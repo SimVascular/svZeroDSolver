@@ -92,35 +92,6 @@ def connect_blocks_by_inblock_list(block_list):
             wire_dict[name_wire] = wire(connecting_elements, name=name_wire)
             block_list[id_bA].add_connecting_wire(name_wire)
 
-    return connectivity, wire_dict
-
-
-def connect_blocks_by_connectivity_list(block_list, connectivity):
-    wire_dict = {}
-
-    for e in connectivity:
-        e1, e2 = e
-        e1name = block_list[e1].name
-        e2name = block_list[e2].name
-
-        connecting_elements = (block_list[e1], block_list[e2])
-        name_wire = e1name + "_" + e2name
-
-        wire_dict[name_wire] = wire(connecting_elements, name=name_wire)
-
-        if e2name not in block_list[e1].connecting_block_list:
-            block_list[e1].add_connecting_wire(name_wire)
-            block_list[e1].add_connecting_block(e2name, +1)
-
-        if e1name not in block_list[e2].connecting_block_list:
-            block_list[e2].add_connecting_wire(name_wire)
-            block_list[e2].add_connecting_block(e1name, -1)
-
-        # print name_wire
-        # print block_list[e1].name, block_list[e1].flow_directions
-        # print block_list[e2].name, block_list[e2].flow_directions
-
-    # print wire_dict
     return wire_dict
 
 

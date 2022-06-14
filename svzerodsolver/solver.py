@@ -733,7 +733,7 @@ def run_network_util(
     """
 
     block_list = list(parameters["blocks"].values())
-    connect_list, wire_dict = connections.connect_blocks_by_inblock_list(block_list)
+    wire_dict = connections.connect_blocks_by_inblock_list(block_list)
     neq = connections.compute_neq(
         block_list, wire_dict
     )  # number of equations governing the 0d model

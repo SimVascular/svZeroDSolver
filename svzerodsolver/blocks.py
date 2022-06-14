@@ -40,11 +40,8 @@ class wire:
     They can also only possess one element(or junction) at each end
     """
 
-    def __init__(
-        self, connecting_elements, name="NoNameWire", P_units="cgs", Q_units="cgs"
-    ):
+    def __init__(self, connecting_elements, name="NoNameWire"):
         self.name = name
-        self.type = "Wire"
         if len(connecting_elements) > 2:
             raise Exception(
                 "Wire cannot connect to more than two elements at a time. Use a junction LPN block"
@@ -63,8 +60,6 @@ class LPNBlock:
         self.num_connections = len(connecting_block_list)
         self.name = name
         self.neq = 2
-        self.n_connect = 2
-        self.type = "ArbitraryBlock"
         self.num_block_vars = 0
         self.connecting_wires_list = []
 
@@ -90,23 +85,6 @@ class LPNBlock:
 
         self.flat_row_ids = []
         self.flat_col_ids = []
-
-    def check_block_consistency(self):
-        if len(connecting_block_list) != self.n_connect:
-            msg = (
-                self.name
-                + " block can be connected only to "
-                + str(self.n_connect)
-                + " elements"
-            )
-            raise Exception(msg)
-
-    def add_connecting_block(self, block, direction):
-        # Direction = +1 if flow sent to block
-        #            = -1 if flow recvd from block
-        self.connecting_block_list.append(block)
-        self.num_connections = len(self.connecting_block_list)
-        self.flow_directions.append(direction)
 
     def add_connecting_wire(self, new_wire):
         self.connecting_wires_list.append(new_wire)
@@ -160,7 +138,6 @@ class InternalJunction(LPNBlock):
         LPNBlock.__init__(
             self, connecting_block_list, name=name, flow_directions=flow_directions
         )
-        self.type = "Junction"
         self.neq = (
             self.num_connections
         )  # number of equations = num of blocks that connect to this junction, where the equations are 1) mass conservation 2) inlet pressures = outlet pressures
@@ -185,12 +162,6 @@ class InternalJunction(LPNBlock):
         self.mat["F"].append(tmp)
         self.mat["F"] = np.array(self.mat["F"], dtype=float)
         self.mats_to_assemble.add("F")
-
-    def add_connecting_block(self, block, direction):
-        self.connecting_block_list.append(block)
-        self.num_connections = len(self.connecting_block_list)
-        self.neq = self.num_connections
-        self.flow_directions.append(direction)
 
 
 class BloodVesselJunction(InternalJunction):
@@ -233,14 +204,12 @@ class BloodVessel(LPNBlock):
         LPNBlock.__init__(
             self, connecting_block_list, name=name, flow_directions=flow_directions
         )
-        self.type = "BloodVessel"
         self.neq = 3
         self.num_block_vars = 1
         self.R = R  # poiseuille resistance value = 8 * mu * L / (pi * r**4)
         self.C = C
         self.L = L
         self.stenosis_coefficient = stenosis_coefficient
-        self._qin_id = None
 
         # the ordering of the solution variables is : (P_in, Q_in, P_out, Q_out)
         self.mat["E"] = np.zeros((3, 5), dtype=float)
@@ -286,7 +255,6 @@ class UnsteadyResistanceWithDistalPressure(LPNBlock):
         LPNBlock.__init__(
             self, connecting_block_list, name=name, flow_directions=flow_directions
         )
-        self.type = "UnsteadyResistanceWithDistalPressure"
         self.neq = 1
         self.Rfunc = Rfunc
         self.Pref_func = Pref_func
@@ -324,9 +292,7 @@ class UnsteadyPressureRef(LPNBlock):
         LPNBlock.__init__(
             self, connecting_block_list, name=name, flow_directions=flow_directions
         )
-        self.type = "UnsteadyPressureRef"
         self.neq = 1
-        self.n_connect = 1
         self.Pfunc = Pfunc
 
         self.vec["C"] = np.zeros(1, dtype=float)
@@ -354,9 +320,7 @@ class UnsteadyFlowRef(LPNBlock):
         LPNBlock.__init__(
             self, connecting_block_list, name=name, flow_directions=flow_directions
         )
-        self.type = "UnsteadyFlowRef"
         self.neq = 1
-        self.n_connect = 1
         self.Qfunc = Qfunc
         self.vec["C"] = np.zeros(1, dtype=float)
         self.mat["F"] = np.array([[0.0, 1.0]], dtype=float)
@@ -387,9 +351,7 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
         LPNBlock.__init__(
             self, connecting_block_list, name=name, flow_directions=flow_directions
         )
-        self.type = "UnsteadyRCRBlockWithDistalPressure"
         self.neq = 2
-        self.n_connect = 1
         self.num_block_vars = 1
         self.Rp_func = Rp_func
         self.C_func = C_func
@@ -437,16 +399,13 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         LPNBlock.__init__(
             self, connecting_block_list, name=name, flow_directions=flow_directions
         )
-        self.type = "OpenLoopCoronaryWithDistalPressureBlock_v2"
         self.neq = 2
-        self.n_connect = 1
         self.num_block_vars = 1
         self.Ra = Ra
         self.Ca = Ca
         self.Ram = Ram
         self.Cim = Cim
         self.Rv = Rv
-        self.Pa = 0.0
         self.Pim = Pim
         self.Pv = Pv
         self.cardiac_cycle_period = cardiac_cycle_period

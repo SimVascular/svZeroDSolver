@@ -33,18 +33,14 @@
 import numpy as np
 import scipy
 import scipy.sparse.linalg
-from scipy.sparse import csr_matrix
 import copy
 
-try:
-    import matplotlib.pyplot as plt
-except:
-    pass
 
 class GenAlpha:
     """
     Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson for non-linear residual
     """
+
     def __init__(self, rho, y):
         # Constants for generalized alpha
         self.alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho)
@@ -70,13 +66,12 @@ class GenAlpha:
         # residual vector
         self.res = np.zeros(self.n)
 
-        self.mats = ['E', 'F', 'dE', 'dF', 'dC']
-        self.vecs = ['C']
+        self.mats = ["E", "F", "dE", "dF", "dC"]
+        self.vecs = ["C"]
         for m in self.mats:
             self.mat[m] = np.zeros((self.n, self.n))
         for v in self.vecs:
             self.mat[v] = np.zeros(self.n)
-
 
     def assemble_structures(self, block_list):
         """
@@ -94,69 +89,18 @@ class GenAlpha:
         """
         Create Jacobian matrix
         """
-        self.M = (self.mat['F'] + (self.mat['dE'] + self.mat['dF'] + self.mat['dC'] + self.mat['E'] * self.fac * invdt))
+        self.M = self.mat["F"] + (
+            self.mat["dE"]
+            + self.mat["dF"]
+            + self.mat["dC"]
+            + self.mat["E"] * self.fac * invdt
+        )
 
     def form_rhs_NR(self, y, ydot):
         """
         Create residual vector
         """
-        self.res = - self.mat['E'].dot(ydot) - self.mat['F'].dot(y) - self.mat['C']
-
-    def form_matrix_NR_numerical(self, res_i, ydotam, args, block_list, epsilon):
-        """
-        Numerically compute the Jacobian by computing the partial derivatives of the residual using forward finite differences
-        """
-        # save original values for restoration later
-        yaf_original = copy.deepcopy(args['Solution']) # yaf_i
-
-        # compute numerical Jacobian
-        J_numerical = np.zeros((self.n, self.n))
-        for jj in range(self.n):
-
-            yaf_step_size = np.zeros(self.n)
-            yaf_step_size[jj] = np.abs(yaf_original[jj])  * epsilon
-
-            # get solution at the i+1 step
-            args['Solution'] = yaf_original  + yaf_step_size # yaf_ip1
-
-            for b in block_list:
-                b.update_solution(args)
-            self.assemble_structures(block_list)
-            self.form_rhs_NR(args['Solution'], ydotam)
-
-            # use forward finite differences (multiply by -1 b/c form_rhs_NR creates the negative residual)
-            J_numerical[:, jj] = (self.res - res_i) / yaf_step_size[jj] * -1
-
-        # restore original quantities
-        args['Solution'] = yaf_original
-
-        for b in block_list:
-            b.update_solution(args)
-        self.assemble_structures(block_list)
-        self.form_rhs_NR(args['Solution'], ydotam)
-
-        return J_numerical
-
-    def check_jacobian(self, res_i, ydotam, args, block_list):
-        """
-        Check if the analytical Jacobian (computed from form_matrix_NR) matches the numerical Jacobian
-        """
-
-        epsilon_list = np.power(10, np.linspace(-6, 4, 25))
-
-        fig, axs = plt.subplots(self.n, self.n, figsize = (20, 20))
-        for epsilon in epsilon_list:
-            J_numerical = self.form_matrix_NR_numerical(res_i, ydotam, args, block_list, epsilon)
-            error = np.abs(self.M - J_numerical)
-            for ii in range(self.n):
-                for jj in range(self.n):
-                    axs[ii, jj].loglog(epsilon, error[ii, jj], 'k*-')
-
-        for ax in axs.flat:
-            ax.set(xlabel='epsilon', ylabel='error')
-
-        fig.suptitle('absolute error vs epsilon')
-        plt.show()
+        self.res = -self.mat["E"].dot(ydot) - self.mat["F"].dot(y) - self.mat["C"]
 
     def step(self, y, ydot, t, block_list, args, dt, nit=30):
         """
@@ -171,8 +115,8 @@ class GenAlpha:
         ydotam = ydot + self.alpha_m * (curr_ydot - ydot)
 
         # initialize solution
-        args['Time'] = t + self.alpha_f * dt
-        args['Solution'] = yaf
+        args["Time"] = t + self.alpha_f * dt
+        args["Solution"] = yaf
 
         # initialize blocks
         for b in block_list:
@@ -192,9 +136,11 @@ class GenAlpha:
             self.form_matrix_NR(invdt)
 
             # perform finite-difference check of jacobian if requested
-            if args['check_jacobian']:
-                if args['Time'] > dt:
-                    self.check_jacobian(copy.deepcopy(self.res), ydotam, args, block_list)
+            if args["check_jacobian"]:
+                if args["Time"] > dt:
+                    self.check_jacobian(
+                        copy.deepcopy(self.res), ydotam, args, block_list
+                    )
 
             # solve for Newton increment
             dy = self.solver(self.M, self.res)
@@ -204,18 +150,23 @@ class GenAlpha:
             ydotam += dy * fac_ydotam
 
             if np.isnan(self.res).any():
-                raise RuntimeError('Solution nan')
+                raise RuntimeError("Solution nan")
 
-            args['Solution'] = yaf
+            args["Solution"] = yaf
             iit += 1
 
         if iit >= nit:
-            print("Max NR iterations reached at time: ", t, " , max error: ", max(abs(self.res)))
+            print(
+                "Max NR iterations reached at time: ",
+                t,
+                " , max error: ",
+                max(abs(self.res)),
+            )
 
         # update time step
         curr_y = y + (yaf - y) / self.alpha_f
         curr_ydot = ydot + (ydotam - ydot) / self.alpha_m
 
-        args['Time'] = t + dt
+        args["Time"] = t + dt
 
         return curr_y, curr_ydot

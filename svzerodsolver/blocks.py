@@ -32,19 +32,25 @@
 
 import numpy as np
 
+
 class wire:
     """
     Wires connect circuit elements and junctions
     They can only posses a single pressure and flow value (system variables)
     They can also only possess one element(or junction) at each end
     """
-    def __init__(self, connecting_elements, name="NoNameWire", P_units='cgs', Q_units='cgs'):
+
+    def __init__(
+        self, connecting_elements, name="NoNameWire", P_units="cgs", Q_units="cgs"
+    ):
         self.name = name
-        self.type = 'Wire'
+        self.type = "Wire"
         if len(connecting_elements) > 2:
-            raise Exception('Wire cannot connect to more than two elements at a time. Use a junction LPN block')
+            raise Exception(
+                "Wire cannot connect to more than two elements at a time. Use a junction LPN block"
+            )
         if not isinstance(connecting_elements, tuple):
-            raise Exception('Connecting elements to wire should be passed as a 2-tuple')
+            raise Exception("Connecting elements to wire should be passed as a 2-tuple")
         self.connecting_elements = connecting_elements
         self.LPN_solution_ids = [None] * 2
 
@@ -87,7 +93,12 @@ class LPNBlock:
 
     def check_block_consistency(self):
         if len(connecting_block_list) != self.n_connect:
-            msg = self.name + " block can be connected only to " + str(self.n_connect) + " elements"
+            msg = (
+                self.name
+                + " block can be connected only to "
+                + str(self.n_connect)
+                + " elements"
+            )
             raise Exception(msg)
 
     def add_connecting_block(self, block, direction):
@@ -115,7 +126,9 @@ class LPNBlock:
     def eqids(self, wire_dict, local_eq):
         # EqID returns variable's location in solution vector
 
-        nwirevars = self.num_connections * 2  # num_connections is multipled by 2 because each wire has 2 soltns (P and Q)
+        nwirevars = (
+            self.num_connections * 2
+        )  # num_connections is multipled by 2 because each wire has 2 soltns (P and Q)
         if local_eq < nwirevars:
             vtype = local_eq % 2  # 0 --> P, 1 --> Q
             wnum = int(local_eq / 2)
@@ -140,16 +153,28 @@ class InternalJunction(LPNBlock):
     """
     Internal junction points between LPN blocks (for mesh refinement, does not appear as physical junction in model)
     """
-    def __init__(self, connecting_block_list=None, name="NoNameJunction", flow_directions=None):
-        LPNBlock.__init__(self, connecting_block_list, name=name, flow_directions=flow_directions)
+
+    def __init__(
+        self, connecting_block_list=None, name="NoNameJunction", flow_directions=None
+    ):
+        LPNBlock.__init__(
+            self, connecting_block_list, name=name, flow_directions=flow_directions
+        )
         self.type = "Junction"
-        self.neq = self.num_connections  # number of equations = num of blocks that connect to this junction, where the equations are 1) mass conservation 2) inlet pressures = outlet pressures
+        self.neq = (
+            self.num_connections
+        )  # number of equations = num of blocks that connect to this junction, where the equations are 1) mass conservation 2) inlet pressures = outlet pressures
 
         # Number of variables per tuple = 2*num_connections
         # Number of equations = num_connections-1 Pressure equations, 1 flow equation
         # Format : P1,Q1,P2,Q2,P3,Q3, .., Pn,Qm
-        self.mat['F'] = [(1.,) + (0,) * (2 * i + 1) + (-1,) + (0,) * (2 * self.num_connections - 2 * i - 3) for i in
-                         range(self.num_connections - 1)]
+        self.mat["F"] = [
+            (1.0,)
+            + (0,) * (2 * i + 1)
+            + (-1,)
+            + (0,) * (2 * self.num_connections - 2 * i - 3)
+            for i in range(self.num_connections - 1)
+        ]
 
         tmp = (0,)
         for d in self.flow_directions[:-1]:
@@ -157,8 +182,8 @@ class InternalJunction(LPNBlock):
             tmp += (0,)
 
         tmp += (self.flow_directions[-1],)
-        self.mat['F'].append(tmp)
-        self.mat['F'] = np.array(self.mat['F'], dtype=float)
+        self.mat["F"].append(tmp)
+        self.mat["F"] = np.array(self.mat["F"], dtype=float)
         self.mats_to_assemble.add("F")
 
     def add_connecting_block(self, block, direction):
@@ -172,8 +197,17 @@ class BloodVesselJunction(InternalJunction):
     """
     Blood vessel junction (dummy for future implementation of blood pressure losses at junctions)
     """
-    def __init__(self, j_params, connecting_block_list=None, name="NoNameJunction", flow_directions=None):
-        InternalJunction.__init__(self, connecting_block_list, name=name, flow_directions=flow_directions)
+
+    def __init__(
+        self,
+        j_params,
+        connecting_block_list=None,
+        name="NoNameJunction",
+        flow_directions=None,
+    ):
+        InternalJunction.__init__(
+            self, connecting_block_list, name=name, flow_directions=flow_directions
+        )
         self.j_params = j_params
 
 
@@ -185,8 +219,20 @@ class BloodVessel(LPNBlock):
 
         source: Mirramezani, M., Shadden, S.C. A distributed lumped parameter model of blood flow. Annals of Biomedical Engineering. 2020.
     """
-    def __init__(self, R, C, L, stenosis_coefficient, connecting_block_list = None, name = "NoNameBloodVessel", flow_directions = None):
-        LPNBlock.__init__(self, connecting_block_list, name=name, flow_directions=flow_directions)
+
+    def __init__(
+        self,
+        R,
+        C,
+        L,
+        stenosis_coefficient,
+        connecting_block_list=None,
+        name="NoNameBloodVessel",
+        flow_directions=None,
+    ):
+        LPNBlock.__init__(
+            self, connecting_block_list, name=name, flow_directions=flow_directions
+        )
         self.type = "BloodVessel"
         self.neq = 3
         self.num_block_vars = 1
@@ -197,35 +243,49 @@ class BloodVessel(LPNBlock):
         self._qin_id = None
 
         # the ordering of the solution variables is : (P_in, Q_in, P_out, Q_out)
-        self.mat['E'] = np.zeros((3, 5), dtype=float)
+        self.mat["E"] = np.zeros((3, 5), dtype=float)
         self.mat["E"][0, 3] = -self.L
-        self.mat['E'][1, 4] = -self.C
-        self.mat['F'] = np.array(
+        self.mat["E"][1, 4] = -self.C
+        self.mat["F"] = np.array(
             [
-                [1.0, 0.0, -1.0, 0.0, 0.0], 
-                [0.0, 1.0, 0.0, -1.0, 0.0], 
-                [1.0, 0.0, 0.0, 0.0, -1.0]
+                [1.0, 0.0, -1.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0, -1.0, 0.0],
+                [1.0, 0.0, 0.0, 0.0, -1.0],
             ],
-            dtype=float
+            dtype=float,
         )
-        self.mat['dF'] = np.zeros((3, 5), dtype=float)
+        self.mat["dF"] = np.zeros((3, 5), dtype=float)
 
         # only necessary to assemble E in __init__, F and dF get assembled with update_solution
         self.mats_to_assemble.add("E")
 
     def update_solution(self, args):
-        Q_in = np.abs(args["Solution"][args['Wire dictionary'][self.connecting_wires_list[0]].LPN_solution_ids[1]])
+        Q_in = np.abs(
+            args["Solution"][
+                args["Wire dictionary"][self.connecting_wires_list[0]].LPN_solution_ids[
+                    1
+                ]
+            ]
+        )
         fac1 = -self.stenosis_coefficient * Q_in
         fac2 = fac1 - self.R
-        self.mat['F'][[0, 2], 1] = fac2
-        self.mat['dF'][[0, 2], 1] = fac1
+        self.mat["F"][[0, 2], 1] = fac2
+        self.mat["dF"][[0, 2], 1] = fac1
         self.mats_to_assemble.update({"F", "dF"})
 
 
 class UnsteadyResistanceWithDistalPressure(LPNBlock):
-    def __init__(self, Rfunc, Pref_func, connecting_block_list=None, name="NoNameUnsteadyResistanceWithDistalPressure",
-                 flow_directions=None):
-        LPNBlock.__init__(self, connecting_block_list, name=name, flow_directions=flow_directions)
+    def __init__(
+        self,
+        Rfunc,
+        Pref_func,
+        connecting_block_list=None,
+        name="NoNameUnsteadyResistanceWithDistalPressure",
+        flow_directions=None,
+    ):
+        LPNBlock.__init__(
+            self, connecting_block_list, name=name, flow_directions=flow_directions
+        )
         self.type = "UnsteadyResistanceWithDistalPressure"
         self.neq = 1
         self.Rfunc = Rfunc
@@ -234,26 +294,36 @@ class UnsteadyResistanceWithDistalPressure(LPNBlock):
             [
                 [1.0, 0.0],
             ],
-            dtype=float
+            dtype=float,
         )
-        self.vec['C'] = np.array([0.0], dtype=float)
+        self.vec["C"] = np.array([0.0], dtype=float)
 
     def update_time(self, args):
         """
         the ordering is : (P_in,Q_in)
         """
-        t = args['Time']
+        t = args["Time"]
         self.mat["F"][0, 1] = -self.Rfunc(t)
-        self.vec['C'][0] = -self.Pref_func(t)
+        self.vec["C"][0] = -self.Pref_func(t)
         self.mats_to_assemble.add("F")
         self.vecs_to_assemble.add("C")
+
 
 class UnsteadyPressureRef(LPNBlock):
     """
     Unsteady P reference
     """
-    def __init__(self, Pfunc, connecting_block_list=None, name="NoNameUnsteadyPressureRef", flow_directions=None):
-        LPNBlock.__init__(self, connecting_block_list, name=name, flow_directions=flow_directions)
+
+    def __init__(
+        self,
+        Pfunc,
+        connecting_block_list=None,
+        name="NoNameUnsteadyPressureRef",
+        flow_directions=None,
+    ):
+        LPNBlock.__init__(
+            self, connecting_block_list, name=name, flow_directions=flow_directions
+        )
         self.type = "UnsteadyPressureRef"
         self.neq = 1
         self.n_connect = 1
@@ -263,8 +333,8 @@ class UnsteadyPressureRef(LPNBlock):
         self.mat["F"] = np.array([[1.0, 0.0]], dtype=float)
 
     def update_time(self, args):
-        t = args['Time']
-        self.vec['C'][0] = -self.Pfunc(t)
+        t = args["Time"]
+        self.vec["C"][0] = -self.Pfunc(t)
         self.vecs_to_assemble.add("C")
         self.mats_to_assemble.add("F")
 
@@ -273,18 +343,27 @@ class UnsteadyFlowRef(LPNBlock):
     """
     Flow reference
     """
-    def __init__(self, Qfunc, connecting_block_list=None, name="NoNameUnsteadyFlowRef", flow_directions=None):
-        LPNBlock.__init__(self, connecting_block_list, name=name, flow_directions=flow_directions)
+
+    def __init__(
+        self,
+        Qfunc,
+        connecting_block_list=None,
+        name="NoNameUnsteadyFlowRef",
+        flow_directions=None,
+    ):
+        LPNBlock.__init__(
+            self, connecting_block_list, name=name, flow_directions=flow_directions
+        )
         self.type = "UnsteadyFlowRef"
         self.neq = 1
         self.n_connect = 1
         self.Qfunc = Qfunc
-        self.vec['C'] = np.zeros(1, dtype=float)
+        self.vec["C"] = np.zeros(1, dtype=float)
         self.mat["F"] = np.array([[0.0, 1.0]], dtype=float)
 
     def update_time(self, args):
-        t = args['Time']
-        self.vec['C'][0] = -self.Qfunc(t)
+        t = args["Time"]
+        self.vec["C"][0] = -self.Qfunc(t)
         self.vecs_to_assemble.add("C")
         self.mats_to_assemble.add("F")
 
@@ -294,9 +373,20 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
     Unsteady RCR - time-varying RCR values
     Formulation includes additional variable : internal pressure proximal to capacitance.
     """
-    def __init__(self, Rp_func, C_func, Rd_func, Pref_func, connecting_block_list=None,
-                 name="NoNameUnsteadyRCRBlockWithDistalPressure", flow_directions=None):
-        LPNBlock.__init__(self, connecting_block_list, name=name, flow_directions=flow_directions)
+
+    def __init__(
+        self,
+        Rp_func,
+        C_func,
+        Rd_func,
+        Pref_func,
+        connecting_block_list=None,
+        name="NoNameUnsteadyRCRBlockWithDistalPressure",
+        flow_directions=None,
+    ):
+        LPNBlock.__init__(
+            self, connecting_block_list, name=name, flow_directions=flow_directions
+        )
         self.type = "UnsteadyRCRBlockWithDistalPressure"
         self.neq = 2
         self.n_connect = 1
@@ -307,25 +397,19 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
         self.Pref_func = Pref_func
 
         self.mat["E"] = np.zeros((2, 3), dtype=float)
-        self.mat['F'] = np.array(
-            [
-                [1.0, 0.0, -1.0],
-                [0.0, 0.0, -1.0]
-            ],
-            dtype=float
-        )
-        self.vec['C'] = np.array([0.0, 0.0], dtype=float)
+        self.mat["F"] = np.array([[1.0, 0.0, -1.0], [0.0, 0.0, -1.0]], dtype=float)
+        self.vec["C"] = np.array([0.0, 0.0], dtype=float)
 
     def update_time(self, args):
         """
         unknowns = [P_in, Q_in, internal_var (Pressure at the intersection of the Rp, Rd, and C elements)]
         """
-        t = args['Time']
+        t = args["Time"]
         Rd_t = self.Rd_func(t)
         self.mat["E"][1, 2] = -Rd_t * self.C_func(t)
-        self.mat['F'][0, 1] = -self.Rp_func(t)
-        self.mat['F'][1, 1] = Rd_t
-        self.vec['C'][1] = self.Pref_func(t)
+        self.mat["F"][0, 1] = -self.Rp_func(t)
+        self.mat["F"][1, 1] = Rd_t
+        self.vec["C"][1] = self.Pref_func(t)
         self.mats_to_assemble.update({"E", "F"})
         self.vecs_to_assemble.add("C")
 
@@ -335,9 +419,24 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
     open-loop coronary BC = RCRCR BC
     Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow and pressure in human coronary arteries. Annals of Biomedical Engineering 38, 3195–3209 (2010)."
     """
-    def __init__(self, Ra, Ca, Ram, Cim, Rv, Pim, Pv, cardiac_cycle_period, connecting_block_list=None,
-                 name="NoNameCoronary", flow_directions=None):
-        LPNBlock.__init__(self, connecting_block_list, name=name, flow_directions=flow_directions)
+
+    def __init__(
+        self,
+        Ra,
+        Ca,
+        Ram,
+        Cim,
+        Rv,
+        Pim,
+        Pv,
+        cardiac_cycle_period,
+        connecting_block_list=None,
+        name="NoNameCoronary",
+        flow_directions=None,
+    ):
+        LPNBlock.__init__(
+            self, connecting_block_list, name=name, flow_directions=flow_directions
+        )
         self.type = "OpenLoopCoronaryWithDistalPressureBlock_v2"
         self.neq = 2
         self.n_connect = 1
@@ -352,20 +451,20 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         self.Pv = Pv
         self.cardiac_cycle_period = cardiac_cycle_period
 
-        self.vec['C'] = np.zeros(2)
-        self.mat['E'] = np.zeros((2, 3))
-        self.mat['F'] = np.zeros((2, 3))
-        self.mat['F'][0, 2] = -1.0
+        self.vec["C"] = np.zeros(2)
+        self.mat["E"] = np.zeros((2, 3))
+        self.mat["F"] = np.zeros((2, 3))
+        self.mat["F"][0, 2] = -1.0
 
         Cim_Rv = self.Cim * self.Rv
-        self.mat['E'][0, 0] = -self.Ca * Cim_Rv
-        self.mat['E'][0, 1] = self.Ra * self.Ca * Cim_Rv
-        self.mat['E'][0, 2] = -Cim_Rv
-        self.mat['E'][1, 2] = -Cim_Rv * self.Ram
-        self.mat['F'][0, 1] = Cim_Rv
-        self.mat['F'][1, 0] = Cim_Rv
-        self.mat['F'][1, 1] = -Cim_Rv * self.Ra
-        self.mat['F'][1, 2] = -(self.Rv + self.Ram)
+        self.mat["E"][0, 0] = -self.Ca * Cim_Rv
+        self.mat["E"][0, 1] = self.Ra * self.Ca * Cim_Rv
+        self.mat["E"][0, 2] = -Cim_Rv
+        self.mat["E"][1, 2] = -Cim_Rv * self.Ram
+        self.mat["F"][0, 1] = Cim_Rv
+        self.mat["F"][1, 0] = Cim_Rv
+        self.mat["F"][1, 1] = -Cim_Rv * self.Ra
+        self.mat["F"][1, 2] = -(self.Rv + self.Ram)
         self.mats_to_assemble.update({"E", "F"})
 
     def get_P_at_t(self, P, t):
@@ -380,9 +479,12 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         # where V_im is the volume of the second capacitor, Cim
         # Q_in is the flow through the first resistor
         # and P_in is the pressure at the inlet of the first resistor
-        ttt = args['Time']
+        ttt = args["Time"]
         Pim_value = self.get_P_at_t(self.Pim, ttt)
         Pv_value = self.get_P_at_t(self.Pv, ttt)
         self.vec["C"][0] = -self.Cim * Pim_value + self.Cim * Pv_value
-        self.vec["C"][1] = -self.Cim * (self.Rv + self.Ram) * Pim_value + self.Ram * self.Cim * Pv_value
+        self.vec["C"][1] = (
+            -self.Cim * (self.Rv + self.Ram) * Pim_value
+            + self.Ram * self.Cim * Pv_value
+        )
         self.vecs_to_assemble.add("C")

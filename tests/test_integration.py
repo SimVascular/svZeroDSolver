@@ -10,7 +10,7 @@ RTOL_FLOW = 1.0e-8
 
 def run_test_case_by_name(name, testdir):
     """Run a test case by its case name.
-    
+
     Args:
         name: Name of the test case.
         testdir: Directory for performing the simulation.
@@ -21,8 +21,9 @@ def run_test_case_by_name(name, testdir):
     result_file = os.path.join(testdir, name + "_branch_results.npy")
     return np.load(result_file, allow_pickle=True).item()
 
+
 def get_result(result_array, field, branch, branch_node, time_step):
-    """"Get results at specific field, branch, branch_node and time step."""
+    """ "Get results at specific field, branch, branch_node and time step."""
     # extract result
     return result_array[field][branch][branch_node, time_step]
 

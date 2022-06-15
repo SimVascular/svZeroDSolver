@@ -746,9 +746,7 @@ def run_network_util(
         ICs_dict = np.load(ICs_npy_file_path, allow_pickle=True).item()
         y_initial, ydot_initial = load_in_ics(var_name_list, ICs_dict)
     else:
-        y_initial, ydot_initial = connections.initialize_solution_structures(
-            neq
-        )  # initial conditions for all solutions are zero
+        y_initial, ydot_initial = np.zeros(neq), np.zeros(neq)
     y_next = y_initial.copy()
     ydot_next = ydot_initial.copy()
 

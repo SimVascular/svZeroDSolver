@@ -34,25 +34,6 @@ import numpy as np
 from .blocks import Wire
 
 
-def check_block_pair_flow_consistency(bA, bB):
-    if bB.name not in bA.connecting_block_list:
-        raise Exception("Block " + bB.name + " not in connecting list of " + bA.name)
-    else:
-        id_bB = bA.connecting_block_list.index(bB.name)
-
-    if bA.name not in bB.connecting_block_list:
-        raise Exception("Block " + bA.name + " not in connecting list of " + bB.name)
-    else:
-        id_bA = bB.connecting_block_list.index(bA.name)
-
-    if bA.flow_directions[id_bB] * bB.flow_directions[id_bA] != -1:
-        print("Flow direction of " + bB.name + " :", bB.flow_directions[id_bA])
-        print("Flow direction of " + bA.name + " :", bA.flow_directions[id_bB])
-        raise Exception(
-            "Flow directions of " + bA.name + " donot conform to that of " + bB.name
-        )
-
-
 def connect_blocks_by_inblock_list(block_list):
 
     connectivity = []
@@ -60,12 +41,6 @@ def connect_blocks_by_inblock_list(block_list):
     wire_dict = {}
 
     bnames = [_.name for _ in block_list]
-
-    # Check if connection definition is consistent
-    for bA in block_list:
-        for bBnm in bA.connecting_block_list:
-            bB = block_list[bnames.index(bBnm)]
-            check_block_pair_flow_consistency(bA, bB)
 
     # If you reached here, it means each block has a consistent (connecting_block_list) and (flow_directions)
     for bA in block_list:
@@ -115,13 +90,6 @@ def compute_neq(block_list, wire_dict):
         raise Exception("Mismatch between number of variables and equations")
 
     return neq
-
-
-def initialize_solution_structures(neq):
-    # Return y,ydot
-    return np.zeros(neq), np.zeros(
-        neq
-    )  # recall that neq = number of solution variables = num of unknowns. thus, the global solution vector, y, should be of length neq
 
 
 def assign_global_ids(

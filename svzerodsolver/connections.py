@@ -89,8 +89,9 @@ def connect_blocks_by_inblock_list(block_list):
             #     block_list[id_bB].add_connecting_wire(name_wire)
             else:
                 continue  # if this line is executed, then the next two lines (wire_dict[name_wire] = ... and block_list[id_bA] = ...) will not be executed
-            wire_dict[name_wire] = wire(connecting_elements, name=name_wire)
-            block_list[id_bA].add_connecting_wire(name_wire)
+            wire_obj = wire(connecting_elements, name=name_wire)
+            wire_dict[name_wire] = wire_obj
+            block_list[id_bA].add_connecting_wire(wire_obj)
 
     return wire_dict
 
@@ -104,8 +105,6 @@ def check_block_connection(block):
         raise Exception(
             "Number of connections donot match the number of inflows+outflows for this block"
         )
-
-    # print block.connecting_wires_list
     reorder_inblock_connectivity(block)
 
 
@@ -118,9 +117,9 @@ def reorder_inblock_connectivity(block):
         range(len(block.flow_directions)), key=lambda k: block.flow_directions[k]
     )
 
-    block.flow_directions = [block.flow_directions[_] for _ in indx]
-    block.connecting_wires_list = [block.connecting_wires_list[_] for _ in indx]
-    block.connecting_block_list = [block.connecting_block_list[_] for _ in indx]
+    block.flow_directions = [block.flow_directions[i] for i in indx]
+    block.connecting_wires_list = [block.connecting_wires_list[i] for i in indx]
+    block.connecting_block_list = [block.connecting_block_list[i] for i in indx]
 
 
 # Function to compute number of equations from blocks and wires
@@ -168,15 +167,13 @@ def assign_global_ids(
 
     # note that a solution ID = the index at which a solution variable is located in the global vector of solution variables
 
-    for (
-        w
-    ) in (
-        wire_dict.values()
-    ):  # assign the wire solutions here (i.e. each wire has a P and Q solution. recall that each block, ie resistance block, has 2 associated wires and thus each block has 4 associated solutions (Pin, Qin, Pout, Qin). so here, we are assigning those solution ids in the global solution vector for those P and Q solutions
+    wire_lpn_ids = {}
+    for wire_name, wire_obj in wire_dict.items():
+        # assign the wire solutions here (i.e. each wire has a P and Q solution. recall that each block, ie resistance block, has 2 associated wires and thus each block has 4 associated solutions (Pin, Qin, Pout, Qin). so here, we are assigning those solution ids in the global solution vector for those P and Q solutions
         # note that because wire_dict is a dictionary, it is unordered and basically, everytime we call wire_dict and loop through its values or keys or whatever, there is no set order of wires that we will follow and loop through.
-        w.LPN_solution_ids = [i, i + 1]
-        var_name_list.append("P_" + w.name)
-        var_name_list.append("Q_" + w.name)
+        wire_lpn_ids[wire_name] = [i, i + 1]
+        var_name_list.append("P_" + wire_obj.name)
+        var_name_list.append("Q_" + wire_obj.name)
         i += 2
 
     for (
@@ -185,6 +182,8 @@ def assign_global_ids(
         block_list
     ):  # here, we assign the solution ids for the internal solutions of the LPNBlocks
         b.LPN_solution_ids = []
+        for w in b.connecting_wires_list:
+            w.LPN_solution_ids = wire_lpn_ids[w.name]
         for j in range(b.num_block_vars):
             b.LPN_solution_ids.append(i)
             var_name_list.append("var_" + str(j) + "_" + b.name)

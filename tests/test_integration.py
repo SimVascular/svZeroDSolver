@@ -272,7 +272,7 @@ def test_pusatile_flow_cstenosis_steady_pressure(tmpdir):
     results = run_test_case_by_name("pusatileFlow_CStenosis_steadyPressure", tmpdir)
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -439),
-        0.5937169800360568,
+        0.5937166987044968,
         rtol=1.0e-5,
     )  # inlet pressure
     assert np.isclose(

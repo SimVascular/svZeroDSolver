@@ -89,13 +89,13 @@ class LPNBlock:
     def add_connecting_wire(self, new_wire):
         self.connecting_wires_list.append(new_wire)
 
-    def update_time(self, args):
+    def update_time(self, time):
         """
         Update time-dependent blocks
         """
         pass
 
-    def update_solution(self, args):
+    def update_solution(self, y):
         """
         Update solution-dependent blocks
         """
@@ -120,8 +120,7 @@ class LPNBlock:
             #         3            :    1        :    1        <---    vtype = flow, wnum = outlet wire
             #    note that vtype represents whether the solution variable in local_eq (local ID) is a P or Q solution
             #        and wnum represents whether the solution variable in local_eq comes from the inlet wire or the outlet wire, for this LPNBlock with 2 connections (one inlet, one outlet)
-
-            return wire_dict[self.connecting_wires_list[wnum]].LPN_solution_ids[vtype]
+            return self.connecting_wires_list[wnum].LPN_solution_ids[vtype]
         else:  # this section will return the index at which the LPNBlock's  INTERNAL SOLUTION VARIABLES are stored in the global vector of solution unknowns/variables (i.e. I think RCR and OpenLoopCoronaryBlock have internal solution variables; these internal solution variables arent the P_in, Q_in, P_out, Q_out that correspond to the solutions on the attached wires, they are the solutions that are internal to the LPNBlock itself)
             vnum = local_eq - nwirevars
             return self.LPN_solution_ids[vnum]
@@ -228,14 +227,8 @@ class BloodVessel(LPNBlock):
         # only necessary to assemble E in __init__, F and dF get assembled with update_solution
         self.mats_to_assemble.add("E")
 
-    def update_solution(self, args):
-        Q_in = np.abs(
-            args["Solution"][
-                args["Wire dictionary"][self.connecting_wires_list[0]].LPN_solution_ids[
-                    1
-                ]
-            ]
-        )
+    def update_solution(self, sol):
+        Q_in = np.abs(sol[self.connecting_wires_list[0].LPN_solution_ids[1]])
         fac1 = -self.stenosis_coefficient * Q_in
         fac2 = fac1 - self.R
         self.mat["F"][[0, 2], 1] = fac2
@@ -266,13 +259,12 @@ class UnsteadyResistanceWithDistalPressure(LPNBlock):
         )
         self.vec["C"] = np.array([0.0], dtype=float)
 
-    def update_time(self, args):
+    def update_time(self, time):
         """
         the ordering is : (P_in,Q_in)
         """
-        t = args["Time"]
-        self.mat["F"][0, 1] = -self.Rfunc(t)
-        self.vec["C"][0] = -self.Pref_func(t)
+        self.mat["F"][0, 1] = -self.Rfunc(time)
+        self.vec["C"][0] = -self.Pref_func(time)
         self.mats_to_assemble.add("F")
         self.vecs_to_assemble.add("C")
 
@@ -298,9 +290,8 @@ class UnsteadyPressureRef(LPNBlock):
         self.vec["C"] = np.zeros(1, dtype=float)
         self.mat["F"] = np.array([[1.0, 0.0]], dtype=float)
 
-    def update_time(self, args):
-        t = args["Time"]
-        self.vec["C"][0] = -self.Pfunc(t)
+    def update_time(self, time):
+        self.vec["C"][0] = -self.Pfunc(time)
         self.vecs_to_assemble.add("C")
         self.mats_to_assemble.add("F")
 
@@ -325,9 +316,8 @@ class UnsteadyFlowRef(LPNBlock):
         self.vec["C"] = np.zeros(1, dtype=float)
         self.mat["F"] = np.array([[0.0, 1.0]], dtype=float)
 
-    def update_time(self, args):
-        t = args["Time"]
-        self.vec["C"][0] = -self.Qfunc(t)
+    def update_time(self, time):
+        self.vec["C"][0] = -self.Qfunc(time)
         self.vecs_to_assemble.add("C")
         self.mats_to_assemble.add("F")
 
@@ -362,16 +352,15 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
         self.mat["F"] = np.array([[1.0, 0.0, -1.0], [0.0, 0.0, -1.0]], dtype=float)
         self.vec["C"] = np.array([0.0, 0.0], dtype=float)
 
-    def update_time(self, args):
+    def update_time(self, time):
         """
         unknowns = [P_in, Q_in, internal_var (Pressure at the intersection of the Rp, Rd, and C elements)]
         """
-        t = args["Time"]
-        Rd_t = self.Rd_func(t)
-        self.mat["E"][1, 2] = -Rd_t * self.C_func(t)
-        self.mat["F"][0, 1] = -self.Rp_func(t)
+        Rd_t = self.Rd_func(time)
+        self.mat["E"][1, 2] = -Rd_t * self.C_func(time)
+        self.mat["F"][0, 1] = -self.Rp_func(time)
         self.mat["F"][1, 1] = Rd_t
-        self.vec["C"][1] = self.Pref_func(t)
+        self.vec["C"][1] = self.Pref_func(time)
         self.mats_to_assemble.update({"E", "F"})
         self.vecs_to_assemble.add("C")
 
@@ -433,14 +422,13 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         P_tt = np.interp(td, tt, P_val)
         return P_tt
 
-    def update_time(self, args):
+    def update_time(self, time):
         # For this open-loop coronary BC, the ordering of solution unknowns is : (P_in, Q_in, V_im)
         # where V_im is the volume of the second capacitor, Cim
         # Q_in is the flow through the first resistor
         # and P_in is the pressure at the inlet of the first resistor
-        ttt = args["Time"]
-        Pim_value = self.get_P_at_t(self.Pim, ttt)
-        Pv_value = self.get_P_at_t(self.Pv, ttt)
+        Pim_value = self.get_P_at_t(self.Pim, time)
+        Pv_value = self.get_P_at_t(self.Pv, time)
         self.vec["C"][0] = -self.Cim * Pim_value + self.Cim * Pv_value
         self.vec["C"][1] = (
             -self.Cim * (self.Rv + self.Ram) * Pim_value

@@ -755,45 +755,30 @@ def run_network_util(
     ydot_next = ydot_initial.copy()
 
     rho = 0.1
-    args = {}
-    args["Time step"] = parameters["simulation_parameters"]["delta_t"]
-    args["rho"] = rho
-    args["Wire dictionary"] = wire_dict
-    args["check_jacobian"] = parameters["simulation_parameters"]["check_jacobian"]
-
-    # y_next, ydot_next = min_ydot_least_sq_init(neq, 1e-8, y_initial, block_list, args, parameters["simulation_parameters"]["delta_t"], rho)
 
     print("starting simulation")
 
     ylist = [y_next.copy()]
     parameters["initial_time"] = simulation_start_time
-    tlist = np.array(
-        [
-            parameters["initial_time"]
-            + _ * parameters["simulation_parameters"]["delta_t"]
-            for _ in range(
-                0,
-                parameters["simulation_parameters"][
-                    "total_number_of_simulated_time_steps"
-                ],
-            )
-        ]
+    dt = parameters["simulation_parameters"]["delta_t"]
+    tlist = np.arange(
+        parameters["initial_time"],
+        parameters["simulation_parameters"]["total_number_of_simulated_time_steps"]
+        * dt,
+        dt,
     )
 
     # create time integration
-    t_int = time_int.GenAlpha(rho, y_next)
+    t_int = time_int.GeneralizedAlpha(
+        rho, y_next.shape[0], parameters["simulation_parameters"]["delta_t"]
+    )
 
-    loop_list = tlist[:-1]
-
-    for t_current in loop_list:
-        args["Solution"] = y_next
+    for time in tlist[:-1]:
         y_next, ydot_next = t_int.step(
             y_next,
             ydot_next,
-            t_current,
+            time,
             block_list,
-            args,
-            parameters["simulation_parameters"]["delta_t"],
         )
         ylist.append(y_next)
 
@@ -802,9 +787,8 @@ def run_network_util(
 
     var_name_list_original = copy.deepcopy(var_name_list)
     results_0d = np.array(ylist)
-    zero_d_time = tlist
     return (
-        zero_d_time,
+        tlist,
         results_0d,
         var_name_list,
         y_next,
@@ -1167,7 +1151,6 @@ def set_up_and_run_0d_simulation(
     ICs_npy_file_path=None,
     save_y_ydot_to_npy=False,
     y_ydot_file_path=None,
-    check_jacobian=False,
     simulation_start_time=0.0,
     use_steady_soltns_as_ics=True,
 ):
@@ -1195,8 +1178,6 @@ def set_up_and_run_0d_simulation(
             = True to save the entire 0d solution and its time derivative at the final time step to a .npy file
         string y_ydot_file_path
             = name of the .npy file to which the 0d solution and its time derivative at the final time step will be saved
-        boolean check_jacobian
-            = True to run a finite difference check on the tangent matrix (to check if it is correct)
         float simulation_start_time
             = time at which to begin the 0d simulation
             -- assumes the cardiac cycle begins at t = 0.0 and ends at t = cardiac_cycle_period
@@ -1211,8 +1192,6 @@ def set_up_and_run_0d_simulation(
 
     with open(zero_d_solver_input_file_path, "r") as infile:
         parameters = json.load(infile)
-
-    parameters["simulation_parameters"]["check_jacobian"] = check_jacobian
 
     if use_steady_soltns_as_ics:
         parameters_mean = copy.deepcopy(parameters)
@@ -1404,7 +1383,6 @@ def main():
         ICs_npy_file_path=args.ICsPath,
         save_y_ydot_to_npy=args.saveYydot,
         y_ydot_file_path=args.yydotPath,
-        check_jacobian=args.checkJacobian,
         simulation_start_time=args.initialTime,
         use_steady_soltns_as_ics=args.useSteadyIC,
     )

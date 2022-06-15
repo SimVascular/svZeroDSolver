@@ -100,7 +100,7 @@ class LPNBlock:
         """
         pass
 
-    def eqids(self, wire_dict, local_eq):
+    def eqids(self, local_eq):
         # EqID returns variable's location in solution vector
 
         nwirevars = (

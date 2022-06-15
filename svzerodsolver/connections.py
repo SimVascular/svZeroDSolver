@@ -68,30 +68,6 @@ def connect_blocks_by_inblock_list(block_list):
     return wire_dict
 
 
-# Function to compute number of equations from blocks and wires
-def compute_neq(block_list, wire_dict):
-    neq = 0
-    block_vars = 0
-    for b in block_list:
-        neq += b.neq
-        block_vars += b.num_block_vars
-
-    # print("Number of equations : ",neq)
-
-    print(
-        "Number of unknowns = ", 2 * len(wire_dict.values()) + block_vars
-    )  # wire_dict.values() gives me an iterable or whatever whose length is the number of wires in wire_dict (number of wires in our model). then we multiply by 2, because each wire has 2 solution variables (P and Q).
-    print(
-        "Number of equations = ", neq
-    )  # number of unknowns (solutionv variables) = 2*len(wire_dict.values()) + block_vars
-    if 2 * len(wire_dict.values()) + block_vars != neq:
-        print("Expected number of variables : ", 2 * len(wire_dict) + block_vars)
-        print("Number of equations = ", neq)
-        raise Exception("Mismatch between number of variables and equations")
-
-    return neq
-
-
 def assign_global_ids(
     block_list, wire_dict
 ):  # this function is where aekaansh assigns the global ids for the solution variables for the wires and blocks
@@ -136,7 +112,7 @@ def assign_global_ids(
             b.num_block_vars + 2 * len(b.connecting_block_list)
         ):  # note that b.num_block_vars+2*len(b.connecting_block_list) = the total number of solution variables/unknowns associated with this LPNBlock. len(b.connecting_block_list) is the number of wires (and blocks) attached to the current LPNBlock and this number is multiplied by 2 because each wire has 2 solutions (P and Q). then, the block also has internal solutions, where the number of internal solutions that it has is = b.num_block_vars
             b.global_col_id.append(
-                b.eqids(wire_dict, local_id)
+                b.eqids(local_id)
             )  # b.eqids returns the index at which the block's solution variable corresponding to local_id is located in the global vector of solution variables/unknowns.
         for local_id in range(b.neq):
             b.global_row_id += [offset + local_id]

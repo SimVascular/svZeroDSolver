@@ -734,9 +734,7 @@ def run_network_util(
 
     block_list = list(parameters["blocks"].values())
     wire_dict = connections.connect_blocks_by_inblock_list(block_list)
-    neq = connections.compute_neq(
-        block_list, wire_dict
-    )  # number of equations governing the 0d model
+    neq = sum([b.neq for b in block_list])
     var_name_list = connections.assign_global_ids(
         block_list, wire_dict
     )  # assign solution variables with global ID

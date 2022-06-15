@@ -33,7 +33,7 @@
 import numpy as np
 
 
-class wire:
+class Wire:
     """
     Wires connect circuit elements and junctions
     They can only posses a single pressure and flow value (system variables)
@@ -61,7 +61,9 @@ class LPNBlock:
         self.name = name
         self.neq = 2
         self.num_block_vars = 0
-        self.connecting_wires_list = []
+
+        self.inflow_wires = []
+        self.outflow_wires = []
 
         # -1 : Inflow to block, +1 outflow from block
         self.flow_directions = flow_directions
@@ -85,9 +87,6 @@ class LPNBlock:
 
         self.flat_row_ids = []
         self.flat_col_ids = []
-
-    def add_connecting_wire(self, new_wire):
-        self.connecting_wires_list.append(new_wire)
 
     def update_time(self, time):
         """
@@ -120,7 +119,9 @@ class LPNBlock:
             #         3            :    1        :    1        <---    vtype = flow, wnum = outlet wire
             #    note that vtype represents whether the solution variable in local_eq (local ID) is a P or Q solution
             #        and wnum represents whether the solution variable in local_eq comes from the inlet wire or the outlet wire, for this LPNBlock with 2 connections (one inlet, one outlet)
-            return self.connecting_wires_list[wnum].LPN_solution_ids[vtype]
+            return (self.outflow_wires + self.inflow_wires)[wnum].LPN_solution_ids[
+                vtype
+            ]
         else:  # this section will return the index at which the LPNBlock's  INTERNAL SOLUTION VARIABLES are stored in the global vector of solution unknowns/variables (i.e. I think RCR and OpenLoopCoronaryBlock have internal solution variables; these internal solution variables arent the P_in, Q_in, P_out, Q_out that correspond to the solutions on the attached wires, they are the solutions that are internal to the LPNBlock itself)
             vnum = local_eq - nwirevars
             return self.LPN_solution_ids[vnum]
@@ -228,7 +229,7 @@ class BloodVessel(LPNBlock):
         self.mats_to_assemble.add("E")
 
     def update_solution(self, sol):
-        Q_in = np.abs(sol[self.connecting_wires_list[0].LPN_solution_ids[1]])
+        Q_in = np.abs(sol[self.inflow_wires[0].LPN_solution_ids[1]])
         fac1 = -self.stenosis_coefficient * Q_in
         fac2 = fac1 - self.R
         self.mat["F"][[0, 2], 1] = fac2

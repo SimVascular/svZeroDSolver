@@ -7,5 +7,4 @@ addopts = """
     --cov-report=html
     --cov-report=term
     --cov=svzerodsolver
-    --verbose
 """

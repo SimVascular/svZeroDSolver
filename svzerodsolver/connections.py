@@ -31,7 +31,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import numpy as np
-from .blocks import wire
+from .blocks import Wire
 
 
 def check_block_pair_flow_consistency(bA, bB):
@@ -78,48 +78,19 @@ def connect_blocks_by_inblock_list(block_list):
             if bA.flow_directions[i] == +1 and (id_bA, id_bB) not in connectivity:
                 name_wire = bA.name + "_" + bB.name
                 connecting_elements = (block_list[id_bA], block_list[id_bB])
-                # wire_dict[name_wire] = wire(connecting_elements,name=name_wire)
-                connectivity.append(
-                    (id_bA, id_bB)
-                )  # connectivity stores pair-wise tuples of indices of the blocks that are connected; basically, if block 1 is connected to block 2 and the flow goes from block 1 to block 2, then connectivity will store a 2-element tuple, where the first element is the index at which block 1 is stored in block_list and the 2nd element is the index at which block 2 is stored in block_list. if the flow goes from block 2 to block 1, then connectivity will store a 2-element tuple, where the first element is the index at which block 2 is stored in block_list and the 2nd element is the index at which block 1 is stored in block_list.
+                connectivity.append((id_bA, id_bB))
+                wire_obj = Wire(connecting_elements, name=name_wire)
+                block_list[id_bA].inflow_wires.append(wire_obj)
             elif bA.flow_directions[i] == -1:
                 name_wire = bB.name + "_" + bA.name
                 connecting_elements = (block_list[id_bB], block_list[id_bA])
-            #     block_list[id_bA].add_connecting_wire(name_wire)
-            #     block_list[id_bB].add_connecting_wire(name_wire)
+                wire_obj = Wire(connecting_elements, name=name_wire)
+                block_list[id_bA].outflow_wires.append(wire_obj)
             else:
                 continue  # if this line is executed, then the next two lines (wire_dict[name_wire] = ... and block_list[id_bA] = ...) will not be executed
-            wire_obj = wire(connecting_elements, name=name_wire)
             wire_dict[name_wire] = wire_obj
-            block_list[id_bA].add_connecting_wire(wire_obj)
 
     return wire_dict
-
-
-def check_block_connection(block):
-    if len(block.flow_directions) != block.num_connections:
-        print("Block name: " + block.name)
-        print("Block number of flows: ", len(block.flow_directions))
-        print("Block number of eqs: ", block.num_connections)
-
-        raise Exception(
-            "Number of connections donot match the number of inflows+outflows for this block"
-        )
-    reorder_inblock_connectivity(block)
-
-
-# Reorder blocks to have connecting_block_list and connecting_wires_list arranged in ascending flow_directions
-# This will give robustness to initial ordering during setup
-
-
-def reorder_inblock_connectivity(block):
-    indx = sorted(
-        range(len(block.flow_directions)), key=lambda k: block.flow_directions[k]
-    )
-
-    block.flow_directions = [block.flow_directions[i] for i in indx]
-    block.connecting_wires_list = [block.connecting_wires_list[i] for i in indx]
-    block.connecting_block_list = [block.connecting_block_list[i] for i in indx]
 
 
 # Function to compute number of equations from blocks and wires
@@ -182,7 +153,9 @@ def assign_global_ids(
         block_list
     ):  # here, we assign the solution ids for the internal solutions of the LPNBlocks
         b.LPN_solution_ids = []
-        for w in b.connecting_wires_list:
+        for w in b.inflow_wires:
+            w.LPN_solution_ids = wire_lpn_ids[w.name]
+        for w in b.outflow_wires:
             w.LPN_solution_ids = wire_lpn_ids[w.name]
         for j in range(b.num_block_vars):
             b.LPN_solution_ids.append(i)

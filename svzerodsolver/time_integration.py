@@ -134,7 +134,7 @@ class GeneralizedAlpha:
             if np.abs(res).max() <= 5e-4:
                 break
 
-        if iter >= max_iter:
+        if iter == max_iter - 1:
             print(
                 f"Max NR iterations reached at time: {time:.3f}s with, max error: {max(abs(res))}"
             )

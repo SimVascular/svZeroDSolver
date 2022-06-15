@@ -135,86 +135,10 @@ def create_junction_blocks(parameters):
         elif config["junction_type"] == "BloodVesselJunction":
             junction_blocks[
                 config["junction_name"]
-            ] = ntwku.InternalJunction.from_config(config)
+            ] = ntwku.BloodVesselJunction.from_config(config)
         else:
             raise ValueError("Unknown junction type " + config["junction_type"])
     parameters["blocks"].update(junction_blocks)
-
-
-def get_vessel_ids_list(parameters):
-    vessel_ids_list = []
-    for vessel in parameters["vessels"]:
-        vessel_ids_list.append(vessel["vessel_id"])
-    return vessel_ids_list
-
-
-def get_vessel_block_helpers(parameters):
-    """
-    Purpose:
-        Create helper dictionaries to support the creation of the vessel blocks.
-    Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-    Returns:
-        dict vessel_blocks_connecting_block_lists
-            = {vessel_id : connecting_block_list}
-        dict vessel_blocks_flow_directions
-            = {vessel_id : flow_directions}
-        dict vessel_blocks_names
-            = {vessel_id : block_name}
-    """
-    vessel_blocks_connecting_block_lists = {}
-    vessel_blocks_flow_directions = {}
-    vessel_blocks_names = {}
-    vessel_ids_list = get_vessel_ids_list(parameters)
-    for vessel_id in vessel_ids_list:
-        vessel_blocks_connecting_block_lists[vessel_id] = []
-        vessel_blocks_flow_directions[vessel_id] = []
-        vessel_blocks_names[vessel_id] = "V" + str(vessel_id)
-    for location in ["inlet", "outlet"]:
-        ids_of_cap_vessels = use_steady_bcs.get_ids_of_cap_vessels(parameters, location)
-        for vessel_id in ids_of_cap_vessels:
-            if location == "inlet":
-                bc_block_name = "BC" + str(vessel_id) + "_inlet"
-                vessel_blocks_flow_directions[vessel_id].append(-1)
-            else:
-                bc_block_name = "BC" + str(vessel_id) + "_outlet"
-                vessel_blocks_flow_directions[vessel_id].append(+1)
-            vessel_blocks_connecting_block_lists[vessel_id].append(bc_block_name)
-    for junction in parameters["junctions"]:
-        junction_name = junction["junction_name"]
-        if not junction_name.startswith("J") and not junction_name[1].isnumeric():
-            message = (
-                "Joint name, "
-                + junction_name
-                + ", is not 'J' followed by numeric values. The 0D solver assumes that all joint names are 'J' followed by numeric values in the 0d solver input file. Note that the joint names are the same as the junction names."
-            )
-            raise RuntimeError(message)
-        for location in ["inlet", "outlet"]:
-            for vessel_id in junction[location + "_vessels"]:
-                vessel_blocks_connecting_block_lists[vessel_id].append(junction_name)
-                if location == "inlet":
-                    vessel_blocks_flow_directions[vessel_id].append(+1)
-                else:
-                    vessel_blocks_flow_directions[vessel_id].append(-1)
-    return (
-        vessel_blocks_connecting_block_lists,
-        vessel_blocks_flow_directions,
-        vessel_blocks_names,
-    )
-
-
-def create_vessel_id_to_zero_d_element_dict(parameters):
-    vessel_id_to_zero_d_element_dict = {}
-    for vessel in parameters["vessels"]:
-        vessel_id = vessel["vessel_id"]
-        zero_d_element_type = vessel["zero_d_element_type"]
-        zero_d_element_values = vessel["zero_d_element_values"]
-        vessel_id_to_zero_d_element_dict[vessel_id] = {
-            "zero_d_element_type": zero_d_element_type,
-            "zero_d_element_values": zero_d_element_values,
-        }
-    return vessel_id_to_zero_d_element_dict
 
 
 def create_vessel_blocks(parameters):
@@ -229,67 +153,34 @@ def create_vessel_blocks(parameters):
             parameters["blocks"] = {block_name : block_object}
     """
     vessel_blocks = {}  # {block_name : block_object}
-    (
-        vessel_blocks_connecting_block_lists,
-        vessel_blocks_flow_directions,
-        vessel_blocks_names,
-    ) = get_vessel_block_helpers(parameters)
-    vessel_ids_list = get_vessel_ids_list(parameters)
-    vessel_id_to_zero_d_element_dict = create_vessel_id_to_zero_d_element_dict(
-        parameters
-    )
-    for vessel_id in vessel_ids_list:
-        block_name = vessel_blocks_names[vessel_id]
-        connecting_block_list = vessel_blocks_connecting_block_lists[vessel_id]
-        flow_directions = vessel_blocks_flow_directions[vessel_id]
-        zero_d_element_type = vessel_id_to_zero_d_element_dict[vessel_id][
-            "zero_d_element_type"
-        ]
-        if zero_d_element_type == "BloodVessel":
-            if (
-                "R_poiseuille"
-                not in vessel_id_to_zero_d_element_dict[vessel_id][
-                    "zero_d_element_values"
-                ]
-            ):
-                message = "Error. BloodVessel block requires viscous Poiseuille-based resistance."
-                raise RuntimeError(message)
-            R = vessel_id_to_zero_d_element_dict[vessel_id]["zero_d_element_values"][
-                "R_poiseuille"
-            ]
-            C = (
-                vessel_id_to_zero_d_element_dict[vessel_id]["zero_d_element_values"][
-                    "C"
-                ]
-                if "C"
-                in vessel_id_to_zero_d_element_dict[vessel_id]["zero_d_element_values"]
-                else 0
+    vessel_config = {}
+    for vessel in parameters["vessels"]:
+        vessel_id = vessel["vessel_id"]
+        vessel_config[vessel_id] = dict(
+            name="V" + str(vessel_id),
+            connecting_blocks=[],
+            flow_directions=[],
+            **vessel,
+        )
+    for location in ["inlet", "outlet"]:
+        ids_of_cap_vessels = use_steady_bcs.get_ids_of_cap_vessels(parameters, location)
+        for vessel_id in ids_of_cap_vessels:
+            flow_direction = -1 if location == "inlet" else +1
+            vessel_config[vessel_id]["flow_directions"].append(flow_direction)
+            vessel_config[vessel_id]["connecting_blocks"].append(
+                f"BC{vessel_id}_{location}"
             )
-            L = (
-                vessel_id_to_zero_d_element_dict[vessel_id]["zero_d_element_values"][
-                    "L"
-                ]
-                if "L"
-                in vessel_id_to_zero_d_element_dict[vessel_id]["zero_d_element_values"]
-                else 0
-            )
-            stenosis_coefficient = (
-                vessel_id_to_zero_d_element_dict[vessel_id]["zero_d_element_values"][
-                    "stenosis_coefficient"
-                ]
-                if "stenosis_coefficient"
-                in vessel_id_to_zero_d_element_dict[vessel_id]["zero_d_element_values"]
-                else 0
-            )
-            vessel_blocks[block_name] = ntwku.BloodVessel(
-                R=R,
-                C=C,
-                L=L,
-                stenosis_coefficient=stenosis_coefficient,
-                connecting_block_list=connecting_block_list,
-                name=block_name,
-                flow_directions=flow_directions,
-            )
+        for junction in parameters["junctions"]:
+            for vessel_id in junction[location + "_vessels"]:
+                vessel_config[vessel_id]["connecting_blocks"].append(
+                    junction["junction_name"]
+                )
+                flow_direction = +1 if location == "inlet" else -1
+                vessel_config[vessel_id]["flow_directions"].append(flow_direction)
+
+    for vessel in vessel_config.values():
+        if vessel["zero_d_element_type"] == "BloodVessel":
+            vessel_blocks[vessel["name"]] = ntwku.BloodVessel.from_config(vessel)
         else:  # this is a custom, user-defined element block
             raise NotImplementedError
     parameters["blocks"].update(vessel_blocks)

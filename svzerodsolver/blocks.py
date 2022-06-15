@@ -250,6 +250,20 @@ class BloodVessel(LPNBlock):
         # only necessary to assemble E in __init__, F and dF get assembled with update_solution
         self.mats_to_assemble.add("E")
 
+    @classmethod
+    def from_config(cls, config):
+        return cls(
+            R=config["zero_d_element_values"].get("R_poiseuille"),
+            C=config["zero_d_element_values"].get("C", 0.0),
+            L=config["zero_d_element_values"].get("L", 0.0),
+            stenosis_coefficient=config["zero_d_element_values"].get(
+            "stenosis_coefficient", 0.0
+        ),
+            connecting_block_list=config["connecting_blocks"],
+            name=config["name"],
+            flow_directions=config["flow_directions"],
+        )
+
     def update_solution(self, sol):
         Q_in = np.abs(sol[self.inflow_wires[0].LPN_solution_ids[1]])
         fac1 = -self.stenosis_coefficient * Q_in

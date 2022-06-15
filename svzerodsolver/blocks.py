@@ -163,6 +163,28 @@ class InternalJunction(LPNBlock):
         self.mat["F"] = np.array(self.mat["F"], dtype=float)
         self.mats_to_assemble.add("F")
 
+    @classmethod
+    def from_config(cls, config):
+        name = config["junction_name"]
+        if not name.startswith("J") and not name[1].isnumeric():
+            raise ValueError(
+                f"Invalid junction name {name}. Junction names must "
+                "start with J following by a number."
+            )
+        connecting_block_list = []
+        flow_directions = []
+        for vessel_id in config["inlet_vessels"]:
+            connecting_block_list.append("V" + str(vessel_id))
+            flow_directions.append(-1)
+        for vessel_id in config["outlet_vessels"]:
+            connecting_block_list.append("V" + str(vessel_id))
+            flow_directions.append(+1)
+        if not (+1 in flow_directions) and (-1 in flow_directions):
+            raise ValueError(
+                "Junction block must have at least 1 inlet and 1 outlet " "connection."
+            )
+        return cls(connecting_block_list, name, flow_directions)
+
 
 class BloodVesselJunction(InternalJunction):
     """

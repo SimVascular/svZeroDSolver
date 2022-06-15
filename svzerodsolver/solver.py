@@ -127,46 +127,17 @@ def create_junction_blocks(parameters):
             parameters["blocks"] = {block_name : block_object}
     """
     junction_blocks = {}  # {block_name : block_object}
-    for junction in parameters["junctions"]:
-        junction_name = junction["junction_name"]
-        if not junction_name.startswith("J") and not junction_name[1].isnumeric():
-            message = (
-                "Error. Joint name, "
-                + junction_name
-                + ", is not 'J' followed by numeric values. The 0D solver assumes that all joint names are 'J' followed by numeric values in the 0d solver input file. Note that the joint names are the same as the junction names."
-            )
-            raise RuntimeError(message)
-        connecting_block_list = []
-        flow_directions = []
-        for vessel_id in junction["inlet_vessels"]:
-            connecting_block_list.append("V" + str(vessel_id))
-            flow_directions.append(-1)
-        for vessel_id in junction["outlet_vessels"]:
-            connecting_block_list.append("V" + str(vessel_id))
-            flow_directions.append(+1)
-        if (+1 in flow_directions) and (-1 in flow_directions):
-            if junction["junction_type"] in ["NORMAL_JUNCTION", "internal_junction"]:
-                junction_blocks[junction_name] = ntwku.InternalJunction(
-                    connecting_block_list=connecting_block_list,
-                    name=junction_name,
-                    flow_directions=flow_directions,
-                )
-            elif junction["junction_type"] == "BloodVesselJunction":
-                junction_blocks[junction_name] = ntwku.BloodVesselJunction(
-                    junction,
-                    connecting_block_list=connecting_block_list,
-                    name=junction_name,
-                    flow_directions=flow_directions,
-                )
-            else:
-                raise ValueError("Unknown junction type " + junction["junction_type"])
+    for config in parameters["junctions"]:
+        if config["junction_type"] in ["NORMAL_JUNCTION", "internal_junction"]:
+            junction_blocks[
+                config["junction_name"]
+            ] = ntwku.InternalJunction.from_config(config)
+        elif config["junction_type"] == "BloodVesselJunction":
+            junction_blocks[
+                config["junction_name"]
+            ] = ntwku.InternalJunction.from_config(config)
         else:
-            message = (
-                "Error. Junction block, "
-                + junction_name
-                + ", must have at least 1 inlet connection and 1 outlet connection."
-            )
-            raise RuntimeError(message)
+            raise ValueError("Unknown junction type " + config["junction_type"])
     parameters["blocks"].update(junction_blocks)
 
 

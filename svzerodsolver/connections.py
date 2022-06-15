@@ -44,12 +44,10 @@ def connect_blocks_by_inblock_list(block_list):
 
     # If you reached here, it means each block has a consistent (connecting_block_list) and (flow_directions)
     for bA in block_list:
-        i = -1
         id_bA = block_list.index(bA)
-        for bBnm in bA.connecting_block_list:
+        for i, bBnm in enumerate(bA.connecting_block_list):
             id_bB = bnames.index(bBnm)
             bB = block_list[id_bB]
-            i += 1  # i is the index at which block, bB, is located in block bA's connecting_block_list
             if bA.flow_directions[i] == +1 and (id_bA, id_bB) not in connectivity:
                 name_wire = bA.name + "_" + bB.name
                 connecting_elements = (block_list[id_bA], block_list[id_bB])

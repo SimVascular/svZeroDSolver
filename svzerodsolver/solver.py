@@ -75,7 +75,7 @@ import json
 
 from .blocks import create_LPN_blocks
 from . import connections
-from . import time_integration as time_int
+from .time_integration import run_integrator
 from . import use_steady_bcs
 
 import argparse
@@ -117,11 +117,11 @@ def set_solver_parameters(parameters):
     )
 
 
-def load_in_ics(var_name_list, ICs_dict):
+def convert_ics(var_name_list, var_name_list_original, y, ydot):
 
-    var_name_list_loaded = ICs_dict["var_name_list"]
-    y_initial_loaded = ICs_dict["y"]
-    ydot_initial_loaded = ICs_dict["ydot"]
+    var_name_list_loaded = var_name_list_original
+    y_initial_loaded = y
+    ydot_initial_loaded = ydot
 
     y_initial = np.zeros(len(var_name_list))
     ydot_initial = np.zeros(len(var_name_list))
@@ -132,116 +132,6 @@ def load_in_ics(var_name_list, ICs_dict):
         ydot_initial[i] = ydot_initial_loaded[ind]
 
     return y_initial, ydot_initial
-
-
-def run_network_util(
-    parameters,
-    block_list,
-    use_ICs_from_npy_file,
-    ICs_npy_file_path,
-    save_y_ydot_to_npy,
-    y_ydot_file_path,
-    simulation_start_time,
-):
-    """
-    Purpose:
-        Run functions from network_util_NR to execute the 0d simulation and generate simulation results (pressure, flow rates).
-    Inputs:
-        string zero_d_solver_input_file_path
-            = path to the 0d solver input file
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-        boolean draw_directed_graph
-            = True to visualize the 0d model as a directed graph using networkx -- saves the graph to a .png file (hierarchical graph layout) and a networkx .dot file; False, otherwise. .dot file can be opened with neato from graphviz to visualize the directed in a different format.
-        boolean use_ICs_from_npy_file
-            = True to use user-prescribed ICs (saved in a .npy file)
-        string ICs_npy_file_path
-            = path to .npy file storing the initial conditions
-        boolean save_y_ydot_to_npy
-            = True to save the entire 0d solution and its time derivative at the final time step to a .npy file
-        string y_ydot_file_path
-            = name of the .npy file to which the 0d solution and its time derivative at the final time step will be saved
-        float simulation_start_time
-            = initial time of 0d simulation
-    Returns:
-        np.array zero_d_time
-            = np.array of simulated time points
-        np.array results_0d
-            = np.array of the 0d simulation results, where the rows correspond to the each time point in zero_d_time and the column j corresponds to the solution for item j in var_name_list
-        list var_name_list
-            = list of the names of the 0d simulation results; most of the items in var_name_list are the QoIs + the names of the wires used in the 0d model (the wires connect the 0d blocks), where the wire names are usually comprised of the wire's inlet block name + "_" + the wire's outlet block name
-                Example:
-                    for var_name_list = ['P_V6_BC6_outlet', 'Q_V6_BC6_outlet'], then results_0d[:, i] holds the pressure (i = 0) or flow rate simulation result (i = 1) (both as np.arrays) for wire R6_BC6, which corresponds to cap segment #6
-        np.array y_next
-            = 0d solution at the final time step
-        np.array ydot_next
-            = time derivative of the 0d solution at the final time step
-        var_name_list_original
-            = list of the names of the 0d simulation results; most of the items in var_name_list are the QoIs + the names of the wires used in the 0d model (the wires connect the 0d blocks), where the wire names are usually comprised of the wire's inlet block name + "_" + the wire's outlet block name
-    """
-    wire_dict = connections.connect_blocks_by_inblock_list(block_list)
-    neq = sum([b.neq for b in block_list])
-    var_name_list = connections.assign_global_ids(
-        block_list, wire_dict
-    )  # assign solution variables with global ID
-
-    # initialize solution structures
-    if use_ICs_from_npy_file:
-        ICs_dict = np.load(ICs_npy_file_path, allow_pickle=True).item()
-        y_initial, ydot_initial = load_in_ics(var_name_list, ICs_dict)
-    else:
-        y_initial, ydot_initial = np.zeros(neq), np.zeros(neq)
-    y_next = y_initial.copy()
-    ydot_next = ydot_initial.copy()
-
-    rho = 0.1
-
-    print("starting simulation")
-
-    ylist = [y_next.copy()]
-    parameters["initial_time"] = simulation_start_time
-    dt = parameters["simulation_parameters"]["delta_t"]
-    tlist = np.arange(
-        parameters["initial_time"],
-        parameters["simulation_parameters"]["total_number_of_simulated_time_steps"]
-        * dt,
-        dt,
-    )
-
-    # create time integration
-    t_int = time_int.GeneralizedAlpha(
-        rho, y_next.shape[0], parameters["simulation_parameters"]["delta_t"]
-    )
-
-    for time in tlist[:-1]:
-        y_next, ydot_next = t_int.step(
-            y_next,
-            ydot_next,
-            time,
-            block_list,
-        )
-        ylist.append(y_next)
-
-    if save_y_ydot_to_npy:
-        save_ics(y_ydot_file_path, y_next, ydot_next, var_name_list)
-
-    var_name_list_original = copy.deepcopy(var_name_list)
-    results_0d = np.array(ylist)
-    return (
-        tlist,
-        results_0d,
-        var_name_list,
-        y_next,
-        ydot_next,
-        var_name_list_original,
-    )
-
-
-def save_ics(y_ydot_file_path, y_next, ydot_next, var_name_list):
-    np.save(
-        y_ydot_file_path,
-        {"y": y_next, "ydot": ydot_next, "var_name_list": var_name_list},
-    )
 
 
 def reformat_network_util_results_all(zero_d_time, results_0d, var_name_list):
@@ -493,105 +383,8 @@ def reformat_network_util_results_branch(
     return zero_d_results
 
 
-def extract_last_cardiac_cycle_simulation_results(
-    time, results, number_of_time_pts_per_cardiac_cycle
-):
-    """
-    Purpose:
-        Extract the simulation results for the last cardiac cycle for the given np.arrays, time and results
-    Inputs:
-        np.array time
-            = array of time points
-        np.array results
-            = 2d array of simulation results
-        int number_of_time_pts_per_cardiac_cycle
-            = number of simulated time points per cycle
-    Returns:
-        np.array time_for_last_cardiac_cycle
-            = time, but condensed to contain just the values for the last cardiac cycle
-        np.array results_for_last_cardiac_cycle
-            = results, but condensed to contain just the values for the last cardiac cycle
-    """
-    time_for_last_cardiac_cycle = time[-1 * number_of_time_pts_per_cardiac_cycle :]
-    time_for_last_cardiac_cycle = (
-        time_for_last_cardiac_cycle - time_for_last_cardiac_cycle[0] + time[0]
-    )
-    return (
-        time_for_last_cardiac_cycle,
-        results[-1 * number_of_time_pts_per_cardiac_cycle :, :],
-    )
-
-
-def run_last_cycle_extraction_routines(
-    cardiac_cycle_period, number_of_time_pts_per_cardiac_cycle, zero_d_time, results_0d
-):
-    """
-    Purpose:
-        Extract the last cardiac cycle waveform for all 0d simulation results
-    Inputs:
-        float cardiac_cycle_period
-            = period of a cardiac cycle
-        int number_of_time_pts_per_cardiac_cycle
-            = number of simulated 0d time points per cycle
-        np.array zero_d_time
-            = np.array of simulated time points
-        np.array results_0d
-            = np.array of the 0d simulation results, where the rows correspond to the each simulated time point and column j corresponds to the 0d solution for the solution variable name in var_name_list[j]
-    Returns:
-        np.array time_for_last_cardiac_cycle
-            = time, but condensed to contain just the values for the last cardiac cycle
-        np.array res
-            = results, but condensed to contain just the values for the last cardiac cycle
-    """
-
-    time_for_last_cardiac_cycle, res = extract_last_cardiac_cycle_simulation_results(
-        zero_d_time, results_0d, number_of_time_pts_per_cardiac_cycle
-    )
-
-    # check that the cardiac cycle period is correctly given by zero_d_time
-    errr = (
-        (
-            cardiac_cycle_period
-            - (time_for_last_cardiac_cycle[-1] - time_for_last_cardiac_cycle[0])
-        )
-        / cardiac_cycle_period
-        * 100.0
-    )
-    if errr > 0.01:
-        message = "Error. cardiac_cycle_period != time_for_last_cardiac_cycle[-1] - time_for_last_cardiac_cycle[0]"
-        raise RuntimeError(message)
-
-    return time_for_last_cardiac_cycle, res
-
-
-def save_simulation_results(zero_d_simulation_results_file_path, zero_d_results):
-    """
-    Purpose:
-        Save the 0d simulation results to a .npy file.
-    Usage:
-        To open and load the .npy file to extract the 0d simulation results, use the following command:
-            zero_d_results = np.load(/path/to/zero/d/simulation/results/npy/file, allow_pickle = True).item()
-    Inputs:
-        string zero_d_simulation_results_file_path
-            = path to the .npy file to which the 0d simulation results will be saved
-        dict zero_d_results
-            = obtained from reformat_network_util_results_all or reformat_network_util_results_branch
-    Returns:
-        void, but saves a .npy file storing the 0d simulation results (zero_d_results) as a dictionary.
-    """
-    np.save(zero_d_simulation_results_file_path, zero_d_results)
-
-
-def set_up_and_run_0d_simulation(
-    zero_d_solver_input_file_path,
-    last_cycle=False,
-    save_results_all=False,
-    save_results_branch=True,
-    use_ICs_from_npy_file=False,
-    ICs_npy_file_path=None,
-    save_y_ydot_to_npy=False,
-    y_ydot_file_path=None,
-    simulation_start_time=0.0,
+def run_simulation_from_config(
+    parameters,
     use_steady_soltns_as_ics=True,
 ):
     """
@@ -629,10 +422,8 @@ def set_up_and_run_0d_simulation(
     Returns:
         void
     """
-
-    with open(zero_d_solver_input_file_path, "r") as infile:
-        parameters = json.load(infile)
-
+    y_initial = None
+    ydot_initial = None
     if use_steady_soltns_as_ics:
         parameters_mean = copy.deepcopy(parameters)
         (
@@ -646,82 +437,49 @@ def set_up_and_run_0d_simulation(
         ] = 11
         parameters_mean["simulation_parameters"]["number_of_cardiac_cycles"] = 3
 
-        y_ydot_file_path_temp = (
-            os.path.splitext(zero_d_solver_input_file_path)[0]
-            + "_initial_conditions.npy"
-        )
-
         block_list = create_LPN_blocks(parameters_mean)
         set_solver_parameters(parameters_mean)
-        (
-            zero_d_time,
-            results_0d,
-            var_name_list,
-            y_f,
-            ydot_f,
-            var_name_list_original,
-        ) = run_network_util(
-            parameters_mean,
+        wire_dict = connections.connect_blocks_by_inblock_list(block_list)
+        var_name_list_original = connections.assign_global_ids(block_list, wire_dict)
+        (_, y_list, ydot_list) = run_integrator(
             block_list,
-            use_ICs_from_npy_file=False,
-            ICs_npy_file_path=None,
-            save_y_ydot_to_npy=False,
-            y_ydot_file_path=None,
-            simulation_start_time=simulation_start_time,
+            parameters_mean["simulation_parameters"][
+                "total_number_of_simulated_time_steps"
+            ],
+            parameters_mean["simulation_parameters"]["delta_t"],
         )
 
         (
-            y0,
-            ydot0,
-            var_name_list,
+            y_initial,
+            ydot_initial,
+            var_name_list_original,
         ) = use_steady_bcs.restore_internal_variables_for_capacitance_based_bcs(
-            y_f, ydot_f, var_name_list_original, altered_bc_blocks
+            y_list[-1], ydot_list[-1], var_name_list_original, altered_bc_blocks
         )
-
-        save_ics(y_ydot_file_path_temp, y0, ydot0, var_name_list)
-
-        use_ICs_from_npy_file = True
-        ICs_npy_file_path = y_ydot_file_path_temp
 
     block_list = create_LPN_blocks(parameters)
     set_solver_parameters(parameters)
-    zero_d_time, results_0d, var_name_list, _, _, _ = run_network_util(
-        parameters,
-        block_list,
-        use_ICs_from_npy_file,
-        ICs_npy_file_path,
-        save_y_ydot_to_npy,
-        y_ydot_file_path,
-        simulation_start_time,
+    wire_dict = connections.connect_blocks_by_inblock_list(block_list)
+    var_name_list = connections.assign_global_ids(block_list, wire_dict)
+    y_initial, ydot_initial = convert_ics(
+        var_name_list, var_name_list_original, y_initial, ydot_initial
     )
-    print("0D simulation completed!\n")
+    (time_steps, y_list, ydot_list) = run_integrator(
+        block_list,
+        parameters["simulation_parameters"]["total_number_of_simulated_time_steps"],
+        parameters["simulation_parameters"]["delta_t"],
+        y_initial,
+        ydot_initial,
+    )
 
-    # postprocessing
-    if last_cycle == True:
-        zero_d_time, results_0d = run_last_cycle_extraction_routines(
-            parameters["simulation_parameters"]["cardiac_cycle_period"],
-            parameters["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"],
-            zero_d_time,
-            results_0d,
-        )
-    if save_results_all or save_results_branch:
-        zero_d_input_file_name = os.path.splitext(zero_d_solver_input_file_path)[0]
-        if save_results_all:
-            zero_d_simulation_results_file_path = (
-                zero_d_input_file_name + "_all_results"
-            )
-            zero_d_results = reformat_network_util_results_all(
-                zero_d_time, results_0d, var_name_list
-            )
-            save_simulation_results(zero_d_simulation_results_file_path, zero_d_results)
-        if save_results_branch:
-            zero_d_simulation_results_file_path = (
-                zero_d_input_file_name + "_branch_results"
-            )
-            zero_d_results = reformat_network_util_results_branch(
-                zero_d_time, results_0d, var_name_list, parameters
-            )
-            save_simulation_results(zero_d_simulation_results_file_path, zero_d_results)
+    zero_d_results_all = reformat_network_util_results_all(
+        time_steps, np.array(y_list), var_name_list
+    )
+
+    zero_d_results_branch = reformat_network_util_results_branch(
+        time_steps, np.array(y_list), var_name_list, parameters
+    )
+    return zero_d_results_branch, zero_d_results_all
 
 
 def create_parser():
@@ -733,20 +491,6 @@ def create_parser():
     # Define 0D solver commands.
 
     parser.add_argument("zero", help="Path to 0d solver input file")
-
-    parser.add_argument(
-        "-v",
-        "--visualize",
-        action="store_true",
-        help="Visualize the 0d model as a networkx directed graph and save to .png file",
-    )
-
-    parser.add_argument(
-        "-l",
-        "--returnLast",
-        action="store_true",
-        help="Return results for only the last simulated cardiac cycle",
-    )
 
     parser.add_argument(
         "-sa",
@@ -815,12 +559,12 @@ def main():
 
     args = parser.parse_args(args)
 
-    set_up_and_run_0d_simulation(
+    with open(args.zero) as infile:
+        parameters = json.load(infile)
+
+    zero_d_results_branch, zero_d_results_all = run_simulation_from_config(
+        parameters=parameters,
         zero_d_solver_input_file_path=args.zero,
-        last_cycle=args.returnLast,
-        save_results_all=args.saveAll,
-        save_results_branch=args.saveBranch,
-        use_custom_0d_elements=args.useCustom,
         use_ICs_from_npy_file=args.useICs,
         ICs_npy_file_path=args.ICsPath,
         save_y_ydot_to_npy=args.saveYydot,
@@ -828,6 +572,14 @@ def main():
         simulation_start_time=args.initialTime,
         use_steady_soltns_as_ics=args.useSteadyIC,
     )
+
+    # postprocessing
+    zero_d_input_file_name = os.path.splitext(args.zero)[0]
+    if args.saveAll:
+        np.save(zero_d_input_file_name + "_all_results", zero_d_results_all)
+
+    if args.saveBranch:
+        np.save(zero_d_input_file_name + "_branch_results", zero_d_results_branch)
 
 
 if __name__ == "__main__":

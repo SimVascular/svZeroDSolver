@@ -1,7 +1,7 @@
-from svzerodsolver.solver import set_up_and_run_0d_simulation
+from svzerodsolver.solver import run_simulation_from_config
 import os
 
-import shutil
+import json
 import numpy as np
 
 RTOL_PRES = 1.0e-7
@@ -16,10 +16,10 @@ def run_test_case_by_name(name, testdir):
         testdir: Directory for performing the simulation.
     """
     testfile = os.path.join(os.path.dirname(__file__), "cases", name + ".json")
-    shutil.copyfile(testfile, os.path.join(testdir, name + ".json"))
-    set_up_and_run_0d_simulation(os.path.join(testdir, name + ".json"))
-    result_file = os.path.join(testdir, name + "_branch_results.npy")
-    return np.load(result_file, allow_pickle=True).item()
+    with open(testfile) as ff:
+        config = json.load(ff)
+    branch_result, _ = run_simulation_from_config(config, os.path.join(testdir, name))
+    return branch_result
 
 
 def get_result(result_array, field, branch, branch_node, time_step):

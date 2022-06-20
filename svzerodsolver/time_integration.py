@@ -144,3 +144,51 @@ class GeneralizedAlpha:
         curr_ydot = ydot + (ydotam - ydot) / self.alpha_m
 
         return curr_y, curr_ydot
+
+
+def run_integrator(
+    block_list,
+    num_time_steps,
+    time_step_size,
+    y_initial=None,
+    ydot_initial=None,
+    rho=0.1,
+    method="genalpha",
+):
+
+    neq = sum([b.neq for b in block_list])
+
+    # initialize solution structures
+    if y_initial is None:
+        y = np.zeros(neq)
+    else:
+        y = y_initial.copy()
+
+    if ydot_initial is None:
+        ydot = np.zeros(neq)
+    else:
+        ydot = ydot_initial.copy()
+
+    y_list = [y.copy()]
+    ydot_list = [ydot.copy()]
+    time_steps = np.arange(
+        0.0, num_time_steps * time_step_size, time_step_size, dtype=float
+    )
+
+    # create time integration
+    if method == "genalpha":
+        integrator = GeneralizedAlpha(rho, y.shape[0], time_step_size)
+    else:
+        raise ValueError(f"Unknown integration method {method}.")
+
+    for time in time_steps[:-1]:
+        y, ydot = integrator.step(
+            y,
+            ydot,
+            time,
+            block_list,
+        )
+        y_list.append(y)
+        ydot_list.append(ydot)
+
+    return time_steps, y_list, ydot_list

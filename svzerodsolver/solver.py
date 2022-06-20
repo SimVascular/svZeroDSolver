@@ -71,48 +71,15 @@ import re
 import os
 import copy
 import numpy as np
-import scipy.interpolate
 import json
 
-from . import blocks as ntwku
+from . import blocks
 from . import connections
 from . import time_integration as time_int
 from . import use_steady_bcs
 
 import argparse
 from collections import defaultdict
-
-
-def create_unsteady_bc_value_function(time, bc_values):
-    """
-    Purpose:
-        Create a time-dependent function for bc_values (boundary condition values) by interpolating bc_values over time with a cubic spline and periodic boundaries
-    Caveats:
-        1) bc_values must have the same start and end values, since periodic boundariess are used for the cubic spline
-        2) bc_values and time must have the same length
-    Inputs:
-        list time
-            = [list of time points]
-        list bc_values
-            = [list of bc_values]
-    Returns:
-        cubic spline for bc_values as a function of time
-    Reference:
-        https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.CubicSpline.html
-    """
-    if len(bc_values) == 2 and bc_values[0] == bc_values[1]:
-
-        def function(t):
-            """
-            Constant boundary condition. Need to provide a "t" (time) input to work with the general (unsteady) blocks defined in blocks.py
-            """
-            return bc_values[0]
-
-        return function
-    else:
-        return scipy.interpolate.CubicSpline(
-            np.array(time), np.array(bc_values), bc_type="periodic"
-        )
 
 
 def create_junction_blocks(parameters):
@@ -126,19 +93,15 @@ def create_junction_blocks(parameters):
         void, but updates parameters["blocks"] to include the junction_blocks, where
             parameters["blocks"] = {block_name : block_object}
     """
-    junction_blocks = {}  # {block_name : block_object}
+    block_list = []
     for config in parameters["junctions"]:
         if config["junction_type"] in ["NORMAL_JUNCTION", "internal_junction"]:
-            junction_blocks[
-                config["junction_name"]
-            ] = ntwku.InternalJunction.from_config(config)
+            block_list.append(blocks.InternalJunction.from_config(config))
         elif config["junction_type"] == "BloodVesselJunction":
-            junction_blocks[
-                config["junction_name"]
-            ] = ntwku.BloodVesselJunction.from_config(config)
+            block_list.append(blocks.BloodVesselJunction.from_config(config))
         else:
-            raise ValueError("Unknown junction type " + config["junction_type"])
-    parameters["blocks"].update(junction_blocks)
+            raise ValueError(f"Unknown junction type: {config['junction_type']}")
+    return block_list
 
 
 def create_vessel_blocks(parameters):
@@ -152,7 +115,6 @@ def create_vessel_blocks(parameters):
         void, but updates parameters["blocks"] to include the vessel_blocks, where
             parameters["blocks"] = {block_name : block_object}
     """
-    vessel_blocks = {}  # {block_name : block_object}
     vessel_config = {}
     for vessel in parameters["vessels"]:
         vessel_id = vessel["vessel_id"]
@@ -177,16 +139,16 @@ def create_vessel_blocks(parameters):
                 )
                 flow_direction = +1 if location == "inlet" else -1
                 vessel_config[vessel_id]["flow_directions"].append(flow_direction)
-
+    block_list = []
     for vessel in vessel_config.values():
         if vessel["zero_d_element_type"] == "BloodVessel":
-            vessel_blocks[vessel["name"]] = ntwku.BloodVessel.from_config(vessel)
+            block_list.append(blocks.BloodVessel.from_config(vessel))
         else:
             raise NotImplementedError
-    parameters["blocks"].update(vessel_blocks)
+    return block_list
 
 
-def create_bc_blocks(parameters, location):
+def create_bc_blocks(parameters):
     """
     Purpose:
         Create the outlet bc (boundary condition) blocks for the 0d model.
@@ -194,70 +156,83 @@ def create_bc_blocks(parameters, location):
         dict parameters
             -- created from function utils.extract_info_from_solver_input_file
     Returns:
-        void, but updates parameters["blocks"] to include the outlet_bc_blocks, where
+        void, but updates parameters["blocks"] to include the blocks, where
             parameters["blocks"] = {block_name : block_object}
     """
-    outlet_bc_blocks = {}  # {block_name : block_object}
-    vessels_of_model = use_steady_bcs.get_ids_of_cap_vessels(parameters, location)
-    vessel_bc_map = parameters["vessel_id_to_boundary_condition_map"]
-    for vessel_id in vessels_of_model:
-        block_name = "BC" + str(vessel_id) + "_" + location
+    block_list = []
+    vessel_id_to_boundary_condition_map = {}
+    for vessel in parameters["vessels"]:
+        if "boundary_conditions" in vessel:
+            vessel_id = vessel["vessel_id"]
+            vessel_id_to_boundary_condition_map[vessel_id] = {}
+            for location, bc_name in vessel["boundary_conditions"].items():
+                for boundary_condition in parameters["boundary_conditions"]:
+                    if boundary_condition["bc_name"] == bc_name:
+                        vessel_id_to_boundary_condition_map[vessel_id][
+                            location
+                        ] = boundary_condition
+    parameters[
+        "vessel_id_to_boundary_condition_map"
+    ] = vessel_id_to_boundary_condition_map
+    for location in ["outlet", "inlet"]:
+        for vessel_id in use_steady_bcs.get_ids_of_cap_vessels(parameters, location):
+            block_name = "BC" + str(vessel_id) + "_" + location
 
-        vessel_config = dict(
-            name=block_name,
-            connecting_blocks=["V" + str(vessel_id)],
-            flow_directions=[-1] if location == "outlet" else [+1],
-            **vessel_bc_map[vessel_id][location],
-        )
-
-        if (
-            "t" in vessel_config["bc_values"]
-            and len(vessel_config["bc_values"]["t"]) >= 2
-        ):
-            cardiac_cycle_period = (
-                vessel_config["bc_values"]["t"][-1] - vessel_config["bc_values"]["t"][0]
+            vessel_config = dict(
+                name=block_name,
+                connecting_blocks=["V" + str(vessel_id)],
+                flow_directions=[-1] if location == "outlet" else [+1],
+                **parameters["vessel_id_to_boundary_condition_map"][vessel_id][
+                    location
+                ],
             )
+
             if (
-                "cardiac_cycle_period" in parameters["simulation_parameters"]
-                and cardiac_cycle_period
-                != parameters["simulation_parameters"]["cardiac_cycle_period"]
+                "t" in vessel_config["bc_values"]
+                and len(vessel_config["bc_values"]["t"]) >= 2
             ):
-                message = (
-                    "Error. The time series of the boundary condition for segment #"
-                    + str(vessel_id)
-                    + " does not have the same cardiac cycle period as the other boundary conditions.  All boundary conditions, including the inlet and outlet boundary conditions, should have the same prescribed cardiac cycle period. Note that each boundary conditions must be prescribed over exactly one cardiac cycle."
+                cardiac_cycle_period = (
+                    vessel_config["bc_values"]["t"][-1]
+                    - vessel_config["bc_values"]["t"][0]
                 )
-                raise RuntimeError(message)
-            elif "cardiac_cycle_period" not in parameters["simulation_parameters"]:
-                parameters["simulation_parameters"].update(
-                    {"cardiac_cycle_period": cardiac_cycle_period}
+                if (
+                    "cardiac_cycle_period" in parameters["simulation_parameters"]
+                    and cardiac_cycle_period
+                    != parameters["simulation_parameters"]["cardiac_cycle_period"]
+                ):
+                    raise RuntimeError(
+                        f"The time series of the boundary condition for segment {vessel_id} does "
+                        "not have the same cardiac cycle period as the other boundary conditions."
+                    )
+                elif "cardiac_cycle_period" not in parameters["simulation_parameters"]:
+                    parameters["simulation_parameters"][
+                        "cardiac_cycle_period"
+                    ] = cardiac_cycle_period
+
+            if vessel_config["bc_type"] == "RESISTANCE":
+                block_list.append(
+                    blocks.UnsteadyResistanceWithDistalPressure.from_config(
+                        vessel_config
+                    )
+                )
+            elif vessel_config["bc_type"] == "RCR":
+                block_list.append(
+                    blocks.UnsteadyRCRBlockWithDistalPressure.from_config(vessel_config)
+                )
+            elif vessel_config["bc_type"] == "FLOW":
+                block_list.append(blocks.UnsteadyFlowRef.from_config(vessel_config))
+            elif vessel_config["bc_type"] == "PRESSURE":
+                block_list.append(blocks.UnsteadyPressureRef.from_config(vessel_config))
+            elif vessel_config["bc_type"] == "CORONARY":
+                block_list.append(
+                    blocks.OpenLoopCoronaryWithDistalPressureBlock.from_config(
+                        vessel_config
+                    )
                 )
 
-        if vessel_config["bc_type"] == "RESISTANCE":
-            outlet_bc_blocks[
-                block_name
-            ] = ntwku.UnsteadyResistanceWithDistalPressure.from_config(vessel_config)
-        elif vessel_config["bc_type"] == "RCR":
-            outlet_bc_blocks[
-                block_name
-            ] = ntwku.UnsteadyRCRBlockWithDistalPressure.from_config(vessel_config)
-        elif vessel_config["bc_type"] == "FLOW":
-            outlet_bc_blocks[block_name] = ntwku.UnsteadyFlowRef.from_config(
-                vessel_config
-            )
-        elif vessel_config["bc_type"] == "PRESSURE":
-            outlet_bc_blocks[block_name] = ntwku.UnsteadyPressureRef.from_config(
-                vessel_config
-            )
-        elif vessel_config["bc_type"] == "CORONARY":
-            "Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow and pressure in human coronary arteries. Annals of Biomedical Engineering 38, 3195–3209 (2010)."
-            outlet_bc_blocks[
-                block_name
-            ] = ntwku.OpenLoopCoronaryWithDistalPressureBlock.from_config(vessel_config)
-
-        else:  # this is a custom, user-defined outlet bc block
-            raise NotImplementedError
-    parameters["blocks"].update(outlet_bc_blocks)
+            else:
+                raise NotImplementedError
+    return block_list
 
 
 def create_LPN_blocks(parameters):
@@ -273,14 +248,10 @@ def create_LPN_blocks(parameters):
                 = {block_name : block_object}
                 -- where the values are the junction, vessel, outlet BC, and inlet BC block objects
     """
-    blocks = {}  # {block_name : block_object}
-    parameters.update({"blocks": blocks})
-    create_junction_blocks(parameters)
-    create_vessel_blocks(parameters)
-    use_steady_bcs.create_vessel_id_to_boundary_condition_map(parameters)
-    create_bc_blocks(parameters, "outlet")
-    create_bc_blocks(parameters, "inlet")
-    parameters.update({"block_names": list(parameters["blocks"].keys())})
+    block_list = create_junction_blocks(parameters)
+    block_list += create_vessel_blocks(parameters)
+    block_list += create_bc_blocks(parameters)
+    return block_list
 
 
 def set_solver_parameters(parameters):
@@ -337,6 +308,7 @@ def load_in_ics(var_name_list, ICs_dict):
 
 def run_network_util(
     parameters,
+    block_list,
     use_ICs_from_npy_file,
     ICs_npy_file_path,
     save_y_ydot_to_npy,
@@ -379,8 +351,6 @@ def run_network_util(
         var_name_list_original
             = list of the names of the 0d simulation results; most of the items in var_name_list are the QoIs + the names of the wires used in the 0d model (the wires connect the 0d blocks), where the wire names are usually comprised of the wire's inlet block name + "_" + the wire's outlet block name
     """
-
-    block_list = list(parameters["blocks"].values())
     wire_dict = connections.connect_blocks_by_inblock_list(block_list)
     neq = sum([b.neq for b in block_list])
     var_name_list = connections.assign_global_ids(
@@ -853,7 +823,7 @@ def set_up_and_run_0d_simulation(
             + "_initial_conditions.npy"
         )
 
-        create_LPN_blocks(parameters_mean)
+        block_list = create_LPN_blocks(parameters_mean)
         set_solver_parameters(parameters_mean)
         (
             zero_d_time,
@@ -864,6 +834,7 @@ def set_up_and_run_0d_simulation(
             var_name_list_original,
         ) = run_network_util(
             parameters_mean,
+            block_list,
             use_ICs_from_npy_file=False,
             ICs_npy_file_path=None,
             save_y_ydot_to_npy=False,
@@ -884,10 +855,11 @@ def set_up_and_run_0d_simulation(
         use_ICs_from_npy_file = True
         ICs_npy_file_path = y_ydot_file_path_temp
 
-    create_LPN_blocks(parameters)
+    block_list = create_LPN_blocks(parameters)
     set_solver_parameters(parameters)
     zero_d_time, results_0d, var_name_list, _, _, _ = run_network_util(
         parameters,
+        block_list,
         use_ICs_from_npy_file,
         ICs_npy_file_path,
         save_y_ydot_to_npy,

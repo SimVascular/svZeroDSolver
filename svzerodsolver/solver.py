@@ -66,19 +66,15 @@ Available boundary conditions (BCs):
         9) steady coronary with time-dependent intramyocadial pressure with user-prescribed constant distal pressure
         10) custom, user-defined outlet BC
 """
-import sys
 import re
-import os
 import copy
 import numpy as np
-import json
 
 from .blocks import create_LPN_blocks
 from . import connections
 from .time_integration import run_integrator
 from . import use_steady_bcs
 
-import argparse
 from collections import defaultdict
 
 
@@ -387,41 +383,7 @@ def run_simulation_from_config(
     parameters,
     use_steady_soltns_as_ics=True,
 ):
-    """
-    Purpose:
-        Create all network_util_NR::LPNBlock objects for the 0d model and run the 0d simulation.
-    Inputs:
-        string zero_d_solver_input_file_path
-            = path to the 0d solver input file
-        boolean draw_directed_graph
-            = True to visualize the 0d model as a directed graph using networkx -- saves the graph to a .png file (hierarchical graph layout) and a networkx .dot file; False, otherwise. .dot file can be opened with neato from graphviz to visualize the directed in a different format.
-        boolean last_cycle
-            = True to return 0d simulation results for only the last cycle; False to return the results for all simulated cycles
-        boolean save_results_all
-            = True to save all 0d simulation results (reformatted to a readable dictionary format) to a .npy file
-        boolean save_results_branch
-            = True to save the 0d simulation results for just the branches (reformatted to a readable dictionary format, while preserving the 1d/centerline branch structure) to a .npy file
-        boolean use_custom_0d_elements
-            = True to use user-defined, custom 0d elements in the 0d model; False, otherwire
-        boolean use_ICs_from_npy_file
-            = True to use user-prescribed ICs (saved in a .npy file)
-        string ICs_npy_file_path
-            = path to .npy file storing the initial conditions
-        boolean save_y_ydot_to_npy
-            = True to save the entire 0d solution and its time derivative at the final time step to a .npy file
-        string y_ydot_file_path
-            = name of the .npy file to which the 0d solution and its time derivative at the final time step will be saved
-        float simulation_start_time
-            = time at which to begin the 0d simulation
-            -- assumes the cardiac cycle begins at t = 0.0 and ends at t = cardiac_cycle_period
-            -- 0.0 <= simulation_start_time <= cardiac_cycle_period
-        boolean use_steady_soltns_as_ics
-            = True to 1) run the 0d simulation using steady mean BCs and zero initial conditions and then 2) use the steady-state solution from the previous part as the initial condition for the original pulsatile simulation
-    Caveats:
-        The save_results_branch option works only for 0d models with the branching structure where each vessel is modeled as a single branch with 1 or multiple sub-segments
-    Returns:
-        void
-    """
+
     y_initial = None
     ydot_initial = None
     if use_steady_soltns_as_ics:
@@ -480,107 +442,3 @@ def run_simulation_from_config(
         time_steps, np.array(y_list), var_name_list, parameters
     )
     return zero_d_results_branch, zero_d_results_all
-
-
-def create_parser():
-    """Create a command-line parser."""
-
-    # Create the parser.
-    parser = argparse.ArgumentParser(description="This code runs the 0d solver.")
-
-    # Define 0D solver commands.
-
-    parser.add_argument("zero", help="Path to 0d solver input file")
-
-    parser.add_argument(
-        "-sa",
-        "--saveAll",
-        default=True,
-        action="store_true",
-        help="Save all simulation results to a .npy file",
-    )
-
-    parser.add_argument(
-        "-sb",
-        "--saveBranch",
-        default=True,
-        action="store_true",
-        help="Save the simulation results (preserving the 1d/centerline branch structure) to a .npy file",
-    )  # todo: do we need to change action to 'store_false' here?
-
-    parser.add_argument(
-        "-i",
-        "--useICs",
-        action="store_true",
-        help="Use initial conditions from .npy file",
-    )  # todo: need to prevent users from using both: useSteadyIC and useICs
-
-    parser.add_argument(
-        "-pi",
-        "--ICsPath",
-        help="Path to the .npy file containing the initial conditions",
-    )
-
-    parser.add_argument(
-        "-y", "--saveYydot", action="store_true", help="Save y and ydot to a .npy file"
-    )
-
-    parser.add_argument(
-        "-py", "--yydotPath", help="Path to the .npy file containing y and ydot"
-    )
-
-    parser.add_argument(
-        "-j", "--checkJacobian", action="store_true", help="Check the Jacobian"
-    )
-
-    parser.add_argument(
-        "-it",
-        "--initialTime",
-        default=0.0,
-        type=float,
-        help="Start (initial) time of the 0d simulation",
-    )
-
-    parser.add_argument(
-        "-sic",
-        "--useSteadyIC",
-        action="store_true",
-        help="Run the pulsatile 0d simulation using the steady-state solution from the equivalent steady 0d model as the initial conditions.",
-    )  # caveat - does not work with custom, user-defined BCs
-
-    return parser
-
-
-def main():
-
-    args = sys.argv[1:]
-
-    parser = create_parser()
-
-    args = parser.parse_args(args)
-
-    with open(args.zero) as infile:
-        parameters = json.load(infile)
-
-    zero_d_results_branch, zero_d_results_all = run_simulation_from_config(
-        parameters=parameters,
-        zero_d_solver_input_file_path=args.zero,
-        use_ICs_from_npy_file=args.useICs,
-        ICs_npy_file_path=args.ICsPath,
-        save_y_ydot_to_npy=args.saveYydot,
-        y_ydot_file_path=args.yydotPath,
-        simulation_start_time=args.initialTime,
-        use_steady_soltns_as_ics=args.useSteadyIC,
-    )
-
-    # postprocessing
-    zero_d_input_file_name = os.path.splitext(args.zero)[0]
-    if args.saveAll:
-        np.save(zero_d_input_file_name + "_all_results", zero_d_results_all)
-
-    if args.saveBranch:
-        np.save(zero_d_input_file_name + "_branch_results", zero_d_results_branch)
-
-
-if __name__ == "__main__":
-    main(main)

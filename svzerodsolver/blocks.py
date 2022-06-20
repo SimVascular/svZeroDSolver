@@ -32,6 +32,8 @@
 
 import numpy as np
 
+from scipy.interpolate import CubicSpline
+
 
 class Wire:
     """
@@ -257,8 +259,8 @@ class BloodVessel(LPNBlock):
             C=config["zero_d_element_values"].get("C", 0.0),
             L=config["zero_d_element_values"].get("L", 0.0),
             stenosis_coefficient=config["zero_d_element_values"].get(
-            "stenosis_coefficient", 0.0
-        ),
+                "stenosis_coefficient", 0.0
+            ),
             connecting_block_list=config["connecting_blocks"],
             name=config["name"],
             flow_directions=config["flow_directions"],
@@ -296,6 +298,16 @@ class UnsteadyResistanceWithDistalPressure(LPNBlock):
         )
         self.vec["C"] = np.array([0.0], dtype=float)
 
+    @classmethod
+    def from_config(cls, config):
+        return cls(
+            connecting_block_list=config["connecting_blocks"],
+            Rfunc=lambda t: config["bc_values"]["R"],
+            Pref_func=lambda t: config["bc_values"]["Pd"],
+            name=config["name"],
+            flow_directions=config["flow_directions"],
+        )
+
     def update_time(self, time):
         """
         the ordering is : (P_in,Q_in)
@@ -327,6 +339,18 @@ class UnsteadyPressureRef(LPNBlock):
         self.vec["C"] = np.zeros(1, dtype=float)
         self.mat["F"] = np.array([[1.0, 0.0]], dtype=float)
 
+    @classmethod
+    def from_config(cls, config):
+        time = config["bc_values"]["t"]
+        bc_values = config["bc_values"]["P"]
+        Pfunc = CubicSpline(np.array(time), np.array(bc_values), bc_type="periodic")
+        return cls(
+            connecting_block_list=config["connecting_blocks"],
+            Pfunc=Pfunc,
+            name=config["name"],
+            flow_directions=config["flow_directions"],
+        )
+
     def update_time(self, time):
         self.vec["C"][0] = -self.Pfunc(time)
         self.vecs_to_assemble.add("C")
@@ -352,6 +376,18 @@ class UnsteadyFlowRef(LPNBlock):
         self.Qfunc = Qfunc
         self.vec["C"] = np.zeros(1, dtype=float)
         self.mat["F"] = np.array([[0.0, 1.0]], dtype=float)
+
+    @classmethod
+    def from_config(cls, config):
+        time = config["bc_values"]["t"]
+        bc_values = config["bc_values"]["Q"]
+        Qfunc = CubicSpline(np.array(time), np.array(bc_values), bc_type="periodic")
+        return cls(
+            connecting_block_list=config["connecting_blocks"],
+            Qfunc=Qfunc,
+            name=config["name"],
+            flow_directions=config["flow_directions"],
+        )
 
     def update_time(self, time):
         self.vec["C"][0] = -self.Qfunc(time)
@@ -388,6 +424,18 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
         self.mat["E"] = np.zeros((2, 3), dtype=float)
         self.mat["F"] = np.array([[1.0, 0.0, -1.0], [0.0, 0.0, -1.0]], dtype=float)
         self.vec["C"] = np.array([0.0, 0.0], dtype=float)
+
+    @classmethod
+    def from_config(cls, config):
+        return cls(
+            Rp_func=lambda t: config["bc_values"]["Rp"],
+            C_func=lambda t: config["bc_values"]["C"],
+            Rd_func=lambda t: config["bc_values"]["Rd"],
+            Pref_func=lambda t: config["bc_values"]["Pd"],
+            connecting_block_list=config["connecting_blocks"],
+            name=config["name"],
+            flow_directions=config["flow_directions"],
+        )
 
     def update_time(self, time):
         """
@@ -451,6 +499,34 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         self.mat["F"][1, 1] = -Cim_Rv * self.Ra
         self.mat["F"][1, 2] = -(self.Rv + self.Ram)
         self.mats_to_assemble.update({"E", "F"})
+
+    @classmethod
+    def from_config(cls, config):
+        intramyocard_pres_time = config["bc_values"]["t"]
+        bc_values_of_intramyocardial_pressure = config["bc_values"]["Pim"]
+        Pim_func = np.zeros((len(intramyocard_pres_time), 2))
+        Pv_distal_pressure_func = np.zeros((len(intramyocard_pres_time), 2))
+        Pim_func[:, 0] = intramyocard_pres_time
+        Pv_distal_pressure_func[:, 0] = intramyocard_pres_time
+        Pim_func[:, 1] = bc_values_of_intramyocardial_pressure
+        Pv_distal_pressure_func[:, 1] = (
+            np.ones(len(intramyocard_pres_time)) * config["bc_values"]["P_v"]
+        )
+
+        return cls(
+            Ra=config["bc_values"]["Ra1"],
+            Ca=config["bc_values"]["Ca"],
+            Ram=config["bc_values"]["Ra2"],
+            Cim=config["bc_values"]["Cc"],
+            Rv=config["bc_values"]["Rv1"],
+            Pim=Pim_func,
+            Pv=Pv_distal_pressure_func,
+            cardiac_cycle_period=config["bc_values"]["t"][-1]
+            - config["bc_values"]["t"][0],
+            connecting_block_list=config["connecting_blocks"],
+            name=config["name"],
+            flow_directions=config["flow_directions"],
+        )
 
     def get_P_at_t(self, P, t):
         tt = P[:, 0]

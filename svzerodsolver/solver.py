@@ -181,12 +181,12 @@ def create_vessel_blocks(parameters):
     for vessel in vessel_config.values():
         if vessel["zero_d_element_type"] == "BloodVessel":
             vessel_blocks[vessel["name"]] = ntwku.BloodVessel.from_config(vessel)
-        else:  # this is a custom, user-defined element block
+        else:
             raise NotImplementedError
     parameters["blocks"].update(vessel_blocks)
 
 
-def create_outlet_bc_blocks(parameters):
+def create_bc_blocks(parameters, location):
     """
     Purpose:
         Create the outlet bc (boundary condition) blocks for the 0d model.
@@ -198,280 +198,66 @@ def create_outlet_bc_blocks(parameters):
             parameters["blocks"] = {block_name : block_object}
     """
     outlet_bc_blocks = {}  # {block_name : block_object}
-    outlet_vessels_of_model = use_steady_bcs.get_ids_of_cap_vessels(
-        parameters, "outlet"
-    )
-    vessel_id_to_boundary_condition_map = parameters[
-        "vessel_id_to_boundary_condition_map"
-    ]
-    for vessel_id in outlet_vessels_of_model:
-        block_name = "BC" + str(vessel_id) + "_outlet"
-        connecting_block_list = ["V" + str(vessel_id)]
-        flow_directions = [-1]
+    vessels_of_model = use_steady_bcs.get_ids_of_cap_vessels(parameters, location)
+    vessel_bc_map = parameters["vessel_id_to_boundary_condition_map"]
+    for vessel_id in vessels_of_model:
+        block_name = "BC" + str(vessel_id) + "_" + location
+
+        vessel_config = dict(
+            name=block_name,
+            connecting_blocks=["V" + str(vessel_id)],
+            flow_directions=[-1] if location == "outlet" else [+1],
+            **vessel_bc_map[vessel_id][location],
+        )
 
         if (
-            vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_type"]
-            == "RESISTANCE"
+            "t" in vessel_config["bc_values"]
+            and len(vessel_config["bc_values"]["t"]) >= 2
         ):
-            R = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "R"
-            ]
-            R_func = create_unsteady_bc_value_function([0.0, 1.0], [R, R])
-
-            Pref = vessel_id_to_boundary_condition_map[vessel_id]["outlet"][
-                "bc_values"
-            ]["Pd"]
-
-            Pref_func = create_unsteady_bc_value_function([0.0, 1.0], [Pref, Pref])
-            outlet_bc_blocks[block_name] = ntwku.UnsteadyResistanceWithDistalPressure(
-                connecting_block_list=connecting_block_list,
-                Rfunc=R_func,
-                Pref_func=Pref_func,
-                name=block_name,
-                flow_directions=flow_directions,
+            cardiac_cycle_period = (
+                vessel_config["bc_values"]["t"][-1] - vessel_config["bc_values"]["t"][0]
             )
-        elif (
-            vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_type"] == "RCR"
-        ):
-            Rp = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "Rp"
-            ]
-            Rp_func = create_unsteady_bc_value_function([0.0, 1.0], [Rp, Rp])
-
-            C = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "C"
-            ]
-            C_func = create_unsteady_bc_value_function([0.0, 1.0], [C, C])
-
-            Rd = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "Rd"
-            ]
-            Rd_func = create_unsteady_bc_value_function([0.0, 1.0], [Rd, Rd])
-
-            Pref = vessel_id_to_boundary_condition_map[vessel_id]["outlet"][
-                "bc_values"
-            ]["Pd"]
-            Pref_func = create_unsteady_bc_value_function([0.0, 1.0], [Pref, Pref])
-
-            outlet_bc_blocks[block_name] = ntwku.UnsteadyRCRBlockWithDistalPressure(
-                Rp_func=Rp_func,
-                C_func=C_func,
-                Rd_func=Rd_func,
-                Pref_func=Pref_func,
-                connecting_block_list=connecting_block_list,
-                name=block_name,
-                flow_directions=flow_directions,
-            )
-        elif (
-            vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_type"]
-            == "FLOW"
-        ):
-            time = vessel_id_to_boundary_condition_map[vessel_id]["outlet"][
-                "bc_values"
-            ]["t"]
-            bc_values = vessel_id_to_boundary_condition_map[vessel_id]["outlet"][
-                "bc_values"
-            ]["Q"]
-            Qfunc = create_unsteady_bc_value_function(time, bc_values)
-            outlet_bc_blocks[block_name] = ntwku.UnsteadyFlowRef(
-                connecting_block_list=connecting_block_list,
-                Qfunc=Qfunc,
-                name=block_name,
-                flow_directions=flow_directions,
-            )
-        elif (
-            vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_type"]
-            == "PRESSURE"
-        ):
-            time = vessel_id_to_boundary_condition_map[vessel_id]["outlet"][
-                "bc_values"
-            ]["t"]
-            bc_values = vessel_id_to_boundary_condition_map[vessel_id]["outlet"][
-                "bc_values"
-            ]["P"]
-            Pfunc = create_unsteady_bc_value_function(time, bc_values)
-            outlet_bc_blocks[block_name] = ntwku.UnsteadyPressureRef(
-                connecting_block_list=connecting_block_list,
-                Pfunc=Pfunc,
-                name=block_name,
-                flow_directions=flow_directions,
-            )
-        elif (
-            vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_type"]
-            == "CORONARY"
-        ):
-            "Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow and pressure in human coronary arteries. Annals of Biomedical Engineering 38, 3195–3209 (2010)."
-            Ra1 = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "Ra1"
-            ]
-            Ra2 = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "Ra2"
-            ]
-            Ca = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "Ca"
-            ]
-            Cc = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "Cc"
-            ]
-            Rv1 = vessel_id_to_boundary_condition_map[vessel_id]["outlet"]["bc_values"][
-                "Rv1"
-            ]
-            Pv_distal_pressure = vessel_id_to_boundary_condition_map[vessel_id][
-                "outlet"
-            ]["bc_values"]["P_v"]
-
-            time_of_intramyocardial_pressure = vessel_id_to_boundary_condition_map[
-                vessel_id
-            ]["outlet"]["bc_values"]["t"]
-
-            bc_values_of_intramyocardial_pressure = vessel_id_to_boundary_condition_map[
-                vessel_id
-            ]["outlet"]["bc_values"]["Pim"]
-
-            if "cardiac_cycle_period" in parameters["simulation_parameters"]:
-                if (
-                    time_of_intramyocardial_pressure[-1]
-                    - time_of_intramyocardial_pressure[0]
-                    != parameters["simulation_parameters"]["cardiac_cycle_period"]
-                ):
-                    message = (
-                        "Error. The time series of the intramyocadial pressure for the coronary boundary condition for segment #"
-                        + str(vessel_id)
-                        + " does not have the same cardiac cycle period as the other boundary conditions.  All boundary conditions, including the inlet and outlet boundary conditions, should have the same prescribed cardiac cycle period. Note that each boundary conditions must be prescribed over exactly one cardiac cycle."
-                    )  # todo: fix bug where this code does not work if the user prescribes only a single time point for the intramyocadial pressure time history (the code should work though b/c prescription of a single time point for the intramyocardial pressure suggests a steady intramyocadial pressure)
-                    raise RuntimeError(message)
-            else:
+            if (
+                "cardiac_cycle_period" in parameters["simulation_parameters"]
+                and cardiac_cycle_period
+                != parameters["simulation_parameters"]["cardiac_cycle_period"]
+            ):
+                message = (
+                    "Error. The time series of the boundary condition for segment #"
+                    + str(vessel_id)
+                    + " does not have the same cardiac cycle period as the other boundary conditions.  All boundary conditions, including the inlet and outlet boundary conditions, should have the same prescribed cardiac cycle period. Note that each boundary conditions must be prescribed over exactly one cardiac cycle."
+                )
+                raise RuntimeError(message)
+            elif "cardiac_cycle_period" not in parameters["simulation_parameters"]:
                 parameters["simulation_parameters"].update(
-                    {
-                        "cardiac_cycle_period": time_of_intramyocardial_pressure[-1]
-                        - time_of_intramyocardial_pressure[0]
-                    }
+                    {"cardiac_cycle_period": cardiac_cycle_period}
                 )
 
-            Pim_func = np.zeros((len(time_of_intramyocardial_pressure), 2))
-            Pv_distal_pressure_func = np.zeros(
-                (len(time_of_intramyocardial_pressure), 2)
-            )
-
-            Pim_func[:, 0] = time_of_intramyocardial_pressure
-            Pv_distal_pressure_func[:, 0] = time_of_intramyocardial_pressure
-
-            Pim_func[:, 1] = bc_values_of_intramyocardial_pressure
-            Pv_distal_pressure_func[:, 1] = (
-                np.ones(len(time_of_intramyocardial_pressure)) * Pv_distal_pressure
-            )
-
+        if vessel_config["bc_type"] == "RESISTANCE":
             outlet_bc_blocks[
                 block_name
-            ] = ntwku.OpenLoopCoronaryWithDistalPressureBlock(
-                Ra=Ra1,
-                Ca=Ca,
-                Ram=Ra2,
-                Cim=Cc,
-                Rv=Rv1,
-                Pim=Pim_func,
-                Pv=Pv_distal_pressure_func,
-                cardiac_cycle_period=parameters["simulation_parameters"][
-                    "cardiac_cycle_period"
-                ],
-                connecting_block_list=connecting_block_list,
-                name=block_name,
-                flow_directions=flow_directions,
+            ] = ntwku.UnsteadyResistanceWithDistalPressure.from_config(vessel_config)
+        elif vessel_config["bc_type"] == "RCR":
+            outlet_bc_blocks[
+                block_name
+            ] = ntwku.UnsteadyRCRBlockWithDistalPressure.from_config(vessel_config)
+        elif vessel_config["bc_type"] == "FLOW":
+            outlet_bc_blocks[block_name] = ntwku.UnsteadyFlowRef.from_config(
+                vessel_config
             )
+        elif vessel_config["bc_type"] == "PRESSURE":
+            outlet_bc_blocks[block_name] = ntwku.UnsteadyPressureRef.from_config(
+                vessel_config
+            )
+        elif vessel_config["bc_type"] == "CORONARY":
+            "Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow and pressure in human coronary arteries. Annals of Biomedical Engineering 38, 3195–3209 (2010)."
+            outlet_bc_blocks[
+                block_name
+            ] = ntwku.OpenLoopCoronaryWithDistalPressureBlock.from_config(vessel_config)
 
         else:  # this is a custom, user-defined outlet bc block
             raise NotImplementedError
     parameters["blocks"].update(outlet_bc_blocks)
-
-
-def create_inlet_bc_blocks(parameters):
-    """
-    Purpose:
-        Create the inlet bc (boundary condition) blocks for the 0d model.
-    Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-    Returns:
-        void, but updates parameters["blocks"] to include the inlet_bc_blocks, where
-            parameters["blocks"] = {block_name : block_object}
-    """
-    inlet_bc_blocks = {}  # {block_name : block_object}
-    inlet_vessels_of_model = use_steady_bcs.get_ids_of_cap_vessels(parameters, "inlet")
-    vessel_id_to_boundary_condition_map = parameters[
-        "vessel_id_to_boundary_condition_map"
-    ]
-    for vessel_id in inlet_vessels_of_model:
-        block_name = "BC" + str(vessel_id) + "_inlet"
-        connecting_block_list = ["V" + str(vessel_id)]
-        flow_directions = [+1]
-        if vessel_id_to_boundary_condition_map[vessel_id]["inlet"]["bc_type"] == "FLOW":
-            time = vessel_id_to_boundary_condition_map[vessel_id]["inlet"]["bc_values"][
-                "t"
-            ]
-            bc_values = vessel_id_to_boundary_condition_map[vessel_id]["inlet"][
-                "bc_values"
-            ]["Q"]
-            Qfunc = create_unsteady_bc_value_function(time, bc_values)
-            inlet_bc_blocks[block_name] = ntwku.UnsteadyFlowRef(
-                Qfunc=Qfunc,
-                connecting_block_list=connecting_block_list,
-                name=block_name,
-                flow_directions=flow_directions,
-            )
-            if len(time) >= 2:
-                cardiac_cycle_period = time[-1] - time[0]
-            if "cardiac_cycle_period" in parameters["simulation_parameters"]:
-                if (
-                    cardiac_cycle_period
-                    != parameters["simulation_parameters"]["cardiac_cycle_period"]
-                ):
-                    message = (
-                        "Error. The time series of the boundary condition for segment #"
-                        + str(vessel_id)
-                        + " does not have the same cardiac cycle period as the other boundary conditions.  All boundary conditions, including the inlet and outlet boundary conditions, should have the same prescribed cardiac cycle period. Note that each boundary conditions must be prescribed over exactly one cardiac cycle."
-                    )
-                    raise RuntimeError(message)
-            else:
-                parameters["simulation_parameters"].update(
-                    {"cardiac_cycle_period": cardiac_cycle_period}
-                )
-        elif (
-            vessel_id_to_boundary_condition_map[vessel_id]["inlet"]["bc_type"]
-            == "PRESSURE"
-        ):
-            time = vessel_id_to_boundary_condition_map[vessel_id]["inlet"]["bc_values"][
-                "t"
-            ]
-            bc_values = vessel_id_to_boundary_condition_map[vessel_id]["inlet"][
-                "bc_values"
-            ]["P"]
-            Pfunc = create_unsteady_bc_value_function(time, bc_values)
-            inlet_bc_blocks[block_name] = ntwku.UnsteadyPressureRef(
-                Pfunc=Pfunc,
-                connecting_block_list=connecting_block_list,
-                name=block_name,
-                flow_directions=flow_directions,
-            )
-            if len(time) >= 2:
-                cardiac_cycle_period = time[-1] - time[0]
-            if "cardiac_cycle_period" in parameters["simulation_parameters"]:
-                if (
-                    cardiac_cycle_period
-                    != parameters["simulation_parameters"]["cardiac_cycle_period"]
-                ):
-                    message = (
-                        "Error. The time series of the boundary condition for segment #"
-                        + str(vessel_id)
-                        + " does not have the same cardiac cycle period as the other boundary conditions.  All boundary conditions, including the inlet and outlet boundary conditions, should have the same prescribed cardiac cycle period. Note that each boundary conditions must be prescribed over exactly one cardiac cycle."
-                    )
-                    raise RuntimeError(message)
-            else:
-                parameters["simulation_parameters"].update(
-                    {"cardiac_cycle_period": cardiac_cycle_period}
-                )
-        else:  # this is a custom, user-defined inlet bc block
-            raise NotImplementedError
-    parameters["blocks"].update(inlet_bc_blocks)
 
 
 def create_LPN_blocks(parameters):
@@ -492,8 +278,8 @@ def create_LPN_blocks(parameters):
     create_junction_blocks(parameters)
     create_vessel_blocks(parameters)
     use_steady_bcs.create_vessel_id_to_boundary_condition_map(parameters)
-    create_outlet_bc_blocks(parameters)
-    create_inlet_bc_blocks(parameters)
+    create_bc_blocks(parameters, "outlet")
+    create_bc_blocks(parameters, "inlet")
     parameters.update({"block_names": list(parameters["blocks"].keys())})
 
 

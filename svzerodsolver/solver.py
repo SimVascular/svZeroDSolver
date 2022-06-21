@@ -66,12 +66,10 @@ Available boundary conditions (BCs):
         9) steady coronary with time-dependent intramyocadial pressure with user-prescribed constant distal pressure
         10) custom, user-defined outlet BC
 """
-import copy
 import numpy as np
 
-from .blocks import create_blocks
+from .blocks import create_blocks, BloodVessel
 from .time_integration import run_integrator
-from .results import reformat_network_util_results_branch
 
 import numpy as np
 from copy import deepcopy
@@ -133,6 +131,32 @@ def set_solver_parameters(parameters):
     )
 
 
+def format_results_to_dict(zero_d_time, results_0d, block_list, dofhandler):
+
+    results_0d = np.array(results_0d)
+
+    vessels = [block for block in block_list if isinstance(block, BloodVessel)]
+
+    results = {
+        "time": zero_d_time,
+        "names": [],
+        "flow_in": [],
+        "flow_out": [],
+        "pressure_in": [],
+        "pressure_out": [],
+    }
+
+    for vessel in vessels:
+
+        results["names"].append(vessel.name)
+        results["flow_in"].append(results_0d[:, vessel.inflow_wires[0].flow_dof])
+        results["flow_out"].append(results_0d[:, vessel.outflow_wires[0].flow_dof])
+        results["pressure_in"].append(results_0d[:, vessel.inflow_wires[0].pres_dof])
+        results["pressure_out"].append(results_0d[:, vessel.outflow_wires[0].pres_dof])
+
+    return results
+
+
 def run_simulation_from_config(
     parameters,
     use_steady_soltns_as_ics=True,
@@ -171,7 +195,7 @@ def run_simulation_from_config(
         ydot_initial,
     )
 
-    zero_d_results_branch = reformat_network_util_results_branch(
-        time_steps, np.array(y_list), list(dofhandler.variables.values()), parameters
+    zero_d_results_branch = format_results_to_dict(
+        time_steps, y_list, block_list, dofhandler
     )
     return zero_d_results_branch

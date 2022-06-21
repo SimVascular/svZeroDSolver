@@ -25,7 +25,9 @@ def run_test_case_by_name(name, testdir):
 def get_result(result_array, field, branch, branch_node, time_step):
     """ "Get results at specific field, branch, branch_node and time step."""
     # extract result
-    return result_array[field][branch][branch_node, time_step]
+    node_conversion = ["in", "out"]
+    field_new = f"{field}_" + node_conversion[branch_node]
+    return result_array[field_new][branch][time_step]
 
 
 def test_steady_flow_R_R(tmpdir):

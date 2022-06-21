@@ -71,8 +71,31 @@ import numpy as np
 
 from .blocks import create_blocks
 from .time_integration import run_integrator
-from . import use_steady_bcs
 from .results import reformat_network_util_results_branch
+
+import numpy as np
+from copy import deepcopy
+
+
+def convert_unsteady_bcs_to_steady(parameters):
+    steady_parameters = deepcopy(parameters)
+    bc_identifiers = {"FLOW": "Q", "PRESSURE": "P", "CORONARY": "Pim"}
+
+    for i, bc in enumerate(parameters["boundary_conditions"]):
+        if bc["bc_type"] in bc_identifiers:
+            time = bc["bc_values"]["t"]
+            bc_values = bc["bc_values"][bc_identifiers[bc["bc_type"]]]
+            # Time averaged value for a single cariadic_cycle
+            time_averaged_value = 1.0 / (time[-1] - time[0]) * np.trapz(bc_values, time)
+            steady_parameters["boundary_conditions"][i]["bc_values"]["t"] = [
+                time[0],
+                time[-1],
+            ]
+            steady_parameters["boundary_conditions"][i]["bc_values"][
+                bc_identifiers[bc["bc_type"]]
+            ] = [time_averaged_value, time_averaged_value]
+
+    return steady_parameters
 
 
 def set_solver_parameters(parameters):
@@ -110,23 +133,6 @@ def set_solver_parameters(parameters):
     )
 
 
-def convert_ics(var_name_list, var_name_list_original, y, ydot):
-
-    var_name_list_loaded = var_name_list_original
-    y_initial_loaded = y
-    ydot_initial_loaded = ydot
-
-    y_initial = np.zeros(len(var_name_list))
-    ydot_initial = np.zeros(len(var_name_list))
-    for i in range(len(var_name_list)):
-        var_name = var_name_list[i]
-        ind = var_name_list_loaded.index(var_name)
-        y_initial[i] = y_initial_loaded[ind]
-        ydot_initial[i] = ydot_initial_loaded[ind]
-
-    return y_initial, ydot_initial
-
-
 def run_simulation_from_config(
     parameters,
     use_steady_soltns_as_ics=True,
@@ -135,46 +141,27 @@ def run_simulation_from_config(
     y_initial = None
     ydot_initial = None
     if use_steady_soltns_as_ics:
-        parameters_mean = copy.deepcopy(parameters)
-        (
-            parameters_mean,
-            altered_bc_blocks,
-        ) = use_steady_bcs.convert_unsteady_bcs_to_steady(parameters_mean)
+        steady_paramters = convert_unsteady_bcs_to_steady(parameters)
 
         # to run the 0d model with steady BCs to steady-state, simulate this model with large time step size for an arbitrarily small number of cardiac cycles
-        parameters_mean["simulation_parameters"][
+        steady_paramters["simulation_parameters"][
             "number_of_time_pts_per_cardiac_cycle"
         ] = 11
-        parameters_mean["simulation_parameters"]["number_of_cardiac_cycles"] = 3
+        steady_paramters["simulation_parameters"]["number_of_cardiac_cycles"] = 3
 
-        block_list, dofhandler = create_blocks(parameters_mean)
-        set_solver_parameters(parameters_mean)
+        block_list, dofhandler = create_blocks(steady_paramters, steady=True)
+        set_solver_parameters(steady_paramters)
         (_, y_list, ydot_list) = run_integrator(
             block_list,
-            parameters_mean["simulation_parameters"][
+            steady_paramters["simulation_parameters"][
                 "total_number_of_simulated_time_steps"
             ],
-            parameters_mean["simulation_parameters"]["delta_t"],
+            steady_paramters["simulation_parameters"]["delta_t"],
         )
-
-        (
-            y_initial,
-            ydot_initial,
-            var_name_list_original,
-        ) = use_steady_bcs.restore_internal_variables_for_capacitance_based_bcs(
-            y_list[-1],
-            ydot_list[-1],
-            list(dofhandler.variables.values()),
-            altered_bc_blocks,
-        )
+        y_initial = y_list[-1]
+        ydot_initial = ydot_list[-1]
 
     block_list, dofhandler = create_blocks(parameters)
-    y_initial, ydot_initial = convert_ics(
-        list(dofhandler.variables.values()),
-        var_name_list_original,
-        y_initial,
-        ydot_initial,
-    )
     set_solver_parameters(parameters)
     (time_steps, y_list, ydot_list) = run_integrator(
         block_list,

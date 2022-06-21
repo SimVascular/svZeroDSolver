@@ -41,6 +41,10 @@ class DOFHandler:
         self._eqn_counter = -1
         self.variables = {}
 
+    @property
+    def n(self):
+        return self._eqn_counter + 1
+
     def register_variable(self, name=None):
         self._var_counter += 1
         if name is not None:
@@ -240,6 +244,7 @@ class UnsteadyResistanceWithDistalPressure(LPNBlock):
         Rfunc,
         Pref_func,
         name="NoNameUnsteadyResistanceWithDistalPressure",
+        steady=False,
     ):
         LPNBlock.__init__(self, name=name)
         self.neq = 1
@@ -280,6 +285,7 @@ class UnsteadyPressureRef(LPNBlock):
         self,
         Pfunc,
         name="NoNameUnsteadyPressureRef",
+        steady=False,
     ):
         LPNBlock.__init__(self, name=name)
         self.neq = 1
@@ -313,6 +319,7 @@ class UnsteadyFlowRef(LPNBlock):
         self,
         Qfunc,
         name="NoNameUnsteadyFlowRef",
+        steady=False,
     ):
         LPNBlock.__init__(self, name=name)
         self.neq = 1
@@ -349,6 +356,7 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
         Rd_func,
         Pref_func,
         name="NoNameUnsteadyRCRBlockWithDistalPressure",
+        steady=False,
     ):
         LPNBlock.__init__(self, name=name)
         self.neq = 2
@@ -357,6 +365,10 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
         self.C_func = C_func
         self.Rd_func = Rd_func
         self.Pref_func = Pref_func
+        self.steady = steady
+
+        if self.steady:
+            self.C_func = lambda t: 0.0
 
         self.mat["E"] = np.zeros((2, 3), dtype=float)
         self.mat["F"] = np.array([[1.0, 0.0, -1.0], [0.0, 0.0, -1.0]], dtype=float)
@@ -370,6 +382,7 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
             Rd_func=lambda t: config["bc_values"]["Rd"],
             Pref_func=lambda t: config["bc_values"]["Pd"],
             name=config["name"],
+            steady=config["steady"],
         )
 
     def update_time(self, time):
@@ -402,6 +415,7 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         Pv,
         cardiac_cycle_period,
         name="NoNameCoronary",
+        steady=False,
     ):
         LPNBlock.__init__(self, name=name)
         self.neq = 2
@@ -414,22 +428,33 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         self.Pim = Pim
         self.Pv = Pv
         self.cardiac_cycle_period = cardiac_cycle_period
+        self.steady = steady
 
         self.vec["C"] = np.zeros(2)
-        self.mat["E"] = np.zeros((2, 3))
         self.mat["F"] = np.zeros((2, 3))
-        self.mat["F"][0, 2] = -1.0
 
-        Cim_Rv = self.Cim * self.Rv
-        self.mat["E"][0, 0] = -self.Ca * Cim_Rv
-        self.mat["E"][0, 1] = self.Ra * self.Ca * Cim_Rv
-        self.mat["E"][0, 2] = -Cim_Rv
-        self.mat["E"][1, 2] = -Cim_Rv * self.Ram
-        self.mat["F"][0, 1] = Cim_Rv
-        self.mat["F"][1, 0] = Cim_Rv
-        self.mat["F"][1, 1] = -Cim_Rv * self.Ra
-        self.mat["F"][1, 2] = -(self.Rv + self.Ram)
-        self.mats_to_assemble.update({"E", "F"})
+        if not self.steady:
+            self.mat["F"][0, 2] = -1.0
+
+            Cim_Rv = self.Cim * self.Rv
+            self.mat["E"] = np.zeros((2, 3))
+            self.mat["E"][0, 0] = -self.Ca * Cim_Rv
+            self.mat["E"][0, 1] = self.Ra * self.Ca * Cim_Rv
+            self.mat["E"][0, 2] = -Cim_Rv
+            self.mat["E"][1, 2] = -Cim_Rv * self.Ram
+            self.mat["F"][0, 1] = Cim_Rv
+            self.mat["F"][1, 0] = Cim_Rv
+            self.mat["F"][1, 1] = -Cim_Rv * self.Ra
+            self.mat["F"][1, 2] = -(self.Rv + self.Ram)
+            self.mats_to_assemble.update({"E", "F"})
+        else:
+            self.mat["F"] = np.array(
+                [
+                    [-self.Cim, self.Cim * (self.Ra + self.Ram), 1.0],
+                    [-1.0, self.Ra + self.Ram + self.Rv, 0.0],
+                ]
+            )
+            self.mats_to_assemble.update({"F"})
 
     @classmethod
     def from_config(cls, config):
@@ -455,6 +480,7 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
             cardiac_cycle_period=config["bc_values"]["t"][-1]
             - config["bc_values"]["t"][0],
             name=config["name"],
+            steady=config["steady"],
         )
 
     def get_P_at_t(self, P, t):
@@ -471,11 +497,16 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         # and P_in is the pressure at the inlet of the first resistor
         Pim_value = self.get_P_at_t(self.Pim, time)
         Pv_value = self.get_P_at_t(self.Pv, time)
-        self.vec["C"][0] = -self.Cim * Pim_value + self.Cim * Pv_value
-        self.vec["C"][1] = (
-            -self.Cim * (self.Rv + self.Ram) * Pim_value
-            + self.Ram * self.Cim * Pv_value
-        )
+        if not self.steady:
+            self.vec["C"][0] = -self.Cim * Pim_value + self.Cim * Pv_value
+            # Pa is assumed to be 0.0
+            self.vec["C"][1] = (
+                -self.Cim * (self.Rv + self.Ram) * Pim_value
+                + self.Ram * self.Cim * Pv_value
+            )
+        else:
+            self.vec["C"][0] = -self.Cim * Pim_value
+            self.vec["C"][1] = Pv_value
         self.vecs_to_assemble.add("C")
 
 
@@ -545,7 +576,7 @@ def create_vessel_blocks(parameters):
     return block_dict, connections
 
 
-def create_bc_blocks(parameters):
+def create_bc_blocks(parameters, steady=False):
     """
     Purpose:
         Create the outlet bc (boundary condition) blocks for the 0d model.
@@ -570,7 +601,9 @@ def create_bc_blocks(parameters):
             for config in parameters["boundary_conditions"]:
                 if config["bc_name"] == vessel_config["boundary_conditions"][location]:
                     bc_config = dict(
-                        name="BC" + str(vessel_id) + "_" + location, **config
+                        name="BC" + str(vessel_id) + "_" + location,
+                        steady=steady,
+                        **config,
                     )
                     break
 
@@ -608,7 +641,7 @@ def create_bc_blocks(parameters):
     return block_dict
 
 
-def create_blocks(parameters):
+def create_blocks(parameters, steady=False):
     """
     Purpose:
         Create all LPNBlock objects for the 0d model.
@@ -623,7 +656,7 @@ def create_blocks(parameters):
     """
     junction_blocks, junction_connections = create_junction_blocks(parameters)
     vessel_blocks, vessel_connections = create_vessel_blocks(parameters)
-    bc_blocks = create_bc_blocks(parameters)
+    bc_blocks = create_bc_blocks(parameters, steady=steady)
     all_blocks = junction_blocks | vessel_blocks | bc_blocks
     dofhandler = DOFHandler()
     for ele1_name, ele2_name in junction_connections + vessel_connections:

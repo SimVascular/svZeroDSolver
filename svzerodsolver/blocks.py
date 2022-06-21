@@ -33,7 +33,23 @@
 import numpy as np
 
 from scipy.interpolate import CubicSpline
-from . import use_steady_bcs
+
+
+class DOFHandler:
+    def __init__(self):
+        self._var_counter = -1
+        self._eqn_counter = -1
+        self.variables = {}
+
+    def register_variable(self, name=None):
+        self._var_counter += 1
+        if name is not None:
+            self.variables[self._var_counter] = name
+        return self._var_counter
+
+    def register_equation(self):
+        self._eqn_counter += 1
+        return self._eqn_counter
 
 
 class Wire:
@@ -43,36 +59,30 @@ class Wire:
     They can also only possess one element(or junction) at each end
     """
 
-    def __init__(self, connecting_elements, name="NoNameWire"):
+    def __init__(self, ele1, ele2, name="NoNameWire"):
         self.name = name
-        if len(connecting_elements) > 2:
-            raise Exception(
-                "Wire cannot connect to more than two elements at a time. Use a junction LPN block"
-            )
-        if not isinstance(connecting_elements, tuple):
-            raise Exception("Connecting elements to wire should be passed as a 2-tuple")
-        self.connecting_elements = connecting_elements
-        self.LPN_solution_ids = [None] * 2
+        self.flow_dof = None
+        self.pres_dof = None
+        ele1.outflow_wires.append(self)
+        ele2.inflow_wires.append(self)
+
+    def setup_dofs(self, dofhandler):
+        self.flow_dof = dofhandler.register_variable("Q_" + self.name)
+        self.pres_dof = dofhandler.register_variable("P_" + self.name)
 
 
 class LPNBlock:
-    def __init__(self, connecting_block_list=None, name="NoName", flow_directions=[]):
-        if connecting_block_list == None:
-            connecting_block_list = []
-        self.connecting_block_list = connecting_block_list
-        self.num_connections = len(connecting_block_list)
+    def __init__(self, name="NoName"):
+
         self.name = name
         self.neq = 2
-        self.num_block_vars = 0
 
         self.inflow_wires = []
         self.outflow_wires = []
 
-        # -1 : Inflow to block, +1 outflow from block
-        self.flow_directions = flow_directions
-
         # solution IDs for the LPN block's internal solution variables
-        self.LPN_solution_ids = []
+        self.pres_dofs = []
+        self.flow_dofs = []
 
         # block matrices
         self.mat = {}
@@ -85,11 +95,38 @@ class LPNBlock:
         self.vecs_to_assemble = set()
 
         # row and column indices of block in global matrix
-        self.global_col_id = []
-        self.global_row_id = []
+        self.global_col_id = None
+        self.global_row_id = None
 
-        self.flat_row_ids = []
-        self.flat_col_ids = []
+        self.flat_row_ids = None
+        self.flat_col_ids = None
+
+    def setup_dofs(self, dofhandler):
+        self.flow_dofs = [
+            dofhandler.register_variable("var_" + str(i) + "_" + self.name)
+            for i in range(len(self.flow_dofs))
+        ]
+
+        self.pres_dofs = [
+            dofhandler.register_variable("var_" + str(j) + "_" + self.name)
+            for j in range(
+                len(self.flow_dofs), len(self.pres_dofs) + len(self.flow_dofs)
+            )
+        ]
+
+        self.global_col_id = []
+        for wire in self.inflow_wires:
+            self.global_col_id += [wire.pres_dof, wire.flow_dof]
+        for wire in self.outflow_wires:
+            self.global_col_id += [wire.pres_dof, wire.flow_dof]
+        self.global_col_id += self.pres_dofs + self.flow_dofs
+
+        self.global_row_id = [dofhandler.register_equation() for _ in range(self.neq)]
+
+        meshgrid = np.array(
+            np.meshgrid(self.global_row_id, self.global_col_id)
+        ).T.reshape(-1, 2)
+        self.flat_row_ids, self.flat_col_ids = meshgrid[:, 0], meshgrid[:, 1]
 
     def update_time(self, time):
         """
@@ -103,67 +140,24 @@ class LPNBlock:
         """
         pass
 
-    def eqids(self, local_eq):
-        # EqID returns variable's location in solution vector
-
-        nwirevars = (
-            self.num_connections * 2
-        )  # num_connections is multipled by 2 because each wire has 2 soltns (P and Q)
-        if local_eq < nwirevars:
-            vtype = local_eq % 2  # 0 --> P, 1 --> Q
-            wnum = int(local_eq / 2)
-
-            # example: assume num_connections is 2. this can be a normal resistor block, which has 2 connections. then this R block has 2 connecting wires. thus, this R block has 4 related solution variables/unknowns (P_in, Q_in, P_out, Q_out). note that local_eq = local ID.
-            #     then for these are the vtypes we get for each local_eq:
-            #         local_eq    :     vtype     :     wnum
-            #         0            :     0        :    0        <---    vtype = pressure, wnum = inlet wire
-            #         1            :    1        :    0        <---    vtype = flow, wnum = inlet wire
-            #         2            :    0        :    1        <---    vtype = pressure, wnum = outlet wire
-            #         3            :    1        :    1        <---    vtype = flow, wnum = outlet wire
-            #    note that vtype represents whether the solution variable in local_eq (local ID) is a P or Q solution
-            #        and wnum represents whether the solution variable in local_eq comes from the inlet wire or the outlet wire, for this LPNBlock with 2 connections (one inlet, one outlet)
-            return (self.outflow_wires + self.inflow_wires)[wnum].LPN_solution_ids[
-                vtype
-            ]
-        else:  # this section will return the index at which the LPNBlock's  INTERNAL SOLUTION VARIABLES are stored in the global vector of solution unknowns/variables (i.e. I think RCR and OpenLoopCoronaryBlock have internal solution variables; these internal solution variables arent the P_in, Q_in, P_out, Q_out that correspond to the solutions on the attached wires, they are the solutions that are internal to the LPNBlock itself)
-            vnum = local_eq - nwirevars
-            return self.LPN_solution_ids[vnum]
-
 
 class InternalJunction(LPNBlock):
     """
     Internal junction points between LPN blocks (for mesh refinement, does not appear as physical junction in model)
     """
 
-    def __init__(
-        self, connecting_block_list=None, name="NoNameJunction", flow_directions=None
-    ):
-        LPNBlock.__init__(
-            self, connecting_block_list, name=name, flow_directions=flow_directions
-        )
-        self.neq = (
-            self.num_connections
-        )  # number of equations = num of blocks that connect to this junction, where the equations are 1) mass conservation 2) inlet pressures = outlet pressures
+    def setup_dofs(self, dofhandler):
+        num_inflow = len(self.inflow_wires)
+        num_outflow = len(self.outflow_wires)
+        self.neq = num_inflow + num_outflow
+        super().setup_dofs(dofhandler)
 
-        # Number of variables per tuple = 2*num_connections
-        # Number of equations = num_connections-1 Pressure equations, 1 flow equation
-        # Format : P1,Q1,P2,Q2,P3,Q3, .., Pn,Qm
-        self.mat["F"] = [
-            (1.0,)
-            + (0,) * (2 * i + 1)
-            + (-1,)
-            + (0,) * (2 * self.num_connections - 2 * i - 3)
-            for i in range(self.num_connections - 1)
-        ]
-
-        tmp = (0,)
-        for d in self.flow_directions[:-1]:
-            tmp += (d,)
-            tmp += (0,)
-
-        tmp += (self.flow_directions[-1],)
-        self.mat["F"].append(tmp)
-        self.mat["F"] = np.array(self.mat["F"], dtype=float)
+        self.mat["F"] = np.zeros((self.neq, self.neq * 2))
+        for i in range(self.neq - 1):
+            self.mat["F"][i, [0, 2 * i + 2]] = [1.0, -1.0]
+        self.mat["F"][-1, np.arange(1, 2 * self.neq, 2)] = [1.0] * num_inflow + [
+            -1.0
+        ] * num_outflow
         self.mats_to_assemble.add("F")
 
     @classmethod
@@ -174,37 +168,7 @@ class InternalJunction(LPNBlock):
                 f"Invalid junction name {name}. Junction names must "
                 "start with J following by a number."
             )
-        connecting_block_list = []
-        flow_directions = []
-        for vessel_id in config["inlet_vessels"]:
-            connecting_block_list.append("V" + str(vessel_id))
-            flow_directions.append(-1)
-        for vessel_id in config["outlet_vessels"]:
-            connecting_block_list.append("V" + str(vessel_id))
-            flow_directions.append(+1)
-        if not (+1 in flow_directions) and (-1 in flow_directions):
-            raise ValueError(
-                "Junction block must have at least 1 inlet and 1 outlet " "connection."
-            )
-        return cls(connecting_block_list, name, flow_directions)
-
-
-class BloodVesselJunction(InternalJunction):
-    """
-    Blood vessel junction (dummy for future implementation of blood pressure losses at junctions)
-    """
-
-    def __init__(
-        self,
-        j_params,
-        connecting_block_list=None,
-        name="NoNameJunction",
-        flow_directions=None,
-    ):
-        InternalJunction.__init__(
-            self, connecting_block_list, name=name, flow_directions=flow_directions
-        )
-        self.j_params = j_params
+        return cls(name)
 
 
 class BloodVessel(LPNBlock):
@@ -222,15 +186,11 @@ class BloodVessel(LPNBlock):
         C,
         L,
         stenosis_coefficient,
-        connecting_block_list=None,
         name="NoNameBloodVessel",
-        flow_directions=None,
     ):
-        LPNBlock.__init__(
-            self, connecting_block_list, name=name, flow_directions=flow_directions
-        )
+        LPNBlock.__init__(self, name=name)
         self.neq = 3
-        self.num_block_vars = 1
+        self.pres_dofs = [None]
         self.R = R  # poiseuille resistance value = 8 * mu * L / (pi * r**4)
         self.C = C
         self.L = L
@@ -262,13 +222,11 @@ class BloodVessel(LPNBlock):
             stenosis_coefficient=config["zero_d_element_values"].get(
                 "stenosis_coefficient", 0.0
             ),
-            connecting_block_list=config["connecting_blocks"],
-            name=config["name"],
-            flow_directions=config["flow_directions"],
+            name="V" + str(config["vessel_id"]),
         )
 
     def update_solution(self, sol):
-        Q_in = np.abs(sol[self.inflow_wires[0].LPN_solution_ids[1]])
+        Q_in = np.abs(sol[self.inflow_wires[0].flow_dof])
         fac1 = -self.stenosis_coefficient * Q_in
         fac2 = fac1 - self.R
         self.mat["F"][[0, 2], 1] = fac2
@@ -281,13 +239,9 @@ class UnsteadyResistanceWithDistalPressure(LPNBlock):
         self,
         Rfunc,
         Pref_func,
-        connecting_block_list=None,
         name="NoNameUnsteadyResistanceWithDistalPressure",
-        flow_directions=None,
     ):
-        LPNBlock.__init__(
-            self, connecting_block_list, name=name, flow_directions=flow_directions
-        )
+        LPNBlock.__init__(self, name=name)
         self.neq = 1
         self.Rfunc = Rfunc
         self.Pref_func = Pref_func
@@ -302,11 +256,9 @@ class UnsteadyResistanceWithDistalPressure(LPNBlock):
     @classmethod
     def from_config(cls, config):
         return cls(
-            connecting_block_list=config["connecting_blocks"],
             Rfunc=lambda t: config["bc_values"]["R"],
             Pref_func=lambda t: config["bc_values"]["Pd"],
             name=config["name"],
-            flow_directions=config["flow_directions"],
         )
 
     def update_time(self, time):
@@ -327,13 +279,9 @@ class UnsteadyPressureRef(LPNBlock):
     def __init__(
         self,
         Pfunc,
-        connecting_block_list=None,
         name="NoNameUnsteadyPressureRef",
-        flow_directions=None,
     ):
-        LPNBlock.__init__(
-            self, connecting_block_list, name=name, flow_directions=flow_directions
-        )
+        LPNBlock.__init__(self, name=name)
         self.neq = 1
         self.Pfunc = Pfunc
 
@@ -346,10 +294,8 @@ class UnsteadyPressureRef(LPNBlock):
         bc_values = config["bc_values"]["P"]
         Pfunc = CubicSpline(np.array(time), np.array(bc_values), bc_type="periodic")
         return cls(
-            connecting_block_list=config["connecting_blocks"],
             Pfunc=Pfunc,
             name=config["name"],
-            flow_directions=config["flow_directions"],
         )
 
     def update_time(self, time):
@@ -366,13 +312,9 @@ class UnsteadyFlowRef(LPNBlock):
     def __init__(
         self,
         Qfunc,
-        connecting_block_list=None,
         name="NoNameUnsteadyFlowRef",
-        flow_directions=None,
     ):
-        LPNBlock.__init__(
-            self, connecting_block_list, name=name, flow_directions=flow_directions
-        )
+        LPNBlock.__init__(self, name=name)
         self.neq = 1
         self.Qfunc = Qfunc
         self.vec["C"] = np.zeros(1, dtype=float)
@@ -384,10 +326,8 @@ class UnsteadyFlowRef(LPNBlock):
         bc_values = config["bc_values"]["Q"]
         Qfunc = CubicSpline(np.array(time), np.array(bc_values), bc_type="periodic")
         return cls(
-            connecting_block_list=config["connecting_blocks"],
             Qfunc=Qfunc,
             name=config["name"],
-            flow_directions=config["flow_directions"],
         )
 
     def update_time(self, time):
@@ -408,15 +348,11 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
         C_func,
         Rd_func,
         Pref_func,
-        connecting_block_list=None,
         name="NoNameUnsteadyRCRBlockWithDistalPressure",
-        flow_directions=None,
     ):
-        LPNBlock.__init__(
-            self, connecting_block_list, name=name, flow_directions=flow_directions
-        )
+        LPNBlock.__init__(self, name=name)
         self.neq = 2
-        self.num_block_vars = 1
+        self.pres_dofs = [None]
         self.Rp_func = Rp_func
         self.C_func = C_func
         self.Rd_func = Rd_func
@@ -433,9 +369,7 @@ class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
             C_func=lambda t: config["bc_values"]["C"],
             Rd_func=lambda t: config["bc_values"]["Rd"],
             Pref_func=lambda t: config["bc_values"]["Pd"],
-            connecting_block_list=config["connecting_blocks"],
             name=config["name"],
-            flow_directions=config["flow_directions"],
         )
 
     def update_time(self, time):
@@ -467,15 +401,11 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
         Pim,
         Pv,
         cardiac_cycle_period,
-        connecting_block_list=None,
         name="NoNameCoronary",
-        flow_directions=None,
     ):
-        LPNBlock.__init__(
-            self, connecting_block_list, name=name, flow_directions=flow_directions
-        )
+        LPNBlock.__init__(self, name=name)
         self.neq = 2
-        self.num_block_vars = 1
+        self.pres_dofs = [None]
         self.Ra = Ra
         self.Ca = Ca
         self.Ram = Ram
@@ -524,9 +454,7 @@ class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
             Pv=Pv_distal_pressure_func,
             cardiac_cycle_period=config["bc_values"]["t"][-1]
             - config["bc_values"]["t"][0],
-            connecting_block_list=config["connecting_blocks"],
             name=config["name"],
-            flow_directions=config["flow_directions"],
         )
 
     def get_P_at_t(self, P, t):
@@ -562,15 +490,20 @@ def create_junction_blocks(parameters):
         void, but updates parameters["blocks"] to include the junction_blocks, where
             parameters["blocks"] = {block_name : block_object}
     """
-    block_list = []
+    block_dict = {}
+    connections = []
     for config in parameters["junctions"]:
         if config["junction_type"] in ["NORMAL_JUNCTION", "internal_junction"]:
-            block_list.append(InternalJunction.from_config(config))
-        elif config["junction_type"] == "BloodVesselJunction":
-            block_list.append(BloodVesselJunction.from_config(config))
+            junction = InternalJunction.from_config(config)
         else:
             raise ValueError(f"Unknown junction type: {config['junction_type']}")
-    return block_list
+        connections += [(f"V{vid}", junction.name) for vid in config["inlet_vessels"]]
+        connections += [(junction.name, f"V{vid}") for vid in config["outlet_vessels"]]
+        if junction.name in block_dict:
+            raise RuntimeError(f"Junction {junction.name} already exists.")
+        block_dict[junction.name] = junction
+
+    return block_dict, connections
 
 
 def create_vessel_blocks(parameters):
@@ -584,37 +517,32 @@ def create_vessel_blocks(parameters):
         void, but updates parameters["blocks"] to include the vessel_blocks, where
             parameters["blocks"] = {block_name : block_object}
     """
-    vessel_config = {}
-    for vessel in parameters["vessels"]:
-        vessel_id = vessel["vessel_id"]
-        vessel_config[vessel_id] = dict(
-            name="V" + str(vessel_id),
-            connecting_blocks=[],
-            flow_directions=[],
-            **vessel,
-        )
-    for location in ["inlet", "outlet"]:
-        ids_of_cap_vessels = use_steady_bcs.get_ids_of_cap_vessels(parameters, location)
-        for vessel_id in ids_of_cap_vessels:
-            flow_direction = -1 if location == "inlet" else +1
-            vessel_config[vessel_id]["flow_directions"].append(flow_direction)
-            vessel_config[vessel_id]["connecting_blocks"].append(
-                f"BC{vessel_id}_{location}"
-            )
-        for junction in parameters["junctions"]:
-            for vessel_id in junction[location + "_vessels"]:
-                vessel_config[vessel_id]["connecting_blocks"].append(
-                    junction["junction_name"]
-                )
-                flow_direction = +1 if location == "inlet" else -1
-                vessel_config[vessel_id]["flow_directions"].append(flow_direction)
-    block_list = []
-    for vessel in vessel_config.values():
-        if vessel["zero_d_element_type"] == "BloodVessel":
-            block_list.append(BloodVessel.from_config(vessel))
+    block_dict = {}
+    connections = []
+    for vessel_config in parameters["vessels"]:
+        if vessel_config["zero_d_element_type"] == "BloodVessel":
+            vessel = BloodVessel.from_config(vessel_config)
         else:
             raise NotImplementedError
-    return block_list
+        if "boundary_conditions" in vessel_config:
+            if "inlet" in vessel_config["boundary_conditions"]:
+                connections.append(
+                    (
+                        "BC" + str(vessel_config["vessel_id"]) + "_inlet",
+                        vessel.name,
+                    )
+                )
+            if "outlet" in vessel_config["boundary_conditions"]:
+                connections.append(
+                    (
+                        vessel.name,
+                        "BC" + str(vessel_config["vessel_id"]) + "_outlet",
+                    )
+                )
+        if vessel.name in block_dict:
+            raise RuntimeError(f"Vessel {vessel.name} already exists.")
+        block_dict[vessel.name] = vessel
+    return block_dict, connections
 
 
 def create_bc_blocks(parameters):
@@ -628,41 +556,27 @@ def create_bc_blocks(parameters):
         void, but updates parameters["blocks"] to include the blocks, where
             parameters["blocks"] = {block_name : block_object}
     """
-    block_list = []
-    vessel_id_to_boundary_condition_map = {}
-    for vessel in parameters["vessels"]:
-        if "boundary_conditions" in vessel:
-            vessel_id = vessel["vessel_id"]
-            vessel_id_to_boundary_condition_map[vessel_id] = {}
-            for location, bc_name in vessel["boundary_conditions"].items():
-                for boundary_condition in parameters["boundary_conditions"]:
-                    if boundary_condition["bc_name"] == bc_name:
-                        vessel_id_to_boundary_condition_map[vessel_id][
-                            location
-                        ] = boundary_condition
-    parameters[
-        "vessel_id_to_boundary_condition_map"
-    ] = vessel_id_to_boundary_condition_map
-    for location in ["outlet", "inlet"]:
-        for vessel_id in use_steady_bcs.get_ids_of_cap_vessels(parameters, location):
-            block_name = "BC" + str(vessel_id) + "_" + location
+    block_dict = {}
+    for vessel_config in [
+        v for v in parameters["vessels"] if "boundary_conditions" in v
+    ]:
+        locations = [
+            loc
+            for loc in ("inlet", "outlet")
+            if loc in vessel_config["boundary_conditions"]
+        ]
+        for location in locations:
+            vessel_id = vessel_config["vessel_id"]
+            for config in parameters["boundary_conditions"]:
+                if config["bc_name"] == vessel_config["boundary_conditions"][location]:
+                    bc_config = dict(
+                        name="BC" + str(vessel_id) + "_" + location, **config
+                    )
+                    break
 
-            vessel_config = dict(
-                name=block_name,
-                connecting_blocks=["V" + str(vessel_id)],
-                flow_directions=[-1] if location == "outlet" else [+1],
-                **parameters["vessel_id_to_boundary_condition_map"][vessel_id][
-                    location
-                ],
-            )
-
-            if (
-                "t" in vessel_config["bc_values"]
-                and len(vessel_config["bc_values"]["t"]) >= 2
-            ):
+            if "t" in bc_config["bc_values"] and len(bc_config["bc_values"]["t"]) >= 2:
                 cardiac_cycle_period = (
-                    vessel_config["bc_values"]["t"][-1]
-                    - vessel_config["bc_values"]["t"][0]
+                    bc_config["bc_values"]["t"][-1] - bc_config["bc_values"]["t"][0]
                 )
                 if (
                     "cardiac_cycle_period" in parameters["simulation_parameters"]
@@ -678,29 +592,23 @@ def create_bc_blocks(parameters):
                         "cardiac_cycle_period"
                     ] = cardiac_cycle_period
 
-            if vessel_config["bc_type"] == "RESISTANCE":
-                block_list.append(
-                    UnsteadyResistanceWithDistalPressure.from_config(vessel_config)
-                )
-            elif vessel_config["bc_type"] == "RCR":
-                block_list.append(
-                    UnsteadyRCRBlockWithDistalPressure.from_config(vessel_config)
-                )
-            elif vessel_config["bc_type"] == "FLOW":
-                block_list.append(UnsteadyFlowRef.from_config(vessel_config))
-            elif vessel_config["bc_type"] == "PRESSURE":
-                block_list.append(UnsteadyPressureRef.from_config(vessel_config))
-            elif vessel_config["bc_type"] == "CORONARY":
-                block_list.append(
-                    OpenLoopCoronaryWithDistalPressureBlock.from_config(vessel_config)
-                )
-
+            if bc_config["bc_type"] == "RESISTANCE":
+                bc = UnsteadyResistanceWithDistalPressure.from_config(bc_config)
+            elif bc_config["bc_type"] == "RCR":
+                bc = UnsteadyRCRBlockWithDistalPressure.from_config(bc_config)
+            elif bc_config["bc_type"] == "FLOW":
+                bc = UnsteadyFlowRef.from_config(bc_config)
+            elif bc_config["bc_type"] == "PRESSURE":
+                bc = UnsteadyPressureRef.from_config(bc_config)
+            elif bc_config["bc_type"] == "CORONARY":
+                bc = OpenLoopCoronaryWithDistalPressureBlock.from_config(bc_config)
             else:
                 raise NotImplementedError
-    return block_list
+            block_dict[bc.name] = bc
+    return block_dict
 
 
-def create_LPN_blocks(parameters):
+def create_blocks(parameters):
     """
     Purpose:
         Create all LPNBlock objects for the 0d model.
@@ -713,7 +621,18 @@ def create_LPN_blocks(parameters):
                 = {block_name : block_object}
                 -- where the values are the junction, vessel, outlet BC, and inlet BC block objects
     """
-    block_list = create_junction_blocks(parameters)
-    block_list += create_vessel_blocks(parameters)
-    block_list += create_bc_blocks(parameters)
-    return block_list
+    junction_blocks, junction_connections = create_junction_blocks(parameters)
+    vessel_blocks, vessel_connections = create_vessel_blocks(parameters)
+    bc_blocks = create_bc_blocks(parameters)
+    all_blocks = junction_blocks | vessel_blocks | bc_blocks
+    dofhandler = DOFHandler()
+    for ele1_name, ele2_name in junction_connections + vessel_connections:
+        wire = Wire(
+            all_blocks[ele1_name],
+            all_blocks[ele2_name],
+            name=ele1_name + "_" + ele2_name,
+        )
+        wire.setup_dofs(dofhandler)
+    for block in all_blocks.values():
+        block.setup_dofs(dofhandler)
+    return list(all_blocks.values()), dofhandler

@@ -18,7 +18,7 @@ def run_test_case_by_name(name, testdir):
     testfile = os.path.join(os.path.dirname(__file__), "cases", name + ".json")
     with open(testfile) as ff:
         config = json.load(ff)
-    branch_result, _ = run_simulation_from_config(config, os.path.join(testdir, name))
+    branch_result = run_simulation_from_config(config, os.path.join(testdir, name))
     return branch_result
 
 

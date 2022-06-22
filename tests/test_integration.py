@@ -1,4 +1,4 @@
-from svzerodsolver.solver import run_simulation_from_config
+from svzerodsolver import run_simulation_from_config
 import os
 
 import json

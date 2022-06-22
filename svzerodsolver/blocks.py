@@ -1,5 +1,3 @@
-# coding=utf-8
-
 # Copyright (c) Stanford University, The Regents of the University of
 #               California, and others.
 #
@@ -30,153 +28,321 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from abc import ABC, abstractclassmethod
 import numpy as np
 
 from scipy.interpolate import CubicSpline
 
+from typing import Sequence
+
 
 class DOFHandler:
+    """Degree-of-freedom handler.
+
+    Class for handling global degrees of freedom of a system. Assigns global
+    IDs to variables and equations.
+
+    Attributes:
+        variables: List of variable names corresponding to the global IDs.
+            Variables without a name have an entry None.
+        n: Size of the system.
+    """
+
     def __init__(self):
+        """Create a new DOFHandler instance."""
         self._var_counter = -1
         self._eqn_counter = -1
-        self.variables = {}
+        self.variables: list[str] = []
 
     @property
-    def n(self):
+    def n(self) -> int:
+        """Size of the system."""
         return self._eqn_counter + 1
 
-    def register_variable(self, name=None):
+    def register_variable(self, name: str = None) -> int:
+        """Register a new variable and get global index.
+
+        Args:
+            name: Optional name of the variables.
+
+        Returns:
+            global_id: Global id of the variable.
+        """
         self._var_counter += 1
-        if name is not None:
-            self.variables[self._var_counter] = name
+        self.variables.append(name)
         return self._var_counter
 
-    def register_equation(self):
+    def register_equation(self) -> int:
+        """Register a new equation and get global index.
+
+        Returns:
+            global_id: Global id of the equation.
+        """
         self._eqn_counter += 1
         return self._eqn_counter
 
 
-class Wire:
-    """
-    Wires connect circuit elements and junctions
-    They can only posses a single pressure and flow value (system variables)
-    They can also only possess one element(or junction) at each end
+class Block(ABC):
+    """Base class for lumped-parameter blocks.
+
+    A block stores all information about the mechanical characteristics of
+    a lumped-parameter element. The block is used to setup, update and
+    assemble element contributions in a network.
+
+    Attributes:
+        name: Name of the block.
+        inflow_nodes: Inflow nodes of the element.
+        outflow_nodes: Outflow nodes of the element.
     """
 
-    def __init__(self, ele1, ele2, name="NoNameWire"):
+    # Number of equations the element contirbutes at assembly
+    _NUM_EQUATIONS = None
+
+    # Number of internal variables of the block
+    _NUM_INTERNAL_VARS = 0
+
+    def __init__(self, params: dict = None, name: str = None):
+        """Create a new Block.
+
+        Args:
+            params: The configuration paramaters of the block. Mostly comprised
+                of constants for element contribution calculation.
+            name: Optional name of the block.
+        """
         self.name = name
-        self.flow_dof = None
-        self.pres_dof = None
-        ele1.outflow_wires.append(self)
-        ele2.inflow_wires.append(self)
+        self._params = params
 
-    def setup_dofs(self, dofhandler):
+        # Inflow and outflow wires of the block. Will be set by wires
+        self.inflow_nodes: list[Node] = []
+        self.outflow_nodes: list[Node] = []
+
+        # Element contribution matrices
+        self._mat = {}
+        self._vec = {}
+
+        # row and column indices of block in global matrix
+        self._global_row_id = None
+        self._flat_row_ids = None
+        self._flat_col_ids = None
+
+    @abstractclassmethod
+    def from_config(cls, config: dict) -> "Block":
+        """Create block from config dictionary.
+
+        Args:
+            config: The configuration dict for the block.
+
+        Returns:
+            The block instance.
+        """
+        pass
+
+    def setup_dofs(self, dofhandler: DOFHandler) -> None:
+        """Setup degree of freedoms of the block.
+
+        Registers equations and internal variables at a DOF handler.
+
+        Args:
+            dofhandler: The DOF handler to register the variables and equations
+                at.
+        """
+
+        # Register internal variables
+        internal_vars = [
+            dofhandler.register_variable(f"var_{i}_{self.name}")
+            for i in range(self._NUM_INTERNAL_VARS)
+        ]
+
+        # Collect assembly column ids based from inflow/outflow wires and
+        # internal variables
+        global_col_id = []
+        for wire in self.inflow_nodes:
+            global_col_id += [wire.pres_dof, wire.flow_dof]
+        for wire in self.outflow_nodes:
+            global_col_id += [wire.pres_dof, wire.flow_dof]
+        global_col_id += internal_vars
+
+        # Register equations of the block
+        self._global_row_id = [
+            dofhandler.register_equation() for _ in range(self._NUM_EQUATIONS)
+        ]
+
+        # Create flat indices to assemble matrices as flattend array (faster)
+        meshgrid = np.array(np.meshgrid(self._global_row_id, global_col_id)).T.reshape(
+            -1, 2
+        )
+        self._flat_row_ids, self._flat_col_ids = meshgrid[:, 0], meshgrid[:, 1]
+
+    def assemble(self, mat: dict[str, np.ndarray]) -> None:
+        """Assemble block to global system.
+
+        Args:
+            mat: Global system.
+        """
+        for key, value in self._vec.items():
+            mat[key][self._global_row_id] = value
+        for key, value in self._mat.items():
+            mat[key][self._flat_row_ids, self._flat_col_ids] = value.ravel()
+
+    def update_time(self, time: float) -> None:
+        """Update time dependent element contributions.
+
+        Args:
+            time: Current time.
+        """
+        pass
+
+    def update_solution(self, y: np.ndarray) -> None:
+        """Update solution dependent element contributions.
+
+        Args:
+            y: Current solution.
+        """
+        pass
+
+    def _interpolate(self, times, values, method="cubic_spline"):
+        if times is None:
+            raise ValueError("No time sequence provided for interpolation.")
+        return CubicSpline(np.array(times), np.array(values), bc_type="periodic")
+
+
+class Node:
+    """Node.
+
+    Nodes connect two blocks with each other. Each node corresponds to a
+    flow and pressure value of the system.
+
+    Attributes:
+        name: Name of the node.
+        flow_dof: Global ID of the flow value associated with the node.
+        pres_dof: Global ID of the pressure value associated with the node.
+    """
+
+    def __init__(self, ele1: Block, ele2: Block, name: str = None):
+        """Create a new Node instance.
+
+        Args:
+            ele1: First element for the node to connect.
+            ele2: Second element for the node to connect.
+            name: Optional name of the node.
+        """
+        self.name = name
+        self.flow_dof: int = None
+        self.pres_dof: int = None
+
+        # Make the node the ouflow node of the first element and the inflow
+        # node of the second element
+        ele1.outflow_nodes.append(self)
+        ele2.inflow_nodes.append(self)
+
+    def setup_dofs(self, dofhandler: DOFHandler):
+        """Setup degree of freedoms of the node.
+
+        Registers the pressure and the flow variable at a DOF handler.
+
+        Args:
+            dofhandler: The DOF handler to register the variables at.
+        """
         self.flow_dof = dofhandler.register_variable("Q_" + self.name)
         self.pres_dof = dofhandler.register_variable("P_" + self.name)
 
 
-class LPNBlock:
-    def __init__(self, name="NoName"):
+class Junction(Block):
+    r"""Junction block.
 
-        self.name = name
-        self.neq = 2
+    Represents a basic model junction without special mechanical behavior.
+    Across all inlets and outlets of the junction, mass is conserved and
+    pressure is continuous. The block contributes as many equations to the
+    global system as it has inlet/outlet nodes :math:`n_{eq}=n_{inlets}+n_{outlets}`.
+    One equation comes from the mass conservation:
 
-        self.inflow_wires = []
-        self.outflow_wires = []
+    .. math::
 
-        # solution IDs for the LPN block's internal solution variables
-        self.pres_dofs = []
-        self.flow_dofs = []
+        \sum_{i}^{n_{inlets}} Q_{i}=\sum_{j}^{n_{outlets}} Q_{j}
 
-        # block matrices
-        self.mat = {}
-        self.vec = {}
+    And the remaining :math:`n_{eq}-1` equations come from the continuous
+    pressure condition between each pair of different pressure values.
 
-        # mat and vec assembly queue. To reduce the need to reassemble
-        # matrices that havent't changed since last assembly, these attributes
-        # are used to queue updated mats and vecs.
-        self.mats_to_assemble = set()
-        self.vecs_to_assemble = set()
+    .. math::
 
-        # row and column indices of block in global matrix
-        self.global_col_id = None
-        self.global_row_id = None
+        P_{i}=P_{j} \quad \text{with} \quad i \neq j
 
-        self.flat_row_ids = None
-        self.flat_col_ids = None
+    The ordering of the variables is:
 
-    def setup_dofs(self, dofhandler):
-        self.flow_dofs = [
-            dofhandler.register_variable("var_" + str(i) + "_" + self.name)
-            for i in range(len(self.flow_dofs))
-        ]
+    .. math::
 
-        self.pres_dofs = [
-            dofhandler.register_variable("var_" + str(j) + "_" + self.name)
-            for j in range(
-                len(self.flow_dofs), len(self.pres_dofs) + len(self.flow_dofs)
-            )
-        ]
-
-        self.global_col_id = []
-        for wire in self.inflow_wires:
-            self.global_col_id += [wire.pres_dof, wire.flow_dof]
-        for wire in self.outflow_wires:
-            self.global_col_id += [wire.pres_dof, wire.flow_dof]
-        self.global_col_id += self.pres_dofs + self.flow_dofs
-
-        self.global_row_id = [dofhandler.register_equation() for _ in range(self.neq)]
-
-        meshgrid = np.array(
-            np.meshgrid(self.global_row_id, self.global_col_id)
-        ).T.reshape(-1, 2)
-        self.flat_row_ids, self.flat_col_ids = meshgrid[:, 0], meshgrid[:, 1]
-
-    def update_time(self, time):
-        """
-        Update time-dependent blocks
-        """
-        pass
-
-    def update_solution(self, y):
-        """
-        Update solution-dependent blocks
-        """
-        pass
-
-
-class InternalJunction(LPNBlock):
-    """
-    Internal junction points between LPN blocks (for mesh refinement, does not appear as physical junction in model)
+        \left[\begin{array}{llllllllll}P_{\text {in}, 1}^{e} & Q_{\text {in}, 1}^{e} & \dots & P_{\text {in}, i}^{e} & Q_{\text {in}, i}^{e} & P_{\text {out }, 1}^{e} & Q_{\text {out }, 1}^{e} & \dots & P_{\text {out}, i}^{e} & Q_{\text {out}, i}^{e}\end{array}\right]
     """
 
     def setup_dofs(self, dofhandler):
-        num_inflow = len(self.inflow_wires)
-        num_outflow = len(self.outflow_wires)
-        self.neq = num_inflow + num_outflow
+        """Setup degree of freedoms of the block.
+
+        Registers equations and internal variables at a DOF handler.
+
+        Args:
+            dofhandler: The DOF handler to register the variables and equations
+                at.
+        """
+        # Derive number of inlets and outlets
+        num_inlets = len(self.inflow_nodes)
+        num_outlets = len(self.outflow_nodes)
+
+        # Set number of equations of a junction block based on number of
+        # inlets/outlets. Must be set before calling parent constructor
+        self._NUM_EQUATIONS = num_inlets + num_outlets
         super().setup_dofs(dofhandler)
 
-        self.mat["F"] = np.zeros((self.neq, self.neq * 2))
-        for i in range(self.neq - 1):
-            self.mat["F"][i, [0, 2 * i + 2]] = [1.0, -1.0]
-        self.mat["F"][-1, np.arange(1, 2 * self.neq, 2)] = [1.0] * num_inflow + [
-            -1.0
-        ] * num_outflow
-        self.mats_to_assemble.add("F")
+        # Set some constant element element contributions that needed
+        # _NUM_EQUATIONS
+        self._mat["F"] = np.zeros((self._NUM_EQUATIONS, self._NUM_EQUATIONS * 2))
+        for i in range(self._NUM_EQUATIONS - 1):
+            self._mat["F"][i, [0, 2 * i + 2]] = [1.0, -1.0]
+        self._mat["F"][-1, np.arange(1, 2 * self._NUM_EQUATIONS, 2)] = [
+            1.0
+        ] * num_inlets + [-1.0] * num_outlets
 
     @classmethod
-    def from_config(cls, config):
+    def from_config(cls, config: dict) -> "Junction":
+        """Create block from config dictionary.
+
+        Args:
+            config: The configuration dict for the block.
+
+        Returns:
+            The block instance.
+        """
         name = config["junction_name"]
         if not name.startswith("J") and not name[1].isnumeric():
             raise ValueError(
                 f"Invalid junction name {name}. Junction names must "
                 "start with J following by a number."
             )
-        return cls(name)
+        return cls(name=name)
 
 
-class BloodVessel(LPNBlock):
-    """
+class BloodVessel(Block):
+    r"""Resistor-capacitor-inductor blood vessel with optional stenosis.
+
+    Valid parameters:
+        * :code:`R`: Poiseuille resistance :math:`\frac{8 \mu L}{\pi r^{4}}`
+        * :code:`L`: Inductance
+        * :code:`C`: Capacitance
+        * :code:`stenosis_coefficient`: Stenosis coefficient :math:`K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}`.
+
+    The governing equations for the local resistor-capacitor-inductor element are
+
+    .. math::
+
+        P_{i n}^{e}-P_{o u t}^{e}-R Q_{i n}^{e}-L \frac{d Q_{o u t}^{e}}{d t}=0
+
+    .. math::
+
+        Q_{\text {in }}^{e}-Q_{\text {out }}^{e}-C \frac{d P_{c}^{e}}{d t}=0
+
+    .. math::
+
+        P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0
+
     Stenosis:
         equation: delta_P = ( K_t * rho / ( 2 * (A_0)**2 ) ) * ( ( A_0 / A_s ) - 1 )**2 * Q * abs(Q) + R_poiseuille * Q
                           =               stenosis_coefficient                          * Q * abs(Q) + R_poiseuille * Q
@@ -184,330 +350,338 @@ class BloodVessel(LPNBlock):
         source: Mirramezani, M., Shadden, S.C. A distributed lumped parameter model of blood flow. Annals of Biomedical Engineering. 2020.
     """
 
-    def __init__(
-        self,
-        R,
-        C,
-        L,
-        stenosis_coefficient,
-        name="NoNameBloodVessel",
-    ):
-        LPNBlock.__init__(self, name=name)
-        self.neq = 3
-        self.pres_dofs = [None]
-        self.R = R  # poiseuille resistance value = 8 * mu * L / (pi * r**4)
-        self.C = C
-        self.L = L
-        self.stenosis_coefficient = stenosis_coefficient
+    _NUM_EQUATIONS = 3
+    _NUM_INTERNAL_VARS = 1
+
+    def __init__(self, params: dict = None, name: str = None):
+        super().__init__(params=params, name=name)
 
         # the ordering of the solution variables is : (P_in, Q_in, P_out, Q_out)
-        self.mat["E"] = np.zeros((3, 5), dtype=float)
-        self.mat["E"][0, 3] = -self.L
-        self.mat["E"][1, 4] = -self.C
-        self.mat["F"] = np.array(
+        self._mat["E"] = np.zeros((3, 5), dtype=float)
+        self._mat["E"][0, 3] = -self._params["L"]
+        self._mat["E"][1, 4] = -self._params["C"]
+        self._mat["F"] = np.array(
             [
-                [1.0, 0.0, -1.0, 0.0, 0.0],
+                [1.0, -self._params["R"], -1.0, 0.0, 0.0],
                 [0.0, 1.0, 0.0, -1.0, 0.0],
-                [1.0, 0.0, 0.0, 0.0, -1.0],
+                [1.0, -self._params["R"], 0.0, 0.0, -1.0],
             ],
             dtype=float,
         )
-        self.mat["dF"] = np.zeros((3, 5), dtype=float)
+        self._mat["dF"] = np.zeros((3, 5), dtype=float)
 
-        # only necessary to assemble E in __init__, F and dF get assembled with update_solution
-        self.mats_to_assemble.add("E")
+        # This class's update_solution is only needed if class is configured with
+        # non-zero stenosis coefficient. If stenosis coefficient is 0.0 the
+        # emtpy parent update_solution can be used and is faster.
+        if self._params["stenosis_coefficient"] == 0.0:
+            self.update_solution = super().update_solution
 
     @classmethod
-    def from_config(cls, config):
-        return cls(
+    def from_config(cls, config: dict) -> "BloodVessel":
+        """Create block from config dictionary.
+
+        Args:
+            config: The configuration dict for the block.
+
+        Returns:
+            The block instance.
+        """
+        params = dict(
             R=config["zero_d_element_values"].get("R_poiseuille"),
             C=config["zero_d_element_values"].get("C", 0.0),
             L=config["zero_d_element_values"].get("L", 0.0),
             stenosis_coefficient=config["zero_d_element_values"].get(
                 "stenosis_coefficient", 0.0
             ),
-            name="V" + str(config["vessel_id"]),
         )
+        return cls(params=params, name="V" + str(config["vessel_id"]))
 
-    def update_solution(self, sol):
-        Q_in = np.abs(sol[self.inflow_wires[0].flow_dof])
-        fac1 = -self.stenosis_coefficient * Q_in
-        fac2 = fac1 - self.R
-        self.mat["F"][[0, 2], 1] = fac2
-        self.mat["dF"][[0, 2], 1] = fac1
-        self.mats_to_assemble.update({"F", "dF"})
+    def update_solution(self, y: np.ndarray) -> None:
+        """Update solution dependent element contributions.
+
+        Args:
+            y: Current solution.
+        """
+        Q_in = np.abs(y[self.inflow_nodes[0].flow_dof])
+        fac1 = -self._params["stenosis_coefficient"] * Q_in
+        fac2 = fac1 - self._params["R"]
+        self._mat["F"][[0, 2], 1] = fac2
+        self._mat["dF"][[0, 2], 1] = fac1
 
 
-class UnsteadyResistanceWithDistalPressure(LPNBlock):
-    def __init__(
-        self,
-        Rfunc,
-        Pref_func,
-        name="NoNameUnsteadyResistanceWithDistalPressure",
-        steady=False,
-    ):
-        LPNBlock.__init__(self, name=name)
-        self.neq = 1
-        self.Rfunc = Rfunc
-        self.Pref_func = Pref_func
-        self.mat["F"] = np.array(
-            [
-                [1.0, 0.0],
-            ],
-            dtype=float,
-        )
-        self.vec["C"] = np.array([0.0], dtype=float)
+class ResistanceWithDistalPressure(Block):
+
+    _NUM_EQUATIONS = 1
+
+    def __init__(self, params: dict = None, name: str = None):
+        super().__init__(params=params, name=name)
+
+        self._r_func = None
+        if isinstance(self._params["R"], Sequence):
+            self._r_func = self._interpolate(self._params["time"], self._params["R"])
+            self._mat["F"] = np.array([[1.0, 0.0]], dtype=float)
+        else:
+            self._mat["F"] = np.array([[1.0, -self._params["R"]]], dtype=float)
+
+        self._pd_func = None
+        if isinstance(self._params["Pd"], Sequence):
+            self._pd_func = self._interpolate(self._params["time"], self._params["Pd"])
+            self._vec["C"] = np.array([0.0], dtype=float)
+        else:
+            self._vec["C"] = np.array([-self._params["Pd"]], dtype=float)
+
+        if self._r_func is None and self._pd_func is None:
+            self.update_time = super().update_time
 
     @classmethod
     def from_config(cls, config):
-        return cls(
-            Rfunc=lambda t: config["bc_values"]["R"],
-            Pref_func=lambda t: config["bc_values"]["Pd"],
-            name=config["name"],
+        params = dict(
+            time=config["bc_values"].get("t", None),
+            Pd=config["bc_values"].get("Pd"),
+            R=config["bc_values"].get("R"),
         )
+        return cls(params=params, name=config["name"])
 
     def update_time(self, time):
         """
         the ordering is : (P_in,Q_in)
         """
-        self.mat["F"][0, 1] = -self.Rfunc(time)
-        self.vec["C"][0] = -self.Pref_func(time)
-        self.mats_to_assemble.add("F")
-        self.vecs_to_assemble.add("C")
+        self._mat["F"][0, 1] = -self._r_func(time)
+        self._vec["C"][0] = -self._pd_func(time)
 
 
-class UnsteadyPressureRef(LPNBlock):
+class PressureRef(Block):
     """
     Unsteady P reference
     """
 
-    def __init__(
-        self,
-        Pfunc,
-        name="NoNameUnsteadyPressureRef",
-        steady=False,
-    ):
-        LPNBlock.__init__(self, name=name)
-        self.neq = 1
-        self.Pfunc = Pfunc
+    _NUM_EQUATIONS = 1
 
-        self.vec["C"] = np.zeros(1, dtype=float)
-        self.mat["F"] = np.array([[1.0, 0.0]], dtype=float)
+    def __init__(self, params: dict = None, name: str = None):
+        super().__init__(params=params, name=name)
+
+        if isinstance(self._params["P"], Sequence):
+            self._p_func = self._interpolate(self._params["time"], self._params["P"])
+            self._vec["C"] = np.zeros(1, dtype=float)
+        else:
+            self._vec["C"] = np.array([-self._params["P"]], dtype=float)
+            self.update_time = super().update_time
+
+        self._mat["F"] = np.array([[1.0, 0.0]], dtype=float)
 
     @classmethod
     def from_config(cls, config):
-        time = config["bc_values"]["t"]
-        bc_values = config["bc_values"]["P"]
-        Pfunc = CubicSpline(np.array(time), np.array(bc_values), bc_type="periodic")
-        return cls(
-            Pfunc=Pfunc,
-            name=config["name"],
+        params = dict(
+            time=config["bc_values"].get("t", None),
+            P=config["bc_values"].get("P"),
         )
+        return cls(params=params, name=config["name"])
 
     def update_time(self, time):
-        self.vec["C"][0] = -self.Pfunc(time)
-        self.vecs_to_assemble.add("C")
-        self.mats_to_assemble.add("F")
+        self._vec["C"][0] = -self._p_func(time)
 
 
-class UnsteadyFlowRef(LPNBlock):
+class FlowRef(Block):
     """
     Flow reference
     """
 
-    def __init__(
-        self,
-        Qfunc,
-        name="NoNameUnsteadyFlowRef",
-        steady=False,
-    ):
-        LPNBlock.__init__(self, name=name)
-        self.neq = 1
-        self.Qfunc = Qfunc
-        self.vec["C"] = np.zeros(1, dtype=float)
-        self.mat["F"] = np.array([[0.0, 1.0]], dtype=float)
+    _NUM_EQUATIONS = 1
+
+    def __init__(self, params: dict = None, name: str = None):
+        super().__init__(params=params, name=name)
+
+        if isinstance(self._params["Q"], Sequence):
+            self._q_func = self._interpolate(self._params["time"], self._params["Q"])
+            self._vec["C"] = np.zeros(1, dtype=float)
+        else:
+            self._vec["C"] = np.array([-self._params["Q"]], dtype=float)
+            self.update_time = super().update_time
+
+        self._mat["F"] = np.array([[0.0, 1.0]], dtype=float)
 
     @classmethod
     def from_config(cls, config):
-        time = config["bc_values"]["t"]
-        bc_values = config["bc_values"]["Q"]
-        Qfunc = CubicSpline(np.array(time), np.array(bc_values), bc_type="periodic")
-        return cls(
-            Qfunc=Qfunc,
-            name=config["name"],
+        params = dict(
+            time=config["bc_values"].get("t", None),
+            Q=config["bc_values"].get("Q"),
         )
+        return cls(params=params, name=config["name"])
 
     def update_time(self, time):
-        self.vec["C"][0] = -self.Qfunc(time)
-        self.vecs_to_assemble.add("C")
-        self.mats_to_assemble.add("F")
+        self._vec["C"][0] = -self._q_func(time)
 
 
-class UnsteadyRCRBlockWithDistalPressure(LPNBlock):
+class RCRBlockWithDistalPressure(Block):
     """
     Unsteady RCR - time-varying RCR values
     Formulation includes additional variable : internal pressure proximal to capacitance.
     """
 
-    def __init__(
-        self,
-        Rp_func,
-        C_func,
-        Rd_func,
-        Pref_func,
-        name="NoNameUnsteadyRCRBlockWithDistalPressure",
-        steady=False,
-    ):
-        LPNBlock.__init__(self, name=name)
-        self.neq = 2
-        self.pres_dofs = [None]
-        self.Rp_func = Rp_func
-        self.C_func = C_func
-        self.Rd_func = Rd_func
-        self.Pref_func = Pref_func
-        self.steady = steady
+    _NUM_EQUATIONS = 2
+    _NUM_INTERNAL_VARS = 1
 
-        if self.steady:
-            self.C_func = lambda t: 0.0
+    def __init__(self, params: dict = None, name: str = None):
+        super().__init__(params=params, name=name)
 
-        self.mat["E"] = np.zeros((2, 3), dtype=float)
-        self.mat["F"] = np.array([[1.0, 0.0, -1.0], [0.0, 0.0, -1.0]], dtype=float)
-        self.vec["C"] = np.array([0.0, 0.0], dtype=float)
+        self._mat["E"] = np.zeros((2, 3), dtype=float)
+        self._mat["F"] = np.array([[1.0, 0.0, -1.0], [0.0, 0.0, -1.0]], dtype=float)
+        self._vec["C"] = np.array([0.0, 0.0], dtype=float)
+
+        self._rp_func = None
+        if isinstance(self._params["Rp"], Sequence):
+            self._rp_func = self._interpolate(self._params["time"], self._params["Rp"])
+
+        self._c_func = None
+        if isinstance(self._params["C"], Sequence):
+            self._c_func = self._interpolate(self._params["time"], self._params["C"])
+
+        self._rd_func = None
+        if isinstance(self._params["Rd"], Sequence):
+            self._rd_func = self._interpolate(self._params["time"], self._params["Rd"])
+
+        self._pd_func = None
+        if isinstance(self._params["Pd"], Sequence):
+            self._pd_func = self._interpolate(self._params["time"], self._params["Pd"])
+
+        if [self._rp_func, self._c_func, self._rd_func, self._pd_func] == [None] * 4:
+            self._mat["E"][1, 2] = -self._params["Rd"] * self._params["C"]
+            self._mat["F"][0, 1] = -self._params["Rp"]
+            self._mat["F"][1, 1] = self._params["Rd"]
+            self._vec["C"][1] = self._params["Pd"]
+            self.update_time = super().update_time
 
     @classmethod
     def from_config(cls, config):
-        return cls(
-            Rp_func=lambda t: config["bc_values"]["Rp"],
-            C_func=lambda t: config["bc_values"]["C"],
-            Rd_func=lambda t: config["bc_values"]["Rd"],
-            Pref_func=lambda t: config["bc_values"]["Pd"],
-            name=config["name"],
-            steady=config["steady"],
+        params = dict(
+            time=config["bc_values"].get("t", None),
+            Rp=config["bc_values"].get("Rp"),
+            C=config["bc_values"].get("C"),
+            Rd=config["bc_values"].get("Rd"),
+            Pd=config["bc_values"].get("Pd"),
         )
+        return cls(params=params, name=config["name"])
 
     def update_time(self, time):
         """
         unknowns = [P_in, Q_in, internal_var (Pressure at the intersection of the Rp, Rd, and C elements)]
         """
-        Rd_t = self.Rd_func(time)
-        self.mat["E"][1, 2] = -Rd_t * self.C_func(time)
-        self.mat["F"][0, 1] = -self.Rp_func(time)
-        self.mat["F"][1, 1] = Rd_t
-        self.vec["C"][1] = self.Pref_func(time)
-        self.mats_to_assemble.update({"E", "F"})
-        self.vecs_to_assemble.add("C")
+        rd_t = self._rd_func(time)
+        self._mat["E"][1, 2] = -rd_t * self._c_func(time)
+        self._mat["F"][0, 1] = -self._rp_func(time)
+        self._mat["F"][1, 1] = rd_t
+        self._vec["C"][1] = self._pd_func(time)
 
 
-class OpenLoopCoronaryWithDistalPressureBlock(LPNBlock):
+class OpenLoopCoronaryWithDistalPressureBlock(Block):
     """
     open-loop coronary BC = RCRCR BC
     Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow and pressure in human coronary arteries. Annals of Biomedical Engineering 38, 3195–3209 (2010)."
     """
 
-    def __init__(
-        self,
-        Ra,
-        Ca,
-        Ram,
-        Cim,
-        Rv,
-        Pim,
-        Pv,
-        cardiac_cycle_period,
-        name="NoNameCoronary",
-        steady=False,
-    ):
-        LPNBlock.__init__(self, name=name)
-        self.neq = 2
-        self.pres_dofs = [None]
-        self.Ra = Ra
-        self.Ca = Ca
-        self.Ram = Ram
-        self.Cim = Cim
-        self.Rv = Rv
-        self.Pim = Pim
-        self.Pv = Pv
-        self.cardiac_cycle_period = cardiac_cycle_period
-        self.steady = steady
+    _NUM_EQUATIONS = 2
+    _NUM_INTERNAL_VARS = 1
 
-        self.vec["C"] = np.zeros(2)
-        self.mat["F"] = np.zeros((2, 3))
+    def __init__(self, params: dict = None, name: str = None):
+        super().__init__(params=params, name=name)
 
-        if not self.steady:
-            self.mat["F"][0, 2] = -1.0
+        self._pv_func = None
+        if isinstance(self._params["Pv"], Sequence):
+            self._pv_func = self._interpolate(self._params["time"], self._params["Pv"])
 
-            Cim_Rv = self.Cim * self.Rv
-            self.mat["E"] = np.zeros((2, 3))
-            self.mat["E"][0, 0] = -self.Ca * Cim_Rv
-            self.mat["E"][0, 1] = self.Ra * self.Ca * Cim_Rv
-            self.mat["E"][0, 2] = -Cim_Rv
-            self.mat["E"][1, 2] = -Cim_Rv * self.Ram
-            self.mat["F"][0, 1] = Cim_Rv
-            self.mat["F"][1, 0] = Cim_Rv
-            self.mat["F"][1, 1] = -Cim_Rv * self.Ra
-            self.mat["F"][1, 2] = -(self.Rv + self.Ram)
-            self.mats_to_assemble.update({"E", "F"})
-        else:
-            self.mat["F"] = np.array(
+        self._pim_func = None
+        if isinstance(self._params["Pim"], Sequence):
+            self._pim_func = self._interpolate(
+                self._params["time"], self._params["Pim"]
+            )
+
+        self._vec["C"] = np.zeros(2)
+        self._mat["F"] = np.zeros((2, 3))
+
+        self._mat["F"][0, 2] = -1.0
+
+        Cim_Rv = self._params["Cim"] * self._params["Rv"]
+        self._mat["E"] = np.zeros((2, 3))
+        self._mat["E"][0, 0] = -self._params["Ca"] * Cim_Rv
+        self._mat["E"][0, 1] = self._params["Ra"] * self._params["Ca"] * Cim_Rv
+        self._mat["E"][0, 2] = -Cim_Rv
+        self._mat["E"][1, 2] = -Cim_Rv * self._params["Ram"]
+        self._mat["F"][0, 1] = Cim_Rv
+        self._mat["F"][1, 0] = Cim_Rv
+        self._mat["F"][1, 1] = -Cim_Rv * self._params["Ra"]
+        self._mat["F"][1, 2] = -(self._params["Rv"] + self._params["Ram"])
+
+        if self._pv_func is None and self._pim_func is None:
+            self._vec["C"][0] = (
+                -self._params["Cim"] * self._params["Pim"]
+                + self._params["Cim"] * self._params["Pv"]
+            )
+            # Pa is assumed to be 0.0
+            self._vec["C"][1] = (
+                -self._params["Cim"]
+                * (self._params["Rv"] + self._params["Ram"])
+                * self._params["Pim"]
+                + self._params["Ram"] * self._params["Cim"] * self._params["Pv"]
+            )
+            self.update_time = super().update_time
+        elif self._pv_func is None:
+            self._pv_func = lambda _: self._params["Pv"]
+        elif self._pim_func is None:
+            self._pim_func = lambda _: self._params["Pim"]
+
+        if self._params["steady"]:
+            del self._mat["E"]
+            self._mat["F"] = np.array(
                 [
-                    [-self.Cim, self.Cim * (self.Ra + self.Ram), 1.0],
-                    [-1.0, self.Ra + self.Ram + self.Rv, 0.0],
+                    [
+                        -self._params["Cim"],
+                        self._params["Cim"]
+                        * (self._params["Ra"] + self._params["Ram"]),
+                        1.0,
+                    ],
+                    [
+                        -1.0,
+                        self._params["Ra"] + self._params["Ram"] + self._params["Rv"],
+                        0.0,
+                    ],
                 ]
             )
-            self.mats_to_assemble.update({"F"})
+            self._vec["C"][0] = -self._params["Cim"] * self._params["Pim"]
+            self._vec["C"][1] = self._params["Pv"]
 
     @classmethod
     def from_config(cls, config):
-        intramyocard_pres_time = config["bc_values"]["t"]
-        bc_values_of_intramyocardial_pressure = config["bc_values"]["Pim"]
-        Pim_func = np.zeros((len(intramyocard_pres_time), 2))
-        Pv_distal_pressure_func = np.zeros((len(intramyocard_pres_time), 2))
-        Pim_func[:, 0] = intramyocard_pres_time
-        Pv_distal_pressure_func[:, 0] = intramyocard_pres_time
-        Pim_func[:, 1] = bc_values_of_intramyocardial_pressure
-        Pv_distal_pressure_func[:, 1] = (
-            np.ones(len(intramyocard_pres_time)) * config["bc_values"]["P_v"]
-        )
-
-        return cls(
+        params = dict(
+            time=config["bc_values"].get("t", None),
             Ra=config["bc_values"]["Ra1"],
             Ca=config["bc_values"]["Ca"],
             Ram=config["bc_values"]["Ra2"],
             Cim=config["bc_values"]["Cc"],
             Rv=config["bc_values"]["Rv1"],
-            Pim=Pim_func,
-            Pv=Pv_distal_pressure_func,
-            cardiac_cycle_period=config["bc_values"]["t"][-1]
-            - config["bc_values"]["t"][0],
-            name=config["name"],
+            Pim=config["bc_values"]["Pim"],
+            Pv=config["bc_values"]["P_v"],
             steady=config["steady"],
         )
 
-    def get_P_at_t(self, P, t):
-        tt = P[:, 0]
-        P_val = P[:, 1]
-        _, td = divmod(t, self.cardiac_cycle_period)
-        P_tt = np.interp(td, tt, P_val)
-        return P_tt
+        return cls(params=params, name=config["name"])
 
     def update_time(self, time):
         # For this open-loop coronary BC, the ordering of solution unknowns is : (P_in, Q_in, V_im)
         # where V_im is the volume of the second capacitor, Cim
         # Q_in is the flow through the first resistor
         # and P_in is the pressure at the inlet of the first resistor
-        Pim_value = self.get_P_at_t(self.Pim, time)
-        Pv_value = self.get_P_at_t(self.Pv, time)
-        if not self.steady:
-            self.vec["C"][0] = -self.Cim * Pim_value + self.Cim * Pv_value
-            # Pa is assumed to be 0.0
-            self.vec["C"][1] = (
-                -self.Cim * (self.Rv + self.Ram) * Pim_value
-                + self.Ram * self.Cim * Pv_value
-            )
-        else:
-            self.vec["C"][0] = -self.Cim * Pim_value
-            self.vec["C"][1] = Pv_value
-        self.vecs_to_assemble.add("C")
+        Pim_value = self._pim_func(time)
+        Pv_value = self._pv_func(time)
+        self._vec["C"][0] = (
+            -self._params["Cim"] * Pim_value + self._params["Cim"] * Pv_value
+        )
+        # Pa is assumed to be 0.0
+        self._vec["C"][1] = (
+            -self._params["Cim"]
+            * (self._params["Rv"] + self._params["Ram"])
+            * Pim_value
+            + self._params["Ram"] * self._params["Cim"] * Pv_value
+        )
 
 
 def create_junction_blocks(parameters):
@@ -525,7 +699,7 @@ def create_junction_blocks(parameters):
     connections = []
     for config in parameters["junctions"]:
         if config["junction_type"] in ["NORMAL_JUNCTION", "internal_junction"]:
-            junction = InternalJunction.from_config(config)
+            junction = Junction.from_config(config)
         else:
             raise ValueError(f"Unknown junction type: {config['junction_type']}")
         connections += [(f"V{vid}", junction.name) for vid in config["inlet_vessels"]]
@@ -626,13 +800,13 @@ def create_bc_blocks(parameters, steady=False):
                     ] = cardiac_cycle_period
 
             if bc_config["bc_type"] == "RESISTANCE":
-                bc = UnsteadyResistanceWithDistalPressure.from_config(bc_config)
+                bc = ResistanceWithDistalPressure.from_config(bc_config)
             elif bc_config["bc_type"] == "RCR":
-                bc = UnsteadyRCRBlockWithDistalPressure.from_config(bc_config)
+                bc = RCRBlockWithDistalPressure.from_config(bc_config)
             elif bc_config["bc_type"] == "FLOW":
-                bc = UnsteadyFlowRef.from_config(bc_config)
+                bc = FlowRef.from_config(bc_config)
             elif bc_config["bc_type"] == "PRESSURE":
-                bc = UnsteadyPressureRef.from_config(bc_config)
+                bc = PressureRef.from_config(bc_config)
             elif bc_config["bc_type"] == "CORONARY":
                 bc = OpenLoopCoronaryWithDistalPressureBlock.from_config(bc_config)
             else:
@@ -660,7 +834,7 @@ def create_blocks(parameters, steady=False):
     all_blocks = junction_blocks | vessel_blocks | bc_blocks
     dofhandler = DOFHandler()
     for ele1_name, ele2_name in junction_connections + vessel_connections:
-        wire = Wire(
+        wire = Node(
             all_blocks[ele1_name],
             all_blocks[ele2_name],
             name=ele1_name + "_" + ele2_name,

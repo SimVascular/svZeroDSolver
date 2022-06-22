@@ -74,12 +74,7 @@ class GeneralizedAlpha:
         Assemble block matrices into global matrices
         """
         for bl in block_list:
-            while bl.vecs_to_assemble:
-                n = bl.vecs_to_assemble.pop()
-                self.mat[n][bl.global_row_id] = bl.vec[n]
-            while bl.mats_to_assemble:
-                n = bl.mats_to_assemble.pop()
-                self.mat[n][bl.flat_row_ids, bl.flat_col_ids] = bl.mat[n].ravel()
+            bl.assemble(self.mat)
 
         lhs = self.mat["F"] + (
             self.mat["dE"]
@@ -148,6 +143,7 @@ class GeneralizedAlpha:
 
 def run_integrator(
     block_list,
+    dofhandler,
     num_time_steps,
     time_step_size,
     y_initial=None,
@@ -156,26 +152,14 @@ def run_integrator(
     method="genalpha",
 ):
 
-    neq = sum([b.neq for b in block_list])
+    y = np.zeros(dofhandler.n) if y_initial is None else y_initial.copy()
+    ydot = np.zeros(dofhandler.n) if ydot_initial is None else ydot_initial.copy()
 
-    # initialize solution structures
-    if y_initial is None:
-        y = np.zeros(neq)
-    else:
-        y = y_initial.copy()
-
-    if ydot_initial is None:
-        ydot = np.zeros(neq)
-    else:
-        ydot = ydot_initial.copy()
-
-    y_list = [y.copy()]
-    ydot_list = [ydot.copy()]
+    y_over_time = [y.copy()]
+    ydot_over_time = [ydot.copy()]
     time_steps = np.arange(
         0.0, num_time_steps * time_step_size, time_step_size, dtype=float
     )
-
-    # create time integration
     if method == "genalpha":
         integrator = GeneralizedAlpha(rho, y.shape[0], time_step_size)
     else:
@@ -188,7 +172,7 @@ def run_integrator(
             time,
             block_list,
         )
-        y_list.append(y)
-        ydot_list.append(ydot)
+        y_over_time.append(y.copy())
+        ydot_over_time.append(ydot.copy())
 
-    return time_steps, y_list, ydot_list
+    return time_steps, y_over_time, ydot_over_time

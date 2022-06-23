@@ -9,8 +9,16 @@ protected:
     unsigned int num_internal_vars = 0;
 
 public:
+    struct Parameters : public Block::Parameters
+    {
+    };
+    Junction(Parameters &params, std::string name);
+    ~Junction();
     void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System system);
+
+private:
+    Parameters *params;
 };
 
 #endif // SVZERODSOLVER_JUNCTION_H_

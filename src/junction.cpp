@@ -1,5 +1,15 @@
 #include "junction.hpp"
 
+Junction::Junction(Junction::Parameters &params, std::string name) : Block(params, name)
+{
+    this->name = name;
+    this->params = &params;
+}
+
+Junction::~Junction()
+{
+}
+
 void Junction::setup_dofs(DOFHandler &dofhandler)
 {
     // Derive number of inlets and outlets

@@ -45,9 +45,3 @@ void Block::update_time(System system, double time)
 void Block::update_solution(System system, Eigen::VectorXd &y)
 {
 }
-
-// Bloodvessel
-
-// FlowRef BC
-
-// RCR BC

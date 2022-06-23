@@ -15,7 +15,7 @@ void BloodVessel::setup_dofs(DOFHandler &dofhandler)
     Block::setup_dofs_(dofhandler, 3, 1);
 }
 
-void BloodVessel::update_constant(System system)
+void BloodVessel::update_constant(System &system)
 {
     system.E(global_eqn_ids[0], global_var_ids[3]) = -params->L;
     system.E(global_eqn_ids[1], global_var_ids[4]) = -params->C;
@@ -29,7 +29,7 @@ void BloodVessel::update_constant(System system)
     system.F(global_eqn_ids[2], global_var_ids[2]) = -params->R;
     system.F(global_eqn_ids[2], global_var_ids[4]) = -1.0;
 }
-void BloodVessel::update_solution(System system, Eigen::VectorXd &y)
+void BloodVessel::update_solution(System &system, Eigen::VectorXd &y)
 {
     double q_in = abs(y[inlet_nodes[0]->flow_dof]);
     double fac1 = -params->stenosis_coefficient * q_in;

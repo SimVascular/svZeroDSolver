@@ -24,9 +24,9 @@ public:
     std::vector<unsigned int> global_eqn_ids;
 
     void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations, unsigned int num_internal_vars);
-    void update_constant(System system);
-    void update_time(System system, double time);
-    void update_solution(System system, Eigen::VectorXd &y);
+    void update_constant(System &system);
+    void update_time(System &system, double time);
+    void update_solution(System &system, Eigen::VectorXd &y);
 
 private:
     Parameters *params;

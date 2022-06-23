@@ -13,8 +13,8 @@ public:
     FlowReference(Parameters &params, std::string name);
     ~FlowReference();
     void setup_dofs(DOFHandler &dofhandler);
-    void update_constant(System system);
-    void update_time(System system);
+    void update_constant(System &system);
+    void update_time(System &system, double time);
 
 private:
     Parameters *params;

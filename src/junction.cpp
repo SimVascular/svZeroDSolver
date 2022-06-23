@@ -17,7 +17,7 @@ void Junction::setup_dofs(DOFHandler &dofhandler)
     Block::setup_dofs_(dofhandler, inlet_nodes.size() + outlet_nodes.size(), 0);
 }
 
-void Junction::update_constant(System system)
+void Junction::update_constant(System &system)
 {
     unsigned int num_inlets = inlet_nodes.size();
     unsigned int num_outlets = outlet_nodes.size();

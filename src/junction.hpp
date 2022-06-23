@@ -12,7 +12,7 @@ public:
     Junction(Parameters &params, std::string name);
     ~Junction();
     void setup_dofs(DOFHandler &dofhandler);
-    void update_constant(System system);
+    void update_constant(System &system);
 
     std::string name;
     std::vector<Node *> inlet_nodes;

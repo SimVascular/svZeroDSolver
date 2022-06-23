@@ -16,8 +16,8 @@ public:
     BloodVessel(Parameters &params, std::string name);
     ~BloodVessel();
     void setup_dofs(DOFHandler &dofhandler);
-    void update_constant(System system);
-    void update_solution(System system, Eigen::VectorXd &y);
+    void update_constant(System &system);
+    void update_solution(System &system, Eigen::VectorXd &y);
 
     std::string name;
     std::vector<Node *> inlet_nodes;

@@ -15,6 +15,7 @@
 #include "flowreference.hpp"
 #include "node.hpp"
 #include "dofhandler.hpp"
+#include "integrator.hpp"
 
 #include <stdexcept>
 
@@ -159,17 +160,14 @@ std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBloc
                         } },
                        elem1.second);
         }
-        std::cout << "Size of system: " << dofhandler.size() << std::endl;
     }
-
     for (auto &&elem : blocks)
     {
         std::visit([&](auto &&block)
-                   { block.setup_dofs(dofhandler);
-                   std::cout << "Block name: " << block.name << std::endl;
-                   std::cout << "Size of system: " << dofhandler.size() << std::endl; },
+                   { block.setup_dofs(dofhandler); },
                    elem.second);
     }
+    std::cout << "Size of system: " << dofhandler.size() << std::endl;
     return blocks;
 }
 
@@ -195,6 +193,8 @@ int main(int argc, char *argv[])
 
     // Create the blocks
     auto blocks = create_blocks(config);
+
+    Integrator integrator = Integrator(0.1, 100, time_step_size);
 
     return 0;
 }

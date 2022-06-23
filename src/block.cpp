@@ -41,12 +41,12 @@ void Block::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations, unsi
         global_eqn_ids.push_back(dofhandler.register_equation());
     }
 }
-void Block::update_constant(System system)
+void Block::update_constant(System &system)
 {
 }
-void Block::update_time(System system, double time)
+void Block::update_time(System &system, double time)
 {
 }
-void Block::update_solution(System system, Eigen::VectorXd &y)
+void Block::update_solution(System &system, Eigen::VectorXd &y)
 {
 }

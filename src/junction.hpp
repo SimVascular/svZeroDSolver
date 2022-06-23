@@ -5,9 +5,6 @@
 
 class Junction : public Block
 {
-protected:
-    unsigned int num_internal_vars = 0;
-
 public:
     struct Parameters : public Block::Parameters
     {
@@ -16,6 +13,10 @@ public:
     ~Junction();
     void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System system);
+
+    std::string name;
+    std::vector<Node *> inlet_nodes;
+    std::vector<Node *> outlet_nodes;
 
 private:
     Parameters *params;

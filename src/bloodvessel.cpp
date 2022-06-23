@@ -10,6 +10,11 @@ BloodVessel::~BloodVessel()
 {
 }
 
+void BloodVessel::setup_dofs(DOFHandler &dofhandler)
+{
+    Block::setup_dofs_(dofhandler, 3, 1);
+}
+
 void BloodVessel::update_constant(System system)
 {
     system.E(global_eqn_ids[0], global_var_ids[3]) = -params->L;

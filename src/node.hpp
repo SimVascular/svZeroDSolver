@@ -14,7 +14,7 @@ public:
     unsigned int flow_dof;
     unsigned int pres_dof;
 
-    void setup_dofs(DOFHandler dofhandler);
+    void setup_dofs(DOFHandler &dofhandler);
 };
 
 #include "block.hpp"

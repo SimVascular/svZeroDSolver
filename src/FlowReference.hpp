@@ -5,14 +5,14 @@
 
 class FlowReference : public Block
 {
-protected:
-    unsigned int num_equations = 1;
-
 public:
-    struct Parameters
+    struct Parameters : public Block::Parameters
     {
         double Q; // Flow at timestep
     };
+    FlowReference(Parameters &params, std::string name);
+    ~FlowReference();
+    void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System system);
     void update_time(System system);
 

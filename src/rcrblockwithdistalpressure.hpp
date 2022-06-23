@@ -5,18 +5,18 @@
 
 class RCRBlockWithDistalPressure : public Block
 {
-protected:
-    unsigned int num_equations = 2;
-    unsigned int num_internal_vars = 1;
 
 public:
-    struct Parameters
+    struct Parameters : public Block::Parameters
     {
         double Rp; // Proximal resistance
         double C;  // Capacitance
         double Rd; // Distal restistance
         double Pd; // Distal Pressure
     };
+    RCRBlockWithDistalPressure(Parameters &params, std::string name);
+    ~RCRBlockWithDistalPressure();
+    void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System system);
     void update_time(System system);
 

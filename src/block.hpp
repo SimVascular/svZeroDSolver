@@ -8,14 +8,11 @@
 
 class Block
 {
-protected:
-    unsigned short int num_equations;
-    unsigned short int num_internal_vars;
-
 public:
     struct Parameters
     {
     };
+    Block();
     Block(Parameters &params, std::string name);
     ~Block();
 
@@ -26,7 +23,7 @@ public:
     std::vector<unsigned int> global_var_ids;
     std::vector<unsigned int> global_eqn_ids;
 
-    void setup_dofs(DOFHandler &dofhandler);
+    void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations, unsigned int num_internal_vars);
     void update_constant(System system);
     void update_time(System system, double time);
     void update_solution(System system, Eigen::VectorXd &y);

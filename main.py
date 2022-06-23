@@ -1,5 +1,5 @@
 import argparse
-from svzerodsolver.solver import run_simulation_from_config
+from svzerodsolver.__init__ import run_simulation_from_config
 import json
 import os
 import numpy as np

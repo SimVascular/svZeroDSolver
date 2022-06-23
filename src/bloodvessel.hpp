@@ -5,10 +5,6 @@
 
 class BloodVessel : public Block
 {
-protected:
-    unsigned int num_equations = 3;
-    unsigned int num_internal_vars = 1;
-
 public:
     struct Parameters : public Block::Parameters
     {
@@ -19,8 +15,13 @@ public:
     };
     BloodVessel(Parameters &params, std::string name);
     ~BloodVessel();
+    void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System system);
     void update_solution(System system, Eigen::VectorXd &y);
+
+    std::string name;
+    std::vector<Node *> inlet_nodes;
+    std::vector<Node *> outlet_nodes;
 
 private:
     Parameters *params;

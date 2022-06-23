@@ -834,12 +834,12 @@ def create_blocks(parameters, steady=False):
     all_blocks = junction_blocks | vessel_blocks | bc_blocks
     dofhandler = DOFHandler()
     for ele1_name, ele2_name in junction_connections + vessel_connections:
-        wire = Node(
+        node = Node(
             all_blocks[ele1_name],
             all_blocks[ele2_name],
             name=ele1_name + "_" + ele2_name,
         )
-        wire.setup_dofs(dofhandler)
+        node.setup_dofs(dofhandler)
     for block in all_blocks.values():
         block.setup_dofs(dofhandler)
     return list(all_blocks.values()), dofhandler

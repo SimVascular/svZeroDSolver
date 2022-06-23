@@ -1,4 +1,9 @@
 #include "block.hpp"
+#include <iostream>
+
+Block::Block()
+{
+}
 
 Block::Block(Block::Parameters &params, std::string name)
 {
@@ -10,18 +15,18 @@ Block::~Block()
 {
 }
 
-void Block::setup_dofs(DOFHandler &dofhandler)
+void Block::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations, unsigned int num_internal_vars)
 {
     // Collect external DOFs from inlet and outlet nodes
-    for (auto it = inlet_nodes.begin(); it != inlet_nodes.end(); it++)
+    for (size_t i = 0; i < inlet_nodes.size(); i++)
     {
-        global_var_ids.push_back((*it)->pres_dof);
-        global_var_ids.push_back((*it)->flow_dof);
+        global_var_ids.push_back(inlet_nodes[i]->pres_dof);
+        global_var_ids.push_back(inlet_nodes[i]->flow_dof);
     }
-    for (auto it = outlet_nodes.begin(); it != outlet_nodes.end(); it++)
+    for (size_t i = 0; i < outlet_nodes.size(); i++)
     {
-        global_var_ids.push_back((*it)->pres_dof);
-        global_var_ids.push_back((*it)->flow_dof);
+        global_var_ids.push_back(outlet_nodes[i]->pres_dof);
+        global_var_ids.push_back(outlet_nodes[i]->flow_dof);
     }
 
     // Register internal variables of block

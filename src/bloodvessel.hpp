@@ -10,13 +10,15 @@ protected:
     unsigned int num_internal_vars = 1;
 
 public:
-    struct Parameters
+    struct Parameters : public Block::Parameters
     {
         double R;                    // Poseuille resistance
         double C;                    // Capacitance
         double L;                    // Inductance
         double stenosis_coefficient; // Stenosis Coefficient
     };
+    BloodVessel(Parameters &params, std::string name);
+    ~BloodVessel();
     void update_constant(System system);
     void update_solution(System system, Eigen::VectorXd &y);
 

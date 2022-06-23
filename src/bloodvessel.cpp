@@ -1,5 +1,15 @@
 #include "bloodvessel.hpp"
 
+BloodVessel::BloodVessel(BloodVessel::Parameters &params, std::string name) : Block(params, name)
+{
+    this->name = name;
+    this->params = &params;
+}
+
+BloodVessel::~BloodVessel()
+{
+}
+
 void BloodVessel::update_constant(System system)
 {
     system.E(global_eqn_ids[0], global_var_ids[3]) = -params->L;

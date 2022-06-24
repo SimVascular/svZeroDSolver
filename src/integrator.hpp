@@ -2,11 +2,9 @@
 #define SVZERODSOLVER_INTEGRATOR_H_
 
 #include <map>
+#include <Eigen/Dense>
 #include "system.hpp"
-#include "junction.hpp"
-#include "bloodvessel.hpp"
-#include "rcrblockwithdistalpressure.hpp"
-#include "flowreference.hpp"
+#include "model.hpp"
 
 class State
 {
@@ -16,6 +14,8 @@ public:
     State();
     ~State();
     State(const State &state);
+
+    static State Zero(unsigned int n);
 };
 
 class Integrator
@@ -25,7 +25,6 @@ private:
     double alpha_f;
     double gamma;
     double gamma_inv;
-    unsigned int n;
     double time_step_size;
     double time_step_size_inv;
     double y_dot_coeff;
@@ -33,9 +32,9 @@ private:
     System system;
 
 public:
-    Integrator(double rho, unsigned int n, double time_step_size);
+    Integrator(System &system, double time_step_size, double rho);
     ~Integrator();
-    State step(State &state, double time, std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBlockWithDistalPressure>> &blocks, unsigned int max_iter);
+    State step(State &state, double time, Model &model, unsigned int max_iter);
 };
 
 #endif // SVZERODSOLVER_INTEGRATOR_H_

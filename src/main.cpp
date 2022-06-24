@@ -14,15 +14,16 @@
 #include "rcrblockwithdistalpressure.hpp"
 #include "flowreference.hpp"
 #include "node.hpp"
-#include "dofhandler.hpp"
 #include "integrator.hpp"
+#include "model.hpp"
+#include "system.hpp"
 
 #include <stdexcept>
 
-std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBlockWithDistalPressure>> create_blocks(Json::Value &config)
+Model create_model(Json::Value &config)
 {
     // Create blog mapping
-    std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBlockWithDistalPressure>> blocks;
+    Model model;
 
     // Create list to store block connections while generating blocks
     std::vector<std::tuple<std::string, std::string>> connections;
@@ -34,9 +35,8 @@ std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBloc
     {
         if ((config["junctions"][i]["junction_type"].asString() == "NORMAL_JUNCTION") || (config["junctions"][i]["junction_type"].asString() == "internal_junction"))
         {
-            Junction::Parameters params;
             std::string name = config["junctions"][i]["junction_name"].asString();
-            blocks.insert(std::make_pair(name, Junction(params, name)));
+            model.blocks.insert(std::make_pair(name, Junction(name)));
             std::cout << "Created junction " << name << std::endl;
             for (int j = 0; j < config["junctions"][i]["inlet_vessels"].size(); j++)
             {
@@ -64,9 +64,13 @@ std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBloc
     {
         if ((config["vessels"][i]["zero_d_element_type"].asString() == "BloodVessel"))
         {
-            BloodVessel::Parameters params;
+            Json::Value vessel_values = config["vessels"][i]["zero_d_element_values"];
             std::string name = "V" + config["vessels"][i]["vessel_id"].asString();
-            blocks.insert(std::make_pair(name, BloodVessel(params, name)));
+            double R = vessel_values["R_poiseuille"].asDouble();
+            double C = vessel_values.get("C", 0.0).asDouble();
+            double L = vessel_values.get("L", 0.0).asDouble();
+            double stenosis_coefficient = vessel_values.get("stenosis_coefficient", 0.0).asDouble();
+            model.blocks.insert(std::make_pair(name, BloodVessel(R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient, name = name)));
             std::cout << "Created vessel " << name << std::endl;
 
             if (config["vessels"][i].isMember("boundary_conditions"))
@@ -79,16 +83,20 @@ std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBloc
                     {
                         if (config["boundary_conditions"][j]["bc_name"].asString() == bc_handle)
                         {
+                            Json::Value bc_values = config["boundary_conditions"][j]["bc_values"];
                             if (config["boundary_conditions"][j]["bc_type"].asString() == "RCR")
                             {
-                                RCRBlockWithDistalPressure::Parameters bc_params;
-                                blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure(bc_params, bc_name)));
+                                double Rp = bc_values["Rp"].asDouble();
+                                double C = bc_values["C"].asDouble();
+                                double Rd = bc_values["Rd"].asDouble();
+                                double Pd = bc_values["Pd"].asDouble();
+                                model.blocks.insert(std::make_pair(name, RCRBlockWithDistalPressure(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else if (config["boundary_conditions"][j]["bc_type"].asString() == "FLOW")
                             {
-                                FlowReference::Parameters bc_params;
-                                blocks.insert(std::make_pair(bc_name, FlowReference(bc_params, bc_name)));
+                                double Q = bc_values["Q"].asDouble();
+                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else
@@ -110,16 +118,20 @@ std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBloc
                     {
                         if (config["boundary_conditions"][j]["bc_name"].asString() == bc_handle)
                         {
+                            Json::Value bc_values = config["boundary_conditions"][j]["bc_values"];
                             if (config["boundary_conditions"][j]["bc_type"].asString() == "RCR")
                             {
-                                RCRBlockWithDistalPressure::Parameters bc_params;
-                                blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure(bc_params, bc_name)));
+                                double Rp = bc_values["Rp"].asDouble();
+                                double C = bc_values["C"].asDouble();
+                                double Rd = bc_values["Rd"].asDouble();
+                                double Pd = bc_values["Pd"].asDouble();
+                                model.blocks.insert(std::make_pair(name, RCRBlockWithDistalPressure(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else if (config["boundary_conditions"][j]["bc_type"].asString() == "FLOW")
                             {
-                                FlowReference::Parameters bc_params;
-                                blocks.insert(std::make_pair(bc_name, FlowReference(bc_params, bc_name)));
+                                double Q = bc_values["Q"].asDouble();
+                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else
@@ -141,41 +153,37 @@ std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBloc
         }
     }
 
-    // Create DofHandler
-    DOFHandler dofhandler = DOFHandler();
-
     // Create Connections
     for (size_t i = 0; i < connections.size(); i++)
     {
         auto connection = connections[i];
-        for (auto &&elem1 : blocks)
+        for (auto &&elem1 : model.blocks)
         {
             std::visit([&](auto &&ele1)
                        {
-                        for (auto &&elem2 : blocks)
+                        for (auto &&elem2 : model.blocks)
                         {
                             std::visit([&](auto &&ele2)
-                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){Node node = Node(ele1, ele2, ele1.name + "_" + ele2.name); std::cout << "Created node " << node.name << std::endl; node.setup_dofs(dofhandler);}},
+                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){Node node = Node(ele1, ele2, ele1.name + "_" + ele2.name); std::cout << "Created node " << node.name << std::endl; node.setup_dofs(model.dofhandler);}},
                                     elem2.second);
                         } },
                        elem1.second);
         }
     }
-    for (auto &&elem : blocks)
+    for (auto &&elem : model.blocks)
     {
         std::visit([&](auto &&block)
-                   { block.setup_dofs(dofhandler); },
+                   { block.setup_dofs(model.dofhandler); },
                    elem.second);
     }
-    std::cout << "Size of system: " << dofhandler.size() << std::endl;
-    return blocks;
+    return model;
 }
 
 int main(int argc, char *argv[])
 {
     std::cout << "Starting svZeroDSolver" << std::endl;
-    std::cout << "Reading configuration from " << argv[1] << std::endl;
-    std::ifstream file_input(argv[1]);
+    // std::cout << "Reading configuration from " << argv[1] << std::endl;
+    std::ifstream file_input("../solver_0d.in");
     Json::Reader reader;
     Json::Value config;
     reader.parse(file_input, config);
@@ -192,9 +200,20 @@ int main(int argc, char *argv[])
     std::cout << "Time step size:      " << time_step_size << std::endl;
 
     // Create the blocks
-    auto blocks = create_blocks(config);
+    auto model = create_model(config);
 
-    Integrator integrator = Integrator(0.1, 100, time_step_size);
+    System system;
+    system.setup_matrices(model.dofhandler.size());
+
+    Integrator integrator = Integrator(system, time_step_size, 0.1);
+
+    State state = State::Zero(model.dofhandler.size());
+
+    double time = 0.0;
+    int max_iter = 30;
+    integrator.step(state, time, model, max_iter);
+
+    std::cout << system.F << std::endl;
 
     return 0;
 }

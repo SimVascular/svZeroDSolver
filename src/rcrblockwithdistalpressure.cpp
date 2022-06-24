@@ -1,9 +1,12 @@
 #include "rcrblockwithdistalpressure.hpp"
 
-RCRBlockWithDistalPressure::RCRBlockWithDistalPressure(RCRBlockWithDistalPressure::Parameters &params, std::string name) : Block(params, name)
+RCRBlockWithDistalPressure::RCRBlockWithDistalPressure(double Rp, double C, double Rd, double Pd, std::string name) : Block(name)
 {
     this->name = name;
-    this->params = &params;
+    this->params.Rp = Rp;
+    this->params.C = C;
+    this->params.Rd = Rd;
+    this->params.Pd = Pd;
 }
 
 RCRBlockWithDistalPressure::~RCRBlockWithDistalPressure()
@@ -23,8 +26,8 @@ void RCRBlockWithDistalPressure::update_constant(System &system)
 }
 void RCRBlockWithDistalPressure::update_time(System &system, double time)
 {
-    system.E(global_eqn_ids[1], global_var_ids[2]) = -params->Rd * params->C;
-    system.F(global_eqn_ids[0], global_var_ids[1]) = -params->Rp;
-    system.F(global_eqn_ids[1], global_var_ids[1]) = params->Rd;
-    system.C(global_eqn_ids[1]) = params->Pd;
+    system.E(global_eqn_ids[1], global_var_ids[2]) = -params.Rd * params.C;
+    system.F(global_eqn_ids[0], global_var_ids[1]) = -params.Rp;
+    system.F(global_eqn_ids[1], global_var_ids[1]) = params.Rd;
+    system.C(global_eqn_ids[1]) = params.Pd;
 }

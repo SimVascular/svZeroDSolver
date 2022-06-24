@@ -9,7 +9,7 @@ public:
     struct Parameters : public Block::Parameters
     {
     };
-    Junction(Parameters &params, std::string name);
+    Junction(std::string name);
     ~Junction();
     void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System &system);
@@ -19,7 +19,7 @@ public:
     std::vector<Node *> outlet_nodes;
 
 private:
-    Parameters *params;
+    Parameters params;
 };
 
 #endif // SVZERODSOLVER_JUNCTION_H_

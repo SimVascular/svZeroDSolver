@@ -5,10 +5,9 @@ Block::Block()
 {
 }
 
-Block::Block(Block::Parameters &params, std::string name)
+Block::Block(std::string name)
 {
     this->name = name;
-    this->params = &params;
 }
 
 Block::~Block()

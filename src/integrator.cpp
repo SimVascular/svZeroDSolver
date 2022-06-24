@@ -1,8 +1,11 @@
 #include "integrator.hpp"
 
+#include "iostream"
+
 State::State()
 {
 }
+
 State::~State()
 {
 }
@@ -13,14 +16,22 @@ State::State(const State &state)
     ydot = state.ydot;
 }
 
-Integrator::Integrator(double rho, unsigned int n, double time_step_size)
+State State::Zero(unsigned int n)
+{
+    static State state;
+    state.y = Eigen::VectorXd::Zero(n);
+    state.ydot = Eigen::VectorXd::Zero(n);
+    return state;
+}
+
+Integrator::Integrator(System &system, double time_step_size, double rho)
 {
     alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
     alpha_f = 1.0 / (1.0 + rho);
     gamma = 0.5 + alpha_m - alpha_f;
     gamma_inv = 1.0 / gamma;
 
-    this->n = n;
+    this->system = system;
     this->time_step_size = time_step_size;
     time_step_size_inv = 1.0 / time_step_size;
 
@@ -31,7 +42,7 @@ Integrator::~Integrator()
 {
 }
 
-State Integrator::step(State &state, double time, std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBlockWithDistalPressure>> &blocks, unsigned int max_iter)
+State Integrator::step(State &state, double time, Model &model, unsigned int max_iter)
 {
     State old_state = state;
     State new_state;
@@ -44,19 +55,22 @@ State Integrator::step(State &state, double time, std::map<std::string, std::var
 
     double new_time = time + alpha_f * time_step_size;
 
+    std::cout << "Before updating blocks" << std::endl;
+
     // Update time in blocks
-    for (auto &&elem : blocks)
+    for (auto &&elem : model.blocks)
     {
         std::visit([&](auto &&block)
                    {block.update_constant(system); block.update_time(system, time); },
                    elem.second);
     }
+    std::cout << system.F << std::endl;
 
     for (size_t i = 0; i < max_iter; i++)
     {
 
         // Update solution and assemble
-        for (auto &&elem : blocks)
+        for (auto &&elem : model.blocks)
         {
             std::visit([&](auto &&block)
                        { block.update_solution(system, y_af); },
@@ -67,6 +81,8 @@ State Integrator::step(State &state, double time, std::map<std::string, std::var
         auto lhs = system.F + (system.dE + system.dF + system.dC + system.E * y_dot_coeff);
         auto rhs = -system.E.transpose() * ydot_am - system.F.transpose() * y_af - system.C;
 
+        std::cout << lhs << std::endl;
+        std::cout << rhs << std::endl;
         // Solve system
         Eigen::VectorXd dy = lhs.colPivHouseholderQr().solve(rhs);
 

@@ -13,7 +13,7 @@ public:
         double L;                    // Inductance
         double stenosis_coefficient; // Stenosis Coefficient
     };
-    BloodVessel(Parameters &params, std::string name);
+    BloodVessel(double R, double C, double L, double stenosis_coefficient, std::string name);
     ~BloodVessel();
     void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System &system);
@@ -24,7 +24,7 @@ public:
     std::vector<Node *> outlet_nodes;
 
 private:
-    Parameters *params;
+    Parameters params;
 };
 
 #endif // SVZERODSOLVER_BLOODVESSEL_H_

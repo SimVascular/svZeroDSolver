@@ -1,9 +1,8 @@
 #include "junction.hpp"
 
-Junction::Junction(Junction::Parameters &params, std::string name) : Block(params, name)
+Junction::Junction(std::string name) : Block(name)
 {
     this->name = name;
-    this->params = &params;
 }
 
 Junction::~Junction()

@@ -14,14 +14,14 @@ public:
         double Rd; // Distal restistance
         double Pd; // Distal Pressure
     };
-    RCRBlockWithDistalPressure(Parameters &params, std::string name);
+    RCRBlockWithDistalPressure(double Rp, double C, double Rd, double Pd, std::string name);
     ~RCRBlockWithDistalPressure();
     void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System &system);
     void update_time(System &system, double time);
 
 private:
-    Parameters *params;
+    Parameters params;
 };
 
 #endif // SVZERODSOLVER_RCRBLOCKWITHDISTALPRESSURE_H_

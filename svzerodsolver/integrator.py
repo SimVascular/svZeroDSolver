@@ -116,7 +116,7 @@ class GeneralizedAlpha:
             for b in block_list:
                 b.update_solution(yaf)
 
-            # update residual and jacobian
+            # Assemble
             lhs, res = self.assemble(block_list, yaf, ydotam)
 
             # solve for Newton increment

@@ -13,7 +13,7 @@ public:
     {
     };
     Block();
-    Block(Parameters &params, std::string name);
+    Block(std::string name);
     ~Block();
 
     std::string name;
@@ -29,7 +29,7 @@ public:
     void update_solution(System &system, Eigen::VectorXd &y);
 
 private:
-    Parameters *params;
+    Parameters params;
 };
 
 #endif // SVZERODSOLVER_BLOCK_H_

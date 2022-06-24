@@ -1,9 +1,9 @@
 #include "flowreference.hpp"
 
-FlowReference::FlowReference(FlowReference::Parameters &params, std::string name) : Block(params, name)
+FlowReference::FlowReference(double Q, std::string name) : Block(name)
 {
     this->name = name;
-    this->params = &params;
+    this->params.Q = Q;
 }
 
 FlowReference::~FlowReference()
@@ -21,5 +21,5 @@ void FlowReference::update_constant(System &system)
 }
 void FlowReference::update_time(System &system, double time)
 {
-    system.C(global_eqn_ids[0]) = -params->Q;
+    system.C(global_eqn_ids[0]) = -params.Q;
 }

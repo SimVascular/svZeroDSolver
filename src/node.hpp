@@ -3,12 +3,10 @@
 
 #include "dofhandler.hpp"
 
-class Block;
-
 class Node
 {
 public:
-    Node(Block &ele1, Block &ele2, std::string name);
+    Node(std::string name);
     ~Node();
     std::string name;
     unsigned int flow_dof;
@@ -16,7 +14,5 @@ public:
 
     void setup_dofs(DOFHandler &dofhandler);
 };
-
-#include "block.hpp"
 
 #endif // SVZERODSOLVER_NODE_H_

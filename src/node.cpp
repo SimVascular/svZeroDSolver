@@ -1,12 +1,11 @@
 
 #include <string>
+#include <iostream>
 
 #include "node.hpp"
 
-Node::Node(Block &ele1, Block &ele2, std::string name)
+Node::Node(std::string name)
 {
-    ele1.outlet_nodes.push_back(this);
-    ele2.inlet_nodes.push_back(this);
     this->name = name;
 }
 

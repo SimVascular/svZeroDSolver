@@ -3,15 +3,16 @@
 
 #include "block.hpp"
 #include "system.hpp"
+#include "parameter.hpp"
 
 class FlowReference : public Block
 {
 public:
     struct Parameters : public Block::Parameters
     {
-        double Q; // Flow at timestep
+        TimeDependentParameter Q; // Flow at timestep
     };
-    FlowReference(double Q, std::string name);
+    FlowReference(TimeDependentParameter Q, std::string name);
     ~FlowReference();
     void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System &system);

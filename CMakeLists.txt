@@ -12,7 +12,7 @@ set_target_properties(jsoncpp PROPERTIES
 )
 
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
-add_executable(svzerodsolver src/main.cpp src/dofhandler.cpp src/node.cpp src/block.cpp src/junction.cpp src/bloodvessel.cpp src/flowreference.cpp src/rcrblockwithdistalpressure.cpp src/integrator.cpp src/system.cpp src/model.cpp)
+add_executable(svzerodsolver src/main.cpp src/dofhandler.cpp src/node.cpp src/block.cpp src/junction.cpp src/bloodvessel.cpp src/flowreference.cpp src/rcrblockwithdistalpressure.cpp src/integrator.cpp src/system.cpp src/model.cpp src/parameter.cpp)
 
 target_link_libraries(svzerodsolver Eigen3::Eigen)
 target_link_libraries(svzerodsolver jsoncpp)

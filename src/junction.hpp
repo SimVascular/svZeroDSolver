@@ -15,11 +15,11 @@ public:
     void update_constant(System &system);
 
     std::string name;
-    std::vector<Node *> inlet_nodes;
-    std::vector<Node *> outlet_nodes;
 
 private:
     Parameters params;
+    unsigned int num_inlets;
+    unsigned int num_outlets;
 };
 
 #endif // SVZERODSOLVER_JUNCTION_H_

@@ -17,8 +17,31 @@
 #include "integrator.hpp"
 #include "model.hpp"
 #include "system.hpp"
+#include "parameter.hpp"
 
 #include <stdexcept>
+
+TimeDependentParameter get_time_dependent_parameter(Json::Value &json_times, Json::Value &json_values)
+{
+    std::vector<double> times;
+    std::vector<double> values;
+    if (json_values.isDouble())
+    {
+        values.push_back(json_values.asDouble());
+    }
+    else
+    {
+        for (auto it = json_times.begin(); it != json_times.end(); it++)
+        {
+            times.push_back(it->asDouble());
+        }
+        for (auto it = json_values.begin(); it != json_values.end(); it++)
+        {
+            values.push_back(it->asDouble());
+        }
+    }
+    return TimeDependentParameter(times, values);
+}
 
 Model create_model(Json::Value &config)
 {
@@ -90,13 +113,15 @@ Model create_model(Json::Value &config)
                                 double C = bc_values["C"].asDouble();
                                 double Rd = bc_values["Rd"].asDouble();
                                 double Pd = bc_values["Pd"].asDouble();
-                                model.blocks.insert(std::make_pair(name, RCRBlockWithDistalPressure(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
+                                model.blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else if (config["boundary_conditions"][j]["bc_type"].asString() == "FLOW")
                             {
-                                double Q = bc_values["Q"].asDouble();
-                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
+                                Json::Value Q_json = bc_values["Q"];
+                                Json::Value t_json = bc_values.get("t", 0.0);
+                                auto Q = get_time_dependent_parameter(t_json, Q_json);
+                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, name = bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else
@@ -125,13 +150,15 @@ Model create_model(Json::Value &config)
                                 double C = bc_values["C"].asDouble();
                                 double Rd = bc_values["Rd"].asDouble();
                                 double Pd = bc_values["Pd"].asDouble();
-                                model.blocks.insert(std::make_pair(name, RCRBlockWithDistalPressure(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
+                                model.blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else if (config["boundary_conditions"][j]["bc_type"].asString() == "FLOW")
                             {
-                                double Q = bc_values["Q"].asDouble();
-                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
+                                Json::Value Q_json = bc_values["Q"];
+                                Json::Value t_json = bc_values.get("t", 0.0);
+                                auto Q = get_time_dependent_parameter(t_json, Q_json);
+                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, name = bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else
@@ -157,24 +184,24 @@ Model create_model(Json::Value &config)
     for (size_t i = 0; i < connections.size(); i++)
     {
         auto connection = connections[i];
-        for (auto &&elem1 : model.blocks)
+        for (auto &[key, elem1] : model.blocks)
         {
             std::visit([&](auto &&ele1)
                        {
-                        for (auto &&elem2 : model.blocks)
+                        for (auto &[key, elem2] : model.blocks)
                         {
                             std::visit([&](auto &&ele2)
-                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){Node node = Node(ele1, ele2, ele1.name + "_" + ele2.name); std::cout << "Created node " << node.name << std::endl; node.setup_dofs(model.dofhandler);}},
-                                    elem2.second);
+                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){ model.nodes.push_back(Node(ele1.name + "_" + ele2.name)); std::cout << "Created node " << model.nodes.back().name << std::endl; ele1.outlet_nodes.push_back(&model.nodes.back()); ele2.inlet_nodes.push_back(&model.nodes.back()); model.nodes.back().setup_dofs(model.dofhandler); } },
+                                    elem2);
                         } },
-                       elem1.second);
+                       elem1);
         }
     }
-    for (auto &&elem : model.blocks)
+    for (auto &[key, elem] : model.blocks)
     {
         std::visit([&](auto &&block)
                    { block.setup_dofs(model.dofhandler); },
-                   elem.second);
+                   elem);
     }
     return model;
 }
@@ -201,6 +228,8 @@ int main(int argc, char *argv[])
 
     // Create the blocks
     auto model = create_model(config);
+
+    std::cout << "Size of system:      " << model.dofhandler.size() << std::endl;
 
     System system;
     system.setup_matrices(model.dofhandler.size());

@@ -2,12 +2,14 @@
 #define SVZERODSOLVER_MODEL_H_
 
 #include <map>
+#include <vector>
 
 #include "junction.hpp"
 #include "bloodvessel.hpp"
 #include "rcrblockwithdistalpressure.hpp"
 #include "flowreference.hpp"
 #include "dofhandler.hpp"
+#include "node.hpp"
 
 class Model
 {
@@ -17,6 +19,7 @@ public:
 
     std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBlockWithDistalPressure>> blocks;
     DOFHandler dofhandler;
+    std::vector<Node> nodes;
 };
 
 #endif // SVZERODSOLVER_MODEL_H_

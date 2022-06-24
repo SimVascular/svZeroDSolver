@@ -14,8 +14,6 @@ public:
     void setup_dofs(DOFHandler &dofhandler);
     void update_constant(System &system);
 
-    std::string name;
-
 private:
     Parameters params;
     unsigned int num_inlets;

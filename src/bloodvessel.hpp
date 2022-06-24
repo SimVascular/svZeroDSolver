@@ -20,8 +20,6 @@ public:
     void update_solution(System &system, Eigen::VectorXd &y);
 
     std::string name;
-    std::vector<Node *> inlet_nodes;
-    std::vector<Node *> outlet_nodes;
 
 private:
     Parameters params;

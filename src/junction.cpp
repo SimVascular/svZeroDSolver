@@ -22,25 +22,17 @@ void Junction::setup_dofs(DOFHandler &dofhandler)
 
 void Junction::update_constant(System &system)
 {
-    std::cout << "Junction" << std::endl;
     for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++)
     {
-        std::cout << 1 << std::endl;
-        std::cout << "Num rows " << system.F.rows() << std::endl;
-        std::cout << "Row " << global_eqn_ids[i] << std::endl;
-        std::cout << "Col " << global_var_ids[0] << std::endl;
         system.F(global_eqn_ids[i], global_var_ids[0]) = 1.0;
-        std::cout << 2 << std::endl;
         system.F(global_eqn_ids[i], global_var_ids[2 * i + 2]) = -1.0;
     }
     for (size_t i = 0; i < num_inlets; i++)
     {
-        std::cout << 3 << std::endl;
         system.F(global_eqn_ids[num_inlets + num_outlets - 1], global_var_ids[i]) = 1.0;
     }
     for (size_t i = num_inlets; i < num_inlets + num_outlets; i++)
     {
-        std::cout << 4 << std::endl;
         system.F(global_eqn_ids[num_inlets + num_outlets - 1], global_var_ids[i]) = -1.0;
     }
 }

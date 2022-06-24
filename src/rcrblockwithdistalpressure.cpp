@@ -22,7 +22,6 @@ void RCRBlockWithDistalPressure::setup_dofs(DOFHandler &dofhandler)
 
 void RCRBlockWithDistalPressure::update_constant(System &system)
 {
-    std::cout << "RCRBlockWithDistalPressure" << std::endl;
     system.F(global_eqn_ids[0], global_var_ids[0]) = 1.0;
     system.F(global_eqn_ids[0], global_var_ids[2]) = -1.0;
     system.F(global_eqn_ids[1], global_var_ids[2]) = -1.0;

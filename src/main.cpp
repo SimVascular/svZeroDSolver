@@ -121,7 +121,7 @@ Model create_model(Json::Value &config)
                                 Json::Value Q_json = bc_values["Q"];
                                 Json::Value t_json = bc_values.get("t", 0.0);
                                 auto Q = get_time_dependent_parameter(t_json, Q_json);
-                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, name = bc_name)));
+                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else
@@ -158,7 +158,7 @@ Model create_model(Json::Value &config)
                                 Json::Value Q_json = bc_values["Q"];
                                 Json::Value t_json = bc_values.get("t", 0.0);
                                 auto Q = get_time_dependent_parameter(t_json, Q_json);
-                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, name = bc_name)));
+                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else
@@ -181,9 +181,8 @@ Model create_model(Json::Value &config)
     }
 
     // Create Connections
-    for (size_t i = 0; i < connections.size(); i++)
+    for (auto &connection : connections)
     {
-        auto connection = connections[i];
         for (auto &[key, elem1] : model.blocks)
         {
             std::visit([&](auto &&ele1)
@@ -191,7 +190,7 @@ Model create_model(Json::Value &config)
                         for (auto &[key, elem2] : model.blocks)
                         {
                             std::visit([&](auto &&ele2)
-                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){ model.nodes.push_back(Node(ele1.name + "_" + ele2.name)); std::cout << "Created node " << model.nodes.back().name << std::endl; ele1.outlet_nodes.push_back(&model.nodes.back()); ele2.inlet_nodes.push_back(&model.nodes.back()); model.nodes.back().setup_dofs(model.dofhandler); } },
+                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){ model.nodes.push_back(Node(ele1.name + "_" + ele2.name)); std::cout << "Created node " << model.nodes.back().name << std::endl; ele1.outlet_nodes.push_back(&model.nodes.back()); ele2.inlet_nodes.push_back(&model.nodes.back()); model.nodes.back().setup_dofs(model.dofhandler); std::cout << "Check flow dof: " << ele1.outlet_nodes.back()->flow_dof << std::endl; } },
                                     elem2);
                         } },
                        elem1);

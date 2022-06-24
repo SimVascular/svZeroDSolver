@@ -17,15 +17,15 @@ Block::~Block()
 void Block::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations, unsigned int num_internal_vars)
 {
     // Collect external DOFs from inlet and outlet nodes
-    for (size_t i = 0; i < inlet_nodes.size(); i++)
+    for (auto inlet_node : inlet_nodes)
     {
-        global_var_ids.push_back(inlet_nodes[i]->pres_dof);
-        global_var_ids.push_back(inlet_nodes[i]->flow_dof);
+        global_var_ids.push_back(inlet_node->pres_dof);
+        global_var_ids.push_back(inlet_node->flow_dof);
     }
-    for (size_t i = 0; i < outlet_nodes.size(); i++)
+    for (auto outlet_node : outlet_nodes)
     {
-        global_var_ids.push_back(outlet_nodes[i]->pres_dof);
-        global_var_ids.push_back(outlet_nodes[i]->flow_dof);
+        global_var_ids.push_back(outlet_node->pres_dof);
+        global_var_ids.push_back(outlet_node->flow_dof);
     }
 
     // Register internal variables of block

@@ -55,8 +55,6 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
 
     double new_time = time + alpha_f * time_step_size;
 
-    std::cout << "Before updating blocks" << std::endl;
-
     // Update time in blocks
     for (auto &&elem : model.blocks)
     {
@@ -64,7 +62,6 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
                    {block.update_constant(system); block.update_time(system, time); },
                    elem.second);
     }
-    std::cout << system.F << std::endl;
 
     for (size_t i = 0; i < max_iter; i++)
     {
@@ -81,8 +78,6 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
         auto lhs = system.F + (system.dE + system.dF + system.dC + system.E * y_dot_coeff);
         auto rhs = -system.E.transpose() * ydot_am - system.F.transpose() * y_af - system.C;
 
-        std::cout << lhs << std::endl;
-        std::cout << rhs << std::endl;
         // Solve system
         Eigen::VectorXd dy = lhs.colPivHouseholderQr().solve(rhs);
 

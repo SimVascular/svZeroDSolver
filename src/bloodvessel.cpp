@@ -22,14 +22,10 @@ void BloodVessel::setup_dofs(DOFHandler &dofhandler)
 
 void BloodVessel::update_constant(System &system)
 {
-    std::cout << "Before Bloodvessel" << std::endl;
-    std::cout << -params.L << std::endl;
     system.E(global_eqn_ids[0], global_var_ids[3]) = -params.L;
-    std::cout << "Before C" << std::endl;
     system.E(global_eqn_ids[1], global_var_ids[4]) = -params.C;
 
     system.F(global_eqn_ids[0], global_var_ids[0]) = 1.0;
-    std::cout << "Before R" << std::endl;
     system.F(global_eqn_ids[0], global_var_ids[1]) = -params.R;
     system.F(global_eqn_ids[0], global_var_ids[2]) = -1.0;
     system.F(global_eqn_ids[1], global_var_ids[1]) = 1.0;
@@ -37,7 +33,6 @@ void BloodVessel::update_constant(System &system)
     system.F(global_eqn_ids[2], global_var_ids[0]) = 1.0;
     system.F(global_eqn_ids[2], global_var_ids[2]) = -params.R;
     system.F(global_eqn_ids[2], global_var_ids[4]) = -1.0;
-    std::cout << "After Bloodvessel" << std::endl;
 }
 void BloodVessel::update_solution(System &system, Eigen::VectorXd &y)
 {

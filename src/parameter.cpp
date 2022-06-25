@@ -1,7 +1,5 @@
 #include "parameter.hpp"
 
-#include <iostream>
-
 TimeDependentParameter::TimeDependentParameter()
 {
 }
@@ -12,6 +10,14 @@ TimeDependentParameter::TimeDependentParameter(std::vector<double> times, std::v
     this->values = values;
     cycle_period = times.back() - times[0];
     size = times.size();
+    if (size == 1)
+    {
+        isconstant = true;
+    }
+    else
+    {
+        isconstant = false;
+    }
 }
 
 TimeDependentParameter::~TimeDependentParameter()
@@ -25,7 +31,7 @@ double TimeDependentParameter::get(double time)
         return values[0];
     }
 
-    double rtime = remainder(time, cycle_period);
+    double rtime = fmod(time, cycle_period);
 
     auto i = lower_bound(times.begin(), times.end(), rtime);
     unsigned int k = i - times.begin();

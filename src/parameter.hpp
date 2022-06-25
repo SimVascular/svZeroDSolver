@@ -22,6 +22,7 @@ public:
     double get(double time);
 
     void setup_dofs(DOFHandler &dofhandler);
+    bool isconstant;
 };
 
 #endif // SVZERODSOLVER_PARAMETER_H_

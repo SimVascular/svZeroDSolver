@@ -1,7 +1,5 @@
 #include "flowreference.hpp"
 
-#include <iostream>
-
 FlowReference::FlowReference(TimeDependentParameter Q, std::string name) : Block(name)
 {
     this->name = name;

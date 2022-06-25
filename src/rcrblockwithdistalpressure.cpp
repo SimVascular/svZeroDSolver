@@ -1,7 +1,5 @@
 #include "rcrblockwithdistalpressure.hpp"
 
-#include <iostream>
-
 RCRBlockWithDistalPressure::RCRBlockWithDistalPressure(double Rp, double C, double Rd, double Pd, std::string name) : Block(name)
 {
     this->name = name;

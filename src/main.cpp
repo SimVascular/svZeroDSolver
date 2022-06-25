@@ -9,7 +9,6 @@
 #include <variant>
 #include "Eigen/Dense"
 
-#include "block.hpp"
 #include "junction.hpp"
 #include "bloodvessel.hpp"
 #include "rcrblockwithdistalpressure.hpp"
@@ -122,6 +121,10 @@ Model create_model(Json::Value &config)
                                 Json::Value Q_json = bc_values["Q"];
                                 Json::Value t_json = bc_values.get("t", 0.0);
                                 auto Q = get_time_dependent_parameter(t_json, Q_json);
+                                if (Q.isconstant == false)
+                                {
+                                    config["simulation_parameters"]["cardiac_cycle_period"] = Json::Value(Q.cycle_period);
+                                }
                                 model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
@@ -159,6 +162,10 @@ Model create_model(Json::Value &config)
                                 Json::Value Q_json = bc_values["Q"];
                                 Json::Value t_json = bc_values.get("t", 0.0);
                                 auto Q = get_time_dependent_parameter(t_json, Q_json);
+                                if (Q.isconstant == false)
+                                {
+                                    config["simulation_parameters"]["cardiac_cycle_period"] = Json::Value(Q.cycle_period);
+                                }
                                 model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
@@ -191,7 +198,7 @@ Model create_model(Json::Value &config)
                         for (auto &[key, elem2] : model.blocks)
                         {
                             std::visit([&](auto &&ele2)
-                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){ model.nodes.push_back(Node(ele1.name + "_" + ele2.name)); std::cout << "Created node " << model.nodes.back().name << std::endl; ele1.outlet_nodes.push_back(&model.nodes.back()); ele2.inlet_nodes.push_back(&model.nodes.back()); model.nodes.back().setup_dofs(model.dofhandler); std::cout << "Check flow dof: " << ele1.outlet_nodes.back()->flow_dof << std::endl; } },
+                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){ model.nodes.push_back(Node(ele1.name + "_" + ele2.name)); std::cout << "Created node " << model.nodes.back().name << std::endl; ele1.outlet_nodes.push_back(&model.nodes.back()); ele2.inlet_nodes.push_back(&model.nodes.back()); model.nodes.back().setup_dofs(model.dofhandler); } },
                                     elem2);
                         } },
                        elem1);
@@ -200,15 +207,9 @@ Model create_model(Json::Value &config)
     for (auto &[key, elem] : model.blocks)
     {
         std::visit([&](auto &&block)
-                   { block.setup_dofs(model.dofhandler); std::cout << "Setting up DOFs for " << block.name << std::endl; },
+                   { block.setup_dofs(model.dofhandler); },
                    elem);
     }
-    std::cout << "Variables: ";
-    for (auto var : model.dofhandler.variables)
-    {
-        std::cout << var << " ";
-    }
-    std::cout << std::endl;
     return model;
 }
 
@@ -288,6 +289,9 @@ int main(int argc, char *argv[])
     Json::Value config;
     reader.parse(file_input, config);
 
+    // Create the blocks
+    auto model = create_model(config);
+
     Json::Value sim_params = config["simulation_parameters"];
     double cardiac_cycle_period = sim_params.get("cardiac_cycle_period", 1.0).asDouble();
     double num_cycles = sim_params["number_of_cardiac_cycles"].asDouble();
@@ -298,10 +302,6 @@ int main(int argc, char *argv[])
     std::cout << "Reading configuration completed" << std::endl;
     std::cout << "Number of timesteps: " << num_time_steps << std::endl;
     std::cout << "Time step size:      " << time_step_size << std::endl;
-
-    // Create the blocks
-    auto model = create_model(config);
-
     std::cout << "Size of system:      " << model.dofhandler.size() << std::endl;
 
     System system;
@@ -330,6 +330,8 @@ int main(int argc, char *argv[])
     }
 
     write_json(argv[2], times, states, model);
+
+    std::cout << "Simulation completed!" << std::endl;
 
     return 0;
 }

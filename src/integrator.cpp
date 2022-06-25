@@ -1,7 +1,5 @@
 #include "integrator.hpp"
 
-#include "iostream"
-
 State::State()
 {
 }
@@ -56,7 +54,7 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
     double new_time = time + alpha_f * time_step_size;
 
     // Update time in blocks
-    model.update_time(system, time);
+    model.update_time(system, new_time);
 
     for (size_t i = 0; i < max_iter; i++)
     {
@@ -72,9 +70,10 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
         Eigen::VectorXd dy = lhs.colPivHouseholderQr().solve(rhs);
 
         // Update solution
-        y_af = y_af + dy;
-        ydot_am = ydot_am + dy * y_dot_coeff;
+        y_af += dy;
+        ydot_am += dy * y_dot_coeff;
 
+        // Check residuum
         if (norm < 5.0e-4)
         {
             break;

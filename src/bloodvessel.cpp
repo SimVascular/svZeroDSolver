@@ -1,6 +1,5 @@
 #include "bloodvessel.hpp"
-
-#include "iostream"
+#include <math.h>
 
 BloodVessel::BloodVessel(double R, double C, double L, double stenosis_coefficient, std::string name) : Block(name)
 {
@@ -38,7 +37,7 @@ void BloodVessel::update_constant(System &system)
 }
 void BloodVessel::update_solution(System &system, Eigen::VectorXd &y)
 {
-    double q_in = abs(y[inlet_nodes[0]->flow_dof]);
+    double q_in = fabs(y[inlet_nodes[0]->flow_dof]);
     double fac1 = -params.stenosis_coefficient * q_in;
     double fac2 = fac1 - params.R;
     system.F(global_eqn_ids[0], global_var_ids[1]) = fac2;

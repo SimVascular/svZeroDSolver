@@ -1,5 +1,4 @@
 #include "dofhandler.hpp"
-#include <iostream>
 
 DOFHandler::DOFHandler()
 {

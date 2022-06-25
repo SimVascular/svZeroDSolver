@@ -76,16 +76,22 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
 
         // Calculate RHS and LHS
         auto lhs = system.F + (system.dE + system.dF + system.dC + system.E * y_dot_coeff);
-        auto rhs = -system.E.transpose() * ydot_am - system.F.transpose() * y_af - system.C;
+        auto rhs = -system.E * ydot_am - system.F * y_af - system.C;
+        double norm = rhs.norm();
 
         // Solve system
         Eigen::VectorXd dy = lhs.colPivHouseholderQr().solve(rhs);
 
         // Update solution
         y_af = y_af + dy;
-        ydot_am = ydot_am * y_dot_coeff;
+        ydot_am = ydot_am + dy * y_dot_coeff;
 
-        if (rhs.norm() < 5.0e-4)
+        if (isnan(norm))
+        {
+            throw std::runtime_error("Solution NaN.");
+        }
+
+        if (norm < 5.0e-4)
         {
             break;
         }

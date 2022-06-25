@@ -199,17 +199,56 @@ Model create_model(Json::Value &config)
     for (auto &[key, elem] : model.blocks)
     {
         std::visit([&](auto &&block)
-                   { block.setup_dofs(model.dofhandler); },
+                   { block.setup_dofs(model.dofhandler); std::cout << "Setting up DOFs for " << block.name << std::endl; },
                    elem);
     }
+    std::cout << "Variables: ";
+    for (auto var : model.dofhandler.variables)
+    {
+        std::cout << var << " ";
+    }
+    std::cout << std::endl;
     return model;
+}
+
+void write_json(std::string path, std::vector<double> times, std::vector<State> states, Model model)
+{
+    Json::Value output;
+    Json::Value json_times(Json::arrayValue);
+    for (auto time : times)
+    {
+        json_times.append(Json::Value(time));
+    }
+
+    Json::Value json_names(Json::arrayValue);
+    Json::Value json_flow_in(Json::arrayValue);
+    Json::Value json_flow_out(Json::arrayValue);
+    Json::Value json_pres_in(Json::arrayValue);
+    Json::Value json_pres_out(Json::arrayValue);
+
+    for (auto &[key, elem] : model.blocks)
+    {
+        std::visit([&](auto &&block)
+                   { json_names.append(block.name); },
+                   elem);
+    }
+
+    output["times"] = json_times;
+    output["names"] = json_names;
+
+    Json::StreamWriterBuilder builder;
+    builder["commentStyle"] = "None";
+    builder["indentation"] = "   ";
+    std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+    std::ofstream outputfilestream(path);
+    writer->write(output, &outputfilestream);
 }
 
 int main(int argc, char *argv[])
 {
     std::cout << "Starting svZeroDSolver" << std::endl;
-    // std::cout << "Reading configuration from " << argv[1] << std::endl;
-    std::ifstream file_input("../solver_0d.in");
+    std::cout << "Reading configuration from " << argv[1] << std::endl;
+    std::ifstream file_input(argv[1]);
     Json::Reader reader;
     Json::Value config;
     reader.parse(file_input, config);
@@ -239,9 +278,22 @@ int main(int argc, char *argv[])
 
     double time = 0.0;
     int max_iter = 30;
-    integrator.step(state, time, model, max_iter);
 
-    std::cout << system.F << std::endl;
+    std::vector<State> states;
+    std::vector<double> times;
+
+    states.push_back(state);
+    times.push_back(0.0);
+
+    for (size_t i = 0; i < num_time_steps; i++)
+    {
+        state = integrator.step(state, time, model, max_iter);
+        time = time + time_step_size;
+        times.push_back(time);
+        states.push_back(state);
+    }
+
+    write_json(argv[2], times, states, model);
 
     return 0;
 }

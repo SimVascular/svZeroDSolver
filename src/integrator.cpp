@@ -33,6 +33,13 @@ Integrator::Integrator(System &system, double time_step_size, double rho)
     this->time_step_size = time_step_size;
     time_step_size_inv = 1.0 / time_step_size;
 
+    size = system.F.row(0).size();
+    y_af = Eigen::VectorXd(size);
+    ydot_am = Eigen::VectorXd(size);
+    dy = Eigen::VectorXd(size);
+    lhs = Eigen::MatrixXd(size, size);
+    rhs = Eigen::VectorXd(size);
+
     y_dot_coeff = alpha_m / (alpha_f * gamma) * time_step_size_inv;
 }
 
@@ -48,29 +55,35 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
     new_state.y = old_state.y + 0.5 * time_step_size * old_state.ydot;
     new_state.ydot = old_state.ydot * (gamma - 0.5) * gamma_inv;
 
-    Eigen::VectorXd y_af = old_state.y + alpha_f * (new_state.y - old_state.y);
-    Eigen::VectorXd ydot_am = old_state.ydot + alpha_m * (new_state.ydot - old_state.ydot);
+    y_af = old_state.y + alpha_f * (new_state.y - old_state.y);
+    ydot_am = old_state.ydot + alpha_m * (new_state.ydot - old_state.ydot);
 
     double new_time = time + alpha_f * time_step_size;
 
     // Update time in blocks
     model.update_time(system, new_time);
 
+    dy.setZero();
     for (size_t i = 0; i < max_iter; i++)
     {
         // Update solution and assemble
         model.update_solution(system, y_af);
 
         // Calculate RHS and LHS
-        auto rhs = -system.E * ydot_am - system.F * y_af - system.C;
-        if (rhs.norm() < 5.0e-4)
+        rhs = -(system.E * ydot_am) - (system.F * y_af) - system.C;
+        if (rhs.norm() < 1.0e-8)
         {
             break;
         }
-        auto lhs = system.F + (system.dE + system.dF + system.dC + system.E * y_dot_coeff);
+        else if (i == max_iter - 1)
+        {
+            throw std::runtime_error("Maxium number of non-linear iterations reached.");
+            exit(1);
+        }
+        lhs = system.F + (system.dE + system.dF + system.dC + system.E * y_dot_coeff);
 
         // Solve system
-        Eigen::VectorXd dy = lhs.colPivHouseholderQr().solve(rhs);
+        dy = lhs.partialPivLu().solve(rhs);
 
         // Update solution
         y_af += dy;

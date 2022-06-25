@@ -29,6 +29,13 @@ private:
     double time_step_size_inv;
     double y_dot_coeff;
 
+    int size;
+    Eigen::VectorXd y_af;
+    Eigen::VectorXd ydot_am;
+    Eigen::VectorXd dy;
+    Eigen::MatrixXd lhs;
+    Eigen::VectorXd rhs;
+
     System system;
 
 public:

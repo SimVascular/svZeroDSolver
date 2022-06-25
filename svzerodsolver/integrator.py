@@ -69,22 +69,12 @@ class GeneralizedAlpha:
         for v in self.vecs:
             self.mat[v] = np.zeros(self.n)
 
-    def assemble(self, block_list, y, ydot):
+    def assemble(self, block_list):
         """
         Assemble block matrices into global matrices
         """
         for bl in block_list:
             bl.assemble(self.mat)
-
-        lhs = self.mat["F"] + (
-            self.mat["dE"]
-            + self.mat["dF"]
-            + self.mat["dC"]
-            + self.mat["E"] * self.fac * self.time_step_size_inv
-        )
-        rhs = -self.mat["E"].dot(ydot) - self.mat["F"].dot(y) - self.mat["C"]
-
-        return lhs, rhs
 
     def step(self, y, ydot, time, block_list, max_iter=30):
         """
@@ -117,7 +107,17 @@ class GeneralizedAlpha:
                 b.update_solution(yaf)
 
             # Assemble
-            lhs, res = self.assemble(block_list, yaf, ydotam)
+            self.assemble(block_list)
+            res = -self.mat["E"].dot(ydotam) - self.mat["F"].dot(yaf) - self.mat["C"]
+            if np.linalg.norm(res) <= 1e-8:
+                break
+
+            lhs = self.mat["F"] + (
+                self.mat["dE"]
+                + self.mat["dF"]
+                + self.mat["dC"]
+                + self.mat["E"] * self.fac * self.time_step_size_inv
+            )
 
             # solve for Newton increment
             dy = self.solve(lhs, res)
@@ -125,9 +125,6 @@ class GeneralizedAlpha:
             # update solution
             yaf += dy
             ydotam += dy * fac_ydotam
-
-            if np.linalg.norm(res) <= 5e-4:
-                break
 
         if iter == max_iter - 1:
             print(

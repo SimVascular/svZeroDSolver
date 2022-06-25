@@ -290,6 +290,7 @@ int main(int argc, char *argv[])
     reader.parse(file_input, config);
 
     // Create the blocks
+    std::cout << "Creating model" << std::endl;
     auto model = create_model(config);
 
     Json::Value sim_params = config["simulation_parameters"];
@@ -299,7 +300,7 @@ int main(int argc, char *argv[])
     double time_step_size = cardiac_cycle_period / (num_pts_per_cycle - 1);
     int num_time_steps = (num_pts_per_cycle - 1) * num_cycles + 1;
 
-    std::cout << "Reading configuration completed" << std::endl;
+    std::cout << "Setup simulutation" << std::endl;
     std::cout << "Number of timesteps: " << num_time_steps << std::endl;
     std::cout << "Time step size:      " << time_step_size << std::endl;
     std::cout << "Size of system:      " << model.dofhandler.size() << std::endl;
@@ -311,12 +312,12 @@ int main(int argc, char *argv[])
     State state = State::Zero(model.dofhandler.size());
     if (steady_inital)
     {
+        std::cout << "Calculating steady initial condition" << std::endl;
         double time_step_size_steady = cardiac_cycle_period / 10.0;
         int num_time_steps_steady = 31;
         auto model_steady = create_model(config);
         model_steady.to_steady();
-        System system_steady;
-        system_steady.setup_matrices(model_steady.dofhandler.size());
+        System system_steady(model_steady.dofhandler.size());
         model_steady.update_constant(system_steady);
         Integrator integrator_steady = Integrator(system_steady, time_step_size_steady, 0.1);
         State state_steady = State::Zero(model_steady.dofhandler.size());
@@ -330,8 +331,8 @@ int main(int argc, char *argv[])
         state = state_steady;
     }
 
-    System system;
-    system.setup_matrices(model.dofhandler.size());
+    std::cout << "Starting simulation" << std::endl;
+    System system(model.dofhandler.size());
     model.update_constant(system);
 
     Integrator integrator = Integrator(system, time_step_size, 0.1);
@@ -344,17 +345,24 @@ int main(int argc, char *argv[])
     states.push_back(state);
     times.push_back(0.0);
 
+    int output_interval = 1;
+    int interval_counter = 0;
+
     for (size_t i = 0; i < num_time_steps; i++)
     {
         state = integrator.step(state, time, model, max_iter);
         time = time + time_step_size;
-        times.push_back(time);
-        states.push_back(state);
+        interval_counter += 1;
+        if (interval_counter == output_interval)
+        {
+            times.push_back(time);
+            states.push_back(state);
+            interval_counter = 0;
+        }
     }
+    std::cout << "Simulation completed" << std::endl;
 
     write_json(argv[2], times, states, model);
-
-    std::cout << "Simulation completed!" << std::endl;
 
     return 0;
 }

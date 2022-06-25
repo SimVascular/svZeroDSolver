@@ -129,21 +129,27 @@ def format_results_to_dict(zero_d_time, results_0d, block_list):
     vessels = [block for block in block_list if isinstance(block, BloodVessel)]
 
     results = {
-        "time": zero_d_time,
-        "names": [],
         "flow_in": [],
         "flow_out": [],
+        "names": [],
         "pressure_in": [],
         "pressure_out": [],
+        "time": list(zero_d_time),
     }
 
     for vessel in vessels:
 
         results["names"].append(vessel.name)
-        results["flow_in"].append(results_0d[:, vessel.inflow_nodes[0].flow_dof])
-        results["flow_out"].append(results_0d[:, vessel.outflow_nodes[0].flow_dof])
-        results["pressure_in"].append(results_0d[:, vessel.inflow_nodes[0].pres_dof])
-        results["pressure_out"].append(results_0d[:, vessel.outflow_nodes[0].pres_dof])
+        results["flow_in"].append(list(results_0d[:, vessel.inflow_nodes[0].flow_dof]))
+        results["flow_out"].append(
+            list(results_0d[:, vessel.outflow_nodes[0].flow_dof])
+        )
+        results["pressure_in"].append(
+            list(results_0d[:, vessel.inflow_nodes[0].pres_dof])
+        )
+        results["pressure_out"].append(
+            list(results_0d[:, vessel.outflow_nodes[0].pres_dof])
+        )
 
     return results
 

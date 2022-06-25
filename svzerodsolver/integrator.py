@@ -126,7 +126,7 @@ class GeneralizedAlpha:
             yaf += dy
             ydotam += dy * fac_ydotam
 
-            if np.abs(res).max() <= 5e-4:
+            if np.linalg.norm(res) <= 5e-4:
                 break
 
         if iter == max_iter - 1:

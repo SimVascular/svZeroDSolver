@@ -711,7 +711,7 @@ def create_junction_blocks(parameters):
     return block_dict, connections
 
 
-def create_vessel_blocks(parameters):
+def create_vessel_blocks(parameters, steady):
     """
     Purpose:
         Create the vessel blocks for the 0d model.
@@ -747,72 +747,64 @@ def create_vessel_blocks(parameters):
         if vessel.name in block_dict:
             raise RuntimeError(f"Vessel {vessel.name} already exists.")
         block_dict[vessel.name] = vessel
-    return block_dict, connections
+        if "boundary_conditions" in vessel_config:
+            locations = [
+                loc
+                for loc in ("inlet", "outlet")
+                if loc in vessel_config["boundary_conditions"]
+            ]
+            for location in locations:
+                vessel_id = vessel_config["vessel_id"]
+                for config in parameters["boundary_conditions"]:
+                    if (
+                        config["bc_name"]
+                        == vessel_config["boundary_conditions"][location]
+                    ):
+                        bc_config = dict(
+                            name="BC" + str(vessel_id) + "_" + location,
+                            steady=steady,
+                            **config,
+                        )
+                        break
 
-
-def create_bc_blocks(parameters, steady=False):
-    """
-    Purpose:
-        Create the outlet bc (boundary condition) blocks for the 0d model.
-    Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-    Returns:
-        void, but updates parameters["blocks"] to include the blocks, where
-            parameters["blocks"] = {block_name : block_object}
-    """
-    block_dict = {}
-    for vessel_config in [
-        v for v in parameters["vessels"] if "boundary_conditions" in v
-    ]:
-        locations = [
-            loc
-            for loc in ("inlet", "outlet")
-            if loc in vessel_config["boundary_conditions"]
-        ]
-        for location in locations:
-            vessel_id = vessel_config["vessel_id"]
-            for config in parameters["boundary_conditions"]:
-                if config["bc_name"] == vessel_config["boundary_conditions"][location]:
-                    bc_config = dict(
-                        name="BC" + str(vessel_id) + "_" + location,
-                        steady=steady,
-                        **config,
-                    )
-                    break
-
-            if "t" in bc_config["bc_values"] and len(bc_config["bc_values"]["t"]) >= 2:
-                cardiac_cycle_period = (
-                    bc_config["bc_values"]["t"][-1] - bc_config["bc_values"]["t"][0]
-                )
                 if (
-                    "cardiac_cycle_period" in parameters["simulation_parameters"]
-                    and cardiac_cycle_period
-                    != parameters["simulation_parameters"]["cardiac_cycle_period"]
+                    "t" in bc_config["bc_values"]
+                    and len(bc_config["bc_values"]["t"]) >= 2
                 ):
-                    raise RuntimeError(
-                        f"The time series of the boundary condition for segment {vessel_id} does "
-                        "not have the same cardiac cycle period as the other boundary conditions."
+                    cardiac_cycle_period = (
+                        bc_config["bc_values"]["t"][-1] - bc_config["bc_values"]["t"][0]
                     )
-                elif "cardiac_cycle_period" not in parameters["simulation_parameters"]:
-                    parameters["simulation_parameters"][
+                    if (
+                        "cardiac_cycle_period" in parameters["simulation_parameters"]
+                        and cardiac_cycle_period
+                        != parameters["simulation_parameters"]["cardiac_cycle_period"]
+                    ):
+                        raise RuntimeError(
+                            f"The time series of the boundary condition for segment {vessel_id} does "
+                            "not have the same cardiac cycle period as the other boundary conditions."
+                        )
+                    elif (
                         "cardiac_cycle_period"
-                    ] = cardiac_cycle_period
+                        not in parameters["simulation_parameters"]
+                    ):
+                        parameters["simulation_parameters"][
+                            "cardiac_cycle_period"
+                        ] = cardiac_cycle_period
 
-            if bc_config["bc_type"] == "RESISTANCE":
-                bc = ResistanceWithDistalPressure.from_config(bc_config)
-            elif bc_config["bc_type"] == "RCR":
-                bc = RCRBlockWithDistalPressure.from_config(bc_config)
-            elif bc_config["bc_type"] == "FLOW":
-                bc = FlowRef.from_config(bc_config)
-            elif bc_config["bc_type"] == "PRESSURE":
-                bc = PressureRef.from_config(bc_config)
-            elif bc_config["bc_type"] == "CORONARY":
-                bc = OpenLoopCoronaryWithDistalPressureBlock.from_config(bc_config)
-            else:
-                raise NotImplementedError
-            block_dict[bc.name] = bc
-    return block_dict
+                if bc_config["bc_type"] == "RESISTANCE":
+                    bc = ResistanceWithDistalPressure.from_config(bc_config)
+                elif bc_config["bc_type"] == "RCR":
+                    bc = RCRBlockWithDistalPressure.from_config(bc_config)
+                elif bc_config["bc_type"] == "FLOW":
+                    bc = FlowRef.from_config(bc_config)
+                elif bc_config["bc_type"] == "PRESSURE":
+                    bc = PressureRef.from_config(bc_config)
+                elif bc_config["bc_type"] == "CORONARY":
+                    bc = OpenLoopCoronaryWithDistalPressureBlock.from_config(bc_config)
+                else:
+                    raise NotImplementedError
+                block_dict[bc.name] = bc
+    return block_dict, connections
 
 
 def create_blocks(parameters, steady=False):
@@ -829,9 +821,8 @@ def create_blocks(parameters, steady=False):
                 -- where the values are the junction, vessel, outlet BC, and inlet BC block objects
     """
     junction_blocks, junction_connections = create_junction_blocks(parameters)
-    vessel_blocks, vessel_connections = create_vessel_blocks(parameters)
-    bc_blocks = create_bc_blocks(parameters, steady=steady)
-    all_blocks = junction_blocks | vessel_blocks | bc_blocks
+    vessel_blocks, vessel_connections = create_vessel_blocks(parameters, steady=steady)
+    all_blocks = junction_blocks | vessel_blocks
     dofhandler = DOFHandler()
     for ele1_name, ele2_name in junction_connections + vessel_connections:
         node = Node(
@@ -840,6 +831,6 @@ def create_blocks(parameters, steady=False):
             name=ele1_name + "_" + ele2_name,
         )
         node.setup_dofs(dofhandler)
-    for block in all_blocks.values():
-        block.setup_dofs(dofhandler)
+    for key in sorted(all_blocks):
+        all_blocks[key].setup_dofs(dofhandler)
     return list(all_blocks.values()), dofhandler

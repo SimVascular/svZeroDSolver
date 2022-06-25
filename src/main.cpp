@@ -21,10 +21,12 @@
 
 #include <stdexcept>
 
-TimeDependentParameter get_time_dependent_parameter(Json::Value &json_times, Json::Value &json_values)
+typedef double T;
+
+TimeDependentParameter<T> get_time_dependent_parameter(Json::Value &json_times, Json::Value &json_values)
 {
-    std::vector<double> times;
-    std::vector<double> values;
+    std::vector<T> times;
+    std::vector<T> values;
     if (json_values.isDouble())
     {
         values.push_back(json_values.asDouble());
@@ -40,13 +42,13 @@ TimeDependentParameter get_time_dependent_parameter(Json::Value &json_times, Jso
             values.push_back(it->asDouble());
         }
     }
-    return TimeDependentParameter(times, values);
+    return TimeDependentParameter<T>(times, values);
 }
 
-Model create_model(Json::Value &config)
+Model<T> create_model(Json::Value &config)
 {
     // Create blog mapping
-    Model model;
+    Model<T> model;
 
     // Create list to store block connections while generating blocks
     std::vector<std::tuple<std::string, std::string>> connections;
@@ -59,7 +61,7 @@ Model create_model(Json::Value &config)
         if ((config["junctions"][i]["junction_type"].asString() == "NORMAL_JUNCTION") || (config["junctions"][i]["junction_type"].asString() == "internal_junction"))
         {
             std::string name = config["junctions"][i]["junction_name"].asString();
-            model.blocks.insert(std::make_pair(name, Junction(name)));
+            model.blocks.insert(std::make_pair(name, Junction<T>(name)));
             std::cout << "Created junction " << name << std::endl;
             for (int j = 0; j < config["junctions"][i]["inlet_vessels"].size(); j++)
             {
@@ -89,11 +91,11 @@ Model create_model(Json::Value &config)
         {
             Json::Value vessel_values = config["vessels"][i]["zero_d_element_values"];
             std::string name = "V" + config["vessels"][i]["vessel_id"].asString();
-            double R = vessel_values["R_poiseuille"].asDouble();
-            double C = vessel_values.get("C", 0.0).asDouble();
-            double L = vessel_values.get("L", 0.0).asDouble();
-            double stenosis_coefficient = vessel_values.get("stenosis_coefficient", 0.0).asDouble();
-            model.blocks.insert(std::make_pair(name, BloodVessel(R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient, name = name)));
+            T R = vessel_values["R_poiseuille"].asDouble();
+            T C = vessel_values.get("C", 0.0).asDouble();
+            T L = vessel_values.get("L", 0.0).asDouble();
+            T stenosis_coefficient = vessel_values.get("stenosis_coefficient", 0.0).asDouble();
+            model.blocks.insert(std::make_pair(name, BloodVessel<T>(R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient, name = name)));
             std::cout << "Created vessel " << name << std::endl;
 
             if (config["vessels"][i].isMember("boundary_conditions"))
@@ -109,11 +111,11 @@ Model create_model(Json::Value &config)
                             Json::Value bc_values = config["boundary_conditions"][j]["bc_values"];
                             if (config["boundary_conditions"][j]["bc_type"].asString() == "RCR")
                             {
-                                double Rp = bc_values["Rp"].asDouble();
-                                double C = bc_values["C"].asDouble();
-                                double Rd = bc_values["Rd"].asDouble();
-                                double Pd = bc_values["Pd"].asDouble();
-                                model.blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
+                                T Rp = bc_values["Rp"].asDouble();
+                                T C = bc_values["C"].asDouble();
+                                T Rd = bc_values["Rd"].asDouble();
+                                T Pd = bc_values["Pd"].asDouble();
+                                model.blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else if (config["boundary_conditions"][j]["bc_type"].asString() == "FLOW")
@@ -125,7 +127,7 @@ Model create_model(Json::Value &config)
                                 {
                                     config["simulation_parameters"]["cardiac_cycle_period"] = Json::Value(Q.cycle_period);
                                 }
-                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
+                                model.blocks.insert(std::make_pair(bc_name, FlowReference<T>(Q = Q, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else
@@ -150,11 +152,11 @@ Model create_model(Json::Value &config)
                             Json::Value bc_values = config["boundary_conditions"][j]["bc_values"];
                             if (config["boundary_conditions"][j]["bc_type"].asString() == "RCR")
                             {
-                                double Rp = bc_values["Rp"].asDouble();
-                                double C = bc_values["C"].asDouble();
-                                double Rd = bc_values["Rd"].asDouble();
-                                double Pd = bc_values["Pd"].asDouble();
-                                model.blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
+                                T Rp = bc_values["Rp"].asDouble();
+                                T C = bc_values["C"].asDouble();
+                                T Rd = bc_values["Rd"].asDouble();
+                                T Pd = bc_values["Pd"].asDouble();
+                                model.blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else if (config["boundary_conditions"][j]["bc_type"].asString() == "FLOW")
@@ -166,7 +168,7 @@ Model create_model(Json::Value &config)
                                 {
                                     config["simulation_parameters"]["cardiac_cycle_period"] = Json::Value(Q.cycle_period);
                                 }
-                                model.blocks.insert(std::make_pair(bc_name, FlowReference(Q = Q, bc_name)));
+                                model.blocks.insert(std::make_pair(bc_name, FlowReference<T>(Q = Q, bc_name)));
                                 std::cout << "Created boundary condition " << bc_name << std::endl;
                             }
                             else
@@ -218,7 +220,7 @@ bool startsWith(const std::string &str, const std::string &prefix)
     return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
 }
 
-void write_json(std::string path, std::vector<double> times, std::vector<State> states, Model model)
+void write_json(std::string path, std::vector<T> times, std::vector<State<T>> states, Model<T> model)
 {
     Json::Value output;
     Json::Value json_times(Json::arrayValue);
@@ -294,10 +296,10 @@ int main(int argc, char *argv[])
     auto model = create_model(config);
 
     Json::Value sim_params = config["simulation_parameters"];
-    double cardiac_cycle_period = sim_params.get("cardiac_cycle_period", 1.0).asDouble();
-    double num_cycles = sim_params["number_of_cardiac_cycles"].asDouble();
-    double num_pts_per_cycle = sim_params["number_of_time_pts_per_cardiac_cycle"].asDouble();
-    double time_step_size = cardiac_cycle_period / (num_pts_per_cycle - 1);
+    T cardiac_cycle_period = sim_params.get("cardiac_cycle_period", 1.0).asDouble();
+    T num_cycles = sim_params["number_of_cardiac_cycles"].asDouble();
+    T num_pts_per_cycle = sim_params["number_of_time_pts_per_cardiac_cycle"].asDouble();
+    T time_step_size = cardiac_cycle_period / (num_pts_per_cycle - 1);
     int num_time_steps = (num_pts_per_cycle - 1) * num_cycles + 1;
 
     std::cout << "Setup simulutation" << std::endl;
@@ -309,38 +311,38 @@ int main(int argc, char *argv[])
 
     bool steady_inital = true;
 
-    State state = State::Zero(model.dofhandler.size());
+    State<T> state = State<T>::Zero(model.dofhandler.size());
     if (steady_inital)
     {
         std::cout << "Calculating steady initial condition" << std::endl;
-        double time_step_size_steady = cardiac_cycle_period / 10.0;
+        T time_step_size_steady = cardiac_cycle_period / 10.0;
         int num_time_steps_steady = 31;
         auto model_steady = create_model(config);
         model_steady.to_steady();
-        System system_steady(model_steady.dofhandler.size());
+        System<T> system_steady(model_steady.dofhandler.size());
         model_steady.update_constant(system_steady);
-        Integrator integrator_steady = Integrator(system_steady, time_step_size_steady, 0.1);
-        State state_steady = State::Zero(model_steady.dofhandler.size());
-        double time_steady = 0.0;
+        Integrator<T> integrator_steady(system_steady, time_step_size_steady, 0.1);
+        State<T> state_steady = State<T>::Zero(model_steady.dofhandler.size());
+        T time_steady = 0.0;
 
         for (size_t i = 0; i < num_time_steps_steady; i++)
         {
-            time_steady = time_step_size_steady * double(i);
+            time_steady = time_step_size_steady * T(i);
             state_steady = integrator_steady.step(state_steady, time_steady, model_steady, max_iter);
         }
         state = state_steady;
     }
 
     std::cout << "Starting simulation" << std::endl;
-    System system(model.dofhandler.size());
+    System<T> system(model.dofhandler.size());
     model.update_constant(system);
 
-    Integrator integrator = Integrator(system, time_step_size, 0.1);
+    Integrator<T> integrator(system, time_step_size, 0.1);
 
-    double time = 0.0;
+    T time = 0.0;
 
-    std::vector<State> states;
-    std::vector<double> times;
+    std::vector<State<T>> states;
+    std::vector<T> times;
 
     states.push_back(state);
     times.push_back(0.0);

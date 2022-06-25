@@ -28,6 +28,8 @@ public:
     void update_time(System &system, double time);
     void update_solution(System &system, Eigen::VectorXd &y);
 
+    void to_steady();
+
 private:
     Parameters params;
 };

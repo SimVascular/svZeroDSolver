@@ -34,3 +34,13 @@ void Model::update_solution(System &system, Eigen::VectorXd &y)
                    elem.second);
     }
 }
+
+void Model::to_steady()
+{
+    for (auto &&elem : blocks)
+    {
+        std::visit([&](auto &&block)
+                   { block.to_steady(); },
+                   elem.second);
+    }
+}

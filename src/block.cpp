@@ -48,3 +48,7 @@ void Block::update_time(System &system, double time)
 void Block::update_solution(System &system, Eigen::VectorXd &y)
 {
 }
+
+void Block::to_steady()
+{
+}

@@ -1,5 +1,7 @@
 #include "parameter.hpp"
 
+#include <numeric>
+
 TimeDependentParameter::TimeDependentParameter()
 {
 }
@@ -46,4 +48,14 @@ double TimeDependentParameter::get(double time)
     unsigned int l = k ? k - 1 : 1;
 
     return values[l] + ((values[k] - values[l]) / (times[k] - times[l])) * (rtime - times[l]);
+}
+
+void TimeDependentParameter::to_steady()
+{
+    double mean = std::accumulate(values.begin(), values.end(), 0.0) / values.size();
+    values = std::vector<double>();
+    times = std::vector<double>();
+    values.push_back(mean);
+    size = 1;
+    isconstant = true;
 }

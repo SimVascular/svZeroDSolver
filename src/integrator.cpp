@@ -62,9 +62,12 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
         model.update_solution(system, y_af);
 
         // Calculate RHS and LHS
-        auto lhs = system.F + (system.dE + system.dF + system.dC + system.E * y_dot_coeff);
         auto rhs = -system.E * ydot_am - system.F * y_af - system.C;
-        double norm = rhs.norm();
+        if (rhs.norm() < 5.0e-4)
+        {
+            break;
+        }
+        auto lhs = system.F + (system.dE + system.dF + system.dC + system.E * y_dot_coeff);
 
         // Solve system
         Eigen::VectorXd dy = lhs.colPivHouseholderQr().solve(rhs);
@@ -72,12 +75,6 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
         // Update solution
         y_af += dy;
         ydot_am += dy * y_dot_coeff;
-
-        // Check residuum
-        if (norm < 5.0e-4)
-        {
-            break;
-        }
     }
 
     new_state.y = old_state.y + (y_af - old_state.y) / alpha_f;

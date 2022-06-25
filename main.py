@@ -15,7 +15,8 @@ def main():
     parser.add_argument(
         "-sic",
         "--steady_ic",
-        action="store_true",
+        type=bool,
+        default=True,
         help=(
             "Run the pulsatile 0d simulation using the steady-state solution from "
             "the equivalent steady 0d model as the initial conditions."
@@ -28,7 +29,7 @@ def main():
         config = json.load(input_file)
 
     zero_d_results_branch = run_simulation_from_config(
-        parameters=config,
+        parameters=config, use_steady_soltns_as_ics=args.steady_ics
     )
 
     with open(args.output_file, "w") as ff:

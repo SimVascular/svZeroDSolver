@@ -23,3 +23,8 @@ void FlowReference::update_time(System &system, double time)
 {
     system.C(global_eqn_ids[0]) = -params.Q.get(time);
 }
+
+void FlowReference::to_steady()
+{
+    params.Q.to_steady();
+}

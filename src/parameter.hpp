@@ -23,6 +23,8 @@ public:
 
     void setup_dofs(DOFHandler &dofhandler);
     bool isconstant;
+
+    void to_steady();
 };
 
 #endif // SVZERODSOLVER_PARAMETER_H_

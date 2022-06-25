@@ -304,16 +304,39 @@ int main(int argc, char *argv[])
     std::cout << "Time step size:      " << time_step_size << std::endl;
     std::cout << "Size of system:      " << model.dofhandler.size() << std::endl;
 
+    int max_iter = 30;
+
+    bool steady_inital = true;
+
+    State state = State::Zero(model.dofhandler.size());
+    if (steady_inital)
+    {
+        double time_step_size_steady = cardiac_cycle_period / 10.0;
+        int num_time_steps_steady = 31;
+        auto model_steady = create_model(config);
+        model_steady.to_steady();
+        System system_steady;
+        system_steady.setup_matrices(model_steady.dofhandler.size());
+        model_steady.update_constant(system_steady);
+        Integrator integrator_steady = Integrator(system_steady, time_step_size_steady, 0.1);
+        State state_steady = State::Zero(model_steady.dofhandler.size());
+        double time_steady = 0.0;
+
+        for (size_t i = 0; i < num_time_steps_steady; i++)
+        {
+            time_steady = time_step_size_steady * double(i);
+            state_steady = integrator_steady.step(state_steady, time_steady, model_steady, max_iter);
+        }
+        state = state_steady;
+    }
+
     System system;
     system.setup_matrices(model.dofhandler.size());
     model.update_constant(system);
 
     Integrator integrator = Integrator(system, time_step_size, 0.1);
 
-    State state = State::Zero(model.dofhandler.size());
-
     double time = 0.0;
-    int max_iter = 30;
 
     std::vector<State> states;
     std::vector<double> times;

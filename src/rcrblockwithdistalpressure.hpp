@@ -20,6 +20,8 @@ public:
     void update_constant(System &system);
     void update_time(System &system, double time);
 
+    void to_steady();
+
 private:
     Parameters params;
 };

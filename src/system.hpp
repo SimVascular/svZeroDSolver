@@ -13,7 +13,7 @@ public:
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> dF;
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> dE;
     Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> dC;
-    Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> C;
+    Eigen::VectorXd C;
 
     void setup_matrices(unsigned int n);
 };

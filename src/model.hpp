@@ -24,6 +24,7 @@ public:
     void update_constant(System &system);
     void update_time(System &system, double time);
     void update_solution(System &system, Eigen::VectorXd &y);
+    void to_steady();
 };
 
 #endif // SVZERODSOLVER_MODEL_H_

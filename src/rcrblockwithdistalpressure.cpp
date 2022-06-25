@@ -31,3 +31,8 @@ void RCRBlockWithDistalPressure::update_time(System &system, double time)
     system.F(global_eqn_ids[1], global_var_ids[1]) = params.Rd;
     system.C(global_eqn_ids[1]) = params.Pd;
 }
+
+void RCRBlockWithDistalPressure::to_steady()
+{
+    params.C = 0.0;
+}

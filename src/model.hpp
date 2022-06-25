@@ -20,6 +20,10 @@ public:
     std::map<std::string, std::variant<Junction, BloodVessel, FlowReference, RCRBlockWithDistalPressure>> blocks;
     DOFHandler dofhandler;
     std::list<Node> nodes;
+
+    void update_constant(System &system);
+    void update_time(System &system, double time);
+    void update_solution(System &system, Eigen::VectorXd &y);
 };
 
 #endif // SVZERODSOLVER_MODEL_H_

@@ -56,23 +56,12 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
     double new_time = time + alpha_f * time_step_size;
 
     // Update time in blocks
-    for (auto &&elem : model.blocks)
-    {
-        std::visit([&](auto &&block)
-                   {block.update_constant(system); block.update_time(system, time); },
-                   elem.second);
-    }
+    model.update_time(system, time);
 
     for (size_t i = 0; i < max_iter; i++)
     {
-
         // Update solution and assemble
-        for (auto &&elem : model.blocks)
-        {
-            std::visit([&](auto &&block)
-                       { block.update_solution(system, y_af); },
-                       elem.second);
-        }
+        model.update_solution(system, y_af);
 
         // Calculate RHS and LHS
         auto lhs = system.F + (system.dE + system.dF + system.dC + system.E * y_dot_coeff);
@@ -85,11 +74,6 @@ State Integrator::step(State &state, double time, Model &model, unsigned int max
         // Update solution
         y_af = y_af + dy;
         ydot_am = ydot_am + dy * y_dot_coeff;
-
-        if (isnan(norm))
-        {
-            throw std::runtime_error("Solution NaN.");
-        }
 
         if (norm < 5.0e-4)
         {

@@ -1,6 +1,7 @@
 // #include <json/value.h>
 #include <fstream>
 #include <iostream>
+#include <string>
 #include "json.h"
 #include <vector>
 #include <map>
@@ -211,6 +212,11 @@ Model create_model(Json::Value &config)
     return model;
 }
 
+bool startsWith(const std::string &str, const std::string &prefix)
+{
+    return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
+}
+
 void write_json(std::string path, std::vector<double> times, std::vector<State> states, Model model)
 {
     Json::Value output;
@@ -228,13 +234,42 @@ void write_json(std::string path, std::vector<double> times, std::vector<State> 
 
     for (auto &[key, elem] : model.blocks)
     {
+        std::string name = "NoName";
+        unsigned int inflow_dof;
+        unsigned int outflow_dof;
+        unsigned int inpres_dof;
+        unsigned int outpres_dof;
         std::visit([&](auto &&block)
-                   { json_names.append(block.name); },
+                   { if (startsWith(block.name, "V")){name = block.name; inflow_dof = block.inlet_nodes[0]->flow_dof; outflow_dof = block.outlet_nodes[0]->flow_dof; inpres_dof = block.inlet_nodes[0]->pres_dof; outpres_dof = block.outlet_nodes[0]->pres_dof;} },
                    elem);
+
+        if (name != "NoName")
+        {
+            json_names.append(name);
+            Json::Value json_flow_in_i(Json::arrayValue);
+            Json::Value json_flow_out_i(Json::arrayValue);
+            Json::Value json_pres_in_i(Json::arrayValue);
+            Json::Value json_pres_out_i(Json::arrayValue);
+            for (auto state : states)
+            {
+                json_flow_in_i.append(state.y[inflow_dof]);
+                json_flow_out_i.append(state.y[outflow_dof]);
+                json_pres_in_i.append(state.y[inpres_dof]);
+                json_pres_out_i.append(state.y[outpres_dof]);
+            }
+            json_flow_in.append(json_flow_in_i);
+            json_flow_out.append(json_flow_out_i);
+            json_pres_in.append(json_pres_in_i);
+            json_pres_out.append(json_pres_out_i);
+        }
     }
 
-    output["times"] = json_times;
+    output["time"] = json_times;
     output["names"] = json_names;
+    output["flow_in"] = json_flow_in;
+    output["flow_out"] = json_flow_out;
+    output["pressure_in"] = json_pres_in;
+    output["pressure_out"] = json_pres_out;
 
     Json::StreamWriterBuilder builder;
     builder["commentStyle"] = "None";
@@ -271,6 +306,7 @@ int main(int argc, char *argv[])
 
     System system;
     system.setup_matrices(model.dofhandler.size());
+    model.update_constant(system);
 
     Integrator integrator = Integrator(system, time_step_size, 0.1);
 

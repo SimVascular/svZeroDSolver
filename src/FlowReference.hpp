@@ -16,8 +16,14 @@ public:
     FlowReference(TimeDependentParameter<T> Q, std::string name);
     ~FlowReference();
     void setup_dofs(DOFHandler &dofhandler);
+
+    // Dense
     void update_constant(System<T> &system);
     void update_time(System<T> &system, T time);
+
+    // Sparse
+    void update_constant(SparseSystem<T> &system);
+    void update_time(SparseSystem<T> &system, T time);
 
     void to_steady();
 
@@ -51,6 +57,18 @@ void FlowReference<T>::update_constant(System<T> &system)
 
 template <typename T>
 void FlowReference<T>::update_time(System<T> &system, T time)
+{
+    system.C(this->global_eqn_ids[0]) = -params.Q.get(time);
+}
+
+template <typename T>
+void FlowReference<T>::update_constant(SparseSystem<T> &system)
+{
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
+}
+
+template <typename T>
+void FlowReference<T>::update_time(SparseSystem<T> &system, T time)
 {
     system.C(this->global_eqn_ids[0]) = -params.Q.get(time);
 }

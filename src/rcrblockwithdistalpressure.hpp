@@ -17,8 +17,14 @@ public:
     RCRBlockWithDistalPressure(T Rp, T C, T Rd, T Pd, std::string name);
     ~RCRBlockWithDistalPressure();
     void setup_dofs(DOFHandler &dofhandler);
+
+    // Dense
     void update_constant(System<T> &system);
     void update_time(System<T> &system, T time);
+
+    // Sparse
+    void update_constant(SparseSystem<T> &system);
+    void update_time(SparseSystem<T> &system, T time);
 
     void to_steady();
 
@@ -61,6 +67,23 @@ void RCRBlockWithDistalPressure<T>::update_time(System<T> &system, T time)
     system.E(this->global_eqn_ids[1], this->global_var_ids[2]) = -params.Rd * params.C;
     system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = -params.Rp;
     system.F(this->global_eqn_ids[1], this->global_var_ids[1]) = params.Rd;
+    system.C(this->global_eqn_ids[1]) = params.Pd;
+}
+
+template <typename T>
+void RCRBlockWithDistalPressure<T>::update_constant(SparseSystem<T> &system)
+{
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
+    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) = -1.0;
+}
+
+template <typename T>
+void RCRBlockWithDistalPressure<T>::update_time(SparseSystem<T> &system, T time)
+{
+    system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) = -params.Rd * params.C;
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -params.Rp;
+    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = params.Rd;
     system.C(this->global_eqn_ids[1]) = params.Pd;
 }
 

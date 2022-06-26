@@ -23,6 +23,9 @@
 
 typedef double T;
 
+template <typename TT>
+using S = System<TT>;
+
 TimeDependentParameter<T> get_time_dependent_parameter(Json::Value &json_times, Json::Value &json_values)
 {
     std::vector<T> times;
@@ -319,9 +322,9 @@ int main(int argc, char *argv[])
         int num_time_steps_steady = 31;
         auto model_steady = create_model(config);
         model_steady.to_steady();
-        System<T> system_steady(model_steady.dofhandler.size());
+        S<T> system_steady(model_steady.dofhandler.size());
         model_steady.update_constant(system_steady);
-        Integrator<T> integrator_steady(system_steady, time_step_size_steady, 0.1);
+        Integrator<T, S> integrator_steady(system_steady, time_step_size_steady, 0.1);
         State<T> state_steady = State<T>::Zero(model_steady.dofhandler.size());
         T time_steady = 0.0;
 
@@ -334,10 +337,10 @@ int main(int argc, char *argv[])
     }
 
     std::cout << "Starting simulation" << std::endl;
-    System<T> system(model.dofhandler.size());
+    S<T> system(model.dofhandler.size());
     model.update_constant(system);
 
-    Integrator<T> integrator(system, time_step_size, 0.1);
+    Integrator<T, S> integrator(system, time_step_size, 0.1);
 
     T time = 0.0;
 

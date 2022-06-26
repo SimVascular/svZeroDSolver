@@ -25,9 +25,16 @@ public:
     std::vector<unsigned int> global_eqn_ids;
 
     void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations, unsigned int num_internal_vars);
+
+    // Dense
     void update_constant(System<T> &system);
     void update_time(System<T> &system, T time);
     void update_solution(System<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+
+    // Sparse
+    void update_constant(SparseSystem<T> &system);
+    void update_time(SparseSystem<T> &system, T time);
+    void update_solution(SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
     void to_steady();
 
@@ -91,6 +98,21 @@ void Block<T>::update_time(System<T> &system, T time)
 
 template <typename T>
 void Block<T>::update_solution(System<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y)
+{
+}
+
+template <typename T>
+void Block<T>::update_constant(SparseSystem<T> &system)
+{
+}
+
+template <typename T>
+void Block<T>::update_time(SparseSystem<T> &system, T time)
+{
+}
+
+template <typename T>
+void Block<T>::update_solution(SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y)
 {
 }
 

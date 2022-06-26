@@ -18,8 +18,14 @@ public:
     BloodVessel(T R, T C, T L, T stenosis_coefficient, std::string name);
     ~BloodVessel();
     void setup_dofs(DOFHandler &dofhandler);
+
+    // Dense
     void update_constant(System<T> &system);
     void update_solution(System<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+
+    // Sparse
+    void update_constant(SparseSystem<T> &system);
+    void update_solution(SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
     std::string name;
 
@@ -76,6 +82,36 @@ void BloodVessel<T>::update_solution(System<T> &system, Eigen::Matrix<T, Eigen::
     system.F(this->global_eqn_ids[2], this->global_var_ids[1]) = fac2;
     system.dF(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
     system.dF(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
+}
+
+template <typename T>
+void BloodVessel<T>::update_constant(SparseSystem<T> &system)
+{
+    system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) = -params.L;
+    system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) = -params.C;
+
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -params.R;
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
+
+    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
+    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
+
+    system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[0]) = 1.0;
+    system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = -params.R;
+    system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = -1.0;
+}
+
+template <typename T>
+void BloodVessel<T>::update_solution(SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y)
+{
+    T q_in = fabs(y[this->inlet_nodes[0]->flow_dof]);
+    T fac1 = -params.stenosis_coefficient * q_in;
+    T fac2 = fac1 - params.R;
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac2;
+    system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac2;
+    system.dF.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
+    system.dF.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
 }
 
 #endif // SVZERODSOLVER_BLOODVESSEL_H_

@@ -19,7 +19,7 @@ public:
     static State Zero(unsigned int n);
 };
 
-template <typename T>
+template <typename T, template <class> class S>
 class Integrator
 {
 private:
@@ -32,19 +32,16 @@ private:
     T time_step_size;
     T time_step_size_inv;
     T y_dot_coeff;
-    T rtol;
+    T atol;
 
     int size;
     Eigen::Matrix<T, Eigen::Dynamic, 1> y_af;
     Eigen::Matrix<T, Eigen::Dynamic, 1> ydot_am;
-    Eigen::Matrix<T, Eigen::Dynamic, 1> dy;
-    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> lhs;
-    Eigen::Matrix<T, Eigen::Dynamic, 1> res;
 
-    System<T> system;
+    S<T> system;
 
 public:
-    Integrator(System<T> &system, T time_step_size, T rho, T atol = 1e-5);
+    Integrator(S<T> &system, T time_step_size, T rho, T atol = 1e-5);
     ~Integrator();
     State<T> step(State<T> &state, T time, Model<T> &model, unsigned int max_iter);
 };
@@ -75,8 +72,8 @@ State<T> State<T>::Zero(unsigned int n)
     return state;
 }
 
-template <typename T>
-Integrator<T>::Integrator(System<T> &system, T time_step_size, T rho, T rtol)
+template <typename T, template <class> class S>
+Integrator<T, S>::Integrator(S<T> &system, T time_step_size, T rho, T atol)
 {
     alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
     alpha_f = 1.0 / (1.0 + rho);
@@ -87,26 +84,23 @@ Integrator<T>::Integrator(System<T> &system, T time_step_size, T rho, T rtol)
 
     this->system = system;
     this->time_step_size = time_step_size;
-    this->rtol = rtol;
+    this->atol = atol;
     time_step_size_inv = 1.0 / time_step_size;
 
     size = system.F.row(0).size();
     y_af = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
     ydot_am = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
-    dy = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
-    lhs = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>(size, size);
-    res = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
 
     y_dot_coeff = alpha_m / (alpha_f * gamma) * time_step_size_inv;
 }
 
-template <typename T>
-Integrator<T>::~Integrator()
+template <typename T, template <class> class S>
+Integrator<T, S>::~Integrator()
 {
 }
 
-template <typename T>
-State<T> Integrator<T>::step(State<T> &state, T time, Model<T> &model, unsigned int max_iter)
+template <typename T, template <class> class S>
+State<T> Integrator<T, S>::step(State<T> &state, T time, Model<T> &model, unsigned int max_iter)
 {
     State<T> old_state = state;
     State<T> new_state;
@@ -122,15 +116,14 @@ State<T> Integrator<T>::step(State<T> &state, T time, Model<T> &model, unsigned 
     // Update time in blocks
     model.update_time(system, new_time);
 
-    dy.setZero();
     for (size_t i = 0; i < max_iter; i++)
     {
         // Update solution and assemble
         model.update_solution(system, y_af);
 
-        // Calculate RHS and LHS
-        res = -(system.E * ydot_am) - (system.F * y_af) - system.C;
-        if (res.cwiseAbs().maxCoeff() < rtol)
+        // Determine residuum and check termination criteria
+        system.update_residual(y_af, ydot_am);
+        if (system.residual.cwiseAbs().maxCoeff() < atol)
         {
             break;
         }
@@ -138,15 +131,16 @@ State<T> Integrator<T>::step(State<T> &state, T time, Model<T> &model, unsigned 
         {
             throw std::runtime_error("Maxium number of non-linear iterations reached.");
         }
-        lhs = system.F + system.dE + system.dF + system.dC + system.E * y_dot_coeff;
+
+        // Determine jacobian
+        system.update_jacobian(y_dot_coeff);
 
         // Solve system
-        // TODO: Works only if matrix is invertable: Check if True otherwise use colPivHouseholderQr
-        dy = lhs.partialPivLu().solve(res);
+        system.solve();
 
         // Update solution
-        y_af += dy;
-        ydot_am += dy * y_dot_coeff;
+        y_af += system.dy;
+        ydot_am += system.dy * y_dot_coeff;
     }
 
     new_state.y = old_state.y + (y_af - old_state.y) * alpha_f_inv;

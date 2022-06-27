@@ -10,6 +10,7 @@
 #include "flowreference.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
+#include "system.hpp"
 
 template <typename T>
 class Model
@@ -33,6 +34,7 @@ public:
     void update_solution(SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
     void to_steady();
+    std::map<std::string, int> get_num_triplets();
 };
 
 template <typename T>
@@ -120,6 +122,25 @@ void Model<T>::to_steady()
                    { block.to_steady(); },
                    elem.second);
     }
+}
+
+template <typename T>
+std::map<std::string, int> Model<T>::get_num_triplets()
+{
+    std::map<std::string, int> num_triplets = {
+        {"F", 0},
+        {"E", 0},
+        {"dF", 0},
+        {"dE", 0},
+        {"dC", 0},
+    };
+    for (auto &&elem : blocks)
+    {
+        std::visit([&](auto &&block)
+                   { for (auto &[key, value] : block.num_triplets){num_triplets[key] += value;} },
+                   elem.second);
+    }
+    return num_triplets;
 }
 
 #endif // SVZERODSOLVER_MODEL_H_

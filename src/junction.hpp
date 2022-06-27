@@ -20,6 +20,15 @@ public:
     // Sparse
     void update_constant(SparseSystem<T> &system);
 
+    // Number of triplets that will be added to global matrices (relevant for sparse reservation)
+    std::map<std::string, int> num_triplets = {
+        {"F", 0},
+        {"E", 0},
+        {"dF", 0},
+        {"dE", 0},
+        {"dC", 0},
+    };
+
 private:
     Parameters params;
     unsigned int num_inlets;
@@ -54,14 +63,17 @@ void Junction<T>::update_constant(System<T> &system)
     {
         system.F(this->global_eqn_ids[i], this->global_var_ids[0]) = 1.0;
         system.F(this->global_eqn_ids[i], this->global_var_ids[2 * i + 2]) = -1.0;
+        num_triplets["F"] += 2;
     }
     for (size_t i = 1; i < num_inlets * 2; i = i + 2)
     {
         system.F(this->global_eqn_ids[num_inlets + num_outlets - 1], this->global_var_ids[i]) = 1.0;
+        num_triplets["F"] += 1;
     }
     for (size_t i = (num_inlets * 2) + 1; i < (num_inlets + num_outlets) * 2; i = i + 2)
     {
         system.F(this->global_eqn_ids[num_inlets + num_outlets - 1], this->global_var_ids[i]) = -1.0;
+        num_triplets["F"] += 1;
     }
 }
 

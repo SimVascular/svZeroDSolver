@@ -23,6 +23,7 @@ public:
     Eigen::Matrix<T, Eigen::Dynamic, 1> residual;
     Eigen::Matrix<T, Eigen::Dynamic, 1> dy;
 
+    void reserve(std::map<std::string, int> num_triplets);
     void update_residual(Eigen::Matrix<T, Eigen::Dynamic, 1> &y, Eigen::Matrix<T, Eigen::Dynamic, 1> &ydot);
     void update_jacobian(T e_coeff);
     void solve();
@@ -50,6 +51,11 @@ System<T>::System(unsigned int n)
 
 template <typename T>
 System<T>::~System()
+{
+}
+
+template <typename T>
+void System<T>::reserve(std::map<std::string, int> num_triplets)
 {
 }
 
@@ -90,6 +96,7 @@ public:
     Eigen::Matrix<T, Eigen::Dynamic, 1> residual;
     Eigen::Matrix<T, Eigen::Dynamic, 1> dy;
 
+    void reserve(std::map<std::string, int> num_triplets);
     void update_residual(Eigen::Matrix<T, Eigen::Dynamic, 1> &y, Eigen::Matrix<T, Eigen::Dynamic, 1> &ydot);
     void update_jacobian(T e_coeff);
     void solve();
@@ -110,12 +117,6 @@ SparseSystem<T>::SparseSystem(unsigned int n)
     dC = Eigen::SparseMatrix<T>(n, n);
     C = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
 
-    F.reserve(Eigen::VectorXi::Constant(n, 6));
-    E.reserve(Eigen::VectorXi::Constant(n, 6));
-    dE.reserve(Eigen::VectorXi::Constant(n, 6));
-    dC.reserve(Eigen::VectorXi::Constant(n, 6));
-    F.reserve(Eigen::VectorXi::Constant(n, 6));
-
     jacobian = Eigen::SparseMatrix<T>(n, n);
     residual = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
     dy = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
@@ -124,6 +125,16 @@ SparseSystem<T>::SparseSystem(unsigned int n)
 template <typename T>
 SparseSystem<T>::~SparseSystem()
 {
+}
+
+template <typename T>
+void SparseSystem<T>::reserve(std::map<std::string, int> num_triplets)
+{
+    F.reserve(num_triplets["F"]);
+    E.reserve(num_triplets["E"]);
+    dF.reserve(num_triplets["dF"]);
+    dE.reserve(num_triplets["dE"]);
+    dC.reserve(num_triplets["dC"]);
 }
 
 template <typename T>

@@ -27,6 +27,15 @@ public:
     void update_constant(SparseSystem<T> &system);
     void update_solution(SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
+    // Number of triplets that will be added to global matrices (relevant for sparse reservation)
+    std::map<std::string, int> num_triplets = {
+        {"F", 10},
+        {"E", 2},
+        {"dF", 2},
+        {"dE", 0},
+        {"dC", 0},
+    };
+
     std::string name;
 
 private:

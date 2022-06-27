@@ -26,6 +26,15 @@ public:
     void update_constant(SparseSystem<T> &system);
     void update_time(SparseSystem<T> &system, T time);
 
+    // Number of triplets that will be added to global matrices (relevant for sparse reservation)
+    std::map<std::string, int> num_triplets = {
+        {"F", 5},
+        {"E", 1},
+        {"dF", 0},
+        {"dE", 0},
+        {"dC", 0},
+    };
+
     void to_steady();
 
 private:

@@ -2,6 +2,7 @@
 #define SVZERODSOLVER_BLOCK_H_
 
 #include <vector>
+#include <map>
 #include "node.hpp"
 #include "dofhandler.hpp"
 #include "system.hpp"
@@ -35,6 +36,15 @@ public:
     void update_constant(SparseSystem<T> &system);
     void update_time(SparseSystem<T> &system, T time);
     void update_solution(SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+
+    // Number of triplets that will be added to global matrices (relevant for sparse reservation)
+    std::map<std::string, int> num_triplets = {
+        {"F", 0},
+        {"E", 0},
+        {"dF", 0},
+        {"dE", 0},
+        {"dC", 0},
+    };
 
     void to_steady();
 

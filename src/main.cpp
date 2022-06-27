@@ -2,12 +2,10 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include "json.h"
 #include <vector>
 #include <map>
 #include <list>
 #include <variant>
-#include "Eigen/Dense"
 
 #include "junction.hpp"
 #include "bloodvessel.hpp"
@@ -18,13 +16,27 @@
 #include "model.hpp"
 #include "system.hpp"
 #include "parameter.hpp"
+#include "writer.hpp"
 
 #include <stdexcept>
+
+#ifdef DEBUG
+#define DEBUG_MSG(str)                 \
+    do                                 \
+    {                                  \
+        std::cout << str << std::endl; \
+    } while (false)
+#else
+#define DEBUG_MSG(str) \
+    do                 \
+    {                  \
+    } while (false)
+#endif
 
 typedef double T;
 
 template <typename TT>
-using S = System<TT>;
+using S = SparseSystem<TT>;
 
 TimeDependentParameter<T> get_time_dependent_parameter(Json::Value &json_times, Json::Value &json_values)
 {
@@ -58,25 +70,25 @@ Model<T> create_model(Json::Value &config)
 
     // Create junctions
     int num_junctions = config["junctions"].size();
-    std::cout << "Number of junctions: " << num_junctions << std::endl;
+    DEBUG_MSG("Number of junctions: " << num_junctions);
     for (int i = 0; i < num_junctions; i++)
     {
         if ((config["junctions"][i]["junction_type"].asString() == "NORMAL_JUNCTION") || (config["junctions"][i]["junction_type"].asString() == "internal_junction"))
         {
             std::string name = config["junctions"][i]["junction_name"].asString();
             model.blocks.insert(std::make_pair(name, Junction<T>(name)));
-            std::cout << "Created junction " << name << std::endl;
+            DEBUG_MSG("Created junction " << name);
             for (int j = 0; j < config["junctions"][i]["inlet_vessels"].size(); j++)
             {
                 auto connection = std::make_tuple("V" + config["junctions"][i]["inlet_vessels"][j].asString(), name);
                 connections.push_back(connection);
-                std::cout << "Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection) << std::endl;
+                DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
             }
             for (int j = 0; j < config["junctions"][i]["outlet_vessels"].size(); j++)
             {
                 auto connection = std::make_tuple(name, "V" + config["junctions"][i]["outlet_vessels"][j].asString());
                 connections.push_back(connection);
-                std::cout << "Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection) << std::endl;
+                DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
             }
         }
         else
@@ -87,7 +99,7 @@ Model<T> create_model(Json::Value &config)
 
     // Create vessels
     int num_vessels = config["vessels"].size();
-    std::cout << "Number of vessels: " << num_vessels << std::endl;
+    DEBUG_MSG("Number of vessels: " << num_vessels);
     for (int i = 0; i < num_vessels; i++)
     {
         if ((config["vessels"][i]["zero_d_element_type"].asString() == "BloodVessel"))
@@ -99,7 +111,7 @@ Model<T> create_model(Json::Value &config)
             T L = vessel_values.get("L", 0.0).asDouble();
             T stenosis_coefficient = vessel_values.get("stenosis_coefficient", 0.0).asDouble();
             model.blocks.insert(std::make_pair(name, BloodVessel<T>(R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient, name = name)));
-            std::cout << "Created vessel " << name << std::endl;
+            DEBUG_MSG("Created vessel " << name);
 
             if (config["vessels"][i].isMember("boundary_conditions"))
             {
@@ -119,7 +131,7 @@ Model<T> create_model(Json::Value &config)
                                 T Rd = bc_values["Rd"].asDouble();
                                 T Pd = bc_values["Pd"].asDouble();
                                 model.blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
-                                std::cout << "Created boundary condition " << bc_name << std::endl;
+                                DEBUG_MSG("Created boundary condition " << bc_name);
                             }
                             else if (config["boundary_conditions"][j]["bc_type"].asString() == "FLOW")
                             {
@@ -131,7 +143,7 @@ Model<T> create_model(Json::Value &config)
                                     config["simulation_parameters"]["cardiac_cycle_period"] = Json::Value(Q.cycle_period);
                                 }
                                 model.blocks.insert(std::make_pair(bc_name, FlowReference<T>(Q = Q, bc_name)));
-                                std::cout << "Created boundary condition " << bc_name << std::endl;
+                                DEBUG_MSG("Created boundary condition " << bc_name);
                             }
                             else
                             {
@@ -142,7 +154,7 @@ Model<T> create_model(Json::Value &config)
                     }
                     auto connection = std::make_tuple(bc_name, name);
                     connections.push_back(connection);
-                    std::cout << "Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection) << std::endl;
+                    DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
                 }
                 if (config["vessels"][i]["boundary_conditions"].isMember("outlet"))
                 {
@@ -160,7 +172,7 @@ Model<T> create_model(Json::Value &config)
                                 T Rd = bc_values["Rd"].asDouble();
                                 T Pd = bc_values["Pd"].asDouble();
                                 model.blocks.insert(std::make_pair(bc_name, RCRBlockWithDistalPressure<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
-                                std::cout << "Created boundary condition " << bc_name << std::endl;
+                                DEBUG_MSG("Created boundary condition " << bc_name);
                             }
                             else if (config["boundary_conditions"][j]["bc_type"].asString() == "FLOW")
                             {
@@ -172,7 +184,7 @@ Model<T> create_model(Json::Value &config)
                                     config["simulation_parameters"]["cardiac_cycle_period"] = Json::Value(Q.cycle_period);
                                 }
                                 model.blocks.insert(std::make_pair(bc_name, FlowReference<T>(Q = Q, bc_name)));
-                                std::cout << "Created boundary condition " << bc_name << std::endl;
+                                DEBUG_MSG("Created boundary condition " << bc_name);
                             }
                             else
                             {
@@ -183,7 +195,7 @@ Model<T> create_model(Json::Value &config)
                     }
                     auto connection = std::make_tuple(name, bc_name);
                     connections.push_back(connection);
-                    std::cout << "Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection) << std::endl;
+                    DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
                 }
             }
         }
@@ -203,7 +215,7 @@ Model<T> create_model(Json::Value &config)
                         for (auto &[key, elem2] : model.blocks)
                         {
                             std::visit([&](auto &&ele2)
-                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){ model.nodes.push_back(Node(ele1.name + "_" + ele2.name)); std::cout << "Created node " << model.nodes.back().name << std::endl; ele1.outlet_nodes.push_back(&model.nodes.back()); ele2.inlet_nodes.push_back(&model.nodes.back()); model.nodes.back().setup_dofs(model.dofhandler); } },
+                                    {if ((ele1.name == std::get<0>(connection)) && (ele2.name == std::get<1>(connection))){ model.nodes.push_back(Node(ele1.name + "_" + ele2.name)); DEBUG_MSG("Created node " << model.nodes.back().name); ele1.outlet_nodes.push_back(&model.nodes.back()); ele2.inlet_nodes.push_back(&model.nodes.back()); model.nodes.back().setup_dofs(model.dofhandler); } },
                                     elem2);
                         } },
                        elem1);
@@ -218,84 +230,24 @@ Model<T> create_model(Json::Value &config)
     return model;
 }
 
-bool startsWith(const std::string &str, const std::string &prefix)
-{
-    return str.size() >= prefix.size() && str.compare(0, prefix.size(), prefix) == 0;
-}
-
-void write_json(std::string path, std::vector<T> times, std::vector<State<T>> states, Model<T> model)
-{
-    Json::Value output;
-    Json::Value json_times(Json::arrayValue);
-    for (auto time : times)
-    {
-        json_times.append(Json::Value(time));
-    }
-
-    Json::Value json_names(Json::arrayValue);
-    Json::Value json_flow_in(Json::arrayValue);
-    Json::Value json_flow_out(Json::arrayValue);
-    Json::Value json_pres_in(Json::arrayValue);
-    Json::Value json_pres_out(Json::arrayValue);
-
-    for (auto &[key, elem] : model.blocks)
-    {
-        std::string name = "NoName";
-        unsigned int inflow_dof;
-        unsigned int outflow_dof;
-        unsigned int inpres_dof;
-        unsigned int outpres_dof;
-        std::visit([&](auto &&block)
-                   { if (startsWith(block.name, "V")){name = block.name; inflow_dof = block.inlet_nodes[0]->flow_dof; outflow_dof = block.outlet_nodes[0]->flow_dof; inpres_dof = block.inlet_nodes[0]->pres_dof; outpres_dof = block.outlet_nodes[0]->pres_dof;} },
-                   elem);
-
-        if (name != "NoName")
-        {
-            json_names.append(name);
-            Json::Value json_flow_in_i(Json::arrayValue);
-            Json::Value json_flow_out_i(Json::arrayValue);
-            Json::Value json_pres_in_i(Json::arrayValue);
-            Json::Value json_pres_out_i(Json::arrayValue);
-            for (auto state : states)
-            {
-                json_flow_in_i.append(state.y[inflow_dof]);
-                json_flow_out_i.append(state.y[outflow_dof]);
-                json_pres_in_i.append(state.y[inpres_dof]);
-                json_pres_out_i.append(state.y[outpres_dof]);
-            }
-            json_flow_in.append(json_flow_in_i);
-            json_flow_out.append(json_flow_out_i);
-            json_pres_in.append(json_pres_in_i);
-            json_pres_out.append(json_pres_out_i);
-        }
-    }
-
-    output["time"] = json_times;
-    output["names"] = json_names;
-    output["flow_in"] = json_flow_in;
-    output["flow_out"] = json_flow_out;
-    output["pressure_in"] = json_pres_in;
-    output["pressure_out"] = json_pres_out;
-
-    Json::StreamWriterBuilder builder;
-    builder["commentStyle"] = "None";
-    builder["indentation"] = "   ";
-    std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
-    std::ofstream outputfilestream(path);
-    writer->write(output, &outputfilestream);
-}
-
 int main(int argc, char *argv[])
 {
-    std::cout << "Starting svZeroDSolver" << std::endl;
-    std::cout << "Reading configuration from " << argv[1] << std::endl;
-    std::ifstream file_input(argv[1]);
+
+    std::string input_file = argv[1];
+    std::string output_file = argv[2];
+    bool steady_inital = true;
+    int max_iter = 30;
+    int output_interval = 1;
+
+    DEBUG_MSG("Starting svZeroDSolver");
+    DEBUG_MSG("Reading configuration from " << input_file);
+    std::ifstream file_input(input_file);
     Json::Reader reader;
     Json::Value config;
     reader.parse(file_input, config);
 
     // Create the blocks
-    std::cout << "Creating model" << std::endl;
+    DEBUG_MSG("Creating model");
     auto model = create_model(config);
 
     Json::Value sim_params = config["simulation_parameters"];
@@ -305,59 +257,48 @@ int main(int argc, char *argv[])
     T time_step_size = cardiac_cycle_period / (num_pts_per_cycle - 1);
     int num_time_steps = (num_pts_per_cycle - 1) * num_cycles + 1;
 
-    std::cout << "Setup simulutation" << std::endl;
-    std::cout << "Number of timesteps: " << num_time_steps << std::endl;
-    std::cout << "Time step size:      " << time_step_size << std::endl;
-    std::cout << "Size of system:      " << model.dofhandler.size() << std::endl;
+    DEBUG_MSG("Setup simulutation");
+    DEBUG_MSG("Number of timesteps: " << num_time_steps);
+    DEBUG_MSG("Time step size:      " << time_step_size);
+    DEBUG_MSG("Size of system:      " << model.dofhandler.size());
 
-    int max_iter = 30;
-
-    bool steady_inital = true;
-
+    DEBUG_MSG("Starting simulation");
     State<T> state = State<T>::Zero(model.dofhandler.size());
+    S<T> system(model.dofhandler.size());
+    system.reserve(model.get_num_triplets());
+
+    // Create steady initial
     if (steady_inital)
     {
-        std::cout << "Calculating steady initial condition" << std::endl;
+        DEBUG_MSG("Calculating steady initial condition");
         T time_step_size_steady = cardiac_cycle_period / 10.0;
-        int num_time_steps_steady = 31;
         auto model_steady = create_model(config);
         model_steady.to_steady();
-        S<T> system_steady(model_steady.dofhandler.size());
-        model_steady.update_constant(system_steady);
-        Integrator<T, S> integrator_steady(system_steady, time_step_size_steady, 0.1);
-        State<T> state_steady = State<T>::Zero(model_steady.dofhandler.size());
-        T time_steady = 0.0;
-
-        for (size_t i = 0; i < num_time_steps_steady; i++)
+        model_steady.update_constant(system);
+        Integrator<T, S> integrator_steady(system, time_step_size_steady, 0.1);
+        for (size_t i = 0; i < 31; i++)
         {
-            time_steady = time_step_size_steady * T(i);
-            state_steady = integrator_steady.step(state_steady, time_steady, model_steady, max_iter);
+            state = integrator_steady.step(state, time_step_size_steady * T(i), model_steady, max_iter);
         }
-        state = state_steady;
     }
-
-    std::cout << "Starting simulation" << std::endl;
-    S<T> system(model.dofhandler.size());
     model.update_constant(system);
 
     Integrator<T, S> integrator(system, time_step_size, 0.1);
 
-    T time = 0.0;
-
     std::vector<State<T>> states;
     std::vector<T> times;
 
+    T time = 0.0;
+
     states.push_back(state);
-    times.push_back(0.0);
+    times.push_back(time);
 
-    int output_interval = 1;
     int interval_counter = 0;
-
     for (size_t i = 0; i < num_time_steps; i++)
     {
         state = integrator.step(state, time, model, max_iter);
-        time = time + time_step_size;
         interval_counter += 1;
+        time = time_step_size * T(i + 1);
         if (interval_counter == output_interval)
         {
             times.push_back(time);
@@ -365,9 +306,9 @@ int main(int argc, char *argv[])
             interval_counter = 0;
         }
     }
-    std::cout << "Simulation completed" << std::endl;
+    DEBUG_MSG("Simulation completed");
 
-    write_json(argv[2], times, states, model);
+    write_csv<T>(output_file, times, states, model);
 
     return 0;
 }

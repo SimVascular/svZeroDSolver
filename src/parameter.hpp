@@ -2,7 +2,6 @@
 #define SVZERODSOLVER_PARAMETER_H_
 
 #include "dofhandler.hpp"
-#include "json.h"
 #include <math.h>
 
 #include <vector>

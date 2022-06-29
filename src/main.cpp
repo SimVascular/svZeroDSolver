@@ -36,7 +36,7 @@
 typedef double T;
 
 template <typename TT>
-using S = System<TT>;
+using S = SparseSystem<TT>;
 
 TimeDependentParameter<T> get_time_dependent_parameter(simdjson::dom::element &json_times, simdjson::dom::element &json_values)
 {

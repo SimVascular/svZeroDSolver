@@ -11,6 +11,7 @@
 #include "dofhandler.hpp"
 #include "node.hpp"
 #include "system.hpp"
+#include "parameter.hpp"
 
 template <typename T>
 class Model
@@ -22,6 +23,7 @@ public:
     std::map<std::string, std::variant<Junction<T>, BloodVessel<T>, FlowReference<T>, RCRBlockWithDistalPressure<T>>> blocks;
     DOFHandler dofhandler;
     std::list<Node> nodes;
+    std::list<TimeDependentParameter<T>> time_params;
 
     // Dense
     void update_constant(System<T> &system);

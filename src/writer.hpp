@@ -74,12 +74,13 @@ void write_json(std::string path, std::vector<T> times, std::vector<State<T>> st
 }
 
 template <typename T>
-void write_csv(std::string path, std::vector<T> times, std::vector<State<T>> states, Model<T> model)
+void write_csv(std::string path, std::vector<T> times, std::vector<State<T>> states, Model<T> model, bool mean = false)
 {
 
     std::stringstream out;
     out << "name,time,flow_in,flow_out,pressure_in,pressure_out\n";
     char buff[100];
+    T num_steps = times.size();
 
     for (auto &[key, elem] : model.blocks)
     {
@@ -94,11 +95,33 @@ void write_csv(std::string path, std::vector<T> times, std::vector<State<T>> sta
 
         if (name != "NoName")
         {
-            for (size_t i = 0; i < times.size(); i++)
+            if (mean)
             {
-                // out << name << "," << times[i] << "," << states[i].y[inflow_dof] << "," << states[i].y[outflow_dof] << "," << states[i].y[inpres_dof] << "," << states[i].y[outpres_dof] << "\n";
-                sprintf(buff, "%s,%.10f,%.10e,%.10e,%.10e,%.10e\n", name.c_str(), times[i], states[i].y[inflow_dof], states[i].y[outflow_dof], states[i].y[inpres_dof], states[i].y[outpres_dof]);
+                T inflow_mean = 0.0;
+                T outflow_mean = 0.0;
+                T inpres_mean = 0.0;
+                T outpres_mean = 0.0;
+                for (size_t i = 0; i < times.size(); i++)
+                {
+                    inflow_mean += states[i].y[inflow_dof];
+                    outflow_mean += states[i].y[outflow_dof];
+                    inpres_mean += states[i].y[inpres_dof];
+                    outpres_mean += states[i].y[outpres_dof];
+                }
+                inflow_mean /= num_steps;
+                outflow_mean /= num_steps;
+                inpres_mean /= num_steps;
+                outpres_mean /= num_steps;
+                sprintf(buff, "%s,,%.10e,%.10e,%.10e,%.10e\n", name.c_str(), inflow_mean, outflow_mean, inpres_mean, outpres_mean);
                 out << buff;
+            }
+            else
+            {
+                for (size_t i = 0; i < times.size(); i++)
+                {
+                    sprintf(buff, "%s,%.10f,%.10e,%.10e,%.10e,%.10e\n", name.c_str(), times[i], states[i].y[inflow_dof], states[i].y[outflow_dof], states[i].y[inpres_dof], states[i].y[outpres_dof]);
+                    out << buff;
+                }
             }
         }
     }

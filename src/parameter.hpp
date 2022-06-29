@@ -84,7 +84,7 @@ T TimeDependentParameter<T>::get(T time)
 template <typename T>
 void TimeDependentParameter<T>::to_steady()
 {
-    T mean = std::accumulate(values.begin(), values.end(), 0.0) / values.size();
+    T mean = std::accumulate(values.begin(), values.end(), 0.0) / T(values.size());
     values = std::vector<T>();
     times = std::vector<T>();
     values.push_back(mean);

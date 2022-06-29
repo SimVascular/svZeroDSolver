@@ -15,7 +15,7 @@ set_target_properties(jsoncpp PROPERTIES
 )
 
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
-add_executable(svzerodsolver src/main.cpp)
+add_executable(svzerodsolver src/main.cpp src/simdjson.cpp)
 
 target_link_libraries(svzerodsolver Eigen3::Eigen)
 target_link_libraries(svzerodsolver jsoncpp)

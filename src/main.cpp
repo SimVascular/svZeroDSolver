@@ -1,42 +1,16 @@
-// #include <json/value.h>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <vector>
-#include <map>
-#include <list>
-#include <variant>
-
-#include "junction.hpp"
-#include "bloodvessel.hpp"
-#include "rcrblockwithdistalpressure.hpp"
-#include "flowreference.hpp"
-#include "node.hpp"
-#include "integrator.hpp"
-#include "model.hpp"
-#include "system.hpp"
-#include "parameter.hpp"
-#include "reader.hpp"
-#include "writer.hpp"
-
-#include <stdexcept>
-#ifdef DEBUG
-#define DEBUG_MSG(str)                 \
-    do                                 \
-    {                                  \
-        std::cout << str << std::endl; \
-    } while (false)
-#else
-#define DEBUG_MSG(str) \
-    do                 \
-    {                  \
-    } while (false)
-#endif
+#include "algebra/integrator.hpp"
+#include "algebra/densesystem.hpp"
+#include "algebra/sparsesystem.hpp"
+#include "algebra/state.hpp"
+#include "model/model.hpp"
+#include "io/configreader.hpp"
+#include "io/csvwriter.hpp"
+#include "helpers/debug.hpp"
 
 typedef double T;
 
 template <typename TT>
-using S = SparseSystem<TT>;
+using S = ALGEBRA::SparseSystem<TT>;
 
 int main(int argc, char *argv[])
 {
@@ -54,7 +28,7 @@ int main(int argc, char *argv[])
 
     DEBUG_MSG("Starting svZeroDSolver");
     DEBUG_MSG("Reading configuration from " << input_file);
-    ConfigReader<T> config(input_file);
+    IO::ConfigReader<T> config(input_file);
 
     // Create the blocks and get simulation parameters
     DEBUG_MSG("Creating model");
@@ -68,7 +42,7 @@ int main(int argc, char *argv[])
     DEBUG_MSG("Size of system:      " << model.dofhandler.size());
 
     DEBUG_MSG("Starting simulation");
-    State<T> state = State<T>::Zero(model.dofhandler.size());
+    ALGEBRA::State<T> state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
     S<T> system(model.dofhandler.size());
     system.reserve(model.get_num_triplets());
 
@@ -80,7 +54,7 @@ int main(int argc, char *argv[])
         auto model_steady = config.get_model();
         model_steady.to_steady();
         model_steady.update_constant(system);
-        Integrator<T, S> integrator_steady(system, time_step_size_steady, 0.1);
+        ALGEBRA::Integrator<T, S> integrator_steady(system, time_step_size_steady, 0.1);
         for (size_t i = 0; i < 31; i++)
         {
             state = integrator_steady.step(state, time_step_size_steady * T(i), model_steady, max_iter);
@@ -88,9 +62,9 @@ int main(int argc, char *argv[])
     }
     model.update_constant(system);
 
-    Integrator<T, S> integrator(system, time_step_size, 0.1);
+    ALGEBRA::Integrator<T, S> integrator(system, time_step_size, 0.1);
 
-    std::vector<State<T>> states;
+    std::vector<ALGEBRA::State<T>> states;
     std::vector<T> times;
     states.reserve(num_time_steps + 1);
     times.reserve(num_time_steps + 1);
@@ -115,7 +89,7 @@ int main(int argc, char *argv[])
     }
     DEBUG_MSG("Simulation completed");
 
-    write_csv<T>(output_file, times, states, model, mean);
+    IO::write_csv<T>(output_file, times, states, model, mean);
 
     return 0;
 }

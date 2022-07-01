@@ -7,7 +7,7 @@
 #include "../model/model.hpp"
 #include "../model/junction.hpp"
 #include "../helpers/debug.hpp"
-#include "simdjson.h"
+#include "../external/simdjson/singleheader/simdjson.h"
 
 namespace IO
 {

@@ -1,9 +1,7 @@
 #ifndef SVZERODSOLVER_ALGREBRA_DENSESYSTEM_HPP_
 #define SVZERODSOLVER_ALGREBRA_DENSESYSTEM_HPP_
 
-#include <Eigen/Dense>
-#include <Eigen/Sparse>
-#include <Eigen/SparseLU>
+#include "../external/eigen/Eigen/Dense"
 
 namespace ALGEBRA
 {

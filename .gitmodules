@@ -1,0 +1,6 @@
+[submodule "src/external/simdjson"]
+	path = src/external/simdjson
+	url = https://github.com/simdjson/simdjson.git
+[submodule "src/external/eigen"]
+	path = src/external/eigen
+	url = https://gitlab.com/libeigen/eigen.git

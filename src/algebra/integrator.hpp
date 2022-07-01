@@ -2,9 +2,9 @@
 #define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 
 #include <map>
-#include <Eigen/Dense>
 
 #include "../model/model.hpp"
+#include "../external/eigen/Eigen/Dense"
 #include "state.hpp"
 
 namespace ALGEBRA

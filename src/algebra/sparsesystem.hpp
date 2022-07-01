@@ -1,8 +1,8 @@
 #ifndef SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_
 #define SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_
 
-#include <Eigen/Sparse>
-#include <Eigen/SparseLU>
+#include "../external/eigen/Eigen/Sparse"
+#include "../external/eigen/Eigen/SparseLU"
 
 namespace ALGEBRA
 {

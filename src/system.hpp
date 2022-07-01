@@ -14,9 +14,7 @@ public:
     ~System();
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> F;
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> E;
-    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> dF;
-    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> dE;
-    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> dC;
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> D;
     Eigen::Matrix<T, Eigen::Dynamic, 1> C;
 
     Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> jacobian;
@@ -39,9 +37,7 @@ System<T>::System(unsigned int n)
 {
     F = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Zero(n, n);
     E = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Zero(n, n);
-    dF = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Zero(n, n);
-    dE = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Zero(n, n);
-    dC = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Zero(n, n);
+    D = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Zero(n, n);
     C = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
 
     jacobian = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Zero(n, n);
@@ -68,7 +64,7 @@ void System<T>::update_residual(Eigen::Matrix<T, Eigen::Dynamic, 1> &y, Eigen::M
 template <typename T>
 void System<T>::update_jacobian(T e_coeff)
 {
-    jacobian = F + dE + dF + dC + E * e_coeff;
+    jacobian = F + D + E * e_coeff;
 }
 
 template <typename T>
@@ -87,9 +83,7 @@ public:
     ~SparseSystem();
     Eigen::SparseMatrix<T> F;
     Eigen::SparseMatrix<T> E;
-    Eigen::SparseMatrix<T> dF;
-    Eigen::SparseMatrix<T> dE;
-    Eigen::SparseMatrix<T> dC;
+    Eigen::SparseMatrix<T> D;
     Eigen::Matrix<T, Eigen::Dynamic, 1> C;
 
     Eigen::SparseMatrix<T> jacobian;
@@ -112,9 +106,7 @@ SparseSystem<T>::SparseSystem(unsigned int n)
 {
     F = Eigen::SparseMatrix<T>(n, n);
     E = Eigen::SparseMatrix<T>(n, n);
-    dF = Eigen::SparseMatrix<T>(n, n);
-    dE = Eigen::SparseMatrix<T>(n, n);
-    dC = Eigen::SparseMatrix<T>(n, n);
+    D = Eigen::SparseMatrix<T>(n, n);
     C = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
 
     jacobian = Eigen::SparseMatrix<T>(n, n);
@@ -132,9 +124,8 @@ void SparseSystem<T>::reserve(std::map<std::string, int> num_triplets)
 {
     F.reserve(num_triplets["F"]);
     E.reserve(num_triplets["E"]);
-    dF.reserve(num_triplets["dF"]);
-    dE.reserve(num_triplets["dE"]);
-    dC.reserve(num_triplets["dC"]);
+    D.reserve(num_triplets["D"]);
+    jacobian.reserve(num_triplets["F"] + num_triplets["E"]);
 }
 
 template <typename T>
@@ -146,7 +137,7 @@ void SparseSystem<T>::update_residual(Eigen::Matrix<T, Eigen::Dynamic, 1> &y, Ei
 template <typename T>
 void SparseSystem<T>::update_jacobian(T e_coeff)
 {
-    jacobian = F + dE + dF + dC + E * e_coeff;
+    jacobian = (F + D) + (E * e_coeff);
 }
 
 template <typename T>

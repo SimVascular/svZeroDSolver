@@ -38,15 +38,16 @@ TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times, std::vec
 {
     this->times = times;
     this->values = values;
-    cycle_period = times.back() - times[0];
     size = times.size();
     if (size == 1)
     {
         isconstant = true;
+        cycle_period = 1.0;
     }
     else
     {
         isconstant = false;
+        cycle_period = times.back() - times[0];
     }
 }
 

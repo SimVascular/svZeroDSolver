@@ -11,7 +11,6 @@
 #include "dofhandler.hpp"
 #include "node.hpp"
 #include "system.hpp"
-#include "parameter.hpp"
 
 template <typename T>
 class Model
@@ -23,7 +22,6 @@ public:
     std::map<std::string, std::variant<Junction<T>, BloodVessel<T>, FlowReference<T>, RCRBlockWithDistalPressure<T>>> blocks;
     DOFHandler dofhandler;
     std::list<Node> nodes;
-    std::list<TimeDependentParameter<T>> time_params;
 
     // Dense
     void update_constant(System<T> &system);
@@ -132,9 +130,7 @@ std::map<std::string, int> Model<T>::get_num_triplets()
     std::map<std::string, int> num_triplets = {
         {"F", 0},
         {"E", 0},
-        {"dF", 0},
-        {"dE", 0},
-        {"dC", 0},
+        {"D", 0},
     };
     for (auto &&elem : blocks)
     {

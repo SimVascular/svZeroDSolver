@@ -31,9 +31,7 @@ public:
     std::map<std::string, int> num_triplets = {
         {"F", 10},
         {"E", 2},
-        {"dF", 2},
-        {"dE", 0},
-        {"dC", 0},
+        {"D", 2},
     };
 
     std::string name;
@@ -89,8 +87,8 @@ void BloodVessel<T>::update_solution(System<T> &system, Eigen::Matrix<T, Eigen::
     T fac2 = fac1 - params.R;
     system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = fac2;
     system.F(this->global_eqn_ids[2], this->global_var_ids[1]) = fac2;
-    system.dF(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
-    system.dF(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
+    system.D(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
+    system.D(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
 }
 
 template <typename T>
@@ -119,8 +117,8 @@ void BloodVessel<T>::update_solution(SparseSystem<T> &system, Eigen::Matrix<T, E
     T fac2 = fac1 - params.R;
     system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac2;
     system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac2;
-    system.dF.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
-    system.dF.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
+    system.D.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
+    system.D.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
 }
 
 #endif // SVZERODSOLVER_BLOODVESSEL_H_

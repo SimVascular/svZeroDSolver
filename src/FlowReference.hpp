@@ -29,9 +29,7 @@ public:
     std::map<std::string, int> num_triplets = {
         {"F", 1},
         {"E", 0},
-        {"dF", 0},
-        {"dE", 0},
-        {"dC", 0},
+        {"D", 0},
     };
 
     void to_steady();

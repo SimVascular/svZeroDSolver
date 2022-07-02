@@ -1,3 +1,4 @@
+
 name: documentation
 on: [push, pull_request]
 permissions:
@@ -7,11 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install doxygen dependencies
+        run: |
+          sudo apt-get install -y graphviz doxygen doxygen-latex
       - name: Build doxygen documentation
-        uses: mattnotmitt/doxygen-action@v1.9.4
-        with:
-          doxyfile-path: 'docs/cpp/Doxyfile'
-          enable-latex: true
+        run: doxygen docs/cpp/Doxyfile
       # - name: Install sphinx dependencies
       #   run: |
       #     conda install pip

@@ -5,7 +5,7 @@
 #ifndef SVZERODSOLVER_IO_JSONWRITER_HPP_
 #define SVZERODSOLVER_IO_JSONWRITER_HPP_
 
-#include <jsoncpp/json/json.h>
+#include <json.h>
 #include <vector>
 #include "../algebra/state.hpp"
 #include "../model/model.hpp"

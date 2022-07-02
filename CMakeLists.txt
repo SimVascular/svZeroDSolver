@@ -13,6 +13,11 @@ if(APPLE)
         IMPORTED_LOCATION "/usr/local/lib/libjsoncpp.dylib"
         INTERFACE_INCLUDE_DIRECTORIES "/usr/local/include/json"
     )
+elseif("${CMAKE_SYSTEM}" MATCHES "Linux")
+    set_target_properties(jsoncpp PROPERTIES
+        IMPORTED_LOCATION "/usr/lib/x86_64-linux-gnu/libjsoncpp.so"
+        INTERFACE_INCLUDE_DIRECTORIES "/usr/include/jsoncpp/json"
+    )
 endif()
 
 add_executable(svzerodsolver src/main.cpp)

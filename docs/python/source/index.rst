@@ -1,4 +1,4 @@
-.. _numpy_docs_mainpage:
+.. _mainpage:
 
 ******************************
 svZeroDSolver documentation
@@ -28,6 +28,5 @@ svZeroDSolver and all its dependencies can be installed easily via pip:
    :maxdepth: 1
    :hidden:
 
-   Getting Started <rst/installation>
    Documentation <modules>
    References <rst/bibliography>

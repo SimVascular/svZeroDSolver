@@ -109,8 +109,6 @@ class GeneralizedAlpha:
             # Assemble
             self.assemble(block_list)
             res = -self.mat["E"].dot(ydotam) - self.mat["F"].dot(yaf) - self.mat["C"]
-            if np.abs(res).max() <= 1e-5:
-                break
 
             lhs = self.mat["F"] + (
                 self.mat["dE"]
@@ -125,6 +123,9 @@ class GeneralizedAlpha:
             # update solution
             yaf += dy
             ydotam += dy * fac_ydotam
+
+            if np.abs(res).max() <= 1e-5:
+                break
 
         if iter == max_iter - 1:
             print(

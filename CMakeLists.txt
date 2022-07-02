@@ -4,7 +4,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(svZeroDSolver)
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-find_package(simdjson CONFIG REQUIRED)
+find_package(simdjson REQUIRED)
 
 add_executable(svzerodsolver src/main.cpp)
 

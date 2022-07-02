@@ -81,14 +81,14 @@
  * All classes make use of templates to allow easy exchange of scalar
  * types like `double` or `float` or to switch between sparse and dense systems.
  *
- * # Building svZeroDSolver
+ * # Build svZeroDSolver
  *
  * svZeroDSolver can be build easily via CMake. Make sure you have the following
  * dependencies installed before you start:
  *
  * ## Install dependencies on macOS
  *
- * \code{.bash}
+ * \code
  * brew install eigen       # Linear algebra library
  * brew install jsoncpp     # Standard json library
  * brew install simdjson    # Fast json input parser
@@ -96,27 +96,40 @@
  *
  * ## Install dependencies on Linux
  *
- * ```bash
+ * \code
  * sudo apt install libeigen3-dev       # Linear algebra library
  * sudo apt-get install libjsoncpp-dev  # Standard json library
  * sudo apt install libsimdjson-dev     # Fast json input parser
- * ```
+ * \endcode
  *
  * ## Build in debug mode
  *
- * ```bash
+ * \code
  * mkdir Debug
  * cd Debug
  * cmake -DCMAKE_BUILD_TYPE=Debug ..
  * cmake --build .
- * ```
+ * \endcode
  *
  * ## Build in release mode
- * ```bash
+ * \code
  * mkdir Release
  * cd Release
  * cmake -DCMAKE_BUILD_TYPE=Release ..
  * cmake --build .
- * ```
+ * \endcode
+ *
+ * # Run svZeroDSolver
+ *
+ * After building svZeroDSolver, the build folder contains an executable
+ * called `svzerodsolver`. Run it with one of:
+ *
+ * \code
+ * ./svzerodsolver path/to/config.json path/to/output.json  # For json output file format
+ * ./svzerodsolver path/to/config.json path/to/output.csv   # For csv output file format (faster)
+ * \endcode
+ *
+ * `path/to/config.json` and `path/to/output` should be replaced by the correct
+ * paths to the input and output file, respectively.
  *
  */

@@ -1,0 +1,257 @@
+\hypertarget{class_m_o_d_e_l_1_1_model}{}\doxysection{MODEL\+::Model\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_m_o_d_e_l_1_1_model}\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+
+
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} of 0D elements.  
+
+
+
+
+{\ttfamily \#include $<$model.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a75204aff4fddcf2032dd5c3e01c05433}{Model}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_af906fc8d73cea59e804174a828468f23}{$\sim$\+Model}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of all elements in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system, T time)
+\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of all elements in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y)
+\begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of all elements in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_ab251541e14d080d82639950015579413}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of all elements in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7cb64c8d49c6dc41d2c00df1cc24132d}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
+\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of all elements in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a2e33d813e05f809fad8541a12189648a}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y)
+\begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of all elements in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a6aca235e32671218c934c19395b9ff96}{to\+\_\+steady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the blocks to a steady behavior. \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0568bb6ffb0ee3e0ddba35ef9d1ce196}{get\+\_\+num\+\_\+triplets}} ()
+\begin{DoxyCompactList}\small\item\em Get number of triplets all elements. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, std\+::variant$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{Flow\+Reference}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure}{RCRBlock\+With\+Distal\+Pressure}}$<$ T $>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a99b1375ef649ea5752e25e3d38219b5e}{blocks}}
+\begin{DoxyCompactList}\small\item\em Elements of the model. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}
+\begin{DoxyCompactList}\small\item\em Degree-\/of-\/freedom handler of the model. \end{DoxyCompactList}\item 
+std\+::list$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}{nodes}}
+\begin{DoxyCompactList}\small\item\em Nodes of the model. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class MODEL\+::\+Model$<$ T $>$}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} of 0D elements. 
+
+This class represents a full 0D model. It contains attributes and methods to store and modify 0D elements.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a75204aff4fddcf2032dd5c3e01c05433}\label{class_m_o_d_e_l_1_1_model_a75204aff4fddcf2032dd5c3e01c05433}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!Model@{Model}}
+\index{Model@{Model}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Model()}{Model()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::\+Model}
+
+
+
+Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} object. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_af906fc8d73cea59e804174a828468f23}\label{class_m_o_d_e_l_1_1_model_af906fc8d73cea59e804174a828468f23}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!````~Model@{$\sim$Model}}
+\index{````~Model@{$\sim$Model}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Model()}{~Model()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}}}
+
+
+
+Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a0568bb6ffb0ee3e0ddba35ef9d1ce196}\label{class_m_o_d_e_l_1_1_model_a0568bb6ffb0ee3e0ddba35ef9d1ce196}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}}
+\index{get\_num\_triplets@{get\_num\_triplets}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_num\_triplets()}{get\_num\_triplets()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::get\+\_\+num\+\_\+triplets}
+
+
+
+Get number of triplets all elements. 
+
+Get the number of triplets the elements contribute to the global system (relevant for sparse memory reservation)
+
+\begin{DoxyReturn}{Returns}
+Number of triplets that are used in each system matrix 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a6aca235e32671218c934c19395b9ff96}\label{class_m_o_d_e_l_1_1_model_a6aca235e32671218c934c19395b9ff96}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!to\_steady@{to\_steady}}
+\index{to\_steady@{to\_steady}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::to\+\_\+steady}
+
+
+
+Convert the blocks to a steady behavior. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}\label{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of all elements in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_ab251541e14d080d82639950015579413}\label{class_m_o_d_e_l_1_1_model_ab251541e14d080d82639950015579413}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of all elements in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}\label{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_solution@{update\_solution}}
+\index{update\_solution@{update\_solution}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_solution()}{update\_solution()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::update\+\_\+solution (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{y }\end{DoxyParamCaption})}
+
+
+
+Update the solution-\/dependent contributions of all elements in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em y} & Current solution \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a2e33d813e05f809fad8541a12189648a}\label{class_m_o_d_e_l_1_1_model_a2e33d813e05f809fad8541a12189648a}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_solution@{update\_solution}}
+\index{update\_solution@{update\_solution}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_solution()}{update\_solution()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::update\+\_\+solution (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{y }\end{DoxyParamCaption})}
+
+
+
+Update the solution-\/dependent contributions of all elements in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em y} & Current solution \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}\label{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_time@{update\_time}}
+\index{update\_time@{update\_time}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Update the time-\/dependent contributions of all elements in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a7cb64c8d49c6dc41d2c00df1cc24132d}\label{class_m_o_d_e_l_1_1_model_a7cb64c8d49c6dc41d2c00df1cc24132d}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_time@{update\_time}}
+\index{update\_time@{update\_time}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Update the time-\/dependent contributions of all elements in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a99b1375ef649ea5752e25e3d38219b5e}\label{class_m_o_d_e_l_1_1_model_a99b1375ef649ea5752e25e3d38219b5e}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!blocks@{blocks}}
+\index{blocks@{blocks}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{blocks}{blocks}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$std\+::string, std\+::variant$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{Flow\+Reference}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure}{RCRBlock\+With\+Distal\+Pressure}}$<$T$>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::blocks}
+
+
+
+Elements of the model. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}\label{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!dofhandler@{dofhandler}}
+\index{dofhandler@{dofhandler}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{dofhandler}{dofhandler}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::dofhandler}
+
+
+
+Degree-\/of-\/freedom handler of the model. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}\label{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!nodes@{nodes}}
+\index{nodes@{nodes}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{nodes}{nodes}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::list$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::nodes}
+
+
+
+Nodes of the model. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{model_8hpp}{model.\+hpp}}\end{DoxyCompactItemize}

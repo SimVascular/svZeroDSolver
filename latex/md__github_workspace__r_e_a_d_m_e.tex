@@ -1,0 +1,79 @@
+sv\+Zero\+DSolver is a Python code that simulates the hemodynamics in zero-\/dimensional (0D) lumped parameter models of vascular networks. These 0D models are governed by differential algebraic equations (DAEs).
+
+The solver uses a highly modular framework to model the vascular anatomy, using individual 0D elements to represent different parts of the vascular anatomy (and boundary conditions). The individual 0D elements and their associated governing equations defined in {\ttfamily blocks.\+py}. In {\ttfamily solver.\+py}, the blocks are assembled and simulated using the generalized-\/alpha time-\/stepping method defined in {\ttfamily time\+\_\+integration.\+py}.
+
+The sv\+Zero\+DSolver Python files are in the {\ttfamily svzerodsolver} Python package directory.
+
+sv\+Zero\+DSolver currently supports the following vascular 0D modeling options and boundary conditions\+:\hypertarget{md__github_workspace__r_e_a_d_m_e_autotoc_md1}{}\doxysubsubsection{Vascular 0\+D elements\+:}\label{md__github_workspace__r_e_a_d_m_e_autotoc_md1}
+
+\begin{DoxyItemize}
+\item Resistor
+\item Resistor-\/capacitor
+\item Resistor-\/inductor
+\item Resistor-\/capacitor-\/inductor
+\end{DoxyItemize}\hypertarget{md__github_workspace__r_e_a_d_m_e_autotoc_md2}{}\doxysubsubsection{Boundary conditions\+:}\label{md__github_workspace__r_e_a_d_m_e_autotoc_md2}
+
+\begin{DoxyItemize}
+\item Pressure
+\item Resistor
+\item RCR
+\item Coronary
+\item Flow
+\end{DoxyItemize}\hypertarget{md__github_workspace__r_e_a_d_m_e_autotoc_md3}{}\doxysubsection{Installation}\label{md__github_workspace__r_e_a_d_m_e_autotoc_md3}
+sv\+Zero\+DSolver and all its dependencies can be installed easily via pip.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{pip install git+https://github.com/SimVascular/svZeroDSolver.git}
+
+\end{DoxyCode}
+\hypertarget{md__github_workspace__r_e_a_d_m_e_autotoc_md4}{}\doxysubsubsection{For Contributers}\label{md__github_workspace__r_e_a_d_m_e_autotoc_md4}
+The following guide provides all necessary steps to install your local sv\+Zero\+DSolver repository via pip in editable mode to allow for local code changes to reflect in the package.
+
+If you are contributing to sv\+Zero\+DSolver, it is highly recommended to use a virtual environment like \href{https://docs.conda.io/en/latest/miniconda.html}{\texttt{ Miniconda}}. After installing Miniconda you can create a new environment and enter it using\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{conda create -\/n zerodsolver python=3.9}
+\DoxyCodeLine{conda activate zerodsolver}
+
+\end{DoxyCode}
+
+
+After that, enter the repository folder and install the sv\+Zero\+DSolver {\bfseries{with development related dependencies}} using\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{pip install -\/e .[dev]}
+
+\end{DoxyCode}
+
+
+{\itshape If you are using the {\ttfamily zsh} shell, enter\+: {\ttfamily pip install -\/e \char`\"{}.\mbox{[}dev\mbox{]}\char`\"{}}}\hypertarget{md__github_workspace__r_e_a_d_m_e_autotoc_md5}{}\doxysubsection{Usage}\label{md__github_workspace__r_e_a_d_m_e_autotoc_md5}
+\hypertarget{md__github_workspace__r_e_a_d_m_e_autotoc_md6}{}\doxysubsubsection{Command line}\label{md__github_workspace__r_e_a_d_m_e_autotoc_md6}
+To run sv\+Zero\+DSolver form the command line, run\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{zerod SOLVER\_INPUT\_FILE }
+
+\end{DoxyCode}
+
+
+For more information about command line options, enter\+:
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{zerod -\/-\/help}
+
+\end{DoxyCode}
+\hypertarget{md__github_workspace__r_e_a_d_m_e_autotoc_md7}{}\doxysubsubsection{As a python module}\label{md__github_workspace__r_e_a_d_m_e_autotoc_md7}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\textcolor{keyword}{import} svzerodsolver}
+\DoxyCodeLine{svzerodsolver.solver.set\_up\_and\_run\_0d\_simulation(\textcolor{stringliteral}{'input.json'})}
+
+\end{DoxyCode}
+
+
+This variant enables running sv\+Zero\+DSolver within a user-\/defined Python code (e.\+g. parameter optimization, uncertainty quantification) 

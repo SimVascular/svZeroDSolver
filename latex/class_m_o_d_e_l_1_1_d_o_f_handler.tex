@@ -1,0 +1,122 @@
+\hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler}{}\doxysection{MODEL\+::DOFHandler Class Reference}
+\label{class_m_o_d_e_l_1_1_d_o_f_handler}\index{MODEL::DOFHandler@{MODEL::DOFHandler}}
+
+
+Degree-\/of-\/freedom handler.  
+
+
+
+
+{\ttfamily \#include $<$dofhandler.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a8a8c504cac23395821f65a236f42d3f3}{DOFHandler}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a53dc8c00e7d0055e971e0d2443cc98fd}{$\sim$\+DOFHandler}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} object. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}} ()
+\begin{DoxyCompactList}\small\item\em Get the size of the system. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{register\+\_\+variable}} (std\+::string name)
+\begin{DoxyCompactList}\small\item\em Register a new variable at the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}}. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}{register\+\_\+equation}} ()
+\begin{DoxyCompactList}\small\item\em Register a new equation at the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}
+\begin{DoxyCompactList}\small\item\em Variable names corresponding to the variable indices. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Degree-\/of-\/freedom handler. 
+
+This class handles degrees-\/of-\/freedom for model variables and equations. It assigns each element with row and column indices which it can use to assemble it\textquotesingle{}s local contibutions into the global system. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler_a8a8c504cac23395821f65a236f42d3f3}\label{class_m_o_d_e_l_1_1_d_o_f_handler_a8a8c504cac23395821f65a236f42d3f3}} 
+\index{MODEL::DOFHandler@{MODEL::DOFHandler}!DOFHandler@{DOFHandler}}
+\index{DOFHandler@{DOFHandler}!MODEL::DOFHandler@{MODEL::DOFHandler}}
+\doxysubsubsection{\texorpdfstring{DOFHandler()}{DOFHandler()}}
+{\footnotesize\ttfamily MODEL\+::\+DOFHandler\+::\+DOFHandler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} object. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler_a53dc8c00e7d0055e971e0d2443cc98fd}\label{class_m_o_d_e_l_1_1_d_o_f_handler_a53dc8c00e7d0055e971e0d2443cc98fd}} 
+\index{MODEL::DOFHandler@{MODEL::DOFHandler}!````~DOFHandler@{$\sim$DOFHandler}}
+\index{````~DOFHandler@{$\sim$DOFHandler}!MODEL::DOFHandler@{MODEL::DOFHandler}}
+\doxysubsubsection{\texorpdfstring{$\sim$DOFHandler()}{~DOFHandler()}}
+{\footnotesize\ttfamily MODEL\+::\+DOFHandler\+::$\sim$\+DOFHandler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}\label{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}} 
+\index{MODEL::DOFHandler@{MODEL::DOFHandler}!register\_equation@{register\_equation}}
+\index{register\_equation@{register\_equation}!MODEL::DOFHandler@{MODEL::DOFHandler}}
+\doxysubsubsection{\texorpdfstring{register\_equation()}{register\_equation()}}
+{\footnotesize\ttfamily unsigned int MODEL\+::\+DOFHandler\+::register\+\_\+equation (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Register a new equation at the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}}. 
+
+\begin{DoxyReturn}{Returns}
+Global index of the equation 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}\label{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}} 
+\index{MODEL::DOFHandler@{MODEL::DOFHandler}!register\_variable@{register\_variable}}
+\index{register\_variable@{register\_variable}!MODEL::DOFHandler@{MODEL::DOFHandler}}
+\doxysubsubsection{\texorpdfstring{register\_variable()}{register\_variable()}}
+{\footnotesize\ttfamily unsigned int MODEL\+::\+DOFHandler\+::register\+\_\+variable (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+
+
+Register a new variable at the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name of the variable \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Global index of the variable 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}\label{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}} 
+\index{MODEL::DOFHandler@{MODEL::DOFHandler}!size@{size}}
+\index{size@{size}!MODEL::DOFHandler@{MODEL::DOFHandler}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily unsigned int MODEL\+::\+DOFHandler\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Get the size of the system. 
+
+\begin{DoxyReturn}{Returns}
+Size of the system 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}\label{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}} 
+\index{MODEL::DOFHandler@{MODEL::DOFHandler}!variables@{variables}}
+\index{variables@{variables}!MODEL::DOFHandler@{MODEL::DOFHandler}}
+\doxysubsubsection{\texorpdfstring{variables}{variables}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ MODEL\+::\+DOFHandler\+::variables}
+
+
+
+Variable names corresponding to the variable indices. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{dofhandler_8hpp}{dofhandler.\+hpp}}\end{DoxyCompactItemize}

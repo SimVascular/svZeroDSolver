@@ -1,0 +1,148 @@
+\hypertarget{class_i_o_1_1_config_reader}{}\doxysection{IO\+::Config\+Reader\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_i_o_1_1_config_reader}\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+
+
+sv\+Zero\+DSolver configuration reader.  
+
+
+
+
+{\ttfamily \#include $<$configreader.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{Config\+Reader}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new Config Reader object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_i_o_1_1_config_reader_a66f9934835f47b84c4bd77b5c8e97592}{Config\+Reader}} (std\+::string filename)
+\begin{DoxyCompactList}\small\item\em Construct a new Config Reader object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{$\sim$\+Config\+Reader}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the Config Reader object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \mbox{\hyperlink{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}{get\+\_\+model}} ()
+\begin{DoxyCompactList}\small\item\em Create model from configuration file. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}{get\+\_\+num\+\_\+time\+\_\+steps}} ()
+\begin{DoxyCompactList}\small\item\em Get number of time steps based on configuration. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}{get\+\_\+time\+\_\+step\+\_\+size}} ()
+\begin{DoxyCompactList}\small\item\em Get the time step size based on configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+T \mbox{\hyperlink{class_i_o_1_1_config_reader_a7401fb68b296447b8152636d1d363416}{cardiac\+\_\+cycle\+\_\+period}} = 1.\+0
+\begin{DoxyCompactList}\small\item\em Cardiac cycle period. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class IO\+::\+Config\+Reader$<$ T $>$}
+sv\+Zero\+DSolver configuration reader. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}\label{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}}
+\index{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ConfigReader()}{ConfigReader()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::\+Config\+Reader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Construct a new Config Reader object. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a66f9934835f47b84c4bd77b5c8e97592}\label{class_i_o_1_1_config_reader_a66f9934835f47b84c4bd77b5c8e97592}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}}
+\index{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ConfigReader()}{ConfigReader()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::\+Config\+Reader (\begin{DoxyParamCaption}\item[{std\+::string}]{filename }\end{DoxyParamCaption})}
+
+
+
+Construct a new Config Reader object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & Name of the configuration file \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}\label{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!````~ConfigReader@{$\sim$ConfigReader}}
+\index{````~ConfigReader@{$\sim$ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$ConfigReader()}{~ConfigReader()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_i_o_1_1_config_reader}{Config\+Reader}}}
+
+
+
+Destroy the Config Reader object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}\label{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_model@{get\_model}}
+\index{get\_model@{get\_model}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_model()}{get\_model()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+model}
+
+
+
+Create model from configuration file. 
+
+\begin{DoxyReturn}{Returns}
+Model 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}\label{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_num\_time\_steps@{get\_num\_time\_steps}}
+\index{get\_num\_time\_steps@{get\_num\_time\_steps}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_num\_time\_steps()}{get\_num\_time\_steps()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+num\+\_\+time\+\_\+steps}
+
+
+
+Get number of time steps based on configuration. 
+
+\begin{DoxyReturn}{Returns}
+Number of time steps 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}\label{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_time\_step\_size@{get\_time\_step\_size}}
+\index{get\_time\_step\_size@{get\_time\_step\_size}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_time\_step\_size()}{get\_time\_step\_size()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+time\+\_\+step\+\_\+size}
+
+
+
+Get the time step size based on configuration. 
+
+\begin{DoxyReturn}{Returns}
+Time step size 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a7401fb68b296447b8152636d1d363416}\label{class_i_o_1_1_config_reader_a7401fb68b296447b8152636d1d363416}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!cardiac\_cycle\_period@{cardiac\_cycle\_period}}
+\index{cardiac\_cycle\_period@{cardiac\_cycle\_period}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{cardiac\_cycle\_period}{cardiac\_cycle\_period}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::cardiac\+\_\+cycle\+\_\+period = 1.\+0}
+
+
+
+Cardiac cycle period. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+io/\mbox{\hyperlink{configreader_8hpp}{configreader.\+hpp}}\end{DoxyCompactItemize}

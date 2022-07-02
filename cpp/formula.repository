@@ -1,56 +1,19 @@
-\documentclass{article}
-\usepackage{ifthen}
-\usepackage{epsfig}
-\usepackage[utf8]{inputenc}
-% Packages requested by user
-\usepackage{tikz}
-\usepackage{circuitikz}
-
-\usepackage{newunicodechar}
-  \newunicodechar{⁻}{${}^{-}$}% Superscript minus
-  \newunicodechar{²}{${}^{2}$}% Superscript two
-  \newunicodechar{³}{${}^{3}$}% Superscript three
-
-\pagestyle{empty}
-\begin{document}
-\[
+\_form#0=196x14:\[
 \mathbf{E}(\mathbf{y}, t) \cdot \dot{\mathbf{y}}+\mathbf{F}(\mathbf{y}, t) \cdot \mathbf{y}+\mathbf{c}(\mathbf{y}, t)=\mathbf{0}
 \]
-\pagebreak
-
-$y$
-\pagebreak
-
-$\dot{y}$
-\pagebreak
-
-$N$
-\pagebreak
-
-$\alpha$
-\pagebreak
-
-\[
+\_form#1=8x9:$y$
+\_form#2=8x11:$\dot{y}$
+\_form#3=11x10:$N$
+\_form#4=8x6:$\alpha$
+\_form#5=326x16:\[
 [P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1, \dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}]
 \]
-\pagebreak
-
-$P_{in} $
-\pagebreak
-
-$Q_{in} $
-\pagebreak
-
-$P_{out} $
-\pagebreak
-
-$Q_{out} $
-\pagebreak
-
-$V $
-\pagebreak
-
-\[
+\_form#6=18x13:$P_{in} $
+\_form#7=19x13:$Q_{in} $
+\_form#8=23x13:$P_{out} $
+\_form#9=24x13:$Q_{out} $
+\_form#10=10x10:$V $
+\_form#11=266x96:\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -62,97 +25,63 @@ node[ground]{$P_C$};
 \draw [-latex] (5.2,0) -- (6,0) node[right] {$Q_{out}$};
 \end{circuitikz}
 \]
-\pagebreak
-
-\[
+\_form#12=184x28:\[
 P_{in}^{e}-P_{out}^{e}-R Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
 \]
-\pagebreak
-
-\[
+\_form#13=134x28:\[
 Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{c}^{e}}{d t}=0
 \]
-\pagebreak
-
-\[
+\_form#14=114x14:\[
 P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0
 \]
-\pagebreak
-
-\[
+\_form#15=214x20:\[
 \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{i n}^{e} & Q_{in}^{e} & P_{out}^{e} & Q_{out}^{e} & P_C\end{array}\right]^{T}
 \]
-\pagebreak
-
-\[
+\_form#16=164x46:\[
 \mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 & 0 & 0 & -L & 0 \\
 0 & 0 & 0 & 0 & -C \\
 0 & 0 & 0 & 0 & 0
 \end{array}\right]
 \]
-\pagebreak
-
-\[
+\_form#17=218x46:\[
 \mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 & -R_{ste}-R & -1 & 0 & 0 \\
 0 & 1 & 0 & -1 & 0 \\
 1 & -R_{ste}-R & 0 & 0 & -1
 \end{array}\right]
 \]
-\pagebreak
-
-\[
+\_form#18=166x46:\[
 \mathbf{D}^{e}=\left[\begin{array}{ccccc}
 0 & -R_{ste} & 0 & 0 & 0 \\
 0 & 0 & 0 & 0 & 0 \\
 0 & -R_{ste} & 0 & 0 & 0
 \end{array}\right]
 \]
-\pagebreak
-
-$ R_{ste}=K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| $
-\pagebreak
-
-$R$
-\pagebreak
-
-$C$
-\pagebreak
-
-$L$
-\pagebreak
-
-\[
+\_form#19=163x26:$ R_{ste}=K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| $
+\_form#20=10x10:$R$
+\_form#21=10x10:$C$
+\_form#22=9x10:$L$
+\_form#23=106x21:\[
 \begin{circuitikz} \draw
 node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
 \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
 \end{circuitikz}
 \]
-\pagebreak
-
-\[
+\_form#24=36x15:\[
 Q=\hat{Q}
 \]
-\pagebreak
-
-\[
+\_form#25=104x20:\[
 \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
 \]
-\pagebreak
-
-\[
+\_form#26=78x16:\[
 \mathbf{F}^{e}=\left[\begin{array}{ll}0 & 1\end{array}\right]
 \]
-\pagebreak
-
-\[
+\_form#27=51x24:\[
 \mathbf{C}^{e}=\left[\hat{Q}\right]
 \]
-\pagebreak
-
-\[
+\_form#28=248x120:\[
 \begin{circuitikz}
 \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$} to [short, *-*] (3.0,0);
@@ -164,34 +93,22 @@ Q=\hat{Q}
 \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
 \end{circuitikz}
 \]
-\pagebreak
-
-\[
+\_form#29=145x38:\[
 \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
 \]
-\pagebreak
-
-\[
+\_form#30=119x14:\[
 P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
 \]
-\pagebreak
-
-\[
+\_form#31=424x16:\[
 \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e} & \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} & \dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right]
 \]
-\pagebreak
-
-\[
+\_form#32=263x16:\[
 \mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 & 1 & 0 & 1 & \dots & 0 & -1 & 0 & -1 & \dots\end{array}\right]
  \]
-\pagebreak
-
-\[
+\_form#33=294x31:\[
 \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots & \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right] \quad \mathrm{with} \quad i \neq j
 \]
-\pagebreak
-
-\[
+\_form#34=214x96:\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -202,45 +119,30 @@ node[anchor=south]{$P_{ref}$}
 node[ground]{$P_{C}$};
 \end{circuitikz}
 \]
-\pagebreak
-
-\[
+\_form#35=189x28:\[
 R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
 \]
-\pagebreak
-
-\[
+\_form#36=114x14:\[
 P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
 \]
-\pagebreak
-
-\[
+\_form#37=131x20:\[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & P_{c}^{e}\end{array}\right]^{T}
 \]
-\pagebreak
-
-\[
+\_form#38=126x31:\[
 \mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 & 0 & -R_{d} C \\
 0 & 0 & 0
 \end{array}\right]
 \]
-\pagebreak
-
-\[
+\_form#39=126x31:\[
 \mathbf{F}^{e}=\left[\begin{array}{ccc}
 0 & R_{d} & -1 \\
 1 & -R_{p} & -1
 \end{array}\right]
 \]
-\pagebreak
-
-\[
+\_form#40=76x31:\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
 \]
-\pagebreak
-
-\end{document}

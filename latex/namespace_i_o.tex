@@ -1,0 +1,83 @@
+\hypertarget{namespace_i_o}{}\doxysection{IO Namespace Reference}
+\label{namespace_i_o}\index{IO@{IO}}
+
+
+\mbox{\hyperlink{namespace_i_o}{IO}} namespace.  
+
+
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_i_o_1_1_config_reader}{Config\+Reader}}
+\begin{DoxyCompactList}\small\item\em sv\+Zero\+DSolver configuration reader. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_ab7ebfa63dd94e3d4fa9230f1cc33e464}{write\+\_\+csv}} (std\+::string path, std\+::vector$<$ T $>$ times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ model, bool mean=false)
+\begin{DoxyCompactList}\small\item\em Write the solution to a csv file. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_a54befa804c1df62b13250b15c8131707}{write\+\_\+json}} (std\+::string path, std\+::vector$<$ T $>$ times, std\+::vector$<$ State$<$ T $>$ $>$ states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ model)
+\begin{DoxyCompactList}\small\item\em Write the solution to a json file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{namespace_i_o}{IO}} namespace. 
+
+The \mbox{\hyperlink{namespace_i_o}{IO}} namespace contains all tools for reading configuration and writing solution files. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_i_o_ab7ebfa63dd94e3d4fa9230f1cc33e464}\label{namespace_i_o_ab7ebfa63dd94e3d4fa9230f1cc33e464}} 
+\index{IO@{IO}!write\_csv@{write\_csv}}
+\index{write\_csv@{write\_csv}!IO@{IO}}
+\doxysubsubsection{\texorpdfstring{write\_csv()}{write\_csv()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void IO\+::write\+\_\+csv (\begin{DoxyParamCaption}\item[{std\+::string}]{path,  }\item[{std\+::vector$<$ T $>$}]{times,  }\item[{std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$}]{states,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$}]{model,  }\item[{bool}]{mean = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Write the solution to a csv file. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em path} & Path to the output csv file \\
+\hline
+{\em times} & Sequence of time steps corresponding to the solutions \\
+\hline
+{\em states} & Sequence of states corresponding to the time steps \\
+\hline
+{\em model} & The underlying model \\
+\hline
+{\em mean} & Toggle whether only the mean over all time steps should be written \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{namespace_i_o_a54befa804c1df62b13250b15c8131707}\label{namespace_i_o_a54befa804c1df62b13250b15c8131707}} 
+\index{IO@{IO}!write\_json@{write\_json}}
+\index{write\_json@{write\_json}!IO@{IO}}
+\doxysubsubsection{\texorpdfstring{write\_json()}{write\_json()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void IO\+::write\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string}]{path,  }\item[{std\+::vector$<$ T $>$}]{times,  }\item[{std\+::vector$<$ State$<$ T $>$ $>$}]{states,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$}]{model }\end{DoxyParamCaption})}
+
+
+
+Write the solution to a json file. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em path} & Path to the output json file \\
+\hline
+{\em times} & Sequence of time steps corresponding to the solutions \\
+\hline
+{\em states} & Sequence of states corresponding to the time steps \\
+\hline
+{\em model} & The underlying model \\
+\hline
+\end{DoxyParams}

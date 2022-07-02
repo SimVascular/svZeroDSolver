@@ -1,0 +1,120 @@
+\hypertarget{class_m_o_d_e_l_1_1_node}{}\doxysection{MODEL\+::Node Class Reference}
+\label{class_m_o_d_e_l_1_1_node}\index{MODEL::Node@{MODEL::Node}}
+
+
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}.  
+
+
+
+
+{\ttfamily \#include $<$node.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a066dff1336371f704fed4599e5b7165d}{Node}} (std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}})
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a58141b669fcf0ca3cc46b2eaefb8e697}{$\sim$\+Node}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a50119a4dd8496e64503edc625412b314}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
+\begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}}
+\begin{DoxyCompactList}\small\item\em Name. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_af6b6212b5afa8b4a0052242f2dd34dc8}{flow\+\_\+dof}}
+\begin{DoxyCompactList}\small\item\em Global flow degree-\/of-\/freedom of the node. \end{DoxyCompactList}\item 
+unsigned int \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_ac54a317558f3b44c05f7499ab96db074}{pres\+\_\+dof}}
+\begin{DoxyCompactList}\small\item\em Global pressure degree-\/of-\/freedom of the node. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}. 
+
+Nodes connect two blocks with each other. Each node corresponds to a flow and pressure value of the system. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_node_a066dff1336371f704fed4599e5b7165d}\label{class_m_o_d_e_l_1_1_node_a066dff1336371f704fed4599e5b7165d}} 
+\index{MODEL::Node@{MODEL::Node}!Node@{Node}}
+\index{Node@{Node}!MODEL::Node@{MODEL::Node}}
+\doxysubsubsection{\texorpdfstring{Node()}{Node()}}
+{\footnotesize\ttfamily MODEL\+::\+Node\+::\+Node (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_node_a58141b669fcf0ca3cc46b2eaefb8e697}\label{class_m_o_d_e_l_1_1_node_a58141b669fcf0ca3cc46b2eaefb8e697}} 
+\index{MODEL::Node@{MODEL::Node}!````~Node@{$\sim$Node}}
+\index{````~Node@{$\sim$Node}!MODEL::Node@{MODEL::Node}}
+\doxysubsubsection{\texorpdfstring{$\sim$Node()}{~Node()}}
+{\footnotesize\ttfamily MODEL\+::\+Node\+::$\sim$\+Node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_node_a50119a4dd8496e64503edc625412b314}\label{class_m_o_d_e_l_1_1_node_a50119a4dd8496e64503edc625412b314}} 
+\index{MODEL::Node@{MODEL::Node}!setup\_dofs@{setup\_dofs}}
+\index{setup\_dofs@{setup\_dofs}!MODEL::Node@{MODEL::Node}}
+\doxysubsubsection{\texorpdfstring{setup\_dofs()}{setup\_dofs()}}
+{\footnotesize\ttfamily void MODEL\+::\+Node\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})}
+
+
+
+Set up the degrees of freedom (DOF) of the block. 
+
+Set global\+\_\+var\+\_\+ids and global\+\_\+eqn\+\_\+ids of the element based on the number of equations and the number of internal variables of the element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dofhandler} & Degree-\/of-\/freedom handler to register variables and equations at \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_node_af6b6212b5afa8b4a0052242f2dd34dc8}\label{class_m_o_d_e_l_1_1_node_af6b6212b5afa8b4a0052242f2dd34dc8}} 
+\index{MODEL::Node@{MODEL::Node}!flow\_dof@{flow\_dof}}
+\index{flow\_dof@{flow\_dof}!MODEL::Node@{MODEL::Node}}
+\doxysubsubsection{\texorpdfstring{flow\_dof}{flow\_dof}}
+{\footnotesize\ttfamily unsigned int MODEL\+::\+Node\+::flow\+\_\+dof}
+
+
+
+Global flow degree-\/of-\/freedom of the node. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}\label{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}} 
+\index{MODEL::Node@{MODEL::Node}!name@{name}}
+\index{name@{name}!MODEL::Node@{MODEL::Node}}
+\doxysubsubsection{\texorpdfstring{name}{name}}
+{\footnotesize\ttfamily std\+::string MODEL\+::\+Node\+::name}
+
+
+
+Name. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_node_ac54a317558f3b44c05f7499ab96db074}\label{class_m_o_d_e_l_1_1_node_ac54a317558f3b44c05f7499ab96db074}} 
+\index{MODEL::Node@{MODEL::Node}!pres\_dof@{pres\_dof}}
+\index{pres\_dof@{pres\_dof}!MODEL::Node@{MODEL::Node}}
+\doxysubsubsection{\texorpdfstring{pres\_dof}{pres\_dof}}
+{\footnotesize\ttfamily unsigned int MODEL\+::\+Node\+::pres\+\_\+dof}
+
+
+
+Global pressure degree-\/of-\/freedom of the node. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{node_8hpp}{node.\+hpp}}\end{DoxyCompactItemize}

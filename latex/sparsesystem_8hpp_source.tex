@@ -1,0 +1,141 @@
+\hypertarget{sparsesystem_8hpp_source}{}\doxysection{sparsesystem.\+hpp}
+\label{sparsesystem_8hpp_source}\index{algebra/sparsesystem.hpp@{algebra/sparsesystem.hpp}}
+\mbox{\hyperlink{sparsesystem_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{/**}}
+\DoxyCodeLine{2 \textcolor{comment}{ * @file sparsesystem.hpp}}
+\DoxyCodeLine{3 \textcolor{comment}{ * @brief ALGEBRA::SparseSystem source file}}
+\DoxyCodeLine{4 \textcolor{comment}{ */}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_ALGREBRA\_SPARSESYSTEM\_HPP\_}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#define SVZERODSOLVER\_ALGREBRA\_SPARSESYSTEM\_HPP\_}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <Eigen/Sparse>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <Eigen/SparseLU>}}
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_a_l_g_e_b_r_a}{ALGEBRA}}}
+\DoxyCodeLine{12 \{\textcolor{comment}{}}
+\DoxyCodeLine{13 \textcolor{comment}{    /**}}
+\DoxyCodeLine{14 \textcolor{comment}{     * @brief Sparse system}}
+\DoxyCodeLine{15 \textcolor{comment}{     *}}
+\DoxyCodeLine{16 \textcolor{comment}{     * This class contains all attributes and methods to create, modify, and}}
+\DoxyCodeLine{17 \textcolor{comment}{     * solve sparse systems.}}
+\DoxyCodeLine{18 \textcolor{comment}{     *}}
+\DoxyCodeLine{19 \textcolor{comment}{     * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{20 \textcolor{comment}{     */}}
+\DoxyCodeLine{21     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{22     \textcolor{keyword}{class }\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{SparseSystem}}}
+\DoxyCodeLine{23     \{}
+\DoxyCodeLine{24     \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{25 \textcolor{comment}{        /**}}
+\DoxyCodeLine{26 \textcolor{comment}{         * @brief Construct a new Sparse System object}}
+\DoxyCodeLine{27 \textcolor{comment}{         *}}
+\DoxyCodeLine{28 \textcolor{comment}{         */}}
+\DoxyCodeLine{29         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a04f581a81ec6afd1955ad1611bed25d8}{SparseSystem}}();}
+\DoxyCodeLine{30 \textcolor{comment}{}}
+\DoxyCodeLine{31 \textcolor{comment}{        /**}}
+\DoxyCodeLine{32 \textcolor{comment}{         * @brief Construct a new Sparse System object}}
+\DoxyCodeLine{33 \textcolor{comment}{         *}}
+\DoxyCodeLine{34 \textcolor{comment}{         * @param n Size of the system}}
+\DoxyCodeLine{35 \textcolor{comment}{         */}}
+\DoxyCodeLine{36         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a04f581a81ec6afd1955ad1611bed25d8}{SparseSystem}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} n);}
+\DoxyCodeLine{37 \textcolor{comment}{}}
+\DoxyCodeLine{38 \textcolor{comment}{        /**}}
+\DoxyCodeLine{39 \textcolor{comment}{         * @brief Destroy the Sparse System object}}
+\DoxyCodeLine{40 \textcolor{comment}{         *}}
+\DoxyCodeLine{41 \textcolor{comment}{         */}}
+\DoxyCodeLine{42         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a70cd2505b7fd6c9b8f9fb3a5255e4f10}{\string~SparseSystem}}();}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44         Eigen::SparseMatrix<T> \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}};              \textcolor{comment}{///< System matrix F}}
+\DoxyCodeLine{45         Eigen::SparseMatrix<T> \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}};              \textcolor{comment}{///< System matrix E}}
+\DoxyCodeLine{46         Eigen::SparseMatrix<T> \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}};              \textcolor{comment}{///< System matrix D}}
+\DoxyCodeLine{47         Eigen::Matrix<T, Eigen::Dynamic, 1> \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}; \textcolor{comment}{///< System vector C}}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49         Eigen::SparseMatrix<T> \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_afa227ccde52f18650e8ee34b33d98715}{jacobian}};              \textcolor{comment}{///< Jacobian of the system}}
+\DoxyCodeLine{50         Eigen::Matrix<T, Eigen::Dynamic, 1> \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a17aa18649992a4040df695530203fc05}{residual}}; \textcolor{comment}{///< Residual of the system}}
+\DoxyCodeLine{51         Eigen::Matrix<T, Eigen::Dynamic, 1> \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_ac6fc3a2c1e2713d5f2484f56a9a6b912}{dy}};       \textcolor{comment}{///< Solution increment of the system}}
+\DoxyCodeLine{52 \textcolor{comment}{}}
+\DoxyCodeLine{53 \textcolor{comment}{        /**}}
+\DoxyCodeLine{54 \textcolor{comment}{         * @brief Reserve memory in system matrices based on number of triplets}}
+\DoxyCodeLine{55 \textcolor{comment}{         *}}
+\DoxyCodeLine{56 \textcolor{comment}{         * @param num\_triplets Number of triplets that will be assembled to each matrix.}}
+\DoxyCodeLine{57 \textcolor{comment}{         */}}
+\DoxyCodeLine{58         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_add4edc3526630803e228b049a9329f66}{reserve}}(std::map<std::string, int> num\_triplets);}
+\DoxyCodeLine{59 \textcolor{comment}{}}
+\DoxyCodeLine{60 \textcolor{comment}{        /**}}
+\DoxyCodeLine{61 \textcolor{comment}{         * @brief Update the residual of the system}}
+\DoxyCodeLine{62 \textcolor{comment}{         *}}
+\DoxyCodeLine{63 \textcolor{comment}{         * @param y Vector of current solution quantities}}
+\DoxyCodeLine{64 \textcolor{comment}{         * @param ydot Derivate of y}}
+\DoxyCodeLine{65 \textcolor{comment}{         */}}
+\DoxyCodeLine{66         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9e52477eed131af02faf4a31d24b79e9}{update\_residual}}(Eigen::Matrix<T, Eigen::Dynamic, 1> \&y, Eigen::Matrix<T, Eigen::Dynamic, 1> \&ydot);}
+\DoxyCodeLine{67 \textcolor{comment}{}}
+\DoxyCodeLine{68 \textcolor{comment}{        /**}}
+\DoxyCodeLine{69 \textcolor{comment}{         * @brief Update the jacobian of the system}}
+\DoxyCodeLine{70 \textcolor{comment}{         *}}
+\DoxyCodeLine{71 \textcolor{comment}{         * @param e\_coeff Coefficent for system matrix \(\backslash\)ref E}}
+\DoxyCodeLine{72 \textcolor{comment}{         */}}
+\DoxyCodeLine{73         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a1a20ebc6624e53e42f181d0bb3ea1c84}{update\_jacobian}}(T e\_coeff);}
+\DoxyCodeLine{74 \textcolor{comment}{}}
+\DoxyCodeLine{75 \textcolor{comment}{        /**}}
+\DoxyCodeLine{76 \textcolor{comment}{         * @brief Solve the system}}
+\DoxyCodeLine{77 \textcolor{comment}{         */}}
+\DoxyCodeLine{78         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9f0c93ef94c2c8ad2cda685bd9b2e4ee}{solve}}();}
+\DoxyCodeLine{79     \};}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{82     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a04f581a81ec6afd1955ad1611bed25d8}{SparseSystem<T>::SparseSystem}}()}
+\DoxyCodeLine{83     \{}
+\DoxyCodeLine{84     \}}
+\DoxyCodeLine{85 }
+\DoxyCodeLine{86     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{87     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a04f581a81ec6afd1955ad1611bed25d8}{SparseSystem<T>::SparseSystem}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} n)}
+\DoxyCodeLine{88     \{}
+\DoxyCodeLine{89         F = Eigen::SparseMatrix<T>(n, n);}
+\DoxyCodeLine{90         E = Eigen::SparseMatrix<T>(n, n);}
+\DoxyCodeLine{91         D = Eigen::SparseMatrix<T>(n, n);}
+\DoxyCodeLine{92         C = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94         jacobian = Eigen::SparseMatrix<T>(n, n);}
+\DoxyCodeLine{95         residual = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);}
+\DoxyCodeLine{96         dy = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);}
+\DoxyCodeLine{97     \}}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{100     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a70cd2505b7fd6c9b8f9fb3a5255e4f10}{SparseSystem<T>::\string~SparseSystem}}()}
+\DoxyCodeLine{101     \{}
+\DoxyCodeLine{102     \}}
+\DoxyCodeLine{103 }
+\DoxyCodeLine{104     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{105     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_add4edc3526630803e228b049a9329f66}{SparseSystem<T>::reserve}}(std::map<std::string, int> num\_triplets)}
+\DoxyCodeLine{106     \{}
+\DoxyCodeLine{107         F.reserve(num\_triplets[\textcolor{stringliteral}{"{}F"{}}]);}
+\DoxyCodeLine{108         E.reserve(num\_triplets[\textcolor{stringliteral}{"{}E"{}}]);}
+\DoxyCodeLine{109         D.reserve(num\_triplets[\textcolor{stringliteral}{"{}D"{}}]);}
+\DoxyCodeLine{110         jacobian.reserve(num\_triplets[\textcolor{stringliteral}{"{}F"{}}] + num\_triplets[\textcolor{stringliteral}{"{}E"{}}]);}
+\DoxyCodeLine{111     \}}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{114     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9e52477eed131af02faf4a31d24b79e9}{SparseSystem<T>::update\_residual}}(Eigen::Matrix<T, Eigen::Dynamic, 1> \&y, Eigen::Matrix<T, Eigen::Dynamic, 1> \&ydot)}
+\DoxyCodeLine{115     \{}
+\DoxyCodeLine{116         residual = -\/(E * ydot) -\/ (F * y) -\/ C;}
+\DoxyCodeLine{117     \}}
+\DoxyCodeLine{118 }
+\DoxyCodeLine{119     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{120     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a1a20ebc6624e53e42f181d0bb3ea1c84}{SparseSystem<T>::update\_jacobian}}(T e\_coeff)}
+\DoxyCodeLine{121     \{}
+\DoxyCodeLine{122         jacobian = (F + D) + (E * e\_coeff);}
+\DoxyCodeLine{123     \}}
+\DoxyCodeLine{124 }
+\DoxyCodeLine{125     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{126     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9f0c93ef94c2c8ad2cda685bd9b2e4ee}{SparseSystem<T>::solve}}()}
+\DoxyCodeLine{127     \{}
+\DoxyCodeLine{128         Eigen::SparseLU<Eigen::SparseMatrix<T>> solver;}
+\DoxyCodeLine{129         solver.compute(jacobian);}
+\DoxyCodeLine{130         dy = solver.solve(residual);}
+\DoxyCodeLine{131     \}}
+\DoxyCodeLine{132 }
+\DoxyCodeLine{133 \} \textcolor{comment}{// namespace ALGEBRA}}
+\DoxyCodeLine{134 }
+\DoxyCodeLine{135 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_ALGREBRA\_SPARSESYSTEM\_HPP\_}}
+
+\end{DoxyCode}

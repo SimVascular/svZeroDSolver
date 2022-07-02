@@ -1,0 +1,266 @@
+\hypertarget{class_m_o_d_e_l_1_1_blood_vessel}{}\doxysection{MODEL\+::Blood\+Vessel\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_m_o_d_e_l_1_1_blood_vessel}\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+
+
+Resistor-\/capacitor-\/inductor blood vessel with optional stenosis.  
+
+
+
+
+{\ttfamily \#include $<$bloodvessel.\+hpp$>$}
+
+Inheritance diagram for MODEL\+::Blood\+Vessel\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_m_o_d_e_l_1_1_blood_vessel}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters}{Parameters}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ad49bbb055eed81dbbf7ec0f5c6e43b20}{Blood\+Vessel}} (T R, T C, T L, T stenosis\+\_\+coefficient, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
+\begin{DoxyCompactList}\small\item\em Construct a new Blood Vessel object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a9b99b6231781c73be05f8081a1567f82}{$\sim$\+Blood\+Vessel}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the Blood Vessel object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
+\begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y)
+\begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of the element in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3909586564df17501073663785e74880}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ac6192a5011157b55641c0f32e0d9fca2}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y)
+\begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3e6d973f217880e6cce55a84ffd3f658}{num\+\_\+triplets}}
+\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class MODEL\+::\+Blood\+Vessel$<$ T $>$}
+Resistor-\/capacitor-\/inductor blood vessel with optional stenosis. 
+
+Models the mechanical behavior of a bloodvessel with optional stenosis.
+
+\[
+\begin{circuitikz} \draw
+node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+\draw (1,0) node[anchor=south]{$P_{in}$}
+to [R, l=$R$, *-] (3,0)
+to [L, l=$L$, *-*] (5,0)
+node[anchor=south]{$P_{out}$}
+(3,0) to [C, l=$C$, *-] (3,-1.5)
+node[ground]{$P_C$};
+\draw [-latex] (5.2,0) -- (6,0) node[right] {$Q_{out}$};
+\end{circuitikz}
+\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md8}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md8}
+\[
+P_{in}^{e}-P_{out}^{e}-R Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
+\]
+
+\[
+Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{c}^{e}}{d t}=0
+\]
+
+\[
+P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0
+\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md9}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md9}
+\[
+\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{i n}^{e} & Q_{in}^{e} & P_{out}^{e} & Q_{out}^{e} & P_C\end{array}\right]^{T}
+\]
+
+\[
+\mathbf{E}^{e}=\left[\begin{array}{ccccc}
+0 & 0 & 0 & -L & 0 \\
+0 & 0 & 0 & 0 & -C \\
+0 & 0 & 0 & 0 & 0
+\end{array}\right]
+\]
+
+\[
+\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+1 & -R_{ste}-R & -1 & 0 & 0 \\
+0 & 1 & 0 & -1 & 0 \\
+1 & -R_{ste}-R & 0 & 0 & -1
+\end{array}\right]
+\]
+
+\[
+\mathbf{D}^{e}=\left[\begin{array}{ccccc}
+0 & -R_{ste} & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 \\
+0 & -R_{ste} & 0 & 0 & 0
+\end{array}\right]
+\]
+
+with the stenosis resistance $ R_{ste}=K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| $. The constant part of the equation is summarized in \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a5f0adc244080b0bd404c579d39ec3f2b}{Parameters\+::stenosis\+\_\+coefficient}}. $R$, $C$, and $L$ refer to Poisieuille resistance, capacitance and inductance, respectively.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_ad49bbb055eed81dbbf7ec0f5c6e43b20}\label{class_m_o_d_e_l_1_1_blood_vessel_ad49bbb055eed81dbbf7ec0f5c6e43b20}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!BloodVessel@{BloodVessel}}
+\index{BloodVessel@{BloodVessel}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{BloodVessel()}{BloodVessel()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::\+Blood\+Vessel (\begin{DoxyParamCaption}\item[{T}]{R,  }\item[{T}]{C,  }\item[{T}]{L,  }\item[{T}]{stenosis\+\_\+coefficient,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+
+
+Construct a new Blood Vessel object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em R} & Poiseuille resistance \\
+\hline
+{\em C} & Capacitance \\
+\hline
+{\em L} & Inductance \\
+\hline
+{\em stenosis\+\_\+coefficient} & Stenosis Coefficient \\
+\hline
+{\em name} & Name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_a9b99b6231781c73be05f8081a1567f82}\label{class_m_o_d_e_l_1_1_blood_vessel_a9b99b6231781c73be05f8081a1567f82}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!````~BloodVessel@{$\sim$BloodVessel}}
+\index{````~BloodVessel@{$\sim$BloodVessel}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$BloodVessel()}{~BloodVessel()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}}
+
+
+
+Destroy the Blood Vessel object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}\label{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!setup\_dofs@{setup\_dofs}}
+\index{setup\_dofs@{setup\_dofs}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setup\_dofs()}{setup\_dofs()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})}
+
+
+
+Set up the degrees of freedom (DOF) of the block. 
+
+Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}{global\+\_\+var\+\_\+ids}} and \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}{global\+\_\+eqn\+\_\+ids}} of the element based on the number of equations and the number of internal variables of the element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dofhandler} & Degree-\/of-\/freedom handler to register variables and equations at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}\label{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of the element in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_a3909586564df17501073663785e74880}\label{class_m_o_d_e_l_1_1_blood_vessel_a3909586564df17501073663785e74880}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of the element in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}\label{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!update\_solution@{update\_solution}}
+\index{update\_solution@{update\_solution}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_solution()}{update\_solution()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::update\+\_\+solution (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{y }\end{DoxyParamCaption})}
+
+
+
+Update the solution-\/dependent contributions of the element in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em y} & Current solution \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_ac6192a5011157b55641c0f32e0d9fca2}\label{class_m_o_d_e_l_1_1_blood_vessel_ac6192a5011157b55641c0f32e0d9fca2}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!update\_solution@{update\_solution}}
+\index{update\_solution@{update\_solution}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_solution()}{update\_solution()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::update\+\_\+solution (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{y }\end{DoxyParamCaption})}
+
+
+
+Update the solution-\/dependent contributions of the element in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em y} & Current solution \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_a3e6d973f217880e6cce55a84ffd3f658}\label{class_m_o_d_e_l_1_1_blood_vessel_a3e6d973f217880e6cce55a84ffd3f658}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!num\_triplets@{num\_triplets}}
+\index{num\_triplets@{num\_triplets}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{num\_triplets}{num\_triplets}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::num\+\_\+triplets}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}F"{}}, 10\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}E"{}}, 2\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}D"{}}, 2\},}
+\DoxyCodeLine{        \}}
+
+\end{DoxyCode}
+
+
+Number of triplets of element. 
+
+Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{bloodvessel_8hpp}{bloodvessel.\+hpp}}\end{DoxyCompactItemize}

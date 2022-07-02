@@ -5,15 +5,7 @@
 \_form#2=8x11:$\dot{y}$
 \_form#3=11x10:$N$
 \_form#4=8x6:$\alpha$
-\_form#5=326x16:\[
-[P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1, \dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}]
-\]
-\_form#6=18x13:$P_{in} $
-\_form#7=19x13:$Q_{in} $
-\_form#8=23x13:$P_{out} $
-\_form#9=24x13:$Q_{out} $
-\_form#10=10x10:$V $
-\_form#11=266x96:\[
+\_form#5=266x96:\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -25,6 +17,14 @@ node[ground]{$P_C$};
 \draw [-latex] (5.2,0) -- (6,0) node[right] {$Q_{out}$};
 \end{circuitikz}
 \]
+\_form#6=326x16:\[
+[P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1, \dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}]
+\]
+\_form#7=18x13:$P_{in} $
+\_form#8=19x13:$Q_{in} $
+\_form#9=23x13:$P_{out} $
+\_form#10=24x13:$Q_{out} $
+\_form#11=10x10:$V $
 \_form#12=184x28:\[
 P_{in}^{e}-P_{out}^{e}-R Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
 \]

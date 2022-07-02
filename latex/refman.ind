@@ -22,9 +22,9 @@
     \subitem {MODEL::Node}, \hyperpage{59}
   \item {$\sim$RCRBlockWithDistalPressure}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$}, 
-		\hyperpage{68}
+		\hyperpage{69}
   \item {$\sim$SparseSystem}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{72}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{73}
   \item {$\sim$State}
     \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{76}
   \item {$\sim$TimeDependentParameter}
@@ -35,9 +35,9 @@
   \item {ALGEBRA}, \hyperpage{15}
   \item {algebra/densesystem.hpp}, \hyperpage{81, 82}
   \item {algebra/integrator.hpp}, \hyperpage{83, 84}
-  \item {algebra/namespace.hpp}, \hyperpage{119}
-  \item {algebra/sparsesystem.hpp}, \hyperpage{86}
-  \item {algebra/state.hpp}, \hyperpage{88, 89}
+  \item {algebra/namespace.hpp}, \hyperpage{128}
+  \item {algebra/sparsesystem.hpp}, \hyperpage{86}, \hyperpage{88}
+  \item {algebra/state.hpp}, \hyperpage{89, 90}
   \item {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{35}
     \subitem {$\sim$DenseSystem}, \hyperpage{37}
     \subitem {C}, \hyperpage{38}
@@ -57,30 +57,30 @@
     \subitem {Integrator}, \hyperpage{48}
     \subitem {step}, \hyperpage{48}
   \item {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{71}
-    \subitem {$\sim$SparseSystem}, \hyperpage{72}
-    \subitem {C}, \hyperpage{73}
+    \subitem {$\sim$SparseSystem}, \hyperpage{73}
+    \subitem {C}, \hyperpage{74}
     \subitem {D}, \hyperpage{74}
     \subitem {dy}, \hyperpage{74}
     \subitem {E}, \hyperpage{74}
-    \subitem {F}, \hyperpage{74}
-    \subitem {jacobian}, \hyperpage{74}
-    \subitem {reserve}, \hyperpage{72}
-    \subitem {residual}, \hyperpage{74}
+    \subitem {F}, \hyperpage{75}
+    \subitem {jacobian}, \hyperpage{75}
+    \subitem {reserve}, \hyperpage{73}
+    \subitem {residual}, \hyperpage{75}
     \subitem {solve}, \hyperpage{73}
     \subitem {SparseSystem}, \hyperpage{72}
     \subitem {update\_jacobian}, \hyperpage{73}
-    \subitem {update\_residual}, \hyperpage{73}
+    \subitem {update\_residual}, \hyperpage{74}
   \item {ALGEBRA::State$<$ T $>$}, \hyperpage{75}
     \subitem {$\sim$State}, \hyperpage{76}
-    \subitem {State}, \hyperpage{76}
+    \subitem {State}, \hyperpage{76, 77}
     \subitem {y}, \hyperpage{77}
-    \subitem {ydot}, \hyperpage{77}
-    \subitem {Zero}, \hyperpage{76}
+    \subitem {ydot}, \hyperpage{78}
+    \subitem {Zero}, \hyperpage{77}
 
   \indexspace
 
   \item {Block}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{20, 21}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{21}
   \item {blocks}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{57}
   \item {BloodVessel}
@@ -90,7 +90,7 @@
 
   \item {C}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{38}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{73}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{74}
     \subitem {MODEL::BloodVessel$<$ T $>$::Parameters}, \hyperpage{62}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}, 
 		\hyperpage{65}
@@ -107,9 +107,9 @@
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{38}
     \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{74}
   \item {debug.hpp}
-    \subitem {DEBUG\_MSG}, \hyperpage{90}
+    \subitem {DEBUG\_MSG}, \hyperpage{92}
   \item {DEBUG\_MSG}
-    \subitem {debug.hpp}, \hyperpage{90}
+    \subitem {debug.hpp}, \hyperpage{92}
   \item {DenseSystem}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{36}
   \item {DOFHandler}
@@ -130,7 +130,7 @@
 
   \item {F}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{39}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{74}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{75}
   \item {flow\_dof}
     \subitem {MODEL::Node}, \hyperpage{60}
   \item {FlowReference}
@@ -157,23 +157,23 @@
 
   \item {HELPERS}, \hyperpage{15}
     \subitem {startswith}, \hyperpage{16}
-  \item {helpers/debug.hpp}, \hyperpage{90}
-  \item {helpers/namespace.hpp}, \hyperpage{119, 120}
-  \item {helpers/startswith.hpp}, \hyperpage{91}
+  \item {helpers/debug.hpp}, \hyperpage{91, 92}
+  \item {helpers/namespace.hpp}, \hyperpage{128, 129}
+  \item {helpers/startswith.hpp}, \hyperpage{93, 94}
 
   \indexspace
 
   \item {inlet\_nodes}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{25}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{26}
   \item {Integrator}
     \subitem {ALGEBRA::Integrator$<$ T, S $>$}, \hyperpage{48}
   \item {IO}, \hyperpage{16}
     \subitem {write\_csv}, \hyperpage{17}
     \subitem {write\_json}, \hyperpage{17}
-  \item {io/configreader.hpp}, \hyperpage{91, 92}
-  \item {io/csvwriter.hpp}, \hyperpage{96, 97}
-  \item {io/jsonwriter.hpp}, \hyperpage{98, 99}
-  \item {io/namespace.hpp}, \hyperpage{120}
+  \item {io/configreader.hpp}, \hyperpage{94, 95}
+  \item {io/csvwriter.hpp}, \hyperpage{99, 100}
+  \item {io/jsonwriter.hpp}, \hyperpage{101, 102}
+  \item {io/namespace.hpp}, \hyperpage{129}
   \item {IO::ConfigReader$<$ T $>$}, \hyperpage{31}
     \subitem {$\sim$ConfigReader}, \hyperpage{34}
     \subitem {cardiac\_cycle\_period}, \hyperpage{35}
@@ -186,7 +186,7 @@
 
   \item {jacobian}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{39}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{74}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{75}
   \item {Junction}
     \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{52}
 
@@ -197,35 +197,37 @@
 
   \indexspace
 
-  \item {main.hpp}, \hyperpage{100}
+  \item {main.hpp}, \hyperpage{103}
   \item {MODEL}, \hyperpage{18}
   \item {Model}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{55}
-  \item {model/block.hpp}, \hyperpage{100, 101}
-  \item {model/bloodvessel.hpp}, \hyperpage{104, 105}
-  \item {model/dofhandler.hpp}, \hyperpage{108}
-  \item {model/flowreference.hpp}, \hyperpage{109, 110}
-  \item {model/junction.hpp}, \hyperpage{112, 113}
-  \item {model/model.hpp}, \hyperpage{115, 116}
-  \item {model/namespace.hpp}, \hyperpage{121}
-  \item {model/node.hpp}, \hyperpage{121, 122}
-  \item {model/rcrblockwithdistalpressure.hpp}, \hyperpage{123}
-  \item {model/timedependentparameter.hpp}, \hyperpage{126, 127}
+  \item {model/block.hpp}, \hyperpage{105, 106}
+  \item {model/bloodvessel.hpp}, \hyperpage{110, 111}
+  \item {model/dofhandler.hpp}, \hyperpage{114, 115}
+  \item {model/flowreference.hpp}, \hyperpage{116}, \hyperpage{118}
+  \item {model/junction.hpp}, \hyperpage{120, 121}
+  \item {model/model.hpp}, \hyperpage{124, 125}
+  \item {model/namespace.hpp}, \hyperpage{129, 130}
+  \item {model/node.hpp}, \hyperpage{130, 131}
+  \item {model/rcrblockwithdistalpressure.hpp}, \hyperpage{132}, 
+		\hyperpage{134}
+  \item {model/timedependentparameter.hpp}, \hyperpage{136}, 
+		\hyperpage{138}
   \item {MODEL::Block$<$ T $>$}, \hyperpage{19}
     \subitem {$\sim$Block}, \hyperpage{21}
-    \subitem {Block}, \hyperpage{20, 21}
+    \subitem {Block}, \hyperpage{21}
     \subitem {global\_eqn\_ids}, \hyperpage{25}
     \subitem {global\_var\_ids}, \hyperpage{25}
-    \subitem {inlet\_nodes}, \hyperpage{25}
+    \subitem {inlet\_nodes}, \hyperpage{26}
     \subitem {name}, \hyperpage{26}
     \subitem {num\_triplets}, \hyperpage{26}
     \subitem {outlet\_nodes}, \hyperpage{26}
     \subitem {setup\_dofs}, \hyperpage{21}
-    \subitem {setup\_dofs\_}, \hyperpage{21}
+    \subitem {setup\_dofs\_}, \hyperpage{22}
     \subitem {to\_steady}, \hyperpage{22}
-    \subitem {update\_constant}, \hyperpage{22}
+    \subitem {update\_constant}, \hyperpage{22}, \hyperpage{24}
     \subitem {update\_solution}, \hyperpage{24}
-    \subitem {update\_time}, \hyperpage{24, 25}
+    \subitem {update\_time}, \hyperpage{25}
   \item {MODEL::Block$<$ T $>$::Parameters}, \hyperpage{60}
   \item {MODEL::BloodVessel$<$ T $>$}, \hyperpage{27}
     \subitem {$\sim$BloodVessel}, \hyperpage{29}
@@ -282,26 +284,26 @@
     \subitem {pres\_dof}, \hyperpage{60}
     \subitem {setup\_dofs}, \hyperpage{59}
   \item {MODEL::RCRBlockWithDistalPressure$<$ T $>$}, \hyperpage{66}
-    \subitem {$\sim$RCRBlockWithDistalPressure}, \hyperpage{68}
-    \subitem {num\_triplets}, \hyperpage{70}
+    \subitem {$\sim$RCRBlockWithDistalPressure}, \hyperpage{69}
+    \subitem {num\_triplets}, \hyperpage{71}
     \subitem {RCRBlockWithDistalPressure}, \hyperpage{68}
-    \subitem {setup\_dofs}, \hyperpage{68}
+    \subitem {setup\_dofs}, \hyperpage{69}
     \subitem {to\_steady}, \hyperpage{69}
-    \subitem {update\_constant}, \hyperpage{69}
-    \subitem {update\_time}, \hyperpage{69, 70}
+    \subitem {update\_constant}, \hyperpage{69, 70}
+    \subitem {update\_time}, \hyperpage{70}
   \item {MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}, 
 		\hyperpage{64}
     \subitem {C}, \hyperpage{65}
     \subitem {Pd}, \hyperpage{65}
-    \subitem {Rd}, \hyperpage{65}
-    \subitem {Rp}, \hyperpage{65}
-  \item {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{77}
+    \subitem {Rd}, \hyperpage{66}
+    \subitem {Rp}, \hyperpage{66}
+  \item {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{78}
     \subitem {$\sim$TimeDependentParameter}, \hyperpage{79}
     \subitem {cycle\_period}, \hyperpage{80}
     \subitem {get}, \hyperpage{79}
-    \subitem {TimeDependentParameter}, \hyperpage{78}
+    \subitem {TimeDependentParameter}, \hyperpage{79}
     \subitem {times}, \hyperpage{80}
-    \subitem {to\_steady}, \hyperpage{79}
+    \subitem {to\_steady}, \hyperpage{80}
     \subitem {values}, \hyperpage{80}
 
   \indexspace
@@ -319,7 +321,7 @@
     \subitem {MODEL::FlowReference$<$ T $>$}, \hyperpage{47}
     \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{53}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$}, 
-		\hyperpage{70}
+		\hyperpage{71}
 
   \indexspace
 
@@ -349,20 +351,20 @@
 		\hyperpage{68}
   \item {Rd}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}, 
-		\hyperpage{65}
+		\hyperpage{66}
   \item {register\_equation}
     \subitem {MODEL::DOFHandler}, \hyperpage{40}
   \item {register\_variable}
     \subitem {MODEL::DOFHandler}, \hyperpage{41}
   \item {reserve}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{37}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{72}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{73}
   \item {residual}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{39}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{74}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{75}
   \item {Rp}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}, 
-		\hyperpage{65}
+		\hyperpage{66}
 
   \indexspace
 
@@ -373,9 +375,9 @@
     \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{52}
     \subitem {MODEL::Node}, \hyperpage{59}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$}, 
-		\hyperpage{68}
+		\hyperpage{69}
   \item {setup\_dofs\_}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{21}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{22}
   \item {size}
     \subitem {MODEL::DOFHandler}, \hyperpage{41}
   \item {solve}
@@ -386,7 +388,7 @@
   \item {startswith}
     \subitem {HELPERS}, \hyperpage{16}
   \item {State}
-    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{76}
+    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{76, 77}
   \item {stenosis\_coefficient}
     \subitem {MODEL::BloodVessel$<$ T $>$::Parameters}, \hyperpage{62}
   \item {step}
@@ -395,7 +397,7 @@
   \indexspace
 
   \item {TimeDependentParameter}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{78}
+    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{79}
   \item {times}
     \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{80}
   \item {to\_steady}
@@ -404,35 +406,35 @@
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{55}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$}, 
 		\hyperpage{69}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{79}
+    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{80}
 
   \indexspace
 
   \item {update\_constant}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{22}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{22}, \hyperpage{24}
     \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{30}
     \subitem {MODEL::FlowReference$<$ T $>$}, \hyperpage{44}, 
 		\hyperpage{46}
     \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{53}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{55, 56}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$}, 
-		\hyperpage{69}
+		\hyperpage{69, 70}
   \item {update\_jacobian}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{37}
     \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{73}
   \item {update\_residual}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{38}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{73}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{74}
   \item {update\_solution}
     \subitem {MODEL::Block$<$ T $>$}, \hyperpage{24}
     \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{30, 31}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{56}
   \item {update\_time}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{24, 25}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{25}
     \subitem {MODEL::FlowReference$<$ T $>$}, \hyperpage{46}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{57}
     \subitem {MODEL::RCRBlockWithDistalPressure$<$ T $>$}, 
-		\hyperpage{69, 70}
+		\hyperpage{70}
 
   \indexspace
 
@@ -453,11 +455,11 @@
   \item {y}
     \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{77}
   \item {ydot}
-    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{77}
+    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{78}
 
   \indexspace
 
   \item {Zero}
-    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{76}
+    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{77}
 
 \end{theindex}

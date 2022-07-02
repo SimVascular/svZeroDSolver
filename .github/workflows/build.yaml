@@ -3,13 +3,12 @@ name: Build
 on: [push, pull_request]
 jobs:
   ubuntu:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
         run: |
-          apt-get update && apt-get upgrade
-          sudo apt install libeigen3-dev libsimdjson-dev libjsoncpp-dev build-essential
+          sudo apt install libeigen3-dev libsimdjson-dev libjsoncpp-dev
       - name: Build svZeroDSolver
         run: |
           mkdir Debug

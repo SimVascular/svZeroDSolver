@@ -1,7 +1,8 @@
 <map id="model/bloodvessel.hpp" name="model/bloodvessel.hpp">
-<area shape="rect" id="node1" title="MODEL::BloodVessel source file." alt="" coords="164,5,319,32"/>
-<area shape="rect" id="node2" href="$model_8hpp.html" title="MODEL::Model source file." alt="" coords="181,80,301,107"/>
+<area shape="rect" id="node1" title="MODEL::BloodVessel source file." alt="" coords="237,5,392,32"/>
+<area shape="rect" id="node2" href="$model_8hpp.html" title="MODEL::Model source file." alt="" coords="255,80,375,107"/>
 <area shape="rect" id="node3" href="$integrator_8hpp.html" title="ALGEBRA::Integrator source file." alt="" coords="5,155,152,181"/>
 <area shape="rect" id="node4" href="$configreader_8hpp.html" title="IO::ConfigReader source file." alt="" coords="176,155,307,181"/>
 <area shape="rect" id="node5" href="$csvwriter_8hpp.html" title="IO::write_csv source file." alt="" coords="331,155,445,181"/>
+<area shape="rect" id="node6" href="$jsonwriter_8hpp.html" title="IO::write_json source file." alt="" coords="469,155,585,181"/>
 </map>

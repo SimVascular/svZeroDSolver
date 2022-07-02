@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['zero_0',['Zero',['../class_a_l_g_e_b_r_a_1_1_state.html#a8b9bcbe746b0d2b87f7c0381ddf471a3',1,'ALGEBRA::State']]]
+  ['write_5fcsv_0',['write_csv',['../namespace_i_o.html#ab7ebfa63dd94e3d4fa9230f1cc33e464',1,'IO']]],
+  ['write_5fjson_1',['write_json',['../namespace_i_o.html#a5627320a9783c2ba55b82553bb145f19',1,'IO']]]
 ];

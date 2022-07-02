@@ -2,17 +2,20 @@
 \label{jsonwriter_8hpp}\index{io/jsonwriter.hpp@{io/jsonwriter.hpp}}
 
 
-\mbox{\hyperlink{namespace_i_o_a54befa804c1df62b13250b15c8131707}{IO\+::write\+\_\+json}} source file.  
+\mbox{\hyperlink{namespace_i_o_a5627320a9783c2ba55b82553bb145f19}{IO\+::write\+\_\+json}} source file.  
 
 
-{\ttfamily \#include $<$jsoncpp$>$}\newline
+{\ttfamily \#include $<$jsoncpp/json/json.\+h$>$}\newline
 {\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include \char`\"{}../algebra/state.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../model/model.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../helpers/startswith.\+hpp\char`\"{}}\newline
 Include dependency graph for jsonwriter.\+hpp\+:
 \nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=192pt]{jsonwriter_8hpp__incl}
+\includegraphics[width=350pt]{jsonwriter_8hpp__incl}
 \end{center}
 \end{figure}
 \doxysubsection*{Namespaces}
@@ -23,10 +26,10 @@ namespace \mbox{\hyperlink{namespace_i_o}{IO}}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_a54befa804c1df62b13250b15c8131707}{IO\+::write\+\_\+json}} (std\+::string path, std\+::vector$<$ T $>$ times, std\+::vector$<$ State$<$ T $>$ $>$ states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ model)
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_a5627320a9783c2ba55b82553bb145f19}{IO\+::write\+\_\+json}} (std\+::string path, std\+::vector$<$ T $>$ times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ model)
 \begin{DoxyCompactList}\small\item\em Write the solution to a json file. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-\mbox{\hyperlink{namespace_i_o_a54befa804c1df62b13250b15c8131707}{IO\+::write\+\_\+json}} source file. 
+\mbox{\hyperlink{namespace_i_o_a5627320a9783c2ba55b82553bb145f19}{IO\+::write\+\_\+json}} source file. 
 

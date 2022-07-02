@@ -16,6 +16,14 @@ jobs:
           cd Debug
           cmake -DCMAKE_BUILD_TYPE=Debug ..
           cmake --build .
+      - name: Install test dependencies
+        run: |
+          conda create -n zerod python=3.9
+          conda run -n zerod pip install pytest pytest-cov pytest-mock
+          conda run -n zerod pip install -e .
+      - name: Test the build
+        run: |
+          conda run -n zerod pytest tests/test_integration_cpp.py
   macos:
     runs-on: macOS-latest
     steps:
@@ -29,5 +37,13 @@ jobs:
           cd Debug
           cmake -DCMAKE_BUILD_TYPE=Debug ..
           cmake --build .
+      - name: Install test dependencies
+        run: |
+          conda create -n zerod python=3.9
+          conda run -n zerod pip install pytest pytest-cov pytest-mock
+          conda run -n zerod pip install -e .
+      - name: Test the build
+        run: |
+          conda run -n zerod pytest tests/test_integration_cpp.py
     
       

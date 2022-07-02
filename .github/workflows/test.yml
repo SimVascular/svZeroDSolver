@@ -16,7 +16,7 @@ jobs:
           conda run -n zerod pip install -e .
       - name: Run pytest
         run: |
-          conda run -n zerod pytest
+          conda run -n zerod pytest tests/test_integration.py
       - name: Save coverage report
         uses: actions/upload-artifact@v3
         with:

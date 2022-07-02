@@ -10,7 +10,7 @@ jobs:
       - name: Build doxygen documentation
         uses: mattnotmitt/doxygen-action@v1.9.4
         with:
-          doxyfile-path: 'docs/cpp/Doxygen'
+          doxyfile-path: 'docs/cpp/Doxyfile'
           enable-latex: true
       # - name: Install sphinx dependencies
       #   run: |

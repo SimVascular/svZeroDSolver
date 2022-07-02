@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['about_20svzerodsolver_229',['About svZeroDSolver',['../index.html',1,'']]]
+  ['about_20svzerodsolver_0',['About svZeroDSolver',['../index.html',1,'']]]
 ];

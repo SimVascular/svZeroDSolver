@@ -5,7 +5,15 @@ project(svZeroDSolver)
 
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
 find_package(simdjson REQUIRED)
-find_package(jsoncpp REQUIRED)
+
+add_library(jsoncpp SHARED IMPORTED)
+
+if(APPLE)
+    set_target_properties(jsoncpp PROPERTIES
+        IMPORTED_LOCATION "/usr/local/lib/libjsoncpp.dylib"
+        INTERFACE_INCLUDE_DIRECTORIES "/usr/local/include/json"
+    )
+endif()
 
 add_executable(svzerodsolver src/main.cpp)
 

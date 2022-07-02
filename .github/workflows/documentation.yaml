@@ -9,13 +9,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install doxygen dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y graphviz
-          wget https://www.doxygen.nl/files/doxygen-1.9.2.linux.bin.tar.gz
-          tar -xvzf doxygen-1.9.2.linux.bin.tar.gz
-          ln -s doxygen-1.9.2/bin/doxygen doxygen
+          sudo apt-get install -y graphviz doxygen
       - name: Build doxygen documentation
-        run: ./doxygen docs/cpp/Doxyfile
+        run: doxygen docs/cpp/Doxyfile
       - name: Install sphinx dependencies
         run: |
           conda install pip

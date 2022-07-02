@@ -1,5 +1,5 @@
 
-name: documentation
+name: Documentation
 on: [push, pull_request]
 permissions:
   contents: write

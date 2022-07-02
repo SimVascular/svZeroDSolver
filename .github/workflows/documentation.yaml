@@ -5,13 +5,14 @@ permissions:
   contents: write
 jobs:
   documentation:
-    runs-on: macos-12
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Install doxygen dependencies
-        run: |
-          brew install doxygen
-          brew install --cask mactex
+      - name: Build doxygen documentation
+        uses: mattnotmitt/doxygen-action@v1.3.1
+        with:
+          working-directory: '.'
+          doxyfile-path: 'docs/cpp/Doxyfile'
       - name: Build doxygen documentation
         run: doxygen docs/cpp/Doxyfile
       # - name: Install sphinx dependencies

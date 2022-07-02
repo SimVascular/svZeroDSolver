@@ -5,8 +5,11 @@
 #ifndef SVZERODSOLVER_IO_JSONWRITER_HPP_
 #define SVZERODSOLVER_IO_JSONWRITER_HPP_
 
-#include <jsoncpp>
+#include <jsoncpp/json/json.h>
 #include <vector>
+#include "../algebra/state.hpp"
+#include "../model/model.hpp"
+#include "../helpers/startswith.hpp"
 
 namespace IO
 {
@@ -21,7 +24,7 @@ namespace IO
      * @param model The underlying model
      */
     template <typename T>
-    void write_json(std::string path, std::vector<T> times, std::vector<State<T>> states, MODEL::Model<T> model)
+    void write_json(std::string path, std::vector<T> times, std::vector<ALGEBRA::State<T>> states, MODEL::Model<T> model)
     {
         Json::Value output;
         Json::Value json_times(Json::arrayValue);
@@ -44,7 +47,7 @@ namespace IO
             unsigned int inpres_dof;
             unsigned int outpres_dof;
             std::visit([&](auto &&block)
-                       { if (startsWith(block.name, "V")){name = block.name; inflow_dof = block.inlet_nodes[0]->flow_dof; outflow_dof = block.outlet_nodes[0]->flow_dof; inpres_dof = block.inlet_nodes[0]->pres_dof; outpres_dof = block.outlet_nodes[0]->pres_dof;} },
+                       { if (HELPERS::startswith(block.name, "V")){name = block.name; inflow_dof = block.inlet_nodes[0]->flow_dof; outflow_dof = block.outlet_nodes[0]->flow_dof; inpres_dof = block.inlet_nodes[0]->pres_dof; outpres_dof = block.outlet_nodes[0]->pres_dof;} },
                        elem);
 
             if (name != "NoName")

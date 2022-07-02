@@ -5,7 +5,9 @@
 #include "model/model.hpp"
 #include "io/configreader.hpp"
 #include "io/csvwriter.hpp"
+#include "io/jsonwriter.hpp"
 #include "helpers/debug.hpp"
+#include "helpers/endswith.hpp"
 
 typedef double T;
 
@@ -89,7 +91,18 @@ int main(int argc, char *argv[])
     }
     DEBUG_MSG("Simulation completed");
 
-    IO::write_csv<T>(output_file, times, states, model, mean);
+    if (HELPERS::endswith(output_file, ".csv"))
+    {
+        IO::write_csv<T>(output_file, times, states, model, mean);
+    }
+    else if (HELPERS::endswith(output_file, ".json"))
+    {
+        IO::write_json<T>(output_file, times, states, model);
+    }
+    else
+    {
+        throw std::runtime_error("Unsupported outfile file format.");
+    }
 
     return 0;
 }

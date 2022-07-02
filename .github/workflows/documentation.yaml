@@ -13,8 +13,7 @@ jobs:
         with:
           working-directory: '.'
           doxyfile-path: 'docs/cpp/Doxyfile'
-      - name: Build doxygen documentation
-        run: doxygen docs/cpp/Doxyfile
+          enable-latex: true
       # - name: Install sphinx dependencies
       #   run: |
       #     conda install pip

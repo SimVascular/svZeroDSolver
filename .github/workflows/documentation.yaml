@@ -17,12 +17,12 @@ jobs:
           enable-latex: true
       - name: Install sphinx dependencies
         run: |
-          conda install pip
-          pip install .[dev]
+          conda create -n zerod python=3.9
+          conda run -n zerod pip install -e .[dev]
       - name: Build sphinx documentation
         run: |
-          sphinx-apidoc -o docs/python/source svzerodsolver
-          sphinx-build -b html -d docs/python/build/doctrees  docs/python/source docs/html/python
+          conda run -n zerod sphinx-apidoc -o docs/python/source svzerodsolver
+          conda run -n zerod sphinx-build -b html -d docs/python/build/doctrees  docs/python/source docs/html/python
       - name: Save documentation
         uses: actions/upload-artifact@v3
         with:

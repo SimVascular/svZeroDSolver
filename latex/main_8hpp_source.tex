@@ -84,14 +84,14 @@
 \DoxyCodeLine{81 \textcolor{comment}{ * All classes make use of templates to allow easy exchange of scalar}}
 \DoxyCodeLine{82 \textcolor{comment}{ * types like `double` or `float` or to switch between sparse and dense systems.}}
 \DoxyCodeLine{83 \textcolor{comment}{ *}}
-\DoxyCodeLine{84 \textcolor{comment}{ * \# Building svZeroDSolver}}
+\DoxyCodeLine{84 \textcolor{comment}{ * \# Build svZeroDSolver}}
 \DoxyCodeLine{85 \textcolor{comment}{ *}}
 \DoxyCodeLine{86 \textcolor{comment}{ * svZeroDSolver can be build easily via CMake. Make sure you have the following}}
 \DoxyCodeLine{87 \textcolor{comment}{ * dependencies installed before you start:}}
 \DoxyCodeLine{88 \textcolor{comment}{ *}}
 \DoxyCodeLine{89 \textcolor{comment}{ * \#\# Install dependencies on macOS}}
 \DoxyCodeLine{90 \textcolor{comment}{ *}}
-\DoxyCodeLine{91 \textcolor{comment}{ * \(\backslash\)code\{.bash\}}}
+\DoxyCodeLine{91 \textcolor{comment}{ * \(\backslash\)code}}
 \DoxyCodeLine{92 \textcolor{comment}{ * brew install eigen       \# Linear algebra library}}
 \DoxyCodeLine{93 \textcolor{comment}{ * brew install jsoncpp     \# Standard json library}}
 \DoxyCodeLine{94 \textcolor{comment}{ * brew install simdjson    \# Fast json input parser}}
@@ -99,29 +99,42 @@
 \DoxyCodeLine{96 \textcolor{comment}{ *}}
 \DoxyCodeLine{97 \textcolor{comment}{ * \#\# Install dependencies on Linux}}
 \DoxyCodeLine{98 \textcolor{comment}{ *}}
-\DoxyCodeLine{99 \textcolor{comment}{ * ```bash}}
+\DoxyCodeLine{99 \textcolor{comment}{ * \(\backslash\)code}}
 \DoxyCodeLine{100 \textcolor{comment}{ * sudo apt install libeigen3-\/dev       \# Linear algebra library}}
 \DoxyCodeLine{101 \textcolor{comment}{ * sudo apt-\/get install libjsoncpp-\/dev  \# Standard json library}}
 \DoxyCodeLine{102 \textcolor{comment}{ * sudo apt install libsimdjson-\/dev     \# Fast json input parser}}
-\DoxyCodeLine{103 \textcolor{comment}{ * ```}}
+\DoxyCodeLine{103 \textcolor{comment}{ * \(\backslash\)endcode}}
 \DoxyCodeLine{104 \textcolor{comment}{ *}}
 \DoxyCodeLine{105 \textcolor{comment}{ * \#\# Build in debug mode}}
 \DoxyCodeLine{106 \textcolor{comment}{ *}}
-\DoxyCodeLine{107 \textcolor{comment}{ * ```bash}}
+\DoxyCodeLine{107 \textcolor{comment}{ * \(\backslash\)code}}
 \DoxyCodeLine{108 \textcolor{comment}{ * mkdir Debug}}
 \DoxyCodeLine{109 \textcolor{comment}{ * cd Debug}}
 \DoxyCodeLine{110 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Debug ..}}
 \DoxyCodeLine{111 \textcolor{comment}{ * cmake -\/-\/build .}}
-\DoxyCodeLine{112 \textcolor{comment}{ * ```}}
+\DoxyCodeLine{112 \textcolor{comment}{ * \(\backslash\)endcode}}
 \DoxyCodeLine{113 \textcolor{comment}{ *}}
 \DoxyCodeLine{114 \textcolor{comment}{ * \#\# Build in release mode}}
-\DoxyCodeLine{115 \textcolor{comment}{ * ```bash}}
+\DoxyCodeLine{115 \textcolor{comment}{ * \(\backslash\)code}}
 \DoxyCodeLine{116 \textcolor{comment}{ * mkdir Release}}
 \DoxyCodeLine{117 \textcolor{comment}{ * cd Release}}
 \DoxyCodeLine{118 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release ..}}
 \DoxyCodeLine{119 \textcolor{comment}{ * cmake -\/-\/build .}}
-\DoxyCodeLine{120 \textcolor{comment}{ * ```}}
+\DoxyCodeLine{120 \textcolor{comment}{ * \(\backslash\)endcode}}
 \DoxyCodeLine{121 \textcolor{comment}{ *}}
-\DoxyCodeLine{122 \textcolor{comment}{ */}}
+\DoxyCodeLine{122 \textcolor{comment}{ * \# Run svZeroDSolver}}
+\DoxyCodeLine{123 \textcolor{comment}{ *}}
+\DoxyCodeLine{124 \textcolor{comment}{ * After building svZeroDSolver, the build folder contains an executable}}
+\DoxyCodeLine{125 \textcolor{comment}{ * called `svzerodsolver`. Run it with one of:}}
+\DoxyCodeLine{126 \textcolor{comment}{ *}}
+\DoxyCodeLine{127 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{128 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.json  \# For json output file format}}
+\DoxyCodeLine{129 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.csv   \# For csv output file format (faster)}}
+\DoxyCodeLine{130 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{131 \textcolor{comment}{ *}}
+\DoxyCodeLine{132 \textcolor{comment}{ * `path/to/config.json` and `path/to/output` should be replaced by the correct}}
+\DoxyCodeLine{133 \textcolor{comment}{ * paths to the input and output file, respectively.}}
+\DoxyCodeLine{134 \textcolor{comment}{ *}}
+\DoxyCodeLine{135 \textcolor{comment}{ */}}
 
 \end{DoxyCode}

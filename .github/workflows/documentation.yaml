@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - name: Install doxygen dependencies
-        run: |
-          sudo apt-get install -y graphviz doxygen doxygen-latex
       - name: Build doxygen documentation
-        run: doxygen docs/cpp/Doxyfile
+        uses: mattnotmitt/doxygen-action@v1.9.4
+        with:
+          doxyfile-path: 'docs/cpp/Doxygen'
+          enable-latex: true
       # - name: Install sphinx dependencies
       #   run: |
       #     conda install pip

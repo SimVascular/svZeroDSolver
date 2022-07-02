@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Alpine Linux) (preloaded format=pdflatex 2022.7.2)  2 JUL 2022 07:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Alpine Linux) (preloaded format=pdflatex 2022.7.2)  2 JUL 2022 07:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1576,11 +1576,11 @@ pp__incl.pdf
 pdfTeX warning: pdflatex (file ./integrator_8hpp__incl.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >
-<integrator_8hpp__incl.pdf, id=3318, 1129.21875pt x 437.635pt>
+<integrator_8hpp__incl.pdf, id=3318, 973.6375pt x 437.635pt>
 File: integrator_8hpp__incl.pdf Graphic file (type pdf)
 <use integrator_8hpp__incl.pdf>
 Package pdftex.def Info: integrator_8hpp__incl.pdf  used on input line 18.
-(pdftex.def)             Requested size: 350.0pt x 135.6454pt.
+(pdftex.def)             Requested size: 350.0pt x 157.31476pt.
  [83]) (./integrator_8hpp_source.tex [84] [85]) (./sparsesystem_8hpp.tex <./spa
 rsesystem_8hpp__incl.pdf
 
@@ -1655,22 +1655,22 @@ Package pdftex.def Info: startswith_8hpp__dep__incl.pdf  used on input line 22.
 (pdftex.def)             Requested size: 192.0pt x 155.99922pt.
 ) (./startswith_8hpp_source.tex [93]) (./configreader_8hpp.tex <./configreader_
 8hpp__incl.pdf>
-<configreader_8hpp__incl.pdf, id=3597, 1101.11375pt x 437.635pt>
+<configreader_8hpp__incl.pdf, id=3597, 964.60374pt x 437.635pt>
 File: configreader_8hpp__incl.pdf Graphic file (type pdf)
 <use configreader_8hpp__incl.pdf>
 Package pdftex.def Info: configreader_8hpp__incl.pdf  used on input line 19.
-(pdftex.def)             Requested size: 350.0pt x 139.10449pt.
+(pdftex.def)             Requested size: 350.0pt x 158.79054pt.
 ) (./configreader_8hpp_source.tex [94] [95] [96] [97] [98])
 (./csvwriter_8hpp.tex <./csvwriter_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./csvwriter_8hpp__incl.pdf): PDF inclusion: mult
 iple pdfs with page group included in a single page
 >
-<csvwriter_8hpp__incl.pdf, id=3680, 1086.0575pt x 437.635pt>
+<csvwriter_8hpp__incl.pdf, id=3680, 1236.62pt x 437.635pt>
 File: csvwriter_8hpp__incl.pdf Graphic file (type pdf)
 <use csvwriter_8hpp__incl.pdf>
 Package pdftex.def Info: csvwriter_8hpp__incl.pdf  used on input line 19.
-(pdftex.def)             Requested size: 350.0pt x 141.03436pt.
+(pdftex.def)             Requested size: 350.0pt x 123.86583pt.
  [99]) (./csvwriter_8hpp_source.tex [100]) (./jsonwriter_8hpp.tex <./jsonwriter
 _8hpp__incl.pdf
 
@@ -1800,11 +1800,11 @@ el_8hpp__incl.pdf
 pdfTeX warning: pdflatex (file ./model_8hpp__incl.pdf): PDF inclusion: multiple
  pdfs with page group included in a single page
 >
-<model_8hpp__incl.pdf, id=4264, 918.43124pt x 381.425pt>
+<model_8hpp__incl.pdf, id=4264, 967.615pt x 381.425pt>
 File: model_8hpp__incl.pdf Graphic file (type pdf)
 <use model_8hpp__incl.pdf>
-Package pdftex.def Info: model_8hpp__incl.pdf  used on input line 23.
-(pdftex.def)             Requested size: 350.0pt x 145.35622pt.
+Package pdftex.def Info: model_8hpp__incl.pdf  used on input line 24.
+(pdftex.def)             Requested size: 350.0pt x 137.96474pt.
  <./model_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./model_8hpp__dep__incl.pdf): PDF inclusion: mul
@@ -1813,11 +1813,11 @@ tiple pdfs with page group included in a single page
 <model_8hpp__dep__incl.pdf, id=4279, 411.5375pt x 156.585pt>
 File: model_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use model_8hpp__dep__incl.pdf>
-Package pdftex.def Info: model_8hpp__dep__incl.pdf  used on input line 31.
+Package pdftex.def Info: model_8hpp__dep__incl.pdf  used on input line 32.
 (pdftex.def)             Requested size: 350.0pt x 133.17194pt.
  [124]) (./model_8hpp_source.tex [125] [126]) (./algebra_2namespace_8hpp.tex
 [127]) (./algebra_2namespace_8hpp_source.tex) (./helpers_2namespace_8hpp.tex)
-(./helpers_2namespace_8hpp_source.tex) (./io_2namespace_8hpp.tex [128])
+(./helpers_2namespace_8hpp_source.tex [128]) (./io_2namespace_8hpp.tex)
 (./io_2namespace_8hpp_source.tex) (./model_2namespace_8hpp.tex)
 (./model_2namespace_8hpp_source.tex [129]) (./node_8hpp.tex <./node_8hpp__incl.
 pdf
@@ -1914,7 +1914,7 @@ You may provide a definition with
 Here is how much of TeX's memory you used:
  45131 strings out of 478238
  1026707 string characters out of 5850422
- 1579026 words of memory out of 5000000
+ 1580026 words of memory out of 5000000
  61645 multiletter control sequences out of 15000+600000
  536269 words of font info for 117 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191

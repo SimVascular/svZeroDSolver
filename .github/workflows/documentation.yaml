@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build doxygen documentation
+        continue-on-error: true
         uses: mattnotmitt/doxygen-action@v1.9.4
         with:
           working-directory: '.'
@@ -24,12 +25,10 @@ jobs:
       #     sphinx-build -b html -d docs/python/build/doctrees  docs/python/source docs/html/python
       - name: Save documentation
         uses: actions/upload-artifact@v3
-        if: always()
         with:
           name: documentation
           path: ./docs/html
       - name: Deploy documentation
-        if: always()
         # if: github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v3
         with:

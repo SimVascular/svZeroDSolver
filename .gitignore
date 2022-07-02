@@ -1,30 +1,29 @@
-# python stuff
+# Python
 __pycache__
 *.pyc
 
-# build folder
-build/
-
-# mac os file system
+# macOS file system
 .DS_Store
 
-# patches
+# Patches
 *.diff
 /dist
 *.egg-info
 
-# testing
+# Testing
 .coverage*
 /htmlcov
 *.prof
 *.vscode
 public
 
-doc/cov
-doc/build
-doc/source/*.rst
-!doc/source/index.rst
-!doc/source/modules.rst
+# Documentation
+docs/html
+docs/python/source/*.rst
+!docs/python/source/index.rst
+!docs/python/source/modules.rst
+docs/python/build
 
-Release
-Debug
+# C++ build directories
+Release/
+Debug/

@@ -4,4 +4,10 @@ project(svZeroDSolver)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-add_executable(svzerodsolver src/main.cpp src/external/simdjson/singleheader/simdjson.cpp src/external/eigen/Eigen/Dense src/external/eigen/Eigen/Sparse src/external/eigen/Eigen/SparseLU)
+find_package(Eigen3 3.3 REQUIRED NO_MODULE)
+find_package(simdjson CONFIG REQUIRED)
+
+add_executable(svzerodsolver src/main.cpp)
+
+target_link_libraries(svzerodsolver Eigen3::Eigen)
+target_link_libraries(svzerodsolver simdjson::simdjson)

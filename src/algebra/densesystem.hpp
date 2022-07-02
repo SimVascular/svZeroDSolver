@@ -1,30 +1,80 @@
+/**
+ * @file densesystem.hpp
+ * @brief ALGEBRA::DenseSystem source file
+ */
 #ifndef SVZERODSOLVER_ALGREBRA_DENSESYSTEM_HPP_
 #define SVZERODSOLVER_ALGREBRA_DENSESYSTEM_HPP_
 
-#include "../external/eigen/Eigen/Dense"
+#include <Eigen/Dense>
 
 namespace ALGEBRA
 {
 
+    /**
+     * @brief Dense system
+     *
+     * This class contains all attributes and methods to create, modify, and
+     * solve dense systems.
+     *
+     * @tparam T Scalar type (e.g. `float`, `double`)
+     */
     template <typename T>
     class DenseSystem
     {
     public:
+        /**
+         * @brief Construct a new Dense System object
+         *
+         */
         DenseSystem();
+
+        /**
+         * @brief Construct a new Dense System object
+         *
+         * @param n Size of the system
+         */
         DenseSystem(unsigned int n);
+
+        /**
+         * @brief Destroy the Dense System object
+         *
+         */
         ~DenseSystem();
-        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> F;
-        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> E;
-        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> D;
-        Eigen::Matrix<T, Eigen::Dynamic, 1> C;
 
-        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> jacobian;
-        Eigen::Matrix<T, Eigen::Dynamic, 1> residual;
-        Eigen::Matrix<T, Eigen::Dynamic, 1> dy;
+        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> F; ///< System matrix F
+        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> E; ///< System matrix E
+        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> D; ///< System matrix D
+        Eigen::Matrix<T, Eigen::Dynamic, 1> C;              ///< System matrix C
 
+        Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> jacobian; ///< Jacobian of the system
+        Eigen::Matrix<T, Eigen::Dynamic, 1> residual;              ///< Residual of the system
+        Eigen::Matrix<T, Eigen::Dynamic, 1> dy;                    ///< Solution increment of the system
+
+        /**
+         * @brief Reserve memory in system matrices based on number of triplets
+         *
+         * @param num_triplets Number of triplets that will be assembled to each matrix.
+         */
         void reserve(std::map<std::string, int> num_triplets);
+
+        /**
+         * @brief Update the residual of the system
+         *
+         * @param y Vector of current solution quantities
+         * @param ydot Derivate of y
+         */
         void update_residual(Eigen::Matrix<T, Eigen::Dynamic, 1> &y, Eigen::Matrix<T, Eigen::Dynamic, 1> &ydot);
+
+        /**
+         * @brief Update the jacobian of the system
+         *
+         * @param e_coeff Coefficent for system matrix \ref E
+         */
         void update_jacobian(T e_coeff);
+
+        /**
+         * @brief Solve the system
+         */
         void solve();
     };
 

@@ -8,7 +8,7 @@
 /**
  * @brief MODEL namespace
  *
- * The model namespace contains all classes that are used to build a 0D blood
+ * The MODEL namespace contains all classes that are used to build a 0D blood
  * flow model, including the components (elements) of the model themselves and
  * a few auxilliary classes.
  *

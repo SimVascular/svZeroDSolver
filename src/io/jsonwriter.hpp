@@ -1,11 +1,26 @@
+/**
+ * @file jsonwriter.hpp
+ * @brief IO::write_json source file
+ */
 #ifndef SVZERODSOLVER_IO_JSONWRITER_HPP_
 #define SVZERODSOLVER_IO_JSONWRITER_HPP_
 
-template <typename T>
+#include <jsoncpp>
+#include <vector>
 
 namespace IO
 {
 
+    /**
+     * @brief Write the solution to a json file
+     *
+     * @tparam T Scalar type (e.g. `float`, `double`)
+     * @param path Path to the output json file
+     * @param times Sequence of time steps corresponding to the solutions
+     * @param states Sequence of states corresponding to the time steps
+     * @param model The underlying model
+     */
+    template <typename T>
     void write_json(std::string path, std::vector<T> times, std::vector<State<T>> states, MODEL::Model<T> model)
     {
         Json::Value output;

@@ -64,6 +64,16 @@ namespace MODEL
     {
     public:
         /**
+         * @brief Parameters of the element.
+         *
+         * Struct containing all constant and/or time-dependent parameters of the
+         * element.
+         */
+        struct Parameters : public Block<T>::Parameters
+        {
+        };
+
+        /**
          * @brief Construct a new Junction object
          *
          * @param name Name

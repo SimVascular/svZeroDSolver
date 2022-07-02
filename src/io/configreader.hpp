@@ -1,3 +1,7 @@
+/**
+ * @file configreader.hpp
+ * @brief IO::ConfigReader source file
+ */
 #ifndef SVZERODSOLVER_IO_CONFIGREADER_HPP_
 #define SVZERODSOLVER_IO_CONFIGREADER_HPP_
 
@@ -7,22 +11,59 @@
 #include "../model/model.hpp"
 #include "../model/junction.hpp"
 #include "../helpers/debug.hpp"
-#include "../external/simdjson/singleheader/simdjson.h"
+#include "simdjson.h"
 
 namespace IO
 {
 
+    /**
+     * @brief svZeroDSolver configuration reader.
+     *
+     * @tparam T Scalar type (e.g. `float`, `double`)
+     */
     template <typename T>
     class ConfigReader
     {
     public:
+        /**
+         * @brief Construct a new Config Reader object
+         */
         ConfigReader();
+
+        /**
+         * @brief Construct a new Config Reader object
+         *
+         * @param filename Name of the configuration file
+         */
         ConfigReader(std::string filename);
+
+        /**
+         * @brief Destroy the Config Reader object
+         */
         ~ConfigReader();
+
+        /**
+         * @brief Create model from configuration file
+         *
+         * @return Model
+         */
         MODEL::Model<T> get_model();
+
+        /**
+         * @brief Get number of time steps based on configuration
+         *
+         * @return Number of time steps
+         */
         int get_num_time_steps();
+
+        /**
+         * @brief Get the time step size based on configuration
+         *
+         * @return Time step size
+         */
         T get_time_step_size();
-        T cardiac_cycle_period = 1.0;
+
+        T cardiac_cycle_period = 1.0; ///< Cardiac cycle period
 
     private:
         bool model_created = false;

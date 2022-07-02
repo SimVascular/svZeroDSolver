@@ -8,7 +8,7 @@
 #include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
-#include "parameter.hpp"
+#include "timedependentparameter.hpp"
 
 namespace MODEL
 {

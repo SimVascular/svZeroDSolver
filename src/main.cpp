@@ -54,15 +54,15 @@ int main(int argc, char *argv[])
         auto model_steady = config.get_model();
         model_steady.to_steady();
         model_steady.update_constant(system);
-        ALGEBRA::Integrator<T, S> integrator_steady(system, time_step_size_steady, 0.1);
+        ALGEBRA::Integrator<T, S> integrator_steady(system, time_step_size_steady, 0.1, 1e-5, max_iter);
         for (size_t i = 0; i < 31; i++)
         {
-            state = integrator_steady.step(state, time_step_size_steady * T(i), model_steady, max_iter);
+            state = integrator_steady.step(state, time_step_size_steady * T(i), model_steady);
         }
     }
     model.update_constant(system);
 
-    ALGEBRA::Integrator<T, S> integrator(system, time_step_size, 0.1);
+    ALGEBRA::Integrator<T, S> integrator(system, time_step_size, 0.1, 1e-5, max_iter);
 
     std::vector<ALGEBRA::State<T>> states;
     std::vector<T> times;
@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     int interval_counter = 0;
     for (size_t i = 0; i < num_time_steps; i++)
     {
-        state = integrator.step(state, time, model, max_iter);
+        state = integrator.step(state, time, model);
         interval_counter += 1;
         time = time_step_size * T(i + 1);
         if (interval_counter == output_interval)

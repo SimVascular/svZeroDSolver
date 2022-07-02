@@ -92,7 +92,7 @@ namespace MODEL
          * Struct containing all constant and/or time-dependent parameters of the
          * element.
          */
-        struct Pa struct Parameters : public Block<T>::Parameters
+        struct Parameters : public Block<T>::Parameters
         {
             T R;                    ///< Poiseuille resistance
             T C;                    ///< Capacitance
@@ -167,9 +167,10 @@ namespace MODEL
             {"F", 10},
             {"E", 2},
             {"D", 2},
-        }
+        };
 
-        private : Parameters params;
+    private:
+        Parameters params;
     };
 
     template <typename T>

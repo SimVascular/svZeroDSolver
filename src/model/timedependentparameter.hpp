@@ -95,25 +95,27 @@ namespace MODEL
     template <typename T>
     T TimeDependentParameter<T>::get(T time)
     {
+        // Return the first and only value if parameter is constant
         if (size == 1)
         {
             return values[0];
         }
 
+        // Determine the time within a cycle (necessary to extrapolate)
         T rtime = fmod(time, cycle_period);
 
+        // Determine the lower and upper element for interpolation
         auto i = lower_bound(times.begin(), times.end(), rtime);
         unsigned int k = i - times.begin();
-
         if (i == times.end())
             --i;
         else if (*i == rtime)
         {
             return values[k];
         }
-
         unsigned int l = k ? k - 1 : 1;
 
+        // Perform linear interpolation
         return values[l] + ((values[k] - values[l]) / (times[k] - times[l])) * (rtime - times[l]);
     }
 

@@ -7,6 +7,7 @@
 
 #include <map>
 #include <list>
+#include <variant>
 
 #include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"

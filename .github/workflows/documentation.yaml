@@ -11,6 +11,7 @@ jobs:
       - name: Install doxygen dependencies
         run: |
           brew install doxygen
+          brew install --cask mactex
       - name: Build doxygen documentation
         run: doxygen docs/cpp/Doxyfile
       # - name: Install sphinx dependencies

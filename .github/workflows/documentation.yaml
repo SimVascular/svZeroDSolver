@@ -18,7 +18,7 @@ jobs:
       - name: Install sphinx dependencies
         run: |
           conda install pip
-          pip install -e .[dev]
+          pip install .[dev]
       - name: Build sphinx documentation
         run: |
           sphinx-apidoc -o docs/python/source svzerodsolver

@@ -1,3 +1,7 @@
+/**
+ * @file node.hpp
+ * @brief MODEL::Node source file
+ */
 #ifndef SVZERODSOLVER_MODEL_NODE_HPP_
 #define SVZERODSOLVER_MODEL_NODE_HPP_
 
@@ -8,15 +12,41 @@
 namespace MODEL
 {
 
+    /**
+     * @brief Node
+     *
+     * Nodes connect two blocks with each other. Each node corresponds to a
+     * flow and pressure value of the system.
+     */
     class Node
     {
     public:
+        /**
+         * @brief Construct a new Node object
+         *
+         * @param name Name
+         */
         Node(std::string name);
-        ~Node();
-        std::string name;
-        unsigned int flow_dof;
-        unsigned int pres_dof;
 
+        /**
+         * @brief Destroy the Node object
+         *
+         */
+        ~Node();
+
+        std::string name;      ///< Name
+        unsigned int flow_dof; ///< Global flow degree-of-freedom of the node
+        unsigned int pres_dof; ///< Global pressure degree-of-freedom of the node
+
+        /**
+         * @brief Set up the degrees of freedom (DOF) of the block
+         *
+         * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
+         * number of equations and the number of internal variables of the
+         * element.
+         *
+         * @param dofhandler Degree-of-freedom handler to register variables and equations at
+         */
         void setup_dofs(DOFHandler &dofhandler);
     };
 

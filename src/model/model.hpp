@@ -1,3 +1,7 @@
+/**
+ * @file model.hpp
+ * @brief MODEL::Model source file
+ */
 #ifndef SVZERODSOLVER_MODEL_MODEL_HPP_
 #define SVZERODSOLVER_MODEL_MODEL_HPP_
 
@@ -17,28 +21,94 @@
 namespace MODEL
 {
 
+    /**
+     * @brief Model of 0D elements
+     *
+     * This class represents a full 0D model. It contains attributes and
+     * methods to store and modify 0D elements.
+     *
+     * @tparam T Scalar type (e.g. `float`, `double`)
+     */
     template <typename T>
     class Model
     {
     public:
+        /**
+         * @brief Construct a new Model object
+         *
+         */
         Model();
+
+        /**
+         * @brief Destroy the Model object
+         *
+         */
         ~Model();
 
-        std::map<std::string, std::variant<Junction<T>, BloodVessel<T>, FlowReference<T>, RCRBlockWithDistalPressure<T>>> blocks;
-        DOFHandler dofhandler;
-        std::list<Node> nodes;
+        std::map<std::string, std::variant<Junction<T>, BloodVessel<T>, FlowReference<T>, RCRBlockWithDistalPressure<T>>> blocks; ///< Elements of the model
+        DOFHandler dofhandler;                                                                                                    ///< Degree-of-freedom handler of the model
+        std::list<Node> nodes;                                                                                                    ///< Nodes of the model
 
-        // Dense
+        /**
+         * @brief Update the constant contributions of all elements in a dense system
+         *
+         * @param system System to update contributions at
+         */
         void update_constant(ALGEBRA::DenseSystem<T> &system);
+
+        /**
+         * @brief Update the time-dependent contributions of all elements in a dense system
+         *
+         * @param system System to update contributions at
+         * @param time Current time
+         */
         void update_time(ALGEBRA::DenseSystem<T> &system, T time);
+
+        /**
+         * @brief Update the solution-dependent contributions of all elements in a dense system
+         *
+         * @param system System to update contributions at
+         * @param y Current solution
+         */
         void update_solution(ALGEBRA::DenseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
-        // Sparse
+        /**
+         * @brief Update the constant contributions of all elements in a sparse system
+         *
+         * @param system System to update contributions at
+         */
         void update_constant(ALGEBRA::SparseSystem<T> &system);
+
+        /**
+         * @brief Update the time-dependent contributions of all elements in a sparse system
+         *
+         * @param system System to update contributions at
+         * @param time Current time
+         */
         void update_time(ALGEBRA::SparseSystem<T> &system, T time);
+
+        /**
+         * @brief Update the solution-dependent contributions of all elements in a sparse system
+         *
+         * @param system System to update contributions at
+         * @param y Current solution
+         */
         void update_solution(ALGEBRA::SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
+        /**
+         * @brief Convert the blocks to a steady behavior
+         *
+         */
         void to_steady();
+
+        /**
+         * @brief Get number of triplets all elements
+         *
+         * Get the number of triplets the elements contribute to the global system
+         * (relevant for sparse memory reservation)
+         *
+         * @return Number of triplets that are used in each system matrix
+         */
         std::map<std::string, int> get_num_triplets();
     };
 

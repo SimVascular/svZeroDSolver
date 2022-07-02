@@ -1,3 +1,7 @@
+/**
+ * @file timedependentparameter.hpp
+ * @brief MODEL::TimeDependentParameter source file
+ */
 #ifndef SVZERODSOLVER_MODEL_PARAMETER_HPP_
 #define SVZERODSOLVER_MODEL_PARAMETER_HPP_
 
@@ -10,25 +14,54 @@
 namespace MODEL
 {
 
+    /**
+     * @brief Time-dependent parameter.
+     *
+     * This class handles time-dependent parameter that need to be interpolated
+     * and periodically applied.
+     *
+     * @tparam T Scalar type (e.g. `float`, `double`)
+     */
     template <typename T>
     class TimeDependentParameter
     {
     public:
+        /**
+         * @brief Construct a new Time Dependent Parameter object
+         *
+         */
         TimeDependentParameter();
+
+        /**
+         * @brief Construct a new Time Dependent Parameter object
+         *
+         * @param times Time steps corresponding to the values
+         * @param values Values correspondong to the time steps
+         */
         TimeDependentParameter(std::vector<T> times, std::vector<T> values);
+
+        /**
+         * @brief Destroy the Time Dependent Parameter object
+         *
+         */
         ~TimeDependentParameter();
 
-        std::vector<T> times;
-        std::vector<T> values;
-        T cycle_period;
+        std::vector<T> times;  ///< Time steps
+        std::vector<T> values; ///< Values
+        T cycle_period;        ///< Cardiac cycle period corresponding to the time sequence
         int size;
 
+        /**
+         * @brief Get the parameter value at the specified time.
+         *
+         * @param time Current time
+         * @return Value at the time
+         */
         T get(T time);
 
-        void setup_dofs(DOFHandler &dofhandler);
         bool isconstant;
 
-        void to_steady();
+        void to_steady(); ///< Bool value indicating if the parameter is constant
     };
 
     template <typename T>

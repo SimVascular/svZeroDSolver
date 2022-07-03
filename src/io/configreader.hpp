@@ -63,14 +63,68 @@ namespace IO
          */
         T get_time_step_size();
 
+        /**
+         * @brief Get an integer simulation parameter
+         *
+         * @param key The key of the simulation parameter
+         * @return Value of the simulation parameter
+         */
+        int get_int_simulation_parameter(std::string key);
+
+        /**
+         * @brief Get an integer simulation parameter with default value
+         *
+         * @param key The key of the simulation parameter
+         * @param def Default value if key not in simulation parameters
+         * @return Value of the simulation parameter
+         */
+        int get_int_simulation_parameter(std::string key, int def);
+
+        /**
+         * @brief Get a scalar simulation parameter
+         *
+         * @param key The key of the simulation parameter
+         * @return Value of the simulation parameter
+         */
+        T get_scalar_simulation_parameter(std::string key);
+
+        /**
+         * @brief Get a scalar simulation parameter with default value
+         *
+         * @param key The key of the simulation parameter
+         * @param def Default value if key not in simulation parameters
+         * @return Value of the simulation parameter
+         */
+        T get_scalar_simulation_parameter(std::string key, T def);
+
+        /**
+         * @brief Get a bool simulation parameter
+         *
+         * @param key The key of the simulation parameter
+         * @return Value of the simulation parameter
+         */
+        bool get_bool_simulation_parameter(std::string key);
+
+        /**
+         * @brief Get a bool simulation parameter with default value
+         *
+         * @param key The key of the simulation parameter
+         * @param def Default value if key not in simulation parameters
+         * @return Value of the simulation parameter
+         */
+        bool get_bool_simulation_parameter(std::string key, bool def);
+
         T cardiac_cycle_period = 1.0; ///< Cardiac cycle period
 
     private:
         bool model_created = false;
         simdjson::dom::parser parser;
         simdjson::dom::element config;
+        simdjson::dom::element sim_params;
         static bool has_key(simdjson::dom::element &ele, std::string key);
         static T get_default(simdjson::dom::element &ele, std::string key, T def);
+        static int get_default(simdjson::dom::element &ele, std::string key, int def);
+        static bool get_default(simdjson::dom::element &ele, std::string key, bool def);
         static simdjson::dom::element get_default(simdjson::dom::element &ele, std::string key, simdjson::dom::element def);
         static MODEL::TimeDependentParameter<T> get_time_dependent_parameter(simdjson::dom::element &json_times, simdjson::dom::element &json_values);
     };
@@ -79,6 +133,7 @@ namespace IO
     ConfigReader<T>::ConfigReader(std::string filename)
     {
         config = parser.load(filename);
+        sim_params = config["simulation_parameters"];
     }
 
     template <typename T>
@@ -105,6 +160,28 @@ namespace IO
     T ConfigReader<T>::get_default(simdjson::dom::element &ele, std::string key, T def)
     {
         T value = def;
+        if (has_key(ele, key))
+        {
+            value = ele[key];
+        }
+        return value;
+    }
+
+    template <typename T>
+    int ConfigReader<T>::get_default(simdjson::dom::element &ele, std::string key, int def)
+    {
+        int value = def;
+        if (has_key(ele, key))
+        {
+            value = ele[key].get_int64();
+        }
+        return value;
+    }
+
+    template <typename T>
+    bool ConfigReader<T>::get_default(simdjson::dom::element &ele, std::string key, bool def)
+    {
+        bool value = def;
         if (has_key(ele, key))
         {
             value = ele[key];
@@ -334,6 +411,43 @@ namespace IO
         T time_step_size = cardiac_cycle_period / (num_pts_per_cycle - 1);
         return time_step_size;
     }
+
+    template <typename T>
+    int ConfigReader<T>::get_int_simulation_parameter(std::string key)
+    {
+        return int(config["simulation_parameters"][key]);
+    }
+
+    template <typename T>
+    int ConfigReader<T>::get_int_simulation_parameter(std::string key, int def)
+    {
+        return get_default(sim_params, key, def);
+    }
+
+    template <typename T>
+    T ConfigReader<T>::get_scalar_simulation_parameter(std::string key)
+    {
+        return int(config["simulation_parameters"][key]);
+    }
+
+    template <typename T>
+    T ConfigReader<T>::get_scalar_simulation_parameter(std::string key, T def)
+    {
+        return get_default(sim_params, key, def);
+    }
+
+    template <typename T>
+    bool ConfigReader<T>::get_bool_simulation_parameter(std::string key)
+    {
+        return int(config["simulation_parameters"][key]);
+    }
+
+    template <typename T>
+    bool ConfigReader<T>::get_bool_simulation_parameter(std::string key, bool def)
+    {
+        return get_default(sim_params, key, def);
+    }
+
 } // namespace IO
 
 #endif // SVZERODSOLVER_IO_CONFIGREADER_HPP_

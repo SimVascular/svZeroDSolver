@@ -132,4 +132,19 @@
  * `path/to/config.json` and `path/to/output` should be replaced by the correct
  * paths to the input and output file, respectively.
  *
+ * ## Simulation parameters
+ *
+ * The svZeroDSolver can be configured with the following options in the
+ * `simulation_parameters` section of the input file. Parameters without a
+ * default value must be specified.
+ *
+ * Parameter key                           | Description                               | Default value
+ * --------------------------------------- | ----------------------------------------- | -----------
+ * number_of_cardiac_cycles                | Number of cardiac cycles to simulate      | -
+ * number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -
+ * absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
+ * maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$
+ * output_interval                         | The frequence of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
+ * steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
+ * output_mean_only                        | Write only the mean values over every timestep in the output file (only in csv) | false
  */

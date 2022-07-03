@@ -24,18 +24,19 @@ namespace MODEL
      * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
      * \draw (1,0) node[anchor=south]{$P_{in}$}
      * to [R, l=$R$, *-] (3,0)
-     * to [L, l=$L$, *-*] (5,0)
+     * to [R, l=$R_{ste}$, -] (5,0)
+     * to [L, l=$L$, *-*] (7,0)
      * node[anchor=south]{$P_{out}$}
-     * (3,0) to [C, l=$C$, *-] (3,-1.5)
+     * (5,0) to [C, l=$C$, *-] (5,-1.5)
      * node[ground]{$P_C$};
-     * \draw [-latex] (5.2,0) -- (6,0) node[right] {$Q_{out}$};
+     * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
      * \end{circuitikz}
      * \f]
      *
      * ### Governing equations
      *
      * \f[
-     * P_{in}^{e}-P_{out}^{e}-R Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
+     * P_{in}^{e}-P_{out}^{e}-(R+R_{ste}) Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
      * \f]
      *
      * \f[
@@ -43,7 +44,7 @@ namespace MODEL
      * \f]
      *
      * \f[
-     * P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0
+     * P_{i n}^{e}-(R+R_{ste}) Q_{i n}^{e}-P_{c}=0
      * \f]
      *
      * ### Local contributions

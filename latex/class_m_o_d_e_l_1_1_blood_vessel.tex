@@ -60,15 +60,16 @@ Models the mechanical behavior of a bloodvessel with optional stenosis.
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R$, *-] (3,0)
-to [L, l=$L$, *-*] (5,0)
+to [R, l=$R_{ste}$, -] (5,0)
+to [L, l=$L$, *-*] (7,0)
 node[anchor=south]{$P_{out}$}
-(3,0) to [C, l=$C$, *-] (3,-1.5)
+(5,0) to [C, l=$C$, *-] (5,-1.5)
 node[ground]{$P_C$};
-\draw [-latex] (5.2,0) -- (6,0) node[right] {$Q_{out}$};
+\draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md19}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md19}
+\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md20}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md20}
 \[
-P_{in}^{e}-P_{out}^{e}-R Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
+P_{in}^{e}-P_{out}^{e}-(R+R_{ste}) Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
 \]
 
 \[
@@ -76,8 +77,8 @@ Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{c}^{e}}{d t}=0
 \]
 
 \[
-P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0
-\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md20}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md20}
+P_{i n}^{e}-(R+R_{ste}) Q_{i n}^{e}-P_{c}=0
+\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md21}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md21}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{i n}^{e} & Q_{in}^{e} & P_{out}^{e} & Q_{out}^{e} & P_C\end{array}\right]^{T}
 \]

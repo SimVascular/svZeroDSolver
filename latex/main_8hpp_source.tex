@@ -135,6 +135,21 @@
 \DoxyCodeLine{132 \textcolor{comment}{ * `path/to/config.json` and `path/to/output` should be replaced by the correct}}
 \DoxyCodeLine{133 \textcolor{comment}{ * paths to the input and output file, respectively.}}
 \DoxyCodeLine{134 \textcolor{comment}{ *}}
-\DoxyCodeLine{135 \textcolor{comment}{ */}}
+\DoxyCodeLine{135 \textcolor{comment}{ * \#\# Simulation parameters}}
+\DoxyCodeLine{136 \textcolor{comment}{ *}}
+\DoxyCodeLine{137 \textcolor{comment}{ * The svZeroDSolver can be configured with the following options in the}}
+\DoxyCodeLine{138 \textcolor{comment}{ * `simulation\_parameters` section of the input file. Parameters without a}}
+\DoxyCodeLine{139 \textcolor{comment}{ * default value must be specified.}}
+\DoxyCodeLine{140 \textcolor{comment}{ *}}
+\DoxyCodeLine{141 \textcolor{comment}{ * Parameter key                           | Description                               | Default value}}
+\DoxyCodeLine{142 \textcolor{comment}{ * -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{143 \textcolor{comment}{ * number\_of\_cardiac\_cycles                | Number of cardiac cycles to simulate      | -\/}}
+\DoxyCodeLine{144 \textcolor{comment}{ * number\_of\_time\_pts\_per\_cardiac\_cycle    | Number of time steps per cardiac cycle    | -\/}}
+\DoxyCodeLine{145 \textcolor{comment}{ * absolute\_tolerance                      | Absolute tolerance for time integration   | \(\backslash\)f\$10\string^\{-\/8\}\(\backslash\)f\$}}
+\DoxyCodeLine{146 \textcolor{comment}{ * maximum\_nonlinear\_iterations            | Maximum number of nonlinear iterations for time integration | \(\backslash\)f\$30\(\backslash\)f\$}}
+\DoxyCodeLine{147 \textcolor{comment}{ * output\_interval                         | The frequence of writing timesteps to the output (1 means every time step is written to output) | \(\backslash\)f\$1\(\backslash\)f\$}}
+\DoxyCodeLine{148 \textcolor{comment}{ * steady\_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true}}
+\DoxyCodeLine{149 \textcolor{comment}{ * output\_mean\_only                        | Write only the mean values over every timestep in the output file (only in csv) | false}}
+\DoxyCodeLine{150 \textcolor{comment}{ */}}
 
 \end{DoxyCode}

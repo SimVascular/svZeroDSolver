@@ -23,7 +23,19 @@ sv\+Zero\+DSolver configuration reader.
 int \mbox{\hyperlink{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}{get\+\_\+num\+\_\+time\+\_\+steps}} ()
 \begin{DoxyCompactList}\small\item\em Get number of time steps based on configuration. \end{DoxyCompactList}\item 
 T \mbox{\hyperlink{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}{get\+\_\+time\+\_\+step\+\_\+size}} ()
-\begin{DoxyCompactList}\small\item\em Get the time step size based on configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get the time step size based on configuration. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}{get\+\_\+int\+\_\+simulation\+\_\+parameter}} (std\+::string key)
+\begin{DoxyCompactList}\small\item\em Get an integer simulation parameter. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_i_o_1_1_config_reader_a7e28be5d3dc3d36f15a231a70caa0832}{get\+\_\+int\+\_\+simulation\+\_\+parameter}} (std\+::string key, int def)
+\begin{DoxyCompactList}\small\item\em Get an integer simulation parameter with default value. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}{get\+\_\+scalar\+\_\+simulation\+\_\+parameter}} (std\+::string key)
+\begin{DoxyCompactList}\small\item\em Get a scalar simulation parameter. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_i_o_1_1_config_reader_ab9b23fa0fec12cbce562d8b33354df32}{get\+\_\+scalar\+\_\+simulation\+\_\+parameter}} (std\+::string key, T def)
+\begin{DoxyCompactList}\small\item\em Get a scalar simulation parameter with default value. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}{get\+\_\+bool\+\_\+simulation\+\_\+parameter}} (std\+::string key)
+\begin{DoxyCompactList}\small\item\em Get a bool simulation parameter. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader_a259786ae8302cc0fd414317d4695ae40}{get\+\_\+bool\+\_\+simulation\+\_\+parameter}} (std\+::string key, bool def)
+\begin{DoxyCompactList}\small\item\em Get a bool simulation parameter with default value. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -85,6 +97,86 @@ Destroy the Config Reader object.
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}\label{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}}
+\index{get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_bool\_simulation\_parameter()}{get\_bool\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+bool\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})}
+
+
+
+Get a bool simulation parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key of the simulation parameter \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Value of the simulation parameter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a259786ae8302cc0fd414317d4695ae40}\label{class_i_o_1_1_config_reader_a259786ae8302cc0fd414317d4695ae40}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}}
+\index{get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_bool\_simulation\_parameter()}{get\_bool\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+bool\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key,  }\item[{bool}]{def }\end{DoxyParamCaption})}
+
+
+
+Get a bool simulation parameter with default value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key of the simulation parameter \\
+\hline
+{\em def} & Default value if key not in simulation parameters \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Value of the simulation parameter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}\label{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}}
+\index{get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_int\_simulation\_parameter()}{get\_int\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+int\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})}
+
+
+
+Get an integer simulation parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key of the simulation parameter \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Value of the simulation parameter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a7e28be5d3dc3d36f15a231a70caa0832}\label{class_i_o_1_1_config_reader_a7e28be5d3dc3d36f15a231a70caa0832}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}}
+\index{get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_int\_simulation\_parameter()}{get\_int\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+int\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key,  }\item[{int}]{def }\end{DoxyParamCaption})}
+
+
+
+Get an integer simulation parameter with default value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key of the simulation parameter \\
+\hline
+{\em def} & Default value if key not in simulation parameters \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Value of the simulation parameter 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}\label{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}} 
 \index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_model@{get\_model}}
 \index{get\_model@{get\_model}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
@@ -112,6 +204,46 @@ Get number of time steps based on configuration.
 
 \begin{DoxyReturn}{Returns}
 Number of time steps 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}\label{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}}
+\index{get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_scalar\_simulation\_parameter()}{get\_scalar\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+scalar\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})}
+
+
+
+Get a scalar simulation parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key of the simulation parameter \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Value of the simulation parameter 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_ab9b23fa0fec12cbce562d8b33354df32}\label{class_i_o_1_1_config_reader_ab9b23fa0fec12cbce562d8b33354df32}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}}
+\index{get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_scalar\_simulation\_parameter()}{get\_scalar\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+scalar\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key,  }\item[{T}]{def }\end{DoxyParamCaption})}
+
+
+
+Get a scalar simulation parameter with default value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key of the simulation parameter \\
+\hline
+{\em def} & Default value if key not in simulation parameters \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Value of the simulation parameter 
 \end{DoxyReturn}
 \mbox{\Hypertarget{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}\label{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}} 
 \index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_time\_step\_size@{get\_time\_step\_size}}

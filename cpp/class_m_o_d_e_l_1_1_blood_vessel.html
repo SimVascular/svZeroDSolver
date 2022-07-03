@@ -189,37 +189,38 @@ class MODEL::BloodVessel&lt; T &gt;</div><p >Resistor-capacitor-inductor blood v
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R$, *-] (3,0)
-to [L, l=$L$, *-*] (5,0)
+to [R, l=$R_{ste}$, -] (5,0)
+to [L, l=$L$, *-*] (7,0)
 node[anchor=south]{$P_{out}$}
-(3,0) to [C, l=$C$, *-] (3,-1.5)
+(5,0) to [C, l=$C$, *-] (5,-1.5)
 node[ground]{$P_C$};
-\draw [-latex] (5.2,0) -- (6,0) node[right] {$Q_{out}$};
+\draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
 \end{circuitikz}
-\]" src="form_5.png" width="266" height="96"/>
+\]" src="form_15.png" width="336" height="96"/>
 </p>
-<h3><a class="anchor" id="autotoc_md19"></a>
+<h3><a class="anchor" id="autotoc_md20"></a>
 Governing equations</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-P_{in}^{e}-P_{out}^{e}-R Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
-\]" src="form_12.png" width="184" height="28"/>
+P_{in}^{e}-P_{out}^{e}-(R+R_{ste}) Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
+\]" src="form_16.png" width="231" height="28"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{c}^{e}}{d t}=0
-\]" src="form_13.png" width="134" height="28"/>
+\]" src="form_17.png" width="134" height="28"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0
-\]" src="form_14.png" width="114" height="14"/>
+P_{i n}^{e}-(R+R_{ste}) Q_{i n}^{e}-P_{c}=0
+\]" src="form_18.png" width="164" height="14"/>
 </p>
-<h3><a class="anchor" id="autotoc_md20"></a>
+<h3><a class="anchor" id="autotoc_md21"></a>
 Local contributions</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{i n}^{e} &amp; Q_{in}^{e} &amp; P_{out}^{e} &amp; Q_{out}^{e} &amp; P_C\end{array}\right]^{T}
-\]" src="form_15.png" width="214" height="20"/>
+\]" src="form_19.png" width="214" height="20"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
@@ -228,7 +229,7 @@ Local contributions</h3>
 0 &amp; 0 &amp; 0 &amp; 0 &amp; -C \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_16.png" width="164" height="46"/>
+\]" src="form_20.png" width="164" height="46"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
@@ -237,7 +238,7 @@ Local contributions</h3>
 0 &amp; 1 &amp; 0 &amp; -1 &amp; 0 \\
 1 &amp; -R_{ste}-R &amp; 0 &amp; 0 &amp; -1
 \end{array}\right]
-\]" src="form_17.png" width="218" height="46"/>
+\]" src="form_21.png" width="218" height="46"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
@@ -246,9 +247,9 @@ Local contributions</h3>
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
 0 &amp; -R_{ste} &amp; 0 &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_18.png" width="166" height="46"/>
+\]" src="form_22.png" width="166" height="46"/>
 </p>
-<p >with the stenosis resistance <img class="formulaInl" alt="$ R_{ste}=K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| $" src="form_19.png" width="163" height="26"/>. The constant part of the equation is summarized in <a class="el" href="struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.html#a5f0adc244080b0bd404c579d39ec3f2b">Parameters::stenosis_coefficient</a>. <img class="formulaInl" alt="$R$" src="form_20.png" width="10" height="10"/>, <img class="formulaInl" alt="$C$" src="form_21.png" width="10" height="10"/>, and <img class="formulaInl" alt="$L$" src="form_22.png" width="9" height="10"/> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
+<p >with the stenosis resistance <img class="formulaInl" alt="$ R_{ste}=K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| $" src="form_23.png" width="163" height="26"/>. The constant part of the equation is summarized in <a class="el" href="struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.html#a5f0adc244080b0bd404c579d39ec3f2b">Parameters::stenosis_coefficient</a>. <img class="formulaInl" alt="$R$" src="form_24.png" width="10" height="10"/>, <img class="formulaInl" alt="$C$" src="form_25.png" width="10" height="10"/>, and <img class="formulaInl" alt="$L$" src="form_26.png" width="9" height="10"/> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>Scalar type (e.g. <code>float</code>, <code>double</code>) </td></tr>
@@ -529,7 +530,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jul 2 2022 23:08:57 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sun Jul 3 2022 20:50:06 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

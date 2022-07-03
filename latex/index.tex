@@ -80,4 +80,24 @@ After building sv\+Zero\+DSolver, the build folder contains an executable called
 \end{DoxyCode}
 
 
-{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output} should be replaced by the correct paths to the input and output file, respectively. 
+{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md19}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md19}
+The sv\+Zero\+DSolver can be configured with the following options in the {\ttfamily simulation\+\_\+parameters} section of the input file. Parameters without a default value must be specified.
+
+\tabulinesep=1mm
+\begin{longtabu}spread 0pt [c]{*{3}{|X[-1]}|}
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Parameter key   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Default value    }\\\cline{1-3}
+\endfirsthead
+\hline
+\endfoot
+\hline
+\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Parameter key   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Description   }&\PBS\centering \cellcolor{\tableheadbgcolor}\textbf{ Default value    }\\\cline{1-3}
+\endhead
+number\+\_\+of\+\_\+cardiac\+\_\+cycles   &Number of cardiac cycles to simulate   &-\/    \\\cline{1-3}
+number\+\_\+of\+\_\+time\+\_\+pts\+\_\+per\+\_\+cardiac\+\_\+cycle   &Number of time steps per cardiac cycle   &-\/    \\\cline{1-3}
+absolute\+\_\+tolerance   &Absolute tolerance for time integration   &$10^{-8}$    \\\cline{1-3}
+maximum\+\_\+nonlinear\+\_\+iterations   &Maximum number of nonlinear iterations for time integration   &$30$    \\\cline{1-3}
+output\+\_\+interval   &The frequence of writing timesteps to the output (1 means every time step is written to output)   &$1$    \\\cline{1-3}
+steady\+\_\+initial   &Toggle whether to use the steady solution as the initial condition for the simulation   &true    \\\cline{1-3}
+output\+\_\+mean\+\_\+only   &Write only the mean values over every timestep in the output file (only in csv)   &false   \\\cline{1-3}
+\end{longtabu}

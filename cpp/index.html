@@ -79,7 +79,9 @@ $(function() {
 <li class="level2"><a href="#autotoc_md17">Build in release mode</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md18">Run svZeroDSolver</a></li>
+<li class="level1"><a href="#autotoc_md18">Run svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md19">Simulation parameters</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <div class="textblock"><p >The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of vascular networks using zero-dimensional (0D) lumped parameter models.</p>
@@ -154,12 +156,33 @@ Run svZeroDSolver</h1>
 <p >After building svZeroDSolver, the build folder contains an executable called <code>svzerodsolver</code>. Run it with one of:</p>
 <div class="fragment"><div class="line">./svzerodsolver path/to/config.json path/to/output.json  # For json output file format</div>
 <div class="line">./svzerodsolver path/to/config.json path/to/output.csv   # For csv output file format (faster)</div>
-</div><!-- fragment --><p ><code>path/to/config.json</code> and <code>path/to/output</code> should be replaced by the correct paths to the input and output file, respectively. </p>
+</div><!-- fragment --><p ><code>path/to/config.json</code> and <code>path/to/output</code> should be replaced by the correct paths to the input and output file, respectively.</p>
+<h2><a class="anchor" id="autotoc_md19"></a>
+Simulation parameters</h2>
+<p >The svZeroDSolver can be configured with the following options in the <code>simulation_parameters</code> section of the input file. Parameters without a default value must be specified.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Parameter key   </th><th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Default value    </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">number_of_cardiac_cycles   </td><td class="markdownTableBodyNone">Number of cardiac cycles to simulate   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">number_of_time_pts_per_cardiac_cycle   </td><td class="markdownTableBodyNone">Number of time steps per cardiac cycle   </td><td class="markdownTableBodyNone">-    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">absolute_tolerance   </td><td class="markdownTableBodyNone">Absolute tolerance for time integration   </td><td class="markdownTableBodyNone"><img class="formulaInl" alt="$10^{-8}$" src="form_6.png" width="25" height="11"/>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">maximum_nonlinear_iterations   </td><td class="markdownTableBodyNone">Maximum number of nonlinear iterations for time integration   </td><td class="markdownTableBodyNone"><img class="formulaInl" alt="$30$" src="form_7.png" width="14" height="9"/>    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">output_interval   </td><td class="markdownTableBodyNone">The frequence of writing timesteps to the output (1 means every time step is written to output)   </td><td class="markdownTableBodyNone"><img class="formulaInl" alt="$1$" src="form_8.png" width="5" height="9"/>    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">steady_initial   </td><td class="markdownTableBodyNone">Toggle whether to use the steady solution as the initial condition for the simulation   </td><td class="markdownTableBodyNone">true    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">output_mean_only   </td><td class="markdownTableBodyNone">Write only the mean values over every timestep in the output file (only in csv)   </td><td class="markdownTableBodyNone">false   </td></tr>
+</table>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jul 2 2022 23:08:58 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sun Jul 3 2022 20:50:06 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

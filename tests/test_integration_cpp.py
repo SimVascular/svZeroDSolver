@@ -5,7 +5,7 @@ import json
 import numpy as np
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
-cpp_exec = os.path.join(this_file_dir, "..", "Debug", "svzerodsolver")
+cpp_exec = os.path.join(this_file_dir, "..", "Release", "svzerodsolver")
 
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8

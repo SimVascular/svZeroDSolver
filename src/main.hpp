@@ -144,7 +144,7 @@
  * number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -
  * absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
  * maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$
- * output_interval                         | The frequence of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
+ * output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
  * steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
  * output_mean_only                        | Write only the mean values over every timestep in the output file (only in csv) | false
  */

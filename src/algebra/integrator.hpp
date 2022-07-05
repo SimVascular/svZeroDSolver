@@ -5,9 +5,7 @@
 #ifndef SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 #define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 
-#include <map>
 #include <Eigen/Dense>
-#include <iostream>
 
 #include "../model/model.hpp"
 #include "state.hpp"
@@ -53,7 +51,6 @@ namespace ALGEBRA
         int size;
         Eigen::Matrix<T, Eigen::Dynamic, 1> y_af;
         Eigen::Matrix<T, Eigen::Dynamic, 1> ydot_am;
-
         S<T> system;
 
     public:
@@ -66,7 +63,7 @@ namespace ALGEBRA
          * @param atol Absolut tolerance for non-linear iteration termination
          * @param max_iter Maximum number of non-linear iterations
          */
-        Integrator(S<T> &system, T time_step_size, T rho, T atol, int max_iter);
+        Integrator(MODEL::Model<T> &model, T time_step_size, T rho, T atol, int max_iter);
 
         /**
          * @brief Destroy the Integrator object
@@ -86,7 +83,7 @@ namespace ALGEBRA
     };
 
     template <typename T, template <class> class S>
-    Integrator<T, S>::Integrator(S<T> &system, T time_step_size, T rho, T atol, int max_iter)
+    Integrator<T, S>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho, T atol, int max_iter)
     {
         alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
         alpha_f = 1.0 / (1.0 + rho);
@@ -95,7 +92,7 @@ namespace ALGEBRA
         gamma = 0.5 + alpha_m - alpha_f;
         gamma_inv = 1.0 / gamma;
 
-        this->system = system;
+        system = S<T>(model.dofhandler.size());
         this->time_step_size = time_step_size;
         this->atol = atol;
         this->max_iter = max_iter;
@@ -106,6 +103,13 @@ namespace ALGEBRA
         ydot_am = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
 
         y_dot_coeff = alpha_m / (alpha_f * gamma) * time_step_size_inv;
+
+        // Make some memory reservations
+        model.update_constant(system);
+        model.update_time(system, 0.0);
+        Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_y = Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(size);
+        model.update_solution(system, dummy_y);
+        system.reserve(model.get_num_triplets());
     }
 
     template <typename T, template <class> class S>
@@ -114,11 +118,9 @@ namespace ALGEBRA
     }
 
     template <typename T, template <class> class S>
-    State<T> Integrator<T, S>::step(State<T> &state, T time, MODEL::Model<T> &model)
+    State<T> Integrator<T, S>::step(State<T> &old_state, T time, MODEL::Model<T> &model)
     {
-
         // Create new state
-        State<T> old_state = state;
         State<T> new_state;
 
         // Predictor step

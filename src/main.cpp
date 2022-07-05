@@ -1,3 +1,7 @@
+/**
+ * @file main.cpp
+ * @brief Main routine of svZeroDSolver
+ */
 #include "algebra/integrator.hpp"
 #include "algebra/densesystem.hpp"
 #include "algebra/sparsesystem.hpp"
@@ -14,11 +18,33 @@ typedef double T;
 template <typename TT>
 using S = ALGEBRA::SparseSystem<TT>;
 
+/**
+ *
+ * @brief svZeroDSolver main routine
+ *
+ * This is the main routine of the svZeroDSolver. It exectutes the following
+ * steps:
+ *
+ * 1. Read the input file
+ * 2. Create the 0D model
+ * 3. (Optional) Solve for steady initial condition
+ * 4. Run simulation
+ * 5. Write output to file
+ *
+ * @param argc Number of command line arguments
+ * @param argv Command line arguments
+ * @return Return code
+ */
 int main(int argc, char *argv[])
 {
     DEBUG_MSG("Starting svZeroDSolver");
 
     // Get input and output file name
+    if (argc != 3)
+    {
+        std::cout << "Usage: svzerodsolver path/to/config.json path/to/output.json" << std::endl;
+        exit(1);
+    }
     std::string input_file = argv[1];
     std::string output_file = argv[2];
     DEBUG_MSG("Reading configuration from " << input_file);
@@ -46,8 +72,6 @@ int main(int argc, char *argv[])
     // Setup system
     DEBUG_MSG("Starting simulation");
     ALGEBRA::State<T> state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
-    S<T> system(model.dofhandler.size());
-    system.reserve(model.get_num_triplets());
 
     // Create steady initial
     if (steady_initial)
@@ -56,16 +80,15 @@ int main(int argc, char *argv[])
         T time_step_size_steady = config.cardiac_cycle_period / 10.0;
         auto model_steady = config.get_model();
         model_steady.to_steady();
-        model_steady.update_constant(system);
-        ALGEBRA::Integrator<T, S> integrator_steady(system, time_step_size_steady, 0.1, absolute_tolerance, max_nliter);
+        ALGEBRA::Integrator<T, S> integrator_steady(model_steady, time_step_size_steady, 0.1, absolute_tolerance, max_nliter);
         for (size_t i = 0; i < 31; i++)
         {
             state = integrator_steady.step(state, time_step_size_steady * T(i), model_steady);
         }
     }
-    model.update_constant(system);
 
-    ALGEBRA::Integrator<T, S> integrator(system, time_step_size, 0.1, absolute_tolerance, max_nliter);
+    ALGEBRA::Integrator<T, S>
+        integrator(model, time_step_size, 0.1, absolute_tolerance, max_nliter);
 
     std::vector<ALGEBRA::State<T>> states;
     std::vector<T> times;

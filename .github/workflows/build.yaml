@@ -12,9 +12,9 @@ jobs:
           sudo apt install libeigen3-dev libsimdjson-dev libjsoncpp-dev build-essential cmake
       - name: Build svZeroDSolver
         run: |
-          mkdir Debug
-          cd Debug
-          cmake -DCMAKE_BUILD_TYPE=Debug ..
+          mkdir Release
+          cd Release
+          cmake -DCMAKE_BUILD_TYPE=Release ..
           cmake --build .
       - name: Install test dependencies
         run: |
@@ -33,9 +33,9 @@ jobs:
           brew install eigen jsoncpp simdjson
       - name: Build svZeroDSolver
         run: |
-          mkdir Debug
-          cd Debug
-          cmake -DCMAKE_BUILD_TYPE=Debug ..
+          mkdir Release
+          cd Release
+          cmake -DCMAKE_BUILD_TYPE=Release ..
           cmake --build .
       - name: Install test dependencies
         run: |

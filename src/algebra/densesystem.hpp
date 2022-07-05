@@ -121,8 +121,7 @@ namespace ALGEBRA
     template <typename T>
     void DenseSystem<T>::solve()
     {
-        // TODO: Works only if matrix is invertable: Check if True otherwise use colPivHouseholderQr
-        dy = jacobian.partialPivLu().solve(residual);
+        dy = jacobian.colPivHouseholderQr().solve(residual);
     }
 
 } // namespace ALGEBRA

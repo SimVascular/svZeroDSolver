@@ -50,6 +50,8 @@ namespace ALGEBRA
         Eigen::Matrix<T, Eigen::Dynamic, 1> residual; ///< Residual of the system
         Eigen::Matrix<T, Eigen::Dynamic, 1> dy;       ///< Solution increment of the system
 
+        Eigen::SparseLU<Eigen::SparseMatrix<T>> *solver = new Eigen::SparseLU<Eigen::SparseMatrix<T>>();
+
         /**
          * @brief Reserve memory in system matrices based on number of triplets
          *
@@ -107,7 +109,9 @@ namespace ALGEBRA
         F.reserve(num_triplets["F"]);
         E.reserve(num_triplets["E"]);
         D.reserve(num_triplets["D"]);
-        jacobian.reserve(num_triplets["F"] + num_triplets["E"]);
+        jacobian.reserve(num_triplets["F"]); // Just an estimate
+        update_jacobian(1.0);                // Update it once to have sparsity pattern
+        solver->analyzePattern(jacobian);    // Let solver analyze pattern
     }
 
     template <typename T>
@@ -119,15 +123,14 @@ namespace ALGEBRA
     template <typename T>
     void SparseSystem<T>::update_jacobian(T e_coeff)
     {
-        jacobian = (F + D) + (E * e_coeff);
+        jacobian = F + D + E * e_coeff;
     }
 
     template <typename T>
     void SparseSystem<T>::solve()
     {
-        Eigen::SparseLU<Eigen::SparseMatrix<T>> solver;
-        solver.compute(jacobian);
-        dy = solver.solve(residual);
+        solver->factorize(jacobian);
+        dy = solver->solve(residual);
     }
 
 } // namespace ALGEBRA

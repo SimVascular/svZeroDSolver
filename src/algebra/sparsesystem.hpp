@@ -121,6 +121,9 @@ namespace ALGEBRA
         model.update_time(*this, 0.0);
         Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_y = Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
         model.update_solution(*this, dummy_y);
+        F.makeCompressed();
+        E.makeCompressed();
+        D.makeCompressed();
         jacobian.reserve(num_triplets["F"] + num_triplets["E"]); // Just an estimate
         update_jacobian(1.0);                                    // Update it once to have sparsity pattern
         jacobian.makeCompressed();

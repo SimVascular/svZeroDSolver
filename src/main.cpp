@@ -109,7 +109,7 @@ int main(int argc, char *argv[])
         if (interval_counter == output_interval)
         {
             times.push_back(time);
-            states.push_back(state);
+            states.push_back(std::move(state));
             interval_counter = 0;
         }
     }

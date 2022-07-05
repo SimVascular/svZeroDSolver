@@ -92,24 +92,20 @@ namespace ALGEBRA
         gamma = 0.5 + alpha_m - alpha_f;
         gamma_inv = 1.0 / gamma;
 
-        system = S<T>(model.dofhandler.size());
+        size = model.dofhandler.size();
+        system = S<T>(size);
         this->time_step_size = time_step_size;
         this->atol = atol;
         this->max_iter = max_iter;
         time_step_size_inv = 1.0 / time_step_size;
 
-        size = system.F.row(0).size();
         y_af = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
         ydot_am = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
 
         y_dot_coeff = alpha_m / (alpha_f * gamma) * time_step_size_inv;
 
         // Make some memory reservations
-        model.update_constant(system);
-        model.update_time(system, 0.0);
-        Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_y = Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(size);
-        model.update_solution(system, dummy_y);
-        system.reserve(model.get_num_triplets());
+        system.reserve(model);
     }
 
     template <typename T, template <class> class S>
@@ -121,15 +117,17 @@ namespace ALGEBRA
     State<T> Integrator<T, S>::step(State<T> &old_state, T time, MODEL::Model<T> &model)
     {
         // Create new state
-        State<T> new_state;
+        State<T> new_state(size);
 
         // Predictor step
         new_state.y = old_state.y + 0.5 * time_step_size * old_state.ydot;
         new_state.ydot = old_state.ydot * (gamma - 0.5) * gamma_inv;
 
         // Initiator step
-        y_af = old_state.y + alpha_f * (new_state.y - old_state.y);
-        ydot_am = old_state.ydot + alpha_m * (new_state.ydot - old_state.ydot);
+        y_af.setZero();
+        ydot_am.setZero();
+        y_af += old_state.y + alpha_f * (new_state.y - old_state.y);
+        ydot_am += old_state.ydot + alpha_m * (new_state.ydot - old_state.ydot);
 
         // Determine new time
         T new_time = time + alpha_f * time_step_size;

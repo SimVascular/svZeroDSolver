@@ -24,7 +24,7 @@ namespace IO
      * @param model The underlying model
      */
     template <typename T>
-    void write_json(std::string path, std::vector<T> times, std::vector<ALGEBRA::State<T>> states, MODEL::Model<T> model)
+    void write_json(std::string &path, std::vector<T> &times, std::vector<ALGEBRA::State<T>> &states, MODEL::Model<T> &model)
     {
         Json::Value output;
         Json::Value json_times(Json::arrayValue);

@@ -7,6 +7,13 @@
 
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
+#include <iostream>
+
+namespace MODEL
+{
+    template <typename T>
+    class Model;
+}
 
 namespace ALGEBRA
 {
@@ -57,7 +64,7 @@ namespace ALGEBRA
          *
          * @param num_triplets Number of triplets that will be assembled to each matrix.
          */
-        void reserve(std::map<std::string, int> num_triplets);
+        void reserve(MODEL::Model<T> &model);
 
         /**
          * @brief Update the residual of the system
@@ -104,35 +111,48 @@ namespace ALGEBRA
     }
 
     template <typename T>
-    void SparseSystem<T>::reserve(std::map<std::string, int> num_triplets)
+    void SparseSystem<T>::reserve(MODEL::Model<T> &model)
     {
+        auto num_triplets = model.get_num_triplets();
         F.reserve(num_triplets["F"]);
         E.reserve(num_triplets["E"]);
         D.reserve(num_triplets["D"]);
-        jacobian.reserve(num_triplets["F"]); // Just an estimate
-        update_jacobian(1.0);                // Update it once to have sparsity pattern
-        solver->analyzePattern(jacobian);    // Let solver analyze pattern
+        model.update_constant(*this);
+        model.update_time(*this, 0.0);
+        Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_y = Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
+        model.update_solution(*this, dummy_y);
+        jacobian.reserve(num_triplets["F"] + num_triplets["E"]); // Just an estimate
+        update_jacobian(1.0);                                    // Update it once to have sparsity pattern
+        jacobian.makeCompressed();
+        solver->analyzePattern(jacobian); // Let solver analyze pattern
     }
 
     template <typename T>
     void SparseSystem<T>::update_residual(Eigen::Matrix<T, Eigen::Dynamic, 1> &y, Eigen::Matrix<T, Eigen::Dynamic, 1> &ydot)
     {
-        residual = -(E * ydot) - (F * y) - C;
+        residual.setZero();
+        residual -= C;
+        residual.noalias() -= E * ydot;
+        residual.noalias() -= F * y;
     }
 
     template <typename T>
     void SparseSystem<T>::update_jacobian(T e_coeff)
     {
-        jacobian = F + D + E * e_coeff;
+        jacobian.setZero();
+        jacobian += F + D + E * e_coeff;
     }
 
     template <typename T>
     void SparseSystem<T>::solve()
     {
         solver->factorize(jacobian);
-        dy = solver->solve(residual);
+        dy.setZero();
+        dy += solver->solve(residual);
     }
 
 } // namespace ALGEBRA
+
+#include "../model/model.hpp"
 
 #endif // SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_

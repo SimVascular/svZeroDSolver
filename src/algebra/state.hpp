@@ -29,6 +29,13 @@ namespace ALGEBRA
         State();
 
         /**
+         * @brief Construct a new State object
+         *
+         * @param n Size of the state
+         */
+        State(unsigned int n);
+
+        /**
          * @brief Destroy the State object
          *
          */
@@ -56,6 +63,13 @@ namespace ALGEBRA
     }
 
     template <typename T>
+    State<T>::State(unsigned int n)
+    {
+        y = Eigen::Matrix<T, Eigen::Dynamic, 1>(n);
+        ydot = Eigen::Matrix<T, Eigen::Dynamic, 1>(n);
+    }
+
+    template <typename T>
     State<T>::~State()
     {
     }
@@ -70,7 +84,7 @@ namespace ALGEBRA
     template <typename T>
     State<T> State<T>::Zero(unsigned int n)
     {
-        static State<T> state;
+        static State<T> state(n);
         state.y = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
         state.ydot = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
         return state;

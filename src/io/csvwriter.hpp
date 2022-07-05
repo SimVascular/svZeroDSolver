@@ -27,7 +27,7 @@ namespace IO
      * @param mean Toggle whether only the mean over all time steps should be written
      */
     template <typename T>
-    void write_csv(std::string path, std::vector<T> times, std::vector<ALGEBRA::State<T>> states, MODEL::Model<T> model, bool mean = false)
+    void write_csv(std::string &path, std::vector<T> &times, std::vector<ALGEBRA::State<T>> &states, MODEL::Model<T> &model, bool mean = false)
     {
         // Create string stream to buffer output
         std::stringstream out;
@@ -41,15 +41,15 @@ namespace IO
         // Determine number of time steps
         T num_steps = times.size();
 
+        unsigned int inflow_dof;
+        unsigned int outflow_dof;
+        unsigned int inpres_dof;
+        unsigned int outpres_dof;
         for (auto &[key, elem] : model.blocks)
         {
 
             // Extract global solution indices of the block
             std::string name = "NoName";
-            unsigned int inflow_dof;
-            unsigned int outflow_dof;
-            unsigned int inpres_dof;
-            unsigned int outpres_dof;
             std::visit([&](auto &&block)
                        { if (HELPERS::startswith(block.name, "V")){name = block.name; inflow_dof = block.inlet_nodes[0]->flow_dof; outflow_dof = block.outlet_nodes[0]->flow_dof; inpres_dof = block.inlet_nodes[0]->pres_dof; outpres_dof = block.outlet_nodes[0]->pres_dof;} },
                        elem);

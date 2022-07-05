@@ -47,6 +47,8 @@ namespace ALGEBRA
         T time_step_size_inv;
         T y_dot_coeff;
         T atol;
+        T y_init_coeff;
+        T ydot_init_coeff;
         int max_iter;
         int size;
         Eigen::Matrix<T, Eigen::Dynamic, 1> y_af;
@@ -92,6 +94,9 @@ namespace ALGEBRA
         gamma = 0.5 + alpha_m - alpha_f;
         gamma_inv = 1.0 / gamma;
 
+        y_init_coeff = alpha_f * 0.5 * time_step_size;
+        ydot_init_coeff = (1.0 + alpha_m * ((gamma - 0.5) * gamma_inv - 1.0));
+
         size = model.dofhandler.size();
         system = S<T>(size);
         this->time_step_size = time_step_size;
@@ -116,18 +121,12 @@ namespace ALGEBRA
     template <typename T, template <class> class S>
     State<T> Integrator<T, S>::step(State<T> &old_state, T time, MODEL::Model<T> &model)
     {
-        // Create new state
-        State<T> new_state(size);
 
-        // Predictor step
-        new_state.y = old_state.y + 0.5 * time_step_size * old_state.ydot;
-        new_state.ydot = old_state.ydot * (gamma - 0.5) * gamma_inv;
-
-        // Initiator step
+        // Predictor + initiator step
         y_af.setZero();
         ydot_am.setZero();
-        y_af += old_state.y + alpha_f * (new_state.y - old_state.y);
-        ydot_am += old_state.ydot + alpha_m * (new_state.ydot - old_state.ydot);
+        y_af += old_state.y + old_state.ydot * y_init_coeff;
+        ydot_am += old_state.ydot * ydot_init_coeff;
 
         // Determine new time
         T new_time = time + alpha_f * time_step_size;
@@ -165,8 +164,9 @@ namespace ALGEBRA
         }
 
         // Set new state
-        new_state.y = old_state.y + (y_af - old_state.y) * alpha_f_inv;
-        new_state.ydot = old_state.ydot + (ydot_am - old_state.ydot) / alpha_m_inv;
+        State<T> new_state = State<T>::Zero(size);
+        new_state.y += old_state.y + (y_af - old_state.y) * alpha_f_inv;
+        new_state.ydot += old_state.ydot + (ydot_am - old_state.ydot) * alpha_m_inv;
 
         return new_state;
     }

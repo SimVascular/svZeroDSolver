@@ -125,12 +125,11 @@
 \DoxyCodeLine{121     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
 \DoxyCodeLine{122     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a38cb181b01179eee0d6a36b29d22d5d7}{DenseSystem<T>::solve}}()}
 \DoxyCodeLine{123     \{}
-\DoxyCodeLine{124         \textcolor{comment}{// TODO: Works only if matrix is invertable: Check if True otherwise use colPivHouseholderQr}}
-\DoxyCodeLine{125         dy = jacobian.partialPivLu().solve(residual);}
-\DoxyCodeLine{126     \}}
-\DoxyCodeLine{127 }
-\DoxyCodeLine{128 \} \textcolor{comment}{// namespace ALGEBRA}}
-\DoxyCodeLine{129 }
-\DoxyCodeLine{130 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_ALGREBRA\_DENSESYSTEM\_HPP\_}}
+\DoxyCodeLine{124         dy = jacobian.colPivHouseholderQr().solve(residual);}
+\DoxyCodeLine{125     \}}
+\DoxyCodeLine{126 }
+\DoxyCodeLine{127 \} \textcolor{comment}{// namespace ALGEBRA}}
+\DoxyCodeLine{128 }
+\DoxyCodeLine{129 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_ALGREBRA\_DENSESYSTEM\_HPP\_}}
 
 \end{DoxyCode}

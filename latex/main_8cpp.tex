@@ -1,0 +1,78 @@
+\hypertarget{main_8cpp}{}\doxysection{main.\+cpp File Reference}
+\label{main_8cpp}\index{main.cpp@{main.cpp}}
+
+
+Main routine of sv\+Zero\+DSolver.  
+
+
+{\ttfamily \#include \char`\"{}algebra/integrator.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}algebra/densesystem.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}algebra/sparsesystem.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}algebra/state.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}model/model.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}io/configreader.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}io/csvwriter.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}io/jsonwriter.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}helpers/debug.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}helpers/endswith.\+hpp\char`\"{}}\newline
+Include dependency graph for main.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{main_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{main_8cpp_a634f2e2245ac87de466e2810dee4f841}\label{main_8cpp_a634f2e2245ac87de466e2810dee4f841}} 
+typedef double {\bfseries T}
+\item 
+\mbox{\Hypertarget{main_8cpp_a4611385a098e11d52988841ad6dfd313}\label{main_8cpp_a4611385a098e11d52988841ad6dfd313}} 
+{\footnotesize template$<$typename TT $>$ }\\using {\bfseries S} = \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ TT $>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{main_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em sv\+Zero\+DSolver main routine \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Main routine of sv\+Zero\+DSolver. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{main_8cpp_a0ddf1224851353fc92bfbff6f499fa97}\label{main_8cpp_a0ddf1224851353fc92bfbff6f499fa97}} 
+\index{main.cpp@{main.cpp}!main@{main}}
+\index{main@{main}!main.cpp@{main.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+sv\+Zero\+DSolver main routine 
+
+This is the main routine of the sv\+Zero\+DSolver. It exectutes the following steps\+:
+
+
+\begin{DoxyEnumerate}
+\item Read the input file
+\item Create the 0D model
+\item (Optional) Solve for steady initial condition
+\item Run simulation
+\item Write output to file
+\end{DoxyEnumerate}
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & Number of command line arguments \\
+\hline
+{\em argv} & Command line arguments \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Return code 
+\end{DoxyReturn}

@@ -8,7 +8,7 @@ var searchData=
   ['sparsesystem_2ehpp_5',['sparsesystem.hpp',['../sparsesystem_8hpp.html',1,'']]],
   ['startswith_6',['startswith',['../namespace_h_e_l_p_e_r_s.html#aa60c2dfbfc096834b6cd243f84b9c47b',1,'HELPERS']]],
   ['startswith_2ehpp_7',['startswith.hpp',['../startswith_8hpp.html',1,'']]],
-  ['state_8',['State',['../class_a_l_g_e_b_r_a_1_1_state.html',1,'ALGEBRA::State&lt; T &gt;'],['../class_a_l_g_e_b_r_a_1_1_state.html#ad73d1d5ac46ff0d8703c085e9a3a055f',1,'ALGEBRA::State::State()'],['../class_a_l_g_e_b_r_a_1_1_state.html#a91b7c7792072398d4de2c7be759ae1e0',1,'ALGEBRA::State::State(const State &amp;state)']]],
+  ['state_8',['State',['../class_a_l_g_e_b_r_a_1_1_state.html',1,'ALGEBRA::State&lt; T &gt;'],['../class_a_l_g_e_b_r_a_1_1_state.html#ad73d1d5ac46ff0d8703c085e9a3a055f',1,'ALGEBRA::State::State()'],['../class_a_l_g_e_b_r_a_1_1_state.html#a83bb73c52cee641e8297720c4face003',1,'ALGEBRA::State::State(unsigned int n)'],['../class_a_l_g_e_b_r_a_1_1_state.html#a91b7c7792072398d4de2c7be759ae1e0',1,'ALGEBRA::State::State(const State &amp;state)']]],
   ['state_2ehpp_9',['state.hpp',['../state_8hpp.html',1,'']]],
   ['stenosis_5fcoefficient_10',['stenosis_coefficient',['../struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.html#a5f0adc244080b0bd404c579d39ec3f2b',1,'MODEL::BloodVessel::Parameters']]],
   ['step_11',['step',['../class_a_l_g_e_b_r_a_1_1_integrator.html#a7ccd128be68c65beeaca85abb15e3d22',1,'ALGEBRA::Integrator']]],

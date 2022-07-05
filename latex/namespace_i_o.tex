@@ -13,9 +13,9 @@ class \mbox{\hyperlink{class_i_o_1_1_config_reader}{Config\+Reader}}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_ab7ebfa63dd94e3d4fa9230f1cc33e464}{write\+\_\+csv}} (std\+::string path, std\+::vector$<$ T $>$ times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ model, bool mean=false)
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_a7fe99544be33fd70a49d02daf6256bcf}{write\+\_\+csv}} (std\+::string \&path, std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, bool mean=false)
 \begin{DoxyCompactList}\small\item\em Write the solution to a csv file. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_a5627320a9783c2ba55b82553bb145f19}{write\+\_\+json}} (std\+::string path, std\+::vector$<$ T $>$ times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ model)
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_ac3c323735b6caecafd2bc812dcbb2476}{write\+\_\+json}} (std\+::string \&path, std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
 \begin{DoxyCompactList}\small\item\em Write the solution to a json file. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -25,12 +25,12 @@ class \mbox{\hyperlink{class_i_o_1_1_config_reader}{Config\+Reader}}
 The \mbox{\hyperlink{namespace_i_o}{IO}} namespace contains all tools for reading configuration and writing solution files. 
 
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{namespace_i_o_ab7ebfa63dd94e3d4fa9230f1cc33e464}\label{namespace_i_o_ab7ebfa63dd94e3d4fa9230f1cc33e464}} 
+\mbox{\Hypertarget{namespace_i_o_a7fe99544be33fd70a49d02daf6256bcf}\label{namespace_i_o_a7fe99544be33fd70a49d02daf6256bcf}} 
 \index{IO@{IO}!write\_csv@{write\_csv}}
 \index{write\_csv@{write\_csv}!IO@{IO}}
 \doxysubsubsection{\texorpdfstring{write\_csv()}{write\_csv()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void IO\+::write\+\_\+csv (\begin{DoxyParamCaption}\item[{std\+::string}]{path,  }\item[{std\+::vector$<$ T $>$}]{times,  }\item[{std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$}]{states,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$}]{model,  }\item[{bool}]{mean = {\ttfamily false} }\end{DoxyParamCaption})}
+void IO\+::write\+\_\+csv (\begin{DoxyParamCaption}\item[{std\+::string \&}]{path,  }\item[{std\+::vector$<$ T $>$ \&}]{times,  }\item[{std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&}]{states,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model,  }\item[{bool}]{mean = {\ttfamily false} }\end{DoxyParamCaption})}
 
 
 
@@ -54,12 +54,12 @@ Write the solution to a csv file.
 {\em mean} & Toggle whether only the mean over all time steps should be written \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{namespace_i_o_a5627320a9783c2ba55b82553bb145f19}\label{namespace_i_o_a5627320a9783c2ba55b82553bb145f19}} 
+\mbox{\Hypertarget{namespace_i_o_ac3c323735b6caecafd2bc812dcbb2476}\label{namespace_i_o_ac3c323735b6caecafd2bc812dcbb2476}} 
 \index{IO@{IO}!write\_json@{write\_json}}
 \index{write\_json@{write\_json}!IO@{IO}}
 \doxysubsubsection{\texorpdfstring{write\_json()}{write\_json()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void IO\+::write\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string}]{path,  }\item[{std\+::vector$<$ T $>$}]{times,  }\item[{std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$}]{states,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$}]{model }\end{DoxyParamCaption})}
+void IO\+::write\+\_\+json (\begin{DoxyParamCaption}\item[{std\+::string \&}]{path,  }\item[{std\+::vector$<$ T $>$ \&}]{times,  }\item[{std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&}]{states,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model }\end{DoxyParamCaption})}
 
 
 

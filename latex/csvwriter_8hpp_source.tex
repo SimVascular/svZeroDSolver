@@ -31,7 +31,7 @@
 \DoxyCodeLine{27 \textcolor{comment}{     * @param mean Toggle whether only the mean over all time steps should be written}}
 \DoxyCodeLine{28 \textcolor{comment}{     */}}
 \DoxyCodeLine{29     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{30     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_i_o_ab7ebfa63dd94e3d4fa9230f1cc33e464}{write\_csv}}(std::string path, std::vector<T> times, std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} model, \textcolor{keywordtype}{bool} mean = \textcolor{keyword}{false})}
+\DoxyCodeLine{30     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_i_o_a7fe99544be33fd70a49d02daf6256bcf}{write\_csv}}(std::string \&path, std::vector<T> \&times, std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, \textcolor{keywordtype}{bool} mean = \textcolor{keyword}{false})}
 \DoxyCodeLine{31     \{}
 \DoxyCodeLine{32         \textcolor{comment}{// Create string stream to buffer output}}
 \DoxyCodeLine{33         std::stringstream out;}
@@ -45,15 +45,15 @@
 \DoxyCodeLine{41         \textcolor{comment}{// Determine number of time steps}}
 \DoxyCodeLine{42         T num\_steps = times.size();}
 \DoxyCodeLine{43 }
-\DoxyCodeLine{44         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a99b1375ef649ea5752e25e3d38219b5e}{blocks}})}
-\DoxyCodeLine{45         \{}
-\DoxyCodeLine{46 }
-\DoxyCodeLine{47             \textcolor{comment}{// Extract global solution indices of the block}}
-\DoxyCodeLine{48             std::string name = \textcolor{stringliteral}{"{}NoName"{}};}
-\DoxyCodeLine{49             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} inflow\_dof;}
-\DoxyCodeLine{50             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} outflow\_dof;}
-\DoxyCodeLine{51             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} inpres\_dof;}
-\DoxyCodeLine{52             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} outpres\_dof;}
+\DoxyCodeLine{44         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} inflow\_dof;}
+\DoxyCodeLine{45         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} outflow\_dof;}
+\DoxyCodeLine{46         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} inpres\_dof;}
+\DoxyCodeLine{47         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} outpres\_dof;}
+\DoxyCodeLine{48         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a99b1375ef649ea5752e25e3d38219b5e}{blocks}})}
+\DoxyCodeLine{49         \{}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51             \textcolor{comment}{// Extract global solution indices of the block}}
+\DoxyCodeLine{52             std::string name = \textcolor{stringliteral}{"{}NoName"{}};}
 \DoxyCodeLine{53             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
 \DoxyCodeLine{54                        \{ \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespace_h_e_l_p_e_r_s_aa60c2dfbfc096834b6cd243f84b9c47b}{HELPERS::startswith}}(block.name, \textcolor{stringliteral}{"{}V"{}}))\{name = block.name; inflow\_dof = block.inlet\_nodes[0]-\/>flow\_dof; outflow\_dof = block.outlet\_nodes[0]-\/>flow\_dof; inpres\_dof = block.inlet\_nodes[0]-\/>pres\_dof; outpres\_dof = block.outlet\_nodes[0]-\/>pres\_dof;\} \},}
 \DoxyCodeLine{55                        elem);}

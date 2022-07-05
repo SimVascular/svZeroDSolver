@@ -33,54 +33,68 @@
 \DoxyCodeLine{29         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State}}();}
 \DoxyCodeLine{30 \textcolor{comment}{}}
 \DoxyCodeLine{31 \textcolor{comment}{        /**}}
-\DoxyCodeLine{32 \textcolor{comment}{         * @brief Destroy the State object}}
+\DoxyCodeLine{32 \textcolor{comment}{         * @brief Construct a new State object}}
 \DoxyCodeLine{33 \textcolor{comment}{         *}}
-\DoxyCodeLine{34 \textcolor{comment}{         */}}
-\DoxyCodeLine{35         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a52df29ccfa65e5fdaa637d109dddf137}{\string~State}}();}
-\DoxyCodeLine{36 \textcolor{comment}{}}
-\DoxyCodeLine{37 \textcolor{comment}{        /**}}
-\DoxyCodeLine{38 \textcolor{comment}{         * @brief Copy a State object}}
-\DoxyCodeLine{39 \textcolor{comment}{         *}}
-\DoxyCodeLine{40 \textcolor{comment}{         * @param state}}
+\DoxyCodeLine{34 \textcolor{comment}{         * @param n Size of the state}}
+\DoxyCodeLine{35 \textcolor{comment}{         */}}
+\DoxyCodeLine{36         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} n);}
+\DoxyCodeLine{37 \textcolor{comment}{}}
+\DoxyCodeLine{38 \textcolor{comment}{        /**}}
+\DoxyCodeLine{39 \textcolor{comment}{         * @brief Destroy the State object}}
+\DoxyCodeLine{40 \textcolor{comment}{         *}}
 \DoxyCodeLine{41 \textcolor{comment}{         */}}
-\DoxyCodeLine{42         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State}} \&state);}
+\DoxyCodeLine{42         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a52df29ccfa65e5fdaa637d109dddf137}{\string~State}}();}
 \DoxyCodeLine{43 \textcolor{comment}{}}
 \DoxyCodeLine{44 \textcolor{comment}{        /**}}
-\DoxyCodeLine{45 \textcolor{comment}{         * @brief Construct a new State object and initilaize with all zeros.}}
+\DoxyCodeLine{45 \textcolor{comment}{         * @brief Copy a State object}}
 \DoxyCodeLine{46 \textcolor{comment}{         *}}
-\DoxyCodeLine{47 \textcolor{comment}{         * @param n Size of the state}}
-\DoxyCodeLine{48 \textcolor{comment}{         * @return New state initialized with all zeros}}
-\DoxyCodeLine{49 \textcolor{comment}{         */}}
-\DoxyCodeLine{50         \textcolor{keyword}{static} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State}} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a8b9bcbe746b0d2b87f7c0381ddf471a3}{Zero}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} n);}
-\DoxyCodeLine{51     \};}
-\DoxyCodeLine{52 }
-\DoxyCodeLine{53     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{54     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State<T>::State}}()}
-\DoxyCodeLine{55     \{}
-\DoxyCodeLine{56     \}}
-\DoxyCodeLine{57 }
-\DoxyCodeLine{58     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{59     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a52df29ccfa65e5fdaa637d109dddf137}{State<T>::\string~State}}()}
-\DoxyCodeLine{60     \{}
-\DoxyCodeLine{61     \}}
-\DoxyCodeLine{62 }
-\DoxyCodeLine{63     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{64     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State<T>::State}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State}} \&state)}
-\DoxyCodeLine{65     \{}
-\DoxyCodeLine{66         y = state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}};}
-\DoxyCodeLine{67         ydot = state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}};}
-\DoxyCodeLine{68     \}}
-\DoxyCodeLine{69 }
-\DoxyCodeLine{70     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{71     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a8b9bcbe746b0d2b87f7c0381ddf471a3}{State<T>::Zero}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} n)}
-\DoxyCodeLine{72     \{}
-\DoxyCodeLine{73         \textcolor{keyword}{static} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} state;}
-\DoxyCodeLine{74         state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}} = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);}
-\DoxyCodeLine{75         state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);}
-\DoxyCodeLine{76         \textcolor{keywordflow}{return} state;}
-\DoxyCodeLine{77     \}}
-\DoxyCodeLine{78 \} \textcolor{comment}{// namespace ALGEBRA}}
-\DoxyCodeLine{79 }
-\DoxyCodeLine{80 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_ALGEBRA\_STATE\_HPP\_}}
+\DoxyCodeLine{47 \textcolor{comment}{         * @param state}}
+\DoxyCodeLine{48 \textcolor{comment}{         */}}
+\DoxyCodeLine{49         \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State}} \&state);}
+\DoxyCodeLine{50 \textcolor{comment}{}}
+\DoxyCodeLine{51 \textcolor{comment}{        /**}}
+\DoxyCodeLine{52 \textcolor{comment}{         * @brief Construct a new State object and initilaize with all zeros.}}
+\DoxyCodeLine{53 \textcolor{comment}{         *}}
+\DoxyCodeLine{54 \textcolor{comment}{         * @param n Size of the state}}
+\DoxyCodeLine{55 \textcolor{comment}{         * @return New state initialized with all zeros}}
+\DoxyCodeLine{56 \textcolor{comment}{         */}}
+\DoxyCodeLine{57         \textcolor{keyword}{static} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State}} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a8b9bcbe746b0d2b87f7c0381ddf471a3}{Zero}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} n);}
+\DoxyCodeLine{58     \};}
+\DoxyCodeLine{59 }
+\DoxyCodeLine{60     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{61     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State<T>::State}}()}
+\DoxyCodeLine{62     \{}
+\DoxyCodeLine{63     \}}
+\DoxyCodeLine{64 }
+\DoxyCodeLine{65     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{66     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State<T>::State}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} n)}
+\DoxyCodeLine{67     \{}
+\DoxyCodeLine{68         y = Eigen::Matrix<T, Eigen::Dynamic, 1>(n);}
+\DoxyCodeLine{69         ydot = Eigen::Matrix<T, Eigen::Dynamic, 1>(n);}
+\DoxyCodeLine{70     \}}
+\DoxyCodeLine{71 }
+\DoxyCodeLine{72     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{73     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a52df29ccfa65e5fdaa637d109dddf137}{State<T>::\string~State}}()}
+\DoxyCodeLine{74     \{}
+\DoxyCodeLine{75     \}}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{78     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_ad73d1d5ac46ff0d8703c085e9a3a055f}{State<T>::State}}(\textcolor{keyword}{const} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State}} \&state)}
+\DoxyCodeLine{79     \{}
+\DoxyCodeLine{80         y = state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}};}
+\DoxyCodeLine{81         ydot = state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}};}
+\DoxyCodeLine{82     \}}
+\DoxyCodeLine{83 }
+\DoxyCodeLine{84     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{85     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a8b9bcbe746b0d2b87f7c0381ddf471a3}{State<T>::Zero}}(\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} n)}
+\DoxyCodeLine{86     \{}
+\DoxyCodeLine{87         \textcolor{keyword}{static} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} state(n);}
+\DoxyCodeLine{88         state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}} = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);}
+\DoxyCodeLine{89         state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);}
+\DoxyCodeLine{90         \textcolor{keywordflow}{return} state;}
+\DoxyCodeLine{91     \}}
+\DoxyCodeLine{92 \} \textcolor{comment}{// namespace ALGEBRA}}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_ALGEBRA\_STATE\_HPP\_}}
 
 \end{DoxyCode}

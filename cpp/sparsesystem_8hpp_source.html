@@ -193,51 +193,54 @@ $(function() {
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>        model.<a class="code hl_function" href="class_m_o_d_e_l_1_1_model.html#a0ac10aab77f38974e91af13823d2d40a">update_time</a>(*<span class="keyword">this</span>, 0.0);</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; dummy_y = Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt;::Ones(residual.size());</div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        model.<a class="code hl_function" href="class_m_o_d_e_l_1_1_model.html#a177656d1de5a6d396e37789430fe5c77">update_solution</a>(*<span class="keyword">this</span>, dummy_y);</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        jacobian.reserve(num_triplets[<span class="stringliteral">&quot;F&quot;</span>] + num_triplets[<span class="stringliteral">&quot;E&quot;</span>]); <span class="comment">// Just an estimate</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        update_jacobian(1.0);                                    <span class="comment">// Update it once to have sparsity pattern</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        jacobian.makeCompressed();</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        solver-&gt;analyzePattern(jacobian); <span class="comment">// Let solver analyze pattern</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    }</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno"><a class="line" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9e52477eed131af02faf4a31d24b79e9">  131</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9e52477eed131af02faf4a31d24b79e9">SparseSystem&lt;T&gt;::update_residual</a>(Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y, Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;ydot)</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    {</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>        residual.setZero();</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        residual -= C;</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        residual.noalias() -= E * ydot;</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        residual.noalias() -= F * y;</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    }</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a1a20ebc6624e53e42f181d0bb3ea1c84">  140</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a1a20ebc6624e53e42f181d0bb3ea1c84">SparseSystem&lt;T&gt;::update_jacobian</a>(T e_coeff)</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    {</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        jacobian.setZero();</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>        jacobian += F + D + E * e_coeff;</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    }</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno"><a class="line" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9f0c93ef94c2c8ad2cda685bd9b2e4ee">  147</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9f0c93ef94c2c8ad2cda685bd9b2e4ee">SparseSystem&lt;T&gt;::solve</a>()</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    {</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>        solver-&gt;factorize(jacobian);</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>        dy.setZero();</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>        dy += solver-&gt;solve(residual);</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    }</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span> </div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>} <span class="comment">// namespace ALGEBRA</span></div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="preprocessor">#include &quot;../model/model.hpp&quot;</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span> </div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="preprocessor">#endif </span><span class="comment">// SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>        F.makeCompressed();</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        E.makeCompressed();</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        D.makeCompressed();</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        jacobian.reserve(num_triplets[<span class="stringliteral">&quot;F&quot;</span>] + num_triplets[<span class="stringliteral">&quot;E&quot;</span>]); <span class="comment">// Just an estimate</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        update_jacobian(1.0);                                    <span class="comment">// Update it once to have sparsity pattern</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>        jacobian.makeCompressed();</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>        solver-&gt;analyzePattern(jacobian); <span class="comment">// Let solver analyze pattern</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    }</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9e52477eed131af02faf4a31d24b79e9">  134</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9e52477eed131af02faf4a31d24b79e9">SparseSystem&lt;T&gt;::update_residual</a>(Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y, Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;ydot)</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    {</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>        residual.setZero();</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>        residual -= C;</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>        residual.noalias() -= E * ydot;</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>        residual.noalias() -= F * y;</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    }</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno"><a class="line" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a1a20ebc6624e53e42f181d0bb3ea1c84">  143</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a1a20ebc6624e53e42f181d0bb3ea1c84">SparseSystem&lt;T&gt;::update_jacobian</a>(T e_coeff)</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    {</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        jacobian.setZero();</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>        jacobian += F + D + E * e_coeff;</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    }</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno"><a class="line" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9f0c93ef94c2c8ad2cda685bd9b2e4ee">  150</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9f0c93ef94c2c8ad2cda685bd9b2e4ee">SparseSystem&lt;T&gt;::solve</a>()</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    {</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        solver-&gt;factorize(jacobian);</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        dy.setZero();</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>        dy += solver-&gt;solve(residual);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    }</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>} <span class="comment">// namespace ALGEBRA</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="preprocessor">#include &quot;../model/model.hpp&quot;</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="preprocessor">#endif </span><span class="comment">// SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_</span></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:30</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a04f581a81ec6afd1955ad1611bed25d8"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a04f581a81ec6afd1955ad1611bed25d8">ALGEBRA::SparseSystem::SparseSystem</a></div><div class="ttdeci">SparseSystem()</div><div class="ttdoc">Construct a new Sparse System object.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:91</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a17aa18649992a4040df695530203fc05"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a17aa18649992a4040df695530203fc05">ALGEBRA::SparseSystem::residual</a></div><div class="ttdeci">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; residual</div><div class="ttdoc">Residual of the system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:57</div></div>
-<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a1a20ebc6624e53e42f181d0bb3ea1c84"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a1a20ebc6624e53e42f181d0bb3ea1c84">ALGEBRA::SparseSystem::update_jacobian</a></div><div class="ttdeci">void update_jacobian(T e_coeff)</div><div class="ttdoc">Update the jacobian of the system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:140</div></div>
+<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a1a20ebc6624e53e42f181d0bb3ea1c84"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a1a20ebc6624e53e42f181d0bb3ea1c84">ALGEBRA::SparseSystem::update_jacobian</a></div><div class="ttdeci">void update_jacobian(T e_coeff)</div><div class="ttdoc">Update the jacobian of the system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:143</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a5a227ddd625d11f7dc88c73bd0d6f2f6"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a5a227ddd625d11f7dc88c73bd0d6f2f6">ALGEBRA::SparseSystem::C</a></div><div class="ttdeci">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; C</div><div class="ttdoc">System vector C.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:54</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a6f8a213d10412ff535c8767be09177f5"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a6f8a213d10412ff535c8767be09177f5">ALGEBRA::SparseSystem::reserve</a></div><div class="ttdeci">void reserve(MODEL::Model&lt; T &gt; &amp;model)</div><div class="ttdoc">Reserve memory in system matrices based on number of triplets.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:114</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a70cd2505b7fd6c9b8f9fb3a5255e4f10"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a70cd2505b7fd6c9b8f9fb3a5255e4f10">ALGEBRA::SparseSystem::~SparseSystem</a></div><div class="ttdeci">~SparseSystem()</div><div class="ttdoc">Destroy the Sparse System object.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:109</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a7e9cabf8b8343236a2d83d091cd6a530"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a7e9cabf8b8343236a2d83d091cd6a530">ALGEBRA::SparseSystem::E</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; T &gt; E</div><div class="ttdoc">System matrix E.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:52</div></div>
-<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a9e52477eed131af02faf4a31d24b79e9"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9e52477eed131af02faf4a31d24b79e9">ALGEBRA::SparseSystem::update_residual</a></div><div class="ttdeci">void update_residual(Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;ydot)</div><div class="ttdoc">Update the residual of the system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:131</div></div>
-<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a9f0c93ef94c2c8ad2cda685bd9b2e4ee"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9f0c93ef94c2c8ad2cda685bd9b2e4ee">ALGEBRA::SparseSystem::solve</a></div><div class="ttdeci">void solve()</div><div class="ttdoc">Solve the system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:147</div></div>
+<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a9e52477eed131af02faf4a31d24b79e9"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9e52477eed131af02faf4a31d24b79e9">ALGEBRA::SparseSystem::update_residual</a></div><div class="ttdeci">void update_residual(Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;ydot)</div><div class="ttdoc">Update the residual of the system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:134</div></div>
+<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_a9f0c93ef94c2c8ad2cda685bd9b2e4ee"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#a9f0c93ef94c2c8ad2cda685bd9b2e4ee">ALGEBRA::SparseSystem::solve</a></div><div class="ttdeci">void solve()</div><div class="ttdoc">Solve the system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:150</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_ac6fc3a2c1e2713d5f2484f56a9a6b912"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#ac6fc3a2c1e2713d5f2484f56a9a6b912">ALGEBRA::SparseSystem::dy</a></div><div class="ttdeci">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; dy</div><div class="ttdoc">Solution increment of the system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:58</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_af3b2b049c7cbf6f6ad1a012ebe97d20e"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#af3b2b049c7cbf6f6ad1a012ebe97d20e">ALGEBRA::SparseSystem::D</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; T &gt; D</div><div class="ttdoc">System matrix D.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:53</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html_af4182ac7c2657f2455fb69967a2bc87a"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html#af4182ac7c2657f2455fb69967a2bc87a">ALGEBRA::SparseSystem::F</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; T &gt; F</div><div class="ttdoc">System matrix F.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:51</div></div>
@@ -252,7 +255,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 5 2022 19:37:38 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Jul 6 2022 01:47:46 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

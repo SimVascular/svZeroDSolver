@@ -125,40 +125,43 @@
 \DoxyCodeLine{121         model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{update\_time}}(*\textcolor{keyword}{this}, 0.0);}
 \DoxyCodeLine{122         Eigen::Matrix<T, Eigen::Dynamic, 1> dummy\_y = Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());}
 \DoxyCodeLine{123         model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{update\_solution}}(*\textcolor{keyword}{this}, dummy\_y);}
-\DoxyCodeLine{124         jacobian.reserve(num\_triplets[\textcolor{stringliteral}{"{}F"{}}] + num\_triplets[\textcolor{stringliteral}{"{}E"{}}]); \textcolor{comment}{// Just an estimate}}
-\DoxyCodeLine{125         update\_jacobian(1.0);                                    \textcolor{comment}{// Update it once to have sparsity pattern}}
-\DoxyCodeLine{126         jacobian.makeCompressed();}
-\DoxyCodeLine{127         solver-\/>analyzePattern(jacobian); \textcolor{comment}{// Let solver analyze pattern}}
-\DoxyCodeLine{128     \}}
-\DoxyCodeLine{129 }
-\DoxyCodeLine{130     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{131     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9e52477eed131af02faf4a31d24b79e9}{SparseSystem<T>::update\_residual}}(Eigen::Matrix<T, Eigen::Dynamic, 1> \&y, Eigen::Matrix<T, Eigen::Dynamic, 1> \&ydot)}
-\DoxyCodeLine{132     \{}
-\DoxyCodeLine{133         residual.setZero();}
-\DoxyCodeLine{134         residual -\/= C;}
-\DoxyCodeLine{135         residual.noalias() -\/= E * ydot;}
-\DoxyCodeLine{136         residual.noalias() -\/= F * y;}
-\DoxyCodeLine{137     \}}
-\DoxyCodeLine{138 }
-\DoxyCodeLine{139     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{140     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a1a20ebc6624e53e42f181d0bb3ea1c84}{SparseSystem<T>::update\_jacobian}}(T e\_coeff)}
-\DoxyCodeLine{141     \{}
-\DoxyCodeLine{142         jacobian.setZero();}
-\DoxyCodeLine{143         jacobian += F + D + E * e\_coeff;}
-\DoxyCodeLine{144     \}}
-\DoxyCodeLine{145 }
-\DoxyCodeLine{146     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{147     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9f0c93ef94c2c8ad2cda685bd9b2e4ee}{SparseSystem<T>::solve}}()}
-\DoxyCodeLine{148     \{}
-\DoxyCodeLine{149         solver-\/>factorize(jacobian);}
-\DoxyCodeLine{150         dy.setZero();}
-\DoxyCodeLine{151         dy += solver-\/>solve(residual);}
-\DoxyCodeLine{152     \}}
-\DoxyCodeLine{153 }
-\DoxyCodeLine{154 \} \textcolor{comment}{// namespace ALGEBRA}}
-\DoxyCodeLine{155 }
-\DoxyCodeLine{156 \textcolor{preprocessor}{\#include "{}../model/model.hpp"{}}}
-\DoxyCodeLine{157 }
-\DoxyCodeLine{158 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_ALGREBRA\_SPARSESYSTEM\_HPP\_}}
+\DoxyCodeLine{124         F.makeCompressed();}
+\DoxyCodeLine{125         E.makeCompressed();}
+\DoxyCodeLine{126         D.makeCompressed();}
+\DoxyCodeLine{127         jacobian.reserve(num\_triplets[\textcolor{stringliteral}{"{}F"{}}] + num\_triplets[\textcolor{stringliteral}{"{}E"{}}]); \textcolor{comment}{// Just an estimate}}
+\DoxyCodeLine{128         update\_jacobian(1.0);                                    \textcolor{comment}{// Update it once to have sparsity pattern}}
+\DoxyCodeLine{129         jacobian.makeCompressed();}
+\DoxyCodeLine{130         solver-\/>analyzePattern(jacobian); \textcolor{comment}{// Let solver analyze pattern}}
+\DoxyCodeLine{131     \}}
+\DoxyCodeLine{132 }
+\DoxyCodeLine{133     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{134     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9e52477eed131af02faf4a31d24b79e9}{SparseSystem<T>::update\_residual}}(Eigen::Matrix<T, Eigen::Dynamic, 1> \&y, Eigen::Matrix<T, Eigen::Dynamic, 1> \&ydot)}
+\DoxyCodeLine{135     \{}
+\DoxyCodeLine{136         residual.setZero();}
+\DoxyCodeLine{137         residual -\/= C;}
+\DoxyCodeLine{138         residual.noalias() -\/= E * ydot;}
+\DoxyCodeLine{139         residual.noalias() -\/= F * y;}
+\DoxyCodeLine{140     \}}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{143     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a1a20ebc6624e53e42f181d0bb3ea1c84}{SparseSystem<T>::update\_jacobian}}(T e\_coeff)}
+\DoxyCodeLine{144     \{}
+\DoxyCodeLine{145         jacobian.setZero();}
+\DoxyCodeLine{146         jacobian += F + D + E * e\_coeff;}
+\DoxyCodeLine{147     \}}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{149     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{150     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9f0c93ef94c2c8ad2cda685bd9b2e4ee}{SparseSystem<T>::solve}}()}
+\DoxyCodeLine{151     \{}
+\DoxyCodeLine{152         solver-\/>factorize(jacobian);}
+\DoxyCodeLine{153         dy.setZero();}
+\DoxyCodeLine{154         dy += solver-\/>solve(residual);}
+\DoxyCodeLine{155     \}}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157 \} \textcolor{comment}{// namespace ALGEBRA}}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159 \textcolor{preprocessor}{\#include "{}../model/model.hpp"{}}}
+\DoxyCodeLine{160 }
+\DoxyCodeLine{161 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_ALGREBRA\_SPARSESYSTEM\_HPP\_}}
 
 \end{DoxyCode}

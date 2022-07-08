@@ -7,6 +7,13 @@
 
 #include <Eigen/Dense>
 
+// Forward declaration of Model
+namespace MODEL
+{
+    template <typename T>
+    class Model;
+}
+
 namespace ALGEBRA
 {
 
@@ -53,9 +60,9 @@ namespace ALGEBRA
         /**
          * @brief Reserve memory in system matrices based on number of triplets
          *
-         * @param num_triplets Number of triplets that will be assembled to each matrix.
+         * @param model The model to reserve space for in the system
          */
-        void reserve(std::map<std::string, int> num_triplets);
+        void reserve(MODEL::Model<T> &model);
 
         /**
          * @brief Update the residual of the system
@@ -102,8 +109,12 @@ namespace ALGEBRA
     }
 
     template <typename T>
-    void DenseSystem<T>::reserve(std::map<std::string, int> num_triplets)
+    void DenseSystem<T>::reserve(MODEL::Model<T> &model)
     {
+        model.update_constant(*this);
+        model.update_time(*this, 0.0);
+        Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_y = Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
+        model.update_solution(*this, dummy_y);
     }
 
     template <typename T>
@@ -125,5 +136,7 @@ namespace ALGEBRA
     }
 
 } // namespace ALGEBRA
+
+#include "../model/model.hpp"
 
 #endif // SVZERODSOLVER_ALGREBRA_DENSESYSTEM_HPP_

@@ -9,6 +9,7 @@
 #include <Eigen/SparseLU>
 #include <iostream>
 
+// Forward declaration of Model
 namespace MODEL
 {
     template <typename T>
@@ -62,7 +63,7 @@ namespace ALGEBRA
         /**
          * @brief Reserve memory in system matrices based on number of triplets
          *
-         * @param num_triplets Number of triplets that will be assembled to each matrix.
+         * @param model The model to reserve space for in the system
          */
         void reserve(MODEL::Model<T> &model);
 

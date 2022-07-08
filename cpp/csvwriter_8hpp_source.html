@@ -117,7 +117,7 @@ $(function() {
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> outflow_dof;</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> inpres_dof;</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> outpres_dof;</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;[key, elem] : model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a99b1375ef649ea5752e25e3d38219b5e">blocks</a>)</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;[key, elem] : model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#af97ac47d86d601d57589c0b3b0b72941">blocks</a>)</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        {</div>
 <div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>            <span class="comment">// Extract global solution indices of the block</span></div>
@@ -168,15 +168,15 @@ $(function() {
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="preprocessor">#endif </span><span class="comment">// SVZERODSOLVER_IO_CSVWRITER_HPP_</span></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_state_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a></div><div class="ttdoc">State of the system.</div><div class="ttdef"><b>Definition:</b> state.hpp:20</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> model.hpp:35</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_a99b1375ef649ea5752e25e3d38219b5e"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#a99b1375ef649ea5752e25e3d38219b5e">MODEL::Model::blocks</a></div><div class="ttdeci">std::map&lt; std::string, std::variant&lt; Junction&lt; T &gt;, BloodVessel&lt; T &gt;, FlowReference&lt; T &gt;, RCRBlockWithDistalPressure&lt; T &gt; &gt; &gt; blocks</div><div class="ttdoc">Elements of the model.</div><div class="ttdef"><b>Definition:</b> model.hpp:49</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> model.hpp:37</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_af97ac47d86d601d57589c0b3b0b72941"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#af97ac47d86d601d57589c0b3b0b72941">MODEL::Model::blocks</a></div><div class="ttdeci">std::map&lt; std::string, std::variant&lt; Junction&lt; T &gt;, BloodVessel&lt; T &gt;, FlowReference&lt; T &gt;, PressureReference&lt; T &gt;, RCRBlockWithDistalPressure&lt; T &gt;, ResistanceWithDistalPressure&lt; T &gt; &gt; &gt; blocks</div><div class="ttdoc">Elements of the model.</div><div class="ttdef"><b>Definition:</b> model.hpp:51</div></div>
 <div class="ttc" id="anamespace_h_e_l_p_e_r_s_html_aa60c2dfbfc096834b6cd243f84b9c47b"><div class="ttname"><a href="namespace_h_e_l_p_e_r_s.html#aa60c2dfbfc096834b6cd243f84b9c47b">HELPERS::startswith</a></div><div class="ttdeci">bool startswith(const std::string &amp;str, const std::string &amp;prefix)</div><div class="ttdoc">Check if a string starts with the letters of another string.</div><div class="ttdef"><b>Definition:</b> startswith.hpp:19</div></div>
-<div class="ttc" id="anamespace_i_o_html"><div class="ttname"><a href="namespace_i_o.html">IO</a></div><div class="ttdoc">IO namespace.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:17</div></div>
+<div class="ttc" id="anamespace_i_o_html"><div class="ttname"><a href="namespace_i_o.html">IO</a></div><div class="ttdoc">IO namespace.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:16</div></div>
 <div class="ttc" id="anamespace_i_o_html_a7fe99544be33fd70a49d02daf6256bcf"><div class="ttname"><a href="namespace_i_o.html#a7fe99544be33fd70a49d02daf6256bcf">IO::write_csv</a></div><div class="ttdeci">void write_csv(std::string &amp;path, std::vector&lt; T &gt; &amp;times, std::vector&lt; ALGEBRA::State&lt; T &gt; &gt; &amp;states, MODEL::Model&lt; T &gt; &amp;model, bool mean=false)</div><div class="ttdoc">Write the solution to a csv file.</div><div class="ttdef"><b>Definition:</b> csvwriter.hpp:30</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 7 2022 23:07:14 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Fri Jul 8 2022 03:14:18 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

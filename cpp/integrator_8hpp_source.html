@@ -161,8 +161,8 @@ $(function() {
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    {</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>        alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);</div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>        alpha_f = 1.0 / (1.0 + rho);</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        alpha_m_inv = alpha_m / 1.0;</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        alpha_f_inv = alpha_f / 1.0;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>        alpha_m_inv = 1.0 / alpha_m;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>        alpha_f_inv = 1.0 / alpha_f;</div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        gamma = 0.5 + alpha_m - alpha_f;</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>        gamma_inv = 1.0 / gamma;</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
@@ -179,7 +179,7 @@ $(function() {
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        y_af = Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt;(size);</div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        ydot_am = Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt;(size);</div>
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        y_dot_coeff = alpha_m / (alpha_f * gamma) * time_step_size_inv;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>        y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>        <span class="comment">// Make some memory reservations</span></div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>        system.reserve(model);</div>
@@ -255,16 +255,16 @@ $(function() {
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_state_html_a8b9bcbe746b0d2b87f7c0381ddf471a3"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_state.html#a8b9bcbe746b0d2b87f7c0381ddf471a3">ALGEBRA::State::Zero</a></div><div class="ttdeci">static State Zero(unsigned int n)</div><div class="ttdoc">Construct a new State object and initilaize with all zeros.</div><div class="ttdef"><b>Definition:</b> state.hpp:85</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_state_html_aa1042453417a1af57edc93e3192270a9"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_state.html#aa1042453417a1af57edc93e3192270a9">ALGEBRA::State::ydot</a></div><div class="ttdeci">Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; ydot</div><div class="ttdoc">Derivate of y.</div><div class="ttdef"><b>Definition:</b> state.hpp:23</div></div>
 <div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html_acff2844be5b12678f603ca677a2c17f3"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">MODEL::DOFHandler::size</a></div><div class="ttdeci">unsigned int size()</div><div class="ttdoc">Get the size of the system.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:75</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> model.hpp:35</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_a0ac10aab77f38974e91af13823d2d40a"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#a0ac10aab77f38974e91af13823d2d40a">MODEL::Model::update_time</a></div><div class="ttdeci">void update_time(ALGEBRA::DenseSystem&lt; T &gt; &amp;system, T time)</div><div class="ttdoc">Update the time-dependent contributions of all elements in a dense system.</div><div class="ttdef"><b>Definition:</b> model.hpp:138</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_a177656d1de5a6d396e37789430fe5c77"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#a177656d1de5a6d396e37789430fe5c77">MODEL::Model::update_solution</a></div><div class="ttdeci">void update_solution(ALGEBRA::DenseSystem&lt; T &gt; &amp;system, Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y)</div><div class="ttdoc">Update the solution-dependent contributions of all elements in a dense system.</div><div class="ttdef"><b>Definition:</b> model.hpp:149</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_a43b9cc3c9874be9c2baeae576271fbad"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">MODEL::Model::dofhandler</a></div><div class="ttdeci">DOFHandler dofhandler</div><div class="ttdoc">Degree-of-freedom handler of the model.</div><div class="ttdef"><b>Definition:</b> model.hpp:50</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> model.hpp:37</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_a0ac10aab77f38974e91af13823d2d40a"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#a0ac10aab77f38974e91af13823d2d40a">MODEL::Model::update_time</a></div><div class="ttdeci">void update_time(ALGEBRA::DenseSystem&lt; T &gt; &amp;system, T time)</div><div class="ttdoc">Update the time-dependent contributions of all elements in a dense system.</div><div class="ttdef"><b>Definition:</b> model.hpp:140</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_a177656d1de5a6d396e37789430fe5c77"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#a177656d1de5a6d396e37789430fe5c77">MODEL::Model::update_solution</a></div><div class="ttdeci">void update_solution(ALGEBRA::DenseSystem&lt; T &gt; &amp;system, Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y)</div><div class="ttdoc">Update the solution-dependent contributions of all elements in a dense system.</div><div class="ttdef"><b>Definition:</b> model.hpp:151</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_a43b9cc3c9874be9c2baeae576271fbad"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">MODEL::Model::dofhandler</a></div><div class="ttdeci">DOFHandler dofhandler</div><div class="ttdoc">Degree-of-freedom handler of the model.</div><div class="ttdef"><b>Definition:</b> model.hpp:52</div></div>
 <div class="ttc" id="anamespace_a_l_g_e_b_r_a_html"><div class="ttname"><a href="namespace_a_l_g_e_b_r_a.html">ALGEBRA</a></div><div class="ttdoc">ALGEBRA namespace.</div><div class="ttdef"><b>Definition:</b> densesystem.hpp:11</div></div>
 <div class="ttc" id="astate_8hpp_html"><div class="ttname"><a href="state_8hpp.html">state.hpp</a></div><div class="ttdoc">ALGEBRA::State source file.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jul 7 2022 23:07:14 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Fri Jul 8 2022 03:14:18 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

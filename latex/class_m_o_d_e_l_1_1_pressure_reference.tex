@@ -1,0 +1,247 @@
+\hypertarget{class_m_o_d_e_l_1_1_pressure_reference}{}\doxysection{MODEL\+::Pressure\+Reference\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_m_o_d_e_l_1_1_pressure_reference}\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+
+
+Pressure reference boundary condition element.  
+
+
+
+
+{\ttfamily \#include $<$pressurereference.\+hpp$>$}
+
+
+
+Inheritance diagram for MODEL\+::Pressure\+Reference\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=241pt]{class_m_o_d_e_l_1_1_pressure_reference__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_pressure_reference_1_1_parameters}{Parameters}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_pressure_reference_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_a3544148bcb573c12d7cf88576e85db59}{Pressure\+Reference}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ P, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
+\begin{DoxyCompactList}\small\item\em Construct a new Pressure Reference object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_a1941c40e6e90e37be39f7a44e6858e9f}{$\sim$\+Pressure\+Reference}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the Pressure Reference object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_af8890627a57d2ee67e154c137f680f88}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
+\begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_a19a5e9f5a8c9c258e74ccf56920d5e85}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_af4ac5141300e167596a879a7c9784bae}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system, T time)
+\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_a9ffc793e81c1937f913fdfd9b48ef165}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_af86c6132da8b5715dccb8c6fa799f4ed}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
+\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_ab7a533f897646b2bc07f94d9cafed306}{to\+\_\+steady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_a0175f2dd4503a5f3f20877dc4794d8d7}{num\+\_\+triplets}}
+\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class MODEL\+::\+Pressure\+Reference$<$ T $>$}
+Pressure reference boundary condition element. 
+
+Applies a predefined pressure at a boundary.
+
+\[
+\begin{circuitikz}
+\draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
+\draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
+\draw (1,0) to [short, l=, *-] (1,-1)
+node[ground]{$\hat{P}$};
+\end{circuitikz}
+\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_autotoc_md26}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_pressure_reference_autotoc_md26}
+\[
+P=\hat{P}
+\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_autotoc_md27}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_pressure_reference_autotoc_md27}
+\[
+\mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
+\]
+
+\[
+\mathbf{F}^{e}=\left[\begin{array}{ll}1 & 0\end{array}\right]
+\]
+
+\[
+\mathbf{C}^{e}=\left[\hat{P}\right]
+\]
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_a3544148bcb573c12d7cf88576e85db59}\label{class_m_o_d_e_l_1_1_pressure_reference_a3544148bcb573c12d7cf88576e85db59}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!PressureReference@{PressureReference}}
+\index{PressureReference@{PressureReference}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{PressureReference()}{PressureReference()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::\+Pressure\+Reference (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{P,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+
+
+Construct a new Pressure Reference object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em P} & Time dependent pressure \\
+\hline
+{\em name} & Name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_a1941c40e6e90e37be39f7a44e6858e9f}\label{class_m_o_d_e_l_1_1_pressure_reference_a1941c40e6e90e37be39f7a44e6858e9f}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!````~PressureReference@{$\sim$PressureReference}}
+\index{````~PressureReference@{$\sim$PressureReference}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$PressureReference()}{~PressureReference()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{Pressure\+Reference}}}
+
+
+
+Destroy the Pressure Reference object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_af8890627a57d2ee67e154c137f680f88}\label{class_m_o_d_e_l_1_1_pressure_reference_af8890627a57d2ee67e154c137f680f88}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!setup\_dofs@{setup\_dofs}}
+\index{setup\_dofs@{setup\_dofs}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setup\_dofs()}{setup\_dofs()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})}
+
+
+
+Set up the degrees of freedom (DOF) of the block. 
+
+Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}{global\+\_\+var\+\_\+ids}} and \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}{global\+\_\+eqn\+\_\+ids}} of the element based on the number of equations and the number of internal variables of the element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dofhandler} & Degree-\/of-\/freedom handler to register variables and equations at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_ab7a533f897646b2bc07f94d9cafed306}\label{class_m_o_d_e_l_1_1_pressure_reference_ab7a533f897646b2bc07f94d9cafed306}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!to\_steady@{to\_steady}}
+\index{to\_steady@{to\_steady}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::to\+\_\+steady}
+
+
+
+Convert the block to a steady behavior. 
+
+Converts the prescribed pressure to the constant mean of itself \mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_a19a5e9f5a8c9c258e74ccf56920d5e85}\label{class_m_o_d_e_l_1_1_pressure_reference_a19a5e9f5a8c9c258e74ccf56920d5e85}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of the element in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_a9ffc793e81c1937f913fdfd9b48ef165}\label{class_m_o_d_e_l_1_1_pressure_reference_a9ffc793e81c1937f913fdfd9b48ef165}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of the element in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_af4ac5141300e167596a879a7c9784bae}\label{class_m_o_d_e_l_1_1_pressure_reference_af4ac5141300e167596a879a7c9784bae}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!update\_time@{update\_time}}
+\index{update\_time@{update\_time}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Update the time-\/dependent contributions of the element in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_af86c6132da8b5715dccb8c6fa799f4ed}\label{class_m_o_d_e_l_1_1_pressure_reference_af86c6132da8b5715dccb8c6fa799f4ed}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!update\_time@{update\_time}}
+\index{update\_time@{update\_time}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Update the time-\/dependent contributions of the element in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_a0175f2dd4503a5f3f20877dc4794d8d7}\label{class_m_o_d_e_l_1_1_pressure_reference_a0175f2dd4503a5f3f20877dc4794d8d7}} 
+\index{MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}!num\_triplets@{num\_triplets}}
+\index{num\_triplets@{num\_triplets}!MODEL::PressureReference$<$ T $>$@{MODEL::PressureReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{num\_triplets}{num\_triplets}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL\+::\+Pressure\+Reference}}$<$ T $>$\+::num\+\_\+triplets}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{        \}}
+
+\end{DoxyCode}
+
+
+Number of triplets of element. 
+
+Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{pressurereference_8hpp}{pressurereference.\+hpp}}\end{DoxyCompactItemize}

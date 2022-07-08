@@ -1,0 +1,246 @@
+\hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{}\doxysection{MODEL\+::Resistance\+With\+Distal\+Pressure\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+
+
+Resistance with distal pressure boundary condition element.  
+
+
+
+
+{\ttfamily \#include $<$resistancewithdistalpressure.\+hpp$>$}
+
+
+
+Inheritance diagram for MODEL\+::Resistance\+With\+Distal\+Pressure\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=229pt]{class_m_o_d_e_l_1_1_resistance_with_distal_pressure__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_with_distal_pressure_1_1_parameters}{Parameters}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_with_distal_pressure_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a76868641df5fb6747db3253d3666a89c}{Resistance\+With\+Distal\+Pressure}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ R, \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ Pd, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{Resistance\+With\+Distal\+Pressure}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a99955dd0ab19389b909db4c7a1e53c96}{$\sim$\+Resistance\+With\+Distal\+Pressure}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{Resistance\+With\+Distal\+Pressure}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a75f8dd5cb04917717d674db17753682f}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
+\begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a867c91e0a474b325ff5d2962a457cb48}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_ae2e2514e4816ec36daec2763a788dbea}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system, T time)
+\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a5046dfb392e92fa97ee0cb9a85103e37}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_af85e3829162405813be8d030101e6aed}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
+\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a7fb2ca05e8219ebd5f9fa4989c723011}{to\+\_\+steady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_ad3fd7e063996943fa305bcef6d6b3f7a}{num\+\_\+triplets}}
+\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class MODEL\+::\+Resistance\+With\+Distal\+Pressure$<$ T $>$}
+Resistance with distal pressure boundary condition element. 
+
+\[
+\begin{circuitikz} \draw
+node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+\draw (1.0,0) to [R, l=$R$, *-*] (3,0)
+node[anchor=south]{$P_{d}$};
+\end{circuitikz}
+\]\hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_autotoc_md30}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_autotoc_md30}
+\[
+P-P_d=R \cdot Q
+\]\hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_autotoc_md31}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_autotoc_md31}
+\[
+\mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
+\]
+
+\[
+\mathbf{F}^{e}=\left[\begin{array}{ll}1 & -R\end{array}\right]
+\]
+
+\[
+\mathbf{C}^{e}=\left[-P_d\right]
+\]
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a76868641df5fb6747db3253d3666a89c}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a76868641df5fb6747db3253d3666a89c}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!ResistanceWithDistalPressure@{ResistanceWithDistalPressure}}
+\index{ResistanceWithDistalPressure@{ResistanceWithDistalPressure}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ResistanceWithDistalPressure()}{ResistanceWithDistalPressure()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::\+Resistance\+With\+Distal\+Pressure (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{R,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{Pd,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{Resistance\+With\+Distal\+Pressure}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em R} & Time-\/dependent resistance \\
+\hline
+{\em Pd} & Time-\/dependent distal pressure \\
+\hline
+{\em name} & Name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a99955dd0ab19389b909db4c7a1e53c96}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a99955dd0ab19389b909db4c7a1e53c96}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!````~ResistanceWithDistalPressure@{$\sim$ResistanceWithDistalPressure}}
+\index{````~ResistanceWithDistalPressure@{$\sim$ResistanceWithDistalPressure}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$ResistanceWithDistalPressure()}{~ResistanceWithDistalPressure()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{Resistance\+With\+Distal\+Pressure}}}
+
+
+
+Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{Resistance\+With\+Distal\+Pressure}} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a75f8dd5cb04917717d674db17753682f}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a75f8dd5cb04917717d674db17753682f}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!setup\_dofs@{setup\_dofs}}
+\index{setup\_dofs@{setup\_dofs}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setup\_dofs()}{setup\_dofs()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})}
+
+
+
+Set up the degrees of freedom (DOF) of the block. 
+
+Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}{global\+\_\+var\+\_\+ids}} and \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}{global\+\_\+eqn\+\_\+ids}} of the element based on the number of equations and the number of internal variables of the element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dofhandler} & Degree-\/of-\/freedom handler to register variables and equations at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a7fb2ca05e8219ebd5f9fa4989c723011}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a7fb2ca05e8219ebd5f9fa4989c723011}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!to\_steady@{to\_steady}}
+\index{to\_steady@{to\_steady}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::to\+\_\+steady}
+
+
+
+Convert the block to a steady behavior. 
+
+Converts the resistance and distal pressure to the constant means of themselve \mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a867c91e0a474b325ff5d2962a457cb48}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a867c91e0a474b325ff5d2962a457cb48}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of the element in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a5046dfb392e92fa97ee0cb9a85103e37}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_a5046dfb392e92fa97ee0cb9a85103e37}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of the element in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_ae2e2514e4816ec36daec2763a788dbea}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_ae2e2514e4816ec36daec2763a788dbea}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!update\_time@{update\_time}}
+\index{update\_time@{update\_time}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Update the time-\/dependent contributions of the element in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_af85e3829162405813be8d030101e6aed}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_af85e3829162405813be8d030101e6aed}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!update\_time@{update\_time}}
+\index{update\_time@{update\_time}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Update the time-\/dependent contributions of the element in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_ad3fd7e063996943fa305bcef6d6b3f7a}\label{class_m_o_d_e_l_1_1_resistance_with_distal_pressure_ad3fd7e063996943fa305bcef6d6b3f7a}} 
+\index{MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}!num\_triplets@{num\_triplets}}
+\index{num\_triplets@{num\_triplets}!MODEL::ResistanceWithDistalPressure$<$ T $>$@{MODEL::ResistanceWithDistalPressure$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{num\_triplets}{num\_triplets}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL\+::\+Resistance\+With\+Distal\+Pressure}}$<$ T $>$\+::num\+\_\+triplets}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{        \}}
+
+\end{DoxyCode}
+
+
+Number of triplets of element. 
+
+Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{resistancewithdistalpressure_8hpp}{resistancewithdistalpressure.\+hpp}}\end{DoxyCompactItemize}

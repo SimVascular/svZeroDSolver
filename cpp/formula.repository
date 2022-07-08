@@ -124,7 +124,24 @@ P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
 \_form#37=294x31:\[
 \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots & \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right] \quad \mathrm{with} \quad i \neq j
 \]
-\_form#38=214x96:\[
+\_form#38=65x69:\[
+\begin{circuitikz}
+\draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
+\draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
+\draw (1,0) to [short, l=, *-] (1,-1)
+node[ground]{$\hat{P}$};
+\end{circuitikz}
+\]
+\_form#39=36x13:\[
+P=\hat{P}
+\]
+\_form#40=78x16:\[
+\mathbf{F}^{e}=\left[\begin{array}{ll}1 & 0\end{array}\right]
+\]
+\_form#41=51x24:\[
+\mathbf{C}^{e}=\left[\hat{P}\right]
+\]
+\_form#42=214x96:\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -135,30 +152,46 @@ node[anchor=south]{$P_{ref}$}
 node[ground]{$P_{C}$};
 \end{circuitikz}
 \]
-\_form#39=189x28:\[
+\_form#43=189x28:\[
 R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
 \]
-\_form#40=114x14:\[
+\_form#44=114x14:\[
 P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
 \]
-\_form#41=131x20:\[
+\_form#45=131x20:\[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & P_{c}^{e}\end{array}\right]^{T}
 \]
-\_form#42=126x31:\[
+\_form#46=126x31:\[
 \mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 & 0 & -R_{d} C \\
 0 & 0 & 0
 \end{array}\right]
 \]
-\_form#43=126x31:\[
+\_form#47=126x31:\[
 \mathbf{F}^{e}=\left[\begin{array}{ccc}
 0 & R_{d} & -1 \\
 1 & -R_{p} & -1
 \end{array}\right]
 \]
-\_form#44=76x31:\[
+\_form#48=76x31:\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
+\]
+\_form#49=139x30:\[
+\begin{circuitikz} \draw
+node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+\draw (1.0,0) to [R, l=$R$, *-*] (3,0)
+node[anchor=south]{$P_{d}$};
+\end{circuitikz}
+\]
+\_form#50=84x13:\[
+P-P_d=R \cdot Q
+\]
+\_form#51=90x16:\[
+\mathbf{F}^{e}=\left[\begin{array}{ll}1 & -R\end{array}\right]
+\]
+\_form#52=61x14:\[
+\mathbf{C}^{e}=\left[-P_d\right]
 \]

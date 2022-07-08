@@ -93,8 +93,8 @@
 \DoxyCodeLine{89     \{}
 \DoxyCodeLine{90         alpha\_m = 0.5 * (3.0 -\/ rho) / (1.0 + rho);}
 \DoxyCodeLine{91         alpha\_f = 1.0 / (1.0 + rho);}
-\DoxyCodeLine{92         alpha\_m\_inv = alpha\_m / 1.0;}
-\DoxyCodeLine{93         alpha\_f\_inv = alpha\_f / 1.0;}
+\DoxyCodeLine{92         alpha\_m\_inv = 1.0 / alpha\_m;}
+\DoxyCodeLine{93         alpha\_f\_inv = 1.0 / alpha\_f;}
 \DoxyCodeLine{94         gamma = 0.5 + alpha\_m -\/ alpha\_f;}
 \DoxyCodeLine{95         gamma\_inv = 1.0 / gamma;}
 \DoxyCodeLine{96 }
@@ -111,7 +111,7 @@
 \DoxyCodeLine{107         y\_af = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);}
 \DoxyCodeLine{108         ydot\_am = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);}
 \DoxyCodeLine{109 }
-\DoxyCodeLine{110         y\_dot\_coeff = alpha\_m / (alpha\_f * gamma) * time\_step\_size\_inv;}
+\DoxyCodeLine{110         y\_dot\_coeff = alpha\_m * alpha\_f\_inv * gamma\_inv * time\_step\_size\_inv;}
 \DoxyCodeLine{111 }
 \DoxyCodeLine{112         \textcolor{comment}{// Make some memory reservations}}
 \DoxyCodeLine{113         system.reserve(model);}

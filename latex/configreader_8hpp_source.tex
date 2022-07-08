@@ -245,7 +245,7 @@
 \DoxyCodeLine{241             \textcolor{keywordflow}{if} ((\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}]) == \textcolor{stringliteral}{"{}NORMAL\_JUNCTION"{}}) || (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}]) == \textcolor{stringliteral}{"{}internal\_junction"{}}))}
 \DoxyCodeLine{242             \{}
 \DoxyCodeLine{243                 std::string name = \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_name"{}}]);}
-\DoxyCodeLine{244                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL::Junction<T>}}(name)));}
+\DoxyCodeLine{244                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL::Junction<T>}}(name)));}
 \DoxyCodeLine{245                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created junction "{}} << name);}
 \DoxyCodeLine{246                 \textcolor{keywordflow}{for} (simdjson::dom::element inlet\_vessel : junction\_config[\textcolor{stringliteral}{"{}inlet\_vessels"{}}])}
 \DoxyCodeLine{247                 \{}
@@ -278,7 +278,7 @@
 \DoxyCodeLine{274                 T C = get\_default(vessel\_values, \textcolor{stringliteral}{"{}C"{}}, 0.0);}
 \DoxyCodeLine{275                 T L = get\_default(vessel\_values, \textcolor{stringliteral}{"{}L"{}}, 0.0);}
 \DoxyCodeLine{276                 T stenosis\_coefficient = get\_default(vessel\_values, \textcolor{stringliteral}{"{}stenosis\_coefficient"{}}, 0.0);}
-\DoxyCodeLine{277                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL::BloodVessel<T>}}(R = R, C = C, L = L, stenosis\_coefficient = stenosis\_coefficient, name = name)));}
+\DoxyCodeLine{277                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL::BloodVessel<T>}}(R = R, C = C, L = L, stenosis\_coefficient = stenosis\_coefficient, name = name)));}
 \DoxyCodeLine{278                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created vessel "{}} << name);}
 \DoxyCodeLine{279 }
 \DoxyCodeLine{280                 \textcolor{keywordflow}{if} (has\_key(vessel\_config, \textcolor{stringliteral}{"{}boundary\_conditions"{}}) == \textcolor{keyword}{true})}
@@ -299,7 +299,7 @@
 \DoxyCodeLine{295                                     T C = bc\_values[\textcolor{stringliteral}{"{}C"{}}];}
 \DoxyCodeLine{296                                     T Rd = bc\_values[\textcolor{stringliteral}{"{}Rd"{}}];}
 \DoxyCodeLine{297                                     T Pd = bc\_values[\textcolor{stringliteral}{"{}Pd"{}}];}
-\DoxyCodeLine{298                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure}{MODEL::RCRBlockWithDistalPressure<T>}}(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc\_name)));}
+\DoxyCodeLine{298                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL::WindkesselBC<T>}}(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc\_name)));}
 \DoxyCodeLine{299                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{300                                 \}}
 \DoxyCodeLine{301                                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}FLOW"{}})}
@@ -311,7 +311,7 @@
 \DoxyCodeLine{307                                     \{}
 \DoxyCodeLine{308                                         cardiac\_cycle\_period = Q.cycle\_period;}
 \DoxyCodeLine{309                                     \}}
-\DoxyCodeLine{310                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL::FlowReference<T>}}(Q = Q, bc\_name)));}
+\DoxyCodeLine{310                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL::FlowReferenceBC<T>}}(Q = Q, bc\_name)));}
 \DoxyCodeLine{311                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{312                                 \}}
 \DoxyCodeLine{313                                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}RESISTANCE"{}})}
@@ -329,7 +329,7 @@
 \DoxyCodeLine{325                                     \{}
 \DoxyCodeLine{326                                         cardiac\_cycle\_period = Pd.cycle\_period;}
 \DoxyCodeLine{327                                     \}}
-\DoxyCodeLine{328                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL::ResistanceWithDistalPressure<T>}}(R = R, Pd = Pd, bc\_name)));}
+\DoxyCodeLine{328                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL::ResistanceBC<T>}}(R = R, Pd = Pd, bc\_name)));}
 \DoxyCodeLine{329                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{330                                 \}}
 \DoxyCodeLine{331                                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}PRESSURE"{}})}
@@ -341,7 +341,7 @@
 \DoxyCodeLine{337                                     \{}
 \DoxyCodeLine{338                                         cardiac\_cycle\_period = P.cycle\_period;}
 \DoxyCodeLine{339                                     \}}
-\DoxyCodeLine{340                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL::PressureReference<T>}}(P = P, bc\_name)));}
+\DoxyCodeLine{340                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL::PressureReferenceBC<T>}}(P = P, bc\_name)));}
 \DoxyCodeLine{341                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{342                                 \}}
 \DoxyCodeLine{343                                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}CORONARY"{}})}
@@ -364,7 +364,7 @@
 \DoxyCodeLine{360                                     \{}
 \DoxyCodeLine{361                                         cardiac\_cycle\_period = Pv.cycle\_period;}
 \DoxyCodeLine{362                                     \}}
-\DoxyCodeLine{363                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_with_distal_pressure}{MODEL::OpenLoopCoronaryWithDistalPressure<T>}}(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc\_name)));}
+\DoxyCodeLine{363                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL::OpenLoopCoronaryBC<T>}}(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc\_name)));}
 \DoxyCodeLine{364                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{365                                 \}}
 \DoxyCodeLine{366                                 \textcolor{keywordflow}{else}}
@@ -393,7 +393,7 @@
 \DoxyCodeLine{389                                     T C = bc\_values[\textcolor{stringliteral}{"{}C"{}}];}
 \DoxyCodeLine{390                                     T Rd = bc\_values[\textcolor{stringliteral}{"{}Rd"{}}];}
 \DoxyCodeLine{391                                     T Pd = bc\_values[\textcolor{stringliteral}{"{}Pd"{}}];}
-\DoxyCodeLine{392                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure}{MODEL::RCRBlockWithDistalPressure<T>}}(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc\_name)));}
+\DoxyCodeLine{392                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL::WindkesselBC<T>}}(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc\_name)));}
 \DoxyCodeLine{393                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{394                                 \}}
 \DoxyCodeLine{395                                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}FLOW"{}})}
@@ -405,7 +405,7 @@
 \DoxyCodeLine{401                                     \{}
 \DoxyCodeLine{402                                         cardiac\_cycle\_period = Q.cycle\_period;}
 \DoxyCodeLine{403                                     \}}
-\DoxyCodeLine{404                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL::FlowReference<T>}}(Q = Q, bc\_name)));}
+\DoxyCodeLine{404                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL::FlowReferenceBC<T>}}(Q = Q, bc\_name)));}
 \DoxyCodeLine{405                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{406                                 \}}
 \DoxyCodeLine{407                                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}RESISTANCE"{}})}
@@ -423,7 +423,7 @@
 \DoxyCodeLine{419                                     \{}
 \DoxyCodeLine{420                                         cardiac\_cycle\_period = Pd.cycle\_period;}
 \DoxyCodeLine{421                                     \}}
-\DoxyCodeLine{422                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_with_distal_pressure}{MODEL::ResistanceWithDistalPressure<T>}}(R = R, Pd = Pd, bc\_name)));}
+\DoxyCodeLine{422                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL::ResistanceBC<T>}}(R = R, Pd = Pd, bc\_name)));}
 \DoxyCodeLine{423                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{424                                 \}}
 \DoxyCodeLine{425                                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}PRESSURE"{}})}
@@ -435,7 +435,7 @@
 \DoxyCodeLine{431                                     \{}
 \DoxyCodeLine{432                                         cardiac\_cycle\_period = P.cycle\_period;}
 \DoxyCodeLine{433                                     \}}
-\DoxyCodeLine{434                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference}{MODEL::PressureReference<T>}}(P = P, bc\_name)));}
+\DoxyCodeLine{434                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL::PressureReferenceBC<T>}}(P = P, bc\_name)));}
 \DoxyCodeLine{435                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{436                                 \}}
 \DoxyCodeLine{437                                 \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}CORONARY"{}})}
@@ -458,7 +458,7 @@
 \DoxyCodeLine{454                                     \{}
 \DoxyCodeLine{455                                         cardiac\_cycle\_period = Pv.cycle\_period;}
 \DoxyCodeLine{456                                     \}}
-\DoxyCodeLine{457                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_with_distal_pressure}{MODEL::OpenLoopCoronaryWithDistalPressure<T>}}(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc\_name)));}
+\DoxyCodeLine{457                                     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(std::make\_pair(bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL::OpenLoopCoronaryBC<T>}}(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc\_name)));}
 \DoxyCodeLine{458                                     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
 \DoxyCodeLine{459                                 \}}
 \DoxyCodeLine{460                                 \textcolor{keywordflow}{else}}
@@ -483,11 +483,11 @@
 \DoxyCodeLine{479         \textcolor{comment}{// Create Connections}}
 \DoxyCodeLine{480         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&connection : connections)}
 \DoxyCodeLine{481         \{}
-\DoxyCodeLine{482             \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem1] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}})}
+\DoxyCodeLine{482             \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem1] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}})}
 \DoxyCodeLine{483             \{}
 \DoxyCodeLine{484                 std::visit([\&](\textcolor{keyword}{auto} \&\&ele1)}
 \DoxyCodeLine{485                            \{}
-\DoxyCodeLine{486                         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem2] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7969ed2df86d33e7890d8a9dc317f8b7}{blocks}})}
+\DoxyCodeLine{486                         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem2] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}})}
 \DoxyCodeLine{487                         \{}
 \DoxyCodeLine{488                             std::visit([\&](auto \&\&ele2)}
 \DoxyCodeLine{489                                     \{if ((ele1.name == std::get<0>(connection)) \&\& (ele2.name == std::get<1>(connection)))\{ model.nodes.push\_back(MODEL::Node(ele1.name + \textcolor{stringliteral}{"{}\_"{}} + ele2.name)); DEBUG\_MSG(\textcolor{stringliteral}{"{}Created node "{}} << model.nodes.back().name); ele1.outlet\_nodes.push\_back(\&model.nodes.back()); ele2.inlet\_nodes.push\_back(\&model.nodes.back()); model.nodes.back().setup\_dofs(model.dofhandler); \} \},}

@@ -1,0 +1,201 @@
+\hypertarget{pressurereferencebc_8hpp_source}{}\doxysection{pressurereferencebc.\+hpp}
+\label{pressurereferencebc_8hpp_source}\index{model/pressurereferencebc.hpp@{model/pressurereferencebc.hpp}}
+\mbox{\hyperlink{pressurereferencebc_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{/**}}
+\DoxyCodeLine{2 \textcolor{comment}{ * @file pressurereferencebc.hpp}}
+\DoxyCodeLine{3 \textcolor{comment}{ * @brief MODEL::PressureReferenceBC source file}}
+\DoxyCodeLine{4 \textcolor{comment}{ */}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_PRESSUREREFERENCEBC\_HPP\_}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_PRESSUREREFERENCEBC\_HPP\_}}
+\DoxyCodeLine{7 }
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}../algebra/densesystem.hpp"{}}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{timedependentparameter_8hpp}{timedependentparameter.hpp}}"{}}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}}}
+\DoxyCodeLine{14 \{}
+\DoxyCodeLine{15 \textcolor{comment}{}}
+\DoxyCodeLine{16 \textcolor{comment}{    /**}}
+\DoxyCodeLine{17 \textcolor{comment}{     * @brief Pressure reference boundary condition.}}
+\DoxyCodeLine{18 \textcolor{comment}{     *}}
+\DoxyCodeLine{19 \textcolor{comment}{     * Applies a predefined pressure at a boundary.}}
+\DoxyCodeLine{20 \textcolor{comment}{     *}}
+\DoxyCodeLine{21 \textcolor{comment}{     * \(\backslash\)f[}}
+\DoxyCodeLine{22 \textcolor{comment}{     * \(\backslash\)begin\{circuitikz\}}}
+\DoxyCodeLine{23 \textcolor{comment}{     * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\$\} to [short, *-\/] (1.2,0) ;}}
+\DoxyCodeLine{24 \textcolor{comment}{     * \(\backslash\)draw [-\/latex] (1.4,0) -\/-\/ (2.2,0) node[right] \{\$Q\$\};}}
+\DoxyCodeLine{25 \textcolor{comment}{     * \(\backslash\)draw (1,0) to [short, l=, *-\/] (1,-\/1)}}
+\DoxyCodeLine{26 \textcolor{comment}{     * node[ground]\{\$\(\backslash\)hat\{P\}\$\};}}
+\DoxyCodeLine{27 \textcolor{comment}{     * \(\backslash\)end\{circuitikz\}}}
+\DoxyCodeLine{28 \textcolor{comment}{     * \(\backslash\)f]}}
+\DoxyCodeLine{29 \textcolor{comment}{     *}}
+\DoxyCodeLine{30 \textcolor{comment}{     * \#\#\# Governing equations}}
+\DoxyCodeLine{31 \textcolor{comment}{     *}}
+\DoxyCodeLine{32 \textcolor{comment}{     * \(\backslash\)f[}}
+\DoxyCodeLine{33 \textcolor{comment}{     * P=\(\backslash\)hat\{P\}}}
+\DoxyCodeLine{34 \textcolor{comment}{     * \(\backslash\)f]}}
+\DoxyCodeLine{35 \textcolor{comment}{     *}}
+\DoxyCodeLine{36 \textcolor{comment}{     * \#\#\# Local contributions}}
+\DoxyCodeLine{37 \textcolor{comment}{     *}}
+\DoxyCodeLine{38 \textcolor{comment}{     * \(\backslash\)f[}}
+\DoxyCodeLine{39 \textcolor{comment}{     * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ll\}P\string^\{e\} \& Q\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\}}}
+\DoxyCodeLine{40 \textcolor{comment}{     * \(\backslash\)f]}}
+\DoxyCodeLine{41 \textcolor{comment}{     *}}
+\DoxyCodeLine{42 \textcolor{comment}{     * \(\backslash\)f[}}
+\DoxyCodeLine{43 \textcolor{comment}{     * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ll\}1 \& 0\(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{44 \textcolor{comment}{     * \(\backslash\)f]}}
+\DoxyCodeLine{45 \textcolor{comment}{     *}}
+\DoxyCodeLine{46 \textcolor{comment}{     * \(\backslash\)f[}}
+\DoxyCodeLine{47 \textcolor{comment}{     * \(\backslash\)mathbf\{C\}\string^\{e\}=\(\backslash\)left[\(\backslash\)hat\{P\}\(\backslash\)right]}}
+\DoxyCodeLine{48 \textcolor{comment}{     * \(\backslash\)f]}}
+\DoxyCodeLine{49 \textcolor{comment}{     *}}
+\DoxyCodeLine{50 \textcolor{comment}{     * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{51 \textcolor{comment}{     */}}
+\DoxyCodeLine{52     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{53     \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{PressureReferenceBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>}
+\DoxyCodeLine{54     \{}
+\DoxyCodeLine{55     \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{56 \textcolor{comment}{        /**}}
+\DoxyCodeLine{57 \textcolor{comment}{         * @brief Parameters of the element.}}
+\DoxyCodeLine{58 \textcolor{comment}{         *}}
+\DoxyCodeLine{59 \textcolor{comment}{         * Struct containing all constant and/or time-\/dependent parameters of the}}
+\DoxyCodeLine{60 \textcolor{comment}{         * element.}}
+\DoxyCodeLine{61 \textcolor{comment}{         */}}
+\DoxyCodeLine{62         \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters}
+\DoxyCodeLine{63         \{}
+\DoxyCodeLine{64             \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} \mbox{\hyperlink{struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters_a2458c71154ced6651c9809526f3e1cd6}{P}}; \textcolor{comment}{///< Time-\/dependent pressure}}
+\DoxyCodeLine{65         \};}
+\DoxyCodeLine{66 \textcolor{comment}{}}
+\DoxyCodeLine{67 \textcolor{comment}{        /**}}
+\DoxyCodeLine{68 \textcolor{comment}{         * @brief Construct a new PressureReferenceBC object}}
+\DoxyCodeLine{69 \textcolor{comment}{         *}}
+\DoxyCodeLine{70 \textcolor{comment}{         * @param P Time dependent pressure}}
+\DoxyCodeLine{71 \textcolor{comment}{         * @param name Name}}
+\DoxyCodeLine{72 \textcolor{comment}{         */}}
+\DoxyCodeLine{73         \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_af3eee123d0f2d3cd9c314e89657107d7}{PressureReferenceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} P, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
+\DoxyCodeLine{74 \textcolor{comment}{}}
+\DoxyCodeLine{75 \textcolor{comment}{        /**}}
+\DoxyCodeLine{76 \textcolor{comment}{         * @brief Destroy the PressureReferenceBC object}}
+\DoxyCodeLine{77 \textcolor{comment}{         *}}
+\DoxyCodeLine{78 \textcolor{comment}{         */}}
+\DoxyCodeLine{79         \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a687e158f42007c3dda8a1992e3b28137}{\string~PressureReferenceBC}}();}
+\DoxyCodeLine{80 \textcolor{comment}{}}
+\DoxyCodeLine{81 \textcolor{comment}{        /**}}
+\DoxyCodeLine{82 \textcolor{comment}{         * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{83 \textcolor{comment}{         *}}
+\DoxyCodeLine{84 \textcolor{comment}{         * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{85 \textcolor{comment}{         * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{86 \textcolor{comment}{         * element.}}
+\DoxyCodeLine{87 \textcolor{comment}{         *}}
+\DoxyCodeLine{88 \textcolor{comment}{         * @param dofhandler Degree-\/of-\/freedom handler to register variables and equations at}}
+\DoxyCodeLine{89 \textcolor{comment}{         */}}
+\DoxyCodeLine{90         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_aff1ef740afb66f254f8b14fdf8e5803d}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{91 \textcolor{comment}{}}
+\DoxyCodeLine{92 \textcolor{comment}{        /**}}
+\DoxyCodeLine{93 \textcolor{comment}{         * @brief Update the constant contributions of the element in a dense system}}
+\DoxyCodeLine{94 \textcolor{comment}{         *}}
+\DoxyCodeLine{95 \textcolor{comment}{         * @param system System to update contributions at}}
+\DoxyCodeLine{96 \textcolor{comment}{         */}}
+\DoxyCodeLine{97         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a20d68258c2017b50c1990ab8ef9e1dc8}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
+\DoxyCodeLine{98 \textcolor{comment}{}}
+\DoxyCodeLine{99 \textcolor{comment}{        /**}}
+\DoxyCodeLine{100 \textcolor{comment}{         * @brief Update the time-\/dependent contributions of the element in a dense system}}
+\DoxyCodeLine{101 \textcolor{comment}{         *}}
+\DoxyCodeLine{102 \textcolor{comment}{         * @param system System to update contributions at}}
+\DoxyCodeLine{103 \textcolor{comment}{         * @param time Current time}}
+\DoxyCodeLine{104 \textcolor{comment}{         */}}
+\DoxyCodeLine{105         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a65bf1d40c5335e072ed18ea474eaf243}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{106 \textcolor{comment}{}}
+\DoxyCodeLine{107 \textcolor{comment}{        /**}}
+\DoxyCodeLine{108 \textcolor{comment}{         * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{109 \textcolor{comment}{         *}}
+\DoxyCodeLine{110 \textcolor{comment}{         * @param system System to update contributions at}}
+\DoxyCodeLine{111 \textcolor{comment}{         */}}
+\DoxyCodeLine{112         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a20d68258c2017b50c1990ab8ef9e1dc8}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{113 \textcolor{comment}{}}
+\DoxyCodeLine{114 \textcolor{comment}{        /**}}
+\DoxyCodeLine{115 \textcolor{comment}{         * @brief Update the time-\/dependent contributions of the element in a sparse system}}
+\DoxyCodeLine{116 \textcolor{comment}{         *}}
+\DoxyCodeLine{117 \textcolor{comment}{         * @param system System to update contributions at}}
+\DoxyCodeLine{118 \textcolor{comment}{         * @param time Current time}}
+\DoxyCodeLine{119 \textcolor{comment}{         */}}
+\DoxyCodeLine{120         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a65bf1d40c5335e072ed18ea474eaf243}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{121 \textcolor{comment}{}}
+\DoxyCodeLine{122 \textcolor{comment}{        /**}}
+\DoxyCodeLine{123 \textcolor{comment}{         * @brief Number of triplets of element}}
+\DoxyCodeLine{124 \textcolor{comment}{         *}}
+\DoxyCodeLine{125 \textcolor{comment}{         * Number of triplets that the element contributes to the global system (relevant for sparse memory reservation)}}
+\DoxyCodeLine{126 \textcolor{comment}{         */}}
+\DoxyCodeLine{127         std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_adcdd1588ba282ee62f00ddafae198c0e}{num\_triplets}} = \{}
+\DoxyCodeLine{128             \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
+\DoxyCodeLine{129             \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{130             \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{131         \};}
+\DoxyCodeLine{132 \textcolor{comment}{}}
+\DoxyCodeLine{133 \textcolor{comment}{        /**}}
+\DoxyCodeLine{134 \textcolor{comment}{         * @brief Convert the block to a steady behavior}}
+\DoxyCodeLine{135 \textcolor{comment}{         *}}
+\DoxyCodeLine{136 \textcolor{comment}{         * Converts the prescribed pressure to the constant mean of itself}}
+\DoxyCodeLine{137 \textcolor{comment}{         *}}
+\DoxyCodeLine{138 \textcolor{comment}{         */}}
+\DoxyCodeLine{139         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_ad68608d53bde04b36f293b66165ce9f1}{to\_steady}}();}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141     \textcolor{keyword}{private}:}
+\DoxyCodeLine{142         Parameters params;}
+\DoxyCodeLine{143     \};}
+\DoxyCodeLine{144 }
+\DoxyCodeLine{145     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{146     \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_af3eee123d0f2d3cd9c314e89657107d7}{PressureReferenceBC<T>::PressureReferenceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} P, std::string name) : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name)}
+\DoxyCodeLine{147     \{}
+\DoxyCodeLine{148         this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
+\DoxyCodeLine{149         this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters_a2458c71154ced6651c9809526f3e1cd6}{P}} = P;}
+\DoxyCodeLine{150     \}}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{152     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{153     \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a687e158f42007c3dda8a1992e3b28137}{PressureReferenceBC<T>::\string~PressureReferenceBC}}()}
+\DoxyCodeLine{154     \{}
+\DoxyCodeLine{155     \}}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{158     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_aff1ef740afb66f254f8b14fdf8e5803d}{PressureReferenceBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)}
+\DoxyCodeLine{159     \{}
+\DoxyCodeLine{160         \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{Block<T>::setup\_dofs\_}}(dofhandler, 1, 0);}
+\DoxyCodeLine{161     \}}
+\DoxyCodeLine{162 }
+\DoxyCodeLine{163     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{164     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a20d68258c2017b50c1990ab8ef9e1dc8}{PressureReferenceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system)}
+\DoxyCodeLine{165     \{}
+\DoxyCodeLine{166         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{167     \}}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{170     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a65bf1d40c5335e072ed18ea474eaf243}{PressureReferenceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time)}
+\DoxyCodeLine{171     \{}
+\DoxyCodeLine{172         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a1278a49733c3df5105a932a486d0afde}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.P.get(time);}
+\DoxyCodeLine{173     \}}
+\DoxyCodeLine{174 }
+\DoxyCodeLine{175     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{176     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a20d68258c2017b50c1990ab8ef9e1dc8}{PressureReferenceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system)}
+\DoxyCodeLine{177     \{}
+\DoxyCodeLine{178         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{179     \}}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{182     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a65bf1d40c5335e072ed18ea474eaf243}{PressureReferenceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time)}
+\DoxyCodeLine{183     \{}
+\DoxyCodeLine{184         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.P.get(time);}
+\DoxyCodeLine{185     \}}
+\DoxyCodeLine{186 }
+\DoxyCodeLine{187     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{188     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_ad68608d53bde04b36f293b66165ce9f1}{PressureReferenceBC<T>::to\_steady}}()}
+\DoxyCodeLine{189     \{}
+\DoxyCodeLine{190         params.P.to\_steady();}
+\DoxyCodeLine{191     \}}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193 \} \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{194 }
+\DoxyCodeLine{195 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_PRESSUREREFERENCEBC\_HPP\_}}
+
+\end{DoxyCode}

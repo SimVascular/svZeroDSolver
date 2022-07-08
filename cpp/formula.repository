@@ -174,7 +174,23 @@ P=\hat{P}
 \_form#49=51x24:\[
 \mathbf{C}^{e}=\left[\hat{P}\right]
 \]
-\_form#50=214x96:\[
+\_form#50=139x30:\[
+\begin{circuitikz} \draw
+node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+\draw (1.0,0) to [R, l=$R$, *-*] (3,0)
+node[anchor=south]{$P_{d}$};
+\end{circuitikz}
+\]
+\_form#51=84x13:\[
+P-P_d=R \cdot Q
+\]
+\_form#52=90x16:\[
+\mathbf{F}^{e}=\left[\begin{array}{ll}1 & -R\end{array}\right]
+\]
+\_form#53=61x14:\[
+\mathbf{C}^{e}=\left[-P_d\right]
+\]
+\_form#54=214x96:\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -185,46 +201,30 @@ node[anchor=south]{$P_{ref}$}
 node[ground]{$P_{C}$};
 \end{circuitikz}
 \]
-\_form#51=189x28:\[
+\_form#55=189x28:\[
 R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
 \]
-\_form#52=114x14:\[
+\_form#56=114x14:\[
 P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
 \]
-\_form#53=131x20:\[
+\_form#57=131x20:\[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & P_{c}^{e}\end{array}\right]^{T}
 \]
-\_form#54=126x31:\[
+\_form#58=126x31:\[
 \mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 & 0 & -R_{d} C \\
 0 & 0 & 0
 \end{array}\right]
 \]
-\_form#55=126x31:\[
+\_form#59=126x31:\[
 \mathbf{F}^{e}=\left[\begin{array}{ccc}
 0 & R_{d} & -1 \\
 1 & -R_{p} & -1
 \end{array}\right]
 \]
-\_form#56=76x31:\[
+\_form#60=76x31:\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
-\]
-\_form#57=139x30:\[
-\begin{circuitikz} \draw
-node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-\draw (1.0,0) to [R, l=$R$, *-*] (3,0)
-node[anchor=south]{$P_{d}$};
-\end{circuitikz}
-\]
-\_form#58=84x13:\[
-P-P_d=R \cdot Q
-\]
-\_form#59=90x16:\[
-\mathbf{F}^{e}=\left[\begin{array}{ll}1 & -R\end{array}\right]
-\]
-\_form#60=61x14:\[
-\mathbf{C}^{e}=\left[-P_d\right]
 \]

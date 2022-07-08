@@ -53,103 +53,107 @@
 \DoxyCodeLine{50 \textcolor{comment}{ * model. The elements are part of the MODEL namespace. Currently}}
 \DoxyCodeLine{51 \textcolor{comment}{ * supported elements are:}}
 \DoxyCodeLine{52 \textcolor{comment}{ *}}
-\DoxyCodeLine{53 \textcolor{comment}{ * * MODEL::BloodVessel: RCL blood vessel respresentation with optional stenosis}}
+\DoxyCodeLine{53 \textcolor{comment}{ * * MODEL::BloodVessel: RCL blood vessel respresentation with optional stenosis.}}
 \DoxyCodeLine{54 \textcolor{comment}{ * * MODEL::Junction: Junction element with arbitrary inlets and outlets.}}
-\DoxyCodeLine{55 \textcolor{comment}{ * * MODEL::FlowReference: Prescribed flow boundary condition}}
-\DoxyCodeLine{56 \textcolor{comment}{ * * MODEL::RCRBlockWithDistalPressure: RCR Windkessel boundary condition}}
-\DoxyCodeLine{57 \textcolor{comment}{ *}}
-\DoxyCodeLine{58 \textcolor{comment}{ * More information about the elements can be found on their}}
-\DoxyCodeLine{59 \textcolor{comment}{ * respective pages. The elements are connected to each other via nodes}}
-\DoxyCodeLine{60 \textcolor{comment}{ * (see MODEL::Node). Each node corresponds to a flow and a pressure value}}
-\DoxyCodeLine{61 \textcolor{comment}{ * of the model. The MODEL::DOFHandler handles the degrees-\/of-\/freedom (DOF) of the}}
-\DoxyCodeLine{62 \textcolor{comment}{ * system by assigning DOF indices to each element that determine the location}}
-\DoxyCodeLine{63 \textcolor{comment}{ * of the local element contribution in the global system. The complete model}}
-\DoxyCodeLine{64 \textcolor{comment}{ * is stored and managed by the MODEL::Model class.}}
-\DoxyCodeLine{65 \textcolor{comment}{ *}}
-\DoxyCodeLine{66 \textcolor{comment}{ * \#\# Algebra}}
-\DoxyCodeLine{67 \textcolor{comment}{ *}}
-\DoxyCodeLine{68 \textcolor{comment}{ * Everything related to solving the system of equation is contained in the}}
-\DoxyCodeLine{69 \textcolor{comment}{ * ALGEBRA namespace. The svZeroDSolver provides two different strategies for}}
-\DoxyCodeLine{70 \textcolor{comment}{ * handling the system of equation: a dense strategy (see ALGEBRA::DenseSystem)}}
-\DoxyCodeLine{71 \textcolor{comment}{ * and a sparse strategy (ALGEBRA::SparseSystem). The ALGEBRA::Integrator}}
-\DoxyCodeLine{72 \textcolor{comment}{ * handles the time integration scheme (see Integrator documentation for}}
-\DoxyCodeLine{73 \textcolor{comment}{ * more information on that).}}
-\DoxyCodeLine{74 \textcolor{comment}{ *}}
-\DoxyCodeLine{75 \textcolor{comment}{ * \#\# Input/output}}
-\DoxyCodeLine{76 \textcolor{comment}{ *}}
-\DoxyCodeLine{77 \textcolor{comment}{ * Finally the IO namespace provides everything related to reading and writing}}
-\DoxyCodeLine{78 \textcolor{comment}{ * files. The IO::ConfigReader reads the simultion config and IO::write\_csv and}}
-\DoxyCodeLine{79 \textcolor{comment}{ * IO::write\_json are two different methods for writing the result files.}}
+\DoxyCodeLine{55 \textcolor{comment}{ * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.}}
+\DoxyCodeLine{56 \textcolor{comment}{ * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.}}
+\DoxyCodeLine{57 \textcolor{comment}{ * * MODEL::ResistanceBC: Resistance boundary condition.}}
+\DoxyCodeLine{58 \textcolor{comment}{ * * MODEL::WindkesselBC: RCR Windkessel boundary condition.}}
+\DoxyCodeLine{59 \textcolor{comment}{ * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.}}
+\DoxyCodeLine{60 \textcolor{comment}{ *}}
+\DoxyCodeLine{61 \textcolor{comment}{ * The elements are based on the parent MODEL::Block class. More information about the}}
+\DoxyCodeLine{62 \textcolor{comment}{ * elements can be found on their}}
+\DoxyCodeLine{63 \textcolor{comment}{ * respective pages. The elements are connected to each other via nodes}}
+\DoxyCodeLine{64 \textcolor{comment}{ * (see MODEL::Node). Each node corresponds to a flow and a pressure value}}
+\DoxyCodeLine{65 \textcolor{comment}{ * of the model. The MODEL::DOFHandler handles the degrees-\/of-\/freedom (DOF) of the}}
+\DoxyCodeLine{66 \textcolor{comment}{ * system by assigning DOF indices to each element that determine the location}}
+\DoxyCodeLine{67 \textcolor{comment}{ * of the local element contribution in the global system. The complete model}}
+\DoxyCodeLine{68 \textcolor{comment}{ * is stored and managed by the MODEL::Model class.}}
+\DoxyCodeLine{69 \textcolor{comment}{ *}}
+\DoxyCodeLine{70 \textcolor{comment}{ * \#\# Algebra}}
+\DoxyCodeLine{71 \textcolor{comment}{ *}}
+\DoxyCodeLine{72 \textcolor{comment}{ * Everything related to solving the system of equation is contained in the}}
+\DoxyCodeLine{73 \textcolor{comment}{ * ALGEBRA namespace. The svZeroDSolver provides two different strategies for}}
+\DoxyCodeLine{74 \textcolor{comment}{ * handling the system of equation: a dense strategy (see ALGEBRA::DenseSystem)}}
+\DoxyCodeLine{75 \textcolor{comment}{ * and a sparse strategy (ALGEBRA::SparseSystem). The ALGEBRA::Integrator}}
+\DoxyCodeLine{76 \textcolor{comment}{ * handles the time integration scheme (see Integrator documentation for}}
+\DoxyCodeLine{77 \textcolor{comment}{ * more information on that).}}
+\DoxyCodeLine{78 \textcolor{comment}{ *}}
+\DoxyCodeLine{79 \textcolor{comment}{ * \#\# Input/output}}
 \DoxyCodeLine{80 \textcolor{comment}{ *}}
-\DoxyCodeLine{81 \textcolor{comment}{ * All classes make use of templates to allow easy exchange of scalar}}
-\DoxyCodeLine{82 \textcolor{comment}{ * types like `double` or `float` or to switch between sparse and dense systems.}}
-\DoxyCodeLine{83 \textcolor{comment}{ *}}
-\DoxyCodeLine{84 \textcolor{comment}{ * \# Build svZeroDSolver}}
-\DoxyCodeLine{85 \textcolor{comment}{ *}}
-\DoxyCodeLine{86 \textcolor{comment}{ * svZeroDSolver can be build easily via CMake. Make sure you have the following}}
-\DoxyCodeLine{87 \textcolor{comment}{ * dependencies installed before you start:}}
-\DoxyCodeLine{88 \textcolor{comment}{ *}}
-\DoxyCodeLine{89 \textcolor{comment}{ * \#\# Install dependencies on macOS}}
-\DoxyCodeLine{90 \textcolor{comment}{ *}}
-\DoxyCodeLine{91 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{92 \textcolor{comment}{ * brew install eigen       \# Linear algebra library}}
-\DoxyCodeLine{93 \textcolor{comment}{ * brew install jsoncpp     \# Standard json library}}
-\DoxyCodeLine{94 \textcolor{comment}{ * brew install simdjson    \# Fast json input parser}}
-\DoxyCodeLine{95 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{96 \textcolor{comment}{ *}}
-\DoxyCodeLine{97 \textcolor{comment}{ * \#\# Install dependencies on Linux}}
-\DoxyCodeLine{98 \textcolor{comment}{ *}}
-\DoxyCodeLine{99 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{100 \textcolor{comment}{ * sudo apt install libeigen3-\/dev       \# Linear algebra library}}
-\DoxyCodeLine{101 \textcolor{comment}{ * sudo apt-\/get install libjsoncpp-\/dev  \# Standard json library}}
-\DoxyCodeLine{102 \textcolor{comment}{ * sudo apt install libsimdjson-\/dev     \# Fast json input parser}}
-\DoxyCodeLine{103 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{104 \textcolor{comment}{ *}}
-\DoxyCodeLine{105 \textcolor{comment}{ * \#\# Build in debug mode}}
-\DoxyCodeLine{106 \textcolor{comment}{ *}}
-\DoxyCodeLine{107 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{108 \textcolor{comment}{ * mkdir Debug}}
-\DoxyCodeLine{109 \textcolor{comment}{ * cd Debug}}
-\DoxyCodeLine{110 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Debug ..}}
-\DoxyCodeLine{111 \textcolor{comment}{ * cmake -\/-\/build .}}
-\DoxyCodeLine{112 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{113 \textcolor{comment}{ *}}
-\DoxyCodeLine{114 \textcolor{comment}{ * \#\# Build in release mode}}
-\DoxyCodeLine{115 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{116 \textcolor{comment}{ * mkdir Release}}
-\DoxyCodeLine{117 \textcolor{comment}{ * cd Release}}
-\DoxyCodeLine{118 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release ..}}
-\DoxyCodeLine{119 \textcolor{comment}{ * cmake -\/-\/build .}}
-\DoxyCodeLine{120 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{121 \textcolor{comment}{ *}}
-\DoxyCodeLine{122 \textcolor{comment}{ * \# Run svZeroDSolver}}
-\DoxyCodeLine{123 \textcolor{comment}{ *}}
-\DoxyCodeLine{124 \textcolor{comment}{ * After building svZeroDSolver, the build folder contains an executable}}
-\DoxyCodeLine{125 \textcolor{comment}{ * called `svzerodsolver`. Run it with one of:}}
-\DoxyCodeLine{126 \textcolor{comment}{ *}}
-\DoxyCodeLine{127 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{128 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.json  \# For json output file format}}
-\DoxyCodeLine{129 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.csv   \# For csv output file format (faster)}}
-\DoxyCodeLine{130 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{131 \textcolor{comment}{ *}}
-\DoxyCodeLine{132 \textcolor{comment}{ * `path/to/config.json` and `path/to/output` should be replaced by the correct}}
-\DoxyCodeLine{133 \textcolor{comment}{ * paths to the input and output file, respectively.}}
-\DoxyCodeLine{134 \textcolor{comment}{ *}}
-\DoxyCodeLine{135 \textcolor{comment}{ * \#\# Simulation parameters}}
-\DoxyCodeLine{136 \textcolor{comment}{ *}}
-\DoxyCodeLine{137 \textcolor{comment}{ * The svZeroDSolver can be configured with the following options in the}}
-\DoxyCodeLine{138 \textcolor{comment}{ * `simulation\_parameters` section of the input file. Parameters without a}}
-\DoxyCodeLine{139 \textcolor{comment}{ * default value must be specified.}}
+\DoxyCodeLine{81 \textcolor{comment}{ * Finally the IO namespace provides everything related to reading and writing}}
+\DoxyCodeLine{82 \textcolor{comment}{ * files. The IO::ConfigReader reads the simultion config and IO::write\_csv and}}
+\DoxyCodeLine{83 \textcolor{comment}{ * IO::write\_json are two different methods for writing the result files.}}
+\DoxyCodeLine{84 \textcolor{comment}{ *}}
+\DoxyCodeLine{85 \textcolor{comment}{ * All classes make use of templates to allow easy exchange of scalar}}
+\DoxyCodeLine{86 \textcolor{comment}{ * types like `double` or `float` or to switch between sparse and dense systems.}}
+\DoxyCodeLine{87 \textcolor{comment}{ *}}
+\DoxyCodeLine{88 \textcolor{comment}{ * \# Build svZeroDSolver}}
+\DoxyCodeLine{89 \textcolor{comment}{ *}}
+\DoxyCodeLine{90 \textcolor{comment}{ * svZeroDSolver can be build easily via CMake. Make sure you have the following}}
+\DoxyCodeLine{91 \textcolor{comment}{ * dependencies installed before you start:}}
+\DoxyCodeLine{92 \textcolor{comment}{ *}}
+\DoxyCodeLine{93 \textcolor{comment}{ * \#\# Install dependencies on macOS}}
+\DoxyCodeLine{94 \textcolor{comment}{ *}}
+\DoxyCodeLine{95 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{96 \textcolor{comment}{ * brew install eigen       \# Linear algebra library}}
+\DoxyCodeLine{97 \textcolor{comment}{ * brew install jsoncpp     \# Standard json library}}
+\DoxyCodeLine{98 \textcolor{comment}{ * brew install simdjson    \# Fast json input parser}}
+\DoxyCodeLine{99 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{100 \textcolor{comment}{ *}}
+\DoxyCodeLine{101 \textcolor{comment}{ * \#\# Install dependencies on Linux}}
+\DoxyCodeLine{102 \textcolor{comment}{ *}}
+\DoxyCodeLine{103 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{104 \textcolor{comment}{ * sudo apt install libeigen3-\/dev       \# Linear algebra library}}
+\DoxyCodeLine{105 \textcolor{comment}{ * sudo apt-\/get install libjsoncpp-\/dev  \# Standard json library}}
+\DoxyCodeLine{106 \textcolor{comment}{ * sudo apt install libsimdjson-\/dev     \# Fast json input parser}}
+\DoxyCodeLine{107 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{108 \textcolor{comment}{ *}}
+\DoxyCodeLine{109 \textcolor{comment}{ * \#\# Build in debug mode}}
+\DoxyCodeLine{110 \textcolor{comment}{ *}}
+\DoxyCodeLine{111 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{112 \textcolor{comment}{ * mkdir Debug}}
+\DoxyCodeLine{113 \textcolor{comment}{ * cd Debug}}
+\DoxyCodeLine{114 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Debug ..}}
+\DoxyCodeLine{115 \textcolor{comment}{ * cmake -\/-\/build .}}
+\DoxyCodeLine{116 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{117 \textcolor{comment}{ *}}
+\DoxyCodeLine{118 \textcolor{comment}{ * \#\# Build in release mode}}
+\DoxyCodeLine{119 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{120 \textcolor{comment}{ * mkdir Release}}
+\DoxyCodeLine{121 \textcolor{comment}{ * cd Release}}
+\DoxyCodeLine{122 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release ..}}
+\DoxyCodeLine{123 \textcolor{comment}{ * cmake -\/-\/build .}}
+\DoxyCodeLine{124 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{125 \textcolor{comment}{ *}}
+\DoxyCodeLine{126 \textcolor{comment}{ * \# Run svZeroDSolver}}
+\DoxyCodeLine{127 \textcolor{comment}{ *}}
+\DoxyCodeLine{128 \textcolor{comment}{ * After building svZeroDSolver, the build folder contains an executable}}
+\DoxyCodeLine{129 \textcolor{comment}{ * called `svzerodsolver`. Run it with one of:}}
+\DoxyCodeLine{130 \textcolor{comment}{ *}}
+\DoxyCodeLine{131 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{132 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.json  \# For json output file format}}
+\DoxyCodeLine{133 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.csv   \# For csv output file format (faster)}}
+\DoxyCodeLine{134 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{135 \textcolor{comment}{ *}}
+\DoxyCodeLine{136 \textcolor{comment}{ * `path/to/config.json` and `path/to/output` should be replaced by the correct}}
+\DoxyCodeLine{137 \textcolor{comment}{ * paths to the input and output file, respectively.}}
+\DoxyCodeLine{138 \textcolor{comment}{ *}}
+\DoxyCodeLine{139 \textcolor{comment}{ * \#\# Simulation parameters}}
 \DoxyCodeLine{140 \textcolor{comment}{ *}}
-\DoxyCodeLine{141 \textcolor{comment}{ * Parameter key                           | Description                               | Default value}}
-\DoxyCodeLine{142 \textcolor{comment}{ * -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{143 \textcolor{comment}{ * number\_of\_cardiac\_cycles                | Number of cardiac cycles to simulate      | -\/}}
-\DoxyCodeLine{144 \textcolor{comment}{ * number\_of\_time\_pts\_per\_cardiac\_cycle    | Number of time steps per cardiac cycle    | -\/}}
-\DoxyCodeLine{145 \textcolor{comment}{ * absolute\_tolerance                      | Absolute tolerance for time integration   | \(\backslash\)f\$10\string^\{-\/8\}\(\backslash\)f\$}}
-\DoxyCodeLine{146 \textcolor{comment}{ * maximum\_nonlinear\_iterations            | Maximum number of nonlinear iterations for time integration | \(\backslash\)f\$30\(\backslash\)f\$}}
-\DoxyCodeLine{147 \textcolor{comment}{ * output\_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \(\backslash\)f\$1\(\backslash\)f\$}}
-\DoxyCodeLine{148 \textcolor{comment}{ * steady\_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true}}
-\DoxyCodeLine{149 \textcolor{comment}{ * output\_mean\_only                        | Write only the mean values over every timestep in the output file (only in csv) | false}}
-\DoxyCodeLine{150 \textcolor{comment}{ */}}
+\DoxyCodeLine{141 \textcolor{comment}{ * The svZeroDSolver can be configured with the following options in the}}
+\DoxyCodeLine{142 \textcolor{comment}{ * `simulation\_parameters` section of the input file. Parameters without a}}
+\DoxyCodeLine{143 \textcolor{comment}{ * default value must be specified.}}
+\DoxyCodeLine{144 \textcolor{comment}{ *}}
+\DoxyCodeLine{145 \textcolor{comment}{ * Parameter key                           | Description                               | Default value}}
+\DoxyCodeLine{146 \textcolor{comment}{ * -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{147 \textcolor{comment}{ * number\_of\_cardiac\_cycles                | Number of cardiac cycles to simulate      | -\/}}
+\DoxyCodeLine{148 \textcolor{comment}{ * number\_of\_time\_pts\_per\_cardiac\_cycle    | Number of time steps per cardiac cycle    | -\/}}
+\DoxyCodeLine{149 \textcolor{comment}{ * absolute\_tolerance                      | Absolute tolerance for time integration   | \(\backslash\)f\$10\string^\{-\/8\}\(\backslash\)f\$}}
+\DoxyCodeLine{150 \textcolor{comment}{ * maximum\_nonlinear\_iterations            | Maximum number of nonlinear iterations for time integration | \(\backslash\)f\$30\(\backslash\)f\$}}
+\DoxyCodeLine{151 \textcolor{comment}{ * output\_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \(\backslash\)f\$1\(\backslash\)f\$}}
+\DoxyCodeLine{152 \textcolor{comment}{ * steady\_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true}}
+\DoxyCodeLine{153 \textcolor{comment}{ * output\_mean\_only                        | Write only the mean values over every timestep in the output file (only in csv) | false}}
+\DoxyCodeLine{154 \textcolor{comment}{ */}}
 
 \end{DoxyCode}

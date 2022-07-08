@@ -340,6 +340,29 @@ namespace IO
                                     model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReference<T>(P = P, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "CORONARY")
+                                {
+                                    T Ra = bc_values["Ra1"];
+                                    T Ram = bc_values["Ra2"];
+                                    T Rv = bc_values["Rv1"];
+                                    T Ca = bc_values["Ca"];
+                                    T Cim = bc_values["Cc"];
+                                    simdjson::dom::element Pim_json = bc_values["Pim"];
+                                    simdjson::dom::element Pv_json = bc_values["P_v"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto Pim = get_time_dependent_parameter(t_json, Pim_json);
+                                    auto Pv = get_time_dependent_parameter(t_json, Pv_json);
+                                    if (Pim.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = Pim.cycle_period;
+                                    }
+                                    if (Pv.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = Pv.cycle_period;
+                                    }
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::OpenLoopCoronaryWithDistalPressure<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)));
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
                                 else
                                 {
                                     throw std::invalid_argument("Unknown boundary condition type " + static_cast<std::string>(bc_config["bc_type"]));
@@ -409,6 +432,29 @@ namespace IO
                                         cardiac_cycle_period = P.cycle_period;
                                     }
                                     model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReference<T>(P = P, bc_name)));
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "CORONARY")
+                                {
+                                    T Ra = bc_values["Ra1"];
+                                    T Ram = bc_values["Ra2"];
+                                    T Rv = bc_values["Rv1"];
+                                    T Ca = bc_values["Ca"];
+                                    T Cim = bc_values["Cc"];
+                                    simdjson::dom::element Pim_json = bc_values["Pim"];
+                                    simdjson::dom::element Pv_json = bc_values["P_v"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto Pim = get_time_dependent_parameter(t_json, Pim_json);
+                                    auto Pv = get_time_dependent_parameter(t_json, Pv_json);
+                                    if (Pim.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = Pim.cycle_period;
+                                    }
+                                    if (Pv.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = Pv.cycle_period;
+                                    }
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::OpenLoopCoronaryWithDistalPressure<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else

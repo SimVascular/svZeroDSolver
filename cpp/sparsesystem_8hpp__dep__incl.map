@@ -1,16 +1,17 @@
 <map id="algebra/sparsesystem.hpp" name="algebra/sparsesystem.hpp">
-<area shape="rect" id="node1" title="ALGEBRA::SparseSystem source file." alt="" coords="663,5,836,32"/>
-<area shape="rect" id="node2" href="$main_8cpp.html" title="Main routine of svZeroDSolver." alt="" coords="657,379,732,405"/>
-<area shape="rect" id="node3" href="$block_8hpp.html" title="MODEL::Block source file." alt="" coords="643,80,759,107"/>
-<area shape="rect" id="node4" href="$bloodvessel_8hpp.html" title="MODEL::BloodVessel source file." alt="" coords="947,155,1101,181"/>
-<area shape="rect" id="node5" href="$model_8hpp.html" title="MODEL::Model source file." alt="" coords="737,229,857,256"/>
-<area shape="rect" id="node10" href="$flowreference_8hpp.html" title="MODEL::FlowReference source file." alt="" coords="1125,155,1288,181"/>
+<area shape="rect" id="node1" title="ALGEBRA::SparseSystem source file." alt="" coords="853,5,1027,32"/>
+<area shape="rect" id="node2" href="$main_8cpp.html" title="Main routine of svZeroDSolver." alt="" coords="836,379,911,405"/>
+<area shape="rect" id="node3" href="$block_8hpp.html" title="MODEL::Block source file." alt="" coords="786,80,902,107"/>
+<area shape="rect" id="node4" href="$bloodvessel_8hpp.html" title="MODEL::BloodVessel source file." alt="" coords="1261,155,1416,181"/>
+<area shape="rect" id="node5" href="$model_8hpp.html" title="MODEL::Model source file." alt="" coords="917,229,1037,256"/>
+<area shape="rect" id="node10" href="$flowreference_8hpp.html" title="MODEL::FlowReference source file." alt="" coords="1440,155,1603,181"/>
 <area shape="rect" id="node11" href="$junction_8hpp.html" title="MODEL::Junction source file." alt="" coords="43,155,173,181"/>
-<area shape="rect" id="node12" href="$pressurereference_8hpp.html" title="MODEL::PressureReference source file." alt="" coords="197,155,387,181"/>
-<area shape="rect" id="node13" href="$rcrblockwithdistalpressure_8hpp.html" title="MODEL::RCRBlockWithDistalPressure source file." alt="" coords="411,155,647,181"/>
-<area shape="rect" id="node14" href="$resistancewithdistalpressure_8hpp.html" title="MODEL::ResistanceWithDistalPressure source file." alt="" coords="672,155,923,181"/>
-<area shape="rect" id="node6" href="$integrator_8hpp.html" title="ALGEBRA::Integrator source file." alt="" coords="780,304,927,331"/>
-<area shape="rect" id="node7" href="$configreader_8hpp.html" title="IO::ConfigReader source file." alt="" coords="951,304,1081,331"/>
-<area shape="rect" id="node8" href="$csvwriter_8hpp.html" title="IO::write_csv source file." alt="" coords="451,304,565,331"/>
-<area shape="rect" id="node9" href="$jsonwriter_8hpp.html" title="IO::write_json source file." alt="" coords="589,304,705,331"/>
+<area shape="rect" id="node12" href="$openloopcoronarywithdistalpressure_8hpp.html" title="MODEL::OpenLoopCoronaryWithDistalPressure source file." alt="" coords="197,155,488,181"/>
+<area shape="rect" id="node13" href="$pressurereference_8hpp.html" title="MODEL::PressureReference source file." alt="" coords="512,155,701,181"/>
+<area shape="rect" id="node14" href="$rcrblockwithdistalpressure_8hpp.html" title="MODEL::RCRBlockWithDistalPressure source file." alt="" coords="726,155,962,181"/>
+<area shape="rect" id="node15" href="$resistancewithdistalpressure_8hpp.html" title="MODEL::ResistanceWithDistalPressure source file." alt="" coords="987,155,1237,181"/>
+<area shape="rect" id="node6" href="$integrator_8hpp.html" title="ALGEBRA::Integrator source file." alt="" coords="959,304,1105,331"/>
+<area shape="rect" id="node7" href="$configreader_8hpp.html" title="IO::ConfigReader source file." alt="" coords="1129,304,1260,331"/>
+<area shape="rect" id="node8" href="$csvwriter_8hpp.html" title="IO::write_csv source file." alt="" coords="630,304,743,331"/>
+<area shape="rect" id="node9" href="$jsonwriter_8hpp.html" title="IO::write_json source file." alt="" coords="767,304,883,331"/>
 </map>

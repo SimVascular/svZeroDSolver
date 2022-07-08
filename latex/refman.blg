@@ -3,44 +3,44 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: refman.aux
 The style file: plain.bst
 Database file #1: bibTmpFile_1.bib
-You've used 1 entry,
+You've used 2 entries,
             2118 wiz_defined-function locations,
-            505 strings with 4273 characters,
-and the built_in function-call counts, 376 in all, are:
-= -- 34
-> -- 18
+            513 strings with 4522 characters,
+and the built_in function-call counts, 829 in all, are:
+= -- 75
+> -- 51
 < -- 0
-+ -- 8
-- -- 6
-* -- 32
-:= -- 69
-add.period$ -- 3
-call.type$ -- 1
-change.case$ -- 6
++ -- 21
+- -- 18
+* -- 74
+:= -- 148
+add.period$ -- 6
+call.type$ -- 2
+change.case$ -- 15
 chr.to.int$ -- 0
-cite$ -- 1
-duplicate$ -- 11
-empty$ -- 28
-format.name$ -- 6
-if$ -- 74
+cite$ -- 2
+duplicate$ -- 22
+empty$ -- 55
+format.name$ -- 18
+if$ -- 163
 int.to.chr$ -- 0
-int.to.str$ -- 1
-missing$ -- 1
-newline$ -- 8
-num.names$ -- 2
-pop$ -- 4
+int.to.str$ -- 2
+missing$ -- 2
+newline$ -- 13
+num.names$ -- 4
+pop$ -- 11
 preamble$ -- 1
-purify$ -- 5
+purify$ -- 13
 quote$ -- 0
-skip$ -- 7
+skip$ -- 14
 stack$ -- 0
-substring$ -- 27
-swap$ -- 1
+substring$ -- 56
+swap$ -- 2
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
+type$ -- 8
 warning$ -- 0
-while$ -- 3
-width$ -- 2
-write$ -- 13
+while$ -- 6
+width$ -- 3
+write$ -- 24

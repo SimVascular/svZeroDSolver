@@ -1,9 +1,10 @@
 <map id="MODEL::Block&lt; T &gt;" name="MODEL::Block&lt; T &gt;">
-<area shape="rect" id="node1" title="Base class for 0D model components." alt="" coords="5,132,143,159"/>
+<area shape="rect" id="node1" title="Base class for 0D model components." alt="" coords="5,165,143,192"/>
 <area shape="rect" id="node2" href="$class_m_o_d_e_l_1_1_blood_vessel.html" title="Resistor&#45;capacitor&#45;inductor blood vessel with optional stenosis." alt="" coords="209,5,387,32"/>
 <area shape="rect" id="node3" href="$class_m_o_d_e_l_1_1_flow_reference.html" title="Flow reference boundary condition element." alt="" coords="203,56,393,83"/>
 <area shape="rect" id="node4" href="$class_m_o_d_e_l_1_1_junction.html" title="Junction." alt="" coords="221,107,375,133"/>
-<area shape="rect" id="node5" href="$class_m_o_d_e_l_1_1_pressure_reference.html" title="Pressure reference boundary condition element." alt="" coords="191,157,405,184"/>
-<area shape="rect" id="node6" href="$class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html" title="RCR boundary condition element." alt="" coords="201,209,395,250"/>
-<area shape="rect" id="node7" href="$class_m_o_d_e_l_1_1_resistance_with_distal_pressure.html" title="Resistance with distal pressure boundary condition element." alt="" coords="199,274,397,315"/>
+<area shape="rect" id="node5" href="$class_m_o_d_e_l_1_1_open_loop_coronary_with_distal_pressure.html" title="Open loop coronary boundary condition element ." alt="" coords="193,158,403,199"/>
+<area shape="rect" id="node6" href="$class_m_o_d_e_l_1_1_pressure_reference.html" title="Pressure reference boundary condition element." alt="" coords="191,224,405,251"/>
+<area shape="rect" id="node7" href="$class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html" title="RCR boundary condition element." alt="" coords="201,275,395,317"/>
+<area shape="rect" id="node8" href="$class_m_o_d_e_l_1_1_resistance_with_distal_pressure.html" title="Resistance with distal pressure boundary condition element." alt="" coords="199,341,397,382"/>
 </map>

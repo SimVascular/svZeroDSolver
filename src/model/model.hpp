@@ -14,10 +14,12 @@
 
 #include "junction.hpp"
 #include "bloodvessel.hpp"
-#include "rcrblockwithdistalpressure.hpp"
-#include "flowreference.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
+#include "flowreference.hpp"
+#include "pressurereference.hpp"
+#include "rcrblockwithdistalpressure.hpp"
+#include "resistancewithdistalpressure.hpp"
 
 namespace MODEL
 {
@@ -46,9 +48,9 @@ namespace MODEL
          */
         ~Model();
 
-        std::map<std::string, std::variant<Junction<T>, BloodVessel<T>, FlowReference<T>, RCRBlockWithDistalPressure<T>>> blocks; ///< Elements of the model
-        DOFHandler dofhandler;                                                                                                    ///< Degree-of-freedom handler of the model
-        std::list<Node> nodes;                                                                                                    ///< Nodes of the model
+        std::map<std::string, std::variant<Junction<T>, BloodVessel<T>, FlowReference<T>, PressureReference<T>, RCRBlockWithDistalPressure<T>, ResistanceWithDistalPressure<T>>> blocks; ///< Elements of the model
+        DOFHandler dofhandler;                                                                                                                                                           ///< Degree-of-freedom handler of the model
+        std::list<Node> nodes;                                                                                                                                                           ///< Nodes of the model
 
         /**
          * @brief Update the constant contributions of all elements in a dense system

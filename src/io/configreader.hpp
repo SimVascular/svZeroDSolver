@@ -9,7 +9,6 @@
 #include <stdexcept>
 
 #include "../model/model.hpp"
-#include "../model/junction.hpp"
 #include "../helpers/debug.hpp"
 #include "simdjson.h"
 
@@ -207,6 +206,7 @@ namespace IO
         std::vector<T> values;
         if (json_values.is_double())
         {
+            times.push_back(0.0);
             values.push_back(json_values);
         }
         else
@@ -303,8 +303,41 @@ namespace IO
                                     simdjson::dom::element Q_json = bc_values["Q"];
                                     simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
                                     auto Q = get_time_dependent_parameter(t_json, Q_json);
-                                    cardiac_cycle_period = Q.cycle_period;
+                                    if (Q.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = Q.cycle_period;
+                                    }
                                     model.blocks.insert(std::make_pair(bc_name, MODEL::FlowReference<T>(Q = Q, bc_name)));
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "RESISTANCE")
+                                {
+                                    simdjson::dom::element R_json = bc_values["R"];
+                                    simdjson::dom::element Pd_json = bc_values["Pd"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto R = get_time_dependent_parameter(t_json, R_json);
+                                    auto Pd = get_time_dependent_parameter(t_json, Pd_json);
+                                    if (R.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = R.cycle_period;
+                                    }
+                                    if (Pd.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = Pd.cycle_period;
+                                    }
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::ResistanceWithDistalPressure<T>(R = R, Pd = Pd, bc_name)));
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "PRESSURE")
+                                {
+                                    simdjson::dom::element P_json = bc_values["P"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto P = get_time_dependent_parameter(t_json, P_json);
+                                    if (P.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = P.cycle_period;
+                                    }
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReference<T>(P = P, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else
@@ -341,8 +374,41 @@ namespace IO
                                     simdjson::dom::element Q_json = bc_values["Q"];
                                     simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
                                     auto Q = get_time_dependent_parameter(t_json, Q_json);
-                                    cardiac_cycle_period = Q.cycle_period;
+                                    if (Q.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = Q.cycle_period;
+                                    }
                                     model.blocks.insert(std::make_pair(bc_name, MODEL::FlowReference<T>(Q = Q, bc_name)));
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "RESISTANCE")
+                                {
+                                    simdjson::dom::element R_json = bc_values["R"];
+                                    simdjson::dom::element Pd_json = bc_values["Pd"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto R = get_time_dependent_parameter(t_json, R_json);
+                                    auto Pd = get_time_dependent_parameter(t_json, Pd_json);
+                                    if (R.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = R.cycle_period;
+                                    }
+                                    if (Pd.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = Pd.cycle_period;
+                                    }
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::ResistanceWithDistalPressure<T>(R = R, Pd = Pd, bc_name)));
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "PRESSURE")
+                                {
+                                    simdjson::dom::element P_json = bc_values["P"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto P = get_time_dependent_parameter(t_json, P_json);
+                                    if (P.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = P.cycle_period;
+                                    }
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReference<T>(P = P, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else

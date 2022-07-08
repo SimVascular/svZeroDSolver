@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
 
     std::vector<ALGEBRA::State<T>> states;
     std::vector<T> times;
-    states.reserve(num_time_steps + 1);
-    times.reserve(num_time_steps + 1);
+    states.reserve(num_time_steps);
+    times.reserve(num_time_steps);
 
     T time = 0.0;
 
@@ -101,11 +101,11 @@ int main(int argc, char *argv[])
     times.push_back(time);
 
     int interval_counter = 0;
-    for (size_t i = 0; i < num_time_steps; i++)
+    for (size_t i = 1; i < num_time_steps; i++)
     {
         state = integrator.step(state, time, model);
         interval_counter += 1;
-        time = time_step_size * T(i + 1);
+        time = time_step_size * T(i);
         if (interval_counter == output_interval)
         {
             times.push_back(time);
@@ -117,12 +117,12 @@ int main(int argc, char *argv[])
 
     if (HELPERS::endswith(output_file, ".csv"))
     {
-        DEBUG_MSG("Reading csv file to " << output_file);
+        DEBUG_MSG("Saving csv result file to " << output_file);
         IO::write_csv<T>(output_file, times, states, model, output_mean_only);
     }
     else if (HELPERS::endswith(output_file, ".json"))
     {
-        DEBUG_MSG("Reading json file to " << output_file);
+        DEBUG_MSG("Saving json result file to " << output_file);
         IO::write_json<T>(output_file, times, states, model);
     }
     else

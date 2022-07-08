@@ -89,8 +89,8 @@ namespace ALGEBRA
     {
         alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
         alpha_f = 1.0 / (1.0 + rho);
-        alpha_m_inv = alpha_m / 1.0;
-        alpha_f_inv = alpha_f / 1.0;
+        alpha_m_inv = 1.0 / alpha_m;
+        alpha_f_inv = 1.0 / alpha_f;
         gamma = 0.5 + alpha_m - alpha_f;
         gamma_inv = 1.0 / gamma;
 
@@ -107,7 +107,7 @@ namespace ALGEBRA
         y_af = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
         ydot_am = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);
 
-        y_dot_coeff = alpha_m / (alpha_f * gamma) * time_step_size_inv;
+        y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;
 
         // Make some memory reservations
         system.reserve(model);

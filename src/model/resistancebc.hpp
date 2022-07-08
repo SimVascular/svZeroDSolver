@@ -1,9 +1,9 @@
 /**
- * @file flowreference.hpp
- * @brief MODEL::FlowReference source file
+ * @file resistancebc.hpp
+ * @brief MODEL::ResistanceBC source file
  */
-#ifndef SVZERODSOLVER_MODEL_FLOWREFERENCE_HPP_
-#define SVZERODSOLVER_MODEL_FLOWREFERENCE_HPP_
+#ifndef SVZERODSOLVER_MODEL_RESISTANCEWITHDISTALPRESSURE_HPP_
+#define SVZERODSOLVER_MODEL_RESISTANCEWITHDISTALPRESSURE_HPP_
 
 #include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
@@ -14,22 +14,20 @@ namespace MODEL
 {
 
     /**
-     * @brief Flow reference boundary condition element.
-     *
-     * Applies a predefined flow at a boundary.
+     * @brief Resistance boundary condition.
      *
      * \f[
      * \begin{circuitikz} \draw
-     * node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
-     * \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
-     * \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
+     * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+     * \draw (1.0,0) to [R, l=$R$, *-*] (3,0)
+     * node[anchor=south]{$P_{d}$};
      * \end{circuitikz}
      * \f]
      *
      * ### Governing equations
      *
      * \f[
-     * Q=\hat{Q}
+     * P-P_d=R \cdot Q
      * \f]
      *
      * ### Local contributions
@@ -39,17 +37,18 @@ namespace MODEL
      * \f]
      *
      * \f[
-     * \mathbf{F}^{e}=\left[\begin{array}{ll}0 & 1\end{array}\right]
+     * \mathbf{F}^{e}=\left[\begin{array}{ll}1 & -R\end{array}\right]
      * \f]
      *
      * \f[
-     * \mathbf{C}^{e}=\left[\hat{Q}\right]
+     * \mathbf{C}^{e}=\left[-P_d\right]
      * \f]
+     *
      *
      * @tparam T Scalar type (e.g. `float`, `double`)
      */
     template <typename T>
-    class FlowReference : public Block<T>
+    class ResistanceBC : public Block<T>
     {
     public:
         /**
@@ -60,22 +59,24 @@ namespace MODEL
          */
         struct Parameters : public Block<T>::Parameters
         {
-            TimeDependentParameter<T> Q; ///< Time-dependent flow
+            TimeDependentParameter<T> R;  ///< Time-dependent resistance
+            TimeDependentParameter<T> Pd; ///< Time-dependent distal pressure
         };
 
         /**
-         * @brief Construct a new Flow Reference object
+         * @brief Construct a new ResistanceBC object
          *
-         * @param Q Time dependent flow
+         * @param R Time-dependent resistance
+         * @param Pd Time-dependent distal pressure
          * @param name Name
          */
-        FlowReference(TimeDependentParameter<T> Q, std::string name);
+        ResistanceBC(TimeDependentParameter<T> R, TimeDependentParameter<T> Pd, std::string name);
 
         /**
-         * @brief Destroy the Flow Reference object
+         * @brief Destroy the ResistanceBC object
          *
          */
-        ~FlowReference();
+        ~ResistanceBC();
 
         /**
          * @brief Set up the degrees of freedom (DOF) of the block
@@ -132,8 +133,8 @@ namespace MODEL
         /**
          * @brief Convert the block to a steady behavior
          *
-         * Converts the prescribed flow to the constant mean of itself
-         *
+         * Converts the resistance and distal pressure to the constant means of
+         * themselve
          */
         void to_steady();
 
@@ -142,53 +143,57 @@ namespace MODEL
     };
 
     template <typename T>
-    FlowReference<T>::FlowReference(TimeDependentParameter<T> Q, std::string name) : Block<T>(name)
+    ResistanceBC<T>::ResistanceBC(TimeDependentParameter<T> R, TimeDependentParameter<T> Pd, std::string name) : Block<T>(name)
     {
         this->name = name;
-        this->params.Q = Q;
+        this->params.R = R;
+        this->params.Pd = Pd;
     }
 
     template <typename T>
-    FlowReference<T>::~FlowReference()
+    ResistanceBC<T>::~ResistanceBC()
     {
     }
 
     template <typename T>
-    void FlowReference<T>::setup_dofs(DOFHandler &dofhandler)
+    void ResistanceBC<T>::setup_dofs(DOFHandler &dofhandler)
     {
         Block<T>::setup_dofs_(dofhandler, 1, 0);
     }
 
     template <typename T>
-    void FlowReference<T>::update_constant(ALGEBRA::DenseSystem<T> &system)
+    void ResistanceBC<T>::update_constant(ALGEBRA::DenseSystem<T> &system)
     {
-        system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
+        system.F(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
     }
 
     template <typename T>
-    void FlowReference<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time)
+    void ResistanceBC<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time)
     {
-        system.C(this->global_eqn_ids[0]) = -params.Q.get(time);
+        system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = -params.R.get(time);
+        system.C(this->global_eqn_ids[0]) = -params.Pd.get(time);
     }
 
     template <typename T>
-    void FlowReference<T>::update_constant(ALGEBRA::SparseSystem<T> &system)
+    void ResistanceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system)
     {
-        system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
+        system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
     }
 
     template <typename T>
-    void FlowReference<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time)
+    void ResistanceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time)
     {
-        system.C(this->global_eqn_ids[0]) = -params.Q.get(time);
+        system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -params.R.get(time);
+        system.C(this->global_eqn_ids[0]) = -params.Pd.get(time);
     }
 
     template <typename T>
-    void FlowReference<T>::to_steady()
+    void ResistanceBC<T>::to_steady()
     {
-        params.Q.to_steady();
+        params.R.to_steady();
+        params.Pd.to_steady();
     }
 
 } // namespace MODEL
 
-#endif // SVZERODSOLVER_MODEL_FLOWREFERENCE_HPP_
+#endif // SVZERODSOLVER_MODEL_RESISTANCEWITHDISTALPRESSURE_HPP_

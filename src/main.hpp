@@ -50,12 +50,16 @@
  * model. The elements are part of the MODEL namespace. Currently
  * supported elements are:
  *
- * * MODEL::BloodVessel: RCL blood vessel respresentation with optional stenosis
+ * * MODEL::BloodVessel: RCL blood vessel respresentation with optional stenosis.
  * * MODEL::Junction: Junction element with arbitrary inlets and outlets.
- * * MODEL::FlowReference: Prescribed flow boundary condition
- * * MODEL::RCRBlockWithDistalPressure: RCR Windkessel boundary condition
+ * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.
+ * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.
+ * * MODEL::ResistanceBC: Resistance boundary condition.
+ * * MODEL::WindkesselBC: RCR Windkessel boundary condition.
+ * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.
  *
- * More information about the elements can be found on their
+ * The elements are based on the parent MODEL::Block class. More information about the
+ * elements can be found on their
  * respective pages. The elements are connected to each other via nodes
  * (see MODEL::Node). Each node corresponds to a flow and a pressure value
  * of the model. The MODEL::DOFHandler handles the degrees-of-freedom (DOF) of the

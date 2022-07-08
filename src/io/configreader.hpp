@@ -295,7 +295,7 @@ namespace IO
                                     T C = bc_values["C"];
                                     T Rd = bc_values["Rd"];
                                     T Pd = bc_values["Pd"];
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::RCRBlockWithDistalPressure<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else if (static_cast<std::string>(bc_config["bc_type"]) == "FLOW")
@@ -307,7 +307,7 @@ namespace IO
                                     {
                                         cardiac_cycle_period = Q.cycle_period;
                                     }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::FlowReference<T>(Q = Q, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::FlowReferenceBC<T>(Q = Q, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else if (static_cast<std::string>(bc_config["bc_type"]) == "RESISTANCE")
@@ -325,7 +325,7 @@ namespace IO
                                     {
                                         cardiac_cycle_period = Pd.cycle_period;
                                     }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::ResistanceWithDistalPressure<T>(R = R, Pd = Pd, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::ResistanceBC<T>(R = R, Pd = Pd, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else if (static_cast<std::string>(bc_config["bc_type"]) == "PRESSURE")
@@ -337,7 +337,7 @@ namespace IO
                                     {
                                         cardiac_cycle_period = P.cycle_period;
                                     }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReference<T>(P = P, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReferenceBC<T>(P = P, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else if (static_cast<std::string>(bc_config["bc_type"]) == "CORONARY")
@@ -360,7 +360,7 @@ namespace IO
                                     {
                                         cardiac_cycle_period = Pv.cycle_period;
                                     }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::OpenLoopCoronaryWithDistalPressure<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::OpenLoopCoronaryBC<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else
@@ -389,7 +389,7 @@ namespace IO
                                     T C = bc_values["C"];
                                     T Rd = bc_values["Rd"];
                                     T Pd = bc_values["Pd"];
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::RCRBlockWithDistalPressure<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else if (static_cast<std::string>(bc_config["bc_type"]) == "FLOW")
@@ -401,7 +401,7 @@ namespace IO
                                     {
                                         cardiac_cycle_period = Q.cycle_period;
                                     }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::FlowReference<T>(Q = Q, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::FlowReferenceBC<T>(Q = Q, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else if (static_cast<std::string>(bc_config["bc_type"]) == "RESISTANCE")
@@ -419,7 +419,7 @@ namespace IO
                                     {
                                         cardiac_cycle_period = Pd.cycle_period;
                                     }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::ResistanceWithDistalPressure<T>(R = R, Pd = Pd, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::ResistanceBC<T>(R = R, Pd = Pd, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else if (static_cast<std::string>(bc_config["bc_type"]) == "PRESSURE")
@@ -431,7 +431,7 @@ namespace IO
                                     {
                                         cardiac_cycle_period = P.cycle_period;
                                     }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReference<T>(P = P, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReferenceBC<T>(P = P, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else if (static_cast<std::string>(bc_config["bc_type"]) == "CORONARY")
@@ -454,7 +454,7 @@ namespace IO
                                     {
                                         cardiac_cycle_period = Pv.cycle_period;
                                     }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::OpenLoopCoronaryWithDistalPressure<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)));
+                                    model.blocks.insert(std::make_pair(bc_name, MODEL::OpenLoopCoronaryBC<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)));
                                     DEBUG_MSG("Created boundary condition " << bc_name);
                                 }
                                 else

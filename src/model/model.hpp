@@ -16,11 +16,11 @@
 #include "bloodvessel.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
-#include "flowreference.hpp"
-#include "pressurereference.hpp"
-#include "rcrblockwithdistalpressure.hpp"
-#include "resistancewithdistalpressure.hpp"
-#include "openloopcoronarywithdistalpressure.hpp"
+#include "flowreferencebc.hpp"
+#include "pressurereferencebc.hpp"
+#include "windkesselbc.hpp"
+#include "resistancebc.hpp"
+#include "openloopcoronarybc.hpp"
 
 namespace MODEL
 {
@@ -49,9 +49,9 @@ namespace MODEL
          */
         ~Model();
 
-        std::map<std::string, std::variant<Junction<T>, BloodVessel<T>, FlowReference<T>, PressureReference<T>, RCRBlockWithDistalPressure<T>, ResistanceWithDistalPressure<T>, OpenLoopCoronaryWithDistalPressure<T>>> blocks; ///< Elements of the model
-        DOFHandler dofhandler;                                                                                                                                                                                                  ///< Degree-of-freedom handler of the model
-        std::list<Node> nodes;                                                                                                                                                                                                  ///< Nodes of the model
+        std::map<std::string, std::variant<Junction<T>, BloodVessel<T>, FlowReferenceBC<T>, PressureReferenceBC<T>, WindkesselBC<T>, ResistanceBC<T>, OpenLoopCoronaryBC<T>>> blocks; ///< Elements of the model
+        DOFHandler dofhandler;                                                                                                                                                        ///< Degree-of-freedom handler of the model
+        std::list<Node> nodes;                                                                                                                                                        ///< Nodes of the model
 
         /**
          * @brief Update the constant contributions of all elements in a dense system

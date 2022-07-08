@@ -1,9 +1,9 @@
 /**
- * @file openloopcoronarywithdistalpressure.hpp
- * @brief MODEL::OpenLoopCoronaryWithDistalPressure source file
+ * @file openloopcoronarybc.hpp
+ * @brief MODEL::OpenLoopCoronaryBC source file
  */
-#ifndef SVZERODSOLVER_MODEL_OPENLOOPCORONARYWITHDISTALPRESSURE_HPP_
-#define SVZERODSOLVER_MODEL_OPENLOOPCORONARYWITHDISTALPRESSURE_HPP_
+#ifndef SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_
+#define SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_
 
 #include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
@@ -14,7 +14,7 @@ namespace MODEL
 {
 
     /**
-     * @brief Open loop coronary boundary condition element \cite kim_coronary.
+     * @brief Open loop coronary boundary condition based on \cite kim_coronary.
      *
      * \f[
      * \begin{circuitikz} \draw
@@ -64,7 +64,7 @@ namespace MODEL
      * @tparam T Scalar type (e.g. `float`, `double`)
      */
     template <typename T>
-    class OpenLoopCoronaryWithDistalPressure : public Block<T>
+    class OpenLoopCoronaryBC : public Block<T>
     {
     public:
         /**
@@ -85,18 +85,18 @@ namespace MODEL
         };
 
         /**
-         * @brief Construct a new OpenLoopCoronaryWithDistalPressure object
+         * @brief Construct a new OpenLoopCoronaryBC object
          *
          * @param P Time dependent pressure
          * @param name Name
          */
-        OpenLoopCoronaryWithDistalPressure(T Ra, T Ram, T Rv, T Ca, T Cim, TimeDependentParameter<T> Pim, TimeDependentParameter<T> Pv, std::string name);
+        OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim, TimeDependentParameter<T> Pim, TimeDependentParameter<T> Pv, std::string name);
 
         /**
-         * @brief Destroy the OpenLoopCoronaryWithDistalPressure object
+         * @brief Destroy the OpenLoopCoronaryBC object
          *
          */
-        ~OpenLoopCoronaryWithDistalPressure();
+        ~OpenLoopCoronaryBC();
 
         /**
          * @brief Set up the degrees of freedom (DOF) of the block
@@ -164,7 +164,7 @@ namespace MODEL
     };
 
     template <typename T>
-    OpenLoopCoronaryWithDistalPressure<T>::OpenLoopCoronaryWithDistalPressure(T Ra, T Ram, T Rv, T Ca, T Cim, TimeDependentParameter<T> Pim, TimeDependentParameter<T> Pv, std::string name) : Block<T>(name)
+    OpenLoopCoronaryBC<T>::OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim, TimeDependentParameter<T> Pim, TimeDependentParameter<T> Pv, std::string name) : Block<T>(name)
     {
         this->name = name;
         this->params.Ra = Ra;
@@ -177,28 +177,64 @@ namespace MODEL
     }
 
     template <typename T>
-    OpenLoopCoronaryWithDistalPressure<T>::~OpenLoopCoronaryWithDistalPressure()
+    OpenLoopCoronaryBC<T>::~OpenLoopCoronaryBC()
     {
     }
 
     template <typename T>
-    void OpenLoopCoronaryWithDistalPressure<T>::setup_dofs(DOFHandler &dofhandler)
+    void OpenLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler)
     {
         Block<T>::setup_dofs_(dofhandler, 2, 1);
     }
 
     template <typename T>
-    void OpenLoopCoronaryWithDistalPressure<T>::update_constant(ALGEBRA::DenseSystem<T> &system)
+    void OpenLoopCoronaryBC<T>::update_constant(ALGEBRA::DenseSystem<T> &system)
     {
+        if (issteady)
+        {
+            // Different assmembly for steady block to avoid singular system
+            // and solve for the internal variable V_im inherently
+            system.F(this->global_eqn_ids[0], this->global_var_ids[0]) = -params.Cim;
+            system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = params.Cim * (params.Ra + params.Ram);
+            system.F(this->global_eqn_ids[0], this->global_var_ids[2]) = 1.0;
+            system.F(this->global_eqn_ids[1], this->global_var_ids[0]) = -1.0;
+            system.F(this->global_eqn_ids[1], this->global_var_ids[1]) = params.Ra + params.Ram + params.Rv;
+        }
+        else
+        {
+            system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = params.Cim * params.Rv;
+            system.F(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
+            system.F(this->global_eqn_ids[1], this->global_var_ids[0]) = params.Cim * params.Rv;
+            system.F(this->global_eqn_ids[1], this->global_var_ids[1]) = -params.Cim * params.Rv * params.Ra;
+            system.F(this->global_eqn_ids[1], this->global_var_ids[2]) = -(params.Rv + params.Ram);
+
+            system.E(this->global_eqn_ids[0], this->global_var_ids[0]) = -params.Ca * params.Cim * params.Rv;
+            system.E(this->global_eqn_ids[0], this->global_var_ids[1]) = params.Ra * params.Ca * params.Cim * params.Rv;
+            system.E(this->global_eqn_ids[0], this->global_var_ids[2]) = -params.Cim * params.Rv;
+            system.E(this->global_eqn_ids[1], this->global_var_ids[2]) = -params.Cim * params.Rv * params.Ram;
+        }
     }
 
     template <typename T>
-    void OpenLoopCoronaryWithDistalPressure<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time)
+    void OpenLoopCoronaryBC<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time)
     {
+        T Pim = params.Pim.get(time);
+        T Pv = params.Pv.get(time);
+
+        if (issteady)
+        {
+            system.C(this->global_eqn_ids[0]) = -params.Cim * Pim;
+            system.C(this->global_eqn_ids[1]) = Pv;
+        }
+        else
+        {
+            system.C(this->global_eqn_ids[0]) = params.Cim * (-Pim + Pv);
+            system.C(this->global_eqn_ids[1]) = -params.Cim * (params.Rv + params.Ram) * Pim + params.Ram * params.Cim * Pv;
+        }
     }
 
     template <typename T>
-    void OpenLoopCoronaryWithDistalPressure<T>::update_constant(ALGEBRA::SparseSystem<T> &system)
+    void OpenLoopCoronaryBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system)
     {
         if (issteady)
         {
@@ -226,7 +262,7 @@ namespace MODEL
     }
 
     template <typename T>
-    void OpenLoopCoronaryWithDistalPressure<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time)
+    void OpenLoopCoronaryBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time)
     {
         T Pim = params.Pim.get(time);
         T Pv = params.Pv.get(time);
@@ -244,7 +280,7 @@ namespace MODEL
     }
 
     template <typename T>
-    void OpenLoopCoronaryWithDistalPressure<T>::to_steady()
+    void OpenLoopCoronaryBC<T>::to_steady()
     {
         params.Pim.to_steady();
         params.Pv.to_steady();
@@ -253,4 +289,4 @@ namespace MODEL
 
 } // namespace MODEL
 
-#endif // SVZERODSOLVER_MODEL_OPENLOOPCORONARYWITHDISTALPRESSURE_HPP_
+#endif // SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_

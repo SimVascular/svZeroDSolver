@@ -17,9 +17,9 @@ node[ground]{$P_C$};
 \draw [-latex] (5.2,0) -- (6,0) node[right] {$Q_{out}$};
 \end{circuitikz}
 \]
-\end{DoxyItemize}\hypertarget{index_autotoc_md8}{}\doxysection{Background}\label{index_autotoc_md8}
-Zero-\/dimensional (0D) models are lightweight methods to simulate bulk hemodynamic quantities in the cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-\/dependent; they are unable to simulate spatial patterns in the hemodynamics. 0D models are analogous to electrical circuits. The flow rate simulated by 0D models represents electrical current, while the pressure represents voltage. Three primary building blocks of 0D models are resistors, capacitors, and inductors Resistance captures the viscous effects of blood flow, capacitance represents the compliance and distensibility of the vessel wall, and inductance represents the inertia of the blood flow. Different combinations of these building blocks, as well as others, can be formed to reflect the hemodynamics and physiology of different cardiovascular anatomies.\+These 0D models are governed by differential algebraic equations (DAEs).\hypertarget{index_autotoc_md9}{}\doxysection{Architecture}\label{index_autotoc_md9}
-\hypertarget{index_autotoc_md10}{}\doxysubsection{Model}\label{index_autotoc_md10}
+\end{DoxyItemize}\hypertarget{index_autotoc_md0}{}\doxysection{Background}\label{index_autotoc_md0}
+Zero-\/dimensional (0D) models are lightweight methods to simulate bulk hemodynamic quantities in the cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-\/dependent; they are unable to simulate spatial patterns in the hemodynamics. 0D models are analogous to electrical circuits. The flow rate simulated by 0D models represents electrical current, while the pressure represents voltage. Three primary building blocks of 0D models are resistors, capacitors, and inductors Resistance captures the viscous effects of blood flow, capacitance represents the compliance and distensibility of the vessel wall, and inductance represents the inertia of the blood flow. Different combinations of these building blocks, as well as others, can be formed to reflect the hemodynamics and physiology of different cardiovascular anatomies.\+These 0D models are governed by differential algebraic equations (DAEs).\hypertarget{index_autotoc_md1}{}\doxysection{Architecture}\label{index_autotoc_md1}
+\hypertarget{index_autotoc_md2}{}\doxysubsection{Model}\label{index_autotoc_md2}
 The solver uses a highly modular framework to model the vascular anatomy, using individual classes to represent different 0D elements of the model. The elements are part of the \mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} namespace. Currently supported elements are\+:
 
 
@@ -33,12 +33,12 @@ The solver uses a highly modular framework to model the vascular anatomy, using 
 \item \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}\+: Open Loop coronary boundary condition.
 \end{DoxyItemize}
 
-The elements are based on the parent \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}} class. More information about the elements can be found on their respective pages. The elements are connected to each other via nodes (see \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{MODEL\+::\+Node}}). Each node corresponds to a flow and a pressure value of the model. The \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{MODEL\+::\+DOFHandler}} handles the degrees-\/of-\/freedom (DOF) of the system by assigning DOF indices to each element that determine the location of the local element contribution in the global system. The complete model is stored and managed by the \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}} class.\hypertarget{index_autotoc_md11}{}\doxysubsection{Algebra}\label{index_autotoc_md11}
-Everything related to solving the system of equation is contained in the \mbox{\hyperlink{namespace_a_l_g_e_b_r_a}{ALGEBRA}} namespace. The sv\+Zero\+DSolver provides two different strategies for handling the system of equation\+: a dense strategy (see \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}) and a sparse strategy (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}). The \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA\+::\+Integrator}} handles the time integration scheme (see Integrator documentation for more information on that).\hypertarget{index_autotoc_md12}{}\doxysubsection{Input/output}\label{index_autotoc_md12}
+The elements are based on the parent \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}} class. More information about the elements can be found on their respective pages. The elements are connected to each other via nodes (see \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{MODEL\+::\+Node}}). Each node corresponds to a flow and a pressure value of the model. The \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{MODEL\+::\+DOFHandler}} handles the degrees-\/of-\/freedom (DOF) of the system by assigning DOF indices to each element that determine the location of the local element contribution in the global system. The complete model is stored and managed by the \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}} class.\hypertarget{index_autotoc_md3}{}\doxysubsection{Algebra}\label{index_autotoc_md3}
+Everything related to solving the system of equation is contained in the \mbox{\hyperlink{namespace_a_l_g_e_b_r_a}{ALGEBRA}} namespace. The sv\+Zero\+DSolver provides two different strategies for handling the system of equation\+: a dense strategy (see \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}) and a sparse strategy (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}). The \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA\+::\+Integrator}} handles the time integration scheme (see Integrator documentation for more information on that).\hypertarget{index_autotoc_md4}{}\doxysubsection{Input/output}\label{index_autotoc_md4}
 Finally the \mbox{\hyperlink{namespace_i_o}{IO}} namespace provides everything related to reading and writing files. The \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}} reads the simultion config and \mbox{\hyperlink{namespace_i_o_a7fe99544be33fd70a49d02daf6256bcf}{IO\+::write\+\_\+csv}} and \mbox{\hyperlink{namespace_i_o_ac3c323735b6caecafd2bc812dcbb2476}{IO\+::write\+\_\+json}} are two different methods for writing the result files.
 
-All classes make use of templates to allow easy exchange of scalar types like {\ttfamily double} or {\ttfamily float} or to switch between sparse and dense systems.\hypertarget{index_autotoc_md13}{}\doxysection{Build sv\+Zero\+DSolver}\label{index_autotoc_md13}
-sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the following dependencies installed before you start\+:\hypertarget{index_autotoc_md14}{}\doxysubsection{Install dependencies on mac\+OS}\label{index_autotoc_md14}
+All classes make use of templates to allow easy exchange of scalar types like {\ttfamily double} or {\ttfamily float} or to switch between sparse and dense systems.\hypertarget{index_autotoc_md5}{}\doxysection{Build sv\+Zero\+DSolver}\label{index_autotoc_md5}
+sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the following dependencies installed before you start\+:\hypertarget{index_autotoc_md6}{}\doxysubsection{Install dependencies on mac\+OS}\label{index_autotoc_md6}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{brew install eigen       \# Linear algebra library}
@@ -46,7 +46,7 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{brew install simdjson    \# Fast json input parser}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md15}{}\doxysubsection{Install dependencies on Linux}\label{index_autotoc_md15}
+\hypertarget{index_autotoc_md7}{}\doxysubsection{Install dependencies on Linux}\label{index_autotoc_md7}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{sudo apt install libeigen3-\/dev       \# Linear algebra library}
@@ -54,7 +54,7 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{sudo apt install libsimdjson-\/dev     \# Fast json input parser}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md16}{}\doxysubsection{Build in debug mode}\label{index_autotoc_md16}
+\hypertarget{index_autotoc_md8}{}\doxysubsection{Build in debug mode}\label{index_autotoc_md8}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{mkdir Debug}
@@ -63,7 +63,7 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md17}{}\doxysubsection{Build in release mode}\label{index_autotoc_md17}
+\hypertarget{index_autotoc_md9}{}\doxysubsection{Build in release mode}\label{index_autotoc_md9}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{mkdir Release}
@@ -72,7 +72,7 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md18}{}\doxysection{Run sv\+Zero\+DSolver}\label{index_autotoc_md18}
+\hypertarget{index_autotoc_md10}{}\doxysection{Run sv\+Zero\+DSolver}\label{index_autotoc_md10}
 After building sv\+Zero\+DSolver, the build folder contains an executable called {\ttfamily svzerodsolver}. Run it with one of\+:
 
 
@@ -85,7 +85,7 @@ After building sv\+Zero\+DSolver, the build folder contains an executable called
 \end{DoxyCode}
 
 
-{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md19}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md19}
+{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md11}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md11}
 The sv\+Zero\+DSolver can be configured with the following options in the {\ttfamily simulation\+\_\+parameters} section of the input file. Parameters without a default value must be specified.
 
 \tabulinesep=1mm
@@ -106,3 +106,5 @@ output\+\_\+interval   &The frequency of writing timesteps to the output (1 mean
 steady\+\_\+initial   &Toggle whether to use the steady solution as the initial condition for the simulation   &true    \\\cline{1-3}
 output\+\_\+mean\+\_\+only   &Write only the mean values over every timestep in the output file (only in csv)   &false   \\\cline{1-3}
 \end{longtabu}
+\hypertarget{index_autotoc_md12}{}\doxysection{Developer Guide}\label{index_autotoc_md12}
+If you are a developer and want to contribute to sv\+Zero\+DSolver, you can find more helpful information in our \mbox{\hyperlink{md_developer_guide}{Developer Guide}}. 

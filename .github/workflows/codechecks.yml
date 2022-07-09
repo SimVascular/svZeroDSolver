@@ -1,0 +1,14 @@
+name: Codechecks
+on: [push, pull_request]
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          sudo apt install clang-format
+      - name: Run clang-format
+        run: |
+          cd src
+          find **/*.hpp **/*.cpp | xargs clang-format --dry-run --style=Google --Werror

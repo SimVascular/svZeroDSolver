@@ -25,7 +25,7 @@ jobs:
         run: |
           conda run -n zerod pytest tests/test_integration_cpp.py
   macos:
-    runs-on: macOS-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies

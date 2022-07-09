@@ -11,21 +11,20 @@
 \DoxyCodeLine{7 }
 \DoxyCodeLine{8 \textcolor{preprocessor}{\#include <string>}}
 \DoxyCodeLine{9 }
-\DoxyCodeLine{10 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_h_e_l_p_e_r_s}{HELPERS}}}
-\DoxyCodeLine{11 \{\textcolor{comment}{}}
-\DoxyCodeLine{12 \textcolor{comment}{    /**}}
-\DoxyCodeLine{13 \textcolor{comment}{     * @brief Check if a string starts with the letters of another string}}
-\DoxyCodeLine{14 \textcolor{comment}{     *}}
-\DoxyCodeLine{15 \textcolor{comment}{     * @param str The string to check for the specified prefix}}
-\DoxyCodeLine{16 \textcolor{comment}{     * @param prefix The prefix the string should be checked for}}
-\DoxyCodeLine{17 \textcolor{comment}{     * @return true if strings starts with the prefix, otherwise false}}
-\DoxyCodeLine{18 \textcolor{comment}{     */}}
-\DoxyCodeLine{19     \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_h_e_l_p_e_r_s_aa60c2dfbfc096834b6cd243f84b9c47b}{startswith}}(\textcolor{keyword}{const} std::string \&str, \textcolor{keyword}{const} std::string \&prefix)}
-\DoxyCodeLine{20     \{}
-\DoxyCodeLine{21         \textcolor{keywordflow}{return} str.size() >= prefix.size() \&\& str.compare(0, prefix.size(), prefix) == 0;}
-\DoxyCodeLine{22     \}}
-\DoxyCodeLine{23 \}}
-\DoxyCodeLine{24 }
-\DoxyCodeLine{25 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_HELPERS\_STARTSWITH\_HPP\_}}
+\DoxyCodeLine{10 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_h_e_l_p_e_r_s}{HELPERS}} \{\textcolor{comment}{}}
+\DoxyCodeLine{11 \textcolor{comment}{/**}}
+\DoxyCodeLine{12 \textcolor{comment}{ * @brief Check if a string starts with the letters of another string}}
+\DoxyCodeLine{13 \textcolor{comment}{ *}}
+\DoxyCodeLine{14 \textcolor{comment}{ * @param str The string to check for the specified prefix}}
+\DoxyCodeLine{15 \textcolor{comment}{ * @param prefix The prefix the string should be checked for}}
+\DoxyCodeLine{16 \textcolor{comment}{ * @return true if strings starts with the prefix, otherwise false}}
+\DoxyCodeLine{17 \textcolor{comment}{ */}}
+\DoxyCodeLine{18 \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_h_e_l_p_e_r_s_aa60c2dfbfc096834b6cd243f84b9c47b}{startswith}}(\textcolor{keyword}{const} std::string \&str, \textcolor{keyword}{const} std::string \&prefix) \{}
+\DoxyCodeLine{19   \textcolor{keywordflow}{return} str.size() >= prefix.size() \&\&}
+\DoxyCodeLine{20          str.compare(0, prefix.size(), prefix) == 0;}
+\DoxyCodeLine{21 \}}
+\DoxyCodeLine{22 \}  \textcolor{comment}{// namespace HELPERS}}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_HELPERS\_STARTSWITH\_HPP\_}}
 
 \end{DoxyCode}

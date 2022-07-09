@@ -1,15 +1,19 @@
 <map id="model/model.hpp" name="model/model.hpp">
-<area shape="rect" id="node1" title="MODEL::Model source file." alt="" coords="409,5,529,32"/>
-<area shape="rect" id="node2" href="$integrator_8hpp.html" title="ALGEBRA::Integrator source file." alt="" coords="43,155,189,181"/>
-<area shape="rect" id="node3" href="$main_8cpp.html" title="Main routine of svZeroDSolver." alt="" coords="228,379,303,405"/>
-<area shape="rect" id="node4" href="$sparsesystem_8hpp.html" title="ALGEBRA::SparseSystem source file." alt="" coords="669,80,843,107"/>
-<area shape="rect" id="node10" href="$configreader_8hpp.html" title="IO::ConfigReader source file." alt="" coords="351,304,481,331"/>
-<area shape="rect" id="node12" href="$csvwriter_8hpp.html" title="IO::write_csv source file." alt="" coords="162,304,275,331"/>
-<area shape="rect" id="node13" href="$jsonwriter_8hpp.html" title="IO::write_json source file." alt="" coords="265,80,381,107"/>
-<area shape="rect" id="node5" href="$block_8hpp.html" title="MODEL::Block source file." alt="" coords="698,155,814,181"/>
-<area shape="rect" id="node6" href="$bloodvessel_8hpp.html" title="MODEL::BloodVessel source file." alt="" coords="556,229,711,256"/>
-<area shape="rect" id="node7" href="$closedloopheartpulmonary_8hpp.html" title="MODEL::ClosedLoopHeartPulmonary source file." alt="" coords="735,229,969,256"/>
-<area shape="rect" id="node8" href="$flowreference_8hpp.html" title="MODEL::FlowReference source file." alt="" coords="993,229,1156,256"/>
-<area shape="rect" id="node9" href="$junction_8hpp.html" title="MODEL::Junction source file." alt="" coords="401,229,532,256"/>
-<area shape="rect" id="node11" href="$rcrblockwithdistalpressure_8hpp.html" title="MODEL::RCRBlockWithDistalPressure source file." alt="" coords="1230,229,1466,256"/>
+<area shape="rect" id="node1" title="MODEL::Model source file." alt="" coords="779,5,899,32"/>
+<area shape="rect" id="node2" href="$densesystem_8hpp.html" title="ALGEBRA::DenseSystem source file." alt="" coords="1013,80,1182,107"/>
+<area shape="rect" id="node3" href="$main_8cpp.html" title="Main routine of svZeroDSolver." alt="" coords="412,155,487,181"/>
+<area shape="rect" id="node13" href="$integrator_8hpp.html" title="ALGEBRA::Integrator source file." alt="" coords="489,80,636,107"/>
+<area shape="rect" id="node14" href="$sparsesystem_8hpp.html" title="ALGEBRA::SparseSystem source file." alt="" coords="815,80,988,107"/>
+<area shape="rect" id="node15" href="$configreader_8hpp.html" title="IO::ConfigReader source file." alt="" coords="5,80,136,107"/>
+<area shape="rect" id="node16" href="$csvwriter_8hpp.html" title="IO::write_csv source file." alt="" coords="161,80,274,107"/>
+<area shape="rect" id="node17" href="$jsonwriter_8hpp.html" title="IO::write_json source file." alt="" coords="298,80,414,107"/>
+<area shape="rect" id="node4" href="$block_8hpp.html" title="MODEL::Block source file." alt="" coords="1018,155,1134,181"/>
+<area shape="rect" id="node5" href="$bloodvessel_8hpp.html" title="MODEL::BloodVessel source file." alt="" coords="584,229,739,256"/>
+<area shape="rect" id="node6" href="$closedloopheartpulmonary_8hpp.html" title="MODEL::ClosedLoopHeartPulmonary source file." alt="" coords="917,229,1152,256"/>
+<area shape="rect" id="node7" href="$flowreferencebc_8hpp.html" title="MODEL::FlowReferenceBC source file." alt="" coords="384,229,560,256"/>
+<area shape="rect" id="node8" href="$junction_8hpp.html" title="MODEL::Junction source file." alt="" coords="763,229,893,256"/>
+<area shape="rect" id="node9" href="$openloopcoronarybc_8hpp.html" title="MODEL::OpenLoopCoronaryBC source file." alt="" coords="1360,229,1560,256"/>
+<area shape="rect" id="node10" href="$pressurereferencebc_8hpp.html" title="MODEL::PressureReferenceBC source file." alt="" coords="1584,229,1787,256"/>
+<area shape="rect" id="node11" href="$resistancebc_8hpp.html" title="MODEL::ResistanceBC source file." alt="" coords="1177,229,1335,256"/>
+<area shape="rect" id="node12" href="$windkesselbc_8hpp.html" title="MODEL::WindkesselBC source file." alt="" coords="1811,229,1975,256"/>
 </map>

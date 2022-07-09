@@ -113,12 +113,15 @@ Architecture</h1>
 Model</h2>
 <p >The solver uses a highly modular framework to model the vascular anatomy, using individual classes to represent different 0D elements of the model. The elements are part of the <a class="el" href="namespace_m_o_d_e_l.html" title="MODEL namespace.">MODEL</a> namespace. Currently supported elements are:</p>
 <ul>
-<li><a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">MODEL::BloodVessel</a>: RCL blood vessel respresentation with optional stenosis</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">MODEL::BloodVessel</a>: RCL blood vessel respresentation with optional stenosis.</li>
 <li><a class="el" href="class_m_o_d_e_l_1_1_junction.html" title="Junction.">MODEL::Junction</a>: Junction element with arbitrary inlets and outlets.</li>
-<li><a class="el" href="class_m_o_d_e_l_1_1_flow_reference.html" title="Flow reference boundary condition element.">MODEL::FlowReference</a>: Prescribed flow boundary condition</li>
-<li><a class="el" href="class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html" title="RCR boundary condition element.">MODEL::RCRBlockWithDistalPressure</a>: RCR Windkessel boundary condition</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html" title="Flow reference boundary condition.">MODEL::FlowReferenceBC</a>: Prescribed flow boundary condition.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html" title="Pressure reference boundary condition.">MODEL::PressureReferenceBC</a>: Prescribed pressure boundary condition.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html" title="Resistance boundary condition.">MODEL::ResistanceBC</a>: Resistance boundary condition.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html" title="Windkessel RCR boundary condition.">MODEL::WindkesselBC</a>: RCR Windkessel boundary condition.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on .">MODEL::OpenLoopCoronaryBC</a>: Open Loop coronary boundary condition.</li>
 </ul>
-<p >More information about the elements can be found on their respective pages. The elements are connected to each other via nodes (see <a class="el" href="class_m_o_d_e_l_1_1_node.html" title="Node.">MODEL::Node</a>). Each node corresponds to a flow and a pressure value of the model. The <a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html" title="Degree-of-freedom handler.">MODEL::DOFHandler</a> handles the degrees-of-freedom (DOF) of the system by assigning DOF indices to each element that determine the location of the local element contribution in the global system. The complete model is stored and managed by the <a class="el" href="class_m_o_d_e_l_1_1_model.html" title="Model of 0D elements.">MODEL::Model</a> class.</p>
+<p >The elements are based on the parent <a class="el" href="class_m_o_d_e_l_1_1_block.html" title="Base class for 0D model components.">MODEL::Block</a> class. More information about the elements can be found on their respective pages. The elements are connected to each other via nodes (see <a class="el" href="class_m_o_d_e_l_1_1_node.html" title="Node.">MODEL::Node</a>). Each node corresponds to a flow and a pressure value of the model. The <a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html" title="Degree-of-freedom handler.">MODEL::DOFHandler</a> handles the degrees-of-freedom (DOF) of the system by assigning DOF indices to each element that determine the location of the local element contribution in the global system. The complete model is stored and managed by the <a class="el" href="class_m_o_d_e_l_1_1_model.html" title="Model of 0D elements.">MODEL::Model</a> class.</p>
 <h2><a class="anchor" id="autotoc_md11"></a>
 Algebra</h2>
 <p >Everything related to solving the system of equation is contained in the <a class="el" href="namespace_a_l_g_e_b_r_a.html" title="ALGEBRA namespace.">ALGEBRA</a> namespace. The svZeroDSolver provides two different strategies for handling the system of equation: a dense strategy (see <a class="el" href="class_a_l_g_e_b_r_a_1_1_dense_system.html" title="Dense system.">ALGEBRA::DenseSystem</a>) and a sparse strategy (<a class="el" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html" title="Sparse system.">ALGEBRA::SparseSystem</a>). The <a class="el" href="class_a_l_g_e_b_r_a_1_1_integrator.html" title="Generalized-alpha integrator.">ALGEBRA::Integrator</a> handles the time integration scheme (see Integrator documentation for more information on that).</p>
@@ -154,8 +157,10 @@ Build in release mode</h2>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md18"></a>
 Run svZeroDSolver</h1>
 <p >After building svZeroDSolver, the build folder contains an executable called <code>svzerodsolver</code>. Run it with one of:</p>
-<div class="fragment"><div class="line">./svzerodsolver path/to/config.json path/to/output.json  # For json output file format</div>
-<div class="line">./svzerodsolver path/to/config.json path/to/output.csv   # For csv output file format (faster)</div>
+<div class="fragment"><div class="line">./svzerodsolver path/to/config.json path/to/output.json  # For json output</div>
+<div class="line">file format</div>
+<div class="line">./svzerodsolver path/to/config.json path/to/output.csv   # For csv output</div>
+<div class="line">file format (faster) </div>
 </div><!-- fragment --><p ><code>path/to/config.json</code> and <code>path/to/output</code> should be replaced by the correct paths to the input and output file, respectively.</p>
 <h2><a class="anchor" id="autotoc_md19"></a>
 Simulation parameters</h2>
@@ -182,7 +187,7 @@ Simulation parameters</h2>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jul 9 2022 01:42:20 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sat Jul 9 2022 02:13:04 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

@@ -96,10 +96,10 @@ Classes</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ab4b9b47d604b55e923459bc1fe4cd955"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#ab4b9b47d604b55e923459bc1fe4cd955">ClosedLoopHeartPulmonary</a> (simdjson::dom::element heart_parameters, std::string <a class="el" href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">name</a>)</td></tr>
-<tr class="memdesc:ab4b9b47d604b55e923459bc1fe4cd955"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html" title="RCR boundary condition element.">RCRBlockWithDistalPressure</a> object.  <a href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#ab4b9b47d604b55e923459bc1fe4cd955">More...</a><br /></td></tr>
+<tr class="memdesc:ab4b9b47d604b55e923459bc1fe4cd955"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new RCRBlockWithDistalPressure object.  <a href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#ab4b9b47d604b55e923459bc1fe4cd955">More...</a><br /></td></tr>
 <tr class="separator:ab4b9b47d604b55e923459bc1fe4cd955"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d36cbc641c820ae88beeb2f4fa3027a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a6d36cbc641c820ae88beeb2f4fa3027a">~ClosedLoopHeartPulmonary</a> ()</td></tr>
-<tr class="memdesc:a6d36cbc641c820ae88beeb2f4fa3027a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html" title="RCR boundary condition element.">RCRBlockWithDistalPressure</a> object.  <a href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a6d36cbc641c820ae88beeb2f4fa3027a">More...</a><br /></td></tr>
+<tr class="memdesc:a6d36cbc641c820ae88beeb2f4fa3027a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the RCRBlockWithDistalPressure object.  <a href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a6d36cbc641c820ae88beeb2f4fa3027a">More...</a><br /></td></tr>
 <tr class="separator:a6d36cbc641c820ae88beeb2f4fa3027a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37fbf9c3749d095700b9739eb04a44e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a37fbf9c3749d095700b9739eb04a44e0">setup_dofs</a> (<a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:a37fbf9c3749d095700b9739eb04a44e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <a href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a37fbf9c3749d095700b9739eb04a44e0">More...</a><br /></td></tr>
@@ -122,9 +122,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a98c480ede15293fbd2aeeb26eff73006"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a98c480ede15293fbd2aeeb26eff73006">update_solution</a> (<a class="el" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem</a>&lt; T &gt; &amp;system, Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:a98c480ede15293fbd2aeeb26eff73006"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <a href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a98c480ede15293fbd2aeeb26eff73006">More...</a><br /></td></tr>
 <tr class="separator:a98c480ede15293fbd2aeeb26eff73006"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a29d155742af0f341536a5db08500d934"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a29d155742af0f341536a5db08500d934">to_steady</a> ()</td></tr>
-<tr class="memdesc:a29d155742af0f341536a5db08500d934"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the block to a steady behavior.  <a href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a29d155742af0f341536a5db08500d934">More...</a><br /></td></tr>
-<tr class="separator:a29d155742af0f341536a5db08500d934"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9268f72ccc9831441471fd74b0aa735"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#ac9268f72ccc9831441471fd74b0aa735">get_activation_and_elastance_functions</a> (T time)</td></tr>
 <tr class="memdesc:ac9268f72ccc9831441471fd74b0aa735"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the atrial activation and LV/RV elastance functions which depend on time.  <a href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#ac9268f72ccc9831441471fd74b0aa735">More...</a><br /></td></tr>
 <tr class="separator:ac9268f72ccc9831441471fd74b0aa735"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -295,7 +292,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Construct a new <a class="el" href="class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html" title="RCR boundary condition element.">RCRBlockWithDistalPressure</a> object. </p>
+<p>Construct a new RCRBlockWithDistalPressure object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">Rp</td><td>Proximal resistance </td></tr>
@@ -323,7 +320,7 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Destroy the <a class="el" href="class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html" title="RCR boundary condition element.">RCRBlockWithDistalPressure</a> object. </p>
+<p>Destroy the RCRBlockWithDistalPressure object. </p>
 
 </div>
 </div>
@@ -382,25 +379,6 @@ template&lt;typename T &gt; </div>
   </table>
   </dd>
 </dl>
-
-</div>
-</div>
-<a id="a29d155742af0f341536a5db08500d934" name="a29d155742af0f341536a5db08500d934"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a29d155742af0f341536a5db08500d934">&#9670;&nbsp;</a></span>to_steady()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html">MODEL::ClosedLoopHeartPulmonary</a>&lt; T &gt;::to_steady</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert the block to a steady behavior. </p>
-<p >Set the capacitance to 0. </p>
 
 </div>
 </div>
@@ -663,9 +641,9 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">            {<span class="stringliteral">&quot;F&quot;</span>, 5},</div>
-<div class="line">            {<span class="stringliteral">&quot;E&quot;</span>, 1},</div>
-<div class="line">            {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
+<div class="line">            {<span class="stringliteral">&quot;F&quot;</span>, 33},</div>
+<div class="line">            {<span class="stringliteral">&quot;E&quot;</span>, 10},</div>
+<div class="line">            {<span class="stringliteral">&quot;D&quot;</span>, 2},</div>
 <div class="line">        }</div>
 </div><!-- fragment -->
 <p>Number of triplets of element. </p>
@@ -679,7 +657,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jul 9 2022 01:42:20 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sat Jul 9 2022 02:13:04 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['timedependentparameter_0',['TimeDependentParameter',['../class_m_o_d_e_l_1_1_time_dependent_parameter.html#a6b20648694b84b99af8faf36e6feae33',1,'MODEL::TimeDependentParameter::TimeDependentParameter()'],['../class_m_o_d_e_l_1_1_time_dependent_parameter.html#a27cc83fe61ec4fa383e35227275a8ce2',1,'MODEL::TimeDependentParameter::TimeDependentParameter(std::vector&lt; T &gt; times, std::vector&lt; T &gt; values)']]],
-  ['to_5fsteady_1',['to_steady',['../class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a',1,'MODEL::Block::to_steady()'],['../class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a29d155742af0f341536a5db08500d934',1,'MODEL::ClosedLoopHeartPulmonary::to_steady()'],['../class_m_o_d_e_l_1_1_flow_reference.html#a3f68d961296afeca077bfb4571ec6935',1,'MODEL::FlowReference::to_steady()'],['../class_m_o_d_e_l_1_1_model.html#a6aca235e32671218c934c19395b9ff96',1,'MODEL::Model::to_steady()'],['../class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html#a7169518ded64480728c2c2287bdb94e8',1,'MODEL::RCRBlockWithDistalPressure::to_steady()'],['../class_m_o_d_e_l_1_1_time_dependent_parameter.html#a040eeefcb9697499f31ee7cabc028f40',1,'MODEL::TimeDependentParameter::to_steady()']]]
+  ['register_5fequation_0',['register_equation',['../class_m_o_d_e_l_1_1_d_o_f_handler.html#acc2279e604839dd8fe28891fd4ec95d7',1,'MODEL::DOFHandler']]],
+  ['register_5fvariable_1',['register_variable',['../class_m_o_d_e_l_1_1_d_o_f_handler.html#a5a0ed333dcaba12d1ef7ff9875170840',1,'MODEL::DOFHandler']]],
+  ['reserve_2',['reserve',['../class_a_l_g_e_b_r_a_1_1_dense_system.html#a9c8262ffdc33153e3867a8c93e4eeecf',1,'ALGEBRA::DenseSystem::reserve()'],['../class_a_l_g_e_b_r_a_1_1_sparse_system.html#a6f8a213d10412ff535c8767be09177f5',1,'ALGEBRA::SparseSystem::reserve()']]],
+  ['resistancebc_3',['ResistanceBC',['../class_m_o_d_e_l_1_1_resistance_b_c.html#a5bcb6df09176e5cc9a563f054253838b',1,'MODEL::ResistanceBC']]]
 ];

@@ -6,6 +6,7 @@
 #define SVZERODSOLVER_IO_CONFIGREADER_HPP_
 
 #include <string>
+#include <list>
 #include <stdexcept>
 
 #include "../model/model.hpp"
@@ -125,7 +126,7 @@ namespace IO
         static int get_default(simdjson::dom::element &ele, std::string key, int def);
         static bool get_default(simdjson::dom::element &ele, std::string key, bool def);
         static simdjson::dom::element get_default(simdjson::dom::element &ele, std::string key, simdjson::dom::element def);
-        static MODEL::TimeDependentParameter<T> get_time_dependent_parameter(simdjson::dom::element &json_times, simdjson::dom::element &json_values);
+        MODEL::TimeDependentParameter<T> get_time_dependent_parameter(simdjson::dom::element &json_times, simdjson::dom::element &json_values);
     };
 
     template <typename T>
@@ -143,6 +144,7 @@ namespace IO
     template <typename T>
     bool ConfigReader<T>::has_key(simdjson::dom::element &ele, std::string key)
     {
+        // Check if config has key by trying
         bool has_key = true;
         try
         {
@@ -223,7 +225,12 @@ namespace IO
                 values.push_back(value);
             }
         }
-        return MODEL::TimeDependentParameter<T>(times, values);
+        MODEL::TimeDependentParameter<T> param(times, values);
+        if (param.isconstant == false)
+        {
+            cardiac_cycle_period = param.cycle_period;
+        }
+        return param;
     }
 
     template <typename T>
@@ -240,20 +247,18 @@ namespace IO
         {
             if ((static_cast<std::string>(junction_config["junction_type"]) == "NORMAL_JUNCTION") || (static_cast<std::string>(junction_config["junction_type"]) == "internal_junction"))
             {
-                std::string name = static_cast<std::string>(junction_config["junction_name"]);
-                model.blocks.insert(std::make_pair(name, MODEL::Junction<T>(name)));
-                DEBUG_MSG("Created junction " << name);
+                // Create the junction and add to blocks
+                std::string junction_name = static_cast<std::string>(junction_config["junction_name"]);
+                model.blocks.insert({junction_name, MODEL::Junction<T>(junction_name)});
+
+                // Check for connections to inlet and outlet vessels and append to connections list
                 for (simdjson::dom::element inlet_vessel : junction_config["inlet_vessels"])
                 {
-                    auto connection = std::make_tuple("V" + std::to_string(inlet_vessel.get_int64()), name);
-                    connections.push_back(connection);
-                    DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
+                    connections.push_back({"V" + std::to_string(inlet_vessel.get_int64()), junction_name});
                 }
                 for (simdjson::dom::element outlet_vessel : junction_config["outlet_vessels"])
                 {
-                    auto connection = std::make_tuple(name, "V" + std::to_string(outlet_vessel.get_int64()));
-                    connections.push_back(connection);
-                    DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
+                    connections.push_back({junction_name, "V" + std::to_string(outlet_vessel.get_int64())});
                 }
             }
             else
@@ -263,216 +268,101 @@ namespace IO
         }
 
         // Create vessels
+        std::list<std::string> bc_locations = {"inlet", "outlet"};
         for (simdjson::dom::element vessel_config : config["vessels"])
         {
+            simdjson::dom::element vessel_values = vessel_config["zero_d_element_values"];
+            std::string vessel_id_string = std::to_string(vessel_config["vessel_id"].get_int64());
+            std::string vessel_name = "V" + vessel_id_string;
             if (static_cast<std::string>(vessel_config["zero_d_element_type"]) == "BloodVessel")
             {
-                simdjson::dom::element vessel_values = vessel_config["zero_d_element_values"];
-                std::string vessel_id_string = std::to_string(vessel_config["vessel_id"].get_int64());
-                std::string name = "V" + vessel_id_string;
-                T R = vessel_values["R_poiseuille"];
-                T C = get_default(vessel_values, "C", 0.0);
-                T L = get_default(vessel_values, "L", 0.0);
-                T stenosis_coefficient = get_default(vessel_values, "stenosis_coefficient", 0.0);
-                model.blocks.insert(std::make_pair(name, MODEL::BloodVessel<T>(R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient, name = name)));
-                DEBUG_MSG("Created vessel " << name);
-
-                if (has_key(vessel_config, "boundary_conditions") == true)
-                {
-                    simdjson::dom::element vessel_bcs = vessel_config["boundary_conditions"];
-                    if (has_key(vessel_bcs, "inlet"))
-                    {
-                        std::string bc_name = "BC" + vessel_id_string + "_inlet";
-                        std::string bc_handle = static_cast<std::string>(vessel_bcs["inlet"]);
-                        for (simdjson::dom::element bc_config : config["boundary_conditions"])
-                        {
-                            if (static_cast<std::string>(bc_config["bc_name"]) == bc_handle)
-                            {
-                                simdjson::dom::element bc_values = bc_config["bc_values"];
-                                if (static_cast<std::string>(bc_config["bc_type"]) == "RCR")
-                                {
-                                    T Rp = bc_values["Rp"];
-                                    T C = bc_values["C"];
-                                    T Rd = bc_values["Rd"];
-                                    T Pd = bc_values["Pd"];
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else if (static_cast<std::string>(bc_config["bc_type"]) == "FLOW")
-                                {
-                                    simdjson::dom::element Q_json = bc_values["Q"];
-                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
-                                    auto Q = get_time_dependent_parameter(t_json, Q_json);
-                                    if (Q.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = Q.cycle_period;
-                                    }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::FlowReferenceBC<T>(Q = Q, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else if (static_cast<std::string>(bc_config["bc_type"]) == "RESISTANCE")
-                                {
-                                    simdjson::dom::element R_json = bc_values["R"];
-                                    simdjson::dom::element Pd_json = bc_values["Pd"];
-                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
-                                    auto R = get_time_dependent_parameter(t_json, R_json);
-                                    auto Pd = get_time_dependent_parameter(t_json, Pd_json);
-                                    if (R.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = R.cycle_period;
-                                    }
-                                    if (Pd.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = Pd.cycle_period;
-                                    }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::ResistanceBC<T>(R = R, Pd = Pd, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else if (static_cast<std::string>(bc_config["bc_type"]) == "PRESSURE")
-                                {
-                                    simdjson::dom::element P_json = bc_values["P"];
-                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
-                                    auto P = get_time_dependent_parameter(t_json, P_json);
-                                    if (P.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = P.cycle_period;
-                                    }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReferenceBC<T>(P = P, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else if (static_cast<std::string>(bc_config["bc_type"]) == "CORONARY")
-                                {
-                                    T Ra = bc_values["Ra1"];
-                                    T Ram = bc_values["Ra2"];
-                                    T Rv = bc_values["Rv1"];
-                                    T Ca = bc_values["Ca"];
-                                    T Cim = bc_values["Cc"];
-                                    simdjson::dom::element Pim_json = bc_values["Pim"];
-                                    simdjson::dom::element Pv_json = bc_values["P_v"];
-                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
-                                    auto Pim = get_time_dependent_parameter(t_json, Pim_json);
-                                    auto Pv = get_time_dependent_parameter(t_json, Pv_json);
-                                    if (Pim.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = Pim.cycle_period;
-                                    }
-                                    if (Pv.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = Pv.cycle_period;
-                                    }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::OpenLoopCoronaryBC<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else
-                                {
-                                    throw std::invalid_argument("Unknown boundary condition type " + static_cast<std::string>(bc_config["bc_type"]));
-                                }
-                                break;
-                            }
-                        }
-                        auto connection = std::make_tuple(bc_name, name);
-                        connections.push_back(connection);
-                        DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
-                    }
-                    if (has_key(vessel_bcs, "outlet") == true)
-                    {
-                        std::string bc_name = "BC" + vessel_id_string + "_outlet";
-                        std::string bc_handle = static_cast<std::string>(vessel_bcs["outlet"]);
-                        for (simdjson::dom::element bc_config : config["boundary_conditions"])
-                        {
-                            if (static_cast<std::string>(bc_config["bc_name"]) == bc_handle)
-                            {
-                                simdjson::dom::element bc_values = bc_config["bc_values"];
-                                if (static_cast<std::string>(bc_config["bc_type"]) == "RCR")
-                                {
-                                    T Rp = bc_values["Rp"];
-                                    T C = bc_values["C"];
-                                    T Rd = bc_values["Rd"];
-                                    T Pd = bc_values["Pd"];
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else if (static_cast<std::string>(bc_config["bc_type"]) == "FLOW")
-                                {
-                                    simdjson::dom::element Q_json = bc_values["Q"];
-                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
-                                    auto Q = get_time_dependent_parameter(t_json, Q_json);
-                                    if (Q.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = Q.cycle_period;
-                                    }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::FlowReferenceBC<T>(Q = Q, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else if (static_cast<std::string>(bc_config["bc_type"]) == "RESISTANCE")
-                                {
-                                    simdjson::dom::element R_json = bc_values["R"];
-                                    simdjson::dom::element Pd_json = bc_values["Pd"];
-                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
-                                    auto R = get_time_dependent_parameter(t_json, R_json);
-                                    auto Pd = get_time_dependent_parameter(t_json, Pd_json);
-                                    if (R.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = R.cycle_period;
-                                    }
-                                    if (Pd.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = Pd.cycle_period;
-                                    }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::ResistanceBC<T>(R = R, Pd = Pd, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else if (static_cast<std::string>(bc_config["bc_type"]) == "PRESSURE")
-                                {
-                                    simdjson::dom::element P_json = bc_values["P"];
-                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
-                                    auto P = get_time_dependent_parameter(t_json, P_json);
-                                    if (P.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = P.cycle_period;
-                                    }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::PressureReferenceBC<T>(P = P, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else if (static_cast<std::string>(bc_config["bc_type"]) == "CORONARY")
-                                {
-                                    T Ra = bc_values["Ra1"];
-                                    T Ram = bc_values["Ra2"];
-                                    T Rv = bc_values["Rv1"];
-                                    T Ca = bc_values["Ca"];
-                                    T Cim = bc_values["Cc"];
-                                    simdjson::dom::element Pim_json = bc_values["Pim"];
-                                    simdjson::dom::element Pv_json = bc_values["P_v"];
-                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
-                                    auto Pim = get_time_dependent_parameter(t_json, Pim_json);
-                                    auto Pv = get_time_dependent_parameter(t_json, Pv_json);
-                                    if (Pim.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = Pim.cycle_period;
-                                    }
-                                    if (Pv.isconstant == false)
-                                    {
-                                        cardiac_cycle_period = Pv.cycle_period;
-                                    }
-                                    model.blocks.insert(std::make_pair(bc_name, MODEL::OpenLoopCoronaryBC<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)));
-                                    DEBUG_MSG("Created boundary condition " << bc_name);
-                                }
-                                else
-                                {
-                                    throw std::invalid_argument("Unknown boundary condition type " + static_cast<std::string>(bc_config["bc_type"]));
-                                }
-                                break;
-                            }
-                        }
-                        auto connection = std::make_tuple(name, bc_name);
-                        connections.push_back(connection);
-                        DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
-                    }
-                }
+                T R = vessel_values["R_poiseuille"], C = get_default(vessel_values, "C", 0.0);
+                T L = get_default(vessel_values, "L", 0.0), stenosis_coefficient = get_default(vessel_values, "stenosis_coefficient", 0.0);
+                model.blocks.insert({vessel_name, MODEL::BloodVessel<T>(R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient, vessel_name)});
             }
             else
             {
                 throw std::invalid_argument("Unknown vessel type " + static_cast<std::string>(vessel_config["vessel_type"]));
+            }
+
+            // Create boundary conditions of blood vessel
+            if (has_key(vessel_config, "boundary_conditions") == true)
+            {
+                simdjson::dom::element vessel_bcs = vessel_config["boundary_conditions"];
+                for (auto loc : bc_locations)
+                {
+                    // Check for BC blocks at inlet or outlet
+                    if (has_key(vessel_bcs, loc))
+                    {
+                        std::string bc_name = "BC" + vessel_id_string + "_" + loc;
+                        std::string bc_handle = static_cast<std::string>(vessel_bcs[loc]);
+                        for (simdjson::dom::element bc_config : config["boundary_conditions"])
+                        {
+                            if (static_cast<std::string>(bc_config["bc_name"]) == bc_handle)
+                            {
+                                simdjson::dom::element bc_values = bc_config["bc_values"];
+                                if (static_cast<std::string>(bc_config["bc_type"]) == "RCR")
+                                {
+                                    T Rp = bc_values["Rp"], C = bc_values["C"], Rd = bc_values["Rd"], Pd = bc_values["Pd"];
+                                    model.blocks.insert({bc_name, MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)});
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "FLOW")
+                                {
+                                    simdjson::dom::element Q_json = bc_values["Q"], t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto Q = get_time_dependent_parameter(t_json, Q_json);
+                                    model.blocks.insert({bc_name, MODEL::FlowReferenceBC<T>(Q = Q, bc_name)});
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "RESISTANCE")
+                                {
+                                    simdjson::dom::element R_json = bc_values["R"], Pd_json = bc_values["Pd"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto R = get_time_dependent_parameter(t_json, R_json);
+                                    auto Pd = get_time_dependent_parameter(t_json, Pd_json);
+                                    model.blocks.insert({bc_name, MODEL::ResistanceBC<T>(R = R, Pd = Pd, bc_name)});
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "PRESSURE")
+                                {
+                                    simdjson::dom::element P_json = bc_values["P"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto P = get_time_dependent_parameter(t_json, P_json);
+                                    if (P.isconstant == false)
+                                    {
+                                        cardiac_cycle_period = P.cycle_period;
+                                    }
+                                    model.blocks.insert({bc_name, MODEL::PressureReferenceBC<T>(P = P, bc_name)});
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else if (static_cast<std::string>(bc_config["bc_type"]) == "CORONARY")
+                                {
+                                    T Ra = bc_values["Ra1"], Ram = bc_values["Ra2"], Rv = bc_values["Rv1"], Ca = bc_values["Ca"], Cim = bc_values["Cc"];
+                                    simdjson::dom::element Pim_json = bc_values["Pim"], Pv_json = bc_values["P_v"];
+                                    simdjson::dom::element t_json = get_default(bc_values, "t", simdjson::dom::element());
+                                    auto Pim = get_time_dependent_parameter(t_json, Pim_json);
+                                    auto Pv = get_time_dependent_parameter(t_json, Pv_json);
+                                    model.blocks.insert({bc_name, MODEL::OpenLoopCoronaryBC<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, Pim = Pim, Pv = Pv, bc_name)});
+                                    DEBUG_MSG("Created boundary condition " << bc_name);
+                                }
+                                else
+                                {
+                                    throw std::invalid_argument("Unknown boundary condition type " + static_cast<std::string>(bc_config["bc_type"]));
+                                }
+                                break;
+                            }
+                        }
+                        if (loc == "inlet")
+                        {
+                            connections.push_back({bc_name, vessel_name});
+                        }
+                        else
+                        {
+                            connections.push_back({vessel_name, bc_name});
+                        }
+                        DEBUG_MSG("Found connection " << std::get<0>(connection) << "/" << std::get<1>(connection));
+                    }
+                }
             }
         }
 

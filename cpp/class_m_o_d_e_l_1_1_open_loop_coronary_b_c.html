@@ -205,35 +205,40 @@ node[left]{$P_a$};
 Governing equations</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v} \frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q^{e}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}^{e}}{d t}=0
-\]" src="form_39.png" width="555" height="28"/>
+C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
+\frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a}
+C_{i m} R_{v} \frac{d Q^{e}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}^{e}}{d
+t}=0 \]" src="form_39.png" width="555" height="28"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v} P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0
-\]" src="form_40.png" width="568" height="28"/>
+C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v}
+P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i
+m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]" src="form_40.png" width="568" height="28"/>
 </p>
 <h3><a class="anchor" id="autotoc_md27"></a>
 Local contributions</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} &amp; Q^{e} &amp; V_{i m}^{e}\end{array}\right]^{T},
-\]" src="form_41.png" width="141" height="20"/>
+\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} &amp; Q^{e} &amp; V_{i
+m}^{e}\end{array}\right]^{T}, \]" src="form_41.png" width="141" height="20"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} &amp; R_{a} C_{a} C_{i m} R_{v} &amp; -C_{i m} R_{v} \\ 0 &amp; 0 &amp; -C_{i m} R_{v} R_{a m}\end{array}\right]
-\]" src="form_42.png" width="281" height="31"/>
+\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} &amp; R_{a} C_{a}
+C_{i m} R_{v} &amp; -C_{i m} R_{v} \\ 0 &amp; 0 &amp; -C_{i m} R_{v} R_{a
+m}\end{array}\right] \]" src="form_42.png" width="281" height="31"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-\mathbf{F}^{e}=\left[\begin{array}{ccc}0 &amp; C_{i m} R_{v} &amp; -1 \\C_{i m} R_{v} &amp; -C_{i m} R_{v} R_{a} &amp; -\left(R_{v}+R_{a m}\right)\end{array}\right]
-\]" src="form_43.png" width="256" height="31"/>
+\mathbf{F}^{e}=\left[\begin{array}{ccc}0 &amp; C_{i m} R_{v} &amp; -1 \\C_{i m} R_{v}
+&amp; -C_{i m} R_{v} R_{a} &amp; -\left(R_{v}+R_{a m}\right)\end{array}\right] \]" src="form_43.png" width="256" height="31"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i m}+R_{a m} C_{i m} P_{v}\end{array}\right]
-\]" src="form_44.png" width="249" height="31"/>
+\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)+C_{a}
+C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i
+m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]" src="form_44.png" width="249" height="31"/>
 </p>
 <p >Assume <img class="formulaInl" alt="$P_a=0$" src="form_45.png" width="36" height="13"/>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
@@ -534,10 +539,10 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">            {<span class="stringliteral">&quot;F&quot;</span>, 5},</div>
-<div class="line">            {<span class="stringliteral">&quot;E&quot;</span>, 4},</div>
-<div class="line">            {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
-<div class="line">        }</div>
+<div class="line">      {<span class="stringliteral">&quot;F&quot;</span>, 5},</div>
+<div class="line">      {<span class="stringliteral">&quot;E&quot;</span>, 4},</div>
+<div class="line">      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
+<div class="line">  }</div>
 </div><!-- fragment -->
 <p>Number of triplets of element. </p>
 <p >Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) </p>
@@ -550,7 +555,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 8 2022 21:24:01 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sat Jul 9 2022 01:33:17 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

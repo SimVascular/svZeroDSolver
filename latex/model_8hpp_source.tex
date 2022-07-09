@@ -9,223 +9,208 @@
 \DoxyCodeLine{5 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_MODEL\_HPP\_}}
 \DoxyCodeLine{6 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_MODEL\_HPP\_}}
 \DoxyCodeLine{7 }
-\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <map>}}
-\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <list>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <list>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <map>}}
 \DoxyCodeLine{10 \textcolor{preprocessor}{\#include <variant>}}
 \DoxyCodeLine{11 }
 \DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}../algebra/densesystem.hpp"{}}}
 \DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
-\DoxyCodeLine{14 }
-\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{junction_8hpp}{junction.hpp}}"{}}}
-\DoxyCodeLine{16 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{bloodvessel_8hpp}{bloodvessel.hpp}}"{}}}
-\DoxyCodeLine{17 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{dofhandler_8hpp}{dofhandler.hpp}}"{}}}
+\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{bloodvessel_8hpp}{bloodvessel.hpp}}"{}}}
+\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{dofhandler_8hpp}{dofhandler.hpp}}"{}}}
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{flowreferencebc_8hpp}{flowreferencebc.hpp}}"{}}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{junction_8hpp}{junction.hpp}}"{}}}
 \DoxyCodeLine{18 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{node_8hpp}{node.hpp}}"{}}}
-\DoxyCodeLine{19 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{flowreferencebc_8hpp}{flowreferencebc.hpp}}"{}}}
+\DoxyCodeLine{19 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{openloopcoronarybc_8hpp}{openloopcoronarybc.hpp}}"{}}}
 \DoxyCodeLine{20 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{pressurereferencebc_8hpp}{pressurereferencebc.hpp}}"{}}}
-\DoxyCodeLine{21 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{windkesselbc_8hpp}{windkesselbc.hpp}}"{}}}
-\DoxyCodeLine{22 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{resistancebc_8hpp}{resistancebc.hpp}}"{}}}
-\DoxyCodeLine{23 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{openloopcoronarybc_8hpp}{openloopcoronarybc.hpp}}"{}}}
-\DoxyCodeLine{24 }
-\DoxyCodeLine{25 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}}}
-\DoxyCodeLine{26 \{}
-\DoxyCodeLine{27 \textcolor{comment}{}}
-\DoxyCodeLine{28 \textcolor{comment}{    /**}}
-\DoxyCodeLine{29 \textcolor{comment}{     * @brief Model of 0D elements}}
-\DoxyCodeLine{30 \textcolor{comment}{     *}}
-\DoxyCodeLine{31 \textcolor{comment}{     * This class represents a full 0D model. It contains attributes and}}
-\DoxyCodeLine{32 \textcolor{comment}{     * methods to store and modify 0D elements.}}
-\DoxyCodeLine{33 \textcolor{comment}{     *}}
-\DoxyCodeLine{34 \textcolor{comment}{     * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{35 \textcolor{comment}{     */}}
-\DoxyCodeLine{36     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{37     \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}}}
-\DoxyCodeLine{38     \{}
-\DoxyCodeLine{39     \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{40 \textcolor{comment}{        /**}}
-\DoxyCodeLine{41 \textcolor{comment}{         * @brief Construct a new Model object}}
-\DoxyCodeLine{42 \textcolor{comment}{         *}}
-\DoxyCodeLine{43 \textcolor{comment}{         */}}
-\DoxyCodeLine{44         \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a75204aff4fddcf2032dd5c3e01c05433}{Model}}();}
-\DoxyCodeLine{45 \textcolor{comment}{}}
-\DoxyCodeLine{46 \textcolor{comment}{        /**}}
-\DoxyCodeLine{47 \textcolor{comment}{         * @brief Destroy the Model object}}
-\DoxyCodeLine{48 \textcolor{comment}{         *}}
-\DoxyCodeLine{49 \textcolor{comment}{         */}}
-\DoxyCodeLine{50         \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_af906fc8d73cea59e804174a828468f23}{\string~Model}}();}
-\DoxyCodeLine{51 }
-\DoxyCodeLine{52         std::map<std::string, std::variant<Junction<T>, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{BloodVessel<T>}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{FlowReferenceBC<T>}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{PressureReferenceBC<T>}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{WindkesselBC<T>}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{ResistanceBC<T>}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{OpenLoopCoronaryBC<T>}}>> \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}; \textcolor{comment}{///< Elements of the model}}
-\DoxyCodeLine{53         \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}};                                                                                                                                                        \textcolor{comment}{///< Degree-\/of-\/freedom handler of the model}}
-\DoxyCodeLine{54         std::list<Node> \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}{nodes}};                                                                                                                                                        \textcolor{comment}{///< Nodes of the model}}
-\DoxyCodeLine{55 \textcolor{comment}{}}
-\DoxyCodeLine{56 \textcolor{comment}{        /**}}
-\DoxyCodeLine{57 \textcolor{comment}{         * @brief Update the constant contributions of all elements in a dense system}}
-\DoxyCodeLine{58 \textcolor{comment}{         *}}
-\DoxyCodeLine{59 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{60 \textcolor{comment}{         */}}
-\DoxyCodeLine{61         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
-\DoxyCodeLine{62 \textcolor{comment}{}}
-\DoxyCodeLine{63 \textcolor{comment}{        /**}}
-\DoxyCodeLine{64 \textcolor{comment}{         * @brief Update the time-\/dependent contributions of all elements in a dense system}}
-\DoxyCodeLine{65 \textcolor{comment}{         *}}
-\DoxyCodeLine{66 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{67 \textcolor{comment}{         * @param time Current time}}
-\DoxyCodeLine{68 \textcolor{comment}{         */}}
-\DoxyCodeLine{69         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{70 \textcolor{comment}{}}
-\DoxyCodeLine{71 \textcolor{comment}{        /**}}
-\DoxyCodeLine{72 \textcolor{comment}{         * @brief Update the solution-\/dependent contributions of all elements in a dense system}}
-\DoxyCodeLine{73 \textcolor{comment}{         *}}
-\DoxyCodeLine{74 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{75 \textcolor{comment}{         * @param y Current solution}}
-\DoxyCodeLine{76 \textcolor{comment}{         */}}
-\DoxyCodeLine{77         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{78 \textcolor{comment}{}}
-\DoxyCodeLine{79 \textcolor{comment}{        /**}}
-\DoxyCodeLine{80 \textcolor{comment}{         * @brief Update the constant contributions of all elements in a sparse system}}
-\DoxyCodeLine{81 \textcolor{comment}{         *}}
-\DoxyCodeLine{82 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{83 \textcolor{comment}{         */}}
-\DoxyCodeLine{84         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{85 \textcolor{comment}{}}
-\DoxyCodeLine{86 \textcolor{comment}{        /**}}
-\DoxyCodeLine{87 \textcolor{comment}{         * @brief Update the time-\/dependent contributions of all elements in a sparse system}}
-\DoxyCodeLine{88 \textcolor{comment}{         *}}
-\DoxyCodeLine{89 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{90 \textcolor{comment}{         * @param time Current time}}
-\DoxyCodeLine{91 \textcolor{comment}{         */}}
-\DoxyCodeLine{92         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{93 \textcolor{comment}{}}
-\DoxyCodeLine{94 \textcolor{comment}{        /**}}
-\DoxyCodeLine{95 \textcolor{comment}{         * @brief Update the solution-\/dependent contributions of all elements in a sparse system}}
-\DoxyCodeLine{96 \textcolor{comment}{         *}}
-\DoxyCodeLine{97 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{98 \textcolor{comment}{         * @param y Current solution}}
-\DoxyCodeLine{99 \textcolor{comment}{         */}}
-\DoxyCodeLine{100         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{101 \textcolor{comment}{}}
-\DoxyCodeLine{102 \textcolor{comment}{        /**}}
-\DoxyCodeLine{103 \textcolor{comment}{         * @brief Convert the blocks to a steady behavior}}
-\DoxyCodeLine{104 \textcolor{comment}{         *}}
-\DoxyCodeLine{105 \textcolor{comment}{         */}}
-\DoxyCodeLine{106         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a6aca235e32671218c934c19395b9ff96}{to\_steady}}();}
-\DoxyCodeLine{107 \textcolor{comment}{}}
-\DoxyCodeLine{108 \textcolor{comment}{        /**}}
-\DoxyCodeLine{109 \textcolor{comment}{         * @brief Get number of triplets all elements}}
-\DoxyCodeLine{110 \textcolor{comment}{         *}}
-\DoxyCodeLine{111 \textcolor{comment}{         * Get the number of triplets the elements contribute to the global system}}
-\DoxyCodeLine{112 \textcolor{comment}{         * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{113 \textcolor{comment}{         *}}
-\DoxyCodeLine{114 \textcolor{comment}{         * @return Number of triplets that are used in each system matrix}}
-\DoxyCodeLine{115 \textcolor{comment}{         */}}
-\DoxyCodeLine{116         std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0568bb6ffb0ee3e0ddba35ef9d1ce196}{get\_num\_triplets}}();}
-\DoxyCodeLine{117     \};}
-\DoxyCodeLine{118 }
-\DoxyCodeLine{119     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{120     \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a75204aff4fddcf2032dd5c3e01c05433}{Model<T>::Model}}()}
-\DoxyCodeLine{121     \{}
-\DoxyCodeLine{122     \}}
-\DoxyCodeLine{123 }
-\DoxyCodeLine{124     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{125     \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_af906fc8d73cea59e804174a828468f23}{Model<T>::\string~Model}}()}
-\DoxyCodeLine{126     \{}
-\DoxyCodeLine{127     \}}
+\DoxyCodeLine{21 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{resistancebc_8hpp}{resistancebc.hpp}}"{}}}
+\DoxyCodeLine{22 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{windkesselbc_8hpp}{windkesselbc.hpp}}"{}}}
+\DoxyCodeLine{23 }
+\DoxyCodeLine{24 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
+\DoxyCodeLine{25 \textcolor{comment}{}}
+\DoxyCodeLine{26 \textcolor{comment}{/**}}
+\DoxyCodeLine{27 \textcolor{comment}{ * @brief Model of 0D elements}}
+\DoxyCodeLine{28 \textcolor{comment}{ *}}
+\DoxyCodeLine{29 \textcolor{comment}{ * This class represents a full 0D model. It contains attributes and}}
+\DoxyCodeLine{30 \textcolor{comment}{ * methods to store and modify 0D elements.}}
+\DoxyCodeLine{31 \textcolor{comment}{ *}}
+\DoxyCodeLine{32 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{33 \textcolor{comment}{ */}}
+\DoxyCodeLine{34 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{35 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} \{}
+\DoxyCodeLine{36  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{37 \textcolor{comment}{  /**}}
+\DoxyCodeLine{38 \textcolor{comment}{   * @brief Construct a new Model object}}
+\DoxyCodeLine{39 \textcolor{comment}{   *}}
+\DoxyCodeLine{40 \textcolor{comment}{   */}}
+\DoxyCodeLine{41   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a75204aff4fddcf2032dd5c3e01c05433}{Model}}();}
+\DoxyCodeLine{42 \textcolor{comment}{}}
+\DoxyCodeLine{43 \textcolor{comment}{  /**}}
+\DoxyCodeLine{44 \textcolor{comment}{   * @brief Destroy the Model object}}
+\DoxyCodeLine{45 \textcolor{comment}{   *}}
+\DoxyCodeLine{46 \textcolor{comment}{   */}}
+\DoxyCodeLine{47   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_af906fc8d73cea59e804174a828468f23}{\string~Model}}();}
+\DoxyCodeLine{48 }
+\DoxyCodeLine{49   std::map<std::string,}
+\DoxyCodeLine{50            std::variant<Junction<T>, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{BloodVessel<T>}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{FlowReferenceBC<T>}},}
+\DoxyCodeLine{51                         \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{PressureReferenceBC<T>}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{WindkesselBC<T>}},}
+\DoxyCodeLine{52                         \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{ResistanceBC<T>}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{OpenLoopCoronaryBC<T>}}>>}
+\DoxyCodeLine{53       \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}};             \textcolor{comment}{///< Elements of the model}}
+\DoxyCodeLine{54   \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}};  \textcolor{comment}{///< Degree-\/of-\/freedom handler of the model}}
+\DoxyCodeLine{55   std::list<Node> \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}{nodes}};  \textcolor{comment}{///< Nodes of the model}}
+\DoxyCodeLine{56 \textcolor{comment}{}}
+\DoxyCodeLine{57 \textcolor{comment}{  /**}}
+\DoxyCodeLine{58 \textcolor{comment}{   * @brief Update the constant contributions of all elements in a dense system}}
+\DoxyCodeLine{59 \textcolor{comment}{   *}}
+\DoxyCodeLine{60 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{61 \textcolor{comment}{   */}}
+\DoxyCodeLine{62   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
+\DoxyCodeLine{63 \textcolor{comment}{}}
+\DoxyCodeLine{64 \textcolor{comment}{  /**}}
+\DoxyCodeLine{65 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of all elements in a dense}}
+\DoxyCodeLine{66 \textcolor{comment}{   * system}}
+\DoxyCodeLine{67 \textcolor{comment}{   *}}
+\DoxyCodeLine{68 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{69 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{70 \textcolor{comment}{   */}}
+\DoxyCodeLine{71   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{72 \textcolor{comment}{}}
+\DoxyCodeLine{73 \textcolor{comment}{  /**}}
+\DoxyCodeLine{74 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of all elements in a}}
+\DoxyCodeLine{75 \textcolor{comment}{   * dense system}}
+\DoxyCodeLine{76 \textcolor{comment}{   *}}
+\DoxyCodeLine{77 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{78 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{79 \textcolor{comment}{   */}}
+\DoxyCodeLine{80   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
+\DoxyCodeLine{81                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{82 \textcolor{comment}{}}
+\DoxyCodeLine{83 \textcolor{comment}{  /**}}
+\DoxyCodeLine{84 \textcolor{comment}{   * @brief Update the constant contributions of all elements in a sparse system}}
+\DoxyCodeLine{85 \textcolor{comment}{   *}}
+\DoxyCodeLine{86 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{87 \textcolor{comment}{   */}}
+\DoxyCodeLine{88   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{89 \textcolor{comment}{}}
+\DoxyCodeLine{90 \textcolor{comment}{  /**}}
+\DoxyCodeLine{91 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of all elements in a sparse}}
+\DoxyCodeLine{92 \textcolor{comment}{   * system}}
+\DoxyCodeLine{93 \textcolor{comment}{   *}}
+\DoxyCodeLine{94 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{95 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{96 \textcolor{comment}{   */}}
+\DoxyCodeLine{97   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{98 \textcolor{comment}{}}
+\DoxyCodeLine{99 \textcolor{comment}{  /**}}
+\DoxyCodeLine{100 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of all elements in a}}
+\DoxyCodeLine{101 \textcolor{comment}{   * sparse system}}
+\DoxyCodeLine{102 \textcolor{comment}{   *}}
+\DoxyCodeLine{103 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{104 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{105 \textcolor{comment}{   */}}
+\DoxyCodeLine{106   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{107                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{108 \textcolor{comment}{}}
+\DoxyCodeLine{109 \textcolor{comment}{  /**}}
+\DoxyCodeLine{110 \textcolor{comment}{   * @brief Convert the blocks to a steady behavior}}
+\DoxyCodeLine{111 \textcolor{comment}{   *}}
+\DoxyCodeLine{112 \textcolor{comment}{   */}}
+\DoxyCodeLine{113   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a6aca235e32671218c934c19395b9ff96}{to\_steady}}();}
+\DoxyCodeLine{114 \textcolor{comment}{}}
+\DoxyCodeLine{115 \textcolor{comment}{  /**}}
+\DoxyCodeLine{116 \textcolor{comment}{   * @brief Get number of triplets all elements}}
+\DoxyCodeLine{117 \textcolor{comment}{   *}}
+\DoxyCodeLine{118 \textcolor{comment}{   * Get the number of triplets the elements contribute to the global system}}
+\DoxyCodeLine{119 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{120 \textcolor{comment}{   *}}
+\DoxyCodeLine{121 \textcolor{comment}{   * @return Number of triplets that are used in each system matrix}}
+\DoxyCodeLine{122 \textcolor{comment}{   */}}
+\DoxyCodeLine{123   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0568bb6ffb0ee3e0ddba35ef9d1ce196}{get\_num\_triplets}}();}
+\DoxyCodeLine{124 \};}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{126 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{127 \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a75204aff4fddcf2032dd5c3e01c05433}{Model<T>::Model}}() \{\}}
 \DoxyCodeLine{128 }
-\DoxyCodeLine{129     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{130     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{Model<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system)}
-\DoxyCodeLine{131     \{}
-\DoxyCodeLine{132         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks)}
-\DoxyCodeLine{133         \{}
-\DoxyCodeLine{134             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
-\DoxyCodeLine{135                        \{ block.update\_constant(system); \},}
-\DoxyCodeLine{136                        elem.second);}
-\DoxyCodeLine{137         \}}
-\DoxyCodeLine{138     \}}
+\DoxyCodeLine{129 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{130 \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_af906fc8d73cea59e804174a828468f23}{Model<T>::\string~Model}}() \{\}}
+\DoxyCodeLine{131 }
+\DoxyCodeLine{132 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{133 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{Model<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{}
+\DoxyCodeLine{134   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks) \{}
+\DoxyCodeLine{135     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.update\_constant(system); \},}
+\DoxyCodeLine{136                elem.second);}
+\DoxyCodeLine{137   \}}
+\DoxyCodeLine{138 \}}
 \DoxyCodeLine{139 }
-\DoxyCodeLine{140     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{141     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{Model<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time)}
-\DoxyCodeLine{142     \{}
-\DoxyCodeLine{143         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks)}
-\DoxyCodeLine{144         \{}
-\DoxyCodeLine{145             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
-\DoxyCodeLine{146                        \{ block.update\_time(system, time); \},}
-\DoxyCodeLine{147                        elem.second);}
-\DoxyCodeLine{148         \}}
-\DoxyCodeLine{149     \}}
-\DoxyCodeLine{150 }
-\DoxyCodeLine{151     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{152     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{Model<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y)}
-\DoxyCodeLine{153     \{}
-\DoxyCodeLine{154         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks)}
-\DoxyCodeLine{155         \{}
-\DoxyCodeLine{156             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
-\DoxyCodeLine{157                        \{ block.update\_solution(system, y); \},}
-\DoxyCodeLine{158                        elem.second);}
-\DoxyCodeLine{159         \}}
-\DoxyCodeLine{160     \}}
-\DoxyCodeLine{161 }
-\DoxyCodeLine{162     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{163     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{Model<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system)}
-\DoxyCodeLine{164     \{}
-\DoxyCodeLine{165         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks)}
-\DoxyCodeLine{166         \{}
-\DoxyCodeLine{167             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
-\DoxyCodeLine{168                        \{ block.update\_constant(system); \},}
-\DoxyCodeLine{169                        elem.second);}
-\DoxyCodeLine{170         \}}
-\DoxyCodeLine{171     \}}
+\DoxyCodeLine{140 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{141 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{Model<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time) \{}
+\DoxyCodeLine{142   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks) \{}
+\DoxyCodeLine{143     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.update\_time(system, time); \},}
+\DoxyCodeLine{144                elem.second);}
+\DoxyCodeLine{145   \}}
+\DoxyCodeLine{146 \}}
+\DoxyCodeLine{147 }
+\DoxyCodeLine{148 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{149 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{Model<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
+\DoxyCodeLine{150                                Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
+\DoxyCodeLine{151   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks) \{}
+\DoxyCodeLine{152     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.update\_solution(system, y); \},}
+\DoxyCodeLine{153                elem.second);}
+\DoxyCodeLine{154   \}}
+\DoxyCodeLine{155 \}}
+\DoxyCodeLine{156 }
+\DoxyCodeLine{157 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{158 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{Model<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{159   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks) \{}
+\DoxyCodeLine{160     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.update\_constant(system); \},}
+\DoxyCodeLine{161                elem.second);}
+\DoxyCodeLine{162   \}}
+\DoxyCodeLine{163 \}}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{166 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{Model<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{}
+\DoxyCodeLine{167   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks) \{}
+\DoxyCodeLine{168     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.update\_time(system, time); \},}
+\DoxyCodeLine{169                elem.second);}
+\DoxyCodeLine{170   \}}
+\DoxyCodeLine{171 \}}
 \DoxyCodeLine{172 }
-\DoxyCodeLine{173     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{174     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{Model<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time)}
-\DoxyCodeLine{175     \{}
-\DoxyCodeLine{176         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks)}
-\DoxyCodeLine{177         \{}
-\DoxyCodeLine{178             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
-\DoxyCodeLine{179                        \{ block.update\_time(system, time); \},}
-\DoxyCodeLine{180                        elem.second);}
-\DoxyCodeLine{181         \}}
-\DoxyCodeLine{182     \}}
-\DoxyCodeLine{183 }
-\DoxyCodeLine{184     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{185     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{Model<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y)}
-\DoxyCodeLine{186     \{}
-\DoxyCodeLine{187         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks)}
-\DoxyCodeLine{188         \{}
-\DoxyCodeLine{189             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
-\DoxyCodeLine{190                        \{ block.update\_solution(system, y); \},}
-\DoxyCodeLine{191                        elem.second);}
-\DoxyCodeLine{192         \}}
-\DoxyCodeLine{193     \}}
-\DoxyCodeLine{194 }
-\DoxyCodeLine{195     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{196     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a6aca235e32671218c934c19395b9ff96}{Model<T>::to\_steady}}()}
-\DoxyCodeLine{197     \{}
-\DoxyCodeLine{198         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks)}
-\DoxyCodeLine{199         \{}
-\DoxyCodeLine{200             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
-\DoxyCodeLine{201                        \{ block.to\_steady(); \},}
-\DoxyCodeLine{202                        elem.second);}
-\DoxyCodeLine{203         \}}
-\DoxyCodeLine{204     \}}
-\DoxyCodeLine{205 }
-\DoxyCodeLine{206     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{207     std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0568bb6ffb0ee3e0ddba35ef9d1ce196}{Model<T>::get\_num\_triplets}}()}
-\DoxyCodeLine{208     \{}
-\DoxyCodeLine{209         std::map<std::string, int> num\_triplets = \{}
-\DoxyCodeLine{210             \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
-\DoxyCodeLine{211             \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{212             \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{213         \};}
-\DoxyCodeLine{214         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks)}
-\DoxyCodeLine{215         \{}
-\DoxyCodeLine{216             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
-\DoxyCodeLine{217                        \{ \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, value] : block.num\_triplets)\{num\_triplets[key] += value;\} \},}
-\DoxyCodeLine{218                        elem.second);}
-\DoxyCodeLine{219         \}}
-\DoxyCodeLine{220         \textcolor{keywordflow}{return} num\_triplets;}
-\DoxyCodeLine{221     \}}
-\DoxyCodeLine{222 }
-\DoxyCodeLine{223 \} \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{224 }
-\DoxyCodeLine{225 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_MODEL\_HPP\_}}
+\DoxyCodeLine{173 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{174 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{Model<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{175                                Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
+\DoxyCodeLine{176   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks) \{}
+\DoxyCodeLine{177     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.update\_solution(system, y); \},}
+\DoxyCodeLine{178                elem.second);}
+\DoxyCodeLine{179   \}}
+\DoxyCodeLine{180 \}}
+\DoxyCodeLine{181 }
+\DoxyCodeLine{182 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{183 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a6aca235e32671218c934c19395b9ff96}{Model<T>::to\_steady}}() \{}
+\DoxyCodeLine{184   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks) \{}
+\DoxyCodeLine{185     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.to\_steady(); \}, elem.second);}
+\DoxyCodeLine{186   \}}
+\DoxyCodeLine{187 \}}
+\DoxyCodeLine{188 }
+\DoxyCodeLine{189 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{190 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0568bb6ffb0ee3e0ddba35ef9d1ce196}{Model<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{191   std::map<std::string, int> num\_triplets = \{}
+\DoxyCodeLine{192       \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
+\DoxyCodeLine{193       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{194       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{195   \};}
+\DoxyCodeLine{196   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&\&elem : blocks) \{}
+\DoxyCodeLine{197     std::visit(}
+\DoxyCodeLine{198         [\&](\textcolor{keyword}{auto} \&\&block) \{}
+\DoxyCodeLine{199           \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, value] : block.num\_triplets) \{}
+\DoxyCodeLine{200             num\_triplets[key] += value;}
+\DoxyCodeLine{201           \}}
+\DoxyCodeLine{202         \},}
+\DoxyCodeLine{203         elem.second);}
+\DoxyCodeLine{204   \}}
+\DoxyCodeLine{205   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{206 \}}
+\DoxyCodeLine{207 }
+\DoxyCodeLine{208 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{209 }
+\DoxyCodeLine{210 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_MODEL\_HPP\_}}
 
 \end{DoxyCode}

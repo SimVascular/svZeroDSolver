@@ -71,18 +71,19 @@ Models a junction with arbitrary inlets and outlets. Across all inlets and outle
 P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
 \]\hypertarget{class_m_o_d_e_l_1_1_junction_autotoc_md25}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_junction_autotoc_md25}
 \[
-\mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e} & \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} & \dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right]
-\]
+\mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e} &
+\dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} &
+\dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right] \]
 
 Mass conservation
 
 \[
-\mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 & 1 & 0 & 1 & \dots & 0 & -1 & 0 & -1 & \dots\end{array}\right]
- \]
+\mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 & 1 & 0 & 1 & \dots & 0 &
+-1 & 0 & -1 & \dots\end{array}\right] \]
 
-Due to the pressure continuity, we can write for all independent pressure pairs\+: \[
-\mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots & \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right] \quad \mathrm{with} \quad i \neq j
-\]
+Due to the pressure continuity, we can write for all independent pressure pairs\+: \[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
+\underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right]
+\quad \mathrm{with} \quad i \neq j \]
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -185,10 +186,10 @@ std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{= \{}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{        \}}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{  \}}
 
 \end{DoxyCode}
 

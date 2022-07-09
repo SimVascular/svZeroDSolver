@@ -307,10 +307,11 @@ Global variable indices of the local element contributions.
 Determines where the local element contributions are written to in the global system during assembly. The order of indices is\+:
 
 \[
-[P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1, \dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}]
-\]
+[P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1,
+\dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \]
 
-with $P_{in} $, $Q_{in} $, $P_{out} $, $Q_{out} $, and $V $ denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.
+with $P_{in} $, $Q_{in} $, $P_{out} $, $Q_{out} $, and $V
+$ denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.
 
 Variable indices correspond to columns in the global system. \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a39d671d4cdced4eda628465b8e660c64}\label{class_m_o_d_e_l_1_1_block_a39d671d4cdced4eda628465b8e660c64}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!inlet\_nodes@{inlet\_nodes}}
@@ -344,10 +345,10 @@ std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{M
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{= \{}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{        \}}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{  \}}
 
 \end{DoxyCode}
 

@@ -70,27 +70,32 @@ node[left]{$P_a$};
 \end{circuitikz}
 \]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md26}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md26}
 \[
-C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v} \frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q^{e}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}^{e}}{d t}=0
-\]
+C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
+\frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a}
+C_{i m} R_{v} \frac{d Q^{e}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}^{e}}{d
+t}=0 \]
 
 \[
-C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v} P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0
-\]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md27}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md27}
+C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v}
+P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i
+m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md27}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md27}
 \[
-\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & V_{i m}^{e}\end{array}\right]^{T},
-\]
+\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & V_{i
+m}^{e}\end{array}\right]^{T}, \]
 
 \[
-\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} & R_{a} C_{a} C_{i m} R_{v} & -C_{i m} R_{v} \\ 0 & 0 & -C_{i m} R_{v} R_{a m}\end{array}\right]
-\]
+\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} & R_{a} C_{a}
+C_{i m} R_{v} & -C_{i m} R_{v} \\ 0 & 0 & -C_{i m} R_{v} R_{a
+m}\end{array}\right] \]
 
 \[
-\mathbf{F}^{e}=\left[\begin{array}{ccc}0 & C_{i m} R_{v} & -1 \\C_{i m} R_{v} & -C_{i m} R_{v} R_{a} & -\left(R_{v}+R_{a m}\right)\end{array}\right]
-\]
+\mathbf{F}^{e}=\left[\begin{array}{ccc}0 & C_{i m} R_{v} & -1 \\C_{i m} R_{v}
+& -C_{i m} R_{v} R_{a} & -\left(R_{v}+R_{a m}\right)\end{array}\right] \]
 
 \[
-\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i m}+R_{a m} C_{i m} P_{v}\end{array}\right]
-\]
+\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)+C_{a}
+C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i
+m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]
 
 Assume $P_a=0$.
 
@@ -244,10 +249,10 @@ std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loo
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{= \{}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}F"{}}, 5\},}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}E"{}}, 4\},}
-\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{        \}}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}F"{}}, 5\},}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}E"{}}, 4\},}
+\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{  \}}
 
 \end{DoxyCode}
 

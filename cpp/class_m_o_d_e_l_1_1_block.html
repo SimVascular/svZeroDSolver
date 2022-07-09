@@ -573,10 +573,11 @@ template&lt;typename T &gt; </div>
 <p >Determines where the local element contributions are written to in the global system during assembly. The order of indices is:</p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
-[P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1, \dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}]
-\]" src="form_9.png" width="326" height="16"/>
+[P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1,
+\dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \]" src="form_9.png" width="326" height="16"/>
 </p>
-<p >with <img class="formulaInl" alt="$P_{in} $" src="form_10.png" width="18" height="13"/>, <img class="formulaInl" alt="$Q_{in} $" src="form_11.png" width="19" height="13"/>, <img class="formulaInl" alt="$P_{out} $" src="form_12.png" width="23" height="13"/>, <img class="formulaInl" alt="$Q_{out} $" src="form_13.png" width="24" height="13"/>, and <img class="formulaInl" alt="$V $" src="form_14.png" width="10" height="10"/> denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.</p>
+<p >with <img class="formulaInl" alt="$P_{in} $" src="form_10.png" width="18" height="13"/>, <img class="formulaInl" alt="$Q_{in} $" src="form_11.png" width="19" height="13"/>, <img class="formulaInl" alt="$P_{out} $" src="form_12.png" width="23" height="13"/>, <img class="formulaInl" alt="$Q_{out} $" src="form_13.png" width="24" height="13"/>, and <img class="formulaInl" alt="$V
+$" src="form_14.png" width="10" height="10"/> denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.</p>
 <p >Variable indices correspond to columns in the global system. </p>
 
 </div>
@@ -631,10 +632,10 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">            {<span class="stringliteral">&quot;F&quot;</span>, 0},</div>
-<div class="line">            {<span class="stringliteral">&quot;E&quot;</span>, 0},</div>
-<div class="line">            {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
-<div class="line">        }</div>
+<div class="line">      {<span class="stringliteral">&quot;F&quot;</span>, 0},</div>
+<div class="line">      {<span class="stringliteral">&quot;E&quot;</span>, 0},</div>
+<div class="line">      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
+<div class="line">  }</div>
 </div><!-- fragment -->
 <p>Number of triplets of element. </p>
 <p >Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) </p>
@@ -665,7 +666,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jul 8 2022 21:24:01 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sat Jul 9 2022 01:33:17 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

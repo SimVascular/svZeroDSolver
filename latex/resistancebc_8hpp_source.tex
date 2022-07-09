@@ -14,192 +14,189 @@
 \DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
 \DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{timedependentparameter_8hpp}{timedependentparameter.hpp}}"{}}}
 \DoxyCodeLine{12 }
-\DoxyCodeLine{13 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}}}
-\DoxyCodeLine{14 \{}
-\DoxyCodeLine{15 \textcolor{comment}{}}
-\DoxyCodeLine{16 \textcolor{comment}{    /**}}
-\DoxyCodeLine{17 \textcolor{comment}{     * @brief Resistance boundary condition.}}
-\DoxyCodeLine{18 \textcolor{comment}{     *}}
-\DoxyCodeLine{19 \textcolor{comment}{     * \(\backslash\)f[}}
-\DoxyCodeLine{20 \textcolor{comment}{     * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
-\DoxyCodeLine{21 \textcolor{comment}{     * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
-\DoxyCodeLine{22 \textcolor{comment}{     * \(\backslash\)draw (1.0,0) to [R, l=\$R\$, *-\/*] (3,0)}}
-\DoxyCodeLine{23 \textcolor{comment}{     * node[anchor=south]\{\$P\_\{d\}\$\};}}
-\DoxyCodeLine{24 \textcolor{comment}{     * \(\backslash\)end\{circuitikz\}}}
-\DoxyCodeLine{25 \textcolor{comment}{     * \(\backslash\)f]}}
-\DoxyCodeLine{26 \textcolor{comment}{     *}}
-\DoxyCodeLine{27 \textcolor{comment}{     * \#\#\# Governing equations}}
-\DoxyCodeLine{28 \textcolor{comment}{     *}}
-\DoxyCodeLine{29 \textcolor{comment}{     * \(\backslash\)f[}}
-\DoxyCodeLine{30 \textcolor{comment}{     * P-\/P\_d=R \(\backslash\)cdot Q}}
-\DoxyCodeLine{31 \textcolor{comment}{     * \(\backslash\)f]}}
-\DoxyCodeLine{32 \textcolor{comment}{     *}}
-\DoxyCodeLine{33 \textcolor{comment}{     * \#\#\# Local contributions}}
-\DoxyCodeLine{34 \textcolor{comment}{     *}}
-\DoxyCodeLine{35 \textcolor{comment}{     * \(\backslash\)f[}}
-\DoxyCodeLine{36 \textcolor{comment}{     * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ll\}P\string^\{e\} \& Q\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\}}}
-\DoxyCodeLine{37 \textcolor{comment}{     * \(\backslash\)f]}}
-\DoxyCodeLine{38 \textcolor{comment}{     *}}
-\DoxyCodeLine{39 \textcolor{comment}{     * \(\backslash\)f[}}
-\DoxyCodeLine{40 \textcolor{comment}{     * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ll\}1 \& -\/R\(\backslash\)end\{array\}\(\backslash\)right]}}
-\DoxyCodeLine{41 \textcolor{comment}{     * \(\backslash\)f]}}
-\DoxyCodeLine{42 \textcolor{comment}{     *}}
-\DoxyCodeLine{43 \textcolor{comment}{     * \(\backslash\)f[}}
-\DoxyCodeLine{44 \textcolor{comment}{     * \(\backslash\)mathbf\{C\}\string^\{e\}=\(\backslash\)left[-\/P\_d\(\backslash\)right]}}
-\DoxyCodeLine{45 \textcolor{comment}{     * \(\backslash\)f]}}
-\DoxyCodeLine{46 \textcolor{comment}{     *}}
-\DoxyCodeLine{47 \textcolor{comment}{     *}}
-\DoxyCodeLine{48 \textcolor{comment}{     * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{49 \textcolor{comment}{     */}}
-\DoxyCodeLine{50     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{51     \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{ResistanceBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>}
-\DoxyCodeLine{52     \{}
-\DoxyCodeLine{53     \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{54 \textcolor{comment}{        /**}}
-\DoxyCodeLine{55 \textcolor{comment}{         * @brief Parameters of the element.}}
-\DoxyCodeLine{56 \textcolor{comment}{         *}}
-\DoxyCodeLine{57 \textcolor{comment}{         * Struct containing all constant and/or time-\/dependent parameters of the}}
-\DoxyCodeLine{58 \textcolor{comment}{         * element.}}
-\DoxyCodeLine{59 \textcolor{comment}{         */}}
-\DoxyCodeLine{60         \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters}
-\DoxyCodeLine{61         \{}
-\DoxyCodeLine{62             \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} \mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_af053fae1f978f2a89c28ec3eabf0fa39}{R}};  \textcolor{comment}{///< Time-\/dependent resistance}}
-\DoxyCodeLine{63             \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} \mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_a8cef65e35f85e7511347788ea0692bc8}{Pd}}; \textcolor{comment}{///< Time-\/dependent distal pressure}}
-\DoxyCodeLine{64         \};}
-\DoxyCodeLine{65 \textcolor{comment}{}}
-\DoxyCodeLine{66 \textcolor{comment}{        /**}}
-\DoxyCodeLine{67 \textcolor{comment}{         * @brief Construct a new ResistanceBC object}}
-\DoxyCodeLine{68 \textcolor{comment}{         *}}
-\DoxyCodeLine{69 \textcolor{comment}{         * @param R Time-\/dependent resistance}}
-\DoxyCodeLine{70 \textcolor{comment}{         * @param Pd Time-\/dependent distal pressure}}
-\DoxyCodeLine{71 \textcolor{comment}{         * @param name Name}}
-\DoxyCodeLine{72 \textcolor{comment}{         */}}
-\DoxyCodeLine{73         \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a5bcb6df09176e5cc9a563f054253838b}{ResistanceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} R, \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} Pd, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
-\DoxyCodeLine{74 \textcolor{comment}{}}
-\DoxyCodeLine{75 \textcolor{comment}{        /**}}
-\DoxyCodeLine{76 \textcolor{comment}{         * @brief Destroy the ResistanceBC object}}
-\DoxyCodeLine{77 \textcolor{comment}{         *}}
-\DoxyCodeLine{78 \textcolor{comment}{         */}}
-\DoxyCodeLine{79         \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aa16d90b9c1d86e6732b61fa708d8750c}{\string~ResistanceBC}}();}
-\DoxyCodeLine{80 \textcolor{comment}{}}
-\DoxyCodeLine{81 \textcolor{comment}{        /**}}
-\DoxyCodeLine{82 \textcolor{comment}{         * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{83 \textcolor{comment}{         *}}
-\DoxyCodeLine{84 \textcolor{comment}{         * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{85 \textcolor{comment}{         * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{86 \textcolor{comment}{         * element.}}
-\DoxyCodeLine{87 \textcolor{comment}{         *}}
-\DoxyCodeLine{88 \textcolor{comment}{         * @param dofhandler Degree-\/of-\/freedom handler to register variables and equations at}}
-\DoxyCodeLine{89 \textcolor{comment}{         */}}
-\DoxyCodeLine{90         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
-\DoxyCodeLine{91 \textcolor{comment}{}}
-\DoxyCodeLine{92 \textcolor{comment}{        /**}}
-\DoxyCodeLine{93 \textcolor{comment}{         * @brief Update the constant contributions of the element in a dense system}}
-\DoxyCodeLine{94 \textcolor{comment}{         *}}
-\DoxyCodeLine{95 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{96 \textcolor{comment}{         */}}
-\DoxyCodeLine{97         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
-\DoxyCodeLine{98 \textcolor{comment}{}}
-\DoxyCodeLine{99 \textcolor{comment}{        /**}}
-\DoxyCodeLine{100 \textcolor{comment}{         * @brief Update the time-\/dependent contributions of the element in a dense system}}
-\DoxyCodeLine{101 \textcolor{comment}{         *}}
-\DoxyCodeLine{102 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{103 \textcolor{comment}{         * @param time Current time}}
-\DoxyCodeLine{104 \textcolor{comment}{         */}}
-\DoxyCodeLine{105         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{13 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
+\DoxyCodeLine{14 \textcolor{comment}{}}
+\DoxyCodeLine{15 \textcolor{comment}{/**}}
+\DoxyCodeLine{16 \textcolor{comment}{ * @brief Resistance boundary condition.}}
+\DoxyCodeLine{17 \textcolor{comment}{ *}}
+\DoxyCodeLine{18 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{19 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
+\DoxyCodeLine{20 \textcolor{comment}{ * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
+\DoxyCodeLine{21 \textcolor{comment}{ * \(\backslash\)draw (1.0,0) to [R, l=\$R\$, *-\/*] (3,0)}}
+\DoxyCodeLine{22 \textcolor{comment}{ * node[anchor=south]\{\$P\_\{d\}\$\};}}
+\DoxyCodeLine{23 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
+\DoxyCodeLine{24 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{25 \textcolor{comment}{ *}}
+\DoxyCodeLine{26 \textcolor{comment}{ * \#\#\# Governing equations}}
+\DoxyCodeLine{27 \textcolor{comment}{ *}}
+\DoxyCodeLine{28 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{29 \textcolor{comment}{ * P-\/P\_d=R \(\backslash\)cdot Q}}
+\DoxyCodeLine{30 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{31 \textcolor{comment}{ *}}
+\DoxyCodeLine{32 \textcolor{comment}{ * \#\#\# Local contributions}}
+\DoxyCodeLine{33 \textcolor{comment}{ *}}
+\DoxyCodeLine{34 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{35 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ll\}P\string^\{e\} \& Q\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\}}}
+\DoxyCodeLine{36 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{37 \textcolor{comment}{ *}}
+\DoxyCodeLine{38 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{39 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ll\}1 \& -\/R\(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{40 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{41 \textcolor{comment}{ *}}
+\DoxyCodeLine{42 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{43 \textcolor{comment}{ * \(\backslash\)mathbf\{C\}\string^\{e\}=\(\backslash\)left[-\/P\_d\(\backslash\)right]}}
+\DoxyCodeLine{44 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{45 \textcolor{comment}{ *}}
+\DoxyCodeLine{46 \textcolor{comment}{ *}}
+\DoxyCodeLine{47 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{48 \textcolor{comment}{ */}}
+\DoxyCodeLine{49 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{50 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{ResistanceBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
+\DoxyCodeLine{51  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{52 \textcolor{comment}{  /**}}
+\DoxyCodeLine{53 \textcolor{comment}{   * @brief Parameters of the element.}}
+\DoxyCodeLine{54 \textcolor{comment}{   *}}
+\DoxyCodeLine{55 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
+\DoxyCodeLine{56 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{57 \textcolor{comment}{   */}}
+\DoxyCodeLine{58   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
+\DoxyCodeLine{59     \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} \mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_af053fae1f978f2a89c28ec3eabf0fa39}{R}};   \textcolor{comment}{///< Time-\/dependent resistance}}
+\DoxyCodeLine{60     \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} \mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_a8cef65e35f85e7511347788ea0692bc8}{Pd}};  \textcolor{comment}{///< Time-\/dependent distal pressure}}
+\DoxyCodeLine{61   \};}
+\DoxyCodeLine{62 \textcolor{comment}{}}
+\DoxyCodeLine{63 \textcolor{comment}{  /**}}
+\DoxyCodeLine{64 \textcolor{comment}{   * @brief Construct a new ResistanceBC object}}
+\DoxyCodeLine{65 \textcolor{comment}{   *}}
+\DoxyCodeLine{66 \textcolor{comment}{   * @param R Time-\/dependent resistance}}
+\DoxyCodeLine{67 \textcolor{comment}{   * @param Pd Time-\/dependent distal pressure}}
+\DoxyCodeLine{68 \textcolor{comment}{   * @param name Name}}
+\DoxyCodeLine{69 \textcolor{comment}{   */}}
+\DoxyCodeLine{70   \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a5bcb6df09176e5cc9a563f054253838b}{ResistanceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} R, \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} Pd,}
+\DoxyCodeLine{71                std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
+\DoxyCodeLine{72 \textcolor{comment}{}}
+\DoxyCodeLine{73 \textcolor{comment}{  /**}}
+\DoxyCodeLine{74 \textcolor{comment}{   * @brief Destroy the ResistanceBC object}}
+\DoxyCodeLine{75 \textcolor{comment}{   *}}
+\DoxyCodeLine{76 \textcolor{comment}{   */}}
+\DoxyCodeLine{77   \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aa16d90b9c1d86e6732b61fa708d8750c}{\string~ResistanceBC}}();}
+\DoxyCodeLine{78 \textcolor{comment}{}}
+\DoxyCodeLine{79 \textcolor{comment}{  /**}}
+\DoxyCodeLine{80 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{81 \textcolor{comment}{   *}}
+\DoxyCodeLine{82 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{83 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{84 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{85 \textcolor{comment}{   *}}
+\DoxyCodeLine{86 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{87 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{88 \textcolor{comment}{   */}}
+\DoxyCodeLine{89   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{90 \textcolor{comment}{}}
+\DoxyCodeLine{91 \textcolor{comment}{  /**}}
+\DoxyCodeLine{92 \textcolor{comment}{   * @brief Update the constant contributions of the element in a dense system}}
+\DoxyCodeLine{93 \textcolor{comment}{   *}}
+\DoxyCodeLine{94 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{95 \textcolor{comment}{   */}}
+\DoxyCodeLine{96   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
+\DoxyCodeLine{97 \textcolor{comment}{}}
+\DoxyCodeLine{98 \textcolor{comment}{  /**}}
+\DoxyCodeLine{99 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a dense}}
+\DoxyCodeLine{100 \textcolor{comment}{   * system}}
+\DoxyCodeLine{101 \textcolor{comment}{   *}}
+\DoxyCodeLine{102 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{103 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{104 \textcolor{comment}{   */}}
+\DoxyCodeLine{105   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
 \DoxyCodeLine{106 \textcolor{comment}{}}
-\DoxyCodeLine{107 \textcolor{comment}{        /**}}
-\DoxyCodeLine{108 \textcolor{comment}{         * @brief Update the constant contributions of the element in a sparse system}}
-\DoxyCodeLine{109 \textcolor{comment}{         *}}
-\DoxyCodeLine{110 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{111 \textcolor{comment}{         */}}
-\DoxyCodeLine{112         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{107 \textcolor{comment}{  /**}}
+\DoxyCodeLine{108 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{109 \textcolor{comment}{   *}}
+\DoxyCodeLine{110 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{111 \textcolor{comment}{   */}}
+\DoxyCodeLine{112   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
 \DoxyCodeLine{113 \textcolor{comment}{}}
-\DoxyCodeLine{114 \textcolor{comment}{        /**}}
-\DoxyCodeLine{115 \textcolor{comment}{         * @brief Update the time-\/dependent contributions of the element in a sparse system}}
-\DoxyCodeLine{116 \textcolor{comment}{         *}}
-\DoxyCodeLine{117 \textcolor{comment}{         * @param system System to update contributions at}}
-\DoxyCodeLine{118 \textcolor{comment}{         * @param time Current time}}
-\DoxyCodeLine{119 \textcolor{comment}{         */}}
-\DoxyCodeLine{120         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{121 \textcolor{comment}{}}
-\DoxyCodeLine{122 \textcolor{comment}{        /**}}
-\DoxyCodeLine{123 \textcolor{comment}{         * @brief Number of triplets of element}}
-\DoxyCodeLine{124 \textcolor{comment}{         *}}
-\DoxyCodeLine{125 \textcolor{comment}{         * Number of triplets that the element contributes to the global system (relevant for sparse memory reservation)}}
-\DoxyCodeLine{126 \textcolor{comment}{         */}}
-\DoxyCodeLine{127         std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a9878a9385bfdc31c3a7d2f4e5e4cfb88}{num\_triplets}} = \{}
-\DoxyCodeLine{128             \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
-\DoxyCodeLine{129             \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{130             \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{131         \};}
-\DoxyCodeLine{132 \textcolor{comment}{}}
-\DoxyCodeLine{133 \textcolor{comment}{        /**}}
-\DoxyCodeLine{134 \textcolor{comment}{         * @brief Convert the block to a steady behavior}}
-\DoxyCodeLine{135 \textcolor{comment}{         *}}
-\DoxyCodeLine{136 \textcolor{comment}{         * Converts the resistance and distal pressure to the constant means of}}
-\DoxyCodeLine{137 \textcolor{comment}{         * themselve}}
-\DoxyCodeLine{138 \textcolor{comment}{         */}}
-\DoxyCodeLine{139         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{to\_steady}}();}
-\DoxyCodeLine{140 }
-\DoxyCodeLine{141     \textcolor{keyword}{private}:}
-\DoxyCodeLine{142         Parameters params;}
-\DoxyCodeLine{143     \};}
-\DoxyCodeLine{144 }
-\DoxyCodeLine{145     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{146     \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a5bcb6df09176e5cc9a563f054253838b}{ResistanceBC<T>::ResistanceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} R, \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} Pd, std::string name) : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name)}
-\DoxyCodeLine{147     \{}
-\DoxyCodeLine{148         this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{149         this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_af053fae1f978f2a89c28ec3eabf0fa39}{R}} = R;}
-\DoxyCodeLine{150         this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_a8cef65e35f85e7511347788ea0692bc8}{Pd}} = Pd;}
-\DoxyCodeLine{151     \}}
-\DoxyCodeLine{152 }
-\DoxyCodeLine{153     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{154     \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aa16d90b9c1d86e6732b61fa708d8750c}{ResistanceBC<T>::\string~ResistanceBC}}()}
-\DoxyCodeLine{155     \{}
-\DoxyCodeLine{156     \}}
-\DoxyCodeLine{157 }
-\DoxyCodeLine{158     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{159     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{ResistanceBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)}
-\DoxyCodeLine{160     \{}
-\DoxyCodeLine{161         \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{Block<T>::setup\_dofs\_}}(dofhandler, 1, 0);}
-\DoxyCodeLine{162     \}}
+\DoxyCodeLine{114 \textcolor{comment}{  /**}}
+\DoxyCodeLine{115 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
+\DoxyCodeLine{116 \textcolor{comment}{   * system}}
+\DoxyCodeLine{117 \textcolor{comment}{   *}}
+\DoxyCodeLine{118 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{119 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{120 \textcolor{comment}{   */}}
+\DoxyCodeLine{121   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{122 \textcolor{comment}{}}
+\DoxyCodeLine{123 \textcolor{comment}{  /**}}
+\DoxyCodeLine{124 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{125 \textcolor{comment}{   *}}
+\DoxyCodeLine{126 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{127 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{128 \textcolor{comment}{   */}}
+\DoxyCodeLine{129   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a9878a9385bfdc31c3a7d2f4e5e4cfb88}{num\_triplets}} = \{}
+\DoxyCodeLine{130       \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
+\DoxyCodeLine{131       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{132       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{133   \};}
+\DoxyCodeLine{134 \textcolor{comment}{}}
+\DoxyCodeLine{135 \textcolor{comment}{  /**}}
+\DoxyCodeLine{136 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
+\DoxyCodeLine{137 \textcolor{comment}{   *}}
+\DoxyCodeLine{138 \textcolor{comment}{   * Converts the resistance and distal pressure to the constant means of}}
+\DoxyCodeLine{139 \textcolor{comment}{   * themselve}}
+\DoxyCodeLine{140 \textcolor{comment}{   */}}
+\DoxyCodeLine{141   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{to\_steady}}();}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143  \textcolor{keyword}{private}:}
+\DoxyCodeLine{144   Parameters params;}
+\DoxyCodeLine{145 \};}
+\DoxyCodeLine{146 }
+\DoxyCodeLine{147 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{148 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a5bcb6df09176e5cc9a563f054253838b}{ResistanceBC<T>::ResistanceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} R,}
+\DoxyCodeLine{149                               \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} Pd, std::string name)}
+\DoxyCodeLine{150     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
+\DoxyCodeLine{151   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
+\DoxyCodeLine{152   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_af053fae1f978f2a89c28ec3eabf0fa39}{R}} = R;}
+\DoxyCodeLine{153   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_a8cef65e35f85e7511347788ea0692bc8}{Pd}} = Pd;}
+\DoxyCodeLine{154 \}}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{157 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aa16d90b9c1d86e6732b61fa708d8750c}{ResistanceBC<T>::\string~ResistanceBC}}() \{\}}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{160 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{ResistanceBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{161   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{Block<T>::setup\_dofs\_}}(dofhandler, 1, 0);}
+\DoxyCodeLine{162 \}}
 \DoxyCodeLine{163 }
-\DoxyCodeLine{164     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{165     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{ResistanceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system)}
-\DoxyCodeLine{166     \{}
-\DoxyCodeLine{167         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{168     \}}
-\DoxyCodeLine{169 }
-\DoxyCodeLine{170     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{171     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{ResistanceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time)}
-\DoxyCodeLine{172     \{}
-\DoxyCodeLine{173         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = -\/params.R.get(time);}
-\DoxyCodeLine{174         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a1278a49733c3df5105a932a486d0afde}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.Pd.get(time);}
-\DoxyCodeLine{175     \}}
-\DoxyCodeLine{176 }
-\DoxyCodeLine{177     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{178     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{ResistanceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system)}
-\DoxyCodeLine{179     \{}
-\DoxyCodeLine{180         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{181     \}}
-\DoxyCodeLine{182 }
-\DoxyCodeLine{183     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{184     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{ResistanceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time)}
-\DoxyCodeLine{185     \{}
-\DoxyCodeLine{186         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = -\/params.R.get(time);}
-\DoxyCodeLine{187         system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.Pd.get(time);}
-\DoxyCodeLine{188     \}}
-\DoxyCodeLine{189 }
-\DoxyCodeLine{190     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{191     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{ResistanceBC<T>::to\_steady}}()}
-\DoxyCodeLine{192     \{}
-\DoxyCodeLine{193         params.R.to\_steady();}
-\DoxyCodeLine{194         params.Pd.to\_steady();}
-\DoxyCodeLine{195     \}}
-\DoxyCodeLine{196 }
-\DoxyCodeLine{197 \} \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{198 }
-\DoxyCodeLine{199 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_RESISTANCEWITHDISTALPRESSURE\_HPP\_}}
+\DoxyCodeLine{164 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{165 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{ResistanceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{}
+\DoxyCodeLine{166   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{167 \}}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{170 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{ResistanceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time) \{}
+\DoxyCodeLine{171   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{172       -\/params.R.get(time);}
+\DoxyCodeLine{173   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a1278a49733c3df5105a932a486d0afde}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.Pd.get(time);}
+\DoxyCodeLine{174 \}}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{177 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{ResistanceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{178   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{179 \}}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{182 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{ResistanceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{}
+\DoxyCodeLine{183   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{184       -\/params.R.get(time);}
+\DoxyCodeLine{185   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.Pd.get(time);}
+\DoxyCodeLine{186 \}}
+\DoxyCodeLine{187 }
+\DoxyCodeLine{188 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{189 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{ResistanceBC<T>::to\_steady}}() \{}
+\DoxyCodeLine{190   params.R.to\_steady();}
+\DoxyCodeLine{191   params.Pd.to\_steady();}
+\DoxyCodeLine{192 \}}
+\DoxyCodeLine{193 }
+\DoxyCodeLine{194 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{195 }
+\DoxyCodeLine{196 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_RESISTANCEWITHDISTALPRESSURE\_HPP\_}}
 
 \end{DoxyCode}

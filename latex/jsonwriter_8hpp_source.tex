@@ -10,91 +10,85 @@
 \DoxyCodeLine{6 \textcolor{preprocessor}{\#define SVZERODSOLVER\_IO\_JSONWRITER\_HPP\_}}
 \DoxyCodeLine{7 }
 \DoxyCodeLine{8 \textcolor{preprocessor}{\#include <json.h>}}
-\DoxyCodeLine{9 }
-\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <vector>}}
-\DoxyCodeLine{11 }
-\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}../algebra/state.hpp"{}}}
-\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}../helpers/startswith.hpp"{}}}
-\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}../model/model.hpp"{}}}
-\DoxyCodeLine{15 }
-\DoxyCodeLine{16 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_i_o}{IO}} \{}
-\DoxyCodeLine{17 \textcolor{comment}{}}
-\DoxyCodeLine{18 \textcolor{comment}{/**}}
-\DoxyCodeLine{19 \textcolor{comment}{ * @brief Write the solution to a json file}}
-\DoxyCodeLine{20 \textcolor{comment}{ *}}
-\DoxyCodeLine{21 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{22 \textcolor{comment}{ * @param path Path to the output json file}}
-\DoxyCodeLine{23 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
-\DoxyCodeLine{24 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
-\DoxyCodeLine{25 \textcolor{comment}{ * @param model The underlying model}}
-\DoxyCodeLine{26 \textcolor{comment}{ */}}
-\DoxyCodeLine{27 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{28 \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_i_o_ac3c323735b6caecafd2bc812dcbb2476}{write\_json}}(std::string \&path, std::vector<T> \&times,}
-\DoxyCodeLine{29                 std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
-\DoxyCodeLine{30                 \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
-\DoxyCodeLine{31   Json::Value output;}
-\DoxyCodeLine{32   Json::Value json\_times(Json::arrayValue);}
-\DoxyCodeLine{33   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} time : times) \{}
-\DoxyCodeLine{34     json\_times.append(Json::Value(time));}
-\DoxyCodeLine{35   \}}
-\DoxyCodeLine{36 }
-\DoxyCodeLine{37   Json::Value json\_names(Json::arrayValue);}
-\DoxyCodeLine{38   Json::Value json\_flow\_in(Json::arrayValue);}
-\DoxyCodeLine{39   Json::Value json\_flow\_out(Json::arrayValue);}
-\DoxyCodeLine{40   Json::Value json\_pres\_in(Json::arrayValue);}
-\DoxyCodeLine{41   Json::Value json\_pres\_out(Json::arrayValue);}
-\DoxyCodeLine{42 }
-\DoxyCodeLine{43   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}) \{}
-\DoxyCodeLine{44     std::string name = \textcolor{stringliteral}{"{}NoName"{}};}
-\DoxyCodeLine{45     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} inflow\_dof;}
-\DoxyCodeLine{46     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} outflow\_dof;}
-\DoxyCodeLine{47     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} inpres\_dof;}
-\DoxyCodeLine{48     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} outpres\_dof;}
-\DoxyCodeLine{49     std::visit(}
-\DoxyCodeLine{50         [\&](\textcolor{keyword}{auto} \&\&block) \{}
-\DoxyCodeLine{51           \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespace_h_e_l_p_e_r_s_aa60c2dfbfc096834b6cd243f84b9c47b}{HELPERS::startswith}}(block.name, \textcolor{stringliteral}{"{}V"{}})) \{}
-\DoxyCodeLine{52             name = block.name;}
-\DoxyCodeLine{53             inflow\_dof = block.inlet\_nodes[0]-\/>flow\_dof;}
-\DoxyCodeLine{54             outflow\_dof = block.outlet\_nodes[0]-\/>flow\_dof;}
-\DoxyCodeLine{55             inpres\_dof = block.inlet\_nodes[0]-\/>pres\_dof;}
-\DoxyCodeLine{56             outpres\_dof = block.outlet\_nodes[0]-\/>pres\_dof;}
-\DoxyCodeLine{57           \}}
-\DoxyCodeLine{58         \},}
-\DoxyCodeLine{59         elem);}
-\DoxyCodeLine{60 }
-\DoxyCodeLine{61     \textcolor{keywordflow}{if} (name != \textcolor{stringliteral}{"{}NoName"{}}) \{}
-\DoxyCodeLine{62       json\_names.append(name);}
-\DoxyCodeLine{63       Json::Value json\_flow\_in\_i(Json::arrayValue);}
-\DoxyCodeLine{64       Json::Value json\_flow\_out\_i(Json::arrayValue);}
-\DoxyCodeLine{65       Json::Value json\_pres\_in\_i(Json::arrayValue);}
-\DoxyCodeLine{66       Json::Value json\_pres\_out\_i(Json::arrayValue);}
-\DoxyCodeLine{67       \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} state : states) \{}
-\DoxyCodeLine{68         json\_flow\_in\_i.append(state.y[inflow\_dof]);}
-\DoxyCodeLine{69         json\_flow\_out\_i.append(state.y[outflow\_dof]);}
-\DoxyCodeLine{70         json\_pres\_in\_i.append(state.y[inpres\_dof]);}
-\DoxyCodeLine{71         json\_pres\_out\_i.append(state.y[outpres\_dof]);}
-\DoxyCodeLine{72       \}}
-\DoxyCodeLine{73       json\_flow\_in.append(json\_flow\_in\_i);}
-\DoxyCodeLine{74       json\_flow\_out.append(json\_flow\_out\_i);}
-\DoxyCodeLine{75       json\_pres\_in.append(json\_pres\_in\_i);}
-\DoxyCodeLine{76       json\_pres\_out.append(json\_pres\_out\_i);}
-\DoxyCodeLine{77     \}}
-\DoxyCodeLine{78   \}}
-\DoxyCodeLine{79 }
-\DoxyCodeLine{80   output[\textcolor{stringliteral}{"{}time"{}}] = json\_times;}
-\DoxyCodeLine{81   output[\textcolor{stringliteral}{"{}names"{}}] = json\_names;}
-\DoxyCodeLine{82   output[\textcolor{stringliteral}{"{}flow\_in"{}}] = json\_flow\_in;}
-\DoxyCodeLine{83   output[\textcolor{stringliteral}{"{}flow\_out"{}}] = json\_flow\_out;}
-\DoxyCodeLine{84   output[\textcolor{stringliteral}{"{}pressure\_in"{}}] = json\_pres\_in;}
-\DoxyCodeLine{85   output[\textcolor{stringliteral}{"{}pressure\_out"{}}] = json\_pres\_out;}
-\DoxyCodeLine{86 }
-\DoxyCodeLine{87   Json::FastWriter writer;}
-\DoxyCodeLine{88   std::ofstream out(path);}
-\DoxyCodeLine{89   out << writer.write(output);}
-\DoxyCodeLine{90   out.close();}
-\DoxyCodeLine{91 \}}
-\DoxyCodeLine{92 \}  \textcolor{comment}{// namespace IO}}
-\DoxyCodeLine{93 }
-\DoxyCodeLine{94 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_JSONWRITER\_HPP\_}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}../algebra/state.hpp"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}../model/model.hpp"{}}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}../helpers/startswith.hpp"{}}}
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_i_o}{IO}}}
+\DoxyCodeLine{15 \{}
+\DoxyCodeLine{16 \textcolor{comment}{}}
+\DoxyCodeLine{17 \textcolor{comment}{    /**}}
+\DoxyCodeLine{18 \textcolor{comment}{     * @brief Write the solution to a json file}}
+\DoxyCodeLine{19 \textcolor{comment}{     *}}
+\DoxyCodeLine{20 \textcolor{comment}{     * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{21 \textcolor{comment}{     * @param path Path to the output json file}}
+\DoxyCodeLine{22 \textcolor{comment}{     * @param times Sequence of time steps corresponding to the solutions}}
+\DoxyCodeLine{23 \textcolor{comment}{     * @param states Sequence of states corresponding to the time steps}}
+\DoxyCodeLine{24 \textcolor{comment}{     * @param model The underlying model}}
+\DoxyCodeLine{25 \textcolor{comment}{     */}}
+\DoxyCodeLine{26     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{27     \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_i_o_ac3c323735b6caecafd2bc812dcbb2476}{write\_json}}(std::string \&path, std::vector<T> \&times, std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model)}
+\DoxyCodeLine{28     \{}
+\DoxyCodeLine{29         Json::Value output;}
+\DoxyCodeLine{30         Json::Value json\_times(Json::arrayValue);}
+\DoxyCodeLine{31         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} time : times)}
+\DoxyCodeLine{32         \{}
+\DoxyCodeLine{33             json\_times.append(Json::Value(time));}
+\DoxyCodeLine{34         \}}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36         Json::Value json\_names(Json::arrayValue);}
+\DoxyCodeLine{37         Json::Value json\_flow\_in(Json::arrayValue);}
+\DoxyCodeLine{38         Json::Value json\_flow\_out(Json::arrayValue);}
+\DoxyCodeLine{39         Json::Value json\_pres\_in(Json::arrayValue);}
+\DoxyCodeLine{40         Json::Value json\_pres\_out(Json::arrayValue);}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a99b1375ef649ea5752e25e3d38219b5e}{blocks}})}
+\DoxyCodeLine{43         \{}
+\DoxyCodeLine{44             std::string name = \textcolor{stringliteral}{"{}NoName"{}};}
+\DoxyCodeLine{45             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} inflow\_dof;}
+\DoxyCodeLine{46             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} outflow\_dof;}
+\DoxyCodeLine{47             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} inpres\_dof;}
+\DoxyCodeLine{48             \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} outpres\_dof;}
+\DoxyCodeLine{49             std::visit([\&](\textcolor{keyword}{auto} \&\&block)}
+\DoxyCodeLine{50                        \{ \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespace_h_e_l_p_e_r_s_aa60c2dfbfc096834b6cd243f84b9c47b}{HELPERS::startswith}}(block.name, \textcolor{stringliteral}{"{}V"{}}))\{name = block.name; inflow\_dof = block.inlet\_nodes[0]-\/>flow\_dof; outflow\_dof = block.outlet\_nodes[0]-\/>flow\_dof; inpres\_dof = block.inlet\_nodes[0]-\/>pres\_dof; outpres\_dof = block.outlet\_nodes[0]-\/>pres\_dof;\} \},}
+\DoxyCodeLine{51                        elem);}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53             \textcolor{keywordflow}{if} (name != \textcolor{stringliteral}{"{}NoName"{}})}
+\DoxyCodeLine{54             \{}
+\DoxyCodeLine{55                 json\_names.append(name);}
+\DoxyCodeLine{56                 Json::Value json\_flow\_in\_i(Json::arrayValue);}
+\DoxyCodeLine{57                 Json::Value json\_flow\_out\_i(Json::arrayValue);}
+\DoxyCodeLine{58                 Json::Value json\_pres\_in\_i(Json::arrayValue);}
+\DoxyCodeLine{59                 Json::Value json\_pres\_out\_i(Json::arrayValue);}
+\DoxyCodeLine{60                 \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} state : states)}
+\DoxyCodeLine{61                 \{}
+\DoxyCodeLine{62                     json\_flow\_in\_i.append(state.y[inflow\_dof]);}
+\DoxyCodeLine{63                     json\_flow\_out\_i.append(state.y[outflow\_dof]);}
+\DoxyCodeLine{64                     json\_pres\_in\_i.append(state.y[inpres\_dof]);}
+\DoxyCodeLine{65                     json\_pres\_out\_i.append(state.y[outpres\_dof]);}
+\DoxyCodeLine{66                 \}}
+\DoxyCodeLine{67                 json\_flow\_in.append(json\_flow\_in\_i);}
+\DoxyCodeLine{68                 json\_flow\_out.append(json\_flow\_out\_i);}
+\DoxyCodeLine{69                 json\_pres\_in.append(json\_pres\_in\_i);}
+\DoxyCodeLine{70                 json\_pres\_out.append(json\_pres\_out\_i);}
+\DoxyCodeLine{71             \}}
+\DoxyCodeLine{72         \}}
+\DoxyCodeLine{73 }
+\DoxyCodeLine{74         output[\textcolor{stringliteral}{"{}time"{}}] = json\_times;}
+\DoxyCodeLine{75         output[\textcolor{stringliteral}{"{}names"{}}] = json\_names;}
+\DoxyCodeLine{76         output[\textcolor{stringliteral}{"{}flow\_in"{}}] = json\_flow\_in;}
+\DoxyCodeLine{77         output[\textcolor{stringliteral}{"{}flow\_out"{}}] = json\_flow\_out;}
+\DoxyCodeLine{78         output[\textcolor{stringliteral}{"{}pressure\_in"{}}] = json\_pres\_in;}
+\DoxyCodeLine{79         output[\textcolor{stringliteral}{"{}pressure\_out"{}}] = json\_pres\_out;}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81         Json::FastWriter writer;}
+\DoxyCodeLine{82         std::ofstream out(path);}
+\DoxyCodeLine{83         out << writer.write(output);}
+\DoxyCodeLine{84         out.close();}
+\DoxyCodeLine{85     \}}
+\DoxyCodeLine{86 \} \textcolor{comment}{// namespace IO}}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_IO\_JSONWRITER\_HPP\_}}
 
 \end{DoxyCode}

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['flowreferencebc_0',['FlowReferenceBC',['../class_m_o_d_e_l_1_1_flow_reference_b_c.html#a56d61d48d04dae89d5dc470bbf8dbf5f',1,'MODEL::FlowReferenceBC']]]
+  ['flowreference_0',['FlowReference',['../class_m_o_d_e_l_1_1_flow_reference.html#a8d9adb11615d0a9160b964d7d8c74bdb',1,'MODEL::FlowReference']]]
 ];

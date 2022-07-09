@@ -13,57 +13,64 @@
 \DoxyCodeLine{9 }
 \DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{dofhandler_8hpp}{dofhandler.hpp}}"{}}}
 \DoxyCodeLine{11 }
-\DoxyCodeLine{12 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
-\DoxyCodeLine{13 \textcolor{comment}{}}
-\DoxyCodeLine{14 \textcolor{comment}{/**}}
-\DoxyCodeLine{15 \textcolor{comment}{ * @brief Node}}
-\DoxyCodeLine{16 \textcolor{comment}{ *}}
-\DoxyCodeLine{17 \textcolor{comment}{ * Nodes connect two blocks with each other. Each node corresponds to a}}
-\DoxyCodeLine{18 \textcolor{comment}{ * flow and pressure value of the system.}}
-\DoxyCodeLine{19 \textcolor{comment}{ */}}
-\DoxyCodeLine{20 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} \{}
-\DoxyCodeLine{21  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{22 \textcolor{comment}{  /**}}
-\DoxyCodeLine{23 \textcolor{comment}{   * @brief Construct a new Node object}}
-\DoxyCodeLine{24 \textcolor{comment}{   *}}
-\DoxyCodeLine{25 \textcolor{comment}{   * @param name Name}}
-\DoxyCodeLine{26 \textcolor{comment}{   */}}
-\DoxyCodeLine{27   \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a066dff1336371f704fed4599e5b7165d}{Node}}(std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}});}
-\DoxyCodeLine{28 \textcolor{comment}{}}
-\DoxyCodeLine{29 \textcolor{comment}{  /**}}
-\DoxyCodeLine{30 \textcolor{comment}{   * @brief Destroy the Node object}}
-\DoxyCodeLine{31 \textcolor{comment}{   *}}
-\DoxyCodeLine{32 \textcolor{comment}{   */}}
-\DoxyCodeLine{33   \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a58141b669fcf0ca3cc46b2eaefb8e697}{\string~Node}}();}
-\DoxyCodeLine{34 }
-\DoxyCodeLine{35   std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}};       \textcolor{comment}{///< Name}}
-\DoxyCodeLine{36   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_af6b6212b5afa8b4a0052242f2dd34dc8}{flow\_dof}};  \textcolor{comment}{///< Global flow degree-\/of-\/freedom of the node}}
-\DoxyCodeLine{37   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_ac54a317558f3b44c05f7499ab96db074}{pres\_dof}};  \textcolor{comment}{///< Global pressure degree-\/of-\/freedom of the node}}
-\DoxyCodeLine{38 \textcolor{comment}{}}
-\DoxyCodeLine{39 \textcolor{comment}{  /**}}
-\DoxyCodeLine{40 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{41 \textcolor{comment}{   *}}
-\DoxyCodeLine{42 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{43 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{44 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{45 \textcolor{comment}{   *}}
-\DoxyCodeLine{46 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{47 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{48 \textcolor{comment}{   */}}
-\DoxyCodeLine{49   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a50119a4dd8496e64503edc625412b314}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
-\DoxyCodeLine{50 \};}
-\DoxyCodeLine{51 }
-\DoxyCodeLine{52 \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a066dff1336371f704fed4599e5b7165d}{Node::Node}}(std::string name) \{ this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}}; \}}
-\DoxyCodeLine{53 }
-\DoxyCodeLine{54 \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a58141b669fcf0ca3cc46b2eaefb8e697}{Node::\string~Node}}() \{\}}
-\DoxyCodeLine{55 }
-\DoxyCodeLine{56 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a50119a4dd8496e64503edc625412b314}{Node::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{57   \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_af6b6212b5afa8b4a0052242f2dd34dc8}{flow\_dof}} = dofhandler.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{register\_variable}}(\textcolor{stringliteral}{"{}Q\_"{}} + \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}});}
-\DoxyCodeLine{58   \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_ac54a317558f3b44c05f7499ab96db074}{pres\_dof}} = dofhandler.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{register\_variable}}(\textcolor{stringliteral}{"{}P\_"{}} + \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}});}
-\DoxyCodeLine{59 \}}
-\DoxyCodeLine{60 }
-\DoxyCodeLine{61 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{62 }
-\DoxyCodeLine{63 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_NODE\_HPP\_}}
+\DoxyCodeLine{12 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}}}
+\DoxyCodeLine{13 \{}
+\DoxyCodeLine{14 \textcolor{comment}{}}
+\DoxyCodeLine{15 \textcolor{comment}{    /**}}
+\DoxyCodeLine{16 \textcolor{comment}{     * @brief Node}}
+\DoxyCodeLine{17 \textcolor{comment}{     *}}
+\DoxyCodeLine{18 \textcolor{comment}{     * Nodes connect two blocks with each other. Each node corresponds to a}}
+\DoxyCodeLine{19 \textcolor{comment}{     * flow and pressure value of the system.}}
+\DoxyCodeLine{20 \textcolor{comment}{     */}}
+\DoxyCodeLine{21     \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}}
+\DoxyCodeLine{22     \{}
+\DoxyCodeLine{23     \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{24 \textcolor{comment}{        /**}}
+\DoxyCodeLine{25 \textcolor{comment}{         * @brief Construct a new Node object}}
+\DoxyCodeLine{26 \textcolor{comment}{         *}}
+\DoxyCodeLine{27 \textcolor{comment}{         * @param name Name}}
+\DoxyCodeLine{28 \textcolor{comment}{         */}}
+\DoxyCodeLine{29         \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a066dff1336371f704fed4599e5b7165d}{Node}}(std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}});}
+\DoxyCodeLine{30 \textcolor{comment}{}}
+\DoxyCodeLine{31 \textcolor{comment}{        /**}}
+\DoxyCodeLine{32 \textcolor{comment}{         * @brief Destroy the Node object}}
+\DoxyCodeLine{33 \textcolor{comment}{         *}}
+\DoxyCodeLine{34 \textcolor{comment}{         */}}
+\DoxyCodeLine{35         \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a58141b669fcf0ca3cc46b2eaefb8e697}{\string~Node}}();}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37         std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}};      \textcolor{comment}{///< Name}}
+\DoxyCodeLine{38         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_af6b6212b5afa8b4a0052242f2dd34dc8}{flow\_dof}}; \textcolor{comment}{///< Global flow degree-\/of-\/freedom of the node}}
+\DoxyCodeLine{39         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_ac54a317558f3b44c05f7499ab96db074}{pres\_dof}}; \textcolor{comment}{///< Global pressure degree-\/of-\/freedom of the node}}
+\DoxyCodeLine{40 \textcolor{comment}{}}
+\DoxyCodeLine{41 \textcolor{comment}{        /**}}
+\DoxyCodeLine{42 \textcolor{comment}{         * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{43 \textcolor{comment}{         *}}
+\DoxyCodeLine{44 \textcolor{comment}{         * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{45 \textcolor{comment}{         * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{46 \textcolor{comment}{         * element.}}
+\DoxyCodeLine{47 \textcolor{comment}{         *}}
+\DoxyCodeLine{48 \textcolor{comment}{         * @param dofhandler Degree-\/of-\/freedom handler to register variables and equations at}}
+\DoxyCodeLine{49 \textcolor{comment}{         */}}
+\DoxyCodeLine{50         \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a50119a4dd8496e64503edc625412b314}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{51     \};}
+\DoxyCodeLine{52 }
+\DoxyCodeLine{53     \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a066dff1336371f704fed4599e5b7165d}{Node::Node}}(std::string name)}
+\DoxyCodeLine{54     \{}
+\DoxyCodeLine{55         this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}};}
+\DoxyCodeLine{56     \}}
+\DoxyCodeLine{57 }
+\DoxyCodeLine{58     \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a58141b669fcf0ca3cc46b2eaefb8e697}{Node::\string~Node}}()}
+\DoxyCodeLine{59     \{}
+\DoxyCodeLine{60     \}}
+\DoxyCodeLine{61 }
+\DoxyCodeLine{62     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a50119a4dd8496e64503edc625412b314}{Node::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)}
+\DoxyCodeLine{63     \{}
+\DoxyCodeLine{64         \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_af6b6212b5afa8b4a0052242f2dd34dc8}{flow\_dof}} = dofhandler.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{register\_variable}}(\textcolor{stringliteral}{"{}Q\_"{}} + \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}});}
+\DoxyCodeLine{65         \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_ac54a317558f3b44c05f7499ab96db074}{pres\_dof}} = dofhandler.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{register\_variable}}(\textcolor{stringliteral}{"{}P\_"{}} + \mbox{\hyperlink{class_m_o_d_e_l_1_1_node_a56165620f82f7ac32672f50f37660829}{name}});}
+\DoxyCodeLine{66     \}}
+\DoxyCodeLine{67 }
+\DoxyCodeLine{68 \} \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{69 }
+\DoxyCodeLine{70 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_NODE\_HPP\_}}
 
 \end{DoxyCode}

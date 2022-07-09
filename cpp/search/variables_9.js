@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['name_0',['name',['../class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281',1,'MODEL::Block::name()'],['../class_m_o_d_e_l_1_1_node.html#a56165620f82f7ac32672f50f37660829',1,'MODEL::Node::name()']]],
-  ['nodes_1',['nodes',['../class_m_o_d_e_l_1_1_model.html#a513272238d7c4f37a4351ab9d7d825e6',1,'MODEL::Model']]],
-  ['num_5ftriplets_2',['num_triplets',['../class_m_o_d_e_l_1_1_block.html#adb23ef1a0b7069096bf7c0189839bf6b',1,'MODEL::Block::num_triplets()'],['../class_m_o_d_e_l_1_1_blood_vessel.html#a3e6d973f217880e6cce55a84ffd3f658',1,'MODEL::BloodVessel::num_triplets()'],['../class_m_o_d_e_l_1_1_flow_reference_b_c.html#aef45cf661c4cfa8da82d0ea37fc2ce8b',1,'MODEL::FlowReferenceBC::num_triplets()'],['../class_m_o_d_e_l_1_1_junction.html#a5d98db120811ddbb43f2b974116cb6da',1,'MODEL::Junction::num_triplets()'],['../class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a775aafb5a86021c15959b97282e213e1',1,'MODEL::OpenLoopCoronaryBC::num_triplets()'],['../class_m_o_d_e_l_1_1_pressure_reference_b_c.html#adcdd1588ba282ee62f00ddafae198c0e',1,'MODEL::PressureReferenceBC::num_triplets()'],['../class_m_o_d_e_l_1_1_resistance_b_c.html#a9878a9385bfdc31c3a7d2f4e5e4cfb88',1,'MODEL::ResistanceBC::num_triplets()'],['../class_m_o_d_e_l_1_1_windkessel_b_c.html#a26ac0a44556e6ae986e89f6a23dabb07',1,'MODEL::WindkesselBC::num_triplets()']]]
+  ['l_0',['L',['../struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.html#a75bd48844a1d4af4555898f0d2f53dcf',1,'MODEL::BloodVessel::Parameters']]]
 ];

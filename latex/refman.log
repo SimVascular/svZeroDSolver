@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Alpine Linux) (preloaded format=pdflatex 2022.7.9)  9 JUL 2022 01:33
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Alpine Linux) (preloaded format=pdflatex 2022.7.9)  9 JUL 2022 01:42
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1208,9 +1208,7 @@ LaTeX Font Info:    Trying to load font information for T1+pcr on input line 17
 (/usr/share/texmf-dist/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 ) [2] [3] [4] [5] [6] [7]
-[8] [9] [10] [11] [12
-
-]
+[8] [9] [10]
 Package hyperref Info: Option `pageanchor' set `true' on input line 179.
 
 Chapter 1.
@@ -1241,6 +1239,7 @@ LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 10.79993pt on input line 22.
  [1
+
 
 ] [2])
 [3] [4
@@ -1283,12 +1282,7 @@ Chapter 5.
 
 ]
 Chapter 6.
-(./annotated.tex
-
-Package natbib Warning: Citation `kim_coronary' on page 13 undefined on input l
-ine 13.
-
-[13]) [14]
+(./annotated.tex [13]) [14]
 Chapter 7.
 (./files.tex [15
 
@@ -1316,15 +1310,8 @@ Underfull \hbox (badness 10000) detected at line 60
 [][][]
  []
 
-) (./namespace_i_o.tex [18] [19]) (./namespace_m_o_d_e_l.tex [20]
-LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 8.09995pt on input line 26.
-
-
-Package natbib Warning: Citation `kim_coronary' on page 21 undefined on input l
-ine 26.
-
-) [21] [22
+) (./namespace_i_o.tex [18] [19]) (./namespace_m_o_d_e_l.tex [20]) [21]
+[22
 
 ]
 Chapter 9.
@@ -1334,13 +1321,13 @@ df
 pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_block__inherit__graph.pdf)
 : PDF inclusion: multiple pdfs with page group included in a single page
 >
-<class_m_o_d_e_l_1_1_block__inherit__graph.pdf, id=2585, 395.4775pt x 341.275pt
+<class_m_o_d_e_l_1_1_block__inherit__graph.pdf, id=2346, 420.57124pt x 264.99pt
 >
 File: class_m_o_d_e_l_1_1_block__inherit__graph.pdf Graphic file (type pdf)
 <use class_m_o_d_e_l_1_1_block__inherit__graph.pdf>
 Package pdftex.def Info: class_m_o_d_e_l_1_1_block__inherit__graph.pdf  used on
  input line 19.
-(pdftex.def)             Requested size: 350.0pt x 302.03616pt.
+(pdftex.def)             Requested size: 350.0pt x 220.52794pt.
  [23] [24]
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
 (Font)              scaled to size 7.19995pt on input line 89.
@@ -1358,7 +1345,7 @@ pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_blood_vessel__inherit__gra
 ph.pdf): PDF inclusion: multiple pdfs with page group included in a single page
 
 >
-<class_m_o_d_e_l_1_1_blood_vessel__inherit__graph.pdf, id=2738, 213.79875pt x 1
+<class_m_o_d_e_l_1_1_blood_vessel__inherit__graph.pdf, id=2497, 213.79875pt x 1
 56.585pt>
 File: class_m_o_d_e_l_1_1_blood_vessel__inherit__graph.pdf Graphic file (type p
 df)
@@ -1366,7 +1353,30 @@ df)
 Package pdftex.def Info: class_m_o_d_e_l_1_1_blood_vessel__inherit__graph.pdf  
 used on input line 19.
 (pdftex.def)             Requested size: 213.0pt x 155.99922pt.
- [31] [32] [33] [34]) (./class_i_o_1_1_config_reader.tex [35] [36] [37]
+ [31] [32] [33] [34]) (./class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.tex <.
+/class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary__inherit__graph.pdf
+
+pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_closed_loop_heart_pulmonar
+y__inherit__graph.pdf): PDF inclusion: multiple pdfs with page group included i
+n a single page
+>
+<class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary__inherit__graph.pdf, id=2586, 
+281.05pt x 156.585pt>
+File: class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary__inherit__graph.pdf Graph
+ic file (type pdf)
+<use class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary__inherit__graph.pdf>
+Package pdftex.def Info: class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary__inher
+it__graph.pdf  used on input line 19.
+(pdftex.def)             Requested size: 280.0pt x 156.00879pt.
+ [35] [36] [37] [38] [39] [40]
+Underfull \hbox (badness 10000) in paragraph at lines 319--321
+\T1/pcr/m/n/8 void []$\OML/cmm/m/it/8 <$\T1/pcr/m/n/8 T$\OML/cmm/m/it/8 >$[]\T1
+/pcr/m/n/8 ::get[]_[]psi[]_[]ra[]_[]la (Eigen[]::[]Matrix$\OML/cmm/m/it/8 <$\T1
+/pcr/m/n/8 T, Eigen[]::[]Dynamic, 1$\OML/cmm/m/it/8 >$ \T1/pcr/m/n/8 &y, T$\OMS
+/cmsy/m/n/8 ^^C$
+ []
+
+[41]) (./class_i_o_1_1_config_reader.tex [42] [43]
 Underfull \hbox (badness 10000) detected at line 116
 [][][]
  []
@@ -1376,12 +1386,12 @@ Underfull \hbox (badness 10000) detected at line 137
 [][][]
  []
 
-
+[44]
 Underfull \hbox (badness 10000) detected at line 156
 [][][]
  []
 
-[38] [39]
+
 Underfull \hbox (badness 10000) detected at line 177
 [][][]
  []
@@ -1391,16 +1401,12 @@ Underfull \hbox (badness 10000) detected at line 191
 [][][]
  []
 
-
+[45]
 Underfull \hbox (badness 10000) detected at line 205
 [][][]
  []
 
 
-Overfull \vbox (2.00717pt too high) has occurred while \output is active []
-
-
-[40]
 Underfull \hbox (badness 10000) detected at line 224
 [][][]
  []
@@ -1410,72 +1416,76 @@ Underfull \hbox (badness 10000) detected at line 245
 [][][]
  []
 
-
+[46]
 Underfull \hbox (badness 10000) detected at line 259
 [][][]
  []
 
-) (./class_a_l_g_e_b_r_a_1_1_dense_system.tex [41] [42] [43] [44])
-(./class_m_o_d_e_l_1_1_d_o_f_handler.tex [45] [46]
+) (./class_a_l_g_e_b_r_a_1_1_dense_system.tex [47] [48] [49] [50])
+(./class_m_o_d_e_l_1_1_d_o_f_handler.tex [51]
 Underfull \hbox (badness 10000) detected at line 71
 [][][]
  []
 
-
+[52]
 Underfull \hbox (badness 10000) detected at line 89
 [][][]
  []
 
-[47]
+
 Underfull \hbox (badness 10000) detected at line 102
 [][][]
  []
 
-) (./class_m_o_d_e_l_1_1_flow_reference_b_c.tex <./class_m_o_d_e_l_1_1_flow_ref
-erence_b_c__inherit__graph.pdf
+) (./class_m_o_d_e_l_1_1_flow_reference.tex [53] <./class_m_o_d_e_l_1_1_flow_re
+ference__inherit__graph.pdf
 
-pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_flow_reference_b_c__inheri
-t__graph.pdf): PDF inclusion: multiple pdfs with page group included in a singl
-e page
+pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_flow_reference__inherit__g
+raph.pdf): PDF inclusion: multiple pdfs with page group included in a single pa
+ge
 >
-<class_m_o_d_e_l_1_1_flow_reference_b_c__inherit__graph.pdf, id=3019, 237.88875
-pt x 156.585pt>
-File: class_m_o_d_e_l_1_1_flow_reference_b_c__inherit__graph.pdf Graphic file (
-type pdf)
-<use class_m_o_d_e_l_1_1_flow_reference_b_c__inherit__graph.pdf>
-Package pdftex.def Info: class_m_o_d_e_l_1_1_flow_reference_b_c__inherit__graph
-.pdf  used on input line 19.
-(pdftex.def)             Requested size: 237.0pt x 156.0064pt.
- [48] [49] [50] [51]) (./class_a_l_g_e_b_r_a_1_1_integrator.tex [52]
+<class_m_o_d_e_l_1_1_flow_reference__inherit__graph.pdf, id=2903, 223.83624pt x
+ 156.585pt>
+File: class_m_o_d_e_l_1_1_flow_reference__inherit__graph.pdf Graphic file (type
+ pdf)
+<use class_m_o_d_e_l_1_1_flow_reference__inherit__graph.pdf>
+Package pdftex.def Info: class_m_o_d_e_l_1_1_flow_reference__inherit__graph.pdf
+  used on input line 19.
+(pdftex.def)             Requested size: 223.0pt x 156.004pt.
+ [54] [55] [56] [57]
+Overfull \vbox (11.97957pt too high) has occurred while \output is active []
 
-Package natbib Warning: Citation `JANSEN2000305' on page 53 undefined on input 
+
+[58]) (./class_a_l_g_e_b_r_a_1_1_integrator.tex
+
+Package natbib Warning: Citation `JANSEN2000305' on page 59 undefined on input 
 line 36.
 
-[53]
+[59] [60] [61]
 Underfull \hbox (badness 10000) detected at line 106
 [][][]
  []
 
-[54]) (./class_m_o_d_e_l_1_1_junction.tex <./class_m_o_d_e_l_1_1_junction__inhe
-rit__graph.pdf
+) (./class_m_o_d_e_l_1_1_junction.tex <./class_m_o_d_e_l_1_1_junction__inherit_
+_graph.pdf
 
 pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_junction__inherit__graph.p
 df): PDF inclusion: multiple pdfs with page group included in a single page
 >
-<class_m_o_d_e_l_1_1_junction__inherit__graph.pdf, id=3162, 195.73125pt x 156.5
+<class_m_o_d_e_l_1_1_junction__inherit__graph.pdf, id=3046, 195.73125pt x 156.5
 85pt>
 File: class_m_o_d_e_l_1_1_junction__inherit__graph.pdf Graphic file (type pdf)
 <use class_m_o_d_e_l_1_1_junction__inherit__graph.pdf>
 Package pdftex.def Info: class_m_o_d_e_l_1_1_junction__inherit__graph.pdf  used
  on input line 19.
 (pdftex.def)             Requested size: 195.0pt x 156.00879pt.
- [55] [56]
+ [62] [63]
 
 Package longtable Warning: Column widths have changed
-(longtable)                in table 9.43 on input line 111.
+(longtable)                in table 9.55 on input line 110.
 
-[57]) (./class_m_o_d_e_l_1_1_model.tex [58]
-Underfull \hbox (badness 1286) in paragraph at lines 38--39
+[64] [65]) (./class_m_o_d_e_l_1_1_model.tex
+Underfull \hbox (badness 2856) in paragraph at lines 38--39
 []\T1/phv/m/n/10 std[]::map$\OML/cmm/m/it/10 <$ \T1/phv/m/n/10 std[]::string, s
 td[]::variant$\OML/cmm/m/it/10 <$ []$<$ \T1/phv/m/n/10 T $\OML/cmm/m/it/10 >$\T
 1/phv/m/n/10 , []$\OML/cmm/m/it/10 <$ \T1/phv/m/n/10 T $\OML/cmm/m/it/10 >$\T1/
@@ -1483,86 +1493,52 @@ phv/m/n/10 , []$\OML/cmm/m/it/10 <$ \T1/phv/m/n/10 T $\OML/cmm/m/it/10 >$\T1/ph
 v/m/n/10 ,
  []
 
-[59]
+[66]
 Underfull \hbox (badness 10000) detected at line 99
 [][][]
  []
 
-[60]
+[67]
 Overfull \vbox (14.25883pt too high) has occurred while \output is active []
 
 
-[61]
-Overfull \hbox (76.46825pt too wide) in paragraph at lines 224--226
+[68]
+Overfull \hbox (95.66826pt too wide) in paragraph at lines 224--226
 \T1/pcr/m/n/8 std[]::map$\OML/cmm/m/it/8 <$\T1/pcr/m/n/8 std[]::string, std[]::
 variant$\OML/cmm/m/it/8 <$[]$<$\T1/pcr/m/n/8 T$\OML/cmm/m/it/8 >$\T1/pcr/m/n/8 
 , []$\OML/cmm/m/it/8 <$\T1/pcr/m/n/8 T$\OML/cmm/m/it/8 >$\T1/pcr/m/n/8 , []$\OM
 L/cmm/m/it/8 <$\T1/pcr/m/n/8 T$\OML/cmm/m/it/8 >$\T1/pcr/m/n/8 , []$\OML/cmm/m/
-it/8 <$\T1/pcr/m/n/8 T$\OML/cmm/m/it/8 >$\T1/pcr/m/n/8 ,
+it/8 <$\T1/pcr/m/n/8 T$\OML/cmm/m/it/8 >$
  []
 
-[62]) (./class_m_o_d_e_l_1_1_node.tex [63]
+[69]) (./class_m_o_d_e_l_1_1_node.tex [70]
 
 Package longtable Warning: Column widths have changed
-(longtable)                in table 9.54 on input line 52.
+(longtable)                in table 9.66 on input line 52.
 
-[64]) (./class_m_o_d_e_l_1_1_open_loop_coronary_b_c.tex
-
-Package natbib Warning: Citation `kim_coronary' on page 65 undefined on input l
-ine 5.
-
- <./class_m_o_d_e_l_1_1_open_loop_coronary_b_c__inherit__graph.pdf
-
-pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_open_loop_coronary_b_c__in
-herit__graph.pdf): PDF inclusion: multiple pdfs with page group included in a s
-ingle page
->
-<class_m_o_d_e_l_1_1_open_loop_coronary_b_c__inherit__graph.pdf, id=3379, 255.9
-5625pt x 156.585pt>
-File: class_m_o_d_e_l_1_1_open_loop_coronary_b_c__inherit__graph.pdf Graphic fi
-le (type pdf)
-<use class_m_o_d_e_l_1_1_open_loop_coronary_b_c__inherit__graph.pdf>
-Package pdftex.def Info: class_m_o_d_e_l_1_1_open_loop_coronary_b_c__inherit__g
-raph.pdf  used on input line 19.
-(pdftex.def)             Requested size: 255.0pt x 155.99922pt.
-
-Underfull \hbox (badness 905) in paragraph at lines 30--31
-[][] \T1/phv/m/n/10 (T Ra, T Ram, T Rv, T Ca, T Cim, []$\OML/cmm/m/it/10 <$ \T1
-/phv/m/n/10 T $\OML/cmm/m/it/10 >$ \T1/phv/m/n/10 Pim,
- []
-
-[65]
-
-Package natbib Warning: Citation `kim_coronary' on page 66 undefined on input l
-ine 56.
-
-[66] [67] [68] [69]
-Overfull \vbox (11.97957pt too high) has occurred while \output is active []
-
-
-[70]) (./struct_m_o_d_e_l_1_1_block_1_1_parameters.tex <./struct_m_o_d_e_l_1_1_
+[71]) (./struct_m_o_d_e_l_1_1_block_1_1_parameters.tex <./struct_m_o_d_e_l_1_1_
 block_1_1_parameters__inherit__graph.pdf
 
 pdfTeX warning: pdflatex (file ./struct_m_o_d_e_l_1_1_block_1_1_parameters__inh
 erit__graph.pdf): PDF inclusion: multiple pdfs with page group included in a si
 ngle page
 >
-<struct_m_o_d_e_l_1_1_block_1_1_parameters__inherit__graph.pdf, id=3483, 376.40
-625pt x 406.51875pt>
+<struct_m_o_d_e_l_1_1_block_1_1_parameters__inherit__graph.pdf, id=3259, 401.5p
+t x 308.15125pt>
 File: struct_m_o_d_e_l_1_1_block_1_1_parameters__inherit__graph.pdf Graphic fil
 e (type pdf)
 <use struct_m_o_d_e_l_1_1_block_1_1_parameters__inherit__graph.pdf>
 Package pdftex.def Info: struct_m_o_d_e_l_1_1_block_1_1_parameters__inherit__gr
 aph.pdf  used on input line 19.
-(pdftex.def)             Requested size: 350.0pt x 378.0275pt.
- [71]) (./struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.tex <./struct_m_o_d_
+(pdftex.def)             Requested size: 350.0pt x 268.64424pt.
+ [72]) (./struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.tex <./struct_m_o_d_
 e_l_1_1_blood_vessel_1_1_parameters__inherit__graph.pdf
 
 pdfTeX warning: pdflatex (file ./struct_m_o_d_e_l_1_1_blood_vessel_1_1_paramete
 rs__inherit__graph.pdf): PDF inclusion: multiple pdfs with page group included 
 in a single page
 >
-<struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters__inherit__graph.pdf, id=3499,
+<struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters__inherit__graph.pdf, id=3274,
  190.7125pt x 178.6675pt>
 File: struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters__inherit__graph.pdf Grap
 hic file (type pdf)
@@ -1570,21 +1546,32 @@ hic file (type pdf)
 Package pdftex.def Info: struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters__inhe
 rit__graph.pdf  used on input line 19.
 (pdftex.def)             Requested size: 190.0pt x 178.0073pt.
- [72] [73]) (./struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters.tex <./st
-ruct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters__inherit__graph.pdf>
-<struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters__inherit__graph.pdf, id
-=3536, 214.8025pt x 178.6675pt>
-File: struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters__inherit__graph.pd
-f Graphic file (type pdf)
-<use struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters__inherit__graph.pdf
->
-Package pdftex.def Info: struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters
-__inherit__graph.pdf  used on input line 19.
-(pdftex.def)             Requested size: 214.0pt x 178.00185pt.
-
-[74]) (./struct_m_o_d_e_l_1_1_junction_1_1_parameters.tex <./struct_m_o_d_e_l_1
-_1_junction_1_1_parameters__inherit__graph.pdf>
-<struct_m_o_d_e_l_1_1_junction_1_1_parameters__inherit__graph.pdf, id=3558, 187
+ [73] [74])
+(./struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters.tex <./struc
+t_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters__inherit__graph.pdf>
+<struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters__inherit__grap
+h.pdf, id=3312, 257.96375pt x 178.6675pt>
+File: struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters__inherit_
+_graph.pdf Graphic file (type pdf)
+<use struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters__inherit__
+graph.pdf>
+Package pdftex.def Info: struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_p
+arameters__inherit__graph.pdf  used on input line 19.
+(pdftex.def)             Requested size: 257.0pt x 178.01547pt.
+[75]) (./struct_m_o_d_e_l_1_1_flow_reference_1_1_parameters.tex <./struct_m_o_d
+_e_l_1_1_flow_reference_1_1_parameters__inherit__graph.pdf>
+<struct_m_o_d_e_l_1_1_flow_reference_1_1_parameters__inherit__graph.pdf, id=332
+9, 201.75375pt x 178.6675pt>
+File: struct_m_o_d_e_l_1_1_flow_reference_1_1_parameters__inherit__graph.pdf Gr
+aphic file (type pdf)
+<use struct_m_o_d_e_l_1_1_flow_reference_1_1_parameters__inherit__graph.pdf>
+Package pdftex.def Info: struct_m_o_d_e_l_1_1_flow_reference_1_1_parameters__in
+herit__graph.pdf  used on input line 19.
+(pdftex.def)             Requested size: 201.0pt x 178.00185pt.
+ [76])
+(./struct_m_o_d_e_l_1_1_junction_1_1_parameters.tex <./struct_m_o_d_e_l_1_1_jun
+ction_1_1_parameters__inherit__graph.pdf>
+<struct_m_o_d_e_l_1_1_junction_1_1_parameters__inherit__graph.pdf, id=3354, 187
 .70125pt x 178.6675pt>
 File: struct_m_o_d_e_l_1_1_junction_1_1_parameters__inherit__graph.pdf Graphic 
 file (type pdf)
@@ -1592,110 +1579,47 @@ file (type pdf)
 Package pdftex.def Info: struct_m_o_d_e_l_1_1_junction_1_1_parameters__inherit_
 _graph.pdf  used on input line 19.
 (pdftex.def)             Requested size: 187.0pt x 178.01003pt.
- [75])
-(./struct_m_o_d_e_l_1_1_open_loop_coronary_b_c_1_1_parameters.tex <./struct_m_o
-_d_e_l_1_1_open_loop_coronary_b_c_1_1_parameters__inherit__graph.pdf>
-<struct_m_o_d_e_l_1_1_open_loop_coronary_b_c_1_1_parameters__inherit__graph.pdf
-, id=3578, 232.87pt x 178.6675pt>
-File: struct_m_o_d_e_l_1_1_open_loop_coronary_b_c_1_1_parameters__inherit__grap
-h.pdf Graphic file (type pdf)
-<use struct_m_o_d_e_l_1_1_open_loop_coronary_b_c_1_1_parameters__inherit__graph
-.pdf>
-Package pdftex.def Info: struct_m_o_d_e_l_1_1_open_loop_coronary_b_c_1_1_parame
-ters__inherit__graph.pdf  used on input line 19.
-(pdftex.def)             Requested size: 232.0pt x 178.0073pt.
- [76])
-(./struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters.tex <./struct_m_o
-_d_e_l_1_1_pressure_reference_b_c_1_1_parameters__inherit__graph.pdf>
-<struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters__inherit__graph.pdf
-, id=3606, 219.82124pt x 178.6675pt>
-File: struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters__inherit__grap
-h.pdf Graphic file (type pdf)
-<use struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters__inherit__graph
-.pdf>
-Package pdftex.def Info: struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parame
-ters__inherit__graph.pdf  used on input line 19.
-(pdftex.def)             Requested size: 219.0pt x 178.00456pt.
- [77])
-(./struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters.tex <./struct_m_o_d_e_l_1
-_1_resistance_b_c_1_1_parameters__inherit__graph.pdf>
-<struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters__inherit__graph.pdf, id=363
-2, 198.7425pt x 178.6675pt>
-File: struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters__inherit__graph.pdf Gr
-aphic file (type pdf)
-<use struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters__inherit__graph.pdf>
-Package pdftex.def Info: struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters__in
-herit__graph.pdf  used on input line 19.
-(pdftex.def)             Requested size: 198.0pt x 178.00456pt.
- [78])
-(./struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters.tex <./struct_m_o_d_e_l_1
-_1_windkessel_b_c_1_1_parameters__inherit__graph.pdf>
-<struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters__inherit__graph.pdf, id=366
-1, 199.74625pt x 178.6675pt>
-File: struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters__inherit__graph.pdf Gr
-aphic file (type pdf)
-<use struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters__inherit__graph.pdf>
-Package pdftex.def Info: struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters__in
-herit__graph.pdf  used on input line 19.
-(pdftex.def)             Requested size: 199.0pt x 178.01003pt.
- [79])
-(./class_m_o_d_e_l_1_1_pressure_reference_b_c.tex [80] <./class_m_o_d_e_l_1_1_p
-ressure_reference_b_c__inherit__graph.pdf
+)
+(./struct_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure_1_1_parameters.tex <./
+struct_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure_1_1_parameters__inherit__
+graph.pdf
 
-pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_pressure_reference_b_c__in
-herit__graph.pdf): PDF inclusion: multiple pdfs with page group included in a s
-ingle page
+pdfTeX warning: pdflatex (file ./struct_m_o_d_e_l_1_1_r_c_r_block_with_distal_p
+ressure_1_1_parameters__inherit__graph.pdf): PDF inclusion: multiple pdfs with 
+page group included in a single page
 >
-<class_m_o_d_e_l_1_1_pressure_reference_b_c__inherit__graph.pdf, id=3696, 219.8
-2124pt x 167.62625pt>
-File: class_m_o_d_e_l_1_1_pressure_reference_b_c__inherit__graph.pdf Graphic fi
-le (type pdf)
-<use class_m_o_d_e_l_1_1_pressure_reference_b_c__inherit__graph.pdf>
-Package pdftex.def Info: class_m_o_d_e_l_1_1_pressure_reference_b_c__inherit__g
-raph.pdf  used on input line 19.
-(pdftex.def)             Requested size: 219.0pt x 167.00427pt.
- [81] [82] [83] [84]) (./class_m_o_d_e_l_1_1_resistance_b_c.tex <./class_m_o_d_
-e_l_1_1_resistance_b_c__inherit__graph.pdf
-
-pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_resistance_b_c__inherit__g
-raph.pdf): PDF inclusion: multiple pdfs with page group included in a single pa
-ge
->
-<class_m_o_d_e_l_1_1_resistance_b_c__inherit__graph.pdf, id=3788, 220.825pt x 1
-56.585pt>
-File: class_m_o_d_e_l_1_1_resistance_b_c__inherit__graph.pdf Graphic file (type
- pdf)
-<use class_m_o_d_e_l_1_1_resistance_b_c__inherit__graph.pdf>
-Package pdftex.def Info: class_m_o_d_e_l_1_1_resistance_b_c__inherit__graph.pdf
-  used on input line 19.
-(pdftex.def)             Requested size: 220.0pt x 156.0064pt.
- [85] [86] [87] [88]) (./class_a_l_g_e_b_r_a_1_1_sparse_system.tex [89]
-[90] [91] [92] [93]) (./class_a_l_g_e_b_r_a_1_1_state.tex [94] [95] [96]
+<struct_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure_1_1_parameters__inherit_
+_graph.pdf, id=3366, 225.84375pt x 178.6675pt>
+File: struct_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure_1_1_parameters__inh
+erit__graph.pdf Graphic file (type pdf)
+<use struct_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure_1_1_parameters__inhe
+rit__graph.pdf>
+Package pdftex.def Info: struct_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure_
+1_1_parameters__inherit__graph.pdf  used on input line 19.
+(pdftex.def)             Requested size: 225.0pt x 178.01003pt.
+ [77] [78]) (./class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.tex <./clas
+s_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure__inherit__graph.pdf>
+<class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure__inherit__graph.pdf, id=3
+403, 225.84375pt x 167.62625pt>
+File: class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure__inherit__graph.pdf 
+Graphic file (type pdf)
+<use class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure__inherit__graph.pdf>
+Package pdftex.def Info: class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure__
+inherit__graph.pdf  used on input line 19.
+(pdftex.def)             Requested size: 225.0pt x 167.0094pt.
+ [79]
+[80] [81] [82] [83]) (./class_a_l_g_e_b_r_a_1_1_sparse_system.tex [84] [85]
+[86] [87] [88]) (./class_a_l_g_e_b_r_a_1_1_state.tex [89] [90] [91]
 Underfull \hbox (badness 10000) detected at line 125
 [][][]
  []
 
-) (./class_m_o_d_e_l_1_1_time_dependent_parameter.tex [97] [98] [99]
+) (./class_m_o_d_e_l_1_1_time_dependent_parameter.tex [92] [93]
 Underfull \hbox (badness 10000) detected at line 116
 [][][]
  []
 
-) (./class_m_o_d_e_l_1_1_windkessel_b_c.tex <./class_m_o_d_e_l_1_1_windkessel_b
-_c__inherit__graph.pdf
-
-pdfTeX warning: pdflatex (file ./class_m_o_d_e_l_1_1_windkessel_b_c__inherit__g
-raph.pdf): PDF inclusion: multiple pdfs with page group included in a single pa
-ge
->
-<class_m_o_d_e_l_1_1_windkessel_b_c__inherit__graph.pdf, id=4076, 222.8325pt x 
-156.585pt>
-File: class_m_o_d_e_l_1_1_windkessel_b_c__inherit__graph.pdf Graphic file (type
- pdf)
-<use class_m_o_d_e_l_1_1_windkessel_b_c__inherit__graph.pdf>
-Package pdftex.def Info: class_m_o_d_e_l_1_1_windkessel_b_c__inherit__graph.pdf
-  used on input line 19.
-(pdftex.def)             Requested size: 222.0pt x 156.00162pt.
- [100] [101] [102] [103] [104]) [105] [106
+[94]) [95] [96
 
 ]
 Chapter 10.
@@ -1704,114 +1628,118 @@ Chapter 10.
 pdfTeX warning: pdflatex (file ./densesystem_8hpp__incl.pdf): PDF inclusion: mu
 ltiple pdfs with page group included in a single page
 >
-<densesystem_8hpp__incl.pdf, id=4180, 1216.545pt x 437.635pt>
+<densesystem_8hpp__incl.pdf, id=3698, 207.77625pt x 156.585pt>
 File: densesystem_8hpp__incl.pdf Graphic file (type pdf)
 <use densesystem_8hpp__incl.pdf>
-Package pdftex.def Info: densesystem_8hpp__incl.pdf  used on input line 15.
-(pdftex.def)             Requested size: 350.0pt x 125.90256pt.
+Package pdftex.def Info: densesystem_8hpp__incl.pdf  used on input line 14.
+(pdftex.def)             Requested size: 207.0pt x 156.0064pt.
  <./densesystem_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./densesystem_8hpp__dep__incl.pdf): PDF inclusio
 n: multiple pdfs with page group included in a single page
 >
-<densesystem_8hpp__dep__incl.pdf, id=4195, 1437.37pt x 381.425pt>
+<densesystem_8hpp__dep__incl.pdf, id=3706, 1092.08pt x 493.845pt>
 File: densesystem_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use densesystem_8hpp__dep__incl.pdf>
-Package pdftex.def Info: densesystem_8hpp__dep__incl.pdf  used on input line 23
+Package pdftex.def Info: densesystem_8hpp__dep__incl.pdf  used on input line 22
 .
-(pdftex.def)             Requested size: 350.0pt x 92.87666pt.
- [107]) (./densesystem_8hpp_source.tex [108]) (./integrator_8hpp.tex <./integra
-tor_8hpp__incl.pdf
+(pdftex.def)             Requested size: 350.0pt x 158.26721pt.
+ [97]) (./densesystem_8hpp_source.tex [98]) (./integrator_8hpp.tex <./integrato
+r_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./integrator_8hpp__incl.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >
-<integrator_8hpp__incl.pdf, id=4264, 1227.58624pt x 437.635pt>
+<integrator_8hpp__incl.pdf, id=3766, 1016.79875pt x 437.635pt>
 File: integrator_8hpp__incl.pdf Graphic file (type pdf)
 <use integrator_8hpp__incl.pdf>
 Package pdftex.def Info: integrator_8hpp__incl.pdf  used on input line 16.
-(pdftex.def)             Requested size: 350.0pt x 124.774pt.
- [109] <./integrator_8hpp__dep__incl.pdf
+(pdftex.def)             Requested size: 350.0pt x 150.64366pt.
+ [99] <./integrator_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./integrator_8hpp__dep__incl.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
 >
-<integrator_8hpp__dep__incl.pdf, id=4283, 190.7125pt x 156.585pt>
+<integrator_8hpp__dep__incl.pdf, id=3785, 190.7125pt x 156.585pt>
 File: integrator_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use integrator_8hpp__dep__incl.pdf>
 Package pdftex.def Info: integrator_8hpp__dep__incl.pdf  used on input line 24.
 
 (pdftex.def)             Requested size: 190.0pt x 156.0064pt.
-) (./integrator_8hpp_source.tex [110] [111] [112]) (./sparsesystem_8hpp.tex <./
+) (./integrator_8hpp_source.tex [100] [101] [102]) (./sparsesystem_8hpp.tex <./
 sparsesystem_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./sparsesystem_8hpp__incl.pdf): PDF inclusion: m
 ultiple pdfs with page group included in a single page
 >
-<sparsesystem_8hpp__incl.pdf, id=4354, 1105.12875pt x 437.635pt>
+<sparsesystem_8hpp__incl.pdf, id=3856, 844.15375pt x 437.635pt>
 File: sparsesystem_8hpp__incl.pdf Graphic file (type pdf)
 <use sparsesystem_8hpp__incl.pdf>
 Package pdftex.def Info: sparsesystem_8hpp__incl.pdf  used on input line 17.
-(pdftex.def)             Requested size: 350.0pt x 138.59698pt.
+(pdftex.def)             Requested size: 350.0pt x 181.45486pt.
  <./sparsesystem_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./sparsesystem_8hpp__dep__incl.pdf): PDF inclusi
 on: multiple pdfs with page group included in a single page
 >
-<sparsesystem_8hpp__dep__incl.pdf, id=4369, 1436.36626pt x 381.425pt>
+<sparsesystem_8hpp__dep__incl.pdf, id=3871, 928.46875pt x 381.425pt>
 File: sparsesystem_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use sparsesystem_8hpp__dep__incl.pdf>
 Package pdftex.def Info: sparsesystem_8hpp__dep__incl.pdf  used on input line 2
 5.
-(pdftex.def)             Requested size: 350.0pt x 92.94067pt.
-) (./sparsesystem_8hpp_source.tex [113] [114]) (./state_8hpp.tex [115] <./state
+(pdftex.def)             Requested size: 350.0pt x 143.7848pt.
+ [103]) (./sparsesystem_8hpp_source.tex [104] [105]) (./state_8hpp.tex <./state
 _8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./state_8hpp__dep__incl.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >
-<state_8hpp__dep__incl.pdf, id=4442, 438.63875pt x 212.795pt>
+<state_8hpp__dep__incl.pdf, id=3944, 438.63875pt x 212.795pt>
 File: state_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use state_8hpp__dep__incl.pdf>
 Package pdftex.def Info: state_8hpp__dep__incl.pdf  used on input line 13.
 (pdftex.def)             Requested size: 350.0pt x 169.79787pt.
-) (./state_8hpp_source.tex [116]) (./debug_8hpp.tex <./debug_8hpp__incl.pdf>
-<debug_8hpp__incl.pdf, id=4488, 175.65625pt x 156.585pt>
+) (./state_8hpp_source.tex [106] [107]) (./debug_8hpp.tex <./debug_8hpp__incl.p
+df
+
+pdfTeX warning: pdflatex (file ./debug_8hpp__incl.pdf): PDF inclusion: multiple
+ pdfs with page group included in a single page
+>
+<debug_8hpp__incl.pdf, id=3995, 175.65625pt x 156.585pt>
 File: debug_8hpp__incl.pdf Graphic file (type pdf)
 <use debug_8hpp__incl.pdf>
 Package pdftex.def Info: debug_8hpp__incl.pdf  used on input line 14.
 (pdftex.def)             Requested size: 175.0pt x 156.01117pt.
-
-[117] <./debug_8hpp__dep__incl.pdf
+ <./debug_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./debug_8hpp__dep__incl.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >
-<debug_8hpp__dep__incl.pdf, id=4500, 215.80624pt x 212.795pt>
+<debug_8hpp__dep__incl.pdf, id=4003, 215.80624pt x 212.795pt>
 File: debug_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use debug_8hpp__dep__incl.pdf>
 Package pdftex.def Info: debug_8hpp__dep__incl.pdf  used on input line 22.
 (pdftex.def)             Requested size: 215.0pt x 212.00543pt.
- [118]) (./debug_8hpp_source.tex) (./endswith_8hpp.tex <./endswith_8hpp__incl.p
+ [108]) (./debug_8hpp_source.tex) (./endswith_8hpp.tex <./endswith_8hpp__incl.p
 df>
-<endswith_8hpp__incl.pdf, id=4527, 188.705pt x 156.585pt>
+<endswith_8hpp__incl.pdf, id=4030, 188.705pt x 156.585pt>
 File: endswith_8hpp__incl.pdf Graphic file (type pdf)
 <use endswith_8hpp__incl.pdf>
 Package pdftex.def Info: endswith_8hpp__incl.pdf  used on input line 14.
 (pdftex.def)             Requested size: 188.0pt x 155.99922pt.
- <./endswith_8hpp__dep__incl.pdf
+ [109] <./endswith_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./endswith_8hpp__dep__incl.pdf): PDF inclusion: 
 multiple pdfs with page group included in a single page
 >
-<endswith_8hpp__dep__incl.pdf, id=4535, 188.705pt x 156.585pt>
+<endswith_8hpp__dep__incl.pdf, id=4044, 188.705pt x 156.585pt>
 File: endswith_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use endswith_8hpp__dep__incl.pdf>
 Package pdftex.def Info: endswith_8hpp__dep__incl.pdf  used on input line 22.
 (pdftex.def)             Requested size: 188.0pt x 155.99922pt.
- [119]) (./endswith_8hpp_source.tex) (./startswith_8hpp.tex [120] <./startswith
-_8hpp__incl.pdf>
-<startswith_8hpp__incl.pdf, id=4569, 192.72pt x 156.585pt>
+) (./endswith_8hpp_source.tex [110]) (./startswith_8hpp.tex <./startswith_8hpp_
+_incl.pdf>
+<startswith_8hpp__incl.pdf, id=4071, 192.72pt x 156.585pt>
 File: startswith_8hpp__incl.pdf Graphic file (type pdf)
 <use startswith_8hpp__incl.pdf>
 Package pdftex.def Info: startswith_8hpp__incl.pdf  used on input line 14.
@@ -1821,221 +1749,242 @@ Package pdftex.def Info: startswith_8hpp__incl.pdf  used on input line 14.
 pdfTeX warning: pdflatex (file ./startswith_8hpp__dep__incl.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
 >
-<startswith_8hpp__dep__incl.pdf, id=4577, 271.0125pt x 212.795pt>
+<startswith_8hpp__dep__incl.pdf, id=4079, 271.0125pt x 212.795pt>
 File: startswith_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use startswith_8hpp__dep__incl.pdf>
 Package pdftex.def Info: startswith_8hpp__dep__incl.pdf  used on input line 22.
 
 (pdftex.def)             Requested size: 270.0pt x 212.00868pt.
-) (./startswith_8hpp_source.tex [121]) (./configreader_8hpp.tex <./configreader
-_8hpp__incl.pdf>
-<configreader_8hpp__incl.pdf, id=4602, 1494.58376pt x 437.635pt>
+ [111]) (./startswith_8hpp_source.tex) (./configreader_8hpp.tex [112] <./config
+reader_8hpp__incl.pdf>
+<configreader_8hpp__incl.pdf, id=4110, 1185.42876pt x 437.635pt>
 File: configreader_8hpp__incl.pdf Graphic file (type pdf)
 <use configreader_8hpp__incl.pdf>
 Package pdftex.def Info: configreader_8hpp__incl.pdf  used on input line 19.
-(pdftex.def)             Requested size: 350.0pt x 102.48363pt.
+(pdftex.def)             Requested size: 350.0pt x 129.20804pt.
  <./configreader_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./configreader_8hpp__dep__incl.pdf): PDF inclusi
 on: multiple pdfs with page group included in a single page
 >
-<configreader_8hpp__dep__incl.pdf, id=4617, 178.6675pt x 156.585pt>
+<configreader_8hpp__dep__incl.pdf, id=4125, 178.6675pt x 156.585pt>
 File: configreader_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use configreader_8hpp__dep__incl.pdf>
 Package pdftex.def Info: configreader_8hpp__dep__incl.pdf  used on input line 2
 7.
 (pdftex.def)             Requested size: 178.0pt x 156.00879pt.
- [122]) (./configreader_8hpp_source.tex [123] [124] [125] [126] [127])
-(./csvwriter_8hpp.tex [128] <./csvwriter_8hpp__incl.pdf
+) (./configreader_8hpp_source.tex [113] [114] [115] [116] [117] [118])
+(./csvwriter_8hpp.tex <./csvwriter_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./csvwriter_8hpp__incl.pdf): PDF inclusion: mult
 iple pdfs with page group included in a single page
 >
-<csvwriter_8hpp__incl.pdf, id=4725, 1489.565pt x 437.635pt>
+<csvwriter_8hpp__incl.pdf, id=4225, 1300.86pt x 437.635pt>
 File: csvwriter_8hpp__incl.pdf Graphic file (type pdf)
 <use csvwriter_8hpp__incl.pdf>
 Package pdftex.def Info: csvwriter_8hpp__incl.pdf  used on input line 19.
-(pdftex.def)             Requested size: 350.0pt x 102.83087pt.
- <./csvwriter_8hpp__dep__incl.pdf
+(pdftex.def)             Requested size: 350.0pt x 117.74232pt.
+ [119] <./csvwriter_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./csvwriter_8hpp__dep__incl.pdf): PDF inclusion:
  multiple pdfs with page group included in a single page
 >
-<csvwriter_8hpp__dep__incl.pdf, id=4740, 165.61874pt x 156.585pt>
+<csvwriter_8hpp__dep__incl.pdf, id=4244, 165.61874pt x 156.585pt>
 File: csvwriter_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use csvwriter_8hpp__dep__incl.pdf>
 Package pdftex.def Info: csvwriter_8hpp__dep__incl.pdf  used on input line 27.
 (pdftex.def)             Requested size: 165.0pt x 156.0064pt.
-) (./csvwriter_8hpp_source.tex [129] [130]) (./jsonwriter_8hpp.tex <./jsonwrite
+) (./csvwriter_8hpp_source.tex [120] [121]) (./jsonwriter_8hpp.tex <./jsonwrite
 r_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./jsonwriter_8hpp__incl.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >
-<jsonwriter_8hpp__incl.pdf, id=4777, 1470.49374pt x 437.635pt>
+<jsonwriter_8hpp__incl.pdf, id=4281, 1088.065pt x 437.635pt>
 File: jsonwriter_8hpp__incl.pdf Graphic file (type pdf)
 <use jsonwriter_8hpp__incl.pdf>
 Package pdftex.def Info: jsonwriter_8hpp__incl.pdf  used on input line 18.
-(pdftex.def)             Requested size: 350.0pt x 104.15974pt.
+(pdftex.def)             Requested size: 350.0pt x 140.77393pt.
  <./jsonwriter_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./jsonwriter_8hpp__dep__incl.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
 >
-<jsonwriter_8hpp__dep__incl.pdf, id=4792, 167.62625pt x 156.585pt>
+<jsonwriter_8hpp__dep__incl.pdf, id=4297, 167.62625pt x 156.585pt>
 File: jsonwriter_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use jsonwriter_8hpp__dep__incl.pdf>
 Package pdftex.def Info: jsonwriter_8hpp__dep__incl.pdf  used on input line 26.
 
 (pdftex.def)             Requested size: 167.0pt x 155.99922pt.
- [131]) (./jsonwriter_8hpp_source.tex [132]) (./main_8cpp.tex <./main_8cpp__inc
-l.pdf>
-<main_8cpp__incl.pdf, id=4829, 1828.8325pt x 493.845pt>
+ [122]) (./jsonwriter_8hpp_source.tex [123]) (./main_8cpp.tex <./main_8cpp__inc
+l.pdf
+
+pdfTeX warning: pdflatex (file ./main_8cpp__incl.pdf): PDF inclusion: multiple 
+pdfs with page group included in a single page
+>
+<main_8cpp__incl.pdf, id=4332, 1574.88374pt x 493.845pt>
 File: main_8cpp__incl.pdf Graphic file (type pdf)
 <use main_8cpp__incl.pdf>
 Package pdftex.def Info: main_8cpp__incl.pdf  used on input line 23.
-(pdftex.def)             Requested size: 350.0pt x 94.5097pt.
- [133] [134]
+(pdftex.def)             Requested size: 350.0pt x 109.7464pt.
+ [124]
 Underfull \hbox (badness 10000) detected at line 76
 [][][]
  []
 
-) (./main_8hpp.tex) (./main_8hpp_source.tex [135] [136]) (./block_8hpp.tex <./b
-lock_8hpp__incl.pdf
+) (./main_8hpp.tex [125]) (./main_8hpp_source.tex [126] [127])
+(./block_8hpp.tex <./block_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./block_8hpp__incl.pdf): PDF inclusion: multiple
  pdfs with page group included in a single page
 >
-<block_8hpp__incl.pdf, id=4879, 1335.99126pt x 437.635pt>
+<block_8hpp__incl.pdf, id=4382, 971.63pt x 437.635pt>
 File: block_8hpp__incl.pdf Graphic file (type pdf)
 <use block_8hpp__incl.pdf>
 Package pdftex.def Info: block_8hpp__incl.pdf  used on input line 19.
-(pdftex.def)             Requested size: 350.0pt x 114.65051pt.
+(pdftex.def)             Requested size: 350.0pt x 157.64197pt.
  <./block_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./block_8hpp__dep__incl.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >
-<block_8hpp__dep__incl.pdf, id=4894, 1324.95pt x 325.215pt>
+<block_8hpp__dep__incl.pdf, id=4397, 1006.76125pt x 437.635pt>
 File: block_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use block_8hpp__dep__incl.pdf>
 Package pdftex.def Info: block_8hpp__dep__incl.pdf  used on input line 27.
-(pdftex.def)             Requested size: 350.0pt x 85.90863pt.
- [137]) (./block_8hpp_source.tex [138] [139] [140]) (./bloodvessel_8hpp.tex <./
+(pdftex.def)             Requested size: 350.0pt x 152.13948pt.
+ [128]) (./block_8hpp_source.tex [129] [130] [131]) (./bloodvessel_8hpp.tex <./
 bloodvessel_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./bloodvessel_8hpp__incl.pdf): PDF inclusion: mu
 ltiple pdfs with page group included in a single page
 >
-<bloodvessel_8hpp__incl.pdf, id=4994, 1235.61626pt x 493.845pt>
+<bloodvessel_8hpp__incl.pdf, id=4497, 979.66pt x 493.845pt>
 File: bloodvessel_8hpp__incl.pdf Graphic file (type pdf)
 <use bloodvessel_8hpp__incl.pdf>
 Package pdftex.def Info: bloodvessel_8hpp__incl.pdf  used on input line 17.
-(pdftex.def)             Requested size: 350.0pt x 139.88823pt.
+(pdftex.def)             Requested size: 350.0pt x 176.42767pt.
  <./bloodvessel_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./bloodvessel_8hpp__dep__incl.pdf): PDF inclusio
 n: multiple pdfs with page group included in a single page
 >
-<bloodvessel_8hpp__dep__incl.pdf, id=5009, 1258.7025pt x 325.215pt>
+<bloodvessel_8hpp__dep__incl.pdf, id=4512, 1045.9075pt x 437.635pt>
 File: bloodvessel_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use bloodvessel_8hpp__dep__incl.pdf>
 Package pdftex.def Info: bloodvessel_8hpp__dep__incl.pdf  used on input line 25
 .
-(pdftex.def)             Requested size: 350.0pt x 90.42935pt.
- [141]) (./bloodvessel_8hpp_source.tex [142] [143] [144])
-(./dofhandler_8hpp.tex <./dofhandler_8hpp__incl.pdf
+(pdftex.def)             Requested size: 350.0pt x 146.45003pt.
+ [132]) (./bloodvessel_8hpp_source.tex [133] [134] [135])
+(./closedloopheartpulmonary_8hpp.tex <./closedloopheartpulmonary_8hpp__incl.pdf
+
+
+pdfTeX warning: pdflatex (file ./closedloopheartpulmonary_8hpp__incl.pdf): PDF 
+inclusion: multiple pdfs with page group included in a single page
+>
+<closedloopheartpulmonary_8hpp__incl.pdf, id=4631, 929.4725pt x 493.845pt>
+File: closedloopheartpulmonary_8hpp__incl.pdf Graphic file (type pdf)
+<use closedloopheartpulmonary_8hpp__incl.pdf>
+Package pdftex.def Info: closedloopheartpulmonary_8hpp__incl.pdf  used on input
+ line 17.
+(pdftex.def)             Requested size: 350.0pt x 185.96002pt.
+ [136]) (./closedloopheartpulmonary_8hpp_source.tex [137] [138] [139] [140]
+[141] [142] [143]) (./dofhandler_8hpp.tex <./dofhandler_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./dofhandler_8hpp__incl.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >
-<dofhandler_8hpp__incl.pdf, id=5128, 189.70876pt x 156.585pt>
+<dofhandler_8hpp__incl.pdf, id=4801, 189.70876pt x 156.585pt>
 File: dofhandler_8hpp__incl.pdf Graphic file (type pdf)
 <use dofhandler_8hpp__incl.pdf>
 Package pdftex.def Info: dofhandler_8hpp__incl.pdf  used on input line 15.
 (pdftex.def)             Requested size: 189.0pt x 156.004pt.
- <./dofhandler_8hpp__dep__incl.pdf
+ [144] <./dofhandler_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./dofhandler_8hpp__dep__incl.pdf): PDF inclusion
 : multiple pdfs with page group included in a single page
 >
-<dofhandler_8hpp__dep__incl.pdf, id=5136, 1526.70375pt x 437.635pt>
+<dofhandler_8hpp__dep__incl.pdf, id=4813, 1084.05pt x 550.055pt>
 File: dofhandler_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use dofhandler_8hpp__dep__incl.pdf>
 Package pdftex.def Info: dofhandler_8hpp__dep__incl.pdf  used on input line 23.
 
-(pdftex.def)             Requested size: 350.0pt x 100.32672pt.
- [145]) (./dofhandler_8hpp_source.tex [146]) (./flowreferencebc_8hpp.tex <./flo
-wreferencebc_8hpp__incl.pdf>
-<flowreferencebc_8hpp__incl.pdf, id=5186, 1112.155pt x 493.845pt>
-File: flowreferencebc_8hpp__incl.pdf Graphic file (type pdf)
-<use flowreferencebc_8hpp__incl.pdf>
-Package pdftex.def Info: flowreferencebc_8hpp__incl.pdf  used on input line 17.
+(pdftex.def)             Requested size: 350.0pt x 177.59071pt.
+) (./dofhandler_8hpp_source.tex [145] [146]) (./flowreference_8hpp.tex <./flowr
+eference_8hpp__incl.pdf
 
-(pdftex.def)             Requested size: 350.0pt x 155.41881pt.
- [147] <./flowreferencebc_8hpp__dep__incl.pdf
-
-pdfTeX warning: pdflatex (file ./flowreferencebc_8hpp__dep__incl.pdf): PDF incl
-usion: multiple pdfs with page group included in a single page
+pdfTeX warning: pdflatex (file ./flowreference_8hpp__incl.pdf): PDF inclusion: 
+multiple pdfs with page group included in a single page
 >
-<flowreferencebc_8hpp__dep__incl.pdf, id=5205, 1258.7025pt x 325.215pt>
-File: flowreferencebc_8hpp__dep__incl.pdf Graphic file (type pdf)
-<use flowreferencebc_8hpp__dep__incl.pdf>
-Package pdftex.def Info: flowreferencebc_8hpp__dep__incl.pdf  used on input lin
-e 25.
-(pdftex.def)             Requested size: 350.0pt x 90.42935pt.
-) (./flowreferencebc_8hpp_source.tex [148] [149] [150]) (./junction_8hpp.tex <.
-/junction_8hpp__incl.pdf
+<flowreference_8hpp__incl.pdf, id=4864, 977.6525pt x 493.845pt>
+File: flowreference_8hpp__incl.pdf Graphic file (type pdf)
+<use flowreference_8hpp__incl.pdf>
+Package pdftex.def Info: flowreference_8hpp__incl.pdf  used on input line 17.
+(pdftex.def)             Requested size: 350.0pt x 176.7969pt.
+ <./flowreference_8hpp__dep__incl.pdf
+
+pdfTeX warning: pdflatex (file ./flowreference_8hpp__dep__incl.pdf): PDF inclus
+ion: multiple pdfs with page group included in a single page
+>
+<flowreference_8hpp__dep__incl.pdf, id=4879, 1084.05pt x 437.635pt>
+File: flowreference_8hpp__dep__incl.pdf Graphic file (type pdf)
+<use flowreference_8hpp__dep__incl.pdf>
+Package pdftex.def Info: flowreference_8hpp__dep__incl.pdf  used on input line 
+25.
+(pdftex.def)             Requested size: 350.0pt x 141.2948pt.
+ [147]) (./flowreference_8hpp_source.tex [148] [149]) (./junction_8hpp.tex <./j
+unction_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./junction_8hpp__incl.pdf): PDF inclusion: multi
 ple pdfs with page group included in a single page
 >
-<junction_8hpp__incl.pdf, id=5295, 1161.33875pt x 493.845pt>
+<junction_8hpp__incl.pdf, id=4967, 817.0525pt x 493.845pt>
 File: junction_8hpp__incl.pdf Graphic file (type pdf)
 <use junction_8hpp__incl.pdf>
 Package pdftex.def Info: junction_8hpp__incl.pdf  used on input line 16.
-(pdftex.def)             Requested size: 350.0pt x 148.83282pt.
- <./junction_8hpp__dep__incl.pdf
+(pdftex.def)             Requested size: 350.0pt x 211.55045pt.
+ [150] <./junction_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./junction_8hpp__dep__incl.pdf): PDF inclusion: 
 multiple pdfs with page group included in a single page
 >
-<junction_8hpp__dep__incl.pdf, id=5310, 1270.7475pt x 325.215pt>
+<junction_8hpp__dep__incl.pdf, id=4987, 1092.08pt x 325.215pt>
 File: junction_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use junction_8hpp__dep__incl.pdf>
 Package pdftex.def Info: junction_8hpp__dep__incl.pdf  used on input line 24.
-(pdftex.def)             Requested size: 350.0pt x 89.57086pt.
- [151]) (./junction_8hpp_source.tex [152] [153]) (./model_8hpp.tex <./model_8hp
+(pdftex.def)             Requested size: 350.0pt x 104.22475pt.
+) (./junction_8hpp_source.tex [151] [152] [153]) (./model_8hpp.tex <./model_8hp
 p__incl.pdf
 
 pdfTeX warning: pdflatex (file ./model_8hpp__incl.pdf): PDF inclusion: multiple
  pdfs with page group included in a single page
 >
-<model_8hpp__incl.pdf, id=5388, 1186.4325pt x 381.425pt>
+<model_8hpp__incl.pdf, id=5065, 991.705pt x 381.425pt>
 File: model_8hpp__incl.pdf Graphic file (type pdf)
 <use model_8hpp__incl.pdf>
-Package pdftex.def Info: model_8hpp__incl.pdf  used on input line 27.
-(pdftex.def)             Requested size: 350.0pt x 112.5194pt.
- [154] <./model_8hpp__dep__incl.pdf
+Package pdftex.def Info: model_8hpp__incl.pdf  used on input line 24.
+(pdftex.def)             Requested size: 350.0pt x 134.61238pt.
+ <./model_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./model_8hpp__dep__incl.pdf): PDF inclusion: mul
 tiple pdfs with page group included in a single page
 >
-<model_8hpp__dep__incl.pdf, id=5407, 1457.445pt x 269.005pt>
+<model_8hpp__dep__incl.pdf, id=5080, 1180.41pt x 381.425pt>
 File: model_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use model_8hpp__dep__incl.pdf>
-Package pdftex.def Info: model_8hpp__dep__incl.pdf  used on input line 35.
-(pdftex.def)             Requested size: 350.0pt x 64.59946pt.
-) (./model_8hpp_source.tex [155] [156] [157]) (./algebra_2namespace_8hpp.tex)
-(./algebra_2namespace_8hpp_source.tex) (./helpers_2namespace_8hpp.tex)
-(./helpers_2namespace_8hpp_source.tex [158]) (./io_2namespace_8hpp.tex)
-(./io_2namespace_8hpp_source.tex) (./model_2namespace_8hpp.tex [159])
-(./model_2namespace_8hpp_source.tex) (./node_8hpp.tex <./node_8hpp__incl.pdf
+Package pdftex.def Info: model_8hpp__dep__incl.pdf  used on input line 32.
+(pdftex.def)             Requested size: 350.0pt x 113.08975pt.
+ [154]) (./model_8hpp_source.tex [155] [156] [157])
+(./algebra_2namespace_8hpp.tex) (./algebra_2namespace_8hpp_source.tex)
+(./helpers_2namespace_8hpp.tex) (./helpers_2namespace_8hpp_source.tex [158])
+(./io_2namespace_8hpp.tex) (./io_2namespace_8hpp_source.tex)
+(./model_2namespace_8hpp.tex [159]) (./model_2namespace_8hpp_source.tex)
+(./node_8hpp.tex <./node_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./node_8hpp__incl.pdf): PDF inclusion: multiple 
 pdfs with page group included in a single page
 >
-<node_8hpp__incl.pdf, id=5540, 205.76875pt x 212.795pt>
+<node_8hpp__incl.pdf, id=5213, 205.76875pt x 212.795pt>
 File: node_8hpp__incl.pdf Graphic file (type pdf)
 <use node_8hpp__incl.pdf>
 Package pdftex.def Info: node_8hpp__incl.pdf  used on input line 15.
@@ -2045,131 +1994,61 @@ Package pdftex.def Info: node_8hpp__incl.pdf  used on input line 15.
 pdfTeX warning: pdflatex (file ./node_8hpp__dep__incl.pdf): PDF inclusion: mult
 iple pdfs with page group included in a single page
 >
-<node_8hpp__dep__incl.pdf, id=5555, 1361.085pt x 381.425pt>
+<node_8hpp__dep__incl.pdf, id=5227, 1088.065pt x 493.845pt>
 File: node_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use node_8hpp__dep__incl.pdf>
 Package pdftex.def Info: node_8hpp__dep__incl.pdf  used on input line 23.
-(pdftex.def)             Requested size: 350.0pt x 98.0798pt.
-) (./node_8hpp_source.tex [161]) (./openloopcoronarybc_8hpp.tex <./openloopcoro
-narybc_8hpp__incl.pdf>
-<openloopcoronarybc_8hpp__incl.pdf, id=5610, 1082.0425pt x 493.845pt>
-File: openloopcoronarybc_8hpp__incl.pdf Graphic file (type pdf)
-<use openloopcoronarybc_8hpp__incl.pdf>
-Package pdftex.def Info: openloopcoronarybc_8hpp__incl.pdf  used on input line 
-17.
-(pdftex.def)             Requested size: 350.0pt x 159.73663pt.
- [162] <./openloopcoronarybc_8hpp__dep__incl.pdf
+(pdftex.def)             Requested size: 350.0pt x 158.85498pt.
+) (./node_8hpp_source.tex [161]) (./rcrblockwithdistalpressure_8hpp.tex <./rcrb
+lockwithdistalpressure_8hpp__incl.pdf>
+<rcrblockwithdistalpressure_8hpp__incl.pdf, id=5281, 772.8875pt x 493.845pt>
+File: rcrblockwithdistalpressure_8hpp__incl.pdf Graphic file (type pdf)
+<use rcrblockwithdistalpressure_8hpp__incl.pdf>
+Package pdftex.def Info: rcrblockwithdistalpressure_8hpp__incl.pdf  used on inp
+ut line 16.
+(pdftex.def)             Requested size: 350.0pt x 223.63731pt.
+ [162] <./rcrblockwithdistalpressure_8hpp__dep__incl.pdf
 
-pdfTeX warning: pdflatex (file ./openloopcoronarybc_8hpp__dep__incl.pdf): PDF i
-nclusion: multiple pdfs with page group included in a single page
+pdfTeX warning: pdflatex (file ./rcrblockwithdistalpressure_8hpp__dep__incl.pdf
+): PDF inclusion: multiple pdfs with page group included in a single page
 >
-<openloopcoronarybc_8hpp__dep__incl.pdf, id=5629, 1271.75125pt x 325.215pt>
-File: openloopcoronarybc_8hpp__dep__incl.pdf Graphic file (type pdf)
-<use openloopcoronarybc_8hpp__dep__incl.pdf>
-Package pdftex.def Info: openloopcoronarybc_8hpp__dep__incl.pdf  used on input 
-line 25.
-(pdftex.def)             Requested size: 350.0pt x 89.50139pt.
-
-
-Package natbib Warning: Citation `kim_coronary' on page 163 undefined on input 
-line 32.
-
-) (./openloopcoronarybc_8hpp_source.tex [163] [164] [165] [166])
-(./pressurereferencebc_8hpp.tex <./pressurereferencebc_8hpp__incl.pdf
-
-pdfTeX warning: pdflatex (file ./pressurereferencebc_8hpp__incl.pdf): PDF inclu
-sion: multiple pdfs with page group included in a single page
->
-<pressurereferencebc_8hpp__incl.pdf, id=5755, 1080.035pt x 493.845pt>
-File: pressurereferencebc_8hpp__incl.pdf Graphic file (type pdf)
-<use pressurereferencebc_8hpp__incl.pdf>
-Package pdftex.def Info: pressurereferencebc_8hpp__incl.pdf  used on input line
- 17.
-(pdftex.def)             Requested size: 350.0pt x 160.03052pt.
- [167] <./pressurereferencebc_8hpp__dep__incl.pdf
-
-pdfTeX warning: pdflatex (file ./pressurereferencebc_8hpp__dep__incl.pdf): PDF 
-inclusion: multiple pdfs with page group included in a single page
->
-<pressurereferencebc_8hpp__dep__incl.pdf, id=5776, 1270.7475pt x 325.215pt>
-File: pressurereferencebc_8hpp__dep__incl.pdf Graphic file (type pdf)
-<use pressurereferencebc_8hpp__dep__incl.pdf>
-Package pdftex.def Info: pressurereferencebc_8hpp__dep__incl.pdf  used on input
- line 25.
-(pdftex.def)             Requested size: 350.0pt x 89.57086pt.
-) (./pressurereferencebc_8hpp_source.tex [168] [169] [170])
-(./resistancebc_8hpp.tex <./resistancebc_8hpp__incl.pdf
-
-pdfTeX warning: pdflatex (file ./resistancebc_8hpp__incl.pdf): PDF inclusion: m
-ultiple pdfs with page group included in a single page
->
-<resistancebc_8hpp__incl.pdf, id=5864, 1107.13625pt x 493.845pt>
-File: resistancebc_8hpp__incl.pdf Graphic file (type pdf)
-<use resistancebc_8hpp__incl.pdf>
-Package pdftex.def Info: resistancebc_8hpp__incl.pdf  used on input line 17.
-(pdftex.def)             Requested size: 350.0pt x 156.11961pt.
- <./resistancebc_8hpp__dep__incl.pdf
-
-pdfTeX warning: pdflatex (file ./resistancebc_8hpp__dep__incl.pdf): PDF inclusi
-on: multiple pdfs with page group included in a single page
->
-<resistancebc_8hpp__dep__incl.pdf, id=5879, 1274.7625pt x 325.215pt>
-File: resistancebc_8hpp__dep__incl.pdf Graphic file (type pdf)
-<use resistancebc_8hpp__dep__incl.pdf>
-Package pdftex.def Info: resistancebc_8hpp__dep__incl.pdf  used on input line 2
-5.
-(pdftex.def)             Requested size: 350.0pt x 89.28801pt.
- [171]) (./resistancebc_8hpp_source.tex [172] [173])
+<rcrblockwithdistalpressure_8hpp__dep__incl.pdf, id=5301, 1029.8475pt x 437.635
+pt>
+File: rcrblockwithdistalpressure_8hpp__dep__incl.pdf Graphic file (type pdf)
+<use rcrblockwithdistalpressure_8hpp__dep__incl.pdf>
+Package pdftex.def Info: rcrblockwithdistalpressure_8hpp__dep__incl.pdf  used o
+n input line 24.
+(pdftex.def)             Requested size: 350.0pt x 148.72714pt.
+) (./rcrblockwithdistalpressure_8hpp_source.tex [163] [164] [165])
 (./timedependentparameter_8hpp.tex <./timedependentparameter_8hpp__incl.pdf
 
 pdfTeX warning: pdflatex (file ./timedependentparameter_8hpp__incl.pdf): PDF in
 clusion: multiple pdfs with page group included in a single page
 >
-<timedependentparameter_8hpp__incl.pdf, id=5976, 333.245pt x 212.795pt>
+<timedependentparameter_8hpp__incl.pdf, id=5402, 333.245pt x 212.795pt>
 File: timedependentparameter_8hpp__incl.pdf Graphic file (type pdf)
 <use timedependentparameter_8hpp__incl.pdf>
 Package pdftex.def Info: timedependentparameter_8hpp__incl.pdf  used on input l
 ine 17.
 (pdftex.def)             Requested size: 332.0pt x 212.01518pt.
- [174] <./timedependentparameter_8hpp__dep__incl.pdf
+ [166] <./timedependentparameter_8hpp__dep__incl.pdf
 
 pdfTeX warning: pdflatex (file ./timedependentparameter_8hpp__dep__incl.pdf): P
 DF inclusion: multiple pdfs with page group included in a single page
 >
-<timedependentparameter_8hpp__dep__incl.pdf, id=5989, 1306.8825pt x 381.425pt>
+<timedependentparameter_8hpp__dep__incl.pdf, id=5415, 1087.06125pt x 493.845pt>
+
 File: timedependentparameter_8hpp__dep__incl.pdf Graphic file (type pdf)
 <use timedependentparameter_8hpp__dep__incl.pdf>
 Package pdftex.def Info: timedependentparameter_8hpp__dep__incl.pdf  used on in
 put line 25.
-(pdftex.def)             Requested size: 350.0pt x 102.14803pt.
-) (./timedependentparameter_8hpp_source.tex [175] [176])
-(./windkesselbc_8hpp.tex <./windkesselbc_8hpp__incl.pdf
-
-pdfTeX warning: pdflatex (file ./windkesselbc_8hpp__incl.pdf): PDF inclusion: m
-ultiple pdfs with page group included in a single page
->
-<windkesselbc_8hpp__incl.pdf, id=6042, 1170.3725pt x 493.845pt>
-File: windkesselbc_8hpp__incl.pdf Graphic file (type pdf)
-<use windkesselbc_8hpp__incl.pdf>
-Package pdftex.def Info: windkesselbc_8hpp__incl.pdf  used on input line 16.
-(pdftex.def)             Requested size: 350.0pt x 147.68744pt.
- <./windkesselbc_8hpp__dep__incl.pdf
-
-pdfTeX warning: pdflatex (file ./windkesselbc_8hpp__dep__incl.pdf): PDF inclusi
-on: multiple pdfs with page group included in a single page
->
-<windkesselbc_8hpp__dep__incl.pdf, id=6057, 1270.7475pt x 325.215pt>
-File: windkesselbc_8hpp__dep__incl.pdf Graphic file (type pdf)
-<use windkesselbc_8hpp__dep__incl.pdf>
-Package pdftex.def Info: windkesselbc_8hpp__dep__incl.pdf  used on input line 2
-4.
-(pdftex.def)             Requested size: 350.0pt x 89.57086pt.
- [177]) (./windkesselbc_8hpp_source.tex [178] [179] [180]) [181] (./refman.bbl
+(pdftex.def)             Requested size: 350.0pt x 159.00569pt.
+) (./timedependentparameter_8hpp_source.tex [167] [168]) [169] (./refman.bbl
 No file refman.brf.
 \tf@brf=\write8
 \openout8 = `refman.brf'.
 
-[182
+[170
 
 ]
 
@@ -2193,11 +2072,11 @@ You may provide a definition with
 
  
 Here is how much of TeX's memory you used:
- 46100 strings out of 478238
- 1058515 string characters out of 5850422
- 1597207 words of memory out of 5000000
- 62296 multiletter control sequences out of 15000+600000
- 538999 words of font info for 119 fonts, out of 8000000 for 9000
+ 45641 strings out of 478238
+ 1043347 string characters out of 5850422
+ 1587484 words of memory out of 5000000
+ 61979 multiletter control sequences out of 15000+600000
+ 536269 words of font info for 117 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,16n,117p,1089b,879s stack positions out of 10000i,1000n,20000p,200000b,200000s
 !  ==> Fatal error occurred, no output PDF file produced!

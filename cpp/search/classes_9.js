@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['parameters_0',['Parameters',['../struct_m_o_d_e_l_1_1_block_1_1_parameters.html',1,'MODEL::Block&lt; T &gt;::Parameters'],['../struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.html',1,'MODEL::BloodVessel&lt; T &gt;::Parameters'],['../struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters.html',1,'MODEL::FlowReferenceBC&lt; T &gt;::Parameters'],['../struct_m_o_d_e_l_1_1_junction_1_1_parameters.html',1,'MODEL::Junction&lt; T &gt;::Parameters'],['../struct_m_o_d_e_l_1_1_open_loop_coronary_b_c_1_1_parameters.html',1,'MODEL::OpenLoopCoronaryBC&lt; T &gt;::Parameters'],['../struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters.html',1,'MODEL::PressureReferenceBC&lt; T &gt;::Parameters'],['../struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters.html',1,'MODEL::ResistanceBC&lt; T &gt;::Parameters'],['../struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters.html',1,'MODEL::WindkesselBC&lt; T &gt;::Parameters']]],
-  ['pressurereferencebc_1',['PressureReferenceBC',['../class_m_o_d_e_l_1_1_pressure_reference_b_c.html',1,'MODEL']]]
+  ['rcrblockwithdistalpressure_0',['RCRBlockWithDistalPressure',['../class_m_o_d_e_l_1_1_r_c_r_block_with_distal_pressure.html',1,'MODEL']]]
 ];

@@ -18,7 +18,7 @@ Dense system.
 \begin{DoxyCompactList}\small\item\em Construct a new Dense System object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a6ab3c9f4c74ca88801b2ede81630aa25}{$\sim$\+Dense\+System}} ()
 \begin{DoxyCompactList}\small\item\em Destroy the Dense System object. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a9c8262ffdc33153e3867a8c93e4eeecf}{reserve}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
+void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a18d4ca8308f1b62cc10d6f48cf8fb8de}{reserve}} (std\+::map$<$ std\+::string, int $>$ num\+\_\+triplets)
 \begin{DoxyCompactList}\small\item\em Reserve memory in system matrices based on number of triplets. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a2144ff84fa1e6ab249b272747ffa50cf}{update\+\_\+residual}} (Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&ydot)
 \begin{DoxyCompactList}\small\item\em Update the residual of the system. \end{DoxyCompactList}\item 
@@ -101,12 +101,12 @@ Destroy the Dense System object.
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_dense_system_a9c8262ffdc33153e3867a8c93e4eeecf}\label{class_a_l_g_e_b_r_a_1_1_dense_system_a9c8262ffdc33153e3867a8c93e4eeecf}} 
+\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_dense_system_a18d4ca8308f1b62cc10d6f48cf8fb8de}\label{class_a_l_g_e_b_r_a_1_1_dense_system_a18d4ca8308f1b62cc10d6f48cf8fb8de}} 
 \index{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!reserve@{reserve}}
 \index{reserve@{reserve}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{reserve()}{reserve()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$\+::reserve (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model }\end{DoxyParamCaption})}
+void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$\+::reserve (\begin{DoxyParamCaption}\item[{std\+::map$<$ std\+::string, int $>$}]{num\+\_\+triplets }\end{DoxyParamCaption})}
 
 
 
@@ -114,7 +114,7 @@ Reserve memory in system matrices based on number of triplets.
 
 
 \begin{DoxyParams}{Parameters}
-{\em model} & The model to reserve space for in the system \\
+{\em num\+\_\+triplets} & Number of triplets that will be assembled to each matrix. \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_dense_system_a38cb181b01179eee0d6a36b29d22d5d7}\label{class_a_l_g_e_b_r_a_1_1_dense_system_a38cb181b01179eee0d6a36b29d22d5d7}} 

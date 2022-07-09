@@ -91,9 +91,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6ab3c9f4c74ca88801b2ede81630aa25"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_l_g_e_b_r_a_1_1_dense_system.html#a6ab3c9f4c74ca88801b2ede81630aa25">~DenseSystem</a> ()</td></tr>
 <tr class="memdesc:a6ab3c9f4c74ca88801b2ede81630aa25"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the Dense System object.  <a href="class_a_l_g_e_b_r_a_1_1_dense_system.html#a6ab3c9f4c74ca88801b2ede81630aa25">More...</a><br /></td></tr>
 <tr class="separator:a6ab3c9f4c74ca88801b2ede81630aa25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c8262ffdc33153e3867a8c93e4eeecf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_l_g_e_b_r_a_1_1_dense_system.html#a9c8262ffdc33153e3867a8c93e4eeecf">reserve</a> (<a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt; &amp;model)</td></tr>
-<tr class="memdesc:a9c8262ffdc33153e3867a8c93e4eeecf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserve memory in system matrices based on number of triplets.  <a href="class_a_l_g_e_b_r_a_1_1_dense_system.html#a9c8262ffdc33153e3867a8c93e4eeecf">More...</a><br /></td></tr>
-<tr class="separator:a9c8262ffdc33153e3867a8c93e4eeecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18d4ca8308f1b62cc10d6f48cf8fb8de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_l_g_e_b_r_a_1_1_dense_system.html#a18d4ca8308f1b62cc10d6f48cf8fb8de">reserve</a> (std::map&lt; std::string, int &gt; num_triplets)</td></tr>
+<tr class="memdesc:a18d4ca8308f1b62cc10d6f48cf8fb8de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reserve memory in system matrices based on number of triplets.  <a href="class_a_l_g_e_b_r_a_1_1_dense_system.html#a18d4ca8308f1b62cc10d6f48cf8fb8de">More...</a><br /></td></tr>
+<tr class="separator:a18d4ca8308f1b62cc10d6f48cf8fb8de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2144ff84fa1e6ab249b272747ffa50cf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_a_l_g_e_b_r_a_1_1_dense_system.html#a2144ff84fa1e6ab249b272747ffa50cf">update_residual</a> (Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;ydot)</td></tr>
 <tr class="memdesc:a2144ff84fa1e6ab249b272747ffa50cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the residual of the system.  <a href="class_a_l_g_e_b_r_a_1_1_dense_system.html#a2144ff84fa1e6ab249b272747ffa50cf">More...</a><br /></td></tr>
 <tr class="separator:a2144ff84fa1e6ab249b272747ffa50cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,8 +204,8 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9c8262ffdc33153e3867a8c93e4eeecf" name="a9c8262ffdc33153e3867a8c93e4eeecf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c8262ffdc33153e3867a8c93e4eeecf">&#9670;&nbsp;</a></span>reserve()</h2>
+<a id="a18d4ca8308f1b62cc10d6f48cf8fb8de" name="a18d4ca8308f1b62cc10d6f48cf8fb8de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a18d4ca8308f1b62cc10d6f48cf8fb8de">&#9670;&nbsp;</a></span>reserve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -215,8 +215,8 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem</a>&lt; T &gt;::reserve </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt; &amp;&#160;</td>
-          <td class="paramname"><em>model</em></td><td>)</td>
+          <td class="paramtype">std::map&lt; std::string, int &gt;&#160;</td>
+          <td class="paramname"><em>num_triplets</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -225,7 +225,7 @@ template&lt;typename T &gt; </div>
 <p>Reserve memory in system matrices based on number of triplets. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">model</td><td>The model to reserve space for in the system </td></tr>
+    <tr><td class="paramname">num_triplets</td><td>Number of triplets that will be assembled to each matrix. </td></tr>
   </table>
   </dd>
 </dl>
@@ -450,7 +450,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Jul 9 2022 01:33:17 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sat Jul 9 2022 01:42:20 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

@@ -11,24 +11,28 @@
 \DoxyCodeLine{7 }
 \DoxyCodeLine{8 \textcolor{preprocessor}{\#include <string>}}
 \DoxyCodeLine{9 }
-\DoxyCodeLine{10 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_h_e_l_p_e_r_s}{HELPERS}} \{\textcolor{comment}{}}
-\DoxyCodeLine{11 \textcolor{comment}{/**}}
-\DoxyCodeLine{12 \textcolor{comment}{ * @brief Check if a string ends with the letters of another string}}
-\DoxyCodeLine{13 \textcolor{comment}{ *}}
-\DoxyCodeLine{14 \textcolor{comment}{ * @param str The string to check for the specified suffix}}
-\DoxyCodeLine{15 \textcolor{comment}{ * @param suffix The suffix the string should be checked for}}
-\DoxyCodeLine{16 \textcolor{comment}{ * @return true if strings ends with the suffix, otherwise false}}
-\DoxyCodeLine{17 \textcolor{comment}{ */}}
-\DoxyCodeLine{18 \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_h_e_l_p_e_r_s_a6ca9cc09c804d2e0bc4e6890b19b6014}{endswith}}(\textcolor{keyword}{const} std::string \&str, \textcolor{keyword}{const} std::string \&suffix) \{}
-\DoxyCodeLine{19   \textcolor{keywordflow}{if} (str.length() >= suffix.length()) \{}
-\DoxyCodeLine{20     \textcolor{keywordflow}{return} (0 == str.compare(str.length() -\/ suffix.length(), suffix.length(),}
-\DoxyCodeLine{21                              suffix));}
-\DoxyCodeLine{22   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{23     \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
-\DoxyCodeLine{24   \}}
-\DoxyCodeLine{25 \}}
-\DoxyCodeLine{26 \}  \textcolor{comment}{// namespace HELPERS}}
-\DoxyCodeLine{27 }
-\DoxyCodeLine{28 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_HELPERS\_ENDSWITH\_HPP\_}}
+\DoxyCodeLine{10 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_h_e_l_p_e_r_s}{HELPERS}}}
+\DoxyCodeLine{11 \{\textcolor{comment}{}}
+\DoxyCodeLine{12 \textcolor{comment}{    /**}}
+\DoxyCodeLine{13 \textcolor{comment}{     * @brief Check if a string ends with the letters of another string}}
+\DoxyCodeLine{14 \textcolor{comment}{     *}}
+\DoxyCodeLine{15 \textcolor{comment}{     * @param str The string to check for the specified suffix}}
+\DoxyCodeLine{16 \textcolor{comment}{     * @param suffix The suffix the string should be checked for}}
+\DoxyCodeLine{17 \textcolor{comment}{     * @return true if strings ends with the suffix, otherwise false}}
+\DoxyCodeLine{18 \textcolor{comment}{     */}}
+\DoxyCodeLine{19     \textcolor{keywordtype}{bool} \mbox{\hyperlink{namespace_h_e_l_p_e_r_s_a6ca9cc09c804d2e0bc4e6890b19b6014}{endswith}}(\textcolor{keyword}{const} std::string \&str, \textcolor{keyword}{const} std::string \&suffix)}
+\DoxyCodeLine{20     \{}
+\DoxyCodeLine{21         \textcolor{keywordflow}{if} (str.length() >= suffix.length())}
+\DoxyCodeLine{22         \{}
+\DoxyCodeLine{23             \textcolor{keywordflow}{return} (0 == str.compare(str.length() -\/ suffix.length(), suffix.length(), suffix));}
+\DoxyCodeLine{24         \}}
+\DoxyCodeLine{25         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{26         \{}
+\DoxyCodeLine{27             \textcolor{keywordflow}{return} \textcolor{keyword}{false};}
+\DoxyCodeLine{28         \}}
+\DoxyCodeLine{29     \}}
+\DoxyCodeLine{30 \}}
+\DoxyCodeLine{31 }
+\DoxyCodeLine{32 \textcolor{preprocessor}{\#endif }\textcolor{comment}{// SVZERODSOLVER\_HELPERS\_ENDSWITH\_HPP\_}}
 
 \end{DoxyCode}

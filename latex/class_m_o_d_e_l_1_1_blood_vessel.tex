@@ -80,8 +80,8 @@ Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{c}^{e}}{d t}=0
 P_{i n}^{e}-(R+R_{ste}) Q_{i n}^{e}-P_{c}=0
 \]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md21}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_blood_vessel_autotoc_md21}
 \[
-\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{i n}^{e} & Q_{in}^{e} &
-P_{out}^{e} & Q_{out}^{e} & P_C\end{array}\right]^{T} \]
+\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{i n}^{e} & Q_{in}^{e} & P_{out}^{e} & Q_{out}^{e} & P_C\end{array}\right]^{T}
+\]
 
 \[
 \mathbf{E}^{e}=\left[\begin{array}{ccccc}
@@ -107,8 +107,7 @@ P_{out}^{e} & Q_{out}^{e} & P_C\end{array}\right]^{T} \]
 \end{array}\right]
 \]
 
-with the stenosis resistance $ R_{ste}=K_{t} \frac{\rho}{2
-A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| $. The constant part of the equation is summarized in \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a5f0adc244080b0bd404c579d39ec3f2b}{Parameters\+::stenosis\+\_\+coefficient}}. $R$, $C$, and $L$ refer to Poisieuille resistance, capacitance and inductance, respectively.
+with the stenosis resistance $ R_{ste}=K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| $. The constant part of the equation is summarized in \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a5f0adc244080b0bd404c579d39ec3f2b}{Parameters\+::stenosis\+\_\+coefficient}}. $R$, $C$, and $L$ refer to Poisieuille resistance, capacitance and inductance, respectively.
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -255,10 +254,10 @@ std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_ve
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{= \{}
-\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}F"{}}, 10\},}
-\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}E"{}}, 2\},}
-\DoxyCodeLine{      \{\textcolor{stringliteral}{"{}D"{}}, 2\},}
-\DoxyCodeLine{  \}}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}F"{}}, 10\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}E"{}}, 2\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}D"{}}, 2\},}
+\DoxyCodeLine{        \}}
 
 \end{DoxyCode}
 

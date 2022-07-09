@@ -1,0 +1,246 @@
+\hypertarget{class_m_o_d_e_l_1_1_flow_reference}{}\doxysection{MODEL\+::Flow\+Reference\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_m_o_d_e_l_1_1_flow_reference}\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+
+
+Flow reference boundary condition element.  
+
+
+
+
+{\ttfamily \#include $<$flowreference.\+hpp$>$}
+
+
+
+Inheritance diagram for MODEL\+::Flow\+Reference\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=223pt]{class_m_o_d_e_l_1_1_flow_reference__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_flow_reference_1_1_parameters}{Parameters}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_flow_reference_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_a8d9adb11615d0a9160b964d7d8c74bdb}{Flow\+Reference}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ Q, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
+\begin{DoxyCompactList}\small\item\em Construct a new Flow Reference object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_ad638b8f1567251f6fe9eab9aedb65e4e}{$\sim$\+Flow\+Reference}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the Flow Reference object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_aaffe23cebacd9daa2036d53ff16fd130}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
+\begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_a59cd772637ff6ff7d3791bc8f9b49981}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_ad5963decdd538bd39738858d2a2f0a48}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system, T time)
+\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a dense system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_acbd1de46cbd491456cb836a9ef0c86c0}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_a9f3dcd88f205f243665d24410b1592ae}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
+\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_a3f68d961296afeca077bfb4571ec6935}{to\+\_\+steady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_ac8a93e912400c05673460f0ec6d8292f}{num\+\_\+triplets}}
+\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class MODEL\+::\+Flow\+Reference$<$ T $>$}
+Flow reference boundary condition element. 
+
+Applies a predefined flow at a boundary.
+
+\[
+\begin{circuitikz} \draw
+node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
+\draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
+\draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
+\end{circuitikz}
+\]\hypertarget{class_m_o_d_e_l_1_1_flow_reference_autotoc_md24}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_flow_reference_autotoc_md24}
+\[
+Q=\hat{Q}
+\]\hypertarget{class_m_o_d_e_l_1_1_flow_reference_autotoc_md25}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_flow_reference_autotoc_md25}
+\[
+\mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
+\]
+
+\[
+\mathbf{F}^{e}=\left[\begin{array}{ll}0 & 1\end{array}\right]
+\]
+
+\[
+\mathbf{C}^{e}=\left[\hat{Q}\right]
+\]
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_a8d9adb11615d0a9160b964d7d8c74bdb}\label{class_m_o_d_e_l_1_1_flow_reference_a8d9adb11615d0a9160b964d7d8c74bdb}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!FlowReference@{FlowReference}}
+\index{FlowReference@{FlowReference}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{FlowReference()}{FlowReference()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::\+Flow\+Reference (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{Q,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+
+
+
+Construct a new Flow Reference object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Q} & Time dependent flow \\
+\hline
+{\em name} & Name \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_ad638b8f1567251f6fe9eab9aedb65e4e}\label{class_m_o_d_e_l_1_1_flow_reference_ad638b8f1567251f6fe9eab9aedb65e4e}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!````~FlowReference@{$\sim$FlowReference}}
+\index{````~FlowReference@{$\sim$FlowReference}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$FlowReference()}{~FlowReference()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{Flow\+Reference}}}
+
+
+
+Destroy the Flow Reference object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_aaffe23cebacd9daa2036d53ff16fd130}\label{class_m_o_d_e_l_1_1_flow_reference_aaffe23cebacd9daa2036d53ff16fd130}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!setup\_dofs@{setup\_dofs}}
+\index{setup\_dofs@{setup\_dofs}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setup\_dofs()}{setup\_dofs()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})}
+
+
+
+Set up the degrees of freedom (DOF) of the block. 
+
+Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}{global\+\_\+var\+\_\+ids}} and \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}{global\+\_\+eqn\+\_\+ids}} of the element based on the number of equations and the number of internal variables of the element.
+
+
+\begin{DoxyParams}{Parameters}
+{\em dofhandler} & Degree-\/of-\/freedom handler to register variables and equations at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_a3f68d961296afeca077bfb4571ec6935}\label{class_m_o_d_e_l_1_1_flow_reference_a3f68d961296afeca077bfb4571ec6935}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!to\_steady@{to\_steady}}
+\index{to\_steady@{to\_steady}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::to\+\_\+steady}
+
+
+
+Convert the block to a steady behavior. 
+
+Converts the prescribed flow to the constant mean of itself \mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_a59cd772637ff6ff7d3791bc8f9b49981}\label{class_m_o_d_e_l_1_1_flow_reference_a59cd772637ff6ff7d3791bc8f9b49981}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of the element in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_acbd1de46cbd491456cb836a9ef0c86c0}\label{class_m_o_d_e_l_1_1_flow_reference_acbd1de46cbd491456cb836a9ef0c86c0}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!update\_constant@{update\_constant}}
+\index{update\_constant@{update\_constant}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+
+
+
+Update the constant contributions of the element in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_ad5963decdd538bd39738858d2a2f0a48}\label{class_m_o_d_e_l_1_1_flow_reference_ad5963decdd538bd39738858d2a2f0a48}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!update\_time@{update\_time}}
+\index{update\_time@{update\_time}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Update the time-\/dependent contributions of the element in a dense system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_a9f3dcd88f205f243665d24410b1592ae}\label{class_m_o_d_e_l_1_1_flow_reference_a9f3dcd88f205f243665d24410b1592ae}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!update\_time@{update\_time}}
+\index{update\_time@{update\_time}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Update the time-\/dependent contributions of the element in a sparse system. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_ac8a93e912400c05673460f0ec6d8292f}\label{class_m_o_d_e_l_1_1_flow_reference_ac8a93e912400c05673460f0ec6d8292f}} 
+\index{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!num\_triplets@{num\_triplets}}
+\index{num\_triplets@{num\_triplets}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{num\_triplets}{num\_triplets}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference}{MODEL\+::\+Flow\+Reference}}$<$ T $>$\+::num\+\_\+triplets}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{= \{}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{            \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{        \}}
+
+\end{DoxyCode}
+
+
+Number of triplets of element. 
+
+Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{flowreference_8hpp}{flowreference.\+hpp}}\end{DoxyCompactItemize}

@@ -64,360 +64,322 @@
 \indexentry{update\_solution@{update\_solution}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}|hyperpage}{35}
 \indexentry{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{35}
 \indexentry{num\_triplets@{num\_triplets}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}|hyperpage}{35}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{35}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}|hyperpage}{36}
-\indexentry{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{36}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}|hyperpage}{37}
-\indexentry{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{37}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!````~ConfigReader@{$\sim$ConfigReader}|hyperpage}{37}
-\indexentry{````~ConfigReader@{$\sim$ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{37}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}|hyperpage}{37}
-\indexentry{get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{37}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}|hyperpage}{38}
-\indexentry{get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{38}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}|hyperpage}{38}
-\indexentry{get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{38}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}|hyperpage}{38}
-\indexentry{get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{38}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_model@{get\_model}|hyperpage}{40}
-\indexentry{get\_model@{get\_model}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{40}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_num\_time\_steps@{get\_num\_time\_steps}|hyperpage}{40}
-\indexentry{get\_num\_time\_steps@{get\_num\_time\_steps}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{40}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}|hyperpage}{40}
-\indexentry{get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{40}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}|hyperpage}{41}
-\indexentry{get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{41}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_time\_step\_size@{get\_time\_step\_size}|hyperpage}{41}
-\indexentry{get\_time\_step\_size@{get\_time\_step\_size}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{41}
-\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!cardiac\_cycle\_period@{cardiac\_cycle\_period}|hyperpage}{41}
-\indexentry{cardiac\_cycle\_period@{cardiac\_cycle\_period}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{41}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{42}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!DenseSystem@{DenseSystem}|hyperpage}{43}
-\indexentry{DenseSystem@{DenseSystem}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{43}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!DenseSystem@{DenseSystem}|hyperpage}{43}
-\indexentry{DenseSystem@{DenseSystem}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{43}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!````~DenseSystem@{$\sim$DenseSystem}|hyperpage}{43}
-\indexentry{````~DenseSystem@{$\sim$DenseSystem}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{43}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!reserve@{reserve}|hyperpage}{43}
-\indexentry{reserve@{reserve}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{43}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!solve@{solve}|hyperpage}{44}
-\indexentry{solve@{solve}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{44}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!update\_jacobian@{update\_jacobian}|hyperpage}{44}
-\indexentry{update\_jacobian@{update\_jacobian}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{44}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!update\_residual@{update\_residual}|hyperpage}{44}
-\indexentry{update\_residual@{update\_residual}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{44}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!C@{C}|hyperpage}{44}
-\indexentry{C@{C}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{44}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!D@{D}|hyperpage}{45}
-\indexentry{D@{D}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{45}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!dy@{dy}|hyperpage}{45}
-\indexentry{dy@{dy}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{45}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!E@{E}|hyperpage}{45}
-\indexentry{E@{E}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{45}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!F@{F}|hyperpage}{45}
-\indexentry{F@{F}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{45}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!jacobian@{jacobian}|hyperpage}{45}
-\indexentry{jacobian@{jacobian}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{45}
-\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!residual@{residual}|hyperpage}{45}
-\indexentry{residual@{residual}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{45}
-\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{46}
-\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!DOFHandler@{DOFHandler}|hyperpage}{46}
-\indexentry{DOFHandler@{DOFHandler}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{46}
-\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!````~DOFHandler@{$\sim$DOFHandler}|hyperpage}{47}
-\indexentry{````~DOFHandler@{$\sim$DOFHandler}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{47}
-\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!register\_equation@{register\_equation}|hyperpage}{47}
-\indexentry{register\_equation@{register\_equation}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{47}
-\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!register\_variable@{register\_variable}|hyperpage}{47}
-\indexentry{register\_variable@{register\_variable}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{47}
-\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!size@{size}|hyperpage}{47}
-\indexentry{size@{size}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{47}
-\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!variables@{variables}|hyperpage}{48}
-\indexentry{variables@{variables}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{48}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{48}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!FlowReferenceBC@{FlowReferenceBC}|hyperpage}{50}
-\indexentry{FlowReferenceBC@{FlowReferenceBC}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{50}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!````~FlowReferenceBC@{$\sim$FlowReferenceBC}|hyperpage}{50}
-\indexentry{````~FlowReferenceBC@{$\sim$FlowReferenceBC}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{50}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{50}
-\indexentry{setup\_dofs@{setup\_dofs}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{50}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{51}
-\indexentry{to\_steady@{to\_steady}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{51}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{51}
-\indexentry{update\_constant@{update\_constant}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{51}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{51}
-\indexentry{update\_constant@{update\_constant}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{51}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{51}
-\indexentry{update\_time@{update\_time}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{51}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{52}
-\indexentry{update\_time@{update\_time}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{52}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{52}
-\indexentry{num\_triplets@{num\_triplets}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}|hyperpage}{52}
-\indexentry{ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}|hyperpage}{53}
-\indexentry{ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}!Integrator@{Integrator}|hyperpage}{53}
-\indexentry{Integrator@{Integrator}!ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}|hyperpage}{53}
-\indexentry{ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}!````~Integrator@{$\sim$Integrator}|hyperpage}{54}
-\indexentry{````~Integrator@{$\sim$Integrator}!ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}|hyperpage}{54}
-\indexentry{ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}!step@{step}|hyperpage}{54}
-\indexentry{step@{step}!ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}|hyperpage}{54}
-\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{55}
-\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!Junction@{Junction}|hyperpage}{57}
-\indexentry{Junction@{Junction}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{57}
-\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!````~Junction@{$\sim$Junction}|hyperpage}{57}
-\indexentry{````~Junction@{$\sim$Junction}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{57}
-\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{57}
-\indexentry{setup\_dofs@{setup\_dofs}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{57}
-\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{57}
-\indexentry{update\_constant@{update\_constant}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{57}
-\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{58}
-\indexentry{update\_constant@{update\_constant}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{58}
-\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{58}
-\indexentry{num\_triplets@{num\_triplets}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{58}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{59}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!Model@{Model}|hyperpage}{60}
-\indexentry{Model@{Model}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{60}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!````~Model@{$\sim$Model}|hyperpage}{60}
-\indexentry{````~Model@{$\sim$Model}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{60}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}|hyperpage}{60}
-\indexentry{get\_num\_triplets@{get\_num\_triplets}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{60}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{60}
-\indexentry{to\_steady@{to\_steady}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{60}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{60}
-\indexentry{update\_constant@{update\_constant}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{60}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{61}
-\indexentry{update\_constant@{update\_constant}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{61}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_solution@{update\_solution}|hyperpage}{61}
-\indexentry{update\_solution@{update\_solution}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{61}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_solution@{update\_solution}|hyperpage}{61}
-\indexentry{update\_solution@{update\_solution}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{61}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_time@{update\_time}|hyperpage}{62}
-\indexentry{update\_time@{update\_time}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{62}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_time@{update\_time}|hyperpage}{62}
-\indexentry{update\_time@{update\_time}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{62}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!blocks@{blocks}|hyperpage}{62}
-\indexentry{blocks@{blocks}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{62}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!dofhandler@{dofhandler}|hyperpage}{62}
-\indexentry{dofhandler@{dofhandler}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{62}
-\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!nodes@{nodes}|hyperpage}{63}
-\indexentry{nodes@{nodes}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{63}
-\indexentry{MODEL::Node@{MODEL::Node}|hyperpage}{63}
-\indexentry{MODEL::Node@{MODEL::Node}!Node@{Node}|hyperpage}{64}
-\indexentry{Node@{Node}!MODEL::Node@{MODEL::Node}|hyperpage}{64}
-\indexentry{MODEL::Node@{MODEL::Node}!````~Node@{$\sim$Node}|hyperpage}{64}
-\indexentry{````~Node@{$\sim$Node}!MODEL::Node@{MODEL::Node}|hyperpage}{64}
-\indexentry{MODEL::Node@{MODEL::Node}!setup\_dofs@{setup\_dofs}|hyperpage}{64}
-\indexentry{setup\_dofs@{setup\_dofs}!MODEL::Node@{MODEL::Node}|hyperpage}{64}
-\indexentry{MODEL::Node@{MODEL::Node}!flow\_dof@{flow\_dof}|hyperpage}{65}
-\indexentry{flow\_dof@{flow\_dof}!MODEL::Node@{MODEL::Node}|hyperpage}{65}
-\indexentry{MODEL::Node@{MODEL::Node}!name@{name}|hyperpage}{65}
-\indexentry{name@{name}!MODEL::Node@{MODEL::Node}|hyperpage}{65}
-\indexentry{MODEL::Node@{MODEL::Node}!pres\_dof@{pres\_dof}|hyperpage}{65}
-\indexentry{pres\_dof@{pres\_dof}!MODEL::Node@{MODEL::Node}|hyperpage}{65}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{65}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!OpenLoopCoronaryBC@{OpenLoopCoronaryBC}|hyperpage}{67}
-\indexentry{OpenLoopCoronaryBC@{OpenLoopCoronaryBC}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{67}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!````~OpenLoopCoronaryBC@{$\sim$OpenLoopCoronaryBC}|hyperpage}{68}
-\indexentry{````~OpenLoopCoronaryBC@{$\sim$OpenLoopCoronaryBC}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{68}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{68}
-\indexentry{setup\_dofs@{setup\_dofs}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{68}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{68}
-\indexentry{to\_steady@{to\_steady}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{68}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{68}
-\indexentry{update\_constant@{update\_constant}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{68}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{70}
-\indexentry{update\_constant@{update\_constant}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{70}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{70}
-\indexentry{update\_time@{update\_time}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{70}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{70}
-\indexentry{update\_time@{update\_time}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{70}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{71}
-\indexentry{num\_triplets@{num\_triplets}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}|hyperpage}{71}
-\indexentry{MODEL::Block$<$ T $>$::Parameters@{MODEL::Block$<$ T $>$::Parameters}|hyperpage}{71}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{35}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!ClosedLoopHeartPulmonary@{ClosedLoopHeartPulmonary}|hyperpage}{38}
+\indexentry{ClosedLoopHeartPulmonary@{ClosedLoopHeartPulmonary}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{38}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!````~ClosedLoopHeartPulmonary@{$\sim$ClosedLoopHeartPulmonary}|hyperpage}{38}
+\indexentry{````~ClosedLoopHeartPulmonary@{$\sim$ClosedLoopHeartPulmonary}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{38}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!get\_activation\_and\_elastance\_functions@{get\_activation\_and\_elastance\_functions}|hyperpage}{38}
+\indexentry{get\_activation\_and\_elastance\_functions@{get\_activation\_and\_elastance\_functions}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{38}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{39}
+\indexentry{setup\_dofs@{setup\_dofs}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{39}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{39}
+\indexentry{to\_steady@{to\_steady}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{39}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{39}
+\indexentry{update\_constant@{update\_constant}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{39}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{39}
+\indexentry{update\_constant@{update\_constant}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{39}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!update\_solution@{update\_solution}|hyperpage}{40}
+\indexentry{update\_solution@{update\_solution}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{40}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!update\_solution@{update\_solution}|hyperpage}{40}
+\indexentry{update\_solution@{update\_solution}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{40}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!update\_time@{update\_time}|hyperpage}{40}
+\indexentry{update\_time@{update\_time}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{40}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!update\_time@{update\_time}|hyperpage}{41}
+\indexentry{update\_time@{update\_time}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{41}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!AA@{AA}|hyperpage}{41}
+\indexentry{AA@{AA}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{41}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{42}
+\indexentry{num\_triplets@{num\_triplets}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}|hyperpage}{42}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{42}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}|hyperpage}{43}
+\indexentry{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{43}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}|hyperpage}{43}
+\indexentry{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{43}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!````~ConfigReader@{$\sim$ConfigReader}|hyperpage}{43}
+\indexentry{````~ConfigReader@{$\sim$ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{43}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}|hyperpage}{44}
+\indexentry{get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{44}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}|hyperpage}{44}
+\indexentry{get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{44}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}|hyperpage}{44}
+\indexentry{get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{44}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}|hyperpage}{45}
+\indexentry{get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{45}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_model@{get\_model}|hyperpage}{45}
+\indexentry{get\_model@{get\_model}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{45}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_num\_time\_steps@{get\_num\_time\_steps}|hyperpage}{45}
+\indexentry{get\_num\_time\_steps@{get\_num\_time\_steps}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{45}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}|hyperpage}{46}
+\indexentry{get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{46}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}|hyperpage}{46}
+\indexentry{get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{46}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_time\_step\_size@{get\_time\_step\_size}|hyperpage}{46}
+\indexentry{get\_time\_step\_size@{get\_time\_step\_size}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{46}
+\indexentry{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!cardiac\_cycle\_period@{cardiac\_cycle\_period}|hyperpage}{47}
+\indexentry{cardiac\_cycle\_period@{cardiac\_cycle\_period}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}|hyperpage}{47}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{47}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!DenseSystem@{DenseSystem}|hyperpage}{48}
+\indexentry{DenseSystem@{DenseSystem}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{48}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!DenseSystem@{DenseSystem}|hyperpage}{48}
+\indexentry{DenseSystem@{DenseSystem}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{48}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!````~DenseSystem@{$\sim$DenseSystem}|hyperpage}{49}
+\indexentry{````~DenseSystem@{$\sim$DenseSystem}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{49}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!reserve@{reserve}|hyperpage}{49}
+\indexentry{reserve@{reserve}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{49}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!solve@{solve}|hyperpage}{49}
+\indexentry{solve@{solve}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{49}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!update\_jacobian@{update\_jacobian}|hyperpage}{49}
+\indexentry{update\_jacobian@{update\_jacobian}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{49}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!update\_residual@{update\_residual}|hyperpage}{50}
+\indexentry{update\_residual@{update\_residual}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{50}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!C@{C}|hyperpage}{50}
+\indexentry{C@{C}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{50}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!D@{D}|hyperpage}{50}
+\indexentry{D@{D}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{50}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!dy@{dy}|hyperpage}{50}
+\indexentry{dy@{dy}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{50}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!E@{E}|hyperpage}{50}
+\indexentry{E@{E}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{50}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!F@{F}|hyperpage}{51}
+\indexentry{F@{F}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{51}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!jacobian@{jacobian}|hyperpage}{51}
+\indexentry{jacobian@{jacobian}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{51}
+\indexentry{ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}!residual@{residual}|hyperpage}{51}
+\indexentry{residual@{residual}!ALGEBRA::DenseSystem$<$ T $>$@{ALGEBRA::DenseSystem$<$ T $>$}|hyperpage}{51}
+\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{51}
+\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!DOFHandler@{DOFHandler}|hyperpage}{52}
+\indexentry{DOFHandler@{DOFHandler}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{52}
+\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!````~DOFHandler@{$\sim$DOFHandler}|hyperpage}{52}
+\indexentry{````~DOFHandler@{$\sim$DOFHandler}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{52}
+\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!register\_equation@{register\_equation}|hyperpage}{52}
+\indexentry{register\_equation@{register\_equation}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{52}
+\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!register\_variable@{register\_variable}|hyperpage}{53}
+\indexentry{register\_variable@{register\_variable}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{53}
+\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!size@{size}|hyperpage}{53}
+\indexentry{size@{size}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{53}
+\indexentry{MODEL::DOFHandler@{MODEL::DOFHandler}!variables@{variables}|hyperpage}{53}
+\indexentry{variables@{variables}!MODEL::DOFHandler@{MODEL::DOFHandler}|hyperpage}{53}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{54}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!FlowReference@{FlowReference}|hyperpage}{55}
+\indexentry{FlowReference@{FlowReference}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{55}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!````~FlowReference@{$\sim$FlowReference}|hyperpage}{56}
+\indexentry{````~FlowReference@{$\sim$FlowReference}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{56}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{56}
+\indexentry{setup\_dofs@{setup\_dofs}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{56}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{56}
+\indexentry{to\_steady@{to\_steady}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{56}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{56}
+\indexentry{update\_constant@{update\_constant}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{56}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{58}
+\indexentry{update\_constant@{update\_constant}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{58}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!update\_time@{update\_time}|hyperpage}{58}
+\indexentry{update\_time@{update\_time}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{58}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!update\_time@{update\_time}|hyperpage}{58}
+\indexentry{update\_time@{update\_time}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{58}
+\indexentry{MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{59}
+\indexentry{num\_triplets@{num\_triplets}!MODEL::FlowReference$<$ T $>$@{MODEL::FlowReference$<$ T $>$}|hyperpage}{59}
+\indexentry{ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}|hyperpage}{59}
+\indexentry{ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}!Integrator@{Integrator}|hyperpage}{60}
+\indexentry{Integrator@{Integrator}!ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}|hyperpage}{60}
+\indexentry{ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}!````~Integrator@{$\sim$Integrator}|hyperpage}{60}
+\indexentry{````~Integrator@{$\sim$Integrator}!ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}|hyperpage}{60}
+\indexentry{ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}!step@{step}|hyperpage}{60}
+\indexentry{step@{step}!ALGEBRA::Integrator$<$ T, S $>$@{ALGEBRA::Integrator$<$ T, S $>$}|hyperpage}{60}
+\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{62}
+\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!Junction@{Junction}|hyperpage}{64}
+\indexentry{Junction@{Junction}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{64}
+\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!````~Junction@{$\sim$Junction}|hyperpage}{64}
+\indexentry{````~Junction@{$\sim$Junction}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{64}
+\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{64}
+\indexentry{setup\_dofs@{setup\_dofs}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{64}
+\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{65}
+\indexentry{update\_constant@{update\_constant}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{65}
+\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{65}
+\indexentry{update\_constant@{update\_constant}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{65}
+\indexentry{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{65}
+\indexentry{num\_triplets@{num\_triplets}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}|hyperpage}{65}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{66}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!Model@{Model}|hyperpage}{67}
+\indexentry{Model@{Model}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{67}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!````~Model@{$\sim$Model}|hyperpage}{67}
+\indexentry{````~Model@{$\sim$Model}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{67}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}|hyperpage}{67}
+\indexentry{get\_num\_triplets@{get\_num\_triplets}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{67}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{67}
+\indexentry{to\_steady@{to\_steady}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{67}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{67}
+\indexentry{update\_constant@{update\_constant}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{67}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{68}
+\indexentry{update\_constant@{update\_constant}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{68}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_solution@{update\_solution}|hyperpage}{68}
+\indexentry{update\_solution@{update\_solution}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{68}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_solution@{update\_solution}|hyperpage}{68}
+\indexentry{update\_solution@{update\_solution}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{68}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_time@{update\_time}|hyperpage}{69}
+\indexentry{update\_time@{update\_time}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{69}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_time@{update\_time}|hyperpage}{69}
+\indexentry{update\_time@{update\_time}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{69}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!blocks@{blocks}|hyperpage}{69}
+\indexentry{blocks@{blocks}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{69}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!dofhandler@{dofhandler}|hyperpage}{69}
+\indexentry{dofhandler@{dofhandler}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{69}
+\indexentry{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!nodes@{nodes}|hyperpage}{70}
+\indexentry{nodes@{nodes}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}|hyperpage}{70}
+\indexentry{MODEL::Node@{MODEL::Node}|hyperpage}{70}
+\indexentry{MODEL::Node@{MODEL::Node}!Node@{Node}|hyperpage}{71}
+\indexentry{Node@{Node}!MODEL::Node@{MODEL::Node}|hyperpage}{71}
+\indexentry{MODEL::Node@{MODEL::Node}!````~Node@{$\sim$Node}|hyperpage}{71}
+\indexentry{````~Node@{$\sim$Node}!MODEL::Node@{MODEL::Node}|hyperpage}{71}
+\indexentry{MODEL::Node@{MODEL::Node}!setup\_dofs@{setup\_dofs}|hyperpage}{71}
+\indexentry{setup\_dofs@{setup\_dofs}!MODEL::Node@{MODEL::Node}|hyperpage}{71}
+\indexentry{MODEL::Node@{MODEL::Node}!flow\_dof@{flow\_dof}|hyperpage}{72}
+\indexentry{flow\_dof@{flow\_dof}!MODEL::Node@{MODEL::Node}|hyperpage}{72}
+\indexentry{MODEL::Node@{MODEL::Node}!name@{name}|hyperpage}{72}
+\indexentry{name@{name}!MODEL::Node@{MODEL::Node}|hyperpage}{72}
+\indexentry{MODEL::Node@{MODEL::Node}!pres\_dof@{pres\_dof}|hyperpage}{72}
+\indexentry{pres\_dof@{pres\_dof}!MODEL::Node@{MODEL::Node}|hyperpage}{72}
+\indexentry{MODEL::Block$<$ T $>$::Parameters@{MODEL::Block$<$ T $>$::Parameters}|hyperpage}{72}
 \indexentry{MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}|hyperpage}{73}
-\indexentry{MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}!C@{C}|hyperpage}{73}
-\indexentry{C@{C}!MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}|hyperpage}{73}
+\indexentry{MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}!C@{C}|hyperpage}{74}
+\indexentry{C@{C}!MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}|hyperpage}{74}
 \indexentry{MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}!L@{L}|hyperpage}{74}
 \indexentry{L@{L}!MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}|hyperpage}{74}
-\indexentry{MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}!R@{R}|hyperpage}{74}
-\indexentry{R@{R}!MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}|hyperpage}{74}
-\indexentry{MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}!stenosis\_coefficient@{stenosis\_coefficient}|hyperpage}{74}
-\indexentry{stenosis\_coefficient@{stenosis\_coefficient}!MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}|hyperpage}{74}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$::Parameters@{MODEL::FlowReferenceBC$<$ T $>$::Parameters}|hyperpage}{74}
-\indexentry{MODEL::FlowReferenceBC$<$ T $>$::Parameters@{MODEL::FlowReferenceBC$<$ T $>$::Parameters}!Q@{Q}|hyperpage}{75}
-\indexentry{Q@{Q}!MODEL::FlowReferenceBC$<$ T $>$::Parameters@{MODEL::FlowReferenceBC$<$ T $>$::Parameters}|hyperpage}{75}
-\indexentry{MODEL::Junction$<$ T $>$::Parameters@{MODEL::Junction$<$ T $>$::Parameters}|hyperpage}{75}
-\indexentry{MODEL::OpenLoopCoronaryBC$<$ T $>$::Parameters@{MODEL::OpenLoopCoronaryBC$<$ T $>$::Parameters}|hyperpage}{76}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$::Parameters@{MODEL::PressureReferenceBC$<$ T $>$::Parameters}|hyperpage}{77}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$::Parameters@{MODEL::PressureReferenceBC$<$ T $>$::Parameters}!P@{P}|hyperpage}{78}
-\indexentry{P@{P}!MODEL::PressureReferenceBC$<$ T $>$::Parameters@{MODEL::PressureReferenceBC$<$ T $>$::Parameters}|hyperpage}{78}
-\indexentry{MODEL::ResistanceBC$<$ T $>$::Parameters@{MODEL::ResistanceBC$<$ T $>$::Parameters}|hyperpage}{78}
-\indexentry{MODEL::ResistanceBC$<$ T $>$::Parameters@{MODEL::ResistanceBC$<$ T $>$::Parameters}!Pd@{Pd}|hyperpage}{79}
-\indexentry{Pd@{Pd}!MODEL::ResistanceBC$<$ T $>$::Parameters@{MODEL::ResistanceBC$<$ T $>$::Parameters}|hyperpage}{79}
-\indexentry{MODEL::ResistanceBC$<$ T $>$::Parameters@{MODEL::ResistanceBC$<$ T $>$::Parameters}!R@{R}|hyperpage}{79}
-\indexentry{R@{R}!MODEL::ResistanceBC$<$ T $>$::Parameters@{MODEL::ResistanceBC$<$ T $>$::Parameters}|hyperpage}{79}
-\indexentry{MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}|hyperpage}{79}
-\indexentry{MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}!C@{C}|hyperpage}{80}
-\indexentry{C@{C}!MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}|hyperpage}{80}
-\indexentry{MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}!Pd@{Pd}|hyperpage}{80}
-\indexentry{Pd@{Pd}!MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}|hyperpage}{80}
-\indexentry{MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}!Rd@{Rd}|hyperpage}{80}
-\indexentry{Rd@{Rd}!MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}|hyperpage}{80}
-\indexentry{MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}!Rp@{Rp}|hyperpage}{80}
-\indexentry{Rp@{Rp}!MODEL::WindkesselBC$<$ T $>$::Parameters@{MODEL::WindkesselBC$<$ T $>$::Parameters}|hyperpage}{80}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{81}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!PressureReferenceBC@{PressureReferenceBC}|hyperpage}{82}
-\indexentry{PressureReferenceBC@{PressureReferenceBC}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{82}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!````~PressureReferenceBC@{$\sim$PressureReferenceBC}|hyperpage}{83}
-\indexentry{````~PressureReferenceBC@{$\sim$PressureReferenceBC}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{83}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{83}
-\indexentry{setup\_dofs@{setup\_dofs}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{83}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{83}
-\indexentry{to\_steady@{to\_steady}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{83}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{84}
-\indexentry{update\_constant@{update\_constant}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{84}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{84}
-\indexentry{update\_constant@{update\_constant}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{84}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{84}
-\indexentry{update\_time@{update\_time}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{84}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{84}
-\indexentry{update\_time@{update\_time}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{84}
-\indexentry{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{85}
-\indexentry{num\_triplets@{num\_triplets}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}|hyperpage}{85}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{85}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!ResistanceBC@{ResistanceBC}|hyperpage}{87}
-\indexentry{ResistanceBC@{ResistanceBC}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{87}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!````~ResistanceBC@{$\sim$ResistanceBC}|hyperpage}{87}
-\indexentry{````~ResistanceBC@{$\sim$ResistanceBC}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{87}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{87}
-\indexentry{setup\_dofs@{setup\_dofs}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{87}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{88}
-\indexentry{to\_steady@{to\_steady}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{88}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{88}
-\indexentry{update\_constant@{update\_constant}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{88}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{88}
-\indexentry{update\_constant@{update\_constant}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{88}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{88}
-\indexentry{update\_time@{update\_time}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{88}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{89}
-\indexentry{update\_time@{update\_time}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{89}
-\indexentry{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{89}
-\indexentry{num\_triplets@{num\_triplets}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}|hyperpage}{89}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{90}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!SparseSystem@{SparseSystem}|hyperpage}{91}
-\indexentry{SparseSystem@{SparseSystem}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{91}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!SparseSystem@{SparseSystem}|hyperpage}{91}
-\indexentry{SparseSystem@{SparseSystem}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{91}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!````~SparseSystem@{$\sim$SparseSystem}|hyperpage}{91}
-\indexentry{````~SparseSystem@{$\sim$SparseSystem}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{91}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!reserve@{reserve}|hyperpage}{91}
-\indexentry{reserve@{reserve}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{91}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!solve@{solve}|hyperpage}{92}
-\indexentry{solve@{solve}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{92}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!update\_jacobian@{update\_jacobian}|hyperpage}{92}
-\indexentry{update\_jacobian@{update\_jacobian}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{92}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!update\_residual@{update\_residual}|hyperpage}{92}
-\indexentry{update\_residual@{update\_residual}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{92}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!C@{C}|hyperpage}{92}
-\indexentry{C@{C}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{92}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!D@{D}|hyperpage}{93}
-\indexentry{D@{D}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{93}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!dy@{dy}|hyperpage}{93}
-\indexentry{dy@{dy}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{93}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!E@{E}|hyperpage}{93}
-\indexentry{E@{E}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{93}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!F@{F}|hyperpage}{93}
-\indexentry{F@{F}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{93}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!jacobian@{jacobian}|hyperpage}{93}
-\indexentry{jacobian@{jacobian}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{93}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!residual@{residual}|hyperpage}{93}
-\indexentry{residual@{residual}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{93}
-\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!solver@{solver}|hyperpage}{94}
-\indexentry{solver@{solver}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{94}
-\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{94}
-\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!State@{State}|hyperpage}{96}
-\indexentry{State@{State}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{96}
-\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!State@{State}|hyperpage}{96}
-\indexentry{State@{State}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{96}
-\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!````~State@{$\sim$State}|hyperpage}{96}
-\indexentry{````~State@{$\sim$State}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{96}
-\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!State@{State}|hyperpage}{96}
-\indexentry{State@{State}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{96}
-\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!Zero@{Zero}|hyperpage}{97}
-\indexentry{Zero@{Zero}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{97}
-\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!y@{y}|hyperpage}{97}
-\indexentry{y@{y}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{97}
-\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!ydot@{ydot}|hyperpage}{97}
-\indexentry{ydot@{ydot}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{97}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{98}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!TimeDependentParameter@{TimeDependentParameter}|hyperpage}{98}
-\indexentry{TimeDependentParameter@{TimeDependentParameter}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{98}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!TimeDependentParameter@{TimeDependentParameter}|hyperpage}{99}
-\indexentry{TimeDependentParameter@{TimeDependentParameter}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{99}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!````~TimeDependentParameter@{$\sim$TimeDependentParameter}|hyperpage}{99}
-\indexentry{````~TimeDependentParameter@{$\sim$TimeDependentParameter}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{99}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!get@{get}|hyperpage}{99}
-\indexentry{get@{get}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{99}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{100}
-\indexentry{to\_steady@{to\_steady}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{100}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!cycle\_period@{cycle\_period}|hyperpage}{100}
-\indexentry{cycle\_period@{cycle\_period}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{100}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!times@{times}|hyperpage}{100}
-\indexentry{times@{times}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{100}
-\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!values@{values}|hyperpage}{100}
-\indexentry{values@{values}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{100}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{101}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!WindkesselBC@{WindkesselBC}|hyperpage}{103}
-\indexentry{WindkesselBC@{WindkesselBC}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{103}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!````~WindkesselBC@{$\sim$WindkesselBC}|hyperpage}{103}
-\indexentry{````~WindkesselBC@{$\sim$WindkesselBC}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{103}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{103}
-\indexentry{setup\_dofs@{setup\_dofs}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{103}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{104}
-\indexentry{to\_steady@{to\_steady}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{104}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{104}
-\indexentry{update\_constant@{update\_constant}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{104}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{104}
-\indexentry{update\_constant@{update\_constant}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{104}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{104}
-\indexentry{update\_time@{update\_time}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{104}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!update\_time@{update\_time}|hyperpage}{105}
-\indexentry{update\_time@{update\_time}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{105}
-\indexentry{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{105}
-\indexentry{num\_triplets@{num\_triplets}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}|hyperpage}{105}
-\indexentry{algebra/densesystem.hpp@{algebra/densesystem.hpp}|hyperpage}{107}
-\indexentry{algebra/densesystem.hpp@{algebra/densesystem.hpp}|hyperpage}{108}
-\indexentry{algebra/integrator.hpp@{algebra/integrator.hpp}|hyperpage}{109}
-\indexentry{algebra/integrator.hpp@{algebra/integrator.hpp}|hyperpage}{111}
-\indexentry{algebra/sparsesystem.hpp@{algebra/sparsesystem.hpp}|hyperpage}{113}
-\indexentry{algebra/sparsesystem.hpp@{algebra/sparsesystem.hpp}|hyperpage}{114}
-\indexentry{algebra/state.hpp@{algebra/state.hpp}|hyperpage}{116}
-\indexentry{algebra/state.hpp@{algebra/state.hpp}|hyperpage}{116}
-\indexentry{helpers/debug.hpp@{helpers/debug.hpp}|hyperpage}{117}
-\indexentry{debug.hpp@{debug.hpp}!DEBUG\_MSG@{DEBUG\_MSG}|hyperpage}{118}
-\indexentry{DEBUG\_MSG@{DEBUG\_MSG}!debug.hpp@{debug.hpp}|hyperpage}{118}
-\indexentry{helpers/debug.hpp@{helpers/debug.hpp}|hyperpage}{119}
-\indexentry{helpers/endswith.hpp@{helpers/endswith.hpp}|hyperpage}{119}
-\indexentry{helpers/endswith.hpp@{helpers/endswith.hpp}|hyperpage}{120}
-\indexentry{helpers/startswith.hpp@{helpers/startswith.hpp}|hyperpage}{121}
-\indexentry{helpers/startswith.hpp@{helpers/startswith.hpp}|hyperpage}{122}
-\indexentry{io/configreader.hpp@{io/configreader.hpp}|hyperpage}{122}
-\indexentry{io/configreader.hpp@{io/configreader.hpp}|hyperpage}{123}
-\indexentry{io/csvwriter.hpp@{io/csvwriter.hpp}|hyperpage}{129}
-\indexentry{io/csvwriter.hpp@{io/csvwriter.hpp}|hyperpage}{130}
-\indexentry{io/jsonwriter.hpp@{io/jsonwriter.hpp}|hyperpage}{131}
-\indexentry{io/jsonwriter.hpp@{io/jsonwriter.hpp}|hyperpage}{132}
-\indexentry{main.cpp@{main.cpp}|hyperpage}{133}
-\indexentry{main.cpp@{main.cpp}!main@{main}|hyperpage}{134}
-\indexentry{main@{main}!main.cpp@{main.cpp}|hyperpage}{134}
-\indexentry{main.hpp@{main.hpp}|hyperpage}{135}
-\indexentry{model/block.hpp@{model/block.hpp}|hyperpage}{137}
-\indexentry{model/block.hpp@{model/block.hpp}|hyperpage}{138}
-\indexentry{model/bloodvessel.hpp@{model/bloodvessel.hpp}|hyperpage}{141}
-\indexentry{model/bloodvessel.hpp@{model/bloodvessel.hpp}|hyperpage}{142}
-\indexentry{model/dofhandler.hpp@{model/dofhandler.hpp}|hyperpage}{145}
+\indexentry{MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}!R@{R}|hyperpage}{75}
+\indexentry{R@{R}!MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}|hyperpage}{75}
+\indexentry{MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}!stenosis\_coefficient@{stenosis\_coefficient}|hyperpage}{75}
+\indexentry{stenosis\_coefficient@{stenosis\_coefficient}!MODEL::BloodVessel$<$ T $>$::Parameters@{MODEL::BloodVessel$<$ T $>$::Parameters}|hyperpage}{75}
+\indexentry{MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}|hyperpage}{75}
+\indexentry{MODEL::FlowReference$<$ T $>$::Parameters@{MODEL::FlowReference$<$ T $>$::Parameters}|hyperpage}{76}
+\indexentry{MODEL::FlowReference$<$ T $>$::Parameters@{MODEL::FlowReference$<$ T $>$::Parameters}!Q@{Q}|hyperpage}{77}
+\indexentry{Q@{Q}!MODEL::FlowReference$<$ T $>$::Parameters@{MODEL::FlowReference$<$ T $>$::Parameters}|hyperpage}{77}
+\indexentry{MODEL::Junction$<$ T $>$::Parameters@{MODEL::Junction$<$ T $>$::Parameters}|hyperpage}{77}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}|hyperpage}{78}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}!C@{C}|hyperpage}{78}
+\indexentry{C@{C}!MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}|hyperpage}{78}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}!Pd@{Pd}|hyperpage}{79}
+\indexentry{Pd@{Pd}!MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}|hyperpage}{79}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}!Rd@{Rd}|hyperpage}{79}
+\indexentry{Rd@{Rd}!MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}|hyperpage}{79}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}!Rp@{Rp}|hyperpage}{79}
+\indexentry{Rp@{Rp}!MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters@{MODEL::RCRBlockWithDistalPressure$<$ T $>$::Parameters}|hyperpage}{79}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{79}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!RCRBlockWithDistalPressure@{RCRBlockWithDistalPressure}|hyperpage}{81}
+\indexentry{RCRBlockWithDistalPressure@{RCRBlockWithDistalPressure}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{81}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!````~RCRBlockWithDistalPressure@{$\sim$RCRBlockWithDistalPressure}|hyperpage}{82}
+\indexentry{````~RCRBlockWithDistalPressure@{$\sim$RCRBlockWithDistalPressure}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{82}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!setup\_dofs@{setup\_dofs}|hyperpage}{82}
+\indexentry{setup\_dofs@{setup\_dofs}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{82}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{82}
+\indexentry{to\_steady@{to\_steady}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{82}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{82}
+\indexentry{update\_constant@{update\_constant}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{82}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!update\_constant@{update\_constant}|hyperpage}{83}
+\indexentry{update\_constant@{update\_constant}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{83}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!update\_time@{update\_time}|hyperpage}{83}
+\indexentry{update\_time@{update\_time}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{83}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!update\_time@{update\_time}|hyperpage}{83}
+\indexentry{update\_time@{update\_time}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{83}
+\indexentry{MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}!num\_triplets@{num\_triplets}|hyperpage}{84}
+\indexentry{num\_triplets@{num\_triplets}!MODEL::RCRBlockWithDistalPressure$<$ T $>$@{MODEL::RCRBlockWithDistalPressure$<$ T $>$}|hyperpage}{84}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{84}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!SparseSystem@{SparseSystem}|hyperpage}{85}
+\indexentry{SparseSystem@{SparseSystem}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{85}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!SparseSystem@{SparseSystem}|hyperpage}{85}
+\indexentry{SparseSystem@{SparseSystem}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{85}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!````~SparseSystem@{$\sim$SparseSystem}|hyperpage}{87}
+\indexentry{````~SparseSystem@{$\sim$SparseSystem}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{87}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!reserve@{reserve}|hyperpage}{87}
+\indexentry{reserve@{reserve}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{87}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!solve@{solve}|hyperpage}{87}
+\indexentry{solve@{solve}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{87}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!update\_jacobian@{update\_jacobian}|hyperpage}{87}
+\indexentry{update\_jacobian@{update\_jacobian}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{87}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!update\_residual@{update\_residual}|hyperpage}{88}
+\indexentry{update\_residual@{update\_residual}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{88}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!C@{C}|hyperpage}{88}
+\indexentry{C@{C}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{88}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!D@{D}|hyperpage}{88}
+\indexentry{D@{D}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{88}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!dy@{dy}|hyperpage}{88}
+\indexentry{dy@{dy}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{88}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!E@{E}|hyperpage}{88}
+\indexentry{E@{E}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{88}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!F@{F}|hyperpage}{89}
+\indexentry{F@{F}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{89}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!jacobian@{jacobian}|hyperpage}{89}
+\indexentry{jacobian@{jacobian}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{89}
+\indexentry{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!residual@{residual}|hyperpage}{89}
+\indexentry{residual@{residual}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}|hyperpage}{89}
+\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{89}
+\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!State@{State}|hyperpage}{90}
+\indexentry{State@{State}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{90}
+\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!State@{State}|hyperpage}{90}
+\indexentry{State@{State}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{90}
+\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!````~State@{$\sim$State}|hyperpage}{91}
+\indexentry{````~State@{$\sim$State}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{91}
+\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!State@{State}|hyperpage}{91}
+\indexentry{State@{State}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{91}
+\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!Zero@{Zero}|hyperpage}{91}
+\indexentry{Zero@{Zero}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{91}
+\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!y@{y}|hyperpage}{92}
+\indexentry{y@{y}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{92}
+\indexentry{ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}!ydot@{ydot}|hyperpage}{92}
+\indexentry{ydot@{ydot}!ALGEBRA::State$<$ T $>$@{ALGEBRA::State$<$ T $>$}|hyperpage}{92}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{92}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!TimeDependentParameter@{TimeDependentParameter}|hyperpage}{93}
+\indexentry{TimeDependentParameter@{TimeDependentParameter}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{93}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!TimeDependentParameter@{TimeDependentParameter}|hyperpage}{93}
+\indexentry{TimeDependentParameter@{TimeDependentParameter}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{93}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!````~TimeDependentParameter@{$\sim$TimeDependentParameter}|hyperpage}{94}
+\indexentry{````~TimeDependentParameter@{$\sim$TimeDependentParameter}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{94}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!get@{get}|hyperpage}{94}
+\indexentry{get@{get}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{94}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!to\_steady@{to\_steady}|hyperpage}{94}
+\indexentry{to\_steady@{to\_steady}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{94}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!cycle\_period@{cycle\_period}|hyperpage}{94}
+\indexentry{cycle\_period@{cycle\_period}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{94}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!times@{times}|hyperpage}{95}
+\indexentry{times@{times}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{95}
+\indexentry{MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}!values@{values}|hyperpage}{95}
+\indexentry{values@{values}!MODEL::TimeDependentParameter$<$ T $>$@{MODEL::TimeDependentParameter$<$ T $>$}|hyperpage}{95}
+\indexentry{algebra/densesystem.hpp@{algebra/densesystem.hpp}|hyperpage}{97}
+\indexentry{algebra/densesystem.hpp@{algebra/densesystem.hpp}|hyperpage}{98}
+\indexentry{algebra/integrator.hpp@{algebra/integrator.hpp}|hyperpage}{99}
+\indexentry{algebra/integrator.hpp@{algebra/integrator.hpp}|hyperpage}{101}
+\indexentry{algebra/sparsesystem.hpp@{algebra/sparsesystem.hpp}|hyperpage}{103}
+\indexentry{algebra/sparsesystem.hpp@{algebra/sparsesystem.hpp}|hyperpage}{104}
+\indexentry{algebra/state.hpp@{algebra/state.hpp}|hyperpage}{106}
+\indexentry{algebra/state.hpp@{algebra/state.hpp}|hyperpage}{107}
+\indexentry{helpers/debug.hpp@{helpers/debug.hpp}|hyperpage}{108}
+\indexentry{debug.hpp@{debug.hpp}!DEBUG\_MSG@{DEBUG\_MSG}|hyperpage}{109}
+\indexentry{DEBUG\_MSG@{DEBUG\_MSG}!debug.hpp@{debug.hpp}|hyperpage}{109}
+\indexentry{helpers/debug.hpp@{helpers/debug.hpp}|hyperpage}{109}
+\indexentry{helpers/endswith.hpp@{helpers/endswith.hpp}|hyperpage}{109}
+\indexentry{helpers/endswith.hpp@{helpers/endswith.hpp}|hyperpage}{111}
+\indexentry{helpers/startswith.hpp@{helpers/startswith.hpp}|hyperpage}{111}
+\indexentry{helpers/startswith.hpp@{helpers/startswith.hpp}|hyperpage}{112}
+\indexentry{io/configreader.hpp@{io/configreader.hpp}|hyperpage}{113}
+\indexentry{io/configreader.hpp@{io/configreader.hpp}|hyperpage}{114}
+\indexentry{io/csvwriter.hpp@{io/csvwriter.hpp}|hyperpage}{119}
+\indexentry{io/csvwriter.hpp@{io/csvwriter.hpp}|hyperpage}{121}
+\indexentry{io/jsonwriter.hpp@{io/jsonwriter.hpp}|hyperpage}{122}
+\indexentry{io/jsonwriter.hpp@{io/jsonwriter.hpp}|hyperpage}{123}
+\indexentry{main.cpp@{main.cpp}|hyperpage}{124}
+\indexentry{main.cpp@{main.cpp}!main@{main}|hyperpage}{125}
+\indexentry{main@{main}!main.cpp@{main.cpp}|hyperpage}{125}
+\indexentry{main.hpp@{main.hpp}|hyperpage}{126}
+\indexentry{model/block.hpp@{model/block.hpp}|hyperpage}{128}
+\indexentry{model/block.hpp@{model/block.hpp}|hyperpage}{129}
+\indexentry{model/bloodvessel.hpp@{model/bloodvessel.hpp}|hyperpage}{132}
+\indexentry{model/bloodvessel.hpp@{model/bloodvessel.hpp}|hyperpage}{133}
+\indexentry{model/closedloopheartpulmonary.hpp@{model/closedloopheartpulmonary.hpp}|hyperpage}{136}
+\indexentry{model/closedloopheartpulmonary.hpp@{model/closedloopheartpulmonary.hpp}|hyperpage}{138}
+\indexentry{model/dofhandler.hpp@{model/dofhandler.hpp}|hyperpage}{144}
 \indexentry{model/dofhandler.hpp@{model/dofhandler.hpp}|hyperpage}{146}
-\indexentry{model/flowreferencebc.hpp@{model/flowreferencebc.hpp}|hyperpage}{147}
-\indexentry{model/flowreferencebc.hpp@{model/flowreferencebc.hpp}|hyperpage}{149}
-\indexentry{model/junction.hpp@{model/junction.hpp}|hyperpage}{151}
+\indexentry{model/flowreference.hpp@{model/flowreference.hpp}|hyperpage}{147}
+\indexentry{model/flowreference.hpp@{model/flowreference.hpp}|hyperpage}{148}
+\indexentry{model/junction.hpp@{model/junction.hpp}|hyperpage}{150}
 \indexentry{model/junction.hpp@{model/junction.hpp}|hyperpage}{152}
 \indexentry{model/model.hpp@{model/model.hpp}|hyperpage}{154}
 \indexentry{model/model.hpp@{model/model.hpp}|hyperpage}{155}
@@ -431,13 +393,7 @@
 \indexentry{model/namespace.hpp@{model/namespace.hpp}|hyperpage}{160}
 \indexentry{model/node.hpp@{model/node.hpp}|hyperpage}{160}
 \indexentry{model/node.hpp@{model/node.hpp}|hyperpage}{162}
-\indexentry{model/openloopcoronarybc.hpp@{model/openloopcoronarybc.hpp}|hyperpage}{162}
-\indexentry{model/openloopcoronarybc.hpp@{model/openloopcoronarybc.hpp}|hyperpage}{164}
-\indexentry{model/pressurereferencebc.hpp@{model/pressurereferencebc.hpp}|hyperpage}{167}
-\indexentry{model/pressurereferencebc.hpp@{model/pressurereferencebc.hpp}|hyperpage}{169}
-\indexentry{model/resistancebc.hpp@{model/resistancebc.hpp}|hyperpage}{171}
-\indexentry{model/resistancebc.hpp@{model/resistancebc.hpp}|hyperpage}{172}
-\indexentry{model/timedependentparameter.hpp@{model/timedependentparameter.hpp}|hyperpage}{174}
-\indexentry{model/timedependentparameter.hpp@{model/timedependentparameter.hpp}|hyperpage}{176}
-\indexentry{model/windkesselbc.hpp@{model/windkesselbc.hpp}|hyperpage}{177}
-\indexentry{model/windkesselbc.hpp@{model/windkesselbc.hpp}|hyperpage}{178}
+\indexentry{model/rcrblockwithdistalpressure.hpp@{model/rcrblockwithdistalpressure.hpp}|hyperpage}{162}
+\indexentry{model/rcrblockwithdistalpressure.hpp@{model/rcrblockwithdistalpressure.hpp}|hyperpage}{164}
+\indexentry{model/timedependentparameter.hpp@{model/timedependentparameter.hpp}|hyperpage}{166}
+\indexentry{model/timedependentparameter.hpp@{model/timedependentparameter.hpp}|hyperpage}{168}

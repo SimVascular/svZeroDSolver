@@ -1,3 +1,4 @@
+// clang-format off
 /**
  * @file main.hpp
  * @brief Main page documentation
@@ -9,7 +10,8 @@
  * The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of
  * vascular networks using zero-dimensional (0D) lumped parameter models.
  *
- * * <a href="https://github.com/SimVascular/svZeroDSolver">Source repository</a>
+ * * <a href="https://github.com/SimVascular/svZeroDSolver">Source
+ * repository</a>
  * * <a href="https://simvascular.github.io">About SimVascular</a>
  *
  * \f[
@@ -29,17 +31,18 @@
  *
  * Zero-dimensional (0D) models
  * are lightweight methods to simulate bulk hemodynamic quantities in the
- * cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-dependent;
- * they are unable to simulate spatial patterns in the hemodynamics.
- * 0D models are analogous to electrical circuits. The flow rate simulated by
- * 0D models represents electrical current, while the pressure represents voltage.
- * Three primary building blocks of 0D models are resistors, capacitors, and inductors
- * Resistance captures the viscous effects of blood flow, capacitance represents
- * the compliance and distensibility of the vessel wall, and inductance represents
- * the inertia of the blood flow. Different combinations of these building blocks,
- * as well as others, can be formed to reflect the hemodynamics and physiology of
- * different cardiovascular anatomies.These 0D models are governed
- * by differential algebraic equations (DAEs).
+ * cardiovascular system. Unlike 3D and 1D models, 0D models are purely
+ * time-dependent; they are unable to simulate spatial patterns in the
+ * hemodynamics. 0D models are analogous to electrical circuits. The flow rate
+ * simulated by 0D models represents electrical current, while the pressure
+ * represents voltage. Three primary building blocks of 0D models are resistors,
+ * capacitors, and inductors Resistance captures the viscous effects of blood
+ * flow, capacitance represents the compliance and distensibility of the vessel
+ * wall, and inductance represents the inertia of the blood flow. Different
+ * combinations of these building blocks, as well as others, can be formed to
+ * reflect the hemodynamics and physiology of different cardiovascular
+ * anatomies.These 0D models are governed by differential algebraic equations
+ * (DAEs).
  *
  * # Architecture
  *
@@ -50,7 +53,8 @@
  * model. The elements are part of the MODEL namespace. Currently
  * supported elements are:
  *
- * * MODEL::BloodVessel: RCL blood vessel respresentation with optional stenosis.
+ * * MODEL::BloodVessel: RCL blood vessel respresentation with optional
+ * stenosis.
  * * MODEL::Junction: Junction element with arbitrary inlets and outlets.
  * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.
  * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.
@@ -58,14 +62,14 @@
  * * MODEL::WindkesselBC: RCR Windkessel boundary condition.
  * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.
  *
- * The elements are based on the parent MODEL::Block class. More information about the
- * elements can be found on their
- * respective pages. The elements are connected to each other via nodes
- * (see MODEL::Node). Each node corresponds to a flow and a pressure value
- * of the model. The MODEL::DOFHandler handles the degrees-of-freedom (DOF) of the
- * system by assigning DOF indices to each element that determine the location
- * of the local element contribution in the global system. The complete model
- * is stored and managed by the MODEL::Model class.
+ * The elements are based on the parent MODEL::Block class. More information
+ * about the elements can be found on their respective pages. The elements are
+ * connected to each other via nodes (see MODEL::Node). Each node corresponds to
+ * a flow and a pressure value of the model. The MODEL::DOFHandler handles the
+ * degrees-of-freedom (DOF) of the system by assigning DOF indices to each
+ * element that determine the location of the local element contribution in the
+ * global system. The complete model is stored and managed by the MODEL::Model
+ * class.
  *
  * ## Algebra
  *
@@ -129,9 +133,10 @@
  * called `svzerodsolver`. Run it with one of:
  *
  * \code
- * ./svzerodsolver path/to/config.json path/to/output.json  # For json output file format
- * ./svzerodsolver path/to/config.json path/to/output.csv   # For csv output file format (faster)
- * \endcode
+ * ./svzerodsolver path/to/config.json path/to/output.json  # For json output
+ * file format
+ * ./svzerodsolver path/to/config.json path/to/output.csv   # For csv output
+ * file format (faster) \endcode
  *
  * `path/to/config.json` and `path/to/output` should be replaced by the correct
  * paths to the input and output file, respectively.
@@ -141,9 +146,10 @@
  * The svZeroDSolver can be configured with the following options in the
  * `simulation_parameters` section of the input file. Parameters without a
  * default value must be specified.
+ * 
  *
  * Parameter key                           | Description                               | Default value
- * --------------------------------------- | ----------------------------------------- | -----------
+ * --------------------------------------- | ----------------------------------------- | ----------- 
  * number_of_cardiac_cycles                | Number of cardiac cycles to simulate      | -
  * number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -
  * absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
@@ -152,3 +158,4 @@
  * steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
  * output_mean_only                        | Write only the mean values over every timestep in the output file (only in csv) | false
  */
+// clang-format on

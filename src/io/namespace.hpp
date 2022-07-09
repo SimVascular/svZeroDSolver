@@ -9,6 +9,4 @@
  * The IO namespace contains all tools for reading configuration and writing
  * solution files.
  */
-namespace IO
-{
-}
+namespace IO {}

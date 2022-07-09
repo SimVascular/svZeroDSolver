@@ -13,8 +13,6 @@
  * a few auxilliary classes.
  *
  */
-namespace MODEL
-{
-} // namespace MODEL
+namespace MODEL {}  // namespace MODEL
 
-#endif // SVZERODSOLVER_MODEL_NAMESPACE_HPP_
+#endif  // SVZERODSOLVER_MODEL_NAMESPACE_HPP_

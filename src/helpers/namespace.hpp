@@ -8,6 +8,4 @@
  *
  * Namespace for various helper tools.
  */
-namespace HELPERS
-{
-}
+namespace HELPERS {}

@@ -8,16 +8,14 @@
 #include <iostream>
 
 #ifdef DEBUG
-#define DEBUG_MSG(str)                 \
-    do                                 \
-    {                                  \
-        std::cout << str << std::endl; \
-    } while (false)
+#define DEBUG_MSG(str)             \
+  do {                             \
+    std::cout << str << std::endl; \
+  } while (false)
 #else
 #define DEBUG_MSG(str) \
-    do                 \
-    {                  \
-    } while (false)
+  do {                 \
+  } while (false)
 #endif
 
-#endif // SVZERODSOLVER_HELPERS_DEBUG_HPP_
+#endif  // SVZERODSOLVER_HELPERS_DEBUG_HPP_

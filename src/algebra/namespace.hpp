@@ -8,6 +8,4 @@
  *
  * The ALGEBRA namespace contains all tools for solving 0D blood flow models.
  */
-namespace ALGEBRA
-{
-}
+namespace ALGEBRA {}

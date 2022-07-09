@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['values_0',['values',['../class_m_o_d_e_l_1_1_time_dependent_parameter.html#a9a74b1459175f6aff164bbeac129afb4',1,'MODEL::TimeDependentParameter']]],
-  ['variables_1',['variables',['../class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806',1,'MODEL::DOFHandler']]]
+  ['y_0',['y',['../class_a_l_g_e_b_r_a_1_1_state.html#a5e310eddee49852d84d0749cbf104e57',1,'ALGEBRA::State']]],
+  ['ydot_1',['ydot',['../class_a_l_g_e_b_r_a_1_1_state.html#aa1042453417a1af57edc93e3192270a9',1,'ALGEBRA::State']]]
 ];

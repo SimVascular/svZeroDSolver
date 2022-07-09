@@ -1,5 +1,5 @@
 
-name: Build
+name: Build and test
 on: [push, pull_request]
 jobs:
   ubuntu:

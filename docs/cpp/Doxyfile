@@ -27,8 +27,7 @@ ABBREVIATE_BRIEF       = "The $name class" \
 ALWAYS_DETAILED_SEC    = YES
 INLINE_INHERITED_MEMB  = NO
 FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = "src" \
-                         "svzerodsolver"
+STRIP_FROM_PATH        = "src" "docs/cpp/pages"
 STRIP_FROM_INC_PATH    = 
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
@@ -107,7 +106,8 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = 
+INPUT                  = "src" \
+                         "docs/cpp/pages"
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.cpp \
                          *.hpp \

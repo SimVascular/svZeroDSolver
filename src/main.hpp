@@ -157,5 +157,12 @@
  * output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
  * steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
  * output_mean_only                        | Write only the mean values over every timestep in the output file (only in csv) | false
+ * 
+ * 
+ * # Developer Guide
+ * 
+ * If you are a developer and want to contribute to svZeroDSolver, you can find
+ * more helpful information in our [Developer Guide](docs/cpp/pages/developer_guide.md).
+ * 
  */
 // clang-format on

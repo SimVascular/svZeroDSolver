@@ -9,7 +9,9 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt update
-          sudo apt install build-essential cmake libeigen3-dev libsimdjson-dev libjsoncpp-dev python-pybind11
+          sudo apt install build-essential cmake libeigen3-dev libsimdjson-dev libjsoncpp-dev
+          sudo apt-get update
+          sudo apt-get install python-pybind11
       - name: Build svZeroDSolver
         run: |
           mkdir Release

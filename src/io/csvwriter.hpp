@@ -37,7 +37,7 @@ std::string write_csv(std::vector<T> &times,
   out << "name,time,flow_in,flow_out,pressure_in,pressure_out\n";
 
   // Create buffer for lines
-  char buff[100];
+  char buff[130];
 
   // Determine number of time steps
   T num_steps = times.size();
@@ -78,12 +78,12 @@ std::string write_csv(std::vector<T> &times,
         outflow_mean /= num_steps;
         inpres_mean /= num_steps;
         outpres_mean /= num_steps;
-        sprintf(buff, "%s,,%.10e,%.10e,%.10e,%.10e\n", name.c_str(),
+        sprintf(buff, "%s,,%.16e,%.16e,%.16e,%.16e\n", name.c_str(),
                 inflow_mean, outflow_mean, inpres_mean, outpres_mean);
         out << buff;
       } else {
         for (size_t i = 0; i < times.size(); i++) {
-          sprintf(buff, "%s,%.10f,%.10e,%.10e,%.10e,%.10e\n", name.c_str(),
+          sprintf(buff, "%s,%.16e,%.16e,%.16e,%.16e,%.16e\n", name.c_str(),
                   times[i], states[i].y[inflow_dof], states[i].y[outflow_dof],
                   states[i].y[inpres_dof], states[i].y[outpres_dof]);
           out << buff;

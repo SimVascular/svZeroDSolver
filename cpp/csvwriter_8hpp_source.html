@@ -109,7 +109,7 @@ $(function() {
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  out &lt;&lt; <span class="stringliteral">&quot;name,time,flow_in,flow_out,pressure_in,pressure_out\n&quot;</span>;</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  <span class="comment">// Create buffer for lines</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keywordtype">char</span> buff[100];</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <span class="keywordtype">char</span> buff[130];</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <span class="comment">// Determine number of time steps</span></div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  T num_steps = times.size();</div>
@@ -150,12 +150,12 @@ $(function() {
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        outflow_mean /= num_steps;</div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        inpres_mean /= num_steps;</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        outpres_mean /= num_steps;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        sprintf(buff, <span class="stringliteral">&quot;%s,,%.10e,%.10e,%.10e,%.10e\n&quot;</span>, name.c_str(),</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>        sprintf(buff, <span class="stringliteral">&quot;%s,,%.16e,%.16e,%.16e,%.16e\n&quot;</span>, name.c_str(),</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                inflow_mean, outflow_mean, inpres_mean, outpres_mean);</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        out &lt;&lt; buff;</div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>      } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; times.size(); i++) {</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>          sprintf(buff, <span class="stringliteral">&quot;%s,%.10f,%.10e,%.10e,%.10e,%.10e\n&quot;</span>, name.c_str(),</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>          sprintf(buff, <span class="stringliteral">&quot;%s,%.16e,%.16e,%.16e,%.16e,%.16e\n&quot;</span>, name.c_str(),</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                  times[i], states[i].y[inflow_dof], states[i].y[outflow_dof],</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                  states[i].y[inpres_dof], states[i].y[outpres_dof]);</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>          out &lt;&lt; buff;</div>
@@ -178,7 +178,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 11 2022 00:45:01 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Jul 11 2022 17:26:04 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

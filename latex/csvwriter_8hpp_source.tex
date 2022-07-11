@@ -41,7 +41,7 @@
 \DoxyCodeLine{37   out << \textcolor{stringliteral}{"{}name,time,flow\_in,flow\_out,pressure\_in,pressure\_out\(\backslash\)n"{}};}
 \DoxyCodeLine{38 }
 \DoxyCodeLine{39   \textcolor{comment}{// Create buffer for lines}}
-\DoxyCodeLine{40   \textcolor{keywordtype}{char} buff[100];}
+\DoxyCodeLine{40   \textcolor{keywordtype}{char} buff[130];}
 \DoxyCodeLine{41 }
 \DoxyCodeLine{42   \textcolor{comment}{// Determine number of time steps}}
 \DoxyCodeLine{43   T num\_steps = times.size();}
@@ -82,12 +82,12 @@
 \DoxyCodeLine{78         outflow\_mean /= num\_steps;}
 \DoxyCodeLine{79         inpres\_mean /= num\_steps;}
 \DoxyCodeLine{80         outpres\_mean /= num\_steps;}
-\DoxyCodeLine{81         sprintf(buff, \textcolor{stringliteral}{"{}\%s,,\%.10e,\%.10e,\%.10e,\%.10e\(\backslash\)n"{}}, name.c\_str(),}
+\DoxyCodeLine{81         sprintf(buff, \textcolor{stringliteral}{"{}\%s,,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(),}
 \DoxyCodeLine{82                 inflow\_mean, outflow\_mean, inpres\_mean, outpres\_mean);}
 \DoxyCodeLine{83         out << buff;}
 \DoxyCodeLine{84       \} \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{85         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < times.size(); i++) \{}
-\DoxyCodeLine{86           sprintf(buff, \textcolor{stringliteral}{"{}\%s,\%.10f,\%.10e,\%.10e,\%.10e,\%.10e\(\backslash\)n"{}}, name.c\_str(),}
+\DoxyCodeLine{86           sprintf(buff, \textcolor{stringliteral}{"{}\%s,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(),}
 \DoxyCodeLine{87                   times[i], states[i].y[inflow\_dof], states[i].y[outflow\_dof],}
 \DoxyCodeLine{88                   states[i].y[inpres\_dof], states[i].y[outpres\_dof]);}
 \DoxyCodeLine{89           out << buff;}

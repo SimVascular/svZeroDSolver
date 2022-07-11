@@ -91,15 +91,15 @@ $(function() {
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * @brief Write the solution to a json file</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> *</span></div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * @tparam T Scalar type (e.g. `float`, `double`)</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * @param path Path to the output json file</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * @param times Sequence of time steps corresponding to the solutions</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * @param states Sequence of states corresponding to the time steps</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * @param model The underlying model</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * @param times Sequence of time steps corresponding to the solutions</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * @param states Sequence of states corresponding to the time steps</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * @param model The underlying model</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * @return Json encoded output string</span></div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="namespace_i_o.html#ac3c323735b6caecafd2bc812dcbb2476">   28</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="namespace_i_o.html#ac3c323735b6caecafd2bc812dcbb2476">write_json</a>(std::string &amp;path, std::vector&lt;T&gt; &amp;times,</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                std::vector&lt;<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State&lt;T&gt;</a>&gt; &amp;states,</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                <a class="code hl_class" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model&lt;T&gt;</a> &amp;model) {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno"><a class="line" href="namespace_i_o.html#afa9845e77ecf4f0cd1d312b2af111973">   28</a></span>std::string <a class="code hl_function" href="namespace_i_o.html#afa9845e77ecf4f0cd1d312b2af111973">write_json</a>(std::vector&lt;T&gt; &amp;times,</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>                       std::vector&lt;<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State&lt;T&gt;</a>&gt; &amp;states,</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>                       <a class="code hl_class" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model&lt;T&gt;</a> &amp;model) {</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  Json::Value output;</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  Json::Value json_times(Json::arrayValue);</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> time : times) {</div>
@@ -157,23 +157,21 @@ $(function() {
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  output[<span class="stringliteral">&quot;pressure_out&quot;</span>] = json_pres_out;</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  Json::FastWriter writer;</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  std::ofstream out(path);</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>  out &lt;&lt; writer.write(output);</div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  out.close();</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>}</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>}  <span class="comment">// namespace IO</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_IO_JSONWRITER_HPP_</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  <span class="keywordflow">return</span> writer.write(output);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>}</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>}  <span class="comment">// namespace IO</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_IO_JSONWRITER_HPP_</span></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_state_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a></div><div class="ttdoc">State of the system.</div><div class="ttdef"><b>Definition:</b> state.hpp:18</div></div>
 <div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> model.hpp:35</div></div>
 <div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_adbd91c5205700c4628b2eeea20ea404f"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#adbd91c5205700c4628b2eeea20ea404f">MODEL::Model::blocks</a></div><div class="ttdeci">std::map&lt; std::string, std::variant&lt; Junction&lt; T &gt;, BloodVessel&lt; T &gt;, FlowReferenceBC&lt; T &gt;, PressureReferenceBC&lt; T &gt;, WindkesselBC&lt; T &gt;, ResistanceBC&lt; T &gt;, OpenLoopCoronaryBC&lt; T &gt; &gt; &gt; blocks</div><div class="ttdoc">Elements of the model.</div><div class="ttdef"><b>Definition:</b> model.hpp:53</div></div>
 <div class="ttc" id="anamespace_h_e_l_p_e_r_s_html_aa60c2dfbfc096834b6cd243f84b9c47b"><div class="ttname"><a href="namespace_h_e_l_p_e_r_s.html#aa60c2dfbfc096834b6cd243f84b9c47b">HELPERS::startswith</a></div><div class="ttdeci">bool startswith(const std::string &amp;str, const std::string &amp;prefix)</div><div class="ttdoc">Check if a string starts with the letters of another string.</div><div class="ttdef"><b>Definition:</b> startswith.hpp:18</div></div>
-<div class="ttc" id="anamespace_i_o_html"><div class="ttname"><a href="namespace_i_o.html">IO</a></div><div class="ttdoc">IO namespace.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:16</div></div>
-<div class="ttc" id="anamespace_i_o_html_ac3c323735b6caecafd2bc812dcbb2476"><div class="ttname"><a href="namespace_i_o.html#ac3c323735b6caecafd2bc812dcbb2476">IO::write_json</a></div><div class="ttdeci">void write_json(std::string &amp;path, std::vector&lt; T &gt; &amp;times, std::vector&lt; ALGEBRA::State&lt; T &gt; &gt; &amp;states, MODEL::Model&lt; T &gt; &amp;model)</div><div class="ttdoc">Write the solution to a json file.</div><div class="ttdef"><b>Definition:</b> jsonwriter.hpp:28</div></div>
+<div class="ttc" id="anamespace_i_o_html"><div class="ttname"><a href="namespace_i_o.html">IO</a></div><div class="ttdoc">IO namespace.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:17</div></div>
+<div class="ttc" id="anamespace_i_o_html_afa9845e77ecf4f0cd1d312b2af111973"><div class="ttname"><a href="namespace_i_o.html#afa9845e77ecf4f0cd1d312b2af111973">IO::write_json</a></div><div class="ttdeci">std::string write_json(std::vector&lt; T &gt; &amp;times, std::vector&lt; ALGEBRA::State&lt; T &gt; &gt; &amp;states, MODEL::Model&lt; T &gt; &amp;model)</div><div class="ttdoc">Write the solution to a json file.</div><div class="ttdef"><b>Definition:</b> jsonwriter.hpp:28</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sun Jul 10 2022 23:24:53 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Jul 11 2022 00:28:46 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

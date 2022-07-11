@@ -23,15 +23,15 @@
 \DoxyCodeLine{19 \textcolor{comment}{ * @brief Write the solution to a json file}}
 \DoxyCodeLine{20 \textcolor{comment}{ *}}
 \DoxyCodeLine{21 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{22 \textcolor{comment}{ * @param path Path to the output json file}}
-\DoxyCodeLine{23 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
-\DoxyCodeLine{24 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
-\DoxyCodeLine{25 \textcolor{comment}{ * @param model The underlying model}}
+\DoxyCodeLine{22 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
+\DoxyCodeLine{23 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
+\DoxyCodeLine{24 \textcolor{comment}{ * @param model The underlying model}}
+\DoxyCodeLine{25 \textcolor{comment}{ * @return Json encoded output string}}
 \DoxyCodeLine{26 \textcolor{comment}{ */}}
 \DoxyCodeLine{27 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{28 \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_i_o_ac3c323735b6caecafd2bc812dcbb2476}{write\_json}}(std::string \&path, std::vector<T> \&times,}
-\DoxyCodeLine{29                 std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
-\DoxyCodeLine{30                 \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
+\DoxyCodeLine{28 std::string \mbox{\hyperlink{namespace_i_o_afa9845e77ecf4f0cd1d312b2af111973}{write\_json}}(std::vector<T> \&times,}
+\DoxyCodeLine{29                        std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
+\DoxyCodeLine{30                        \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
 \DoxyCodeLine{31   Json::Value output;}
 \DoxyCodeLine{32   Json::Value json\_times(Json::arrayValue);}
 \DoxyCodeLine{33   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} time : times) \{}
@@ -89,12 +89,10 @@
 \DoxyCodeLine{85   output[\textcolor{stringliteral}{"{}pressure\_out"{}}] = json\_pres\_out;}
 \DoxyCodeLine{86 }
 \DoxyCodeLine{87   Json::FastWriter writer;}
-\DoxyCodeLine{88   std::ofstream out(path);}
-\DoxyCodeLine{89   out << writer.write(output);}
-\DoxyCodeLine{90   out.close();}
-\DoxyCodeLine{91 \}}
-\DoxyCodeLine{92 \}  \textcolor{comment}{// namespace IO}}
-\DoxyCodeLine{93 }
-\DoxyCodeLine{94 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_JSONWRITER\_HPP\_}}
+\DoxyCodeLine{88   \textcolor{keywordflow}{return} writer.write(output);}
+\DoxyCodeLine{89 \}}
+\DoxyCodeLine{90 \}  \textcolor{comment}{// namespace IO}}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_JSONWRITER\_HPP\_}}
 
 \end{DoxyCode}

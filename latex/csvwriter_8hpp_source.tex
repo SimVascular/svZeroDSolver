@@ -23,17 +23,17 @@
 \DoxyCodeLine{19 \textcolor{comment}{ * @brief Write the solution to a csv file}}
 \DoxyCodeLine{20 \textcolor{comment}{ *}}
 \DoxyCodeLine{21 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{22 \textcolor{comment}{ * @param path Path to the output csv file}}
-\DoxyCodeLine{23 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
-\DoxyCodeLine{24 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
-\DoxyCodeLine{25 \textcolor{comment}{ * @param model The underlying model}}
-\DoxyCodeLine{26 \textcolor{comment}{ * @param mean Toggle whether only the mean over all time steps should be}}
-\DoxyCodeLine{27 \textcolor{comment}{ * written}}
+\DoxyCodeLine{22 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
+\DoxyCodeLine{23 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
+\DoxyCodeLine{24 \textcolor{comment}{ * @param model The underlying model}}
+\DoxyCodeLine{25 \textcolor{comment}{ * @param mean Toggle whether only the mean over all time steps should be}}
+\DoxyCodeLine{26 \textcolor{comment}{ * written}}
+\DoxyCodeLine{27 \textcolor{comment}{ * @return CSV encoded output string}}
 \DoxyCodeLine{28 \textcolor{comment}{ */}}
 \DoxyCodeLine{29 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{30 \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_i_o_a7fe99544be33fd70a49d02daf6256bcf}{write\_csv}}(std::string \&path, std::vector<T> \&times,}
-\DoxyCodeLine{31                std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model,}
-\DoxyCodeLine{32                \textcolor{keywordtype}{bool} mean = \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{30 std::string \mbox{\hyperlink{namespace_i_o_a456fee8c34646a806d7ffc47d2692236}{write\_csv}}(std::vector<T> \&times,}
+\DoxyCodeLine{31                       std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
+\DoxyCodeLine{32                       \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, \textcolor{keywordtype}{bool} mean = \textcolor{keyword}{false}) \{}
 \DoxyCodeLine{33   \textcolor{comment}{// Create string stream to buffer output}}
 \DoxyCodeLine{34   std::stringstream out;}
 \DoxyCodeLine{35 }
@@ -96,12 +96,10 @@
 \DoxyCodeLine{92     \}}
 \DoxyCodeLine{93   \}}
 \DoxyCodeLine{94 }
-\DoxyCodeLine{95   std::ofstream ofs(path);}
-\DoxyCodeLine{96   ofs << out.str();}
-\DoxyCodeLine{97   ofs.close();}
-\DoxyCodeLine{98 \}}
-\DoxyCodeLine{99 \}  \textcolor{comment}{// namespace IO}}
-\DoxyCodeLine{100 }
-\DoxyCodeLine{101 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_CSVWRITER\_HPP\_}}
+\DoxyCodeLine{95   \textcolor{keywordflow}{return} out.str();}
+\DoxyCodeLine{96 \}}
+\DoxyCodeLine{97 \}  \textcolor{comment}{// namespace IO}}
+\DoxyCodeLine{98 }
+\DoxyCodeLine{99 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_CSVWRITER\_HPP\_}}
 
 \end{DoxyCode}

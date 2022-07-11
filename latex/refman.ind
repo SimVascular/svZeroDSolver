@@ -40,7 +40,7 @@
   \item {ALGEBRA}, \hyperpage{15}
   \item {algebra/densesystem.hpp}, \hyperpage{105, 106}
   \item {algebra/integrator.hpp}, \hyperpage{107}, \hyperpage{109}
-  \item {algebra/namespace.hpp}, \hyperpage{156}
+  \item {algebra/namespace.hpp}, \hyperpage{155, 156}
   \item {algebra/sparsesystem.hpp}, \hyperpage{111, 112}
   \item {algebra/state.hpp}, \hyperpage{114}
   \item {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{40}
@@ -173,7 +173,7 @@
     \subitem {startswith}, \hyperpage{16}
   \item {helpers/debug.hpp}, \hyperpage{115}, \hyperpage{117}
   \item {helpers/endswith.hpp}, \hyperpage{117, 118}
-  \item {helpers/namespace.hpp}, \hyperpage{156, 157}
+  \item {helpers/namespace.hpp}, \hyperpage{156}
   \item {helpers/startswith.hpp}, \hyperpage{119, 120}
 
   \indexspace
@@ -188,7 +188,7 @@
   \item {io/configreader.hpp}, \hyperpage{120, 121}
   \item {io/csvwriter.hpp}, \hyperpage{127, 128}
   \item {io/jsonwriter.hpp}, \hyperpage{129, 130}
-  \item {io/namespace.hpp}, \hyperpage{157}
+  \item {io/namespace.hpp}, \hyperpage{156, 157}
   \item {IO::ConfigReader$<$ T $>$}, \hyperpage{33}
     \subitem {$\sim$ConfigReader}, \hyperpage{35}
     \subitem {cardiac\_cycle\_period}, \hyperpage{39}
@@ -225,20 +225,20 @@
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{58}
   \item {model/block.hpp}, \hyperpage{135, 136}
   \item {model/bloodvessel.hpp}, \hyperpage{139, 140}
-  \item {model/dofhandler.hpp}, \hyperpage{143}, \hyperpage{145}
-  \item {model/flowreferencebc.hpp}, \hyperpage{146, 147}
-  \item {model/junction.hpp}, \hyperpage{149, 150}
+  \item {model/dofhandler.hpp}, \hyperpage{143, 144}
+  \item {model/flowreferencebc.hpp}, \hyperpage{145, 146}
+  \item {model/junction.hpp}, \hyperpage{148}, \hyperpage{150}
   \item {model/model.hpp}, \hyperpage{152, 153}
-  \item {model/namespace.hpp}, \hyperpage{158}
-  \item {model/node.hpp}, \hyperpage{158}, \hyperpage{160}
-  \item {model/openloopcoronarybc.hpp}, \hyperpage{160}, 
-		\hyperpage{162}
-  \item {model/pressurereferencebc.hpp}, \hyperpage{165}, 
-		\hyperpage{167}
-  \item {model/resistancebc.hpp}, \hyperpage{169, 170}
-  \item {model/timedependentparameter.hpp}, \hyperpage{172}, 
-		\hyperpage{174}
-  \item {model/windkesselbc.hpp}, \hyperpage{175, 176}
+  \item {model/namespace.hpp}, \hyperpage{157}
+  \item {model/node.hpp}, \hyperpage{158, 159}
+  \item {model/openloopcoronarybc.hpp}, \hyperpage{159}, 
+		\hyperpage{161}
+  \item {model/pressurereferencebc.hpp}, \hyperpage{164}, 
+		\hyperpage{166}
+  \item {model/resistancebc.hpp}, \hyperpage{168, 169}
+  \item {model/timedependentparameter.hpp}, \hyperpage{171}, 
+		\hyperpage{173}
+  \item {model/windkesselbc.hpp}, \hyperpage{174, 175}
   \item {MODEL::Block$<$ T $>$}, \hyperpage{21}
     \subitem {$\sim$Block}, \hyperpage{23}
     \subitem {Block}, \hyperpage{23}

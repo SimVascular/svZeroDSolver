@@ -14,7 +14,7 @@ sv\+Zero\+DSolver configuration reader.
 \item 
 \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{Config\+Reader}} ()
 \begin{DoxyCompactList}\small\item\em Construct a new Config Reader object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_i_o_1_1_config_reader_a66f9934835f47b84c4bd77b5c8e97592}{Config\+Reader}} (std\+::string filename)
+\mbox{\hyperlink{class_i_o_1_1_config_reader_a37f52891001a10772ad3aa6585f3cd3b}{Config\+Reader}} (std\+::string \&specifier)
 \begin{DoxyCompactList}\small\item\em Construct a new Config Reader object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{$\sim$\+Config\+Reader}} ()
 \begin{DoxyCompactList}\small\item\em Destroy the Config Reader object. \end{DoxyCompactList}\item 
@@ -67,20 +67,22 @@ sv\+Zero\+DSolver configuration reader.
 
 Construct a new Config Reader object. 
 
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a66f9934835f47b84c4bd77b5c8e97592}\label{class_i_o_1_1_config_reader_a66f9934835f47b84c4bd77b5c8e97592}} 
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a37f52891001a10772ad3aa6585f3cd3b}\label{class_i_o_1_1_config_reader_a37f52891001a10772ad3aa6585f3cd3b}} 
 \index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}}
 \index{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{ConfigReader()}{ConfigReader()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::\+Config\+Reader (\begin{DoxyParamCaption}\item[{std\+::string}]{filename }\end{DoxyParamCaption})}
+\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::\+Config\+Reader (\begin{DoxyParamCaption}\item[{std\+::string \&}]{specifier }\end{DoxyParamCaption})}
 
 
 
 Construct a new Config Reader object. 
 
+Can be constructed either with the path to a json configuration file or directly with a json encoded string.
+
 
 \begin{DoxyParams}{Parameters}
-{\em filename} & Name of the configuration file \\
+{\em specifier} & Path configuration file or json encoded configuration \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}\label{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}} 

@@ -10,6 +10,7 @@
 #include <string>
 
 #include "../helpers/debug.hpp"
+#include "../helpers/startswith.hpp"
 #include "../model/model.hpp"
 #include "simdjson.h"
 
@@ -31,9 +32,12 @@ class ConfigReader {
   /**
    * @brief Construct a new Config Reader object
    *
-   * @param filename Name of the configuration file
+   * Can be constructed either with the path to a json configuration file
+   * or directly with a json encoded string.
+   *
+   * @param specifier Path configuration file or json encoded configuration
    */
-  ConfigReader(std::string filename);
+  ConfigReader(std::string &specifier);
 
   /**
    * @brief Destroy the Config Reader object
@@ -132,8 +136,12 @@ class ConfigReader {
 };
 
 template <typename T>
-ConfigReader<T>::ConfigReader(std::string filename) {
-  config = parser.load(filename);
+ConfigReader<T>::ConfigReader(std::string &specifier) {
+  if (HELPERS::startswith(specifier, "{")) {
+    config = parser.parse(specifier);
+  } else {
+    config = parser.load(specifier);
+  }
   sim_params = config["simulation_parameters"];
 }
 
@@ -363,8 +371,6 @@ MODEL::Model<T> ConfigReader<T>::get_model() {
           } else {
             connections.push_back({vessel_name, bc_name});
           }
-          DEBUG_MSG("Found connection " << std::get<0>(connection) << "/"
-                                        << std::get<1>(connection));
         }
       }
     }

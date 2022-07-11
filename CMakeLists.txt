@@ -5,6 +5,7 @@ project(svZeroDSolver)
 
 find_package(Eigen3 REQUIRED NO_MODULE)
 find_package(simdjson REQUIRED)
+find_package(pybind11 REQUIRED)
 
 add_library(jsoncpp SHARED IMPORTED)
 
@@ -21,7 +22,11 @@ elseif("${CMAKE_SYSTEM}" MATCHES "Linux")
 endif()
 
 add_executable(svzerodsolver src/main.cpp)
+pybind11_add_module(svzerodsolvercpp src/svzerodsolver.cpp)
 
-target_link_libraries(svzerodsolver Eigen3::Eigen)
-target_link_libraries(svzerodsolver simdjson::simdjson)
-target_link_libraries(svzerodsolver jsoncpp)
+target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
+target_link_libraries(svzerodsolver PRIVATE simdjson::simdjson)
+target_link_libraries(svzerodsolver PRIVATE jsoncpp)
+target_link_libraries(svzerodsolvercpp PRIVATE Eigen3::Eigen)
+target_link_libraries(svzerodsolvercpp PRIVATE simdjson::simdjson)
+target_link_libraries(svzerodsolvercpp PRIVATE jsoncpp)

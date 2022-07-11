@@ -19,17 +19,17 @@ namespace IO {
  * @brief Write the solution to a csv file
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
- * @param path Path to the output csv file
  * @param times Sequence of time steps corresponding to the solutions
  * @param states Sequence of states corresponding to the time steps
  * @param model The underlying model
  * @param mean Toggle whether only the mean over all time steps should be
  * written
+ * @return CSV encoded output string
  */
 template <typename T>
-void write_csv(std::string &path, std::vector<T> &times,
-               std::vector<ALGEBRA::State<T>> &states, MODEL::Model<T> &model,
-               bool mean = false) {
+std::string write_csv(std::vector<T> &times,
+                      std::vector<ALGEBRA::State<T>> &states,
+                      MODEL::Model<T> &model, bool mean = false) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -92,9 +92,7 @@ void write_csv(std::string &path, std::vector<T> &times,
     }
   }
 
-  std::ofstream ofs(path);
-  ofs << out.str();
-  ofs.close();
+  return out.str();
 }
 }  // namespace IO
 

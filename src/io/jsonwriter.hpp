@@ -19,15 +19,15 @@ namespace IO {
  * @brief Write the solution to a json file
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
- * @param path Path to the output json file
  * @param times Sequence of time steps corresponding to the solutions
  * @param states Sequence of states corresponding to the time steps
  * @param model The underlying model
+ * @return Json encoded output string
  */
 template <typename T>
-void write_json(std::string &path, std::vector<T> &times,
-                std::vector<ALGEBRA::State<T>> &states,
-                MODEL::Model<T> &model) {
+std::string write_json(std::vector<T> &times,
+                       std::vector<ALGEBRA::State<T>> &states,
+                       MODEL::Model<T> &model) {
   Json::Value output;
   Json::Value json_times(Json::arrayValue);
   for (auto time : times) {
@@ -85,9 +85,7 @@ void write_json(std::string &path, std::vector<T> &times,
   output["pressure_out"] = json_pres_out;
 
   Json::FastWriter writer;
-  std::ofstream out(path);
-  out << writer.write(output);
-  out.close();
+  return writer.write(output);
 }
 }  // namespace IO
 

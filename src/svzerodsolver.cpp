@@ -2,6 +2,8 @@
  * @file main.cpp
  * @brief Main routine of svZeroDSolver
  */
+#include <pybind11/pybind11.h>
+
 #include "algebra/densesystem.hpp"
 #include "algebra/integrator.hpp"
 #include "algebra/sparsesystem.hpp"
@@ -10,7 +12,6 @@
 #include "helpers/endswith.hpp"
 #include "io/configreader.hpp"
 #include "io/csvwriter.hpp"
-#include "io/jsonwriter.hpp"
 #include "model/model.hpp"
 
 typedef double T;
@@ -18,38 +19,11 @@ typedef double T;
 template <typename TT>
 using S = ALGEBRA::SparseSystem<TT>;
 
-/**
- *
- * @brief svZeroDSolver main routine
- *
- * This is the main routine of the svZeroDSolver. It exectutes the following
- * steps:
- *
- * 1. Read the input file
- * 2. Create the 0D model
- * 3. (Optional) Solve for steady initial condition
- * 4. Run simulation
- * 5. Write output to file
- *
- * @param argc Number of command line arguments
- * @param argv Command line arguments
- * @return Return code
- */
-int main(int argc, char *argv[]) {
+const std::string run(std::string &json_config) {
   DEBUG_MSG("Starting svZeroDSolver");
 
-  // Get input and output file name
-  if (argc != 3) {
-    std::cout << "Usage: svzerodsolver path/to/config.json path/to/output.json"
-              << std::endl;
-    exit(1);
-  }
-  std::string input_file = argv[1];
-  std::string output_file = argv[2];
-  DEBUG_MSG("Reading configuration from " << input_file);
-
   // Create configuration reader
-  IO::ConfigReader<T> config(input_file);
+  IO::ConfigReader<T> config(json_config);
 
   // Create model
   DEBUG_MSG("Creating model");
@@ -118,20 +92,10 @@ int main(int argc, char *argv[]) {
   }
   DEBUG_MSG("Simulation completed");
 
-  std::string output;
-  if (HELPERS::endswith(output_file, ".csv")) {
-    DEBUG_MSG("Saving csv result file to " << output_file);
-    output = IO::write_csv<T>(times, states, model, output_mean_only);
-  } else if (HELPERS::endswith(output_file, ".json")) {
-    DEBUG_MSG("Saving json result file to " << output_file);
-    output = IO::write_json<T>(times, states, model);
-  } else {
-    throw std::runtime_error("Unsupported outfile file format.");
-  }
+  return IO::write_csv<T>(times, states, model, output_mean_only);
+}
 
-  std::ofstream ofs(output_file);
-  ofs << output;
-  ofs.close();
-
-  return 0;
+PYBIND11_MODULE(svzerodsolvercpp, mod) {
+  mod.doc() = "svZeroDSolver";
+  mod.def("run", &run, "Run the svZeroDSolver.");
 }

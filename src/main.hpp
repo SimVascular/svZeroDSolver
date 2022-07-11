@@ -100,14 +100,16 @@
  * brew install eigen       # Linear algebra library
  * brew install jsoncpp     # Standard json library
  * brew install simdjson    # Fast json input parser
+ * brew install pybind11    # Python bindings
  * \endcode
  *
  * ## Install dependencies on Linux
  *
  * \code
  * sudo apt install libeigen3-dev       # Linear algebra library
- * sudo apt-get install libjsoncpp-dev  # Standard json library
+ * sudo apt install libjsoncpp-dev      # Standard json library
  * sudo apt install libsimdjson-dev     # Fast json input parser
+ * sudo apt install python-pybind11     # Python bindings
  * \endcode
  *
  * ## Build in debug mode

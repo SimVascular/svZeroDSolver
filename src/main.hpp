@@ -109,7 +109,7 @@
  * sudo apt install libeigen3-dev       # Linear algebra library
  * sudo apt install libjsoncpp-dev      # Standard json library
  * sudo apt install libsimdjson-dev     # Fast json input parser
- * sudo apt install python-pybind11     # Python bindings
+ * sudo apt install pybind11-dev        # Python bindings
  * \endcode
  *
  * ## Build in debug mode

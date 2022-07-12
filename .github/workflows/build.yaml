@@ -47,5 +47,30 @@ jobs:
       - name: Test the build
         run: |
           conda run -n zerod pytest tests/test_integration_cpp.py
-    
+  cluster:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Clone dependencies
+        run: |
+          mkdir externals
+          cd externals
+          git clone https://gitlab.com/libeigen/eigen.git
+          git clone https://github.com/simdjson/simdjson.git
+          git clone https://github.com/open-source-parsers/jsoncpp.git
+          git clone https://github.com/pybind/pybind11.git
+      - name: Build svZeroDSolver
+        run: |
+          mkdir Release
+          cd Release
+          cmake -DCMAKE_BUILD_TYPE=Release -DCLUSTER=ON ..
+          cmake --build .
+      - name: Install test dependencies
+        run: |
+          conda create -n zerod python=3.9
+          conda run -n zerod pip install pytest pytest-cov pytest-mock
+          conda run -n zerod pip install -e .
+      - name: Test the build
+        run: |
+          conda run -n zerod pytest tests/test_integration_cpp.py
       

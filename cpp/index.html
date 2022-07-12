@@ -77,12 +77,13 @@ $(function() {
 <li class="level2"><a href="#autotoc_md7">Install dependencies on Linux</a></li>
 <li class="level2"><a href="#autotoc_md8">Build in debug mode</a></li>
 <li class="level2"><a href="#autotoc_md9">Build in release mode</a></li>
+<li class="level2"><a href="#autotoc_md10">Build on cluster</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md10">Run svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md11">Simulation parameters</a></li>
+<li class="level1"><a href="#autotoc_md11">Run svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md12">Simulation parameters</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md12">Developer Guide</a></li>
+<li class="level1"><a href="#autotoc_md13">Developer Guide</a></li>
 </ul>
 </div>
 <div class="textblock"><p >The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of vascular networks using zero-dimensional (0D) lumped parameter models.</p>
@@ -157,7 +158,21 @@ Build in release mode</h2>
 <div class="line">cd Release</div>
 <div class="line">cmake -DCMAKE_BUILD_TYPE=Release ..</div>
 <div class="line">cmake --build .</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md10"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md10"></a>
+Build on cluster</h2>
+<p >If you want to build without the need for a package manager, use the following instructions</p>
+<div class="fragment"><div class="line">mkdir externals</div>
+<div class="line">cd externals</div>
+<div class="line">git clone https:<span class="comment">//gitlab.com/libeigen/eigen.git</span></div>
+<div class="line">git clone https:<span class="comment">//github.com/simdjson/simdjson.git</span></div>
+<div class="line">git clone https:<span class="comment">//github.com/open-source-parsers/jsoncpp.git</span></div>
+<div class="line">git clone https:<span class="comment">//github.com/pybind/pybind11.git</span></div>
+<div class="line">cd ..</div>
+<div class="line">mkdir Release</div>
+<div class="line">cd Release</div>
+<div class="line">cmake -DCMAKE_BUILD_TYPE=Release -DCLUSTER=ON ..</div>
+<div class="line">cmake --build </div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
 Run svZeroDSolver</h1>
 <p >After building svZeroDSolver, the build folder contains an executable called <code>svzerodsolver</code>. Run it with one of:</p>
 <div class="fragment"><div class="line">./svzerodsolver path/to/config.json path/to/output.json  # For json output</div>
@@ -165,7 +180,7 @@ Run svZeroDSolver</h1>
 <div class="line">./svzerodsolver path/to/config.json path/to/output.csv   # For csv output</div>
 <div class="line">file format (faster) </div>
 </div><!-- fragment --><p ><code>path/to/config.json</code> and <code>path/to/output</code> should be replaced by the correct paths to the input and output file, respectively.</p>
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Simulation parameters</h2>
 <p >The svZeroDSolver can be configured with the following options in the <code>simulation_parameters</code> section of the input file. Parameters without a default value must be specified.</p>
 <table class="markdownTable">
@@ -186,14 +201,14 @@ Simulation parameters</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">output_mean_only   </td><td class="markdownTableBodyNone">Write only the mean values over every timestep in the output file (only in csv)   </td><td class="markdownTableBodyNone">false   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md12"></a>
+<h1><a class="anchor" id="autotoc_md13"></a>
 Developer Guide</h1>
 <p >If you are a developer and want to contribute to svZeroDSolver, you can find more helpful information in our <a class="el" href="md_developer_guide.html">Developer Guide</a>. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 11 2022 17:26:04 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Tue Jul 12 2022 21:08:43 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

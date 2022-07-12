@@ -128,6 +128,25 @@
  * cmake -DCMAKE_BUILD_TYPE=Release ..
  * cmake --build .
  * \endcode
+ * 
+ * ## Build on cluster
+ * 
+ * If you want to build without the need for a package manager, use the following
+ * instructions
+ * 
+ * \code
+ * mkdir externals
+ * cd externals
+ * git clone https://gitlab.com/libeigen/eigen.git
+ * git clone https://github.com/simdjson/simdjson.git
+ * git clone https://github.com/open-source-parsers/jsoncpp.git
+ * git clone https://github.com/pybind/pybind11.git
+ * cd ..
+ * mkdir Release
+ * cd Release
+ * cmake -DCMAKE_BUILD_TYPE=Release -DCLUSTER=ON ..
+ * cmake --build 
+ * \endcode
  *
  * # Run svZeroDSolver
  *

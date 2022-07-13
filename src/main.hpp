@@ -129,12 +129,13 @@
  * cmake --build .
  * \endcode
  * 
- * ## Build on cluster
- * 
- * If you want to build without the need for a package manager, use the following
- * instructions
+ * ## Build on Sherlock
  * 
  * \code
+ * ml load cmake/3.23.1
+ * ml load gcc/12.1.0
+ * ml load python/3.9.0
+ * ml load binutils/2.38
  * mkdir externals
  * cd externals
  * git clone https://gitlab.com/libeigen/eigen.git
@@ -144,7 +145,7 @@
  * cd ..
  * mkdir Release
  * cd Release
- * cmake -DCMAKE_BUILD_TYPE=Release -DCLUSTER=ON ..
+ * cmake -DCMAKE_BUILD_TYPE=Release -DCLUSTER=ON -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc -DPYTHON_EXECUTABLE=/share/software/user/open/python/3.9.0/bin/python3 ..
  * cmake --build 
  * \endcode
  *

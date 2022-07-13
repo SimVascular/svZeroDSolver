@@ -172,9 +172,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a41597a548728e98c07e388037ee0f4d9 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_m_o_d_e_l_1_1_node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">outlet_nodes</a></td></tr>
 <tr class="memdesc:a41597a548728e98c07e388037ee0f4d9 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outlet nodes.  <a href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">More...</a><br /></td></tr>
 <tr class="separator:a41597a548728e98c07e388037ee0f4d9 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40a13777d3a077981fddb520424dd1e5 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a40a13777d3a077981fddb520424dd1e5">closed_loop_outlet</a> = false</td></tr>
-<tr class="memdesc:a40a13777d3a077981fddb520424dd1e5 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is this block connected to a closed-loop model?  <a href="class_m_o_d_e_l_1_1_block.html#a40a13777d3a077981fddb520424dd1e5">More...</a><br /></td></tr>
-<tr class="separator:a40a13777d3a077981fddb520424dd1e5 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dc20753b52a12c3e8f094f26755cc60 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">global_var_ids</a></td></tr>
 <tr class="memdesc:a0dc20753b52a12c3e8f094f26755cc60 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global variable indices of the local element contributions.  <a href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">More...</a><br /></td></tr>
 <tr class="separator:a0dc20753b52a12c3e8f094f26755cc60 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,31 +193,31 @@ node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
 \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
 \end{circuitikz}
-\]" src="form_43.png" width="106" height="21"/>
+\]" src="form_27.png" width="106" height="21"/>
 </p>
-<h3><a class="anchor" id="autotoc_md21"></a>
+<h3><a class="anchor" id="autotoc_md16"></a>
 Governing equations</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 Q=\hat{Q}
-\]" src="form_44.png" width="36" height="15"/>
+\]" src="form_28.png" width="36" height="15"/>
 </p>
-<h3><a class="anchor" id="autotoc_md22"></a>
+<h3><a class="anchor" id="autotoc_md17"></a>
 Local contributions</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} &amp; Q^{e}\end{array}\right]^{T}
-\]" src="form_45.png" width="104" height="20"/>
+\]" src="form_29.png" width="104" height="20"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ll}0 &amp; 1\end{array}\right]
-\]" src="form_46.png" width="78" height="16"/>
+\]" src="form_30.png" width="78" height="16"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{C}^{e}=\left[\hat{Q}\right]
-\]" src="form_47.png" width="51" height="24"/>
+\]" src="form_31.png" width="51" height="24"/>
 </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -500,7 +497,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 13 2022 18:33:08 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Jul 13 2022 18:39:51 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

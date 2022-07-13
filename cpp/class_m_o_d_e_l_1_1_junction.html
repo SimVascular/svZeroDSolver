@@ -163,9 +163,6 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a41597a548728e98c07e388037ee0f4d9 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_m_o_d_e_l_1_1_node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">outlet_nodes</a></td></tr>
 <tr class="memdesc:a41597a548728e98c07e388037ee0f4d9 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Outlet nodes.  <a href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">More...</a><br /></td></tr>
 <tr class="separator:a41597a548728e98c07e388037ee0f4d9 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40a13777d3a077981fddb520424dd1e5 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a40a13777d3a077981fddb520424dd1e5">closed_loop_outlet</a> = false</td></tr>
-<tr class="memdesc:a40a13777d3a077981fddb520424dd1e5 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Is this block connected to a closed-loop model?  <a href="class_m_o_d_e_l_1_1_block.html#a40a13777d3a077981fddb520424dd1e5">More...</a><br /></td></tr>
-<tr class="separator:a40a13777d3a077981fddb520424dd1e5 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dc20753b52a12c3e8f094f26755cc60 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">global_var_ids</a></td></tr>
 <tr class="memdesc:a0dc20753b52a12c3e8f094f26755cc60 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global variable indices of the local element contributions.  <a href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">More...</a><br /></td></tr>
 <tr class="separator:a0dc20753b52a12c3e8f094f26755cc60 inherit pub_attribs_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -192,38 +189,38 @@ class MODEL::Junction&lt; T &gt;</div><p ><a class="el" href="class_m_o_d_e_l_1_
 \draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
 \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
 \end{circuitikz}
-\]" src="form_48.png" width="248" height="120"/>
+\]" src="form_32.png" width="248" height="120"/>
 </p>
-<h3><a class="anchor" id="autotoc_md23"></a>
+<h3><a class="anchor" id="autotoc_md18"></a>
 Governing equations</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
-\]" src="form_49.png" width="145" height="38"/>
+\]" src="form_33.png" width="145" height="38"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
-\]" src="form_50.png" width="119" height="14"/>
+\]" src="form_34.png" width="119" height="14"/>
 </p>
-<h3><a class="anchor" id="autotoc_md24"></a>
+<h3><a class="anchor" id="autotoc_md19"></a>
 Local contributions</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e} &amp;
 \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
-\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_51.png" width="424" height="16"/>
+\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_35.png" width="424" height="16"/>
 </p>
 <p >Mass conservation</p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0 &amp;
--1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_52.png" width="263" height="16"/>
+-1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_36.png" width="263" height="16"/>
 </p>
 <p >Due to the pressure continuity, we can write for all independent pressure pairs: </p><p class="formulaDsp">
 <img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
 \underbrace{1}_{P_i} &amp; \dots &amp; \underbrace{1}_{P_j} &amp; \dots\end{array}\right]
-\quad \mathrm{with} \quad i \neq j \]" src="form_53.png" width="294" height="31"/>
+\quad \mathrm{with} \quad i \neq j \]" src="form_37.png" width="294" height="31"/>
 </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -395,7 +392,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 13 2022 18:33:08 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Jul 13 2022 18:39:51 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

@@ -112,7 +112,7 @@
 \DoxyCodeLine{109 \textcolor{comment}{ * sudo apt install libeigen3-\/dev       \# Linear algebra library}}
 \DoxyCodeLine{110 \textcolor{comment}{ * sudo apt install libjsoncpp-\/dev      \# Standard json library}}
 \DoxyCodeLine{111 \textcolor{comment}{ * sudo apt install libsimdjson-\/dev     \# Fast json input parser}}
-\DoxyCodeLine{112 \textcolor{comment}{ * sudo apt install python-\/pybind11     \# Python bindings}}
+\DoxyCodeLine{112 \textcolor{comment}{ * sudo apt install pybind11-\/dev        \# Python bindings}}
 \DoxyCodeLine{113 \textcolor{comment}{ * \(\backslash\)endcode}}
 \DoxyCodeLine{114 \textcolor{comment}{ *}}
 \DoxyCodeLine{115 \textcolor{comment}{ * \#\# Build in debug mode}}
@@ -131,45 +131,65 @@
 \DoxyCodeLine{128 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release ..}}
 \DoxyCodeLine{129 \textcolor{comment}{ * cmake -\/-\/build .}}
 \DoxyCodeLine{130 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{131 \textcolor{comment}{ *}}
-\DoxyCodeLine{132 \textcolor{comment}{ * \# Run svZeroDSolver}}
-\DoxyCodeLine{133 \textcolor{comment}{ *}}
-\DoxyCodeLine{134 \textcolor{comment}{ * After building svZeroDSolver, the build folder contains an executable}}
-\DoxyCodeLine{135 \textcolor{comment}{ * called `svzerodsolver`. Run it with one of:}}
-\DoxyCodeLine{136 \textcolor{comment}{ *}}
-\DoxyCodeLine{137 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{138 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.json  \# For json output}}
-\DoxyCodeLine{139 \textcolor{comment}{ * file format}}
-\DoxyCodeLine{140 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.csv   \# For csv output}}
-\DoxyCodeLine{141 \textcolor{comment}{ * file format (faster) \(\backslash\)endcode}}
-\DoxyCodeLine{142 \textcolor{comment}{ *}}
-\DoxyCodeLine{143 \textcolor{comment}{ * `path/to/config.json` and `path/to/output` should be replaced by the correct}}
-\DoxyCodeLine{144 \textcolor{comment}{ * paths to the input and output file, respectively.}}
-\DoxyCodeLine{145 \textcolor{comment}{ *}}
-\DoxyCodeLine{146 \textcolor{comment}{ * \#\# Simulation parameters}}
-\DoxyCodeLine{147 \textcolor{comment}{ *}}
-\DoxyCodeLine{148 \textcolor{comment}{ * The svZeroDSolver can be configured with the following options in the}}
-\DoxyCodeLine{149 \textcolor{comment}{ * `simulation\_parameters` section of the input file. Parameters without a}}
-\DoxyCodeLine{150 \textcolor{comment}{ * default value must be specified.}}
-\DoxyCodeLine{151 \textcolor{comment}{ * }}
-\DoxyCodeLine{152 \textcolor{comment}{ *}}
-\DoxyCodeLine{153 \textcolor{comment}{ * Parameter key                           | Description                               | Default value}}
-\DoxyCodeLine{154 \textcolor{comment}{ * -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ }}
-\DoxyCodeLine{155 \textcolor{comment}{ * number\_of\_cardiac\_cycles                | Number of cardiac cycles to simulate      | -\/}}
-\DoxyCodeLine{156 \textcolor{comment}{ * number\_of\_time\_pts\_per\_cardiac\_cycle    | Number of time steps per cardiac cycle    | -\/}}
-\DoxyCodeLine{157 \textcolor{comment}{ * absolute\_tolerance                      | Absolute tolerance for time integration   | \(\backslash\)f\$10\string^\{-\/8\}\(\backslash\)f\$}}
-\DoxyCodeLine{158 \textcolor{comment}{ * maximum\_nonlinear\_iterations            | Maximum number of nonlinear iterations for time integration | \(\backslash\)f\$30\(\backslash\)f\$}}
-\DoxyCodeLine{159 \textcolor{comment}{ * output\_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \(\backslash\)f\$1\(\backslash\)f\$}}
-\DoxyCodeLine{160 \textcolor{comment}{ * steady\_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true}}
-\DoxyCodeLine{161 \textcolor{comment}{ * output\_mean\_only                        | Write only the mean values over every timestep in the output file (only in csv) | false}}
-\DoxyCodeLine{162 \textcolor{comment}{ * }}
-\DoxyCodeLine{163 \textcolor{comment}{ * }}
-\DoxyCodeLine{164 \textcolor{comment}{ * \# Developer Guide}}
-\DoxyCodeLine{165 \textcolor{comment}{ * }}
-\DoxyCodeLine{166 \textcolor{comment}{ * If you are a developer and want to contribute to svZeroDSolver, you can find}}
-\DoxyCodeLine{167 \textcolor{comment}{ * more helpful information in our [Developer Guide](docs/cpp/pages/developer\_guide.md).}}
-\DoxyCodeLine{168 \textcolor{comment}{ * }}
-\DoxyCodeLine{169 \textcolor{comment}{ */}}
-\DoxyCodeLine{170 \textcolor{comment}{// clang-\/format on}}
+\DoxyCodeLine{131 \textcolor{comment}{ * }}
+\DoxyCodeLine{132 \textcolor{comment}{ * \#\# Build on Sherlock}}
+\DoxyCodeLine{133 \textcolor{comment}{ * }}
+\DoxyCodeLine{134 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{135 \textcolor{comment}{ * ml load cmake/3.23.1}}
+\DoxyCodeLine{136 \textcolor{comment}{ * ml load gcc/12.1.0}}
+\DoxyCodeLine{137 \textcolor{comment}{ * ml load python/3.9.0}}
+\DoxyCodeLine{138 \textcolor{comment}{ * ml load binutils/2.38}}
+\DoxyCodeLine{139 \textcolor{comment}{ * mkdir externals}}
+\DoxyCodeLine{140 \textcolor{comment}{ * cd externals}}
+\DoxyCodeLine{141 \textcolor{comment}{ * git clone https://gitlab.com/libeigen/eigen.git}}
+\DoxyCodeLine{142 \textcolor{comment}{ * git clone https://github.com/simdjson/simdjson.git}}
+\DoxyCodeLine{143 \textcolor{comment}{ * git clone https://github.com/open-\/source-\/parsers/jsoncpp.git}}
+\DoxyCodeLine{144 \textcolor{comment}{ * git clone https://github.com/pybind/pybind11.git}}
+\DoxyCodeLine{145 \textcolor{comment}{ * cd ..}}
+\DoxyCodeLine{146 \textcolor{comment}{ * mkdir Release}}
+\DoxyCodeLine{147 \textcolor{comment}{ * cd Release}}
+\DoxyCodeLine{148 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release -\/DCLUSTER=ON -\/DCMAKE\_CXX\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -\/DCMAKE\_C\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc -\/DPYTHON\_EXECUTABLE=/share/software/user/open/python/3.9.0/bin/python3 ..}}
+\DoxyCodeLine{149 \textcolor{comment}{ * cmake -\/-\/build }}
+\DoxyCodeLine{150 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{151 \textcolor{comment}{ *}}
+\DoxyCodeLine{152 \textcolor{comment}{ * \# Run svZeroDSolver}}
+\DoxyCodeLine{153 \textcolor{comment}{ *}}
+\DoxyCodeLine{154 \textcolor{comment}{ * After building svZeroDSolver, the build folder contains an executable}}
+\DoxyCodeLine{155 \textcolor{comment}{ * called `svzerodsolver`. Run it with one of:}}
+\DoxyCodeLine{156 \textcolor{comment}{ *}}
+\DoxyCodeLine{157 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{158 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.json  \# For json output}}
+\DoxyCodeLine{159 \textcolor{comment}{ * file format}}
+\DoxyCodeLine{160 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.csv   \# For csv output}}
+\DoxyCodeLine{161 \textcolor{comment}{ * file format (faster) \(\backslash\)endcode}}
+\DoxyCodeLine{162 \textcolor{comment}{ *}}
+\DoxyCodeLine{163 \textcolor{comment}{ * `path/to/config.json` and `path/to/output` should be replaced by the correct}}
+\DoxyCodeLine{164 \textcolor{comment}{ * paths to the input and output file, respectively.}}
+\DoxyCodeLine{165 \textcolor{comment}{ *}}
+\DoxyCodeLine{166 \textcolor{comment}{ * \#\# Simulation parameters}}
+\DoxyCodeLine{167 \textcolor{comment}{ *}}
+\DoxyCodeLine{168 \textcolor{comment}{ * The svZeroDSolver can be configured with the following options in the}}
+\DoxyCodeLine{169 \textcolor{comment}{ * `simulation\_parameters` section of the input file. Parameters without a}}
+\DoxyCodeLine{170 \textcolor{comment}{ * default value must be specified.}}
+\DoxyCodeLine{171 \textcolor{comment}{ * }}
+\DoxyCodeLine{172 \textcolor{comment}{ *}}
+\DoxyCodeLine{173 \textcolor{comment}{ * Parameter key                           | Description                               | Default value}}
+\DoxyCodeLine{174 \textcolor{comment}{ * -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ }}
+\DoxyCodeLine{175 \textcolor{comment}{ * number\_of\_cardiac\_cycles                | Number of cardiac cycles to simulate      | -\/}}
+\DoxyCodeLine{176 \textcolor{comment}{ * number\_of\_time\_pts\_per\_cardiac\_cycle    | Number of time steps per cardiac cycle    | -\/}}
+\DoxyCodeLine{177 \textcolor{comment}{ * absolute\_tolerance                      | Absolute tolerance for time integration   | \(\backslash\)f\$10\string^\{-\/8\}\(\backslash\)f\$}}
+\DoxyCodeLine{178 \textcolor{comment}{ * maximum\_nonlinear\_iterations            | Maximum number of nonlinear iterations for time integration | \(\backslash\)f\$30\(\backslash\)f\$}}
+\DoxyCodeLine{179 \textcolor{comment}{ * output\_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \(\backslash\)f\$1\(\backslash\)f\$}}
+\DoxyCodeLine{180 \textcolor{comment}{ * steady\_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true}}
+\DoxyCodeLine{181 \textcolor{comment}{ * output\_mean\_only                        | Write only the mean values over every timestep in the output file (only in csv) | false}}
+\DoxyCodeLine{182 \textcolor{comment}{ * }}
+\DoxyCodeLine{183 \textcolor{comment}{ * }}
+\DoxyCodeLine{184 \textcolor{comment}{ * \# Developer Guide}}
+\DoxyCodeLine{185 \textcolor{comment}{ * }}
+\DoxyCodeLine{186 \textcolor{comment}{ * If you are a developer and want to contribute to svZeroDSolver, you can find}}
+\DoxyCodeLine{187 \textcolor{comment}{ * more helpful information in our [Developer Guide](docs/cpp/pages/developer\_guide.md).}}
+\DoxyCodeLine{188 \textcolor{comment}{ * }}
+\DoxyCodeLine{189 \textcolor{comment}{ */}}
+\DoxyCodeLine{190 \textcolor{comment}{// clang-\/format on}}
 
 \end{DoxyCode}

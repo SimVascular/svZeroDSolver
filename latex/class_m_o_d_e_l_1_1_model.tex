@@ -35,14 +35,12 @@ std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-std\+::map$<$ std\+::string, std\+::variant$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{Closed\+Loop\+RCRBC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{Closed\+Loop\+Coronary\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{Closed\+Loop\+Heart\+Pulmonary}}$<$ T $>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a22b59013236fd0fb3ae4fec09b371525}{blocks}}
+std\+::map$<$ std\+::string, std\+::variant$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}$<$ T $>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}
 \begin{DoxyCompactList}\small\item\em Elements of the model. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}
 \begin{DoxyCompactList}\small\item\em Degree-\/of-\/freedom handler of the model. \end{DoxyCompactList}\item 
 std\+::list$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}{nodes}}
-\begin{DoxyCompactList}\small\item\em Nodes of the model. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a8cfe88359cb868d581a547d43efea173}{heartpulmonary\+\_\+block\+\_\+present}} = false
-\begin{DoxyCompactList}\small\item\em Flag to check if heart block is present (requires different handling) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Nodes of the model. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -219,12 +217,12 @@ Update the time-\/dependent contributions of all elements in a sparse system.
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a22b59013236fd0fb3ae4fec09b371525}\label{class_m_o_d_e_l_1_1_model_a22b59013236fd0fb3ae4fec09b371525}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}\label{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}} 
 \index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!blocks@{blocks}}
 \index{blocks@{blocks}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{blocks}{blocks}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-std\+::map$<$std\+::string, std\+::variant$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{Closed\+Loop\+RCRBC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{Closed\+Loop\+Coronary\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{Closed\+Loop\+Heart\+Pulmonary}}$<$T$>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::blocks}
+std\+::map$<$std\+::string, std\+::variant$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}$<$T$>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::blocks}
 
 
 
@@ -240,17 +238,6 @@ Elements of the model.
 
 
 Degree-\/of-\/freedom handler of the model. 
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a8cfe88359cb868d581a547d43efea173}\label{class_m_o_d_e_l_1_1_model_a8cfe88359cb868d581a547d43efea173}} 
-\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!heartpulmonary\_block\_present@{heartpulmonary\_block\_present}}
-\index{heartpulmonary\_block\_present@{heartpulmonary\_block\_present}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{heartpulmonary\_block\_present}{heartpulmonary\_block\_present}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::heartpulmonary\+\_\+block\+\_\+present = false}
-
-
-
-Flag to check if heart block is present (requires different handling) 
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}\label{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}} 
 \index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!nodes@{nodes}}

@@ -118,14 +118,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a259786ae8302cc0fd414317d4695ae40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#a259786ae8302cc0fd414317d4695ae40">get_bool_simulation_parameter</a> (std::string key, bool def)</td></tr>
 <tr class="memdesc:a259786ae8302cc0fd414317d4695ae40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a bool simulation parameter with default value.  <a href="class_i_o_1_1_config_reader.html#a259786ae8302cc0fd414317d4695ae40">More...</a><br /></td></tr>
 <tr class="separator:a259786ae8302cc0fd414317d4695ae40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa032d89e7d3bb8f2fb64b9f5aaebe1fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#aa032d89e7d3bb8f2fb64b9f5aaebe1fe">set_cardiac_cycle_period</a> ()</td></tr>
-<tr class="memdesc:aa032d89e7d3bb8f2fb64b9f5aaebe1fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set final value of cardiac cycle period.  <a href="class_i_o_1_1_config_reader.html#aa032d89e7d3bb8f2fb64b9f5aaebe1fe">More...</a><br /></td></tr>
-<tr class="separator:aa032d89e7d3bb8f2fb64b9f5aaebe1fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a7401fb68b296447b8152636d1d363416"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#a7401fb68b296447b8152636d1d363416">cardiac_cycle_period</a> = -1.0</td></tr>
-<tr class="memdesc:a7401fb68b296447b8152636d1d363416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cardiac cycle period. Negative value indicates this has not been read from config file or from TimeDependent parameter yet.  <a href="class_i_o_1_1_config_reader.html#a7401fb68b296447b8152636d1d363416">More...</a><br /></td></tr>
+<tr class="memitem:a7401fb68b296447b8152636d1d363416"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#a7401fb68b296447b8152636d1d363416">cardiac_cycle_period</a> = 1.0</td></tr>
+<tr class="memdesc:a7401fb68b296447b8152636d1d363416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cardiac cycle period.  <a href="class_i_o_1_1_config_reader.html#a7401fb68b296447b8152636d1d363416">More...</a><br /></td></tr>
 <tr class="separator:a7401fb68b296447b8152636d1d363416"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -471,24 +468,6 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="aa032d89e7d3bb8f2fb64b9f5aaebe1fe" name="aa032d89e7d3bb8f2fb64b9f5aaebe1fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa032d89e7d3bb8f2fb64b9f5aaebe1fe">&#9670;&nbsp;</a></span>set_cardiac_cycle_period()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename T &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">void <a class="el" href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a>&lt; T &gt;::set_cardiac_cycle_period</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Set final value of cardiac cycle period. </p>
-
-</div>
-</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a7401fb68b296447b8152636d1d363416" name="a7401fb68b296447b8152636d1d363416"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7401fb68b296447b8152636d1d363416">&#9670;&nbsp;</a></span>cardiac_cycle_period</h2>
@@ -499,12 +478,12 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">T <a class="el" href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a>&lt; T &gt;::cardiac_cycle_period = -1.0</td>
+          <td class="memname">T <a class="el" href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a>&lt; T &gt;::cardiac_cycle_period = 1.0</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Cardiac cycle period. Negative value indicates this has not been read from config file or from TimeDependent parameter yet. </p>
+<p>Cardiac cycle period. </p>
 
 </div>
 </div>
@@ -514,7 +493,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 13 2022 18:33:08 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Jul 13 2022 18:39:51 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

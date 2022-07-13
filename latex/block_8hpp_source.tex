@@ -62,200 +62,201 @@
 \DoxyCodeLine{58   std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};                  \textcolor{comment}{///< Name of the block}}
 \DoxyCodeLine{59   std::vector<Node *> \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a39d671d4cdced4eda628465b8e660c64}{inlet\_nodes}};   \textcolor{comment}{///< Inlet nodes}}
 \DoxyCodeLine{60   std::vector<Node *> \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a41597a548728e98c07e388037ee0f4d9}{outlet\_nodes}};  \textcolor{comment}{///< Outlet nodes}}
-\DoxyCodeLine{61 \textcolor{comment}{}}
-\DoxyCodeLine{62 \textcolor{comment}{  /**}}
-\DoxyCodeLine{63 \textcolor{comment}{   * @brief Global variable indices of the local element contributions}}
-\DoxyCodeLine{64 \textcolor{comment}{   *}}
-\DoxyCodeLine{65 \textcolor{comment}{   * Determines where the local element contributions are written to in}}
-\DoxyCodeLine{66 \textcolor{comment}{   * the global system during assembly. The order of indices is:}}
-\DoxyCodeLine{67 \textcolor{comment}{   *}}
-\DoxyCodeLine{68 \textcolor{comment}{   * \(\backslash\)f[}}
-\DoxyCodeLine{69 \textcolor{comment}{   * [P\_\{in\}\string^1, Q\_\{in\}\string^1, \(\backslash\)dots, P\_\{in\}\string^n, Q\_\{in\}\string^n, P\_\{out\}\string^1, Q\_\{out\}\string^1,}}
-\DoxyCodeLine{70 \textcolor{comment}{   * \(\backslash\)dots, P\_\{out\}\string^m, Q\_\{out\}\string^m, V\string^\{1\}, \(\backslash\)dots, V\string^\{p\}] \(\backslash\)f]}}
-\DoxyCodeLine{71 \textcolor{comment}{   *}}
-\DoxyCodeLine{72 \textcolor{comment}{   * with \(\backslash\)f\$P\_\{in\} \(\backslash\)f\$, \(\backslash\)f\$Q\_\{in\} \(\backslash\)f\$, \(\backslash\)f\$P\_\{out\} \(\backslash\)f\$, \(\backslash\)f\$Q\_\{out\} \(\backslash\)f\$, and \(\backslash\)f\$V}}
-\DoxyCodeLine{73 \textcolor{comment}{   * \(\backslash\)f\$ denoting inlet pressure, inlet flow, outlet pressure, outlet flow and}}
-\DoxyCodeLine{74 \textcolor{comment}{   * an internal variable of the element, respectively.}}
-\DoxyCodeLine{75 \textcolor{comment}{   *}}
-\DoxyCodeLine{76 \textcolor{comment}{   * Variable indices correspond to columns in the global system.}}
-\DoxyCodeLine{77 \textcolor{comment}{   *}}
-\DoxyCodeLine{78 \textcolor{comment}{   */}}
-\DoxyCodeLine{79   std::vector<unsigned int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}{global\_var\_ids}};}
-\DoxyCodeLine{80 \textcolor{comment}{}}
-\DoxyCodeLine{81 \textcolor{comment}{  /**}}
-\DoxyCodeLine{82 \textcolor{comment}{   * @brief Global equation indices of the local element contributions}}
-\DoxyCodeLine{83 \textcolor{comment}{   *}}
-\DoxyCodeLine{84 \textcolor{comment}{   * Equation indices correspond to rows in the global system.}}
-\DoxyCodeLine{85 \textcolor{comment}{   */}}
-\DoxyCodeLine{86   std::vector<unsigned int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}{global\_eqn\_ids}};}
-\DoxyCodeLine{87 \textcolor{comment}{}}
-\DoxyCodeLine{88 \textcolor{comment}{  /**}}
-\DoxyCodeLine{89 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{90 \textcolor{comment}{   *}}
-\DoxyCodeLine{91 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{92 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{93 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{94 \textcolor{comment}{   *}}
-\DoxyCodeLine{95 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{96 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{97 \textcolor{comment}{   * @param num\_equations Number of equations of the block}}
-\DoxyCodeLine{98 \textcolor{comment}{   * @param num\_internal\_vars Number of internal variables of the block}}
-\DoxyCodeLine{99 \textcolor{comment}{   */}}
-\DoxyCodeLine{100   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{setup\_dofs\_}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_equations,}
-\DoxyCodeLine{101                    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_internal\_vars);}
-\DoxyCodeLine{102 \textcolor{comment}{}}
-\DoxyCodeLine{103 \textcolor{comment}{  /**}}
-\DoxyCodeLine{104 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{105 \textcolor{comment}{   *}}
-\DoxyCodeLine{106 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{107 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{108 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{109 \textcolor{comment}{   *}}
-\DoxyCodeLine{110 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{111 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{112 \textcolor{comment}{   */}}
-\DoxyCodeLine{113   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
-\DoxyCodeLine{114 \textcolor{comment}{}}
-\DoxyCodeLine{115 \textcolor{comment}{  /**}}
-\DoxyCodeLine{116 \textcolor{comment}{   * @brief Update the constant contributions of the element in a dense system}}
-\DoxyCodeLine{117 \textcolor{comment}{   *}}
-\DoxyCodeLine{118 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{119 \textcolor{comment}{   */}}
-\DoxyCodeLine{120   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3bdc5dc31e9448fac8827fa4493e12d9}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
-\DoxyCodeLine{121 \textcolor{comment}{}}
-\DoxyCodeLine{122 \textcolor{comment}{  /**}}
-\DoxyCodeLine{123 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a dense}}
-\DoxyCodeLine{124 \textcolor{comment}{   * system}}
-\DoxyCodeLine{125 \textcolor{comment}{   *}}
-\DoxyCodeLine{126 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{127 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{128 \textcolor{comment}{   */}}
-\DoxyCodeLine{129   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a93cbb352a757ef3b04c5d5acc02d381e}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{130 \textcolor{comment}{}}
-\DoxyCodeLine{131 \textcolor{comment}{  /**}}
-\DoxyCodeLine{132 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
-\DoxyCodeLine{133 \textcolor{comment}{   * dense system}}
-\DoxyCodeLine{134 \textcolor{comment}{   *}}
-\DoxyCodeLine{135 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{136 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{137 \textcolor{comment}{   */}}
-\DoxyCodeLine{138   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afc67ed63ad7bc021af1e89c4e18ba525}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
-\DoxyCodeLine{139                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{140 \textcolor{comment}{}}
-\DoxyCodeLine{141 \textcolor{comment}{  /**}}
-\DoxyCodeLine{142 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
-\DoxyCodeLine{143 \textcolor{comment}{   *}}
-\DoxyCodeLine{144 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{145 \textcolor{comment}{   */}}
-\DoxyCodeLine{146   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3bdc5dc31e9448fac8827fa4493e12d9}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{147 \textcolor{comment}{}}
-\DoxyCodeLine{148 \textcolor{comment}{  /**}}
-\DoxyCodeLine{149 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
-\DoxyCodeLine{150 \textcolor{comment}{   * system}}
-\DoxyCodeLine{151 \textcolor{comment}{   *}}
-\DoxyCodeLine{152 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{153 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{154 \textcolor{comment}{   */}}
-\DoxyCodeLine{155   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a93cbb352a757ef3b04c5d5acc02d381e}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{156 \textcolor{comment}{}}
-\DoxyCodeLine{157 \textcolor{comment}{  /**}}
-\DoxyCodeLine{158 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
-\DoxyCodeLine{159 \textcolor{comment}{   * sparse system}}
-\DoxyCodeLine{160 \textcolor{comment}{   *}}
-\DoxyCodeLine{161 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{162 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{163 \textcolor{comment}{   */}}
-\DoxyCodeLine{164   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afc67ed63ad7bc021af1e89c4e18ba525}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
-\DoxyCodeLine{165                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{166 \textcolor{comment}{}}
-\DoxyCodeLine{167 \textcolor{comment}{  /**}}
-\DoxyCodeLine{168 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
-\DoxyCodeLine{169 \textcolor{comment}{   *}}
-\DoxyCodeLine{170 \textcolor{comment}{   */}}
-\DoxyCodeLine{171   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{to\_steady}}();}
-\DoxyCodeLine{172 \textcolor{comment}{}}
-\DoxyCodeLine{173 \textcolor{comment}{  /**}}
-\DoxyCodeLine{174 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{175 \textcolor{comment}{   *}}
-\DoxyCodeLine{176 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{177 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{178 \textcolor{comment}{   */}}
-\DoxyCodeLine{179   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_adb23ef1a0b7069096bf7c0189839bf6b}{num\_triplets}} = \{}
-\DoxyCodeLine{180       \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
-\DoxyCodeLine{181       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{182       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{183   \};}
-\DoxyCodeLine{184 }
-\DoxyCodeLine{185  \textcolor{keyword}{private}:}
-\DoxyCodeLine{186   Parameters params;  \textcolor{comment}{///< Parameters of the element}}
-\DoxyCodeLine{187 \};}
-\DoxyCodeLine{188 }
-\DoxyCodeLine{189 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{190 \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a2353b1aae8afa7f065ab1e2aa033bf29}{Block<T>::Block}}() \{\}}
-\DoxyCodeLine{191 }
-\DoxyCodeLine{192 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{193 \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a2353b1aae8afa7f065ab1e2aa033bf29}{Block<T>::Block}}(std::string name) \{}
-\DoxyCodeLine{194   this-\/>name = name;}
-\DoxyCodeLine{195 \}}
-\DoxyCodeLine{196 }
-\DoxyCodeLine{197 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{198 \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad3f4ea72447eb698a2de71b29da45c01}{Block<T>::\string~Block}}() \{\}}
-\DoxyCodeLine{199 }
-\DoxyCodeLine{200 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{201 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{Block<T>::setup\_dofs\_}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_equations,}
-\DoxyCodeLine{202                            \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_internal\_vars) \{}
-\DoxyCodeLine{203   \textcolor{comment}{// Collect external DOFs from inlet nodes}}
-\DoxyCodeLine{204   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} inlet\_node : inlet\_nodes) \{}
-\DoxyCodeLine{205     global\_var\_ids.push\_back(inlet\_node-\/>pres\_dof);}
-\DoxyCodeLine{206     global\_var\_ids.push\_back(inlet\_node-\/>flow\_dof);}
-\DoxyCodeLine{207   \}}
-\DoxyCodeLine{208 }
-\DoxyCodeLine{209   \textcolor{comment}{// Collect external DOFs from outlet nodes}}
-\DoxyCodeLine{210   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} outlet\_node : outlet\_nodes) \{}
-\DoxyCodeLine{211     global\_var\_ids.push\_back(outlet\_node-\/>pres\_dof);}
-\DoxyCodeLine{212     global\_var\_ids.push\_back(outlet\_node-\/>flow\_dof);}
-\DoxyCodeLine{213   \}}
-\DoxyCodeLine{214 }
-\DoxyCodeLine{215   \textcolor{comment}{// Register internal variables of block}}
-\DoxyCodeLine{216   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i = 0; i < num\_internal\_vars; i++) \{}
-\DoxyCodeLine{217     global\_var\_ids.push\_back(}
-\DoxyCodeLine{218         dofhandler.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{register\_variable}}(\textcolor{stringliteral}{"{}var\_"{}} + std::to\_string(i) + \textcolor{stringliteral}{"{}\_"{}} + name));}
-\DoxyCodeLine{219   \}}
-\DoxyCodeLine{220 }
-\DoxyCodeLine{221   \textcolor{comment}{// Register equations of block}}
-\DoxyCodeLine{222   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i = 0; i < num\_equations; i++) \{}
-\DoxyCodeLine{223     global\_eqn\_ids.push\_back(dofhandler.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}{register\_equation}}());}
-\DoxyCodeLine{224   \}}
-\DoxyCodeLine{225 \}}
-\DoxyCodeLine{226 }
-\DoxyCodeLine{227 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{228 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{Block<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{\}}
-\DoxyCodeLine{229 }
-\DoxyCodeLine{230 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{231 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3bdc5dc31e9448fac8827fa4493e12d9}{Block<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{\}}
-\DoxyCodeLine{232 }
-\DoxyCodeLine{233 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{234 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a93cbb352a757ef3b04c5d5acc02d381e}{Block<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time) \{\}}
-\DoxyCodeLine{235 }
-\DoxyCodeLine{236 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{237 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afc67ed63ad7bc021af1e89c4e18ba525}{Block<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
-\DoxyCodeLine{238                                Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{\}}
-\DoxyCodeLine{239 }
-\DoxyCodeLine{240 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{241 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3bdc5dc31e9448fac8827fa4493e12d9}{Block<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{\}}
-\DoxyCodeLine{242 }
-\DoxyCodeLine{243 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{244 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a93cbb352a757ef3b04c5d5acc02d381e}{Block<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{\}}
-\DoxyCodeLine{245 }
-\DoxyCodeLine{246 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{247 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afc67ed63ad7bc021af1e89c4e18ba525}{Block<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
-\DoxyCodeLine{248                                Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{\}}
-\DoxyCodeLine{249 }
-\DoxyCodeLine{250 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{251 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{Block<T>::to\_steady}}() \{\}}
-\DoxyCodeLine{252 }
-\DoxyCodeLine{253 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{254 }
-\DoxyCodeLine{255 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_BLOCK\_HPP\_}}
+\DoxyCodeLine{61   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a40a13777d3a077981fddb520424dd1e5}{closed\_loop\_outlet}} = \textcolor{keyword}{false};  \textcolor{comment}{///< Is this block connected to a closed-\/loop model?}}
+\DoxyCodeLine{62 \textcolor{comment}{}}
+\DoxyCodeLine{63 \textcolor{comment}{  /**}}
+\DoxyCodeLine{64 \textcolor{comment}{   * @brief Global variable indices of the local element contributions}}
+\DoxyCodeLine{65 \textcolor{comment}{   *}}
+\DoxyCodeLine{66 \textcolor{comment}{   * Determines where the local element contributions are written to in}}
+\DoxyCodeLine{67 \textcolor{comment}{   * the global system during assembly. The order of indices is:}}
+\DoxyCodeLine{68 \textcolor{comment}{   *}}
+\DoxyCodeLine{69 \textcolor{comment}{   * \(\backslash\)f[}}
+\DoxyCodeLine{70 \textcolor{comment}{   * [P\_\{in\}\string^1, Q\_\{in\}\string^1, \(\backslash\)dots, P\_\{in\}\string^n, Q\_\{in\}\string^n, P\_\{out\}\string^1, Q\_\{out\}\string^1,}}
+\DoxyCodeLine{71 \textcolor{comment}{   * \(\backslash\)dots, P\_\{out\}\string^m, Q\_\{out\}\string^m, V\string^\{1\}, \(\backslash\)dots, V\string^\{p\}] \(\backslash\)f]}}
+\DoxyCodeLine{72 \textcolor{comment}{   *}}
+\DoxyCodeLine{73 \textcolor{comment}{   * with \(\backslash\)f\$P\_\{in\} \(\backslash\)f\$, \(\backslash\)f\$Q\_\{in\} \(\backslash\)f\$, \(\backslash\)f\$P\_\{out\} \(\backslash\)f\$, \(\backslash\)f\$Q\_\{out\} \(\backslash\)f\$, and \(\backslash\)f\$V}}
+\DoxyCodeLine{74 \textcolor{comment}{   * \(\backslash\)f\$ denoting inlet pressure, inlet flow, outlet pressure, outlet flow and}}
+\DoxyCodeLine{75 \textcolor{comment}{   * an internal variable of the element, respectively.}}
+\DoxyCodeLine{76 \textcolor{comment}{   *}}
+\DoxyCodeLine{77 \textcolor{comment}{   * Variable indices correspond to columns in the global system.}}
+\DoxyCodeLine{78 \textcolor{comment}{   *}}
+\DoxyCodeLine{79 \textcolor{comment}{   */}}
+\DoxyCodeLine{80   std::vector<unsigned int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}{global\_var\_ids}};}
+\DoxyCodeLine{81 \textcolor{comment}{}}
+\DoxyCodeLine{82 \textcolor{comment}{  /**}}
+\DoxyCodeLine{83 \textcolor{comment}{   * @brief Global equation indices of the local element contributions}}
+\DoxyCodeLine{84 \textcolor{comment}{   *}}
+\DoxyCodeLine{85 \textcolor{comment}{   * Equation indices correspond to rows in the global system.}}
+\DoxyCodeLine{86 \textcolor{comment}{   */}}
+\DoxyCodeLine{87   std::vector<unsigned int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}{global\_eqn\_ids}};}
+\DoxyCodeLine{88 \textcolor{comment}{}}
+\DoxyCodeLine{89 \textcolor{comment}{  /**}}
+\DoxyCodeLine{90 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{91 \textcolor{comment}{   *}}
+\DoxyCodeLine{92 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{93 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{94 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{95 \textcolor{comment}{   *}}
+\DoxyCodeLine{96 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{97 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{98 \textcolor{comment}{   * @param num\_equations Number of equations of the block}}
+\DoxyCodeLine{99 \textcolor{comment}{   * @param num\_internal\_vars Number of internal variables of the block}}
+\DoxyCodeLine{100 \textcolor{comment}{   */}}
+\DoxyCodeLine{101   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{setup\_dofs\_}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_equations,}
+\DoxyCodeLine{102                    \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_internal\_vars);}
+\DoxyCodeLine{103 \textcolor{comment}{}}
+\DoxyCodeLine{104 \textcolor{comment}{  /**}}
+\DoxyCodeLine{105 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{106 \textcolor{comment}{   *}}
+\DoxyCodeLine{107 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{108 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{109 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{110 \textcolor{comment}{   *}}
+\DoxyCodeLine{111 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{112 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{113 \textcolor{comment}{   */}}
+\DoxyCodeLine{114   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{115 \textcolor{comment}{}}
+\DoxyCodeLine{116 \textcolor{comment}{  /**}}
+\DoxyCodeLine{117 \textcolor{comment}{   * @brief Update the constant contributions of the element in a dense system}}
+\DoxyCodeLine{118 \textcolor{comment}{   *}}
+\DoxyCodeLine{119 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{120 \textcolor{comment}{   */}}
+\DoxyCodeLine{121   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3bdc5dc31e9448fac8827fa4493e12d9}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
+\DoxyCodeLine{122 \textcolor{comment}{}}
+\DoxyCodeLine{123 \textcolor{comment}{  /**}}
+\DoxyCodeLine{124 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a dense}}
+\DoxyCodeLine{125 \textcolor{comment}{   * system}}
+\DoxyCodeLine{126 \textcolor{comment}{   *}}
+\DoxyCodeLine{127 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{128 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{129 \textcolor{comment}{   */}}
+\DoxyCodeLine{130   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a93cbb352a757ef3b04c5d5acc02d381e}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{131 \textcolor{comment}{}}
+\DoxyCodeLine{132 \textcolor{comment}{  /**}}
+\DoxyCodeLine{133 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
+\DoxyCodeLine{134 \textcolor{comment}{   * dense system}}
+\DoxyCodeLine{135 \textcolor{comment}{   *}}
+\DoxyCodeLine{136 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{137 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{138 \textcolor{comment}{   */}}
+\DoxyCodeLine{139   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afc67ed63ad7bc021af1e89c4e18ba525}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
+\DoxyCodeLine{140                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{141 \textcolor{comment}{}}
+\DoxyCodeLine{142 \textcolor{comment}{  /**}}
+\DoxyCodeLine{143 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{144 \textcolor{comment}{   *}}
+\DoxyCodeLine{145 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{146 \textcolor{comment}{   */}}
+\DoxyCodeLine{147   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3bdc5dc31e9448fac8827fa4493e12d9}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{148 \textcolor{comment}{}}
+\DoxyCodeLine{149 \textcolor{comment}{  /**}}
+\DoxyCodeLine{150 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
+\DoxyCodeLine{151 \textcolor{comment}{   * system}}
+\DoxyCodeLine{152 \textcolor{comment}{   *}}
+\DoxyCodeLine{153 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{154 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{155 \textcolor{comment}{   */}}
+\DoxyCodeLine{156   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a93cbb352a757ef3b04c5d5acc02d381e}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{157 \textcolor{comment}{}}
+\DoxyCodeLine{158 \textcolor{comment}{  /**}}
+\DoxyCodeLine{159 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
+\DoxyCodeLine{160 \textcolor{comment}{   * sparse system}}
+\DoxyCodeLine{161 \textcolor{comment}{   *}}
+\DoxyCodeLine{162 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{163 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{164 \textcolor{comment}{   */}}
+\DoxyCodeLine{165   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afc67ed63ad7bc021af1e89c4e18ba525}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{166                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{167 \textcolor{comment}{}}
+\DoxyCodeLine{168 \textcolor{comment}{  /**}}
+\DoxyCodeLine{169 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
+\DoxyCodeLine{170 \textcolor{comment}{   *}}
+\DoxyCodeLine{171 \textcolor{comment}{   */}}
+\DoxyCodeLine{172   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{to\_steady}}();}
+\DoxyCodeLine{173 \textcolor{comment}{}}
+\DoxyCodeLine{174 \textcolor{comment}{  /**}}
+\DoxyCodeLine{175 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{176 \textcolor{comment}{   *}}
+\DoxyCodeLine{177 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{178 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{179 \textcolor{comment}{   */}}
+\DoxyCodeLine{180   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_adb23ef1a0b7069096bf7c0189839bf6b}{num\_triplets}} = \{}
+\DoxyCodeLine{181       \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
+\DoxyCodeLine{182       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{183       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{184   \};}
+\DoxyCodeLine{185 }
+\DoxyCodeLine{186  \textcolor{keyword}{private}:}
+\DoxyCodeLine{187   Parameters params;  \textcolor{comment}{///< Parameters of the element}}
+\DoxyCodeLine{188 \};}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{191 \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a2353b1aae8afa7f065ab1e2aa033bf29}{Block<T>::Block}}() \{\}}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{194 \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a2353b1aae8afa7f065ab1e2aa033bf29}{Block<T>::Block}}(std::string name) \{}
+\DoxyCodeLine{195   this-\/>name = name;}
+\DoxyCodeLine{196 \}}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{199 \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad3f4ea72447eb698a2de71b29da45c01}{Block<T>::\string~Block}}() \{\}}
+\DoxyCodeLine{200 }
+\DoxyCodeLine{201 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{202 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{Block<T>::setup\_dofs\_}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler, \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_equations,}
+\DoxyCodeLine{203                            \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_internal\_vars) \{}
+\DoxyCodeLine{204   \textcolor{comment}{// Collect external DOFs from inlet nodes}}
+\DoxyCodeLine{205   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} inlet\_node : inlet\_nodes) \{}
+\DoxyCodeLine{206     global\_var\_ids.push\_back(inlet\_node-\/>pres\_dof);}
+\DoxyCodeLine{207     global\_var\_ids.push\_back(inlet\_node-\/>flow\_dof);}
+\DoxyCodeLine{208   \}}
+\DoxyCodeLine{209 }
+\DoxyCodeLine{210   \textcolor{comment}{// Collect external DOFs from outlet nodes}}
+\DoxyCodeLine{211   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} outlet\_node : outlet\_nodes) \{}
+\DoxyCodeLine{212     global\_var\_ids.push\_back(outlet\_node-\/>pres\_dof);}
+\DoxyCodeLine{213     global\_var\_ids.push\_back(outlet\_node-\/>flow\_dof);}
+\DoxyCodeLine{214   \}}
+\DoxyCodeLine{215 }
+\DoxyCodeLine{216   \textcolor{comment}{// Register internal variables of block}}
+\DoxyCodeLine{217   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i = 0; i < num\_internal\_vars; i++) \{}
+\DoxyCodeLine{218     global\_var\_ids.push\_back(}
+\DoxyCodeLine{219         dofhandler.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{register\_variable}}(\textcolor{stringliteral}{"{}var\_"{}} + std::to\_string(i) + \textcolor{stringliteral}{"{}\_"{}} + name));}
+\DoxyCodeLine{220   \}}
+\DoxyCodeLine{221 }
+\DoxyCodeLine{222   \textcolor{comment}{// Register equations of block}}
+\DoxyCodeLine{223   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} i = 0; i < num\_equations; i++) \{}
+\DoxyCodeLine{224     global\_eqn\_ids.push\_back(dofhandler.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}{register\_equation}}());}
+\DoxyCodeLine{225   \}}
+\DoxyCodeLine{226 \}}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{228 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{229 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{Block<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{\}}
+\DoxyCodeLine{230 }
+\DoxyCodeLine{231 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{232 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3bdc5dc31e9448fac8827fa4493e12d9}{Block<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{\}}
+\DoxyCodeLine{233 }
+\DoxyCodeLine{234 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{235 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a93cbb352a757ef3b04c5d5acc02d381e}{Block<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time) \{\}}
+\DoxyCodeLine{236 }
+\DoxyCodeLine{237 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{238 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afc67ed63ad7bc021af1e89c4e18ba525}{Block<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
+\DoxyCodeLine{239                                Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{\}}
+\DoxyCodeLine{240 }
+\DoxyCodeLine{241 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{242 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3bdc5dc31e9448fac8827fa4493e12d9}{Block<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{\}}
+\DoxyCodeLine{243 }
+\DoxyCodeLine{244 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{245 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a93cbb352a757ef3b04c5d5acc02d381e}{Block<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{\}}
+\DoxyCodeLine{246 }
+\DoxyCodeLine{247 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{248 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afc67ed63ad7bc021af1e89c4e18ba525}{Block<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{249                                Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{\}}
+\DoxyCodeLine{250 }
+\DoxyCodeLine{251 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{252 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{Block<T>::to\_steady}}() \{\}}
+\DoxyCodeLine{253 }
+\DoxyCodeLine{254 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{255 }
+\DoxyCodeLine{256 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_BLOCK\_HPP\_}}
 
 \end{DoxyCode}

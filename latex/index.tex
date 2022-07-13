@@ -53,7 +53,7 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{sudo apt install libeigen3-\/dev       \# Linear algebra library}
 \DoxyCodeLine{sudo apt install libjsoncpp-\/dev      \# Standard json library}
 \DoxyCodeLine{sudo apt install libsimdjson-\/dev     \# Fast json input parser}
-\DoxyCodeLine{sudo apt install pybind11-\/dev        \# Python bindings}
+\DoxyCodeLine{sudo apt install python-\/pybind11     \# Python bindings}
 
 \end{DoxyCode}
 \hypertarget{index_autotoc_md8}{}\doxysubsection{Build in debug mode}\label{index_autotoc_md8}
@@ -74,27 +74,7 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md10}{}\doxysubsection{Build on Sherlock}\label{index_autotoc_md10}
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{ml load cmake/3.23.1}
-\DoxyCodeLine{ml load gcc/12.1.0}
-\DoxyCodeLine{ml load python/3.9.0}
-\DoxyCodeLine{ml load binutils/2.38}
-\DoxyCodeLine{mkdir externals}
-\DoxyCodeLine{cd externals}
-\DoxyCodeLine{git clone https:\textcolor{comment}{//gitlab.com/libeigen/eigen.git}}
-\DoxyCodeLine{git clone https:\textcolor{comment}{//github.com/simdjson/simdjson.git}}
-\DoxyCodeLine{git clone https:\textcolor{comment}{//github.com/open-\/source-\/parsers/jsoncpp.git}}
-\DoxyCodeLine{git clone https:\textcolor{comment}{//github.com/pybind/pybind11.git}}
-\DoxyCodeLine{cd ..}
-\DoxyCodeLine{mkdir Release}
-\DoxyCodeLine{cd Release}
-\DoxyCodeLine{cmake -\/DCMAKE\_BUILD\_TYPE=Release -\/DCLUSTER=ON -\/DCMAKE\_CXX\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -\/DCMAKE\_C\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc -\/DPYTHON\_EXECUTABLE=/share/software/user/open/python/3.9.0/bin/python3 ..}
-\DoxyCodeLine{cmake -\/-\/build }
-
-\end{DoxyCode}
-\hypertarget{index_autotoc_md11}{}\doxysection{Run sv\+Zero\+DSolver}\label{index_autotoc_md11}
+\hypertarget{index_autotoc_md10}{}\doxysection{Run sv\+Zero\+DSolver}\label{index_autotoc_md10}
 After building sv\+Zero\+DSolver, the build folder contains an executable called {\ttfamily svzerodsolver}. Run it with one of\+:
 
 
@@ -107,7 +87,7 @@ After building sv\+Zero\+DSolver, the build folder contains an executable called
 \end{DoxyCode}
 
 
-{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md12}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md12}
+{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md11}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md11}
 The sv\+Zero\+DSolver can be configured with the following options in the {\ttfamily simulation\+\_\+parameters} section of the input file. Parameters without a default value must be specified.
 
 \tabulinesep=1mm
@@ -128,5 +108,5 @@ output\+\_\+interval   &The frequency of writing timesteps to the output (1 mean
 steady\+\_\+initial   &Toggle whether to use the steady solution as the initial condition for the simulation   &true    \\\cline{1-3}
 output\+\_\+mean\+\_\+only   &Write only the mean values over every timestep in the output file (only in csv)   &false   \\\cline{1-3}
 \end{longtabu}
-\hypertarget{index_autotoc_md13}{}\doxysection{Developer Guide}\label{index_autotoc_md13}
+\hypertarget{index_autotoc_md12}{}\doxysection{Developer Guide}\label{index_autotoc_md12}
 If you are a developer and want to contribute to sv\+Zero\+DSolver, you can find more helpful information in our \mbox{\hyperlink{md_developer_guide}{Developer Guide}}. 

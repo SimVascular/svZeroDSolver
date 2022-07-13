@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['stenosis_5fcoefficient_0',['stenosis_coefficient',['../struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.html#a5f0adc244080b0bd404c579d39ec3f2b',1,'MODEL::BloodVessel::Parameters']]]
+  ['q_0',['Q',['../struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters.html#a9f221dbd64224a7efc92d37d34fd2059',1,'MODEL::FlowReferenceBC::Parameters']]]
 ];

@@ -60,6 +60,8 @@ std\+::vector$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $\ast$ $>$ \m
 \begin{DoxyCompactList}\small\item\em Inlet nodes. \end{DoxyCompactList}\item 
 std\+::vector$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $\ast$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a41597a548728e98c07e388037ee0f4d9}{outlet\+\_\+nodes}}
 \begin{DoxyCompactList}\small\item\em Outlet nodes. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a40a13777d3a077981fddb520424dd1e5}{closed\+\_\+loop\+\_\+outlet}} = false
+\begin{DoxyCompactList}\small\item\em Is this block connected to a closed-\/loop model? \end{DoxyCompactList}\item 
 std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}{global\+\_\+var\+\_\+ids}}
 \begin{DoxyCompactList}\small\item\em Global variable indices of the local element contributions. \end{DoxyCompactList}\item 
 std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}{global\+\_\+eqn\+\_\+ids}}
@@ -282,6 +284,17 @@ Update the time-\/dependent contributions of the element in a sparse system.
 
 
 \doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a40a13777d3a077981fddb520424dd1e5}\label{class_m_o_d_e_l_1_1_block_a40a13777d3a077981fddb520424dd1e5}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!closed\_loop\_outlet@{closed\_loop\_outlet}}
+\index{closed\_loop\_outlet@{closed\_loop\_outlet}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{closed\_loop\_outlet}{closed\_loop\_outlet}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::closed\+\_\+loop\+\_\+outlet = false}
+
+
+
+Is this block connected to a closed-\/loop model? 
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}\label{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!global\_eqn\_ids@{global\_eqn\_ids}}
 \index{global\_eqn\_ids@{global\_eqn\_ids}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}

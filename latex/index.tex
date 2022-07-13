@@ -74,11 +74,13 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md10}{}\doxysubsection{Build on cluster}\label{index_autotoc_md10}
-If you want to build without the need for a package manager, use the following instructions
-
+\hypertarget{index_autotoc_md10}{}\doxysubsection{Build on Sherlock}\label{index_autotoc_md10}
 
 \begin{DoxyCode}{0}
+\DoxyCodeLine{ml load cmake/3.23.1}
+\DoxyCodeLine{ml load gcc/12.1.0}
+\DoxyCodeLine{ml load python/3.9.0}
+\DoxyCodeLine{ml load binutils/2.38}
 \DoxyCodeLine{mkdir externals}
 \DoxyCodeLine{cd externals}
 \DoxyCodeLine{git clone https:\textcolor{comment}{//gitlab.com/libeigen/eigen.git}}
@@ -88,7 +90,7 @@ If you want to build without the need for a package manager, use the following i
 \DoxyCodeLine{cd ..}
 \DoxyCodeLine{mkdir Release}
 \DoxyCodeLine{cd Release}
-\DoxyCodeLine{cmake -\/DCMAKE\_BUILD\_TYPE=Release -\/DCLUSTER=ON ..}
+\DoxyCodeLine{cmake -\/DCMAKE\_BUILD\_TYPE=Release -\/DCLUSTER=ON -\/DCMAKE\_CXX\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -\/DCMAKE\_C\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc -\/DPYTHON\_EXECUTABLE=/share/software/user/open/python/3.9.0/bin/python3 ..}
 \DoxyCodeLine{cmake -\/-\/build }
 
 \end{DoxyCode}

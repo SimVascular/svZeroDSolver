@@ -214,10 +214,20 @@
 \DoxyCodeLine{210     }
 \DoxyCodeLine{211 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
 \DoxyCodeLine{212 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model<T>::set\_heart\_ics}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}\& state) \{}
-\DoxyCodeLine{213 \}}
-\DoxyCodeLine{214 }
-\DoxyCodeLine{215 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{216 }
-\DoxyCodeLine{217 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_MODEL\_HPP\_}}
+\DoxyCodeLine{213   \textcolor{keyword}{auto} heart\_block = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a22b59013236fd0fb3ae4fec09b371525}{blocks}}[\textcolor{stringliteral}{"{}CLH0"{}}]; \textcolor{comment}{// Only one heart model so name is unique}}
+\DoxyCodeLine{214   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[0]] = 4.72   \textcolor{comment}{// RA pressure}}
+\DoxyCodeLine{215   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[4]] = 38.43  \textcolor{comment}{// RA vol.}}
+\DoxyCodeLine{216   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[7]] = 96.07  \textcolor{comment}{// RV vol.}}
+\DoxyCodeLine{217   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[11]] = 38.43 \textcolor{comment}{// LA vol.}}
+\DoxyCodeLine{218   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[14]] = 96.07 \textcolor{comment}{// LV vol.}}
+\DoxyCodeLine{219   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[9]] = 8.0    \textcolor{comment}{// Pulm pressure}}
+\DoxyCodeLine{220   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[6]] = 14.58  \textcolor{comment}{// RV pressure}}
+\DoxyCodeLine{221   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[10]] = 6.09  \textcolor{comment}{// LA pressure}}
+\DoxyCodeLine{222   state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}[heart\_block.global\_var\_ids[13]] = 22.39 \textcolor{comment}{// LV pressure}}
+\DoxyCodeLine{223 \}}
+\DoxyCodeLine{224 }
+\DoxyCodeLine{225 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{226 }
+\DoxyCodeLine{227 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_MODEL\_HPP\_}}
 
 \end{DoxyCode}

@@ -527,8 +527,8 @@ $(function() {
 <div class="line"><a id="l00455" name="l00455"></a><span class="lineno">  455</span>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a id="l00456" name="l00456"></a><span class="lineno">  456</span>    <span class="keywordtype">void</span> <a class="code hl_class" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html">ClosedLoopHeartPulmonary&lt;T&gt;::get_psi_ra_la</a>(Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y, T* psi_ra, T* psi_la, T* psi_ra_derivative, T* psi_la_derivative)</div>
 <div class="line"><a id="l00457" name="l00457"></a><span class="lineno">  457</span>    {</div>
-<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>        <span class="keyword">auto</span> RA_volume = args[<span class="stringliteral">&quot;Solution&quot;</span>][self.LPN_solution_ids[0]];</div>
-<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>        <span class="keyword">auto</span> LA_volume = args[<span class="stringliteral">&quot;Solution&quot;</span>][self.LPN_solution_ids[7]];</div>
+<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>        <span class="keyword">auto</span> RA_volume = y[this-&gt;global_var_ids[4]];</div>
+<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>        <span class="keyword">auto</span> LA_volume = y[this-&gt;global_var_ids[11]];</div>
 <div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>        psi_ra = params.Kxp_ra*(exp((RA_volume-params.Vaso_ra)*params.Kxv_ra)-1.0);</div>
 <div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>        psi_la = params.Kxp_la*(exp((LA_volume-params.Vaso_la)*params.Kxv_la)-1.0);</div>
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span> </div>
@@ -611,7 +611,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 13 2022 02:29:34 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Jul 13 2022 18:10:17 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

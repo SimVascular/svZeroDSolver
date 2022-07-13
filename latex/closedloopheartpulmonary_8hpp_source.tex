@@ -459,8 +459,8 @@
 \DoxyCodeLine{455     \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
 \DoxyCodeLine{456     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{ClosedLoopHeartPulmonary<T>::get\_psi\_ra\_la}}(Eigen::Matrix<T, Eigen::Dynamic, 1> \&y, T* psi\_ra, T* psi\_la, T* psi\_ra\_derivative, T* psi\_la\_derivative)}
 \DoxyCodeLine{457     \{}
-\DoxyCodeLine{458         \textcolor{keyword}{auto} RA\_volume = args[\textcolor{stringliteral}{"{}Solution"{}}][self.LPN\_solution\_ids[0]];}
-\DoxyCodeLine{459         \textcolor{keyword}{auto} LA\_volume = args[\textcolor{stringliteral}{"{}Solution"{}}][self.LPN\_solution\_ids[7]];}
+\DoxyCodeLine{458         \textcolor{keyword}{auto} RA\_volume = y[this-\/>global\_var\_ids[4]];}
+\DoxyCodeLine{459         \textcolor{keyword}{auto} LA\_volume = y[this-\/>global\_var\_ids[11]];}
 \DoxyCodeLine{460         psi\_ra = params.Kxp\_ra*(exp((RA\_volume-\/params.Vaso\_ra)*params.Kxv\_ra)-\/1.0);}
 \DoxyCodeLine{461         psi\_la = params.Kxp\_la*(exp((LA\_volume-\/params.Vaso\_la)*params.Kxv\_la)-\/1.0);}
 \DoxyCodeLine{462 }

@@ -43,25 +43,23 @@
 
   \indexspace
 
-  \item {AA}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{44}
   \item {ALGEBRA}, \hyperpage{15}
   \item {algebra/densesystem.hpp}, \hyperpage{125, 126}
   \item {algebra/integrator.hpp}, \hyperpage{127}, \hyperpage{129}
   \item {algebra/namespace.hpp}, \hyperpage{131}
   \item {algebra/sparsesystem.hpp}, \hyperpage{133, 134}
   \item {algebra/state.hpp}, \hyperpage{136, 137}
-  \item {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{56}
+  \item {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{55}
     \subitem {$\sim$DenseSystem}, \hyperpage{57}
-    \subitem {C}, \hyperpage{59}
+    \subitem {C}, \hyperpage{58}
     \subitem {D}, \hyperpage{59}
     \subitem {DenseSystem}, \hyperpage{57}
     \subitem {dy}, \hyperpage{59}
     \subitem {E}, \hyperpage{59}
     \subitem {F}, \hyperpage{59}
-    \subitem {jacobian}, \hyperpage{60}
-    \subitem {reserve}, \hyperpage{58}
-    \subitem {residual}, \hyperpage{60}
+    \subitem {jacobian}, \hyperpage{59}
+    \subitem {reserve}, \hyperpage{57}
+    \subitem {residual}, \hyperpage{59}
     \subitem {solve}, \hyperpage{58}
     \subitem {update\_jacobian}, \hyperpage{58}
     \subitem {update\_residual}, \hyperpage{58}
@@ -103,7 +101,7 @@
   \indexspace
 
   \item {C}
-    \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{59}
+    \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{58}
     \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{111}
     \subitem {MODEL::BloodVessel$<$ T $>$::Parameters}, \hyperpage{88}
     \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$::Parameters}, 
@@ -116,7 +114,8 @@
   \item {ClosedLoopCoronaryBC}
     \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{35}
   \item {ClosedLoopHeartPulmonary}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{41}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, 
+		\hyperpage{41, 42}
   \item {ClosedLoopRCRBC}
     \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{47}
   \item {ConfigReader}
@@ -136,7 +135,7 @@
   \item {DenseSystem}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{57}
   \item {DOFHandler}
-    \subitem {MODEL::DOFHandler}, \hyperpage{61}
+    \subitem {MODEL::DOFHandler}, \hyperpage{60}
   \item {dofhandler}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{76}
   \item {dy}
@@ -166,9 +165,9 @@
   \item {get}
     \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{118}
   \item {get\_activation\_and\_elastance\_functions}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{41}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{42}
   \item {get\_bool\_simulation\_parameter}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{51, 52}
+    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{52}
   \item {get\_int\_simulation\_parameter}
     \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{52, 53}
   \item {get\_model}
@@ -178,10 +177,9 @@
   \item {get\_num\_triplets}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{74}
   \item {get\_scalar\_simulation\_parameter}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{53}, 
-		\hyperpage{55}
+    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{54}
   \item {get\_time\_step\_size}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{55}
+    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{54}
   \item {global\_eqn\_ids}
     \subitem {MODEL::Block$<$ T $>$}, \hyperpage{27}
   \item {global\_var\_ids}
@@ -209,25 +207,25 @@
     \subitem {write\_csv}, \hyperpage{17}
     \subitem {write\_json}, \hyperpage{18}
   \item {io/configreader.hpp}, \hyperpage{142, 143}
-  \item {io/csvwriter.hpp}, \hyperpage{150, 151}
-  \item {io/jsonwriter.hpp}, \hyperpage{152}, \hyperpage{154}
+  \item {io/csvwriter.hpp}, \hyperpage{150}, \hyperpage{152}
+  \item {io/jsonwriter.hpp}, \hyperpage{153, 154}
   \item {io/namespace.hpp}, \hyperpage{132}
   \item {IO::ConfigReader$<$ T $>$}, \hyperpage{50}
     \subitem {$\sim$ConfigReader}, \hyperpage{51}
     \subitem {cardiac\_cycle\_period}, \hyperpage{55}
     \subitem {ConfigReader}, \hyperpage{51}
-    \subitem {get\_bool\_simulation\_parameter}, \hyperpage{51, 52}
+    \subitem {get\_bool\_simulation\_parameter}, \hyperpage{52}
     \subitem {get\_int\_simulation\_parameter}, \hyperpage{52, 53}
     \subitem {get\_model}, \hyperpage{53}
     \subitem {get\_num\_time\_steps}, \hyperpage{53}
-    \subitem {get\_scalar\_simulation\_parameter}, \hyperpage{53}, 
-		\hyperpage{55}
-    \subitem {get\_time\_step\_size}, \hyperpage{55}
+    \subitem {get\_scalar\_simulation\_parameter}, \hyperpage{54}
+    \subitem {get\_time\_step\_size}, \hyperpage{54}
+    \subitem {set\_cardiac\_cycle\_period}, \hyperpage{55}
 
   \indexspace
 
   \item {jacobian}
-    \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{60}
+    \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{59}
     \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{112}
   \item {Junction}
     \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{71}
@@ -251,13 +249,13 @@
   \item {model/bloodvessel.hpp}, \hyperpage{163, 164}
   \item {model/closedloopcoronarybc.hpp}, \hyperpage{167}
   \item {model/closedloopheartpulmonary.hpp}, \hyperpage{170, 171}
-  \item {model/closedloopRCRbc.hpp}, \hyperpage{177}
+  \item {model/closedloopRCRbc.hpp}, \hyperpage{178}
   \item {model/dofhandler.hpp}, \hyperpage{180, 181}
   \item {model/flowreferencebc.hpp}, \hyperpage{182, 183}
-  \item {model/junction.hpp}, \hyperpage{185, 186}
-  \item {model/model.hpp}, \hyperpage{188}, \hyperpage{190}
+  \item {model/junction.hpp}, \hyperpage{185}, \hyperpage{187}
+  \item {model/model.hpp}, \hyperpage{189, 190}
   \item {model/namespace.hpp}, \hyperpage{132, 133}
-  \item {model/node.hpp}, \hyperpage{192}, \hyperpage{194}
+  \item {model/node.hpp}, \hyperpage{193, 194}
   \item {model/openloopcoronarybc.hpp}, \hyperpage{194}, 
 		\hyperpage{196}
   \item {model/pressurereferencebc.hpp}, \hyperpage{199}, 
@@ -308,35 +306,34 @@
 		\hyperpage{90}
   \item {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{38}
     \subitem {$\sim$ClosedLoopHeartPulmonary}, \hyperpage{41}
-    \subitem {AA}, \hyperpage{44}
-    \subitem {ClosedLoopHeartPulmonary}, \hyperpage{41}
+    \subitem {ClosedLoopHeartPulmonary}, \hyperpage{41, 42}
     \subitem {get\_activation\_and\_elastance\_functions}, 
-		\hyperpage{41}
-    \subitem {num\_triplets}, \hyperpage{44}
-    \subitem {setup\_dofs}, \hyperpage{41}
-    \subitem {update\_constant}, \hyperpage{42}
-    \subitem {update\_solution}, \hyperpage{42, 43}
-    \subitem {update\_time}, \hyperpage{43}
+		\hyperpage{42}
+    \subitem {num\_triplets}, \hyperpage{45}
+    \subitem {setup\_dofs}, \hyperpage{42}
+    \subitem {update\_constant}, \hyperpage{43}
+    \subitem {update\_solution}, \hyperpage{43, 44}
+    \subitem {update\_time}, \hyperpage{44}
   \item {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
 		\hyperpage{91}
   \item {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{45}
     \subitem {$\sim$ClosedLoopRCRBC}, \hyperpage{47}
     \subitem {ClosedLoopRCRBC}, \hyperpage{47}
-    \subitem {num\_triplets}, \hyperpage{49}
-    \subitem {setup\_dofs}, \hyperpage{47}
+    \subitem {num\_triplets}, \hyperpage{50}
+    \subitem {setup\_dofs}, \hyperpage{48}
     \subitem {to\_steady}, \hyperpage{48}
-    \subitem {update\_constant}, \hyperpage{48}
-    \subitem {update\_time}, \hyperpage{48, 49}
+    \subitem {update\_constant}, \hyperpage{48, 49}
+    \subitem {update\_time}, \hyperpage{49}
   \item {MODEL::ClosedLoopRCRBC$<$ T $>$::Parameters}, \hyperpage{91}
     \subitem {C}, \hyperpage{92}
     \subitem {Rd}, \hyperpage{92}
     \subitem {Rp}, \hyperpage{93}
   \item {MODEL::DOFHandler}, \hyperpage{60}
     \subitem {$\sim$DOFHandler}, \hyperpage{61}
-    \subitem {DOFHandler}, \hyperpage{61}
+    \subitem {DOFHandler}, \hyperpage{60}
     \subitem {register\_equation}, \hyperpage{61}
     \subitem {register\_variable}, \hyperpage{61}
-    \subitem {size}, \hyperpage{62}
+    \subitem {size}, \hyperpage{61}
     \subitem {variables}, \hyperpage{62}
   \item {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{62}
     \subitem {$\sim$FlowReferenceBC}, \hyperpage{64}
@@ -441,8 +438,8 @@
     \subitem {MODEL::Block$<$ T $>$}, \hyperpage{27}
     \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{32}
     \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{38}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{44}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{49}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{45}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{50}
     \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{66}
     \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{72}
     \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{86}
@@ -490,10 +487,10 @@
   \item {register\_variable}
     \subitem {MODEL::DOFHandler}, \hyperpage{61}
   \item {reserve}
-    \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{58}
+    \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{57}
     \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{110}
   \item {residual}
-    \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{60}
+    \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{59}
     \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{112}
   \item {ResistanceBC}
     \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{106}
@@ -504,12 +501,14 @@
 
   \indexspace
 
+  \item {set\_cardiac\_cycle\_period}
+    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{55}
   \item {setup\_dofs}
     \subitem {MODEL::Block$<$ T $>$}, \hyperpage{24}
     \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{31}
     \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{36}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{41}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{47}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{42}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{48}
     \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{64}
     \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{71}
     \subitem {MODEL::Node}, \hyperpage{78}
@@ -520,7 +519,7 @@
   \item {setup\_dofs\_}
     \subitem {MODEL::Block$<$ T $>$}, \hyperpage{24}
   \item {size}
-    \subitem {MODEL::DOFHandler}, \hyperpage{62}
+    \subitem {MODEL::DOFHandler}, \hyperpage{61}
   \item {solve}
     \subitem {ALGEBRA::DenseSystem$<$ T $>$}, \hyperpage{58}
     \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{111}
@@ -562,8 +561,8 @@
     \subitem {MODEL::Block$<$ T $>$}, \hyperpage{24, 25}
     \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{31}
     \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{36, 37}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{42}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{48}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{43}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{48, 49}
     \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{65}
     \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{71, 72}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{74, 75}
@@ -585,12 +584,12 @@
     \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{32}
     \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{37}
     \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, 
-		\hyperpage{42, 43}
+		\hyperpage{43, 44}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{75}
   \item {update\_time}
     \subitem {MODEL::Block$<$ T $>$}, \hyperpage{26}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{43}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{48, 49}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{44}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{49}
     \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{65, 66}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{76}
     \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{85}

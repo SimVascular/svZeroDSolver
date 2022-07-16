@@ -18,4 +18,3 @@ both under the following links:
 * [**C++ Developer Guide**](https://richterjakob.github.io/svZeroDSolver/cpp/md_developer_guide.html)
 * [**Python Documentation**](https://richterjakob.github.io/svZeroDSolver/python)
 * [**Wiki**](https://github.com/richterjakob/svZeroDSolver/wiki)
-* [**Source code**](https://github.com/richterjakob/svZeroDSolver)

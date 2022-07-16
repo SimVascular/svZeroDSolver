@@ -1,13 +1,21 @@
 svzerodsolver package
 =====================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   svzerodsolver.model
+
 Submodules
 ----------
 
-svzerodsolver.blocks module
----------------------------
+svzerodsolver.cpp module
+------------------------
 
-.. automodule:: svzerodsolver.blocks
+.. automodule:: svzerodsolver.cpp
    :members:
    :undoc-members:
    :show-inheritance:
@@ -20,10 +28,18 @@ svzerodsolver.integrator module
    :undoc-members:
    :show-inheritance:
 
-svzerodsolver.svzerodsolvercpp module
--------------------------------------
+svzerodsolver.runner module
+---------------------------
 
-.. automodule:: svzerodsolver.svzerodsolvercpp
+.. automodule:: svzerodsolver.runner
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+svzerodsolver.utils module
+--------------------------
+
+.. automodule:: svzerodsolver.utils
    :members:
    :undoc-members:
    :show-inheritance:

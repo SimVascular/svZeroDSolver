@@ -190,7 +190,10 @@
 <span class="sd">    Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson for non-linear residual</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">time_step_size</span><span class="p">):</span>
+    <span class="c1"># Integrator(MODEL::Model&lt;T&gt; &amp;model, T time_step_size, T rho, T atol,</span>
+    <span class="c1">#          int max_iter);</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">time_step_size</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">10</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
 
         <span class="c1"># Setup constants for generalized alpha time integration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha_m</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">rho</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">rho</span><span class="p">)</span>
@@ -203,6 +206,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">n</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time_step_size</span> <span class="o">=</span> <span class="n">time_step_size</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time_step_size_inv</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">time_step_size</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">atol</span> <span class="o">=</span> <span class="n">atol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span> <span class="o">=</span> <span class="n">max_iter</span>
 
         <span class="c1"># jacobian matrix</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">n</span> <span class="o">&gt;</span> <span class="mi">800</span><span class="p">:</span>
@@ -226,7 +232,7 @@
         <span class="k">for</span> <span class="n">bl</span> <span class="ow">in</span> <span class="n">block_list</span><span class="p">:</span>
             <span class="n">bl</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GeneralizedAlpha.step"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.integrator.GeneralizedAlpha.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ydot</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">block_list</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+<div class="viewcode-block" id="GeneralizedAlpha.step"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.integrator.GeneralizedAlpha.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ydot</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">block_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform one time step</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -251,7 +257,7 @@
             <span class="n">b</span><span class="o">.</span><span class="n">update_time</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
 
         <span class="n">fac_ydotam</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fac</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_step_size_inv</span>
-        <span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">max_iter</span><span class="p">):</span>
+        <span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span><span class="p">):</span>
             <span class="c1"># update solution-dependent blocks</span>
             <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">block_list</span><span class="p">:</span>
                 <span class="n">b</span><span class="o">.</span><span class="n">update_solution</span><span class="p">(</span><span class="n">yaf</span><span class="p">)</span>
@@ -259,6 +265,10 @@
             <span class="c1"># Assemble</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="n">block_list</span><span class="p">)</span>
             <span class="n">res</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ydotam</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">yaf</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Check termination criteria</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atol</span><span class="p">:</span>
+                <span class="k">break</span>
 
             <span class="n">lhs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;dE&quot;</span><span class="p">]</span>
@@ -274,10 +284,7 @@
             <span class="n">yaf</span> <span class="o">+=</span> <span class="n">dy</span>
             <span class="n">ydotam</span> <span class="o">+=</span> <span class="n">dy</span> <span class="o">*</span> <span class="n">fac_ydotam</span>
 
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mf">1e-5</span><span class="p">:</span>
-                <span class="k">break</span>
-
-        <span class="k">if</span> <span class="nb">iter</span> <span class="o">==</span> <span class="n">max_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">iter</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Max NR iterations reached at time: </span><span class="si">{</span><span class="n">time</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">s with, max error: </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">res</span><span class="p">))</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
@@ -298,6 +305,8 @@
     <span class="n">ydot_initial</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">rho</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;genalpha&quot;</span><span class="p">,</span>
+    <span class="n">atol</span><span class="o">=</span><span class="mi">10</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span>
+    <span class="n">max_iter</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
 <span class="p">):</span>
 
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dofhandler</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">y_initial</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">y_initial</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -309,7 +318,9 @@
         <span class="mf">0.0</span><span class="p">,</span> <span class="n">num_time_steps</span> <span class="o">*</span> <span class="n">time_step_size</span><span class="p">,</span> <span class="n">time_step_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span>
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;genalpha&quot;</span><span class="p">:</span>
-        <span class="n">integrator</span> <span class="o">=</span> <span class="n">GeneralizedAlpha</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time_step_size</span><span class="p">)</span>
+        <span class="n">integrator</span> <span class="o">=</span> <span class="n">GeneralizedAlpha</span><span class="p">(</span>
+            <span class="n">rho</span><span class="p">,</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">time_step_size</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="n">atol</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="n">max_iter</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown integration method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
 

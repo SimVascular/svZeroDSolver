@@ -40,7 +40,10 @@ class GeneralizedAlpha:
     Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson for non-linear residual
     """
 
-    def __init__(self, rho, n, time_step_size):
+    # Integrator(MODEL::Model<T> &model, T time_step_size, T rho, T atol,
+    #          int max_iter);
+
+    def __init__(self, rho, n, time_step_size, atol=10 - 8, max_iter=30):
 
         # Setup constants for generalized alpha time integration
         self.alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho)
@@ -53,6 +56,9 @@ class GeneralizedAlpha:
         self.n = n
         self.time_step_size = time_step_size
         self.time_step_size_inv = 1.0 / time_step_size
+
+        self.atol = atol
+        self.max_iter = max_iter
 
         # jacobian matrix
         if self.n > 800:
@@ -76,7 +82,7 @@ class GeneralizedAlpha:
         for bl in block_list:
             bl.assemble(self.mat)
 
-    def step(self, y, ydot, time, block_list, max_iter=30):
+    def step(self, y, ydot, time, block_list):
         """
         Perform one time step
         """
@@ -101,7 +107,7 @@ class GeneralizedAlpha:
             b.update_time(time)
 
         fac_ydotam = self.fac * self.time_step_size_inv
-        for iter in range(max_iter):
+        for iter in range(self.max_iter):
             # update solution-dependent blocks
             for b in block_list:
                 b.update_solution(yaf)
@@ -109,6 +115,10 @@ class GeneralizedAlpha:
             # Assemble
             self.assemble(block_list)
             res = -self.mat["E"].dot(ydotam) - self.mat["F"].dot(yaf) - self.mat["C"]
+
+            # Check termination criteria
+            if np.abs(res).max() <= self.atol:
+                break
 
             lhs = self.mat["F"] + (
                 self.mat["dE"]
@@ -124,10 +134,7 @@ class GeneralizedAlpha:
             yaf += dy
             ydotam += dy * fac_ydotam
 
-            if np.abs(res).max() <= 1e-5:
-                break
-
-        if iter == max_iter - 1:
+        if iter == self.max_iter - 1:
             print(
                 f"Max NR iterations reached at time: {time:.3f}s with, max error: {max(abs(res))}"
             )
@@ -148,6 +155,8 @@ def run_integrator(
     ydot_initial=None,
     rho=0.1,
     method="genalpha",
+    atol=10 - 8,
+    max_iter=30,
 ):
 
     y = np.zeros(dofhandler.n) if y_initial is None else y_initial.copy()
@@ -159,7 +168,9 @@ def run_integrator(
         0.0, num_time_steps * time_step_size, time_step_size, dtype=float
     )
     if method == "genalpha":
-        integrator = GeneralizedAlpha(rho, y.shape[0], time_step_size)
+        integrator = GeneralizedAlpha(
+            rho, y.shape[0], time_step_size, atol=atol, max_iter=max_iter
+        )
     else:
         raise ValueError(f"Unknown integration method {method}.")
 

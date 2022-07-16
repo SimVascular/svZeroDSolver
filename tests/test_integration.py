@@ -1,8 +1,9 @@
-from svzerodsolver import run_simulation_from_config
+import json
 import os
 
-import json
 import numpy as np
+
+from svzerodsolver.runner import run_from_config
 
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8
@@ -18,7 +19,7 @@ def run_test_case_by_name(name, testdir):
     testfile = os.path.join(os.path.dirname(__file__), "cases", name + ".json")
     with open(testfile) as ff:
         config = json.load(ff)
-    branch_result = run_simulation_from_config(config, os.path.join(testdir, name))
+    branch_result = run_from_config(config)
     return branch_result
 
 

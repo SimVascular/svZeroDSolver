@@ -2,13 +2,14 @@
 
 Expects to find a build in the Release folder.
 """
-import importlib.util
-import sys
-import os
 import glob
+import importlib.util
+import os
+import sys
+from io import StringIO
+
 import orjson
 from pandas import read_csv
-from io import StringIO
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -26,7 +27,7 @@ sys.modules["svzerodsolvercpp"] = svzerodsolvercpp
 spec.loader.exec_module(svzerodsolvercpp)
 
 
-def run(config):
+def run_from_config(config):
     """Run the C++ svZeroDSolver.
 
     Args:

@@ -1,8 +1,8 @@
+import json
 import os
 from subprocess import call
 from tempfile import TemporaryDirectory
 
-import json
 import numpy as np
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))

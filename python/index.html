@@ -153,6 +153,35 @@
   <a class="reference internal nav-link" href="#installation">
    Installation
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#for-contributers">
+     For Contributers
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#usage">
+   Usage
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#command-line">
+     Command line
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#as-a-python-module">
+     As a python module
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#more-information">
+   More information
+  </a>
  </li>
 </ul>
 
@@ -183,13 +212,86 @@
 <p>svZeroDSolver is a Python code that simulates the hemodynamics in zero-dimensional
 (0D) lumped parameter models of vascular networks. These 0D models are governed
 by differential algebraic equations (DAEs).</p>
+<p>The solver uses a highly modular framework to model the vascular anatomy, using
+individual 0D elements to represent different parts of the vascular anatomy
+(and boundary conditions). The individual 0D elements and their associated
+governing equations defined in <cite>blocks.py</cite>.
+In <cite>solver.py</cite>, the blocks are assembled and simulated using the generalized-alpha
+time-stepping method defined in <cite>time_integration.py</cite>.</p>
+<p>The svZeroDSolver Python files are in the <cite>svzerodsolver</cite> Python package directory.</p>
+<p>svZeroDSolver currently supports the following vascular 0D modeling options and
+boundary conditions:</p>
+<p><strong>Vascular 0D elements</strong>:</p>
+<ul class="simple">
+<li><p>Resistor</p></li>
+<li><p>Resistor-capacitor</p></li>
+<li><p>Resistor-inductor</p></li>
+<li><p>Resistor-capacitor-inductor</p></li>
+</ul>
+<p><strong>Boundary conditions</strong>:</p>
+<ul class="simple">
+<li><p>Pressure</p></li>
+<li><p>Resistor</p></li>
+<li><p>RCR</p></li>
+<li><p>Coronary</p></li>
+<li><p>Flow</p></li>
+</ul>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
-<p>svZeroDSolver and all its dependencies can be installed easily via pip:</p>
+<p>svZeroDSolver and all its dependencies can be installed easily via pip.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install git+https://github.com/SimVascular/svZeroDSolver.git
 </pre></div>
 </div>
+<section id="for-contributers">
+<h3>For Contributers<a class="headerlink" href="#for-contributers" title="Permalink to this heading">#</a></h3>
+<p>The following guide provides all necessary steps to install your local
+svZeroDSolver repository via pip in editable mode to allow for local code changes
+to reflect in the package.</p>
+<p>If you are contributing to svZeroDSolver, it is highly recommended to use a virtual
+environment like [Miniconda](<a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">https://docs.conda.io/en/latest/miniconda.html</a>).
+After installing Miniconda you can create a new environment and enter it using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda create -n zerodsolver <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.9
+conda activate zerodsolver
+</pre></div>
+</div>
+<p>After that, enter the repository folder and install the svZeroDSolver
+<strong>with development related dependencies</strong> using:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -e .<span class="o">[</span>dev<span class="o">]</span>
+</pre></div>
+</div>
+<p><em>If you are using the `zsh` shell, enter: `pip install -e “.[dev]”`</em></p>
+</section>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
+<section id="command-line">
+<h3>Command line<a class="headerlink" href="#command-line" title="Permalink to this heading">#</a></h3>
+<p>To run svZeroDSolver form the command line, run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zerod SOLVER_INPUT_FILE
+</pre></div>
+</div>
+<p>For more information about command line options, enter:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zerod --help
+</pre></div>
+</div>
+</section>
+<section id="as-a-python-module">
+<h3>As a python module<a class="headerlink" href="#as-a-python-module" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">svzerodsolver</span>
+<span class="n">svzerodsolver</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">set_up_and_run_0d_simulation</span><span class="p">(</span><span class="s1">&#39;input.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This variant enables running svZeroDSolver within a user-defined Python code
+(e.g. parameter optimization, uncertainty quantification)</p>
+</section>
+</section>
+<section id="more-information">
+<h2>More information<a class="headerlink" href="#more-information" title="Permalink to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="rst/bibliography.html">References</a></li>
+</ul>
 </div>
 </section>
 </section>

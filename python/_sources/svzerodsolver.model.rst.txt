@@ -20,6 +20,14 @@ svzerodsolver.model.bloodvessel module
    :undoc-members:
    :show-inheritance:
 
+svzerodsolver.model.bloodvesseljunction module
+----------------------------------------------
+
+.. automodule:: svzerodsolver.model.bloodvesseljunction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 svzerodsolver.model.dofhandler module
 -------------------------------------
 
@@ -36,10 +44,10 @@ svzerodsolver.model.flowreferencebc module
    :undoc-members:
    :show-inheritance:
 
-svzerodsolver.model.junction module
------------------------------------
+svzerodsolver.model.internaljunction module
+-------------------------------------------
 
-.. automodule:: svzerodsolver.model.junction
+.. automodule:: svzerodsolver.model.internaljunction
    :members:
    :undoc-members:
    :show-inheritance:

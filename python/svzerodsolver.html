@@ -65,7 +65,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -180,18 +180,18 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#svzerodsolver-cpp-module">
-   svzerodsolver.cpp module
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-svzerodsolver.integrator">
-   svzerodsolver.integrator module
+  <a class="reference internal nav-link" href="#module-svzerodsolver.algebra">
+   svzerodsolver.algebra module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-svzerodsolver.runner">
    svzerodsolver.runner module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#svzerodsolver-runnercpp-module">
+   svzerodsolver.runnercpp module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -233,9 +233,10 @@
 <li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#submodules">Submodules</a></li>
 <li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.block">svzerodsolver.model.block module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.bloodvessel">svzerodsolver.model.bloodvessel module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.bloodvesseljunction">svzerodsolver.model.bloodvesseljunction module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.dofhandler">svzerodsolver.model.dofhandler module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.flowreferencebc">svzerodsolver.model.flowreferencebc module</a></li>
-<li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.junction">svzerodsolver.model.junction module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.internaljunction">svzerodsolver.model.internaljunction module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.node">svzerodsolver.model.node module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.openloopcoronarybc">svzerodsolver.model.openloopcoronarybc module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="svzerodsolver.model.html#module-svzerodsolver.model.pressurereferencebc">svzerodsolver.model.pressurereferencebc module</a></li>
@@ -250,159 +251,171 @@
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">#</a></h2>
 </section>
-<section id="svzerodsolver-cpp-module">
-<h2>svzerodsolver.cpp module<a class="headerlink" href="#svzerodsolver-cpp-module" title="Permalink to this heading">#</a></h2>
-</section>
-<section id="module-svzerodsolver.integrator">
-<span id="svzerodsolver-integrator-module"></span><h2>svzerodsolver.integrator module<a class="headerlink" href="#module-svzerodsolver.integrator" title="Permalink to this heading">#</a></h2>
+<section id="module-svzerodsolver.algebra">
+<span id="svzerodsolver-algebra-module"></span><h2>svzerodsolver.algebra module<a class="headerlink" href="#module-svzerodsolver.algebra" title="Permalink to this heading">#</a></h2>
+<p>This module holds all algebra related classes and methods.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="svzerodsolver.integrator.GeneralizedAlpha">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.integrator.</span></span><span class="sig-name descname"><span class="pre">GeneralizedAlpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/integrator.html#GeneralizedAlpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.integrator.GeneralizedAlpha" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="svzerodsolver.algebra.GeneralizedAlpha">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.algebra.</span></span><span class="sig-name descname"><span class="pre">GeneralizedAlpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/algebra.html#GeneralizedAlpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.algebra.GeneralizedAlpha" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Generalized alpha time integrator.</p>
-<p>Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson for non-linear residual</p>
+<p>Generalized alpha time integrator. <span id="id1">[<a class="reference internal" href="rst/bibliography.html#id3" title="Kenneth E. Jansen, Christian H. Whiting, and Gregory M. Hulbert. A generalized-α method for integrating the filtered navier–stokes equations with a stabilized finite element method. Computer Methods in Applied Mechanics and Engineering, 190(3):305-319, 2000. URL: https://www.sciencedirect.com/science/article/pii/S0045782500002036, doi:https://doi.org/10.1016/S0045-7825(00)00203-6.">1</a>]</span></p>
+<p>Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson
+for non-linear residual.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rho</strong> – Generalized-alpha parameter rho.</p></li>
+<li><p><strong>n</strong> – System size.</p></li>
+<li><p><strong>time_step_size</strong> – Time step size.</p></li>
+<li><p><strong>atol</strong> – Absolute tolerance.</p></li>
+<li><p><strong>max_iter</strong> – Maximum nonlinear iterations.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="svzerodsolver.integrator.GeneralizedAlpha.assemble">
-<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/integrator.html#GeneralizedAlpha.assemble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.integrator.GeneralizedAlpha.assemble" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="svzerodsolver.algebra.GeneralizedAlpha.assemble">
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/algebra.html#GeneralizedAlpha.assemble"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.algebra.GeneralizedAlpha.assemble" title="Permalink to this definition">#</a></dt>
 <dd><p>Assemble block matrices into global matrices</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="svzerodsolver.integrator.GeneralizedAlpha.step">
-<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ydot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/integrator.html#GeneralizedAlpha.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.integrator.GeneralizedAlpha.step" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="svzerodsolver.algebra.GeneralizedAlpha.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ydot</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/algebra.html#GeneralizedAlpha.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.algebra.GeneralizedAlpha.step" title="Permalink to this definition">#</a></dt>
 <dd><p>Perform one time step</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="svzerodsolver.integrator.run_integrator">
-<span class="sig-prename descclassname"><span class="pre">svzerodsolver.integrator.</span></span><span class="sig-name descname"><span class="pre">run_integrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofhandler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_time_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ydot_initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'genalpha'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/integrator.html#run_integrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.integrator.run_integrator" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="svzerodsolver.algebra.run_integrator">
+<span class="sig-prename descclassname"><span class="pre">svzerodsolver.algebra.</span></span><span class="sig-name descname"><span class="pre">run_integrator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofhandler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_time_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_step_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ydot_initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rho</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'genalpha'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/algebra.html#run_integrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.algebra.run_integrator" title="Permalink to this definition">#</a></dt>
+<dd><p>Run time integration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>block_list</strong> – List of model blocks.</p></li>
+<li><p><strong>dofhandler</strong> – Degree-of-freedom handler.</p></li>
+<li><p><strong>num_time_steps</strong> – Number of time steps.</p></li>
+<li><p><strong>time_step_size</strong> – Time step size.</p></li>
+<li><p><strong>y_initial</strong> – Initial y.</p></li>
+<li><p><strong>ydot_initial</strong> – Initial ydot.</p></li>
+<li><p><strong>rho</strong> – Generalized-alpha parameter rho.</p></li>
+<li><p><strong>method</strong> – Time integration method to use.</p></li>
+<li><p><strong>atol</strong> – Absolute tolerance.</p></li>
+<li><p><strong>max_iter</strong> – Maximum nonlinear iterations.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-svzerodsolver.runner">
 <span id="svzerodsolver-runner-module"></span><h2>svzerodsolver.runner module<a class="headerlink" href="#module-svzerodsolver.runner" title="Permalink to this heading">#</a></h2>
+<p>This module holds the main execution routines of svZeroDSolver.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="svzerodsolver.runner.run_from_config">
 <span class="sig-prename descclassname"><span class="pre">svzerodsolver.runner.</span></span><span class="sig-name descname"><span class="pre">run_from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/runner.html#run_from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.runner.run_from_config" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Run the svZeroDSolver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – Python dict of the configuration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Python dict with results.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="svzerodsolver.runner.run_from_file">
 <span class="sig-prename descclassname"><span class="pre">svzerodsolver.runner.</span></span><span class="sig-name descname"><span class="pre">run_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/runner.html#run_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.runner.run_from_file" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Run the svZeroDSolver from file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> – Input file with configuration.</p></li>
+<li><p><strong>output_file</strong> – Output file with configuration.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
+</section>
+<section id="svzerodsolver-runnercpp-module">
+<h2>svzerodsolver.runnercpp module<a class="headerlink" href="#svzerodsolver-runnercpp-module" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="module-svzerodsolver.utils">
 <span id="svzerodsolver-utils-module"></span><h2>svzerodsolver.utils module<a class="headerlink" href="#module-svzerodsolver.utils" title="Permalink to this heading">#</a></h2>
+<p>This module holds helper functions for svZeroDSolver.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="svzerodsolver.utils.convert_unsteady_bcs_to_steady">
-<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">convert_unsteady_bcs_to_steady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#convert_unsteady_bcs_to_steady"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.convert_unsteady_bcs_to_steady" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">convert_unsteady_bcs_to_steady</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#convert_unsteady_bcs_to_steady"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.convert_unsteady_bcs_to_steady" title="Permalink to this definition">#</a></dt>
+<dd><p>Convert unsteady boundary conditions to their steady equivalent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – svZeroDSolver configuration.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Configuration of the steady equivalent.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>steady_config</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="svzerodsolver.utils.create_blocks">
-<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">create_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steady</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#create_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.create_blocks" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Purpose:</dt><dd><p>Create all LPNBlock objects for the 0d model.</p>
-</dd>
-<dt>Inputs:</dt><dd><dl class="simple">
-<dt>dict parameters</dt><dd><p>– created from function utils.extract_info_from_solver_input_file</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">create_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steady</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#create_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.create_blocks" title="Permalink to this definition">#</a></dt>
+<dd><p>Create blocks.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>dict blocks</dt><dd><p>= {block_name : block_object}
-– where the values are the junction, vessel, outlet BC, and inlet BC block objects</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> – svZeroDSolver configuration.</p></li>
+<li><p><strong>steady</strong> – Toggle if blocks should be created with steady behavior.</p></li>
+</ul>
 </dd>
-</dl>
-</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of created blocks.
+dofhandler: Degree-of-freedom handler.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>void, but updates parameters to include</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="svzerodsolver.utils.create_junction_blocks">
-<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">create_junction_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#create_junction_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.create_junction_blocks" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Purpose:</dt><dd><p>Create the junction blocks for the 0d model.</p>
-</dd>
-<dt>Inputs:</dt><dd><dl class="simple">
-<dt>dict parameters</dt><dd><p>– created from function utils.extract_info_from_solver_input_file</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>void, but updates parameters[“blocks”] to include the junction_blocks, where</dt><dd><p>parameters[“blocks”] = {block_name : block_object}</p>
-</dd>
-</dl>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="svzerodsolver.utils.create_vessel_blocks">
-<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">create_vessel_blocks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steady</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#create_vessel_blocks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.create_vessel_blocks" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Purpose:</dt><dd><p>Create the vessel blocks for the 0d model.</p>
-</dd>
-<dt>Inputs:</dt><dd><dl class="simple">
-<dt>dict parameters</dt><dd><p>– created from function utils.extract_info_from_solver_input_file</p>
-</dd>
-</dl>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>void, but updates parameters[“blocks”] to include the vessel_blocks, where</dt><dd><p>parameters[“blocks”] = {block_name : block_object}</p>
-</dd>
-</dl>
-</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>blocks</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="svzerodsolver.utils.format_results_to_dict">
-<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">format_results_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zero_d_time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results_0d</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#format_results_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.format_results_to_dict" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">format_results_to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_steps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result_array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">block_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#format_results_to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.format_results_to_dict" title="Permalink to this definition">#</a></dt>
+<dd><p>Format result array to dict format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>time_steps</strong> – List of time steps.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Resuluts in dict format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>results</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="svzerodsolver.utils.get_solver_params">
-<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">get_solver_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parameters</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#get_solver_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.get_solver_params" title="Permalink to this definition">#</a></dt>
-<dd><dl class="simple">
-<dt>Purpose:</dt><dd><p>Set the 0d simulation time-stepping parameters</p>
-</dd>
-<dt>Inputs:</dt><dd><dl class="simple">
-<dt>dict parameters</dt><dd><p>– created from function utils.extract_info_from_solver_input_file</p>
-</dd>
-</dl>
-</dd>
-</dl>
+<span class="sig-prename descclassname"><span class="pre">svzerodsolver.utils.</span></span><span class="sig-name descname"><span class="pre">get_solver_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/utils.html#get_solver_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.utils.get_solver_params" title="Permalink to this definition">#</a></dt>
+<dd><p>Determine time step size and number of timesteps.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>float delta_t</dt><dd><p>= constant time step size for the 0d simulation</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – svZeroDSolver configuration.</p>
 </dd>
-<dt>int total_number_of_simulated_time_steps</dt><dd><p>= total number of time steps to simulate for the entire 0d simulation</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Time step size:
+num_time_steps: Number of time steps.</p>
 </dd>
-</dl>
-</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>void, but updates parameters to include</p>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>time_step_size</p>
 </dd>
 </dl>
 </dd></dl>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>svzerodsolver.integrator &#8212; svZeroDSolver v1.0 Manual</title>
+    <title>svzerodsolver.algebra &#8212; svZeroDSolver v1.0 Manual</title>
 <script>
   document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
@@ -62,7 +62,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -147,7 +147,7 @@
               
               <article class="bd-article" role="main">
                 
-  <h1>Source code for svzerodsolver.integrator</h1><div class="highlight"><pre>
+  <h1>Source code for svzerodsolver.algebra</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding=utf-8</span>
 
 <span class="c1"># Copyright (c) Stanford University, The Regents of the University of</span>
@@ -179,21 +179,26 @@
 <span class="c1"># LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING</span>
 <span class="c1"># NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span>
 <span class="c1"># SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
-
+<span class="sd">&quot;&quot;&quot;This module holds all algebra related classes and methods.&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.sparse</span> <span class="kn">import</span> <span class="n">linalg</span>
 
 
-<div class="viewcode-block" id="GeneralizedAlpha"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.integrator.GeneralizedAlpha">[docs]</a><span class="k">class</span> <span class="nc">GeneralizedAlpha</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Generalized alpha time integrator.</span>
+<div class="viewcode-block" id="GeneralizedAlpha"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.algebra.GeneralizedAlpha">[docs]</a><span class="k">class</span> <span class="nc">GeneralizedAlpha</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Generalized alpha time integrator. :cite:`JANSEN2000305`</span>
 
-<span class="sd">    Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson for non-linear residual</span>
+<span class="sd">    Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson</span>
+<span class="sd">    for non-linear residual.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        rho: Generalized-alpha parameter rho.</span>
+<span class="sd">        n: System size.</span>
+<span class="sd">        time_step_size: Time step size.</span>
+<span class="sd">        atol: Absolute tolerance.</span>
+<span class="sd">        max_iter: Maximum nonlinear iterations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># Integrator(MODEL::Model&lt;T&gt; &amp;model, T time_step_size, T rho, T atol,</span>
-    <span class="c1">#          int max_iter);</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">time_step_size</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">10</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rho</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">time_step_size</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">30</span><span class="p">):</span>
 
         <span class="c1"># Setup constants for generalized alpha time integration</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">alpha_m</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">-</span> <span class="n">rho</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">rho</span><span class="p">)</span>
@@ -225,14 +230,14 @@
         <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">vecs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
 
-<div class="viewcode-block" id="GeneralizedAlpha.assemble"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.integrator.GeneralizedAlpha.assemble">[docs]</a>    <span class="k">def</span> <span class="nf">assemble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_list</span><span class="p">):</span>
+<div class="viewcode-block" id="GeneralizedAlpha.assemble"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.algebra.GeneralizedAlpha.assemble">[docs]</a>    <span class="k">def</span> <span class="nf">assemble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">block_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Assemble block matrices into global matrices</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">bl</span> <span class="ow">in</span> <span class="n">block_list</span><span class="p">:</span>
             <span class="n">bl</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GeneralizedAlpha.step"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.integrator.GeneralizedAlpha.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ydot</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">block_list</span><span class="p">):</span>
+<div class="viewcode-block" id="GeneralizedAlpha.step"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.algebra.GeneralizedAlpha.step">[docs]</a>    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">ydot</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">block_list</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform one time step</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -264,7 +269,11 @@
 
             <span class="c1"># Assemble</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">assemble</span><span class="p">(</span><span class="n">block_list</span><span class="p">)</span>
-            <span class="n">res</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ydotam</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">yaf</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;E&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ydotam</span><span class="p">)</span>
+                <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">yaf</span><span class="p">)</span>
+                <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mat</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
 
             <span class="c1"># Check termination criteria</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">res</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">atol</span><span class="p">:</span>
@@ -296,7 +305,7 @@
         <span class="k">return</span> <span class="n">curr_y</span><span class="p">,</span> <span class="n">curr_ydot</span></div></div>
 
 
-<div class="viewcode-block" id="run_integrator"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.integrator.run_integrator">[docs]</a><span class="k">def</span> <span class="nf">run_integrator</span><span class="p">(</span>
+<div class="viewcode-block" id="run_integrator"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.algebra.run_integrator">[docs]</a><span class="k">def</span> <span class="nf">run_integrator</span><span class="p">(</span>
     <span class="n">block_list</span><span class="p">,</span>
     <span class="n">dofhandler</span><span class="p">,</span>
     <span class="n">num_time_steps</span><span class="p">,</span>
@@ -308,9 +317,25 @@
     <span class="n">atol</span><span class="o">=</span><span class="mi">10</span> <span class="o">-</span> <span class="mi">8</span><span class="p">,</span>
     <span class="n">max_iter</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
 <span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run time integration.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        block_list: List of model blocks.</span>
+<span class="sd">        dofhandler: Degree-of-freedom handler.</span>
+<span class="sd">        num_time_steps: Number of time steps.</span>
+<span class="sd">        time_step_size: Time step size.</span>
+<span class="sd">        y_initial: Initial y.</span>
+<span class="sd">        ydot_initial: Initial ydot.</span>
+<span class="sd">        rho: Generalized-alpha parameter rho.</span>
+<span class="sd">        method: Time integration method to use.</span>
+<span class="sd">        atol: Absolute tolerance.</span>
+<span class="sd">        max_iter: Maximum nonlinear iterations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dofhandler</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">y_initial</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">y_initial</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">ydot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dofhandler</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">ydot_initial</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ydot_initial</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">ydot</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dofhandler</span><span class="o">.</span><span class="n">n</span><span class="p">)</span> <span class="k">if</span> <span class="n">ydot_initial</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">ydot_initial</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="p">)</span>
 
     <span class="n">y_over_time</span> <span class="o">=</span> <span class="p">[</span><span class="n">y</span><span class="o">.</span><span class="n">copy</span><span class="p">()]</span>
     <span class="n">ydot_over_time</span> <span class="o">=</span> <span class="p">[</span><span class="n">ydot</span><span class="o">.</span><span class="n">copy</span><span class="p">()]</span>

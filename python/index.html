@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>svZeroDSolver documentation &#8212; svZeroDSolver v1.0 Manual</title>
+    <title>svZeroDSolver Python Documentation &#8212; svZeroDSolver v1.0 Manual</title>
 <script>
   document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
   document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
@@ -64,7 +64,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -202,40 +202,22 @@
               
               <article class="bd-article" role="main">
                 
-  <section id="svzerodsolver-documentation">
-<span id="mainpage"></span><h1>svZeroDSolver documentation<a class="headerlink" href="#svzerodsolver-documentation" title="Permalink to this heading">#</a></h1>
+  <section id="svzerodsolver-python-documentation">
+<span id="mainpage"></span><h1>svZeroDSolver Python Documentation<a class="headerlink" href="#svzerodsolver-python-documentation" title="Permalink to this heading">#</a></h1>
 <p><strong>Version</strong>: v1.0</p>
 <p><strong>Useful links</strong>:
 <a class="reference external" href="https://github.com/SimVascular/svZeroDSolver">Source Repository</a> |
 <a class="reference external" href="https://github.com/SimVascular/svZeroDSolver/issues">Issue Tracker</a> |
 <a class="reference external" href="https://simvascular.github.io">SimVascular</a></p>
-<p>svZeroDSolver is a Python code that simulates the hemodynamics in zero-dimensional
+<p>svZeroDSolver is a Python package that simulates the hemodynamics in zero-dimensional
 (0D) lumped parameter models of vascular networks. These 0D models are governed
 by differential algebraic equations (DAEs).</p>
 <p>The solver uses a highly modular framework to model the vascular anatomy, using
 individual 0D elements to represent different parts of the vascular anatomy
 (and boundary conditions). The individual 0D elements and their associated
-governing equations defined in <cite>blocks.py</cite>.
-In <cite>solver.py</cite>, the blocks are assembled and simulated using the generalized-alpha
-time-stepping method defined in <cite>time_integration.py</cite>.</p>
-<p>The svZeroDSolver Python files are in the <cite>svzerodsolver</cite> Python package directory.</p>
-<p>svZeroDSolver currently supports the following vascular 0D modeling options and
-boundary conditions:</p>
-<p><strong>Vascular 0D elements</strong>:</p>
-<ul class="simple">
-<li><p>Resistor</p></li>
-<li><p>Resistor-capacitor</p></li>
-<li><p>Resistor-inductor</p></li>
-<li><p>Resistor-capacitor-inductor</p></li>
-</ul>
-<p><strong>Boundary conditions</strong>:</p>
-<ul class="simple">
-<li><p>Pressure</p></li>
-<li><p>Resistor</p></li>
-<li><p>RCR</p></li>
-<li><p>Coronary</p></li>
-<li><p>Flow</p></li>
-</ul>
+governing equations defined in <cite>models</cite> subpackage.
+In the <cite>algebra</cite> module, the blocks are assembled and simulated using the
+generalized-alpha time-stepping method.</p>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
 <p>svZeroDSolver and all its dependencies can be installed easily via pip.</p>
@@ -267,7 +249,7 @@ conda activate zerodsolver
 <section id="command-line">
 <h3>Command line<a class="headerlink" href="#command-line" title="Permalink to this heading">#</a></h3>
 <p>To run svZeroDSolver form the command line, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zerod SOLVER_INPUT_FILE
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>zerod SOLVER_INPUT_FILE SOLVER_OUTPUT_FILE
 </pre></div>
 </div>
 <p>For more information about command line options, enter:</p>
@@ -278,7 +260,7 @@ conda activate zerodsolver
 <section id="as-a-python-module">
 <h3>As a python module<a class="headerlink" href="#as-a-python-module" title="Permalink to this heading">#</a></h3>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">svzerodsolver</span>
-<span class="n">svzerodsolver</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">set_up_and_run_0d_simulation</span><span class="p">(</span><span class="s1">&#39;input.json&#39;</span><span class="p">)</span>
+<span class="n">svzerodsolver</span><span class="o">.</span><span class="n">runner</span><span class="o">.</span><span class="n">run_from_file</span><span class="p">(</span><span class="s1">&#39;input.json&#39;</span><span class="p">,</span> <span class="s1">&#39;output.json&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>This variant enables running svZeroDSolver within a user-defined Python code

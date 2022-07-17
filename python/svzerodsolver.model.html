@@ -35,7 +35,6 @@
     <script src="_static/underscore.js"></script>
     <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="References" href="rst/bibliography.html" />
@@ -66,7 +65,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -186,6 +185,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-svzerodsolver.model.bloodvesseljunction">
+   svzerodsolver.model.bloodvesseljunction module
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#module-svzerodsolver.model.dofhandler">
    svzerodsolver.model.dofhandler module
   </a>
@@ -196,8 +200,8 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#module-svzerodsolver.model.junction">
-   svzerodsolver.model.junction module
+  <a class="reference internal nav-link" href="#module-svzerodsolver.model.internaljunction">
+   svzerodsolver.model.internaljunction module
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -256,14 +260,16 @@
 </section>
 <section id="module-svzerodsolver.model.block">
 <span id="svzerodsolver-model-block-module"></span><h2>svzerodsolver.model.block module<a class="headerlink" href="#module-svzerodsolver.model.block" title="Permalink to this heading">#</a></h2>
+<p>This module holds the Block class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.block.Block">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.block.</span></span><span class="sig-name descname"><span class="pre">Block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/block.html#Block"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.block.Block" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<p>Base class for lumped-parameter blocks.</p>
-<p>A block stores all information about the mechanical characteristics of
-a lumped-parameter element. The block is used to setup, update and
-assemble element contributions in a network.</p>
+<p>Base class for 0D model components.</p>
+<p>A block is the base class of 0D model elements. It is the place where the
+contribution of an element to the global system is controlled. It defines
+all relevant attributes and methods of an element and a few common helpers
+for setting it up.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="svzerodsolver.model.block.Block.name">
 <span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.block.Block.name" title="Permalink to this definition">#</a></dt>
@@ -362,35 +368,31 @@ at.</p>
 </section>
 <section id="module-svzerodsolver.model.bloodvessel">
 <span id="svzerodsolver-model-bloodvessel-module"></span><h2>svzerodsolver.model.bloodvessel module<a class="headerlink" href="#module-svzerodsolver.model.bloodvessel" title="Permalink to this heading">#</a></h2>
+<p>This module holds the BloodVessel class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.bloodvessel.BloodVessel">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.bloodvessel.</span></span><span class="sig-name descname"><span class="pre">BloodVessel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/bloodvessel.html#BloodVessel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.bloodvessel.BloodVessel" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#svzerodsolver.model.block.Block" title="svzerodsolver.model.block.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a></p>
 <p>Resistor-capacitor-inductor blood vessel with optional stenosis.</p>
-<dl class="simple">
-<dt>Valid parameters:</dt><dd><ul class="simple">
-<li><p><code class="code docutils literal notranslate"><span class="pre">R</span></code>: Poiseuille resistance <span class="math notranslate nohighlight">\(\frac{8 \mu L}{\pi r^{4}}\)</span></p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">L</span></code>: Inductance</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">C</span></code>: Capacitance</p></li>
-<li><p><code class="code docutils literal notranslate"><span class="pre">stenosis_coefficient</span></code>: Stenosis coefficient <span class="math notranslate nohighlight">\(K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}\)</span>.</p></li>
-</ul>
-</dd>
-</dl>
-<p>The governing equations for the local resistor-capacitor-inductor element are</p>
-<div class="math notranslate nohighlight">
-\[P_{i n}^{e}-P_{o u t}^{e}-R Q_{i n}^{e}-L \frac{d Q_{o u t}^{e}}{d t}=0\]</div>
-<div class="math notranslate nohighlight">
-\[Q_{\text {in }}^{e}-Q_{\text {out }}^{e}-C \frac{d P_{c}^{e}}{d t}=0\]</div>
-<div class="math notranslate nohighlight">
-\[P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0\]</div>
-<dl>
-<dt>Stenosis:</dt><dd><dl class="simple">
-<dt>equation: delta_P = ( K_t * rho / ( 2 * (A_0)**2 ) ) * ( ( A_0 / A_s ) - 1 )**2 * Q * abs(Q) + R_poiseuille * Q</dt><dd><p>=               stenosis_coefficient                          * Q * abs(Q) + R_poiseuille * Q</p>
-</dd>
-</dl>
-<p>source: Mirramezani, M., Shadden, S.C. A distributed lumped parameter model of blood flow. Annals of Biomedical Engineering. 2020.</p>
-</dd>
-</dl>
+<p>Models the mechanical behavior of a bloodvessel with optional stenosis.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.bloodvessel.BloodVessel.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.bloodvessel.BloodVessel.name" title="Permalink to this definition">#</a></dt>
+<dd><p>Name of the block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.bloodvessel.BloodVessel.inflow_nodes">
+<span class="sig-name descname"><span class="pre">inflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.bloodvessel.BloodVessel.inflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Inflow nodes of the element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.bloodvessel.BloodVessel.outflow_nodes">
+<span class="sig-name descname"><span class="pre">outflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.bloodvessel.BloodVessel.outflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Outflow nodes of the element.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="svzerodsolver.model.bloodvessel.BloodVessel.from_config">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/bloodvessel.html#BloodVessel.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.bloodvessel.BloodVessel.from_config" title="Permalink to this definition">#</a></dt>
@@ -425,15 +427,48 @@ at.</p>
 </dd></dl>
 
 </section>
+<section id="module-svzerodsolver.model.bloodvesseljunction">
+<span id="svzerodsolver-model-bloodvesseljunction-module"></span><h2>svzerodsolver.model.bloodvesseljunction module<a class="headerlink" href="#module-svzerodsolver.model.bloodvesseljunction" title="Permalink to this heading">#</a></h2>
+<p>This module holds the BloodVesselJunction class.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="svzerodsolver.model.bloodvesseljunction.BloodVesselJunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.bloodvesseljunction.</span></span><span class="sig-name descname"><span class="pre">BloodVesselJunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/bloodvesseljunction.html#BloodVesselJunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.bloodvesseljunction.BloodVesselJunction" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#svzerodsolver.model.internaljunction.InternalJunction" title="svzerodsolver.model.internaljunction.InternalJunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">InternalJunction</span></code></a></p>
+<p>Blood vessel junction.</p>
+<p>(dummy for future implementation of blood pressure losses at junctions)</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.name" title="Permalink to this definition">#</a></dt>
+<dd><p>Name of the block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.inflow_nodes">
+<span class="sig-name descname"><span class="pre">inflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.inflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Inflow nodes of the element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.outflow_nodes">
+<span class="sig-name descname"><span class="pre">outflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.outflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Outflow nodes of the element.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-svzerodsolver.model.dofhandler">
 <span id="svzerodsolver-model-dofhandler-module"></span><h2>svzerodsolver.model.dofhandler module<a class="headerlink" href="#module-svzerodsolver.model.dofhandler" title="Permalink to this heading">#</a></h2>
+<p>This module holds the DOFHandler class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.dofhandler.DOFHandler">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.dofhandler.</span></span><span class="sig-name descname"><span class="pre">DOFHandler</span></span><a class="reference internal" href="_modules/svzerodsolver/model/dofhandler.html#DOFHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.dofhandler.DOFHandler" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Degree-of-freedom handler.</p>
-<p>Class for handling global degrees of freedom of a system. Assigns global
-IDs to variables and equations.</p>
+<p>This class handles degrees-of-freedom for model variables and equations.
+It assigns each element with row and column indices which it can use to
+assemble it’s local contributions into the local contributions into the
+global system.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="svzerodsolver.model.dofhandler.DOFHandler.variables">
 <span class="sig-name descname"><span class="pre">variables</span></span><a class="headerlink" href="#svzerodsolver.model.dofhandler.DOFHandler.variables" title="Permalink to this definition">#</a></dt>
@@ -441,15 +476,9 @@ IDs to variables and equations.</p>
 Variables without a name have an entry None.</p>
 </dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="svzerodsolver.model.dofhandler.DOFHandler.n">
-<span class="sig-name descname"><span class="pre">n</span></span><a class="headerlink" href="#svzerodsolver.model.dofhandler.DOFHandler.n" title="Permalink to this definition">#</a></dt>
-<dd><p>Size of the system.</p>
-</dd></dl>
-
 <dl class="py property">
-<dt class="sig sig-object py" id="id0">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="svzerodsolver.model.dofhandler.DOFHandler.n">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">n</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#svzerodsolver.model.dofhandler.DOFHandler.n" title="Permalink to this definition">#</a></dt>
 <dd><p>Size of the system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Return type<span class="colon">:</span></dt>
@@ -494,11 +523,31 @@ Variables without a name have an entry None.</p>
 </section>
 <section id="module-svzerodsolver.model.flowreferencebc">
 <span id="svzerodsolver-model-flowreferencebc-module"></span><h2>svzerodsolver.model.flowreferencebc module<a class="headerlink" href="#module-svzerodsolver.model.flowreferencebc" title="Permalink to this heading">#</a></h2>
+<p>This module holds the FlowReferenceBC class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.flowreferencebc.FlowReferenceBC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.flowreferencebc.</span></span><span class="sig-name descname"><span class="pre">FlowReferenceBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/flowreferencebc.html#FlowReferenceBC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.flowreferencebc.FlowReferenceBC" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#svzerodsolver.model.block.Block" title="svzerodsolver.model.block.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a></p>
-<p>Flow reference</p>
+<p>Flow reference boundary condition.</p>
+<p>Applies a prescribed flow to a boundary.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.flowreferencebc.FlowReferenceBC.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.flowreferencebc.FlowReferenceBC.name" title="Permalink to this definition">#</a></dt>
+<dd><p>Name of the block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.flowreferencebc.FlowReferenceBC.inflow_nodes">
+<span class="sig-name descname"><span class="pre">inflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.flowreferencebc.FlowReferenceBC.inflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Inflow nodes of the element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.flowreferencebc.FlowReferenceBC.outflow_nodes">
+<span class="sig-name descname"><span class="pre">outflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.flowreferencebc.FlowReferenceBC.outflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Outflow nodes of the element.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="svzerodsolver.model.flowreferencebc.FlowReferenceBC.from_config">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/flowreferencebc.html#FlowReferenceBC.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.flowreferencebc.FlowReferenceBC.from_config" title="Permalink to this definition">#</a></dt>
@@ -527,37 +576,45 @@ Variables without a name have an entry None.</p>
 </dd></dl>
 
 </section>
-<section id="module-svzerodsolver.model.junction">
-<span id="svzerodsolver-model-junction-module"></span><h2>svzerodsolver.model.junction module<a class="headerlink" href="#module-svzerodsolver.model.junction" title="Permalink to this heading">#</a></h2>
+<section id="module-svzerodsolver.model.internaljunction">
+<span id="svzerodsolver-model-internaljunction-module"></span><h2>svzerodsolver.model.internaljunction module<a class="headerlink" href="#module-svzerodsolver.model.internaljunction" title="Permalink to this heading">#</a></h2>
+<p>This module holds the InternalJunction class.</p>
 <dl class="py class">
-<dt class="sig sig-object py" id="svzerodsolver.model.junction.Junction">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.junction.</span></span><span class="sig-name descname"><span class="pre">Junction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/junction.html#Junction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.junction.Junction" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="svzerodsolver.model.internaljunction.InternalJunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.internaljunction.</span></span><span class="sig-name descname"><span class="pre">InternalJunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/internaljunction.html#InternalJunction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.internaljunction.InternalJunction" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#svzerodsolver.model.block.Block" title="svzerodsolver.model.block.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a></p>
 <p>Junction block.</p>
 <p>Represents a basic model junction without special mechanical behavior.
 Across all inlets and outlets of the junction, mass is conserved and
-pressure is continuous. The block contributes as many equations to the
-global system as it has inlet/outlet nodes <span class="math notranslate nohighlight">\(n_{eq}=n_{inlets}+n_{outlets}\)</span>.
-One equation comes from the mass conservation:</p>
-<div class="math notranslate nohighlight">
-\[\sum_{i}^{n_{inlets}} Q_{i}=\sum_{j}^{n_{outlets}} Q_{j}\]</div>
-<p>And the remaining <span class="math notranslate nohighlight">\(n_{eq}-1\)</span> equations come from the continuous
-pressure condition between each pair of different pressure values.</p>
-<div class="math notranslate nohighlight">
-\[P_{i}=P_{j} \quad \text{with} \quad i \neq j\]</div>
-<p>The ordering of the variables is:</p>
-<div class="math notranslate nohighlight">
-\[\left[\begin{array}{llllllllll}P_{\text {in}, 1}^{e} &amp; Q_{\text {in}, 1}^{e} &amp; \dots &amp; P_{\text {in}, i}^{e} &amp; Q_{\text {in}, i}^{e} &amp; P_{\text {out }, 1}^{e} &amp; Q_{\text {out }, 1}^{e} &amp; \dots &amp; P_{\text {out}, i}^{e} &amp; Q_{\text {out}, i}^{e}\end{array}\right]\]</div>
+pressure is continuous.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.internaljunction.InternalJunction.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.internaljunction.InternalJunction.name" title="Permalink to this definition">#</a></dt>
+<dd><p>Name of the block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.internaljunction.InternalJunction.inflow_nodes">
+<span class="sig-name descname"><span class="pre">inflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.internaljunction.InternalJunction.inflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Inflow nodes of the element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.internaljunction.InternalJunction.outflow_nodes">
+<span class="sig-name descname"><span class="pre">outflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.internaljunction.InternalJunction.outflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Outflow nodes of the element.</p>
+</dd></dl>
+
 <dl class="py method">
-<dt class="sig sig-object py" id="svzerodsolver.model.junction.Junction.from_config">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/junction.html#Junction.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.junction.Junction.from_config" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="svzerodsolver.model.internaljunction.InternalJunction.from_config">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/internaljunction.html#InternalJunction.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.internaljunction.InternalJunction.from_config" title="Permalink to this definition">#</a></dt>
 <dd><p>Create block from config dictionary.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>config</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code>) – The configuration dict for the block.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#svzerodsolver.model.junction.Junction" title="svzerodsolver.model.junction.Junction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Junction</span></code></a></p>
+<dd class="field-even"><p><a class="reference internal" href="#svzerodsolver.model.internaljunction.InternalJunction" title="svzerodsolver.model.internaljunction.InternalJunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">InternalJunction</span></code></a></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The block instance.</p>
@@ -566,8 +623,8 @@ pressure condition between each pair of different pressure values.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="svzerodsolver.model.junction.Junction.setup_dofs">
-<span class="sig-name descname"><span class="pre">setup_dofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dofhandler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/junction.html#Junction.setup_dofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.junction.Junction.setup_dofs" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="svzerodsolver.model.internaljunction.InternalJunction.setup_dofs">
+<span class="sig-name descname"><span class="pre">setup_dofs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dofhandler</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/internaljunction.html#InternalJunction.setup_dofs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.internaljunction.InternalJunction.setup_dofs" title="Permalink to this definition">#</a></dt>
 <dd><p>Setup degree of freedoms of the block.</p>
 <p>Registers equations and internal variables at a DOF handler.</p>
 <dl class="field-list simple">
@@ -583,6 +640,7 @@ at.</p>
 </section>
 <section id="module-svzerodsolver.model.node">
 <span id="svzerodsolver-model-node-module"></span><h2>svzerodsolver.model.node module<a class="headerlink" href="#module-svzerodsolver.model.node" title="Permalink to this heading">#</a></h2>
+<p>This module holds the Node class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.node.Node">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ele1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ele2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/node.html#Node"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.node.Node" title="Permalink to this definition">#</a></dt>
@@ -625,12 +683,30 @@ flow and pressure value of the system.</p>
 </section>
 <section id="module-svzerodsolver.model.openloopcoronarybc">
 <span id="svzerodsolver-model-openloopcoronarybc-module"></span><h2>svzerodsolver.model.openloopcoronarybc module<a class="headerlink" href="#module-svzerodsolver.model.openloopcoronarybc" title="Permalink to this heading">#</a></h2>
+<p>This module holds the OpenLoopCoronaryBC class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.openloopcoronarybc.</span></span><span class="sig-name descname"><span class="pre">OpenLoopCoronaryBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/openloopcoronarybc.html#OpenLoopCoronaryBC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#svzerodsolver.model.block.Block" title="svzerodsolver.model.block.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a></p>
-<p>open-loop coronary BC = RCRCR BC
-Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow and pressure in human coronary arteries. Annals of Biomedical Engineering 38, 3195–3209 (2010).”</p>
+<p>Open-loop coronary boundary condition. <span id="id1">[<a class="reference internal" href="rst/bibliography.html#id4" title="H Kim, Irene Vignon-Clementel, Jessica Coogan, Carlos Figueroa, Kenneth Jansen, and CA Taylor. Patient-specific modeling of blood flow and pressure in human coronary arteries. Annals of biomedical engineering, 38:3195-209, 10 2010. doi:10.1007/s10439-010-0083-6.">2</a>]</span></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.name" title="Permalink to this definition">#</a></dt>
+<dd><p>Name of the block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.inflow_nodes">
+<span class="sig-name descname"><span class="pre">inflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.inflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Inflow nodes of the element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.outflow_nodes">
+<span class="sig-name descname"><span class="pre">outflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.outflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Outflow nodes of the element.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.from_config">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/openloopcoronarybc.html#OpenLoopCoronaryBC.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.from_config" title="Permalink to this definition">#</a></dt>
@@ -661,11 +737,31 @@ Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow
 </section>
 <section id="module-svzerodsolver.model.pressurereferencebc">
 <span id="svzerodsolver-model-pressurereferencebc-module"></span><h2>svzerodsolver.model.pressurereferencebc module<a class="headerlink" href="#module-svzerodsolver.model.pressurereferencebc" title="Permalink to this heading">#</a></h2>
+<p>This module holds the PressureReferenceBC class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.pressurereferencebc.PressureReferenceBC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.pressurereferencebc.</span></span><span class="sig-name descname"><span class="pre">PressureReferenceBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/pressurereferencebc.html#PressureReferenceBC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.pressurereferencebc.PressureReferenceBC" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#svzerodsolver.model.block.Block" title="svzerodsolver.model.block.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a></p>
-<p>Unsteady P reference</p>
+<p>Pressure reference boundary condition.</p>
+<p>Applies a predefined pressure at a boundary.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.pressurereferencebc.PressureReferenceBC.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.pressurereferencebc.PressureReferenceBC.name" title="Permalink to this definition">#</a></dt>
+<dd><p>Name of the block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.pressurereferencebc.PressureReferenceBC.inflow_nodes">
+<span class="sig-name descname"><span class="pre">inflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.pressurereferencebc.PressureReferenceBC.inflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Inflow nodes of the element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.pressurereferencebc.PressureReferenceBC.outflow_nodes">
+<span class="sig-name descname"><span class="pre">outflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.pressurereferencebc.PressureReferenceBC.outflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Outflow nodes of the element.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="svzerodsolver.model.pressurereferencebc.PressureReferenceBC.from_config">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/pressurereferencebc.html#PressureReferenceBC.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.pressurereferencebc.PressureReferenceBC.from_config" title="Permalink to this definition">#</a></dt>
@@ -696,10 +792,30 @@ Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow
 </section>
 <section id="module-svzerodsolver.model.resistancebc">
 <span id="svzerodsolver-model-resistancebc-module"></span><h2>svzerodsolver.model.resistancebc module<a class="headerlink" href="#module-svzerodsolver.model.resistancebc" title="Permalink to this heading">#</a></h2>
+<p>This module holds the ResistanceBC class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.resistancebc.ResistanceBC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.resistancebc.</span></span><span class="sig-name descname"><span class="pre">ResistanceBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/resistancebc.html#ResistanceBC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.resistancebc.ResistanceBC" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#svzerodsolver.model.block.Block" title="svzerodsolver.model.block.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a></p>
+<p>Resistance boundary condition.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.resistancebc.ResistanceBC.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.resistancebc.ResistanceBC.name" title="Permalink to this definition">#</a></dt>
+<dd><p>Name of the block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.resistancebc.ResistanceBC.inflow_nodes">
+<span class="sig-name descname"><span class="pre">inflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.resistancebc.ResistanceBC.inflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Inflow nodes of the element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.resistancebc.ResistanceBC.outflow_nodes">
+<span class="sig-name descname"><span class="pre">outflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.resistancebc.ResistanceBC.outflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Outflow nodes of the element.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="svzerodsolver.model.resistancebc.ResistanceBC.from_config">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/resistancebc.html#ResistanceBC.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.resistancebc.ResistanceBC.from_config" title="Permalink to this definition">#</a></dt>
@@ -717,7 +833,12 @@ Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow
 <dl class="py method">
 <dt class="sig sig-object py" id="svzerodsolver.model.resistancebc.ResistanceBC.update_time">
 <span class="sig-name descname"><span class="pre">update_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/resistancebc.html#ResistanceBC.update_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.resistancebc.ResistanceBC.update_time" title="Permalink to this definition">#</a></dt>
-<dd><p>the ordering is : (P_in,Q_in)</p>
+<dd><p>Update time dependent element contributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>time</strong> – Current time.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -725,12 +846,30 @@ Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow
 </section>
 <section id="module-svzerodsolver.model.windkesselbc">
 <span id="svzerodsolver-model-windkesselbc-module"></span><h2>svzerodsolver.model.windkesselbc module<a class="headerlink" href="#module-svzerodsolver.model.windkesselbc" title="Permalink to this heading">#</a></h2>
+<p>This module holds the WindkesselBC class.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="svzerodsolver.model.windkesselbc.WindkesselBC">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">svzerodsolver.model.windkesselbc.</span></span><span class="sig-name descname"><span class="pre">WindkesselBC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/windkesselbc.html#WindkesselBC"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.windkesselbc.WindkesselBC" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#svzerodsolver.model.block.Block" title="svzerodsolver.model.block.Block"><code class="xref py py-class docutils literal notranslate"><span class="pre">Block</span></code></a></p>
-<p>Unsteady RCR - time-varying RCR values
-Formulation includes additional variable : internal pressure proximal to capacitance.</p>
+<p>Windkessel RCR boundary condition.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.windkesselbc.WindkesselBC.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#svzerodsolver.model.windkesselbc.WindkesselBC.name" title="Permalink to this definition">#</a></dt>
+<dd><p>Name of the block.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.windkesselbc.WindkesselBC.inflow_nodes">
+<span class="sig-name descname"><span class="pre">inflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.windkesselbc.WindkesselBC.inflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Inflow nodes of the element.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="svzerodsolver.model.windkesselbc.WindkesselBC.outflow_nodes">
+<span class="sig-name descname"><span class="pre">outflow_nodes</span></span><a class="headerlink" href="#svzerodsolver.model.windkesselbc.WindkesselBC.outflow_nodes" title="Permalink to this definition">#</a></dt>
+<dd><p>Outflow nodes of the element.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="svzerodsolver.model.windkesselbc.WindkesselBC.from_config">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/windkesselbc.html#WindkesselBC.from_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.windkesselbc.WindkesselBC.from_config" title="Permalink to this definition">#</a></dt>
@@ -748,7 +887,12 @@ Formulation includes additional variable : internal pressure proximal to capacit
 <dl class="py method">
 <dt class="sig sig-object py" id="svzerodsolver.model.windkesselbc.WindkesselBC.update_time">
 <span class="sig-name descname"><span class="pre">update_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/svzerodsolver/model/windkesselbc.html#WindkesselBC.update_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#svzerodsolver.model.windkesselbc.WindkesselBC.update_time" title="Permalink to this definition">#</a></dt>
-<dd><p>unknowns = [P_in, Q_in, internal_var (Pressure at the intersection of the Rp, Rd, and C elements)]</p>
+<dd><p>Update time dependent element contributions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>time</strong> – Current time.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

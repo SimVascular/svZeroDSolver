@@ -62,7 +62,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -148,16 +148,20 @@
               <article class="bd-article" role="main">
                 
   <h1>Source code for svzerodsolver.model.dofhandler</h1><div class="highlight"><pre>
-<div class="viewcode-block" id="DOFHandler"><a class="viewcode-back" href="../../../svzerodsolver.model.html#svzerodsolver.model.dofhandler.DOFHandler">[docs]</a><span></span><span class="k">class</span> <span class="nc">DOFHandler</span><span class="p">:</span>
+<span></span><span class="sd">&quot;&quot;&quot;This module holds the DOFHandler class.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="DOFHandler"><a class="viewcode-back" href="../../../svzerodsolver.model.html#svzerodsolver.model.dofhandler.DOFHandler">[docs]</a><span class="k">class</span> <span class="nc">DOFHandler</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Degree-of-freedom handler.</span>
 
-<span class="sd">    Class for handling global degrees of freedom of a system. Assigns global</span>
-<span class="sd">    IDs to variables and equations.</span>
+<span class="sd">    This class handles degrees-of-freedom for model variables and equations.</span>
+<span class="sd">    It assigns each element with row and column indices which it can use to</span>
+<span class="sd">    assemble it&#39;s local contributions into the local contributions into the</span>
+<span class="sd">    global system.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        variables: List of variable names corresponding to the global IDs.</span>
 <span class="sd">            Variables without a name have an entry None.</span>
-<span class="sd">        n: Size of the system.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

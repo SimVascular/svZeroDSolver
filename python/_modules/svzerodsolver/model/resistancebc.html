@@ -62,7 +62,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -148,7 +148,8 @@
               <article class="bd-article" role="main">
                 
   <h1>Source code for svzerodsolver.model.resistancebc</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
+<span></span><span class="sd">&quot;&quot;&quot;This module holds the ResistanceBC class.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -156,22 +157,40 @@
 
 
 <div class="viewcode-block" id="ResistanceBC"><a class="viewcode-back" href="../../../svzerodsolver.model.html#svzerodsolver.model.resistancebc.ResistanceBC">[docs]</a><span class="k">class</span> <span class="nc">ResistanceBC</span><span class="p">(</span><span class="n">Block</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Resistance boundary condition.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        name: Name of the block.</span>
+<span class="sd">        inflow_nodes: Inflow nodes of the element.</span>
+<span class="sd">        outflow_nodes: Outflow nodes of the element.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_NUM_EQUATIONS</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new ResistanceBC instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: The configuration paramaters of the block. Mostly comprised</span>
+<span class="sd">                of constants for element contribution calculation.</span>
+<span class="sd">            name: Optional name of the block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_r_func</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">],</span> <span class="n">Sequence</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_r_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_r_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolate</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mat</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mat</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_pd_func</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;Pd&quot;</span><span class="p">],</span> <span class="n">Sequence</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_pd_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;Pd&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pd_func</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interpolate</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;Pd&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_vec</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_vec</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;Pd&quot;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -181,6 +200,14 @@
 
 <div class="viewcode-block" id="ResistanceBC.from_config"><a class="viewcode-back" href="../../../svzerodsolver.model.html#svzerodsolver.model.resistancebc.ResistanceBC.from_config">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create block from config dictionary.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            config: The configuration dict for the block.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The block instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
             <span class="n">time</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;bc_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
             <span class="n">Pd</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;bc_values&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Pd&quot;</span><span class="p">),</span>
@@ -189,8 +216,10 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="ResistanceBC.update_time"><a class="viewcode-back" href="../../../svzerodsolver.model.html#svzerodsolver.model.resistancebc.ResistanceBC.update_time">[docs]</a>    <span class="k">def</span> <span class="nf">update_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        the ordering is : (P_in,Q_in)</span>
+        <span class="sd">&quot;&quot;&quot;Update time dependent element contributions.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            time: Current time.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mat</span><span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_r_func</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_vec</span><span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">_pd_func</span><span class="p">(</span><span class="n">time</span><span class="p">)</span></div></div>

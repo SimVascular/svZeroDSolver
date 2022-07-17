@@ -62,7 +62,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -148,7 +148,8 @@
               <article class="bd-article" role="main">
                 
   <h1>Source code for svzerodsolver.model.bloodvessel</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="sd">&quot;&quot;&quot;This module holds the BloodVessel class.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">.block</span> <span class="kn">import</span> <span class="n">Block</span>
 
@@ -156,37 +157,25 @@
 <div class="viewcode-block" id="BloodVessel"><a class="viewcode-back" href="../../../svzerodsolver.model.html#svzerodsolver.model.bloodvessel.BloodVessel">[docs]</a><span class="k">class</span> <span class="nc">BloodVessel</span><span class="p">(</span><span class="n">Block</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Resistor-capacitor-inductor blood vessel with optional stenosis.</span>
 
-<span class="sd">    Valid parameters:</span>
-<span class="sd">        * :code:`R`: Poiseuille resistance :math:`\frac{8 \mu L}{\pi r^{4}}`</span>
-<span class="sd">        * :code:`L`: Inductance</span>
-<span class="sd">        * :code:`C`: Capacitance</span>
-<span class="sd">        * :code:`stenosis_coefficient`: Stenosis coefficient :math:`K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}`.</span>
+<span class="sd">    Models the mechanical behavior of a bloodvessel with optional stenosis.</span>
 
-<span class="sd">    The governing equations for the local resistor-capacitor-inductor element are</span>
-
-<span class="sd">    .. math::</span>
-
-<span class="sd">        P_{i n}^{e}-P_{o u t}^{e}-R Q_{i n}^{e}-L \frac{d Q_{o u t}^{e}}{d t}=0</span>
-
-<span class="sd">    .. math::</span>
-
-<span class="sd">        Q_{\text {in }}^{e}-Q_{\text {out }}^{e}-C \frac{d P_{c}^{e}}{d t}=0</span>
-
-<span class="sd">    .. math::</span>
-
-<span class="sd">        P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0</span>
-
-<span class="sd">    Stenosis:</span>
-<span class="sd">        equation: delta_P = ( K_t * rho / ( 2 * (A_0)**2 ) ) * ( ( A_0 / A_s ) - 1 )**2 * Q * abs(Q) + R_poiseuille * Q</span>
-<span class="sd">                          =               stenosis_coefficient                          * Q * abs(Q) + R_poiseuille * Q</span>
-
-<span class="sd">        source: Mirramezani, M., Shadden, S.C. A distributed lumped parameter model of blood flow. Annals of Biomedical Engineering. 2020.</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        name: Name of the block.</span>
+<span class="sd">        inflow_nodes: Inflow nodes of the element.</span>
+<span class="sd">        outflow_nodes: Outflow nodes of the element.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">_NUM_EQUATIONS</span> <span class="o">=</span> <span class="mi">3</span>
     <span class="n">_NUM_INTERNAL_VARS</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new BloodVessel instance.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params: The configuration paramaters of the block. Mostly comprised</span>
+<span class="sd">                of constants for element contribution calculation.</span>
+<span class="sd">            name: Optional name of the block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># the ordering of the solution variables is : (P_in, Q_in, P_out, Q_out)</span>

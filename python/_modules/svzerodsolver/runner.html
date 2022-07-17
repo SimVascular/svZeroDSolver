@@ -62,7 +62,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -148,20 +148,29 @@
               <article class="bd-article" role="main">
                 
   <h1>Source code for svzerodsolver.runner</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span></span><span class="sd">&quot;&quot;&quot;This module holds the main execution routines of svZeroDSolver.&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">import</span> <span class="nn">click</span>
 
+<span class="kn">from</span> <span class="nn">.algebra</span> <span class="kn">import</span> <span class="n">run_integrator</span>
+<span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">convert_unsteady_bcs_to_steady</span><span class="p">,</span>
+    <span class="n">create_blocks</span><span class="p">,</span>
+    <span class="n">format_results_to_dict</span><span class="p">,</span>
+    <span class="n">get_solver_params</span><span class="p">,</span>
+<span class="p">)</span>
+
 
 <div class="viewcode-block" id="run_from_config"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.runner.run_from_config">[docs]</a><span class="k">def</span> <span class="nf">run_from_config</span><span class="p">(</span><span class="n">parameters</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run the svZeroDSolver.</span>
 
-    <span class="kn">from</span> <span class="nn">.integrator</span> <span class="kn">import</span> <span class="n">run_integrator</span>
-    <span class="kn">from</span> <span class="nn">.utils</span> <span class="kn">import</span> <span class="p">(</span>
-        <span class="n">convert_unsteady_bcs_to_steady</span><span class="p">,</span>
-        <span class="n">create_blocks</span><span class="p">,</span>
-        <span class="n">format_results_to_dict</span><span class="p">,</span>
-        <span class="n">get_solver_params</span><span class="p">,</span>
-    <span class="p">)</span>
+<span class="sd">    Args:</span>
+<span class="sd">        config: Python dict of the configuration.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Python dict with results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">y_initial</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="n">ydot_initial</span> <span class="o">=</span> <span class="kc">None</span>
@@ -197,11 +206,19 @@
         <span class="n">max_iter</span><span class="o">=</span><span class="n">sim_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;maximum_nonlinear_iterations&quot;</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span>
     <span class="p">)</span>
 
-    <span class="n">zero_d_results_branch</span> <span class="o">=</span> <span class="n">format_results_to_dict</span><span class="p">(</span><span class="n">time_steps</span><span class="p">,</span> <span class="n">y_list</span><span class="p">,</span> <span class="n">block_list</span><span class="p">)</span>
+    <span class="n">zero_d_results_branch</span> <span class="o">=</span> <span class="n">format_results_to_dict</span><span class="p">(</span>
+        <span class="n">time_steps</span><span class="p">,</span> <span class="n">y_list</span><span class="p">,</span> <span class="n">block_list</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">zero_d_results_branch</span></div>
 
 
 <div class="viewcode-block" id="run_from_file"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.runner.run_from_file">[docs]</a><span class="k">def</span> <span class="nf">run_from_file</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run the svZeroDSolver from file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        input_file: Input file with configuration.</span>
+<span class="sd">        output_file: Output file with configuration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">ff</span><span class="p">)</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">run_from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
@@ -223,6 +240,7 @@
     <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="k">def</span> <span class="nf">_run_from_from_sys_args</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run the svZeroDSolver.&quot;&quot;&quot;</span>
     <span class="n">run_from_file</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">output_file</span><span class="p">)</span>
 </pre></div>
 

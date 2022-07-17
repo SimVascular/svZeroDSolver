@@ -62,7 +62,7 @@
   
   
   
-    <p class="title logo__title">svZeroDSolver v1.0 Manual</p>
+    <p class="title logo__title">svZeroDSolver Python Documentation</p>
   
 </a>
     
@@ -158,7 +158,6 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#J"><strong>J</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#O"><strong>O</strong></a>
@@ -173,7 +172,7 @@
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="svzerodsolver.html#svzerodsolver.integrator.GeneralizedAlpha.assemble">assemble() (svzerodsolver.integrator.GeneralizedAlpha method)</a>
+      <li><a href="svzerodsolver.html#svzerodsolver.algebra.GeneralizedAlpha.assemble">assemble() (svzerodsolver.algebra.GeneralizedAlpha method)</a>
 
       <ul>
         <li><a href="svzerodsolver.model.html#svzerodsolver.model.block.Block.assemble">(svzerodsolver.model.block.Block method)</a>
@@ -191,6 +190,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="svzerodsolver.model.html#svzerodsolver.model.bloodvessel.BloodVessel">BloodVessel (class in svzerodsolver.model.bloodvessel)</a>
 </li>
+      <li><a href="svzerodsolver.model.html#svzerodsolver.model.bloodvesseljunction.BloodVesselJunction">BloodVesselJunction (class in svzerodsolver.model.bloodvesseljunction)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -199,13 +200,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="svzerodsolver.html#svzerodsolver.utils.convert_unsteady_bcs_to_steady">convert_unsteady_bcs_to_steady() (in module svzerodsolver.utils)</a>
 </li>
-      <li><a href="svzerodsolver.html#svzerodsolver.utils.create_blocks">create_blocks() (in module svzerodsolver.utils)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="svzerodsolver.html#svzerodsolver.utils.create_junction_blocks">create_junction_blocks() (in module svzerodsolver.utils)</a>
-</li>
-      <li><a href="svzerodsolver.html#svzerodsolver.utils.create_vessel_blocks">create_vessel_blocks() (in module svzerodsolver.utils)</a>
+      <li><a href="svzerodsolver.html#svzerodsolver.utils.create_blocks">create_blocks() (in module svzerodsolver.utils)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -234,7 +231,7 @@
 </li>
         <li><a href="svzerodsolver.model.html#svzerodsolver.model.flowreferencebc.FlowReferenceBC.from_config">(svzerodsolver.model.flowreferencebc.FlowReferenceBC class method)</a>
 </li>
-        <li><a href="svzerodsolver.model.html#svzerodsolver.model.junction.Junction.from_config">(svzerodsolver.model.junction.Junction class method)</a>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.internaljunction.InternalJunction.from_config">(svzerodsolver.model.internaljunction.InternalJunction class method)</a>
 </li>
         <li><a href="svzerodsolver.model.html#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.from_config">(svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC class method)</a>
 </li>
@@ -251,7 +248,7 @@
 <h2 id="G">G</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="svzerodsolver.html#svzerodsolver.integrator.GeneralizedAlpha">GeneralizedAlpha (class in svzerodsolver.integrator)</a>
+      <li><a href="svzerodsolver.html#svzerodsolver.algebra.GeneralizedAlpha">GeneralizedAlpha (class in svzerodsolver.algebra)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -264,14 +261,28 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="svzerodsolver.model.html#svzerodsolver.model.block.Block.inflow_nodes">inflow_nodes (svzerodsolver.model.block.Block attribute)</a>
-</li>
-  </ul></td>
-</tr></table>
 
-<h2 id="J">J</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
+      <ul>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.bloodvessel.BloodVessel.inflow_nodes">(svzerodsolver.model.bloodvessel.BloodVessel attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.inflow_nodes">(svzerodsolver.model.bloodvesseljunction.BloodVesselJunction attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.flowreferencebc.FlowReferenceBC.inflow_nodes">(svzerodsolver.model.flowreferencebc.FlowReferenceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.internaljunction.InternalJunction.inflow_nodes">(svzerodsolver.model.internaljunction.InternalJunction attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.inflow_nodes">(svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.pressurereferencebc.PressureReferenceBC.inflow_nodes">(svzerodsolver.model.pressurereferencebc.PressureReferenceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.resistancebc.ResistanceBC.inflow_nodes">(svzerodsolver.model.resistancebc.ResistanceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.windkesselbc.WindkesselBC.inflow_nodes">(svzerodsolver.model.windkesselbc.WindkesselBC attribute)</a>
+</li>
+      </ul></li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="svzerodsolver.model.html#svzerodsolver.model.junction.Junction">Junction (class in svzerodsolver.model.junction)</a>
+      <li><a href="svzerodsolver.model.html#svzerodsolver.model.internaljunction.InternalJunction">InternalJunction (class in svzerodsolver.model.internaljunction)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -285,7 +296,7 @@
       <ul>
         <li><a href="svzerodsolver.html#module-svzerodsolver">svzerodsolver</a>
 </li>
-        <li><a href="svzerodsolver.html#module-svzerodsolver.integrator">svzerodsolver.integrator</a>
+        <li><a href="svzerodsolver.html#module-svzerodsolver.algebra">svzerodsolver.algebra</a>
 </li>
         <li><a href="svzerodsolver.model.html#module-svzerodsolver.model">svzerodsolver.model</a>
 </li>
@@ -293,11 +304,13 @@
 </li>
         <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.bloodvessel">svzerodsolver.model.bloodvessel</a>
 </li>
+        <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.bloodvesseljunction">svzerodsolver.model.bloodvesseljunction</a>
+</li>
         <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.dofhandler">svzerodsolver.model.dofhandler</a>
 </li>
         <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.flowreferencebc">svzerodsolver.model.flowreferencebc</a>
 </li>
-        <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.junction">svzerodsolver.model.junction</a>
+        <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.internaljunction">svzerodsolver.model.internaljunction</a>
 </li>
         <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.node">svzerodsolver.model.node</a>
 </li>
@@ -320,20 +333,32 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="svzerodsolver.model.html#svzerodsolver.model.dofhandler.DOFHandler.n">n (svzerodsolver.model.dofhandler.DOFHandler attribute)</a>
+      <li><a href="svzerodsolver.model.html#svzerodsolver.model.dofhandler.DOFHandler.n">n (svzerodsolver.model.dofhandler.DOFHandler property)</a>
+</li>
+      <li><a href="svzerodsolver.model.html#svzerodsolver.model.block.Block.name">name (svzerodsolver.model.block.Block attribute)</a>
 
       <ul>
-        <li><a href="svzerodsolver.model.html#id0">(svzerodsolver.model.dofhandler.DOFHandler property)</a>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.bloodvessel.BloodVessel.name">(svzerodsolver.model.bloodvessel.BloodVessel attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.name">(svzerodsolver.model.bloodvesseljunction.BloodVesselJunction attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.flowreferencebc.FlowReferenceBC.name">(svzerodsolver.model.flowreferencebc.FlowReferenceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.internaljunction.InternalJunction.name">(svzerodsolver.model.internaljunction.InternalJunction attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.node.Node.name">(svzerodsolver.model.node.Node attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.name">(svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.pressurereferencebc.PressureReferenceBC.name">(svzerodsolver.model.pressurereferencebc.PressureReferenceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.resistancebc.ResistanceBC.name">(svzerodsolver.model.resistancebc.ResistanceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.windkesselbc.WindkesselBC.name">(svzerodsolver.model.windkesselbc.WindkesselBC attribute)</a>
 </li>
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="svzerodsolver.model.html#svzerodsolver.model.block.Block.name">name (svzerodsolver.model.block.Block attribute)</a>
-
-      <ul>
-        <li><a href="svzerodsolver.model.html#svzerodsolver.model.node.Node.name">(svzerodsolver.model.node.Node attribute)</a>
-</li>
-      </ul></li>
       <li><a href="svzerodsolver.model.html#svzerodsolver.model.node.Node">Node (class in svzerodsolver.model.node)</a>
 </li>
   </ul></td>
@@ -344,10 +369,26 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="svzerodsolver.model.html#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC">OpenLoopCoronaryBC (class in svzerodsolver.model.openloopcoronarybc)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="svzerodsolver.model.html#svzerodsolver.model.block.Block.outflow_nodes">outflow_nodes (svzerodsolver.model.block.Block attribute)</a>
+
+      <ul>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.bloodvessel.BloodVessel.outflow_nodes">(svzerodsolver.model.bloodvessel.BloodVessel attribute)</a>
 </li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.bloodvesseljunction.BloodVesselJunction.outflow_nodes">(svzerodsolver.model.bloodvesseljunction.BloodVesselJunction attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.flowreferencebc.FlowReferenceBC.outflow_nodes">(svzerodsolver.model.flowreferencebc.FlowReferenceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.internaljunction.InternalJunction.outflow_nodes">(svzerodsolver.model.internaljunction.InternalJunction attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC.outflow_nodes">(svzerodsolver.model.openloopcoronarybc.OpenLoopCoronaryBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.pressurereferencebc.PressureReferenceBC.outflow_nodes">(svzerodsolver.model.pressurereferencebc.PressureReferenceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.resistancebc.ResistanceBC.outflow_nodes">(svzerodsolver.model.resistancebc.ResistanceBC attribute)</a>
+</li>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.windkesselbc.WindkesselBC.outflow_nodes">(svzerodsolver.model.windkesselbc.WindkesselBC attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -378,7 +419,7 @@
 </li>
       <li><a href="svzerodsolver.html#svzerodsolver.runner.run_from_file">run_from_file() (in module svzerodsolver.runner)</a>
 </li>
-      <li><a href="svzerodsolver.html#svzerodsolver.integrator.run_integrator">run_integrator() (in module svzerodsolver.integrator)</a>
+      <li><a href="svzerodsolver.html#svzerodsolver.algebra.run_integrator">run_integrator() (in module svzerodsolver.algebra)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -389,12 +430,12 @@
       <li><a href="svzerodsolver.model.html#svzerodsolver.model.block.Block.setup_dofs">setup_dofs() (svzerodsolver.model.block.Block method)</a>
 
       <ul>
-        <li><a href="svzerodsolver.model.html#svzerodsolver.model.junction.Junction.setup_dofs">(svzerodsolver.model.junction.Junction method)</a>
+        <li><a href="svzerodsolver.model.html#svzerodsolver.model.internaljunction.InternalJunction.setup_dofs">(svzerodsolver.model.internaljunction.InternalJunction method)</a>
 </li>
         <li><a href="svzerodsolver.model.html#svzerodsolver.model.node.Node.setup_dofs">(svzerodsolver.model.node.Node method)</a>
 </li>
       </ul></li>
-      <li><a href="svzerodsolver.html#svzerodsolver.integrator.GeneralizedAlpha.step">step() (svzerodsolver.integrator.GeneralizedAlpha method)</a>
+      <li><a href="svzerodsolver.html#svzerodsolver.algebra.GeneralizedAlpha.step">step() (svzerodsolver.algebra.GeneralizedAlpha method)</a>
 </li>
       <li>
     svzerodsolver
@@ -404,10 +445,10 @@
 </li>
       </ul></li>
       <li>
-    svzerodsolver.integrator
+    svzerodsolver.algebra
 
       <ul>
-        <li><a href="svzerodsolver.html#module-svzerodsolver.integrator">module</a>
+        <li><a href="svzerodsolver.html#module-svzerodsolver.algebra">module</a>
 </li>
       </ul></li>
       <li>
@@ -432,12 +473,21 @@
 </li>
       </ul></li>
       <li>
+    svzerodsolver.model.bloodvesseljunction
+
+      <ul>
+        <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.bloodvesseljunction">module</a>
+</li>
+      </ul></li>
+      <li>
     svzerodsolver.model.dofhandler
 
       <ul>
         <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.dofhandler">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     svzerodsolver.model.flowreferencebc
 
@@ -445,13 +495,11 @@
         <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.flowreferencebc">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
-    svzerodsolver.model.junction
+    svzerodsolver.model.internaljunction
 
       <ul>
-        <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.junction">module</a>
+        <li><a href="svzerodsolver.model.html#module-svzerodsolver.model.internaljunction">module</a>
 </li>
       </ul></li>
       <li>

@@ -2,7 +2,7 @@
 <div align="center">
 <h1>svZeroDSolver</h1>
 
-[![Build Status](https://github.com/richterjakob/svZeroDSolver/actions/workflows/build.yml/badge.svg)](https://github.com/richterjakob/svZeroDSolver/actions)
+[![Test Status](https://github.com/richterjakob/svZeroDSolver/actions/workflows/test.yml/badge.svg)](https://github.com/richterjakob/svZeroDSolver/actions)
 [![Latest Release](https://img.shields.io/github/v/release/richterjakob/svZeroDSolver?label=latest)](https://github.com/richterjakob/svZeroDSolver/releases/latest)
 ![Platform](https://img.shields.io/badge/platform-macOS%20|%20linux-blue)
 
@@ -18,3 +18,6 @@ both under the following links:
 * [**C++ Developer Guide**](https://richterjakob.github.io/svZeroDSolver/cpp/md_developer_guide.html)
 * [**Python Documentation**](https://richterjakob.github.io/svZeroDSolver/python)
 * [**Wiki**](https://github.com/richterjakob/svZeroDSolver/wiki)
+* [**Bug Reports**](https://github.com/SimVascular/svZeroDSolver/issues)
+* [**Forum**](https://github.com/SimVascular/svZeroDSolver/discussions)
+* [**About SimVascular**](https://simvascular.github.io)

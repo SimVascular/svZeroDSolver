@@ -27,7 +27,7 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+"""This module holds helper functions for svZeroDSolver."""
 from copy import deepcopy
 
 import numpy as np
@@ -35,7 +35,7 @@ import numpy as np
 from .model.bloodvessel import BloodVessel
 from .model.dofhandler import DOFHandler
 from .model.flowreferencebc import FlowReferenceBC
-from .model.junction import Junction
+from .model.internaljunction import InternalJunction
 from .model.node import Node
 from .model.openloopcoronarybc import OpenLoopCoronaryBC
 from .model.pressurereferencebc import PressureReferenceBC
@@ -43,21 +43,17 @@ from .model.resistancebc import ResistanceBC
 from .model.windkesselbc import WindkesselBC
 
 
-def get_solver_params(parameters):
-    """
-    Purpose:
-        Set the 0d simulation time-stepping parameters
-    Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
+def get_solver_params(config):
+    """Determine time step size and number of timesteps.
+
+    Args:
+        config: svZeroDSolver configuration.
+
     Returns:
-        void, but updates parameters to include:
-            float delta_t
-                = constant time step size for the 0d simulation
-            int total_number_of_simulated_time_steps
-                = total number of time steps to simulate for the entire 0d simulation
+        time_step_size: Time step size:
+        num_time_steps: Number of time steps.
     """
-    sim_params = parameters["simulation_parameters"]
+    sim_params = config["simulation_parameters"]
     cardiac_cycle_period = sim_params.get("cardiac_cycle_period", 1.0)
     num_cycles = sim_params.get("number_of_cardiac_cycles")
     num_pts_per_cycle = sim_params.get("number_of_time_pts_per_cardiac_cycle")
@@ -66,69 +62,74 @@ def get_solver_params(parameters):
     return time_step_size, num_time_steps
 
 
-def convert_unsteady_bcs_to_steady(parameters):
-    steady_parameters = deepcopy(parameters)
-    steady_parameters["simulation_parameters"][
+def convert_unsteady_bcs_to_steady(config):
+    """Convert unsteady boundary conditions to their steady equivalent.
+
+    Args:
+        config: svZeroDSolver configuration.
+
+    Returns:
+        steady_config: Configuration of the steady equivalent.
+    """
+    steady_config = deepcopy(config)
+    steady_config["simulation_parameters"][
         "number_of_time_pts_per_cardiac_cycle"
     ] = 11
-    steady_parameters["simulation_parameters"]["number_of_cardiac_cycles"] = 3
+    steady_config["simulation_parameters"]["number_of_cardiac_cycles"] = 3
     bc_identifiers = {"FLOW": "Q", "PRESSURE": "P", "CORONARY": "Pim"}
-
-    for i, bc in enumerate(parameters["boundary_conditions"]):
+    for i, bc in enumerate(config["boundary_conditions"]):
         if bc["bc_type"] in bc_identifiers:
             bc_values = bc["bc_values"][bc_identifiers[bc["bc_type"]]]
             # Time averaged value for a single cariadic_cycle
-            del steady_parameters["boundary_conditions"][i]["bc_values"]["t"]
-            steady_parameters["boundary_conditions"][i]["bc_values"][
+            del steady_config["boundary_conditions"][i]["bc_values"]["t"]
+            steady_config["boundary_conditions"][i]["bc_values"][
                 bc_identifiers[bc["bc_type"]]
             ] = np.mean(bc_values)
         if bc["bc_type"] == "RCR":
-            steady_parameters["boundary_conditions"][i]["bc_values"]["C"] = 0.0
+            steady_config["boundary_conditions"][i]["bc_values"]["C"] = 0.0
 
-    return steady_parameters
+    return steady_config
 
 
-def create_junction_blocks(parameters):
-    """
-    Purpose:
-        Create the junction blocks for the 0d model.
-    Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
+def create_blocks(config, steady=False):
+    """Create blocks.
+
+    Args:
+        config: svZeroDSolver configuration.
+        steady: Toggle if blocks should be created with steady behavior.
+
     Returns:
-        void, but updates parameters["blocks"] to include the junction_blocks, where
-            parameters["blocks"] = {block_name : block_object}
+        blocks: List of created blocks.
+        dofhandler: Degree-of-freedom handler.
     """
     block_dict = {}
     connections = []
-    for config in parameters["junctions"]:
-        if config["junction_type"] in ["NORMAL_JUNCTION", "internal_junction"]:
-            junction = Junction.from_config(config)
+
+    # Create junctions
+    for junction_config in config["junctions"]:
+        if junction_config["junction_type"] in [
+            "NORMAL_JUNCTION",
+            "internal_junction",
+        ]:
+            junction = InternalJunction.from_config(junction_config)
         else:
-            raise ValueError(f"Unknown junction type: {config['junction_type']}")
-        connections += [(f"V{vid}", junction.name) for vid in config["inlet_vessels"]]
-        connections += [(junction.name, f"V{vid}") for vid in config["outlet_vessels"]]
+            raise ValueError(
+                f"Unknown junction type: {junction_config['junction_type']}"
+            )
+        connections += [
+            (f"V{vid}", junction.name)
+            for vid in junction_config["inlet_vessels"]
+        ]
+        connections += [
+            (junction.name, f"V{vid}")
+            for vid in junction_config["outlet_vessels"]
+        ]
         if junction.name in block_dict:
             raise RuntimeError(f"Junction {junction.name} already exists.")
         block_dict[junction.name] = junction
 
-    return block_dict, connections
-
-
-def create_vessel_blocks(parameters, steady):
-    """
-    Purpose:
-        Create the vessel blocks for the 0d model.
-    Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-    Returns:
-        void, but updates parameters["blocks"] to include the vessel_blocks, where
-            parameters["blocks"] = {block_name : block_object}
-    """
-    block_dict = {}
-    connections = []
-    for vessel_config in parameters["vessels"]:
+    # Create vessels and boundary conditions
+    for vessel_config in config["vessels"]:
         if vessel_config["zero_d_element_type"] == "BloodVessel":
             vessel = BloodVessel.from_config(vessel_config)
         else:
@@ -159,15 +160,15 @@ def create_vessel_blocks(parameters, steady):
             ]
             for location in locations:
                 vessel_id = vessel_config["vessel_id"]
-                for config in parameters["boundary_conditions"]:
+                for bc_config in config["boundary_conditions"]:
                     if (
-                        config["bc_name"]
+                        bc_config["bc_name"]
                         == vessel_config["boundary_conditions"][location]
                     ):
                         bc_config = dict(
                             name="BC" + str(vessel_id) + "_" + location,
                             steady=steady,
-                            **config,
+                            **bc_config,
                         )
                         break
 
@@ -176,12 +177,16 @@ def create_vessel_blocks(parameters, steady):
                     and len(bc_config["bc_values"]["t"]) >= 2
                 ):
                     cardiac_cycle_period = (
-                        bc_config["bc_values"]["t"][-1] - bc_config["bc_values"]["t"][0]
+                        bc_config["bc_values"]["t"][-1]
+                        - bc_config["bc_values"]["t"][0]
                     )
                     if (
-                        "cardiac_cycle_period" in parameters["simulation_parameters"]
+                        "cardiac_cycle_period"
+                        in config["simulation_parameters"]
                         and cardiac_cycle_period
-                        != parameters["simulation_parameters"]["cardiac_cycle_period"]
+                        != config["simulation_parameters"][
+                            "cardiac_cycle_period"
+                        ]
                     ):
                         raise RuntimeError(
                             f"The time series of the boundary condition for segment {vessel_id} does "
@@ -189,9 +194,9 @@ def create_vessel_blocks(parameters, steady):
                         )
                     elif (
                         "cardiac_cycle_period"
-                        not in parameters["simulation_parameters"]
+                        not in config["simulation_parameters"]
                     ):
-                        parameters["simulation_parameters"][
+                        config["simulation_parameters"][
                             "cardiac_cycle_period"
                         ] = cardiac_cycle_period
 
@@ -208,65 +213,58 @@ def create_vessel_blocks(parameters, steady):
                 else:
                     raise NotImplementedError
                 block_dict[bc.name] = bc
-    return block_dict, connections
 
-
-def create_blocks(parameters, steady=False):
-    """
-    Purpose:
-        Create all LPNBlock objects for the 0d model.
-    Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-    Returns:
-        void, but updates parameters to include:
-            dict blocks
-                = {block_name : block_object}
-                -- where the values are the junction, vessel, outlet BC, and inlet BC block objects
-    """
-    junction_blocks, junction_connections = create_junction_blocks(parameters)
-    vessel_blocks, vessel_connections = create_vessel_blocks(parameters, steady=steady)
-    all_blocks = junction_blocks | vessel_blocks
+    # Create nodes
     dofhandler = DOFHandler()
-    for ele1_name, ele2_name in junction_connections + vessel_connections:
+    for ele1_name, ele2_name in connections:
         node = Node(
-            all_blocks[ele1_name],
-            all_blocks[ele2_name],
+            block_dict[ele1_name],
+            block_dict[ele2_name],
             name=ele1_name + "_" + ele2_name,
         )
         node.setup_dofs(dofhandler)
-    for key in sorted(all_blocks):
-        all_blocks[key].setup_dofs(dofhandler)
-    return list(all_blocks.values()), dofhandler
+
+    # Setup degrees of freedom of the model
+    for key in sorted(block_dict):
+        block_dict[key].setup_dofs(dofhandler)
+    return list(block_dict.values()), dofhandler
 
 
-def format_results_to_dict(zero_d_time, results_0d, block_list):
+def format_results_to_dict(time_steps, result_array, block_list):
+    """Format result array to dict format.
 
-    results_0d = np.array(results_0d)
+    Args:
+        time_steps: List of time steps.
 
+    Returns:
+        results: Resuluts in dict format.
+    """
+
+    result_array = np.array(result_array)
     vessels = [block for block in block_list if isinstance(block, BloodVessel)]
-
     results = {
         "flow_in": [],
         "flow_out": [],
         "names": [],
         "pressure_in": [],
         "pressure_out": [],
-        "time": list(zero_d_time),
+        "time": list(time_steps),
     }
 
     for vessel in vessels:
 
         results["names"].append(vessel.name)
-        results["flow_in"].append(list(results_0d[:, vessel.inflow_nodes[0].flow_dof]))
+        results["flow_in"].append(
+            list(result_array[:, vessel.inflow_nodes[0].flow_dof])
+        )
         results["flow_out"].append(
-            list(results_0d[:, vessel.outflow_nodes[0].flow_dof])
+            list(result_array[:, vessel.outflow_nodes[0].flow_dof])
         )
         results["pressure_in"].append(
-            list(results_0d[:, vessel.inflow_nodes[0].pres_dof])
+            list(result_array[:, vessel.inflow_nodes[0].pres_dof])
         )
         results["pressure_out"].append(
-            list(results_0d[:, vessel.outflow_nodes[0].pres_dof])
+            list(result_array[:, vessel.outflow_nodes[0].pres_dof])
         )
 
     return results

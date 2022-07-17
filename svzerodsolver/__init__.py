@@ -31,6 +31,4 @@
 
 NAME = "svZeroDSolver"
 VERSION = "v1.0"
-COPYRIGHT = (
-    "Stanford University, The Regents of the University of California, and others."
-)
+COPYRIGHT = "Stanford University, The Regents of the University of California, and others."

@@ -15,7 +15,7 @@ namespace MODEL {
  *
  * This class handles degrees-of-freedom for model variables and
  * equations. It assigns each element with row and column indices which it
- * can use to assemble it's local contibutions into the global system.
+ * can use to assemble it's local contributions into the global system.
  */
 class DOFHandler {
  private:

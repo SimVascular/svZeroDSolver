@@ -29,7 +29,7 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+"""This module holds all algebra related classes and methods."""
 import numpy as np
 from scipy.sparse import linalg
 
@@ -37,13 +37,18 @@ from scipy.sparse import linalg
 class GeneralizedAlpha:
     """Generalized alpha time integrator.
 
-    Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson for non-linear residual
+    Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson
+    for non-linear residual.
+
+    Args:
+        rho: Generalized-alpha parameter rho.
+        n: System size.
+        time_step_size: Time step size.
+        atol: Absolute tolerance.
+        max_iter: Maximum nonlinear iterations.
     """
 
-    # Integrator(MODEL::Model<T> &model, T time_step_size, T rho, T atol,
-    #          int max_iter);
-
-    def __init__(self, rho, n, time_step_size, atol=10 - 8, max_iter=30):
+    def __init__(self, rho, n, time_step_size, atol=1e-8, max_iter=30):
 
         # Setup constants for generalized alpha time integration
         self.alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho)
@@ -114,7 +119,11 @@ class GeneralizedAlpha:
 
             # Assemble
             self.assemble(block_list)
-            res = -self.mat["E"].dot(ydotam) - self.mat["F"].dot(yaf) - self.mat["C"]
+            res = (
+                -self.mat["E"].dot(ydotam)
+                - self.mat["F"].dot(yaf)
+                - self.mat["C"]
+            )
 
             # Check termination criteria
             if np.abs(res).max() <= self.atol:
@@ -158,9 +167,25 @@ def run_integrator(
     atol=10 - 8,
     max_iter=30,
 ):
+    """Run time integration.
+
+    Args:
+        block_list: List of model blocks.
+        dofhandler: Degree-of-freedom handler.
+        num_time_steps: Number of time steps.
+        time_step_size: Time step size.
+        y_initial: Initial y.
+        ydot_initial: Initial ydot.
+        rho: Generalized-alpha parameter rho.
+        method: Time integration method to use.
+        atol: Absolute tolerance.
+        max_iter: Maximum nonlinear iterations.
+    """
 
     y = np.zeros(dofhandler.n) if y_initial is None else y_initial.copy()
-    ydot = np.zeros(dofhandler.n) if ydot_initial is None else ydot_initial.copy()
+    ydot = (
+        np.zeros(dofhandler.n) if ydot_initial is None else ydot_initial.copy()
+    )
 
     y_over_time = [y.copy()]
     ydot_over_time = [ydot.copy()]

@@ -1,3 +1,4 @@
+"""This module holds the OpenLoopCoronaryBC class."""
 from typing import Sequence
 
 import numpy as np
@@ -6,20 +7,36 @@ from .block import Block
 
 
 class OpenLoopCoronaryBC(Block):
-    """
-    open-loop coronary BC = RCRCR BC
-    Publication reference: Kim, H. J. et al. Patient-specific modeling of blood flow and pressure in human coronary arteries. Annals of Biomedical Engineering 38, 3195–3209 (2010)."
+    """Open-loop coronary boundary condition.
+
+    Base on: Kim, H. J. et al. Patient-specific modeling of blood flow and
+    pressure in human coronary arteries. Annals of Biomedical Engineering 38,
+    3195–3209 (2010)."
+
+    Attributes:
+        name: Name of the block.
+        inflow_nodes: Inflow nodes of the element.
+        outflow_nodes: Outflow nodes of the element.
     """
 
     _NUM_EQUATIONS = 2
     _NUM_INTERNAL_VARS = 1
 
     def __init__(self, params: dict = None, name: str = None):
+        """Create a new OpenLoopCoronaryBC instance.
+
+        Args:
+            params: The configuration paramaters of the block. Mostly comprised
+                of constants for element contribution calculation.
+            name: Optional name of the block.
+        """
         super().__init__(params=params, name=name)
 
         self._pv_func = None
         if isinstance(self._params["Pv"], Sequence):
-            self._pv_func = self._interpolate(self._params["time"], self._params["Pv"])
+            self._pv_func = self._interpolate(
+                self._params["time"], self._params["Pv"]
+            )
 
         self._pim_func = None
         if isinstance(self._params["Pim"], Sequence):
@@ -53,7 +70,9 @@ class OpenLoopCoronaryBC(Block):
                 -self._params["Cim"]
                 * (self._params["Rv"] + self._params["Ram"])
                 * self._params["Pim"]
-                + self._params["Ram"] * self._params["Cim"] * self._params["Pv"]
+                + self._params["Ram"]
+                * self._params["Cim"]
+                * self._params["Pv"]
             )
             self.update_time = super().update_time
         elif self._pv_func is None:
@@ -73,7 +92,9 @@ class OpenLoopCoronaryBC(Block):
                     ],
                     [
                         -1.0,
-                        self._params["Ra"] + self._params["Ram"] + self._params["Rv"],
+                        self._params["Ra"]
+                        + self._params["Ram"]
+                        + self._params["Rv"],
                         0.0,
                     ],
                 ]
@@ -83,6 +104,14 @@ class OpenLoopCoronaryBC(Block):
 
     @classmethod
     def from_config(cls, config):
+        """Create block from config dictionary.
+
+        Args:
+            config: The configuration dict for the block.
+
+        Returns:
+            The block instance.
+        """
         params = dict(
             time=config["bc_values"].get("t", None),
             Ra=config["bc_values"]["Ra1"],
@@ -98,8 +127,13 @@ class OpenLoopCoronaryBC(Block):
         return cls(params=params, name=config["name"])
 
     def update_time(self, time):
-        # For this open-loop coronary BC, the ordering of solution unknowns is : (P_in, Q_in, V_im)
-        # where V_im is the volume of the second capacitor, Cim
+        """Update time dependent element contributions.
+
+        Args:
+            time: Current time.
+        """
+        # For this open-loop coronary BC, the ordering of solution unknowns is :
+        # (P_in, Q_in, V_im) where V_im is the volume of the second capacitor, Cim
         # Q_in is the flow through the first resistor
         # and P_in is the pressure at the inlet of the first resistor
         Pim_value = self._pim_func(time)

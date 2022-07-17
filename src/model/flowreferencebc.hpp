@@ -15,7 +15,7 @@ namespace MODEL {
 /**
  * @brief Flow reference boundary condition.
  *
- * Applies a predefined flow at a boundary.
+ * Applies a prescribed flow to a boundary.
  *
  * \f[
  * \begin{circuitikz} \draw

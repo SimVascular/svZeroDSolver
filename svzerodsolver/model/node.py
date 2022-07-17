@@ -1,3 +1,4 @@
+"""This module holds the Node class."""
 from .block import Block
 from .dofhandler import DOFHandler
 

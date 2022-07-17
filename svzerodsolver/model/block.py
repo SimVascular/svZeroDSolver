@@ -1,3 +1,4 @@
+"""This module holds the Block class."""
 from abc import ABC, abstractclassmethod
 
 import numpy as np
@@ -7,11 +8,12 @@ from .dofhandler import DOFHandler
 
 
 class Block(ABC):
-    """Base class for lumped-parameter blocks.
+    """Base class for 0D model components.
 
-    A block stores all information about the mechanical characteristics of
-    a lumped-parameter element. The block is used to setup, update and
-    assemble element contributions in a network.
+    A block is the base class of 0D model elements. It is the place where the
+    contribution of an element to the global system is controlled. It defines
+    all relevant attributes and methods of an element and a few common helpers
+    for setting it up.
 
     Attributes:
         name: Name of the block.
@@ -92,9 +94,9 @@ class Block(ABC):
         ]
 
         # Create flat indices to assemble matrices as flattend array (faster)
-        meshgrid = np.array(np.meshgrid(self._global_row_id, global_col_id)).T.reshape(
-            -1, 2
-        )
+        meshgrid = np.array(
+            np.meshgrid(self._global_row_id, global_col_id)
+        ).T.reshape(-1, 2)
         self._flat_row_ids, self._flat_col_ids = meshgrid[:, 0], meshgrid[:, 1]
 
     def assemble(self, mat: dict[str, np.ndarray]) -> None:
@@ -127,4 +129,6 @@ class Block(ABC):
     def _interpolate(self, times, values):
         if times is None:
             raise ValueError("No time sequence provided for interpolation.")
-        return CubicSpline(np.array(times), np.array(values), bc_type="periodic")
+        return CubicSpline(
+            np.array(times), np.array(values), bc_type="periodic"
+        )

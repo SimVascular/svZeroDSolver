@@ -1,33 +1,20 @@
+"""This module holds the InternalJunction class."""
 import numpy as np
 
 from .block import Block
 
 
-class Junction(Block):
+class InternalJunction(Block):
     r"""Junction block.
 
     Represents a basic model junction without special mechanical behavior.
     Across all inlets and outlets of the junction, mass is conserved and
-    pressure is continuous. The block contributes as many equations to the
-    global system as it has inlet/outlet nodes :math:`n_{eq}=n_{inlets}+n_{outlets}`.
-    One equation comes from the mass conservation:
+    pressure is continuous.
 
-    .. math::
-
-        \sum_{i}^{n_{inlets}} Q_{i}=\sum_{j}^{n_{outlets}} Q_{j}
-
-    And the remaining :math:`n_{eq}-1` equations come from the continuous
-    pressure condition between each pair of different pressure values.
-
-    .. math::
-
-        P_{i}=P_{j} \quad \text{with} \quad i \neq j
-
-    The ordering of the variables is:
-
-    .. math::
-
-        \left[\begin{array}{llllllllll}P_{\text {in}, 1}^{e} & Q_{\text {in}, 1}^{e} & \dots & P_{\text {in}, i}^{e} & Q_{\text {in}, i}^{e} & P_{\text {out }, 1}^{e} & Q_{\text {out }, 1}^{e} & \dots & P_{\text {out}, i}^{e} & Q_{\text {out}, i}^{e}\end{array}\right]
+    Attributes:
+        name: Name of the block.
+        inflow_nodes: Inflow nodes of the element.
+        outflow_nodes: Outflow nodes of the element.
     """
 
     def setup_dofs(self, dofhandler):
@@ -50,7 +37,9 @@ class Junction(Block):
 
         # Set some constant element element contributions that needed
         # _NUM_EQUATIONS
-        self._mat["F"] = np.zeros((self._NUM_EQUATIONS, self._NUM_EQUATIONS * 2))
+        self._mat["F"] = np.zeros(
+            (self._NUM_EQUATIONS, self._NUM_EQUATIONS * 2)
+        )
         for i in range(self._NUM_EQUATIONS - 1):
             self._mat["F"][i, [0, 2 * i + 2]] = [1.0, -1.0]
         self._mat["F"][-1, np.arange(1, 2 * self._NUM_EQUATIONS, 2)] = [
@@ -58,7 +47,7 @@ class Junction(Block):
         ] * num_inlets + [-1.0] * num_outlets
 
     @classmethod
-    def from_config(cls, config: dict) -> "Junction":
+    def from_config(cls, config: dict) -> "InternalJunction":
         """Create block from config dictionary.
 
         Args:

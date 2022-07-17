@@ -1,8 +1,13 @@
+"""This module holds the DOFHandler class."""
+
+
 class DOFHandler:
     """Degree-of-freedom handler.
 
-    Class for handling global degrees of freedom of a system. Assigns global
-    IDs to variables and equations.
+    This class handles degrees-of-freedom for model variables and equations.
+    It assigns each element with row and column indices which it can use to
+    assemble it's local contributions into the local contributions into the
+    global system.
 
     Attributes:
         variables: List of variable names corresponding to the global IDs.

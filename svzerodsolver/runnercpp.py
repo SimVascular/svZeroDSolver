@@ -13,10 +13,14 @@ from pandas import read_csv
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
-libfiles = glob.glob(os.path.join(this_file_dir, "..", "Release", "svzerodsolver*.so"))
+libfiles = glob.glob(
+    os.path.join(this_file_dir, "..", "Release", "svzerodsolver*.so")
+)
 
 if not libfiles:
-    raise ImportError("No release build of svzerodsolver found.")
+    raise ImportError(
+        "No release build of svzerodsolver found. Please create a build in a folder called 'Release'."
+    )
 
 spec = importlib.util.spec_from_file_location(
     "svzerodsolvercpp",

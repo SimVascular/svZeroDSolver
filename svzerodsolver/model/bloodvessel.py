@@ -1,3 +1,4 @@
+"""This module holds the BloodVessel class."""
 import numpy as np
 
 from .block import Block
@@ -6,37 +7,25 @@ from .block import Block
 class BloodVessel(Block):
     r"""Resistor-capacitor-inductor blood vessel with optional stenosis.
 
-    Valid parameters:
-        * :code:`R`: Poiseuille resistance :math:`\frac{8 \mu L}{\pi r^{4}}`
-        * :code:`L`: Inductance
-        * :code:`C`: Capacitance
-        * :code:`stenosis_coefficient`: Stenosis coefficient :math:`K_{t} \frac{\rho}{2 A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}`.
+    Models the mechanical behavior of a bloodvessel with optional stenosis.
 
-    The governing equations for the local resistor-capacitor-inductor element are
-
-    .. math::
-
-        P_{i n}^{e}-P_{o u t}^{e}-R Q_{i n}^{e}-L \frac{d Q_{o u t}^{e}}{d t}=0
-
-    .. math::
-
-        Q_{\text {in }}^{e}-Q_{\text {out }}^{e}-C \frac{d P_{c}^{e}}{d t}=0
-
-    .. math::
-
-        P_{i n}^{e}-R Q_{i n}^{e}-P_{c}=0
-
-    Stenosis:
-        equation: delta_P = ( K_t * rho / ( 2 * (A_0)**2 ) ) * ( ( A_0 / A_s ) - 1 )**2 * Q * abs(Q) + R_poiseuille * Q
-                          =               stenosis_coefficient                          * Q * abs(Q) + R_poiseuille * Q
-
-        source: Mirramezani, M., Shadden, S.C. A distributed lumped parameter model of blood flow. Annals of Biomedical Engineering. 2020.
+    Attributes:
+        name: Name of the block.
+        inflow_nodes: Inflow nodes of the element.
+        outflow_nodes: Outflow nodes of the element.
     """
 
     _NUM_EQUATIONS = 3
     _NUM_INTERNAL_VARS = 1
 
     def __init__(self, params: dict = None, name: str = None):
+        """Create a new BloodVessel instance.
+
+        Args:
+            params: The configuration paramaters of the block. Mostly comprised
+                of constants for element contribution calculation.
+            name: Optional name of the block.
+        """
         super().__init__(params=params, name=name)
 
         # the ordering of the solution variables is : (P_in, Q_in, P_out, Q_out)

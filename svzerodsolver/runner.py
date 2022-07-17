@@ -1,17 +1,26 @@
+"""This module holds the main execution routines of svZeroDSolver."""
 import json
 
 import click
 
+from .algebra import run_integrator
+from .utils import (
+    convert_unsteady_bcs_to_steady,
+    create_blocks,
+    format_results_to_dict,
+    get_solver_params,
+)
+
 
 def run_from_config(parameters):
+    """Run the svZeroDSolver.
 
-    from .integrator import run_integrator
-    from .utils import (
-        convert_unsteady_bcs_to_steady,
-        create_blocks,
-        format_results_to_dict,
-        get_solver_params,
-    )
+    Args:
+        config: Python dict of the configuration.
+
+    Returns:
+        Python dict with results.
+    """
 
     y_initial = None
     ydot_initial = None
@@ -47,11 +56,19 @@ def run_from_config(parameters):
         max_iter=sim_params.get("maximum_nonlinear_iterations", 30),
     )
 
-    zero_d_results_branch = format_results_to_dict(time_steps, y_list, block_list)
+    zero_d_results_branch = format_results_to_dict(
+        time_steps, y_list, block_list
+    )
     return zero_d_results_branch
 
 
 def run_from_file(input_file, output_file):
+    """Run the svZeroDSolver from file.
+
+    Args:
+        input_file: Input file with configuration.
+        output_file: Output file with configuration.
+    """
     with open(input_file) as ff:
         config = json.load(ff)
     result = run_from_config(config)
@@ -73,4 +90,5 @@ def run_from_file(input_file, output_file):
     type=str,
 )
 def _run_from_from_sys_args(input_file, output_file):
+    """Run the svZeroDSolver."""
     run_from_file(input_file, output_file)

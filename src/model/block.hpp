@@ -19,7 +19,7 @@ namespace MODEL {
  * @brief Base class for 0D model components.
  *
  * A MODEL::Block is the base class of 0D model elements. It is the place
- * where the contibution of an element to the global system is controlled.
+ * where the contribution of an element to the global system is controlled.
  * It defines all relevant attributes and methods of an element and a few
  * common helpers for setting it up.
  *

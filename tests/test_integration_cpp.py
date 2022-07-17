@@ -1,25 +1,30 @@
 import json
 import os
+from subprocess import call
+from tempfile import TemporaryDirectory
 
 import numpy as np
 
-from svzerodsolver.runner import run_from_config
+this_file_dir = os.path.abspath(os.path.dirname(__file__))
+cpp_exec = os.path.join(this_file_dir, "..", "Release", "svzerodsolver")
 
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8
 
 
-def run_test_case_by_name(name, testdir):
+def run_test_case_by_name(name):
     """Run a test case by its case name.
 
     Args:
         name: Name of the test case.
         testdir: Directory for performing the simulation.
     """
-    testfile = os.path.join(os.path.dirname(__file__), "cases", name + ".json")
-    with open(testfile) as ff:
-        config = json.load(ff)
-    branch_result = run_from_config(config)
+    testfile = os.path.join(this_file_dir, "cases", name + ".json")
+    with TemporaryDirectory() as tempdir:
+        outfile = os.path.join(tempdir, "output.json")
+        call([cpp_exec, testfile, outfile])
+        with open(outfile) as ff:
+            branch_result = json.load(ff)
     return branch_result
 
 
@@ -31,8 +36,8 @@ def get_result(result_array, field, branch, branch_node, time_step):
     return result_array[field_new][branch][time_step]
 
 
-def test_steady_flow_R_R(tmpdir):
-    results = run_test_case_by_name("steadyFlow_R_R", tmpdir)
+def test_steady_flow_R_R():
+    results = run_test_case_by_name("steadyFlow_R_R")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 1100.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -47,8 +52,8 @@ def test_steady_flow_R_R(tmpdir):
     )  # outlet flow
 
 
-def test_steady_flow_r_coronary(tmpdir):
-    results = run_test_case_by_name("steadyFlow_R_coronary", tmpdir)
+def test_steady_flow_r_coronary():
+    results = run_test_case_by_name("steadyFlow_R_coronary")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 2000.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -63,8 +68,8 @@ def test_steady_flow_r_coronary(tmpdir):
     )  # outlet flow
 
 
-def test_steady_flow_rlc_r(tmpdir):
-    results = run_test_case_by_name("steadyFlow_RLC_R", tmpdir)
+def test_steady_flow_rlc_r():
+    results = run_test_case_by_name("steadyFlow_RLC_R")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 1100.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -79,8 +84,8 @@ def test_steady_flow_rlc_r(tmpdir):
     )  # outlet flow
 
 
-def test_steady_flow_rc_r(tmpdir):
-    results = run_test_case_by_name("steadyFlow_RC_R", tmpdir)
+def test_steady_flow_rc_r():
+    results = run_test_case_by_name("steadyFlow_RC_R")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 1100.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -95,8 +100,8 @@ def test_steady_flow_rc_r(tmpdir):
     )  # outlet flow
 
 
-def test_steady_flow_rl_r(tmpdir):
-    results = run_test_case_by_name("steadyFlow_RL_R", tmpdir)
+def test_steady_flow_rl_r():
+    results = run_test_case_by_name("steadyFlow_RL_R")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 1100.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -111,8 +116,8 @@ def test_steady_flow_rl_r(tmpdir):
     )  # outlet flow
 
 
-def test_steady_flow_r_rcr(tmpdir):
-    results = run_test_case_by_name("steadyFlow_R_RCR", tmpdir)
+def test_steady_flow_r_rcr():
+    results = run_test_case_by_name("steadyFlow_R_RCR")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 10500.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -127,8 +132,8 @@ def test_steady_flow_r_rcr(tmpdir):
     )  # outlet flow
 
 
-def test_steady_flow_r_steady_pressure(tmpdir):
-    results = run_test_case_by_name("steadyFlow_R_steadyPressure", tmpdir)
+def test_steady_flow_r_steady_pressure():
+    results = run_test_case_by_name("steadyFlow_R_steadyPressure")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 1500.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -143,8 +148,8 @@ def test_steady_flow_r_steady_pressure(tmpdir):
     )  # outlet flow
 
 
-def test_steady_flow_stenosis_r(tmpdir):
-    results = run_test_case_by_name("steadyFlow_stenosis_R", tmpdir)
+def test_steady_flow_stenosis_r():
+    results = run_test_case_by_name("steadyFlow_stenosis_R")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 3600.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -159,8 +164,8 @@ def test_steady_flow_stenosis_r(tmpdir):
     )  # outlet flow
 
 
-def test_steady_flow_bifurcationr_r1(tmpdir):
-    results = run_test_case_by_name("steadyFlow_bifurcationR_R1", tmpdir)
+def test_steady_flow_bifurcationr_r1():
+    results = run_test_case_by_name("steadyFlow_bifurcationR_R1")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 1100.0, rtol=RTOL_PRES
     )  # parent inlet pressure
@@ -199,8 +204,8 @@ def test_steady_flow_bifurcationr_r1(tmpdir):
     )  # daughter2 outlet flow
 
 
-def test_steady_flow_bifurcationr_r2(tmpdir):
-    results = run_test_case_by_name("steadyFlow_bifurcationR_R2", tmpdir)
+def test_steady_flow_bifurcationr_r2():
+    results = run_test_case_by_name("steadyFlow_bifurcationR_R2")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 3462.5, rtol=RTOL_PRES
     )  # parent inlet pressure
@@ -239,8 +244,8 @@ def test_steady_flow_bifurcationr_r2(tmpdir):
     )  # daughter2 outlet flow
 
 
-def test_pulsatile_flow_r_rcr(tmpdir):
-    results = run_test_case_by_name("pulsatileFlow_R_RCR", tmpdir)
+def test_pulsatile_flow_r_rcr():
+    results = run_test_case_by_name("pulsatileFlow_R_RCR")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, 0), 4620.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -255,8 +260,8 @@ def test_pulsatile_flow_r_rcr(tmpdir):
     )  # outlet flow
 
 
-def test_pulsatile_flow_r_coronary(tmpdir):
-    results = run_test_case_by_name("pulsatileFlow_R_coronary", tmpdir)
+def test_pulsatile_flow_r_coronary():
+    results = run_test_case_by_name("pulsatileFlow_R_coronary")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, 0), 880.0, rtol=RTOL_PRES
     )  # inlet pressure
@@ -271,13 +276,11 @@ def test_pulsatile_flow_r_coronary(tmpdir):
     )  # outlet flow
 
 
-def test_pusatile_flow_cstenosis_steady_pressure(tmpdir):
-    results = run_test_case_by_name(
-        "pusatileFlow_CStenosis_steadyPressure", tmpdir
-    )
+def test_pusatile_flow_cstenosis_steady_pressure():
+    results = run_test_case_by_name("pusatileFlow_CStenosis_steadyPressure")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -439),
-        0.5937166987044968,
+        0.5933049197138334,
         rtol=1.0e-5,
     )  # inlet pressure
     assert np.isclose(
@@ -285,18 +288,18 @@ def test_pusatile_flow_cstenosis_steady_pressure(tmpdir):
     )  # outlet pressure
     assert np.isclose(
         get_result(results, "flow", 0, 0, -439),
-        0.7026499697830042,
+        0.7023611813029965,
         rtol=1.0e-5,
     )  # inlet flow
     assert np.isclose(
         get_result(results, "flow", 0, -1, -439),
-        0.7026499697830042,
+        0.7023611813029965,
         rtol=1.0e-5,
     )  # outlet flow
 
 
-def test_steady_flow_confluencer_r(tmpdir):
-    results = run_test_case_by_name("steadyFlow_confluenceR_R", tmpdir)
+def test_steady_flow_confluencer_r():
+    results = run_test_case_by_name("steadyFlow_confluenceR_R")
     assert np.isclose(
         get_result(results, "pressure", 0, 0, -1), 6600.0, rtol=RTOL_PRES
     )  # parent inlet pressure

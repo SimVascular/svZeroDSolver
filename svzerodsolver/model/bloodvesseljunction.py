@@ -27,8 +27,19 @@
 # LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+"""This module holds the BloodVesselJunction class."""
+from .internaljunction import InternalJunction
 
 
-NAME = "svZeroDSolver"
-VERSION = "v1.0"
-COPYRIGHT = "Stanford University, The Regents of the University of California, and others."
+class BloodVesselJunction(InternalJunction):
+    """Blood vessel junction.
+
+    (dummy for future implementation of blood pressure losses at junctions)
+
+    Attributes:
+        name: Name of the block.
+        inflow_nodes: Inflow nodes of the element.
+        outflow_nodes: Outflow nodes of the element.
+    """
+
+    pass

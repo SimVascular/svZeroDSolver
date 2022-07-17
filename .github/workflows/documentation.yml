@@ -1,0 +1,38 @@
+name: Documentation
+on: [push, pull_request]
+permissions:
+  contents: write
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Make html directory
+        run: mkdir docs/html
+      - name: Build doxygen documentation
+        continue-on-error: true
+        uses: mattnotmitt/doxygen-action@v1.9.4
+        with:
+          working-directory: '.'
+          doxyfile-path: 'docs/cpp/Doxyfile'
+          enable-latex: true
+      - name: Install sphinx dependencies
+        run: |
+          conda create -n zerod python=3.9
+          conda run -n zerod pip install -e .[dev]
+      - name: Build sphinx documentation
+        continue-on-error: true
+        run: |
+          conda run -n zerod sphinx-apidoc -o docs/python/source svzerodsolver
+          conda run -n zerod sphinx-build -b html -d docs/python/build/doctrees  docs/python/source docs/html/python
+      - name: Save documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation
+          path: ./docs/html
+      - name: Deploy documentation
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/html

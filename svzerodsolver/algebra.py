@@ -35,7 +35,7 @@ from scipy.sparse import linalg
 
 
 class GeneralizedAlpha:
-    """Generalized alpha time integrator.
+    """Generalized alpha time integrator. :cite:`JANSEN2000305`
 
     Solves system E*ydot + F*y + C = 0 with generalized alpha and Newton-Raphson
     for non-linear residual.

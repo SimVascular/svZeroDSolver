@@ -30,7 +30,9 @@ bibtex_default_style = "unsrt"
 set_type_checking_flag = False
 
 html_theme_options = {
-    "logo_link": "index",
+    "logo": {
+        "text": "svZeroDSolver Python Documentation",
+    },
     "collapse_navigation": True,
     "show_prev_next": False,
     "github_url": "https://github.com/SimVascular/svZeroDSolver",

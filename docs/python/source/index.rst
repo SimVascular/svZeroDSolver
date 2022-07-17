@@ -1,8 +1,8 @@
 .. _mainpage:
 
-******************************
-svZeroDSolver documentation
-******************************
+**********************************
+svZeroDSolver Python Documentation
+**********************************
 
 **Version**: |release|
 
@@ -11,36 +11,16 @@ svZeroDSolver documentation
 `Issue Tracker <https://github.com/SimVascular/svZeroDSolver/issues>`_ |
 `SimVascular <https://simvascular.github.io>`_
 
-svZeroDSolver is a Python code that simulates the hemodynamics in zero-dimensional
+svZeroDSolver is a Python package that simulates the hemodynamics in zero-dimensional
 (0D) lumped parameter models of vascular networks. These 0D models are governed
 by differential algebraic equations (DAEs).
 
 The solver uses a highly modular framework to model the vascular anatomy, using
 individual 0D elements to represent different parts of the vascular anatomy
 (and boundary conditions). The individual 0D elements and their associated
-governing equations defined in `blocks.py`. 
-In `solver.py`, the blocks are assembled and simulated using the generalized-alpha
-time-stepping method defined in `time_integration.py`.
-
-The svZeroDSolver Python files are in the `svzerodsolver` Python package directory. 
-
-svZeroDSolver currently supports the following vascular 0D modeling options and
-boundary conditions:
-
-**Vascular 0D elements**:
-
-* Resistor
-* Resistor-capacitor
-* Resistor-inductor
-* Resistor-capacitor-inductor
-
-**Boundary conditions**:
-
-* Pressure
-* Resistor
-* RCR
-* Coronary
-* Flow
+governing equations defined in `models` subpackage. 
+In the `algebra` module, the blocks are assembled and simulated using the
+generalized-alpha time-stepping method.
 
 Installation
 ************
@@ -88,7 +68,7 @@ To run svZeroDSolver form the command line, run:
 
 .. code-block:: bash
 
-   zerod SOLVER_INPUT_FILE 
+   zerod SOLVER_INPUT_FILE SOLVER_OUTPUT_FILE
 
 
 For more information about command line options, enter:
@@ -103,7 +83,7 @@ As a python module
 .. code-block:: python
 
    import svzerodsolver
-   svzerodsolver.solver.set_up_and_run_0d_simulation('input.json')
+   svzerodsolver.runner.run_from_file('input.json', 'output.json')
 
 This variant enables running svZeroDSolver within a user-defined Python code
 (e.g. parameter optimization, uncertainty quantification)

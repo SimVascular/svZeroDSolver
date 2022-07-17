@@ -7,11 +7,7 @@ from .block import Block
 
 
 class OpenLoopCoronaryBC(Block):
-    """Open-loop coronary boundary condition.
-
-    Base on: Kim, H. J. et al. Patient-specific modeling of blood flow and
-    pressure in human coronary arteries. Annals of Biomedical Engineering 38,
-    3195–3209 (2010)."
+    """Open-loop coronary boundary condition. :cite:`kim_coronary`
 
     Attributes:
         name: Name of the block.

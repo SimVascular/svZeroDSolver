@@ -12,7 +12,6 @@ class DOFHandler:
     Attributes:
         variables: List of variable names corresponding to the global IDs.
             Variables without a name have an entry None.
-        n: Size of the system.
     """
 
     def __init__(self):

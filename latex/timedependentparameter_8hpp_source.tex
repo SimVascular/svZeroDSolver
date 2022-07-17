@@ -2,129 +2,158 @@
 \label{timedependentparameter_8hpp_source}\index{model/timedependentparameter.hpp@{model/timedependentparameter.hpp}}
 \mbox{\hyperlink{timedependentparameter_8hpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{1 \textcolor{comment}{/**}}
-\DoxyCodeLine{2 \textcolor{comment}{ * @file timedependentparameter.hpp}}
-\DoxyCodeLine{3 \textcolor{comment}{ * @brief MODEL::TimeDependentParameter source file}}
-\DoxyCodeLine{4 \textcolor{comment}{ */}}
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_PARAMETER\_HPP\_}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_PARAMETER\_HPP\_}}
-\DoxyCodeLine{7 }
-\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <math.h>}}
-\DoxyCodeLine{9 }
-\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <numeric>}}
-\DoxyCodeLine{11 \textcolor{preprocessor}{\#include <vector>}}
-\DoxyCodeLine{12 }
-\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{dofhandler_8hpp}{dofhandler.hpp}}"{}}}
-\DoxyCodeLine{14 }
-\DoxyCodeLine{15 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
-\DoxyCodeLine{16 \textcolor{comment}{}}
-\DoxyCodeLine{17 \textcolor{comment}{/**}}
-\DoxyCodeLine{18 \textcolor{comment}{ * @brief Time-\/dependent parameter.}}
-\DoxyCodeLine{19 \textcolor{comment}{ *}}
-\DoxyCodeLine{20 \textcolor{comment}{ * This class handles time-\/dependent parameter that need to be interpolated}}
-\DoxyCodeLine{21 \textcolor{comment}{ * and periodically applied.}}
-\DoxyCodeLine{22 \textcolor{comment}{ *}}
-\DoxyCodeLine{23 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{24 \textcolor{comment}{ */}}
-\DoxyCodeLine{25 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{26 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter}} \{}
-\DoxyCodeLine{27  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{28 \textcolor{comment}{  /**}}
-\DoxyCodeLine{29 \textcolor{comment}{   * @brief Construct a new Time Dependent Parameter object}}
-\DoxyCodeLine{30 \textcolor{comment}{   *}}
-\DoxyCodeLine{31 \textcolor{comment}{   */}}
-\DoxyCodeLine{32   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a6b20648694b84b99af8faf36e6feae33}{TimeDependentParameter}}();}
-\DoxyCodeLine{33 \textcolor{comment}{}}
-\DoxyCodeLine{34 \textcolor{comment}{  /**}}
-\DoxyCodeLine{35 \textcolor{comment}{   * @brief Construct a new Time Dependent Parameter object}}
-\DoxyCodeLine{36 \textcolor{comment}{   *}}
-\DoxyCodeLine{37 \textcolor{comment}{   * @param times Time steps corresponding to the values}}
-\DoxyCodeLine{38 \textcolor{comment}{   * @param values Values correspondong to the time steps}}
-\DoxyCodeLine{39 \textcolor{comment}{   */}}
-\DoxyCodeLine{40   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a6b20648694b84b99af8faf36e6feae33}{TimeDependentParameter}}(std::vector<T> \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_ae2d4753300caa18ac0e6978c9838072b}{times}}, std::vector<T> \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a9a74b1459175f6aff164bbeac129afb4}{values}});}
-\DoxyCodeLine{41 \textcolor{comment}{}}
-\DoxyCodeLine{42 \textcolor{comment}{  /**}}
-\DoxyCodeLine{43 \textcolor{comment}{   * @brief Destroy the Time Dependent Parameter object}}
-\DoxyCodeLine{44 \textcolor{comment}{   *}}
-\DoxyCodeLine{45 \textcolor{comment}{   */}}
-\DoxyCodeLine{46   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a98ecc5ee6b8a94abd1bbe38b0f3225da}{\string~TimeDependentParameter}}();}
-\DoxyCodeLine{47 }
-\DoxyCodeLine{48   std::vector<T> \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_ae2d4753300caa18ac0e6978c9838072b}{times}};   \textcolor{comment}{///< Time steps}}
-\DoxyCodeLine{49   std::vector<T> \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a9a74b1459175f6aff164bbeac129afb4}{values}};  \textcolor{comment}{///< Values}}
-\DoxyCodeLine{50   T \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}};  \textcolor{comment}{///< Cardiac cycle period corresponding to the time sequence}}
-\DoxyCodeLine{51   \textcolor{keywordtype}{int} size;}
-\DoxyCodeLine{52 \textcolor{comment}{}}
-\DoxyCodeLine{53 \textcolor{comment}{  /**}}
-\DoxyCodeLine{54 \textcolor{comment}{   * @brief Get the parameter value at the specified time.}}
-\DoxyCodeLine{55 \textcolor{comment}{   *}}
-\DoxyCodeLine{56 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{57 \textcolor{comment}{   * @return Value at the time}}
-\DoxyCodeLine{58 \textcolor{comment}{   */}}
-\DoxyCodeLine{59   T \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a4dcbdfd359c34b8d4af725808705733e}{get}}(T time);}
-\DoxyCodeLine{60 }
-\DoxyCodeLine{61   \textcolor{keywordtype}{bool} isconstant;}
-\DoxyCodeLine{62 }
-\DoxyCodeLine{63   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a040eeefcb9697499f31ee7cabc028f40}{to\_steady}}();  \textcolor{comment}{///< Bool value indicating if the parameter is constant}}
-\DoxyCodeLine{64 \};}
-\DoxyCodeLine{65 }
-\DoxyCodeLine{66 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{67 \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a6b20648694b84b99af8faf36e6feae33}{TimeDependentParameter<T>::TimeDependentParameter}}() \{\}}
-\DoxyCodeLine{68 }
-\DoxyCodeLine{69 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{70 \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a6b20648694b84b99af8faf36e6feae33}{TimeDependentParameter<T>::TimeDependentParameter}}(std::vector<T> times,}
-\DoxyCodeLine{71                                                   std::vector<T> values) \{}
-\DoxyCodeLine{72   this-\/>times = times;}
-\DoxyCodeLine{73   this-\/>values = values;}
-\DoxyCodeLine{74   size = times.size();}
-\DoxyCodeLine{75   \textcolor{keywordflow}{if} (size == 1) \{}
-\DoxyCodeLine{76     isconstant = \textcolor{keyword}{true};}
-\DoxyCodeLine{77     cycle\_period = 1.0;}
-\DoxyCodeLine{78   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{79     isconstant = \textcolor{keyword}{false};}
-\DoxyCodeLine{80     cycle\_period = times.back() -\/ times[0];}
-\DoxyCodeLine{81   \}}
-\DoxyCodeLine{82 \}}
-\DoxyCodeLine{83 }
-\DoxyCodeLine{84 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{85 \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a98ecc5ee6b8a94abd1bbe38b0f3225da}{TimeDependentParameter<T>::\string~TimeDependentParameter}}() \{\}}
-\DoxyCodeLine{86 }
-\DoxyCodeLine{87 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{88 T \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a4dcbdfd359c34b8d4af725808705733e}{TimeDependentParameter<T>::get}}(T time) \{}
-\DoxyCodeLine{89   \textcolor{comment}{// Return the first and only value if parameter is constant}}
-\DoxyCodeLine{90   \textcolor{keywordflow}{if} (size == 1) \{}
-\DoxyCodeLine{91     \textcolor{keywordflow}{return} values[0];}
-\DoxyCodeLine{92   \}}
-\DoxyCodeLine{93 }
-\DoxyCodeLine{94   \textcolor{comment}{// Determine the time within a cycle (necessary to extrapolate)}}
-\DoxyCodeLine{95   T rtime = fmod(time, cycle\_period);}
-\DoxyCodeLine{96 }
-\DoxyCodeLine{97   \textcolor{comment}{// Determine the lower and upper element for interpolation}}
-\DoxyCodeLine{98   \textcolor{keyword}{auto} i = lower\_bound(times.begin(), times.end(), rtime);}
-\DoxyCodeLine{99   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k = i -\/ times.begin();}
-\DoxyCodeLine{100   \textcolor{keywordflow}{if} (i == times.end())}
-\DoxyCodeLine{101     -\/-\/i;}
-\DoxyCodeLine{102   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (*i == rtime) \{}
-\DoxyCodeLine{103     \textcolor{keywordflow}{return} values[k];}
-\DoxyCodeLine{104   \}}
-\DoxyCodeLine{105   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l = k ? k -\/ 1 : 1;}
-\DoxyCodeLine{106 }
-\DoxyCodeLine{107   \textcolor{comment}{// Perform linear interpolation}}
-\DoxyCodeLine{108   \textcolor{keywordflow}{return} values[l] +}
-\DoxyCodeLine{109          ((values[k] -\/ values[l]) / (times[k] -\/ times[l])) * (rtime -\/ times[l]);}
-\DoxyCodeLine{110 \}}
-\DoxyCodeLine{111 }
-\DoxyCodeLine{112 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{113 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a040eeefcb9697499f31ee7cabc028f40}{TimeDependentParameter<T>::to\_steady}}() \{}
-\DoxyCodeLine{114   T mean =}
-\DoxyCodeLine{115       std::accumulate(values.begin(), values.end(), 0.0) / T(values.size());}
-\DoxyCodeLine{116   values = std::vector<T>();}
-\DoxyCodeLine{117   times = std::vector<T>();}
-\DoxyCodeLine{118   values.push\_back(mean);}
-\DoxyCodeLine{119   size = 1;}
-\DoxyCodeLine{120   isconstant = \textcolor{keyword}{true};}
-\DoxyCodeLine{121 \}}
-\DoxyCodeLine{122 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{123 }
-\DoxyCodeLine{124 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_PARAMETER\_HPP\_}}
+\DoxyCodeLine{1 \textcolor{comment}{// Copyright (c) Stanford University, The Regents of the University of}}
+\DoxyCodeLine{2 \textcolor{comment}{//               California, and others.}}
+\DoxyCodeLine{3 \textcolor{comment}{//}}
+\DoxyCodeLine{4 \textcolor{comment}{// All Rights Reserved.}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{6 \textcolor{comment}{// See Copyright-\/SimVascular.txt for additional details.}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// Permission is hereby granted, free of charge, to any person obtaining}}
+\DoxyCodeLine{9 \textcolor{comment}{// a copy of this software and associated documentation files (the}}
+\DoxyCodeLine{10 \textcolor{comment}{// "{}Software"{}), to deal in the Software without restriction, including}}
+\DoxyCodeLine{11 \textcolor{comment}{// without limitation the rights to use, copy, modify, merge, publish,}}
+\DoxyCodeLine{12 \textcolor{comment}{// distribute, sublicense, and/or sell copies of the Software, and to}}
+\DoxyCodeLine{13 \textcolor{comment}{// permit persons to whom the Software is furnished to do so, subject}}
+\DoxyCodeLine{14 \textcolor{comment}{// to the following conditions:}}
+\DoxyCodeLine{15 \textcolor{comment}{//}}
+\DoxyCodeLine{16 \textcolor{comment}{// The above copyright notice and this permission notice shall be included}}
+\DoxyCodeLine{17 \textcolor{comment}{// in all copies or substantial portions of the Software.}}
+\DoxyCodeLine{18 \textcolor{comment}{//}}
+\DoxyCodeLine{19 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "{}AS}}
+\DoxyCodeLine{20 \textcolor{comment}{// IS"{} AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED}}
+\DoxyCodeLine{21 \textcolor{comment}{// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A}}
+\DoxyCodeLine{22 \textcolor{comment}{// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER}}
+\DoxyCodeLine{23 \textcolor{comment}{// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,}}
+\DoxyCodeLine{24 \textcolor{comment}{// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{25 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR}}
+\DoxyCodeLine{26 \textcolor{comment}{// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF}}
+\DoxyCodeLine{27 \textcolor{comment}{// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING}}
+\DoxyCodeLine{28 \textcolor{comment}{// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS}}
+\DoxyCodeLine{29 \textcolor{comment}{// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}\textcolor{comment}{}}
+\DoxyCodeLine{30 \textcolor{comment}{/**}}
+\DoxyCodeLine{31 \textcolor{comment}{ * @file timedependentparameter.hpp}}
+\DoxyCodeLine{32 \textcolor{comment}{ * @brief MODEL::TimeDependentParameter source file}}
+\DoxyCodeLine{33 \textcolor{comment}{ */}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_PARAMETER\_HPP\_}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_PARAMETER\_HPP\_}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#include <math.h>}}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include <numeric>}}
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{dofhandler_8hpp}{dofhandler.hpp}}"{}}}
+\DoxyCodeLine{43 }
+\DoxyCodeLine{44 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
+\DoxyCodeLine{45 \textcolor{comment}{}}
+\DoxyCodeLine{46 \textcolor{comment}{/**}}
+\DoxyCodeLine{47 \textcolor{comment}{ * @brief Time-\/dependent parameter.}}
+\DoxyCodeLine{48 \textcolor{comment}{ *}}
+\DoxyCodeLine{49 \textcolor{comment}{ * This class handles time-\/dependent parameter that need to be interpolated}}
+\DoxyCodeLine{50 \textcolor{comment}{ * and periodically applied.}}
+\DoxyCodeLine{51 \textcolor{comment}{ *}}
+\DoxyCodeLine{52 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{53 \textcolor{comment}{ */}}
+\DoxyCodeLine{54 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{55 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter}} \{}
+\DoxyCodeLine{56  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{57 \textcolor{comment}{  /**}}
+\DoxyCodeLine{58 \textcolor{comment}{   * @brief Construct a new Time Dependent Parameter object}}
+\DoxyCodeLine{59 \textcolor{comment}{   *}}
+\DoxyCodeLine{60 \textcolor{comment}{   */}}
+\DoxyCodeLine{61   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a6b20648694b84b99af8faf36e6feae33}{TimeDependentParameter}}();}
+\DoxyCodeLine{62 \textcolor{comment}{}}
+\DoxyCodeLine{63 \textcolor{comment}{  /**}}
+\DoxyCodeLine{64 \textcolor{comment}{   * @brief Construct a new Time Dependent Parameter object}}
+\DoxyCodeLine{65 \textcolor{comment}{   *}}
+\DoxyCodeLine{66 \textcolor{comment}{   * @param times Time steps corresponding to the values}}
+\DoxyCodeLine{67 \textcolor{comment}{   * @param values Values correspondong to the time steps}}
+\DoxyCodeLine{68 \textcolor{comment}{   */}}
+\DoxyCodeLine{69   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a6b20648694b84b99af8faf36e6feae33}{TimeDependentParameter}}(std::vector<T> \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_ae2d4753300caa18ac0e6978c9838072b}{times}}, std::vector<T> \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a9a74b1459175f6aff164bbeac129afb4}{values}});}
+\DoxyCodeLine{70 \textcolor{comment}{}}
+\DoxyCodeLine{71 \textcolor{comment}{  /**}}
+\DoxyCodeLine{72 \textcolor{comment}{   * @brief Destroy the Time Dependent Parameter object}}
+\DoxyCodeLine{73 \textcolor{comment}{   *}}
+\DoxyCodeLine{74 \textcolor{comment}{   */}}
+\DoxyCodeLine{75   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a98ecc5ee6b8a94abd1bbe38b0f3225da}{\string~TimeDependentParameter}}();}
+\DoxyCodeLine{76 }
+\DoxyCodeLine{77   std::vector<T> \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_ae2d4753300caa18ac0e6978c9838072b}{times}};   \textcolor{comment}{///< Time steps}}
+\DoxyCodeLine{78   std::vector<T> \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a9a74b1459175f6aff164bbeac129afb4}{values}};  \textcolor{comment}{///< Values}}
+\DoxyCodeLine{79   T \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}};  \textcolor{comment}{///< Cardiac cycle period corresponding to the time sequence}}
+\DoxyCodeLine{80   \textcolor{keywordtype}{int} size;}
+\DoxyCodeLine{81 \textcolor{comment}{}}
+\DoxyCodeLine{82 \textcolor{comment}{  /**}}
+\DoxyCodeLine{83 \textcolor{comment}{   * @brief Get the parameter value at the specified time.}}
+\DoxyCodeLine{84 \textcolor{comment}{   *}}
+\DoxyCodeLine{85 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{86 \textcolor{comment}{   * @return Value at the time}}
+\DoxyCodeLine{87 \textcolor{comment}{   */}}
+\DoxyCodeLine{88   T \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a4dcbdfd359c34b8d4af725808705733e}{get}}(T time);}
+\DoxyCodeLine{89 }
+\DoxyCodeLine{90   \textcolor{keywordtype}{bool} isconstant;}
+\DoxyCodeLine{91 }
+\DoxyCodeLine{92   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a040eeefcb9697499f31ee7cabc028f40}{to\_steady}}();  \textcolor{comment}{///< Bool value indicating if the parameter is constant}}
+\DoxyCodeLine{93 \};}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{96 \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a6b20648694b84b99af8faf36e6feae33}{TimeDependentParameter<T>::TimeDependentParameter}}() \{\}}
+\DoxyCodeLine{97 }
+\DoxyCodeLine{98 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{99 \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a6b20648694b84b99af8faf36e6feae33}{TimeDependentParameter<T>::TimeDependentParameter}}(std::vector<T> times,}
+\DoxyCodeLine{100                                                   std::vector<T> values) \{}
+\DoxyCodeLine{101   this-\/>times = times;}
+\DoxyCodeLine{102   this-\/>values = values;}
+\DoxyCodeLine{103   size = times.size();}
+\DoxyCodeLine{104   \textcolor{keywordflow}{if} (size == 1) \{}
+\DoxyCodeLine{105     isconstant = \textcolor{keyword}{true};}
+\DoxyCodeLine{106     cycle\_period = 1.0;}
+\DoxyCodeLine{107   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{108     isconstant = \textcolor{keyword}{false};}
+\DoxyCodeLine{109     cycle\_period = times.back() -\/ times[0];}
+\DoxyCodeLine{110   \}}
+\DoxyCodeLine{111 \}}
+\DoxyCodeLine{112 }
+\DoxyCodeLine{113 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{114 \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a98ecc5ee6b8a94abd1bbe38b0f3225da}{TimeDependentParameter<T>::\string~TimeDependentParameter}}() \{\}}
+\DoxyCodeLine{115 }
+\DoxyCodeLine{116 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{117 T \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a4dcbdfd359c34b8d4af725808705733e}{TimeDependentParameter<T>::get}}(T time) \{}
+\DoxyCodeLine{118   \textcolor{comment}{// Return the first and only value if parameter is constant}}
+\DoxyCodeLine{119   \textcolor{keywordflow}{if} (size == 1) \{}
+\DoxyCodeLine{120     \textcolor{keywordflow}{return} values[0];}
+\DoxyCodeLine{121   \}}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123   \textcolor{comment}{// Determine the time within a cycle (necessary to extrapolate)}}
+\DoxyCodeLine{124   T rtime = fmod(time, cycle\_period);}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{126   \textcolor{comment}{// Determine the lower and upper element for interpolation}}
+\DoxyCodeLine{127   \textcolor{keyword}{auto} i = lower\_bound(times.begin(), times.end(), rtime);}
+\DoxyCodeLine{128   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} k = i -\/ times.begin();}
+\DoxyCodeLine{129   \textcolor{keywordflow}{if} (i == times.end())}
+\DoxyCodeLine{130     -\/-\/i;}
+\DoxyCodeLine{131   \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (*i == rtime) \{}
+\DoxyCodeLine{132     \textcolor{keywordflow}{return} values[k];}
+\DoxyCodeLine{133   \}}
+\DoxyCodeLine{134   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} l = k ? k -\/ 1 : 1;}
+\DoxyCodeLine{135 }
+\DoxyCodeLine{136   \textcolor{comment}{// Perform linear interpolation}}
+\DoxyCodeLine{137   \textcolor{keywordflow}{return} values[l] +}
+\DoxyCodeLine{138          ((values[k] -\/ values[l]) / (times[k] -\/ times[l])) * (rtime -\/ times[l]);}
+\DoxyCodeLine{139 \}}
+\DoxyCodeLine{140 }
+\DoxyCodeLine{141 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{142 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a040eeefcb9697499f31ee7cabc028f40}{TimeDependentParameter<T>::to\_steady}}() \{}
+\DoxyCodeLine{143   T mean =}
+\DoxyCodeLine{144       std::accumulate(values.begin(), values.end(), 0.0) / T(values.size());}
+\DoxyCodeLine{145   values = std::vector<T>();}
+\DoxyCodeLine{146   times = std::vector<T>();}
+\DoxyCodeLine{147   values.push\_back(mean);}
+\DoxyCodeLine{148   size = 1;}
+\DoxyCodeLine{149   isconstant = \textcolor{keyword}{true};}
+\DoxyCodeLine{150 \}}
+\DoxyCodeLine{151 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_PARAMETER\_HPP\_}}
 
 \end{DoxyCode}

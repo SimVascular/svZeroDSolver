@@ -2,233 +2,262 @@
 \label{windkesselbc_8hpp_source}\index{model/windkesselbc.hpp@{model/windkesselbc.hpp}}
 \mbox{\hyperlink{windkesselbc_8hpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{1 \textcolor{comment}{/**}}
-\DoxyCodeLine{2 \textcolor{comment}{ * @file windkesselbc.hpp}}
-\DoxyCodeLine{3 \textcolor{comment}{ * @brief MODEL::WindkesselBC source file}}
-\DoxyCodeLine{4 \textcolor{comment}{ */}}
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_WINDKESSELBC\_HPP\_}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_WINDKESSELBC\_HPP\_}}
-\DoxyCodeLine{7 }
-\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}../algebra/densesystem.hpp"{}}}
-\DoxyCodeLine{9 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
-\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
-\DoxyCodeLine{11 }
-\DoxyCodeLine{12 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{\textcolor{comment}{}}
-\DoxyCodeLine{13 \textcolor{comment}{/**}}
-\DoxyCodeLine{14 \textcolor{comment}{ * @brief Windkessel RCR boundary condition.}}
-\DoxyCodeLine{15 \textcolor{comment}{ *}}
-\DoxyCodeLine{16 \textcolor{comment}{ * Models the mechanical behavior of a Windkessel boundary condition.}}
-\DoxyCodeLine{17 \textcolor{comment}{ *}}
-\DoxyCodeLine{18 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{19 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
-\DoxyCodeLine{20 \textcolor{comment}{ * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
-\DoxyCodeLine{21 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\}}}
-\DoxyCodeLine{22 \textcolor{comment}{ * to [R, l=\$R\_p\$, *-\/] (3,0)}}
-\DoxyCodeLine{23 \textcolor{comment}{ * to [R, l=\$R\_d\$, *-\/*] (5,0)}}
-\DoxyCodeLine{24 \textcolor{comment}{ * node[anchor=south]\{\$P\_\{ref\}\$\}}}
-\DoxyCodeLine{25 \textcolor{comment}{ * (3,0) to [C, l=\$C\$, *-\/] (3,-\/1.5)}}
-\DoxyCodeLine{26 \textcolor{comment}{ * node[ground]\{\$P\_\{C\}\$\};}}
-\DoxyCodeLine{27 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
-\DoxyCodeLine{28 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{29 \textcolor{comment}{ *}}
-\DoxyCodeLine{30 \textcolor{comment}{ * \#\#\# Governing equations}}
-\DoxyCodeLine{31 \textcolor{comment}{ *}}
-\DoxyCodeLine{32 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{33 \textcolor{comment}{ * R\_\{d\} Q\string^\{e\}-\/P\_\{c\}\string^\{e\}+P\_\{r e f\}-\/R\_\{d\} C \(\backslash\)frac\{d P\_\{c\}\string^\{e\}\}\{d t\}=0}}
-\DoxyCodeLine{34 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{35 \textcolor{comment}{ *}}
-\DoxyCodeLine{36 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{37 \textcolor{comment}{ * P\string^\{e\}-\/P\_\{c\}\string^\{e\}-\/R\_\{p\} Q\string^\{e\}=0}}
-\DoxyCodeLine{38 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{39 \textcolor{comment}{ *}}
-\DoxyCodeLine{40 \textcolor{comment}{ * \#\#\# Local contributions}}
-\DoxyCodeLine{41 \textcolor{comment}{ *}}
-\DoxyCodeLine{42 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{43 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{lll\}P\string^\{e\} \& Q\string^\{e\} \&}}
-\DoxyCodeLine{44 \textcolor{comment}{ * P\_\{c\}\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\} \(\backslash\)f]}}
-\DoxyCodeLine{45 \textcolor{comment}{ *}}
-\DoxyCodeLine{46 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{47 \textcolor{comment}{ * \(\backslash\)mathbf\{E\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccc\}}}
-\DoxyCodeLine{48 \textcolor{comment}{ * 0 \& 0 \& -\/R\_\{d\} C \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{49 \textcolor{comment}{ * 0 \& 0 \& 0}}
-\DoxyCodeLine{50 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
-\DoxyCodeLine{51 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{52 \textcolor{comment}{ *}}
-\DoxyCodeLine{53 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{54 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccc\}}}
-\DoxyCodeLine{55 \textcolor{comment}{ * 0 \& R\_\{d\} \& -\/1 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{56 \textcolor{comment}{ * 1 \& -\/R\_\{p\} \& -\/1}}
-\DoxyCodeLine{57 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
-\DoxyCodeLine{58 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{59 \textcolor{comment}{ *}}
-\DoxyCodeLine{60 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{61 \textcolor{comment}{ * \(\backslash\)mathbf\{c\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{c\}}}
-\DoxyCodeLine{62 \textcolor{comment}{ * P\_\{r e f\} \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{63 \textcolor{comment}{ * 0}}
-\DoxyCodeLine{64 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
-\DoxyCodeLine{65 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{66 \textcolor{comment}{ *}}
-\DoxyCodeLine{67 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{68 \textcolor{comment}{ */}}
-\DoxyCodeLine{69 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{70 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{WindkesselBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
-\DoxyCodeLine{71  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{72 \textcolor{comment}{  /**}}
-\DoxyCodeLine{73 \textcolor{comment}{   * @brief Parameters of the element.}}
-\DoxyCodeLine{74 \textcolor{comment}{   *}}
-\DoxyCodeLine{75 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
-\DoxyCodeLine{76 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{77 \textcolor{comment}{   */}}
-\DoxyCodeLine{78   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
-\DoxyCodeLine{79     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_ae9f7a3a9a9acba6b81ce7c98d54585ea}{Rp}};  \textcolor{comment}{///< Proximal resistance}}
-\DoxyCodeLine{80     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_accf8727cdf7f28f1f441593c3765729c}{C}};   \textcolor{comment}{///< Capacitance}}
-\DoxyCodeLine{81     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_a1e1196b8cb93c69c1c76582107976b76}{Rd}};  \textcolor{comment}{///< Distal restistance}}
-\DoxyCodeLine{82     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_a291b776f2bb4bf19001a6c91e2c5b597}{Pd}};  \textcolor{comment}{///< Distal Pressure}}
-\DoxyCodeLine{83   \};}
-\DoxyCodeLine{84 \textcolor{comment}{}}
-\DoxyCodeLine{85 \textcolor{comment}{  /**}}
-\DoxyCodeLine{86 \textcolor{comment}{   * @brief Construct a new WindkesselBC object}}
-\DoxyCodeLine{87 \textcolor{comment}{   *}}
-\DoxyCodeLine{88 \textcolor{comment}{   * @param Rp Proximal resistance}}
-\DoxyCodeLine{89 \textcolor{comment}{   * @param C Capacitance}}
-\DoxyCodeLine{90 \textcolor{comment}{   * @param Rd Distal resistance}}
-\DoxyCodeLine{91 \textcolor{comment}{   * @param Pd Distal pressure}}
-\DoxyCodeLine{92 \textcolor{comment}{   * @param name Name}}
-\DoxyCodeLine{93 \textcolor{comment}{   */}}
-\DoxyCodeLine{94   \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ae68b9bacd858103d6ff24cc16074b251}{WindkesselBC}}(T Rp, T C, T Rd, T Pd, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
-\DoxyCodeLine{95 \textcolor{comment}{}}
-\DoxyCodeLine{96 \textcolor{comment}{  /**}}
-\DoxyCodeLine{97 \textcolor{comment}{   * @brief Destroy the WindkesselBC object}}
-\DoxyCodeLine{98 \textcolor{comment}{   *}}
-\DoxyCodeLine{99 \textcolor{comment}{   */}}
-\DoxyCodeLine{100   \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_af094418bf6f8d9489cf4079a598c1506}{\string~WindkesselBC}}();}
-\DoxyCodeLine{101 \textcolor{comment}{}}
-\DoxyCodeLine{102 \textcolor{comment}{  /**}}
-\DoxyCodeLine{103 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{104 \textcolor{comment}{   *}}
-\DoxyCodeLine{105 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{106 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{107 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{108 \textcolor{comment}{   *}}
-\DoxyCodeLine{109 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{110 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{111 \textcolor{comment}{   */}}
-\DoxyCodeLine{112   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a5d09cb4285ed013e10c0ce163d018ff4}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{1 \textcolor{comment}{// Copyright (c) Stanford University, The Regents of the University of}}
+\DoxyCodeLine{2 \textcolor{comment}{//               California, and others.}}
+\DoxyCodeLine{3 \textcolor{comment}{//}}
+\DoxyCodeLine{4 \textcolor{comment}{// All Rights Reserved.}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{6 \textcolor{comment}{// See Copyright-\/SimVascular.txt for additional details.}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// Permission is hereby granted, free of charge, to any person obtaining}}
+\DoxyCodeLine{9 \textcolor{comment}{// a copy of this software and associated documentation files (the}}
+\DoxyCodeLine{10 \textcolor{comment}{// "{}Software"{}), to deal in the Software without restriction, including}}
+\DoxyCodeLine{11 \textcolor{comment}{// without limitation the rights to use, copy, modify, merge, publish,}}
+\DoxyCodeLine{12 \textcolor{comment}{// distribute, sublicense, and/or sell copies of the Software, and to}}
+\DoxyCodeLine{13 \textcolor{comment}{// permit persons to whom the Software is furnished to do so, subject}}
+\DoxyCodeLine{14 \textcolor{comment}{// to the following conditions:}}
+\DoxyCodeLine{15 \textcolor{comment}{//}}
+\DoxyCodeLine{16 \textcolor{comment}{// The above copyright notice and this permission notice shall be included}}
+\DoxyCodeLine{17 \textcolor{comment}{// in all copies or substantial portions of the Software.}}
+\DoxyCodeLine{18 \textcolor{comment}{//}}
+\DoxyCodeLine{19 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "{}AS}}
+\DoxyCodeLine{20 \textcolor{comment}{// IS"{} AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED}}
+\DoxyCodeLine{21 \textcolor{comment}{// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A}}
+\DoxyCodeLine{22 \textcolor{comment}{// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER}}
+\DoxyCodeLine{23 \textcolor{comment}{// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,}}
+\DoxyCodeLine{24 \textcolor{comment}{// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{25 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR}}
+\DoxyCodeLine{26 \textcolor{comment}{// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF}}
+\DoxyCodeLine{27 \textcolor{comment}{// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING}}
+\DoxyCodeLine{28 \textcolor{comment}{// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS}}
+\DoxyCodeLine{29 \textcolor{comment}{// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}\textcolor{comment}{}}
+\DoxyCodeLine{30 \textcolor{comment}{/**}}
+\DoxyCodeLine{31 \textcolor{comment}{ * @file windkesselbc.hpp}}
+\DoxyCodeLine{32 \textcolor{comment}{ * @brief MODEL::WindkesselBC source file}}
+\DoxyCodeLine{33 \textcolor{comment}{ */}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_WINDKESSELBC\_HPP\_}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_WINDKESSELBC\_HPP\_}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#include "{}../algebra/densesystem.hpp"{}}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{\textcolor{comment}{}}
+\DoxyCodeLine{42 \textcolor{comment}{/**}}
+\DoxyCodeLine{43 \textcolor{comment}{ * @brief Windkessel RCR boundary condition.}}
+\DoxyCodeLine{44 \textcolor{comment}{ *}}
+\DoxyCodeLine{45 \textcolor{comment}{ * Models the mechanical behavior of a Windkessel boundary condition.}}
+\DoxyCodeLine{46 \textcolor{comment}{ *}}
+\DoxyCodeLine{47 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{48 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
+\DoxyCodeLine{49 \textcolor{comment}{ * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
+\DoxyCodeLine{50 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\}}}
+\DoxyCodeLine{51 \textcolor{comment}{ * to [R, l=\$R\_p\$, *-\/] (3,0)}}
+\DoxyCodeLine{52 \textcolor{comment}{ * to [R, l=\$R\_d\$, *-\/*] (5,0)}}
+\DoxyCodeLine{53 \textcolor{comment}{ * node[anchor=south]\{\$P\_\{ref\}\$\}}}
+\DoxyCodeLine{54 \textcolor{comment}{ * (3,0) to [C, l=\$C\$, *-\/] (3,-\/1.5)}}
+\DoxyCodeLine{55 \textcolor{comment}{ * node[ground]\{\$P\_\{C\}\$\};}}
+\DoxyCodeLine{56 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
+\DoxyCodeLine{57 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{58 \textcolor{comment}{ *}}
+\DoxyCodeLine{59 \textcolor{comment}{ * \#\#\# Governing equations}}
+\DoxyCodeLine{60 \textcolor{comment}{ *}}
+\DoxyCodeLine{61 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{62 \textcolor{comment}{ * R\_\{d\} Q\string^\{e\}-\/P\_\{c\}\string^\{e\}+P\_\{r e f\}-\/R\_\{d\} C \(\backslash\)frac\{d P\_\{c\}\string^\{e\}\}\{d t\}=0}}
+\DoxyCodeLine{63 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{64 \textcolor{comment}{ *}}
+\DoxyCodeLine{65 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{66 \textcolor{comment}{ * P\string^\{e\}-\/P\_\{c\}\string^\{e\}-\/R\_\{p\} Q\string^\{e\}=0}}
+\DoxyCodeLine{67 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{68 \textcolor{comment}{ *}}
+\DoxyCodeLine{69 \textcolor{comment}{ * \#\#\# Local contributions}}
+\DoxyCodeLine{70 \textcolor{comment}{ *}}
+\DoxyCodeLine{71 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{72 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{lll\}P\string^\{e\} \& Q\string^\{e\} \&}}
+\DoxyCodeLine{73 \textcolor{comment}{ * P\_\{c\}\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\} \(\backslash\)f]}}
+\DoxyCodeLine{74 \textcolor{comment}{ *}}
+\DoxyCodeLine{75 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{76 \textcolor{comment}{ * \(\backslash\)mathbf\{E\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccc\}}}
+\DoxyCodeLine{77 \textcolor{comment}{ * 0 \& 0 \& -\/R\_\{d\} C \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{78 \textcolor{comment}{ * 0 \& 0 \& 0}}
+\DoxyCodeLine{79 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{80 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{81 \textcolor{comment}{ *}}
+\DoxyCodeLine{82 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{83 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccc\}}}
+\DoxyCodeLine{84 \textcolor{comment}{ * 0 \& R\_\{d\} \& -\/1 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{85 \textcolor{comment}{ * 1 \& -\/R\_\{p\} \& -\/1}}
+\DoxyCodeLine{86 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{87 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{88 \textcolor{comment}{ *}}
+\DoxyCodeLine{89 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{90 \textcolor{comment}{ * \(\backslash\)mathbf\{c\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{c\}}}
+\DoxyCodeLine{91 \textcolor{comment}{ * P\_\{r e f\} \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{92 \textcolor{comment}{ * 0}}
+\DoxyCodeLine{93 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{94 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{95 \textcolor{comment}{ *}}
+\DoxyCodeLine{96 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{97 \textcolor{comment}{ */}}
+\DoxyCodeLine{98 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{99 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{WindkesselBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
+\DoxyCodeLine{100  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{101 \textcolor{comment}{  /**}}
+\DoxyCodeLine{102 \textcolor{comment}{   * @brief Parameters of the element.}}
+\DoxyCodeLine{103 \textcolor{comment}{   *}}
+\DoxyCodeLine{104 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
+\DoxyCodeLine{105 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{106 \textcolor{comment}{   */}}
+\DoxyCodeLine{107   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
+\DoxyCodeLine{108     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_ae9f7a3a9a9acba6b81ce7c98d54585ea}{Rp}};  \textcolor{comment}{///< Proximal resistance}}
+\DoxyCodeLine{109     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_accf8727cdf7f28f1f441593c3765729c}{C}};   \textcolor{comment}{///< Capacitance}}
+\DoxyCodeLine{110     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_a1e1196b8cb93c69c1c76582107976b76}{Rd}};  \textcolor{comment}{///< Distal restistance}}
+\DoxyCodeLine{111     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_a291b776f2bb4bf19001a6c91e2c5b597}{Pd}};  \textcolor{comment}{///< Distal Pressure}}
+\DoxyCodeLine{112   \};}
 \DoxyCodeLine{113 \textcolor{comment}{}}
 \DoxyCodeLine{114 \textcolor{comment}{  /**}}
-\DoxyCodeLine{115 \textcolor{comment}{   * @brief Update the constant contributions of the element in a dense system}}
+\DoxyCodeLine{115 \textcolor{comment}{   * @brief Construct a new WindkesselBC object}}
 \DoxyCodeLine{116 \textcolor{comment}{   *}}
-\DoxyCodeLine{117 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{118 \textcolor{comment}{   */}}
-\DoxyCodeLine{119   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a91adde97d65c5230e2d8afb4a00b88c2}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
-\DoxyCodeLine{120 \textcolor{comment}{}}
-\DoxyCodeLine{121 \textcolor{comment}{  /**}}
-\DoxyCodeLine{122 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a dense}}
-\DoxyCodeLine{123 \textcolor{comment}{   * system}}
-\DoxyCodeLine{124 \textcolor{comment}{   *}}
-\DoxyCodeLine{125 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{126 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{127 \textcolor{comment}{   */}}
-\DoxyCodeLine{128   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a54b06512ed81c391de3ac0dec564aea2}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{129 \textcolor{comment}{}}
-\DoxyCodeLine{130 \textcolor{comment}{  /**}}
-\DoxyCodeLine{131 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
-\DoxyCodeLine{132 \textcolor{comment}{   *}}
-\DoxyCodeLine{133 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{134 \textcolor{comment}{   */}}
-\DoxyCodeLine{135   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a91adde97d65c5230e2d8afb4a00b88c2}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{136 \textcolor{comment}{}}
-\DoxyCodeLine{137 \textcolor{comment}{  /**}}
-\DoxyCodeLine{138 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
-\DoxyCodeLine{139 \textcolor{comment}{   * system}}
-\DoxyCodeLine{140 \textcolor{comment}{   *}}
-\DoxyCodeLine{141 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{142 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{143 \textcolor{comment}{   */}}
-\DoxyCodeLine{144   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a54b06512ed81c391de3ac0dec564aea2}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{145 \textcolor{comment}{}}
-\DoxyCodeLine{146 \textcolor{comment}{  /**}}
-\DoxyCodeLine{147 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{148 \textcolor{comment}{   *}}
-\DoxyCodeLine{149 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{150 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{151 \textcolor{comment}{   */}}
-\DoxyCodeLine{152   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a26ac0a44556e6ae986e89f6a23dabb07}{num\_triplets}} = \{}
-\DoxyCodeLine{153       \{\textcolor{stringliteral}{"{}F"{}}, 5\},}
-\DoxyCodeLine{154       \{\textcolor{stringliteral}{"{}E"{}}, 1\},}
-\DoxyCodeLine{155       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{156   \};}
-\DoxyCodeLine{157 \textcolor{comment}{}}
-\DoxyCodeLine{158 \textcolor{comment}{  /**}}
-\DoxyCodeLine{159 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
-\DoxyCodeLine{160 \textcolor{comment}{   *}}
-\DoxyCodeLine{161 \textcolor{comment}{   * Set the capacitance to 0.}}
-\DoxyCodeLine{162 \textcolor{comment}{   */}}
-\DoxyCodeLine{163   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a781684eca75d46c9282f4e35d57853e6}{to\_steady}}();}
-\DoxyCodeLine{164 }
-\DoxyCodeLine{165  \textcolor{keyword}{private}:}
-\DoxyCodeLine{166   Parameters params;}
-\DoxyCodeLine{167 \};}
-\DoxyCodeLine{168 }
-\DoxyCodeLine{169 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{170 \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ae68b9bacd858103d6ff24cc16074b251}{WindkesselBC<T>::WindkesselBC}}(T Rp, T C, T Rd, T Pd, std::string name)}
-\DoxyCodeLine{171     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{172   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{173   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_ae9f7a3a9a9acba6b81ce7c98d54585ea}{Rp}} = Rp;}
-\DoxyCodeLine{174   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_accf8727cdf7f28f1f441593c3765729c}{C}} = C;}
-\DoxyCodeLine{175   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_a1e1196b8cb93c69c1c76582107976b76}{Rd}} = Rd;}
-\DoxyCodeLine{176   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_a291b776f2bb4bf19001a6c91e2c5b597}{Pd}} = Pd;}
-\DoxyCodeLine{177 \}}
-\DoxyCodeLine{178 }
-\DoxyCodeLine{179 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{180 \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_af094418bf6f8d9489cf4079a598c1506}{WindkesselBC<T>::\string~WindkesselBC}}() \{\}}
-\DoxyCodeLine{181 }
-\DoxyCodeLine{182 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{183 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a5d09cb4285ed013e10c0ce163d018ff4}{WindkesselBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{184   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{Block<T>::setup\_dofs\_}}(dofhandler, 2, 1);}
-\DoxyCodeLine{185 \}}
-\DoxyCodeLine{186 }
-\DoxyCodeLine{187 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{188 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a91adde97d65c5230e2d8afb4a00b88c2}{WindkesselBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{}
-\DoxyCodeLine{189   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{190   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = -\/1.0;}
-\DoxyCodeLine{191   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) = -\/1.0;}
-\DoxyCodeLine{192 \}}
+\DoxyCodeLine{117 \textcolor{comment}{   * @param Rp Proximal resistance}}
+\DoxyCodeLine{118 \textcolor{comment}{   * @param C Capacitance}}
+\DoxyCodeLine{119 \textcolor{comment}{   * @param Rd Distal resistance}}
+\DoxyCodeLine{120 \textcolor{comment}{   * @param Pd Distal pressure}}
+\DoxyCodeLine{121 \textcolor{comment}{   * @param name Name}}
+\DoxyCodeLine{122 \textcolor{comment}{   */}}
+\DoxyCodeLine{123   \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ae68b9bacd858103d6ff24cc16074b251}{WindkesselBC}}(T Rp, T C, T Rd, T Pd, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
+\DoxyCodeLine{124 \textcolor{comment}{}}
+\DoxyCodeLine{125 \textcolor{comment}{  /**}}
+\DoxyCodeLine{126 \textcolor{comment}{   * @brief Destroy the WindkesselBC object}}
+\DoxyCodeLine{127 \textcolor{comment}{   *}}
+\DoxyCodeLine{128 \textcolor{comment}{   */}}
+\DoxyCodeLine{129   \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_af094418bf6f8d9489cf4079a598c1506}{\string~WindkesselBC}}();}
+\DoxyCodeLine{130 \textcolor{comment}{}}
+\DoxyCodeLine{131 \textcolor{comment}{  /**}}
+\DoxyCodeLine{132 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{133 \textcolor{comment}{   *}}
+\DoxyCodeLine{134 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{135 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{136 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{137 \textcolor{comment}{   *}}
+\DoxyCodeLine{138 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{139 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{140 \textcolor{comment}{   */}}
+\DoxyCodeLine{141   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a5d09cb4285ed013e10c0ce163d018ff4}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{142 \textcolor{comment}{}}
+\DoxyCodeLine{143 \textcolor{comment}{  /**}}
+\DoxyCodeLine{144 \textcolor{comment}{   * @brief Update the constant contributions of the element in a dense system}}
+\DoxyCodeLine{145 \textcolor{comment}{   *}}
+\DoxyCodeLine{146 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{147 \textcolor{comment}{   */}}
+\DoxyCodeLine{148   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a91adde97d65c5230e2d8afb4a00b88c2}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
+\DoxyCodeLine{149 \textcolor{comment}{}}
+\DoxyCodeLine{150 \textcolor{comment}{  /**}}
+\DoxyCodeLine{151 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a dense}}
+\DoxyCodeLine{152 \textcolor{comment}{   * system}}
+\DoxyCodeLine{153 \textcolor{comment}{   *}}
+\DoxyCodeLine{154 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{155 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{156 \textcolor{comment}{   */}}
+\DoxyCodeLine{157   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a54b06512ed81c391de3ac0dec564aea2}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{158 \textcolor{comment}{}}
+\DoxyCodeLine{159 \textcolor{comment}{  /**}}
+\DoxyCodeLine{160 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{161 \textcolor{comment}{   *}}
+\DoxyCodeLine{162 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{163 \textcolor{comment}{   */}}
+\DoxyCodeLine{164   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a91adde97d65c5230e2d8afb4a00b88c2}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{165 \textcolor{comment}{}}
+\DoxyCodeLine{166 \textcolor{comment}{  /**}}
+\DoxyCodeLine{167 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
+\DoxyCodeLine{168 \textcolor{comment}{   * system}}
+\DoxyCodeLine{169 \textcolor{comment}{   *}}
+\DoxyCodeLine{170 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{171 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{172 \textcolor{comment}{   */}}
+\DoxyCodeLine{173   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a54b06512ed81c391de3ac0dec564aea2}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{174 \textcolor{comment}{}}
+\DoxyCodeLine{175 \textcolor{comment}{  /**}}
+\DoxyCodeLine{176 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{177 \textcolor{comment}{   *}}
+\DoxyCodeLine{178 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{179 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{180 \textcolor{comment}{   */}}
+\DoxyCodeLine{181   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a26ac0a44556e6ae986e89f6a23dabb07}{num\_triplets}} = \{}
+\DoxyCodeLine{182       \{\textcolor{stringliteral}{"{}F"{}}, 5\},}
+\DoxyCodeLine{183       \{\textcolor{stringliteral}{"{}E"{}}, 1\},}
+\DoxyCodeLine{184       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{185   \};}
+\DoxyCodeLine{186 \textcolor{comment}{}}
+\DoxyCodeLine{187 \textcolor{comment}{  /**}}
+\DoxyCodeLine{188 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
+\DoxyCodeLine{189 \textcolor{comment}{   *}}
+\DoxyCodeLine{190 \textcolor{comment}{   * Set the capacitance to 0.}}
+\DoxyCodeLine{191 \textcolor{comment}{   */}}
+\DoxyCodeLine{192   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a781684eca75d46c9282f4e35d57853e6}{to\_steady}}();}
 \DoxyCodeLine{193 }
-\DoxyCodeLine{194 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{195 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a54b06512ed81c391de3ac0dec564aea2}{WindkesselBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time) \{}
-\DoxyCodeLine{196   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a52a8c10de1d498cd2a22b38f044204ba}{E}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) =}
-\DoxyCodeLine{197       -\/params.Rd * params.C;}
-\DoxyCodeLine{198   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = -\/params.Rp;}
-\DoxyCodeLine{199   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = params.Rd;}
-\DoxyCodeLine{200   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a1278a49733c3df5105a932a486d0afde}{C}}(this-\/>global\_eqn\_ids[1]) = params.Pd;}
-\DoxyCodeLine{201 \}}
-\DoxyCodeLine{202 }
-\DoxyCodeLine{203 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{204 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a91adde97d65c5230e2d8afb4a00b88c2}{WindkesselBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{205   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{206   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = -\/1.0;}
-\DoxyCodeLine{207   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) = -\/1.0;}
-\DoxyCodeLine{208 \}}
-\DoxyCodeLine{209 }
-\DoxyCodeLine{210 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{211 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a54b06512ed81c391de3ac0dec564aea2}{WindkesselBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{}
-\DoxyCodeLine{212   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) =}
-\DoxyCodeLine{213       -\/params.Rd * params.C;}
-\DoxyCodeLine{214   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{215       -\/params.Rp;}
-\DoxyCodeLine{216   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{217       params.Rd;}
-\DoxyCodeLine{218   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[1]) = params.Pd;}
-\DoxyCodeLine{219 \}}
-\DoxyCodeLine{220 }
-\DoxyCodeLine{221 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{222 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a781684eca75d46c9282f4e35d57853e6}{WindkesselBC<T>::to\_steady}}() \{}
-\DoxyCodeLine{223   params.C = 0.0;}
-\DoxyCodeLine{224 \}}
-\DoxyCodeLine{225 }
-\DoxyCodeLine{226 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{227 }
-\DoxyCodeLine{228 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_WINDKESSELBC\_HPP\_}}
+\DoxyCodeLine{194  \textcolor{keyword}{private}:}
+\DoxyCodeLine{195   Parameters params;}
+\DoxyCodeLine{196 \};}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{199 \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ae68b9bacd858103d6ff24cc16074b251}{WindkesselBC<T>::WindkesselBC}}(T Rp, T C, T Rd, T Pd, std::string name)}
+\DoxyCodeLine{200     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
+\DoxyCodeLine{201   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
+\DoxyCodeLine{202   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_ae9f7a3a9a9acba6b81ce7c98d54585ea}{Rp}} = Rp;}
+\DoxyCodeLine{203   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_accf8727cdf7f28f1f441593c3765729c}{C}} = C;}
+\DoxyCodeLine{204   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_a1e1196b8cb93c69c1c76582107976b76}{Rd}} = Rd;}
+\DoxyCodeLine{205   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters_a291b776f2bb4bf19001a6c91e2c5b597}{Pd}} = Pd;}
+\DoxyCodeLine{206 \}}
+\DoxyCodeLine{207 }
+\DoxyCodeLine{208 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{209 \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_af094418bf6f8d9489cf4079a598c1506}{WindkesselBC<T>::\string~WindkesselBC}}() \{\}}
+\DoxyCodeLine{210 }
+\DoxyCodeLine{211 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{212 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a5d09cb4285ed013e10c0ce163d018ff4}{WindkesselBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{213   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{Block<T>::setup\_dofs\_}}(dofhandler, 2, 1);}
+\DoxyCodeLine{214 \}}
+\DoxyCodeLine{215 }
+\DoxyCodeLine{216 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{217 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a91adde97d65c5230e2d8afb4a00b88c2}{WindkesselBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{}
+\DoxyCodeLine{218   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{219   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = -\/1.0;}
+\DoxyCodeLine{220   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) = -\/1.0;}
+\DoxyCodeLine{221 \}}
+\DoxyCodeLine{222 }
+\DoxyCodeLine{223 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{224 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a54b06512ed81c391de3ac0dec564aea2}{WindkesselBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system, T time) \{}
+\DoxyCodeLine{225   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a52a8c10de1d498cd2a22b38f044204ba}{E}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) =}
+\DoxyCodeLine{226       -\/params.Rd * params.C;}
+\DoxyCodeLine{227   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = -\/params.Rp;}
+\DoxyCodeLine{228   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = params.Rd;}
+\DoxyCodeLine{229   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a1278a49733c3df5105a932a486d0afde}{C}}(this-\/>global\_eqn\_ids[1]) = params.Pd;}
+\DoxyCodeLine{230 \}}
+\DoxyCodeLine{231 }
+\DoxyCodeLine{232 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{233 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a91adde97d65c5230e2d8afb4a00b88c2}{WindkesselBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{234   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{235   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = -\/1.0;}
+\DoxyCodeLine{236   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) = -\/1.0;}
+\DoxyCodeLine{237 \}}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{240 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a54b06512ed81c391de3ac0dec564aea2}{WindkesselBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{}
+\DoxyCodeLine{241   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) =}
+\DoxyCodeLine{242       -\/params.Rd * params.C;}
+\DoxyCodeLine{243   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{244       -\/params.Rp;}
+\DoxyCodeLine{245   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{246       params.Rd;}
+\DoxyCodeLine{247   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[1]) = params.Pd;}
+\DoxyCodeLine{248 \}}
+\DoxyCodeLine{249 }
+\DoxyCodeLine{250 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{251 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a781684eca75d46c9282f4e35d57853e6}{WindkesselBC<T>::to\_steady}}() \{}
+\DoxyCodeLine{252   params.C = 0.0;}
+\DoxyCodeLine{253 \}}
+\DoxyCodeLine{254 }
+\DoxyCodeLine{255 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{256 }
+\DoxyCodeLine{257 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_WINDKESSELBC\_HPP\_}}
 
 \end{DoxyCode}

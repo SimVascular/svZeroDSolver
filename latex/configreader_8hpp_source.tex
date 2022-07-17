@@ -2,470 +2,499 @@
 \label{configreader_8hpp_source}\index{io/configreader.hpp@{io/configreader.hpp}}
 \mbox{\hyperlink{configreader_8hpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{1 \textcolor{comment}{/**}}
-\DoxyCodeLine{2 \textcolor{comment}{ * @file configreader.hpp}}
-\DoxyCodeLine{3 \textcolor{comment}{ * @brief IO::ConfigReader source file}}
-\DoxyCodeLine{4 \textcolor{comment}{ */}}
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#define SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
-\DoxyCodeLine{7 }
-\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <list>}}
-\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <stdexcept>}}
-\DoxyCodeLine{10 \textcolor{preprocessor}{\#include <string>}}
-\DoxyCodeLine{11 }
-\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}../helpers/debug.hpp"{}}}
-\DoxyCodeLine{13 \textcolor{preprocessor}{\#include "{}../helpers/startswith.hpp"{}}}
-\DoxyCodeLine{14 \textcolor{preprocessor}{\#include "{}../model/model.hpp"{}}}
-\DoxyCodeLine{15 \textcolor{preprocessor}{\#include "{}simdjson.h"{}}}
-\DoxyCodeLine{16 }
-\DoxyCodeLine{17 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_i_o}{IO}} \{}
-\DoxyCodeLine{18 \textcolor{comment}{}}
-\DoxyCodeLine{19 \textcolor{comment}{/**}}
-\DoxyCodeLine{20 \textcolor{comment}{ * @brief svZeroDSolver configuration reader.}}
-\DoxyCodeLine{21 \textcolor{comment}{ *}}
-\DoxyCodeLine{22 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{23 \textcolor{comment}{ */}}
-\DoxyCodeLine{24 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{25 \textcolor{keyword}{class }\mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader}} \{}
-\DoxyCodeLine{26  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{27 \textcolor{comment}{  /**}}
-\DoxyCodeLine{28 \textcolor{comment}{   * @brief Construct a new Config Reader object}}
-\DoxyCodeLine{29 \textcolor{comment}{   */}}
-\DoxyCodeLine{30   \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{ConfigReader}}();}
-\DoxyCodeLine{31 \textcolor{comment}{}}
-\DoxyCodeLine{32 \textcolor{comment}{  /**}}
-\DoxyCodeLine{33 \textcolor{comment}{   * @brief Construct a new Config Reader object}}
-\DoxyCodeLine{34 \textcolor{comment}{   *}}
-\DoxyCodeLine{35 \textcolor{comment}{   * Can be constructed either with the path to a json configuration file}}
-\DoxyCodeLine{36 \textcolor{comment}{   * or directly with a json encoded string.}}
-\DoxyCodeLine{37 \textcolor{comment}{   *}}
-\DoxyCodeLine{38 \textcolor{comment}{   * @param specifier Path configuration file or json encoded configuration}}
-\DoxyCodeLine{39 \textcolor{comment}{   */}}
-\DoxyCodeLine{40   \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{ConfigReader}}(std::string \&specifier);}
-\DoxyCodeLine{41 \textcolor{comment}{}}
-\DoxyCodeLine{42 \textcolor{comment}{  /**}}
-\DoxyCodeLine{43 \textcolor{comment}{   * @brief Destroy the Config Reader object}}
-\DoxyCodeLine{44 \textcolor{comment}{   */}}
-\DoxyCodeLine{45   \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{\string~ConfigReader}}();}
-\DoxyCodeLine{46 \textcolor{comment}{}}
-\DoxyCodeLine{47 \textcolor{comment}{  /**}}
-\DoxyCodeLine{48 \textcolor{comment}{   * @brief Create model from configuration file}}
-\DoxyCodeLine{49 \textcolor{comment}{   *}}
-\DoxyCodeLine{50 \textcolor{comment}{   * @return Model}}
-\DoxyCodeLine{51 \textcolor{comment}{   */}}
-\DoxyCodeLine{52   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \mbox{\hyperlink{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}{get\_model}}();}
-\DoxyCodeLine{53 \textcolor{comment}{}}
-\DoxyCodeLine{54 \textcolor{comment}{  /**}}
-\DoxyCodeLine{55 \textcolor{comment}{   * @brief Get number of time steps based on configuration}}
-\DoxyCodeLine{56 \textcolor{comment}{   *}}
-\DoxyCodeLine{57 \textcolor{comment}{   * @return Number of time steps}}
+\DoxyCodeLine{1 \textcolor{comment}{// Copyright (c) Stanford University, The Regents of the University of}}
+\DoxyCodeLine{2 \textcolor{comment}{//               California, and others.}}
+\DoxyCodeLine{3 \textcolor{comment}{//}}
+\DoxyCodeLine{4 \textcolor{comment}{// All Rights Reserved.}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{6 \textcolor{comment}{// See Copyright-\/SimVascular.txt for additional details.}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// Permission is hereby granted, free of charge, to any person obtaining}}
+\DoxyCodeLine{9 \textcolor{comment}{// a copy of this software and associated documentation files (the}}
+\DoxyCodeLine{10 \textcolor{comment}{// "{}Software"{}), to deal in the Software without restriction, including}}
+\DoxyCodeLine{11 \textcolor{comment}{// without limitation the rights to use, copy, modify, merge, publish,}}
+\DoxyCodeLine{12 \textcolor{comment}{// distribute, sublicense, and/or sell copies of the Software, and to}}
+\DoxyCodeLine{13 \textcolor{comment}{// permit persons to whom the Software is furnished to do so, subject}}
+\DoxyCodeLine{14 \textcolor{comment}{// to the following conditions:}}
+\DoxyCodeLine{15 \textcolor{comment}{//}}
+\DoxyCodeLine{16 \textcolor{comment}{// The above copyright notice and this permission notice shall be included}}
+\DoxyCodeLine{17 \textcolor{comment}{// in all copies or substantial portions of the Software.}}
+\DoxyCodeLine{18 \textcolor{comment}{//}}
+\DoxyCodeLine{19 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "{}AS}}
+\DoxyCodeLine{20 \textcolor{comment}{// IS"{} AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED}}
+\DoxyCodeLine{21 \textcolor{comment}{// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A}}
+\DoxyCodeLine{22 \textcolor{comment}{// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER}}
+\DoxyCodeLine{23 \textcolor{comment}{// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,}}
+\DoxyCodeLine{24 \textcolor{comment}{// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{25 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR}}
+\DoxyCodeLine{26 \textcolor{comment}{// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF}}
+\DoxyCodeLine{27 \textcolor{comment}{// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING}}
+\DoxyCodeLine{28 \textcolor{comment}{// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS}}
+\DoxyCodeLine{29 \textcolor{comment}{// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}\textcolor{comment}{}}
+\DoxyCodeLine{30 \textcolor{comment}{/**}}
+\DoxyCodeLine{31 \textcolor{comment}{ * @file configreader.hpp}}
+\DoxyCodeLine{32 \textcolor{comment}{ * @brief IO::ConfigReader source file}}
+\DoxyCodeLine{33 \textcolor{comment}{ */}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#define SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#include <list>}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#include <stdexcept>}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#include "{}../helpers/debug.hpp"{}}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#include "{}../helpers/startswith.hpp"{}}}
+\DoxyCodeLine{43 \textcolor{preprocessor}{\#include "{}../model/model.hpp"{}}}
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#include "{}simdjson.h"{}}}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_i_o}{IO}} \{}
+\DoxyCodeLine{47 \textcolor{comment}{}}
+\DoxyCodeLine{48 \textcolor{comment}{/**}}
+\DoxyCodeLine{49 \textcolor{comment}{ * @brief svZeroDSolver configuration reader.}}
+\DoxyCodeLine{50 \textcolor{comment}{ *}}
+\DoxyCodeLine{51 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{52 \textcolor{comment}{ */}}
+\DoxyCodeLine{53 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{54 \textcolor{keyword}{class }\mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader}} \{}
+\DoxyCodeLine{55  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{56 \textcolor{comment}{  /**}}
+\DoxyCodeLine{57 \textcolor{comment}{   * @brief Construct a new Config Reader object}}
 \DoxyCodeLine{58 \textcolor{comment}{   */}}
-\DoxyCodeLine{59   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}{get\_num\_time\_steps}}();}
+\DoxyCodeLine{59   \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{ConfigReader}}();}
 \DoxyCodeLine{60 \textcolor{comment}{}}
 \DoxyCodeLine{61 \textcolor{comment}{  /**}}
-\DoxyCodeLine{62 \textcolor{comment}{   * @brief Get the time step size based on configuration}}
+\DoxyCodeLine{62 \textcolor{comment}{   * @brief Construct a new Config Reader object}}
 \DoxyCodeLine{63 \textcolor{comment}{   *}}
-\DoxyCodeLine{64 \textcolor{comment}{   * @return Time step size}}
-\DoxyCodeLine{65 \textcolor{comment}{   */}}
-\DoxyCodeLine{66   T \mbox{\hyperlink{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}{get\_time\_step\_size}}();}
-\DoxyCodeLine{67 \textcolor{comment}{}}
-\DoxyCodeLine{68 \textcolor{comment}{  /**}}
-\DoxyCodeLine{69 \textcolor{comment}{   * @brief Get an integer simulation parameter}}
-\DoxyCodeLine{70 \textcolor{comment}{   *}}
-\DoxyCodeLine{71 \textcolor{comment}{   * @param key The key of the simulation parameter}}
-\DoxyCodeLine{72 \textcolor{comment}{   * @return Value of the simulation parameter}}
+\DoxyCodeLine{64 \textcolor{comment}{   * Can be constructed either with the path to a json configuration file}}
+\DoxyCodeLine{65 \textcolor{comment}{   * or directly with a json encoded string.}}
+\DoxyCodeLine{66 \textcolor{comment}{   *}}
+\DoxyCodeLine{67 \textcolor{comment}{   * @param specifier Path configuration file or json encoded configuration}}
+\DoxyCodeLine{68 \textcolor{comment}{   */}}
+\DoxyCodeLine{69   \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{ConfigReader}}(std::string \&specifier);}
+\DoxyCodeLine{70 \textcolor{comment}{}}
+\DoxyCodeLine{71 \textcolor{comment}{  /**}}
+\DoxyCodeLine{72 \textcolor{comment}{   * @brief Destroy the Config Reader object}}
 \DoxyCodeLine{73 \textcolor{comment}{   */}}
-\DoxyCodeLine{74   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}{get\_int\_simulation\_parameter}}(std::string key);}
+\DoxyCodeLine{74   \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{\string~ConfigReader}}();}
 \DoxyCodeLine{75 \textcolor{comment}{}}
 \DoxyCodeLine{76 \textcolor{comment}{  /**}}
-\DoxyCodeLine{77 \textcolor{comment}{   * @brief Get an integer simulation parameter with default value}}
+\DoxyCodeLine{77 \textcolor{comment}{   * @brief Create model from configuration file}}
 \DoxyCodeLine{78 \textcolor{comment}{   *}}
-\DoxyCodeLine{79 \textcolor{comment}{   * @param key The key of the simulation parameter}}
-\DoxyCodeLine{80 \textcolor{comment}{   * @param def Default value if key not in simulation parameters}}
-\DoxyCodeLine{81 \textcolor{comment}{   * @return Value of the simulation parameter}}
-\DoxyCodeLine{82 \textcolor{comment}{   */}}
-\DoxyCodeLine{83   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}{get\_int\_simulation\_parameter}}(std::string key, \textcolor{keywordtype}{int} def);}
-\DoxyCodeLine{84 \textcolor{comment}{}}
-\DoxyCodeLine{85 \textcolor{comment}{  /**}}
-\DoxyCodeLine{86 \textcolor{comment}{   * @brief Get a scalar simulation parameter}}
-\DoxyCodeLine{87 \textcolor{comment}{   *}}
-\DoxyCodeLine{88 \textcolor{comment}{   * @param key The key of the simulation parameter}}
-\DoxyCodeLine{89 \textcolor{comment}{   * @return Value of the simulation parameter}}
-\DoxyCodeLine{90 \textcolor{comment}{   */}}
-\DoxyCodeLine{91   T \mbox{\hyperlink{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}{get\_scalar\_simulation\_parameter}}(std::string key);}
-\DoxyCodeLine{92 \textcolor{comment}{}}
-\DoxyCodeLine{93 \textcolor{comment}{  /**}}
-\DoxyCodeLine{94 \textcolor{comment}{   * @brief Get a scalar simulation parameter with default value}}
-\DoxyCodeLine{95 \textcolor{comment}{   *}}
-\DoxyCodeLine{96 \textcolor{comment}{   * @param key The key of the simulation parameter}}
-\DoxyCodeLine{97 \textcolor{comment}{   * @param def Default value if key not in simulation parameters}}
-\DoxyCodeLine{98 \textcolor{comment}{   * @return Value of the simulation parameter}}
-\DoxyCodeLine{99 \textcolor{comment}{   */}}
-\DoxyCodeLine{100   T \mbox{\hyperlink{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}{get\_scalar\_simulation\_parameter}}(std::string key, T def);}
-\DoxyCodeLine{101 \textcolor{comment}{}}
-\DoxyCodeLine{102 \textcolor{comment}{  /**}}
-\DoxyCodeLine{103 \textcolor{comment}{   * @brief Get a bool simulation parameter}}
-\DoxyCodeLine{104 \textcolor{comment}{   *}}
-\DoxyCodeLine{105 \textcolor{comment}{   * @param key The key of the simulation parameter}}
-\DoxyCodeLine{106 \textcolor{comment}{   * @return Value of the simulation parameter}}
-\DoxyCodeLine{107 \textcolor{comment}{   */}}
-\DoxyCodeLine{108   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}{get\_bool\_simulation\_parameter}}(std::string key);}
-\DoxyCodeLine{109 \textcolor{comment}{}}
-\DoxyCodeLine{110 \textcolor{comment}{  /**}}
-\DoxyCodeLine{111 \textcolor{comment}{   * @brief Get a bool simulation parameter with default value}}
-\DoxyCodeLine{112 \textcolor{comment}{   *}}
-\DoxyCodeLine{113 \textcolor{comment}{   * @param key The key of the simulation parameter}}
-\DoxyCodeLine{114 \textcolor{comment}{   * @param def Default value if key not in simulation parameters}}
-\DoxyCodeLine{115 \textcolor{comment}{   * @return Value of the simulation parameter}}
-\DoxyCodeLine{116 \textcolor{comment}{   */}}
-\DoxyCodeLine{117   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}{get\_bool\_simulation\_parameter}}(std::string key, \textcolor{keywordtype}{bool} def);}
-\DoxyCodeLine{118 }
-\DoxyCodeLine{119   T \mbox{\hyperlink{class_i_o_1_1_config_reader_a7401fb68b296447b8152636d1d363416}{cardiac\_cycle\_period}} = 1.0;  \textcolor{comment}{///< Cardiac cycle period}}
-\DoxyCodeLine{120 }
-\DoxyCodeLine{121  \textcolor{keyword}{private}:}
-\DoxyCodeLine{122   \textcolor{keywordtype}{bool} model\_created = \textcolor{keyword}{false};}
-\DoxyCodeLine{123   simdjson::dom::parser parser;}
-\DoxyCodeLine{124   simdjson::dom::element config;}
-\DoxyCodeLine{125   simdjson::dom::element sim\_params;}
-\DoxyCodeLine{126   \textcolor{keyword}{static} \textcolor{keywordtype}{bool} has\_key(simdjson::dom::element \&ele, std::string key);}
-\DoxyCodeLine{127   \textcolor{keyword}{static} T get\_default(simdjson::dom::element \&ele, std::string key, T def);}
-\DoxyCodeLine{128   \textcolor{keyword}{static} \textcolor{keywordtype}{int} get\_default(simdjson::dom::element \&ele, std::string key, \textcolor{keywordtype}{int} def);}
-\DoxyCodeLine{129   \textcolor{keyword}{static} \textcolor{keywordtype}{bool} get\_default(simdjson::dom::element \&ele, std::string key,}
-\DoxyCodeLine{130                           \textcolor{keywordtype}{bool} def);}
-\DoxyCodeLine{131   \textcolor{keyword}{static} simdjson::dom::element get\_default(simdjson::dom::element \&ele,}
-\DoxyCodeLine{132                                             std::string key,}
-\DoxyCodeLine{133                                             simdjson::dom::element def);}
-\DoxyCodeLine{134   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter<T>}} get\_time\_dependent\_parameter(}
-\DoxyCodeLine{135       simdjson::dom::element \&json\_times, simdjson::dom::element \&json\_values);}
-\DoxyCodeLine{136 \};}
-\DoxyCodeLine{137 }
-\DoxyCodeLine{138 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{139 \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{ConfigReader<T>::ConfigReader}}(std::string \&specifier) \{}
-\DoxyCodeLine{140   \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespace_h_e_l_p_e_r_s_aa60c2dfbfc096834b6cd243f84b9c47b}{HELPERS::startswith}}(specifier, \textcolor{stringliteral}{"{}\{"{}})) \{}
-\DoxyCodeLine{141     config = parser.parse(specifier);}
-\DoxyCodeLine{142   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{143     config = parser.load(specifier);}
-\DoxyCodeLine{144   \}}
-\DoxyCodeLine{145   sim\_params = config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}];}
-\DoxyCodeLine{146 \}}
+\DoxyCodeLine{79 \textcolor{comment}{   * @return Model}}
+\DoxyCodeLine{80 \textcolor{comment}{   */}}
+\DoxyCodeLine{81   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \mbox{\hyperlink{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}{get\_model}}();}
+\DoxyCodeLine{82 \textcolor{comment}{}}
+\DoxyCodeLine{83 \textcolor{comment}{  /**}}
+\DoxyCodeLine{84 \textcolor{comment}{   * @brief Get number of time steps based on configuration}}
+\DoxyCodeLine{85 \textcolor{comment}{   *}}
+\DoxyCodeLine{86 \textcolor{comment}{   * @return Number of time steps}}
+\DoxyCodeLine{87 \textcolor{comment}{   */}}
+\DoxyCodeLine{88   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}{get\_num\_time\_steps}}();}
+\DoxyCodeLine{89 \textcolor{comment}{}}
+\DoxyCodeLine{90 \textcolor{comment}{  /**}}
+\DoxyCodeLine{91 \textcolor{comment}{   * @brief Get the time step size based on configuration}}
+\DoxyCodeLine{92 \textcolor{comment}{   *}}
+\DoxyCodeLine{93 \textcolor{comment}{   * @return Time step size}}
+\DoxyCodeLine{94 \textcolor{comment}{   */}}
+\DoxyCodeLine{95   T \mbox{\hyperlink{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}{get\_time\_step\_size}}();}
+\DoxyCodeLine{96 \textcolor{comment}{}}
+\DoxyCodeLine{97 \textcolor{comment}{  /**}}
+\DoxyCodeLine{98 \textcolor{comment}{   * @brief Get an integer simulation parameter}}
+\DoxyCodeLine{99 \textcolor{comment}{   *}}
+\DoxyCodeLine{100 \textcolor{comment}{   * @param key The key of the simulation parameter}}
+\DoxyCodeLine{101 \textcolor{comment}{   * @return Value of the simulation parameter}}
+\DoxyCodeLine{102 \textcolor{comment}{   */}}
+\DoxyCodeLine{103   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}{get\_int\_simulation\_parameter}}(std::string key);}
+\DoxyCodeLine{104 \textcolor{comment}{}}
+\DoxyCodeLine{105 \textcolor{comment}{  /**}}
+\DoxyCodeLine{106 \textcolor{comment}{   * @brief Get an integer simulation parameter with default value}}
+\DoxyCodeLine{107 \textcolor{comment}{   *}}
+\DoxyCodeLine{108 \textcolor{comment}{   * @param key The key of the simulation parameter}}
+\DoxyCodeLine{109 \textcolor{comment}{   * @param def Default value if key not in simulation parameters}}
+\DoxyCodeLine{110 \textcolor{comment}{   * @return Value of the simulation parameter}}
+\DoxyCodeLine{111 \textcolor{comment}{   */}}
+\DoxyCodeLine{112   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}{get\_int\_simulation\_parameter}}(std::string key, \textcolor{keywordtype}{int} def);}
+\DoxyCodeLine{113 \textcolor{comment}{}}
+\DoxyCodeLine{114 \textcolor{comment}{  /**}}
+\DoxyCodeLine{115 \textcolor{comment}{   * @brief Get a scalar simulation parameter}}
+\DoxyCodeLine{116 \textcolor{comment}{   *}}
+\DoxyCodeLine{117 \textcolor{comment}{   * @param key The key of the simulation parameter}}
+\DoxyCodeLine{118 \textcolor{comment}{   * @return Value of the simulation parameter}}
+\DoxyCodeLine{119 \textcolor{comment}{   */}}
+\DoxyCodeLine{120   T \mbox{\hyperlink{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}{get\_scalar\_simulation\_parameter}}(std::string key);}
+\DoxyCodeLine{121 \textcolor{comment}{}}
+\DoxyCodeLine{122 \textcolor{comment}{  /**}}
+\DoxyCodeLine{123 \textcolor{comment}{   * @brief Get a scalar simulation parameter with default value}}
+\DoxyCodeLine{124 \textcolor{comment}{   *}}
+\DoxyCodeLine{125 \textcolor{comment}{   * @param key The key of the simulation parameter}}
+\DoxyCodeLine{126 \textcolor{comment}{   * @param def Default value if key not in simulation parameters}}
+\DoxyCodeLine{127 \textcolor{comment}{   * @return Value of the simulation parameter}}
+\DoxyCodeLine{128 \textcolor{comment}{   */}}
+\DoxyCodeLine{129   T \mbox{\hyperlink{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}{get\_scalar\_simulation\_parameter}}(std::string key, T def);}
+\DoxyCodeLine{130 \textcolor{comment}{}}
+\DoxyCodeLine{131 \textcolor{comment}{  /**}}
+\DoxyCodeLine{132 \textcolor{comment}{   * @brief Get a bool simulation parameter}}
+\DoxyCodeLine{133 \textcolor{comment}{   *}}
+\DoxyCodeLine{134 \textcolor{comment}{   * @param key The key of the simulation parameter}}
+\DoxyCodeLine{135 \textcolor{comment}{   * @return Value of the simulation parameter}}
+\DoxyCodeLine{136 \textcolor{comment}{   */}}
+\DoxyCodeLine{137   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}{get\_bool\_simulation\_parameter}}(std::string key);}
+\DoxyCodeLine{138 \textcolor{comment}{}}
+\DoxyCodeLine{139 \textcolor{comment}{  /**}}
+\DoxyCodeLine{140 \textcolor{comment}{   * @brief Get a bool simulation parameter with default value}}
+\DoxyCodeLine{141 \textcolor{comment}{   *}}
+\DoxyCodeLine{142 \textcolor{comment}{   * @param key The key of the simulation parameter}}
+\DoxyCodeLine{143 \textcolor{comment}{   * @param def Default value if key not in simulation parameters}}
+\DoxyCodeLine{144 \textcolor{comment}{   * @return Value of the simulation parameter}}
+\DoxyCodeLine{145 \textcolor{comment}{   */}}
+\DoxyCodeLine{146   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}{get\_bool\_simulation\_parameter}}(std::string key, \textcolor{keywordtype}{bool} def);}
 \DoxyCodeLine{147 }
-\DoxyCodeLine{148 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{149 \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{ConfigReader<T>::\string~ConfigReader}}() \{\}}
-\DoxyCodeLine{150 }
-\DoxyCodeLine{151 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{152 \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::has\_key}}(simdjson::dom::element \&ele, std::string key) \{}
-\DoxyCodeLine{153   \textcolor{comment}{// Check if config has key by trying}}
-\DoxyCodeLine{154   \textcolor{keywordtype}{bool} has\_key = \textcolor{keyword}{true};}
-\DoxyCodeLine{155   \textcolor{keywordflow}{try} \{}
-\DoxyCodeLine{156     simdjson::dom::element tmp = ele.at\_key(key);}
-\DoxyCodeLine{157   \} \textcolor{keywordflow}{catch} (simdjson::simdjson\_error) \{}
-\DoxyCodeLine{158     has\_key = \textcolor{keyword}{false};}
-\DoxyCodeLine{159   \}}
-\DoxyCodeLine{160   \textcolor{keywordflow}{return} has\_key;}
-\DoxyCodeLine{161 \}}
-\DoxyCodeLine{162 }
-\DoxyCodeLine{163 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{164 T ConfigReader<T>::get\_default(simdjson::dom::element \&ele, std::string key,}
-\DoxyCodeLine{165                                T def) \{}
-\DoxyCodeLine{166   T value = def;}
-\DoxyCodeLine{167   \textcolor{keywordflow}{if} (has\_key(ele, key)) \{}
-\DoxyCodeLine{168     value = ele[key];}
-\DoxyCodeLine{169   \}}
-\DoxyCodeLine{170   \textcolor{keywordflow}{return} value;}
-\DoxyCodeLine{171 \}}
-\DoxyCodeLine{172 }
-\DoxyCodeLine{173 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{174 \textcolor{keywordtype}{int} ConfigReader<T>::get\_default(simdjson::dom::element \&ele, std::string key,}
-\DoxyCodeLine{175                                  \textcolor{keywordtype}{int} def) \{}
-\DoxyCodeLine{176   \textcolor{keywordtype}{int} value = def;}
-\DoxyCodeLine{177   \textcolor{keywordflow}{if} (has\_key(ele, key)) \{}
-\DoxyCodeLine{178     value = ele[key].get\_int64();}
-\DoxyCodeLine{179   \}}
-\DoxyCodeLine{180   \textcolor{keywordflow}{return} value;}
-\DoxyCodeLine{181 \}}
-\DoxyCodeLine{182 }
-\DoxyCodeLine{183 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{184 \textcolor{keywordtype}{bool} ConfigReader<T>::get\_default(simdjson::dom::element \&ele, std::string key,}
-\DoxyCodeLine{185                                   \textcolor{keywordtype}{bool} def) \{}
-\DoxyCodeLine{186   \textcolor{keywordtype}{bool} value = def;}
-\DoxyCodeLine{187   \textcolor{keywordflow}{if} (has\_key(ele, key)) \{}
-\DoxyCodeLine{188     value = ele[key];}
-\DoxyCodeLine{189   \}}
-\DoxyCodeLine{190   \textcolor{keywordflow}{return} value;}
-\DoxyCodeLine{191 \}}
-\DoxyCodeLine{192 }
-\DoxyCodeLine{193 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{194 simdjson::dom::element ConfigReader<T>::get\_default(}
-\DoxyCodeLine{195     simdjson::dom::element \&ele, std::string key, simdjson::dom::element def) \{}
-\DoxyCodeLine{196   simdjson::dom::element value = def;}
-\DoxyCodeLine{197   \textcolor{keywordflow}{if} (has\_key(ele, key)) \{}
-\DoxyCodeLine{198     value = ele[key];}
-\DoxyCodeLine{199   \}}
-\DoxyCodeLine{200   \textcolor{keywordflow}{return} value;}
-\DoxyCodeLine{201 \}}
-\DoxyCodeLine{202 }
-\DoxyCodeLine{203 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{204 \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter<T>}} ConfigReader<T>::get\_time\_dependent\_parameter(}
-\DoxyCodeLine{205     simdjson::dom::element \&json\_times, simdjson::dom::element \&json\_values) \{}
-\DoxyCodeLine{206   std::vector<T> times;}
-\DoxyCodeLine{207   std::vector<T> values;}
-\DoxyCodeLine{208   \textcolor{keywordflow}{if} (json\_values.is\_double()) \{}
-\DoxyCodeLine{209     times.push\_back(0.0);}
-\DoxyCodeLine{210     values.push\_back(json\_values);}
-\DoxyCodeLine{211   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{212     \textcolor{keywordtype}{int} len = simdjson::dom::array(json\_times).size();}
-\DoxyCodeLine{213     times.reserve(len);}
-\DoxyCodeLine{214     values.reserve(len);}
-\DoxyCodeLine{215     \textcolor{keywordflow}{for} (T time : json\_times) \{}
-\DoxyCodeLine{216       times.push\_back(time);}
-\DoxyCodeLine{217     \}}
-\DoxyCodeLine{218     \textcolor{keywordflow}{for} (T value : json\_values) \{}
-\DoxyCodeLine{219       values.push\_back(value);}
-\DoxyCodeLine{220     \}}
-\DoxyCodeLine{221   \}}
-\DoxyCodeLine{222   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter<T>}} param(times, values);}
-\DoxyCodeLine{223   \textcolor{keywordflow}{if} (param.isconstant == \textcolor{keyword}{false}) \{}
-\DoxyCodeLine{224     cardiac\_cycle\_period = param.cycle\_period;}
-\DoxyCodeLine{225   \}}
-\DoxyCodeLine{226   \textcolor{keywordflow}{return} param;}
-\DoxyCodeLine{227 \}}
-\DoxyCodeLine{228 }
-\DoxyCodeLine{229 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{230 \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \mbox{\hyperlink{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}{ConfigReader<T>::get\_model}}() \{}
-\DoxyCodeLine{231   \textcolor{comment}{// Create blog mapping}}
-\DoxyCodeLine{232   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} model;}
-\DoxyCodeLine{233 }
-\DoxyCodeLine{234   \textcolor{comment}{// Create list to store block connections while generating blocks}}
-\DoxyCodeLine{235   std::vector<std::tuple<std::string, std::string>> connections;}
-\DoxyCodeLine{236 }
-\DoxyCodeLine{237   \textcolor{comment}{// Create junctions}}
-\DoxyCodeLine{238   \textcolor{keywordflow}{for} (simdjson::dom::element junction\_config : config[\textcolor{stringliteral}{"{}junctions"{}}]) \{}
-\DoxyCodeLine{239     \textcolor{keywordflow}{if} ((\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}]) ==}
-\DoxyCodeLine{240          \textcolor{stringliteral}{"{}NORMAL\_JUNCTION"{}}) ||}
-\DoxyCodeLine{241         (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}]) ==}
-\DoxyCodeLine{242          \textcolor{stringliteral}{"{}internal\_junction"{}})) \{}
-\DoxyCodeLine{243       \textcolor{comment}{// Create the junction and add to blocks}}
-\DoxyCodeLine{244       std::string junction\_name =}
-\DoxyCodeLine{245           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_name"{}}]);}
-\DoxyCodeLine{246       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(\{junction\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL::Junction<T>}}(junction\_name)\});}
-\DoxyCodeLine{247 }
-\DoxyCodeLine{248       \textcolor{comment}{// Check for connections to inlet and outlet vessels and append to}}
-\DoxyCodeLine{249       \textcolor{comment}{// connections list}}
-\DoxyCodeLine{250       \textcolor{keywordflow}{for} (simdjson::dom::element inlet\_vessel :}
-\DoxyCodeLine{251            junction\_config[\textcolor{stringliteral}{"{}inlet\_vessels"{}}]) \{}
-\DoxyCodeLine{252         connections.push\_back(}
-\DoxyCodeLine{253             \{\textcolor{stringliteral}{"{}V"{}} + std::to\_string(inlet\_vessel.get\_int64()), junction\_name\});}
-\DoxyCodeLine{254       \}}
-\DoxyCodeLine{255       \textcolor{keywordflow}{for} (simdjson::dom::element outlet\_vessel :}
-\DoxyCodeLine{256            junction\_config[\textcolor{stringliteral}{"{}outlet\_vessels"{}}]) \{}
-\DoxyCodeLine{257         connections.push\_back(}
-\DoxyCodeLine{258             \{junction\_name, \textcolor{stringliteral}{"{}V"{}} + std::to\_string(outlet\_vessel.get\_int64())\});}
-\DoxyCodeLine{259       \}}
-\DoxyCodeLine{260     \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{261       \textcolor{keywordflow}{throw} std::invalid\_argument(}
-\DoxyCodeLine{262           \textcolor{stringliteral}{"{}Unknown junction type "{}} +}
-\DoxyCodeLine{263           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}]));}
-\DoxyCodeLine{264     \}}
-\DoxyCodeLine{265   \}}
-\DoxyCodeLine{266 }
-\DoxyCodeLine{267   \textcolor{comment}{// Create vessels}}
-\DoxyCodeLine{268   std::list<std::string> bc\_locations = \{\textcolor{stringliteral}{"{}inlet"{}}, \textcolor{stringliteral}{"{}outlet"{}}\};}
-\DoxyCodeLine{269   \textcolor{keywordflow}{for} (simdjson::dom::element vessel\_config : config[\textcolor{stringliteral}{"{}vessels"{}}]) \{}
-\DoxyCodeLine{270     simdjson::dom::element vessel\_values =}
-\DoxyCodeLine{271         vessel\_config[\textcolor{stringliteral}{"{}zero\_d\_element\_values"{}}];}
-\DoxyCodeLine{272     std::string vessel\_id\_string =}
-\DoxyCodeLine{273         std::to\_string(vessel\_config[\textcolor{stringliteral}{"{}vessel\_id"{}}].get\_int64());}
-\DoxyCodeLine{274     std::string vessel\_name = \textcolor{stringliteral}{"{}V"{}} + vessel\_id\_string;}
-\DoxyCodeLine{275     \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(vessel\_config[\textcolor{stringliteral}{"{}zero\_d\_element\_type"{}}]) ==}
-\DoxyCodeLine{276         \textcolor{stringliteral}{"{}BloodVessel"{}}) \{}
-\DoxyCodeLine{277       T R = vessel\_values[\textcolor{stringliteral}{"{}R\_poiseuille"{}}],}
-\DoxyCodeLine{278         C = get\_default(vessel\_values, \textcolor{stringliteral}{"{}C"{}}, 0.0);}
-\DoxyCodeLine{279       T L = get\_default(vessel\_values, \textcolor{stringliteral}{"{}L"{}}, 0.0),}
-\DoxyCodeLine{280         stenosis\_coefficient =}
-\DoxyCodeLine{281             get\_default(vessel\_values, \textcolor{stringliteral}{"{}stenosis\_coefficient"{}}, 0.0);}
-\DoxyCodeLine{282       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
-\DoxyCodeLine{283           \{vessel\_name,}
-\DoxyCodeLine{284            \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL::BloodVessel<T>}}(R = R, C = C, L = L,}
-\DoxyCodeLine{285                                  stenosis\_coefficient = stenosis\_coefficient,}
-\DoxyCodeLine{286                                  vessel\_name)\});}
-\DoxyCodeLine{287     \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{288       \textcolor{keywordflow}{throw} std::invalid\_argument(}
-\DoxyCodeLine{289           \textcolor{stringliteral}{"{}Unknown vessel type "{}} +}
-\DoxyCodeLine{290           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(vessel\_config[\textcolor{stringliteral}{"{}vessel\_type"{}}]));}
-\DoxyCodeLine{291     \}}
-\DoxyCodeLine{292 }
-\DoxyCodeLine{293     \textcolor{comment}{// Create boundary conditions of blood vessel}}
-\DoxyCodeLine{294     \textcolor{keywordflow}{if} (has\_key(vessel\_config, \textcolor{stringliteral}{"{}boundary\_conditions"{}}) == \textcolor{keyword}{true}) \{}
-\DoxyCodeLine{295       simdjson::dom::element vessel\_bcs = vessel\_config[\textcolor{stringliteral}{"{}boundary\_conditions"{}}];}
-\DoxyCodeLine{296       \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} loc : bc\_locations) \{}
-\DoxyCodeLine{297         \textcolor{comment}{// Check for BC blocks at inlet or outlet}}
-\DoxyCodeLine{298         \textcolor{keywordflow}{if} (has\_key(vessel\_bcs, loc)) \{}
-\DoxyCodeLine{299           std::string bc\_name = \textcolor{stringliteral}{"{}BC"{}} + vessel\_id\_string + \textcolor{stringliteral}{"{}\_"{}} + loc;}
-\DoxyCodeLine{300           std::string bc\_handle = \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(vessel\_bcs[loc]);}
-\DoxyCodeLine{301           \textcolor{keywordflow}{for} (simdjson::dom::element bc\_config :}
-\DoxyCodeLine{302                config[\textcolor{stringliteral}{"{}boundary\_conditions"{}}]) \{}
-\DoxyCodeLine{303             \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_name"{}}]) == bc\_handle) \{}
-\DoxyCodeLine{304               simdjson::dom::element bc\_values = bc\_config[\textcolor{stringliteral}{"{}bc\_values"{}}];}
-\DoxyCodeLine{305               \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}RCR"{}}) \{}
-\DoxyCodeLine{306                 T Rp = bc\_values[\textcolor{stringliteral}{"{}Rp"{}}], C = bc\_values[\textcolor{stringliteral}{"{}C"{}}],}
-\DoxyCodeLine{307                   Rd = bc\_values[\textcolor{stringliteral}{"{}Rd"{}}], Pd = bc\_values[\textcolor{stringliteral}{"{}Pd"{}}];}
-\DoxyCodeLine{308                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
-\DoxyCodeLine{309                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL::WindkesselBC<T>}}(Rp = Rp, C = C, Rd = Rd,}
-\DoxyCodeLine{310                                                      Pd = Pd, bc\_name)\});}
-\DoxyCodeLine{311                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
-\DoxyCodeLine{312               \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) ==}
-\DoxyCodeLine{313                          \textcolor{stringliteral}{"{}FLOW"{}}) \{}
-\DoxyCodeLine{314                 simdjson::dom::element Q\_json = bc\_values[\textcolor{stringliteral}{"{}Q"{}}],}
-\DoxyCodeLine{315                                        t\_json = get\_default(}
-\DoxyCodeLine{316                                            bc\_values, \textcolor{stringliteral}{"{}t"{}},}
-\DoxyCodeLine{317                                            simdjson::dom::element());}
-\DoxyCodeLine{318                 \textcolor{keyword}{auto} Q = get\_time\_dependent\_parameter(t\_json, Q\_json);}
-\DoxyCodeLine{319                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
-\DoxyCodeLine{320                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL::FlowReferenceBC<T>}}(Q = Q, bc\_name)\});}
-\DoxyCodeLine{321                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
-\DoxyCodeLine{322               \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) ==}
-\DoxyCodeLine{323                          \textcolor{stringliteral}{"{}RESISTANCE"{}}) \{}
-\DoxyCodeLine{324                 simdjson::dom::element R\_json = bc\_values[\textcolor{stringliteral}{"{}R"{}}],}
-\DoxyCodeLine{325                                        Pd\_json = bc\_values[\textcolor{stringliteral}{"{}Pd"{}}];}
-\DoxyCodeLine{326                 simdjson::dom::element t\_json =}
-\DoxyCodeLine{327                     get\_default(bc\_values, \textcolor{stringliteral}{"{}t"{}}, simdjson::dom::element());}
-\DoxyCodeLine{328                 \textcolor{keyword}{auto} R = get\_time\_dependent\_parameter(t\_json, R\_json);}
-\DoxyCodeLine{329                 \textcolor{keyword}{auto} Pd = get\_time\_dependent\_parameter(t\_json, Pd\_json);}
-\DoxyCodeLine{330                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
-\DoxyCodeLine{331                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL::ResistanceBC<T>}}(R = R, Pd = Pd, bc\_name)\});}
-\DoxyCodeLine{332                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
-\DoxyCodeLine{333               \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) ==}
-\DoxyCodeLine{334                          \textcolor{stringliteral}{"{}PRESSURE"{}}) \{}
-\DoxyCodeLine{335                 simdjson::dom::element P\_json = bc\_values[\textcolor{stringliteral}{"{}P"{}}];}
-\DoxyCodeLine{336                 simdjson::dom::element t\_json =}
-\DoxyCodeLine{337                     get\_default(bc\_values, \textcolor{stringliteral}{"{}t"{}}, simdjson::dom::element());}
-\DoxyCodeLine{338                 \textcolor{keyword}{auto} P = get\_time\_dependent\_parameter(t\_json, P\_json);}
-\DoxyCodeLine{339                 \textcolor{keywordflow}{if} (P.isconstant == \textcolor{keyword}{false}) \{}
-\DoxyCodeLine{340                   cardiac\_cycle\_period = P.cycle\_period;}
-\DoxyCodeLine{341                 \}}
-\DoxyCodeLine{342                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
-\DoxyCodeLine{343                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL::PressureReferenceBC<T>}}(P = P, bc\_name)\});}
-\DoxyCodeLine{344                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
-\DoxyCodeLine{345               \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) ==}
-\DoxyCodeLine{346                          \textcolor{stringliteral}{"{}CORONARY"{}}) \{}
-\DoxyCodeLine{347                 T Ra = bc\_values[\textcolor{stringliteral}{"{}Ra1"{}}], Ram = bc\_values[\textcolor{stringliteral}{"{}Ra2"{}}],}
-\DoxyCodeLine{348                   Rv = bc\_values[\textcolor{stringliteral}{"{}Rv1"{}}], Ca = bc\_values[\textcolor{stringliteral}{"{}Ca"{}}],}
-\DoxyCodeLine{349                   Cim = bc\_values[\textcolor{stringliteral}{"{}Cc"{}}];}
-\DoxyCodeLine{350                 simdjson::dom::element Pim\_json = bc\_values[\textcolor{stringliteral}{"{}Pim"{}}],}
-\DoxyCodeLine{351                                        Pv\_json = bc\_values[\textcolor{stringliteral}{"{}P\_v"{}}];}
-\DoxyCodeLine{352                 simdjson::dom::element t\_json =}
-\DoxyCodeLine{353                     get\_default(bc\_values, \textcolor{stringliteral}{"{}t"{}}, simdjson::dom::element());}
-\DoxyCodeLine{354                 \textcolor{keyword}{auto} Pim = get\_time\_dependent\_parameter(t\_json, Pim\_json);}
-\DoxyCodeLine{355                 \textcolor{keyword}{auto} Pv = get\_time\_dependent\_parameter(t\_json, Pv\_json);}
-\DoxyCodeLine{356                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
-\DoxyCodeLine{357                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL::OpenLoopCoronaryBC<T>}}(}
-\DoxyCodeLine{358                                   Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca,}
-\DoxyCodeLine{359                                   Cim = Cim, Pim = Pim, Pv = Pv, bc\_name)\});}
-\DoxyCodeLine{360                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
-\DoxyCodeLine{361               \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{362                 \textcolor{keywordflow}{throw} std::invalid\_argument(}
-\DoxyCodeLine{363                     \textcolor{stringliteral}{"{}Unknown boundary condition type "{}} +}
-\DoxyCodeLine{364                     \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]));}
-\DoxyCodeLine{365               \}}
-\DoxyCodeLine{366               \textcolor{keywordflow}{break};}
-\DoxyCodeLine{367             \}}
-\DoxyCodeLine{368           \}}
-\DoxyCodeLine{369           \textcolor{keywordflow}{if} (loc == \textcolor{stringliteral}{"{}inlet"{}}) \{}
-\DoxyCodeLine{370             connections.push\_back(\{bc\_name, vessel\_name\});}
-\DoxyCodeLine{371           \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{372             connections.push\_back(\{vessel\_name, bc\_name\});}
-\DoxyCodeLine{373           \}}
-\DoxyCodeLine{374         \}}
-\DoxyCodeLine{375       \}}
-\DoxyCodeLine{376     \}}
-\DoxyCodeLine{377   \}}
-\DoxyCodeLine{378 }
-\DoxyCodeLine{379   \textcolor{comment}{// Create Connections}}
-\DoxyCodeLine{380   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&connection : connections) \{}
-\DoxyCodeLine{381     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem1] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}) \{}
-\DoxyCodeLine{382       std::visit(}
-\DoxyCodeLine{383           [\&](\textcolor{keyword}{auto} \&\&ele1) \{}
-\DoxyCodeLine{384             \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem2] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}) \{}
-\DoxyCodeLine{385               std::visit(}
-\DoxyCodeLine{386                   [\&](auto \&\&ele2) \{}
-\DoxyCodeLine{387                     if ((ele1.name == std::get<0>(connection)) \&\&}
-\DoxyCodeLine{388                         (ele2.name == std::get<1>(connection))) \{}
-\DoxyCodeLine{389                       model.nodes.push\_back(}
-\DoxyCodeLine{390                           MODEL::Node(ele1.name + \textcolor{stringliteral}{"{}\_"{}} + ele2.name));}
-\DoxyCodeLine{391                       DEBUG\_MSG(\textcolor{stringliteral}{"{}Created node "{}} << model.nodes.back().name);}
-\DoxyCodeLine{392                       ele1.outlet\_nodes.push\_back(\&model.nodes.back());}
-\DoxyCodeLine{393                       ele2.inlet\_nodes.push\_back(\&model.nodes.back());}
-\DoxyCodeLine{394                       model.nodes.back().setup\_dofs(model.dofhandler);}
-\DoxyCodeLine{395                     \}}
-\DoxyCodeLine{396                   \},}
-\DoxyCodeLine{397                   elem2);}
-\DoxyCodeLine{398             \}}
-\DoxyCodeLine{399           \},}
-\DoxyCodeLine{400           elem1);}
-\DoxyCodeLine{401     \}}
-\DoxyCodeLine{402   \}}
-\DoxyCodeLine{403   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem] : model.blocks) \{}
-\DoxyCodeLine{404     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.setup\_dofs(model.dofhandler); \}, elem);}
-\DoxyCodeLine{405   \}}
-\DoxyCodeLine{406   model\_created = \textcolor{keyword}{true};}
-\DoxyCodeLine{407   \textcolor{keywordflow}{return} model;}
-\DoxyCodeLine{408 \}}
-\DoxyCodeLine{409 }
-\DoxyCodeLine{410 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{411 \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_num\_time\_steps}}() \{}
-\DoxyCodeLine{412   T num\_cycles = config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][\textcolor{stringliteral}{"{}number\_of\_cardiac\_cycles"{}}];}
-\DoxyCodeLine{413   T num\_pts\_per\_cycle =}
-\DoxyCodeLine{414       config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][\textcolor{stringliteral}{"{}number\_of\_time\_pts\_per\_cardiac\_cycle"{}}];}
-\DoxyCodeLine{415   \textcolor{keywordtype}{int} num\_time\_steps = (num\_pts\_per\_cycle -\/ 1) * num\_cycles + 1;}
-\DoxyCodeLine{416   \textcolor{keywordflow}{return} num\_time\_steps;}
-\DoxyCodeLine{417 \}}
-\DoxyCodeLine{418 }
-\DoxyCodeLine{419 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{420 T \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_time\_step\_size}}() \{}
-\DoxyCodeLine{421   \textcolor{keywordflow}{if} (model\_created == \textcolor{keyword}{false}) \{}
-\DoxyCodeLine{422     \textcolor{comment}{// Cardiac cycle period is set at model creation so it has to be performed}}
-\DoxyCodeLine{423     \textcolor{comment}{// first}}
-\DoxyCodeLine{424     \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{425         \textcolor{stringliteral}{"{}Please create model before calculating timstepsize."{}});}
-\DoxyCodeLine{426   \}}
-\DoxyCodeLine{427   T num\_pts\_per\_cycle =}
-\DoxyCodeLine{428       config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][\textcolor{stringliteral}{"{}number\_of\_time\_pts\_per\_cardiac\_cycle"{}}];}
-\DoxyCodeLine{429   T time\_step\_size = cardiac\_cycle\_period / (num\_pts\_per\_cycle -\/ 1);}
-\DoxyCodeLine{430   \textcolor{keywordflow}{return} time\_step\_size;}
-\DoxyCodeLine{431 \}}
-\DoxyCodeLine{432 }
-\DoxyCodeLine{433 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{434 \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_int\_simulation\_parameter}}(std::string key) \{}
-\DoxyCodeLine{435   \textcolor{keywordflow}{return} int(config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][key]);}
-\DoxyCodeLine{436 \}}
-\DoxyCodeLine{437 }
-\DoxyCodeLine{438 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{439 \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_int\_simulation\_parameter}}(std::string key, \textcolor{keywordtype}{int} def) \{}
-\DoxyCodeLine{440   \textcolor{keywordflow}{return} get\_default(sim\_params, key, def);}
-\DoxyCodeLine{441 \}}
-\DoxyCodeLine{442 }
-\DoxyCodeLine{443 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{444 T \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_scalar\_simulation\_parameter}}(std::string key) \{}
-\DoxyCodeLine{445   \textcolor{keywordflow}{return} int(config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][key]);}
+\DoxyCodeLine{148   T \mbox{\hyperlink{class_i_o_1_1_config_reader_a7401fb68b296447b8152636d1d363416}{cardiac\_cycle\_period}} = 1.0;  \textcolor{comment}{///< Cardiac cycle period}}
+\DoxyCodeLine{149 }
+\DoxyCodeLine{150  \textcolor{keyword}{private}:}
+\DoxyCodeLine{151   \textcolor{keywordtype}{bool} model\_created = \textcolor{keyword}{false};}
+\DoxyCodeLine{152   simdjson::dom::parser parser;}
+\DoxyCodeLine{153   simdjson::dom::element config;}
+\DoxyCodeLine{154   simdjson::dom::element sim\_params;}
+\DoxyCodeLine{155   \textcolor{keyword}{static} \textcolor{keywordtype}{bool} has\_key(simdjson::dom::element \&ele, std::string key);}
+\DoxyCodeLine{156   \textcolor{keyword}{static} T get\_default(simdjson::dom::element \&ele, std::string key, T def);}
+\DoxyCodeLine{157   \textcolor{keyword}{static} \textcolor{keywordtype}{int} get\_default(simdjson::dom::element \&ele, std::string key, \textcolor{keywordtype}{int} def);}
+\DoxyCodeLine{158   \textcolor{keyword}{static} \textcolor{keywordtype}{bool} get\_default(simdjson::dom::element \&ele, std::string key,}
+\DoxyCodeLine{159                           \textcolor{keywordtype}{bool} def);}
+\DoxyCodeLine{160   \textcolor{keyword}{static} simdjson::dom::element get\_default(simdjson::dom::element \&ele,}
+\DoxyCodeLine{161                                             std::string key,}
+\DoxyCodeLine{162                                             simdjson::dom::element def);}
+\DoxyCodeLine{163   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter<T>}} get\_time\_dependent\_parameter(}
+\DoxyCodeLine{164       simdjson::dom::element \&json\_times, simdjson::dom::element \&json\_values);}
+\DoxyCodeLine{165 \};}
+\DoxyCodeLine{166 }
+\DoxyCodeLine{167 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{168 \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{ConfigReader<T>::ConfigReader}}(std::string \&specifier) \{}
+\DoxyCodeLine{169   \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespace_h_e_l_p_e_r_s_aa60c2dfbfc096834b6cd243f84b9c47b}{HELPERS::startswith}}(specifier, \textcolor{stringliteral}{"{}\{"{}})) \{}
+\DoxyCodeLine{170     config = parser.parse(specifier);}
+\DoxyCodeLine{171   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{172     config = parser.load(specifier);}
+\DoxyCodeLine{173   \}}
+\DoxyCodeLine{174   sim\_params = config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}];}
+\DoxyCodeLine{175 \}}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{178 \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{ConfigReader<T>::\string~ConfigReader}}() \{\}}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{181 \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::has\_key}}(simdjson::dom::element \&ele, std::string key) \{}
+\DoxyCodeLine{182   \textcolor{comment}{// Check if config has key by trying}}
+\DoxyCodeLine{183   \textcolor{keywordtype}{bool} has\_key = \textcolor{keyword}{true};}
+\DoxyCodeLine{184   \textcolor{keywordflow}{try} \{}
+\DoxyCodeLine{185     simdjson::dom::element tmp = ele.at\_key(key);}
+\DoxyCodeLine{186   \} \textcolor{keywordflow}{catch} (simdjson::simdjson\_error) \{}
+\DoxyCodeLine{187     has\_key = \textcolor{keyword}{false};}
+\DoxyCodeLine{188   \}}
+\DoxyCodeLine{189   \textcolor{keywordflow}{return} has\_key;}
+\DoxyCodeLine{190 \}}
+\DoxyCodeLine{191 }
+\DoxyCodeLine{192 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{193 T ConfigReader<T>::get\_default(simdjson::dom::element \&ele, std::string key,}
+\DoxyCodeLine{194                                T def) \{}
+\DoxyCodeLine{195   T value = def;}
+\DoxyCodeLine{196   \textcolor{keywordflow}{if} (has\_key(ele, key)) \{}
+\DoxyCodeLine{197     value = ele[key];}
+\DoxyCodeLine{198   \}}
+\DoxyCodeLine{199   \textcolor{keywordflow}{return} value;}
+\DoxyCodeLine{200 \}}
+\DoxyCodeLine{201 }
+\DoxyCodeLine{202 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{203 \textcolor{keywordtype}{int} ConfigReader<T>::get\_default(simdjson::dom::element \&ele, std::string key,}
+\DoxyCodeLine{204                                  \textcolor{keywordtype}{int} def) \{}
+\DoxyCodeLine{205   \textcolor{keywordtype}{int} value = def;}
+\DoxyCodeLine{206   \textcolor{keywordflow}{if} (has\_key(ele, key)) \{}
+\DoxyCodeLine{207     value = ele[key].get\_int64();}
+\DoxyCodeLine{208   \}}
+\DoxyCodeLine{209   \textcolor{keywordflow}{return} value;}
+\DoxyCodeLine{210 \}}
+\DoxyCodeLine{211 }
+\DoxyCodeLine{212 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{213 \textcolor{keywordtype}{bool} ConfigReader<T>::get\_default(simdjson::dom::element \&ele, std::string key,}
+\DoxyCodeLine{214                                   \textcolor{keywordtype}{bool} def) \{}
+\DoxyCodeLine{215   \textcolor{keywordtype}{bool} value = def;}
+\DoxyCodeLine{216   \textcolor{keywordflow}{if} (has\_key(ele, key)) \{}
+\DoxyCodeLine{217     value = ele[key];}
+\DoxyCodeLine{218   \}}
+\DoxyCodeLine{219   \textcolor{keywordflow}{return} value;}
+\DoxyCodeLine{220 \}}
+\DoxyCodeLine{221 }
+\DoxyCodeLine{222 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{223 simdjson::dom::element ConfigReader<T>::get\_default(}
+\DoxyCodeLine{224     simdjson::dom::element \&ele, std::string key, simdjson::dom::element def) \{}
+\DoxyCodeLine{225   simdjson::dom::element value = def;}
+\DoxyCodeLine{226   \textcolor{keywordflow}{if} (has\_key(ele, key)) \{}
+\DoxyCodeLine{227     value = ele[key];}
+\DoxyCodeLine{228   \}}
+\DoxyCodeLine{229   \textcolor{keywordflow}{return} value;}
+\DoxyCodeLine{230 \}}
+\DoxyCodeLine{231 }
+\DoxyCodeLine{232 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{233 \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter<T>}} ConfigReader<T>::get\_time\_dependent\_parameter(}
+\DoxyCodeLine{234     simdjson::dom::element \&json\_times, simdjson::dom::element \&json\_values) \{}
+\DoxyCodeLine{235   std::vector<T> times;}
+\DoxyCodeLine{236   std::vector<T> values;}
+\DoxyCodeLine{237   \textcolor{keywordflow}{if} (json\_values.is\_double()) \{}
+\DoxyCodeLine{238     times.push\_back(0.0);}
+\DoxyCodeLine{239     values.push\_back(json\_values);}
+\DoxyCodeLine{240   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{241     \textcolor{keywordtype}{int} len = simdjson::dom::array(json\_times).size();}
+\DoxyCodeLine{242     times.reserve(len);}
+\DoxyCodeLine{243     values.reserve(len);}
+\DoxyCodeLine{244     \textcolor{keywordflow}{for} (T time : json\_times) \{}
+\DoxyCodeLine{245       times.push\_back(time);}
+\DoxyCodeLine{246     \}}
+\DoxyCodeLine{247     \textcolor{keywordflow}{for} (T value : json\_values) \{}
+\DoxyCodeLine{248       values.push\_back(value);}
+\DoxyCodeLine{249     \}}
+\DoxyCodeLine{250   \}}
+\DoxyCodeLine{251   \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter<T>}} param(times, values);}
+\DoxyCodeLine{252   \textcolor{keywordflow}{if} (param.isconstant == \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{253     cardiac\_cycle\_period = param.cycle\_period;}
+\DoxyCodeLine{254   \}}
+\DoxyCodeLine{255   \textcolor{keywordflow}{return} param;}
+\DoxyCodeLine{256 \}}
+\DoxyCodeLine{257 }
+\DoxyCodeLine{258 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{259 \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \mbox{\hyperlink{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}{ConfigReader<T>::get\_model}}() \{}
+\DoxyCodeLine{260   \textcolor{comment}{// Create blog mapping}}
+\DoxyCodeLine{261   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} model;}
+\DoxyCodeLine{262 }
+\DoxyCodeLine{263   \textcolor{comment}{// Create list to store block connections while generating blocks}}
+\DoxyCodeLine{264   std::vector<std::tuple<std::string, std::string>> connections;}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266   \textcolor{comment}{// Create junctions}}
+\DoxyCodeLine{267   \textcolor{keywordflow}{for} (simdjson::dom::element junction\_config : config[\textcolor{stringliteral}{"{}junctions"{}}]) \{}
+\DoxyCodeLine{268     \textcolor{keywordflow}{if} ((\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}]) ==}
+\DoxyCodeLine{269          \textcolor{stringliteral}{"{}NORMAL\_JUNCTION"{}}) ||}
+\DoxyCodeLine{270         (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}]) ==}
+\DoxyCodeLine{271          \textcolor{stringliteral}{"{}internal\_junction"{}})) \{}
+\DoxyCodeLine{272       \textcolor{comment}{// Create the junction and add to blocks}}
+\DoxyCodeLine{273       std::string junction\_name =}
+\DoxyCodeLine{274           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_name"{}}]);}
+\DoxyCodeLine{275       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(\{junction\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL::Junction<T>}}(junction\_name)\});}
+\DoxyCodeLine{276 }
+\DoxyCodeLine{277       \textcolor{comment}{// Check for connections to inlet and outlet vessels and append to}}
+\DoxyCodeLine{278       \textcolor{comment}{// connections list}}
+\DoxyCodeLine{279       \textcolor{keywordflow}{for} (simdjson::dom::element inlet\_vessel :}
+\DoxyCodeLine{280            junction\_config[\textcolor{stringliteral}{"{}inlet\_vessels"{}}]) \{}
+\DoxyCodeLine{281         connections.push\_back(}
+\DoxyCodeLine{282             \{\textcolor{stringliteral}{"{}V"{}} + std::to\_string(inlet\_vessel.get\_int64()), junction\_name\});}
+\DoxyCodeLine{283       \}}
+\DoxyCodeLine{284       \textcolor{keywordflow}{for} (simdjson::dom::element outlet\_vessel :}
+\DoxyCodeLine{285            junction\_config[\textcolor{stringliteral}{"{}outlet\_vessels"{}}]) \{}
+\DoxyCodeLine{286         connections.push\_back(}
+\DoxyCodeLine{287             \{junction\_name, \textcolor{stringliteral}{"{}V"{}} + std::to\_string(outlet\_vessel.get\_int64())\});}
+\DoxyCodeLine{288       \}}
+\DoxyCodeLine{289     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{290       \textcolor{keywordflow}{throw} std::invalid\_argument(}
+\DoxyCodeLine{291           \textcolor{stringliteral}{"{}Unknown junction type "{}} +}
+\DoxyCodeLine{292           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}]));}
+\DoxyCodeLine{293     \}}
+\DoxyCodeLine{294   \}}
+\DoxyCodeLine{295 }
+\DoxyCodeLine{296   \textcolor{comment}{// Create vessels}}
+\DoxyCodeLine{297   std::list<std::string> bc\_locations = \{\textcolor{stringliteral}{"{}inlet"{}}, \textcolor{stringliteral}{"{}outlet"{}}\};}
+\DoxyCodeLine{298   \textcolor{keywordflow}{for} (simdjson::dom::element vessel\_config : config[\textcolor{stringliteral}{"{}vessels"{}}]) \{}
+\DoxyCodeLine{299     simdjson::dom::element vessel\_values =}
+\DoxyCodeLine{300         vessel\_config[\textcolor{stringliteral}{"{}zero\_d\_element\_values"{}}];}
+\DoxyCodeLine{301     std::string vessel\_id\_string =}
+\DoxyCodeLine{302         std::to\_string(vessel\_config[\textcolor{stringliteral}{"{}vessel\_id"{}}].get\_int64());}
+\DoxyCodeLine{303     std::string vessel\_name = \textcolor{stringliteral}{"{}V"{}} + vessel\_id\_string;}
+\DoxyCodeLine{304     \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(vessel\_config[\textcolor{stringliteral}{"{}zero\_d\_element\_type"{}}]) ==}
+\DoxyCodeLine{305         \textcolor{stringliteral}{"{}BloodVessel"{}}) \{}
+\DoxyCodeLine{306       T R = vessel\_values[\textcolor{stringliteral}{"{}R\_poiseuille"{}}],}
+\DoxyCodeLine{307         C = get\_default(vessel\_values, \textcolor{stringliteral}{"{}C"{}}, 0.0);}
+\DoxyCodeLine{308       T L = get\_default(vessel\_values, \textcolor{stringliteral}{"{}L"{}}, 0.0),}
+\DoxyCodeLine{309         stenosis\_coefficient =}
+\DoxyCodeLine{310             get\_default(vessel\_values, \textcolor{stringliteral}{"{}stenosis\_coefficient"{}}, 0.0);}
+\DoxyCodeLine{311       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
+\DoxyCodeLine{312           \{vessel\_name,}
+\DoxyCodeLine{313            \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL::BloodVessel<T>}}(R = R, C = C, L = L,}
+\DoxyCodeLine{314                                  stenosis\_coefficient = stenosis\_coefficient,}
+\DoxyCodeLine{315                                  vessel\_name)\});}
+\DoxyCodeLine{316     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{317       \textcolor{keywordflow}{throw} std::invalid\_argument(}
+\DoxyCodeLine{318           \textcolor{stringliteral}{"{}Unknown vessel type "{}} +}
+\DoxyCodeLine{319           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(vessel\_config[\textcolor{stringliteral}{"{}vessel\_type"{}}]));}
+\DoxyCodeLine{320     \}}
+\DoxyCodeLine{321 }
+\DoxyCodeLine{322     \textcolor{comment}{// Create boundary conditions of blood vessel}}
+\DoxyCodeLine{323     \textcolor{keywordflow}{if} (has\_key(vessel\_config, \textcolor{stringliteral}{"{}boundary\_conditions"{}}) == \textcolor{keyword}{true}) \{}
+\DoxyCodeLine{324       simdjson::dom::element vessel\_bcs = vessel\_config[\textcolor{stringliteral}{"{}boundary\_conditions"{}}];}
+\DoxyCodeLine{325       \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} loc : bc\_locations) \{}
+\DoxyCodeLine{326         \textcolor{comment}{// Check for BC blocks at inlet or outlet}}
+\DoxyCodeLine{327         \textcolor{keywordflow}{if} (has\_key(vessel\_bcs, loc)) \{}
+\DoxyCodeLine{328           std::string bc\_name = \textcolor{stringliteral}{"{}BC"{}} + vessel\_id\_string + \textcolor{stringliteral}{"{}\_"{}} + loc;}
+\DoxyCodeLine{329           std::string bc\_handle = \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(vessel\_bcs[loc]);}
+\DoxyCodeLine{330           \textcolor{keywordflow}{for} (simdjson::dom::element bc\_config :}
+\DoxyCodeLine{331                config[\textcolor{stringliteral}{"{}boundary\_conditions"{}}]) \{}
+\DoxyCodeLine{332             \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_name"{}}]) == bc\_handle) \{}
+\DoxyCodeLine{333               simdjson::dom::element bc\_values = bc\_config[\textcolor{stringliteral}{"{}bc\_values"{}}];}
+\DoxyCodeLine{334               \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) == \textcolor{stringliteral}{"{}RCR"{}}) \{}
+\DoxyCodeLine{335                 T Rp = bc\_values[\textcolor{stringliteral}{"{}Rp"{}}], C = bc\_values[\textcolor{stringliteral}{"{}C"{}}],}
+\DoxyCodeLine{336                   Rd = bc\_values[\textcolor{stringliteral}{"{}Rd"{}}], Pd = bc\_values[\textcolor{stringliteral}{"{}Pd"{}}];}
+\DoxyCodeLine{337                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
+\DoxyCodeLine{338                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL::WindkesselBC<T>}}(Rp = Rp, C = C, Rd = Rd,}
+\DoxyCodeLine{339                                                      Pd = Pd, bc\_name)\});}
+\DoxyCodeLine{340                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
+\DoxyCodeLine{341               \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) ==}
+\DoxyCodeLine{342                          \textcolor{stringliteral}{"{}FLOW"{}}) \{}
+\DoxyCodeLine{343                 simdjson::dom::element Q\_json = bc\_values[\textcolor{stringliteral}{"{}Q"{}}],}
+\DoxyCodeLine{344                                        t\_json = get\_default(}
+\DoxyCodeLine{345                                            bc\_values, \textcolor{stringliteral}{"{}t"{}},}
+\DoxyCodeLine{346                                            simdjson::dom::element());}
+\DoxyCodeLine{347                 \textcolor{keyword}{auto} Q = get\_time\_dependent\_parameter(t\_json, Q\_json);}
+\DoxyCodeLine{348                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
+\DoxyCodeLine{349                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL::FlowReferenceBC<T>}}(Q = Q, bc\_name)\});}
+\DoxyCodeLine{350                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
+\DoxyCodeLine{351               \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) ==}
+\DoxyCodeLine{352                          \textcolor{stringliteral}{"{}RESISTANCE"{}}) \{}
+\DoxyCodeLine{353                 simdjson::dom::element R\_json = bc\_values[\textcolor{stringliteral}{"{}R"{}}],}
+\DoxyCodeLine{354                                        Pd\_json = bc\_values[\textcolor{stringliteral}{"{}Pd"{}}];}
+\DoxyCodeLine{355                 simdjson::dom::element t\_json =}
+\DoxyCodeLine{356                     get\_default(bc\_values, \textcolor{stringliteral}{"{}t"{}}, simdjson::dom::element());}
+\DoxyCodeLine{357                 \textcolor{keyword}{auto} R = get\_time\_dependent\_parameter(t\_json, R\_json);}
+\DoxyCodeLine{358                 \textcolor{keyword}{auto} Pd = get\_time\_dependent\_parameter(t\_json, Pd\_json);}
+\DoxyCodeLine{359                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
+\DoxyCodeLine{360                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL::ResistanceBC<T>}}(R = R, Pd = Pd, bc\_name)\});}
+\DoxyCodeLine{361                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
+\DoxyCodeLine{362               \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) ==}
+\DoxyCodeLine{363                          \textcolor{stringliteral}{"{}PRESSURE"{}}) \{}
+\DoxyCodeLine{364                 simdjson::dom::element P\_json = bc\_values[\textcolor{stringliteral}{"{}P"{}}];}
+\DoxyCodeLine{365                 simdjson::dom::element t\_json =}
+\DoxyCodeLine{366                     get\_default(bc\_values, \textcolor{stringliteral}{"{}t"{}}, simdjson::dom::element());}
+\DoxyCodeLine{367                 \textcolor{keyword}{auto} P = get\_time\_dependent\_parameter(t\_json, P\_json);}
+\DoxyCodeLine{368                 \textcolor{keywordflow}{if} (P.isconstant == \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{369                   cardiac\_cycle\_period = P.cycle\_period;}
+\DoxyCodeLine{370                 \}}
+\DoxyCodeLine{371                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
+\DoxyCodeLine{372                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL::PressureReferenceBC<T>}}(P = P, bc\_name)\});}
+\DoxyCodeLine{373                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
+\DoxyCodeLine{374               \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]) ==}
+\DoxyCodeLine{375                          \textcolor{stringliteral}{"{}CORONARY"{}}) \{}
+\DoxyCodeLine{376                 T Ra = bc\_values[\textcolor{stringliteral}{"{}Ra1"{}}], Ram = bc\_values[\textcolor{stringliteral}{"{}Ra2"{}}],}
+\DoxyCodeLine{377                   Rv = bc\_values[\textcolor{stringliteral}{"{}Rv1"{}}], Ca = bc\_values[\textcolor{stringliteral}{"{}Ca"{}}],}
+\DoxyCodeLine{378                   Cim = bc\_values[\textcolor{stringliteral}{"{}Cc"{}}];}
+\DoxyCodeLine{379                 simdjson::dom::element Pim\_json = bc\_values[\textcolor{stringliteral}{"{}Pim"{}}],}
+\DoxyCodeLine{380                                        Pv\_json = bc\_values[\textcolor{stringliteral}{"{}P\_v"{}}];}
+\DoxyCodeLine{381                 simdjson::dom::element t\_json =}
+\DoxyCodeLine{382                     get\_default(bc\_values, \textcolor{stringliteral}{"{}t"{}}, simdjson::dom::element());}
+\DoxyCodeLine{383                 \textcolor{keyword}{auto} Pim = get\_time\_dependent\_parameter(t\_json, Pim\_json);}
+\DoxyCodeLine{384                 \textcolor{keyword}{auto} Pv = get\_time\_dependent\_parameter(t\_json, Pv\_json);}
+\DoxyCodeLine{385                 model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}.insert(}
+\DoxyCodeLine{386                     \{bc\_name, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL::OpenLoopCoronaryBC<T>}}(}
+\DoxyCodeLine{387                                   Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca,}
+\DoxyCodeLine{388                                   Cim = Cim, Pim = Pim, Pv = Pv, bc\_name)\});}
+\DoxyCodeLine{389                 DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
+\DoxyCodeLine{390               \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{391                 \textcolor{keywordflow}{throw} std::invalid\_argument(}
+\DoxyCodeLine{392                     \textcolor{stringliteral}{"{}Unknown boundary condition type "{}} +}
+\DoxyCodeLine{393                     \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}]));}
+\DoxyCodeLine{394               \}}
+\DoxyCodeLine{395               \textcolor{keywordflow}{break};}
+\DoxyCodeLine{396             \}}
+\DoxyCodeLine{397           \}}
+\DoxyCodeLine{398           \textcolor{keywordflow}{if} (loc == \textcolor{stringliteral}{"{}inlet"{}}) \{}
+\DoxyCodeLine{399             connections.push\_back(\{bc\_name, vessel\_name\});}
+\DoxyCodeLine{400           \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{401             connections.push\_back(\{vessel\_name, bc\_name\});}
+\DoxyCodeLine{402           \}}
+\DoxyCodeLine{403         \}}
+\DoxyCodeLine{404       \}}
+\DoxyCodeLine{405     \}}
+\DoxyCodeLine{406   \}}
+\DoxyCodeLine{407 }
+\DoxyCodeLine{408   \textcolor{comment}{// Create Connections}}
+\DoxyCodeLine{409   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&connection : connections) \{}
+\DoxyCodeLine{410     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem1] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}) \{}
+\DoxyCodeLine{411       std::visit(}
+\DoxyCodeLine{412           [\&](\textcolor{keyword}{auto} \&\&ele1) \{}
+\DoxyCodeLine{413             \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem2] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}) \{}
+\DoxyCodeLine{414               std::visit(}
+\DoxyCodeLine{415                   [\&](auto \&\&ele2) \{}
+\DoxyCodeLine{416                     if ((ele1.name == std::get<0>(connection)) \&\&}
+\DoxyCodeLine{417                         (ele2.name == std::get<1>(connection))) \{}
+\DoxyCodeLine{418                       model.nodes.push\_back(}
+\DoxyCodeLine{419                           MODEL::Node(ele1.name + \textcolor{stringliteral}{"{}\_"{}} + ele2.name));}
+\DoxyCodeLine{420                       DEBUG\_MSG(\textcolor{stringliteral}{"{}Created node "{}} << model.nodes.back().name);}
+\DoxyCodeLine{421                       ele1.outlet\_nodes.push\_back(\&model.nodes.back());}
+\DoxyCodeLine{422                       ele2.inlet\_nodes.push\_back(\&model.nodes.back());}
+\DoxyCodeLine{423                       model.nodes.back().setup\_dofs(model.dofhandler);}
+\DoxyCodeLine{424                     \}}
+\DoxyCodeLine{425                   \},}
+\DoxyCodeLine{426                   elem2);}
+\DoxyCodeLine{427             \}}
+\DoxyCodeLine{428           \},}
+\DoxyCodeLine{429           elem1);}
+\DoxyCodeLine{430     \}}
+\DoxyCodeLine{431   \}}
+\DoxyCodeLine{432   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem] : model.blocks) \{}
+\DoxyCodeLine{433     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{ block.setup\_dofs(model.dofhandler); \}, elem);}
+\DoxyCodeLine{434   \}}
+\DoxyCodeLine{435   model\_created = \textcolor{keyword}{true};}
+\DoxyCodeLine{436   \textcolor{keywordflow}{return} model;}
+\DoxyCodeLine{437 \}}
+\DoxyCodeLine{438 }
+\DoxyCodeLine{439 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{440 \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_num\_time\_steps}}() \{}
+\DoxyCodeLine{441   T num\_cycles = config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][\textcolor{stringliteral}{"{}number\_of\_cardiac\_cycles"{}}];}
+\DoxyCodeLine{442   T num\_pts\_per\_cycle =}
+\DoxyCodeLine{443       config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][\textcolor{stringliteral}{"{}number\_of\_time\_pts\_per\_cardiac\_cycle"{}}];}
+\DoxyCodeLine{444   \textcolor{keywordtype}{int} num\_time\_steps = (num\_pts\_per\_cycle -\/ 1) * num\_cycles + 1;}
+\DoxyCodeLine{445   \textcolor{keywordflow}{return} num\_time\_steps;}
 \DoxyCodeLine{446 \}}
 \DoxyCodeLine{447 }
 \DoxyCodeLine{448 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{449 T \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_scalar\_simulation\_parameter}}(std::string key, T def) \{}
-\DoxyCodeLine{450   \textcolor{keywordflow}{return} get\_default(sim\_params, key, def);}
-\DoxyCodeLine{451 \}}
-\DoxyCodeLine{452 }
-\DoxyCodeLine{453 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{454 \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_bool\_simulation\_parameter}}(std::string key) \{}
-\DoxyCodeLine{455   \textcolor{keywordflow}{return} int(config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][key]);}
-\DoxyCodeLine{456 \}}
-\DoxyCodeLine{457 }
-\DoxyCodeLine{458 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{459 \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_bool\_simulation\_parameter}}(std::string key, \textcolor{keywordtype}{bool} def) \{}
-\DoxyCodeLine{460   \textcolor{keywordflow}{return} get\_default(sim\_params, key, def);}
-\DoxyCodeLine{461 \}}
-\DoxyCodeLine{462 }
-\DoxyCodeLine{463 \}  \textcolor{comment}{// namespace IO}}
-\DoxyCodeLine{464 }
-\DoxyCodeLine{465 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
+\DoxyCodeLine{449 T \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_time\_step\_size}}() \{}
+\DoxyCodeLine{450   \textcolor{keywordflow}{if} (model\_created == \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{451     \textcolor{comment}{// Cardiac cycle period is set at model creation so it has to be performed}}
+\DoxyCodeLine{452     \textcolor{comment}{// first}}
+\DoxyCodeLine{453     \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{454         \textcolor{stringliteral}{"{}Please create model before calculating timstepsize."{}});}
+\DoxyCodeLine{455   \}}
+\DoxyCodeLine{456   T num\_pts\_per\_cycle =}
+\DoxyCodeLine{457       config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][\textcolor{stringliteral}{"{}number\_of\_time\_pts\_per\_cardiac\_cycle"{}}];}
+\DoxyCodeLine{458   T time\_step\_size = cardiac\_cycle\_period / (num\_pts\_per\_cycle -\/ 1);}
+\DoxyCodeLine{459   \textcolor{keywordflow}{return} time\_step\_size;}
+\DoxyCodeLine{460 \}}
+\DoxyCodeLine{461 }
+\DoxyCodeLine{462 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{463 \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_int\_simulation\_parameter}}(std::string key) \{}
+\DoxyCodeLine{464   \textcolor{keywordflow}{return} int(config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][key]);}
+\DoxyCodeLine{465 \}}
+\DoxyCodeLine{466 }
+\DoxyCodeLine{467 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{468 \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_int\_simulation\_parameter}}(std::string key, \textcolor{keywordtype}{int} def) \{}
+\DoxyCodeLine{469   \textcolor{keywordflow}{return} get\_default(sim\_params, key, def);}
+\DoxyCodeLine{470 \}}
+\DoxyCodeLine{471 }
+\DoxyCodeLine{472 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{473 T \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_scalar\_simulation\_parameter}}(std::string key) \{}
+\DoxyCodeLine{474   \textcolor{keywordflow}{return} int(config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][key]);}
+\DoxyCodeLine{475 \}}
+\DoxyCodeLine{476 }
+\DoxyCodeLine{477 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{478 T \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_scalar\_simulation\_parameter}}(std::string key, T def) \{}
+\DoxyCodeLine{479   \textcolor{keywordflow}{return} get\_default(sim\_params, key, def);}
+\DoxyCodeLine{480 \}}
+\DoxyCodeLine{481 }
+\DoxyCodeLine{482 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{483 \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_bool\_simulation\_parameter}}(std::string key) \{}
+\DoxyCodeLine{484   \textcolor{keywordflow}{return} int(config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}][key]);}
+\DoxyCodeLine{485 \}}
+\DoxyCodeLine{486 }
+\DoxyCodeLine{487 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{488 \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader<T>::get\_bool\_simulation\_parameter}}(std::string key, \textcolor{keywordtype}{bool} def) \{}
+\DoxyCodeLine{489   \textcolor{keywordflow}{return} get\_default(sim\_params, key, def);}
+\DoxyCodeLine{490 \}}
+\DoxyCodeLine{491 }
+\DoxyCodeLine{492 \}  \textcolor{comment}{// namespace IO}}
+\DoxyCodeLine{493 }
+\DoxyCodeLine{494 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
 
 \end{DoxyCode}

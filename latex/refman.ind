@@ -223,20 +223,22 @@
     \subitem {main.cpp}, \hyperpage{140}
   \item {main.cpp}, \hyperpage{139}
     \subitem {main}, \hyperpage{140}
-  \item {main.hpp}, \hyperpage{141}
+  \item {main.hpp}, \hyperpage{140}
   \item {MODEL}, \hyperpage{21}
   \item {Model}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{60}
-  \item {model/block.hpp}, \hyperpage{143}, \hyperpage{145}
-  \item {model/bloodvessel.hpp}, \hyperpage{148, 149}
-  \item {model/dofhandler.hpp}, \hyperpage{152, 153}
-  \item {model/flowreferencebc.hpp}, \hyperpage{154, 155}
-  \item {model/junction.hpp}, \hyperpage{157, 158}
-  \item {model/model.hpp}, \hyperpage{160}, \hyperpage{162}
+  \item {model/block.hpp}, \hyperpage{143, 144}
+  \item {model/bloodvessel.hpp}, \hyperpage{147, 148}
+  \item {model/dofhandler.hpp}, \hyperpage{151, 152}
+  \item {model/flowreferencebc.hpp}, \hyperpage{153, 154}
+  \item {model/junction.hpp}, \hyperpage{156}, \hyperpage{158}
+  \item {model/model.hpp}, \hyperpage{160, 161}
   \item {model/namespace.hpp}, \hyperpage{122, 123}
-  \item {model/node.hpp}, \hyperpage{164, 165}
-  \item {model/openloopcoronarybc.hpp}, \hyperpage{166, 167}
-  \item {model/pressurereferencebc.hpp}, \hyperpage{171, 172}
+  \item {model/node.hpp}, \hyperpage{163}, \hyperpage{165}
+  \item {model/openloopcoronarybc.hpp}, \hyperpage{165}, 
+		\hyperpage{167}
+  \item {model/pressurereferencebc.hpp}, \hyperpage{170}, 
+		\hyperpage{172}
   \item {model/resistancebc.hpp}, \hyperpage{174, 175}
   \item {model/timedependentparameter.hpp}, \hyperpage{177}, 
 		\hyperpage{179}

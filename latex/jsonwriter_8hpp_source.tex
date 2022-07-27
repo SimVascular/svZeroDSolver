@@ -54,186 +54,150 @@
 \DoxyCodeLine{50         [\&](\textcolor{keyword}{auto} \&\&block) \{}
 \DoxyCodeLine{51           \textcolor{keywordflow}{if} (\mbox{\hyperlink{namespace_h_e_l_p_e_r_s_aa60c2dfbfc096834b6cd243f84b9c47b}{HELPERS::startswith}}(block.name, \textcolor{stringliteral}{"{}V"{}})) \{}
 \DoxyCodeLine{52             name = block.name;}
-\DoxyCodeLine{53           \textcolor{comment}{//inflow\_dof = block.inlet\_nodes[0]-\/>flow\_dof;}}
-\DoxyCodeLine{54           \textcolor{comment}{//outflow\_dof = block.outlet\_nodes[0]-\/>flow\_dof;}}
-\DoxyCodeLine{55           \textcolor{comment}{//inpres\_dof = block.inlet\_nodes[0]-\/>pres\_dof;}}
-\DoxyCodeLine{56           \textcolor{comment}{//outpres\_dof = block.outlet\_nodes[0]-\/>pres\_dof;}}
-\DoxyCodeLine{57             inflow\_dof = block.global\_var\_ids[1];}
-\DoxyCodeLine{58             outflow\_dof = block.global\_var\_ids[3];}
-\DoxyCodeLine{59             inpres\_dof = block.global\_var\_ids[0];}
-\DoxyCodeLine{60             outpres\_dof = block.global\_var\_ids[2];}
-\DoxyCodeLine{61           \}}
-\DoxyCodeLine{62         \},}
-\DoxyCodeLine{63         elem);}
-\DoxyCodeLine{64 }
-\DoxyCodeLine{65     \textcolor{keywordflow}{if} (name != \textcolor{stringliteral}{"{}NoName"{}}) \{}
-\DoxyCodeLine{66       json\_names.append(name);}
-\DoxyCodeLine{67       Json::Value json\_flow\_in\_i(Json::arrayValue);}
-\DoxyCodeLine{68       Json::Value json\_flow\_out\_i(Json::arrayValue);}
-\DoxyCodeLine{69       Json::Value json\_pres\_in\_i(Json::arrayValue);}
-\DoxyCodeLine{70       Json::Value json\_pres\_out\_i(Json::arrayValue);}
-\DoxyCodeLine{71       \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} state : states) \{}
-\DoxyCodeLine{72         json\_flow\_in\_i.append(state.y[inflow\_dof]);}
-\DoxyCodeLine{73         json\_flow\_out\_i.append(state.y[outflow\_dof]);}
-\DoxyCodeLine{74         json\_pres\_in\_i.append(state.y[inpres\_dof]);}
-\DoxyCodeLine{75         json\_pres\_out\_i.append(state.y[outpres\_dof]);}
-\DoxyCodeLine{76       \}}
-\DoxyCodeLine{77       json\_flow\_in.append(json\_flow\_in\_i);}
-\DoxyCodeLine{78       json\_flow\_out.append(json\_flow\_out\_i);}
-\DoxyCodeLine{79       json\_pres\_in.append(json\_pres\_in\_i);}
-\DoxyCodeLine{80       json\_pres\_out.append(json\_pres\_out\_i);}
-\DoxyCodeLine{81     \}}
-\DoxyCodeLine{82   \}}
-\DoxyCodeLine{83 }
-\DoxyCodeLine{84   output[\textcolor{stringliteral}{"{}time"{}}] = json\_times;}
-\DoxyCodeLine{85   output[\textcolor{stringliteral}{"{}names"{}}] = json\_names;}
-\DoxyCodeLine{86   output[\textcolor{stringliteral}{"{}flow\_in"{}}] = json\_flow\_in;}
-\DoxyCodeLine{87   output[\textcolor{stringliteral}{"{}flow\_out"{}}] = json\_flow\_out;}
-\DoxyCodeLine{88   output[\textcolor{stringliteral}{"{}pressure\_in"{}}] = json\_pres\_in;}
-\DoxyCodeLine{89   output[\textcolor{stringliteral}{"{}pressure\_out"{}}] = json\_pres\_out;}
-\DoxyCodeLine{90 }
-\DoxyCodeLine{91   Json::FastWriter writer;}
-\DoxyCodeLine{92   \textcolor{keywordflow}{return} writer.write(output);}
-\DoxyCodeLine{93 \}}
-\DoxyCodeLine{94 \textcolor{comment}{}}
-\DoxyCodeLine{95 \textcolor{comment}{/**}}
-\DoxyCodeLine{96 \textcolor{comment}{ * @brief Write the node solutions to a json file}}
-\DoxyCodeLine{97 \textcolor{comment}{ *}}
-\DoxyCodeLine{98 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{99 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
-\DoxyCodeLine{100 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
-\DoxyCodeLine{101 \textcolor{comment}{ * @param model The underlying model}}
-\DoxyCodeLine{102 \textcolor{comment}{ * @return Json encoded output string}}
-\DoxyCodeLine{103 \textcolor{comment}{ */}}
-\DoxyCodeLine{104 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{105 std::string \mbox{\hyperlink{namespace_i_o_ae6bc591c76dde29806bb4095a4223093}{write\_json\_nodes}}(std::vector<T> \&times,}
-\DoxyCodeLine{106                        std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
-\DoxyCodeLine{107                        \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
-\DoxyCodeLine{108   Json::Value output;}
-\DoxyCodeLine{109   Json::Value json\_times(Json::arrayValue);}
-\DoxyCodeLine{110   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} time : times) \{}
-\DoxyCodeLine{111     json\_times.append(Json::Value(time));}
-\DoxyCodeLine{112   \}}
-\DoxyCodeLine{113 }
-\DoxyCodeLine{114   Json::Value json\_names(Json::arrayValue);}
-\DoxyCodeLine{115   Json::Value json\_flow(Json::arrayValue);}
-\DoxyCodeLine{116   Json::Value json\_pres(Json::arrayValue);}
-\DoxyCodeLine{117   }
-\DoxyCodeLine{118   std::string name;}
-\DoxyCodeLine{119   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} flow\_dof;}
-\DoxyCodeLine{120   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pres\_dof;}
-\DoxyCodeLine{121 }
-\DoxyCodeLine{122   \textcolor{comment}{//for (auto \&[key, elem] : model.blocks) \{}}
-\DoxyCodeLine{123   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} node : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}{nodes}}) \{}
-\DoxyCodeLine{124     name = node.name;}
-\DoxyCodeLine{125     flow\_dof = node.flow\_dof;}
-\DoxyCodeLine{126     pres\_dof = node.pres\_dof;}
-\DoxyCodeLine{127 }
-\DoxyCodeLine{128     json\_names.append(name);}
-\DoxyCodeLine{129     Json::Value json\_flow\_i(Json::arrayValue);}
-\DoxyCodeLine{130     Json::Value json\_pres\_i(Json::arrayValue);}
-\DoxyCodeLine{131     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} state : states) \{}
-\DoxyCodeLine{132       json\_flow\_i.append(state.y[flow\_dof]);}
-\DoxyCodeLine{133       json\_pres\_i.append(state.y[pres\_dof]);}
-\DoxyCodeLine{134     \}}
-\DoxyCodeLine{135     json\_flow.append(json\_flow\_i);}
-\DoxyCodeLine{136     json\_pres.append(json\_pres\_i);}
-\DoxyCodeLine{137   \}}
+\DoxyCodeLine{53             inflow\_dof = block.global\_var\_ids[1];}
+\DoxyCodeLine{54             outflow\_dof = block.global\_var\_ids[3];}
+\DoxyCodeLine{55             inpres\_dof = block.global\_var\_ids[0];}
+\DoxyCodeLine{56             outpres\_dof = block.global\_var\_ids[2];}
+\DoxyCodeLine{57           \}}
+\DoxyCodeLine{58         \},}
+\DoxyCodeLine{59         elem);}
+\DoxyCodeLine{60 }
+\DoxyCodeLine{61     \textcolor{keywordflow}{if} (name != \textcolor{stringliteral}{"{}NoName"{}}) \{}
+\DoxyCodeLine{62       json\_names.append(name);}
+\DoxyCodeLine{63       Json::Value json\_flow\_in\_i(Json::arrayValue);}
+\DoxyCodeLine{64       Json::Value json\_flow\_out\_i(Json::arrayValue);}
+\DoxyCodeLine{65       Json::Value json\_pres\_in\_i(Json::arrayValue);}
+\DoxyCodeLine{66       Json::Value json\_pres\_out\_i(Json::arrayValue);}
+\DoxyCodeLine{67       \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} state : states) \{}
+\DoxyCodeLine{68         json\_flow\_in\_i.append(state.y[inflow\_dof]);}
+\DoxyCodeLine{69         json\_flow\_out\_i.append(state.y[outflow\_dof]);}
+\DoxyCodeLine{70         json\_pres\_in\_i.append(state.y[inpres\_dof]);}
+\DoxyCodeLine{71         json\_pres\_out\_i.append(state.y[outpres\_dof]);}
+\DoxyCodeLine{72       \}}
+\DoxyCodeLine{73       json\_flow\_in.append(json\_flow\_in\_i);}
+\DoxyCodeLine{74       json\_flow\_out.append(json\_flow\_out\_i);}
+\DoxyCodeLine{75       json\_pres\_in.append(json\_pres\_in\_i);}
+\DoxyCodeLine{76       json\_pres\_out.append(json\_pres\_out\_i);}
+\DoxyCodeLine{77     \}}
+\DoxyCodeLine{78   \}}
+\DoxyCodeLine{79 }
+\DoxyCodeLine{80   output[\textcolor{stringliteral}{"{}time"{}}] = json\_times;}
+\DoxyCodeLine{81   output[\textcolor{stringliteral}{"{}names"{}}] = json\_names;}
+\DoxyCodeLine{82   output[\textcolor{stringliteral}{"{}flow\_in"{}}] = json\_flow\_in;}
+\DoxyCodeLine{83   output[\textcolor{stringliteral}{"{}flow\_out"{}}] = json\_flow\_out;}
+\DoxyCodeLine{84   output[\textcolor{stringliteral}{"{}pressure\_in"{}}] = json\_pres\_in;}
+\DoxyCodeLine{85   output[\textcolor{stringliteral}{"{}pressure\_out"{}}] = json\_pres\_out;}
+\DoxyCodeLine{86 }
+\DoxyCodeLine{87   Json::FastWriter writer;}
+\DoxyCodeLine{88   \textcolor{keywordflow}{return} writer.write(output);}
+\DoxyCodeLine{89 \}}
+\DoxyCodeLine{90 \textcolor{comment}{}}
+\DoxyCodeLine{91 \textcolor{comment}{/**}}
+\DoxyCodeLine{92 \textcolor{comment}{ * @brief Write the node solutions to a json file}}
+\DoxyCodeLine{93 \textcolor{comment}{ *}}
+\DoxyCodeLine{94 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{95 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
+\DoxyCodeLine{96 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
+\DoxyCodeLine{97 \textcolor{comment}{ * @param model The underlying model}}
+\DoxyCodeLine{98 \textcolor{comment}{ * @return Json encoded output string}}
+\DoxyCodeLine{99 \textcolor{comment}{ */}}
+\DoxyCodeLine{100 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{101 std::string \mbox{\hyperlink{namespace_i_o_ae6bc591c76dde29806bb4095a4223093}{write\_json\_nodes}}(std::vector<T> \&times,}
+\DoxyCodeLine{102                        std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
+\DoxyCodeLine{103                        \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
+\DoxyCodeLine{104   Json::Value output;}
+\DoxyCodeLine{105   Json::Value json\_times(Json::arrayValue);}
+\DoxyCodeLine{106   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} time : times) \{}
+\DoxyCodeLine{107     json\_times.append(Json::Value(time));}
+\DoxyCodeLine{108   \}}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110   Json::Value json\_names(Json::arrayValue);}
+\DoxyCodeLine{111   Json::Value json\_flow(Json::arrayValue);}
+\DoxyCodeLine{112   Json::Value json\_pres(Json::arrayValue);}
+\DoxyCodeLine{113   }
+\DoxyCodeLine{114   std::string name;}
+\DoxyCodeLine{115   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} flow\_dof;}
+\DoxyCodeLine{116   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} pres\_dof;}
+\DoxyCodeLine{117 }
+\DoxyCodeLine{118   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} node : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a513272238d7c4f37a4351ab9d7d825e6}{nodes}}) \{}
+\DoxyCodeLine{119     name = node.name;}
+\DoxyCodeLine{120     flow\_dof = node.flow\_dof;}
+\DoxyCodeLine{121     pres\_dof = node.pres\_dof;}
+\DoxyCodeLine{122 }
+\DoxyCodeLine{123     json\_names.append(name);}
+\DoxyCodeLine{124     Json::Value json\_flow\_i(Json::arrayValue);}
+\DoxyCodeLine{125     Json::Value json\_pres\_i(Json::arrayValue);}
+\DoxyCodeLine{126     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} state : states) \{}
+\DoxyCodeLine{127       json\_flow\_i.append(state.y[flow\_dof]);}
+\DoxyCodeLine{128       json\_pres\_i.append(state.y[pres\_dof]);}
+\DoxyCodeLine{129     \}}
+\DoxyCodeLine{130     json\_flow.append(json\_flow\_i);}
+\DoxyCodeLine{131     json\_pres.append(json\_pres\_i);}
+\DoxyCodeLine{132   \}}
+\DoxyCodeLine{133 }
+\DoxyCodeLine{134   output[\textcolor{stringliteral}{"{}time"{}}] = json\_times;}
+\DoxyCodeLine{135   output[\textcolor{stringliteral}{"{}names"{}}] = json\_names;}
+\DoxyCodeLine{136   output[\textcolor{stringliteral}{"{}flow"{}}] = json\_flow;}
+\DoxyCodeLine{137   output[\textcolor{stringliteral}{"{}pressure"{}}] = json\_pres;}
 \DoxyCodeLine{138 }
-\DoxyCodeLine{139   output[\textcolor{stringliteral}{"{}time"{}}] = json\_times;}
-\DoxyCodeLine{140   output[\textcolor{stringliteral}{"{}names"{}}] = json\_names;}
-\DoxyCodeLine{141   output[\textcolor{stringliteral}{"{}flow"{}}] = json\_flow;}
-\DoxyCodeLine{142   output[\textcolor{stringliteral}{"{}pressure"{}}] = json\_pres;}
-\DoxyCodeLine{143 }
-\DoxyCodeLine{144   Json::FastWriter writer;}
-\DoxyCodeLine{145   \textcolor{keywordflow}{return} writer.write(output);}
-\DoxyCodeLine{146 \}}
-\DoxyCodeLine{147 \textcolor{comment}{}}
-\DoxyCodeLine{148 \textcolor{comment}{/**}}
-\DoxyCodeLine{149 \textcolor{comment}{ * @brief Write the internal variable solutions to a json file}}
-\DoxyCodeLine{150 \textcolor{comment}{ *}}
-\DoxyCodeLine{151 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{152 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
-\DoxyCodeLine{153 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
-\DoxyCodeLine{154 \textcolor{comment}{ * @param model The underlying model}}
-\DoxyCodeLine{155 \textcolor{comment}{ * @return Json encoded output string}}
-\DoxyCodeLine{156 \textcolor{comment}{ */}}
-\DoxyCodeLine{157 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{158 std::string \mbox{\hyperlink{namespace_i_o_a7fefa55ea0ec853a19b3706f806ee655}{write\_json\_internal\_vars}}(std::vector<T> \&times,}
-\DoxyCodeLine{159                        std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
-\DoxyCodeLine{160                        \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
-\DoxyCodeLine{161   Json::Value output;}
-\DoxyCodeLine{162   Json::Value json\_times(Json::arrayValue);}
-\DoxyCodeLine{163   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} time : times) \{}
-\DoxyCodeLine{164     json\_times.append(Json::Value(time));}
-\DoxyCodeLine{165   \}}
-\DoxyCodeLine{166 }
-\DoxyCodeLine{167   Json::Value json\_names(Json::arrayValue);}
-\DoxyCodeLine{168   Json::Value json\_value(Json::arrayValue);}
+\DoxyCodeLine{139   Json::FastWriter writer;}
+\DoxyCodeLine{140   \textcolor{keywordflow}{return} writer.write(output);}
+\DoxyCodeLine{141 \}}
+\DoxyCodeLine{142 \textcolor{comment}{}}
+\DoxyCodeLine{143 \textcolor{comment}{/**}}
+\DoxyCodeLine{144 \textcolor{comment}{ * @brief Write the internal variable solutions to a json file}}
+\DoxyCodeLine{145 \textcolor{comment}{ *}}
+\DoxyCodeLine{146 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{147 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
+\DoxyCodeLine{148 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
+\DoxyCodeLine{149 \textcolor{comment}{ * @param model The underlying model}}
+\DoxyCodeLine{150 \textcolor{comment}{ * @return Json encoded output string}}
+\DoxyCodeLine{151 \textcolor{comment}{ */}}
+\DoxyCodeLine{152 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{153 std::string \mbox{\hyperlink{namespace_i_o_a7fefa55ea0ec853a19b3706f806ee655}{write\_json\_internal\_vars}}(std::vector<T> \&times,}
+\DoxyCodeLine{154                        std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
+\DoxyCodeLine{155                        \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
+\DoxyCodeLine{156   Json::Value output;}
+\DoxyCodeLine{157   Json::Value json\_times(Json::arrayValue);}
+\DoxyCodeLine{158   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} time : times) \{}
+\DoxyCodeLine{159     json\_times.append(Json::Value(time));}
+\DoxyCodeLine{160   \}}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162   Json::Value json\_names(Json::arrayValue);}
+\DoxyCodeLine{163   Json::Value json\_value(Json::arrayValue);}
+\DoxyCodeLine{164 }
+\DoxyCodeLine{165   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} var\_dof;}
+\DoxyCodeLine{166   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_vars;}
+\DoxyCodeLine{167   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_inlets; }
+\DoxyCodeLine{168   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_outlets;}
 \DoxyCodeLine{169 }
-\DoxyCodeLine{170   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} var\_dof;}
-\DoxyCodeLine{171   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_vars;}
-\DoxyCodeLine{172   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_inlets; }
-\DoxyCodeLine{173   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_outlets;}
-\DoxyCodeLine{174 }
-\DoxyCodeLine{175   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}) \{}
-\DoxyCodeLine{176     std::string name = \textcolor{stringliteral}{"{}NoName"{}};}
-\DoxyCodeLine{177     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{}
-\DoxyCodeLine{178       num\_vars = block.global\_var\_ids.size();}
-\DoxyCodeLine{179       num\_inlets = block.inlet\_nodes.size(); }
-\DoxyCodeLine{180       num\_outlets = block.outlet\_nodes.size();}
-\DoxyCodeLine{181       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} var\_id = 2*(num\_inlets+num\_outlets); var\_id < num\_vars; var\_id++) \{}
-\DoxyCodeLine{182         name = \textcolor{stringliteral}{"{}var\_"{}} + std::to\_string(var\_id) + \textcolor{stringliteral}{"{}\_"{}} + block.name;}
-\DoxyCodeLine{183         var\_dof = block.global\_var\_ids[var\_id];}
-\DoxyCodeLine{184 \textcolor{comment}{//      if (mean) \{}}
-\DoxyCodeLine{185 \textcolor{comment}{//        T var\_mean = 0.0;}}
-\DoxyCodeLine{186 \textcolor{comment}{//        for (size\_t i = 0; i < times.size(); i++) \{}}
-\DoxyCodeLine{187 \textcolor{comment}{//          var\_mean += states[i].y[var\_dof];}}
-\DoxyCodeLine{188 \textcolor{comment}{//        \}}}
-\DoxyCodeLine{189 \textcolor{comment}{//        var\_mean /= num\_steps;}}
-\DoxyCodeLine{190 \textcolor{comment}{//        sprintf(buff, "{}\%s,,\%.16e\(\backslash\)n"{}, name.c\_str(), var\_mean);}}
-\DoxyCodeLine{191 \textcolor{comment}{//        out << buff;}}
-\DoxyCodeLine{192 \textcolor{comment}{//      \} else \{}}
-\DoxyCodeLine{193 \textcolor{comment}{//        for (size\_t i = 0; i < times.size(); i++) \{}}
-\DoxyCodeLine{194 \textcolor{comment}{//          sprintf(buff, "{}\%s,\%.16e,\%.16e\(\backslash\)n"{}, name.c\_str(),}}
-\DoxyCodeLine{195 \textcolor{comment}{//                  times[i], states[i].y[var\_dof]);}}
-\DoxyCodeLine{196 \textcolor{comment}{//          out << buff;}}
-\DoxyCodeLine{197 \textcolor{comment}{//        \}}}
-\DoxyCodeLine{198 \textcolor{comment}{//      \}}}
-\DoxyCodeLine{199         json\_names.append(name);}
-\DoxyCodeLine{200         Json::Value json\_value\_i(Json::arrayValue);}
-\DoxyCodeLine{201         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} state : states) \{}
-\DoxyCodeLine{202           json\_value\_i.append(state.y[var\_dof]);}
-\DoxyCodeLine{203         \}}
-\DoxyCodeLine{204         json\_value.append(json\_value\_i);}
-\DoxyCodeLine{205       \}}
-\DoxyCodeLine{206 \textcolor{comment}{//    if (HELPERS::startswith(block.name, "{}V"{})) \{}}
-\DoxyCodeLine{207 \textcolor{comment}{//      name = block.name;}}
-\DoxyCodeLine{208 \textcolor{comment}{//      inflow\_dof = block.global\_var\_ids[1];}}
-\DoxyCodeLine{209 \textcolor{comment}{//      outflow\_dof = block.global\_var\_ids[3];}}
-\DoxyCodeLine{210 \textcolor{comment}{//      inpres\_dof = block.global\_var\_ids[0];}}
-\DoxyCodeLine{211 \textcolor{comment}{//      outpres\_dof = block.global\_var\_ids[2];}}
-\DoxyCodeLine{212 \textcolor{comment}{//    \}}}
-\DoxyCodeLine{213     \},}
-\DoxyCodeLine{214     elem);}
-\DoxyCodeLine{215 }
-\DoxyCodeLine{216 \textcolor{comment}{//  json\_names.append(name);}}
-\DoxyCodeLine{217 \textcolor{comment}{//  Json::Value json\_value\_i(Json::arrayValue);}}
-\DoxyCodeLine{218 \textcolor{comment}{//  for (auto state : states) \{}}
-\DoxyCodeLine{219 \textcolor{comment}{//    json\_value\_i.append(state.y[var\_dof]);}}
-\DoxyCodeLine{220 \textcolor{comment}{//  \}}}
-\DoxyCodeLine{221 \textcolor{comment}{//  json\_value.append(json\_value\_i);}}
-\DoxyCodeLine{222   \}}
-\DoxyCodeLine{223 }
-\DoxyCodeLine{224   output[\textcolor{stringliteral}{"{}time"{}}] = json\_times;}
-\DoxyCodeLine{225   output[\textcolor{stringliteral}{"{}names"{}}] = json\_names;}
-\DoxyCodeLine{226   output[\textcolor{stringliteral}{"{}value"{}}] = json\_value;}
-\DoxyCodeLine{227 }
-\DoxyCodeLine{228   Json::FastWriter writer;}
-\DoxyCodeLine{229   \textcolor{keywordflow}{return} writer.write(output);}
-\DoxyCodeLine{230 \}}
-\DoxyCodeLine{231 \}  \textcolor{comment}{// namespace IO}}
-\DoxyCodeLine{232 }
-\DoxyCodeLine{233 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_JSONWRITER\_HPP\_}}
+\DoxyCodeLine{170   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&[key, elem] : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}) \{}
+\DoxyCodeLine{171     std::string name = \textcolor{stringliteral}{"{}NoName"{}};}
+\DoxyCodeLine{172     std::visit([\&](\textcolor{keyword}{auto} \&\&block) \{}
+\DoxyCodeLine{173       num\_vars = block.global\_var\_ids.size();}
+\DoxyCodeLine{174       num\_inlets = block.inlet\_nodes.size(); }
+\DoxyCodeLine{175       num\_outlets = block.outlet\_nodes.size();}
+\DoxyCodeLine{176       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} var\_id = 2*(num\_inlets+num\_outlets); var\_id < num\_vars; var\_id++) \{}
+\DoxyCodeLine{177         name = \textcolor{stringliteral}{"{}var\_"{}} + std::to\_string(var\_id) + \textcolor{stringliteral}{"{}\_"{}} + block.name;}
+\DoxyCodeLine{178         var\_dof = block.global\_var\_ids[var\_id];}
+\DoxyCodeLine{179         json\_names.append(name);}
+\DoxyCodeLine{180         Json::Value json\_value\_i(Json::arrayValue);}
+\DoxyCodeLine{181         \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} state : states) \{}
+\DoxyCodeLine{182           json\_value\_i.append(state.y[var\_dof]);}
+\DoxyCodeLine{183         \}}
+\DoxyCodeLine{184         json\_value.append(json\_value\_i);}
+\DoxyCodeLine{185       \}}
+\DoxyCodeLine{186     \},}
+\DoxyCodeLine{187     elem);}
+\DoxyCodeLine{188   \}}
+\DoxyCodeLine{189   output[\textcolor{stringliteral}{"{}time"{}}] = json\_times;}
+\DoxyCodeLine{190   output[\textcolor{stringliteral}{"{}names"{}}] = json\_names;}
+\DoxyCodeLine{191   output[\textcolor{stringliteral}{"{}value"{}}] = json\_value;}
+\DoxyCodeLine{192   Json::FastWriter writer;}
+\DoxyCodeLine{193   \textcolor{keywordflow}{return} writer.write(output);}
+\DoxyCodeLine{194 \}}
+\DoxyCodeLine{195 \}  \textcolor{comment}{// namespace IO}}
+\DoxyCodeLine{196 }
+\DoxyCodeLine{197 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_JSONWRITER\_HPP\_}}
 
 \end{DoxyCode}

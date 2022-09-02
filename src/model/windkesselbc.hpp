@@ -210,7 +210,7 @@ WindkesselBC<T>::~WindkesselBC() {}
 
 template <typename T>
 void WindkesselBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 2, 1);
+  Block<T>::setup_dofs_(dofhandler, 2, {"pressure_c"});
 }
 
 template <typename T>

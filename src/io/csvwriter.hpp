@@ -87,7 +87,7 @@ std::string to_vessel_csv(std::vector<T> &times,
     std::string name = "NoName";
     std::visit(
         [&](auto &&block) {
-          if (HELPERS::startswith(block.name, "V")) {
+          if (HELPERS::startswith(block.name, "branch")) {
             name = block.name;
             inflow_dof = block.inlet_nodes[0]->flow_dof;
             outflow_dof = block.outlet_nodes[0]->flow_dof;

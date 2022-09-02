@@ -221,7 +221,7 @@ OpenLoopCoronaryBC<T>::~OpenLoopCoronaryBC() {}
 
 template <typename T>
 void OpenLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 2, 1);
+  Block<T>::setup_dofs_(dofhandler, 2, {"volume_im"});
 }
 
 template <typename T>

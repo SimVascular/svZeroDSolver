@@ -33,7 +33,15 @@
             }
         },
         {
-            "bc_name": "OUT",
+            "bc_name": "OUT1",
+            "bc_type": "RESISTANCE",
+            "bc_values": {
+                "Pd": 100.0,
+                "R": 100.0
+            }
+        },
+        {
+            "bc_name": "OUT2",
             "bc_type": "RESISTANCE",
             "bc_values": {
                 "Pd": 100.0,
@@ -73,7 +81,7 @@
         },
         {
             "boundary_conditions": {
-                "outlet": "OUT"
+                "outlet": "OUT1"
             },
             "vessel_id": 1,
             "vessel_length": 10.0,
@@ -85,7 +93,7 @@
         },
         {
             "boundary_conditions": {
-                "outlet": "OUT"
+                "outlet": "OUT2"
             },
             "vessel_id": 2,
             "vessel_length": 10.0,

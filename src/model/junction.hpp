@@ -170,7 +170,7 @@ void Junction<T>::setup_dofs(DOFHandler &dofhandler) {
   // inlets/outlets. Must be set before calling parent constructor
   num_inlets = this->inlet_nodes.size();
   num_outlets = this->outlet_nodes.size();
-  Block<T>::setup_dofs_(dofhandler, num_inlets + num_outlets, 0);
+  Block<T>::setup_dofs_(dofhandler, num_inlets + num_outlets, {});
 }
 
 template <typename T>

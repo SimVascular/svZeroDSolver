@@ -185,7 +185,7 @@ PressureReferenceBC<T>::~PressureReferenceBC() {}
 
 template <typename T>
 void PressureReferenceBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 1, 0);
+  Block<T>::setup_dofs_(dofhandler, 1, {});
 }
 
 template <typename T>

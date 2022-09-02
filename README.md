@@ -4,7 +4,7 @@
 
 [![Test Status](https://github.com/richterjakob/svZeroDSolver/actions/workflows/test.yml/badge.svg)](https://github.com/richterjakob/svZeroDSolver/actions)
 [![Latest Release](https://img.shields.io/github/v/release/richterjakob/svZeroDSolver?label=latest)](https://github.com/richterjakob/svZeroDSolver/releases/latest)
-![Platform](https://img.shields.io/badge/platform-macOS%20|%20linux-blue)
+![Platform](https://img.shields.io/badge/platform-macOS%20|%Ubuntu-blue)
 
 </div>
 

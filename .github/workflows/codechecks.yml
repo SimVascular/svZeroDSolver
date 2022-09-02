@@ -1,3 +1,4 @@
+# This workflow checks for compliance with the Google C++ style guide.
 name: Codechecks
 on: [push, pull_request]
 jobs:

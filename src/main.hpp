@@ -120,26 +120,16 @@
  *
  * # Build svZeroDSolver
  *
- * svZeroDSolver can be build easily via CMake. Make sure you have the following
- * dependencies installed before you start:
- *
- * ## Install dependencies on macOS
- *
- * \code
- * brew install eigen       # Linear algebra library
- * brew install jsoncpp     # Standard json library
- * brew install simdjson    # Fast json input parser
- * brew install pybind11    # Python bindings
- * \endcode
- *
- * ## Install dependencies on Linux
- *
- * \code
- * sudo apt install libeigen3-dev       # Linear algebra library
- * sudo apt install libjsoncpp-dev      # Standard json library
- * sudo apt install libsimdjson-dev     # Fast json input parser
- * sudo apt install pybind11-dev        # Python bindings
- * \endcode
+ * svZeroDSolver uses CMake to build the tool. The dependencies are installed
+ * by CMake. If you want to use the C++ Python interface of svZeroDSolver make
+ * sure to checkout the correct Python environment beforehand. Currently
+ * supported are:
+ * 
+ * * Ubuntu 18
+ * * Ubuntu 20
+ * * Ubuntu 22
+ * * macOS Big Sur
+ * * macOS Monterey
  *
  * ## Build in debug mode
  *
@@ -159,23 +149,12 @@
  * \endcode
  * 
  * ## Build on Sherlock
- * 
  * \code
- * ml load cmake/3.23.1
- * ml load gcc/12.1.0
- * ml load python/3.9.0
- * ml load binutils/2.38
- * mkdir externals
- * cd externals
- * git clone https://gitlab.com/libeigen/eigen.git
- * git clone https://github.com/simdjson/simdjson.git
- * git clone https://github.com/open-source-parsers/jsoncpp.git
- * git clone https://github.com/pybind/pybind11.git
- * cd ..
+ * module load cmake/3.23.1 gcc/12.1.0 binutils/2.38
  * mkdir Release
  * cd Release
- * cmake -DCMAKE_BUILD_TYPE=Release -DCLUSTER=ON -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc -DPYTHON_EXECUTABLE=/share/software/user/open/python/3.9.0/bin/python3 ..
- * cmake --build 
+ * cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..
+ * cmake --build .
  * \endcode
  *
  * # Run svZeroDSolver
@@ -184,13 +163,11 @@
  * called `svzerodsolver`. Run it with one of:
  *
  * \code
- * ./svzerodsolver path/to/config.json path/to/output.json  # For json output
- * file format
- * ./svzerodsolver path/to/config.json path/to/output.csv   # For csv output
- * file format (faster) \endcode
+ * ./svzerodsolver path/to/config.json path/to/output.csv
+ * \endcode
  *
- * `path/to/config.json` and `path/to/output` should be replaced by the correct
- * paths to the input and output file, respectively.
+ * `path/to/config.json` and `path/to/output.csv` should be replaced by the
+ * correct paths to the input and output file, respectively.
  *
  * ## Simulation parameters
  *
@@ -205,9 +182,11 @@
  * number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -
  * absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
  * maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$
- * output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
  * steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
- * output_mean_only                        | Write only the mean values over every timestep in the output file (only in csv) | false
+ * output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
+ * output_mean_only                        | Write only the mean values over every timestep to output file | false
+ * output_derivative                       | Write time derivatives to output file | false
+ * output_last_cycle_only                  | Write only the last cardiac cycle | false
  * 
  * 
  * # Developer Guide
@@ -217,3 +196,118 @@
  * 
  */
 // clang-format on
+#include "algebra/integrator.hpp"
+#include "algebra/state.hpp"
+#include "helpers/debug.hpp"
+#include "helpers/endswith.hpp"
+#include "io/configreader.hpp"
+#include "io/csvwriter.hpp"
+#include "model/model.hpp"
+
+typedef double T;
+
+template <typename TT>
+using S = ALGEBRA::SparseSystem<TT>;
+
+/**
+ *
+ * @brief Run svZeroDSolver with configuration
+ *
+ * 1. Read the input file
+ * 2. Create the 0D model
+ * 3. (Optional) Solve for steady initial condition
+ * 4. Run simulation
+ * 5. Write output to file
+ *
+ * @param json_config Path config or json encoded string with config
+ * @return Result as csv encoded string
+ */
+const std::string run(std::string& json_config) {
+  // Create configuration reader
+  IO::ConfigReader<T> config(json_config);
+
+  // Create model
+  DEBUG_MSG("Creating model");
+  auto model = config.get_model();
+  DEBUG_MSG("Size of system:      " << model.dofhandler.size());
+
+  // Get simulation parameters
+  DEBUG_MSG("Setup simulutation");
+  T time_step_size = config.get_time_step_size();
+  DEBUG_MSG("Time step size:      " << time_step_size);
+  int num_time_steps = config.get_num_time_steps();
+  DEBUG_MSG("Number of timesteps: " << num_time_steps);
+  T absolute_tolerance =
+      config.get_scalar_simulation_parameter("absolute_tolerance", 1e-8);
+  int max_nliter =
+      config.get_int_simulation_parameter("maximum_nonlinear_iterations", 30);
+  bool steady_initial =
+      config.get_bool_simulation_parameter("steady_initial", true);
+  int output_interval =
+      config.get_int_simulation_parameter("output_interval", 1);
+  bool output_mean_only =
+      config.get_bool_simulation_parameter("output_mean_only", false);
+  bool derivative =
+      config.get_bool_simulation_parameter("output_derivative", false);
+  bool last_cycle_only =
+      config.get_bool_simulation_parameter("output_last_cycle_only", false);
+
+  // Setup system
+  DEBUG_MSG("Starting simulation");
+  ALGEBRA::State<T> state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
+
+  // Create steady initial
+  if (steady_initial) {
+    DEBUG_MSG("Calculating steady initial condition");
+    T time_step_size_steady = config.cardiac_cycle_period / 10.0;
+    auto model_steady = config.get_model();
+    model_steady.to_steady();
+    ALGEBRA::Integrator<T, S> integrator_steady(model_steady,
+                                                time_step_size_steady, 0.1,
+                                                absolute_tolerance, max_nliter);
+    for (size_t i = 0; i < 31; i++) {
+      state = integrator_steady.step(state, time_step_size_steady * T(i),
+                                     model_steady);
+    }
+  }
+
+  ALGEBRA::Integrator<T, S> integrator(model, time_step_size, 0.1,
+                                       absolute_tolerance, max_nliter);
+
+  std::vector<ALGEBRA::State<T>> states;
+  std::vector<T> times;
+  states.reserve(num_time_steps);
+  times.reserve(num_time_steps);
+
+  T time = 0.0;
+
+  states.push_back(state);
+  times.push_back(time);
+
+  int interval_counter = 0;
+  for (size_t i = 1; i < num_time_steps; i++) {
+    state = integrator.step(state, time, model);
+    interval_counter += 1;
+    time = time_step_size * T(i);
+    if (interval_counter == output_interval) {
+      times.push_back(time);
+      states.push_back(std::move(state));
+      interval_counter = 0;
+    }
+  }
+  DEBUG_MSG("Simulation completed");
+
+  // Extract last cardiac cycle
+  if (last_cycle_only) {
+    states.erase(states.begin(), states.end() - config.num_pts_per_cycle);
+    times.erase(times.begin(), times.end() - config.num_pts_per_cycle);
+    T start_time = times[0];
+    for (auto& time : times) {
+      time -= start_time;
+    }
+  }
+
+  std::string output;
+  output = IO::write_csv<T>(times, states, model, output_mean_only, derivative);
+  return output;
+}

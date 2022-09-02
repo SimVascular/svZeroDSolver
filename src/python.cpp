@@ -28,45 +28,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file main.cpp
- * @brief Main routine of svZeroDSolver
+ * @file python.cpp
+ * @brief Python binding for svZeroDSolver
  */
+#include <pybind11/pybind11.h>
+
 #include "main.hpp"
 
-/**
- *
- * @brief svZeroDSolver main routine
- *
- * This is the main routine of the svZeroDSolver. It exectutes the following
- * steps:
- *
- * 1. Read the input file
- * 2. Create the 0D model
- * 3. (Optional) Solve for steady initial condition
- * 4. Run simulation
- * 5. Write output to file
- *
- * @param argc Number of command line arguments
- * @param argv Command line arguments
- * @return Return code
- */
-int main(int argc, char *argv[]) {
-  DEBUG_MSG("Starting svZeroDSolver");
-
-  // Get input and output file name
-  if (argc != 3) {
-    std::cout << "Usage: svzerodsolver path/to/config.json path/to/output.csv"
-              << std::endl;
-    exit(1);
-  }
-  std::string input_file = argv[1];
-  std::string output_file = argv[2];
-
-  auto output = run(input_file);
-
-  std::ofstream ofs(output_file);
-  ofs << output;
-  ofs.close();
-
-  return 0;
+PYBIND11_MODULE(libsvzerodsolver, mod) {
+  mod.doc() = "svZeroDSolver";
+  mod.def("run", &run, "Run the svZeroDSolver.");
 }

@@ -29,6 +29,8 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """This module holds the main execution routines of svZeroDSolver."""
 import json
+import pandas as pd
+import numpy as np
 
 import click
 
@@ -85,10 +87,43 @@ def run_from_config(parameters):
         max_iter=sim_params.get("maximum_nonlinear_iterations", 30),
     )
 
-    zero_d_results_branch = format_results_to_dict(
-        time_steps, y_list, block_list
+    branch_result = format_results_to_dict(time_steps, y_list, block_list)
+
+    result = pd.DataFrame(
+        columns=[
+            "name",
+            "time",
+            "flow_in",
+            "flow_out",
+            "pressure_in",
+            "pressure_out",
+        ]
     )
-    return zero_d_results_branch
+    for branch_id, name in enumerate(branch_result["names"]):
+        result = pd.concat(
+            [
+                result,
+                pd.DataFrame.from_dict(
+                    {
+                        "name": [name] * len(branch_result["time"]),
+                        "time": np.array(branch_result["time"]),
+                        "flow_in": np.array(
+                            branch_result["flow_in"][branch_id]
+                        ),
+                        "flow_out": np.array(
+                            branch_result["flow_out"][branch_id]
+                        ),
+                        "pressure_in": np.array(
+                            branch_result["pressure_in"][branch_id]
+                        ),
+                        "pressure_out": np.array(
+                            branch_result["pressure_out"][branch_id]
+                        ),
+                    }
+                ),
+            ]
+        )
+    return result
 
 
 def run_from_file(input_file, output_file):

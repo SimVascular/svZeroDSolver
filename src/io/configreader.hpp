@@ -146,6 +146,8 @@ class ConfigReader {
   bool get_bool_simulation_parameter(std::string key, bool def);
 
   T cardiac_cycle_period = 1.0;  ///< Cardiac cycle period
+  int num_cycles;
+  int num_pts_per_cycle;
 
  private:
   bool model_created = false;
@@ -172,6 +174,11 @@ ConfigReader<T>::ConfigReader(std::string &specifier) {
     config = parser.load(specifier);
   }
   sim_params = config["simulation_parameters"];
+  T t_num_cycles = config["simulation_parameters"]["number_of_cardiac_cycles"];
+  num_cycles = int(t_num_cycles);
+  T t_num_pts_per_cycle =
+      config["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"];
+  num_pts_per_cycle = int(t_num_pts_per_cycle);
 }
 
 template <typename T>
@@ -438,9 +445,6 @@ MODEL::Model<T> ConfigReader<T>::get_model() {
 
 template <typename T>
 int ConfigReader<T>::get_num_time_steps() {
-  T num_cycles = config["simulation_parameters"]["number_of_cardiac_cycles"];
-  T num_pts_per_cycle =
-      config["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"];
   int num_time_steps = (num_pts_per_cycle - 1) * num_cycles + 1;
   return num_time_steps;
 }
@@ -453,8 +457,6 @@ T ConfigReader<T>::get_time_step_size() {
     throw std::runtime_error(
         "Please create model before calculating timstepsize.");
   }
-  T num_pts_per_cycle =
-      config["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"];
   T time_step_size = cardiac_cycle_period / (num_pts_per_cycle - 1);
   return time_step_size;
 }

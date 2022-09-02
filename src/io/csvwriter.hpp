@@ -57,9 +57,9 @@ namespace IO {
  */
 template <typename T>
 std::string to_vessel_csv(std::vector<T> &times,
-                                  std::vector<ALGEBRA::State<T>> &states,
-                                  MODEL::Model<T> &model, bool mean = false,
-                                  bool derivative = false) {
+                          std::vector<ALGEBRA::State<T>> &states,
+                          MODEL::Model<T> &model, bool mean = false,
+                          bool derivative = false) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -195,9 +195,9 @@ std::string to_vessel_csv(std::vector<T> &times,
  */
 template <typename T>
 std::string to_variable_csv(std::vector<T> &times,
-                                std::vector<ALGEBRA::State<T>> &states,
-                                MODEL::Model<T> &model, bool mean = false,
-                                bool derivative = false) {
+                            std::vector<ALGEBRA::State<T>> &states,
+                            MODEL::Model<T> &model, bool mean = false,
+                            bool derivative = false) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -222,7 +222,7 @@ std::string to_variable_csv(std::vector<T> &times,
         }
         mean_y /= num_steps;
         mean_ydot /= num_steps;
-        sprintf(lbuff, "%s,,%.16e,%.16e\n", name.c_str(), mean_y,mean_ydot);
+        sprintf(lbuff, "%s,,%.16e,%.16e\n", name.c_str(), mean_y, mean_ydot);
         out << lbuff;
       }
     } else {
@@ -230,7 +230,7 @@ std::string to_variable_csv(std::vector<T> &times,
         std::string name = model.dofhandler.variables[i];
         for (size_t j = 0; j < num_steps; j++) {
           sprintf(lbuff, "%s,%.16e,%.16e,%.16e\n", name.c_str(), times[j],
-                  states[j].y[i],states[j].ydot[i]);
+                  states[j].y[i], states[j].ydot[i]);
           out << lbuff;
         }
       }

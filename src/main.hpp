@@ -311,15 +311,12 @@ const std::string run(std::string& json_config) {
   }
 
   std::string output;
-  if (output_variable_based)
-  {
+  if (output_variable_based) {
     output = IO::to_variable_csv<T>(times, states, model, output_mean_only,
-                                      output_derivative);
-  }
-  else
-  {
+                                    output_derivative);
+  } else {
     output = IO::to_vessel_csv<T>(times, states, model, output_mean_only,
-                                      output_derivative);
+                                  output_derivative);
   }
   return output;
 }

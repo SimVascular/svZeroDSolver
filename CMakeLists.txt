@@ -2,51 +2,58 @@ cmake_minimum_required(VERSION 3.22)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 project(svZeroDSolver)
+include(FetchContent)
 
-set(CLUSTER OFF CACHE BOOL "Turn on cluster build.")
+# -----------------------------------------------------------------------------
+# Fetch simdjson
+# -----------------------------------------------------------------------------
+set(CMAKE_POSITION_INDEPENDENT_CODE ON) # Fixes bug with smdjson. Try to remove later
+FetchContent_Declare(
+  simdjson
+  GIT_REPOSITORY https://github.com/simdjson/simdjson.git
+  GIT_TAG  master
+  GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(simdjson)
 
-if (CLUSTER)
-    set(EXTERNAL_LIB_HEADERS externals/eigen externals/jsoncpp/include/json externals/jsoncpp/include/ externals/simdjson/singleheader externals/pybind11)
-    set(JSONCPP_INCLUDE_DIRS "$externals/jsoncpp/include/")
-    file(GLOB JSONCPP_SOURCES
-		"externals/jsoncpp/include/json/*.h"
-		"externals/jsoncpp/src/lib_json/*.inl"
-		"externals/jsoncpp/src/lib_json/*.h"
-		"externals/jsoncpp/src/lib_json/*.cpp")
-    add_executable(svzerodsolver src/main.cpp externals/simdjson/singleheader/simdjson.cpp ${JSONCPP_SOURCES})
-    add_subdirectory(externals/pybind11)
-    pybind11_add_module(svzerodsolvercpp src/svzerodsolver.cpp)
-    target_include_directories(svzerodsolver PRIVATE ${EXTERNAL_LIB_HEADERS})
-    target_include_directories(svzerodsolvercpp PRIVATE ${EXTERNAL_LIB_HEADERS})
+# -----------------------------------------------------------------------------
+# Fetch Eigen
+# -----------------------------------------------------------------------------
+FetchContent_Declare(
+  Eigen
+  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+  GIT_TAG master
+  GIT_SHALLOW TRUE
+  GIT_PROGRESS TRUE)
+set(EIGEN_BUILD_DOC OFF)
+set(BUILD_TESTING OFF)
+set(EIGEN_BUILD_PKGCONFIG OFF)
+set( OFF)
+FetchContent_MakeAvailable(Eigen)
 
-else()
-
-    find_package(Eigen3 REQUIRED NO_MODULE)
-    find_package(simdjson REQUIRED)
-    find_package(pybind11 REQUIRED)
-
-    add_library(jsoncpp SHARED IMPORTED)
-
-    if(APPLE)
-        set_target_properties(jsoncpp PROPERTIES
-            IMPORTED_LOCATION "/usr/local/lib/libjsoncpp.dylib"
-            INTERFACE_INCLUDE_DIRECTORIES "/usr/local/include/json"
-        )
-    elseif("${CMAKE_SYSTEM}" MATCHES "Linux")
-        set_target_properties(jsoncpp PROPERTIES
-            IMPORTED_LOCATION "/usr/lib/x86_64-linux-gnu/libjsoncpp.so"
-            INTERFACE_INCLUDE_DIRECTORIES "/usr/include/jsoncpp/json"
-        )
-    endif()
-
-    add_executable(svzerodsolver src/main.cpp)
-    pybind11_add_module(svzerodsolvercpp src/svzerodsolver.cpp)
-
-    target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
-    target_link_libraries(svzerodsolver PRIVATE simdjson::simdjson)
-    target_link_libraries(svzerodsolver PRIVATE jsoncpp)
-    target_link_libraries(svzerodsolvercpp PRIVATE Eigen3::Eigen)
-    target_link_libraries(svzerodsolvercpp PRIVATE simdjson::simdjson)
-    target_link_libraries(svzerodsolvercpp PRIVATE jsoncpp)
-
+# -----------------------------------------------------------------------------
+# Fetch pybind11
+# -----------------------------------------------------------------------------
+FetchContent_Declare(
+    pybind11
+    GIT_REPOSITORY https://github.com/pybind/pybind11
+    GIT_TAG        master
+)
+FetchContent_GetProperties(pybind11)
+if(NOT pybind11_POPULATED)
+    FetchContent_Populate(pybind11)
+    add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
 endif()
+
+# -----------------------------------------------------------------------------
+# Set executable and python library
+# -----------------------------------------------------------------------------
+add_executable(svzerodsolver src/main.cpp)
+pybind11_add_module(libsvzerodsolver src/python.cpp)
+
+# -----------------------------------------------------------------------------
+# Link libraries
+# -----------------------------------------------------------------------------
+target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
+target_link_libraries(svzerodsolver PRIVATE simdjson)
+target_link_libraries(libsvzerodsolver PRIVATE Eigen3::Eigen)
+target_link_libraries(libsvzerodsolver PRIVATE simdjson)

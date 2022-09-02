@@ -28,6 +28,7 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """This module holds the Block class."""
+from __future__ import annotations
 from abc import ABC, abstractclassmethod
 
 import numpy as np

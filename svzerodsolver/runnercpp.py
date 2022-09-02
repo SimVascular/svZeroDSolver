@@ -43,7 +43,7 @@ from pandas import read_csv
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
 libfiles = glob.glob(
-    os.path.join(this_file_dir, "..", "Release", "svzerodsolver*.so")
+    os.path.join(this_file_dir, "..", "Release", "libsvzerodsolver*.so")
 )
 
 if not libfiles:
@@ -52,7 +52,7 @@ if not libfiles:
     )
 
 spec = importlib.util.spec_from_file_location(
-    "svzerodsolvercpp",
+    "libsvzerodsolver",
     libfiles[0],
 )
 svzerodsolvercpp = importlib.util.module_from_spec(spec)

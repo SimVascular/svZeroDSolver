@@ -19,8 +19,47 @@ def run_test_case_by_name(name, testdir):
     testfile = os.path.join(os.path.dirname(__file__), "cases", name + ".json")
     with open(testfile) as ff:
         config = json.load(ff)
-    branch_result = run_from_config(config)
-    return branch_result
+    result = run_from_config(config)
+
+    output = {
+        "pressure_in": {},
+        "pressure_out": {},
+        "flow_in": {},
+        "flow_out": {},
+    }
+
+    last_seg_id = 0
+
+    for vessel in config["vessels"]:
+        name = vessel["vessel_name"]
+        branch_id, seg_id = name.split("_")
+        branch_id, seg_id = int(branch_id[6:]), int(seg_id[3:])
+        vessel_id = vessel["vessel_id"]
+
+        if seg_id == 0:
+            output["pressure_in"][branch_id] = np.array(
+                result[result.name == f"V{vessel_id}"]["pressure_in"]
+            )
+            output["flow_in"][branch_id] = np.array(
+                result[result.name == f"V{vessel_id}"]["flow_in"]
+            )
+            output["pressure_out"][branch_id] = np.array(
+                result[result.name == f"V{vessel_id}"]["pressure_out"]
+            )
+            output["flow_out"][branch_id] = np.array(
+                result[result.name == f"V{vessel_id}"]["flow_out"]
+            )
+        elif seg_id > last_seg_id:
+            output["pressure_out"][branch_id] = np.array(
+                result[result.name == f"V{vessel_id}"]["pressure_out"]
+            )
+            output["flow_out"][branch_id] = np.array(
+                result[result.name == f"V{vessel_id}"]["flow_out"]
+            )
+
+        last_seg_id = seg_id
+
+    return output
 
 
 def get_result(result_array, field, branch, branch_node, time_step):

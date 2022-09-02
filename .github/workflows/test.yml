@@ -1,15 +1,19 @@
-
+# This workflow builds and tests svZeroDSolver. The Python version is tested on
+# ubuntu and the C++ version is built and tested on different versions of
+# ubuntu and macOS.
 name: Build and test
 on: [push, pull_request]
 jobs:
-  ubuntu:
-    runs-on: ubuntu-22.04
+  cpp:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-22.04, macos-11, macos-12]
     steps:
       - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install build-essential cmake libeigen3-dev libsimdjson-dev libjsoncpp-dev pybind11-dev
+      - name: Install ubuntu dependencies
+        if: ${{ matrix.os == 'ubuntu-*' }}
+        run: sudo apt update && sudo apt install build-essential cmake
       - name: Build svZeroDSolver
         run: |
           mkdir Release
@@ -24,54 +28,7 @@ jobs:
       - name: Test the build
         run: |
           conda run -n zerod pytest tests/test_integration_cpp.py
-  macos:
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          brew install eigen jsoncpp simdjson pybind11
-      - name: Build svZeroDSolver
-        run: |
-          mkdir Release
-          cd Release
-          cmake -DCMAKE_BUILD_TYPE=Release ..
-          cmake --build .
-      - name: Install test dependencies
-        run: |
-          conda create -n zerod python=3.9
-          conda run -n zerod pip install pytest pytest-cov pytest-mock
-          conda run -n zerod pip install -e .
-      - name: Test the build
-        run: |
-          conda run -n zerod pytest tests/test_integration_cpp.py
-  cluster:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v2
-      - name: Clone dependencies
-        run: |
-          mkdir externals
-          cd externals
-          git clone https://gitlab.com/libeigen/eigen.git
-          git clone https://github.com/simdjson/simdjson.git
-          git clone https://github.com/open-source-parsers/jsoncpp.git
-          git clone https://github.com/pybind/pybind11.git
-      - name: Build svZeroDSolver
-        run: |
-          mkdir Release
-          cd Release
-          cmake -DCMAKE_BUILD_TYPE=Release -DCLUSTER=ON ..
-          cmake --build .
-      - name: Install test dependencies
-        run: |
-          conda create -n zerod python=3.9
-          conda run -n zerod pip install pytest pytest-cov pytest-mock
-          conda run -n zerod pip install -e .
-      - name: Test the build
-        run: |
-          conda run -n zerod pytest tests/test_integration_cpp.py
-  pytest:
+  python:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

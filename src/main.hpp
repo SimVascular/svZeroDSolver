@@ -183,6 +183,7 @@
  * absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
  * maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$
  * steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
+ * output_variable_based                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false
  * output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
  * output_mean_only                        | Write only the mean values over every timestep to output file | false
  * output_derivative                       | Write time derivatives to output file | false
@@ -243,13 +244,15 @@ const std::string run(std::string& json_config) {
       config.get_int_simulation_parameter("maximum_nonlinear_iterations", 30);
   bool steady_initial =
       config.get_bool_simulation_parameter("steady_initial", true);
+  bool output_variable_based =
+      config.get_bool_simulation_parameter("output_variable_based", false);
   int output_interval =
       config.get_int_simulation_parameter("output_interval", 1);
   bool output_mean_only =
       config.get_bool_simulation_parameter("output_mean_only", false);
-  bool derivative =
+  bool output_derivative =
       config.get_bool_simulation_parameter("output_derivative", false);
-  bool last_cycle_only =
+  bool output_last_cycle_only =
       config.get_bool_simulation_parameter("output_last_cycle_only", false);
 
   // Setup system
@@ -298,7 +301,7 @@ const std::string run(std::string& json_config) {
   DEBUG_MSG("Simulation completed");
 
   // Extract last cardiac cycle
-  if (last_cycle_only) {
+  if (output_last_cycle_only) {
     states.erase(states.begin(), states.end() - config.num_pts_per_cycle);
     times.erase(times.begin(), times.end() - config.num_pts_per_cycle);
     T start_time = times[0];
@@ -308,6 +311,15 @@ const std::string run(std::string& json_config) {
   }
 
   std::string output;
-  output = IO::write_csv<T>(times, states, model, output_mean_only, derivative);
+  if (output_variable_based)
+  {
+    output = IO::to_variable_csv<T>(times, states, model, output_mean_only,
+                                      output_derivative);
+  }
+  else
+  {
+    output = IO::to_vessel_csv<T>(times, states, model, output_mean_only,
+                                      output_derivative);
+  }
   return output;
 }

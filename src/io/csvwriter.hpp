@@ -45,7 +45,7 @@
 namespace IO {
 
 /**
- * @brief Write the solution to a csv file
+ * @brief Write results vessel based.
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  * @param times Sequence of time steps corresponding to the solutions
@@ -56,10 +56,10 @@ namespace IO {
  * @return CSV encoded output string
  */
 template <typename T>
-std::string write_csv(std::vector<T> &times,
-                      std::vector<ALGEBRA::State<T>> &states,
-                      MODEL::Model<T> &model, bool mean = false,
-                      bool derivative = false) {
+std::string to_vessel_csv(std::vector<T> &times,
+                                  std::vector<ALGEBRA::State<T>> &states,
+                                  MODEL::Model<T> &model, bool mean = false,
+                                  bool derivative = false) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -76,7 +76,7 @@ std::string write_csv(std::vector<T> &times,
   }
 
   // Determine number of time steps
-  T num_steps = times.size();
+  int num_steps = times.size();
 
   unsigned int inflow_dof;
   unsigned int outflow_dof;
@@ -109,7 +109,7 @@ std::string write_csv(std::vector<T> &times,
           T d_outflow_mean = 0.0;
           T d_inpres_mean = 0.0;
           T d_outpres_mean = 0.0;
-          for (size_t i = 0; i < times.size(); i++) {
+          for (size_t i = 0; i < num_steps; i++) {
             inflow_mean += states[i].y[inflow_dof];
             outflow_mean += states[i].y[outflow_dof];
             inpres_mean += states[i].y[inpres_dof];
@@ -134,7 +134,7 @@ std::string write_csv(std::vector<T> &times,
                   d_outpres_mean);
           out << lbuff;
         } else {
-          for (size_t i = 0; i < times.size(); i++) {
+          for (size_t i = 0; i < num_steps; i++) {
             sprintf(
                 lbuff,
                 "%s,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n",
@@ -154,7 +154,7 @@ std::string write_csv(std::vector<T> &times,
           T outflow_mean = 0.0;
           T inpres_mean = 0.0;
           T outpres_mean = 0.0;
-          for (size_t i = 0; i < times.size(); i++) {
+          for (size_t i = 0; i < num_steps; i++) {
             inflow_mean += states[i].y[inflow_dof];
             outflow_mean += states[i].y[outflow_dof];
             inpres_mean += states[i].y[inpres_dof];
@@ -168,12 +168,93 @@ std::string write_csv(std::vector<T> &times,
                   inflow_mean, outflow_mean, inpres_mean, outpres_mean);
           out << sbuff;
         } else {
-          for (size_t i = 0; i < times.size(); i++) {
+          for (size_t i = 0; i < num_steps; i++) {
             sprintf(sbuff, "%s,%.16e,%.16e,%.16e,%.16e,%.16e\n", name.c_str(),
                     times[i], states[i].y[inflow_dof], states[i].y[outflow_dof],
                     states[i].y[inpres_dof], states[i].y[outpres_dof]);
             out << sbuff;
           }
+        }
+      }
+    }
+  }
+
+  return out.str();
+}
+
+/**
+ * @brief Write results variable based.
+ *
+ * @tparam T Scalar type (e.g. `float`, `double`)
+ * @param times Sequence of time steps corresponding to the solutions
+ * @param states Sequence of states corresponding to the time steps
+ * @param model The underlying model
+ * @param mean Toggle whether only the mean over all time steps should be
+ * written
+ * @return CSV encoded output string
+ */
+template <typename T>
+std::string to_variable_csv(std::vector<T> &times,
+                                std::vector<ALGEBRA::State<T>> &states,
+                                MODEL::Model<T> &model, bool mean = false,
+                                bool derivative = false) {
+  // Create string stream to buffer output
+  std::stringstream out;
+
+  // Create short and long buffer for lines
+  char sbuff[77];
+  char lbuff[100];
+
+  // Determine number of time steps
+  int num_steps = times.size();
+
+  // Write column labels
+  if (derivative) {
+    out << "name,time,y,ydot\n";
+    if (mean) {
+      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+        std::string name = model.dofhandler.variables[i];
+        T mean_y = 0.0;
+        T mean_ydot = 0.0;
+        for (size_t j = 0; j < num_steps; j++) {
+          mean_y += states[j].y[i];
+          mean_ydot += states[j].ydot[i];
+        }
+        mean_y /= num_steps;
+        mean_ydot /= num_steps;
+        sprintf(lbuff, "%s,,%.16e,%.16e\n", name.c_str(), mean_y,mean_ydot);
+        out << lbuff;
+      }
+    } else {
+      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+        std::string name = model.dofhandler.variables[i];
+        for (size_t j = 0; j < num_steps; j++) {
+          sprintf(lbuff, "%s,%.16e,%.16e,%.16e\n", name.c_str(), times[j],
+                  states[j].y[i],states[j].ydot[i]);
+          out << lbuff;
+        }
+      }
+    }
+  } else {
+    out << "name,time,y\n";
+    if (mean) {
+      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+        std::string name = model.dofhandler.variables[i];
+        T mean_y = 0.0;
+        for (size_t j = 0; j < num_steps; j++) {
+          mean_y += states[j].y[i];
+        }
+        mean_y /= num_steps;
+        sprintf(sbuff, "%s,,%.16e\n", name.c_str(), mean_y);
+        out << sbuff;
+      }
+    } else {
+      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+        std::string name = model.dofhandler.variables[i];
+        for (size_t j = 0; j < num_steps; j++) {
+          sprintf(sbuff, "%s,%.16e,%.16e\n", name.c_str(), times[j],
+                  states[j].y[i]);
+          out << sbuff;
         }
       }
     }

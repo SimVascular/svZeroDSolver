@@ -14,33 +14,41 @@ sv\+Zero\+DSolver configuration reader.
 \item 
 \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{Config\+Reader}} ()
 \begin{DoxyCompactList}\small\item\em Construct a new Config Reader object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_i_o_1_1_config_reader_a37f52891001a10772ad3aa6585f3cd3b}{Config\+Reader}} (std\+::string \&specifier)
-\begin{DoxyCompactList}\small\item\em Construct a new Config Reader object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{$\sim$\+Config\+Reader}} ()
 \begin{DoxyCompactList}\small\item\em Destroy the Config Reader object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \mbox{\hyperlink{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}{get\+\_\+model}} ()
-\begin{DoxyCompactList}\small\item\em Create model from configuration file. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}{get\+\_\+num\+\_\+time\+\_\+steps}} ()
-\begin{DoxyCompactList}\small\item\em Get number of time steps based on configuration. \end{DoxyCompactList}\item 
-T \mbox{\hyperlink{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}{get\+\_\+time\+\_\+step\+\_\+size}} ()
-\begin{DoxyCompactList}\small\item\em Get the time step size based on configuration. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}{get\+\_\+int\+\_\+simulation\+\_\+parameter}} (std\+::string key)
-\begin{DoxyCompactList}\small\item\em Get an integer simulation parameter. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{class_i_o_1_1_config_reader_a7e28be5d3dc3d36f15a231a70caa0832}{get\+\_\+int\+\_\+simulation\+\_\+parameter}} (std\+::string key, int def)
-\begin{DoxyCompactList}\small\item\em Get an integer simulation parameter with default value. \end{DoxyCompactList}\item 
-T \mbox{\hyperlink{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}{get\+\_\+scalar\+\_\+simulation\+\_\+parameter}} (std\+::string key)
-\begin{DoxyCompactList}\small\item\em Get a scalar simulation parameter. \end{DoxyCompactList}\item 
-T \mbox{\hyperlink{class_i_o_1_1_config_reader_ab9b23fa0fec12cbce562d8b33354df32}{get\+\_\+scalar\+\_\+simulation\+\_\+parameter}} (std\+::string key, T def)
-\begin{DoxyCompactList}\small\item\em Get a scalar simulation parameter with default value. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}{get\+\_\+bool\+\_\+simulation\+\_\+parameter}} (std\+::string key)
-\begin{DoxyCompactList}\small\item\em Get a bool simulation parameter. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{class_i_o_1_1_config_reader_a259786ae8302cc0fd414317d4695ae40}{get\+\_\+bool\+\_\+simulation\+\_\+parameter}} (std\+::string key, bool def)
-\begin{DoxyCompactList}\small\item\em Get a bool simulation parameter with default value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+void \mbox{\hyperlink{class_i_o_1_1_config_reader_a44d1b9249fc80c0e65a6267b42597bdb}{load}} (std\+::string \&specifier)
+\begin{DoxyCompactList}\small\item\em Create model from configuration file. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-T \mbox{\hyperlink{class_i_o_1_1_config_reader_a7401fb68b296447b8152636d1d363416}{cardiac\+\_\+cycle\+\_\+period}} = 1.\+0
-\begin{DoxyCompactList}\small\item\em Cardiac cycle period. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}
+\begin{DoxyCompactList}\small\item\em Simulation model. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_i_o_1_1_config_reader_aaa79d0afffb88356f8d4ccbb7628309f}{sim\+\_\+cardiac\+\_\+cycle\+\_\+period}}
+\begin{DoxyCompactList}\small\item\em Cardiac cycle period. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\+\_\+time\+\_\+step\+\_\+size}}
+\begin{DoxyCompactList}\small\item\em Simulation time step size. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\+\_\+abs\+\_\+tol}}
+\begin{DoxyCompactList}\small\item\em Absolute tolerance for simulation. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_i_o_1_1_config_reader_a4d7c56de89d9e7719726b9c620a92845}{sim\+\_\+num\+\_\+cycles}}
+\begin{DoxyCompactList}\small\item\em Number of cardiac cycles to simulate. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\+\_\+pts\+\_\+per\+\_\+cycle}}
+\begin{DoxyCompactList}\small\item\em Number of time steps per cardiac cycle. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\+\_\+num\+\_\+time\+\_\+steps}}
+\begin{DoxyCompactList}\small\item\em Total number of time steps. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\+\_\+nliter}}
+\item 
+int \mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\+\_\+interval}}
+\begin{DoxyCompactList}\small\item\em Interval of writing output. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader_a1e593472af26af8f4bf98b158d996434}{sim\+\_\+steady\+\_\+initial}}
+\begin{DoxyCompactList}\small\item\em Start from steady solution. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader_acfee0686c847138a19ad12ad71d57750}{output\+\_\+variable\+\_\+based}}
+\begin{DoxyCompactList}\small\item\em Output variable based instead of vessel based. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\+\_\+mean\+\_\+only}}
+\begin{DoxyCompactList}\small\item\em Output only the mean value. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\+\_\+derivative}}
+\begin{DoxyCompactList}\small\item\em Output derivatives. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\+\_\+last\+\_\+cycle\+\_\+only}}
+\begin{DoxyCompactList}\small\item\em Output only the last cardiac cycle. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -59,32 +67,14 @@ sv\+Zero\+DSolver configuration reader.
 \mbox{\Hypertarget{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}\label{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}} 
 \index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}}
 \index{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{ConfigReader()}{ConfigReader()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\doxysubsubsection{\texorpdfstring{ConfigReader()}{ConfigReader()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::\+Config\+Reader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::\+Config\+Reader}
 
 
 
 Construct a new Config Reader object. 
 
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a37f52891001a10772ad3aa6585f3cd3b}\label{class_i_o_1_1_config_reader_a37f52891001a10772ad3aa6585f3cd3b}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!ConfigReader@{ConfigReader}}
-\index{ConfigReader@{ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{ConfigReader()}{ConfigReader()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::\+Config\+Reader (\begin{DoxyParamCaption}\item[{std\+::string \&}]{specifier }\end{DoxyParamCaption})}
-
-
-
-Construct a new Config Reader object. 
-
-Can be constructed either with the path to a json configuration file or directly with a json encoded string.
-
-
-\begin{DoxyParams}{Parameters}
-{\em specifier} & Path configuration file or json encoded configuration \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}\label{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}} 
 \index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!````~ConfigReader@{$\sim$ConfigReader}}
 \index{````~ConfigReader@{$\sim$ConfigReader}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
@@ -99,92 +89,12 @@ Destroy the Config Reader object.
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}\label{class_i_o_1_1_config_reader_a8a17af470183fa6e3734d26a985211f5}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}}
-\index{get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_bool\_simulation\_parameter()}{get\_bool\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a44d1b9249fc80c0e65a6267b42597bdb}\label{class_i_o_1_1_config_reader_a44d1b9249fc80c0e65a6267b42597bdb}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!load@{load}}
+\index{load@{load}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+bool\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})}
-
-
-
-Get a bool simulation parameter. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em key} & The key of the simulation parameter \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Value of the simulation parameter 
-\end{DoxyReturn}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a259786ae8302cc0fd414317d4695ae40}\label{class_i_o_1_1_config_reader_a259786ae8302cc0fd414317d4695ae40}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}}
-\index{get\_bool\_simulation\_parameter@{get\_bool\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_bool\_simulation\_parameter()}{get\_bool\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+bool\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key,  }\item[{bool}]{def }\end{DoxyParamCaption})}
-
-
-
-Get a bool simulation parameter with default value. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em key} & The key of the simulation parameter \\
-\hline
-{\em def} & Default value if key not in simulation parameters \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Value of the simulation parameter 
-\end{DoxyReturn}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}\label{class_i_o_1_1_config_reader_a684add1b8843da67198e619852bea435}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}}
-\index{get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_int\_simulation\_parameter()}{get\_int\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+int\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})}
-
-
-
-Get an integer simulation parameter. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em key} & The key of the simulation parameter \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Value of the simulation parameter 
-\end{DoxyReturn}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a7e28be5d3dc3d36f15a231a70caa0832}\label{class_i_o_1_1_config_reader_a7e28be5d3dc3d36f15a231a70caa0832}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}}
-\index{get\_int\_simulation\_parameter@{get\_int\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_int\_simulation\_parameter()}{get\_int\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+int\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key,  }\item[{int}]{def }\end{DoxyParamCaption})}
-
-
-
-Get an integer simulation parameter with default value. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em key} & The key of the simulation parameter \\
-\hline
-{\em def} & Default value if key not in simulation parameters \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Value of the simulation parameter 
-\end{DoxyReturn}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}\label{class_i_o_1_1_config_reader_acbfe926ecbf754503071f8c62a64b3be}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_model@{get\_model}}
-\index{get\_model@{get\_model}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_model()}{get\_model()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+model}
+void \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::load (\begin{DoxyParamCaption}\item[{std\+::string \&}]{specifier }\end{DoxyParamCaption})}
 
 
 
@@ -193,87 +103,158 @@ Create model from configuration file.
 \begin{DoxyReturn}{Returns}
 Model 
 \end{DoxyReturn}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}\label{class_i_o_1_1_config_reader_a30a6649ef956d00d48eb14118d7f4bf4}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_num\_time\_steps@{get\_num\_time\_steps}}
-\index{get\_num\_time\_steps@{get\_num\_time\_steps}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_num\_time\_steps()}{get\_num\_time\_steps()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+num\+\_\+time\+\_\+steps}
-
-
-
-Get number of time steps based on configuration. 
-
-\begin{DoxyReturn}{Returns}
-Number of time steps 
-\end{DoxyReturn}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}\label{class_i_o_1_1_config_reader_abb736d8ea428c43494301da8422cd90f}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}}
-\index{get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_scalar\_simulation\_parameter()}{get\_scalar\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+scalar\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key }\end{DoxyParamCaption})}
-
-
-
-Get a scalar simulation parameter. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em key} & The key of the simulation parameter \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Value of the simulation parameter 
-\end{DoxyReturn}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_ab9b23fa0fec12cbce562d8b33354df32}\label{class_i_o_1_1_config_reader_ab9b23fa0fec12cbce562d8b33354df32}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}}
-\index{get\_scalar\_simulation\_parameter@{get\_scalar\_simulation\_parameter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_scalar\_simulation\_parameter()}{get\_scalar\_simulation\_parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+scalar\+\_\+simulation\+\_\+parameter (\begin{DoxyParamCaption}\item[{std\+::string}]{key,  }\item[{T}]{def }\end{DoxyParamCaption})}
-
-
-
-Get a scalar simulation parameter with default value. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em key} & The key of the simulation parameter \\
-\hline
-{\em def} & Default value if key not in simulation parameters \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-Value of the simulation parameter 
-\end{DoxyReturn}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}\label{class_i_o_1_1_config_reader_ae63fc5536e55937512435528dcd262bc}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!get\_time\_step\_size@{get\_time\_step\_size}}
-\index{get\_time\_step\_size@{get\_time\_step\_size}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_time\_step\_size()}{get\_time\_step\_size()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::get\+\_\+time\+\_\+step\+\_\+size}
-
-
-
-Get the time step size based on configuration. 
-
-\begin{DoxyReturn}{Returns}
-Time step size 
-\end{DoxyReturn}
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a7401fb68b296447b8152636d1d363416}\label{class_i_o_1_1_config_reader_a7401fb68b296447b8152636d1d363416}} 
-\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!cardiac\_cycle\_period@{cardiac\_cycle\_period}}
-\index{cardiac\_cycle\_period@{cardiac\_cycle\_period}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{cardiac\_cycle\_period}{cardiac\_cycle\_period}}
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}\label{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!model@{model}}
+\index{model@{model}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{model}{model}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::cardiac\+\_\+cycle\+\_\+period = 1.\+0}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$T$>$ \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::model}
+
+
+
+Simulation model. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}\label{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!output\_derivative@{output\_derivative}}
+\index{output\_derivative@{output\_derivative}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{output\_derivative}{output\_derivative}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::output\+\_\+derivative}
+
+
+
+Output derivatives. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}\label{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!output\_interval@{output\_interval}}
+\index{output\_interval@{output\_interval}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{output\_interval}{output\_interval}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::output\+\_\+interval}
+
+
+
+Interval of writing output. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}\label{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!output\_last\_cycle\_only@{output\_last\_cycle\_only}}
+\index{output\_last\_cycle\_only@{output\_last\_cycle\_only}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{output\_last\_cycle\_only}{output\_last\_cycle\_only}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::output\+\_\+last\+\_\+cycle\+\_\+only}
+
+
+
+Output only the last cardiac cycle. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}\label{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!output\_mean\_only@{output\_mean\_only}}
+\index{output\_mean\_only@{output\_mean\_only}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{output\_mean\_only}{output\_mean\_only}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::output\+\_\+mean\+\_\+only}
+
+
+
+Output only the mean value. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_acfee0686c847138a19ad12ad71d57750}\label{class_i_o_1_1_config_reader_acfee0686c847138a19ad12ad71d57750}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!output\_variable\_based@{output\_variable\_based}}
+\index{output\_variable\_based@{output\_variable\_based}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{output\_variable\_based}{output\_variable\_based}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::output\+\_\+variable\+\_\+based}
+
+
+
+Output variable based instead of vessel based. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}\label{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!sim\_abs\_tol@{sim\_abs\_tol}}
+\index{sim\_abs\_tol@{sim\_abs\_tol}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sim\_abs\_tol}{sim\_abs\_tol}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::sim\+\_\+abs\+\_\+tol}
+
+
+
+Absolute tolerance for simulation. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_aaa79d0afffb88356f8d4ccbb7628309f}\label{class_i_o_1_1_config_reader_aaa79d0afffb88356f8d4ccbb7628309f}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!sim\_cardiac\_cycle\_period@{sim\_cardiac\_cycle\_period}}
+\index{sim\_cardiac\_cycle\_period@{sim\_cardiac\_cycle\_period}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sim\_cardiac\_cycle\_period}{sim\_cardiac\_cycle\_period}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::sim\+\_\+cardiac\+\_\+cycle\+\_\+period}
 
 
 
 Cardiac cycle period. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}\label{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!sim\_nliter@{sim\_nliter}}
+\index{sim\_nliter@{sim\_nliter}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sim\_nliter}{sim\_nliter}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::sim\+\_\+nliter}
+
+Maximum number of non-\/linear iterations in time integration \mbox{\Hypertarget{class_i_o_1_1_config_reader_a4d7c56de89d9e7719726b9c620a92845}\label{class_i_o_1_1_config_reader_a4d7c56de89d9e7719726b9c620a92845}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!sim\_num\_cycles@{sim\_num\_cycles}}
+\index{sim\_num\_cycles@{sim\_num\_cycles}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sim\_num\_cycles}{sim\_num\_cycles}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::sim\+\_\+num\+\_\+cycles}
+
+
+
+Number of cardiac cycles to simulate. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}\label{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!sim\_num\_time\_steps@{sim\_num\_time\_steps}}
+\index{sim\_num\_time\_steps@{sim\_num\_time\_steps}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sim\_num\_time\_steps}{sim\_num\_time\_steps}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::sim\+\_\+num\+\_\+time\+\_\+steps}
+
+
+
+Total number of time steps. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}\label{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!sim\_pts\_per\_cycle@{sim\_pts\_per\_cycle}}
+\index{sim\_pts\_per\_cycle@{sim\_pts\_per\_cycle}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sim\_pts\_per\_cycle}{sim\_pts\_per\_cycle}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::sim\+\_\+pts\+\_\+per\+\_\+cycle}
+
+
+
+Number of time steps per cardiac cycle. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a1e593472af26af8f4bf98b158d996434}\label{class_i_o_1_1_config_reader_a1e593472af26af8f4bf98b158d996434}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!sim\_steady\_initial@{sim\_steady\_initial}}
+\index{sim\_steady\_initial@{sim\_steady\_initial}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sim\_steady\_initial}{sim\_steady\_initial}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::sim\+\_\+steady\+\_\+initial}
+
+
+
+Start from steady solution. 
+
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}\label{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}} 
+\index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!sim\_time\_step\_size@{sim\_time\_step\_size}}
+\index{sim\_time\_step\_size@{sim\_time\_step\_size}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{sim\_time\_step\_size}{sim\_time\_step\_size}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::sim\+\_\+time\+\_\+step\+\_\+size}
+
+
+
+Simulation time step size. 
 
 
 

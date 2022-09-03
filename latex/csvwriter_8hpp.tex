@@ -24,7 +24,7 @@ This graph shows which files directly or indirectly include this file\+:
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=165pt]{csvwriter_8hpp__dep__incl}
+\includegraphics[width=218pt]{csvwriter_8hpp__dep__incl}
 \end{center}
 \end{figure}
 \doxysubsection*{Namespaces}
@@ -35,12 +35,10 @@ namespace \mbox{\hyperlink{namespace_i_o}{IO}}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-{\footnotesize template$<$typename T $>$ }\\std\+::string \mbox{\hyperlink{namespace_i_o_a3ca9ad0179e52f455094b9e6143943e7}{IO\+::write\+\_\+csv\+\_\+nodes}} (std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, bool mean=false)
-\begin{DoxyCompactList}\small\item\em Write the node solutions to a csv file. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename T $>$ }\\std\+::string \mbox{\hyperlink{namespace_i_o_a8c06f173c59142eaa97b25404df25ef9}{IO\+::write\+\_\+csv\+\_\+vessels}} (std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, bool mean=false)
-\begin{DoxyCompactList}\small\item\em Write the blood vessel solutions to a csv file. \end{DoxyCompactList}\item 
-{\footnotesize template$<$typename T $>$ }\\std\+::string \mbox{\hyperlink{namespace_i_o_a267b12d2dc2f10d909162e9c45d0f0ae}{IO\+::write\+\_\+csv\+\_\+internal\+\_\+vars}} (std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, bool mean=false)
-\begin{DoxyCompactList}\small\item\em Write the solution of internal variables to a csv file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+{\footnotesize template$<$typename T $>$ }\\std\+::string \mbox{\hyperlink{namespace_i_o_a1ef2a3fccc174166142bb843eab206f4}{IO\+::to\+\_\+vessel\+\_\+csv}} (std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, bool mean=false, bool derivative=false)
+\begin{DoxyCompactList}\small\item\em Write results vessel based. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\std\+::string \mbox{\hyperlink{namespace_i_o_a02005a08dbf60e9a61dbb595454010f5}{IO\+::to\+\_\+variable\+\_\+csv}} (std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, bool mean=false, bool derivative=false)
+\begin{DoxyCompactList}\small\item\em Write results variable based. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}

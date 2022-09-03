@@ -42,6 +42,8 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{to\+\_\+steady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}{to\+\_\+unsteady}} ()
 \begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -61,10 +63,10 @@ node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1.0,0) to [R, l=$R$, *-*] (3,0)
 node[anchor=south]{$P_{d}$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_autotoc_md24}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_resistance_b_c_autotoc_md24}
+\]\hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_autotoc_md22}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_resistance_b_c_autotoc_md22}
 \[
 P-P_d=R \cdot Q
-\]\hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_autotoc_md25}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_resistance_b_c_autotoc_md25}
+\]\hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_autotoc_md23}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_resistance_b_c_autotoc_md23}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
 \]
@@ -148,7 +150,18 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\
 
 Convert the block to a steady behavior. 
 
-Converts the resistance and distal pressure to the constant means of themselve \mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}\label{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}} 
+Converts the resistance and distal pressure to the constant means of themselve \mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}\label{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}} 
+\index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
+\index{to\_unsteady@{to\_unsteady}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::to\+\_\+unsteady}
+
+
+
+Convert the block to a steady behavior. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}\label{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}} 
 \index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}

@@ -42,7 +42,9 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a23d2a1599bba5d
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a015dd358bf5581ef46925959653b7018}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_ad68608d53bde04b36f293b66165ce9f1}{to\+\_\+steady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a3fbf3331a8987a8ee498f0b027be22a4}{to\+\_\+unsteady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the block to an unsteady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -64,10 +66,10 @@ Applies a predefined pressure at a boundary.
 \draw (1,0) to [short, l=, *-] (1,-1)
 node[ground]{$\hat{P}$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md22}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md22}
+\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md20}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md20}
 \[
 P=\hat{P}
-\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md23}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md23}
+\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md21}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md21}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
 \]
@@ -149,7 +151,18 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pre
 
 Convert the block to a steady behavior. 
 
-Converts the prescribed pressure to the constant mean of itself \mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a20d68258c2017b50c1990ab8ef9e1dc8}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a20d68258c2017b50c1990ab8ef9e1dc8}} 
+Converts the prescribed pressure to the constant mean of itself \mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a3fbf3331a8987a8ee498f0b027be22a4}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a3fbf3331a8987a8ee498f0b027be22a4}} 
+\index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
+\index{to\_unsteady@{to\_unsteady}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::to\+\_\+unsteady}
+
+
+
+Convert the block to an unsteady behavior. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a20d68258c2017b50c1990ab8ef9e1dc8}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a20d68258c2017b50c1990ab8ef9e1dc8}} 
 \index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}

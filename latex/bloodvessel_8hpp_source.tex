@@ -2,269 +2,298 @@
 \label{bloodvessel_8hpp_source}\index{model/bloodvessel.hpp@{model/bloodvessel.hpp}}
 \mbox{\hyperlink{bloodvessel_8hpp}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{1 \textcolor{comment}{/**}}
-\DoxyCodeLine{2 \textcolor{comment}{ * @file bloodvessel.hpp}}
-\DoxyCodeLine{3 \textcolor{comment}{ * @brief MODEL::BloodVessel source file}}
-\DoxyCodeLine{4 \textcolor{comment}{ */}}
-\DoxyCodeLine{5 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_BLOODVESSEL\_HPP\_}}
-\DoxyCodeLine{6 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_BLOODVESSEL\_HPP\_}}
-\DoxyCodeLine{7 }
-\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <math.h>}}
-\DoxyCodeLine{9 }
-\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}../algebra/densesystem.hpp"{}}}
-\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
-\DoxyCodeLine{12 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
-\DoxyCodeLine{13 }
-\DoxyCodeLine{14 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
-\DoxyCodeLine{15 \textcolor{comment}{}}
-\DoxyCodeLine{16 \textcolor{comment}{/**}}
-\DoxyCodeLine{17 \textcolor{comment}{ * @brief Resistor-\/capacitor-\/inductor blood vessel with optional stenosis}}
-\DoxyCodeLine{18 \textcolor{comment}{ *}}
-\DoxyCodeLine{19 \textcolor{comment}{ * Models the mechanical behavior of a bloodvessel with optional stenosis.}}
-\DoxyCodeLine{20 \textcolor{comment}{ *}}
-\DoxyCodeLine{21 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{22 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
-\DoxyCodeLine{23 \textcolor{comment}{ * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
-\DoxyCodeLine{24 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\}}}
-\DoxyCodeLine{25 \textcolor{comment}{ * to [R, l=\$R\$, *-\/] (3,0)}}
-\DoxyCodeLine{26 \textcolor{comment}{ * to [R, l=\$R\_\{ste\}\$, -\/] (5,0)}}
-\DoxyCodeLine{27 \textcolor{comment}{ * to [L, l=\$L\$, *-\/*] (7,0)}}
-\DoxyCodeLine{28 \textcolor{comment}{ * node[anchor=south]\{\$P\_\{out\}\$\}}}
-\DoxyCodeLine{29 \textcolor{comment}{ * (5,0) to [C, l=\$C\$, *-\/] (5,-\/1.5)}}
-\DoxyCodeLine{30 \textcolor{comment}{ * node[ground]\{\$P\_C\$\};}}
-\DoxyCodeLine{31 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (7.2,0) -\/-\/ (8,0) node[right] \{\$Q\_\{out\}\$\};}}
-\DoxyCodeLine{32 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
-\DoxyCodeLine{33 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{34 \textcolor{comment}{ *}}
-\DoxyCodeLine{35 \textcolor{comment}{ * \#\#\# Governing equations}}
-\DoxyCodeLine{36 \textcolor{comment}{ *}}
-\DoxyCodeLine{37 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{38 \textcolor{comment}{ * P\_\{in\}\string^\{e\}-\/P\_\{out\}\string^\{e\}-\/(R+R\_\{ste\}) Q\_\{in\}\string^\{e\}-\/L\(\backslash\)frac\{d Q\_\{out\}\string^\{e\}\}\{dt\}=0}}
-\DoxyCodeLine{39 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{40 \textcolor{comment}{ *}}
-\DoxyCodeLine{41 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{42 \textcolor{comment}{ * Q\_\{i n\}\string^\{e\}-\/Q\_\{o u t\}\string^\{e\}-\/C \(\backslash\)frac\{d P\_\{c\}\string^\{e\}\}\{d t\}=0}}
-\DoxyCodeLine{43 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{44 \textcolor{comment}{ *}}
-\DoxyCodeLine{45 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{46 \textcolor{comment}{ * P\_\{i n\}\string^\{e\}-\/(R+R\_\{ste\}) Q\_\{i n\}\string^\{e\}-\/P\_\{c\}=0}}
-\DoxyCodeLine{47 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{48 \textcolor{comment}{ *}}
-\DoxyCodeLine{49 \textcolor{comment}{ * \#\#\# Local contributions}}
-\DoxyCodeLine{50 \textcolor{comment}{ *}}
-\DoxyCodeLine{51 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{52 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{lllll\}P\_\{i n\}\string^\{e\} \& Q\_\{in\}\string^\{e\} \&}}
-\DoxyCodeLine{53 \textcolor{comment}{ * P\_\{out\}\string^\{e\} \& Q\_\{out\}\string^\{e\} \& P\_C\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\} \(\backslash\)f]}}
-\DoxyCodeLine{54 \textcolor{comment}{ *}}
-\DoxyCodeLine{55 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{56 \textcolor{comment}{ * \(\backslash\)mathbf\{E\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
-\DoxyCodeLine{57 \textcolor{comment}{ * 0 \& 0 \& 0 \& -\/L \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{58 \textcolor{comment}{ * 0 \& 0 \& 0 \& 0 \& -\/C \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{59 \textcolor{comment}{ * 0 \& 0 \& 0 \& 0 \& 0}}
-\DoxyCodeLine{60 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
-\DoxyCodeLine{61 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{62 \textcolor{comment}{ *}}
-\DoxyCodeLine{63 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{64 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
-\DoxyCodeLine{65 \textcolor{comment}{ * 1 \& -\/R\_\{ste\}-\/R \& -\/1 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{66 \textcolor{comment}{ * 0 \& 1 \& 0 \& -\/1 \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{67 \textcolor{comment}{ * 1 \& -\/R\_\{ste\}-\/R \& 0 \& 0 \& -\/1}}
-\DoxyCodeLine{68 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
-\DoxyCodeLine{69 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{70 \textcolor{comment}{ *}}
-\DoxyCodeLine{71 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{72 \textcolor{comment}{ * \(\backslash\)mathbf\{D\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
-\DoxyCodeLine{73 \textcolor{comment}{ * 0 \& -\/R\_\{ste\} \& 0 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{74 \textcolor{comment}{ * 0 \& 0 \& 0 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{75 \textcolor{comment}{ * 0 \& -\/R\_\{ste\} \& 0 \& 0 \& 0}}
-\DoxyCodeLine{76 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
-\DoxyCodeLine{77 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{78 \textcolor{comment}{ *}}
-\DoxyCodeLine{79 \textcolor{comment}{ * with the stenosis resistance \(\backslash\)f\$ R\_\{ste\}=K\_\{t\} \(\backslash\)frac\{\(\backslash\)rho\}\{2}}
-\DoxyCodeLine{80 \textcolor{comment}{ * A\_\{o\}\string^\{2\}\}\(\backslash\)left(\(\backslash\)frac\{A\_\{o\}\}\{A\_\{s\}\}-\/1\(\backslash\)right)\string^\{2\}|Q\_\{in\}\string^\{e\}| \(\backslash\)f\$. The}}
-\DoxyCodeLine{81 \textcolor{comment}{ * constant part of the equation is summarized in \(\backslash\)ref}}
-\DoxyCodeLine{82 \textcolor{comment}{ * Parameters::stenosis\_coefficient. \(\backslash\)f\$R\(\backslash\)f\$, \(\backslash\)f\$C\(\backslash\)f\$, and \(\backslash\)f\$L\(\backslash\)f\$ refer to}}
-\DoxyCodeLine{83 \textcolor{comment}{ * Poisieuille resistance, capacitance and inductance, respectively.}}
-\DoxyCodeLine{84 \textcolor{comment}{ *}}
-\DoxyCodeLine{85 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{86 \textcolor{comment}{ */}}
-\DoxyCodeLine{87 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{88 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{BloodVessel}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
-\DoxyCodeLine{89  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{90 \textcolor{comment}{  /**}}
-\DoxyCodeLine{91 \textcolor{comment}{   * @brief Parameters of the element.}}
-\DoxyCodeLine{92 \textcolor{comment}{   *}}
-\DoxyCodeLine{93 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
-\DoxyCodeLine{94 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{95 \textcolor{comment}{   */}}
-\DoxyCodeLine{96   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
-\DoxyCodeLine{97     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_ac07230961398a72244552473dc19eff9}{R}};                     \textcolor{comment}{///< Poiseuille resistance}}
-\DoxyCodeLine{98     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_ad3f14c85d7bbeae2326a1e9177433675}{C}};                     \textcolor{comment}{///< Capacitance}}
-\DoxyCodeLine{99     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a75bd48844a1d4af4555898f0d2f53dcf}{L}};                     \textcolor{comment}{///< Inductance}}
-\DoxyCodeLine{100     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a5f0adc244080b0bd404c579d39ec3f2b}{stenosis\_coefficient}};  \textcolor{comment}{///< Stenosis Coefficient}}
-\DoxyCodeLine{101   \};}
-\DoxyCodeLine{102 \textcolor{comment}{}}
-\DoxyCodeLine{103 \textcolor{comment}{  /**}}
-\DoxyCodeLine{104 \textcolor{comment}{   * @brief Construct a new Blood Vessel object}}
-\DoxyCodeLine{105 \textcolor{comment}{   *}}
-\DoxyCodeLine{106 \textcolor{comment}{   * @param R Poiseuille resistance}}
-\DoxyCodeLine{107 \textcolor{comment}{   * @param C Capacitance}}
-\DoxyCodeLine{108 \textcolor{comment}{   * @param L Inductance}}
-\DoxyCodeLine{109 \textcolor{comment}{   * @param stenosis\_coefficient Stenosis Coefficient}}
-\DoxyCodeLine{110 \textcolor{comment}{   * @param name Name}}
-\DoxyCodeLine{111 \textcolor{comment}{   */}}
-\DoxyCodeLine{112   \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ad49bbb055eed81dbbf7ec0f5c6e43b20}{BloodVessel}}(T R, T C, T L, T stenosis\_coefficient, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
-\DoxyCodeLine{113 \textcolor{comment}{}}
-\DoxyCodeLine{114 \textcolor{comment}{  /**}}
-\DoxyCodeLine{115 \textcolor{comment}{   * @brief Destroy the Blood Vessel object}}
-\DoxyCodeLine{116 \textcolor{comment}{   *}}
-\DoxyCodeLine{117 \textcolor{comment}{   */}}
-\DoxyCodeLine{118   \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a9b99b6231781c73be05f8081a1567f82}{\string~BloodVessel}}();}
-\DoxyCodeLine{119 \textcolor{comment}{}}
-\DoxyCodeLine{120 \textcolor{comment}{  /**}}
-\DoxyCodeLine{121 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{122 \textcolor{comment}{   *}}
-\DoxyCodeLine{123 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{124 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{125 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{126 \textcolor{comment}{   *}}
-\DoxyCodeLine{127 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{128 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{129 \textcolor{comment}{   */}}
-\DoxyCodeLine{130   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{1 \textcolor{comment}{// Copyright (c) Stanford University, The Regents of the University of}}
+\DoxyCodeLine{2 \textcolor{comment}{//               California, and others.}}
+\DoxyCodeLine{3 \textcolor{comment}{//}}
+\DoxyCodeLine{4 \textcolor{comment}{// All Rights Reserved.}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{6 \textcolor{comment}{// See Copyright-\/SimVascular.txt for additional details.}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// Permission is hereby granted, free of charge, to any person obtaining}}
+\DoxyCodeLine{9 \textcolor{comment}{// a copy of this software and associated documentation files (the}}
+\DoxyCodeLine{10 \textcolor{comment}{// "{}Software"{}), to deal in the Software without restriction, including}}
+\DoxyCodeLine{11 \textcolor{comment}{// without limitation the rights to use, copy, modify, merge, publish,}}
+\DoxyCodeLine{12 \textcolor{comment}{// distribute, sublicense, and/or sell copies of the Software, and to}}
+\DoxyCodeLine{13 \textcolor{comment}{// permit persons to whom the Software is furnished to do so, subject}}
+\DoxyCodeLine{14 \textcolor{comment}{// to the following conditions:}}
+\DoxyCodeLine{15 \textcolor{comment}{//}}
+\DoxyCodeLine{16 \textcolor{comment}{// The above copyright notice and this permission notice shall be included}}
+\DoxyCodeLine{17 \textcolor{comment}{// in all copies or substantial portions of the Software.}}
+\DoxyCodeLine{18 \textcolor{comment}{//}}
+\DoxyCodeLine{19 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "{}AS}}
+\DoxyCodeLine{20 \textcolor{comment}{// IS"{} AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED}}
+\DoxyCodeLine{21 \textcolor{comment}{// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A}}
+\DoxyCodeLine{22 \textcolor{comment}{// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER}}
+\DoxyCodeLine{23 \textcolor{comment}{// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,}}
+\DoxyCodeLine{24 \textcolor{comment}{// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{25 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR}}
+\DoxyCodeLine{26 \textcolor{comment}{// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF}}
+\DoxyCodeLine{27 \textcolor{comment}{// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING}}
+\DoxyCodeLine{28 \textcolor{comment}{// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS}}
+\DoxyCodeLine{29 \textcolor{comment}{// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}\textcolor{comment}{}}
+\DoxyCodeLine{30 \textcolor{comment}{/**}}
+\DoxyCodeLine{31 \textcolor{comment}{ * @file bloodvessel.hpp}}
+\DoxyCodeLine{32 \textcolor{comment}{ * @brief MODEL::BloodVessel source file}}
+\DoxyCodeLine{33 \textcolor{comment}{ */}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_BLOODVESSEL\_HPP\_}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_BLOODVESSEL\_HPP\_}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#include <math.h>}}
+\DoxyCodeLine{38 }
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include "{}../algebra/densesystem.hpp"{}}}
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
+\DoxyCodeLine{44 \textcolor{comment}{}}
+\DoxyCodeLine{45 \textcolor{comment}{/**}}
+\DoxyCodeLine{46 \textcolor{comment}{ * @brief Resistor-\/capacitor-\/inductor blood vessel with optional stenosis}}
+\DoxyCodeLine{47 \textcolor{comment}{ *}}
+\DoxyCodeLine{48 \textcolor{comment}{ * Models the mechanical behavior of a bloodvessel with optional stenosis.}}
+\DoxyCodeLine{49 \textcolor{comment}{ *}}
+\DoxyCodeLine{50 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{51 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
+\DoxyCodeLine{52 \textcolor{comment}{ * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
+\DoxyCodeLine{53 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\}}}
+\DoxyCodeLine{54 \textcolor{comment}{ * to [R, l=\$R\$, *-\/] (3,0)}}
+\DoxyCodeLine{55 \textcolor{comment}{ * to [R, l=\$R\_\{ste\}\$, -\/] (5,0)}}
+\DoxyCodeLine{56 \textcolor{comment}{ * to [L, l=\$L\$, *-\/*] (7,0)}}
+\DoxyCodeLine{57 \textcolor{comment}{ * node[anchor=south]\{\$P\_\{out\}\$\}}}
+\DoxyCodeLine{58 \textcolor{comment}{ * (5,0) to [C, l=\$C\$, *-\/] (5,-\/1.5)}}
+\DoxyCodeLine{59 \textcolor{comment}{ * node[ground]\{\$P\_C\$\};}}
+\DoxyCodeLine{60 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (7.2,0) -\/-\/ (8,0) node[right] \{\$Q\_\{out\}\$\};}}
+\DoxyCodeLine{61 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
+\DoxyCodeLine{62 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{63 \textcolor{comment}{ *}}
+\DoxyCodeLine{64 \textcolor{comment}{ * \#\#\# Governing equations}}
+\DoxyCodeLine{65 \textcolor{comment}{ *}}
+\DoxyCodeLine{66 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{67 \textcolor{comment}{ * P\_\{in\}\string^\{e\}-\/P\_\{out\}\string^\{e\}-\/(R+R\_\{ste\}) Q\_\{in\}\string^\{e\}-\/L\(\backslash\)frac\{d Q\_\{out\}\string^\{e\}\}\{dt\}=0}}
+\DoxyCodeLine{68 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{69 \textcolor{comment}{ *}}
+\DoxyCodeLine{70 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{71 \textcolor{comment}{ * Q\_\{i n\}\string^\{e\}-\/Q\_\{o u t\}\string^\{e\}-\/C \(\backslash\)frac\{d P\_\{c\}\string^\{e\}\}\{d t\}=0}}
+\DoxyCodeLine{72 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{73 \textcolor{comment}{ *}}
+\DoxyCodeLine{74 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{75 \textcolor{comment}{ * P\_\{i n\}\string^\{e\}-\/(R+R\_\{ste\}) Q\_\{i n\}\string^\{e\}-\/P\_\{c\}=0}}
+\DoxyCodeLine{76 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{77 \textcolor{comment}{ *}}
+\DoxyCodeLine{78 \textcolor{comment}{ * \#\#\# Local contributions}}
+\DoxyCodeLine{79 \textcolor{comment}{ *}}
+\DoxyCodeLine{80 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{81 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{lllll\}P\_\{i n\}\string^\{e\} \& Q\_\{in\}\string^\{e\} \&}}
+\DoxyCodeLine{82 \textcolor{comment}{ * P\_\{out\}\string^\{e\} \& Q\_\{out\}\string^\{e\} \& P\_C\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\} \(\backslash\)f]}}
+\DoxyCodeLine{83 \textcolor{comment}{ *}}
+\DoxyCodeLine{84 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{85 \textcolor{comment}{ * \(\backslash\)mathbf\{E\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
+\DoxyCodeLine{86 \textcolor{comment}{ * 0 \& 0 \& 0 \& -\/L \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{87 \textcolor{comment}{ * 0 \& 0 \& 0 \& 0 \& -\/C \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{88 \textcolor{comment}{ * 0 \& 0 \& 0 \& 0 \& 0}}
+\DoxyCodeLine{89 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{90 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{91 \textcolor{comment}{ *}}
+\DoxyCodeLine{92 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{93 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
+\DoxyCodeLine{94 \textcolor{comment}{ * 1 \& -\/R\_\{ste\}-\/R \& -\/1 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{95 \textcolor{comment}{ * 0 \& 1 \& 0 \& -\/1 \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{96 \textcolor{comment}{ * 1 \& -\/R\_\{ste\}-\/R \& 0 \& 0 \& -\/1}}
+\DoxyCodeLine{97 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{98 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{99 \textcolor{comment}{ *}}
+\DoxyCodeLine{100 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{101 \textcolor{comment}{ * \(\backslash\)mathbf\{D\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
+\DoxyCodeLine{102 \textcolor{comment}{ * 0 \& -\/R\_\{ste\} \& 0 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{103 \textcolor{comment}{ * 0 \& 0 \& 0 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{104 \textcolor{comment}{ * 0 \& -\/R\_\{ste\} \& 0 \& 0 \& 0}}
+\DoxyCodeLine{105 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{106 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{107 \textcolor{comment}{ *}}
+\DoxyCodeLine{108 \textcolor{comment}{ * with the stenosis resistance \(\backslash\)f\$ R\_\{ste\}=K\_\{t\} \(\backslash\)frac\{\(\backslash\)rho\}\{2}}
+\DoxyCodeLine{109 \textcolor{comment}{ * A\_\{o\}\string^\{2\}\}\(\backslash\)left(\(\backslash\)frac\{A\_\{o\}\}\{A\_\{s\}\}-\/1\(\backslash\)right)\string^\{2\}|Q\_\{in\}\string^\{e\}| \(\backslash\)f\$. The}}
+\DoxyCodeLine{110 \textcolor{comment}{ * constant part of the equation is summarized in \(\backslash\)ref}}
+\DoxyCodeLine{111 \textcolor{comment}{ * Parameters::stenosis\_coefficient. \(\backslash\)f\$R\(\backslash\)f\$, \(\backslash\)f\$C\(\backslash\)f\$, and \(\backslash\)f\$L\(\backslash\)f\$ refer to}}
+\DoxyCodeLine{112 \textcolor{comment}{ * Poisieuille resistance, capacitance and inductance, respectively.}}
+\DoxyCodeLine{113 \textcolor{comment}{ *}}
+\DoxyCodeLine{114 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{115 \textcolor{comment}{ */}}
+\DoxyCodeLine{116 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{117 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{BloodVessel}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
+\DoxyCodeLine{118  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{119 \textcolor{comment}{  /**}}
+\DoxyCodeLine{120 \textcolor{comment}{   * @brief Parameters of the element.}}
+\DoxyCodeLine{121 \textcolor{comment}{   *}}
+\DoxyCodeLine{122 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
+\DoxyCodeLine{123 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{124 \textcolor{comment}{   */}}
+\DoxyCodeLine{125   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
+\DoxyCodeLine{126     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_ac07230961398a72244552473dc19eff9}{R}};                     \textcolor{comment}{///< Poiseuille resistance}}
+\DoxyCodeLine{127     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_ad3f14c85d7bbeae2326a1e9177433675}{C}};                     \textcolor{comment}{///< Capacitance}}
+\DoxyCodeLine{128     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a75bd48844a1d4af4555898f0d2f53dcf}{L}};                     \textcolor{comment}{///< Inductance}}
+\DoxyCodeLine{129     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a5f0adc244080b0bd404c579d39ec3f2b}{stenosis\_coefficient}};  \textcolor{comment}{///< Stenosis Coefficient}}
+\DoxyCodeLine{130   \};}
 \DoxyCodeLine{131 \textcolor{comment}{}}
 \DoxyCodeLine{132 \textcolor{comment}{  /**}}
-\DoxyCodeLine{133 \textcolor{comment}{   * @brief Update the constant contributions of the element in a dense system}}
+\DoxyCodeLine{133 \textcolor{comment}{   * @brief Construct a new Blood Vessel object}}
 \DoxyCodeLine{134 \textcolor{comment}{   *}}
-\DoxyCodeLine{135 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{136 \textcolor{comment}{   */}}
-\DoxyCodeLine{137   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
-\DoxyCodeLine{138 \textcolor{comment}{}}
-\DoxyCodeLine{139 \textcolor{comment}{  /**}}
-\DoxyCodeLine{140 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
-\DoxyCodeLine{141 \textcolor{comment}{   * dense system}}
-\DoxyCodeLine{142 \textcolor{comment}{   *}}
-\DoxyCodeLine{143 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{144 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{145 \textcolor{comment}{   */}}
-\DoxyCodeLine{146   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
-\DoxyCodeLine{147                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{135 \textcolor{comment}{   * @param R Poiseuille resistance}}
+\DoxyCodeLine{136 \textcolor{comment}{   * @param C Capacitance}}
+\DoxyCodeLine{137 \textcolor{comment}{   * @param L Inductance}}
+\DoxyCodeLine{138 \textcolor{comment}{   * @param stenosis\_coefficient Stenosis Coefficient}}
+\DoxyCodeLine{139 \textcolor{comment}{   * @param name Name}}
+\DoxyCodeLine{140 \textcolor{comment}{   */}}
+\DoxyCodeLine{141   \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ad49bbb055eed81dbbf7ec0f5c6e43b20}{BloodVessel}}(T R, T C, T L, T stenosis\_coefficient, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
+\DoxyCodeLine{142 \textcolor{comment}{}}
+\DoxyCodeLine{143 \textcolor{comment}{  /**}}
+\DoxyCodeLine{144 \textcolor{comment}{   * @brief Destroy the Blood Vessel object}}
+\DoxyCodeLine{145 \textcolor{comment}{   *}}
+\DoxyCodeLine{146 \textcolor{comment}{   */}}
+\DoxyCodeLine{147   \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a9b99b6231781c73be05f8081a1567f82}{\string~BloodVessel}}();}
 \DoxyCodeLine{148 \textcolor{comment}{}}
 \DoxyCodeLine{149 \textcolor{comment}{  /**}}
-\DoxyCodeLine{150 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{150 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
 \DoxyCodeLine{151 \textcolor{comment}{   *}}
-\DoxyCodeLine{152 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{153 \textcolor{comment}{   */}}
-\DoxyCodeLine{154   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{155 \textcolor{comment}{}}
-\DoxyCodeLine{156 \textcolor{comment}{  /**}}
-\DoxyCodeLine{157 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
-\DoxyCodeLine{158 \textcolor{comment}{   * sparse system}}
-\DoxyCodeLine{159 \textcolor{comment}{   *}}
-\DoxyCodeLine{160 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{161 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{162 \textcolor{comment}{   */}}
-\DoxyCodeLine{163   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
-\DoxyCodeLine{164                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{165 \textcolor{comment}{}}
-\DoxyCodeLine{166 \textcolor{comment}{  /**}}
-\DoxyCodeLine{167 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{168 \textcolor{comment}{   *}}
-\DoxyCodeLine{169 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{170 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{171 \textcolor{comment}{   */}}
-\DoxyCodeLine{172   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3e6d973f217880e6cce55a84ffd3f658}{num\_triplets}} = \{}
-\DoxyCodeLine{173       \{\textcolor{stringliteral}{"{}F"{}}, 10\},}
-\DoxyCodeLine{174       \{\textcolor{stringliteral}{"{}E"{}}, 2\},}
-\DoxyCodeLine{175       \{\textcolor{stringliteral}{"{}D"{}}, 2\},}
-\DoxyCodeLine{176   \};}
-\DoxyCodeLine{177 }
-\DoxyCodeLine{178  \textcolor{keyword}{private}:}
-\DoxyCodeLine{179   Parameters params;}
-\DoxyCodeLine{180 \};}
-\DoxyCodeLine{181 }
-\DoxyCodeLine{182 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{183 \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ad49bbb055eed81dbbf7ec0f5c6e43b20}{BloodVessel<T>::BloodVessel}}(T R, T C, T L, T stenosis\_coefficient,}
-\DoxyCodeLine{184                             std::string name)}
-\DoxyCodeLine{185     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{186   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{187   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_ac07230961398a72244552473dc19eff9}{R}} = R;}
-\DoxyCodeLine{188   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_ad3f14c85d7bbeae2326a1e9177433675}{C}} = C;}
-\DoxyCodeLine{189   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a75bd48844a1d4af4555898f0d2f53dcf}{L}} = L;}
-\DoxyCodeLine{190   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a5f0adc244080b0bd404c579d39ec3f2b}{stenosis\_coefficient}} = stenosis\_coefficient;}
-\DoxyCodeLine{191 \}}
-\DoxyCodeLine{192 }
-\DoxyCodeLine{193 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{194 \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a9b99b6231781c73be05f8081a1567f82}{BloodVessel<T>::\string~BloodVessel}}() \{\}}
-\DoxyCodeLine{195 }
-\DoxyCodeLine{196 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{197 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}{BloodVessel<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{198   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad4a96c69c0b20deade719f4be46e2a9f}{Block<T>::setup\_dofs\_}}(dofhandler, 3, 1);}
-\DoxyCodeLine{199 \}}
-\DoxyCodeLine{200 }
-\DoxyCodeLine{201 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{202 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{BloodVessel<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{}
-\DoxyCodeLine{203   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a52a8c10de1d498cd2a22b38f044204ba}{E}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) = -\/params.L;}
-\DoxyCodeLine{204   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a52a8c10de1d498cd2a22b38f044204ba}{E}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) = -\/params.C;}
-\DoxyCodeLine{205 }
-\DoxyCodeLine{206   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{207   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = -\/params.R;}
-\DoxyCodeLine{208   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = -\/1.0;}
-\DoxyCodeLine{209 }
-\DoxyCodeLine{210   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = 1.0;}
-\DoxyCodeLine{211   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = -\/1.0;}
-\DoxyCodeLine{212 }
-\DoxyCodeLine{213   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{214   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = -\/params.R;}
-\DoxyCodeLine{215   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = -\/1.0;}
-\DoxyCodeLine{216 \}}
-\DoxyCodeLine{217 }
-\DoxyCodeLine{218 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{219 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{BloodVessel<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
-\DoxyCodeLine{220                                      Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
-\DoxyCodeLine{221   T q\_in = fabs(y[this-\/>inlet\_nodes[0]-\/>flow\_dof]);}
-\DoxyCodeLine{222   T fac1 = -\/params.stenosis\_coefficient * q\_in;}
-\DoxyCodeLine{223   T fac2 = fac1 -\/ params.R;}
-\DoxyCodeLine{224   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac2;}
-\DoxyCodeLine{225   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = fac2;}
-\DoxyCodeLine{226   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a06533022932495efe9da4ecf62a65a60}{D}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac1;}
-\DoxyCodeLine{227   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a06533022932495efe9da4ecf62a65a60}{D}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = fac1;}
+\DoxyCodeLine{152 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{153 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{154 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{155 \textcolor{comment}{   *}}
+\DoxyCodeLine{156 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{157 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{158 \textcolor{comment}{   */}}
+\DoxyCodeLine{159   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{160 \textcolor{comment}{}}
+\DoxyCodeLine{161 \textcolor{comment}{  /**}}
+\DoxyCodeLine{162 \textcolor{comment}{   * @brief Update the constant contributions of the element in a dense system}}
+\DoxyCodeLine{163 \textcolor{comment}{   *}}
+\DoxyCodeLine{164 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{165 \textcolor{comment}{   */}}
+\DoxyCodeLine{166   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
+\DoxyCodeLine{167 \textcolor{comment}{}}
+\DoxyCodeLine{168 \textcolor{comment}{  /**}}
+\DoxyCodeLine{169 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
+\DoxyCodeLine{170 \textcolor{comment}{   * dense system}}
+\DoxyCodeLine{171 \textcolor{comment}{   *}}
+\DoxyCodeLine{172 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{173 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{174 \textcolor{comment}{   */}}
+\DoxyCodeLine{175   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
+\DoxyCodeLine{176                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{177 \textcolor{comment}{}}
+\DoxyCodeLine{178 \textcolor{comment}{  /**}}
+\DoxyCodeLine{179 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{180 \textcolor{comment}{   *}}
+\DoxyCodeLine{181 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{182 \textcolor{comment}{   */}}
+\DoxyCodeLine{183   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{184 \textcolor{comment}{}}
+\DoxyCodeLine{185 \textcolor{comment}{  /**}}
+\DoxyCodeLine{186 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
+\DoxyCodeLine{187 \textcolor{comment}{   * sparse system}}
+\DoxyCodeLine{188 \textcolor{comment}{   *}}
+\DoxyCodeLine{189 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{190 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{191 \textcolor{comment}{   */}}
+\DoxyCodeLine{192   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{193                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{194 \textcolor{comment}{}}
+\DoxyCodeLine{195 \textcolor{comment}{  /**}}
+\DoxyCodeLine{196 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{197 \textcolor{comment}{   *}}
+\DoxyCodeLine{198 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{199 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{200 \textcolor{comment}{   */}}
+\DoxyCodeLine{201   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3e6d973f217880e6cce55a84ffd3f658}{num\_triplets}} = \{}
+\DoxyCodeLine{202       \{\textcolor{stringliteral}{"{}F"{}}, 10\},}
+\DoxyCodeLine{203       \{\textcolor{stringliteral}{"{}E"{}}, 2\},}
+\DoxyCodeLine{204       \{\textcolor{stringliteral}{"{}D"{}}, 2\},}
+\DoxyCodeLine{205   \};}
+\DoxyCodeLine{206 }
+\DoxyCodeLine{207  \textcolor{keyword}{private}:}
+\DoxyCodeLine{208   Parameters params;}
+\DoxyCodeLine{209 \};}
+\DoxyCodeLine{210 }
+\DoxyCodeLine{211 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{212 \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ad49bbb055eed81dbbf7ec0f5c6e43b20}{BloodVessel<T>::BloodVessel}}(T R, T C, T L, T stenosis\_coefficient,}
+\DoxyCodeLine{213                             std::string name)}
+\DoxyCodeLine{214     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
+\DoxyCodeLine{215   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
+\DoxyCodeLine{216   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_ac07230961398a72244552473dc19eff9}{R}} = R;}
+\DoxyCodeLine{217   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_ad3f14c85d7bbeae2326a1e9177433675}{C}} = C;}
+\DoxyCodeLine{218   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a75bd48844a1d4af4555898f0d2f53dcf}{L}} = L;}
+\DoxyCodeLine{219   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters_a5f0adc244080b0bd404c579d39ec3f2b}{stenosis\_coefficient}} = stenosis\_coefficient;}
+\DoxyCodeLine{220 \}}
+\DoxyCodeLine{221 }
+\DoxyCodeLine{222 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{223 \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a9b99b6231781c73be05f8081a1567f82}{BloodVessel<T>::\string~BloodVessel}}() \{\}}
+\DoxyCodeLine{224 }
+\DoxyCodeLine{225 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{226 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}{BloodVessel<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{227   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 3, \{\textcolor{stringliteral}{"{}pressure\_c"{}}\});}
 \DoxyCodeLine{228 \}}
 \DoxyCodeLine{229 }
 \DoxyCodeLine{230 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{231 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{BloodVessel<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{232   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) =}
-\DoxyCodeLine{233       -\/params.L;}
-\DoxyCodeLine{234   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) =}
-\DoxyCodeLine{235       -\/params.C;}
-\DoxyCodeLine{236 }
-\DoxyCodeLine{237   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{238   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{239       -\/params.R;}
-\DoxyCodeLine{240   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = -\/1.0;}
+\DoxyCodeLine{231 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{BloodVessel<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{}
+\DoxyCodeLine{232   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a52a8c10de1d498cd2a22b38f044204ba}{E}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) = -\/params.L;}
+\DoxyCodeLine{233   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a52a8c10de1d498cd2a22b38f044204ba}{E}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) = -\/params.C;}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{235   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{236   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = -\/params.R;}
+\DoxyCodeLine{237   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = -\/1.0;}
+\DoxyCodeLine{238 }
+\DoxyCodeLine{239   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = 1.0;}
+\DoxyCodeLine{240   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = -\/1.0;}
 \DoxyCodeLine{241 }
-\DoxyCodeLine{242   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = 1.0;}
-\DoxyCodeLine{243   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = -\/1.0;}
-\DoxyCodeLine{244 }
-\DoxyCodeLine{245   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{246   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{247       -\/params.R;}
-\DoxyCodeLine{248   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = -\/1.0;}
-\DoxyCodeLine{249 \}}
-\DoxyCodeLine{250 }
-\DoxyCodeLine{251 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{252 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{BloodVessel<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
-\DoxyCodeLine{253                                      Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
-\DoxyCodeLine{254   T q\_in = fabs(y[this-\/>inlet\_nodes[0]-\/>flow\_dof]);}
-\DoxyCodeLine{255   T fac1 = -\/params.stenosis\_coefficient * q\_in;}
-\DoxyCodeLine{256   T fac2 = fac1 -\/ params.R;}
-\DoxyCodeLine{257   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac2;}
-\DoxyCodeLine{258   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = fac2;}
-\DoxyCodeLine{259   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac1;}
-\DoxyCodeLine{260   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = fac1;}
-\DoxyCodeLine{261 \}}
-\DoxyCodeLine{262 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{263 }
-\DoxyCodeLine{264 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_BLOODVESSEL\_HPP\_}}
+\DoxyCodeLine{242   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{243   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = -\/params.R;}
+\DoxyCodeLine{244   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = -\/1.0;}
+\DoxyCodeLine{245 \}}
+\DoxyCodeLine{246 }
+\DoxyCodeLine{247 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{248 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{BloodVessel<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system,}
+\DoxyCodeLine{249                                      Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
+\DoxyCodeLine{250   T q\_in = fabs(y[this-\/>inlet\_nodes[0]-\/>flow\_dof]);}
+\DoxyCodeLine{251   T fac1 = -\/params.stenosis\_coefficient * q\_in;}
+\DoxyCodeLine{252   T fac2 = fac1 -\/ params.R;}
+\DoxyCodeLine{253   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac2;}
+\DoxyCodeLine{254   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = fac2;}
+\DoxyCodeLine{255   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a06533022932495efe9da4ecf62a65a60}{D}}(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac1;}
+\DoxyCodeLine{256   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_a06533022932495efe9da4ecf62a65a60}{D}}(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = fac1;}
+\DoxyCodeLine{257 \}}
+\DoxyCodeLine{258 }
+\DoxyCodeLine{259 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{260 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_aa01ae047ca7b88d911cd018362b4c895}{BloodVessel<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{261   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) =}
+\DoxyCodeLine{262       -\/params.L;}
+\DoxyCodeLine{263   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) =}
+\DoxyCodeLine{264       -\/params.C;}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{267   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{268       -\/params.R;}
+\DoxyCodeLine{269   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = -\/1.0;}
+\DoxyCodeLine{270 }
+\DoxyCodeLine{271   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = 1.0;}
+\DoxyCodeLine{272   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = -\/1.0;}
+\DoxyCodeLine{273 }
+\DoxyCodeLine{274   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{275   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{276       -\/params.R;}
+\DoxyCodeLine{277   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = -\/1.0;}
+\DoxyCodeLine{278 \}}
+\DoxyCodeLine{279 }
+\DoxyCodeLine{280 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{281 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3d9f1305d7cdc8d743270ed9c1d11ffc}{BloodVessel<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{282                                      Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
+\DoxyCodeLine{283   T q\_in = fabs(y[this-\/>inlet\_nodes[0]-\/>flow\_dof]);}
+\DoxyCodeLine{284   T fac1 = -\/params.stenosis\_coefficient * q\_in;}
+\DoxyCodeLine{285   T fac2 = fac1 -\/ params.R;}
+\DoxyCodeLine{286   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac2;}
+\DoxyCodeLine{287   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = fac2;}
+\DoxyCodeLine{288   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac1;}
+\DoxyCodeLine{289   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = fac1;}
+\DoxyCodeLine{290 \}}
+\DoxyCodeLine{291 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{292 }
+\DoxyCodeLine{293 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_BLOODVESSEL\_HPP\_}}
 
 \end{DoxyCode}

@@ -30,12 +30,14 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a2e33d813e05f809fad8541a12189648
 \begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of all elements in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a6aca235e32671218c934c19395b9ff96}{to\+\_\+steady}} ()
 \begin{DoxyCompactList}\small\item\em Convert the blocks to a steady behavior. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_aae71072906c424697f7490fce4344020}{to\+\_\+unsteady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the blocks to an unsteady behavior. \end{DoxyCompactList}\item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0568bb6ffb0ee3e0ddba35ef9d1ce196}{get\+\_\+num\+\_\+triplets}} ()
 \begin{DoxyCompactList}\small\item\em Get number of triplets all elements. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-std\+::map$<$ std\+::string, std\+::variant$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}$<$ T $>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}{blocks}}
+std\+::map$<$ std\+::string\+\_\+view, std\+::variant$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}$<$ T $>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}$<$ T $>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a2edffd089b409529b8757dcb8d853202}{blocks}}
 \begin{DoxyCompactList}\small\item\em Elements of the model. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}
 \begin{DoxyCompactList}\small\item\em Degree-\/of-\/freedom handler of the model. \end{DoxyCompactList}\item 
@@ -109,6 +111,17 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::
 
 
 Convert the blocks to a steady behavior. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_aae71072906c424697f7490fce4344020}\label{class_m_o_d_e_l_1_1_model_aae71072906c424697f7490fce4344020}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!to\_unsteady@{to\_unsteady}}
+\index{to\_unsteady@{to\_unsteady}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::to\+\_\+unsteady}
+
+
+
+Convert the blocks to an unsteady behavior. 
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}\label{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}} 
 \index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!update\_constant@{update\_constant}}
@@ -217,12 +230,12 @@ Update the time-\/dependent contributions of all elements in a sparse system.
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}\label{class_m_o_d_e_l_1_1_model_adbd91c5205700c4628b2eeea20ea404f}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a2edffd089b409529b8757dcb8d853202}\label{class_m_o_d_e_l_1_1_model_a2edffd089b409529b8757dcb8d853202}} 
 \index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!blocks@{blocks}}
 \index{blocks@{blocks}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{blocks}{blocks}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-std\+::map$<$std\+::string, std\+::variant$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}$<$T$>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::blocks}
+std\+::map$<$std\+::string\+\_\+view, std\+::variant$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{Blood\+Vessel}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}$<$T$>$, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}$<$T$>$ $>$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::blocks}
 
 
 

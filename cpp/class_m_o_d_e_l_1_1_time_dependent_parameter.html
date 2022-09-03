@@ -95,8 +95,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a4dcbdfd359c34b8d4af725808705733e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the parameter value at the specified time.  <a href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#a4dcbdfd359c34b8d4af725808705733e">More...</a><br /></td></tr>
 <tr class="separator:a4dcbdfd359c34b8d4af725808705733e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a040eeefcb9697499f31ee7cabc028f40"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#a040eeefcb9697499f31ee7cabc028f40">to_steady</a> ()</td></tr>
-<tr class="memdesc:a040eeefcb9697499f31ee7cabc028f40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bool value indicating if the parameter is constant.  <a href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#a040eeefcb9697499f31ee7cabc028f40">More...</a><br /></td></tr>
+<tr class="memdesc:a040eeefcb9697499f31ee7cabc028f40"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the parameter into a steady mean state.  <a href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#a040eeefcb9697499f31ee7cabc028f40">More...</a><br /></td></tr>
 <tr class="separator:a040eeefcb9697499f31ee7cabc028f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b0a62c1bbfe1fd3ecaeb64e56a4cfdf"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#a0b0a62c1bbfe1fd3ecaeb64e56a4cfdf">to_unsteady</a> ()</td></tr>
+<tr class="memdesc:a0b0a62c1bbfe1fd3ecaeb64e56a4cfdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the parameter back into an unsteady mean state.  <a href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#a0b0a62c1bbfe1fd3ecaeb64e56a4cfdf">More...</a><br /></td></tr>
+<tr class="separator:a0b0a62c1bbfe1fd3ecaeb64e56a4cfdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -112,8 +115,8 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a68725c9e5d20bade16d5d7b4c77bac4b"><td class="memItemLeft" align="right" valign="top"><a id="a68725c9e5d20bade16d5d7b4c77bac4b" name="a68725c9e5d20bade16d5d7b4c77bac4b"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b></td></tr>
 <tr class="separator:a68725c9e5d20bade16d5d7b4c77bac4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aee6221393da44b0e6279986782cb7c9a"><td class="memItemLeft" align="right" valign="top"><a id="aee6221393da44b0e6279986782cb7c9a" name="aee6221393da44b0e6279986782cb7c9a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>isconstant</b></td></tr>
+<tr class="memitem:aee6221393da44b0e6279986782cb7c9a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#aee6221393da44b0e6279986782cb7c9a">isconstant</a></td></tr>
+<tr class="memdesc:aee6221393da44b0e6279986782cb7c9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Bool value indicating if the parameter is constant.  <a href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#aee6221393da44b0e6279986782cb7c9a">More...</a><br /></td></tr>
 <tr class="separator:aee6221393da44b0e6279986782cb7c9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -246,7 +249,25 @@ template&lt;typename T &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Bool value indicating if the parameter is constant. </p>
+<p>Convert the parameter into a steady mean state. </p>
+
+</div>
+</div>
+<a id="a0b0a62c1bbfe1fd3ecaeb64e56a4cfdf" name="a0b0a62c1bbfe1fd3ecaeb64e56a4cfdf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b0a62c1bbfe1fd3ecaeb64e56a4cfdf">&#9670;&nbsp;</a></span>to_unsteady()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_m_o_d_e_l_1_1_time_dependent_parameter.html">MODEL::TimeDependentParameter</a>&lt; T &gt;::to_unsteady</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Convert the parameter back into an unsteady mean state. </p>
 
 </div>
 </div>
@@ -266,6 +287,24 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Cardiac cycle period corresponding to the time sequence. </p>
+
+</div>
+</div>
+<a id="aee6221393da44b0e6279986782cb7c9a" name="aee6221393da44b0e6279986782cb7c9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee6221393da44b0e6279986782cb7c9a">&#9670;&nbsp;</a></span>isconstant</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_m_o_d_e_l_1_1_time_dependent_parameter.html">MODEL::TimeDependentParameter</a>&lt; T &gt;::isconstant</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Bool value indicating if the parameter is constant. </p>
 
 </div>
 </div>
@@ -311,7 +350,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 27 2022 20:35:54 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sat Sep 3 2022 19:57:12 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

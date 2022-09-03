@@ -38,25 +38,16 @@ Everything related to solving the system of equation is contained in the \mbox{\
 Finally the \mbox{\hyperlink{namespace_i_o}{IO}} namespace provides everything related to reading and writing files. The \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}} reads the simultion config and IO\+::write\+\_\+csv and IO\+::write\+\_\+json are two different methods for writing the result files.
 
 All classes make use of templates to allow easy exchange of scalar types like {\ttfamily double} or {\ttfamily float} or to switch between sparse and dense systems.\hypertarget{index_autotoc_md5}{}\doxysection{Build sv\+Zero\+DSolver}\label{index_autotoc_md5}
-sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the following dependencies installed before you start\+:\hypertarget{index_autotoc_md6}{}\doxysubsection{Install dependencies on mac\+OS}\label{index_autotoc_md6}
+sv\+Zero\+DSolver uses CMake to build the tool. The dependencies are installed by CMake. If you want to use the C++ Python interface of sv\+Zero\+DSolver make sure to checkout the correct Python environment beforehand. Currently supported are\+:
 
-\begin{DoxyCode}{0}
-\DoxyCodeLine{brew install eigen       \# Linear algebra library}
-\DoxyCodeLine{brew install jsoncpp     \# Standard json library}
-\DoxyCodeLine{brew install simdjson    \# Fast json input parser}
-\DoxyCodeLine{brew install pybind11    \# Python bindings}
 
-\end{DoxyCode}
-\hypertarget{index_autotoc_md7}{}\doxysubsection{Install dependencies on Linux}\label{index_autotoc_md7}
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{sudo apt install libeigen3-\/dev       \# Linear algebra library}
-\DoxyCodeLine{sudo apt install libjsoncpp-\/dev      \# Standard json library}
-\DoxyCodeLine{sudo apt install libsimdjson-\/dev     \# Fast json input parser}
-\DoxyCodeLine{sudo apt install pybind11-\/dev        \# Python bindings}
-
-\end{DoxyCode}
-\hypertarget{index_autotoc_md8}{}\doxysubsection{Build in debug mode}\label{index_autotoc_md8}
+\begin{DoxyItemize}
+\item Ubuntu 18
+\item Ubuntu 20
+\item Ubuntu 22
+\item mac\+OS Big Sur
+\item mac\+OS Monterey
+\end{DoxyItemize}\hypertarget{index_autotoc_md6}{}\doxysubsection{Build in debug mode}\label{index_autotoc_md6}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{mkdir Debug}
@@ -65,7 +56,7 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md9}{}\doxysubsection{Build in release mode}\label{index_autotoc_md9}
+\hypertarget{index_autotoc_md7}{}\doxysubsection{Build in release mode}\label{index_autotoc_md7}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{mkdir Release}
@@ -74,40 +65,27 @@ sv\+Zero\+DSolver can be build easily via CMake. Make sure you have the followin
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md10}{}\doxysubsection{Build on Sherlock}\label{index_autotoc_md10}
+\hypertarget{index_autotoc_md8}{}\doxysubsection{Build on Sherlock}\label{index_autotoc_md8}
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{ml load cmake/3.23.1}
-\DoxyCodeLine{ml load gcc/12.1.0}
-\DoxyCodeLine{ml load python/3.9.0}
-\DoxyCodeLine{ml load binutils/2.38}
-\DoxyCodeLine{mkdir externals}
-\DoxyCodeLine{cd externals}
-\DoxyCodeLine{git clone https:\textcolor{comment}{//gitlab.com/libeigen/eigen.git}}
-\DoxyCodeLine{git clone https:\textcolor{comment}{//github.com/simdjson/simdjson.git}}
-\DoxyCodeLine{git clone https:\textcolor{comment}{//github.com/open-\/source-\/parsers/jsoncpp.git}}
-\DoxyCodeLine{git clone https:\textcolor{comment}{//github.com/pybind/pybind11.git}}
-\DoxyCodeLine{cd ..}
+\DoxyCodeLine{module load cmake/3.23.1 gcc/12.1.0 binutils/2.38}
 \DoxyCodeLine{mkdir Release}
 \DoxyCodeLine{cd Release}
-\DoxyCodeLine{cmake -\/DCMAKE\_BUILD\_TYPE=Release -\/DCLUSTER=ON -\/DCMAKE\_CXX\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -\/DCMAKE\_C\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc -\/DPYTHON\_EXECUTABLE=/share/software/user/open/python/3.9.0/bin/python3 ..}
-\DoxyCodeLine{cmake -\/-\/build }
+\DoxyCodeLine{cmake -\/DCMAKE\_BUILD\_TYPE=Release -\/DCMAKE\_CXX\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -\/DCMAKE\_C\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..}
+\DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md11}{}\doxysection{Run sv\+Zero\+DSolver}\label{index_autotoc_md11}
+\hypertarget{index_autotoc_md9}{}\doxysection{Run sv\+Zero\+DSolver}\label{index_autotoc_md9}
 After building sv\+Zero\+DSolver, the build folder contains an executable called {\ttfamily svzerodsolver}. Run it with one of\+:
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{./svzerodsolver path/to/config.json path/to/output.json  \# For json output}
-\DoxyCodeLine{file format}
-\DoxyCodeLine{./svzerodsolver path/to/config.json path/to/output.csv   \# For csv output}
-\DoxyCodeLine{file format (faster) }
+\DoxyCodeLine{./svzerodsolver path/to/config.json path/to/output.csv}
 
 \end{DoxyCode}
 
 
-{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md12}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md12}
+{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output.\+csv} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md10}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md10}
 The sv\+Zero\+DSolver can be configured with the following options in the {\ttfamily simulation\+\_\+parameters} section of the input file. Parameters without a default value must be specified.
 
 \tabulinesep=1mm
@@ -124,9 +102,12 @@ number\+\_\+of\+\_\+cardiac\+\_\+cycles   &Number of cardiac cycles to simulate 
 number\+\_\+of\+\_\+time\+\_\+pts\+\_\+per\+\_\+cardiac\+\_\+cycle   &Number of time steps per cardiac cycle   &-\/    \\\cline{1-3}
 absolute\+\_\+tolerance   &Absolute tolerance for time integration   &$10^{-8}$    \\\cline{1-3}
 maximum\+\_\+nonlinear\+\_\+iterations   &Maximum number of nonlinear iterations for time integration   &$30$    \\\cline{1-3}
-output\+\_\+interval   &The frequency of writing timesteps to the output (1 means every time step is written to output)   &$1$    \\\cline{1-3}
 steady\+\_\+initial   &Toggle whether to use the steady solution as the initial condition for the simulation   &true    \\\cline{1-3}
-output\+\_\+mean\+\_\+only   &Write only the mean values over every timestep in the output file (only in csv)   &false   \\\cline{1-3}
+output\+\_\+variable\+\_\+based   &Output solution based on variables (i.\+e. flow+pressure at nodes and internal variables)   &false    \\\cline{1-3}
+output\+\_\+interval   &The frequency of writing timesteps to the output (1 means every time step is written to output)   &$1$    \\\cline{1-3}
+output\+\_\+mean\+\_\+only   &Write only the mean values over every timestep to output file   &false    \\\cline{1-3}
+output\+\_\+derivative   &Write time derivatives to output file   &false    \\\cline{1-3}
+output\+\_\+last\+\_\+cycle\+\_\+only   &Write only the last cardiac cycle   &false   \\\cline{1-3}
 \end{longtabu}
-\hypertarget{index_autotoc_md13}{}\doxysection{Developer Guide}\label{index_autotoc_md13}
+\hypertarget{index_autotoc_md11}{}\doxysection{Developer Guide}\label{index_autotoc_md11}
 If you are a developer and want to contribute to sv\+Zero\+DSolver, you can find more helpful information in our \mbox{\hyperlink{md_developer_guide}{Developer Guide}}. 

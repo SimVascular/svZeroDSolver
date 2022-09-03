@@ -42,6 +42,8 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_aa2f6e126801e8b86b6edcd
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ac79143b27ae1eb25f4bcd065e494c2a5}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a781684eca75d46c9282f4e35d57853e6}{to\+\_\+steady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ab71a70243ae365107129bdd731938639}{to\+\_\+unsteady}} ()
 \begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -67,14 +69,14 @@ node[anchor=south]{$P_{ref}$}
 (3,0) to [C, l=$C$, *-] (3,-1.5)
 node[ground]{$P_{C}$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_windkessel_b_c_autotoc_md26}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_windkessel_b_c_autotoc_md26}
+\]\hypertarget{class_m_o_d_e_l_1_1_windkessel_b_c_autotoc_md24}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_windkessel_b_c_autotoc_md24}
 \[
 R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
 \]
 
 \[
 P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
-\]\hypertarget{class_m_o_d_e_l_1_1_windkessel_b_c_autotoc_md27}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_windkessel_b_c_autotoc_md27}
+\]\hypertarget{class_m_o_d_e_l_1_1_windkessel_b_c_autotoc_md25}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_windkessel_b_c_autotoc_md25}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} &
 P_{c}^{e}\end{array}\right]^{T} \]
@@ -170,6 +172,17 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 \doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL\+::\+Windkessel\+BC}}$<$ T $>$\+::to\+\_\+steady}
+
+
+
+Convert the block to a steady behavior. 
+
+Set the capacitance to 0. \mbox{\Hypertarget{class_m_o_d_e_l_1_1_windkessel_b_c_ab71a70243ae365107129bdd731938639}\label{class_m_o_d_e_l_1_1_windkessel_b_c_ab71a70243ae365107129bdd731938639}} 
+\index{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
+\index{to\_unsteady@{to\_unsteady}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL\+::\+Windkessel\+BC}}$<$ T $>$\+::to\+\_\+unsteady}
 
 
 

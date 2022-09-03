@@ -73,17 +73,15 @@ $(function() {
 <li class="level2"><a href="#autotoc_md4">Input/output</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md5">Build svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md6">Install dependencies on macOS</a></li>
-<li class="level2"><a href="#autotoc_md7">Install dependencies on Linux</a></li>
-<li class="level2"><a href="#autotoc_md8">Build in debug mode</a></li>
-<li class="level2"><a href="#autotoc_md9">Build in release mode</a></li>
-<li class="level2"><a href="#autotoc_md10">Build on Sherlock</a></li>
+<li class="level1"><a href="#autotoc_md5">Build svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md6">Build in debug mode</a></li>
+<li class="level2"><a href="#autotoc_md7">Build in release mode</a></li>
+<li class="level2"><a href="#autotoc_md8">Build on Sherlock</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md11">Run svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md12">Simulation parameters</a></li>
+<li class="level1"><a href="#autotoc_md9">Run svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md10">Simulation parameters</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md13">Developer Guide</a></li>
+<li class="level1"><a href="#autotoc_md11">Developer Guide</a></li>
 </ul>
 </div>
 <div class="textblock"><p >The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of vascular networks using zero-dimensional (0D) lumped parameter models.</p>
@@ -133,57 +131,39 @@ Input/output</h2>
 <p >All classes make use of templates to allow easy exchange of scalar types like <code>double</code> or <code>float</code> or to switch between sparse and dense systems.</p>
 <h1><a class="anchor" id="autotoc_md5"></a>
 Build svZeroDSolver</h1>
-<p >svZeroDSolver can be build easily via CMake. Make sure you have the following dependencies installed before you start:</p>
+<p >svZeroDSolver uses CMake to build the tool. The dependencies are installed by CMake. If you want to use the C++ Python interface of svZeroDSolver make sure to checkout the correct Python environment beforehand. Currently supported are:</p>
+<ul>
+<li>Ubuntu 18</li>
+<li>Ubuntu 20</li>
+<li>Ubuntu 22</li>
+<li>macOS Big Sur</li>
+<li>macOS Monterey</li>
+</ul>
 <h2><a class="anchor" id="autotoc_md6"></a>
-Install dependencies on macOS</h2>
-<div class="fragment"><div class="line">brew install eigen       # Linear algebra library</div>
-<div class="line">brew install jsoncpp     # Standard json library</div>
-<div class="line">brew install simdjson    # Fast json input parser</div>
-<div class="line">brew install pybind11    # Python bindings</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
-Install dependencies on Linux</h2>
-<div class="fragment"><div class="line">sudo apt install libeigen3-dev       # Linear algebra library</div>
-<div class="line">sudo apt install libjsoncpp-dev      # Standard json library</div>
-<div class="line">sudo apt install libsimdjson-dev     # Fast json input parser</div>
-<div class="line">sudo apt install pybind11-dev        # Python bindings</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
 Build in debug mode</h2>
 <div class="fragment"><div class="line">mkdir Debug</div>
 <div class="line">cd Debug</div>
 <div class="line">cmake -DCMAKE_BUILD_TYPE=Debug ..</div>
 <div class="line">cmake --build .</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
 Build in release mode</h2>
 <div class="fragment"><div class="line">mkdir Release</div>
 <div class="line">cd Release</div>
 <div class="line">cmake -DCMAKE_BUILD_TYPE=Release ..</div>
 <div class="line">cmake --build .</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md10"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
 Build on Sherlock</h2>
-<div class="fragment"><div class="line">ml load cmake/3.23.1</div>
-<div class="line">ml load gcc/12.1.0</div>
-<div class="line">ml load python/3.9.0</div>
-<div class="line">ml load binutils/2.38</div>
-<div class="line">mkdir externals</div>
-<div class="line">cd externals</div>
-<div class="line">git clone https:<span class="comment">//gitlab.com/libeigen/eigen.git</span></div>
-<div class="line">git clone https:<span class="comment">//github.com/simdjson/simdjson.git</span></div>
-<div class="line">git clone https:<span class="comment">//github.com/open-source-parsers/jsoncpp.git</span></div>
-<div class="line">git clone https:<span class="comment">//github.com/pybind/pybind11.git</span></div>
-<div class="line">cd ..</div>
+<div class="fragment"><div class="line">module load cmake/3.23.1 gcc/12.1.0 binutils/2.38</div>
 <div class="line">mkdir Release</div>
 <div class="line">cd Release</div>
-<div class="line">cmake -DCMAKE_BUILD_TYPE=Release -DCLUSTER=ON -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc -DPYTHON_EXECUTABLE=/share/software/user/open/python/3.9.0/bin/python3 ..</div>
-<div class="line">cmake --build </div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
+<div class="line">cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..</div>
+<div class="line">cmake --build .</div>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md9"></a>
 Run svZeroDSolver</h1>
 <p >After building svZeroDSolver, the build folder contains an executable called <code>svzerodsolver</code>. Run it with one of:</p>
-<div class="fragment"><div class="line">./svzerodsolver path/to/config.json path/to/output.json  # For json output</div>
-<div class="line">file format</div>
-<div class="line">./svzerodsolver path/to/config.json path/to/output.csv   # For csv output</div>
-<div class="line">file format (faster) </div>
-</div><!-- fragment --><p ><code>path/to/config.json</code> and <code>path/to/output</code> should be replaced by the correct paths to the input and output file, respectively.</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<div class="fragment"><div class="line">./svzerodsolver path/to/config.json path/to/output.csv</div>
+</div><!-- fragment --><p ><code>path/to/config.json</code> and <code>path/to/output.csv</code> should be replaced by the correct paths to the input and output file, respectively.</p>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Simulation parameters</h2>
 <p >The svZeroDSolver can be configured with the following options in the <code>simulation_parameters</code> section of the input file. Parameters without a default value must be specified.</p>
 <table class="markdownTable">
@@ -198,20 +178,26 @@ Simulation parameters</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">maximum_nonlinear_iterations   </td><td class="markdownTableBodyNone">Maximum number of nonlinear iterations for time integration   </td><td class="markdownTableBodyNone"><img class="formulaInl" alt="$30$" src="form_7.png" width="14" height="9"/>    </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">steady_initial   </td><td class="markdownTableBodyNone">Toggle whether to use the steady solution as the initial condition for the simulation   </td><td class="markdownTableBodyNone">true    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">output_variable_based   </td><td class="markdownTableBodyNone">Output solution based on variables (i.e. flow+pressure at nodes and internal variables)   </td><td class="markdownTableBodyNone">false    </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">output_interval   </td><td class="markdownTableBodyNone">The frequency of writing timesteps to the output (1 means every time step is written to output)   </td><td class="markdownTableBodyNone"><img class="formulaInl" alt="$1$" src="form_8.png" width="5" height="9"/>    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">steady_initial   </td><td class="markdownTableBodyNone">Toggle whether to use the steady solution as the initial condition for the simulation   </td><td class="markdownTableBodyNone">true    </td></tr>
+<td class="markdownTableBodyNone">output_mean_only   </td><td class="markdownTableBodyNone">Write only the mean values over every timestep to output file   </td><td class="markdownTableBodyNone">false    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">output_mean_only   </td><td class="markdownTableBodyNone">Write only the mean values over every timestep in the output file (only in csv)   </td><td class="markdownTableBodyNone">false   </td></tr>
+<td class="markdownTableBodyNone">output_derivative   </td><td class="markdownTableBodyNone">Write time derivatives to output file   </td><td class="markdownTableBodyNone">false    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">output_last_cycle_only   </td><td class="markdownTableBodyNone">Write only the last cardiac cycle   </td><td class="markdownTableBodyNone">false   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md11"></a>
 Developer Guide</h1>
 <p >If you are a developer and want to contribute to svZeroDSolver, you can find more helpful information in our <a class="el" href="md_developer_guide.html">Developer Guide</a>. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 27 2022 20:35:54 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sat Sep 3 2022 19:57:12 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

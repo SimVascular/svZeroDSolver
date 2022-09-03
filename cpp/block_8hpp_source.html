@@ -70,289 +70,328 @@ $(function() {
   <div class="headertitle"><div class="title">block.hpp</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="block_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment"> * @file block.hpp</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment"> * @brief MODEL::Block source file</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#ifndef SVZERODSOLVER_MODEL_BLOCK_HPP_</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#define SVZERODSOLVER_MODEL_BLOCK_HPP_</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;map&gt;</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &quot;../algebra/densesystem.hpp&quot;</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &quot;../algebra/sparsesystem.hpp&quot;</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="dofhandler_8hpp.html">dofhandler.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="node_8hpp.html">node.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_m_o_d_e_l.html">MODEL</a> {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"></span> </div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * @brief Base class for 0D model components.</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * A MODEL::Block is the base class of 0D model elements. It is the place</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * where the contibution of an element to the global system is controlled.</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * It defines all relevant attributes and methods of an element and a few</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * common helpers for setting it up.</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * @tparam T Scalar type (e.g. `float`, `double`)</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html">   29</a></span><span class="keyword">class </span><a class="code hl_class" href="class_m_o_d_e_l_1_1_block.html">Block</a> {</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> <span class="keyword">public</span>:<span class="comment"></span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">   * @brief Parameters of the element.</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">   * Struct containing all constant and/or time-dependent parameters of the</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">   * element.</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno"><a class="line" href="struct_m_o_d_e_l_1_1_block_1_1_parameters.html">   37</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="struct_m_o_d_e_l_1_1_block_1_1_parameters.html">Parameters</a> {};</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment"></span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">   * @brief Construct a new Block object</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">Block</a>();</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"></span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">   * @brief Construct a new Block object</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment">   * @param name Name of the block</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">Block</a>(std::string <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">name</a>);</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"></span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment">   * @brief Destroy the Block object</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#ad3f4ea72447eb698a2de71b29da45c01">~Block</a>();</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">   58</a></span>  std::string <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">name</a>;                  <span class="comment">///&lt; Name of the block</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a39d671d4cdced4eda628465b8e660c64">   59</a></span>  std::vector&lt;Node *&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#a39d671d4cdced4eda628465b8e660c64">inlet_nodes</a>;   <span class="comment">///&lt; Inlet nodes</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">   60</a></span>  std::vector&lt;Node *&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">outlet_nodes</a>;  <span class="comment">///&lt; Outlet nodes</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"></span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment">   * @brief Global variable indices of the local element contributions</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment">   * Determines where the local element contributions are written to in</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">   * the global system during assembly. The order of indices is:</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">   * \f[</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">   * [P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1,</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">   * \dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \f]</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">   * with \f$P_{in} \f$, \f$Q_{in} \f$, \f$P_{out} \f$, \f$Q_{out} \f$, and \f$V</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">   * \f$ denoting inlet pressure, inlet flow, outlet pressure, outlet flow and</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">   * an internal variable of the element, respectively.</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">   * Variable indices correspond to columns in the global system.</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment">   *</span></div>
+<a href="block_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) Stanford University, The Regents of the University of</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">//               California, and others.</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">// All Rights Reserved.</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">// See Copyright-SimVascular.txt for additional details.</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">//</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">// Permission is hereby granted, free of charge, to any person obtaining</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">// a copy of this software and associated documentation files (the</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">// &quot;Software&quot;), to deal in the Software without restriction, including</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">// without limitation the rights to use, copy, modify, merge, publish,</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// distribute, sublicense, and/or sell copies of the Software, and to</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// permit persons to whom the Software is furnished to do so, subject</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">// to the following conditions:</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">//</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">// The above copyright notice and this permission notice shall be included</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">// in all copies or substantial portions of the Software.</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">//</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">// IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span><span class="comment"></span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * @file block.hpp</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief MODEL::Block source file</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#ifndef SVZERODSOLVER_MODEL_BLOCK_HPP_</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#define SVZERODSOLVER_MODEL_BLOCK_HPP_</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#include &quot;../algebra/densesystem.hpp&quot;</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#include &quot;../algebra/sparsesystem.hpp&quot;</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#include &quot;<a class="code" href="dofhandler_8hpp.html">dofhandler.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#include &quot;<a class="code" href="node_8hpp.html">node.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_m_o_d_e_l.html">MODEL</a> {</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"></span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * @brief Base class for 0D model components.</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * A MODEL::Block is the base class of 0D model elements. It is the place</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> * where the contribution of an element to the global system is controlled.</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> * It defines all relevant attributes and methods of an element and a few</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * common helpers for setting it up.</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * @tparam T Scalar type (e.g. `float`, `double`)</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html">   58</a></span><span class="keyword">class </span><a class="code hl_class" href="class_m_o_d_e_l_1_1_block.html">Block</a> {</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> <span class="keyword">public</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment">   * @brief Parameters of the element.</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment">   * Struct containing all constant and/or time-dependent parameters of the</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">   * element.</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="struct_m_o_d_e_l_1_1_block_1_1_parameters.html">   66</a></span>  <span class="keyword">struct </span><a class="code hl_struct" href="struct_m_o_d_e_l_1_1_block_1_1_parameters.html">Parameters</a> {};</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"></span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">   * @brief Construct a new Block object</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">Block</a>();</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"></span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">   * @brief Construct a new Block object</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment">   * @param name Name of the block</span></div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">   79</a></span>  std::vector&lt;unsigned int&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">global_var_ids</a>;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">Block</a>(std::string <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">name</a>);</div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"></span> </div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">   * @brief Global equation indices of the local element contributions</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">   * @brief Destroy the Block object</span></div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">   * Equation indices correspond to rows in the global system.</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ad338703d131cb419b5d85af5b6527108">   86</a></span>  std::vector&lt;unsigned int&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#ad338703d131cb419b5d85af5b6527108">global_eqn_ids</a>;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"></span> </div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">   * @brief Set up the degrees of freedom (DOF) of the block</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">   * number of equations and the number of internal variables of the</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   * element.</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">   * equations at</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">   * @param num_equations Number of equations of the block</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">   * @param num_internal_vars Number of internal variables of the block</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#ad4a96c69c0b20deade719f4be46e2a9f">setup_dofs_</a>(<a class="code hl_class" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_equations,</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>                   <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_internal_vars);</div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"></span> </div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">   * @brief Set up the degrees of freedom (DOF) of the block</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">   * number of equations and the number of internal variables of the</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">   * element.</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">   * equations at</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">setup_dofs</a>(<a class="code hl_class" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler);</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"></span> </div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">   * @brief Update the constant contributions of the element in a dense system</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">update_constant</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system);</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment"></span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">   * @brief Update the time-dependent contributions of the element in a dense</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">   * system</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">   * @param time Current time</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#ad3f4ea72447eb698a2de71b29da45c01">~Block</a>();</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">   87</a></span>  std::string <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">name</a>;                  <span class="comment">///&lt; Name of the block</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a39d671d4cdced4eda628465b8e660c64">   88</a></span>  std::vector&lt;Node *&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#a39d671d4cdced4eda628465b8e660c64">inlet_nodes</a>;   <span class="comment">///&lt; Inlet nodes</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">   89</a></span>  std::vector&lt;Node *&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">outlet_nodes</a>;  <span class="comment">///&lt; Outlet nodes</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"></span> </div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">   * @brief Global variable indices of the local element contributions</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">   * Determines where the local element contributions are written to in</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment">   * the global system during assembly. The order of indices is:</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">   * \f[</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">   * [P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1,</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">   * \dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \f]</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment">   * with \f$P_{in} \f$, \f$Q_{in} \f$, \f$P_{out} \f$, \f$Q_{out} \f$, and \f$V</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">   * \f$ denoting inlet pressure, inlet flow, outlet pressure, outlet flow and</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">   * an internal variable of the element, respectively.</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">   * Variable indices correspond to columns in the global system.</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">  108</a></span>  std::vector&lt;unsigned int&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">global_var_ids</a>;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"></span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">   * @brief Global equation indices of the local element contributions</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">   * Equation indices correspond to rows in the global system.</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ad338703d131cb419b5d85af5b6527108">  115</a></span>  std::vector&lt;unsigned int&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#ad338703d131cb419b5d85af5b6527108">global_eqn_ids</a>;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"></span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">   * @brief Set up the degrees of freedom (DOF) of the block</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">   * number of equations and the number of internal variables of the</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">   * element.</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">   * equations at</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">   * @param num_equations Number of equations of the block</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">   * @param num_internal_vars Number of internal variables of the block</span></div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">update_time</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system, T time);</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment"></span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment">   * @brief Update the solution-dependent contributions of the element in a</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment">   * dense system</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a9995a19d845d6ce92344713b979bdcd9">setup_dofs_</a>(<a class="code hl_class" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_equations,</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>                   std::list&lt;std::string&gt; internal_var_names);</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"></span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment">   * @brief Set up the degrees of freedom (DOF) of the block</span></div>
 <div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment">   * @param y Current solution</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">update_solution</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system,</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>                       Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y);</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment"></span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">   * @brief Update the constant contributions of the element in a sparse system</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">update_constant</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system);</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment"></span> </div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment">   * @brief Update the time-dependent contributions of the element in a sparse</span></div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="comment">   * system</span></div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="comment">   * @param time Current time</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">update_time</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system, T time);</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="comment"></span> </div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="comment">   * @brief Update the solution-dependent contributions of the element in a</span></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="comment">   * sparse system</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment">   * @param y Current solution</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">update_solution</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system,</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>                       Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y);</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment"></span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment">   * @brief Convert the block to a steady behavior</span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a">to_steady</a>();</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment"></span> </div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">   * @brief Number of triplets of element</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#adb23ef1a0b7069096bf7c0189839bf6b">  179</a></span>  std::map&lt;std::string, int&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#adb23ef1a0b7069096bf7c0189839bf6b">num_triplets</a> = {</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>      {<span class="stringliteral">&quot;F&quot;</span>, 0},</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>      {<span class="stringliteral">&quot;E&quot;</span>, 0},</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>  };</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>  Parameters params;  <span class="comment">///&lt; Parameters of the element</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>};</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">  190</a></span><a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">Block&lt;T&gt;::Block</a>() {}</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a061d34013620c7d6b67abd589a849422">  193</a></span><a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">Block&lt;T&gt;::Block</a>(std::string name) {</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>  this-&gt;name = name;</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>}</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ad3f4ea72447eb698a2de71b29da45c01">  198</a></span><a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#ad3f4ea72447eb698a2de71b29da45c01">Block&lt;T&gt;::~Block</a>() {}</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ad4a96c69c0b20deade719f4be46e2a9f">  201</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#ad4a96c69c0b20deade719f4be46e2a9f">Block&lt;T&gt;::setup_dofs_</a>(<a class="code hl_class" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_equations,</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>                           <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_internal_vars) {</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>  <span class="comment">// Collect external DOFs from inlet nodes</span></div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> inlet_node : inlet_nodes) {</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    global_var_ids.push_back(inlet_node-&gt;pres_dof);</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    global_var_ids.push_back(inlet_node-&gt;flow_dof);</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>  }</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>  <span class="comment">// Collect external DOFs from outlet nodes</span></div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> outlet_node : outlet_nodes) {</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    global_var_ids.push_back(outlet_node-&gt;pres_dof);</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>    global_var_ids.push_back(outlet_node-&gt;flow_dof);</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>  }</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>  <span class="comment">// Register internal variables of block</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>  <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; num_internal_vars; i++) {</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>    global_var_ids.push_back(</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        dofhandler.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a5a0ed333dcaba12d1ef7ff9875170840">register_variable</a>(<span class="stringliteral">&quot;var_&quot;</span> + std::to_string(i) + <span class="stringliteral">&quot;_&quot;</span> + name));</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>  }</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>  <span class="comment">// Register equations of block</span></div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>  <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; num_equations; i++) {</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    global_eqn_ids.push_back(dofhandler.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acc2279e604839dd8fe28891fd4ec95d7">register_equation</a>());</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>  }</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>}</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment">   * number of equations and the number of internal variables of the</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">   * element.</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment">   * equations at</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">setup_dofs</a>(<a class="code hl_class" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler);</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment"></span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">   * @brief Update the constant contributions of the element in a dense system</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">update_constant</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system);</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="comment"></span> </div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment">   * @brief Update the time-dependent contributions of the element in a dense</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="comment">   * system</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="comment">   * @param time Current time</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">update_time</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system, T time);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="comment"></span> </div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment">   * @brief Update the solution-dependent contributions of the element in a</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment">   * dense system</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment">   * @param y Current solution</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">update_solution</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system,</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>                       Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment"></span> </div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="comment">   * @brief Update the constant contributions of the element in a sparse system</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">update_constant</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system);</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment"></span> </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">   * @brief Update the time-dependent contributions of the element in a sparse</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment">   * system</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">   * @param time Current time</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">update_time</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system, T time);</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment"></span> </div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment">   * @brief Update the solution-dependent contributions of the element in a</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment">   * sparse system</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment">   * @param y Current solution</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">update_solution</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system,</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                       Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span><span class="comment"></span> </div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">   * @brief Convert the block to a steady behavior</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a">to_steady</a>();</div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment"></span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="comment">   * @brief Convert the block to an unsteady behavior</span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a4aeb18c50f3e2a2748d76d5488f928f3">to_unsteady</a>();</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="comment"></span> </div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="comment">   * @brief Number of triplets of element</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#adb23ef1a0b7069096bf7c0189839bf6b">  214</a></span>  std::map&lt;std::string, int&gt; <a class="code hl_variable" href="class_m_o_d_e_l_1_1_block.html#adb23ef1a0b7069096bf7c0189839bf6b">num_triplets</a> = {</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>      {<span class="stringliteral">&quot;F&quot;</span>, 0},</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>      {<span class="stringliteral">&quot;E&quot;</span>, 0},</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>  };</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>  Parameters params;  <span class="comment">///&lt; Parameters of the element</span></div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>};</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">  225</a></span><a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">Block&lt;T&gt;::Block</a>() {}</div>
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
 <div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">  228</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">Block&lt;T&gt;::setup_dofs</a>(<a class="code hl_class" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler) {}</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">  231</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">Block&lt;T&gt;::update_constant</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system) {}</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span> </div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">  234</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">Block&lt;T&gt;::update_time</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system, T time) {}</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">  237</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">Block&lt;T&gt;::update_solution</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system,</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>                               Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y) {}</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#aa1351a3b60e8060d6183045d382dbf6e">  241</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">Block&lt;T&gt;::update_constant</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system) {}</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ac5d06fd3b4c7b517fc08b331f76c0d66">  244</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">Block&lt;T&gt;::update_time</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system, T time) {}</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ad2ed01c3bbd8f8b064c1c62be5fbee1a">  247</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">Block&lt;T&gt;::update_solution</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system,</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>                               Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y) {}</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a061d34013620c7d6b67abd589a849422">  228</a></span><a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">Block&lt;T&gt;::Block</a>(std::string name) {</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>  this-&gt;name = name;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>}</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span> </div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ad3f4ea72447eb698a2de71b29da45c01">  233</a></span><a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#ad3f4ea72447eb698a2de71b29da45c01">Block&lt;T&gt;::~Block</a>() {}</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a9995a19d845d6ce92344713b979bdcd9">  236</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a9995a19d845d6ce92344713b979bdcd9">Block&lt;T&gt;::setup_dofs_</a>(<a class="code hl_class" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> num_equations,</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>                           std::list&lt;std::string&gt; internal_var_names) {</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>  <span class="comment">// Collect external DOFs from inlet nodes</span></div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> inlet_node : inlet_nodes) {</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    global_var_ids.push_back(inlet_node-&gt;pres_dof);</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    global_var_ids.push_back(inlet_node-&gt;flow_dof);</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  }</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>  <span class="comment">// Collect external DOFs from outlet nodes</span></div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> outlet_node : outlet_nodes) {</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    global_var_ids.push_back(outlet_node-&gt;pres_dof);</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    global_var_ids.push_back(outlet_node-&gt;flow_dof);</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>  }</div>
 <div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a">  251</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a">Block&lt;T&gt;::to_steady</a>() {}</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>}  <span class="comment">// namespace MODEL</span></div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_BLOCK_HPP_</span></div>
-<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_dense_system_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem</a></div><div class="ttdoc">Dense system.</div><div class="ttdef"><b>Definition:</b> densesystem.hpp:27</div></div>
-<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:28</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html">MODEL::Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition:</b> block.hpp:29</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a0dc20753b52a12c3e8f094f26755cc60"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">MODEL::Block::global_var_ids</a></div><div class="ttdeci">std::vector&lt; unsigned int &gt; global_var_ids</div><div class="ttdoc">Global variable indices of the local element contributions.</div><div class="ttdef"><b>Definition:</b> block.hpp:79</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a2353b1aae8afa7f065ab1e2aa033bf29"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">MODEL::Block::Block</a></div><div class="ttdeci">Block()</div><div class="ttdoc">Construct a new Block object.</div><div class="ttdef"><b>Definition:</b> block.hpp:190</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a39d671d4cdced4eda628465b8e660c64"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a39d671d4cdced4eda628465b8e660c64">MODEL::Block::inlet_nodes</a></div><div class="ttdeci">std::vector&lt; Node * &gt; inlet_nodes</div><div class="ttdoc">Inlet nodes.</div><div class="ttdef"><b>Definition:</b> block.hpp:59</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a3bdc5dc31e9448fac8827fa4493e12d9"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">MODEL::Block::update_constant</a></div><div class="ttdeci">void update_constant(ALGEBRA::DenseSystem&lt; T &gt; &amp;system)</div><div class="ttdoc">Update the constant contributions of the element in a dense system.</div><div class="ttdef"><b>Definition:</b> block.hpp:231</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a41597a548728e98c07e388037ee0f4d9"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">MODEL::Block::outlet_nodes</a></div><div class="ttdeci">std::vector&lt; Node * &gt; outlet_nodes</div><div class="ttdoc">Outlet nodes.</div><div class="ttdef"><b>Definition:</b> block.hpp:60</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a70ccd1dd5919a360d520a6e8320dfecf"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">MODEL::Block::setup_dofs</a></div><div class="ttdeci">void setup_dofs(DOFHandler &amp;dofhandler)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition:</b> block.hpp:228</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a85fb185f31375f63ec3c0d8112ebd06a"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a">MODEL::Block::to_steady</a></div><div class="ttdeci">void to_steady()</div><div class="ttdoc">Convert the block to a steady behavior.</div><div class="ttdef"><b>Definition:</b> block.hpp:251</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a93cbb352a757ef3b04c5d5acc02d381e"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">MODEL::Block::update_time</a></div><div class="ttdeci">void update_time(ALGEBRA::DenseSystem&lt; T &gt; &amp;system, T time)</div><div class="ttdoc">Update the time-dependent contributions of the element in a dense system.</div><div class="ttdef"><b>Definition:</b> block.hpp:234</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_acdcef422b1feed3413fea94584151281"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">MODEL::Block::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">Name of the block.</div><div class="ttdef"><b>Definition:</b> block.hpp:58</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_ad338703d131cb419b5d85af5b6527108"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#ad338703d131cb419b5d85af5b6527108">MODEL::Block::global_eqn_ids</a></div><div class="ttdeci">std::vector&lt; unsigned int &gt; global_eqn_ids</div><div class="ttdoc">Global equation indices of the local element contributions.</div><div class="ttdef"><b>Definition:</b> block.hpp:86</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_ad3f4ea72447eb698a2de71b29da45c01"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#ad3f4ea72447eb698a2de71b29da45c01">MODEL::Block::~Block</a></div><div class="ttdeci">~Block()</div><div class="ttdoc">Destroy the Block object.</div><div class="ttdef"><b>Definition:</b> block.hpp:198</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_ad4a96c69c0b20deade719f4be46e2a9f"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#ad4a96c69c0b20deade719f4be46e2a9f">MODEL::Block::setup_dofs_</a></div><div class="ttdeci">void setup_dofs_(DOFHandler &amp;dofhandler, unsigned int num_equations, unsigned int num_internal_vars)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition:</b> block.hpp:201</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_adb23ef1a0b7069096bf7c0189839bf6b"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#adb23ef1a0b7069096bf7c0189839bf6b">MODEL::Block::num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition:</b> block.hpp:179</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_afc67ed63ad7bc021af1e89c4e18ba525"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">MODEL::Block::update_solution</a></div><div class="ttdeci">void update_solution(ALGEBRA::DenseSystem&lt; T &gt; &amp;system, Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y)</div><div class="ttdoc">Update the solution-dependent contributions of the element in a dense system.</div><div class="ttdef"><b>Definition:</b> block.hpp:237</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html">MODEL::DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:20</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html_a5a0ed333dcaba12d1ef7ff9875170840"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a5a0ed333dcaba12d1ef7ff9875170840">MODEL::DOFHandler::register_variable</a></div><div class="ttdeci">unsigned int register_variable(std::string name)</div><div class="ttdoc">Register a new variable at the DOFHandler.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:73</div></div>
-<div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html_acc2279e604839dd8fe28891fd4ec95d7"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acc2279e604839dd8fe28891fd4ec95d7">MODEL::DOFHandler::register_equation</a></div><div class="ttdeci">unsigned int register_equation()</div><div class="ttdoc">Register a new equation at the DOFHandler.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:78</div></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>  <span class="comment">// Register internal variables of block</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>  <span class="keywordflow">for</span> (<span class="keyword">auto</span> int_name : internal_var_names) {</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    global_var_ids.push_back(</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>        dofhandler.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a5a0ed333dcaba12d1ef7ff9875170840">register_variable</a>(int_name + <span class="stringliteral">&quot;:&quot;</span> + name));</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>  }</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span> </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>  <span class="comment">// Register equations of block</span></div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>  <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> i = 0; i &lt; num_equations; i++) {</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    global_eqn_ids.push_back(dofhandler.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acc2279e604839dd8fe28891fd4ec95d7">register_equation</a>());</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>  }</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>}</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">  263</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">Block&lt;T&gt;::setup_dofs</a>(<a class="code hl_class" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler) {}</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">  266</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">Block&lt;T&gt;::update_constant</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system) {}</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">  269</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">Block&lt;T&gt;::update_time</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system, T time) {}</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">  272</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">Block&lt;T&gt;::update_solution</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem&lt;T&gt;</a> &amp;system,</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>                               Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y) {}</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#aa1351a3b60e8060d6183045d382dbf6e">  276</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">Block&lt;T&gt;::update_constant</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system) {}</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span> </div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ac5d06fd3b4c7b517fc08b331f76c0d66">  279</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">Block&lt;T&gt;::update_time</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system, T time) {}</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#ad2ed01c3bbd8f8b064c1c62be5fbee1a">  282</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">Block&lt;T&gt;::update_solution</a>(<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem&lt;T&gt;</a> &amp;system,</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>                               Eigen::Matrix&lt;T, Eigen::Dynamic, 1&gt; &amp;y) {}</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a">  286</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a">Block&lt;T&gt;::to_steady</a>() {}</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_block.html#a4aeb18c50f3e2a2748d76d5488f928f3">  289</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="class_m_o_d_e_l_1_1_block.html#a4aeb18c50f3e2a2748d76d5488f928f3">Block&lt;T&gt;::to_unsteady</a>() {}</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>}  <span class="comment">// namespace MODEL</span></div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span> </div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_BLOCK_HPP_</span></div>
+<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_dense_system_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_dense_system.html">ALGEBRA::DenseSystem</a></div><div class="ttdoc">Dense system.</div><div class="ttdef"><b>Definition:</b> densesystem.hpp:56</div></div>
+<div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_sparse_system_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> sparsesystem.hpp:57</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html">MODEL::Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition:</b> block.hpp:58</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a0dc20753b52a12c3e8f094f26755cc60"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a0dc20753b52a12c3e8f094f26755cc60">MODEL::Block::global_var_ids</a></div><div class="ttdeci">std::vector&lt; unsigned int &gt; global_var_ids</div><div class="ttdoc">Global variable indices of the local element contributions.</div><div class="ttdef"><b>Definition:</b> block.hpp:108</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a2353b1aae8afa7f065ab1e2aa033bf29"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29">MODEL::Block::Block</a></div><div class="ttdeci">Block()</div><div class="ttdoc">Construct a new Block object.</div><div class="ttdef"><b>Definition:</b> block.hpp:225</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a39d671d4cdced4eda628465b8e660c64"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a39d671d4cdced4eda628465b8e660c64">MODEL::Block::inlet_nodes</a></div><div class="ttdeci">std::vector&lt; Node * &gt; inlet_nodes</div><div class="ttdoc">Inlet nodes.</div><div class="ttdef"><b>Definition:</b> block.hpp:88</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a3bdc5dc31e9448fac8827fa4493e12d9"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a3bdc5dc31e9448fac8827fa4493e12d9">MODEL::Block::update_constant</a></div><div class="ttdeci">void update_constant(ALGEBRA::DenseSystem&lt; T &gt; &amp;system)</div><div class="ttdoc">Update the constant contributions of the element in a dense system.</div><div class="ttdef"><b>Definition:</b> block.hpp:266</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a41597a548728e98c07e388037ee0f4d9"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a41597a548728e98c07e388037ee0f4d9">MODEL::Block::outlet_nodes</a></div><div class="ttdeci">std::vector&lt; Node * &gt; outlet_nodes</div><div class="ttdoc">Outlet nodes.</div><div class="ttdef"><b>Definition:</b> block.hpp:89</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a4aeb18c50f3e2a2748d76d5488f928f3"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a4aeb18c50f3e2a2748d76d5488f928f3">MODEL::Block::to_unsteady</a></div><div class="ttdeci">void to_unsteady()</div><div class="ttdoc">Convert the block to an unsteady behavior.</div><div class="ttdef"><b>Definition:</b> block.hpp:289</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a70ccd1dd5919a360d520a6e8320dfecf"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">MODEL::Block::setup_dofs</a></div><div class="ttdeci">void setup_dofs(DOFHandler &amp;dofhandler)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition:</b> block.hpp:263</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a85fb185f31375f63ec3c0d8112ebd06a"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a85fb185f31375f63ec3c0d8112ebd06a">MODEL::Block::to_steady</a></div><div class="ttdeci">void to_steady()</div><div class="ttdoc">Convert the block to a steady behavior.</div><div class="ttdef"><b>Definition:</b> block.hpp:286</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a93cbb352a757ef3b04c5d5acc02d381e"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a93cbb352a757ef3b04c5d5acc02d381e">MODEL::Block::update_time</a></div><div class="ttdeci">void update_time(ALGEBRA::DenseSystem&lt; T &gt; &amp;system, T time)</div><div class="ttdoc">Update the time-dependent contributions of the element in a dense system.</div><div class="ttdef"><b>Definition:</b> block.hpp:269</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_a9995a19d845d6ce92344713b979bdcd9"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#a9995a19d845d6ce92344713b979bdcd9">MODEL::Block::setup_dofs_</a></div><div class="ttdeci">void setup_dofs_(DOFHandler &amp;dofhandler, unsigned int num_equations, std::list&lt; std::string &gt; internal_var_names)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition:</b> block.hpp:236</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_acdcef422b1feed3413fea94584151281"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#acdcef422b1feed3413fea94584151281">MODEL::Block::name</a></div><div class="ttdeci">std::string name</div><div class="ttdoc">Name of the block.</div><div class="ttdef"><b>Definition:</b> block.hpp:87</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_ad338703d131cb419b5d85af5b6527108"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#ad338703d131cb419b5d85af5b6527108">MODEL::Block::global_eqn_ids</a></div><div class="ttdeci">std::vector&lt; unsigned int &gt; global_eqn_ids</div><div class="ttdoc">Global equation indices of the local element contributions.</div><div class="ttdef"><b>Definition:</b> block.hpp:115</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_ad3f4ea72447eb698a2de71b29da45c01"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#ad3f4ea72447eb698a2de71b29da45c01">MODEL::Block::~Block</a></div><div class="ttdeci">~Block()</div><div class="ttdoc">Destroy the Block object.</div><div class="ttdef"><b>Definition:</b> block.hpp:233</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_adb23ef1a0b7069096bf7c0189839bf6b"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#adb23ef1a0b7069096bf7c0189839bf6b">MODEL::Block::num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition:</b> block.hpp:214</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_block_html_afc67ed63ad7bc021af1e89c4e18ba525"><div class="ttname"><a href="class_m_o_d_e_l_1_1_block.html#afc67ed63ad7bc021af1e89c4e18ba525">MODEL::Block::update_solution</a></div><div class="ttdeci">void update_solution(ALGEBRA::DenseSystem&lt; T &gt; &amp;system, Eigen::Matrix&lt; T, Eigen::Dynamic, 1 &gt; &amp;y)</div><div class="ttdoc">Update the solution-dependent contributions of the element in a dense system.</div><div class="ttdef"><b>Definition:</b> block.hpp:272</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html">MODEL::DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:49</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html_a5a0ed333dcaba12d1ef7ff9875170840"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a5a0ed333dcaba12d1ef7ff9875170840">MODEL::DOFHandler::register_variable</a></div><div class="ttdeci">unsigned int register_variable(std::string name)</div><div class="ttdoc">Register a new variable at the DOFHandler.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:102</div></div>
+<div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html_acc2279e604839dd8fe28891fd4ec95d7"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acc2279e604839dd8fe28891fd4ec95d7">MODEL::DOFHandler::register_equation</a></div><div class="ttdeci">unsigned int register_equation()</div><div class="ttdoc">Register a new equation at the DOFHandler.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:107</div></div>
 <div class="ttc" id="adofhandler_8hpp_html"><div class="ttname"><a href="dofhandler_8hpp.html">dofhandler.hpp</a></div><div class="ttdoc">MODEL::DOFHandler source file.</div></div>
-<div class="ttc" id="anamespace_m_o_d_e_l_html"><div class="ttname"><a href="namespace_m_o_d_e_l.html">MODEL</a></div><div class="ttdoc">MODEL namespace.</div><div class="ttdef"><b>Definition:</b> densesystem.hpp:11</div></div>
+<div class="ttc" id="anamespace_m_o_d_e_l_html"><div class="ttname"><a href="namespace_m_o_d_e_l.html">MODEL</a></div><div class="ttdoc">MODEL namespace.</div><div class="ttdef"><b>Definition:</b> densesystem.hpp:40</div></div>
 <div class="ttc" id="anode_8hpp_html"><div class="ttname"><a href="node_8hpp.html">node.hpp</a></div><div class="ttdoc">MODEL::Node source file.</div></div>
-<div class="ttc" id="astruct_m_o_d_e_l_1_1_block_1_1_parameters_html"><div class="ttname"><a href="struct_m_o_d_e_l_1_1_block_1_1_parameters.html">MODEL::Block::Parameters</a></div><div class="ttdoc">Parameters of the element.</div><div class="ttdef"><b>Definition:</b> block.hpp:37</div></div>
+<div class="ttc" id="astruct_m_o_d_e_l_1_1_block_1_1_parameters_html"><div class="ttname"><a href="struct_m_o_d_e_l_1_1_block_1_1_parameters.html">MODEL::Block::Parameters</a></div><div class="ttdoc">Parameters of the element.</div><div class="ttdef"><b>Definition:</b> block.hpp:66</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 27 2022 20:35:53 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sat Sep 3 2022 19:57:11 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

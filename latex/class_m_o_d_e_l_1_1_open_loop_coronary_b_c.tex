@@ -42,7 +42,9 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a60a6f3b6e91a32
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a45375f8f005ff5964c9c78230a3a58c0}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a96819b99b2d52312c8912108007a6263}{to\+\_\+steady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_af63db0bdd6b1cd70d3d7e334e8b6d7b9}{to\+\_\+unsteady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the block to an unsteady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -68,7 +70,7 @@ node[left]{$P_{im}$}
 (3,0) to [C, l=$C_a$, -*] (3,-1.5)
 node[left]{$P_a$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md20}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md20}
+\]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md18}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md18}
 \[
 C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
 \frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a}
@@ -78,7 +80,7 @@ t}=0 \]
 \[
 C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v}
 P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i
-m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md21}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md21}
+m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md19}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md19}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & V_{i
 m}^{e}\end{array}\right]^{T}, \]
@@ -168,7 +170,18 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Ope
 
 Convert the block to a steady behavior. 
 
-Converts the prescribed pressure to the constant mean of itself \mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a476ca7807f2339b04f09fffc4e30c013}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a476ca7807f2339b04f09fffc4e30c013}} 
+Converts the prescribed pressure to the constant mean of itself \mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_af63db0bdd6b1cd70d3d7e334e8b6d7b9}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_af63db0bdd6b1cd70d3d7e334e8b6d7b9}} 
+\index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
+\index{to\_unsteady@{to\_unsteady}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::to\+\_\+unsteady}
+
+
+
+Convert the block to an unsteady behavior. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a476ca7807f2339b04f09fffc4e30c013}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a476ca7807f2339b04f09fffc4e30c013}} 
 \index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}

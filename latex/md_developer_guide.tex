@@ -1,5 +1,5 @@
-\hypertarget{md_developer_guide_autotoc_md29}{}\doxysection{Code Style}\label{md_developer_guide_autotoc_md29}
-We follow the \href{https://google.github.io/styleguide/cppguide.html}{\texttt{ Google C++ Style Guide}}.\hypertarget{md_developer_guide_autotoc_md30}{}\doxysection{Formatting}\label{md_developer_guide_autotoc_md30}
+\hypertarget{md_developer_guide_autotoc_md27}{}\doxysection{Code Style}\label{md_developer_guide_autotoc_md27}
+We follow the \href{https://google.github.io/styleguide/cppguide.html}{\texttt{ Google C++ Style Guide}}.\hypertarget{md_developer_guide_autotoc_md28}{}\doxysection{Formatting}\label{md_developer_guide_autotoc_md28}
 We use \href{https://clang.llvm.org/docs/ClangFormat.html}{\texttt{ clang-\/format}} to automatically format our code accoring to the \href{https://google.github.io/styleguide/cppguide.html}{\texttt{ Google Style}}. This increases readability and maintainability of the code while enabling you to focus on coding. Before committing any changes, you can run the following comment to format all your files\+:
 
 
@@ -20,7 +20,7 @@ You can also just check {\bfseries{if}} a file would be formatted without actual
 \end{DoxyCode}
 
 
-The latter check is also performed in the Git\+Hub CI/\+CD (a.\+k.\+a. Actions) and indicates on merge requests when the code doesnt\textquotesingle{}t yet meet all style requirements.\hypertarget{md_developer_guide_autotoc_md31}{}\doxysection{Documentation}\label{md_developer_guide_autotoc_md31}
+The latter check is also performed in the Git\+Hub CI/\+CD (a.\+k.\+a. Actions) and indicates on merge requests when the code doesnt\textquotesingle{}t yet meet all style requirements.\hypertarget{md_developer_guide_autotoc_md29}{}\doxysection{Documentation}\label{md_developer_guide_autotoc_md29}
 We use \href{https://doxygen.nl}{\texttt{ Doxygen}} to automatically build an html documentation from source code. Please have at Doxygen\textquotesingle{}s \href{https://www.doxygen.nl/manual/docblocks.html}{\texttt{ Documentation Guide}} for an introduction into the syntax of writing documentation in C++. For more inspiration, you can look at the existing source files and how they use documentation. In the following you can find a short recap of the most important commands\+:
 
 
@@ -55,8 +55,8 @@ The documentation is automatically build in the Git\+Hub CI/\+CD and published o
 \end{DoxyCode}
 
 
-If you do not have Doxygen install you can do that with {\ttfamily brew install doxygen} on mac\+OS or with {\ttfamily sudo apt-\/get install doxygen} on Linux.\hypertarget{md_developer_guide_autotoc_md32}{}\doxysection{Profiling}\label{md_developer_guide_autotoc_md32}
-Profiling helps to easily identify bottlenecks in the code. A profiling report lists the executation time spend on certain parts of the code. If you experience performance issue with sv\+Zero\+DSolver, you can follow this guide to create a profiling report.\hypertarget{md_developer_guide_autotoc_md33}{}\doxysubsection{mac\+OS}\label{md_developer_guide_autotoc_md33}
+If you do not have Doxygen install you can do that with {\ttfamily brew install doxygen} on mac\+OS or with {\ttfamily sudo apt-\/get install doxygen} on Linux.\hypertarget{md_developer_guide_autotoc_md30}{}\doxysection{Profiling}\label{md_developer_guide_autotoc_md30}
+Profiling helps to easily identify bottlenecks in the code. A profiling report lists the executation time spend on certain parts of the code. If you experience performance issue with sv\+Zero\+DSolver, you can follow this guide to create a profiling report.\hypertarget{md_developer_guide_autotoc_md31}{}\doxysubsection{mac\+OS}\label{md_developer_guide_autotoc_md31}
 Install Google Performance Tools\+:
 
 
@@ -76,7 +76,7 @@ Go to the folder of the build you want to profile (i.\+e. {\ttfamily cd Debug} o
 \end{DoxyCode}
 
 
-This will generate a profiling report called {\ttfamily profiling\+\_\+report.\+pdf} in the respective folder. Make sure to build sv\+Zero\+DSolver before starting profiling.\hypertarget{md_developer_guide_autotoc_md34}{}\doxysubsection{Linux}\label{md_developer_guide_autotoc_md34}
+This will generate a profiling report called {\ttfamily profiling\+\_\+report.\+pdf} in the respective folder. Make sure to build sv\+Zero\+DSolver before starting profiling.\hypertarget{md_developer_guide_autotoc_md32}{}\doxysubsection{Linux}\label{md_developer_guide_autotoc_md32}
 Install Google Performance Tools\+:
 
 

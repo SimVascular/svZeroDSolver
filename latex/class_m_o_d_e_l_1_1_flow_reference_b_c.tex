@@ -42,7 +42,9 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a6810600bcf2e2e505d
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_accaf0289d7808f20efb3fd3bd5ee2dbe}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a9c868f6221abfba243ea4b667dea8309}{to\+\_\+steady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adf944c2f4d404c58e04043fe2a84a31a}{to\+\_\+unsteady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the block to an unsteady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -55,7 +57,7 @@ std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_r
 class MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}
 Flow reference boundary condition. 
 
-Applies a predefined flow at a boundary.
+Applies a prescribed flow to a boundary.
 
 \[
 \begin{circuitikz} \draw
@@ -63,10 +65,10 @@ node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
 \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_autotoc_md16}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_autotoc_md16}
+\]\hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_autotoc_md14}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_autotoc_md14}
 \[
 Q=\hat{Q}
-\]\hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_autotoc_md17}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_autotoc_md17}
+\]\hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_autotoc_md15}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_autotoc_md15}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
 \]
@@ -148,7 +150,18 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL\+::\+Flow\+R
 
 Convert the block to a steady behavior. 
 
-Converts the prescribed flow to the constant mean of itself \mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_a347acee1889c0e3edf49e51f7f096dbe}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_a347acee1889c0e3edf49e51f7f096dbe}} 
+Converts the prescribed flow to the constant mean of itself \mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_adf944c2f4d404c58e04043fe2a84a31a}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_adf944c2f4d404c58e04043fe2a84a31a}} 
+\index{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
+\index{to\_unsteady@{to\_unsteady}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL\+::\+Flow\+Reference\+BC}}$<$ T $>$\+::to\+\_\+unsteady}
+
+
+
+Convert the block to an unsteady behavior. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_a347acee1889c0e3edf49e51f7f096dbe}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_a347acee1889c0e3edf49e51f7f096dbe}} 
 \index{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}

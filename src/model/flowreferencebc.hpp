@@ -167,6 +167,12 @@ class FlowReferenceBC : public Block<T> {
    */
   void to_steady();
 
+  /**
+   * @brief Convert the block to an unsteady behavior
+   * 
+   */
+  void to_unsteady();
+
  private:
   Parameters params;
 };
@@ -210,6 +216,11 @@ void FlowReferenceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
 template <typename T>
 void FlowReferenceBC<T>::to_steady() {
   params.Q.to_steady();
+}
+
+template <typename T>
+void FlowReferenceBC<T>::to_unsteady() {
+  params.Q.to_unsteady();
 }
 
 }  // namespace MODEL

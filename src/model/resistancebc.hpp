@@ -169,6 +169,12 @@ class ResistanceBC : public Block<T> {
    */
   void to_steady();
 
+  /**
+   * @brief Convert the block to a steady behavior
+   *
+   */
+  void to_unsteady();
+
  private:
   Parameters params;
 };
@@ -218,6 +224,12 @@ template <typename T>
 void ResistanceBC<T>::to_steady() {
   params.R.to_steady();
   params.Pd.to_steady();
+}
+
+template <typename T>
+void ResistanceBC<T>::to_unsteady() {
+  params.R.to_unsteady();
+  params.Pd.to_unsteady();
 }
 
 }  // namespace MODEL

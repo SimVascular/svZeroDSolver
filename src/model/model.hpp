@@ -75,7 +75,7 @@ class Model {
    */
   ~Model();
 
-  std::map<std::string,
+  std::map<std::string_view,
            std::variant<Junction<T>, BloodVessel<T>, FlowReferenceBC<T>,
                         PressureReferenceBC<T>, WindkesselBC<T>,
                         ResistanceBC<T>, OpenLoopCoronaryBC<T>>>
@@ -140,6 +140,12 @@ class Model {
    *
    */
   void to_steady();
+
+  /**
+   * @brief Convert the blocks to an unsteady behavior
+   *
+   */
+  void to_unsteady();
 
   /**
    * @brief Get number of triplets all elements
@@ -212,6 +218,13 @@ template <typename T>
 void Model<T>::to_steady() {
   for (auto &&elem : blocks) {
     std::visit([&](auto &&block) { block.to_steady(); }, elem.second);
+  }
+}
+
+template <typename T>
+void Model<T>::to_unsteady() {
+  for (auto &&elem : blocks) {
+    std::visit([&](auto &&block) { block.to_unsteady(); }, elem.second);
   }
 }
 

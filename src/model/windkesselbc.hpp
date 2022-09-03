@@ -190,9 +190,16 @@ class WindkesselBC : public Block<T> {
    * Set the capacitance to 0.
    */
   void to_steady();
+  /**
+   * @brief Convert the block to a steady behavior
+   *
+   * Set the capacitance to 0.
+   */
+  void to_unsteady();
 
  private:
   Parameters params;
+  T c_cache;
 };
 
 template <typename T>
@@ -249,7 +256,13 @@ void WindkesselBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
 
 template <typename T>
 void WindkesselBC<T>::to_steady() {
+  c_cache = params.C;
   params.C = 0.0;
+}
+
+template <typename T>
+void WindkesselBC<T>::to_unsteady() {
+  params.C = c_cache;
 }
 
 }  // namespace MODEL

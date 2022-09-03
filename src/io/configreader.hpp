@@ -59,16 +59,6 @@ class ConfigReader {
   ConfigReader();
 
   /**
-   * @brief Construct a new Config Reader object
-   *
-   * Can be constructed either with the path to a json configuration file
-   * or directly with a json encoded string.
-   *
-   * @param specifier Path configuration file or json encoded configuration
-   */
-  ConfigReader(std::string &specifier);
-
-  /**
    * @brief Destroy the Config Reader object
    */
   ~ConfigReader();
@@ -78,7 +68,7 @@ class ConfigReader {
    *
    * @return Model
    */
-  MODEL::Model<T> get_model();
+  void load(std::string &specifier);
 
   /**
    * @brief Get number of time steps based on configuration
@@ -94,310 +84,288 @@ class ConfigReader {
    */
   T get_time_step_size();
 
-  /**
-   * @brief Get an integer simulation parameter
-   *
-   * @param key The key of the simulation parameter
-   * @return Value of the simulation parameter
-   */
-  int get_int_simulation_parameter(std::string key);
+  MODEL::Model<T> model;
 
-  /**
-   * @brief Get an integer simulation parameter with default value
-   *
-   * @param key The key of the simulation parameter
-   * @param def Default value if key not in simulation parameters
-   * @return Value of the simulation parameter
-   */
-  int get_int_simulation_parameter(std::string key, int def);
-
-  /**
-   * @brief Get a scalar simulation parameter
-   *
-   * @param key The key of the simulation parameter
-   * @return Value of the simulation parameter
-   */
-  T get_scalar_simulation_parameter(std::string key);
-
-  /**
-   * @brief Get a scalar simulation parameter with default value
-   *
-   * @param key The key of the simulation parameter
-   * @param def Default value if key not in simulation parameters
-   * @return Value of the simulation parameter
-   */
-  T get_scalar_simulation_parameter(std::string key, T def);
-
-  /**
-   * @brief Get a bool simulation parameter
-   *
-   * @param key The key of the simulation parameter
-   * @return Value of the simulation parameter
-   */
-  bool get_bool_simulation_parameter(std::string key);
-
-  /**
-   * @brief Get a bool simulation parameter with default value
-   *
-   * @param key The key of the simulation parameter
-   * @param def Default value if key not in simulation parameters
-   * @return Value of the simulation parameter
-   */
-  bool get_bool_simulation_parameter(std::string key, bool def);
-
-  T cardiac_cycle_period = 1.0;  ///< Cardiac cycle period
-  int num_cycles;
-  int num_pts_per_cycle;
-
- private:
-  bool model_created = false;
-  simdjson::dom::parser parser;
-  simdjson::dom::element config;
-  simdjson::dom::element sim_params;
-  static bool has_key(simdjson::dom::element &ele, std::string key);
-  static T get_default(simdjson::dom::element &ele, std::string key, T def);
-  static int get_default(simdjson::dom::element &ele, std::string key, int def);
-  static bool get_default(simdjson::dom::element &ele, std::string key,
-                          bool def);
-  static simdjson::dom::element get_default(simdjson::dom::element &ele,
-                                            std::string key,
-                                            simdjson::dom::element def);
-  MODEL::TimeDependentParameter<T> get_time_dependent_parameter(
-      simdjson::dom::element &json_times, simdjson::dom::element &json_values);
+  T sim_cardiac_cycle_period;  ///< Cardiac cycle period
+  int sim_num_cycles;
+  int sim_pts_per_cycle;
+  T sim_time_step_size;
+  int sim_num_time_steps;
+  T sim_abs_tol;
+  int sim_nliter;
+  bool sim_steady_initial;
+  bool output_variable_based;
+  int output_interval;
+  bool output_mean_only;
+  bool output_derivative;
+  bool output_last_cycle_only;
 };
 
 template <typename T>
-ConfigReader<T>::ConfigReader(std::string &specifier) {
-  if (HELPERS::startswith(specifier, "{")) {
-    config = parser.parse(specifier);
-  } else {
-    config = parser.load(specifier);
-  }
-  sim_params = config["simulation_parameters"];
-  T t_num_cycles = config["simulation_parameters"]["number_of_cardiac_cycles"];
-  num_cycles = int(t_num_cycles);
-  T t_num_pts_per_cycle =
-      config["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"];
-  num_pts_per_cycle = int(t_num_pts_per_cycle);
-}
+ConfigReader<T>::ConfigReader() {}
 
 template <typename T>
 ConfigReader<T>::~ConfigReader() {}
 
 template <typename T>
-bool ConfigReader<T>::has_key(simdjson::dom::element &ele, std::string key) {
-  // Check if config has key by trying
-  bool has_key = true;
-  try {
-    simdjson::dom::element tmp = ele.at_key(key);
-  } catch (simdjson::simdjson_error) {
-    has_key = false;
-  }
-  return has_key;
-}
+void ConfigReader<T>::load(std::string &specifier) {
+  simdjson::ondemand::parser parser;
+  simdjson::ondemand::document config;
 
-template <typename T>
-T ConfigReader<T>::get_default(simdjson::dom::element &ele, std::string key,
-                               T def) {
-  T value = def;
-  if (has_key(ele, key)) {
-    value = ele[key];
-  }
-  return value;
-}
-
-template <typename T>
-int ConfigReader<T>::get_default(simdjson::dom::element &ele, std::string key,
-                                 int def) {
-  int value = def;
-  if (has_key(ele, key)) {
-    value = ele[key].get_int64();
-  }
-  return value;
-}
-
-template <typename T>
-bool ConfigReader<T>::get_default(simdjson::dom::element &ele, std::string key,
-                                  bool def) {
-  bool value = def;
-  if (has_key(ele, key)) {
-    value = ele[key];
-  }
-  return value;
-}
-
-template <typename T>
-simdjson::dom::element ConfigReader<T>::get_default(
-    simdjson::dom::element &ele, std::string key, simdjson::dom::element def) {
-  simdjson::dom::element value = def;
-  if (has_key(ele, key)) {
-    value = ele[key];
-  }
-  return value;
-}
-
-template <typename T>
-MODEL::TimeDependentParameter<T> ConfigReader<T>::get_time_dependent_parameter(
-    simdjson::dom::element &json_times, simdjson::dom::element &json_values) {
-  std::vector<T> times;
-  std::vector<T> values;
-  if (json_values.is_double()) {
-    times.push_back(0.0);
-    values.push_back(json_values);
+  if (HELPERS::startswith(specifier, "{")) {
+    config = parser.iterate(specifier);
   } else {
-    int len = simdjson::dom::array(json_times).size();
-    times.reserve(len);
-    values.reserve(len);
-    for (T time : json_times) {
-      times.push_back(time);
-    }
-    for (T value : json_values) {
-      values.push_back(value);
-    }
+    config = parser.iterate(simdjson::padded_string::load(specifier));
   }
-  MODEL::TimeDependentParameter<T> param(times, values);
-  if (param.isconstant == false) {
-    cardiac_cycle_period = param.cycle_period;
-  }
-  return param;
-}
 
-template <typename T>
-MODEL::Model<T> ConfigReader<T>::get_model() {
-  // Create blog mapping
-  MODEL::Model<T> model;
+  auto sim_params = config["simulation_parameters"];
+  sim_num_cycles = sim_params["number_of_cardiac_cycles"].get_int64();
+  sim_pts_per_cycle =
+      sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
+  sim_num_time_steps = (sim_pts_per_cycle - 1) * sim_num_cycles + 1;
+
+  try {
+    sim_abs_tol = sim_params["absolute_tolerance"].get_double();
+  } catch (simdjson::simdjson_error) {
+    sim_abs_tol = 1e-8;
+  }
+
+  try {
+    sim_nliter = sim_params["maximum_nonlinear_iterations"].get_int64();
+  } catch (simdjson::simdjson_error) {
+    sim_nliter = 30;
+  }
+
+  try {
+    sim_steady_initial = sim_params["steady_initial"].get_bool();
+  } catch (simdjson::simdjson_error) {
+    sim_steady_initial = true;
+  }
+
+  try {
+    output_variable_based = sim_params["output_variable_based"].get_bool();
+  } catch (simdjson::simdjson_error) {
+    output_variable_based = false;
+  }
+
+  try {
+    output_interval = sim_params["output_interval"].get_int64();
+  } catch (simdjson::simdjson_error) {
+    output_interval = 1;
+  }
+
+  try {
+    output_mean_only = sim_params["output_mean_only"].get_bool();
+  } catch (simdjson::simdjson_error) {
+    output_mean_only = false;
+  }
+
+  try {
+    output_derivative = sim_params["output_derivative"].get_bool();
+  } catch (simdjson::simdjson_error) {
+    output_derivative = false;
+  }
+
+  try {
+    output_last_cycle_only = sim_params["output_last_cycle_only"].get_bool();
+  } catch (simdjson::simdjson_error) {
+    output_last_cycle_only = false;
+  }
 
   // Create list to store block connections while generating blocks
-  std::vector<std::tuple<std::string, std::string>> connections;
+  std::vector<std::tuple<std::string_view, std::string_view>> connections;
 
   // Create vessels
-  std::map<int, std::string> vessel_id_map;
-  for (simdjson::dom::element vessel_config : config["vessels"]) {
-    simdjson::dom::element vessel_values =
-        vessel_config["zero_d_element_values"];
-    std::string vessel_name =
-        static_cast<std::string>(vessel_config["vessel_name"]);
+  std::map<std::int64_t, std::string_view> vessel_id_map;
+  for (auto vessel_config : config["vessels"]) {
+    auto vessel_values = vessel_config["zero_d_element_values"];
+    std::string_view vessel_name = vessel_config["vessel_name"].get_string();
     vessel_id_map.insert({vessel_config["vessel_id"].get_int64(), vessel_name});
-    if (static_cast<std::string>(vessel_config["zero_d_element_type"]) ==
+    if (std::string_view(vessel_config["zero_d_element_type"].get_string()) ==
         "BloodVessel") {
-      T R = vessel_values["R_poiseuille"],
-        C = get_default(vessel_values, "C", 0.0);
-      T L = get_default(vessel_values, "L", 0.0),
+      T R = vessel_values["R_poiseuille"].get_double();
+      T C;
+      try {
+        C = vessel_values["C"].get_double();
+      } catch (simdjson::simdjson_error) {
+        C = 0.0;
+      }
+      T L;
+      try {
+        L = vessel_values["L"].get_double();
+      } catch (simdjson::simdjson_error) {
+        L = 0.0;
+      }
+      T stenosis_coefficient;
+      try {
         stenosis_coefficient =
-            get_default(vessel_values, "stenosis_coefficient", 0.0);
+            vessel_values["stenosis_coefficient"].get_double();
+      } catch (simdjson::simdjson_error) {
+        stenosis_coefficient = 0.0;
+      }
       model.blocks.insert(
           {vessel_name,
            MODEL::BloodVessel<T>(R = R, C = C, L = L,
                                  stenosis_coefficient = stenosis_coefficient,
-                                 vessel_name)});
+                                 static_cast<std::string>(vessel_name))});
       DEBUG_MSG("Created vessel " << vessel_name);
     } else {
-      throw std::invalid_argument(
-          "Unknown vessel type " +
-          static_cast<std::string>(vessel_config["vessel_type"]));
+      throw std::invalid_argument("Unknown vessel type ");
     }
 
     // Read connected boundary condtitions
-    if (has_key(vessel_config, "boundary_conditions") == true) {
-      simdjson::dom::element vessel_bcs = vessel_config["boundary_conditions"];
-      for (std::string loc : {"inlet", "outlet"}) {
-        if (has_key(vessel_bcs, loc)) {
-          if (loc == "inlet") {
-            connections.push_back({static_cast<std::string>(vessel_bcs[loc]), vessel_name});
-          } else {
-            connections.push_back({vessel_name, static_cast<std::string>(vessel_bcs[loc])});
-          }
-        }
-      }
+    try {
+      auto inlet_bc = vessel_config["boundary_conditions"]["inlet"];
+      connections.push_back({inlet_bc.get_string(), vessel_name});
+    } catch (simdjson::simdjson_error) {
+    }
+
+    try {
+      auto outlet_bc = vessel_config["boundary_conditions"]["outlet"];
+      connections.push_back({vessel_name, outlet_bc.get_string()});
+    } catch (simdjson::simdjson_error) {
     }
   }
 
   // Create boundary conditions
-  for (simdjson::dom::element bc_config : config["boundary_conditions"]) {
-    std::string bc_name = static_cast<std::string>(bc_config["bc_name"]);
-    simdjson::dom::element bc_values = bc_config["bc_values"];
-    if (static_cast<std::string>(bc_config["bc_type"]) == "RCR") {
+  for (auto bc_config : config["boundary_conditions"]) {
+    std::string_view bc_name = bc_config["bc_name"].get_string();
+    std::string_view bc_type = bc_config["bc_type"].get_string();
+    auto bc_values = bc_config["bc_values"];
+
+    std::vector<T> t;
+    try {
+      for (auto x : bc_values["t"].get_array()) {
+        t.push_back(x.get_double());
+      }
+    } catch (simdjson::simdjson_error) {
+      t.push_back(0.0);
+    };
+
+    if (bc_type == "RCR") {
       T Rp = bc_values["Rp"], C = bc_values["C"], Rd = bc_values["Rd"],
         Pd = bc_values["Pd"];
       model.blocks.insert(
-          {bc_name,
-           MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd, bc_name)});
+          {bc_name, MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd,
+                                           static_cast<std::string>(bc_name))});
       DEBUG_MSG("Created boundary condition " << bc_name);
-    } else if (static_cast<std::string>(bc_config["bc_type"]) == "FLOW") {
-      simdjson::dom::element Q_json = bc_values["Q"],
-                             t_json = get_default(bc_values, "t",
-                                                  simdjson::dom::element());
-      auto Q = get_time_dependent_parameter(t_json, Q_json);
-      model.blocks.insert({bc_name, MODEL::FlowReferenceBC<T>(Q = Q, bc_name)});
-      DEBUG_MSG("Created boundary condition " << bc_name);
-    } else if (static_cast<std::string>(bc_config["bc_type"]) == "RESISTANCE") {
-      simdjson::dom::element R_json = bc_values["R"], Pd_json = bc_values["Pd"];
-      simdjson::dom::element t_json =
-          get_default(bc_values, "t", simdjson::dom::element());
-      auto R = get_time_dependent_parameter(t_json, R_json);
-      auto Pd = get_time_dependent_parameter(t_json, Pd_json);
-      model.blocks.insert(
-          {bc_name, MODEL::ResistanceBC<T>(R = R, Pd = Pd, bc_name)});
-      DEBUG_MSG("Created boundary condition " << bc_name);
-    } else if (static_cast<std::string>(bc_config["bc_type"]) == "PRESSURE") {
-      simdjson::dom::element P_json = bc_values["P"];
-      simdjson::dom::element t_json =
-          get_default(bc_values, "t", simdjson::dom::element());
-      auto P = get_time_dependent_parameter(t_json, P_json);
-      if (P.isconstant == false) {
-        cardiac_cycle_period = P.cycle_period;
+    } else if (bc_type == "FLOW") {
+      std::vector<T> Q;
+      try {
+        for (auto x : bc_values["Q"].get_array()) {
+          Q.push_back(x.get_double());
+        }
+      } catch (simdjson::simdjson_error) {
+        Q.push_back(bc_values["Q"].get_double());
+      }
+
+      MODEL::TimeDependentParameter q_param(t, Q);
+      if (q_param.isconstant == false) {
+        sim_cardiac_cycle_period = q_param.cycle_period;
       }
       model.blocks.insert(
-          {bc_name, MODEL::PressureReferenceBC<T>(P = P, bc_name)});
+          {bc_name, MODEL::FlowReferenceBC<T>(
+                        q_param, static_cast<std::string>(bc_name))});
       DEBUG_MSG("Created boundary condition " << bc_name);
-    } else if (static_cast<std::string>(bc_config["bc_type"]) == "CORONARY") {
+
+    } else if (bc_type == "RESISTANCE") {
+      std::vector<T> R;
+      try {
+        for (auto x : bc_values["R"].get_array()) {
+          R.push_back(x.get_double());
+        }
+      } catch (simdjson::simdjson_error) {
+        R.push_back(bc_values["R"].get_double());
+      }
+      MODEL::TimeDependentParameter r_param(t, R);
+
+      std::vector<T> Pd;
+      try {
+        for (auto x : bc_values["Pd"].get_array()) {
+          Pd.push_back(x.get_double());
+        }
+      } catch (simdjson::simdjson_error) {
+        Pd.push_back(bc_values["Pd"].get_double());
+      }
+      MODEL::TimeDependentParameter pd_param(t, Pd);
+      model.blocks.insert(
+          {bc_name, MODEL::ResistanceBC<T>(r_param, pd_param,
+                                           static_cast<std::string>(bc_name))});
+      DEBUG_MSG("Created boundary condition " << bc_name);
+    } else if (bc_type == "PRESSURE") {
+      std::vector<T> P;
+      try {
+        for (auto x : bc_values["P"].get_array()) {
+          P.push_back(x.get_double());
+        }
+      } catch (simdjson::simdjson_error) {
+        P.push_back(bc_values["P"].get_double());
+      }
+      MODEL::TimeDependentParameter p_param(t, P);
+      if (p_param.isconstant == false) {
+        sim_cardiac_cycle_period = p_param.cycle_period;
+      }
+      model.blocks.insert(
+          {bc_name, MODEL::PressureReferenceBC<T>(
+                        p_param, static_cast<std::string>(bc_name))});
+      DEBUG_MSG("Created boundary condition " << bc_name);
+    } else if (bc_type == "CORONARY") {
       T Ra = bc_values["Ra1"], Ram = bc_values["Ra2"], Rv = bc_values["Rv1"],
         Ca = bc_values["Ca"], Cim = bc_values["Cc"];
-      simdjson::dom::element Pim_json = bc_values["Pim"],
-                             Pv_json = bc_values["P_v"];
-      simdjson::dom::element t_json =
-          get_default(bc_values, "t", simdjson::dom::element());
-      auto Pim = get_time_dependent_parameter(t_json, Pim_json);
-      auto Pv = get_time_dependent_parameter(t_json, Pv_json);
-      model.blocks.insert(
-          {bc_name, MODEL::OpenLoopCoronaryBC<T>(Ra = Ra, Ram = Ram, Rv = Rv,
-                                                 Ca = Ca, Cim = Cim, Pim = Pim,
-                                                 Pv = Pv, bc_name)});
+      auto Pim_json = bc_values["Pim"], Pv_json = bc_values["P_v"];
+
+      std::vector<T> Pim;
+      try {
+        for (auto x : bc_values["Pim"].get_array()) {
+          Pim.push_back(x.get_double());
+        }
+      } catch (simdjson::simdjson_error) {
+        Pim.push_back(bc_values["Pim"].get_double());
+      }
+      MODEL::TimeDependentParameter pim_param(t, Pim);
+      std::vector<T> P_v;
+      try {
+        for (auto x : bc_values["P_v"].get_array()) {
+          P_v.push_back(x.get_double());
+        }
+      } catch (simdjson::simdjson_error) {
+        P_v.push_back(bc_values["P_v"].get_double());
+      }
+      MODEL::TimeDependentParameter pv_param(t, P_v);
+
+      model.blocks.insert({bc_name, MODEL::OpenLoopCoronaryBC<T>(
+                                        Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca,
+                                        Cim = Cim, pim_param, pv_param,
+                                        static_cast<std::string>(bc_name))});
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else {
-      throw std::invalid_argument(
-          "Unknown boundary condition type " +
-          static_cast<std::string>(bc_config["bc_type"]));
+      throw std::invalid_argument("Unknown boundary condition type");
     }
   }
 
   // Create junctions
-  for (simdjson::dom::element junction_config : config["junctions"]) {
-    if ((static_cast<std::string>(junction_config["junction_type"]) ==
-         "NORMAL_JUNCTION") ||
-        (static_cast<std::string>(junction_config["junction_type"]) ==
-         "internal_junction")) {
+  for (auto junction_config : config["junctions"]) {
+    std::string_view j_type = junction_config["junction_type"].get_string();
+    if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
       // Create the junction and add to blocks
-      std::string junction_name =
-          static_cast<std::string>(junction_config["junction_name"]);
-      model.blocks.insert({junction_name, MODEL::Junction<T>(junction_name)});
+      std::string_view junction_name =
+          junction_config["junction_name"].get_string();
+      model.blocks.insert(
+          {junction_name,
+           MODEL::Junction<T>(static_cast<std::string>(junction_name))});
 
       // Check for connections to inlet and outlet vessels and append to
       // connections list
-      for (simdjson::dom::element inlet_vessel :
-           junction_config["inlet_vessels"]) {
+      for (auto inlet_vessel : junction_config["inlet_vessels"]) {
         connections.push_back(
-            {vessel_id_map[int(inlet_vessel.get_int64())], junction_name});
+            {vessel_id_map[inlet_vessel.get_int64()], junction_name});
       }
-      for (simdjson::dom::element outlet_vessel :
-           junction_config["outlet_vessels"]) {
+      for (auto outlet_vessel : junction_config["outlet_vessels"]) {
         connections.push_back(
-            {junction_name, vessel_id_map[int(outlet_vessel.get_int64())]});
+            {junction_name, vessel_id_map[outlet_vessel.get_int64()]});
       }
     } else {
-      throw std::invalid_argument(
-          "Unknown junction type " +
-          static_cast<std::string>(junction_config["junction_type"]));
+      throw std::invalid_argument("Unknown junction type");
     }
   }
 
@@ -425,59 +393,14 @@ MODEL::Model<T> ConfigReader<T>::get_model() {
           elem1);
     }
   }
+
+  // Setup degrees of freedom of the system
   for (auto &[key, elem] : model.blocks) {
     std::visit([&](auto &&block) { block.setup_dofs(model.dofhandler); }, elem);
   }
-  model_created = true;
-  return model;
-}
 
-template <typename T>
-int ConfigReader<T>::get_num_time_steps() {
-  int num_time_steps = (num_pts_per_cycle - 1) * num_cycles + 1;
-  return num_time_steps;
-}
-
-template <typename T>
-T ConfigReader<T>::get_time_step_size() {
-  if (model_created == false) {
-    // Cardiac cycle period is set at model creation so it has to be performed
-    // first
-    throw std::runtime_error(
-        "Please create model before calculating timstepsize.");
-  }
-  T time_step_size = cardiac_cycle_period / (num_pts_per_cycle - 1);
-  return time_step_size;
-}
-
-template <typename T>
-int ConfigReader<T>::get_int_simulation_parameter(std::string key) {
-  return int(config["simulation_parameters"][key]);
-}
-
-template <typename T>
-int ConfigReader<T>::get_int_simulation_parameter(std::string key, int def) {
-  return get_default(sim_params, key, def);
-}
-
-template <typename T>
-T ConfigReader<T>::get_scalar_simulation_parameter(std::string key) {
-  return int(config["simulation_parameters"][key]);
-}
-
-template <typename T>
-T ConfigReader<T>::get_scalar_simulation_parameter(std::string key, T def) {
-  return get_default(sim_params, key, def);
-}
-
-template <typename T>
-bool ConfigReader<T>::get_bool_simulation_parameter(std::string key) {
-  return int(config["simulation_parameters"][key]);
-}
-
-template <typename T>
-bool ConfigReader<T>::get_bool_simulation_parameter(std::string key, bool def) {
-  return get_default(sim_params, key, def);
+  // calculate time step size
+  sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
 }
 
 }  // namespace IO

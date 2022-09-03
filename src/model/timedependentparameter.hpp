@@ -87,9 +87,15 @@ class TimeDependentParameter {
    */
   T get(T time);
 
-  bool isconstant;
+  bool isconstant; ///< Bool value indicating if the parameter is constant
 
-  void to_steady();  ///< Bool value indicating if the parameter is constant
+  void to_steady();
+  void to_unsteady();
+
+ private:
+  std::vector<T> times_cache;   ///< Time steps cache
+  std::vector<T> values_cache;  ///< Values cache
+  int size_cache;
 };
 
 template <typename T>
@@ -142,12 +148,27 @@ template <typename T>
 void TimeDependentParameter<T>::to_steady() {
   T mean =
       std::accumulate(values.begin(), values.end(), 0.0) / T(values.size());
+  values_cache = values;
+  times_cache = times;
+  size_cache = size;
   values = std::vector<T>();
   times = std::vector<T>();
   values.push_back(mean);
+  values.push_back(0.0);
   size = 1;
   isconstant = true;
 }
+
+template <typename T>
+void TimeDependentParameter<T>::to_unsteady() {
+  values = values_cache;
+  times = times_cache;
+  size = size_cache;
+  if (size > 1) {
+    isconstant = false;
+  }
+}
+
 }  // namespace MODEL
 
 #endif  // SVZERODSOLVER_MODEL_PARAMETER_HPP_

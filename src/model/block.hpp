@@ -200,6 +200,12 @@ class Block {
   void to_steady();
 
   /**
+   * @brief Convert the block to an unsteady behavior
+   *
+   */
+  void to_unsteady();
+
+  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system
@@ -278,6 +284,9 @@ void Block<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
 
 template <typename T>
 void Block<T>::to_steady() {}
+
+template <typename T>
+void Block<T>::to_unsteady() {}
 
 }  // namespace MODEL
 

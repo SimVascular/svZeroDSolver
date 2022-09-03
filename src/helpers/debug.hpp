@@ -36,7 +36,7 @@
 
 #include <iostream>
 
-#ifndef DEBUG
+#ifdef DEBUG
 #define DEBUG_MSG(str)             \
   do {                             \
     std::cout << str << std::endl; \

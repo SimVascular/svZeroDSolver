@@ -64,8 +64,8 @@ std::string to_vessel_csv(std::vector<T> &times,
   std::stringstream out;
 
   // Create short and long buffer for lines
-  char sbuff[130];
-  char lbuff[226];
+  char sbuff[140];
+  char lbuff[236];
 
   // Write column labels
   if (derivative) {
@@ -202,8 +202,8 @@ std::string to_variable_csv(std::vector<T> &times,
   std::stringstream out;
 
   // Create short and long buffer for lines
-  char sbuff[77];
-  char lbuff[100];
+  char sbuff[87];
+  char lbuff[110];
 
   // Determine number of time steps
   int num_steps = times.size();

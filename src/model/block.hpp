@@ -127,7 +127,7 @@ class Block {
    * @param num_internal_vars Number of internal variables of the block
    */
   void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
-                   unsigned int num_internal_vars);
+                   std::list<std::string> internal_var_names);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -200,6 +200,12 @@ class Block {
   void to_steady();
 
   /**
+   * @brief Convert the block to an unsteady behavior
+   *
+   */
+  void to_unsteady();
+
+  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system
@@ -228,7 +234,7 @@ Block<T>::~Block() {}
 
 template <typename T>
 void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
-                           unsigned int num_internal_vars) {
+                           std::list<std::string> internal_var_names) {
   // Collect external DOFs from inlet nodes
   for (auto inlet_node : inlet_nodes) {
     global_var_ids.push_back(inlet_node->pres_dof);
@@ -242,9 +248,9 @@ void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
   }
 
   // Register internal variables of block
-  for (unsigned int i = 0; i < num_internal_vars; i++) {
+  for (auto int_name : internal_var_names) {
     global_var_ids.push_back(
-        dofhandler.register_variable("var_" + std::to_string(i) + "_" + name));
+        dofhandler.register_variable(int_name + ":" + name));
   }
 
   // Register equations of block
@@ -278,6 +284,9 @@ void Block<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
 
 template <typename T>
 void Block<T>::to_steady() {}
+
+template <typename T>
+void Block<T>::to_unsteady() {}
 
 }  // namespace MODEL
 

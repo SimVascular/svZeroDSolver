@@ -168,6 +168,12 @@ class PressureReferenceBC : public Block<T> {
    */
   void to_steady();
 
+  /**
+   * @brief Convert the block to an unsteady behavior
+   *
+   */
+  void to_unsteady();
+
  private:
   Parameters params;
 };
@@ -185,7 +191,7 @@ PressureReferenceBC<T>::~PressureReferenceBC() {}
 
 template <typename T>
 void PressureReferenceBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 1, 0);
+  Block<T>::setup_dofs_(dofhandler, 1, {});
 }
 
 template <typename T>
@@ -213,6 +219,11 @@ void PressureReferenceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system,
 template <typename T>
 void PressureReferenceBC<T>::to_steady() {
   params.P.to_steady();
+}
+
+template <typename T>
+void PressureReferenceBC<T>::to_unsteady() {
+  params.P.to_unsteady();
 }
 
 }  // namespace MODEL

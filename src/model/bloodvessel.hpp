@@ -224,7 +224,7 @@ BloodVessel<T>::~BloodVessel() {}
 
 template <typename T>
 void BloodVessel<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 3, 1);
+  Block<T>::setup_dofs_(dofhandler, 3, {"pressure_c"});
 }
 
 template <typename T>

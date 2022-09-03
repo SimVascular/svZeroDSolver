@@ -195,6 +195,12 @@ class OpenLoopCoronaryBC : public Block<T> {
    */
   void to_steady();
 
+  /**
+   * @brief Convert the block to an unsteady behavior
+   *
+   */
+  void to_unsteady();
+
  private:
   Parameters params;
   bool issteady = false;
@@ -221,7 +227,7 @@ OpenLoopCoronaryBC<T>::~OpenLoopCoronaryBC() {}
 
 template <typename T>
 void OpenLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 2, 1);
+  Block<T>::setup_dofs_(dofhandler, 2, {"volume_im"});
 }
 
 template <typename T>
@@ -332,6 +338,13 @@ void OpenLoopCoronaryBC<T>::to_steady() {
   params.Pim.to_steady();
   params.Pv.to_steady();
   issteady = true;
+}
+
+template <typename T>
+void OpenLoopCoronaryBC<T>::to_unsteady() {
+  params.Pim.to_unsteady();
+  params.Pv.to_unsteady();
+  issteady = false;
 }
 
 }  // namespace MODEL

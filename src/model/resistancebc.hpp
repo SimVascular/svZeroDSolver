@@ -169,6 +169,12 @@ class ResistanceBC : public Block<T> {
    */
   void to_steady();
 
+  /**
+   * @brief Convert the block to a steady behavior
+   *
+   */
+  void to_unsteady();
+
  private:
   Parameters params;
 };
@@ -187,7 +193,7 @@ ResistanceBC<T>::~ResistanceBC() {}
 
 template <typename T>
 void ResistanceBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 1, 0);
+  Block<T>::setup_dofs_(dofhandler, 1, {});
 }
 
 template <typename T>
@@ -218,6 +224,12 @@ template <typename T>
 void ResistanceBC<T>::to_steady() {
   params.R.to_steady();
   params.Pd.to_steady();
+}
+
+template <typename T>
+void ResistanceBC<T>::to_unsteady() {
+  params.R.to_unsteady();
+  params.Pd.to_unsteady();
 }
 
 }  // namespace MODEL

@@ -45,23 +45,23 @@ def run_test_case_by_name(name):
 
         if seg_id == 0:
             output["pressure_in"][branch_id] = np.array(
-                result[result.name == f"V{vessel_id}"]["pressure_in"]
+                result[result.name == name]["pressure_in"]
             )
             output["flow_in"][branch_id] = np.array(
-                result[result.name == f"V{vessel_id}"]["flow_in"]
+                result[result.name == name]["flow_in"]
             )
             output["pressure_out"][branch_id] = np.array(
-                result[result.name == f"V{vessel_id}"]["pressure_out"]
+                result[result.name == name]["pressure_out"]
             )
             output["flow_out"][branch_id] = np.array(
-                result[result.name == f"V{vessel_id}"]["flow_out"]
+                result[result.name == name]["flow_out"]
             )
         elif seg_id > last_seg_id:
             output["pressure_out"][branch_id] = np.array(
-                result[result.name == f"V{vessel_id}"]["pressure_out"]
+                result[result.name == name]["pressure_out"]
             )
             output["flow_out"][branch_id] = np.array(
-                result[result.name == f"V{vessel_id}"]["flow_out"]
+                result[result.name == name]["flow_out"]
             )
 
         last_seg_id = seg_id

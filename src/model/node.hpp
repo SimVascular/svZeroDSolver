@@ -83,8 +83,8 @@ Node::Node(std::string name) { this->name = name; }
 Node::~Node() {}
 
 void Node::setup_dofs(DOFHandler &dofhandler) {
-  flow_dof = dofhandler.register_variable("Q_" + name);
-  pres_dof = dofhandler.register_variable("P_" + name);
+  flow_dof = dofhandler.register_variable("flow:" + name);
+  pres_dof = dofhandler.register_variable("pressure:" + name);
 }
 
 }  // namespace MODEL

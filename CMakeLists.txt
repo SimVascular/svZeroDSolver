@@ -11,7 +11,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON) # Fixes bug with smdjson. Try to remove 
 FetchContent_Declare(
   simdjson
   GIT_REPOSITORY https://github.com/simdjson/simdjson.git
-  GIT_TAG  master
+  GIT_TAG  v2.2.0
   GIT_SHALLOW TRUE)
 FetchContent_MakeAvailable(simdjson)
 

@@ -169,7 +169,7 @@ class FlowReferenceBC : public Block<T> {
 
   /**
    * @brief Convert the block to an unsteady behavior
-   * 
+   *
    */
   void to_unsteady();
 

@@ -224,7 +224,6 @@ using S = ALGEBRA::SparseSystem<TT>;
  * @return Result as csv encoded string
  */
 const std::string run(std::string& json_config) {
-
   // Load model and configuration
   DEBUG_MSG("Load model and configuration");
   IO::ConfigReader<T> reader;
@@ -240,9 +239,9 @@ const std::string run(std::string& json_config) {
     DEBUG_MSG("Calculating steady initial condition");
     T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
     reader.model.to_steady();
-    ALGEBRA::Integrator<T, S> integrator_steady(reader.model,
-                                                time_step_size_steady, 0.1,
-                                                reader.sim_abs_tol, reader.sim_nliter);
+    ALGEBRA::Integrator<T, S> integrator_steady(
+        reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol,
+        reader.sim_nliter);
     for (size_t i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * T(i),
                                      reader.model);
@@ -250,8 +249,9 @@ const std::string run(std::string& json_config) {
     reader.model.to_unsteady();
   }
 
-  ALGEBRA::Integrator<T, S> integrator(reader.model, reader.sim_time_step_size, 0.1,
-                                       reader.sim_abs_tol, reader.sim_nliter);
+  ALGEBRA::Integrator<T, S> integrator(reader.model, reader.sim_time_step_size,
+                                       0.1, reader.sim_abs_tol,
+                                       reader.sim_nliter);
 
   std::vector<ALGEBRA::State<T>> states;
   std::vector<T> times;
@@ -260,7 +260,7 @@ const std::string run(std::string& json_config) {
 
   T time = 0.0;
 
-  states.push_back(state);
+  states.push_back(std::move(state));
   times.push_back(time);
 
   int interval_counter = 0;
@@ -289,10 +289,12 @@ const std::string run(std::string& json_config) {
   std::string output;
   if (reader.output_variable_based) {
     output = IO::to_variable_csv<T>(times, states, reader.model,
-                                    reader.output_mean_only, reader.output_derivative);
+                                    reader.output_mean_only,
+                                    reader.output_derivative);
   } else {
-    output = IO::to_vessel_csv<T>(times, states, reader.model, reader.output_mean_only,
-                                  reader.output_derivative);
+    output =
+        IO::to_vessel_csv<T>(times, states, reader.model,
+                             reader.output_mean_only, reader.output_derivative);
   }
   return output;
 }

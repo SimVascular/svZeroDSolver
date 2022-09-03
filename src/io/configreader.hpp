@@ -70,35 +70,25 @@ class ConfigReader {
    */
   void load(std::string &specifier);
 
-  /**
-   * @brief Get number of time steps based on configuration
-   *
-   * @return Number of time steps
-   */
-  int get_num_time_steps();
-
-  /**
-   * @brief Get the time step size based on configuration
-   *
-   * @return Time step size
-   */
-  T get_time_step_size();
-
-  MODEL::Model<T> model;
+  MODEL::Model<T> model;  ///< Simulation model
 
   T sim_cardiac_cycle_period;  ///< Cardiac cycle period
-  int sim_num_cycles;
-  int sim_pts_per_cycle;
-  T sim_time_step_size;
-  int sim_num_time_steps;
-  T sim_abs_tol;
-  int sim_nliter;
-  bool sim_steady_initial;
-  bool output_variable_based;
-  int output_interval;
-  bool output_mean_only;
-  bool output_derivative;
-  bool output_last_cycle_only;
+  T sim_time_step_size;        ///< Simulation time step size
+  T sim_abs_tol;               ///< Absolute tolerance for simulation
+
+  int sim_num_cycles;      ///< Number of cardiac cycles to simulate
+  int sim_pts_per_cycle;   ///< Number of time steps per cardiac cycle
+  int sim_num_time_steps;  ///< Total number of time steps
+  int sim_nliter;          ///< Maximum number of non-linear iterations in time
+                           ///< integration
+  int output_interval;     ///< Interval of writing output
+
+  bool sim_steady_initial;  ///< Start from steady solution
+  bool
+      output_variable_based;  ///< Output variable based instead of vessel based
+  bool output_mean_only;      ///< Output only the mean value
+  bool output_derivative;     ///< Output derivatives
+  bool output_last_cycle_only;  ///< Output only the last cardiac cycle
 };
 
 template <typename T>
@@ -109,63 +99,57 @@ ConfigReader<T>::~ConfigReader() {}
 
 template <typename T>
 void ConfigReader<T>::load(std::string &specifier) {
+  // Create iterator for json configuration
   simdjson::ondemand::parser parser;
-  simdjson::ondemand::document config;
-
+  simdjson::padded_string string;
   if (HELPERS::startswith(specifier, "{")) {
-    config = parser.iterate(specifier);
+    string = simdjson::padded_string(specifier);
   } else {
-    config = parser.iterate(simdjson::padded_string::load(specifier));
+    string = simdjson::padded_string::load(specifier);
   }
+  auto config = parser.iterate(string);
 
+  // Load simulation paramaters
   auto sim_params = config["simulation_parameters"];
   sim_num_cycles = sim_params["number_of_cardiac_cycles"].get_int64();
   sim_pts_per_cycle =
       sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
-  sim_num_time_steps = (sim_pts_per_cycle - 1) * sim_num_cycles + 1;
-
+  sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
   try {
     sim_abs_tol = sim_params["absolute_tolerance"].get_double();
   } catch (simdjson::simdjson_error) {
     sim_abs_tol = 1e-8;
   }
-
   try {
     sim_nliter = sim_params["maximum_nonlinear_iterations"].get_int64();
   } catch (simdjson::simdjson_error) {
     sim_nliter = 30;
   }
-
   try {
     sim_steady_initial = sim_params["steady_initial"].get_bool();
   } catch (simdjson::simdjson_error) {
     sim_steady_initial = true;
   }
-
   try {
     output_variable_based = sim_params["output_variable_based"].get_bool();
   } catch (simdjson::simdjson_error) {
     output_variable_based = false;
   }
-
   try {
     output_interval = sim_params["output_interval"].get_int64();
   } catch (simdjson::simdjson_error) {
     output_interval = 1;
   }
-
   try {
     output_mean_only = sim_params["output_mean_only"].get_bool();
   } catch (simdjson::simdjson_error) {
     output_mean_only = false;
   }
-
   try {
     output_derivative = sim_params["output_derivative"].get_bool();
   } catch (simdjson::simdjson_error) {
     output_derivative = false;
   }
-
   try {
     output_last_cycle_only = sim_params["output_last_cycle_only"].get_bool();
   } catch (simdjson::simdjson_error) {
@@ -210,7 +194,7 @@ void ConfigReader<T>::load(std::string &specifier) {
                                  static_cast<std::string>(vessel_name))});
       DEBUG_MSG("Created vessel " << vessel_name);
     } else {
-      throw std::invalid_argument("Unknown vessel type ");
+      throw std::invalid_argument("Unknown vessel type");
     }
 
     // Read connected boundary condtitions
@@ -229,13 +213,13 @@ void ConfigReader<T>::load(std::string &specifier) {
 
   // Create boundary conditions
   for (auto bc_config : config["boundary_conditions"]) {
-    std::string_view bc_name = bc_config["bc_name"].get_string();
-    std::string_view bc_type = bc_config["bc_type"].get_string();
+    std::string_view bc_type = bc_config["bc_type"];
+    std::string_view bc_name = bc_config["bc_name"];
     auto bc_values = bc_config["bc_values"];
 
     std::vector<T> t;
     try {
-      for (auto x : bc_values["t"].get_array()) {
+      for (auto x : bc_values["t"]) {
         t.push_back(x.get_double());
       }
     } catch (simdjson::simdjson_error) {

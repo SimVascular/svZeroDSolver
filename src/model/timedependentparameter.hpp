@@ -87,9 +87,18 @@ class TimeDependentParameter {
    */
   T get(T time);
 
-  bool isconstant; ///< Bool value indicating if the parameter is constant
+  bool isconstant;  ///< Bool value indicating if the parameter is constant
 
+  /** 
+   * @brief Convert the parameter into a steady mean state.
+   *
+   */
   void to_steady();
+  
+  /** 
+   * @brief Convert the parameter back into an unsteady mean state.
+   *
+   */
   void to_unsteady();
 
  private:

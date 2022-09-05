@@ -231,8 +231,7 @@ const std::string run(std::string& json_config) {
 
   // Setup system
   DEBUG_MSG("Starting simulation");
-  ALGEBRA::State<T> state =
-      ALGEBRA::State<T>::Zero(reader.model.dofhandler.size());
+  ALGEBRA::State<T> state = reader.initial_state;
 
   // Create steady initial
   if (reader.sim_steady_initial) {

@@ -71,6 +71,7 @@ class ConfigReader {
   void load(std::string &specifier);
 
   MODEL::Model<T> model;  ///< Simulation model
+  ALGEBRA::State<T> initial_state;  ///< Initial state
 
   T sim_cardiac_cycle_period;  ///< Cardiac cycle period
   T sim_time_step_size;        ///< Simulation time step size
@@ -383,7 +384,22 @@ void ConfigReader<T>::load(std::string &specifier) {
     std::visit([&](auto &&block) { block.setup_dofs(model.dofhandler); }, elem);
   }
 
-  // calculate time step size
+  // Read initial condition
+  initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
+  try {
+      for (auto field : config["initial_condition"].get_object())
+      {
+        std::string_view key = field.unescaped_key();
+        T value = field.value();
+        int index = model.dofhandler.get_index(key);
+        initial_state.y[index] = value;
+        std::cout << "Setting " << key << " to " << value << std::endl;
+      }
+      
+    } catch (simdjson::simdjson_error) {
+    }
+
+  // Calculate time step size
   sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
 }
 

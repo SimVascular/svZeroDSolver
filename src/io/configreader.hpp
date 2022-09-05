@@ -43,6 +43,15 @@
 #include "../model/model.hpp"
 #include "simdjson.h"
 
+#include "../model/bloodvessel.hpp"
+#include "../model/flowreferencebc.hpp"
+#include "../model/junction.hpp"
+#include "../model/node.hpp"
+#include "../model/openloopcoronarybc.hpp"
+#include "../model/pressurereferencebc.hpp"
+#include "../model/resistancebc.hpp"
+#include "../model/windkesselbc.hpp"
+
 namespace IO {
 
 /**
@@ -189,7 +198,7 @@ void ConfigReader<T>::load(std::string &specifier) {
         stenosis_coefficient = 0.0;
       }
       model.blocks.push_back(
-          MODEL::BloodVessel<T>(R = R, C = C, L = L,
+          new MODEL::BloodVessel<T>(R = R, C = C, L = L,
                                  stenosis_coefficient = stenosis_coefficient,
                                  static_cast<std::string>(vessel_name)));
       DEBUG_MSG("Created vessel " << vessel_name);
@@ -230,7 +239,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       T Rp = bc_values["Rp"], C = bc_values["C"], Rd = bc_values["Rd"],
         Pd = bc_values["Pd"];
       model.blocks.push_back(
-          MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd,
+          new MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd,
                                            static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "FLOW") {
@@ -248,7 +257,7 @@ void ConfigReader<T>::load(std::string &specifier) {
         sim_cardiac_cycle_period = q_param.cycle_period;
       }
       model.blocks.push_back(
-          MODEL::FlowReferenceBC<T>(
+          new MODEL::FlowReferenceBC<T>(
                         q_param, static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
 
@@ -273,7 +282,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       MODEL::TimeDependentParameter pd_param(t, Pd);
       model.blocks.push_back(
-          MODEL::ResistanceBC<T>(r_param, pd_param,
+          new MODEL::ResistanceBC<T>(r_param, pd_param,
                                            static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "PRESSURE") {
@@ -290,7 +299,7 @@ void ConfigReader<T>::load(std::string &specifier) {
         sim_cardiac_cycle_period = p_param.cycle_period;
       }
       model.blocks.push_back(
-          MODEL::PressureReferenceBC<T>(
+          new MODEL::PressureReferenceBC<T>(
                         p_param, static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "CORONARY") {
@@ -317,7 +326,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       MODEL::TimeDependentParameter pv_param(t, P_v);
 
-      model.blocks.push_back(MODEL::OpenLoopCoronaryBC<T>(
+      model.blocks.push_back(new MODEL::OpenLoopCoronaryBC<T>(
                                         Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca,
                                         Cim = Cim, pim_param, pv_param,
                                         static_cast<std::string>(bc_name)));
@@ -335,7 +344,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       std::string_view junction_name =
           junction_config["junction_name"].get_string();
       model.blocks.push_back(
-           MODEL::Junction<T>(static_cast<std::string>(junction_name)));
+           new MODEL::Junction<T>(static_cast<std::string>(junction_name)));
 
       // Check for connections to inlet and outlet vessels and append to
       // connections list
@@ -354,32 +363,24 @@ void ConfigReader<T>::load(std::string &specifier) {
 
   // Create Connections
   for (auto &connection : connections) {
-    for (auto &elem1 : model.blocks) {
-      std::visit(
-          [&](auto &&ele1) {
-            for (auto &elem2 : model.blocks) {
-              std::visit(
-                  [&](auto &&ele2) {
-                    if ((ele1.name == std::get<0>(connection)) &&
-                        (ele2.name == std::get<1>(connection))) {
-                      model.nodes.push_back(
-                          MODEL::Node(ele1.name + ":" + ele2.name));
-                      DEBUG_MSG("Created node " << model.nodes.back().name);
-                      ele1.outlet_nodes.push_back(&model.nodes.back());
-                      ele2.inlet_nodes.push_back(&model.nodes.back());
-                      model.nodes.back().setup_dofs(model.dofhandler);
-                    }
-                  },
-                  elem2);
-            }
-          },
-          elem1);
+    for (auto &ele1 : model.blocks) {
+        for (auto &ele2 : model.blocks) {
+          if ((ele1->name == std::get<0>(connection)) &&
+              (ele2->name == std::get<1>(connection))) {
+            model.nodes.push_back(
+                new MODEL::Node(ele1->name + ":" + ele2->name));
+            DEBUG_MSG("Created node " << model.nodes.back()->name);
+            ele1->outlet_nodes.push_back(model.nodes.back());
+            ele2->inlet_nodes.push_back(model.nodes.back());
+            model.nodes.back()->setup_dofs(model.dofhandler);
+        }
     }
+  }
   }
 
   // Setup degrees of freedom of the system
-  for (auto &elem : model.blocks) {
-    std::visit([&](auto &&block) { block.setup_dofs(model.dofhandler); }, elem);
+  for (auto &block : model.blocks) {
+    block->setup_dofs(model.dofhandler);
   }
 
   // Read initial condition

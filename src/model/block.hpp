@@ -37,7 +37,6 @@
 #include <map>
 #include <vector>
 
-#include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
@@ -139,40 +138,14 @@ class Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
-
-  /**
-   * @brief Update the constant contributions of the element in a dense system
-   *
-   * @param system System to update contributions at
-   */
-  void update_constant(ALGEBRA::DenseSystem<T> &system);
-
-  /**
-   * @brief Update the time-dependent contributions of the element in a dense
-   * system
-   *
-   * @param system System to update contributions at
-   * @param time Current time
-   */
-  void update_time(ALGEBRA::DenseSystem<T> &system, T time);
-
-  /**
-   * @brief Update the solution-dependent contributions of the element in a
-   * dense system
-   *
-   * @param system System to update contributions at
-   * @param y Current solution
-   */
-  void update_solution(ALGEBRA::DenseSystem<T> &system,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+  virtual void setup_dofs(DOFHandler &dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  virtual void update_constant(ALGEBRA::SparseSystem<T> &system);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -181,7 +154,7 @@ class Block {
    * @param system System to update contributions at
    * @param time Current time
    */
-  void update_time(ALGEBRA::SparseSystem<T> &system, T time);
+  virtual void update_time(ALGEBRA::SparseSystem<T> &system, T time);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -190,20 +163,20 @@ class Block {
    * @param system System to update contributions at
    * @param y Current solution
    */
-  void update_solution(ALGEBRA::SparseSystem<T> &system,
+  virtual void update_solution(ALGEBRA::SparseSystem<T> &system,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
   /**
    * @brief Convert the block to a steady behavior
    *
    */
-  void to_steady();
+  virtual void to_steady();
 
   /**
    * @brief Convert the block to an unsteady behavior
    *
    */
-  void to_unsteady();
+  virtual void to_unsteady();
 
   /**
    * @brief Number of triplets of element
@@ -216,6 +189,8 @@ class Block {
       {"E", 0},
       {"D", 0},
   };
+
+  virtual std::map<std::string, int> get_num_triplets();
 
  private:
   Parameters params;  ///< Parameters of the element
@@ -263,16 +238,6 @@ template <typename T>
 void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
 
 template <typename T>
-void Block<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {}
-
-template <typename T>
-void Block<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time) {}
-
-template <typename T>
-void Block<T>::update_solution(ALGEBRA::DenseSystem<T> &system,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {}
-
-template <typename T>
 void Block<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {}
 
 template <typename T>
@@ -287,6 +252,11 @@ void Block<T>::to_steady() {}
 
 template <typename T>
 void Block<T>::to_unsteady() {}
+
+template <typename T>
+std::map<std::string, int> Block<T>::get_num_triplets() {
+  return num_triplets;
+}
 
 }  // namespace MODEL
 

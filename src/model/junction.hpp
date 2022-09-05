@@ -34,7 +34,6 @@
 #ifndef SVZERODSOLVER_MODEL_JUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_JUNCTION_HPP_
 
-#include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
 
@@ -125,13 +124,6 @@ class Junction : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update the constant contributions of the element in a dense system
-   *
-   * @param system System to update contributions at
-   */
-  void update_constant(ALGEBRA::DenseSystem<T> &system);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -149,6 +141,8 @@ class Junction : public Block<T> {
       {"E", 0},
       {"D", 0},
   };
+
+  std::map<std::string, int> get_num_triplets();
 
  private:
   Parameters params;
@@ -174,29 +168,6 @@ void Junction<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void Junction<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {
-  // Continuous pressure condition
-  for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++) {
-    system.F(this->global_eqn_ids[i], this->global_var_ids[0]) = 1.0;
-    system.F(this->global_eqn_ids[i], this->global_var_ids[2 * i + 2]) = -1.0;
-    num_triplets["F"] += 2;
-  }
-
-  // Conservation of mass
-  for (size_t i = 1; i < num_inlets * 2; i = i + 2) {
-    system.F(this->global_eqn_ids[num_inlets + num_outlets - 1],
-             this->global_var_ids[i]) = 1.0;
-    num_triplets["F"] += 1;
-  }
-  for (size_t i = (num_inlets * 2) + 1; i < (num_inlets + num_outlets) * 2;
-       i = i + 2) {
-    system.F(this->global_eqn_ids[num_inlets + num_outlets - 1],
-             this->global_var_ids[i]) = -1.0;
-    num_triplets["F"] += 1;
-  }
-}
-
-template <typename T>
 void Junction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
   for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++) {
     system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[0]) = 1.0;
@@ -212,6 +183,11 @@ void Junction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
     system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets - 1],
                       this->global_var_ids[i]) = -1.0;
   }
+}
+
+template <typename T>
+std::map<std::string, int> Junction<T>::get_num_triplets() {
+  return num_triplets;
 }
 
 }  // namespace MODEL

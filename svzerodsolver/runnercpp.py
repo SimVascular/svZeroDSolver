@@ -35,7 +35,7 @@ import glob
 import importlib.util
 import os
 import sys
-from io import StringIO
+from io import BytesIO
 
 import orjson
 from pandas import read_csv
@@ -74,4 +74,4 @@ def run_from_config(config):
             option=orjson.OPT_NAIVE_UTC | orjson.OPT_SERIALIZE_NUMPY,
         )
     )
-    return read_csv(StringIO(result))
+    return read_csv(BytesIO(result))

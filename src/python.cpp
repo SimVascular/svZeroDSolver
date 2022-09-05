@@ -37,5 +37,9 @@
 
 PYBIND11_MODULE(libsvzerodsolver, mod) {
   mod.doc() = "svZeroDSolver";
-  mod.def("run", &run, "Run the svZeroDSolver.");
+  mod.def("run",
+    [](std::string& json_config) {
+        return pybind11::bytes(run(json_config).str());
+    }
+);
 }

@@ -103,9 +103,7 @@
  * ## Algebra
  *
  * Everything related to solving the system of equation is contained in the
- * ALGEBRA namespace. The svZeroDSolver provides two different strategies for
- * handling the system of equation: a dense strategy (see ALGEBRA::DenseSystem)
- * and a sparse strategy (ALGEBRA::SparseSystem). The ALGEBRA::Integrator
+ * ALGEBRA namespace. The ALGEBRA::Integrator
  * handles the time integration scheme (see Integrator documentation for
  * more information on that).
  *
@@ -116,7 +114,7 @@
  * IO::write_json are two different methods for writing the result files.
  *
  * All classes make use of templates to allow easy exchange of scalar
- * types like `double` or `float` or to switch between sparse and dense systems.
+ * types like `double` or `float`.
  *
  * # Build svZeroDSolver
  *
@@ -238,7 +236,7 @@ const std::string run(std::string& json_config) {
     DEBUG_MSG("Calculating steady initial condition");
     T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
     reader.model.to_steady();
-    ALGEBRA::Integrator<T, S> integrator_steady(
+    ALGEBRA::Integrator<T> integrator_steady(
         reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol,
         reader.sim_nliter);
     for (size_t i = 0; i < 31; i++) {
@@ -248,7 +246,7 @@ const std::string run(std::string& json_config) {
     reader.model.to_unsteady();
   }
 
-  ALGEBRA::Integrator<T, S> integrator(reader.model, reader.sim_time_step_size,
+  ALGEBRA::Integrator<T> integrator(reader.model, reader.sim_time_step_size,
                                        0.1, reader.sim_abs_tol,
                                        reader.sim_nliter);
 

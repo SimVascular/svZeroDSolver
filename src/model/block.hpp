@@ -236,19 +236,19 @@ template <typename T>
 void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
                            std::list<std::string> internal_var_names) {
   // Collect external DOFs from inlet nodes
-  for (auto inlet_node : inlet_nodes) {
+  for (auto &inlet_node : inlet_nodes) {
     global_var_ids.push_back(inlet_node->pres_dof);
     global_var_ids.push_back(inlet_node->flow_dof);
   }
 
   // Collect external DOFs from outlet nodes
-  for (auto outlet_node : outlet_nodes) {
+  for (auto &outlet_node : outlet_nodes) {
     global_var_ids.push_back(outlet_node->pres_dof);
     global_var_ids.push_back(outlet_node->flow_dof);
   }
 
   // Register internal variables of block
-  for (auto int_name : internal_var_names) {
+  for (auto &int_name : internal_var_names) {
     global_var_ids.push_back(
         dofhandler.register_variable(int_name + ":" + name));
   }

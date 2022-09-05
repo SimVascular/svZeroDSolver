@@ -35,7 +35,7 @@
 #define SVZERODSOLVER_MODEL_MODEL_HPP_
 
 #include <list>
-#include <map>
+#include <vector>
 #include <variant>
 
 #include "../algebra/densesystem.hpp"
@@ -75,8 +75,7 @@ class Model {
    */
   ~Model();
 
-  std::map<std::string_view,
-           std::variant<Junction<T>, BloodVessel<T>, FlowReferenceBC<T>,
+  std::vector<std::variant<Junction<T>, BloodVessel<T>, FlowReferenceBC<T>,
                         PressureReferenceBC<T>, WindkesselBC<T>,
                         ResistanceBC<T>, OpenLoopCoronaryBC<T>>>
       blocks;             ///< Elements of the model
@@ -164,67 +163,75 @@ Model<T>::Model() {}
 template <typename T>
 Model<T>::~Model() {}
 
-template <typename T>
-void Model<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {
-  for (auto &&elem : blocks) {
-    std::visit([&](auto &&block) { block.update_constant(system); },
-               elem.second);
-  }
-}
+// template <typename T>
+// void Model<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {
+//   #pragma clang loop vectorize(assume_safety)
+//   for (auto &&elem : blocks) {
+//     std::visit([&](auto &&block) { block.update_constant(system); },
+//                elem.second);
+//   }
+// }
 
-template <typename T>
-void Model<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time) {
-  for (auto &&elem : blocks) {
-    std::visit([&](auto &&block) { block.update_time(system, time); },
-               elem.second);
-  }
-}
+// template <typename T>
+// void Model<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time) {
+//   #pragma clang loop vectorize(assume_safety)
+//   for (auto &&elem : blocks) {
+//     std::visit([&](auto &&block) { block.update_time(system, time); },
+//                elem.second);
+//   }
+// }
 
-template <typename T>
-void Model<T>::update_solution(ALGEBRA::DenseSystem<T> &system,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  for (auto &&elem : blocks) {
-    std::visit([&](auto &&block) { block.update_solution(system, y); },
-               elem.second);
-  }
-}
+// template <typename T>
+// void Model<T>::update_solution(ALGEBRA::DenseSystem<T> &system,
+//                                Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+//   #pragma clang loop vectorize(assume_safety)
+//   for (auto &&elem : blocks) {
+//     std::visit([&](auto &&block) { block.update_solution(system, y); },
+//                elem.second);
+//   }
+// }
 
 template <typename T>
 void Model<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
-  for (auto &&elem : blocks) {
+  #pragma clang loop unroll(full)
+  for (size_t i = 0; i < blocks.size(); i++) {
     std::visit([&](auto &&block) { block.update_constant(system); },
-               elem.second);
+               blocks[i]);
   }
 }
 
 template <typename T>
 void Model<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
-  for (auto &&elem : blocks) {
+  #pragma clang loop unroll(full)
+  for (size_t i = 0; i < blocks.size(); i++) {
     std::visit([&](auto &&block) { block.update_time(system, time); },
-               elem.second);
+               blocks[i]);
   }
 }
 
 template <typename T>
 void Model<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  for (auto &&elem : blocks) {
+  #pragma clang loop unroll(full)
+  for (size_t i = 0; i < blocks.size(); i++) {
     std::visit([&](auto &&block) { block.update_solution(system, y); },
-               elem.second);
+               blocks[i]);
   }
 }
 
 template <typename T>
 void Model<T>::to_steady() {
-  for (auto &&elem : blocks) {
-    std::visit([&](auto &&block) { block.to_steady(); }, elem.second);
+  #pragma clang loop unroll(full)
+  for (size_t i = 0; i < blocks.size(); i++){
+    std::visit([&](auto &&block) { block.to_steady(); }, blocks[i]);
   }
 }
 
 template <typename T>
 void Model<T>::to_unsteady() {
-  for (auto &&elem : blocks) {
-    std::visit([&](auto &&block) { block.to_unsteady(); }, elem.second);
+  #pragma clang loop unroll(full)
+  for (size_t i = 0; i < blocks.size(); i++) {
+    std::visit([&](auto &&block) { block.to_unsteady(); }, blocks[i]);
   }
 }
 
@@ -242,7 +249,7 @@ std::map<std::string, int> Model<T>::get_num_triplets() {
             num_triplets[key] += value;
           }
         },
-        elem.second);
+        elem);
   }
   return num_triplets;
 }

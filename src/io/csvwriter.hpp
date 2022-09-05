@@ -82,7 +82,7 @@ std::string to_vessel_csv(std::vector<T> &times,
   unsigned int outflow_dof;
   unsigned int inpres_dof;
   unsigned int outpres_dof;
-  for (auto &[key, elem] : model.blocks) {
+  for (auto &elem : model.blocks) {
     // Extract global solution indices of the block
     std::string name = "NoName";
     std::visit(

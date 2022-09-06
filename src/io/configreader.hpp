@@ -378,14 +378,15 @@ void ConfigReader<T>::load(std::string &specifier) {
   // Read initial condition
   initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
   try {
-    for (auto field : config["initial_condition"].get_object()) {
-      std::string_view key = field.unescaped_key();
-      T value = field.value();
-      int index = model.dofhandler.get_index(key);
-      initial_state.y[index] = value;
-      std::cout << "Setting " << key << " to " << value << std::endl;
+    auto initial_condition = config["initial_condition"].value();
+    for (size_t i = 0; i < model.dofhandler.size(); i++) {
+      try {
+        initial_state.y[i] = initial_condition[model.dofhandler.variables[i]];
+      } catch (simdjson::simdjson_error) {
+        std::cout << "Initial condition found, but no value for "
+                  << model.dofhandler.variables[i] << std::endl;
+      }
     }
-
   } catch (simdjson::simdjson_error) {
   }
 

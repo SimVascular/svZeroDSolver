@@ -203,10 +203,8 @@
 #include "io/csvwriter.hpp"
 #include "model/model.hpp"
 
+// Setting scalar type to double
 typedef double T;
-
-template <typename TT>
-using S = ALGEBRA::SparseSystem<TT>;
 
 /**
  *
@@ -223,17 +221,14 @@ using S = ALGEBRA::SparseSystem<TT>;
  */
 const std::string run(std::string& json_config) {
   // Load model and configuration
-  DEBUG_MSG("Load model and configuration");
   IO::ConfigReader<T> reader;
   reader.load(json_config);
 
   // Setup system
-  DEBUG_MSG("Starting simulation");
   ALGEBRA::State<T> state = reader.initial_state;
 
   // Create steady initial
   if (reader.sim_steady_initial) {
-    DEBUG_MSG("Calculating steady initial condition");
     T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
     reader.model.to_steady();
     ALGEBRA::Integrator<T> integrator_steady(
@@ -246,19 +241,20 @@ const std::string run(std::string& json_config) {
     reader.model.to_unsteady();
   }
 
+  // Set-up integrator
   ALGEBRA::Integrator<T> integrator(reader.model, reader.sim_time_step_size,
                                     0.1, reader.sim_abs_tol, reader.sim_nliter);
 
+  // Initialize loop
   std::vector<ALGEBRA::State<T>> states;
   std::vector<T> times;
   states.reserve(reader.sim_num_time_steps);
   times.reserve(reader.sim_num_time_steps);
-
   T time = 0.0;
-
   states.push_back(std::move(state));
   times.push_back(time);
 
+  // Run integrator
   int interval_counter = 0;
   for (size_t i = 1; i < reader.sim_num_time_steps; i++) {
     state = integrator.step(state, time, reader.model);
@@ -270,7 +266,6 @@ const std::string run(std::string& json_config) {
       interval_counter = 0;
     }
   }
-  DEBUG_MSG("Simulation completed");
 
   // Extract last cardiac cycle
   if (reader.output_last_cycle_only) {
@@ -282,6 +277,7 @@ const std::string run(std::string& json_config) {
     }
   }
 
+  // Write csv output string
   std::string output;
   if (reader.output_variable_based) {
     output = IO::to_variable_csv<T>(times, states, reader.model,

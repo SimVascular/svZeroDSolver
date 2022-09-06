@@ -104,7 +104,7 @@ class TimeDependentParameter {
  private:
   std::vector<T> times_cache;   ///< Time steps cache
   std::vector<T> values_cache;  ///< Values cache
-  int size_cache;
+  int size_cache;               ///< Size cache
 };
 
 template <typename T>

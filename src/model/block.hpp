@@ -190,6 +190,12 @@ class Block {
       {"D", 0},
   };
 
+  /**
+   * @brief Get number of triplets of element
+   *
+   * Number of triplets that the element contributes to the global system
+   * (relevant for sparse memory reservation)
+   */
   virtual std::map<std::string, int> get_num_triplets();
 
  private:

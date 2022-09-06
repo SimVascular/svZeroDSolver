@@ -247,8 +247,7 @@ const std::string run(std::string& json_config) {
   }
 
   ALGEBRA::Integrator<T> integrator(reader.model, reader.sim_time_step_size,
-                                       0.1, reader.sim_abs_tol,
-                                       reader.sim_nliter);
+                                    0.1, reader.sim_abs_tol, reader.sim_nliter);
 
   std::vector<ALGEBRA::State<T>> states;
   std::vector<T> times;

@@ -116,7 +116,7 @@ class Integrator {
 
 template <typename T>
 Integrator<T>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
-                             T atol, int max_iter) {
+                          T atol, int max_iter) {
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
   alpha_m_inv = 1.0 / alpha_m;
@@ -148,7 +148,7 @@ Integrator<T>::~Integrator() {}
 
 template <typename T>
 State<T> Integrator<T>::step(State<T> &old_state, T time,
-                                MODEL::Model<T> &model) {
+                             MODEL::Model<T> &model) {
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();

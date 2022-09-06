@@ -164,7 +164,7 @@ class Block {
    * @param y Current solution
    */
   virtual void update_solution(ALGEBRA::SparseSystem<T> &system,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
   /**
    * @brief Convert the block to a steady behavior

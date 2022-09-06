@@ -34,9 +34,9 @@
 #ifndef SVZERODSOLVER_MODEL_MODEL_HPP_
 #define SVZERODSOLVER_MODEL_MODEL_HPP_
 
+#include <algorithm>
 #include <list>
 #include <vector>
-#include <algorithm>
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
@@ -68,9 +68,9 @@ class Model {
    */
   ~Model();
 
-  std::vector<Block<T>*> blocks;             ///< Elements of the model
-  DOFHandler dofhandler;  ///< Degree-of-freedom handler of the model
-  std::list<Node*> nodes;  ///< Nodes of the model
+  std::vector<Block<T> *> blocks;  ///< Elements of the model
+  DOFHandler dofhandler;           ///< Degree-of-freedom handler of the model
+  std::list<Node *> nodes;         ///< Nodes of the model
 
   /**
    * @brief Update the constant contributions of all elements in a sparse system
@@ -137,7 +137,7 @@ void Model<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 template <typename T>
 void Model<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
   for (size_t i = 0; i < blocks.size(); i++) {
-   blocks[i]->update_time(system, time);
+    blocks[i]->update_time(system, time);
   }
 }
 
@@ -151,7 +151,7 @@ void Model<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
 
 template <typename T>
 void Model<T>::to_steady() {
-  for (size_t i = 0; i < blocks.size(); i++){
+  for (size_t i = 0; i < blocks.size(); i++) {
     blocks[i]->to_steady();
   }
 }
@@ -159,7 +159,7 @@ void Model<T>::to_steady() {
 template <typename T>
 void Model<T>::to_unsteady() {
   for (size_t i = 0; i < blocks.size(); i++) {
-   blocks[i]->to_unsteady();
+    blocks[i]->to_unsteady();
   }
 }
 
@@ -172,8 +172,8 @@ std::map<std::string, int> Model<T>::get_num_triplets() {
   };
   for (auto &elem : blocks) {
     for (auto &[key, value] : elem->get_num_triplets()) {
-            num_triplets[key] += value;
-          }
+      num_triplets[key] += value;
+    }
   }
   return num_triplets;
 }

@@ -82,20 +82,16 @@ std::string to_vessel_csv(std::vector<T> &times,
   unsigned int outflow_dof;
   unsigned int inpres_dof;
   unsigned int outpres_dof;
-  for (auto &[key, elem] : model.blocks) {
+  for (auto &block : model.blocks) {
     // Extract global solution indices of the block
     std::string name = "NoName";
-    std::visit(
-        [&](auto &&block) {
-          if (HELPERS::startswith(block.name, "branch")) {
-            name = block.name;
-            inflow_dof = block.inlet_nodes[0]->flow_dof;
-            outflow_dof = block.outlet_nodes[0]->flow_dof;
-            inpres_dof = block.inlet_nodes[0]->pres_dof;
-            outpres_dof = block.outlet_nodes[0]->pres_dof;
-          }
-        },
-        elem);
+    if (HELPERS::startswith(block->name, "branch")) {
+      name = block->name;
+      inflow_dof = block->inlet_nodes[0]->flow_dof;
+      outflow_dof = block->outlet_nodes[0]->flow_dof;
+      inpres_dof = block->inlet_nodes[0]->pres_dof;
+      outpres_dof = block->outlet_nodes[0]->pres_dof;
+    }
 
     // Write the solution of the block to the output file
     if (derivative) {

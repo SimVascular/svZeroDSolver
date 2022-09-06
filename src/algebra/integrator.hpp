@@ -61,10 +61,9 @@ namespace ALGEBRA {
  * the generalized-\f$\alpha\f$ method \cite JANSEN2000305.
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
- * @tparam S Type of System (e.g. `ALGEBRA::DenseSystem`,
  * `ALGEBRA::SparseSystem`)
  */
-template <typename T, template <class> class S>
+template <typename T>
 class Integrator {
  private:
   T alpha_m;
@@ -83,7 +82,7 @@ class Integrator {
   int size;
   Eigen::Matrix<T, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<T, Eigen::Dynamic, 1> ydot_am;
-  S<T> system;
+  SparseSystem<T> system;
 
  public:
   /**
@@ -115,9 +114,9 @@ class Integrator {
   State<T> step(State<T> &state, T time, MODEL::Model<T> &model);
 };
 
-template <typename T, template <class> class S>
-Integrator<T, S>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
-                             T atol, int max_iter) {
+template <typename T>
+Integrator<T>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
+                          T atol, int max_iter) {
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
   alpha_m_inv = 1.0 / alpha_m;
@@ -129,7 +128,7 @@ Integrator<T, S>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
   ydot_init_coeff = (1.0 + alpha_m * ((gamma - 0.5) * gamma_inv - 1.0));
 
   size = model.dofhandler.size();
-  system = S<T>(size);
+  system = SparseSystem<T>(size);
   this->time_step_size = time_step_size;
   this->atol = atol;
   this->max_iter = max_iter;
@@ -144,12 +143,12 @@ Integrator<T, S>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
   system.reserve(model);
 }
 
-template <typename T, template <class> class S>
-Integrator<T, S>::~Integrator() {}
+template <typename T>
+Integrator<T>::~Integrator() {}
 
-template <typename T, template <class> class S>
-State<T> Integrator<T, S>::step(State<T> &old_state, T time,
-                                MODEL::Model<T> &model) {
+template <typename T>
+State<T> Integrator<T>::step(State<T> &old_state, T time,
+                             MODEL::Model<T> &model) {
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();

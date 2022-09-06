@@ -34,7 +34,6 @@
 #ifndef SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_
 #define SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_
 
-#include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
 #include "timedependentparameter.hpp"
@@ -144,22 +143,6 @@ class OpenLoopCoronaryBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update the constant contributions of the element in a dense system
-   *
-   * @param system System to update contributions at
-   */
-  void update_constant(ALGEBRA::DenseSystem<T> &system);
-
-  /**
-   * @brief Update the time-dependent contributions of the element in a dense
-   * system
-   *
-   * @param system System to update contributions at
-   * @param time Current time
-   */
-  void update_time(ALGEBRA::DenseSystem<T> &system, T time);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -186,6 +169,14 @@ class OpenLoopCoronaryBC : public Block<T> {
       {"E", 4},
       {"D", 0},
   };
+
+  /**
+   * @brief Get number of triplets of element
+   *
+   * Number of triplets that the element contributes to the global system
+   * (relevant for sparse memory reservation)
+   */
+  std::map<std::string, int> get_num_triplets();
 
   /**
    * @brief Convert the block to a steady behavior
@@ -228,57 +219,6 @@ OpenLoopCoronaryBC<T>::~OpenLoopCoronaryBC() {}
 template <typename T>
 void OpenLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 2, {"volume_im"});
-}
-
-template <typename T>
-void OpenLoopCoronaryBC<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {
-  if (issteady) {
-    // Different assmembly for steady block to avoid singular system
-    // and solve for the internal variable V_im inherently
-    system.F(this->global_eqn_ids[0], this->global_var_ids[0]) = -params.Cim;
-    system.F(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        params.Cim * (params.Ra + params.Ram);
-    system.F(this->global_eqn_ids[0], this->global_var_ids[2]) = 1.0;
-    system.F(this->global_eqn_ids[1], this->global_var_ids[0]) = -1.0;
-    system.F(this->global_eqn_ids[1], this->global_var_ids[1]) =
-        params.Ra + params.Ram + params.Rv;
-  } else {
-    system.F(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        params.Cim * params.Rv;
-    system.F(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
-    system.F(this->global_eqn_ids[1], this->global_var_ids[0]) =
-        params.Cim * params.Rv;
-    system.F(this->global_eqn_ids[1], this->global_var_ids[1]) =
-        -params.Cim * params.Rv * params.Ra;
-    system.F(this->global_eqn_ids[1], this->global_var_ids[2]) =
-        -(params.Rv + params.Ram);
-
-    system.E(this->global_eqn_ids[0], this->global_var_ids[0]) =
-        -params.Ca * params.Cim * params.Rv;
-    system.E(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        params.Ra * params.Ca * params.Cim * params.Rv;
-    system.E(this->global_eqn_ids[0], this->global_var_ids[2]) =
-        -params.Cim * params.Rv;
-    system.E(this->global_eqn_ids[1], this->global_var_ids[2]) =
-        -params.Cim * params.Rv * params.Ram;
-  }
-}
-
-template <typename T>
-void OpenLoopCoronaryBC<T>::update_time(ALGEBRA::DenseSystem<T> &system,
-                                        T time) {
-  T Pim = params.Pim.get(time);
-  T Pv = params.Pv.get(time);
-
-  if (issteady) {
-    system.C(this->global_eqn_ids[0]) = -params.Cim * Pim;
-    system.C(this->global_eqn_ids[1]) = Pv;
-  } else {
-    system.C(this->global_eqn_ids[0]) = params.Cim * (-Pim + Pv);
-    system.C(this->global_eqn_ids[1]) =
-        -params.Cim * (params.Rv + params.Ram) * Pim +
-        params.Ram * params.Cim * Pv;
-  }
 }
 
 template <typename T>
@@ -345,6 +285,11 @@ void OpenLoopCoronaryBC<T>::to_unsteady() {
   params.Pim.to_unsteady();
   params.Pv.to_unsteady();
   issteady = false;
+}
+
+template <typename T>
+std::map<std::string, int> OpenLoopCoronaryBC<T>::get_num_triplets() {
+  return num_triplets;
 }
 
 }  // namespace MODEL

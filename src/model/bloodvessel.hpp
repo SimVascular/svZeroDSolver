@@ -36,7 +36,6 @@
 
 #include <math.h>
 
-#include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
 
@@ -159,23 +158,6 @@ class BloodVessel : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update the constant contributions of the element in a dense system
-   *
-   * @param system System to update contributions at
-   */
-  void update_constant(ALGEBRA::DenseSystem<T> &system);
-
-  /**
-   * @brief Update the solution-dependent contributions of the element in a
-   * dense system
-   *
-   * @param system System to update contributions at
-   * @param y Current solution
-   */
-  void update_solution(ALGEBRA::DenseSystem<T> &system,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -204,6 +186,14 @@ class BloodVessel : public Block<T> {
       {"D", 2},
   };
 
+  /**
+   * @brief Get number of triplets of element
+   *
+   * Number of triplets that the element contributes to the global system
+   * (relevant for sparse memory reservation)
+   */
+  std::map<std::string, int> get_num_triplets();
+
  private:
   Parameters params;
 };
@@ -225,35 +215,6 @@ BloodVessel<T>::~BloodVessel() {}
 template <typename T>
 void BloodVessel<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 3, {"pressure_c"});
-}
-
-template <typename T>
-void BloodVessel<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {
-  system.E(this->global_eqn_ids[0], this->global_var_ids[3]) = -params.L;
-  system.E(this->global_eqn_ids[1], this->global_var_ids[4]) = -params.C;
-
-  system.F(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-  system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = -params.R;
-  system.F(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
-
-  system.F(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
-  system.F(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
-
-  system.F(this->global_eqn_ids[2], this->global_var_ids[0]) = 1.0;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[1]) = -params.R;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[4]) = -1.0;
-}
-
-template <typename T>
-void BloodVessel<T>::update_solution(ALGEBRA::DenseSystem<T> &system,
-                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  T q_in = fabs(y[this->inlet_nodes[0]->flow_dof]);
-  T fac1 = -params.stenosis_coefficient * q_in;
-  T fac2 = fac1 - params.R;
-  system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = fac2;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[1]) = fac2;
-  system.D(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
-  system.D(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
 }
 
 template <typename T>
@@ -288,6 +249,12 @@ void BloodVessel<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
   system.D.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
   system.D.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
 }
+
+template <typename T>
+std::map<std::string, int> BloodVessel<T>::get_num_triplets() {
+  return num_triplets;
+}
+
 }  // namespace MODEL
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_

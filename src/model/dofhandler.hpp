@@ -88,6 +88,14 @@ class DOFHandler {
    * @return Global index of the equation
    */
   unsigned int register_equation();
+
+  /**
+   * @brief Get the index of a variable
+   *
+   * @param name Name of the variable
+   * @return Index of variable with given name
+   */
+  int get_index(std::string_view& name);
 };
 
 DOFHandler::DOFHandler() {
@@ -105,6 +113,15 @@ unsigned int DOFHandler::register_variable(std::string name) {
 }
 
 unsigned int DOFHandler::register_equation() { return eqn_counter++; }
+
+int DOFHandler::get_index(std::string_view& name) {
+  auto it = find(variables.begin(), variables.end(), name);
+  if (it != variables.end()) {
+    return it - variables.begin();
+  } else {
+    throw std::runtime_error("No variable with that name");
+  }
+}
 
 }  // namespace MODEL
 

@@ -34,7 +34,6 @@
 #ifndef SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_
 #define SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_
 
-#include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
 
@@ -141,22 +140,6 @@ class WindkesselBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update the constant contributions of the element in a dense system
-   *
-   * @param system System to update contributions at
-   */
-  void update_constant(ALGEBRA::DenseSystem<T> &system);
-
-  /**
-   * @brief Update the time-dependent contributions of the element in a dense
-   * system
-   *
-   * @param system System to update contributions at
-   * @param time Current time
-   */
-  void update_time(ALGEBRA::DenseSystem<T> &system, T time);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -183,6 +166,14 @@ class WindkesselBC : public Block<T> {
       {"E", 1},
       {"D", 0},
   };
+
+  /**
+   * @brief Get number of triplets of element
+   *
+   * Number of triplets that the element contributes to the global system
+   * (relevant for sparse memory reservation)
+   */
+  std::map<std::string, int> get_num_triplets();
 
   /**
    * @brief Convert the block to a steady behavior
@@ -221,22 +212,6 @@ void WindkesselBC<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void WindkesselBC<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {
-  system.F(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-  system.F(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
-  system.F(this->global_eqn_ids[1], this->global_var_ids[2]) = -1.0;
-}
-
-template <typename T>
-void WindkesselBC<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time) {
-  system.E(this->global_eqn_ids[1], this->global_var_ids[2]) =
-      -params.Rd * params.C;
-  system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = -params.Rp;
-  system.F(this->global_eqn_ids[1], this->global_var_ids[1]) = params.Rd;
-  system.C(this->global_eqn_ids[1]) = params.Pd;
-}
-
-template <typename T>
 void WindkesselBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
@@ -263,6 +238,11 @@ void WindkesselBC<T>::to_steady() {
 template <typename T>
 void WindkesselBC<T>::to_unsteady() {
   params.C = c_cache;
+}
+
+template <typename T>
+std::map<std::string, int> WindkesselBC<T>::get_num_triplets() {
+  return num_triplets;
 }
 
 }  // namespace MODEL

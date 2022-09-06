@@ -38,121 +38,121 @@
 \DoxyCodeLine{34 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_MODEL\_JUNCTION\_HPP\_}}
 \DoxyCodeLine{35 \textcolor{preprocessor}{\#define SVZERODSOLVER\_MODEL\_JUNCTION\_HPP\_}}
 \DoxyCodeLine{36 }
-\DoxyCodeLine{37 \textcolor{preprocessor}{\#include "{}../algebra/densesystem.hpp"{}}}
-\DoxyCodeLine{38 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
-\DoxyCodeLine{39 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
-\DoxyCodeLine{40 }
-\DoxyCodeLine{41 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{\textcolor{comment}{}}
-\DoxyCodeLine{42 \textcolor{comment}{/**}}
-\DoxyCodeLine{43 \textcolor{comment}{ * @brief Junction}}
-\DoxyCodeLine{44 \textcolor{comment}{ *}}
-\DoxyCodeLine{45 \textcolor{comment}{ * Models a junction with arbitrary inlets and outlets. Across all inlets and}}
-\DoxyCodeLine{46 \textcolor{comment}{ * outlets of the junction, mass is conserved and pressure is continuous.}}
-\DoxyCodeLine{47 \textcolor{comment}{ *}}
-\DoxyCodeLine{48 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{49 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\}}}
-\DoxyCodeLine{50 \textcolor{comment}{ * \(\backslash\)draw node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
-\DoxyCodeLine{51 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\} to [short, *-\/*] (3.0,0);}}
-\DoxyCodeLine{52 \textcolor{comment}{ * \(\backslash\)draw (3,0) node[anchor=south]\{\} to [short, -\/*] (4.5,1.0);}}
-\DoxyCodeLine{53 \textcolor{comment}{ * \(\backslash\)draw (4.3,1.1) node[anchor=south] \{\$P\_\{out,1\}\$\};}}
-\DoxyCodeLine{54 \textcolor{comment}{ * \(\backslash\)draw (3,0) node[anchor=south]\{\} to [short, -\/*] (4.5,-\/1.0);}}
-\DoxyCodeLine{55 \textcolor{comment}{ * \(\backslash\)draw (4.3,-\/1.1) node[anchor=north] \{\$P\_\{out,2\}\$\};}}
-\DoxyCodeLine{56 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (4.65,1.1) -\/-\/ (5.25,1.5) node[right] \{\$Q\_\{out,1\}\$\};}}
-\DoxyCodeLine{57 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (4.65,-\/1.1) -\/-\/ (5.25,-\/1.5) node[right] \{\$Q\_\{out,2\}\$\};}}
-\DoxyCodeLine{58 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
-\DoxyCodeLine{59 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{60 \textcolor{comment}{ *}}
-\DoxyCodeLine{61 \textcolor{comment}{ * \#\#\# Governing equations}}
-\DoxyCodeLine{62 \textcolor{comment}{ *}}
-\DoxyCodeLine{63 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{64 \textcolor{comment}{ * \(\backslash\)sum\_\{i\}\string^\{n\_\{inlets\}\} Q\_\{in, i\}=\(\backslash\)sum\_\{j\}\string^\{n\_\{outlets\}\} Q\_\{out, j\}}}
-\DoxyCodeLine{65 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{66 \textcolor{comment}{ *}}
-\DoxyCodeLine{67 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{68 \textcolor{comment}{ * P\_\{i\}=P\_\{j\} \(\backslash\)quad \(\backslash\)mathrm\{with\} \(\backslash\)quad i \(\backslash\)neq j}}
-\DoxyCodeLine{69 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{70 \textcolor{comment}{ *}}
-\DoxyCodeLine{71 \textcolor{comment}{ * \#\#\# Local contributions}}
-\DoxyCodeLine{72 \textcolor{comment}{ *}}
-\DoxyCodeLine{73 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{74 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{llllllllll\}P\_\{in, 1\}\string^\{e\} \& Q\_\{in, 1\}\string^\{e\} \&}}
-\DoxyCodeLine{75 \textcolor{comment}{ * \(\backslash\)dots \& P\_\{in, i\}\string^\{e\} \& Q\_\{in, i\}\string^\{e\} \& P\_\{out, 1\}\string^\{e\} \& Q\_\{out, 1\}\string^\{e\} \&}}
-\DoxyCodeLine{76 \textcolor{comment}{ * \(\backslash\)dots \& P\_\{out, i\}\string^\{e\} \& Q\_\{out, i\}\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
-\DoxyCodeLine{77 \textcolor{comment}{ *}}
-\DoxyCodeLine{78 \textcolor{comment}{ * Mass conservation}}
-\DoxyCodeLine{79 \textcolor{comment}{ *}}
-\DoxyCodeLine{80 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{81 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}\_1 = \(\backslash\)left[\(\backslash\)begin\{array\}\{llllllllll\}0 \& 1 \& 0 \& 1 \& \(\backslash\)dots \& 0 \&}}
-\DoxyCodeLine{82 \textcolor{comment}{ * -\/1 \& 0 \& -\/1 \& \(\backslash\)dots\(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
-\DoxyCodeLine{83 \textcolor{comment}{ *}}
-\DoxyCodeLine{84 \textcolor{comment}{ * Due to the pressure continuity, we can write for all independent pressure}}
-\DoxyCodeLine{85 \textcolor{comment}{ * pairs: \(\backslash\)f[ \(\backslash\)mathbf\{F\}\string^\{e\}\_\{2,...,n\} = \(\backslash\)left[\(\backslash\)begin\{array\}\{lllll\}\(\backslash\)dots \&}}
-\DoxyCodeLine{86 \textcolor{comment}{ * \(\backslash\)underbrace\{1\}\_\{P\_i\} \& \(\backslash\)dots \& \(\backslash\)underbrace\{1\}\_\{P\_j\} \& \(\backslash\)dots\(\backslash\)end\{array\}\(\backslash\)right]}}
-\DoxyCodeLine{87 \textcolor{comment}{ * \(\backslash\)quad \(\backslash\)mathrm\{with\} \(\backslash\)quad i \(\backslash\)neq j \(\backslash\)f]}}
-\DoxyCodeLine{88 \textcolor{comment}{ *}}
-\DoxyCodeLine{89 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{90 \textcolor{comment}{ */}}
-\DoxyCodeLine{91 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{92 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
-\DoxyCodeLine{93  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{94 \textcolor{comment}{  /**}}
-\DoxyCodeLine{95 \textcolor{comment}{   * @brief Parameters of the element.}}
-\DoxyCodeLine{96 \textcolor{comment}{   *}}
-\DoxyCodeLine{97 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
-\DoxyCodeLine{98 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{99 \textcolor{comment}{   */}}
-\DoxyCodeLine{100   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_junction_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{\};}
-\DoxyCodeLine{101 \textcolor{comment}{}}
-\DoxyCodeLine{102 \textcolor{comment}{  /**}}
-\DoxyCodeLine{103 \textcolor{comment}{   * @brief Construct a new Junction object}}
-\DoxyCodeLine{104 \textcolor{comment}{   *}}
-\DoxyCodeLine{105 \textcolor{comment}{   * @param name Name}}
-\DoxyCodeLine{106 \textcolor{comment}{   */}}
-\DoxyCodeLine{107   \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a33a25b8ece3b0b803603c00729936fc1}{Junction}}(std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
-\DoxyCodeLine{108 \textcolor{comment}{}}
-\DoxyCodeLine{109 \textcolor{comment}{  /**}}
-\DoxyCodeLine{110 \textcolor{comment}{   * @brief Destroy the Junction object}}
-\DoxyCodeLine{111 \textcolor{comment}{   *}}
-\DoxyCodeLine{112 \textcolor{comment}{   */}}
-\DoxyCodeLine{113   \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a8b0a6279701734b1edf455e8d875e230}{\string~Junction}}();}
-\DoxyCodeLine{114 \textcolor{comment}{}}
-\DoxyCodeLine{115 \textcolor{comment}{  /**}}
-\DoxyCodeLine{116 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{117 \textcolor{comment}{   *}}
-\DoxyCodeLine{118 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{119 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{120 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{121 \textcolor{comment}{   *}}
-\DoxyCodeLine{122 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{123 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{124 \textcolor{comment}{   */}}
-\DoxyCodeLine{125   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a57cacb323bdb462c2e1773851f6088df}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
-\DoxyCodeLine{126 \textcolor{comment}{}}
-\DoxyCodeLine{127 \textcolor{comment}{  /**}}
-\DoxyCodeLine{128 \textcolor{comment}{   * @brief Update the constant contributions of the element in a dense system}}
-\DoxyCodeLine{129 \textcolor{comment}{   *}}
-\DoxyCodeLine{130 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{131 \textcolor{comment}{   */}}
-\DoxyCodeLine{132   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_ac23f15b47d2bfb7f18e17a783b44fbe0}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system);}
-\DoxyCodeLine{133 \textcolor{comment}{}}
-\DoxyCodeLine{134 \textcolor{comment}{  /**}}
-\DoxyCodeLine{135 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
-\DoxyCodeLine{136 \textcolor{comment}{   *}}
-\DoxyCodeLine{137 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{\textcolor{comment}{}}
+\DoxyCodeLine{41 \textcolor{comment}{/**}}
+\DoxyCodeLine{42 \textcolor{comment}{ * @brief Junction}}
+\DoxyCodeLine{43 \textcolor{comment}{ *}}
+\DoxyCodeLine{44 \textcolor{comment}{ * Models a junction with arbitrary inlets and outlets. Across all inlets and}}
+\DoxyCodeLine{45 \textcolor{comment}{ * outlets of the junction, mass is conserved and pressure is continuous.}}
+\DoxyCodeLine{46 \textcolor{comment}{ *}}
+\DoxyCodeLine{47 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{48 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\}}}
+\DoxyCodeLine{49 \textcolor{comment}{ * \(\backslash\)draw node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
+\DoxyCodeLine{50 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\} to [short, *-\/*] (3.0,0);}}
+\DoxyCodeLine{51 \textcolor{comment}{ * \(\backslash\)draw (3,0) node[anchor=south]\{\} to [short, -\/*] (4.5,1.0);}}
+\DoxyCodeLine{52 \textcolor{comment}{ * \(\backslash\)draw (4.3,1.1) node[anchor=south] \{\$P\_\{out,1\}\$\};}}
+\DoxyCodeLine{53 \textcolor{comment}{ * \(\backslash\)draw (3,0) node[anchor=south]\{\} to [short, -\/*] (4.5,-\/1.0);}}
+\DoxyCodeLine{54 \textcolor{comment}{ * \(\backslash\)draw (4.3,-\/1.1) node[anchor=north] \{\$P\_\{out,2\}\$\};}}
+\DoxyCodeLine{55 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (4.65,1.1) -\/-\/ (5.25,1.5) node[right] \{\$Q\_\{out,1\}\$\};}}
+\DoxyCodeLine{56 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (4.65,-\/1.1) -\/-\/ (5.25,-\/1.5) node[right] \{\$Q\_\{out,2\}\$\};}}
+\DoxyCodeLine{57 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
+\DoxyCodeLine{58 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{59 \textcolor{comment}{ *}}
+\DoxyCodeLine{60 \textcolor{comment}{ * \#\#\# Governing equations}}
+\DoxyCodeLine{61 \textcolor{comment}{ *}}
+\DoxyCodeLine{62 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{63 \textcolor{comment}{ * \(\backslash\)sum\_\{i\}\string^\{n\_\{inlets\}\} Q\_\{in, i\}=\(\backslash\)sum\_\{j\}\string^\{n\_\{outlets\}\} Q\_\{out, j\}}}
+\DoxyCodeLine{64 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{65 \textcolor{comment}{ *}}
+\DoxyCodeLine{66 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{67 \textcolor{comment}{ * P\_\{i\}=P\_\{j\} \(\backslash\)quad \(\backslash\)mathrm\{with\} \(\backslash\)quad i \(\backslash\)neq j}}
+\DoxyCodeLine{68 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{69 \textcolor{comment}{ *}}
+\DoxyCodeLine{70 \textcolor{comment}{ * \#\#\# Local contributions}}
+\DoxyCodeLine{71 \textcolor{comment}{ *}}
+\DoxyCodeLine{72 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{73 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{llllllllll\}P\_\{in, 1\}\string^\{e\} \& Q\_\{in, 1\}\string^\{e\} \&}}
+\DoxyCodeLine{74 \textcolor{comment}{ * \(\backslash\)dots \& P\_\{in, i\}\string^\{e\} \& Q\_\{in, i\}\string^\{e\} \& P\_\{out, 1\}\string^\{e\} \& Q\_\{out, 1\}\string^\{e\} \&}}
+\DoxyCodeLine{75 \textcolor{comment}{ * \(\backslash\)dots \& P\_\{out, i\}\string^\{e\} \& Q\_\{out, i\}\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
+\DoxyCodeLine{76 \textcolor{comment}{ *}}
+\DoxyCodeLine{77 \textcolor{comment}{ * Mass conservation}}
+\DoxyCodeLine{78 \textcolor{comment}{ *}}
+\DoxyCodeLine{79 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{80 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}\_1 = \(\backslash\)left[\(\backslash\)begin\{array\}\{llllllllll\}0 \& 1 \& 0 \& 1 \& \(\backslash\)dots \& 0 \&}}
+\DoxyCodeLine{81 \textcolor{comment}{ * -\/1 \& 0 \& -\/1 \& \(\backslash\)dots\(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
+\DoxyCodeLine{82 \textcolor{comment}{ *}}
+\DoxyCodeLine{83 \textcolor{comment}{ * Due to the pressure continuity, we can write for all independent pressure}}
+\DoxyCodeLine{84 \textcolor{comment}{ * pairs: \(\backslash\)f[ \(\backslash\)mathbf\{F\}\string^\{e\}\_\{2,...,n\} = \(\backslash\)left[\(\backslash\)begin\{array\}\{lllll\}\(\backslash\)dots \&}}
+\DoxyCodeLine{85 \textcolor{comment}{ * \(\backslash\)underbrace\{1\}\_\{P\_i\} \& \(\backslash\)dots \& \(\backslash\)underbrace\{1\}\_\{P\_j\} \& \(\backslash\)dots\(\backslash\)end\{array\}\(\backslash\)right]}}
+\DoxyCodeLine{86 \textcolor{comment}{ * \(\backslash\)quad \(\backslash\)mathrm\{with\} \(\backslash\)quad i \(\backslash\)neq j \(\backslash\)f]}}
+\DoxyCodeLine{87 \textcolor{comment}{ *}}
+\DoxyCodeLine{88 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{89 \textcolor{comment}{ */}}
+\DoxyCodeLine{90 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{91 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
+\DoxyCodeLine{92  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{93 \textcolor{comment}{  /**}}
+\DoxyCodeLine{94 \textcolor{comment}{   * @brief Parameters of the element.}}
+\DoxyCodeLine{95 \textcolor{comment}{   *}}
+\DoxyCodeLine{96 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
+\DoxyCodeLine{97 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{98 \textcolor{comment}{   */}}
+\DoxyCodeLine{99   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_junction_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{\};}
+\DoxyCodeLine{100 \textcolor{comment}{}}
+\DoxyCodeLine{101 \textcolor{comment}{  /**}}
+\DoxyCodeLine{102 \textcolor{comment}{   * @brief Construct a new Junction object}}
+\DoxyCodeLine{103 \textcolor{comment}{   *}}
+\DoxyCodeLine{104 \textcolor{comment}{   * @param name Name}}
+\DoxyCodeLine{105 \textcolor{comment}{   */}}
+\DoxyCodeLine{106   \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a33a25b8ece3b0b803603c00729936fc1}{Junction}}(std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
+\DoxyCodeLine{107 \textcolor{comment}{}}
+\DoxyCodeLine{108 \textcolor{comment}{  /**}}
+\DoxyCodeLine{109 \textcolor{comment}{   * @brief Destroy the Junction object}}
+\DoxyCodeLine{110 \textcolor{comment}{   *}}
+\DoxyCodeLine{111 \textcolor{comment}{   */}}
+\DoxyCodeLine{112   \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a8b0a6279701734b1edf455e8d875e230}{\string~Junction}}();}
+\DoxyCodeLine{113 \textcolor{comment}{}}
+\DoxyCodeLine{114 \textcolor{comment}{  /**}}
+\DoxyCodeLine{115 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{116 \textcolor{comment}{   *}}
+\DoxyCodeLine{117 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{118 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{119 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{120 \textcolor{comment}{   *}}
+\DoxyCodeLine{121 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{122 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{123 \textcolor{comment}{   */}}
+\DoxyCodeLine{124   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a57cacb323bdb462c2e1773851f6088df}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{125 \textcolor{comment}{}}
+\DoxyCodeLine{126 \textcolor{comment}{  /**}}
+\DoxyCodeLine{127 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{128 \textcolor{comment}{   *}}
+\DoxyCodeLine{129 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{130 \textcolor{comment}{   */}}
+\DoxyCodeLine{131   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{132 \textcolor{comment}{}}
+\DoxyCodeLine{133 \textcolor{comment}{  /**}}
+\DoxyCodeLine{134 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{135 \textcolor{comment}{   *}}
+\DoxyCodeLine{136 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{137 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
 \DoxyCodeLine{138 \textcolor{comment}{   */}}
-\DoxyCodeLine{139   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_ac23f15b47d2bfb7f18e17a783b44fbe0}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{140 \textcolor{comment}{}}
-\DoxyCodeLine{141 \textcolor{comment}{  /**}}
-\DoxyCodeLine{142 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{143 \textcolor{comment}{   *}}
-\DoxyCodeLine{144 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{145 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{146 \textcolor{comment}{   */}}
-\DoxyCodeLine{147   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a5d98db120811ddbb43f2b974116cb6da}{num\_triplets}} = \{}
-\DoxyCodeLine{148       \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
-\DoxyCodeLine{149       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{150       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{151   \};}
+\DoxyCodeLine{139   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a5d98db120811ddbb43f2b974116cb6da}{num\_triplets}} = \{}
+\DoxyCodeLine{140       \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
+\DoxyCodeLine{141       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{142       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{143   \};}
+\DoxyCodeLine{144 \textcolor{comment}{}}
+\DoxyCodeLine{145 \textcolor{comment}{  /**}}
+\DoxyCodeLine{146 \textcolor{comment}{   * @brief Get number of triplets of element}}
+\DoxyCodeLine{147 \textcolor{comment}{   *}}
+\DoxyCodeLine{148 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{149 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{150 \textcolor{comment}{   */}}
+\DoxyCodeLine{151   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}{get\_num\_triplets}}();}
 \DoxyCodeLine{152 }
 \DoxyCodeLine{153  \textcolor{keyword}{private}:}
 \DoxyCodeLine{154   Parameters params;}
@@ -178,48 +178,30 @@
 \DoxyCodeLine{174 \}}
 \DoxyCodeLine{175 }
 \DoxyCodeLine{176 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{177 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_ac23f15b47d2bfb7f18e17a783b44fbe0}{Junction<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA::DenseSystem<T>}} \&system) \{}
-\DoxyCodeLine{178   \textcolor{comment}{// Continuous pressure condition}}
-\DoxyCodeLine{179   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < (num\_inlets + num\_outlets -\/ 1); i++) \{}
-\DoxyCodeLine{180     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{181     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[2 * i + 2]) = -\/1.0;}
-\DoxyCodeLine{182     num\_triplets[\textcolor{stringliteral}{"{}F"{}}] += 2;}
-\DoxyCodeLine{183   \}}
-\DoxyCodeLine{184 }
-\DoxyCodeLine{185   \textcolor{comment}{// Conservation of mass}}
-\DoxyCodeLine{186   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 1; i < num\_inlets * 2; i = i + 2) \{}
-\DoxyCodeLine{187     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
-\DoxyCodeLine{188              this-\/>global\_var\_ids[i]) = 1.0;}
-\DoxyCodeLine{189     num\_triplets[\textcolor{stringliteral}{"{}F"{}}] += 1;}
-\DoxyCodeLine{190   \}}
-\DoxyCodeLine{191   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = (num\_inlets * 2) + 1; i < (num\_inlets + num\_outlets) * 2;}
-\DoxyCodeLine{192        i = i + 2) \{}
-\DoxyCodeLine{193     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system_ac20a8f0004a04e220567c11746ea77dd}{F}}(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
-\DoxyCodeLine{194              this-\/>global\_var\_ids[i]) = -\/1.0;}
-\DoxyCodeLine{195     num\_triplets[\textcolor{stringliteral}{"{}F"{}}] += 1;}
-\DoxyCodeLine{196   \}}
+\DoxyCodeLine{177 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}{Junction<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{178   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < (num\_inlets + num\_outlets -\/ 1); i++) \{}
+\DoxyCodeLine{179     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{180     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i],}
+\DoxyCodeLine{181                       this-\/>global\_var\_ids[2 * i + 2]) = -\/1.0;}
+\DoxyCodeLine{182   \}}
+\DoxyCodeLine{183   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 1; i < num\_inlets * 2; i = i + 2) \{}
+\DoxyCodeLine{184     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
+\DoxyCodeLine{185                       this-\/>global\_var\_ids[i]) = 1.0;}
+\DoxyCodeLine{186   \}}
+\DoxyCodeLine{187   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = (num\_inlets * 2) + 1; i < (num\_inlets + num\_outlets) * 2;}
+\DoxyCodeLine{188        i = i + 2) \{}
+\DoxyCodeLine{189     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
+\DoxyCodeLine{190                       this-\/>global\_var\_ids[i]) = -\/1.0;}
+\DoxyCodeLine{191   \}}
+\DoxyCodeLine{192 \}}
+\DoxyCodeLine{193 }
+\DoxyCodeLine{194 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{195 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}{Junction<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{196   \textcolor{keywordflow}{return} num\_triplets;}
 \DoxyCodeLine{197 \}}
 \DoxyCodeLine{198 }
-\DoxyCodeLine{199 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{200 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_ac23f15b47d2bfb7f18e17a783b44fbe0}{Junction<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{201   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < (num\_inlets + num\_outlets -\/ 1); i++) \{}
-\DoxyCodeLine{202     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{203     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i],}
-\DoxyCodeLine{204                       this-\/>global\_var\_ids[2 * i + 2]) = -\/1.0;}
-\DoxyCodeLine{205   \}}
-\DoxyCodeLine{206   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 1; i < num\_inlets * 2; i = i + 2) \{}
-\DoxyCodeLine{207     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
-\DoxyCodeLine{208                       this-\/>global\_var\_ids[i]) = 1.0;}
-\DoxyCodeLine{209   \}}
-\DoxyCodeLine{210   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = (num\_inlets * 2) + 1; i < (num\_inlets + num\_outlets) * 2;}
-\DoxyCodeLine{211        i = i + 2) \{}
-\DoxyCodeLine{212     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
-\DoxyCodeLine{213                       this-\/>global\_var\_ids[i]) = -\/1.0;}
-\DoxyCodeLine{214   \}}
-\DoxyCodeLine{215 \}}
-\DoxyCodeLine{216 }
-\DoxyCodeLine{217 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{218 }
-\DoxyCodeLine{219 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_JUNCTION\_HPP\_}}
+\DoxyCodeLine{199 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{200 }
+\DoxyCodeLine{201 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_JUNCTION\_HPP\_}}
 
 \end{DoxyCode}

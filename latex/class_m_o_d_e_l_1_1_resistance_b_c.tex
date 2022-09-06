@@ -33,14 +33,12 @@ struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters}{Para
 \begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system)
-\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a dense system. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system, T time)
-\begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a dense system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97adf48719b8}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}{get\+\_\+num\+\_\+triplets}} ()
+\begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{to\+\_\+steady}} ()
 \begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}{to\+\_\+unsteady}} ()
@@ -121,12 +119,27 @@ Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}\label{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}} 
+\index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}}
+\index{get\_num\_triplets@{get\_num\_triplets}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_num\_triplets()}{get\_num\_triplets()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::get\+\_\+num\+\_\+triplets\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Get number of triplets of element. 
+
+Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) 
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ae68725b7b8add13e1d182ce46fca76d2}{MODEL\+::\+Block$<$ T $>$}}.
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}\label{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}} 
 \index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!setup\_dofs@{setup\_dofs}}
 \index{setup\_dofs@{setup\_dofs}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{setup\_dofs()}{setup\_dofs()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -139,50 +152,46 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 {\em dofhandler} & Degree-\/of-\/freedom handler to register variables and equations at \\
 \hline
 \end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}\label{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}} 
 \index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!to\_steady@{to\_steady}}
 \index{to\_steady@{to\_steady}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::to\+\_\+steady}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::to\+\_\+steady\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
 Convert the block to a steady behavior. 
 
-Converts the resistance and distal pressure to the constant means of themselve \mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}\label{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}} 
+Converts the resistance and distal pressure to the constant means of themselve 
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{MODEL\+::\+Block$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}\label{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}} 
 \index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
 \index{to\_unsteady@{to\_unsteady}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::to\+\_\+unsteady}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::to\+\_\+unsteady\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
 Convert the block to a steady behavior. 
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}\label{class_m_o_d_e_l_1_1_resistance_b_c_aaf1d8b82c238c61b056cc7d473195b68}} 
-\index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_constant@{update\_constant}}
-\index{update\_constant@{update\_constant}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
 
 
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}{MODEL\+::\+Block$<$ T $>$}}.
 
-Update the constant contributions of the element in a dense system. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em system} & System to update contributions at \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97adf48719b8}\label{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97adf48719b8}} 
 \index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -193,30 +202,16 @@ Update the constant contributions of the element in a sparse system.
 {\em system} & System to update contributions at \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}\label{class_m_o_d_e_l_1_1_resistance_b_c_a49ccd29c24abb5ef6da653d3f62b0c17}} 
-\index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_time@{update\_time}}
-\index{update\_time@{update\_time}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
 
 
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{MODEL\+::\+Block$<$ T $>$}}.
 
-Update the time-\/dependent contributions of the element in a dense system. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em system} & System to update contributions at \\
-\hline
-{\em time} & Current time \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}\label{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}} 
 \index{MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}!update\_time@{update\_time}}
 \index{update\_time@{update\_time}!MODEL::ResistanceBC$<$ T $>$@{MODEL::ResistanceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+\doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -229,6 +224,10 @@ Update the time-\/dependent contributions of the element in a sparse system.
 {\em time} & Current time \\
 \hline
 \end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ac5d06fd3b4c7b517fc08b331f76c0d66}{MODEL\+::\+Block$<$ T $>$}}.
+
 
 
 \doxysubsection{Member Data Documentation}

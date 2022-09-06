@@ -97,6 +97,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acc2279e604839dd8fe28891fd4ec95d7"><td class="memItemLeft" align="right" valign="top">unsigned int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acc2279e604839dd8fe28891fd4ec95d7">register_equation</a> ()</td></tr>
 <tr class="memdesc:acc2279e604839dd8fe28891fd4ec95d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a new equation at the <a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html" title="Degree-of-freedom handler.">DOFHandler</a>.  <a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acc2279e604839dd8fe28891fd4ec95d7">More...</a><br /></td></tr>
 <tr class="separator:acc2279e604839dd8fe28891fd4ec95d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2af3f14749449bd3134a442eb1f4bfb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#ae2af3f14749449bd3134a442eb1f4bfb">get_index</a> (std::string_view &amp;name)</td></tr>
+<tr class="memdesc:ae2af3f14749449bd3134a442eb1f4bfb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the index of a variable.  <a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#ae2af3f14749449bd3134a442eb1f4bfb">More...</a><br /></td></tr>
+<tr class="separator:ae2af3f14749449bd3134a442eb1f4bfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -147,6 +150,33 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae2af3f14749449bd3134a442eb1f4bfb" name="ae2af3f14749449bd3134a442eb1f4bfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2af3f14749449bd3134a442eb1f4bfb">&#9670;&nbsp;</a></span>get_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int MODEL::DOFHandler::get_index </td>
+          <td>(</td>
+          <td class="paramtype">std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the index of a variable. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the variable </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Index of variable with given name </dd></dl>
+
+</div>
+</div>
 <a id="acc2279e604839dd8fe28891fd4ec95d7" name="acc2279e604839dd8fe28891fd4ec95d7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acc2279e604839dd8fe28891fd4ec95d7">&#9670;&nbsp;</a></span>register_equation()</h2>
 
@@ -237,7 +267,7 @@ Public Attributes</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Sat Sep 3 2022 19:57:11 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Tue Sep 6 2022 01:14:42 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

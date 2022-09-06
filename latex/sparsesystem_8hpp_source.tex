@@ -45,7 +45,7 @@
 \DoxyCodeLine{41 \textcolor{comment}{// Forward declaration of Model}}
 \DoxyCodeLine{42 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
 \DoxyCodeLine{43 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{44 \textcolor{keyword}{class }Model;}
+\DoxyCodeLine{44 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}};}
 \DoxyCodeLine{45 \}}
 \DoxyCodeLine{46 }
 \DoxyCodeLine{47 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_a_l_g_e_b_r_a}{ALGEBRA}} \{\textcolor{comment}{}}
@@ -144,11 +144,11 @@
 \DoxyCodeLine{140   F.reserve(num\_triplets[\textcolor{stringliteral}{"{}F"{}}]);}
 \DoxyCodeLine{141   E.reserve(num\_triplets[\textcolor{stringliteral}{"{}E"{}}]);}
 \DoxyCodeLine{142   D.reserve(num\_triplets[\textcolor{stringliteral}{"{}D"{}}]);}
-\DoxyCodeLine{143   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1a0bf15374ffd41cd1fe56417375d3a2}{update\_constant}}(*\textcolor{keyword}{this});}
-\DoxyCodeLine{144   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a0ac10aab77f38974e91af13823d2d40a}{update\_time}}(*\textcolor{keyword}{this}, 0.0);}
+\DoxyCodeLine{143   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_ab251541e14d080d82639950015579413}{update\_constant}}(*\textcolor{keyword}{this});}
+\DoxyCodeLine{144   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7cb64c8d49c6dc41d2c00df1cc24132d}{update\_time}}(*\textcolor{keyword}{this}, 0.0);}
 \DoxyCodeLine{145   Eigen::Matrix<T, Eigen::Dynamic, 1> dummy\_y =}
 \DoxyCodeLine{146       Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());}
-\DoxyCodeLine{147   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a177656d1de5a6d396e37789430fe5c77}{update\_solution}}(*\textcolor{keyword}{this}, dummy\_y);}
+\DoxyCodeLine{147   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a2e33d813e05f809fad8541a12189648a}{update\_solution}}(*\textcolor{keyword}{this}, dummy\_y);}
 \DoxyCodeLine{148   F.makeCompressed();}
 \DoxyCodeLine{149   E.makeCompressed();}
 \DoxyCodeLine{150   D.makeCompressed();}

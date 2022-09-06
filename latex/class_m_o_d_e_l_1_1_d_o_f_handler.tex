@@ -21,7 +21,9 @@ unsigned int \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b1267
 unsigned int \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{register\+\_\+variable}} (std\+::string name)
 \begin{DoxyCompactList}\small\item\em Register a new variable at the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}}. \end{DoxyCompactList}\item 
 unsigned int \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}{register\+\_\+equation}} ()
-\begin{DoxyCompactList}\small\item\em Register a new equation at the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Register a new equation at the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}}. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_ae2af3f14749449bd3134a442eb1f4bfb}{get\+\_\+index}} (std\+::string\+\_\+view \&name)
+\begin{DoxyCompactList}\small\item\em Get the index of a variable. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -58,6 +60,24 @@ Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} obj
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler_ae2af3f14749449bd3134a442eb1f4bfb}\label{class_m_o_d_e_l_1_1_d_o_f_handler_ae2af3f14749449bd3134a442eb1f4bfb}} 
+\index{MODEL::DOFHandler@{MODEL::DOFHandler}!get\_index@{get\_index}}
+\index{get\_index@{get\_index}!MODEL::DOFHandler@{MODEL::DOFHandler}}
+\doxysubsubsection{\texorpdfstring{get\_index()}{get\_index()}}
+{\footnotesize\ttfamily int MODEL\+::\+DOFHandler\+::get\+\_\+index (\begin{DoxyParamCaption}\item[{std\+::string\+\_\+view \&}]{name }\end{DoxyParamCaption})}
+
+
+
+Get the index of a variable. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Name of the variable \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Index of variable with given name 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}\label{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}} 
 \index{MODEL::DOFHandler@{MODEL::DOFHandler}!register\_equation@{register\_equation}}
 \index{register\_equation@{register\_equation}!MODEL::DOFHandler@{MODEL::DOFHandler}}

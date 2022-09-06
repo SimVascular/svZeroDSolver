@@ -33,10 +33,10 @@ struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_junction_1_1_parameters}{Parameters
 \begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a57cacb323bdb462c2e1773851f6088df}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_ac23f15b47d2bfb7f18e17a783b44fbe0}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&system)
-\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a dense system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
-\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}{get\+\_\+num\+\_\+triplets}} ()
+\begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -123,12 +123,27 @@ Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}} object.
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}\label{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}} 
+\index{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}}
+\index{get\_num\_triplets@{get\_num\_triplets}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_num\_triplets()}{get\_num\_triplets()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::get\+\_\+num\+\_\+triplets\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Get number of triplets of element. 
+
+Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) 
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ae68725b7b8add13e1d182ce46fca76d2}{MODEL\+::\+Block$<$ T $>$}}.
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_a57cacb323bdb462c2e1773851f6088df}\label{class_m_o_d_e_l_1_1_junction_a57cacb323bdb462c2e1773851f6088df}} 
 \index{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!setup\_dofs@{setup\_dofs}}
 \index{setup\_dofs@{setup\_dofs}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{setup\_dofs()}{setup\_dofs()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::setup\+\_\+dofs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&}]{dofhandler }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -141,28 +156,16 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 {\em dofhandler} & Degree-\/of-\/freedom handler to register variables and equations at \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_ac23f15b47d2bfb7f18e17a783b44fbe0}\label{class_m_o_d_e_l_1_1_junction_ac23f15b47d2bfb7f18e17a783b44fbe0}} 
-\index{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!update\_constant@{update\_constant}}
-\index{update\_constant@{update\_constant}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_dense_system}{ALGEBRA\+::\+Dense\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
 
 
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
 
-Update the constant contributions of the element in a dense system. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em system} & System to update contributions at \\
-\hline
-\end{DoxyParams}
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}\label{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}} 
 \index{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+\doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -173,6 +176,10 @@ Update the constant contributions of the element in a sparse system.
 {\em system} & System to update contributions at \\
 \hline
 \end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{MODEL\+::\+Block$<$ T $>$}}.
+
 
 
 \doxysubsection{Member Data Documentation}

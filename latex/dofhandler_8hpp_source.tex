@@ -92,26 +92,43 @@
 \DoxyCodeLine{88 \textcolor{comment}{   * @return Global index of the equation}}
 \DoxyCodeLine{89 \textcolor{comment}{   */}}
 \DoxyCodeLine{90   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}{register\_equation}}();}
-\DoxyCodeLine{91 \};}
-\DoxyCodeLine{92 }
-\DoxyCodeLine{93 \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a8a8c504cac23395821f65a236f42d3f3}{DOFHandler::DOFHandler}}() \{}
-\DoxyCodeLine{94   var\_counter = 0;}
-\DoxyCodeLine{95   eqn\_counter = 0;}
-\DoxyCodeLine{96 \}}
-\DoxyCodeLine{97 }
-\DoxyCodeLine{98 \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a53dc8c00e7d0055e971e0d2443cc98fd}{DOFHandler::\string~DOFHandler}}() \{\}}
-\DoxyCodeLine{99 }
-\DoxyCodeLine{100 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{DOFHandler::size}}() \{ \textcolor{keywordflow}{return} var\_counter; \}}
-\DoxyCodeLine{101 }
-\DoxyCodeLine{102 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{DOFHandler::register\_variable}}(std::string name) \{}
-\DoxyCodeLine{103   \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}.push\_back(name);}
-\DoxyCodeLine{104   \textcolor{keywordflow}{return} var\_counter++;}
-\DoxyCodeLine{105 \}}
-\DoxyCodeLine{106 }
-\DoxyCodeLine{107 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}{DOFHandler::register\_equation}}() \{ \textcolor{keywordflow}{return} eqn\_counter++; \}}
-\DoxyCodeLine{108 }
-\DoxyCodeLine{109 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{110 }
-\DoxyCodeLine{111 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_DOFHANDLER\_HPP\_}}
+\DoxyCodeLine{91 \textcolor{comment}{}}
+\DoxyCodeLine{92 \textcolor{comment}{  /**}}
+\DoxyCodeLine{93 \textcolor{comment}{   * @brief Get the index of a variable}}
+\DoxyCodeLine{94 \textcolor{comment}{   *}}
+\DoxyCodeLine{95 \textcolor{comment}{   * @param name Name of the variable}}
+\DoxyCodeLine{96 \textcolor{comment}{   * @return Index of variable with given name}}
+\DoxyCodeLine{97 \textcolor{comment}{   */}}
+\DoxyCodeLine{98   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_ae2af3f14749449bd3134a442eb1f4bfb}{get\_index}}(std::string\_view\& name);}
+\DoxyCodeLine{99 \};}
+\DoxyCodeLine{100 }
+\DoxyCodeLine{101 \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a8a8c504cac23395821f65a236f42d3f3}{DOFHandler::DOFHandler}}() \{}
+\DoxyCodeLine{102   var\_counter = 0;}
+\DoxyCodeLine{103   eqn\_counter = 0;}
+\DoxyCodeLine{104 \}}
+\DoxyCodeLine{105 }
+\DoxyCodeLine{106 \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a53dc8c00e7d0055e971e0d2443cc98fd}{DOFHandler::\string~DOFHandler}}() \{\}}
+\DoxyCodeLine{107 }
+\DoxyCodeLine{108 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{DOFHandler::size}}() \{ \textcolor{keywordflow}{return} var\_counter; \}}
+\DoxyCodeLine{109 }
+\DoxyCodeLine{110 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a5a0ed333dcaba12d1ef7ff9875170840}{DOFHandler::register\_variable}}(std::string name) \{}
+\DoxyCodeLine{111   \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}.push\_back(name);}
+\DoxyCodeLine{112   \textcolor{keywordflow}{return} var\_counter++;}
+\DoxyCodeLine{113 \}}
+\DoxyCodeLine{114 }
+\DoxyCodeLine{115 \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acc2279e604839dd8fe28891fd4ec95d7}{DOFHandler::register\_equation}}() \{ \textcolor{keywordflow}{return} eqn\_counter++; \}}
+\DoxyCodeLine{116 }
+\DoxyCodeLine{117 \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_ae2af3f14749449bd3134a442eb1f4bfb}{DOFHandler::get\_index}}(std::string\_view\& name) \{}
+\DoxyCodeLine{118   \textcolor{keyword}{auto} it = find(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}.begin(), \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}.end(), name);}
+\DoxyCodeLine{119   \textcolor{keywordflow}{if} (it != \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}.end()) \{}
+\DoxyCodeLine{120     \textcolor{keywordflow}{return} it -\/ \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}.begin();}
+\DoxyCodeLine{121   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{122     \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"{}No variable with that name"{}});}
+\DoxyCodeLine{123   \}}
+\DoxyCodeLine{124 \}}
+\DoxyCodeLine{125 }
+\DoxyCodeLine{126 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{127 }
+\DoxyCodeLine{128 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_DOFHANDLER\_HPP\_}}
 
 \end{DoxyCode}

@@ -51,11 +51,11 @@ namespace MODEL {
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R$, *-] (3,0)
- * to [R, l=$R_{ste}$, -] (5,0)
- * to [L, l=$L$, *-*] (7,0)
+ * to [R, l=$R_{ste}$, -] (5,0) node[anchor=south] {$P_{C}$}
+ * (5,0) to [L, l=$L$, *-*] (7,0)
  * node[anchor=south]{$P_{out}$}
  * (5,0) to [C, l=$C$, *-] (5,-1.5)
- * node[ground]{$P_C$};
+ * node[ground]{};
  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
  * \f]

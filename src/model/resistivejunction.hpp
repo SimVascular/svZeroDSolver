@@ -41,6 +41,59 @@ namespace MODEL {
 /**
  * @brief ResistiveJunction
  *
+ * Models a junction with arbitrary resistive inlets and outlets. Across all
+ * inlets and outlets of the junction, mass is conserved.
+ *
+ * \f[
+ * \begin{circuitikz}
+ * \draw [-latex] (0.25,1.4) node[left] {$Q_{in,1}$} -- (0.85,1.1);
+ * \draw [-latex] (0.25,-1.4) node[left] {$Q_{in,1}$} -- (0.85,-1.1);
+ * \draw (1,1.0) node[anchor=south]{$P_{in,1}$} to [R, , l=$R_{in,1}$, *-*]
+ * (3.0,0) node[anchor=north] {$P_{C}$}; \draw (1,-1.0)
+ * node[anchor=north]{$P_{in, 2}$} to [R, , l=$R_{in,2}$, *-*] (3.0,0); \draw
+ * (3,0) node[anchor=south]{} to [R, l=$R_{out,1}$, -*] (5,1.0); \draw (4.3,1.1)
+ * node[anchor=south] {$P_{out,1}$}; \draw (3,0) node[anchor=south]{} to [R,
+ * l=$R_{out,2}$, -*] (5,-1.0); \draw (4.3,-1.1) node[anchor=north]
+ * {$P_{out,2}$}; \draw [-latex] (5.15,1.1) -- (5.75,1.4) node[right]
+ * {$Q_{out,1}$}; \draw [-latex] (5.15,-1.1) -- (5.75,-1.4) node[right]
+ * {$Q_{out,2}$}; \end{circuitikz} \f]
+ *
+ * ### Governing equations
+ *
+ * \f[
+ * \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
+ * \f]
+ *
+ * \f[
+ * P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}
+ * \f]
+ * \f[
+ * P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}
+ * \f]
+ *
+ * ### Local contributions
+ *
+ * \f[
+ * \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
+ * & \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} &
+ * \dots & P_{out, i}^{e} & Q_{out, i}^{e} & P_{C}\end{array}\right] \f]
+ *
+ * Mass conservation
+ *
+ * \f[
+ * \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 & 1 & 0 & 1 & \dots & 0
+ * & -1 & 0 & -1 & \dots & 0\end{array}\right] \f]
+ *
+ * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
+ * \underbrace{1}_{P_{in,i}} & \underbrace{-R_{in,i}}_{Q_{in,i}} & \dots &
+ * \underbrace{-1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
+ * i\in n_{inlets}  \f]
+ *
+ * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
+ * \underbrace{-1}_{P_{out,j}} & \underbrace{-R_{out,j}}_{Q_{out,j}} & \dots &
+ * \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
+ * j\in n_{oulets}  \f]
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>

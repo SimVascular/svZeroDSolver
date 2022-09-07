@@ -48,6 +48,7 @@
 #include "../model/openloopcoronarybc.hpp"
 #include "../model/pressurereferencebc.hpp"
 #include "../model/resistancebc.hpp"
+#include "../model/resistivejunction.hpp"
 #include "../model/windkesselbc.hpp"
 #include "simdjson.h"
 
@@ -332,25 +333,30 @@ void ConfigReader<T>::load(std::string &specifier) {
   // Create junctions
   for (auto junction_config : config["junctions"]) {
     std::string_view j_type = junction_config["junction_type"].get_string();
+    std::string_view junction_name =
+        junction_config["junction_name"].get_string();
     if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
-      // Create the junction and add to blocks
-      std::string_view junction_name =
-          junction_config["junction_name"].get_string();
       model.blocks.push_back(
           new MODEL::Junction<T>(static_cast<std::string>(junction_name)));
-
-      // Check for connections to inlet and outlet vessels and append to
-      // connections list
-      for (auto inlet_vessel : junction_config["inlet_vessels"]) {
-        connections.push_back(
-            {vessel_id_map[inlet_vessel.get_int64()], junction_name});
+    } else if (j_type == "resistive_junction") {
+      std::vector<T> R;
+      for (auto x : junction_config["junction_values"]["R"].get_array()) {
+        R.push_back(x.get_double());
       }
-      for (auto outlet_vessel : junction_config["outlet_vessels"]) {
-        connections.push_back(
-            {junction_name, vessel_id_map[outlet_vessel.get_int64()]});
-      }
+      model.blocks.push_back(new MODEL::ResistiveJunction<T>(
+          R, static_cast<std::string>(junction_name)));
     } else {
       throw std::invalid_argument("Unknown junction type");
+    }
+    // Check for connections to inlet and outlet vessels and append to
+    // connections list
+    for (auto inlet_vessel : junction_config["inlet_vessels"]) {
+      connections.push_back(
+          {vessel_id_map[inlet_vessel.get_int64()], junction_name});
+    }
+    for (auto outlet_vessel : junction_config["outlet_vessels"]) {
+      connections.push_back(
+          {junction_name, vessel_id_map[outlet_vessel.get_int64()]});
     }
   }
 

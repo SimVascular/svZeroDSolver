@@ -251,7 +251,7 @@ const std::string run(std::string& json_config) {
   states.reserve(reader.sim_num_time_steps);
   times.reserve(reader.sim_num_time_steps);
   T time = 0.0;
-  states.push_back(std::move(state));
+  states.push_back(state);
   times.push_back(time);
 
   // Run integrator

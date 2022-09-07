@@ -28,34 +28,35 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file junction.hpp
- * @brief MODEL::Junction source file
+ * @file resistivejunction.hpp
+ * @brief MODEL::ResistiveJunction source file
  */
-#ifndef SVZERODSOLVER_MODEL_JUNCTION_HPP_
-#define SVZERODSOLVER_MODEL_JUNCTION_HPP_
+#ifndef SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_
+#define SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
 
 namespace MODEL {
 /**
- * @brief Junction
+ * @brief ResistiveJunction
  *
- * Models a junction with arbitrary inlets and outlets. Across all inlets and
- * outlets of the junction, mass is conserved and pressure is continuous.
+ * Models a junction with arbitrary resistive inlets and outlets. Across all
+ * inlets and outlets of the junction, mass is conserved.
  *
  * \f[
  * \begin{circuitikz}
- * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_{in}$} to [short, *-*] (3.0,0);
- * \draw (3,0) node[anchor=south]{} to [short, -*] (4.5,1.0);
- * \draw (4.3,1.1) node[anchor=south] {$P_{out,1}$};
- * \draw (3,0) node[anchor=south]{} to [short, -*] (4.5,-1.0);
- * \draw (4.3,-1.1) node[anchor=north] {$P_{out,2}$};
- * \draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
- * \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
- * \end{circuitikz}
- * \f]
+ * \draw [-latex] (0.25,1.4) node[left] {$Q_{in,1}$} -- (0.85,1.1);
+ * \draw [-latex] (0.25,-1.4) node[left] {$Q_{in,1}$} -- (0.85,-1.1);
+ * \draw (1,1.0) node[anchor=south]{$P_{in,1}$} to [R, , l=$R_{in,1}$, *-*]
+ * (3.0,0) node[anchor=north] {$P_{C}$}; \draw (1,-1.0)
+ * node[anchor=north]{$P_{in, 2}$} to [R, , l=$R_{in,2}$, *-*] (3.0,0); \draw
+ * (3,0) node[anchor=south]{} to [R, l=$R_{out,1}$, -*] (5,1.0); \draw (4.3,1.1)
+ * node[anchor=south] {$P_{out,1}$}; \draw (3,0) node[anchor=south]{} to [R,
+ * l=$R_{out,2}$, -*] (5,-1.0); \draw (4.3,-1.1) node[anchor=north]
+ * {$P_{out,2}$}; \draw [-latex] (5.15,1.1) -- (5.75,1.4) node[right]
+ * {$Q_{out,1}$}; \draw [-latex] (5.15,-1.1) -- (5.75,-1.4) node[right]
+ * {$Q_{out,2}$}; \end{circuitikz} \f]
  *
  * ### Governing equations
  *
@@ -64,31 +65,39 @@ namespace MODEL {
  * \f]
  *
  * \f[
- * P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
+ * P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}
+ * \f]
+ * \f[
+ * P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e} &
- * \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} &
- * \dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right] \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
+ * & \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} &
+ * \dots & P_{out, i}^{e} & Q_{out, i}^{e} & P_{C}\end{array}\right] \f]
  *
  * Mass conservation
  *
  * \f[
- * \mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 & 1 & 0 & 1 & \dots & 0 &
- * -1 & 0 & -1 & \dots\end{array}\right] \f]
+ * \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 & 1 & 0 & 1 & \dots & 0
+ * & -1 & 0 & -1 & \dots & 0\end{array}\right] \f]
  *
- * Due to the pressure continuity, we can write for all independent pressure
- * pairs: \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
- * \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right]
- * \quad \mathrm{with} \quad i \neq j \f]
+ * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
+ * \underbrace{1}_{P_{in,i}} & \underbrace{-R_{in,i}}_{Q_{in,i}} & \dots &
+ * \underbrace{-1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
+ * i\in n_{inlets}  \f]
+ *
+ * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
+ * \underbrace{-1}_{P_{out,j}} & \underbrace{-R_{out,j}}_{Q_{out,j}} & \dots &
+ * \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
+ * j\in n_{oulets}  \f]
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
-class Junction : public Block<T> {
+class ResistiveJunction : public Block<T> {
  public:
   /**
    * @brief Parameters of the element.
@@ -96,20 +105,22 @@ class Junction : public Block<T> {
    * Struct containing all constant and/or time-dependent parameters of the
    * element.
    */
-  struct Parameters : public Block<T>::Parameters {};
+  struct Parameters : public Block<T>::Parameters {
+    std::vector<T> R;  ///< Poiseuille resistance
+  };
 
   /**
-   * @brief Construct a new Junction object
+   * @brief Construct a new ResistiveJunction object
    *
    * @param name Name
    */
-  Junction(std::string name);
+  ResistiveJunction(std::vector<T> R, std::string name);
 
   /**
-   * @brief Destroy the Junction object
+   * @brief Destroy the ResistiveJunction object
    *
    */
-  ~Junction();
+  ~ResistiveJunction();
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -157,50 +168,62 @@ class Junction : public Block<T> {
 };
 
 template <typename T>
-Junction<T>::Junction(std::string name) : Block<T>(name) {
+ResistiveJunction<T>::ResistiveJunction(std::vector<T> R, std::string name)
+    : Block<T>(name) {
   this->name = name;
+  this->params.R = R;
 }
 
 template <typename T>
-Junction<T>::~Junction() {}
+ResistiveJunction<T>::~ResistiveJunction() {}
 
 template <typename T>
-void Junction<T>::setup_dofs(DOFHandler &dofhandler) {
+void ResistiveJunction<T>::setup_dofs(DOFHandler &dofhandler) {
   // Set number of equations of a junction block based on number of
   // inlets/outlets. Must be set before calling parent constructor
   num_inlets = this->inlet_nodes.size();
   num_outlets = this->outlet_nodes.size();
-  Block<T>::setup_dofs_(dofhandler, num_inlets + num_outlets, {});
-  num_triplets["F"] =
-      (num_inlets + num_outlets - 1) * 2 + num_inlets + num_outlets;
+  Block<T>::setup_dofs_(dofhandler, num_inlets + num_outlets + 1,
+                        {"pressure_c"});
+  num_triplets["F"] = (num_inlets + num_outlets) * 4;
 }
 
 template <typename T>
-void Junction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
-  // Pressure conservation
-  for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++) {
-    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[0]) = 1.0;
+void ResistiveJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+  for (size_t i = 0; i < num_inlets; i++) {
+    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[i * 2]) =
+        1.0;
     system.F.coeffRef(this->global_eqn_ids[i],
-                      this->global_var_ids[2 * i + 2]) = -1.0;
+                      this->global_var_ids[i * 2 + 1]) = -params.R[i];
+    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids.back()) =
+        -1.0;
+  }
+  for (size_t i = num_inlets; i < num_inlets + num_outlets; i++) {
+    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[i * 2]) =
+        -1.0;
+    system.F.coeffRef(this->global_eqn_ids[i],
+                      this->global_var_ids[i * 2 + 1]) = -params.R[i];
+    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids.back()) =
+        1.0;
   }
 
   // Mass conservation
   for (size_t i = 1; i < num_inlets * 2; i = i + 2) {
-    system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets - 1],
+    system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets],
                       this->global_var_ids[i]) = 1.0;
   }
   for (size_t i = (num_inlets * 2) + 1; i < (num_inlets + num_outlets) * 2;
        i = i + 2) {
-    system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets - 1],
+    system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets],
                       this->global_var_ids[i]) = -1.0;
   }
 }
 
 template <typename T>
-std::map<std::string, int> Junction<T>::get_num_triplets() {
+std::map<std::string, int> ResistiveJunction<T>::get_num_triplets() {
   return num_triplets;
 }
 
 }  // namespace MODEL
 
-#endif  // SVZERODSOLVER_MODEL_JUNCTION_HPP_
+#endif  // SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_

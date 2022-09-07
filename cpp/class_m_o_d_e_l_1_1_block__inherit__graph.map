@@ -1,10 +1,11 @@
 <map id="MODEL::Block&lt; T &gt;" name="MODEL::Block&lt; T &gt;">
-<area shape="rect" id="node1" title="Base class for 0D model components." alt="" coords="5,157,143,184"/>
+<area shape="rect" id="node1" title="Base class for 0D model components." alt="" coords="5,187,143,213"/>
 <area shape="rect" id="node2" href="$class_m_o_d_e_l_1_1_blood_vessel.html" title="Resistor&#45;capacitor&#45;inductor blood vessel with optional stenosis." alt="" coords="219,5,396,32"/>
 <area shape="rect" id="node3" href="$class_m_o_d_e_l_1_1_flow_reference_b_c.html" title="Flow reference boundary condition." alt="" coords="203,56,412,83"/>
 <area shape="rect" id="node4" href="$class_m_o_d_e_l_1_1_junction.html" title="Junction." alt="" coords="231,107,384,133"/>
 <area shape="rect" id="node5" href="$class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on ." alt="" coords="191,157,424,184"/>
 <area shape="rect" id="node6" href="$class_m_o_d_e_l_1_1_pressure_reference_b_c.html" title="Pressure reference boundary condition." alt="" coords="215,209,400,250"/>
 <area shape="rect" id="node7" href="$class_m_o_d_e_l_1_1_resistance_b_c.html" title="Resistance boundary condition." alt="" coords="214,275,401,301"/>
-<area shape="rect" id="node8" href="$class_m_o_d_e_l_1_1_windkessel_b_c.html" title="Windkessel RCR boundary condition." alt="" coords="213,325,402,352"/>
+<area shape="rect" id="node8" href="$class_m_o_d_e_l_1_1_resistive_junction.html" title="ResistiveJunction." alt="" coords="204,325,411,352"/>
+<area shape="rect" id="node9" href="$class_m_o_d_e_l_1_1_windkessel_b_c.html" title="Windkessel RCR boundary condition." alt="" coords="213,376,402,403"/>
 </map>

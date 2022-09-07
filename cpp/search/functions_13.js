@@ -12,8 +12,9 @@ var searchData=
   ['_7eopenloopcoronarybc_9',['~OpenLoopCoronaryBC',['../class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a72d7be0834bc923552e6ab6b54695559',1,'MODEL::OpenLoopCoronaryBC']]],
   ['_7epressurereferencebc_10',['~PressureReferenceBC',['../class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a687e158f42007c3dda8a1992e3b28137',1,'MODEL::PressureReferenceBC']]],
   ['_7eresistancebc_11',['~ResistanceBC',['../class_m_o_d_e_l_1_1_resistance_b_c.html#aa16d90b9c1d86e6732b61fa708d8750c',1,'MODEL::ResistanceBC']]],
-  ['_7esparsesystem_12',['~SparseSystem',['../class_a_l_g_e_b_r_a_1_1_sparse_system.html#a70cd2505b7fd6c9b8f9fb3a5255e4f10',1,'ALGEBRA::SparseSystem']]],
-  ['_7estate_13',['~State',['../class_a_l_g_e_b_r_a_1_1_state.html#a52df29ccfa65e5fdaa637d109dddf137',1,'ALGEBRA::State']]],
-  ['_7etimedependentparameter_14',['~TimeDependentParameter',['../class_m_o_d_e_l_1_1_time_dependent_parameter.html#a98ecc5ee6b8a94abd1bbe38b0f3225da',1,'MODEL::TimeDependentParameter']]],
-  ['_7ewindkesselbc_15',['~WindkesselBC',['../class_m_o_d_e_l_1_1_windkessel_b_c.html#af094418bf6f8d9489cf4079a598c1506',1,'MODEL::WindkesselBC']]]
+  ['_7eresistivejunction_12',['~ResistiveJunction',['../class_m_o_d_e_l_1_1_resistive_junction.html#a14b440134065c081afd141f1a0708b87',1,'MODEL::ResistiveJunction']]],
+  ['_7esparsesystem_13',['~SparseSystem',['../class_a_l_g_e_b_r_a_1_1_sparse_system.html#a70cd2505b7fd6c9b8f9fb3a5255e4f10',1,'ALGEBRA::SparseSystem']]],
+  ['_7estate_14',['~State',['../class_a_l_g_e_b_r_a_1_1_state.html#a52df29ccfa65e5fdaa637d109dddf137',1,'ALGEBRA::State']]],
+  ['_7etimedependentparameter_15',['~TimeDependentParameter',['../class_m_o_d_e_l_1_1_time_dependent_parameter.html#a98ecc5ee6b8a94abd1bbe38b0f3225da',1,'MODEL::TimeDependentParameter']]],
+  ['_7ewindkesselbc_16',['~WindkesselBC',['../class_m_o_d_e_l_1_1_windkessel_b_c.html#af094418bf6f8d9489cf4079a598c1506',1,'MODEL::WindkesselBC']]]
 ];

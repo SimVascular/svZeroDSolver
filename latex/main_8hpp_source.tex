@@ -50,11 +50,11 @@
 \DoxyCodeLine{47 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
 \DoxyCodeLine{48 \textcolor{comment}{ * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
 \DoxyCodeLine{49 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\}}}
-\DoxyCodeLine{50 \textcolor{comment}{ * to [R, l=\$R\$, *-\/] (3,0)}}
-\DoxyCodeLine{51 \textcolor{comment}{ * to [L, l=\$L\$, *-\/*] (5,0)}}
+\DoxyCodeLine{50 \textcolor{comment}{ * to [R, l=\$R\$, *-\/] (3,0) node[anchor=south] \{\$P\_\{C\}\$\}}}
+\DoxyCodeLine{51 \textcolor{comment}{ * (3,0) to [L, l=\$L\$, *-\/*] (5,0)}}
 \DoxyCodeLine{52 \textcolor{comment}{ * node[anchor=south]\{\$P\_\{out\}\$\}}}
 \DoxyCodeLine{53 \textcolor{comment}{ * (3,0) to [C, l=\$C\$, *-\/] (3,-\/1.5)}}
-\DoxyCodeLine{54 \textcolor{comment}{ * node[ground]\{\$P\_C\$\};}}
+\DoxyCodeLine{54 \textcolor{comment}{ * node[ground]\{\};}}
 \DoxyCodeLine{55 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (5.2,0) -\/-\/ (6,0) node[right] \{\$Q\_\{out\}\$\};}}
 \DoxyCodeLine{56 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
 \DoxyCodeLine{57 \textcolor{comment}{ * \(\backslash\)f]}}
@@ -254,7 +254,7 @@
 \DoxyCodeLine{251   states.reserve(reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}});}
 \DoxyCodeLine{252   times.reserve(reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}});}
 \DoxyCodeLine{253   T time = 0.0;}
-\DoxyCodeLine{254   states.push\_back(std::move(state));}
+\DoxyCodeLine{254   states.push\_back(state);}
 \DoxyCodeLine{255   times.push\_back(time);}
 \DoxyCodeLine{256 }
 \DoxyCodeLine{257   \textcolor{comment}{// Run integrator}}

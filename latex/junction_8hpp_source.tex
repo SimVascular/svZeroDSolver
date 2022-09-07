@@ -175,33 +175,38 @@
 \DoxyCodeLine{171   num\_inlets = this-\/>inlet\_nodes.size();}
 \DoxyCodeLine{172   num\_outlets = this-\/>outlet\_nodes.size();}
 \DoxyCodeLine{173   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, num\_inlets + num\_outlets, \{\});}
-\DoxyCodeLine{174 \}}
-\DoxyCodeLine{175 }
-\DoxyCodeLine{176 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{177 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}{Junction<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{178   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < (num\_inlets + num\_outlets -\/ 1); i++) \{}
-\DoxyCodeLine{179     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{180     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i],}
-\DoxyCodeLine{181                       this-\/>global\_var\_ids[2 * i + 2]) = -\/1.0;}
-\DoxyCodeLine{182   \}}
-\DoxyCodeLine{183   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 1; i < num\_inlets * 2; i = i + 2) \{}
-\DoxyCodeLine{184     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
-\DoxyCodeLine{185                       this-\/>global\_var\_ids[i]) = 1.0;}
-\DoxyCodeLine{186   \}}
-\DoxyCodeLine{187   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = (num\_inlets * 2) + 1; i < (num\_inlets + num\_outlets) * 2;}
-\DoxyCodeLine{188        i = i + 2) \{}
+\DoxyCodeLine{174   num\_triplets[\textcolor{stringliteral}{"{}F"{}}] =}
+\DoxyCodeLine{175       (num\_inlets + num\_outlets -\/ 1) * 2 + num\_inlets + num\_outlets;}
+\DoxyCodeLine{176 \}}
+\DoxyCodeLine{177 }
+\DoxyCodeLine{178 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{179 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}{Junction<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{180   \textcolor{comment}{// Pressure conservation}}
+\DoxyCodeLine{181   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < (num\_inlets + num\_outlets -\/ 1); i++) \{}
+\DoxyCodeLine{182     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{183     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i],}
+\DoxyCodeLine{184                       this-\/>global\_var\_ids[2 * i + 2]) = -\/1.0;}
+\DoxyCodeLine{185   \}}
+\DoxyCodeLine{186 }
+\DoxyCodeLine{187   \textcolor{comment}{// Mass conservation}}
+\DoxyCodeLine{188   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 1; i < num\_inlets * 2; i = i + 2) \{}
 \DoxyCodeLine{189     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
-\DoxyCodeLine{190                       this-\/>global\_var\_ids[i]) = -\/1.0;}
+\DoxyCodeLine{190                       this-\/>global\_var\_ids[i]) = 1.0;}
 \DoxyCodeLine{191   \}}
-\DoxyCodeLine{192 \}}
-\DoxyCodeLine{193 }
-\DoxyCodeLine{194 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{195 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}{Junction<T>::get\_num\_triplets}}() \{}
-\DoxyCodeLine{196   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{192   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = (num\_inlets * 2) + 1; i < (num\_inlets + num\_outlets) * 2;}
+\DoxyCodeLine{193        i = i + 2) \{}
+\DoxyCodeLine{194     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets -\/ 1],}
+\DoxyCodeLine{195                       this-\/>global\_var\_ids[i]) = -\/1.0;}
+\DoxyCodeLine{196   \}}
 \DoxyCodeLine{197 \}}
 \DoxyCodeLine{198 }
-\DoxyCodeLine{199 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{200 }
-\DoxyCodeLine{201 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_JUNCTION\_HPP\_}}
+\DoxyCodeLine{199 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{200 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}{Junction<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{201   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{202 \}}
+\DoxyCodeLine{203 }
+\DoxyCodeLine{204 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{205 }
+\DoxyCodeLine{206 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_JUNCTION\_HPP\_}}
 
 \end{DoxyCode}

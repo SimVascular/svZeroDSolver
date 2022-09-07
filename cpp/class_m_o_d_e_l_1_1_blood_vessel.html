@@ -183,11 +183,11 @@ class MODEL::BloodVessel&lt; T &gt;</div><p >Resistor-capacitor-inductor blood v
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R$, *-] (3,0)
-to [R, l=$R_{ste}$, -] (5,0)
-to [L, l=$L$, *-*] (7,0)
+to [R, l=$R_{ste}$, -] (5,0) node[anchor=south] {$P_{C}$}
+(5,0) to [L, l=$L$, *-*] (7,0)
 node[anchor=south]{$P_{out}$}
 (5,0) to [C, l=$C$, *-] (5,-1.5)
-node[ground]{$P_C$};
+node[ground]{};
 \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
 \end{circuitikz}
 \]" src="form_15.png" width="336" height="96"/>
@@ -517,7 +517,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Sep 6 2022 01:14:42 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Sep 7 2022 16:57:53 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

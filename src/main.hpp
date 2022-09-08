@@ -234,7 +234,7 @@ const std::string run(std::string& json_config) {
     ALGEBRA::Integrator<T> integrator_steady(
         reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol,
         reader.sim_nliter);
-    for (size_t i = 0; i < 31; i++) {
+    for (int i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * T(i),
                                      reader.model);
     }
@@ -256,7 +256,7 @@ const std::string run(std::string& json_config) {
 
   // Run integrator
   int interval_counter = 0;
-  for (size_t i = 1; i < reader.sim_num_time_steps; i++) {
+  for (int i = 1; i < reader.sim_num_time_steps; i++) {
     state = integrator.step(state, time, reader.model);
     interval_counter += 1;
     time = reader.sim_time_step_size * T(i);

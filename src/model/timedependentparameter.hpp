@@ -115,7 +115,7 @@ TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
                                                   std::vector<T> values) {
   this->times = times;
   this->values = values;
-  size = times.size();
+  size = values.size();
   if (size == 1) {
     isconstant = true;
     cycle_period = 1.0;
@@ -131,7 +131,7 @@ TimeDependentParameter<T>::~TimeDependentParameter() {}
 template <typename T>
 T TimeDependentParameter<T>::get(T time) {
   // Return the first and only value if parameter is constant
-  if (size == 1) {
+  if (isconstant) {
     return values[0];
   }
 

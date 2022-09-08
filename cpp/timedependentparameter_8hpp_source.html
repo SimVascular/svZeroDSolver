@@ -187,7 +187,7 @@ $(function() {
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>                                                  std::vector&lt;T&gt; values) {</div>
 <div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  this-&gt;times = times;</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  this-&gt;values = values;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  size = times.size();</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  size = values.size();</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  <span class="keywordflow">if</span> (size == 1) {</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    isconstant = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    cycle_period = 1.0;</div>
@@ -203,7 +203,7 @@ $(function() {
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#a4dcbdfd359c34b8d4af725808705733e">  132</a></span>T <a class="code hl_function" href="class_m_o_d_e_l_1_1_time_dependent_parameter.html#a4dcbdfd359c34b8d4af725808705733e">TimeDependentParameter&lt;T&gt;::get</a>(T time) {</div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>  <span class="comment">// Return the first and only value if parameter is constant</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  <span class="keywordflow">if</span> (size == 1) {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>  <span class="keywordflow">if</span> (isconstant) {</div>
 <div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    <span class="keywordflow">return</span> values[0];</div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>  }</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
@@ -268,7 +268,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 7 2022 16:57:53 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Thu Sep 8 2022 20:29:52 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

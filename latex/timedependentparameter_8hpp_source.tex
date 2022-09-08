@@ -119,7 +119,7 @@
 \DoxyCodeLine{115                                                   std::vector<T> values) \{}
 \DoxyCodeLine{116   this-\/>times = times;}
 \DoxyCodeLine{117   this-\/>values = values;}
-\DoxyCodeLine{118   size = times.size();}
+\DoxyCodeLine{118   size = values.size();}
 \DoxyCodeLine{119   \textcolor{keywordflow}{if} (size == 1) \{}
 \DoxyCodeLine{120     isconstant = \textcolor{keyword}{true};}
 \DoxyCodeLine{121     cycle\_period = 1.0;}
@@ -135,7 +135,7 @@
 \DoxyCodeLine{131 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
 \DoxyCodeLine{132 T \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a4dcbdfd359c34b8d4af725808705733e}{TimeDependentParameter<T>::get}}(T time) \{}
 \DoxyCodeLine{133   \textcolor{comment}{// Return the first and only value if parameter is constant}}
-\DoxyCodeLine{134   \textcolor{keywordflow}{if} (size == 1) \{}
+\DoxyCodeLine{134   \textcolor{keywordflow}{if} (isconstant) \{}
 \DoxyCodeLine{135     \textcolor{keywordflow}{return} values[0];}
 \DoxyCodeLine{136   \}}
 \DoxyCodeLine{137 }

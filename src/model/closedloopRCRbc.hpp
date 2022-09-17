@@ -5,7 +5,6 @@
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBC_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBC_HPP_
 
-#include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
 
@@ -139,14 +138,30 @@ class ClosedLoopRCRBC : public Block<T> {
   };
 
   /**
+   * @brief Get number of triplets of element
+   *
+   * Number of triplets that the element contributes to the global system
+   * (relevant for sparse memory reservation)
+   */
+  std::map<std::string, int> get_num_triplets();
+
+  /**
    * @brief Convert the block to a steady behavior
    *
    * Set the capacitance to 0.
    */
   void to_steady();
+  
+  /**
+   * @brief Convert the block to a steady behavior
+   *
+   * Set the capacitance to original value.
+   */
+  void to_unsteady();
 
  private:
   Parameters params;
+  T c_cache;
 };
 
 template <typename T>
@@ -199,7 +214,18 @@ void ClosedLoopRCRBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 
 template <typename T>
 void ClosedLoopRCRBC<T>::to_steady() {
+  c_cache = params.C;
   params.C = 0.0;
+}
+
+template <typename T>
+void ClosedLoopRCRBC<T>::to_unsteady() {
+  params.C = c_cache;
+}
+
+template <typename T>
+std::map<std::string, int> ClosedLoopRCRBC<T>::get_num_triplets() {
+  return num_triplets;
 }
 
 }  // namespace MODEL

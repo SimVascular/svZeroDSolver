@@ -112,13 +112,6 @@ class ClosedLoopRCRBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update the constant contributions of the element in a dense system
-   *
-   * @param system System to update contributions at
-   */
-  void update_constant(ALGEBRA::DenseSystem<T> &system);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -180,21 +173,6 @@ ClosedLoopRCRBC<T>::~ClosedLoopRCRBC() {}
 template <typename T>
 void ClosedLoopRCRBC<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 3, 1);
-}
-
-template <typename T>
-void ClosedLoopRCRBC<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {
-  system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = -1.0;
-  system.F(this->global_eqn_ids[0], this->global_var_ids[3]) =  1.0;
-  system.F(this->global_eqn_ids[1], this->global_var_ids[0]) =  1.0;
-  system.F(this->global_eqn_ids[1], this->global_var_ids[4]) = -1.0;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[2]) = -1.0;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[4]) =  1.0;
- 
-  // Below values can be unsteady if needed (not currently implemented)
-  system.E(this->global_eqn_ids[0], this->global_var_ids[4]) =  params.C;
-  system.F(this->global_eqn_ids[1], this->global_var_ids[1]) =  -params.Rp;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[3]) =  -params.Rd;
 }
 
 template <typename T>

@@ -117,7 +117,8 @@ namespace MODEL
          * @param heart_parameters Map/dictionary containing the 27 heart parameters
          * @param name Name
          */
-        ClosedLoopHeartPulmonary(std::map<std::string, T> heart_parameters, std::string name);
+        //ClosedLoopHeartPulmonary(std::map<std::string, T> heart_parameters, std::string name);
+        ClosedLoopHeartPulmonary(std::map<std::string, T> heart_parameters, T cycle_period, std::string name) : Block<T>(name)
 
         /**
          * @brief Destroy the ClosedLoopHeartPulmonary object
@@ -141,7 +142,7 @@ namespace MODEL
          *
          * @param model Model object to access model-dependent variables
          */
-        void update_model_dependent_params(MODEL::Model<T> &model);
+        //void update_model_dependent_params(MODEL::Model<T> &model);
 
         /**
          * @brief Return parameter values
@@ -249,9 +250,10 @@ namespace MODEL
     };
 
     template <typename T>
-    ClosedLoopHeartPulmonary<T>::ClosedLoopHeartPulmonary(std::map<std::string, T> heart_parameters, std::string name) : Block<T>(name)
+    ClosedLoopHeartPulmonary<T>::ClosedLoopHeartPulmonary(std::map<std::string, T> heart_parameters, T cycle_period, std::string name) : Block<T>(name)
     {
         this->name = name;
+        this->cardiac_cycle_period = cycle_period;
         this->params.Tsa     = heart_parameters["Tsa"];    
         this->params.tpwave  = heart_parameters["tpwave"];
         this->params.Erv_s   = heart_parameters["Erv_s"];  
@@ -645,11 +647,11 @@ namespace MODEL
         }
     }
     
-    template <typename T>
-    void ClosedLoopHeartPulmonary<T>::update_model_dependent_params(MODEL::Model<T> &model)
-    {
-        this->cardiac_cycle_period = model.cardiac_cycle_period;
-    }
+//  template <typename T>
+//  void ClosedLoopHeartPulmonary<T>::update_model_dependent_params(MODEL::Model<T> &model)
+//  {
+//      this->cardiac_cycle_period = model.cardiac_cycle_period;
+//  }
     
     template <typename T>
     void ClosedLoopHeartPulmonary<T>::set_ICs(ALGEBRA::State<T> &state) 

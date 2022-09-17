@@ -125,11 +125,12 @@ void ConfigReader<T>::load(std::string &specifier) {
   sim_pts_per_cycle =
       sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
   sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
-  try {
-    sim_cardiac_cycle_period = sim_params["cardiac_cycle_period"].get_double();
-  } catch (simdjson::simdjson_error) {
-    sim_cardiac_cycle_period = -1.0; // Negative value indicates this has not been read from config file or from TimeDependent parameter yet.
-  }
+  sim_cardiac_cycle_period = -1.0; // Negative value indicates this has not been read from config file yet.
+//try {
+//  sim_cardiac_cycle_period = sim_params["cardiac_cycle_period"].get_double();
+//} catch (simdjson::simdjson_error) {
+//  sim_cardiac_cycle_period = -1.0; // Negative value indicates this has not been read from config file or from TimeDependent parameter yet.
+//}
   try {
     sim_abs_tol = sim_params["absolute_tolerance"].get_double();
   } catch (simdjson::simdjson_error) {
@@ -404,7 +405,7 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   }
   
-      // KMENON -- need to fix
+  // KMENON -- fixed
   // Create closed-loop blocks
   bool heartpulmonary_block_present = false;  ///< Flag to check if heart block is present (requires different handling)
   try {
@@ -420,8 +421,16 @@ void ConfigReader<T>::load(std::string &specifier) {
         if (heartpulmonary_block_present == false) {
           // Create the closed_loop and add to blocks
           heartpulmonary_block_present = true;
+          sim_steady_initial = false;
           //std::string heartpulmonary_name = "CLH" + std::to_string(closed_loop_index);
           std::string_view heartpulmonary_name = "CLH";
+          T cycle_period = closed_loop_config["cardiac_cycle_period"].get_double();
+          if ((sim_cardiac_cycle_period > 0.0) && (cycle_period != sim_cardiac_cycle_period)) {
+            throw std::runtime_error("Inconsistent cardiac cycle period defined in ClosedLoopHeartAndPulmonary.");
+          }
+          else {
+            sim_cardiac_cycle_period = cycle_period;
+          }
           //simdjson::dom::element heart_params = closed_loop_config["parameters"];
           auto heart_params = closed_loop_config["parameters"];
           // Convert to std::map to keep model blocks independent of simdjson
@@ -455,7 +464,7 @@ void ConfigReader<T>::load(std::string &specifier) {
           param_values.insert(std::make_pair("Vaso_la", heart_params["Vaso_la"])); 
           if (param_values.size() == 27) { 
             //model.blocks.insert({heartpulmonary_name, MODEL::ClosedLoopHeartPulmonary<T>(param_values, heartpulmonary_name)});
-            model.blocks.push_back(new MODEL::ClosedLoopHeartPulmonary<T>(param_values, static_cast<std::string>(heartpulmonary_name)));
+            model.blocks.push_back(new MODEL::ClosedLoopHeartPulmonary<T>(param_values, cycle_period, static_cast<std::string>(heartpulmonary_name)));
           }
           else {
             throw std::runtime_error("Error. ClosedLoopHeartAndPulmonary should have 27 parameters");
@@ -497,7 +506,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
     }
   } catch (simdjson::simdjson_error) {}
-      // KMENON -- need to fix
+  // KMENON -- fixed
 
   // Create Connections
   for (auto &connection : connections) {
@@ -520,18 +529,35 @@ void ConfigReader<T>::load(std::string &specifier) {
     block->setup_dofs(model.dofhandler);
   }
 
-      // KMENON -- need to fix
-     // Update closed loop blocks (in an unordered way):
-       // 1. Cardiac cycle perdiod in heart block
-       // 2. Coronary block params that depend on heart block DOFs
-     
-       if (model.heartpulmonary_block_present == true) {
-           for (auto &[key, elem] : model.blocks) {
-               std::visit([&](auto &&block) { block.update_model_dependent_params(model); }, elem);
-             }
-         }
-      // KMENON -- need to fix
-      
+  // Set value of cardiac cycle period
+  if (sim_cardiac_cycle_period < 0.0) {
+    sim_cardiac_cycle_period = 1.0; // If it has not been read from config or TimeDependentParameter yet, set as default value of 1.0
+  }
+  // Calculate time step size
+  sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
+  
+  // KMENON -- fixed
+  // Update block parameters that depend on DOFs and other params of other blocks
+  // 1. Cardiac cycle perdiod in heart block
+  // 2. Coronary block params that depend on heart block DOFs
+  for (auto &block : model.blocks) {
+    block->update_model_dependent_params(model);
+  }
+  // KMENON -- fixed
+  
+  /*
+  // KMENON -- need to fix
+  // Update closed loop blocks (in an unordered way):
+    // 1. Cardiac cycle perdiod in heart block
+    // 2. Coronary block params that depend on heart block DOFs
+  
+    if (model.heartpulmonary_block_present == true) {
+        for (auto &[key, elem] : model.blocks) {
+            std::visit([&](auto &&block) { block.update_model_dependent_params(model); }, elem);
+          }
+      }
+  // KMENON -- need to fix
+
       // KMENON -- need to fix
 +  if (model.heartpulmonary_block_present == true) {
   +    steady_initial = false;
@@ -540,9 +566,16 @@ void ConfigReader<T>::load(std::string &specifier) {
     +    }
   +  }
       // KMENON -- need to fix
+  */  
   
   // Read initial condition
   initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
+  // KMENON -- fixed
+  // Initialize blocks that have fixed initial conditions
+  for (auto &block : model.blocks) {
+    block->set_ICs(initial_state);
+  }
+  // KMENON -- fixed
   try {
     auto initial_condition = config["initial_condition"].value();
     for (size_t i = 0; i < model.dofhandler.size(); i++) {
@@ -555,13 +588,6 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   } catch (simdjson::simdjson_error) {
   }
-
-  // Set value of cardiac cycle period
-  if (sim_cardiac_cycle_period < 0.0) {
-    sim__cardiac_cycle_period = 1.0; // If it has not been read from config or TimeDependentParameter yet, set as default value of 1.0
-  }
-  // Calculate time step size
-  sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
 }
 
 }  // namespace IO

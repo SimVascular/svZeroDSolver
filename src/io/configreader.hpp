@@ -359,6 +359,83 @@ void ConfigReader<T>::load(std::string &specifier) {
           {junction_name, vessel_id_map[outlet_vessel.get_int64()]});
     }
   }
+  
+  // Create closed-loop blocks
+  if (has_key(config, "closed_loop_blocks") == true) {
+    int closed_loop_index = -1;
+    for (simdjson::dom::element closed_loop_config : config["closed_loop_blocks"]) {
+      closed_loop_index++;
+      if (static_cast<std::string>(closed_loop_config["closed_loop_type"]) ==
+           "ClosedLoopHeartAndPulmonary") { 
+        if (model.heartpulmonary_block_present == false) {
+          // Create the closed_loop and add to blocks
+          model.heartpulmonary_block_present = true;
+          std::string heartpulmonary_name = "CLH" + std::to_string(closed_loop_index);
+          simdjson::dom::element heart_params = closed_loop_config["parameters"];
+          // Convert to std::map to keep model blocks independent of simdjson
+          std::map<std::string, T> param_values;
+          param_values.insert(std::make_pair("Tsa", heart_params["Tsa"]));    
+          param_values.insert(std::make_pair("tpwave", heart_params["tpwave"])); 
+          param_values.insert(std::make_pair("Erv_s", heart_params["Erv_s"]));  
+          param_values.insert(std::make_pair("Elv_s", heart_params["Elv_s"]));  
+          param_values.insert(std::make_pair("iml", heart_params["iml"]));    
+          param_values.insert(std::make_pair("imr", heart_params["imr"]));    
+          param_values.insert(std::make_pair("Lra_v", heart_params["Lra_v"]));  
+          param_values.insert(std::make_pair("Rra_v", heart_params["Rra_v"]));  
+          param_values.insert(std::make_pair("Lrv_a", heart_params["Lrv_a"]));  
+          param_values.insert(std::make_pair("Rrv_a", heart_params["Rrv_a"]));  
+          param_values.insert(std::make_pair("Lla_v", heart_params["Lla_v"]));  
+          param_values.insert(std::make_pair("Rla_v", heart_params["Rla_v"]));  
+          param_values.insert(std::make_pair("Llv_a", heart_params["Llv_a"]));  
+          param_values.insert(std::make_pair("Rlv_ao", heart_params["Rlv_ao"])); 
+          param_values.insert(std::make_pair("Vrv_u", heart_params["Vrv_u"]));  
+          param_values.insert(std::make_pair("Vlv_u", heart_params["Vlv_u"])); 
+          param_values.insert(std::make_pair("Rpd", heart_params["Rpd"]));    
+          param_values.insert(std::make_pair("Cp", heart_params["Cp"]));     
+          param_values.insert(std::make_pair("Cpa", heart_params["Cpa"]));    
+          param_values.insert(std::make_pair("Kxp_ra", heart_params["Kxp_ra"]));  
+          param_values.insert(std::make_pair("Kxv_ra", heart_params["Kxv_ra"]));  
+          param_values.insert(std::make_pair("Kxp_la", heart_params["Kxp_la"]));  
+          param_values.insert(std::make_pair("Kxv_la", heart_params["Kxv_la"]));  
+          param_values.insert(std::make_pair("Emax_ra", heart_params["Emax_ra"])); 
+          param_values.insert(std::make_pair("Emax_la", heart_params["Emax_la"])); 
+          param_values.insert(std::make_pair("Vaso_ra", heart_params["Vaso_ra"])); 
+          param_values.insert(std::make_pair("Vaso_la", heart_params["Vaso_la"])); 
+          if (param_values.size() == 27) { 
+            model.blocks.insert({heartpulmonary_name, MODEL::ClosedLoopHeartPulmonary<T>(param_values, heartpulmonary_name)});
+          }
+          else {
+            throw std::runtime_error("Error. ClosedLoopHeartAndPulmonary should have 27 parameters");
+          }
+          // Count number of junctions in config file (is there a better way)
+          int num_junctions = 0;
+          for (simdjson::dom::element junction_config : config["junctions"]) {
+            num_junctions++;
+          }
+          // Junction at inlet to heart
+          std::string heart_inlet_junction_name = "J" + std::to_string(num_junctions);
+          connections.push_back({heart_inlet_junction_name, heartpulmonary_name});
+          model.blocks.insert({heart_inlet_junction_name, MODEL::Junction<T>(heart_inlet_junction_name)});
+          for (auto heart_inlet_elem : closed_loop_RCRbcs) {
+            connections.push_back({heart_inlet_elem, heart_inlet_junction_name});
+          }
+          for (auto heart_inlet_elem : closed_loop_coronarybcs) {
+            connections.push_back({heart_inlet_elem, heart_inlet_junction_name});
+          }
+          // Junction at outlet from heart
+          std::string heart_outlet_junction_name = "J" + std::to_string(num_junctions+1);
+          connections.push_back({heartpulmonary_name, heart_outlet_junction_name});
+          model.blocks.insert({heart_outlet_junction_name, MODEL::Junction<T>(heart_outlet_junction_name)});
+          for (simdjson::dom::element heart_outlet_vessel : closed_loop_config["outlet_vessels"]) {
+            connections.push_back({heart_outlet_junction_name,"V" + std::to_string(heart_outlet_vessel.get_int64())});
+          }
+        }
+        else {
+          throw std::runtime_error("Error. Only one ClosedLoopHeartAndPulmonary can be included.");
+        }
+      }
+    }
+  }
 
   // Create Connections
   for (auto &connection : connections) {

@@ -224,6 +224,10 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   }
 
+      // KMENON -- need to fix
+  std::vector<std::string> closed_loop_RCRbcs;
+  std::vector<std::string> closed_loop_coronarybcs;
+      // KMENON -- need to fix
   // Create boundary conditions
   for (auto bc_config : config["boundary_conditions"]) {
     std::string_view bc_type = bc_config["bc_type"];
@@ -501,6 +505,18 @@ void ConfigReader<T>::load(std::string &specifier) {
   for (auto &block : model.blocks) {
     block->setup_dofs(model.dofhandler);
   }
+
+      // KMENON -- need to fix
+     // Update closed loop blocks (in an unordered way):
+       // 1. Cardiac cycle perdiod in heart block
+       // 2. Coronary block params that depend on heart block DOFs
+     
+       if (model.heartpulmonary_block_present == true) {
+           for (auto &[key, elem] : model.blocks) {
+               std::visit([&](auto &&block) { block.update_model_dependent_params(model); }, elem);
+             }
+         }
+      // KMENON -- need to fix
 
   // Read initial condition
   initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());

@@ -184,7 +184,7 @@ class WindkesselBC : public Block<T> {
   /**
    * @brief Convert the block to a steady behavior
    *
-   * Set the capacitance to 0.
+   * Set the capacitance to original value.
    */
   void to_unsteady();
 

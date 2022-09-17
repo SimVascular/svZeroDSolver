@@ -82,7 +82,7 @@ class ConfigReader {
   MODEL::Model<T> model;            ///< Simulation model
   ALGEBRA::State<T> initial_state;  ///< Initial state
 
-  T sim_cardiac_cycle_period;  ///< Cardiac cycle period
+  T sim_cardiac_cycle_period;  ///< Cardiac cycle period.
   T sim_time_step_size;        ///< Simulation time step size
   T sim_abs_tol;               ///< Absolute tolerance for simulation
 
@@ -125,6 +125,11 @@ void ConfigReader<T>::load(std::string &specifier) {
   sim_pts_per_cycle =
       sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
   sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
+  try {
+    sim_cardiac_cycle_period = sim_params["cardiac_cycle_period"].get_double();
+  } catch (simdjson::simdjson_error) {
+    sim_cardiac_cycle_period = -1.0; // Negative value indicates this has not been read from config file or from TimeDependent parameter yet.
+  }
   try {
     sim_abs_tol = sim_params["absolute_tolerance"].get_double();
   } catch (simdjson::simdjson_error) {
@@ -240,6 +245,19 @@ void ConfigReader<T>::load(std::string &specifier) {
       model.blocks.push_back(new MODEL::WindkesselBC<T>(
           Rp = Rp, C = C, Rd = Rd, Pd = Pd, static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
+      // KMENON -- need to fix
+              } else if (static_cast<std::string>(bc_config["bc_type"]) == "ClosedLoopRCR") {
+                T Rp = bc_values["Rp"], C = bc_values["C"],
+                  Rd = bc_values["Rd"];
+                bool closed_loop_outlet = bc_values["closed_loop_outlet"];
+                if (closed_loop_outlet == true) {
+                  closed_loop_RCRbcs.push_back(bc_name);
+                }
+                model.blocks.insert(
+                    {bc_name, MODEL::ClosedLoopRCRBC<T>(Rp = Rp, C = C, Rd = Rd,
+                                                     closed_loop_outlet = closed_loop_outlet, bc_name)});
+                DEBUG_MSG("Created boundary condition " << bc_name);
+      // KMENON -- need to fix
     } else if (bc_type == "FLOW") {
       std::vector<T> Q;
       try {
@@ -252,7 +270,12 @@ void ConfigReader<T>::load(std::string &specifier) {
 
       MODEL::TimeDependentParameter q_param(t, Q);
       if (q_param.isconstant == false) {
-        sim_cardiac_cycle_period = q_param.cycle_period;
+        if ((sim_cardiac_cycle_period > 0.0) && (q_param.cycle_period != sim_cardiac_cycle_period)) {
+          throw std::runtime_error("Inconsistent cardiac cycle period defined in TimeDependentParameter");
+        }
+        else {
+          sim_cardiac_cycle_period = q_param.cycle_period;
+        }
       }
       model.blocks.push_back(new MODEL::FlowReferenceBC<T>(
           q_param, static_cast<std::string>(bc_name)));
@@ -292,7 +315,12 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       MODEL::TimeDependentParameter p_param(t, P);
       if (p_param.isconstant == false) {
-        sim_cardiac_cycle_period = p_param.cycle_period;
+        if ((sim_cardiac_cycle_period > 0.0) && (p_param.cycle_period != sim_cardiac_cycle_period)) {
+          throw std::runtime_error("Inconsistent cardiac cycle period defined in TimeDependentParameter");
+        }
+        else {
+          sim_cardiac_cycle_period = p_param.cycle_period;
+        }
       }
       model.blocks.push_back(new MODEL::PressureReferenceBC<T>(
           p_param, static_cast<std::string>(bc_name)));
@@ -325,6 +353,20 @@ void ConfigReader<T>::load(std::string &specifier) {
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, pim_param, pv_param,
           static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
+      // KMENON -- need to fix
+              } else if (static_cast<std::string>(bc_config["bc_type"]) ==
+                         "ClosedLoopCoronary") {
+                T Ra = bc_values["Ra"], Ram = bc_values["Ram"],
+                  Rv = bc_values["Rv"], Ca = bc_values["Ca"],
+                  Cim = bc_values["Cim"];
+                std::string side = static_cast<std::string>(bc_values["side"]);
+                  closed_loop_coronarybcs.push_back(bc_name);
+                model.blocks.insert(
+                    {bc_name, MODEL::ClosedLoopCoronaryBC<T>(
+                                  Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca,
+                                  Cim = Cim, side = side, bc_name)});
+                DEBUG_MSG("Created boundary condition " << bc_name);
+      // KMENON -- need to fix
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
     }
@@ -360,6 +402,7 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   }
   
+      // KMENON -- need to fix
   // Create closed-loop blocks
   if (has_key(config, "closed_loop_blocks") == true) {
     int closed_loop_index = -1;
@@ -436,6 +479,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
     }
   }
+      // KMENON -- need to fix
 
   // Create Connections
   for (auto &connection : connections) {
@@ -473,6 +517,10 @@ void ConfigReader<T>::load(std::string &specifier) {
   } catch (simdjson::simdjson_error) {
   }
 
+  // Set value of cardiac cycle period
+  if (sim_cardiac_cycle_period < 0.0) {
+    sim__cardiac_cycle_period = 1.0; // If it has not been read from config or TimeDependentParameter yet, set as default value of 1.0
+  }
   // Calculate time step size
   sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
 }

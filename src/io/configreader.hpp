@@ -517,7 +517,16 @@ void ConfigReader<T>::load(std::string &specifier) {
              }
          }
       // KMENON -- need to fix
-
+      
+      // KMENON -- need to fix
++  if (model.heartpulmonary_block_present == true) {
+  +    steady_initial = false;
+  +    for (auto &[key, elem] : model.blocks) {
+    +      std::visit([&](auto &&block) { block.set_ICs(state); }, elem);
+    +    }
+  +  }
+      // KMENON -- need to fix
+  
   // Read initial condition
   initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
   try {

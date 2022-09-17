@@ -146,6 +146,13 @@ class Block {
    * @param model Model object to access model-dependent variables
    */
   virtual void update_model_dependent_params(MODEL::Model<T> 
+
+  /**
+   * @brief Return parameter values
+   *
+   * @param message String to identify different requests
+   */
+  virtual void get_parameter_value(std::string message, T &param_value);
   
   /**
    * @brief Set block-specific initial conditions
@@ -257,6 +264,9 @@ void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
   
 template <typename T>
 void Block<T>::update_model_dependent_params(MODEL::Model<T> &model) {}
+  
+template <typename T>
+void Block<T>::get_parameter_value(std::string message, T &param_value) {}
 
 template <typename T>
 void Block<T>::set_ICs(ALGEBRA::State<T> &state) {}

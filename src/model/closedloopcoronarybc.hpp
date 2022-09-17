@@ -5,7 +5,6 @@
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_
 
-#include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
 
@@ -112,22 +111,6 @@ class ClosedLoopCoronaryBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update the constant contributions of the element in a dense system
-   *
-   * @param system System to update contributions at
-   */
-  void update_constant(ALGEBRA::DenseSystem<T> &system);
-
-  /**
-   * @brief Update the solution-dependent contributions of the element
-   *
-   * @param system System to update contributions at
-   * @param y Current solution
-   */
-  void update_solution(ALGEBRA::DenseSystem<T> &system,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -161,6 +144,15 @@ class ClosedLoopCoronaryBC : public Block<T> {
       {"F", 9},
       {"E", 5},
       {"D", 0},
+  
+  /**
+   * @brief Get number of triplets of element
+   *
+   * Number of triplets that the element contributes to the global system
+   * (relevant for sparse memory reservation)
+   */
+  std::map<std::string, int> get_num_triplets();
+
   };
 
  private:
@@ -189,33 +181,7 @@ ClosedLoopCoronaryBC<T>::~ClosedLoopCoronaryBC() {}
 
 template <typename T>
 void ClosedLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 3, 1);
-}
-
-template <typename T>
-void ClosedLoopCoronaryBC<T>::update_constant(ALGEBRA::DenseSystem<T> &system) {
-  system.E(this->global_eqn_ids[0], this->global_var_ids[0]) = -params.Ram*params.Ca;
-  system.E(this->global_eqn_ids[0], this->global_var_ids[1]) = params.Ram*params.Ra*params.Ca;
-  system.E(this->global_eqn_ids[1], this->global_var_ids[0]) = -params.Ca;
-  system.E(this->global_eqn_ids[1], this->global_var_ids[1]) = params.Ca*params.Ra;
-  system.E(this->global_eqn_ids[1], this->global_var_ids[4]) = -1.0;
-  
-  system.F(this->global_eqn_ids[0], this->global_var_ids[0]) = -1.0;
-  system.F(this->global_eqn_ids[0], this->global_var_ids[1]) = (params.Ra + params.Ram);
-  system.F(this->global_eqn_ids[0], this->global_var_ids[2]) = 1.0;
-  system.F(this->global_eqn_ids[0], this->global_var_ids[3]) = params.Rv;
-  system.F(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
-  system.F(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[2]) = params.Cim;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[3]) = params.Cim*params.Rv;
-  system.F(this->global_eqn_ids[2], this->global_var_ids[4]) = -1.0;
-}
-
-template <typename T>
-void ClosedLoopCoronaryBC<T>::update_solution(ALGEBRA::DenseSystem<T> &system,
-                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  auto Pim = this->im*y[this->ventricle_var_id];
-  system.C(this->global_eqn_ids[2]) = -params.Cim*Pim;
+  Block<T>::setup_dofs_(dofhandler, 3, {"volume_im"});
 }
 
 template <typename T>
@@ -247,23 +213,38 @@ void ClosedLoopCoronaryBC<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
 template <typename T>
 void ClosedLoopCoronaryBC<T>::update_model_dependent_params(MODEL::Model<T> &model) {
   T im_value = 0.0;
-  for (auto &[key, elem] : model.blocks) {
-    std::visit([&](auto &&block) { 
-      if (key == "CLH0") {
-        if (this->side == "left") {
-          block.get_parameter_value("iml", im_value); // Scaling for LV pressure -> intramyocardial pressure
-          this->ventricle_var_id = block.global_var_ids[13]; // Solution ID for LV pressure
-        }
-        else if (this->side == "right") {
-          block.get_parameter_value("imr", im_value); // Scaling for RV pressure -> intramyocardial pressure
-          this->ventricle_var_id = block.global_var_ids[6]; 
-        }
-        else {
-          throw std::runtime_error("For closed loop coronary, 'side' should be either 'left' or 'right'");
-        }
+  for (auto &block : model.blocks) {
+    if (block->name == "CLH") {
+      if (this->side == "left") {
+        block->get_parameter_value("iml", im_value); // Scaling for LV pressure -> intramyocardial pressure
+        this->ventricle_var_id = block.global_var_ids[13]; // Solution ID for LV pressure
       }
-    }, elem);
+      else if (this->side == "right") {
+        block.get_parameter_value("imr", im_value); // Scaling for RV pressure -> intramyocardial pressure
+        this->ventricle_var_id = block.global_var_ids[6]; 
+      }
+      else {
+        throw std::runtime_error("For closed loop coronary, 'side' should be either 'left' or 'right'");
+      }
+    }
   }
+//for (auto &[key, elem] : model.blocks) {
+//  std::visit([&](auto &&block) { 
+//    if (key == "CLH0") {
+//      if (this->side == "left") {
+//        block.get_parameter_value("iml", im_value); // Scaling for LV pressure -> intramyocardial pressure
+//        this->ventricle_var_id = block.global_var_ids[13]; // Solution ID for LV pressure
+//      }
+//      else if (this->side == "right") {
+//        block.get_parameter_value("imr", im_value); // Scaling for RV pressure -> intramyocardial pressure
+//        this->ventricle_var_id = block.global_var_ids[6]; 
+//      }
+//      else {
+//        throw std::runtime_error("For closed loop coronary, 'side' should be either 'left' or 'right'");
+//      }
+//    }
+//  }, elem);
+//}
   this->im = im_value;
 }
 

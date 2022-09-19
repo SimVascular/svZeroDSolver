@@ -501,7 +501,8 @@ void ConfigReader<T>::load(std::string &specifier) {
           for (auto heart_outlet_block : closed_loop_config["outlet_blocks"]) {
             connections.push_back(
                 {heart_outlet_junction_name,heart_outlet_block});
-                //{heart_outlet_junction_name,vessel_id_map[heart_outlet_vessel.get_int64()]});
+                //{heart_outlet_junction_name,static_cast<std::string>(heart_outlet_block)});
+                //{heart_outlet_junction_name,vessel_id_map[heart_outlet_block.get_int64()]});
           }
         }
         else {

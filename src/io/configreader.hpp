@@ -498,9 +498,10 @@ void ConfigReader<T>::load(std::string &specifier) {
           //for (simdjson::dom::element heart_outlet_vessel : closed_loop_config["outlet_vessels"]) {
           //  connections.push_back({heart_outlet_junction_name,"V" + std::to_string(heart_outlet_vessel.get_int64())});
           //}
-          for (auto heart_outlet_vessel : closed_loop_config["outlet_vessels"]) {
+          for (auto heart_outlet_block : closed_loop_config["outlet_blocks"]) {
             connections.push_back(
-                {heart_outlet_junction_name,vessel_id_map[heart_outlet_vessel.get_int64()]});
+                {heart_outlet_junction_name,heart_outlet_block});
+                //{heart_outlet_junction_name,vessel_id_map[heart_outlet_vessel.get_int64()]});
           }
         }
         else {

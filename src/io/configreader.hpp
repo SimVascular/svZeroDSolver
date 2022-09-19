@@ -587,8 +587,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       try {
         initial_state.y[i] = initial_condition[model.dofhandler.variables[i]];
       } catch (simdjson::simdjson_error) {
-        std::cout << "Initial condition found, but no value for "
-                  << model.dofhandler.variables[i] << std::endl;
+        DEBUG_MSG("Initial condition found, but no value for "
+                  << model.dofhandler.variables[i]);
       }
     }
   } catch (simdjson::simdjson_error) {

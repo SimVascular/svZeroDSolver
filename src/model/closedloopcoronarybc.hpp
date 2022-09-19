@@ -144,6 +144,7 @@ class ClosedLoopCoronaryBC : public Block<T> {
       {"F", 9},
       {"E", 5},
       {"D", 0},
+  };
   
   /**
    * @brief Get number of triplets of element
@@ -152,8 +153,6 @@ class ClosedLoopCoronaryBC : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> get_num_triplets();
-
-  };
 
  private:
   Parameters params;
@@ -173,7 +172,7 @@ ClosedLoopCoronaryBC<T>::ClosedLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
   this->params.Ca = Ca;
   this->params.Cim = Cim;
   this->side = side;
-  this->closed_loop_outlet = true;
+  //this->closed_loop_outlet = true;
 }
 
 template <typename T>
@@ -217,11 +216,11 @@ void ClosedLoopCoronaryBC<T>::update_model_dependent_params(MODEL::Model<T> &mod
     if (block->name == "CLH") {
       if (this->side == "left") {
         block->get_parameter_value("iml", im_value); // Scaling for LV pressure -> intramyocardial pressure
-        this->ventricle_var_id = block.global_var_ids[13]; // Solution ID for LV pressure
+        this->ventricle_var_id = block->global_var_ids[13]; // Solution ID for LV pressure
       }
       else if (this->side == "right") {
-        block.get_parameter_value("imr", im_value); // Scaling for RV pressure -> intramyocardial pressure
-        this->ventricle_var_id = block.global_var_ids[6]; 
+        block->get_parameter_value("imr", im_value); // Scaling for RV pressure -> intramyocardial pressure
+        this->ventricle_var_id = block->global_var_ids[6]; 
       }
       else {
         throw std::runtime_error("For closed loop coronary, 'side' should be either 'left' or 'right'");
@@ -246,6 +245,11 @@ void ClosedLoopCoronaryBC<T>::update_model_dependent_params(MODEL::Model<T> &mod
 //  }, elem);
 //}
   this->im = im_value;
+}
+
+template <typename T>
+std::map<std::string, int> ClosedLoopCoronaryBC<T>::get_num_triplets() {
+  return num_triplets;
 }
 
 }  // namespace MODEL

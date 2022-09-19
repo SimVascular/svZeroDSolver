@@ -50,6 +50,9 @@
 #include "../model/resistancebc.hpp"
 #include "../model/resistivejunction.hpp"
 #include "../model/windkesselbc.hpp"
+#include "../model/closedloopRCRbc.hpp"
+#include "../model/closedloopcoronarybc.hpp"
+#include "../model/closedloopheartpulmonary.hpp"
 #include "simdjson.h"
 
 namespace IO {
@@ -228,7 +231,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       // KMENON -- need to fix
   //std::vector<std::string> closed_loop_RCRbcs;
   //std::vector<std::string> closed_loop_coronarybcs;
-  std::vector<std::string> closed_loop_bcs;
+  std::vector<std::string_view> closed_loop_bcs;
       // KMENON -- need to fix
 
   // Create boundary conditions
@@ -367,7 +370,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       //std::string side = static_cast<std::string>(bc_values["side"]);
       model.blocks.push_back(new MODEL::ClosedLoopCoronaryBC<T>(
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, 
-          side = static_cast<std::string>(side), static_cast<std::string>(bc_name)));
+          static_cast<std::string>(side), static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
       // KMENON -- need to fix
     } else {

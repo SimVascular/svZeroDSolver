@@ -38,6 +38,7 @@
 #include <vector>
 
 #include "../algebra/sparsesystem.hpp"
+#include "../algebra/state.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
 
@@ -145,7 +146,7 @@ class Block {
    *
    * @param model Model object to access model-dependent variables
    */
-  virtual void update_model_dependent_params(MODEL::Model<T> 
+  virtual void update_model_dependent_params(MODEL::Model<T> &model); 
 
   /**
    * @brief Return parameter values
@@ -162,10 +163,10 @@ class Block {
   virtual void set_ICs(ALGEBRA::State<T> &state);
 
   /**
-   * @brief Update the constant contributions of the element in a sparse    *
+   * @brief Update the constant contributions of the element in a sparse system
    * @param system System to update contributions at
    */
-  virtual void update_constant(ALGEBRA::SparseSystem<T> &system
+  virtual void update_constant(ALGEBRA::SparseSystem<T> &system);
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system

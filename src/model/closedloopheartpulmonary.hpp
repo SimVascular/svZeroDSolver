@@ -5,7 +5,6 @@
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
 
-#include "../algebra/densesystem.hpp"
 #include "../algebra/sparsesystem.hpp"
 #include "../algebra/state.hpp"
 #include "block.hpp"
@@ -118,7 +117,7 @@ namespace MODEL
          * @param name Name
          */
         //ClosedLoopHeartPulmonary(std::map<std::string, T> heart_parameters, std::string name);
-        ClosedLoopHeartPulmonary(std::map<std::string, T> heart_parameters, T cycle_period, std::string name) : Block<T>(name)
+        ClosedLoopHeartPulmonary(std::map<std::string, T> heart_parameters, T cycle_period, std::string name);
 
         /**
          * @brief Destroy the ClosedLoopHeartPulmonary object
@@ -159,29 +158,6 @@ namespace MODEL
         void set_ICs(ALGEBRA::State<T> &state);
 
         /**
-         * @brief Update the constant contributions of the element in a dense system
-         *
-         * @param system System to update contributions at
-         */
-        void update_constant(ALGEBRA::DenseSystem<T> &system);
-
-        /**
-         * @brief Update the time-dependent contributions of the element in a dense system
-         *
-         * @param system System to update contributions at
-         * @param time Current time
-         */
-        void update_time(ALGEBRA::DenseSystem<T> &system, T time);
-        
-        /**
-         * @brief Update the solution-dependent contributions of the element in a dense system
-         *
-         * @param system System to update contributions at
-         * @param y Current solution
-         */
-        void update_solution(ALGEBRA::DenseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
-
-        /**
          * @brief Update the constant contributions of the element in a sparse system
          *
          * @param system System to update contributions at
@@ -214,6 +190,14 @@ namespace MODEL
             {"E", 10},
             {"D", 2},
         };
+
+       /**
+        * @brief Get number of triplets of element
+        *
+        * Number of triplets that the element contributes to the global system
+        * (relevant for sparse memory reservation)
+        */
+       std::map<std::string, int> get_num_triplets();
 
         /**
          * @brief Update the atrial activation and LV/RV elastance functions which depend on time
@@ -291,7 +275,8 @@ namespace MODEL
     template <typename T>
     void ClosedLoopHeartPulmonary<T>::setup_dofs(DOFHandler &dofhandler)
     {
-        Block<T>::setup_dofs_(dofhandler, 14, 12);
+        //Block<T>::setup_dofs_(dofhandler, 14, 12);
+        Block<T>::setup_dofs_(dofhandler, 14, {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul", "P_LA", "V_LA", "Q_LA", "P_LV", "V_LV", "Q_LV"});
     }
 
     template <typename T>
@@ -407,123 +392,6 @@ namespace MODEL
         system.F.coeffRef(this->global_eqn_ids[13], this->global_var_ids[13]) = -1.0;
         system.F.coeffRef(this->global_eqn_ids[13], this->global_var_ids[2]) = 1.0;
         system.F.coeffRef(this->global_eqn_ids[13], this->global_var_ids[15]) = params.Rlv_ao*valves[15];
-
-    }
-
-    template <typename T>
-    void ClosedLoopHeartPulmonary<T>::update_constant(ALGEBRA::DenseSystem<T> &system)
-    {
-        // DOF 2, Eq 1: Aortic pressure
-        system.E(this->global_eqn_ids[1], this->global_var_ids[2]) = params.Cpa;
-        // DOF 4, Eq 2: Right atrium volume
-        system.E(this->global_eqn_ids[2], this->global_var_ids[4]) = 1.0;
-        // DOF 5, Eq 3: Right atrium outflow
-        system.E(this->global_eqn_ids[3], this->global_var_ids[5]) = params.Lra_v;
-        // DOF 7, Eq 5: Right ventricle volume
-        system.E(this->global_eqn_ids[5], this->global_var_ids[7]) = 1.0;
-        // DOF 8, Eq 6: Right ventricle outflow
-        system.E(this->global_eqn_ids[6], this->global_var_ids[8]) = params.Lrv_a;
-        // DOF 9, Eq 7: Pulmonary pressure
-        system.E(this->global_eqn_ids[7], this->global_var_ids[9]) = params.Cp;
-        // DOF 11, Eq 9: Left atrium volume
-        system.E(this->global_eqn_ids[9], this->global_var_ids[11]) = 1.0;
-        // DOF 12, Eq 10: Left atrium outflow
-        system.E(this->global_eqn_ids[10], this->global_var_ids[12]) = params.Lla_v;
-        // DOF 14, Eq 12: Left ventricle volume
-        system.E(this->global_eqn_ids[12], this->global_var_ids[14]) = 1.0;
-        // DOF 15, Eq 13: Left ventricle outflow
-        system.E(this->global_eqn_ids[13], this->global_var_ids[15]) = params.Llv_a;
-    }
-
-    template <typename T>
-    void ClosedLoopHeartPulmonary<T>::update_time(ALGEBRA::DenseSystem<T> &system, T time)
-    {
-        this->get_activation_and_elastance_functions(time);
-    }
-
-    template <typename T>
-    void ClosedLoopHeartPulmonary<T>::update_solution(ALGEBRA::DenseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y)
-    {
-            
-        this->get_psi_ra_la(y);
-        this->get_valve_positions(y);
-
-        // F and C matrices depend on time and solution
-        // Specifying all terms here, including constant terms (which can instead be specified in update_constant) for readability
-        // (Doesn't seem to make a difference to compute time)
-        // DOF IDs are arranged as inflow [P_in,Q_in,P_out,Q_out,internal variables...]
-
-
-        // DOF 0, Eq 0: Right atrium pressure
-        system.F(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-        system.F(this->global_eqn_ids[0], this->global_var_ids[4]) = -this->AA*params.Emax_ra;
-        system.C(this->global_eqn_ids[0]) = this->AA*params.Emax_ra*params.Vaso_ra + psi_ra*(this->AA-1.0);
-        system.D(this->global_eqn_ids[0], this->global_var_ids[4]) = psi_ra_derivative*(this->AA-1.0);
-
-        // DOF 1: Flow into right atrium (no equation)
-
-        // DOF 2, Eq 1: Aortic pressure
-        system.F(this->global_eqn_ids[1], this->global_var_ids[15]) = -valves[15];
-        system.F(this->global_eqn_ids[1], this->global_var_ids[3]) = 1.0;
-
-        // DOF 3: Flow into aorta (no equation)
-
-        // DOF 4, Eq 2: Right atrium volume
-        system.F(this->global_eqn_ids[2], this->global_var_ids[5]) = 1.0*valves[5];
-        system.F(this->global_eqn_ids[2], this->global_var_ids[1]) = -1.0;
-
-        // DOF 5, Eq 3: Right atrium outflow
-        system.F(this->global_eqn_ids[3], this->global_var_ids[5]) = params.Rra_v*valves[5];
-        system.F(this->global_eqn_ids[3], this->global_var_ids[0]) = -1.0;
-        system.F(this->global_eqn_ids[3], this->global_var_ids[6]) = 1.0;
-
-        // DOF 6, Eq 4: Right ventricle pressure
-        system.F(this->global_eqn_ids[4], this->global_var_ids[6]) = 1.0;
-        system.F(this->global_eqn_ids[4], this->global_var_ids[7]) = -this->Erv;
-        system.C(this->global_eqn_ids[4]) = this->Erv*params.Vrv_u;
-
-        // DOF 7, Eq 5: Right ventricle volume
-        system.F(this->global_eqn_ids[5], this->global_var_ids[5]) = -1.0*valves[5];
-        system.F(this->global_eqn_ids[5], this->global_var_ids[8]) = 1.0*valves[8];
-
-        // DOF 8, Eq 6: Right ventricle outflow
-        system.F(this->global_eqn_ids[6], this->global_var_ids[6]) = -1.0;
-        system.F(this->global_eqn_ids[6], this->global_var_ids[9]) = 1.0;
-        system.F(this->global_eqn_ids[6], this->global_var_ids[8]) = params.Rrv_a*valves[8];
-
-        // DOF 9, Eq 7: Pulmonary pressure
-        system.F(this->global_eqn_ids[7], this->global_var_ids[8]) = -valves[8];
-        system.F(this->global_eqn_ids[7], this->global_var_ids[9]) = 1.0/params.Rpd;
-        system.F(this->global_eqn_ids[7], this->global_var_ids[10]) = -1.0/params.Rpd;
-
-        // DOF 10, Eq 8: Left atrium pressure
-        system.F(this->global_eqn_ids[8], this->global_var_ids[10]) = 1.0;
-        system.F(this->global_eqn_ids[8], this->global_var_ids[11]) = -this->AA*params.Emax_la;
-        system.C(this->global_eqn_ids[8]) = this->AA*params.Emax_la*params.Vaso_la + psi_la*(this->AA-1.0);
-        system.D(this->global_eqn_ids[8], this->global_var_ids[11]) = psi_la_derivative*(this->AA-1.0);
-
-        // DOF 11, Eq 9: Left atrium volume
-        system.F(this->global_eqn_ids[9], this->global_var_ids[8]) = -1.0*valves[8];
-        system.F(this->global_eqn_ids[9], this->global_var_ids[12]) = 1.0*valves[12];
-
-        // DOF 12, Eq 10: Left atrium outflow
-        system.F(this->global_eqn_ids[10], this->global_var_ids[10]) = -1.0;
-        system.F(this->global_eqn_ids[10], this->global_var_ids[13]) = 1.0;
-        system.F(this->global_eqn_ids[10], this->global_var_ids[12]) = params.Rla_v*valves[12];
-
-        // DOF 13, Eq 11: Left ventricle pressure
-        system.F(this->global_eqn_ids[11], this->global_var_ids[13]) = 1.0;
-        system.F(this->global_eqn_ids[11], this->global_var_ids[14]) = -this->Elv;
-        system.C(this->global_eqn_ids[11]) = this->Elv*params.Vlv_u;
-
-        // DOF 14, Eq 12: Left ventricle volume
-        system.F(this->global_eqn_ids[12], this->global_var_ids[12]) = -1.0*valves[12];
-        system.F(this->global_eqn_ids[12], this->global_var_ids[15]) = 1.0*valves[15];
-
-        // DOF 15, Eq 13: Left ventricle outflow
-        system.F(this->global_eqn_ids[13], this->global_var_ids[13]) = -1.0;
-        system.F(this->global_eqn_ids[13], this->global_var_ids[2]) = 1.0;
-        system.F(this->global_eqn_ids[13], this->global_var_ids[15]) = params.Rlv_ao*valves[15];
 
     }
     
@@ -680,6 +548,11 @@ namespace MODEL
             param_value = params.imr;
         }
     }
+
+template <typename T>
+std::map<std::string, int> ClosedLoopHeartPulmonary<T>::get_num_triplets() {
+  return num_triplets;
+}
 
 } // namespace MODEL
 

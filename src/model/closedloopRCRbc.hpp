@@ -155,6 +155,7 @@ class ClosedLoopRCRBC : public Block<T> {
  private:
   Parameters params;
   T c_cache;
+  bool closed_loop_outlet = false;  ///< Is this block connected to a closed-loop model?
 };
 
 template <typename T>
@@ -172,7 +173,8 @@ ClosedLoopRCRBC<T>::~ClosedLoopRCRBC() {}
 
 template <typename T>
 void ClosedLoopRCRBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 3, 1);
+  //Block<T>::setup_dofs_(dofhandler, 3, 1);
+  Block<T>::setup_dofs_(dofhandler, 3, {"P_c"});
 }
 
 template <typename T>

@@ -498,14 +498,6 @@ void ClosedLoopHeartPulmonary<T>::get_valve_positions(
   }
 }
 
-//  template <typename T>
-//  void
-//  ClosedLoopHeartPulmonary<T>::update_model_dependent_params(MODEL::Model<T>
-//  &model)
-//  {
-//      this->cardiac_cycle_period = model.cardiac_cycle_period;
-//  }
-
 template <typename T>
 void ClosedLoopHeartPulmonary<T>::set_ICs(ALGEBRA::State<T> &state) {
   state.y[this->global_var_ids[4]] = 38.43;   // RA vol.

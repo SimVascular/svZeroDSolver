@@ -140,13 +140,14 @@ class Block {
    * equations at
    */
   virtual void setup_dofs(DOFHandler &dofhandler);
-  
+
   /**
-   * @brief Update for model-dependent variables that are set at the end of model construction
+   * @brief Update for model-dependent variables that are set at the end of
+   * model construction
    *
    * @param model Model object to access model-dependent variables
    */
-  virtual void update_model_dependent_params(MODEL::Model<T> &model); 
+  virtual void update_model_dependent_params(MODEL::Model<T> &model);
 
   /**
    * @brief Return parameter values
@@ -154,7 +155,7 @@ class Block {
    * @param message String to identify different requests
    */
   virtual void get_parameter_value(std::string message, T &param_value);
-  
+
   /**
    * @brief Set block-specific initial conditions
    *
@@ -262,10 +263,10 @@ void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
 
 template <typename T>
 void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
-  
+
 template <typename T>
 void Block<T>::update_model_dependent_params(MODEL::Model<T> &model) {}
-  
+
 template <typename T>
 void Block<T>::get_parameter_value(std::string message, T &param_value) {}
 

@@ -12,7 +12,8 @@ namespace MODEL {
 /**
  * @brief Closed-loop RCR boundary condition.
  *
- * Models the mechanical behavior of a Windkessel boundary condition that is connected to other blocks on both sides.
+ * Models the mechanical behavior of a Windkessel boundary condition that is
+ * connected to other blocks on both sides.
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -45,7 +46,8 @@ namespace MODEL {
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}=\left[\begin{array}{lllll}P_{in} & Q_{in} & P_{out} & Q_{out} & P_{c}\end{array}\right]^{T} \f]
+ * \mathbf{y}=\left[\begin{array}{lllll}P_{in} & Q_{in} & P_{out} & Q_{out} &
+ * P_{c}\end{array}\right]^{T} \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
@@ -149,7 +151,7 @@ class ClosedLoopRCRBC : public Block<T> {
    * Set the capacitance to 0.
    */
   void to_steady();
-  
+
   /**
    * @brief Convert the block to a steady behavior
    *
@@ -160,11 +162,13 @@ class ClosedLoopRCRBC : public Block<T> {
  private:
   Parameters params;
   T c_cache;
-  bool closed_loop_outlet = false;  ///< Is this block connected to a closed-loop model?
+  bool closed_loop_outlet =
+      false;  ///< Is this block connected to a closed-loop model?
 };
 
 template <typename T>
-ClosedLoopRCRBC<T>::ClosedLoopRCRBC(T Rp, T C, T Rd, bool closed_loop_outlet, std::string name)
+ClosedLoopRCRBC<T>::ClosedLoopRCRBC(T Rp, T C, T Rd, bool closed_loop_outlet,
+                                    std::string name)
     : Block<T>(name) {
   this->name = name;
   this->params.Rp = Rp;
@@ -178,23 +182,26 @@ ClosedLoopRCRBC<T>::~ClosedLoopRCRBC() {}
 
 template <typename T>
 void ClosedLoopRCRBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  //Block<T>::setup_dofs_(dofhandler, 3, 1);
+  // Block<T>::setup_dofs_(dofhandler, 3, 1);
   Block<T>::setup_dofs_(dofhandler, 3, {"P_c"});
 }
 
 template <typename T>
 void ClosedLoopRCRBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) =  1.0;
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) =  1.0;
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) = 1.0;
+  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) = -1.0;
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[2]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) =  1.0;
- 
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = 1.0;
+
   // Below values can be unsteady if needed (not currently implemented)
-  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[4]) =  params.C;
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =  -params.Rp;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) =  -params.Rd;
+  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[4]) =
+      params.C;
+  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
+      -params.Rp;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) =
+      -params.Rd;
 }
 
 template <typename T>

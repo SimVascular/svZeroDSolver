@@ -11,7 +11,8 @@
 namespace MODEL {
 
 /**
- * @brief Closed loop coronary boundary condition (connected to other blocks on both sides).
+ * @brief Closed loop coronary boundary condition (connected to other blocks on
+ * both sides).
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -32,12 +33,13 @@ namespace MODEL {
  * ### Governing equations
  *
  * \f[
- * P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a \frac{dQ_{in}}{dt} = 0
- * \f]
+ * P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a
+ * \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a
+ * \frac{dQ_{in}}{dt} = 0 \f]
  *
  * \f[
- * Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a \frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0
- * \f]
+ * Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
+ * \frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \f]
  *
  * \f[
  * C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
@@ -46,7 +48,8 @@ namespace MODEL {
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} & Q_{out} & V_{im}^{e}\end{array}\right]^{T}, \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} & Q_{out}
+ * & V_{im}^{e}\end{array}\right]^{T}, \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
@@ -97,8 +100,8 @@ class ClosedLoopCoronaryBC : public Block<T> {
    * @param P Time dependent pressure
    * @param name Name
    */
-  ClosedLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                     std::string side, std::string name);
+  ClosedLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim, std::string side,
+                       std::string name);
 
   /**
    * @brief Destroy the ClosedLoopCoronaryBC object
@@ -153,7 +156,7 @@ class ClosedLoopCoronaryBC : public Block<T> {
       {"E", 5},
       {"D", 0},
   };
-  
+
   /**
    * @brief Get number of triplets of element
    *
@@ -171,7 +174,8 @@ class ClosedLoopCoronaryBC : public Block<T> {
 
 template <typename T>
 ClosedLoopCoronaryBC<T>::ClosedLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                                          std::string side, std::string name)
+                                              std::string side,
+                                              std::string name)
     : Block<T>(name) {
   this->name = name;
   this->params.Ra = Ra;
@@ -180,7 +184,7 @@ ClosedLoopCoronaryBC<T>::ClosedLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
   this->params.Ca = Ca;
   this->params.Cim = Cim;
   this->side = side;
-  //this->closed_loop_outlet = true;
+  // this->closed_loop_outlet = true;
 }
 
 template <typename T>
@@ -192,66 +196,84 @@ void ClosedLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void ClosedLoopCoronaryBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
-  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = -params.Ram*params.Ca;
-  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = params.Ram*params.Ra*params.Ca;
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = -params.Ca;
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = params.Ca*params.Ra;
+void ClosedLoopCoronaryBC<T>::update_constant(
+    ALGEBRA::SparseSystem<T> &system) {
+  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) =
+      -params.Ram * params.Ca;
+  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
+      params.Ram * params.Ra * params.Ca;
+  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) =
+      -params.Ca;
+  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
+      params.Ca * params.Ra;
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) = -1.0;
-  
+
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = (params.Ra + params.Ram);
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
+      (params.Ra + params.Ram);
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) = params.Rv;
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) =
+      params.Rv;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[2]) = params.Cim;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) = params.Cim*params.Rv;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[2]) =
+      params.Cim;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) =
+      params.Cim * params.Rv;
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = -1.0;
 }
 
 template <typename T>
-void ClosedLoopCoronaryBC<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
-                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  auto Pim = this->im*y[this->ventricle_var_id];
-  system.C(this->global_eqn_ids[2]) = -params.Cim*Pim;
+void ClosedLoopCoronaryBC<T>::update_solution(
+    ALGEBRA::SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+  auto Pim = this->im * y[this->ventricle_var_id];
+  system.C(this->global_eqn_ids[2]) = -params.Cim * Pim;
 }
 
 template <typename T>
-void ClosedLoopCoronaryBC<T>::update_model_dependent_params(MODEL::Model<T> &model) {
+void ClosedLoopCoronaryBC<T>::update_model_dependent_params(
+    MODEL::Model<T> &model) {
   T im_value = 0.0;
   for (auto &block : model.blocks) {
     if (block->name == "CLH") {
       if (this->side == "left") {
-        block->get_parameter_value("iml", im_value); // Scaling for LV pressure -> intramyocardial pressure
-        this->ventricle_var_id = block->global_var_ids[13]; // Solution ID for LV pressure
-      }
-      else if (this->side == "right") {
-        block->get_parameter_value("imr", im_value); // Scaling for RV pressure -> intramyocardial pressure
-        this->ventricle_var_id = block->global_var_ids[6]; 
-      }
-      else {
-        throw std::runtime_error("For closed loop coronary, 'side' should be either 'left' or 'right'");
+        block->get_parameter_value(
+            "iml",
+            im_value);  // Scaling for LV pressure -> intramyocardial pressure
+        this->ventricle_var_id =
+            block->global_var_ids[13];  // Solution ID for LV pressure
+      } else if (this->side == "right") {
+        block->get_parameter_value(
+            "imr",
+            im_value);  // Scaling for RV pressure -> intramyocardial pressure
+        this->ventricle_var_id = block->global_var_ids[6];
+      } else {
+        throw std::runtime_error(
+            "For closed loop coronary, 'side' should be either 'left' or "
+            "'right'");
       }
     }
   }
-//for (auto &[key, elem] : model.blocks) {
-//  std::visit([&](auto &&block) { 
-//    if (key == "CLH0") {
-//      if (this->side == "left") {
-//        block.get_parameter_value("iml", im_value); // Scaling for LV pressure -> intramyocardial pressure
-//        this->ventricle_var_id = block.global_var_ids[13]; // Solution ID for LV pressure
-//      }
-//      else if (this->side == "right") {
-//        block.get_parameter_value("imr", im_value); // Scaling for RV pressure -> intramyocardial pressure
-//        this->ventricle_var_id = block.global_var_ids[6]; 
-//      }
-//      else {
-//        throw std::runtime_error("For closed loop coronary, 'side' should be either 'left' or 'right'");
-//      }
-//    }
-//  }, elem);
-//}
+  // for (auto &[key, elem] : model.blocks) {
+  //  std::visit([&](auto &&block) {
+  //    if (key == "CLH0") {
+  //      if (this->side == "left") {
+  //        block.get_parameter_value("iml", im_value); // Scaling for LV
+  //        pressure -> intramyocardial pressure this->ventricle_var_id =
+  //        block.global_var_ids[13]; // Solution ID for LV pressure
+  //      }
+  //      else if (this->side == "right") {
+  //        block.get_parameter_value("imr", im_value); // Scaling for RV
+  //        pressure -> intramyocardial pressure this->ventricle_var_id =
+  //        block.global_var_ids[6];
+  //      }
+  //      else {
+  //        throw std::runtime_error("For closed loop coronary, 'side' should be
+  //        either 'left' or 'right'");
+  //      }
+  //    }
+  //  }, elem);
+  //}
   this->im = im_value;
 }
 

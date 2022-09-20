@@ -5,7 +5,7 @@
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
 
-#include <math>
+#include <math.h>
 
 #include "../algebra/sparsesystem.hpp"
 #include "../algebra/state.hpp"

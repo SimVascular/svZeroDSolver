@@ -228,11 +228,7 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   }
 
-      // KMENON -- need to fix
-  //std::vector<std::string> closed_loop_RCRbcs;
-  //std::vector<std::string> closed_loop_coronarybcs;
   std::vector<std::string_view> closed_loop_bcs;
-      // KMENON -- need to fix
 
   // Create boundary conditions
   for (auto bc_config : config["boundary_conditions"]) {
@@ -255,7 +251,6 @@ void ConfigReader<T>::load(std::string &specifier) {
       model.blocks.push_back(new MODEL::WindkesselBC<T>(
           Rp = Rp, C = C, Rd = Rd, Pd = Pd, static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
-    // KMENON -- need to fix
     } else if (bc_type == "ClosedLoopRCR") {
       T Rp = bc_values["Rp"], C = bc_values["C"], Rd = bc_values["Rd"];
       bool closed_loop_outlet = bc_values["closed_loop_outlet"];
@@ -265,7 +260,6 @@ void ConfigReader<T>::load(std::string &specifier) {
       model.blocks.push_back(new MODEL::ClosedLoopRCRBC<T>(
           Rp = Rp, C = C, Rd = Rd, closed_loop_outlet = closed_loop_outlet, static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
-     // KMENON -- need to fix
     } else if (bc_type == "FLOW") {
       std::vector<T> Q;
       try {
@@ -361,7 +355,6 @@ void ConfigReader<T>::load(std::string &specifier) {
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, pim_param, pv_param,
           static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
-      // KMENON -- need to fix
     } else if (bc_type == "ClosedLoopCoronary") {
       T Ra = bc_values["Ra"], Ram = bc_values["Ram"], Rv = bc_values["Rv"], 
         Ca = bc_values["Ca"], Cim = bc_values["Cim"];
@@ -372,7 +365,6 @@ void ConfigReader<T>::load(std::string &specifier) {
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, 
           static_cast<std::string>(side), static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
-      // KMENON -- need to fix
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
     }
@@ -408,24 +400,15 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   }
   
-  // KMENON -- fixed
   // Create closed-loop blocks
   bool heartpulmonary_block_present = false;  ///< Flag to check if heart block is present (requires different handling)
   try {
-  //if (has_key(config, "closed_loop_blocks") == true) {
-    //int closed_loop_index = -1;
-    //for (simdjson::dom::element closed_loop_config : config["closed_loop_blocks"]) {
     for (auto closed_loop_config : config["closed_loop_blocks"]) {
-      //closed_loop_index++;
       std::string_view closed_loop_type = closed_loop_config["closed_loop_type"];
-      //if (static_cast<std::string>(closed_loop_config["closed_loop_type"]) ==
-      //     "ClosedLoopHeartAndPulmonary") { 
       if (closed_loop_type == "ClosedLoopHeartAndPulmonary") { 
         if (heartpulmonary_block_present == false) {
-          // Create the closed_loop and add to blocks
           heartpulmonary_block_present = true;
           sim_steady_initial = false;
-          //std::string heartpulmonary_name = "CLH" + std::to_string(closed_loop_index);
           std::string_view heartpulmonary_name = "CLH";
           T cycle_period = closed_loop_config["cardiac_cycle_period"].get_double();
           if ((sim_cardiac_cycle_period > 0.0) && (cycle_period != sim_cardiac_cycle_period)) {
@@ -434,7 +417,6 @@ void ConfigReader<T>::load(std::string &specifier) {
           else {
             sim_cardiac_cycle_period = cycle_period;
           }
-          //simdjson::dom::element heart_params = closed_loop_config["parameters"];
           auto heart_params = closed_loop_config["parameters"];
           // Convert to std::map to keep model blocks independent of simdjson
           std::map<std::string, T> param_values;
@@ -466,43 +448,25 @@ void ConfigReader<T>::load(std::string &specifier) {
           param_values.insert(std::make_pair("Vaso_ra", heart_params["Vaso_ra"])); 
           param_values.insert(std::make_pair("Vaso_la", heart_params["Vaso_la"])); 
           if (param_values.size() == 27) { 
-            //model.blocks.insert({heartpulmonary_name, MODEL::ClosedLoopHeartPulmonary<T>(param_values, heartpulmonary_name)});
             model.blocks.push_back(new MODEL::ClosedLoopHeartPulmonary<T>(param_values, cycle_period, static_cast<std::string>(heartpulmonary_name)));
           }
           else {
             throw std::runtime_error("Error. ClosedLoopHeartAndPulmonary should have 27 parameters");
           }
-          // Count number of junctions in config file (is there a better way)
-          //int num_junctions = 0;
-          //for (simdjson::dom::element junction_config : config["junctions"]) {
-          //  num_junctions++;
-          //}
           // Junction at inlet to heart
-          //std::string heart_inlet_junction_name = "J" + std::to_string(num_junctions);
           std::string_view heart_inlet_junction_name = "J_heart_inlet";
           connections.push_back({heart_inlet_junction_name, heartpulmonary_name});
-          //model.blocks.insert({heart_inlet_junction_name, MODEL::Junction<T>(heart_inlet_junction_name)});
           model.blocks.push_back(new MODEL::Junction<T>(static_cast<std::string>(heart_inlet_junction_name)));
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back({heart_inlet_elem, heart_inlet_junction_name});
           }
-          //for (auto heart_inlet_elem : closed_loop_coronarybcs) {
-          //  connections.push_back({heart_inlet_elem, heart_inlet_junction_name});
-          //}
           // Junction at outlet from heart
-          //std::string heart_outlet_junction_name = "J" + std::to_string(num_junctions+1);
           std::string_view heart_outlet_junction_name = "J_heart_outlet";
           connections.push_back({heartpulmonary_name, heart_outlet_junction_name});
-          //model.blocks.insert({heart_outlet_junction_name, MODEL::Junction<T>(heart_outlet_junction_name)});
           model.blocks.push_back(new MODEL::Junction<T>(static_cast<std::string>(heart_outlet_junction_name)));
-          //for (simdjson::dom::element heart_outlet_vessel : closed_loop_config["outlet_vessels"]) {
-          //  connections.push_back({heart_outlet_junction_name,"V" + std::to_string(heart_outlet_vessel.get_int64())});
-          //}
           for (auto heart_outlet_block : closed_loop_config["outlet_blocks"]) {
             connections.push_back(
                 {heart_outlet_junction_name,heart_outlet_block});
-                //{heart_outlet_junction_name,static_cast<std::string>(heart_outlet_block)});
-                //{heart_outlet_junction_name,vessel_id_map[heart_outlet_block.get_int64()]});
           }
         }
         else {
@@ -511,7 +475,6 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
     }
   } catch (simdjson::simdjson_error) {}
-  // KMENON -- fixed
 
   // Create Connections
   for (auto &connection : connections) {
@@ -541,46 +504,18 @@ void ConfigReader<T>::load(std::string &specifier) {
   // Calculate time step size
   sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
   
-  // KMENON -- fixed
   // Update block parameters that depend on DOFs and other params of other blocks
-  // 1. Cardiac cycle perdiod in heart block
-  // 2. Coronary block params that depend on heart block DOFs
+  // For example, coronary block params that depend on heart block DOFs
   for (auto &block : model.blocks) {
     block->update_model_dependent_params(model);
   }
-  // KMENON -- fixed
-  
-  /*
-  // KMENON -- need to fix
-  // Update closed loop blocks (in an unordered way):
-    // 1. Cardiac cycle perdiod in heart block
-    // 2. Coronary block params that depend on heart block DOFs
-  
-    if (model.heartpulmonary_block_present == true) {
-        for (auto &[key, elem] : model.blocks) {
-            std::visit([&](auto &&block) { block.update_model_dependent_params(model); }, elem);
-          }
-      }
-  // KMENON -- need to fix
-
-      // KMENON -- need to fix
-+  if (model.heartpulmonary_block_present == true) {
-  +    steady_initial = false;
-  +    for (auto &[key, elem] : model.blocks) {
-    +      std::visit([&](auto &&block) { block.set_ICs(state); }, elem);
-    +    }
-  +  }
-      // KMENON -- need to fix
-  */  
   
   // Read initial condition
   initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
-  // KMENON -- fixed
   // Initialize blocks that have fixed initial conditions
   for (auto &block : model.blocks) {
     block->set_ICs(initial_state);
   }
-  // KMENON -- fixed
   try {
     auto initial_condition = config["initial_condition"].value();
     for (size_t i = 0; i < model.dofhandler.size(); i++) {

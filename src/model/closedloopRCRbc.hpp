@@ -31,36 +31,41 @@ namespace MODEL {
  * ### Governing equations
  *
  * \f[
- * R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
+ * C \frac{d P_c}{dt} + Q_{out} -Q_{in} = 0
  * \f]
  *
  * \f[
- * P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
+ * P_{in}-P_{c}-R_{p} Q_{in}=0
+ * \f]
+ *
+ * \f[
+ * P_{c} - P_{out} - R_{d} Q_{out}=0
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} &
- * P_{c}^{e}\end{array}\right]^{T} \f]
+ * \mathbf{y}=\left[\begin{array}{lllll}P_{in} & Q_{in} & P_{out} & Q_{out} & P_{c}\end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{ccc}
- * 0 & 0 & -R_{d} C \\
- * 0 & 0 & 0
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
+ * 0 & 0 & 0 & 0 & C \\
+ * 0 & 0 & 0 & 0 & 0 \\
+ * 0 & 0 & 0 & 0 & 0 \\
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{ccc}
- * 0 & R_{d} & -1 \\
- * 1 & -R_{p} & -1
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * 0 & -1 & 1 & 0 & 0 \\
+ * 1 & -R_p & 0 & 0 & -1 \\
+ * 0 & 0 & -1 & -R_d & +1 \\
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
- * P_{r e f} \\
+ * 0 \\
  * 0
  * \end{array}\right]
  * \f]

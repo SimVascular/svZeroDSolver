@@ -18,54 +18,9 @@ namespace MODEL
      *
      * Models the mechanics of the 4 heart chambers and pulmonary circulation
      *
-     * \f[
-     * \begin{circuitikz} \draw
-     * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-     * \draw (1,0) node[anchor=south]{$P_{in}$}
-     * to [R, l=$R_p$, *-] (3,0)
-     * to [R, l=$R_d$, *-*] (5,0)
-     * node[anchor=south]{$P_{ref}$}
-     * (3,0) to [C, l=$C$, *-] (3,-1.5)
-     * node[ground]{$P_{C}$};
-     * \end{circuitikz}
-     * \f]
+     * Reference for equations and model structure: Sankaran, S., Moghadam, M. E., Kahn, A. M., Tseng, E. E., Guccione, J. M., & Marsden, A. L. (2012). Patient-specific multiscale modeling of blood flow for coronary artery bypass graft surgery. Annals of Biomedical Engineering, 40(10), 2228–2242. https://doi.org/10.1007/s10439-012-0579-3
      *
-     * ### Governing equations
-     *
-     * \f[
-     * R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
-     * \f]
-     *
-     * \f[
-     * P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
-     * \f]
-     *
-     * ### Local contributions
-     *
-     * \f[
-     * \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & P_{c}^{e}\end{array}\right]^{T}
-     * \f]
-     *
-     * \f[
-     * \mathbf{E}^{e}=\left[\begin{array}{ccc}
-     * 0 & 0 & -R_{d} C \\
-     * 0 & 0 & 0
-     * \end{array}\right]
-     * \f]
-     *
-     * \f[
-     * \mathbf{F}^{e}=\left[\begin{array}{ccc}
-     * 0 & R_{d} & -1 \\
-     * 1 & -R_{p} & -1
-     * \end{array}\right]
-     * \f]
-     *
-     * \f[
-     * \mathbf{c}^{e}=\left[\begin{array}{c}
-     * P_{r e f} \\
-     * 0
-     * \end{array}\right]
-     * \f]
+     * TODO: Equations and circuit diagram
      *
      * @tparam T Scalar type (e.g. `float`, `double`)
      */

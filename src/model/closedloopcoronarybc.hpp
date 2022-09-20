@@ -32,35 +32,43 @@ namespace MODEL {
  * ### Governing equations
  *
  * \f[
- * C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
- * \frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a}
- * C_{i m} R_{v} \frac{d Q^{e}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}^{e}}{d
- * t}=0 \f]
+ * P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a \frac{dQ_{in}}{dt} = 0
+ * \f]
  *
  * \f[
- * C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v}
- * P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i
- * m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \f]
+ * Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a \frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0
+ * \f]
+ *
+ * \f[
+ * C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
+ * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & V_{i
- * m}^{e}\end{array}\right]^{T}, \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} & Q_{out} & V_{im}^{e}\end{array}\right]^{T}, \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} & R_{a} C_{a}
- * C_{i m} R_{v} & -C_{i m} R_{v} \\ 0 & 0 & -C_{i m} R_{v} R_{a
- * m}\end{array}\right] \f]
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
+ * -R_{am} C_{a} & R_{am} R_{a} C_{a} & 0 & 0 & 0 \\
+ * -C_{a} & R_{a} C_{a} & 0 & 0 & -1 \\
+ * 0 & 0 & 0 & 0 & 0 \\
+ * \end{array}\right] \f]
+ *
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{ccc}0 & C_{i m} R_{v} & -1 \\C_{i m} R_{v}
- * & -C_{i m} R_{v} R_{a} & -\left(R_{v}+R_{a m}\right)\end{array}\right] \f]
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * -1 & R_{am} + R_{a} & 1 & R_v & 0 \\
+ * 0 & 1 & 0 & -1 & 0 \\
+ * 0 & 0 & C_{im} & C_{im} R_v & -1 \\
+ * \end{array}\right] \f]
  *
  * \f[
- * \mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)+C_{a}
- * C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i
- * m}+R_{a m} C_{i m} P_{v}\end{array}\right] \f]
+ * \mathbf{c}^{e}=\left[\begin{array}{c}
+ * C_{a} R_{am} \frac{d P_{a}}{d t} \\
+ * C_{a}\frac{d P_{a}}{d t} \\
+ * -C_{im} P_{im}
+ * \end{array}\right] \f]
  *
  * Assume \f$P_a=0\f$.
  *

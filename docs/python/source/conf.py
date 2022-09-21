@@ -35,7 +35,7 @@ html_theme_options = {
     },
     "collapse_navigation": True,
     "show_prev_next": False,
-    "github_url": "https://github.com/SimVascular/svZeroDSolver",
+    "github_url": "https://github.com/StanfordCBCL/svZeroDSolver",
     "navbar_end": ["navbar-icon-links"],
 }
 html_title = "%s %s Manual" % (project, release)

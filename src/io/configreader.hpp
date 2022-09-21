@@ -41,6 +41,9 @@
 #include "../helpers/debug.hpp"
 #include "../helpers/startswith.hpp"
 #include "../model/bloodvessel.hpp"
+#include "../model/closedloopRCRbc.hpp"
+#include "../model/closedloopcoronarybc.hpp"
+#include "../model/closedloopheartpulmonary.hpp"
 #include "../model/flowreferencebc.hpp"
 #include "../model/junction.hpp"
 #include "../model/model.hpp"
@@ -82,7 +85,7 @@ class ConfigReader {
   MODEL::Model<T> model;            ///< Simulation model
   ALGEBRA::State<T> initial_state;  ///< Initial state
 
-  T sim_cardiac_cycle_period;  ///< Cardiac cycle period
+  T sim_cardiac_cycle_period;  ///< Cardiac cycle period.
   T sim_time_step_size;        ///< Simulation time step size
   T sim_abs_tol;               ///< Absolute tolerance for simulation
 
@@ -125,6 +128,15 @@ void ConfigReader<T>::load(std::string &specifier) {
   sim_pts_per_cycle =
       sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
   sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
+  sim_cardiac_cycle_period = -1.0;  // Negative value indicates this has not
+                                    // been read from config file yet.
+                                    // try {
+  //  sim_cardiac_cycle_period =
+  //  sim_params["cardiac_cycle_period"].get_double();
+  //} catch (simdjson::simdjson_error) {
+  //  sim_cardiac_cycle_period = -1.0; // Negative value indicates this has not
+  //  been read from config file or from TimeDependent parameter yet.
+  //}
   try {
     sim_abs_tol = sim_params["absolute_tolerance"].get_double();
   } catch (simdjson::simdjson_error) {
@@ -219,6 +231,8 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   }
 
+  std::vector<std::string_view> closed_loop_bcs;
+
   // Create boundary conditions
   for (auto bc_config : config["boundary_conditions"]) {
     std::string_view bc_type = bc_config["bc_type"];
@@ -240,6 +254,16 @@ void ConfigReader<T>::load(std::string &specifier) {
       model.blocks.push_back(new MODEL::WindkesselBC<T>(
           Rp = Rp, C = C, Rd = Rd, Pd = Pd, static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
+    } else if (bc_type == "ClosedLoopRCR") {
+      T Rp = bc_values["Rp"], C = bc_values["C"], Rd = bc_values["Rd"];
+      bool closed_loop_outlet = bc_values["closed_loop_outlet"];
+      if (closed_loop_outlet == true) {
+        closed_loop_bcs.push_back(bc_name);
+      }
+      model.blocks.push_back(new MODEL::ClosedLoopRCRBC<T>(
+          Rp = Rp, C = C, Rd = Rd, closed_loop_outlet = closed_loop_outlet,
+          static_cast<std::string>(bc_name)));
+      DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "FLOW") {
       std::vector<T> Q;
       try {
@@ -252,7 +276,14 @@ void ConfigReader<T>::load(std::string &specifier) {
 
       MODEL::TimeDependentParameter q_param(t, Q);
       if (q_param.isconstant == false) {
-        sim_cardiac_cycle_period = q_param.cycle_period;
+        if ((sim_cardiac_cycle_period > 0.0) &&
+            (q_param.cycle_period != sim_cardiac_cycle_period)) {
+          throw std::runtime_error(
+              "Inconsistent cardiac cycle period defined in "
+              "TimeDependentParameter");
+        } else {
+          sim_cardiac_cycle_period = q_param.cycle_period;
+        }
       }
       model.blocks.push_back(new MODEL::FlowReferenceBC<T>(
           q_param, static_cast<std::string>(bc_name)));
@@ -292,7 +323,14 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       MODEL::TimeDependentParameter p_param(t, P);
       if (p_param.isconstant == false) {
-        sim_cardiac_cycle_period = p_param.cycle_period;
+        if ((sim_cardiac_cycle_period > 0.0) &&
+            (p_param.cycle_period != sim_cardiac_cycle_period)) {
+          throw std::runtime_error(
+              "Inconsistent cardiac cycle period defined in "
+              "TimeDependentParameter");
+        } else {
+          sim_cardiac_cycle_period = p_param.cycle_period;
+        }
       }
       model.blocks.push_back(new MODEL::PressureReferenceBC<T>(
           p_param, static_cast<std::string>(bc_name)));
@@ -324,6 +362,16 @@ void ConfigReader<T>::load(std::string &specifier) {
       model.blocks.push_back(new MODEL::OpenLoopCoronaryBC<T>(
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, pim_param, pv_param,
           static_cast<std::string>(bc_name)));
+      DEBUG_MSG("Created boundary condition " << bc_name);
+    } else if (bc_type == "ClosedLoopCoronary") {
+      T Ra = bc_values["Ra"], Ram = bc_values["Ram"], Rv = bc_values["Rv"],
+        Ca = bc_values["Ca"], Cim = bc_values["Cim"];
+      std::string_view side = bc_values["side"];
+      closed_loop_bcs.push_back(bc_name);
+      // std::string side = static_cast<std::string>(bc_values["side"]);
+      model.blocks.push_back(new MODEL::ClosedLoopCoronaryBC<T>(
+          Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim,
+          static_cast<std::string>(side), static_cast<std::string>(bc_name)));
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
@@ -360,6 +408,100 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   }
 
+  // Create closed-loop blocks
+  bool heartpulmonary_block_present =
+      false;  ///< Flag to check if heart block is present (requires different
+              ///< handling)
+  try {
+    for (auto closed_loop_config : config["closed_loop_blocks"]) {
+      std::string_view closed_loop_type =
+          closed_loop_config["closed_loop_type"];
+      if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
+        if (heartpulmonary_block_present == false) {
+          heartpulmonary_block_present = true;
+          sim_steady_initial = false;
+          std::string_view heartpulmonary_name = "CLH";
+          T cycle_period =
+              closed_loop_config["cardiac_cycle_period"].get_double();
+          if ((sim_cardiac_cycle_period > 0.0) &&
+              (cycle_period != sim_cardiac_cycle_period)) {
+            throw std::runtime_error(
+                "Inconsistent cardiac cycle period defined in "
+                "ClosedLoopHeartAndPulmonary.");
+          } else {
+            sim_cardiac_cycle_period = cycle_period;
+          }
+          auto heart_params = closed_loop_config["parameters"];
+          // Convert to std::map to keep model blocks independent of simdjson
+          std::map<std::string, T> param_values;
+          param_values.insert(std::make_pair("Tsa", heart_params["Tsa"]));
+          param_values.insert(std::make_pair("tpwave", heart_params["tpwave"]));
+          param_values.insert(std::make_pair("Erv_s", heart_params["Erv_s"]));
+          param_values.insert(std::make_pair("Elv_s", heart_params["Elv_s"]));
+          param_values.insert(std::make_pair("iml", heart_params["iml"]));
+          param_values.insert(std::make_pair("imr", heart_params["imr"]));
+          param_values.insert(std::make_pair("Lra_v", heart_params["Lra_v"]));
+          param_values.insert(std::make_pair("Rra_v", heart_params["Rra_v"]));
+          param_values.insert(std::make_pair("Lrv_a", heart_params["Lrv_a"]));
+          param_values.insert(std::make_pair("Rrv_a", heart_params["Rrv_a"]));
+          param_values.insert(std::make_pair("Lla_v", heart_params["Lla_v"]));
+          param_values.insert(std::make_pair("Rla_v", heart_params["Rla_v"]));
+          param_values.insert(std::make_pair("Llv_a", heart_params["Llv_a"]));
+          param_values.insert(std::make_pair("Rlv_ao", heart_params["Rlv_ao"]));
+          param_values.insert(std::make_pair("Vrv_u", heart_params["Vrv_u"]));
+          param_values.insert(std::make_pair("Vlv_u", heart_params["Vlv_u"]));
+          param_values.insert(std::make_pair("Rpd", heart_params["Rpd"]));
+          param_values.insert(std::make_pair("Cp", heart_params["Cp"]));
+          param_values.insert(std::make_pair("Cpa", heart_params["Cpa"]));
+          param_values.insert(std::make_pair("Kxp_ra", heart_params["Kxp_ra"]));
+          param_values.insert(std::make_pair("Kxv_ra", heart_params["Kxv_ra"]));
+          param_values.insert(std::make_pair("Kxp_la", heart_params["Kxp_la"]));
+          param_values.insert(std::make_pair("Kxv_la", heart_params["Kxv_la"]));
+          param_values.insert(
+              std::make_pair("Emax_ra", heart_params["Emax_ra"]));
+          param_values.insert(
+              std::make_pair("Emax_la", heart_params["Emax_la"]));
+          param_values.insert(
+              std::make_pair("Vaso_ra", heart_params["Vaso_ra"]));
+          param_values.insert(
+              std::make_pair("Vaso_la", heart_params["Vaso_la"]));
+          if (param_values.size() == 27) {
+            model.blocks.push_back(new MODEL::ClosedLoopHeartPulmonary<T>(
+                param_values, cycle_period,
+                static_cast<std::string>(heartpulmonary_name)));
+          } else {
+            throw std::runtime_error(
+                "Error. ClosedLoopHeartAndPulmonary should have 27 parameters");
+          }
+          // Junction at inlet to heart
+          std::string_view heart_inlet_junction_name = "J_heart_inlet";
+          connections.push_back(
+              {heart_inlet_junction_name, heartpulmonary_name});
+          model.blocks.push_back(new MODEL::Junction<T>(
+              static_cast<std::string>(heart_inlet_junction_name)));
+          for (auto heart_inlet_elem : closed_loop_bcs) {
+            connections.push_back(
+                {heart_inlet_elem, heart_inlet_junction_name});
+          }
+          // Junction at outlet from heart
+          std::string_view heart_outlet_junction_name = "J_heart_outlet";
+          connections.push_back(
+              {heartpulmonary_name, heart_outlet_junction_name});
+          model.blocks.push_back(new MODEL::Junction<T>(
+              static_cast<std::string>(heart_outlet_junction_name)));
+          for (auto heart_outlet_block : closed_loop_config["outlet_blocks"]) {
+            connections.push_back(
+                {heart_outlet_junction_name, heart_outlet_block});
+          }
+        } else {
+          throw std::runtime_error(
+              "Error. Only one ClosedLoopHeartAndPulmonary can be included.");
+        }
+      }
+    }
+  } catch (simdjson::simdjson_error) {
+  }
+
   // Create Connections
   for (auto &connection : connections) {
     for (auto &ele1 : model.blocks) {
@@ -381,23 +523,39 @@ void ConfigReader<T>::load(std::string &specifier) {
     block->setup_dofs(model.dofhandler);
   }
 
+  // Set value of cardiac cycle period
+  if (sim_cardiac_cycle_period < 0.0) {
+    sim_cardiac_cycle_period =
+        1.0;  // If it has not been read from config or TimeDependentParameter
+              // yet, set as default value of 1.0
+  }
+  // Calculate time step size
+  sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
+
+  // Update block parameters that depend on DOFs and other params of other
+  // blocks For example, coronary block params that depend on heart block DOFs
+  for (auto &block : model.blocks) {
+    block->update_model_dependent_params(model);
+  }
+
   // Read initial condition
   initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
+  // Initialize blocks that have fixed initial conditions
+  for (auto &block : model.blocks) {
+    block->set_ICs(initial_state);
+  }
   try {
     auto initial_condition = config["initial_condition"].value();
     for (size_t i = 0; i < model.dofhandler.size(); i++) {
       try {
         initial_state.y[i] = initial_condition[model.dofhandler.variables[i]];
       } catch (simdjson::simdjson_error) {
-        std::cout << "Initial condition found, but no value for "
-                  << model.dofhandler.variables[i] << std::endl;
+        DEBUG_MSG("Initial condition found, but no value for "
+                  << model.dofhandler.variables[i]);
       }
     }
   } catch (simdjson::simdjson_error) {
   }
-
-  // Calculate time step size
-  sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
 }
 
 }  // namespace IO

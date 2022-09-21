@@ -38,6 +38,7 @@
 #include <vector>
 
 #include "../algebra/sparsesystem.hpp"
+#include "../algebra/state.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
 
@@ -141,12 +142,32 @@ class Block {
   virtual void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update the constant contributions of the element in a sparse system
+   * @brief Update for model-dependent variables that are set at the end of
+   * model construction
    *
+   * @param model Model object to access model-dependent variables
+   */
+  virtual void update_model_dependent_params(MODEL::Model<T> &model);
+
+  /**
+   * @brief Return parameter values
+   *
+   * @param message String to identify different requests
+   */
+  virtual void get_parameter_value(std::string message, T &param_value);
+
+  /**
+   * @brief Set block-specific initial conditions
+   *
+   * @param state State vector containing y and ydot
+   */
+  virtual void set_ICs(ALGEBRA::State<T> &state);
+
+  /**
+   * @brief Update the constant contributions of the element in a sparse system
    * @param system System to update contributions at
    */
   virtual void update_constant(ALGEBRA::SparseSystem<T> &system);
-
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
@@ -242,6 +263,15 @@ void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
 
 template <typename T>
 void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
+
+template <typename T>
+void Block<T>::update_model_dependent_params(MODEL::Model<T> &model) {}
+
+template <typename T>
+void Block<T>::get_parameter_value(std::string message, T &param_value) {}
+
+template <typename T>
+void Block<T>::set_ICs(ALGEBRA::State<T> &state) {}
 
 template <typename T>
 void Block<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {}

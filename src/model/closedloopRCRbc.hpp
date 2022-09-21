@@ -28,20 +28,21 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file windkesselbc.hpp
- * @brief MODEL::WindkesselBC source file
+ * @file closedloopRCRbc.hpp
+ * @brief MODEL::ClosedLoopRCRBC source file
  */
-#ifndef SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_
-#define SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_
+#ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBC_HPP_
+#define SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBC_HPP_
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
 
 namespace MODEL {
 /**
- * @brief Windkessel RCR boundary condition.
+ * @brief Closed-loop RCR boundary condition.
  *
- * Models the mechanical behavior of a Windkessel boundary condition.
+ * Models the mechanical behavior of a Windkessel boundary condition that is
+ * connected to other blocks on both sides.
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -49,45 +50,52 @@ namespace MODEL {
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R_p$, *-] (3,0)
  * to [R, l=$R_d$, *-*] (5,0)
- * node[anchor=south]{$P_{ref}$}
+ * node[anchor=south]{$P_{out}$}
  * (3,0) to [C, l=$C$, *-] (3,-1.5)
  * node[ground]{$P_{C}$};
+ * \draw [-latex] (5.2,0) -- (6.0,0) node[right] {$Q_{out}$} ;
  * \end{circuitikz}
  * \f]
  *
  * ### Governing equations
  *
  * \f[
- * R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
+ * C \frac{d P_c}{dt} + Q_{out} -Q_{in} = 0
  * \f]
  *
  * \f[
- * P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
+ * P_{in}-P_{c}-R_{p} Q_{in}=0
+ * \f]
+ *
+ * \f[
+ * P_{c} - P_{out} - R_{d} Q_{out}=0
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} &
- * P_{c}^{e}\end{array}\right]^{T} \f]
+ * \mathbf{y}=\left[\begin{array}{lllll}P_{in} & Q_{in} & P_{out} & Q_{out} &
+ * P_{c}\end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{ccc}
- * 0 & 0 & -R_{d} C \\
- * 0 & 0 & 0
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
+ * 0 & 0 & 0 & 0 & C \\
+ * 0 & 0 & 0 & 0 & 0 \\
+ * 0 & 0 & 0 & 0 & 0 \\
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{ccc}
- * 0 & R_{d} & -1 \\
- * 1 & -R_{p} & -1
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * 0 & -1 & 1 & 0 & 0 \\
+ * 1 & -R_p & 0 & 0 & -1 \\
+ * 0 & 0 & -1 & -R_d & +1 \\
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
- * P_{r e f} \\
+ * 0 \\
  * 0
  * \end{array}\right]
  * \f]
@@ -95,7 +103,7 @@ namespace MODEL {
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
-class WindkesselBC : public Block<T> {
+class ClosedLoopRCRBC : public Block<T> {
  public:
   /**
    * @brief Parameters of the element.
@@ -107,11 +115,10 @@ class WindkesselBC : public Block<T> {
     T Rp;  ///< Proximal resistance
     T C;   ///< Capacitance
     T Rd;  ///< Distal restistance
-    T Pd;  ///< Distal Pressure
   };
 
   /**
-   * @brief Construct a new WindkesselBC object
+   * @brief Construct a new ClosedLoopRCRBC object
    *
    * @param Rp Proximal resistance
    * @param C Capacitance
@@ -119,13 +126,13 @@ class WindkesselBC : public Block<T> {
    * @param Pd Distal pressure
    * @param name Name
    */
-  WindkesselBC(T Rp, T C, T Rd, T Pd, std::string name);
+  ClosedLoopRCRBC(T Rp, T C, T Rd, bool closed_loop_outlet, std::string name);
 
   /**
-   * @brief Destroy the WindkesselBC object
+   * @brief Destroy the ClosedLoopRCRBC object
    *
    */
-  ~WindkesselBC();
+  ~ClosedLoopRCRBC();
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -147,22 +154,13 @@ class WindkesselBC : public Block<T> {
   void update_constant(ALGEBRA::SparseSystem<T> &system);
 
   /**
-   * @brief Update the time-dependent contributions of the element in a sparse
-   * system
-   *
-   * @param system System to update contributions at
-   * @param time Current time
-   */
-  void update_time(ALGEBRA::SparseSystem<T> &system, T time);
-
-  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> num_triplets = {
-      {"F", 5},
+      {"F", 8},
       {"E", 1},
       {"D", 0},
   };
@@ -181,6 +179,7 @@ class WindkesselBC : public Block<T> {
    * Set the capacitance to 0.
    */
   void to_steady();
+
   /**
    * @brief Convert the block to a steady behavior
    *
@@ -191,60 +190,64 @@ class WindkesselBC : public Block<T> {
  private:
   Parameters params;
   T c_cache;
+  bool closed_loop_outlet =
+      false;  ///< Is this block connected to a closed-loop model?
 };
 
 template <typename T>
-WindkesselBC<T>::WindkesselBC(T Rp, T C, T Rd, T Pd, std::string name)
+ClosedLoopRCRBC<T>::ClosedLoopRCRBC(T Rp, T C, T Rd, bool closed_loop_outlet,
+                                    std::string name)
     : Block<T>(name) {
   this->name = name;
   this->params.Rp = Rp;
   this->params.C = C;
   this->params.Rd = Rd;
-  this->params.Pd = Pd;
+  this->closed_loop_outlet = closed_loop_outlet;
 }
 
 template <typename T>
-WindkesselBC<T>::~WindkesselBC() {}
+ClosedLoopRCRBC<T>::~ClosedLoopRCRBC() {}
 
 template <typename T>
-void WindkesselBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 2, {"pressure_c"});
+void ClosedLoopRCRBC<T>::setup_dofs(DOFHandler &dofhandler) {
+  // Block<T>::setup_dofs_(dofhandler, 3, 1);
+  Block<T>::setup_dofs_(dofhandler, 3, {"P_c"});
 }
 
 template <typename T>
-void WindkesselBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) = -1.0;
-}
+void ClosedLoopRCRBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -1.0;
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) = 1.0;
+  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = 1.0;
+  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) = -1.0;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[2]) = -1.0;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = 1.0;
 
-template <typename T>
-void WindkesselBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
-      -params.Rd * params.C;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      -params.Rp;
+  // Below values can be unsteady if needed (not currently implemented)
+  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[4]) =
+      params.C;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      params.Rd;
-  system.C(this->global_eqn_ids[1]) = params.Pd;
+      -params.Rp;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) =
+      -params.Rd;
 }
 
 template <typename T>
-void WindkesselBC<T>::to_steady() {
+void ClosedLoopRCRBC<T>::to_steady() {
   c_cache = params.C;
   params.C = 0.0;
 }
 
 template <typename T>
-void WindkesselBC<T>::to_unsteady() {
+void ClosedLoopRCRBC<T>::to_unsteady() {
   params.C = c_cache;
 }
 
 template <typename T>
-std::map<std::string, int> WindkesselBC<T>::get_num_triplets() {
+std::map<std::string, int> ClosedLoopRCRBC<T>::get_num_triplets() {
   return num_triplets;
 }
 
 }  // namespace MODEL
 
-#endif  // SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_
+#endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBCBC_HPP_

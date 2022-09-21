@@ -126,6 +126,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a70ccd1dd5919a360d520a6e8320dfecf inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">setup_dofs</a> (<a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:a70ccd1dd5919a360d520a6e8320dfecf inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <a href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">More...</a><br /></td></tr>
 <tr class="separator:a70ccd1dd5919a360d520a6e8320dfecf inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a734b31879d4c99c77ccbc01dbf227367 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a734b31879d4c99c77ccbc01dbf227367">update_model_dependent_params</a> (<a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt; &amp;model)</td></tr>
+<tr class="memdesc:a734b31879d4c99c77ccbc01dbf227367 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update for model-dependent variables that are set at the end of model construction.  <a href="class_m_o_d_e_l_1_1_block.html#a734b31879d4c99c77ccbc01dbf227367">More...</a><br /></td></tr>
+<tr class="separator:a734b31879d4c99c77ccbc01dbf227367 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec411e6f9159b3ec2c8d144da8d25763 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#aec411e6f9159b3ec2c8d144da8d25763">get_parameter_value</a> (std::string message, T &amp;param_value)</td></tr>
+<tr class="memdesc:aec411e6f9159b3ec2c8d144da8d25763 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return parameter values.  <a href="class_m_o_d_e_l_1_1_block.html#aec411e6f9159b3ec2c8d144da8d25763">More...</a><br /></td></tr>
+<tr class="separator:aec411e6f9159b3ec2c8d144da8d25763 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e87c0c28d9c8173e144fcddcefd5bb2 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a4e87c0c28d9c8173e144fcddcefd5bb2">set_ICs</a> (<a class="el" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a>&lt; T &gt; &amp;state)</td></tr>
+<tr class="memdesc:a4e87c0c28d9c8173e144fcddcefd5bb2 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set block-specific initial conditions.  <a href="class_m_o_d_e_l_1_1_block.html#a4e87c0c28d9c8173e144fcddcefd5bb2">More...</a><br /></td></tr>
+<tr class="separator:a4e87c0c28d9c8173e144fcddcefd5bb2 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1351a3b60e8060d6183045d382dbf6e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#aa1351a3b60e8060d6183045d382dbf6e">update_constant</a> (<a class="el" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem</a>&lt; T &gt; &amp;system)</td></tr>
 <tr class="memdesc:aa1351a3b60e8060d6183045d382dbf6e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <a href="class_m_o_d_e_l_1_1_block.html#aa1351a3b60e8060d6183045d382dbf6e">More...</a><br /></td></tr>
 <tr class="separator:aa1351a3b60e8060d6183045d382dbf6e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,38 +195,38 @@ class MODEL::Junction&lt; T &gt;</div><p ><a class="el" href="class_m_o_d_e_l_1_
 \draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
 \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
 \end{circuitikz}
-\]" src="form_32.png" width="248" height="120"/>
+\]" src="form_49.png" width="248" height="120"/>
 </p>
-<h3><a class="anchor" id="autotoc_md16"></a>
+<h3><a class="anchor" id="autotoc_md20"></a>
 Governing equations</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
-\]" src="form_33.png" width="145" height="38"/>
+\]" src="form_50.png" width="145" height="38"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
-\]" src="form_34.png" width="119" height="14"/>
+\]" src="form_51.png" width="119" height="14"/>
 </p>
-<h3><a class="anchor" id="autotoc_md17"></a>
+<h3><a class="anchor" id="autotoc_md21"></a>
 Local contributions</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e} &amp;
 \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
-\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_35.png" width="424" height="16"/>
+\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_52.png" width="424" height="16"/>
 </p>
 <p >Mass conservation</p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0 &amp;
--1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_36.png" width="263" height="16"/>
+-1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_53.png" width="263" height="16"/>
 </p>
 <p >Due to the pressure continuity, we can write for all independent pressure pairs: </p><p class="formulaDsp">
 <img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
 \underbrace{1}_{P_i} &amp; \dots &amp; \underbrace{1}_{P_j} &amp; \dots\end{array}\right]
-\quad \mathrm{with} \quad i \neq j \]" src="form_37.png" width="294" height="31"/>
+\quad \mathrm{with} \quad i \neq j \]" src="form_54.png" width="294" height="31"/>
 </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -410,7 +419,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 8 2022 20:29:52 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Sep 21 2022 00:41:36 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

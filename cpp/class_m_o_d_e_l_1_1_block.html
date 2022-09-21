@@ -83,7 +83,7 @@ $(function() {
 <div class="dynheader">
 Inheritance diagram for MODEL::Block&lt; T &gt;:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_m_o_d_e_l_1_1_block__inherit__graph.svg" width="430" height="408"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_m_o_d_e_l_1_1_block__inherit__graph.svg" width="463" height="576"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -110,6 +110,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a70ccd1dd5919a360d520a6e8320dfecf"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">setup_dofs</a> (<a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:a70ccd1dd5919a360d520a6e8320dfecf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <a href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">More...</a><br /></td></tr>
 <tr class="separator:a70ccd1dd5919a360d520a6e8320dfecf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a734b31879d4c99c77ccbc01dbf227367"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a734b31879d4c99c77ccbc01dbf227367">update_model_dependent_params</a> (<a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt; &amp;model)</td></tr>
+<tr class="memdesc:a734b31879d4c99c77ccbc01dbf227367"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update for model-dependent variables that are set at the end of model construction.  <a href="class_m_o_d_e_l_1_1_block.html#a734b31879d4c99c77ccbc01dbf227367">More...</a><br /></td></tr>
+<tr class="separator:a734b31879d4c99c77ccbc01dbf227367"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec411e6f9159b3ec2c8d144da8d25763"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#aec411e6f9159b3ec2c8d144da8d25763">get_parameter_value</a> (std::string message, T &amp;param_value)</td></tr>
+<tr class="memdesc:aec411e6f9159b3ec2c8d144da8d25763"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return parameter values.  <a href="class_m_o_d_e_l_1_1_block.html#aec411e6f9159b3ec2c8d144da8d25763">More...</a><br /></td></tr>
+<tr class="separator:aec411e6f9159b3ec2c8d144da8d25763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e87c0c28d9c8173e144fcddcefd5bb2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a4e87c0c28d9c8173e144fcddcefd5bb2">set_ICs</a> (<a class="el" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a>&lt; T &gt; &amp;state)</td></tr>
+<tr class="memdesc:a4e87c0c28d9c8173e144fcddcefd5bb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set block-specific initial conditions.  <a href="class_m_o_d_e_l_1_1_block.html#a4e87c0c28d9c8173e144fcddcefd5bb2">More...</a><br /></td></tr>
+<tr class="separator:a4e87c0c28d9c8173e144fcddcefd5bb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1351a3b60e8060d6183045d382dbf6e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#aa1351a3b60e8060d6183045d382dbf6e">update_constant</a> (<a class="el" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem</a>&lt; T &gt; &amp;system)</td></tr>
 <tr class="memdesc:aa1351a3b60e8060d6183045d382dbf6e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <a href="class_m_o_d_e_l_1_1_block.html#aa1351a3b60e8060d6183045d382dbf6e">More...</a><br /></td></tr>
 <tr class="separator:aa1351a3b60e8060d6183045d382dbf6e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -251,7 +260,93 @@ template&lt;typename T &gt; </div>
 <p>Get number of triplets of element. </p>
 <p >Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) </p>
 
-<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html#add082727e7934e9bef9cfb3e56f2e26b">MODEL::BloodVessel&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#a24254b45c29850fce94c216322c7e771">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_junction.html#a79399551ee54a043360b823cbeeb6d29">MODEL::Junction&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#abd92d8d6a4d13f4d4b103f40097eb281">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a39ccdae0608ee6bff4ac1eba99b9a288">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a4925f800d6622b598c9475279a806e44">MODEL::ResistanceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html#a7520ac287c5fd089b305b15771c0a808">MODEL::ResistiveJunction&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#a98fbe1042443e5b2de402eca5006436a">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html#add082727e7934e9bef9cfb3e56f2e26b">MODEL::BloodVessel&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_coronary_b_c.html#a0769ae27e4251236b0ac9c9b0e77111a">MODEL::ClosedLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a950b4b19381d2e509a21045ad98ab122">MODEL::ClosedLoopHeartPulmonary&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#ac46bf97d2b0b3ffe12dc13b0e4458abc">MODEL::ClosedLoopRCRBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#a24254b45c29850fce94c216322c7e771">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_junction.html#a79399551ee54a043360b823cbeeb6d29">MODEL::Junction&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#abd92d8d6a4d13f4d4b103f40097eb281">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a39ccdae0608ee6bff4ac1eba99b9a288">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a4925f800d6622b598c9475279a806e44">MODEL::ResistanceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html#a7520ac287c5fd089b305b15771c0a808">MODEL::ResistiveJunction&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#a98fbe1042443e5b2de402eca5006436a">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
+
+</div>
+</div>
+<a id="aec411e6f9159b3ec2c8d144da8d25763" name="aec411e6f9159b3ec2c8d144da8d25763"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec411e6f9159b3ec2c8d144da8d25763">&#9670;&nbsp;</a></span>get_parameter_value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_m_o_d_e_l_1_1_block.html">MODEL::Block</a>&lt; T &gt;::get_parameter_value </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>message</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>param_value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return parameter values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">message</td><td>String to identify different requests </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#ae56fbb49b7f567592029db16b9e4af99">MODEL::ClosedLoopHeartPulmonary&lt; T &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a4e87c0c28d9c8173e144fcddcefd5bb2" name="a4e87c0c28d9c8173e144fcddcefd5bb2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e87c0c28d9c8173e144fcddcefd5bb2">&#9670;&nbsp;</a></span>set_ICs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_m_o_d_e_l_1_1_block.html">MODEL::Block</a>&lt; T &gt;::set_ICs </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>state</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set block-specific initial conditions. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>State vector containing y and ydot </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a9211429338b3377e49f2ddd868cd9f76">MODEL::ClosedLoopHeartPulmonary&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -290,7 +385,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html#a81b433e90529749dc4bd0d078ecd0e1b">MODEL::BloodVessel&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#a07b024cf724ad95ce2abde3793c3af1f">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_junction.html#a57cacb323bdb462c2e1773851f6088df">MODEL::Junction&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a7e66436bf3a9d86cc32a877cf3d32ae5">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#aff1ef740afb66f254f8b14fdf8e5803d">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#aef5e82e969313208c3ee42d705797b1c">MODEL::ResistanceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html#af326b1f9faa34405d1a5024a6d5e132e">MODEL::ResistiveJunction&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#a5d09cb4285ed013e10c0ce163d018ff4">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html#a81b433e90529749dc4bd0d078ecd0e1b">MODEL::BloodVessel&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_coronary_b_c.html#a7c048bdaeed71e554bf03d03bb9496a7">MODEL::ClosedLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a37fbf9c3749d095700b9739eb04a44e0">MODEL::ClosedLoopHeartPulmonary&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#aa2b928a00c70ffbb06e43170035dc9ae">MODEL::ClosedLoopRCRBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#a07b024cf724ad95ce2abde3793c3af1f">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_junction.html#a57cacb323bdb462c2e1773851f6088df">MODEL::Junction&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a7e66436bf3a9d86cc32a877cf3d32ae5">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#aff1ef740afb66f254f8b14fdf8e5803d">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#aef5e82e969313208c3ee42d705797b1c">MODEL::ResistanceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html#af326b1f9faa34405d1a5024a6d5e132e">MODEL::ResistiveJunction&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#a5d09cb4285ed013e10c0ce163d018ff4">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -365,7 +460,7 @@ template&lt;typename T &gt; </div>
 
 <p>Convert the block to a steady behavior. </p>
 
-<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#a9c868f6221abfba243ea4b667dea8309">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a96819b99b2d52312c8912108007a6263">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#ad68608d53bde04b36f293b66165ce9f1">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a7329943beabebc0c35235e41f10bf3d3">MODEL::ResistanceBC&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#a781684eca75d46c9282f4e35d57853e6">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#aac95efa884dfda07ed4fdc84f4f2e916">MODEL::ClosedLoopRCRBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#a9c868f6221abfba243ea4b667dea8309">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a96819b99b2d52312c8912108007a6263">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#ad68608d53bde04b36f293b66165ce9f1">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a7329943beabebc0c35235e41f10bf3d3">MODEL::ResistanceBC&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#a781684eca75d46c9282f4e35d57853e6">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -393,7 +488,7 @@ template&lt;typename T &gt; </div>
 
 <p>Convert the block to an unsteady behavior. </p>
 
-<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#adf944c2f4d404c58e04043fe2a84a31a">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#af63db0bdd6b1cd70d3d7e334e8b6d7b9">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a3fbf3331a8987a8ee498f0b027be22a4">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a200b03a7b559463aa62cf4d8e7ef0cd8">MODEL::ResistanceBC&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#ab71a70243ae365107129bdd731938639">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#a4a40ddc294e504449b94a46941cf7fd8">MODEL::ClosedLoopRCRBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#adf944c2f4d404c58e04043fe2a84a31a">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#af63db0bdd6b1cd70d3d7e334e8b6d7b9">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a3fbf3331a8987a8ee498f0b027be22a4">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a200b03a7b559463aa62cf4d8e7ef0cd8">MODEL::ResistanceBC&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#ab71a70243ae365107129bdd731938639">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -431,7 +526,45 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html#a3909586564df17501073663785e74880">MODEL::BloodVessel&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#a6810600bcf2e2e505dbe138da4d0f2e7">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_junction.html#abf74c3ff9be18be6a146307f26785af3">MODEL::Junction&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a60a6f3b6e91a3216621241d4659902d5">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a23d2a1599bba5d26842a5eaea24407eb">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a2f07fa973b0bb9c750cc97adf48719b8">MODEL::ResistanceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html#ab9feb4188109a2e55b294cfe6eb965c4">MODEL::ResistiveJunction&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#aa2f6e126801e8b86b6edcd92b2f76abd">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html#a3909586564df17501073663785e74880">MODEL::BloodVessel&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_coronary_b_c.html#a619b35199d45bc811f1210a4a00bc9fc">MODEL::ClosedLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a0904e85cbfbc9ec808ef92b1b8a356ad">MODEL::ClosedLoopHeartPulmonary&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#aee13a5851329b46c4589771fbfd97bfe">MODEL::ClosedLoopRCRBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#a6810600bcf2e2e505dbe138da4d0f2e7">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_junction.html#abf74c3ff9be18be6a146307f26785af3">MODEL::Junction&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a60a6f3b6e91a3216621241d4659902d5">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a23d2a1599bba5d26842a5eaea24407eb">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a2f07fa973b0bb9c750cc97adf48719b8">MODEL::ResistanceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html#ab9feb4188109a2e55b294cfe6eb965c4">MODEL::ResistiveJunction&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#aa2f6e126801e8b86b6edcd92b2f76abd">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
+
+</div>
+</div>
+<a id="a734b31879d4c99c77ccbc01dbf227367" name="a734b31879d4c99c77ccbc01dbf227367"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a734b31879d4c99c77ccbc01dbf227367">&#9670;&nbsp;</a></span>update_model_dependent_params()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_m_o_d_e_l_1_1_block.html">MODEL::Block</a>&lt; T &gt;::update_model_dependent_params </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>model</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Update for model-dependent variables that are set at the end of model construction. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">model</td><td><a class="el" href="class_m_o_d_e_l_1_1_model.html" title="Model of 0D elements.">Model</a> object to access model-dependent variables </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_coronary_b_c.html#acd0bdeaaca1b2273173ca507720ebc47">MODEL::ClosedLoopCoronaryBC&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -480,7 +613,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html#ac6192a5011157b55641c0f32e0d9fca2">MODEL::BloodVessel&lt; T &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html#ac6192a5011157b55641c0f32e0d9fca2">MODEL::BloodVessel&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_coronary_b_c.html#ae65db4d179f4a3bc33fda5ef1aa74c0b">MODEL::ClosedLoopCoronaryBC&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#a98c480ede15293fbd2aeeb26eff73006">MODEL::ClosedLoopHeartPulmonary&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -529,7 +662,7 @@ template&lt;typename T &gt; </div>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#accaf0289d7808f20efb3fd3bd5ee2dbe">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a45375f8f005ff5964c9c78230a3a58c0">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a015dd358bf5581ef46925959653b7018">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a87b99c32ad16faf5fc239d67f33a3be0">MODEL::ResistanceBC&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#ac79143b27ae1eb25f4bcd065e494c2a5">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
+<p>Reimplemented in <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html#ac27b052e7557d75389f50df7fee2b8b8">MODEL::ClosedLoopHeartPulmonary&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html#accaf0289d7808f20efb3fd3bd5ee2dbe">MODEL::FlowReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html#a45375f8f005ff5964c9c78230a3a58c0">MODEL::OpenLoopCoronaryBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a015dd358bf5581ef46925959653b7018">MODEL::PressureReferenceBC&lt; T &gt;</a>, <a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html#a87b99c32ad16faf5fc239d67f33a3be0">MODEL::ResistanceBC&lt; T &gt;</a>, and <a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html#ac79143b27ae1eb25f4bcd065e494c2a5">MODEL::WindkesselBC&lt; T &gt;</a>.</p>
 
 </div>
 </div>
@@ -664,7 +797,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 8 2022 20:29:52 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Sep 21 2022 00:41:36 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

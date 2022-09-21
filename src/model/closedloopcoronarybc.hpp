@@ -55,6 +55,7 @@ namespace MODEL {
  * node[left]{$P_{im}$}
  * (3,0) to [C, l=$C_a$, -*] (3,-1.5)
  * node[left]{$P_a$};
+ * \draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
  * \f]
  *

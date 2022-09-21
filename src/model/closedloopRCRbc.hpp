@@ -53,7 +53,7 @@ namespace MODEL {
  * node[anchor=south]{$P_{out}$}
  * (3,0) to [C, l=$C$, *-] (3,-1.5)
  * node[ground]{$P_{C}$};
- * \draw node[left] {$Q_{out}$} [-latex] (5.2,0) -- (6.0,0);
+ * \draw [-latex] (5.2,0) -- (6.0,0) node[right] {$Q_{out}$} ;
  * \end{circuitikz}
  * \f]
  *

@@ -7,8 +7,8 @@ svZeroDSolver Python Documentation
 **Version**: |release|
 
 **Useful links**:
-`Source Repository <https://github.com/SimVascular/svZeroDSolver>`_ |
-`Issue Tracker <https://github.com/SimVascular/svZeroDSolver/issues>`_ |
+`Source Repository <https://github.com/StanfordCBCL/svZeroDSolver>`_ |
+`Issue Tracker <https://github.com/StanfordCBCL/svZeroDSolver/issues>`_ |
 `SimVascular <https://simvascular.github.io>`_
 
 svZeroDSolver is a Python package that simulates the hemodynamics in zero-dimensional
@@ -29,7 +29,7 @@ svZeroDSolver and all its dependencies can be installed easily via pip.
 
 .. code-block:: bash
 
-   pip install git+https://github.com/SimVascular/svZeroDSolver.git
+   pip install git+https://github.com/StanfordCBCL/svZeroDSolver.git
 
 
 For Contributers

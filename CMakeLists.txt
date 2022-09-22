@@ -49,7 +49,6 @@ endif()
 # -----------------------------------------------------------------------------
 add_executable(svzerodsolver src/main.cpp)
 pybind11_add_module(libsvzerodsolver src/python.cpp)
-add_subdirectory("src/interface")
 
 # -----------------------------------------------------------------------------
 # Link libraries

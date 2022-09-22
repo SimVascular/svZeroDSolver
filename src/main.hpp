@@ -206,6 +206,14 @@
 // Setting scalar type to double
 typedef double T;
 
+// TEST KMENON
+template <typename T>
+class MainTest {
+  public:
+    MODEL::Model<T>* model;
+};
+// TEST KMENON
+
 /**
  *
  * @brief Run svZeroDSolver with configuration
@@ -224,26 +232,41 @@ const std::string run(std::string& json_config) {
   IO::ConfigReader<T> reader;
   reader.load(json_config);
 
+//// TEST KMENON
+//MainTest<T> mtest;
+//mtest.model = reader.model;
+//auto model = mtest.model;
+  //auto model = reader.model;
+  // TEST KMENON
+
   // Setup system
   ALGEBRA::State<T> state = reader.initial_state;
 
   // Create steady initial
   if (reader.sim_steady_initial) {
     T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
-    reader.model.to_steady();
-    ALGEBRA::Integrator<T> integrator_steady(
-        reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol,
-        reader.sim_nliter);
+  // TEST KMENON
+    //reader.model.to_steady();
+    reader.model->to_steady();
+//  ALGEBRA::Integrator<T> integrator_steady(
+//      reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol,
+//      reader.sim_nliter);
+    ALGEBRA::Integrator<T> integrator_steady(*reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol, reader.sim_nliter);
     for (int i = 0; i < 31; i++) {
-      state = integrator_steady.step(state, time_step_size_steady * T(i),
-                                     reader.model);
+//    state = integrator_steady.step(state, time_step_size_steady * T(i),
+//                                   reader.model);
+      state = integrator_steady.step(state, time_step_size_steady * T(i),*reader.model);
     }
-    reader.model.to_unsteady();
+    //reader.model.to_unsteady();
+    reader.model->to_unsteady();
+  // TEST KMENON
   }
 
   // Set-up integrator
-  ALGEBRA::Integrator<T> integrator(reader.model, reader.sim_time_step_size,
-                                    0.1, reader.sim_abs_tol, reader.sim_nliter);
+  // TEST KMENON
+//ALGEBRA::Integrator<T> integrator(reader.model, reader.sim_time_step_size,
+//                                  0.1, reader.sim_abs_tol, reader.sim_nliter);
+  ALGEBRA::Integrator<T> integrator(*reader.model, reader.sim_time_step_size,0.1, reader.sim_abs_tol, reader.sim_nliter);
 
   // Initialize loop
   std::vector<ALGEBRA::State<T>> states;
@@ -257,7 +280,9 @@ const std::string run(std::string& json_config) {
   // Run integrator
   int interval_counter = 0;
   for (int i = 1; i < reader.sim_num_time_steps; i++) {
-    state = integrator.step(state, time, reader.model);
+  // TEST KMENON
+    //state = integrator.step(state, time, reader.model);
+    state = integrator.step(state, time, *reader.model);
     interval_counter += 1;
     time = reader.sim_time_step_size * T(i);
     if (interval_counter == reader.output_interval) {
@@ -280,12 +305,19 @@ const std::string run(std::string& json_config) {
   // Write csv output string
   std::string output;
   if (reader.output_variable_based) {
-    output = IO::to_variable_csv<T>(times, states, reader.model,
+  // TEST KMENON
+//  output = IO::to_variable_csv<T>(times, states, reader.model,
+//                                  reader.output_mean_only,
+//                                  reader.output_derivative);
+    output = IO::to_variable_csv<T>(times, states, *reader.model,
                                     reader.output_mean_only,
                                     reader.output_derivative);
   } else {
     output =
-        IO::to_vessel_csv<T>(times, states, reader.model,
+  // TEST KMENON
+//      IO::to_vessel_csv<T>(times, states, reader.model,
+//                           reader.output_mean_only, reader.output_derivative);
+        IO::to_vessel_csv<T>(times, states, *reader.model,
                              reader.output_mean_only, reader.output_derivative);
   }
   return output;

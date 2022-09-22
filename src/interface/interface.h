@@ -1,5 +1,4 @@
 
-#include "algebra/densesystem.hpp"
 #include "algebra/integrator.hpp"
 #include "algebra/sparsesystem.hpp"
 #include "algebra/state.hpp"
@@ -7,7 +6,6 @@
 #include "helpers/endswith.hpp"
 #include "io/configreader.hpp"
 #include "io/csvwriter.hpp"
-#include "io/jsonwriter.hpp"
 #include "model/model.hpp"
 
 #include <map>
@@ -34,11 +32,11 @@ class SolverInterface
     int problem_id_ = 0;
     std::string input_file_name_;
 
-    // Solver parameters.
+    // Parameters for the external solver (the calling program).
     //
-    // These are set via the solver interface.
+    // These are set by the external solver via the interface.
     //
-    double solver_time_step_ = 0.1;
+    double external_time_step_ = 0.1;
 
     // 0D solver parameters. 
     //

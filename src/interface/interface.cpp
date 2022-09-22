@@ -72,11 +72,11 @@ extern "C" void increment_time(const int problem_id, const double time, std::vec
 //
 // Parameters:
 //   input_file_arg: The name of the JSON 0D solver configuration file.
-//   solver_time_step: The time step used by the 3D solver.
+//   external_time_step: The time step used by the 3D solver.
 //
 //   problem_id: The returned ID used to identify the 0D problem (block).
 //
-void initialize(const char* input_file_arg, const double solver_time_step, int& problem_id, int& system_size)
+void initialize(const char* input_file_arg, const double external_time_step, int& problem_id, int& system_size)
 {
   std::cout << "========== svzero initialize ==========" << std::endl;
   std::string input_file(input_file_arg);
@@ -84,7 +84,7 @@ void initialize(const char* input_file_arg, const double solver_time_step, int& 
   std::string output_file = "svzerod.json";
 
   auto interface = new SolverInterface(input_file);
-  interface->solver_time_step_ = solver_time_step;
+  interface->external_time_step_ = external_time_step;
   problem_id = interface->problem_id_;
   std::cout << "[initialize] problem_id: " << problem_id << std::endl;
 

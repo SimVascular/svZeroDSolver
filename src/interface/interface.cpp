@@ -147,7 +147,7 @@ void initialize(const char* input_file_arg, const double external_time_step, int
     auto model_steady = reader.model;
     model_steady->to_steady();
 
-    ALGEBRA::Integrator<T, S> integrator_steady(*model_steady, time_step_size_steady, 0.1, absolute_tolerance, max_nliter);
+    ALGEBRA::Integrator<T> integrator_steady(*model_steady, time_step_size_steady, 0.1, absolute_tolerance, max_nliter);
 
     for (size_t i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * T(i), *model_steady);
@@ -180,9 +180,9 @@ void increment_time(const int problem_id, const double external_time, std::vecto
   //std::cout << "[increment_time] external_time: " << external_time << std::endl;
 
   //ALGEBRA::Integrator<T, S> integrator(*model, external_time, 0.1, absolute_tolerance, max_nliter);
-  ALGEBRA::Integrator<T, S> integrator(*model, time_step_size, 0.1, absolute_tolerance, max_nliter);
+  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1, absolute_tolerance, max_nliter);
   auto state = interface->state_;
-  interface->state_ = integrator.step(state, time, *model);
+  interface->state_ = integrator.step(state, external_time, *model);
   interface->time_step_ += 1;
 
   //int state_size = state.y.size();

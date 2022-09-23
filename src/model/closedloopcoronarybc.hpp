@@ -172,7 +172,7 @@ class ClosedLoopCoronaryBC : public Block<T> {
    * @param system System to update contributions at
    * @param y Current solution
    */
-  void update_model_dependent_params(MODEL::Model<T> &model);
+  void set_model_dependent_params(MODEL::Model<T> &model);
 
   /**
    * @brief Number of triplets of element
@@ -260,7 +260,7 @@ void ClosedLoopCoronaryBC<T>::update_solution(
 }
 
 template <typename T>
-void ClosedLoopCoronaryBC<T>::update_model_dependent_params(
+void ClosedLoopCoronaryBC<T>::set_model_dependent_params(
     MODEL::Model<T> &model) {
   T im_value = 0.0;
   for (auto &block : model.blocks) {

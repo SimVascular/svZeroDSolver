@@ -532,7 +532,7 @@ void ConfigReader<T>::load(std::string &specifier) {
   // Update block parameters that depend on DOFs and other params of other
   // blocks For example, coronary block params that depend on heart block DOFs
   for (auto &block : model->blocks) {
-    block->update_model_dependent_params(*model);
+    block->set_model_dependent_params(*model);
   }
 
   // Read initial condition

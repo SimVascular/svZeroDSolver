@@ -126,14 +126,6 @@ class ClosedLoopHeartPulmonary : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update for model-dependent variables that are set at the end of
-   * model construction
-   *
-   * @param model Model object to access model-dependent variables
-   */
-  // void update_model_dependent_params(MODEL::Model<T> &model);
-
-  /**
    * @brief Return parameter values
    *
    * @param message String to identify different requests

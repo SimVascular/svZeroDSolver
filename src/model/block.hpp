@@ -147,7 +147,7 @@ class Block {
    *
    * @param model Model object to access model-dependent variables
    */
-  virtual void update_model_dependent_params(MODEL::Model<T> &model);
+  virtual void set_model_dependent_params(MODEL::Model<T> &model);
 
   /**
    * @brief Return parameter values
@@ -265,7 +265,7 @@ template <typename T>
 void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
 
 template <typename T>
-void Block<T>::update_model_dependent_params(MODEL::Model<T> &model) {}
+void Block<T>::set_model_dependent_params(MODEL::Model<T> &model) {}
 
 template <typename T>
 void Block<T>::get_parameter_value(std::string message, T &param_value) {}

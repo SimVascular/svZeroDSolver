@@ -69,6 +69,7 @@ class Model {
   ~Model();
 
   std::vector<Block<T> *> blocks;  ///< Elements of the model
+  std::map<std::string_view, std::int64_t> block_index_map; ///< Map between block name and index
   DOFHandler dofhandler;           ///< Degree-of-freedom handler of the model
   std::list<Node *> nodes;         ///< Nodes of the model
 

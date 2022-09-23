@@ -46,16 +46,17 @@ class SolverInterface
     int num_time_steps_ = 0;
     double absolute_tolerance_ = 0.0;
     int max_nliter_ = 0;
-
-    MODEL::Model<T>* model_;
-    //ALGEBRA::Integrator<double,S>* integrator;
-
     int time_step_ = 0.0;
-    ALGEBRA::State<double> state_;
-    std::vector<double> times_;
     int save_interval_counter_ = 0;
     int output_interval_ = 0;
     int system_size_ = 0;
+    int num_output_steps_ = 0;
+    int pts_per_cycle_ = 0;
+    bool output_last_cycle_only_ = false;
 
+    MODEL::Model<T>* model_;
+    //ALGEBRA::Integrator<double,S>* integrator;
+    ALGEBRA::State<double> state_;
+    std::vector<double> times_;
 };
 

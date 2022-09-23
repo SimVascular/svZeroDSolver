@@ -29,9 +29,11 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file interface.cpp
- * @brief svZeroDSolver callinle interace.
+ * @brief svZeroDSolver callable interace.
  */
 #include "interface.h"
+
+#include <cmath>
 
 typedef double T;
 
@@ -58,138 +60,192 @@ SolverInterface::~SolverInterface()
 }
 
 //////////////////////////////////////////////////////////
-//            Callible interface functions              //
+//            Callable interface functions              //
 //////////////////////////////////////////////////////////
 
-extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size);
+extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps);
 
 extern "C" void increment_time(const int problem_id, const double external_time, std::vector<double>& solution);
 
-//------------
-// initialize
-//------------
-// Initialize the 0D solver.
-//
-// Parameters:
-//   input_file_arg: The name of the JSON 0D solver configuration file.
-//   external_time_step: The time step used by the 3D solver.
-//
-//   problem_id: The returned ID used to identify the 0D problem (block).
-//
-void initialize(const char* input_file_arg, const double external_time_step, int& problem_id, int& system_size)
+extern "C" void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions);
+
+/**
+ * @brief Initialize the 0D solver interface.
+ *
+ * @param input_file_arg The name of the JSON 0D solver configuration file.
+ * @param external_time_step The time step used by the external program (3D solver).
+ * @param problem_id The returned ID used to identify the 0D problem.
+ * @param system_size Number of degrees-of-freedom.
+ */
+void initialize(const char* input_file_arg, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps)
 {
-  std::cout << "========== svZeroD initialize ==========" << std::endl;
+  DEBUG_MSG("========== svZeroD initialize ==========");
   std::string input_file(input_file_arg);
-  std::cout << "[initialize] input_file: " << input_file << std::endl;
+  DEBUG_MSG("[initialize] input_file: " << input_file);
   std::string output_file = "svzerod.csv";
 
   auto interface = new SolverInterface(input_file);
-  interface->external_time_step_ = external_time_step;
   problem_id = interface->problem_id_;
-  std::cout << "[initialize] problem_id: " << problem_id << std::endl;
+  DEBUG_MSG("[initialize] problem_id: " << problem_id);
 
   // Create configuration reader.
-  //IO::ConfigReader<T> config(input_file);
   IO::ConfigReader<T> reader;
   reader.load(input_file);
 
   // Create a model.
-  //auto model = config.get_model();
   auto model = reader.model;
   interface->model_ = model; 
-  system_size = model->dofhandler.size();
-  system_size = model->dofhandler.size();
-  std::cout << "[initialize] System size: " << system_size << std::endl;
 
-  // Get simulation parameters from the input JSON file.
-  //
-  T time_step_size = reader.sim_time_step_size;
-  int num_time_steps = reader.sim_num_time_steps;
-  T absolute_tolerance = reader.sim_abs_tol;
-  int max_nliter = reader.sim_nliter;
-  int output_interval = reader.output_interval;
-  bool output_mean_only = reader.output_mean_only;
+  // Get simulation parameters
+  interface->time_step_size_ = reader.sim_time_step_size;
+  interface->max_nliter_ = reader.sim_nliter;
+  interface->absolute_tolerance_ = reader.sim_abs_tol;
+  interface->external_time_step_ = external_time_step;
+  interface->time_step_ = 0;
+  interface->system_size_ = model->dofhandler.size();
+  system_size = interface->system_size_;
+  interface->output_interval_ = reader.output_interval;
+  interface->num_time_steps_ = reader.sim_num_time_steps;
+  interface->pts_per_cycle_ = reader.sim_pts_per_cycle;
 
-//T time_step_size = config.get_time_step_size();
-//int num_time_steps = config.get_num_time_steps();
-//T absolute_tolerance = config.get_scalar_simulation_parameter("absolute_tolerance", 1e-8);
-//int max_nliter = config.get_int_simulation_parameter("maximum_nonlinear_iterations", 30);
-//int output_interval = config.get_int_simulation_parameter("output_interval", 1);
-//bool steady_initial = config.get_bool_simulation_parameter("steady_initial", true);
-//bool output_mean_only = config.get_bool_simulation_parameter("output_mean_only", false);
-
-  std::cout << "[initialize] svzero parameters " << std::endl;
-  std::cout << "[initialize]   num_time_steps: " << num_time_steps << std::endl;
-  std::cout << "[initialize]   time_step_size: " << time_step_size << std::endl;
-  std::cout << "[initialize]   absolute_tolerance: " << absolute_tolerance << std::endl;
-  std::cout << "[initialize]   max_nliter: " << max_nliter << std::endl;
-
-  interface->num_time_steps_ = num_time_steps;
-  interface->time_step_size_ = time_step_size;
-  interface->max_nliter_ = max_nliter;
-  interface->absolute_tolerance_ = absolute_tolerance;
+  // For how many time steps are outputs being returned?
+  if (reader.output_mean_only) {
+    num_output_steps = 1;
+  } else if (reader.output_last_cycle_only) {
+    num_output_steps = interface->pts_per_cycle_;
+  } else {
+    //num_output_steps = std::ceil(interface->num_time_steps_/interface->output_interval_);
+    num_output_steps = interface->num_time_steps_;
+  }
+  interface->num_output_steps_ = num_output_steps;
+  DEBUG_MSG("[initialize] System size: " << interface->system_size_);
 
   // Create initial state.
   ALGEBRA::State<T> state = reader.initial_state;
- // ALGEBRA::State<T> state = ALGEBRA::State<T>::Zero(model->dofhandler.size());
 
   // Create steady initial state.
-  //
-  //if (steady_initial) {
   if (reader.sim_steady_initial) {
-    std::cout << "[initialize] " << std::endl;
-    std::cout << "[initialize] ----- Calculating steady initial condition ----- " << std::endl;
-    //T time_step_size_steady = config.cardiac_cycle_period / 10.0;
+    DEBUG_MSG("[initialize] ----- Calculating steady initial condition ----- ");
     T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
-    std::cout << "[initialize] Create steady model ... " << std::endl;
+    DEBUG_MSG("[initialize] Create steady model ... ");
 
-    //auto model_steady = config.get_model();
     auto model_steady = reader.model;
     model_steady->to_steady();
 
-    ALGEBRA::Integrator<T> integrator_steady(*model_steady, time_step_size_steady, 0.1, absolute_tolerance, max_nliter);
+    ALGEBRA::Integrator<T> integrator_steady(*model_steady, time_step_size_steady, 0.1, interface->absolute_tolerance_, interface->max_nliter_);
 
     for (size_t i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * T(i), *model_steady);
     }
   }
-
   interface->state_ = state;
-  interface->time_step_ = 0;
-  interface->save_interval_counter_ = 0;
-  interface->output_interval_ = output_interval;
-  interface->system_size_ = system_size;
 
-  std::cout << "[initialize] Done " << std::endl;
+  DEBUG_MSG("[initialize] Done");
 }
 
-//----------------
-// increment_time
-//----------------
-//
+/**
+ * @brief Increment the 0D solution by one time step.
+ *
+ * @param problem_id The ID used to identify the 0D problem.
+ * @param external_time The current time in the external program.
+ * @param solution The solution vector containing all degrees-of-freedom.
+ */
 void increment_time(const int problem_id, const double external_time, std::vector<double>& solution)
 {
-  //std::cout << "[increment_time] " << std::endl;
-  //std::cout << "[increment_time] ========== svZeroD increment_time ==========" << std::endl;
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
   auto time_step_size = interface->time_step_size_;
   auto absolute_tolerance = interface->absolute_tolerance_;
   auto max_nliter = interface->max_nliter_;
-  //std::cout << "[increment_time] external_time: " << external_time << std::endl;
 
-  //ALGEBRA::Integrator<T, S> integrator(*model, external_time, 0.1, absolute_tolerance, max_nliter);
   ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1, absolute_tolerance, max_nliter);
   auto state = interface->state_;
   interface->state_ = integrator.step(state, external_time, *model);
   interface->time_step_ += 1;
 
-  //int state_size = state.y.size();
-  //std::cout << "[increment_time] state_size: " << state_size << std::endl;
-  //std::cout << "[increment_time] solution size: " << solution.size() << std::endl;
-
   for (int i = 0; i < state.y.size(); i++) {
     solution[i] = state.y[i];
+  }
+}
+
+/**
+ * @brief Run a full 0D simululation.
+ *
+ * @param problem_id The ID used to identify the 0D problem.
+ * @param external_time The current time in the external program.
+ * @param output_times Vector containing time-stamps for output_solution vectors.
+ * @param output_solutions The solution vector containing all degrees-of-freedom stored sequentially (1D vector).
+ */
+void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions)
+{
+  auto interface = SolverInterface::interface_list_[problem_id];
+  auto model = interface->model_;
+
+  auto time_step_size = interface->time_step_size_;
+  auto absolute_tolerance = interface->absolute_tolerance_;
+  auto max_nliter = interface->max_nliter_;
+  auto num_time_steps = interface->num_time_steps_;
+  auto system_size = interface->system_size_;
+  auto num_output_steps = interface->num_output_steps_;
+
+  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1, absolute_tolerance, max_nliter);
+  auto state = interface->state_;
+  T time = external_time;
+  std::vector<T> times;
+  times.reserve(num_time_steps);
+  times.push_back(time);
+  std::vector<ALGEBRA::State<T>> states;
+  states.reserve(num_time_steps);
+  states.push_back(state);
+  std::cout << "[run_simulation] time_step_size: " << time_step_size << std::endl;
+
+  // Run integrator
+  interface->time_step_ = 0;
+  for (int i = 1; i < num_time_steps; i++) {
+    std::cout << "[run_simulation] time: " << time << std::endl;
+    interface->time_step_ += 1;
+    state = integrator.step(state, time, *model);
+    time += time_step_size;
+    times.push_back(time);
+    states.push_back(std::move(state));
+  }
+
+  // Extract last cardiac cycle
+  if (interface->output_last_cycle_only_) {
+    states.erase(states.begin(), states.end() - interface->pts_per_cycle_);
+    times.erase(times.begin(), times.end() - interface->pts_per_cycle_);
+    T start_time = times[0];
+    for (auto& time : times) {
+      time -= start_time;
+    }
+  }
+
+  // Write states to solution output vector
+  if (output_solutions.size() != num_output_steps*system_size) {
+    throw std::runtime_error("Solution vector size is wrong.");
+  }
+  int output_idx = 0;
+  int soln_idx = 0;
+  for (int t = 0; t < num_output_steps; t++) {
+    auto state = states[t];
+    output_times[t] = times[t];
+    for (int i = 0; i < system_size; i++) {
+      soln_idx = output_idx*system_size + i;
+      output_solutions[soln_idx] = state.y[i];
+    }
+    output_idx++;
+  }
+  
+  output_idx = 0;
+  soln_idx = 0;
+  for (int t = 0; t < num_output_steps; t++) {
+    std::cout << "[run_simulation] output_times: " << output_times[t] << " output_solutions: ";
+    for (int i = 0; i < system_size; i++) {
+      soln_idx = system_size*output_idx + i;
+      std::cout << output_solutions[soln_idx] << " ";
+    }
+    std::cout << std::endl;
+    output_idx++;
   }
 }

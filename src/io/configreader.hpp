@@ -210,7 +210,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->blocks.push_back(new MODEL::BloodVessel<T>(
           R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient,
           static_cast<std::string>(vessel_name)));
-      model->block_index_map.insert({vessel_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(vessel_name),block_count});
       block_count++;
       DEBUG_MSG("Created vessel " << vessel_name);
     } else {
@@ -253,7 +253,7 @@ void ConfigReader<T>::load(std::string &specifier) {
         Pd = bc_values["Pd"];
       model->blocks.push_back(new MODEL::WindkesselBC<T>(
           Rp = Rp, C = C, Rd = Rd, Pd = Pd, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({bc_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "ClosedLoopRCR") {
@@ -265,7 +265,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->blocks.push_back(new MODEL::ClosedLoopRCRBC<T>(
           Rp = Rp, C = C, Rd = Rd, closed_loop_outlet = closed_loop_outlet,
           static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({bc_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "FLOW") {
@@ -291,9 +291,13 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
           q_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({bc_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
+      // KMENON
+      std::cout << "[configreader]: " << block_count <<" " << bc_name << std::endl;
+      std::cout << "[configreader]: " << model->block_index_map[static_cast<std::string>(bc_name)] << std::endl;
+      std::cout << "[configreader]: " << model->block_index_map["INFLOW"] << std::endl;
 
     } else if (bc_type == "RESISTANCE") {
       std::vector<T> R;
@@ -317,8 +321,13 @@ void ConfigReader<T>::load(std::string &specifier) {
       MODEL::TimeDependentParameter pd_param(t, Pd);
       model->blocks.push_back(new MODEL::ResistanceBC<T>(
           r_param, pd_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({bc_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
+      // KMENON
+      std::cout << "[configreader]: " << block_count <<" " << bc_name << std::endl;
+      std::cout << "[configreader]: " << model->block_index_map[static_cast<std::string>(bc_name)] << std::endl;
+      std::cout << "[configreader]: " << model->block_index_map["INFLOW"] << std::endl;
+      std::cout << "[configreader]: " << model->block_index_map["OUT"] << std::endl;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "PRESSURE") {
       std::vector<T> P;
@@ -342,7 +351,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
           p_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({bc_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "CORONARY") {
@@ -372,7 +381,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->blocks.push_back(new MODEL::OpenLoopCoronaryBC<T>(
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, pim_param, pv_param,
           static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({bc_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "ClosedLoopCoronary") {
@@ -383,7 +392,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->blocks.push_back(new MODEL::ClosedLoopCoronaryBC<T>(
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim,
           static_cast<std::string>(side), static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({bc_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else {
@@ -399,7 +408,7 @@ void ConfigReader<T>::load(std::string &specifier) {
     if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
       model->blocks.push_back(
           new MODEL::Junction<T>(static_cast<std::string>(junction_name)));
-      model->block_index_map.insert({junction_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(junction_name),block_count});
       block_count++;
     } else if (j_type == "resistive_junction") {
       std::vector<T> R;
@@ -408,7 +417,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       model->blocks.push_back(new MODEL::ResistiveJunction<T>(
           R, static_cast<std::string>(junction_name)));
-      model->block_index_map.insert({junction_name,block_count});
+      model->block_index_map.insert({static_cast<std::string>(junction_name),block_count});
       block_count++;
     } else {
       throw std::invalid_argument("Unknown junction type");
@@ -486,7 +495,7 @@ void ConfigReader<T>::load(std::string &specifier) {
             model->blocks.push_back(new MODEL::ClosedLoopHeartPulmonary<T>(
                 param_values, cycle_period,
                 static_cast<std::string>(heartpulmonary_name)));
-            model->block_index_map.insert({heartpulmonary_name,block_count});
+            model->block_index_map.insert({static_cast<std::string>(heartpulmonary_name),block_count});
             block_count++;
           } else {
             throw std::runtime_error(
@@ -498,7 +507,7 @@ void ConfigReader<T>::load(std::string &specifier) {
               {heart_inlet_junction_name, heartpulmonary_name});
           model->blocks.push_back(new MODEL::Junction<T>(
               static_cast<std::string>(heart_inlet_junction_name)));
-          model->block_index_map.insert({heart_inlet_junction_name,block_count});
+          model->block_index_map.insert({static_cast<std::string>(heart_inlet_junction_name),block_count});
           block_count++;
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back(
@@ -510,7 +519,7 @@ void ConfigReader<T>::load(std::string &specifier) {
               {heartpulmonary_name, heart_outlet_junction_name});
           model->blocks.push_back(new MODEL::Junction<T>(
               static_cast<std::string>(heart_outlet_junction_name)));
-          model->block_index_map.insert({heart_outlet_junction_name,block_count});
+          model->block_index_map.insert({static_cast<std::string>(heart_outlet_junction_name),block_count});
           block_count++;
           for (auto heart_outlet_block : closed_loop_config["outlet_blocks"]) {
             connections.push_back(

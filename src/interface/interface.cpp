@@ -69,6 +69,8 @@ extern "C" void increment_time(const int problem_id, const double external_time,
 
 extern "C" void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions);
 
+extern "C" void update_block_params(const int problem_id, const char* block_name, std::vector<double>& params);
+
 /**
  * @brief Initialize the 0D solver interface.
  *
@@ -95,6 +97,9 @@ void initialize(const char* input_file_arg, const double external_time_step, int
   // Create a model.
   auto model = reader.model;
   interface->model_ = model; 
+  std::cout << "[initialize] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
+  std::cout << "[initialize] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
+  std::cout << "[initialize] block_index_map: " << model->block_index_map["OUT"] << std::endl;
 
   // Get simulation parameters
   interface->time_step_size_ = reader.sim_time_step_size;
@@ -155,8 +160,17 @@ void update_block_params(const int problem_id, const char* block_name, std::vect
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
+  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
+  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
+  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["OUT"] << std::endl;
+  for(auto const &elem : model->block_index_map)
+  {
+    std::cout << elem.first << " " << elem.second << "\n";
+  }
   int block_index = model->block_index_map[block_name];
+  std::cout << "[update_block_params] block_index: " << block_index << std::endl;
   auto block = model->blocks[block_index];
+  std::cout << "[update_block_params] block name: " << block->name << std::endl;
   block->update_block_params(params);
 }
 
@@ -198,6 +212,9 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
+  std::cout << "[run_simulation] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
+  std::cout << "[run_simulation] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
+  std::cout << "[run_simulation] block_index_map: " << model->block_index_map["OUT"] << std::endl;
 
   auto time_step_size = interface->time_step_size_;
   auto absolute_tolerance = interface->absolute_tolerance_;
@@ -220,7 +237,7 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
   // Run integrator
   interface->time_step_ = 0;
   for (int i = 1; i < num_time_steps; i++) {
-    std::cout << "[run_simulation] time: " << time << std::endl;
+    //std::cout << "[run_simulation] time: " << time << std::endl;
     interface->time_step_ += 1;
     state = integrator.step(state, time, *model);
     time += time_step_size;

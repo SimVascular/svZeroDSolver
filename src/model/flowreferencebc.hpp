@@ -195,12 +195,22 @@ template <typename T>
 void FlowReferenceBC<T>::update_block_params(std::vector<T> new_params) {
   std::vector<T> t_new;
   std::vector<T> Q_new;
+  std::cout << "[update_block_params] new_params: ";
+  for(int j = 0; j < new_params.size(); j++) {
+    std::cout << new_params[j] << " ";
+  }
+  std::cout << std::endl;
   int num_time_pts = (int) new_params[0];
   for (int i = 0; i < num_time_pts; i++) {
     t_new.push_back(new_params[1+i]);
     Q_new.push_back(new_params[1+num_time_pts+i]);
   }
   this->params.Q.update_params(t_new,Q_new);
+  //std::cout << "[update_block_params] params.Q.values " << params.Q.values << std::endl;
+  std::cout << "[update_block_params] params.Q.values: ";
+  for(int j = 0; j < 2; j++) {
+    std::cout << params.Q.values[j] << " ";
+  }
 }
 
 template <typename T>

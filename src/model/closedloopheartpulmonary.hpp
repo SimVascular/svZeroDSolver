@@ -140,6 +140,13 @@ class ClosedLoopHeartPulmonary : public Block<T> {
   void set_ICs(ALGEBRA::State<T> &state);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -267,6 +274,37 @@ void ClosedLoopHeartPulmonary<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 14,
                         {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul",
                          "P_LA", "V_LA", "Q_LA", "P_LV", "V_LV", "Q_LV"});
+}
+
+template <typename T>
+void ClosedLoopHeartPulmonary<T>::update_block_params(std::vector<T> new_params) {
+  this->params.Tsa = new_params[0];
+  this->params.tpwave = new_params[1];
+  this->params.Erv_s = new_params[2];
+  this->params.Elv_s = new_params[3];
+  this->params.iml = new_params[4];
+  this->params.imr = new_params[5];
+  this->params.Lra_v = new_params[6];
+  this->params.Rra_v = new_params[7];
+  this->params.Lrv_a = new_params[8];
+  this->params.Rrv_a = new_params[9];
+  this->params.Lla_v = new_params[10];
+  this->params.Rla_v = new_params[11];
+  this->params.Llv_a = new_params[12];
+  this->params.Rlv_ao = new_params[13];
+  this->params.Vrv_u = new_params[14];
+  this->params.Vlv_u = new_params[15];
+  this->params.Rpd = new_params[16];
+  this->params.Cp = new_params[17];
+  this->params.Cpa = new_params[18];
+  this->params.Kxp_ra = new_params[19];
+  this->params.Kxv_ra = new_params[20];
+  this->params.Kxp_la = new_params[21];
+  this->params.Kxv_la = new_params[22];
+  this->params.Emax_ra = new_params[23];
+  this->params.Emax_la = new_params[24];
+  this->params.Vaso_ra = new_params[25];
+  this->params.Vaso_la = new_params[26];
 }
 
 template <typename T>

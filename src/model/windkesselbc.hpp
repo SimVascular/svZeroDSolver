@@ -140,6 +140,13 @@ class WindkesselBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -209,6 +216,14 @@ WindkesselBC<T>::~WindkesselBC() {}
 template <typename T>
 void WindkesselBC<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 2, {"pressure_c"});
+}
+
+template <typename T>
+void WindkesselBC<T>::update_block_params(std::vector<T> params) {
+  this->params.Rp = params[0];
+  this->params.C = params[1];
+  this->params.Rd = params[2];
+  this->params.Pd = params[3];
 }
 
 template <typename T>

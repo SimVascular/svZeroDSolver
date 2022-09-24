@@ -151,6 +151,13 @@ class ClosedLoopCoronaryBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -283,27 +290,17 @@ void ClosedLoopCoronaryBC<T>::set_model_dependent_params(
       }
     }
   }
-  // for (auto &[key, elem] : model.blocks) {
-  //  std::visit([&](auto &&block) {
-  //    if (key == "CLH0") {
-  //      if (this->side == "left") {
-  //        block.get_parameter_value("iml", im_value); // Scaling for LV
-  //        pressure -> intramyocardial pressure this->ventricle_var_id =
-  //        block.global_var_ids[13]; // Solution ID for LV pressure
-  //      }
-  //      else if (this->side == "right") {
-  //        block.get_parameter_value("imr", im_value); // Scaling for RV
-  //        pressure -> intramyocardial pressure this->ventricle_var_id =
-  //        block.global_var_ids[6];
-  //      }
-  //      else {
-  //        throw std::runtime_error("For closed loop coronary, 'side' should be
-  //        either 'left' or 'right'");
-  //      }
-  //    }
-  //  }, elem);
-  //}
   this->im = im_value;
+}
+
+template <typename T>
+void ClosedLoopCoronaryBC<T>::update_block_params(std::vector<T> new_params) {
+  this->params.Ra = new_params[0];
+  this->params.Ram = new_params[1];
+  this->params.Rv = new_params[2];
+  this->params.Ca = new_params[3];
+  this->params.Cim = new_params[4];
+  this->im = new_params[5];
 }
 
 template <typename T>

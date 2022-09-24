@@ -80,6 +80,15 @@ class TimeDependentParameter {
   int size;
 
   /**
+   * @brief Update parameters
+   *
+   * @param times Time steps corresponding to the values
+   * @param values Values correspondong to the time steps
+   */
+
+  void update_params(std::vector<T> times, std::vector<T> values);
+
+  /**
    * @brief Get the parameter value at the specified time.
    *
    * @param time Current time
@@ -123,6 +132,21 @@ TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
     isconstant = false;
     cycle_period = times.back() - times[0];
   }
+}
+
+template <typename T>
+void TimeDependentParameter<T>::update_params(std::vector<T> times, std::vector<T> values) {
+  this->times = times;
+  this->values = values;
+  size = values.size();
+  cycle_period = times.back() - times[0];
+//if (size == 1) {
+//  isconstant = true;
+//  cycle_period = 1.0;
+//} else {
+//  isconstant = false;
+//  cycle_period = times.back() - times[0];
+//}
 }
 
 template <typename T>

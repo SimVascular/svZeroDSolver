@@ -164,6 +164,13 @@ class Block {
   virtual void set_ICs(ALGEBRA::State<T> &state);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  virtual void update_block_params(std::vector<T> new_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    * @param system System to update contributions at
    */
@@ -272,6 +279,9 @@ void Block<T>::get_parameter_value(std::string message, T &param_value) {}
 
 template <typename T>
 void Block<T>::set_ICs(ALGEBRA::State<T> &state) {}
+  
+template <typename T>
+void Block<T>::update_block_params(std::vector<T> new_params) {}
 
 template <typename T>
 void Block<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {}

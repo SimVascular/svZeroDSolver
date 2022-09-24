@@ -117,6 +117,13 @@ class ResistanceBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -187,6 +194,20 @@ void ResistanceBC<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 1, {});
 }
 
+template <typename T>
+void ResistanceBC<T>::update_block_params(std::vector<T> new_params) {
+  std::vector<T> t_new;
+  std::vector<T> R_new;
+  std::vector<T> Pd_new;
+  int num_time_pts = (int)new_params[0];
+  for (int i = 0; i < num_time_pts; i++) {
+    t_new.push_back(new_params[1+i]);
+    R_new.push_back(new_params[1+num_time_pts+i]);
+    Pd_new.push_back(new_params[1+2*num_time_pts+i]);
+  }
+  this->params.R.update_params(t_new,R_new);
+  this->params.Pd.update_params(t_new,Pd_new);
+}
 template <typename T>
 void ResistanceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;

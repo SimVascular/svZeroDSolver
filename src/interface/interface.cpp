@@ -144,6 +144,23 @@ void initialize(const char* input_file_arg, const double external_time_step, int
 }
 
 /**
+ * @brief Update the parameters of a particular block.
+ *
+ * @param problem_id The returned ID used to identify the 0D problem.
+ * @param block name The name of the block to update.
+ * @param params The time step used by the external program (3D solver).
+ * @param system_size Number of degrees-of-freedom.
+ */
+void update_block_params(const int problem_id, const char* block_name, std::vector<double>& params)
+{
+  auto interface = SolverInterface::interface_list_[problem_id];
+  auto model = interface->model_;
+  int block_index = model->block_index_map[block_name];
+  auto block = model->blocks[block_index];
+  block->update_block_params(params);
+}
+
+/**
  * @brief Increment the 0D solution by one time step.
  *
  * @param problem_id The ID used to identify the 0D problem.

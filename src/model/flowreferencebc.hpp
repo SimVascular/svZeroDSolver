@@ -115,6 +115,13 @@ class FlowReferenceBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -182,6 +189,18 @@ FlowReferenceBC<T>::~FlowReferenceBC() {}
 template <typename T>
 void FlowReferenceBC<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 1, {});
+}
+
+template <typename T>
+void FlowReferenceBC<T>::update_block_params(std::vector<T> new_params) {
+  std::vector<T> t_new;
+  std::vector<T> Q_new;
+  int num_time_pts = (int) new_params[0];
+  for (int i = 0; i < num_time_pts; i++) {
+    t_new.push_back(new_params[1+i]);
+    Q_new.push_back(new_params[1+num_time_pts+i]);
+  }
+  this->params.Q.update_params(t_new,Q_new);
 }
 
 template <typename T>

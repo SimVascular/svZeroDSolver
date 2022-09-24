@@ -143,6 +143,13 @@ class OpenLoopCoronaryBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -219,6 +226,28 @@ OpenLoopCoronaryBC<T>::~OpenLoopCoronaryBC() {}
 template <typename T>
 void OpenLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 2, {"volume_im"});
+}
+
+template <typename T>
+void OpenLoopCoronaryBC<T>::update_block_params(std::vector<T> new_params) {
+  this->params.Ra = new_params[0];
+  this->params.Ram = new_params[1];
+  this->params.Rv = new_params[2];
+  this->params.Ca = new_params[3];
+  this->params.Cim = new_params[4];
+  //this->params.Pim = params[5];
+  //this->params.Pv = params[6];
+  int num_time_pts = (int)new_params[5];
+  std::vector<T> t_new;
+  std::vector<T> Pv_new;
+  std::vector<T> Pim_new;
+  for (int i = 0; i < num_time_pts; i++) {
+    t_new.push_back(new_params[1+i]);
+    Pv_new.push_back(new_params[1+num_time_pts+i]);
+    Pim_new.push_back(new_params[1+2*num_time_pts+i]);
+  }
+  this->params.Pv.update_params(t_new,Pv_new);
+  this->params.Pim.update_params(t_new,Pim_new);
 }
 
 template <typename T>

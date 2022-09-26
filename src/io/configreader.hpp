@@ -295,9 +295,9 @@ void ConfigReader<T>::load(std::string &specifier) {
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
       // KMENON
-      std::cout << "[configreader]: " << block_count <<" " << bc_name << std::endl;
-      std::cout << "[configreader]: " << model->block_index_map[static_cast<std::string>(bc_name)] << std::endl;
-      std::cout << "[configreader]: " << model->block_index_map["INFLOW"] << std::endl;
+//    std::cout << "[configreader]: " << block_count <<" " << bc_name << std::endl;
+//    std::cout << "[configreader]: " << model->block_index_map[static_cast<std::string>(bc_name)] << std::endl;
+//    std::cout << "[configreader]: " << model->block_index_map["INFLOW"] << std::endl;
 
     } else if (bc_type == "RESISTANCE") {
       std::vector<T> R;
@@ -324,10 +324,10 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
       // KMENON
-      std::cout << "[configreader]: " << block_count <<" " << bc_name << std::endl;
-      std::cout << "[configreader]: " << model->block_index_map[static_cast<std::string>(bc_name)] << std::endl;
-      std::cout << "[configreader]: " << model->block_index_map["INFLOW"] << std::endl;
-      std::cout << "[configreader]: " << model->block_index_map["OUT"] << std::endl;
+//    std::cout << "[configreader]: " << block_count <<" " << bc_name << std::endl;
+//    std::cout << "[configreader]: " << model->block_index_map[static_cast<std::string>(bc_name)] << std::endl;
+//    std::cout << "[configreader]: " << model->block_index_map["INFLOW"] << std::endl;
+//    std::cout << "[configreader]: " << model->block_index_map["OUT"] << std::endl;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "PRESSURE") {
       std::vector<T> P;

@@ -147,6 +147,13 @@ class ClosedLoopHeartPulmonary : public Block<T> {
   void update_block_params(std::vector<T> new_params);
 
   /**
+   * @brief Return parameters of a block.
+   *
+   * @block_params Block parameters.
+   */
+  void get_block_params(std::vector<T> &block_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -305,6 +312,40 @@ void ClosedLoopHeartPulmonary<T>::update_block_params(std::vector<T> new_params)
   this->params.Emax_la = new_params[24];
   this->params.Vaso_ra = new_params[25];
   this->params.Vaso_la = new_params[26];
+}
+
+template <typename T>
+void ClosedLoopHeartPulmonary<T>::get_block_params(std::vector<T> &block_params) {
+  if (block_params.size() != 27 ) {
+    throw std::runtime_error("Wrong vector size in get_block_params for ClosedLoopHeartPulmonary.");
+  }
+  block_params[0] = this->params.Tsa;
+  block_params[1] = this->params.tpwave;
+  block_params[2] = this->params.Erv_s;
+  block_params[3] = this->params.Elv_s;
+  block_params[4] = this->params.iml;
+  block_params[5] = this->params.imr;
+  block_params[6] = this->params.Lra_v;
+  block_params[7] = this->params.Rra_v;
+  block_params[8] = this->params.Lrv_a;
+  block_params[9] = this->params.Rrv_a;
+  block_params[10] = this->params.Lla_v;
+  block_params[11] = this->params.Rla_v;
+  block_params[12] = this->params.Llv_a;
+  block_params[13] = this->params.Rlv_ao;
+  block_params[14] = this->params.Vrv_u;
+  block_params[15] = this->params.Vlv_u;
+  block_params[16] = this->params.Rpd;
+  block_params[17] = this->params.Cp;
+  block_params[18] = this->params.Cpa;
+  block_params[19] = this->params.Kxp_ra;
+  block_params[20] = this->params.Kxv_ra;
+  block_params[21] = this->params.Kxp_la;
+  block_params[22] = this->params.Kxv_la;
+  block_params[23] = this->params.Emax_ra;
+  block_params[24] = this->params.Emax_la;
+  block_params[25] = this->params.Vaso_ra;
+  block_params[26] = this->params.Vaso_la;
 }
 
 template <typename T>

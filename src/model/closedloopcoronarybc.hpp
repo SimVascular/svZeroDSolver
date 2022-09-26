@@ -158,6 +158,13 @@ class ClosedLoopCoronaryBC : public Block<T> {
   void update_block_params(std::vector<T> new_params);
 
   /**
+   * @brief Return parameters of a block.
+   *
+   * @block_params Block parameters.
+   */
+  void get_block_params(std::vector<T> &block_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -301,6 +308,19 @@ void ClosedLoopCoronaryBC<T>::update_block_params(std::vector<T> new_params) {
   this->params.Ca = new_params[3];
   this->params.Cim = new_params[4];
   this->im = new_params[5];
+}
+
+template <typename T>
+void ClosedLoopCoronaryBC<T>::get_block_params(std::vector<T> &block_params) {
+  if (block_params.size() != 6 ) {
+    throw std::runtime_error("Wrong vector size in get_block_params for ClosedLoopCoronaryBC.");
+  }
+  block_params[0] = this->params.Ra;
+  block_params[1] = this->params.Ram;
+  block_params[2] = this->params.Rv;
+  block_params[3] = this->params.Ca;
+  block_params[4] = this->params.Cim;
+  block_params[5] = this->im;
 }
 
 template <typename T>

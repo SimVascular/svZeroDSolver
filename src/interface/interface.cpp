@@ -63,13 +63,15 @@ SolverInterface::~SolverInterface()
 //            Callable interface functions              //
 //////////////////////////////////////////////////////////
 
-extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps);
+extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names);
 
 extern "C" void increment_time(const int problem_id, const double external_time, std::vector<double>& solution);
 
-extern "C" void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions);
+extern "C" void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions, int& error_code);
 
 extern "C" void update_block_params(const int problem_id, const char* block_name, std::vector<double>& params);
+
+extern "C" void read_block_params(const int problem_id, const char* block_name, std::vector<double>& params);
 
 /**
  * @brief Initialize the 0D solver interface.
@@ -79,7 +81,7 @@ extern "C" void update_block_params(const int problem_id, const char* block_name
  * @param problem_id The returned ID used to identify the 0D problem.
  * @param system_size Number of degrees-of-freedom.
  */
-void initialize(const char* input_file_arg, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps)
+void initialize(const char* input_file_arg, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names)
 {
   DEBUG_MSG("========== svZeroD initialize ==========");
   std::string input_file(input_file_arg);
@@ -100,6 +102,11 @@ void initialize(const char* input_file_arg, const double external_time_step, int
   std::cout << "[initialize] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
   std::cout << "[initialize] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
   std::cout << "[initialize] block_index_map: " << model->block_index_map["OUT"] << std::endl;
+  for(auto const &elem : model->block_index_map)
+  {
+    std::cout << elem.first << " " << elem.second << "\n";
+    block_names.push_back(elem.first);
+  }
 
   // Get simulation parameters
   interface->time_step_size_ = reader.sim_time_step_size;
@@ -153,8 +160,7 @@ void initialize(const char* input_file_arg, const double external_time_step, int
  *
  * @param problem_id The returned ID used to identify the 0D problem.
  * @param block name The name of the block to update.
- * @param params The time step used by the external program (3D solver).
- * @param system_size Number of degrees-of-freedom.
+ * @param params New parameters for the block (structure depends on block type).
  */
 void update_block_params(const int problem_id, const char* block_name, std::vector<double>& params)
 {
@@ -172,6 +178,22 @@ void update_block_params(const int problem_id, const char* block_name, std::vect
   auto block = model->blocks[block_index];
   std::cout << "[update_block_params] block name: " << block->name << std::endl;
   block->update_block_params(params);
+}
+
+/**
+ * @brief Read the parameters of a particular block.
+ *
+ * @param problem_id The returned ID used to identify the 0D problem.
+ * @param block name The name of the block to read.
+ * @param params Parameters of the block (structure depends on block type).
+ */
+void read_block_params(const int problem_id, const char* block_name, std::vector<double>& params)
+{
+  auto interface = SolverInterface::interface_list_[problem_id];
+  auto model = interface->model_;
+  int block_index = model->block_index_map[block_name];
+  auto block = model->blocks[block_index];
+  block->get_block_params(params);
 }
 
 /**
@@ -208,7 +230,7 @@ void increment_time(const int problem_id, const double external_time, std::vecto
  * @param output_times Vector containing time-stamps for output_solution vectors.
  * @param output_solutions The solution vector containing all degrees-of-freedom stored sequentially (1D vector).
  */
-void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions)
+void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions, int& error_code)
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
@@ -236,10 +258,23 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
 
   // Run integrator
   interface->time_step_ = 0;
+  error_code = 0;
+  bool isNaN;
   for (int i = 1; i < num_time_steps; i++) {
     //std::cout << "[run_simulation] time: " << time << std::endl;
     interface->time_step_ += 1;
     state = integrator.step(state, time, *model);
+    // Check for NaNs in the state vector
+    if ((i % 100) == 0) {
+      for(int j=0; j < system_size; j++) {
+        isNaN = (state.y[j] != state.y[j]);
+        if(isNaN) {
+          std::cout << "Found NaN in state vector at timestep " << i << " and index " << j << std::endl;
+          error_code = 1;
+          return;
+        }
+      }
+    }
     time += time_step_size;
     times.push_back(time);
     states.push_back(std::move(state));

@@ -63,7 +63,7 @@ SolverInterface::~SolverInterface()
 //            Callable interface functions              //
 //////////////////////////////////////////////////////////
 
-extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names);
+extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
 
 extern "C" void increment_time(const int problem_id, const double external_time, std::vector<double>& solution);
 
@@ -81,7 +81,7 @@ extern "C" void read_block_params(const int problem_id, const char* block_name, 
  * @param problem_id The returned ID used to identify the 0D problem.
  * @param system_size Number of degrees-of-freedom.
  */
-void initialize(const char* input_file_arg, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names)
+void initialize(const char* input_file_arg, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names)
 {
   DEBUG_MSG("========== svZeroD initialize ==========");
   std::string input_file(input_file_arg);
@@ -104,9 +104,10 @@ void initialize(const char* input_file_arg, const double external_time_step, int
   std::cout << "[initialize] block_index_map: " << model->block_index_map["OUT"] << std::endl;
   for(auto const &elem : model->block_index_map)
   {
-    std::cout << elem.first << " " << elem.second << "\n";
+    //std::cout << elem.first << " " << elem.second << "\n";
     block_names.push_back(elem.first);
   }
+  variable_names = model->dofhandler.variables;
 
   // Get simulation parameters
   interface->time_step_size_ = reader.sim_time_step_size;

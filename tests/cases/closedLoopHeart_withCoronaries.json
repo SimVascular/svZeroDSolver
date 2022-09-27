@@ -191,5 +191,12 @@
                 "Vaso_la": 9.355754
             }
         }
-    ]
+    ],
+    "initial_condition": {
+        "V_RA:CLH": 38.43,
+        "V_RV:CLH": 96.07,
+        "V_LA:CLH": 38.43,
+        "V_LV:CLH": 96.07,
+        "P_pul:CLH": 8.0
+    }
 }

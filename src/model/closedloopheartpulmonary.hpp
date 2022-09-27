@@ -601,11 +601,11 @@ void ClosedLoopHeartPulmonary<T>::get_valve_positions(
 
 template <typename T>
 void ClosedLoopHeartPulmonary<T>::set_ICs(ALGEBRA::State<T> &state) {
-  state.y[this->global_var_ids[4]] = 38.43;   // RA vol.
-  state.y[this->global_var_ids[7]] = 96.07;   // RV vol.
-  state.y[this->global_var_ids[11]] = 38.43;  // LA vol.
-  state.y[this->global_var_ids[14]] = 96.07;  // LV vol.
-  state.y[this->global_var_ids[9]] = 8.0;     // Pulm pressure
+//state.y[this->global_var_ids[4]] = 38.43;   // RA vol.
+//state.y[this->global_var_ids[7]] = 96.07;   // RV vol.
+//state.y[this->global_var_ids[11]] = 38.43;  // LA vol.
+//state.y[this->global_var_ids[14]] = 96.07;  // LV vol.
+//state.y[this->global_var_ids[9]] = 8.0;     // Pulm pressure
   // Below ICs likely are not needed (but retained as comments in case they are)
   // state.y[this->global_var_ids[0]] = 4.72;   // RA pressure
   // state.y[this->global_var_ids[6]] = 14.58;  // RV pressure

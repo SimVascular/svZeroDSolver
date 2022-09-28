@@ -31,7 +31,7 @@ set_type_checking_flag = False
 
 html_theme_options = {
     "logo": {
-        "text": "svZeroDSolver Python Documentation",
+        "text": "svZeroDPlus Python Documentation",
     },
     "collapse_navigation": True,
     "show_prev_next": False,

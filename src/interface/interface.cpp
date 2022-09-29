@@ -69,9 +69,10 @@ extern "C" void increment_time(const int problem_id, const double external_time,
 
 extern "C" void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions, int& error_code);
 
-extern "C" void update_block_params(const int problem_id, const char* block_name, std::vector<double>& params);
+extern "C" void update_block_params(const int problem_id, std::string block_name, std::vector<double>& params);
 
-extern "C" void read_block_params(const int problem_id, const char* block_name, std::vector<double>& params);
+//extern "C" void read_block_params(const int problem_id, const char* block_name, std::vector<double>& params);
+extern "C" void read_block_params(const int problem_id, std::string block_name, std::vector<double>& params);
 
 /**
  * @brief Initialize the 0D solver interface.
@@ -163,7 +164,7 @@ void initialize(const char* input_file_arg, const double external_time_step, int
  * @param block name The name of the block to update.
  * @param params New parameters for the block (structure depends on block type).
  */
-void update_block_params(const int problem_id, const char* block_name, std::vector<double>& params)
+void update_block_params(const int problem_id, std::string block_name, std::vector<double>& params)
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
@@ -188,7 +189,8 @@ void update_block_params(const int problem_id, const char* block_name, std::vect
  * @param block name The name of the block to read.
  * @param params Parameters of the block (structure depends on block type).
  */
-void read_block_params(const int problem_id, const char* block_name, std::vector<double>& params)
+//void read_block_params(const int problem_id, const char* block_name, std::vector<double>& params)
+void read_block_params(const int problem_id, std::string block_name, std::vector<double>& params)
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;

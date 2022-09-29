@@ -63,7 +63,8 @@ SolverInterface::~SolverInterface()
 //            Callable interface functions              //
 //////////////////////////////////////////////////////////
 
-extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
+//extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
+extern "C" void initialize(const char* input_file, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
 
 extern "C" void increment_time(const int problem_id, const double external_time, std::vector<double>& solution);
 
@@ -82,7 +83,7 @@ extern "C" void read_block_params(const int problem_id, std::string block_name, 
  * @param problem_id The returned ID used to identify the 0D problem.
  * @param system_size Number of degrees-of-freedom.
  */
-void initialize(const char* input_file_arg, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names)
+void initialize(const char* input_file_arg, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names)
 {
   DEBUG_MSG("========== svZeroD initialize ==========");
   std::string input_file(input_file_arg);
@@ -114,13 +115,15 @@ void initialize(const char* input_file_arg, const double external_time_step, int
   interface->time_step_size_ = reader.sim_time_step_size;
   interface->max_nliter_ = reader.sim_nliter;
   interface->absolute_tolerance_ = reader.sim_abs_tol;
-  interface->external_time_step_ = external_time_step;
+  //interface->external_time_step_ = external_time_step;
   interface->time_step_ = 0;
   interface->system_size_ = model->dofhandler.size();
-  system_size = interface->system_size_;
+  //system_size = interface->system_size_;
   interface->output_interval_ = reader.output_interval;
   interface->num_time_steps_ = reader.sim_num_time_steps;
   interface->pts_per_cycle_ = reader.sim_pts_per_cycle;
+  pts_per_cycle = reader.sim_pts_per_cycle;
+  num_cycles = reader.sim_num_cycles;
 
   // For how many time steps are outputs being returned?
   if (reader.output_mean_only) {

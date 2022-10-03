@@ -63,8 +63,7 @@ SolverInterface::~SolverInterface()
 //            Callable interface functions              //
 //////////////////////////////////////////////////////////
 
-//extern "C" void initialize(const char* input_file, const double external_time_step, int& problem_id, int& system_size, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
-extern "C" void initialize(const char* input_file, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
+extern "C" void initialize(std::string input_file, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
 
 extern "C" void increment_time(const int problem_id, const double external_time, std::vector<double>& solution);
 
@@ -83,7 +82,7 @@ extern "C" void read_block_params(const int problem_id, std::string block_name, 
  * @param problem_id The returned ID used to identify the 0D problem.
  * @param system_size Number of degrees-of-freedom.
  */
-void initialize(const char* input_file_arg, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names)
+void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names)
 {
   DEBUG_MSG("========== svZeroD initialize ==========");
   std::string input_file(input_file_arg);
@@ -101,9 +100,9 @@ void initialize(const char* input_file_arg, int& problem_id, int& pts_per_cycle,
   // Create a model.
   auto model = reader.model;
   interface->model_ = model; 
-  std::cout << "[initialize] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
-  std::cout << "[initialize] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
-  std::cout << "[initialize] block_index_map: " << model->block_index_map["OUT"] << std::endl;
+//std::cout << "[initialize] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
+//std::cout << "[initialize] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
+//std::cout << "[initialize] block_index_map: " << model->block_index_map["OUT"] << std::endl;
   for(auto const &elem : model->block_index_map)
   {
     //std::cout << elem.first << " " << elem.second << "\n";
@@ -171,17 +170,17 @@ void update_block_params(const int problem_id, std::string block_name, std::vect
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
-  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
-  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
-  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["OUT"] << std::endl;
-  for(auto const &elem : model->block_index_map)
-  {
-    std::cout << elem.first << " " << elem.second << "\n";
-  }
+//std::cout << "[update_block_params] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
+//std::cout << "[update_block_params] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
+//std::cout << "[update_block_params] block_index_map: " << model->block_index_map["OUT"] << std::endl;
+//for(auto const &elem : model->block_index_map)
+//{
+//  std::cout << elem.first << " " << elem.second << "\n";
+//}
   int block_index = model->block_index_map[block_name];
-  std::cout << "[update_block_params] block_index: " << block_index << std::endl;
+//std::cout << "[update_block_params] block_index: " << block_index << std::endl;
   auto block = model->blocks[block_index];
-  std::cout << "[update_block_params] block name: " << block->name << std::endl;
+//std::cout << "[update_block_params] block name: " << block->name << std::endl;
   block->update_block_params(params);
 }
 
@@ -240,9 +239,9 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
-  std::cout << "[run_simulation] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
-  std::cout << "[run_simulation] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
-  std::cout << "[run_simulation] block_index_map: " << model->block_index_map["OUT"] << std::endl;
+//std::cout << "[run_simulation] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
+//std::cout << "[run_simulation] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
+//std::cout << "[run_simulation] block_index_map: " << model->block_index_map["OUT"] << std::endl;
 
   auto time_step_size = interface->time_step_size_;
   auto absolute_tolerance = interface->absolute_tolerance_;
@@ -260,7 +259,6 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
   std::vector<ALGEBRA::State<T>> states;
   states.reserve(num_time_steps);
   states.push_back(state);
-  std::cout << "[run_simulation] time_step_size: " << time_step_size << std::endl;
 
   // Run integrator
   interface->time_step_ = 0;
@@ -312,15 +310,15 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
     output_idx++;
   }
   
-  output_idx = 0;
-  soln_idx = 0;
-  for (int t = 0; t < num_output_steps; t++) {
-    std::cout << "[run_simulation] output_times: " << output_times[t] << " output_solutions: ";
-    for (int i = 0; i < system_size; i++) {
-      soln_idx = system_size*output_idx + i;
-      std::cout << output_solutions[soln_idx] << " ";
-    }
-    std::cout << std::endl;
-    output_idx++;
-  }
+//output_idx = 0;
+//soln_idx = 0;
+//for (int t = 0; t < num_output_steps; t++) {
+//  std::cout << "[run_simulation] output_times: " << output_times[t] << " output_solutions: ";
+//  for (int i = 0; i < system_size; i++) {
+//    soln_idx = system_size*output_idx + i;
+//    std::cout << output_solutions[soln_idx] << " ";
+//  }
+//  std::cout << std::endl;
+//  output_idx++;
+//}
 }

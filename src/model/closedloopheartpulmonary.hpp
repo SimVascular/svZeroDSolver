@@ -317,7 +317,7 @@ void ClosedLoopHeartPulmonary<T>::update_block_params(std::vector<T> new_params)
 template <typename T>
 void ClosedLoopHeartPulmonary<T>::get_block_params(std::vector<T> &block_params) {
   if (block_params.size() != 27 ) {
-    throw std::runtime_error("Wrong vector size in get_block_params for ClosedLoopHeartPulmonary.");
+    throw std::runtime_error("Wrong vector size in get_block_params for ClosedLoopHeartPulmonary. Size should be 27 but is currently " + std::to_string(block_params.size()));
   }
   block_params[0] = this->params.Tsa;
   block_params[1] = this->params.tpwave;

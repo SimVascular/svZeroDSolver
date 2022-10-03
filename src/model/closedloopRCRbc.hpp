@@ -238,7 +238,7 @@ void ClosedLoopRCRBC<T>::update_block_params(std::vector<T> new_params) {
 template <typename T>
 void ClosedLoopRCRBC<T>::get_block_params(std::vector<T> &block_params) {
   if (block_params.size() != 3 ) {
-    throw std::runtime_error("Wrong vector size in get_block_params for ClosedLoopRCRBC.");
+    throw std::runtime_error("Wrong vector size in get_block_params for ClosedLoopRCRBC. Size should be 3 but is currently " + std::to_string(block_params.size()));
   }
   block_params[0] = this->params.Rp;
   block_params[1] = this->params.C;

@@ -217,7 +217,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       throw std::invalid_argument("Unknown vessel type");
     }
 
-    // Read connected boundary condtitions
+    // Read connected boundary conditions
     try {
       auto inlet_bc = vessel_config["boundary_conditions"]["inlet"];
       connections.push_back({inlet_bc.get_string(), vessel_name});
@@ -231,6 +231,120 @@ void ConfigReader<T>::load(std::string &specifier) {
     }
   }
   
+  // Create external coupling blocks
+  try {
+    for (auto coupling_config : config["external_solver_coupling_blocks"]) {
+      std::string_view coupling_type = coupling_config["type"];
+      std::string_view coupling_name = coupling_config["name"];
+      std::string_view coupling_loc = coupling_config["location"];
+      auto coupling_values = coupling_config["values"];
+      
+      // Create coupling block
+      std::vector<T> t_coupling;
+      try {
+        for (auto x : coupling_values["t"]) {
+          t_coupling.push_back(x.get_double());
+        }
+      } catch (simdjson::simdjson_error) {
+        t_coupling.push_back(0.0);
+      };
+      
+      if (coupling_type == "FLOW") {
+        std::vector<T> Q_coupling;
+        try {
+          for (auto x : coupling_values["Q"].get_array()) {
+            Q_coupling.push_back(x.get_double());
+          }
+        } catch (simdjson::simdjson_error) {
+          Q_coupling.push_back(coupling_values["Q"].get_double());
+        }
+
+        MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling);
+//      if (q_coupling_param.isconstant == false) {
+//        if ((sim_cardiac_cycle_period > 0.0) &&
+//            (q_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
+//          throw std::runtime_error(
+//              "Inconsistent cardiac cycle period defined in "
+//              "TimeDependentParameter");
+//        } else {
+//          sim_cardiac_cycle_period = q_coupling_param.cycle_period;
+//        }
+//      }
+        model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
+            q_coupling_param, static_cast<std::string>(coupling_name)));
+        model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
+        block_count++;
+        DEBUG_MSG("Created coupling block " << coupling_name);
+      } else if (coupling_type == "PRESSURE") {
+        std::vector<T> P_coupling;
+        try {
+          for (auto x : coupling_values["P"].get_array()) {
+            P_coupling.push_back(x.get_double());
+          }
+        } catch (simdjson::simdjson_error) {
+          P_coupling.push_back(coupling_values["P"].get_double());
+        }
+        MODEL::TimeDependentParameter p_coupling_param(t_coupling, P_coupling);
+//      if (p_coupling_param.isconstant == false) {
+//        if ((sim_cardiac_cycle_period > 0.0) &&
+//            (p_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
+//          throw std::runtime_error(
+//              "Inconsistent cardiac cycle period defined in "
+//              "TimeDependentParameter");
+//        } else {
+//          sim_cardiac_cycle_period = p_coupling_param.cycle_period;
+//        }
+//      }
+        model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
+            p_coupling_param, static_cast<std::string>(coupling_name)));
+        model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
+        block_count++;
+        DEBUG_MSG("Created coupling block " << coupling_name);
+      } else {
+        throw std::runtime_error("Error. Flowsolver coupling block types should be FLOW or PRESSURE.");
+      }
+     
+      // Connected block
+      std::string_view connected_block = coupling_config["connected_block"];
+      std::string connected_type;
+      if (connected_name == "ClosedLoopHeartAndPulmonary") {
+        connected_type = "ClosedLoopHeartAndPulmonary";
+      } else {
+        int connected_block_flag = 0;
+        for (auto bc_config : config["boundary_conditions"]) {
+          std::string_view bc_type = bc_config["bc_type"];
+          std::string_view bc_name = bc_config["bc_name"];
+          if (static_cast<std::string>(bc_config["bc_name"]) == connected_block) {
+            connected_type = bc_config["bc_type"];
+            connected_block_flag = 1;
+            break;
+          } // bc_config["bc_name"] == connected_block 
+        } // bc_config
+        if (connected_block_flag == 0) {
+          throw std::runtime_error("Error: Could not find connected_block for an entry in external_solver_coupling_blocks");
+        }
+      } // connected_name != "ClosedLoopHeartAndPulmonary"
+      
+      if (coupling_loc == "inlet") {
+        std::vector<std::string> possible_types = {"RESISTANCE", "RCR", "ClosedLoopRCR", "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
+        if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
+            throw std::runtime_error("Error: The specified connection type for inlet external_coupling_block is invalid.");
+        }
+        connections.push_back({coupling_name, connected_block});
+      } else if (coupling_loc == "outlet") {
+        std::vector<std::string> possible_types = {"ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
+        if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
+            throw std::runtime_error("Error: The specified connection type for outlet external_coupling_block is invalid.");
+        }
+        // Add connection only for closedLoopRCR. Connection to ClosedLoopHeartAndPulmonary will be handled in ClosedLoopHeartAndPulmonary creation.
+        if (connected_type == "ClosedLoopRCR") {
+          connections.push_back({connected_block, coupling_name});
+        } // connected_type == "ClosedLoopRCR"
+      } // block_location
+    } // for (auto coupling_config : config["external_solver_coupling_blocks"])
+  } catch (simdjson::simdjson_error) {
+  }
+
   std::vector<std::string_view> closed_loop_bcs;
 
   // Create boundary conditions

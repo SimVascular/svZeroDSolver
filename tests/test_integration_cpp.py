@@ -13,7 +13,7 @@ RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8
 
 
-def run_test_case_by_name(name):
+def run_test_case_by_name(name, output_variable_based = False):
     """Run a test case by its case name.
 
     Args:
@@ -28,43 +28,47 @@ def run_test_case_by_name(name):
     with open(testfile) as ff:
         config = json.load(ff)
 
-    output = {
-        "pressure_in": {},
-        "pressure_out": {},
-        "flow_in": {},
-        "flow_out": {},
-    }
+    if (output_variable_based == False):
+        output = {
+            "pressure_in": {},
+            "pressure_out": {},
+            "flow_in": {},
+            "flow_out": {},
+        }
 
-    last_seg_id = 0
+        last_seg_id = 0
 
-    for vessel in config["vessels"]:
-        name = vessel["vessel_name"]
-        branch_id, seg_id = name.split("_")
-        branch_id, seg_id = int(branch_id[6:]), int(seg_id[3:])
-        vessel_id = vessel["vessel_id"]
+        for vessel in config["vessels"]:
+            name = vessel["vessel_name"]
+            branch_id, seg_id = name.split("_")
+            branch_id, seg_id = int(branch_id[6:]), int(seg_id[3:])
+            vessel_id = vessel["vessel_id"]
 
-        if seg_id == 0:
-            output["pressure_in"][branch_id] = np.array(
-                result[result.name == name]["pressure_in"]
-            )
-            output["flow_in"][branch_id] = np.array(
-                result[result.name == name]["flow_in"]
-            )
-            output["pressure_out"][branch_id] = np.array(
-                result[result.name == name]["pressure_out"]
-            )
-            output["flow_out"][branch_id] = np.array(
-                result[result.name == name]["flow_out"]
-            )
-        elif seg_id > last_seg_id:
-            output["pressure_out"][branch_id] = np.array(
-                result[result.name == name]["pressure_out"]
-            )
-            output["flow_out"][branch_id] = np.array(
-                result[result.name == name]["flow_out"]
-            )
+            if seg_id == 0:
+                output["pressure_in"][branch_id] = np.array(
+                    result[result.name == name]["pressure_in"]
+                )
+                output["flow_in"][branch_id] = np.array(
+                    result[result.name == name]["flow_in"]
+                )
+                output["pressure_out"][branch_id] = np.array(
+                    result[result.name == name]["pressure_out"]
+                )
+                output["flow_out"][branch_id] = np.array(
+                    result[result.name == name]["flow_out"]
+                )
+            elif seg_id > last_seg_id:
+                output["pressure_out"][branch_id] = np.array(
+                    result[result.name == name]["pressure_out"]
+                )
+                output["flow_out"][branch_id] = np.array(
+                    result[result.name == name]["flow_out"]
+                )
 
-        last_seg_id = seg_id
+            last_seg_id = seg_id
+    
+    elif (output_variable_based == True):
+        output = result
 
     return output
 
@@ -407,3 +411,31 @@ def test_closed_loop_heart_with_coronaries(tmpdir):
     assert np.isclose(
         np.amax(np.array(results['flow_in'][0])), 171.35198346122127, rtol=RTOL_FLOW
     )  # max aortic flow
+
+
+def test_coupled_block_heart_single_vessel(tmpdir):
+    result = run_test_case_by_name("coupledBlock_closedLoopHeart_singleVessel", output_variable_based = True)
+    aortic_pressure = result[result.name == "pressure:J_heart_outlet:external_outlet"]["y"].to_numpy()
+    assert np.isclose(
+        np.mean(aortic_pressure[-50:]), 69.92379300168665, rtol=RTOL_PRES
+    )  # mean aortic pressure
+    assert np.isclose(
+        np.amax(aortic_pressure[-50:]), 91.44472791507646, rtol=RTOL_PRES
+    )  # max aortic pressure
+    assert np.isclose(
+        np.amin(aortic_pressure[-50:]), 49.246695924657494, rtol=RTOL_PRES
+    )  # min aortic pressure
+
+
+def test_coupled_block_heart_with_coronaries(tmpdir):
+    result = run_test_case_by_name("coupledBlock_closedLoopHeart_withCoronaries", output_variable_based = True)
+    aortic_pressure = result[result.name == "pressure:J_heart_outlet:external_outlet"]["y"].to_numpy()
+    assert np.isclose(
+        np.mean(aortic_pressure[-50:]), 59.52487958523876, rtol=RTOL_PRES
+    )  # mean aortic pressure
+    assert np.isclose(
+        np.amax(aortic_pressure[-50:]), 81.0040824877808, rtol=RTOL_PRES
+    )  # max aortic pressure
+    assert np.isclose(
+        np.amin(aortic_pressure[-50:]), 38.80066561075395, rtol=RTOL_PRES
+    )  # min aortic pressure

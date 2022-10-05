@@ -242,7 +242,7 @@ void ConfigReader<T>::load(std::string &specifier) {
   for (auto bc_config : config["boundary_conditions"]) {
     bc_type_map.insert({bc_config["bc_name"],bc_config["bc_type"]});
   }
-//try {
+  try {
     for (auto coupling_config : config["external_solver_coupling_blocks"]) {
       std::string_view coupling_type = coupling_config["type"];
       std::string_view coupling_name = coupling_config["name"];
@@ -328,8 +328,8 @@ void ConfigReader<T>::load(std::string &specifier) {
         } // connected_type == "ClosedLoopRCR"
       } // coupling_loc
     } // for (auto coupling_config : config["external_solver_coupling_blocks"])
-//} catch (simdjson::simdjson_error) {
-//}
+  } catch (simdjson::simdjson_error) {
+  }
 
 
 

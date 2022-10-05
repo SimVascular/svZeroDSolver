@@ -230,12 +230,219 @@ void ConfigReader<T>::load(std::string &specifier) {
     } catch (simdjson::simdjson_error) {
     }
   }
-  
-  // Create external coupling blocks
-  try {
+/*  
+  for (auto coupling_config : config["external_solver_coupling_blocks"]) {
+    std::string_view coupling_type = coupling_config["type"];
+    std::string_view coupling_name = coupling_config["name"];
+      std::cout<<"Test: Coupling block " << coupling_name<<std::endl;
+  }
+*/
+  // Create map for boundary conditions to boundary condition type
+  std::map<std::string_view, std::string_view> bc_type_map;
+  for (auto bc_config : config["boundary_conditions"]) {
+    bc_type_map.insert({bc_config["bc_name"],bc_config["bc_type"]});
+  }
+//try {
     for (auto coupling_config : config["external_solver_coupling_blocks"]) {
       std::string_view coupling_type = coupling_config["type"];
       std::string_view coupling_name = coupling_config["name"];
+      std::string_view coupling_loc = coupling_config["location"];
+      auto coupling_values = coupling_config["values"];
+      
+      // Create coupling block
+      std::vector<T> t_coupling;
+      try {
+        for (auto x : coupling_values["t"]) {
+          t_coupling.push_back(x.get_double());
+        }
+      } catch (simdjson::simdjson_error) {
+        t_coupling.push_back(0.0);
+      };
+      
+      if (coupling_type == "FLOW") {
+        std::vector<T> Q_coupling;
+        try {
+          for (auto x : coupling_values["Q"].get_array()) {
+            Q_coupling.push_back(x.get_double());
+          }
+        } catch (simdjson::simdjson_error) {
+          Q_coupling.push_back(coupling_values["Q"].get_double());
+        }
+
+        MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling);
+        model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
+            q_coupling_param, static_cast<std::string>(coupling_name)));
+        model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
+        block_count++;
+        DEBUG_MSG("Created coupling block " << coupling_name);
+        std::cout<<"Created coupling block " << coupling_name<<std::endl;
+      } else if (coupling_type == "PRESSURE") {
+        std::vector<T> P_coupling;
+        try {
+          for (auto x : coupling_values["P"].get_array()) {
+            P_coupling.push_back(x.get_double());
+          }
+        } catch (simdjson::simdjson_error) {
+          P_coupling.push_back(coupling_values["P"].get_double());
+        }
+        MODEL::TimeDependentParameter p_coupling_param(t_coupling, P_coupling);
+        model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
+            p_coupling_param, static_cast<std::string>(coupling_name)));
+        model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
+        block_count++;
+        DEBUG_MSG("Created coupling block " << coupling_name);
+      } else {
+        throw std::runtime_error("Error. Flowsolver coupling block types should be FLOW or PRESSURE.");
+      }
+      
+      // Determine the type of connected block
+      std::string_view connected_block = coupling_config["connected_block"];
+      std::string_view connected_type;
+      std::cout<<"Coupling block 2 " << coupling_name << " " << connected_block <<std::endl;
+      if (connected_block == "ClosedLoopHeartAndPulmonary") {
+        connected_type = "ClosedLoopHeartAndPulmonary";
+      std::cout<<"Coupling block 2.1 " << coupling_name << " " << connected_block <<std::endl;
+      }
+      else {
+        std::cout<<"Coupling block 2.3 " << bc_type_map[connected_block]<<std::endl;
+        connected_type = bc_type_map[connected_block];
+//      for (auto bc_config : config["boundary_conditions"]) {
+//        std::cout<<"Coupling block 2.3 " << coupling_name << " " << bc_config["bc_name"] << " "<<bc_config["bc_type"]<<std::endl;
+//      }
+      } //connected_block == "ClosedLoopHeartAndPulmonary"
+      // Create connections
+      if (coupling_loc == "inlet") {
+        std::vector<std::string_view> possible_types = {"RESISTANCE", "RCR", "ClosedLoopRCR", "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
+        if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
+            throw std::runtime_error("Error: The specified connection type for inlet external_coupling_block is invalid.");
+        }
+        connections.push_back({coupling_name, connected_block});
+      } else if (coupling_loc == "outlet") {
+        std::vector<std::string_view> possible_types = {"ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
+        if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
+            throw std::runtime_error("Error: The specified connection type for outlet external_coupling_block is invalid.");
+        }
+        // Add connection only for closedLoopRCR. Connection to ClosedLoopHeartAndPulmonary will be handled in ClosedLoopHeartAndPulmonary creation.
+        if (connected_type == "ClosedLoopRCR") {
+          connections.push_back({connected_block, coupling_name});
+        } // connected_type == "ClosedLoopRCR"
+      } // coupling_loc
+    } // for (auto coupling_config : config["external_solver_coupling_blocks"])
+//} catch (simdjson::simdjson_error) {
+//}
+
+
+
+
+//    else {
+//      std::cout<<"Coupling block 2.2 " << coupling_name << " " << connected_block <<std::endl;
+//      int connected_block_flag = 0;
+//      int num_bc = 0;
+//      for (auto bc_config : config["boundary_conditions"]) {
+//        num_bc++;
+//        std::cout<<typeid(num_bc).name()<<std::endl;
+//        std::cout<<typeid(bc_config).name()<<std::endl;
+//      }
+//      //if (num_bc > 1) {
+//      for (auto bc_config : config["boundary_conditions"]) {
+//      std::cout<<"Coupling block 2.3 " << coupling_name << " " << bc_config["bc_name"] << " "<<bc_config["bc_type"]<<std::endl;
+//        if (bc_config["bc_name"] == connected_block) {
+//          std::cout<<"Found connected block"<<std::endl;
+//          connected_type = bc_config["bc_type"];
+//          connected_block_flag = 1;
+//          //break;
+//        } // bc_config["bc_name"] == connected_block 
+//      } // bc_config
+//      //} // num_bc > 1
+////      else {
+////        auto test = config["boundary_conditions"].get_array();
+////        auto bc_config = test[0];
+////        //auto bc_config = config["boundary_conditions"].get_array();
+////        
+////      std::cout<<"Coupling block 2.3.n " << coupling_name << " " << bc_config["bc_name"] << " "<<bc_config["bc_type"]<<std::endl;
+////        connected_type = bc_config["bc_type"];
+////          connected_block_flag = 1;
+////      }
+//    std::cout<<"Coupling block 2.4 " << coupling_name << " " << connected_block <<" "<<connected_block_flag<<std::endl;
+//      if (connected_block_flag == 0) {
+//        throw std::runtime_error("Error: Could not find connected_block for an entry in external_solver_coupling_blocks");
+//      }
+//    } // coupling_name == "ClosedLoopHeartAndPulmonary"
+//        std::cout<<"Coupling block 3 " << coupling_name << " " << connected_type <<std::endl;
+//    
+//    // Create connections
+//    if (coupling_loc == "inlet") {
+//      std::vector<std::string_view> possible_types = {"RESISTANCE", "RCR", "ClosedLoopRCR", "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
+//      if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
+//          throw std::runtime_error("Error: The specified connection type for inlet external_coupling_block is invalid.");
+//      }
+//      connections.push_back({coupling_name, connected_block});
+//    } else if (coupling_loc == "outlet") {
+//      std::vector<std::string_view> possible_types = {"ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
+//      if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
+//          throw std::runtime_error("Error: The specified connection type for outlet external_coupling_block is invalid.");
+//      }
+//      // Add connection only for closedLoopRCR. Connection to ClosedLoopHeartAndPulmonary will be handled in ClosedLoopHeartAndPulmonary creation.
+//      if (connected_type == "ClosedLoopRCR") {
+//        connections.push_back({connected_block, coupling_name});
+//      } // connected_type == "ClosedLoopRCR"
+//    } // coupling_loc
+
+
+//  } // for (auto coupling_config : config["external_solver_coupling_blocks"])
+//} catch (simdjson::simdjson_error) {
+//}
+        std::cout<<"Coupling blocks FINISHED " <<std::endl;
+/*     
+        std::cout<<"Coupling block 1 " << coupling_name<<std::endl;
+      // Connected block
+      std::string_view connected_block = coupling_config["connected_block"];
+      std::string_view connected_type;
+      if (coupling_name == "ClosedLoopHeartAndPulmonary") {
+        connected_type = "ClosedLoopHeartAndPulmonary";
+      } else {
+        int connected_block_flag = 0;
+        for (auto bc_config : config["boundary_conditions"]) {
+          //if (static_cast<std::string>(bc_config["bc_name"]) == connected_block) {
+          if (bc_config["bc_name"] == connected_block) {
+            //connected_type = static_cast<std::string>(bc_config["bc_type"]);
+            connected_type = bc_config["bc_type"];
+            connected_block_flag = 1;
+            break;
+          } // bc_config["bc_name"] == connected_block 
+        } // bc_config
+        if (connected_block_flag == 0) {
+          throw std::runtime_error("Error: Could not find connected_block for an entry in external_solver_coupling_blocks");
+        }
+      } // coupling_name == "ClosedLoopHeartAndPulmonary"
+        std::cout<<"Coupling block 2 " << coupling_name<<std::endl;
+      
+      if (coupling_loc == "inlet") {
+        std::vector<std::string_view> possible_types = {"RESISTANCE", "RCR", "ClosedLoopRCR", "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
+        if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
+            throw std::runtime_error("Error: The specified connection type for inlet external_coupling_block is invalid.");
+        }
+        connections.push_back({coupling_name, connected_block});
+      } else if (coupling_loc == "outlet") {
+        std::vector<std::string_view> possible_types = {"ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
+        if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
+            throw std::runtime_error("Error: The specified connection type for outlet external_coupling_block is invalid.");
+        }
+        // Add connection only for closedLoopRCR. Connection to ClosedLoopHeartAndPulmonary will be handled in ClosedLoopHeartAndPulmonary creation.
+        if (connected_type == "ClosedLoopRCR") {
+          connections.push_back({connected_block, coupling_name});
+        } // connected_type == "ClosedLoopRCR"
+      } // coupling_loc
+        std::cout<<"Coupling block 3 " << coupling_name<<std::endl;
+*/
+/*
+  // Create external coupling blocks
+//try {
+    for (auto coupling_config : config["external_solver_coupling_blocks"]) {
+        std::cout<<"Coupling block 0" <<std::endl;
+      std::string_view coupling_type = coupling_config["type"];
+      std::string_view coupling_name = coupling_config["name"];
+        std::cout<<"Coupling block " << coupling_name<<std::endl;
       std::string_view coupling_loc = coupling_config["location"];
       auto coupling_values = coupling_config["values"];
       
@@ -275,6 +482,7 @@ void ConfigReader<T>::load(std::string &specifier) {
         model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
         block_count++;
         DEBUG_MSG("Created coupling block " << coupling_name);
+        std::cout<<"Created coupling block " << coupling_name<<std::endl;
       } else if (coupling_type == "PRESSURE") {
         std::vector<T> P_coupling;
         try {
@@ -304,17 +512,18 @@ void ConfigReader<T>::load(std::string &specifier) {
         throw std::runtime_error("Error. Flowsolver coupling block types should be FLOW or PRESSURE.");
       }
      
+        std::cout<<"Coupling block 1 " << coupling_name<<std::endl;
       // Connected block
       std::string_view connected_block = coupling_config["connected_block"];
-      std::string connected_type;
-      if (connected_name == "ClosedLoopHeartAndPulmonary") {
+      std::string_view connected_type;
+      if (coupling_name == "ClosedLoopHeartAndPulmonary") {
         connected_type = "ClosedLoopHeartAndPulmonary";
       } else {
         int connected_block_flag = 0;
         for (auto bc_config : config["boundary_conditions"]) {
-          std::string_view bc_type = bc_config["bc_type"];
-          std::string_view bc_name = bc_config["bc_name"];
-          if (static_cast<std::string>(bc_config["bc_name"]) == connected_block) {
+          //if (static_cast<std::string>(bc_config["bc_name"]) == connected_block) {
+          if (bc_config["bc_name"] == connected_block) {
+            //connected_type = static_cast<std::string>(bc_config["bc_type"]);
             connected_type = bc_config["bc_type"];
             connected_block_flag = 1;
             break;
@@ -323,16 +532,17 @@ void ConfigReader<T>::load(std::string &specifier) {
         if (connected_block_flag == 0) {
           throw std::runtime_error("Error: Could not find connected_block for an entry in external_solver_coupling_blocks");
         }
-      } // connected_name != "ClosedLoopHeartAndPulmonary"
+      } // coupling_name == "ClosedLoopHeartAndPulmonary"
+        std::cout<<"Coupling block 2 " << coupling_name<<std::endl;
       
       if (coupling_loc == "inlet") {
-        std::vector<std::string> possible_types = {"RESISTANCE", "RCR", "ClosedLoopRCR", "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
+        std::vector<std::string_view> possible_types = {"RESISTANCE", "RCR", "ClosedLoopRCR", "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
         if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
             throw std::runtime_error("Error: The specified connection type for inlet external_coupling_block is invalid.");
         }
         connections.push_back({coupling_name, connected_block});
       } else if (coupling_loc == "outlet") {
-        std::vector<std::string> possible_types = {"ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
+        std::vector<std::string_view> possible_types = {"ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
         if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
             throw std::runtime_error("Error: The specified connection type for outlet external_coupling_block is invalid.");
         }
@@ -340,11 +550,12 @@ void ConfigReader<T>::load(std::string &specifier) {
         if (connected_type == "ClosedLoopRCR") {
           connections.push_back({connected_block, coupling_name});
         } // connected_type == "ClosedLoopRCR"
-      } // block_location
+      } // coupling_loc
+        std::cout<<"Coupling block 3 " << coupling_name<<std::endl;
     } // for (auto coupling_config : config["external_solver_coupling_blocks"])
-  } catch (simdjson::simdjson_error) {
-  }
-
+//} catch (simdjson::simdjson_error) {
+//}
+*/
   std::vector<std::string_view> closed_loop_bcs;
 
   // Create boundary conditions

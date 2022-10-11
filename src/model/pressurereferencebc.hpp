@@ -172,6 +172,12 @@ class PressureReferenceBC : public Block<T> {
    */
   void to_unsteady();
 
+  /**
+   * @brief Specify is this is an inlet or outlet to the svZeroD model when used for external coupling.
+   *
+   */
+  std::string coupling_loc = "None";
+
  private:
   Parameters params;
 };

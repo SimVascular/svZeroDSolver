@@ -294,6 +294,9 @@ void ConfigReader<T>::load(std::string &specifier) {
       } else {
         throw std::runtime_error("Error. Flowsolver coupling block types should be FLOW or PRESSURE.");
       }
+      // Save the coupling location
+      auto &block = model->blocks[block_count];
+      block->coupling_loc = static_cast<std::string>(coupling_loc);
       
       // Determine the type of connected block
       std::string_view connected_block = coupling_config["connected_block"];

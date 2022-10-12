@@ -271,9 +271,10 @@ void ConfigReader<T>::load(std::string &specifier) {
 
         MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling);
         model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
-            q_coupling_param, static_cast<std::string>(coupling_name)));
+            q_coupling_param, static_cast<std::string>(coupling_name), static_cast<std::string>(coupling_loc)));
         model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
         block_count++;
+        model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name))
         DEBUG_MSG("Created coupling block " << coupling_name);
         std::cout<<"Created coupling block " << coupling_name<<std::endl;
       } else if (coupling_type == "PRESSURE") {
@@ -287,16 +288,17 @@ void ConfigReader<T>::load(std::string &specifier) {
         }
         MODEL::TimeDependentParameter p_coupling_param(t_coupling, P_coupling);
         model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
-            p_coupling_param, static_cast<std::string>(coupling_name)));
+            p_coupling_param, static_cast<std::string>(coupling_name), static_cast<std::string>(coupling_loc)));
         model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
         block_count++;
+        model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name))
         DEBUG_MSG("Created coupling block " << coupling_name);
       } else {
         throw std::runtime_error("Error. Flowsolver coupling block types should be FLOW or PRESSURE.");
       }
-      // Save the coupling location
-      auto &block = model->blocks[block_count];
-      block->coupling_loc = static_cast<std::string>(coupling_loc);
+//    // Save the coupling location
+//    auto &block = model->blocks[block_count];
+//    block->coupling_loc = static_cast<std::string>(coupling_loc);
       
       // Determine the type of connected block
       std::string_view connected_block = coupling_config["connected_block"];
@@ -395,7 +397,7 @@ void ConfigReader<T>::load(std::string &specifier) {
 //  } // for (auto coupling_config : config["external_solver_coupling_blocks"])
 //} catch (simdjson::simdjson_error) {
 //}
-        std::cout<<"Coupling blocks FINISHED " <<std::endl;
+//        std::cout<<"Coupling blocks FINISHED " <<std::endl;
 /*     
         std::cout<<"Coupling block 1 " << coupling_name<<std::endl;
       // Connected block

@@ -94,7 +94,8 @@ class FlowReferenceBC : public Block<T> {
    * @param Q Time dependent flow
    * @param name Name
    */
-  FlowReferenceBC(TimeDependentParameter<T> Q, std::string name);
+  //FlowReferenceBC(TimeDependentParameter<T> Q, std::string name);
+  FlowReferenceBC(TimeDependentParameter<T> Q, std::string name, std::string coupling_loc = "None");
 
   /**
    * @brief Destroy the FlowReferenceBC object
@@ -175,7 +176,7 @@ class FlowReferenceBC : public Block<T> {
    * @brief Specify is this is an inlet or outlet to the svZeroD model when used for external coupling.
    *
    */
-  std::string coupling_loc = "None";
+  std::string coupling_loc;
 
  private:
   Parameters params;
@@ -183,10 +184,11 @@ class FlowReferenceBC : public Block<T> {
 
 template <typename T>
 FlowReferenceBC<T>::FlowReferenceBC(TimeDependentParameter<T> Q,
-                                    std::string name)
+                                    std::string name, std::string coupling_loc)
     : Block<T>(name) {
   this->name = name;
   this->params.Q = Q;
+  this->coupling_loc = coupling_loc;
 }
 
 template <typename T>

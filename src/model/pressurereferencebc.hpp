@@ -95,7 +95,8 @@ class PressureReferenceBC : public Block<T> {
    * @param P Time dependent pressure
    * @param name Name
    */
-  PressureReferenceBC(TimeDependentParameter<T> P, std::string name);
+  //PressureReferenceBC(TimeDependentParameter<T> P, std::string name);
+  PressureReferenceBC(TimeDependentParameter<T> P, std::string name, std::string coupling_loc = "None");
 
   /**
    * @brief Destroy the PressureReferenceBC object
@@ -176,18 +177,21 @@ class PressureReferenceBC : public Block<T> {
    * @brief Specify is this is an inlet or outlet to the svZeroD model when used for external coupling.
    *
    */
-  std::string coupling_loc = "None";
+  std::string coupling_loc;
 
  private:
   Parameters params;
 };
 
 template <typename T>
+//PressureReferenceBC<T>::PressureReferenceBC(TimeDependentParameter<T> P,
+//                                            std::string name, std::string coupling_loc = "None")
 PressureReferenceBC<T>::PressureReferenceBC(TimeDependentParameter<T> P,
-                                            std::string name)
+                                            std::string name, std::string coupling_loc)
     : Block<T>(name) {
   this->name = name;
   this->params.P = P;
+  this->coupling_loc = coupling_loc;
 }
 
 template <typename T>

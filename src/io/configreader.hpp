@@ -274,7 +274,7 @@ void ConfigReader<T>::load(std::string &specifier) {
             q_coupling_param, static_cast<std::string>(coupling_name), static_cast<std::string>(coupling_loc)));
         model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
         block_count++;
-        model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name))
+        model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name));
         DEBUG_MSG("Created coupling block " << coupling_name);
         std::cout<<"Created coupling block " << coupling_name<<std::endl;
       } else if (coupling_type == "PRESSURE") {
@@ -291,7 +291,7 @@ void ConfigReader<T>::load(std::string &specifier) {
             p_coupling_param, static_cast<std::string>(coupling_name), static_cast<std::string>(coupling_loc)));
         model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
         block_count++;
-        model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name))
+        model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name));
         DEBUG_MSG("Created coupling block " << coupling_name);
       } else {
         throw std::runtime_error("Error. Flowsolver coupling block types should be FLOW or PRESSURE.");
@@ -775,6 +775,9 @@ void ConfigReader<T>::load(std::string &specifier) {
       if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
         if (heartpulmonary_block_present == false) {
           heartpulmonary_block_present = true;
+          if (sim_steady_initial == true) {
+            std::runtime_error("ERROR: Steady initial condition is not compatible with ClosedLoopHeartAndPulmonary block.")
+          }
           sim_steady_initial = false;
           std::string_view heartpulmonary_name = "CLH";
           T cycle_period =

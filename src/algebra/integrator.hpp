@@ -154,7 +154,7 @@ State<T> Integrator<T>::step(State<T> &old_state, T time,
   ydot_am.setZero();
   y_af += old_state.y + old_state.ydot * y_init_coeff;
   ydot_am += old_state.ydot * ydot_init_coeff;
-
+  
   // Determine new time
   T new_time = time + alpha_f * time_step_size;
 

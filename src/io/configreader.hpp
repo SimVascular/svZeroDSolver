@@ -776,7 +776,7 @@ void ConfigReader<T>::load(std::string &specifier) {
         if (heartpulmonary_block_present == false) {
           heartpulmonary_block_present = true;
           if (sim_steady_initial == true) {
-            std::runtime_error("ERROR: Steady initial condition is not compatible with ClosedLoopHeartAndPulmonary block.")
+            std::runtime_error("ERROR: Steady initial condition is not compatible with ClosedLoopHeartAndPulmonary block.");
           }
           sim_steady_initial = false;
           std::string_view heartpulmonary_name = "CLH";

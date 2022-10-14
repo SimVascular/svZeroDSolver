@@ -75,6 +75,10 @@ extern "C" void read_block_params(const int problem_id, std::string block_name, 
 
 extern "C" void get_block_node_IDs(const int problem_id, std::string block_name, std::vector<int>& IDs);
 
+extern "C" void update_state(const int problem_id, std::vector<double> new_state_y, std::vector<double> new_state_ydot);
+
+extern "C" void return_ydot(const int problem_id, std::vector<double>& ydot);
+
 /**
  * @brief Initialize the 0D solver interface.
  *
@@ -86,16 +90,16 @@ extern "C" void get_block_node_IDs(const int problem_id, std::string block_name,
 void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names)
 {
   DEBUG_MSG("========== svZeroD initialize ==========");
-  std::cout << "[svZeroD::initialize] 1" << std::endl;
+  //std::cout << "[svZeroD::initialize] 1" << std::endl;
   std::string input_file(input_file_arg);
   DEBUG_MSG("[initialize] input_file: " << input_file);
   std::string output_file = "svzerod.csv";
-  std::cout << "[svZeroD::initialize] 2" << std::endl;
+  //std::cout << "[svZeroD::initialize] 2" << std::endl;
 
   auto interface = new SolverInterface(input_file);
   problem_id = interface->problem_id_;
   DEBUG_MSG("[initialize] problem_id: " << problem_id);
-  std::cout << "[svZeroD::initialize] 3" << std::endl;
+  //std::cout << "[svZeroD::initialize] 3" << std::endl;
 
   // Create configuration reader.
   IO::ConfigReader<T> reader;
@@ -104,7 +108,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   // Create a model.
   auto model = reader.model;
   interface->model_ = model; 
-  std::cout << "[svZeroD::initialize] 4" << std::endl;
+  //std::cout << "[svZeroD::initialize] 4" << std::endl;
 //std::cout << "[initialize] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
 //std::cout << "[initialize] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
 //std::cout << "[initialize] block_index_map: " << model->block_index_map["OUT"] << std::endl;
@@ -113,9 +117,9 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
     //std::cout << elem.first << " " << elem.second << "\n";
     block_names.push_back(elem.first);
   }
-  std::cout << "[svZeroD::initialize] 5" << std::endl;
+  //std::cout << "[svZeroD::initialize] 5" << std::endl;
   variable_names = model->dofhandler.variables;
-  std::cout << "[svZeroD::initialize] 6" << std::endl;
+  //std::cout << "[svZeroD::initialize] 6" << std::endl;
 
   // Get simulation parameters
   interface->time_step_size_ = reader.sim_time_step_size;
@@ -131,7 +135,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   pts_per_cycle = reader.sim_pts_per_cycle;
   num_cycles = reader.sim_num_cycles;
 
-  std::cout << "[svZeroD::initialize] 7" << std::endl;
+  //std::cout << "[svZeroD::initialize] 7" << std::endl;
   // For how many time steps are outputs being returned?
   if (reader.output_mean_only) {
     num_output_steps = 1;
@@ -165,7 +169,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->state_ = state;
 
   DEBUG_MSG("[initialize] Done");
-  std::cout << "[svZeroD::initialize] END" << std::endl;
+  //std::cout << "[svZeroD::initialize] END" << std::endl;
 }
 
 /**
@@ -179,18 +183,18 @@ void update_block_params(const int problem_id, std::string block_name, std::vect
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
-  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
-  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
-  std::cout << "[update_block_params] block_index_map: " << model->block_index_map["OUT"] << std::endl;
+  //std::cout << "[update_block_params] block_index_map: " << model->block_index_map["branch0_seg0"] << std::endl;
+  //std::cout << "[update_block_params] block_index_map: " << model->block_index_map["INFLOW"] << std::endl;
+  //std::cout << "[update_block_params] block_index_map: " << model->block_index_map["OUT"] << std::endl;
   for(auto const &elem : model->block_index_map)
   {
     std::cout << elem.first << " " << elem.second << "\n";
   }
   int block_index = model->block_index_map[block_name];
-  std::cout << "[update_block_params] Input block name: " << block_name << std::endl;
-  std::cout << "[update_block_params] block_index: " << block_index << std::endl;
+  //std::cout << "[update_block_params] Input block name: " << block_name << std::endl;
+  //std::cout << "[update_block_params] block_index: " << block_index << std::endl;
   auto block = model->blocks[block_index];
-  std::cout << "[update_block_params] block name: " << block->name << std::endl;
+  //std::cout << "[update_block_params] block name: " << block->name << std::endl;
   block->update_block_params(params);
 }
 
@@ -236,6 +240,51 @@ void get_block_node_IDs(const int problem_id, std::string block_name, std::vecto
     IDs.push_back(block->outlet_nodes[i]->flow_dof);
     IDs.push_back(block->outlet_nodes[i]->pres_dof);
   }
+}
+
+/**
+ * @brief Return the ydot state vector.
+ *
+ * @param problem_id The ID used to identify the 0D problem.
+ * @param ydot The state vector containing all state.ydot degrees-of-freedom.
+ */
+void return_ydot(const int problem_id, std::vector<double>& ydot)
+{
+  auto interface = SolverInterface::interface_list_[problem_id];
+  auto model = interface->model_;
+  auto system_size = interface->system_size_;
+  if (ydot.size() != system_size) {
+    throw std::runtime_error("ERROR: State vector size is wrong in return_ydot().");
+  }
+  
+  auto state = interface->state_;
+  for (int i = 0; i < system_size; i++) {
+    ydot[i] = state.ydot[i];
+  }
+}
+
+/**
+ * @brief Update the state vector.
+ *
+ * @param problem_id The ID used to identify the 0D problem.
+ * @param new_state_y The new state vector containing all state.y degrees-of-freedom.
+ * @param new_state_ydot The new state vector containing all state.ydot degrees-of-freedom.
+ */
+void update_state(const int problem_id, std::vector<double> new_state_y, std::vector<double> new_state_ydot)
+{
+  auto interface = SolverInterface::interface_list_[problem_id];
+  auto model = interface->model_;
+  auto system_size = interface->system_size_;
+  if ((new_state_y.size() != system_size) || (new_state_ydot.size() != system_size)) {
+    throw std::runtime_error("ERROR: State vector size is wrong in update_state().");
+  }
+
+  auto state = interface->state_;
+  for (int i = 0; i < system_size; i++) {
+    state.y[i] = new_state_y[i];
+    state.ydot[i] = new_state_ydot[i];
+  }
+  interface->state_ = state;
 }
 
 /**

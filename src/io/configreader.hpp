@@ -103,6 +103,9 @@ class ConfigReader {
   bool output_mean_only;      ///< Output only the mean value
   bool output_derivative;     ///< Output derivatives
   bool output_last_cycle_only;  ///< Output only the last cardiac cycle
+  
+  bool sim_coupled;           ///< Running 0D simulation coupled with external solver
+  T sim_external_step_size;   ///< Step size of external solver if running coupled
 };
 
 template <typename T>
@@ -128,10 +131,25 @@ void ConfigReader<T>::load(std::string &specifier) {
 
   // Load simulation parameters
   auto sim_params = config["simulation_parameters"];
-  sim_num_cycles = sim_params["number_of_cardiac_cycles"].get_int64();
-  sim_pts_per_cycle =
-      sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
-  sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
+  try {
+    sim_coupled = sim_params["coupled_simulation"].get_bool();
+  } catch (simdjson::simdjson_error) {
+    sim_coupled = false;
+  }
+  if (!sim_coupled) {
+    sim_num_cycles = sim_params["number_of_cardiac_cycles"].get_int64();
+    sim_pts_per_cycle = sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
+    sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
+  } else {
+    sim_num_cycles = 1;
+    sim_num_time_steps = sim_params["number_of_time_pts"].get_int64();
+    sim_pts_per_cycle = sim_num_time_steps;
+    try {
+      sim_external_step_size = sim_params["external_step_size"].get_double();
+    } catch (simdjson::simdjson_error) {
+      sim_external_step_size = 0.1;
+    }
+  }
   sim_cardiac_cycle_period = -1.0;  // Negative value indicates this has not
                                     // been read from config file yet.
   try {
@@ -303,13 +321,13 @@ void ConfigReader<T>::load(std::string &specifier) {
       // Determine the type of connected block
       std::string_view connected_block = coupling_config["connected_block"];
       std::string_view connected_type;
-      std::cout<<"Coupling block 2 " << coupling_name << " " << connected_block <<std::endl;
+      //std::cout<<"Coupling block 2 " << coupling_name << " " << connected_block <<std::endl;
       if (connected_block == "ClosedLoopHeartAndPulmonary") {
         connected_type = "ClosedLoopHeartAndPulmonary";
-      std::cout<<"Coupling block 2.1 " << coupling_name << " " << connected_block <<std::endl;
+      //std::cout<<"Coupling block 2.1 " << coupling_name << " " << connected_block <<std::endl;
       }
       else {
-        std::cout<<"Coupling block 2.3 " << bc_type_map[connected_block]<<std::endl;
+        //std::cout<<"Coupling block 2.3 " << bc_type_map[connected_block]<<std::endl;
         connected_type = bc_type_map[connected_block];
 //      for (auto bc_config : config["boundary_conditions"]) {
 //        std::cout<<"Coupling block 2.3 " << coupling_name << " " << bc_config["bc_name"] << " "<<bc_config["bc_type"]<<std::endl;
@@ -895,7 +913,11 @@ void ConfigReader<T>::load(std::string &specifier) {
               // yet, set as default value of 1.0
   }
   // Calculate time step size
-  sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
+  if (!sim_coupled) {
+    sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
+  } else {
+    sim_time_step_size = sim_external_step_size / (T(sim_num_time_steps) - 1.0);
+  }
 
   // Update block parameters that depend on DOFs and other params of other
   // blocks For example, coronary block params that depend on heart block DOFs

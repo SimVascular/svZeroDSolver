@@ -36,7 +36,7 @@ class SolverInterface
     //
     // These are set by the external solver via the interface.
     //
-    double external_time_step_ = 0.1;
+    double external_step_size_ = 0.1;
 
     // 0D solver parameters. 
     //

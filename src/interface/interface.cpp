@@ -65,6 +65,8 @@ SolverInterface::~SolverInterface()
 
 extern "C" void initialize(std::string input_file, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
 
+extern "C" void set_external_step_size(const int problem_id, double external_step_size);
+
 extern "C" void increment_time(const int problem_id, const double external_time, std::vector<double>& solution);
 
 extern "C" void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions, int& error_code);
@@ -134,6 +136,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->pts_per_cycle_ = reader.sim_pts_per_cycle;
   pts_per_cycle = reader.sim_pts_per_cycle;
   num_cycles = reader.sim_num_cycles;
+  interface->external_step_size_ = reader.sim_external_step_size; 
 
   //std::cout << "[svZeroD::initialize] 7" << std::endl;
   // For how many time steps are outputs being returned?
@@ -170,6 +173,27 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 
   DEBUG_MSG("[initialize] Done");
   //std::cout << "[svZeroD::initialize] END" << std::endl;
+}
+
+/**
+ * @brief Set the timestep of the external program. For cases when 0D time step depends on external time step.
+ *
+ * @param problem_id The returned ID used to identify the 0D problem.
+ * @param external_step_size The time step size of the external program.
+ */
+void set_external_step_size(const int problem_id, double external_step_size)
+{
+  auto interface = SolverInterface::interface_list_[problem_id];
+  auto model = interface->model_;
+
+  // Update external step size in model and interface
+  interface->external_step_size_ = external_step_size;
+  //reader.external_step_size = external_step_size;
+
+  // Update time step size in model and interface
+  double zerod_step_size = external_step_size / (T(interface->num_time_steps_) - 1.0);
+  interface->time_step_size_ = zerod_step_size;
+  //reader.sim_time_step_size = zerod_step_size;
 }
 
 /**

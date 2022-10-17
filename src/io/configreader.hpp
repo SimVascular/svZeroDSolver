@@ -116,10 +116,12 @@ ConfigReader<T>::~ConfigReader() {}
 
 template <typename T>
 void ConfigReader<T>::load(std::string &specifier) {
+  std::cout<<"[configreader] START"<<std::endl;
   // Initialize model pointer
   model = new MODEL::Model<T>();
   
   // Create iterator for json configuration
+  //std::cout<<"[configreader] 0"<<std::endl;
   simdjson::ondemand::parser parser;
   simdjson::padded_string string;
   if (HELPERS::startswith(specifier, "{")) {
@@ -128,19 +130,24 @@ void ConfigReader<T>::load(std::string &specifier) {
     string = simdjson::padded_string::load(specifier);
   }
   auto config = parser.iterate(string);
+  //std::cout<<"[configreader] 0.1"<<std::endl;
 
   // Load simulation parameters
   auto sim_params = config["simulation_parameters"];
   try {
+  //std::cout<<"[configreader] 1"<<std::endl;
     sim_coupled = sim_params["coupled_simulation"].get_bool();
   } catch (simdjson::simdjson_error) {
     sim_coupled = false;
   }
   if (!sim_coupled) {
+  //std::cout<<"[configreader] 2"<<std::endl;
     sim_num_cycles = sim_params["number_of_cardiac_cycles"].get_int64();
     sim_pts_per_cycle = sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
     sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
+    sim_external_step_size = 0.0;
   } else {
+  //std::cout<<"[configreader] 3"<<std::endl;
     sim_num_cycles = 1;
     sim_num_time_steps = sim_params["number_of_time_pts"].get_int64();
     sim_pts_per_cycle = sim_num_time_steps;
@@ -265,6 +272,12 @@ void ConfigReader<T>::load(std::string &specifier) {
       std::string_view coupling_type = coupling_config["type"];
       std::string_view coupling_name = coupling_config["name"];
       std::string_view coupling_loc = coupling_config["location"];
+      bool periodic;
+      try {
+        periodic = coupling_config["periodic"].get_bool();
+      } catch(simdjson::simdjson_error) {
+        periodic = true;
+      }
       auto coupling_values = coupling_config["values"];
       
       // Create coupling block
@@ -287,14 +300,24 @@ void ConfigReader<T>::load(std::string &specifier) {
           Q_coupling.push_back(coupling_values["Q"].get_double());
         }
 
-        MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling);
+        MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling, periodic);
+        if ((q_coupling_param.isconstant == false) && (q_coupling_param.isperiodic == true)) {
+          if ((sim_cardiac_cycle_period > 0.0) &&
+              (q_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
+            throw std::runtime_error(
+                "Inconsistent cardiac cycle period defined in "
+                "TimeDependentParameter");
+          } else {
+            sim_cardiac_cycle_period = q_coupling_param.cycle_period;
+          }
+        }
         model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
             q_coupling_param, static_cast<std::string>(coupling_name), static_cast<std::string>(coupling_loc)));
         model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
         block_count++;
         model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name));
         DEBUG_MSG("Created coupling block " << coupling_name);
-        std::cout<<"Created coupling block " << coupling_name<<std::endl;
+        //std::cout<<"Created coupling block " << coupling_name<<std::endl;
       } else if (coupling_type == "PRESSURE") {
         std::vector<T> P_coupling;
         try {
@@ -304,7 +327,17 @@ void ConfigReader<T>::load(std::string &specifier) {
         } catch (simdjson::simdjson_error) {
           P_coupling.push_back(coupling_values["P"].get_double());
         }
-        MODEL::TimeDependentParameter p_coupling_param(t_coupling, P_coupling);
+        MODEL::TimeDependentParameter p_coupling_param(t_coupling, P_coupling, periodic);
+        if ((p_coupling_param.isconstant == false) && (p_coupling_param.isperiodic == true)) {
+          if ((sim_cardiac_cycle_period > 0.0) &&
+              (p_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
+            throw std::runtime_error(
+                "Inconsistent cardiac cycle period defined in "
+                "TimeDependentParameter");
+          } else {
+            sim_cardiac_cycle_period = p_coupling_param.cycle_period;
+          }
+        }
         model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
             p_coupling_param, static_cast<std::string>(coupling_name), static_cast<std::string>(coupling_loc)));
         model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
@@ -627,7 +660,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
 
       MODEL::TimeDependentParameter q_param(t, Q);
-      if (q_param.isconstant == false) {
+      if ((q_param.isconstant == false) && (q_param.isperiodic == true)) {
         if ((sim_cardiac_cycle_period > 0.0) &&
             (q_param.cycle_period != sim_cardiac_cycle_period)) {
           throw std::runtime_error(
@@ -687,7 +720,8 @@ void ConfigReader<T>::load(std::string &specifier) {
         P.push_back(bc_values["P"].get_double());
       }
       MODEL::TimeDependentParameter p_param(t, P);
-      if (p_param.isconstant == false) {
+      if ((p_param.isconstant == false) && (p_param.isperiodic == true)) {
+      //if (p_param.isconstant == false) {
         if ((sim_cardiac_cycle_period > 0.0) &&
             (p_param.cycle_period != sim_cardiac_cycle_period)) {
           throw std::runtime_error(

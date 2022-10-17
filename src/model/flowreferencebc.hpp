@@ -180,6 +180,7 @@ class FlowReferenceBC : public Block<T> {
 
  private:
   Parameters params;
+  bool external_coupling = false;
 };
 
 template <typename T>
@@ -189,6 +190,9 @@ FlowReferenceBC<T>::FlowReferenceBC(TimeDependentParameter<T> Q,
   this->name = name;
   this->params.Q = Q;
   this->coupling_loc = coupling_loc;
+  if (coupling_loc != "None") {
+    this->external_coupling = true;
+  }
 }
 
 template <typename T>
@@ -229,6 +233,8 @@ void FlowReferenceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 template <typename T>
 void FlowReferenceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
   system.C(this->global_eqn_ids[0]) = -params.Q.get(time);
+//std::cout<<"[FlowReferenceBC<T>::update_time] name, time: "<<this->name<<", "<<time<<std::endl;
+//std::cout<<"params.Q.get(time) = "<<params.Q.get(time, this->external_coupling)<<std::endl;
 }
 
 template <typename T>

@@ -181,6 +181,7 @@ class PressureReferenceBC : public Block<T> {
 
  private:
   Parameters params;
+  bool external_coupling = false;
 };
 
 template <typename T>
@@ -192,6 +193,9 @@ PressureReferenceBC<T>::PressureReferenceBC(TimeDependentParameter<T> P,
   this->name = name;
   this->params.P = P;
   this->coupling_loc = coupling_loc;
+  if (coupling_loc != "None") {
+    this->external_coupling = true;
+  }
 }
 
 template <typename T>

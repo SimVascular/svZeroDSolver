@@ -66,7 +66,8 @@ class TimeDependentParameter {
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-  TimeDependentParameter(std::vector<T> times, std::vector<T> values);
+  //TimeDependentParameter(std::vector<T> times, std::vector<T> values);
+  TimeDependentParameter(std::vector<T> times, std::vector<T> values, bool periodic = true);
 
   /**
    * @brief Destroy the Time Dependent Parameter object
@@ -97,6 +98,7 @@ class TimeDependentParameter {
   T get(T time);
 
   bool isconstant;  ///< Bool value indicating if the parameter is constant
+  bool isperiodic;  ///< Bool value indicating if the parameter is periodic with the cardiac cycle
 
   /**
    * @brief Convert the parameter into a steady mean state.
@@ -120,17 +122,20 @@ template <typename T>
 TimeDependentParameter<T>::TimeDependentParameter() {}
 
 template <typename T>
-TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
-                                                  std::vector<T> values) {
+//TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
+//                                                  std::vector<T> values) {
+TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times, std::vector<T> values, bool periodic) {
   this->times = times;
   this->values = values;
   size = values.size();
   if (size == 1) {
     isconstant = true;
     cycle_period = 1.0;
+    isperiodic = true;
   } else {
     isconstant = false;
     cycle_period = times.back() - times[0];
+    isperiodic = periodic;
   }
 }
 
@@ -159,18 +164,30 @@ T TimeDependentParameter<T>::get(T time) {
     return values[0];
   }
 
-  // Determine the time within a cycle (necessary to extrapolate)
-  T rtime = fmod(time, cycle_period);
+  // Determine the time within this->times (necessary to extrapolate)
+  T rtime;
+  if (isperiodic == true) {
+    rtime = fmod(time, cycle_period);
+  } else {
+    // this->times is not periodic when running with external solver
+    rtime = time; 
+  }
 
+  std::cout<<"[TimeDependentParameter<T>::get]"<<std::endl;
   // Determine the lower and upper element for interpolation
   auto i = lower_bound(times.begin(), times.end(), rtime);
   unsigned int k = i - times.begin();
+  std::cout<<"times.begin(), times.end(), k"<<std::endl;
+  std::cout<<times[0]<<", "<< times.back()<<", "<< k<<std::endl;
   if (i == times.end())
     --i;
   else if (*i == rtime) {
     return values[k];
   }
   unsigned int l = k ? k - 1 : 1;
+  
+  std::cout<<"values[l], values[k], times[l], times[k], rtime"<<std::endl;
+  std::cout<<values[l]<<", "<<values[k]<<", "<<times[l]<<", "<<times[k]<<", "<<rtime<<std::endl;
 
   // Perform linear interpolation
   return values[l] +

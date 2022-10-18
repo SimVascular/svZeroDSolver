@@ -282,7 +282,6 @@ const std::string run(std::string& json_config) {
       interval_counter = 0;
     }
   }
-  std::cout << states.size() << std::endl;
 
   // Make times start from 0
   if (reader.output_last_cycle_only) {

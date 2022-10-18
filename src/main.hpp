@@ -221,6 +221,7 @@ typedef double T;
  */
 const std::string run(std::string& json_config) {
   // Load model and configuration
+  DEBUG_MSG("Read configuration");
   IO::ConfigReader<T> reader;
   reader.load(json_config);
 
@@ -229,6 +230,7 @@ const std::string run(std::string& json_config) {
 
   // Create steady initial
   if (reader.sim_steady_initial) {
+    DEBUG_MSG("Calculate steady initial condition");
     T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
     reader.model.to_steady();
     ALGEBRA::Integrator<T> integrator_steady(
@@ -242,35 +244,48 @@ const std::string run(std::string& json_config) {
   }
 
   // Set-up integrator
+  DEBUG_MSG("Setup time integration");
   ALGEBRA::Integrator<T> integrator(reader.model, reader.sim_time_step_size,
                                     0.1, reader.sim_abs_tol, reader.sim_nliter);
 
   // Initialize loop
   std::vector<ALGEBRA::State<T>> states;
   std::vector<T> times;
-  states.reserve(reader.sim_num_time_steps);
-  times.reserve(reader.sim_num_time_steps);
+  if (reader.output_last_cycle_only) {
+    int num_states = reader.sim_pts_per_cycle / reader.output_interval + 1;
+    states.reserve(num_states);
+    times.reserve(num_states);
+  } else {
+    int num_states = reader.sim_num_time_steps / reader.output_interval + 1;
+    states.reserve(num_states);
+    times.reserve(num_states);
+  }
   T time = 0.0;
   states.push_back(state);
   times.push_back(time);
 
   // Run integrator
+  DEBUG_MSG("Run time integration");
   int interval_counter = 0;
+  int start_last_cycle =
+      reader.sim_num_time_steps - reader.sim_pts_per_cycle + 1;
   for (int i = 1; i < reader.sim_num_time_steps; i++) {
     state = integrator.step(state, time, reader.model);
     interval_counter += 1;
     time = reader.sim_time_step_size * T(i);
-    if (interval_counter == reader.output_interval) {
-      times.push_back(time);
-      states.push_back(std::move(state));
+    if ((interval_counter == reader.output_interval) ||
+        (reader.output_last_cycle_only && (i == start_last_cycle))) {
+      if ((reader.output_last_cycle_only == false) || (i >= start_last_cycle)) {
+        times.push_back(time);
+        states.push_back(std::move(state));
+      }
       interval_counter = 0;
     }
   }
+  std::cout << states.size() << std::endl;
 
-  // Extract last cardiac cycle
+  // Make times start from 0
   if (reader.output_last_cycle_only) {
-    states.erase(states.begin(), states.end() - reader.sim_pts_per_cycle);
-    times.erase(times.begin(), times.end() - reader.sim_pts_per_cycle);
     T start_time = times[0];
     for (auto& time : times) {
       time -= start_time;
@@ -278,6 +293,7 @@ const std::string run(std::string& json_config) {
   }
 
   // Write csv output string
+  DEBUG_MSG("Write output");
   std::string output;
   if (reader.output_variable_based) {
     output = IO::to_variable_csv<T>(times, states, reader.model,
@@ -288,5 +304,6 @@ const std::string run(std::string& json_config) {
         IO::to_vessel_csv<T>(times, states, reader.model,
                              reader.output_mean_only, reader.output_derivative);
   }
+  DEBUG_MSG("Finished");
   return output;
 }

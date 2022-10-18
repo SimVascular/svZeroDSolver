@@ -173,12 +173,13 @@ T TimeDependentParameter<T>::get(T time) {
     rtime = time; 
   }
 
-  std::cout<<"[TimeDependentParameter<T>::get]"<<std::endl;
+  //std::cout<<"[TimeDependentParameter<T>::get]"<<std::endl;
+
   // Determine the lower and upper element for interpolation
   auto i = lower_bound(times.begin(), times.end(), rtime);
   unsigned int k = i - times.begin();
-  std::cout<<"times.begin(), times.end(), k"<<std::endl;
-  std::cout<<times[0]<<", "<< times.back()<<", "<< k<<std::endl;
+  //std::cout<<"times.begin(), times.end(), k"<<std::endl;
+  //std::cout<<times[0]<<", "<< times.back()<<", "<< k<<std::endl;
   if (i == times.end())
     --i;
   else if (*i == rtime) {
@@ -186,8 +187,8 @@ T TimeDependentParameter<T>::get(T time) {
   }
   unsigned int l = k ? k - 1 : 1;
   
-  std::cout<<"values[l], values[k], times[l], times[k], rtime"<<std::endl;
-  std::cout<<values[l]<<", "<<values[k]<<", "<<times[l]<<", "<<times[k]<<", "<<rtime<<std::endl;
+  //std::cout<<"values[l], values[k], times[l], times[k], rtime"<<std::endl;
+  //std::cout<<values[l]<<", "<<values[k]<<", "<<times[l]<<", "<<times[k]<<", "<<rtime<<std::endl;
 
   // Perform linear interpolation
   return values[l] +

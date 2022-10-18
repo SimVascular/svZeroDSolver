@@ -271,6 +271,8 @@ void ClosedLoopCoronaryBC<T>::update_solution(
     ALGEBRA::SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
   auto Pim = this->im * y[this->ventricle_var_id];
   system.C(this->global_eqn_ids[2]) = -params.Cim * Pim;
+  //std::cout<<"[ClosedLoopCoronaryBC<T>::update_solution]"<<std::endl;
+  //std::cout<<"Pim = "<<system.C(this->global_eqn_ids[2])<<std::endl;
 }
 
 template <typename T>

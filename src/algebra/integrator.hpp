@@ -140,6 +140,7 @@ Integrator<T>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
   y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;
 
   // Make some memory reservations
+  //std::cout << "[Integrator] reserve " << std::endl;
   system.reserve(model);
 }
 
@@ -157,14 +158,55 @@ State<T> Integrator<T>::step(State<T> &old_state, T time,
   
   // Determine new time
   T new_time = time + alpha_f * time_step_size;
-
+//std::cout << "[Integrator::step] new_time = " <<new_time<< std::endl;
+//std::cout << "[Integrator::step] time_step_size = " <<time_step_size<< std::endl;
+//std::cout << "[Integrator::step] y_init_coeff = " <<y_init_coeff<< std::endl;
+//std::cout << "[Integrator::step] y, y_af " << std::endl;
+//double sum_C = 0.0;
+//double sum_D = 0.0;
+//double sum_E = 0.0;
+//double sum_F = 0.0;
+//for (int temp = 0; temp < this->size; temp++) {
+//  std::cout<<old_state.y[temp]<<", "<<y_af[temp]<<std::endl;
+//  sum_C += system.C(temp);
+//  for (int temp2 = 0; temp2 < this->size; temp2++) {
+//    sum_D += system.D.coeffRef(temp,temp2);
+//    sum_E += system.E.coeffRef(temp,temp2);
+//    sum_F += system.F.coeffRef(temp,temp2);
+//  }
+//}
+//std::cout << "[Integrator::step] ydot, ydot_am " << std::endl;
+//for (int temp = 0; temp < this->size; temp++) {
+//  std::cout<<old_state.ydot[temp]<<", "<<ydot_am[temp]<<std::endl;
+//}
+//std::cout<<"[Integrator::step] Matrix sums: "<<std::endl;
+//std::cout<<sum_C<<", "<<sum_D<<", "<<sum_E<<", "<<sum_F<<std::endl;
+  
+  //std::cout << "[Integrator::step] 0 " << std::endl;
   // Update time-dependent element contributions in system
   model.update_time(system, new_time);
 
+  //std::cout << "[Integrator::step] 1 " << std::endl;
   for (size_t i = 0; i < max_iter; i++) {
     // Update solution-dependent element contribitions
     model.update_solution(system, y_af);
-
+  
+//sum_C = 0.0;
+//sum_D = 0.0;
+//sum_E = 0.0;
+//sum_F = 0.0;
+//for (int temp = 0; temp < this->size; temp++) {
+//  sum_C += system.C(temp);
+//  for (int temp2 = 0; temp2 < this->size; temp2++) {
+//    sum_D += system.D.coeffRef(temp,temp2);
+//    sum_E += system.E.coeffRef(temp,temp2);
+//    sum_F += system.F.coeffRef(temp,temp2);
+//  }
+//}
+//  std::cout<<"[Integrator::step] Matrix sums (after update solution): "<<std::endl;
+//  std::cout<<sum_C<<", "<<sum_D<<", "<<sum_E<<", "<<sum_F<<std::endl;
+  
+  //std::cout << "[Integrator::step] 2 " << std::endl;
     // Update residuum and check termination criteria
     system.update_residual(y_af, ydot_am);
     if (system.residual.cwiseAbs().maxCoeff() < atol) {
@@ -177,15 +219,27 @@ State<T> Integrator<T>::step(State<T> &old_state, T time,
           "Maxium number of non-linear iterations reached.");
     }
 
+  //std::cout << "[Integrator::step] 3 " << std::endl;
     // Determine jacobian
     system.update_jacobian(y_dot_coeff);
 
+  //std::cout << "[Integrator::step] 4 " << std::endl;
     // Solve system
     system.solve();
 
     // Add increment to solution
     y_af += system.dy;
     ydot_am += system.dy * y_dot_coeff;
+  //std::cout << "[Integrator::step] 5 " << std::endl;
+//std::cout << "[Integrator::step] After solve y, y_af " << std::endl;
+//for (int temp = 0; temp < this->size; temp++) {
+//  std::cout<<old_state.y[temp]<<", "<<y_af[temp]<<std::endl;
+//}
+//std::cout << "[Integrator::step] After solve ydot, ydot_am " << std::endl;
+//for (int temp = 0; temp < this->size; temp++) {
+//  std::cout<<old_state.ydot[temp]<<", "<<ydot_am[temp]<<std::endl;
+//}
+
   }
 
   // Set new state

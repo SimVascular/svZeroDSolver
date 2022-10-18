@@ -191,11 +191,11 @@ void set_external_step_size(const int problem_id, double external_step_size)
   //reader.external_step_size = external_step_size;
 
   // Update time step size in model and interface
-  std::cout<<"[set_external_step_size] interface->external_step_size_ = "<<interface->external_step_size_<<std::endl;
-  std::cout<<"[set_external_step_size] external_step_size = "<<external_step_size<<std::endl;
+  //std::cout<<"[set_external_step_size] interface->external_step_size_ = "<<interface->external_step_size_<<std::endl;
+  //std::cout<<"[set_external_step_size] external_step_size = "<<external_step_size<<std::endl;
   double zerod_step_size = external_step_size / (T(interface->num_time_steps_) - 1.0);
   interface->time_step_size_ = zerod_step_size;
-  std::cout<<"[set_external_step_size] interface->time_step_size_ = "<<interface->time_step_size_<<std::endl;
+  //std::cout<<"[set_external_step_size] interface->time_step_size_ = "<<interface->time_step_size_<<std::endl;
   //reader.sim_time_step_size = zerod_step_size;
 }
 
@@ -219,10 +219,10 @@ void update_block_params(const int problem_id, std::string block_name, std::vect
 //}
   //int block_index = model->block_index_map[block_name];
   int block_index = model->block_index_map.at(block_name);
-  std::cout << "[update_block_params] Input block name: " << block_name << std::endl;
-  std::cout << "[update_block_params] block_index: " << block_index << std::endl;
+  //std::cout << "[update_block_params] Input block name: " << block_name << std::endl;
+  //std::cout << "[update_block_params] block_index: " << block_index << std::endl;
   auto block = model->blocks[block_index];
-  std::cout << "[update_block_params] Found block name: " << block->name << std::endl;
+  //std::cout << "[update_block_params] Found block name: " << block->name << std::endl;
   block->update_block_params(params);
 }
 
@@ -256,11 +256,11 @@ void get_block_node_IDs(const int problem_id, std::string block_name, std::vecto
 {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
-  std::cout << "[get_block_node_IDs] Input block name: " << block_name << std::endl;
+  //std::cout << "[get_block_node_IDs] Input block name: " << block_name << std::endl;
   int block_index = model->block_index_map.at(block_name);
-  std::cout << "[get_block_node_IDs] block_index: " << block_index << std::endl;
+  //std::cout << "[get_block_node_IDs] block_index: " << block_index << std::endl;
   auto block = model->blocks[block_index];
-  std::cout << "[get_block_node_IDs] Found block name: " << block->name << std::endl;
+  //std::cout << "[get_block_node_IDs] Found block name: " << block->name << std::endl;
   IDs.clear();
   IDs.push_back(block->inlet_nodes.size());
   for (int i = 0; i < block->inlet_nodes.size(); i++) {
@@ -384,7 +384,7 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
   error_code = 0;
   bool isNaN = false;
   for (int i = 1; i < num_time_steps; i++) {
-    std::cout << "[run_simulation] time: " << time << std::endl;
+    //std::cout << "[run_simulation] time: " << time << std::endl;
     interface->time_step_ += 1;
     state = integrator.step(state, time, *model);
     // Check for NaNs in the state vector

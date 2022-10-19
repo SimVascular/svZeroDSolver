@@ -285,9 +285,9 @@ const std::string run(std::string& json_config) {
 
   // Make times start from 0
   if (reader.output_last_cycle_only) {
-    T start_time = times[0];
-    for (auto& time : times) {
-      time -= start_time;
+    T start_time = times[1] - reader.sim_time_step_size;
+    for (auto it = ++times.begin(); it != times.end(); ++it) {
+      *it -= start_time;
     }
   }
 

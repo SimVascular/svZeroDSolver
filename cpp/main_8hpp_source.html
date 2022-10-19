@@ -289,75 +289,91 @@ $(function() {
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00222" name="l00222"></a><span class="lineno"><a class="line" href="main_8hpp.html#aeb3d695c62c5a6d74a0584e3c5bd65d2">  222</a></span><span class="keyword">const</span> std::string <a class="code hl_function" href="main_8hpp.html#aeb3d695c62c5a6d74a0584e3c5bd65d2">run</a>(std::string&amp; json_config) {</div>
 <div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>  <span class="comment">// Load model and configuration</span></div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>  <a class="code hl_class" href="class_i_o_1_1_config_reader.html">IO::ConfigReader&lt;T&gt;</a> reader;</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>  reader.<a class="code hl_function" href="class_i_o_1_1_config_reader.html#a44d1b9249fc80c0e65a6267b42597bdb">load</a>(json_config);</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>  <span class="comment">// Setup system</span></div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>  <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State&lt;T&gt;</a> state = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c">initial_state</a>;</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span> </div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>  <span class="comment">// Create steady initial</span></div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a1e593472af26af8f4bf98b158d996434">sim_steady_initial</a>) {</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    T time_step_size_steady = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#aaa79d0afffb88356f8d4ccbb7628309f">sim_cardiac_cycle_period</a> / 10.0;</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>.to_steady();</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator&lt;T&gt;</a> integrator_steady(</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>        reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>, time_step_size_steady, 0.1, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">sim_abs_tol</a>,</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>        reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">sim_nliter</a>);</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 31; i++) {</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>      state = integrator_steady.<a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">step</a>(state, time_step_size_steady * T(i),</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>                                     reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>);</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    }</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>.to_unsteady();</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  }</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>  <span class="comment">// Set-up integrator</span></div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>  <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator&lt;T&gt;</a> integrator(reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">sim_time_step_size</a>,</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>                                    0.1, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">sim_abs_tol</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">sim_nliter</a>);</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span> </div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>  <span class="comment">// Initialize loop</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>  std::vector&lt;ALGEBRA::State&lt;T&gt;&gt; states;</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>  std::vector&lt;T&gt; times;</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>  states.reserve(reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a>);</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>  times.reserve(reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a>);</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>  T time = 0.0;</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>  states.push_back(state);</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>  times.push_back(time);</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>  <span class="comment">// Run integrator</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>  <span class="keywordtype">int</span> interval_counter = 0;</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a>; i++) {</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    state = integrator.<a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">step</a>(state, time, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>);</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    interval_counter += 1;</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>    time = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">sim_time_step_size</a> * T(i);</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>    <span class="keywordflow">if</span> (interval_counter == reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a>) {</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>      times.push_back(time);</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>      states.push_back(std::move(state));</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>      interval_counter = 0;</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    }</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  }</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> </div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>  <span class="comment">// Extract last cardiac cycle</span></div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a>) {</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>    states.erase(states.begin(), states.end() - reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">sim_pts_per_cycle</a>);</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    times.erase(times.begin(), times.end() - reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">sim_pts_per_cycle</a>);</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    T start_time = times[0];</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; time : times) {</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>      time -= start_time;</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    }</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>  }</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>  <span class="comment">// Write csv output string</span></div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>  std::string output;</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#acfee0686c847138a19ad12ad71d57750">output_variable_based</a>) {</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    output = IO::to_variable_csv&lt;T&gt;(times, states, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>,</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>                                    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">output_mean_only</a>,</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>                                    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">output_derivative</a>);</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    output =</div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>        IO::to_vessel_csv&lt;T&gt;(times, states, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>,</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>                             reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">output_mean_only</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">output_derivative</a>);</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>  }</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>  <span class="keywordflow">return</span> output;</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>}</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>  DEBUG_MSG(<span class="stringliteral">&quot;Read configuration&quot;</span>);</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>  <a class="code hl_class" href="class_i_o_1_1_config_reader.html">IO::ConfigReader&lt;T&gt;</a> reader;</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>  reader.<a class="code hl_function" href="class_i_o_1_1_config_reader.html#a44d1b9249fc80c0e65a6267b42597bdb">load</a>(json_config);</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>  <span class="comment">// Setup system</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>  <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State&lt;T&gt;</a> state = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c">initial_state</a>;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>  <span class="comment">// Create steady initial</span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a1e593472af26af8f4bf98b158d996434">sim_steady_initial</a>) {</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    DEBUG_MSG(<span class="stringliteral">&quot;Calculate steady initial condition&quot;</span>);</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    T time_step_size_steady = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#aaa79d0afffb88356f8d4ccbb7628309f">sim_cardiac_cycle_period</a> / 10.0;</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>.to_steady();</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator&lt;T&gt;</a> integrator_steady(</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>        reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>, time_step_size_steady, 0.1, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">sim_abs_tol</a>,</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">sim_nliter</a>);</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 31; i++) {</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>      state = integrator_steady.<a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">step</a>(state, time_step_size_steady * T(i),</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                                     reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>);</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    }</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>.to_unsteady();</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>  }</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>  <span class="comment">// Set-up integrator</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  DEBUG_MSG(<span class="stringliteral">&quot;Setup time integration&quot;</span>);</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>  <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator&lt;T&gt;</a> integrator(reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">sim_time_step_size</a>,</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>                                    0.1, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">sim_abs_tol</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">sim_nliter</a>);</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>  <span class="comment">// Initialize loop</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>  std::vector&lt;ALGEBRA::State&lt;T&gt;&gt; states;</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>  std::vector&lt;T&gt; times;</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a>) {</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keywordtype">int</span> num_states = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">sim_pts_per_cycle</a> / reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a> + 1;</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    states.reserve(num_states);</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    times.reserve(num_states);</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <span class="keywordtype">int</span> num_states = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a> / reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a> + 1;</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    states.reserve(num_states);</div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    times.reserve(num_states);</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  }</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>  T time = 0.0;</div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>  states.push_back(state);</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>  times.push_back(time);</div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span> </div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>  <span class="comment">// Run integrator</span></div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  DEBUG_MSG(<span class="stringliteral">&quot;Run time integration&quot;</span>);</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>  <span class="keywordtype">int</span> interval_counter = 0;</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>  <span class="keywordtype">int</span> start_last_cycle =</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>      reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a> - reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">sim_pts_per_cycle</a> + 1;</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a>; i++) {</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    state = integrator.<a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">step</a>(state, time, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>);</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    interval_counter += 1;</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    time = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">sim_time_step_size</a> * T(i);</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <span class="keywordflow">if</span> ((interval_counter == reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a>) ||</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>        (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a> &amp;&amp; (i == start_last_cycle))) {</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>      <span class="keywordflow">if</span> ((reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a> == <span class="keyword">false</span>) || (i &gt;= start_last_cycle)) {</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>        times.push_back(time);</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        states.push_back(std::move(state));</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>      }</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>      interval_counter = 0;</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    }</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>  }</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>  <span class="comment">// Make times start from 0</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a>) {</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    T start_time = times[0];</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; time : times) {</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>      time -= start_time;</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    }</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>  }</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span> </div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>  <span class="comment">// Write csv output string</span></div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>  DEBUG_MSG(<span class="stringliteral">&quot;Write output&quot;</span>);</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>  std::string output;</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#acfee0686c847138a19ad12ad71d57750">output_variable_based</a>) {</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    output = IO::to_variable_csv&lt;T&gt;(times, states, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>,</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>                                    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">output_mean_only</a>,</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>                                    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">output_derivative</a>);</div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    output =</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>        IO::to_vessel_csv&lt;T&gt;(times, states, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>,</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>                             reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">output_mean_only</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">output_derivative</a>);</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>  }</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>  DEBUG_MSG(<span class="stringliteral">&quot;Finished&quot;</span>);</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>  <span class="keywordflow">return</span> output;</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>}</div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_integrator_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator</a></div><div class="ttdoc">Generalized-alpha integrator.</div><div class="ttdef"><b>Definition:</b> integrator.hpp:67</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_integrator_html_ac64552c2b5d1007b5f0bb37ab4b125b7"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">ALGEBRA::Integrator::step</a></div><div class="ttdeci">State&lt; T &gt; step(State&lt; T &gt; &amp;state, T time, MODEL::Model&lt; T &gt; &amp;model)</div><div class="ttdoc">Perform a time step.</div><div class="ttdef"><b>Definition:</b> integrator.hpp:150</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_state_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a></div><div class="ttdoc">State of the system.</div><div class="ttdef"><b>Definition:</b> state.hpp:47</div></div>
@@ -388,7 +404,7 @@ $(function() {
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Sep 28 2022 21:36:01 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Wed Oct 19 2022 19:11:18 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

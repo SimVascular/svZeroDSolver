@@ -261,14 +261,15 @@ const std::string run(std::string& json_config) {
     times.reserve(num_states);
   }
   T time = 0.0;
-  states.push_back(state);
-  times.push_back(time);
 
   // Run integrator
   DEBUG_MSG("Run time integration");
   int interval_counter = 0;
-  int start_last_cycle =
-      reader.sim_num_time_steps - reader.sim_pts_per_cycle + 1;
+  int start_last_cycle = reader.sim_num_time_steps - reader.sim_pts_per_cycle;
+  if ((reader.output_last_cycle_only == false) || (0 >= start_last_cycle)) {
+    times.push_back(time);
+    states.push_back(std::move(state));
+  }
   for (int i = 1; i < reader.sim_num_time_steps; i++) {
     state = integrator.step(state, time, reader.model);
     interval_counter += 1;

@@ -278,11 +278,12 @@ const std::string run(std::string& json_config) {
   times.push_back(time);
 
   // Run integrator
+  DEBUG_MSG("Starting integration.");
   int interval_counter = 0;
   for (int i = 1; i < reader.sim_num_time_steps; i++) {
   // TEST KMENON
     //state = integrator.step(state, time, reader.model);
-    //std::cout << "[main] time: " << time << std::endl;
+    DEBUG_MSG("Integration time: "<< time << std::endl);
     state = integrator.step(state, time, *reader.model);
     interval_counter += 1;
     time = reader.sim_time_step_size * T(i);

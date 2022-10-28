@@ -79,6 +79,8 @@ extern "C" void get_block_node_IDs(const int problem_id, std::string block_name,
 
 extern "C" void update_state(const int problem_id, std::vector<double> new_state_y, std::vector<double> new_state_ydot);
 
+extern "C" void return_y(const int problem_id, std::vector<double>& ydot);
+
 extern "C" void return_ydot(const int problem_id, std::vector<double>& ydot);
 
 /**
@@ -219,7 +221,7 @@ void update_block_params(const int problem_id, std::string block_name, std::vect
 //}
   //int block_index = model->block_index_map[block_name];
   int block_index = model->block_index_map.at(block_name);
-  //std::cout << "[update_block_params] Input block name: " << block_name << std::endl;
+  std::cout << "[update_block_params] Input block name: " << block_name << std::endl;
   //std::cout << "[update_block_params] block_index: " << block_index << std::endl;
   auto block = model->blocks[block_index];
   //std::cout << "[update_block_params] Found block name: " << block->name << std::endl;
@@ -271,6 +273,27 @@ void get_block_node_IDs(const int problem_id, std::string block_name, std::vecto
   for (int i = 0; i < block->outlet_nodes.size(); i++) {
     IDs.push_back(block->outlet_nodes[i]->flow_dof);
     IDs.push_back(block->outlet_nodes[i]->pres_dof);
+  }
+}
+
+/**
+ * @brief Return the y state vector.
+ *
+ * @param problem_id The ID used to identify the 0D problem.
+ * @param y The state vector containing all state.y degrees-of-freedom.
+ */
+void return_y(const int problem_id, std::vector<double>& y)
+{
+  auto interface = SolverInterface::interface_list_[problem_id];
+  auto model = interface->model_;
+  auto system_size = interface->system_size_;
+  if (y.size() != system_size) {
+    throw std::runtime_error("ERROR: State vector size is wrong in return_y().");
+  }
+  
+  auto state = interface->state_;
+  for (int i = 0; i < system_size; i++) {
+    y[i] = state.y[i];
   }
 }
 

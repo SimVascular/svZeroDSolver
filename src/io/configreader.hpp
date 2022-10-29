@@ -751,12 +751,34 @@ void ConfigReader<T>::load(std::string &specifier) {
   }
   try {
     auto initial_condition = config["initial_condition"].value();
+    // Check for pressure_all or flow_all condition. 
+    // This will initialize all pressure:* and flow:* variables.
+    T init_p, init_q;
+    bool init_p_flag = false;
+    bool init_q_flag = false;
+    try {
+      init_p = initial_condition["pressure_all"];
+      init_p_flag = true;
+    } catch (simdjson::simdjson_error) {}
+    try {
+      init_q = initial_condition["flow_all"];
+      init_q_flag = true;
+    } catch (simdjson::simdjson_error) {}
+    // Loop through variables and check for initial conditions.
     for (size_t i = 0; i < model->dofhandler.size(); i++) {
       try {
         initial_state.y[i] = initial_condition[model->dofhandler.variables[i]];
       } catch (simdjson::simdjson_error) {
-        DEBUG_MSG("Initial condition found, but no value for "
-                  << model->dofhandler.variables[i]);
+        std::string var_name = model->dofhandler.variables[i];
+        if ((init_p_flag == true) && (var_name.substr(0,9) == "pressure:")) {
+          initial_state.y[i] = init_p;
+          DEBUG_MSG("pressure_all initial condition for "<< model->dofhandler.variables[i]);
+        } else if ((init_q_flag == true) && (var_name.substr(0,5) == "flow:")) {
+          initial_state.y[i] = init_q;
+          DEBUG_MSG("flow_all initial condition for "<< model->dofhandler.variables[i]);
+        } else  {
+          DEBUG_MSG("No initial condition found for "<< model->dofhandler.variables[i]);
+        }
       }
     }
   } catch (simdjson::simdjson_error) {

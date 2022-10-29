@@ -770,7 +770,7 @@ void ConfigReader<T>::load(std::string &specifier) {
         initial_state.y[i] = initial_condition[model->dofhandler.variables[i]];
       } catch (simdjson::simdjson_error) {
         std::string var_name = model->dofhandler.variables[i];
-        if ((init_p_flag == true) && (var_name.substr(0,9) == "pressure:")) {
+        if ((init_p_flag == true) && ((var_name.substr(0,9) == "pressure:") || (var_name.substr(0,4) == "P_c:"))) {
           initial_state.y[i] = init_p;
           DEBUG_MSG("pressure_all initial condition for "<< model->dofhandler.variables[i]);
         } else if ((init_q_flag == true) && (var_name.substr(0,5) == "flow:")) {

@@ -221,7 +221,7 @@ void update_block_params(const int problem_id, std::string block_name, std::vect
 //}
   //int block_index = model->block_index_map[block_name];
   int block_index = model->block_index_map.at(block_name);
-  std::cout << "[update_block_params] Input block name: " << block_name << std::endl;
+  //std::cout << "[update_block_params] Input block name: " << block_name << std::endl;
   //std::cout << "[update_block_params] block_index: " << block_index << std::endl;
   auto block = model->blocks[block_index];
   //std::cout << "[update_block_params] Found block name: " << block->name << std::endl;

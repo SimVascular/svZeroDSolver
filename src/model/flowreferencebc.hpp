@@ -94,7 +94,6 @@ class FlowReferenceBC : public Block<T> {
    * @param Q Time dependent flow
    * @param name Name
    */
-  //FlowReferenceBC(TimeDependentParameter<T> Q, std::string name);
   FlowReferenceBC(TimeDependentParameter<T> Q, std::string name, std::string coupling_loc = "None");
 
   /**
@@ -207,18 +206,12 @@ template <typename T>
 void FlowReferenceBC<T>::update_block_params(std::vector<T> new_params) {
   std::vector<T> t_new;
   std::vector<T> Q_new;
-  //std::cout << "[update_block_params] new_params: ";
   int num_time_pts = (int) new_params[0];
   for (int i = 0; i < num_time_pts; i++) {
     t_new.push_back(new_params[1+i]);
     Q_new.push_back(new_params[1+num_time_pts+i]);
   }
   this->params.Q.update_params(t_new,Q_new);
-//std::cout << "[update_block_params] params.Q.values: " << std::endl;
-//for(int j = 0; j < 2; j++) {
-//  std::cout << params.Q.values[j] << " ";
-//}
-//std::cout<<std::endl;
 }
 
 template <typename T>
@@ -229,8 +222,6 @@ void FlowReferenceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 template <typename T>
 void FlowReferenceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
   system.C(this->global_eqn_ids[0]) = -params.Q.get(time);
-//std::cout<<"[FlowReferenceBC<T>::update_time] name, time: "<<this->name<<", "<<time<<std::endl;
-//std::cout<<"params.Q.get(time) = "<<params.Q.get(time, this->external_coupling)<<std::endl;
 }
 
 template <typename T>

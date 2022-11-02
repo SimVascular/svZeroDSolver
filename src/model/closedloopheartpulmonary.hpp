@@ -383,7 +383,6 @@ template <typename T>
 void ClosedLoopHeartPulmonary<T>::update_time(ALGEBRA::SparseSystem<T> &system,
                                               T time) {
   this->get_activation_and_elastance_functions(time);
-  //std::cout<<"[ClosedLoopHeartPulmonary<T>::update_time] time = "<<time<<std::endl;
 }
 
 template <typename T>
@@ -397,21 +396,6 @@ void ClosedLoopHeartPulmonary<T>::update_solution(
   // specified in update_constant) for readability (Doesn't seem to make a
   // difference to compute time) DOF IDs are arranged as inflow
   // [P_in,Q_in,P_out,Q_out,internal variables...]
-
-//std::cout<<"[ClosedLoopHeartPulmonary<T>::update_solution]"<<std::endl;
-//std::cout<<"AA = "<<this->AA<<std::endl;
-//std::cout<<"psi_ra = "<<psi_ra<<std::endl;
-//std::cout<<"psi_ra_derivative = "<<psi_ra_derivative<<std::endl;
-//std::cout<<"psi_la = "<<psi_la<<std::endl;
-//std::cout<<"psi_la_derivative = "<<psi_la_derivative<<std::endl;
-//std::cout<<"RA_volume = "<<y[this->global_var_ids[4]]<<std::endl;
-//std::cout<<"LA_volume = "<<y[this->global_var_ids[11]]<<std::endl;
-//std::cout<<"valves[15] = "<<valves[15]<<std::endl;
-//std::cout<<"valves[12] = "<<valves[12]<<std::endl;
-//std::cout<<"valves[5] = "<<valves[5]<<std::endl;
-//std::cout<<"valves[8] = "<<valves[8]<<std::endl;
-//std::cout<<"Erv = "<<this->Erv<<std::endl;
-//std::cout<<"Elv = "<<this->Elv<<std::endl;
 
   // DOF 0, Eq 0: Right atrium pressure
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;

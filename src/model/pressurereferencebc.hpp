@@ -95,7 +95,6 @@ class PressureReferenceBC : public Block<T> {
    * @param P Time dependent pressure
    * @param name Name
    */
-  //PressureReferenceBC(TimeDependentParameter<T> P, std::string name);
   PressureReferenceBC(TimeDependentParameter<T> P, std::string name, std::string coupling_loc = "None");
 
   /**
@@ -185,8 +184,6 @@ class PressureReferenceBC : public Block<T> {
 };
 
 template <typename T>
-//PressureReferenceBC<T>::PressureReferenceBC(TimeDependentParameter<T> P,
-//                                            std::string name, std::string coupling_loc = "None")
 PressureReferenceBC<T>::PressureReferenceBC(TimeDependentParameter<T> P,
                                             std::string name, std::string coupling_loc)
     : Block<T>(name) {

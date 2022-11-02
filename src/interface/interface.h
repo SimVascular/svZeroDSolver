@@ -16,10 +16,10 @@ typedef double T;
 template <typename TT>
 using S = ALGEBRA::SparseSystem<TT>;
 
-//-----------------
-// SolverInterface
-//-----------------
-//
+/**
+ * @brief Interface class for calling svZeroD from external programs
+ */
+
 class SolverInterface 
 {
   public:
@@ -33,15 +33,11 @@ class SolverInterface
     std::string input_file_name_;
 
     // Parameters for the external solver (the calling program).
-    //
-    // These are set by the external solver via the interface.
-    //
+    // This is set by the external solver via the interface.
     double external_step_size_ = 0.1;
 
     // 0D solver parameters. 
-    //
     // These are read in from the input JSON solver configuration file.
-    //
     double time_step_size_ = 0.0;
     int num_time_steps_ = 0;
     double absolute_tolerance_ = 0.0;
@@ -55,7 +51,6 @@ class SolverInterface
     bool output_last_cycle_only_ = false;
 
     MODEL::Model<T>* model_;
-    //ALGEBRA::Integrator<double,S>* integrator;
     ALGEBRA::State<double> state_;
     std::vector<double> times_;
 };

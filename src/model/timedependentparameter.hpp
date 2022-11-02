@@ -66,7 +66,6 @@ class TimeDependentParameter {
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-  //TimeDependentParameter(std::vector<T> times, std::vector<T> values);
   TimeDependentParameter(std::vector<T> times, std::vector<T> values, bool periodic = true);
 
   /**
@@ -122,8 +121,6 @@ template <typename T>
 TimeDependentParameter<T>::TimeDependentParameter() {}
 
 template <typename T>
-//TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
-//                                                  std::vector<T> values) {
 TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times, std::vector<T> values, bool periodic) {
   this->times = times;
   this->values = values;
@@ -145,13 +142,6 @@ void TimeDependentParameter<T>::update_params(std::vector<T> times, std::vector<
   this->values = values;
   size = values.size();
   cycle_period = times.back() - times[0];
-//if (size == 1) {
-//  isconstant = true;
-//  cycle_period = 1.0;
-//} else {
-//  isconstant = false;
-//  cycle_period = times.back() - times[0];
-//}
 }
 
 template <typename T>
@@ -173,22 +163,15 @@ T TimeDependentParameter<T>::get(T time) {
     rtime = time; 
   }
 
-  //std::cout<<"[TimeDependentParameter<T>::get]"<<std::endl;
-
   // Determine the lower and upper element for interpolation
   auto i = lower_bound(times.begin(), times.end(), rtime);
   unsigned int k = i - times.begin();
-  //std::cout<<"times.begin(), times.end(), k"<<std::endl;
-  //std::cout<<times[0]<<", "<< times.back()<<", "<< k<<std::endl;
   if (i == times.end())
     --i;
   else if (*i == rtime) {
     return values[k];
   }
   unsigned int l = k ? k - 1 : 1;
-  
-  //std::cout<<"values[l], values[k], times[l], times[k], rtime"<<std::endl;
-  //std::cout<<values[l]<<", "<<values[k]<<", "<<times[l]<<", "<<times[k]<<", "<<rtime<<std::endl;
 
   // Perform linear interpolation
   return values[l] +

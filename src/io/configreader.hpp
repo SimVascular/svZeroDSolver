@@ -121,7 +121,6 @@ void ConfigReader<T>::load(std::string &specifier) {
   model = new MODEL::Model<T>();
   
   // Create iterator for json configuration
-  //std::cout<<"[configreader] 0"<<std::endl;
   simdjson::ondemand::parser parser;
   simdjson::padded_string string;
   if (HELPERS::startswith(specifier, "{")) {
@@ -131,24 +130,20 @@ void ConfigReader<T>::load(std::string &specifier) {
   }
   DEBUG_MSG("Loaded svZeroD config file. Starting parsing.");
   auto config = parser.iterate(string);
-  //std::cout<<"[configreader] 0.1"<<std::endl;
 
   // Load simulation parameters
   auto sim_params = config["simulation_parameters"];
   try {
-  //std::cout<<"[configreader] 1"<<std::endl;
     sim_coupled = sim_params["coupled_simulation"].get_bool();
   } catch (simdjson::simdjson_error) {
     sim_coupled = false;
   }
   if (!sim_coupled) {
-  //std::cout<<"[configreader] 2"<<std::endl;
     sim_num_cycles = sim_params["number_of_cardiac_cycles"].get_int64();
     sim_pts_per_cycle = sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
     sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
     sim_external_step_size = 0.0;
   } else {
-  //std::cout<<"[configreader] 3"<<std::endl;
     sim_num_cycles = 1;
     sim_num_time_steps = sim_params["number_of_time_pts"].get_int64();
     sim_pts_per_cycle = sim_num_time_steps;
@@ -201,7 +196,6 @@ void ConfigReader<T>::load(std::string &specifier) {
     output_last_cycle_only = false;
   }
 
-  //std::cout<<"[configreader] 4"<<std::endl;
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string_view, std::string_view>> connections;
   int block_count = 0;
@@ -257,21 +251,13 @@ void ConfigReader<T>::load(std::string &specifier) {
     } catch (simdjson::simdjson_error) {
     }
   }
-  //std::cout<<"[configreader] 5"<<std::endl;
-/*  
-  for (auto coupling_config : config["external_solver_coupling_blocks"]) {
-    std::string_view coupling_type = coupling_config["type"];
-    std::string_view coupling_name = coupling_config["name"];
-      std::cout<<"Test: Coupling block " << coupling_name<<std::endl;
-  }
-*/
+  
   // Create map for boundary conditions to boundary condition type
   std::map<std::string_view, std::string_view> bc_type_map;
   for (auto bc_config : config["boundary_conditions"]) {
     bc_type_map.insert({bc_config["bc_name"],bc_config["bc_type"]});
   }
   DEBUG_MSG("Created BC name->type map.");
-  //std::cout<<"[configreader] 6"<<std::endl;
 
   try {
     for (auto coupling_config : config["external_solver_coupling_blocks"]) {
@@ -286,7 +272,6 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       auto coupling_values = coupling_config["values"];
       
-      //std::cout<<"Coupling block 0 " << coupling_name <<std::endl;
       // Create coupling block
       std::vector<T> t_coupling;
       try {
@@ -307,7 +292,6 @@ void ConfigReader<T>::load(std::string &specifier) {
           Q_coupling.push_back(coupling_values["Q"].get_double());
         }
 
-      //std::cout<<"Coupling block 1 " << coupling_name <<std::endl;
         MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling, periodic);
         if ((q_coupling_param.isconstant == false) && (q_coupling_param.isperiodic == true)) {
           if ((sim_cardiac_cycle_period > 0.0) &&
@@ -353,24 +337,15 @@ void ConfigReader<T>::load(std::string &specifier) {
         throw std::runtime_error("Error. Flowsolver coupling block types should be FLOW or PRESSURE.");
       }
       DEBUG_MSG("Created coupling block " << coupling_name);
-//    // Save the coupling location
-//    auto &block = model->blocks[block_count];
-//    block->coupling_loc = static_cast<std::string>(coupling_loc);
       
       // Determine the type of connected block
       std::string_view connected_block = coupling_config["connected_block"];
       std::string_view connected_type;
-      //std::cout<<"Coupling block 2 " << coupling_name << " " << connected_block <<std::endl;
       if (connected_block == "ClosedLoopHeartAndPulmonary") {
         connected_type = "ClosedLoopHeartAndPulmonary";
-      //std::cout<<"Coupling block 2.1 " << coupling_name << " " << connected_block <<std::endl;
       }
       else {
-        //std::cout<<"Coupling block 2.3 " << bc_type_map[connected_block]<<std::endl;
         connected_type = bc_type_map[connected_block];
-//      for (auto bc_config : config["boundary_conditions"]) {
-//        std::cout<<"Coupling block 2.3 " << coupling_name << " " << bc_config["bc_name"] << " "<<bc_config["bc_type"]<<std::endl;
-//      }
       } //connected_block == "ClosedLoopHeartAndPulmonary"
       // Create connections
       if (coupling_loc == "inlet") {
@@ -459,10 +434,6 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
-      // KMENON
-//    std::cout << "[configreader]: " << block_count <<" " << bc_name << std::endl;
-//    std::cout << "[configreader]: " << model->block_index_map[static_cast<std::string>(bc_name)] << std::endl;
-//    std::cout << "[configreader]: " << model->block_index_map["INFLOW"] << std::endl;
 
     } else if (bc_type == "RESISTANCE") {
       std::vector<T> R;
@@ -488,11 +459,6 @@ void ConfigReader<T>::load(std::string &specifier) {
           r_param, pd_param, static_cast<std::string>(bc_name)));
       model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
       block_count++;
-      // KMENON
-//    std::cout << "[configreader]: " << block_count <<" " << bc_name << std::endl;
-//    std::cout << "[configreader]: " << model->block_index_map[static_cast<std::string>(bc_name)] << std::endl;
-//    std::cout << "[configreader]: " << model->block_index_map["INFLOW"] << std::endl;
-//    std::cout << "[configreader]: " << model->block_index_map["OUT"] << std::endl;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "PRESSURE") {
       std::vector<T> P;

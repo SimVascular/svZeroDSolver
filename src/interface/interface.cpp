@@ -197,7 +197,14 @@ void update_block_params(const int problem_id, std::string block_name, std::vect
   auto model = interface->model_;
 
   // Find the required block
-  int block_index = model->block_index_map.at(block_name);
+  //int block_index = model->block_index_map.at(block_name);
+  int block_index;
+  try {
+    block_index = model->block_index_map.at(block_name);
+  } catch (...) {
+    std::cout << "[update_block_params] Error! Could not find block with name: " << block_name <<std::endl;
+    throw std::runtime_error("Terminating.");
+  }
   auto block = model->blocks[block_index];
 
   // Update params
@@ -217,7 +224,13 @@ void read_block_params(const int problem_id, std::string block_name, std::vector
   auto model = interface->model_;
 
   // Find the required block
-  int block_index = model->block_index_map.at(block_name);
+  int block_index;
+  try {
+    block_index = model->block_index_map.at(block_name);
+  } catch (...) {
+    std::cout << "[update_block_params] Error! Could not find block with name: " << block_name <<std::endl;
+    throw std::runtime_error("Terminating.");
+  }
   auto block = model->blocks[block_index];
   // Read params
   block->get_block_params(params);

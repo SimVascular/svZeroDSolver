@@ -95,7 +95,8 @@ class PressureReferenceBC : public Block<T> {
    * @param P Time dependent pressure
    * @param name Name
    */
-  PressureReferenceBC(TimeDependentParameter<T> P, std::string name, std::string coupling_loc = "None");
+  PressureReferenceBC(TimeDependentParameter<T> P, std::string name,
+                      std::string coupling_loc = "None");
 
   /**
    * @brief Destroy the PressureReferenceBC object
@@ -173,7 +174,8 @@ class PressureReferenceBC : public Block<T> {
   void to_unsteady();
 
   /**
-   * @brief Specify is this is an inlet or outlet to the svZeroD model when used for external coupling.
+   * @brief Specify is this is an inlet or outlet to the svZeroD model when used
+   * for external coupling.
    *
    */
   std::string coupling_loc;
@@ -185,7 +187,8 @@ class PressureReferenceBC : public Block<T> {
 
 template <typename T>
 PressureReferenceBC<T>::PressureReferenceBC(TimeDependentParameter<T> P,
-                                            std::string name, std::string coupling_loc)
+                                            std::string name,
+                                            std::string coupling_loc)
     : Block<T>(name) {
   this->name = name;
   this->params.P = P;
@@ -209,10 +212,10 @@ void PressureReferenceBC<T>::update_block_params(std::vector<T> new_params) {
   std::vector<T> P_new;
   int num_time_pts = (int)new_params[0];
   for (int i = 0; i < num_time_pts; i++) {
-    t_new.push_back(new_params[1+i]);
-    P_new.push_back(new_params[1+num_time_pts+i]);
+    t_new.push_back(new_params[1 + i]);
+    P_new.push_back(new_params[1 + num_time_pts + i]);
   }
-  this->params.P.update_params(t_new,P_new);
+  this->params.P.update_params(t_new, P_new);
 }
 
 template <typename T>

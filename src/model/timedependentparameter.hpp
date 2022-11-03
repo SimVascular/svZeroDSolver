@@ -66,7 +66,8 @@ class TimeDependentParameter {
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-  TimeDependentParameter(std::vector<T> times, std::vector<T> values, bool periodic = true);
+  TimeDependentParameter(std::vector<T> times, std::vector<T> values,
+                         bool periodic = true);
 
   /**
    * @brief Destroy the Time Dependent Parameter object
@@ -97,7 +98,8 @@ class TimeDependentParameter {
   T get(T time);
 
   bool isconstant;  ///< Bool value indicating if the parameter is constant
-  bool isperiodic;  ///< Bool value indicating if the parameter is periodic with the cardiac cycle
+  bool isperiodic;  ///< Bool value indicating if the parameter is periodic with
+                    ///< the cardiac cycle
 
   /**
    * @brief Convert the parameter into a steady mean state.
@@ -121,7 +123,9 @@ template <typename T>
 TimeDependentParameter<T>::TimeDependentParameter() {}
 
 template <typename T>
-TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times, std::vector<T> values, bool periodic) {
+TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
+                                                  std::vector<T> values,
+                                                  bool periodic) {
   this->times = times;
   this->values = values;
   size = values.size();
@@ -137,7 +141,8 @@ TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times, std::vec
 }
 
 template <typename T>
-void TimeDependentParameter<T>::update_params(std::vector<T> times, std::vector<T> values) {
+void TimeDependentParameter<T>::update_params(std::vector<T> times,
+                                              std::vector<T> values) {
   this->times = times;
   this->values = values;
   size = values.size();
@@ -160,7 +165,7 @@ T TimeDependentParameter<T>::get(T time) {
     rtime = fmod(time, cycle_period);
   } else {
     // this->times is not periodic when running with external solver
-    rtime = time; 
+    rtime = time;
   }
 
   // Determine the lower and upper element for interpolation

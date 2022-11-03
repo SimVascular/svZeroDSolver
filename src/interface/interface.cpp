@@ -42,40 +42,53 @@ using S = ALGEBRA::SparseSystem<TT>;
 
 // Static member data.
 int SolverInterface::problem_id_count_ = 0;
-std::map<int,SolverInterface*> SolverInterface::interface_list_;
+std::map<int, SolverInterface*> SolverInterface::interface_list_;
 
 //-----------------
 // SolverInterface
 //-----------------
-SolverInterface::SolverInterface(const std::string& input_file_name) : input_file_name_(input_file_name)
-{
+SolverInterface::SolverInterface(const std::string& input_file_name)
+    : input_file_name_(input_file_name) {
   problem_id_ = problem_id_count_++;
   SolverInterface::interface_list_[problem_id_] = this;
 }
 
-SolverInterface::~SolverInterface()
-{
-}
+SolverInterface::~SolverInterface() {}
 
 //////////////////////////////////////////////////////////
 //            Callable interface functions              //
 //////////////////////////////////////////////////////////
 
-extern "C" void initialize(std::string input_file, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names);
+extern "C" void initialize(std::string input_file, int& problem_id,
+                           int& pts_per_cycle, int& num_cycles,
+                           int& num_output_steps,
+                           std::vector<std::string>& block_names,
+                           std::vector<std::string>& variable_names);
 
-extern "C" void set_external_step_size(const int problem_id, double external_step_size);
+extern "C" void set_external_step_size(const int problem_id,
+                                       double external_step_size);
 
-extern "C" void increment_time(const int problem_id, const double external_time, std::vector<double>& solution);
+extern "C" void increment_time(const int problem_id, const double external_time,
+                               std::vector<double>& solution);
 
-extern "C" void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions, int& error_code);
+extern "C" void run_simulation(const int problem_id, const double external_time,
+                               std::vector<double>& output_times,
+                               std::vector<double>& output_solutions,
+                               int& error_code);
 
-extern "C" void update_block_params(const int problem_id, std::string block_name, std::vector<double>& params);
+extern "C" void update_block_params(const int problem_id,
+                                    std::string block_name,
+                                    std::vector<double>& params);
 
-extern "C" void read_block_params(const int problem_id, std::string block_name, std::vector<double>& params);
+extern "C" void read_block_params(const int problem_id, std::string block_name,
+                                  std::vector<double>& params);
 
-extern "C" void get_block_node_IDs(const int problem_id, std::string block_name, std::vector<int>& IDs);
+extern "C" void get_block_node_IDs(const int problem_id, std::string block_name,
+                                   std::vector<int>& IDs);
 
-extern "C" void update_state(const int problem_id, std::vector<double> new_state_y, std::vector<double> new_state_ydot);
+extern "C" void update_state(const int problem_id,
+                             std::vector<double> new_state_y,
+                             std::vector<double> new_state_ydot);
 
 extern "C" void return_y(const int problem_id, std::vector<double>& ydot);
 
@@ -92,8 +105,10 @@ extern "C" void return_ydot(const int problem_id, std::vector<double>& ydot);
  * @param block_names Vector of all the 0D block names.
  * @param variable_names Vector of all the 0D variable names.
  */
-void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle, int& num_cycles, int& num_output_steps, std::vector<std::string>& block_names, std::vector<std::string>& variable_names)
-{
+void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
+                int& num_cycles, int& num_output_steps,
+                std::vector<std::string>& block_names,
+                std::vector<std::string>& variable_names) {
   DEBUG_MSG("========== svZeroD initialize ==========");
   std::string input_file(input_file_arg);
   DEBUG_MSG("[initialize] input_file: " << input_file);
@@ -112,8 +127,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->model_ = model;
 
   // Create a vector containing all block names
-  for(auto const &elem : model->block_index_map)
-  {
+  for (auto const& elem : model->block_index_map) {
     block_names.push_back(elem.first);
   }
   variable_names = model->dofhandler.variables;
@@ -129,7 +143,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->pts_per_cycle_ = reader.sim_pts_per_cycle;
   pts_per_cycle = reader.sim_pts_per_cycle;
   num_cycles = reader.sim_num_cycles;
-  interface->external_step_size_ = reader.sim_external_step_size; 
+  interface->external_step_size_ = reader.sim_external_step_size;
 
   // For how many time steps are outputs being returned?
   if (reader.output_mean_only) {
@@ -154,10 +168,13 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
     auto model_steady = reader.model;
     model_steady->to_steady();
 
-    ALGEBRA::Integrator<T> integrator_steady(*model_steady, time_step_size_steady, 0.1, interface->absolute_tolerance_, interface->max_nliter_);
+    ALGEBRA::Integrator<T> integrator_steady(
+        *model_steady, time_step_size_steady, 0.1,
+        interface->absolute_tolerance_, interface->max_nliter_);
 
     for (size_t i = 0; i < 31; i++) {
-      state = integrator_steady.step(state, time_step_size_steady * T(i), *model_steady);
+      state = integrator_steady.step(state, time_step_size_steady * T(i),
+                                     *model_steady);
     }
   }
   interface->state_ = state;
@@ -166,13 +183,13 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 }
 
 /**
- * @brief Set the timestep of the external program. For cases when 0D time step depends on external time step.
+ * @brief Set the timestep of the external program. For cases when 0D time step
+ * depends on external time step.
  *
  * @param problem_id The returned ID used to identify the 0D problem.
  * @param external_step_size The time step size of the external program.
  */
-void set_external_step_size(const int problem_id, double external_step_size)
-{
+void set_external_step_size(const int problem_id, double external_step_size) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -180,7 +197,8 @@ void set_external_step_size(const int problem_id, double external_step_size)
   interface->external_step_size_ = external_step_size;
 
   // Update time step size in interface
-  double zerod_step_size = external_step_size / (T(interface->num_time_steps_) - 1.0);
+  double zerod_step_size =
+      external_step_size / (T(interface->num_time_steps_) - 1.0);
   interface->time_step_size_ = zerod_step_size;
 }
 
@@ -191,18 +209,19 @@ void set_external_step_size(const int problem_id, double external_step_size)
  * @param block name The name of the block to update.
  * @param params New parameters for the block (structure depends on block type).
  */
-void update_block_params(const int problem_id, std::string block_name, std::vector<double>& params)
-{
+void update_block_params(const int problem_id, std::string block_name,
+                         std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
   // Find the required block
-  //int block_index = model->block_index_map.at(block_name);
+  // int block_index = model->block_index_map.at(block_name);
   int block_index;
   try {
     block_index = model->block_index_map.at(block_name);
   } catch (...) {
-    std::cout << "[update_block_params] Error! Could not find block with name: " << block_name <<std::endl;
+    std::cout << "[update_block_params] Error! Could not find block with name: "
+              << block_name << std::endl;
     throw std::runtime_error("Terminating.");
   }
   auto block = model->blocks[block_index];
@@ -218,8 +237,8 @@ void update_block_params(const int problem_id, std::string block_name, std::vect
  * @param block name The name of the block to read.
  * @param params Parameters of the block (structure depends on block type).
  */
-void read_block_params(const int problem_id, std::string block_name, std::vector<double>& params)
-{
+void read_block_params(const int problem_id, std::string block_name,
+                       std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -228,7 +247,8 @@ void read_block_params(const int problem_id, std::string block_name, std::vector
   try {
     block_index = model->block_index_map.at(block_name);
   } catch (...) {
-    std::cout << "[update_block_params] Error! Could not find block with name: " << block_name <<std::endl;
+    std::cout << "[update_block_params] Error! Could not find block with name: "
+              << block_name << std::endl;
     throw std::runtime_error("Terminating.");
   }
   auto block = model->blocks[block_index];
@@ -237,14 +257,17 @@ void read_block_params(const int problem_id, std::string block_name, std::vector
 }
 
 /**
- * @brief Return the IDs of the input and output nodes in the solution vector for a given block.
+ * @brief Return the IDs of the input and output nodes in the solution vector
+ * for a given block.
  *
  * @param problem_id The returned ID used to identify the 0D problem.
  * @param block name The name of the block whose node IDs are returned.
- * @param IDs Vector containing IDs of input and output nodes in the following order: {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet nodes, outlet flow[0], outlet pressure[0],...}.
+ * @param IDs Vector containing IDs of input and output nodes in the following
+ * order: {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet
+ * nodes, outlet flow[0], outlet pressure[0],...}.
  */
-void get_block_node_IDs(const int problem_id, std::string block_name, std::vector<int>& IDs)
-{
+void get_block_node_IDs(const int problem_id, std::string block_name,
+                        std::vector<int>& IDs) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -253,7 +276,8 @@ void get_block_node_IDs(const int problem_id, std::string block_name, std::vecto
   auto block = model->blocks[block_index];
 
   // IDs are stored in the following format
-  // {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet nodes, outlet flow[0], outlet pressure[0],...}
+  // {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet nodes,
+  // outlet flow[0], outlet pressure[0],...}
   IDs.clear();
   IDs.push_back(block->inlet_nodes.size());
   for (int i = 0; i < block->inlet_nodes.size(); i++) {
@@ -273,15 +297,15 @@ void get_block_node_IDs(const int problem_id, std::string block_name, std::vecto
  * @param problem_id The ID used to identify the 0D problem.
  * @param y The state vector containing all state.y degrees-of-freedom.
  */
-void return_y(const int problem_id, std::vector<double>& y)
-{
+void return_y(const int problem_id, std::vector<double>& y) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;
   if (y.size() != system_size) {
-    throw std::runtime_error("ERROR: State vector size is wrong in return_y().");
+    throw std::runtime_error(
+        "ERROR: State vector size is wrong in return_y().");
   }
-  
+
   auto state = interface->state_;
   for (int i = 0; i < system_size; i++) {
     y[i] = state.y[i];
@@ -294,19 +318,19 @@ void return_y(const int problem_id, std::vector<double>& y)
  * @param problem_id The ID used to identify the 0D problem.
  * @param ydot The state vector containing all state.ydot degrees-of-freedom.
  */
-void return_ydot(const int problem_id, std::vector<double>& ydot)
-{
+void return_ydot(const int problem_id, std::vector<double>& ydot) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;
   if (ydot.size() != system_size) {
-    throw std::runtime_error("ERROR: State vector size is wrong in return_ydot().");
+    throw std::runtime_error(
+        "ERROR: State vector size is wrong in return_ydot().");
   }
-  
+
   auto state = interface->state_;
   for (int i = 0; i < system_size; i++) {
     ydot[i] = state.ydot[i];
-    //std::cout<<"return_ydot: "<<ydot[i]<<std::endl;
+    // std::cout<<"return_ydot: "<<ydot[i]<<std::endl;
   }
 }
 
@@ -314,16 +338,20 @@ void return_ydot(const int problem_id, std::vector<double>& ydot)
  * @brief Update the state vector.
  *
  * @param problem_id The ID used to identify the 0D problem.
- * @param new_state_y The new state vector containing all state.y degrees-of-freedom.
- * @param new_state_ydot The new state vector containing all state.ydot degrees-of-freedom.
+ * @param new_state_y The new state vector containing all state.y
+ * degrees-of-freedom.
+ * @param new_state_ydot The new state vector containing all state.ydot
+ * degrees-of-freedom.
  */
-void update_state(const int problem_id, std::vector<double> new_state_y, std::vector<double> new_state_ydot)
-{
+void update_state(const int problem_id, std::vector<double> new_state_y,
+                  std::vector<double> new_state_ydot) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;
-  if ((new_state_y.size() != system_size) || (new_state_ydot.size() != system_size)) {
-    throw std::runtime_error("ERROR: State vector size is wrong in update_state().");
+  if ((new_state_y.size() != system_size) ||
+      (new_state_ydot.size() != system_size)) {
+    throw std::runtime_error(
+        "ERROR: State vector size is wrong in update_state().");
   }
 
   auto state = interface->state_;
@@ -341,8 +369,8 @@ void update_state(const int problem_id, std::vector<double> new_state_y, std::ve
  * @param external_time The current time in the external program.
  * @param solution The solution vector containing all degrees-of-freedom.
  */
-void increment_time(const int problem_id, const double external_time, std::vector<double>& solution)
-{
+void increment_time(const int problem_id, const double external_time,
+                    std::vector<double>& solution) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -350,7 +378,8 @@ void increment_time(const int problem_id, const double external_time, std::vecto
   auto absolute_tolerance = interface->absolute_tolerance_;
   auto max_nliter = interface->max_nliter_;
 
-  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1, absolute_tolerance, max_nliter);
+  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
+                                    absolute_tolerance, max_nliter);
   auto state = interface->state_;
   interface->state_ = integrator.step(state, external_time, *model);
   interface->time_step_ += 1;
@@ -365,12 +394,16 @@ void increment_time(const int problem_id, const double external_time, std::vecto
  *
  * @param problem_id The ID used to identify the 0D problem.
  * @param external_time The current time in the external program.
- * @param output_times Vector containing time-stamps for output_solution vectors.
- * @param output_solutions The solution vector containing all degrees-of-freedom stored sequentially (1D vector).
- * @param error_code This is 1 if a NaN is found in the solution vector, 0 otherwise.
+ * @param output_times Vector containing time-stamps for output_solution
+ * vectors.
+ * @param output_solutions The solution vector containing all degrees-of-freedom
+ * stored sequentially (1D vector).
+ * @param error_code This is 1 if a NaN is found in the solution vector, 0
+ * otherwise.
  */
-void run_simulation(const int problem_id, const double external_time, std::vector<double>& output_times, std::vector<double>& output_solutions, int& error_code)
-{
+void run_simulation(const int problem_id, const double external_time,
+                    std::vector<double>& output_times,
+                    std::vector<double>& output_solutions, int& error_code) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -381,7 +414,8 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
   auto system_size = interface->system_size_;
   auto num_output_steps = interface->num_output_steps_;
 
-  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1, absolute_tolerance, max_nliter);
+  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
+                                    absolute_tolerance, max_nliter);
   auto state = interface->state_;
   T time = external_time;
   std::vector<T> times;
@@ -396,15 +430,16 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
   error_code = 0;
   bool isNaN = false;
   for (int i = 1; i < num_time_steps; i++) {
-    //std::cout << "[run_simulation] time: " << time << std::endl;
+    // std::cout << "[run_simulation] time: " << time << std::endl;
     interface->time_step_ += 1;
     state = integrator.step(state, time, *model);
     // Check for NaNs in the state vector
     if ((i % 100) == 0) {
-      for(int j=0; j < system_size; j++) {
+      for (int j = 0; j < system_size; j++) {
         isNaN = (state.y[j] != state.y[j]);
-        if(isNaN) {
-          std::cout << "Found NaN in state vector at timestep " << i << " and index " << j << std::endl;
+        if (isNaN) {
+          std::cout << "Found NaN in state vector at timestep " << i
+                    << " and index " << j << std::endl;
           error_code = 1;
           return;
         }
@@ -427,7 +462,7 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
   }
 
   // Write states to solution output vector
-  if (output_solutions.size() != num_output_steps*system_size) {
+  if (output_solutions.size() != num_output_steps * system_size) {
     throw std::runtime_error("Solution vector size is wrong.");
   }
   int output_idx = 0;
@@ -436,10 +471,9 @@ void run_simulation(const int problem_id, const double external_time, std::vecto
     auto state = states[t];
     output_times[t] = times[t];
     for (int i = 0; i < system_size; i++) {
-      soln_idx = output_idx*system_size + i;
+      soln_idx = output_idx * system_size + i;
       output_solutions[soln_idx] = state.y[i];
     }
     output_idx++;
   }
-  
 }

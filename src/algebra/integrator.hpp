@@ -36,9 +36,9 @@
 
 #include <Eigen/Dense>
 
+#include "../helpers/debug.hpp"
 #include "../model/model.hpp"
 #include "state.hpp"
-#include "../helpers/debug.hpp"
 
 namespace ALGEBRA {
 
@@ -150,23 +150,23 @@ Integrator<T>::~Integrator() {}
 template <typename T>
 State<T> Integrator<T>::step(State<T> &old_state, T time,
                              MODEL::Model<T> &model) {
-  //DEBUG_MSG("Step: time = "<< time);
+  // DEBUG_MSG("Step: time = "<< time);
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();
   y_af += old_state.y + old_state.ydot * y_init_coeff;
   ydot_am += old_state.ydot * ydot_init_coeff;
-  
+
   // Determine new time
   T new_time = time + alpha_f * time_step_size;
-  
+
   // Update time-dependent element contributions in system
   model.update_time(system, new_time);
 
   for (size_t i = 0; i < max_iter; i++) {
     // Update solution-dependent element contribitions
     model.update_solution(system, y_af);
-  
+
     // Update residuum and check termination criteria
     system.update_residual(y_af, ydot_am);
     if (system.residual.cwiseAbs().maxCoeff() < atol) {

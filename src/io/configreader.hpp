@@ -40,6 +40,7 @@
 
 #include "../helpers/debug.hpp"
 #include "../helpers/startswith.hpp"
+#include "../model/block.hpp"
 #include "../model/bloodvessel.hpp"
 #include "../model/closedloopRCRbc.hpp"
 #include "../model/closedloopcoronarybc.hpp"
@@ -47,7 +48,6 @@
 #include "../model/flowreferencebc.hpp"
 #include "../model/junction.hpp"
 #include "../model/model.hpp"
-#include "../model/block.hpp"
 #include "../model/node.hpp"
 #include "../model/openloopcoronarybc.hpp"
 #include "../model/pressurereferencebc.hpp"
@@ -83,7 +83,7 @@ class ConfigReader {
    */
   void load(std::string &specifier);
 
-  MODEL::Model<T>* model;            ///< Simulation model
+  MODEL::Model<T> *model;           ///< Simulation model
   ALGEBRA::State<T> initial_state;  ///< Initial state
 
   T sim_cardiac_cycle_period;  ///< Cardiac cycle period.
@@ -103,9 +103,10 @@ class ConfigReader {
   bool output_mean_only;      ///< Output only the mean value
   bool output_derivative;     ///< Output derivatives
   bool output_last_cycle_only;  ///< Output only the last cardiac cycle
-  
-  bool sim_coupled;           ///< Running 0D simulation coupled with external solver
-  T sim_external_step_size;   ///< Step size of external solver if running coupled
+
+  bool sim_coupled;  ///< Running 0D simulation coupled with external solver
+  T sim_external_step_size;  ///< Step size of external solver if running
+                             ///< coupled
 };
 
 template <typename T>
@@ -119,7 +120,7 @@ void ConfigReader<T>::load(std::string &specifier) {
   DEBUG_MSG("Start ConfigReader::load");
   // Initialize model pointer
   model = new MODEL::Model<T>();
-  
+
   // Create iterator for json configuration
   simdjson::ondemand::parser parser;
   simdjson::padded_string string;
@@ -140,7 +141,8 @@ void ConfigReader<T>::load(std::string &specifier) {
   }
   if (!sim_coupled) {
     sim_num_cycles = sim_params["number_of_cardiac_cycles"].get_int64();
-    sim_pts_per_cycle = sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
+    sim_pts_per_cycle =
+        sim_params["number_of_time_pts_per_cardiac_cycle"].get_int64();
     sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
     sim_external_step_size = 0.0;
   } else {
@@ -231,7 +233,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->blocks.push_back(new MODEL::BloodVessel<T>(
           R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient,
           static_cast<std::string>(vessel_name)));
-      model->block_index_map.insert({static_cast<std::string>(vessel_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(vessel_name), block_count});
       block_count++;
       DEBUG_MSG("Created vessel " << vessel_name);
     } else {
@@ -251,11 +254,11 @@ void ConfigReader<T>::load(std::string &specifier) {
     } catch (simdjson::simdjson_error) {
     }
   }
-  
+
   // Create map for boundary conditions to boundary condition type
   std::map<std::string_view, std::string_view> bc_type_map;
   for (auto bc_config : config["boundary_conditions"]) {
-    bc_type_map.insert({bc_config["bc_name"],bc_config["bc_type"]});
+    bc_type_map.insert({bc_config["bc_name"], bc_config["bc_type"]});
   }
   DEBUG_MSG("Created BC name->type map.");
 
@@ -267,11 +270,11 @@ void ConfigReader<T>::load(std::string &specifier) {
       bool periodic;
       try {
         periodic = coupling_config["periodic"].get_bool();
-      } catch(simdjson::simdjson_error) {
+      } catch (simdjson::simdjson_error) {
         periodic = true;
       }
       auto coupling_values = coupling_config["values"];
-      
+
       // Create coupling block
       std::vector<T> t_coupling;
       try {
@@ -281,7 +284,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       } catch (simdjson::simdjson_error) {
         t_coupling.push_back(0.0);
       };
-      
+
       if (coupling_type == "FLOW") {
         std::vector<T> Q_coupling;
         try {
@@ -292,8 +295,10 @@ void ConfigReader<T>::load(std::string &specifier) {
           Q_coupling.push_back(coupling_values["Q"].get_double());
         }
 
-        MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling, periodic);
-        if ((q_coupling_param.isconstant == false) && (q_coupling_param.isperiodic == true)) {
+        MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling,
+                                                       periodic);
+        if ((q_coupling_param.isconstant == false) &&
+            (q_coupling_param.isperiodic == true)) {
           if ((sim_cardiac_cycle_period > 0.0) &&
               (q_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
             throw std::runtime_error(
@@ -304,10 +309,13 @@ void ConfigReader<T>::load(std::string &specifier) {
           }
         }
         model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
-            q_coupling_param, static_cast<std::string>(coupling_name), static_cast<std::string>(coupling_loc)));
-        model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
+            q_coupling_param, static_cast<std::string>(coupling_name),
+            static_cast<std::string>(coupling_loc)));
+        model->block_index_map.insert(
+            {static_cast<std::string>(coupling_name), block_count});
         block_count++;
-        model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name));
+        model->external_coupling_blocks.push_back(
+            static_cast<std::string>(coupling_name));
       } else if (coupling_type == "PRESSURE") {
         std::vector<T> P_coupling;
         try {
@@ -317,8 +325,10 @@ void ConfigReader<T>::load(std::string &specifier) {
         } catch (simdjson::simdjson_error) {
           P_coupling.push_back(coupling_values["P"].get_double());
         }
-        MODEL::TimeDependentParameter p_coupling_param(t_coupling, P_coupling, periodic);
-        if ((p_coupling_param.isconstant == false) && (p_coupling_param.isperiodic == true)) {
+        MODEL::TimeDependentParameter p_coupling_param(t_coupling, P_coupling,
+                                                       periodic);
+        if ((p_coupling_param.isconstant == false) &&
+            (p_coupling_param.isperiodic == true)) {
           if ((sim_cardiac_cycle_period > 0.0) &&
               (p_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
             throw std::runtime_error(
@@ -329,44 +339,61 @@ void ConfigReader<T>::load(std::string &specifier) {
           }
         }
         model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
-            p_coupling_param, static_cast<std::string>(coupling_name), static_cast<std::string>(coupling_loc)));
-        model->block_index_map.insert({static_cast<std::string>(coupling_name),block_count});
+            p_coupling_param, static_cast<std::string>(coupling_name),
+            static_cast<std::string>(coupling_loc)));
+        model->block_index_map.insert(
+            {static_cast<std::string>(coupling_name), block_count});
         block_count++;
-        model->external_coupling_blocks.push_back(static_cast<std::string>(coupling_name));
+        model->external_coupling_blocks.push_back(
+            static_cast<std::string>(coupling_name));
       } else {
-        throw std::runtime_error("Error. Flowsolver coupling block types should be FLOW or PRESSURE.");
+        throw std::runtime_error(
+            "Error. Flowsolver coupling block types should be FLOW or "
+            "PRESSURE.");
       }
       DEBUG_MSG("Created coupling block " << coupling_name);
-      
+
       // Determine the type of connected block
       std::string_view connected_block = coupling_config["connected_block"];
       std::string_view connected_type;
       if (connected_block == "ClosedLoopHeartAndPulmonary") {
         connected_type = "ClosedLoopHeartAndPulmonary";
-      }
-      else {
+      } else {
         connected_type = bc_type_map[connected_block];
-      } //connected_block == "ClosedLoopHeartAndPulmonary"
+      }  // connected_block == "ClosedLoopHeartAndPulmonary"
       // Create connections
       if (coupling_loc == "inlet") {
-        std::vector<std::string_view> possible_types = {"RESISTANCE", "RCR", "ClosedLoopRCR", "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
-        if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
-            throw std::runtime_error("Error: The specified connection type for inlet external_coupling_block is invalid.");
+        std::vector<std::string_view> possible_types = {
+            "RESISTANCE",    "RCR",      "ClosedLoopRCR",
+            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
+        if (std::find(std::begin(possible_types), std::end(possible_types),
+                      connected_type) == std::end(possible_types)) {
+          throw std::runtime_error(
+              "Error: The specified connection type for inlet "
+              "external_coupling_block is invalid.");
         }
         connections.push_back({coupling_name, connected_block});
-        DEBUG_MSG("Created coupling block connection: " << coupling_name << "->" << connected_block);
+        DEBUG_MSG("Created coupling block connection: " << coupling_name << "->"
+                                                        << connected_block);
       } else if (coupling_loc == "outlet") {
-        std::vector<std::string_view> possible_types = {"ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
-        if (std::find(std::begin(possible_types), std::end(possible_types), connected_type) == std::end(possible_types)) {
-            throw std::runtime_error("Error: The specified connection type for outlet external_coupling_block is invalid.");
+        std::vector<std::string_view> possible_types = {
+            "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
+        if (std::find(std::begin(possible_types), std::end(possible_types),
+                      connected_type) == std::end(possible_types)) {
+          throw std::runtime_error(
+              "Error: The specified connection type for outlet "
+              "external_coupling_block is invalid.");
         }
-        // Add connection only for closedLoopRCR. Connection to ClosedLoopHeartAndPulmonary will be handled in ClosedLoopHeartAndPulmonary creation.
+        // Add connection only for closedLoopRCR. Connection to
+        // ClosedLoopHeartAndPulmonary will be handled in
+        // ClosedLoopHeartAndPulmonary creation.
         if (connected_type == "ClosedLoopRCR") {
           connections.push_back({connected_block, coupling_name});
-          DEBUG_MSG("Created coupling block connection: " << connected_block << "-> "<< coupling_name);
-        } // connected_type == "ClosedLoopRCR"
-      } // coupling_loc
-    } // for (auto coupling_config : config["external_solver_coupling_blocks"])
+          DEBUG_MSG("Created coupling block connection: "
+                    << connected_block << "-> " << coupling_name);
+        }  // connected_type == "ClosedLoopRCR"
+      }    // coupling_loc
+    }  // for (auto coupling_config : config["external_solver_coupling_blocks"])
   } catch (simdjson::simdjson_error) {
   }
   DEBUG_MSG("Finished creating external coupling blocks.");
@@ -393,7 +420,8 @@ void ConfigReader<T>::load(std::string &specifier) {
         Pd = bc_values["Pd"];
       model->blocks.push_back(new MODEL::WindkesselBC<T>(
           Rp = Rp, C = C, Rd = Rd, Pd = Pd, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(bc_name), block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "ClosedLoopRCR") {
@@ -405,7 +433,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->blocks.push_back(new MODEL::ClosedLoopRCRBC<T>(
           Rp = Rp, C = C, Rd = Rd, closed_loop_outlet = closed_loop_outlet,
           static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(bc_name), block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "FLOW") {
@@ -431,7 +460,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
           q_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(bc_name), block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
 
@@ -457,7 +487,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       MODEL::TimeDependentParameter pd_param(t, Pd);
       model->blocks.push_back(new MODEL::ResistanceBC<T>(
           r_param, pd_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(bc_name), block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "PRESSURE") {
@@ -471,7 +502,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       MODEL::TimeDependentParameter p_param(t, P);
       if ((p_param.isconstant == false) && (p_param.isperiodic == true)) {
-      //if (p_param.isconstant == false) {
+        // if (p_param.isconstant == false) {
         if ((sim_cardiac_cycle_period > 0.0) &&
             (p_param.cycle_period != sim_cardiac_cycle_period)) {
           throw std::runtime_error(
@@ -483,7 +514,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
           p_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(bc_name), block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "CORONARY") {
@@ -513,7 +545,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->blocks.push_back(new MODEL::OpenLoopCoronaryBC<T>(
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, pim_param, pv_param,
           static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(bc_name), block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else if (bc_type == "ClosedLoopCoronary") {
@@ -524,7 +557,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->blocks.push_back(new MODEL::ClosedLoopCoronaryBC<T>(
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim,
           static_cast<std::string>(side), static_cast<std::string>(bc_name)));
-      model->block_index_map.insert({static_cast<std::string>(bc_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(bc_name), block_count});
       block_count++;
       DEBUG_MSG("Created boundary condition " << bc_name);
     } else {
@@ -540,7 +574,8 @@ void ConfigReader<T>::load(std::string &specifier) {
     if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
       model->blocks.push_back(
           new MODEL::Junction<T>(static_cast<std::string>(junction_name)));
-      model->block_index_map.insert({static_cast<std::string>(junction_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(junction_name), block_count});
       block_count++;
     } else if (j_type == "resistive_junction") {
       std::vector<T> R;
@@ -549,7 +584,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       model->blocks.push_back(new MODEL::ResistiveJunction<T>(
           R, static_cast<std::string>(junction_name)));
-      model->block_index_map.insert({static_cast<std::string>(junction_name),block_count});
+      model->block_index_map.insert(
+          {static_cast<std::string>(junction_name), block_count});
       block_count++;
     } else {
       throw std::invalid_argument("Unknown junction type");
@@ -578,7 +614,9 @@ void ConfigReader<T>::load(std::string &specifier) {
         if (heartpulmonary_block_present == false) {
           heartpulmonary_block_present = true;
           if (sim_steady_initial == true) {
-            std::runtime_error("ERROR: Steady initial condition is not compatible with ClosedLoopHeartAndPulmonary block.");
+            std::runtime_error(
+                "ERROR: Steady initial condition is not compatible with "
+                "ClosedLoopHeartAndPulmonary block.");
           }
           sim_steady_initial = false;
           std::string_view heartpulmonary_name = "CLH";
@@ -630,7 +668,8 @@ void ConfigReader<T>::load(std::string &specifier) {
             model->blocks.push_back(new MODEL::ClosedLoopHeartPulmonary<T>(
                 param_values, cycle_period,
                 static_cast<std::string>(heartpulmonary_name)));
-            model->block_index_map.insert({static_cast<std::string>(heartpulmonary_name),block_count});
+            model->block_index_map.insert(
+                {static_cast<std::string>(heartpulmonary_name), block_count});
             block_count++;
           } else {
             throw std::runtime_error(
@@ -642,7 +681,9 @@ void ConfigReader<T>::load(std::string &specifier) {
               {heart_inlet_junction_name, heartpulmonary_name});
           model->blocks.push_back(new MODEL::Junction<T>(
               static_cast<std::string>(heart_inlet_junction_name)));
-          model->block_index_map.insert({static_cast<std::string>(heart_inlet_junction_name),block_count});
+          model->block_index_map.insert(
+              {static_cast<std::string>(heart_inlet_junction_name),
+               block_count});
           block_count++;
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back(
@@ -654,7 +695,9 @@ void ConfigReader<T>::load(std::string &specifier) {
               {heartpulmonary_name, heart_outlet_junction_name});
           model->blocks.push_back(new MODEL::Junction<T>(
               static_cast<std::string>(heart_outlet_junction_name)));
-          model->block_index_map.insert({static_cast<std::string>(heart_outlet_junction_name),block_count});
+          model->block_index_map.insert(
+              {static_cast<std::string>(heart_outlet_junction_name),
+               block_count});
           block_count++;
           for (auto heart_outlet_block : closed_loop_config["outlet_blocks"]) {
             connections.push_back(
@@ -675,7 +718,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       for (auto &ele2 : model->blocks) {
         if ((ele1->name == std::get<0>(connection)) &&
             (ele2->name == std::get<1>(connection))) {
-          model->nodes.push_back(new MODEL::Node(ele1->name + ":" + ele2->name));
+          model->nodes.push_back(
+              new MODEL::Node(ele1->name + ":" + ele2->name));
           DEBUG_MSG("Created node " << model->nodes.back()->name);
           ele1->outlet_nodes.push_back(model->nodes.back());
           ele2->inlet_nodes.push_back(model->nodes.back());
@@ -698,7 +742,8 @@ void ConfigReader<T>::load(std::string &specifier) {
   }
   // Calculate time step size
   if (!sim_coupled) {
-    sim_time_step_size = sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
+    sim_time_step_size =
+        sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
   } else {
     sim_time_step_size = sim_external_step_size / (T(sim_num_time_steps) - 1.0);
   }
@@ -717,7 +762,7 @@ void ConfigReader<T>::load(std::string &specifier) {
   }
   try {
     auto initial_condition = config["initial_condition"].value();
-    // Check for pressure_all or flow_all condition. 
+    // Check for pressure_all or flow_all condition.
     // This will initialize all pressure:* and flow:* variables.
     T init_p, init_q;
     bool init_p_flag = false;
@@ -725,25 +770,32 @@ void ConfigReader<T>::load(std::string &specifier) {
     try {
       init_p = initial_condition["pressure_all"];
       init_p_flag = true;
-    } catch (simdjson::simdjson_error) {}
+    } catch (simdjson::simdjson_error) {
+    }
     try {
       init_q = initial_condition["flow_all"];
       init_q_flag = true;
-    } catch (simdjson::simdjson_error) {}
+    } catch (simdjson::simdjson_error) {
+    }
     // Loop through variables and check for initial conditions.
     for (size_t i = 0; i < model->dofhandler.size(); i++) {
       try {
         initial_state.y[i] = initial_condition[model->dofhandler.variables[i]];
       } catch (simdjson::simdjson_error) {
         std::string var_name = model->dofhandler.variables[i];
-        if ((init_p_flag == true) && ((var_name.substr(0,9) == "pressure:") || (var_name.substr(0,4) == "P_c:"))) {
+        if ((init_p_flag == true) && ((var_name.substr(0, 9) == "pressure:") ||
+                                      (var_name.substr(0, 4) == "P_c:"))) {
           initial_state.y[i] = init_p;
-          DEBUG_MSG("pressure_all initial condition for "<< model->dofhandler.variables[i]);
-        } else if ((init_q_flag == true) && (var_name.substr(0,5) == "flow:")) {
+          DEBUG_MSG("pressure_all initial condition for "
+                    << model->dofhandler.variables[i]);
+        } else if ((init_q_flag == true) &&
+                   (var_name.substr(0, 5) == "flow:")) {
           initial_state.y[i] = init_q;
-          DEBUG_MSG("flow_all initial condition for "<< model->dofhandler.variables[i]);
-        } else  {
-          DEBUG_MSG("No initial condition found for "<< model->dofhandler.variables[i]);
+          DEBUG_MSG("flow_all initial condition for "
+                    << model->dofhandler.variables[i]);
+        } else {
+          DEBUG_MSG("No initial condition found for "
+                    << model->dofhandler.variables[i]);
         }
       }
     }

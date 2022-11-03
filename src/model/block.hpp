@@ -286,10 +286,10 @@ void Block<T>::get_parameter_value(std::string message, T &param_value) {}
 
 template <typename T>
 void Block<T>::set_ICs(ALGEBRA::State<T> &state) {}
-  
+
 template <typename T>
 void Block<T>::update_block_params(std::vector<T> new_params) {}
-  
+
 template <typename T>
 void Block<T>::get_block_params(std::vector<T> &block_params) {}
 

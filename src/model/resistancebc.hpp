@@ -201,12 +201,12 @@ void ResistanceBC<T>::update_block_params(std::vector<T> new_params) {
   std::vector<T> Pd_new;
   int num_time_pts = (int)new_params[0];
   for (int i = 0; i < num_time_pts; i++) {
-    t_new.push_back(new_params[1+i]);
-    R_new.push_back(new_params[1+num_time_pts+i]);
-    Pd_new.push_back(new_params[1+2*num_time_pts+i]);
+    t_new.push_back(new_params[1 + i]);
+    R_new.push_back(new_params[1 + num_time_pts + i]);
+    Pd_new.push_back(new_params[1 + 2 * num_time_pts + i]);
   }
-  this->params.R.update_params(t_new,R_new);
-  this->params.Pd.update_params(t_new,Pd_new);
+  this->params.R.update_params(t_new, R_new);
+  this->params.Pd.update_params(t_new, Pd_new);
 }
 template <typename T>
 void ResistanceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {

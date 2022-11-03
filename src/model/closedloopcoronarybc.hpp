@@ -312,8 +312,11 @@ void ClosedLoopCoronaryBC<T>::update_block_params(std::vector<T> new_params) {
 
 template <typename T>
 void ClosedLoopCoronaryBC<T>::get_block_params(std::vector<T> &block_params) {
-  if (block_params.size() != 6 ) {
-    throw std::runtime_error("Wrong vector size in get_block_params for ClosedLoopCoronaryBC. Size should be 6 but is currently " + std::to_string(block_params.size()));
+  if (block_params.size() != 6) {
+    throw std::runtime_error(
+        "Wrong vector size in get_block_params for ClosedLoopCoronaryBC. Size "
+        "should be 6 but is currently " +
+        std::to_string(block_params.size()));
   }
   block_params[0] = this->params.Ra;
   block_params[1] = this->params.Ram;

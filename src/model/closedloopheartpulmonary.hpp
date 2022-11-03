@@ -284,7 +284,8 @@ void ClosedLoopHeartPulmonary<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void ClosedLoopHeartPulmonary<T>::update_block_params(std::vector<T> new_params) {
+void ClosedLoopHeartPulmonary<T>::update_block_params(
+    std::vector<T> new_params) {
   this->params.Tsa = new_params[0];
   this->params.tpwave = new_params[1];
   this->params.Erv_s = new_params[2];
@@ -315,9 +316,13 @@ void ClosedLoopHeartPulmonary<T>::update_block_params(std::vector<T> new_params)
 }
 
 template <typename T>
-void ClosedLoopHeartPulmonary<T>::get_block_params(std::vector<T> &block_params) {
-  if (block_params.size() != 27 ) {
-    throw std::runtime_error("Wrong vector size in get_block_params for ClosedLoopHeartPulmonary. Size should be 27 but is currently " + std::to_string(block_params.size()));
+void ClosedLoopHeartPulmonary<T>::get_block_params(
+    std::vector<T> &block_params) {
+  if (block_params.size() != 27) {
+    throw std::runtime_error(
+        "Wrong vector size in get_block_params for ClosedLoopHeartPulmonary. "
+        "Size should be 27 but is currently " +
+        std::to_string(block_params.size()));
   }
   block_params[0] = this->params.Tsa;
   block_params[1] = this->params.tpwave;
@@ -601,11 +606,11 @@ void ClosedLoopHeartPulmonary<T>::get_valve_positions(
 
 template <typename T>
 void ClosedLoopHeartPulmonary<T>::set_ICs(ALGEBRA::State<T> &state) {
-//state.y[this->global_var_ids[4]] = 38.43;   // RA vol.
-//state.y[this->global_var_ids[7]] = 96.07;   // RV vol.
-//state.y[this->global_var_ids[11]] = 38.43;  // LA vol.
-//state.y[this->global_var_ids[14]] = 96.07;  // LV vol.
-//state.y[this->global_var_ids[9]] = 8.0;     // Pulm pressure
+  // state.y[this->global_var_ids[4]] = 38.43;   // RA vol.
+  // state.y[this->global_var_ids[7]] = 96.07;   // RV vol.
+  // state.y[this->global_var_ids[11]] = 38.43;  // LA vol.
+  // state.y[this->global_var_ids[14]] = 96.07;  // LV vol.
+  // state.y[this->global_var_ids[9]] = 8.0;     // Pulm pressure
   // Below ICs likely are not needed (but retained as comments in case they are)
   // state.y[this->global_var_ids[0]] = 4.72;   // RA pressure
   // state.y[this->global_var_ids[6]] = 14.58;  // RV pressure

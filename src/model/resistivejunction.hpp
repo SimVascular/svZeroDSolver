@@ -200,7 +200,6 @@ void ResistiveJunction<T>::update_block_params(std::vector<T> new_params) {
   this->params.R = new_params;
 }
 
-
 template <typename T>
 void ResistiveJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
   for (size_t i = 0; i < num_inlets; i++) {

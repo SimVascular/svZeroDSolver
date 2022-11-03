@@ -31,6 +31,8 @@ The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and
 indicates on merge requests when the code doesnt't yet meet all style
 requirements.
 
+On Sherlock at Stanford, clang-format is included in the `llvm` module.
+
 ## Documentation
 
 We use [Doxygen](https://doxygen.nl) to automatically build an html documentation

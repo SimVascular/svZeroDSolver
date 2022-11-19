@@ -36,6 +36,7 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
+#include "bloodvessel.hpp"
 
 namespace MODEL {
 /**
@@ -106,15 +107,23 @@ class BloodVesselJunction : public Block<T> {
    * element.
    */
   struct Parameters : public Block<T>::Parameters {
-    std::vector<T> R;  ///< Poiseuille resistance
+    std::vector<T> R;                     ///< Poiseuille resistances
+    std::vector<T> C;                     ///< Capacitances
+    std::vector<T> L;                     ///< Inductances
+    std::vector<T> stenosis_coefficient;  ///< Stenosis Coefficients
   };
 
   /**
    * @brief Construct a new BloodVesselJunction object
    *
+   * @param R Poiseuille resistances
+   * @param C Capacitances
+   * @param L Inductances
+   * @param stenosis_coefficient Stenosis Coefficients
    * @param name Name
    */
-  BloodVesselJunction(std::vector<T> R, std::string name);
+  BloodVesselJunction(std::vector<T> R, std::vector<T> C, std::vector<T> L,
+                      std::vector<T> stenosis_coefficient, std::string name);
 
   /**
    * @brief Destroy the BloodVesselJunction object
@@ -142,6 +151,16 @@ class BloodVesselJunction : public Block<T> {
   void update_constant(ALGEBRA::SparseSystem<T> &system);
 
   /**
+   * @brief Update the solution-dependent contributions of the element in a
+   * sparse system
+   *
+   * @param system System to update contributions at
+   * @param y Current solution
+   */
+  void update_solution(ALGEBRA::SparseSystem<T> &system,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+
+  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system
@@ -162,16 +181,23 @@ class BloodVesselJunction : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 
  private:
+  std::vector<BloodVessel<T>*> blood_vessels;
   Parameters params;
   unsigned int num_inlets;
   unsigned int num_outlets;
 };
 
 template <typename T>
-BloodVesselJunction<T>::BloodVesselJunction(std::vector<T> R, std::string name)
+BloodVesselJunction<T>::BloodVesselJunction(std::vector<T> R, std::vector<T> C,
+                                            std::vector<T> L,
+                                            std::vector<T> stenosis_coefficient,
+                                            std::string name)
     : Block<T>(name) {
   this->name = name;
   this->params.R = R;
+  this->params.C = C;
+  this->params.L = L;
+  this->params.stenosis_coefficient = stenosis_coefficient;
 }
 
 template <typename T>
@@ -183,39 +209,33 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
   // inlets/outlets. Must be set before calling parent constructor
   num_inlets = this->inlet_nodes.size();
   num_outlets = this->outlet_nodes.size();
-  Block<T>::setup_dofs_(dofhandler, num_inlets + num_outlets + 1,
-                        {"pressure_c"});
-  num_triplets["F"] = (num_inlets + num_outlets) * 4;
+  for (size_t i = 0; i < num_outlets; i++) {
+    blood_vessels.push_back(new BloodVessel<T>(
+        params.R[i], params.C[i], params.L[i], params.stenosis_coefficient[i],
+        this->name + "_bv" + std::to_string(i)));
+    blood_vessels[i]->inlet_nodes.push_back(this->inlet_nodes[0]);
+    blood_vessels[i]->outlet_nodes.push_back(this->outlet_nodes[i]);
+    blood_vessels[i]->setup_dofs(dofhandler);
+  }
+  num_triplets = {
+      {"F", 10 * num_outlets},
+      {"E", 2 * num_outlets},
+      {"D", 2 * num_outlets},
+  };
 }
 
 template <typename T>
 void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
-  for (size_t i = 0; i < num_inlets; i++) {
-    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[i * 2]) =
-        1.0;
-    system.F.coeffRef(this->global_eqn_ids[i],
-                      this->global_var_ids[i * 2 + 1]) = -params.R[i];
-    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids.back()) =
-        -1.0;
+  for (auto bv : blood_vessels) {
+    bv->update_constant(system);
   }
-  for (size_t i = num_inlets; i < num_inlets + num_outlets; i++) {
-    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[i * 2]) =
-        -1.0;
-    system.F.coeffRef(this->global_eqn_ids[i],
-                      this->global_var_ids[i * 2 + 1]) = -params.R[i];
-    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids.back()) =
-        1.0;
-  }
+}
 
-  // Mass conservation
-  for (size_t i = 1; i < num_inlets * 2; i = i + 2) {
-    system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets],
-                      this->global_var_ids[i]) = 1.0;
-  }
-  for (size_t i = (num_inlets * 2) + 1; i < (num_inlets + num_outlets) * 2;
-       i = i + 2) {
-    system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets],
-                      this->global_var_ids[i]) = -1.0;
+template <typename T>
+void BloodVesselJunction<T>::update_solution(
+    ALGEBRA::SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+  for (auto bv : blood_vessels) {
+    bv->update_solution(system, y);
   }
 }
 

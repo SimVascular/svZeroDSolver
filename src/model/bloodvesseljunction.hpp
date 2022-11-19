@@ -183,7 +183,6 @@ class BloodVesselJunction : public Block<T> {
  private:
   std::vector<BloodVessel<T>*> blood_vessels;
   Parameters params;
-  unsigned int num_inlets;
   unsigned int num_outlets;
 };
 
@@ -207,8 +206,12 @@ template <typename T>
 void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
   // Set number of equations of a junction block based on number of
   // inlets/outlets. Must be set before calling parent constructor
-  num_inlets = this->inlet_nodes.size();
   num_outlets = this->outlet_nodes.size();
+  std::list<std::string> internal_var_names;
+  for (size_t i = 0; i < num_outlets; i++) {
+    internal_var_names.push_back("flow_" + std::to_string(i));
+  }
+  Block<T>::setup_dofs_(dofhandler, 1, internal_var_names);
   for (size_t i = 0; i < num_outlets; i++) {
     blood_vessels.push_back(new BloodVessel<T>(
         params.R[i], params.C[i], params.L[i], params.stenosis_coefficient[i],
@@ -216,9 +219,10 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
     blood_vessels[i]->inlet_nodes.push_back(this->inlet_nodes[0]);
     blood_vessels[i]->outlet_nodes.push_back(this->outlet_nodes[i]);
     blood_vessels[i]->setup_dofs(dofhandler);
+    blood_vessels[i]->global_var_ids[1] = this->global_var_ids.end()[i-num_outlets];
   }
   num_triplets = {
-      {"F", 10 * num_outlets},
+      {"F", 10 * num_outlets + num_outlets + 1},
       {"E", 2 * num_outlets},
       {"D", 2 * num_outlets},
   };
@@ -228,6 +232,13 @@ template <typename T>
 void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
   for (auto bv : blood_vessels) {
     bv->update_constant(system);
+  }
+  // Mass conservation
+  system.F.coeffRef(this->global_eqn_ids[0],
+                    this->global_var_ids[1]) = 1.0;
+  for (size_t i = 0; i < num_outlets; i++) {
+    system.F.coeffRef(this->global_eqn_ids[0],
+                      this->global_var_ids.end()[-(i+1)]) = -1.0;
   }
 }
 

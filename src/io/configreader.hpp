@@ -421,6 +421,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       connections.push_back(
           {junction_name, vessel_id_map[outlet_vessel.get_int64()]});
     }
+    DEBUG_MSG("Created junction " << junction_name);
   }
 
   // Create closed-loop blocks

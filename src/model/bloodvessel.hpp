@@ -241,7 +241,7 @@ void BloodVessel<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 template <typename T>
 void BloodVessel<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
                                      Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  T q_in = fabs(y[this->inlet_nodes[0]->flow_dof]);
+  T q_in = fabs(y[this->global_var_ids[1]]);
   T fac1 = -params.stenosis_coefficient * q_in;
   T fac2 = fac1 - params.R;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac2;

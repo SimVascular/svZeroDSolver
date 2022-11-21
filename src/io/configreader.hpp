@@ -392,7 +392,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       std::vector<T> C;
       std::vector<T> L;
       std::vector<T> stenosis_coefficient;
-      for (auto x : junction_config["junction_values"]["R"].get_array()) {
+      for (auto x : junction_config["junction_values"]["R_poiseuille"].get_array()) {
         R.push_back(x.get_double());
       }
       for (auto x : junction_config["junction_values"]["C"].get_array()) {

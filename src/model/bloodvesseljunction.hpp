@@ -42,58 +42,54 @@ namespace MODEL {
 /**
  * @brief BloodVesselJunction
  *
- * Models a junction with arbitrary resistive inlets and outlets. Across all
- * inlets and outlets of the junction, mass is conserved.
+ * Models a junction with one inlet and arbitrary outlets using
+ * MODEL::BloodVessel elements between each inlet and outlet pair.
  *
  * \f[
  * \begin{circuitikz}
- * \draw [-latex] (0.25,1.4) node[left] {$Q_{in,1}$} -- (0.85,1.1);
- * \draw [-latex] (0.25,-1.4) node[left] {$Q_{in,1}$} -- (0.85,-1.1);
- * \draw (1,1.0) node[anchor=south]{$P_{in,1}$} to [R, , l=$R_{in,1}$, *-*]
- * (3.0,0) node[anchor=north] {$P_{C}$}; \draw (1,-1.0)
- * node[anchor=north]{$P_{in, 2}$} to [R, , l=$R_{in,2}$, *-*] (3.0,0); \draw
- * (3,0) node[anchor=south]{} to [R, l=$R_{out,1}$, -*] (5,1.0); \draw (4.3,1.1)
- * node[anchor=south] {$P_{out,1}$}; \draw (3,0) node[anchor=south]{} to [R,
- * l=$R_{out,2}$, -*] (5,-1.0); \draw (4.3,-1.1) node[anchor=north]
- * {$P_{out,2}$}; \draw [-latex] (5.15,1.1) -- (5.75,1.4) node[right]
- * {$Q_{out,1}$}; \draw [-latex] (5.15,-1.1) -- (5.75,-1.4) node[right]
+ * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1,0.1) node[anchor=south]{$P_{in}$};
+ * \draw (1,0) to [short, *-] (2.5,0.75);
+ * \draw (1,0) to [short, *-] (2.5,-0.75);
+ * \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
+ * (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{$Q_{in,1}$}; \draw (4.6,0.75)
+ * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{} to
+ * [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
+ * node[anchor=north]{$Q_{in,2}$}; \draw (4.6,-0.75) node[anchor=north]
+ * {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
+ * {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
  * {$Q_{out,2}$}; \end{circuitikz} \f]
  *
  * ### Governing equations
  *
- * \f[
- * \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
- * \f]
+ * The governing equations are mainly defined by the blood vessel elements
+ * (see MODEL::BloodVessel for more information). For the sake of brevity,
+ * the blood vessel contributions are not repeated here. In addition to the
+ * individual blood vessel contributions, the following equation ensures
+ * mass conservation between the inlets of the blood vessel elements:
  *
  * \f[
- * P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}
- * \f]
- * \f[
- * P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}
+ * Q_{in}=\sum_{i}^{n_{outlets}} Q_{in, i}
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
- * & \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} &
- * \dots & P_{out, i}^{e} & Q_{out, i}^{e} & P_{C}\end{array}\right] \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
+ * & P_{out, 1}^{e} & Q_{out, 1}^{e} &
+ * \dots & P_{out, i}^{e} & Q_{out, i}^{e} & Q_{in,1} & \dots &
+ * Q_{in,i}\end{array}\right] \f]
  *
  * Mass conservation
  *
  * \f[
- * \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 & 1 & 0 & 1 & \dots & 0
- * & -1 & 0 & -1 & \dots & 0\end{array}\right] \f]
- *
- * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
- * \underbrace{1}_{P_{in,i}} & \underbrace{-R_{in,i}}_{Q_{in,i}} & \dots &
- * \underbrace{-1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
- * i\in n_{inlets}  \f]
- *
- * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
- * \underbrace{-1}_{P_{out,j}} & \underbrace{-R_{out,j}}_{Q_{out,j}} & \dots &
- * \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
- * j\in n_{oulets}  \f]
+ * \mathbf{F}^{e} = \left[\begin{array}{llllllllll}
+ * 0 & 1 & 0 & 0 & \dots & 0 & 0 & -1 & \dots & -1 \\
+ * & & & & & & & & & \\
+ * \multicolumn{10}{c}{\mathrm{< blood \, vessel \, contributions >}} \\
+ * & & & & & & & & &
+ * \end{array}\right]
+ * \f]
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
@@ -181,7 +177,7 @@ class BloodVesselJunction : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 
  private:
-  std::vector<BloodVessel<T>*> blood_vessels;
+  std::vector<BloodVessel<T> *> blood_vessels;
   Parameters params;
   unsigned int num_outlets;
 };
@@ -219,7 +215,8 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
     blood_vessels[i]->inlet_nodes.push_back(this->inlet_nodes[0]);
     blood_vessels[i]->outlet_nodes.push_back(this->outlet_nodes[i]);
     blood_vessels[i]->setup_dofs(dofhandler);
-    blood_vessels[i]->global_var_ids[1] = this->global_var_ids.end()[i-num_outlets];
+    blood_vessels[i]->global_var_ids[1] =
+        this->global_var_ids.end()[i - num_outlets];
   }
   num_triplets = {
       {"F", 10 * num_outlets + num_outlets + 1},
@@ -234,11 +231,10 @@ void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
     bv->update_constant(system);
   }
   // Mass conservation
-  system.F.coeffRef(this->global_eqn_ids[0],
-                    this->global_var_ids[1]) = 1.0;
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
   for (size_t i = 0; i < num_outlets; i++) {
     system.F.coeffRef(this->global_eqn_ids[0],
-                      this->global_var_ids.end()[-(i+1)]) = -1.0;
+                      this->global_var_ids.end()[-(i + 1)]) = -1.0;
   }
 }
 

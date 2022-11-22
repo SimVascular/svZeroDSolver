@@ -136,7 +136,12 @@
  * * macOS Monterey
  * 
  * @note If you want to use the Python interface of svZeroDPlus make
- * sure to **activate the correct Python environment** before building the solver.
+ * sure to **activate the correct Python environment** before building the
+ * solver. Also make sure to install the Python package using the `-e` options,
+ * i.e.
+ * \code
+ * pip install -e .
+ * \endcode
  *
  * ## Build in debug mode
  *

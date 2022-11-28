@@ -42,7 +42,7 @@
 \DoxyCodeLine{39 \textcolor{comment}{ * The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of}}
 \DoxyCodeLine{40 \textcolor{comment}{ * vascular networks using zero-\/dimensional (0D) lumped parameter models.}}
 \DoxyCodeLine{41 \textcolor{comment}{ *}}
-\DoxyCodeLine{42 \textcolor{comment}{ * * <a href="{}https://github.com/StanfordCBCL/svZeroDSolver"{}>Source}}
+\DoxyCodeLine{42 \textcolor{comment}{ * * <a href="{}https://github.com/StanfordCBCL/svZeroDPlus"{}>Source}}
 \DoxyCodeLine{43 \textcolor{comment}{ * repository</a>}}
 \DoxyCodeLine{44 \textcolor{comment}{ * * <a href="{}https://simvascular.github.io"{}>About SimVascular</a>}}
 \DoxyCodeLine{45 \textcolor{comment}{ *}}
@@ -73,7 +73,7 @@
 \DoxyCodeLine{70 \textcolor{comment}{ * wall, and inductance represents the inertia of the blood flow. Different}}
 \DoxyCodeLine{71 \textcolor{comment}{ * combinations of these building blocks, as well as others, can be formed to}}
 \DoxyCodeLine{72 \textcolor{comment}{ * reflect the hemodynamics and physiology of different cardiovascular}}
-\DoxyCodeLine{73 \textcolor{comment}{ * anatomies.These 0D models are governed by differential algebraic equations}}
+\DoxyCodeLine{73 \textcolor{comment}{ * anatomies. These 0D models are governed by differential algebraic equations}}
 \DoxyCodeLine{74 \textcolor{comment}{ * (DAEs).}}
 \DoxyCodeLine{75 \textcolor{comment}{ *}}
 \DoxyCodeLine{76 \textcolor{comment}{ * \# Architecture}}
@@ -84,231 +84,245 @@
 \DoxyCodeLine{81 \textcolor{comment}{ * using individual classes to represent different 0D elements of the}}
 \DoxyCodeLine{82 \textcolor{comment}{ * model. The elements are part of the MODEL namespace. Currently}}
 \DoxyCodeLine{83 \textcolor{comment}{ * supported elements are:}}
-\DoxyCodeLine{84 \textcolor{comment}{ *}}
-\DoxyCodeLine{85 \textcolor{comment}{ * * MODEL::BloodVessel: RCL blood vessel respresentation with optional}}
-\DoxyCodeLine{86 \textcolor{comment}{ * stenosis.}}
-\DoxyCodeLine{87 \textcolor{comment}{ * * MODEL::Junction: Junction element with arbitrary inlets and outlets.}}
-\DoxyCodeLine{88 \textcolor{comment}{ * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.}}
-\DoxyCodeLine{89 \textcolor{comment}{ * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.}}
-\DoxyCodeLine{90 \textcolor{comment}{ * * MODEL::ResistanceBC: Resistance boundary condition.}}
-\DoxyCodeLine{91 \textcolor{comment}{ * * MODEL::WindkesselBC: RCR Windkessel boundary condition.}}
-\DoxyCodeLine{92 \textcolor{comment}{ * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.}}
-\DoxyCodeLine{93 \textcolor{comment}{ *}}
-\DoxyCodeLine{94 \textcolor{comment}{ * The elements are based on the parent MODEL::Block class. More information}}
-\DoxyCodeLine{95 \textcolor{comment}{ * about the elements can be found on their respective pages. The elements are}}
-\DoxyCodeLine{96 \textcolor{comment}{ * connected to each other via nodes (see MODEL::Node). Each node corresponds to}}
-\DoxyCodeLine{97 \textcolor{comment}{ * a flow and a pressure value of the model. The MODEL::DOFHandler handles the}}
-\DoxyCodeLine{98 \textcolor{comment}{ * degrees-\/of-\/freedom (DOF) of the system by assigning DOF indices to each}}
-\DoxyCodeLine{99 \textcolor{comment}{ * element that determine the location of the local element contribution in the}}
-\DoxyCodeLine{100 \textcolor{comment}{ * global system. The complete model is stored and managed by the MODEL::Model}}
-\DoxyCodeLine{101 \textcolor{comment}{ * class.}}
-\DoxyCodeLine{102 \textcolor{comment}{ *}}
-\DoxyCodeLine{103 \textcolor{comment}{ * \#\# Algebra}}
+\DoxyCodeLine{84 \textcolor{comment}{ * }}
+\DoxyCodeLine{85 \textcolor{comment}{ * \#\#\#\# Vessels}}
+\DoxyCodeLine{86 \textcolor{comment}{ *}}
+\DoxyCodeLine{87 \textcolor{comment}{ * * MODEL::BloodVessel: RCL blood vessel with optional stenosis.}}
+\DoxyCodeLine{88 \textcolor{comment}{ * }}
+\DoxyCodeLine{89 \textcolor{comment}{ * \#\#\#\# Junctions}}
+\DoxyCodeLine{90 \textcolor{comment}{ * }}
+\DoxyCodeLine{91 \textcolor{comment}{ * * MODEL::Junction: Mass conservation junction element.}}
+\DoxyCodeLine{92 \textcolor{comment}{ * * MODEL::ResistiveJunction: Resistive junction element.}}
+\DoxyCodeLine{93 \textcolor{comment}{ * * MODEL::BloodVesselJunction: RCL junction element with optional stenoses.}}
+\DoxyCodeLine{94 \textcolor{comment}{ * }}
+\DoxyCodeLine{95 \textcolor{comment}{ * \#\#\#\# Boundary conditions}}
+\DoxyCodeLine{96 \textcolor{comment}{ * }}
+\DoxyCodeLine{97 \textcolor{comment}{ * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.}}
+\DoxyCodeLine{98 \textcolor{comment}{ * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.}}
+\DoxyCodeLine{99 \textcolor{comment}{ * * MODEL::ResistanceBC: Resistance boundary condition.}}
+\DoxyCodeLine{100 \textcolor{comment}{ * * MODEL::WindkesselBC: RCR Windkessel boundary condition.}}
+\DoxyCodeLine{101 \textcolor{comment}{ * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.}}
+\DoxyCodeLine{102 \textcolor{comment}{ * * MODEL::ClosedLoopCoronaryBC: Closed Loop coronary boundary condition.}}
+\DoxyCodeLine{103 \textcolor{comment}{ * * MODEL::ClosedLoopHeartPulmonary: Heart and pulmonary circulation model.}}
 \DoxyCodeLine{104 \textcolor{comment}{ *}}
-\DoxyCodeLine{105 \textcolor{comment}{ * Everything related to solving the system of equation is contained in the}}
-\DoxyCodeLine{106 \textcolor{comment}{ * ALGEBRA namespace. The ALGEBRA::Integrator}}
-\DoxyCodeLine{107 \textcolor{comment}{ * handles the time integration scheme (see Integrator documentation for}}
-\DoxyCodeLine{108 \textcolor{comment}{ * more information on that).}}
-\DoxyCodeLine{109 \textcolor{comment}{ *}}
-\DoxyCodeLine{110 \textcolor{comment}{ * \#\# Input/output}}
-\DoxyCodeLine{111 \textcolor{comment}{ *}}
-\DoxyCodeLine{112 \textcolor{comment}{ * Finally the IO namespace provides everything related to reading and writing}}
-\DoxyCodeLine{113 \textcolor{comment}{ * files. The IO::ConfigReader reads the simultion config and IO::write\_csv and}}
-\DoxyCodeLine{114 \textcolor{comment}{ * IO::write\_json are two different methods for writing the result files.}}
+\DoxyCodeLine{105 \textcolor{comment}{ * The elements are based on the parent MODEL::Block class. More information}}
+\DoxyCodeLine{106 \textcolor{comment}{ * about the elements can be found on their respective pages. The elements are}}
+\DoxyCodeLine{107 \textcolor{comment}{ * connected to each other via nodes (see MODEL::Node). Each node corresponds to}}
+\DoxyCodeLine{108 \textcolor{comment}{ * a flow and a pressure value of the model. The MODEL::DOFHandler handles the}}
+\DoxyCodeLine{109 \textcolor{comment}{ * degrees-\/of-\/freedom (DOF) of the system by assigning DOF indices to each}}
+\DoxyCodeLine{110 \textcolor{comment}{ * element that determine the location of the local element contribution in the}}
+\DoxyCodeLine{111 \textcolor{comment}{ * global system. The complete model is stored and managed by the MODEL::Model}}
+\DoxyCodeLine{112 \textcolor{comment}{ * class.}}
+\DoxyCodeLine{113 \textcolor{comment}{ *}}
+\DoxyCodeLine{114 \textcolor{comment}{ * \#\# Algebra}}
 \DoxyCodeLine{115 \textcolor{comment}{ *}}
-\DoxyCodeLine{116 \textcolor{comment}{ * All classes make use of templates to allow easy exchange of scalar}}
-\DoxyCodeLine{117 \textcolor{comment}{ * types like `double` or `float`.}}
-\DoxyCodeLine{118 \textcolor{comment}{ *}}
-\DoxyCodeLine{119 \textcolor{comment}{ * \# Build svZeroDSolver}}
+\DoxyCodeLine{116 \textcolor{comment}{ * Everything related to solving the system of equation is contained in the}}
+\DoxyCodeLine{117 \textcolor{comment}{ * ALGEBRA namespace. The ALGEBRA::Integrator}}
+\DoxyCodeLine{118 \textcolor{comment}{ * handles the time integration scheme (see Integrator documentation for}}
+\DoxyCodeLine{119 \textcolor{comment}{ * more information on that).}}
 \DoxyCodeLine{120 \textcolor{comment}{ *}}
-\DoxyCodeLine{121 \textcolor{comment}{ * svZeroDSolver uses CMake to build the tool. The dependencies are installed}}
-\DoxyCodeLine{122 \textcolor{comment}{ * by CMake. If you want to use the C++ Python interface of svZeroDSolver make}}
-\DoxyCodeLine{123 \textcolor{comment}{ * sure to checkout the correct Python environment beforehand. Currently}}
-\DoxyCodeLine{124 \textcolor{comment}{ * supported are:}}
-\DoxyCodeLine{125 \textcolor{comment}{ * }}
-\DoxyCodeLine{126 \textcolor{comment}{ * * Ubuntu 18}}
-\DoxyCodeLine{127 \textcolor{comment}{ * * Ubuntu 20}}
-\DoxyCodeLine{128 \textcolor{comment}{ * * Ubuntu 22}}
-\DoxyCodeLine{129 \textcolor{comment}{ * * macOS Big Sur}}
-\DoxyCodeLine{130 \textcolor{comment}{ * * macOS Monterey}}
-\DoxyCodeLine{131 \textcolor{comment}{ *}}
-\DoxyCodeLine{132 \textcolor{comment}{ * \#\# Build in debug mode}}
-\DoxyCodeLine{133 \textcolor{comment}{ *}}
-\DoxyCodeLine{134 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{135 \textcolor{comment}{ * mkdir Debug}}
-\DoxyCodeLine{136 \textcolor{comment}{ * cd Debug}}
-\DoxyCodeLine{137 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Debug ..}}
-\DoxyCodeLine{138 \textcolor{comment}{ * cmake -\/-\/build .}}
-\DoxyCodeLine{139 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{140 \textcolor{comment}{ *}}
-\DoxyCodeLine{141 \textcolor{comment}{ * \#\# Build in release mode}}
+\DoxyCodeLine{121 \textcolor{comment}{ * \#\# Input/output}}
+\DoxyCodeLine{122 \textcolor{comment}{ *}}
+\DoxyCodeLine{123 \textcolor{comment}{ * Finally the IO namespace provides everything related to reading and writing}}
+\DoxyCodeLine{124 \textcolor{comment}{ * files. The IO::ConfigReader reads the simulation config and IO::to\_vessel\_csv and}}
+\DoxyCodeLine{125 \textcolor{comment}{ * IO::to\_variable\_csv are two different methods for writing the result files.}}
+\DoxyCodeLine{126 \textcolor{comment}{ *}}
+\DoxyCodeLine{127 \textcolor{comment}{ * \# Build svZeroDSolver}}
+\DoxyCodeLine{128 \textcolor{comment}{ *}}
+\DoxyCodeLine{129 \textcolor{comment}{ * svZeroDSolver uses CMake to build the tool. The dependencies are installed}}
+\DoxyCodeLine{130 \textcolor{comment}{ * by CMake. Currently supported are:}}
+\DoxyCodeLine{131 \textcolor{comment}{ * }}
+\DoxyCodeLine{132 \textcolor{comment}{ * * Ubuntu 18}}
+\DoxyCodeLine{133 \textcolor{comment}{ * * Ubuntu 20}}
+\DoxyCodeLine{134 \textcolor{comment}{ * * Ubuntu 22}}
+\DoxyCodeLine{135 \textcolor{comment}{ * * macOS Big Sur}}
+\DoxyCodeLine{136 \textcolor{comment}{ * * macOS Monterey}}
+\DoxyCodeLine{137 \textcolor{comment}{ * }}
+\DoxyCodeLine{138 \textcolor{comment}{ * @note If you want to use the Python interface of svZeroDPlus make}}
+\DoxyCodeLine{139 \textcolor{comment}{ * sure to **activate the correct Python environment** before building the}}
+\DoxyCodeLine{140 \textcolor{comment}{ * solver. Also make sure to install the Python package using the `-\/e` options,}}
+\DoxyCodeLine{141 \textcolor{comment}{ * i.e.}}
 \DoxyCodeLine{142 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{143 \textcolor{comment}{ * mkdir Release}}
-\DoxyCodeLine{144 \textcolor{comment}{ * cd Release}}
-\DoxyCodeLine{145 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release ..}}
-\DoxyCodeLine{146 \textcolor{comment}{ * cmake -\/-\/build .}}
-\DoxyCodeLine{147 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{148 \textcolor{comment}{ * }}
-\DoxyCodeLine{149 \textcolor{comment}{ * \#\# Build on Sherlock}}
-\DoxyCodeLine{150 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{151 \textcolor{comment}{ * module load cmake/3.23.1 gcc/12.1.0 binutils/2.38}}
-\DoxyCodeLine{152 \textcolor{comment}{ * mkdir Release}}
-\DoxyCodeLine{153 \textcolor{comment}{ * cd Release}}
-\DoxyCodeLine{154 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release -\/DCMAKE\_CXX\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -\/DCMAKE\_C\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..}}
-\DoxyCodeLine{155 \textcolor{comment}{ * cmake -\/-\/build .}}
-\DoxyCodeLine{156 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{157 \textcolor{comment}{ *}}
-\DoxyCodeLine{158 \textcolor{comment}{ * \# Run svZeroDSolver}}
-\DoxyCodeLine{159 \textcolor{comment}{ *}}
-\DoxyCodeLine{160 \textcolor{comment}{ * After building svZeroDSolver, the build folder contains an executable}}
-\DoxyCodeLine{161 \textcolor{comment}{ * called `svzerodsolver`. Run it with one of:}}
-\DoxyCodeLine{162 \textcolor{comment}{ *}}
-\DoxyCodeLine{163 \textcolor{comment}{ * \(\backslash\)code}}
-\DoxyCodeLine{164 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.csv}}
-\DoxyCodeLine{165 \textcolor{comment}{ * \(\backslash\)endcode}}
-\DoxyCodeLine{166 \textcolor{comment}{ *}}
-\DoxyCodeLine{167 \textcolor{comment}{ * `path/to/config.json` and `path/to/output.csv` should be replaced by the}}
-\DoxyCodeLine{168 \textcolor{comment}{ * correct paths to the input and output file, respectively.}}
-\DoxyCodeLine{169 \textcolor{comment}{ *}}
-\DoxyCodeLine{170 \textcolor{comment}{ * \#\# Simulation parameters}}
+\DoxyCodeLine{143 \textcolor{comment}{ * pip install -\/e .}}
+\DoxyCodeLine{144 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{145 \textcolor{comment}{ *}}
+\DoxyCodeLine{146 \textcolor{comment}{ * \#\# Build in debug mode}}
+\DoxyCodeLine{147 \textcolor{comment}{ *}}
+\DoxyCodeLine{148 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{149 \textcolor{comment}{ * mkdir Debug}}
+\DoxyCodeLine{150 \textcolor{comment}{ * cd Debug}}
+\DoxyCodeLine{151 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Debug ..}}
+\DoxyCodeLine{152 \textcolor{comment}{ * cmake -\/-\/build .}}
+\DoxyCodeLine{153 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{154 \textcolor{comment}{ *}}
+\DoxyCodeLine{155 \textcolor{comment}{ * \#\# Build in release mode}}
+\DoxyCodeLine{156 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{157 \textcolor{comment}{ * mkdir Release}}
+\DoxyCodeLine{158 \textcolor{comment}{ * cd Release}}
+\DoxyCodeLine{159 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release ..}}
+\DoxyCodeLine{160 \textcolor{comment}{ * cmake -\/-\/build .}}
+\DoxyCodeLine{161 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{162 \textcolor{comment}{ * }}
+\DoxyCodeLine{163 \textcolor{comment}{ * \#\# Build on Sherlock}}
+\DoxyCodeLine{164 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{165 \textcolor{comment}{ * module load cmake/3.23.1 gcc/12.1.0 binutils/2.38}}
+\DoxyCodeLine{166 \textcolor{comment}{ * mkdir Release}}
+\DoxyCodeLine{167 \textcolor{comment}{ * cd Release}}
+\DoxyCodeLine{168 \textcolor{comment}{ * cmake -\/DCMAKE\_BUILD\_TYPE=Release -\/DCMAKE\_CXX\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -\/DCMAKE\_C\_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..}}
+\DoxyCodeLine{169 \textcolor{comment}{ * cmake -\/-\/build .}}
+\DoxyCodeLine{170 \textcolor{comment}{ * \(\backslash\)endcode}}
 \DoxyCodeLine{171 \textcolor{comment}{ *}}
-\DoxyCodeLine{172 \textcolor{comment}{ * The svZeroDSolver can be configured with the following options in the}}
-\DoxyCodeLine{173 \textcolor{comment}{ * `simulation\_parameters` section of the input file. Parameters without a}}
-\DoxyCodeLine{174 \textcolor{comment}{ * default value must be specified.}}
-\DoxyCodeLine{175 \textcolor{comment}{ * }}
+\DoxyCodeLine{172 \textcolor{comment}{ * \# Run svZeroDSolver}}
+\DoxyCodeLine{173 \textcolor{comment}{ *}}
+\DoxyCodeLine{174 \textcolor{comment}{ * After building svZeroDSolver, the build folder contains an executable}}
+\DoxyCodeLine{175 \textcolor{comment}{ * called `svzerodsolver`. Run it with one of:}}
 \DoxyCodeLine{176 \textcolor{comment}{ *}}
-\DoxyCodeLine{177 \textcolor{comment}{ * Parameter key                           | Description                               | Default value}}
-\DoxyCodeLine{178 \textcolor{comment}{ * -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ }}
-\DoxyCodeLine{179 \textcolor{comment}{ * number\_of\_cardiac\_cycles                | Number of cardiac cycles to simulate      | -\/}}
-\DoxyCodeLine{180 \textcolor{comment}{ * number\_of\_time\_pts\_per\_cardiac\_cycle    | Number of time steps per cardiac cycle    | -\/}}
-\DoxyCodeLine{181 \textcolor{comment}{ * absolute\_tolerance                      | Absolute tolerance for time integration   | \(\backslash\)f\$10\string^\{-\/8\}\(\backslash\)f\$}}
-\DoxyCodeLine{182 \textcolor{comment}{ * maximum\_nonlinear\_iterations            | Maximum number of nonlinear iterations for time integration | \(\backslash\)f\$30\(\backslash\)f\$}}
-\DoxyCodeLine{183 \textcolor{comment}{ * steady\_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true}}
-\DoxyCodeLine{184 \textcolor{comment}{ * output\_variable\_based                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false}}
-\DoxyCodeLine{185 \textcolor{comment}{ * output\_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \(\backslash\)f\$1\(\backslash\)f\$}}
-\DoxyCodeLine{186 \textcolor{comment}{ * output\_mean\_only                        | Write only the mean values over every timestep to output file | false}}
-\DoxyCodeLine{187 \textcolor{comment}{ * output\_derivative                       | Write time derivatives to output file | false}}
-\DoxyCodeLine{188 \textcolor{comment}{ * output\_last\_cycle\_only                  | Write only the last cardiac cycle | false}}
+\DoxyCodeLine{177 \textcolor{comment}{ * \(\backslash\)code}}
+\DoxyCodeLine{178 \textcolor{comment}{ * ./svzerodsolver path/to/config.json path/to/output.csv}}
+\DoxyCodeLine{179 \textcolor{comment}{ * \(\backslash\)endcode}}
+\DoxyCodeLine{180 \textcolor{comment}{ *}}
+\DoxyCodeLine{181 \textcolor{comment}{ * `path/to/config.json` and `path/to/output.csv` should be replaced by the}}
+\DoxyCodeLine{182 \textcolor{comment}{ * correct paths to the input and output file, respectively.}}
+\DoxyCodeLine{183 \textcolor{comment}{ *}}
+\DoxyCodeLine{184 \textcolor{comment}{ * \#\# Simulation parameters}}
+\DoxyCodeLine{185 \textcolor{comment}{ *}}
+\DoxyCodeLine{186 \textcolor{comment}{ * The svZeroDSolver can be configured with the following options in the}}
+\DoxyCodeLine{187 \textcolor{comment}{ * `simulation\_parameters` section of the input file. Parameters without a}}
+\DoxyCodeLine{188 \textcolor{comment}{ * default value must be specified.}}
 \DoxyCodeLine{189 \textcolor{comment}{ * }}
-\DoxyCodeLine{190 \textcolor{comment}{ * }}
-\DoxyCodeLine{191 \textcolor{comment}{ * \# Developer Guide}}
-\DoxyCodeLine{192 \textcolor{comment}{ * }}
-\DoxyCodeLine{193 \textcolor{comment}{ * If you are a developer and want to contribute to svZeroDSolver, you can find}}
-\DoxyCodeLine{194 \textcolor{comment}{ * more helpful information in our [Developer Guide](docs/cpp/pages/developer\_guide.md).}}
-\DoxyCodeLine{195 \textcolor{comment}{ * }}
-\DoxyCodeLine{196 \textcolor{comment}{ */}}
-\DoxyCodeLine{197 \textcolor{comment}{// clang-\/format on}}
-\DoxyCodeLine{198 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{integrator_8hpp}{algebra/integrator.hpp}}"{}}}
-\DoxyCodeLine{199 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{state_8hpp}{algebra/state.hpp}}"{}}}
-\DoxyCodeLine{200 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{debug_8hpp}{helpers/debug.hpp}}"{}}}
-\DoxyCodeLine{201 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{endswith_8hpp}{helpers/endswith.hpp}}"{}}}
-\DoxyCodeLine{202 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{configreader_8hpp}{io/configreader.hpp}}"{}}}
-\DoxyCodeLine{203 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{csvwriter_8hpp}{io/csvwriter.hpp}}"{}}}
-\DoxyCodeLine{204 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{model_8hpp}{model/model.hpp}}"{}}}
-\DoxyCodeLine{205 }
-\DoxyCodeLine{206 \textcolor{comment}{// Setting scalar type to double}}
-\DoxyCodeLine{207 \textcolor{keyword}{typedef} \textcolor{keywordtype}{double} T;}
-\DoxyCodeLine{208 \textcolor{comment}{}}
-\DoxyCodeLine{209 \textcolor{comment}{/**}}
-\DoxyCodeLine{210 \textcolor{comment}{ *}}
-\DoxyCodeLine{211 \textcolor{comment}{ * @brief Run svZeroDSolver with configuration}}
-\DoxyCodeLine{212 \textcolor{comment}{ *}}
-\DoxyCodeLine{213 \textcolor{comment}{ * 1. Read the input file}}
-\DoxyCodeLine{214 \textcolor{comment}{ * 2. Create the 0D model}}
-\DoxyCodeLine{215 \textcolor{comment}{ * 3. (Optional) Solve for steady initial condition}}
-\DoxyCodeLine{216 \textcolor{comment}{ * 4. Run simulation}}
-\DoxyCodeLine{217 \textcolor{comment}{ * 5. Write output to file}}
-\DoxyCodeLine{218 \textcolor{comment}{ *}}
-\DoxyCodeLine{219 \textcolor{comment}{ * @param json\_config Path config or json encoded string with config}}
-\DoxyCodeLine{220 \textcolor{comment}{ * @return Result as csv encoded string}}
-\DoxyCodeLine{221 \textcolor{comment}{ */}}
-\DoxyCodeLine{222 \textcolor{keyword}{const} std::string \mbox{\hyperlink{main_8hpp_aeb3d695c62c5a6d74a0584e3c5bd65d2}{run}}(std::string\& json\_config) \{}
-\DoxyCodeLine{223   \textcolor{comment}{// Load model and configuration}}
-\DoxyCodeLine{224   DEBUG\_MSG(\textcolor{stringliteral}{"{}Read configuration"{}});}
-\DoxyCodeLine{225   \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO::ConfigReader<T>}} reader;}
-\DoxyCodeLine{226   reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a44d1b9249fc80c0e65a6267b42597bdb}{load}}(json\_config);}
-\DoxyCodeLine{227 }
-\DoxyCodeLine{228   \textcolor{comment}{// Setup system}}
-\DoxyCodeLine{229   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}} state = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_abe9831cb10972b4982a766aac615cb6c}{initial\_state}};}
-\DoxyCodeLine{230 }
-\DoxyCodeLine{231   \textcolor{comment}{// Create steady initial}}
-\DoxyCodeLine{232   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a1e593472af26af8f4bf98b158d996434}{sim\_steady\_initial}}) \{}
-\DoxyCodeLine{233     DEBUG\_MSG(\textcolor{stringliteral}{"{}Calculate steady initial condition"{}});}
-\DoxyCodeLine{234     T time\_step\_size\_steady = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_aaa79d0afffb88356f8d4ccbb7628309f}{sim\_cardiac\_cycle\_period}} / 10.0;}
-\DoxyCodeLine{235     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}.to\_steady();}
-\DoxyCodeLine{236     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator\_steady(}
-\DoxyCodeLine{237         reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}, time\_step\_size\_steady, 0.1, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}},}
-\DoxyCodeLine{238         reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}});}
-\DoxyCodeLine{239     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 31; i++) \{}
-\DoxyCodeLine{240       state = integrator\_steady.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(state, time\_step\_size\_steady * T(i),}
-\DoxyCodeLine{241                                      reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}});}
-\DoxyCodeLine{242     \}}
-\DoxyCodeLine{243     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}.to\_unsteady();}
-\DoxyCodeLine{244   \}}
-\DoxyCodeLine{245 }
-\DoxyCodeLine{246   \textcolor{comment}{// Set-\/up integrator}}
-\DoxyCodeLine{247   DEBUG\_MSG(\textcolor{stringliteral}{"{}Setup time integration"{}});}
-\DoxyCodeLine{248   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator(reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}},}
-\DoxyCodeLine{249                                     0.1, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}});}
-\DoxyCodeLine{250 }
-\DoxyCodeLine{251   \textcolor{comment}{// Initialize loop}}
-\DoxyCodeLine{252   std::vector<ALGEBRA::State<T>> states;}
-\DoxyCodeLine{253   std::vector<T> times;}
-\DoxyCodeLine{254   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}}) \{}
-\DoxyCodeLine{255     \textcolor{keywordtype}{int} num\_states = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}} / reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}} + 1;}
-\DoxyCodeLine{256     states.reserve(num\_states);}
-\DoxyCodeLine{257     times.reserve(num\_states);}
-\DoxyCodeLine{258   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{259     \textcolor{keywordtype}{int} num\_states = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}} / reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}} + 1;}
-\DoxyCodeLine{260     states.reserve(num\_states);}
-\DoxyCodeLine{261     times.reserve(num\_states);}
-\DoxyCodeLine{262   \}}
-\DoxyCodeLine{263   T time = 0.0;}
+\DoxyCodeLine{190 \textcolor{comment}{ *}}
+\DoxyCodeLine{191 \textcolor{comment}{ * Parameter key                           | Description                               | Default value}}
+\DoxyCodeLine{192 \textcolor{comment}{ * -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ | -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ }}
+\DoxyCodeLine{193 \textcolor{comment}{ * number\_of\_cardiac\_cycles                | Number of cardiac cycles to simulate      | -\/}}
+\DoxyCodeLine{194 \textcolor{comment}{ * number\_of\_time\_pts\_per\_cardiac\_cycle    | Number of time steps per cardiac cycle    | -\/}}
+\DoxyCodeLine{195 \textcolor{comment}{ * absolute\_tolerance                      | Absolute tolerance for time integration   | \(\backslash\)f\$10\string^\{-\/8\}\(\backslash\)f\$}}
+\DoxyCodeLine{196 \textcolor{comment}{ * maximum\_nonlinear\_iterations            | Maximum number of nonlinear iterations for time integration | \(\backslash\)f\$30\(\backslash\)f\$}}
+\DoxyCodeLine{197 \textcolor{comment}{ * steady\_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true}}
+\DoxyCodeLine{198 \textcolor{comment}{ * output\_variable\_based                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false}}
+\DoxyCodeLine{199 \textcolor{comment}{ * output\_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \(\backslash\)f\$1\(\backslash\)f\$}}
+\DoxyCodeLine{200 \textcolor{comment}{ * output\_mean\_only                        | Write only the mean values over every timestep to output file | false}}
+\DoxyCodeLine{201 \textcolor{comment}{ * output\_derivative                       | Write time derivatives to output file | false}}
+\DoxyCodeLine{202 \textcolor{comment}{ * output\_last\_cycle\_only                  | Write only the last cardiac cycle | false}}
+\DoxyCodeLine{203 \textcolor{comment}{ * }}
+\DoxyCodeLine{204 \textcolor{comment}{ * }}
+\DoxyCodeLine{205 \textcolor{comment}{ * \# Developer Guide}}
+\DoxyCodeLine{206 \textcolor{comment}{ * }}
+\DoxyCodeLine{207 \textcolor{comment}{ * If you are a developer and want to contribute to svZeroDSolver, you can find}}
+\DoxyCodeLine{208 \textcolor{comment}{ * more helpful information in our [Developer Guide](docs/cpp/pages/developer\_guide.md).}}
+\DoxyCodeLine{209 \textcolor{comment}{ * }}
+\DoxyCodeLine{210 \textcolor{comment}{ */}}
+\DoxyCodeLine{211 \textcolor{comment}{// clang-\/format on}}
+\DoxyCodeLine{212 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{integrator_8hpp}{algebra/integrator.hpp}}"{}}}
+\DoxyCodeLine{213 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{state_8hpp}{algebra/state.hpp}}"{}}}
+\DoxyCodeLine{214 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{debug_8hpp}{helpers/debug.hpp}}"{}}}
+\DoxyCodeLine{215 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{endswith_8hpp}{helpers/endswith.hpp}}"{}}}
+\DoxyCodeLine{216 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{configreader_8hpp}{io/configreader.hpp}}"{}}}
+\DoxyCodeLine{217 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{csvwriter_8hpp}{io/csvwriter.hpp}}"{}}}
+\DoxyCodeLine{218 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{model_8hpp}{model/model.hpp}}"{}}}
+\DoxyCodeLine{219 }
+\DoxyCodeLine{220 \textcolor{comment}{// Setting scalar type to double}}
+\DoxyCodeLine{221 \textcolor{keyword}{typedef} \textcolor{keywordtype}{double} T;}
+\DoxyCodeLine{222 \textcolor{comment}{}}
+\DoxyCodeLine{223 \textcolor{comment}{/**}}
+\DoxyCodeLine{224 \textcolor{comment}{ *}}
+\DoxyCodeLine{225 \textcolor{comment}{ * @brief Run svZeroDSolver with configuration}}
+\DoxyCodeLine{226 \textcolor{comment}{ *}}
+\DoxyCodeLine{227 \textcolor{comment}{ * 1. Read the input file}}
+\DoxyCodeLine{228 \textcolor{comment}{ * 2. Create the 0D model}}
+\DoxyCodeLine{229 \textcolor{comment}{ * 3. (Optional) Solve for steady initial condition}}
+\DoxyCodeLine{230 \textcolor{comment}{ * 4. Run simulation}}
+\DoxyCodeLine{231 \textcolor{comment}{ * 5. Write output to file}}
+\DoxyCodeLine{232 \textcolor{comment}{ *}}
+\DoxyCodeLine{233 \textcolor{comment}{ * @param json\_config Path config or json encoded string with config}}
+\DoxyCodeLine{234 \textcolor{comment}{ * @return Result as csv encoded string}}
+\DoxyCodeLine{235 \textcolor{comment}{ */}}
+\DoxyCodeLine{236 \textcolor{keyword}{const} std::string \mbox{\hyperlink{main_8hpp_aeb3d695c62c5a6d74a0584e3c5bd65d2}{run}}(std::string\& json\_config) \{}
+\DoxyCodeLine{237   \textcolor{comment}{// Load model and configuration}}
+\DoxyCodeLine{238   DEBUG\_MSG(\textcolor{stringliteral}{"{}Read configuration"{}});}
+\DoxyCodeLine{239   \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO::ConfigReader<T>}} reader;}
+\DoxyCodeLine{240   reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a44d1b9249fc80c0e65a6267b42597bdb}{load}}(json\_config);}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242   \textcolor{comment}{// Setup system}}
+\DoxyCodeLine{243   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}} state = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_abe9831cb10972b4982a766aac615cb6c}{initial\_state}};}
+\DoxyCodeLine{244 }
+\DoxyCodeLine{245   \textcolor{comment}{// Create steady initial}}
+\DoxyCodeLine{246   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a1e593472af26af8f4bf98b158d996434}{sim\_steady\_initial}}) \{}
+\DoxyCodeLine{247     DEBUG\_MSG(\textcolor{stringliteral}{"{}Calculate steady initial condition"{}});}
+\DoxyCodeLine{248     T time\_step\_size\_steady = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_aaa79d0afffb88356f8d4ccbb7628309f}{sim\_cardiac\_cycle\_period}} / 10.0;}
+\DoxyCodeLine{249     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}.to\_steady();}
+\DoxyCodeLine{250     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator\_steady(}
+\DoxyCodeLine{251         reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}, time\_step\_size\_steady, 0.1, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}},}
+\DoxyCodeLine{252         reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}});}
+\DoxyCodeLine{253     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 31; i++) \{}
+\DoxyCodeLine{254       state = integrator\_steady.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(state, time\_step\_size\_steady * T(i),}
+\DoxyCodeLine{255                                      reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}});}
+\DoxyCodeLine{256     \}}
+\DoxyCodeLine{257     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}.to\_unsteady();}
+\DoxyCodeLine{258   \}}
+\DoxyCodeLine{259 }
+\DoxyCodeLine{260   \textcolor{comment}{// Set-\/up integrator}}
+\DoxyCodeLine{261   DEBUG\_MSG(\textcolor{stringliteral}{"{}Setup time integration"{}});}
+\DoxyCodeLine{262   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator(reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}},}
+\DoxyCodeLine{263                                     0.1, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}});}
 \DoxyCodeLine{264 }
-\DoxyCodeLine{265   \textcolor{comment}{// Run integrator}}
-\DoxyCodeLine{266   DEBUG\_MSG(\textcolor{stringliteral}{"{}Run time integration"{}});}
-\DoxyCodeLine{267   \textcolor{keywordtype}{int} interval\_counter = 0;}
-\DoxyCodeLine{268   \textcolor{keywordtype}{int} start\_last\_cycle = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}} -\/ reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}};}
-\DoxyCodeLine{269   \textcolor{keywordflow}{if} ((reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} == \textcolor{keyword}{false}) || (0 >= start\_last\_cycle)) \{}
-\DoxyCodeLine{270     times.push\_back(time);}
-\DoxyCodeLine{271     states.push\_back(std::move(state));}
-\DoxyCodeLine{272   \}}
-\DoxyCodeLine{273   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}}; i++) \{}
-\DoxyCodeLine{274     state = integrator.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(state, time, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}});}
-\DoxyCodeLine{275     interval\_counter += 1;}
-\DoxyCodeLine{276     time = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}} * T(i);}
-\DoxyCodeLine{277     \textcolor{keywordflow}{if} ((interval\_counter == reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}}) ||}
-\DoxyCodeLine{278         (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} \&\& (i == start\_last\_cycle))) \{}
-\DoxyCodeLine{279       \textcolor{keywordflow}{if} ((reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} == \textcolor{keyword}{false}) || (i >= start\_last\_cycle)) \{}
-\DoxyCodeLine{280         times.push\_back(time);}
-\DoxyCodeLine{281         states.push\_back(std::move(state));}
-\DoxyCodeLine{282       \}}
-\DoxyCodeLine{283       interval\_counter = 0;}
-\DoxyCodeLine{284     \}}
-\DoxyCodeLine{285   \}}
-\DoxyCodeLine{286 }
-\DoxyCodeLine{287   \textcolor{comment}{// Make times start from 0}}
-\DoxyCodeLine{288   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}}) \{}
-\DoxyCodeLine{289     T start\_time = times[0];}
-\DoxyCodeLine{290     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto}\& time : times) \{}
-\DoxyCodeLine{291       time -\/= start\_time;}
-\DoxyCodeLine{292     \}}
-\DoxyCodeLine{293   \}}
-\DoxyCodeLine{294 }
-\DoxyCodeLine{295   \textcolor{comment}{// Write csv output string}}
-\DoxyCodeLine{296   DEBUG\_MSG(\textcolor{stringliteral}{"{}Write output"{}});}
-\DoxyCodeLine{297   std::string output;}
-\DoxyCodeLine{298   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_acfee0686c847138a19ad12ad71d57750}{output\_variable\_based}}) \{}
-\DoxyCodeLine{299     output = IO::to\_variable\_csv<T>(times, states, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}},}
-\DoxyCodeLine{300                                     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}},}
-\DoxyCodeLine{301                                     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}});}
-\DoxyCodeLine{302   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{303     output =}
-\DoxyCodeLine{304         IO::to\_vessel\_csv<T>(times, states, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}},}
-\DoxyCodeLine{305                              reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}});}
-\DoxyCodeLine{306   \}}
-\DoxyCodeLine{307   DEBUG\_MSG(\textcolor{stringliteral}{"{}Finished"{}});}
-\DoxyCodeLine{308   \textcolor{keywordflow}{return} output;}
-\DoxyCodeLine{309 \}}
+\DoxyCodeLine{265   \textcolor{comment}{// Initialize loop}}
+\DoxyCodeLine{266   std::vector<ALGEBRA::State<T>> states;}
+\DoxyCodeLine{267   std::vector<T> times;}
+\DoxyCodeLine{268   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}}) \{}
+\DoxyCodeLine{269     \textcolor{keywordtype}{int} num\_states = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}} / reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}} + 1;}
+\DoxyCodeLine{270     states.reserve(num\_states);}
+\DoxyCodeLine{271     times.reserve(num\_states);}
+\DoxyCodeLine{272   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{273     \textcolor{keywordtype}{int} num\_states = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}} / reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}} + 1;}
+\DoxyCodeLine{274     states.reserve(num\_states);}
+\DoxyCodeLine{275     times.reserve(num\_states);}
+\DoxyCodeLine{276   \}}
+\DoxyCodeLine{277   T time = 0.0;}
+\DoxyCodeLine{278 }
+\DoxyCodeLine{279   \textcolor{comment}{// Run integrator}}
+\DoxyCodeLine{280   DEBUG\_MSG(\textcolor{stringliteral}{"{}Run time integration"{}});}
+\DoxyCodeLine{281   \textcolor{keywordtype}{int} interval\_counter = 0;}
+\DoxyCodeLine{282   \textcolor{keywordtype}{int} start\_last\_cycle = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}} -\/ reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}};}
+\DoxyCodeLine{283   \textcolor{keywordflow}{if} ((reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} == \textcolor{keyword}{false}) || (0 >= start\_last\_cycle)) \{}
+\DoxyCodeLine{284     times.push\_back(time);}
+\DoxyCodeLine{285     states.push\_back(std::move(state));}
+\DoxyCodeLine{286   \}}
+\DoxyCodeLine{287   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}}; i++) \{}
+\DoxyCodeLine{288     state = integrator.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(state, time, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}});}
+\DoxyCodeLine{289     interval\_counter += 1;}
+\DoxyCodeLine{290     time = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}} * T(i);}
+\DoxyCodeLine{291     \textcolor{keywordflow}{if} ((interval\_counter == reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}}) ||}
+\DoxyCodeLine{292         (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} \&\& (i == start\_last\_cycle))) \{}
+\DoxyCodeLine{293       \textcolor{keywordflow}{if} ((reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} == \textcolor{keyword}{false}) || (i >= start\_last\_cycle)) \{}
+\DoxyCodeLine{294         times.push\_back(time);}
+\DoxyCodeLine{295         states.push\_back(std::move(state));}
+\DoxyCodeLine{296       \}}
+\DoxyCodeLine{297       interval\_counter = 0;}
+\DoxyCodeLine{298     \}}
+\DoxyCodeLine{299   \}}
+\DoxyCodeLine{300 }
+\DoxyCodeLine{301   \textcolor{comment}{// Make times start from 0}}
+\DoxyCodeLine{302   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}}) \{}
+\DoxyCodeLine{303     T start\_time = times[0];}
+\DoxyCodeLine{304     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto}\& time : times) \{}
+\DoxyCodeLine{305       time -\/= start\_time;}
+\DoxyCodeLine{306     \}}
+\DoxyCodeLine{307   \}}
+\DoxyCodeLine{308 }
+\DoxyCodeLine{309   \textcolor{comment}{// Write csv output string}}
+\DoxyCodeLine{310   DEBUG\_MSG(\textcolor{stringliteral}{"{}Write output"{}});}
+\DoxyCodeLine{311   std::string output;}
+\DoxyCodeLine{312   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_acfee0686c847138a19ad12ad71d57750}{output\_variable\_based}}) \{}
+\DoxyCodeLine{313     output = IO::to\_variable\_csv<T>(times, states, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}},}
+\DoxyCodeLine{314                                     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}},}
+\DoxyCodeLine{315                                     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}});}
+\DoxyCodeLine{316   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{317     output =}
+\DoxyCodeLine{318         IO::to\_vessel\_csv<T>(times, states, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}},}
+\DoxyCodeLine{319                              reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}});}
+\DoxyCodeLine{320   \}}
+\DoxyCodeLine{321   DEBUG\_MSG(\textcolor{stringliteral}{"{}Finished"{}});}
+\DoxyCodeLine{322   \textcolor{keywordflow}{return} output;}
+\DoxyCodeLine{323 \}}
 
 \end{DoxyCode}

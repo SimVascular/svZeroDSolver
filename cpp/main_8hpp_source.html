@@ -107,7 +107,7 @@ $(function() {
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"> * The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of</span></div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"> * vascular networks using zero-dimensional (0D) lumped parameter models.</span></div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> * * &lt;a href=&quot;https://github.com/StanfordCBCL/svZeroDSolver&quot;&gt;Source</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> * * &lt;a href=&quot;https://github.com/StanfordCBCL/svZeroDPlus&quot;&gt;Source</span></div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> * repository&lt;/a&gt;</span></div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * * &lt;a href=&quot;https://simvascular.github.io&quot;&gt;About SimVascular&lt;/a&gt;</span></div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> *</span></div>
@@ -138,7 +138,7 @@ $(function() {
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * wall, and inductance represents the inertia of the blood flow. Different</span></div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * combinations of these building blocks, as well as others, can be formed to</span></div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * reflect the hemodynamics and physiology of different cardiovascular</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * anatomies.These 0D models are governed by differential algebraic equations</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * anatomies. These 0D models are governed by differential algebraic equations</span></div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> * (DAEs).</span></div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"> *</span></div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> * # Architecture</span></div>
@@ -149,263 +149,277 @@ $(function() {
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> * using individual classes to represent different 0D elements of the</span></div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> * model. The elements are part of the MODEL namespace. Currently</span></div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> * supported elements are:</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * * MODEL::BloodVessel: RCL blood vessel respresentation with optional</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> * stenosis.</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> * * MODEL::Junction: Junction element with arbitrary inlets and outlets.</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> * * MODEL::ResistanceBC: Resistance boundary condition.</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * * MODEL::WindkesselBC: RCR Windkessel boundary condition.</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * The elements are based on the parent MODEL::Block class. More information</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> * about the elements can be found on their respective pages. The elements are</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> * connected to each other via nodes (see MODEL::Node). Each node corresponds to</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> * a flow and a pressure value of the model. The MODEL::DOFHandler handles the</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> * degrees-of-freedom (DOF) of the system by assigning DOF indices to each</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> * element that determine the location of the local element contribution in the</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> * global system. The complete model is stored and managed by the MODEL::Model</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> * class.</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"> * ## Algebra</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * #### Vessels</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> * * MODEL::BloodVessel: RCL blood vessel with optional stenosis.</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * #### Junctions</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * * MODEL::Junction: Mass conservation junction element.</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * * MODEL::ResistiveJunction: Resistive junction element.</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * * MODEL::BloodVesselJunction: RCL junction element with optional stenoses.</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> * #### Boundary conditions</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> * * MODEL::ResistanceBC: Resistance boundary condition.</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> * * MODEL::WindkesselBC: RCR Windkessel boundary condition.</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> * * MODEL::ClosedLoopCoronaryBC: Closed Loop coronary boundary condition.</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"> * * MODEL::ClosedLoopHeartPulmonary: Heart and pulmonary circulation model.</span></div>
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment"> * Everything related to solving the system of equation is contained in the</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment"> * ALGEBRA namespace. The ALGEBRA::Integrator</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment"> * handles the time integration scheme (see Integrator documentation for</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment"> * more information on that).</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"> * ## Input/output</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment"> * Finally the IO namespace provides everything related to reading and writing</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment"> * files. The IO::ConfigReader reads the simultion config and IO::write_csv and</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"> * IO::write_json are two different methods for writing the result files.</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment"> * The elements are based on the parent MODEL::Block class. More information</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment"> * about the elements can be found on their respective pages. The elements are</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment"> * connected to each other via nodes (see MODEL::Node). Each node corresponds to</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment"> * a flow and a pressure value of the model. The MODEL::DOFHandler handles the</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"> * degrees-of-freedom (DOF) of the system by assigning DOF indices to each</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"> * element that determine the location of the local element contribution in the</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment"> * global system. The complete model is stored and managed by the MODEL::Model</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment"> * class.</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"> * ## Algebra</span></div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"> * All classes make use of templates to allow easy exchange of scalar</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment"> * types like `double` or `float`.</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"> * # Build svZeroDSolver</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"> * Everything related to solving the system of equation is contained in the</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment"> * ALGEBRA namespace. The ALGEBRA::Integrator</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"> * handles the time integration scheme (see Integrator documentation for</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"> * more information on that).</span></div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment"> * svZeroDSolver uses CMake to build the tool. The dependencies are installed</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"> * by CMake. If you want to use the C++ Python interface of svZeroDSolver make</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment"> * sure to checkout the correct Python environment beforehand. Currently</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment"> * supported are:</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment"> * * Ubuntu 18</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment"> * * Ubuntu 20</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment"> * * Ubuntu 22</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment"> * * macOS Big Sur</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment"> * * macOS Monterey</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment"> * ## Build in debug mode</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment"> * \code</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment"> * mkdir Debug</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment"> * cd Debug</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment"> * cmake -DCMAKE_BUILD_TYPE=Debug ..</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment"> * cmake --build .</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment"> * \endcode</span></div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment"> * ## Build in release mode</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment"> * ## Input/output</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment"> * Finally the IO namespace provides everything related to reading and writing</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment"> * files. The IO::ConfigReader reads the simulation config and IO::to_vessel_csv and</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment"> * IO::to_variable_csv are two different methods for writing the result files.</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment"> * # Build svZeroDSolver</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment"> * svZeroDSolver uses CMake to build the tool. The dependencies are installed</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment"> * by CMake. Currently supported are:</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment"> * * Ubuntu 18</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment"> * * Ubuntu 20</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment"> * * Ubuntu 22</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment"> * * macOS Big Sur</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment"> * * macOS Monterey</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment"> * @note If you want to use the Python interface of svZeroDPlus make</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment"> * sure to **activate the correct Python environment** before building the</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment"> * solver. Also make sure to install the Python package using the `-e` options,</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment"> * i.e.</span></div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment"> * \code</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment"> * mkdir Release</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment"> * cd Release</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment"> * cmake -DCMAKE_BUILD_TYPE=Release ..</span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment"> * cmake --build .</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment"> * \endcode</span></div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment"> * ## Build on Sherlock</span></div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="comment"> * \code</span></div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment"> * module load cmake/3.23.1 gcc/12.1.0 binutils/2.38</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment"> * mkdir Release</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="comment"> * cd Release</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="comment"> * cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..</span></div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="comment"> * cmake --build .</span></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="comment"> * \endcode</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="comment"> * # Run svZeroDSolver</span></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment"> * After building svZeroDSolver, the build folder contains an executable</span></div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment"> * called `svzerodsolver`. Run it with one of:</span></div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment"> * \code</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment"> * ./svzerodsolver path/to/config.json path/to/output.csv</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment"> * \endcode</span></div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="comment"> * `path/to/config.json` and `path/to/output.csv` should be replaced by the</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment"> * correct paths to the input and output file, respectively.</span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="comment"> * ## Simulation parameters</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment"> * pip install -e .</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment"> * \endcode</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment"> * ## Build in debug mode</span></div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment"> * \code</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment"> * mkdir Debug</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="comment"> * cd Debug</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment"> * cmake -DCMAKE_BUILD_TYPE=Debug ..</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment"> * cmake --build .</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="comment"> * \endcode</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="comment"> * ## Build in release mode</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="comment"> * \code</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="comment"> * mkdir Release</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="comment"> * cd Release</span></div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="comment"> * cmake -DCMAKE_BUILD_TYPE=Release ..</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment"> * cmake --build .</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment"> * \endcode</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment"> * ## Build on Sherlock</span></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment"> * \code</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment"> * module load cmake/3.23.1 gcc/12.1.0 binutils/2.38</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment"> * mkdir Release</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="comment"> * cd Release</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment"> * cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..</span></div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment"> * cmake --build .</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="comment"> * \endcode</span></div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment"> * The svZeroDSolver can be configured with the following options in the</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment"> * `simulation_parameters` section of the input file. Parameters without a</span></div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment"> * default value must be specified.</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment"> * # Run svZeroDSolver</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment"> * After building svZeroDSolver, the build folder contains an executable</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment"> * called `svzerodsolver`. Run it with one of:</span></div>
 <div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment"> * Parameter key                           | Description                               | Default value</span></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment"> * --------------------------------------- | ----------------------------------------- | ----------- </span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment"> * number_of_cardiac_cycles                | Number of cardiac cycles to simulate      | -</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment"> * number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -</span></div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment"> * absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$</span></div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment"> * maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$</span></div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment"> * steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment"> * output_variable_based                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false</span></div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment"> * output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$</span></div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment"> * output_mean_only                        | Write only the mean values over every timestep to output file | false</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment"> * output_derivative                       | Write time derivatives to output file | false</span></div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment"> * output_last_cycle_only                  | Write only the last cardiac cycle | false</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment"> * \code</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment"> * ./svzerodsolver path/to/config.json path/to/output.csv</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment"> * \endcode</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment"> * `path/to/config.json` and `path/to/output.csv` should be replaced by the</span></div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment"> * correct paths to the input and output file, respectively.</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment"> * ## Simulation parameters</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment"> * The svZeroDSolver can be configured with the following options in the</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment"> * `simulation_parameters` section of the input file. Parameters without a</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment"> * default value must be specified.</span></div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment"> * # Developer Guide</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="comment"> * If you are a developer and want to contribute to svZeroDSolver, you can find</span></div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment"> * more helpful information in our [Developer Guide](docs/cpp/pages/developer_guide.md).</span></div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span><span class="comment"> * </span></div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">// clang-format on</span></div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="preprocessor">#include &quot;<a class="code" href="integrator_8hpp.html">algebra/integrator.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="preprocessor">#include &quot;<a class="code" href="state_8hpp.html">algebra/state.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="preprocessor">#include &quot;<a class="code" href="debug_8hpp.html">helpers/debug.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="preprocessor">#include &quot;<a class="code" href="endswith_8hpp.html">helpers/endswith.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="preprocessor">#include &quot;<a class="code" href="configreader_8hpp.html">io/configreader.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="preprocessor">#include &quot;<a class="code" href="csvwriter_8hpp.html">io/csvwriter.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="preprocessor">#include &quot;<a class="code" href="model_8hpp.html">model/model.hpp</a>&quot;</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="comment">// Setting scalar type to double</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="keyword">typedef</span> <span class="keywordtype">double</span> T;</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="comment"></span> </div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="comment"> * @brief Run svZeroDSolver with configuration</span></div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="comment"> * 1. Read the input file</span></div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="comment"> * 2. Create the 0D model</span></div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="comment"> * 3. (Optional) Solve for steady initial condition</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="comment"> * 4. Run simulation</span></div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="comment"> * 5. Write output to file</span></div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span><span class="comment"> * @param json_config Path config or json encoded string with config</span></div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span><span class="comment"> * @return Result as csv encoded string</span></div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno"><a class="line" href="main_8hpp.html#aeb3d695c62c5a6d74a0584e3c5bd65d2">  222</a></span><span class="keyword">const</span> std::string <a class="code hl_function" href="main_8hpp.html#aeb3d695c62c5a6d74a0584e3c5bd65d2">run</a>(std::string&amp; json_config) {</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>  <span class="comment">// Load model and configuration</span></div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>  DEBUG_MSG(<span class="stringliteral">&quot;Read configuration&quot;</span>);</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>  <a class="code hl_class" href="class_i_o_1_1_config_reader.html">IO::ConfigReader&lt;T&gt;</a> reader;</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>  reader.<a class="code hl_function" href="class_i_o_1_1_config_reader.html#a44d1b9249fc80c0e65a6267b42597bdb">load</a>(json_config);</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span> </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>  <span class="comment">// Setup system</span></div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>  <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State&lt;T&gt;</a> state = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c">initial_state</a>;</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>  <span class="comment">// Create steady initial</span></div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a1e593472af26af8f4bf98b158d996434">sim_steady_initial</a>) {</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    DEBUG_MSG(<span class="stringliteral">&quot;Calculate steady initial condition&quot;</span>);</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    T time_step_size_steady = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#aaa79d0afffb88356f8d4ccbb7628309f">sim_cardiac_cycle_period</a> / 10.0;</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>.to_steady();</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator&lt;T&gt;</a> integrator_steady(</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>        reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>, time_step_size_steady, 0.1, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">sim_abs_tol</a>,</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">sim_nliter</a>);</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 31; i++) {</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>      state = integrator_steady.<a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">step</a>(state, time_step_size_steady * T(i),</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>                                     reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>);</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    }</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>.to_unsteady();</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>  }</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>  <span class="comment">// Set-up integrator</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  DEBUG_MSG(<span class="stringliteral">&quot;Setup time integration&quot;</span>);</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>  <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator&lt;T&gt;</a> integrator(reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">sim_time_step_size</a>,</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>                                    0.1, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">sim_abs_tol</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">sim_nliter</a>);</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>  <span class="comment">// Initialize loop</span></div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>  std::vector&lt;ALGEBRA::State&lt;T&gt;&gt; states;</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>  std::vector&lt;T&gt; times;</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a>) {</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keywordtype">int</span> num_states = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">sim_pts_per_cycle</a> / reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a> + 1;</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    states.reserve(num_states);</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    times.reserve(num_states);</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <span class="keywordtype">int</span> num_states = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a> / reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a> + 1;</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>    states.reserve(num_states);</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>    times.reserve(num_states);</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  }</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>  T time = 0.0;</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment"> * Parameter key                           | Description                               | Default value</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment"> * --------------------------------------- | ----------------------------------------- | ----------- </span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="comment"> * number_of_cardiac_cycles                | Number of cardiac cycles to simulate      | -</span></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment"> * number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -</span></div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span><span class="comment"> * absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$</span></div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment"> * maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment"> * steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment"> * output_variable_based                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="comment"> * output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="comment"> * output_mean_only                        | Write only the mean values over every timestep to output file | false</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment"> * output_derivative                       | Write time derivatives to output file | false</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment"> * output_last_cycle_only                  | Write only the last cardiac cycle | false</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span><span class="comment"> * # Developer Guide</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span><span class="comment"> * If you are a developer and want to contribute to svZeroDSolver, you can find</span></div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="comment"> * more helpful information in our [Developer Guide](docs/cpp/pages/developer_guide.md).</span></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="comment"> * </span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="comment">// clang-format on</span></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="preprocessor">#include &quot;<a class="code" href="integrator_8hpp.html">algebra/integrator.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="preprocessor">#include &quot;<a class="code" href="state_8hpp.html">algebra/state.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="preprocessor">#include &quot;<a class="code" href="debug_8hpp.html">helpers/debug.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="preprocessor">#include &quot;<a class="code" href="endswith_8hpp.html">helpers/endswith.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="preprocessor">#include &quot;<a class="code" href="configreader_8hpp.html">io/configreader.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="preprocessor">#include &quot;<a class="code" href="csvwriter_8hpp.html">io/csvwriter.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="preprocessor">#include &quot;<a class="code" href="model_8hpp.html">model/model.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span><span class="comment">// Setting scalar type to double</span></div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span><span class="keyword">typedef</span> <span class="keywordtype">double</span> T;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span><span class="comment"></span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="comment"> * @brief Run svZeroDSolver with configuration</span></div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span><span class="comment"> * 1. Read the input file</span></div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span><span class="comment"> * 2. Create the 0D model</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="comment"> * 3. (Optional) Solve for steady initial condition</span></div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="comment"> * 4. Run simulation</span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="comment"> * 5. Write output to file</span></div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><span class="comment"> * @param json_config Path config or json encoded string with config</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span><span class="comment"> * @return Result as csv encoded string</span></div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno"><a class="line" href="main_8hpp.html#aeb3d695c62c5a6d74a0584e3c5bd65d2">  236</a></span><span class="keyword">const</span> std::string <a class="code hl_function" href="main_8hpp.html#aeb3d695c62c5a6d74a0584e3c5bd65d2">run</a>(std::string&amp; json_config) {</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>  <span class="comment">// Load model and configuration</span></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>  DEBUG_MSG(<span class="stringliteral">&quot;Read configuration&quot;</span>);</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>  <a class="code hl_class" href="class_i_o_1_1_config_reader.html">IO::ConfigReader&lt;T&gt;</a> reader;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>  reader.<a class="code hl_function" href="class_i_o_1_1_config_reader.html#a44d1b9249fc80c0e65a6267b42597bdb">load</a>(json_config);</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>  <span class="comment">// Setup system</span></div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>  <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State&lt;T&gt;</a> state = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c">initial_state</a>;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>  <span class="comment">// Create steady initial</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a1e593472af26af8f4bf98b158d996434">sim_steady_initial</a>) {</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    DEBUG_MSG(<span class="stringliteral">&quot;Calculate steady initial condition&quot;</span>);</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    T time_step_size_steady = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#aaa79d0afffb88356f8d4ccbb7628309f">sim_cardiac_cycle_period</a> / 10.0;</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>.to_steady();</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator&lt;T&gt;</a> integrator_steady(</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>, time_step_size_steady, 0.1, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">sim_abs_tol</a>,</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">sim_nliter</a>);</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 31; i++) {</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>      state = integrator_steady.<a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">step</a>(state, time_step_size_steady * T(i),</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>                                     reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>);</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    }</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>.to_unsteady();</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>  }</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>  <span class="comment">// Set-up integrator</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>  DEBUG_MSG(<span class="stringliteral">&quot;Setup time integration&quot;</span>);</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>  <a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator&lt;T&gt;</a> integrator(reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">sim_time_step_size</a>,</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>                                    0.1, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">sim_abs_tol</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">sim_nliter</a>);</div>
 <div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>  <span class="comment">// Run integrator</span></div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>  DEBUG_MSG(<span class="stringliteral">&quot;Run time integration&quot;</span>);</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>  <span class="keywordtype">int</span> interval_counter = 0;</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  <span class="keywordtype">int</span> start_last_cycle = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a> - reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">sim_pts_per_cycle</a>;</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>  <span class="keywordflow">if</span> ((reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a> == <span class="keyword">false</span>) || (0 &gt;= start_last_cycle)) {</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    times.push_back(time);</div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    states.push_back(std::move(state));</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>  }</div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a>; i++) {</div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    state = integrator.<a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">step</a>(state, time, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>);</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    interval_counter += 1;</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    time = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">sim_time_step_size</a> * T(i);</div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    <span class="keywordflow">if</span> ((interval_counter == reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a>) ||</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>        (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a> &amp;&amp; (i == start_last_cycle))) {</div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>      <span class="keywordflow">if</span> ((reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a> == <span class="keyword">false</span>) || (i &gt;= start_last_cycle)) {</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        times.push_back(time);</div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>        states.push_back(std::move(state));</div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>      }</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>      interval_counter = 0;</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    }</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>  }</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>  <span class="comment">// Make times start from 0</span></div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a>) {</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    T start_time = times[0];</div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; time : times) {</div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>      time -= start_time;</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    }</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>  }</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span> </div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>  <span class="comment">// Write csv output string</span></div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>  DEBUG_MSG(<span class="stringliteral">&quot;Write output&quot;</span>);</div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>  std::string output;</div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#acfee0686c847138a19ad12ad71d57750">output_variable_based</a>) {</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    output = IO::to_variable_csv&lt;T&gt;(times, states, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>,</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>                                    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">output_mean_only</a>,</div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>                                    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">output_derivative</a>);</div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    output =</div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>        IO::to_vessel_csv&lt;T&gt;(times, states, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>,</div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>                             reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">output_mean_only</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">output_derivative</a>);</div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>  }</div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>  DEBUG_MSG(<span class="stringliteral">&quot;Finished&quot;</span>);</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>  <span class="keywordflow">return</span> output;</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>}</div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>  <span class="comment">// Initialize loop</span></div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>  std::vector&lt;ALGEBRA::State&lt;T&gt;&gt; states;</div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>  std::vector&lt;T&gt; times;</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a>) {</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <span class="keywordtype">int</span> num_states = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">sim_pts_per_cycle</a> / reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a> + 1;</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>    states.reserve(num_states);</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    times.reserve(num_states);</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>    <span class="keywordtype">int</span> num_states = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a> / reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a> + 1;</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    states.reserve(num_states);</div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>    times.reserve(num_states);</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>  }</div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>  T time = 0.0;</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>  <span class="comment">// Run integrator</span></div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>  DEBUG_MSG(<span class="stringliteral">&quot;Run time integration&quot;</span>);</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>  <span class="keywordtype">int</span> interval_counter = 0;</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>  <span class="keywordtype">int</span> start_last_cycle = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a> - reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">sim_pts_per_cycle</a>;</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>  <span class="keywordflow">if</span> ((reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a> == <span class="keyword">false</span>) || (0 &gt;= start_last_cycle)) {</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    times.push_back(time);</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    states.push_back(std::move(state));</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>  }</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">sim_num_time_steps</a>; i++) {</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    state = integrator.<a class="code hl_function" href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">step</a>(state, time, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>);</div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    interval_counter += 1;</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    time = reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">sim_time_step_size</a> * T(i);</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    <span class="keywordflow">if</span> ((interval_counter == reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">output_interval</a>) ||</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>        (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a> &amp;&amp; (i == start_last_cycle))) {</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>      <span class="keywordflow">if</span> ((reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a> == <span class="keyword">false</span>) || (i &gt;= start_last_cycle)) {</div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>        times.push_back(time);</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>        states.push_back(std::move(state));</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>      }</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>      interval_counter = 0;</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    }</div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>  }</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>  <span class="comment">// Make times start from 0</span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a>) {</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span>    T start_time = times[0];</div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; time : times) {</div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span>      time -= start_time;</div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span>    }</div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>  }</div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>  <span class="comment">// Write csv output string</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>  DEBUG_MSG(<span class="stringliteral">&quot;Write output&quot;</span>);</div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>  std::string output;</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>  <span class="keywordflow">if</span> (reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#acfee0686c847138a19ad12ad71d57750">output_variable_based</a>) {</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    output = IO::to_variable_csv&lt;T&gt;(times, states, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>,</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>                                    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">output_mean_only</a>,</div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>                                    reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">output_derivative</a>);</div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    output =</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        IO::to_vessel_csv&lt;T&gt;(times, states, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a>,</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>                             reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">output_mean_only</a>, reader.<a class="code hl_variable" href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">output_derivative</a>);</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>  }</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>  DEBUG_MSG(<span class="stringliteral">&quot;Finished&quot;</span>);</div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>  <span class="keywordflow">return</span> output;</div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>}</div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_integrator_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_integrator.html">ALGEBRA::Integrator</a></div><div class="ttdoc">Generalized-alpha integrator.</div><div class="ttdef"><b>Definition:</b> integrator.hpp:67</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_integrator_html_ac64552c2b5d1007b5f0bb37ab4b125b7"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_integrator.html#ac64552c2b5d1007b5f0bb37ab4b125b7">ALGEBRA::Integrator::step</a></div><div class="ttdeci">State&lt; T &gt; step(State&lt; T &gt; &amp;state, T time, MODEL::Model&lt; T &gt; &amp;model)</div><div class="ttdoc">Perform a time step.</div><div class="ttdef"><b>Definition:</b> integrator.hpp:150</div></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_state_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a></div><div class="ttdoc">State of the system.</div><div class="ttdef"><b>Definition:</b> state.hpp:47</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html"><div class="ttname"><a href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a></div><div class="ttdoc">svZeroDSolver configuration reader.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:66</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a1e593472af26af8f4bf98b158d996434"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a1e593472af26af8f4bf98b158d996434">IO::ConfigReader::sim_steady_initial</a></div><div class="ttdeci">bool sim_steady_initial</div><div class="ttdoc">Start from steady solution.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:99</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a44d1b9249fc80c0e65a6267b42597bdb"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a44d1b9249fc80c0e65a6267b42597bdb">IO::ConfigReader::load</a></div><div class="ttdeci">void load(std::string &amp;specifier)</div><div class="ttdoc">Create model from configuration file.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:114</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a46b1de73e58adb34d4e783e83e1e22e9"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">IO::ConfigReader::sim_abs_tol</a></div><div class="ttdeci">T sim_abs_tol</div><div class="ttdoc">Absolute tolerance for simulation.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:90</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a4b5b5b7b81108221d204840937dbad35"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">IO::ConfigReader::output_mean_only</a></div><div class="ttdeci">bool output_mean_only</div><div class="ttdoc">Output only the mean value.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:102</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a4e0c08c222cc1ede5011c867d22a7f9d"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">IO::ConfigReader::sim_nliter</a></div><div class="ttdeci">int sim_nliter</div><div class="ttdef"><b>Definition:</b> configreader.hpp:95</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a77d8dac5655f87b49476fd4f40029bb6"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">IO::ConfigReader::output_derivative</a></div><div class="ttdeci">bool output_derivative</div><div class="ttdoc">Output derivatives.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:103</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a77fc4400616332eef67acb58ad071208"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">IO::ConfigReader::sim_num_time_steps</a></div><div class="ttdeci">int sim_num_time_steps</div><div class="ttdoc">Total number of time steps.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:94</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a883ce5b06abfa9e464c15d1054b64bfc"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">IO::ConfigReader::model</a></div><div class="ttdeci">MODEL::Model&lt; T &gt; model</div><div class="ttdoc">Simulation model.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:85</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a8ad19204e82a0f29790452485f36a2ba"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">IO::ConfigReader::sim_time_step_size</a></div><div class="ttdeci">T sim_time_step_size</div><div class="ttdoc">Simulation time step size.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:89</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_aaa79d0afffb88356f8d4ccbb7628309f"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#aaa79d0afffb88356f8d4ccbb7628309f">IO::ConfigReader::sim_cardiac_cycle_period</a></div><div class="ttdeci">T sim_cardiac_cycle_period</div><div class="ttdoc">Cardiac cycle period.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:88</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_abe9831cb10972b4982a766aac615cb6c"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c">IO::ConfigReader::initial_state</a></div><div class="ttdeci">ALGEBRA::State&lt; T &gt; initial_state</div><div class="ttdoc">Initial state.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:86</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_acfee0686c847138a19ad12ad71d57750"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#acfee0686c847138a19ad12ad71d57750">IO::ConfigReader::output_variable_based</a></div><div class="ttdeci">bool output_variable_based</div><div class="ttdoc">Output variable based instead of vessel based.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:101</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_ad872723e0b5862abc77290a2152556f0"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">IO::ConfigReader::output_last_cycle_only</a></div><div class="ttdeci">bool output_last_cycle_only</div><div class="ttdoc">Output only the last cardiac cycle.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:104</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_adf7c3390971a4ce76c8d4d7a6bd24cc1"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">IO::ConfigReader::output_interval</a></div><div class="ttdeci">int output_interval</div><div class="ttdoc">Interval of writing output.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:97</div></div>
-<div class="ttc" id="aclass_i_o_1_1_config_reader_html_af4bde4c7696a7af78e607707e111f5b9"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">IO::ConfigReader::sim_pts_per_cycle</a></div><div class="ttdeci">int sim_pts_per_cycle</div><div class="ttdoc">Number of time steps per cardiac cycle.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:93</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html"><div class="ttname"><a href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a></div><div class="ttdoc">svZeroDSolver configuration reader.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:67</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a1e593472af26af8f4bf98b158d996434"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a1e593472af26af8f4bf98b158d996434">IO::ConfigReader::sim_steady_initial</a></div><div class="ttdeci">bool sim_steady_initial</div><div class="ttdoc">Start from steady solution.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:100</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a44d1b9249fc80c0e65a6267b42597bdb"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a44d1b9249fc80c0e65a6267b42597bdb">IO::ConfigReader::load</a></div><div class="ttdeci">void load(std::string &amp;specifier)</div><div class="ttdoc">Create model from configuration file.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:115</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a46b1de73e58adb34d4e783e83e1e22e9"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a46b1de73e58adb34d4e783e83e1e22e9">IO::ConfigReader::sim_abs_tol</a></div><div class="ttdeci">T sim_abs_tol</div><div class="ttdoc">Absolute tolerance for simulation.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:91</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a4b5b5b7b81108221d204840937dbad35"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a4b5b5b7b81108221d204840937dbad35">IO::ConfigReader::output_mean_only</a></div><div class="ttdeci">bool output_mean_only</div><div class="ttdoc">Output only the mean value.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:103</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a4e0c08c222cc1ede5011c867d22a7f9d"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a4e0c08c222cc1ede5011c867d22a7f9d">IO::ConfigReader::sim_nliter</a></div><div class="ttdeci">int sim_nliter</div><div class="ttdef"><b>Definition:</b> configreader.hpp:96</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a77d8dac5655f87b49476fd4f40029bb6"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a77d8dac5655f87b49476fd4f40029bb6">IO::ConfigReader::output_derivative</a></div><div class="ttdeci">bool output_derivative</div><div class="ttdoc">Output derivatives.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:104</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a77fc4400616332eef67acb58ad071208"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a77fc4400616332eef67acb58ad071208">IO::ConfigReader::sim_num_time_steps</a></div><div class="ttdeci">int sim_num_time_steps</div><div class="ttdoc">Total number of time steps.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:95</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a883ce5b06abfa9e464c15d1054b64bfc"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">IO::ConfigReader::model</a></div><div class="ttdeci">MODEL::Model&lt; T &gt; model</div><div class="ttdoc">Simulation model.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:86</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_a8ad19204e82a0f29790452485f36a2ba"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba">IO::ConfigReader::sim_time_step_size</a></div><div class="ttdeci">T sim_time_step_size</div><div class="ttdoc">Simulation time step size.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:90</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_aaa79d0afffb88356f8d4ccbb7628309f"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#aaa79d0afffb88356f8d4ccbb7628309f">IO::ConfigReader::sim_cardiac_cycle_period</a></div><div class="ttdeci">T sim_cardiac_cycle_period</div><div class="ttdoc">Cardiac cycle period.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:89</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_abe9831cb10972b4982a766aac615cb6c"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c">IO::ConfigReader::initial_state</a></div><div class="ttdeci">ALGEBRA::State&lt; T &gt; initial_state</div><div class="ttdoc">Initial state.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:87</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_acfee0686c847138a19ad12ad71d57750"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#acfee0686c847138a19ad12ad71d57750">IO::ConfigReader::output_variable_based</a></div><div class="ttdeci">bool output_variable_based</div><div class="ttdoc">Output variable based instead of vessel based.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:102</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_ad872723e0b5862abc77290a2152556f0"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">IO::ConfigReader::output_last_cycle_only</a></div><div class="ttdeci">bool output_last_cycle_only</div><div class="ttdoc">Output only the last cardiac cycle.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:105</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_adf7c3390971a4ce76c8d4d7a6bd24cc1"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#adf7c3390971a4ce76c8d4d7a6bd24cc1">IO::ConfigReader::output_interval</a></div><div class="ttdeci">int output_interval</div><div class="ttdoc">Interval of writing output.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:98</div></div>
+<div class="ttc" id="aclass_i_o_1_1_config_reader_html_af4bde4c7696a7af78e607707e111f5b9"><div class="ttname"><a href="class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9">IO::ConfigReader::sim_pts_per_cycle</a></div><div class="ttdeci">int sim_pts_per_cycle</div><div class="ttdoc">Number of time steps per cardiac cycle.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:94</div></div>
 <div class="ttc" id="aconfigreader_8hpp_html"><div class="ttname"><a href="configreader_8hpp.html">configreader.hpp</a></div><div class="ttdoc">IO::ConfigReader source file.</div></div>
 <div class="ttc" id="acsvwriter_8hpp_html"><div class="ttname"><a href="csvwriter_8hpp.html">csvwriter.hpp</a></div><div class="ttdoc">IO::write_csv source file.</div></div>
 <div class="ttc" id="adebug_8hpp_html"><div class="ttname"><a href="debug_8hpp.html">debug.hpp</a></div><div class="ttdoc">HELPERS::DEBUG source file.</div></div>
 <div class="ttc" id="aendswith_8hpp_html"><div class="ttname"><a href="endswith_8hpp.html">endswith.hpp</a></div><div class="ttdoc">HELPERS::endswith source file.</div></div>
 <div class="ttc" id="aintegrator_8hpp_html"><div class="ttname"><a href="integrator_8hpp.html">integrator.hpp</a></div><div class="ttdoc">ALGEBRA::Integrator source file.</div></div>
-<div class="ttc" id="amain_8hpp_html_aeb3d695c62c5a6d74a0584e3c5bd65d2"><div class="ttname"><a href="main_8hpp.html#aeb3d695c62c5a6d74a0584e3c5bd65d2">run</a></div><div class="ttdeci">const std::string run(std::string &amp;json_config)</div><div class="ttdoc">Run svZeroDSolver with configuration.</div><div class="ttdef"><b>Definition:</b> main.hpp:222</div></div>
+<div class="ttc" id="amain_8hpp_html_aeb3d695c62c5a6d74a0584e3c5bd65d2"><div class="ttname"><a href="main_8hpp.html#aeb3d695c62c5a6d74a0584e3c5bd65d2">run</a></div><div class="ttdeci">const std::string run(std::string &amp;json_config)</div><div class="ttdoc">Run svZeroDSolver with configuration.</div><div class="ttdef"><b>Definition:</b> main.hpp:236</div></div>
 <div class="ttc" id="amodel_8hpp_html"><div class="ttname"><a href="model_8hpp.html">model.hpp</a></div><div class="ttdoc">MODEL::Model source file.</div></div>
 <div class="ttc" id="astate_8hpp_html"><div class="ttname"><a href="state_8hpp.html">state.hpp</a></div><div class="ttdoc">ALGEBRA::State source file.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 19 2022 21:51:18 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Nov 28 2022 21:04:02 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

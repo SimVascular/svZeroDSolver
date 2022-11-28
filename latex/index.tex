@@ -2,7 +2,7 @@ The sv\+Zero\+DSolver is a fast simulation tool for modeling the hemodynamics of
 
 
 \begin{DoxyItemize}
-\item \href{https://github.com/StanfordCBCL/svZeroDSolver}{\texttt{ Source repository}}
+\item \href{https://github.com/StanfordCBCL/svZeroDPlus}{\texttt{ Source repository}}
 \item \href{https://simvascular.github.io}{\texttt{ About Sim\+Vascular}}
 
 \[
@@ -18,27 +18,34 @@ node[ground]{};
 \end{circuitikz}
 \]
 \end{DoxyItemize}\hypertarget{index_autotoc_md0}{}\doxysection{Background}\label{index_autotoc_md0}
-Zero-\/dimensional (0D) models are lightweight methods to simulate bulk hemodynamic quantities in the cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-\/dependent; they are unable to simulate spatial patterns in the hemodynamics. 0D models are analogous to electrical circuits. The flow rate simulated by 0D models represents electrical current, while the pressure represents voltage. Three primary building blocks of 0D models are resistors, capacitors, and inductors Resistance captures the viscous effects of blood flow, capacitance represents the compliance and distensibility of the vessel wall, and inductance represents the inertia of the blood flow. Different combinations of these building blocks, as well as others, can be formed to reflect the hemodynamics and physiology of different cardiovascular anatomies.\+These 0D models are governed by differential algebraic equations (DAEs).\hypertarget{index_autotoc_md1}{}\doxysection{Architecture}\label{index_autotoc_md1}
+Zero-\/dimensional (0D) models are lightweight methods to simulate bulk hemodynamic quantities in the cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-\/dependent; they are unable to simulate spatial patterns in the hemodynamics. 0D models are analogous to electrical circuits. The flow rate simulated by 0D models represents electrical current, while the pressure represents voltage. Three primary building blocks of 0D models are resistors, capacitors, and inductors Resistance captures the viscous effects of blood flow, capacitance represents the compliance and distensibility of the vessel wall, and inductance represents the inertia of the blood flow. Different combinations of these building blocks, as well as others, can be formed to reflect the hemodynamics and physiology of different cardiovascular anatomies. These 0D models are governed by differential algebraic equations (DAEs).\hypertarget{index_autotoc_md1}{}\doxysection{Architecture}\label{index_autotoc_md1}
 \hypertarget{index_autotoc_md2}{}\doxysubsection{Model}\label{index_autotoc_md2}
-The solver uses a highly modular framework to model the vascular anatomy, using individual classes to represent different 0D elements of the model. The elements are part of the \mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} namespace. Currently supported elements are\+:
-
+The solver uses a highly modular framework to model the vascular anatomy, using individual classes to represent different 0D elements of the model. The elements are part of the \mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} namespace. Currently supported elements are\+:\hypertarget{index_autotoc_md3}{}\doxyparagraph{Vessels}\label{index_autotoc_md3}
 
 \begin{DoxyItemize}
-\item \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}\+: RCL blood vessel respresentation with optional stenosis.
-\item \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}\+: Junction element with arbitrary inlets and outlets.
+\item \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}\+: RCL blood vessel with optional stenosis.
+\end{DoxyItemize}\hypertarget{index_autotoc_md4}{}\doxyparagraph{Junctions}\label{index_autotoc_md4}
+
+\begin{DoxyItemize}
+\item \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}\+: Mass conservation junction element.
+\item \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction}{MODEL\+::\+Resistive\+Junction}}\+: Resistive junction element.
+\item \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}\+: RCL junction element with optional stenoses.
+\end{DoxyItemize}\hypertarget{index_autotoc_md5}{}\doxyparagraph{Boundary conditions}\label{index_autotoc_md5}
+
+\begin{DoxyItemize}
 \item \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL\+::\+Flow\+Reference\+BC}}\+: Prescribed flow boundary condition.
 \item \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}\+: Prescribed pressure boundary condition.
 \item \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL\+::\+Resistance\+BC}}\+: Resistance boundary condition.
 \item \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL\+::\+Windkessel\+BC}}\+: RCR Windkessel boundary condition.
 \item \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}\+: Open Loop coronary boundary condition.
+\item \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{MODEL\+::\+Closed\+Loop\+Coronary\+BC}}\+: Closed Loop coronary boundary condition.
+\item \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary}}\+: Heart and pulmonary circulation model.
 \end{DoxyItemize}
 
-The elements are based on the parent \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}} class. More information about the elements can be found on their respective pages. The elements are connected to each other via nodes (see \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{MODEL\+::\+Node}}). Each node corresponds to a flow and a pressure value of the model. The \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{MODEL\+::\+DOFHandler}} handles the degrees-\/of-\/freedom (DOF) of the system by assigning DOF indices to each element that determine the location of the local element contribution in the global system. The complete model is stored and managed by the \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}} class.\hypertarget{index_autotoc_md3}{}\doxysubsection{Algebra}\label{index_autotoc_md3}
-Everything related to solving the system of equation is contained in the \mbox{\hyperlink{namespace_a_l_g_e_b_r_a}{ALGEBRA}} namespace. The \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA\+::\+Integrator}} handles the time integration scheme (see Integrator documentation for more information on that).\hypertarget{index_autotoc_md4}{}\doxysubsection{Input/output}\label{index_autotoc_md4}
-Finally the \mbox{\hyperlink{namespace_i_o}{IO}} namespace provides everything related to reading and writing files. The \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}} reads the simultion config and IO\+::write\+\_\+csv and IO\+::write\+\_\+json are two different methods for writing the result files.
-
-All classes make use of templates to allow easy exchange of scalar types like {\ttfamily double} or {\ttfamily float}.\hypertarget{index_autotoc_md5}{}\doxysection{Build sv\+Zero\+DSolver}\label{index_autotoc_md5}
-sv\+Zero\+DSolver uses CMake to build the tool. The dependencies are installed by CMake. If you want to use the C++ Python interface of sv\+Zero\+DSolver make sure to checkout the correct Python environment beforehand. Currently supported are\+:
+The elements are based on the parent \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}} class. More information about the elements can be found on their respective pages. The elements are connected to each other via nodes (see \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{MODEL\+::\+Node}}). Each node corresponds to a flow and a pressure value of the model. The \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{MODEL\+::\+DOFHandler}} handles the degrees-\/of-\/freedom (DOF) of the system by assigning DOF indices to each element that determine the location of the local element contribution in the global system. The complete model is stored and managed by the \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}} class.\hypertarget{index_autotoc_md6}{}\doxysubsection{Algebra}\label{index_autotoc_md6}
+Everything related to solving the system of equation is contained in the \mbox{\hyperlink{namespace_a_l_g_e_b_r_a}{ALGEBRA}} namespace. The \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA\+::\+Integrator}} handles the time integration scheme (see Integrator documentation for more information on that).\hypertarget{index_autotoc_md7}{}\doxysubsection{Input/output}\label{index_autotoc_md7}
+Finally the \mbox{\hyperlink{namespace_i_o}{IO}} namespace provides everything related to reading and writing files. The \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}} reads the simulation config and \mbox{\hyperlink{namespace_i_o_a1ef2a3fccc174166142bb843eab206f4}{IO\+::to\+\_\+vessel\+\_\+csv}} and \mbox{\hyperlink{namespace_i_o_a02005a08dbf60e9a61dbb595454010f5}{IO\+::to\+\_\+variable\+\_\+csv}} are two different methods for writing the result files.\hypertarget{index_autotoc_md8}{}\doxysection{Build sv\+Zero\+DSolver}\label{index_autotoc_md8}
+sv\+Zero\+DSolver uses CMake to build the tool. The dependencies are installed by CMake. Currently supported are\+:
 
 
 \begin{DoxyItemize}
@@ -47,7 +54,17 @@ sv\+Zero\+DSolver uses CMake to build the tool. The dependencies are installed b
 \item Ubuntu 22
 \item mac\+OS Big Sur
 \item mac\+OS Monterey
-\end{DoxyItemize}\hypertarget{index_autotoc_md6}{}\doxysubsection{Build in debug mode}\label{index_autotoc_md6}
+\end{DoxyItemize}
+
+\begin{DoxyNote}{Note}
+If you want to use the Python interface of sv\+Zero\+DPlus make sure to {\bfseries{activate the correct Python environment}} before building the solver. Also make sure to install the Python package using the {\ttfamily -\/e} options, i.\+e. 
+\begin{DoxyCode}{0}
+\DoxyCodeLine{pip install -\/e .}
+
+\end{DoxyCode}
+
+\end{DoxyNote}
+\hypertarget{index_autotoc_md9}{}\doxysubsection{Build in debug mode}\label{index_autotoc_md9}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{mkdir Debug}
@@ -56,7 +73,7 @@ sv\+Zero\+DSolver uses CMake to build the tool. The dependencies are installed b
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md7}{}\doxysubsection{Build in release mode}\label{index_autotoc_md7}
+\hypertarget{index_autotoc_md10}{}\doxysubsection{Build in release mode}\label{index_autotoc_md10}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{mkdir Release}
@@ -65,7 +82,7 @@ sv\+Zero\+DSolver uses CMake to build the tool. The dependencies are installed b
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md8}{}\doxysubsection{Build on Sherlock}\label{index_autotoc_md8}
+\hypertarget{index_autotoc_md11}{}\doxysubsection{Build on Sherlock}\label{index_autotoc_md11}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{module load cmake/3.23.1 gcc/12.1.0 binutils/2.38}
@@ -75,7 +92,7 @@ sv\+Zero\+DSolver uses CMake to build the tool. The dependencies are installed b
 \DoxyCodeLine{cmake -\/-\/build .}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md9}{}\doxysection{Run sv\+Zero\+DSolver}\label{index_autotoc_md9}
+\hypertarget{index_autotoc_md12}{}\doxysection{Run sv\+Zero\+DSolver}\label{index_autotoc_md12}
 After building sv\+Zero\+DSolver, the build folder contains an executable called {\ttfamily svzerodsolver}. Run it with one of\+:
 
 
@@ -85,7 +102,7 @@ After building sv\+Zero\+DSolver, the build folder contains an executable called
 \end{DoxyCode}
 
 
-{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output.\+csv} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md10}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md10}
+{\ttfamily path/to/config.\+json} and {\ttfamily path/to/output.\+csv} should be replaced by the correct paths to the input and output file, respectively.\hypertarget{index_autotoc_md13}{}\doxysubsection{Simulation parameters}\label{index_autotoc_md13}
 The sv\+Zero\+DSolver can be configured with the following options in the {\ttfamily simulation\+\_\+parameters} section of the input file. Parameters without a default value must be specified.
 
 \tabulinesep=1mm
@@ -109,5 +126,5 @@ output\+\_\+mean\+\_\+only   &Write only the mean values over every timestep to 
 output\+\_\+derivative   &Write time derivatives to output file   &false    \\\cline{1-3}
 output\+\_\+last\+\_\+cycle\+\_\+only   &Write only the last cardiac cycle   &false   \\\cline{1-3}
 \end{longtabu}
-\hypertarget{index_autotoc_md11}{}\doxysection{Developer Guide}\label{index_autotoc_md11}
+\hypertarget{index_autotoc_md14}{}\doxysection{Developer Guide}\label{index_autotoc_md14}
 If you are a developer and want to contribute to sv\+Zero\+DSolver, you can find more helpful information in our \mbox{\hyperlink{md_developer_guide}{Developer Guide}}. 

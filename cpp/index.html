@@ -68,25 +68,30 @@ $(function() {
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
 <ul><li class="level1"><a href="#autotoc_md0">Background</a></li>
-<li class="level1"><a href="#autotoc_md1">Architecture</a><ul><li class="level2"><a href="#autotoc_md2">Model</a></li>
-<li class="level2"><a href="#autotoc_md3">Algebra</a></li>
-<li class="level2"><a href="#autotoc_md4">Input/output</a></li>
+<li class="level1"><a href="#autotoc_md1">Architecture</a><ul><li class="level2"><a href="#autotoc_md2">Model</a><ul><ul><li class="level4"><a href="#autotoc_md3">Vessels</a></li>
+<li class="level4"><a href="#autotoc_md4">Junctions</a></li>
+<li class="level4"><a href="#autotoc_md5">Boundary conditions</a></li>
+</ul>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md5">Build svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md6">Build in debug mode</a></li>
-<li class="level2"><a href="#autotoc_md7">Build in release mode</a></li>
-<li class="level2"><a href="#autotoc_md8">Build on Sherlock</a></li>
+<li class="level2"><a href="#autotoc_md6">Algebra</a></li>
+<li class="level2"><a href="#autotoc_md7">Input/output</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md9">Run svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md10">Simulation parameters</a></li>
+<li class="level1"><a href="#autotoc_md8">Build svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md9">Build in debug mode</a></li>
+<li class="level2"><a href="#autotoc_md10">Build in release mode</a></li>
+<li class="level2"><a href="#autotoc_md11">Build on Sherlock</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md11">Developer Guide</a></li>
+<li class="level1"><a href="#autotoc_md12">Run svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md13">Simulation parameters</a></li>
+</ul>
+</li>
+<li class="level1"><a href="#autotoc_md14">Developer Guide</a></li>
 </ul>
 </div>
 <div class="textblock"><p >The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of vascular networks using zero-dimensional (0D) lumped parameter models.</p>
 <ul>
-<li><a href="https://github.com/StanfordCBCL/svZeroDSolver">Source repository</a></li>
+<li><a href="https://github.com/StanfordCBCL/svZeroDPlus">Source repository</a></li>
 <li><p class="startli"><a href="https://simvascular.github.io">About SimVascular</a></p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
@@ -106,32 +111,45 @@ node[ground]{};
 </ul>
 <h1><a class="anchor" id="autotoc_md0"></a>
 Background</h1>
-<p >Zero-dimensional (0D) models are lightweight methods to simulate bulk hemodynamic quantities in the cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-dependent; they are unable to simulate spatial patterns in the hemodynamics. 0D models are analogous to electrical circuits. The flow rate simulated by 0D models represents electrical current, while the pressure represents voltage. Three primary building blocks of 0D models are resistors, capacitors, and inductors Resistance captures the viscous effects of blood flow, capacitance represents the compliance and distensibility of the vessel wall, and inductance represents the inertia of the blood flow. Different combinations of these building blocks, as well as others, can be formed to reflect the hemodynamics and physiology of different cardiovascular anatomies.These 0D models are governed by differential algebraic equations (DAEs).</p>
+<p >Zero-dimensional (0D) models are lightweight methods to simulate bulk hemodynamic quantities in the cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-dependent; they are unable to simulate spatial patterns in the hemodynamics. 0D models are analogous to electrical circuits. The flow rate simulated by 0D models represents electrical current, while the pressure represents voltage. Three primary building blocks of 0D models are resistors, capacitors, and inductors Resistance captures the viscous effects of blood flow, capacitance represents the compliance and distensibility of the vessel wall, and inductance represents the inertia of the blood flow. Different combinations of these building blocks, as well as others, can be formed to reflect the hemodynamics and physiology of different cardiovascular anatomies. These 0D models are governed by differential algebraic equations (DAEs).</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Architecture</h1>
 <h2><a class="anchor" id="autotoc_md2"></a>
 Model</h2>
 <p >The solver uses a highly modular framework to model the vascular anatomy, using individual classes to represent different 0D elements of the model. The elements are part of the <a class="el" href="namespace_m_o_d_e_l.html" title="MODEL namespace.">MODEL</a> namespace. Currently supported elements are:</p>
+<h4><a class="anchor" id="autotoc_md3"></a>
+Vessels</h4>
 <ul>
-<li><a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">MODEL::BloodVessel</a>: RCL blood vessel respresentation with optional stenosis.</li>
-<li><a class="el" href="class_m_o_d_e_l_1_1_junction.html" title="Junction.">MODEL::Junction</a>: Junction element with arbitrary inlets and outlets.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">MODEL::BloodVessel</a>: RCL blood vessel with optional stenosis.</li>
+</ul>
+<h4><a class="anchor" id="autotoc_md4"></a>
+Junctions</h4>
+<ul>
+<li><a class="el" href="class_m_o_d_e_l_1_1_junction.html" title="Junction.">MODEL::Junction</a>: Mass conservation junction element.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html" title="ResistiveJunction.">MODEL::ResistiveJunction</a>: Resistive junction element.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_blood_vessel_junction.html" title="BloodVesselJunction.">MODEL::BloodVesselJunction</a>: RCL junction element with optional stenoses.</li>
+</ul>
+<h4><a class="anchor" id="autotoc_md5"></a>
+Boundary conditions</h4>
+<ul>
 <li><a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html" title="Flow reference boundary condition.">MODEL::FlowReferenceBC</a>: Prescribed flow boundary condition.</li>
 <li><a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html" title="Pressure reference boundary condition.">MODEL::PressureReferenceBC</a>: Prescribed pressure boundary condition.</li>
 <li><a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html" title="Resistance boundary condition.">MODEL::ResistanceBC</a>: Resistance boundary condition.</li>
 <li><a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html" title="Windkessel RCR boundary condition.">MODEL::WindkesselBC</a>: RCR Windkessel boundary condition.</li>
 <li><a class="el" href="class_m_o_d_e_l_1_1_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on .">MODEL::OpenLoopCoronaryBC</a>: Open Loop coronary boundary condition.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_coronary_b_c.html" title="Closed loop coronary boundary condition (connected to other blocks on both sides).">MODEL::ClosedLoopCoronaryBC</a>: Closed Loop coronary boundary condition.</li>
+<li><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary.html" title="Heart and pulmonary circulation model.">MODEL::ClosedLoopHeartPulmonary</a>: Heart and pulmonary circulation model.</li>
 </ul>
 <p >The elements are based on the parent <a class="el" href="class_m_o_d_e_l_1_1_block.html" title="Base class for 0D model components.">MODEL::Block</a> class. More information about the elements can be found on their respective pages. The elements are connected to each other via nodes (see <a class="el" href="class_m_o_d_e_l_1_1_node.html" title="Node.">MODEL::Node</a>). Each node corresponds to a flow and a pressure value of the model. The <a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html" title="Degree-of-freedom handler.">MODEL::DOFHandler</a> handles the degrees-of-freedom (DOF) of the system by assigning DOF indices to each element that determine the location of the local element contribution in the global system. The complete model is stored and managed by the <a class="el" href="class_m_o_d_e_l_1_1_model.html" title="Model of 0D elements.">MODEL::Model</a> class.</p>
-<h2><a class="anchor" id="autotoc_md3"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 Algebra</h2>
 <p >Everything related to solving the system of equation is contained in the <a class="el" href="namespace_a_l_g_e_b_r_a.html" title="ALGEBRA namespace.">ALGEBRA</a> namespace. The <a class="el" href="class_a_l_g_e_b_r_a_1_1_integrator.html" title="Generalized-alpha integrator.">ALGEBRA::Integrator</a> handles the time integration scheme (see Integrator documentation for more information on that).</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md7"></a>
 Input/output</h2>
-<p >Finally the <a class="el" href="namespace_i_o.html" title="IO namespace.">IO</a> namespace provides everything related to reading and writing files. The <a class="el" href="class_i_o_1_1_config_reader.html" title="svZeroDSolver configuration reader.">IO::ConfigReader</a> reads the simultion config and IO::write_csv and IO::write_json are two different methods for writing the result files.</p>
-<p >All classes make use of templates to allow easy exchange of scalar types like <code>double</code> or <code>float</code>.</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<p >Finally the <a class="el" href="namespace_i_o.html" title="IO namespace.">IO</a> namespace provides everything related to reading and writing files. The <a class="el" href="class_i_o_1_1_config_reader.html" title="svZeroDSolver configuration reader.">IO::ConfigReader</a> reads the simulation config and <a class="el" href="namespace_i_o.html#a1ef2a3fccc174166142bb843eab206f4" title="Write results vessel based.">IO::to_vessel_csv</a> and <a class="el" href="namespace_i_o.html#a02005a08dbf60e9a61dbb595454010f5" title="Write results variable based.">IO::to_variable_csv</a> are two different methods for writing the result files.</p>
+<h1><a class="anchor" id="autotoc_md8"></a>
 Build svZeroDSolver</h1>
-<p >svZeroDSolver uses CMake to build the tool. The dependencies are installed by CMake. If you want to use the C++ Python interface of svZeroDSolver make sure to checkout the correct Python environment beforehand. Currently supported are:</p>
+<p >svZeroDSolver uses CMake to build the tool. The dependencies are installed by CMake. Currently supported are:</p>
 <ul>
 <li>Ubuntu 18</li>
 <li>Ubuntu 20</li>
@@ -139,31 +157,33 @@ Build svZeroDSolver</h1>
 <li>macOS Big Sur</li>
 <li>macOS Monterey</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md6"></a>
+<dl class="section note"><dt>Note</dt><dd>If you want to use the Python interface of svZeroDPlus make sure to <b>activate the correct Python environment</b> before building the solver. Also make sure to install the Python package using the <code>-e</code> options, i.e. <div class="fragment"><div class="line">pip install -e .</div>
+</div><!-- fragment --></dd></dl>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Build in debug mode</h2>
 <div class="fragment"><div class="line">mkdir Debug</div>
 <div class="line">cd Debug</div>
 <div class="line">cmake -DCMAKE_BUILD_TYPE=Debug ..</div>
 <div class="line">cmake --build .</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md10"></a>
 Build in release mode</h2>
 <div class="fragment"><div class="line">mkdir Release</div>
 <div class="line">cd Release</div>
 <div class="line">cmake -DCMAKE_BUILD_TYPE=Release ..</div>
 <div class="line">cmake --build .</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md11"></a>
 Build on Sherlock</h2>
 <div class="fragment"><div class="line">module load cmake/3.23.1 gcc/12.1.0 binutils/2.38</div>
 <div class="line">mkdir Release</div>
 <div class="line">cd Release</div>
 <div class="line">cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..</div>
 <div class="line">cmake --build .</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md9"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md12"></a>
 Run svZeroDSolver</h1>
 <p >After building svZeroDSolver, the build folder contains an executable called <code>svzerodsolver</code>. Run it with one of:</p>
 <div class="fragment"><div class="line">./svzerodsolver path/to/config.json path/to/output.csv</div>
 </div><!-- fragment --><p ><code>path/to/config.json</code> and <code>path/to/output.csv</code> should be replaced by the correct paths to the input and output file, respectively.</p>
-<h2><a class="anchor" id="autotoc_md10"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Simulation parameters</h2>
 <p >The svZeroDSolver can be configured with the following options in the <code>simulation_parameters</code> section of the input file. Parameters without a default value must be specified.</p>
 <table class="markdownTable">
@@ -190,14 +210,14 @@ Simulation parameters</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">output_last_cycle_only   </td><td class="markdownTableBodyNone">Write only the last cardiac cycle   </td><td class="markdownTableBodyNone">false   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md11"></a>
+<h1><a class="anchor" id="autotoc_md14"></a>
 Developer Guide</h1>
 <p >If you are a developer and want to contribute to svZeroDSolver, you can find more helpful information in our <a class="el" href="md_developer_guide.html">Developer Guide</a>. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 19 2022 21:51:18 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Nov 28 2022 21:04:02 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

@@ -245,7 +245,7 @@
 \DoxyCodeLine{241 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
 \DoxyCodeLine{242 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ac6192a5011157b55641c0f32e0d9fca2}{BloodVessel<T>::update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
 \DoxyCodeLine{243                                      Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
-\DoxyCodeLine{244   T q\_in = fabs(y[this-\/>inlet\_nodes[0]-\/>flow\_dof]);}
+\DoxyCodeLine{244   T q\_in = fabs(y[this-\/>global\_var\_ids[1]]);}
 \DoxyCodeLine{245   T fac1 = -\/params.stenosis\_coefficient * q\_in;}
 \DoxyCodeLine{246   T fac2 = fac1 -\/ params.R;}
 \DoxyCodeLine{247   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = fac2;}

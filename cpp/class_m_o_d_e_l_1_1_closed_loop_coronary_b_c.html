@@ -203,32 +203,32 @@ node[left]{$P_{im}$}
 node[left]{$P_a$};
 \draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
 \end{circuitikz}
-\]" src="form_27.png" width="336" height="81"/>
+\]" src="form_31.png" width="336" height="81"/>
 </p>
-<h3><a class="anchor" id="autotoc_md14"></a>
+<h3><a class="anchor" id="autotoc_md19"></a>
 Governing equations</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a
 \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a
-\frac{dQ_{in}}{dt} = 0 \]" src="form_28.png" width="456" height="28"/>
+\frac{dQ_{in}}{dt} = 0 \]" src="form_32.png" width="456" height="28"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
-\frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \]" src="form_29.png" width="315" height="28"/>
+\frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \]" src="form_33.png" width="315" height="28"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
-\]" src="form_30.png" width="239" height="13"/>
+\]" src="form_34.png" width="239" height="13"/>
 </p>
-<h3><a class="anchor" id="autotoc_md15"></a>
+<h3><a class="anchor" id="autotoc_md20"></a>
 Local contributions</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} &amp; Q^{in} &amp; P_{out} &amp; Q_{out}
-&amp; V_{im}^{e}\end{array}\right]^{T}, \]" src="form_31.png" width="224" height="20"/>
+&amp; V_{im}^{e}\end{array}\right]^{T}, \]" src="form_35.png" width="224" height="20"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
@@ -236,7 +236,7 @@ Local contributions</h3>
 -R_{am} C_{a} &amp; R_{am} R_{a} C_{a} &amp; 0 &amp; 0 &amp; 0 \\
 -C_{a} &amp; R_{a} C_{a} &amp; 0 &amp; 0 &amp; -1 \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
-\end{array}\right] \]" src="form_32.png" width="240" height="46"/>
+\end{array}\right] \]" src="form_36.png" width="240" height="46"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
@@ -244,7 +244,7 @@ Local contributions</h3>
 -1 &amp; R_{am} + R_{a} &amp; 1 &amp; R_v &amp; 0 \\
 0 &amp; 1 &amp; 0 &amp; -1 &amp; 0 \\
 0 &amp; 0 &amp; C_{im} &amp; C_{im} R_v &amp; -1 \\
-\end{array}\right] \]" src="form_33.png" width="253" height="46"/>
+\end{array}\right] \]" src="form_37.png" width="253" height="46"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
@@ -252,9 +252,9 @@ Local contributions</h3>
 C_{a} R_{am} \frac{d P_{a}}{d t} \\
 C_{a}\frac{d P_{a}}{d t} \\
 -C_{im} P_{im}
-\end{array}\right] \]" src="form_34.png" width="113" height="48"/>
+\end{array}\right] \]" src="form_38.png" width="113" height="48"/>
 </p>
-<p >Assume <img class="formulaInl" alt="$P_a=0$" src="form_35.png" width="36" height="13"/>.</p>
+<p >Assume <img class="formulaInl" alt="$P_a=0$" src="form_39.png" width="36" height="13"/>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>Scalar type (e.g. <code>float</code>, <code>double</code>) </td></tr>
@@ -575,7 +575,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 19 2022 21:51:18 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Nov 28 2022 21:04:02 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

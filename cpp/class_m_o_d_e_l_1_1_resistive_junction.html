@@ -196,50 +196,50 @@ node[anchor=south] {$P_{out,1}$}; \draw (3,0) node[anchor=south]{} to [R,
 l=$R_{out,2}$, -*] (5,-1.0); \draw (4.3,-1.1) node[anchor=north]
 {$P_{out,2}$}; \draw [-latex] (5.15,1.1) -- (5.75,1.4) node[right]
 {$Q_{out,1}$}; \draw [-latex] (5.15,-1.1) -- (5.75,-1.4) node[right]
-{$Q_{out,2}$}; \end{circuitikz} \]" src="form_70.png" width="264" height="114"/>
+{$Q_{out,2}$}; \end{circuitikz} \]" src="form_74.png" width="264" height="114"/>
 </p>
-<h3><a class="anchor" id="autotoc_md28"></a>
+<h3><a class="anchor" id="autotoc_md33"></a>
 Governing equations</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
-\]" src="form_50.png" width="145" height="38"/>
+\]" src="form_54.png" width="145" height="38"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}
-\]" src="form_71.png" width="208" height="14"/>
+\]" src="form_75.png" width="208" height="14"/>
 </p>
  <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}
-\]" src="form_72.png" width="231" height="14"/>
+\]" src="form_76.png" width="231" height="14"/>
 </p>
-<h3><a class="anchor" id="autotoc_md29"></a>
+<h3><a class="anchor" id="autotoc_md34"></a>
 Local contributions</h3>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e}
 &amp; \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
-\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e} &amp; P_{C}\end{array}\right] \]" src="form_73.png" width="453" height="16"/>
+\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e} &amp; P_{C}\end{array}\right] \]" src="form_77.png" width="453" height="16"/>
 </p>
 <p >Mass conservation</p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[
 \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0
-&amp; -1 &amp; 0 &amp; -1 &amp; \dots &amp; 0\end{array}\right] \]" src="form_74.png" width="281" height="16"/>
+&amp; -1 &amp; 0 &amp; -1 &amp; \dots &amp; 0\end{array}\right] \]" src="form_78.png" width="281" height="16"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
 \underbrace{1}_{P_{in,i}} &amp; \underbrace{-R_{in,i}}_{Q_{in,i}} &amp; \dots &amp;
 \underbrace{-1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
-i\in n_{inlets}  \]" src="form_75.png" width="350" height="39"/>
+i\in n_{inlets}  \]" src="form_79.png" width="350" height="39"/>
 </p>
 <p class="formulaDsp">
 <img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
 \underbrace{-1}_{P_{out,j}} &amp; \underbrace{-R_{out,j}}_{Q_{out,j}} &amp; \dots &amp;
 \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
-j\in n_{oulets}  \]" src="form_76.png" width="364" height="39"/>
+j\in n_{oulets}  \]" src="form_80.png" width="364" height="39"/>
 </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -279,6 +279,7 @@ template&lt;typename T &gt; </div>
 <p>Construct a new <a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html" title="ResistiveJunction.">ResistiveJunction</a> object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
+    <tr><td class="paramname">R</td><td>Resistances </td></tr>
     <tr><td class="paramname">name</td><td>Name </td></tr>
   </table>
   </dd>
@@ -442,7 +443,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Oct 19 2022 21:51:18 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Mon Nov 28 2022 21:04:02 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

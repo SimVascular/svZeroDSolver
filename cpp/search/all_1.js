@@ -5,5 +5,7 @@ var searchData=
   ['block_2ehpp_2',['block.hpp',['../block_8hpp.html',1,'']]],
   ['blocks_3',['blocks',['../class_m_o_d_e_l_1_1_model.html#a69eebd78213465c7ab13ffbb7a5b86c8',1,'MODEL::Model']]],
   ['bloodvessel_4',['BloodVessel',['../class_m_o_d_e_l_1_1_blood_vessel.html#ad49bbb055eed81dbbf7ec0f5c6e43b20',1,'MODEL::BloodVessel::BloodVessel()'],['../class_m_o_d_e_l_1_1_blood_vessel.html',1,'MODEL::BloodVessel&lt; T &gt;']]],
-  ['bloodvessel_2ehpp_5',['bloodvessel.hpp',['../bloodvessel_8hpp.html',1,'']]]
+  ['bloodvessel_2ehpp_5',['bloodvessel.hpp',['../bloodvessel_8hpp.html',1,'']]],
+  ['bloodvesseljunction_6',['BloodVesselJunction',['../class_m_o_d_e_l_1_1_blood_vessel_junction.html#a7d6da1d1ec672851d8134c90bc3f9bd8',1,'MODEL::BloodVesselJunction::BloodVesselJunction()'],['../class_m_o_d_e_l_1_1_blood_vessel_junction.html',1,'MODEL::BloodVesselJunction&lt; T &gt;']]],
+  ['bloodvesseljunction_2ehpp_7',['bloodvesseljunction.hpp',['../bloodvesseljunction_8hpp.html',1,'']]]
 ];

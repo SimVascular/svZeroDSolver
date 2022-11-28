@@ -39,7 +39,7 @@
  * The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of
  * vascular networks using zero-dimensional (0D) lumped parameter models.
  *
- * * <a href="https://github.com/StanfordCBCL/svZeroDSolver">Source
+ * * <a href="https://github.com/StanfordCBCL/svZeroDPlus">Source
  * repository</a>
  * * <a href="https://simvascular.github.io">About SimVascular</a>
  *
@@ -70,7 +70,7 @@
  * wall, and inductance represents the inertia of the blood flow. Different
  * combinations of these building blocks, as well as others, can be formed to
  * reflect the hemodynamics and physiology of different cardiovascular
- * anatomies.These 0D models are governed by differential algebraic equations
+ * anatomies. These 0D models are governed by differential algebraic equations
  * (DAEs).
  *
  * # Architecture
@@ -81,15 +81,26 @@
  * using individual classes to represent different 0D elements of the
  * model. The elements are part of the MODEL namespace. Currently
  * supported elements are:
+ * 
+ * #### Vessels
  *
- * * MODEL::BloodVessel: RCL blood vessel respresentation with optional
- * stenosis.
- * * MODEL::Junction: Junction element with arbitrary inlets and outlets.
+ * * MODEL::BloodVessel: RCL blood vessel with optional stenosis.
+ * 
+ * #### Junctions
+ * 
+ * * MODEL::Junction: Mass conservation junction element.
+ * * MODEL::ResistiveJunction: Resistive junction element.
+ * * MODEL::BloodVesselJunction: RCL junction element with optional stenoses.
+ * 
+ * #### Boundary conditions
+ * 
  * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.
  * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.
  * * MODEL::ResistanceBC: Resistance boundary condition.
  * * MODEL::WindkesselBC: RCR Windkessel boundary condition.
  * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.
+ * * MODEL::ClosedLoopCoronaryBC: Closed Loop coronary boundary condition.
+ * * MODEL::ClosedLoopHeartPulmonary: Heart and pulmonary circulation model.
  *
  * The elements are based on the parent MODEL::Block class. More information
  * about the elements can be found on their respective pages. The elements are
@@ -110,24 +121,27 @@
  * ## Input/output
  *
  * Finally the IO namespace provides everything related to reading and writing
- * files. The IO::ConfigReader reads the simultion config and IO::write_csv and
- * IO::write_json are two different methods for writing the result files.
- *
- * All classes make use of templates to allow easy exchange of scalar
- * types like `double` or `float`.
+ * files. The IO::ConfigReader reads the simulation config and IO::to_vessel_csv and
+ * IO::to_variable_csv are two different methods for writing the result files.
  *
  * # Build svZeroDSolver
  *
  * svZeroDSolver uses CMake to build the tool. The dependencies are installed
- * by CMake. If you want to use the C++ Python interface of svZeroDSolver make
- * sure to checkout the correct Python environment beforehand. Currently
- * supported are:
+ * by CMake. Currently supported are:
  * 
  * * Ubuntu 18
  * * Ubuntu 20
  * * Ubuntu 22
  * * macOS Big Sur
  * * macOS Monterey
+ * 
+ * @note If you want to use the Python interface of svZeroDPlus make
+ * sure to **activate the correct Python environment** before building the
+ * solver. Also make sure to install the Python package using the `-e` options,
+ * i.e.
+ * \code
+ * pip install -e .
+ * \endcode
  *
  * ## Build in debug mode
  *

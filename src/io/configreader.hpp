@@ -41,6 +41,7 @@
 #include "../helpers/debug.hpp"
 #include "../helpers/startswith.hpp"
 #include "../model/bloodvessel.hpp"
+#include "../model/bloodvesseljunction.hpp"
 #include "../model/closedloopRCRbc.hpp"
 #include "../model/closedloopcoronarybc.hpp"
 #include "../model/closedloopheartpulmonary.hpp"
@@ -122,7 +123,7 @@ void ConfigReader<T>::load(std::string &specifier) {
   }
   auto config = parser.iterate(string);
 
-  // Load simulation paramaters
+  // Load simulation parameters
   auto sim_params = config["simulation_parameters"];
   sim_num_cycles = sim_params["number_of_cardiac_cycles"].get_int64();
   sim_pts_per_cycle =
@@ -130,13 +131,6 @@ void ConfigReader<T>::load(std::string &specifier) {
   sim_num_time_steps = (sim_pts_per_cycle - 1.0) * sim_num_cycles + 1.0;
   sim_cardiac_cycle_period = -1.0;  // Negative value indicates this has not
                                     // been read from config file yet.
-                                    // try {
-  //  sim_cardiac_cycle_period =
-  //  sim_params["cardiac_cycle_period"].get_double();
-  //} catch (simdjson::simdjson_error) {
-  //  sim_cardiac_cycle_period = -1.0; // Negative value indicates this has not
-  //  been read from config file or from TimeDependent parameter yet.
-  //}
   try {
     sim_abs_tol = sim_params["absolute_tolerance"].get_double();
   } catch (simdjson::simdjson_error) {
@@ -217,7 +211,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       throw std::invalid_argument("Unknown vessel type");
     }
 
-    // Read connected boundary condtitions
+    // Read connected boundary conditions
     try {
       auto inlet_bc = vessel_config["boundary_conditions"]["inlet"];
       connections.push_back({inlet_bc.get_string(), vessel_name});
@@ -393,6 +387,28 @@ void ConfigReader<T>::load(std::string &specifier) {
       }
       model.blocks.push_back(new MODEL::ResistiveJunction<T>(
           R, static_cast<std::string>(junction_name)));
+    } else if (j_type == "BloodVesselJunction") {
+      std::vector<T> R;
+      std::vector<T> C;
+      std::vector<T> L;
+      std::vector<T> stenosis_coefficient;
+      for (auto x :
+           junction_config["junction_values"]["R_poiseuille"].get_array()) {
+        R.push_back(x.get_double());
+      }
+      for (auto x : junction_config["junction_values"]["C"].get_array()) {
+        C.push_back(x.get_double());
+      }
+      for (auto x : junction_config["junction_values"]["L"].get_array()) {
+        L.push_back(x.get_double());
+      }
+      for (auto x : junction_config["junction_values"]["stenosis_coefficient"]
+                        .get_array()) {
+        stenosis_coefficient.push_back(x.get_double());
+      }
+      model.blocks.push_back(new MODEL::BloodVesselJunction<T>(
+          R, C, L, stenosis_coefficient,
+          static_cast<std::string>(junction_name)));
     } else {
       throw std::invalid_argument("Unknown junction type");
     }
@@ -406,6 +422,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       connections.push_back(
           {junction_name, vessel_id_map[outlet_vessel.get_int64()]});
     }
+    DEBUG_MSG("Created junction " << junction_name);
   }
 
   // Create closed-loop blocks

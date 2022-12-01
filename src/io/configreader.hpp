@@ -356,16 +356,35 @@ void ConfigReader<T>::load(std::string &specifier) {
       // Determine the type of connected block
       std::string_view connected_block = coupling_config["connected_block"];
       std::string_view connected_type;
+      int found_block = 0;
       if (connected_block == "ClosedLoopHeartAndPulmonary") {
         connected_type = "ClosedLoopHeartAndPulmonary";
+        found_block = 1;
       } else {
-        connected_type = bc_type_map[connected_block];
-      }  // connected_block == "ClosedLoopHeartAndPulmonary"
+        try {
+          connected_type = bc_type_map.at(connected_block);
+          found_block = 1;
+        } catch (...) {}
+        if (found_block == 0) {
+          // Search for connected_block in the list of vessel names
+          for (auto const vessel : vessel_id_map) {
+            if (connected_block == vessel.second) {
+              connected_type = "BloodVessel";
+              found_block = 1;
+              break;
+            }
+          }
+        }
+        if (found_block == 0) {
+          std::cout << "Error! Could not connected type for block: " << connected_block << std::endl;
+          throw std::runtime_error("Terminating.");
+        }
+      }  // connected_block != "ClosedLoopHeartAndPulmonary"
       // Create connections
       if (coupling_loc == "inlet") {
         std::vector<std::string_view> possible_types = {
             "RESISTANCE",    "RCR",      "ClosedLoopRCR",
-            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary"};
+            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary", "BloodVessel"};
         if (std::find(std::begin(possible_types), std::end(possible_types),
                       connected_type) == std::end(possible_types)) {
           throw std::runtime_error(
@@ -377,17 +396,15 @@ void ConfigReader<T>::load(std::string &specifier) {
                                                         << connected_block);
       } else if (coupling_loc == "outlet") {
         std::vector<std::string_view> possible_types = {
-            "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary"};
+            "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
         if (std::find(std::begin(possible_types), std::end(possible_types),
                       connected_type) == std::end(possible_types)) {
           throw std::runtime_error(
               "Error: The specified connection type for outlet "
               "external_coupling_block is invalid.");
         }
-        // Add connection only for closedLoopRCR. Connection to
-        // ClosedLoopHeartAndPulmonary will be handled in
-        // ClosedLoopHeartAndPulmonary creation.
-        if (connected_type == "ClosedLoopRCR") {
+        // Add connection only for closedLoopRCR and BloodVessel. Connection to ClosedLoopHeartAndPulmonary will be handled in ClosedLoopHeartAndPulmonary creation.
+        if ((connected_type == "ClosedLoopRCR") || (connected_type == "BloodVessel")) {
           connections.push_back({connected_block, coupling_name});
           DEBUG_MSG("Created coupling block connection: "
                     << connected_block << "-> " << coupling_name);

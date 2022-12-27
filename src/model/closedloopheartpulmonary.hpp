@@ -67,33 +67,33 @@ class ClosedLoopHeartPulmonary : public Block<T> {
    * element.
    */
   struct Parameters : public Block<T>::Parameters {
-    T Tsa;      // Fractions of cardiac cycle (not sure)
-    T tpwave;   // Fraction of cardiac cycle (P-wave)
-    T Erv_s;    // Scaling for right ventricle elastance
-    T Elv_s;    // Scaling for left ventricle elastance
-    T iml;      // Scaling for intramyocardial pressure (left coronaries)
-    T imr;      // Scaling for intramyocardial pressure (right coronaries)
-    T Lra_v;    // Right atrium inductance
-    T Rra_v;    // Right atrium outflow resistance
-    T Lrv_a;    // Right ventricle inductance
-    T Rrv_a;    // Right ventricle outflow resistance
-    T Lla_v;    // Left atrium inductance
-    T Rla_v;    // Left atrium outflow resistance
-    T Llv_a;    // Left ventricle inductance
-    T Rlv_ao;   // Left ventricle outflow resistance
-    T Vrv_u;    // Right ventricle unstressed volume
-    T Vlv_u;    // Right ventricle unstressed volume
-    T Rpd;      // Pulmonary resistance
-    T Cp;       // Pulmonary capacitance
-    T Cpa;      // Aortic capacitance
-    T Kxp_ra;   // Right atrium pressure-volume relationship (?)
-    T Kxv_ra;   // Right atrium pressure-volume relationship (?)
-    T Kxp_la;   // Left atrium pressure-volume relationship (?)
-    T Kxv_la;   // Left atrium pressure-volume relationship (?)
-    T Emax_ra;  // Right atrium elastance (?)
-    T Emax_la;  // Left atrium elastance (?)
-    T Vaso_ra;  // Right atrium rest volume (?)
-    T Vaso_la;  // Left atrium rest volume (?)
+    T Tsa;      ///< Fractions of cardiac cycle (not sure)
+    T tpwave;   ///< Fraction of cardiac cycle (P-wave)
+    T Erv_s;    ///< Scaling for right ventricle elastance
+    T Elv_s;    ///< Scaling for left ventricle elastance
+    T iml;      ///< Scaling for intramyocardial pressure (left coronaries)
+    T imr;      ///< Scaling for intramyocardial pressure (right coronaries)
+    T Lra_v;    ///< Right atrium inductance
+    T Rra_v;    ///< Right atrium outflow resistance
+    T Lrv_a;    ///< Right ventricle inductance
+    T Rrv_a;    ///< Right ventricle outflow resistance
+    T Lla_v;    ///< Left atrium inductance
+    T Rla_v;    ///< Left atrium outflow resistance
+    T Llv_a;    ///< Left ventricle inductance
+    T Rlv_ao;   ///< Left ventricle outflow resistance
+    T Vrv_u;    ///< Right ventricle unstressed volume
+    T Vlv_u;    ///< Right ventricle unstressed volume
+    T Rpd;      ///< Pulmonary resistance
+    T Cp;       ///< Pulmonary capacitance
+    T Cpa;      ///< Aortic capacitance
+    T Kxp_ra;   ///< Right atrium pressure-volume relationship (?)
+    T Kxv_ra;   ///< Right atrium pressure-volume relationship (?)
+    T Kxp_la;   ///< Left atrium pressure-volume relationship (?)
+    T Kxv_la;   ///< Left atrium pressure-volume relationship (?)
+    T Emax_ra;  ///< Right atrium elastance (?)
+    T Emax_la;  ///< Left atrium elastance (?)
+    T Vaso_ra;  ///< Right atrium rest volume (?)
+    T Vaso_la;  ///< Left atrium rest volume (?)
   };
 
   /**

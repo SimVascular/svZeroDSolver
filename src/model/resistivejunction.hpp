@@ -106,12 +106,13 @@ class ResistiveJunction : public Block<T> {
    * element.
    */
   struct Parameters : public Block<T>::Parameters {
-    std::vector<T> R;  ///< Poiseuille resistance
+    std::vector<T> R;  ///< Poiseuille resistances
   };
 
   /**
    * @brief Construct a new ResistiveJunction object
    *
+   * @param R Resistances
    * @param name Name
    */
   ResistiveJunction(std::vector<T> R, std::string name);

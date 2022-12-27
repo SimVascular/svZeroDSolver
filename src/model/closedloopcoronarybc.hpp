@@ -28,7 +28,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file openloopcoronarybc.hpp
+ * @file closedloopcoronarybc.hpp
  * @brief MODEL::ClosedLoopCoronaryBC source file
  */
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_
@@ -333,4 +333,4 @@ std::map<std::string, int> ClosedLoopCoronaryBC<T>::get_num_triplets() {
 
 }  // namespace MODEL
 
-#endif  // SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_
+#endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_

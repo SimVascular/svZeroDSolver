@@ -29,6 +29,6 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
-NAME = "svZeroDSolver"
+NAME = "svZeroDPlus"
 VERSION = "v1.0"
 COPYRIGHT = "Stanford University, The Regents of the University of California, and others."

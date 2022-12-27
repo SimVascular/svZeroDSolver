@@ -31,8 +31,8 @@
  * @file resistancebc.hpp
  * @brief MODEL::ResistanceBC source file
  */
-#ifndef SVZERODSOLVER_MODEL_RESISTANCEWITHDISTALPRESSURE_HPP_
-#define SVZERODSOLVER_MODEL_RESISTANCEWITHDISTALPRESSURE_HPP_
+#ifndef SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_
+#define SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
@@ -239,4 +239,4 @@ std::map<std::string, int> ResistanceBC<T>::get_num_triplets() {
 
 }  // namespace MODEL
 
-#endif  // SVZERODSOLVER_MODEL_RESISTANCEWITHDISTALPRESSURE_HPP_
+#endif  // SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_

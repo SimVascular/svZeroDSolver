@@ -39,7 +39,7 @@
  * The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of
  * vascular networks using zero-dimensional (0D) lumped parameter models.
  *
- * * <a href="https://github.com/StanfordCBCL/svZeroDSolver">Source
+ * * <a href="https://github.com/StanfordCBCL/svZeroDPlus">Source
  * repository</a>
  * * <a href="https://simvascular.github.io">About SimVascular</a>
  *
@@ -70,7 +70,7 @@
  * wall, and inductance represents the inertia of the blood flow. Different
  * combinations of these building blocks, as well as others, can be formed to
  * reflect the hemodynamics and physiology of different cardiovascular
- * anatomies.These 0D models are governed by differential algebraic equations
+ * anatomies. These 0D models are governed by differential algebraic equations
  * (DAEs).
  *
  * # Architecture
@@ -81,15 +81,26 @@
  * using individual classes to represent different 0D elements of the
  * model. The elements are part of the MODEL namespace. Currently
  * supported elements are:
+ * 
+ * #### Vessels
  *
- * * MODEL::BloodVessel: RCL blood vessel respresentation with optional
- * stenosis.
- * * MODEL::Junction: Junction element with arbitrary inlets and outlets.
+ * * MODEL::BloodVessel: RCL blood vessel with optional stenosis.
+ * 
+ * #### Junctions
+ * 
+ * * MODEL::Junction: Mass conservation junction element.
+ * * MODEL::ResistiveJunction: Resistive junction element.
+ * * MODEL::BloodVesselJunction: RCL junction element with optional stenoses.
+ * 
+ * #### Boundary conditions
+ * 
  * * MODEL::FlowReferenceBC: Prescribed flow boundary condition.
  * * MODEL::PressureReferenceBC: Prescribed pressure boundary condition.
  * * MODEL::ResistanceBC: Resistance boundary condition.
  * * MODEL::WindkesselBC: RCR Windkessel boundary condition.
  * * MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.
+ * * MODEL::ClosedLoopCoronaryBC: Closed Loop coronary boundary condition.
+ * * MODEL::ClosedLoopHeartPulmonary: Heart and pulmonary circulation model.
  *
  * The elements are based on the parent MODEL::Block class. More information
  * about the elements can be found on their respective pages. The elements are
@@ -110,24 +121,27 @@
  * ## Input/output
  *
  * Finally the IO namespace provides everything related to reading and writing
- * files. The IO::ConfigReader reads the simultion config and IO::write_csv and
- * IO::write_json are two different methods for writing the result files.
- *
- * All classes make use of templates to allow easy exchange of scalar
- * types like `double` or `float`.
+ * files. The IO::ConfigReader reads the simulation config and IO::to_vessel_csv and
+ * IO::to_variable_csv are two different methods for writing the result files.
  *
  * # Build svZeroDSolver
  *
  * svZeroDSolver uses CMake to build the tool. The dependencies are installed
- * by CMake. If you want to use the C++ Python interface of svZeroDSolver make
- * sure to checkout the correct Python environment beforehand. Currently
- * supported are:
+ * by CMake. Currently supported are:
  * 
  * * Ubuntu 18
  * * Ubuntu 20
  * * Ubuntu 22
  * * macOS Big Sur
  * * macOS Monterey
+ * 
+ * @note If you want to use the Python interface of svZeroDPlus make
+ * sure to **activate the correct Python environment** before building the
+ * solver. Also make sure to install the Python package using the `-e` options,
+ * i.e.
+ * \code
+ * pip install -e .
+ * \endcode
  *
  * ## Build in debug mode
  *
@@ -221,6 +235,7 @@ typedef double T;
  */
 const std::string run(std::string& json_config) {
   // Load model and configuration
+  DEBUG_MSG("Read configuration");
   IO::ConfigReader<T> reader;
   reader.load(json_config);
 
@@ -229,6 +244,7 @@ const std::string run(std::string& json_config) {
 
   // Create steady initial
   if (reader.sim_steady_initial) {
+    DEBUG_MSG("Calculate steady initial condition");
     T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
     reader.model->to_steady();
     ALGEBRA::Integrator<T> integrator_steady(*reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol, reader.sim_nliter);
@@ -238,36 +254,50 @@ const std::string run(std::string& json_config) {
     reader.model->to_unsteady();
   }
 
-  ALGEBRA::Integrator<T> integrator(*reader.model, reader.sim_time_step_size,0.1, reader.sim_abs_tol, reader.sim_nliter);
+  // Set-up integrator
+  DEBUG_MSG("Setup time integration");
+  ALGEBRA::Integrator<T> integrator(*reader.model, reader.sim_time_step_size,
+                                    0.1, reader.sim_abs_tol, reader.sim_nliter);
 
   // Initialize loop
   std::vector<ALGEBRA::State<T>> states;
   std::vector<T> times;
-  states.reserve(reader.sim_num_time_steps);
-  times.reserve(reader.sim_num_time_steps);
+  if (reader.output_last_cycle_only) {
+    int num_states = reader.sim_pts_per_cycle / reader.output_interval + 1;
+    states.reserve(num_states);
+    times.reserve(num_states);
+  } else {
+    int num_states = reader.sim_num_time_steps / reader.output_interval + 1;
+    states.reserve(num_states);
+    times.reserve(num_states);
+  }
   T time = 0.0;
-  states.push_back(state);
-  times.push_back(time);
 
   // Run integrator
-  DEBUG_MSG("Starting integration.");
+  DEBUG_MSG("Run time integration");
   int interval_counter = 0;
+  int start_last_cycle = reader.sim_num_time_steps - reader.sim_pts_per_cycle;
+  if ((reader.output_last_cycle_only == false) || (0 >= start_last_cycle)) {
+    times.push_back(time);
+    states.push_back(std::move(state));
+  }
   for (int i = 1; i < reader.sim_num_time_steps; i++) {
     DEBUG_MSG("Integration time: "<< time << std::endl);
     state = integrator.step(state, time, *reader.model);
     interval_counter += 1;
     time = reader.sim_time_step_size * T(i);
-    if (interval_counter == reader.output_interval) {
-      times.push_back(time);
-      states.push_back(std::move(state));
+    if ((interval_counter == reader.output_interval) ||
+        (reader.output_last_cycle_only && (i == start_last_cycle))) {
+      if ((reader.output_last_cycle_only == false) || (i >= start_last_cycle)) {
+        times.push_back(time);
+        states.push_back(std::move(state));
+      }
       interval_counter = 0;
     }
   }
 
-  // Extract last cardiac cycle
+  // Make times start from 0
   if (reader.output_last_cycle_only) {
-    states.erase(states.begin(), states.end() - reader.sim_pts_per_cycle);
-    times.erase(times.begin(), times.end() - reader.sim_pts_per_cycle);
     T start_time = times[0];
     for (auto& time : times) {
       time -= start_time;
@@ -275,6 +305,7 @@ const std::string run(std::string& json_config) {
   }
 
   // Write csv output string
+  DEBUG_MSG("Write output");
   std::string output;
   if (reader.output_variable_based) {
     output = IO::to_variable_csv<T>(times, states, *reader.model,
@@ -285,5 +316,6 @@ const std::string run(std::string& json_config) {
         IO::to_vessel_csv<T>(times, states, *reader.model,
                              reader.output_mean_only, reader.output_derivative);
   }
+  DEBUG_MSG("Finished");
   return output;
 }

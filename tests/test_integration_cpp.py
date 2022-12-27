@@ -287,6 +287,46 @@ def test_steady_flow_bifurcationr_r2():
     )  # daughter2 outlet flow
 
 
+def test_steadyFlow_blood_vessel_junction():
+    results = run_test_case_by_name("steadyFlow_blood_vessel_junction")
+    assert np.isclose(
+        get_result(results, "pressure_in", 0, -1), 3462.5, rtol=RTOL_PRES
+    )  # parent inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 0, -1), 1962.5, rtol=RTOL_PRES
+    )  # parent outlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_in", 1, -1), 1580.0, rtol=RTOL_PRES
+    )  # daughter1 inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 1, -1), 432.5, rtol=RTOL_PRES
+    )  # daughter1 outlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_in", 2, -1), 1727.5, rtol=RTOL_PRES
+    )  # daughter2 inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 2, -1), 1375.0, rtol=RTOL_PRES
+    )  # daughter2 outlet pressure
+    assert np.isclose(
+        get_result(results, "flow_in", 0, -1), 5.0, rtol=RTOL_FLOW
+    )  # parent inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 0, -1), 5.0, rtol=RTOL_FLOW
+    )  # parent outlet flow
+    assert np.isclose(
+        get_result(results, "flow_in", 1, -1), 3.825, rtol=RTOL_FLOW
+    )  # daughter1 inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 1, -1), 3.825, rtol=RTOL_FLOW
+    )  # daughter1 outlet flow
+    assert np.isclose(
+        get_result(results, "flow_in", 2, -1), 1.175, rtol=RTOL_FLOW
+    )  # daughter2 inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 2, -1), 1.175, rtol=RTOL_FLOW
+    )  # daughter2 outlet flow
+
+
 def test_pulsatile_flow_r_rcr():
     results = run_test_case_by_name("pulsatileFlow_R_RCR")
     assert np.isclose(
@@ -384,32 +424,32 @@ def test_steady_flow_confluencer_r():
 def test_closed_loop_heart_single_vessel(tmpdir):
     results = run_test_case_by_name("closedLoopHeart_singleVessel")
     assert np.isclose(
-        np.mean(np.array(results['pressure_in'][0])), 55.703345704742844, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_in"][0])), 55.703345704742844, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(np.array(results['pressure_in'][0])), 73.97450170686889, rtol=RTOL_PRES
+        np.amax(np.array(results["pressure_in"][0])), 73.97450170686889, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
-        np.amin(np.array(results['pressure_in'][0])), 0.0, rtol=RTOL_PRES
+        np.amin(np.array(results["pressure_in"][0])), 0.0, rtol=RTOL_PRES
     )  # min aortic pressure
     assert np.isclose(
-        np.mean(np.array(results['flow_in'][0])), 43.21028819256006, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_in"][0])), 43.21028819256006, rtol=RTOL_FLOW
     )  # aortic inflow
 
 
 def test_closed_loop_heart_with_coronaries(tmpdir):
     results = run_test_case_by_name("closedLoopHeart_withCoronaries")
     assert np.isclose(
-        np.mean(np.array(results['pressure_in'][0])), 50.162313086833805, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_in"][0])), 50.162313086833805, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(np.array(results['pressure_in'][0])), 69.01524513715958, rtol=RTOL_PRES
+        np.amax(np.array(results["pressure_in"][0])), 69.01524513715958, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
-        np.mean(np.array(results['flow_in'][0])), 38.05442038841015, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_in"][0])), 38.05442038841015, rtol=RTOL_FLOW
     )  # mean aortic flow
     assert np.isclose(
-        np.amax(np.array(results['flow_in'][0])), 171.35198346122127, rtol=RTOL_FLOW
+        np.amax(np.array(results["flow_in"][0])), 171.35198346122127, rtol=RTOL_FLOW
     )  # max aortic flow
 
 

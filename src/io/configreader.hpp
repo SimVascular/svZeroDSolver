@@ -42,6 +42,7 @@
 #include "../helpers/startswith.hpp"
 #include "../model/block.hpp"
 #include "../model/bloodvessel.hpp"
+#include "../model/bloodvesseljunction.hpp"
 #include "../model/closedloopRCRbc.hpp"
 #include "../model/closedloopcoronarybc.hpp"
 #include "../model/closedloopheartpulmonary.hpp"
@@ -604,6 +605,31 @@ void ConfigReader<T>::load(std::string &specifier) {
       model->block_index_map.insert(
           {static_cast<std::string>(junction_name), block_count});
       block_count++;
+    } else if (j_type == "BloodVesselJunction") {
+      std::vector<T> R;
+      std::vector<T> C;
+      std::vector<T> L;
+      std::vector<T> stenosis_coefficient;
+      for (auto x :
+           junction_config["junction_values"]["R_poiseuille"].get_array()) {
+        R.push_back(x.get_double());
+      }
+      for (auto x : junction_config["junction_values"]["C"].get_array()) {
+        C.push_back(x.get_double());
+      }
+      for (auto x : junction_config["junction_values"]["L"].get_array()) {
+        L.push_back(x.get_double());
+      }
+      for (auto x : junction_config["junction_values"]["stenosis_coefficient"]
+                        .get_array()) {
+        stenosis_coefficient.push_back(x.get_double());
+      }
+      model.blocks.push_back(new MODEL::BloodVesselJunction<T>(
+          R, C, L, stenosis_coefficient,
+          static_cast<std::string>(junction_name)));
+      model->block_index_map.insert(
+          {static_cast<std::string>(junction_name), block_count});
+      block_count++;
     } else {
       throw std::invalid_argument("Unknown junction type");
     }
@@ -617,6 +643,7 @@ void ConfigReader<T>::load(std::string &specifier) {
       connections.push_back(
           {junction_name, vessel_id_map[outlet_vessel.get_int64()]});
     }
+    DEBUG_MSG("Created junction " << junction_name);
   }
 
   // Create closed-loop blocks

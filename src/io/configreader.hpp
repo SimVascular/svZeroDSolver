@@ -624,7 +624,7 @@ void ConfigReader<T>::load(std::string &specifier) {
                         .get_array()) {
         stenosis_coefficient.push_back(x.get_double());
       }
-      model.blocks.push_back(new MODEL::BloodVesselJunction<T>(
+      model->blocks.push_back(new MODEL::BloodVesselJunction<T>(
           R, C, L, stenosis_coefficient,
           static_cast<std::string>(junction_name)));
       model->block_index_map.insert(

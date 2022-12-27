@@ -365,7 +365,8 @@ void ConfigReader<T>::load(std::string &specifier) {
         try {
           connected_type = bc_type_map.at(connected_block);
           found_block = 1;
-        } catch (...) {}
+        } catch (...) {
+        }
         if (found_block == 0) {
           // Search for connected_block in the list of vessel names
           for (auto const vessel : vessel_id_map) {
@@ -377,7 +378,8 @@ void ConfigReader<T>::load(std::string &specifier) {
           }
         }
         if (found_block == 0) {
-          std::cout << "Error! Could not connected type for block: " << connected_block << std::endl;
+          std::cout << "Error! Could not connected type for block: "
+                    << connected_block << std::endl;
           throw std::runtime_error("Terminating.");
         }
       }  // connected_block != "ClosedLoopHeartAndPulmonary"
@@ -385,7 +387,8 @@ void ConfigReader<T>::load(std::string &specifier) {
       if (coupling_loc == "inlet") {
         std::vector<std::string_view> possible_types = {
             "RESISTANCE",    "RCR",      "ClosedLoopRCR",
-            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary", "BloodVessel"};
+            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
+            "BloodVessel"};
         if (std::find(std::begin(possible_types), std::end(possible_types),
                       connected_type) == std::end(possible_types)) {
           throw std::runtime_error(
@@ -404,8 +407,11 @@ void ConfigReader<T>::load(std::string &specifier) {
               "Error: The specified connection type for outlet "
               "external_coupling_block is invalid.");
         }
-        // Add connection only for closedLoopRCR and BloodVessel. Connection to ClosedLoopHeartAndPulmonary will be handled in ClosedLoopHeartAndPulmonary creation.
-        if ((connected_type == "ClosedLoopRCR") || (connected_type == "BloodVessel")) {
+        // Add connection only for closedLoopRCR and BloodVessel. Connection to
+        // ClosedLoopHeartAndPulmonary will be handled in
+        // ClosedLoopHeartAndPulmonary creation.
+        if ((connected_type == "ClosedLoopRCR") ||
+            (connected_type == "BloodVessel")) {
           connections.push_back({connected_block, coupling_name});
           DEBUG_MSG("Created coupling block connection: "
                     << connected_block << "-> " << coupling_name);

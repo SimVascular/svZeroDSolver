@@ -28,7 +28,7 @@ find **/*.hpp **/*.cpp | xargs clang-format --dry-run --style=Google --Werror
 ```
 
 The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and
-indicates on merge requests when the code doesnt't yet meet all style
+indicates on merge requests when the code doesnt yet meet all style
 requirements.
 
 On Sherlock at Stanford, clang-format is included in the `llvm` module.

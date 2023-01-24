@@ -33,11 +33,15 @@ struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_coronary_b_c_1_1_parame
 \begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{Closed\+Loop\+Coronary\+BC}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_af6f18c8f4b611a5beea29b88d72b5af0}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ new\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ada897d3dada8b0a6e83f4014abbadea2}{get\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ \&block\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Return parameters of a block. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y)
 \begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of the element. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_acd0bdeaaca1b2273173ca507720ebc47}{update\+\_\+model\+\_\+dependent\+\_\+params}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0a23c2fbef9c48d6f5c9a6e82b1b91d2}{set\+\_\+model\+\_\+dependent\+\_\+params}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
 \begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of t. \end{DoxyCompactList}\item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}{get\+\_\+num\+\_\+triplets}} ()
 \begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
@@ -147,6 +151,21 @@ Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{Close
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ada897d3dada8b0a6e83f4014abbadea2}\label{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ada897d3dada8b0a6e83f4014abbadea2}} 
+\index{MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}!get\_block\_params@{get\_block\_params}}
+\index{get\_block\_params@{get\_block\_params}!MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_block\_params()}{get\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{MODEL\+::\+Closed\+Loop\+Coronary\+BC}}$<$ T $>$\+::get\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{block\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Return parameters of a block. 
+
+@block\+\_\+params \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} parameters. 
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a17a3f09a478899add488c91710ea742e}{MODEL\+::\+Block$<$ T $>$}}.
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}\label{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}} 
 \index{MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}}
 \index{get\_num\_triplets@{get\_num\_triplets}!MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}}
@@ -161,6 +180,28 @@ Get number of triplets of element.
 Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) 
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ae68725b7b8add13e1d182ce46fca76d2}{MODEL\+::\+Block$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0a23c2fbef9c48d6f5c9a6e82b1b91d2}\label{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0a23c2fbef9c48d6f5c9a6e82b1b91d2}} 
+\index{MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}!set\_model\_dependent\_params@{set\_model\_dependent\_params}}
+\index{set\_model\_dependent\_params@{set\_model\_dependent\_params}!MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{set\_model\_dependent\_params()}{set\_model\_dependent\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{MODEL\+::\+Closed\+Loop\+Coronary\+BC}}$<$ T $>$\+::set\+\_\+model\+\_\+dependent\+\_\+params (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Update the solution-\/dependent contributions of t. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em system} & System to update contributions at \\
+\hline
+{\em y} & Current solution \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a89fef5378b8d6d8c94d7bfb1a92e4152}{MODEL\+::\+Block$<$ T $>$}}.
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}\label{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}} 
 \index{MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}!setup\_dofs@{setup\_dofs}}
@@ -184,6 +225,26 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_af6f18c8f4b611a5beea29b88d72b5af0}\label{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_af6f18c8f4b611a5beea29b88d72b5af0}} 
+\index{MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}!update\_block\_params@{update\_block\_params}}
+\index{update\_block\_params@{update\_block\_params}!MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{MODEL\+::\+Closed\+Loop\+Coronary\+BC}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Update parameters of a block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em params} & New parameters. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{MODEL\+::\+Block$<$ T $>$}}.
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}\label{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}} 
 \index{MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}}
@@ -203,28 +264,6 @@ Update the constant contributions of the element in a sparse system.
 
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_acd0bdeaaca1b2273173ca507720ebc47}\label{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_acd0bdeaaca1b2273173ca507720ebc47}} 
-\index{MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}!update\_model\_dependent\_params@{update\_model\_dependent\_params}}
-\index{update\_model\_dependent\_params@{update\_model\_dependent\_params}!MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_model\_dependent\_params()}{update\_model\_dependent\_params()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{MODEL\+::\+Closed\+Loop\+Coronary\+BC}}$<$ T $>$\+::update\+\_\+model\+\_\+dependent\+\_\+params (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Update the solution-\/dependent contributions of t. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em system} & System to update contributions at \\
-\hline
-{\em y} & Current solution \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a734b31879d4c99c77ccbc01dbf227367}{MODEL\+::\+Block$<$ T $>$}}.
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}\label{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}} 
 \index{MODEL::ClosedLoopCoronaryBC$<$ T $>$@{MODEL::ClosedLoopCoronaryBC$<$ T $>$}!update\_solution@{update\_solution}}

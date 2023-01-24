@@ -140,97 +140,109 @@
 \DoxyCodeLine{136   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_af326b1f9faa34405d1a5024a6d5e132e}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
 \DoxyCodeLine{137 \textcolor{comment}{}}
 \DoxyCodeLine{138 \textcolor{comment}{  /**}}
-\DoxyCodeLine{139 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{139 \textcolor{comment}{   * @brief Update parameters of a block.}}
 \DoxyCodeLine{140 \textcolor{comment}{   *}}
-\DoxyCodeLine{141 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{141 \textcolor{comment}{   * @param params New parameters.}}
 \DoxyCodeLine{142 \textcolor{comment}{   */}}
-\DoxyCodeLine{143   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_ab9feb4188109a2e55b294cfe6eb965c4}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{143   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a29158cbf4c5fbddb2842cb1a776c9d54}{update\_block\_params}}(std::vector<T> new\_params);}
 \DoxyCodeLine{144 \textcolor{comment}{}}
 \DoxyCodeLine{145 \textcolor{comment}{  /**}}
-\DoxyCodeLine{146 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{146 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
 \DoxyCodeLine{147 \textcolor{comment}{   *}}
-\DoxyCodeLine{148 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{149 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{150 \textcolor{comment}{   */}}
-\DoxyCodeLine{151   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a8b6cdf17513b7c6f845aea55727d70f5}{num\_triplets}} = \{}
-\DoxyCodeLine{152       \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
-\DoxyCodeLine{153       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{154       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{155   \};}
-\DoxyCodeLine{156 \textcolor{comment}{}}
-\DoxyCodeLine{157 \textcolor{comment}{  /**}}
-\DoxyCodeLine{158 \textcolor{comment}{   * @brief Get number of triplets of element}}
-\DoxyCodeLine{159 \textcolor{comment}{   *}}
-\DoxyCodeLine{160 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{161 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{162 \textcolor{comment}{   */}}
-\DoxyCodeLine{163   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a7520ac287c5fd089b305b15771c0a808}{get\_num\_triplets}}();}
-\DoxyCodeLine{164 }
-\DoxyCodeLine{165  \textcolor{keyword}{private}:}
-\DoxyCodeLine{166   Parameters params;}
-\DoxyCodeLine{167   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_inlets;}
-\DoxyCodeLine{168   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_outlets;}
-\DoxyCodeLine{169 \};}
-\DoxyCodeLine{170 }
-\DoxyCodeLine{171 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{172 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a7a94159734df6f999935f7ef8104330e}{ResistiveJunction<T>::ResistiveJunction}}(std::vector<T> R, std::string name)}
-\DoxyCodeLine{173     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{174   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{175   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistive_junction_1_1_parameters_abf36dce21a2a8b6d90352e6bf5439d24}{R}} = R;}
-\DoxyCodeLine{176 \}}
+\DoxyCodeLine{148 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{149 \textcolor{comment}{   */}}
+\DoxyCodeLine{150   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_ab9feb4188109a2e55b294cfe6eb965c4}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{151 \textcolor{comment}{}}
+\DoxyCodeLine{152 \textcolor{comment}{  /**}}
+\DoxyCodeLine{153 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{154 \textcolor{comment}{   *}}
+\DoxyCodeLine{155 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{156 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{157 \textcolor{comment}{   */}}
+\DoxyCodeLine{158   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a8b6cdf17513b7c6f845aea55727d70f5}{num\_triplets}} = \{}
+\DoxyCodeLine{159       \{\textcolor{stringliteral}{"{}F"{}}, 0\},}
+\DoxyCodeLine{160       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{161       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{162   \};}
+\DoxyCodeLine{163 \textcolor{comment}{}}
+\DoxyCodeLine{164 \textcolor{comment}{  /**}}
+\DoxyCodeLine{165 \textcolor{comment}{   * @brief Get number of triplets of element}}
+\DoxyCodeLine{166 \textcolor{comment}{   *}}
+\DoxyCodeLine{167 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{168 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{169 \textcolor{comment}{   */}}
+\DoxyCodeLine{170   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a7520ac287c5fd089b305b15771c0a808}{get\_num\_triplets}}();}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172  \textcolor{keyword}{private}:}
+\DoxyCodeLine{173   Parameters params;}
+\DoxyCodeLine{174   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_inlets;}
+\DoxyCodeLine{175   \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} num\_outlets;}
+\DoxyCodeLine{176 \};}
 \DoxyCodeLine{177 }
 \DoxyCodeLine{178 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{179 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a14b440134065c081afd141f1a0708b87}{ResistiveJunction<T>::\string~ResistiveJunction}}() \{\}}
-\DoxyCodeLine{180 }
-\DoxyCodeLine{181 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{182 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_af326b1f9faa34405d1a5024a6d5e132e}{ResistiveJunction<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{183   \textcolor{comment}{// Set number of equations of a junction block based on number of}}
-\DoxyCodeLine{184   \textcolor{comment}{// inlets/outlets. Must be set before calling parent constructor}}
-\DoxyCodeLine{185   num\_inlets = this-\/>inlet\_nodes.size();}
-\DoxyCodeLine{186   num\_outlets = this-\/>outlet\_nodes.size();}
-\DoxyCodeLine{187   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, num\_inlets + num\_outlets + 1,}
-\DoxyCodeLine{188                         \{\textcolor{stringliteral}{"{}pressure\_c"{}}\});}
-\DoxyCodeLine{189   num\_triplets[\textcolor{stringliteral}{"{}F"{}}] = (num\_inlets + num\_outlets) * 4;}
-\DoxyCodeLine{190 \}}
-\DoxyCodeLine{191 }
-\DoxyCodeLine{192 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{193 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_ab9feb4188109a2e55b294cfe6eb965c4}{ResistiveJunction<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{194   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < num\_inlets; i++) \{}
-\DoxyCodeLine{195     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[i * 2]) =}
-\DoxyCodeLine{196         1.0;}
-\DoxyCodeLine{197     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i],}
-\DoxyCodeLine{198                       this-\/>global\_var\_ids[i * 2 + 1]) = -\/params.R[i];}
-\DoxyCodeLine{199     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids.back()) =}
-\DoxyCodeLine{200         -\/1.0;}
-\DoxyCodeLine{201   \}}
-\DoxyCodeLine{202   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = num\_inlets; i < num\_inlets + num\_outlets; i++) \{}
-\DoxyCodeLine{203     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[i * 2]) =}
-\DoxyCodeLine{204         -\/1.0;}
-\DoxyCodeLine{205     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i],}
-\DoxyCodeLine{206                       this-\/>global\_var\_ids[i * 2 + 1]) = -\/params.R[i];}
-\DoxyCodeLine{207     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids.back()) =}
+\DoxyCodeLine{179 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a7a94159734df6f999935f7ef8104330e}{ResistiveJunction<T>::ResistiveJunction}}(std::vector<T> R, std::string name)}
+\DoxyCodeLine{180     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
+\DoxyCodeLine{181   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
+\DoxyCodeLine{182   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistive_junction_1_1_parameters_abf36dce21a2a8b6d90352e6bf5439d24}{R}} = R;}
+\DoxyCodeLine{183 \}}
+\DoxyCodeLine{184 }
+\DoxyCodeLine{185 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{186 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a14b440134065c081afd141f1a0708b87}{ResistiveJunction<T>::\string~ResistiveJunction}}() \{\}}
+\DoxyCodeLine{187 }
+\DoxyCodeLine{188 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{189 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_af326b1f9faa34405d1a5024a6d5e132e}{ResistiveJunction<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{190   \textcolor{comment}{// Set number of equations of a junction block based on number of}}
+\DoxyCodeLine{191   \textcolor{comment}{// inlets/outlets. Must be set before calling parent constructor}}
+\DoxyCodeLine{192   num\_inlets = this-\/>inlet\_nodes.size();}
+\DoxyCodeLine{193   num\_outlets = this-\/>outlet\_nodes.size();}
+\DoxyCodeLine{194   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, num\_inlets + num\_outlets + 1,}
+\DoxyCodeLine{195                         \{\textcolor{stringliteral}{"{}pressure\_c"{}}\});}
+\DoxyCodeLine{196   num\_triplets[\textcolor{stringliteral}{"{}F"{}}] = (num\_inlets + num\_outlets) * 4;}
+\DoxyCodeLine{197 \}}
+\DoxyCodeLine{198 }
+\DoxyCodeLine{199 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{200 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a29158cbf4c5fbddb2842cb1a776c9d54}{ResistiveJunction<T>::update\_block\_params}}(std::vector<T> new\_params) \{}
+\DoxyCodeLine{201   this-\/>params.R = new\_params;}
+\DoxyCodeLine{202 \}}
+\DoxyCodeLine{203 }
+\DoxyCodeLine{204 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{205 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_ab9feb4188109a2e55b294cfe6eb965c4}{ResistiveJunction<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{206   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < num\_inlets; i++) \{}
+\DoxyCodeLine{207     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[i * 2]) =}
 \DoxyCodeLine{208         1.0;}
-\DoxyCodeLine{209   \}}
-\DoxyCodeLine{210 }
-\DoxyCodeLine{211   \textcolor{comment}{// Mass conservation}}
-\DoxyCodeLine{212   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 1; i < num\_inlets * 2; i = i + 2) \{}
-\DoxyCodeLine{213     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets],}
-\DoxyCodeLine{214                       this-\/>global\_var\_ids[i]) = 1.0;}
-\DoxyCodeLine{215   \}}
-\DoxyCodeLine{216   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = (num\_inlets * 2) + 1; i < (num\_inlets + num\_outlets) * 2;}
-\DoxyCodeLine{217        i = i + 2) \{}
-\DoxyCodeLine{218     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets],}
-\DoxyCodeLine{219                       this-\/>global\_var\_ids[i]) = -\/1.0;}
-\DoxyCodeLine{220   \}}
-\DoxyCodeLine{221 \}}
+\DoxyCodeLine{209     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i],}
+\DoxyCodeLine{210                       this-\/>global\_var\_ids[i * 2 + 1]) = -\/params.R[i];}
+\DoxyCodeLine{211     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids.back()) =}
+\DoxyCodeLine{212         -\/1.0;}
+\DoxyCodeLine{213   \}}
+\DoxyCodeLine{214   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = num\_inlets; i < num\_inlets + num\_outlets; i++) \{}
+\DoxyCodeLine{215     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids[i * 2]) =}
+\DoxyCodeLine{216         -\/1.0;}
+\DoxyCodeLine{217     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i],}
+\DoxyCodeLine{218                       this-\/>global\_var\_ids[i * 2 + 1]) = -\/params.R[i];}
+\DoxyCodeLine{219     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[i], this-\/>global\_var\_ids.back()) =}
+\DoxyCodeLine{220         1.0;}
+\DoxyCodeLine{221   \}}
 \DoxyCodeLine{222 }
-\DoxyCodeLine{223 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{224 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a7520ac287c5fd089b305b15771c0a808}{ResistiveJunction<T>::get\_num\_triplets}}() \{}
-\DoxyCodeLine{225   \textcolor{keywordflow}{return} num\_triplets;}
-\DoxyCodeLine{226 \}}
-\DoxyCodeLine{227 }
-\DoxyCodeLine{228 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{229 }
-\DoxyCodeLine{230 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_RESISTIVEJUNCTION\_HPP\_}}
+\DoxyCodeLine{223   \textcolor{comment}{// Mass conservation}}
+\DoxyCodeLine{224   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 1; i < num\_inlets * 2; i = i + 2) \{}
+\DoxyCodeLine{225     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets],}
+\DoxyCodeLine{226                       this-\/>global\_var\_ids[i]) = 1.0;}
+\DoxyCodeLine{227   \}}
+\DoxyCodeLine{228   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = (num\_inlets * 2) + 1; i < (num\_inlets + num\_outlets) * 2;}
+\DoxyCodeLine{229        i = i + 2) \{}
+\DoxyCodeLine{230     system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[num\_inlets + num\_outlets],}
+\DoxyCodeLine{231                       this-\/>global\_var\_ids[i]) = -\/1.0;}
+\DoxyCodeLine{232   \}}
+\DoxyCodeLine{233 \}}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{235 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{236 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a7520ac287c5fd089b305b15771c0a808}{ResistiveJunction<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{237   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{238 \}}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_RESISTIVEJUNCTION\_HPP\_}}
 
 \end{DoxyCode}

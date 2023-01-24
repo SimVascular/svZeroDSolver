@@ -34,9 +34,13 @@ struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_par
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a37fbf9c3749d095700b9739eb04a44e0}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ae56fbb49b7f567592029db16b9e4af99}{get\+\_\+parameter\+\_\+value}} (std\+::string message, T \&param\+\_\+value)
-\begin{DoxyCompactList}\small\item\em Update for model-\/dependent variables that are set at the end of model construction. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Return parameter values. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a9211429338b3377e49f2ddd868cd9f76}{set\+\_\+\+ICs}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ \&state)
 \begin{DoxyCompactList}\small\item\em Set block-\/specific initial conditions. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ab5ab03142e9797cba87acd373dedd015}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ new\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_aeaf848241964ea716fb4583bc0b74dda}{get\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ \&block\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Return parameters of a block. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0904e85cbfbc9ec808ef92b1b8a356ad}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ac27b052e7557d75389f50df7fee2b8b8}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
@@ -128,6 +132,21 @@ Update the atrial activation and LV/\+RV elastance functions which depend on tim
 {\em time} & Current time \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_aeaf848241964ea716fb4583bc0b74dda}\label{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_aeaf848241964ea716fb4583bc0b74dda}} 
+\index{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!get\_block\_params@{get\_block\_params}}
+\index{get\_block\_params@{get\_block\_params}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_block\_params()}{get\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary}}$<$ T $>$\+::get\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{block\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Return parameters of a block. 
+
+@block\+\_\+params \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} parameters. 
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a17a3f09a478899add488c91710ea742e}{MODEL\+::\+Block$<$ T $>$}}.
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a950b4b19381d2e509a21045ad98ab122}\label{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a950b4b19381d2e509a21045ad98ab122}} 
 \index{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}}
 \index{get\_num\_triplets@{get\_num\_triplets}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}}
@@ -152,14 +171,7 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{MODEL\+::
 
 
 
-Update for model-\/dependent variables that are set at the end of model construction. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em model} & \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} object to access model-\/dependent variables\\
-\hline
-\end{DoxyParams}
-Return parameter values
+Return parameter values. 
 
 
 \begin{DoxyParams}{Parameters}
@@ -245,6 +257,26 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ab5ab03142e9797cba87acd373dedd015}\label{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ab5ab03142e9797cba87acd373dedd015}} 
+\index{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!update\_block\_params@{update\_block\_params}}
+\index{update\_block\_params@{update\_block\_params}!MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Update parameters of a block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em params} & New parameters. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{MODEL\+::\+Block$<$ T $>$}}.
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0904e85cbfbc9ec808ef92b1b8a356ad}\label{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0904e85cbfbc9ec808ef92b1b8a356ad}} 
 \index{MODEL::ClosedLoopHeartPulmonary$<$ T $>$@{MODEL::ClosedLoopHeartPulmonary$<$ T $>$}!update\_constant@{update\_constant}}

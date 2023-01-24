@@ -155,168 +155,188 @@
 \DoxyCodeLine{151   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
 \DoxyCodeLine{152 \textcolor{comment}{}}
 \DoxyCodeLine{153 \textcolor{comment}{  /**}}
-\DoxyCodeLine{154 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{154 \textcolor{comment}{   * @brief Update parameters of a block.}}
 \DoxyCodeLine{155 \textcolor{comment}{   *}}
-\DoxyCodeLine{156 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{156 \textcolor{comment}{   * @param params New parameters.}}
 \DoxyCodeLine{157 \textcolor{comment}{   */}}
-\DoxyCodeLine{158   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{158   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_af6f18c8f4b611a5beea29b88d72b5af0}{update\_block\_params}}(std::vector<T> new\_params);}
 \DoxyCodeLine{159 \textcolor{comment}{}}
 \DoxyCodeLine{160 \textcolor{comment}{  /**}}
-\DoxyCodeLine{161 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element}}
+\DoxyCodeLine{161 \textcolor{comment}{   * @brief Return parameters of a block.}}
 \DoxyCodeLine{162 \textcolor{comment}{   *}}
-\DoxyCodeLine{163 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{164 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{165 \textcolor{comment}{   */}}
-\DoxyCodeLine{166   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
-\DoxyCodeLine{167                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{168 \textcolor{comment}{}}
-\DoxyCodeLine{169 \textcolor{comment}{  /**}}
-\DoxyCodeLine{170 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of t}}
-\DoxyCodeLine{171 \textcolor{comment}{   *}}
-\DoxyCodeLine{172 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{173 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{174 \textcolor{comment}{   */}}
-\DoxyCodeLine{175   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_acd0bdeaaca1b2273173ca507720ebc47}{update\_model\_dependent\_params}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model);}
-\DoxyCodeLine{176 \textcolor{comment}{}}
-\DoxyCodeLine{177 \textcolor{comment}{  /**}}
-\DoxyCodeLine{178 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{179 \textcolor{comment}{   *}}
-\DoxyCodeLine{180 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{181 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{182 \textcolor{comment}{   */}}
-\DoxyCodeLine{183   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ab10a7a6a835e692afcac9fe471692892}{num\_triplets}} = \{}
-\DoxyCodeLine{184       \{\textcolor{stringliteral}{"{}F"{}}, 9\},}
-\DoxyCodeLine{185       \{\textcolor{stringliteral}{"{}E"{}}, 5\},}
-\DoxyCodeLine{186       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{187   \};}
-\DoxyCodeLine{188 \textcolor{comment}{}}
-\DoxyCodeLine{189 \textcolor{comment}{  /**}}
-\DoxyCodeLine{190 \textcolor{comment}{   * @brief Get number of triplets of element}}
-\DoxyCodeLine{191 \textcolor{comment}{   *}}
-\DoxyCodeLine{192 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{193 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{194 \textcolor{comment}{   */}}
-\DoxyCodeLine{195   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}{get\_num\_triplets}}();}
-\DoxyCodeLine{196 }
-\DoxyCodeLine{197  \textcolor{keyword}{private}:}
-\DoxyCodeLine{198   Parameters params;}
-\DoxyCodeLine{199   std::string side;      \textcolor{comment}{// Left or right coronary?}}
-\DoxyCodeLine{200   \textcolor{keywordtype}{int} ventricle\_var\_id;  \textcolor{comment}{// Index of either left or right ventricle}}
-\DoxyCodeLine{201   T im;                  \textcolor{comment}{// Either iml or imr based on left or right}}
-\DoxyCodeLine{202 \};}
-\DoxyCodeLine{203 }
-\DoxyCodeLine{204 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{205 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aa20a7adeff5e769879c68c157c4b8aff}{ClosedLoopCoronaryBC<T>::ClosedLoopCoronaryBC}}(T Ra, T Ram, T Rv, T Ca, T Cim,}
-\DoxyCodeLine{206                                               std::string side,}
-\DoxyCodeLine{207                                               std::string name)}
-\DoxyCodeLine{208     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{209   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{210   this-\/>params.Ra = Ra;}
-\DoxyCodeLine{211   this-\/>params.Ram = Ram;}
-\DoxyCodeLine{212   this-\/>params.Rv = Rv;}
-\DoxyCodeLine{213   this-\/>params.Ca = Ca;}
-\DoxyCodeLine{214   this-\/>params.Cim = Cim;}
-\DoxyCodeLine{215   this-\/>side = side;}
-\DoxyCodeLine{216   \textcolor{comment}{// this-\/>closed\_loop\_outlet = true;}}
-\DoxyCodeLine{217 \}}
-\DoxyCodeLine{218 }
-\DoxyCodeLine{219 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{220 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_afaaed7691c734cc953ce4e321f871f17}{ClosedLoopCoronaryBC<T>::\string~ClosedLoopCoronaryBC}}() \{\}}
-\DoxyCodeLine{221 }
-\DoxyCodeLine{222 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{223 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}{ClosedLoopCoronaryBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{224   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 3, \{\textcolor{stringliteral}{"{}volume\_im"{}}\});}
-\DoxyCodeLine{225 \}}
-\DoxyCodeLine{226 }
-\DoxyCodeLine{227 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{228 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}{ClosedLoopCoronaryBC<T>::update\_constant}}(}
-\DoxyCodeLine{229     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{230   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) =}
-\DoxyCodeLine{231       -\/params.Ram * params.Ca;}
-\DoxyCodeLine{232   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{233       params.Ram * params.Ra * params.Ca;}
-\DoxyCodeLine{234   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[0]) =}
-\DoxyCodeLine{235       -\/params.Ca;}
-\DoxyCodeLine{236   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{237       params.Ca * params.Ra;}
-\DoxyCodeLine{238   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) = -\/1.0;}
-\DoxyCodeLine{239 }
-\DoxyCodeLine{240   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = -\/1.0;}
-\DoxyCodeLine{241   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{242       (params.Ra + params.Ram);}
-\DoxyCodeLine{243   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = 1.0;}
-\DoxyCodeLine{244   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) =}
-\DoxyCodeLine{245       params.Rv;}
-\DoxyCodeLine{246   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = 1.0;}
-\DoxyCodeLine{247   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = -\/1.0;}
-\DoxyCodeLine{248   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[2]) =}
-\DoxyCodeLine{249       params.Cim;}
-\DoxyCodeLine{250   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[3]) =}
-\DoxyCodeLine{251       params.Cim * params.Rv;}
-\DoxyCodeLine{252   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = -\/1.0;}
-\DoxyCodeLine{253 \}}
-\DoxyCodeLine{254 }
-\DoxyCodeLine{255 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{256 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}{ClosedLoopCoronaryBC<T>::update\_solution}}(}
-\DoxyCodeLine{257     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
-\DoxyCodeLine{258   \textcolor{keyword}{auto} Pim = this-\/>im * y[this-\/>ventricle\_var\_id];}
-\DoxyCodeLine{259   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[2]) = -\/params.Cim * Pim;}
-\DoxyCodeLine{260 \}}
-\DoxyCodeLine{261 }
-\DoxyCodeLine{262 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{263 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_acd0bdeaaca1b2273173ca507720ebc47}{ClosedLoopCoronaryBC<T>::update\_model\_dependent\_params}}(}
-\DoxyCodeLine{264     \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
-\DoxyCodeLine{265   T im\_value = 0.0;}
-\DoxyCodeLine{266   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&block : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a69eebd78213465c7ab13ffbb7a5b86c8}{blocks}}) \{}
-\DoxyCodeLine{267     \textcolor{keywordflow}{if} (block-\/>name == \textcolor{stringliteral}{"{}CLH"{}}) \{}
-\DoxyCodeLine{268       \textcolor{keywordflow}{if} (this-\/>side == \textcolor{stringliteral}{"{}left"{}}) \{}
-\DoxyCodeLine{269         block-\/>get\_parameter\_value(}
-\DoxyCodeLine{270             \textcolor{stringliteral}{"{}iml"{}},}
-\DoxyCodeLine{271             im\_value);  \textcolor{comment}{// Scaling for LV pressure -\/> intramyocardial pressure}}
-\DoxyCodeLine{272         this-\/>ventricle\_var\_id =}
-\DoxyCodeLine{273             block-\/>global\_var\_ids[13];  \textcolor{comment}{// Solution ID for LV pressure}}
-\DoxyCodeLine{274       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (this-\/>side == \textcolor{stringliteral}{"{}right"{}}) \{}
-\DoxyCodeLine{275         block-\/>get\_parameter\_value(}
-\DoxyCodeLine{276             \textcolor{stringliteral}{"{}imr"{}},}
-\DoxyCodeLine{277             im\_value);  \textcolor{comment}{// Scaling for RV pressure -\/> intramyocardial pressure}}
-\DoxyCodeLine{278         this-\/>ventricle\_var\_id = block-\/>global\_var\_ids[6];}
-\DoxyCodeLine{279       \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{280         \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{281             \textcolor{stringliteral}{"{}For closed loop coronary, 'side' should be either 'left' or "{}}}
-\DoxyCodeLine{282             \textcolor{stringliteral}{"{}'right'"{}});}
-\DoxyCodeLine{283       \}}
-\DoxyCodeLine{284     \}}
-\DoxyCodeLine{285   \}}
-\DoxyCodeLine{286   \textcolor{comment}{// for (auto \&[key, elem] : model.blocks) \{}}
-\DoxyCodeLine{287   \textcolor{comment}{//  std::visit([\&](auto \&\&block) \{}}
-\DoxyCodeLine{288   \textcolor{comment}{//    if (key == "{}CLH0"{}) \{}}
-\DoxyCodeLine{289   \textcolor{comment}{//      if (this-\/>side == "{}left"{}) \{}}
-\DoxyCodeLine{290   \textcolor{comment}{//        block.get\_parameter\_value("{}iml"{}, im\_value); // Scaling for LV}}
-\DoxyCodeLine{291   \textcolor{comment}{//        pressure -\/> intramyocardial pressure this-\/>ventricle\_var\_id =}}
-\DoxyCodeLine{292   \textcolor{comment}{//        block.global\_var\_ids[13]; // Solution ID for LV pressure}}
-\DoxyCodeLine{293   \textcolor{comment}{//      \}}}
-\DoxyCodeLine{294   \textcolor{comment}{//      else if (this-\/>side == "{}right"{}) \{}}
-\DoxyCodeLine{295   \textcolor{comment}{//        block.get\_parameter\_value("{}imr"{}, im\_value); // Scaling for RV}}
-\DoxyCodeLine{296   \textcolor{comment}{//        pressure -\/> intramyocardial pressure this-\/>ventricle\_var\_id =}}
-\DoxyCodeLine{297   \textcolor{comment}{//        block.global\_var\_ids[6];}}
-\DoxyCodeLine{298   \textcolor{comment}{//      \}}}
-\DoxyCodeLine{299   \textcolor{comment}{//      else \{}}
-\DoxyCodeLine{300   \textcolor{comment}{//        throw std::runtime\_error("{}For closed loop coronary, 'side' should be}}
-\DoxyCodeLine{301   \textcolor{comment}{//        either 'left' or 'right'"{});}}
-\DoxyCodeLine{302   \textcolor{comment}{//      \}}}
-\DoxyCodeLine{303   \textcolor{comment}{//    \}}}
-\DoxyCodeLine{304   \textcolor{comment}{//  \}, elem);}}
-\DoxyCodeLine{305   \textcolor{comment}{//\}}}
-\DoxyCodeLine{306   this-\/>im = im\_value;}
-\DoxyCodeLine{307 \}}
-\DoxyCodeLine{308 }
-\DoxyCodeLine{309 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{310 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}{ClosedLoopCoronaryBC<T>::get\_num\_triplets}}() \{}
-\DoxyCodeLine{311   \textcolor{keywordflow}{return} num\_triplets;}
-\DoxyCodeLine{312 \}}
-\DoxyCodeLine{313 }
-\DoxyCodeLine{314 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{315 }
-\DoxyCodeLine{316 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_CLOSEDLOOPCORONARYBC\_HPP\_}}
+\DoxyCodeLine{163 \textcolor{comment}{   * @block\_params Block parameters.}}
+\DoxyCodeLine{164 \textcolor{comment}{   */}}
+\DoxyCodeLine{165   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ada897d3dada8b0a6e83f4014abbadea2}{get\_block\_params}}(std::vector<T> \&block\_params);}
+\DoxyCodeLine{166 \textcolor{comment}{}}
+\DoxyCodeLine{167 \textcolor{comment}{  /**}}
+\DoxyCodeLine{168 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{169 \textcolor{comment}{   *}}
+\DoxyCodeLine{170 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{171 \textcolor{comment}{   */}}
+\DoxyCodeLine{172   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{173 \textcolor{comment}{}}
+\DoxyCodeLine{174 \textcolor{comment}{  /**}}
+\DoxyCodeLine{175 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element}}
+\DoxyCodeLine{176 \textcolor{comment}{   *}}
+\DoxyCodeLine{177 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{178 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{179 \textcolor{comment}{   */}}
+\DoxyCodeLine{180   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{181                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{182 \textcolor{comment}{}}
+\DoxyCodeLine{183 \textcolor{comment}{  /**}}
+\DoxyCodeLine{184 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of t}}
+\DoxyCodeLine{185 \textcolor{comment}{   *}}
+\DoxyCodeLine{186 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{187 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{188 \textcolor{comment}{   */}}
+\DoxyCodeLine{189   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0a23c2fbef9c48d6f5c9a6e82b1b91d2}{set\_model\_dependent\_params}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model);}
+\DoxyCodeLine{190 \textcolor{comment}{}}
+\DoxyCodeLine{191 \textcolor{comment}{  /**}}
+\DoxyCodeLine{192 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{193 \textcolor{comment}{   *}}
+\DoxyCodeLine{194 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{195 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{196 \textcolor{comment}{   */}}
+\DoxyCodeLine{197   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ab10a7a6a835e692afcac9fe471692892}{num\_triplets}} = \{}
+\DoxyCodeLine{198       \{\textcolor{stringliteral}{"{}F"{}}, 9\},}
+\DoxyCodeLine{199       \{\textcolor{stringliteral}{"{}E"{}}, 5\},}
+\DoxyCodeLine{200       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{201   \};}
+\DoxyCodeLine{202 \textcolor{comment}{}}
+\DoxyCodeLine{203 \textcolor{comment}{  /**}}
+\DoxyCodeLine{204 \textcolor{comment}{   * @brief Get number of triplets of element}}
+\DoxyCodeLine{205 \textcolor{comment}{   *}}
+\DoxyCodeLine{206 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{207 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{208 \textcolor{comment}{   */}}
+\DoxyCodeLine{209   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}{get\_num\_triplets}}();}
+\DoxyCodeLine{210 }
+\DoxyCodeLine{211  \textcolor{keyword}{private}:}
+\DoxyCodeLine{212   Parameters params;}
+\DoxyCodeLine{213   std::string side;      \textcolor{comment}{// Left or right coronary?}}
+\DoxyCodeLine{214   \textcolor{keywordtype}{int} ventricle\_var\_id;  \textcolor{comment}{// Index of either left or right ventricle}}
+\DoxyCodeLine{215   T im;                  \textcolor{comment}{// Either iml or imr based on left or right}}
+\DoxyCodeLine{216 \};}
+\DoxyCodeLine{217 }
+\DoxyCodeLine{218 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{219 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aa20a7adeff5e769879c68c157c4b8aff}{ClosedLoopCoronaryBC<T>::ClosedLoopCoronaryBC}}(T Ra, T Ram, T Rv, T Ca, T Cim,}
+\DoxyCodeLine{220                                               std::string side,}
+\DoxyCodeLine{221                                               std::string name)}
+\DoxyCodeLine{222     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
+\DoxyCodeLine{223   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
+\DoxyCodeLine{224   this-\/>params.Ra = Ra;}
+\DoxyCodeLine{225   this-\/>params.Ram = Ram;}
+\DoxyCodeLine{226   this-\/>params.Rv = Rv;}
+\DoxyCodeLine{227   this-\/>params.Ca = Ca;}
+\DoxyCodeLine{228   this-\/>params.Cim = Cim;}
+\DoxyCodeLine{229   this-\/>side = side;}
+\DoxyCodeLine{230   \textcolor{comment}{// this-\/>closed\_loop\_outlet = true;}}
+\DoxyCodeLine{231 \}}
+\DoxyCodeLine{232 }
+\DoxyCodeLine{233 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{234 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_afaaed7691c734cc953ce4e321f871f17}{ClosedLoopCoronaryBC<T>::\string~ClosedLoopCoronaryBC}}() \{\}}
+\DoxyCodeLine{235 }
+\DoxyCodeLine{236 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{237 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}{ClosedLoopCoronaryBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{238   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 3, \{\textcolor{stringliteral}{"{}volume\_im"{}}\});}
+\DoxyCodeLine{239 \}}
+\DoxyCodeLine{240 }
+\DoxyCodeLine{241 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{242 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}{ClosedLoopCoronaryBC<T>::update\_constant}}(}
+\DoxyCodeLine{243     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{244   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) =}
+\DoxyCodeLine{245       -\/params.Ram * params.Ca;}
+\DoxyCodeLine{246   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{247       params.Ram * params.Ra * params.Ca;}
+\DoxyCodeLine{248   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[0]) =}
+\DoxyCodeLine{249       -\/params.Ca;}
+\DoxyCodeLine{250   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{251       params.Ca * params.Ra;}
+\DoxyCodeLine{252   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) = -\/1.0;}
+\DoxyCodeLine{253 }
+\DoxyCodeLine{254   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = -\/1.0;}
+\DoxyCodeLine{255   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{256       (params.Ra + params.Ram);}
+\DoxyCodeLine{257   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = 1.0;}
+\DoxyCodeLine{258   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) =}
+\DoxyCodeLine{259       params.Rv;}
+\DoxyCodeLine{260   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = 1.0;}
+\DoxyCodeLine{261   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = -\/1.0;}
+\DoxyCodeLine{262   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[2]) =}
+\DoxyCodeLine{263       params.Cim;}
+\DoxyCodeLine{264   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[3]) =}
+\DoxyCodeLine{265       params.Cim * params.Rv;}
+\DoxyCodeLine{266   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = -\/1.0;}
+\DoxyCodeLine{267 \}}
+\DoxyCodeLine{268 }
+\DoxyCodeLine{269 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{270 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}{ClosedLoopCoronaryBC<T>::update\_solution}}(}
+\DoxyCodeLine{271     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
+\DoxyCodeLine{272   \textcolor{keyword}{auto} Pim = this-\/>im * y[this-\/>ventricle\_var\_id];}
+\DoxyCodeLine{273   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[2]) = -\/params.Cim * Pim;}
+\DoxyCodeLine{274 \}}
+\DoxyCodeLine{275 }
+\DoxyCodeLine{276 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{277 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0a23c2fbef9c48d6f5c9a6e82b1b91d2}{ClosedLoopCoronaryBC<T>::set\_model\_dependent\_params}}(}
+\DoxyCodeLine{278     \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
+\DoxyCodeLine{279   T im\_value = 0.0;}
+\DoxyCodeLine{280   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&block : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a69eebd78213465c7ab13ffbb7a5b86c8}{blocks}}) \{}
+\DoxyCodeLine{281     \textcolor{keywordflow}{if} (block-\/>name == \textcolor{stringliteral}{"{}CLH"{}}) \{}
+\DoxyCodeLine{282       \textcolor{keywordflow}{if} (this-\/>side == \textcolor{stringliteral}{"{}left"{}}) \{}
+\DoxyCodeLine{283         block-\/>get\_parameter\_value(}
+\DoxyCodeLine{284             \textcolor{stringliteral}{"{}iml"{}},}
+\DoxyCodeLine{285             im\_value);  \textcolor{comment}{// Scaling for LV pressure -\/> intramyocardial pressure}}
+\DoxyCodeLine{286         this-\/>ventricle\_var\_id =}
+\DoxyCodeLine{287             block-\/>global\_var\_ids[13];  \textcolor{comment}{// Solution ID for LV pressure}}
+\DoxyCodeLine{288       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (this-\/>side == \textcolor{stringliteral}{"{}right"{}}) \{}
+\DoxyCodeLine{289         block-\/>get\_parameter\_value(}
+\DoxyCodeLine{290             \textcolor{stringliteral}{"{}imr"{}},}
+\DoxyCodeLine{291             im\_value);  \textcolor{comment}{// Scaling for RV pressure -\/> intramyocardial pressure}}
+\DoxyCodeLine{292         this-\/>ventricle\_var\_id = block-\/>global\_var\_ids[6];}
+\DoxyCodeLine{293       \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{294         \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{295             \textcolor{stringliteral}{"{}For closed loop coronary, 'side' should be either 'left' or "{}}}
+\DoxyCodeLine{296             \textcolor{stringliteral}{"{}'right'"{}});}
+\DoxyCodeLine{297       \}}
+\DoxyCodeLine{298     \}}
+\DoxyCodeLine{299   \}}
+\DoxyCodeLine{300   this-\/>im = im\_value;}
+\DoxyCodeLine{301 \}}
+\DoxyCodeLine{302 }
+\DoxyCodeLine{303 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{304 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_af6f18c8f4b611a5beea29b88d72b5af0}{ClosedLoopCoronaryBC<T>::update\_block\_params}}(std::vector<T> new\_params) \{}
+\DoxyCodeLine{305   this-\/>params.Ra = new\_params[0];}
+\DoxyCodeLine{306   this-\/>params.Ram = new\_params[1];}
+\DoxyCodeLine{307   this-\/>params.Rv = new\_params[2];}
+\DoxyCodeLine{308   this-\/>params.Ca = new\_params[3];}
+\DoxyCodeLine{309   this-\/>params.Cim = new\_params[4];}
+\DoxyCodeLine{310   this-\/>im = new\_params[5];}
+\DoxyCodeLine{311 \}}
+\DoxyCodeLine{312 }
+\DoxyCodeLine{313 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{314 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ada897d3dada8b0a6e83f4014abbadea2}{ClosedLoopCoronaryBC<T>::get\_block\_params}}(std::vector<T> \&block\_params) \{}
+\DoxyCodeLine{315   \textcolor{keywordflow}{if} (block\_params.size() != 6) \{}
+\DoxyCodeLine{316     \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{317         \textcolor{stringliteral}{"{}Wrong vector size in get\_block\_params for ClosedLoopCoronaryBC. Size "{}}}
+\DoxyCodeLine{318         \textcolor{stringliteral}{"{}should be 6 but is currently "{}} +}
+\DoxyCodeLine{319         std::to\_string(block\_params.size()));}
+\DoxyCodeLine{320   \}}
+\DoxyCodeLine{321   block\_params[0] = this-\/>params.Ra;}
+\DoxyCodeLine{322   block\_params[1] = this-\/>params.Ram;}
+\DoxyCodeLine{323   block\_params[2] = this-\/>params.Rv;}
+\DoxyCodeLine{324   block\_params[3] = this-\/>params.Ca;}
+\DoxyCodeLine{325   block\_params[4] = this-\/>params.Cim;}
+\DoxyCodeLine{326   block\_params[5] = this-\/>im;}
+\DoxyCodeLine{327 \}}
+\DoxyCodeLine{328 }
+\DoxyCodeLine{329 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{330 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}{ClosedLoopCoronaryBC<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{331   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{332 \}}
+\DoxyCodeLine{333 }
+\DoxyCodeLine{334 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{335 }
+\DoxyCodeLine{336 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_CLOSEDLOOPCORONARYBC\_HPP\_}}
 
 \end{DoxyCode}

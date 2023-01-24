@@ -249,80 +249,78 @@
 \DoxyCodeLine{246   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a1e593472af26af8f4bf98b158d996434}{sim\_steady\_initial}}) \{}
 \DoxyCodeLine{247     DEBUG\_MSG(\textcolor{stringliteral}{"{}Calculate steady initial condition"{}});}
 \DoxyCodeLine{248     T time\_step\_size\_steady = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_aaa79d0afffb88356f8d4ccbb7628309f}{sim\_cardiac\_cycle\_period}} / 10.0;}
-\DoxyCodeLine{249     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}.to\_steady();}
-\DoxyCodeLine{250     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator\_steady(}
-\DoxyCodeLine{251         reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}, time\_step\_size\_steady, 0.1, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}},}
-\DoxyCodeLine{252         reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}});}
-\DoxyCodeLine{253     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 31; i++) \{}
-\DoxyCodeLine{254       state = integrator\_steady.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(state, time\_step\_size\_steady * T(i),}
-\DoxyCodeLine{255                                      reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}});}
-\DoxyCodeLine{256     \}}
-\DoxyCodeLine{257     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}.to\_unsteady();}
-\DoxyCodeLine{258   \}}
-\DoxyCodeLine{259 }
-\DoxyCodeLine{260   \textcolor{comment}{// Set-\/up integrator}}
-\DoxyCodeLine{261   DEBUG\_MSG(\textcolor{stringliteral}{"{}Setup time integration"{}});}
-\DoxyCodeLine{262   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator(reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}},}
-\DoxyCodeLine{263                                     0.1, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}});}
-\DoxyCodeLine{264 }
-\DoxyCodeLine{265   \textcolor{comment}{// Initialize loop}}
-\DoxyCodeLine{266   std::vector<ALGEBRA::State<T>> states;}
-\DoxyCodeLine{267   std::vector<T> times;}
-\DoxyCodeLine{268   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}}) \{}
-\DoxyCodeLine{269     \textcolor{keywordtype}{int} num\_states = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}} / reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}} + 1;}
-\DoxyCodeLine{270     states.reserve(num\_states);}
-\DoxyCodeLine{271     times.reserve(num\_states);}
-\DoxyCodeLine{272   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{273     \textcolor{keywordtype}{int} num\_states = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}} / reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}} + 1;}
-\DoxyCodeLine{274     states.reserve(num\_states);}
-\DoxyCodeLine{275     times.reserve(num\_states);}
-\DoxyCodeLine{276   \}}
-\DoxyCodeLine{277   T time = 0.0;}
-\DoxyCodeLine{278 }
-\DoxyCodeLine{279   \textcolor{comment}{// Run integrator}}
-\DoxyCodeLine{280   DEBUG\_MSG(\textcolor{stringliteral}{"{}Run time integration"{}});}
-\DoxyCodeLine{281   \textcolor{keywordtype}{int} interval\_counter = 0;}
-\DoxyCodeLine{282   \textcolor{keywordtype}{int} start\_last\_cycle = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}} -\/ reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}};}
-\DoxyCodeLine{283   \textcolor{keywordflow}{if} ((reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} == \textcolor{keyword}{false}) || (0 >= start\_last\_cycle)) \{}
-\DoxyCodeLine{284     times.push\_back(time);}
-\DoxyCodeLine{285     states.push\_back(std::move(state));}
-\DoxyCodeLine{286   \}}
-\DoxyCodeLine{287   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}}; i++) \{}
-\DoxyCodeLine{288     state = integrator.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(state, time, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}});}
-\DoxyCodeLine{289     interval\_counter += 1;}
-\DoxyCodeLine{290     time = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}} * T(i);}
-\DoxyCodeLine{291     \textcolor{keywordflow}{if} ((interval\_counter == reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}}) ||}
-\DoxyCodeLine{292         (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} \&\& (i == start\_last\_cycle))) \{}
-\DoxyCodeLine{293       \textcolor{keywordflow}{if} ((reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} == \textcolor{keyword}{false}) || (i >= start\_last\_cycle)) \{}
-\DoxyCodeLine{294         times.push\_back(time);}
-\DoxyCodeLine{295         states.push\_back(std::move(state));}
-\DoxyCodeLine{296       \}}
-\DoxyCodeLine{297       interval\_counter = 0;}
-\DoxyCodeLine{298     \}}
-\DoxyCodeLine{299   \}}
-\DoxyCodeLine{300 }
-\DoxyCodeLine{301   \textcolor{comment}{// Make times start from 0}}
-\DoxyCodeLine{302   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}}) \{}
-\DoxyCodeLine{303     T start\_time = times[0];}
-\DoxyCodeLine{304     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto}\& time : times) \{}
-\DoxyCodeLine{305       time -\/= start\_time;}
-\DoxyCodeLine{306     \}}
-\DoxyCodeLine{307   \}}
-\DoxyCodeLine{308 }
-\DoxyCodeLine{309   \textcolor{comment}{// Write csv output string}}
-\DoxyCodeLine{310   DEBUG\_MSG(\textcolor{stringliteral}{"{}Write output"{}});}
-\DoxyCodeLine{311   std::string output;}
-\DoxyCodeLine{312   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_acfee0686c847138a19ad12ad71d57750}{output\_variable\_based}}) \{}
-\DoxyCodeLine{313     output = IO::to\_variable\_csv<T>(times, states, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}},}
-\DoxyCodeLine{314                                     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}},}
-\DoxyCodeLine{315                                     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}});}
-\DoxyCodeLine{316   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{317     output =}
-\DoxyCodeLine{318         IO::to\_vessel\_csv<T>(times, states, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a883ce5b06abfa9e464c15d1054b64bfc}{model}},}
-\DoxyCodeLine{319                              reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}});}
-\DoxyCodeLine{320   \}}
-\DoxyCodeLine{321   DEBUG\_MSG(\textcolor{stringliteral}{"{}Finished"{}});}
-\DoxyCodeLine{322   \textcolor{keywordflow}{return} output;}
-\DoxyCodeLine{323 \}}
+\DoxyCodeLine{249     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}}-\/>to\_steady();}
+\DoxyCodeLine{250     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator\_steady(*reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}}, time\_step\_size\_steady, 0.1, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}});}
+\DoxyCodeLine{251     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 31; i++) \{}
+\DoxyCodeLine{252       state = integrator\_steady.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(state, time\_step\_size\_steady * T(i),*reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}});}
+\DoxyCodeLine{253     \}}
+\DoxyCodeLine{254     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}}-\/>to\_unsteady();}
+\DoxyCodeLine{255   \}}
+\DoxyCodeLine{256 }
+\DoxyCodeLine{257   \textcolor{comment}{// Set-\/up integrator}}
+\DoxyCodeLine{258   DEBUG\_MSG(\textcolor{stringliteral}{"{}Setup time integration"{}});}
+\DoxyCodeLine{259   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator(*reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}},}
+\DoxyCodeLine{260                                     0.1, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}});}
+\DoxyCodeLine{261 }
+\DoxyCodeLine{262   \textcolor{comment}{// Initialize loop}}
+\DoxyCodeLine{263   std::vector<ALGEBRA::State<T>> states;}
+\DoxyCodeLine{264   std::vector<T> times;}
+\DoxyCodeLine{265   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}}) \{}
+\DoxyCodeLine{266     \textcolor{keywordtype}{int} num\_states = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}} / reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}} + 1;}
+\DoxyCodeLine{267     states.reserve(num\_states);}
+\DoxyCodeLine{268     times.reserve(num\_states);}
+\DoxyCodeLine{269   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{270     \textcolor{keywordtype}{int} num\_states = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}} / reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}} + 1;}
+\DoxyCodeLine{271     states.reserve(num\_states);}
+\DoxyCodeLine{272     times.reserve(num\_states);}
+\DoxyCodeLine{273   \}}
+\DoxyCodeLine{274   T time = 0.0;}
+\DoxyCodeLine{275 }
+\DoxyCodeLine{276   \textcolor{comment}{// Run integrator}}
+\DoxyCodeLine{277   DEBUG\_MSG(\textcolor{stringliteral}{"{}Run time integration"{}});}
+\DoxyCodeLine{278   \textcolor{keywordtype}{int} interval\_counter = 0;}
+\DoxyCodeLine{279   \textcolor{keywordtype}{int} start\_last\_cycle = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}} -\/ reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}};}
+\DoxyCodeLine{280   \textcolor{keywordflow}{if} ((reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} == \textcolor{keyword}{false}) || (0 >= start\_last\_cycle)) \{}
+\DoxyCodeLine{281     times.push\_back(time);}
+\DoxyCodeLine{282     states.push\_back(std::move(state));}
+\DoxyCodeLine{283   \}}
+\DoxyCodeLine{284   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}}; i++) \{}
+\DoxyCodeLine{285     DEBUG\_MSG(\textcolor{stringliteral}{"{}Integration time: "{}}<< time << std::endl);}
+\DoxyCodeLine{286     state = integrator.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(state, time, *reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}});}
+\DoxyCodeLine{287     interval\_counter += 1;}
+\DoxyCodeLine{288     time = reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}} * T(i);}
+\DoxyCodeLine{289     \textcolor{keywordflow}{if} ((interval\_counter == reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}}) ||}
+\DoxyCodeLine{290         (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} \&\& (i == start\_last\_cycle))) \{}
+\DoxyCodeLine{291       \textcolor{keywordflow}{if} ((reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}} == \textcolor{keyword}{false}) || (i >= start\_last\_cycle)) \{}
+\DoxyCodeLine{292         times.push\_back(time);}
+\DoxyCodeLine{293         states.push\_back(std::move(state));}
+\DoxyCodeLine{294       \}}
+\DoxyCodeLine{295       interval\_counter = 0;}
+\DoxyCodeLine{296     \}}
+\DoxyCodeLine{297   \}}
+\DoxyCodeLine{298 }
+\DoxyCodeLine{299   \textcolor{comment}{// Make times start from 0}}
+\DoxyCodeLine{300   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}}) \{}
+\DoxyCodeLine{301     T start\_time = times[0];}
+\DoxyCodeLine{302     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto}\& time : times) \{}
+\DoxyCodeLine{303       time -\/= start\_time;}
+\DoxyCodeLine{304     \}}
+\DoxyCodeLine{305   \}}
+\DoxyCodeLine{306 }
+\DoxyCodeLine{307   \textcolor{comment}{// Write csv output string}}
+\DoxyCodeLine{308   DEBUG\_MSG(\textcolor{stringliteral}{"{}Write output"{}});}
+\DoxyCodeLine{309   std::string output;}
+\DoxyCodeLine{310   \textcolor{keywordflow}{if} (reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_acfee0686c847138a19ad12ad71d57750}{output\_variable\_based}}) \{}
+\DoxyCodeLine{311     output = IO::to\_variable\_csv<T>(times, states, *reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}},}
+\DoxyCodeLine{312                                     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}},}
+\DoxyCodeLine{313                                     reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}});}
+\DoxyCodeLine{314   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{315     output =}
+\DoxyCodeLine{316         IO::to\_vessel\_csv<T>(times, states, *reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}},}
+\DoxyCodeLine{317                              reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}}, reader.\mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}});}
+\DoxyCodeLine{318   \}}
+\DoxyCodeLine{319   DEBUG\_MSG(\textcolor{stringliteral}{"{}Finished"{}});}
+\DoxyCodeLine{320   \textcolor{keywordflow}{return} output;}
+\DoxyCodeLine{321 \}}
 
 \end{DoxyCode}

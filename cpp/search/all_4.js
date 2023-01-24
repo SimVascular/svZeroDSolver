@@ -6,5 +6,6 @@ var searchData=
   ['emax_5fra_3',['Emax_ra',['../struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters.html#a23636bd961e5f491acc707d08a572c69',1,'MODEL::ClosedLoopHeartPulmonary::Parameters']]],
   ['endswith_4',['endswith',['../namespace_h_e_l_p_e_r_s.html#a6ca9cc09c804d2e0bc4e6890b19b6014',1,'HELPERS']]],
   ['endswith_2ehpp_5',['endswith.hpp',['../endswith_8hpp.html',1,'']]],
-  ['erv_5fs_6',['Erv_s',['../struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters.html#a64d2bd46d983d6cc788a20bc0f04c8dd',1,'MODEL::ClosedLoopHeartPulmonary::Parameters']]]
+  ['erv_5fs_6',['Erv_s',['../struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters.html#a64d2bd46d983d6cc788a20bc0f04c8dd',1,'MODEL::ClosedLoopHeartPulmonary::Parameters']]],
+  ['external_5fcoupling_5fblocks_7',['external_coupling_blocks',['../class_m_o_d_e_l_1_1_model.html#ade86c6aa2bfc6e538c95e9eb0e712392',1,'MODEL::Model']]]
 ];

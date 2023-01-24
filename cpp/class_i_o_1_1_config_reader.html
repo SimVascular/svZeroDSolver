@@ -94,9 +94,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a883ce5b06abfa9e464c15d1054b64bfc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">model</a></td></tr>
-<tr class="memdesc:a883ce5b06abfa9e464c15d1054b64bfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulation model.  <a href="class_i_o_1_1_config_reader.html#a883ce5b06abfa9e464c15d1054b64bfc">More...</a><br /></td></tr>
-<tr class="separator:a883ce5b06abfa9e464c15d1054b64bfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae442b4d3b3c7891a0584bd6fbf895dce"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#ae442b4d3b3c7891a0584bd6fbf895dce">model</a></td></tr>
+<tr class="memdesc:ae442b4d3b3c7891a0584bd6fbf895dce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulation model.  <a href="class_i_o_1_1_config_reader.html#ae442b4d3b3c7891a0584bd6fbf895dce">More...</a><br /></td></tr>
+<tr class="separator:ae442b4d3b3c7891a0584bd6fbf895dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe9831cb10972b4982a766aac615cb6c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c">initial_state</a></td></tr>
 <tr class="memdesc:abe9831cb10972b4982a766aac615cb6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initial state.  <a href="class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c">More...</a><br /></td></tr>
 <tr class="separator:abe9831cb10972b4982a766aac615cb6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,6 +138,11 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:ad872723e0b5862abc77290a2152556f0"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">output_last_cycle_only</a></td></tr>
 <tr class="memdesc:ad872723e0b5862abc77290a2152556f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output only the last cardiac cycle.  <a href="class_i_o_1_1_config_reader.html#ad872723e0b5862abc77290a2152556f0">More...</a><br /></td></tr>
 <tr class="separator:ad872723e0b5862abc77290a2152556f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d0522c13e13fda51056fd9ff111dc88"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#a8d0522c13e13fda51056fd9ff111dc88">sim_coupled</a></td></tr>
+<tr class="memdesc:a8d0522c13e13fda51056fd9ff111dc88"><td class="mdescLeft">&#160;</td><td class="mdescRight">Running 0D simulation coupled with external solver.  <a href="class_i_o_1_1_config_reader.html#a8d0522c13e13fda51056fd9ff111dc88">More...</a><br /></td></tr>
+<tr class="separator:a8d0522c13e13fda51056fd9ff111dc88"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1887c05ac836540409b779768181c08"><td class="memItemLeft" align="right" valign="top">T&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#ab1887c05ac836540409b779768181c08">sim_external_step_size</a></td></tr>
+<tr class="separator:ab1887c05ac836540409b779768181c08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
@@ -229,8 +234,8 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
-<a id="a883ce5b06abfa9e464c15d1054b64bfc" name="a883ce5b06abfa9e464c15d1054b64bfc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a883ce5b06abfa9e464c15d1054b64bfc">&#9670;&nbsp;</a></span>model</h2>
+<a id="ae442b4d3b3c7891a0584bd6fbf895dce" name="ae442b4d3b3c7891a0584bd6fbf895dce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae442b4d3b3c7891a0584bd6fbf895dce">&#9670;&nbsp;</a></span>model</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -238,7 +243,7 @@ template&lt;typename T &gt; </div>
 template&lt;typename T &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt;T&gt; <a class="el" href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a>&lt; T &gt;::model</td>
+          <td class="memname"><a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt;T&gt;* <a class="el" href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a>&lt; T &gt;::model</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -373,6 +378,41 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="a8d0522c13e13fda51056fd9ff111dc88" name="a8d0522c13e13fda51056fd9ff111dc88"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d0522c13e13fda51056fd9ff111dc88">&#9670;&nbsp;</a></span>sim_coupled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a>&lt; T &gt;::sim_coupled</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Running 0D simulation coupled with external solver. </p>
+
+</div>
+</div>
+<a id="ab1887c05ac836540409b779768181c08" name="ab1887c05ac836540409b779768181c08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1887c05ac836540409b779768181c08">&#9670;&nbsp;</a></span>sim_external_step_size</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T <a class="el" href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a>&lt; T &gt;::sim_external_step_size</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >Step size of external solver if running coupled </p>
+
+</div>
+</div>
 <a id="a4e0c08c222cc1ede5011c867d22a7f9d" name="a4e0c08c222cc1ede5011c867d22a7f9d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4e0c08c222cc1ede5011c867d22a7f9d">&#9670;&nbsp;</a></span>sim_nliter</h2>
 
@@ -486,7 +526,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 28 2022 21:04:02 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Tue Jan 24 2023 17:02:28 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

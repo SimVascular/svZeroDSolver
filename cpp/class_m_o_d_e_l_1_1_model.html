@@ -112,12 +112,17 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a69eebd78213465c7ab13ffbb7a5b86c8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_m_o_d_e_l_1_1_block.html">Block</a>&lt; T &gt; * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_model.html#a69eebd78213465c7ab13ffbb7a5b86c8">blocks</a></td></tr>
 <tr class="memdesc:a69eebd78213465c7ab13ffbb7a5b86c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Elements of the model.  <a href="class_m_o_d_e_l_1_1_model.html#a69eebd78213465c7ab13ffbb7a5b86c8">More...</a><br /></td></tr>
 <tr class="separator:a69eebd78213465c7ab13ffbb7a5b86c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a866e9f663a8889dd8c13e8e97da2c4c3"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_model.html#a866e9f663a8889dd8c13e8e97da2c4c3">block_index_map</a></td></tr>
+<tr class="memdesc:a866e9f663a8889dd8c13e8e97da2c4c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map between block name and index.  <a href="class_m_o_d_e_l_1_1_model.html#a866e9f663a8889dd8c13e8e97da2c4c3">More...</a><br /></td></tr>
+<tr class="separator:a866e9f663a8889dd8c13e8e97da2c4c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43b9cc3c9874be9c2baeae576271fbad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a></td></tr>
 <tr class="memdesc:a43b9cc3c9874be9c2baeae576271fbad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Degree-of-freedom handler of the model.  <a href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">More...</a><br /></td></tr>
 <tr class="separator:a43b9cc3c9874be9c2baeae576271fbad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a872417ccceb8d9154672b39203f8791b"><td class="memItemLeft" align="right" valign="top">std::list&lt; <a class="el" href="class_m_o_d_e_l_1_1_node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_model.html#a872417ccceb8d9154672b39203f8791b">nodes</a></td></tr>
 <tr class="memdesc:a872417ccceb8d9154672b39203f8791b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Nodes of the model.  <a href="class_m_o_d_e_l_1_1_model.html#a872417ccceb8d9154672b39203f8791b">More...</a><br /></td></tr>
 <tr class="separator:a872417ccceb8d9154672b39203f8791b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade86c6aa2bfc6e538c95e9eb0e712392"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_model.html#ade86c6aa2bfc6e538c95e9eb0e712392">external_coupling_blocks</a></td></tr>
+<tr class="separator:ade86c6aa2bfc6e538c95e9eb0e712392"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename T&gt;<br />
@@ -330,6 +335,24 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a866e9f663a8889dd8c13e8e97da2c4c3" name="a866e9f663a8889dd8c13e8e97da2c4c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a866e9f663a8889dd8c13e8e97da2c4c3">&#9670;&nbsp;</a></span>block_index_map</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string, int&gt; <a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt;::block_index_map</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Map between block name and index. </p>
+
+</div>
+</div>
 <a id="a69eebd78213465c7ab13ffbb7a5b86c8" name="a69eebd78213465c7ab13ffbb7a5b86c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a69eebd78213465c7ab13ffbb7a5b86c8">&#9670;&nbsp;</a></span>blocks</h2>
 
@@ -366,6 +389,23 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="ade86c6aa2bfc6e538c95e9eb0e712392" name="ade86c6aa2bfc6e538c95e9eb0e712392"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade86c6aa2bfc6e538c95e9eb0e712392">&#9670;&nbsp;</a></span>external_coupling_blocks</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; <a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt;::external_coupling_blocks</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p >List of external coupling blocks (names need to be available for interface) </p>
+
+</div>
+</div>
 <a id="a872417ccceb8d9154672b39203f8791b" name="a872417ccceb8d9154672b39203f8791b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a872417ccceb8d9154672b39203f8791b">&#9670;&nbsp;</a></span>nodes</h2>
 
@@ -391,7 +431,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 28 2022 21:04:02 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Tue Jan 24 2023 17:02:28 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

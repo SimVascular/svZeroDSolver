@@ -121,107 +121,128 @@
 \DoxyCodeLine{117   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
 \DoxyCodeLine{118 \textcolor{comment}{}}
 \DoxyCodeLine{119 \textcolor{comment}{  /**}}
-\DoxyCodeLine{120 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{120 \textcolor{comment}{   * @brief Update parameters of a block.}}
 \DoxyCodeLine{121 \textcolor{comment}{   *}}
-\DoxyCodeLine{122 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{122 \textcolor{comment}{   * @param params New parameters.}}
 \DoxyCodeLine{123 \textcolor{comment}{   */}}
-\DoxyCodeLine{124   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97adf48719b8}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{124   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7d203b6fbeed72466f6f143848a01b0f}{update\_block\_params}}(std::vector<T> new\_params);}
 \DoxyCodeLine{125 \textcolor{comment}{}}
 \DoxyCodeLine{126 \textcolor{comment}{  /**}}
-\DoxyCodeLine{127 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
-\DoxyCodeLine{128 \textcolor{comment}{   * system}}
-\DoxyCodeLine{129 \textcolor{comment}{   *}}
-\DoxyCodeLine{130 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{131 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{132 \textcolor{comment}{   */}}
-\DoxyCodeLine{133   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{134 \textcolor{comment}{}}
-\DoxyCodeLine{135 \textcolor{comment}{  /**}}
-\DoxyCodeLine{136 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{137 \textcolor{comment}{   *}}
-\DoxyCodeLine{138 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{139 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{140 \textcolor{comment}{   */}}
-\DoxyCodeLine{141   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a9878a9385bfdc31c3a7d2f4e5e4cfb88}{num\_triplets}} = \{}
-\DoxyCodeLine{142       \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
-\DoxyCodeLine{143       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{144       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{145   \};}
-\DoxyCodeLine{146 \textcolor{comment}{}}
-\DoxyCodeLine{147 \textcolor{comment}{  /**}}
-\DoxyCodeLine{148 \textcolor{comment}{   * @brief Get number of triplets of element}}
-\DoxyCodeLine{149 \textcolor{comment}{   *}}
-\DoxyCodeLine{150 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{151 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{152 \textcolor{comment}{   */}}
-\DoxyCodeLine{153   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}{get\_num\_triplets}}();}
-\DoxyCodeLine{154 \textcolor{comment}{}}
-\DoxyCodeLine{155 \textcolor{comment}{  /**}}
-\DoxyCodeLine{156 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
-\DoxyCodeLine{157 \textcolor{comment}{   *}}
-\DoxyCodeLine{158 \textcolor{comment}{   * Converts the resistance and distal pressure to the constant means of}}
-\DoxyCodeLine{159 \textcolor{comment}{   * themselve}}
-\DoxyCodeLine{160 \textcolor{comment}{   */}}
-\DoxyCodeLine{161   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{to\_steady}}();}
-\DoxyCodeLine{162 \textcolor{comment}{}}
-\DoxyCodeLine{163 \textcolor{comment}{  /**}}
-\DoxyCodeLine{164 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
-\DoxyCodeLine{165 \textcolor{comment}{   *}}
-\DoxyCodeLine{166 \textcolor{comment}{   */}}
-\DoxyCodeLine{167   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}{to\_unsteady}}();}
-\DoxyCodeLine{168 }
-\DoxyCodeLine{169  \textcolor{keyword}{private}:}
-\DoxyCodeLine{170   Parameters params;}
-\DoxyCodeLine{171 \};}
-\DoxyCodeLine{172 }
-\DoxyCodeLine{173 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{174 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a5bcb6df09176e5cc9a563f054253838b}{ResistanceBC<T>::ResistanceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} R,}
-\DoxyCodeLine{175                               \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} Pd, std::string name)}
-\DoxyCodeLine{176     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{177   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{178   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_af053fae1f978f2a89c28ec3eabf0fa39}{R}} = R;}
-\DoxyCodeLine{179   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_a8cef65e35f85e7511347788ea0692bc8}{Pd}} = Pd;}
-\DoxyCodeLine{180 \}}
-\DoxyCodeLine{181 }
-\DoxyCodeLine{182 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{183 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aa16d90b9c1d86e6732b61fa708d8750c}{ResistanceBC<T>::\string~ResistanceBC}}() \{\}}
-\DoxyCodeLine{184 }
-\DoxyCodeLine{185 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{186 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{ResistanceBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{187   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 1, \{\});}
-\DoxyCodeLine{188 \}}
-\DoxyCodeLine{189 }
-\DoxyCodeLine{190 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{191 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97adf48719b8}{ResistanceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{192   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{193 \}}
-\DoxyCodeLine{194 }
-\DoxyCodeLine{195 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{196 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}{ResistanceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{}
-\DoxyCodeLine{197   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{198       -\/params.R.get(time);}
-\DoxyCodeLine{199   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.Pd.get(time);}
-\DoxyCodeLine{200 \}}
-\DoxyCodeLine{201 }
-\DoxyCodeLine{202 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{203 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{ResistanceBC<T>::to\_steady}}() \{}
-\DoxyCodeLine{204   params.R.to\_steady();}
-\DoxyCodeLine{205   params.Pd.to\_steady();}
-\DoxyCodeLine{206 \}}
-\DoxyCodeLine{207 }
-\DoxyCodeLine{208 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{209 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}{ResistanceBC<T>::to\_unsteady}}() \{}
-\DoxyCodeLine{210   params.R.to\_unsteady();}
-\DoxyCodeLine{211   params.Pd.to\_unsteady();}
-\DoxyCodeLine{212 \}}
-\DoxyCodeLine{213 }
-\DoxyCodeLine{214 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{215 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}{ResistanceBC<T>::get\_num\_triplets}}() \{}
-\DoxyCodeLine{216   \textcolor{keywordflow}{return} num\_triplets;}
-\DoxyCodeLine{217 \}}
-\DoxyCodeLine{218 }
-\DoxyCodeLine{219 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{220 }
-\DoxyCodeLine{221 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_RESISTANCEBC\_HPP\_}}
+\DoxyCodeLine{127 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{128 \textcolor{comment}{   *}}
+\DoxyCodeLine{129 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{130 \textcolor{comment}{   */}}
+\DoxyCodeLine{131   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97adf48719b8}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
+\DoxyCodeLine{132 \textcolor{comment}{}}
+\DoxyCodeLine{133 \textcolor{comment}{  /**}}
+\DoxyCodeLine{134 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
+\DoxyCodeLine{135 \textcolor{comment}{   * system}}
+\DoxyCodeLine{136 \textcolor{comment}{   *}}
+\DoxyCodeLine{137 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{138 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{139 \textcolor{comment}{   */}}
+\DoxyCodeLine{140   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
+\DoxyCodeLine{141 \textcolor{comment}{}}
+\DoxyCodeLine{142 \textcolor{comment}{  /**}}
+\DoxyCodeLine{143 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{144 \textcolor{comment}{   *}}
+\DoxyCodeLine{145 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{146 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{147 \textcolor{comment}{   */}}
+\DoxyCodeLine{148   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a9878a9385bfdc31c3a7d2f4e5e4cfb88}{num\_triplets}} = \{}
+\DoxyCodeLine{149       \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
+\DoxyCodeLine{150       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{151       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{152   \};}
+\DoxyCodeLine{153 \textcolor{comment}{}}
+\DoxyCodeLine{154 \textcolor{comment}{  /**}}
+\DoxyCodeLine{155 \textcolor{comment}{   * @brief Get number of triplets of element}}
+\DoxyCodeLine{156 \textcolor{comment}{   *}}
+\DoxyCodeLine{157 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{158 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{159 \textcolor{comment}{   */}}
+\DoxyCodeLine{160   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}{get\_num\_triplets}}();}
+\DoxyCodeLine{161 \textcolor{comment}{}}
+\DoxyCodeLine{162 \textcolor{comment}{  /**}}
+\DoxyCodeLine{163 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
+\DoxyCodeLine{164 \textcolor{comment}{   *}}
+\DoxyCodeLine{165 \textcolor{comment}{   * Converts the resistance and distal pressure to the constant means of}}
+\DoxyCodeLine{166 \textcolor{comment}{   * themselve}}
+\DoxyCodeLine{167 \textcolor{comment}{   */}}
+\DoxyCodeLine{168   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{to\_steady}}();}
+\DoxyCodeLine{169 \textcolor{comment}{}}
+\DoxyCodeLine{170 \textcolor{comment}{  /**}}
+\DoxyCodeLine{171 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
+\DoxyCodeLine{172 \textcolor{comment}{   *}}
+\DoxyCodeLine{173 \textcolor{comment}{   */}}
+\DoxyCodeLine{174   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}{to\_unsteady}}();}
+\DoxyCodeLine{175 }
+\DoxyCodeLine{176  \textcolor{keyword}{private}:}
+\DoxyCodeLine{177   Parameters params;}
+\DoxyCodeLine{178 \};}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{181 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a5bcb6df09176e5cc9a563f054253838b}{ResistanceBC<T>::ResistanceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} R,}
+\DoxyCodeLine{182                               \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} Pd, std::string name)}
+\DoxyCodeLine{183     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
+\DoxyCodeLine{184   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
+\DoxyCodeLine{185   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_af053fae1f978f2a89c28ec3eabf0fa39}{R}} = R;}
+\DoxyCodeLine{186   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_resistance_b_c_1_1_parameters_a8cef65e35f85e7511347788ea0692bc8}{Pd}} = Pd;}
+\DoxyCodeLine{187 \}}
+\DoxyCodeLine{188 }
+\DoxyCodeLine{189 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{190 \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aa16d90b9c1d86e6732b61fa708d8750c}{ResistanceBC<T>::\string~ResistanceBC}}() \{\}}
+\DoxyCodeLine{191 }
+\DoxyCodeLine{192 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{193 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{ResistanceBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{194   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 1, \{\});}
+\DoxyCodeLine{195 \}}
+\DoxyCodeLine{196 }
+\DoxyCodeLine{197 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{198 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7d203b6fbeed72466f6f143848a01b0f}{ResistanceBC<T>::update\_block\_params}}(std::vector<T> new\_params) \{}
+\DoxyCodeLine{199   std::vector<T> t\_new;}
+\DoxyCodeLine{200   std::vector<T> R\_new;}
+\DoxyCodeLine{201   std::vector<T> Pd\_new;}
+\DoxyCodeLine{202   \textcolor{keywordtype}{int} num\_time\_pts = (int)new\_params[0];}
+\DoxyCodeLine{203   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < num\_time\_pts; i++) \{}
+\DoxyCodeLine{204     t\_new.push\_back(new\_params[1 + i]);}
+\DoxyCodeLine{205     R\_new.push\_back(new\_params[1 + num\_time\_pts + i]);}
+\DoxyCodeLine{206     Pd\_new.push\_back(new\_params[1 + 2 * num\_time\_pts + i]);}
+\DoxyCodeLine{207   \}}
+\DoxyCodeLine{208   this-\/>params.R.update\_params(t\_new, R\_new);}
+\DoxyCodeLine{209   this-\/>params.Pd.update\_params(t\_new, Pd\_new);}
+\DoxyCodeLine{210 \}}
+\DoxyCodeLine{211 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{212 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97adf48719b8}{ResistanceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
+\DoxyCodeLine{213   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{214 \}}
+\DoxyCodeLine{215 }
+\DoxyCodeLine{216 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{217 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}{ResistanceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{}
+\DoxyCodeLine{218   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{219       -\/params.R.get(time);}
+\DoxyCodeLine{220   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.Pd.get(time);}
+\DoxyCodeLine{221 \}}
+\DoxyCodeLine{222 }
+\DoxyCodeLine{223 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{224 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{ResistanceBC<T>::to\_steady}}() \{}
+\DoxyCodeLine{225   params.R.to\_steady();}
+\DoxyCodeLine{226   params.Pd.to\_steady();}
+\DoxyCodeLine{227 \}}
+\DoxyCodeLine{228 }
+\DoxyCodeLine{229 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{230 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}{ResistanceBC<T>::to\_unsteady}}() \{}
+\DoxyCodeLine{231   params.R.to\_unsteady();}
+\DoxyCodeLine{232   params.Pd.to\_unsteady();}
+\DoxyCodeLine{233 \}}
+\DoxyCodeLine{234 }
+\DoxyCodeLine{235 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{236 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}{ResistanceBC<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{237   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{238 \}}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_RESISTANCEBC\_HPP\_}}
 
 \end{DoxyCode}

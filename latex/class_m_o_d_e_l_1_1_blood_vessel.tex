@@ -33,6 +33,10 @@ struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters}{Parame
 \begin{DoxyCompactList}\small\item\em Destroy the Blood Vessel object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a6ad709b63514157ff5e0e1faa376273c}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ new\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_af2ca52cf2153bbdda72de6214c93f8cf}{get\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ \&block\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Return parameters of a block. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3909586564df17501073663785e74880}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ac6192a5011157b55641c0f32e0d9fca2}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y)
@@ -154,6 +158,21 @@ Destroy the Blood Vessel object.
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_af2ca52cf2153bbdda72de6214c93f8cf}\label{class_m_o_d_e_l_1_1_blood_vessel_af2ca52cf2153bbdda72de6214c93f8cf}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!get\_block\_params@{get\_block\_params}}
+\index{get\_block\_params@{get\_block\_params}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_block\_params()}{get\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::get\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{block\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Return parameters of a block. 
+
+@block\+\_\+params \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} parameters. 
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a17a3f09a478899add488c91710ea742e}{MODEL\+::\+Block$<$ T $>$}}.
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_add082727e7934e9bef9cfb3e56f2e26b}\label{class_m_o_d_e_l_1_1_blood_vessel_add082727e7934e9bef9cfb3e56f2e26b}} 
 \index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}}
 \index{get\_num\_triplets@{get\_num\_triplets}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
@@ -190,6 +209,26 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_a6ad709b63514157ff5e0e1faa376273c}\label{class_m_o_d_e_l_1_1_blood_vessel_a6ad709b63514157ff5e0e1faa376273c}} 
+\index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!update\_block\_params@{update\_block\_params}}
+\index{update\_block\_params@{update\_block\_params}!MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Update parameters of a block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em params} & New parameters. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{MODEL\+::\+Block$<$ T $>$}}.
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_a3909586564df17501073663785e74880}\label{class_m_o_d_e_l_1_1_blood_vessel_a3909586564df17501073663785e74880}} 
 \index{MODEL::BloodVessel$<$ T $>$@{MODEL::BloodVessel$<$ T $>$}!update\_constant@{update\_constant}}

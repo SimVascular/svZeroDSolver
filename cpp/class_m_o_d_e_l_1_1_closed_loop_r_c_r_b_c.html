@@ -104,6 +104,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa2b928a00c70ffbb06e43170035dc9ae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#aa2b928a00c70ffbb06e43170035dc9ae">setup_dofs</a> (<a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:aa2b928a00c70ffbb06e43170035dc9ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <a href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#aa2b928a00c70ffbb06e43170035dc9ae">More...</a><br /></td></tr>
 <tr class="separator:aa2b928a00c70ffbb06e43170035dc9ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3b7765e29f386b086de147905312b03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#ad3b7765e29f386b086de147905312b03">update_block_params</a> (std::vector&lt; T &gt; new_params)</td></tr>
+<tr class="memdesc:ad3b7765e29f386b086de147905312b03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update parameters of a block.  <a href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#ad3b7765e29f386b086de147905312b03">More...</a><br /></td></tr>
+<tr class="separator:ad3b7765e29f386b086de147905312b03"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0156ce2ac6b46e01c9f658202ebbfacb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#a0156ce2ac6b46e01c9f658202ebbfacb">get_block_params</a> (std::vector&lt; T &gt; &amp;block_params)</td></tr>
+<tr class="memdesc:a0156ce2ac6b46e01c9f658202ebbfacb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return parameters of a block.  <a href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#a0156ce2ac6b46e01c9f658202ebbfacb">More...</a><br /></td></tr>
+<tr class="separator:a0156ce2ac6b46e01c9f658202ebbfacb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee13a5851329b46c4589771fbfd97bfe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#aee13a5851329b46c4589771fbfd97bfe">update_constant</a> (<a class="el" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem</a>&lt; T &gt; &amp;system)</td></tr>
 <tr class="memdesc:aee13a5851329b46c4589771fbfd97bfe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <a href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html#aee13a5851329b46c4589771fbfd97bfe">More...</a><br /></td></tr>
 <tr class="separator:aee13a5851329b46c4589771fbfd97bfe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,15 +138,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a70ccd1dd5919a360d520a6e8320dfecf inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">setup_dofs</a> (<a class="el" href="class_m_o_d_e_l_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:a70ccd1dd5919a360d520a6e8320dfecf inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <a href="class_m_o_d_e_l_1_1_block.html#a70ccd1dd5919a360d520a6e8320dfecf">More...</a><br /></td></tr>
 <tr class="separator:a70ccd1dd5919a360d520a6e8320dfecf inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a734b31879d4c99c77ccbc01dbf227367 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a734b31879d4c99c77ccbc01dbf227367">update_model_dependent_params</a> (<a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt; &amp;model)</td></tr>
-<tr class="memdesc:a734b31879d4c99c77ccbc01dbf227367 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update for model-dependent variables that are set at the end of model construction.  <a href="class_m_o_d_e_l_1_1_block.html#a734b31879d4c99c77ccbc01dbf227367">More...</a><br /></td></tr>
-<tr class="separator:a734b31879d4c99c77ccbc01dbf227367 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89fef5378b8d6d8c94d7bfb1a92e4152 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a89fef5378b8d6d8c94d7bfb1a92e4152">set_model_dependent_params</a> (<a class="el" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model</a>&lt; T &gt; &amp;model)</td></tr>
+<tr class="memdesc:a89fef5378b8d6d8c94d7bfb1a92e4152 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update for model-dependent variables that are set at the end of model construction.  <a href="class_m_o_d_e_l_1_1_block.html#a89fef5378b8d6d8c94d7bfb1a92e4152">More...</a><br /></td></tr>
+<tr class="separator:a89fef5378b8d6d8c94d7bfb1a92e4152 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec411e6f9159b3ec2c8d144da8d25763 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#aec411e6f9159b3ec2c8d144da8d25763">get_parameter_value</a> (std::string message, T &amp;param_value)</td></tr>
 <tr class="memdesc:aec411e6f9159b3ec2c8d144da8d25763 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return parameter values.  <a href="class_m_o_d_e_l_1_1_block.html#aec411e6f9159b3ec2c8d144da8d25763">More...</a><br /></td></tr>
 <tr class="separator:aec411e6f9159b3ec2c8d144da8d25763 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e87c0c28d9c8173e144fcddcefd5bb2 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a4e87c0c28d9c8173e144fcddcefd5bb2">set_ICs</a> (<a class="el" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a>&lt; T &gt; &amp;state)</td></tr>
 <tr class="memdesc:a4e87c0c28d9c8173e144fcddcefd5bb2 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set block-specific initial conditions.  <a href="class_m_o_d_e_l_1_1_block.html#a4e87c0c28d9c8173e144fcddcefd5bb2">More...</a><br /></td></tr>
 <tr class="separator:a4e87c0c28d9c8173e144fcddcefd5bb2 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fe2ea21f3cbd60b4a5ed469e9c42fc3 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a9fe2ea21f3cbd60b4a5ed469e9c42fc3">update_block_params</a> (std::vector&lt; T &gt; new_params)</td></tr>
+<tr class="memdesc:a9fe2ea21f3cbd60b4a5ed469e9c42fc3 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update parameters of a block.  <a href="class_m_o_d_e_l_1_1_block.html#a9fe2ea21f3cbd60b4a5ed469e9c42fc3">More...</a><br /></td></tr>
+<tr class="separator:a9fe2ea21f3cbd60b4a5ed469e9c42fc3 inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17a3f09a478899add488c91710ea742e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#a17a3f09a478899add488c91710ea742e">get_block_params</a> (std::vector&lt; T &gt; &amp;block_params)</td></tr>
+<tr class="memdesc:a17a3f09a478899add488c91710ea742e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return parameters of a block.  <a href="class_m_o_d_e_l_1_1_block.html#a17a3f09a478899add488c91710ea742e">More...</a><br /></td></tr>
+<tr class="separator:a17a3f09a478899add488c91710ea742e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1351a3b60e8060d6183045d382dbf6e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_m_o_d_e_l_1_1_block.html#aa1351a3b60e8060d6183045d382dbf6e">update_constant</a> (<a class="el" href="class_a_l_g_e_b_r_a_1_1_sparse_system.html">ALGEBRA::SparseSystem</a>&lt; T &gt; &amp;system)</td></tr>
 <tr class="memdesc:aa1351a3b60e8060d6183045d382dbf6e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <a href="class_m_o_d_e_l_1_1_block.html#aa1351a3b60e8060d6183045d382dbf6e">More...</a><br /></td></tr>
 <tr class="separator:aa1351a3b60e8060d6183045d382dbf6e inherit pub_methods_class_m_o_d_e_l_1_1_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -339,6 +351,39 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0156ce2ac6b46e01c9f658202ebbfacb" name="a0156ce2ac6b46e01c9f658202ebbfacb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0156ce2ac6b46e01c9f658202ebbfacb">&#9670;&nbsp;</a></span>get_block_params()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html">MODEL::ClosedLoopRCRBC</a>&lt; T &gt;::get_block_params </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; T &gt; &amp;&#160;</td>
+          <td class="paramname"><em>block_params</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return parameters of a block. </p>
+<p >@block_params <a class="el" href="class_m_o_d_e_l_1_1_block.html" title="Base class for 0D model components.">Block</a> parameters. </p>
+
+<p>Reimplemented from <a class="el" href="class_m_o_d_e_l_1_1_block.html#a17a3f09a478899add488c91710ea742e">MODEL::Block&lt; T &gt;</a>.</p>
+
+</div>
+</div>
 <a id="ac46bf97d2b0b3ffe12dc13b0e4458abc" name="ac46bf97d2b0b3ffe12dc13b0e4458abc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac46bf97d2b0b3ffe12dc13b0e4458abc">&#9670;&nbsp;</a></span>get_num_triplets()</h2>
 
@@ -465,6 +510,44 @@ template&lt;typename T &gt; </div>
 
 </div>
 </div>
+<a id="ad3b7765e29f386b086de147905312b03" name="ad3b7765e29f386b086de147905312b03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3b7765e29f386b086de147905312b03">&#9670;&nbsp;</a></span>update_block_params()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c.html">MODEL::ClosedLoopRCRBC</a>&lt; T &gt;::update_block_params </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; T &gt;&#160;</td>
+          <td class="paramname"><em>new_params</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Update parameters of a block. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>New parameters. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_m_o_d_e_l_1_1_block.html#a9fe2ea21f3cbd60b4a5ed469e9c42fc3">MODEL::Block&lt; T &gt;</a>.</p>
+
+</div>
+</div>
 <a id="aee13a5851329b46c4589771fbfd97bfe" name="aee13a5851329b46c4589771fbfd97bfe"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee13a5851329b46c4589771fbfd97bfe">&#9670;&nbsp;</a></span>update_constant()</h2>
 
@@ -534,7 +617,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 28 2022 21:04:02 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Tue Jan 24 2023 17:02:28 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

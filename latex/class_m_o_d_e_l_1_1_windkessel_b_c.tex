@@ -33,6 +33,8 @@ struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_windkessel_b_c_1_1_parameters}{Para
 \begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a5d09cb4285ed013e10c0ce163d018ff4}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a8fc3bd7c6d2cba9b16861d2ed2c03d73}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ params)
+\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_aa2f6e126801e8b86b6edcd92b2f76abd}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ac79143b27ae1eb25f4bcd065e494c2a5}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
@@ -212,6 +214,26 @@ Convert the block to a steady behavior.
 Set the capacitance to original value. 
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}{MODEL\+::\+Block$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_windkessel_b_c_a8fc3bd7c6d2cba9b16861d2ed2c03d73}\label{class_m_o_d_e_l_1_1_windkessel_b_c_a8fc3bd7c6d2cba9b16861d2ed2c03d73}} 
+\index{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!update\_block\_params@{update\_block\_params}}
+\index{update\_block\_params@{update\_block\_params}!MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL\+::\+Windkessel\+BC}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Update parameters of a block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em params} & New parameters. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{MODEL\+::\+Block$<$ T $>$}}.
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_windkessel_b_c_aa2f6e126801e8b86b6edcd92b2f76abd}\label{class_m_o_d_e_l_1_1_windkessel_b_c_aa2f6e126801e8b86b6edcd92b2f76abd}} 
 \index{MODEL::WindkesselBC$<$ T $>$@{MODEL::WindkesselBC$<$ T $>$}!update\_constant@{update\_constant}}

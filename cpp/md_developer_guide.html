@@ -87,7 +87,8 @@ Formatting</h1>
 </div><!-- fragment --><p >You can also just check <b>if</b> a file would be formatted without actually formatting it with:</p>
 <div class="fragment"><div class="line">cd src</div>
 <div class="line">find **/*.hpp **/*.cpp | xargs clang-format --dry-run --style=Google --Werror</div>
-</div><!-- fragment --><p >The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and indicates on merge requests when the code doesnt't yet meet all style requirements.</p>
+</div><!-- fragment --><p >The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and indicates on merge requests when the code doesnt yet meet all style requirements.</p>
+<p >On Sherlock at Stanford, clang-format is included in the <code>llvm</code> module.</p>
 <h1><a class="anchor" id="autotoc_md40"></a>
 Documentation</h1>
 <p >We use <a href="https://doxygen.nl">Doxygen</a> to automatically build an html documentation from source code. Please have at Doxygen's <a href="https://www.doxygen.nl/manual/docblocks.html">Documentation Guide</a> for an introduction into the syntax of writing documentation in C++. For more inspiration, you can look at the existing source files and how they use documentation. In the following you can find a short recap of the most important commands:</p>
@@ -131,7 +132,7 @@ Linux</h2>
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 28 2022 21:04:02 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Tue Jan 24 2023 17:02:28 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

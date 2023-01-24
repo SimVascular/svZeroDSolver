@@ -27,12 +27,14 @@ struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters}{
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a56d61d48d04dae89d5dc470bbf8dbf5f}{Flow\+Reference\+BC}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ Q, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_afc9b0f704b7f0ad85e120e9faa975b5c}{Flow\+Reference\+BC}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ Q, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}}, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adc256c007eb1d76741cad2753d69cf65}{coupling\+\_\+loc}}=\char`\"{}None\char`\"{})
 \begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}} object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a59470544c3c1f89732051abf8f6f9300}{$\sim$\+Flow\+Reference\+BC}} ()
 \begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{Flow\+Reference\+BC}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a07b024cf724ad95ce2abde3793c3af1f}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a4e3e6ef315b0496920e1cbe7171c702f}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ new\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a6810600bcf2e2e505dbe138da4d0f2e7}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_accaf0289d7808f20efb3fd3bd5ee2dbe}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
@@ -47,7 +49,9 @@ void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adf944c2f4d404c58e0
 \begin{DoxyCompactItemize}
 \item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_aef45cf661c4cfa8da82d0ea37fc2ce8b}{num\+\_\+triplets}}
-\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adc256c007eb1d76741cad2753d69cf65}{coupling\+\_\+loc}}
+\begin{DoxyCompactList}\small\item\em Specify is this is an inlet or outlet to the sv\+ZeroD model when used for external coupling. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -87,12 +91,12 @@ Q=\hat{Q}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_a56d61d48d04dae89d5dc470bbf8dbf5f}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_a56d61d48d04dae89d5dc470bbf8dbf5f}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_afc9b0f704b7f0ad85e120e9faa975b5c}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_afc9b0f704b7f0ad85e120e9faa975b5c}} 
 \index{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!FlowReferenceBC@{FlowReferenceBC}}
 \index{FlowReferenceBC@{FlowReferenceBC}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{FlowReferenceBC()}{FlowReferenceBC()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL\+::\+Flow\+Reference\+BC}}$<$ T $>$\+::\+Flow\+Reference\+BC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{Q,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL\+::\+Flow\+Reference\+BC}}$<$ T $>$\+::\+Flow\+Reference\+BC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{Q,  }\item[{std\+::string}]{name,  }\item[{std\+::string}]{coupling\+\_\+loc = {\ttfamily \char`\"{}None\char`\"{}} }\end{DoxyParamCaption})}
 
 
 
@@ -186,6 +190,26 @@ Convert the block to an unsteady behavior.
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}{MODEL\+::\+Block$<$ T $>$}}.
 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_a4e3e6ef315b0496920e1cbe7171c702f}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_a4e3e6ef315b0496920e1cbe7171c702f}} 
+\index{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!update\_block\_params@{update\_block\_params}}
+\index{update\_block\_params@{update\_block\_params}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL\+::\+Flow\+Reference\+BC}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Update parameters of a block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em params} & New parameters. \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{MODEL\+::\+Block$<$ T $>$}}.
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_a6810600bcf2e2e505dbe138da4d0f2e7}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_a6810600bcf2e2e505dbe138da4d0f2e7}} 
 \index{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}}
@@ -231,6 +255,17 @@ Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ac5d06fd3b4c7b517f
 
 
 \doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_adc256c007eb1d76741cad2753d69cf65}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_adc256c007eb1d76741cad2753d69cf65}} 
+\index{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!coupling\_loc@{coupling\_loc}}
+\index{coupling\_loc@{coupling\_loc}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{coupling\_loc}{coupling\_loc}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL\+::\+Flow\+Reference\+BC}}$<$ T $>$\+::coupling\+\_\+loc}
+
+
+
+Specify is this is an inlet or outlet to the sv\+ZeroD model when used for external coupling. 
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_flow_reference_b_c_aef45cf661c4cfa8da82d0ea37fc2ce8b}\label{class_m_o_d_e_l_1_1_flow_reference_b_c_aef45cf661c4cfa8da82d0ea37fc2ce8b}} 
 \index{MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}!num\_triplets@{num\_triplets}}
 \index{num\_triplets@{num\_triplets}!MODEL::FlowReferenceBC$<$ T $>$@{MODEL::FlowReferenceBC$<$ T $>$}}

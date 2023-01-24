@@ -33,10 +33,14 @@ std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_
 \item 
 std\+::vector$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}$<$ T $>$ $\ast$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a69eebd78213465c7ab13ffbb7a5b86c8}{blocks}}
 \begin{DoxyCompactList}\small\item\em Elements of the model. \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a866e9f663a8889dd8c13e8e97da2c4c3}{block\+\_\+index\+\_\+map}}
+\begin{DoxyCompactList}\small\item\em Map between block name and index. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}
 \begin{DoxyCompactList}\small\item\em Degree-\/of-\/freedom handler of the model. \end{DoxyCompactList}\item 
 std\+::list$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $\ast$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a872417ccceb8d9154672b39203f8791b}{nodes}}
-\begin{DoxyCompactList}\small\item\em Nodes of the model. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Nodes of the model. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model_ade86c6aa2bfc6e538c95e9eb0e712392}{external\+\_\+coupling\+\_\+blocks}}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -172,6 +176,17 @@ Update the time-\/dependent contributions of all elements in a sparse system.
 
 
 \doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a866e9f663a8889dd8c13e8e97da2c4c3}\label{class_m_o_d_e_l_1_1_model_a866e9f663a8889dd8c13e8e97da2c4c3}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!block\_index\_map@{block\_index\_map}}
+\index{block\_index\_map@{block\_index\_map}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{block\_index\_map}{block\_index\_map}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::block\+\_\+index\+\_\+map}
+
+
+
+Map between block name and index. 
+
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a69eebd78213465c7ab13ffbb7a5b86c8}\label{class_m_o_d_e_l_1_1_model_a69eebd78213465c7ab13ffbb7a5b86c8}} 
 \index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!blocks@{blocks}}
 \index{blocks@{blocks}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
@@ -194,7 +209,14 @@ Elements of the model.
 
 Degree-\/of-\/freedom handler of the model. 
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a872417ccceb8d9154672b39203f8791b}\label{class_m_o_d_e_l_1_1_model_a872417ccceb8d9154672b39203f8791b}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_ade86c6aa2bfc6e538c95e9eb0e712392}\label{class_m_o_d_e_l_1_1_model_ade86c6aa2bfc6e538c95e9eb0e712392}} 
+\index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!external\_coupling\_blocks@{external\_coupling\_blocks}}
+\index{external\_coupling\_blocks@{external\_coupling\_blocks}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{external\_coupling\_blocks}{external\_coupling\_blocks}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::vector$<$std\+::string$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$\+::external\+\_\+coupling\+\_\+blocks}
+
+List of external coupling blocks (names need to be available for interface) \mbox{\Hypertarget{class_m_o_d_e_l_1_1_model_a872417ccceb8d9154672b39203f8791b}\label{class_m_o_d_e_l_1_1_model_a872417ccceb8d9154672b39203f8791b}} 
 \index{MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}!nodes@{nodes}}
 \index{nodes@{nodes}!MODEL::Model$<$ T $>$@{MODEL::Model$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{nodes}{nodes}}

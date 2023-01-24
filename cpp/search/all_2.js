@@ -9,8 +9,9 @@ var searchData=
   ['closedlooprcrbc_2ehpp_6',['closedloopRCRbc.hpp',['../closedloop_r_c_rbc_8hpp.html',1,'']]],
   ['configreader_7',['ConfigReader',['../class_i_o_1_1_config_reader.html#a62ff5f79acc744f70ef8e33723aedbb1',1,'IO::ConfigReader::ConfigReader()'],['../class_i_o_1_1_config_reader.html',1,'IO::ConfigReader&lt; T &gt;']]],
   ['configreader_2ehpp_8',['configreader.hpp',['../configreader_8hpp.html',1,'']]],
-  ['cp_9',['Cp',['../struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters.html#a66f947a030b82e7b693985d831ff91e8',1,'MODEL::ClosedLoopHeartPulmonary::Parameters']]],
-  ['cpa_10',['Cpa',['../struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters.html#ade115eadec431bd81f807ce9bf5d9293',1,'MODEL::ClosedLoopHeartPulmonary::Parameters']]],
-  ['csvwriter_2ehpp_11',['csvwriter.hpp',['../csvwriter_8hpp.html',1,'']]],
-  ['cycle_5fperiod_12',['cycle_period',['../class_m_o_d_e_l_1_1_time_dependent_parameter.html#a2d104c267b7ac6a0ed71b05acd1cb36c',1,'MODEL::TimeDependentParameter']]]
+  ['coupling_5floc_9',['coupling_loc',['../class_m_o_d_e_l_1_1_flow_reference_b_c.html#adc256c007eb1d76741cad2753d69cf65',1,'MODEL::FlowReferenceBC::coupling_loc()'],['../class_m_o_d_e_l_1_1_pressure_reference_b_c.html#a2734001b61c75cf0e779e7b9eb9aaa6d',1,'MODEL::PressureReferenceBC::coupling_loc()']]],
+  ['cp_10',['Cp',['../struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters.html#a66f947a030b82e7b693985d831ff91e8',1,'MODEL::ClosedLoopHeartPulmonary::Parameters']]],
+  ['cpa_11',['Cpa',['../struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters.html#ade115eadec431bd81f807ce9bf5d9293',1,'MODEL::ClosedLoopHeartPulmonary::Parameters']]],
+  ['csvwriter_2ehpp_12',['csvwriter.hpp',['../csvwriter_8hpp.html',1,'']]],
+  ['cycle_5fperiod_13',['cycle_period',['../class_m_o_d_e_l_1_1_time_dependent_parameter.html#a2d104c267b7ac6a0ed71b05acd1cb36c',1,'MODEL::TimeDependentParameter']]]
 ];

@@ -95,7 +95,8 @@ class PressureReferenceBC : public Block<T> {
    * @param P Time dependent pressure
    * @param name Name
    */
-  PressureReferenceBC(TimeDependentParameter<T> P, std::string name);
+  PressureReferenceBC(TimeDependentParameter<T> P, std::string name,
+                      std::string coupling_loc = "None");
 
   /**
    * @brief Destroy the PressureReferenceBC object
@@ -114,6 +115,13 @@ class PressureReferenceBC : public Block<T> {
    * equations at
    */
   void setup_dofs(DOFHandler &dofhandler);
+
+  /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -165,16 +173,29 @@ class PressureReferenceBC : public Block<T> {
    */
   void to_unsteady();
 
+  /**
+   * @brief Specify is this is an inlet or outlet to the svZeroD model when used
+   * for external coupling.
+   *
+   */
+  std::string coupling_loc;
+
  private:
   Parameters params;
+  bool external_coupling = false;
 };
 
 template <typename T>
 PressureReferenceBC<T>::PressureReferenceBC(TimeDependentParameter<T> P,
-                                            std::string name)
+                                            std::string name,
+                                            std::string coupling_loc)
     : Block<T>(name) {
   this->name = name;
   this->params.P = P;
+  this->coupling_loc = coupling_loc;
+  if (coupling_loc != "None") {
+    this->external_coupling = true;
+  }
 }
 
 template <typename T>
@@ -183,6 +204,18 @@ PressureReferenceBC<T>::~PressureReferenceBC() {}
 template <typename T>
 void PressureReferenceBC<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 1, {});
+}
+
+template <typename T>
+void PressureReferenceBC<T>::update_block_params(std::vector<T> new_params) {
+  std::vector<T> t_new;
+  std::vector<T> P_new;
+  int num_time_pts = (int)new_params[0];
+  for (int i = 0; i < num_time_pts; i++) {
+    t_new.push_back(new_params[1 + i]);
+    P_new.push_back(new_params[1 + num_time_pts + i]);
+  }
+  this->params.P.update_params(t_new, P_new);
 }
 
 template <typename T>

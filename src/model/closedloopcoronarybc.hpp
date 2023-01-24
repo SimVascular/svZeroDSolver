@@ -151,6 +151,20 @@ class ClosedLoopCoronaryBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
+   * @brief Return parameters of a block.
+   *
+   * @block_params Block parameters.
+   */
+  void get_block_params(std::vector<T> &block_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -172,7 +186,7 @@ class ClosedLoopCoronaryBC : public Block<T> {
    * @param system System to update contributions at
    * @param y Current solution
    */
-  void update_model_dependent_params(MODEL::Model<T> &model);
+  void set_model_dependent_params(MODEL::Model<T> &model);
 
   /**
    * @brief Number of triplets of element
@@ -260,7 +274,7 @@ void ClosedLoopCoronaryBC<T>::update_solution(
 }
 
 template <typename T>
-void ClosedLoopCoronaryBC<T>::update_model_dependent_params(
+void ClosedLoopCoronaryBC<T>::set_model_dependent_params(
     MODEL::Model<T> &model) {
   T im_value = 0.0;
   for (auto &block : model.blocks) {
@@ -283,27 +297,33 @@ void ClosedLoopCoronaryBC<T>::update_model_dependent_params(
       }
     }
   }
-  // for (auto &[key, elem] : model.blocks) {
-  //  std::visit([&](auto &&block) {
-  //    if (key == "CLH0") {
-  //      if (this->side == "left") {
-  //        block.get_parameter_value("iml", im_value); // Scaling for LV
-  //        pressure -> intramyocardial pressure this->ventricle_var_id =
-  //        block.global_var_ids[13]; // Solution ID for LV pressure
-  //      }
-  //      else if (this->side == "right") {
-  //        block.get_parameter_value("imr", im_value); // Scaling for RV
-  //        pressure -> intramyocardial pressure this->ventricle_var_id =
-  //        block.global_var_ids[6];
-  //      }
-  //      else {
-  //        throw std::runtime_error("For closed loop coronary, 'side' should be
-  //        either 'left' or 'right'");
-  //      }
-  //    }
-  //  }, elem);
-  //}
   this->im = im_value;
+}
+
+template <typename T>
+void ClosedLoopCoronaryBC<T>::update_block_params(std::vector<T> new_params) {
+  this->params.Ra = new_params[0];
+  this->params.Ram = new_params[1];
+  this->params.Rv = new_params[2];
+  this->params.Ca = new_params[3];
+  this->params.Cim = new_params[4];
+  this->im = new_params[5];
+}
+
+template <typename T>
+void ClosedLoopCoronaryBC<T>::get_block_params(std::vector<T> &block_params) {
+  if (block_params.size() != 6) {
+    throw std::runtime_error(
+        "Wrong vector size in get_block_params for ClosedLoopCoronaryBC. Size "
+        "should be 6 but is currently " +
+        std::to_string(block_params.size()));
+  }
+  block_params[0] = this->params.Ra;
+  block_params[1] = this->params.Ram;
+  block_params[2] = this->params.Rv;
+  block_params[3] = this->params.Ca;
+  block_params[4] = this->params.Cim;
+  block_params[5] = this->im;
 }
 
 template <typename T>

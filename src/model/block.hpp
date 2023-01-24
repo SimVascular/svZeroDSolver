@@ -147,7 +147,7 @@ class Block {
    *
    * @param model Model object to access model-dependent variables
    */
-  virtual void update_model_dependent_params(MODEL::Model<T> &model);
+  virtual void set_model_dependent_params(MODEL::Model<T> &model);
 
   /**
    * @brief Return parameter values
@@ -162,6 +162,20 @@ class Block {
    * @param state State vector containing y and ydot
    */
   virtual void set_ICs(ALGEBRA::State<T> &state);
+
+  /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  virtual void update_block_params(std::vector<T> new_params);
+
+  /**
+   * @brief Return parameters of a block.
+   *
+   * @block_params Block parameters.
+   */
+  virtual void get_block_params(std::vector<T> &block_params);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -265,13 +279,19 @@ template <typename T>
 void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
 
 template <typename T>
-void Block<T>::update_model_dependent_params(MODEL::Model<T> &model) {}
+void Block<T>::set_model_dependent_params(MODEL::Model<T> &model) {}
 
 template <typename T>
 void Block<T>::get_parameter_value(std::string message, T &param_value) {}
 
 template <typename T>
 void Block<T>::set_ICs(ALGEBRA::State<T> &state) {}
+
+template <typename T>
+void Block<T>::update_block_params(std::vector<T> new_params) {}
+
+template <typename T>
+void Block<T>::get_block_params(std::vector<T> &block_params) {}
 
 template <typename T>
 void Block<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {}

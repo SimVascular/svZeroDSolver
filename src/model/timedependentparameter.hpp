@@ -66,7 +66,8 @@ class TimeDependentParameter {
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-  TimeDependentParameter(std::vector<T> times, std::vector<T> values);
+  TimeDependentParameter(std::vector<T> times, std::vector<T> values,
+                         bool periodic = true);
 
   /**
    * @brief Destroy the Time Dependent Parameter object
@@ -80,6 +81,15 @@ class TimeDependentParameter {
   int size;
 
   /**
+   * @brief Update parameters
+   *
+   * @param times Time steps corresponding to the values
+   * @param values Values correspondong to the time steps
+   */
+
+  void update_params(std::vector<T> times, std::vector<T> values);
+
+  /**
    * @brief Get the parameter value at the specified time.
    *
    * @param time Current time
@@ -88,6 +98,8 @@ class TimeDependentParameter {
   T get(T time);
 
   bool isconstant;  ///< Bool value indicating if the parameter is constant
+  bool isperiodic;  ///< Bool value indicating if the parameter is periodic with
+                    ///< the cardiac cycle
 
   /**
    * @brief Convert the parameter into a steady mean state.
@@ -112,17 +124,29 @@ TimeDependentParameter<T>::TimeDependentParameter() {}
 
 template <typename T>
 TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
-                                                  std::vector<T> values) {
+                                                  std::vector<T> values,
+                                                  bool periodic) {
   this->times = times;
   this->values = values;
   size = values.size();
   if (size == 1) {
     isconstant = true;
     cycle_period = 1.0;
+    isperiodic = true;
   } else {
     isconstant = false;
     cycle_period = times.back() - times[0];
+    isperiodic = periodic;
   }
+}
+
+template <typename T>
+void TimeDependentParameter<T>::update_params(std::vector<T> times,
+                                              std::vector<T> values) {
+  this->times = times;
+  this->values = values;
+  size = values.size();
+  cycle_period = times.back() - times[0];
 }
 
 template <typename T>
@@ -135,8 +159,14 @@ T TimeDependentParameter<T>::get(T time) {
     return values[0];
   }
 
-  // Determine the time within a cycle (necessary to extrapolate)
-  T rtime = fmod(time, cycle_period);
+  // Determine the time within this->times (necessary to extrapolate)
+  T rtime;
+  if (isperiodic == true) {
+    rtime = fmod(time, cycle_period);
+  } else {
+    // this->times is not periodic when running with external solver
+    rtime = time;
+  }
 
   // Determine the lower and upper element for interpolation
   auto i = lower_bound(times.begin(), times.end(), rtime);

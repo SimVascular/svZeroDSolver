@@ -158,6 +158,20 @@ class BloodVessel : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
+   * @brief Return parameters of a block.
+   *
+   * @block_params Block parameters.
+   */
+  void get_block_params(std::vector<T> &block_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -215,6 +229,28 @@ BloodVessel<T>::~BloodVessel() {}
 template <typename T>
 void BloodVessel<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 3, {"pressure_c"});
+}
+
+template <typename T>
+void BloodVessel<T>::update_block_params(std::vector<T> new_params) {
+  this->params.R = new_params[0];
+  this->params.C = new_params[1];
+  this->params.L = new_params[2];
+  this->params.stenosis_coefficient = new_params[3];
+}
+
+template <typename T>
+void BloodVessel<T>::get_block_params(std::vector<T> &block_params) {
+  if (block_params.size() != 4) {
+    throw std::runtime_error(
+        "Wrong vector size in get_block_params for BloodVessel. Size should be "
+        "4 but is currently " +
+        std::to_string(block_params.size()));
+  }
+  block_params[0] = this->params.R;
+  block_params[1] = this->params.C;
+  block_params[2] = this->params.L;
+  block_params[3] = this->params.stenosis_coefficient;
 }
 
 template <typename T>

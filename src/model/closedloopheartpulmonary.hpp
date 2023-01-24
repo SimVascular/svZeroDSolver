@@ -126,14 +126,6 @@ class ClosedLoopHeartPulmonary : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update for model-dependent variables that are set at the end of
-   * model construction
-   *
-   * @param model Model object to access model-dependent variables
-   */
-  // void update_model_dependent_params(MODEL::Model<T> &model);
-
-  /**
    * @brief Return parameter values
    *
    * @param message String to identify different requests
@@ -146,6 +138,20 @@ class ClosedLoopHeartPulmonary : public Block<T> {
    * @param state State vector containing y and ydot
    */
   void set_ICs(ALGEBRA::State<T> &state);
+
+  /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
+   * @brief Return parameters of a block.
+   *
+   * @block_params Block parameters.
+   */
+  void get_block_params(std::vector<T> &block_params);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -275,6 +281,76 @@ void ClosedLoopHeartPulmonary<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 14,
                         {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul",
                          "P_LA", "V_LA", "Q_LA", "P_LV", "V_LV", "Q_LV"});
+}
+
+template <typename T>
+void ClosedLoopHeartPulmonary<T>::update_block_params(
+    std::vector<T> new_params) {
+  this->params.Tsa = new_params[0];
+  this->params.tpwave = new_params[1];
+  this->params.Erv_s = new_params[2];
+  this->params.Elv_s = new_params[3];
+  this->params.iml = new_params[4];
+  this->params.imr = new_params[5];
+  this->params.Lra_v = new_params[6];
+  this->params.Rra_v = new_params[7];
+  this->params.Lrv_a = new_params[8];
+  this->params.Rrv_a = new_params[9];
+  this->params.Lla_v = new_params[10];
+  this->params.Rla_v = new_params[11];
+  this->params.Llv_a = new_params[12];
+  this->params.Rlv_ao = new_params[13];
+  this->params.Vrv_u = new_params[14];
+  this->params.Vlv_u = new_params[15];
+  this->params.Rpd = new_params[16];
+  this->params.Cp = new_params[17];
+  this->params.Cpa = new_params[18];
+  this->params.Kxp_ra = new_params[19];
+  this->params.Kxv_ra = new_params[20];
+  this->params.Kxp_la = new_params[21];
+  this->params.Kxv_la = new_params[22];
+  this->params.Emax_ra = new_params[23];
+  this->params.Emax_la = new_params[24];
+  this->params.Vaso_ra = new_params[25];
+  this->params.Vaso_la = new_params[26];
+}
+
+template <typename T>
+void ClosedLoopHeartPulmonary<T>::get_block_params(
+    std::vector<T> &block_params) {
+  if (block_params.size() != 27) {
+    throw std::runtime_error(
+        "Wrong vector size in get_block_params for ClosedLoopHeartPulmonary. "
+        "Size should be 27 but is currently " +
+        std::to_string(block_params.size()));
+  }
+  block_params[0] = this->params.Tsa;
+  block_params[1] = this->params.tpwave;
+  block_params[2] = this->params.Erv_s;
+  block_params[3] = this->params.Elv_s;
+  block_params[4] = this->params.iml;
+  block_params[5] = this->params.imr;
+  block_params[6] = this->params.Lra_v;
+  block_params[7] = this->params.Rra_v;
+  block_params[8] = this->params.Lrv_a;
+  block_params[9] = this->params.Rrv_a;
+  block_params[10] = this->params.Lla_v;
+  block_params[11] = this->params.Rla_v;
+  block_params[12] = this->params.Llv_a;
+  block_params[13] = this->params.Rlv_ao;
+  block_params[14] = this->params.Vrv_u;
+  block_params[15] = this->params.Vlv_u;
+  block_params[16] = this->params.Rpd;
+  block_params[17] = this->params.Cp;
+  block_params[18] = this->params.Cpa;
+  block_params[19] = this->params.Kxp_ra;
+  block_params[20] = this->params.Kxv_ra;
+  block_params[21] = this->params.Kxp_la;
+  block_params[22] = this->params.Kxv_la;
+  block_params[23] = this->params.Emax_ra;
+  block_params[24] = this->params.Emax_la;
+  block_params[25] = this->params.Vaso_ra;
+  block_params[26] = this->params.Vaso_la;
 }
 
 template <typename T>
@@ -530,11 +606,11 @@ void ClosedLoopHeartPulmonary<T>::get_valve_positions(
 
 template <typename T>
 void ClosedLoopHeartPulmonary<T>::set_ICs(ALGEBRA::State<T> &state) {
-  state.y[this->global_var_ids[4]] = 38.43;   // RA vol.
-  state.y[this->global_var_ids[7]] = 96.07;   // RV vol.
-  state.y[this->global_var_ids[11]] = 38.43;  // LA vol.
-  state.y[this->global_var_ids[14]] = 96.07;  // LV vol.
-  state.y[this->global_var_ids[9]] = 8.0;     // Pulm pressure
+  // state.y[this->global_var_ids[4]] = 38.43;   // RA vol.
+  // state.y[this->global_var_ids[7]] = 96.07;   // RV vol.
+  // state.y[this->global_var_ids[11]] = 38.43;  // LA vol.
+  // state.y[this->global_var_ids[14]] = 96.07;  // LV vol.
+  // state.y[this->global_var_ids[9]] = 8.0;     // Pulm pressure
   // Below ICs likely are not needed (but retained as comments in case they are)
   // state.y[this->global_var_ids[0]] = 4.72;   // RA pressure
   // state.y[this->global_var_ids[6]] = 14.58;  // RV pressure

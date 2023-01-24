@@ -69,8 +69,13 @@ class Model {
   ~Model();
 
   std::vector<Block<T> *> blocks;  ///< Elements of the model
-  DOFHandler dofhandler;           ///< Degree-of-freedom handler of the model
-  std::list<Node *> nodes;         ///< Nodes of the model
+  std::map<std::string, int>
+      block_index_map;      ///< Map between block name and index
+  DOFHandler dofhandler;    ///< Degree-of-freedom handler of the model
+  std::list<Node *> nodes;  ///< Nodes of the model
+  std::vector<std::string>
+      external_coupling_blocks;  ///< List of external coupling blocks (names
+                                 ///< need to be available for interface)
 
   /**
    * @brief Update the constant contributions of all elements in a sparse system

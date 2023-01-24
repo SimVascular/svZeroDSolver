@@ -136,6 +136,13 @@ class ResistiveJunction : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Update parameters of a block.
+   *
+   * @param params New parameters.
+   */
+  void update_block_params(std::vector<T> new_params);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -187,6 +194,11 @@ void ResistiveJunction<T>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, num_inlets + num_outlets + 1,
                         {"pressure_c"});
   num_triplets["F"] = (num_inlets + num_outlets) * 4;
+}
+
+template <typename T>
+void ResistiveJunction<T>::update_block_params(std::vector<T> new_params) {
+  this->params.R = new_params;
 }
 
 template <typename T>

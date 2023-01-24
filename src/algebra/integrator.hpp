@@ -36,6 +36,7 @@
 
 #include <Eigen/Dense>
 
+#include "../helpers/debug.hpp"
 #include "../model/model.hpp"
 #include "state.hpp"
 
@@ -149,6 +150,7 @@ Integrator<T>::~Integrator() {}
 template <typename T>
 State<T> Integrator<T>::step(State<T> &old_state, T time,
                              MODEL::Model<T> &model) {
+  // DEBUG_MSG("Step: time = "<< time);
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();

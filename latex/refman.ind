@@ -47,7 +47,7 @@
 
   \item {ALGEBRA}, \hyperpage{15}
   \item {algebra/integrator.hpp}, \hyperpage{145, 146}
-  \item {algebra/namespace.hpp}, \hyperpage{237, 238}
+  \item {algebra/namespace.hpp}, \hyperpage{181, 182}
   \item {algebra/sparsesystem.hpp}, \hyperpage{149, 150}
   \item {algebra/state.hpp}, \hyperpage{152, 153}
   \item {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{72}
@@ -215,7 +215,7 @@
     \subitem {startswith}, \hyperpage{16}
   \item {helpers/debug.hpp}, \hyperpage{154}, \hyperpage{156}
   \item {helpers/endswith.hpp}, \hyperpage{156}, \hyperpage{158}
-  \item {helpers/namespace.hpp}, \hyperpage{238, 239}
+  \item {helpers/namespace.hpp}, \hyperpage{182, 183}
   \item {helpers/startswith.hpp}, \hyperpage{158}, \hyperpage{160}
 
   \indexspace
@@ -253,7 +253,7 @@
     \subitem {to\_vessel\_csv}, \hyperpage{18}
   \item {io/configreader.hpp}, \hyperpage{165}, \hyperpage{167}
   \item {io/csvwriter.hpp}, \hyperpage{177, 178}
-  \item {io/namespace.hpp}, \hyperpage{239, 240}
+  \item {io/namespace.hpp}, \hyperpage{183, 184}
   \item {IO::ConfigReader$<$ T $>$}, \hyperpage{59}
     \subitem {$\sim$ConfigReader}, \hyperpage{61}
     \subitem {ConfigReader}, \hyperpage{61}
@@ -326,29 +326,29 @@
   \indexspace
 
   \item {main}
-    \subitem {main.cpp}, \hyperpage{182}
-  \item {main.cpp}, \hyperpage{181}
-    \subitem {main}, \hyperpage{182}
-  \item {main.hpp}, \hyperpage{182}
-    \subitem {run}, \hyperpage{183}
+    \subitem {main.cpp}, \hyperpage{186}
+  \item {main.cpp}, \hyperpage{185}
+    \subitem {main}, \hyperpage{186}
+  \item {main.hpp}, \hyperpage{186}
+    \subitem {run}, \hyperpage{187}
   \item {MODEL}, \hyperpage{18}
   \item {Model}
     \subitem {MODEL::Model$<$ T $>$}, \hyperpage{79}
   \item {model}
     \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{62}
-  \item {model/block.hpp}, \hyperpage{188, 189}
-  \item {model/bloodvessel.hpp}, \hyperpage{193}, \hyperpage{195}
-  \item {model/bloodvesseljunction.hpp}, \hyperpage{198}, 
-		\hyperpage{200}
-  \item {model/closedloopcoronarybc.hpp}, \hyperpage{203, 204}
-  \item {model/closedloopheartpulmonary.hpp}, \hyperpage{208}, 
-		\hyperpage{210}
-  \item {model/closedloopRCRbc.hpp}, \hyperpage{217}, \hyperpage{219}
-  \item {model/dofhandler.hpp}, \hyperpage{222}, \hyperpage{224}
-  \item {model/flowreferencebc.hpp}, \hyperpage{225}, \hyperpage{227}
-  \item {model/junction.hpp}, \hyperpage{230, 231}
-  \item {model/model.hpp}, \hyperpage{234, 235}
-  \item {model/namespace.hpp}, \hyperpage{240, 241}
+  \item {model/block.hpp}, \hyperpage{192, 193}
+  \item {model/bloodvessel.hpp}, \hyperpage{197}, \hyperpage{199}
+  \item {model/bloodvesseljunction.hpp}, \hyperpage{202}, 
+		\hyperpage{204}
+  \item {model/closedloopcoronarybc.hpp}, \hyperpage{207, 208}
+  \item {model/closedloopheartpulmonary.hpp}, \hyperpage{212}, 
+		\hyperpage{214}
+  \item {model/closedloopRCRbc.hpp}, \hyperpage{221}, \hyperpage{223}
+  \item {model/dofhandler.hpp}, \hyperpage{226}, \hyperpage{228}
+  \item {model/flowreferencebc.hpp}, \hyperpage{229}, \hyperpage{231}
+  \item {model/junction.hpp}, \hyperpage{234, 235}
+  \item {model/model.hpp}, \hyperpage{238, 239}
+  \item {model/namespace.hpp}, \hyperpage{184, 185}
   \item {model/node.hpp}, \hyperpage{241}, \hyperpage{243}
   \item {model/openloopcoronarybc.hpp}, \hyperpage{244, 245}
   \item {model/pressurereferencebc.hpp}, \hyperpage{249}, 
@@ -733,7 +733,7 @@
     \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
 		\hyperpage{102}
   \item {run}
-    \subitem {main.hpp}, \hyperpage{183}
+    \subitem {main.hpp}, \hyperpage{187}
   \item {run\_simulation}
     \subitem {interface.cpp}, \hyperpage{164}
 

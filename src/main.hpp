@@ -282,7 +282,7 @@ const std::string run(std::string& json_config) {
     states.push_back(std::move(state));
   }
   for (int i = 1; i < reader.sim_num_time_steps; i++) {
-    DEBUG_MSG("Integration time: "<< time << std::endl);
+    // DEBUG_MSG("Integration time: "<< time << std::endl);
     state = integrator.step(state, time, *reader.model);
     interval_counter += 1;
     time = reader.sim_time_step_size * T(i);

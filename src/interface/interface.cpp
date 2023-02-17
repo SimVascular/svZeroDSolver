@@ -247,7 +247,7 @@ void read_block_params(const int problem_id, std::string block_name,
   try {
     block_index = model->block_index_map.at(block_name);
   } catch (...) {
-    std::cout << "[update_block_params] Error! Could not find block with name: "
+    std::cout << "[read_block_params] Error! Could not find block with name: "
               << block_name << std::endl;
     throw std::runtime_error("Terminating.");
   }

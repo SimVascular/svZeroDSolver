@@ -25,6 +25,6 @@ docs/python/source/*.rst
 docs/python/build
 
 # C++ build and externals directories
-Release/
-Debug/
+Release*/
+Debug*/
 externals/

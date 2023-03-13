@@ -184,6 +184,9 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->times_.resize(num_output_steps);
   interface->states_.resize(num_output_steps);
 
+  // Initialize integrator
+  interface->integrator_ = ALGEBRA::Integrator<T>(*model, interface->time_step_size_, 0.1, interface->absolute_tolerance_, interface->max_nliter_);
+
   DEBUG_MSG("[initialize] Done");
 }
 
@@ -419,16 +422,13 @@ void run_simulation(const int problem_id, const double external_time,
   auto system_size = interface->system_size_;
   auto num_output_steps = interface->num_output_steps_;
 
-  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
-                                    absolute_tolerance, max_nliter);
+//ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
+//                                  absolute_tolerance, max_nliter);
+  auto integrator = interface->integrator_;
+  integrator.update_params(*model, time_step_size);
+
   auto state = interface->state_;
   T time = external_time;
-//std::vector<T> times;
-//times.reserve(num_time_steps);
-//times.push_back(time);
-//std::vector<ALGEBRA::State<T>> states;
-//states.reserve(num_time_steps);
-//states.push_back(state);
 
   interface->times_[0] = time;
   interface->states_[0] = state;
@@ -454,22 +454,10 @@ void run_simulation(const int problem_id, const double external_time,
       }
     }
     time += time_step_size;
-    //times.push_back(time);
-    //states.push_back(std::move(state));
     interface->times_[i] = time;
     interface->states_[i] = state;
   }
   interface->state_ = state;
-
-//// Extract last cardiac cycle -- NOT TESTED
-//if (interface->output_last_cycle_only_) {
-//  states.erase(states.begin(), states.end() - interface->pts_per_cycle_);
-//  times.erase(times.begin(), times.end() - interface->pts_per_cycle_);
-//  T start_time = times[0];
-//  for (auto& time : times) {
-//    time -= start_time;
-//  }
-//}
 
   // Write states to solution output vector
   if (output_solutions.size() != num_output_steps * system_size) {
@@ -484,8 +472,6 @@ void run_simulation(const int problem_id, const double external_time,
     start_time = interface->times_[start_idx];
   }
   for (int t = start_idx; t < num_output_steps; t++) {
-//  auto state = states[t];
-//  output_times[t] = times[t] - start_time;
     state = interface->states_[t];
     output_times[t] = interface->times_[t] - start_time;
     for (int i = 0; i < system_size; i++) {
@@ -496,5 +482,5 @@ void run_simulation(const int problem_id, const double external_time,
   }
 
   // Release dynamic memory
-  integrator.clean();
+  //integrator.clean();
 }

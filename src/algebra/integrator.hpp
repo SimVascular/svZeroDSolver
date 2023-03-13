@@ -97,6 +97,11 @@ class Integrator {
    */
   Integrator(MODEL::Model<T> &model, T time_step_size, T rho, T atol,
              int max_iter);
+  /**
+   * @brief Delete dynamically allocated memory (in class member SparseSystem<T> system).
+   */
+  void clean();
+
 
   /**
    * @brief Destroy the Integrator object
@@ -148,9 +153,14 @@ template <typename T>
 Integrator<T>::~Integrator() {}
 
 template <typename T>
+void Integrator<T>::clean() {
+  // Cannot be in destructor because dynamically allocated pointers will be lost when objects are assigned from temporary objects.
+  system.clean();
+}
+
+template <typename T>
 State<T> Integrator<T>::step(State<T> &old_state, T time,
                              MODEL::Model<T> &model) {
-  // DEBUG_MSG("Step: time = "<< time);
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();

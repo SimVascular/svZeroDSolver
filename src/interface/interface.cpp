@@ -451,7 +451,7 @@ void run_simulation(const int problem_id, const double external_time,
   }
   interface->state_ = state;
 
-  // Extract last cardiac cycle
+  // Extract last cardiac cycle -- NOT TESTED
   if (interface->output_last_cycle_only_) {
     states.erase(states.begin(), states.end() - interface->pts_per_cycle_);
     times.erase(times.begin(), times.end() - interface->pts_per_cycle_);
@@ -467,13 +467,22 @@ void run_simulation(const int problem_id, const double external_time,
   }
   int output_idx = 0;
   int soln_idx = 0;
-  for (int t = 0; t < num_output_steps; t++) {
+  int start_idx = 0;
+  T start_time = 0.0;
+  if (interface->output_last_cycle_only_) { // NOT TESTED
+    start_idx = interface->num_time_steps_ - interface->pts_per_cycle_;
+    start_time = interface->times_[start_idx];
+  }
+  for (int t = start_idx; t < num_output_steps; t++) {
     auto state = states[t];
-    output_times[t] = times[t];
+    output_times[t] = times[t] - start_time;
     for (int i = 0; i < system_size; i++) {
       soln_idx = output_idx * system_size + i;
       output_solutions[soln_idx] = state.y[i];
     }
     output_idx++;
   }
+
+  // Release dynamic memory
+  integrator.clean();
 }

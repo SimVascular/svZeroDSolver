@@ -84,7 +84,8 @@ class SparseSystem {
   Eigen::Matrix<T, Eigen::Dynamic, 1> residual;  ///< Residual of the system
   Eigen::Matrix<T, Eigen::Dynamic, 1> dy;  ///< Solution increment of the system
 
-  Eigen::SparseLU<Eigen::SparseMatrix<T>> *solver = new Eigen::SparseLU<Eigen::SparseMatrix<T>>(); ///< Linear solver
+  Eigen::SparseLU<Eigen::SparseMatrix<T>> *solver =
+      new Eigen::SparseLU<Eigen::SparseMatrix<T>>();  ///< Linear solver
 
   /**
    * @brief Reserve memory in system matrices based on number of triplets
@@ -115,7 +116,8 @@ class SparseSystem {
   void solve();
 
   /**
-   * @brief Delete dynamically allocated memory (class member Eigen::SparseLU<Eigen::SparseMatrix<T>> *solver)
+   * @brief Delete dynamically allocated memory (class member
+   * Eigen::SparseLU<Eigen::SparseMatrix<T>> *solver)
    */
   void clean();
 };
@@ -140,7 +142,8 @@ SparseSystem<T>::~SparseSystem() {}
 
 template <typename T>
 void SparseSystem<T>::clean() {
-  // Cannot be in destructor because dynamically allocated pointers will be lost when objects are assigned from temporary objects.
+  // Cannot be in destructor because dynamically allocated pointers will be lost
+  // when objects are assigned from temporary objects.
   delete solver;
 }
 

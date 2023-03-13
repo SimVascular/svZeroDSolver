@@ -185,7 +185,9 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->states_.resize(num_output_steps);
 
   // Initialize integrator
-  interface->integrator_ = ALGEBRA::Integrator<T>(*model, interface->time_step_size_, 0.1, interface->absolute_tolerance_, interface->max_nliter_);
+  interface->integrator_ = ALGEBRA::Integrator<T>(
+      *model, interface->time_step_size_, 0.1, interface->absolute_tolerance_,
+      interface->max_nliter_);
 
   DEBUG_MSG("[initialize] Done");
 }
@@ -422,8 +424,8 @@ void run_simulation(const int problem_id, const double external_time,
   auto system_size = interface->system_size_;
   auto num_output_steps = interface->num_output_steps_;
 
-//ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
-//                                  absolute_tolerance, max_nliter);
+  // ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
+  //                                  absolute_tolerance, max_nliter);
   auto integrator = interface->integrator_;
   integrator.update_params(*model, time_step_size);
 
@@ -467,7 +469,7 @@ void run_simulation(const int problem_id, const double external_time,
   int soln_idx = 0;
   int start_idx = 0;
   T start_time = 0.0;
-  if (interface->output_last_cycle_only_) { // NOT TESTED
+  if (interface->output_last_cycle_only_) {  // NOT TESTED
     start_idx = interface->num_time_steps_ - interface->pts_per_cycle_;
     start_time = interface->times_[start_idx];
   }
@@ -482,5 +484,5 @@ void run_simulation(const int problem_id, const double external_time,
   }
 
   // Release dynamic memory
-  //integrator.clean();
+  // integrator.clean();
 }

@@ -111,12 +111,14 @@ class Integrator {
   ~Integrator();
 
   /**
-   * @brief Delete dynamically allocated memory (in class member SparseSystem<T> system).
+   * @brief Delete dynamically allocated memory (in class member SparseSystem<T>
+   * system).
    */
   void clean();
 
   /**
-   * @brief Update integrator parameter and system matrices with model parameter updates.
+   * @brief Update integrator parameter and system matrices with model parameter
+   * updates.
    *
    * @param model ZeroD model being solved
    * @param time_step_size Time step size for 0D model
@@ -171,10 +173,10 @@ Integrator<T>::~Integrator() {}
 
 template <typename T>
 void Integrator<T>::clean() {
-  // Cannot be in destructor because dynamically allocated pointers will be lost when objects are assigned from temporary objects.
+  // Cannot be in destructor because dynamically allocated pointers will be lost
+  // when objects are assigned from temporary objects.
   system.clean();
 }
-
 
 template <typename T>
 void Integrator<T>::update_params(MODEL::Model<T> &model, T time_step_size) {

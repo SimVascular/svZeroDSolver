@@ -146,6 +146,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->external_step_size_ = reader.sim_external_step_size;
 
   // For how many time steps are outputs being returned?
+  // NOTE: Only tested num_output_steps = interface->num_time_steps_
   if (reader.output_mean_only) {
     num_output_steps = 1;
   } else if (reader.output_last_cycle_only) {
@@ -178,6 +179,10 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
     }
   }
   interface->state_ = state;
+
+  // Initialize states and times vectors because size is now known
+  interface->times_.resize(num_output_steps);
+  interface->states_.resize(num_output_steps);
 
   DEBUG_MSG("[initialize] Done");
 }
@@ -418,12 +423,15 @@ void run_simulation(const int problem_id, const double external_time,
                                     absolute_tolerance, max_nliter);
   auto state = interface->state_;
   T time = external_time;
-  std::vector<T> times;
-  times.reserve(num_time_steps);
-  times.push_back(time);
-  std::vector<ALGEBRA::State<T>> states;
-  states.reserve(num_time_steps);
-  states.push_back(state);
+//std::vector<T> times;
+//times.reserve(num_time_steps);
+//times.push_back(time);
+//std::vector<ALGEBRA::State<T>> states;
+//states.reserve(num_time_steps);
+//states.push_back(state);
+
+  interface->times_[0] = time;
+  interface->states_[0] = state;
 
   // Run integrator
   interface->time_step_ = 0;
@@ -446,20 +454,22 @@ void run_simulation(const int problem_id, const double external_time,
       }
     }
     time += time_step_size;
-    times.push_back(time);
-    states.push_back(std::move(state));
+    //times.push_back(time);
+    //states.push_back(std::move(state));
+    interface->times_[i] = time;
+    interface->states_[i] = state;
   }
   interface->state_ = state;
 
-  // Extract last cardiac cycle -- NOT TESTED
-  if (interface->output_last_cycle_only_) {
-    states.erase(states.begin(), states.end() - interface->pts_per_cycle_);
-    times.erase(times.begin(), times.end() - interface->pts_per_cycle_);
-    T start_time = times[0];
-    for (auto& time : times) {
-      time -= start_time;
-    }
-  }
+//// Extract last cardiac cycle -- NOT TESTED
+//if (interface->output_last_cycle_only_) {
+//  states.erase(states.begin(), states.end() - interface->pts_per_cycle_);
+//  times.erase(times.begin(), times.end() - interface->pts_per_cycle_);
+//  T start_time = times[0];
+//  for (auto& time : times) {
+//    time -= start_time;
+//  }
+//}
 
   // Write states to solution output vector
   if (output_solutions.size() != num_output_steps * system_size) {
@@ -474,8 +484,10 @@ void run_simulation(const int problem_id, const double external_time,
     start_time = interface->times_[start_idx];
   }
   for (int t = start_idx; t < num_output_steps; t++) {
-    auto state = states[t];
-    output_times[t] = times[t] - start_time;
+//  auto state = states[t];
+//  output_times[t] = times[t] - start_time;
+    state = interface->states_[t];
+    output_times[t] = interface->times_[t] - start_time;
     for (int i = 0; i < system_size; i++) {
       soln_idx = output_idx * system_size + i;
       output_solutions[soln_idx] = state.y[i];

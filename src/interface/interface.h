@@ -53,5 +53,6 @@ class SolverInterface
     MODEL::Model<T>* model_;
     ALGEBRA::State<double> state_;
     std::vector<double> times_;
+    std::vector<ALGEBRA::State<T>> states_;
 };
 

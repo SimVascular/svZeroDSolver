@@ -36,10 +36,10 @@
 
 #include <iostream>
 
-#ifndef DEBUG
-#define DEBUG_MSG(str)             \
-  do {                             \
-    std::cout << str << std::endl; \
+#ifndef NDEBUG
+#define DEBUG_MSG(str)                                   \
+  do {                                                   \
+    std::cout << "[DEBUG MESSAGE] " << str << std::endl; \
   } while (false)
 #else
 #define DEBUG_MSG(str) \

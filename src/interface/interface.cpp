@@ -151,13 +151,13 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
     num_output_steps = 1;
     throw std::runtime_error(
         "ERROR: Option output_last_cycle_only has not been implemented when "
-        "using the svZeroDPlus interface library.")
+        "using the svZeroDPlus interface library.");
   } else if (reader.output_last_cycle_only) {
     num_output_steps = interface->pts_per_cycle_;
     throw std::runtime_error(
         "ERROR: Option output_last_cycle_only has been implemented but not "
         "tested when using the svZeroDPlus interface library. Please test this "
-        "functionality before removing this message.")
+        "functionality before removing this message.");
   } else {
     num_output_steps = interface->num_time_steps_;
   }
@@ -482,7 +482,7 @@ void run_simulation(const int problem_id, const double external_time,
     throw std::runtime_error(
         "ERROR: Option output_last_cycle_only has been implemented but not "
         "tested when using the svZeroDPlus interface library. Please test this "
-        "functionality before removing this message.")
+        "functionality before removing this message.");
   }
   for (int t = start_idx; t < num_output_steps; t++) {
     state = interface->states_[t];

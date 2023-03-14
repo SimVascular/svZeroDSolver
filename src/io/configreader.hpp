@@ -56,7 +56,6 @@
 #include "../model/resistivejunction.hpp"
 #include "../model/windkesselbc.hpp"
 #include "./jsonhandler.hpp"
-#include "simdjson.h"
 
 namespace IO {
 
@@ -79,9 +78,9 @@ class ConfigReader {
   ~ConfigReader();
 
   /**
-   * @brief Create model from configuration file
+   * @brief Create model from configuration
    *
-   * @return Model
+   * @param handler Configuration handler
    */
   void load(JsonHandler &handler);
 

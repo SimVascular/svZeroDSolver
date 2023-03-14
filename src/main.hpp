@@ -234,7 +234,7 @@ typedef double T;
  * @param json_config Path config or json encoded string with config
  * @return Result as csv encoded string
  */
-const std::string run(std::string& json_config) {
+const std::string run(std::string_view json_config) {
   // Load model and configuration
   DEBUG_MSG("Read configuration");
   IO::ConfigReader<T> reader;

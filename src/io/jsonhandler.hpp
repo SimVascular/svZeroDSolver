@@ -47,35 +47,158 @@ class JsonHandler {
   simdjson::dom::parser *parser;
 
  public:
+  /**
+   * @brief Construct a new JsonHandler object
+   *
+   * @param json_encoded_string JSON encoded string
+   */
   JsonHandler(std::string_view json_encoded_string);
+
+  /**
+   * @brief Construct a new JsonHandler object
+   *
+   * @param data simdjson data
+   */
   JsonHandler(simdjson::simdjson_result<simdjson::dom::element> data);
+
+  /**
+   * @brief Destroy the JsonHandler object
+   *
+   */
   ~JsonHandler();
 
+  /**
+   * @brief Returns the lengths of the data if it can be cast to an array
+   *
+   * @return int Length of the data
+   */
   int length();
+
+  /**
+   * @brief Check if JSON data has a certain key
+   *
+   * @param key
+   * @return true If key exists
+   * @return false If key doesn't exist
+   */
   bool has_key(std::string_view key);
 
+  /**
+   * @brief Get the inner JSON object at a string key
+   *
+   * @param key JSON key
+   * @return JsonHandler Inner JSON object at the key
+   */
   JsonHandler operator[](std::string_view key);
+
+  /**
+   * @brief Get the inner JSON object at an integer key
+   *
+   * @param index JSON index
+   * @return JsonHandler
+   */
   JsonHandler operator[](int index);
 
+  /**
+   * @brief Get boolean parameter
+   *
+   * @param key Key of the parameter
+   * @return bool Value of the parameter
+   */
   bool get_bool(std::string_view key);
+
+  /**
+   * @brief Get boolean parameter with default value
+   *
+   * @param key Key of the parameter
+   * @param default_value Value to return if key doesn't exist
+   * @return bool Value of the parameter or default value if key doesn't exist
+   */
   bool get_bool(std::string_view key, bool default_value);
 
+  /**
+   * @brief Get integer parameter
+   *
+   * @param key Key of the parameter
+   * @return int Value of the parameter
+   */
   int get_int(std::string_view key);
+
+  /**
+   * @brief Get integer parameter with default value
+   *
+   * @param key Key of the parameter
+   * @param default_value Value to return if key doesn't exist
+   * @return int Value of the parameter or default value if key doesn't exist
+   */
   int get_int(std::string_view key, int default_value);
 
+  /**
+   * @brief Get double parameter
+   *
+   * @param key Key of the parameter
+   * @return double Value of the parameter
+   */
   double get_double(std::string_view key);
+
+  /**
+   * @brief Get double parameter with default value
+   *
+   * @param key Key of the parameter
+   * @param default_value Value to return if key doesn't exist
+   * @return double Value of the parameter or default value if key doesn't exist
+   */
   double get_double(std::string_view key, double default_value);
 
+  /**
+   * @brief Get double array parameter
+   *
+   * @param key Key of the parameter
+   * @return std::vector<double> Value of the parameter
+   */
   std::vector<double> get_double_array(std::string_view key);
+
+  /**
+   * @brief Get double array parameter with default value
+   *
+   * @param key Key of the parameter
+   * @param default_value Value to return if key doesn't exist
+   * @return std::vector<double> Value of the parameter or default value if key
+   * doesn't exist
+   */
   std::vector<double> get_double_array(std::string_view key,
                                        std::vector<double> default_value);
 
+  /**
+   * @brief Get integer array parameter
+   *
+   * @param key Key of the parameter
+   * @return std::vector<int> Value of the parameter
+   */
   std::vector<int> get_int_array(std::string_view key);
 
+  /**
+   * @brief Get string parameter
+   *
+   * @param key Key of the parameter
+   * @return std::string_view Value of the parameter
+   */
   std::string_view get_string(std::string_view key);
 
+  /**
+   * @brief Get string array parameter
+   *
+   * @param key Key of the parameter
+   * @return std::vector<std::string_view> Value of the parameter
+   */
   std::vector<std::string_view> get_string_array(std::string_view key);
 
+  /**
+   * @brief Get the list parameter
+   *
+   * @param key Key of the parameter
+   * @return std::list<JsonHandler> Value of the parameter
+   */
   std::list<JsonHandler> get_list(std::string_view key);
 };
 
@@ -84,6 +207,7 @@ JsonHandler::JsonHandler(std::string_view json_encoded_string) {
   auto string = simdjson::padded_string(json_encoded_string);
   data = parser->parse(string);
 }
+
 JsonHandler::JsonHandler(
     simdjson::simdjson_result<simdjson::dom::element> data) {
   this->data = data;

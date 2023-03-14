@@ -207,7 +207,6 @@ JsonHandler::JsonHandler(std::string_view json_encoded_string) {
   auto string = simdjson::padded_string(json_encoded_string);
   data = parser->parse(string);
 }
-
 JsonHandler::JsonHandler(
     simdjson::simdjson_result<simdjson::dom::element> data) {
   this->data = data;

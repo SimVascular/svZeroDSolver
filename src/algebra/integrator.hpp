@@ -99,10 +99,31 @@ class Integrator {
              int max_iter);
 
   /**
+   * @brief Construct a new Integrator object
+   *
+   */
+  Integrator();
+
+  /**
    * @brief Destroy the Integrator object
    *
    */
   ~Integrator();
+
+  /**
+   * @brief Delete dynamically allocated memory (in class member SparseSystem<T>
+   * system).
+   */
+  void clean();
+
+  /**
+   * @brief Update integrator parameter and system matrices with model parameter
+   * updates.
+   *
+   * @param model ZeroD model being solved
+   * @param time_step_size Time step size for 0D model
+   */
+  void update_params(MODEL::Model<T> &model, T time_step_size);
 
   /**
    * @brief Perform a time step
@@ -145,12 +166,31 @@ Integrator<T>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
 }
 
 template <typename T>
+Integrator<T>::Integrator() {}
+
+template <typename T>
 Integrator<T>::~Integrator() {}
+
+template <typename T>
+void Integrator<T>::clean() {
+  // Cannot be in destructor because dynamically allocated pointers will be lost
+  // when objects are assigned from temporary objects.
+  system.clean();
+}
+
+template <typename T>
+void Integrator<T>::update_params(MODEL::Model<T> &model, T time_step_size) {
+  y_init_coeff = alpha_f * 0.5 * time_step_size;
+  this->time_step_size = time_step_size;
+  time_step_size_inv = 1.0 / time_step_size;
+  y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;
+  model.update_constant(system);
+  model.update_time(system, 0.0);
+}
 
 template <typename T>
 State<T> Integrator<T>::step(State<T> &old_state, T time,
                              MODEL::Model<T> &model) {
-  // DEBUG_MSG("Step: time = "<< time);
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();

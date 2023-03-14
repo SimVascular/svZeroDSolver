@@ -146,10 +146,18 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->external_step_size_ = reader.sim_external_step_size;
 
   // For how many time steps are outputs being returned?
+  // NOTE: Only tested num_output_steps = interface->num_time_steps_
   if (reader.output_mean_only) {
     num_output_steps = 1;
+    throw std::runtime_error(
+        "ERROR: Option output_last_cycle_only has not been implemented when "
+        "using the svZeroDPlus interface library.");
   } else if (reader.output_last_cycle_only) {
     num_output_steps = interface->pts_per_cycle_;
+    throw std::runtime_error(
+        "ERROR: Option output_last_cycle_only has been implemented but not "
+        "tested when using the svZeroDPlus interface library. Please test this "
+        "functionality before removing this message.");
   } else {
     num_output_steps = interface->num_time_steps_;
   }
@@ -178,6 +186,15 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
     }
   }
   interface->state_ = state;
+
+  // Initialize states and times vectors because size is now known
+  interface->times_.resize(num_output_steps);
+  interface->states_.resize(num_output_steps);
+
+  // Initialize integrator
+  interface->integrator_ = ALGEBRA::Integrator<T>(
+      *model, interface->time_step_size_, 0.1, interface->absolute_tolerance_,
+      interface->max_nliter_);
 
   DEBUG_MSG("[initialize] Done");
 }
@@ -414,16 +431,16 @@ void run_simulation(const int problem_id, const double external_time,
   auto system_size = interface->system_size_;
   auto num_output_steps = interface->num_output_steps_;
 
-  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
-                                    absolute_tolerance, max_nliter);
+  // ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
+  //                                  absolute_tolerance, max_nliter);
+  auto integrator = interface->integrator_;
+  integrator.update_params(*model, time_step_size);
+
   auto state = interface->state_;
   T time = external_time;
-  std::vector<T> times;
-  times.reserve(num_time_steps);
-  times.push_back(time);
-  std::vector<ALGEBRA::State<T>> states;
-  states.reserve(num_time_steps);
-  states.push_back(state);
+
+  interface->times_[0] = time;
+  interface->states_[0] = state;
 
   // Run integrator
   interface->time_step_ = 0;
@@ -446,20 +463,10 @@ void run_simulation(const int problem_id, const double external_time,
       }
     }
     time += time_step_size;
-    times.push_back(time);
-    states.push_back(std::move(state));
+    interface->times_[i] = time;
+    interface->states_[i] = state;
   }
   interface->state_ = state;
-
-  // Extract last cardiac cycle
-  if (interface->output_last_cycle_only_) {
-    states.erase(states.begin(), states.end() - interface->pts_per_cycle_);
-    times.erase(times.begin(), times.end() - interface->pts_per_cycle_);
-    T start_time = times[0];
-    for (auto& time : times) {
-      time -= start_time;
-    }
-  }
 
   // Write states to solution output vector
   if (output_solutions.size() != num_output_steps * system_size) {
@@ -467,13 +474,26 @@ void run_simulation(const int problem_id, const double external_time,
   }
   int output_idx = 0;
   int soln_idx = 0;
-  for (int t = 0; t < num_output_steps; t++) {
-    auto state = states[t];
-    output_times[t] = times[t];
+  int start_idx = 0;
+  T start_time = 0.0;
+  if (interface->output_last_cycle_only_) {  // NOT TESTED
+    start_idx = interface->num_time_steps_ - interface->pts_per_cycle_;
+    start_time = interface->times_[start_idx];
+    throw std::runtime_error(
+        "ERROR: Option output_last_cycle_only has been implemented but not "
+        "tested when using the svZeroDPlus interface library. Please test this "
+        "functionality before removing this message.");
+  }
+  for (int t = start_idx; t < num_output_steps; t++) {
+    state = interface->states_[t];
+    output_times[t] = interface->times_[t] - start_time;
     for (int i = 0; i < system_size; i++) {
       soln_idx = output_idx * system_size + i;
       output_solutions[soln_idx] = state.y[i];
     }
     output_idx++;
   }
+
+  // Release dynamic memory
+  // integrator.clean();
 }

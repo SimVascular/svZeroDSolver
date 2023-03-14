@@ -51,7 +51,10 @@ class SolverInterface
     bool output_last_cycle_only_ = false;
 
     MODEL::Model<T>* model_;
+    ALGEBRA::Integrator<T> integrator_;
+
     ALGEBRA::State<double> state_;
     std::vector<double> times_;
+    std::vector<ALGEBRA::State<T>> states_;
 };
 

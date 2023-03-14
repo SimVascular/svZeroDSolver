@@ -10,5 +10,6 @@ var searchData=
   ['sim_5fpts_5fper_5fcycle_7',['sim_pts_per_cycle',['../class_i_o_1_1_config_reader.html#af4bde4c7696a7af78e607707e111f5b9',1,'IO::ConfigReader']]],
   ['sim_5fsteady_5finitial_8',['sim_steady_initial',['../class_i_o_1_1_config_reader.html#a1e593472af26af8f4bf98b158d996434',1,'IO::ConfigReader']]],
   ['sim_5ftime_5fstep_5fsize_9',['sim_time_step_size',['../class_i_o_1_1_config_reader.html#a8ad19204e82a0f29790452485f36a2ba',1,'IO::ConfigReader']]],
-  ['stenosis_5fcoefficient_10',['stenosis_coefficient',['../struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.html#a5f0adc244080b0bd404c579d39ec3f2b',1,'MODEL::BloodVessel::Parameters::stenosis_coefficient()'],['../struct_m_o_d_e_l_1_1_blood_vessel_junction_1_1_parameters.html#a6c30292246f121a23fd62b8cf727e9a8',1,'MODEL::BloodVesselJunction::Parameters::stenosis_coefficient()']]]
+  ['solver_10',['solver',['../class_a_l_g_e_b_r_a_1_1_sparse_system.html#a6662fb1f3f80510a1549b02df555672f',1,'ALGEBRA::SparseSystem']]],
+  ['stenosis_5fcoefficient_11',['stenosis_coefficient',['../struct_m_o_d_e_l_1_1_blood_vessel_1_1_parameters.html#a5f0adc244080b0bd404c579d39ec3f2b',1,'MODEL::BloodVessel::Parameters::stenosis_coefficient()'],['../struct_m_o_d_e_l_1_1_blood_vessel_junction_1_1_parameters.html#a6c30292246f121a23fd62b8cf727e9a8',1,'MODEL::BloodVesselJunction::Parameters::stenosis_coefficient()']]]
 ];

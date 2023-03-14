@@ -14,8 +14,14 @@ Generalized-\/alpha integrator.
 \item 
 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_af2c14ec14e456f9660ba41cb108f015a}{Integrator}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, T time\+\_\+step\+\_\+size, T rho, T atol, int max\+\_\+iter)
 \begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{Integrator}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_af4f52400a2ba9332c32e2f3cb44de126}{Integrator}} ()
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{Integrator}} object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a5d4708faf6c9443ad8a59329fc3c1812}{$\sim$\+Integrator}} ()
 \begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{Integrator}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a0e27a441720f787e90ff7f220cc796d9}{clean}} ()
+\begin{DoxyCompactList}\small\item\em Delete dynamically allocated memory (in class member Sparse\+System$<$\+T$>$ system). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a7a68e2d7aa7056308b280393e3e6dcc9}{update\+\_\+params}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, T time\+\_\+step\+\_\+size)
+\begin{DoxyCompactList}\small\item\em Update integrator parameter and system matrices with model parameter updates. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State}}$<$ T $>$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State}}$<$ T $>$ \&state, T time, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
 \begin{DoxyCompactList}\small\item\em Perform a time step. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -46,7 +52,7 @@ Here, $y$ is the vector of solution quantities and $\dot{y}$ is the time derivat
 \mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_integrator_af2c14ec14e456f9660ba41cb108f015a}\label{class_a_l_g_e_b_r_a_1_1_integrator_af2c14ec14e456f9660ba41cb108f015a}} 
 \index{ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}!Integrator@{Integrator}}
 \index{Integrator@{Integrator}!ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{Integrator()}{Integrator()}}
+\doxysubsubsection{\texorpdfstring{Integrator()}{Integrator()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA\+::\+Integrator}}$<$ T $>$\+::\+Integrator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model,  }\item[{T}]{time\+\_\+step\+\_\+size,  }\item[{T}]{rho,  }\item[{T}]{atol,  }\item[{int}]{max\+\_\+iter }\end{DoxyParamCaption})}
 
@@ -67,6 +73,17 @@ Construct a new \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{Integrator}
 {\em max\+\_\+iter} & Maximum number of non-\/linear iterations \\
 \hline
 \end{DoxyParams}
+\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_integrator_af4f52400a2ba9332c32e2f3cb44de126}\label{class_a_l_g_e_b_r_a_1_1_integrator_af4f52400a2ba9332c32e2f3cb44de126}} 
+\index{ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}!Integrator@{Integrator}}
+\index{Integrator@{Integrator}!ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Integrator()}{Integrator()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA\+::\+Integrator}}$<$ T $>$\+::\+Integrator}
+
+
+
+Construct a new \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{Integrator}} object. 
+
 \mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_integrator_a5d4708faf6c9443ad8a59329fc3c1812}\label{class_a_l_g_e_b_r_a_1_1_integrator_a5d4708faf6c9443ad8a59329fc3c1812}} 
 \index{ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}!````~Integrator@{$\sim$Integrator}}
 \index{````~Integrator@{$\sim$Integrator}!ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}}
@@ -81,6 +98,17 @@ Destroy the \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{Integrator}} ob
 
 
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_integrator_a0e27a441720f787e90ff7f220cc796d9}\label{class_a_l_g_e_b_r_a_1_1_integrator_a0e27a441720f787e90ff7f220cc796d9}} 
+\index{ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}!clean@{clean}}
+\index{clean@{clean}!ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{clean()}{clean()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA\+::\+Integrator}}$<$ T $>$\+::clean}
+
+
+
+Delete dynamically allocated memory (in class member Sparse\+System$<$\+T$>$ system). 
+
 \mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}\label{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}} 
 \index{ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}!step@{step}}
 \index{step@{step}!ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}}
@@ -104,6 +132,24 @@ Perform a time step.
 \begin{DoxyReturn}{Returns}
 New state 
 \end{DoxyReturn}
+\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_integrator_a7a68e2d7aa7056308b280393e3e6dcc9}\label{class_a_l_g_e_b_r_a_1_1_integrator_a7a68e2d7aa7056308b280393e3e6dcc9}} 
+\index{ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}!update\_params@{update\_params}}
+\index{update\_params@{update\_params}!ALGEBRA::Integrator$<$ T $>$@{ALGEBRA::Integrator$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_params()}{update\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA\+::\+Integrator}}$<$ T $>$\+::update\+\_\+params (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model,  }\item[{T}]{time\+\_\+step\+\_\+size }\end{DoxyParamCaption})}
+
+
+
+Update integrator parameter and system matrices with model parameter updates. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model} & ZeroD model being solved \\
+\hline
+{\em time\+\_\+step\+\_\+size} & Time step size for 0D model \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

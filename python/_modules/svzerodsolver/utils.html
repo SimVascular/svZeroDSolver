@@ -1,0 +1,641 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>svzerodsolver.utils &#8212; svZeroDPlus v1.0 Manual</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=12da95d707ffb74b382d" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/svzerodsolver/utils';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    <p class="title logo__title">svZeroDPlus Python Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../rst/bibliography.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/StanfordCBCL/svZeroDSolver" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../modules.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../rst/bibliography.html">
+                        References
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/StanfordCBCL/svZeroDSolver" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumbs">
+  <ul class="bd-breadcrumbs" role="navigation" aria-label="Breadcrumb">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module code</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">svzerodsolver.utils</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <h1>Source code for svzerodsolver.utils</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Copyright (c) Stanford University, The Regents of the University of</span>
+<span class="c1">#               California, and others.</span>
+<span class="c1">#</span>
+<span class="c1"># All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1"># See Copyright-SimVascular.txt for additional details.</span>
+<span class="c1">#</span>
+<span class="c1"># Permission is hereby granted, free of charge, to any person obtaining</span>
+<span class="c1"># a copy of this software and associated documentation files (the</span>
+<span class="c1"># &quot;Software&quot;), to deal in the Software without restriction, including</span>
+<span class="c1"># without limitation the rights to use, copy, modify, merge, publish,</span>
+<span class="c1"># distribute, sublicense, and/or sell copies of the Software, and to</span>
+<span class="c1"># permit persons to whom the Software is furnished to do so, subject</span>
+<span class="c1"># to the following conditions:</span>
+<span class="c1">#</span>
+<span class="c1"># The above copyright notice and this permission notice shall be included</span>
+<span class="c1"># in all copies or substantial portions of the Software.</span>
+<span class="c1">#</span>
+<span class="c1"># THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS</span>
+<span class="c1"># IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED</span>
+<span class="c1"># TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span>
+<span class="c1"># PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER</span>
+<span class="c1"># OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</span>
+<span class="c1"># EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</span>
+<span class="c1"># PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</span>
+<span class="c1"># PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF</span>
+<span class="c1"># LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING</span>
+<span class="c1"># NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span>
+<span class="c1"># SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="sd">&quot;&quot;&quot;This module holds helper functions for svZeroDSolver.&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">.model.bloodvessel</span> <span class="kn">import</span> <span class="n">BloodVessel</span>
+<span class="kn">from</span> <span class="nn">.model.dofhandler</span> <span class="kn">import</span> <span class="n">DOFHandler</span>
+<span class="kn">from</span> <span class="nn">.model.flowreferencebc</span> <span class="kn">import</span> <span class="n">FlowReferenceBC</span>
+<span class="kn">from</span> <span class="nn">.model.internaljunction</span> <span class="kn">import</span> <span class="n">InternalJunction</span>
+<span class="kn">from</span> <span class="nn">.model.node</span> <span class="kn">import</span> <span class="n">Node</span>
+<span class="kn">from</span> <span class="nn">.model.openloopcoronarybc</span> <span class="kn">import</span> <span class="n">OpenLoopCoronaryBC</span>
+<span class="kn">from</span> <span class="nn">.model.pressurereferencebc</span> <span class="kn">import</span> <span class="n">PressureReferenceBC</span>
+<span class="kn">from</span> <span class="nn">.model.resistancebc</span> <span class="kn">import</span> <span class="n">ResistanceBC</span>
+<span class="kn">from</span> <span class="nn">.model.windkesselbc</span> <span class="kn">import</span> <span class="n">WindkesselBC</span>
+
+
+<div class="viewcode-block" id="get_solver_params"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.utils.get_solver_params">[docs]</a><span class="k">def</span> <span class="nf">get_solver_params</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine time step size and number of timesteps.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: svZeroDSolver configuration.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        time_step_size: Time step size:</span>
+<span class="sd">        num_time_steps: Number of time steps.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sim_params</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;simulation_parameters&quot;</span><span class="p">]</span>
+    <span class="n">cardiac_cycle_period</span> <span class="o">=</span> <span class="n">sim_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cardiac_cycle_period&quot;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">num_cycles</span> <span class="o">=</span> <span class="n">sim_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;number_of_cardiac_cycles&quot;</span><span class="p">)</span>
+    <span class="n">num_pts_per_cycle</span> <span class="o">=</span> <span class="n">sim_params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;number_of_time_pts_per_cardiac_cycle&quot;</span><span class="p">)</span>
+    <span class="n">time_step_size</span> <span class="o">=</span> <span class="n">cardiac_cycle_period</span> <span class="o">/</span> <span class="p">(</span><span class="n">num_pts_per_cycle</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">num_time_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">num_pts_per_cycle</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_cycles</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">time_step_size</span><span class="p">,</span> <span class="n">num_time_steps</span></div>
+
+
+<div class="viewcode-block" id="convert_unsteady_bcs_to_steady"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.utils.convert_unsteady_bcs_to_steady">[docs]</a><span class="k">def</span> <span class="nf">convert_unsteady_bcs_to_steady</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert unsteady boundary conditions to their steady equivalent.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: svZeroDSolver configuration.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        steady_config: Configuration of the steady equivalent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">steady_config</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+    <span class="n">steady_config</span><span class="p">[</span><span class="s2">&quot;simulation_parameters&quot;</span><span class="p">][</span>
+        <span class="s2">&quot;number_of_time_pts_per_cardiac_cycle&quot;</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="n">steady_config</span><span class="p">[</span><span class="s2">&quot;simulation_parameters&quot;</span><span class="p">][</span><span class="s2">&quot;number_of_cardiac_cycles&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">bc_identifiers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;FLOW&quot;</span><span class="p">:</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;PRESSURE&quot;</span><span class="p">:</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;CORONARY&quot;</span><span class="p">:</span> <span class="s2">&quot;Pim&quot;</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">bc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">bc</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">bc_identifiers</span><span class="p">:</span>
+            <span class="n">bc_values</span> <span class="o">=</span> <span class="n">bc</span><span class="p">[</span><span class="s2">&quot;bc_values&quot;</span><span class="p">][</span><span class="n">bc_identifiers</span><span class="p">[</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]]]</span>
+            <span class="c1"># Time averaged value for a single cariadic_cycle</span>
+            <span class="k">del</span> <span class="n">steady_config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;bc_values&quot;</span><span class="p">][</span><span class="s2">&quot;t&quot;</span><span class="p">]</span>
+            <span class="n">steady_config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;bc_values&quot;</span><span class="p">][</span>
+                <span class="n">bc_identifiers</span><span class="p">[</span><span class="n">bc</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]]</span>
+            <span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">bc_values</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bc</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RCR&quot;</span><span class="p">:</span>
+            <span class="n">steady_config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s2">&quot;bc_values&quot;</span><span class="p">][</span><span class="s2">&quot;C&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+    <span class="k">return</span> <span class="n">steady_config</span></div>
+
+
+<div class="viewcode-block" id="create_blocks"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.utils.create_blocks">[docs]</a><span class="k">def</span> <span class="nf">create_blocks</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">steady</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create blocks.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        config: svZeroDSolver configuration.</span>
+<span class="sd">        steady: Toggle if blocks should be created with steady behavior.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        blocks: List of created blocks.</span>
+<span class="sd">        dofhandler: Degree-of-freedom handler.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">block_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">connections</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Create junctions</span>
+    <span class="k">for</span> <span class="n">junction_config</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;junctions&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">junction_config</span><span class="p">[</span><span class="s2">&quot;junction_type&quot;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="s2">&quot;NORMAL_JUNCTION&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;internal_junction&quot;</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="n">junction</span> <span class="o">=</span> <span class="n">InternalJunction</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">junction_config</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unknown junction type: </span><span class="si">{</span><span class="n">junction_config</span><span class="p">[</span><span class="s1">&#39;junction_type&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="n">connections</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;V</span><span class="si">{</span><span class="n">vid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">junction</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">vid</span> <span class="ow">in</span> <span class="n">junction_config</span><span class="p">[</span><span class="s2">&quot;inlet_vessels&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="n">connections</span> <span class="o">+=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">junction</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;V</span><span class="si">{</span><span class="n">vid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">vid</span> <span class="ow">in</span> <span class="n">junction_config</span><span class="p">[</span><span class="s2">&quot;outlet_vessels&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">junction</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">block_dict</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Junction </span><span class="si">{</span><span class="n">junction</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> already exists.&quot;</span><span class="p">)</span>
+        <span class="n">block_dict</span><span class="p">[</span><span class="n">junction</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">junction</span>
+
+    <span class="c1"># Create vessels and boundary conditions</span>
+    <span class="k">for</span> <span class="n">vessel_config</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;vessels&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">vessel_config</span><span class="p">[</span><span class="s2">&quot;zero_d_element_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;BloodVessel&quot;</span><span class="p">:</span>
+            <span class="n">vessel</span> <span class="o">=</span> <span class="n">BloodVessel</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">vessel_config</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+        <span class="k">if</span> <span class="s2">&quot;boundary_conditions&quot;</span> <span class="ow">in</span> <span class="n">vessel_config</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;inlet&quot;</span> <span class="ow">in</span> <span class="n">vessel_config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">]:</span>
+                <span class="n">connections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="s2">&quot;BC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">vessel_config</span><span class="p">[</span><span class="s2">&quot;vessel_id&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;_inlet&quot;</span><span class="p">,</span>
+                        <span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;outlet&quot;</span> <span class="ow">in</span> <span class="n">vessel_config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">]:</span>
+                <span class="n">connections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="p">(</span>
+                        <span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="s2">&quot;BC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">vessel_config</span><span class="p">[</span><span class="s2">&quot;vessel_id&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;_outlet&quot;</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">if</span> <span class="n">vessel</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">block_dict</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Vessel </span><span class="si">{</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> already exists.&quot;</span><span class="p">)</span>
+        <span class="n">block_dict</span><span class="p">[</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">vessel</span>
+        <span class="k">if</span> <span class="s2">&quot;boundary_conditions&quot;</span> <span class="ow">in</span> <span class="n">vessel_config</span><span class="p">:</span>
+            <span class="n">locations</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">loc</span>
+                <span class="k">for</span> <span class="n">loc</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;inlet&quot;</span><span class="p">,</span> <span class="s2">&quot;outlet&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">loc</span> <span class="ow">in</span> <span class="n">vessel_config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">]</span>
+            <span class="p">]</span>
+            <span class="k">for</span> <span class="n">location</span> <span class="ow">in</span> <span class="n">locations</span><span class="p">:</span>
+                <span class="n">vessel_id</span> <span class="o">=</span> <span class="n">vessel_config</span><span class="p">[</span><span class="s2">&quot;vessel_id&quot;</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">bc_config</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_name&quot;</span><span class="p">]</span>
+                        <span class="o">==</span> <span class="n">vessel_config</span><span class="p">[</span><span class="s2">&quot;boundary_conditions&quot;</span><span class="p">][</span><span class="n">location</span><span class="p">]</span>
+                    <span class="p">):</span>
+                        <span class="n">bc_config</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;BC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">vessel_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">location</span><span class="p">,</span>
+                            <span class="n">steady</span><span class="o">=</span><span class="n">steady</span><span class="p">,</span>
+                            <span class="o">**</span><span class="n">bc_config</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="k">break</span>
+
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="s2">&quot;t&quot;</span> <span class="ow">in</span> <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_values&quot;</span><span class="p">]</span>
+                    <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_values&quot;</span><span class="p">][</span><span class="s2">&quot;t&quot;</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">2</span>
+                <span class="p">):</span>
+                    <span class="n">cardiac_cycle_period</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_values&quot;</span><span class="p">][</span><span class="s2">&quot;t&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="o">-</span> <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_values&quot;</span><span class="p">][</span><span class="s2">&quot;t&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="s2">&quot;cardiac_cycle_period&quot;</span>
+                        <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;simulation_parameters&quot;</span><span class="p">]</span>
+                        <span class="ow">and</span> <span class="n">cardiac_cycle_period</span>
+                        <span class="o">!=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;simulation_parameters&quot;</span><span class="p">][</span>
+                            <span class="s2">&quot;cardiac_cycle_period&quot;</span>
+                        <span class="p">]</span>
+                    <span class="p">):</span>
+                        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;The time series of the boundary condition for segment </span><span class="si">{</span><span class="n">vessel_id</span><span class="si">}</span><span class="s2"> does &quot;</span>
+                            <span class="s2">&quot;not have the same cardiac cycle period as the other boundary conditions.&quot;</span>
+                        <span class="p">)</span>
+                    <span class="k">elif</span> <span class="p">(</span>
+                        <span class="s2">&quot;cardiac_cycle_period&quot;</span>
+                        <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;simulation_parameters&quot;</span><span class="p">]</span>
+                    <span class="p">):</span>
+                        <span class="n">config</span><span class="p">[</span><span class="s2">&quot;simulation_parameters&quot;</span><span class="p">][</span>
+                            <span class="s2">&quot;cardiac_cycle_period&quot;</span>
+                        <span class="p">]</span> <span class="o">=</span> <span class="n">cardiac_cycle_period</span>
+
+                <span class="k">if</span> <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RESISTANCE&quot;</span><span class="p">:</span>
+                    <span class="n">bc</span> <span class="o">=</span> <span class="n">ResistanceBC</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">bc_config</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RCR&quot;</span><span class="p">:</span>
+                    <span class="n">bc</span> <span class="o">=</span> <span class="n">WindkesselBC</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">bc_config</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;FLOW&quot;</span><span class="p">:</span>
+                    <span class="n">bc</span> <span class="o">=</span> <span class="n">FlowReferenceBC</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">bc_config</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;PRESSURE&quot;</span><span class="p">:</span>
+                    <span class="n">bc</span> <span class="o">=</span> <span class="n">PressureReferenceBC</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">bc_config</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">bc_config</span><span class="p">[</span><span class="s2">&quot;bc_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;CORONARY&quot;</span><span class="p">:</span>
+                    <span class="n">bc</span> <span class="o">=</span> <span class="n">OpenLoopCoronaryBC</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">bc_config</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+                <span class="n">block_dict</span><span class="p">[</span><span class="n">bc</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">bc</span>
+
+    <span class="c1"># Create nodes</span>
+    <span class="n">dofhandler</span> <span class="o">=</span> <span class="n">DOFHandler</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">ele1_name</span><span class="p">,</span> <span class="n">ele2_name</span> <span class="ow">in</span> <span class="n">connections</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+            <span class="n">block_dict</span><span class="p">[</span><span class="n">ele1_name</span><span class="p">],</span>
+            <span class="n">block_dict</span><span class="p">[</span><span class="n">ele2_name</span><span class="p">],</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">ele1_name</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">ele2_name</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">node</span><span class="o">.</span><span class="n">setup_dofs</span><span class="p">(</span><span class="n">dofhandler</span><span class="p">)</span>
+
+    <span class="c1"># Setup degrees of freedom of the model</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">block_dict</span><span class="p">):</span>
+        <span class="n">block_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">setup_dofs</span><span class="p">(</span><span class="n">dofhandler</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">block_dict</span><span class="o">.</span><span class="n">values</span><span class="p">()),</span> <span class="n">dofhandler</span></div>
+
+
+<div class="viewcode-block" id="format_results_to_dict"><a class="viewcode-back" href="../../svzerodsolver.html#svzerodsolver.utils.format_results_to_dict">[docs]</a><span class="k">def</span> <span class="nf">format_results_to_dict</span><span class="p">(</span><span class="n">time_steps</span><span class="p">,</span> <span class="n">result_array</span><span class="p">,</span> <span class="n">block_list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format result array to dict format.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        time_steps: List of time steps.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        results: Resuluts in dict format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">result_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result_array</span><span class="p">)</span>
+    <span class="n">vessels</span> <span class="o">=</span> <span class="p">[</span><span class="n">block</span> <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">block_list</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">BloodVessel</span><span class="p">)]</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;flow_in&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;flow_out&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;names&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;pressure_in&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;pressure_out&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">time_steps</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">for</span> <span class="n">vessel</span> <span class="ow">in</span> <span class="n">vessels</span><span class="p">:</span>
+
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;names&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;flow_in&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">inflow_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flow_dof</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;flow_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">outflow_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">flow_dof</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;pressure_in&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">inflow_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pres_dof</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="n">results</span><span class="p">[</span><span class="s2">&quot;pressure_out&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="nb">list</span><span class="p">(</span><span class="n">result_array</span><span class="p">[:,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">outflow_nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">pres_dof</span><span class="p">])</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">results</span></div>
+</pre></div>
+
+                </article>
+              
+              
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            <div class="bd-footer-content__inner"></div>
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=12da95d707ffb74b382d"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=12da95d707ffb74b382d"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright Stanford University, The Regents of the University of California, and others..
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://sphinx-doc.org/">Sphinx</a> 6.1.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.13.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

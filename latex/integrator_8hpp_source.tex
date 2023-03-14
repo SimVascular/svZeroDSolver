@@ -99,110 +99,150 @@
 \DoxyCodeLine{95 \textcolor{comment}{   * @param atol Absolut tolerance for non-\/linear iteration termination}}
 \DoxyCodeLine{96 \textcolor{comment}{   * @param max\_iter Maximum number of non-\/linear iterations}}
 \DoxyCodeLine{97 \textcolor{comment}{   */}}
-\DoxyCodeLine{98   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_af2c14ec14e456f9660ba41cb108f015a}{Integrator}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, T time\_step\_size, T rho, T atol,}
+\DoxyCodeLine{98   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_af4f52400a2ba9332c32e2f3cb44de126}{Integrator}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, T time\_step\_size, T rho, T atol,}
 \DoxyCodeLine{99              \textcolor{keywordtype}{int} max\_iter);}
 \DoxyCodeLine{100 \textcolor{comment}{}}
 \DoxyCodeLine{101 \textcolor{comment}{  /**}}
-\DoxyCodeLine{102 \textcolor{comment}{   * @brief Destroy the Integrator object}}
+\DoxyCodeLine{102 \textcolor{comment}{   * @brief Construct a new Integrator object}}
 \DoxyCodeLine{103 \textcolor{comment}{   *}}
 \DoxyCodeLine{104 \textcolor{comment}{   */}}
-\DoxyCodeLine{105   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a5d4708faf6c9443ad8a59329fc3c1812}{\string~Integrator}}();}
+\DoxyCodeLine{105   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_af4f52400a2ba9332c32e2f3cb44de126}{Integrator}}();}
 \DoxyCodeLine{106 \textcolor{comment}{}}
 \DoxyCodeLine{107 \textcolor{comment}{  /**}}
-\DoxyCodeLine{108 \textcolor{comment}{   * @brief Perform a time step}}
+\DoxyCodeLine{108 \textcolor{comment}{   * @brief Destroy the Integrator object}}
 \DoxyCodeLine{109 \textcolor{comment}{   *}}
-\DoxyCodeLine{110 \textcolor{comment}{   * @param state Current state}}
-\DoxyCodeLine{111 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{112 \textcolor{comment}{   * @param model The model}}
-\DoxyCodeLine{113 \textcolor{comment}{   * @return New state}}
-\DoxyCodeLine{114 \textcolor{comment}{   */}}
-\DoxyCodeLine{115   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \&state, T time, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model);}
-\DoxyCodeLine{116 \};}
-\DoxyCodeLine{117 }
-\DoxyCodeLine{118 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{119 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_af2c14ec14e456f9660ba41cb108f015a}{Integrator<T>::Integrator}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, T time\_step\_size, T rho,}
-\DoxyCodeLine{120                           T atol, \textcolor{keywordtype}{int} max\_iter) \{}
-\DoxyCodeLine{121   alpha\_m = 0.5 * (3.0 -\/ rho) / (1.0 + rho);}
-\DoxyCodeLine{122   alpha\_f = 1.0 / (1.0 + rho);}
-\DoxyCodeLine{123   alpha\_m\_inv = 1.0 / alpha\_m;}
-\DoxyCodeLine{124   alpha\_f\_inv = 1.0 / alpha\_f;}
-\DoxyCodeLine{125   gamma = 0.5 + alpha\_m -\/ alpha\_f;}
-\DoxyCodeLine{126   gamma\_inv = 1.0 / gamma;}
-\DoxyCodeLine{127 }
-\DoxyCodeLine{128   y\_init\_coeff = alpha\_f * 0.5 * time\_step\_size;}
-\DoxyCodeLine{129   ydot\_init\_coeff = (1.0 + alpha\_m * ((gamma -\/ 0.5) * gamma\_inv -\/ 1.0));}
-\DoxyCodeLine{130 }
-\DoxyCodeLine{131   size = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}();}
-\DoxyCodeLine{132   system = \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{SparseSystem<T>}}(size);}
-\DoxyCodeLine{133   this-\/>time\_step\_size = time\_step\_size;}
-\DoxyCodeLine{134   this-\/>atol = atol;}
-\DoxyCodeLine{135   this-\/>max\_iter = max\_iter;}
-\DoxyCodeLine{136   time\_step\_size\_inv = 1.0 / time\_step\_size;}
-\DoxyCodeLine{137 }
-\DoxyCodeLine{138   y\_af = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);}
-\DoxyCodeLine{139   ydot\_am = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);}
-\DoxyCodeLine{140 }
-\DoxyCodeLine{141   y\_dot\_coeff = alpha\_m * alpha\_f\_inv * gamma\_inv * time\_step\_size\_inv;}
-\DoxyCodeLine{142 }
-\DoxyCodeLine{143   \textcolor{comment}{// Make some memory reservations}}
-\DoxyCodeLine{144   system.reserve(model);}
-\DoxyCodeLine{145 \}}
-\DoxyCodeLine{146 }
-\DoxyCodeLine{147 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{148 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a5d4708faf6c9443ad8a59329fc3c1812}{Integrator<T>::\string~Integrator}}() \{\}}
-\DoxyCodeLine{149 }
-\DoxyCodeLine{150 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{151 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{Integrator<T>::step}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \&old\_state, T time,}
-\DoxyCodeLine{152                              \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
-\DoxyCodeLine{153   \textcolor{comment}{// DEBUG\_MSG("{}Step: time = "{}<< time);}}
-\DoxyCodeLine{154   \textcolor{comment}{// Predictor + initiator step}}
-\DoxyCodeLine{155   y\_af.setZero();}
-\DoxyCodeLine{156   ydot\_am.setZero();}
-\DoxyCodeLine{157   y\_af += old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}} + old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} * y\_init\_coeff;}
-\DoxyCodeLine{158   ydot\_am += old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} * ydot\_init\_coeff;}
-\DoxyCodeLine{159 }
-\DoxyCodeLine{160   \textcolor{comment}{// Determine new time}}
-\DoxyCodeLine{161   T new\_time = time + alpha\_f * time\_step\_size;}
-\DoxyCodeLine{162 }
-\DoxyCodeLine{163   \textcolor{comment}{// Update time-\/dependent element contributions in system}}
-\DoxyCodeLine{164   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7cb64c8d49c6dc41d2c00df1cc24132d}{update\_time}}(system, new\_time);}
-\DoxyCodeLine{165 }
-\DoxyCodeLine{166   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < max\_iter; i++) \{}
-\DoxyCodeLine{167     \textcolor{comment}{// Update solution-\/dependent element contribitions}}
-\DoxyCodeLine{168     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a2e33d813e05f809fad8541a12189648a}{update\_solution}}(system, y\_af);}
-\DoxyCodeLine{169 }
-\DoxyCodeLine{170     \textcolor{comment}{// Update residuum and check termination criteria}}
-\DoxyCodeLine{171     system.update\_residual(y\_af, ydot\_am);}
-\DoxyCodeLine{172     \textcolor{keywordflow}{if} (system.residual.cwiseAbs().maxCoeff() < atol) \{}
-\DoxyCodeLine{173       \textcolor{keywordflow}{break};}
-\DoxyCodeLine{174     \}}
-\DoxyCodeLine{175 }
-\DoxyCodeLine{176     \textcolor{comment}{// Abort if maximum number of non-\/linear iterations is reached}}
-\DoxyCodeLine{177     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (i == max\_iter -\/ 1) \{}
-\DoxyCodeLine{178       \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{179           \textcolor{stringliteral}{"{}Maxium number of non-\/linear iterations reached."{}});}
-\DoxyCodeLine{180     \}}
-\DoxyCodeLine{181 }
-\DoxyCodeLine{182     \textcolor{comment}{// Determine jacobian}}
-\DoxyCodeLine{183     system.update\_jacobian(y\_dot\_coeff);}
-\DoxyCodeLine{184 }
-\DoxyCodeLine{185     \textcolor{comment}{// Solve system}}
-\DoxyCodeLine{186     system.solve();}
-\DoxyCodeLine{187 }
-\DoxyCodeLine{188     \textcolor{comment}{// Add increment to solution}}
-\DoxyCodeLine{189     y\_af += system.dy;}
-\DoxyCodeLine{190     ydot\_am += system.dy * y\_dot\_coeff;}
-\DoxyCodeLine{191   \}}
-\DoxyCodeLine{192 }
-\DoxyCodeLine{193   \textcolor{comment}{// Set new state}}
-\DoxyCodeLine{194   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} new\_state = \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a8b9bcbe746b0d2b87f7c0381ddf471a3}{State<T>::Zero}}(size);}
-\DoxyCodeLine{195   new\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}} += old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}} + (y\_af -\/ old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}) * alpha\_f\_inv;}
-\DoxyCodeLine{196   new\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} += old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} + (ydot\_am -\/ old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}}) * alpha\_m\_inv;}
-\DoxyCodeLine{197 }
-\DoxyCodeLine{198   \textcolor{keywordflow}{return} new\_state;}
-\DoxyCodeLine{199 \}}
-\DoxyCodeLine{200 \}  \textcolor{comment}{// namespace ALGEBRA}}
-\DoxyCodeLine{201 }
-\DoxyCodeLine{202 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_ALGEBRA\_INTEGRATOR\_HPP\_}}
+\DoxyCodeLine{110 \textcolor{comment}{   */}}
+\DoxyCodeLine{111   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a5d4708faf6c9443ad8a59329fc3c1812}{\string~Integrator}}();}
+\DoxyCodeLine{112 \textcolor{comment}{}}
+\DoxyCodeLine{113 \textcolor{comment}{  /**}}
+\DoxyCodeLine{114 \textcolor{comment}{   * @brief Delete dynamically allocated memory (in class member SparseSystem<T>}}
+\DoxyCodeLine{115 \textcolor{comment}{   * system).}}
+\DoxyCodeLine{116 \textcolor{comment}{   */}}
+\DoxyCodeLine{117   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a0e27a441720f787e90ff7f220cc796d9}{clean}}();}
+\DoxyCodeLine{118 \textcolor{comment}{}}
+\DoxyCodeLine{119 \textcolor{comment}{  /**}}
+\DoxyCodeLine{120 \textcolor{comment}{   * @brief Update integrator parameter and system matrices with model parameter}}
+\DoxyCodeLine{121 \textcolor{comment}{   * updates.}}
+\DoxyCodeLine{122 \textcolor{comment}{   *}}
+\DoxyCodeLine{123 \textcolor{comment}{   * @param model ZeroD model being solved}}
+\DoxyCodeLine{124 \textcolor{comment}{   * @param time\_step\_size Time step size for 0D model}}
+\DoxyCodeLine{125 \textcolor{comment}{   */}}
+\DoxyCodeLine{126   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a7a68e2d7aa7056308b280393e3e6dcc9}{update\_params}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, T time\_step\_size);}
+\DoxyCodeLine{127 \textcolor{comment}{}}
+\DoxyCodeLine{128 \textcolor{comment}{  /**}}
+\DoxyCodeLine{129 \textcolor{comment}{   * @brief Perform a time step}}
+\DoxyCodeLine{130 \textcolor{comment}{   *}}
+\DoxyCodeLine{131 \textcolor{comment}{   * @param state Current state}}
+\DoxyCodeLine{132 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{133 \textcolor{comment}{   * @param model The model}}
+\DoxyCodeLine{134 \textcolor{comment}{   * @return New state}}
+\DoxyCodeLine{135 \textcolor{comment}{   */}}
+\DoxyCodeLine{136   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{step}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \&state, T time, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model);}
+\DoxyCodeLine{137 \};}
+\DoxyCodeLine{138 }
+\DoxyCodeLine{139 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{140 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_af4f52400a2ba9332c32e2f3cb44de126}{Integrator<T>::Integrator}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, T time\_step\_size, T rho,}
+\DoxyCodeLine{141                           T atol, \textcolor{keywordtype}{int} max\_iter) \{}
+\DoxyCodeLine{142   alpha\_m = 0.5 * (3.0 -\/ rho) / (1.0 + rho);}
+\DoxyCodeLine{143   alpha\_f = 1.0 / (1.0 + rho);}
+\DoxyCodeLine{144   alpha\_m\_inv = 1.0 / alpha\_m;}
+\DoxyCodeLine{145   alpha\_f\_inv = 1.0 / alpha\_f;}
+\DoxyCodeLine{146   gamma = 0.5 + alpha\_m -\/ alpha\_f;}
+\DoxyCodeLine{147   gamma\_inv = 1.0 / gamma;}
+\DoxyCodeLine{148 }
+\DoxyCodeLine{149   y\_init\_coeff = alpha\_f * 0.5 * time\_step\_size;}
+\DoxyCodeLine{150   ydot\_init\_coeff = (1.0 + alpha\_m * ((gamma -\/ 0.5) * gamma\_inv -\/ 1.0));}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{152   size = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}();}
+\DoxyCodeLine{153   system = \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{SparseSystem<T>}}(size);}
+\DoxyCodeLine{154   this-\/>time\_step\_size = time\_step\_size;}
+\DoxyCodeLine{155   this-\/>atol = atol;}
+\DoxyCodeLine{156   this-\/>max\_iter = max\_iter;}
+\DoxyCodeLine{157   time\_step\_size\_inv = 1.0 / time\_step\_size;}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159   y\_af = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);}
+\DoxyCodeLine{160   ydot\_am = Eigen::Matrix<T, Eigen::Dynamic, 1>(size);}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162   y\_dot\_coeff = alpha\_m * alpha\_f\_inv * gamma\_inv * time\_step\_size\_inv;}
+\DoxyCodeLine{163 }
+\DoxyCodeLine{164   \textcolor{comment}{// Make some memory reservations}}
+\DoxyCodeLine{165   system.reserve(model);}
+\DoxyCodeLine{166 \}}
+\DoxyCodeLine{167 }
+\DoxyCodeLine{168 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{169 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_af4f52400a2ba9332c32e2f3cb44de126}{Integrator<T>::Integrator}}() \{\}}
+\DoxyCodeLine{170 }
+\DoxyCodeLine{171 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{172 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a5d4708faf6c9443ad8a59329fc3c1812}{Integrator<T>::\string~Integrator}}() \{\}}
+\DoxyCodeLine{173 }
+\DoxyCodeLine{174 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{175 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a0e27a441720f787e90ff7f220cc796d9}{Integrator<T>::clean}}() \{}
+\DoxyCodeLine{176   \textcolor{comment}{// Cannot be in destructor because dynamically allocated pointers will be lost}}
+\DoxyCodeLine{177   \textcolor{comment}{// when objects are assigned from temporary objects.}}
+\DoxyCodeLine{178   system.clean();}
+\DoxyCodeLine{179 \}}
+\DoxyCodeLine{180 }
+\DoxyCodeLine{181 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{182 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_a7a68e2d7aa7056308b280393e3e6dcc9}{Integrator<T>::update\_params}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, T time\_step\_size) \{}
+\DoxyCodeLine{183   y\_init\_coeff = alpha\_f * 0.5 * time\_step\_size;}
+\DoxyCodeLine{184   this-\/>time\_step\_size = time\_step\_size;}
+\DoxyCodeLine{185   time\_step\_size\_inv = 1.0 / time\_step\_size;}
+\DoxyCodeLine{186   y\_dot\_coeff = alpha\_m * alpha\_f\_inv * gamma\_inv * time\_step\_size\_inv;}
+\DoxyCodeLine{187   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_ab251541e14d080d82639950015579413}{update\_constant}}(system);}
+\DoxyCodeLine{188   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7cb64c8d49c6dc41d2c00df1cc24132d}{update\_time}}(system, 0.0);}
+\DoxyCodeLine{189 \}}
+\DoxyCodeLine{190 }
+\DoxyCodeLine{191 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{192 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_ac64552c2b5d1007b5f0bb37ab4b125b7}{Integrator<T>::step}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} \&old\_state, T time,}
+\DoxyCodeLine{193                              \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
+\DoxyCodeLine{194   \textcolor{comment}{// Predictor + initiator step}}
+\DoxyCodeLine{195   y\_af.setZero();}
+\DoxyCodeLine{196   ydot\_am.setZero();}
+\DoxyCodeLine{197   y\_af += old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}} + old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} * y\_init\_coeff;}
+\DoxyCodeLine{198   ydot\_am += old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} * ydot\_init\_coeff;}
+\DoxyCodeLine{199 }
+\DoxyCodeLine{200   \textcolor{comment}{// Determine new time}}
+\DoxyCodeLine{201   T new\_time = time + alpha\_f * time\_step\_size;}
+\DoxyCodeLine{202 }
+\DoxyCodeLine{203   \textcolor{comment}{// Update time-\/dependent element contributions in system}}
+\DoxyCodeLine{204   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a7cb64c8d49c6dc41d2c00df1cc24132d}{update\_time}}(system, new\_time);}
+\DoxyCodeLine{205 }
+\DoxyCodeLine{206   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < max\_iter; i++) \{}
+\DoxyCodeLine{207     \textcolor{comment}{// Update solution-\/dependent element contribitions}}
+\DoxyCodeLine{208     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a2e33d813e05f809fad8541a12189648a}{update\_solution}}(system, y\_af);}
+\DoxyCodeLine{209 }
+\DoxyCodeLine{210     \textcolor{comment}{// Update residuum and check termination criteria}}
+\DoxyCodeLine{211     system.update\_residual(y\_af, ydot\_am);}
+\DoxyCodeLine{212     \textcolor{keywordflow}{if} (system.residual.cwiseAbs().maxCoeff() < atol) \{}
+\DoxyCodeLine{213       \textcolor{keywordflow}{break};}
+\DoxyCodeLine{214     \}}
+\DoxyCodeLine{215 }
+\DoxyCodeLine{216     \textcolor{comment}{// Abort if maximum number of non-\/linear iterations is reached}}
+\DoxyCodeLine{217     \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (i == max\_iter -\/ 1) \{}
+\DoxyCodeLine{218       \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{219           \textcolor{stringliteral}{"{}Maxium number of non-\/linear iterations reached."{}});}
+\DoxyCodeLine{220     \}}
+\DoxyCodeLine{221 }
+\DoxyCodeLine{222     \textcolor{comment}{// Determine jacobian}}
+\DoxyCodeLine{223     system.update\_jacobian(y\_dot\_coeff);}
+\DoxyCodeLine{224 }
+\DoxyCodeLine{225     \textcolor{comment}{// Solve system}}
+\DoxyCodeLine{226     system.solve();}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{228     \textcolor{comment}{// Add increment to solution}}
+\DoxyCodeLine{229     y\_af += system.dy;}
+\DoxyCodeLine{230     ydot\_am += system.dy * y\_dot\_coeff;}
+\DoxyCodeLine{231   \}}
+\DoxyCodeLine{232 }
+\DoxyCodeLine{233   \textcolor{comment}{// Set new state}}
+\DoxyCodeLine{234   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{State<T>}} new\_state = \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a8b9bcbe746b0d2b87f7c0381ddf471a3}{State<T>::Zero}}(size);}
+\DoxyCodeLine{235   new\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}} += old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}} + (y\_af -\/ old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a5e310eddee49852d84d0749cbf104e57}{y}}) * alpha\_f\_inv;}
+\DoxyCodeLine{236   new\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} += old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}} + (ydot\_am -\/ old\_state.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_aa1042453417a1af57edc93e3192270a9}{ydot}}) * alpha\_m\_inv;}
+\DoxyCodeLine{237 }
+\DoxyCodeLine{238   \textcolor{keywordflow}{return} new\_state;}
+\DoxyCodeLine{239 \}}
+\DoxyCodeLine{240 \}  \textcolor{comment}{// namespace ALGEBRA}}
+\DoxyCodeLine{241 }
+\DoxyCodeLine{242 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_ALGEBRA\_INTEGRATOR\_HPP\_}}
 
 \end{DoxyCode}

@@ -6,7 +6,7 @@ var searchData=
   ['initial_5fstate_3',['initial_state',['../class_i_o_1_1_config_reader.html#abe9831cb10972b4982a766aac615cb6c',1,'IO::ConfigReader']]],
   ['initialize_4',['initialize',['../interface_8cpp.html#ae89bc7b9995835597d98b9d77a123c70',1,'interface.cpp']]],
   ['inlet_5fnodes_5',['inlet_nodes',['../class_m_o_d_e_l_1_1_block.html#a39d671d4cdced4eda628465b8e660c64',1,'MODEL::Block']]],
-  ['integrator_6',['Integrator',['../class_a_l_g_e_b_r_a_1_1_integrator.html',1,'ALGEBRA::Integrator&lt; T &gt;'],['../class_a_l_g_e_b_r_a_1_1_integrator.html#af2c14ec14e456f9660ba41cb108f015a',1,'ALGEBRA::Integrator::Integrator()']]],
+  ['integrator_6',['Integrator',['../class_a_l_g_e_b_r_a_1_1_integrator.html',1,'ALGEBRA::Integrator&lt; T &gt;'],['../class_a_l_g_e_b_r_a_1_1_integrator.html#af2c14ec14e456f9660ba41cb108f015a',1,'ALGEBRA::Integrator::Integrator(MODEL::Model&lt; T &gt; &amp;model, T time_step_size, T rho, T atol, int max_iter)'],['../class_a_l_g_e_b_r_a_1_1_integrator.html#af4f52400a2ba9332c32e2f3cb44de126',1,'ALGEBRA::Integrator::Integrator()']]],
   ['integrator_2ehpp_7',['integrator.hpp',['../integrator_8hpp.html',1,'']]],
   ['interface_2ecpp_8',['interface.cpp',['../interface_8cpp.html',1,'']]],
   ['io_9',['IO',['../namespace_i_o.html',1,'']]],

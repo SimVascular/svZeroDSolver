@@ -592,6 +592,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
                 static_cast<std::string>(heartpulmonary_name)));
             model->block_index_map.insert(
                 {static_cast<std::string>(heartpulmonary_name), block_count});
+            block_count++;
           } else {
             throw std::runtime_error(
                 "Error. ClosedLoopHeartAndPulmonary should have 27 parameters");
@@ -605,6 +606,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
           model->block_index_map.insert(
               {static_cast<std::string>(heart_inlet_junction_name),
                block_count});
+          block_count++;
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back(
                 {heart_inlet_elem, heart_inlet_junction_name});
@@ -621,13 +623,13 @@ void ConfigReader<T>::load(JsonHandler &handler) {
           for (auto outlet_block :
                closed_loop_config.get_string_array("outlet_blocks")) {
             connections.push_back({heart_outlet_junction_name, outlet_block});
+            block_count++;
           }
           block_count++;
         } else {
           throw std::runtime_error(
               "Error. Only one ClosedLoopHeartAndPulmonary can be included.");
         }
-        block_count++;
       }
     }
   }

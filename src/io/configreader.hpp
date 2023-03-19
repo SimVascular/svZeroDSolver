@@ -650,6 +650,21 @@ void ConfigReader<T>::load(JsonHandler &handler) {
     }
   }
 
+  // Sanity checks
+  bool model_is_valid = true;
+  if (block_count != model->blocks.size()) {
+    model_is_valid = false;
+  }
+  if (block_count != model->block_index_map.size()) {
+    model_is_valid = false;
+  }
+  if (model_is_valid == false) {
+    throw std::runtime_error(
+        "Model sanity check failed: An unexpected error occured while loading "
+        "the configuration. This is likely an implementation issue. Please "
+        "contact a developer.");
+  }
+
   // Setup degrees of freedom of the system
   for (auto &block : model->blocks) {
     block->setup_dofs(model->dofhandler);

@@ -35,6 +35,8 @@
 
 #include <cmath>
 
+#include "io/jsonhandler.hpp"
+
 typedef double T;
 
 template <typename TT>
@@ -120,7 +122,12 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 
   // Create configuration reader.
   IO::ConfigReader<T> reader;
-  reader.load(input_file);
+  std::ifstream input_file_stream(input_file);
+  std::stringstream buffer;
+  buffer << input_file_stream.rdbuf();
+  std::string json_config = buffer.str();
+  auto handler = IO::JsonHandler(json_config);
+  reader.load(handler);
 
   // Create a model.
   auto model = reader.model;

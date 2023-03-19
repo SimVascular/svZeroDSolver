@@ -215,6 +215,7 @@
 #include "helpers/endswith.hpp"
 #include "io/configreader.hpp"
 #include "io/csvwriter.hpp"
+#include "io/jsonhandler.hpp"
 #include "model/model.hpp"
 
 // Setting scalar type to double
@@ -233,11 +234,12 @@ typedef double T;
  * @param json_config Path config or json encoded string with config
  * @return Result as csv encoded string
  */
-const std::string run(std::string& json_config) {
+const std::string run(std::string_view json_config) {
   // Load model and configuration
   DEBUG_MSG("Read configuration");
   IO::ConfigReader<T> reader;
-  reader.load(json_config);
+  auto handler = IO::JsonHandler(json_config);
+  reader.load(handler);
 
   // Setup system
   ALGEBRA::State<T> state = reader.initial_state;
@@ -247,9 +249,12 @@ const std::string run(std::string& json_config) {
     DEBUG_MSG("Calculate steady initial condition");
     T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
     reader.model->to_steady();
-    ALGEBRA::Integrator<T> integrator_steady(*reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol, reader.sim_nliter);
+    ALGEBRA::Integrator<T> integrator_steady(
+        *reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol,
+        reader.sim_nliter);
     for (int i = 0; i < 31; i++) {
-      state = integrator_steady.step(state, time_step_size_steady * T(i),*reader.model);
+      state = integrator_steady.step(state, time_step_size_steady * T(i),
+                                     *reader.model);
     }
     reader.model->to_unsteady();
   }

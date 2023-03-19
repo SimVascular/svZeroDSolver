@@ -123,16 +123,16 @@ std::string to_vessel_csv(std::vector<T> &times,
           d_outflow_mean /= num_steps;
           d_inpres_mean /= num_steps;
           d_outpres_mean /= num_steps;
-          sprintf(lbuff,
-                  "%s,,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n",
-                  name.c_str(), inflow_mean, outflow_mean, inpres_mean,
-                  outpres_mean, d_inflow_mean, d_outflow_mean, d_inpres_mean,
-                  d_outpres_mean);
+          snprintf(lbuff, 236,
+                   "%s,,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n",
+                   name.c_str(), inflow_mean, outflow_mean, inpres_mean,
+                   outpres_mean, d_inflow_mean, d_outflow_mean, d_inpres_mean,
+                   d_outpres_mean);
           out << lbuff;
         } else {
           for (size_t i = 0; i < num_steps; i++) {
-            sprintf(
-                lbuff,
+            snprintf(
+                lbuff, 236,
                 "%s,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n",
                 name.c_str(), times[i], states[i].y[inflow_dof],
                 states[i].y[outflow_dof], states[i].y[inpres_dof],
@@ -160,14 +160,15 @@ std::string to_vessel_csv(std::vector<T> &times,
           outflow_mean /= num_steps;
           inpres_mean /= num_steps;
           outpres_mean /= num_steps;
-          sprintf(sbuff, "%s,,%.16e,%.16e,%.16e,%.16e\n", name.c_str(),
-                  inflow_mean, outflow_mean, inpres_mean, outpres_mean);
+          snprintf(sbuff, 140, "%s,,%.16e,%.16e,%.16e,%.16e\n", name.c_str(),
+                   inflow_mean, outflow_mean, inpres_mean, outpres_mean);
           out << sbuff;
         } else {
           for (size_t i = 0; i < num_steps; i++) {
-            sprintf(sbuff, "%s,%.16e,%.16e,%.16e,%.16e,%.16e\n", name.c_str(),
-                    times[i], states[i].y[inflow_dof], states[i].y[outflow_dof],
-                    states[i].y[inpres_dof], states[i].y[outpres_dof]);
+            snprintf(sbuff, 140, "%s,%.16e,%.16e,%.16e,%.16e,%.16e\n",
+                     name.c_str(), times[i], states[i].y[inflow_dof],
+                     states[i].y[outflow_dof], states[i].y[inpres_dof],
+                     states[i].y[outpres_dof]);
             out << sbuff;
           }
         }
@@ -218,15 +219,16 @@ std::string to_variable_csv(std::vector<T> &times,
         }
         mean_y /= num_steps;
         mean_ydot /= num_steps;
-        sprintf(lbuff, "%s,,%.16e,%.16e\n", name.c_str(), mean_y, mean_ydot);
+        snprintf(lbuff, 110, "%s,,%.16e,%.16e\n", name.c_str(), mean_y,
+                 mean_ydot);
         out << lbuff;
       }
     } else {
       for (size_t i = 0; i < model.dofhandler.size(); i++) {
         std::string name = model.dofhandler.variables[i];
         for (size_t j = 0; j < num_steps; j++) {
-          sprintf(lbuff, "%s,%.16e,%.16e,%.16e\n", name.c_str(), times[j],
-                  states[j].y[i], states[j].ydot[i]);
+          snprintf(lbuff, 110, "%s,%.16e,%.16e,%.16e\n", name.c_str(), times[j],
+                   states[j].y[i], states[j].ydot[i]);
           out << lbuff;
         }
       }
@@ -241,15 +243,15 @@ std::string to_variable_csv(std::vector<T> &times,
           mean_y += states[j].y[i];
         }
         mean_y /= num_steps;
-        sprintf(sbuff, "%s,,%.16e\n", name.c_str(), mean_y);
+        snprintf(sbuff, 87, "%s,,%.16e\n", name.c_str(), mean_y);
         out << sbuff;
       }
     } else {
       for (size_t i = 0; i < model.dofhandler.size(); i++) {
         std::string name = model.dofhandler.variables[i];
         for (size_t j = 0; j < num_steps; j++) {
-          sprintf(sbuff, "%s,%.16e,%.16e\n", name.c_str(), times[j],
-                  states[j].y[i]);
+          snprintf(sbuff, 87, "%s,%.16e,%.16e\n", name.c_str(), times[j],
+                   states[j].y[i]);
           out << sbuff;
         }
       }

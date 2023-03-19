@@ -62,7 +62,12 @@ int main(int argc, char *argv[]) {
   std::string input_file = argv[1];
   std::string output_file = argv[2];
 
-  auto output = run(input_file);
+  std::ifstream input_file_stream(input_file);
+  std::stringstream buffer;
+  buffer << input_file_stream.rdbuf();
+  std::string config = buffer.str();
+
+  auto output = run(config);
 
   std::ofstream ofs(output_file);
   ofs << output;

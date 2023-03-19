@@ -7,4 +7,6 @@ addopts = """
     --cov-report=html
     --cov-report=term
     --cov=svzerodsolver
+    --ignore=Release
+    --ignore=Debug
 """

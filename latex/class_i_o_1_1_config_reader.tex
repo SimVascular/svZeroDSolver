@@ -16,8 +16,8 @@ sv\+Zero\+DSolver configuration reader.
 \begin{DoxyCompactList}\small\item\em Construct a new Config Reader object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{$\sim$\+Config\+Reader}} ()
 \begin{DoxyCompactList}\small\item\em Destroy the Config Reader object. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_i_o_1_1_config_reader_a44d1b9249fc80c0e65a6267b42597bdb}{load}} (std\+::string \&specifier)
-\begin{DoxyCompactList}\small\item\em Create model from configuration file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+void \mbox{\hyperlink{class_i_o_1_1_config_reader_a920b46f9e97b98a6525442e5a8f5cebd}{load}} (\mbox{\hyperlink{class_i_o_1_1_json_handler}{Json\+Handler}} \&handler)
+\begin{DoxyCompactList}\small\item\em Create model from configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -95,20 +95,22 @@ Destroy the Config Reader object.
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_i_o_1_1_config_reader_a44d1b9249fc80c0e65a6267b42597bdb}\label{class_i_o_1_1_config_reader_a44d1b9249fc80c0e65a6267b42597bdb}} 
+\mbox{\Hypertarget{class_i_o_1_1_config_reader_a920b46f9e97b98a6525442e5a8f5cebd}\label{class_i_o_1_1_config_reader_a920b46f9e97b98a6525442e5a8f5cebd}} 
 \index{IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}!load@{load}}
 \index{load@{load}!IO::ConfigReader$<$ T $>$@{IO::ConfigReader$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{load()}{load()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::load (\begin{DoxyParamCaption}\item[{std\+::string \&}]{specifier }\end{DoxyParamCaption})}
+void \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}}$<$ T $>$\+::load (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_o_1_1_json_handler}{Json\+Handler}} \&}]{handler }\end{DoxyParamCaption})}
 
 
 
-Create model from configuration file. 
+Create model from configuration. 
 
-\begin{DoxyReturn}{Returns}
-Model 
-\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em handler} & Configuration handler \\
+\hline
+\end{DoxyParams}
 \texorpdfstring{$<$}{<} Flag to check if heart block is present (requires different handling)
 
 \doxysubsection{Member Data Documentation}

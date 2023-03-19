@@ -195,16 +195,16 @@ $(function() {
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>          d_outflow_mean /= num_steps;</div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>          d_inpres_mean /= num_steps;</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>          d_outpres_mean /= num_steps;</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>          sprintf(lbuff,</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                  <span class="stringliteral">&quot;%s,,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n&quot;</span>,</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                  name.c_str(), inflow_mean, outflow_mean, inpres_mean,</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>                  outpres_mean, d_inflow_mean, d_outflow_mean, d_inpres_mean,</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>                  d_outpres_mean);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>          snprintf(lbuff, 236,</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                   <span class="stringliteral">&quot;%s,,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n&quot;</span>,</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                   name.c_str(), inflow_mean, outflow_mean, inpres_mean,</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>                   outpres_mean, d_inflow_mean, d_outflow_mean, d_inpres_mean,</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>                   d_outpres_mean);</div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>          out &lt;&lt; lbuff;</div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>          <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; num_steps; i++) {</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>            sprintf(</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                lbuff,</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>            snprintf(</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>                lbuff, 236,</div>
 <div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                <span class="stringliteral">&quot;%s,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n&quot;</span>,</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>                name.c_str(), times[i], states[i].y[inflow_dof],</div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>                states[i].y[outflow_dof], states[i].y[inpres_dof],</div>
@@ -232,107 +232,109 @@ $(function() {
 <div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>          outflow_mean /= num_steps;</div>
 <div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>          inpres_mean /= num_steps;</div>
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>          outpres_mean /= num_steps;</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>          sprintf(sbuff, <span class="stringliteral">&quot;%s,,%.16e,%.16e,%.16e,%.16e\n&quot;</span>, name.c_str(),</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>                  inflow_mean, outflow_mean, inpres_mean, outpres_mean);</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>          snprintf(sbuff, 140, <span class="stringliteral">&quot;%s,,%.16e,%.16e,%.16e,%.16e\n&quot;</span>, name.c_str(),</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>                   inflow_mean, outflow_mean, inpres_mean, outpres_mean);</div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>          out &lt;&lt; sbuff;</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        } <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>          <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; num_steps; i++) {</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>            sprintf(sbuff, <span class="stringliteral">&quot;%s,%.16e,%.16e,%.16e,%.16e,%.16e\n&quot;</span>, name.c_str(),</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                    times[i], states[i].y[inflow_dof], states[i].y[outflow_dof],</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                    states[i].y[inpres_dof], states[i].y[outpres_dof]);</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>            out &lt;&lt; sbuff;</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>          }</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        }</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>      }</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    }</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  }</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>  <span class="keywordflow">return</span> out.str();</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>}</div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment"></span> </div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment"> * @brief Write results variable based.</span></div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment"> * @tparam T Scalar type (e.g. `float`, `double`)</span></div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment"> * @param times Sequence of time steps corresponding to the solutions</span></div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment"> * @param states Sequence of states corresponding to the time steps</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment"> * @param model The underlying model</span></div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment"> * @param mean Toggle whether only the mean over all time steps should be</span></div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="comment"> * written</span></div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment"> * @return CSV encoded output string</span></div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno"><a class="line" href="namespace_i_o.html#a02005a08dbf60e9a61dbb595454010f5">  193</a></span>std::string <a class="code hl_function" href="namespace_i_o.html#a02005a08dbf60e9a61dbb595454010f5">to_variable_csv</a>(std::vector&lt;T&gt; &amp;times,</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                            std::vector&lt;<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State&lt;T&gt;</a>&gt; &amp;states,</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>                            <a class="code hl_class" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model&lt;T&gt;</a> &amp;model, <span class="keywordtype">bool</span> mean = <span class="keyword">false</span>,</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>                            <span class="keywordtype">bool</span> derivative = <span class="keyword">false</span>) {</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>  <span class="comment">// Create string stream to buffer output</span></div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>  std::stringstream out;</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>  <span class="comment">// Create short and long buffer for lines</span></div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>  <span class="keywordtype">char</span> sbuff[87];</div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>  <span class="keywordtype">char</span> lbuff[110];</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>  <span class="comment">// Determine number of time steps</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>  <span class="keywordtype">int</span> num_steps = times.size();</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>  <span class="comment">// Write column labels</span></div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>  <span class="keywordflow">if</span> (derivative) {</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>    out &lt;&lt; <span class="stringliteral">&quot;name,time,y,ydot\n&quot;</span>;</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    <span class="keywordflow">if</span> (mean) {</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">size</a>(); i++) {</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        std::string name = model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">variables</a>[i];</div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        T mean_y = 0.0;</div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        T mean_ydot = 0.0;</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; num_steps; j++) {</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>          mean_y += states[j].y[i];</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>          mean_ydot += states[j].ydot[i];</div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        }</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        mean_y /= num_steps;</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        mean_ydot /= num_steps;</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        sprintf(lbuff, <span class="stringliteral">&quot;%s,,%.16e,%.16e\n&quot;</span>, name.c_str(), mean_y, mean_ydot);</div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        out &lt;&lt; lbuff;</div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>      }</div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">size</a>(); i++) {</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        std::string name = model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">variables</a>[i];</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; num_steps; j++) {</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>          sprintf(lbuff, <span class="stringliteral">&quot;%s,%.16e,%.16e,%.16e\n&quot;</span>, name.c_str(), times[j],</div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>                  states[j].y[i], states[j].ydot[i]);</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>          out &lt;&lt; lbuff;</div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        }</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>      }</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    }</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>  } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    out &lt;&lt; <span class="stringliteral">&quot;name,time,y\n&quot;</span>;</div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <span class="keywordflow">if</span> (mean) {</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">size</a>(); i++) {</div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>        std::string name = model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">variables</a>[i];</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>        T mean_y = 0.0;</div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; num_steps; j++) {</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>          mean_y += states[j].y[i];</div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        }</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        mean_y /= num_steps;</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        sprintf(sbuff, <span class="stringliteral">&quot;%s,,%.16e\n&quot;</span>, name.c_str(), mean_y);</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        out &lt;&lt; sbuff;</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>      }</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">size</a>(); i++) {</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        std::string name = model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">variables</a>[i];</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; num_steps; j++) {</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>          sprintf(sbuff, <span class="stringliteral">&quot;%s,%.16e,%.16e\n&quot;</span>, name.c_str(), times[j],</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>                  states[j].y[i]);</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>          out &lt;&lt; sbuff;</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>        }</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>      }</div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    }</div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>  }</div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>  <span class="keywordflow">return</span> out.str();</div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>}</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>}  <span class="comment">// namespace IO</span></div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span> </div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_IO_CSVWRITER_HPP_</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>            snprintf(sbuff, 140, <span class="stringliteral">&quot;%s,%.16e,%.16e,%.16e,%.16e,%.16e\n&quot;</span>,</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                     name.c_str(), times[i], states[i].y[inflow_dof],</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                     states[i].y[outflow_dof], states[i].y[inpres_dof],</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>                     states[i].y[outpres_dof]);</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>            out &lt;&lt; sbuff;</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>          }</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        }</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>      }</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    }</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>  }</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>  <span class="keywordflow">return</span> out.str();</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>}</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment"></span> </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment"> * @brief Write results variable based.</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment"> * @tparam T Scalar type (e.g. `float`, `double`)</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment"> * @param times Sequence of time steps corresponding to the solutions</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment"> * @param states Sequence of states corresponding to the time steps</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment"> * @param model The underlying model</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="comment"> * @param mean Toggle whether only the mean over all time steps should be</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment"> * written</span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment"> * @return CSV encoded output string</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno"><a class="line" href="namespace_i_o.html#a02005a08dbf60e9a61dbb595454010f5">  194</a></span>std::string <a class="code hl_function" href="namespace_i_o.html#a02005a08dbf60e9a61dbb595454010f5">to_variable_csv</a>(std::vector&lt;T&gt; &amp;times,</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>                            std::vector&lt;<a class="code hl_class" href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State&lt;T&gt;</a>&gt; &amp;states,</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>                            <a class="code hl_class" href="class_m_o_d_e_l_1_1_model.html">MODEL::Model&lt;T&gt;</a> &amp;model, <span class="keywordtype">bool</span> mean = <span class="keyword">false</span>,</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>                            <span class="keywordtype">bool</span> derivative = <span class="keyword">false</span>) {</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>  <span class="comment">// Create string stream to buffer output</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>  std::stringstream out;</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span>  <span class="comment">// Create short and long buffer for lines</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>  <span class="keywordtype">char</span> sbuff[87];</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>  <span class="keywordtype">char</span> lbuff[110];</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>  <span class="comment">// Determine number of time steps</span></div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>  <span class="keywordtype">int</span> num_steps = times.size();</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>  <span class="comment">// Write column labels</span></div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>  <span class="keywordflow">if</span> (derivative) {</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    out &lt;&lt; <span class="stringliteral">&quot;name,time,y,ydot\n&quot;</span>;</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    <span class="keywordflow">if</span> (mean) {</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">size</a>(); i++) {</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        std::string name = model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">variables</a>[i];</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        T mean_y = 0.0;</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        T mean_ydot = 0.0;</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; num_steps; j++) {</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>          mean_y += states[j].y[i];</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>          mean_ydot += states[j].ydot[i];</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        }</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        mean_y /= num_steps;</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        mean_ydot /= num_steps;</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        snprintf(lbuff, 110, <span class="stringliteral">&quot;%s,,%.16e,%.16e\n&quot;</span>, name.c_str(), mean_y,</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>                 mean_ydot);</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        out &lt;&lt; lbuff;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>      }</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">size</a>(); i++) {</div>
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>        std::string name = model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">variables</a>[i];</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; num_steps; j++) {</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>          snprintf(lbuff, 110, <span class="stringliteral">&quot;%s,%.16e,%.16e,%.16e\n&quot;</span>, name.c_str(), times[j],</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>                   states[j].y[i], states[j].ydot[i]);</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>          out &lt;&lt; lbuff;</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>        }</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>      }</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    }</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>  } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    out &lt;&lt; <span class="stringliteral">&quot;name,time,y\n&quot;</span>;</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    <span class="keywordflow">if</span> (mean) {</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">size</a>(); i++) {</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>        std::string name = model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">variables</a>[i];</div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>        T mean_y = 0.0;</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; num_steps; j++) {</div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>          mean_y += states[j].y[i];</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        }</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        mean_y /= num_steps;</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        snprintf(sbuff, 87, <span class="stringliteral">&quot;%s,,%.16e\n&quot;</span>, name.c_str(), mean_y);</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        out &lt;&lt; sbuff;</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>      }</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>      <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_function" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">size</a>(); i++) {</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>        std::string name = model.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_model.html#a43b9cc3c9874be9c2baeae576271fbad">dofhandler</a>.<a class="code hl_variable" href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">variables</a>[i];</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> j = 0; j &lt; num_steps; j++) {</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>          snprintf(sbuff, 87, <span class="stringliteral">&quot;%s,%.16e,%.16e\n&quot;</span>, name.c_str(), times[j],</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>                   states[j].y[i]);</div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>          out &lt;&lt; sbuff;</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>        }</div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>      }</div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    }</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>  }</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span>  <span class="keywordflow">return</span> out.str();</div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span>}</div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>}  <span class="comment">// namespace IO</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span> </div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_IO_CSVWRITER_HPP_</span></div>
 <div class="ttc" id="aclass_a_l_g_e_b_r_a_1_1_state_html"><div class="ttname"><a href="class_a_l_g_e_b_r_a_1_1_state.html">ALGEBRA::State</a></div><div class="ttdoc">State of the system.</div><div class="ttdef"><b>Definition:</b> state.hpp:47</div></div>
 <div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html_a3ea05b8362ccff4957585fb1f1c7b806"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#a3ea05b8362ccff4957585fb1f1c7b806">MODEL::DOFHandler::variables</a></div><div class="ttdeci">std::vector&lt; std::string &gt; variables</div><div class="ttdoc">Variable names corresponding to the variable indices.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:56</div></div>
 <div class="ttc" id="aclass_m_o_d_e_l_1_1_d_o_f_handler_html_acff2844be5b12678f603ca677a2c17f3"><div class="ttname"><a href="class_m_o_d_e_l_1_1_d_o_f_handler.html#acff2844be5b12678f603ca677a2c17f3">MODEL::DOFHandler::size</a></div><div class="ttdeci">unsigned int size()</div><div class="ttdoc">Get the size of the system.</div><div class="ttdef"><b>Definition:</b> dofhandler.hpp:108</div></div>
@@ -341,12 +343,12 @@ $(function() {
 <div class="ttc" id="aclass_m_o_d_e_l_1_1_model_html_a69eebd78213465c7ab13ffbb7a5b86c8"><div class="ttname"><a href="class_m_o_d_e_l_1_1_model.html#a69eebd78213465c7ab13ffbb7a5b86c8">MODEL::Model::blocks</a></div><div class="ttdeci">std::vector&lt; Block&lt; T &gt; * &gt; blocks</div><div class="ttdoc">Elements of the model.</div><div class="ttdef"><b>Definition:</b> model.hpp:71</div></div>
 <div class="ttc" id="anamespace_h_e_l_p_e_r_s_html_aa60c2dfbfc096834b6cd243f84b9c47b"><div class="ttname"><a href="namespace_h_e_l_p_e_r_s.html#aa60c2dfbfc096834b6cd243f84b9c47b">HELPERS::startswith</a></div><div class="ttdeci">bool startswith(const std::string &amp;str, const std::string &amp;prefix)</div><div class="ttdoc">Check if a string starts with the letters of another string.</div><div class="ttdef"><b>Definition:</b> startswith.hpp:47</div></div>
 <div class="ttc" id="anamespace_i_o_html"><div class="ttname"><a href="namespace_i_o.html">IO</a></div><div class="ttdoc">IO namespace.</div><div class="ttdef"><b>Definition:</b> configreader.hpp:60</div></div>
-<div class="ttc" id="anamespace_i_o_html_a02005a08dbf60e9a61dbb595454010f5"><div class="ttname"><a href="namespace_i_o.html#a02005a08dbf60e9a61dbb595454010f5">IO::to_variable_csv</a></div><div class="ttdeci">std::string to_variable_csv(std::vector&lt; T &gt; &amp;times, std::vector&lt; ALGEBRA::State&lt; T &gt; &gt; &amp;states, MODEL::Model&lt; T &gt; &amp;model, bool mean=false, bool derivative=false)</div><div class="ttdoc">Write results variable based.</div><div class="ttdef"><b>Definition:</b> csvwriter.hpp:193</div></div>
+<div class="ttc" id="anamespace_i_o_html_a02005a08dbf60e9a61dbb595454010f5"><div class="ttname"><a href="namespace_i_o.html#a02005a08dbf60e9a61dbb595454010f5">IO::to_variable_csv</a></div><div class="ttdeci">std::string to_variable_csv(std::vector&lt; T &gt; &amp;times, std::vector&lt; ALGEBRA::State&lt; T &gt; &gt; &amp;states, MODEL::Model&lt; T &gt; &amp;model, bool mean=false, bool derivative=false)</div><div class="ttdoc">Write results variable based.</div><div class="ttdef"><b>Definition:</b> csvwriter.hpp:194</div></div>
 <div class="ttc" id="anamespace_i_o_html_a1ef2a3fccc174166142bb843eab206f4"><div class="ttname"><a href="namespace_i_o.html#a1ef2a3fccc174166142bb843eab206f4">IO::to_vessel_csv</a></div><div class="ttdeci">std::string to_vessel_csv(std::vector&lt; T &gt; &amp;times, std::vector&lt; ALGEBRA::State&lt; T &gt; &gt; &amp;states, MODEL::Model&lt; T &gt; &amp;model, bool mean=false, bool derivative=false)</div><div class="ttdoc">Write results vessel based.</div><div class="ttdef"><b>Definition:</b> csvwriter.hpp:59</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Mar 14 2023 18:35:07 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sun Mar 19 2023 18:30:32 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

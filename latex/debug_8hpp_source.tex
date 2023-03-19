@@ -40,11 +40,11 @@
 \DoxyCodeLine{36 }
 \DoxyCodeLine{37 \textcolor{preprocessor}{\#include <iostream>}}
 \DoxyCodeLine{38 }
-\DoxyCodeLine{39 \textcolor{preprocessor}{\#ifndef DEBUG}}
-\DoxyCodeLine{40 \textcolor{preprocessor}{\#define DEBUG\_MSG(str)             \(\backslash\)}}
-\DoxyCodeLine{41 \textcolor{preprocessor}{  do \{                             \(\backslash\)}}
-\DoxyCodeLine{42 \textcolor{preprocessor}{    std::cout << str << std::endl; \(\backslash\)}}
-\DoxyCodeLine{43 \textcolor{preprocessor}{  \} while (false)}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#ifndef NDEBUG}}
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#define DEBUG\_MSG(str)                                   \(\backslash\)}}
+\DoxyCodeLine{41 \textcolor{preprocessor}{  do \{                                                   \(\backslash\)}}
+\DoxyCodeLine{42 \textcolor{preprocessor}{    std::cout << "{}[DEBUG MESSAGE] "{}} << str << std::endl; \(\backslash\)}
+\DoxyCodeLine{43   \} while (false)}
 \DoxyCodeLine{44 \textcolor{preprocessor}{\#else}}
 \DoxyCodeLine{45 \textcolor{preprocessor}{\#define DEBUG\_MSG(str) \(\backslash\)}}
 \DoxyCodeLine{46 \textcolor{preprocessor}{  do \{                 \(\backslash\)}}

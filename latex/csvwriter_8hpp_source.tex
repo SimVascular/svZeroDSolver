@@ -127,16 +127,16 @@
 \DoxyCodeLine{123           d\_outflow\_mean /= num\_steps;}
 \DoxyCodeLine{124           d\_inpres\_mean /= num\_steps;}
 \DoxyCodeLine{125           d\_outpres\_mean /= num\_steps;}
-\DoxyCodeLine{126           sprintf(lbuff,}
-\DoxyCodeLine{127                   \textcolor{stringliteral}{"{}\%s,,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}},}
-\DoxyCodeLine{128                   name.c\_str(), inflow\_mean, outflow\_mean, inpres\_mean,}
-\DoxyCodeLine{129                   outpres\_mean, d\_inflow\_mean, d\_outflow\_mean, d\_inpres\_mean,}
-\DoxyCodeLine{130                   d\_outpres\_mean);}
+\DoxyCodeLine{126           snprintf(lbuff, 236,}
+\DoxyCodeLine{127                    \textcolor{stringliteral}{"{}\%s,,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}},}
+\DoxyCodeLine{128                    name.c\_str(), inflow\_mean, outflow\_mean, inpres\_mean,}
+\DoxyCodeLine{129                    outpres\_mean, d\_inflow\_mean, d\_outflow\_mean, d\_inpres\_mean,}
+\DoxyCodeLine{130                    d\_outpres\_mean);}
 \DoxyCodeLine{131           out << lbuff;}
 \DoxyCodeLine{132         \} \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{133           \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < num\_steps; i++) \{}
-\DoxyCodeLine{134             sprintf(}
-\DoxyCodeLine{135                 lbuff,}
+\DoxyCodeLine{134             snprintf(}
+\DoxyCodeLine{135                 lbuff, 236,}
 \DoxyCodeLine{136                 \textcolor{stringliteral}{"{}\%s,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}},}
 \DoxyCodeLine{137                 name.c\_str(), times[i], states[i].y[inflow\_dof],}
 \DoxyCodeLine{138                 states[i].y[outflow\_dof], states[i].y[inpres\_dof],}
@@ -164,106 +164,108 @@
 \DoxyCodeLine{160           outflow\_mean /= num\_steps;}
 \DoxyCodeLine{161           inpres\_mean /= num\_steps;}
 \DoxyCodeLine{162           outpres\_mean /= num\_steps;}
-\DoxyCodeLine{163           sprintf(sbuff, \textcolor{stringliteral}{"{}\%s,,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(),}
-\DoxyCodeLine{164                   inflow\_mean, outflow\_mean, inpres\_mean, outpres\_mean);}
+\DoxyCodeLine{163           snprintf(sbuff, 140, \textcolor{stringliteral}{"{}\%s,,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(),}
+\DoxyCodeLine{164                    inflow\_mean, outflow\_mean, inpres\_mean, outpres\_mean);}
 \DoxyCodeLine{165           out << sbuff;}
 \DoxyCodeLine{166         \} \textcolor{keywordflow}{else} \{}
 \DoxyCodeLine{167           \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < num\_steps; i++) \{}
-\DoxyCodeLine{168             sprintf(sbuff, \textcolor{stringliteral}{"{}\%s,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(),}
-\DoxyCodeLine{169                     times[i], states[i].y[inflow\_dof], states[i].y[outflow\_dof],}
-\DoxyCodeLine{170                     states[i].y[inpres\_dof], states[i].y[outpres\_dof]);}
-\DoxyCodeLine{171             out << sbuff;}
-\DoxyCodeLine{172           \}}
-\DoxyCodeLine{173         \}}
-\DoxyCodeLine{174       \}}
-\DoxyCodeLine{175     \}}
-\DoxyCodeLine{176   \}}
-\DoxyCodeLine{177 }
-\DoxyCodeLine{178   \textcolor{keywordflow}{return} out.str();}
-\DoxyCodeLine{179 \}}
-\DoxyCodeLine{180 \textcolor{comment}{}}
-\DoxyCodeLine{181 \textcolor{comment}{/**}}
-\DoxyCodeLine{182 \textcolor{comment}{ * @brief Write results variable based.}}
-\DoxyCodeLine{183 \textcolor{comment}{ *}}
-\DoxyCodeLine{184 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{185 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
-\DoxyCodeLine{186 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
-\DoxyCodeLine{187 \textcolor{comment}{ * @param model The underlying model}}
-\DoxyCodeLine{188 \textcolor{comment}{ * @param mean Toggle whether only the mean over all time steps should be}}
-\DoxyCodeLine{189 \textcolor{comment}{ * written}}
-\DoxyCodeLine{190 \textcolor{comment}{ * @return CSV encoded output string}}
-\DoxyCodeLine{191 \textcolor{comment}{ */}}
-\DoxyCodeLine{192 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{193 std::string \mbox{\hyperlink{namespace_i_o_a02005a08dbf60e9a61dbb595454010f5}{to\_variable\_csv}}(std::vector<T> \&times,}
-\DoxyCodeLine{194                             std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
-\DoxyCodeLine{195                             \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, \textcolor{keywordtype}{bool} mean = \textcolor{keyword}{false},}
-\DoxyCodeLine{196                             \textcolor{keywordtype}{bool} derivative = \textcolor{keyword}{false}) \{}
-\DoxyCodeLine{197   \textcolor{comment}{// Create string stream to buffer output}}
-\DoxyCodeLine{198   std::stringstream out;}
-\DoxyCodeLine{199 }
-\DoxyCodeLine{200   \textcolor{comment}{// Create short and long buffer for lines}}
-\DoxyCodeLine{201   \textcolor{keywordtype}{char} sbuff[87];}
-\DoxyCodeLine{202   \textcolor{keywordtype}{char} lbuff[110];}
-\DoxyCodeLine{203 }
-\DoxyCodeLine{204   \textcolor{comment}{// Determine number of time steps}}
-\DoxyCodeLine{205   \textcolor{keywordtype}{int} num\_steps = times.size();}
-\DoxyCodeLine{206 }
-\DoxyCodeLine{207   \textcolor{comment}{// Write column labels}}
-\DoxyCodeLine{208   \textcolor{keywordflow}{if} (derivative) \{}
-\DoxyCodeLine{209     out << \textcolor{stringliteral}{"{}name,time,y,ydot\(\backslash\)n"{}};}
-\DoxyCodeLine{210     \textcolor{keywordflow}{if} (mean) \{}
-\DoxyCodeLine{211       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}(); i++) \{}
-\DoxyCodeLine{212         std::string name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
-\DoxyCodeLine{213         T mean\_y = 0.0;}
-\DoxyCodeLine{214         T mean\_ydot = 0.0;}
-\DoxyCodeLine{215         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < num\_steps; j++) \{}
-\DoxyCodeLine{216           mean\_y += states[j].y[i];}
-\DoxyCodeLine{217           mean\_ydot += states[j].ydot[i];}
-\DoxyCodeLine{218         \}}
-\DoxyCodeLine{219         mean\_y /= num\_steps;}
-\DoxyCodeLine{220         mean\_ydot /= num\_steps;}
-\DoxyCodeLine{221         sprintf(lbuff, \textcolor{stringliteral}{"{}\%s,,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(), mean\_y, mean\_ydot);}
-\DoxyCodeLine{222         out << lbuff;}
-\DoxyCodeLine{223       \}}
-\DoxyCodeLine{224     \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{225       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}(); i++) \{}
-\DoxyCodeLine{226         std::string name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
-\DoxyCodeLine{227         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < num\_steps; j++) \{}
-\DoxyCodeLine{228           sprintf(lbuff, \textcolor{stringliteral}{"{}\%s,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(), times[j],}
-\DoxyCodeLine{229                   states[j].y[i], states[j].ydot[i]);}
-\DoxyCodeLine{230           out << lbuff;}
-\DoxyCodeLine{231         \}}
-\DoxyCodeLine{232       \}}
-\DoxyCodeLine{233     \}}
-\DoxyCodeLine{234   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{235     out << \textcolor{stringliteral}{"{}name,time,y\(\backslash\)n"{}};}
-\DoxyCodeLine{236     \textcolor{keywordflow}{if} (mean) \{}
-\DoxyCodeLine{237       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}(); i++) \{}
-\DoxyCodeLine{238         std::string name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
-\DoxyCodeLine{239         T mean\_y = 0.0;}
-\DoxyCodeLine{240         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < num\_steps; j++) \{}
-\DoxyCodeLine{241           mean\_y += states[j].y[i];}
-\DoxyCodeLine{242         \}}
-\DoxyCodeLine{243         mean\_y /= num\_steps;}
-\DoxyCodeLine{244         sprintf(sbuff, \textcolor{stringliteral}{"{}\%s,,\%.16e\(\backslash\)n"{}}, name.c\_str(), mean\_y);}
-\DoxyCodeLine{245         out << sbuff;}
-\DoxyCodeLine{246       \}}
-\DoxyCodeLine{247     \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{248       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}(); i++) \{}
-\DoxyCodeLine{249         std::string name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
-\DoxyCodeLine{250         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < num\_steps; j++) \{}
-\DoxyCodeLine{251           sprintf(sbuff, \textcolor{stringliteral}{"{}\%s,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(), times[j],}
-\DoxyCodeLine{252                   states[j].y[i]);}
-\DoxyCodeLine{253           out << sbuff;}
-\DoxyCodeLine{254         \}}
-\DoxyCodeLine{255       \}}
-\DoxyCodeLine{256     \}}
-\DoxyCodeLine{257   \}}
-\DoxyCodeLine{258 }
-\DoxyCodeLine{259   \textcolor{keywordflow}{return} out.str();}
-\DoxyCodeLine{260 \}}
-\DoxyCodeLine{261 \}  \textcolor{comment}{// namespace IO}}
-\DoxyCodeLine{262 }
-\DoxyCodeLine{263 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_CSVWRITER\_HPP\_}}
+\DoxyCodeLine{168             snprintf(sbuff, 140, \textcolor{stringliteral}{"{}\%s,\%.16e,\%.16e,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}},}
+\DoxyCodeLine{169                      name.c\_str(), times[i], states[i].y[inflow\_dof],}
+\DoxyCodeLine{170                      states[i].y[outflow\_dof], states[i].y[inpres\_dof],}
+\DoxyCodeLine{171                      states[i].y[outpres\_dof]);}
+\DoxyCodeLine{172             out << sbuff;}
+\DoxyCodeLine{173           \}}
+\DoxyCodeLine{174         \}}
+\DoxyCodeLine{175       \}}
+\DoxyCodeLine{176     \}}
+\DoxyCodeLine{177   \}}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179   \textcolor{keywordflow}{return} out.str();}
+\DoxyCodeLine{180 \}}
+\DoxyCodeLine{181 \textcolor{comment}{}}
+\DoxyCodeLine{182 \textcolor{comment}{/**}}
+\DoxyCodeLine{183 \textcolor{comment}{ * @brief Write results variable based.}}
+\DoxyCodeLine{184 \textcolor{comment}{ *}}
+\DoxyCodeLine{185 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{186 \textcolor{comment}{ * @param times Sequence of time steps corresponding to the solutions}}
+\DoxyCodeLine{187 \textcolor{comment}{ * @param states Sequence of states corresponding to the time steps}}
+\DoxyCodeLine{188 \textcolor{comment}{ * @param model The underlying model}}
+\DoxyCodeLine{189 \textcolor{comment}{ * @param mean Toggle whether only the mean over all time steps should be}}
+\DoxyCodeLine{190 \textcolor{comment}{ * written}}
+\DoxyCodeLine{191 \textcolor{comment}{ * @return CSV encoded output string}}
+\DoxyCodeLine{192 \textcolor{comment}{ */}}
+\DoxyCodeLine{193 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{194 std::string \mbox{\hyperlink{namespace_i_o_a02005a08dbf60e9a61dbb595454010f5}{to\_variable\_csv}}(std::vector<T> \&times,}
+\DoxyCodeLine{195                             std::vector<\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}}> \&states,}
+\DoxyCodeLine{196                             \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model, \textcolor{keywordtype}{bool} mean = \textcolor{keyword}{false},}
+\DoxyCodeLine{197                             \textcolor{keywordtype}{bool} derivative = \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{198   \textcolor{comment}{// Create string stream to buffer output}}
+\DoxyCodeLine{199   std::stringstream out;}
+\DoxyCodeLine{200 }
+\DoxyCodeLine{201   \textcolor{comment}{// Create short and long buffer for lines}}
+\DoxyCodeLine{202   \textcolor{keywordtype}{char} sbuff[87];}
+\DoxyCodeLine{203   \textcolor{keywordtype}{char} lbuff[110];}
+\DoxyCodeLine{204 }
+\DoxyCodeLine{205   \textcolor{comment}{// Determine number of time steps}}
+\DoxyCodeLine{206   \textcolor{keywordtype}{int} num\_steps = times.size();}
+\DoxyCodeLine{207 }
+\DoxyCodeLine{208   \textcolor{comment}{// Write column labels}}
+\DoxyCodeLine{209   \textcolor{keywordflow}{if} (derivative) \{}
+\DoxyCodeLine{210     out << \textcolor{stringliteral}{"{}name,time,y,ydot\(\backslash\)n"{}};}
+\DoxyCodeLine{211     \textcolor{keywordflow}{if} (mean) \{}
+\DoxyCodeLine{212       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}(); i++) \{}
+\DoxyCodeLine{213         std::string name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
+\DoxyCodeLine{214         T mean\_y = 0.0;}
+\DoxyCodeLine{215         T mean\_ydot = 0.0;}
+\DoxyCodeLine{216         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < num\_steps; j++) \{}
+\DoxyCodeLine{217           mean\_y += states[j].y[i];}
+\DoxyCodeLine{218           mean\_ydot += states[j].ydot[i];}
+\DoxyCodeLine{219         \}}
+\DoxyCodeLine{220         mean\_y /= num\_steps;}
+\DoxyCodeLine{221         mean\_ydot /= num\_steps;}
+\DoxyCodeLine{222         snprintf(lbuff, 110, \textcolor{stringliteral}{"{}\%s,,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(), mean\_y,}
+\DoxyCodeLine{223                  mean\_ydot);}
+\DoxyCodeLine{224         out << lbuff;}
+\DoxyCodeLine{225       \}}
+\DoxyCodeLine{226     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{227       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}(); i++) \{}
+\DoxyCodeLine{228         std::string name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
+\DoxyCodeLine{229         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < num\_steps; j++) \{}
+\DoxyCodeLine{230           snprintf(lbuff, 110, \textcolor{stringliteral}{"{}\%s,\%.16e,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(), times[j],}
+\DoxyCodeLine{231                    states[j].y[i], states[j].ydot[i]);}
+\DoxyCodeLine{232           out << lbuff;}
+\DoxyCodeLine{233         \}}
+\DoxyCodeLine{234       \}}
+\DoxyCodeLine{235     \}}
+\DoxyCodeLine{236   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{237     out << \textcolor{stringliteral}{"{}name,time,y\(\backslash\)n"{}};}
+\DoxyCodeLine{238     \textcolor{keywordflow}{if} (mean) \{}
+\DoxyCodeLine{239       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}(); i++) \{}
+\DoxyCodeLine{240         std::string name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
+\DoxyCodeLine{241         T mean\_y = 0.0;}
+\DoxyCodeLine{242         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < num\_steps; j++) \{}
+\DoxyCodeLine{243           mean\_y += states[j].y[i];}
+\DoxyCodeLine{244         \}}
+\DoxyCodeLine{245         mean\_y /= num\_steps;}
+\DoxyCodeLine{246         snprintf(sbuff, 87, \textcolor{stringliteral}{"{}\%s,,\%.16e\(\backslash\)n"{}}, name.c\_str(), mean\_y);}
+\DoxyCodeLine{247         out << sbuff;}
+\DoxyCodeLine{248       \}}
+\DoxyCodeLine{249     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{250       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_acff2844be5b12678f603ca677a2c17f3}{size}}(); i++) \{}
+\DoxyCodeLine{251         std::string name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
+\DoxyCodeLine{252         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < num\_steps; j++) \{}
+\DoxyCodeLine{253           snprintf(sbuff, 87, \textcolor{stringliteral}{"{}\%s,\%.16e,\%.16e\(\backslash\)n"{}}, name.c\_str(), times[j],}
+\DoxyCodeLine{254                    states[j].y[i]);}
+\DoxyCodeLine{255           out << sbuff;}
+\DoxyCodeLine{256         \}}
+\DoxyCodeLine{257       \}}
+\DoxyCodeLine{258     \}}
+\DoxyCodeLine{259   \}}
+\DoxyCodeLine{260 }
+\DoxyCodeLine{261   \textcolor{keywordflow}{return} out.str();}
+\DoxyCodeLine{262 \}}
+\DoxyCodeLine{263 \}  \textcolor{comment}{// namespace IO}}
+\DoxyCodeLine{264 }
+\DoxyCodeLine{265 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_CSVWRITER\_HPP\_}}
 
 \end{DoxyCode}

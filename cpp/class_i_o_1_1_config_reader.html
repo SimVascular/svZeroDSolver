@@ -88,9 +88,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a848b6ada6d5b8683418403e90b69b796"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#a848b6ada6d5b8683418403e90b69b796">~ConfigReader</a> ()</td></tr>
 <tr class="memdesc:a848b6ada6d5b8683418403e90b69b796"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the Config Reader object.  <a href="class_i_o_1_1_config_reader.html#a848b6ada6d5b8683418403e90b69b796">More...</a><br /></td></tr>
 <tr class="separator:a848b6ada6d5b8683418403e90b69b796"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44d1b9249fc80c0e65a6267b42597bdb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#a44d1b9249fc80c0e65a6267b42597bdb">load</a> (std::string &amp;specifier)</td></tr>
-<tr class="memdesc:a44d1b9249fc80c0e65a6267b42597bdb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create model from configuration file.  <a href="class_i_o_1_1_config_reader.html#a44d1b9249fc80c0e65a6267b42597bdb">More...</a><br /></td></tr>
-<tr class="separator:a44d1b9249fc80c0e65a6267b42597bdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a920b46f9e97b98a6525442e5a8f5cebd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_o_1_1_config_reader.html#a920b46f9e97b98a6525442e5a8f5cebd">load</a> (<a class="el" href="class_i_o_1_1_json_handler.html">JsonHandler</a> &amp;handler)</td></tr>
+<tr class="memdesc:a920b46f9e97b98a6525442e5a8f5cebd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create model from configuration.  <a href="class_i_o_1_1_config_reader.html#a920b46f9e97b98a6525442e5a8f5cebd">More...</a><br /></td></tr>
+<tr class="separator:a920b46f9e97b98a6525442e5a8f5cebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -191,8 +191,8 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a44d1b9249fc80c0e65a6267b42597bdb" name="a44d1b9249fc80c0e65a6267b42597bdb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a44d1b9249fc80c0e65a6267b42597bdb">&#9670;&nbsp;</a></span>load()</h2>
+<a id="a920b46f9e97b98a6525442e5a8f5cebd" name="a920b46f9e97b98a6525442e5a8f5cebd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a920b46f9e97b98a6525442e5a8f5cebd">&#9670;&nbsp;</a></span>load()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -202,15 +202,20 @@ template&lt;typename T &gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="class_i_o_1_1_config_reader.html">IO::ConfigReader</a>&lt; T &gt;::load </td>
           <td>(</td>
-          <td class="paramtype">std::string &amp;&#160;</td>
-          <td class="paramname"><em>specifier</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="class_i_o_1_1_json_handler.html">JsonHandler</a> &amp;&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Create model from configuration file. </p>
-<dl class="section return"><dt>Returns</dt><dd>Model </dd></dl>
+<p>Create model from configuration. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handler</td><td>Configuration handler </td></tr>
+  </table>
+  </dd>
+</dl>
 <p >&lt; Flag to check if heart block is present (requires different handling)</p>
 
 </div>
@@ -526,7 +531,7 @@ template&lt;typename T &gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Mar 14 2023 18:35:07 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
+Generated on Sun Mar 19 2023 18:30:32 for svZeroDSolver by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.4
 </small></address>
 </body>
 </html>

@@ -623,7 +623,6 @@ void ConfigReader<T>::load(JsonHandler &handler) {
           for (auto outlet_block :
                closed_loop_config.get_string_array("outlet_blocks")) {
             connections.push_back({heart_outlet_junction_name, outlet_block});
-            block_count++;
           }
           block_count++;
         } else {

@@ -69,7 +69,6 @@ class Model {
    */
   ~Model();
 
-  int block_count = 0;
   std::vector<Block<T> *> blocks;          ///< Elements of the model
   std::vector<Parameter<T> *> parameters;  ///< Elements of the model
   std::map<std::string_view, int>
@@ -87,6 +86,13 @@ class Model {
    * @param name The name of the block
    */
   void add_block(Block<T> *block, std::string_view name);
+
+  /**
+   * @brief Add a model parameter
+   *
+   * @param parameter The parameter to add to the model
+   */
+  void add_parameter(Parameter<T> *parameter);
 
   /**
    * @brief Update the constant contributions of all elements in a sparse system
@@ -135,6 +141,10 @@ class Model {
    * @return Number of triplets that are used in each system matrix
    */
   std::map<std::string, int> get_num_triplets();
+
+ private:
+  int block_count = 0;
+  int parameter_count = 0;
 };
 
 template <typename T>
@@ -148,6 +158,12 @@ void Model<T>::add_block(Block<T> *block, std::string_view name) {
   blocks.push_back(block);
   block_index_map.insert({name, block_count});
   block_count++;
+}
+
+template <typename T>
+void Model<T>::add_parameter(Parameter<T> *parameter) {
+  parameters.push_back(parameter);
+  parameter_count++;
 }
 
 template <typename T>

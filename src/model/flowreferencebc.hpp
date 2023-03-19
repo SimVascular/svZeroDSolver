@@ -213,7 +213,7 @@ void FlowReferenceBC<T>::update_block_params(std::vector<T> new_params) {
     t_new.push_back(new_params[1 + i]);
     Q_new.push_back(new_params[1 + num_time_pts + i]);
   }
-  this->params.Q.update_params(t_new, Q_new);
+  this->params.Q.update(t_new, Q_new);
 }
 
 template <typename T>

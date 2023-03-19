@@ -214,7 +214,7 @@ void PressureReferenceBC<T>::update_block_params(std::vector<T> new_params) {
     t_new.push_back(new_params[1 + i]);
     P_new.push_back(new_params[1 + num_time_pts + i]);
   }
-  this->params.P.update_params(t_new, P_new);
+  this->params.P.update(t_new, P_new);
 }
 
 template <typename T>

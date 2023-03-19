@@ -46,8 +46,8 @@ namespace MODEL {
 /**
  * @brief Model Parameter.
  *
- * This class handles time-dependent parameter that need to be interpolated
- * and periodically applied.
+ * This class handles constant parameters and time-dependent parameters that
+ * need to be interpolated and periodically applied.
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
@@ -63,8 +63,15 @@ class Parameter {
   /**
    * @brief Construct a new Parameter object
    *
-   * @param times Time steps corresponding to the values
-   * @param values Values correspondong to the time steps
+   * @param value The value of the parameter
+   */
+  Parameter(T value);
+
+  /**
+   * @brief Construct a new Parameter object
+   *
+   * @param times Time steps corresponding to the time-dependent values
+   * @param values Values corresponding to the time steps
    */
   Parameter(std::vector<T> times, std::vector<T> values, bool periodic = true);
 
@@ -74,19 +81,30 @@ class Parameter {
    */
   ~Parameter();
 
-  std::vector<T> times;   ///< Time steps
-  std::vector<T> values;  ///< Values
-  T cycle_period;  ///< Cardiac cycle period corresponding to the time sequence
-  int size;
+  std::vector<T> times;   ///< Time steps if parameter is time-dependent
+  std::vector<T> values;  ///< Values if parameter is time-dependent
+  T value;                ///< Value if parameter is constant
+  T cycle_period;   ///< Cardiac cycle period corresponding to the time sequence
+  int size;         ///< Size of the time series if parameter is time-dependent
+  bool isconstant;  ///< Bool value indicating if the parameter is constant
+  bool isperiodic;  ///< Bool value indicating if the parameter is periodic with
+                    ///< the cardiac cycle
 
   /**
-   * @brief Update parameters
+   * @brief Update the parameter
+   *
+   * @param value Value of the parameter
+   */
+  void update(T value);
+
+  /**
+   * @brief Update the parameter
    *
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
 
-  void update_params(std::vector<T> times, std::vector<T> values);
+  void update(std::vector<T> times, std::vector<T> values);
 
   /**
    * @brief Get the parameter value at the specified time.
@@ -95,10 +113,6 @@ class Parameter {
    * @return Value at the time
    */
   T get(T time);
-
-  bool isconstant;  ///< Bool value indicating if the parameter is constant
-  bool isperiodic;  ///< Bool value indicating if the parameter is periodic with
-                    ///< the cardiac cycle
 
   /**
    * @brief Convert the parameter into a steady mean state.
@@ -113,37 +127,43 @@ class Parameter {
   void to_unsteady();
 
  private:
-  std::vector<T> times_cache;   ///< Time steps cache
-  std::vector<T> values_cache;  ///< Values cache
-  int size_cache;               ///< Size cache
+  bool steady_converted = false;
 };
 
 template <typename T>
 Parameter<T>::Parameter() {}
 
 template <typename T>
-Parameter<T>::Parameter(std::vector<T> times, std::vector<T> values,
-                        bool periodic) {
-  this->times = times;
-  this->values = values;
-  size = values.size();
-  if (size == 1) {
-    isconstant = true;
-    cycle_period = 1.0;
-    isperiodic = true;
-  } else {
-    isconstant = false;
-    cycle_period = times.back() - times[0];
-    isperiodic = periodic;
-  }
+Parameter<T>::Parameter(T value) {
+  update(value);
 }
 
 template <typename T>
-void Parameter<T>::update_params(std::vector<T> times, std::vector<T> values) {
-  this->times = times;
-  this->values = values;
-  size = values.size();
-  cycle_period = times.back() - times[0];
+Parameter<T>::Parameter(std::vector<T> times, std::vector<T> values,
+                        bool periodic) {
+  this->isperiodic = periodic;
+  update(times, values);
+}
+
+template <typename T>
+void Parameter<T>::update(T value) {
+  this->isconstant = true;
+  this->isperiodic = true;
+  this->value = value;
+}
+
+template <typename T>
+void Parameter<T>::update(std::vector<T> times, std::vector<T> values) {
+  this->size = values.size();
+  if (this->size == 1) {
+    this->value = values[0];
+    this->isconstant = true;
+  } else {
+    this->times = times;
+    this->values = values;
+    this->cycle_period = times.back() - times[0];
+    this->isconstant = false;
+  }
 }
 
 template <typename T>
@@ -151,9 +171,9 @@ Parameter<T>::~Parameter() {}
 
 template <typename T>
 T Parameter<T>::get(T time) {
-  // Return the first and only value if parameter is constant
+  // Return the constant value if parameter is constant
   if (isconstant) {
-    return values[0];
+    return value;
   }
 
   // Determine the time within this->times (necessary to extrapolate)
@@ -176,32 +196,27 @@ T Parameter<T>::get(T time) {
   unsigned int l = k ? k - 1 : 1;
 
   // Perform linear interpolation
+  // TODO: Implement periodic cubic spline
   return values[l] +
          ((values[k] - values[l]) / (times[k] - times[l])) * (rtime - times[l]);
 }
 
 template <typename T>
 void Parameter<T>::to_steady() {
-  T mean =
-      std::accumulate(values.begin(), values.end(), 0.0) / T(values.size());
-  values_cache = values;
-  times_cache = times;
-  size_cache = size;
-  values = std::vector<T>();
-  times = std::vector<T>();
-  values.push_back(mean);
-  values.push_back(0.0);
-  size = 1;
+  if (isconstant) {
+    return;
+  }
+  value = std::accumulate(values.begin(), values.end(), 0.0) / T(size);
+  ;
   isconstant = true;
+  steady_converted = true;
 }
 
 template <typename T>
 void Parameter<T>::to_unsteady() {
-  values = values_cache;
-  times = times_cache;
-  size = size_cache;
-  if (size > 1) {
+  if (steady_converted) {
     isconstant = false;
+    steady_converted = false;
   }
 }
 

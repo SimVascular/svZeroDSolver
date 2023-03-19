@@ -244,8 +244,8 @@ void OpenLoopCoronaryBC<T>::update_block_params(std::vector<T> new_params) {
     Pv_new.push_back(new_params[1 + num_time_pts + i]);
     Pim_new.push_back(new_params[1 + 2 * num_time_pts + i]);
   }
-  this->params.Pv.update_params(t_new, Pv_new);
-  this->params.Pim.update_params(t_new, Pim_new);
+  this->params.Pv.update(t_new, Pv_new);
+  this->params.Pim.update(t_new, Pim_new);
 }
 
 template <typename T>

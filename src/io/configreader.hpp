@@ -152,6 +152,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string_view, std::string_view>> connections;
   int block_count = 0;
+  int parameter_count = 0;
 
   // Create vessels
   DEBUG_MSG("Load vessels");
@@ -220,7 +221,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       if (coupling_type == "FLOW") {
         auto Q_coupling = coupling_values.get_double_array("Q");
 
-        MODEL::TimeDependentParameter q_coupling_param(t_coupling, Q_coupling,
+        MODEL::Parameter q_coupling_param(t_coupling, Q_coupling,
                                                        periodic);
         if ((q_coupling_param.isconstant == false) &&
             (q_coupling_param.isperiodic == true)) {
@@ -228,7 +229,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
               (q_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
             throw std::runtime_error(
                 "Inconsistent cardiac cycle period defined in "
-                "TimeDependentParameter");
+                "Parameter");
           } else {
             sim_cardiac_cycle_period = q_coupling_param.cycle_period;
           }
@@ -243,7 +244,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
             static_cast<std::string>(coupling_name));
       } else if (coupling_type == "PRESSURE") {
         auto P_coupling = coupling_values.get_double_array("P");
-        MODEL::TimeDependentParameter p_coupling_param(t_coupling, P_coupling,
+        MODEL::Parameter p_coupling_param(t_coupling, P_coupling,
                                                        periodic);
         if ((p_coupling_param.isconstant == false) &&
             (p_coupling_param.isperiodic == true)) {
@@ -251,7 +252,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
               (p_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
             throw std::runtime_error(
                 "Inconsistent cardiac cycle period defined in "
-                "TimeDependentParameter");
+                "Parameter");
           } else {
             sim_cardiac_cycle_period = p_coupling_param.cycle_period;
           }
@@ -375,13 +376,13 @@ void ConfigReader<T>::load(JsonHandler &handler) {
     } else if (bc_type == "FLOW") {
       auto Q = bc_values.get_double_array("Q");
 
-      MODEL::TimeDependentParameter q_param(t, Q);
+      MODEL::Parameter q_param(t, Q);
       if ((q_param.isconstant == false) && (q_param.isperiodic == true)) {
         if ((sim_cardiac_cycle_period > 0.0) &&
             (q_param.cycle_period != sim_cardiac_cycle_period)) {
           throw std::runtime_error(
               "Inconsistent cardiac cycle period defined in "
-              "TimeDependentParameter");
+              "Parameter");
         } else {
           sim_cardiac_cycle_period = q_param.cycle_period;
         }
@@ -393,23 +394,23 @@ void ConfigReader<T>::load(JsonHandler &handler) {
 
     } else if (bc_type == "RESISTANCE") {
       auto R = bc_values.get_double_array("R");
-      MODEL::TimeDependentParameter r_param(t, R);
+      MODEL::Parameter r_param(t, R);
 
       auto Pd = bc_values.get_double_array("Pd");
-      MODEL::TimeDependentParameter pd_param(t, Pd);
+      MODEL::Parameter pd_param(t, Pd);
       model->blocks.push_back(new MODEL::ResistanceBC<T>(
           r_param, pd_param, static_cast<std::string>(bc_name)));
       model->block_index_map.insert(
           {static_cast<std::string>(bc_name), block_count});
     } else if (bc_type == "PRESSURE") {
       auto P = bc_values.get_double_array("P");
-      MODEL::TimeDependentParameter p_param(t, P);
+      MODEL::Parameter p_param(t, P);
       if ((p_param.isconstant == false) && (p_param.isperiodic == true)) {
         if ((sim_cardiac_cycle_period > 0.0) &&
             (p_param.cycle_period != sim_cardiac_cycle_period)) {
           throw std::runtime_error(
               "Inconsistent cardiac cycle period defined in "
-              "TimeDependentParameter");
+              "Parameter");
         } else {
           sim_cardiac_cycle_period = p_param.cycle_period;
         }
@@ -426,9 +427,9 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       T Cim = bc_values.get_double("Cc");
 
       auto Pim = bc_values.get_double_array("Pim");
-      MODEL::TimeDependentParameter pim_param(t, Pim);
+      MODEL::Parameter pim_param(t, Pim);
       auto P_v = bc_values.get_double_array("P_v");
-      MODEL::TimeDependentParameter pv_param(t, P_v);
+      MODEL::Parameter pv_param(t, P_v);
 
       model->blocks.push_back(new MODEL::OpenLoopCoronaryBC<T>(
           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, pim_param, pv_param,
@@ -673,7 +674,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
   // Set value of cardiac cycle period
   if (sim_cardiac_cycle_period < 0.0) {
     sim_cardiac_cycle_period =
-        1.0;  // If it has not been read from config or TimeDependentParameter
+        1.0;  // If it has not been read from config or Parameter
               // yet, set as default value of 1.0
   }
   // Calculate time step size

@@ -36,7 +36,7 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
-#include "timedependentparameter.hpp"
+#include "parameter.hpp"
 
 namespace MODEL {
 
@@ -84,8 +84,8 @@ class ResistanceBC : public Block<T> {
    * element.
    */
   struct Parameters : public Block<T>::Parameters {
-    TimeDependentParameter<T> R;   ///< Time-dependent resistance
-    TimeDependentParameter<T> Pd;  ///< Time-dependent distal pressure
+    Parameter<T> R;   ///< Time-dependent resistance
+    Parameter<T> Pd;  ///< Time-dependent distal pressure
   };
 
   /**
@@ -95,7 +95,7 @@ class ResistanceBC : public Block<T> {
    * @param Pd Time-dependent distal pressure
    * @param name Name
    */
-  ResistanceBC(TimeDependentParameter<T> R, TimeDependentParameter<T> Pd,
+  ResistanceBC(Parameter<T> R, Parameter<T> Pd,
                std::string name);
 
   /**
@@ -178,8 +178,8 @@ class ResistanceBC : public Block<T> {
 };
 
 template <typename T>
-ResistanceBC<T>::ResistanceBC(TimeDependentParameter<T> R,
-                              TimeDependentParameter<T> Pd, std::string name)
+ResistanceBC<T>::ResistanceBC(Parameter<T> R,
+                              Parameter<T> Pd, std::string name)
     : Block<T>(name) {
   this->name = name;
   this->params.R = R;

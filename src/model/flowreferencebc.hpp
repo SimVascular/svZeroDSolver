@@ -36,7 +36,7 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
-#include "timedependentparameter.hpp"
+#include "parameter.hpp"
 
 namespace MODEL {
 
@@ -85,7 +85,7 @@ class FlowReferenceBC : public Block<T> {
    * element.
    */
   struct Parameters : public Block<T>::Parameters {
-    TimeDependentParameter<T> Q;  ///< Time-dependent flow
+    Parameter<T> Q;  ///< Time-dependent flow
   };
 
   /**
@@ -94,7 +94,7 @@ class FlowReferenceBC : public Block<T> {
    * @param Q Time dependent flow
    * @param name Name
    */
-  FlowReferenceBC(TimeDependentParameter<T> Q, std::string name,
+  FlowReferenceBC(Parameter<T> Q, std::string name,
                   std::string coupling_loc = "None");
 
   /**
@@ -185,7 +185,7 @@ class FlowReferenceBC : public Block<T> {
 };
 
 template <typename T>
-FlowReferenceBC<T>::FlowReferenceBC(TimeDependentParameter<T> Q,
+FlowReferenceBC<T>::FlowReferenceBC(Parameter<T> Q,
                                     std::string name, std::string coupling_loc)
     : Block<T>(name) {
   this->name = name;

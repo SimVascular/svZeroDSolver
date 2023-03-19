@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file timedependentparameter.hpp
- * @brief MODEL::TimeDependentParameter source file
+ * @file parameter.hpp
+ * @brief MODEL::Parameter source file
  */
 #ifndef SVZERODSOLVER_MODEL_PARAMETER_HPP_
 #define SVZERODSOLVER_MODEL_PARAMETER_HPP_
@@ -44,7 +44,7 @@
 namespace MODEL {
 
 /**
- * @brief Time-dependent parameter.
+ * @brief Model Parameter.
  *
  * This class handles time-dependent parameter that need to be interpolated
  * and periodically applied.
@@ -52,28 +52,28 @@ namespace MODEL {
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
-class TimeDependentParameter {
+class Parameter {
  public:
   /**
-   * @brief Construct a new Time Dependent Parameter object
+   * @brief Construct a new Parameter object
    *
    */
-  TimeDependentParameter();
+  Parameter();
 
   /**
-   * @brief Construct a new Time Dependent Parameter object
+   * @brief Construct a new Parameter object
    *
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-  TimeDependentParameter(std::vector<T> times, std::vector<T> values,
+  Parameter(std::vector<T> times, std::vector<T> values,
                          bool periodic = true);
 
   /**
-   * @brief Destroy the Time Dependent Parameter object
+   * @brief Destroy the Parameter object
    *
    */
-  ~TimeDependentParameter();
+  ~Parameter();
 
   std::vector<T> times;   ///< Time steps
   std::vector<T> values;  ///< Values
@@ -120,10 +120,10 @@ class TimeDependentParameter {
 };
 
 template <typename T>
-TimeDependentParameter<T>::TimeDependentParameter() {}
+Parameter<T>::Parameter() {}
 
 template <typename T>
-TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
+Parameter<T>::Parameter(std::vector<T> times,
                                                   std::vector<T> values,
                                                   bool periodic) {
   this->times = times;
@@ -141,7 +141,7 @@ TimeDependentParameter<T>::TimeDependentParameter(std::vector<T> times,
 }
 
 template <typename T>
-void TimeDependentParameter<T>::update_params(std::vector<T> times,
+void Parameter<T>::update_params(std::vector<T> times,
                                               std::vector<T> values) {
   this->times = times;
   this->values = values;
@@ -150,10 +150,10 @@ void TimeDependentParameter<T>::update_params(std::vector<T> times,
 }
 
 template <typename T>
-TimeDependentParameter<T>::~TimeDependentParameter() {}
+Parameter<T>::~Parameter() {}
 
 template <typename T>
-T TimeDependentParameter<T>::get(T time) {
+T Parameter<T>::get(T time) {
   // Return the first and only value if parameter is constant
   if (isconstant) {
     return values[0];
@@ -184,7 +184,7 @@ T TimeDependentParameter<T>::get(T time) {
 }
 
 template <typename T>
-void TimeDependentParameter<T>::to_steady() {
+void Parameter<T>::to_steady() {
   T mean =
       std::accumulate(values.begin(), values.end(), 0.0) / T(values.size());
   values_cache = values;
@@ -199,7 +199,7 @@ void TimeDependentParameter<T>::to_steady() {
 }
 
 template <typename T>
-void TimeDependentParameter<T>::to_unsteady() {
+void Parameter<T>::to_unsteady() {
   values = values_cache;
   times = times_cache;
   size = size_cache;

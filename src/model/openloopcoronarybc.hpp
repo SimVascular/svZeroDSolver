@@ -36,7 +36,7 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
-#include "timedependentparameter.hpp"
+#include "parameter.hpp"
 
 namespace MODEL {
 
@@ -110,8 +110,8 @@ class OpenLoopCoronaryBC : public Block<T> {
     T Rv;
     T Ca;
     T Cim;
-    TimeDependentParameter<T> Pim;  ///<
-    TimeDependentParameter<T> Pv;
+    Parameter<T> Pim;  ///<
+    Parameter<T> Pv;
   };
 
   /**
@@ -121,8 +121,8 @@ class OpenLoopCoronaryBC : public Block<T> {
    * @param name Name
    */
   OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                     TimeDependentParameter<T> Pim,
-                     TimeDependentParameter<T> Pv, std::string name);
+                     Parameter<T> Pim,
+                     Parameter<T> Pv, std::string name);
 
   /**
    * @brief Destroy the OpenLoopCoronaryBC object
@@ -206,8 +206,8 @@ class OpenLoopCoronaryBC : public Block<T> {
 
 template <typename T>
 OpenLoopCoronaryBC<T>::OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                                          TimeDependentParameter<T> Pim,
-                                          TimeDependentParameter<T> Pv,
+                                          Parameter<T> Pim,
+                                          Parameter<T> Pv,
                                           std::string name)
     : Block<T>(name) {
   this->name = name;

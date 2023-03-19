@@ -186,8 +186,7 @@ class PressureReferenceBC : public Block<T> {
 };
 
 template <typename T>
-PressureReferenceBC<T>::PressureReferenceBC(Parameter<T> P,
-                                            std::string name,
+PressureReferenceBC<T>::PressureReferenceBC(Parameter<T> P, std::string name,
                                             std::string coupling_loc)
     : Block<T>(name) {
   this->name = name;

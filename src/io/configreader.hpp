@@ -151,7 +151,6 @@ void ConfigReader<T>::load(JsonHandler &handler) {
 
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string_view, std::string_view>> connections;
-  int block_count = 0;
   int parameter_count = 0;
 
   // Create vessels
@@ -169,12 +168,11 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       T L = vessel_values.get_double("L", 0.0);
       T stenosis_coefficient =
           vessel_values.get_double("stenosis_coefficient", 0.0);
-      model->blocks.push_back(new MODEL::BloodVessel<T>(
-          R = R, C = C, L = L, stenosis_coefficient = stenosis_coefficient,
-          static_cast<std::string>(vessel_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(vessel_name), block_count});
-      block_count++;
+      model->add_block(
+          new MODEL::BloodVessel<T>(R = R, C = C, L = L,
+                                    stenosis_coefficient = stenosis_coefficient,
+                                    static_cast<std::string>(vessel_name)),
+          vessel_name);
       DEBUG_MSG("Created vessel " << vessel_name);
     } else {
       throw std::invalid_argument("Unknown vessel type");
@@ -221,8 +219,7 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       if (coupling_type == "FLOW") {
         auto Q_coupling = coupling_values.get_double_array("Q");
 
-        MODEL::Parameter q_coupling_param(t_coupling, Q_coupling,
-                                                       periodic);
+        MODEL::Parameter q_coupling_param(t_coupling, Q_coupling, periodic);
         if ((q_coupling_param.isconstant == false) &&
             (q_coupling_param.isperiodic == true)) {
           if ((sim_cardiac_cycle_period > 0.0) &&
@@ -234,18 +231,16 @@ void ConfigReader<T>::load(JsonHandler &handler) {
             sim_cardiac_cycle_period = q_coupling_param.cycle_period;
           }
         }
-        model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
-            q_coupling_param, static_cast<std::string>(coupling_name),
-            static_cast<std::string>(coupling_loc)));
-        model->block_index_map.insert(
-            {static_cast<std::string>(coupling_name), block_count});
-        block_count++;
+        model->add_block(
+            new MODEL::FlowReferenceBC<T>(
+                q_coupling_param, static_cast<std::string>(coupling_name),
+                static_cast<std::string>(coupling_loc)),
+            coupling_name);
         model->external_coupling_blocks.push_back(
             static_cast<std::string>(coupling_name));
       } else if (coupling_type == "PRESSURE") {
         auto P_coupling = coupling_values.get_double_array("P");
-        MODEL::Parameter p_coupling_param(t_coupling, P_coupling,
-                                                       periodic);
+        MODEL::Parameter p_coupling_param(t_coupling, P_coupling, periodic);
         if ((p_coupling_param.isconstant == false) &&
             (p_coupling_param.isperiodic == true)) {
           if ((sim_cardiac_cycle_period > 0.0) &&
@@ -257,12 +252,11 @@ void ConfigReader<T>::load(JsonHandler &handler) {
             sim_cardiac_cycle_period = p_coupling_param.cycle_period;
           }
         }
-        model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
-            p_coupling_param, static_cast<std::string>(coupling_name),
-            static_cast<std::string>(coupling_loc)));
-        model->block_index_map.insert(
-            {static_cast<std::string>(coupling_name), block_count});
-        block_count++;
+        model->add_block(
+            new MODEL::PressureReferenceBC<T>(
+                p_coupling_param, static_cast<std::string>(coupling_name),
+                static_cast<std::string>(coupling_loc)),
+            coupling_name);
         model->external_coupling_blocks.push_back(
             static_cast<std::string>(coupling_name));
       } else {
@@ -355,10 +349,10 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       T C = bc_values.get_double("C");
       T Rd = bc_values.get_double("Rd");
       T Pd = bc_values.get_double("Pd");
-      model->blocks.push_back(new MODEL::WindkesselBC<T>(
-          Rp = Rp, C = C, Rd = Rd, Pd = Pd, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(bc_name), block_count});
+      model->add_block(
+          new MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd,
+                                     static_cast<std::string>(bc_name)),
+          bc_name);
 
     } else if (bc_type == "ClosedLoopRCR") {
       T Rp = bc_values.get_double("Rp");
@@ -368,11 +362,11 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       if (closed_loop_outlet == true) {
         closed_loop_bcs.push_back(bc_name);
       }
-      model->blocks.push_back(new MODEL::ClosedLoopRCRBC<T>(
-          Rp = Rp, C = C, Rd = Rd, closed_loop_outlet = closed_loop_outlet,
-          static_cast<std::string>(bc_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(bc_name), block_count});
+      model->add_block(
+          new MODEL::ClosedLoopRCRBC<T>(Rp = Rp, C = C, Rd = Rd,
+                                        closed_loop_outlet = closed_loop_outlet,
+                                        static_cast<std::string>(bc_name)),
+          bc_name);
     } else if (bc_type == "FLOW") {
       auto Q = bc_values.get_double_array("Q");
 
@@ -387,10 +381,9 @@ void ConfigReader<T>::load(JsonHandler &handler) {
           sim_cardiac_cycle_period = q_param.cycle_period;
         }
       }
-      model->blocks.push_back(new MODEL::FlowReferenceBC<T>(
-          q_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(bc_name), block_count});
+      model->add_block(new MODEL::FlowReferenceBC<T>(
+                           q_param, static_cast<std::string>(bc_name)),
+                       bc_name);
 
     } else if (bc_type == "RESISTANCE") {
       auto R = bc_values.get_double_array("R");
@@ -398,10 +391,10 @@ void ConfigReader<T>::load(JsonHandler &handler) {
 
       auto Pd = bc_values.get_double_array("Pd");
       MODEL::Parameter pd_param(t, Pd);
-      model->blocks.push_back(new MODEL::ResistanceBC<T>(
-          r_param, pd_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(bc_name), block_count});
+      model->add_block(
+          new MODEL::ResistanceBC<T>(r_param, pd_param,
+                                     static_cast<std::string>(bc_name)),
+          bc_name);
     } else if (bc_type == "PRESSURE") {
       auto P = bc_values.get_double_array("P");
       MODEL::Parameter p_param(t, P);
@@ -415,10 +408,9 @@ void ConfigReader<T>::load(JsonHandler &handler) {
           sim_cardiac_cycle_period = p_param.cycle_period;
         }
       }
-      model->blocks.push_back(new MODEL::PressureReferenceBC<T>(
-          p_param, static_cast<std::string>(bc_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(bc_name), block_count});
+      model->add_block(new MODEL::PressureReferenceBC<T>(
+                           p_param, static_cast<std::string>(bc_name)),
+                       bc_name);
     } else if (bc_type == "CORONARY") {
       T Ra = bc_values.get_double("Ra1");
       T Ram = bc_values.get_double("Ra2");
@@ -431,11 +423,11 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       auto P_v = bc_values.get_double_array("P_v");
       MODEL::Parameter pv_param(t, P_v);
 
-      model->blocks.push_back(new MODEL::OpenLoopCoronaryBC<T>(
-          Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, pim_param, pv_param,
-          static_cast<std::string>(bc_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(bc_name), block_count});
+      model->add_block(
+          new MODEL::OpenLoopCoronaryBC<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca,
+                                           Cim = Cim, pim_param, pv_param,
+                                           static_cast<std::string>(bc_name)),
+          bc_name);
     } else if (bc_type == "ClosedLoopCoronary") {
       auto Ra = bc_values.get_double("Ra");
       auto Ram = bc_values.get_double("Ram");
@@ -444,15 +436,14 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       auto Cim = bc_values.get_double("Cim");
       auto side = bc_values.get_string("side");
       closed_loop_bcs.push_back(bc_name);
-      model->blocks.push_back(new MODEL::ClosedLoopCoronaryBC<T>(
-          Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim,
-          static_cast<std::string>(side), static_cast<std::string>(bc_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(bc_name), block_count});
+      model->add_block(new MODEL::ClosedLoopCoronaryBC<T>(
+                           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim,
+                           static_cast<std::string>(side),
+                           static_cast<std::string>(bc_name)),
+                       bc_name);
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
     }
-    block_count++;
     DEBUG_MSG("Created boundary condition " << bc_name);
   }
 
@@ -463,17 +454,15 @@ void ConfigReader<T>::load(JsonHandler &handler) {
     auto j_type = junction_config.get_string("junction_type");
     auto junction_name = junction_config.get_string("junction_name");
     if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
-      model->blocks.push_back(
-          new MODEL::Junction<T>(static_cast<std::string>(junction_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(junction_name), block_count});
+      model->add_block(
+          new MODEL::Junction<T>(static_cast<std::string>(junction_name)),
+          junction_name);
     } else if (j_type == "resistive_junction") {
       auto junction_values = junction_config["junction_values"];
       auto R = junction_values.get_double_array("R");
-      model->blocks.push_back(new MODEL::ResistiveJunction<T>(
-          R, static_cast<std::string>(junction_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(junction_name), block_count});
+      model->add_block(new MODEL::ResistiveJunction<T>(
+                           R, static_cast<std::string>(junction_name)),
+                       junction_name);
     } else if (j_type == "BloodVesselJunction") {
       auto junction_values = junction_config["junction_values"];
       auto R = junction_values.get_double_array("R_poiseuille");
@@ -481,11 +470,10 @@ void ConfigReader<T>::load(JsonHandler &handler) {
       auto L = junction_values.get_double_array("L");
       auto stenosis_coefficient =
           junction_values.get_double_array("stenosis_coefficient");
-      model->blocks.push_back(new MODEL::BloodVesselJunction<T>(
-          R, C, L, stenosis_coefficient,
-          static_cast<std::string>(junction_name)));
-      model->block_index_map.insert(
-          {static_cast<std::string>(junction_name), block_count});
+      model->add_block(new MODEL::BloodVesselJunction<T>(
+                           R, C, L, stenosis_coefficient,
+                           static_cast<std::string>(junction_name)),
+                       junction_name);
     } else {
       throw std::invalid_argument("Unknown junction type");
     }
@@ -497,7 +485,6 @@ void ConfigReader<T>::load(JsonHandler &handler) {
     for (auto vessel_id : junction_config.get_int_array("outlet_vessels")) {
       connections.push_back({junction_name, vessel_id_map[vessel_id]});
     }
-    block_count++;
     DEBUG_MSG("Created junction " << junction_name);
   }
 
@@ -588,12 +575,10 @@ void ConfigReader<T>::load(JsonHandler &handler) {
           param_values.insert(
               std::make_pair("Vaso_la", heart_params.get_double("Vaso_la")));
           if (param_values.size() == 27) {
-            model->blocks.push_back(new MODEL::ClosedLoopHeartPulmonary<T>(
-                param_values, cycle_period,
-                static_cast<std::string>(heartpulmonary_name)));
-            model->block_index_map.insert(
-                {static_cast<std::string>(heartpulmonary_name), block_count});
-            block_count++;
+            model->add_block(new MODEL::ClosedLoopHeartPulmonary<T>(
+                                 param_values, cycle_period,
+                                 static_cast<std::string>(heartpulmonary_name)),
+                             heartpulmonary_name);
           } else {
             throw std::runtime_error(
                 "Error. ClosedLoopHeartAndPulmonary should have 27 parameters");
@@ -602,12 +587,9 @@ void ConfigReader<T>::load(JsonHandler &handler) {
           std::string_view heart_inlet_junction_name = "J_heart_inlet";
           connections.push_back(
               {heart_inlet_junction_name, heartpulmonary_name});
-          model->blocks.push_back(new MODEL::Junction<T>(
-              static_cast<std::string>(heart_inlet_junction_name)));
-          model->block_index_map.insert(
-              {static_cast<std::string>(heart_inlet_junction_name),
-               block_count});
-          block_count++;
+          model->add_block(new MODEL::Junction<T>(static_cast<std::string>(
+                               heart_inlet_junction_name)),
+                           heart_inlet_junction_name);
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back(
                 {heart_inlet_elem, heart_inlet_junction_name});
@@ -616,16 +598,13 @@ void ConfigReader<T>::load(JsonHandler &handler) {
           std::string_view heart_outlet_junction_name = "J_heart_outlet";
           connections.push_back(
               {heartpulmonary_name, heart_outlet_junction_name});
-          model->blocks.push_back(new MODEL::Junction<T>(
-              static_cast<std::string>(heart_outlet_junction_name)));
-          model->block_index_map.insert(
-              {static_cast<std::string>(heart_outlet_junction_name),
-               block_count});
+          model->add_block(new MODEL::Junction<T>(static_cast<std::string>(
+                               heart_outlet_junction_name)),
+                           heart_outlet_junction_name);
           for (auto outlet_block :
                closed_loop_config.get_string_array("outlet_blocks")) {
             connections.push_back({heart_outlet_junction_name, outlet_block});
           }
-          block_count++;
         } else {
           throw std::runtime_error(
               "Error. Only one ClosedLoopHeartAndPulmonary can be included.");
@@ -649,21 +628,6 @@ void ConfigReader<T>::load(JsonHandler &handler) {
         }
       }
     }
-  }
-
-  // Sanity checks
-  bool model_is_valid = true;
-  if (block_count != model->blocks.size()) {
-    model_is_valid = false;
-  }
-  if (block_count != model->block_index_map.size()) {
-    model_is_valid = false;
-  }
-  if (model_is_valid == false) {
-    throw std::runtime_error(
-        "Model sanity check failed: An unexpected error occured while loading "
-        "the configuration. This is likely an implementation issue. Please "
-        "contact a developer.");
   }
 
   // Setup degrees of freedom of the system

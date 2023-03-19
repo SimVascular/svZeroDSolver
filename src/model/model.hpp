@@ -42,6 +42,7 @@
 #include "block.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
+#include "parameter.hpp"
 
 namespace MODEL {
 
@@ -68,14 +69,24 @@ class Model {
    */
   ~Model();
 
-  std::vector<Block<T> *> blocks;  ///< Elements of the model
-  std::map<std::string, int>
+  int block_count = 0;
+  std::vector<Block<T> *> blocks;          ///< Elements of the model
+  std::vector<Parameter<T> *> parameters;  ///< Elements of the model
+  std::map<std::string_view, int>
       block_index_map;      ///< Map between block name and index
   DOFHandler dofhandler;    ///< Degree-of-freedom handler of the model
   std::list<Node *> nodes;  ///< Nodes of the model
   std::vector<std::string>
       external_coupling_blocks;  ///< List of external coupling blocks (names
                                  ///< need to be available for interface)
+
+  /**
+   * @brief Add a block to the model
+   *
+   * @param block The block to add
+   * @param name The name of the block
+   */
+  void add_block(Block<T> *block, std::string_view name);
 
   /**
    * @brief Update the constant contributions of all elements in a sparse system
@@ -131,6 +142,13 @@ Model<T>::Model() {}
 
 template <typename T>
 Model<T>::~Model() {}
+
+template <typename T>
+void Model<T>::add_block(Block<T> *block, std::string_view name) {
+  blocks.push_back(block);
+  block_index_map.insert({name, block_count});
+  block_count++;
+}
 
 template <typename T>
 void Model<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {

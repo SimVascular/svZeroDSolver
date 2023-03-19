@@ -135,7 +135,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 
   // Create a vector containing all block names
   for (auto const& elem : model->block_index_map) {
-    block_names.push_back(elem.first);
+    block_names.push_back(static_cast<std::string>(elem.first));
   }
   variable_names = model->dofhandler.variables;
 

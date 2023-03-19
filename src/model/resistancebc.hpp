@@ -95,8 +95,7 @@ class ResistanceBC : public Block<T> {
    * @param Pd Time-dependent distal pressure
    * @param name Name
    */
-  ResistanceBC(Parameter<T> R, Parameter<T> Pd,
-               std::string name);
+  ResistanceBC(Parameter<T> R, Parameter<T> Pd, std::string name);
 
   /**
    * @brief Destroy the ResistanceBC object
@@ -178,8 +177,7 @@ class ResistanceBC : public Block<T> {
 };
 
 template <typename T>
-ResistanceBC<T>::ResistanceBC(Parameter<T> R,
-                              Parameter<T> Pd, std::string name)
+ResistanceBC<T>::ResistanceBC(Parameter<T> R, Parameter<T> Pd, std::string name)
     : Block<T>(name) {
   this->name = name;
   this->params.R = R;

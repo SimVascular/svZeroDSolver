@@ -185,8 +185,8 @@ class FlowReferenceBC : public Block<T> {
 };
 
 template <typename T>
-FlowReferenceBC<T>::FlowReferenceBC(Parameter<T> Q,
-                                    std::string name, std::string coupling_loc)
+FlowReferenceBC<T>::FlowReferenceBC(Parameter<T> Q, std::string name,
+                                    std::string coupling_loc)
     : Block<T>(name) {
   this->name = name;
   this->params.Q = Q;

@@ -120,8 +120,7 @@ class OpenLoopCoronaryBC : public Block<T> {
    * @param P Time dependent pressure
    * @param name Name
    */
-  OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                     Parameter<T> Pim,
+  OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim, Parameter<T> Pim,
                      Parameter<T> Pv, std::string name);
 
   /**
@@ -206,8 +205,7 @@ class OpenLoopCoronaryBC : public Block<T> {
 
 template <typename T>
 OpenLoopCoronaryBC<T>::OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                                          Parameter<T> Pim,
-                                          Parameter<T> Pv,
+                                          Parameter<T> Pim, Parameter<T> Pv,
                                           std::string name)
     : Block<T>(name) {
   this->name = name;

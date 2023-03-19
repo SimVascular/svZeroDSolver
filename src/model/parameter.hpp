@@ -66,8 +66,7 @@ class Parameter {
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-  Parameter(std::vector<T> times, std::vector<T> values,
-                         bool periodic = true);
+  Parameter(std::vector<T> times, std::vector<T> values, bool periodic = true);
 
   /**
    * @brief Destroy the Parameter object
@@ -123,9 +122,8 @@ template <typename T>
 Parameter<T>::Parameter() {}
 
 template <typename T>
-Parameter<T>::Parameter(std::vector<T> times,
-                                                  std::vector<T> values,
-                                                  bool periodic) {
+Parameter<T>::Parameter(std::vector<T> times, std::vector<T> values,
+                        bool periodic) {
   this->times = times;
   this->values = values;
   size = values.size();
@@ -141,8 +139,7 @@ Parameter<T>::Parameter(std::vector<T> times,
 }
 
 template <typename T>
-void Parameter<T>::update_params(std::vector<T> times,
-                                              std::vector<T> values) {
+void Parameter<T>::update_params(std::vector<T> times, std::vector<T> values) {
   this->times = times;
   this->values = values;
   size = values.size();

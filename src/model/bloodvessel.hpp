@@ -110,6 +110,15 @@ namespace MODEL {
  * Parameters::stenosis_coefficient. \f$R\f$, \f$C\f$, and \f$L\f$ refer to
  * Poisieuille resistance, capacitance and inductance, respectively.
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Poiseuille resistance
+ * * `1` Capacitance
+ * * `2` Inductance
+ * * `3` Stenosis coefficient
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
@@ -196,7 +205,7 @@ void BloodVessel<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
   system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) =
       -parameters[this->global_param_ids[2]];
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) =
-      -parameters[this->global_param_ids[2]];
+      -parameters[this->global_param_ids[1]];
 
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =

@@ -73,6 +73,12 @@ namespace MODEL {
  * \mathbf{C}^{e}=\left[\hat{Q}\right]
  * \f]
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Flow
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>

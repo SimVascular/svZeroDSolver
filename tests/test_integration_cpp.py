@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
-cpp_exec = os.path.join(this_file_dir, "..", "Release", "svzerodsolver")
+cpp_exec = os.path.join(this_file_dir, "..", "Debug", "solver")
 
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8

@@ -92,40 +92,22 @@ namespace MODEL {
  * \end{array}\right]
  * \f]
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Proximal resistance
+ * * `1` Capacitance
+ * * `2` Distal resistance
+ * * `3` Distal pressure
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
 class WindkesselBC : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {
-    T Rp;  ///< Proximal resistance
-    T C;   ///< Capacitance
-    T Rd;  ///< Distal restistance
-    T Pd;  ///< Distal Pressure
-  };
-
-  /**
-   * @brief Construct a new WindkesselBC object
-   *
-   * @param Rp Proximal resistance
-   * @param C Capacitance
-   * @param Rd Distal resistance
-   * @param Pd Distal pressure
-   * @param name Name
-   */
-  WindkesselBC(T Rp, T C, T Rd, T Pd, std::string name);
-
-  /**
-   * @brief Destroy the WindkesselBC object
-   *
-   */
-  ~WindkesselBC();
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -140,27 +122,24 @@ class WindkesselBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  void update_block_params(std::vector<T> params);
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse system
+   * @brief Update the constant contributions of the element in a sparse
+   system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
    *
    * @param system System to update contributions at
-   * @param time Current time
+   * @param parameters Parameters of the model
    */
-  void update_time(ALGEBRA::SparseSystem<T> &system, T time);
+  void update_time(ALGEBRA::SparseSystem<T> &system,
+                   std::vector<T> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -181,37 +160,7 @@ class WindkesselBC : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> get_num_triplets();
-
-  /**
-   * @brief Convert the block to a steady behavior
-   *
-   * Set the capacitance to 0.
-   */
-  void to_steady();
-  /**
-   * @brief Convert the block to a steady behavior
-   *
-   * Set the capacitance to original value.
-   */
-  void to_unsteady();
-
- private:
-  Parameters params;
-  T c_cache;
 };
-
-template <typename T>
-WindkesselBC<T>::WindkesselBC(T Rp, T C, T Rd, T Pd, std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.Rp = Rp;
-  this->params.C = C;
-  this->params.Rd = Rd;
-  this->params.Pd = Pd;
-}
-
-template <typename T>
-WindkesselBC<T>::~WindkesselBC() {}
 
 template <typename T>
 void WindkesselBC<T>::setup_dofs(DOFHandler &dofhandler) {
@@ -219,40 +168,24 @@ void WindkesselBC<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void WindkesselBC<T>::update_block_params(std::vector<T> params) {
-  this->params.Rp = params[0];
-  this->params.C = params[1];
-  this->params.Rd = params[2];
-  this->params.Pd = params[3];
-}
-
-template <typename T>
-void WindkesselBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+void WindkesselBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                      std::vector<T> &parameters) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) = -1.0;
 }
 
 template <typename T>
-void WindkesselBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
+void WindkesselBC<T>::update_time(ALGEBRA::SparseSystem<T> &system,
+                                  std::vector<T> &parameters) {
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
-      -params.Rd * params.C;
+      -parameters[this->global_param_ids[2]] *
+      parameters[this->global_param_ids[1]];
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      -params.Rp;
+      -parameters[this->global_param_ids[0]];
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      params.Rd;
-  system.C(this->global_eqn_ids[1]) = params.Pd;
-}
-
-template <typename T>
-void WindkesselBC<T>::to_steady() {
-  c_cache = params.C;
-  params.C = 0.0;
-}
-
-template <typename T>
-void WindkesselBC<T>::to_unsteady() {
-  params.C = c_cache;
+      parameters[this->global_param_ids[2]];
+  system.C(this->global_eqn_ids[1]) = parameters[this->global_param_ids[3]];
 }
 
 template <typename T>

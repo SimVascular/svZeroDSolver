@@ -355,16 +355,15 @@ void ConfigReader<T>::load_model() {
 
     auto t = bc_values.get_double_array("t", {0.0});
 
-    // if (bc_type == "RCR") {
-    //   T Rp = bc_values.get_double("Rp");
-    //   T C = bc_values.get_double("C");
-    //   T Rd = bc_values.get_double("Rd");
-    //   T Pd = bc_values.get_double("Pd");
-    //   model->add_block(
-    //       new MODEL::WindkesselBC<T>(Rp = Rp, C = C, Rd = Rd, Pd = Pd,
-    //                                  static_cast<std::string>(bc_name)),
-    //       bc_name);
-
+    if (bc_type == "RCR") {
+      model->add_block(MODEL::BlockType::WINDKESSELBC,
+                       {
+                           model->add_parameter(bc_values.get_double("Rp")),
+                           model->add_parameter(bc_values.get_double("C")),
+                           model->add_parameter(bc_values.get_double("Rd")),
+                           model->add_parameter(bc_values.get_double("Pd")),
+                       },
+                       bc_name);
     // } else if (bc_type == "ClosedLoopRCR") {
     //   T Rp = bc_values.get_double("Rp");
     //   T C = bc_values.get_double("C");
@@ -379,9 +378,8 @@ void ConfigReader<T>::load_model() {
     //                                     closed_loop_outlet,
     //                                     static_cast<std::string>(bc_name)),
     //       bc_name);
-    if (bc_type == "FLOW") {
-      auto Q = bc_values.get_double_array("Q");
-      auto q_id = model->add_parameter(t, Q);
+    } else if (bc_type == "FLOW") {
+      auto q_id = model->add_parameter(t, bc_values.get_double_array("Q"));
       auto q_param = model->parameters[q_id];
       if ((q_param->isconstant == false) && (q_param->isperiodic == true)) {
         if ((sim_cardiac_cycle_period > 0.0) &&
@@ -402,22 +400,20 @@ void ConfigReader<T>::load_model() {
           MODEL::BlockType::RESISTANCEBC,
           {model->add_parameter(t, R), model->add_parameter(t, Pd)}, bc_name);
 
-      // } else if (bc_type == "PRESSURE") {
-      //   auto P = bc_values.get_double_array("P");
-      //   MODEL::Parameter p_param(t, P);
-      //   if ((p_param.isconstant == false) && (p_param.isperiodic == true)) {
-      //     if ((sim_cardiac_cycle_period > 0.0) &&
-      //         (p_param.cycle_period != sim_cardiac_cycle_period)) {
-      //       throw std::runtime_error(
-      //           "Inconsistent cardiac cycle period defined in "
-      //           "Parameter");
-      //     } else {
-      //       sim_cardiac_cycle_period = p_param.cycle_period;
-      //     }
-      //   }
-      //   model->add_block(new MODEL::PressureReferenceBC<T>(
-      //                        p_param, static_cast<std::string>(bc_name)),
-      //                    bc_name);
+    } else if (bc_type == "PRESSURE") {
+      auto p_id = model->add_parameter(t, bc_values.get_double_array("P"));
+      auto p_param = model->parameters[p_id];
+      if ((p_param->isconstant == false) && (p_param->isperiodic == true)) {
+        if ((sim_cardiac_cycle_period > 0.0) &&
+            (p_param->cycle_period != sim_cardiac_cycle_period)) {
+          throw std::runtime_error(
+              "Inconsistent cardiac cycle period defined in "
+              "Parameter");
+        } else {
+          sim_cardiac_cycle_period = p_param->cycle_period;
+        }
+      }
+      model->add_block(MODEL::BlockType::PRESSUREBC, {p_id}, bc_name);
       // } else if (bc_type == "CORONARY") {
       //   T Ra = bc_values.get_double("Ra1");
       //   T Ram = bc_values.get_double("Ra2");

@@ -51,8 +51,9 @@
 // #include "../model/closedloopheartpulmonary.hpp"
 #include "../model/flowreferencebc.hpp"
 #include "../model/junction.hpp"
+#include "../model/windkesselbc.hpp"
 // #include "../model/openloopcoronarybc.hpp"
-// #include "../model/pressurereferencebc.hpp"
+#include "../model/pressurereferencebc.hpp"
 #include "../model/resistancebc.hpp"
 // #include "../model/resistivejunction.hpp
 
@@ -65,6 +66,7 @@ enum BlockType {
   FLOWBC = 3,
   PRESSUREBC = 4,
   RESISTANCEBC = 5,
+  WINDKESSELBC = 6,
 };
 
 /**
@@ -90,7 +92,8 @@ class Model {
    */
   ~Model();
 
-  std::vector<std::shared_ptr<Block<T>>> blocks;  ///< Elements of the model
+  std::vector<std::shared_ptr<Block<T>>> blocks;  ///< Blocks of the model
+  std::vector<BlockType> block_types;             ///< Types of the blocks
   std::vector<std::shared_ptr<Parameter<T>>>
       parameters;  ///< Parameters of the model
   std::vector<std::shared_ptr<Parameter<T>>>
@@ -128,7 +131,7 @@ class Model {
    * @param values Values of the parameter
    * @param periodic Toggle whether parameter is periodic
    */
-  int add_parameter(std::vector<T> &times, std::vector<T> &values,
+  int add_parameter(const std::vector<T> &times, const std::vector<T> &values,
                     bool periodic = true);
 
   /**
@@ -182,6 +185,7 @@ class Model {
  private:
   int block_count = 0;
   int parameter_count = 0;
+  std::map<int, T> param_value_cache;
 };
 
 template <typename T>
@@ -213,11 +217,20 @@ int Model<T>::add_block(BlockType block_type,
       block = std::shared_ptr<Block<T>>(
           new ResistanceBC<T>(block_count, block_param_ids, name));
       break;
+    case BlockType::WINDKESSELBC:
+      block = std::shared_ptr<Block<T>>(
+          new WindkesselBC<T>(block_count, block_param_ids, name));
+      break;
+    case BlockType::PRESSUREBC:
+      block = std::shared_ptr<Block<T>>(
+          new PressureReferenceBC<T>(block_count, block_param_ids, name));
+      break;
     default:
       throw std::runtime_error(
           "Adding block to model failed: Invalid block type!");
   }
   blocks.push_back(block);
+  block_types.push_back(block_type);
   block_index_map.insert({name, block_count});
   return block_count++;
 }
@@ -231,8 +244,8 @@ int Model<T>::add_parameter(T value) {
 }
 
 template <typename T>
-int Model<T>::add_parameter(std::vector<T> &times, std::vector<T> &values,
-                            bool periodic) {
+int Model<T>::add_parameter(const std::vector<T> &times,
+                            const std::vector<T> &values, bool periodic) {
   std::shared_ptr<Parameter<T>> param(
       new Parameter<T>(parameter_count, times, values, periodic));
   parameters.push_back(param);
@@ -271,12 +284,23 @@ void Model<T>::to_steady() {
   for (auto param : time_dependent_parameters) {
     param->to_steady();
   }
+  for (size_t i = 0; i < block_types.size(); i++) {
+    if (block_types[i] == BlockType::WINDKESSELBC) {
+      int param_id_capacitance = blocks[i]->global_param_ids[1];
+      T value = parameters[param_id_capacitance]->get(0.0);
+      param_value_cache.insert({param_id_capacitance, value});
+    }
+  }
 }
 
 template <typename T>
 void Model<T>::to_unsteady() {
   for (auto param : time_dependent_parameters) {
     param->to_unsteady();
+  }
+  for (auto &[param_id_capacitance, value] : param_value_cache) {
+    DEBUG_MSG("Setting Windkessel capacitance back to " << value);
+    parameters[param_id_capacitance]->update(value);
   }
 }
 

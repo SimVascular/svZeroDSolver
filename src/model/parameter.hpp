@@ -69,7 +69,7 @@ class Parameter {
    * @param times Time steps corresponding to the time-dependent values
    * @param values Values corresponding to the time steps
    */
-  Parameter(int id, std::vector<T> &times, std::vector<T> &values,
+  Parameter(int id, const std::vector<T> &times, const std::vector<T> &values,
             bool periodic = true);
 
   /**
@@ -101,7 +101,7 @@ class Parameter {
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-  void update(std::vector<T> &times, std::vector<T> &values);
+  void update(const std::vector<T> &times, const std::vector<T> &values);
 
   /**
    * @brief Get the parameter value at the specified time.
@@ -134,8 +134,8 @@ Parameter<T>::Parameter(int id, T value) {
 }
 
 template <typename T>
-Parameter<T>::Parameter(int id, std::vector<T> &times, std::vector<T> &values,
-                        bool periodic) {
+Parameter<T>::Parameter(int id, const std::vector<T> &times,
+                        const std::vector<T> &values, bool periodic) {
   this->id = id;
   this->isperiodic = periodic;
   update(times, values);
@@ -149,7 +149,8 @@ void Parameter<T>::update(T value) {
 }
 
 template <typename T>
-void Parameter<T>::update(std::vector<T> &times, std::vector<T> &values) {
+void Parameter<T>::update(const std::vector<T> &times,
+                          const std::vector<T> &values) {
   this->size = values.size();
   if (this->size == 1) {
     this->value = values[0];

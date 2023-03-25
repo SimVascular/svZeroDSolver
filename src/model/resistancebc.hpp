@@ -71,6 +71,12 @@ namespace MODEL {
  * \mathbf{C}^{e}=\left[-P_d\right]
  * \f]
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Resistance
+ * * `1` Distal pressure
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */

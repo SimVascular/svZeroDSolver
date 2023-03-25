@@ -91,41 +91,22 @@ namespace MODEL {
  * \end{array}\right]
  * \f]
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `i` Poiseuille resistance for inner blood vessel `i`
+ * * `i+num_outlets` Capacitance for inner blood vessel `i`
+ * * `i+2*num_outlets` Inductance for inner blood vessel `i`
+ * * `i+3*num_outlets` Stenosis coefficient for inner blood vessel `i`
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
 class BloodVesselJunction : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {
-    std::vector<T> R;                     ///< Poiseuille resistances
-    std::vector<T> C;                     ///< Capacitances
-    std::vector<T> L;                     ///< Inductances
-    std::vector<T> stenosis_coefficient;  ///< Stenosis Coefficients
-  };
-
-  /**
-   * @brief Construct a new BloodVesselJunction object
-   *
-   * @param R Poiseuille resistances
-   * @param C Capacitances
-   * @param L Inductances
-   * @param stenosis_coefficient Stenosis Coefficients
-   * @param name Name
-   */
-  BloodVesselJunction(std::vector<T> R, std::vector<T> C, std::vector<T> L,
-                      std::vector<T> stenosis_coefficient, std::string name);
-
-  /**
-   * @brief Destroy the BloodVesselJunction object
-   *
-   */
-  ~BloodVesselJunction();
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -143,17 +124,21 @@ class BloodVesselJunction : public Block<T> {
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
    * sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    * @param y Current solution
    */
   void update_solution(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
   /**
@@ -177,26 +162,9 @@ class BloodVesselJunction : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 
  private:
-  std::vector<BloodVessel<T> *> blood_vessels;
-  Parameters params;
-  unsigned int num_outlets;
+  std::vector<std::shared_ptr<Block<T>>> blood_vessels;
+  int num_outlets;
 };
-
-template <typename T>
-BloodVesselJunction<T>::BloodVesselJunction(std::vector<T> R, std::vector<T> C,
-                                            std::vector<T> L,
-                                            std::vector<T> stenosis_coefficient,
-                                            std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.R = R;
-  this->params.C = C;
-  this->params.L = L;
-  this->params.stenosis_coefficient = stenosis_coefficient;
-}
-
-template <typename T>
-BloodVesselJunction<T>::~BloodVesselJunction() {}
 
 template <typename T>
 void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
@@ -209,9 +177,13 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
   }
   Block<T>::setup_dofs_(dofhandler, 1, internal_var_names);
   for (size_t i = 0; i < num_outlets; i++) {
-    blood_vessels.push_back(new BloodVessel<T>(
-        params.R[i], params.C[i], params.L[i], params.stenosis_coefficient[i],
+    std::shared_ptr<Block<T>> block(new BloodVessel<T>(
+        i,
+        {this->global_param_ids[i], this->global_param_ids[i + num_outlets],
+         this->global_param_ids[i + 2 * num_outlets],
+         this->global_param_ids[i + 3 * num_outlets]},
         this->name + "_bv" + std::to_string(i)));
+    blood_vessels.push_back(block);
     blood_vessels[i]->inlet_nodes.push_back(this->inlet_nodes[0]);
     blood_vessels[i]->outlet_nodes.push_back(this->outlet_nodes[i]);
     blood_vessels[i]->setup_dofs(dofhandler);
@@ -226,9 +198,10 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                             std::vector<T> &parameters) {
   for (auto bv : blood_vessels) {
-    bv->update_constant(system);
+    bv->update_constant(system, parameters);
   }
   // Mass conservation
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
@@ -240,9 +213,10 @@ void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 
 template <typename T>
 void BloodVesselJunction<T>::update_solution(
-    ALGEBRA::SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+    ALGEBRA::SparseSystem<T> &system, std::vector<T> &parameters,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
   for (auto bv : blood_vessels) {
-    bv->update_solution(system, y);
+    bv->update_solution(system, parameters, y);
   }
 }
 

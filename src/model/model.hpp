@@ -41,11 +41,11 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "../model/bloodvessel.hpp"
+#include "../model/bloodvesseljunction.hpp"
 #include "block.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
 #include "parameter.hpp"
-// #include "../model/bloodvesseljunction.hpp"
 // #include "../model/closedloopRCRbc.hpp"
 // #include "../model/closedloopcoronarybc.hpp"
 // #include "../model/closedloopheartpulmonary.hpp"
@@ -224,6 +224,10 @@ int Model<T>::add_block(BlockType block_type,
     case BlockType::PRESSUREBC:
       block = std::shared_ptr<Block<T>>(
           new PressureReferenceBC<T>(block_count, block_param_ids, name));
+      break;
+    case BlockType::BLOODVESSELJUNCTION:
+      block = std::shared_ptr<Block<T>>(
+          new BloodVesselJunction<T>(block_count, block_param_ids, name));
       break;
     default:
       throw std::runtime_error(

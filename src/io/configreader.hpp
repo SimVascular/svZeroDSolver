@@ -465,17 +465,23 @@ void ConfigReader<T>::load_model() {
       //   model->add_block(new MODEL::ResistiveJunction<T>(
       //                        R, static_cast<std::string>(junction_name)),
       //                    junction_name);
-      // } else if (j_type == "BloodVesselJunction") {
-      //   auto junction_values = junction_config["junction_values"];
-      //   auto R = junction_values.get_double_array("R_poiseuille");
-      //   auto C = junction_values.get_double_array("C");
-      //   auto L = junction_values.get_double_array("L");
-      //   auto stenosis_coefficient =
-      //       junction_values.get_double_array("stenosis_coefficient");
-      //   model->add_block(new MODEL::BloodVesselJunction<T>(
-      //                        R, C, L, stenosis_coefficient,
-      //                        static_cast<std::string>(junction_name)),
-      //                    junction_name);
+    } else if (j_type == "BloodVesselJunction") {
+      auto junction_values = junction_config["junction_values"];
+      std::vector<int> param_ids;
+      for (T value : junction_values.get_double_array("R_poiseuille")) {
+        param_ids.push_back(model->add_parameter(value));
+      }
+      for (T value : junction_values.get_double_array("C")) {
+        param_ids.push_back(model->add_parameter(value));
+      }
+      for (T value : junction_values.get_double_array("L")) {
+        param_ids.push_back(model->add_parameter(value));
+      }
+      for (T value : junction_values.get_double_array("stenosis_coefficient")) {
+        param_ids.push_back(model->add_parameter(value));
+      }
+      model->add_block(MODEL::BlockType::BLOODVESSELJUNCTION, param_ids,
+                       junction_name);
     } else {
       throw std::invalid_argument("Unknown junction type");
     }

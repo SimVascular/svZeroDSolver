@@ -77,31 +77,8 @@ namespace MODEL {
 template <typename T>
 class ResistanceBC : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {
-    Parameter<T> R;   ///< Time-dependent resistance
-    Parameter<T> Pd;  ///< Time-dependent distal pressure
-  };
-
-  /**
-   * @brief Construct a new ResistanceBC object
-   *
-   * @param R Time-dependent resistance
-   * @param Pd Time-dependent distal pressure
-   * @param name Name
-   */
-  ResistanceBC(Parameter<T> R, Parameter<T> Pd, std::string name);
-
-  /**
-   * @brief Destroy the ResistanceBC object
-   *
-   */
-  ~ResistanceBC();
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -116,27 +93,23 @@ class ResistanceBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  void update_block_params(std::vector<T> new_params);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
    *
    * @param system System to update contributions at
-   * @param time Current time
+   * @param parameters Parameters of the model
    */
-  void update_time(ALGEBRA::SparseSystem<T> &system, T time);
+  void update_time(ALGEBRA::SparseSystem<T> &system,
+                   std::vector<T> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -157,35 +130,7 @@ class ResistanceBC : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> get_num_triplets();
-
-  /**
-   * @brief Convert the block to a steady behavior
-   *
-   * Converts the resistance and distal pressure to the constant means of
-   * themselve
-   */
-  void to_steady();
-
-  /**
-   * @brief Convert the block to a steady behavior
-   *
-   */
-  void to_unsteady();
-
- private:
-  Parameters params;
 };
-
-template <typename T>
-ResistanceBC<T>::ResistanceBC(Parameter<T> R, Parameter<T> Pd, std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.R = R;
-  this->params.Pd = Pd;
-}
-
-template <typename T>
-ResistanceBC<T>::~ResistanceBC() {}
 
 template <typename T>
 void ResistanceBC<T>::setup_dofs(DOFHandler &dofhandler) {
@@ -193,41 +138,17 @@ void ResistanceBC<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void ResistanceBC<T>::update_block_params(std::vector<T> new_params) {
-  std::vector<T> t_new;
-  std::vector<T> R_new;
-  std::vector<T> Pd_new;
-  int num_time_pts = (int)new_params[0];
-  for (int i = 0; i < num_time_pts; i++) {
-    t_new.push_back(new_params[1 + i]);
-    R_new.push_back(new_params[1 + num_time_pts + i]);
-    Pd_new.push_back(new_params[1 + 2 * num_time_pts + i]);
-  }
-  this->params.R.update(t_new, R_new);
-  this->params.Pd.update(t_new, Pd_new);
-}
-template <typename T>
-void ResistanceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+void ResistanceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                      std::vector<T> &parameters) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
 }
 
 template <typename T>
-void ResistanceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
+void ResistanceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system,
+                                  std::vector<T> &parameters) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      -params.R.get(time);
-  system.C(this->global_eqn_ids[0]) = -params.Pd.get(time);
-}
-
-template <typename T>
-void ResistanceBC<T>::to_steady() {
-  params.R.to_steady();
-  params.Pd.to_steady();
-}
-
-template <typename T>
-void ResistanceBC<T>::to_unsteady() {
-  params.R.to_unsteady();
-  params.Pd.to_unsteady();
+      -parameters[this->global_param_ids[0]];
+  system.C(this->global_eqn_ids[0]) = -parameters[this->global_param_ids[1]];
 }
 
 template <typename T>

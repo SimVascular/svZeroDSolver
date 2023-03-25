@@ -36,15 +36,36 @@
 
 #include <algorithm>
 #include <list>
+#include <memory>
 #include <vector>
 
 #include "../algebra/sparsesystem.hpp"
+#include "../model/bloodvessel.hpp"
 #include "block.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
 #include "parameter.hpp"
+// #include "../model/bloodvesseljunction.hpp"
+// #include "../model/closedloopRCRbc.hpp"
+// #include "../model/closedloopcoronarybc.hpp"
+// #include "../model/closedloopheartpulmonary.hpp"
+#include "../model/flowreferencebc.hpp"
+#include "../model/junction.hpp"
+// #include "../model/openloopcoronarybc.hpp"
+// #include "../model/pressurereferencebc.hpp"
+#include "../model/resistancebc.hpp"
+// #include "../model/resistivejunction.hpp
 
 namespace MODEL {
+
+enum BlockType {
+  BLOODVESSEL = 0,
+  JUNCTION = 1,
+  BLOODVESSELJUNCTION = 2,
+  FLOWBC = 3,
+  PRESSUREBC = 4,
+  RESISTANCEBC = 5,
+};
 
 /**
  * @brief Model of 0D elements
@@ -69,12 +90,16 @@ class Model {
    */
   ~Model();
 
-  std::vector<Block<T> *> blocks;          ///< Elements of the model
-  std::vector<Parameter<T> *> parameters;  ///< Elements of the model
+  std::vector<std::shared_ptr<Block<T>>> blocks;  ///< Elements of the model
+  std::vector<std::shared_ptr<Parameter<T>>>
+      parameters;  ///< Parameters of the model
+  std::vector<std::shared_ptr<Parameter<T>>>
+      time_dependent_parameters;  ///< Time-dependent parameters of the model
+  std::vector<double> parameter_values;  ///< Current values of the parameters
   std::map<std::string_view, int>
-      block_index_map;      ///< Map between block name and index
-  DOFHandler dofhandler;    ///< Degree-of-freedom handler of the model
-  std::list<Node *> nodes;  ///< Nodes of the model
+      block_index_map;        ///< Map between block name and index
+  DOFHandler dofhandler;      ///< Degree-of-freedom handler of the model
+  std::vector<Node *> nodes;  ///< Nodes of the model
   std::vector<std::string>
       external_coupling_blocks;  ///< List of external coupling blocks (names
                                  ///< need to be available for interface)
@@ -82,17 +107,29 @@ class Model {
   /**
    * @brief Add a block to the model
    *
-   * @param block The block to add
+   * @param block_type Type of the block
+   * @param block_param_ids Global IDs of the parameters of the block
    * @param name The name of the block
    */
-  void add_block(Block<T> *block, std::string_view name);
+  int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
+                std::string_view name);
 
   /**
-   * @brief Add a model parameter
+   * @brief Add a constant model parameter
    *
-   * @param parameter The parameter to add to the model
+   * @param value Value of the parameter
    */
-  void add_parameter(Parameter<T> *parameter);
+  int add_parameter(T value);
+
+  /**
+   * @brief Add a time-dependent model parameter
+   *
+   * @param times Times corresponding to the parameter values
+   * @param values Values of the parameter
+   * @param periodic Toggle whether parameter is periodic
+   */
+  int add_parameter(std::vector<T> &times, std::vector<T> &values,
+                    bool periodic = true);
 
   /**
    * @brief Update the constant contributions of all elements in a sparse system
@@ -154,51 +191,92 @@ template <typename T>
 Model<T>::~Model() {}
 
 template <typename T>
-void Model<T>::add_block(Block<T> *block, std::string_view name) {
+int Model<T>::add_block(BlockType block_type,
+                        const std::vector<int> &block_param_ids,
+                        std::string_view name) {
+  DEBUG_MSG("Adding block " << name << " with type " << block_type);
+  std::shared_ptr<Block<T>> block;
+  switch (block_type) {
+    case BlockType::BLOODVESSEL:
+      block = std::shared_ptr<Block<T>>(
+          new BloodVessel<T>(block_count, block_param_ids, name));
+      break;
+    case BlockType::JUNCTION:
+      block = std::shared_ptr<Block<T>>(
+          new Junction<T>(block_count, block_param_ids, name));
+      break;
+    case BlockType::FLOWBC:
+      block = std::shared_ptr<Block<T>>(
+          new FlowReferenceBC<T>(block_count, block_param_ids, name));
+      break;
+    case BlockType::RESISTANCEBC:
+      block = std::shared_ptr<Block<T>>(
+          new ResistanceBC<T>(block_count, block_param_ids, name));
+      break;
+    default:
+      throw std::runtime_error(
+          "Adding block to model failed: Invalid block type!");
+  }
   blocks.push_back(block);
   block_index_map.insert({name, block_count});
-  block_count++;
+  return block_count++;
 }
 
 template <typename T>
-void Model<T>::add_parameter(Parameter<T> *parameter) {
-  parameters.push_back(parameter);
-  parameter_count++;
+int Model<T>::add_parameter(T value) {
+  std::shared_ptr<Parameter<T>> param(new Parameter<T>(parameter_count, value));
+  parameters.push_back(param);
+  parameter_values.push_back(param->get(0.0));
+  return parameter_count++;
+}
+
+template <typename T>
+int Model<T>::add_parameter(std::vector<T> &times, std::vector<T> &values,
+                            bool periodic) {
+  std::shared_ptr<Parameter<T>> param(
+      new Parameter<T>(parameter_count, times, values, periodic));
+  parameters.push_back(param);
+  time_dependent_parameters.push_back(param);
+  parameter_values.push_back(param->get(0.0));
+  return parameter_count++;
 }
 
 template <typename T>
 void Model<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
-  for (size_t i = 0; i < blocks.size(); i++) {
-    blocks[i]->update_constant(system);
+  for (auto block : blocks) {
+    block->update_constant(system, parameter_values);
   }
 }
 
 template <typename T>
 void Model<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
-  for (size_t i = 0; i < blocks.size(); i++) {
-    blocks[i]->update_time(system, time);
+  for (auto param : time_dependent_parameters) {
+    parameter_values[param->id] = param->get(time);
+  }
+  for (auto block : blocks) {
+    block->update_time(system, parameter_values);
   }
 }
 
 template <typename T>
 void Model<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  for (size_t i = 0; i < blocks.size(); i++) {
-    blocks[i]->update_solution(system, y);
+  for (auto block : blocks) {
+    block->update_solution(system, parameter_values, y);
   }
 }
 
 template <typename T>
 void Model<T>::to_steady() {
-  for (size_t i = 0; i < blocks.size(); i++) {
-    blocks[i]->to_steady();
+  for (auto param : time_dependent_parameters) {
+    param->to_steady();
   }
 }
 
 template <typename T>
 void Model<T>::to_unsteady() {
-  for (size_t i = 0; i < blocks.size(); i++) {
-    blocks[i]->to_unsteady();
+  for (auto param : time_dependent_parameters) {
+    param->to_unsteady();
   }
 }
 

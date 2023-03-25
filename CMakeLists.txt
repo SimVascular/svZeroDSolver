@@ -47,14 +47,15 @@ endif()
 # -----------------------------------------------------------------------------
 # Set executable and python library
 # -----------------------------------------------------------------------------
-add_executable(svzerodsolver src/main.cpp)
+include_directories(src)
+add_executable(solver applications/solver.cpp)
 pybind11_add_module(libsvzerodsolver src/python.cpp)
 add_subdirectory("src/interface")
 
 # -----------------------------------------------------------------------------
 # Link libraries
 # -----------------------------------------------------------------------------
-target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
-target_link_libraries(svzerodsolver PRIVATE simdjson)
+target_link_libraries(solver PRIVATE Eigen3::Eigen)
+target_link_libraries(solver PRIVATE simdjson)
 target_link_libraries(libsvzerodsolver PRIVATE Eigen3::Eigen)
 target_link_libraries(libsvzerodsolver PRIVATE simdjson)

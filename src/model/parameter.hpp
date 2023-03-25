@@ -57,23 +57,20 @@ class Parameter {
   /**
    * @brief Construct a new Parameter object
    *
-   */
-  Parameter();
-
-  /**
-   * @brief Construct a new Parameter object
-   *
+   * @param id Global ID of the parameter
    * @param value The value of the parameter
    */
-  Parameter(T value);
+  Parameter(int id, T value);
 
   /**
    * @brief Construct a new Parameter object
    *
+   * @param id Global ID of the parameter
    * @param times Time steps corresponding to the time-dependent values
    * @param values Values corresponding to the time steps
    */
-  Parameter(std::vector<T> times, std::vector<T> values, bool periodic = true);
+  Parameter(int id, std::vector<T> &times, std::vector<T> &values,
+            bool periodic = true);
 
   /**
    * @brief Destroy the Parameter object
@@ -81,6 +78,7 @@ class Parameter {
    */
   ~Parameter();
 
+  int id;                 ///< Global ID of the parameter
   std::vector<T> times;   ///< Time steps if parameter is time-dependent
   std::vector<T> values;  ///< Values if parameter is time-dependent
   T value;                ///< Value if parameter is constant
@@ -103,8 +101,7 @@ class Parameter {
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-
-  void update(std::vector<T> times, std::vector<T> values);
+  void update(std::vector<T> &times, std::vector<T> &values);
 
   /**
    * @brief Get the parameter value at the specified time.
@@ -131,16 +128,15 @@ class Parameter {
 };
 
 template <typename T>
-Parameter<T>::Parameter() {}
-
-template <typename T>
-Parameter<T>::Parameter(T value) {
+Parameter<T>::Parameter(int id, T value) {
+  this->id = id;
   update(value);
 }
 
 template <typename T>
-Parameter<T>::Parameter(std::vector<T> times, std::vector<T> values,
+Parameter<T>::Parameter(int id, std::vector<T> &times, std::vector<T> &values,
                         bool periodic) {
+  this->id = id;
   this->isperiodic = periodic;
   update(times, values);
 }
@@ -153,7 +149,7 @@ void Parameter<T>::update(T value) {
 }
 
 template <typename T>
-void Parameter<T>::update(std::vector<T> times, std::vector<T> values) {
+void Parameter<T>::update(std::vector<T> &times, std::vector<T> &values) {
   this->size = values.size();
   if (this->size == 1) {
     this->value = values[0];

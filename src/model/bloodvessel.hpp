@@ -115,35 +115,8 @@ namespace MODEL {
 template <typename T>
 class BloodVessel : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {
-    T R;                     ///< Poiseuille resistance
-    T C;                     ///< Capacitance
-    T L;                     ///< Inductance
-    T stenosis_coefficient;  ///< Stenosis Coefficient
-  };
-
-  /**
-   * @brief Construct a new Blood Vessel object
-   *
-   * @param R Poiseuille resistance
-   * @param C Capacitance
-   * @param L Inductance
-   * @param stenosis_coefficient Stenosis Coefficient
-   * @param name Name
-   */
-  BloodVessel(T R, T C, T L, T stenosis_coefficient, std::string name);
-
-  /**
-   * @brief Destroy the Blood Vessel object
-   *
-   */
-  ~BloodVessel();
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -158,35 +131,38 @@ class BloodVessel : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  void update_block_params(std::vector<T> new_params);
-
-  /**
-   * @brief Return parameters of a block.
-   *
-   * @block_params Block parameters.
-   */
-  void get_block_params(std::vector<T> &block_params);
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse system
+   * @brief Update the constant contributions of the element in a sparse
+   system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
    * sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    * @param y Current solution
    */
   void update_solution(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+
+  /**
+   * @brief Set the gradient of the block contributions with respect to the
+   * parameters
+   *
+   * @param system System to update contributions at
+   * @param y Current solution
+   * @param dy Time-derivative of the current solution
+   */
+  void update_gradient(ALGEBRA::SparseSystem<T> &system,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -207,24 +183,7 @@ class BloodVessel : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> get_num_triplets();
-
- private:
-  Parameters params;
 };
-
-template <typename T>
-BloodVessel<T>::BloodVessel(T R, T C, T L, T stenosis_coefficient,
-                            std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.R = R;
-  this->params.C = C;
-  this->params.L = L;
-  this->params.stenosis_coefficient = stenosis_coefficient;
-}
-
-template <typename T>
-BloodVessel<T>::~BloodVessel() {}
 
 template <typename T>
 void BloodVessel<T>::setup_dofs(DOFHandler &dofhandler) {
@@ -232,37 +191,16 @@ void BloodVessel<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void BloodVessel<T>::update_block_params(std::vector<T> new_params) {
-  this->params.R = new_params[0];
-  this->params.C = new_params[1];
-  this->params.L = new_params[2];
-  this->params.stenosis_coefficient = new_params[3];
-}
-
-template <typename T>
-void BloodVessel<T>::get_block_params(std::vector<T> &block_params) {
-  if (block_params.size() != 4) {
-    throw std::runtime_error(
-        "Wrong vector size in get_block_params for BloodVessel. Size should be "
-        "4 but is currently " +
-        std::to_string(block_params.size()));
-  }
-  block_params[0] = this->params.R;
-  block_params[1] = this->params.C;
-  block_params[2] = this->params.L;
-  block_params[3] = this->params.stenosis_coefficient;
-}
-
-template <typename T>
-void BloodVessel<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+void BloodVessel<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                     std::vector<T> &parameters) {
   system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) =
-      -params.L;
+      -parameters[this->global_param_ids[2]];
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) =
-      -params.C;
+      -parameters[this->global_param_ids[2]];
 
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      -params.R;
+      -parameters[this->global_param_ids[0]];
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
 
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
@@ -270,20 +208,42 @@ void BloodVessel<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[0]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) =
-      -params.R;
+      -parameters[this->global_param_ids[0]];
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = -1.0;
 }
 
 template <typename T>
 void BloodVessel<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
+                                     std::vector<T> &parameters,
                                      Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
   T q_in = fabs(y[this->global_var_ids[1]]);
-  T fac1 = -params.stenosis_coefficient * q_in;
-  T fac2 = fac1 - params.R;
+  T fac1 = -parameters[this->global_param_ids[3]] * q_in;
+  T fac2 = fac1 - parameters[this->global_param_ids[0]];
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac2;
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac2;
   system.D.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
   system.D.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
+}
+
+template <typename T>
+void BloodVessel<T>::update_gradient(ALGEBRA::SparseSystem<T> &system,
+                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
+  T y0 = y[this->global_var_ids[0]];
+  T y1 = y[this->global_var_ids[1]];
+  T y2 = y[this->global_var_ids[2]];
+  T y3 = y[this->global_var_ids[3]];
+  T y4 = y[this->global_var_ids[4]];
+  T dy2 = dy[this->global_var_ids[2]];
+
+  system.X.coeffRef(this->global_param_ids[0], this->global_eqn_ids[0]) = dy2;
+  system.X.coeffRef(this->global_param_ids[2], this->global_eqn_ids[0]) = dy2;
+  system.X.coeffRef(this->global_param_ids[0], this->global_eqn_ids[2]) = y3;
+  system.X.coeffRef(this->global_param_ids[1], this->global_eqn_ids[1]) = y4;
+
+  system.Y(this->global_eqn_ids[0]) = y0 - y2;
+  system.Y(this->global_eqn_ids[1]) = y1 - y3;
+  system.Y(this->global_eqn_ids[2]) = y0 - y4;
 }
 
 template <typename T>

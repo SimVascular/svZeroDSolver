@@ -237,9 +237,11 @@ typedef double T;
 const std::string run(std::string_view json_config) {
   // Load model and configuration
   DEBUG_MSG("Read configuration");
-  IO::ConfigReader<T> reader;
   auto handler = IO::JsonHandler(json_config);
-  reader.load(handler);
+  IO::ConfigReader<T> reader(handler);
+  reader.load_simulation_params();
+  reader.load_model();
+  reader.load_initial_condition();
 
   // Setup system
   ALGEBRA::State<T> state = reader.initial_state;

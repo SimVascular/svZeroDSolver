@@ -48,6 +48,12 @@ class JsonHandler {
 
  public:
   /**
+   * @brief Construct a new Json Handler object
+   *
+   */
+  JsonHandler();
+
+  /**
    * @brief Construct a new JsonHandler object
    *
    * @param json_encoded_string JSON encoded string
@@ -201,6 +207,8 @@ class JsonHandler {
    */
   std::list<JsonHandler> get_list(std::string_view key);
 };
+
+JsonHandler::JsonHandler() {}
 
 JsonHandler::JsonHandler(std::string_view json_encoded_string) {
   parser = new simdjson::dom::parser();

@@ -35,6 +35,8 @@ int main(int argc, char *argv[]) {
 
   auto model = new MODEL::Model<T>();
   std::vector<std::tuple<std::string_view, std::string_view>> connections;
+  std::vector<std::tuple<std::string_view, std::string_view>> inlet_connections;
+  std::vector<std::tuple<std::string_view, std::string_view>> outlet_connections;
 
   // Create vessels
   DEBUG_MSG("Load vessels");
@@ -50,6 +52,19 @@ int main(int argc, char *argv[]) {
                      vessel_name);
     DEBUG_MSG("Created vessel " << vessel_name);
     param_counter += 3;
+
+    // Read connected boundary conditions
+    if (vessel_config.has_key("boundary_conditions")) {
+      auto vessel_bc_config = vessel_config["boundary_conditions"];
+      if (vessel_bc_config.has_key("inlet")) {
+        inlet_connections.push_back(
+            {vessel_bc_config.get_string("inlet"), vessel_name});
+      }
+      if (vessel_bc_config.has_key("outlet")) {
+        outlet_connections.push_back(
+            {vessel_name, vessel_bc_config.get_string("outlet")});
+      }
+    }
   }
 
   // Create junctions
@@ -100,20 +115,30 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  for (auto block : model->blocks) {
-    if (block->inlet_nodes.size() == 0) {
-      model->nodes.push_back(new MODEL::Node("inlet:" + block->name));
-      block->inlet_nodes.push_back(model->nodes.back());
-      model->nodes.back()->setup_dofs(model->dofhandler);
-      DEBUG_MSG("Created node " << model->nodes.back()->name);
-    }
-    if (block->outlet_nodes.size() == 0) {
-      model->nodes.push_back(new MODEL::Node(block->name + ":outlet"));
-      block->outlet_nodes.push_back(model->nodes.back());
-      model->nodes.back()->setup_dofs(model->dofhandler);
-      DEBUG_MSG("Created node " << model->nodes.back()->name);
+  for (auto &connection : inlet_connections) {
+    for (auto &ele : model->blocks) {
+        if (ele->name == std::get<1>(connection)) {
+          model->nodes.push_back(
+              new MODEL::Node(static_cast<std::string>(std::get<0>(connection)) + ":" + ele->name));
+          DEBUG_MSG("Created node " << model->nodes.back()->name);
+          ele->inlet_nodes.push_back(model->nodes.back());
+          model->nodes.back()->setup_dofs(model->dofhandler);
+        }
     }
   }
+
+  for (auto &connection : outlet_connections) {
+    for (auto &ele : model->blocks) {
+        if (ele->name == std::get<0>(connection)) {
+          model->nodes.push_back(
+              new MODEL::Node(ele->name + ":" + static_cast<std::string>(std::get<1>(connection))));
+          DEBUG_MSG("Created node " << model->nodes.back()->name);
+          ele->outlet_nodes.push_back(model->nodes.back());
+          model->nodes.back()->setup_dofs(model->dofhandler);
+        }
+    }
+  }
+
   // Setup degrees of freedom of the system
   for (auto &block : model->blocks) {
     block->setup_dofs(model->dofhandler);

@@ -117,10 +117,10 @@ class Model {
   /**
    * @brief Get a block by its name
    *
-   * @param block_name Name of the Block
+   * @param name Name of the Block
    * @return Block<T>* The block
    */
-  Block<T> *get_block(std::string_view block_name);
+  Block<T> *get_block(std::string_view name);
 
   /**
    * @brief Get a block by its global ID
@@ -133,11 +133,13 @@ class Model {
   /**
    * @brief Add a node to the model
    *
-   * @param inlet_ele Inlet block of the node
-   * @param outlet_ele Outlet block of the node
+   * @param inlet_eles Inlet blocks of the node
+   * @param outlet_eles Outlet blocks of the node
    * @return int Global ID of the node
    */
-  int add_node(Block<T> *inlet_ele, Block<T> *outlet_ele);
+  int add_node(const std::vector<Block<T> *> &inlet_eles,
+               const std::vector<Block<T> *> &outlet_eles,
+               std::string_view name);
 
   /**
    * @brief Add a constant model parameter
@@ -281,8 +283,8 @@ int Model<T>::add_block(BlockType block_type,
 }
 
 template <typename T>
-Block<T> *Model<T>::get_block(std::string_view block_name) {
-  return blocks[block_index_map[block_name]].get();
+Block<T> *Model<T>::get_block(std::string_view name) {
+  return blocks[block_index_map[name]].get();
 }
 
 template <typename T>
@@ -291,13 +293,14 @@ Block<T> *Model<T>::get_block(int block_id) {
 }
 
 template <typename T>
-int Model<T>::add_node(Block<T> *inlet_ele, Block<T> *outlet_ele) {
-  std::string name = inlet_ele->get_name() + ":" + outlet_ele->get_name();
+int Model<T>::add_node(const std::vector<Block<T> *> &inlet_eles,
+                       const std::vector<Block<T> *> &outlet_eles,
+                       std::string_view name) {
   DEBUG_MSG("Adding node " << name);
   auto node = std::shared_ptr<Node<T>>(
-      new Node<T>(node_count, inlet_ele, outlet_ele, this));
+      new Node<T>(node_count, inlet_eles, outlet_eles, this));
   nodes.push_back(node);
-  node_names.push_back(name);
+  node_names.push_back(static_cast<std::string>(name));
   return node_count++;
 }
 

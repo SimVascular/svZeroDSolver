@@ -82,21 +82,18 @@ int main(int argc, char *argv[]) {
   auto junctions = handler["junctions"];
   for (size_t i = 0; i < junctions.length(); i++) {
     auto junction_config = junctions[i];
-    auto j_type = junction_config.get_string("junction_type");
     auto junction_name = junction_config.get_string("junction_name");
-    if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
+    auto outlet_vessels = junction_config.get_int_array("outlet_vessels");
+    int num_outlets = outlet_vessels.size();
+    if (num_outlets == 1) {
       model->add_block(MODEL::BlockType::JUNCTION, {}, junction_name);
-    } else if (j_type == "BloodVesselJunction") {
-      auto outlet_vessels = junction_config.get_int_array("outlet_vessels");
-      int num_outlets = outlet_vessels.size();
+    } else {
       std::vector<int> param_ids;
       for (size_t i = 0; i < (num_outlets * num_params); i++) {
         param_ids.push_back(param_counter++);
       }
       model->add_block(MODEL::BlockType::BLOODVESSELJUNCTION, param_ids,
                        junction_name);
-    } else {
-      throw std::invalid_argument("Unknown junction type");
     }
     // Check for connections to inlet and outlet vessels and append to
     // connections list
@@ -111,49 +108,22 @@ int main(int argc, char *argv[]) {
 
   // Create Connections
   for (auto &connection : connections) {
-    for (auto &ele1 : model->blocks) {
-      for (auto &ele2 : model->blocks) {
-        if ((ele1->name == std::get<0>(connection)) &&
-            (ele2->name == std::get<1>(connection))) {
-          model->nodes.push_back(
-              new MODEL::Node(ele1->name + ":" + ele2->name));
-          DEBUG_MSG("Created node " << model->nodes.back()->name);
-          ele1->outlet_nodes.push_back(model->nodes.back());
-          ele2->inlet_nodes.push_back(model->nodes.back());
-          model->nodes.back()->setup_dofs(model->dofhandler);
-        }
-      }
-    }
+    auto ele1 = model->get_block(std::get<0>(connection));
+    auto ele2 = model->get_block(std::get<1>(connection));
+    model->add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
   }
 
   for (auto &connection : inlet_connections) {
-    for (auto &ele : model->blocks) {
-        if (ele->name == std::get<1>(connection)) {
-          model->nodes.push_back(
-              new MODEL::Node(static_cast<std::string>(std::get<0>(connection)) + ":" + ele->name));
-          DEBUG_MSG("Created node " << model->nodes.back()->name);
-          ele->inlet_nodes.push_back(model->nodes.back());
-          model->nodes.back()->setup_dofs(model->dofhandler);
-        }
-    }
+    auto ele = model->get_block(std::get<1>(connection));
+    model->add_node({}, {ele}, static_cast<std::string>(std::get<0>(connection)) + ":" + ele->get_name());
   }
 
   for (auto &connection : outlet_connections) {
-    for (auto &ele : model->blocks) {
-        if (ele->name == std::get<0>(connection)) {
-          model->nodes.push_back(
-              new MODEL::Node(ele->name + ":" + static_cast<std::string>(std::get<1>(connection))));
-          DEBUG_MSG("Created node " << model->nodes.back()->name);
-          ele->outlet_nodes.push_back(model->nodes.back());
-          model->nodes.back()->setup_dofs(model->dofhandler);
-        }
-    }
+    auto ele = model->get_block(std::get<0>(connection));
+    model->add_node({ele}, {}, ele->get_name() + ":" + static_cast<std::string>(std::get<1>(connection)));
   }
 
-  // Setup degrees of freedom of the system
-  for (auto &block : model->blocks) {
-    block->setup_dofs(model->dofhandler);
-  }
+  model->finalize();
 
   for (size_t i = 0; i < model->dofhandler.size(); i++) {
     std::string var_name = model->dofhandler.variables[i];
@@ -224,14 +194,15 @@ int main(int argc, char *argv[]) {
 
   for (auto &junction_config : output_config["junctions"])
   {
-    if (junction_config["junction_type"] != "BloodVesselJunction")
-    {
-        continue;
-    }
 
     std::string junction_name = junction_config["junction_name"];
     auto block = model->get_block(junction_name);
     int num_outlets = block->outlet_nodes.size();
+
+    if (num_outlets < 2)
+    {
+        continue;
+    }
 
     std::vector<T> r_values;
     for (size_t i = 0; i < num_outlets; i++)
@@ -253,7 +224,7 @@ int main(int argc, char *argv[]) {
     {
         ste_values.push_back(0.0);
     }
-
+    junction_config["junction_type"] = "BloodVesselJunction";
     junction_config["junction_values"] = {
         {"R_poiseuille", r_values},
         {"C", c_values},
@@ -261,6 +232,9 @@ int main(int argc, char *argv[]) {
         {"stenosis_coefficient", ste_values}
     };
   }
+
+  output_config.erase("y");
+  output_config.erase("dy");
 
   std::ofstream o(output_file);
   o << std::setw(4) << output_config << std::endl;

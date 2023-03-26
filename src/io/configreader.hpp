@@ -623,7 +623,7 @@ void ConfigReader<T>::load_model() {
   for (auto &connection : connections) {
     auto ele1 = model->get_block(std::get<0>(connection));
     auto ele2 = model->get_block(std::get<1>(connection));
-    model->add_node(ele1, ele2);
+    model->add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
   }
 
   // Finalize model

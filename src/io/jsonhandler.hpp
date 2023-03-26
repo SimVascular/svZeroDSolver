@@ -34,6 +34,7 @@
 #ifndef SVZERODSOLVER_IO_JSONHANDLER_HPP_
 #define SVZERODSOLVER_IO_JSONHANDLER_HPP_
 
+#include <list>
 #include <stdexcept>
 #include <string>
 

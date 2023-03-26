@@ -182,7 +182,8 @@ class Block {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  virtual void update_gradient(ALGEBRA::SparseSystem<T> &system,
+  virtual void update_gradient(Eigen::SparseMatrix<T> &X,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
@@ -262,7 +263,8 @@ void Block<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {}
 
 template <typename T>
-void Block<T>::update_gradient(ALGEBRA::SparseSystem<T> &system,
+void Block<T>::update_gradient(Eigen::SparseMatrix<T> &X,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {}
 

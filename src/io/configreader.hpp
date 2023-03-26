@@ -162,7 +162,6 @@ void ConfigReader<T>::load_model() {
 
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string_view, std::string_view>> connections;
-  int parameter_count = 0;
 
   // Create vessels
   DEBUG_MSG("Load vessels");
@@ -364,20 +363,20 @@ void ConfigReader<T>::load_model() {
                            model->add_parameter(bc_values.get_double("Pd")),
                        },
                        bc_name);
-    // } else if (bc_type == "ClosedLoopRCR") {
-    //   T Rp = bc_values.get_double("Rp");
-    //   T C = bc_values.get_double("C");
-    //   T Rd = bc_values.get_double("Rd");
-    //   bool closed_loop_outlet = bc_values.get_bool("closed_loop_outlet");
-    //   if (closed_loop_outlet == true) {
-    //     closed_loop_bcs.push_back(bc_name);
-    //   }
-    //   model->add_block(
-    //       new MODEL::ClosedLoopRCRBC<T>(Rp = Rp, C = C, Rd = Rd,
-    //                                     closed_loop_outlet =
-    //                                     closed_loop_outlet,
-    //                                     static_cast<std::string>(bc_name)),
-    //       bc_name);
+      // } else if (bc_type == "ClosedLoopRCR") {
+      //   T Rp = bc_values.get_double("Rp");
+      //   T C = bc_values.get_double("C");
+      //   T Rd = bc_values.get_double("Rd");
+      //   bool closed_loop_outlet = bc_values.get_bool("closed_loop_outlet");
+      //   if (closed_loop_outlet == true) {
+      //     closed_loop_bcs.push_back(bc_name);
+      //   }
+      //   model->add_block(
+      //       new MODEL::ClosedLoopRCRBC<T>(Rp = Rp, C = C, Rd = Rd,
+      //                                     closed_loop_outlet =
+      //                                     closed_loop_outlet,
+      //                                     static_cast<std::string>(bc_name)),
+      //       bc_name);
     } else if (bc_type == "FLOW") {
       auto q_id = model->add_parameter(t, bc_values.get_double_array("Q"));
       auto q_param = model->parameters[q_id];

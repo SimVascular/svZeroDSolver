@@ -257,6 +257,12 @@ void BloodVessel<T>::update_gradient(Eigen::SparseMatrix<T> &X,
   Y(this->global_eqn_ids[0]) = y0 - y2;
   Y(this->global_eqn_ids[1]) = y1 - y3;
   Y(this->global_eqn_ids[2]) = y0 - y4;
+
+  if (this->global_param_ids.size() > 3) {
+    T fac1 = fabs(y1) * y1;
+    X.coeffRef(this->global_eqn_ids[0], this->global_param_ids[3]) = fac1;
+    X.coeffRef(this->global_eqn_ids[2], this->global_param_ids[3]) = fac1;
+  }
 }
 
 template <typename T>

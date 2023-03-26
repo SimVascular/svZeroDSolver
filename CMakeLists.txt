@@ -45,6 +45,15 @@ if(NOT pybind11_POPULATED)
 endif()
 
 # -----------------------------------------------------------------------------
+# Fetch nlohmann/json
+# -----------------------------------------------------------------------------
+FetchContent_Declare(
+    json
+    URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
+)
+FetchContent_MakeAvailable(json)
+
+# -----------------------------------------------------------------------------
 # Set executable and python library
 # -----------------------------------------------------------------------------
 include_directories(src)
@@ -60,5 +69,6 @@ target_link_libraries(solver PRIVATE Eigen3::Eigen)
 target_link_libraries(solver PRIVATE simdjson)
 target_link_libraries(calibrator PRIVATE Eigen3::Eigen)
 target_link_libraries(calibrator PRIVATE simdjson)
+target_link_libraries(calibrator PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(libsvzerodsolver PRIVATE Eigen3::Eigen)
 target_link_libraries(libsvzerodsolver PRIVATE simdjson)

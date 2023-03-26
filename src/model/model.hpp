@@ -118,6 +118,22 @@ class Model {
                 std::string_view name);
 
   /**
+   * @brief Get a block by its name
+   *
+   * @param block_name Name of the Block
+   * @return std::shared_ptr<Block<T>> The block
+   */
+  std::shared_ptr<Block<T>> get_block(std::string_view block_name);
+
+  /**
+   * @brief Get a block by its global ID
+   *
+   * @param block_id ID of the Block
+   * @return std::shared_ptr<Block<T>> The block
+   */
+  std::shared_ptr<Block<T>> get_block(int block_id);
+
+  /**
    * @brief Add a constant model parameter
    *
    * @param value Value of the parameter
@@ -237,6 +253,16 @@ int Model<T>::add_block(BlockType block_type,
   block_types.push_back(block_type);
   block_index_map.insert({name, block_count});
   return block_count++;
+}
+
+template <typename T>
+std::shared_ptr<Block<T>> Model<T>::get_block(std::string_view block_name) {
+  return blocks[block_index_map[block_name]];
+}
+
+template <typename T>
+std::shared_ptr<Block<T>> Model<T>::get_block(int block_id) {
+  return blocks[block_id];
 }
 
 template <typename T>

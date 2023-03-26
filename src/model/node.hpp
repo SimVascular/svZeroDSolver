@@ -40,20 +40,31 @@
 
 namespace MODEL {
 
+// Forward declaration of block
+template <typename T>
+class Block;
+
 /**
  * @brief Node
  *
  * Nodes connect two blocks with each other. Each node corresponds to a
  * flow and pressure value of the system.
+ *
+ * @tparam T Scalar type (e.g. `float`, `double`)
  */
+template <typename T>
 class Node {
  public:
   /**
    * @brief Construct a new Node object
    *
-   * @param name Name
+   * @param id Global ID of the node
+   * @param inlet_ele Inlet element of the node
+   * @param outlet_ele Outlet element of the node
+   * @param model The model to which the node belongs
    */
-  Node(std::string name);
+  Node(int id, Block<T>* inlet_ele, Block<T>* outlet_ele,
+       MODEL::Model<T>* model);
 
   /**
    * @brief Destroy the Node object
@@ -61,9 +72,20 @@ class Node {
    */
   ~Node();
 
-  std::string name;       ///< Name
+  int id;                  ///< Global ID of the block
+  Block<T>* inlet_ele;     ///< Inlet element of the node
+  Block<T>* outlet_ele;    ///< Outlet element of the node
+  MODEL::Model<T>* model;  ///< The model to which the node belongs
+
   unsigned int flow_dof;  ///< Global flow degree-of-freedom of the node
   unsigned int pres_dof;  ///< Global pressure degree-of-freedom of the node
+
+  /**
+   * @brief Get the name of the node
+   *
+   * @return std::string Name of the node
+   */
+  std::string get_name();
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -75,16 +97,32 @@ class Node {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 };
 
-Node::Node(std::string name) { this->name = name; }
+template <typename T>
+Node<T>::Node(int id, Block<T>* inlet_ele, Block<T>* outlet_ele,
+              MODEL::Model<T>* model) {
+  this->id = id;
+  this->inlet_ele = inlet_ele;
+  this->outlet_ele = outlet_ele;
+  this->model = model;
+  inlet_ele->outlet_nodes.push_back(this);
+  outlet_ele->inlet_nodes.push_back(this);
+}
 
-Node::~Node() {}
+template <typename T>
+Node<T>::~Node() {}
 
-void Node::setup_dofs(DOFHandler &dofhandler) {
-  flow_dof = dofhandler.register_variable("flow:" + name);
-  pres_dof = dofhandler.register_variable("pressure:" + name);
+template <typename T>
+std::string Node<T>::get_name() {
+  return this->model->node_names[this->id];
+}
+
+template <typename T>
+void Node<T>::setup_dofs(DOFHandler& dofhandler) {
+  flow_dof = dofhandler.register_variable("flow:" + get_name());
+  pres_dof = dofhandler.register_variable("pressure:" + get_name());
 }
 
 }  // namespace MODEL

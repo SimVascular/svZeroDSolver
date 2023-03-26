@@ -43,6 +43,7 @@
 #include "../model/bloodvessel.hpp"
 #include "../model/bloodvesseljunction.hpp"
 #include "block.hpp"
+#include "blocktype.hpp"
 #include "dofhandler.hpp"
 #include "node.hpp"
 #include "parameter.hpp"
@@ -58,18 +59,6 @@
 #include "../model/windkesselbc.hpp"
 
 namespace MODEL {
-
-enum BlockType {
-  BLOODVESSEL = 0,
-  JUNCTION = 1,
-  BLOODVESSELJUNCTION = 2,
-  RESISTIVEJUNCTION = 3,
-  FLOWBC = 4,
-  PRESSUREBC = 5,
-  RESISTANCEBC = 6,
-  WINDKESSELBC = 7,
-  OPENLOOPCORONARYBC = 8,
-};
 
 /**
  * @brief Model of 0D elements
@@ -96,15 +85,20 @@ class Model {
 
   std::vector<std::shared_ptr<Block<T>>> blocks;  ///< Blocks of the model
   std::vector<BlockType> block_types;             ///< Types of the blocks
+  std::vector<std::string> block_names;           ///< Names of the blocks
+  std::map<std::string_view, int>
+      block_index_map;  ///< Map between block name and index
+
+  std::vector<std::shared_ptr<Node<T>>> nodes;  ///< Nodes of the model
+  std::vector<std::string> node_names;          ///< Names of the nodes
+
   std::vector<std::shared_ptr<Parameter<T>>>
       parameters;  ///< Parameters of the model
   std::vector<std::shared_ptr<Parameter<T>>>
       time_dependent_parameters;  ///< Time-dependent parameters of the model
   std::vector<double> parameter_values;  ///< Current values of the parameters
-  std::map<std::string_view, int>
-      block_index_map;        ///< Map between block name and index
-  DOFHandler dofhandler;      ///< Degree-of-freedom handler of the model
-  std::vector<Node *> nodes;  ///< Nodes of the model
+
+  DOFHandler dofhandler;  ///< Degree-of-freedom handler of the model
   std::vector<std::string>
       external_coupling_blocks;  ///< List of external coupling blocks (names
                                  ///< need to be available for interface)
@@ -115,6 +109,7 @@ class Model {
    * @param block_type Type of the block
    * @param block_param_ids Global IDs of the parameters of the block
    * @param name The name of the block
+   * @return int Global ID of the block
    */
   int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
                 std::string_view name);
@@ -123,22 +118,32 @@ class Model {
    * @brief Get a block by its name
    *
    * @param block_name Name of the Block
-   * @return std::shared_ptr<Block<T>> The block
+   * @return Block<T>* The block
    */
-  std::shared_ptr<Block<T>> get_block(std::string_view block_name);
+  Block<T> *get_block(std::string_view block_name);
 
   /**
    * @brief Get a block by its global ID
    *
    * @param block_id ID of the Block
-   * @return std::shared_ptr<Block<T>> The block
+   * @return Block<T>* The block
    */
-  std::shared_ptr<Block<T>> get_block(int block_id);
+  Block<T> *get_block(int block_id);
+
+  /**
+   * @brief Add a node to the model
+   *
+   * @param inlet_ele Inlet block of the node
+   * @param outlet_ele Outlet block of the node
+   * @return int Global ID of the node
+   */
+  int add_node(Block<T> *inlet_ele, Block<T> *outlet_ele);
 
   /**
    * @brief Add a constant model parameter
    *
    * @param value Value of the parameter
+   * @return int Global ID of the parameter
    */
   int add_parameter(T value);
 
@@ -148,9 +153,17 @@ class Model {
    * @param times Times corresponding to the parameter values
    * @param values Values of the parameter
    * @param periodic Toggle whether parameter is periodic
+   * @return int Global ID of the parameter
    */
   int add_parameter(const std::vector<T> &times, const std::vector<T> &values,
                     bool periodic = true);
+
+  /**
+   * @brief Finalize the model after all blocks, nodes and parameters have been
+   * added
+   *
+   */
+  void finalize();
 
   /**
    * @brief Update the constant contributions of all elements in a sparse system
@@ -202,6 +215,7 @@ class Model {
 
  private:
   int block_count = 0;
+  int node_count = 0;
   int parameter_count = 0;
   std::map<int, T> param_value_cache;
 };
@@ -221,39 +235,39 @@ int Model<T>::add_block(BlockType block_type,
   switch (block_type) {
     case BlockType::BLOODVESSEL:
       block = std::shared_ptr<Block<T>>(
-          new BloodVessel<T>(block_count, block_param_ids, name));
+          new BloodVessel<T>(block_count, block_param_ids, this));
       break;
     case BlockType::JUNCTION:
       block = std::shared_ptr<Block<T>>(
-          new Junction<T>(block_count, block_param_ids, name));
+          new Junction<T>(block_count, block_param_ids, this));
       break;
     case BlockType::BLOODVESSELJUNCTION:
       block = std::shared_ptr<Block<T>>(
-          new BloodVesselJunction<T>(block_count, block_param_ids, name));
+          new BloodVesselJunction<T>(block_count, block_param_ids, this));
       break;
     case BlockType::RESISTIVEJUNCTION:
       block = std::shared_ptr<Block<T>>(
-          new ResistiveJunction<T>(block_count, block_param_ids, name));
+          new ResistiveJunction<T>(block_count, block_param_ids, this));
       break;
     case BlockType::FLOWBC:
       block = std::shared_ptr<Block<T>>(
-          new FlowReferenceBC<T>(block_count, block_param_ids, name));
+          new FlowReferenceBC<T>(block_count, block_param_ids, this));
       break;
     case BlockType::RESISTANCEBC:
       block = std::shared_ptr<Block<T>>(
-          new ResistanceBC<T>(block_count, block_param_ids, name));
+          new ResistanceBC<T>(block_count, block_param_ids, this));
       break;
     case BlockType::WINDKESSELBC:
       block = std::shared_ptr<Block<T>>(
-          new WindkesselBC<T>(block_count, block_param_ids, name));
+          new WindkesselBC<T>(block_count, block_param_ids, this));
       break;
     case BlockType::PRESSUREBC:
       block = std::shared_ptr<Block<T>>(
-          new PressureReferenceBC<T>(block_count, block_param_ids, name));
+          new PressureReferenceBC<T>(block_count, block_param_ids, this));
       break;
     case BlockType::OPENLOOPCORONARYBC:
       block = std::shared_ptr<Block<T>>(
-          new OpenLoopCoronaryBC<T>(block_count, block_param_ids, name));
+          new OpenLoopCoronaryBC<T>(block_count, block_param_ids, this));
       break;
     default:
       throw std::runtime_error(
@@ -262,17 +276,29 @@ int Model<T>::add_block(BlockType block_type,
   blocks.push_back(block);
   block_types.push_back(block_type);
   block_index_map.insert({name, block_count});
+  block_names.push_back(static_cast<std::string>(name));
   return block_count++;
 }
 
 template <typename T>
-std::shared_ptr<Block<T>> Model<T>::get_block(std::string_view block_name) {
-  return blocks[block_index_map[block_name]];
+Block<T> *Model<T>::get_block(std::string_view block_name) {
+  return blocks[block_index_map[block_name]].get();
 }
 
 template <typename T>
-std::shared_ptr<Block<T>> Model<T>::get_block(int block_id) {
-  return blocks[block_id];
+Block<T> *Model<T>::get_block(int block_id) {
+  return blocks[block_id].get();
+}
+
+template <typename T>
+int Model<T>::add_node(Block<T> *inlet_ele, Block<T> *outlet_ele) {
+  std::string name = inlet_ele->get_name() + ":" + outlet_ele->get_name();
+  DEBUG_MSG("Adding node " << name);
+  auto node = std::shared_ptr<Node<T>>(
+      new Node<T>(node_count, inlet_ele, outlet_ele, this));
+  nodes.push_back(node);
+  node_names.push_back(name);
+  return node_count++;
 }
 
 template <typename T>
@@ -292,6 +318,16 @@ int Model<T>::add_parameter(const std::vector<T> &times,
   time_dependent_parameters.push_back(param);
   parameter_values.push_back(param->get(0.0));
   return parameter_count++;
+}
+
+template <typename T>
+void Model<T>::finalize() {
+  for (auto &node : nodes) {
+    node->setup_dofs(dofhandler);
+  }
+  for (auto &block : blocks) {
+    block->setup_dofs(dofhandler);
+  }
 }
 
 template <typename T>

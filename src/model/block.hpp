@@ -62,10 +62,10 @@ class Block {
    *
    * @param id Global ID of the block
    * @param param_ids Global IDs of the block parameters
-   * @param name Name of the block
+   * @param model The model to which the block belongs
    */
   explicit Block(int id, const std::vector<int> &param_ids,
-                 std::string_view name);
+                 MODEL::Model<T> *model);
 
   /**
    * @brief Destroy the Block object
@@ -79,11 +79,11 @@ class Block {
    */
   Block(const Block &) = delete;
 
-  int id;            ///< Global ID of the block
-  std::string name;  ///< Name of the block
+  int id;                  ///< Global ID of the block
+  MODEL::Model<T> *model;  ///< The model to which the block belongs
 
-  std::vector<Node *> inlet_nodes;   ///< Inlet nodes
-  std::vector<Node *> outlet_nodes;  ///< Outlet nodes
+  std::vector<Node<T> *> inlet_nodes;   ///< Inlet nodes
+  std::vector<Node<T> *> outlet_nodes;  ///< Outlet nodes
 
   bool steady = false;  ///< Toggle steady behavior
 
@@ -118,6 +118,13 @@ class Block {
    * Equation indices correspond to rows in the global system.
    */
   std::vector<unsigned int> global_eqn_ids;
+
+  /**
+   * @brief Get the name of the block
+   *
+   * @return std::string Name of the block
+   */
+  std::string get_name();
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -212,10 +219,15 @@ class Block {
 
 template <typename T>
 Block<T>::Block(int id, const std::vector<int> &param_ids,
-                std::string_view name) {
+                MODEL::Model<T> *model) {
   this->id = id;
   this->global_param_ids = param_ids;
-  this->name = static_cast<std::string>(name);
+  this->model = model;
+}
+
+template <typename T>
+std::string Block<T>::get_name() {
+  return this->model->block_names[this->id];
 }
 
 template <typename T>
@@ -239,7 +251,7 @@ void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
   // Register internal variables of block
   for (auto &int_name : internal_var_names) {
     global_var_ids.push_back(
-        dofhandler.register_variable(int_name + ":" + name));
+        dofhandler.register_variable(int_name + ":" + this->get_name()));
   }
 
   // Register equations of block

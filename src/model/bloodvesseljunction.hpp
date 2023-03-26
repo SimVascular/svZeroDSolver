@@ -36,6 +36,7 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
+#include "blocktype.hpp"
 #include "bloodvessel.hpp"
 
 namespace MODEL {
@@ -175,7 +176,7 @@ class BloodVesselJunction : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 
  private:
-  std::vector<std::shared_ptr<Block<T>>> blood_vessels;
+  std::vector<Block<T> *> blood_vessels;
   int num_outlets;
 };
 
@@ -190,13 +191,13 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
   }
   Block<T>::setup_dofs_(dofhandler, 1, internal_var_names);
   for (size_t i = 0; i < num_outlets; i++) {
-    std::shared_ptr<Block<T>> block(new BloodVessel<T>(
-        i,
+    int block_id = this->model->add_block(
+        BlockType::BLOODVESSEL,
         {this->global_param_ids[i], this->global_param_ids[i + num_outlets],
          this->global_param_ids[i + 2 * num_outlets],
          this->global_param_ids[i + 3 * num_outlets]},
-        this->name + "_bv" + std::to_string(i)));
-    blood_vessels.push_back(block);
+        this->get_name() + "_bv" + std::to_string(i));
+    blood_vessels.push_back(this->model->get_block(block_id));
     blood_vessels[i]->inlet_nodes.push_back(this->inlet_nodes[0]);
     blood_vessels[i]->outlet_nodes.push_back(this->outlet_nodes[i]);
     blood_vessels[i]->setup_dofs(dofhandler);

@@ -85,8 +85,8 @@ std::string to_vessel_csv(std::vector<T> &times,
   for (auto &block : model.blocks) {
     // Extract global solution indices of the block
     std::string name = "NoName";
-    if (HELPERS::startswith(block->name, "branch")) {
-      name = block->name;
+    if (HELPERS::startswith(block->get_name(), "branch")) {
+      name = block->get_name();
       inflow_dof = block->inlet_nodes[0]->flow_dof;
       outflow_dof = block->outlet_nodes[0]->flow_dof;
       inpres_dof = block->inlet_nodes[0]->pres_dof;

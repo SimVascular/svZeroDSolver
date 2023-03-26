@@ -621,25 +621,13 @@ void ConfigReader<T>::load_model() {
 
   // Create Connections
   for (auto &connection : connections) {
-    for (auto &ele1 : model->blocks) {
-      for (auto &ele2 : model->blocks) {
-        if ((ele1->name == std::get<0>(connection)) &&
-            (ele2->name == std::get<1>(connection))) {
-          model->nodes.push_back(
-              new MODEL::Node(ele1->name + ":" + ele2->name));
-          DEBUG_MSG("Created node " << model->nodes.back()->name);
-          ele1->outlet_nodes.push_back(model->nodes.back());
-          ele2->inlet_nodes.push_back(model->nodes.back());
-          model->nodes.back()->setup_dofs(model->dofhandler);
-        }
-      }
-    }
+    auto ele1 = model->get_block(std::get<0>(connection));
+    auto ele2 = model->get_block(std::get<1>(connection));
+    model->add_node(ele1, ele2);
   }
 
-  // Setup degrees of freedom of the system
-  for (auto &block : model->blocks) {
-    block->setup_dofs(model->dofhandler);
-  }
+  // Finalize model
+  model->finalize();
 
   // Set value of cardiac cycle period
   if (sim_cardiac_cycle_period < 0.0) {

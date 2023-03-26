@@ -80,9 +80,6 @@ class SparseSystem {
   Eigen::SparseMatrix<T> D;               ///< System matrix D
   Eigen::Matrix<T, Eigen::Dynamic, 1> C;  ///< System vector C
 
-  Eigen::SparseMatrix<T> X;               ///< Gradient matrix X
-  Eigen::Matrix<T, Eigen::Dynamic, 1> Y;  ///< Gradient matrix Y
-
   Eigen::SparseMatrix<T> jacobian;               ///< Jacobian of the system
   Eigen::Matrix<T, Eigen::Dynamic, 1> residual;  ///< Residual of the system
   Eigen::Matrix<T, Eigen::Dynamic, 1> dy;  ///< Solution increment of the system

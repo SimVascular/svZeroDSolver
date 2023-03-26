@@ -451,12 +451,14 @@ void ConfigReader<T>::load_model() {
     auto junction_name = junction_config.get_string("junction_name");
     if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
       model->add_block(MODEL::BlockType::JUNCTION, {}, junction_name);
-      // } else if (j_type == "resistive_junction") {
-      //   auto junction_values = junction_config["junction_values"];
-      //   auto R = junction_values.get_double_array("R");
-      //   model->add_block(new MODEL::ResistiveJunction<T>(
-      //                        R, static_cast<std::string>(junction_name)),
-      //                    junction_name);
+    } else if (j_type == "resistive_junction") {
+      auto junction_values = junction_config["junction_values"];
+      std::vector<int> param_ids;
+      for (T value : junction_values.get_double_array("R")) {
+        param_ids.push_back(model->add_parameter(value));
+      }
+      model->add_block(MODEL::BlockType::RESISTIVEJUNCTION, param_ids,
+                       junction_name);
     } else if (j_type == "BloodVesselJunction") {
       auto junction_values = junction_config["junction_values"];
       std::vector<int> param_ids;

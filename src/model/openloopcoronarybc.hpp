@@ -129,6 +129,7 @@ class OpenLoopCoronaryBC : public Block<T> {
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
   void update_constant(ALGEBRA::SparseSystem<T> &system,
                        std::vector<T> &parameters);
@@ -138,7 +139,7 @@ class OpenLoopCoronaryBC : public Block<T> {
    * system
    *
    * @param system System to update contributions at
-   * @param time Current time
+   * @param parameters Parameters of the model
    */
   void update_time(ALGEBRA::SparseSystem<T> &system,
                    std::vector<T> &parameters);

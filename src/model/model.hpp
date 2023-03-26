@@ -54,8 +54,8 @@
 #include "../model/openloopcoronarybc.hpp"
 #include "../model/pressurereferencebc.hpp"
 #include "../model/resistancebc.hpp"
+#include "../model/resistivejunction.hpp"
 #include "../model/windkesselbc.hpp"
-// #include "../model/resistivejunction.hpp
 
 namespace MODEL {
 
@@ -63,11 +63,12 @@ enum BlockType {
   BLOODVESSEL = 0,
   JUNCTION = 1,
   BLOODVESSELJUNCTION = 2,
-  FLOWBC = 3,
-  PRESSUREBC = 4,
-  RESISTANCEBC = 5,
-  WINDKESSELBC = 6,
-  OPENLOOPCORONARYBC = 7,
+  RESISTIVEJUNCTION = 3,
+  FLOWBC = 4,
+  PRESSUREBC = 5,
+  RESISTANCEBC = 6,
+  WINDKESSELBC = 7,
+  OPENLOOPCORONARYBC = 8,
 };
 
 /**
@@ -226,6 +227,14 @@ int Model<T>::add_block(BlockType block_type,
       block = std::shared_ptr<Block<T>>(
           new Junction<T>(block_count, block_param_ids, name));
       break;
+    case BlockType::BLOODVESSELJUNCTION:
+      block = std::shared_ptr<Block<T>>(
+          new BloodVesselJunction<T>(block_count, block_param_ids, name));
+      break;
+    case BlockType::RESISTIVEJUNCTION:
+      block = std::shared_ptr<Block<T>>(
+          new ResistiveJunction<T>(block_count, block_param_ids, name));
+      break;
     case BlockType::FLOWBC:
       block = std::shared_ptr<Block<T>>(
           new FlowReferenceBC<T>(block_count, block_param_ids, name));
@@ -241,10 +250,6 @@ int Model<T>::add_block(BlockType block_type,
     case BlockType::PRESSUREBC:
       block = std::shared_ptr<Block<T>>(
           new PressureReferenceBC<T>(block_count, block_param_ids, name));
-      break;
-    case BlockType::BLOODVESSELJUNCTION:
-      block = std::shared_ptr<Block<T>>(
-          new BloodVesselJunction<T>(block_count, block_param_ids, name));
       break;
     case BlockType::OPENLOOPCORONARYBC:
       block = std::shared_ptr<Block<T>>(

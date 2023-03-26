@@ -240,13 +240,6 @@ void BloodVessel<T>::update_gradient(Eigen::SparseMatrix<T> &X,
                                      Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
                                      Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
                                      Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
-  DEBUG_MSG("y size: " << y.rows());
-  DEBUG_MSG("yd size: " << dy.rows());
-  for (auto uid : this->global_var_ids) {
-    DEBUG_MSG(uid);
-  }
-  DEBUG_MSG("End");
-
   T y0 = y[this->global_var_ids[0]];
   T y1 = y[this->global_var_ids[1]];
   T y2 = y[this->global_var_ids[2]];
@@ -256,21 +249,13 @@ void BloodVessel<T>::update_gradient(Eigen::SparseMatrix<T> &X,
   T dy3 = dy[this->global_var_ids[3]];
   T dy4 = dy[this->global_var_ids[4]];
 
-  DEBUG_MSG(1);
-
   X.coeffRef(this->global_eqn_ids[0], this->global_param_ids[0]) = y1;
-  DEBUG_MSG(2);
   X.coeffRef(this->global_eqn_ids[2], this->global_param_ids[0]) = y1;
-  DEBUG_MSG(3);
   X.coeffRef(this->global_eqn_ids[0], this->global_param_ids[2]) = dy3;
-  DEBUG_MSG(4);
   X.coeffRef(this->global_eqn_ids[1], this->global_param_ids[1]) = dy4;
-  DEBUG_MSG(5);
 
   Y(this->global_eqn_ids[0]) = y0 - y2;
-  DEBUG_MSG(6);
   Y(this->global_eqn_ids[1]) = y1 - y3;
-  DEBUG_MSG(7);
   Y(this->global_eqn_ids[2]) = y0 - y4;
 }
 

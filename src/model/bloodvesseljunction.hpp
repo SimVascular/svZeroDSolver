@@ -142,6 +142,19 @@ class BloodVesselJunction : public Block<T> {
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
 
   /**
+   * @brief Set the gradient of the block contributions with respect to the
+   * parameters
+   *
+   * @param system System to update contributions at
+   * @param y Current solution
+   * @param dy Time-derivative of the current solution
+   */
+  void update_gradient(Eigen::SparseMatrix<T> &X,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
+
+  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system
@@ -217,6 +230,20 @@ void BloodVesselJunction<T>::update_solution(
     Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
   for (auto bv : blood_vessels) {
     bv->update_solution(system, parameters, y);
+  }
+}
+
+template <typename T>
+void BloodVesselJunction<T>::update_gradient(
+    Eigen::SparseMatrix<T> &X, Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
+  for (auto bv : blood_vessels) {
+    bv->update_gradient(X, Y, y, dy);
+  }
+  Y(this->global_eqn_ids[0]) = y[this->global_var_ids[1]];
+  for (size_t i = 0; i < num_outlets; i++) {
+    Y(this->global_eqn_ids[0]) += -y[this->global_var_ids.end()[-(i + 1)]];
   }
 }
 

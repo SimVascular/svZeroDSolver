@@ -85,6 +85,8 @@ class Block {
   std::vector<Node *> inlet_nodes;   ///< Inlet nodes
   std::vector<Node *> outlet_nodes;  ///< Outlet nodes
 
+  bool steady = false;  ///< Toggle steady behavior
+
   /**
    * @brief Global IDs for the block parameters.
    *

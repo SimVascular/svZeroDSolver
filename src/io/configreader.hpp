@@ -413,24 +413,17 @@ void ConfigReader<T>::load_model() {
         }
       }
       model->add_block(MODEL::BlockType::PRESSUREBC, {p_id}, bc_name);
-      // } else if (bc_type == "CORONARY") {
-      //   T Ra = bc_values.get_double("Ra1");
-      //   T Ram = bc_values.get_double("Ra2");
-      //   T Rv = bc_values.get_double("Rv1");
-      //   T Ca = bc_values.get_double("Ca");
-      //   T Cim = bc_values.get_double("Cc");
-
-      //   auto Pim = bc_values.get_double_array("Pim");
-      //   MODEL::Parameter pim_param(t, Pim);
-      //   auto P_v = bc_values.get_double_array("P_v");
-      //   MODEL::Parameter pv_param(t, P_v);
-
-      //   model->add_block(
-      //       new MODEL::OpenLoopCoronaryBC<T>(Ra = Ra, Ram = Ram, Rv = Rv, Ca
-      //       = Ca,
-      //                                        Cim = Cim, pim_param, pv_param,
-      //                                        static_cast<std::string>(bc_name)),
-      //       bc_name);
+    } else if (bc_type == "CORONARY") {
+      model->add_block(
+          MODEL::BlockType::OPENLOOPCORONARYBC,
+          {model->add_parameter(t, bc_values.get_double_array("Ra1")),
+           model->add_parameter(t, bc_values.get_double_array("Ra2")),
+           model->add_parameter(t, bc_values.get_double_array("Rv1")),
+           model->add_parameter(t, bc_values.get_double_array("Ca")),
+           model->add_parameter(t, bc_values.get_double_array("Cc")),
+           model->add_parameter(t, bc_values.get_double_array("Pim")),
+           model->add_parameter(t, bc_values.get_double_array("P_v"))},
+          bc_name);
       // } else if (bc_type == "ClosedLoopCoronary") {
       //   auto Ra = bc_values.get_double("Ra");
       //   auto Ram = bc_values.get_double("Ram");

@@ -51,10 +51,10 @@
 // #include "../model/closedloopheartpulmonary.hpp"
 #include "../model/flowreferencebc.hpp"
 #include "../model/junction.hpp"
-#include "../model/windkesselbc.hpp"
-// #include "../model/openloopcoronarybc.hpp"
+#include "../model/openloopcoronarybc.hpp"
 #include "../model/pressurereferencebc.hpp"
 #include "../model/resistancebc.hpp"
+#include "../model/windkesselbc.hpp"
 // #include "../model/resistivejunction.hpp
 
 namespace MODEL {
@@ -67,6 +67,7 @@ enum BlockType {
   PRESSUREBC = 4,
   RESISTANCEBC = 5,
   WINDKESSELBC = 6,
+  OPENLOOPCORONARYBC = 7,
 };
 
 /**
@@ -245,6 +246,10 @@ int Model<T>::add_block(BlockType block_type,
       block = std::shared_ptr<Block<T>>(
           new BloodVesselJunction<T>(block_count, block_param_ids, name));
       break;
+    case BlockType::OPENLOOPCORONARYBC:
+      block = std::shared_ptr<Block<T>>(
+          new OpenLoopCoronaryBC<T>(block_count, block_param_ids, name));
+      break;
     default:
       throw std::runtime_error(
           "Adding block to model failed: Invalid block type!");
@@ -315,6 +320,7 @@ void Model<T>::to_steady() {
     param->to_steady();
   }
   for (size_t i = 0; i < block_types.size(); i++) {
+    blocks[i]->steady = true;
     if (block_types[i] == BlockType::WINDKESSELBC) {
       int param_id_capacitance = blocks[i]->global_param_ids[1];
       T value = parameters[param_id_capacitance]->get(0.0);
@@ -331,6 +337,9 @@ void Model<T>::to_unsteady() {
   for (auto &[param_id_capacitance, value] : param_value_cache) {
     DEBUG_MSG("Setting Windkessel capacitance back to " << value);
     parameters[param_id_capacitance]->update(value);
+  }
+  for (size_t i = 0; i < block_types.size(); i++) {
+    blocks[i]->steady = false;
   }
 }
 

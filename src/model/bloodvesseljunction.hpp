@@ -137,21 +137,26 @@ class BloodVesselJunction : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    * @param y Current solution
+   * @param dy Current derivate of the solution
    */
-  void update_solution(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+  virtual void update_solution(ALGEBRA::SparseSystem<T> &system,
+                               std::vector<T> &parameters,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
    * parameters
    *
-   * @param system System to update contributions at
+   * @param jacobian Jacobian with respect to the parameters
+   * @param alpha Current parameter vector
+   * @param residual Residual with respect to the parameters
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  void update_gradient(Eigen::SparseMatrix<T> &X,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
+  void update_gradient(Eigen::SparseMatrix<T> &jacobian,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
@@ -203,12 +208,11 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
     blood_vessels[i]->setup_dofs(dofhandler);
     blood_vessels[i]->global_var_ids[1] =
         this->global_var_ids.end()[i - num_outlets];
+    num_triplets["F"] += blood_vessels[i]->num_triplets["F"];
+    num_triplets["E"] += blood_vessels[i]->num_triplets["E"];
+    num_triplets["D"] += blood_vessels[i]->num_triplets["D"];
   }
-  num_triplets = {
-      {"F", 10 * num_outlets + num_outlets + 1},
-      {"E", 2 * num_outlets},
-      {"D", 2 * num_outlets},
-  };
+  num_triplets["F"] += num_outlets + 1;
 }
 
 template <typename T>
@@ -228,23 +232,27 @@ void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
 template <typename T>
 void BloodVesselJunction<T>::update_solution(
     ALGEBRA::SparseSystem<T> &system, std::vector<T> &parameters,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
   for (auto bv : blood_vessels) {
-    bv->update_solution(system, parameters, y);
+    bv->update_solution(system, parameters, y, dy);
   }
 }
 
 template <typename T>
 void BloodVesselJunction<T>::update_gradient(
-    Eigen::SparseMatrix<T> &X, Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
+    Eigen::SparseMatrix<T> &jacobian,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
     Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
     Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
   for (auto bv : blood_vessels) {
-    bv->update_gradient(X, Y, y, dy);
+    bv->update_gradient(jacobian, residual, alpha, y, dy);
   }
-  Y(this->global_eqn_ids[0]) = y[this->global_var_ids[1]];
+  residual(this->global_eqn_ids[0]) = y[this->global_var_ids[1]];
   for (size_t i = 0; i < num_outlets; i++) {
-    Y(this->global_eqn_ids[0]) += -y[this->global_var_ids.end()[-(i + 1)]];
+    residual(this->global_eqn_ids[0]) +=
+        -y[this->global_var_ids.end()[-(i + 1)]];
   }
 }
 

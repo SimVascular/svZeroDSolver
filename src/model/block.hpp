@@ -178,21 +178,26 @@ class Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    * @param y Current solution
+   * @param dy Current derivate of the solution
    */
   virtual void update_solution(ALGEBRA::SparseSystem<T> &system,
                                std::vector<T> &parameters,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
    * parameters
    *
-   * @param system System to update contributions at
+   * @param jacobian Jacobian with respect to the parameters
+   * @param alpha Current parameter vector
+   * @param residual Residual with respect to the parameters
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  virtual void update_gradient(Eigen::SparseMatrix<T> &X,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
+  virtual void update_gradient(Eigen::SparseMatrix<T> &jacobian,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
@@ -274,11 +279,13 @@ void Block<T>::update_time(ALGEBRA::SparseSystem<T> &system,
 template <typename T>
 void Block<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
                                std::vector<T> &parameters,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {}
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {}
 
 template <typename T>
-void Block<T>::update_gradient(Eigen::SparseMatrix<T> &X,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &Y,
+void Block<T>::update_gradient(Eigen::SparseMatrix<T> &jacobian,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {}
 

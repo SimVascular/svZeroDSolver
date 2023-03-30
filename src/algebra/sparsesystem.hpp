@@ -157,7 +157,9 @@ void SparseSystem<T>::reserve(MODEL::Model<T> &model) {
   model.update_time(*this, 0.0);
   Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_y =
       Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
-  model.update_solution(*this, dummy_y);
+  Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_dy =
+      Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
+  model.update_solution(*this, dummy_y, dummy_dy);
   F.makeCompressed();
   E.makeCompressed();
   D.makeCompressed();

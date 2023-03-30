@@ -148,38 +148,118 @@ int main(int argc, char *argv[]) {
   int num_observations = y_all[0].size();
   DEBUG_MSG("Number of observations: " << num_observations);
 
-  Eigen::SparseMatrix<T> X = Eigen::SparseMatrix<T>(
-      num_observations * model->dofhandler.size(), param_counter);
-  Eigen::Matrix<T, Eigen::Dynamic, 1> Y =
-      Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num_observations *
-                                                model->dofhandler.size());
-
   int num_dofs = model->dofhandler.size();
-  for (size_t i = 0; i < num_observations; i++) {
-    DEBUG_MSG("Assembling observation " << i);
-    Eigen::Matrix<T, Eigen::Dynamic, 1> y =
-        Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(model->dofhandler.size());
-    Eigen::Matrix<T, Eigen::Dynamic, 1> dy =
-        Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(model->dofhandler.size());
-    for (size_t k = 0; k < model->dofhandler.size(); k++) {
-      DEBUG_MSG("Loading DoF: " << k);
-      y(k) = y_all[k][i];
-      dy(k) = dy_all[k][i];
+  int max_nliter = 10;
+
+  // =====================================
+  // Setup alpha
+  // =====================================
+  Eigen::Matrix<T, Eigen::Dynamic, 1> alpha =
+      Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(param_counter);
+  DEBUG_MSG("Reading initial alpha");
+  for (auto &vessel_config : output_config["vessels"])
+  {
+    std::string vessel_name = vessel_config["vessel_name"];
+    DEBUG_MSG("Reading initial alpha for " << vessel_name);
+    auto block = model->get_block(vessel_name);
+    std::cout << "R_poiseuille" << std::endl;
+    alpha[block->global_param_ids[0]] = vessel_config["zero_d_element_values"].value("R_poiseuille", 0.0);
+    std::cout << "C" << std::endl;
+    alpha[block->global_param_ids[1]] = vessel_config["zero_d_element_values"].value("C", 0.0);
+    std::cout << "L" << std::endl;
+    alpha[block->global_param_ids[2]] = vessel_config["zero_d_element_values"].value("L", 0.0);
+    // std::cout << "ste" << std::endl;
+    // alpha[block->global_param_ids[3]] = vessel_config["zero_d_element_values"].value("stenosis_coefficient", 0.0);
+  }
+  for (auto &junction_config : output_config["junctions"])
+  {
+
+    std::string junction_name = junction_config["junction_name"];
+    DEBUG_MSG("Reading initial alpha for " << junction_name);
+    auto block = model->get_block(junction_name);
+    int num_outlets = block->outlet_nodes.size();
+
+    if (num_outlets < 2)
+    {
+        continue;
     }
 
-    for (auto block : model->blocks) {
-      DEBUG_MSG("Updating gradient of block " << block->id);
-      block->update_gradient(X, Y, y, dy);
+    // Missing default handling
+    throw std::runtime_error("Missing default handling for junctions");
 
-      for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
-        block->global_eqn_ids[l] += num_dofs;
-      }
+    std::vector<T> r_values = junction_config["junction_values"]["R_poiseuille"];
+    for (size_t i = 0; i < num_outlets; i++)
+    {
+        alpha[block->global_param_ids[i]] = r_values[i];
+    }
+    std::vector<T> c_values = junction_config["junction_values"]["C"];
+    for (size_t i = 0; i < num_outlets; i++)
+    {
+        alpha[block->global_param_ids[i+num_outlets]] = c_values[i];
+    }
+    std::vector<T> l_values = junction_config["junction_values"]["L"];
+    for (size_t i = 0; i < num_outlets; i++)
+    {
+        alpha[block->global_param_ids[i+2*num_outlets]] = l_values[i];
     }
   }
 
-  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat = X.transpose() * X;
-  Eigen::Matrix<T, Eigen::Dynamic, 1> alpha = mat.inverse() * X.transpose() * Y;
 
+  // =====================================
+  // Gauss-Newton
+  // =====================================
+  DEBUG_MSG("Starting Gauss-Newton");
+  Eigen::SparseMatrix<T> jacobian = Eigen::SparseMatrix<T>(
+      num_observations * model->dofhandler.size(), param_counter);
+  Eigen::Matrix<T, Eigen::Dynamic, 1> residual =
+      Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num_observations *
+                                                model->dofhandler.size());
+
+  for (size_t nliter = 0; nliter < max_nliter; nliter++)
+  {
+    DEBUG_MSG("Gauss-Newton Iteration " << nliter);
+    for (size_t i = 0; i < num_observations; i++) {
+      Eigen::Matrix<T, Eigen::Dynamic, 1> y =
+          Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(model->dofhandler.size());
+      Eigen::Matrix<T, Eigen::Dynamic, 1> dy =
+          Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(model->dofhandler.size());
+      for (size_t k = 0; k < model->dofhandler.size(); k++) {
+        y(k) = y_all[k][i];
+        dy(k) = dy_all[k][i];
+      }
+
+      for (auto block : model->blocks) {
+        block->update_gradient(jacobian, residual, alpha, y, dy);
+
+        for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
+          block->global_eqn_ids[l] += num_dofs;
+        }
+      }
+    }
+
+    for (auto block : model->blocks) {
+      for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
+          block->global_eqn_ids[l] -= num_dofs * num_observations;
+        }
+    }
+
+    T residual_norm = 0.0;
+    for (size_t i = 0; i < param_counter; i++)
+    {
+      residual_norm += residual[i] * residual[i];
+    }
+    DEBUG_MSG("residual norm: " << residual_norm);
+
+
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat = jacobian.transpose() * jacobian;
+    alpha = alpha - mat.inverse() * jacobian.transpose() * residual;
+
+
+  }
+
+  // =====================================
+  // Write output
+  // =====================================
   for (auto &vessel_config : output_config["vessels"])
   {
     std::string vessel_name = vessel_config["vessel_name"];

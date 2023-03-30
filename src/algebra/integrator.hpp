@@ -205,7 +205,7 @@ State<T> Integrator<T>::step(State<T> &old_state, T time,
 
   for (size_t i = 0; i < max_iter; i++) {
     // Update solution-dependent element contribitions
-    model.update_solution(system, y_af);
+    model.update_solution(system, y_af, ydot_am);
 
     // Update residuum and check termination criteria
     system.update_residual(y_af, ydot_am);

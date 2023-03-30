@@ -189,9 +189,11 @@ class Model {
    *
    * @param system System to update contributions at
    * @param y Current solution
+   * @param dy Current derivate of the solution
    */
   void update_solution(ALGEBRA::SparseSystem<T> &system,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Convert the blocks to a steady behavior
@@ -352,9 +354,10 @@ void Model<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
 
 template <typename T>
 void Model<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
   for (auto block : blocks) {
-    block->update_solution(system, parameter_values, y);
+    block->update_solution(system, parameter_values, y, dy);
   }
 }
 

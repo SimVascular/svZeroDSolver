@@ -379,7 +379,7 @@ void ConfigReader<T>::load_model() {
       //       bc_name);
     } else if (bc_type == "FLOW") {
       auto q_id = model->add_parameter(t, bc_values.get_double_array("Q"));
-      auto q_param = model->parameters[q_id];
+      auto q_param = model->get_parameter(q_id);
       if ((q_param->isconstant == false) && (q_param->isperiodic == true)) {
         if ((sim_cardiac_cycle_period > 0.0) &&
             (q_param->cycle_period != sim_cardiac_cycle_period)) {
@@ -401,7 +401,7 @@ void ConfigReader<T>::load_model() {
 
     } else if (bc_type == "PRESSURE") {
       auto p_id = model->add_parameter(t, bc_values.get_double_array("P"));
-      auto p_param = model->parameters[p_id];
+      auto p_param = model->get_parameter(p_id);
       if ((p_param->isconstant == false) && (p_param->isperiodic == true)) {
         if ((sim_cardiac_cycle_period > 0.0) &&
             (p_param->cycle_period != sim_cardiac_cycle_period)) {

@@ -250,13 +250,15 @@ void BloodVessel<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
 
   // Set element contributions
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      capacitance * (resistance + 2 * stenosis_resistance);
+      capacitance * (resistance + 2.0 * stenosis_resistance);
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
       -resistance - stenosis_resistance;
   system.D.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      -stenosis_resistance * q_in;
+      -stenosis_resistance;
+
+  T sgn_q_in = (0.0 < q_in) - (q_in < 0.0);
   system.D.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      2.0 * capacitance * stenosis_resistance * dq_in;
+      2.0 * capacitance * stenosis_coeff * sgn_q_in * dq_in;
 }
 
 template <typename T>
@@ -278,17 +280,30 @@ void BloodVessel<T>::update_gradient(
   T resistance = alpha[this->global_param_ids[ParamId::RESISTANCE]];
   T capacitance = alpha[this->global_param_ids[ParamId::CAPACITANCE]];
   T inductance = alpha[this->global_param_ids[ParamId::INDUCTANCE]];
-  // T stenosis_coeff =
-  // parameters[this->global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
-  T stenosis_resistance = 0.0;  // stenosis_coeff * q_in;
+  T stenosis_coeff = 0.0;
+  if (this->global_eqn_ids.size() > 3) {
+    stenosis_coeff =
+        alpha[this->global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
+  }
+  T stenosis_resistance = stenosis_coeff * fabs(y1);
 
   jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[0]) = -y1;
   jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[2]) = -dy3;
 
+  if (this->global_eqn_ids.size() > 3) {
+    jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[3]) =
+        -fabs(y1) * y1;
+  }
+
   jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[0]) =
       capacitance * y1 * dy1;
   jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[1]) =
-      -y0 + (resistance + 2 * stenosis_resistance) * y1 * dy1;
+      -y0 + (resistance + 2 * stenosis_resistance) * dy1;
+
+  if (this->global_eqn_ids.size() > 3) {
+    jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[3]) =
+        2.0 * capacitance * fabs(y1) * dy1;
+  }
 
   residual(this->global_eqn_ids[0]) =
       y0 - (resistance + stenosis_resistance) * y1 - y2 - inductance * dy3;

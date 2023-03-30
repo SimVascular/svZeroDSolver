@@ -121,7 +121,7 @@ Node<T>::~Node() {}
 
 template <typename T>
 std::string Node<T>::get_name() {
-  return this->model->node_names[this->id];
+  return this->model->get_node_name(this->id);
 }
 
 template <typename T>

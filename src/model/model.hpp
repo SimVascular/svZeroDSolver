@@ -83,21 +83,6 @@ class Model {
    */
   ~Model();
 
-  std::vector<std::shared_ptr<Block<T>>> blocks;  ///< Blocks of the model
-  std::vector<BlockType> block_types;             ///< Types of the blocks
-  std::vector<std::string> block_names;           ///< Names of the blocks
-  std::map<std::string_view, int>
-      block_index_map;  ///< Map between block name and index
-
-  std::vector<std::shared_ptr<Node<T>>> nodes;  ///< Nodes of the model
-  std::vector<std::string> node_names;          ///< Names of the nodes
-
-  std::vector<std::shared_ptr<Parameter<T>>>
-      parameters;  ///< Parameters of the model
-  std::vector<std::shared_ptr<Parameter<T>>>
-      time_dependent_parameters;  ///< Time-dependent parameters of the model
-  std::vector<double> parameter_values;  ///< Current values of the parameters
-
   DOFHandler dofhandler;  ///< Degree-of-freedom handler of the model
   std::vector<std::string>
       external_coupling_blocks;  ///< List of external coupling blocks (names
@@ -109,10 +94,11 @@ class Model {
    * @param block_type Type of the block
    * @param block_param_ids Global IDs of the parameters of the block
    * @param name The name of the block
+   * @param internal Toggle whether block is internal
    * @return int Global ID of the block
    */
   int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
-                std::string_view name);
+                std::string_view name, bool internal = false);
 
   /**
    * @brief Get a block by its name
@@ -125,10 +111,18 @@ class Model {
   /**
    * @brief Get a block by its global ID
    *
-   * @param block_id ID of the Block
+   * @param block_id Global ID of the Block
    * @return Block<T>* The block
    */
   Block<T> *get_block(int block_id);
+
+  /**
+   * @brief Get the name of a block by it's ID
+   *
+   * @param block_id Global ID of the block
+   * @return std::string Name of the block
+   */
+  std::string get_block_name(int block_id);
 
   /**
    * @brief Add a node to the model
@@ -140,6 +134,14 @@ class Model {
   int add_node(const std::vector<Block<T> *> &inlet_eles,
                const std::vector<Block<T> *> &outlet_eles,
                std::string_view name);
+
+  /**
+   * @brief Get the name of a node by it's ID
+   *
+   * @param node_id Global ID of the node
+   * @return std::string Name of the node
+   */
+  std::string get_node_name(int node_id);
 
   /**
    * @brief Add a constant model parameter
@@ -159,6 +161,14 @@ class Model {
    */
   int add_parameter(const std::vector<T> &times, const std::vector<T> &values,
                     bool periodic = true);
+
+  /**
+   * @brief Get a parameter by its global ID
+   *
+   * @param param_id Global ID of the parameter
+   * @return Parameter<T>* The parameter
+   */
+  Parameter<T> *get_parameter(int param_id);
 
   /**
    * @brief Finalize the model after all blocks, nodes and parameters have been
@@ -217,11 +227,36 @@ class Model {
    */
   std::map<std::string, int> get_num_triplets();
 
+  /**
+   * @brief Get the number of blocks in the model
+   *
+   * @return int Number of blocks
+   */
+  int get_num_blocks(bool internal = false);
+
  private:
   int block_count = 0;
   int node_count = 0;
   int parameter_count = 0;
   std::map<int, T> param_value_cache;
+
+  std::vector<std::shared_ptr<Block<T>>> blocks;  ///< Blocks of the model
+  std::vector<BlockType> block_types;             ///< Types of the blocks
+  std::vector<std::string> block_names;           ///< Names of the blocks
+  std::map<std::string_view, int>
+      block_index_map;  ///< Map between block name and index
+
+  std::vector<std::shared_ptr<Block<T>>>
+      hidden_blocks;  ///< Hidden blocks of the model
+
+  std::vector<std::shared_ptr<Node<T>>> nodes;  ///< Nodes of the model
+  std::vector<std::string> node_names;          ///< Names of the nodes
+
+  std::vector<std::shared_ptr<Parameter<T>>>
+      parameters;  ///< Parameters of the model
+  std::vector<std::shared_ptr<Parameter<T>>>
+      time_dependent_parameters;  ///< Time-dependent parameters of the model
+  std::vector<double> parameter_values;  ///< Current values of the parameters
 };
 
 template <typename T>
@@ -233,7 +268,7 @@ Model<T>::~Model() {}
 template <typename T>
 int Model<T>::add_block(BlockType block_type,
                         const std::vector<int> &block_param_ids,
-                        std::string_view name) {
+                        std::string_view name, bool internal) {
   DEBUG_MSG("Adding block " << name << " with type " << block_type);
   std::shared_ptr<Block<T>> block;
   switch (block_type) {
@@ -277,10 +312,14 @@ int Model<T>::add_block(BlockType block_type,
       throw std::runtime_error(
           "Adding block to model failed: Invalid block type!");
   }
-  blocks.push_back(block);
-  block_types.push_back(block_type);
-  block_index_map.insert({name, block_count});
-  block_names.push_back(static_cast<std::string>(name));
+  if (internal) {
+    hidden_blocks.push_back(block);
+  } else {
+    blocks.push_back(block);
+    block_types.push_back(block_type);
+    block_index_map.insert({name, block_count});
+    block_names.push_back(static_cast<std::string>(name));
+  }
   return block_count++;
 }
 
@@ -291,7 +330,15 @@ Block<T> *Model<T>::get_block(std::string_view name) {
 
 template <typename T>
 Block<T> *Model<T>::get_block(int block_id) {
+  if (block_id >= blocks.size()) {
+    return hidden_blocks[block_id - blocks.size()].get();
+  }
   return blocks[block_id].get();
+}
+
+template <typename T>
+std::string Model<T>::get_block_name(int block_id) {
+  return block_names[block_id];
 }
 
 template <typename T>
@@ -304,6 +351,11 @@ int Model<T>::add_node(const std::vector<Block<T> *> &inlet_eles,
   nodes.push_back(node);
   node_names.push_back(static_cast<std::string>(name));
   return node_count++;
+}
+
+template <typename T>
+std::string Model<T>::get_node_name(int node_id) {
+  return node_names[node_id];
 }
 
 template <typename T>
@@ -326,6 +378,11 @@ int Model<T>::add_parameter(const std::vector<T> &times,
 }
 
 template <typename T>
+Parameter<T> *Model<T>::get_parameter(int param_id) {
+  return parameters[param_id].get();
+}
+
+template <typename T>
 void Model<T>::finalize() {
   for (auto &node : nodes) {
     node->setup_dofs(dofhandler);
@@ -333,6 +390,15 @@ void Model<T>::finalize() {
   for (auto &block : blocks) {
     block->setup_dofs(dofhandler);
   }
+}
+
+template <typename T>
+int Model<T>::get_num_blocks(bool internal) {
+  int num_blocks = blocks.size();
+  if (internal) {
+    num_blocks += hidden_blocks.size();
+  }
+  return num_blocks;
 }
 
 template <typename T>

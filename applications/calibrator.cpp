@@ -162,14 +162,13 @@ int main(int argc, char *argv[]) {
     std::string vessel_name = vessel_config["vessel_name"];
     DEBUG_MSG("Reading initial alpha for " << vessel_name);
     auto block = model->get_block(vessel_name);
-    std::cout << "R_poiseuille" << std::endl;
     alpha[block->global_param_ids[0]] = vessel_config["zero_d_element_values"].value("R_poiseuille", 0.0);
-    std::cout << "C" << std::endl;
     alpha[block->global_param_ids[1]] = vessel_config["zero_d_element_values"].value("C", 0.0);
-    std::cout << "L" << std::endl;
     alpha[block->global_param_ids[2]] = vessel_config["zero_d_element_values"].value("L", 0.0);
-    // std::cout << "ste" << std::endl;
-    // alpha[block->global_param_ids[3]] = vessel_config["zero_d_element_values"].value("stenosis_coefficient", 0.0);
+    if (num_params > 3)
+    {
+      alpha[block->global_param_ids[3]] = vessel_config["zero_d_element_values"].value("stenosis_coefficient", 0.0);
+    }
   }
   for (auto &junction_config : output_config["junctions"])
   {
@@ -184,23 +183,14 @@ int main(int argc, char *argv[]) {
         continue;
     }
 
-    // Missing default handling
-    throw std::runtime_error("Missing default handling for junctions");
-
-    std::vector<T> r_values = junction_config["junction_values"]["R_poiseuille"];
     for (size_t i = 0; i < num_outlets; i++)
     {
-        alpha[block->global_param_ids[i]] = r_values[i];
-    }
-    std::vector<T> c_values = junction_config["junction_values"]["C"];
-    for (size_t i = 0; i < num_outlets; i++)
-    {
-        alpha[block->global_param_ids[i+num_outlets]] = c_values[i];
-    }
-    std::vector<T> l_values = junction_config["junction_values"]["L"];
-    for (size_t i = 0; i < num_outlets; i++)
-    {
-        alpha[block->global_param_ids[i+2*num_outlets]] = l_values[i];
+        alpha[block->global_param_ids[i]] = 0.0;
+        alpha[block->global_param_ids[i+num_outlets]] = 0.0;
+        alpha[block->global_param_ids[i+2*num_outlets]] = 0.0;
+        if (num_params > 3) {
+          alpha[block->global_param_ids[i+3*num_outlets]] = 0.0;
+        }
     }
   }
 
@@ -228,7 +218,9 @@ int main(int argc, char *argv[]) {
         dy(k) = dy_all[k][i];
       }
 
-      for (auto block : model->blocks) {
+      for (size_t j = 0; j < model->get_num_blocks(true); j++)
+      {  
+        auto block = model->get_block(j);
         block->update_gradient(jacobian, residual, alpha, y, dy);
 
         for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
@@ -237,7 +229,9 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    for (auto block : model->blocks) {
+    for (size_t j = 0; j < model->get_num_blocks(true); j++)
+      {  
+        auto block = model->get_block(j);
       for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
           block->global_eqn_ids[l] -= num_dofs * num_observations;
         }

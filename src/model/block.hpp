@@ -232,7 +232,7 @@ Block<T>::Block(int id, const std::vector<int> &param_ids,
 
 template <typename T>
 std::string Block<T>::get_name() {
-  return this->model->block_names[this->id];
+  return this->model->get_block_name(this->id);
 }
 
 template <typename T>

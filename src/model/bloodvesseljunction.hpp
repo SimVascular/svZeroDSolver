@@ -201,7 +201,7 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
         {this->global_param_ids[i], this->global_param_ids[i + num_outlets],
          this->global_param_ids[i + 2 * num_outlets],
          this->global_param_ids[i + 3 * num_outlets]},
-        this->get_name() + "_bv" + std::to_string(i));
+        this->get_name() + "_bv" + std::to_string(i), true);
     blood_vessels.push_back(this->model->get_block(block_id));
     blood_vessels[i]->inlet_nodes.push_back(this->inlet_nodes[0]);
     blood_vessels[i]->outlet_nodes.push_back(this->outlet_nodes[i]);

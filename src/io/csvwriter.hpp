@@ -82,16 +82,19 @@ std::string to_vessel_csv(std::vector<T> &times,
   unsigned int outflow_dof;
   unsigned int inpres_dof;
   unsigned int outpres_dof;
-  for (auto &block : model.blocks) {
+  for (size_t i = 0; i < model.get_num_blocks(); i++) {
+    auto block = model.get_block(i);
     // Extract global solution indices of the block
-    std::string name = "NoName";
-    if (HELPERS::startswith(block->get_name(), "branch")) {
-      name = block->get_name();
-      inflow_dof = block->inlet_nodes[0]->flow_dof;
-      outflow_dof = block->outlet_nodes[0]->flow_dof;
-      inpres_dof = block->inlet_nodes[0]->pres_dof;
-      outpres_dof = block->outlet_nodes[0]->pres_dof;
+
+    if (dynamic_cast<const MODEL::BloodVessel<T> *>(block) == nullptr) {
+      continue;
     }
+
+    std::string name = block->get_name();
+    inflow_dof = block->inlet_nodes[0]->flow_dof;
+    outflow_dof = block->outlet_nodes[0]->flow_dof;
+    inpres_dof = block->inlet_nodes[0]->pres_dof;
+    outpres_dof = block->outlet_nodes[0]->pres_dof;
 
     // Write the solution of the block to the output file
     if (derivative) {

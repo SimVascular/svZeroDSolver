@@ -149,7 +149,7 @@ int main(int argc, char *argv[]) {
   DEBUG_MSG("Number of observations: " << num_observations);
 
   int num_dofs = model->dofhandler.size();
-  int max_nliter = 10;
+  int max_nliter = 100;
 
   // =====================================
   // Setup alpha
@@ -237,17 +237,20 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat = jacobian.transpose() * jacobian;
+    Eigen::Matrix<T, Eigen::Dynamic, 1> new_alpha = alpha - mat.inverse() * jacobian.transpose() * residual;
+
+    Eigen::Matrix<T, Eigen::Dynamic, 1> diff = new_alpha - alpha;
+
     T residual_norm = 0.0;
     for (size_t i = 0; i < param_counter; i++)
     {
-      residual_norm += residual[i] * residual[i];
+      residual_norm += diff[i] * diff[i];
     }
+    residual_norm = pow(residual_norm, 0.5);
     DEBUG_MSG("residual norm: " << residual_norm);
 
-
-    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat = jacobian.transpose() * jacobian;
-    alpha = alpha - mat.inverse() * jacobian.transpose() * residual;
-
+    alpha = new_alpha;
 
   }
 
@@ -260,8 +263,8 @@ int main(int argc, char *argv[]) {
     auto block = model->get_block(vessel_name);
     vessel_config["zero_d_element_values"] = {
         {"R_poiseuille", alpha[block->global_param_ids[0]]},
-        {"C", alpha[block->global_param_ids[1]]},
-        {"L", alpha[block->global_param_ids[2]]},
+        {"C", std::max(alpha[block->global_param_ids[1]], 0.0)},
+        {"L", std::max(alpha[block->global_param_ids[2]], 0.0)},
         {"stenosis_coefficient", 0.0}
     };
   }
@@ -286,13 +289,14 @@ int main(int argc, char *argv[]) {
     std::vector<T> c_values;
     for (size_t i = 0; i < num_outlets; i++)
     {
-        c_values.push_back(alpha[block->global_param_ids[i+num_outlets]]);
+        c_values.push_back(std::max(alpha[block->global_param_ids[i+num_outlets]], 0.0));
     }
     std::vector<T> l_values;
     for (size_t i = 0; i < num_outlets; i++)
     {
-        l_values.push_back(alpha[block->global_param_ids[i+2*num_outlets]]);
+        l_values.push_back(std::max(alpha[block->global_param_ids[i+2*num_outlets]], 0.0));
     }
+    // TODO: adapt for stenosis output
     std::vector<T> ste_values;
     for (size_t i = 0; i < num_outlets; i++)
     {

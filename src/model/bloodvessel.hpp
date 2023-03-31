@@ -281,7 +281,7 @@ void BloodVessel<T>::update_gradient(
   T capacitance = alpha[this->global_param_ids[ParamId::CAPACITANCE]];
   T inductance = alpha[this->global_param_ids[ParamId::INDUCTANCE]];
   T stenosis_coeff = 0.0;
-  if (this->global_eqn_ids.size() > 3) {
+  if (this->global_param_ids.size() > 3) {
     stenosis_coeff =
         alpha[this->global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
   }
@@ -290,7 +290,7 @@ void BloodVessel<T>::update_gradient(
   jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[0]) = -y1;
   jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[2]) = -dy3;
 
-  if (this->global_eqn_ids.size() > 3) {
+  if (this->global_param_ids.size() > 3) {
     jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[3]) =
         -fabs(y1) * y1;
   }
@@ -300,7 +300,7 @@ void BloodVessel<T>::update_gradient(
   jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[1]) =
       -dy0 + (resistance + 2 * stenosis_resistance) * dy1;
 
-  if (this->global_eqn_ids.size() > 3) {
+  if (this->global_param_ids.size() > 3) {
     jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[3]) =
         2.0 * capacitance * fabs(y1) * dy1;
   }

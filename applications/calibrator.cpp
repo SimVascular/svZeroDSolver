@@ -17,7 +17,7 @@ typedef double T;
 int main(int argc, char *argv[]) {
   DEBUG_MSG("Starting svZeroDCalibrator");
 
-  int num_params = 3;
+  int num_params = 4;
 
   // Get input and output file name
   if (argc != 3) {
@@ -252,6 +252,8 @@ int main(int argc, char *argv[]) {
 
     alpha = new_alpha;
 
+    if (residual_norm < 1e-12) break;
+
   }
 
   // =====================================
@@ -261,11 +263,16 @@ int main(int argc, char *argv[]) {
   {
     std::string vessel_name = vessel_config["vessel_name"];
     auto block = model->get_block(vessel_name);
+    T stenosis_coeff = 0.0;
+    if (num_params > 3)
+    {
+      stenosis_coeff = alpha[block->global_param_ids[3]];
+    }
     vessel_config["zero_d_element_values"] = {
         {"R_poiseuille", alpha[block->global_param_ids[0]]},
-        {"C", std::max(alpha[block->global_param_ids[1]], 0.0)},
-        {"L", std::max(alpha[block->global_param_ids[2]], 0.0)},
-        {"stenosis_coefficient", 0.0}
+        {"C", alpha[block->global_param_ids[1]]},
+        {"L", alpha[block->global_param_ids[2]]},
+        {"stenosis_coefficient", stenosis_coeff}
     };
   }
 
@@ -289,18 +296,25 @@ int main(int argc, char *argv[]) {
     std::vector<T> c_values;
     for (size_t i = 0; i < num_outlets; i++)
     {
-        c_values.push_back(std::max(alpha[block->global_param_ids[i+num_outlets]], 0.0));
+        c_values.push_back(alpha[block->global_param_ids[i+num_outlets]]);
     }
     std::vector<T> l_values;
     for (size_t i = 0; i < num_outlets; i++)
     {
-        l_values.push_back(std::max(alpha[block->global_param_ids[i+2*num_outlets]], 0.0));
+        l_values.push_back(alpha[block->global_param_ids[i+2*num_outlets]]);
     }
-    // TODO: adapt for stenosis output
     std::vector<T> ste_values;
-    for (size_t i = 0; i < num_outlets; i++)
+    if (num_params > 3)
     {
-        ste_values.push_back(0.0);
+        for (size_t i = 0; i < num_outlets; i++){
+          ste_values.push_back(alpha[block->global_param_ids[i+3*num_outlets]]);
+        }
+    }
+    else {
+      for (size_t i = 0; i < num_outlets; i++)
+      {
+          ste_values.push_back(0.0);
+      }
     }
     junction_config["junction_type"] = "BloodVesselJunction";
     junction_config["junction_values"] = {

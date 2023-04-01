@@ -154,6 +154,12 @@ class Block {
   virtual void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Setup parameters that depend on the model
+   *
+   */
+  virtual void setup_model_dependent_params();
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -267,6 +273,9 @@ void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
 
 template <typename T>
 void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
+
+template <typename T>
+void Block<T>::setup_model_dependent_params() {}
 
 template <typename T>
 void Block<T>::update_constant(ALGEBRA::SparseSystem<T> &system,

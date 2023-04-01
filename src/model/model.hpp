@@ -42,14 +42,9 @@
 #include "../algebra/sparsesystem.hpp"
 #include "../model/bloodvessel.hpp"
 #include "../model/bloodvesseljunction.hpp"
-#include "block.hpp"
-#include "blocktype.hpp"
-#include "dofhandler.hpp"
-#include "node.hpp"
-#include "parameter.hpp"
-// #include "../model/closedloopRCRbc.hpp"
-// #include "../model/closedloopcoronarybc.hpp"
-// #include "../model/closedloopheartpulmonary.hpp"
+#include "../model/closedloopRCRbc.hpp"
+#include "../model/closedloopcoronarybc.hpp"
+#include "../model/closedloopheartpulmonary.hpp"
 #include "../model/flowreferencebc.hpp"
 #include "../model/junction.hpp"
 #include "../model/openloopcoronarybc.hpp"
@@ -57,6 +52,11 @@
 #include "../model/resistancebc.hpp"
 #include "../model/resistivejunction.hpp"
 #include "../model/windkesselbc.hpp"
+#include "block.hpp"
+#include "blocktype.hpp"
+#include "dofhandler.hpp"
+#include "node.hpp"
+#include "parameter.hpp"
 
 namespace MODEL {
 
@@ -84,9 +84,9 @@ class Model {
   ~Model();
 
   DOFHandler dofhandler;  ///< Degree-of-freedom handler of the model
-  std::vector<std::string>
-      external_coupling_blocks;  ///< List of external coupling blocks (names
-                                 ///< need to be available for interface)
+
+  T cardiac_cycle_period = -1.0;  ///< Cardiac cycle period
+  T time = 0.0;                   ///< Current time
 
   /**
    * @brief Add a block to the model
@@ -308,6 +308,24 @@ int Model<T>::add_block(BlockType block_type,
       block = std::shared_ptr<Block<T>>(
           new OpenLoopCoronaryBC<T>(block_count, block_param_ids, this));
       break;
+    case BlockType::CLOSEDLOOPCORONARYLEFTBC:
+      block = std::shared_ptr<Block<T>>(
+          new ClosedLoopCoronaryBC<T, MODEL::Side::LEFT>(
+              block_count, block_param_ids, this));
+      break;
+    case BlockType::CLOSEDLOOPCORONARYRIGHTBC:
+      block = std::shared_ptr<Block<T>>(
+          new ClosedLoopCoronaryBC<T, MODEL::Side::RIGHT>(
+              block_count, block_param_ids, this));
+      break;
+    case BlockType::CLOSEDLOOPRCRBC:
+      block = std::shared_ptr<Block<T>>(
+          new ClosedLoopRCRBC<T>(block_count, block_param_ids, this));
+      break;
+    case BlockType::CLOSEDLOOPHEARTPULMONARY:
+      block = std::shared_ptr<Block<T>>(
+          new ClosedLoopHeartPulmonary<T>(block_count, block_param_ids, this));
+      break;
     default:
       throw std::runtime_error(
           "Adding block to model failed: Invalid block type!");
@@ -390,6 +408,9 @@ void Model<T>::finalize() {
   for (auto &block : blocks) {
     block->setup_dofs(dofhandler);
   }
+  for (auto &block : blocks) {
+    block->setup_model_dependent_params();
+  }
 }
 
 template <typename T>
@@ -410,6 +431,7 @@ void Model<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 
 template <typename T>
 void Model<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
+  this->time = time;
   for (auto param : time_dependent_parameters) {
     parameter_values[param->id] = param->get(time);
   }
@@ -434,7 +456,8 @@ void Model<T>::to_steady() {
   }
   for (size_t i = 0; i < block_types.size(); i++) {
     blocks[i]->steady = true;
-    if (block_types[i] == BlockType::WINDKESSELBC) {
+    if ((block_types[i] == BlockType::WINDKESSELBC) ||
+        (block_types[i] == BlockType::CLOSEDLOOPRCRBC)) {
       int param_id_capacitance = blocks[i]->global_param_ids[1];
       T value = parameters[param_id_capacitance]->get(0.0);
       param_value_cache.insert({param_id_capacitance, value});

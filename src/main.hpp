@@ -249,7 +249,7 @@ const std::string run(std::string_view json_config) {
   // Create steady initial
   if (reader.sim_steady_initial) {
     DEBUG_MSG("Calculate steady initial condition");
-    T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
+    T time_step_size_steady = reader.model->cardiac_cycle_period / 10.0;
     reader.model->to_steady();
     ALGEBRA::Integrator<T> integrator_steady(
         *reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol,

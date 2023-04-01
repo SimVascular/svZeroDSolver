@@ -40,21 +40,7 @@
 
 #include "../helpers/debug.hpp"
 #include "../helpers/startswith.hpp"
-#include "../model/block.hpp"
-#include "../model/bloodvessel.hpp"
-// #include "../model/bloodvesseljunction.hpp"
-// #include "../model/closedloopRCRbc.hpp"
-// #include "../model/closedloopcoronarybc.hpp"
-// #include "../model/closedloopheartpulmonary.hpp"
-#include "../model/flowreferencebc.hpp"
-#include "../model/junction.hpp"
 #include "../model/model.hpp"
-#include "../model/node.hpp"
-// #include "../model/openloopcoronarybc.hpp"
-// #include "../model/pressurereferencebc.hpp"
-#include "../model/resistancebc.hpp"
-// #include "../model/resistivejunction.hpp"
-// #include "../model/windkesselbc.hpp"
 #include "./jsonhandler.hpp"
 
 namespace IO {
@@ -94,9 +80,8 @@ class ConfigReader {
 
   // Negative value indicates this has not
   // been read from config file yet.
-  T sim_cardiac_cycle_period = -1.0;  ///< Cardiac cycle period.
-  T sim_time_step_size;               ///< Simulation time step size
-  T sim_abs_tol;                      ///< Absolute tolerance for simulation
+  T sim_time_step_size;  ///< Simulation time step size
+  T sim_abs_tol;         ///< Absolute tolerance for simulation
 
   int sim_num_cycles;      ///< Number of cardiac cycles to simulate
   int sim_pts_per_cycle;   ///< Number of time steps per cardiac cycle
@@ -210,137 +195,125 @@ void ConfigReader<T>::load_model() {
         {bc_config.get_string("bc_name"), bc_config.get_string("bc_type")});
   }
 
-  // if (handler.has_key("external_solver_coupling_blocks")) {
-  //   DEBUG_MSG("Create external coupling blocks");
-  //   auto coupling_configs = handler["external_solver_coupling_blocks"];
-  //   for (size_t i = 0; i < coupling_configs.length(); i++) {
-  //     auto coupling_config = coupling_configs[i];
-  //     auto coupling_type = coupling_config.get_string("type");
-  //     auto coupling_name = coupling_config.get_string("name");
-  //     auto coupling_loc = coupling_config.get_string("location");
-  //     bool periodic = coupling_config.get_bool("periodic", true);
-  //     auto coupling_values = coupling_config["values"];
+  if (handler.has_key("external_solver_coupling_blocks")) {
+    DEBUG_MSG("Create external coupling blocks");
+    auto coupling_configs = handler["external_solver_coupling_blocks"];
+    for (size_t i = 0; i < coupling_configs.length(); i++) {
+      auto coupling_config = coupling_configs[i];
+      auto coupling_type = coupling_config.get_string("type");
+      auto coupling_name = coupling_config.get_string("name");
+      auto coupling_loc = coupling_config.get_string("location");
+      bool periodic = coupling_config.get_bool("periodic", true);
+      auto coupling_values = coupling_config["values"];
 
-  //     // Create coupling block
-  //     auto t_coupling = coupling_values.get_double_array("t", {0.0});
+      // Create coupling block
+      auto t_coupling = coupling_values.get_double_array("t", {0.0});
 
-  //     if (coupling_type == "FLOW") {
-  //       auto Q_coupling = coupling_values.get_double_array("Q");
+      if (coupling_type == "FLOW") {
+        auto Q_coupling = coupling_values.get_double_array("Q");
+        auto q_id = model->add_parameter(t_coupling, Q_coupling, periodic);
+        auto q_coupling_param = model->get_parameter(q_id);
 
-  //       MODEL::Parameter q_coupling_param(t_coupling, Q_coupling, periodic);
-  //       if ((q_coupling_param.isconstant == false) &&
-  //           (q_coupling_param.isperiodic == true)) {
-  //         if ((sim_cardiac_cycle_period > 0.0) &&
-  //             (q_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
-  //           throw std::runtime_error(
-  //               "Inconsistent cardiac cycle period defined in "
-  //               "Parameter");
-  //         } else {
-  //           sim_cardiac_cycle_period = q_coupling_param.cycle_period;
-  //         }
-  //       }
-  //       model->add_block(
-  //           new MODEL::FlowReferenceBC<T>(
-  //               q_coupling_param, static_cast<std::string>(coupling_name),
-  //               static_cast<std::string>(coupling_loc)),
-  //           coupling_name);
-  //       model->external_coupling_blocks.push_back(
-  //           static_cast<std::string>(coupling_name));
-  //     } else if (coupling_type == "PRESSURE") {
-  //       auto P_coupling = coupling_values.get_double_array("P");
-  //       MODEL::Parameter p_coupling_param(t_coupling, P_coupling, periodic);
-  //       if ((p_coupling_param.isconstant == false) &&
-  //           (p_coupling_param.isperiodic == true)) {
-  //         if ((sim_cardiac_cycle_period > 0.0) &&
-  //             (p_coupling_param.cycle_period != sim_cardiac_cycle_period)) {
-  //           throw std::runtime_error(
-  //               "Inconsistent cardiac cycle period defined in "
-  //               "Parameter");
-  //         } else {
-  //           sim_cardiac_cycle_period = p_coupling_param.cycle_period;
-  //         }
-  //       }
-  //       model->add_block(
-  //           new MODEL::PressureReferenceBC<T>(
-  //               p_coupling_param, static_cast<std::string>(coupling_name),
-  //               static_cast<std::string>(coupling_loc)),
-  //           coupling_name);
-  //       model->external_coupling_blocks.push_back(
-  //           static_cast<std::string>(coupling_name));
-  //     } else {
-  //       throw std::runtime_error(
-  //           "Error. Flowsolver coupling block types should be FLOW or "
-  //           "PRESSURE.");
-  //     }
-  //     DEBUG_MSG("Created coupling block " << coupling_name);
+        if ((q_coupling_param->isconstant == false) &&
+            (q_coupling_param->isperiodic == true)) {
+          if ((model->cardiac_cycle_period > 0.0) &&
+              (q_coupling_param->cycle_period != model->cardiac_cycle_period)) {
+            throw std::runtime_error(
+                "Inconsistent cardiac cycle period defined in "
+                "Parameter");
+          } else {
+            model->cardiac_cycle_period = q_coupling_param->cycle_period;
+          }
+        }
+        model->add_block(MODEL::BlockType::FLOWBC, {q_id}, coupling_name);
+      } else if (coupling_type == "PRESSURE") {
+        auto P_coupling = coupling_values.get_double_array("P");
+        auto p_id = model->add_parameter(t_coupling, P_coupling, periodic);
+        auto p_coupling_param = model->get_parameter(p_id);
+        if ((p_coupling_param->isconstant == false) &&
+            (p_coupling_param->isperiodic == true)) {
+          if ((model->cardiac_cycle_period > 0.0) &&
+              (p_coupling_param->cycle_period != model->cardiac_cycle_period)) {
+            throw std::runtime_error(
+                "Inconsistent cardiac cycle period defined in "
+                "Parameter");
+          } else {
+            model->cardiac_cycle_period = p_coupling_param->cycle_period;
+          }
+        }
+        model->add_block(MODEL::BlockType::PRESSUREBC, {p_id}, coupling_name);
+      } else {
+        throw std::runtime_error(
+            "Error. Flowsolver coupling block types should be FLOW or "
+            "PRESSURE.");
+      }
+      DEBUG_MSG("Created coupling block " << coupling_name);
 
-  //     // Determine the type of connected block
-  //     auto connected_block = coupling_config.get_string("connected_block");
-  //     std::string_view connected_type;
-  //     int found_block = 0;
-  //     if (connected_block == "ClosedLoopHeartAndPulmonary") {
-  //       connected_type = "ClosedLoopHeartAndPulmonary";
-  //       found_block = 1;
-  //     } else {
-  //       try {
-  //         connected_type = bc_type_map.at(connected_block);
-  //         found_block = 1;
-  //       } catch (...) {
-  //       }
-  //       if (found_block == 0) {
-  //         // Search for connected_block in the list of vessel names
-  //         for (auto const vessel : vessel_id_map) {
-  //           if (connected_block == vessel.second) {
-  //             connected_type = "BloodVessel";
-  //             found_block = 1;
-  //             break;
-  //           }
-  //         }
-  //       }
-  //       if (found_block == 0) {
-  //         std::cout << "Error! Could not connected type for block: "
-  //                   << connected_block << std::endl;
-  //         throw std::runtime_error("Terminating.");
-  //       }
-  //     }  // connected_block != "ClosedLoopHeartAndPulmonary"
-  //     // Create connections
-  //     if (coupling_loc == "inlet") {
-  //       std::vector<std::string_view> possible_types = {
-  //           "RESISTANCE",    "RCR",      "ClosedLoopRCR",
-  //           "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
-  //           "BloodVessel"};
-  //       if (std::find(std::begin(possible_types), std::end(possible_types),
-  //                     connected_type) == std::end(possible_types)) {
-  //         throw std::runtime_error(
-  //             "Error: The specified connection type for inlet "
-  //             "external_coupling_block is invalid.");
-  //       }
-  //       connections.push_back({coupling_name, connected_block});
-  //       DEBUG_MSG("Created coupling block connection: " << coupling_name <<
-  //       "->"
-  //                                                       << connected_block);
-  //     } else if (coupling_loc == "outlet") {
-  //       std::vector<std::string_view> possible_types = {
-  //           "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
-  //       if (std::find(std::begin(possible_types), std::end(possible_types),
-  //                     connected_type) == std::end(possible_types)) {
-  //         throw std::runtime_error(
-  //             "Error: The specified connection type for outlet "
-  //             "external_coupling_block is invalid.");
-  //       }
-  //       // Add connection only for closedLoopRCR and BloodVessel. Connection
-  //       to
-  //       // ClosedLoopHeartAndPulmonary will be handled in
-  //       // ClosedLoopHeartAndPulmonary creation.
-  //       if ((connected_type == "ClosedLoopRCR") ||
-  //           (connected_type == "BloodVessel")) {
-  //         connections.push_back({connected_block, coupling_name});
-  //         DEBUG_MSG("Created coupling block connection: "
-  //                   << connected_block << "-> " << coupling_name);
-  //       }  // connected_type == "ClosedLoopRCR"
-  //     }    // coupling_loc
-  //   }      // for (size_t i = 0; i < coupling_configs.length(); i++)
-  // }
+      // Determine the type of connected block
+      auto connected_block = coupling_config.get_string("connected_block");
+      std::string_view connected_type;
+      int found_block = 0;
+      if (connected_block == "ClosedLoopHeartAndPulmonary") {
+        connected_type = "ClosedLoopHeartAndPulmonary";
+        found_block = 1;
+      } else {
+        try {
+          connected_type = bc_type_map.at(connected_block);
+          found_block = 1;
+        } catch (...) {
+        }
+        if (found_block == 0) {
+          // Search for connected_block in the list of vessel names
+          for (auto const vessel : vessel_id_map) {
+            if (connected_block == vessel.second) {
+              connected_type = "BloodVessel";
+              found_block = 1;
+              break;
+            }
+          }
+        }
+        if (found_block == 0) {
+          std::cout << "Error! Could not connected type for block: "
+                    << connected_block << std::endl;
+          throw std::runtime_error("Terminating.");
+        }
+      }  // connected_block != "ClosedLoopHeartAndPulmonary"
+      // Create connections
+      if (coupling_loc == "inlet") {
+        std::vector<std::string_view> possible_types = {
+            "RESISTANCE",    "RCR",      "ClosedLoopRCR",
+            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
+            "BloodVessel"};
+        if (std::find(std::begin(possible_types), std::end(possible_types),
+                      connected_type) == std::end(possible_types)) {
+          throw std::runtime_error(
+              "Error: The specified connection type for inlet "
+              "external_coupling_block is invalid.");
+        }
+        connections.push_back({coupling_name, connected_block});
+        DEBUG_MSG("Created coupling block connection: " << coupling_name << "->"
+                                                        << connected_block);
+      } else if (coupling_loc == "outlet") {
+        std::vector<std::string_view> possible_types = {
+            "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
+        if (std::find(std::begin(possible_types), std::end(possible_types),
+                      connected_type) == std::end(possible_types)) {
+          throw std::runtime_error(
+              "Error: The specified connection type for outlet "
+              "external_coupling_block is invalid.");
+        }
+        // Add connection only for closedLoopRCR and BloodVessel. Connection to
+        // ClosedLoopHeartAndPulmonary will be handled in
+        // ClosedLoopHeartAndPulmonary creation.
+        if ((connected_type == "ClosedLoopRCR") ||
+            (connected_type == "BloodVessel")) {
+          connections.push_back({connected_block, coupling_name});
+          DEBUG_MSG("Created coupling block connection: "
+                    << connected_block << "-> " << coupling_name);
+        }  // connected_type == "ClosedLoopRCR"
+      }    // coupling_loc
+    }      // for (size_t i = 0; i < coupling_configs.length(); i++)
+  }
 
   std::vector<std::string_view> closed_loop_bcs;
 
@@ -363,31 +336,26 @@ void ConfigReader<T>::load_model() {
                            model->add_parameter(bc_values.get_double("Pd")),
                        },
                        bc_name);
-      // } else if (bc_type == "ClosedLoopRCR") {
-      //   T Rp = bc_values.get_double("Rp");
-      //   T C = bc_values.get_double("C");
-      //   T Rd = bc_values.get_double("Rd");
-      //   bool closed_loop_outlet = bc_values.get_bool("closed_loop_outlet");
-      //   if (closed_loop_outlet == true) {
-      //     closed_loop_bcs.push_back(bc_name);
-      //   }
-      //   model->add_block(
-      //       new MODEL::ClosedLoopRCRBC<T>(Rp = Rp, C = C, Rd = Rd,
-      //                                     closed_loop_outlet =
-      //                                     closed_loop_outlet,
-      //                                     static_cast<std::string>(bc_name)),
-      //       bc_name);
+    } else if (bc_type == "ClosedLoopRCR") {
+      model->add_block(MODEL::BlockType::CLOSEDLOOPRCRBC,
+                       {model->add_parameter(bc_values.get_double("Rp")),
+                        model->add_parameter(bc_values.get_double("C")),
+                        model->add_parameter(bc_values.get_double("Rd"))},
+                       bc_name);
+      if (bc_values.get_bool("closed_loop_outlet") == true) {
+        closed_loop_bcs.push_back(bc_name);
+      }
     } else if (bc_type == "FLOW") {
       auto q_id = model->add_parameter(t, bc_values.get_double_array("Q"));
       auto q_param = model->get_parameter(q_id);
       if ((q_param->isconstant == false) && (q_param->isperiodic == true)) {
-        if ((sim_cardiac_cycle_period > 0.0) &&
-            (q_param->cycle_period != sim_cardiac_cycle_period)) {
+        if ((model->cardiac_cycle_period > 0.0) &&
+            (q_param->cycle_period != model->cardiac_cycle_period)) {
           throw std::runtime_error(
               "Inconsistent cardiac cycle period defined in "
               "Parameter");
         } else {
-          sim_cardiac_cycle_period = q_param->cycle_period;
+          model->cardiac_cycle_period = q_param->cycle_period;
         }
       }
       model->add_block(MODEL::BlockType::FLOWBC, {q_id}, bc_name);
@@ -403,13 +371,13 @@ void ConfigReader<T>::load_model() {
       auto p_id = model->add_parameter(t, bc_values.get_double_array("P"));
       auto p_param = model->get_parameter(p_id);
       if ((p_param->isconstant == false) && (p_param->isperiodic == true)) {
-        if ((sim_cardiac_cycle_period > 0.0) &&
-            (p_param->cycle_period != sim_cardiac_cycle_period)) {
+        if ((model->cardiac_cycle_period > 0.0) &&
+            (p_param->cycle_period != model->cardiac_cycle_period)) {
           throw std::runtime_error(
               "Inconsistent cardiac cycle period defined in "
               "Parameter");
         } else {
-          sim_cardiac_cycle_period = p_param->cycle_period;
+          model->cardiac_cycle_period = p_param->cycle_period;
         }
       }
       model->add_block(MODEL::BlockType::PRESSUREBC, {p_id}, bc_name);
@@ -424,19 +392,24 @@ void ConfigReader<T>::load_model() {
            model->add_parameter(t, bc_values.get_double_array("Pim")),
            model->add_parameter(t, bc_values.get_double_array("P_v"))},
           bc_name);
-      // } else if (bc_type == "ClosedLoopCoronary") {
-      //   auto Ra = bc_values.get_double("Ra");
-      //   auto Ram = bc_values.get_double("Ram");
-      //   auto Rv = bc_values.get_double("Rv");
-      //   auto Ca = bc_values.get_double("Ca");
-      //   auto Cim = bc_values.get_double("Cim");
-      //   auto side = bc_values.get_string("side");
-      //   closed_loop_bcs.push_back(bc_name);
-      //   model->add_block(new MODEL::ClosedLoopCoronaryBC<T>(
-      //                        Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim,
-      //                        static_cast<std::string>(side),
-      //                        static_cast<std::string>(bc_name)),
-      //                    bc_name);
+    } else if (bc_type == "ClosedLoopCoronary") {
+      auto side = bc_values.get_string("side");
+      MODEL::BlockType block_type;
+      if (side == "left") {
+        block_type = MODEL::BlockType::CLOSEDLOOPCORONARYLEFTBC;
+      } else if (side == "right") {
+        block_type = MODEL::BlockType::CLOSEDLOOPCORONARYRIGHTBC;
+      } else {
+        throw std::runtime_error("Invalid side for ClosedLoopCoronary");
+      }
+      model->add_block(block_type,
+                       {model->add_parameter(bc_values.get_double("Ra")),
+                        model->add_parameter(bc_values.get_double("Ram")),
+                        model->add_parameter(bc_values.get_double("Rv")),
+                        model->add_parameter(bc_values.get_double("Ca")),
+                        model->add_parameter(bc_values.get_double("Cim"))},
+                       bc_name);
+      closed_loop_bcs.push_back(bc_name);
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
     }
@@ -494,130 +467,92 @@ void ConfigReader<T>::load_model() {
   bool heartpulmonary_block_present =
       false;  ///< Flag to check if heart block is present (requires different
               ///< handling)
-  // if (handler.has_key("closed_loop_blocks")) {
-  //   auto closed_loop_configs = handler["closed_loop_blocks"];
-  //   for (size_t i = 0; i < closed_loop_configs.length(); i++) {
-  //     auto closed_loop_config = closed_loop_configs[i];
-  //     auto closed_loop_type =
-  //     closed_loop_config.get_string("closed_loop_type"); if (closed_loop_type
-  //     == "ClosedLoopHeartAndPulmonary") {
-  //       if (heartpulmonary_block_present == false) {
-  //         heartpulmonary_block_present = true;
-  //         if (sim_steady_initial == true) {
-  //           std::runtime_error(
-  //               "ERROR: Steady initial condition is not compatible with "
-  //               "ClosedLoopHeartAndPulmonary block.");
-  //         }
-  //         sim_steady_initial = false;
-  //         std::string_view heartpulmonary_name = "CLH";
-  //         T cycle_period =
-  //             closed_loop_config.get_double("cardiac_cycle_period");
-  //         if ((sim_cardiac_cycle_period > 0.0) &&
-  //             (cycle_period != sim_cardiac_cycle_period)) {
-  //           throw std::runtime_error(
-  //               "Inconsistent cardiac cycle period defined in "
-  //               "ClosedLoopHeartAndPulmonary.");
-  //         } else {
-  //           sim_cardiac_cycle_period = cycle_period;
-  //         }
-  //         auto heart_params = closed_loop_config["parameters"];
-  //         // Convert to std::map to keep model blocks independent of simdjson
-  //         std::map<std::string, T> param_values;
-  //         param_values.insert(
-  //             std::make_pair("Tsa", heart_params.get_double("Tsa")));
-  //         param_values.insert(
-  //             std::make_pair("tpwave", heart_params.get_double("tpwave")));
-  //         param_values.insert(
-  //             std::make_pair("Erv_s", heart_params.get_double("Erv_s")));
-  //         param_values.insert(
-  //             std::make_pair("Elv_s", heart_params.get_double("Elv_s")));
-  //         param_values.insert(
-  //             std::make_pair("iml", heart_params.get_double("iml")));
-  //         param_values.insert(
-  //             std::make_pair("imr", heart_params.get_double("imr")));
-  //         param_values.insert(
-  //             std::make_pair("Lra_v", heart_params.get_double("Lra_v")));
-  //         param_values.insert(
-  //             std::make_pair("Rra_v", heart_params.get_double("Rra_v")));
-  //         param_values.insert(
-  //             std::make_pair("Lrv_a", heart_params.get_double("Lrv_a")));
-  //         param_values.insert(
-  //             std::make_pair("Rrv_a", heart_params.get_double("Rrv_a")));
-  //         param_values.insert(
-  //             std::make_pair("Lla_v", heart_params.get_double("Lla_v")));
-  //         param_values.insert(
-  //             std::make_pair("Rla_v", heart_params.get_double("Rla_v")));
-  //         param_values.insert(
-  //             std::make_pair("Llv_a", heart_params.get_double("Llv_a")));
-  //         param_values.insert(
-  //             std::make_pair("Rlv_ao", heart_params.get_double("Rlv_ao")));
-  //         param_values.insert(
-  //             std::make_pair("Vrv_u", heart_params.get_double("Vrv_u")));
-  //         param_values.insert(
-  //             std::make_pair("Vlv_u", heart_params.get_double("Vlv_u")));
-  //         param_values.insert(
-  //             std::make_pair("Rpd", heart_params.get_double("Rpd")));
-  //         param_values.insert(
-  //             std::make_pair("Cp", heart_params.get_double("Cp")));
-  //         param_values.insert(
-  //             std::make_pair("Cpa", heart_params.get_double("Cpa")));
-  //         param_values.insert(
-  //             std::make_pair("Kxp_ra", heart_params.get_double("Kxp_ra")));
-  //         param_values.insert(
-  //             std::make_pair("Kxv_ra", heart_params.get_double("Kxv_ra")));
-  //         param_values.insert(
-  //             std::make_pair("Kxp_la", heart_params.get_double("Kxp_la")));
-  //         param_values.insert(
-  //             std::make_pair("Kxv_la", heart_params.get_double("Kxv_la")));
-  //         param_values.insert(
-  //             std::make_pair("Emax_ra", heart_params.get_double("Emax_ra")));
-  //         param_values.insert(
-  //             std::make_pair("Emax_la", heart_params.get_double("Emax_la")));
-  //         param_values.insert(
-  //             std::make_pair("Vaso_ra", heart_params.get_double("Vaso_ra")));
-  //         param_values.insert(
-  //             std::make_pair("Vaso_la", heart_params.get_double("Vaso_la")));
-  //         if (param_values.size() == 27) {
-  //           model->add_block(new MODEL::ClosedLoopHeartPulmonary<T>(
-  //                                param_values, cycle_period,
-  //                                static_cast<std::string>(heartpulmonary_name)),
-  //                            heartpulmonary_name);
-  //         } else {
-  //           throw std::runtime_error(
-  //               "Error. ClosedLoopHeartAndPulmonary should have 27
-  //               parameters");
-  //         }
-  //         // Junction at inlet to heart
-  //         std::string_view heart_inlet_junction_name = "J_heart_inlet";
-  //         connections.push_back(
-  //             {heart_inlet_junction_name, heartpulmonary_name});
-  //         model->add_block(new MODEL::Junction<T>(static_cast<std::string>(
-  //                              heart_inlet_junction_name)),
-  //                          heart_inlet_junction_name);
-  //         for (auto heart_inlet_elem : closed_loop_bcs) {
-  //           connections.push_back(
-  //               {heart_inlet_elem, heart_inlet_junction_name});
-  //         }
-  //         // Junction at outlet from heart
-  //         std::string_view heart_outlet_junction_name = "J_heart_outlet";
-  //         connections.push_back(
-  //             {heartpulmonary_name, heart_outlet_junction_name});
-  //         model->add_block(new MODEL::Junction<T>(static_cast<std::string>(
-  //                              heart_outlet_junction_name)),
-  //                          heart_outlet_junction_name);
-  //         for (auto outlet_block :
-  //              closed_loop_config.get_string_array("outlet_blocks")) {
-  //           connections.push_back({heart_outlet_junction_name,
-  //           outlet_block});
-  //         }
-  //       } else {
-  //         throw std::runtime_error(
-  //             "Error. Only one ClosedLoopHeartAndPulmonary can be
-  //             included.");
-  //       }
-  //     }
-  //   }
-  // }
+  if (handler.has_key("closed_loop_blocks")) {
+    auto closed_loop_configs = handler["closed_loop_blocks"];
+    for (size_t i = 0; i < closed_loop_configs.length(); i++) {
+      auto closed_loop_config = closed_loop_configs[i];
+      auto closed_loop_type = closed_loop_config.get_string("closed_loop_type");
+      if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
+        if (heartpulmonary_block_present == false) {
+          heartpulmonary_block_present = true;
+          if (sim_steady_initial == true) {
+            std::runtime_error(
+                "ERROR: Steady initial condition is not compatible with "
+                "ClosedLoopHeartAndPulmonary block.");
+          }
+          sim_steady_initial = false;
+          std::string_view heartpulmonary_name = "CLH";
+          T cycle_period =
+              closed_loop_config.get_double("cardiac_cycle_period");
+          if ((model->cardiac_cycle_period > 0.0) &&
+              (cycle_period != model->cardiac_cycle_period)) {
+            throw std::runtime_error(
+                "Inconsistent cardiac cycle period defined in "
+                "ClosedLoopHeartAndPulmonary.");
+          } else {
+            model->cardiac_cycle_period = cycle_period;
+          }
+          auto heart_params = closed_loop_config["parameters"];
+          // Convert to std::map to keep model blocks independent of simdjson
+          model->add_block(
+              MODEL::BlockType::CLOSEDLOOPHEARTPULMONARY,
+              {model->add_parameter(heart_params.get_double("Tsa")),
+               model->add_parameter(heart_params.get_double("tpwave")),
+               model->add_parameter(heart_params.get_double("Erv_s")),
+               model->add_parameter(heart_params.get_double("Elv_s")),
+               model->add_parameter(heart_params.get_double("iml")),
+               model->add_parameter(heart_params.get_double("imr")),
+               model->add_parameter(heart_params.get_double("Lra_v")),
+               model->add_parameter(heart_params.get_double("Rra_v")),
+               model->add_parameter(heart_params.get_double("Lrv_a")),
+               model->add_parameter(heart_params.get_double("Rrv_a")),
+               model->add_parameter(heart_params.get_double("Lla_v")),
+               model->add_parameter(heart_params.get_double("Rla_v")),
+               model->add_parameter(heart_params.get_double("Llv_a")),
+               model->add_parameter(heart_params.get_double("Rlv_ao")),
+               model->add_parameter(heart_params.get_double("Vrv_u")),
+               model->add_parameter(heart_params.get_double("Vlv_u")),
+               model->add_parameter(heart_params.get_double("Rpd")),
+               model->add_parameter(heart_params.get_double("Cp")),
+               model->add_parameter(heart_params.get_double("Cpa")),
+               model->add_parameter(heart_params.get_double("Kxp_ra")),
+               model->add_parameter(heart_params.get_double("Kxv_ra")),
+               model->add_parameter(heart_params.get_double("Kxp_la")),
+               model->add_parameter(heart_params.get_double("Kxv_la")),
+               model->add_parameter(heart_params.get_double("Emax_ra")),
+               model->add_parameter(heart_params.get_double("Emax_la")),
+               model->add_parameter(heart_params.get_double("Vaso_ra")),
+               model->add_parameter(heart_params.get_double("Vaso_la"))},
+              heartpulmonary_name);
+
+          // Junction at inlet to heart
+          std::string_view heart_inlet_junction_name = "J_heart_inlet";
+          connections.push_back(
+              {heart_inlet_junction_name, heartpulmonary_name});
+          model->add_block(MODEL::BlockType::JUNCTION, {},
+                           heart_inlet_junction_name);
+          for (auto heart_inlet_elem : closed_loop_bcs) {
+            connections.push_back(
+                {heart_inlet_elem, heart_inlet_junction_name});
+          }
+
+          // Junction at outlet from heart
+          std::string_view heart_outlet_junction_name = "J_heart_outlet";
+          connections.push_back(
+              {heartpulmonary_name, heart_outlet_junction_name});
+          model->add_block(MODEL::BlockType::JUNCTION, {},
+                           heart_outlet_junction_name);
+          for (auto outlet_block :
+               closed_loop_config.get_string_array("outlet_blocks")) {
+            connections.push_back({heart_outlet_junction_name, outlet_block});
+          }
+        } else {
+          throw std::runtime_error(
+              "Error. Only one ClosedLoopHeartAndPulmonary can be included.");
+        }
+      }
+    }
+  }
 
   // Create Connections
   for (auto &connection : connections) {
@@ -630,24 +565,18 @@ void ConfigReader<T>::load_model() {
   model->finalize();
 
   // Set value of cardiac cycle period
-  if (sim_cardiac_cycle_period < 0.0) {
-    sim_cardiac_cycle_period =
+  if (model->cardiac_cycle_period < 0.0) {
+    model->cardiac_cycle_period =
         1.0;  // If it has not been read from config or Parameter
               // yet, set as default value of 1.0
   }
   // Calculate time step size
   if (!sim_coupled) {
     sim_time_step_size =
-        sim_cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
+        model->cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
   } else {
     sim_time_step_size = sim_external_step_size / (T(sim_num_time_steps) - 1.0);
   }
-
-  // Update block parameters that depend on DOFs and other params of other
-  // blocks For example, coronary block params that depend on heart block DOFs
-  // for (auto &block : model->blocks) {
-  //   block->set_model_dependent_params(*model);
-  // }
 }
 
 template <typename T>

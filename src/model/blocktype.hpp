@@ -36,6 +36,10 @@
 
 namespace MODEL {
 
+/**
+ * @brief Block types
+ *
+ */
 enum BlockType {
   BLOODVESSEL = 0,
   JUNCTION = 1,
@@ -46,6 +50,10 @@ enum BlockType {
   RESISTANCEBC = 6,
   WINDKESSELBC = 7,
   OPENLOOPCORONARYBC = 8,
+  CLOSEDLOOPCORONARYLEFTBC = 9,
+  CLOSEDLOOPCORONARYRIGHTBC = 10,
+  CLOSEDLOOPRCRBC = 11,
+  CLOSEDLOOPHEARTPULMONARY = 12
 };
 
 }  // namespace MODEL

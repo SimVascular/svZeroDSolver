@@ -100,39 +100,31 @@ namespace MODEL {
  * \end{array}\right]
  * \f]
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Proximal resistance
+ * * `1` Capacitance
+ * * `2` Distal resistance
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
 class ClosedLoopRCRBC : public Block<T> {
  public:
+  // Inherit constructors
+  using Block<T>::Block;
+
   /**
-   * @brief Parameters of the element.
+   * @brief Local IDs of the parameters
    *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
    */
-  struct Parameters : public Block<T>::Parameters {
-    T Rp;  ///< Proximal resistance
-    T C;   ///< Capacitance
-    T Rd;  ///< Distal restistance
+  enum ParamId {
+    RP = 0,
+    C = 1,
+    RD = 2,
   };
-
-  /**
-   * @brief Construct a new ClosedLoopRCRBC object
-   *
-   * @param Rp Proximal resistance
-   * @param C Capacitance
-   * @param Rd Distal resistance
-   * @param Pd Distal pressure
-   * @param name Name
-   */
-  ClosedLoopRCRBC(T Rp, T C, T Rd, bool closed_loop_outlet, std::string name);
-
-  /**
-   * @brief Destroy the ClosedLoopRCRBC object
-   *
-   */
-  ~ClosedLoopRCRBC();
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -147,25 +139,14 @@ class ClosedLoopRCRBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  void update_block_params(std::vector<T> new_params);
-
-  /**
-   * @brief Return parameters of a block.
-   *
-   * @block_params Block parameters.
-   */
-  void get_block_params(std::vector<T> &block_params);
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse system
+   * @brief Update the constant contributions of the element in a sparse
+   system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -186,70 +167,16 @@ class ClosedLoopRCRBC : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> get_num_triplets();
-
-  /**
-   * @brief Convert the block to a steady behavior
-   *
-   * Set the capacitance to 0.
-   */
-  void to_steady();
-
-  /**
-   * @brief Convert the block to a steady behavior
-   *
-   * Set the capacitance to original value.
-   */
-  void to_unsteady();
-
- private:
-  Parameters params;
-  T c_cache;
-  bool closed_loop_outlet =
-      false;  ///< Is this block connected to a closed-loop model?
 };
 
 template <typename T>
-ClosedLoopRCRBC<T>::ClosedLoopRCRBC(T Rp, T C, T Rd, bool closed_loop_outlet,
-                                    std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.Rp = Rp;
-  this->params.C = C;
-  this->params.Rd = Rd;
-  this->closed_loop_outlet = closed_loop_outlet;
-}
-
-template <typename T>
-ClosedLoopRCRBC<T>::~ClosedLoopRCRBC() {}
-
-template <typename T>
 void ClosedLoopRCRBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  // Block<T>::setup_dofs_(dofhandler, 3, 1);
   Block<T>::setup_dofs_(dofhandler, 3, {"P_c"});
 }
 
 template <typename T>
-void ClosedLoopRCRBC<T>::update_block_params(std::vector<T> new_params) {
-  this->params.Rp = new_params[0];
-  this->params.C = new_params[1];
-  this->params.Rd = new_params[2];
-}
-
-template <typename T>
-void ClosedLoopRCRBC<T>::get_block_params(std::vector<T> &block_params) {
-  if (block_params.size() != 3) {
-    throw std::runtime_error(
-        "Wrong vector size in get_block_params for ClosedLoopRCRBC. Size "
-        "should be 3 but is currently " +
-        std::to_string(block_params.size()));
-  }
-  block_params[0] = this->params.Rp;
-  block_params[1] = this->params.C;
-  block_params[2] = this->params.Rd;
-}
-
-template <typename T>
-void ClosedLoopRCRBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+void ClosedLoopRCRBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                         std::vector<T> &parameters) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -1.0;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = 1.0;
@@ -259,22 +186,11 @@ void ClosedLoopRCRBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 
   // Below values can be unsteady if needed (not currently implemented)
   system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[4]) =
-      params.C;
+      parameters[this->global_param_ids[ParamId::C]];
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      -params.Rp;
+      -parameters[this->global_param_ids[ParamId::RP]];
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) =
-      -params.Rd;
-}
-
-template <typename T>
-void ClosedLoopRCRBC<T>::to_steady() {
-  c_cache = params.C;
-  params.C = 0.0;
-}
-
-template <typename T>
-void ClosedLoopRCRBC<T>::to_unsteady() {
-  params.C = c_cache;
+      -parameters[this->global_param_ids[ParamId::RD]];
 }
 
 template <typename T>

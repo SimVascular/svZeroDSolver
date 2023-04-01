@@ -211,37 +211,16 @@ void ConfigReader<T>::load_model() {
 
       if (coupling_type == "FLOW") {
         auto Q_coupling = coupling_values.get_double_array("Q");
-        auto q_id = model->add_parameter(t_coupling, Q_coupling, periodic);
-        auto q_coupling_param = model->get_parameter(q_id);
-
-        if ((q_coupling_param->isconstant == false) &&
-            (q_coupling_param->isperiodic == true)) {
-          if ((model->cardiac_cycle_period > 0.0) &&
-              (q_coupling_param->cycle_period != model->cardiac_cycle_period)) {
-            throw std::runtime_error(
-                "Inconsistent cardiac cycle period defined in "
-                "Parameter");
-          } else {
-            model->cardiac_cycle_period = q_coupling_param->cycle_period;
-          }
-        }
-        model->add_block(MODEL::BlockType::FLOWBC, {q_id}, coupling_name);
+        model->add_block(
+            MODEL::BlockType::FLOWBC,
+            {model->add_parameter(t_coupling, Q_coupling, periodic)},
+            coupling_name);
       } else if (coupling_type == "PRESSURE") {
         auto P_coupling = coupling_values.get_double_array("P");
-        auto p_id = model->add_parameter(t_coupling, P_coupling, periodic);
-        auto p_coupling_param = model->get_parameter(p_id);
-        if ((p_coupling_param->isconstant == false) &&
-            (p_coupling_param->isperiodic == true)) {
-          if ((model->cardiac_cycle_period > 0.0) &&
-              (p_coupling_param->cycle_period != model->cardiac_cycle_period)) {
-            throw std::runtime_error(
-                "Inconsistent cardiac cycle period defined in "
-                "Parameter");
-          } else {
-            model->cardiac_cycle_period = p_coupling_param->cycle_period;
-          }
-        }
-        model->add_block(MODEL::BlockType::PRESSUREBC, {p_id}, coupling_name);
+        model->add_block(
+            MODEL::BlockType::PRESSUREBC,
+            {model->add_parameter(t_coupling, P_coupling, periodic)},
+            coupling_name);
       } else {
         throw std::runtime_error(
             "Error. Flowsolver coupling block types should be FLOW or "
@@ -346,19 +325,9 @@ void ConfigReader<T>::load_model() {
         closed_loop_bcs.push_back(bc_name);
       }
     } else if (bc_type == "FLOW") {
-      auto q_id = model->add_parameter(t, bc_values.get_double_array("Q"));
-      auto q_param = model->get_parameter(q_id);
-      if ((q_param->isconstant == false) && (q_param->isperiodic == true)) {
-        if ((model->cardiac_cycle_period > 0.0) &&
-            (q_param->cycle_period != model->cardiac_cycle_period)) {
-          throw std::runtime_error(
-              "Inconsistent cardiac cycle period defined in "
-              "Parameter");
-        } else {
-          model->cardiac_cycle_period = q_param->cycle_period;
-        }
-      }
-      model->add_block(MODEL::BlockType::FLOWBC, {q_id}, bc_name);
+      model->add_block(
+          MODEL::BlockType::FLOWBC,
+          {model->add_parameter(t, bc_values.get_double_array("Q"))}, bc_name);
 
     } else if (bc_type == "RESISTANCE") {
       auto R = bc_values.get_double_array("R");
@@ -368,19 +337,9 @@ void ConfigReader<T>::load_model() {
           {model->add_parameter(t, R), model->add_parameter(t, Pd)}, bc_name);
 
     } else if (bc_type == "PRESSURE") {
-      auto p_id = model->add_parameter(t, bc_values.get_double_array("P"));
-      auto p_param = model->get_parameter(p_id);
-      if ((p_param->isconstant == false) && (p_param->isperiodic == true)) {
-        if ((model->cardiac_cycle_period > 0.0) &&
-            (p_param->cycle_period != model->cardiac_cycle_period)) {
-          throw std::runtime_error(
-              "Inconsistent cardiac cycle period defined in "
-              "Parameter");
-        } else {
-          model->cardiac_cycle_period = p_param->cycle_period;
-        }
-      }
-      model->add_block(MODEL::BlockType::PRESSUREBC, {p_id}, bc_name);
+      model->add_block(
+          MODEL::BlockType::PRESSUREBC,
+          {model->add_parameter(t, bc_values.get_double_array("P"))}, bc_name);
     } else if (bc_type == "CORONARY") {
       model->add_block(
           MODEL::BlockType::OPENLOOPCORONARYBC,

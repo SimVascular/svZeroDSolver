@@ -389,6 +389,14 @@ int Model<T>::add_parameter(const std::vector<T> &times,
                             const std::vector<T> &values, bool periodic) {
   std::shared_ptr<Parameter<T>> param(
       new Parameter<T>(parameter_count, times, values, periodic));
+  if (periodic && (param->isconstant == false)) {
+    if ((this->cardiac_cycle_period > 0.0) &&
+        (param->cycle_period != this->cardiac_cycle_period)) {
+      throw std::runtime_error(
+          "Inconsistent cardiac cycle period defined in parameters");
+    }
+    this->cardiac_cycle_period = param->cycle_period;
+  }
   parameters.push_back(param);
   time_dependent_parameters.push_back(param);
   parameter_values.push_back(param->get(0.0));

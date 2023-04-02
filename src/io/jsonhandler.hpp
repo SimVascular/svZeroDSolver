@@ -39,21 +39,15 @@
 #include <stdexcept>
 #include <string>
 
-#include "simdjson.h"
+#include <nlohmann/json.hpp>
 
 namespace IO {
 
 class JsonHandler {
  private:
-  simdjson::simdjson_result<simdjson::dom::element> data;
-  std::shared_ptr<simdjson::dom::parser> parser;
+  nlohmann::json data;
 
  public:
-  /**
-   * @brief Construct a new Json Handler object
-   *
-   */
-  JsonHandler();
 
   /**
    * @brief Construct a new JsonHandler object
@@ -67,7 +61,7 @@ class JsonHandler {
    *
    * @param data simdjson data
    */
-  JsonHandler(simdjson::simdjson_result<simdjson::dom::element> data);
+  JsonHandler(nlohmann::json &data);
 
   /**
    * @brief Destroy the JsonHandler object
@@ -191,7 +185,7 @@ class JsonHandler {
    * @param key Key of the parameter
    * @return std::string_view Value of the parameter
    */
-  std::string_view get_string(std::string_view key);
+  std::string get_string(std::string_view key);
 
   /**
    * @brief Get string array parameter
@@ -199,202 +193,96 @@ class JsonHandler {
    * @param key Key of the parameter
    * @return std::vector<std::string_view> Value of the parameter
    */
-  std::vector<std::string_view> get_string_array(std::string_view key);
-
-  /**
-   * @brief Get the list parameter
-   *
-   * @param key Key of the parameter
-   * @return std::list<JsonHandler> Value of the parameter
-   */
-  std::list<JsonHandler> get_list(std::string_view key);
+  std::vector<std::string> get_string_array(std::string_view key);
 };
 
-JsonHandler::JsonHandler() {}
-
 JsonHandler::JsonHandler(std::string_view json_encoded_string) {
-  parser = std::shared_ptr<simdjson::dom::parser>(new simdjson::dom::parser());
-  auto string = simdjson::padded_string(json_encoded_string);
-  data = parser->parse(string);
+  data = nlohmann::json::parse(json_encoded_string);
 }
 
-JsonHandler::JsonHandler(
-    simdjson::simdjson_result<simdjson::dom::element> data) {
+JsonHandler::JsonHandler(nlohmann::json& data) {
   this->data = data;
 }
 
 JsonHandler::~JsonHandler() {}
 
 int JsonHandler::length() {
-  int size;
-  try {
-    size = data.get_array().size();
-  } catch (simdjson::simdjson_error) {
-    throw std::runtime_error("Not an array");
-  }
-  return size;
+  return data.size();
 }
 
 bool JsonHandler::has_key(std::string_view key) {
-  bool has_key = false;
-  for (auto &&field : data.get_object()) {
-    if (field.key == key) {
-      has_key = true;
-    }
-  }
-  return has_key;
+  return data.contains(key);
 }
 
 JsonHandler JsonHandler::operator[](std::string_view key) {
-  if (!has_key(key)) {
-    throw std::runtime_error("Key not found: " + static_cast<std::string>(key));
-  }
-  return JsonHandler(data.at_key(key));
+  return JsonHandler(data[key]);
 }
 
 JsonHandler JsonHandler::operator[](int index) {
-  simdjson::simdjson_result<simdjson::dom::element> output;
-  try {
-    output = data.get_array().at(index);
-  } catch (simdjson::simdjson_error) {
-    throw std::runtime_error("Index out of range: " + std::to_string(index));
-  }
-  return JsonHandler(output);
+  return JsonHandler(data[index]);
 }
 
 bool JsonHandler::get_bool(std::string_view key) {
-  bool output;
-  try {
-    output = data.at_key(key).get_bool();
-  } catch (simdjson::simdjson_error) {
-    throw std::runtime_error("Key not found: " + static_cast<std::string>(key));
-  }
-  return output;
+  return data[key];
 }
 
 bool JsonHandler::get_bool(std::string_view key, bool default_value) {
-  try {
-    return data.at_key(key).get_bool();
-  } catch (simdjson::simdjson_error) {
-    return default_value;
-  }
+  return data.value(key, default_value);
 }
 
 int JsonHandler::get_int(std::string_view key) {
-  int output;
-  try {
-    output = data.at_key(key).get_int64();
-  } catch (simdjson::simdjson_error) {
-    throw std::runtime_error("Key not found: " + static_cast<std::string>(key));
-  }
-  return output;
+  return data[key];
 }
 
 int JsonHandler::get_int(std::string_view key, int default_value) {
-  try {
-    return data.at_key(key).get_int64();
-  } catch (simdjson::simdjson_error) {
-    return default_value;
-  }
+  return data.value(key, default_value);
 }
 
 double JsonHandler::get_double(std::string_view key) {
-  double output;
-  try {
-    output = data.at_key(key).get_double();
-  } catch (simdjson::simdjson_error) {
-    throw std::runtime_error("Key not found: " + static_cast<std::string>(key));
-  }
-  return output;
+  return data[key];
 }
 
 double JsonHandler::get_double(std::string_view key, double default_value) {
-  try {
-    return data.at_key(key).get_double();
-  } catch (simdjson::simdjson_error) {
-    return default_value;
-  }
+  return data.value(key, default_value);
 }
 
 std::vector<double> JsonHandler::get_double_array(std::string_view key) {
   std::vector<double> vector;
-  try {
-    for (auto x : data.at_key(key).get_array()) {
-      vector.push_back(x.get_double());
-    }
-  } catch (simdjson::simdjson_error) {
-    try {
-      vector.push_back(data.at_key(key).get_double());
-    } catch (simdjson::simdjson_error) {
-      throw std::runtime_error("Key not found: " +
-                               static_cast<std::string>(key));
-    }
-  };
-  return vector;
+  if (!data[key].is_array())
+  {
+    return {data[key]};
+  }
+  return data[key].get<std::vector<double>>();
 }
 
 std::vector<double> JsonHandler::get_double_array(
     std::string_view key, std::vector<double> default_value) {
-  std::vector<double> vector;
-  try {
-    for (auto x : data.at_key(key).get_array()) {
-      vector.push_back(x.get_double());
-    }
-  } catch (simdjson::simdjson_error) {
-    try {
-      vector.push_back(data.at_key(key).get_double());
-    } catch (simdjson::simdjson_error) {
-      return default_value;
-    }
-  };
-  return vector;
+  if (!has_key(key))
+  {
+    return default_value;
+  }
+  if (!data[key].is_array())
+  {
+    return {data[key]};
+  }
+  return data[key].get<std::vector<double>>();
 }
 
 std::vector<int> JsonHandler::get_int_array(std::string_view key) {
-  std::vector<int> vector;
-  try {
-    for (auto x : data.at_key(key).get_array()) {
-      int val = x.get_int64();
-      vector.push_back(val);
-    }
-  } catch (simdjson::simdjson_error) {
-    try {
-      int val = data.at_key(key).get_int64();
-      vector.push_back(val);
-    } catch (simdjson::simdjson_error) {
-      throw std::runtime_error("Key not found: " +
-                               static_cast<std::string>(key));
-    }
-  };
-  return vector;
-}
-
-std::string_view JsonHandler::get_string(std::string_view key) {
-  std::string_view output;
-  try {
-    output = data.at_key(key).get_string();
-  } catch (simdjson::simdjson_error) {
-    throw std::runtime_error("Key not found: " + static_cast<std::string>(key));
+  if (!data[key].is_array())
+  {
+    return {data[key]};
   }
-  return output;
+  return data[key].get<std::vector<int>>();
 }
 
-std::vector<std::string_view> JsonHandler::get_string_array(
+std::string JsonHandler::get_string(std::string_view key) {
+  return data[key];
+}
+
+std::vector<std::string> JsonHandler::get_string_array(
     std::string_view key) {
-  std::vector<std::string_view> vector;
-  try {
-    for (auto x : data.at_key(key).get_array()) {
-      vector.push_back(x.get_string());
-    }
-  } catch (simdjson::simdjson_error) {
-    try {
-      vector.push_back(data.at_key(key).get_string());
-    } catch (simdjson::simdjson_error) {
-      throw std::runtime_error("Key not found: " +
-                               static_cast<std::string>(key));
-    }
-  };
-  return vector;
+  return data[key].get<std::vector<std::string>>();
 }
 
 }  // namespace IO

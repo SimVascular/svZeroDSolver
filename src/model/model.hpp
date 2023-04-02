@@ -243,7 +243,7 @@ class Model {
   std::vector<std::shared_ptr<Block<T>>> blocks;  ///< Blocks of the model
   std::vector<BlockType> block_types;             ///< Types of the blocks
   std::vector<std::string> block_names;           ///< Names of the blocks
-  std::map<std::string_view, int>
+  std::map<std::string, int>
       block_index_map;  ///< Map between block name and index
 
   std::vector<std::shared_ptr<Block<T>>>
@@ -335,18 +335,20 @@ int Model<T>::add_block(BlockType block_type,
   } else {
     blocks.push_back(block);
     block_types.push_back(block_type);
-    block_index_map.insert({name, block_count});
-    block_names.push_back(static_cast<std::string>(name));
+    auto name_string = static_cast<std::string>(name);
+    block_index_map.insert({name_string, block_count});
+    block_names.push_back(name_string);
   }
   return block_count++;
 }
 
 template <typename T>
 Block<T> *Model<T>::get_block(std::string_view name) {
-  if (block_index_map.find(name) == block_index_map.end()) {
+  auto name_string = static_cast<std::string>(name);
+  if (block_index_map.find(name_string) == block_index_map.end()) {
     return nullptr;
   }
-  return blocks[block_index_map[name]].get();
+  return blocks[block_index_map[name_string]].get();
 }
 
 template <typename T>

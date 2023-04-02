@@ -5,17 +5,6 @@ project(svZeroDSolver)
 include(FetchContent)
 
 # -----------------------------------------------------------------------------
-# Fetch simdjson
-# -----------------------------------------------------------------------------
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-FetchContent_Declare(
-  simdjson
-  GIT_REPOSITORY https://github.com/simdjson/simdjson.git
-  GIT_TAG  master
-  GIT_SHALLOW TRUE)
-FetchContent_MakeAvailable(simdjson)
-
-# -----------------------------------------------------------------------------
 # Fetch Eigen
 # -----------------------------------------------------------------------------
 FetchContent_Declare(

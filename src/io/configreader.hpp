@@ -140,16 +140,16 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
   auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
 
   // Create list to store block connections while generating blocks
-  std::vector<std::tuple<std::string_view, std::string_view>> connections;
+  std::vector<std::tuple<std::string, std::string>> connections;
 
   // Create vessels
   DEBUG_MSG("Load vessels");
-  std::map<std::int64_t, std::string_view> vessel_id_map;
+  std::map<std::int64_t, std::string> vessel_id_map;
   auto vessels = config_handler["vessels"];
   for (size_t i = 0; i < vessels.length(); i++) {
     auto vessel_config = vessels[i];
     auto vessel_values = vessel_config["zero_d_element_values"];
-    std::string_view vessel_name = vessel_config.get_string("vessel_name");
+    auto vessel_name = vessel_config.get_string("vessel_name");
     vessel_id_map.insert({vessel_config.get_int("vessel_id"), vessel_name});
     if (vessel_config.get_string("zero_d_element_type") == "BloodVessel") {
       model->add_block(
@@ -182,7 +182,7 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
   // Create map for boundary conditions to boundary condition type
   DEBUG_MSG("Create BC name to BC type map");
   auto bc_configs = config_handler["boundary_conditions"];
-  std::map<std::string_view, std::string_view> bc_type_map;
+  std::map<std::string, std::string> bc_type_map;
   for (size_t i = 0; i < bc_configs.length(); i++) {
     auto bc_config = bc_configs[i];
     bc_type_map.insert(
@@ -225,7 +225,7 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
 
       // Determine the type of connected block
       auto connected_block = coupling_config.get_string("connected_block");
-      std::string_view connected_type;
+      std::string connected_type;
       int found_block = 0;
       if (connected_block == "ClosedLoopHeartAndPulmonary") {
         connected_type = "ClosedLoopHeartAndPulmonary";
@@ -254,7 +254,7 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
       }  // connected_block != "ClosedLoopHeartAndPulmonary"
       // Create connections
       if (coupling_loc == "inlet") {
-        std::vector<std::string_view> possible_types = {
+        std::vector<std::string> possible_types = {
             "RESISTANCE",    "RCR",      "ClosedLoopRCR",
             "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
             "BloodVessel"};
@@ -268,7 +268,7 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
         DEBUG_MSG("Created coupling block connection: " << coupling_name << "->"
                                                         << connected_block);
       } else if (coupling_loc == "outlet") {
-        std::vector<std::string_view> possible_types = {
+        std::vector<std::string> possible_types = {
             "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
         if (std::find(std::begin(possible_types), std::end(possible_types),
                       connected_type) == std::end(possible_types)) {
@@ -290,7 +290,7 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
   }
 
   // Create boundary conditions
-  std::vector<std::string_view> closed_loop_bcs;
+  std::vector<std::string> closed_loop_bcs;
   DEBUG_MSG("Create boundary conditions");
   for (size_t i = 0; i < bc_configs.length(); i++) {
     auto bc_config = bc_configs[i];
@@ -428,7 +428,7 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
       if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
         if (heartpulmonary_block_present == false) {
           heartpulmonary_block_present = true;
-          std::string_view heartpulmonary_name = "CLH";
+          std::string heartpulmonary_name = "CLH";
           T cycle_period =
               closed_loop_config.get_double("cardiac_cycle_period");
           if ((model->cardiac_cycle_period > 0.0) &&
@@ -473,7 +473,7 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
               heartpulmonary_name);
 
           // Junction at inlet to heart
-          std::string_view heart_inlet_junction_name = "J_heart_inlet";
+          std::string heart_inlet_junction_name = "J_heart_inlet";
           connections.push_back(
               {heart_inlet_junction_name, heartpulmonary_name});
           model->add_block(MODEL::BlockType::JUNCTION, {},
@@ -484,7 +484,7 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
           }
 
           // Junction at outlet from heart
-          std::string_view heart_outlet_junction_name = "J_heart_outlet";
+          std::string heart_outlet_junction_name = "J_heart_outlet";
           connections.push_back(
               {heartpulmonary_name, heart_outlet_junction_name});
           model->add_block(MODEL::BlockType::JUNCTION, {},

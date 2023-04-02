@@ -51,10 +51,10 @@ namespace MODEL {
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R$, *-] (3,0)
- * to [R, l=$R_{ste}$, -] (5,0) node[anchor=south] {$P_{C}$}
- * (5,0) to [L, l=$L$, *-*] (7,0)
+ * to [R, l=$R_{ste}$, -] (5,0)
+ * (5,0) to [L, l=$L$, -*] (7,0)
  * node[anchor=south]{$P_{out}$}
- * (5,0) to [C, l=$C$, *-] (5,-1.5)
+ * (5,0) to [C, l=$C$, -] (5,-1.5)
  * node[ground]{};
  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
@@ -67,40 +67,33 @@ namespace MODEL {
  * \f]
  *
  * \f[
- * Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{c}^{e}}{d t}=0
- * \f]
- *
- * \f[
- * P_{i n}^{e}-(R+R_{ste}) Q_{i n}^{e}-P_{c}=0
- * \f]
+ * Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{in}^{e}}{d t}+C(R+2R_{ste})\frac{d
+ * Q_{in}^{e}}{d t}=0 \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{i n}^{e} & Q_{in}^{e} &
- * P_{out}^{e} & Q_{out}^{e} & P_C\end{array}\right]^{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} & Q_{in}^{e} &
+ * P_{out}^{e} & Q_{out}^{e}\end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
- * 0 & 0 & 0 & -L & 0 \\
- * 0 & 0 & 0 & 0 & -C \\
- * 0 & 0 & 0 & 0 & 0
+ * \mathbf{F}^{e}=\left[\begin{array}{cccc}
+ * 1 & -R_{ste}-R & -1 & 0 \\
+ * 0 & 1 & 0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
- * 1 & -R_{ste}-R & -1 & 0 & 0 \\
- * 0 & 1 & 0 & -1 & 0 \\
- * 1 & -R_{ste}-R & 0 & 0 & -1
+ * \mathbf{E}^{e}=\left[\begin{array}{cccc}
+ * 0 & 0 & 0 & -L \\
+ * -C & C(R+2R_{ste}) & 0 & 0
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{D}^{e}=\left[\begin{array}{ccccc}
- * 0 & -R_{ste} & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0 & 0 \\
- * 0 & -R_{ste} & 0 & 0 & 0
+ * \mathbf{D}^{e}=\left[\begin{array}{cccc}
+ * 0 & -R_{ste} & 0 & 0 \\
+ * 0 & 2CK_{ste} sgn(Q_{in}^{e}) \dot{Q}_{in}^{e} & 0 & 0
  * \end{array}\right]
  * \f]
  *
@@ -109,6 +102,24 @@ namespace MODEL {
  * constant part of the equation is summarized in \ref
  * Parameters::stenosis_coefficient. \f$R\f$, \f$C\f$, and \f$L\f$ refer to
  * Poisieuille resistance, capacitance and inductance, respectively.
+ *
+ * ### Gradient
+ *
+ * Gradient of the equations with respect to the parameters:
+ *
+ * \f[
+ * \mathbf{J}^{e} = \left[\begin{array}{cccc}
+ * -y_2 & 0 & -\dot{y}_4 & -|y_2|y_2 \\
+ * C\dot{y}_2 & (-\dot{y}_1+(R+2R_{ste})\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{r}^{e} = \left[\begin{array}{c}
+ * y_1-(R+R_{ste})y_2-y_3-L\dot{y}_4 \\
+ * y_2 - y_4 - C\dot{y}_1 + C(R+2R_{ste}) \dot{y}_2
+ * \end{array}\right]
+ * \f]
  *
  * ### Parameters
  *

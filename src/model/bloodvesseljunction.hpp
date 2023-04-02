@@ -76,10 +76,9 @@ namespace MODEL {
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
+ * \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
  * & P_{out, 1}^{e} & Q_{out, 1}^{e} &
- * \dots & P_{out, i}^{e} & Q_{out, i}^{e} & Q_{in,1} & \dots &
- * Q_{in,i}\end{array}\right] \f]
+ * \dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right] \f]
  *
  * Mass conservation
  *
@@ -89,6 +88,27 @@ namespace MODEL {
  * & & & & & & & & & \\
  * \multicolumn{10}{c}{\mathrm{< blood \, vessel \, contributions >}} \\
  * & & & & & & & & &
+ * \end{array}\right]
+ * \f]
+ *
+ * ### Gradient
+ *
+ * Gradient of the equations with respect to the parameters:
+ *
+ * \f[
+ * \mathbf{J}^{e} = \left[\begin{array}{llll}
+ * 0 & 0 & 0 & 0 \\
+ * & & & \\
+ * \multicolumn{4}{c}{\mathrm{< blood \, vessel \, contributions >}} \\
+ * & & &
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{r}^{e} = \left[\begin{array}{c}
+ * Q_{in, 1} - Q_{out, 1} - \dots - Q_{out, i} \\
+ * \\
+ * \mathrm{< blood \, vessel \, contributions >} \\
  * \end{array}\right]
  * \f]
  *

@@ -43,20 +43,31 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(json)
 
 # -----------------------------------------------------------------------------
+# Fetch pybind11_json
+# -----------------------------------------------------------------------------
+FetchContent_Declare(
+    pybind11_json
+    GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
+    GIT_TAG        master
+)
+FetchContent_MakeAvailable(pybind11_json)
+
+# -----------------------------------------------------------------------------
 # Set executable and python library
 # -----------------------------------------------------------------------------
 include_directories(src)
-add_executable(solver applications/solver.cpp)
-add_executable(calibrator applications/calibrator.cpp)
-pybind11_add_module(libsvzerodsolver src/python.cpp)
-add_subdirectory("src/interface")
+add_executable(svzerodsolver applications/svzerodsolver.cpp)
+add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp)
+pybind11_add_module(libsvzerodplus applications/libsvzerodplus.cpp)
+# add_subdirectory("src/interface")
 
 # -----------------------------------------------------------------------------
 # Link libraries
 # -----------------------------------------------------------------------------
-target_link_libraries(solver PRIVATE Eigen3::Eigen)
-target_link_libraries(solver PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(calibrator PRIVATE Eigen3::Eigen)
-target_link_libraries(calibrator PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(libsvzerodsolver PRIVATE Eigen3::Eigen)
-target_link_libraries(libsvzerodsolver PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
+target_link_libraries(svzerodsolver PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(svzerodcalibrator PRIVATE Eigen3::Eigen)
+target_link_libraries(svzerodcalibrator PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(libsvzerodplus PRIVATE Eigen3::Eigen)
+target_link_libraries(libsvzerodplus PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(libsvzerodplus PRIVATE pybind11_json)

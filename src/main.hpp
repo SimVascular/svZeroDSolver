@@ -231,13 +231,12 @@ typedef double T;
  * 4. Run simulation
  * 5. Write output to file
  *
- * @param json_config Path config or json encoded string with config
+ * @param handler Handler for the json style configuration
  * @return Result as csv encoded string
  */
-const std::string run(std::string_view json_config) {
+const std::string run(IO::JsonHandler handler) {
   // Load model and configuration
   DEBUG_MSG("Read configuration");
-  auto handler = IO::JsonHandler(json_config);
   auto simparams = IO::load_simulation_params<T>(handler);
   auto model = IO::load_model<T>(handler);
   auto state = IO::load_initial_condition<T>(handler, model.get());

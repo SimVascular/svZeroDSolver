@@ -33,11 +33,15 @@
  */
 #include <pybind11/pybind11.h>
 
+#include <io/jsonhandler.hpp>
+
 #include "main.hpp"
+#include "pybind11_json/pybind11_json.hpp"
 
 PYBIND11_MODULE(libsvzerodsolver, mod) {
   mod.doc() = "svZeroDSolver";
-  mod.def("run", [](std::string_view json_config) {
-    return pybind11::bytes(run(json_config));
+  mod.def("run", [](py::dict& config) {
+    nlohmann::json config_json = config;
+    return pybind11::bytes(run(IO::JsonHandler(config_json)));
   });
 }

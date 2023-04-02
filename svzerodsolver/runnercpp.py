@@ -37,13 +37,12 @@ import os
 import sys
 from io import BytesIO
 
-import orjson
 from pandas import read_csv
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
 libfiles = glob.glob(
-    os.path.join(this_file_dir, "..", "Release", "libsvzerodsolver*.so")
+    os.path.join(this_file_dir, "..", "Release", "libsvzerodplus*.so")
 )
 
 if not libfiles:
@@ -68,10 +67,5 @@ def run_from_config(config):
 
     Returns:
         Pandas dataframe with the results."""
-    result = svzerodsolvercpp.run(
-        orjson.dumps(
-            config,
-            option=orjson.OPT_NAIVE_UTC | orjson.OPT_SERIALIZE_NUMPY,
-        )
-    )
+    result = svzerodsolvercpp.run(config)
     return read_csv(BytesIO(result))

@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
   buffer << input_file_stream.rdbuf();
   std::string config = buffer.str();
 
-  auto output = run(config);
+  auto output = run(IO::JsonHandler(config));
 
   std::ofstream ofs(output_file);
   ofs << output;

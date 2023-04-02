@@ -216,12 +216,21 @@ void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
   }
   Block<T>::setup_dofs_(dofhandler, 1, internal_var_names);
   for (size_t i = 0; i < num_outlets; i++) {
-    int block_id = this->model->add_block(
-        BlockType::BLOODVESSEL,
-        {this->global_param_ids[i], this->global_param_ids[i + num_outlets],
-         this->global_param_ids[i + 2 * num_outlets],
-         this->global_param_ids[i + 3 * num_outlets]},
-        this->get_name() + "_bv" + std::to_string(i), true);
+    int block_id;
+    if (this->global_param_ids.size() / num_outlets == 3) {
+      block_id = this->model->add_block(
+          BlockType::BLOODVESSEL,
+          {this->global_param_ids[i], this->global_param_ids[i + num_outlets],
+           this->global_param_ids[i + 2 * num_outlets]},
+          this->get_name() + "_bv" + std::to_string(i), true);
+    } else {
+      block_id = this->model->add_block(
+          BlockType::BLOODVESSEL,
+          {this->global_param_ids[i], this->global_param_ids[i + num_outlets],
+           this->global_param_ids[i + 2 * num_outlets],
+           this->global_param_ids[i + 3 * num_outlets]},
+          this->get_name() + "_bv" + std::to_string(i), true);
+    }
     blood_vessels.push_back(this->model->get_block(block_id));
     blood_vessels[i]->inlet_nodes.push_back(this->inlet_nodes[0]);
     blood_vessels[i]->outlet_nodes.push_back(this->outlet_nodes[i]);

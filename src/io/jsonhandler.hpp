@@ -36,10 +36,9 @@
 
 #include <list>
 #include <memory>
+#include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
-
-#include <nlohmann/json.hpp>
 
 namespace IO {
 
@@ -48,7 +47,6 @@ class JsonHandler {
   nlohmann::json data;
 
  public:
-
   /**
    * @brief Construct a new JsonHandler object
    *
@@ -61,7 +59,7 @@ class JsonHandler {
    *
    * @param data simdjson data
    */
-  JsonHandler(nlohmann::json &data);
+  JsonHandler(nlohmann::json& data);
 
   /**
    * @brief Destroy the JsonHandler object
@@ -200,19 +198,13 @@ JsonHandler::JsonHandler(std::string_view json_encoded_string) {
   data = nlohmann::json::parse(json_encoded_string);
 }
 
-JsonHandler::JsonHandler(nlohmann::json& data) {
-  this->data = data;
-}
+JsonHandler::JsonHandler(nlohmann::json& data) { this->data = data; }
 
 JsonHandler::~JsonHandler() {}
 
-int JsonHandler::length() {
-  return data.size();
-}
+int JsonHandler::length() { return data.size(); }
 
-bool JsonHandler::has_key(std::string_view key) {
-  return data.contains(key);
-}
+bool JsonHandler::has_key(std::string_view key) { return data.contains(key); }
 
 JsonHandler JsonHandler::operator[](std::string_view key) {
   return JsonHandler(data[key]);
@@ -222,25 +214,19 @@ JsonHandler JsonHandler::operator[](int index) {
   return JsonHandler(data[index]);
 }
 
-bool JsonHandler::get_bool(std::string_view key) {
-  return data[key];
-}
+bool JsonHandler::get_bool(std::string_view key) { return data[key]; }
 
 bool JsonHandler::get_bool(std::string_view key, bool default_value) {
   return data.value(key, default_value);
 }
 
-int JsonHandler::get_int(std::string_view key) {
-  return data[key];
-}
+int JsonHandler::get_int(std::string_view key) { return data[key]; }
 
 int JsonHandler::get_int(std::string_view key, int default_value) {
   return data.value(key, default_value);
 }
 
-double JsonHandler::get_double(std::string_view key) {
-  return data[key];
-}
+double JsonHandler::get_double(std::string_view key) { return data[key]; }
 
 double JsonHandler::get_double(std::string_view key, double default_value) {
   return data.value(key, default_value);
@@ -248,8 +234,7 @@ double JsonHandler::get_double(std::string_view key, double default_value) {
 
 std::vector<double> JsonHandler::get_double_array(std::string_view key) {
   std::vector<double> vector;
-  if (!data[key].is_array())
-  {
+  if (!data[key].is_array()) {
     return {data[key]};
   }
   return data[key].get<std::vector<double>>();
@@ -257,31 +242,25 @@ std::vector<double> JsonHandler::get_double_array(std::string_view key) {
 
 std::vector<double> JsonHandler::get_double_array(
     std::string_view key, std::vector<double> default_value) {
-  if (!has_key(key))
-  {
+  if (!has_key(key)) {
     return default_value;
   }
-  if (!data[key].is_array())
-  {
+  if (!data[key].is_array()) {
     return {data[key]};
   }
   return data[key].get<std::vector<double>>();
 }
 
 std::vector<int> JsonHandler::get_int_array(std::string_view key) {
-  if (!data[key].is_array())
-  {
+  if (!data[key].is_array()) {
     return {data[key]};
   }
   return data[key].get<std::vector<int>>();
 }
 
-std::string JsonHandler::get_string(std::string_view key) {
-  return data[key];
-}
+std::string JsonHandler::get_string(std::string_view key) { return data[key]; }
 
-std::vector<std::string> JsonHandler::get_string_array(
-    std::string_view key) {
+std::vector<std::string> JsonHandler::get_string_array(std::string_view key) {
   return data[key].get<std::vector<std::string>>();
 }
 

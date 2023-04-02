@@ -17,8 +17,6 @@ typedef double T;
 int main(int argc, char *argv[]) {
   DEBUG_MSG("Starting svZeroDCalibrator");
 
-  int num_params = 4;
-
   // Get input and output file name
   if (argc != 3) {
     std::cout << "Usage: calibrator path/to/config.json path/to/output.csv"
@@ -41,18 +39,28 @@ int main(int argc, char *argv[]) {
   auto handler = IO::JsonHandler(config);
 
   auto model = new MODEL::Model<T>();
-  std::vector<std::tuple<std::string_view, std::string_view>> connections;
-  std::vector<std::tuple<std::string_view, std::string_view>> inlet_connections;
-  std::vector<std::tuple<std::string_view, std::string_view>> outlet_connections;
+  std::vector<std::tuple<std::string, std::string>> connections;
+  std::vector<std::tuple<std::string, std::string>> inlet_connections;
+  std::vector<std::tuple<std::string, std::string>> outlet_connections;
+
+
+  auto calibration_parameters = handler["calibration_parameters"];
+  bool calibrate_stenosis = calibration_parameters.get_bool("calibrate_stenosis_coefficient");
+  bool zero_capacitance = calibration_parameters.get_bool("set_capacitance_to_zero");
+
+  int num_params = 3;
+  if (calibrate_stenosis){
+    int num_params = 4;
+  }
 
   // Create vessels
   DEBUG_MSG("Load vessels");
-  std::map<std::int64_t, std::string_view> vessel_id_map;
+  std::map<std::int64_t, std::string> vessel_id_map;
   auto vessels = handler["vessels"];
   int param_counter = 0;
   for (size_t i = 0; i < vessels.length(); i++) {
     auto vessel_config = vessels[i];
-    std::string_view vessel_name = vessel_config.get_string("vessel_name");
+    std::string vessel_name = vessel_config.get_string("vessel_name");
     vessel_id_map.insert({vessel_config.get_int("vessel_id"), vessel_name});
     std::vector<int> param_ids;
     for (size_t k = 0; k < num_params; k++)
@@ -107,6 +115,7 @@ int main(int argc, char *argv[]) {
   }
 
   // Create Connections
+  DEBUG_MSG("Created connection");
   for (auto &connection : connections) {
     auto ele1 = model->get_block(std::get<0>(connection));
     auto ele2 = model->get_block(std::get<1>(connection));
@@ -207,7 +216,7 @@ int main(int argc, char *argv[]) {
 
   for (size_t nliter = 0; nliter < max_nliter; nliter++)
   {
-    DEBUG_MSG("Gauss-Newton Iteration " << nliter);
+    std::cout << "Gauss-Newton Iteration " << nliter << std::endl;
     for (size_t i = 0; i < num_observations; i++) {
       Eigen::Matrix<T, Eigen::Dynamic, 1> y =
           Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(model->dofhandler.size());
@@ -248,11 +257,11 @@ int main(int argc, char *argv[]) {
       residual_norm += diff[i] * diff[i];
     }
     residual_norm = pow(residual_norm, 0.5);
-    DEBUG_MSG("residual norm: " << residual_norm);
+    std::cout << "residual norm: " << residual_norm << std::endl;
 
     alpha = new_alpha;
 
-    if (residual_norm < 1e-12) break;
+    if (residual_norm < 1e-10) break;
 
   }
 
@@ -268,9 +277,14 @@ int main(int argc, char *argv[]) {
     {
       stenosis_coeff = alpha[block->global_param_ids[3]];
     }
+    T c_value = 0.0;
+    if (!zero_capacitance)
+    {
+      c_value = alpha[block->global_param_ids[1]];
+    }
     vessel_config["zero_d_element_values"] = {
         {"R_poiseuille", alpha[block->global_param_ids[0]]},
-        {"C", alpha[block->global_param_ids[1]]},
+        {"C", c_value},
         {"L", alpha[block->global_param_ids[2]]},
         {"stenosis_coefficient", stenosis_coeff}
     };
@@ -294,9 +308,18 @@ int main(int argc, char *argv[]) {
         r_values.push_back(alpha[block->global_param_ids[i]]);
     }
     std::vector<T> c_values;
-    for (size_t i = 0; i < num_outlets; i++)
+    if (zero_capacitance)
     {
-        c_values.push_back(alpha[block->global_param_ids[i+num_outlets]]);
+      for (size_t i = 0; i < num_outlets; i++)
+      {
+          c_values.push_back(0.0);
+      }
+    }
+    else {
+      for (size_t i = 0; i < num_outlets; i++)
+      {
+          c_values.push_back(alpha[block->global_param_ids[i+num_outlets]]);
+      }
     }
     std::vector<T> l_values;
     for (size_t i = 0; i < num_outlets; i++)
@@ -327,6 +350,7 @@ int main(int argc, char *argv[]) {
 
   output_config.erase("y");
   output_config.erase("dy");
+  output_config.erase("calibration_parameters");
 
   std::ofstream o(output_file);
   o << std::setw(4) << output_config << std::endl;

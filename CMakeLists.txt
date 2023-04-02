@@ -55,9 +55,8 @@ add_subdirectory("src/interface")
 # Link libraries
 # -----------------------------------------------------------------------------
 target_link_libraries(solver PRIVATE Eigen3::Eigen)
-target_link_libraries(solver PRIVATE simdjson)
+target_link_libraries(solver PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(calibrator PRIVATE Eigen3::Eigen)
-target_link_libraries(calibrator PRIVATE simdjson)
 target_link_libraries(calibrator PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(libsvzerodsolver PRIVATE Eigen3::Eigen)
-target_link_libraries(libsvzerodsolver PRIVATE simdjson)
+target_link_libraries(libsvzerodsolver PRIVATE nlohmann_json::nlohmann_json)

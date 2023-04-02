@@ -238,43 +238,66 @@ const std::string run(std::string_view json_config) {
   // Load model and configuration
   DEBUG_MSG("Read configuration");
   auto handler = IO::JsonHandler(json_config);
-  IO::ConfigReader<T> reader(handler);
-  reader.load_simulation_params();
-  reader.load_model();
-  reader.load_initial_condition();
+  auto simparams = IO::load_simulation_params<T>(handler);
+  auto model = IO::load_model<T>(handler);
+  auto state = IO::load_initial_condition<T>(handler, model.get());
 
-  // Setup system
-  ALGEBRA::State<T> state = reader.initial_state;
+  // Check that steady initial is not set when ClosedLoopHeartAndPulmonary is
+  // used
+  if ((simparams.sim_steady_initial == true) &&
+      (model->get_block("CLH") != nullptr)) {
+    std::runtime_error(
+        "ERROR: Steady initial condition is not compatible with "
+        "ClosedLoopHeartAndPulmonary block.");
+  }
+
+  // Set default cardiac cycle period if not set by model
+  if (model->cardiac_cycle_period < 0.0) {
+    model->cardiac_cycle_period =
+        1.0;  // If it has not been read from config or Parameter
+              // yet, set as default value of 1.0
+  }
+
+  // Calculate time step size
+  if (!simparams.sim_coupled) {
+    simparams.sim_time_step_size =
+        model->cardiac_cycle_period / (T(simparams.sim_pts_per_cycle) - 1.0);
+  } else {
+    simparams.sim_time_step_size = simparams.sim_external_step_size /
+                                   (T(simparams.sim_num_time_steps) - 1.0);
+  }
 
   // Create steady initial
-  if (reader.sim_steady_initial) {
+  if (simparams.sim_steady_initial) {
     DEBUG_MSG("Calculate steady initial condition");
-    T time_step_size_steady = reader.model->cardiac_cycle_period / 10.0;
-    reader.model->to_steady();
-    ALGEBRA::Integrator<T> integrator_steady(
-        *reader.model, time_step_size_steady, 0.1, reader.sim_abs_tol,
-        reader.sim_nliter);
+    T time_step_size_steady = model->cardiac_cycle_period / 10.0;
+    model->to_steady();
+    ALGEBRA::Integrator<T> integrator_steady(model.get(), time_step_size_steady,
+                                             0.1, simparams.sim_abs_tol,
+                                             simparams.sim_nliter);
     for (int i = 0; i < 31; i++) {
-      state = integrator_steady.step(state, time_step_size_steady * T(i),
-                                     *reader.model);
+      state = integrator_steady.step(state, time_step_size_steady * T(i));
     }
-    reader.model->to_unsteady();
+    model->to_unsteady();
   }
 
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  ALGEBRA::Integrator<T> integrator(*reader.model, reader.sim_time_step_size,
-                                    0.1, reader.sim_abs_tol, reader.sim_nliter);
+  ALGEBRA::Integrator<T> integrator(model.get(), simparams.sim_time_step_size,
+                                    0.1, simparams.sim_abs_tol,
+                                    simparams.sim_nliter);
 
   // Initialize loop
   std::vector<ALGEBRA::State<T>> states;
   std::vector<T> times;
-  if (reader.output_last_cycle_only) {
-    int num_states = reader.sim_pts_per_cycle / reader.output_interval + 1;
+  if (simparams.output_last_cycle_only) {
+    int num_states =
+        simparams.sim_pts_per_cycle / simparams.output_interval + 1;
     states.reserve(num_states);
     times.reserve(num_states);
   } else {
-    int num_states = reader.sim_num_time_steps / reader.output_interval + 1;
+    int num_states =
+        simparams.sim_num_time_steps / simparams.output_interval + 1;
     states.reserve(num_states);
     times.reserve(num_states);
   }
@@ -283,19 +306,21 @@ const std::string run(std::string_view json_config) {
   // Run integrator
   DEBUG_MSG("Run time integration");
   int interval_counter = 0;
-  int start_last_cycle = reader.sim_num_time_steps - reader.sim_pts_per_cycle;
-  if ((reader.output_last_cycle_only == false) || (0 >= start_last_cycle)) {
+  int start_last_cycle =
+      simparams.sim_num_time_steps - simparams.sim_pts_per_cycle;
+  if ((simparams.output_last_cycle_only == false) || (0 >= start_last_cycle)) {
     times.push_back(time);
     states.push_back(std::move(state));
   }
-  for (int i = 1; i < reader.sim_num_time_steps; i++) {
+  for (int i = 1; i < simparams.sim_num_time_steps; i++) {
     // DEBUG_MSG("Integration time: "<< time << std::endl);
-    state = integrator.step(state, time, *reader.model);
+    state = integrator.step(state, time);
     interval_counter += 1;
-    time = reader.sim_time_step_size * T(i);
-    if ((interval_counter == reader.output_interval) ||
-        (reader.output_last_cycle_only && (i == start_last_cycle))) {
-      if ((reader.output_last_cycle_only == false) || (i >= start_last_cycle)) {
+    time = simparams.sim_time_step_size * T(i);
+    if ((interval_counter == simparams.output_interval) ||
+        (simparams.output_last_cycle_only && (i == start_last_cycle))) {
+      if ((simparams.output_last_cycle_only == false) ||
+          (i >= start_last_cycle)) {
         times.push_back(time);
         states.push_back(std::move(state));
       }
@@ -304,7 +329,7 @@ const std::string run(std::string_view json_config) {
   }
 
   // Make times start from 0
-  if (reader.output_last_cycle_only) {
+  if (simparams.output_last_cycle_only) {
     T start_time = times[0];
     for (auto& time : times) {
       time -= start_time;
@@ -314,14 +339,14 @@ const std::string run(std::string_view json_config) {
   // Write csv output string
   DEBUG_MSG("Write output");
   std::string output;
-  if (reader.output_variable_based) {
-    output = IO::to_variable_csv<T>(times, states, *reader.model,
-                                    reader.output_mean_only,
-                                    reader.output_derivative);
+  if (simparams.output_variable_based) {
+    output = IO::to_variable_csv<T>(times, states, model.get(),
+                                    simparams.output_mean_only,
+                                    simparams.output_derivative);
   } else {
-    output =
-        IO::to_vessel_csv<T>(times, states, *reader.model,
-                             reader.output_mean_only, reader.output_derivative);
+    output = IO::to_vessel_csv<T>(times, states, model.get(),
+                                  simparams.output_mean_only,
+                                  simparams.output_derivative);
   }
   DEBUG_MSG("Finished");
   return output;

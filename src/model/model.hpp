@@ -343,6 +343,9 @@ int Model<T>::add_block(BlockType block_type,
 
 template <typename T>
 Block<T> *Model<T>::get_block(std::string_view name) {
+  if (block_index_map.find(name) == block_index_map.end()) {
+    return nullptr;
+  }
   return blocks[block_index_map[name]].get();
 }
 

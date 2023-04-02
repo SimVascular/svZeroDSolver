@@ -35,6 +35,7 @@
 #define SVZERODSOLVER_IO_JSONHANDLER_HPP_
 
 #include <list>
+#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -45,7 +46,7 @@ namespace IO {
 class JsonHandler {
  private:
   simdjson::simdjson_result<simdjson::dom::element> data;
-  simdjson::dom::parser *parser;
+  std::shared_ptr<simdjson::dom::parser> parser;
 
  public:
   /**
@@ -212,7 +213,7 @@ class JsonHandler {
 JsonHandler::JsonHandler() {}
 
 JsonHandler::JsonHandler(std::string_view json_encoded_string) {
-  parser = new simdjson::dom::parser();
+  parser = std::shared_ptr<simdjson::dom::parser>(new simdjson::dom::parser());
   auto string = simdjson::padded_string(json_encoded_string);
   data = parser->parse(string);
 }

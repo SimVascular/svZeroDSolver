@@ -44,40 +44,13 @@
 #include "./jsonhandler.hpp"
 
 namespace IO {
-
 /**
- * @brief svZeroDSolver configuration reader.
+ * @brief Simulation parameters
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
-class ConfigReader {
- public:
-  /**
-   * @brief Construct a new Config Reader object
-   */
-  ConfigReader(JsonHandler &config_handler);
-
-  /**
-   * @brief Destroy the Config Reader object
-   */
-  ~ConfigReader();
-
-  /**
-   * @brief Create model from configuration
-   *
-   * @param handler Configuration handler
-   */
-  void load_simulation_params();
-
-  void load_model();
-
-  void load_initial_condition();
-
-  JsonHandler handler;              ///< Configuration handler
-  MODEL::Model<T> *model;           ///< Simulation model
-  ALGEBRA::State<T> initial_state;  ///< Initial state
-
+struct SimulationParameters {
   // Negative value indicates this has not
   // been read from config file yet.
   T sim_time_step_size;  ///< Simulation time step size
@@ -102,48 +75,69 @@ class ConfigReader {
                              ///< coupled
 };
 
+/**
+ * @brief Load the simulation parameters from a configuration
+ *
+ * @tparam T Scalar type (e.g. `float`, `double`)
+ * @param config_handler The handler for the configuration
+ * @return SimulationParameters<T> Simulation parameters read from configuration
+ */
 template <typename T>
-ConfigReader<T>::ConfigReader(JsonHandler &config_handler) {
-  handler = config_handler;
-}
-
-template <typename T>
-ConfigReader<T>::~ConfigReader() {}
-
-template <typename T>
-void ConfigReader<T>::load_simulation_params() {
+SimulationParameters<T> load_simulation_params(JsonHandler& config_handler) {
   DEBUG_MSG("Loading simulation parameters");
-
-  auto sim_params = handler["simulation_parameters"];
-  sim_coupled = sim_params.get_bool("coupled_simulation", false);
-  if (!sim_coupled) {
-    sim_num_cycles = sim_params.get_int("number_of_cardiac_cycles");
-    sim_pts_per_cycle =
-        sim_params.get_int("number_of_time_pts_per_cardiac_cycle");
-    sim_num_time_steps = (sim_pts_per_cycle - 1) * sim_num_cycles + 1;
-    sim_external_step_size = 0.0;
+  SimulationParameters<T> simparams;
+  auto sim_params_input = config_handler["simulation_parameters"];
+  simparams.sim_coupled =
+      sim_params_input.get_bool("coupled_simulation", false);
+  if (!simparams.sim_coupled) {
+    simparams.sim_num_cycles =
+        sim_params_input.get_int("number_of_cardiac_cycles");
+    simparams.sim_pts_per_cycle =
+        sim_params_input.get_int("number_of_time_pts_per_cardiac_cycle");
+    simparams.sim_num_time_steps =
+        (simparams.sim_pts_per_cycle - 1) * simparams.sim_num_cycles + 1;
+    simparams.sim_external_step_size = 0.0;
   } else {
-    sim_num_cycles = 1;
-    sim_num_time_steps = sim_params.get_int("number_of_time_pts");
-    sim_pts_per_cycle = sim_num_time_steps;
-    sim_external_step_size = sim_params.get_double("external_step_size", 0.1);
+    simparams.sim_num_cycles = 1;
+    simparams.sim_num_time_steps =
+        sim_params_input.get_int("number_of_time_pts");
+    simparams.sim_pts_per_cycle = simparams.sim_num_time_steps;
+    simparams.sim_external_step_size =
+        sim_params_input.get_double("external_step_size", 0.1);
   }
-  sim_abs_tol = sim_params.get_double("absolute_tolerance", 1e-8);
-  sim_nliter = sim_params.get_int("maximum_nonlinear_iterations", 30);
-  sim_steady_initial = sim_params.get_bool("steady_initial", true);
-  output_variable_based = sim_params.get_bool("output_variable_based", false);
-  output_interval = sim_params.get_int("output_interval", 1);
-  output_mean_only = sim_params.get_bool("output_mean_only", false);
-  output_derivative = sim_params.get_bool("output_derivative", false);
-  output_last_cycle_only = sim_params.get_bool("output_last_cycle_only", false);
+  simparams.sim_abs_tol =
+      sim_params_input.get_double("absolute_tolerance", 1e-8);
+  simparams.sim_nliter =
+      sim_params_input.get_int("maximum_nonlinear_iterations", 30);
+  simparams.sim_steady_initial =
+      sim_params_input.get_bool("steady_initial", true);
+  simparams.output_variable_based =
+      sim_params_input.get_bool("output_variable_based", false);
+  simparams.output_interval = sim_params_input.get_int("output_interval", 1);
+  simparams.output_mean_only =
+      sim_params_input.get_bool("output_mean_only", false);
+  simparams.output_derivative =
+      sim_params_input.get_bool("output_derivative", false);
+  simparams.output_last_cycle_only =
+      sim_params_input.get_bool("output_last_cycle_only", false);
+  DEBUG_MSG("Finished loading simulation parameters");
+  return simparams;
 }
 
+/**
+ * @brief Load model from a configuration
+ *
+ * @tparam T Scalar type (e.g. `float`, `double`)
+ * @param config_handler The handler for the configuration
+ * @return std::shared_ptr<MODEL::Model<T>> The model read from the
+ * configuration
+ */
 template <typename T>
-void ConfigReader<T>::load_model() {
+std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
   DEBUG_MSG("Loading model");
 
   // Initialize model pointer
-  model = new MODEL::Model<T>();
+  auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
 
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string_view, std::string_view>> connections;
@@ -151,7 +145,7 @@ void ConfigReader<T>::load_model() {
   // Create vessels
   DEBUG_MSG("Load vessels");
   std::map<std::int64_t, std::string_view> vessel_id_map;
-  auto vessels = handler["vessels"];
+  auto vessels = config_handler["vessels"];
   for (size_t i = 0; i < vessels.length(); i++) {
     auto vessel_config = vessels[i];
     auto vessel_values = vessel_config["zero_d_element_values"];
@@ -187,7 +181,7 @@ void ConfigReader<T>::load_model() {
 
   // Create map for boundary conditions to boundary condition type
   DEBUG_MSG("Create BC name to BC type map");
-  auto bc_configs = handler["boundary_conditions"];
+  auto bc_configs = config_handler["boundary_conditions"];
   std::map<std::string_view, std::string_view> bc_type_map;
   for (size_t i = 0; i < bc_configs.length(); i++) {
     auto bc_config = bc_configs[i];
@@ -195,9 +189,10 @@ void ConfigReader<T>::load_model() {
         {bc_config.get_string("bc_name"), bc_config.get_string("bc_type")});
   }
 
-  if (handler.has_key("external_solver_coupling_blocks")) {
+  // Create external coupling blocks
+  if (config_handler.has_key("external_solver_coupling_blocks")) {
     DEBUG_MSG("Create external coupling blocks");
-    auto coupling_configs = handler["external_solver_coupling_blocks"];
+    auto coupling_configs = config_handler["external_solver_coupling_blocks"];
     for (size_t i = 0; i < coupling_configs.length(); i++) {
       auto coupling_config = coupling_configs[i];
       auto coupling_type = coupling_config.get_string("type");
@@ -294,9 +289,8 @@ void ConfigReader<T>::load_model() {
     }      // for (size_t i = 0; i < coupling_configs.length(); i++)
   }
 
-  std::vector<std::string_view> closed_loop_bcs;
-
   // Create boundary conditions
+  std::vector<std::string_view> closed_loop_bcs;
   DEBUG_MSG("Create boundary conditions");
   for (size_t i = 0; i < bc_configs.length(); i++) {
     auto bc_config = bc_configs[i];
@@ -376,7 +370,7 @@ void ConfigReader<T>::load_model() {
   }
 
   // Create junctions
-  auto junctions = handler["junctions"];
+  auto junctions = config_handler["junctions"];
   for (size_t i = 0; i < junctions.length(); i++) {
     auto junction_config = junctions[i];
     auto j_type = junction_config.get_string("junction_type");
@@ -426,20 +420,14 @@ void ConfigReader<T>::load_model() {
   bool heartpulmonary_block_present =
       false;  ///< Flag to check if heart block is present (requires different
               ///< handling)
-  if (handler.has_key("closed_loop_blocks")) {
-    auto closed_loop_configs = handler["closed_loop_blocks"];
+  if (config_handler.has_key("closed_loop_blocks")) {
+    auto closed_loop_configs = config_handler["closed_loop_blocks"];
     for (size_t i = 0; i < closed_loop_configs.length(); i++) {
       auto closed_loop_config = closed_loop_configs[i];
       auto closed_loop_type = closed_loop_config.get_string("closed_loop_type");
       if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
         if (heartpulmonary_block_present == false) {
           heartpulmonary_block_present = true;
-          if (sim_steady_initial == true) {
-            std::runtime_error(
-                "ERROR: Steady initial condition is not compatible with "
-                "ClosedLoopHeartAndPulmonary block.");
-          }
-          sim_steady_initial = false;
           std::string_view heartpulmonary_name = "CLH";
           T cycle_period =
               closed_loop_config.get_double("cardiac_cycle_period");
@@ -514,7 +502,7 @@ void ConfigReader<T>::load_model() {
   }
 
   // Create Connections
-  for (auto &connection : connections) {
+  for (auto& connection : connections) {
     auto ele1 = model->get_block(std::get<0>(connection));
     auto ele2 = model->get_block(std::get<1>(connection));
     model->add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
@@ -523,29 +511,26 @@ void ConfigReader<T>::load_model() {
   // Finalize model
   model->finalize();
 
-  // Set value of cardiac cycle period
-  if (model->cardiac_cycle_period < 0.0) {
-    model->cardiac_cycle_period =
-        1.0;  // If it has not been read from config or Parameter
-              // yet, set as default value of 1.0
-  }
-  // Calculate time step size
-  if (!sim_coupled) {
-    sim_time_step_size =
-        model->cardiac_cycle_period / (T(sim_pts_per_cycle) - 1.0);
-  } else {
-    sim_time_step_size = sim_external_step_size / (T(sim_num_time_steps) - 1.0);
-  }
+  return model;
 }
 
+/**
+ * @brief Load initial conditions from a configuration
+ *
+ * @tparam T Scalar type (e.g. `float`, `double`)
+ * @param config_handler Handler for the configuration
+ * @param model The model
+ * @return ALGEBRA::State<T> Initial configuration for the model
+ */
 template <typename T>
-void ConfigReader<T>::load_initial_condition() {
+ALGEBRA::State<T> load_initial_condition(JsonHandler& config_handler,
+                                         MODEL::Model<T>* model) {
   // Read initial condition
-  initial_state = ALGEBRA::State<T>::Zero(model->dofhandler.size());
+  auto initial_state = ALGEBRA::State<T>::Zero(model->dofhandler.size());
 
   // Initialize blocks that have fixed initial conditions
-  if (handler.has_key("initial_condition")) {
-    auto initial_condition = handler["initial_condition"];
+  if (config_handler.has_key("initial_condition")) {
+    auto initial_condition = config_handler["initial_condition"];
     // Check for pressure_all or flow_all condition.
     // This will initialize all pressure:* and flow:* variables.
     T init_p, init_q;
@@ -575,6 +560,7 @@ void ConfigReader<T>::load_initial_condition() {
       initial_state.y[i] = initial_condition.get_double(var_name, default_val);
     }
   }
+  return initial_state;
 }
 
 }  // namespace IO

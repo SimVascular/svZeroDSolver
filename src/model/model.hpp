@@ -171,6 +171,14 @@ class Model {
   Parameter<T> *get_parameter(int param_id);
 
   /**
+   * @brief Get the current value of a parameter
+   *
+   * @param param_id Global ID of the parameter
+   * @return T Current value of the parameter
+   */
+  T get_parameter_value(int param_id);
+
+  /**
    * @brief Finalize the model after all blocks, nodes and parameters have been
    * added
    *
@@ -411,6 +419,11 @@ int Model<T>::add_parameter(const std::vector<T> &times,
 template <typename T>
 Parameter<T> *Model<T>::get_parameter(int param_id) {
   return parameters[param_id].get();
+}
+
+template <typename T>
+T Model<T>::get_parameter_value(int param_id) {
+  return parameter_values[param_id];
 }
 
 template <typename T>

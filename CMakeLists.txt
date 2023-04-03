@@ -59,7 +59,7 @@ include_directories(src)
 add_executable(svzerodsolver applications/svzerodsolver.cpp)
 add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp)
 pybind11_add_module(libsvzerodplus applications/libsvzerodplus.cpp)
-# add_subdirectory("src/interface")
+add_subdirectory("src/interface")
 
 # -----------------------------------------------------------------------------
 # Link libraries

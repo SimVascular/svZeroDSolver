@@ -50,7 +50,7 @@ class SolverInterface
     int pts_per_cycle_ = 0;
     bool output_last_cycle_only_ = false;
 
-    MODEL::Model<T>* model_;
+    std::shared_ptr<MODEL::Model<T>> model_;
     ALGEBRA::Integrator<T> integrator_;
 
     ALGEBRA::State<double> state_;

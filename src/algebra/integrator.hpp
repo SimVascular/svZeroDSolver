@@ -100,6 +100,12 @@ class Integrator {
              int max_iter);
 
   /**
+   * @brief Construct a new Integrator object
+   *
+   */
+  Integrator();
+
+  /**
    * @brief Destroy the Integrator object
    *
    */
@@ -158,6 +164,9 @@ Integrator<T>::Integrator(MODEL::Model<T>* model, T time_step_size, T rho,
   // Make some memory reservations
   system.reserve(model);
 }
+
+template <typename T>
+Integrator<T>::Integrator() {}
 
 template <typename T>
 Integrator<T>::~Integrator() {}

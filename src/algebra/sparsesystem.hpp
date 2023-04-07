@@ -84,8 +84,9 @@ class SparseSystem {
   Eigen::Matrix<T, Eigen::Dynamic, 1> residual;  ///< Residual of the system
   Eigen::Matrix<T, Eigen::Dynamic, 1> dy;  ///< Solution increment of the system
 
-  Eigen::SparseLU<Eigen::SparseMatrix<T>> *solver =
-      new Eigen::SparseLU<Eigen::SparseMatrix<T>>();  ///< Linear solver
+  std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<T>>> solver =
+      std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<T>>>(
+          new Eigen::SparseLU<Eigen::SparseMatrix<T>>());  ///< Linear solver
 
   /**
    * @brief Reserve memory in system matrices based on number of triplets

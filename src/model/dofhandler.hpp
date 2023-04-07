@@ -48,8 +48,8 @@ namespace MODEL {
  */
 class DOFHandler {
  private:
-  unsigned int var_counter;  ///< Variable counter
-  unsigned int eqn_counter;  ///< Equation counter
+  int var_counter;  ///< Variable counter
+  int eqn_counter;  ///< Equation counter
 
  public:
   std::vector<std::string>
@@ -72,7 +72,21 @@ class DOFHandler {
    *
    * @return Size of the system
    */
-  unsigned int size();
+  int size();
+
+  /**
+   * @brief Get the number of equations
+   *
+   * @return int Number of equations
+   */
+  int get_num_equations();
+
+  /**
+   * @brief Get the number of variables
+   *
+   * @return int Number of variables
+   */
+  int get_num_variables();
 
   /**
    * @brief Register a new variable at the DOFHandler.
@@ -80,14 +94,14 @@ class DOFHandler {
    * @param name Name of the variable
    * @return Global index of the variable
    */
-  unsigned int register_variable(std::string name);
+  int register_variable(std::string name);
 
   /**
    * @brief Register a new equation at the DOFHandler
    *
    * @return Global index of the equation
    */
-  unsigned int register_equation();
+  int register_equation();
 
   /**
    * @brief Get the index of a variable
@@ -105,14 +119,18 @@ DOFHandler::DOFHandler() {
 
 DOFHandler::~DOFHandler() {}
 
-unsigned int DOFHandler::size() { return var_counter; }
+int DOFHandler::size() { return eqn_counter; }
 
-unsigned int DOFHandler::register_variable(std::string name) {
+int DOFHandler::get_num_equations() { return eqn_counter; }
+
+int DOFHandler::get_num_variables() { return var_counter; }
+
+int DOFHandler::register_variable(std::string name) {
   variables.push_back(name);
   return var_counter++;
 }
 
-unsigned int DOFHandler::register_equation() { return eqn_counter++; }
+int DOFHandler::register_equation() { return eqn_counter++; }
 
 int DOFHandler::get_index(std::string_view& name) {
   auto it = find(variables.begin(), variables.end(), name);

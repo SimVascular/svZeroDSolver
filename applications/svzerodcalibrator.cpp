@@ -8,6 +8,7 @@
 #include "helpers/endswith.hpp"
 #include "io/jsonhandler.hpp"
 #include "model/model.hpp"
+#include "optimize/levenbergmarquardtoptimizer.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -38,11 +39,10 @@ int main(int argc, char *argv[]) {
   DEBUG_MSG("Read configuration");
   auto handler = IO::JsonHandler(config);
 
-  auto model = new MODEL::Model<T>();
+  auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
   std::vector<std::tuple<std::string, std::string>> connections;
   std::vector<std::tuple<std::string, std::string>> inlet_connections;
   std::vector<std::tuple<std::string, std::string>> outlet_connections;
-
 
   auto calibration_parameters = handler["calibration_parameters"];
   bool calibrate_stenosis = calibration_parameters.get_bool("calibrate_stenosis_coefficient");
@@ -140,24 +140,33 @@ int main(int argc, char *argv[]) {
   }
 
   DEBUG_MSG("Number of parameters " << param_counter);
+  int num_obs = 0;
 
   DEBUG_MSG("Reading observations");
   std::vector<std::vector<T>> y_all;
   std::vector<std::vector<T>> dy_all;
   auto y_values = handler["y"];
   auto dy_values = handler["dy"];
-  for (size_t i = 0; i < model->dofhandler.size(); i++) {
+  for (size_t i = 0; i < model->dofhandler.get_num_variables(); i++) {
+
     std::string var_name = model->dofhandler.variables[i];
-    DEBUG_MSG("Reading y values for variable " << var_name);
-    y_all.push_back(y_values.get_double_array(var_name));
-    DEBUG_MSG("Reading dy values for variable " << var_name);
-    dy_all.push_back(dy_values.get_double_array(var_name));
+    DEBUG_MSG("Reading observations for variable " << var_name);
+    auto y_array = y_values.get_double_array(var_name);
+    auto dy_array = dy_values.get_double_array(var_name);
+    num_obs = y_array.size();
+    if (i==0)
+    {
+      y_all.resize(num_obs);
+      dy_all.resize(num_obs);
+    }
+    for (size_t j = 0; j < num_obs; j++)
+    {
+      y_all[j].push_back(y_array[j]);
+      dy_all[j].push_back(dy_array[j]);
+    }
   }
+  DEBUG_MSG("Number of observations: " << num_obs);
 
-  int num_observations = y_all[0].size();
-  DEBUG_MSG("Number of observations: " << num_observations);
-
-  int num_dofs = model->dofhandler.size();
   int max_nliter = 100;
 
   // =====================================
@@ -205,64 +214,14 @@ int main(int argc, char *argv[]) {
 
 
   // =====================================
-  // Gauss-Newton
+  // Levenberg Marquardt
   // =====================================
-  DEBUG_MSG("Starting Gauss-Newton");
-  Eigen::SparseMatrix<T> jacobian = Eigen::SparseMatrix<T>(
-      num_observations * model->dofhandler.size(), param_counter);
-  Eigen::Matrix<T, Eigen::Dynamic, 1> residual =
-      Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num_observations *
-                                                model->dofhandler.size());
-
+  DEBUG_MSG("Start optimization");
+  auto lm_alg = OPT::LevenbergMarquardtOptimizer(model.get(), num_obs, param_counter, 0.0);
   for (size_t nliter = 0; nliter < max_nliter; nliter++)
   {
-    std::cout << "Gauss-Newton Iteration " << nliter << std::endl;
-    for (size_t i = 0; i < num_observations; i++) {
-      Eigen::Matrix<T, Eigen::Dynamic, 1> y =
-          Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(model->dofhandler.size());
-      Eigen::Matrix<T, Eigen::Dynamic, 1> dy =
-          Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(model->dofhandler.size());
-      for (size_t k = 0; k < model->dofhandler.size(); k++) {
-        y(k) = y_all[k][i];
-        dy(k) = dy_all[k][i];
-      }
-
-      for (size_t j = 0; j < model->get_num_blocks(true); j++)
-      {  
-        auto block = model->get_block(j);
-        block->update_gradient(jacobian, residual, alpha, y, dy);
-
-        for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
-          block->global_eqn_ids[l] += num_dofs;
-        }
-      }
-    }
-
-    for (size_t j = 0; j < model->get_num_blocks(true); j++)
-      {  
-        auto block = model->get_block(j);
-      for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
-          block->global_eqn_ids[l] -= num_dofs * num_observations;
-        }
-    }
-
-    Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat = jacobian.transpose() * jacobian;
-    Eigen::Matrix<T, Eigen::Dynamic, 1> new_alpha = alpha - mat.inverse() * jacobian.transpose() * residual;
-
-    Eigen::Matrix<T, Eigen::Dynamic, 1> diff = new_alpha - alpha;
-
-    T residual_norm = 0.0;
-    for (size_t i = 0; i < param_counter; i++)
-    {
-      residual_norm += diff[i] * diff[i];
-    }
-    residual_norm = pow(residual_norm, 0.5);
-    std::cout << "residual norm: " << residual_norm << std::endl;
-
-    alpha = new_alpha;
-
-    if (residual_norm < 1e-10) break;
-
+    DEBUG_MSG("Optimization step " << nliter);
+    lm_alg.step(alpha, y_all, dy_all);
   }
 
   // =====================================
@@ -285,7 +244,7 @@ int main(int argc, char *argv[]) {
     vessel_config["zero_d_element_values"] = {
         {"R_poiseuille", alpha[block->global_param_ids[0]]},
         {"C", c_value},
-        {"L", alpha[block->global_param_ids[2]]},
+        {"L", std::max(alpha[block->global_param_ids[2]], 0.0)},
         {"stenosis_coefficient", stenosis_coeff}
     };
   }
@@ -324,7 +283,7 @@ int main(int argc, char *argv[]) {
     std::vector<T> l_values;
     for (size_t i = 0; i < num_outlets; i++)
     {
-        l_values.push_back(alpha[block->global_param_ids[i+2*num_outlets]]);
+        l_values.push_back(std::max(alpha[block->global_param_ids[i+2*num_outlets]],0.0));
     }
     std::vector<T> ste_values;
     if (num_params > 3)

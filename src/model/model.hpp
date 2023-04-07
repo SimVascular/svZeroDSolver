@@ -338,15 +338,15 @@ int Model<T>::add_block(BlockType block_type,
       throw std::runtime_error(
           "Adding block to model failed: Invalid block type!");
   }
+  auto name_string = static_cast<std::string>(name);
   if (internal) {
     hidden_blocks.push_back(block);
   } else {
     blocks.push_back(block);
-    block_types.push_back(block_type);
-    auto name_string = static_cast<std::string>(name);
-    block_index_map.insert({name_string, block_count});
-    block_names.push_back(name_string);
   }
+  block_types.push_back(block_type);
+  block_index_map.insert({name_string, block_count});
+  block_names.push_back(name_string);
   return block_count++;
 }
 

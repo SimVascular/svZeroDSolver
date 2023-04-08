@@ -167,8 +167,6 @@ int main(int argc, char *argv[]) {
   }
   DEBUG_MSG("Number of observations: " << num_obs);
 
-  int max_nliter = 100;
-
   // =====================================
   // Setup alpha
   // =====================================
@@ -210,6 +208,22 @@ int main(int argc, char *argv[]) {
           alpha[block->global_param_ids[i+3*num_outlets]] = 0.0;
         }
     }
+    if (junction_config["junction_type"] == "BloodVesselJunction")
+    {
+      auto resistance = junction_config["junction_values"]["R_poiseuille"].get<std::vector<double>>();
+      auto capacitance = junction_config["junction_values"]["C"].get<std::vector<double>>();
+      auto inductance = junction_config["junction_values"]["L"].get<std::vector<double>>();
+      auto stenosis_coeff = junction_config["junction_values"]["stenosis_coefficient"].get<std::vector<double>>();
+      for (size_t i = 0; i < num_outlets; i++)
+      {
+          alpha[block->global_param_ids[i]] = resistance[i];
+          alpha[block->global_param_ids[i+num_outlets]] = capacitance[i];
+          alpha[block->global_param_ids[i+2*num_outlets]] = inductance[i];
+          if (num_params > 3) {
+            alpha[block->global_param_ids[i+3*num_outlets]] = stenosis_coeff[i];
+          }
+      }
+    }
   }
 
 
@@ -217,12 +231,9 @@ int main(int argc, char *argv[]) {
   // Levenberg Marquardt
   // =====================================
   DEBUG_MSG("Start optimization");
-  auto lm_alg = OPT::LevenbergMarquardtOptimizer(model.get(), num_obs, param_counter, 0.0);
-  for (size_t nliter = 0; nliter < max_nliter; nliter++)
-  {
-    DEBUG_MSG("Optimization step " << nliter);
-    lm_alg.step(alpha, y_all, dy_all);
-  }
+  auto lm_alg = OPT::LevenbergMarquardtOptimizer(model.get(), num_obs, param_counter, 1.0);
+  
+  alpha = lm_alg.run(alpha, y_all, dy_all);
 
   // =====================================
   // Write output
@@ -243,7 +254,7 @@ int main(int argc, char *argv[]) {
     }
     vessel_config["zero_d_element_values"] = {
         {"R_poiseuille", alpha[block->global_param_ids[0]]},
-        {"C", c_value},
+        {"C", std::max(c_value, 0.0)},
         {"L", std::max(alpha[block->global_param_ids[2]], 0.0)},
         {"stenosis_coefficient", stenosis_coeff}
     };
@@ -277,7 +288,7 @@ int main(int argc, char *argv[]) {
     else {
       for (size_t i = 0; i < num_outlets; i++)
       {
-          c_values.push_back(alpha[block->global_param_ids[i+num_outlets]]);
+          c_values.push_back(std::max(alpha[block->global_param_ids[i+num_outlets]], 0.0));
       }
     }
     std::vector<T> l_values;

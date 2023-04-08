@@ -204,8 +204,7 @@ class Block {
   virtual void update_gradient(Eigen::SparseMatrix<T> &jacobian,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
+                               std::vector<T> &y, std::vector<T> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -267,7 +266,7 @@ void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
 
   // Register equations of block
   for (unsigned int i = 0; i < num_equations; i++) {
-    global_eqn_ids.push_back(dofhandler.register_equation());
+    global_eqn_ids.push_back(dofhandler.register_equation(get_name()));
   }
 }
 
@@ -295,8 +294,10 @@ template <typename T>
 void Block<T>::update_gradient(Eigen::SparseMatrix<T> &jacobian,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
                                Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {}
+                               std::vector<T> &y, std::vector<T> &dy) {
+  throw std::runtime_error("Gradient calculation not implemented for block " +
+                           get_name());
+}
 
 template <typename T>
 std::map<std::string, int> Block<T>::get_num_triplets() {

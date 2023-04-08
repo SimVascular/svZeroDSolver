@@ -177,8 +177,7 @@ class BloodVesselJunction : public Block<T> {
   void update_gradient(Eigen::SparseMatrix<T> &jacobian,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
+                       std::vector<T> &y, std::vector<T> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -272,9 +271,8 @@ template <typename T>
 void BloodVesselJunction<T>::update_gradient(
     Eigen::SparseMatrix<T> &jacobian,
     Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha, std::vector<T> &y,
+    std::vector<T> &dy) {
   for (auto bv : blood_vessels) {
     bv->update_gradient(jacobian, residual, alpha, y, dy);
   }

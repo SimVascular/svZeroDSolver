@@ -60,14 +60,25 @@ class LevenbergMarquardtOptimizer {
                               int num_params, T lambda);
   ~LevenbergMarquardtOptimizer();
 
-  void step(Eigen::Matrix<T, Eigen::Dynamic, 1>& alpha,
-            std::vector<std::vector<T>>& y_obs,
-            std::vector<std::vector<T>>& dy_obs);
+  /**
+   * @brief Run the optimization algorithm
+   *
+   * @param alpha Initial parameter vector alpha
+   * @param y_obs Matrix (num_obs x n) with all observations for y
+   * @param dy_obs Matrix (num_obs x n) with all observations for dy
+   * @return Eigen::Matrix<T, Eigen::Dynamic, 1> Optimized parameter vector
+   * alpha
+   */
+  Eigen::Matrix<T, Eigen::Dynamic, 1> run(
+      Eigen::Matrix<T, Eigen::Dynamic, 1> alpha,
+      std::vector<std::vector<T>>& y_obs, std::vector<std::vector<T>>& dy_obs);
 
  private:
   Eigen::SparseMatrix<T> jacobian;
   Eigen::Matrix<T, Eigen::Dynamic, 1> residual;
-  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> identity;
+  Eigen::Matrix<T, Eigen::Dynamic, 1> delta;
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat;
+  Eigen::Matrix<T, Eigen::Dynamic, 1> vec;
   MODEL::Model<T>* model;
   T lambda;
 
@@ -76,6 +87,12 @@ class LevenbergMarquardtOptimizer {
   int num_eqns;
   int num_vars;
   int num_dpoints;
+
+  void update_gradient(Eigen::Matrix<T, Eigen::Dynamic, 1>& alpha,
+                       std::vector<std::vector<T>>& y_obs,
+                       std::vector<std::vector<T>>& dy_obs);
+
+  void update_delta(bool first_step);
 };
 
 template <typename T>
@@ -90,61 +107,76 @@ LevenbergMarquardtOptimizer<T>::LevenbergMarquardtOptimizer(
   this->lambda = lambda;
   jacobian = Eigen::SparseMatrix<T>(num_dpoints, num_params);
   residual = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num_dpoints);
-  identity = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>::Identity(
-      num_params, num_params);
+  mat =
+      Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>(num_params, num_params);
+  vec = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num_params);
 }
 
 template <typename T>
 LevenbergMarquardtOptimizer<T>::~LevenbergMarquardtOptimizer() {}
 
 template <typename T>
-void LevenbergMarquardtOptimizer<T>::step(
+Eigen::Matrix<T, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer<T>::run(
+    Eigen::Matrix<T, Eigen::Dynamic, 1> alpha,
+    std::vector<std::vector<T>>& y_obs, std::vector<std::vector<T>>& dy_obs) {
+  for (size_t nliter = 0; nliter < 100; nliter++) {
+    update_gradient(alpha, y_obs, dy_obs);
+    if (nliter == 0) {
+      update_delta(true);
+    } else {
+      update_delta(false);
+    }
+    alpha -= delta;
+    std::cout << std::setprecision(12) << "Iteration " << nliter + 1
+              << " | lambda: " << lambda << " | norm inc: " << delta.norm()
+              << " | norm grad: " << vec.norm() << std::endl;
+  }
+  return alpha;
+}
+
+template <typename T>
+void LevenbergMarquardtOptimizer<T>::update_gradient(
     Eigen::Matrix<T, Eigen::Dynamic, 1>& alpha,
     std::vector<std::vector<T>>& y_obs, std::vector<std::vector<T>>& dy_obs) {
+  // Set jacobian and residual to zero
+  jacobian.setZero();
+  residual.setZero();
+
   // Assemble gradient and residual
   for (size_t i = 0; i < num_obs; i++) {
-    Eigen::Matrix<T, Eigen::Dynamic, 1> y_i =
-        Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num_vars);
-    Eigen::Matrix<T, Eigen::Dynamic, 1> dy_i =
-        Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num_vars);
-    for (size_t k = 0; k < num_vars; k++) {
-      y_i[k] = y_obs[i][k];
-      dy_i[k] = dy_obs[i][k];
-    }
-
     for (size_t j = 0; j < model->get_num_blocks(true); j++) {
       auto block = model->get_block(j);
       for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
         block->global_eqn_ids[l] += num_eqns * i;
       }
-      block->update_gradient(jacobian, residual, alpha, y_i, dy_i);
+      block->update_gradient(jacobian, residual, alpha, y_obs[i], dy_obs[i]);
       for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
         block->global_eqn_ids[l] -= num_eqns * i;
       }
     }
   }
+}
 
-  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat =
-      jacobian.transpose() * jacobian + lambda * identity;
-  Eigen::Matrix<T, Eigen::Dynamic, 1> vec = jacobian.transpose() * residual;
-  Eigen::Matrix<T, Eigen::Dynamic, 1> delta =
-      mat.colPivHouseholderQr().solve(vec);  // or llt()
+template <typename T>
+void LevenbergMarquardtOptimizer<T>::update_delta(bool first_step) {
+  // Cache old gradient vector and calulcate new one
+  Eigen::Matrix<T, Eigen::Dynamic, 1> vec_old = vec;
+  vec = jacobian.transpose() * residual;
 
-  T residual_norm = 0.0;
-  for (size_t i = 0; i < num_dpoints; i++) {
-    residual_norm += fabs(residual[i]);
+  // Determine new lambda parameter from new and old gradient vector
+  if (!first_step) {
+    lambda *= vec.norm() / vec_old.norm();
   }
-  residual_norm /= num_dpoints;
-  std::cout << "residual norm: " << residual_norm << std::endl;
 
-  T param_norm = 0.0;
-  for (size_t i = 0; i < num_params; i++) {
-    param_norm += fabs(delta[i]);
-  }
-  param_norm /= num_params;
-  std::cout << "param norm: " << param_norm << std::endl;
+  // Determine gradient matrix
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> jacobian_sq =
+      jacobian.transpose() * jacobian;
+  Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> jacobian_sq_diag =
+      jacobian_sq.diagonal().asDiagonal();
+  mat = jacobian_sq + lambda * jacobian_sq_diag;
 
-  alpha -= delta;
+  // Solve for new delta
+  delta = mat.llt().solve(vec);
 }
 
 }  // namespace OPT

@@ -483,8 +483,8 @@ void Model<T>::to_steady() {
   for (auto param : time_dependent_parameters) {
     param->to_steady();
   }
-  for (size_t i = 0; i < block_types.size(); i++) {
-    blocks[i]->steady = true;
+  for (size_t i = 0; i < get_num_blocks(true); i++) {
+    get_block(i)->steady = true;
     if ((block_types[i] == BlockType::WINDKESSELBC) ||
         (block_types[i] == BlockType::CLOSEDLOOPRCRBC)) {
       int param_id_capacitance = blocks[i]->global_param_ids[1];
@@ -503,8 +503,8 @@ void Model<T>::to_unsteady() {
     DEBUG_MSG("Setting Windkessel capacitance back to " << value);
     parameters[param_id_capacitance]->update(value);
   }
-  for (size_t i = 0; i < block_types.size(); i++) {
-    blocks[i]->steady = false;
+  for (size_t i = 0; i < get_num_blocks(true); i++) {
+    get_block(i)->steady = false;
   }
 }
 

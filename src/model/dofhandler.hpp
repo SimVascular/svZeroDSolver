@@ -54,6 +54,8 @@ class DOFHandler {
  public:
   std::vector<std::string>
       variables;  ///< Variable names corresponding to the variable indices
+  std::vector<std::string>
+      equations;  ///< Equation names corresponding to the equation indices
 
   /**
    * @brief Construct a new DOFHandler object
@@ -99,9 +101,10 @@ class DOFHandler {
   /**
    * @brief Register a new equation at the DOFHandler
    *
+   * @param name Name of the equation
    * @return Global index of the equation
    */
-  int register_equation();
+  int register_equation(std::string name);
 
   /**
    * @brief Get the index of a variable
@@ -130,7 +133,10 @@ int DOFHandler::register_variable(std::string name) {
   return var_counter++;
 }
 
-int DOFHandler::register_equation() { return eqn_counter++; }
+int DOFHandler::register_equation(std::string name) {
+  equations.push_back(name);
+  return eqn_counter++;
+}
 
 int DOFHandler::get_index(std::string_view& name) {
   auto it = find(variables.begin(), variables.end(), name);

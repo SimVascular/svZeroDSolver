@@ -98,82 +98,76 @@ std::string to_vessel_csv(std::vector<T> &times,
 
     // Write the solution of the block to the output file
     if (derivative) {
-      if (name != "NoName") {
-        if (mean) {
-          T inflow_mean = 0.0;
-          T outflow_mean = 0.0;
-          T inpres_mean = 0.0;
-          T outpres_mean = 0.0;
-          T d_inflow_mean = 0.0;
-          T d_outflow_mean = 0.0;
-          T d_inpres_mean = 0.0;
-          T d_outpres_mean = 0.0;
-          for (size_t i = 0; i < num_steps; i++) {
-            inflow_mean += states[i].y[inflow_dof];
-            outflow_mean += states[i].y[outflow_dof];
-            inpres_mean += states[i].y[inpres_dof];
-            outpres_mean += states[i].y[outpres_dof];
-            d_inflow_mean += states[i].ydot[inflow_dof];
-            d_outflow_mean += states[i].ydot[outflow_dof];
-            d_inpres_mean += states[i].ydot[inpres_dof];
-            d_outpres_mean += states[i].ydot[outpres_dof];
-          }
-          inflow_mean /= num_steps;
-          outflow_mean /= num_steps;
-          inpres_mean /= num_steps;
-          outpres_mean /= num_steps;
-          d_inflow_mean /= num_steps;
-          d_outflow_mean /= num_steps;
-          d_inpres_mean /= num_steps;
-          d_outpres_mean /= num_steps;
+      if (mean) {
+        T inflow_mean = 0.0;
+        T outflow_mean = 0.0;
+        T inpres_mean = 0.0;
+        T outpres_mean = 0.0;
+        T d_inflow_mean = 0.0;
+        T d_outflow_mean = 0.0;
+        T d_inpres_mean = 0.0;
+        T d_outpres_mean = 0.0;
+        for (size_t i = 0; i < num_steps; i++) {
+          inflow_mean += states[i].y[inflow_dof];
+          outflow_mean += states[i].y[outflow_dof];
+          inpres_mean += states[i].y[inpres_dof];
+          outpres_mean += states[i].y[outpres_dof];
+          d_inflow_mean += states[i].ydot[inflow_dof];
+          d_outflow_mean += states[i].ydot[outflow_dof];
+          d_inpres_mean += states[i].ydot[inpres_dof];
+          d_outpres_mean += states[i].ydot[outpres_dof];
+        }
+        inflow_mean /= num_steps;
+        outflow_mean /= num_steps;
+        inpres_mean /= num_steps;
+        outpres_mean /= num_steps;
+        d_inflow_mean /= num_steps;
+        d_outflow_mean /= num_steps;
+        d_inpres_mean /= num_steps;
+        d_outpres_mean /= num_steps;
+        snprintf(
+            lbuff, 236, "%s,,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n",
+            name.c_str(), inflow_mean, outflow_mean, inpres_mean, outpres_mean,
+            d_inflow_mean, d_outflow_mean, d_inpres_mean, d_outpres_mean);
+        out << lbuff;
+      } else {
+        for (size_t i = 0; i < num_steps; i++) {
           snprintf(lbuff, 236,
-                   "%s,,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n",
-                   name.c_str(), inflow_mean, outflow_mean, inpres_mean,
-                   outpres_mean, d_inflow_mean, d_outflow_mean, d_inpres_mean,
-                   d_outpres_mean);
+                   "%s,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n",
+                   name.c_str(), times[i], states[i].y[inflow_dof],
+                   states[i].y[outflow_dof], states[i].y[inpres_dof],
+                   states[i].y[outpres_dof], states[i].ydot[inflow_dof],
+                   states[i].ydot[outflow_dof], states[i].ydot[inpres_dof],
+                   states[i].ydot[outpres_dof]);
           out << lbuff;
-        } else {
-          for (size_t i = 0; i < num_steps; i++) {
-            snprintf(
-                lbuff, 236,
-                "%s,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e,%.16e\n",
-                name.c_str(), times[i], states[i].y[inflow_dof],
-                states[i].y[outflow_dof], states[i].y[inpres_dof],
-                states[i].y[outpres_dof], states[i].ydot[inflow_dof],
-                states[i].ydot[outflow_dof], states[i].ydot[inpres_dof],
-                states[i].ydot[outpres_dof]);
-            out << lbuff;
-          }
         }
       }
     } else {
-      if (name != "NoName") {
-        if (mean) {
-          T inflow_mean = 0.0;
-          T outflow_mean = 0.0;
-          T inpres_mean = 0.0;
-          T outpres_mean = 0.0;
-          for (size_t i = 0; i < num_steps; i++) {
-            inflow_mean += states[i].y[inflow_dof];
-            outflow_mean += states[i].y[outflow_dof];
-            inpres_mean += states[i].y[inpres_dof];
-            outpres_mean += states[i].y[outpres_dof];
-          }
-          inflow_mean /= num_steps;
-          outflow_mean /= num_steps;
-          inpres_mean /= num_steps;
-          outpres_mean /= num_steps;
-          snprintf(sbuff, 140, "%s,,%.16e,%.16e,%.16e,%.16e\n", name.c_str(),
-                   inflow_mean, outflow_mean, inpres_mean, outpres_mean);
+      if (mean) {
+        T inflow_mean = 0.0;
+        T outflow_mean = 0.0;
+        T inpres_mean = 0.0;
+        T outpres_mean = 0.0;
+        for (size_t i = 0; i < num_steps; i++) {
+          inflow_mean += states[i].y[inflow_dof];
+          outflow_mean += states[i].y[outflow_dof];
+          inpres_mean += states[i].y[inpres_dof];
+          outpres_mean += states[i].y[outpres_dof];
+        }
+        inflow_mean /= num_steps;
+        outflow_mean /= num_steps;
+        inpres_mean /= num_steps;
+        outpres_mean /= num_steps;
+        snprintf(sbuff, 140, "%s,,%.16e,%.16e,%.16e,%.16e\n", name.c_str(),
+                 inflow_mean, outflow_mean, inpres_mean, outpres_mean);
+        out << sbuff;
+      } else {
+        for (size_t i = 0; i < num_steps; i++) {
+          snprintf(sbuff, 140, "%s,%.16e,%.16e,%.16e,%.16e,%.16e\n",
+                   name.c_str(), times[i], states[i].y[inflow_dof],
+                   states[i].y[outflow_dof], states[i].y[inpres_dof],
+                   states[i].y[outpres_dof]);
           out << sbuff;
-        } else {
-          for (size_t i = 0; i < num_steps; i++) {
-            snprintf(sbuff, 140, "%s,%.16e,%.16e,%.16e,%.16e,%.16e\n",
-                     name.c_str(), times[i], states[i].y[inflow_dof],
-                     states[i].y[outflow_dof], states[i].y[inpres_dof],
-                     states[i].y[outpres_dof]);
-            out << sbuff;
-          }
         }
       }
     }

@@ -127,8 +127,7 @@ class Junction : public Block<T> {
   void update_gradient(Eigen::SparseMatrix<T> &jacobian,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
                        Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
+                       std::vector<T> &y, std::vector<T> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -191,8 +190,7 @@ template <typename T>
 void Junction<T>::update_gradient(Eigen::SparseMatrix<T> &jacobian,
                                   Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
                                   Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                                  Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                                  Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
+                                  std::vector<T> &y, std::vector<T> &dy) {
   // Pressure conservation
   residual(this->global_eqn_ids[0]) =
       y[this->global_var_ids[0]] - y[this->global_var_ids[2]];

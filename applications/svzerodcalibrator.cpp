@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
 
   int num_params = 3;
   if (calibrate_stenosis){
-    int num_params = 4;
+    num_params = 4;
   }
 
   // Create vessels

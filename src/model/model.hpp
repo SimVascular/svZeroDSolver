@@ -461,7 +461,7 @@ void Model<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 template <typename T>
 void Model<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
   this->time = time;
-  for (auto param : time_dependent_parameters) {
+  for (auto param : parameters) {
     parameter_values[param->id] = param->get(time);
   }
   for (auto block : blocks) {

@@ -215,7 +215,10 @@ MAKEINDEX_CMD_NAME     = makeindex
 COMPACT_LATEX          = NO
 PAPER_TYPE             = a4
 EXTRA_PACKAGES         = {tikz} \
-                         {circuitikz}
+                         {circuitikz} \
+                         {amsmath} \
+                         {amsfonts} \
+                         {amssymb}
 LATEX_HEADER           =
 LATEX_FOOTER           =
 LATEX_EXTRA_FILES      =

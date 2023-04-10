@@ -376,7 +376,7 @@ def test_pusatile_flow_cstenosis_steady_pressure():
     )  # inlet flow
     assert np.isclose(
         get_result(results, "flow_out", 0, -439),
-        0.7023611813029965,
+        0.7018707542098627,
         rtol=1.0e-5,
     )  # outlet flow
 

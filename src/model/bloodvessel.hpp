@@ -252,11 +252,17 @@ void BloodVessel<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
   // Get parameters
   T resistance = parameters[this->global_param_ids[ParamId::RESISTANCE]];
   T capacitance = parameters[this->global_param_ids[ParamId::CAPACITANCE]];
+  T inductance = parameters[this->global_param_ids[ParamId::INDUCTANCE]];
   T stenosis_coeff =
       parameters[this->global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
+//   std::cout << "resistance " << resistance << std::endl;
+//   std::cout << "capacitance " << capacitance << std::endl;
+//   std::cout << "inductance " << inductance << std::endl;
+//   std::cout << "stenosis_coeff " << stenosis_coeff << std::endl;
   T q_in = y[this->global_var_ids[1]];
   T dq_in = dy[this->global_var_ids[1]];
   T stenosis_resistance = stenosis_coeff * fabs(q_in);
+//   std::cout << this->get_name() << ": " << stenosis_coeff << std::endl;
 
   // Set element contributions
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =

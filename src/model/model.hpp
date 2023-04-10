@@ -490,6 +490,7 @@ void Model<T>::to_steady() {
       int param_id_capacitance = blocks[i]->global_param_ids[1];
       T value = parameters[param_id_capacitance]->get(0.0);
       param_value_cache.insert({param_id_capacitance, value});
+      parameters[param_id_capacitance]->update(0.0);
     }
   }
 }

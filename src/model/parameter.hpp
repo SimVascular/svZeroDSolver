@@ -204,7 +204,6 @@ void Parameter<T>::to_steady() {
     return;
   }
   value = std::accumulate(values.begin(), values.end(), 0.0) / T(size);
-  ;
   isconstant = true;
   steady_converted = true;
 }

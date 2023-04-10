@@ -312,7 +312,6 @@ const std::string run(IO::JsonHandler handler) {
     states.push_back(std::move(state));
   }
   for (int i = 1; i < simparams.sim_num_time_steps; i++) {
-    // DEBUG_MSG("Integration time: "<< time << std::endl);
     state = integrator.step(state, time);
     interval_counter += 1;
     time = simparams.sim_time_step_size * T(i);

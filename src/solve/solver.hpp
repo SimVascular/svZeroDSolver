@@ -74,6 +74,44 @@ class Solver {
   void run();
 
   /**
+   * @brief Get the full result as a csv encoded string
+   * 
+   * @return std::string Result
+   */
+  std::string get_full_result();
+
+  /**
+   * @brief Get the result of a single DOF over time
+   * 
+   * @param dof_name Name of the degree-of-freedom
+   * @return Eigen::VectorXd Result
+   */
+  Eigen::VectorXd get_single_result(std::string dof_name);
+
+  /**
+   * @brief Get the result of a single DOF averaged over time
+   * 
+   * @param dof_name Name of the degree-of-freedom
+   * @return T Result
+   */
+  T get_single_result_avg(std::string dof_name);
+
+  /**
+   * @brief Get the time steps of the result
+   * 
+   * @return std::vector<T> 
+   */
+  std::vector<T> get_times();
+
+  /**
+   * @brief Update the parameters of a block
+   * 
+   * @param block_name Name of the block
+   * @param new_params New parameters
+   */
+  void update_block_params(std::string block_name, std::vector<T> new_params);
+
+  /**
    * @brief Write the result to a csv file.
    *
    * @param filename
@@ -81,7 +119,7 @@ class Solver {
   void write_result_to_csv(std::string_view filename);
 
  private:
-  std::shared_ptr<MODEL::Model<T>> model;
+  MODEL::Model<T> model;
   IO::SimulationParameters<T> simparams;
   std::vector<ALGEBRA::State<T>> states;
   std::vector<T> times;
@@ -95,14 +133,15 @@ Solver<T>::Solver(IO::JsonHandler& handler) {
   DEBUG_MSG("Read simulation parameters");
   simparams = IO::load_simulation_params<T>(handler);
   DEBUG_MSG("Load model");
-  model = IO::load_model<T>(handler);
+  model = MODEL::Model<T>();
+  IO::load_model<T>(handler, model);
   DEBUG_MSG("Load initial condition");
-  inital_state = IO::load_initial_condition<T>(handler, model.get());
+  inital_state = IO::load_initial_condition<T>(handler, model);
 
   // Calculate time step size
   if (!simparams.sim_coupled) {
     simparams.sim_time_step_size =
-        model->cardiac_cycle_period / (T(simparams.sim_pts_per_cycle) - 1.0);
+        model.cardiac_cycle_period / (T(simparams.sim_pts_per_cycle) - 1.0);
   } else {
     simparams.sim_time_step_size = simparams.sim_external_step_size /
                                    (T(simparams.sim_num_time_steps) - 1.0);
@@ -120,21 +159,21 @@ void Solver<T>::run() {
   // Create steady initial
   if (simparams.sim_steady_initial) {
     DEBUG_MSG("Calculate steady initial condition");
-    T time_step_size_steady = model->cardiac_cycle_period / 10.0;
-    model->to_steady();
-    ALGEBRA::Integrator<T> integrator_steady(model.get(), time_step_size_steady,
-                                             0.1, simparams.sim_abs_tol,
+    T time_step_size_steady = model.cardiac_cycle_period / 10.0;
+    model.to_steady();
+    ALGEBRA::Integrator<T> integrator_steady(&model, time_step_size_steady, 0.1,
+                                             simparams.sim_abs_tol,
                                              simparams.sim_nliter);
     for (int i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * T(i));
     }
-    model->to_unsteady();
+    model.to_unsteady();
   }
 
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  ALGEBRA::Integrator<T> integrator(model.get(), simparams.sim_time_step_size,
-                                    0.1, simparams.sim_abs_tol,
+  ALGEBRA::Integrator<T> integrator(&model, simparams.sim_time_step_size, 0.1,
+                                    simparams.sim_abs_tol,
                                     simparams.sim_nliter);
 
   // Initialize loop
@@ -187,10 +226,62 @@ void Solver<T>::run() {
 }
 
 template <typename T>
+std::vector<T> Solver<T>::get_times() {
+  return times;
+}
+
+template <typename T>
+std::string Solver<T>::get_full_result() {
+  std::string output;
+  if (simparams.output_variable_based) {
+    output = IO::to_variable_csv<T>(times, states, &model,
+                                    simparams.output_mean_only,
+                                    simparams.output_derivative);
+  } else {
+    output =
+        IO::to_vessel_csv<T>(times, states, &model, simparams.output_mean_only,
+                             simparams.output_derivative);
+  }
+  return output;
+}
+
+template <typename T>
+Eigen::VectorXd Solver<T>::get_single_result(std::string dof_name) {
+  int dof_index = model.dofhandler.get_variable_index(dof_name);
+  int num_states = states.size();
+  Eigen::VectorXd result = Eigen::VectorXd::Zero(num_states);
+  for (size_t i = 0; i < num_states; i++) result[i] = states[i].y[dof_index];
+  return result;
+}
+
+template <typename T>
+T Solver<T>::get_single_result_avg(std::string dof_name) {
+  int dof_index = model.dofhandler.get_variable_index(dof_name);
+  int num_states = states.size();
+  Eigen::VectorXd result = Eigen::VectorXd::Zero(num_states);
+  for (size_t i = 0; i < num_states; i++) result[i] = states[i].y[dof_index];
+  return result.mean();
+}
+
+template <typename T>
+void Solver<T>::update_block_params(std::string block_name,
+                                    std::vector<T> new_params) {
+  auto block = model.get_block(block_name);
+  if (new_params.size() != block->global_param_ids.size()) {
+    throw std::runtime_error(
+        "Parameter update failed! Number of provided parameters does not match "
+        "with block parameters.");
+  }
+  for (size_t i = 0; i < new_params.size(); i++) {
+    model.get_parameter(block->global_param_ids[i])->update(new_params[i]);
+  }
+}
+
+template <typename T>
 void Solver<T>::sanity_checks() {
   // Check that steady initial is not used with ClosedLoopHeartAndPulmonary
   if ((simparams.sim_steady_initial == true) &&
-      (model->get_block("CLH") != nullptr)) {
+      (model.get_block("CLH") != nullptr)) {
     std::runtime_error(
         "ERROR: Steady initial condition is not compatible with "
         "ClosedLoopHeartAndPulmonary block.");
@@ -200,19 +291,8 @@ void Solver<T>::sanity_checks() {
 template <typename T>
 void Solver<T>::write_result_to_csv(std::string_view filename) {
   DEBUG_MSG("Write output");
-  std::string output;
-  if (simparams.output_variable_based) {
-    output = IO::to_variable_csv<T>(times, states, model.get(),
-                                    simparams.output_mean_only,
-                                    simparams.output_derivative);
-  } else {
-    output = IO::to_vessel_csv<T>(times, states, model.get(),
-                                  simparams.output_mean_only,
-                                  simparams.output_derivative);
-  }
-
   std::ofstream ofs(filename);
-  ofs << output;
+  ofs << get_full_result();
   ofs.close();
 }
 

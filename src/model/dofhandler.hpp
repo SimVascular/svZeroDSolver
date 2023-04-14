@@ -34,6 +34,7 @@
 #ifndef SVZERODSOLVER_MODEL_DOFHANDLER_HPP_
 #define SVZERODSOLVER_MODEL_DOFHANDLER_HPP_
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -54,6 +55,8 @@ class DOFHandler {
  public:
   std::vector<std::string>
       variables;  ///< Variable names corresponding to the variable indices
+  std::map<std::string, int>
+      variable_name_map;  ///< Map between variable name and index
   std::vector<std::string>
       equations;  ///< Equation names corresponding to the equation indices
 
@@ -99,6 +102,14 @@ class DOFHandler {
   int register_variable(std::string name);
 
   /**
+   * @brief Get the index of a variable by its name
+   *
+   * @param name Name of the variable
+   * @return int Name of the variable
+   */
+  int get_variable_index(std::string name);
+
+  /**
    * @brief Register a new equation at the DOFHandler
    *
    * @param name Name of the equation
@@ -130,7 +141,12 @@ int DOFHandler::get_num_variables() { return var_counter; }
 
 int DOFHandler::register_variable(std::string name) {
   variables.push_back(name);
+  variable_name_map.insert({name, var_counter});
   return var_counter++;
+}
+
+int DOFHandler::get_variable_index(std::string name) {
+  return variable_name_map[name];
 }
 
 int DOFHandler::register_equation(std::string name) {

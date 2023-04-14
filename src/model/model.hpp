@@ -260,10 +260,7 @@ class Model {
   std::vector<std::shared_ptr<Node<T>>> nodes;  ///< Nodes of the model
   std::vector<std::string> node_names;          ///< Names of the nodes
 
-  std::vector<std::shared_ptr<Parameter<T>>>
-      parameters;  ///< Parameters of the model
-  std::vector<std::shared_ptr<Parameter<T>>>
-      time_dependent_parameters;  ///< Time-dependent parameters of the model
+  std::vector<Parameter<T>> parameters;  ///< Parameters of the model
   std::vector<double> parameter_values;  ///< Current values of the parameters
 };
 
@@ -391,34 +388,31 @@ std::string Model<T>::get_node_name(int node_id) {
 
 template <typename T>
 int Model<T>::add_parameter(T value) {
-  std::shared_ptr<Parameter<T>> param(new Parameter<T>(parameter_count, value));
-  parameters.push_back(param);
-  parameter_values.push_back(param->get(0.0));
+  parameters.push_back(Parameter<T>(parameter_count, value));
+  parameter_values.push_back(parameters.back().get(0.0));
   return parameter_count++;
 }
 
 template <typename T>
 int Model<T>::add_parameter(const std::vector<T> &times,
                             const std::vector<T> &values, bool periodic) {
-  std::shared_ptr<Parameter<T>> param(
-      new Parameter<T>(parameter_count, times, values, periodic));
-  if (periodic && (param->isconstant == false)) {
+  auto param = Parameter<T>(parameter_count, times, values, periodic);
+  if (periodic && (param.isconstant == false)) {
     if ((this->cardiac_cycle_period > 0.0) &&
-        (param->cycle_period != this->cardiac_cycle_period)) {
+        (param.cycle_period != this->cardiac_cycle_period)) {
       throw std::runtime_error(
           "Inconsistent cardiac cycle period defined in parameters");
     }
-    this->cardiac_cycle_period = param->cycle_period;
+    this->cardiac_cycle_period = param.cycle_period;
   }
-  parameters.push_back(param);
-  time_dependent_parameters.push_back(param);
-  parameter_values.push_back(param->get(0.0));
+  parameter_values.push_back(param.get(0.0));
+  parameters.push_back(std::move(param));
   return parameter_count++;
 }
 
 template <typename T>
 Parameter<T> *Model<T>::get_parameter(int param_id) {
-  return parameters[param_id].get();
+  return &parameters[param_id];
 }
 
 template <typename T>
@@ -464,8 +458,8 @@ void Model<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
 template <typename T>
 void Model<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
   this->time = time;
-  for (auto param : parameters) {
-    parameter_values[param->id] = param->get(time);
+  for (auto &param : parameters) {
+    parameter_values[param.id] = param.get(time);
   }
   for (auto block : blocks) {
     block->update_time(system, parameter_values);
@@ -483,29 +477,29 @@ void Model<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
 
 template <typename T>
 void Model<T>::to_steady() {
-  for (auto param : time_dependent_parameters) {
-    param->to_steady();
+  for (auto &param : parameters) {
+    param.to_steady();
   }
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->steady = true;
     if ((block_types[i] == BlockType::WINDKESSELBC) ||
         (block_types[i] == BlockType::CLOSEDLOOPRCRBC)) {
       int param_id_capacitance = blocks[i]->global_param_ids[1];
-      T value = parameters[param_id_capacitance]->get(0.0);
+      T value = parameters[param_id_capacitance].get(0.0);
       param_value_cache.insert({param_id_capacitance, value});
-      parameters[param_id_capacitance]->update(0.0);
+      parameters[param_id_capacitance].update(0.0);
     }
   }
 }
 
 template <typename T>
 void Model<T>::to_unsteady() {
-  for (auto param : time_dependent_parameters) {
-    param->to_unsteady();
+  for (auto &param : parameters) {
+    param.to_unsteady();
   }
   for (auto &[param_id_capacitance, value] : param_value_cache) {
     DEBUG_MSG("Setting Windkessel capacitance back to " << value);
-    parameters[param_id_capacitance]->update(value);
+    parameters[param_id_capacitance].update(value);
   }
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->steady = false;

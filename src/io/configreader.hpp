@@ -133,11 +133,8 @@ SimulationParameters<T> load_simulation_params(JsonHandler& config_handler) {
  * configuration
  */
 template <typename T>
-std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
+void load_model(JsonHandler& config_handler, MODEL::Model<T>& model) {
   DEBUG_MSG("Loading model");
-
-  // Initialize model pointer
-  auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
 
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
@@ -152,12 +149,12 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
     auto vessel_name = vessel_config.get_string("vessel_name");
     vessel_id_map.insert({vessel_config.get_int("vessel_id"), vessel_name});
     if (vessel_config.get_string("zero_d_element_type") == "BloodVessel") {
-      model->add_block(
+      model.add_block(
           MODEL::BlockType::BLOODVESSEL,
-          {model->add_parameter(vessel_values.get_double("R_poiseuille")),
-           model->add_parameter(vessel_values.get_double("C", 0.0)),
-           model->add_parameter(vessel_values.get_double("L", 0.0)),
-           model->add_parameter(
+          {model.add_parameter(vessel_values.get_double("R_poiseuille")),
+           model.add_parameter(vessel_values.get_double("C", 0.0)),
+           model.add_parameter(vessel_values.get_double("L", 0.0)),
+           model.add_parameter(
                vessel_values.get_double("stenosis_coefficient", 0.0))},
           vessel_name);
       DEBUG_MSG("Created vessel " << vessel_name);
@@ -206,16 +203,14 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
 
       if (coupling_type == "FLOW") {
         auto Q_coupling = coupling_values.get_double_array("Q");
-        model->add_block(
-            MODEL::BlockType::FLOWBC,
-            {model->add_parameter(t_coupling, Q_coupling, periodic)},
-            coupling_name);
+        model.add_block(MODEL::BlockType::FLOWBC,
+                        {model.add_parameter(t_coupling, Q_coupling, periodic)},
+                        coupling_name);
       } else if (coupling_type == "PRESSURE") {
         auto P_coupling = coupling_values.get_double_array("P");
-        model->add_block(
-            MODEL::BlockType::PRESSUREBC,
-            {model->add_parameter(t_coupling, P_coupling, periodic)},
-            coupling_name);
+        model.add_block(MODEL::BlockType::PRESSUREBC,
+                        {model.add_parameter(t_coupling, P_coupling, periodic)},
+                        coupling_name);
       } else {
         throw std::runtime_error(
             "Error. Flowsolver coupling block types should be FLOW or "
@@ -301,49 +296,49 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
     auto t = bc_values.get_double_array("t", {0.0});
 
     if (bc_type == "RCR") {
-      model->add_block(MODEL::BlockType::WINDKESSELBC,
-                       {
-                           model->add_parameter(bc_values.get_double("Rp")),
-                           model->add_parameter(bc_values.get_double("C")),
-                           model->add_parameter(bc_values.get_double("Rd")),
-                           model->add_parameter(bc_values.get_double("Pd")),
-                       },
-                       bc_name);
+      model.add_block(MODEL::BlockType::WINDKESSELBC,
+                      {
+                          model.add_parameter(bc_values.get_double("Rp")),
+                          model.add_parameter(bc_values.get_double("C")),
+                          model.add_parameter(bc_values.get_double("Rd")),
+                          model.add_parameter(bc_values.get_double("Pd")),
+                      },
+                      bc_name);
     } else if (bc_type == "ClosedLoopRCR") {
-      model->add_block(MODEL::BlockType::CLOSEDLOOPRCRBC,
-                       {model->add_parameter(bc_values.get_double("Rp")),
-                        model->add_parameter(bc_values.get_double("C")),
-                        model->add_parameter(bc_values.get_double("Rd"))},
-                       bc_name);
+      model.add_block(MODEL::BlockType::CLOSEDLOOPRCRBC,
+                      {model.add_parameter(bc_values.get_double("Rp")),
+                       model.add_parameter(bc_values.get_double("C")),
+                       model.add_parameter(bc_values.get_double("Rd"))},
+                      bc_name);
       if (bc_values.get_bool("closed_loop_outlet") == true) {
         closed_loop_bcs.push_back(bc_name);
       }
     } else if (bc_type == "FLOW") {
-      model->add_block(
-          MODEL::BlockType::FLOWBC,
-          {model->add_parameter(t, bc_values.get_double_array("Q"))}, bc_name);
+      model.add_block(MODEL::BlockType::FLOWBC,
+                      {model.add_parameter(t, bc_values.get_double_array("Q"))},
+                      bc_name);
 
     } else if (bc_type == "RESISTANCE") {
       auto R = bc_values.get_double_array("R");
       auto Pd = bc_values.get_double_array("Pd");
-      model->add_block(
-          MODEL::BlockType::RESISTANCEBC,
-          {model->add_parameter(t, R), model->add_parameter(t, Pd)}, bc_name);
+      model.add_block(MODEL::BlockType::RESISTANCEBC,
+                      {model.add_parameter(t, R), model.add_parameter(t, Pd)},
+                      bc_name);
 
     } else if (bc_type == "PRESSURE") {
-      model->add_block(
-          MODEL::BlockType::PRESSUREBC,
-          {model->add_parameter(t, bc_values.get_double_array("P"))}, bc_name);
+      model.add_block(MODEL::BlockType::PRESSUREBC,
+                      {model.add_parameter(t, bc_values.get_double_array("P"))},
+                      bc_name);
     } else if (bc_type == "CORONARY") {
-      model->add_block(
+      model.add_block(
           MODEL::BlockType::OPENLOOPCORONARYBC,
-          {model->add_parameter(t, bc_values.get_double_array("Ra1")),
-           model->add_parameter(t, bc_values.get_double_array("Ra2")),
-           model->add_parameter(t, bc_values.get_double_array("Rv1")),
-           model->add_parameter(t, bc_values.get_double_array("Ca")),
-           model->add_parameter(t, bc_values.get_double_array("Cc")),
-           model->add_parameter(t, bc_values.get_double_array("Pim")),
-           model->add_parameter(t, bc_values.get_double_array("P_v"))},
+          {model.add_parameter(t, bc_values.get_double_array("Ra1")),
+           model.add_parameter(t, bc_values.get_double_array("Ra2")),
+           model.add_parameter(t, bc_values.get_double_array("Rv1")),
+           model.add_parameter(t, bc_values.get_double_array("Ca")),
+           model.add_parameter(t, bc_values.get_double_array("Cc")),
+           model.add_parameter(t, bc_values.get_double_array("Pim")),
+           model.add_parameter(t, bc_values.get_double_array("P_v"))},
           bc_name);
     } else if (bc_type == "ClosedLoopCoronary") {
       auto side = bc_values.get_string("side");
@@ -355,13 +350,13 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
       } else {
         throw std::runtime_error("Invalid side for ClosedLoopCoronary");
       }
-      model->add_block(block_type,
-                       {model->add_parameter(bc_values.get_double("Ra")),
-                        model->add_parameter(bc_values.get_double("Ram")),
-                        model->add_parameter(bc_values.get_double("Rv")),
-                        model->add_parameter(bc_values.get_double("Ca")),
-                        model->add_parameter(bc_values.get_double("Cim"))},
-                       bc_name);
+      model.add_block(block_type,
+                      {model.add_parameter(bc_values.get_double("Ra")),
+                       model.add_parameter(bc_values.get_double("Ram")),
+                       model.add_parameter(bc_values.get_double("Rv")),
+                       model.add_parameter(bc_values.get_double("Ca")),
+                       model.add_parameter(bc_values.get_double("Cim"))},
+                      bc_name);
       closed_loop_bcs.push_back(bc_name);
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
@@ -376,32 +371,32 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
     auto j_type = junction_config.get_string("junction_type");
     auto junction_name = junction_config.get_string("junction_name");
     if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
-      model->add_block(MODEL::BlockType::JUNCTION, {}, junction_name);
+      model.add_block(MODEL::BlockType::JUNCTION, {}, junction_name);
     } else if (j_type == "resistive_junction") {
       auto junction_values = junction_config["junction_values"];
       std::vector<int> param_ids;
       for (T value : junction_values.get_double_array("R")) {
-        param_ids.push_back(model->add_parameter(value));
+        param_ids.push_back(model.add_parameter(value));
       }
-      model->add_block(MODEL::BlockType::RESISTIVEJUNCTION, param_ids,
-                       junction_name);
+      model.add_block(MODEL::BlockType::RESISTIVEJUNCTION, param_ids,
+                      junction_name);
     } else if (j_type == "BloodVesselJunction") {
       auto junction_values = junction_config["junction_values"];
       std::vector<int> param_ids;
       for (T value : junction_values.get_double_array("R_poiseuille")) {
-        param_ids.push_back(model->add_parameter(value));
+        param_ids.push_back(model.add_parameter(value));
       }
       for (T value : junction_values.get_double_array("C")) {
-        param_ids.push_back(model->add_parameter(value));
+        param_ids.push_back(model.add_parameter(value));
       }
       for (T value : junction_values.get_double_array("L")) {
-        param_ids.push_back(model->add_parameter(value));
+        param_ids.push_back(model.add_parameter(value));
       }
       for (T value : junction_values.get_double_array("stenosis_coefficient")) {
-        param_ids.push_back(model->add_parameter(value));
+        param_ids.push_back(model.add_parameter(value));
       }
-      model->add_block(MODEL::BlockType::BLOODVESSELJUNCTION, param_ids,
-                       junction_name);
+      model.add_block(MODEL::BlockType::BLOODVESSELJUNCTION, param_ids,
+                      junction_name);
     } else {
       throw std::invalid_argument("Unknown junction type");
     }
@@ -431,53 +426,53 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
           std::string heartpulmonary_name = "CLH";
           T cycle_period =
               closed_loop_config.get_double("cardiac_cycle_period");
-          if ((model->cardiac_cycle_period > 0.0) &&
-              (cycle_period != model->cardiac_cycle_period)) {
+          if ((model.cardiac_cycle_period > 0.0) &&
+              (cycle_period != model.cardiac_cycle_period)) {
             throw std::runtime_error(
                 "Inconsistent cardiac cycle period defined in "
                 "ClosedLoopHeartAndPulmonary.");
           } else {
-            model->cardiac_cycle_period = cycle_period;
+            model.cardiac_cycle_period = cycle_period;
           }
           auto heart_params = closed_loop_config["parameters"];
           // Convert to std::map to keep model blocks independent of simdjson
-          model->add_block(
+          model.add_block(
               MODEL::BlockType::CLOSEDLOOPHEARTPULMONARY,
-              {model->add_parameter(heart_params.get_double("Tsa")),
-               model->add_parameter(heart_params.get_double("tpwave")),
-               model->add_parameter(heart_params.get_double("Erv_s")),
-               model->add_parameter(heart_params.get_double("Elv_s")),
-               model->add_parameter(heart_params.get_double("iml")),
-               model->add_parameter(heart_params.get_double("imr")),
-               model->add_parameter(heart_params.get_double("Lra_v")),
-               model->add_parameter(heart_params.get_double("Rra_v")),
-               model->add_parameter(heart_params.get_double("Lrv_a")),
-               model->add_parameter(heart_params.get_double("Rrv_a")),
-               model->add_parameter(heart_params.get_double("Lla_v")),
-               model->add_parameter(heart_params.get_double("Rla_v")),
-               model->add_parameter(heart_params.get_double("Llv_a")),
-               model->add_parameter(heart_params.get_double("Rlv_ao")),
-               model->add_parameter(heart_params.get_double("Vrv_u")),
-               model->add_parameter(heart_params.get_double("Vlv_u")),
-               model->add_parameter(heart_params.get_double("Rpd")),
-               model->add_parameter(heart_params.get_double("Cp")),
-               model->add_parameter(heart_params.get_double("Cpa")),
-               model->add_parameter(heart_params.get_double("Kxp_ra")),
-               model->add_parameter(heart_params.get_double("Kxv_ra")),
-               model->add_parameter(heart_params.get_double("Kxp_la")),
-               model->add_parameter(heart_params.get_double("Kxv_la")),
-               model->add_parameter(heart_params.get_double("Emax_ra")),
-               model->add_parameter(heart_params.get_double("Emax_la")),
-               model->add_parameter(heart_params.get_double("Vaso_ra")),
-               model->add_parameter(heart_params.get_double("Vaso_la"))},
+              {model.add_parameter(heart_params.get_double("Tsa")),
+               model.add_parameter(heart_params.get_double("tpwave")),
+               model.add_parameter(heart_params.get_double("Erv_s")),
+               model.add_parameter(heart_params.get_double("Elv_s")),
+               model.add_parameter(heart_params.get_double("iml")),
+               model.add_parameter(heart_params.get_double("imr")),
+               model.add_parameter(heart_params.get_double("Lra_v")),
+               model.add_parameter(heart_params.get_double("Rra_v")),
+               model.add_parameter(heart_params.get_double("Lrv_a")),
+               model.add_parameter(heart_params.get_double("Rrv_a")),
+               model.add_parameter(heart_params.get_double("Lla_v")),
+               model.add_parameter(heart_params.get_double("Rla_v")),
+               model.add_parameter(heart_params.get_double("Llv_a")),
+               model.add_parameter(heart_params.get_double("Rlv_ao")),
+               model.add_parameter(heart_params.get_double("Vrv_u")),
+               model.add_parameter(heart_params.get_double("Vlv_u")),
+               model.add_parameter(heart_params.get_double("Rpd")),
+               model.add_parameter(heart_params.get_double("Cp")),
+               model.add_parameter(heart_params.get_double("Cpa")),
+               model.add_parameter(heart_params.get_double("Kxp_ra")),
+               model.add_parameter(heart_params.get_double("Kxv_ra")),
+               model.add_parameter(heart_params.get_double("Kxp_la")),
+               model.add_parameter(heart_params.get_double("Kxv_la")),
+               model.add_parameter(heart_params.get_double("Emax_ra")),
+               model.add_parameter(heart_params.get_double("Emax_la")),
+               model.add_parameter(heart_params.get_double("Vaso_ra")),
+               model.add_parameter(heart_params.get_double("Vaso_la"))},
               heartpulmonary_name);
 
           // Junction at inlet to heart
           std::string heart_inlet_junction_name = "J_heart_inlet";
           connections.push_back(
               {heart_inlet_junction_name, heartpulmonary_name});
-          model->add_block(MODEL::BlockType::JUNCTION, {},
-                           heart_inlet_junction_name);
+          model.add_block(MODEL::BlockType::JUNCTION, {},
+                          heart_inlet_junction_name);
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back(
                 {heart_inlet_elem, heart_inlet_junction_name});
@@ -487,8 +482,8 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
           std::string heart_outlet_junction_name = "J_heart_outlet";
           connections.push_back(
               {heartpulmonary_name, heart_outlet_junction_name});
-          model->add_block(MODEL::BlockType::JUNCTION, {},
-                           heart_outlet_junction_name);
+          model.add_block(MODEL::BlockType::JUNCTION, {},
+                          heart_outlet_junction_name);
           for (auto outlet_block :
                closed_loop_config.get_string_array("outlet_blocks")) {
             connections.push_back({heart_outlet_junction_name, outlet_block});
@@ -503,15 +498,13 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
 
   // Create Connections
   for (auto& connection : connections) {
-    auto ele1 = model->get_block(std::get<0>(connection));
-    auto ele2 = model->get_block(std::get<1>(connection));
-    model->add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
+    auto ele1 = model.get_block(std::get<0>(connection));
+    auto ele2 = model.get_block(std::get<1>(connection));
+    model.add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
   }
 
   // Finalize model
-  model->finalize();
-
-  return model;
+  model.finalize();
 }
 
 /**
@@ -524,9 +517,9 @@ std::shared_ptr<MODEL::Model<T>> load_model(JsonHandler& config_handler) {
  */
 template <typename T>
 ALGEBRA::State<T> load_initial_condition(JsonHandler& config_handler,
-                                         MODEL::Model<T>* model) {
+                                         MODEL::Model<T>& model) {
   // Read initial condition
-  auto initial_state = ALGEBRA::State<T>::Zero(model->dofhandler.size());
+  auto initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
 
   // Initialize blocks that have fixed initial conditions
   if (config_handler.has_key("initial_condition")) {
@@ -544,8 +537,8 @@ ALGEBRA::State<T> load_initial_condition(JsonHandler& config_handler,
     }
 
     // Loop through variables and check for initial conditions.
-    for (size_t i = 0; i < model->dofhandler.size(); i++) {
-      std::string var_name = model->dofhandler.variables[i];
+    for (size_t i = 0; i < model.dofhandler.size(); i++) {
+      std::string var_name = model.dofhandler.variables[i];
       double default_val = 0.0;
       if ((init_p_flag == true) && ((var_name.substr(0, 9) == "pressure:") ||
                                     (var_name.substr(0, 4) == "P_c:"))) {

@@ -32,16 +32,29 @@
  * @brief Python binding for svZeroDSolver
  */
 #include <pybind11/pybind11.h>
+#include <pybind11/operators.h>
+#include <pybind11/eigen.h>
+#include <pybind11/stl.h>
 
 #include <io/jsonhandler.hpp>
 
-#include "main.hpp"
+#include "solve/solver.hpp"
 #include "pybind11_json/pybind11_json.hpp"
 
-PYBIND11_MODULE(libsvzerodsolver, mod) {
-  mod.doc() = "svZeroDSolver";
-  mod.def("run", [](py::dict& config) {
-    nlohmann::json config_json = config;
-    return pybind11::bytes(run(IO::JsonHandler(config_json)));
-  });
+namespace py = pybind11;
+
+PYBIND11_MODULE(libsvzerodplus, m) {
+  using Solver = SOLVE::Solver<double>;
+  m.doc() = "svZeroDSolver";
+  py::class_<Solver>(m, "Solver")
+    .def(py::init([] (py::dict& config) {
+      nlohmann::json config_json = config;
+      auto config_handler = IO::JsonHandler(config_json);
+      return new Solver(config_handler);
+      }))
+    .def("run",&Solver::run)
+    .def("get_full_result",&Solver::get_full_result)
+    .def("get_single_result",&Solver::get_single_result)
+    .def("get_single_result_avg",&Solver::get_single_result_avg)
+    .def("update_block_params",&Solver::update_block_params);
 }

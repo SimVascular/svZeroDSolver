@@ -28,49 +28,13 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file main.cpp
- * @brief Main routine of svZeroDSolver
+ * @file namespace.hpp
+ * @brief SOLVE namespace documentation source file
  */
-#include "solve/solver.hpp"
 
 /**
+ * @brief SOLVE namespace
  *
- * @brief svZeroDSolver main routine
- *
- * This is the main routine of the svZeroDSolver. It exectutes the following
- * steps:
- *
- * 1. Read the input file
- * 2. Create the 0D model
- * 3. (Optional) Solve for steady initial condition
- * 4. Run simulation
- * 5. Write output to file
- *
- * @param argc Number of command line arguments
- * @param argv Command line arguments
- * @return Return code
+ * The SOLVE namespace contains all tools for running 0D simulations.
  */
-int main(int argc, char *argv[]) {
-  DEBUG_MSG("Starting svZeroDSolver");
-
-  // Get input and output file name
-  if (argc != 3) {
-    std::cout << "Usage: svzerodsolver path/to/config.json path/to/output.csv"
-              << std::endl;
-    exit(1);
-  }
-  std::string input_file = argv[1];
-  std::string output_file = argv[2];
-
-  std::ifstream input_file_stream(input_file);
-  std::stringstream buffer;
-  buffer << input_file_stream.rdbuf();
-  std::string config = buffer.str();
-
-  auto config_handler = IO::JsonHandler(config);
-  auto solver = SOLVE::Solver<double>(config_handler);
-  solver.run();
-  solver.write_result_to_csv(output_file);
-
-  return 0;
-}
+namespace SOLVE {}

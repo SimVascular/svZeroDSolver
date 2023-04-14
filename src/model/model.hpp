@@ -440,6 +440,9 @@ void Model<T>::finalize() {
   for (auto &block : blocks) {
     block->setup_model_dependent_params();
   }
+  if (cardiac_cycle_period < 0.0) {
+    cardiac_cycle_period = 1.0;
+  }
 }
 
 template <typename T>

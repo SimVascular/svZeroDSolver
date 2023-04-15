@@ -234,12 +234,12 @@ template <typename T>
 std::string Solver<T>::get_full_result() {
   std::string output;
   if (simparams.output_variable_based) {
-    output = IO::to_variable_csv<T>(times, states, &model,
+    output = IO::to_variable_csv<T>(times, states, model,
                                     simparams.output_mean_only,
                                     simparams.output_derivative);
   } else {
     output =
-        IO::to_vessel_csv<T>(times, states, &model, simparams.output_mean_only,
+        IO::to_vessel_csv<T>(times, states, model, simparams.output_mean_only,
                              simparams.output_derivative);
   }
   return output;

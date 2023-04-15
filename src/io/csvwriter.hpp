@@ -58,7 +58,7 @@ namespace IO {
 template <typename T>
 std::string to_vessel_csv(std::vector<T> &times,
                           std::vector<ALGEBRA::State<T>> &states,
-                          MODEL::Model<T> *model, bool mean = false,
+                          MODEL::Model<T> &model, bool mean = false,
                           bool derivative = false) {
   // Create string stream to buffer output
   std::stringstream out;
@@ -82,8 +82,8 @@ std::string to_vessel_csv(std::vector<T> &times,
   unsigned int outflow_dof;
   unsigned int inpres_dof;
   unsigned int outpres_dof;
-  for (size_t i = 0; i < model->get_num_blocks(); i++) {
-    auto block = model->get_block(i);
+  for (size_t i = 0; i < model.get_num_blocks(); i++) {
+    auto block = model.get_block(i);
     // Extract global solution indices of the block
 
     if (dynamic_cast<const MODEL::BloodVessel<T> *>(block) == nullptr) {
@@ -190,7 +190,7 @@ std::string to_vessel_csv(std::vector<T> &times,
 template <typename T>
 std::string to_variable_csv(std::vector<T> &times,
                             std::vector<ALGEBRA::State<T>> &states,
-                            MODEL::Model<T> *model, bool mean = false,
+                            MODEL::Model<T> &model, bool mean = false,
                             bool derivative = false) {
   // Create string stream to buffer output
   std::stringstream out;
@@ -206,8 +206,8 @@ std::string to_variable_csv(std::vector<T> &times,
   if (derivative) {
     out << "name,time,y,ydot\n";
     if (mean) {
-      for (size_t i = 0; i < model->dofhandler.size(); i++) {
-        std::string name = model->dofhandler.variables[i];
+      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+        std::string name = model.dofhandler.variables[i];
         T mean_y = 0.0;
         T mean_ydot = 0.0;
         for (size_t j = 0; j < num_steps; j++) {
@@ -221,8 +221,8 @@ std::string to_variable_csv(std::vector<T> &times,
         out << lbuff;
       }
     } else {
-      for (size_t i = 0; i < model->dofhandler.size(); i++) {
-        std::string name = model->dofhandler.variables[i];
+      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+        std::string name = model.dofhandler.variables[i];
         for (size_t j = 0; j < num_steps; j++) {
           snprintf(lbuff, 110, "%s,%.16e,%.16e,%.16e\n", name.c_str(), times[j],
                    states[j].y[i], states[j].ydot[i]);
@@ -233,8 +233,8 @@ std::string to_variable_csv(std::vector<T> &times,
   } else {
     out << "name,time,y\n";
     if (mean) {
-      for (size_t i = 0; i < model->dofhandler.size(); i++) {
-        std::string name = model->dofhandler.variables[i];
+      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+        std::string name = model.dofhandler.variables[i];
         T mean_y = 0.0;
         for (size_t j = 0; j < num_steps; j++) {
           mean_y += states[j].y[i];
@@ -244,8 +244,8 @@ std::string to_variable_csv(std::vector<T> &times,
         out << sbuff;
       }
     } else {
-      for (size_t i = 0; i < model->dofhandler.size(); i++) {
-        std::string name = model->dofhandler.variables[i];
+      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+        std::string name = model.dofhandler.variables[i];
         for (size_t j = 0; j < num_steps; j++) {
           snprintf(sbuff, 87, "%s,%.16e,%.16e\n", name.c_str(), times[j],
                    states[j].y[i]);

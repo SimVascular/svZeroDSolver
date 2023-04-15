@@ -43,9 +43,6 @@
 
 namespace py = pybind11;
 
-pybind11::object read_csv = pybind11::module_::import("pandas").attr("read_csv");
-pybind11::object StringIO = pybind11::module_::import("io").attr("StringIO");
-
 PYBIND11_MODULE(libsvzerodplus, m) {
   using Solver = SOLVE::Solver<double>;
   m.doc() = "svZeroDSolver";
@@ -58,12 +55,6 @@ PYBIND11_MODULE(libsvzerodplus, m) {
     .def("__copy__", [](Solver& solver) {return Solver(solver);})
     .def("copy", [](Solver& solver) {return Solver(solver);})
     .def("run",&Solver::run)
-    // .def("get_full_result", [](Solver& solver) {
-    //   std::cout << "Hallo1"<< std::endl;
-    //   auto result = solver.get_full_result();
-    //   std::cout << "Hallo2"<< std::endl;
-    //   return read_csv(result);
-    // })
     .def("get_single_result",&Solver::get_single_result)
     .def("get_single_result_avg",&Solver::get_single_result_avg)
     .def("update_block_params",&Solver::update_block_params);

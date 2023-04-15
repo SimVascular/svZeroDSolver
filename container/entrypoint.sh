@@ -1,2 +1,3 @@
-LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libprofiler.so CPUPROFILE=main.prof CPUPROFILE_FREQUENCY=100000 @
-google-pprof --pdf ./svzerodsolver main.prof > profiling_report.pdf
+export LIBPROFILER=$(find /usr/lib -name "libprofiler.so")
+LD_PRELOAD=$LIBPROFILER CPUPROFILE=/opt/main.prof CPUPROFILE_FREQUENCY=100000 /opt/svzerodplus-build/relwithdebinfo/svzerodsolver $@ /opt/output.csv
+google-pprof --pdf /opt/svzerodplus-build/relwithdebinfo/svzerodsolver /opt/main.prof > profiling_report.pdf

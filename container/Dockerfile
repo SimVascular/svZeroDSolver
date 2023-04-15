@@ -15,6 +15,8 @@ RUN apt-get -q update && \
     ca-certificates \
     google-perftools \
     libgoogle-perftools-dev \
+    graphviz \
+    ghostscript \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

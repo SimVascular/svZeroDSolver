@@ -547,10 +547,23 @@ ALGEBRA::State<T> load_initial_condition(JsonHandler& config_handler,
       } else if ((init_q_flag == true) && (var_name.substr(0, 5) == "flow:")) {
         default_val = init_q;
         DEBUG_MSG("flow_all initial condition for " << var_name);
-      } else {
+      } 
+      if (!initial_condition.has_key(var_name)) {
         DEBUG_MSG("No initial condition found for " << var_name);
       }
       initial_state.y[i] = initial_condition.get_double(var_name, default_val);
+    }
+  }
+  if (config_handler.has_key("initial_condition_d")) {
+    DEBUG_MSG("Reading initial condition derivative");
+    auto initial_condition_d = config_handler["initial_condition_d"];
+    // Loop through variables and check for initial conditions.
+    for (size_t i = 0; i < model.dofhandler.size(); i++) {
+      std::string var_name = model.dofhandler.variables[i];
+      if (!initial_condition_d.has_key(var_name)) {
+        DEBUG_MSG("No initial condition derivative found for " << var_name);
+      }
+      initial_state.ydot[i] = initial_condition_d.get_double(var_name, 0.0);
     }
   }
   return initial_state;

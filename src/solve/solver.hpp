@@ -138,6 +138,8 @@ Solver<T>::Solver(IO::JsonHandler& handler) {
   DEBUG_MSG("Load initial condition");
   inital_state = IO::load_initial_condition<T>(handler, model);
 
+  DEBUG_MSG("Cardiac cycle period " << model.cardiac_cycle_period);
+
   // Calculate time step size
   if (!simparams.sim_coupled) {
     simparams.sim_time_step_size =

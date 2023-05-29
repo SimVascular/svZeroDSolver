@@ -27,5 +27,6 @@ RUN mkdir -p /opt/svzerodplus-build/relwithdebinfo && \
     cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo /opt/svzerodplus && \
     cmake --build . --target svzerodsolver
 
-WORKDIR /opt
+WORKDIR /opt/data
+RUN chmod +x /opt/svzerodplus/container/profiling/entrypoint.sh
 ENTRYPOINT ["/opt/svzerodplus/container/profiling/entrypoint.sh"]

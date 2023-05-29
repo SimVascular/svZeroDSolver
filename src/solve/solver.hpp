@@ -115,7 +115,7 @@ class Solver {
    *
    * @param filename
    */
-  void write_result_to_csv(std::string_view filename);
+  void write_result_to_csv(std::string filename);
 
  private:
   MODEL::Model<T> model;
@@ -290,7 +290,7 @@ void Solver<T>::sanity_checks() {
 }
 
 template <typename T>
-void Solver<T>::write_result_to_csv(std::string_view filename) {
+void Solver<T>::write_result_to_csv(std::string filename) {
   DEBUG_MSG("Write output");
   std::ofstream ofs(filename);
   ofs << get_full_result();

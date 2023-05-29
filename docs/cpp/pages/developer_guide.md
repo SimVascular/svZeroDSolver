@@ -78,45 +78,12 @@ on macOS or with `sudo apt-get install doxygen` on Linux.
 Profiling helps to easily identify bottlenecks in the code. A profiling report
 lists the executation time spend on certain parts of the code. If you experience
 performance issue with svZeroDSolver, you can follow this guide
-to create a profiling report.
+to create a profiling report. The generation of profiling reports requires
+[Docker](https://docs.docker.com/get-docker/) to be installed on your machine.
 
-### macOS
-
-Install Google Performance Tools:
-
-```bash
-brew install gperftools
+```docker
+docker build -t profile_svzerodplus -f container/profiling/Dockerfile .
+docker run -it -v $(PWD):/opt/data --rm profile_svzerodplus path/to/simulation_config.json
 ```
 
-Go to the folder of the build you want to profile (i.e. `cd Debug` or `cd Release`)
-and run:
-
-```bash
-sudo DYLD_INSERT_LIBRARIES=/usr/local/lib/libprofiler.dylib CPUPROFILE=main.prof CPUPROFILE_FREQUENCY=100000 ./svzerodsolver path/to/input_file.json path/to/output_file.csv
-pprof --pdf ./svzerodsolver main.prof > profiling_report.pdf
-```
-
-This will generate a profiling report called `profiling_report.pdf` in the respective
-folder. Make sure to build svZeroDSolver before starting profiling.
-
-### Linux
-
-Install Google Performance Tools:
-
-```bash
-sudo apt install google-perftools libgoogle-perftools-dev
-```
-
-Go to the folder of the build you want to profile (i.e. `cd Debug` or `cd Release`)
-and run:
-
-```bash
-LD_PRELOAD=/usr/local/lib/libprofiler.so CPUPROFILE=main.prof CPUPROFILE_FREQUENCY=100000 ./svzerodsolver ../solver_0d.in ../solver_output.csv
-google-pprof --pdf ./svzerodsolver main.prof > profiling_report.pdf
-```
-
-If the first line of the above command doesn't work, you can try
-exchanging the `LD_PRELOAD` path with `/usr/lib/x86_64-linux-gnu/libprofiler.so`.
-
-This will generate a profiling report called `profiling_report.pdf` in the respective
-folder. Make sure to build svZeroDSolver before starting profiling.
+This will generate a file called `profiling_report.pdf` in your current working directory.

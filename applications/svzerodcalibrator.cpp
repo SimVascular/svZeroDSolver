@@ -7,7 +7,6 @@
 
 #include "helpers/debug.hpp"
 #include "helpers/endswith.hpp"
-#include "io/jsonhandler.hpp"
 #include "model/model.hpp"
 #include "optimize/levenbergmarquardtoptimizer.hpp"
 
@@ -26,28 +25,21 @@ int main(int argc, char *argv[]) {
   std::string input_file = argv[1];
   std::string output_file = argv[2];
 
-  std::ifstream input_file_stream(input_file);
-  std::stringstream buffer;
-  buffer << input_file_stream.rdbuf();
-  std::string config = buffer.str();
-
-  std::ifstream input_file_stream2(input_file);
-  nlohmann::json output_config = nlohmann::json::parse(input_file_stream2);
-
-  // Load model and configuration
   DEBUG_MSG("Read configuration");
-  auto handler = IO::JsonHandler(config);
+  std::ifstream ifs(input_file);
+  const auto& config = nlohmann::json::parse(ifs);
+  auto output_config = nlohmann::json::parse(ifs);
 
-  auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
+  auto model = MODEL::Model<T>();
   std::vector<std::tuple<std::string, std::string>> connections;
   std::vector<std::tuple<std::string, std::string>> inlet_connections;
   std::vector<std::tuple<std::string, std::string>> outlet_connections;
 
-  auto calibration_parameters = handler["calibration_parameters"];
+  auto const& calibration_parameters = config["calibration_parameters"];
   bool calibrate_stenosis =
-      calibration_parameters.get_bool("calibrate_stenosis_coefficient");
+      calibration_parameters["calibrate_stenosis_coefficient"];
   bool zero_capacitance =
-      calibration_parameters.get_bool("set_capacitance_to_zero");
+      calibration_parameters["set_capacitance_to_zero"];
 
   int num_params = 3;
   if (calibrate_stenosis) {
@@ -57,56 +49,52 @@ int main(int argc, char *argv[]) {
   // Create vessels
   DEBUG_MSG("Load vessels");
   std::map<std::int64_t, std::string> vessel_id_map;
-  auto vessels = handler["vessels"];
   int param_counter = 0;
-  for (size_t i = 0; i < vessels.length(); i++) {
-    auto vessel_config = vessels[i];
-    std::string vessel_name = vessel_config.get_string("vessel_name");
-    vessel_id_map.insert({vessel_config.get_int("vessel_id"), vessel_name});
+  for (auto const& vessel_config : config["vessels"]) {
+    std::string vessel_name = vessel_config["vessel_name"];
+    vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     std::vector<int> param_ids;
     for (size_t k = 0; k < num_params; k++) {
       param_ids.push_back(param_counter++);
     }
-    model->add_block(MODEL::BlockType::BLOODVESSEL, param_ids, vessel_name);
+    model.add_block(MODEL::BlockType::BLOODVESSEL, param_ids, vessel_name);
     DEBUG_MSG("Created vessel " << vessel_name);
 
     // Read connected boundary conditions
-    if (vessel_config.has_key("boundary_conditions")) {
-      auto vessel_bc_config = vessel_config["boundary_conditions"];
-      if (vessel_bc_config.has_key("inlet")) {
+    if (vessel_config.contains("boundary_conditions")) {
+      auto const& vessel_bc_config = vessel_config["boundary_conditions"];
+      if (vessel_bc_config.contains("inlet")) {
         inlet_connections.push_back(
-            {vessel_bc_config.get_string("inlet"), vessel_name});
+            {vessel_bc_config["inlet"], vessel_name});
       }
-      if (vessel_bc_config.has_key("outlet")) {
+      if (vessel_bc_config.contains("outlet")) {
         outlet_connections.push_back(
-            {vessel_name, vessel_bc_config.get_string("outlet")});
+            {vessel_name, vessel_bc_config["outlet"]});
       }
     }
   }
 
   // Create junctions
-  auto junctions = handler["junctions"];
-  for (size_t i = 0; i < junctions.length(); i++) {
-    auto junction_config = junctions[i];
-    auto junction_name = junction_config.get_string("junction_name");
-    auto outlet_vessels = junction_config.get_int_array("outlet_vessels");
+  for (auto const& junction_config : config["junctions"]) {
+    std::string junction_name = junction_config["junction_name"];
+    auto const& outlet_vessels = junction_config["outlet_vessels"];
     int num_outlets = outlet_vessels.size();
     if (num_outlets == 1) {
-      model->add_block(MODEL::BlockType::JUNCTION, {}, junction_name);
+      model.add_block(MODEL::BlockType::JUNCTION, {}, junction_name);
     } else {
       std::vector<int> param_ids;
       for (size_t i = 0; i < (num_outlets * num_params); i++) {
         param_ids.push_back(param_counter++);
       }
-      model->add_block(MODEL::BlockType::BLOODVESSELJUNCTION, param_ids,
+      model.add_block(MODEL::BlockType::BLOODVESSELJUNCTION, param_ids,
                        junction_name);
     }
     // Check for connections to inlet and outlet vessels and append to
     // connections list
-    for (auto vessel_id : junction_config.get_int_array("inlet_vessels")) {
+    for (auto vessel_id : junction_config["inlet_vessels"]) {
       connections.push_back({vessel_id_map[vessel_id], junction_name});
     }
-    for (auto vessel_id : junction_config.get_int_array("outlet_vessels")) {
+    for (auto vessel_id : outlet_vessels) {
       connections.push_back({junction_name, vessel_id_map[vessel_id]});
     }
     DEBUG_MSG("Created junction " << junction_name);
@@ -115,29 +103,29 @@ int main(int argc, char *argv[]) {
   // Create Connections
   DEBUG_MSG("Created connection");
   for (auto &connection : connections) {
-    auto ele1 = model->get_block(std::get<0>(connection));
-    auto ele2 = model->get_block(std::get<1>(connection));
-    model->add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
+    auto ele1 = model.get_block(std::get<0>(connection));
+    auto ele2 = model.get_block(std::get<1>(connection));
+    model.add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
   }
 
   for (auto &connection : inlet_connections) {
-    auto ele = model->get_block(std::get<1>(connection));
-    model->add_node({}, {ele},
+    auto ele = model.get_block(std::get<1>(connection));
+    model.add_node({}, {ele},
                     static_cast<std::string>(std::get<0>(connection)) + ":" +
                         ele->get_name());
   }
 
   for (auto &connection : outlet_connections) {
-    auto ele = model->get_block(std::get<0>(connection));
-    model->add_node({ele}, {},
+    auto ele = model.get_block(std::get<0>(connection));
+    model.add_node({ele}, {},
                     ele->get_name() + ":" +
                         static_cast<std::string>(std::get<1>(connection)));
   }
 
-  model->finalize();
+  model.finalize();
 
-  for (size_t i = 0; i < model->dofhandler.size(); i++) {
-    std::string var_name = model->dofhandler.variables[i];
+  for (size_t i = 0; i < model.dofhandler.size(); i++) {
+    std::string var_name = model.dofhandler.variables[i];
     DEBUG_MSG("Variable " << i << ": " << var_name);
   }
 
@@ -147,13 +135,13 @@ int main(int argc, char *argv[]) {
   DEBUG_MSG("Reading observations");
   std::vector<std::vector<T>> y_all;
   std::vector<std::vector<T>> dy_all;
-  auto y_values = handler["y"];
-  auto dy_values = handler["dy"];
-  for (size_t i = 0; i < model->dofhandler.get_num_variables(); i++) {
-    std::string var_name = model->dofhandler.variables[i];
+  auto y_values = config["y"];
+  auto dy_values = config["dy"];
+  for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
+    std::string var_name = model.dofhandler.variables[i];
     DEBUG_MSG("Reading observations for variable " << var_name);
-    auto y_array = y_values.get_double_array(var_name);
-    auto dy_array = dy_values.get_double_array(var_name);
+    auto y_array = y_values[var_name].get<std::vector<double>>();
+    auto dy_array = dy_values[var_name].get<std::vector<double>>();
     num_obs = y_array.size();
     if (i == 0) {
       y_all.resize(num_obs);
@@ -175,7 +163,7 @@ int main(int argc, char *argv[]) {
   for (auto &vessel_config : output_config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
     DEBUG_MSG("Reading initial alpha for " << vessel_name);
-    auto block = model->get_block(vessel_name);
+    auto block = model.get_block(vessel_name);
     alpha[block->global_param_ids[0]] =
         vessel_config["zero_d_element_values"].value("R_poiseuille", 0.0);
     alpha[block->global_param_ids[1]] =
@@ -191,7 +179,7 @@ int main(int argc, char *argv[]) {
   for (auto &junction_config : output_config["junctions"]) {
     std::string junction_name = junction_config["junction_name"];
     DEBUG_MSG("Reading initial alpha for " << junction_name);
-    auto block = model->get_block(junction_name);
+    auto block = model.get_block(junction_name);
     int num_outlets = block->outlet_nodes.size();
 
     if (num_outlets < 2) {
@@ -233,7 +221,7 @@ int main(int argc, char *argv[]) {
   // =====================================
   DEBUG_MSG("Start optimization");
   auto lm_alg = OPT::LevenbergMarquardtOptimizer(
-      model.get(), num_obs, param_counter, 1.0, 1.0e-5, 1.0e-10, 100);
+      &model, num_obs, param_counter, 1.0, 1.0e-5, 1.0e-10, 100);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 
@@ -242,7 +230,7 @@ int main(int argc, char *argv[]) {
   // =====================================
   for (auto &vessel_config : output_config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
-    auto block = model->get_block(vessel_name);
+    auto block = model.get_block(vessel_name);
     T stenosis_coeff = 0.0;
     if (num_params > 3) {
       stenosis_coeff = alpha[block->global_param_ids[3]];
@@ -260,7 +248,7 @@ int main(int argc, char *argv[]) {
 
   for (auto &junction_config : output_config["junctions"]) {
     std::string junction_name = junction_config["junction_name"];
-    auto block = model->get_block(junction_name);
+    auto block = model.get_block(junction_name);
     int num_outlets = block->outlet_nodes.size();
 
     if (num_outlets < 2) {

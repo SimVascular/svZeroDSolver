@@ -88,7 +88,7 @@ struct SimulationParameters {
       output_variable_based;  ///< Output variable based instead of vessel based
   bool output_mean_only;      ///< Output only the mean value
   bool output_derivative;     ///< Output derivatives
-  bool output_last_cycle_only;  ///< Output only the last cardiac cycle
+  bool output_all_cycles;     ///< Output all cardiac cycles
 
   bool sim_coupled;  ///< Running 0D simulation coupled with external solver
   T sim_external_step_size;  ///< Step size of external solver if running
@@ -136,8 +136,8 @@ SimulationParameters<T> load_simulation_params(const nlohmann::json& config) {
       sim_config.value("output_mean_only", false);
   sim_params.output_derivative =
       sim_config.value("output_derivative", false);
-  sim_params.output_last_cycle_only =
-      sim_config.value("output_last_cycle_only", false);
+  sim_params.output_all_cycles =
+      sim_config.value("output_all_cycles", false);
   DEBUG_MSG("Finished loading simulation parameters");
   return sim_params;
 }

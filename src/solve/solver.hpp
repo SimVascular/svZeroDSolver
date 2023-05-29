@@ -180,14 +180,14 @@ void Solver<T>::run() {
   // Initialize loop
   states = std::vector<ALGEBRA::State<T>>();
   times = std::vector<T>();
-  if (simparams.output_last_cycle_only) {
+  if (simparams.output_all_cycles) {
     int num_states =
-        simparams.sim_pts_per_cycle / simparams.output_interval + 1;
+        simparams.sim_num_time_steps / simparams.output_interval + 1;
     states.reserve(num_states);
     times.reserve(num_states);
   } else {
     int num_states =
-        simparams.sim_num_time_steps / simparams.output_interval + 1;
+        simparams.sim_pts_per_cycle / simparams.output_interval + 1;
     states.reserve(num_states);
     times.reserve(num_states);
   }
@@ -198,7 +198,7 @@ void Solver<T>::run() {
   int interval_counter = 0;
   int start_last_cycle =
       simparams.sim_num_time_steps - simparams.sim_pts_per_cycle;
-  if ((simparams.output_last_cycle_only == false) || (0 >= start_last_cycle)) {
+  if (simparams.output_all_cycles || (0 >= start_last_cycle)) {
     times.push_back(time);
     states.push_back(std::move(state));
   }
@@ -207,8 +207,8 @@ void Solver<T>::run() {
     interval_counter += 1;
     time = simparams.sim_time_step_size * T(i);
     if ((interval_counter == simparams.output_interval) ||
-        (simparams.output_last_cycle_only && (i == start_last_cycle))) {
-      if ((simparams.output_last_cycle_only == false) ||
+        (!simparams.output_all_cycles && (i == start_last_cycle))) {
+      if (simparams.output_all_cycles ||
           (i >= start_last_cycle)) {
         times.push_back(time);
         states.push_back(std::move(state));
@@ -218,7 +218,7 @@ void Solver<T>::run() {
   }
 
   // Make times start from 0
-  if (simparams.output_last_cycle_only) {
+  if (!simparams.output_all_cycles) {
     T start_time = times[0];
     for (auto& time : times) {
       time -= start_time;

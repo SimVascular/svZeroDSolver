@@ -199,7 +199,7 @@
  * output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
  * output_mean_only                        | Write only the mean values over every timestep to output file | false
  * output_derivative                       | Write time derivatives to output file | false
- * output_last_cycle_only                  | Write only the last cardiac cycle | false
+ * output_all_cycles                       | Write all cardiac cycles to output file | false
  * 
  * 
  * # Developer Guide

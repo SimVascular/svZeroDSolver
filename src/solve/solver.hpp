@@ -38,7 +38,6 @@
 #include "helpers/endswith.hpp"
 #include "io/configreader.hpp"
 #include "io/csvwriter.hpp"
-#include "io/jsonhandler.hpp"
 #include "model/model.hpp"
 
 #ifndef SVZERODSOLVER_SOLVE_SOLVER_HPP_
@@ -59,7 +58,7 @@ class Solver {
    *
    * @param handler Configuration handler
    */
-  Solver(IO::JsonHandler& handler);
+  Solver(const nlohmann::json& config);
 
   /**
    * @brief Destroy the Solver object
@@ -129,14 +128,14 @@ class Solver {
 };
 
 template <typename T>
-Solver<T>::Solver(IO::JsonHandler& handler) {
+Solver<T>::Solver(const nlohmann::json& config) {
   DEBUG_MSG("Read simulation parameters");
-  simparams = IO::load_simulation_params<T>(handler);
+  simparams = IO::load_simulation_params<T>(config);
   DEBUG_MSG("Load model");
   model = MODEL::Model<T>();
-  IO::load_model<T>(handler, model);
+  IO::load_simulation_model<T>(config, model);
   DEBUG_MSG("Load initial condition");
-  inital_state = IO::load_initial_condition<T>(handler, model);
+  inital_state = IO::load_initial_condition<T>(config, model);
 
   DEBUG_MSG("Cardiac cycle period " << model.cardiac_cycle_period);
 

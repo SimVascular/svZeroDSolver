@@ -28,4 +28,4 @@ RUN mkdir -p /opt/svzerodplus-build/relwithdebinfo && \
     cmake --build . --target svzerodsolver
 
 WORKDIR /opt
-ENTRYPOINT ["/opt/svzerodplus/container/entrypoint.sh"]
+ENTRYPOINT ["/opt/svzerodplus/container/profiling/entrypoint.sh"]

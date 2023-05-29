@@ -36,8 +36,6 @@
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
 
-#include <io/jsonhandler.hpp>
-
 #include "solve/solver.hpp"
 #include "pybind11_json/pybind11_json.hpp"
 
@@ -48,9 +46,8 @@ PYBIND11_MODULE(libsvzerodplus, m) {
   m.doc() = "svZeroDSolver";
   py::class_<Solver>(m, "Solver")
     .def(py::init([] (py::dict& config) {
-      nlohmann::json config_json = config;
-      auto config_handler = IO::JsonHandler(config_json);
-      return Solver(config_handler);
+      const nlohmann::json& config_json = config;
+      return Solver(config_json);
       }))
     .def("__copy__", [](Solver& solver) {return Solver(solver);})
     .def("copy", [](Solver& solver) {return Solver(solver);})
@@ -60,9 +57,8 @@ PYBIND11_MODULE(libsvzerodplus, m) {
     .def("update_block_params",&Solver::update_block_params);
   
   m.def("run", [](py::dict& config) {
-    nlohmann::json config_json = config;
-    auto config_handler = IO::JsonHandler(config_json);
-    auto solver = Solver(config_handler);
+    const nlohmann::json& config_json = config;
+    auto solver = Solver(config_json);
     solver.run();
     return solver.get_full_result();
   });

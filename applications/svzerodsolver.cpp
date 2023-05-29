@@ -62,13 +62,10 @@ int main(int argc, char *argv[]) {
   std::string input_file = argv[1];
   std::string output_file = argv[2];
 
-  std::ifstream input_file_stream(input_file);
-  std::stringstream buffer;
-  buffer << input_file_stream.rdbuf();
-  std::string config = buffer.str();
+  std::ifstream ifs(input_file);
+  const auto& config = nlohmann::json::parse(ifs);
 
-  auto config_handler = IO::JsonHandler(config);
-  auto solver = SOLVE::Solver<double>(config_handler);
+  auto solver = SOLVE::Solver<double>(config);
   solver.run();
   solver.write_result_to_csv(output_file);
 

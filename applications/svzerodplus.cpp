@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file python.cpp
- * @brief Python binding for svZeroDSolver
+ * @brief Python interface for svZeroDSolver
  */
 #include <pybind11/pybind11.h>
 #include <pybind11/operators.h>
@@ -37,11 +37,12 @@
 #include <pybind11/stl.h>
 
 #include "solve/solver.hpp"
+#include "optimize/calibrate.hpp"
 #include "pybind11_json/pybind11_json.hpp"
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(libsvzerodplus, m) {
+PYBIND11_MODULE(svzerodplus, m) {
   using Solver = SOLVE::Solver<double>;
   m.doc() = "svZeroDSolver";
   py::class_<Solver>(m, "Solver")
@@ -61,5 +62,9 @@ PYBIND11_MODULE(libsvzerodplus, m) {
     auto solver = Solver(config_json);
     solver.run();
     return solver.get_full_result();
+  });
+  m.def("calibrate", [](py::dict& config) {
+    const nlohmann::json& config_json = config;
+    return OPT::calibrate<double>(config);
   });
 }

@@ -28,7 +28,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file main.cpp
+ * @file svzerodsolver.cpp
  * @brief Main routine of svZeroDSolver
  */
 #include "solve/solver.hpp"

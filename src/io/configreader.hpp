@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file configreader.hpp
- * @brief IO::ConfigReader source file
+ * @brief Helper functions for reading configurations
  */
 #ifndef SVZERODSOLVER_IO_CONFIGREADER_HPP_
 #define SVZERODSOLVER_IO_CONFIGREADER_HPP_

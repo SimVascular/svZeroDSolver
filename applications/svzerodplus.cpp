@@ -28,7 +28,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file python.cpp
+ * @file svzerodplus.cpp
  * @brief Python interface for svZeroDSolver
  */
 #include <pybind11/pybind11.h>

@@ -4,7 +4,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = svZeroDSolver
+PROJECT_NAME           = svZeroDPlus
 PROJECT_NUMBER         = 
 PROJECT_BRIEF          = 
 PROJECT_LOGO           =
@@ -90,7 +90,7 @@ SHOW_USED_FILES        = YES
 SHOW_FILES             = YES
 SHOW_NAMESPACES        = YES
 FILE_VERSION_FILTER    =
-LAYOUT_FILE            =
+LAYOUT_FILE            = ./docs/cpp/DoxygenLayout.xml
 CITE_BIB_FILES         = ./docs/cpp/references.bib
 #---------------------------------------------------------------------------
 # Configuration options related to warning and progress messages

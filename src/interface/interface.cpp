@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file interface.cpp
- * @brief svZeroDSolver callable interace.
+ * @brief svZeroDSolver callable interface.
  */
 #include "interface.h"
 #include "io/configreader.hpp"

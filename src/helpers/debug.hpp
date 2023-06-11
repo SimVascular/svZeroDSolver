@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file debug.hpp
- * @brief HELPERS::DEBUG source file
+ * @brief DEBUG_MSG source file
  */
 #ifndef SVZERODSOLVER_HELPERS_DEBUG_HPP_
 #define SVZERODSOLVER_HELPERS_DEBUG_HPP_

@@ -32,10 +32,9 @@
  * @brief svZeroDSolver callable interace.
  */
 #include "interface.h"
+#include "io/configreader.hpp"
 
 #include <cmath>
-
-#include "io/jsonhandler.hpp"
 
 typedef double T;
 
@@ -122,14 +121,12 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   DEBUG_MSG("[initialize] problem_id: " << problem_id);
 
   // Create configuration reader.
-  std::ifstream input_file_stream(input_file);
-  std::stringstream buffer;
-  buffer << input_file_stream.rdbuf();
-  std::string config = buffer.str();
-  auto handler = IO::JsonHandler(config);
-  auto simparams = IO::load_simulation_params<T>(handler);
-  auto model = IO::load_model<T>(handler);
-  auto state = IO::load_initial_condition<T>(handler, model.get());
+  std::ifstream ifs(input_file);
+  const auto& config = nlohmann::json::parse(ifs);
+  auto simparams = IO::load_simulation_params<T>(config);
+  auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
+  IO::load_simulation_model<T>(config, *model.get());
+  auto state = IO::load_initial_condition<T>(config, *model.get());
 
   // Check that steady initial is not set when ClosedLoopHeartAndPulmonary is
   // used
@@ -185,7 +182,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
     throw std::runtime_error(
         "ERROR: Option output_last_cycle_only has not been implemented when "
         "using the svZeroDPlus interface library.");
-  } else if (simparams.output_last_cycle_only) {
+  } else if (!simparams.output_all_cycles) {
     num_output_steps = interface->pts_per_cycle_;
     throw std::runtime_error(
         "ERROR: Option output_last_cycle_only has been implemented but not "

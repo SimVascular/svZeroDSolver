@@ -55,6 +55,9 @@ nlohmann::json calibrate(const nlohmann::json& config)
   // Read calibration parameters
   DEBUG_MSG("Parse calibration parameters");
   auto const& calibration_parameters = config["calibration_parameters"];
+  double gradient_tol = config.value("tolerance_gradient", 1e-5);
+  double increment_tol = config.value("tolerance_increment", 1e-10);
+  int max_iter = config.value("maximum_iterations", 100);
   bool calibrate_stenosis =
       calibration_parameters.value("calibrate_stenosis_coefficient", true);
   bool zero_capacitance =
@@ -231,7 +234,7 @@ nlohmann::json calibrate(const nlohmann::json& config)
   // Run optimization
   DEBUG_MSG("Start optimization");
   auto lm_alg = OPT::LevenbergMarquardtOptimizer(
-      &model, num_obs, param_counter, 1.0, 1.0e-5, 1.0e-10, 100);
+      &model, num_obs, param_counter, 1.0, gradient_tol, increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 

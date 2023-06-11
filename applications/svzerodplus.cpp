@@ -50,7 +50,11 @@ PYBIND11_MODULE(svzerodplus, m) {
       const nlohmann::json& config_json = config;
       return Solver(config_json);
       }))
-    .def("__copy__", [](Solver& solver) {return Solver(solver);})
+    .def(py::init([] (std::string config_file) {
+      std::ifstream ifs(config_file);
+      const auto& config_json = nlohmann::json::parse(ifs);
+      return Solver(config_json);
+      }))
     .def("copy", [](Solver& solver) {return Solver(solver);})
     .def("run",&Solver::run)
     .def("get_single_result",&Solver::get_single_result)

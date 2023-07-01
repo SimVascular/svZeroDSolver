@@ -1,15 +1,15 @@
-@mainpage svZeroDSolver
+@mainpage svZeroDPlus
 
 [TOC]
 
-The svZeroDSolver is a fast simulation tool for modeling the hemodynamics of
-vascular networks using zero-dimensional (0D) lumped parameter models.
+svZeroDPlus is an application for performing different tasks with 0D hemodynamic
+computer models. It is written in C++ to enable the
+highest performance. It also offers a Python API for easily integrating it into
+other routines.
 
 * <a href="https://github.com/StanfordCBCL/svZeroDPlus">Source
 repository</a>
 * <a href="https://simvascular.github.io">About SimVascular</a>
-
-# Background
 
 Zero-dimensional (0D) models
 are lightweight methods to simulate bulk hemodynamic quantities in the
@@ -26,86 +26,28 @@ reflect the hemodynamics and physiology of different cardiovascular
 anatomies. These 0D models are governed by differential algebraic equations
 (DAEs).
 
-# Architecture
+For more background information on 0D models, have a look at SimVascular's
+[ROM Simulation Guide](http://simvascular.github.io/docsROMSimulation.html).
 
-## Model
+# Installation
 
-The solver uses a highly modular framework to model the vascular anatomy,
-using individual classes to represent different 0D elements of the
-model. The elements are part of the MODEL namespace. Currently
-supported elements are:
+svZeroDPlus can be installed in two different ways. For using the Python
+API, an installation via pip is recommended.
 
-#### Vessels
+## Using pip
 
-* MODEL::BloodVessel: RCL blood vessel with optional stenosis.
-
-#### Junctions
-
-* MODEL::Junction: Mass conservation junction element.
-* MODEL::ResistiveJunction: Resistive junction element.
-* MODEL::BloodVesselJunction: RCL junction element with optional stenoses.
-
-#### Boundary conditions
-
-* MODEL::FlowReferenceBC: Prescribed flow boundary condition.
-* MODEL::PressureReferenceBC: Prescribed pressure boundary condition.
-* MODEL::ResistanceBC: Resistance boundary condition.
-* MODEL::WindkesselBC: RCR Windkessel boundary condition.
-* MODEL::OpenLoopCoronaryBC: Open Loop coronary boundary condition.
-* MODEL::ClosedLoopCoronaryBC: Closed Loop coronary boundary condition.
-* MODEL::ClosedLoopHeartPulmonary: Heart and pulmonary circulation model.
-
-The elements are based on the parent MODEL::Block class. More information
-about the elements can be found on their respective pages. The elements are
-connected to each other via nodes (see MODEL::Node). Each node corresponds to
-a flow and a pressure value of the model. The MODEL::DOFHandler handles the
-degrees-of-freedom (DOF) of the system by assigning DOF indices to each
-element that determine the location of the local element contribution in the
-global system. The complete model is stored and managed by the MODEL::Model
-class.
-
-## Algebra
-
-Everything related to solving the system of equation is contained in the
-ALGEBRA namespace. The ALGEBRA::Integrator
-handles the time integration scheme (see Integrator documentation for
-more information on that).
-
-## Input/output
-
-Finally the IO namespace provides everything related to reading and writing
-files. The IO::ConfigReader reads the simulation config and IO::to_vessel_csv and
-IO::to_variable_csv are two different methods for writing the result files.
-
-# Build svZeroDSolver
-
-svZeroDSolver uses CMake to build the tool. The dependencies are installed
-by CMake. Currently supported are:
-
-* Ubuntu 18
-* Ubuntu 20
-* Ubuntu 22
-* macOS Big Sur
-* macOS Monterey
-
-@note If you want to use the Python interface of svZeroDPlus make
-sure to*activate the correct Python environment** before building the
-solver. Also make sure to install the Python package using the `-e` options,
-i.e.
-```bash
-pip install -e .
-```
-
-## Build in debug mode
+For a pip installation, simply run the following command
+(cloning of the repository is not required):
 
 ```bash
-mkdir Debug
-cd Debug
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-cmake --build .
+pip install git+https://github.com/StanfordCBCL/svZeroDPlus.git
 ```
 
-## Build in release mode
+## Using CMake
+
+If you want to build svZeroDPlus manually from source, clone the repository
+and run the following commands from the top directory of the project:
+
 ```bash
 mkdir Release
 cd Release
@@ -113,7 +55,10 @@ cmake -DCMAKE_BUILD_TYPE=Release ..
 cmake --build .
 ```
 
-## Build on Sherlock
+
+@remark <details>
+  <summary>**Building on Sherlock**</summary>
+
 ```bash
 module load cmake/3.23.1 gcc/12.1.0 binutils/2.38
 mkdir Release
@@ -122,38 +67,13 @@ cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/
 cmake --build .
 ```
 
-# Run svZeroDSolver
+</details>
 
-After building svZeroDSolver, the build folder contains an executable
-called `svzerodsolver`. Run it with one of:
+# Getting started
 
-```bash
-./svzerodsolver path/to/config.json path/to/output.csv
-```
-
-`path/to/config.json` and `path/to/output.csv` should be replaced by the
-correct paths to the input and output file, respectively.
-
-## Simulation parameters
-
-The svZeroDSolver can be configured with the following options in the
-`simulation_parameters` section of the input file. Parameters without a
-default value must be specified.
-
-
-Parameter key                           | Description                               | Default value
---------------------------------------- | ----------------------------------------- | ----------- 
-number_of_cardiac_cycles                | Number of cardiac cycles to simulate      | -
-number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -
-absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
-maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$
-steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
-output_variable_based                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false
-output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
-output_mean_only                        | Write only the mean values over every timestep to output file | false
-output_derivative                       | Write time derivatives to output file | false
-output_all_cycles                       | Write all cardiac cycles to output file | false
-
+* [Running simulations with svZeroDSolver](@ref svzerodsolver)
+* [Calibrating 0D models with svZeroDCalibrator](@ref svzerodcalibrator)
+* [Embedding svZeroDPlus in your code using the Python API](@ref svzerodplus)
 
 # Developer Guide
 

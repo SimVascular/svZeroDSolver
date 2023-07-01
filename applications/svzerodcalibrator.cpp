@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
 
   // Get input and output file name
   if (argc != 3) {
-    std::cout << "Usage: calibrator path/to/config.json path/to/output.json"
+    std::cout << "Usage: svzerodcalibrator path/to/config.json path/to/output.json"
               << std::endl;
     exit(1);
   }

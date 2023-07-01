@@ -61,7 +61,7 @@ PYBIND11_MODULE(svzerodplus, m) {
     .def("get_single_result_avg",&Solver::get_single_result_avg)
     .def("update_block_params",&Solver::update_block_params);
   
-  m.def("run", [](py::dict& config) {
+  m.def("simulate", [](py::dict& config) {
     const nlohmann::json& config_json = config;
     auto solver = Solver(config_json);
     solver.run();
@@ -70,5 +70,33 @@ PYBIND11_MODULE(svzerodplus, m) {
   m.def("calibrate", [](py::dict& config) {
     const nlohmann::json& config_json = config;
     return OPT::calibrate<double>(config);
+  });
+  m.def("run_simulation_cli", []() {
+    py::module_ sys = py::module_::import("sys");
+    auto argv = sys.attr("argv").cast<std::vector<std::string>>();
+    if (argv.size() != 3) {
+      std::cout << "Usage: svzerodsolver path/to/config.json path/to/output.json"
+                << std::endl;
+      exit(1);
+    }
+    std::ifstream ifs(argv[1]);
+    const auto& config = nlohmann::json::parse(ifs);
+    auto solver = SOLVE::Solver<double>(config);
+    solver.run();
+    solver.write_result_to_csv(argv[2]);
+  });
+  m.def("run_calibration_cli", []() {
+    py::module_ sys = py::module_::import("sys");
+    auto argv = sys.attr("argv").cast<std::vector<std::string>>();
+    if (argv.size() != 3) {
+      std::cout << "Usage: svzerodcalibrator path/to/config.json path/to/output.json"
+                << std::endl;
+      exit(1);
+    }
+    std::ifstream ifs(argv[1]);
+    const auto& config = nlohmann::json::parse(ifs);
+    auto output_config = OPT::calibrate<double>(config);
+    std::ofstream o(argv[2]);
+    o << std::setw(4) << output_config << std::endl;
   });
 }

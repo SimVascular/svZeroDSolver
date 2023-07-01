@@ -58,8 +58,8 @@ FetchContent_MakeAvailable(pybind11_json)
 include_directories(src)
 add_executable(svzerodsolver applications/svzerodsolver.cpp)
 add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp)
-pybind11_add_module(svzerodplus   applications/svzerodplus.cpp)
-add_subdirectory("src/interface")
+pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
+add_subdirectory("src/interface" EXCLUDE_FROM_ALL)
 
 # -----------------------------------------------------------------------------
 # Link libraries

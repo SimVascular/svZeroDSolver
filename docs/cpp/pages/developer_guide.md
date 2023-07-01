@@ -2,6 +2,34 @@
 
 [TOC]
 
+# Architecture
+
+svZeroDPlus is written in a highly modular manner to enable reuse of code
+for many different applications. It is divided into a header based library
+in the `src` directory and a collection of different applications in the
+`applications` folder. Each application is written for a different use-case
+of svZeroDPlus, namely:
+
+* svZeroDCalibrator in `svzerodcalibrator.cpp`
+* svZerodSolver in `svzerodsolver.cpp`
+* Python API in `svzerodplus.cpp`
+
+The header-based library in the `src` folder contains classes and functions that are collectively used by
+all applications. A good overview over the general architecture can be found in the
+<a href="namespaces.html">list of namespaces</a>.
+
+
+## Build in debug mode
+
+For debug purposes it is recommended to build svZeroDPlus in Debug mode.
+
+```bash
+mkdir Debug
+cd Debug
+cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake --build .
+```
+
 ## Code Style
 
 We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).

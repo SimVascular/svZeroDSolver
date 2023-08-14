@@ -36,13 +36,14 @@
 // Setting scalar type to double
 typedef double T;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   DEBUG_MSG("Starting svZeroDCalibrator");
 
   // Get input and output file name
   if (argc != 3) {
-    std::cout << "Usage: svzerodcalibrator path/to/config.json path/to/output.json"
-              << std::endl;
+    std::cout
+        << "Usage: svzerodcalibrator path/to/config.json path/to/output.json"
+        << std::endl;
     exit(1);
   }
 

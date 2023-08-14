@@ -15,13 +15,7 @@ jobs:
       - name: Install ubuntu dependencies
         if: ${{ matrix.os == 'ubuntu-*' }}
         run: sudo apt update && sudo apt install build-essential cmake
-      - name: Build svZeroDSolver
-        run: |
-          mkdir Release
-          cd Release
-          cmake -DCMAKE_BUILD_TYPE=Release ..
-          cmake --build .
-      - name: Install test dependencies
+      - name: Install svZeroDPlus
         run: |
           conda create -n zerod python=3.9
           conda run -n zerod pip install pytest pytest-cov pytest-mock

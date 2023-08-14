@@ -50,7 +50,7 @@
  * @param argv Command line arguments
  * @return Return code
  */
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   DEBUG_MSG("Starting svZeroDSolver");
 
   // Get input and output file name

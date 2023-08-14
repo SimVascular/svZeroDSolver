@@ -32,9 +32,10 @@
  * @brief svZeroDSolver callable interface.
  */
 #include "interface.h"
-#include "io/configreader.hpp"
 
 #include <cmath>
+
+#include "io/configreader.hpp"
 
 typedef double T;
 

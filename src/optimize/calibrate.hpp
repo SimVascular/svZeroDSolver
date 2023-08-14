@@ -41,20 +41,18 @@
 
 #include "helpers/debug.hpp"
 #include "helpers/endswith.hpp"
-#include "model/model.hpp"
 #include "levenbergmarquardtoptimizer.hpp"
+#include "model/model.hpp"
 
 namespace OPT {
 
 template <typename T>
-nlohmann::json calibrate(const nlohmann::json& config) 
-{
-
+nlohmann::json calibrate(const nlohmann::json &config) {
   auto output_config = nlohmann::json(config);
 
   // Read calibration parameters
   DEBUG_MSG("Parse calibration parameters");
-  auto const& calibration_parameters = config["calibration_parameters"];
+  auto const &calibration_parameters = config["calibration_parameters"];
   double gradient_tol = config.value("tolerance_gradient", 1e-5);
   double increment_tol = config.value("tolerance_increment", 1e-10);
   int max_iter = config.value("maximum_iterations", 100);
@@ -78,47 +76,49 @@ nlohmann::json calibrate(const nlohmann::json& config)
   DEBUG_MSG("Load vessels");
   std::map<std::int64_t, std::string> vessel_id_map;
   int param_counter = 0;
-  for (auto const& vessel_config : config["vessels"]) {
+  for (auto const &vessel_config : config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
 
     // Create parameter IDs
     std::vector<int> param_ids;
-    for (size_t k = 0; k < num_params; k++) param_ids.push_back(param_counter++);
+    for (size_t k = 0; k < num_params; k++)
+      param_ids.push_back(param_counter++);
     model.add_block(MODEL::BlockType::BLOODVESSEL, param_ids, vessel_name);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
-      auto const& vessel_bc_config = vessel_config["boundary_conditions"];
+      auto const &vessel_bc_config = vessel_config["boundary_conditions"];
       if (vessel_bc_config.contains("inlet")) {
-        inlet_connections.push_back(
-            {vessel_bc_config["inlet"], vessel_name});
+        inlet_connections.push_back({vessel_bc_config["inlet"], vessel_name});
       }
       if (vessel_bc_config.contains("outlet")) {
-        outlet_connections.push_back(
-            {vessel_name, vessel_bc_config["outlet"]});
+        outlet_connections.push_back({vessel_name, vessel_bc_config["outlet"]});
       }
     }
   }
 
   // Create junctions
-  for (auto const& junction_config : config["junctions"]) {
+  for (auto const &junction_config : config["junctions"]) {
     std::string junction_name = junction_config["junction_name"];
-    auto const& outlet_vessels = junction_config["outlet_vessels"];
+    auto const &outlet_vessels = junction_config["outlet_vessels"];
     int num_outlets = outlet_vessels.size();
     if (num_outlets == 1) {
       model.add_block(MODEL::BlockType::JUNCTION, {}, junction_name);
     } else {
       std::vector<int> param_ids;
-      for (size_t i = 0; i < (num_outlets * num_params); i++) param_ids.push_back(param_counter++);
+      for (size_t i = 0; i < (num_outlets * num_params); i++)
+        param_ids.push_back(param_counter++);
       model.add_block(MODEL::BlockType::BLOODVESSELJUNCTION, param_ids,
-                       junction_name);
+                      junction_name);
     }
     // Check for connections to inlet and outlet vessels and append to
     // connections list
-    for (auto vessel_id : junction_config["inlet_vessels"]) connections.push_back({vessel_id_map[vessel_id], junction_name});
-    for (auto vessel_id : outlet_vessels) connections.push_back({junction_name, vessel_id_map[vessel_id]});
+    for (auto vessel_id : junction_config["inlet_vessels"])
+      connections.push_back({vessel_id_map[vessel_id], junction_name});
+    for (auto vessel_id : outlet_vessels)
+      connections.push_back({junction_name, vessel_id_map[vessel_id]});
     DEBUG_MSG("Created junction " << junction_name);
   }
 
@@ -131,15 +131,11 @@ nlohmann::json calibrate(const nlohmann::json& config)
   }
   for (auto &connection : inlet_connections) {
     auto ele = model.get_block(std::get<1>(connection));
-    model.add_node({}, {ele},
-                    std::get<0>(connection) + ":" +
-                        ele->get_name());
+    model.add_node({}, {ele}, std::get<0>(connection) + ":" + ele->get_name());
   }
   for (auto &connection : outlet_connections) {
     auto ele = model.get_block(std::get<0>(connection));
-    model.add_node({ele}, {},
-                    ele->get_name() + ":" +
-                        std::get<1>(connection));
+    model.add_node({ele}, {}, ele->get_name() + ":" + std::get<1>(connection));
   }
 
   // Finalize model
@@ -233,8 +229,9 @@ nlohmann::json calibrate(const nlohmann::json& config)
 
   // Run optimization
   DEBUG_MSG("Start optimization");
-  auto lm_alg = OPT::LevenbergMarquardtOptimizer(
-      &model, num_obs, param_counter, 1.0, gradient_tol, increment_tol, max_iter);
+  auto lm_alg =
+      OPT::LevenbergMarquardtOptimizer(&model, num_obs, param_counter, 1.0,
+                                       gradient_tol, increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 

@@ -74,14 +74,14 @@ class Solver {
 
   /**
    * @brief Get the full result as a csv encoded string
-   * 
+   *
    * @return std::string Result
    */
   std::string get_full_result();
 
   /**
    * @brief Get the result of a single DOF over time
-   * 
+   *
    * @param dof_name Name of the degree-of-freedom
    * @return Eigen::VectorXd Result
    */
@@ -89,7 +89,7 @@ class Solver {
 
   /**
    * @brief Get the result of a single DOF averaged over time
-   * 
+   *
    * @param dof_name Name of the degree-of-freedom
    * @return T Result
    */
@@ -97,14 +97,14 @@ class Solver {
 
   /**
    * @brief Get the time steps of the result
-   * 
-   * @return std::vector<T> 
+   *
+   * @return std::vector<T>
    */
   std::vector<T> get_times();
 
   /**
    * @brief Update the parameters of a block
-   * 
+   *
    * @param block_name Name of the block
    * @param new_params New parameters
    */
@@ -208,8 +208,7 @@ void Solver<T>::run() {
     time = simparams.sim_time_step_size * T(i);
     if ((interval_counter == simparams.output_interval) ||
         (!simparams.output_all_cycles && (i == start_last_cycle))) {
-      if (simparams.output_all_cycles ||
-          (i >= start_last_cycle)) {
+      if (simparams.output_all_cycles || (i >= start_last_cycle)) {
         times.push_back(time);
         states.push_back(std::move(state));
       }
@@ -235,9 +234,9 @@ template <typename T>
 std::string Solver<T>::get_full_result() {
   std::string output;
   if (simparams.output_variable_based) {
-    output = IO::to_variable_csv<T>(times, states, model,
-                                    simparams.output_mean_only,
-                                    simparams.output_derivative);
+    output =
+        IO::to_variable_csv<T>(times, states, model, simparams.output_mean_only,
+                               simparams.output_derivative);
   } else {
     output =
         IO::to_vessel_csv<T>(times, states, model, simparams.output_mean_only,

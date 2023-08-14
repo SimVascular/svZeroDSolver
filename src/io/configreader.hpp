@@ -35,9 +35,9 @@
 #define SVZERODSOLVER_IO_CONFIGREADER_HPP_
 
 #include <list>
+#include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
-#include <nlohmann/json.hpp>
 
 #include "../helpers/debug.hpp"
 #include "../helpers/startswith.hpp"
@@ -45,7 +45,8 @@
 
 namespace IO {
 
-std::vector<double> get_double_array(const nlohmann::json& data, std::string_view key) {
+std::vector<double> get_double_array(const nlohmann::json& data,
+                                     std::string_view key) {
   std::vector<double> vector;
   if (!data[key].is_array()) {
     return {data[key]};
@@ -53,8 +54,9 @@ std::vector<double> get_double_array(const nlohmann::json& data, std::string_vie
   return data[key].get<std::vector<double>>();
 }
 
-std::vector<double> get_double_array(
-    const nlohmann::json& data, std::string_view key, std::vector<double> default_value) {
+std::vector<double> get_double_array(const nlohmann::json& data,
+                                     std::string_view key,
+                                     std::vector<double> default_value) {
   if (!data.contains(key)) {
     return default_value;
   }
@@ -117,27 +119,20 @@ SimulationParameters<T> load_simulation_params(const nlohmann::json& config) {
     sim_params.sim_external_step_size = 0.0;
   } else {
     sim_params.sim_num_cycles = 1;
-    sim_params.sim_num_time_steps =
-        sim_config["number_of_time_pts"];
+    sim_params.sim_num_time_steps = sim_config["number_of_time_pts"];
     sim_params.sim_pts_per_cycle = sim_params.sim_num_time_steps;
     sim_params.sim_external_step_size =
         sim_config.value("external_step_size", 0.1);
   }
-  sim_params.sim_abs_tol =
-      sim_config.value("absolute_tolerance", 1e-8);
-  sim_params.sim_nliter =
-      sim_config.value("maximum_nonlinear_iterations", 30);
-  sim_params.sim_steady_initial =
-      sim_config.value("steady_initial", true);
+  sim_params.sim_abs_tol = sim_config.value("absolute_tolerance", 1e-8);
+  sim_params.sim_nliter = sim_config.value("maximum_nonlinear_iterations", 30);
+  sim_params.sim_steady_initial = sim_config.value("steady_initial", true);
   sim_params.output_variable_based =
       sim_config.value("output_variable_based", false);
   sim_params.output_interval = sim_config.value("output_interval", 1);
-  sim_params.output_mean_only =
-      sim_config.value("output_mean_only", false);
-  sim_params.output_derivative =
-      sim_config.value("output_derivative", false);
-  sim_params.output_all_cycles =
-      sim_config.value("output_all_cycles", false);
+  sim_params.output_mean_only = sim_config.value("output_mean_only", false);
+  sim_params.output_derivative = sim_config.value("output_derivative", false);
+  sim_params.output_all_cycles = sim_config.value("output_all_cycles", false);
   DEBUG_MSG("Finished loading simulation parameters");
   return sim_params;
 }
@@ -149,7 +144,8 @@ SimulationParameters<T> load_simulation_params(const nlohmann::json& config) {
  * @param config The json configuration
  */
 template <typename T>
-void load_simulation_model(const nlohmann::json& config, MODEL::Model<T>& model) {
+void load_simulation_model(const nlohmann::json& config,
+                           MODEL::Model<T>& model) {
   DEBUG_MSG("Loading model");
 
   // Create list to store block connections while generating blocks
@@ -165,14 +161,13 @@ void load_simulation_model(const nlohmann::json& config, MODEL::Model<T>& model)
     const std::string vessel_name = vessel_config["vessel_name"];
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     if (vessel_config["zero_d_element_type"] == "BloodVessel") {
-      model.add_block(
-          MODEL::BlockType::BLOODVESSEL,
-          {model.add_parameter(vessel_values["R_poiseuille"]),
-           model.add_parameter(vessel_values.value("C", 0.0)),
-           model.add_parameter(vessel_values.value("L", 0.0)),
-           model.add_parameter(
-               vessel_values.value("stenosis_coefficient", 0.0))},
-          vessel_name);
+      model.add_block(MODEL::BlockType::BLOODVESSEL,
+                      {model.add_parameter(vessel_values["R_poiseuille"]),
+                       model.add_parameter(vessel_values.value("C", 0.0)),
+                       model.add_parameter(vessel_values.value("L", 0.0)),
+                       model.add_parameter(
+                           vessel_values.value("stenosis_coefficient", 0.0))},
+                      vessel_name);
       DEBUG_MSG("Created vessel " << vessel_name);
     } else {
       throw std::invalid_argument("Unknown vessel type");
@@ -182,12 +177,10 @@ void load_simulation_model(const nlohmann::json& config, MODEL::Model<T>& model)
     if (vessel_config.contains("boundary_conditions")) {
       const auto& vessel_bc_config = vessel_config["boundary_conditions"];
       if (vessel_bc_config.contains("inlet")) {
-        connections.push_back(
-            {vessel_bc_config["inlet"], vessel_name});
+        connections.push_back({vessel_bc_config["inlet"], vessel_name});
       }
       if (vessel_bc_config.contains("outlet")) {
-        connections.push_back(
-            {vessel_name, vessel_bc_config["outlet"]});
+        connections.push_back({vessel_name, vessel_bc_config["outlet"]});
       }
     }
   }
@@ -201,7 +194,7 @@ void load_simulation_model(const nlohmann::json& config, MODEL::Model<T>& model)
     std::string bc_name = bc_config["bc_name"];
     std::string bc_type = bc_config["bc_type"];
     bc_type_map.insert({bc_name, bc_type});
-    }
+  }
 
   // Create external coupling blocks
   if (config.contains("external_solver_coupling_blocks")) {
@@ -330,19 +323,21 @@ void load_simulation_model(const nlohmann::json& config, MODEL::Model<T>& model)
         closed_loop_bcs.push_back(bc_name);
       }
     } else if (bc_type == "FLOW") {
-      model.add_block(MODEL::BlockType::FLOWBC,
-                      {model.add_parameter(t, get_double_array(bc_values, "Q"))},
-                      bc_name);
+      model.add_block(
+          MODEL::BlockType::FLOWBC,
+          {model.add_parameter(t, get_double_array(bc_values, "Q"))}, bc_name);
 
     } else if (bc_type == "RESISTANCE") {
-      model.add_block(MODEL::BlockType::RESISTANCEBC,
-                      {model.add_parameter(t,  get_double_array(bc_values, "R")), model.add_parameter(t,  get_double_array(bc_values, "Pd"))},
-                      bc_name);
+      model.add_block(
+          MODEL::BlockType::RESISTANCEBC,
+          {model.add_parameter(t, get_double_array(bc_values, "R")),
+           model.add_parameter(t, get_double_array(bc_values, "Pd"))},
+          bc_name);
 
     } else if (bc_type == "PRESSURE") {
-      model.add_block(MODEL::BlockType::PRESSUREBC,
-                      {model.add_parameter(t,  get_double_array(bc_values, "P"))},
-                      bc_name);
+      model.add_block(
+          MODEL::BlockType::PRESSUREBC,
+          {model.add_parameter(t, get_double_array(bc_values, "P"))}, bc_name);
     } else if (bc_type == "CORONARY") {
       model.add_block(
           MODEL::BlockType::OPENLOOPCORONARYBC,
@@ -445,36 +440,35 @@ void load_simulation_model(const nlohmann::json& config, MODEL::Model<T>& model)
           }
           const auto& heart_params = closed_loop_config["parameters"];
           // Convert to std::map to keep model blocks independent of simdjson
-          model.add_block(
-              MODEL::BlockType::CLOSEDLOOPHEARTPULMONARY,
-              {model.add_parameter(heart_params["Tsa"]),
-               model.add_parameter(heart_params["tpwave"]),
-               model.add_parameter(heart_params["Erv_s"]),
-               model.add_parameter(heart_params["Elv_s"]),
-               model.add_parameter(heart_params["iml"]),
-               model.add_parameter(heart_params["imr"]),
-               model.add_parameter(heart_params["Lra_v"]),
-               model.add_parameter(heart_params["Rra_v"]),
-               model.add_parameter(heart_params["Lrv_a"]),
-               model.add_parameter(heart_params["Rrv_a"]),
-               model.add_parameter(heart_params["Lla_v"]),
-               model.add_parameter(heart_params["Rla_v"]),
-               model.add_parameter(heart_params["Llv_a"]),
-               model.add_parameter(heart_params["Rlv_ao"]),
-               model.add_parameter(heart_params["Vrv_u"]),
-               model.add_parameter(heart_params["Vlv_u"]),
-               model.add_parameter(heart_params["Rpd"]),
-               model.add_parameter(heart_params["Cp"]),
-               model.add_parameter(heart_params["Cpa"]),
-               model.add_parameter(heart_params["Kxp_ra"]),
-               model.add_parameter(heart_params["Kxv_ra"]),
-               model.add_parameter(heart_params["Kxp_la"]),
-               model.add_parameter(heart_params["Kxv_la"]),
-               model.add_parameter(heart_params["Emax_ra"]),
-               model.add_parameter(heart_params["Emax_la"]),
-               model.add_parameter(heart_params["Vaso_ra"]),
-               model.add_parameter(heart_params["Vaso_la"])},
-              heartpulmonary_name);
+          model.add_block(MODEL::BlockType::CLOSEDLOOPHEARTPULMONARY,
+                          {model.add_parameter(heart_params["Tsa"]),
+                           model.add_parameter(heart_params["tpwave"]),
+                           model.add_parameter(heart_params["Erv_s"]),
+                           model.add_parameter(heart_params["Elv_s"]),
+                           model.add_parameter(heart_params["iml"]),
+                           model.add_parameter(heart_params["imr"]),
+                           model.add_parameter(heart_params["Lra_v"]),
+                           model.add_parameter(heart_params["Rra_v"]),
+                           model.add_parameter(heart_params["Lrv_a"]),
+                           model.add_parameter(heart_params["Rrv_a"]),
+                           model.add_parameter(heart_params["Lla_v"]),
+                           model.add_parameter(heart_params["Rla_v"]),
+                           model.add_parameter(heart_params["Llv_a"]),
+                           model.add_parameter(heart_params["Rlv_ao"]),
+                           model.add_parameter(heart_params["Vrv_u"]),
+                           model.add_parameter(heart_params["Vlv_u"]),
+                           model.add_parameter(heart_params["Rpd"]),
+                           model.add_parameter(heart_params["Cp"]),
+                           model.add_parameter(heart_params["Cpa"]),
+                           model.add_parameter(heart_params["Kxp_ra"]),
+                           model.add_parameter(heart_params["Kxv_ra"]),
+                           model.add_parameter(heart_params["Kxp_la"]),
+                           model.add_parameter(heart_params["Kxv_la"]),
+                           model.add_parameter(heart_params["Emax_ra"]),
+                           model.add_parameter(heart_params["Emax_la"]),
+                           model.add_parameter(heart_params["Vaso_ra"]),
+                           model.add_parameter(heart_params["Vaso_la"])},
+                          heartpulmonary_name);
 
           // Junction at inlet to heart
           std::string heart_inlet_junction_name = "J_heart_inlet";
@@ -555,7 +549,7 @@ ALGEBRA::State<T> load_initial_condition(const nlohmann::json& config,
       } else if ((init_q_flag == true) && (var_name.substr(0, 5) == "flow:")) {
         default_val = init_q;
         DEBUG_MSG("flow_all initial condition for " << var_name);
-      } 
+      }
       if (!initial_condition.contains(var_name)) {
         DEBUG_MSG("No initial condition found for " << var_name);
       }

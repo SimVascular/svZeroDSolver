@@ -69,8 +69,8 @@ namespace OPT {
  * \f[
  * \boldsymbol{\alpha}^{i+1}=\boldsymbol{\alpha}^{i}+\Delta
  * \boldsymbol{\alpha}^{i+1} \f]
- * 
- * wherein the increment \f$\Delta \boldsymbol{\alpha}^{i+1} \f$ is determined 
+ *
+ * wherein the increment \f$\Delta \boldsymbol{\alpha}^{i+1} \f$ is determined
  * by solving the following system:
  *
  * \f[
@@ -80,7 +80,7 @@ namespace OPT {
  * \mathbf{r}\right]^{i}, \quad \lambda^{i}=\lambda^{i-1}
  * \cdot\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i}\right\|_2
  * /\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i-1}\right\|_2. \f]
- * 
+ *
  * The algorithm terminates when the following tolerance thresholds are reached
  *
  * \f[
@@ -89,7 +89,7 @@ namespace OPT {
  * }}^\alpha \text { and }\left\|\Delta
  * \boldsymbol{\alpha}^{\mathrm{i}+1}\right\|_2<\mathrm{tol}_{\text {inc
  * }}^\alpha, \f]
- * 
+ *
  * The Jacobian is derived from the residual as
  *
  * \f[

@@ -10,6 +10,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Make html directory
         run: mkdir docs/html
+      - name: Install Doxygen dependencies
+        run: sudo apt update && sudo apt install pdf2svg
       - name: Build doxygen documentation
         continue-on-error: true
         uses: mattnotmitt/doxygen-action@v1.9.4

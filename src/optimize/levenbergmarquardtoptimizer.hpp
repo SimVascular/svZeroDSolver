@@ -37,6 +37,8 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
+#include "model/model.hpp"
+
 namespace OPT {
 
 /**

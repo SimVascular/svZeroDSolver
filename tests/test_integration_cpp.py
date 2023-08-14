@@ -1,19 +1,19 @@
 import json
 import os
-from subprocess import call
 from tempfile import TemporaryDirectory
+from io import StringIO
 
 import numpy as np
 import pandas as pd
+import svzerodplus
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
-cpp_exec = os.path.join(this_file_dir, "..", "Release", "svzerodsolver")
 
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8
 
 
-def run_test_case_by_name(name, output_variable_based = False):
+def run_test_case_by_name(name, output_variable_based=False):
     """Run a test case by its case name.
 
     Args:
@@ -21,14 +21,12 @@ def run_test_case_by_name(name, output_variable_based = False):
         testdir: Directory for performing the simulation.
     """
     testfile = os.path.join(this_file_dir, "cases", name + ".json")
-    with TemporaryDirectory() as tempdir:
-        outfile = os.path.join(tempdir, "output.csv")
-        call([cpp_exec, testfile, outfile])
-        result = pd.read_csv(outfile)
     with open(testfile) as ff:
         config = json.load(ff)
+    output = svzerodplus.simulate(config)
+    result = pd.read_csv(StringIO(output))
 
-    if (output_variable_based == False):
+    if output_variable_based == False:
         output = {
             "pressure_in": {},
             "pressure_out": {},
@@ -66,8 +64,8 @@ def run_test_case_by_name(name, output_variable_based = False):
                 )
 
             last_seg_id = seg_id
-    
-    elif (output_variable_based == True):
+
+    elif output_variable_based == True:
         output = result
 
     return output
@@ -454,8 +452,12 @@ def test_closed_loop_heart_with_coronaries(tmpdir):
 
 
 def test_coupled_block_heart_single_vessel(tmpdir):
-    result = run_test_case_by_name("coupledBlock_closedLoopHeart_singleVessel", output_variable_based = True)
-    aortic_pressure = result[result.name == "pressure:J_heart_outlet:external_outlet"]["y"].to_numpy()
+    result = run_test_case_by_name(
+        "coupledBlock_closedLoopHeart_singleVessel", output_variable_based=True
+    )
+    aortic_pressure = result[result.name == "pressure:J_heart_outlet:external_outlet"][
+        "y"
+    ].to_numpy()
     assert np.isclose(
         np.mean(aortic_pressure[-50:]), 69.92379300168665, rtol=RTOL_PRES
     )  # mean aortic pressure
@@ -468,8 +470,12 @@ def test_coupled_block_heart_single_vessel(tmpdir):
 
 
 def test_coupled_block_heart_with_coronaries(tmpdir):
-    result = run_test_case_by_name("coupledBlock_closedLoopHeart_withCoronaries", output_variable_based = True)
-    aortic_pressure = result[result.name == "pressure:J_heart_outlet:external_outlet"]["y"].to_numpy()
+    result = run_test_case_by_name(
+        "coupledBlock_closedLoopHeart_withCoronaries", output_variable_based=True
+    )
+    aortic_pressure = result[result.name == "pressure:J_heart_outlet:external_outlet"][
+        "y"
+    ].to_numpy()
     assert np.isclose(
         np.mean(aortic_pressure[-50:]), 59.52487958523876, rtol=RTOL_PRES
     )  # mean aortic pressure
@@ -479,3 +485,23 @@ def test_coupled_block_heart_with_coronaries(tmpdir):
     assert np.isclose(
         np.amin(aortic_pressure[-50:]), 38.80066561075395, rtol=RTOL_PRES
     )  # min aortic pressure
+
+
+def test_steady_flow_calibration(tmpdir):
+    with open(
+        os.path.join(this_file_dir, "cases", "steadyFlow_calibration.json")
+    ) as ff:
+        config = json.load(ff)
+
+    result = svzerodplus.calibrate(config)
+
+    calibrated_parameters = result["vessels"][0]["zero_d_element_values"]
+
+    assert np.isclose(
+        np.mean(calibrated_parameters["R_poiseuille"]), 100, rtol=RTOL_PRES
+    )
+    assert np.isclose(np.mean(calibrated_parameters["C"]), 0.0, rtol=RTOL_PRES)
+    assert np.isclose(np.mean(calibrated_parameters["L"]), 1.0, rtol=RTOL_PRES)
+    assert np.isclose(
+        np.mean(calibrated_parameters["stenosis_coefficient"]), 0.0, rtol=RTOL_PRES
+    )

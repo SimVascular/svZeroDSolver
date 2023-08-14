@@ -3,9 +3,6 @@
   <!-- Navigation index tabs for HTML output -->
   <navindex>
     <tab type="mainpage" visible="yes" title=""/>
-    <tab type="user" url="@ref svzerodsolver" title="svZeroDSolver"/>
-    <tab type="user" url="@ref svzerodcalibrator" title="svZeroDCalibrator"/>
-    <tab type="user" url="@ref svzerodplus" title="Python API"/>
     <tab type="user" url="@ref developer_guide" title="Developer Guide"/>
     <!-- <tab type="pages" visible="yes" title="" intro=""/> -->
     <tab type="modules" visible="yes" title="" intro=""/>

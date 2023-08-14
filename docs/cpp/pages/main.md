@@ -69,13 +69,250 @@ cmake --build .
 
 </details>
 
-# Getting started
-
-* [Running simulations with svZeroDSolver](@ref svzerodsolver)
-* [Calibrating 0D models with svZeroDCalibrator](@ref svzerodcalibrator)
-* [Embedding svZeroDPlus in your code using the Python API](@ref svzerodplus)
-
 # Developer Guide
 
 If you are a developer and want to contribute to svZeroDSolver, you can find
 more helpful information in our [Developer Guide](@ref developer_guide).
+
+# svZeroDSolver
+
+svZeroDSolver can be used to run zero-dimensional (0D) cardiovascular
+simulations based on a given configuration.
+
+## Run svZeroDSolver
+
+### From the command line
+
+svZeroDSolver can be executed from the command line using a JSON configuration
+file.
+
+```bash
+svzerodsolver tests/cases/steadyFlow_RLC_R.json result_steadyFlow_RLC_R.csv
+```
+
+The result will be written to a csv file.
+
+### In Python
+
+For some applications it is beneficial to run svZeroDSolver directly
+from within another Python application. This can, for example, be
+useful when many simulations need to be performed (e.g. for 
+calibration, uncertainty quantification, ...). Please make sure that
+you installed svZerodPlus via pip to enable this feature. We start by
+importing svzerodplus:
+
+```python
+import svzerodplus
+```
+
+Next, we create a solver from our configuration. The configuration can
+be specified by either a path to a JSON file:
+
+```python
+solver = svzerodplus.Solver("tests/cases/steadyFlow_RLC_R.json")
+```
+
+or as a Python dictionary:
+
+```python
+my_config = {...}
+solver = svzerodplus.Solver(my_config)
+```
+
+To run the simulation we add:
+
+```python
+solver.run()
+```
+
+The simulation result is now saved in the solver instance. We can obtain
+results for individual degrees-of-freedom (DOFs) as
+```python
+solver.get_single_result("flow:INFLOW:branch0_seg0")
+
+>>> array([5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
+       5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
+       5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
+       5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
+       5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
+       5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.])
+```
+The naming of the DOFs is similar to how results are written if the simulation
+option `output_variable_based` is activated (see below). We can also obtain
+the mean result for a DOF over time with:
+```python
+solver.get_single_result_avg("flow:INFLOW:branch0_seg0")
+
+>>> 5.0
+```
+
+
+## Configuration (file)
+
+svZeroDSolver is configured using either a JSON file or a Python
+dictionary. The top-level structure of both is:
+
+```python
+{
+    "simulation_parameters": {...},
+    "vessels": [...],
+    "junctions": [...],
+    "boundary_conditions": [...]
+}
+```
+
+In the following sections, the individual categories are described in more
+detail.
+
+### Simulation parameters
+
+The svZeroDSolver can be configured with the following options in the
+`simulation_parameters` section of the input file. Parameters without a
+default value must be specified.
+
+
+Parameter key                           | Description                               | Default value
+--------------------------------------- | ----------------------------------------- | ----------- 
+number_of_cardiac_cycles                | Number of cardiac cycles to simulate      | -
+number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -
+absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
+maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$
+steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
+output_variable_based                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false
+output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
+output_mean_only                        | Write only the mean values over every timestep to output file | false
+output_derivative                       | Write time derivatives to output file | false
+output_all_cycles                       | Write all cardiac cycles to output file | false
+
+
+### Vessels
+
+More information about the vessels can be found in their respective class references.
+
+```python
+{
+    "boundary_conditions": {
+        "inlet": "INFLOW", # Optional: Name of inlet boundary condition
+        "outlet": "OUT", # Optional: Name of outlet boundary condition
+    },
+    "vessel_id": 0, # ID of the vessel
+    "vessel_name": "branch0_seg0", # Name of vessel
+    "zero_d_element_type": "BloodVessel", # Type of vessel
+    "zero_d_element_values": {...} # Values for configuration parameters
+}
+```
+
+Description                           | Class                       | `zero_d_element_type` | `zero_d_element_values`
+------------------------------------- | --------------------------- | --------------------- | ------------------------
+Blood vessel with \n optional stenosis   | MODEL::BloodVessel       | `BloodVessel`         | `C`: Capacity \n `L`: Inductance \n `R_poiseuille`: Poiseuille resistance \n `stenosis_coefficient`: Stenosis coefficient
+
+
+### Junctions
+
+More information about the junctions can be found in their respective class references.
+
+```python
+{
+    "junction_name": "J0", # Name of the junction
+    "junction_type": "BloodVesselJunction", # Type of the junction
+    "inlet_vessels": [0], # List of vessel IDs connected to the inlet
+    "outlet_vessels": [1, 2], # List of vessel IDs connected to the inlet
+    "junction_values": {...} # Values for configuration parameters
+}
+```
+
+Description                           | Class                       | `junction_type`       | `junction_values`
+------------------------------------- | --------------------------- | --------------------- | ----------- 
+Purely mass \n conserving \n junction | MODEL::Junction             | `NORMAL_JUNCTION`     | -
+Resistive \n junction                 | MODEL::ResistiveJunction    | `resistive_junction`  | `R`: Ordered list of resistances for all inlets and outlets
+Blood vessel \n junction              | MODEL::BloodVesselJunction  | `BloodVesselJunction` | Same as for `BloodVessel` element but \n as ordered list for each inlet and outlet
+
+### Boundary conditions
+
+```python
+{
+    "bc_name": "INFLOW", # Name of the boundary condition
+    "bc_type": "FLOW", # Type of the boundary condition
+    "bc_values": {...} # Values for configuration parameters
+},
+```
+
+Description                           | Class                       | `bc_type`             | `bc_values`
+------------------------------------- | --------------------------- | --------------------- | ----------- 
+Prescribed (transient) flow           | MODEL::FlowReferenceBC      | `FLOW`                | `Q`: Time-dependent flow values \n `t`: Time stamps
+Prescribed (transient) pressure       | MODEL::PressureReferenceBC  | `PRESSURE`            | `P`: Time-dependent pressure values \n `t`: Time stamps
+Resistance                            | MODEL::ResistanceBC         | `RESISTANCE`          | `R`: Resistance \n `Pd`: Time-dependent distal pressure \n `t`: Time stamps
+Windkessel                            | MODEL::WindkesselBC         | `RCR`                 | `Rp`: Proximal resistance \n `C`: Capacitance \n `Rd`: Distal resistance \n `Pd`: Distal pressure
+
+
+# svZeroDCalibrator
+
+svZeroDCalibrator can be used to calibrate cardiovascular 0D models (i.e. infer optimal
+parameters for the 0D elements) based on a given transient result (i.e. from a
+3D simulation).
+
+## Run svZeroDCalibrator
+
+### From the command line
+svZeroDCalibrator can be executed from the command line using a JSON configuration
+file.
+
+```bash
+svzerodcalibrator path/to/input_file.json path/to/output_file.json
+```
+
+The result will be written to a JSON file.
+
+
+### In Python
+
+svZeroDCalibrator can also be called directly from Python.
+Please make sure that you installed svZerodPlus via pip to enable this feature. We start by
+importing svzerodplus:
+
+```python
+import svzerodplus
+
+my_unoptimized_config = {...}
+my_optimized_config = svzerodplus.calibrate(my_unoptimized_config)
+```
+
+## Configuration (file)
+
+In order to make svZeroDCalibrator easy to use, it is based on a similar configuration
+file than svZeroDSolver. Instead of the `simulation_parameters` section, it has a section
+called `calibration_parameters`. Additionally the optimization target (i.e. a given)
+3D result is passed with the key `y` and it's temporal derivative via `dy`. See
+`tests/cases/steadyFlow_calibration.json` for an example input file.
+
+```python
+{
+    "calibration_parameters": {...},
+    "vessels": [...],
+    "junctions": [...],
+    "boundary_conditions": [...],
+    "y": {
+      "flow:INFLOW:branch0_seg0": [0.0, 0.1, ...],  # Time series for DOF
+      "pressure:INFLOW:branch0_seg0": [0.0, 0.1, ...],  # Time series for DOF
+      ...
+    },
+    "dy": {
+      "flow:INFLOW:branch0_seg0": [0.0, 0.1, ...],  # Time series for DOF
+      "pressure:INFLOW:branch0_seg0": [0.0, 0.1, ...],  # Time series for DOF
+      ...
+    },
+}
+```
+
+### Calibration parameters
+
+Here is a list of the parameters that can be specified in the `calibration_parameters`
+section of the configuration file.
+
+Parameter key                           | Description                               | Default value
+--------------------------------------- | ----------------------------------------- | ----------- 
+tolerance_gradient                      | Gradient tolerance for calibration        | \f$10^{-5}\f$
+tolerance_increment                     | Increment tolerance for calibration       | \f$10^{-10}\f$
+maximum_iterations                      | Maximum calibration iterations            | 100
+calibrate_stenosis_coefficient          | Toggle whether stenosis coefficient should be calibrated        | True
+set_capacitance_to_zero                 | Toggle whether all capacitances should be manually set to zero  | True

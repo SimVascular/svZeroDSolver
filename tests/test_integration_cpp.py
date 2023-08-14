@@ -357,8 +357,8 @@ def test_pulsatile_flow_r_coronary():
     )  # outlet flow
 
 
-def test_pusatile_flow_cstenosis_steady_pressure():
-    results = run_test_case_by_name("pusatileFlow_CStenosis_steadyPressure")
+def test_pulsatile_flow_cstenosis_steady_pressure():
+    results = run_test_case_by_name("pulsatileFlow_CStenosis_steadyPressure")
     assert np.isclose(
         get_result(results, "pressure_in", 0, -439),
         0.5933049197138334,

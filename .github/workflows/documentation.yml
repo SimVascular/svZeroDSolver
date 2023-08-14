@@ -17,7 +17,6 @@ jobs:
           working-directory: '.'
           doxyfile-path: 'docs/cpp/Doxyfile'
           enable-latex: true
-          additional-packages: pdf2svg
       - name: Install sphinx dependencies
         run: |
           conda create -n zerod python=3.9

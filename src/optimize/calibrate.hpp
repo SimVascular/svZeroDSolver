@@ -53,8 +53,10 @@ nlohmann::json calibrate(const nlohmann::json &config) {
   // Read calibration parameters
   DEBUG_MSG("Parse calibration parameters");
   auto const &calibration_parameters = config["calibration_parameters"];
-  double gradient_tol = calibration_parameters.value("tolerance_gradient", 1e-5);
-  double increment_tol = calibration_parameters.value("tolerance_increment", 1e-10);
+  double gradient_tol =
+      calibration_parameters.value("tolerance_gradient", 1e-5);
+  double increment_tol =
+      calibration_parameters.value("tolerance_increment", 1e-10);
   int max_iter = calibration_parameters.value("maximum_iterations", 100);
   bool calibrate_stenosis =
       calibration_parameters.value("calibrate_stenosis_coefficient", true);

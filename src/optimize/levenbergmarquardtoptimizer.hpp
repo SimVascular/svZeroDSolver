@@ -204,14 +204,15 @@ Eigen::Matrix<T, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer<T>::run(
     alpha -= delta;
     T norm_grad = vec.norm();
     T norm_inc = delta.norm();
-    std::cout << std::setprecision(12) << "Iteration " << i + 1
-              << " | lambda: " << lambda << " | norm inc: " << norm_inc
+    std::cout << std::setprecision(1) << std::scientific << "Iteration "
+              << i + 1 << " | lambda: " << lambda << " | norm inc: " << norm_inc
               << " | norm grad: " << norm_grad << std::endl;
     if ((norm_grad < tol_grad) && (norm_inc < tol_inc)) {
       break;
     }
     if (i >= max_iter - 1) {
-      throw std::runtime_error("Maximum number of iterations reached");
+      std::cout << "Maximum number of iterations reached" << std::endl;
+      break;
     }
   }
   return alpha;

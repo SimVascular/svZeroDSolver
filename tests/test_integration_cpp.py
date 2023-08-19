@@ -13,14 +13,14 @@ RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8
 
 
-def run_test_case_by_name(name, output_variable_based=False):
+def run_test_case_by_name(name, output_variable_based=False, folder="."):
     """Run a test case by its case name.
 
     Args:
         name: Name of the test case.
         testdir: Directory for performing the simulation.
     """
-    testfile = os.path.join(this_file_dir, "cases", name + ".json")
+    testfile = os.path.join(this_file_dir, "cases", folder, name + ".json")
     with open(testfile) as ff:
         config = json.load(ff)
     output = svzerodplus.simulate(config)

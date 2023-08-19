@@ -393,9 +393,6 @@ void load_simulation_model(const nlohmann::json& config,
       for (T value : junction_values["R_poiseuille"]) {
         param_ids.push_back(model.add_parameter(value));
       }
-      for (T value : junction_values["C"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
       for (T value : junction_values["L"]) {
         param_ids.push_back(model.add_parameter(value));
       }

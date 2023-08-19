@@ -44,7 +44,7 @@ namespace MODEL {
  * @brief BloodVesselJunction
  *
  * Models a junction with one inlet and arbitrary outlets using
- * blood vessel elements between each inlet and outlet pair.
+ * modified blood vessel elements between each inlet and outlet pair.
  *
  * \f[
  * \begin{circuitikz}
@@ -70,9 +70,7 @@ namespace MODEL {
  * to [R, l=$R$, *-] (3,0)
  * to [R, l=$R_{ste}$, -] (5,0)
  * (5,0) to [L, l=$L$, -*] (7,0)
- * node[anchor=south]{$P_{out}$}
- * (7,0) to [C, l=$C$, -] (7,-1.5)
- * node[ground]{};
+ * node[anchor=south]{$P_{out}$};
  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
  * \f]
@@ -80,11 +78,11 @@ namespace MODEL {
  * ### Governing equations
  *
  * \f[
- * Q_{in}-\sum_{i}^{n_{outlets}} Q_{out, i} + C_{i} \cdot \frac{d P_{out,i}}{d
- * t} \f]
+ * Q_{in}-\sum_{i}^{n_{outlets}} Q_{out, i}
+ * \f]
  *
  * \f[
- * P_{in}-P_{out,i} - (R+R_{ste}) \cdot (Q_{out,i} + C\frac{d P_{out,i}}{d t}) -
+ * P_{in}-P_{out,i} - (R+R_{ste}) \cdot Q_{out,i} -
  * L \frac{d Q_{out,i}}{d t} \quad \forall i \in n_{outlets} \f]
  *
  * ### Local contributions
@@ -105,20 +103,19 @@ namespace MODEL {
  *
  * \f[
  * \mathbf{E}^{e} = \left[\begin{array}{lllllllll}
- * 0 & 0 & -C_{1} & 0 & -C_{2} & 0 & -C_{3} & 0 & \dots \\
- * 0 & 0 & -C_{1} \cdot (R_{1}+R_{ste,1}) & -L_{1} & 0 & 0 & 0 & 0 & \dots\\
- * 0 & 0 & 0 & 0 & -C_{2} \cdot (R_{2}+R_{ste,2}) & -L_{2} & 0 & 0 & \dots\\
+ * 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
+ * 0 & 0 & 0 & -L_{1} & 0 & 0 & 0 & 0 & \dots\\
+ * 0 & 0 & 0 & 0 & 0 & -L_{2} & 0 & 0 & \dots\\
  * & & & & & \ddots & \ddots & &
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{E}^{e} = \left[\begin{array}{lllllllll}
+ * \mathbf{D}^{e} = \left[\begin{array}{lllllllll}
  * 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
- * 0 & 0 & -C_{1} \cdot K_{ste,1} \cdot sgn(Q_{out,1}) \cdot \dot Q_{out,1} &
+ * 0 & 0 & 0 &
  * -R_{ste,1} & 0 & 0 & 0 & 0 & \dots\\
- * 0 & 0 & 0 & 0 & -C_{2} \cdot K_{ste,2} \cdot sgn(Q_{out,2}) \cdot \dot
- * Q_{out,2} & -R_{ste,2} & 0 & 0 & \dots\\ & & & & & \ddots & \ddots & &
+ * 0 & 0 & 0 & 0 & 0 & -R_{ste,2} & 0 & 0 & \dots\\ & & & & & \ddots & \ddots & &
  * \end{array}\right]
  * \f]
  *
@@ -127,14 +124,12 @@ namespace MODEL {
  * Gradient of the equations with respect to the parameters:
  *
  * \f[
- * \mathbf{J}^{e} = \left[\begin{array}{llllllllllll}
- * 0 & 0 & \dots & - \dot y_3 & - \dot y_5 & \dots & 0 & 0 & \dots & 0 & 0 &
+ * \mathbf{J}^{e} = \left[\begin{array}{lllllllll}
+ * 0 & 0 & \dots & 0 & 0 & \dots & 0 & 0 &
  * \dots \\
- * -C_{1} \dot y_3 - y_4 & 0 & \dots & -(R_{1}+R_{ste,1} \cdot \dot y_3) & 0 &
- * \dots & - \dot y_4 & 0 & \dots & -C_{1} |y_4| \dot y_3 & 0 & \dots \\
- * 0 &-C_{2} \dot y_5 - y_6 & \dots & 0 & -(R_{2}+R_{ste,2} \cdot \dot y_5) &
- * \dots & 0 & - \dot y_6 & \dots & 0 & -C_{2} |y_6| \dot y_5 & \dots \\
- * 0 & 0 & \ddots & 0 & 0 & \ddots & 0 & 0 & \ddots & 0 & 0 & \ddots \\
+ * - y_4 & 0 & \dots & - \dot y_4 & 0 & \dots & |y_4| y_4 & 0 & \dots \\
+ * 0 & - y_6 & \dots & 0 & - \dot y_6 & \dots & 0 & |y_6| y_6 & \dots \\
+ * 0 & 0 & \ddots & 0 & 0 & \ddots & 0 & 0 & \ddots \\
  * \end{array}\right]
  * \f]
  *
@@ -143,9 +138,8 @@ namespace MODEL {
  * Parameter sequence for constructing this block
  *
  * * `i` Poiseuille resistance for inner blood vessel `i`
- * * `i+num_outlets` Capacitance for inner blood vessel `i`
- * * `i+2*num_outlets` Inductance for inner blood vessel `i`
- * * `i+3*num_outlets` Stenosis coefficient for inner blood vessel `i`
+ * * `i+num_outlets` Inductance for inner blood vessel `i`
+ * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
@@ -248,11 +242,9 @@ void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
   // Mass conservation
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
   for (size_t i = 0; i < num_outlets; i++) {
+    T inductance = parameters[this->global_param_ids[num_outlets + i]];
     system.F.coeffRef(this->global_eqn_ids[0],
                       this->global_var_ids[3 + 2 * i]) = -1.0;
-    system.E.coeffRef(this->global_eqn_ids[0],
-                      this->global_var_ids[2 + 2 * i]) =
-        -parameters[this->global_param_ids[num_outlets + i]];
 
     system.F.coeffRef(this->global_eqn_ids[i + 1], this->global_var_ids[0]) =
         1.0;
@@ -260,8 +252,7 @@ void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
                       this->global_var_ids[2 + 2 * i]) = -1.0;
 
     system.E.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_var_ids[3 + 2 * i]) =
-        -parameters[this->global_param_ids[2 * num_outlets + i]];
+                      this->global_var_ids[3 + 2 * i]) = -inductance;
   }
 }
 
@@ -273,24 +264,14 @@ void BloodVesselJunction<T>::update_solution(
   for (size_t i = 0; i < num_outlets; i++) {
     // Get parameters
     T resistance = parameters[this->global_param_ids[i]];
-    T capacitance = parameters[this->global_param_ids[num_outlets + i]];
-    T stenosis_coeff = parameters[this->global_param_ids[3 * num_outlets + i]];
+    T stenosis_coeff = parameters[this->global_param_ids[2 * num_outlets + i]];
     T q_out = y[this->global_var_ids[3 + 2 * i]];
-    T dq_out = dy[this->global_var_ids[3 + 2 * i]];
     T stenosis_resistance = stenosis_coeff * fabs(q_out);
 
     // Mass conservation
     system.F.coeffRef(this->global_eqn_ids[i + 1],
                       this->global_var_ids[3 + 2 * i]) =
         -resistance - stenosis_resistance;
-    system.E.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_var_ids[2 + 2 * i]) =
-        -capacitance * (resistance + stenosis_resistance);
-
-    T sgn_q_out = (0.0 < q_out) - (q_out < 0.0);
-    system.D.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_var_ids[2 + 2 * i]) =
-        capacitance * stenosis_coeff * sgn_q_out * dq_out;
 
     system.D.coeffRef(this->global_eqn_ids[i + 1],
                       this->global_var_ids[3 + 2 * i]) = -stenosis_resistance;
@@ -310,45 +291,34 @@ void BloodVesselJunction<T>::update_gradient(
   for (size_t i = 0; i < num_outlets; i++) {
     // Get parameters
     T resistance = alpha[this->global_param_ids[i]];
-    T capacitance = alpha[this->global_param_ids[num_outlets + i]];
-    T inductance = alpha[this->global_param_ids[2 * num_outlets + i]];
+    T inductance = alpha[this->global_param_ids[num_outlets + i]];
     T stenosis_coeff = 0.0;
-    if (this->global_param_ids.size() / num_outlets > 3) {
-      stenosis_coeff = alpha[this->global_param_ids[3 * num_outlets + i]];
+    if (this->global_param_ids.size() / num_outlets > 2) {
+      stenosis_coeff = alpha[this->global_param_ids[2 * num_outlets + i]];
     }
     T q_out = y[this->global_var_ids[3 + 2 * i]];
     T p_out = y[this->global_var_ids[2 + 2 * i]];
     T dq_out = dy[this->global_var_ids[3 + 2 * i]];
-    T dp_out = dy[this->global_var_ids[2 + 2 * i]];
     T stenosis_resistance = stenosis_coeff * fabs(q_out);
-
-    // Mass conservation
-    jacobian.coeffRef(this->global_eqn_ids[0],
-                      this->global_param_ids[num_outlets + i]) = -dp_out;
 
     // Resistance
     jacobian.coeffRef(this->global_eqn_ids[i + 1], this->global_param_ids[i]) =
-        -capacitance * dp_out - q_out;
-
-    // Capacitance
-    jacobian.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_param_ids[num_outlets + i]) =
-        -dp_out * (resistance + stenosis_resistance);
+        -q_out;
 
     // Inductance
     jacobian.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_param_ids[2 * num_outlets + i]) = -dq_out;
+                      this->global_param_ids[num_outlets + i]) = -dq_out;
 
     // Stenosis Coefficent
-    if (this->global_param_ids.size() / num_outlets > 3) {
+    if (this->global_param_ids.size() / num_outlets > 2) {
       jacobian.coeffRef(this->global_eqn_ids[i + 1],
-                        this->global_param_ids[3 * num_outlets + i]) =
-          -capacitance * fabs(q_out) * dp_out - fabs(q_out) * q_out;
+                        this->global_param_ids[2 * num_outlets + i]) =
+          -fabs(q_out) * q_out;
     }
 
-    residual(this->global_eqn_ids[0]) -= q_out + capacitance * dp_out;
+    residual(this->global_eqn_ids[0]) -= q_out;
     residual(this->global_eqn_ids[i + 1]) =
-        p_in - p_out - resistance * (q_out + capacitance * dp_out) -
+        p_in - p_out - (resistance + stenosis_resistance) * q_out -
         inductance * dq_out;
   }
 }

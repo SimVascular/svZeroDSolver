@@ -53,15 +53,14 @@ nlohmann::json calibrate(const nlohmann::json &config) {
   // Read calibration parameters
   DEBUG_MSG("Parse calibration parameters");
   auto const &calibration_parameters = config["calibration_parameters"];
-  double gradient_tol =
-      calibration_parameters.value("tolerance_gradient", 1e-5);
-  double increment_tol =
-      calibration_parameters.value("tolerance_increment", 1e-10);
+  T gradient_tol = calibration_parameters.value("tolerance_gradient", 1e-5);
+  T increment_tol = calibration_parameters.value("tolerance_increment", 1e-10);
   int max_iter = calibration_parameters.value("maximum_iterations", 100);
   bool calibrate_stenosis =
       calibration_parameters.value("calibrate_stenosis_coefficient", true);
   bool zero_capacitance =
       calibration_parameters.value("set_capacitance_to_zero", true);
+  T lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
 
   int num_params = 3;
   if (calibrate_stenosis) {
@@ -110,7 +109,7 @@ nlohmann::json calibrate(const nlohmann::json &config) {
       model.add_block(MODEL::BlockType::JUNCTION, {}, junction_name);
     } else {
       std::vector<int> param_ids;
-      for (size_t i = 0; i < (num_outlets * num_params); i++)
+      for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++)
         param_ids.push_back(param_counter++);
       model.add_block(MODEL::BlockType::BLOODVESSELJUNCTION, param_ids,
                       junction_name);
@@ -155,8 +154,8 @@ nlohmann::json calibrate(const nlohmann::json &config) {
   for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
     std::string var_name = model.dofhandler.variables[i];
     DEBUG_MSG("Reading observations for variable " << var_name);
-    auto y_array = y_values[var_name].get<std::vector<double>>();
-    auto dy_array = dy_values[var_name].get<std::vector<double>>();
+    auto y_array = y_values[var_name].get<std::vector<T>>();
+    auto dy_array = dy_values[var_name].get<std::vector<T>>();
     num_obs = y_array.size();
     if (i == 0) {
       y_all.resize(num_obs);
@@ -202,27 +201,23 @@ nlohmann::json calibrate(const nlohmann::json &config) {
     for (size_t i = 0; i < num_outlets; i++) {
       alpha[block->global_param_ids[i]] = 0.0;
       alpha[block->global_param_ids[i + num_outlets]] = 0.0;
-      alpha[block->global_param_ids[i + 2 * num_outlets]] = 0.0;
-      if (num_params > 3) {
-        alpha[block->global_param_ids[i + 3 * num_outlets]] = 0.0;
+      if (num_params > 2) {
+        alpha[block->global_param_ids[i + 2 * num_outlets]] = 0.0;
       }
     }
     if (junction_config["junction_type"] == "BloodVesselJunction") {
       auto resistance = junction_config["junction_values"]["R_poiseuille"]
-                            .get<std::vector<double>>();
-      auto capacitance =
-          junction_config["junction_values"]["C"].get<std::vector<double>>();
+                            .get<std::vector<T>>();
       auto inductance =
-          junction_config["junction_values"]["L"].get<std::vector<double>>();
+          junction_config["junction_values"]["L"].get<std::vector<T>>();
       auto stenosis_coeff =
           junction_config["junction_values"]["stenosis_coefficient"]
-              .get<std::vector<double>>();
+              .get<std::vector<T>>();
       for (size_t i = 0; i < num_outlets; i++) {
         alpha[block->global_param_ids[i]] = resistance[i];
-        alpha[block->global_param_ids[i + num_outlets]] = capacitance[i];
-        alpha[block->global_param_ids[i + 2 * num_outlets]] = inductance[i];
+        alpha[block->global_param_ids[i + num_outlets]] = inductance[i];
         if (num_params > 3) {
-          alpha[block->global_param_ids[i + 3 * num_outlets]] =
+          alpha[block->global_param_ids[i + 2 * num_outlets]] =
               stenosis_coeff[i];
         }
       }
@@ -232,7 +227,7 @@ nlohmann::json calibrate(const nlohmann::json &config) {
   // Run optimization
   DEBUG_MSG("Start optimization");
   auto lm_alg =
-      OPT::LevenbergMarquardtOptimizer(&model, num_obs, param_counter, 1.0,
+      OPT::LevenbergMarquardtOptimizer(&model, num_obs, param_counter, lambda0,
                                        gradient_tol, increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
@@ -268,27 +263,16 @@ nlohmann::json calibrate(const nlohmann::json &config) {
     for (size_t i = 0; i < num_outlets; i++) {
       r_values.push_back(alpha[block->global_param_ids[i]]);
     }
-    std::vector<T> c_values;
-    if (zero_capacitance) {
-      for (size_t i = 0; i < num_outlets; i++) {
-        c_values.push_back(0.0);
-      }
-    } else {
-      for (size_t i = 0; i < num_outlets; i++) {
-        c_values.push_back(
-            std::max(alpha[block->global_param_ids[i + num_outlets]], 0.0));
-      }
-    }
     std::vector<T> l_values;
     for (size_t i = 0; i < num_outlets; i++) {
       l_values.push_back(
-          std::max(alpha[block->global_param_ids[i + 2 * num_outlets]], 0.0));
+          std::max(alpha[block->global_param_ids[i + num_outlets]], 0.0));
     }
     std::vector<T> ste_values;
     if (num_params > 3) {
       for (size_t i = 0; i < num_outlets; i++) {
         ste_values.push_back(
-            alpha[block->global_param_ids[i + 3 * num_outlets]]);
+            alpha[block->global_param_ids[i + 2 * num_outlets]]);
       }
     } else {
       for (size_t i = 0; i < num_outlets; i++) {
@@ -297,7 +281,6 @@ nlohmann::json calibrate(const nlohmann::json &config) {
     }
     junction_config["junction_type"] = "BloodVesselJunction";
     junction_config["junction_values"] = {{"R_poiseuille", r_values},
-                                          {"C", c_values},
                                           {"L", l_values},
                                           {"stenosis_coefficient", ste_values}};
   }

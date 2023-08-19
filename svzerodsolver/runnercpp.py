@@ -32,7 +32,7 @@
 Expects to find a build in the Release folder.
 """
 from io import StringIO
-from libsvzerodplus import run
+import svzerodplus
 
 from pandas import read_csv
 
@@ -45,5 +45,4 @@ def run_from_config(config):
 
     Returns:
         Pandas dataframe with the results."""
-    result = run(config)
-    return read_csv(StringIO(result))
+    return read_csv(StringIO(svzerodplus.simulate(config)))

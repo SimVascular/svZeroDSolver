@@ -115,9 +115,8 @@ namespace MODEL {
  * 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
  * 0 & 0 & 0 &
  * -R_{ste,1} & 0 & 0 & 0 & 0 & \dots\\
- * 0 & 0 & 0 & 0 & 0 & -R_{ste,2} & 0 & 0 & \dots\\ & & & & & \ddots & \ddots & &
- * \end{array}\right]
- * \f]
+ * 0 & 0 & 0 & 0 & 0 & -R_{ste,2} & 0 & 0 & \dots\\ & & & & & \ddots & \ddots &
+ * & \end{array}\right] \f]
  *
  * ### Gradient
  *

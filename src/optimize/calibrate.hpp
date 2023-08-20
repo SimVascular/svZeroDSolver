@@ -59,7 +59,7 @@ nlohmann::json calibrate(const nlohmann::json &config) {
   bool calibrate_stenosis =
       calibration_parameters.value("calibrate_stenosis_coefficient", true);
   bool zero_capacitance =
-      calibration_parameters.value("set_capacitance_to_zero", true);
+      calibration_parameters.value("set_capacitance_to_zero", false);
   T lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
 
   int num_params = 3;
@@ -154,6 +154,16 @@ nlohmann::json calibrate(const nlohmann::json &config) {
   for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
     std::string var_name = model.dofhandler.variables[i];
     DEBUG_MSG("Reading observations for variable " << var_name);
+    if (!y_values.contains(var_name)) {
+      std::cout << "ERROR: Missing y observation for '" << var_name << "'"
+                << std::endl;
+      exit(1);
+    }
+    if (!dy_values.contains(var_name)) {
+      std::cout << "ERROR: Missing dy observation for '" << var_name << "'"
+                << std::endl;
+      exit(1);
+    }
     auto y_array = y_values[var_name].get<std::vector<T>>();
     auto dy_array = dy_values[var_name].get<std::vector<T>>();
     num_obs = y_array.size();

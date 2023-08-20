@@ -315,4 +315,5 @@ tolerance_gradient                      | Gradient tolerance for calibration    
 tolerance_increment                     | Increment tolerance for calibration       | \f$10^{-10}\f$
 maximum_iterations                      | Maximum calibration iterations            | 100
 calibrate_stenosis_coefficient          | Toggle whether stenosis coefficient should be calibrated        | True
-set_capacitance_to_zero                 | Toggle whether all capacitances should be manually set to zero  | True
+set_capacitance_to_zero                 | Toggle whether all capacitances should be manually set to zero  | False
+initial_damping_factor                  | Initial damping factor for Levenberg-Marquardt optimization  | 1.0

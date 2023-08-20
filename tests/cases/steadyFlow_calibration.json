@@ -869,5 +869,12 @@
             0.0
         ]
     },
-    "calibration_parameters": {}
+    "calibration_parameters": {
+        "tolerance_gradient": 1e-5,
+        "tolerance_increment": 1e-10,
+        "maximum_iterations": 100,
+        "calibrate_stenosis_coefficient": true,
+        "set_capacitance_to_zero": false,
+        "initial_damping_factor": 1.0
+    }
 }

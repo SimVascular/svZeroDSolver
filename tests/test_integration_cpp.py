@@ -500,7 +500,7 @@ def test_steady_flow_calibration(tmpdir):
     assert np.isclose(
         np.mean(calibrated_parameters["R_poiseuille"]), 100, rtol=RTOL_PRES
     )
-    assert np.isclose(np.mean(calibrated_parameters["C"]), 0.0, rtol=RTOL_PRES)
+    assert np.isclose(np.mean(calibrated_parameters["C"]), 0.0001, rtol=RTOL_PRES)
     assert np.isclose(np.mean(calibrated_parameters["L"]), 1.0, rtol=RTOL_PRES)
     assert np.isclose(
         np.mean(calibrated_parameters["stenosis_coefficient"]), 0.0, rtol=RTOL_PRES

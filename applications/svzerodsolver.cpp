@@ -54,13 +54,24 @@ int main(int argc, char* argv[]) {
   DEBUG_MSG("Starting svZeroDSolver");
 
   // Get input and output file name
-  if (argc != 3) {
-    std::cout << "Usage: svzerodsolver path/to/config.json path/to/output.csv"
-              << std::endl;
-    exit(1);
+  if (argc < 2 && argc > 3) {
+    std::runtime_error("Usage: svzerodsolver path/to/config.json (optional:path/to/output.csv)")
   }
   std::string input_file = argv[1];
-  std::string output_file = argv[2];
+  std::string output_file;
+  if (argc == 3) {
+    output_file = argv[2];
+  } else {
+    // If output file is not provided, default is <path to .json>+"output.csv"
+    std::size_t end_of_path = str.rfind("/"); 
+    if (end_of_path == std::string::npos) {
+      end_of_path = str.rfind("\\"); // For Windows paths (?)
+      if (end_of_path == std::string::npos) {
+        std::runtime_error("Could not find path to .json file.");
+      }
+    }
+    output_file = input_file.substr(0, end_of_path) + "output.csv"
+  }
 
   std::ifstream ifs(input_file);
   const auto& config = nlohmann::json::parse(ifs);

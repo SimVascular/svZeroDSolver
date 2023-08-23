@@ -215,7 +215,7 @@ State<T> Integrator<T>::step(State<T>& old_state, T time) {
     // Abort if maximum number of non-linear iterations is reached
     else if (i == max_iter - 1) {
       throw std::runtime_error(
-          "Maxium number of non-linear iterations reached.");
+          "Maximum number of non-linear iterations reached.");
     }
 
     // Determine jacobian

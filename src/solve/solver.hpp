@@ -122,7 +122,7 @@ class Solver {
   IO::SimulationParameters<T> simparams;
   std::vector<ALGEBRA::State<T>> states;
   std::vector<T> times;
-  ALGEBRA::State<T> inital_state;
+  ALGEBRA::State<T> initial_state;
 
   void sanity_checks();
 };
@@ -135,9 +135,14 @@ Solver<T>::Solver(const nlohmann::json& config) {
   model = MODEL::Model<T>();
   IO::load_simulation_model<T>(config, model);
   DEBUG_MSG("Load initial condition");
-  inital_state = IO::load_initial_condition<T>(config, model);
+  initial_state = IO::load_initial_condition<T>(config, model);
 
   DEBUG_MSG("Cardiac cycle period " << model.cardiac_cycle_period);
+
+  // Default cardiac cycle period
+  if (model.cardiac_cycle_period < 0.0) {
+    model.cardiac_cycle_period = 1.0;  // If it has not been read from config yet, set as default value of 1.0
+  }
 
   // Calculate time step size
   if (!simparams.sim_coupled) {
@@ -155,7 +160,7 @@ Solver<T>::~Solver() {}
 
 template <typename T>
 void Solver<T>::run() {
-  auto state = inital_state;
+  auto state = initial_state;
 
   // Create steady initial
   if (simparams.sim_steady_initial) {

@@ -117,6 +117,14 @@ class Model {
   Block<T> *get_block(int block_id);
 
   /**
+   * @brief Get a block type by its name
+   *
+   * @param block_id Global ID of the Block
+   * @return BlockType The block type
+   */
+  BlockType get_block_type(std::string_view name);
+
+  /**
    * @brief Get the name of a block by it's ID
    *
    * @param block_id Global ID of the block
@@ -362,6 +370,15 @@ Block<T> *Model<T>::get_block(int block_id) {
     return hidden_blocks[block_id - blocks.size()].get();
   }
   return blocks[block_id].get();
+}
+
+template <typename T>
+BlockType Model<T>::get_block_type(std::string_view name) {
+  auto name_string = static_cast<std::string>(name);
+  if (block_index_map.find(name_string) == block_index_map.end()) {
+    throw std::runtime_error("Could not find block with name " + name_string);
+  }
+  return block_types[block_index_map[name_string]];
 }
 
 template <typename T>

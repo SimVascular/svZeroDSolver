@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
 
   // Get input and output file name
   if (argc < 2 && argc > 3) {
-    std::runtime_error("Usage: svzerodsolver path/to/config.json (optional:path/to/output.csv)")
+    std::runtime_error("Usage: svzerodsolver path/to/config.json (optional:path/to/output.csv)");
   }
   std::string input_file = argv[1];
   std::string output_file;
@@ -63,14 +63,14 @@ int main(int argc, char* argv[]) {
     output_file = argv[2];
   } else {
     // If output file is not provided, default is <path to .json>+"output.csv"
-    std::size_t end_of_path = str.rfind("/"); 
+    std::size_t end_of_path = input_file.rfind("/"); 
     if (end_of_path == std::string::npos) {
-      end_of_path = str.rfind("\\"); // For Windows paths (?)
+      end_of_path = input_file.rfind("\\"); // For Windows paths (?)
       if (end_of_path == std::string::npos) {
         std::runtime_error("Could not find path to .json file.");
       }
     }
-    output_file = input_file.substr(0, end_of_path) + "output.csv"
+    output_file = input_file.substr(0, end_of_path) + "output.csv";
   }
 
   std::ifstream ifs(input_file);

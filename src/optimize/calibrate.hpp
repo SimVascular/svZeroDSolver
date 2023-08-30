@@ -211,7 +211,7 @@ nlohmann::json calibrate(const nlohmann::json &config) {
     for (size_t i = 0; i < num_outlets; i++) {
       alpha[block->global_param_ids[i]] = 0.0;
       alpha[block->global_param_ids[i + num_outlets]] = 0.0;
-      if (num_params > 2) {
+      if (num_params > 3) {
         alpha[block->global_param_ids[i + 2 * num_outlets]] = 0.0;
       }
     }

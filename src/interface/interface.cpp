@@ -35,7 +35,7 @@
 
 #include <cmath>
 
-#include "io/configreader.hpp"
+//#include "io/configreader.hpp"
 
 typedef double T;
 
@@ -116,8 +116,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   DEBUG_MSG("[initialize] input_file: " << input_file);
   std::string output_file = "svzerod.csv";
 
-  auto interface =
-      std::shared_ptr<SolverInterface>(new SolverInterface(input_file));
+  auto interface = new SolverInterface(input_file);
   problem_id = interface->problem_id_;
   DEBUG_MSG("[initialize] problem_id: " << problem_id);
 
@@ -181,7 +180,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   if (simparams.output_mean_only) {
     num_output_steps = 1;
     throw std::runtime_error(
-        "ERROR: Option output_last_cycle_only has not been implemented when "
+        "ERROR: Option output_mean_only has not been implemented when "
         "using the svZeroDPlus interface library.");
   } else if (!simparams.output_all_cycles) {
     num_output_steps = interface->pts_per_cycle_;
@@ -203,7 +202,6 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 
     auto model_steady = model;
     model_steady->to_steady();
-
     ALGEBRA::Integrator<T> integrator_steady(
         model_steady.get(), time_step_size_steady, 0.1,
         interface->absolute_tolerance_, interface->max_nliter_);
@@ -260,18 +258,33 @@ void update_block_params(const int problem_id, std::string block_name,
   auto model = interface->model_;
 
   // Find the required block
-  // int block_index = model->block_index_map.at(block_name);
   auto block = model->get_block(block_name);
   if (block == nullptr) {
     throw std::runtime_error("Could not find block with name " + block_name);
   }
-  if (block->global_param_ids.size() != params.size()) {
-    throw std::runtime_error(
-        "New parameter vector does not match number of parameters of block " +
-        block_name);
-  }
-  for (size_t i = 0; i < params.size(); i++) {
-    model->get_parameter(block->global_param_ids[i])->update(params[i]);
+  auto block_type = model->get_block_type(block_name);
+  // Update is handled differently for blocks that have time-varying parameters (PRESSUREBC and FLOWBC)
+  // TODO: Does this need to be done for OPENLOOPCORONARYBC and RESISTANCEBC too?
+  if ((block_type == MODEL::BlockType::PRESSUREBC) || (block_type == MODEL::BlockType::FLOWBC)) {
+    std::vector<T> times_new;
+    std::vector<T> values_new;
+    int num_time_pts = (int)params[0];
+    for (int i = 0; i < num_time_pts; i++) {
+      times_new.push_back(params[1 + i]);
+      values_new.push_back(params[1 + num_time_pts + i]);
+    }
+    model->get_parameter(block->global_param_ids[0])->update(times_new,values_new);
+  } else {
+    if (block->global_param_ids.size() != params.size()) {
+      throw std::runtime_error(
+          "New parameter vector (given size = " + std::to_string(params.size()) +") does not match number of parameters of block " +
+          block_name + " (required size = " + std::to_string(block->global_param_ids.size()) + ")");
+    }
+    for (size_t i = 0; i < params.size(); i++) {
+      model->get_parameter(block->global_param_ids[i])->update(params[i]);
+      // parameter_values vector needs to be seperately updated for constant parameters
+      model->update_parameter_value(block->global_param_ids[i], params[i]);
+    }
   }
 }
 
@@ -292,8 +305,8 @@ void read_block_params(const int problem_id, std::string block_name,
   }
   if (params.size() != block->global_param_ids.size()) {
     throw std::runtime_error(
-        "Parameter vector does not match number of parameters of block " +
-        block_name);
+        "Parameter vector (given size = " + std::to_string(params.size()) +") does not match number of parameters of block " +
+        block_name + " (required size = " + std::to_string(block->global_param_ids.size()) + ")");
   }
   for (size_t i = 0; i < params.size(); i++) {
     params[i] = model->get_parameter_value(block->global_param_ids[i]);
@@ -373,7 +386,6 @@ void return_ydot(const int problem_id, std::vector<double>& ydot) {
   auto state = interface->state_;
   for (int i = 0; i < system_size; i++) {
     ydot[i] = state.ydot[i];
-    // std::cout<<"return_ydot: "<<ydot[i]<<std::endl;
   }
 }
 
@@ -420,7 +432,6 @@ void increment_time(const int problem_id, const double external_time,
   auto time_step_size = interface->time_step_size_;
   auto absolute_tolerance = interface->absolute_tolerance_;
   auto max_nliter = interface->max_nliter_;
-
   ALGEBRA::Integrator<T> integrator(model.get(), time_step_size, 0.1,
                                     absolute_tolerance, max_nliter);
   auto state = interface->state_;
@@ -457,8 +468,6 @@ void run_simulation(const int problem_id, const double external_time,
   auto system_size = interface->system_size_;
   auto num_output_steps = interface->num_output_steps_;
 
-  // ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
-  //                                  absolute_tolerance, max_nliter);
   auto integrator = interface->integrator_;
   integrator.update_params(time_step_size);
 
@@ -473,7 +482,6 @@ void run_simulation(const int problem_id, const double external_time,
   error_code = 0;
   bool isNaN = false;
   for (int i = 1; i < num_time_steps; i++) {
-    // std::cout << "[run_simulation] time: " << time << std::endl;
     interface->time_step_ += 1;
     state = integrator.step(state, time);
     // Check for NaNs in the state vector

@@ -187,6 +187,14 @@ class Model {
   T get_parameter_value(int param_id);
 
   /**
+   * @brief Update the current value of a parameter
+   *
+   * @param param_id Global ID of the parameter
+   * @param param_value The new parameter value
+   */
+  void update_parameter_value(int param_id, T param_value);
+
+  /**
    * @brief Finalize the model after all blocks, nodes and parameters have been
    * added
    *
@@ -435,6 +443,11 @@ Parameter<T> *Model<T>::get_parameter(int param_id) {
 template <typename T>
 T Model<T>::get_parameter_value(int param_id) {
   return parameter_values[param_id];
+}
+
+template <typename T>
+void Model<T>::update_parameter_value(int param_id, T param_value) {
+  parameter_values[param_id] = param_value;
 }
 
 template <typename T>

@@ -109,7 +109,7 @@ SimulationParameters<T> load_simulation_params(const nlohmann::json& config) {
   DEBUG_MSG("Loading simulation parameters");
   SimulationParameters<T> sim_params;
   const auto& sim_config = config["simulation_parameters"];
-  sim_params.sim_coupled = config.value("coupled_simulation", false);
+  sim_params.sim_coupled = sim_config.value("coupled_simulation", false);
   if (!sim_params.sim_coupled) {
     sim_params.sim_num_cycles = sim_config["number_of_cardiac_cycles"];
     sim_params.sim_pts_per_cycle =
@@ -150,7 +150,6 @@ void load_simulation_model(const nlohmann::json& config,
 
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
-
   // Create vessels
   DEBUG_MSG("Load vessels");
   std::map<int, std::string> vessel_id_map;
@@ -303,7 +302,6 @@ void load_simulation_model(const nlohmann::json& config,
     const auto& bc_values = bc_config["bc_values"];
 
     auto t = get_double_array(bc_values, "t", {0.0});
-
     if (bc_type == "RCR") {
       model.add_block(MODEL::BlockType::WINDKESSELBC,
                       {
@@ -322,6 +320,7 @@ void load_simulation_model(const nlohmann::json& config,
       if (bc_values["closed_loop_outlet"] == true) {
         closed_loop_bcs.push_back(bc_name);
       }
+
     } else if (bc_type == "FLOW") {
       model.add_block(
           MODEL::BlockType::FLOWBC,
@@ -338,6 +337,7 @@ void load_simulation_model(const nlohmann::json& config,
       model.add_block(
           MODEL::BlockType::PRESSUREBC,
           {model.add_parameter(t, get_double_array(bc_values, "P"))}, bc_name);
+
     } else if (bc_type == "CORONARY") {
       model.add_block(
           MODEL::BlockType::OPENLOOPCORONARYBC,
@@ -349,6 +349,7 @@ void load_simulation_model(const nlohmann::json& config,
            model.add_parameter(t, get_double_array(bc_values, "Pim")),
            model.add_parameter(t, get_double_array(bc_values, "P_v"))},
           bc_name);
+    
     } else if (bc_type == "ClosedLoopCoronary") {
       std::string side = bc_values["side"];
       MODEL::BlockType block_type;
@@ -367,6 +368,7 @@ void load_simulation_model(const nlohmann::json& config,
                        model.add_parameter(bc_values["Cim"])},
                       bc_name);
       closed_loop_bcs.push_back(bc_name);
+    
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
     }
@@ -501,7 +503,6 @@ void load_simulation_model(const nlohmann::json& config,
     auto ele2 = model.get_block(std::get<1>(connection));
     model.add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
   }
-
   // Finalize model
   model.finalize();
 }
@@ -520,7 +521,6 @@ ALGEBRA::State<T> load_initial_condition(const nlohmann::json& config,
   // Read initial condition
   auto initial_state = ALGEBRA::State<T>::Zero(model.dofhandler.size());
 
-  // Initialize blocks that have fixed initial conditions
   if (config.contains("initial_condition")) {
     const auto& initial_condition = config["initial_condition"];
     // Check for pressure_all or flow_all condition.
@@ -539,16 +539,19 @@ ALGEBRA::State<T> load_initial_condition(const nlohmann::json& config,
     for (size_t i = 0; i < model.dofhandler.size(); i++) {
       std::string var_name = model.dofhandler.variables[i];
       double default_val = 0.0;
-      if ((init_p_flag == true) && ((var_name.substr(0, 9) == "pressure:") ||
-                                    (var_name.substr(0, 4) == "P_c:"))) {
-        default_val = init_p;
-        DEBUG_MSG("pressure_all initial condition for " << var_name);
-      } else if ((init_q_flag == true) && (var_name.substr(0, 5) == "flow:")) {
-        default_val = init_q;
-        DEBUG_MSG("flow_all initial condition for " << var_name);
-      }
+      // If initial condition is not specified for this variable, 
+      // check if pressure_all/flow_all are applicable
       if (!initial_condition.contains(var_name)) {
-        DEBUG_MSG("No initial condition found for " << var_name);
+        if ((init_p_flag == true) && ((var_name.substr(0, 9) == "pressure:") ||
+                                      (var_name.substr(0, 4) == "P_c:"))) {
+          default_val = init_p;
+          DEBUG_MSG("pressure_all initial condition for " << var_name);
+        } else if ((init_q_flag == true) && (var_name.substr(0, 5) == "flow:")) {
+          default_val = init_q;
+          DEBUG_MSG("flow_all initial condition for " << var_name);
+        } else {
+          DEBUG_MSG("No initial condition found for " << var_name << ". Using default value = 0.");
+        }
       }
       initial_state.y[i] = initial_condition.value(var_name, default_val);
     }

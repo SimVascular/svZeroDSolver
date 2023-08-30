@@ -139,11 +139,6 @@ Solver<T>::Solver(const nlohmann::json& config) {
 
   DEBUG_MSG("Cardiac cycle period " << model.cardiac_cycle_period);
 
-  // Default cardiac cycle period
-  if (model.cardiac_cycle_period < 0.0) {
-    model.cardiac_cycle_period = 1.0;  // If it has not been read from config yet, set as default value of 1.0
-  }
-
   // Calculate time step size
   if (!simparams.sim_coupled) {
     simparams.sim_time_step_size =

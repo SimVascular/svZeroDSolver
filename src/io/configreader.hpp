@@ -349,7 +349,7 @@ void load_simulation_model(const nlohmann::json& config,
            model.add_parameter(t, get_double_array(bc_values, "Pim")),
            model.add_parameter(t, get_double_array(bc_values, "P_v"))},
           bc_name);
-    
+
     } else if (bc_type == "ClosedLoopCoronary") {
       std::string side = bc_values["side"];
       MODEL::BlockType block_type;
@@ -368,7 +368,7 @@ void load_simulation_model(const nlohmann::json& config,
                        model.add_parameter(bc_values["Cim"])},
                       bc_name);
       closed_loop_bcs.push_back(bc_name);
-    
+
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
     }
@@ -539,18 +539,20 @@ ALGEBRA::State<T> load_initial_condition(const nlohmann::json& config,
     for (size_t i = 0; i < model.dofhandler.size(); i++) {
       std::string var_name = model.dofhandler.variables[i];
       double default_val = 0.0;
-      // If initial condition is not specified for this variable, 
+      // If initial condition is not specified for this variable,
       // check if pressure_all/flow_all are applicable
       if (!initial_condition.contains(var_name)) {
         if ((init_p_flag == true) && ((var_name.substr(0, 9) == "pressure:") ||
                                       (var_name.substr(0, 4) == "P_c:"))) {
           default_val = init_p;
           DEBUG_MSG("pressure_all initial condition for " << var_name);
-        } else if ((init_q_flag == true) && (var_name.substr(0, 5) == "flow:")) {
+        } else if ((init_q_flag == true) &&
+                   (var_name.substr(0, 5) == "flow:")) {
           default_val = init_q;
           DEBUG_MSG("flow_all initial condition for " << var_name);
         } else {
-          DEBUG_MSG("No initial condition found for " << var_name << ". Using default value = 0.");
+          DEBUG_MSG("No initial condition found for "
+                    << var_name << ". Using default value = 0.");
         }
       }
       initial_state.y[i] = initial_condition.value(var_name, default_val);

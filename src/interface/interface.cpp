@@ -263,9 +263,12 @@ void update_block_params(const int problem_id, std::string block_name,
     throw std::runtime_error("Could not find block with name " + block_name);
   }
   auto block_type = model->get_block_type(block_name);
-  // Update is handled differently for blocks that have time-varying parameters (PRESSUREBC and FLOWBC)
-  // TODO: Does this need to be done for OPENLOOPCORONARYBC and RESISTANCEBC too?
-  if ((block_type == MODEL::BlockType::PRESSUREBC) || (block_type == MODEL::BlockType::FLOWBC)) {
+  // Update is handled differently for blocks that have time-varying parameters
+  // (PRESSUREBC and FLOWBC)
+  // TODO: Does this need to be done for OPENLOOPCORONARYBC and RESISTANCEBC
+  // too?
+  if ((block_type == MODEL::BlockType::PRESSUREBC) ||
+      (block_type == MODEL::BlockType::FLOWBC)) {
     std::vector<T> times_new;
     std::vector<T> values_new;
     int num_time_pts = (int)params[0];
@@ -273,16 +276,21 @@ void update_block_params(const int problem_id, std::string block_name,
       times_new.push_back(params[1 + i]);
       values_new.push_back(params[1 + num_time_pts + i]);
     }
-    model->get_parameter(block->global_param_ids[0])->update(times_new,values_new);
+    model->get_parameter(block->global_param_ids[0])
+        ->update(times_new, values_new);
   } else {
     if (block->global_param_ids.size() != params.size()) {
       throw std::runtime_error(
-          "New parameter vector (given size = " + std::to_string(params.size()) +") does not match number of parameters of block " +
-          block_name + " (required size = " + std::to_string(block->global_param_ids.size()) + ")");
+          "New parameter vector (given size = " +
+          std::to_string(params.size()) +
+          ") does not match number of parameters of block " + block_name +
+          " (required size = " +
+          std::to_string(block->global_param_ids.size()) + ")");
     }
     for (size_t i = 0; i < params.size(); i++) {
       model->get_parameter(block->global_param_ids[i])->update(params[i]);
-      // parameter_values vector needs to be seperately updated for constant parameters
+      // parameter_values vector needs to be seperately updated for constant
+      // parameters
       model->update_parameter_value(block->global_param_ids[i], params[i]);
     }
   }
@@ -305,8 +313,10 @@ void read_block_params(const int problem_id, std::string block_name,
   }
   if (params.size() != block->global_param_ids.size()) {
     throw std::runtime_error(
-        "Parameter vector (given size = " + std::to_string(params.size()) +") does not match number of parameters of block " +
-        block_name + " (required size = " + std::to_string(block->global_param_ids.size()) + ")");
+        "Parameter vector (given size = " + std::to_string(params.size()) +
+        ") does not match number of parameters of block " + block_name +
+        " (required size = " + std::to_string(block->global_param_ids.size()) +
+        ")");
   }
   for (size_t i = 0; i < params.size(); i++) {
     params[i] = model->get_parameter_value(block->global_param_ids[i]);

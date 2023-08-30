@@ -59,8 +59,8 @@ namespace MODEL {
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Fractions of cardiac cycle (not sure)
- * * `1` Fraction of cardiac cycle (P-wave)
+ * * `0` Atrial systole time fraction
+ * * `1` Time for P-wave
  * * `2` Scaling for right ventricle elastance
  * * `3` Scaling for left ventricle elastance
  * * `4` Scaling for intramyocardial pressure (left coronaries)
@@ -78,14 +78,14 @@ namespace MODEL {
  * * `16` Pulmonary resistance
  * * `17` Pulmonary capacitance
  * * `18` Aortic capacitance
- * * `19` Right atrium pressure-volume relationship (?)
- * * `20` Right atrium pressure-volume relationship (?)
- * * `21` Left atrium pressure-volume relationship (?)
- * * `22` Left atrium pressure-volume relationship (?)
- * * `23` Right atrium elastance (?)
- * * `24` Left atrium elastance (?)
- * * `25` Right atrium rest volume (?)
- * * `26` Left atrium rest volume (?)
+ * * `19` Right atrium pressure scaling
+ * * `20` Right atrium volume scaling
+ * * `21` Left atrium pressure scaling
+ * * `22` Left atrium volume scaling
+ * * `23` Right atrium elastance
+ * * `24` Left atrium elastance
+ * * `25` Right atrium resting volume
+ * * `26` Left atrium resting volume
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */

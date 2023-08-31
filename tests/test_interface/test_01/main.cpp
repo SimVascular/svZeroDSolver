@@ -7,6 +7,7 @@
 #include "LPNSolverInterface.h" 
 #include <iostream>
 #include <map>
+#include <fstream>
 
 //------
 // main
@@ -17,8 +18,19 @@ int main(int argc, char** argv)
   LPNSolverInterface interface;
 
   // Load shared library and get interface functions.
-  auto interface_lib = std::string("../../../Release/src/interface/libsvzero_interface_library.so");
-  interface.load_library(interface_lib);
+  // File extension of the shared library depends on the system
+  std::string interface_lib_path = "../../../Release/src/interface/libsvzero_interface_library";
+  std::string interface_lib_so = interface_lib_path + ".so";
+  std::string interface_lib_dylib = interface_lib_path + ".dylib";
+  std::ifstream lib_so_exists(interface_lib_so);
+  std::ifstream lib_dylib_exists(interface_lib_dylib);
+  if (lib_so_exists) {
+    interface.load_library(interface_lib_so);
+  } else if (lib_dylib_exists) {
+    interface.load_library(interface_lib_dylib);
+  } else {
+    throw std::runtime_error("Could not find shared libraries " + interface_lib_so + " or " + interface_lib_dylib);
+  } 
 
   // Set up the svZeroD model
   std::string file_name = std::string(argv[1]);

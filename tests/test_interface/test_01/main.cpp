@@ -17,15 +17,14 @@ int main(int argc, char** argv)
   LPNSolverInterface interface;
 
   // Load shared library and get interface functions.
-  //auto interface_lib = std::string("/home/users/kmenon13/svZeroDPlus/Release-master/src/interface/libsvzero_interface_library.so");
-  auto interface_lib = std::string("../../../Release-master/src/interface/libsvzero_interface_library.so");
-  
+  auto interface_lib = std::string("../../../Release/src/interface/libsvzero_interface_library.so");
   interface.load_library(interface_lib);
 
   // Set up the svZeroD model
   std::string file_name = std::string(argv[1]);
   interface.initialize(file_name);
-  
+ 
+  // Check number of variables and blocks
   if (interface.system_size_ != 133) {
     throw std::runtime_error("interface.system_size_ != 133");
   }
@@ -42,7 +41,7 @@ int main(int argc, char** argv)
   
   std::vector<double> init_state_ydot = {-407.383, 603.025, -0.12541, 586.776, -0.143589, 579.533, -0.143206, 573.381, -0.140919, 563.241, -0.117593, 583.876, -0.149131, 559.217, -0.125706, 567.295, -0.111758, 583.808, -0.152064, 563.677, -0.16802, 563.084, -0.123088, 571.513, -0.201867, 564.857, 1.0169, 633.091, 0.273686, 633.771, 0.040692, 533.643, 0.191667, 575.913, 0.19006, 577.538, 0.223164, 553.187, 0.252782, 625.121, 0.35634, 639.502, 0.327164, 633.898, 0.355656, 632.605, 466.061, -19.3723, 464.294, -19.3723, 0.309113, -19.3723, 0.191591, -19.3723, 0.208691, -19.3723, 0.128617, -19.3723, 0.222605, -19.3723, 0.358526, -19.3723, 0.115032, -19.3723, 0.216634, -19.3723, 0.174236, -19.3723, 0.262547, -19.3723, 0.150376, -19.3723, 0.288608, -19.3723, -0.19198, -19.3723, -0.0722613, -19.3723, -0.0502622, -19.3723, -0.0729683, -19.3723, -0.0668817, -19.3723, -0.0913291, -19.3723, -0.070668, -19.3723, -0.0819415, -19.3723, -0.0760433, -19.3723, -0.085503, -19.3723, -404.441, 515.61, -404.441, 515.61, 662.168, -0.139623, -0.0804254, -0.0861598, -0.0501321, -0.0982909, -0.151062, -0.0461619, -0.0972004, -0.0662369, -0.106878, -0.0616797, -0.116491, -0.0378684, -0.0180084, -0.00754156, -0.0171239, -0.0157096, -0.0189088, -0.0175604, -0.01926, -0.0174746, -0.0195021, 57.5594, -115695, -23.5015, -555.659, -4642.24, 257.474, 24.2288, 555.659, -315843, 345.199, -405.655, -7759.96};
 
-  // Interface blocks: 
+  // Interface blocks flow boundary conditions (neumann boundary conditions for the 3D flow solver)
   std::map<std::string,std::vector<double>> interface_block_params = {
                                             {"inlet_BC_RCR1", {220.655, 220.143}},
                                             {"inlet_BC_lca1", {0.146379, 0.146236}},
@@ -113,7 +112,7 @@ int main(int argc, char** argv)
   int bc_lca1_outlet_flow_id = IDs[4];
   int bc_lca1_outlet_pressure_id = IDs[5];
  
-  // Update block params
+  // Update block parameters with current flow from 3D solver
   for (const auto block_params : interface_block_params) {
     std::vector<double> new_params(5);
     std::vector<double> params = block_params.second;
@@ -163,6 +162,7 @@ int main(int argc, char** argv)
   mean_bc_lca1_outlet_flow /= (double)interface.num_output_steps_;
   mean_bc_lca1_outlet_pressure /= (double)interface.num_output_steps_;
 
+  // Compare mean flow/pressure in aorta and coronary with pre-computed ("correct") values
   double error_limit = 0.05;
   std::vector<std::string> wrong_quantities;
   bool is_wrong = false;

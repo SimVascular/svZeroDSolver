@@ -29,6 +29,11 @@ jobs:
       - name: Test the build
         run: |
           conda run -n zerod pytest tests/test_integration_cpp.py
+      - name: Test interface
+        run: |
+          cd tests/test_interface/test_01/
+          make
+          ./svZeroD_interface_test svzerod_3Dcoupling.json
   python:
     runs-on: ubuntu-latest
     steps:

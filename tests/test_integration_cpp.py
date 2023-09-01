@@ -36,7 +36,8 @@ def execute_svzerodplus(testfile, mode):
     if coverage:
         # run via executable (slow)
         out_name = "out"
-        subprocess.run(["../Release/svzerod" + mode, testfile, out_name])
+        exe = os.path.join(this_file_dir, "..", "Release", "svzerod")
+        subprocess.run([exe + mode, testfile, out_name])
         if mode == "solver":
             result = pd.read_csv(out_name)
         elif mode == "calibrator":

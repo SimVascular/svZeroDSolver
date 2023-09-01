@@ -30,7 +30,7 @@ jobs:
           cd Release
           cmake -DENABLE_COVERAGE=ON ..
           make -j2
-          conda run -n zerod pytest tests/test_integration_cpp.py -v --durations=0 --coverage
+          conda run -n zerod pytest -v --durations=0 --coverage tests/test_integration_cpp.py
           make coverage      
       - name: Save coverage report
         if: startsWith(matrix.os, 'ubuntu-22.04')

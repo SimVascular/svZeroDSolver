@@ -7,13 +7,17 @@ computer models for cardiovascular flows.
 
 Some noteworthy features of svZeroDPlus are:
 * It is completely modular. Users can create custom flow models by arranging 
-modular blocks corresponding to blood vessels, junctions, different types 
-of boundary conditions, etc. 
+blocks corresponding to blood vessels, junctions, different types of 
+boundary conditions, etc. 
 * It is written in C++ to enable high-performance applications.
-* It offers both a Python API and a C++ shared library to interface with other 
-Python or C++-based applications. 
-* This allows svZeroDPlus to be used in a fully coupled manner with other multi-physics solvers,
-and for parameter estimation, uncertainty quantification, etc.
+* svZeroDPlus offers both a Python API and a C++ shared library to interface with other 
+Python or C++-based applications. This allows it to be used in a fully coupled manner 
+with other multi-physics solvers, and for parameter estimation, uncertainty 
+quantification, etc.
+* The svZeroDCalibrator application, which is included in svZeroDPlus, optimizes 0D
+blood vessel parameters to recapitulate given time-varying flow and pressure measurements 
+(for example, from a high-fidelity 3D simulation). This allows users to build accurate 
+0D models that reflect observed hemodynamics.
 
 Zero-dimensional (0D) models
 are lightweight methods to simulate bulk hemodynamic quantities in the

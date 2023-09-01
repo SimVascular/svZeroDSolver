@@ -1,11 +1,16 @@
 import json
 import os
+import subprocess
 from io import StringIO
 from tempfile import TemporaryDirectory
 
 import numpy as np
 import pandas as pd
 import pytest
+
+# global boolean to perform coverage testing
+# (run executables instead of Python interface, much slower)
+from pytest import coverage
 
 import svzerodplus
 
@@ -15,18 +20,56 @@ RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8
 
 
-def run_test_case_by_name(name, output_variable_based=False, folder="."):
+def execute_svzerodplus(testfile, mode):
+    """Execute svzerodplus (via Python interface or executable).
+
+    Args:
+        testfile: Path to the input file.
+        mode: svZeroDPlus application (solver or calibrator).
+    """
+    assert mode in ["solver", "calibrator"], "unknown mode: " + mode
+
+    # read configuration
+    with open(testfile) as ff:
+        config = json.load(ff)
+
+    if coverage:
+        # run via executable (slow)
+        out_name = "out"
+        subprocess.run(["../Release/svzerod" + mode, testfile, out_name])
+        if mode == "solver":
+            result = pd.read_csv(out_name)
+        elif mode == "calibrator":
+            with open(out_name) as ff:
+                result = json.load(ff)
+        else:
+            raise ValueError("unknown mode: " + mode)
+        os.remove(out_name)
+    else:
+        # run via Python binding (fast)
+        if mode == "solver":
+            output = svzerodplus.simulate(config)
+            result = pd.read_csv(StringIO(output))
+        elif mode == "calibrator":
+            result = svzerodplus.calibrate(config)
+        else:
+            raise ValueError("unknown mode: " + mode)
+
+    return result, config
+
+
+def run_test_case_by_name(name, output_variable_based=False):
     """Run a test case by its case name.
 
     Args:
         name: Name of the test case.
         testdir: Directory for performing the simulation.
     """
-    testfile = os.path.join(this_file_dir, "cases", folder, name + ".json")
-    with open(testfile) as ff:
-        config = json.load(ff)
-    output = svzerodplus.simulate(config)
-    result = pd.read_csv(StringIO(output))
+    # file name of test case
+    testfile = os.path.join(this_file_dir, "cases", name + ".json")
+
+    # run test
+    result, config = execute_svzerodplus(testfile, "solver")
 
     if output_variable_based == False:
         output = {
@@ -490,12 +533,9 @@ def test_coupled_block_heart_with_coronaries(tmpdir):
 
 
 def test_steady_flow_calibration(tmpdir):
-    with open(
-        os.path.join(this_file_dir, "cases", "steadyFlow_calibration.json")
-    ) as ff:
-        config = json.load(ff)
+    testfile = os.path.join(this_file_dir, "cases", "steadyFlow_calibration.json")
 
-    result = svzerodplus.calibrate(config)
+    result, _ = execute_svzerodplus(testfile, "calibrator")
 
     calibrated_parameters = result["vessels"][0]["zero_d_element_values"]
 
@@ -514,13 +554,6 @@ def test_calibration_vmr(model_id):
     """Test actual models from the vascular model repository."""
     with open(
         os.path.join(
-            this_file_dir, "cases", "vmr", "input", f"{model_id}_calibrate_from_0d.json"
-        )
-    ) as ff:
-        config = json.load(ff)
-
-    with open(
-        os.path.join(
             this_file_dir,
             "cases",
             "vmr",
@@ -530,7 +563,11 @@ def test_calibration_vmr(model_id):
     ) as ff:
         reference = json.load(ff)
 
-    result = svzerodplus.calibrate(config)
+    test = os.path.join(
+        this_file_dir, "cases", "vmr", "input", f"{model_id}_calibrate_from_0d.json"
+    )
+
+    result, _ = execute_svzerodplus(test, "calibrator")
 
     for i, vessel in enumerate(reference["vessels"]):
         for key, value in vessel["zero_d_element_values"].items():

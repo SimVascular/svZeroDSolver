@@ -5,6 +5,30 @@ project(svZeroDSolver)
 include(FetchContent)
 
 # -----------------------------------------------------------------------------
+# Enable code coverage
+# -----------------------------------------------------------------------------
+set(ENABLE_COVERAGE OFF CACHE BOOL "Enable code coverage")
+# coverage
+if(ENABLE_COVERAGE)
+  # set compiler flags
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -coverage -g")
+
+  # find required tools
+  find_program(LCOV lcov REQUIRED)
+  find_program(GENHTML genhtml REQUIRED)
+
+  # add coverage target
+  add_custom_target(coverage
+    # gather data
+    COMMAND ${LCOV} --directory . --capture --output-file coverage.info --ignore-errors inconsistent --ignore-errors gcov
+    # exclude externals
+    COMMAND ${LCOV} --remove coverage.info -o coverage.info --ignore-errors unused '/usr/*' '/opt/*' '_deps/*' '/Library' --ignore-errors inconsistent
+    # generate report
+    COMMAND ${GENHTML} --demangle-cpp -o coverage coverage.info --ignore-errors inconsistent --ignore-errors unmapped
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+endif()
+
+# -----------------------------------------------------------------------------
 # Fetch Eigen
 # -----------------------------------------------------------------------------
 FetchContent_Declare(

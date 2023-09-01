@@ -22,7 +22,22 @@ jobs:
           conda run -n zerod pip install -e .
       - name: Test the build
         run: |
-          conda run -n zerod pytest tests/test_integration_cpp.py
+          conda run -n zerod pytest tests/test_integration_cpp.py -v --durations=0
+      - name: Generate code coverage
+        if: startsWith(matrix.os, 'ubuntu-22.04')
+          run: |
+            mkdir Release
+            cd Release
+            cmake -DENABLE_COVERAGE=ON ..
+            make -j2
+            conda run -n zerod pytest tests/test_integration_cpp.py -v --durations=0 --coverage
+            make coverage      
+      - name: Save coverage report
+        if: startsWith(matrix.os, 'ubuntu-22.04')
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage_report
+          path: Release/coverage
   python:
     runs-on: ubuntu-latest
     steps:

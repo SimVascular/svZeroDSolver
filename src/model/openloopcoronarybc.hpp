@@ -36,7 +36,7 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
-#include "timedependentparameter.hpp"
+#include "parameter.hpp"
 
 namespace MODEL {
 
@@ -93,42 +93,25 @@ namespace MODEL {
  *
  * Assume \f$P_a=0\f$.
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Ra
+ * * `1` Ram
+ * * `2` Rv
+ * * `3` Ca
+ * * `4` Cim
+ * * `5` Pim
+ * * `6` Pv
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
 class OpenLoopCoronaryBC : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {
-    T Ra;
-    T Ram;
-    T Rv;
-    T Ca;
-    T Cim;
-    TimeDependentParameter<T> Pim;  ///<
-    TimeDependentParameter<T> Pv;
-  };
-
-  /**
-   * @brief Construct a new OpenLoopCoronaryBC object
-   *
-   * @param P Time dependent pressure
-   * @param name Name
-   */
-  OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                     TimeDependentParameter<T> Pim,
-                     TimeDependentParameter<T> Pv, std::string name);
-
-  /**
-   * @brief Destroy the OpenLoopCoronaryBC object
-   *
-   */
-  ~OpenLoopCoronaryBC();
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -143,27 +126,23 @@ class OpenLoopCoronaryBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  void update_block_params(std::vector<T> new_params);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
    *
    * @param system System to update contributions at
-   * @param time Current time
+   * @param parameters Parameters of the model
    */
-  void update_time(ALGEBRA::SparseSystem<T> &system, T time);
+  void update_time(ALGEBRA::SparseSystem<T> &system,
+                   std::vector<T> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -184,44 +163,7 @@ class OpenLoopCoronaryBC : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> get_num_triplets();
-
-  /**
-   * @brief Convert the block to a steady behavior
-   *
-   * Converts the prescribed pressure to the constant mean of itself
-   *
-   */
-  void to_steady();
-
-  /**
-   * @brief Convert the block to an unsteady behavior
-   *
-   */
-  void to_unsteady();
-
- private:
-  Parameters params;
-  bool issteady = false;
 };
-
-template <typename T>
-OpenLoopCoronaryBC<T>::OpenLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                                          TimeDependentParameter<T> Pim,
-                                          TimeDependentParameter<T> Pv,
-                                          std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.Ra = Ra;
-  this->params.Ram = Ram;
-  this->params.Rv = Rv;
-  this->params.Ca = Ca;
-  this->params.Cim = Cim;
-  this->params.Pim = Pim;
-  this->params.Pv = Pv;
-}
-
-template <typename T>
-OpenLoopCoronaryBC<T>::~OpenLoopCoronaryBC() {}
 
 template <typename T>
 void OpenLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
@@ -229,91 +171,61 @@ void OpenLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void OpenLoopCoronaryBC<T>::update_block_params(std::vector<T> new_params) {
-  this->params.Ra = new_params[0];
-  this->params.Ram = new_params[1];
-  this->params.Rv = new_params[2];
-  this->params.Ca = new_params[3];
-  this->params.Cim = new_params[4];
-  // this->params.Pim = params[5];
-  // this->params.Pv = params[6];
-  int num_time_pts = (int)new_params[5];
-  std::vector<T> t_new;
-  std::vector<T> Pv_new;
-  std::vector<T> Pim_new;
-  for (int i = 0; i < num_time_pts; i++) {
-    t_new.push_back(new_params[1 + i]);
-    Pv_new.push_back(new_params[1 + num_time_pts + i]);
-    Pim_new.push_back(new_params[1 + 2 * num_time_pts + i]);
-  }
-  this->params.Pv.update_params(t_new, Pv_new);
-  this->params.Pim.update_params(t_new, Pim_new);
-}
-
-template <typename T>
-void OpenLoopCoronaryBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
-  if (issteady) {
+void OpenLoopCoronaryBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                            std::vector<T> &parameters) {
+  T Ra = parameters[this->global_param_ids[0]];
+  T Ram = parameters[this->global_param_ids[1]];
+  T Rv = parameters[this->global_param_ids[2]];
+  T Ca = parameters[this->global_param_ids[3]];
+  T Cim = parameters[this->global_param_ids[4]];
+  if (this->steady) {
     // Different assmembly for steady block to avoid singular system
     // and solve for the internal variable V_im inherently
-    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) =
-        -params.Cim;
+    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = -Cim;
     system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        params.Cim * (params.Ra + params.Ram);
+        Cim * (Ra + Ram);
     system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = 1.0;
     system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = -1.0;
     system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-        params.Ra + params.Ram + params.Rv;
+        Ra + Ram + Rv;
   } else {
     system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        params.Cim * params.Rv;
+        Cim * Rv;
     system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
     system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) =
-        params.Cim * params.Rv;
+        Cim * Rv;
     system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-        -params.Cim * params.Rv * params.Ra;
+        -Cim * Rv * Ra;
     system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
-        -(params.Rv + params.Ram);
+        -(Rv + Ram);
 
     system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) =
-        -params.Ca * params.Cim * params.Rv;
+        -Ca * Cim * Rv;
     system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        params.Ra * params.Ca * params.Cim * params.Rv;
+        Ra * Ca * Cim * Rv;
     system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) =
-        -params.Cim * params.Rv;
+        -Cim * Rv;
     system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
-        -params.Cim * params.Rv * params.Ram;
+        -Cim * Rv * Ram;
   }
 }
 
 template <typename T>
 void OpenLoopCoronaryBC<T>::update_time(ALGEBRA::SparseSystem<T> &system,
-                                        T time) {
-  T Pim = params.Pim.get(time);
-  T Pv = params.Pv.get(time);
-
-  if (issteady) {
-    system.C(this->global_eqn_ids[0]) = -params.Cim * Pim;
+                                        std::vector<T> &parameters) {
+  T Ram = parameters[this->global_param_ids[1]];
+  T Rv = parameters[this->global_param_ids[2]];
+  T Cim = parameters[this->global_param_ids[4]];
+  T Pim = parameters[this->global_param_ids[5]];
+  T Pv = parameters[this->global_param_ids[6]];
+  if (this->steady) {
+    system.C(this->global_eqn_ids[0]) = -Cim * Pim;
     system.C(this->global_eqn_ids[1]) = Pv;
   } else {
-    system.C(this->global_eqn_ids[0]) = params.Cim * (-Pim + Pv);
+    system.C(this->global_eqn_ids[0]) = Cim * (-Pim + Pv);
     system.C(this->global_eqn_ids[1]) =
-        -params.Cim * (params.Rv + params.Ram) * Pim +
-        params.Ram * params.Cim * Pv;
+        -Cim * (Rv + Ram) * Pim + Ram * Cim * Pv;
   }
-}
-
-template <typename T>
-void OpenLoopCoronaryBC<T>::to_steady() {
-  params.Pim.to_steady();
-  params.Pv.to_steady();
-  issteady = true;
-}
-
-template <typename T>
-void OpenLoopCoronaryBC<T>::to_unsteady() {
-  params.Pim.to_unsteady();
-  params.Pv.to_unsteady();
-  issteady = false;
 }
 
 template <typename T>

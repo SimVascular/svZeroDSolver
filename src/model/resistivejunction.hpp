@@ -94,34 +94,19 @@ namespace MODEL {
  * \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
  * j\in n_{oulets}  \f]
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `i` Poiseuille resistance for inner blood vessel `i`
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
 class ResistiveJunction : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {
-    std::vector<T> R;  ///< Poiseuille resistances
-  };
-
-  /**
-   * @brief Construct a new ResistiveJunction object
-   *
-   * @param R Resistances
-   * @param name Name
-   */
-  ResistiveJunction(std::vector<T> R, std::string name);
-
-  /**
-   * @brief Destroy the ResistiveJunction object
-   *
-   */
-  ~ResistiveJunction();
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -136,18 +121,13 @@ class ResistiveJunction : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  void update_block_params(std::vector<T> new_params);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -170,20 +150,9 @@ class ResistiveJunction : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 
  private:
-  Parameters params;
-  unsigned int num_inlets;
-  unsigned int num_outlets;
+  int num_inlets;
+  int num_outlets;
 };
-
-template <typename T>
-ResistiveJunction<T>::ResistiveJunction(std::vector<T> R, std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.R = R;
-}
-
-template <typename T>
-ResistiveJunction<T>::~ResistiveJunction() {}
 
 template <typename T>
 void ResistiveJunction<T>::setup_dofs(DOFHandler &dofhandler) {
@@ -197,17 +166,14 @@ void ResistiveJunction<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void ResistiveJunction<T>::update_block_params(std::vector<T> new_params) {
-  this->params.R = new_params;
-}
-
-template <typename T>
-void ResistiveJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+void ResistiveJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                           std::vector<T> &parameters) {
   for (size_t i = 0; i < num_inlets; i++) {
     system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[i * 2]) =
         1.0;
     system.F.coeffRef(this->global_eqn_ids[i],
-                      this->global_var_ids[i * 2 + 1]) = -params.R[i];
+                      this->global_var_ids[i * 2 + 1]) =
+        -parameters[this->global_param_ids[i]];
     system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids.back()) =
         -1.0;
   }
@@ -215,7 +181,8 @@ void ResistiveJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
     system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[i * 2]) =
         -1.0;
     system.F.coeffRef(this->global_eqn_ids[i],
-                      this->global_var_ids[i * 2 + 1]) = -params.R[i];
+                      this->global_var_ids[i * 2 + 1]) =
+        -parameters[this->global_param_ids[i]];
     system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids.back()) =
         1.0;
   }

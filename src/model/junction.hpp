@@ -90,26 +90,8 @@ namespace MODEL {
 template <typename T>
 class Junction : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {};
-
-  /**
-   * @brief Construct a new Junction object
-   *
-   * @param name Name
-   */
-  Junction(std::string name);
-
-  /**
-   * @brief Destroy the Junction object
-   *
-   */
-  ~Junction();
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -127,8 +109,25 @@ class Junction : public Block<T> {
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
+
+  /**
+   * @brief Set the gradient of the block contributions with respect to the
+   * parameters
+   *
+   * @param jacobian Jacobian with respect to the parameters
+   * @param alpha Current parameter vector
+   * @param residual Residual with respect to the parameters
+   * @param y Current solution
+   * @param dy Time-derivative of the current solution
+   */
+  void update_gradient(Eigen::SparseMatrix<T> &jacobian,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
+                       std::vector<T> &y, std::vector<T> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -150,19 +149,9 @@ class Junction : public Block<T> {
    */
   std::map<std::string, int> get_num_triplets();
 
- private:
-  Parameters params;
   unsigned int num_inlets;
   unsigned int num_outlets;
 };
-
-template <typename T>
-Junction<T>::Junction(std::string name) : Block<T>(name) {
-  this->name = name;
-}
-
-template <typename T>
-Junction<T>::~Junction() {}
 
 template <typename T>
 void Junction<T>::setup_dofs(DOFHandler &dofhandler) {
@@ -176,7 +165,8 @@ void Junction<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void Junction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+void Junction<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                  std::vector<T> &parameters) {
   // Pressure conservation
   for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++) {
     system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[0]) = 1.0;
@@ -194,6 +184,18 @@ void Junction<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
     system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets - 1],
                       this->global_var_ids[i]) = -1.0;
   }
+}
+
+template <typename T>
+void Junction<T>::update_gradient(Eigen::SparseMatrix<T> &jacobian,
+                                  Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+                                  Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
+                                  std::vector<T> &y, std::vector<T> &dy) {
+  // Pressure conservation
+  residual(this->global_eqn_ids[0]) =
+      y[this->global_var_ids[0]] - y[this->global_var_ids[2]];
+  residual(this->global_eqn_ids[1]) =
+      y[this->global_var_ids[1]] - y[this->global_var_ids[3]];
 }
 
 template <typename T>

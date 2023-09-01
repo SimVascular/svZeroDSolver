@@ -84,15 +84,16 @@ class SparseSystem {
   Eigen::Matrix<T, Eigen::Dynamic, 1> residual;  ///< Residual of the system
   Eigen::Matrix<T, Eigen::Dynamic, 1> dy;  ///< Solution increment of the system
 
-  Eigen::SparseLU<Eigen::SparseMatrix<T>> *solver =
-      new Eigen::SparseLU<Eigen::SparseMatrix<T>>();  ///< Linear solver
+  std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<T>>> solver =
+      std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<T>>>(
+          new Eigen::SparseLU<Eigen::SparseMatrix<T>>());  ///< Linear solver
 
   /**
    * @brief Reserve memory in system matrices based on number of triplets
    *
    * @param model The model to reserve space for in the system
    */
-  void reserve(MODEL::Model<T> &model);
+  void reserve(MODEL::Model<T> *model);
 
   /**
    * @brief Update the residual of the system
@@ -148,16 +149,18 @@ void SparseSystem<T>::clean() {
 }
 
 template <typename T>
-void SparseSystem<T>::reserve(MODEL::Model<T> &model) {
-  auto num_triplets = model.get_num_triplets();
+void SparseSystem<T>::reserve(MODEL::Model<T> *model) {
+  auto num_triplets = model->get_num_triplets();
   F.reserve(num_triplets["F"]);
   E.reserve(num_triplets["E"]);
   D.reserve(num_triplets["D"]);
-  model.update_constant(*this);
-  model.update_time(*this, 0.0);
+  model->update_constant(*this);
+  model->update_time(*this, 0.0);
   Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_y =
       Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
-  model.update_solution(*this, dummy_y);
+  Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_dy =
+      Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
+  model->update_solution(*this, dummy_y, dummy_dy);
   F.makeCompressed();
   E.makeCompressed();
   D.makeCompressed();

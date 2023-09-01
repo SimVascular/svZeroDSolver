@@ -28,6 +28,9 @@ jobs:
           cd tests/test_interface/test_01/
           make
           ./svZeroD_interface_test svzerod_3Dcoupling.json
+          cd ../test_02/
+          make
+          ./svZeroD_interface_test svzerod_tuned.json
   python:
     runs-on: ubuntu-latest
     steps:

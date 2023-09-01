@@ -25,13 +25,13 @@ jobs:
           conda run -n zerod pytest tests/test_integration_cpp.py -v --durations=0
       - name: Generate code coverage
         if: startsWith(matrix.os, 'ubuntu-22.04')
-          run: |
-            mkdir Release
-            cd Release
-            cmake -DENABLE_COVERAGE=ON ..
-            make -j2
-            conda run -n zerod pytest tests/test_integration_cpp.py -v --durations=0 --coverage
-            make coverage      
+        run: |
+          mkdir Release
+          cd Release
+          cmake -DENABLE_COVERAGE=ON ..
+          make -j2
+          conda run -n zerod pytest tests/test_integration_cpp.py -v --durations=0 --coverage
+          make coverage      
       - name: Save coverage report
         if: startsWith(matrix.os, 'ubuntu-22.04')
         uses: actions/upload-artifact@v3

@@ -23,6 +23,12 @@ jobs:
       - name: Test the build
         run: |
           conda run -n zerod pytest tests/test_integration_cpp.py
+      - name: Build using CMake
+        run: |
+          mkdir Release
+          cd Release
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build .
       - name: Test interface
         run: |
           cd tests/test_interface/test_01/

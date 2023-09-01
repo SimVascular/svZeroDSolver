@@ -6,13 +6,13 @@ svZeroDPlus is an application for performing simulations with 0D/lumped-paramete
 computer models for cardiovascular flows. 
 
 Some noteworthy features of svZeroDPlus are:
-*It is completely modular. Users can create custom flow models by arranging 
+* It is completely modular. Users can create custom flow models by arranging 
 modular blocks corresponding to blood vessels, junctions, different types 
 of boundary conditions, etc. 
-*It is written in C++ to enable high-performance applications.
-*It offers both a Python API and a C++ shared library to interface with other 
+* It is written in C++ to enable high-performance applications.
+* It offers both a Python API and a C++ shared library to interface with other 
 Python or C++-based applications. 
-*This allows svZeroDPlus to be used in a fully coupled manner with other multi-physics solvers,
+* This allows svZeroDPlus to be used in a fully coupled manner with other multi-physics solvers,
 and for parameter estimation, uncertainty quantification, etc.
 
 Zero-dimensional (0D) models
@@ -87,9 +87,7 @@ more helpful information in our [Developer Guide](@ref developer_guide).
 svZeroDSolver can be used to run zero-dimensional (0D) cardiovascular
 simulations based on a given configuration.
 
-## Run svZeroDSolver
-
-### From the command line
+## Run svZeroDSolver from the command line
 
 svZeroDSolver can be executed from the command line using a JSON configuration
 file.
@@ -100,7 +98,7 @@ svzerodsolver tests/cases/steadyFlow_RLC_R.json result_steadyFlow_RLC_R.csv
 
 The result will be written to a csv file.
 
-### From other programs
+## Run svZeroDSolver from other programs
 
 For some applications it is beneficial to run svZeroDSolver directly
 from within another program. For example, this can be
@@ -109,7 +107,14 @@ calibration, uncertainty quantification, ...). It is also allows using
 svZeroDPlus with other solvers, for example as boundary conditions or
 forcing terms.
 
-#### In Python
+### In C++
+
+SvZeroDPlus needs to be built using CMake to use the shared library interface.
+
+Detailed examples of interfacing with svZeroDPlus from C++ codes are available 
+in the test cases at `svZeroDPlus/tests/test_interface`. 
+
+### In Python
 
 Please make sure that
 you installed svZerodPlus via pip to enable this feature. We start by
@@ -160,14 +165,7 @@ solver.get_single_result_avg("flow:INFLOW:branch0_seg0")
 >>> 5.0
 ```
 
-#### In C++
-
-SvZeroDPlus needs to be built using CMake to use the shared library interface.
-
-Detailed examples of interfacing with svZeroDPlus from C++ codes are available 
-in the test cases at `svZeroDPlus/tests/test_interface`. 
-
-## Configuration (file)
+## Configuration
 
 svZeroDSolver is configured using either a JSON file or a Python
 dictionary. The top-level structure of both is:

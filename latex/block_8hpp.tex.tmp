@@ -1,0 +1,32 @@
+\hypertarget{block_8hpp}{}\doxysection{model/block.hpp File Reference}
+\label{block_8hpp}\index{model/block.hpp@{model/block.hpp}}
+
+
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}} source file.  
+
+
+{\ttfamily \#include $<$map$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include \char`\"{}../algebra/sparsesystem.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}../algebra/state.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}dofhandler.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}node.\+hpp\char`\"{}}\newline
+Include dependency graph for block.\+hpp\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block$<$ T $>$}}
+\begin{DoxyCompactList}\small\item\em Base class for 0D model components. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+namespace \mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} namespace. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}} source file. 
+

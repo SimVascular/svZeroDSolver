@@ -59,586 +59,465 @@
 \DoxyCodeLine{55 \textcolor{comment}{ *}}
 \DoxyCodeLine{56 \textcolor{comment}{ * TODO: Equations and circuit diagram}}
 \DoxyCodeLine{57 \textcolor{comment}{ *}}
-\DoxyCodeLine{58 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{59 \textcolor{comment}{ */}}
-\DoxyCodeLine{60 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{61 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{ClosedLoopHeartPulmonary}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
-\DoxyCodeLine{62  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{63 \textcolor{comment}{  /**}}
-\DoxyCodeLine{64 \textcolor{comment}{   * @brief Parameters of the element.}}
-\DoxyCodeLine{65 \textcolor{comment}{   *}}
-\DoxyCodeLine{66 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
-\DoxyCodeLine{67 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{68 \textcolor{comment}{   */}}
-\DoxyCodeLine{69   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
-\DoxyCodeLine{70     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_abe0e8496608ada6ab454b22fc32e1423}{Tsa}};      \textcolor{comment}{///< Fractions of cardiac cycle (not sure)}}
-\DoxyCodeLine{71     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a82d433ea02b931bb26095876d31d7d3b}{tpwave}};   \textcolor{comment}{///< Fraction of cardiac cycle (P-\/wave)}}
-\DoxyCodeLine{72     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a64d2bd46d983d6cc788a20bc0f04c8dd}{Erv\_s}};    \textcolor{comment}{///< Scaling for right ventricle elastance}}
-\DoxyCodeLine{73     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a2ee0cd6200fa3dc594ab82d56e953390}{Elv\_s}};    \textcolor{comment}{///< Scaling for left ventricle elastance}}
-\DoxyCodeLine{74     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_ae9209c79b40938eb9e6b1004548762ec}{iml}};      \textcolor{comment}{///< Scaling for intramyocardial pressure (left coronaries)}}
-\DoxyCodeLine{75     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_af640edaf1ed7ab79fcf30700eeaa889e}{imr}};      \textcolor{comment}{///< Scaling for intramyocardial pressure (right coronaries)}}
-\DoxyCodeLine{76     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a8b49e6c604fd781db0994041ae87ac8a}{Lra\_v}};    \textcolor{comment}{///< Right atrium inductance}}
-\DoxyCodeLine{77     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa83411a7901b9b94059e69d7a8a0e799}{Rra\_v}};    \textcolor{comment}{///< Right atrium outflow resistance}}
-\DoxyCodeLine{78     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a808d67b7adaca4d2b9c3f86ba5006dc7}{Lrv\_a}};    \textcolor{comment}{///< Right ventricle inductance}}
-\DoxyCodeLine{79     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a47144c6edfe702c013817ecde2a2fc40}{Rrv\_a}};    \textcolor{comment}{///< Right ventricle outflow resistance}}
-\DoxyCodeLine{80     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a223c443ad31ff733cf7c4b5ac77c6103}{Lla\_v}};    \textcolor{comment}{///< Left atrium inductance}}
-\DoxyCodeLine{81     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa4ee19e75cb538b37abcd4efccbef1e3}{Rla\_v}};    \textcolor{comment}{///< Left atrium outflow resistance}}
-\DoxyCodeLine{82     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a4997a8c9f8488ab57be651429034920a}{Llv\_a}};    \textcolor{comment}{///< Left ventricle inductance}}
-\DoxyCodeLine{83     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a20c60f25aa7f84bd63dd22179d122f6b}{Rlv\_ao}};   \textcolor{comment}{///< Left ventricle outflow resistance}}
-\DoxyCodeLine{84     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa061f8ad2eec7d3164e47944f7efb619}{Vrv\_u}};    \textcolor{comment}{///< Right ventricle unstressed volume}}
-\DoxyCodeLine{85     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa0c5b742245c541d17f768de01a24740}{Vlv\_u}};    \textcolor{comment}{///< Right ventricle unstressed volume}}
-\DoxyCodeLine{86     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a5e396c0f36849a55b6e7a2115f3f5087}{Rpd}};      \textcolor{comment}{///< Pulmonary resistance}}
-\DoxyCodeLine{87     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a66f947a030b82e7b693985d831ff91e8}{Cp}};       \textcolor{comment}{///< Pulmonary capacitance}}
-\DoxyCodeLine{88     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_ade115eadec431bd81f807ce9bf5d9293}{Cpa}};      \textcolor{comment}{///< Aortic capacitance}}
-\DoxyCodeLine{89     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a466c7ceca38fa18514210bddb3c3212e}{Kxp\_ra}};   \textcolor{comment}{///< Right atrium pressure-\/volume relationship (?)}}
-\DoxyCodeLine{90     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa78a80982034db4e03e6078d51f9819b}{Kxv\_ra}};   \textcolor{comment}{///< Right atrium pressure-\/volume relationship (?)}}
-\DoxyCodeLine{91     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_af301e068b22f2921e51c4066bf06012e}{Kxp\_la}};   \textcolor{comment}{///< Left atrium pressure-\/volume relationship (?)}}
-\DoxyCodeLine{92     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a2b8f134b90256dcd63c6a1d149e98ea4}{Kxv\_la}};   \textcolor{comment}{///< Left atrium pressure-\/volume relationship (?)}}
-\DoxyCodeLine{93     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a23636bd961e5f491acc707d08a572c69}{Emax\_ra}};  \textcolor{comment}{///< Right atrium elastance (?)}}
-\DoxyCodeLine{94     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a411350a3c4ee1c1f8bebd1012880f942}{Emax\_la}};  \textcolor{comment}{///< Left atrium elastance (?)}}
-\DoxyCodeLine{95     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a88f374f90eb861881aed9896e2d26175}{Vaso\_ra}};  \textcolor{comment}{///< Right atrium rest volume (?)}}
-\DoxyCodeLine{96     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_acdf4eaf985d7d8101604399a3e17d686}{Vaso\_la}};  \textcolor{comment}{///< Left atrium rest volume (?)}}
-\DoxyCodeLine{97   \};}
-\DoxyCodeLine{98 \textcolor{comment}{}}
-\DoxyCodeLine{99 \textcolor{comment}{  /**}}
-\DoxyCodeLine{100 \textcolor{comment}{   * @brief Construct a new ClosedLoopHeartPulmonary object}}
-\DoxyCodeLine{101 \textcolor{comment}{   *}}
-\DoxyCodeLine{102 \textcolor{comment}{   * @param heart\_parameters Map/dictionary containing the 27 heart parameters}}
-\DoxyCodeLine{103 \textcolor{comment}{   * @param name Name}}
-\DoxyCodeLine{104 \textcolor{comment}{   */}}
-\DoxyCodeLine{105   \textcolor{comment}{// ClosedLoopHeartPulmonary(std::map<std::string, T> heart\_parameters,}}
-\DoxyCodeLine{106   \textcolor{comment}{// std::string name);}}
-\DoxyCodeLine{107   \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a603a8c6029a73408d93334af48a9b8df}{ClosedLoopHeartPulmonary}}(std::map<std::string, T> heart\_parameters,}
-\DoxyCodeLine{108                            T cycle\_period, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
-\DoxyCodeLine{109 \textcolor{comment}{}}
-\DoxyCodeLine{110 \textcolor{comment}{  /**}}
-\DoxyCodeLine{111 \textcolor{comment}{   * @brief Destroy the ClosedLoopHeartPulmonary object}}
-\DoxyCodeLine{112 \textcolor{comment}{   *}}
-\DoxyCodeLine{113 \textcolor{comment}{   */}}
-\DoxyCodeLine{114   \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a6d36cbc641c820ae88beeb2f4fa3027a}{\string~ClosedLoopHeartPulmonary}}();}
-\DoxyCodeLine{115 \textcolor{comment}{}}
-\DoxyCodeLine{116 \textcolor{comment}{  /**}}
-\DoxyCodeLine{117 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{118 \textcolor{comment}{   *}}
-\DoxyCodeLine{119 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{120 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{121 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{122 \textcolor{comment}{   *}}
-\DoxyCodeLine{123 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{124 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{125 \textcolor{comment}{   */}}
-\DoxyCodeLine{126   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a37fbf9c3749d095700b9739eb04a44e0}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
-\DoxyCodeLine{127 \textcolor{comment}{}}
-\DoxyCodeLine{128 \textcolor{comment}{  /**}}
-\DoxyCodeLine{129 \textcolor{comment}{   * @brief Return parameter values}}
-\DoxyCodeLine{130 \textcolor{comment}{   *}}
-\DoxyCodeLine{131 \textcolor{comment}{   * @param message String to identify different requests}}
-\DoxyCodeLine{132 \textcolor{comment}{   */}}
-\DoxyCodeLine{133   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ae56fbb49b7f567592029db16b9e4af99}{get\_parameter\_value}}(std::string message, T \&param\_value);}
-\DoxyCodeLine{134 \textcolor{comment}{}}
-\DoxyCodeLine{135 \textcolor{comment}{  /**}}
-\DoxyCodeLine{136 \textcolor{comment}{   * @brief Set block-\/specific initial conditions}}
-\DoxyCodeLine{137 \textcolor{comment}{   *}}
-\DoxyCodeLine{138 \textcolor{comment}{   * @param state State vector containing y and ydot}}
-\DoxyCodeLine{139 \textcolor{comment}{   */}}
-\DoxyCodeLine{140   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a9211429338b3377e49f2ddd868cd9f76}{set\_ICs}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}} \&state);}
-\DoxyCodeLine{141 \textcolor{comment}{}}
-\DoxyCodeLine{142 \textcolor{comment}{  /**}}
-\DoxyCodeLine{143 \textcolor{comment}{   * @brief Update parameters of a block.}}
-\DoxyCodeLine{144 \textcolor{comment}{   *}}
-\DoxyCodeLine{145 \textcolor{comment}{   * @param params New parameters.}}
-\DoxyCodeLine{146 \textcolor{comment}{   */}}
-\DoxyCodeLine{147   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ab5ab03142e9797cba87acd373dedd015}{update\_block\_params}}(std::vector<T> new\_params);}
-\DoxyCodeLine{148 \textcolor{comment}{}}
-\DoxyCodeLine{149 \textcolor{comment}{  /**}}
-\DoxyCodeLine{150 \textcolor{comment}{   * @brief Return parameters of a block.}}
-\DoxyCodeLine{151 \textcolor{comment}{   *}}
-\DoxyCodeLine{152 \textcolor{comment}{   * @block\_params Block parameters.}}
-\DoxyCodeLine{153 \textcolor{comment}{   */}}
-\DoxyCodeLine{154   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_aeaf848241964ea716fb4583bc0b74dda}{get\_block\_params}}(std::vector<T> \&block\_params);}
-\DoxyCodeLine{155 \textcolor{comment}{}}
-\DoxyCodeLine{156 \textcolor{comment}{  /**}}
-\DoxyCodeLine{157 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
-\DoxyCodeLine{158 \textcolor{comment}{   *}}
-\DoxyCodeLine{159 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{58 \textcolor{comment}{ * \#\#\# Parameters}}
+\DoxyCodeLine{59 \textcolor{comment}{ *}}
+\DoxyCodeLine{60 \textcolor{comment}{ * Parameter sequence for constructing this block}}
+\DoxyCodeLine{61 \textcolor{comment}{ *}}
+\DoxyCodeLine{62 \textcolor{comment}{ * * `0` Atrial systole time fraction}}
+\DoxyCodeLine{63 \textcolor{comment}{ * * `1` Time for P-\/wave}}
+\DoxyCodeLine{64 \textcolor{comment}{ * * `2` Scaling for right ventricle elastance}}
+\DoxyCodeLine{65 \textcolor{comment}{ * * `3` Scaling for left ventricle elastance}}
+\DoxyCodeLine{66 \textcolor{comment}{ * * `4` Scaling for intramyocardial pressure (left coronaries)}}
+\DoxyCodeLine{67 \textcolor{comment}{ * * `5` Scaling for intramyocardial pressure (right coronaries)}}
+\DoxyCodeLine{68 \textcolor{comment}{ * * `6` Right atrium inductance}}
+\DoxyCodeLine{69 \textcolor{comment}{ * * `7` Right atrium outflow resistance}}
+\DoxyCodeLine{70 \textcolor{comment}{ * * `8` Right ventricle inductance}}
+\DoxyCodeLine{71 \textcolor{comment}{ * * `9` Right ventricle outflow resistance}}
+\DoxyCodeLine{72 \textcolor{comment}{ * * `10` Left atrium inductance}}
+\DoxyCodeLine{73 \textcolor{comment}{ * * `11` Left atrium outflow resistance}}
+\DoxyCodeLine{74 \textcolor{comment}{ * * `12` Left ventricle inductance}}
+\DoxyCodeLine{75 \textcolor{comment}{ * * `13` Left ventricle outflow resistance}}
+\DoxyCodeLine{76 \textcolor{comment}{ * * `14` Right ventricle unstressed volume}}
+\DoxyCodeLine{77 \textcolor{comment}{ * * `15` Left ventricle unstressed volume}}
+\DoxyCodeLine{78 \textcolor{comment}{ * * `16` Pulmonary resistance}}
+\DoxyCodeLine{79 \textcolor{comment}{ * * `17` Pulmonary capacitance}}
+\DoxyCodeLine{80 \textcolor{comment}{ * * `18` Aortic capacitance}}
+\DoxyCodeLine{81 \textcolor{comment}{ * * `19` Right atrium pressure scaling}}
+\DoxyCodeLine{82 \textcolor{comment}{ * * `20` Right atrium volume scaling}}
+\DoxyCodeLine{83 \textcolor{comment}{ * * `21` Left atrium pressure scaling}}
+\DoxyCodeLine{84 \textcolor{comment}{ * * `22` Left atrium volume scaling}}
+\DoxyCodeLine{85 \textcolor{comment}{ * * `23` Right atrium elastance}}
+\DoxyCodeLine{86 \textcolor{comment}{ * * `24` Left atrium elastance}}
+\DoxyCodeLine{87 \textcolor{comment}{ * * `25` Right atrium resting volume}}
+\DoxyCodeLine{88 \textcolor{comment}{ * * `26` Left atrium resting volume}}
+\DoxyCodeLine{89 \textcolor{comment}{ *}}
+\DoxyCodeLine{90 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{91 \textcolor{comment}{ */}}
+\DoxyCodeLine{92 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{93 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{ClosedLoopHeartPulmonary}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
+\DoxyCodeLine{94  \textcolor{keyword}{public}:}
+\DoxyCodeLine{95   \textcolor{comment}{// Inherit constructors}}
+\DoxyCodeLine{96   \textcolor{keyword}{using }\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Block;}
+\DoxyCodeLine{97 \textcolor{comment}{}}
+\DoxyCodeLine{98 \textcolor{comment}{  /**}}
+\DoxyCodeLine{99 \textcolor{comment}{   * @brief Local IDs of the parameters}}
+\DoxyCodeLine{100 \textcolor{comment}{   *}}
+\DoxyCodeLine{101 \textcolor{comment}{   */}}
+\DoxyCodeLine{102   \textcolor{keyword}{enum} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7}{ParamId}} \{}
+\DoxyCodeLine{103     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a44795ff386bf495608fa9864df63361b}{TSA}} = 0,       \textcolor{comment}{///< Fractions of cardiac cycle (not sure)}}
+\DoxyCodeLine{104     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a64129c41aff7a5bf9436f122ccc3ffc8}{TPWAVE}} = 1,    \textcolor{comment}{///< Fraction of cardiac cycle (P-\/wave)}}
+\DoxyCodeLine{105     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7aa1efc3d332e7468e11c8260184924c1b}{ERV\_S}} = 2,     \textcolor{comment}{///< Scaling for right ventricle elastance}}
+\DoxyCodeLine{106     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a3f52abbc3f369a416519ab8462ffa219}{ELV\_S}} = 3,     \textcolor{comment}{///< Scaling for left ventricle elastance}}
+\DoxyCodeLine{107     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a20bc4ab1c194ade26bcb4868f59e1a6c}{IML}} = 4,       \textcolor{comment}{///< Scaling for intramyocardial pressure (left coronaries)}}
+\DoxyCodeLine{108     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7adb09e5be911b6e85983206fd4e4164ad}{IMR}} = 5,       \textcolor{comment}{///< Scaling for intramyocardial pressure (right coronaries)}}
+\DoxyCodeLine{109     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7ab9dbc1bbfa7aec0bf3e79575ecce590e}{LRA\_V}} = 6,     \textcolor{comment}{///< Right atrium inductance}}
+\DoxyCodeLine{110     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a5ce861cd15f17683b7e3614a7b7d8794}{RRA\_V}} = 7,     \textcolor{comment}{///< Right atrium outflow resistance}}
+\DoxyCodeLine{111     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7adf90141d7a58a80b5b9104eff3589728}{LRV\_A}} = 8,     \textcolor{comment}{///< Right ventricle inductance}}
+\DoxyCodeLine{112     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a7e756b1e7f646463f92b4d3c29abf7d5}{RRV\_A}} = 9,     \textcolor{comment}{///< Right ventricle outflow resistance}}
+\DoxyCodeLine{113     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7afb45808a19ec6ce479f12608b26f7819}{LLA\_V}} = 10,    \textcolor{comment}{///< Left atrium inductance}}
+\DoxyCodeLine{114     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a3bc6e58d8e85eca2173cbb48ba989ef5}{RLA\_V}} = 11,    \textcolor{comment}{///< Left atrium outflow resistance}}
+\DoxyCodeLine{115     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a43a1dd3b25938cab41c1c72a3fd76a2e}{LLV\_A}} = 12,    \textcolor{comment}{///< Left ventricle inductance}}
+\DoxyCodeLine{116     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7ac3ecbdd3ca65ee68ed872732f2e2777d}{RLV\_AO}} = 13,   \textcolor{comment}{///< Left ventricle outflow resistance}}
+\DoxyCodeLine{117     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7af468c67c0580ac2b1e95b0477ce12f1e}{VRV\_U}} = 14,    \textcolor{comment}{///< Right ventricle unstressed volume}}
+\DoxyCodeLine{118     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7ae89be7141864f23cb003dd327b718aef}{VLV\_U}} = 15,    \textcolor{comment}{///< Left ventricle unstressed volume}}
+\DoxyCodeLine{119     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7ab4c06e1194c2dadddbab63f05f4e6ef1}{RPD}} = 16,      \textcolor{comment}{///< Pulmonary resistance}}
+\DoxyCodeLine{120     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a66ff8328c6f02fa54ce2c21fcf82bad3}{CP}} = 17,       \textcolor{comment}{///< Pulmonary capacitance}}
+\DoxyCodeLine{121     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a3a881131db783973908b4dcdb0edc95b}{CPA}} = 18,      \textcolor{comment}{///< Aortic capacitance}}
+\DoxyCodeLine{122     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7ac5edc08ef50ad7faa48d8c4189a99d1b}{KXP\_RA}} = 19,   \textcolor{comment}{///< Right atrium pressure-\/volume relationship (?)}}
+\DoxyCodeLine{123     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a0d71b2ad7b3bbdcac8b54e4c52fd888b}{KXV\_RA}} = 20,   \textcolor{comment}{///< Right atrium pressure-\/volume relationship (?)}}
+\DoxyCodeLine{124     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7a7e28b666f6796d7f0ab5327f108f34f9}{KXP\_LA}} = 21,   \textcolor{comment}{///< Left atrium pressure-\/volume relationship (?)}}
+\DoxyCodeLine{125     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7aac3092d362eddd76abb725e3dccd22c3}{KXV\_LA}} = 22,   \textcolor{comment}{///< Left atrium pressure-\/volume relationship (?)}}
+\DoxyCodeLine{126     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7ab32ad4188a7efff571127147922fb596}{EMAX\_RA}} = 23,  \textcolor{comment}{///< Right atrium elastance (?)}}
+\DoxyCodeLine{127     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7af1471378f377de2100a35f7a4e80d45b}{EMAX\_LA}} = 24,  \textcolor{comment}{///< Left atrium elastance (?)}}
+\DoxyCodeLine{128     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7acad652c0ac8c81eb92d2d8ecbc6817d6}{VASO\_RA}} = 25,  \textcolor{comment}{///< Right atrium rest volume (?)}}
+\DoxyCodeLine{129     \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0100adbc0bf0707f5182a944dcad31e7af9e47aae003bcb263ffd138ed8a8f6d6}{VASO\_LA}} = 26,  \textcolor{comment}{///< Left atrium rest volume (?)}}
+\DoxyCodeLine{130   \};}
+\DoxyCodeLine{131 \textcolor{comment}{}}
+\DoxyCodeLine{132 \textcolor{comment}{  /**}}
+\DoxyCodeLine{133 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{134 \textcolor{comment}{   *}}
+\DoxyCodeLine{135 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{136 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{137 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{138 \textcolor{comment}{   *}}
+\DoxyCodeLine{139 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{140 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{141 \textcolor{comment}{   */}}
+\DoxyCodeLine{142   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a37fbf9c3749d095700b9739eb04a44e0}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{143 \textcolor{comment}{}}
+\DoxyCodeLine{144 \textcolor{comment}{  /**}}
+\DoxyCodeLine{145 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse}}
+\DoxyCodeLine{146 \textcolor{comment}{   system}}
+\DoxyCodeLine{147 \textcolor{comment}{   *}}
+\DoxyCodeLine{148 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{149 \textcolor{comment}{   * @param parameters Parameters of the model}}
+\DoxyCodeLine{150 \textcolor{comment}{   */}}
+\DoxyCodeLine{151   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0e753bdf71f301b2f11fe72a49f6fd8b}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{152                        std::vector<T> \&parameters);}
+\DoxyCodeLine{153 \textcolor{comment}{}}
+\DoxyCodeLine{154 \textcolor{comment}{  /**}}
+\DoxyCodeLine{155 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
+\DoxyCodeLine{156 \textcolor{comment}{   * system}}
+\DoxyCodeLine{157 \textcolor{comment}{   *}}
+\DoxyCodeLine{158 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{159 \textcolor{comment}{   * @param parameters Parameters of the model}}
 \DoxyCodeLine{160 \textcolor{comment}{   */}}
-\DoxyCodeLine{161   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0904e85cbfbc9ec808ef92b1b8a356ad}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{162 \textcolor{comment}{}}
-\DoxyCodeLine{163 \textcolor{comment}{  /**}}
-\DoxyCodeLine{164 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
-\DoxyCodeLine{165 \textcolor{comment}{   * system}}
-\DoxyCodeLine{166 \textcolor{comment}{   *}}
-\DoxyCodeLine{167 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{168 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{169 \textcolor{comment}{   */}}
-\DoxyCodeLine{170   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ac27b052e7557d75389f50df7fee2b8b8}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{171 \textcolor{comment}{}}
-\DoxyCodeLine{172 \textcolor{comment}{  /**}}
-\DoxyCodeLine{173 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
-\DoxyCodeLine{174 \textcolor{comment}{   * sparse system}}
-\DoxyCodeLine{175 \textcolor{comment}{   *}}
-\DoxyCodeLine{176 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{177 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{178 \textcolor{comment}{   */}}
-\DoxyCodeLine{179   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a98c480ede15293fbd2aeeb26eff73006}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
-\DoxyCodeLine{180                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{181 \textcolor{comment}{}}
-\DoxyCodeLine{182 \textcolor{comment}{  /**}}
-\DoxyCodeLine{183 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{184 \textcolor{comment}{   *}}
-\DoxyCodeLine{185 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{186 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{187 \textcolor{comment}{   */}}
-\DoxyCodeLine{188   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ad85cf5512454bebfb626e1eceb60a88b}{num\_triplets}} = \{}
-\DoxyCodeLine{189       \{\textcolor{stringliteral}{"{}F"{}}, 33\},}
-\DoxyCodeLine{190       \{\textcolor{stringliteral}{"{}E"{}}, 10\},}
-\DoxyCodeLine{191       \{\textcolor{stringliteral}{"{}D"{}}, 2\},}
-\DoxyCodeLine{192   \};}
-\DoxyCodeLine{193 \textcolor{comment}{}}
-\DoxyCodeLine{194 \textcolor{comment}{  /**}}
-\DoxyCodeLine{195 \textcolor{comment}{   * @brief Get number of triplets of element}}
-\DoxyCodeLine{196 \textcolor{comment}{   *}}
-\DoxyCodeLine{197 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{198 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{199 \textcolor{comment}{   */}}
-\DoxyCodeLine{200   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a950b4b19381d2e509a21045ad98ab122}{get\_num\_triplets}}();}
-\DoxyCodeLine{201 \textcolor{comment}{}}
-\DoxyCodeLine{202 \textcolor{comment}{  /**}}
-\DoxyCodeLine{203 \textcolor{comment}{   * @brief Update the atrial activation and LV/RV elastance functions which}}
-\DoxyCodeLine{204 \textcolor{comment}{   * depend on time}}
-\DoxyCodeLine{205 \textcolor{comment}{   *}}
-\DoxyCodeLine{206 \textcolor{comment}{   * @param time Current time}}
-\DoxyCodeLine{207 \textcolor{comment}{   */}}
-\DoxyCodeLine{208   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ac9268f72ccc9831441471fd74b0aa735}{get\_activation\_and\_elastance\_functions}}(T time);}
-\DoxyCodeLine{209 \textcolor{comment}{}}
-\DoxyCodeLine{210 \textcolor{comment}{  /**}}
-\DoxyCodeLine{211 \textcolor{comment}{   * @brief Compute sub-\/expressions that are part of atrial elastance and}}
-\DoxyCodeLine{212 \textcolor{comment}{   * depends on atrial volume from the solution vector}}
-\DoxyCodeLine{213 \textcolor{comment}{   *}}
-\DoxyCodeLine{214 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{215 \textcolor{comment}{   */}}
-\DoxyCodeLine{216   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_af6554ee00de9c1df66f1f3a9ffb257bf}{get\_psi\_ra\_la}}(Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{217 \textcolor{comment}{}}
-\DoxyCodeLine{218 \textcolor{comment}{  /**}}
-\DoxyCodeLine{219 \textcolor{comment}{   * @brief Valve positions for each heart chamber}}
-\DoxyCodeLine{220 \textcolor{comment}{   *}}
+\DoxyCodeLine{161   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_abaf779073846a87f657b6a22b5b69c8c}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{162                    std::vector<T> \&parameters);}
+\DoxyCodeLine{163 \textcolor{comment}{}}
+\DoxyCodeLine{164 \textcolor{comment}{  /**}}
+\DoxyCodeLine{165 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
+\DoxyCodeLine{166 \textcolor{comment}{   * sparse system}}
+\DoxyCodeLine{167 \textcolor{comment}{   *}}
+\DoxyCodeLine{168 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{169 \textcolor{comment}{   * @param parameters Parameters of the model}}
+\DoxyCodeLine{170 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{171 \textcolor{comment}{   * @param dy Current derivate of the solution}}
+\DoxyCodeLine{172 \textcolor{comment}{   */}}
+\DoxyCodeLine{173   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a5336d1ca242026c95898683643db6f86}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{174                        std::vector<T> \&parameters,}
+\DoxyCodeLine{175                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y,}
+\DoxyCodeLine{176                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&dy);}
+\DoxyCodeLine{177 \textcolor{comment}{}}
+\DoxyCodeLine{178 \textcolor{comment}{  /**}}
+\DoxyCodeLine{179 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{180 \textcolor{comment}{   *}}
+\DoxyCodeLine{181 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{182 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{183 \textcolor{comment}{   */}}
+\DoxyCodeLine{184   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ad85cf5512454bebfb626e1eceb60a88b}{num\_triplets}} = \{}
+\DoxyCodeLine{185       \{\textcolor{stringliteral}{"{}F"{}}, 33\},}
+\DoxyCodeLine{186       \{\textcolor{stringliteral}{"{}E"{}}, 10\},}
+\DoxyCodeLine{187       \{\textcolor{stringliteral}{"{}D"{}}, 2\},}
+\DoxyCodeLine{188   \};}
+\DoxyCodeLine{189 \textcolor{comment}{}}
+\DoxyCodeLine{190 \textcolor{comment}{  /**}}
+\DoxyCodeLine{191 \textcolor{comment}{   * @brief Get number of triplets of element}}
+\DoxyCodeLine{192 \textcolor{comment}{   *}}
+\DoxyCodeLine{193 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{194 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{195 \textcolor{comment}{   */}}
+\DoxyCodeLine{196   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a950b4b19381d2e509a21045ad98ab122}{get\_num\_triplets}}();}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198  \textcolor{keyword}{private}:}
+\DoxyCodeLine{199   \textcolor{comment}{// Below variables change every timestep and are then combined with}}
+\DoxyCodeLine{200   \textcolor{comment}{// expressions that are updated with solution}}
+\DoxyCodeLine{201   T AA;   \textcolor{comment}{// Atrial activation function}}
+\DoxyCodeLine{202   T Elv;  \textcolor{comment}{// LV elastance}}
+\DoxyCodeLine{203   T Erv;  \textcolor{comment}{// RV elastance}}
+\DoxyCodeLine{204   T psi\_ra, psi\_la, psi\_ra\_derivative,}
+\DoxyCodeLine{205       psi\_la\_derivative;  \textcolor{comment}{// Expressions for atrial activation}}
+\DoxyCodeLine{206   T valves[16];}
+\DoxyCodeLine{207 \textcolor{comment}{}}
+\DoxyCodeLine{208 \textcolor{comment}{  /**}}
+\DoxyCodeLine{209 \textcolor{comment}{   * @brief Update the atrial activation and LV/RV elastance functions which}}
+\DoxyCodeLine{210 \textcolor{comment}{   * depend on time}}
+\DoxyCodeLine{211 \textcolor{comment}{   *}}
+\DoxyCodeLine{212 \textcolor{comment}{   * @param parameters Parameters of the model}}
+\DoxyCodeLine{213 \textcolor{comment}{   */}}
+\DoxyCodeLine{214   \textcolor{keywordtype}{void} get\_activation\_and\_elastance\_functions(std::vector<T> \&parameters);}
+\DoxyCodeLine{215 \textcolor{comment}{}}
+\DoxyCodeLine{216 \textcolor{comment}{  /**}}
+\DoxyCodeLine{217 \textcolor{comment}{   * @brief Compute sub-\/expressions that are part of atrial elastance and}}
+\DoxyCodeLine{218 \textcolor{comment}{   * depends on atrial volume from the solution vector}}
+\DoxyCodeLine{219 \textcolor{comment}{   *}}
+\DoxyCodeLine{220 \textcolor{comment}{   * @param parameters Parameters of the model}}
 \DoxyCodeLine{221 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{222 \textcolor{comment}{   * @param valves Vector containing valve positions}}
-\DoxyCodeLine{223 \textcolor{comment}{   */}}
-\DoxyCodeLine{224   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ae14b6aa39184067f3c4317606b334054}{get\_valve\_positions}}(Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{225 }
-\DoxyCodeLine{226   T cardiac\_cycle\_period;}
-\DoxyCodeLine{227 }
-\DoxyCodeLine{228  \textcolor{keyword}{private}:}
-\DoxyCodeLine{229   Parameters params;}
-\DoxyCodeLine{230   \textcolor{comment}{// Below variables change every timestep and are then combined with}}
-\DoxyCodeLine{231   \textcolor{comment}{// expressions that are updated with solution}}
-\DoxyCodeLine{232   T AA;   \textcolor{comment}{// Atrial activation function}}
-\DoxyCodeLine{233   T Elv;  \textcolor{comment}{// LV elastance}}
-\DoxyCodeLine{234   T Erv;  \textcolor{comment}{// RV elastance}}
-\DoxyCodeLine{235   T psi\_ra, psi\_la, psi\_ra\_derivative,}
-\DoxyCodeLine{236       psi\_la\_derivative;  \textcolor{comment}{// Expressions for atrial activation}}
-\DoxyCodeLine{237   T valves[16];}
-\DoxyCodeLine{238 \};}
-\DoxyCodeLine{239 }
-\DoxyCodeLine{240 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{241 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a603a8c6029a73408d93334af48a9b8df}{ClosedLoopHeartPulmonary<T>::ClosedLoopHeartPulmonary}}(}
-\DoxyCodeLine{242     std::map<std::string, T> heart\_parameters, T cycle\_period, std::string name)}
-\DoxyCodeLine{243     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{244   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{245   this-\/>cardiac\_cycle\_period = cycle\_period;}
-\DoxyCodeLine{246   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_abe0e8496608ada6ab454b22fc32e1423}{Tsa}} = heart\_parameters[\textcolor{stringliteral}{"{}Tsa"{}}];}
-\DoxyCodeLine{247   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a82d433ea02b931bb26095876d31d7d3b}{tpwave}} = heart\_parameters[\textcolor{stringliteral}{"{}tpwave"{}}];}
-\DoxyCodeLine{248   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a64d2bd46d983d6cc788a20bc0f04c8dd}{Erv\_s}} = heart\_parameters[\textcolor{stringliteral}{"{}Erv\_s"{}}];}
-\DoxyCodeLine{249   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a2ee0cd6200fa3dc594ab82d56e953390}{Elv\_s}} = heart\_parameters[\textcolor{stringliteral}{"{}Elv\_s"{}}];}
-\DoxyCodeLine{250   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_ae9209c79b40938eb9e6b1004548762ec}{iml}} = heart\_parameters[\textcolor{stringliteral}{"{}iml"{}}];}
-\DoxyCodeLine{251   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_af640edaf1ed7ab79fcf30700eeaa889e}{imr}} = heart\_parameters[\textcolor{stringliteral}{"{}imr"{}}];}
-\DoxyCodeLine{252   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a8b49e6c604fd781db0994041ae87ac8a}{Lra\_v}} = heart\_parameters[\textcolor{stringliteral}{"{}Lra\_v"{}}];}
-\DoxyCodeLine{253   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa83411a7901b9b94059e69d7a8a0e799}{Rra\_v}} = heart\_parameters[\textcolor{stringliteral}{"{}Rra\_v"{}}];}
-\DoxyCodeLine{254   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a808d67b7adaca4d2b9c3f86ba5006dc7}{Lrv\_a}} = heart\_parameters[\textcolor{stringliteral}{"{}Lrv\_a"{}}];}
-\DoxyCodeLine{255   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a47144c6edfe702c013817ecde2a2fc40}{Rrv\_a}} = heart\_parameters[\textcolor{stringliteral}{"{}Rrv\_a"{}}];}
-\DoxyCodeLine{256   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a223c443ad31ff733cf7c4b5ac77c6103}{Lla\_v}} = heart\_parameters[\textcolor{stringliteral}{"{}Lla\_v"{}}];}
-\DoxyCodeLine{257   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa4ee19e75cb538b37abcd4efccbef1e3}{Rla\_v}} = heart\_parameters[\textcolor{stringliteral}{"{}Rla\_v"{}}];}
-\DoxyCodeLine{258   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a4997a8c9f8488ab57be651429034920a}{Llv\_a}} = heart\_parameters[\textcolor{stringliteral}{"{}Llv\_a"{}}];}
-\DoxyCodeLine{259   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a20c60f25aa7f84bd63dd22179d122f6b}{Rlv\_ao}} = heart\_parameters[\textcolor{stringliteral}{"{}Rlv\_ao"{}}];}
-\DoxyCodeLine{260   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa061f8ad2eec7d3164e47944f7efb619}{Vrv\_u}} = heart\_parameters[\textcolor{stringliteral}{"{}Vrv\_u"{}}];}
-\DoxyCodeLine{261   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa0c5b742245c541d17f768de01a24740}{Vlv\_u}} = heart\_parameters[\textcolor{stringliteral}{"{}Vlv\_u"{}}];}
-\DoxyCodeLine{262   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a5e396c0f36849a55b6e7a2115f3f5087}{Rpd}} = heart\_parameters[\textcolor{stringliteral}{"{}Rpd"{}}];}
-\DoxyCodeLine{263   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a66f947a030b82e7b693985d831ff91e8}{Cp}} = heart\_parameters[\textcolor{stringliteral}{"{}Cp"{}}];}
-\DoxyCodeLine{264   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_ade115eadec431bd81f807ce9bf5d9293}{Cpa}} = heart\_parameters[\textcolor{stringliteral}{"{}Cpa"{}}];}
-\DoxyCodeLine{265   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a466c7ceca38fa18514210bddb3c3212e}{Kxp\_ra}} = heart\_parameters[\textcolor{stringliteral}{"{}Kxp\_ra"{}}];}
-\DoxyCodeLine{266   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_aa78a80982034db4e03e6078d51f9819b}{Kxv\_ra}} = heart\_parameters[\textcolor{stringliteral}{"{}Kxv\_ra"{}}];}
-\DoxyCodeLine{267   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_af301e068b22f2921e51c4066bf06012e}{Kxp\_la}} = heart\_parameters[\textcolor{stringliteral}{"{}Kxp\_la"{}}];}
-\DoxyCodeLine{268   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a2b8f134b90256dcd63c6a1d149e98ea4}{Kxv\_la}} = heart\_parameters[\textcolor{stringliteral}{"{}Kxv\_la"{}}];}
-\DoxyCodeLine{269   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a23636bd961e5f491acc707d08a572c69}{Emax\_ra}} = heart\_parameters[\textcolor{stringliteral}{"{}Emax\_ra"{}}];}
-\DoxyCodeLine{270   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a411350a3c4ee1c1f8bebd1012880f942}{Emax\_la}} = heart\_parameters[\textcolor{stringliteral}{"{}Emax\_la"{}}];}
-\DoxyCodeLine{271   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_a88f374f90eb861881aed9896e2d26175}{Vaso\_ra}} = heart\_parameters[\textcolor{stringliteral}{"{}Vaso\_ra"{}}];}
-\DoxyCodeLine{272   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_1_1_parameters_acdf4eaf985d7d8101604399a3e17d686}{Vaso\_la}} = heart\_parameters[\textcolor{stringliteral}{"{}Vaso\_la"{}}];}
-\DoxyCodeLine{273 \}}
-\DoxyCodeLine{274 }
-\DoxyCodeLine{275 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{276 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a6d36cbc641c820ae88beeb2f4fa3027a}{ClosedLoopHeartPulmonary<T>::\string~ClosedLoopHeartPulmonary}}() \{\}}
+\DoxyCodeLine{222 \textcolor{comment}{   */}}
+\DoxyCodeLine{223   \textcolor{keywordtype}{void} get\_psi\_ra\_la(std::vector<T> \&parameters,}
+\DoxyCodeLine{224                      Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{225 \textcolor{comment}{}}
+\DoxyCodeLine{226 \textcolor{comment}{  /**}}
+\DoxyCodeLine{227 \textcolor{comment}{   * @brief Valve positions for each heart chamber}}
+\DoxyCodeLine{228 \textcolor{comment}{   *}}
+\DoxyCodeLine{229 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{230 \textcolor{comment}{   */}}
+\DoxyCodeLine{231   \textcolor{keywordtype}{void} get\_valve\_positions(Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
+\DoxyCodeLine{232 \};}
+\DoxyCodeLine{233 }
+\DoxyCodeLine{234 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{235 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a37fbf9c3749d095700b9739eb04a44e0}{ClosedLoopHeartPulmonary<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{236   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 14,}
+\DoxyCodeLine{237                         \{\textcolor{stringliteral}{"{}V\_RA"{}}, \textcolor{stringliteral}{"{}Q\_RA"{}}, \textcolor{stringliteral}{"{}P\_RV"{}}, \textcolor{stringliteral}{"{}V\_RV"{}}, \textcolor{stringliteral}{"{}Q\_RV"{}}, \textcolor{stringliteral}{"{}P\_pul"{}},}
+\DoxyCodeLine{238                          \textcolor{stringliteral}{"{}P\_LA"{}}, \textcolor{stringliteral}{"{}V\_LA"{}}, \textcolor{stringliteral}{"{}Q\_LA"{}}, \textcolor{stringliteral}{"{}P\_LV"{}}, \textcolor{stringliteral}{"{}V\_LV"{}}, \textcolor{stringliteral}{"{}Q\_LV"{}}\});}
+\DoxyCodeLine{239 \}}
+\DoxyCodeLine{240 }
+\DoxyCodeLine{241 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{242 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0e753bdf71f301b2f11fe72a49f6fd8b}{ClosedLoopHeartPulmonary<T>::update\_constant}}(}
+\DoxyCodeLine{243     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, std::vector<T> \&parameters) \{}
+\DoxyCodeLine{244   \textcolor{comment}{// DOF 2, Eq 1: Aortic pressure}}
+\DoxyCodeLine{245   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) =}
+\DoxyCodeLine{246       parameters[this-\/>global\_param\_ids[ParamId::CPA]];}
+\DoxyCodeLine{247   \textcolor{comment}{// DOF 4, Eq 2: Right atrium volume}}
+\DoxyCodeLine{248   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = 1.0;}
+\DoxyCodeLine{249   \textcolor{comment}{// DOF 5, Eq 3: Right atrium outflow}}
+\DoxyCodeLine{250   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[3], this-\/>global\_var\_ids[5]) =}
+\DoxyCodeLine{251       parameters[this-\/>global\_param\_ids[ParamId::LRA\_V]];}
+\DoxyCodeLine{252   \textcolor{comment}{// DOF 7, Eq 5: Right ventricle volume}}
+\DoxyCodeLine{253   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[5], this-\/>global\_var\_ids[7]) = 1.0;}
+\DoxyCodeLine{254   \textcolor{comment}{// DOF 8, Eq 6: Right ventricle outflow}}
+\DoxyCodeLine{255   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[6], this-\/>global\_var\_ids[8]) =}
+\DoxyCodeLine{256       parameters[this-\/>global\_param\_ids[ParamId::LRV\_A]];}
+\DoxyCodeLine{257   \textcolor{comment}{// DOF 9, Eq 7: Pulmonary pressure}}
+\DoxyCodeLine{258   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[7], this-\/>global\_var\_ids[9]) =}
+\DoxyCodeLine{259       parameters[this-\/>global\_param\_ids[ParamId::CP]];}
+\DoxyCodeLine{260   \textcolor{comment}{// DOF 11, Eq 9: Left atrium volume}}
+\DoxyCodeLine{261   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[9], this-\/>global\_var\_ids[11]) = 1.0;}
+\DoxyCodeLine{262   \textcolor{comment}{// DOF 12, Eq 10: Left atrium outflow}}
+\DoxyCodeLine{263   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[10], this-\/>global\_var\_ids[12]) =}
+\DoxyCodeLine{264       parameters[this-\/>global\_param\_ids[ParamId::LLA\_V]];}
+\DoxyCodeLine{265   \textcolor{comment}{// DOF 14, Eq 12: Left ventricle volume}}
+\DoxyCodeLine{266   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[12], this-\/>global\_var\_ids[14]) = 1.0;}
+\DoxyCodeLine{267   \textcolor{comment}{// DOF 15, Eq 13: Left ventricle outflow}}
+\DoxyCodeLine{268   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[13], this-\/>global\_var\_ids[15]) =}
+\DoxyCodeLine{269       parameters[this-\/>global\_param\_ids[ParamId::LLV\_A]];}
+\DoxyCodeLine{270 \}}
+\DoxyCodeLine{271 }
+\DoxyCodeLine{272 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{273 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_abaf779073846a87f657b6a22b5b69c8c}{ClosedLoopHeartPulmonary<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{274                                               std::vector<T> \&parameters) \{}
+\DoxyCodeLine{275   this-\/>get\_activation\_and\_elastance\_functions(parameters);}
+\DoxyCodeLine{276 \}}
 \DoxyCodeLine{277 }
 \DoxyCodeLine{278 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{279 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a37fbf9c3749d095700b9739eb04a44e0}{ClosedLoopHeartPulmonary<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{280   \textcolor{comment}{// Block<T>::setup\_dofs\_(dofhandler, 14, 12);}}
-\DoxyCodeLine{281   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 14,}
-\DoxyCodeLine{282                         \{\textcolor{stringliteral}{"{}V\_RA"{}}, \textcolor{stringliteral}{"{}Q\_RA"{}}, \textcolor{stringliteral}{"{}P\_RV"{}}, \textcolor{stringliteral}{"{}V\_RV"{}}, \textcolor{stringliteral}{"{}Q\_RV"{}}, \textcolor{stringliteral}{"{}P\_pul"{}},}
-\DoxyCodeLine{283                          \textcolor{stringliteral}{"{}P\_LA"{}}, \textcolor{stringliteral}{"{}V\_LA"{}}, \textcolor{stringliteral}{"{}Q\_LA"{}}, \textcolor{stringliteral}{"{}P\_LV"{}}, \textcolor{stringliteral}{"{}V\_LV"{}}, \textcolor{stringliteral}{"{}Q\_LV"{}}\});}
-\DoxyCodeLine{284 \}}
+\DoxyCodeLine{279 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a5336d1ca242026c95898683643db6f86}{ClosedLoopHeartPulmonary<T>::update\_solution}}(}
+\DoxyCodeLine{280     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, std::vector<T> \&parameters,}
+\DoxyCodeLine{281     Eigen::Matrix<T, Eigen::Dynamic, 1> \&y,}
+\DoxyCodeLine{282     Eigen::Matrix<T, Eigen::Dynamic, 1> \&dy) \{}
+\DoxyCodeLine{283   this-\/>get\_psi\_ra\_la(parameters, y);}
+\DoxyCodeLine{284   this-\/>get\_valve\_positions(y);}
 \DoxyCodeLine{285 }
-\DoxyCodeLine{286 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{287 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ab5ab03142e9797cba87acd373dedd015}{ClosedLoopHeartPulmonary<T>::update\_block\_params}}(}
-\DoxyCodeLine{288     std::vector<T> new\_params) \{}
-\DoxyCodeLine{289   this-\/>params.Tsa = new\_params[0];}
-\DoxyCodeLine{290   this-\/>params.tpwave = new\_params[1];}
-\DoxyCodeLine{291   this-\/>params.Erv\_s = new\_params[2];}
-\DoxyCodeLine{292   this-\/>params.Elv\_s = new\_params[3];}
-\DoxyCodeLine{293   this-\/>params.iml = new\_params[4];}
-\DoxyCodeLine{294   this-\/>params.imr = new\_params[5];}
-\DoxyCodeLine{295   this-\/>params.Lra\_v = new\_params[6];}
-\DoxyCodeLine{296   this-\/>params.Rra\_v = new\_params[7];}
-\DoxyCodeLine{297   this-\/>params.Lrv\_a = new\_params[8];}
-\DoxyCodeLine{298   this-\/>params.Rrv\_a = new\_params[9];}
-\DoxyCodeLine{299   this-\/>params.Lla\_v = new\_params[10];}
-\DoxyCodeLine{300   this-\/>params.Rla\_v = new\_params[11];}
-\DoxyCodeLine{301   this-\/>params.Llv\_a = new\_params[12];}
-\DoxyCodeLine{302   this-\/>params.Rlv\_ao = new\_params[13];}
-\DoxyCodeLine{303   this-\/>params.Vrv\_u = new\_params[14];}
-\DoxyCodeLine{304   this-\/>params.Vlv\_u = new\_params[15];}
-\DoxyCodeLine{305   this-\/>params.Rpd = new\_params[16];}
-\DoxyCodeLine{306   this-\/>params.Cp = new\_params[17];}
-\DoxyCodeLine{307   this-\/>params.Cpa = new\_params[18];}
-\DoxyCodeLine{308   this-\/>params.Kxp\_ra = new\_params[19];}
-\DoxyCodeLine{309   this-\/>params.Kxv\_ra = new\_params[20];}
-\DoxyCodeLine{310   this-\/>params.Kxp\_la = new\_params[21];}
-\DoxyCodeLine{311   this-\/>params.Kxv\_la = new\_params[22];}
-\DoxyCodeLine{312   this-\/>params.Emax\_ra = new\_params[23];}
-\DoxyCodeLine{313   this-\/>params.Emax\_la = new\_params[24];}
-\DoxyCodeLine{314   this-\/>params.Vaso\_ra = new\_params[25];}
-\DoxyCodeLine{315   this-\/>params.Vaso\_la = new\_params[26];}
-\DoxyCodeLine{316 \}}
-\DoxyCodeLine{317 }
-\DoxyCodeLine{318 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{319 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_aeaf848241964ea716fb4583bc0b74dda}{ClosedLoopHeartPulmonary<T>::get\_block\_params}}(}
-\DoxyCodeLine{320     std::vector<T> \&block\_params) \{}
-\DoxyCodeLine{321   \textcolor{keywordflow}{if} (block\_params.size() != 27) \{}
-\DoxyCodeLine{322     \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{323         \textcolor{stringliteral}{"{}Wrong vector size in get\_block\_params for ClosedLoopHeartPulmonary. "{}}}
-\DoxyCodeLine{324         \textcolor{stringliteral}{"{}Size should be 27 but is currently "{}} +}
-\DoxyCodeLine{325         std::to\_string(block\_params.size()));}
-\DoxyCodeLine{326   \}}
-\DoxyCodeLine{327   block\_params[0] = this-\/>params.Tsa;}
-\DoxyCodeLine{328   block\_params[1] = this-\/>params.tpwave;}
-\DoxyCodeLine{329   block\_params[2] = this-\/>params.Erv\_s;}
-\DoxyCodeLine{330   block\_params[3] = this-\/>params.Elv\_s;}
-\DoxyCodeLine{331   block\_params[4] = this-\/>params.iml;}
-\DoxyCodeLine{332   block\_params[5] = this-\/>params.imr;}
-\DoxyCodeLine{333   block\_params[6] = this-\/>params.Lra\_v;}
-\DoxyCodeLine{334   block\_params[7] = this-\/>params.Rra\_v;}
-\DoxyCodeLine{335   block\_params[8] = this-\/>params.Lrv\_a;}
-\DoxyCodeLine{336   block\_params[9] = this-\/>params.Rrv\_a;}
-\DoxyCodeLine{337   block\_params[10] = this-\/>params.Lla\_v;}
-\DoxyCodeLine{338   block\_params[11] = this-\/>params.Rla\_v;}
-\DoxyCodeLine{339   block\_params[12] = this-\/>params.Llv\_a;}
-\DoxyCodeLine{340   block\_params[13] = this-\/>params.Rlv\_ao;}
-\DoxyCodeLine{341   block\_params[14] = this-\/>params.Vrv\_u;}
-\DoxyCodeLine{342   block\_params[15] = this-\/>params.Vlv\_u;}
-\DoxyCodeLine{343   block\_params[16] = this-\/>params.Rpd;}
-\DoxyCodeLine{344   block\_params[17] = this-\/>params.Cp;}
-\DoxyCodeLine{345   block\_params[18] = this-\/>params.Cpa;}
-\DoxyCodeLine{346   block\_params[19] = this-\/>params.Kxp\_ra;}
-\DoxyCodeLine{347   block\_params[20] = this-\/>params.Kxv\_ra;}
-\DoxyCodeLine{348   block\_params[21] = this-\/>params.Kxp\_la;}
-\DoxyCodeLine{349   block\_params[22] = this-\/>params.Kxv\_la;}
-\DoxyCodeLine{350   block\_params[23] = this-\/>params.Emax\_ra;}
-\DoxyCodeLine{351   block\_params[24] = this-\/>params.Emax\_la;}
-\DoxyCodeLine{352   block\_params[25] = this-\/>params.Vaso\_ra;}
-\DoxyCodeLine{353   block\_params[26] = this-\/>params.Vaso\_la;}
-\DoxyCodeLine{354 \}}
-\DoxyCodeLine{355 }
-\DoxyCodeLine{356 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{357 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0904e85cbfbc9ec808ef92b1b8a356ad}{ClosedLoopHeartPulmonary<T>::update\_constant}}(}
-\DoxyCodeLine{358     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{359   \textcolor{comment}{// DOF 2, Eq 1: Aortic pressure}}
-\DoxyCodeLine{360   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[2]) =}
-\DoxyCodeLine{361       params.Cpa;}
-\DoxyCodeLine{362   \textcolor{comment}{// DOF 4, Eq 2: Right atrium volume}}
-\DoxyCodeLine{363   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = 1.0;}
-\DoxyCodeLine{364   \textcolor{comment}{// DOF 5, Eq 3: Right atrium outflow}}
-\DoxyCodeLine{365   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[3], this-\/>global\_var\_ids[5]) =}
-\DoxyCodeLine{366       params.Lra\_v;}
-\DoxyCodeLine{367   \textcolor{comment}{// DOF 7, Eq 5: Right ventricle volume}}
-\DoxyCodeLine{368   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[5], this-\/>global\_var\_ids[7]) = 1.0;}
-\DoxyCodeLine{369   \textcolor{comment}{// DOF 8, Eq 6: Right ventricle outflow}}
-\DoxyCodeLine{370   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[6], this-\/>global\_var\_ids[8]) =}
-\DoxyCodeLine{371       params.Lrv\_a;}
-\DoxyCodeLine{372   \textcolor{comment}{// DOF 9, Eq 7: Pulmonary pressure}}
-\DoxyCodeLine{373   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[7], this-\/>global\_var\_ids[9]) =}
-\DoxyCodeLine{374       params.Cp;}
-\DoxyCodeLine{375   \textcolor{comment}{// DOF 11, Eq 9: Left atrium volume}}
-\DoxyCodeLine{376   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[9], this-\/>global\_var\_ids[11]) = 1.0;}
-\DoxyCodeLine{377   \textcolor{comment}{// DOF 12, Eq 10: Left atrium outflow}}
-\DoxyCodeLine{378   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[10], this-\/>global\_var\_ids[12]) =}
-\DoxyCodeLine{379       params.Lla\_v;}
+\DoxyCodeLine{286   \textcolor{comment}{// F and C matrices depend on time and solution}}
+\DoxyCodeLine{287   \textcolor{comment}{// Specifying all terms here, including constant terms (which can instead be}}
+\DoxyCodeLine{288   \textcolor{comment}{// specified in update\_constant) for readability (Doesn't seem to make a}}
+\DoxyCodeLine{289   \textcolor{comment}{// difference to compute time) DOF IDs are arranged as inflow}}
+\DoxyCodeLine{290   \textcolor{comment}{// [P\_in,Q\_in,P\_out,Q\_out,internal variables...]}}
+\DoxyCodeLine{291 }
+\DoxyCodeLine{292   \textcolor{comment}{// DOF 0, Eq 0: Right atrium pressure}}
+\DoxyCodeLine{293   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{294   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[4]) =}
+\DoxyCodeLine{295       -\/this-\/>AA * parameters[this-\/>global\_param\_ids[ParamId::EMAX\_RA]];}
+\DoxyCodeLine{296   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) =}
+\DoxyCodeLine{297       this-\/>AA * parameters[this-\/>global\_param\_ids[ParamId::EMAX\_RA]] *}
+\DoxyCodeLine{298           parameters[this-\/>global\_param\_ids[ParamId::VASO\_RA]] +}
+\DoxyCodeLine{299       psi\_ra * (this-\/>AA -\/ 1.0);}
+\DoxyCodeLine{300   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[4]) =}
+\DoxyCodeLine{301       psi\_ra\_derivative * (this-\/>AA -\/ 1.0);}
+\DoxyCodeLine{302 }
+\DoxyCodeLine{303   \textcolor{comment}{// DOF 1: Flow into right atrium (no equation)}}
+\DoxyCodeLine{304 }
+\DoxyCodeLine{305   \textcolor{comment}{// DOF 2, Eq 1: Aortic pressure}}
+\DoxyCodeLine{306   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[15]) =}
+\DoxyCodeLine{307       -\/valves[15];}
+\DoxyCodeLine{308   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = 1.0;}
+\DoxyCodeLine{309 }
+\DoxyCodeLine{310   \textcolor{comment}{// DOF 3: Flow into aorta (no equation)}}
+\DoxyCodeLine{311 }
+\DoxyCodeLine{312   \textcolor{comment}{// DOF 4, Eq 2: Right atrium volume}}
+\DoxyCodeLine{313   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[5]) =}
+\DoxyCodeLine{314       1.0 * valves[5];}
+\DoxyCodeLine{315   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = -\/1.0;}
+\DoxyCodeLine{316 }
+\DoxyCodeLine{317   \textcolor{comment}{// DOF 5, Eq 3: Right atrium outflow}}
+\DoxyCodeLine{318   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[3], this-\/>global\_var\_ids[5]) =}
+\DoxyCodeLine{319       parameters[this-\/>global\_param\_ids[ParamId::RRA\_V]] * valves[5];}
+\DoxyCodeLine{320   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[3], this-\/>global\_var\_ids[0]) = -\/1.0;}
+\DoxyCodeLine{321   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[3], this-\/>global\_var\_ids[6]) = 1.0;}
+\DoxyCodeLine{322 }
+\DoxyCodeLine{323   \textcolor{comment}{// DOF 6, Eq 4: Right ventricle pressure}}
+\DoxyCodeLine{324   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[4], this-\/>global\_var\_ids[6]) = 1.0;}
+\DoxyCodeLine{325   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[4], this-\/>global\_var\_ids[7]) =}
+\DoxyCodeLine{326       -\/this-\/>Erv;}
+\DoxyCodeLine{327   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[4]) =}
+\DoxyCodeLine{328       this-\/>Erv * parameters[this-\/>global\_param\_ids[ParamId::VRV\_U]];}
+\DoxyCodeLine{329 }
+\DoxyCodeLine{330   \textcolor{comment}{// DOF 7, Eq 5: Right ventricle volume}}
+\DoxyCodeLine{331   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[5], this-\/>global\_var\_ids[5]) =}
+\DoxyCodeLine{332       -\/1.0 * valves[5];}
+\DoxyCodeLine{333   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[5], this-\/>global\_var\_ids[8]) =}
+\DoxyCodeLine{334       1.0 * valves[8];}
+\DoxyCodeLine{335 }
+\DoxyCodeLine{336   \textcolor{comment}{// DOF 8, Eq 6: Right ventricle outflow}}
+\DoxyCodeLine{337   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[6], this-\/>global\_var\_ids[6]) = -\/1.0;}
+\DoxyCodeLine{338   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[6], this-\/>global\_var\_ids[9]) = 1.0;}
+\DoxyCodeLine{339   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[6], this-\/>global\_var\_ids[8]) =}
+\DoxyCodeLine{340       parameters[this-\/>global\_param\_ids[ParamId::RRV\_A]] * valves[8];}
+\DoxyCodeLine{341 }
+\DoxyCodeLine{342   \textcolor{comment}{// DOF 9, Eq 7: Pulmonary pressure}}
+\DoxyCodeLine{343   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[7], this-\/>global\_var\_ids[8]) =}
+\DoxyCodeLine{344       -\/valves[8];}
+\DoxyCodeLine{345   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[7], this-\/>global\_var\_ids[9]) =}
+\DoxyCodeLine{346       1.0 / parameters[this-\/>global\_param\_ids[ParamId::RPD]];}
+\DoxyCodeLine{347   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[7], this-\/>global\_var\_ids[10]) =}
+\DoxyCodeLine{348       -\/1.0 / parameters[this-\/>global\_param\_ids[ParamId::RPD]];}
+\DoxyCodeLine{349 }
+\DoxyCodeLine{350   \textcolor{comment}{// DOF 10, Eq 8: Left atrium pressure}}
+\DoxyCodeLine{351   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[8], this-\/>global\_var\_ids[10]) = 1.0;}
+\DoxyCodeLine{352   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[8], this-\/>global\_var\_ids[11]) =}
+\DoxyCodeLine{353       -\/this-\/>AA * parameters[this-\/>global\_param\_ids[ParamId::EMAX\_LA]];}
+\DoxyCodeLine{354   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[8]) =}
+\DoxyCodeLine{355       this-\/>AA * parameters[this-\/>global\_param\_ids[ParamId::EMAX\_LA]] *}
+\DoxyCodeLine{356           parameters[this-\/>global\_param\_ids[ParamId::VASO\_LA]] +}
+\DoxyCodeLine{357       psi\_la * (this-\/>AA -\/ 1.0);}
+\DoxyCodeLine{358   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}}.coeffRef(this-\/>global\_eqn\_ids[8], this-\/>global\_var\_ids[11]) =}
+\DoxyCodeLine{359       psi\_la\_derivative * (this-\/>AA -\/ 1.0);}
+\DoxyCodeLine{360 }
+\DoxyCodeLine{361   \textcolor{comment}{// DOF 11, Eq 9: Left atrium volume}}
+\DoxyCodeLine{362   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[9], this-\/>global\_var\_ids[8]) =}
+\DoxyCodeLine{363       -\/1.0 * valves[8];}
+\DoxyCodeLine{364   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[9], this-\/>global\_var\_ids[12]) =}
+\DoxyCodeLine{365       1.0 * valves[12];}
+\DoxyCodeLine{366 }
+\DoxyCodeLine{367   \textcolor{comment}{// DOF 12, Eq 10: Left atrium outflow}}
+\DoxyCodeLine{368   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[10], this-\/>global\_var\_ids[10]) = -\/1.0;}
+\DoxyCodeLine{369   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[10], this-\/>global\_var\_ids[13]) = 1.0;}
+\DoxyCodeLine{370   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[10], this-\/>global\_var\_ids[12]) =}
+\DoxyCodeLine{371       parameters[this-\/>global\_param\_ids[ParamId::RLA\_V]] * valves[12];}
+\DoxyCodeLine{372 }
+\DoxyCodeLine{373   \textcolor{comment}{// DOF 13, Eq 11: Left ventricle pressure}}
+\DoxyCodeLine{374   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[11], this-\/>global\_var\_ids[13]) = 1.0;}
+\DoxyCodeLine{375   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[11], this-\/>global\_var\_ids[14]) =}
+\DoxyCodeLine{376       -\/this-\/>Elv;}
+\DoxyCodeLine{377   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[11]) =}
+\DoxyCodeLine{378       this-\/>Elv * parameters[this-\/>global\_param\_ids[ParamId::VLV\_U]];}
+\DoxyCodeLine{379 }
 \DoxyCodeLine{380   \textcolor{comment}{// DOF 14, Eq 12: Left ventricle volume}}
-\DoxyCodeLine{381   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[12], this-\/>global\_var\_ids[14]) = 1.0;}
-\DoxyCodeLine{382   \textcolor{comment}{// DOF 15, Eq 13: Left ventricle outflow}}
-\DoxyCodeLine{383   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[13], this-\/>global\_var\_ids[15]) =}
-\DoxyCodeLine{384       params.Llv\_a;}
-\DoxyCodeLine{385 \}}
-\DoxyCodeLine{386 }
-\DoxyCodeLine{387 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{388 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ac27b052e7557d75389f50df7fee2b8b8}{ClosedLoopHeartPulmonary<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
-\DoxyCodeLine{389                                               T time) \{}
-\DoxyCodeLine{390   this-\/>get\_activation\_and\_elastance\_functions(time);}
+\DoxyCodeLine{381   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[12], this-\/>global\_var\_ids[12]) =}
+\DoxyCodeLine{382       -\/1.0 * valves[12];}
+\DoxyCodeLine{383   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[12], this-\/>global\_var\_ids[15]) =}
+\DoxyCodeLine{384       1.0 * valves[15];}
+\DoxyCodeLine{385 }
+\DoxyCodeLine{386   \textcolor{comment}{// DOF 15, Eq 13: Left ventricle outflow}}
+\DoxyCodeLine{387   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[13], this-\/>global\_var\_ids[13]) = -\/1.0;}
+\DoxyCodeLine{388   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[13], this-\/>global\_var\_ids[2]) = 1.0;}
+\DoxyCodeLine{389   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[13], this-\/>global\_var\_ids[15]) =}
+\DoxyCodeLine{390       parameters[this-\/>global\_param\_ids[ParamId::RLV\_AO]] * valves[15];}
 \DoxyCodeLine{391 \}}
 \DoxyCodeLine{392 }
 \DoxyCodeLine{393 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{394 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a98c480ede15293fbd2aeeb26eff73006}{ClosedLoopHeartPulmonary<T>::update\_solution}}(}
-\DoxyCodeLine{395     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
-\DoxyCodeLine{396   this-\/>get\_psi\_ra\_la(y);}
-\DoxyCodeLine{397   this-\/>get\_valve\_positions(y);}
-\DoxyCodeLine{398 }
-\DoxyCodeLine{399   \textcolor{comment}{// F and C matrices depend on time and solution}}
-\DoxyCodeLine{400   \textcolor{comment}{// Specifying all terms here, including constant terms (which can instead be}}
-\DoxyCodeLine{401   \textcolor{comment}{// specified in update\_constant) for readability (Doesn't seem to make a}}
-\DoxyCodeLine{402   \textcolor{comment}{// difference to compute time) DOF IDs are arranged as inflow}}
-\DoxyCodeLine{403   \textcolor{comment}{// [P\_in,Q\_in,P\_out,Q\_out,internal variables...]}}
-\DoxyCodeLine{404 }
-\DoxyCodeLine{405   \textcolor{comment}{// DOF 0, Eq 0: Right atrium pressure}}
-\DoxyCodeLine{406   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{407   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[4]) =}
-\DoxyCodeLine{408       -\/this-\/>AA * params.Emax\_ra;}
-\DoxyCodeLine{409   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) =}
-\DoxyCodeLine{410       this-\/>AA * params.Emax\_ra * params.Vaso\_ra + psi\_ra * (this-\/>AA -\/ 1.0);}
-\DoxyCodeLine{411   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[4]) =}
-\DoxyCodeLine{412       psi\_ra\_derivative * (this-\/>AA -\/ 1.0);}
+\DoxyCodeLine{394 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{ClosedLoopHeartPulmonary<T>::get\_activation\_and\_elastance\_functions}}(}
+\DoxyCodeLine{395     std::vector<T> \&parameters) \{}
+\DoxyCodeLine{396   T T\_cardiac = this-\/>model-\/>cardiac\_cycle\_period;}
+\DoxyCodeLine{397   T Tsa = T\_cardiac * parameters[this-\/>global\_param\_ids[ParamId::TSA]];}
+\DoxyCodeLine{398   T tpwave = T\_cardiac / parameters[this-\/>global\_param\_ids[ParamId::TPWAVE]];}
+\DoxyCodeLine{399   T t\_in\_cycle = fmod(this-\/>model-\/>time, T\_cardiac);}
+\DoxyCodeLine{400 }
+\DoxyCodeLine{401   \textcolor{comment}{// Activation function}}
+\DoxyCodeLine{402   AA = 0.0;}
+\DoxyCodeLine{403   \textcolor{keywordflow}{if} (t\_in\_cycle <= tpwave) \{}
+\DoxyCodeLine{404     AA = (0.5) * (1.0 -\/ cos(2.0 * PI * (t\_in\_cycle -\/ tpwave + Tsa) / Tsa));}
+\DoxyCodeLine{405   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((t\_in\_cycle >= (T\_cardiac -\/ Tsa) + tpwave) and}
+\DoxyCodeLine{406              (t\_in\_cycle < T\_cardiac)) \{}
+\DoxyCodeLine{407     AA =}
+\DoxyCodeLine{408         (0.5) *}
+\DoxyCodeLine{409         (1.0 -\/ cos(2.0 * PI * (t\_in\_cycle -\/ tpwave -\/ (T\_cardiac -\/ Tsa)) / Tsa));}
+\DoxyCodeLine{410   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{411     AA = 0.0;}
+\DoxyCodeLine{412   \}}
 \DoxyCodeLine{413 }
-\DoxyCodeLine{414   \textcolor{comment}{// DOF 1: Flow into right atrium (no equation)}}
-\DoxyCodeLine{415 }
-\DoxyCodeLine{416   \textcolor{comment}{// DOF 2, Eq 1: Aortic pressure}}
-\DoxyCodeLine{417   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[15]) =}
-\DoxyCodeLine{418       -\/valves[15];}
-\DoxyCodeLine{419   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = 1.0;}
-\DoxyCodeLine{420 }
-\DoxyCodeLine{421   \textcolor{comment}{// DOF 3: Flow into aorta (no equation)}}
-\DoxyCodeLine{422 }
-\DoxyCodeLine{423   \textcolor{comment}{// DOF 4, Eq 2: Right atrium volume}}
-\DoxyCodeLine{424   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[5]) =}
-\DoxyCodeLine{425       1.0 * valves[5];}
-\DoxyCodeLine{426   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[1]) = -\/1.0;}
-\DoxyCodeLine{427 }
-\DoxyCodeLine{428   \textcolor{comment}{// DOF 5, Eq 3: Right atrium outflow}}
-\DoxyCodeLine{429   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[3], this-\/>global\_var\_ids[5]) =}
-\DoxyCodeLine{430       params.Rra\_v * valves[5];}
-\DoxyCodeLine{431   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[3], this-\/>global\_var\_ids[0]) = -\/1.0;}
-\DoxyCodeLine{432   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[3], this-\/>global\_var\_ids[6]) = 1.0;}
-\DoxyCodeLine{433 }
-\DoxyCodeLine{434   \textcolor{comment}{// DOF 6, Eq 4: Right ventricle pressure}}
-\DoxyCodeLine{435   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[4], this-\/>global\_var\_ids[6]) = 1.0;}
-\DoxyCodeLine{436   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[4], this-\/>global\_var\_ids[7]) =}
-\DoxyCodeLine{437       -\/this-\/>Erv;}
-\DoxyCodeLine{438   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[4]) = this-\/>Erv * params.Vrv\_u;}
-\DoxyCodeLine{439 }
-\DoxyCodeLine{440   \textcolor{comment}{// DOF 7, Eq 5: Right ventricle volume}}
-\DoxyCodeLine{441   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[5], this-\/>global\_var\_ids[5]) =}
-\DoxyCodeLine{442       -\/1.0 * valves[5];}
-\DoxyCodeLine{443   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[5], this-\/>global\_var\_ids[8]) =}
-\DoxyCodeLine{444       1.0 * valves[8];}
-\DoxyCodeLine{445 }
-\DoxyCodeLine{446   \textcolor{comment}{// DOF 8, Eq 6: Right ventricle outflow}}
-\DoxyCodeLine{447   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[6], this-\/>global\_var\_ids[6]) = -\/1.0;}
-\DoxyCodeLine{448   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[6], this-\/>global\_var\_ids[9]) = 1.0;}
-\DoxyCodeLine{449   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[6], this-\/>global\_var\_ids[8]) =}
-\DoxyCodeLine{450       params.Rrv\_a * valves[8];}
-\DoxyCodeLine{451 }
-\DoxyCodeLine{452   \textcolor{comment}{// DOF 9, Eq 7: Pulmonary pressure}}
-\DoxyCodeLine{453   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[7], this-\/>global\_var\_ids[8]) =}
-\DoxyCodeLine{454       -\/valves[8];}
-\DoxyCodeLine{455   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[7], this-\/>global\_var\_ids[9]) =}
-\DoxyCodeLine{456       1.0 / params.Rpd;}
-\DoxyCodeLine{457   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[7], this-\/>global\_var\_ids[10]) =}
-\DoxyCodeLine{458       -\/1.0 / params.Rpd;}
-\DoxyCodeLine{459 }
-\DoxyCodeLine{460   \textcolor{comment}{// DOF 10, Eq 8: Left atrium pressure}}
-\DoxyCodeLine{461   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[8], this-\/>global\_var\_ids[10]) = 1.0;}
-\DoxyCodeLine{462   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[8], this-\/>global\_var\_ids[11]) =}
-\DoxyCodeLine{463       -\/this-\/>AA * params.Emax\_la;}
-\DoxyCodeLine{464   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[8]) =}
-\DoxyCodeLine{465       this-\/>AA * params.Emax\_la * params.Vaso\_la + psi\_la * (this-\/>AA -\/ 1.0);}
-\DoxyCodeLine{466   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af3b2b049c7cbf6f6ad1a012ebe97d20e}{D}}.coeffRef(this-\/>global\_eqn\_ids[8], this-\/>global\_var\_ids[11]) =}
-\DoxyCodeLine{467       psi\_la\_derivative * (this-\/>AA -\/ 1.0);}
-\DoxyCodeLine{468 }
-\DoxyCodeLine{469   \textcolor{comment}{// DOF 11, Eq 9: Left atrium volume}}
-\DoxyCodeLine{470   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[9], this-\/>global\_var\_ids[8]) =}
-\DoxyCodeLine{471       -\/1.0 * valves[8];}
-\DoxyCodeLine{472   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[9], this-\/>global\_var\_ids[12]) =}
-\DoxyCodeLine{473       1.0 * valves[12];}
+\DoxyCodeLine{414   \textcolor{comment}{// Elastance modes (copied from J. Tran's tuning framework)}}
+\DoxyCodeLine{415   \textcolor{keyword}{const} \textcolor{keywordtype}{int} num\_elast\_modes = 25;}
+\DoxyCodeLine{416   T Ft\_elastance[num\_elast\_modes][2] = \{}
+\DoxyCodeLine{417       \{0.283748803, 0.000000000\},   \{0.031830626, -\/0.374299825\},}
+\DoxyCodeLine{418       \{-\/0.209472400, -\/0.018127770\}, \{0.020520047, 0.073971113\},}
+\DoxyCodeLine{419       \{0.008316883, -\/0.047249597\},  \{-\/0.041677660, 0.003212163\},}
+\DoxyCodeLine{420       \{0.000867323, 0.019441411\},   \{-\/0.001675379, -\/0.005565534\},}
+\DoxyCodeLine{421       \{-\/0.011252277, 0.003401432\},  \{-\/0.000414677, 0.008376795\},}
+\DoxyCodeLine{422       \{0.000253749, -\/0.000071880\},  \{-\/0.002584966, 0.001566861\},}
+\DoxyCodeLine{423       \{0.000584752, 0.003143555\},   \{0.000028502, -\/0.000024787\},}
+\DoxyCodeLine{424       \{0.000022961, -\/0.000007476\},  \{0.000018735, -\/0.000001281\},}
+\DoxyCodeLine{425       \{0.000015573, 0.000001781\},   \{0.000013133, 0.000003494\},}
+\DoxyCodeLine{426       \{0.000011199, 0.000004507\},   \{0.000009634, 0.000005117\},}
+\DoxyCodeLine{427       \{0.000008343, 0.000005481\},   \{0.000007265, 0.000005687\},}
+\DoxyCodeLine{428       \{0.000006354, 0.000005789\},   \{0.000005575, 0.000005821\},}
+\DoxyCodeLine{429       \{0.000004903, 0.000005805\}\};}
+\DoxyCodeLine{430 }
+\DoxyCodeLine{431   \textcolor{comment}{// RV and LV elastance}}
+\DoxyCodeLine{432   T Elv\_i = 0.0;}
+\DoxyCodeLine{433   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} i = 0; i < num\_elast\_modes; i++)}
+\DoxyCodeLine{434     Elv\_i = Elv\_i +}
+\DoxyCodeLine{435             (Ft\_elastance[i][0]) * cos(2.0 * PI * i * t\_in\_cycle / T\_cardiac) -\/}
+\DoxyCodeLine{436             (Ft\_elastance[i][1]) * sin(2.0 * PI * i * t\_in\_cycle / T\_cardiac);}
+\DoxyCodeLine{437 }
+\DoxyCodeLine{438   Elv = Elv\_i * parameters[this-\/>global\_param\_ids[ParamId::ELV\_S]];}
+\DoxyCodeLine{439   Erv = Elv\_i * parameters[this-\/>global\_param\_ids[ParamId::ERV\_S]];}
+\DoxyCodeLine{440 \}}
+\DoxyCodeLine{441 }
+\DoxyCodeLine{442 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{443 \textcolor{keywordtype}{void} ClosedLoopHeartPulmonary<T>::get\_psi\_ra\_la(}
+\DoxyCodeLine{444     std::vector<T> \&parameters, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
+\DoxyCodeLine{445   \textcolor{keyword}{auto} RA\_volume = y[this-\/>global\_var\_ids[4]];}
+\DoxyCodeLine{446   \textcolor{keyword}{auto} LA\_volume = y[this-\/>global\_var\_ids[11]];}
+\DoxyCodeLine{447   psi\_ra =}
+\DoxyCodeLine{448       parameters[this-\/>global\_param\_ids[ParamId::KXP\_RA]] *}
+\DoxyCodeLine{449       (exp((RA\_volume -\/ parameters[this-\/>global\_param\_ids[ParamId::VASO\_RA]]) *}
+\DoxyCodeLine{450            parameters[this-\/>global\_param\_ids[ParamId::KXV\_RA]]) -\/}
+\DoxyCodeLine{451        1.0);}
+\DoxyCodeLine{452   psi\_la =}
+\DoxyCodeLine{453       parameters[this-\/>global\_param\_ids[ParamId::KXP\_LA]] *}
+\DoxyCodeLine{454       (exp((LA\_volume -\/ parameters[this-\/>global\_param\_ids[ParamId::VASO\_LA]]) *}
+\DoxyCodeLine{455            parameters[this-\/>global\_param\_ids[ParamId::KXV\_LA]]) -\/}
+\DoxyCodeLine{456        1.0);}
+\DoxyCodeLine{457 }
+\DoxyCodeLine{458   psi\_ra\_derivative =}
+\DoxyCodeLine{459       parameters[this-\/>global\_param\_ids[ParamId::KXP\_RA]] *}
+\DoxyCodeLine{460       exp((RA\_volume -\/ parameters[this-\/>global\_param\_ids[ParamId::VASO\_RA]]) *}
+\DoxyCodeLine{461           parameters[this-\/>global\_param\_ids[ParamId::KXV\_RA]]) *}
+\DoxyCodeLine{462       parameters[this-\/>global\_param\_ids[ParamId::KXV\_RA]];}
+\DoxyCodeLine{463   psi\_la\_derivative =}
+\DoxyCodeLine{464       parameters[this-\/>global\_param\_ids[ParamId::KXP\_LA]] *}
+\DoxyCodeLine{465       exp((LA\_volume -\/ parameters[this-\/>global\_param\_ids[ParamId::VASO\_LA]]) *}
+\DoxyCodeLine{466           parameters[this-\/>global\_param\_ids[ParamId::KXV\_LA]]) *}
+\DoxyCodeLine{467       parameters[this-\/>global\_param\_ids[ParamId::KXV\_LA]];}
+\DoxyCodeLine{468 \}}
+\DoxyCodeLine{469 }
+\DoxyCodeLine{470 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{471 \textcolor{keywordtype}{void} ClosedLoopHeartPulmonary<T>::get\_valve\_positions(}
+\DoxyCodeLine{472     Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
+\DoxyCodeLine{473   std::fill(valves, valves + 16, 1.0);}
 \DoxyCodeLine{474 }
-\DoxyCodeLine{475   \textcolor{comment}{// DOF 12, Eq 10: Left atrium outflow}}
-\DoxyCodeLine{476   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[10], this-\/>global\_var\_ids[10]) = -\/1.0;}
-\DoxyCodeLine{477   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[10], this-\/>global\_var\_ids[13]) = 1.0;}
-\DoxyCodeLine{478   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[10], this-\/>global\_var\_ids[12]) =}
-\DoxyCodeLine{479       params.Rla\_v * valves[12];}
-\DoxyCodeLine{480 }
-\DoxyCodeLine{481   \textcolor{comment}{// DOF 13, Eq 11: Left ventricle pressure}}
-\DoxyCodeLine{482   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[11], this-\/>global\_var\_ids[13]) = 1.0;}
-\DoxyCodeLine{483   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[11], this-\/>global\_var\_ids[14]) =}
-\DoxyCodeLine{484       -\/this-\/>Elv;}
-\DoxyCodeLine{485   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[11]) = this-\/>Elv * params.Vlv\_u;}
-\DoxyCodeLine{486 }
-\DoxyCodeLine{487   \textcolor{comment}{// DOF 14, Eq 12: Left ventricle volume}}
-\DoxyCodeLine{488   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[12], this-\/>global\_var\_ids[12]) =}
-\DoxyCodeLine{489       -\/1.0 * valves[12];}
-\DoxyCodeLine{490   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[12], this-\/>global\_var\_ids[15]) =}
-\DoxyCodeLine{491       1.0 * valves[15];}
-\DoxyCodeLine{492 }
-\DoxyCodeLine{493   \textcolor{comment}{// DOF 15, Eq 13: Left ventricle outflow}}
-\DoxyCodeLine{494   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[13], this-\/>global\_var\_ids[13]) = -\/1.0;}
-\DoxyCodeLine{495   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[13], this-\/>global\_var\_ids[2]) = 1.0;}
-\DoxyCodeLine{496   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[13], this-\/>global\_var\_ids[15]) =}
-\DoxyCodeLine{497       params.Rlv\_ao * valves[15];}
-\DoxyCodeLine{498 \}}
-\DoxyCodeLine{499 }
-\DoxyCodeLine{500 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{501 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ac9268f72ccc9831441471fd74b0aa735}{ClosedLoopHeartPulmonary<T>::get\_activation\_and\_elastance\_functions}}(}
-\DoxyCodeLine{502     T time) \{}
-\DoxyCodeLine{503   T T\_cardiac = this-\/>cardiac\_cycle\_period;}
-\DoxyCodeLine{504   T Tsa = T\_cardiac * params.Tsa;}
-\DoxyCodeLine{505   T tpwave = T\_cardiac / params.tpwave;}
-\DoxyCodeLine{506   T t\_in\_cycle = fmod(time, T\_cardiac);}
-\DoxyCodeLine{507 }
-\DoxyCodeLine{508   \textcolor{comment}{// Activation function}}
-\DoxyCodeLine{509   AA = 0.0;}
-\DoxyCodeLine{510   \textcolor{keywordflow}{if} (t\_in\_cycle <= tpwave) \{}
-\DoxyCodeLine{511     AA = (0.5) * (1.0 -\/ cos(2.0 * PI * (t\_in\_cycle -\/ tpwave + Tsa) / Tsa));}
-\DoxyCodeLine{512   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((t\_in\_cycle >= (T\_cardiac -\/ Tsa) + tpwave) and}
-\DoxyCodeLine{513              (t\_in\_cycle < T\_cardiac)) \{}
-\DoxyCodeLine{514     AA =}
-\DoxyCodeLine{515         (0.5) *}
-\DoxyCodeLine{516         (1.0 -\/ cos(2.0 * PI * (t\_in\_cycle -\/ tpwave -\/ (T\_cardiac -\/ Tsa)) / Tsa));}
-\DoxyCodeLine{517   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{518     AA = 0.0;}
-\DoxyCodeLine{519   \}}
-\DoxyCodeLine{520 }
-\DoxyCodeLine{521   \textcolor{comment}{// Elastance modes (copied from J. Tran's tuning framework)}}
-\DoxyCodeLine{522   \textcolor{keyword}{const} \textcolor{keywordtype}{int} num\_elast\_modes = 25;}
-\DoxyCodeLine{523   T Ft\_elastance[num\_elast\_modes][2] = \{}
-\DoxyCodeLine{524       \{0.283748803, 0.000000000\},   \{0.031830626, -\/0.374299825\},}
-\DoxyCodeLine{525       \{-\/0.209472400, -\/0.018127770\}, \{0.020520047, 0.073971113\},}
-\DoxyCodeLine{526       \{0.008316883, -\/0.047249597\},  \{-\/0.041677660, 0.003212163\},}
-\DoxyCodeLine{527       \{0.000867323, 0.019441411\},   \{-\/0.001675379, -\/0.005565534\},}
-\DoxyCodeLine{528       \{-\/0.011252277, 0.003401432\},  \{-\/0.000414677, 0.008376795\},}
-\DoxyCodeLine{529       \{0.000253749, -\/0.000071880\},  \{-\/0.002584966, 0.001566861\},}
-\DoxyCodeLine{530       \{0.000584752, 0.003143555\},   \{0.000028502, -\/0.000024787\},}
-\DoxyCodeLine{531       \{0.000022961, -\/0.000007476\},  \{0.000018735, -\/0.000001281\},}
-\DoxyCodeLine{532       \{0.000015573, 0.000001781\},   \{0.000013133, 0.000003494\},}
-\DoxyCodeLine{533       \{0.000011199, 0.000004507\},   \{0.000009634, 0.000005117\},}
-\DoxyCodeLine{534       \{0.000008343, 0.000005481\},   \{0.000007265, 0.000005687\},}
-\DoxyCodeLine{535       \{0.000006354, 0.000005789\},   \{0.000005575, 0.000005821\},}
-\DoxyCodeLine{536       \{0.000004903, 0.000005805\}\};}
-\DoxyCodeLine{537 }
-\DoxyCodeLine{538   \textcolor{comment}{// RV and LV elastance}}
-\DoxyCodeLine{539   T Elv\_i = 0.0;}
-\DoxyCodeLine{540   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} i = 0; i < num\_elast\_modes; i++)}
-\DoxyCodeLine{541     Elv\_i = Elv\_i +}
-\DoxyCodeLine{542             (Ft\_elastance[i][0]) * cos(2.0 * PI * i * t\_in\_cycle / T\_cardiac) -\/}
-\DoxyCodeLine{543             (Ft\_elastance[i][1]) * sin(2.0 * PI * i * t\_in\_cycle / T\_cardiac);}
-\DoxyCodeLine{544 }
-\DoxyCodeLine{545   Elv = Elv\_i * params.Elv\_s;}
-\DoxyCodeLine{546   Erv = Elv\_i * params.Erv\_s;}
-\DoxyCodeLine{547 \}}
-\DoxyCodeLine{548 }
-\DoxyCodeLine{549 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{550 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_af6554ee00de9c1df66f1f3a9ffb257bf}{ClosedLoopHeartPulmonary<T>::get\_psi\_ra\_la}}(}
-\DoxyCodeLine{551     Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
-\DoxyCodeLine{552   \textcolor{keyword}{auto} RA\_volume = y[this-\/>global\_var\_ids[4]];}
-\DoxyCodeLine{553   \textcolor{keyword}{auto} LA\_volume = y[this-\/>global\_var\_ids[11]];}
-\DoxyCodeLine{554   psi\_ra =}
-\DoxyCodeLine{555       params.Kxp\_ra * (exp((RA\_volume -\/ params.Vaso\_ra) * params.Kxv\_ra) -\/ 1.0);}
-\DoxyCodeLine{556   psi\_la =}
-\DoxyCodeLine{557       params.Kxp\_la * (exp((LA\_volume -\/ params.Vaso\_la) * params.Kxv\_la) -\/ 1.0);}
-\DoxyCodeLine{558 }
-\DoxyCodeLine{559   psi\_ra\_derivative = params.Kxp\_ra *}
-\DoxyCodeLine{560                       exp((RA\_volume -\/ params.Vaso\_ra) * params.Kxv\_ra) *}
-\DoxyCodeLine{561                       params.Kxv\_ra;}
-\DoxyCodeLine{562   psi\_la\_derivative = params.Kxp\_la *}
-\DoxyCodeLine{563                       exp((LA\_volume -\/ params.Vaso\_la) * params.Kxv\_la) *}
-\DoxyCodeLine{564                       params.Kxv\_la;}
-\DoxyCodeLine{565 \}}
-\DoxyCodeLine{566 }
-\DoxyCodeLine{567 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{568 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ae14b6aa39184067f3c4317606b334054}{ClosedLoopHeartPulmonary<T>::get\_valve\_positions}}(}
-\DoxyCodeLine{569     Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
-\DoxyCodeLine{570   std::fill(valves, valves + 16, 1.0);}
-\DoxyCodeLine{571 }
-\DoxyCodeLine{572   \textcolor{comment}{// RA to RV}}
-\DoxyCodeLine{573   \textcolor{keyword}{auto} pressure\_ra = y[this-\/>global\_var\_ids[0]];}
-\DoxyCodeLine{574   \textcolor{keyword}{auto} pressure\_rv = y[this-\/>global\_var\_ids[6]];}
-\DoxyCodeLine{575   \textcolor{keyword}{auto} outflow\_ra = y[this-\/>global\_var\_ids[5]];}
-\DoxyCodeLine{576   \textcolor{keywordflow}{if} ((pressure\_ra <= pressure\_rv) and (outflow\_ra <= 0.0)) \{}
-\DoxyCodeLine{577     valves[5] = 0.0;}
-\DoxyCodeLine{578     y[this-\/>global\_var\_ids[5]] = 0.0;}
-\DoxyCodeLine{579   \}}
-\DoxyCodeLine{580 }
-\DoxyCodeLine{581   \textcolor{comment}{// RV to pulmonary}}
-\DoxyCodeLine{582   \textcolor{keyword}{auto} pressure\_pulmonary = y[this-\/>global\_var\_ids[9]];}
-\DoxyCodeLine{583   \textcolor{keyword}{auto} outflow\_rv = y[this-\/>global\_var\_ids[8]];}
-\DoxyCodeLine{584   \textcolor{keywordflow}{if} ((pressure\_rv <= pressure\_pulmonary) and (outflow\_rv <= 0.0)) \{}
-\DoxyCodeLine{585     valves[8] = 0.0;}
-\DoxyCodeLine{586     y[this-\/>global\_var\_ids[8]] = 0.0;}
-\DoxyCodeLine{587   \}}
-\DoxyCodeLine{588 }
-\DoxyCodeLine{589   \textcolor{comment}{// LA to LV}}
-\DoxyCodeLine{590   \textcolor{keyword}{auto} pressure\_la = y[this-\/>global\_var\_ids[10]];}
-\DoxyCodeLine{591   \textcolor{keyword}{auto} pressure\_lv = y[this-\/>global\_var\_ids[13]];}
-\DoxyCodeLine{592   \textcolor{keyword}{auto} outflow\_la = y[this-\/>global\_var\_ids[12]];}
-\DoxyCodeLine{593   \textcolor{keywordflow}{if} ((pressure\_la <= pressure\_lv) and (outflow\_la <= 0.0)) \{}
-\DoxyCodeLine{594     valves[12] = 0.0;}
-\DoxyCodeLine{595     y[this-\/>global\_var\_ids[12]] = 0.0;}
-\DoxyCodeLine{596   \}}
-\DoxyCodeLine{597 }
-\DoxyCodeLine{598   \textcolor{comment}{// LV to aorta}}
-\DoxyCodeLine{599   \textcolor{keyword}{auto} pressure\_aorta = y[this-\/>global\_var\_ids[2]];}
-\DoxyCodeLine{600   \textcolor{keyword}{auto} outflow\_lv = y[this-\/>global\_var\_ids[15]];}
-\DoxyCodeLine{601   \textcolor{keywordflow}{if} ((pressure\_lv <= pressure\_aorta) and (outflow\_lv <= 0.0)) \{}
-\DoxyCodeLine{602     valves[15] = 0.0;}
-\DoxyCodeLine{603     y[this-\/>global\_var\_ids[15]] = 0.0;}
-\DoxyCodeLine{604   \}}
-\DoxyCodeLine{605 \}}
-\DoxyCodeLine{606 }
-\DoxyCodeLine{607 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{608 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a9211429338b3377e49f2ddd868cd9f76}{ClosedLoopHeartPulmonary<T>::set\_ICs}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}} \&state) \{}
-\DoxyCodeLine{609   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[4]] = 38.43;   // RA vol.}}
-\DoxyCodeLine{610   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[7]] = 96.07;   // RV vol.}}
-\DoxyCodeLine{611   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[11]] = 38.43;  // LA vol.}}
-\DoxyCodeLine{612   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[14]] = 96.07;  // LV vol.}}
-\DoxyCodeLine{613   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[9]] = 8.0;     // Pulm pressure}}
-\DoxyCodeLine{614   \textcolor{comment}{// Below ICs likely are not needed (but retained as comments in case they are)}}
-\DoxyCodeLine{615   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[0]] = 4.72;   // RA pressure}}
-\DoxyCodeLine{616   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[6]] = 14.58;  // RV pressure}}
-\DoxyCodeLine{617   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[10]] = 6.09;  // LA pressure}}
-\DoxyCodeLine{618   \textcolor{comment}{// state.y[this-\/>global\_var\_ids[13]] = 22.39; // LV pressure}}
-\DoxyCodeLine{619 \}}
-\DoxyCodeLine{620 }
-\DoxyCodeLine{621 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{622 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ae56fbb49b7f567592029db16b9e4af99}{ClosedLoopHeartPulmonary<T>::get\_parameter\_value}}(std::string message,}
-\DoxyCodeLine{623                                                       T \&param\_value) \{}
-\DoxyCodeLine{624   \textcolor{keywordflow}{if} (message == \textcolor{stringliteral}{"{}iml"{}}) \{}
-\DoxyCodeLine{625     param\_value = params.iml;}
-\DoxyCodeLine{626   \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (message == \textcolor{stringliteral}{"{}imr"{}}) \{}
-\DoxyCodeLine{627     param\_value = params.imr;}
-\DoxyCodeLine{628   \}}
-\DoxyCodeLine{629 \}}
-\DoxyCodeLine{630 }
-\DoxyCodeLine{631 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{632 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a950b4b19381d2e509a21045ad98ab122}{ClosedLoopHeartPulmonary<T>::get\_num\_triplets}}() \{}
-\DoxyCodeLine{633   \textcolor{keywordflow}{return} num\_triplets;}
-\DoxyCodeLine{634 \}}
-\DoxyCodeLine{635 }
-\DoxyCodeLine{636 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{637 }
-\DoxyCodeLine{638 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_CLOSEDLOOPHEARTPULMONARY\_HPP\_}}
+\DoxyCodeLine{475   \textcolor{comment}{// RA to RV}}
+\DoxyCodeLine{476   \textcolor{keyword}{auto} pressure\_ra = y[this-\/>global\_var\_ids[0]];}
+\DoxyCodeLine{477   \textcolor{keyword}{auto} pressure\_rv = y[this-\/>global\_var\_ids[6]];}
+\DoxyCodeLine{478   \textcolor{keyword}{auto} outflow\_ra = y[this-\/>global\_var\_ids[5]];}
+\DoxyCodeLine{479   \textcolor{keywordflow}{if} ((pressure\_ra <= pressure\_rv) and (outflow\_ra <= 0.0)) \{}
+\DoxyCodeLine{480     valves[5] = 0.0;}
+\DoxyCodeLine{481     y[this-\/>global\_var\_ids[5]] = 0.0;}
+\DoxyCodeLine{482   \}}
+\DoxyCodeLine{483 }
+\DoxyCodeLine{484   \textcolor{comment}{// RV to pulmonary}}
+\DoxyCodeLine{485   \textcolor{keyword}{auto} pressure\_pulmonary = y[this-\/>global\_var\_ids[9]];}
+\DoxyCodeLine{486   \textcolor{keyword}{auto} outflow\_rv = y[this-\/>global\_var\_ids[8]];}
+\DoxyCodeLine{487   \textcolor{keywordflow}{if} ((pressure\_rv <= pressure\_pulmonary) and (outflow\_rv <= 0.0)) \{}
+\DoxyCodeLine{488     valves[8] = 0.0;}
+\DoxyCodeLine{489     y[this-\/>global\_var\_ids[8]] = 0.0;}
+\DoxyCodeLine{490   \}}
+\DoxyCodeLine{491 }
+\DoxyCodeLine{492   \textcolor{comment}{// LA to LV}}
+\DoxyCodeLine{493   \textcolor{keyword}{auto} pressure\_la = y[this-\/>global\_var\_ids[10]];}
+\DoxyCodeLine{494   \textcolor{keyword}{auto} pressure\_lv = y[this-\/>global\_var\_ids[13]];}
+\DoxyCodeLine{495   \textcolor{keyword}{auto} outflow\_la = y[this-\/>global\_var\_ids[12]];}
+\DoxyCodeLine{496   \textcolor{keywordflow}{if} ((pressure\_la <= pressure\_lv) and (outflow\_la <= 0.0)) \{}
+\DoxyCodeLine{497     valves[12] = 0.0;}
+\DoxyCodeLine{498     y[this-\/>global\_var\_ids[12]] = 0.0;}
+\DoxyCodeLine{499   \}}
+\DoxyCodeLine{500 }
+\DoxyCodeLine{501   \textcolor{comment}{// LV to aorta}}
+\DoxyCodeLine{502   \textcolor{keyword}{auto} pressure\_aorta = y[this-\/>global\_var\_ids[2]];}
+\DoxyCodeLine{503   \textcolor{keyword}{auto} outflow\_lv = y[this-\/>global\_var\_ids[15]];}
+\DoxyCodeLine{504   \textcolor{keywordflow}{if} ((pressure\_lv <= pressure\_aorta) and (outflow\_lv <= 0.0)) \{}
+\DoxyCodeLine{505     valves[15] = 0.0;}
+\DoxyCodeLine{506     y[this-\/>global\_var\_ids[15]] = 0.0;}
+\DoxyCodeLine{507   \}}
+\DoxyCodeLine{508 \}}
+\DoxyCodeLine{509 }
+\DoxyCodeLine{510 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{511 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a950b4b19381d2e509a21045ad98ab122}{ClosedLoopHeartPulmonary<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{512   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{513 \}}
+\DoxyCodeLine{514 }
+\DoxyCodeLine{515 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{516 }
+\DoxyCodeLine{517 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_CLOSEDLOOPHEARTPULMONARY\_HPP\_}}
 
 \end{DoxyCode}

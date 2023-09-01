@@ -12,36 +12,29 @@
 
 
 Inheritance diagram for MODEL\+::Junction\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=195pt]{class_m_o_d_e_l_1_1_junction__inherit__graph}
-\end{center}
-\end{figure}
-\doxysubsection*{Classes}
-\begin{DoxyCompactItemize}
-\item 
-struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_junction_1_1_parameters}{Parameters}}
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_junction_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+% FIG 0
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a33a25b8ece3b0b803603c00729936fc1}{Junction}} (std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
-\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}} object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a8b0a6279701734b1edf455e8d875e230}{$\sim$\+Junction}} ()
-\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a57cacb323bdb462c2e1773851f6088df}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a7dcccab3a986c6a13691cb99eac9bdbe}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a3e0fa60ff9e5d2333380e22721d7881c}{update\+\_\+gradient}} (Eigen\+::\+Sparse\+Matrix$<$ T $>$ \&jacobian, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&residual, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&alpha, std\+::vector$<$ T $>$ \&y, std\+::vector$<$ T $>$ \&dy)
+\begin{DoxyCompactList}\small\item\em Set the gradient of the block contributions with respect to the parameters. \end{DoxyCompactList}\item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}{get\+\_\+num\+\_\+triplets}} ()
 \begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a5d98db120811ddbb43f2b974116cb6da}{num\+\_\+triplets}}
-\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_a71edde3c363c6b6bd1ffbaff0c3822d7}\label{class_m_o_d_e_l_1_1_junction_a71edde3c363c6b6bd1ffbaff0c3822d7}} 
+unsigned int {\bfseries num\+\_\+inlets}
+\item 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_a1d4a874a13e90cbfb12f550a50474fa5}\label{class_m_o_d_e_l_1_1_junction_a1d4a874a13e90cbfb12f550a50474fa5}} 
+unsigned int {\bfseries num\+\_\+outlets}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -62,14 +55,14 @@ Models a junction with arbitrary inlets and outlets. Across all inlets and outle
 \draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
 \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_junction_autotoc_md25}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_junction_autotoc_md25}
+\]\hypertarget{class_m_o_d_e_l_1_1_junction_autotoc_md18}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_junction_autotoc_md18}
 \[
 \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
 \]
 
 \[
 P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
-\]\hypertarget{class_m_o_d_e_l_1_1_junction_autotoc_md26}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_junction_autotoc_md26}
+\]\hypertarget{class_m_o_d_e_l_1_1_junction_autotoc_md19}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_junction_autotoc_md19}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e} &
 \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} &
@@ -90,36 +83,6 @@ Due to the pressure continuity, we can write for all independent pressure pairs\
 {\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
 \hline
 \end{DoxyTemplParams}
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_a33a25b8ece3b0b803603c00729936fc1}\label{class_m_o_d_e_l_1_1_junction_a33a25b8ece3b0b803603c00729936fc1}} 
-\index{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!Junction@{Junction}}
-\index{Junction@{Junction}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{Junction()}{Junction()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::\+Junction (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})}
-
-
-
-Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}} object. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em name} & Name \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_a8b0a6279701734b1edf455e8d875e230}\label{class_m_o_d_e_l_1_1_junction_a8b0a6279701734b1edf455e8d875e230}} 
-\index{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!````~Junction@{$\sim$Junction}}
-\index{````~Junction@{$\sim$Junction}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{$\sim$Junction()}{~Junction()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}}}
-
-
-
-Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{Junction}} object. 
-
 
 
 \doxysubsection{Member Function Documentation}
@@ -160,12 +123,12 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}\label{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_a7dcccab3a986c6a13691cb99eac9bdbe}\label{class_m_o_d_e_l_1_1_junction_a7dcccab3a986c6a13691cb99eac9bdbe}} 
 \index{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -175,10 +138,40 @@ Update the constant contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
+{\em parameters} & Parameters of the model \\
+\hline
 \end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{MODEL\+::\+Block$<$ T $>$}}.
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_abd4e9b82b5c3cff5463a0b2ada6d4f16}{MODEL\+::\+Block$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_junction_a3e0fa60ff9e5d2333380e22721d7881c}\label{class_m_o_d_e_l_1_1_junction_a3e0fa60ff9e5d2333380e22721d7881c}} 
+\index{MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}!update\_gradient@{update\_gradient}}
+\index{update\_gradient@{update\_gradient}!MODEL::Junction$<$ T $>$@{MODEL::Junction$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_gradient()}{update\_gradient()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL\+::\+Junction}}$<$ T $>$\+::update\+\_\+gradient (\begin{DoxyParamCaption}\item[{Eigen\+::\+Sparse\+Matrix$<$ T $>$ \&}]{jacobian,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{residual,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{alpha,  }\item[{std\+::vector$<$ T $>$ \&}]{y,  }\item[{std\+::vector$<$ T $>$ \&}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Set the gradient of the block contributions with respect to the parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jacobian} & Jacobian with respect to the parameters \\
+\hline
+{\em alpha} & Current parameter vector \\
+\hline
+{\em residual} & Residual with respect to the parameters \\
+\hline
+{\em y} & Current solution \\
+\hline
+{\em dy} & Time-\/derivative of the current solution \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa421ffde1a0c16eec27e463e4a816482}{MODEL\+::\+Block$<$ T $>$}}.
 
 
 

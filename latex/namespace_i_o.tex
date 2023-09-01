@@ -8,13 +8,23 @@
 \doxysubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-class \mbox{\hyperlink{class_i_o_1_1_config_reader}{Config\+Reader}}
-\begin{DoxyCompactList}\small\item\em sv\+Zero\+DSolver configuration reader. \end{DoxyCompactList}\item 
-class \mbox{\hyperlink{class_i_o_1_1_json_handler}{Json\+Handler}}
-\end{DoxyCompactItemize}
+struct \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters}{Simulation\+Parameters}}
+\begin{DoxyCompactList}\small\item\em Simulation parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\Hypertarget{namespace_i_o_a9753ce4db67b134deb4af6d71ba4c17a}\label{namespace_i_o_a9753ce4db67b134deb4af6d71ba4c17a}} 
+std\+::vector$<$ double $>$ {\bfseries get\+\_\+double\+\_\+array} (const nlohmann\+::json \&data, std\+::string\+\_\+view key)
+\item 
+\mbox{\Hypertarget{namespace_i_o_ad9e3e9e10f161ccd49ea9cbb9034b9ad}\label{namespace_i_o_ad9e3e9e10f161ccd49ea9cbb9034b9ad}} 
+std\+::vector$<$ double $>$ {\bfseries get\+\_\+double\+\_\+array} (const nlohmann\+::json \&data, std\+::string\+\_\+view key, std\+::vector$<$ double $>$ default\+\_\+value)
+\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters}{Simulation\+Parameters}}$<$ T $>$ \mbox{\hyperlink{namespace_i_o_add684109fb8487834e371cbe517a2582}{load\+\_\+simulation\+\_\+params}} (const nlohmann\+::json \&config)
+\begin{DoxyCompactList}\small\item\em Load the simulation parameters from a json configuration. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_aa43ec6d81b581e9bc734a254c7a43acf}{load\+\_\+simulation\+\_\+model}} (const nlohmann\+::json \&config, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
+\begin{DoxyCompactList}\small\item\em Load model from a configuration. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ \mbox{\hyperlink{namespace_i_o_a979a0a0b79eebfe2c7c3c424f16d806b}{load\+\_\+initial\+\_\+condition}} (const nlohmann\+::json \&config, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
+\begin{DoxyCompactList}\small\item\em Load initial conditions from a configuration. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename T $>$ }\\std\+::string \mbox{\hyperlink{namespace_i_o_a1ef2a3fccc174166142bb843eab206f4}{to\+\_\+vessel\+\_\+csv}} (std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, bool mean=false, bool derivative=false)
 \begin{DoxyCompactList}\small\item\em Write results vessel based. \end{DoxyCompactList}\item 
 {\footnotesize template$<$typename T $>$ }\\std\+::string \mbox{\hyperlink{namespace_i_o_a02005a08dbf60e9a61dbb595454010f5}{to\+\_\+variable\+\_\+csv}} (std\+::vector$<$ T $>$ \&times, std\+::vector$<$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ $>$ \&states, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model, bool mean=false, bool derivative=false)
@@ -27,6 +37,77 @@ class \mbox{\hyperlink{class_i_o_1_1_json_handler}{Json\+Handler}}
 The \mbox{\hyperlink{namespace_i_o}{IO}} namespace contains all tools for reading configuration and writing solution files. 
 
 \doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespace_i_o_a979a0a0b79eebfe2c7c3c424f16d806b}\label{namespace_i_o_a979a0a0b79eebfe2c7c3c424f16d806b}} 
+\index{IO@{IO}!load\_initial\_condition@{load\_initial\_condition}}
+\index{load\_initial\_condition@{load\_initial\_condition}!IO@{IO}}
+\doxysubsubsection{\texorpdfstring{load\_initial\_condition()}{load\_initial\_condition()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ IO\+::load\+\_\+initial\+\_\+condition (\begin{DoxyParamCaption}\item[{const nlohmann\+::json \&}]{config,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model }\end{DoxyParamCaption})}
+
+
+
+Load initial conditions from a configuration. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em config} & The json configuration \\
+\hline
+{\em model} & The model \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ALGEBRA\+::\+State$<$\+T$>$ Initial configuration for the model 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespace_i_o_aa43ec6d81b581e9bc734a254c7a43acf}\label{namespace_i_o_aa43ec6d81b581e9bc734a254c7a43acf}} 
+\index{IO@{IO}!load\_simulation\_model@{load\_simulation\_model}}
+\index{load\_simulation\_model@{load\_simulation\_model}!IO@{IO}}
+\doxysubsubsection{\texorpdfstring{load\_simulation\_model()}{load\_simulation\_model()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void IO\+::load\+\_\+simulation\+\_\+model (\begin{DoxyParamCaption}\item[{const nlohmann\+::json \&}]{config,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model }\end{DoxyParamCaption})}
+
+
+
+Load model from a configuration. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em config} & The json configuration \\
+\hline
+\end{DoxyParams}
+\texorpdfstring{$<$}{<} Flag to check if heart block is present (requires different handling)\mbox{\Hypertarget{namespace_i_o_add684109fb8487834e371cbe517a2582}\label{namespace_i_o_add684109fb8487834e371cbe517a2582}} 
+\index{IO@{IO}!load\_simulation\_params@{load\_simulation\_params}}
+\index{load\_simulation\_params@{load\_simulation\_params}!IO@{IO}}
+\doxysubsubsection{\texorpdfstring{load\_simulation\_params()}{load\_simulation\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters}{Simulation\+Parameters}}$<$ T $>$ IO\+::load\+\_\+simulation\+\_\+params (\begin{DoxyParamCaption}\item[{const nlohmann\+::json \&}]{config }\end{DoxyParamCaption})}
+
+
+
+Load the simulation parameters from a json configuration. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+\begin{DoxyParams}{Parameters}
+{\em config} & The json configuration \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Simulation\+Parameters$<$\+T$>$ Simulation parameters read from configuration 
+\end{DoxyReturn}
 \mbox{\Hypertarget{namespace_i_o_a02005a08dbf60e9a61dbb595454010f5}\label{namespace_i_o_a02005a08dbf60e9a61dbb595454010f5}} 
 \index{IO@{IO}!to\_variable\_csv@{to\_variable\_csv}}
 \index{to\_variable\_csv@{to\_variable\_csv}!IO@{IO}}

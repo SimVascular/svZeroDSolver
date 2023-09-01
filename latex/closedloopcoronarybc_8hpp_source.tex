@@ -40,303 +40,238 @@
 \DoxyCodeLine{36 }
 \DoxyCodeLine{37 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
 \DoxyCodeLine{38 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
-\DoxyCodeLine{39 }
-\DoxyCodeLine{40 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
-\DoxyCodeLine{41 \textcolor{comment}{}}
-\DoxyCodeLine{42 \textcolor{comment}{/**}}
-\DoxyCodeLine{43 \textcolor{comment}{ * @brief Closed loop coronary boundary condition (connected to other blocks on}}
-\DoxyCodeLine{44 \textcolor{comment}{ * both sides).}}
-\DoxyCodeLine{45 \textcolor{comment}{ *}}
-\DoxyCodeLine{46 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{47 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
-\DoxyCodeLine{48 \textcolor{comment}{ * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
-\DoxyCodeLine{49 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\}}}
-\DoxyCodeLine{50 \textcolor{comment}{ * to [R, l=\$R\_a\$, *-\/] (3,0)}}
-\DoxyCodeLine{51 \textcolor{comment}{ * to [R, l=\$R\_\{am\}\$, -\/] (5,0)}}
-\DoxyCodeLine{52 \textcolor{comment}{ * to [R, l=\$R\_v\$, *-\/*] (7,0)}}
-\DoxyCodeLine{53 \textcolor{comment}{ * node[anchor=south]\{\$P\_\{out\}\$\}}}
-\DoxyCodeLine{54 \textcolor{comment}{ * (5,0) to [C, l=\$C\_\{im\} \(\backslash\);V\_\{im\}\$, -\/*] (5,-\/1.5)}}
-\DoxyCodeLine{55 \textcolor{comment}{ * node[left]\{\$P\_\{im\}\$\}}}
-\DoxyCodeLine{56 \textcolor{comment}{ * (3,0) to [C, l=\$C\_a\$, -\/*] (3,-\/1.5)}}
-\DoxyCodeLine{57 \textcolor{comment}{ * node[left]\{\$P\_a\$\};}}
-\DoxyCodeLine{58 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (7.2,0) -\/-\/ (8.0,0) node[right] \{\$Q\_\{out\}\$\};}}
-\DoxyCodeLine{59 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
-\DoxyCodeLine{60 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{61 \textcolor{comment}{ *}}
-\DoxyCodeLine{62 \textcolor{comment}{ * \#\#\# Governing equations}}
-\DoxyCodeLine{63 \textcolor{comment}{ *}}
-\DoxyCodeLine{64 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{65 \textcolor{comment}{ * P\_\{out\} -\/ P\_\{in\} + (R\_\{am\}+R\_a)Q\_\{in\} + R\_v Q\_\{out\} + R\_\{am\} C\_a}}
-\DoxyCodeLine{66 \textcolor{comment}{ * \(\backslash\)frac\{dP\_a\}\{dt\} -\/ R\_\{am\} C\_a \(\backslash\)frac\{dP\_\{in\}\}\{dt\} + R\_\{am\} R\_a C\_a}}
-\DoxyCodeLine{67 \textcolor{comment}{ * \(\backslash\)frac\{dQ\_\{in\}\}\{dt\} = 0 \(\backslash\)f]}}
-\DoxyCodeLine{68 \textcolor{comment}{ *}}
-\DoxyCodeLine{69 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{70 \textcolor{comment}{ * Q\_\{in\} -\/ Q\_\{out\} + C\_a \(\backslash\)frac\{dP\_a\}\{dt\} -\/ C\_a \(\backslash\)frac\{dP\_\{in\}\}\{dt\} + C\_a R\_a}}
-\DoxyCodeLine{71 \textcolor{comment}{ * \(\backslash\)frac\{dQ\_\{in\}\}\{dt\} -\/ \(\backslash\)frac\{dV\_\{im\}\}\{dt\} = 0 \(\backslash\)f]}}
-\DoxyCodeLine{72 \textcolor{comment}{ *}}
-\DoxyCodeLine{73 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{74 \textcolor{comment}{ * C\_\{im\} P\_\{out\} + C\_\{im\} R\_v Q\_\{out\} -\/ C\_\{im\} P\_\{im\} -\/ V\_\{im\} = 0}}
-\DoxyCodeLine{75 \textcolor{comment}{ * \(\backslash\)f]}}
-\DoxyCodeLine{76 \textcolor{comment}{ *}}
-\DoxyCodeLine{77 \textcolor{comment}{ * \#\#\# Local contributions}}
-\DoxyCodeLine{78 \textcolor{comment}{ *}}
-\DoxyCodeLine{79 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{80 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{lllll\}P\string^\{in\} \& Q\string^\{in\} \& P\_\{out\} \& Q\_\{out\}}}
-\DoxyCodeLine{81 \textcolor{comment}{ * \& V\_\{im\}\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\}, \(\backslash\)f]}}
-\DoxyCodeLine{82 \textcolor{comment}{ *}}
-\DoxyCodeLine{83 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{84 \textcolor{comment}{ * \(\backslash\)mathbf\{E\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
-\DoxyCodeLine{85 \textcolor{comment}{ * -\/R\_\{am\} C\_\{a\} \& R\_\{am\} R\_\{a\} C\_\{a\} \& 0 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{86 \textcolor{comment}{ * -\/C\_\{a\} \& R\_\{a\} C\_\{a\} \& 0 \& 0 \& -\/1 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{87 \textcolor{comment}{ * 0 \& 0 \& 0 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{88 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
-\DoxyCodeLine{89 \textcolor{comment}{ *}}
-\DoxyCodeLine{90 \textcolor{comment}{ *}}
-\DoxyCodeLine{91 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{92 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
-\DoxyCodeLine{93 \textcolor{comment}{ * -\/1 \& R\_\{am\} + R\_\{a\} \& 1 \& R\_v \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{94 \textcolor{comment}{ * 0 \& 1 \& 0 \& -\/1 \& 0 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{95 \textcolor{comment}{ * 0 \& 0 \& C\_\{im\} \& C\_\{im\} R\_v \& -\/1 \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{96 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
-\DoxyCodeLine{97 \textcolor{comment}{ *}}
-\DoxyCodeLine{98 \textcolor{comment}{ * \(\backslash\)f[}}
-\DoxyCodeLine{99 \textcolor{comment}{ * \(\backslash\)mathbf\{c\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{c\}}}
-\DoxyCodeLine{100 \textcolor{comment}{ * C\_\{a\} R\_\{am\} \(\backslash\)frac\{d P\_\{a\}\}\{d t\} \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{101 \textcolor{comment}{ * C\_\{a\}\(\backslash\)frac\{d P\_\{a\}\}\{d t\} \(\backslash\)\(\backslash\)}}
-\DoxyCodeLine{102 \textcolor{comment}{ * -\/C\_\{im\} P\_\{im\}}}
-\DoxyCodeLine{103 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
-\DoxyCodeLine{104 \textcolor{comment}{ *}}
-\DoxyCodeLine{105 \textcolor{comment}{ * Assume \(\backslash\)f\$P\_a=0\(\backslash\)f\$.}}
-\DoxyCodeLine{106 \textcolor{comment}{ *}}
-\DoxyCodeLine{107 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{108 \textcolor{comment}{ */}}
-\DoxyCodeLine{109 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{110 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{ClosedLoopCoronaryBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
-\DoxyCodeLine{111  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{112 \textcolor{comment}{  /**}}
-\DoxyCodeLine{113 \textcolor{comment}{   * @brief Parameters of the element.}}
-\DoxyCodeLine{114 \textcolor{comment}{   *}}
-\DoxyCodeLine{115 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
-\DoxyCodeLine{116 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{117 \textcolor{comment}{   */}}
-\DoxyCodeLine{118   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_coronary_b_c_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
-\DoxyCodeLine{119     T Ra;}
-\DoxyCodeLine{120     T Ram;}
-\DoxyCodeLine{121     T Rv;}
-\DoxyCodeLine{122     T Ca;}
-\DoxyCodeLine{123     T Cim;}
-\DoxyCodeLine{124   \};}
-\DoxyCodeLine{125 \textcolor{comment}{}}
-\DoxyCodeLine{126 \textcolor{comment}{  /**}}
-\DoxyCodeLine{127 \textcolor{comment}{   * @brief Construct a new ClosedLoopCoronaryBC object}}
-\DoxyCodeLine{128 \textcolor{comment}{   *}}
-\DoxyCodeLine{129 \textcolor{comment}{   * @param P Time dependent pressure}}
-\DoxyCodeLine{130 \textcolor{comment}{   * @param name Name}}
-\DoxyCodeLine{131 \textcolor{comment}{   */}}
-\DoxyCodeLine{132   \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aa20a7adeff5e769879c68c157c4b8aff}{ClosedLoopCoronaryBC}}(T Ra, T Ram, T Rv, T Ca, T Cim, std::string side,}
-\DoxyCodeLine{133                        std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{closedloopheartpulmonary_8hpp}{closedloopheartpulmonary.hpp}}"{}}}
+\DoxyCodeLine{40 }
+\DoxyCodeLine{41 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{keyword}{enum} Side \{ LEFT, RIGHT \};}
+\DoxyCodeLine{44 \textcolor{comment}{}}
+\DoxyCodeLine{45 \textcolor{comment}{/**}}
+\DoxyCodeLine{46 \textcolor{comment}{ * @brief Closed loop coronary boundary condition (connected to other blocks on}}
+\DoxyCodeLine{47 \textcolor{comment}{ * both sides).}}
+\DoxyCodeLine{48 \textcolor{comment}{ *}}
+\DoxyCodeLine{49 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{50 \textcolor{comment}{ * \(\backslash\)begin\{circuitikz\} \(\backslash\)draw}}
+\DoxyCodeLine{51 \textcolor{comment}{ * node[left] \{\$Q\_\{in\}\$\} [-\/latex] (0,0) -\/-\/ (0.8,0);}}
+\DoxyCodeLine{52 \textcolor{comment}{ * \(\backslash\)draw (1,0) node[anchor=south]\{\$P\_\{in\}\$\}}}
+\DoxyCodeLine{53 \textcolor{comment}{ * to [R, l=\$R\_a\$, *-\/] (3,0)}}
+\DoxyCodeLine{54 \textcolor{comment}{ * to [R, l=\$R\_\{am\}\$, -\/] (5,0)}}
+\DoxyCodeLine{55 \textcolor{comment}{ * to [R, l=\$R\_v\$, *-\/*] (7,0)}}
+\DoxyCodeLine{56 \textcolor{comment}{ * node[anchor=south]\{\$P\_\{out\}\$\}}}
+\DoxyCodeLine{57 \textcolor{comment}{ * (5,0) to [C, l=\$C\_\{im\} \(\backslash\);V\_\{im\}\$, -\/*] (5,-\/1.5)}}
+\DoxyCodeLine{58 \textcolor{comment}{ * node[left]\{\$P\_\{im\}\$\}}}
+\DoxyCodeLine{59 \textcolor{comment}{ * (3,0) to [C, l=\$C\_a\$, -\/*] (3,-\/1.5)}}
+\DoxyCodeLine{60 \textcolor{comment}{ * node[left]\{\$P\_a\$\};}}
+\DoxyCodeLine{61 \textcolor{comment}{ * \(\backslash\)draw [-\/latex] (7.2,0) -\/-\/ (8.0,0) node[right] \{\$Q\_\{out\}\$\};}}
+\DoxyCodeLine{62 \textcolor{comment}{ * \(\backslash\)end\{circuitikz\}}}
+\DoxyCodeLine{63 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{64 \textcolor{comment}{ *}}
+\DoxyCodeLine{65 \textcolor{comment}{ * \#\#\# Governing equations}}
+\DoxyCodeLine{66 \textcolor{comment}{ *}}
+\DoxyCodeLine{67 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{68 \textcolor{comment}{ * P\_\{out\} -\/ P\_\{in\} + (R\_\{am\}+R\_a)Q\_\{in\} + R\_v Q\_\{out\} + R\_\{am\} C\_a}}
+\DoxyCodeLine{69 \textcolor{comment}{ * \(\backslash\)frac\{dP\_a\}\{dt\} -\/ R\_\{am\} C\_a \(\backslash\)frac\{dP\_\{in\}\}\{dt\} + R\_\{am\} R\_a C\_a}}
+\DoxyCodeLine{70 \textcolor{comment}{ * \(\backslash\)frac\{dQ\_\{in\}\}\{dt\} = 0 \(\backslash\)f]}}
+\DoxyCodeLine{71 \textcolor{comment}{ *}}
+\DoxyCodeLine{72 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{73 \textcolor{comment}{ * Q\_\{in\} -\/ Q\_\{out\} + C\_a \(\backslash\)frac\{dP\_a\}\{dt\} -\/ C\_a \(\backslash\)frac\{dP\_\{in\}\}\{dt\} + C\_a R\_a}}
+\DoxyCodeLine{74 \textcolor{comment}{ * \(\backslash\)frac\{dQ\_\{in\}\}\{dt\} -\/ \(\backslash\)frac\{dV\_\{im\}\}\{dt\} = 0 \(\backslash\)f]}}
+\DoxyCodeLine{75 \textcolor{comment}{ *}}
+\DoxyCodeLine{76 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{77 \textcolor{comment}{ * C\_\{im\} P\_\{out\} + C\_\{im\} R\_v Q\_\{out\} -\/ C\_\{im\} P\_\{im\} -\/ V\_\{im\} = 0}}
+\DoxyCodeLine{78 \textcolor{comment}{ * \(\backslash\)f]}}
+\DoxyCodeLine{79 \textcolor{comment}{ *}}
+\DoxyCodeLine{80 \textcolor{comment}{ * \#\#\# Local contributions}}
+\DoxyCodeLine{81 \textcolor{comment}{ *}}
+\DoxyCodeLine{82 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{83 \textcolor{comment}{ * \(\backslash\)mathbf\{y\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{lllll\}P\string^\{in\} \& Q\string^\{in\} \& P\_\{out\} \& Q\_\{out\}}}
+\DoxyCodeLine{84 \textcolor{comment}{ * \& V\_\{im\}\string^\{e\}\(\backslash\)end\{array\}\(\backslash\)right]\string^\{T\}, \(\backslash\)f]}}
+\DoxyCodeLine{85 \textcolor{comment}{ *}}
+\DoxyCodeLine{86 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{87 \textcolor{comment}{ * \(\backslash\)mathbf\{E\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
+\DoxyCodeLine{88 \textcolor{comment}{ * -\/R\_\{am\} C\_\{a\} \& R\_\{am\} R\_\{a\} C\_\{a\} \& 0 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{89 \textcolor{comment}{ * -\/C\_\{a\} \& R\_\{a\} C\_\{a\} \& 0 \& 0 \& -\/1 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{90 \textcolor{comment}{ * 0 \& 0 \& 0 \& 0 \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{91 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
+\DoxyCodeLine{92 \textcolor{comment}{ *}}
+\DoxyCodeLine{93 \textcolor{comment}{ *}}
+\DoxyCodeLine{94 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{95 \textcolor{comment}{ * \(\backslash\)mathbf\{F\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{ccccc\}}}
+\DoxyCodeLine{96 \textcolor{comment}{ * -\/1 \& R\_\{am\} + R\_\{a\} \& 1 \& R\_v \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{97 \textcolor{comment}{ * 0 \& 1 \& 0 \& -\/1 \& 0 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{98 \textcolor{comment}{ * 0 \& 0 \& C\_\{im\} \& C\_\{im\} R\_v \& -\/1 \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{99 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
+\DoxyCodeLine{100 \textcolor{comment}{ *}}
+\DoxyCodeLine{101 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{102 \textcolor{comment}{ * \(\backslash\)mathbf\{c\}\string^\{e\}=\(\backslash\)left[\(\backslash\)begin\{array\}\{c\}}}
+\DoxyCodeLine{103 \textcolor{comment}{ * C\_\{a\} R\_\{am\} \(\backslash\)frac\{d P\_\{a\}\}\{d t\} \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{104 \textcolor{comment}{ * C\_\{a\}\(\backslash\)frac\{d P\_\{a\}\}\{d t\} \(\backslash\)\(\backslash\)}}
+\DoxyCodeLine{105 \textcolor{comment}{ * -\/C\_\{im\} P\_\{im\}}}
+\DoxyCodeLine{106 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right] \(\backslash\)f]}}
+\DoxyCodeLine{107 \textcolor{comment}{ *}}
+\DoxyCodeLine{108 \textcolor{comment}{ * Assume \(\backslash\)f\$P\_a=0\(\backslash\)f\$.}}
+\DoxyCodeLine{109 \textcolor{comment}{ *}}
+\DoxyCodeLine{110 \textcolor{comment}{ * \#\#\# Parameters}}
+\DoxyCodeLine{111 \textcolor{comment}{ *}}
+\DoxyCodeLine{112 \textcolor{comment}{ * Parameter sequence for constructing this block}}
+\DoxyCodeLine{113 \textcolor{comment}{ *}}
+\DoxyCodeLine{114 \textcolor{comment}{ * * `0` Ra}}
+\DoxyCodeLine{115 \textcolor{comment}{ * * `1` Ram}}
+\DoxyCodeLine{116 \textcolor{comment}{ * * `2` Rv}}
+\DoxyCodeLine{117 \textcolor{comment}{ * * `3` Ca}}
+\DoxyCodeLine{118 \textcolor{comment}{ * * `4` Cim}}
+\DoxyCodeLine{119 \textcolor{comment}{ *}}
+\DoxyCodeLine{120 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{121 \textcolor{comment}{ * @tparam side Side of the block (e.g. `Side::LEFT`, `Side::RIGHT`)}}
+\DoxyCodeLine{122 \textcolor{comment}{ */}}
+\DoxyCodeLine{123 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T, S\textcolor{keywordtype}{id}e s\textcolor{keywordtype}{id}e>}
+\DoxyCodeLine{124 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{ClosedLoopCoronaryBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
+\DoxyCodeLine{125  \textcolor{keyword}{public}:}
+\DoxyCodeLine{126   \textcolor{comment}{// Inherit constructors}}
+\DoxyCodeLine{127   \textcolor{keyword}{using }\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Block;}
+\DoxyCodeLine{128 \textcolor{comment}{}}
+\DoxyCodeLine{129 \textcolor{comment}{  /**}}
+\DoxyCodeLine{130 \textcolor{comment}{   * @brief Local IDs of the parameters}}
+\DoxyCodeLine{131 \textcolor{comment}{   *}}
+\DoxyCodeLine{132 \textcolor{comment}{   */}}
+\DoxyCodeLine{133   \textcolor{keyword}{enum} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ab322586750ecb5d434ef0fb06cf4a1a7}{ParamId}} \{ RA = 0, RAM = 1, RV = 2, CA = 3, CIM = 4 \};}
 \DoxyCodeLine{134 \textcolor{comment}{}}
 \DoxyCodeLine{135 \textcolor{comment}{  /**}}
-\DoxyCodeLine{136 \textcolor{comment}{   * @brief Destroy the ClosedLoopCoronaryBC object}}
+\DoxyCodeLine{136 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
 \DoxyCodeLine{137 \textcolor{comment}{   *}}
-\DoxyCodeLine{138 \textcolor{comment}{   */}}
-\DoxyCodeLine{139   \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_afaaed7691c734cc953ce4e321f871f17}{\string~ClosedLoopCoronaryBC}}();}
-\DoxyCodeLine{140 \textcolor{comment}{}}
-\DoxyCodeLine{141 \textcolor{comment}{  /**}}
-\DoxyCodeLine{142 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{143 \textcolor{comment}{   *}}
-\DoxyCodeLine{144 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{145 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{146 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{147 \textcolor{comment}{   *}}
-\DoxyCodeLine{148 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{149 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{138 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{139 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{140 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{141 \textcolor{comment}{   *}}
+\DoxyCodeLine{142 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{143 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{144 \textcolor{comment}{   */}}
+\DoxyCodeLine{145   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a32059043e969bfa12603856db4c18df8}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{146 \textcolor{comment}{}}
+\DoxyCodeLine{147 \textcolor{comment}{  /**}}
+\DoxyCodeLine{148 \textcolor{comment}{   * @brief Setup parameters that depend on the model}}
+\DoxyCodeLine{149 \textcolor{comment}{   *}}
 \DoxyCodeLine{150 \textcolor{comment}{   */}}
-\DoxyCodeLine{151   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{151   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a9112da50a5b0c39abb947849702122d6}{setup\_model\_dependent\_params}}();}
 \DoxyCodeLine{152 \textcolor{comment}{}}
 \DoxyCodeLine{153 \textcolor{comment}{  /**}}
-\DoxyCodeLine{154 \textcolor{comment}{   * @brief Update parameters of a block.}}
+\DoxyCodeLine{154 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
 \DoxyCodeLine{155 \textcolor{comment}{   *}}
-\DoxyCodeLine{156 \textcolor{comment}{   * @param params New parameters.}}
-\DoxyCodeLine{157 \textcolor{comment}{   */}}
-\DoxyCodeLine{158   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_af6f18c8f4b611a5beea29b88d72b5af0}{update\_block\_params}}(std::vector<T> new\_params);}
-\DoxyCodeLine{159 \textcolor{comment}{}}
-\DoxyCodeLine{160 \textcolor{comment}{  /**}}
-\DoxyCodeLine{161 \textcolor{comment}{   * @brief Return parameters of a block.}}
-\DoxyCodeLine{162 \textcolor{comment}{   *}}
-\DoxyCodeLine{163 \textcolor{comment}{   * @block\_params Block parameters.}}
-\DoxyCodeLine{164 \textcolor{comment}{   */}}
-\DoxyCodeLine{165   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ada897d3dada8b0a6e83f4014abbadea2}{get\_block\_params}}(std::vector<T> \&block\_params);}
-\DoxyCodeLine{166 \textcolor{comment}{}}
-\DoxyCodeLine{167 \textcolor{comment}{  /**}}
-\DoxyCodeLine{168 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
-\DoxyCodeLine{169 \textcolor{comment}{   *}}
-\DoxyCodeLine{170 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{171 \textcolor{comment}{   */}}
-\DoxyCodeLine{172   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{173 \textcolor{comment}{}}
-\DoxyCodeLine{174 \textcolor{comment}{  /**}}
-\DoxyCodeLine{175 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element}}
-\DoxyCodeLine{176 \textcolor{comment}{   *}}
-\DoxyCodeLine{177 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{178 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{179 \textcolor{comment}{   */}}
-\DoxyCodeLine{180   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
-\DoxyCodeLine{181                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y);}
-\DoxyCodeLine{182 \textcolor{comment}{}}
-\DoxyCodeLine{183 \textcolor{comment}{  /**}}
-\DoxyCodeLine{184 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of t}}
-\DoxyCodeLine{185 \textcolor{comment}{   *}}
-\DoxyCodeLine{186 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{187 \textcolor{comment}{   * @param y Current solution}}
-\DoxyCodeLine{188 \textcolor{comment}{   */}}
-\DoxyCodeLine{189   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0a23c2fbef9c48d6f5c9a6e82b1b91d2}{set\_model\_dependent\_params}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model);}
-\DoxyCodeLine{190 \textcolor{comment}{}}
-\DoxyCodeLine{191 \textcolor{comment}{  /**}}
-\DoxyCodeLine{192 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{193 \textcolor{comment}{   *}}
-\DoxyCodeLine{194 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{195 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{196 \textcolor{comment}{   */}}
-\DoxyCodeLine{197   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ab10a7a6a835e692afcac9fe471692892}{num\_triplets}} = \{}
-\DoxyCodeLine{198       \{\textcolor{stringliteral}{"{}F"{}}, 9\},}
-\DoxyCodeLine{199       \{\textcolor{stringliteral}{"{}E"{}}, 5\},}
-\DoxyCodeLine{200       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{201   \};}
-\DoxyCodeLine{202 \textcolor{comment}{}}
-\DoxyCodeLine{203 \textcolor{comment}{  /**}}
-\DoxyCodeLine{204 \textcolor{comment}{   * @brief Get number of triplets of element}}
-\DoxyCodeLine{205 \textcolor{comment}{   *}}
-\DoxyCodeLine{206 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{207 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{208 \textcolor{comment}{   */}}
-\DoxyCodeLine{209   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}{get\_num\_triplets}}();}
-\DoxyCodeLine{210 }
-\DoxyCodeLine{211  \textcolor{keyword}{private}:}
-\DoxyCodeLine{212   Parameters params;}
-\DoxyCodeLine{213   std::string side;      \textcolor{comment}{// Left or right coronary?}}
-\DoxyCodeLine{214   \textcolor{keywordtype}{int} ventricle\_var\_id;  \textcolor{comment}{// Index of either left or right ventricle}}
-\DoxyCodeLine{215   T im;                  \textcolor{comment}{// Either iml or imr based on left or right}}
-\DoxyCodeLine{216 \};}
-\DoxyCodeLine{217 }
-\DoxyCodeLine{218 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{219 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aa20a7adeff5e769879c68c157c4b8aff}{ClosedLoopCoronaryBC<T>::ClosedLoopCoronaryBC}}(T Ra, T Ram, T Rv, T Ca, T Cim,}
-\DoxyCodeLine{220                                               std::string side,}
-\DoxyCodeLine{221                                               std::string name)}
-\DoxyCodeLine{222     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{223   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{224   this-\/>params.Ra = Ra;}
-\DoxyCodeLine{225   this-\/>params.Ram = Ram;}
-\DoxyCodeLine{226   this-\/>params.Rv = Rv;}
-\DoxyCodeLine{227   this-\/>params.Ca = Ca;}
-\DoxyCodeLine{228   this-\/>params.Cim = Cim;}
-\DoxyCodeLine{229   this-\/>side = side;}
-\DoxyCodeLine{230   \textcolor{comment}{// this-\/>closed\_loop\_outlet = true;}}
-\DoxyCodeLine{231 \}}
-\DoxyCodeLine{232 }
-\DoxyCodeLine{233 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{234 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_afaaed7691c734cc953ce4e321f871f17}{ClosedLoopCoronaryBC<T>::\string~ClosedLoopCoronaryBC}}() \{\}}
-\DoxyCodeLine{235 }
-\DoxyCodeLine{236 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{237 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}{ClosedLoopCoronaryBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{238   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 3, \{\textcolor{stringliteral}{"{}volume\_im"{}}\});}
-\DoxyCodeLine{239 \}}
-\DoxyCodeLine{240 }
-\DoxyCodeLine{241 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{242 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}{ClosedLoopCoronaryBC<T>::update\_constant}}(}
-\DoxyCodeLine{243     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{244   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) =}
-\DoxyCodeLine{245       -\/params.Ram * params.Ca;}
-\DoxyCodeLine{246   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{247       params.Ram * params.Ra * params.Ca;}
-\DoxyCodeLine{248   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[0]) =}
-\DoxyCodeLine{249       -\/params.Ca;}
-\DoxyCodeLine{250   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{251       params.Ca * params.Ra;}
-\DoxyCodeLine{252   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) = -\/1.0;}
-\DoxyCodeLine{253 }
-\DoxyCodeLine{254   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = -\/1.0;}
-\DoxyCodeLine{255   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{256       (params.Ra + params.Ram);}
-\DoxyCodeLine{257   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = 1.0;}
-\DoxyCodeLine{258   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) =}
-\DoxyCodeLine{259       params.Rv;}
-\DoxyCodeLine{260   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = 1.0;}
-\DoxyCodeLine{261   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = -\/1.0;}
-\DoxyCodeLine{262   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[2]) =}
-\DoxyCodeLine{263       params.Cim;}
-\DoxyCodeLine{264   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[3]) =}
-\DoxyCodeLine{265       params.Cim * params.Rv;}
-\DoxyCodeLine{266   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = -\/1.0;}
+\DoxyCodeLine{156 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{157 \textcolor{comment}{   * @param parameters Parameters of the model}}
+\DoxyCodeLine{158 \textcolor{comment}{   */}}
+\DoxyCodeLine{159   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae025a98ff49b5e6c031b36dbcf1d1d5c}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{160                        std::vector<T> \&parameters);}
+\DoxyCodeLine{161 \textcolor{comment}{}}
+\DoxyCodeLine{162 \textcolor{comment}{  /**}}
+\DoxyCodeLine{163 \textcolor{comment}{   * @brief Update the solution-\/dependent contributions of the element in a}}
+\DoxyCodeLine{164 \textcolor{comment}{   * sparse system}}
+\DoxyCodeLine{165 \textcolor{comment}{   *}}
+\DoxyCodeLine{166 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{167 \textcolor{comment}{   * @param parameters Parameters of the model}}
+\DoxyCodeLine{168 \textcolor{comment}{   * @param y Current solution}}
+\DoxyCodeLine{169 \textcolor{comment}{   * @param dy Current derivate of the solution}}
+\DoxyCodeLine{170 \textcolor{comment}{   */}}
+\DoxyCodeLine{171   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aa601ad866550b7430cec386ad5b71aa7}{update\_solution}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{172                        std::vector<T> \&parameters,}
+\DoxyCodeLine{173                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&y,}
+\DoxyCodeLine{174                        Eigen::Matrix<T, Eigen::Dynamic, 1> \&dy);}
+\DoxyCodeLine{175 \textcolor{comment}{}}
+\DoxyCodeLine{176 \textcolor{comment}{  /**}}
+\DoxyCodeLine{177 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{178 \textcolor{comment}{   *}}
+\DoxyCodeLine{179 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{180 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{181 \textcolor{comment}{   */}}
+\DoxyCodeLine{182   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0daf2b9135cb2bca641048d3a5ce226f}{num\_triplets}} = \{}
+\DoxyCodeLine{183       \{\textcolor{stringliteral}{"{}F"{}}, 9\},}
+\DoxyCodeLine{184       \{\textcolor{stringliteral}{"{}E"{}}, 5\},}
+\DoxyCodeLine{185       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{186   \};}
+\DoxyCodeLine{187 \textcolor{comment}{}}
+\DoxyCodeLine{188 \textcolor{comment}{  /**}}
+\DoxyCodeLine{189 \textcolor{comment}{   * @brief Get number of triplets of element}}
+\DoxyCodeLine{190 \textcolor{comment}{   *}}
+\DoxyCodeLine{191 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{192 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{193 \textcolor{comment}{   */}}
+\DoxyCodeLine{194   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aee74b2d6d8495120f14866de76aab06d}{get\_num\_triplets}}();}
+\DoxyCodeLine{195 }
+\DoxyCodeLine{196  \textcolor{keyword}{private}:}
+\DoxyCodeLine{197   \textcolor{keywordtype}{int} ventricle\_var\_id;  \textcolor{comment}{// Variable index of either left or right ventricle}}
+\DoxyCodeLine{198   \textcolor{keywordtype}{int} im\_param\_id;       \textcolor{comment}{// Index of parameter Im}}
+\DoxyCodeLine{199 \};}
+\DoxyCodeLine{200 }
+\DoxyCodeLine{201 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T, S\textcolor{keywordtype}{id}e s\textcolor{keywordtype}{id}e>}
+\DoxyCodeLine{202 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a32059043e969bfa12603856db4c18df8}{ClosedLoopCoronaryBC<T, side>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{203   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 3, \{\textcolor{stringliteral}{"{}volume\_im"{}}\});}
+\DoxyCodeLine{204 \}}
+\DoxyCodeLine{205 }
+\DoxyCodeLine{206 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T, S\textcolor{keywordtype}{id}e s\textcolor{keywordtype}{id}e>}
+\DoxyCodeLine{207 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a9112da50a5b0c39abb947849702122d6}{ClosedLoopCoronaryBC<T, side>::setup\_model\_dependent\_params}}() \{}
+\DoxyCodeLine{208   \textcolor{keyword}{auto} heart\_block = this-\/>model-\/>get\_block(\textcolor{stringliteral}{"{}CLH"{}});}
+\DoxyCodeLine{209   \textcolor{keywordflow}{if} (side == Side::LEFT) \{}
+\DoxyCodeLine{210     im\_param\_id =}
+\DoxyCodeLine{211         heart\_block}
+\DoxyCodeLine{212             -\/>global\_param\_ids[\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{ClosedLoopHeartPulmonary<T>::ParamId::IML}}];}
+\DoxyCodeLine{213     ventricle\_var\_id =}
+\DoxyCodeLine{214         heart\_block-\/>global\_var\_ids[13];  \textcolor{comment}{// Solution ID for LV pressure}}
+\DoxyCodeLine{215   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{216     im\_param\_id =}
+\DoxyCodeLine{217         heart\_block}
+\DoxyCodeLine{218             -\/>global\_param\_ids[\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{ClosedLoopHeartPulmonary<T>::ParamId::IMR}}];}
+\DoxyCodeLine{219     ventricle\_var\_id = heart\_block-\/>global\_var\_ids[6];}
+\DoxyCodeLine{220   \}}
+\DoxyCodeLine{221 \}}
+\DoxyCodeLine{222 }
+\DoxyCodeLine{223 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T, S\textcolor{keywordtype}{id}e s\textcolor{keywordtype}{id}e>}
+\DoxyCodeLine{224 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae025a98ff49b5e6c031b36dbcf1d1d5c}{ClosedLoopCoronaryBC<T, side>::update\_constant}}(}
+\DoxyCodeLine{225     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, std::vector<T> \&parameters) \{}
+\DoxyCodeLine{226   T ra = parameters[this-\/>global\_param\_ids[ParamId::RA]];}
+\DoxyCodeLine{227   T ram = parameters[this-\/>global\_param\_ids[ParamId::RAM]];}
+\DoxyCodeLine{228   T rv = parameters[this-\/>global\_param\_ids[ParamId::RV]];}
+\DoxyCodeLine{229   T ca = parameters[this-\/>global\_param\_ids[ParamId::CA]];}
+\DoxyCodeLine{230   T cim = parameters[this-\/>global\_param\_ids[ParamId::CIM]];}
+\DoxyCodeLine{231 }
+\DoxyCodeLine{232   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) =}
+\DoxyCodeLine{233       -\/ram * ca;}
+\DoxyCodeLine{234   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{235       ram * ra * ca;}
+\DoxyCodeLine{236   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[0]) = -\/ca;}
+\DoxyCodeLine{237   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = ca * ra;}
+\DoxyCodeLine{238   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) = -\/1.0;}
+\DoxyCodeLine{239 }
+\DoxyCodeLine{240   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[0]) = -\/1.0;}
+\DoxyCodeLine{241   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{242       (ra + ram);}
+\DoxyCodeLine{243   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[2]) = 1.0;}
+\DoxyCodeLine{244   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) = rv;}
+\DoxyCodeLine{245   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) = 1.0;}
+\DoxyCodeLine{246   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[3]) = -\/1.0;}
+\DoxyCodeLine{247   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[2]) = cim;}
+\DoxyCodeLine{248   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[3]) =}
+\DoxyCodeLine{249       cim * rv;}
+\DoxyCodeLine{250   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = -\/1.0;}
+\DoxyCodeLine{251 \}}
+\DoxyCodeLine{252 }
+\DoxyCodeLine{253 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T, S\textcolor{keywordtype}{id}e s\textcolor{keywordtype}{id}e>}
+\DoxyCodeLine{254 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aa601ad866550b7430cec386ad5b71aa7}{ClosedLoopCoronaryBC<T, side>::update\_solution}}(}
+\DoxyCodeLine{255     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, std::vector<T> \&parameters,}
+\DoxyCodeLine{256     Eigen::Matrix<T, Eigen::Dynamic, 1> \&y,}
+\DoxyCodeLine{257     Eigen::Matrix<T, Eigen::Dynamic, 1> \&dy) \{}
+\DoxyCodeLine{258   T cim = parameters[this-\/>global\_param\_ids[ParamId::CIM]];}
+\DoxyCodeLine{259   T im = parameters[im\_param\_id];}
+\DoxyCodeLine{260   \textcolor{keyword}{auto} pim = im * y[this-\/>ventricle\_var\_id];}
+\DoxyCodeLine{261   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[2]) = -\/cim * pim;}
+\DoxyCodeLine{262 \}}
+\DoxyCodeLine{263 }
+\DoxyCodeLine{264 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T, S\textcolor{keywordtype}{id}e s\textcolor{keywordtype}{id}e>}
+\DoxyCodeLine{265 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aee74b2d6d8495120f14866de76aab06d}{ClosedLoopCoronaryBC<T, side>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{266   \textcolor{keywordflow}{return} num\_triplets;}
 \DoxyCodeLine{267 \}}
 \DoxyCodeLine{268 }
-\DoxyCodeLine{269 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{270 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}{ClosedLoopCoronaryBC<T>::update\_solution}}(}
-\DoxyCodeLine{271     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, Eigen::Matrix<T, Eigen::Dynamic, 1> \&y) \{}
-\DoxyCodeLine{272   \textcolor{keyword}{auto} Pim = this-\/>im * y[this-\/>ventricle\_var\_id];}
-\DoxyCodeLine{273   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[2]) = -\/params.Cim * Pim;}
-\DoxyCodeLine{274 \}}
-\DoxyCodeLine{275 }
-\DoxyCodeLine{276 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{277 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0a23c2fbef9c48d6f5c9a6e82b1b91d2}{ClosedLoopCoronaryBC<T>::set\_model\_dependent\_params}}(}
-\DoxyCodeLine{278     \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} \&model) \{}
-\DoxyCodeLine{279   T im\_value = 0.0;}
-\DoxyCodeLine{280   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&block : model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a69eebd78213465c7ab13ffbb7a5b86c8}{blocks}}) \{}
-\DoxyCodeLine{281     \textcolor{keywordflow}{if} (block-\/>name == \textcolor{stringliteral}{"{}CLH"{}}) \{}
-\DoxyCodeLine{282       \textcolor{keywordflow}{if} (this-\/>side == \textcolor{stringliteral}{"{}left"{}}) \{}
-\DoxyCodeLine{283         block-\/>get\_parameter\_value(}
-\DoxyCodeLine{284             \textcolor{stringliteral}{"{}iml"{}},}
-\DoxyCodeLine{285             im\_value);  \textcolor{comment}{// Scaling for LV pressure -\/> intramyocardial pressure}}
-\DoxyCodeLine{286         this-\/>ventricle\_var\_id =}
-\DoxyCodeLine{287             block-\/>global\_var\_ids[13];  \textcolor{comment}{// Solution ID for LV pressure}}
-\DoxyCodeLine{288       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (this-\/>side == \textcolor{stringliteral}{"{}right"{}}) \{}
-\DoxyCodeLine{289         block-\/>get\_parameter\_value(}
-\DoxyCodeLine{290             \textcolor{stringliteral}{"{}imr"{}},}
-\DoxyCodeLine{291             im\_value);  \textcolor{comment}{// Scaling for RV pressure -\/> intramyocardial pressure}}
-\DoxyCodeLine{292         this-\/>ventricle\_var\_id = block-\/>global\_var\_ids[6];}
-\DoxyCodeLine{293       \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{294         \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{295             \textcolor{stringliteral}{"{}For closed loop coronary, 'side' should be either 'left' or "{}}}
-\DoxyCodeLine{296             \textcolor{stringliteral}{"{}'right'"{}});}
-\DoxyCodeLine{297       \}}
-\DoxyCodeLine{298     \}}
-\DoxyCodeLine{299   \}}
-\DoxyCodeLine{300   this-\/>im = im\_value;}
-\DoxyCodeLine{301 \}}
-\DoxyCodeLine{302 }
-\DoxyCodeLine{303 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{304 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_af6f18c8f4b611a5beea29b88d72b5af0}{ClosedLoopCoronaryBC<T>::update\_block\_params}}(std::vector<T> new\_params) \{}
-\DoxyCodeLine{305   this-\/>params.Ra = new\_params[0];}
-\DoxyCodeLine{306   this-\/>params.Ram = new\_params[1];}
-\DoxyCodeLine{307   this-\/>params.Rv = new\_params[2];}
-\DoxyCodeLine{308   this-\/>params.Ca = new\_params[3];}
-\DoxyCodeLine{309   this-\/>params.Cim = new\_params[4];}
-\DoxyCodeLine{310   this-\/>im = new\_params[5];}
-\DoxyCodeLine{311 \}}
-\DoxyCodeLine{312 }
-\DoxyCodeLine{313 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{314 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ada897d3dada8b0a6e83f4014abbadea2}{ClosedLoopCoronaryBC<T>::get\_block\_params}}(std::vector<T> \&block\_params) \{}
-\DoxyCodeLine{315   \textcolor{keywordflow}{if} (block\_params.size() != 6) \{}
-\DoxyCodeLine{316     \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{317         \textcolor{stringliteral}{"{}Wrong vector size in get\_block\_params for ClosedLoopCoronaryBC. Size "{}}}
-\DoxyCodeLine{318         \textcolor{stringliteral}{"{}should be 6 but is currently "{}} +}
-\DoxyCodeLine{319         std::to\_string(block\_params.size()));}
-\DoxyCodeLine{320   \}}
-\DoxyCodeLine{321   block\_params[0] = this-\/>params.Ra;}
-\DoxyCodeLine{322   block\_params[1] = this-\/>params.Ram;}
-\DoxyCodeLine{323   block\_params[2] = this-\/>params.Rv;}
-\DoxyCodeLine{324   block\_params[3] = this-\/>params.Ca;}
-\DoxyCodeLine{325   block\_params[4] = this-\/>params.Cim;}
-\DoxyCodeLine{326   block\_params[5] = this-\/>im;}
-\DoxyCodeLine{327 \}}
-\DoxyCodeLine{328 }
-\DoxyCodeLine{329 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{330 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}{ClosedLoopCoronaryBC<T>::get\_num\_triplets}}() \{}
-\DoxyCodeLine{331   \textcolor{keywordflow}{return} num\_triplets;}
-\DoxyCodeLine{332 \}}
-\DoxyCodeLine{333 }
-\DoxyCodeLine{334 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{335 }
-\DoxyCodeLine{336 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_CLOSEDLOOPCORONARYBC\_HPP\_}}
+\DoxyCodeLine{269 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{270 }
+\DoxyCodeLine{271 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_CLOSEDLOOPCORONARYBC\_HPP\_}}
 
 \end{DoxyCode}

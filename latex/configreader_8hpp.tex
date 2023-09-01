@@ -2,58 +2,47 @@
 \label{configreader_8hpp}\index{io/configreader.hpp@{io/configreader.hpp}}
 
 
-\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}} source file.  
+Helper functions for reading configurations.  
 
 
 {\ttfamily \#include $<$list$>$}\newline
+{\ttfamily \#include $<$nlohmann/json.\+hpp$>$}\newline
 {\ttfamily \#include $<$stdexcept$>$}\newline
 {\ttfamily \#include $<$string$>$}\newline
 {\ttfamily \#include \char`\"{}../helpers/debug.\+hpp\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}../helpers/startswith.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/block.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/bloodvessel.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/bloodvesseljunction.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/closedloop\+RCRbc.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/closedloopcoronarybc.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/closedloopheartpulmonary.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/flowreferencebc.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/junction.\+hpp\char`\"{}}\newline
 {\ttfamily \#include \char`\"{}../model/model.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/node.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/openloopcoronarybc.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/pressurereferencebc.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/resistancebc.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/resistivejunction.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}../model/windkesselbc.\+hpp\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}./jsonhandler.\+hpp\char`\"{}}\newline
 Include dependency graph for configreader.\+hpp\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{configreader_8hpp__incl}
-\end{center}
-\end{figure}
+% FIG 0
 This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=218pt]{configreader_8hpp__dep__incl}
-\end{center}
-\end{figure}
+% FIG 1
 \doxysubsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
-class \mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader$<$ T $>$}}
-\begin{DoxyCompactList}\small\item\em sv\+Zero\+DSolver configuration reader. \end{DoxyCompactList}\end{DoxyCompactItemize}
+struct \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters}{IO\+::\+Simulation\+Parameters$<$ T $>$}}
+\begin{DoxyCompactList}\small\item\em Simulation parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Namespaces}
 \begin{DoxyCompactItemize}
 \item 
 namespace \mbox{\hyperlink{namespace_i_o}{IO}}
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{namespace_i_o}{IO}} namespace. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{namespace_i_o_a9753ce4db67b134deb4af6d71ba4c17a}\label{namespace_i_o_a9753ce4db67b134deb4af6d71ba4c17a}} 
+std\+::vector$<$ double $>$ {\bfseries IO\+::get\+\_\+double\+\_\+array} (const nlohmann\+::json \&data, std\+::string\+\_\+view key)
+\item 
+\mbox{\Hypertarget{namespace_i_o_ad9e3e9e10f161ccd49ea9cbb9034b9ad}\label{namespace_i_o_ad9e3e9e10f161ccd49ea9cbb9034b9ad}} 
+std\+::vector$<$ double $>$ {\bfseries IO\+::get\+\_\+double\+\_\+array} (const nlohmann\+::json \&data, std\+::string\+\_\+view key, std\+::vector$<$ double $>$ default\+\_\+value)
+\item 
+{\footnotesize template$<$typename T $>$ }\\Simulation\+Parameters$<$ T $>$ \mbox{\hyperlink{namespace_i_o_add684109fb8487834e371cbe517a2582}{IO\+::load\+\_\+simulation\+\_\+params}} (const nlohmann\+::json \&config)
+\begin{DoxyCompactList}\small\item\em Load the simulation parameters from a json configuration. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\void \mbox{\hyperlink{namespace_i_o_aa43ec6d81b581e9bc734a254c7a43acf}{IO\+::load\+\_\+simulation\+\_\+model}} (const nlohmann\+::json \&config, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
+\begin{DoxyCompactList}\small\item\em Load model from a configuration. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename T $>$ }\\\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ \mbox{\hyperlink{namespace_i_o_a979a0a0b79eebfe2c7c3c424f16d806b}{IO\+::load\+\_\+initial\+\_\+condition}} (const nlohmann\+::json \&config, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
+\begin{DoxyCompactList}\small\item\em Load initial conditions from a configuration. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-\mbox{\hyperlink{class_i_o_1_1_config_reader}{IO\+::\+Config\+Reader}} source file. 
+Helper functions for reading configurations. 
 

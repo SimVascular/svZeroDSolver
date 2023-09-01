@@ -1,982 +1,800 @@
 \begin{theindex}
 
   \item {$\sim$Block}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{24}
-  \item {$\sim$BloodVessel}
-    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{33}
-  \item {$\sim$BloodVesselJunction}
-    \subitem {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{39}
-  \item {$\sim$ClosedLoopCoronaryBC}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{43}
-  \item {$\sim$ClosedLoopHeartPulmonary}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
-  \item {$\sim$ClosedLoopRCRBC}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{57}
-  \item {$\sim$ConfigReader}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{61}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{27}
   \item {$\sim$DOFHandler}
-    \subitem {MODEL::DOFHandler}, \hyperpage{65}
-  \item {$\sim$FlowReferenceBC}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{69}
+    \subitem {MODEL::DOFHandler}, \hyperpage{57}
   \item {$\sim$Integrator}
-    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{74}
-  \item {$\sim$JsonHandler}
-    \subitem {IO::JsonHandler}, \hyperpage{77}
-  \item {$\sim$Junction}
-    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{85}
+    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{65}
+  \item {$\sim$LevenbergMarquardtOptimizer}
+    \subitem {OPT::LevenbergMarquardtOptimizer$<$ T $>$}, 
+		\hyperpage{71}
   \item {$\sim$Model}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{88}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{74}
   \item {$\sim$Node}
-    \subitem {MODEL::Node}, \hyperpage{92}
-  \item {$\sim$OpenLoopCoronaryBC}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{96}
-  \item {$\sim$PressureReferenceBC}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{123}
-  \item {$\sim$ResistanceBC}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{128}
-  \item {$\sim$ResistiveJunction}
-    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{133}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{83}
+  \item {$\sim$Parameter}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{90}
+  \item {$\sim$Solver}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{108}
   \item {$\sim$SparseSystem}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{138}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{113}
   \item {$\sim$State}
-    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{142}
-  \item {$\sim$TimeDependentParameter}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{145}
-  \item {$\sim$WindkesselBC}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{150}
+    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{117}
 
   \indexspace
 
-  \item {ALGEBRA}, \hyperpage{15}
-  \item {algebra/integrator.hpp}, \hyperpage{155, 156}
-  \item {algebra/namespace.hpp}, \hyperpage{253, 254}
-  \item {algebra/sparsesystem.hpp}, \hyperpage{159}, \hyperpage{161}
-  \item {algebra/state.hpp}, \hyperpage{163, 164}
-  \item {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{72}
-    \subitem {$\sim$Integrator}, \hyperpage{74}
-    \subitem {clean}, \hyperpage{74}
-    \subitem {Integrator}, \hyperpage{73, 74}
-    \subitem {step}, \hyperpage{74}
-    \subitem {update\_params}, \hyperpage{75}
-  \item {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{135}
-    \subitem {$\sim$SparseSystem}, \hyperpage{138}
-    \subitem {C}, \hyperpage{139}
-    \subitem {clean}, \hyperpage{138}
-    \subitem {D}, \hyperpage{139}
-    \subitem {dy}, \hyperpage{139}
-    \subitem {E}, \hyperpage{140}
-    \subitem {F}, \hyperpage{140}
-    \subitem {jacobian}, \hyperpage{140}
-    \subitem {reserve}, \hyperpage{138}
-    \subitem {residual}, \hyperpage{140}
-    \subitem {solve}, \hyperpage{138}
-    \subitem {solver}, \hyperpage{140}
-    \subitem {SparseSystem}, \hyperpage{136}
-    \subitem {update\_jacobian}, \hyperpage{138}
-    \subitem {update\_residual}, \hyperpage{139}
-  \item {ALGEBRA::State$<$ T $>$}, \hyperpage{141}
-    \subitem {$\sim$State}, \hyperpage{142}
-    \subitem {State}, \hyperpage{142}
-    \subitem {y}, \hyperpage{143}
-    \subitem {ydot}, \hyperpage{143}
-    \subitem {Zero}, \hyperpage{143}
+  \item {add\_block}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{74}
+  \item {add\_node}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{75}
+  \item {add\_parameter}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{75}
+  \item {ALGEBRA}, \hyperpage{17}
+  \item {algebra/integrator.hpp}, \hyperpage{123, 124}
+  \item {algebra/namespace.hpp}, \hyperpage{134}
+  \item {algebra/sparsesystem.hpp}, \hyperpage{126, 127}
+  \item {algebra/state.hpp}, \hyperpage{129, 130}
+  \item {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{63}
+    \subitem {$\sim$Integrator}, \hyperpage{65}
+    \subitem {clean}, \hyperpage{65}
+    \subitem {Integrator}, \hyperpage{64, 65}
+    \subitem {step}, \hyperpage{65}
+    \subitem {update\_params}, \hyperpage{66}
+  \item {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{111}
+    \subitem {$\sim$SparseSystem}, \hyperpage{113}
+    \subitem {C}, \hyperpage{114}
+    \subitem {clean}, \hyperpage{113}
+    \subitem {D}, \hyperpage{115}
+    \subitem {dy}, \hyperpage{115}
+    \subitem {E}, \hyperpage{115}
+    \subitem {F}, \hyperpage{115}
+    \subitem {jacobian}, \hyperpage{115}
+    \subitem {reserve}, \hyperpage{113}
+    \subitem {residual}, \hyperpage{115}
+    \subitem {solve}, \hyperpage{114}
+    \subitem {solver}, \hyperpage{116}
+    \subitem {SparseSystem}, \hyperpage{112, 113}
+    \subitem {update\_jacobian}, \hyperpage{114}
+    \subitem {update\_residual}, \hyperpage{114}
+  \item {ALGEBRA::State$<$ T $>$}, \hyperpage{116}
+    \subitem {$\sim$State}, \hyperpage{117}
+    \subitem {State}, \hyperpage{117, 118}
+    \subitem {y}, \hyperpage{118}
+    \subitem {ydot}, \hyperpage{119}
+    \subitem {Zero}, \hyperpage{118}
 
   \indexspace
 
   \item {Block}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{24}
-  \item {block\_index\_map}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{90}
-  \item {blocks}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{90}
-  \item {BloodVessel}
-    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{33}
-  \item {BloodVesselJunction}
-    \subitem {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{39}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{26, 27}
+  \item {BlockType}
+    \subitem {MODEL}, \hyperpage{23}
 
   \indexspace
 
   \item {C}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{139}
-    \subitem {MODEL::BloodVessel$<$ T $>$::Parameters}, \hyperpage{101}
-    \subitem {MODEL::BloodVesselJunction$<$ T $>$::Parameters}, 
-		\hyperpage{102}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$::Parameters}, 
-		\hyperpage{112}
-    \subitem {MODEL::WindkesselBC$<$ T $>$::Parameters}, 
-		\hyperpage{120}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{114}
+  \item {cardiac\_cycle\_period}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{81}
   \item {clean}
-    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{74}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{138}
-  \item {ClosedLoopCoronaryBC}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{43}
-  \item {ClosedLoopHeartPulmonary}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{48}
-  \item {ClosedLoopRCRBC}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{56}
-  \item {ConfigReader}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{61}
-  \item {coupling\_loc}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{72}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{125}
-  \item {Cp}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{106}
-  \item {Cpa}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{106}
+    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{65}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{113}
+  \item {CP}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {CPA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
   \item {cycle\_period}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{146}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{92}
 
   \indexspace
 
   \item {D}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{139}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{115}
   \item {debug.hpp}
-    \subitem {DEBUG\_MSG}, \hyperpage{166}
+    \subitem {DEBUG\_MSG}, \hyperpage{132}
   \item {DEBUG\_MSG}
-    \subitem {debug.hpp}, \hyperpage{166}
+    \subitem {debug.hpp}, \hyperpage{132}
   \item {DOFHandler}
-    \subitem {MODEL::DOFHandler}, \hyperpage{65}
+    \subitem {MODEL::DOFHandler}, \hyperpage{57}
   \item {dofhandler}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{90}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{81}
   \item {dy}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{139}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{115}
 
   \indexspace
 
   \item {E}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{140}
-  \item {Elv\_s}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{107}
-  \item {Emax\_la}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{107}
-  \item {Emax\_ra}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{107}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{115}
+  \item {ELV\_S}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {EMAX\_LA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {EMAX\_RA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
   \item {endswith}
-    \subitem {HELPERS}, \hyperpage{16}
-  \item {Erv\_s}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{107}
-  \item {external\_coupling\_blocks}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{90}
+    \subitem {HELPERS}, \hyperpage{18}
+  \item {equations}
+    \subitem {MODEL::DOFHandler}, \hyperpage{60}
+  \item {ERV\_S}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
 
   \indexspace
 
   \item {F}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{140}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{115}
+  \item {finalize}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{76}
   \item {flow\_dof}
-    \subitem {MODEL::Node}, \hyperpage{92}
-  \item {FlowReferenceBC}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{69}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{84}
 
   \indexspace
 
   \item {get}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{145}
-  \item {get\_activation\_and\_elastance\_functions}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{91}
+  \item {get\_block}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{76}
+  \item {get\_block\_name}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{77}
   \item {get\_block\_node\_IDs}
-    \subitem {interface.cpp}, \hyperpage{173}
-  \item {get\_block\_params}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{24}
-    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{33}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{44}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{57}
-  \item {get\_bool}
-    \subitem {IO::JsonHandler}, \hyperpage{77}
-  \item {get\_double}
-    \subitem {IO::JsonHandler}, \hyperpage{78}
-  \item {get\_double\_array}
-    \subitem {IO::JsonHandler}, \hyperpage{78, 79}
+    \subitem {interface.cpp}, \hyperpage{141}
+  \item {get\_block\_type}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{77}
+  \item {get\_full\_result}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{108}
   \item {get\_index}
-    \subitem {MODEL::DOFHandler}, \hyperpage{66}
-  \item {get\_int}
-    \subitem {IO::JsonHandler}, \hyperpage{79}
-  \item {get\_int\_array}
-    \subitem {IO::JsonHandler}, \hyperpage{80}
-  \item {get\_list}
-    \subitem {IO::JsonHandler}, \hyperpage{80}
+    \subitem {MODEL::DOFHandler}, \hyperpage{57}
+  \item {get\_name}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{27}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{83}
+  \item {get\_node\_name}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{77}
+  \item {get\_num\_blocks}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{78}
+  \item {get\_num\_equations}
+    \subitem {MODEL::DOFHandler}, \hyperpage{58}
   \item {get\_num\_triplets}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{25}
-    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{34}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{27}
+    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{35}
     \subitem {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{39}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{44}
+    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T, side $>$}, 
+		\hyperpage{44}
     \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{57}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{70}
-    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{85}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{88}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{96}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{123}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{128}
-    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{133}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{150}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{55}
+    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{61}
+    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{68}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{78}
+    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{87}
+    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{95}
+    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{98}
+    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{102}
+    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{121}
+  \item {get\_num\_variables}
+    \subitem {MODEL::DOFHandler}, \hyperpage{58}
+  \item {get\_parameter}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{78}
   \item {get\_parameter\_value}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{25}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{50}
-  \item {get\_psi\_ra\_la}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{50}
-  \item {get\_string}
-    \subitem {IO::JsonHandler}, \hyperpage{81}
-  \item {get\_string\_array}
-    \subitem {IO::JsonHandler}, \hyperpage{81}
-  \item {get\_valve\_positions}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{50}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{79}
+  \item {get\_single\_result}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{108}
+  \item {get\_single\_result\_avg}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{110}
+  \item {get\_times}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{110}
+  \item {get\_variable\_index}
+    \subitem {MODEL::DOFHandler}, \hyperpage{58}
   \item {global\_eqn\_ids}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{29}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{31}
+  \item {global\_param\_ids}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{31}
   \item {global\_var\_ids}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{29}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{31}
 
   \indexspace
 
-  \item {has\_key}
-    \subitem {IO::JsonHandler}, \hyperpage{81}
-  \item {HELPERS}, \hyperpage{15}
-    \subitem {endswith}, \hyperpage{16}
-    \subitem {startswith}, \hyperpage{16}
-  \item {helpers/debug.hpp}, \hyperpage{165}, \hyperpage{167}
-  \item {helpers/endswith.hpp}, \hyperpage{167}, \hyperpage{169}
-  \item {helpers/namespace.hpp}, \hyperpage{254, 255}
-  \item {helpers/startswith.hpp}, \hyperpage{169}, \hyperpage{171}
+  \item {HELPERS}, \hyperpage{17}
+    \subitem {endswith}, \hyperpage{18}
+    \subitem {startswith}, \hyperpage{18}
+  \item {helpers/debug.hpp}, \hyperpage{131, 132}
+  \item {helpers/endswith.hpp}, \hyperpage{133}
+  \item {helpers/namespace.hpp}, \hyperpage{135}
+  \item {helpers/startswith.hpp}, \hyperpage{139, 140}
 
   \indexspace
 
-  \item {iml}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{107}
-  \item {imr}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{107}
+  \item {id}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{31}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{84}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{92}
+  \item {IML}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {IMR}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
   \item {increment\_time}
-    \subitem {interface.cpp}, \hyperpage{173}
-  \item {initial\_state}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{61}
+    \subitem {interface.cpp}, \hyperpage{142}
   \item {initialize}
-    \subitem {interface.cpp}, \hyperpage{173}
+    \subitem {interface.cpp}, \hyperpage{142}
+  \item {inlet\_eles}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{84}
   \item {inlet\_nodes}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{29}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{31}
   \item {Integrator}
-    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{73, 74}
+    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{64, 65}
   \item {interface.cpp}
-    \subitem {get\_block\_node\_IDs}, \hyperpage{173}
-    \subitem {increment\_time}, \hyperpage{173}
-    \subitem {initialize}, \hyperpage{173}
-    \subitem {read\_block\_params}, \hyperpage{174}
-    \subitem {return\_y}, \hyperpage{174}
-    \subitem {return\_ydot}, \hyperpage{175}
-    \subitem {run\_simulation}, \hyperpage{175}
-    \subitem {set\_external\_step\_size}, \hyperpage{175}
-    \subitem {update\_block\_params}, \hyperpage{176}
-    \subitem {update\_state}, \hyperpage{176}
-  \item {interface/interface.cpp}, \hyperpage{171}
-  \item {IO}, \hyperpage{17}
-    \subitem {to\_variable\_csv}, \hyperpage{17}
-    \subitem {to\_vessel\_csv}, \hyperpage{18}
-  \item {io/configreader.hpp}, \hyperpage{176}, \hyperpage{178}
-  \item {io/csvwriter.hpp}, \hyperpage{186}, \hyperpage{188}
-  \item {io/jsonhandler.hpp}, \hyperpage{191, 192}
-  \item {io/namespace.hpp}, \hyperpage{255, 256}
-  \item {IO::ConfigReader$<$ T $>$}, \hyperpage{59}
-    \subitem {$\sim$ConfigReader}, \hyperpage{61}
-    \subitem {ConfigReader}, \hyperpage{61}
-    \subitem {initial\_state}, \hyperpage{61}
-    \subitem {load}, \hyperpage{61}
-    \subitem {model}, \hyperpage{62}
-    \subitem {output\_derivative}, \hyperpage{62}
-    \subitem {output\_interval}, \hyperpage{62}
-    \subitem {output\_last\_cycle\_only}, \hyperpage{62}
-    \subitem {output\_mean\_only}, \hyperpage{62}
-    \subitem {output\_variable\_based}, \hyperpage{62}
-    \subitem {sim\_abs\_tol}, \hyperpage{63}
-    \subitem {sim\_cardiac\_cycle\_period}, \hyperpage{63}
-    \subitem {sim\_coupled}, \hyperpage{63}
-    \subitem {sim\_external\_step\_size}, \hyperpage{63}
-    \subitem {sim\_nliter}, \hyperpage{63}
-    \subitem {sim\_num\_cycles}, \hyperpage{63}
-    \subitem {sim\_num\_time\_steps}, \hyperpage{64}
-    \subitem {sim\_pts\_per\_cycle}, \hyperpage{64}
-    \subitem {sim\_steady\_initial}, \hyperpage{64}
-    \subitem {sim\_time\_step\_size}, \hyperpage{64}
-  \item {IO::JsonHandler}, \hyperpage{75}
-    \subitem {$\sim$JsonHandler}, \hyperpage{77}
-    \subitem {get\_bool}, \hyperpage{77}
-    \subitem {get\_double}, \hyperpage{78}
-    \subitem {get\_double\_array}, \hyperpage{78, 79}
-    \subitem {get\_int}, \hyperpage{79}
-    \subitem {get\_int\_array}, \hyperpage{80}
-    \subitem {get\_list}, \hyperpage{80}
-    \subitem {get\_string}, \hyperpage{81}
-    \subitem {get\_string\_array}, \hyperpage{81}
-    \subitem {has\_key}, \hyperpage{81}
-    \subitem {JsonHandler}, \hyperpage{76}
-    \subitem {length}, \hyperpage{82}
-    \subitem {operator[]}, \hyperpage{82}
+    \subitem {get\_block\_node\_IDs}, \hyperpage{141}
+    \subitem {increment\_time}, \hyperpage{142}
+    \subitem {initialize}, \hyperpage{142}
+    \subitem {read\_block\_params}, \hyperpage{143}
+    \subitem {return\_y}, \hyperpage{143}
+    \subitem {return\_ydot}, \hyperpage{143}
+    \subitem {run\_simulation}, \hyperpage{144}
+    \subitem {set\_external\_step\_size}, \hyperpage{144}
+    \subitem {update\_block\_params}, \hyperpage{144}
+    \subitem {update\_state}, \hyperpage{145}
+  \item {interface/interface.cpp}, \hyperpage{140}
+  \item {IO}, \hyperpage{19}
+    \subitem {load\_initial\_condition}, \hyperpage{19}
+    \subitem {load\_simulation\_model}, \hyperpage{20}
+    \subitem {load\_simulation\_params}, \hyperpage{20}
+    \subitem {to\_variable\_csv}, \hyperpage{21}
+    \subitem {to\_vessel\_csv}, \hyperpage{21}
+  \item {io/configreader.hpp}, \hyperpage{145, 146}
+  \item {io/csvwriter.hpp}, \hyperpage{153, 154}
+  \item {io/namespace.hpp}, \hyperpage{136}
+  \item {IO::SimulationParameters$<$ T $>$}, \hyperpage{103}
+    \subitem {output\_all\_cycles}, \hyperpage{104}
+    \subitem {output\_derivative}, \hyperpage{105}
+    \subitem {output\_interval}, \hyperpage{105}
+    \subitem {output\_mean\_only}, \hyperpage{105}
+    \subitem {output\_variable\_based}, \hyperpage{105}
+    \subitem {sim\_abs\_tol}, \hyperpage{105}
+    \subitem {sim\_coupled}, \hyperpage{105}
+    \subitem {sim\_external\_step\_size}, \hyperpage{106}
+    \subitem {sim\_nliter}, \hyperpage{106}
+    \subitem {sim\_num\_cycles}, \hyperpage{106}
+    \subitem {sim\_num\_time\_steps}, \hyperpage{106}
+    \subitem {sim\_pts\_per\_cycle}, \hyperpage{106}
+    \subitem {sim\_steady\_initial}, \hyperpage{106}
+    \subitem {sim\_time\_step\_size}, \hyperpage{107}
   \item {isconstant}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{147}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{92}
   \item {isperiodic}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{147}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{92}
 
   \indexspace
 
   \item {jacobian}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{140}
-  \item {JsonHandler}
-    \subitem {IO::JsonHandler}, \hyperpage{76}
-  \item {Junction}
-    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{85}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{115}
 
   \indexspace
 
-  \item {Kxp\_la}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{108}
-  \item {Kxp\_ra}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{108}
-  \item {Kxv\_la}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{108}
-  \item {Kxv\_ra}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{108}
+  \item {KXP\_LA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {KXP\_RA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {KXV\_LA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {KXV\_RA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
 
   \indexspace
 
-  \item {L}
-    \subitem {MODEL::BloodVessel$<$ T $>$::Parameters}, \hyperpage{101}
-    \subitem {MODEL::BloodVesselJunction$<$ T $>$::Parameters}, 
-		\hyperpage{103}
-  \item {length}
-    \subitem {IO::JsonHandler}, \hyperpage{82}
-  \item {Lla\_v}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{108}
-  \item {Llv\_a}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{108}
-  \item {load}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{61}
-  \item {Lra\_v}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{109}
-  \item {Lrv\_a}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{109}
+  \item {LevenbergMarquardtOptimizer}
+    \subitem {OPT::LevenbergMarquardtOptimizer$<$ T $>$}, 
+		\hyperpage{71}
+  \item {LLA\_V}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {LLV\_A}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {load\_initial\_condition}
+    \subitem {IO}, \hyperpage{19}
+  \item {load\_simulation\_model}
+    \subitem {IO}, \hyperpage{20}
+  \item {load\_simulation\_params}
+    \subitem {IO}, \hyperpage{20}
+  \item {LRA\_V}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {LRV\_A}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
 
   \indexspace
 
-  \item {main}
-    \subitem {main.cpp}, \hyperpage{197}
-  \item {main.cpp}, \hyperpage{197}
-    \subitem {main}, \hyperpage{197}
-  \item {main.hpp}, \hyperpage{198}
-    \subitem {run}, \hyperpage{199}
-  \item {MODEL}, \hyperpage{18}
+  \item {MODEL}, \hyperpage{22}
+    \subitem {BlockType}, \hyperpage{23}
   \item {Model}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{88}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{74}
   \item {model}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{62}
-  \item {model/block.hpp}, \hyperpage{204, 205}
-  \item {model/bloodvessel.hpp}, \hyperpage{209}, \hyperpage{211}
-  \item {model/bloodvesseljunction.hpp}, \hyperpage{214}, 
-		\hyperpage{216}
-  \item {model/closedloopcoronarybc.hpp}, \hyperpage{219, 220}
-  \item {model/closedloopheartpulmonary.hpp}, \hyperpage{224}, 
-		\hyperpage{226}
-  \item {model/closedloopRCRbc.hpp}, \hyperpage{233}, \hyperpage{235}
-  \item {model/dofhandler.hpp}, \hyperpage{238}, \hyperpage{240}
-  \item {model/flowreferencebc.hpp}, \hyperpage{241}, \hyperpage{243}
-  \item {model/junction.hpp}, \hyperpage{246, 247}
-  \item {model/model.hpp}, \hyperpage{250, 251}
-  \item {model/namespace.hpp}, \hyperpage{256, 257}
-  \item {model/node.hpp}, \hyperpage{257}, \hyperpage{259}
-  \item {model/openloopcoronarybc.hpp}, \hyperpage{260, 261}
-  \item {model/pressurereferencebc.hpp}, \hyperpage{265}, 
-		\hyperpage{267}
-  \item {model/resistancebc.hpp}, \hyperpage{270, 271}
-  \item {model/resistivejunction.hpp}, \hyperpage{274}, \hyperpage{276}
-  \item {model/timedependentparameter.hpp}, \hyperpage{279, 280}
-  \item {model/windkesselbc.hpp}, \hyperpage{282}, \hyperpage{284}
-  \item {MODEL::Block$<$ T $>$}, \hyperpage{21}
-    \subitem {$\sim$Block}, \hyperpage{24}
-    \subitem {Block}, \hyperpage{24}
-    \subitem {get\_block\_params}, \hyperpage{24}
-    \subitem {get\_num\_triplets}, \hyperpage{25}
-    \subitem {get\_parameter\_value}, \hyperpage{25}
-    \subitem {global\_eqn\_ids}, \hyperpage{29}
-    \subitem {global\_var\_ids}, \hyperpage{29}
-    \subitem {inlet\_nodes}, \hyperpage{29}
-    \subitem {name}, \hyperpage{30}
-    \subitem {num\_triplets}, \hyperpage{30}
-    \subitem {outlet\_nodes}, \hyperpage{30}
-    \subitem {set\_ICs}, \hyperpage{25}
-    \subitem {set\_model\_dependent\_params}, \hyperpage{26}
-    \subitem {setup\_dofs}, \hyperpage{26}
-    \subitem {setup\_dofs\_}, \hyperpage{26}
-    \subitem {to\_steady}, \hyperpage{27}
-    \subitem {to\_unsteady}, \hyperpage{27}
-    \subitem {update\_block\_params}, \hyperpage{27}
-    \subitem {update\_constant}, \hyperpage{28}
-    \subitem {update\_solution}, \hyperpage{28}
-    \subitem {update\_time}, \hyperpage{28}
-  \item {MODEL::Block$<$ T $>$::Parameters}, \hyperpage{99}
-  \item {MODEL::BloodVessel$<$ T $>$}, \hyperpage{31}
-    \subitem {$\sim$BloodVessel}, \hyperpage{33}
-    \subitem {BloodVessel}, \hyperpage{33}
-    \subitem {get\_block\_params}, \hyperpage{33}
-    \subitem {get\_num\_triplets}, \hyperpage{34}
-    \subitem {num\_triplets}, \hyperpage{36}
-    \subitem {setup\_dofs}, \hyperpage{34}
-    \subitem {update\_block\_params}, \hyperpage{34}
-    \subitem {update\_constant}, \hyperpage{36}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{32}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{84}
+  \item {model/block.hpp}, \hyperpage{157}
+  \item {model/blocktype.hpp}, \hyperpage{161}
+  \item {model/bloodvessel.hpp}, \hyperpage{162, 163}
+  \item {model/bloodvesseljunction.hpp}, \hyperpage{166, 167}
+  \item {model/closedloopcoronarybc.hpp}, \hyperpage{171, 172}
+  \item {model/closedloopheartpulmonary.hpp}, \hyperpage{175, 176}
+  \item {model/closedloopRCRbc.hpp}, \hyperpage{182}
+  \item {model/dofhandler.hpp}, \hyperpage{185}
+  \item {model/flowreferencebc.hpp}, \hyperpage{187, 188}
+  \item {model/junction.hpp}, \hyperpage{190}
+  \item {model/model.hpp}, \hyperpage{193, 194}
+  \item {model/namespace.hpp}, \hyperpage{136, 137}
+  \item {model/node.hpp}, \hyperpage{200, 201}
+  \item {model/openloopcoronarybc.hpp}, \hyperpage{202, 203}
+  \item {model/parameter.hpp}, \hyperpage{205, 206}
+  \item {model/pressurereferencebc.hpp}, \hyperpage{209}
+  \item {model/resistancebc.hpp}, \hyperpage{211, 212}
+  \item {model/resistivejunction.hpp}, \hyperpage{214}
+  \item {model/windkesselbc.hpp}, \hyperpage{217}
+  \item {MODEL::Block$<$ T $>$}, \hyperpage{25}
+    \subitem {$\sim$Block}, \hyperpage{27}
+    \subitem {Block}, \hyperpage{26, 27}
+    \subitem {get\_name}, \hyperpage{27}
+    \subitem {get\_num\_triplets}, \hyperpage{27}
+    \subitem {global\_eqn\_ids}, \hyperpage{31}
+    \subitem {global\_param\_ids}, \hyperpage{31}
+    \subitem {global\_var\_ids}, \hyperpage{31}
+    \subitem {id}, \hyperpage{31}
+    \subitem {inlet\_nodes}, \hyperpage{31}
+    \subitem {model}, \hyperpage{32}
+    \subitem {num\_triplets}, \hyperpage{32}
+    \subitem {outlet\_nodes}, \hyperpage{32}
+    \subitem {setup\_dofs}, \hyperpage{28}
+    \subitem {setup\_dofs\_}, \hyperpage{28}
+    \subitem {setup\_model\_dependent\_params}, \hyperpage{29}
+    \subitem {steady}, \hyperpage{32}
+    \subitem {update\_constant}, \hyperpage{29}
+    \subitem {update\_gradient}, \hyperpage{29}
+    \subitem {update\_solution}, \hyperpage{30}
+    \subitem {update\_time}, \hyperpage{30}
+  \item {MODEL::BloodVessel$<$ T $>$}, \hyperpage{33}
+    \subitem {get\_num\_triplets}, \hyperpage{35}
+    \subitem {num\_triplets}, \hyperpage{37}
+    \subitem {ParamId}, \hyperpage{35}
+    \subitem {setup\_dofs}, \hyperpage{35}
+    \subitem {update\_constant}, \hyperpage{35}
+    \subitem {update\_gradient}, \hyperpage{36}
     \subitem {update\_solution}, \hyperpage{36}
-  \item {MODEL::BloodVessel$<$ T $>$::Parameters}, \hyperpage{100}
-    \subitem {C}, \hyperpage{101}
-    \subitem {L}, \hyperpage{101}
-    \subitem {R}, \hyperpage{101}
-    \subitem {stenosis\_coefficient}, \hyperpage{101}
   \item {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{37}
-    \subitem {$\sim$BloodVesselJunction}, \hyperpage{39}
-    \subitem {BloodVesselJunction}, \hyperpage{39}
     \subitem {get\_num\_triplets}, \hyperpage{39}
     \subitem {num\_triplets}, \hyperpage{41}
     \subitem {setup\_dofs}, \hyperpage{39}
     \subitem {update\_constant}, \hyperpage{40}
+    \subitem {update\_gradient}, \hyperpage{40}
     \subitem {update\_solution}, \hyperpage{40}
-  \item {MODEL::BloodVesselJunction$<$ T $>$::Parameters}, 
-		\hyperpage{102}
-    \subitem {C}, \hyperpage{102}
-    \subitem {L}, \hyperpage{103}
-    \subitem {R}, \hyperpage{103}
-    \subitem {stenosis\_coefficient}, \hyperpage{103}
-  \item {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{41}
-    \subitem {$\sim$ClosedLoopCoronaryBC}, \hyperpage{43}
-    \subitem {ClosedLoopCoronaryBC}, \hyperpage{43}
-    \subitem {get\_block\_params}, \hyperpage{44}
+  \item {MODEL::ClosedLoopCoronaryBC$<$ T, side $>$}, \hyperpage{41}
     \subitem {get\_num\_triplets}, \hyperpage{44}
     \subitem {num\_triplets}, \hyperpage{46}
-    \subitem {set\_model\_dependent\_params}, \hyperpage{44}
-    \subitem {setup\_dofs}, \hyperpage{45}
-    \subitem {update\_block\_params}, \hyperpage{45}
+    \subitem {ParamId}, \hyperpage{44}
+    \subitem {setup\_dofs}, \hyperpage{44}
+    \subitem {setup\_model\_dependent\_params}, \hyperpage{44}
     \subitem {update\_constant}, \hyperpage{45}
-    \subitem {update\_solution}, \hyperpage{46}
-  \item {MODEL::ClosedLoopCoronaryBC$<$ T $>$::Parameters}, 
-		\hyperpage{104}
-  \item {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{47}
-    \subitem {$\sim$ClosedLoopHeartPulmonary}, \hyperpage{49}
-    \subitem {ClosedLoopHeartPulmonary}, \hyperpage{48}
-    \subitem {get\_activation\_and\_elastance\_functions}, 
-		\hyperpage{49}
-    \subitem {get\_block\_params}, \hyperpage{49}
+    \subitem {update\_solution}, \hyperpage{45}
+  \item {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{46}
+    \subitem {CP}, \hyperpage{49}
+    \subitem {CPA}, \hyperpage{49}
+    \subitem {ELV\_S}, \hyperpage{49}
+    \subitem {EMAX\_LA}, \hyperpage{49}
+    \subitem {EMAX\_RA}, \hyperpage{49}
+    \subitem {ERV\_S}, \hyperpage{49}
     \subitem {get\_num\_triplets}, \hyperpage{49}
-    \subitem {get\_parameter\_value}, \hyperpage{50}
-    \subitem {get\_psi\_ra\_la}, \hyperpage{50}
-    \subitem {get\_valve\_positions}, \hyperpage{50}
-    \subitem {num\_triplets}, \hyperpage{54}
-    \subitem {set\_ICs}, \hyperpage{52}
-    \subitem {setup\_dofs}, \hyperpage{52}
-    \subitem {update\_block\_params}, \hyperpage{52}
-    \subitem {update\_constant}, \hyperpage{53}
-    \subitem {update\_solution}, \hyperpage{53}
-    \subitem {update\_time}, \hyperpage{53}
-  \item {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{105}
-    \subitem {Cp}, \hyperpage{106}
-    \subitem {Cpa}, \hyperpage{106}
-    \subitem {Elv\_s}, \hyperpage{107}
-    \subitem {Emax\_la}, \hyperpage{107}
-    \subitem {Emax\_ra}, \hyperpage{107}
-    \subitem {Erv\_s}, \hyperpage{107}
-    \subitem {iml}, \hyperpage{107}
-    \subitem {imr}, \hyperpage{107}
-    \subitem {Kxp\_la}, \hyperpage{108}
-    \subitem {Kxp\_ra}, \hyperpage{108}
-    \subitem {Kxv\_la}, \hyperpage{108}
-    \subitem {Kxv\_ra}, \hyperpage{108}
-    \subitem {Lla\_v}, \hyperpage{108}
-    \subitem {Llv\_a}, \hyperpage{108}
-    \subitem {Lra\_v}, \hyperpage{109}
-    \subitem {Lrv\_a}, \hyperpage{109}
-    \subitem {Rla\_v}, \hyperpage{109}
-    \subitem {Rlv\_ao}, \hyperpage{109}
-    \subitem {Rpd}, \hyperpage{109}
-    \subitem {Rra\_v}, \hyperpage{109}
-    \subitem {Rrv\_a}, \hyperpage{110}
-    \subitem {tpwave}, \hyperpage{110}
-    \subitem {Tsa}, \hyperpage{110}
-    \subitem {Vaso\_la}, \hyperpage{110}
-    \subitem {Vaso\_ra}, \hyperpage{110}
-    \subitem {Vlv\_u}, \hyperpage{110}
-    \subitem {Vrv\_u}, \hyperpage{111}
-  \item {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{54}
-    \subitem {$\sim$ClosedLoopRCRBC}, \hyperpage{57}
-    \subitem {ClosedLoopRCRBC}, \hyperpage{56}
-    \subitem {get\_block\_params}, \hyperpage{57}
-    \subitem {get\_num\_triplets}, \hyperpage{57}
-    \subitem {num\_triplets}, \hyperpage{59}
-    \subitem {setup\_dofs}, \hyperpage{57}
-    \subitem {to\_steady}, \hyperpage{58}
-    \subitem {to\_unsteady}, \hyperpage{58}
-    \subitem {update\_block\_params}, \hyperpage{58}
-    \subitem {update\_constant}, \hyperpage{58}
-  \item {MODEL::ClosedLoopRCRBC$<$ T $>$::Parameters}, \hyperpage{111}
-    \subitem {C}, \hyperpage{112}
-    \subitem {Rd}, \hyperpage{112}
-    \subitem {Rp}, \hyperpage{112}
-  \item {MODEL::DOFHandler}, \hyperpage{65}
-    \subitem {$\sim$DOFHandler}, \hyperpage{65}
-    \subitem {DOFHandler}, \hyperpage{65}
-    \subitem {get\_index}, \hyperpage{66}
-    \subitem {register\_equation}, \hyperpage{66}
-    \subitem {register\_variable}, \hyperpage{66}
-    \subitem {size}, \hyperpage{67}
-    \subitem {variables}, \hyperpage{67}
-  \item {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{67}
-    \subitem {$\sim$FlowReferenceBC}, \hyperpage{69}
-    \subitem {coupling\_loc}, \hyperpage{72}
-    \subitem {FlowReferenceBC}, \hyperpage{69}
-    \subitem {get\_num\_triplets}, \hyperpage{70}
-    \subitem {num\_triplets}, \hyperpage{72}
-    \subitem {setup\_dofs}, \hyperpage{70}
-    \subitem {to\_steady}, \hyperpage{70}
-    \subitem {to\_unsteady}, \hyperpage{70}
-    \subitem {update\_block\_params}, \hyperpage{71}
-    \subitem {update\_constant}, \hyperpage{71}
-    \subitem {update\_time}, \hyperpage{71}
-  \item {MODEL::FlowReferenceBC$<$ T $>$::Parameters}, \hyperpage{113}
-    \subitem {Q}, \hyperpage{113}
-  \item {MODEL::Junction$<$ T $>$}, \hyperpage{83}
-    \subitem {$\sim$Junction}, \hyperpage{85}
-    \subitem {get\_num\_triplets}, \hyperpage{85}
-    \subitem {Junction}, \hyperpage{85}
-    \subitem {num\_triplets}, \hyperpage{86}
-    \subitem {setup\_dofs}, \hyperpage{85}
-    \subitem {update\_constant}, \hyperpage{86}
-  \item {MODEL::Junction$<$ T $>$::Parameters}, \hyperpage{114}
-  \item {MODEL::Model$<$ T $>$}, \hyperpage{87}
-    \subitem {$\sim$Model}, \hyperpage{88}
-    \subitem {block\_index\_map}, \hyperpage{90}
-    \subitem {blocks}, \hyperpage{90}
-    \subitem {dofhandler}, \hyperpage{90}
-    \subitem {external\_coupling\_blocks}, \hyperpage{90}
-    \subitem {get\_num\_triplets}, \hyperpage{88}
-    \subitem {Model}, \hyperpage{88}
-    \subitem {nodes}, \hyperpage{91}
-    \subitem {to\_steady}, \hyperpage{88}
-    \subitem {to\_unsteady}, \hyperpage{89}
-    \subitem {update\_constant}, \hyperpage{89}
-    \subitem {update\_solution}, \hyperpage{89}
-    \subitem {update\_time}, \hyperpage{89}
-  \item {MODEL::Node}, \hyperpage{91}
-    \subitem {$\sim$Node}, \hyperpage{92}
-    \subitem {flow\_dof}, \hyperpage{92}
-    \subitem {name}, \hyperpage{93}
-    \subitem {Node}, \hyperpage{92}
-    \subitem {pres\_dof}, \hyperpage{93}
-    \subitem {setup\_dofs}, \hyperpage{92}
-  \item {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{93}
-    \subitem {$\sim$OpenLoopCoronaryBC}, \hyperpage{96}
-    \subitem {get\_num\_triplets}, \hyperpage{96}
-    \subitem {num\_triplets}, \hyperpage{98}
-    \subitem {OpenLoopCoronaryBC}, \hyperpage{95}
-    \subitem {setup\_dofs}, \hyperpage{96}
-    \subitem {to\_steady}, \hyperpage{97}
-    \subitem {to\_unsteady}, \hyperpage{97}
-    \subitem {update\_block\_params}, \hyperpage{97}
-    \subitem {update\_constant}, \hyperpage{97}
-    \subitem {update\_time}, \hyperpage{98}
-  \item {MODEL::OpenLoopCoronaryBC$<$ T $>$::Parameters}, 
-		\hyperpage{114}
-  \item {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{121}
-    \subitem {$\sim$PressureReferenceBC}, \hyperpage{123}
-    \subitem {coupling\_loc}, \hyperpage{125}
-    \subitem {get\_num\_triplets}, \hyperpage{123}
-    \subitem {num\_triplets}, \hyperpage{125}
-    \subitem {PressureReferenceBC}, \hyperpage{122}
-    \subitem {setup\_dofs}, \hyperpage{123}
-    \subitem {to\_steady}, \hyperpage{124}
-    \subitem {to\_unsteady}, \hyperpage{124}
-    \subitem {update\_block\_params}, \hyperpage{124}
-    \subitem {update\_constant}, \hyperpage{124}
-    \subitem {update\_time}, \hyperpage{125}
-  \item {MODEL::PressureReferenceBC$<$ T $>$::Parameters}, 
-		\hyperpage{115}
-    \subitem {P}, \hyperpage{116}
-  \item {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{126}
-    \subitem {$\sim$ResistanceBC}, \hyperpage{128}
-    \subitem {get\_num\_triplets}, \hyperpage{128}
-    \subitem {num\_triplets}, \hyperpage{130}
-    \subitem {ResistanceBC}, \hyperpage{128}
-    \subitem {setup\_dofs}, \hyperpage{128}
-    \subitem {to\_steady}, \hyperpage{129}
-    \subitem {to\_unsteady}, \hyperpage{129}
-    \subitem {update\_block\_params}, \hyperpage{129}
-    \subitem {update\_constant}, \hyperpage{130}
-    \subitem {update\_time}, \hyperpage{130}
-  \item {MODEL::ResistanceBC$<$ T $>$::Parameters}, \hyperpage{117}
-    \subitem {Pd}, \hyperpage{117}
-    \subitem {R}, \hyperpage{117}
-  \item {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{131}
-    \subitem {$\sim$ResistiveJunction}, \hyperpage{133}
-    \subitem {get\_num\_triplets}, \hyperpage{133}
-    \subitem {num\_triplets}, \hyperpage{135}
-    \subitem {ResistiveJunction}, \hyperpage{133}
-    \subitem {setup\_dofs}, \hyperpage{133}
-    \subitem {update\_block\_params}, \hyperpage{134}
-    \subitem {update\_constant}, \hyperpage{134}
-  \item {MODEL::ResistiveJunction$<$ T $>$::Parameters}, 
-		\hyperpage{118}
-    \subitem {R}, \hyperpage{119}
-  \item {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{144}
-    \subitem {$\sim$TimeDependentParameter}, \hyperpage{145}
-    \subitem {cycle\_period}, \hyperpage{146}
-    \subitem {get}, \hyperpage{145}
-    \subitem {isconstant}, \hyperpage{147}
-    \subitem {isperiodic}, \hyperpage{147}
-    \subitem {TimeDependentParameter}, \hyperpage{145}
-    \subitem {times}, \hyperpage{147}
-    \subitem {to\_steady}, \hyperpage{146}
-    \subitem {to\_unsteady}, \hyperpage{146}
-    \subitem {update\_params}, \hyperpage{146}
-    \subitem {values}, \hyperpage{147}
-  \item {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{148}
-    \subitem {$\sim$WindkesselBC}, \hyperpage{150}
-    \subitem {get\_num\_triplets}, \hyperpage{150}
-    \subitem {num\_triplets}, \hyperpage{152}
-    \subitem {setup\_dofs}, \hyperpage{150}
-    \subitem {to\_steady}, \hyperpage{151}
-    \subitem {to\_unsteady}, \hyperpage{151}
-    \subitem {update\_block\_params}, \hyperpage{151}
-    \subitem {update\_constant}, \hyperpage{152}
-    \subitem {update\_time}, \hyperpage{152}
-    \subitem {WindkesselBC}, \hyperpage{150}
-  \item {MODEL::WindkesselBC$<$ T $>$::Parameters}, \hyperpage{119}
-    \subitem {C}, \hyperpage{120}
-    \subitem {Pd}, \hyperpage{120}
-    \subitem {Rd}, \hyperpage{120}
-    \subitem {Rp}, \hyperpage{120}
+    \subitem {IML}, \hyperpage{49}
+    \subitem {IMR}, \hyperpage{49}
+    \subitem {KXP\_LA}, \hyperpage{49}
+    \subitem {KXP\_RA}, \hyperpage{49}
+    \subitem {KXV\_LA}, \hyperpage{49}
+    \subitem {KXV\_RA}, \hyperpage{49}
+    \subitem {LLA\_V}, \hyperpage{49}
+    \subitem {LLV\_A}, \hyperpage{49}
+    \subitem {LRA\_V}, \hyperpage{49}
+    \subitem {LRV\_A}, \hyperpage{49}
+    \subitem {num\_triplets}, \hyperpage{52}
+    \subitem {ParamId}, \hyperpage{48}
+    \subitem {RLA\_V}, \hyperpage{49}
+    \subitem {RLV\_AO}, \hyperpage{49}
+    \subitem {RPD}, \hyperpage{49}
+    \subitem {RRA\_V}, \hyperpage{49}
+    \subitem {RRV\_A}, \hyperpage{49}
+    \subitem {setup\_dofs}, \hyperpage{50}
+    \subitem {TPWAVE}, \hyperpage{49}
+    \subitem {TSA}, \hyperpage{49}
+    \subitem {update\_constant}, \hyperpage{50}
+    \subitem {update\_solution}, \hyperpage{50}
+    \subitem {update\_time}, \hyperpage{52}
+    \subitem {VASO\_LA}, \hyperpage{49}
+    \subitem {VASO\_RA}, \hyperpage{49}
+    \subitem {VLV\_U}, \hyperpage{49}
+    \subitem {VRV\_U}, \hyperpage{49}
+  \item {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{53}
+    \subitem {get\_num\_triplets}, \hyperpage{55}
+    \subitem {num\_triplets}, \hyperpage{56}
+    \subitem {ParamId}, \hyperpage{54}
+    \subitem {setup\_dofs}, \hyperpage{55}
+    \subitem {update\_constant}, \hyperpage{55}
+  \item {MODEL::DOFHandler}, \hyperpage{56}
+    \subitem {$\sim$DOFHandler}, \hyperpage{57}
+    \subitem {DOFHandler}, \hyperpage{57}
+    \subitem {equations}, \hyperpage{60}
+    \subitem {get\_index}, \hyperpage{57}
+    \subitem {get\_num\_equations}, \hyperpage{58}
+    \subitem {get\_num\_variables}, \hyperpage{58}
+    \subitem {get\_variable\_index}, \hyperpage{58}
+    \subitem {register\_equation}, \hyperpage{59}
+    \subitem {register\_variable}, \hyperpage{59}
+    \subitem {size}, \hyperpage{59}
+    \subitem {variable\_name\_map}, \hyperpage{60}
+    \subitem {variables}, \hyperpage{60}
+  \item {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{60}
+    \subitem {get\_num\_triplets}, \hyperpage{61}
+    \subitem {num\_triplets}, \hyperpage{63}
+    \subitem {setup\_dofs}, \hyperpage{62}
+    \subitem {update\_constant}, \hyperpage{62}
+    \subitem {update\_time}, \hyperpage{62}
+  \item {MODEL::Junction$<$ T $>$}, \hyperpage{66}
+    \subitem {get\_num\_triplets}, \hyperpage{68}
+    \subitem {num\_triplets}, \hyperpage{69}
+    \subitem {setup\_dofs}, \hyperpage{68}
+    \subitem {update\_constant}, \hyperpage{68}
+    \subitem {update\_gradient}, \hyperpage{69}
+  \item {MODEL::Model$<$ T $>$}, \hyperpage{72}
+    \subitem {$\sim$Model}, \hyperpage{74}
+    \subitem {add\_block}, \hyperpage{74}
+    \subitem {add\_node}, \hyperpage{75}
+    \subitem {add\_parameter}, \hyperpage{75}
+    \subitem {cardiac\_cycle\_period}, \hyperpage{81}
+    \subitem {dofhandler}, \hyperpage{81}
+    \subitem {finalize}, \hyperpage{76}
+    \subitem {get\_block}, \hyperpage{76}
+    \subitem {get\_block\_name}, \hyperpage{77}
+    \subitem {get\_block\_type}, \hyperpage{77}
+    \subitem {get\_node\_name}, \hyperpage{77}
+    \subitem {get\_num\_blocks}, \hyperpage{78}
+    \subitem {get\_num\_triplets}, \hyperpage{78}
+    \subitem {get\_parameter}, \hyperpage{78}
+    \subitem {get\_parameter\_value}, \hyperpage{79}
+    \subitem {Model}, \hyperpage{74}
+    \subitem {time}, \hyperpage{81}
+    \subitem {to\_steady}, \hyperpage{79}
+    \subitem {to\_unsteady}, \hyperpage{79}
+    \subitem {update\_constant}, \hyperpage{79}
+    \subitem {update\_parameter\_value}, \hyperpage{80}
+    \subitem {update\_solution}, \hyperpage{80}
+    \subitem {update\_time}, \hyperpage{80}
+  \item {MODEL::Node$<$ T $>$}, \hyperpage{81}
+    \subitem {$\sim$Node}, \hyperpage{83}
+    \subitem {flow\_dof}, \hyperpage{84}
+    \subitem {get\_name}, \hyperpage{83}
+    \subitem {id}, \hyperpage{84}
+    \subitem {inlet\_eles}, \hyperpage{84}
+    \subitem {model}, \hyperpage{84}
+    \subitem {Node}, \hyperpage{82}
+    \subitem {outlet\_eles}, \hyperpage{84}
+    \subitem {pres\_dof}, \hyperpage{85}
+    \subitem {setup\_dofs}, \hyperpage{83}
+  \item {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{85}
+    \subitem {get\_num\_triplets}, \hyperpage{87}
+    \subitem {num\_triplets}, \hyperpage{88}
+    \subitem {setup\_dofs}, \hyperpage{87}
+    \subitem {update\_constant}, \hyperpage{87}
+    \subitem {update\_time}, \hyperpage{88}
+  \item {MODEL::Parameter$<$ T $>$}, \hyperpage{89}
+    \subitem {$\sim$Parameter}, \hyperpage{90}
+    \subitem {cycle\_period}, \hyperpage{92}
+    \subitem {get}, \hyperpage{91}
+    \subitem {id}, \hyperpage{92}
+    \subitem {isconstant}, \hyperpage{92}
+    \subitem {isperiodic}, \hyperpage{92}
+    \subitem {Parameter}, \hyperpage{90}
+    \subitem {size}, \hyperpage{93}
+    \subitem {times}, \hyperpage{93}
+    \subitem {to\_steady}, \hyperpage{91}
+    \subitem {to\_unsteady}, \hyperpage{91}
+    \subitem {update}, \hyperpage{91, 92}
+    \subitem {value}, \hyperpage{93}
+    \subitem {values}, \hyperpage{93}
+  \item {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{94}
+    \subitem {get\_num\_triplets}, \hyperpage{95}
+    \subitem {num\_triplets}, \hyperpage{96}
+    \subitem {setup\_dofs}, \hyperpage{95}
+    \subitem {update\_constant}, \hyperpage{96}
+    \subitem {update\_time}, \hyperpage{96}
+  \item {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{97}
+    \subitem {get\_num\_triplets}, \hyperpage{98}
+    \subitem {num\_triplets}, \hyperpage{99}
+    \subitem {setup\_dofs}, \hyperpage{98}
+    \subitem {update\_constant}, \hyperpage{99}
+    \subitem {update\_time}, \hyperpage{99}
+  \item {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{100}
+    \subitem {get\_num\_triplets}, \hyperpage{102}
+    \subitem {num\_triplets}, \hyperpage{103}
+    \subitem {setup\_dofs}, \hyperpage{102}
+    \subitem {update\_constant}, \hyperpage{102}
+  \item {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{119}
+    \subitem {get\_num\_triplets}, \hyperpage{121}
+    \subitem {num\_triplets}, \hyperpage{122}
+    \subitem {setup\_dofs}, \hyperpage{121}
+    \subitem {update\_constant}, \hyperpage{121}
+    \subitem {update\_time}, \hyperpage{122}
 
   \indexspace
 
-  \item {name}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{30}
-    \subitem {MODEL::Node}, \hyperpage{93}
   \item {Node}
-    \subitem {MODEL::Node}, \hyperpage{92}
-  \item {nodes}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{91}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{82}
   \item {num\_triplets}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{30}
-    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{36}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{32}
+    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{37}
     \subitem {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{41}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{46}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{54}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{59}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{72}
-    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{86}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{98}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{125}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{130}
-    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{135}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{152}
+    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T, side $>$}, 
+		\hyperpage{46}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{52}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{56}
+    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{63}
+    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{69}
+    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{88}
+    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{96}
+    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{99}
+    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{103}
+    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{122}
 
   \indexspace
 
-  \item {OpenLoopCoronaryBC}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{95}
-  \item {operator[]}
-    \subitem {IO::JsonHandler}, \hyperpage{82}
+  \item {OPT}, \hyperpage{24}
+  \item {OPT::LevenbergMarquardtOptimizer$<$ T $>$}, \hyperpage{70}
+    \subitem {$\sim$LevenbergMarquardtOptimizer}, \hyperpage{71}
+    \subitem {LevenbergMarquardtOptimizer}, \hyperpage{71}
+    \subitem {run}, \hyperpage{71}
+  \item {optimize/calibrate.hpp}, \hyperpage{220}
+  \item {optimize/levenbergmarquardtoptimizer.hpp}, 
+		\hyperpage{224, 225}
+  \item {optimize/namespace.hpp}, \hyperpage{137, 138}
+  \item {outlet\_eles}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{84}
   \item {outlet\_nodes}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{30}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{32}
+  \item {output\_all\_cycles}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{104}
   \item {output\_derivative}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{62}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{105}
   \item {output\_interval}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{62}
-  \item {output\_last\_cycle\_only}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{62}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{105}
   \item {output\_mean\_only}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{62}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{105}
   \item {output\_variable\_based}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{62}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{105}
 
   \indexspace
 
-  \item {P}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$::Parameters}, 
-		\hyperpage{116}
-  \item {Pd}
-    \subitem {MODEL::ResistanceBC$<$ T $>$::Parameters}, 
-		\hyperpage{117}
-    \subitem {MODEL::WindkesselBC$<$ T $>$::Parameters}, 
-		\hyperpage{120}
+  \item {Parameter}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{90}
+  \item {ParamId}
+    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{35}
+    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T, side $>$}, 
+		\hyperpage{44}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{48}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{54}
   \item {pres\_dof}
-    \subitem {MODEL::Node}, \hyperpage{93}
-  \item {PressureReferenceBC}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{122}
-  \item {python.cpp}, \hyperpage{287}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{85}
 
   \indexspace
 
-  \item {Q}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$::Parameters}, 
-		\hyperpage{113}
-
-  \indexspace
-
-  \item {R}
-    \subitem {MODEL::BloodVessel$<$ T $>$::Parameters}, \hyperpage{101}
-    \subitem {MODEL::BloodVesselJunction$<$ T $>$::Parameters}, 
-		\hyperpage{103}
-    \subitem {MODEL::ResistanceBC$<$ T $>$::Parameters}, 
-		\hyperpage{117}
-    \subitem {MODEL::ResistiveJunction$<$ T $>$::Parameters}, 
-		\hyperpage{119}
-  \item {Rd}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$::Parameters}, 
-		\hyperpage{112}
-    \subitem {MODEL::WindkesselBC$<$ T $>$::Parameters}, 
-		\hyperpage{120}
   \item {read\_block\_params}
-    \subitem {interface.cpp}, \hyperpage{174}
+    \subitem {interface.cpp}, \hyperpage{143}
   \item {register\_equation}
-    \subitem {MODEL::DOFHandler}, \hyperpage{66}
+    \subitem {MODEL::DOFHandler}, \hyperpage{59}
   \item {register\_variable}
-    \subitem {MODEL::DOFHandler}, \hyperpage{66}
+    \subitem {MODEL::DOFHandler}, \hyperpage{59}
   \item {reserve}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{138}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{113}
   \item {residual}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{140}
-  \item {ResistanceBC}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{128}
-  \item {ResistiveJunction}
-    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{133}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{115}
   \item {return\_y}
-    \subitem {interface.cpp}, \hyperpage{174}
+    \subitem {interface.cpp}, \hyperpage{143}
   \item {return\_ydot}
-    \subitem {interface.cpp}, \hyperpage{175}
-  \item {Rla\_v}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{109}
-  \item {Rlv\_ao}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{109}
-  \item {Rp}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$::Parameters}, 
-		\hyperpage{112}
-    \subitem {MODEL::WindkesselBC$<$ T $>$::Parameters}, 
-		\hyperpage{120}
-  \item {Rpd}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{109}
-  \item {Rra\_v}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{109}
-  \item {Rrv\_a}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{110}
+    \subitem {interface.cpp}, \hyperpage{143}
+  \item {RLA\_V}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {RLV\_AO}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {RPD}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {RRA\_V}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {RRV\_A}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
   \item {run}
-    \subitem {main.hpp}, \hyperpage{199}
+    \subitem {OPT::LevenbergMarquardtOptimizer$<$ T $>$}, 
+		\hyperpage{71}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{110}
   \item {run\_simulation}
-    \subitem {interface.cpp}, \hyperpage{175}
+    \subitem {interface.cpp}, \hyperpage{144}
 
   \indexspace
 
   \item {set\_external\_step\_size}
-    \subitem {interface.cpp}, \hyperpage{175}
-  \item {set\_ICs}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{25}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{52}
-  \item {set\_model\_dependent\_params}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{26}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{44}
+    \subitem {interface.cpp}, \hyperpage{144}
   \item {setup\_dofs}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{26}
-    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{34}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{28}
+    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{35}
     \subitem {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{39}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{45}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{52}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{57}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{70}
-    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{85}
-    \subitem {MODEL::Node}, \hyperpage{92}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{96}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{123}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{128}
-    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{133}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{150}
+    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T, side $>$}, 
+		\hyperpage{44}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{50}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{55}
+    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{62}
+    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{68}
+    \subitem {MODEL::Node$<$ T $>$}, \hyperpage{83}
+    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{87}
+    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{95}
+    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{98}
+    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{102}
+    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{121}
   \item {setup\_dofs\_}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{26}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{28}
+  \item {setup\_model\_dependent\_params}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{29}
+    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T, side $>$}, 
+		\hyperpage{44}
   \item {sim\_abs\_tol}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{63}
-  \item {sim\_cardiac\_cycle\_period}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{63}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{105}
   \item {sim\_coupled}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{63}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{105}
   \item {sim\_external\_step\_size}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{63}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{106}
   \item {sim\_nliter}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{63}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{106}
   \item {sim\_num\_cycles}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{63}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{106}
   \item {sim\_num\_time\_steps}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{64}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{106}
   \item {sim\_pts\_per\_cycle}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{64}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{106}
   \item {sim\_steady\_initial}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{64}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{106}
   \item {sim\_time\_step\_size}
-    \subitem {IO::ConfigReader$<$ T $>$}, \hyperpage{64}
+    \subitem {IO::SimulationParameters$<$ T $>$}, \hyperpage{107}
   \item {size}
-    \subitem {MODEL::DOFHandler}, \hyperpage{67}
+    \subitem {MODEL::DOFHandler}, \hyperpage{59}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{93}
+  \item {SOLVE}, \hyperpage{24}
   \item {solve}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{138}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{114}
+  \item {solve/namespace.hpp}, \hyperpage{138, 139}
+  \item {solve/solver.hpp}, \hyperpage{228}
+  \item {SOLVE::Solver$<$ T $>$}, \hyperpage{107}
+    \subitem {$\sim$Solver}, \hyperpage{108}
+    \subitem {get\_full\_result}, \hyperpage{108}
+    \subitem {get\_single\_result}, \hyperpage{108}
+    \subitem {get\_single\_result\_avg}, \hyperpage{110}
+    \subitem {get\_times}, \hyperpage{110}
+    \subitem {run}, \hyperpage{110}
+    \subitem {Solver}, \hyperpage{108}
+    \subitem {update\_block\_params}, \hyperpage{110}
+    \subitem {write\_result\_to\_csv}, \hyperpage{111}
+  \item {Solver}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{108}
   \item {solver}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{140}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{116}
   \item {SparseSystem}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{136}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{112, 113}
   \item {startswith}
-    \subitem {HELPERS}, \hyperpage{16}
+    \subitem {HELPERS}, \hyperpage{18}
   \item {State}
-    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{142}
-  \item {stenosis\_coefficient}
-    \subitem {MODEL::BloodVessel$<$ T $>$::Parameters}, \hyperpage{101}
-    \subitem {MODEL::BloodVesselJunction$<$ T $>$::Parameters}, 
-		\hyperpage{103}
+    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{117, 118}
+  \item {steady}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{32}
   \item {step}
-    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{74}
+    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{65}
 
   \indexspace
 
-  \item {TimeDependentParameter}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{145}
+  \item {time}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{81}
   \item {times}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{147}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{93}
   \item {to\_steady}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{27}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{58}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{70}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{88}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{97}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{124}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{129}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{146}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{151}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{79}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{91}
   \item {to\_unsteady}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{27}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{58}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{70}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{89}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{97}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{124}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{129}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{146}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{151}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{79}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{91}
   \item {to\_variable\_csv}
-    \subitem {IO}, \hyperpage{17}
+    \subitem {IO}, \hyperpage{21}
   \item {to\_vessel\_csv}
-    \subitem {IO}, \hyperpage{18}
-  \item {tpwave}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{110}
-  \item {Tsa}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{110}
+    \subitem {IO}, \hyperpage{21}
+  \item {TPWAVE}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {TSA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
 
   \indexspace
 
+  \item {update}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{91, 92}
   \item {update\_block\_params}
-    \subitem {interface.cpp}, \hyperpage{176}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{27}
-    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{34}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{45}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{52}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{58}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{71}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{97}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{124}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{129}
-    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{134}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{151}
+    \subitem {interface.cpp}, \hyperpage{144}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{110}
   \item {update\_constant}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{28}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{29}
+    \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{35}
+    \subitem {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{40}
+    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T, side $>$}, 
+		\hyperpage{45}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{50}
+    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{55}
+    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{62}
+    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{68}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{79}
+    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{87}
+    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{96}
+    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{99}
+    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{102}
+    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{121}
+  \item {update\_gradient}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{29}
     \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{36}
     \subitem {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{40}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{45}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{53}
-    \subitem {MODEL::ClosedLoopRCRBC$<$ T $>$}, \hyperpage{58}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{71}
-    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{86}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{89}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{97}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{124}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{130}
-    \subitem {MODEL::ResistiveJunction$<$ T $>$}, \hyperpage{134}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{152}
+    \subitem {MODEL::Junction$<$ T $>$}, \hyperpage{69}
   \item {update\_jacobian}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{138}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{114}
+  \item {update\_parameter\_value}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{80}
   \item {update\_params}
-    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{75}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{146}
+    \subitem {ALGEBRA::Integrator$<$ T $>$}, \hyperpage{66}
   \item {update\_residual}
-    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{139}
+    \subitem {ALGEBRA::SparseSystem$<$ T $>$}, \hyperpage{114}
   \item {update\_solution}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{28}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{30}
     \subitem {MODEL::BloodVessel$<$ T $>$}, \hyperpage{36}
     \subitem {MODEL::BloodVesselJunction$<$ T $>$}, \hyperpage{40}
-    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T $>$}, \hyperpage{46}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{53}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{89}
+    \subitem {MODEL::ClosedLoopCoronaryBC$<$ T, side $>$}, 
+		\hyperpage{45}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{50}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{80}
   \item {update\_state}
-    \subitem {interface.cpp}, \hyperpage{176}
+    \subitem {interface.cpp}, \hyperpage{145}
   \item {update\_time}
-    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{28}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{53}
-    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{71}
-    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{89}
-    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{98}
-    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{125}
-    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{130}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{152}
+    \subitem {MODEL::Block$<$ T $>$}, \hyperpage{30}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{52}
+    \subitem {MODEL::FlowReferenceBC$<$ T $>$}, \hyperpage{62}
+    \subitem {MODEL::Model$<$ T $>$}, \hyperpage{80}
+    \subitem {MODEL::OpenLoopCoronaryBC$<$ T $>$}, \hyperpage{88}
+    \subitem {MODEL::PressureReferenceBC$<$ T $>$}, \hyperpage{96}
+    \subitem {MODEL::ResistanceBC$<$ T $>$}, \hyperpage{99}
+    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{122}
 
   \indexspace
 
+  \item {value}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{93}
   \item {values}
-    \subitem {MODEL::TimeDependentParameter$<$ T $>$}, \hyperpage{147}
+    \subitem {MODEL::Parameter$<$ T $>$}, \hyperpage{93}
+  \item {variable\_name\_map}
+    \subitem {MODEL::DOFHandler}, \hyperpage{60}
   \item {variables}
-    \subitem {MODEL::DOFHandler}, \hyperpage{67}
-  \item {Vaso\_la}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{110}
-  \item {Vaso\_ra}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{110}
-  \item {Vlv\_u}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{110}
-  \item {Vrv\_u}
-    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$::Parameters}, 
-		\hyperpage{111}
+    \subitem {MODEL::DOFHandler}, \hyperpage{60}
+  \item {VASO\_LA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {VASO\_RA}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {VLV\_U}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
+  \item {VRV\_U}
+    \subitem {MODEL::ClosedLoopHeartPulmonary$<$ T $>$}, \hyperpage{49}
 
   \indexspace
 
-  \item {WindkesselBC}
-    \subitem {MODEL::WindkesselBC$<$ T $>$}, \hyperpage{150}
+  \item {write\_result\_to\_csv}
+    \subitem {SOLVE::Solver$<$ T $>$}, \hyperpage{111}
 
   \indexspace
 
   \item {y}
-    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{143}
+    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{118}
   \item {ydot}
-    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{143}
+    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{119}
 
   \indexspace
 
   \item {Zero}
-    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{143}
+    \subitem {ALGEBRA::State$<$ T $>$}, \hyperpage{118}
 
 \end{theindex}

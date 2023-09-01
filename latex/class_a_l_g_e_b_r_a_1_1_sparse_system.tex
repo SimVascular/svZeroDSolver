@@ -18,7 +18,7 @@ Sparse system.
 \begin{DoxyCompactList}\small\item\em Construct a new Sparse System object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a70cd2505b7fd6c9b8f9fb3a5255e4f10}{$\sim$\+Sparse\+System}} ()
 \begin{DoxyCompactList}\small\item\em Destroy the Sparse System object. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a6f8a213d10412ff535c8767be09177f5}{reserve}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
+void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_aaed2ad120461f0095aeabb25c8c8f994}{reserve}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ $\ast$model)
 \begin{DoxyCompactList}\small\item\em Reserve memory in system matrices based on number of triplets. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a9e52477eed131af02faf4a31d24b79e9}{update\+\_\+residual}} (Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&ydot)
 \begin{DoxyCompactList}\small\item\em Update the residual of the system. \end{DoxyCompactList}\item 
@@ -45,7 +45,7 @@ Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \mbox{\hyperlink{class_a_l_g_e
 \begin{DoxyCompactList}\small\item\em Residual of the system. \end{DoxyCompactList}\item 
 Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_ac6fc3a2c1e2713d5f2484f56a9a6b912}{dy}}
 \begin{DoxyCompactList}\small\item\em Solution increment of the system. \end{DoxyCompactList}\item 
-Eigen\+::\+Sparse\+LU$<$ Eigen\+::\+Sparse\+Matrix$<$ T $>$ $>$ $\ast$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a6662fb1f3f80510a1549b02df555672f}{solver}}
+std\+::shared\+\_\+ptr$<$ Eigen\+::\+Sparse\+LU$<$ Eigen\+::\+Sparse\+Matrix$<$ T $>$ $>$ $>$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_aab5b2cfdef4a2402e73c5e3a917061d4}{solver}}
 \begin{DoxyCompactList}\small\item\em Linear solver. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
@@ -116,12 +116,12 @@ void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse
 
 Delete dynamically allocated memory (class member Eigen\+::\+Sparse\+LU$<$\+Eigen\+::\+Sparse\+Matrix$<$\+T$>$$>$ $\ast$solver) 
 
-\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_sparse_system_a6f8a213d10412ff535c8767be09177f5}\label{class_a_l_g_e_b_r_a_1_1_sparse_system_a6f8a213d10412ff535c8767be09177f5}} 
+\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_sparse_system_aaed2ad120461f0095aeabb25c8c8f994}\label{class_a_l_g_e_b_r_a_1_1_sparse_system_aaed2ad120461f0095aeabb25c8c8f994}} 
 \index{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!reserve@{reserve}}
 \index{reserve@{reserve}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{reserve()}{reserve()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$\+::reserve (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model }\end{DoxyParamCaption})}
+void \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$\+::reserve (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ $\ast$}]{model }\end{DoxyParamCaption})}
 
 
 
@@ -257,17 +257,18 @@ Eigen\+::\+Matrix$<$T, Eigen\+::\+Dynamic, 1$>$ \mbox{\hyperlink{class_a_l_g_e_b
 
 Residual of the system. 
 
-\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_sparse_system_a6662fb1f3f80510a1549b02df555672f}\label{class_a_l_g_e_b_r_a_1_1_sparse_system_a6662fb1f3f80510a1549b02df555672f}} 
+\mbox{\Hypertarget{class_a_l_g_e_b_r_a_1_1_sparse_system_aab5b2cfdef4a2402e73c5e3a917061d4}\label{class_a_l_g_e_b_r_a_1_1_sparse_system_aab5b2cfdef4a2402e73c5e3a917061d4}} 
 \index{ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}!solver@{solver}}
 \index{solver@{solver}!ALGEBRA::SparseSystem$<$ T $>$@{ALGEBRA::SparseSystem$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{solver}{solver}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-Eigen\+::\+Sparse\+LU$<$Eigen\+::\+Sparse\+Matrix$<$T$>$ $>$$\ast$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$\+::solver}
+std\+::shared\+\_\+ptr$<$Eigen\+::\+Sparse\+LU$<$Eigen\+::\+Sparse\+Matrix$<$T$>$ $>$ $>$ \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$\+::solver}
 
 {\bfseries Initial value\+:}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{=}
-\DoxyCodeLine{      \textcolor{keyword}{new} Eigen::SparseLU<Eigen::SparseMatrix<T>>()}
+\DoxyCodeLine{      std::shared\_ptr<Eigen::SparseLU<Eigen::SparseMatrix<T>>>(}
+\DoxyCodeLine{          \textcolor{keyword}{new} Eigen::SparseLU<Eigen::SparseMatrix<T>>())}
 
 \end{DoxyCode}
 

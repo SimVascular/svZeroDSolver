@@ -1,0 +1,193 @@
+\hypertarget{class_s_o_l_v_e_1_1_solver}{}\doxysection{SOLVE\+::Solver\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_s_o_l_v_e_1_1_solver}\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+
+
+Class for running 0D simulations.  
+
+
+
+
+{\ttfamily \#include $<$solver.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_aff0d32426aeaecc43c3a22971dd8e61d}{Solver}} (const nlohmann\+::json \&config)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{Solver}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_af0214e66e48ed5d74cd6e267b39b5a64}{$\sim$\+Solver}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{Solver}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a020ddc106626055c1a7cbb2ad48452af}{run}} ()
+\begin{DoxyCompactList}\small\item\em Run the simulation. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a525e7b39e377dee0c20fa70694806d1a}{get\+\_\+full\+\_\+result}} ()
+\begin{DoxyCompactList}\small\item\em Get the full result as a csv encoded string. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector\+Xd \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a9ddc615c22133a4688252db27d95bf1b}{get\+\_\+single\+\_\+result}} (std\+::string dof\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Get the result of a single DOF over time. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a2f31bfe5acf47d1ecc95834a57c74587}{get\+\_\+single\+\_\+result\+\_\+avg}} (std\+::string dof\+\_\+name)
+\begin{DoxyCompactList}\small\item\em Get the result of a single DOF averaged over time. \end{DoxyCompactList}\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_af78b5dc387e427bdafe29c4d78ef7184}{get\+\_\+times}} ()
+\begin{DoxyCompactList}\small\item\em Get the time steps of the result. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a63171aaced9ed236cff17d04db248a79}{update\+\_\+block\+\_\+params}} (std\+::string block\+\_\+name, std\+::vector$<$ T $>$ new\+\_\+params)
+\begin{DoxyCompactList}\small\item\em Update the parameters of a block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_ab5c1374af6c1e0978fced888d6b10abe}{write\+\_\+result\+\_\+to\+\_\+csv}} (std\+::string filename)
+\begin{DoxyCompactList}\small\item\em Write the result to a csv file. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class SOLVE\+::\+Solver$<$ T $>$}
+Class for running 0D simulations. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_aff0d32426aeaecc43c3a22971dd8e61d}\label{class_s_o_l_v_e_1_1_solver_aff0d32426aeaecc43c3a22971dd8e61d}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!Solver@{Solver}}
+\index{Solver@{Solver}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Solver()}{Solver()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::\+Solver (\begin{DoxyParamCaption}\item[{const nlohmann\+::json \&}]{config }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{Solver}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em handler} & Configuration handler \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_af0214e66e48ed5d74cd6e267b39b5a64}\label{class_s_o_l_v_e_1_1_solver_af0214e66e48ed5d74cd6e267b39b5a64}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!````~Solver@{$\sim$Solver}}
+\index{````~Solver@{$\sim$Solver}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Solver()}{~Solver()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{Solver}}}
+
+
+
+Destroy the \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{Solver}} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_a525e7b39e377dee0c20fa70694806d1a}\label{class_s_o_l_v_e_1_1_solver_a525e7b39e377dee0c20fa70694806d1a}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!get\_full\_result@{get\_full\_result}}
+\index{get\_full\_result@{get\_full\_result}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_full\_result()}{get\_full\_result()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::string \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::get\+\_\+full\+\_\+result}
+
+
+
+Get the full result as a csv encoded string. 
+
+\begin{DoxyReturn}{Returns}
+std\+::string Result 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_a9ddc615c22133a4688252db27d95bf1b}\label{class_s_o_l_v_e_1_1_solver_a9ddc615c22133a4688252db27d95bf1b}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!get\_single\_result@{get\_single\_result}}
+\index{get\_single\_result@{get\_single\_result}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_single\_result()}{get\_single\_result()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+Eigen\+::\+Vector\+Xd \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::get\+\_\+single\+\_\+result (\begin{DoxyParamCaption}\item[{std\+::string}]{dof\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Get the result of a single DOF over time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dof\+\_\+name} & Name of the degree-\/of-\/freedom \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\+::\+Vector\+Xd Result 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_a2f31bfe5acf47d1ecc95834a57c74587}\label{class_s_o_l_v_e_1_1_solver_a2f31bfe5acf47d1ecc95834a57c74587}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!get\_single\_result\_avg@{get\_single\_result\_avg}}
+\index{get\_single\_result\_avg@{get\_single\_result\_avg}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_single\_result\_avg()}{get\_single\_result\_avg()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::get\+\_\+single\+\_\+result\+\_\+avg (\begin{DoxyParamCaption}\item[{std\+::string}]{dof\+\_\+name }\end{DoxyParamCaption})}
+
+
+
+Get the result of a single DOF averaged over time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dof\+\_\+name} & Name of the degree-\/of-\/freedom \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+T Result 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_af78b5dc387e427bdafe29c4d78ef7184}\label{class_s_o_l_v_e_1_1_solver_af78b5dc387e427bdafe29c4d78ef7184}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!get\_times@{get\_times}}
+\index{get\_times@{get\_times}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_times()}{get\_times()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::vector$<$ T $>$ \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::get\+\_\+times}
+
+
+
+Get the time steps of the result. 
+
+\begin{DoxyReturn}{Returns}
+std\+::vector$<$\+T$>$ 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_a020ddc106626055c1a7cbb2ad48452af}\label{class_s_o_l_v_e_1_1_solver_a020ddc106626055c1a7cbb2ad48452af}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!run@{run}}
+\index{run@{run}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::run}
+
+
+
+Run the simulation. 
+
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_a63171aaced9ed236cff17d04db248a79}\label{class_s_o_l_v_e_1_1_solver_a63171aaced9ed236cff17d04db248a79}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!update\_block\_params@{update\_block\_params}}
+\index{update\_block\_params@{update\_block\_params}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::string}]{block\+\_\+name,  }\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})}
+
+
+
+Update the parameters of a block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em block\+\_\+name} & Name of the block \\
+\hline
+{\em new\+\_\+params} & New parameters \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_s_o_l_v_e_1_1_solver_ab5c1374af6c1e0978fced888d6b10abe}\label{class_s_o_l_v_e_1_1_solver_ab5c1374af6c1e0978fced888d6b10abe}} 
+\index{SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}!write\_result\_to\_csv@{write\_result\_to\_csv}}
+\index{write\_result\_to\_csv@{write\_result\_to\_csv}!SOLVE::Solver$<$ T $>$@{SOLVE::Solver$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{write\_result\_to\_csv()}{write\_result\_to\_csv()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{SOLVE\+::\+Solver}}$<$ T $>$\+::write\+\_\+result\+\_\+to\+\_\+csv (\begin{DoxyParamCaption}\item[{std\+::string}]{filename }\end{DoxyParamCaption})}
+
+
+
+Write the result to a csv file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em filename} & \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+solve/\mbox{\hyperlink{solver_8hpp}{solver.\+hpp}}\end{DoxyCompactItemize}

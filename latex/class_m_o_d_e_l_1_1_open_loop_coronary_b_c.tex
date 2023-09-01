@@ -12,39 +12,18 @@ Open loop coronary boundary condition based on \cite{kim_coronary}.
 
 
 Inheritance diagram for MODEL\+::Open\+Loop\+Coronary\+BC\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=255pt]{class_m_o_d_e_l_1_1_open_loop_coronary_b_c__inherit__graph}
-\end{center}
-\end{figure}
-\doxysubsection*{Classes}
-\begin{DoxyCompactItemize}
-\item 
-struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_open_loop_coronary_b_c_1_1_parameters}{Parameters}}
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_open_loop_coronary_b_c_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+% FIG 0
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a5549bc3fa9ff585b49e9cf965bb5f8c0}{Open\+Loop\+Coronary\+BC}} (T Ra, T Ram, T Rv, T Ca, T Cim, \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ Pim, \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ Pv, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
-\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}} object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a72d7be0834bc923552e6ab6b54695559}{$\sim$\+Open\+Loop\+Coronary\+BC}} ()
-\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a7e66436bf3a9d86cc32a877cf3d32ae5}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a9574082ab8fd47520058e6bc5a21d80f}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ new\+\_\+params)
-\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a60a6f3b6e91a3216621241d4659902d5}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a3d98093db04ab8f01e320b95a9af17ff}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a45375f8f005ff5964c9c78230a3a58c0}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a513411f456139b8ac6afd872a17b3ab1}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_abd92d8d6a4d13f4d4b103f40097eb281}{get\+\_\+num\+\_\+triplets}} ()
-\begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a96819b99b2d52312c8912108007a6263}{to\+\_\+steady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_af63db0bdd6b1cd70d3d7e334e8b6d7b9}{to\+\_\+unsteady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to an unsteady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -70,7 +49,7 @@ node[left]{$P_{im}$}
 (3,0) to [C, l=$C_a$, -*] (3,-1.5)
 node[left]{$P_a$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md27}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md27}
+\]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md20}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md20}
 \[
 C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
 \frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a}
@@ -80,7 +59,7 @@ t}=0 \]
 \[
 C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v}
 P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i
-m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md28}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md28}
+m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md21}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md21}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & V_{i
 m}^{e}\end{array}\right]^{T}, \]
@@ -99,45 +78,25 @@ m}\end{array}\right] \]
 C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i
 m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]
 
-Assume $P_a=0$.
+Assume $P_a=0$.\hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md22}{}\doxyparagraph{Parameters}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_autotoc_md22}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} sequence for constructing this block
+
+
+\begin{DoxyItemize}
+\item {\ttfamily 0} Ra
+\item {\ttfamily 1} Ram
+\item {\ttfamily 2} Rv
+\item {\ttfamily 3} Ca
+\item {\ttfamily 4} Cim
+\item {\ttfamily 5} Pim
+\item {\ttfamily 6} Pv
+\end{DoxyItemize}
 
 
 \begin{DoxyTemplParams}{Template Parameters}
 {\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
 \hline
 \end{DoxyTemplParams}
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a5549bc3fa9ff585b49e9cf965bb5f8c0}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a5549bc3fa9ff585b49e9cf965bb5f8c0}} 
-\index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!OpenLoopCoronaryBC@{OpenLoopCoronaryBC}}
-\index{OpenLoopCoronaryBC@{OpenLoopCoronaryBC}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{OpenLoopCoronaryBC()}{OpenLoopCoronaryBC()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::\+Open\+Loop\+Coronary\+BC (\begin{DoxyParamCaption}\item[{T}]{Ra,  }\item[{T}]{Ram,  }\item[{T}]{Rv,  }\item[{T}]{Ca,  }\item[{T}]{Cim,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{Pim,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{Pv,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
-
-
-
-Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}} object. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em P} & Time dependent pressure \\
-\hline
-{\em name} & Name \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a72d7be0834bc923552e6ab6b54695559}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a72d7be0834bc923552e6ab6b54695559}} 
-\index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!````~OpenLoopCoronaryBC@{$\sim$OpenLoopCoronaryBC}}
-\index{````~OpenLoopCoronaryBC@{$\sim$OpenLoopCoronaryBC}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{$\sim$OpenLoopCoronaryBC()}{~OpenLoopCoronaryBC()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}}
-
-
-
-Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}} object. 
-
 
 
 \doxysubsection{Member Function Documentation}
@@ -178,62 +137,12 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a96819b99b2d52312c8912108007a6263}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a96819b99b2d52312c8912108007a6263}} 
-\index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!to\_steady@{to\_steady}}
-\index{to\_steady@{to\_steady}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::to\+\_\+steady\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Convert the block to a steady behavior. 
-
-Converts the prescribed pressure to the constant mean of itself 
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_af63db0bdd6b1cd70d3d7e334e8b6d7b9}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_af63db0bdd6b1cd70d3d7e334e8b6d7b9}} 
-\index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
-\index{to\_unsteady@{to\_unsteady}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::to\+\_\+unsteady\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Convert the block to an unsteady behavior. 
-
-
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a9574082ab8fd47520058e6bc5a21d80f}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a9574082ab8fd47520058e6bc5a21d80f}} 
-\index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!update\_block\_params@{update\_block\_params}}
-\index{update\_block\_params@{update\_block\_params}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Update parameters of a block. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em params} & New parameters. \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a60a6f3b6e91a3216621241d4659902d5}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a60a6f3b6e91a3216621241d4659902d5}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a3d98093db04ab8f01e320b95a9af17ff}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a3d98093db04ab8f01e320b95a9af17ff}} 
 \index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -243,17 +152,19 @@ Update the constant contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
+{\em parameters} & Parameters of the model \\
+\hline
 \end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{MODEL\+::\+Block$<$ T $>$}}.
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_abd4e9b82b5c3cff5463a0b2ada6d4f16}{MODEL\+::\+Block$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a45375f8f005ff5964c9c78230a3a58c0}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a45375f8f005ff5964c9c78230a3a58c0}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a513411f456139b8ac6afd872a17b3ab1}\label{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a513411f456139b8ac6afd872a17b3ab1}} 
 \index{MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}!update\_time@{update\_time}}
 \index{update\_time@{update\_time}!MODEL::OpenLoopCoronaryBC$<$ T $>$@{MODEL::OpenLoopCoronaryBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL\+::\+Open\+Loop\+Coronary\+BC}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -263,12 +174,12 @@ Update the time-\/dependent contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
-{\em time} & Current time \\
+{\em parameters} & Parameters of the model \\
 \hline
 \end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ac5d06fd3b4c7b517fc08b331f76c0d66}{MODEL\+::\+Block$<$ T $>$}}.
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a01f77fe1ad91aa7b424a43c5dd8e4d8c}{MODEL\+::\+Block$<$ T $>$}}.
 
 
 

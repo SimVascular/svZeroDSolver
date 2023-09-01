@@ -12,39 +12,27 @@ Closed-\/loop RCR boundary condition.
 
 
 Inheritance diagram for MODEL\+::Closed\+Loop\+RCRBC\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=244pt]{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c__inherit__graph}
-\end{center}
-\end{figure}
-\doxysubsection*{Classes}
+% FIG 0
+\doxysubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters}{Parameters}}
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+enum \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac4ec0d7777a0e17613a62d9161a0d603}{Param\+Id}} \{ \newline
+{\bfseries RP} = 0
+, \newline
+{\bfseries C} = 1
+, \newline
+{\bfseries RD} = 2
+ \}
+\begin{DoxyCompactList}\small\item\em Local IDs of the parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a5d0d9fb9e5a63ffc0df22e586f8c8743}{Closed\+Loop\+RCRBC}} (T Rp, T C, T Rd, bool closed\+\_\+loop\+\_\+outlet, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
-\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{Closed\+Loop\+RCRBC}} object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad67f3ce2a4d56c2403237d0211a6f899}{$\sim$\+Closed\+Loop\+RCRBC}} ()
-\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{Closed\+Loop\+RCRBC}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aa2b928a00c70ffbb06e43170035dc9ae}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad3b7765e29f386b086de147905312b03}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ new\+\_\+params)
-\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a0156ce2ac6b46e01c9f658202ebbfacb}{get\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ \&block\+\_\+params)
-\begin{DoxyCompactList}\small\item\em Return parameters of a block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aee13a5851329b46c4589771fbfd97bfe}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a018e03d4c50e6a276759c02da465557f}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}{get\+\_\+num\+\_\+triplets}} ()
-\begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aac95efa884dfda07ed4fdc84f4f2e916}{to\+\_\+steady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a4a40ddc294e504449b94a46941cf7fd8}{to\+\_\+unsteady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
@@ -70,7 +58,7 @@ node[anchor=south]{$P_{out}$}
 node[ground]{$P_{C}$};
 \draw [-latex] (5.2,0) -- (6.0,0) node[right] {$Q_{out}$} ;
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md21}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md21}
+\]\hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md12}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md12}
 \[
 C \frac{d P_c}{dt} + Q_{out} -Q_{in} = 0
 \]
@@ -81,7 +69,7 @@ P_{in}-P_{c}-R_{p} Q_{in}=0
 
 \[
 P_{c} - P_{out} - R_{d} Q_{out}=0
-\]\hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md22}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md22}
+\]\hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md13}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md13}
 \[
 \mathbf{y}=\left[\begin{array}{lllll}P_{in} & Q_{in} & P_{out} & Q_{out} &
 P_{c}\end{array}\right]^{T} \]
@@ -107,7 +95,15 @@ P_{c}\end{array}\right]^{T} \]
 0 \\
 0
 \end{array}\right]
-\]
+\]\hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md14}{}\doxyparagraph{Parameters}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_autotoc_md14}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} sequence for constructing this block
+
+
+\begin{DoxyItemize}
+\item {\ttfamily 0} Proximal resistance
+\item {\ttfamily 1} Capacitance
+\item {\ttfamily 2} Distal resistance
+\end{DoxyItemize}
 
 
 \begin{DoxyTemplParams}{Template Parameters}
@@ -116,60 +112,21 @@ P_{c}\end{array}\right]^{T} \]
 \end{DoxyTemplParams}
 
 
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a5d0d9fb9e5a63ffc0df22e586f8c8743}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a5d0d9fb9e5a63ffc0df22e586f8c8743}} 
-\index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!ClosedLoopRCRBC@{ClosedLoopRCRBC}}
-\index{ClosedLoopRCRBC@{ClosedLoopRCRBC}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{ClosedLoopRCRBC()}{ClosedLoopRCRBC()}}
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac4ec0d7777a0e17613a62d9161a0d603}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac4ec0d7777a0e17613a62d9161a0d603}} 
+\index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!ParamId@{ParamId}}
+\index{ParamId@{ParamId}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{ParamId}{ParamId}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL\+::\+Closed\+Loop\+RCRBC}}$<$ T $>$\+::\+Closed\+Loop\+RCRBC (\begin{DoxyParamCaption}\item[{T}]{Rp,  }\item[{T}]{C,  }\item[{T}]{Rd,  }\item[{bool}]{closed\+\_\+loop\+\_\+outlet,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+enum \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac4ec0d7777a0e17613a62d9161a0d603}{MODEL\+::\+Closed\+Loop\+RCRBC\+::\+Param\+Id}}}
 
 
 
-Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{Closed\+Loop\+RCRBC}} object. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em Rp} & Proximal resistance \\
-\hline
-{\em C} & Capacitance \\
-\hline
-{\em Rd} & Distal resistance \\
-\hline
-{\em Pd} & Distal pressure \\
-\hline
-{\em name} & Name \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad67f3ce2a4d56c2403237d0211a6f899}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad67f3ce2a4d56c2403237d0211a6f899}} 
-\index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!````~ClosedLoopRCRBC@{$\sim$ClosedLoopRCRBC}}
-\index{````~ClosedLoopRCRBC@{$\sim$ClosedLoopRCRBC}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{$\sim$ClosedLoopRCRBC()}{~ClosedLoopRCRBC()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL\+::\+Closed\+Loop\+RCRBC}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{Closed\+Loop\+RCRBC}}}
-
-
-
-Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{Closed\+Loop\+RCRBC}} object. 
+Local IDs of the parameters. 
 
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a0156ce2ac6b46e01c9f658202ebbfacb}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a0156ce2ac6b46e01c9f658202ebbfacb}} 
-\index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!get\_block\_params@{get\_block\_params}}
-\index{get\_block\_params@{get\_block\_params}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_block\_params()}{get\_block\_params()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL\+::\+Closed\+Loop\+RCRBC}}$<$ T $>$\+::get\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{block\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Return parameters of a block. 
-
-@block\+\_\+params \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} parameters. 
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a17a3f09a478899add488c91710ea742e}{MODEL\+::\+Block$<$ T $>$}}.
-
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}} 
 \index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}}
 \index{get\_num\_triplets@{get\_num\_triplets}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
@@ -207,62 +164,12 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aac95efa884dfda07ed4fdc84f4f2e916}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aac95efa884dfda07ed4fdc84f4f2e916}} 
-\index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!to\_steady@{to\_steady}}
-\index{to\_steady@{to\_steady}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL\+::\+Closed\+Loop\+RCRBC}}$<$ T $>$\+::to\+\_\+steady\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Convert the block to a steady behavior. 
-
-Set the capacitance to 0. 
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a4a40ddc294e504449b94a46941cf7fd8}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a4a40ddc294e504449b94a46941cf7fd8}} 
-\index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
-\index{to\_unsteady@{to\_unsteady}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL\+::\+Closed\+Loop\+RCRBC}}$<$ T $>$\+::to\+\_\+unsteady\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Convert the block to a steady behavior. 
-
-Set the capacitance to original value. 
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad3b7765e29f386b086de147905312b03}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad3b7765e29f386b086de147905312b03}} 
-\index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!update\_block\_params@{update\_block\_params}}
-\index{update\_block\_params@{update\_block\_params}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL\+::\+Closed\+Loop\+RCRBC}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Update parameters of a block. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em params} & New parameters. \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aee13a5851329b46c4589771fbfd97bfe}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aee13a5851329b46c4589771fbfd97bfe}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a018e03d4c50e6a276759c02da465557f}\label{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a018e03d4c50e6a276759c02da465557f}} 
 \index{MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::ClosedLoopRCRBC$<$ T $>$@{MODEL::ClosedLoopRCRBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL\+::\+Closed\+Loop\+RCRBC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL\+::\+Closed\+Loop\+RCRBC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -272,10 +179,12 @@ Update the constant contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
+{\em parameters} & Parameters of the model \\
+\hline
 \end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{MODEL\+::\+Block$<$ T $>$}}.
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_abd4e9b82b5c3cff5463a0b2ada6d4f16}{MODEL\+::\+Block$<$ T $>$}}.
 
 
 

@@ -32,19 +32,69 @@ class \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{Open\+Loop\+Coronary\+BC}}
 \begin{DoxyCompactList}\small\item\em Open loop coronary boundary condition based on \cite{kim_coronary}. \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}}
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}}. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}
 \begin{DoxyCompactList}\small\item\em Pressure reference boundary condition. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{Resistance\+BC}}
 \begin{DoxyCompactList}\small\item\em Resistance boundary condition. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction}{Resistive\+Junction}}
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction}{Resistive\+Junction}}. \end{DoxyCompactList}\item 
-class \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}
-\begin{DoxyCompactList}\small\item\em Time-\/dependent parameter. \end{DoxyCompactList}\item 
 class \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{Windkessel\+BC}}
 \begin{DoxyCompactList}\small\item\em Windkessel RCR boundary condition. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{namespace_m_o_d_e_l_abfc4730d81d2da4910968e593aec2fe3}{Block\+Type}} \{ \newline
+{\bfseries BLOODVESSEL} = 0
+, \newline
+{\bfseries JUNCTION} = 1
+, \newline
+{\bfseries BLOODVESSELJUNCTION} = 2
+, \newline
+{\bfseries RESISTIVEJUNCTION} = 3
+, \newline
+{\bfseries FLOWBC} = 4
+, \newline
+{\bfseries PRESSUREBC} = 5
+, \newline
+{\bfseries RESISTANCEBC} = 6
+, \newline
+{\bfseries WINDKESSELBC} = 7
+, \newline
+{\bfseries OPENLOOPCORONARYBC} = 8
+, \newline
+{\bfseries CLOSEDLOOPCORONARYLEFTBC} = 9
+, \newline
+{\bfseries CLOSEDLOOPCORONARYRIGHTBC} = 10
+, \newline
+{\bfseries CLOSEDLOOPRCRBC} = 11
+, \newline
+{\bfseries CLOSEDLOOPHEARTPULMONARY} = 12
+ \}
+\begin{DoxyCompactList}\small\item\em Block types. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{namespace_m_o_d_e_l_aff19ca6649cfd0b011a2c996cfe14e33}\label{namespace_m_o_d_e_l_aff19ca6649cfd0b011a2c996cfe14e33}} 
+enum {\bfseries Side} \{ \newline
+{\bfseries LEFT}
+, \newline
+{\bfseries RIGHT}
+ \}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
 \mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} namespace. 
 
 The \mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} namespace contains all classes that are used to build a 0D blood flow model, including the components (elements) of the model themselves and a few auxilliary classes. 
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{namespace_m_o_d_e_l_abfc4730d81d2da4910968e593aec2fe3}\label{namespace_m_o_d_e_l_abfc4730d81d2da4910968e593aec2fe3}} 
+\index{MODEL@{MODEL}!BlockType@{BlockType}}
+\index{BlockType@{BlockType}!MODEL@{MODEL}}
+\doxysubsubsection{\texorpdfstring{BlockType}{BlockType}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{namespace_m_o_d_e_l_abfc4730d81d2da4910968e593aec2fe3}{MODEL\+::\+Block\+Type}}}
+
+
+
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} types. 
+

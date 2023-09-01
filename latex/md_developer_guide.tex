@@ -1,5 +1,28 @@
-\hypertarget{md_developer_guide_autotoc_md38}{}\doxysection{Code Style}\label{md_developer_guide_autotoc_md38}
-We follow the \href{https://google.github.io/styleguide/cppguide.html}{\texttt{ Google C++ Style Guide}}.\hypertarget{md_developer_guide_autotoc_md39}{}\doxysection{Formatting}\label{md_developer_guide_autotoc_md39}
+\label{md_developer_guide_developer_guide}%
+\Hypertarget{md_developer_guide_developer_guide}%
+\hypertarget{md_developer_guide_autotoc_md35}{}\doxysection{Architecture}\label{md_developer_guide_autotoc_md35}
+sv\+Zero\+DPlus is written in a highly modular manner to enable reuse of code for many different applications. It is divided into a header based library in the {\ttfamily src} directory and a collection of different applications in the {\ttfamily applications} folder. Each application is written for a different use-\/case of sv\+Zero\+DPlus, namely\+:
+
+
+\begin{DoxyItemize}
+\item sv\+Zero\+DCalibrator in {\ttfamily svzerodcalibrator.\+cpp}
+\item sv\+Zerod\+Solver in {\ttfamily svzerodsolver.\+cpp}
+\item Python API in {\ttfamily svzerodplus.\+cpp}
+\end{DoxyItemize}
+
+The header-\/based library in the {\ttfamily src} folder contains classes and functions that are collectively used by all applications. A good overview over the general architecture can be found in the \href{namespaces.html}{\texttt{ list of namespaces}}.\hypertarget{md_developer_guide_autotoc_md36}{}\doxysubsection{Build in debug mode}\label{md_developer_guide_autotoc_md36}
+For debug purposes it is recommended to build sv\+Zero\+DPlus in Debug mode.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{mkdir Debug}
+\DoxyCodeLine{cd Debug}
+\DoxyCodeLine{cmake -\/DCMAKE\_BUILD\_TYPE=Debug ..}
+\DoxyCodeLine{cmake -\/-\/build .}
+
+\end{DoxyCode}
+\hypertarget{md_developer_guide_autotoc_md37}{}\doxysubsection{Code Style}\label{md_developer_guide_autotoc_md37}
+We follow the \href{https://google.github.io/styleguide/cppguide.html}{\texttt{ Google C++ Style Guide}}.\hypertarget{md_developer_guide_autotoc_md38}{}\doxysubsection{Formatting}\label{md_developer_guide_autotoc_md38}
 We use \href{https://clang.llvm.org/docs/ClangFormat.html}{\texttt{ clang-\/format}} to automatically format our code accoring to the \href{https://google.github.io/styleguide/cppguide.html}{\texttt{ Google Style}}. This increases readability and maintainability of the code while enabling you to focus on coding. Before committing any changes, you can run the following comment to format all your files\+:
 
 
@@ -22,7 +45,7 @@ You can also just check {\bfseries{if}} a file would be formatted without actual
 
 The latter check is also performed in the Git\+Hub CI/\+CD (a.\+k.\+a. Actions) and indicates on merge requests when the code doesnt yet meet all style requirements.
 
-On Sherlock at Stanford, clang-\/format is included in the {\ttfamily llvm} module.\hypertarget{md_developer_guide_autotoc_md40}{}\doxysection{Documentation}\label{md_developer_guide_autotoc_md40}
+On Sherlock at Stanford, clang-\/format is included in the {\ttfamily llvm} module.\hypertarget{md_developer_guide_autotoc_md39}{}\doxysubsection{Documentation}\label{md_developer_guide_autotoc_md39}
 We use \href{https://doxygen.nl}{\texttt{ Doxygen}} to automatically build an html documentation from source code. Please have at Doxygen\textquotesingle{}s \href{https://www.doxygen.nl/manual/docblocks.html}{\texttt{ Documentation Guide}} for an introduction into the syntax of writing documentation in C++. For more inspiration, you can look at the existing source files and how they use documentation. In the following you can find a short recap of the most important commands\+:
 
 
@@ -57,47 +80,15 @@ The documentation is automatically build in the Git\+Hub CI/\+CD and published o
 \end{DoxyCode}
 
 
-If you do not have Doxygen install you can do that with {\ttfamily brew install doxygen} on mac\+OS or with {\ttfamily sudo apt-\/get install doxygen} on Linux.\hypertarget{md_developer_guide_autotoc_md41}{}\doxysection{Profiling}\label{md_developer_guide_autotoc_md41}
-Profiling helps to easily identify bottlenecks in the code. A profiling report lists the executation time spend on certain parts of the code. If you experience performance issue with sv\+Zero\+DSolver, you can follow this guide to create a profiling report.\hypertarget{md_developer_guide_autotoc_md42}{}\doxysubsection{mac\+OS}\label{md_developer_guide_autotoc_md42}
-Install Google Performance Tools\+:
+If you do not have Doxygen install you can do that with {\ttfamily brew install doxygen} on mac\+OS or with {\ttfamily sudo apt-\/get install doxygen} on Linux.\hypertarget{md_developer_guide_autotoc_md40}{}\doxysubsection{Profiling}\label{md_developer_guide_autotoc_md40}
+Profiling helps to easily identify bottlenecks in the code. A profiling report lists the executation time spend on certain parts of the code. If you experience performance issue with sv\+Zero\+DSolver, you can follow this guide to create a profiling report. The generation of profiling reports requires \href{https://docs.docker.com/get-docker/}{\texttt{ Docker}} to be installed on your machine.
 
 
 \begin{DoxyCode}{0}
-\DoxyCodeLine{brew install gperftools}
+\DoxyCodeLine{docker build -\/t profile\_svzerodplus -\/f container/profiling/Dockerfile .}
+\DoxyCodeLine{docker run -\/it -\/v \$(PWD):/opt/data -\/-\/rm profile\_svzerodplus path/to/simulation\_config.json}
 
 \end{DoxyCode}
 
 
-Go to the folder of the build you want to profile (i.\+e. {\ttfamily cd Debug} or {\ttfamily cd Release}) and run\+:
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{sudo DYLD\_INSERT\_LIBRARIES=/usr/local/lib/libprofiler.dylib CPUPROFILE=main.prof CPUPROFILE\_FREQUENCY=100000 ./svzerodsolver path/to/input\_file.json path/to/output\_file.csv}
-\DoxyCodeLine{pprof -\/-\/pdf ./svzerodsolver main.prof > profiling\_report.pdf}
-
-\end{DoxyCode}
-
-
-This will generate a profiling report called {\ttfamily profiling\+\_\+report.\+pdf} in the respective folder. Make sure to build sv\+Zero\+DSolver before starting profiling.\hypertarget{md_developer_guide_autotoc_md43}{}\doxysubsection{Linux}\label{md_developer_guide_autotoc_md43}
-Install Google Performance Tools\+:
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{sudo apt install google-\/perftools libgoogle-\/perftools-\/dev}
-
-\end{DoxyCode}
-
-
-Go to the folder of the build you want to profile (i.\+e. {\ttfamily cd Debug} or {\ttfamily cd Release}) and run\+:
-
-
-\begin{DoxyCode}{0}
-\DoxyCodeLine{LD\_PRELOAD=/usr/local/lib/libprofiler.so CPUPROFILE=main.prof CPUPROFILE\_FREQUENCY=100000 ./svzerodsolver ../solver\_0d.in ../solver\_output.csv}
-\DoxyCodeLine{google-\/pprof -\/-\/pdf ./svzerodsolver main.prof > profiling\_report.pdf}
-
-\end{DoxyCode}
-
-
-If the first line of the above command doesn\textquotesingle{}t work, you can try exchanging the {\ttfamily LD\+\_\+\+PRELOAD} path with {\ttfamily /usr/lib/x86\+\_\+64-\/linux-\/gnu/libprofiler.so}.
-
-This will generate a profiling report called {\ttfamily profiling\+\_\+report.\+pdf} in the respective folder. Make sure to build sv\+Zero\+DSolver before starting profiling. 
+This will generate a file called {\ttfamily profiling\+\_\+report.\+pdf} in your current working directory. 

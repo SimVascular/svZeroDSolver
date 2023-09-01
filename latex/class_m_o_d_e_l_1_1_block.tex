@@ -12,62 +12,49 @@ Base class for 0D model components.
 
 
 Inheritance diagram for MODEL\+::Block\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=350pt]{class_m_o_d_e_l_1_1_block__inherit__graph}
-\end{center}
-\end{figure}
-\doxysubsection*{Classes}
-\begin{DoxyCompactItemize}
-\item 
-struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_block_1_1_parameters}{Parameters}}
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_block_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+% FIG 0
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a2353b1aae8afa7f065ab1e2aa033bf29}{Block}} ()
-\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a061d34013620c7d6b67abd589a849422}{Block}} (std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70d1a4f12e9b36597242030a75597a0a}{Block}} (int \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a03c68d4aac1349a25eae073bbe851560}{id}}, const std\+::vector$<$ int $>$ \&param\+\_\+ids, \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ $\ast$\mbox{\hyperlink{class_m_o_d_e_l_1_1_block_abc61461c571b6307e9f16cb28de152b3}{model}})
 \begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad3f4ea72447eb698a2de71b29da45c01}{$\sim$\+Block}} ()
 \begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a7af4f41f114de552420fa630e96be5dc}{Block}} (const \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} \&)=delete
+\begin{DoxyCompactList}\small\item\em Copy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a36048721d929596429fead4669e75e5d}{get\+\_\+name}} ()
+\begin{DoxyCompactList}\small\item\em Get the name of the block. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{setup\+\_\+dofs\+\_\+}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler, unsigned int num\+\_\+equations, std\+::list$<$ std\+::string $>$ internal\+\_\+var\+\_\+names)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
 virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a89fef5378b8d6d8c94d7bfb1a92e4152}{set\+\_\+model\+\_\+dependent\+\_\+params}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&model)
-\begin{DoxyCompactList}\small\item\em Update for model-\/dependent variables that are set at the end of model construction. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aec411e6f9159b3ec2c8d144da8d25763}{get\+\_\+parameter\+\_\+value}} (std\+::string message, T \&param\+\_\+value)
-\begin{DoxyCompactList}\small\item\em Return parameter values. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a4e87c0c28d9c8173e144fcddcefd5bb2}{set\+\_\+\+ICs}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ \&state)
-\begin{DoxyCompactList}\small\item\em Set block-\/specific initial conditions. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ new\+\_\+params)
-\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a17a3f09a478899add488c91710ea742e}{get\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ \&block\+\_\+params)
-\begin{DoxyCompactList}\small\item\em Return parameters of a block. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ac1d694a595d62d71a056f0d38d510416}{setup\+\_\+model\+\_\+dependent\+\_\+params}} ()
+\begin{DoxyCompactList}\small\item\em Setup parameters that depend on the model. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_abd4e9b82b5c3cff5463a0b2ada6d4f16}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ac5d06fd3b4c7b517fc08b331f76c0d66}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
+virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a01f77fe1ad91aa7b424a43c5dd8e4d8c}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad2ed01c3bbd8f8b064c1c62be5fbee1a}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y)
+virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3fabdf1b9d391665fca5e7dbe9b0f69a}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&dy)
 \begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{to\+\_\+steady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
-virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}{to\+\_\+unsteady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to an unsteady behavior. \end{DoxyCompactList}\item 
+virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa421ffde1a0c16eec27e463e4a816482}{update\+\_\+gradient}} (Eigen\+::\+Sparse\+Matrix$<$ T $>$ \&jacobian, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&residual, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&alpha, std\+::vector$<$ T $>$ \&y, std\+::vector$<$ T $>$ \&dy)
+\begin{DoxyCompactList}\small\item\em Set the gradient of the block contributions with respect to the parameters. \end{DoxyCompactList}\item 
 virtual std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ae68725b7b8add13e1d182ce46fca76d2}{get\+\_\+num\+\_\+triplets}} ()
 \begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
-std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}}
-\begin{DoxyCompactList}\small\item\em Name of the block. \end{DoxyCompactList}\item 
-std\+::vector$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $\ast$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a39d671d4cdced4eda628465b8e660c64}{inlet\+\_\+nodes}}
+int \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a03c68d4aac1349a25eae073bbe851560}{id}}
+\begin{DoxyCompactList}\small\item\em Global ID of the block. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ $\ast$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_abc61461c571b6307e9f16cb28de152b3}{model}}
+\begin{DoxyCompactList}\small\item\em The model to which the block belongs. \end{DoxyCompactList}\item 
+std\+::vector$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}$<$ T $>$ $\ast$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_afdb4236d17b8075c8fd02f209e30bf2e}{inlet\+\_\+nodes}}
 \begin{DoxyCompactList}\small\item\em Inlet nodes. \end{DoxyCompactList}\item 
-std\+::vector$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $\ast$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a41597a548728e98c07e388037ee0f4d9}{outlet\+\_\+nodes}}
+std\+::vector$<$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}$<$ T $>$ $\ast$ $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa0e290e0196b6eb95910c11859047038}{outlet\+\_\+nodes}}
 \begin{DoxyCompactList}\small\item\em Outlet nodes. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a6e2824a0bea81f12e9f114250986751d}{steady}} = false
+\begin{DoxyCompactList}\small\item\em Toggle steady behavior. \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a55e62b9d5b637698d00822ff6ebaddac}{global\+\_\+param\+\_\+ids}}
+\begin{DoxyCompactList}\small\item\em Global IDs for the block parameters. \end{DoxyCompactList}\item 
 std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}{global\+\_\+var\+\_\+ids}}
 \begin{DoxyCompactList}\small\item\em Global variable indices of the local element contributions. \end{DoxyCompactList}\item 
 std\+::vector$<$ unsigned int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad338703d131cb419b5d85af5b6527108}{global\+\_\+eqn\+\_\+ids}}
@@ -91,23 +78,12 @@ A \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}} is the base cla
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a2353b1aae8afa7f065ab1e2aa033bf29}\label{class_m_o_d_e_l_1_1_block_a2353b1aae8afa7f065ab1e2aa033bf29}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a70d1a4f12e9b36597242030a75597a0a}\label{class_m_o_d_e_l_1_1_block_a70d1a4f12e9b36597242030a75597a0a}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!Block@{Block}}
 \index{Block@{Block}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{Block()}{Block()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::\+Block}
-
-
-
-Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object. 
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a061d34013620c7d6b67abd589a849422}\label{class_m_o_d_e_l_1_1_block_a061d34013620c7d6b67abd589a849422}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!Block@{Block}}
-\index{Block@{Block}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{Block()}{Block()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::\+Block (\begin{DoxyParamCaption}\item[{std\+::string}]{name }\end{DoxyParamCaption})}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::\+Block (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{const std\+::vector$<$ int $>$ \&}]{param\+\_\+ids,  }\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ $\ast$}]{model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
 
 
@@ -115,7 +91,11 @@ Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object.
 
 
 \begin{DoxyParams}{Parameters}
-{\em name} & Name of the block \\
+{\em id} & Global ID of the block \\
+\hline
+{\em param\+\_\+ids} & Global IDs of the block parameters \\
+\hline
+{\em model} & The model to which the block belongs \\
 \hline
 \end{DoxyParams}
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_ad3f4ea72447eb698a2de71b29da45c01}\label{class_m_o_d_e_l_1_1_block_ad3f4ea72447eb698a2de71b29da45c01}} 
@@ -129,24 +109,34 @@ Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object.
 
 Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object. 
 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a7af4f41f114de552420fa630e96be5dc}\label{class_m_o_d_e_l_1_1_block_a7af4f41f114de552420fa630e96be5dc}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!Block@{Block}}
+\index{Block@{Block}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Block()}{Block()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::\+Block (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}$<$ T $>$ \&}]{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [delete]}}
+
+
+
+Copy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} object. 
+
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a17a3f09a478899add488c91710ea742e}\label{class_m_o_d_e_l_1_1_block_a17a3f09a478899add488c91710ea742e}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!get\_block\_params@{get\_block\_params}}
-\index{get\_block\_params@{get\_block\_params}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_block\_params()}{get\_block\_params()}}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a36048721d929596429fead4669e75e5d}\label{class_m_o_d_e_l_1_1_block_a36048721d929596429fead4669e75e5d}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!get\_name@{get\_name}}
+\index{get\_name@{get\_name}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get\_name()}{get\_name()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::get\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$ \&}]{block\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::get\+\_\+name}
 
 
 
-Return parameters of a block. 
+Get the name of the block. 
 
-@block\+\_\+params \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}} parameters. 
-
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_af2ca52cf2153bbdda72de6214c93f8cf}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ada897d3dada8b0a6e83f4014abbadea2}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_aeaf848241964ea716fb4583bc0b74dda}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a0156ce2ac6b46e01c9f658202ebbfacb}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}.
-
+\begin{DoxyReturn}{Returns}
+std\+::string Name of the block 
+\end{DoxyReturn}
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_ae68725b7b8add13e1d182ce46fca76d2}\label{class_m_o_d_e_l_1_1_block_ae68725b7b8add13e1d182ce46fca76d2}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!get\_num\_triplets@{get\_num\_triplets}}
 \index{get\_num\_triplets@{get\_num\_triplets}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
@@ -160,67 +150,7 @@ Get number of triplets of element.
 
 Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) 
 
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_add082727e7934e9bef9cfb3e56f2e26b}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_af870a4e729ab45cc3974d71d70a9d64d}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0769ae27e4251236b0ac9c9b0e77111a}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a950b4b19381d2e509a21045ad98ab122}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a24254b45c29850fce94c216322c7e771}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}{MODEL\+::\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_abd92d8d6a4d13f4d4b103f40097eb281}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a39ccdae0608ee6bff4ac1eba99b9a288}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a7520ac287c5fd089b305b15771c0a808}{MODEL\+::\+Resistive\+Junction$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a98fbe1042443e5b2de402eca5006436a}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_aec411e6f9159b3ec2c8d144da8d25763}\label{class_m_o_d_e_l_1_1_block_aec411e6f9159b3ec2c8d144da8d25763}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!get\_parameter\_value@{get\_parameter\_value}}
-\index{get\_parameter\_value@{get\_parameter\_value}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{get\_parameter\_value()}{get\_parameter\_value()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::get\+\_\+parameter\+\_\+value (\begin{DoxyParamCaption}\item[{std\+::string}]{message,  }\item[{T \&}]{param\+\_\+value }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Return parameter values. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em message} & String to identify different requests \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ae56fbb49b7f567592029db16b9e4af99}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a4e87c0c28d9c8173e144fcddcefd5bb2}\label{class_m_o_d_e_l_1_1_block_a4e87c0c28d9c8173e144fcddcefd5bb2}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!set\_ICs@{set\_ICs}}
-\index{set\_ICs@{set\_ICs}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{set\_ICs()}{set\_ICs()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::set\+\_\+\+ICs (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA\+::\+State}}$<$ T $>$ \&}]{state }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Set block-\/specific initial conditions. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em state} & State vector containing y and ydot \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a9211429338b3377e49f2ddd868cd9f76}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a89fef5378b8d6d8c94d7bfb1a92e4152}\label{class_m_o_d_e_l_1_1_block_a89fef5378b8d6d8c94d7bfb1a92e4152}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!set\_model\_dependent\_params@{set\_model\_dependent\_params}}
-\index{set\_model\_dependent\_params@{set\_model\_dependent\_params}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{set\_model\_dependent\_params()}{set\_model\_dependent\_params()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::set\+\_\+model\+\_\+dependent\+\_\+params (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ \&}]{model }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Update for model-\/dependent variables that are set at the end of model construction. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em model} & \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} object to access model-\/dependent variables \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a0a23c2fbef9c48d6f5c9a6e82b1b91d2}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T $>$}}.
+Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_add082727e7934e9bef9cfb3e56f2e26b}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_af870a4e729ab45cc3974d71d70a9d64d}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aee74b2d6d8495120f14866de76aab06d}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T, side $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a950b4b19381d2e509a21045ad98ab122}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a24254b45c29850fce94c216322c7e771}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a79399551ee54a043360b823cbeeb6d29}{MODEL\+::\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_abd92d8d6a4d13f4d4b103f40097eb281}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a39ccdae0608ee6bff4ac1eba99b9a288}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a4925f800d6622b598c9475279a806e44}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a7520ac287c5fd089b305b15771c0a808}{MODEL\+::\+Resistive\+Junction$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a98fbe1042443e5b2de402eca5006436a}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}\label{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!setup\_dofs@{setup\_dofs}}
@@ -242,7 +172,7 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 \end{DoxyParams}
 
 
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_acc5a95a3227288fd488bf783164ac177}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a7c048bdaeed71e554bf03d03bb9496a7}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a37fbf9c3749d095700b9739eb04a44e0}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aa2b928a00c70ffbb06e43170035dc9ae}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a07b024cf724ad95ce2abde3793c3af1f}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a57cacb323bdb462c2e1773851f6088df}{MODEL\+::\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a7e66436bf3a9d86cc32a877cf3d32ae5}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_aff1ef740afb66f254f8b14fdf8e5803d}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_af326b1f9faa34405d1a5024a6d5e132e}{MODEL\+::\+Resistive\+Junction$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a5d09cb4285ed013e10c0ce163d018ff4}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
+Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a81b433e90529749dc4bd0d078ecd0e1b}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_acc5a95a3227288fd488bf783164ac177}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a32059043e969bfa12603856db4c18df8}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T, side $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a37fbf9c3749d095700b9739eb04a44e0}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aa2b928a00c70ffbb06e43170035dc9ae}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a07b024cf724ad95ce2abde3793c3af1f}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a57cacb323bdb462c2e1773851f6088df}{MODEL\+::\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a7e66436bf3a9d86cc32a877cf3d32ae5}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_aff1ef740afb66f254f8b14fdf8e5803d}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_aef5e82e969313208c3ee42d705797b1c}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_af326b1f9faa34405d1a5024a6d5e132e}{MODEL\+::\+Resistive\+Junction$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a5d09cb4285ed013e10c0ce163d018ff4}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}\label{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!setup\_dofs\_@{setup\_dofs\_}}
@@ -266,62 +196,27 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 {\em num\+\_\+internal\+\_\+vars} & Number of internal variables of the block \\
 \hline
 \end{DoxyParams}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}\label{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!to\_steady@{to\_steady}}
-\index{to\_steady@{to\_steady}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_ac1d694a595d62d71a056f0d38d510416}\label{class_m_o_d_e_l_1_1_block_ac1d694a595d62d71a056f0d38d510416}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!setup\_model\_dependent\_params@{setup\_model\_dependent\_params}}
+\index{setup\_model\_dependent\_params@{setup\_model\_dependent\_params}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{setup\_model\_dependent\_params()}{setup\_model\_dependent\_params()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::to\+\_\+steady\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::setup\+\_\+model\+\_\+dependent\+\_\+params\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
-Convert the block to a steady behavior. 
+Setup parameters that depend on the model. 
 
 
 
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aac95efa884dfda07ed4fdc84f4f2e916}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a9c868f6221abfba243ea4b667dea8309}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a96819b99b2d52312c8912108007a6263}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_ad68608d53bde04b36f293b66165ce9f1}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7329943beabebc0c35235e41f10bf3d3}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a781684eca75d46c9282f4e35d57853e6}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
+Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a9112da50a5b0c39abb947849702122d6}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T, side $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}\label{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!to\_unsteady@{to\_unsteady}}
-\index{to\_unsteady@{to\_unsteady}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::to\+\_\+unsteady\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Convert the block to an unsteady behavior. 
-
-
-
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a4a40ddc294e504449b94a46941cf7fd8}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adf944c2f4d404c58e04043fe2a84a31a}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_af63db0bdd6b1cd70d3d7e334e8b6d7b9}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a3fbf3331a8987a8ee498f0b027be22a4}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a200b03a7b559463aa62cf4d8e7ef0cd8}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ab71a70243ae365107129bdd731938639}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}\label{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!update\_block\_params@{update\_block\_params}}
-\index{update\_block\_params@{update\_block\_params}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Update parameters of a block. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em params} & New parameters. \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a6ad709b63514157ff5e0e1faa376273c}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_af6f18c8f4b611a5beea29b88d72b5af0}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ab5ab03142e9797cba87acd373dedd015}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad3b7765e29f386b086de147905312b03}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a4e3e6ef315b0496920e1cbe7171c702f}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a9574082ab8fd47520058e6bc5a21d80f}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_ab99c756c1f25b133e4da8a19a0f002f6}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7d203b6fbeed72466f6f143848a01b0f}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_a29158cbf4c5fbddb2842cb1a776c9d54}{MODEL\+::\+Resistive\+Junction$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a8fc3bd7c6d2cba9b16861d2ed2c03d73}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}\label{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_abd4e9b82b5c3cff5463a0b2ada6d4f16}\label{class_m_o_d_e_l_1_1_block_abd4e9b82b5c3cff5463a0b2ada6d4f16}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -331,17 +226,47 @@ Update the constant contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
+{\em parameters} & Parameters of the model \\
+\hline
 \end{DoxyParams}
 
 
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a3909586564df17501073663785e74880}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a251adccd681c53a0afa4886a61a6ce3a}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_a619b35199d45bc811f1210a4a00bc9fc}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0904e85cbfbc9ec808ef92b1b8a356ad}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aee13a5851329b46c4589771fbfd97bfe}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a6810600bcf2e2e505dbe138da4d0f2e7}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_abf74c3ff9be18be6a146307f26785af3}{MODEL\+::\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a60a6f3b6e91a3216621241d4659902d5}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a23d2a1599bba5d26842a5eaea24407eb}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a2f07fa973b0bb9c750cc97adf48719b8}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_ab9feb4188109a2e55b294cfe6eb965c4}{MODEL\+::\+Resistive\+Junction$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_aa2f6e126801e8b86b6edcd92b2f76abd}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
+Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_a4feb051ad5562d0548299064f8dd9d14}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a2545a5e8b647381a23ff090c7b2f2eee}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae025a98ff49b5e6c031b36dbcf1d1d5c}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T, side $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a0e753bdf71f301b2f11fe72a49f6fd8b}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a018e03d4c50e6a276759c02da465557f}{MODEL\+::\+Closed\+Loop\+RCRBC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a86775a939685e97215b3e414743f8260}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a7dcccab3a986c6a13691cb99eac9bdbe}{MODEL\+::\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a3d98093db04ab8f01e320b95a9af17ff}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a4234ca7dbbb314980c5b0037c4c71c66}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a7a36dffecf4a6ff6deb99c09259d8ace}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction_aed3d64c8f59b3170b7d37311e535ff33}{MODEL\+::\+Resistive\+Junction$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a7549cf0e95996b0911316db200c0c351}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_ad2ed01c3bbd8f8b064c1c62be5fbee1a}\label{class_m_o_d_e_l_1_1_block_ad2ed01c3bbd8f8b064c1c62be5fbee1a}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_aa421ffde1a0c16eec27e463e4a816482}\label{class_m_o_d_e_l_1_1_block_aa421ffde1a0c16eec27e463e4a816482}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!update\_gradient@{update\_gradient}}
+\index{update\_gradient@{update\_gradient}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_gradient()}{update\_gradient()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::update\+\_\+gradient (\begin{DoxyParamCaption}\item[{Eigen\+::\+Sparse\+Matrix$<$ T $>$ \&}]{jacobian,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{residual,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{alpha,  }\item[{std\+::vector$<$ T $>$ \&}]{y,  }\item[{std\+::vector$<$ T $>$ \&}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Set the gradient of the block contributions with respect to the parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jacobian} & Jacobian with respect to the parameters \\
+\hline
+{\em alpha} & Current parameter vector \\
+\hline
+{\em residual} & Residual with respect to the parameters \\
+\hline
+{\em y} & Current solution \\
+\hline
+{\em dy} & Time-\/derivative of the current solution \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ad41ac179eb9a9e1ebaa68da06b84e3e0}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a171d2ed7c087fd817aacf5251b197976}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction_a3e0fa60ff9e5d2333380e22721d7881c}{MODEL\+::\+Junction$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a3fabdf1b9d391665fca5e7dbe9b0f69a}\label{class_m_o_d_e_l_1_1_block_a3fabdf1b9d391665fca5e7dbe9b0f69a}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!update\_solution@{update\_solution}}
 \index{update\_solution@{update\_solution}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_solution()}{update\_solution()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::update\+\_\+solution (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::update\+\_\+solution (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{y,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -351,19 +276,23 @@ Update the solution-\/dependent contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
+{\em parameters} & Parameters of the model \\
+\hline
 {\em y} & Current solution \\
+\hline
+{\em dy} & Current derivate of the solution \\
 \hline
 \end{DoxyParams}
 
 
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ac6192a5011157b55641c0f32e0d9fca2}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_ab10f3411bd8c43310dd3c7bfd9e991d0}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_ae65db4d179f4a3bc33fda5ef1aa74c0b}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a98c480ede15293fbd2aeeb26eff73006}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}.
+Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_ad72d7f12acfc274ed1fe2b78b3bc65bc}{MODEL\+::\+Blood\+Vessel$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a23406660efe4c7537455b66859f82601}{MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c_aa601ad866550b7430cec386ad5b71aa7}{MODEL\+::\+Closed\+Loop\+Coronary\+BC$<$ T, side $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_a5336d1ca242026c95898683643db6f86}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_ac5d06fd3b4c7b517fc08b331f76c0d66}\label{class_m_o_d_e_l_1_1_block_ac5d06fd3b4c7b517fc08b331f76c0d66}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a01f77fe1ad91aa7b424a43c5dd8e4d8c}\label{class_m_o_d_e_l_1_1_block_a01f77fe1ad91aa7b424a43c5dd8e4d8c}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!update\_time@{update\_time}}
 \index{update\_time@{update\_time}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -373,12 +302,12 @@ Update the time-\/dependent contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
-{\em time} & Current time \\
+{\em parameters} & Parameters of the model \\
 \hline
 \end{DoxyParams}
 
 
-Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_ac27b052e7557d75389f50df7fee2b8b8}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_accaf0289d7808f20efb3fd3bd5ee2dbe}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a45375f8f005ff5964c9c78230a3a58c0}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a015dd358bf5581ef46925959653b7018}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a87b99c32ad16faf5fc239d67f33a3be0}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_ac79143b27ae1eb25f4bcd065e494c2a5}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
+Reimplemented in \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary_abaf779073846a87f657b6a22b5b69c8c}{MODEL\+::\+Closed\+Loop\+Heart\+Pulmonary$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a9309ba8c613c40b1059fae2c7d80fb2b}{MODEL\+::\+Flow\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c_a513411f456139b8ac6afd872a17b3ab1}{MODEL\+::\+Open\+Loop\+Coronary\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a25774ad8b3db85fc123558482ae95fd4}{MODEL\+::\+Pressure\+Reference\+BC$<$ T $>$}}, \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c_a5d44e9a15506eed19d4a2fd2efbd44aa}{MODEL\+::\+Resistance\+BC$<$ T $>$}}, and \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c_a04221c53b585ec0d93a75399e63eabc0}{MODEL\+::\+Windkessel\+BC$<$ T $>$}}.
 
 
 
@@ -394,7 +323,18 @@ std\+::vector$<$unsigned int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODE
 
 Global equation indices of the local element contributions. 
 
-Equation indices correspond to rows in the global system. \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}\label{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}} 
+Equation indices correspond to rows in the global system. \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a55e62b9d5b637698d00822ff6ebaddac}\label{class_m_o_d_e_l_1_1_block_a55e62b9d5b637698d00822ff6ebaddac}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!global\_param\_ids@{global\_param\_ids}}
+\index{global\_param\_ids@{global\_param\_ids}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{global\_param\_ids}{global\_param\_ids}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::vector$<$int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::global\+\_\+param\+\_\+ids}
+
+
+
+Global IDs for the block parameters. 
+
+IDs of the parameters \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}\label{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!global\_var\_ids@{global\_var\_ids}}
 \index{global\_var\_ids@{global\_var\_ids}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{global\_var\_ids}{global\_var\_ids}}
@@ -414,27 +354,38 @@ Determines where the local element contributions are written to in the global sy
 with $P_{in} $, $Q_{in} $, $P_{out} $, $Q_{out} $, and $V
 $ denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.
 
-Variable indices correspond to columns in the global system. \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a39d671d4cdced4eda628465b8e660c64}\label{class_m_o_d_e_l_1_1_block_a39d671d4cdced4eda628465b8e660c64}} 
+Variable indices correspond to columns in the global system. \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a03c68d4aac1349a25eae073bbe851560}\label{class_m_o_d_e_l_1_1_block_a03c68d4aac1349a25eae073bbe851560}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!id@{id}}
+\index{id@{id}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::id}
+
+
+
+Global ID of the block. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_afdb4236d17b8075c8fd02f209e30bf2e}\label{class_m_o_d_e_l_1_1_block_afdb4236d17b8075c8fd02f209e30bf2e}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!inlet\_nodes@{inlet\_nodes}}
 \index{inlet\_nodes@{inlet\_nodes}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{inlet\_nodes}{inlet\_nodes}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-std\+::vector$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $\ast$$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::inlet\+\_\+nodes}
+std\+::vector$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}$<$T$>$ $\ast$$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::inlet\+\_\+nodes}
 
 
 
 Inlet nodes. 
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}\label{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}} 
-\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!name@{name}}
-\index{name@{name}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{name}{name}}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_abc61461c571b6307e9f16cb28de152b3}\label{class_m_o_d_e_l_1_1_block_abc61461c571b6307e9f16cb28de152b3}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!model@{model}}
+\index{model@{model}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{model}{model}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::name}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$T$>$$\ast$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::model}
 
 
 
-Name of the block. 
+The model to which the block belongs. 
 
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_adb23ef1a0b7069096bf7c0189839bf6b}\label{class_m_o_d_e_l_1_1_block_adb23ef1a0b7069096bf7c0189839bf6b}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!num\_triplets@{num\_triplets}}
@@ -456,16 +407,27 @@ std\+::map$<$std\+::string, int$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{M
 
 Number of triplets of element. 
 
-Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a41597a548728e98c07e388037ee0f4d9}\label{class_m_o_d_e_l_1_1_block_a41597a548728e98c07e388037ee0f4d9}} 
+Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) \mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_aa0e290e0196b6eb95910c11859047038}\label{class_m_o_d_e_l_1_1_block_aa0e290e0196b6eb95910c11859047038}} 
 \index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!outlet\_nodes@{outlet\_nodes}}
 \index{outlet\_nodes@{outlet\_nodes}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{outlet\_nodes}{outlet\_nodes}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-std\+::vector$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}} $\ast$$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::outlet\+\_\+nodes}
+std\+::vector$<$\mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{Node}}$<$T$>$ $\ast$$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::outlet\+\_\+nodes}
 
 
 
 Outlet nodes. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_block_a6e2824a0bea81f12e9f114250986751d}\label{class_m_o_d_e_l_1_1_block_a6e2824a0bea81f12e9f114250986751d}} 
+\index{MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}!steady@{steady}}
+\index{steady@{steady}!MODEL::Block$<$ T $>$@{MODEL::Block$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{steady}{steady}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{MODEL\+::\+Block}}$<$ T $>$\+::steady = false}
+
+
+
+Toggle steady behavior. 
 
 
 

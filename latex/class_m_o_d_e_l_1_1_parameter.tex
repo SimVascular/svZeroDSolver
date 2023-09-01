@@ -1,0 +1,285 @@
+\hypertarget{class_m_o_d_e_l_1_1_parameter}{}\doxysection{MODEL\+::Parameter\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_m_o_d_e_l_1_1_parameter}\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+
+
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}}.  
+
+
+
+
+{\ttfamily \#include $<$parameter.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a640b9e0446a9c10955cc8d538c99ccff}{Parameter}} (int \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_aff5631de679d40e7b1c2b33c1d82ca0d}{id}}, T \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a4cd3b1fc8ac3fb9e656f5e6fadd39128}{value}})
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a61d27e3c982d4c4b63b1f470d26f4d99}{Parameter}} (int \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_aff5631de679d40e7b1c2b33c1d82ca0d}{id}}, const std\+::vector$<$ T $>$ \&\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a6d6c22a8d3a6dd8b13a75dbda5627e75}{times}}, const std\+::vector$<$ T $>$ \&\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a802a6a27d6e9fce3cd7fc37f31fce02d}{values}}, bool periodic=true)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_aa14d01084a8cd4eab10097946a70bc62}{$\sim$\+Parameter}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_adab0eb71fa526e7d568fe2500c600c39}{update}} (T \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a4cd3b1fc8ac3fb9e656f5e6fadd39128}{value}})
+\begin{DoxyCompactList}\small\item\em Update the parameter. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a8464825f41d41591ce705d0ae6944de4}{update}} (const std\+::vector$<$ T $>$ \&\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a6d6c22a8d3a6dd8b13a75dbda5627e75}{times}}, const std\+::vector$<$ T $>$ \&\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a802a6a27d6e9fce3cd7fc37f31fce02d}{values}})
+\begin{DoxyCompactList}\small\item\em Update the parameter. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a4eb6e357c1e4f290ecbf75dd85ec7866}{get}} (T time)
+\begin{DoxyCompactList}\small\item\em Get the parameter value at the specified time. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_accd0974b145bc4e17df0c4a2fa1bf4c7}{to\+\_\+steady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the parameter into a steady mean state. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_aabdf0f5fc4be7a980e4b31a0d0d40362}{to\+\_\+unsteady}} ()
+\begin{DoxyCompactList}\small\item\em Convert the parameter back into an unsteady mean state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_aff5631de679d40e7b1c2b33c1d82ca0d}{id}}
+\begin{DoxyCompactList}\small\item\em Global ID of the parameter. \end{DoxyCompactList}\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a6d6c22a8d3a6dd8b13a75dbda5627e75}{times}}
+\begin{DoxyCompactList}\small\item\em Time steps if parameter is time-\/dependent. \end{DoxyCompactList}\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a802a6a27d6e9fce3cd7fc37f31fce02d}{values}}
+\begin{DoxyCompactList}\small\item\em Values if parameter is time-\/dependent. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a4cd3b1fc8ac3fb9e656f5e6fadd39128}{value}}
+\begin{DoxyCompactList}\small\item\em Value if parameter is constant. \end{DoxyCompactList}\item 
+T \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a87deb7c94730c9cc46c85acaa2a363a8}{cycle\+\_\+period}}
+\begin{DoxyCompactList}\small\item\em Cardiac cycle period corresponding to the time sequence. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_a60cef1a0f344fd45d033cde329c22931}{size}}
+\begin{DoxyCompactList}\small\item\em Size of the time series if parameter is time-\/dependent. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_aedcaa9042bf6a1d38737fcab4e6864af}{isconstant}}
+\begin{DoxyCompactList}\small\item\em Bool value indicating if the parameter is constant. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter_ae72f886c2216d3aa5b6c9a3f260dfee5}{isperiodic}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class MODEL\+::\+Parameter$<$ T $>$}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{Model}} \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}}. 
+
+This class handles constant parameters and time-\/dependent parameters that need to be interpolated and periodically applied.
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a640b9e0446a9c10955cc8d538c99ccff}\label{class_m_o_d_e_l_1_1_parameter_a640b9e0446a9c10955cc8d538c99ccff}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!Parameter@{Parameter}}
+\index{Parameter@{Parameter}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Parameter()}{Parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::\+Parameter (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{T}]{value }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & Global ID of the parameter \\
+\hline
+{\em value} & The value of the parameter \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a61d27e3c982d4c4b63b1f470d26f4d99}\label{class_m_o_d_e_l_1_1_parameter_a61d27e3c982d4c4b63b1f470d26f4d99}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!Parameter@{Parameter}}
+\index{Parameter@{Parameter}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{Parameter()}{Parameter()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::\+Parameter (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{const std\+::vector$<$ T $>$ \&}]{times,  }\item[{const std\+::vector$<$ T $>$ \&}]{values,  }\item[{bool}]{periodic = {\ttfamily true} }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & Global ID of the parameter \\
+\hline
+{\em times} & Time steps corresponding to the time-\/dependent values \\
+\hline
+{\em values} & Values corresponding to the time steps \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_aa14d01084a8cd4eab10097946a70bc62}\label{class_m_o_d_e_l_1_1_parameter_aa14d01084a8cd4eab10097946a70bc62}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!````~Parameter@{$\sim$Parameter}}
+\index{````~Parameter@{$\sim$Parameter}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$Parameter()}{~Parameter()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}}}
+
+
+
+Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a4eb6e357c1e4f290ecbf75dd85ec7866}\label{class_m_o_d_e_l_1_1_parameter_a4eb6e357c1e4f290ecbf75dd85ec7866}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!get@{get}}
+\index{get@{get}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{get()}{get()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::get (\begin{DoxyParamCaption}\item[{T}]{time }\end{DoxyParamCaption})}
+
+
+
+Get the parameter value at the specified time. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em time} & Current time \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Value at the time 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_accd0974b145bc4e17df0c4a2fa1bf4c7}\label{class_m_o_d_e_l_1_1_parameter_accd0974b145bc4e17df0c4a2fa1bf4c7}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!to\_steady@{to\_steady}}
+\index{to\_steady@{to\_steady}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::to\+\_\+steady}
+
+
+
+Convert the parameter into a steady mean state. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_aabdf0f5fc4be7a980e4b31a0d0d40362}\label{class_m_o_d_e_l_1_1_parameter_aabdf0f5fc4be7a980e4b31a0d0d40362}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!to\_unsteady@{to\_unsteady}}
+\index{to\_unsteady@{to\_unsteady}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::to\+\_\+unsteady}
+
+
+
+Convert the parameter back into an unsteady mean state. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a8464825f41d41591ce705d0ae6944de4}\label{class_m_o_d_e_l_1_1_parameter_a8464825f41d41591ce705d0ae6944de4}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!update@{update}}
+\index{update@{update}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::update (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ T $>$ \&}]{times,  }\item[{const std\+::vector$<$ T $>$ \&}]{values }\end{DoxyParamCaption})}
+
+
+
+Update the parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em times} & Time steps corresponding to the values \\
+\hline
+{\em values} & Values correspondong to the time steps \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_adab0eb71fa526e7d568fe2500c600c39}\label{class_m_o_d_e_l_1_1_parameter_adab0eb71fa526e7d568fe2500c600c39}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!update@{update}}
+\index{update@{update}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update()}{update()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::update (\begin{DoxyParamCaption}\item[{T}]{value }\end{DoxyParamCaption})}
+
+
+
+Update the parameter. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value of the parameter \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a87deb7c94730c9cc46c85acaa2a363a8}\label{class_m_o_d_e_l_1_1_parameter_a87deb7c94730c9cc46c85acaa2a363a8}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!cycle\_period@{cycle\_period}}
+\index{cycle\_period@{cycle\_period}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{cycle\_period}{cycle\_period}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::cycle\+\_\+period}
+
+
+
+Cardiac cycle period corresponding to the time sequence. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_aff5631de679d40e7b1c2b33c1d82ca0d}\label{class_m_o_d_e_l_1_1_parameter_aff5631de679d40e7b1c2b33c1d82ca0d}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!id@{id}}
+\index{id@{id}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{id}{id}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::id}
+
+
+
+Global ID of the parameter. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_aedcaa9042bf6a1d38737fcab4e6864af}\label{class_m_o_d_e_l_1_1_parameter_aedcaa9042bf6a1d38737fcab4e6864af}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!isconstant@{isconstant}}
+\index{isconstant@{isconstant}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{isconstant}{isconstant}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::isconstant}
+
+
+
+Bool value indicating if the parameter is constant. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_ae72f886c2216d3aa5b6c9a3f260dfee5}\label{class_m_o_d_e_l_1_1_parameter_ae72f886c2216d3aa5b6c9a3f260dfee5}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!isperiodic@{isperiodic}}
+\index{isperiodic@{isperiodic}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{isperiodic}{isperiodic}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+bool \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::isperiodic}
+
+Bool value indicating if the parameter is periodic with the cardiac cycle \mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a60cef1a0f344fd45d033cde329c22931}\label{class_m_o_d_e_l_1_1_parameter_a60cef1a0f344fd45d033cde329c22931}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!size@{size}}
+\index{size@{size}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{size}{size}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+int \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::size}
+
+
+
+Size of the time series if parameter is time-\/dependent. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a6d6c22a8d3a6dd8b13a75dbda5627e75}\label{class_m_o_d_e_l_1_1_parameter_a6d6c22a8d3a6dd8b13a75dbda5627e75}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!times@{times}}
+\index{times@{times}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{times}{times}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::vector$<$T$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::times}
+
+
+
+Time steps if parameter is time-\/dependent. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a4cd3b1fc8ac3fb9e656f5e6fadd39128}\label{class_m_o_d_e_l_1_1_parameter_a4cd3b1fc8ac3fb9e656f5e6fadd39128}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!value@{value}}
+\index{value@{value}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{value}{value}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+T \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::value}
+
+
+
+Value if parameter is constant. 
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_parameter_a802a6a27d6e9fce3cd7fc37f31fce02d}\label{class_m_o_d_e_l_1_1_parameter_a802a6a27d6e9fce3cd7fc37f31fce02d}} 
+\index{MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}!values@{values}}
+\index{values@{values}!MODEL::Parameter$<$ T $>$@{MODEL::Parameter$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{values}{values}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+std\+::vector$<$T$>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{MODEL\+::\+Parameter}}$<$ T $>$\+::values}
+
+
+
+Values if parameter is time-\/dependent. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+model/\mbox{\hyperlink{parameter_8hpp}{parameter.\+hpp}}\end{DoxyCompactItemize}

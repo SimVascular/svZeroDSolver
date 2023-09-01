@@ -12,31 +12,18 @@
 
 
 Inheritance diagram for MODEL\+::Blood\+Vessel\+Junction\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=250pt]{class_m_o_d_e_l_1_1_blood_vessel_junction__inherit__graph}
-\end{center}
-\end{figure}
-\doxysubsection*{Classes}
-\begin{DoxyCompactItemize}
-\item 
-struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_junction_1_1_parameters}{Parameters}}
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_blood_vessel_junction_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+% FIG 0
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a7d6da1d1ec672851d8134c90bc3f9bd8}{Blood\+Vessel\+Junction}} (std\+::vector$<$ T $>$ R, std\+::vector$<$ T $>$ C, std\+::vector$<$ T $>$ L, std\+::vector$<$ T $>$ stenosis\+\_\+coefficient, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}})
-\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{Blood\+Vessel\+Junction}} object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a3fc66add0ac596f393b3f20f3afc280b}{$\sim$\+Blood\+Vessel\+Junction}} ()
-\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{Blood\+Vessel\+Junction}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_acc5a95a3227288fd488bf783164ac177}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a251adccd681c53a0afa4886a61a6ce3a}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a2545a5e8b647381a23ff090c7b2f2eee}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_ab10f3411bd8c43310dd3c7bfd9e991d0}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y)
+virtual void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a23406660efe4c7537455b66859f82601}{update\+\_\+solution}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&y, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&dy)
 \begin{DoxyCompactList}\small\item\em Update the solution-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_a171d2ed7c087fd817aacf5251b197976}{update\+\_\+gradient}} (Eigen\+::\+Sparse\+Matrix$<$ T $>$ \&jacobian, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&residual, Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&alpha, std\+::vector$<$ T $>$ \&y, std\+::vector$<$ T $>$ \&dy)
+\begin{DoxyCompactList}\small\item\em Set the gradient of the block contributions with respect to the parameters. \end{DoxyCompactList}\item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction_af870a4e729ab45cc3974d71d70a9d64d}{get\+\_\+num\+\_\+triplets}} ()
 \begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
@@ -51,7 +38,7 @@ std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_
 class MODEL\+::\+Blood\+Vessel\+Junction$<$ T $>$}
 \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{Blood\+Vessel\+Junction}}. 
 
-Models a junction with one inlet and arbitrary outlets using \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}} elements between each inlet and outlet pair.
+Models a junction with one inlet and arbitrary outlets using modified blood vessel elements between each inlet and outlet pair.
 
 \[
 \begin{circuitikz}
@@ -60,78 +47,89 @@ Models a junction with one inlet and arbitrary outlets using \mbox{\hyperlink{cl
 \draw (1,0) to [short, *-] (2.5,0.75);
 \draw (1,0) to [short, *-] (2.5,-0.75);
 \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
-(4.5,0.75); \draw (2.4,0.75) node[anchor=south]{$Q_{in,1}$}; \draw (4.6,0.75)
+(4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
 node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{} to
 [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
-node[anchor=north]{$Q_{in,2}$}; \draw (4.6,-0.75) node[anchor=north]
+node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
 {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
 {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
-{$Q_{out,2}$}; \end{circuitikz} \]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md17}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md17}
-The governing equations are mainly defined by the blood vessel elements (see \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL\+::\+Blood\+Vessel}} for more information). For the sake of brevity, the blood vessel contributions are not repeated here. In addition to the individual blood vessel contributions, the following equation ensures mass conservation between the inlets of the blood vessel elements\+:
+{$Q_{out,2}$}; \end{circuitikz} \]
+
+Each blood vessel is modelled as\+:
 
 \[
-Q_{in}=\sum_{i}^{n_{outlets}} Q_{in, i}
-\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md18}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md18}
+\begin{circuitikz} \draw
+node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+\draw (1,0) node[anchor=south]{$P_{in}$}
+to [R, l=$R$, *-] (3,0)
+to [R, l=$R_{ste}$, -] (5,0)
+(5,0) to [L, l=$L$, -*] (7,0)
+node[anchor=south]{$P_{out}$};
+\draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
+\end{circuitikz}
+\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md4}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md4}
 \[
-\mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
+Q_{in}-\sum_{i}^{n_{outlets}} Q_{out, i}
+\]
+
+\[
+P_{in}-P_{out,i} - (R+R_{ste}) \cdot Q_{out,i} -
+L \frac{d Q_{out,i}}{d t} \quad \forall i \in n_{outlets} \]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md5}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md5}
+\[
+\mathbf{y}^{e}=\left[\begin{array}{lllllll}P_{in}^{e} & Q_{in}^{e}
 & P_{out, 1}^{e} & Q_{out, 1}^{e} &
-\dots & P_{out, i}^{e} & Q_{out, i}^{e} & Q_{in,1} & \dots &
-Q_{in,i}\end{array}\right] \]
-
-Mass conservation
+\dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right] \]
 
 \[
-\mathbf{F}^{e} = \left[\begin{array}{llllllllll}
-0 & 1 & 0 & 0 & \dots & 0 & 0 & -1 & \dots & -1 \\
-& & & & & & & & & \\
-\multicolumn{10}{c}{\mathrm{< blood \, vessel \, contributions >}} \\
-& & & & & & & & &
+\mathbf{F}^{e} = \left[\begin{array}{lllllllll}
+0 & 1 & 0 & -1 & 0 & -1 & 0 & -1 & \dots \\
+1 & 0 & -1 & -R_{1}-R_{ste,1} & 0 & 0 & 0 & 0 & \dots\\
+1 & 0 & 0 & 0 & -1 & -R_{2}-R_{ste,2} & 0& 0& \dots \\
+\vdots & & & & & \ddots & \ddots & &
 \end{array}\right]
 \]
+
+\[
+\mathbf{E}^{e} = \left[\begin{array}{lllllllll}
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
+0 & 0 & 0 & -L_{1} & 0 & 0 & 0 & 0 & \dots\\
+0 & 0 & 0 & 0 & 0 & -L_{2} & 0 & 0 & \dots\\
+& & & & & \ddots & \ddots & &
+\end{array}\right]
+\]
+
+\[
+\mathbf{D}^{e} = \left[\begin{array}{lllllllll}
+0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
+0 & 0 & 0 &
+-R_{ste,1} & 0 & 0 & 0 & 0 & \dots\\
+0 & 0 & 0 & 0 & 0 & -R_{ste,2} & 0 & 0 & \dots\\ & & & & & \ddots & \ddots &
+& \end{array}\right] \]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md6}{}\doxyparagraph{Gradient}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md6}
+Gradient of the equations with respect to the parameters\+:
+
+\[
+\mathbf{J}^{e} = \left[\begin{array}{lllllllll}
+0 & 0 & \dots & 0 & 0 & \dots & 0 & 0 &
+\dots \\
+- y_4 & 0 & \dots & - \dot y_4 & 0 & \dots & |y_4| y_4 & 0 & \dots \\
+0 & - y_6 & \dots & 0 & - \dot y_6 & \dots & 0 & |y_6| y_6 & \dots \\
+0 & 0 & \ddots & 0 & 0 & \ddots & 0 & 0 & \ddots \\
+\end{array}\right]
+\]\hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md7}{}\doxyparagraph{Parameters}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_autotoc_md7}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} sequence for constructing this block
+
+
+\begin{DoxyItemize}
+\item {\ttfamily i} Poiseuille resistance for inner blood vessel {\ttfamily i}
+\item {\ttfamily i+num\+\_\+outlets} Inductance for inner blood vessel {\ttfamily i}
+\item {\ttfamily i+2$\ast$num\+\_\+outlets} Stenosis coefficient for inner blood vessel {\ttfamily i}
+\end{DoxyItemize}
 
 
 \begin{DoxyTemplParams}{Template Parameters}
 {\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
 \hline
 \end{DoxyTemplParams}
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_a7d6da1d1ec672851d8134c90bc3f9bd8}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_a7d6da1d1ec672851d8134c90bc3f9bd8}} 
-\index{MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}!BloodVesselJunction@{BloodVesselJunction}}
-\index{BloodVesselJunction@{BloodVesselJunction}!MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{BloodVesselJunction()}{BloodVesselJunction()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}$<$ T $>$\+::\+Blood\+Vessel\+Junction (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{R,  }\item[{std\+::vector$<$ T $>$}]{C,  }\item[{std\+::vector$<$ T $>$}]{L,  }\item[{std\+::vector$<$ T $>$}]{stenosis\+\_\+coefficient,  }\item[{std\+::string}]{name }\end{DoxyParamCaption})}
-
-
-
-Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{Blood\+Vessel\+Junction}} object. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em R} & Poiseuille resistances \\
-\hline
-{\em C} & Capacitances \\
-\hline
-{\em L} & Inductances \\
-\hline
-{\em stenosis\+\_\+coefficient} & Stenosis Coefficients \\
-\hline
-{\em name} & Name \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_a3fc66add0ac596f393b3f20f3afc280b}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_a3fc66add0ac596f393b3f20f3afc280b}} 
-\index{MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}!````~BloodVesselJunction@{$\sim$BloodVesselJunction}}
-\index{````~BloodVesselJunction@{$\sim$BloodVesselJunction}!MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{$\sim$BloodVesselJunction()}{~BloodVesselJunction()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{Blood\+Vessel\+Junction}}}
-
-
-
-Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{Blood\+Vessel\+Junction}} object. 
-
 
 
 \doxysubsection{Member Function Documentation}
@@ -172,12 +170,12 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_a251adccd681c53a0afa4886a61a6ce3a}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_a251adccd681c53a0afa4886a61a6ce3a}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_a2545a5e8b647381a23ff090c7b2f2eee}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_a2545a5e8b647381a23ff090c7b2f2eee}} 
 \index{MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -187,17 +185,47 @@ Update the constant contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
+{\em parameters} & Parameters of the model \\
+\hline
 \end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{MODEL\+::\+Block$<$ T $>$}}.
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_abd4e9b82b5c3cff5463a0b2ada6d4f16}{MODEL\+::\+Block$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_ab10f3411bd8c43310dd3c7bfd9e991d0}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_ab10f3411bd8c43310dd3c7bfd9e991d0}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_a171d2ed7c087fd817aacf5251b197976}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_a171d2ed7c087fd817aacf5251b197976}} 
+\index{MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}!update\_gradient@{update\_gradient}}
+\index{update\_gradient@{update\_gradient}!MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{update\_gradient()}{update\_gradient()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}$<$ T $>$\+::update\+\_\+gradient (\begin{DoxyParamCaption}\item[{Eigen\+::\+Sparse\+Matrix$<$ T $>$ \&}]{jacobian,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{residual,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{alpha,  }\item[{std\+::vector$<$ T $>$ \&}]{y,  }\item[{std\+::vector$<$ T $>$ \&}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Set the gradient of the block contributions with respect to the parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em jacobian} & Jacobian with respect to the parameters \\
+\hline
+{\em alpha} & Current parameter vector \\
+\hline
+{\em residual} & Residual with respect to the parameters \\
+\hline
+{\em y} & Current solution \\
+\hline
+{\em dy} & Time-\/derivative of the current solution \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa421ffde1a0c16eec27e463e4a816482}{MODEL\+::\+Block$<$ T $>$}}.
+
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_blood_vessel_junction_a23406660efe4c7537455b66859f82601}\label{class_m_o_d_e_l_1_1_blood_vessel_junction_a23406660efe4c7537455b66859f82601}} 
 \index{MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}!update\_solution@{update\_solution}}
 \index{update\_solution@{update\_solution}!MODEL::BloodVesselJunction$<$ T $>$@{MODEL::BloodVesselJunction$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_solution()}{update\_solution()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}$<$ T $>$\+::update\+\_\+solution (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}$<$ T $>$\+::update\+\_\+solution (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{y,  }\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \&}]{dy }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -207,12 +235,16 @@ Update the solution-\/dependent contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
+{\em parameters} & Parameters of the model \\
+\hline
 {\em y} & Current solution \\
+\hline
+{\em dy} & Current derivate of the solution \\
 \hline
 \end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ad2ed01c3bbd8f8b064c1c62be5fbee1a}{MODEL\+::\+Block$<$ T $>$}}.
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a3fabdf1b9d391665fca5e7dbe9b0f69a}{MODEL\+::\+Block$<$ T $>$}}.
 
 
 

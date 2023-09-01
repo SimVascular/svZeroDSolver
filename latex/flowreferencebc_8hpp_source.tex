@@ -40,7 +40,7 @@
 \DoxyCodeLine{36 }
 \DoxyCodeLine{37 \textcolor{preprocessor}{\#include "{}../algebra/sparsesystem.hpp"{}}}
 \DoxyCodeLine{38 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{block_8hpp}{block.hpp}}"{}}}
-\DoxyCodeLine{39 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{timedependentparameter_8hpp}{timedependentparameter.hpp}}"{}}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{parameter_8hpp}{parameter.hpp}}"{}}}
 \DoxyCodeLine{40 }
 \DoxyCodeLine{41 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_m_o_d_e_l}{MODEL}} \{}
 \DoxyCodeLine{42 \textcolor{comment}{}}
@@ -77,176 +77,96 @@
 \DoxyCodeLine{73 \textcolor{comment}{ * \(\backslash\)mathbf\{C\}\string^\{e\}=\(\backslash\)left[\(\backslash\)hat\{Q\}\(\backslash\)right]}}
 \DoxyCodeLine{74 \textcolor{comment}{ * \(\backslash\)f]}}
 \DoxyCodeLine{75 \textcolor{comment}{ *}}
-\DoxyCodeLine{76 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{77 \textcolor{comment}{ */}}
-\DoxyCodeLine{78 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{79 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{FlowReferenceBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
-\DoxyCodeLine{80  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{81 \textcolor{comment}{  /**}}
-\DoxyCodeLine{82 \textcolor{comment}{   * @brief Parameters of the element.}}
-\DoxyCodeLine{83 \textcolor{comment}{   *}}
-\DoxyCodeLine{84 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
-\DoxyCodeLine{85 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{86 \textcolor{comment}{   */}}
-\DoxyCodeLine{87   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
-\DoxyCodeLine{88     \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} \mbox{\hyperlink{struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters_a9f221dbd64224a7efc92d37d34fd2059}{Q}};  \textcolor{comment}{///< Time-\/dependent flow}}
-\DoxyCodeLine{89   \};}
-\DoxyCodeLine{90 \textcolor{comment}{}}
-\DoxyCodeLine{91 \textcolor{comment}{  /**}}
-\DoxyCodeLine{92 \textcolor{comment}{   * @brief Construct a new FlowReferenceBC object}}
-\DoxyCodeLine{93 \textcolor{comment}{   *}}
-\DoxyCodeLine{94 \textcolor{comment}{   * @param Q Time dependent flow}}
-\DoxyCodeLine{95 \textcolor{comment}{   * @param name Name}}
-\DoxyCodeLine{96 \textcolor{comment}{   */}}
-\DoxyCodeLine{97   \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_afc9b0f704b7f0ad85e120e9faa975b5c}{FlowReferenceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} Q, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}},}
-\DoxyCodeLine{98                   std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adc256c007eb1d76741cad2753d69cf65}{coupling\_loc}} = \textcolor{stringliteral}{"{}None"{}});}
-\DoxyCodeLine{99 \textcolor{comment}{}}
-\DoxyCodeLine{100 \textcolor{comment}{  /**}}
-\DoxyCodeLine{101 \textcolor{comment}{   * @brief Destroy the FlowReferenceBC object}}
-\DoxyCodeLine{102 \textcolor{comment}{   *}}
-\DoxyCodeLine{103 \textcolor{comment}{   */}}
-\DoxyCodeLine{104   \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a59470544c3c1f89732051abf8f6f9300}{\string~FlowReferenceBC}}();}
-\DoxyCodeLine{105 \textcolor{comment}{}}
-\DoxyCodeLine{106 \textcolor{comment}{  /**}}
-\DoxyCodeLine{107 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{108 \textcolor{comment}{   *}}
-\DoxyCodeLine{109 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{110 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{111 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{112 \textcolor{comment}{   *}}
-\DoxyCodeLine{113 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{114 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{115 \textcolor{comment}{   */}}
-\DoxyCodeLine{116   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a07b024cf724ad95ce2abde3793c3af1f}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
-\DoxyCodeLine{117 \textcolor{comment}{}}
-\DoxyCodeLine{118 \textcolor{comment}{  /**}}
-\DoxyCodeLine{119 \textcolor{comment}{   * @brief Update parameters of a block.}}
-\DoxyCodeLine{120 \textcolor{comment}{   *}}
-\DoxyCodeLine{121 \textcolor{comment}{   * @param params New parameters.}}
-\DoxyCodeLine{122 \textcolor{comment}{   */}}
-\DoxyCodeLine{123   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a4e3e6ef315b0496920e1cbe7171c702f}{update\_block\_params}}(std::vector<T> new\_params);}
-\DoxyCodeLine{124 \textcolor{comment}{}}
-\DoxyCodeLine{125 \textcolor{comment}{  /**}}
-\DoxyCodeLine{126 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
-\DoxyCodeLine{127 \textcolor{comment}{   *}}
-\DoxyCodeLine{128 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{129 \textcolor{comment}{   */}}
-\DoxyCodeLine{130   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a6810600bcf2e2e505dbe138da4d0f2e7}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{131 \textcolor{comment}{}}
-\DoxyCodeLine{132 \textcolor{comment}{  /**}}
-\DoxyCodeLine{133 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
-\DoxyCodeLine{134 \textcolor{comment}{   * system}}
+\DoxyCodeLine{76 \textcolor{comment}{ * \#\#\# Parameters}}
+\DoxyCodeLine{77 \textcolor{comment}{ *}}
+\DoxyCodeLine{78 \textcolor{comment}{ * Parameter sequence for constructing this block}}
+\DoxyCodeLine{79 \textcolor{comment}{ *}}
+\DoxyCodeLine{80 \textcolor{comment}{ * * `0` Flow}}
+\DoxyCodeLine{81 \textcolor{comment}{ *}}
+\DoxyCodeLine{82 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{83 \textcolor{comment}{ */}}
+\DoxyCodeLine{84 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{85 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{FlowReferenceBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
+\DoxyCodeLine{86  \textcolor{keyword}{public}:}
+\DoxyCodeLine{87   \textcolor{comment}{// Inherit constructors}}
+\DoxyCodeLine{88   \textcolor{keyword}{using }\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Block;}
+\DoxyCodeLine{89 \textcolor{comment}{}}
+\DoxyCodeLine{90 \textcolor{comment}{  /**}}
+\DoxyCodeLine{91 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{92 \textcolor{comment}{   *}}
+\DoxyCodeLine{93 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{94 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{95 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{96 \textcolor{comment}{   *}}
+\DoxyCodeLine{97 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{98 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{99 \textcolor{comment}{   */}}
+\DoxyCodeLine{100   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a07b024cf724ad95ce2abde3793c3af1f}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{101 \textcolor{comment}{}}
+\DoxyCodeLine{102 \textcolor{comment}{  /**}}
+\DoxyCodeLine{103 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{104 \textcolor{comment}{   *}}
+\DoxyCodeLine{105 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{106 \textcolor{comment}{   * @param parameters Parameters of the model}}
+\DoxyCodeLine{107 \textcolor{comment}{   */}}
+\DoxyCodeLine{108   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a86775a939685e97215b3e414743f8260}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{109                        std::vector<T> \&parameters);}
+\DoxyCodeLine{110 \textcolor{comment}{}}
+\DoxyCodeLine{111 \textcolor{comment}{  /**}}
+\DoxyCodeLine{112 \textcolor{comment}{   * @brief Update the time-\/dependent contributions of the element in a sparse}}
+\DoxyCodeLine{113 \textcolor{comment}{   * system}}
+\DoxyCodeLine{114 \textcolor{comment}{   *}}
+\DoxyCodeLine{115 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{116 \textcolor{comment}{   * @param parameters Parameters of the model}}
+\DoxyCodeLine{117 \textcolor{comment}{   */}}
+\DoxyCodeLine{118   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a9309ba8c613c40b1059fae2c7d80fb2b}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{119                    std::vector<T> \&parameters);}
+\DoxyCodeLine{120 \textcolor{comment}{}}
+\DoxyCodeLine{121 \textcolor{comment}{  /**}}
+\DoxyCodeLine{122 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{123 \textcolor{comment}{   *}}
+\DoxyCodeLine{124 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{125 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{126 \textcolor{comment}{   */}}
+\DoxyCodeLine{127   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_aef45cf661c4cfa8da82d0ea37fc2ce8b}{num\_triplets}} = \{}
+\DoxyCodeLine{128       \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
+\DoxyCodeLine{129       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
+\DoxyCodeLine{130       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{131   \};}
+\DoxyCodeLine{132 \textcolor{comment}{}}
+\DoxyCodeLine{133 \textcolor{comment}{  /**}}
+\DoxyCodeLine{134 \textcolor{comment}{   * @brief Get number of triplets of element}}
 \DoxyCodeLine{135 \textcolor{comment}{   *}}
-\DoxyCodeLine{136 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{137 \textcolor{comment}{   * @param time Current time}}
+\DoxyCodeLine{136 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{137 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
 \DoxyCodeLine{138 \textcolor{comment}{   */}}
-\DoxyCodeLine{139   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_accaf0289d7808f20efb3fd3bd5ee2dbe}{update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time);}
-\DoxyCodeLine{140 \textcolor{comment}{}}
-\DoxyCodeLine{141 \textcolor{comment}{  /**}}
-\DoxyCodeLine{142 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{143 \textcolor{comment}{   *}}
-\DoxyCodeLine{144 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{145 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{146 \textcolor{comment}{   */}}
-\DoxyCodeLine{147   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_aef45cf661c4cfa8da82d0ea37fc2ce8b}{num\_triplets}} = \{}
-\DoxyCodeLine{148       \{\textcolor{stringliteral}{"{}F"{}}, 1\},}
-\DoxyCodeLine{149       \{\textcolor{stringliteral}{"{}E"{}}, 0\},}
-\DoxyCodeLine{150       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{151   \};}
-\DoxyCodeLine{152 \textcolor{comment}{}}
-\DoxyCodeLine{153 \textcolor{comment}{  /**}}
-\DoxyCodeLine{154 \textcolor{comment}{   * @brief Get number of triplets of element}}
-\DoxyCodeLine{155 \textcolor{comment}{   *}}
-\DoxyCodeLine{156 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{157 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{158 \textcolor{comment}{   */}}
-\DoxyCodeLine{159   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a24254b45c29850fce94c216322c7e771}{get\_num\_triplets}}();}
-\DoxyCodeLine{160 \textcolor{comment}{}}
-\DoxyCodeLine{161 \textcolor{comment}{  /**}}
-\DoxyCodeLine{162 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
-\DoxyCodeLine{163 \textcolor{comment}{   *}}
-\DoxyCodeLine{164 \textcolor{comment}{   * Converts the prescribed flow to the constant mean of itself}}
-\DoxyCodeLine{165 \textcolor{comment}{   *}}
-\DoxyCodeLine{166 \textcolor{comment}{   */}}
-\DoxyCodeLine{167   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a9c868f6221abfba243ea4b667dea8309}{to\_steady}}();}
-\DoxyCodeLine{168 \textcolor{comment}{}}
-\DoxyCodeLine{169 \textcolor{comment}{  /**}}
-\DoxyCodeLine{170 \textcolor{comment}{   * @brief Convert the block to an unsteady behavior}}
-\DoxyCodeLine{171 \textcolor{comment}{   *}}
-\DoxyCodeLine{172 \textcolor{comment}{   */}}
-\DoxyCodeLine{173   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adf944c2f4d404c58e04043fe2a84a31a}{to\_unsteady}}();}
-\DoxyCodeLine{174 \textcolor{comment}{}}
-\DoxyCodeLine{175 \textcolor{comment}{  /**}}
-\DoxyCodeLine{176 \textcolor{comment}{   * @brief Specify is this is an inlet or outlet to the svZeroD model when used}}
-\DoxyCodeLine{177 \textcolor{comment}{   * for external coupling.}}
-\DoxyCodeLine{178 \textcolor{comment}{   *}}
-\DoxyCodeLine{179 \textcolor{comment}{   */}}
-\DoxyCodeLine{180   std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adc256c007eb1d76741cad2753d69cf65}{coupling\_loc}};}
-\DoxyCodeLine{181 }
-\DoxyCodeLine{182  \textcolor{keyword}{private}:}
-\DoxyCodeLine{183   \mbox{\hyperlink{struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters}{Parameters}} params;}
-\DoxyCodeLine{184   \textcolor{keywordtype}{bool} external\_coupling = \textcolor{keyword}{false};}
-\DoxyCodeLine{185 \};}
-\DoxyCodeLine{186 }
-\DoxyCodeLine{187 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{188 \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_afc9b0f704b7f0ad85e120e9faa975b5c}{FlowReferenceBC<T>::FlowReferenceBC}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{TimeDependentParameter<T>}} Q,}
-\DoxyCodeLine{189                                     std::string name, std::string coupling\_loc)}
-\DoxyCodeLine{190     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{191   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{192   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_flow_reference_b_c_1_1_parameters_a9f221dbd64224a7efc92d37d34fd2059}{Q}} = Q;}
-\DoxyCodeLine{193   this-\/>coupling\_loc = \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adc256c007eb1d76741cad2753d69cf65}{coupling\_loc}};}
-\DoxyCodeLine{194   \textcolor{keywordflow}{if} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adc256c007eb1d76741cad2753d69cf65}{coupling\_loc}} != \textcolor{stringliteral}{"{}None"{}}) \{}
-\DoxyCodeLine{195     this-\/>external\_coupling = \textcolor{keyword}{true};}
-\DoxyCodeLine{196   \}}
-\DoxyCodeLine{197 \}}
-\DoxyCodeLine{198 }
-\DoxyCodeLine{199 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{200 \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a59470544c3c1f89732051abf8f6f9300}{FlowReferenceBC<T>::\string~FlowReferenceBC}}() \{\}}
-\DoxyCodeLine{201 }
-\DoxyCodeLine{202 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{203 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a07b024cf724ad95ce2abde3793c3af1f}{FlowReferenceBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{204   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 1, \{\});}
-\DoxyCodeLine{205 \}}
-\DoxyCodeLine{206 }
-\DoxyCodeLine{207 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{208 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a4e3e6ef315b0496920e1cbe7171c702f}{FlowReferenceBC<T>::update\_block\_params}}(std::vector<T> new\_params) \{}
-\DoxyCodeLine{209   std::vector<T> t\_new;}
-\DoxyCodeLine{210   std::vector<T> Q\_new;}
-\DoxyCodeLine{211   \textcolor{keywordtype}{int} num\_time\_pts = (int)new\_params[0];}
-\DoxyCodeLine{212   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < num\_time\_pts; i++) \{}
-\DoxyCodeLine{213     t\_new.push\_back(new\_params[1 + i]);}
-\DoxyCodeLine{214     Q\_new.push\_back(new\_params[1 + num\_time\_pts + i]);}
-\DoxyCodeLine{215   \}}
-\DoxyCodeLine{216   this-\/>params.Q.update\_params(t\_new, Q\_new);}
-\DoxyCodeLine{217 \}}
-\DoxyCodeLine{218 }
-\DoxyCodeLine{219 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{220 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a6810600bcf2e2e505dbe138da4d0f2e7}{FlowReferenceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{221   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = 1.0;}
-\DoxyCodeLine{222 \}}
-\DoxyCodeLine{223 }
-\DoxyCodeLine{224 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{225 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_accaf0289d7808f20efb3fd3bd5ee2dbe}{FlowReferenceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system, T time) \{}
-\DoxyCodeLine{226   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) = -\/params.Q.get(time);}
-\DoxyCodeLine{227 \}}
-\DoxyCodeLine{228 }
-\DoxyCodeLine{229 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{230 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a9c868f6221abfba243ea4b667dea8309}{FlowReferenceBC<T>::to\_steady}}() \{}
-\DoxyCodeLine{231   params.Q.to\_steady();}
-\DoxyCodeLine{232 \}}
-\DoxyCodeLine{233 }
-\DoxyCodeLine{234 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{235 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_adf944c2f4d404c58e04043fe2a84a31a}{FlowReferenceBC<T>::to\_unsteady}}() \{}
-\DoxyCodeLine{236   params.Q.to\_unsteady();}
-\DoxyCodeLine{237 \}}
-\DoxyCodeLine{238 }
-\DoxyCodeLine{239 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{240 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a24254b45c29850fce94c216322c7e771}{FlowReferenceBC<T>::get\_num\_triplets}}() \{}
-\DoxyCodeLine{241   \textcolor{keywordflow}{return} num\_triplets;}
-\DoxyCodeLine{242 \}}
-\DoxyCodeLine{243 }
-\DoxyCodeLine{244 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{245 }
-\DoxyCodeLine{246 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_FLOWREFERENCEBC\_HPP\_}}
+\DoxyCodeLine{139   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a24254b45c29850fce94c216322c7e771}{get\_num\_triplets}}();}
+\DoxyCodeLine{140 \};}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{143 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a07b024cf724ad95ce2abde3793c3af1f}{FlowReferenceBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{144   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 1, \{\});}
+\DoxyCodeLine{145 \}}
+\DoxyCodeLine{146 }
+\DoxyCodeLine{147 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{148 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a86775a939685e97215b3e414743f8260}{FlowReferenceBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{149                                          std::vector<T> \&parameters) \{}
+\DoxyCodeLine{150   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = 1.0;}
+\DoxyCodeLine{151 \}}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{154 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a9309ba8c613c40b1059fae2c7d80fb2b}{FlowReferenceBC<T>::update\_time}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{155                                      std::vector<T> \&parameters) \{}
+\DoxyCodeLine{156   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a5a227ddd625d11f7dc88c73bd0d6f2f6}{C}}(this-\/>global\_eqn\_ids[0]) = -\/parameters[this-\/>global\_param\_ids[0]];}
+\DoxyCodeLine{157 \}}
+\DoxyCodeLine{158 }
+\DoxyCodeLine{159 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{160 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c_a24254b45c29850fce94c216322c7e771}{FlowReferenceBC<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{161   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{162 \}}
+\DoxyCodeLine{163 }
+\DoxyCodeLine{164 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{165 }
+\DoxyCodeLine{166 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_FLOWREFERENCEBC\_HPP\_}}
 
 \end{DoxyCode}

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['block_0',['Block',['../class_m_o_d_e_l_1_1_block.html#a2353b1aae8afa7f065ab1e2aa033bf29',1,'MODEL::Block::Block()'],['../class_m_o_d_e_l_1_1_block.html#a061d34013620c7d6b67abd589a849422',1,'MODEL::Block::Block(std::string name)']]],
-  ['bloodvessel_1',['BloodVessel',['../class_m_o_d_e_l_1_1_blood_vessel.html#ad49bbb055eed81dbbf7ec0f5c6e43b20',1,'MODEL::BloodVessel']]],
-  ['bloodvesseljunction_2',['BloodVesselJunction',['../class_m_o_d_e_l_1_1_blood_vessel_junction.html#a7d6da1d1ec672851d8134c90bc3f9bd8',1,'MODEL::BloodVesselJunction']]]
+  ['add_5fblock_0',['add_block',['../class_m_o_d_e_l_1_1_model.html#afbc4e91afadea5bddfc78241d54200c6',1,'MODEL::Model']]],
+  ['add_5fnode_1',['add_node',['../class_m_o_d_e_l_1_1_model.html#ac197ebdc9d40d717af919ddcdf6cc027',1,'MODEL::Model']]],
+  ['add_5fparameter_2',['add_parameter',['../class_m_o_d_e_l_1_1_model.html#a1840902a8446dd44f9f1c2c06021bcb0',1,'MODEL::Model::add_parameter(T value)'],['../class_m_o_d_e_l_1_1_model.html#a9db1f984f8bfc89d357707328b4cd2a5',1,'MODEL::Model::add_parameter(const std::vector&lt; T &gt; &amp;times, const std::vector&lt; T &gt; &amp;values, bool periodic=true)']]]
 ];

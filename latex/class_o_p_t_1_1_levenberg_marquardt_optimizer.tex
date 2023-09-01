@@ -1,0 +1,157 @@
+\hypertarget{class_o_p_t_1_1_levenberg_marquardt_optimizer}{}\doxysection{OPT\+::Levenberg\+Marquardt\+Optimizer\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>} Class Template Reference}
+\label{class_o_p_t_1_1_levenberg_marquardt_optimizer}\index{OPT::LevenbergMarquardtOptimizer$<$ T $>$@{OPT::LevenbergMarquardtOptimizer$<$ T $>$}}
+
+
+Levenberg-\/\+Marquardt optimization class.  
+
+
+
+
+{\ttfamily \#include $<$levenbergmarquardtoptimizer.\+hpp$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8227cd7de1b9c31e356a0672611e6216}{Levenberg\+Marquardt\+Optimizer}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ $\ast$model, int num\+\_\+obs, int num\+\_\+params, T lambda0, T tol\+\_\+grad, T tol\+\_\+inc, int max\+\_\+iter)
+\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{Levenberg\+Marquardt\+Optimizer}} object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8c8f51fb27cb86a9ed85b510e8e5a00b}{$\sim$\+Levenberg\+Marquardt\+Optimizer}} ()
+\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{Levenberg\+Marquardt\+Optimizer}} object. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer_abc6feccece5ee987f65f76e01c3a8ba7}{run}} (Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ alpha, std\+::vector$<$ std\+::vector$<$ T $>$ $>$ \&y\+\_\+obs, std\+::vector$<$ std\+::vector$<$ T $>$ $>$ \&dy\+\_\+obs)
+\begin{DoxyCompactList}\small\item\em Run the optimization algorithm. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$\newline
+class OPT\+::\+Levenberg\+Marquardt\+Optimizer$<$ T $>$}
+Levenberg-\/\+Marquardt optimization class. 
+
+The 0D residual (assuming no time-\/dependency in parameters) is
+
+\[
+\boldsymbol{r}(\boldsymbol{\alpha}, \boldsymbol{y}, \boldsymbol{\dot{y}}) =
+\boldsymbol{E}(\boldsymbol{\alpha}, \boldsymbol{y}) \cdot
+\dot{\boldsymbol{y}}+\boldsymbol{F}(\boldsymbol{\alpha}, \boldsymbol{y})
+\cdot \boldsymbol{y}+\boldsymbol{c}(\boldsymbol{\alpha}, \boldsymbol{y}) \]
+
+with solution vector $\boldsymbol{y} \in \mathbb{R}^{N}$ (flow and pressure at nodes), LPN parameters $\boldsymbol{\alpha} \in
+\mathbb{R}^{P}$, system matrices $\boldsymbol{E},\boldsymbol{F} \in
+\mathbb{R}^{NxN}$, and system vector $\boldsymbol{c} \in
+\mathbb{R}^{N}$.
+
+The least squares problem can be formulated as
+
+\[
+\min _\alpha S, \quad \mathrm { with } \quad S=\sum_i^D
+r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \]
+
+with given solution vectors $\boldsymbol{y}$, $\boldsymbol{\dot{y}}$ at all datapoints $D$. The parameter vector is iteratively improved according to
+
+\[
+\boldsymbol{\alpha}^{i+1}=\boldsymbol{\alpha}^{i}+\Delta
+\boldsymbol{\alpha}^{i+1} \]
+
+wherein the increment $\Delta \boldsymbol{\alpha}^{i+1} $ is determined by solving the following system\+:
+
+\[
+\left[\mathbf{J}^{\mathrm{T}} \mathbf{J}+\lambda
+\operatorname{diag}\left(\mathbf{J}^{\mathrm{T}} \mathbf{J}\right)\right]^{i}
+\cdot \Delta \boldsymbol{\alpha}^{i+1}=-\left[\mathbf{J}^{\mathrm{T}}
+\mathbf{r}\right]^{i}, \quad \lambda^{i}=\lambda^{i-1}
+\cdot\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i}\right\|_2
+/\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i-1}\right\|_2. \]
+
+The algorithm terminates when the following tolerance thresholds are reached
+
+\[
+\left\|\left[\mathbf{J}^{\mathrm{T}}
+\mathbf{r}\right]^{\mathrm{i}}\right\|_2<\operatorname{tol}_{\text {grad
+}}^\alpha \text { and }\left\|\Delta
+\boldsymbol{\alpha}^{\mathrm{i}+1}\right\|_2<\mathrm{tol}_{\text {inc
+}}^\alpha, \]
+
+The Jacobian is derived from the residual as
+
+\[
+J = \frac{\partial \boldsymbol{r}}{\partial \boldsymbol{\alpha}} =
+\frac{\partial \mathbf{E}}{\partial \boldsymbol{\alpha}} \cdot
+\dot{\mathbf{y}}+\frac{\partial \mathbf{F}}{\partial \boldsymbol{\alpha}}
+\cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \]
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8227cd7de1b9c31e356a0672611e6216}\label{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8227cd7de1b9c31e356a0672611e6216}} 
+\index{OPT::LevenbergMarquardtOptimizer$<$ T $>$@{OPT::LevenbergMarquardtOptimizer$<$ T $>$}!LevenbergMarquardtOptimizer@{LevenbergMarquardtOptimizer}}
+\index{LevenbergMarquardtOptimizer@{LevenbergMarquardtOptimizer}!OPT::LevenbergMarquardtOptimizer$<$ T $>$@{OPT::LevenbergMarquardtOptimizer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{LevenbergMarquardtOptimizer()}{LevenbergMarquardtOptimizer()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{OPT\+::\+Levenberg\+Marquardt\+Optimizer}}$<$ T $>$\+::\+Levenberg\+Marquardt\+Optimizer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL\+::\+Model}}$<$ T $>$ $\ast$}]{model,  }\item[{int}]{num\+\_\+obs,  }\item[{int}]{num\+\_\+params,  }\item[{T}]{lambda0,  }\item[{T}]{tol\+\_\+grad,  }\item[{T}]{tol\+\_\+inc,  }\item[{int}]{max\+\_\+iter }\end{DoxyParamCaption})}
+
+
+
+Construct a new \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{Levenberg\+Marquardt\+Optimizer}} object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model} & The 0D model \\
+\hline
+{\em num\+\_\+obs} & Number of observations in optimization \\
+\hline
+{\em num\+\_\+params} & Number of parameters in optimization \\
+\hline
+{\em lambda0} & Initial damping factor \\
+\hline
+{\em tol\+\_\+grad} & Gradient tolerance \\
+\hline
+{\em tol\+\_\+inc} & Parameter increment tolerance \\
+\hline
+{\em max\+\_\+iter} & Maximum iterations \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8c8f51fb27cb86a9ed85b510e8e5a00b}\label{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8c8f51fb27cb86a9ed85b510e8e5a00b}} 
+\index{OPT::LevenbergMarquardtOptimizer$<$ T $>$@{OPT::LevenbergMarquardtOptimizer$<$ T $>$}!````~LevenbergMarquardtOptimizer@{$\sim$LevenbergMarquardtOptimizer}}
+\index{````~LevenbergMarquardtOptimizer@{$\sim$LevenbergMarquardtOptimizer}!OPT::LevenbergMarquardtOptimizer$<$ T $>$@{OPT::LevenbergMarquardtOptimizer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{$\sim$LevenbergMarquardtOptimizer()}{~LevenbergMarquardtOptimizer()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+\mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{OPT\+::\+Levenberg\+Marquardt\+Optimizer}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{Levenberg\+Marquardt\+Optimizer}}}
+
+
+
+Destroy the \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{Levenberg\+Marquardt\+Optimizer}} object. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_o_p_t_1_1_levenberg_marquardt_optimizer_abc6feccece5ee987f65f76e01c3a8ba7}\label{class_o_p_t_1_1_levenberg_marquardt_optimizer_abc6feccece5ee987f65f76e01c3a8ba7}} 
+\index{OPT::LevenbergMarquardtOptimizer$<$ T $>$@{OPT::LevenbergMarquardtOptimizer$<$ T $>$}!run@{run}}
+\index{run@{run}!OPT::LevenbergMarquardtOptimizer$<$ T $>$@{OPT::LevenbergMarquardtOptimizer$<$ T $>$}}
+\doxysubsubsection{\texorpdfstring{run()}{run()}}
+{\footnotesize\ttfamily template$<$typename T $>$ \\
+Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$ \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{OPT\+::\+Levenberg\+Marquardt\+Optimizer}}$<$ T $>$\+::run (\begin{DoxyParamCaption}\item[{Eigen\+::\+Matrix$<$ T, Eigen\+::\+Dynamic, 1 $>$}]{alpha,  }\item[{std\+::vector$<$ std\+::vector$<$ T $>$ $>$ \&}]{y\+\_\+obs,  }\item[{std\+::vector$<$ std\+::vector$<$ T $>$ $>$ \&}]{dy\+\_\+obs }\end{DoxyParamCaption})}
+
+
+
+Run the optimization algorithm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em alpha} & Initial parameter vector alpha \\
+\hline
+{\em y\+\_\+obs} & Matrix (num\+\_\+obs x n) with all observations for y \\
+\hline
+{\em dy\+\_\+obs} & Matrix (num\+\_\+obs x n) with all observations for dy \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\+::\+Matrix$<$\+T, Eigen\+::\+Dynamic, 1$>$ Optimized parameter vector alpha 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+optimize/\mbox{\hyperlink{levenbergmarquardtoptimizer_8hpp}{levenbergmarquardtoptimizer.\+hpp}}\end{DoxyCompactItemize}

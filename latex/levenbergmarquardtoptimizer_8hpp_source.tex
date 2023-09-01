@@ -1,0 +1,274 @@
+\hypertarget{levenbergmarquardtoptimizer_8hpp_source}{}\doxysection{levenbergmarquardtoptimizer.\+hpp}
+\label{levenbergmarquardtoptimizer_8hpp_source}\index{optimize/levenbergmarquardtoptimizer.hpp@{optimize/levenbergmarquardtoptimizer.hpp}}
+\mbox{\hyperlink{levenbergmarquardtoptimizer_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Copyright (c) Stanford University, The Regents of the University of}}
+\DoxyCodeLine{2 \textcolor{comment}{//               California, and others.}}
+\DoxyCodeLine{3 \textcolor{comment}{//}}
+\DoxyCodeLine{4 \textcolor{comment}{// All Rights Reserved.}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{6 \textcolor{comment}{// See Copyright-\/SimVascular.txt for additional details.}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// Permission is hereby granted, free of charge, to any person obtaining}}
+\DoxyCodeLine{9 \textcolor{comment}{// a copy of this software and associated documentation files (the}}
+\DoxyCodeLine{10 \textcolor{comment}{// "{}Software"{}), to deal in the Software without restriction, including}}
+\DoxyCodeLine{11 \textcolor{comment}{// without limitation the rights to use, copy, modify, merge, publish,}}
+\DoxyCodeLine{12 \textcolor{comment}{// distribute, sublicense, and/or sell copies of the Software, and to}}
+\DoxyCodeLine{13 \textcolor{comment}{// permit persons to whom the Software is furnished to do so, subject}}
+\DoxyCodeLine{14 \textcolor{comment}{// to the following conditions:}}
+\DoxyCodeLine{15 \textcolor{comment}{//}}
+\DoxyCodeLine{16 \textcolor{comment}{// The above copyright notice and this permission notice shall be included}}
+\DoxyCodeLine{17 \textcolor{comment}{// in all copies or substantial portions of the Software.}}
+\DoxyCodeLine{18 \textcolor{comment}{//}}
+\DoxyCodeLine{19 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "{}AS}}
+\DoxyCodeLine{20 \textcolor{comment}{// IS"{} AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED}}
+\DoxyCodeLine{21 \textcolor{comment}{// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A}}
+\DoxyCodeLine{22 \textcolor{comment}{// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER}}
+\DoxyCodeLine{23 \textcolor{comment}{// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,}}
+\DoxyCodeLine{24 \textcolor{comment}{// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{25 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR}}
+\DoxyCodeLine{26 \textcolor{comment}{// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF}}
+\DoxyCodeLine{27 \textcolor{comment}{// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING}}
+\DoxyCodeLine{28 \textcolor{comment}{// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS}}
+\DoxyCodeLine{29 \textcolor{comment}{// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}\textcolor{comment}{}}
+\DoxyCodeLine{30 \textcolor{comment}{/**}}
+\DoxyCodeLine{31 \textcolor{comment}{ * @file levenbergmarquardtoptimizer.hpp}}
+\DoxyCodeLine{32 \textcolor{comment}{ * @brief OPT::LevenbergMarquardtOptimizer source file}}
+\DoxyCodeLine{33 \textcolor{comment}{ */}}
+\DoxyCodeLine{34 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_OPTIMIZE\_LEVENBERGMARQUARDT\_HPP\_}}
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#define SVZERODSOLVER\_OPTIMIZE\_LEVENBERGMARQUARDT\_HPP\_}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#include <Eigen/Dense>}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#include <Eigen/Sparse>}}
+\DoxyCodeLine{39 }
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{model_8hpp}{model/model.hpp}}"{}}}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_o_p_t}{OPT}} \{}
+\DoxyCodeLine{43 \textcolor{comment}{}}
+\DoxyCodeLine{44 \textcolor{comment}{/**}}
+\DoxyCodeLine{45 \textcolor{comment}{ * @brief Levenberg-\/Marquardt optimization class}}
+\DoxyCodeLine{46 \textcolor{comment}{ *}}
+\DoxyCodeLine{47 \textcolor{comment}{ * The 0D residual (assuming no time-\/dependency in parameters) is}}
+\DoxyCodeLine{48 \textcolor{comment}{ *}}
+\DoxyCodeLine{49 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{50 \textcolor{comment}{ * \(\backslash\)boldsymbol\{r\}(\(\backslash\)boldsymbol\{\(\backslash\)alpha\}, \(\backslash\)boldsymbol\{y\}, \(\backslash\)boldsymbol\{\(\backslash\)dot\{y\}\}) =}}
+\DoxyCodeLine{51 \textcolor{comment}{ * \(\backslash\)boldsymbol\{E\}(\(\backslash\)boldsymbol\{\(\backslash\)alpha\}, \(\backslash\)boldsymbol\{y\}) \(\backslash\)cdot}}
+\DoxyCodeLine{52 \textcolor{comment}{ * \(\backslash\)dot\{\(\backslash\)boldsymbol\{y\}\}+\(\backslash\)boldsymbol\{F\}(\(\backslash\)boldsymbol\{\(\backslash\)alpha\}, \(\backslash\)boldsymbol\{y\})}}
+\DoxyCodeLine{53 \textcolor{comment}{ * \(\backslash\)cdot \(\backslash\)boldsymbol\{y\}+\(\backslash\)boldsymbol\{c\}(\(\backslash\)boldsymbol\{\(\backslash\)alpha\}, \(\backslash\)boldsymbol\{y\}) \(\backslash\)f]}}
+\DoxyCodeLine{54 \textcolor{comment}{ *}}
+\DoxyCodeLine{55 \textcolor{comment}{ * with solution vector \(\backslash\)f\$\(\backslash\)boldsymbol\{y\} \(\backslash\)in \(\backslash\)mathbb\{R\}\string^\{N\}\(\backslash\)f\$ (flow and}}
+\DoxyCodeLine{56 \textcolor{comment}{ * pressure at nodes), LPN parameters \(\backslash\)f\$\(\backslash\)boldsymbol\{\(\backslash\)alpha\} \(\backslash\)in}}
+\DoxyCodeLine{57 \textcolor{comment}{ * \(\backslash\)mathbb\{R\}\string^\{P\}\(\backslash\)f\$, system matrices \(\backslash\)f\$\(\backslash\)boldsymbol\{E\},\(\backslash\)boldsymbol\{F\} \(\backslash\)in}}
+\DoxyCodeLine{58 \textcolor{comment}{ * \(\backslash\)mathbb\{R\}\string^\{NxN\}\(\backslash\)f\$, and system vector \(\backslash\)f\$\(\backslash\)boldsymbol\{c\} \(\backslash\)in}}
+\DoxyCodeLine{59 \textcolor{comment}{ * \(\backslash\)mathbb\{R\}\string^\{N\}\(\backslash\)f\$.}}
+\DoxyCodeLine{60 \textcolor{comment}{ *}}
+\DoxyCodeLine{61 \textcolor{comment}{ * The least squares problem can be formulated as}}
+\DoxyCodeLine{62 \textcolor{comment}{ *}}
+\DoxyCodeLine{63 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{64 \textcolor{comment}{ * \(\backslash\)min \_\(\backslash\)alpha S, \(\backslash\)quad \(\backslash\)mathrm \{ with \} \(\backslash\)quad S=\(\backslash\)sum\_i\string^D}}
+\DoxyCodeLine{65 \textcolor{comment}{ * r\_i\string^2\(\backslash\)left(\(\backslash\)boldsymbol\{\(\backslash\)alpha\}, y\_i, \(\backslash\)dot\{y\}\_i\(\backslash\)right) \(\backslash\)f]}}
+\DoxyCodeLine{66 \textcolor{comment}{ *}}
+\DoxyCodeLine{67 \textcolor{comment}{ * with given solution vectors \(\backslash\)f\$\(\backslash\)boldsymbol\{y\}\(\backslash\)f\$, \(\backslash\)f\$\(\backslash\)boldsymbol\{\(\backslash\)dot\{y\}\}\(\backslash\)f\$}}
+\DoxyCodeLine{68 \textcolor{comment}{ * at all datapoints \(\backslash\)f\$D\(\backslash\)f\$. The parameter vector is iteratively improved}}
+\DoxyCodeLine{69 \textcolor{comment}{ * according to}}
+\DoxyCodeLine{70 \textcolor{comment}{ *}}
+\DoxyCodeLine{71 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{72 \textcolor{comment}{ * \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\string^\{i+1\}=\(\backslash\)boldsymbol\{\(\backslash\)alpha\}\string^\{i\}+\(\backslash\)Delta}}
+\DoxyCodeLine{73 \textcolor{comment}{ * \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\string^\{i+1\} \(\backslash\)f]}}
+\DoxyCodeLine{74 \textcolor{comment}{ *}}
+\DoxyCodeLine{75 \textcolor{comment}{ * wherein the increment \(\backslash\)f\$\(\backslash\)Delta \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\string^\{i+1\} \(\backslash\)f\$ is determined}}
+\DoxyCodeLine{76 \textcolor{comment}{ * by solving the following system:}}
+\DoxyCodeLine{77 \textcolor{comment}{ *}}
+\DoxyCodeLine{78 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{79 \textcolor{comment}{ * \(\backslash\)left[\(\backslash\)mathbf\{J\}\string^\{\(\backslash\)mathrm\{T\}\} \(\backslash\)mathbf\{J\}+\(\backslash\)lambda}}
+\DoxyCodeLine{80 \textcolor{comment}{ * \(\backslash\)operatorname\{diag\}\(\backslash\)left(\(\backslash\)mathbf\{J\}\string^\{\(\backslash\)mathrm\{T\}\} \(\backslash\)mathbf\{J\}\(\backslash\)right)\(\backslash\)right]\string^\{i\}}}
+\DoxyCodeLine{81 \textcolor{comment}{ * \(\backslash\)cdot \(\backslash\)Delta \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\string^\{i+1\}=-\/\(\backslash\)left[\(\backslash\)mathbf\{J\}\string^\{\(\backslash\)mathrm\{T\}\}}}
+\DoxyCodeLine{82 \textcolor{comment}{ * \(\backslash\)mathbf\{r\}\(\backslash\)right]\string^\{i\}, \(\backslash\)quad \(\backslash\)lambda\string^\{i\}=\(\backslash\)lambda\string^\{i-\/1\}}}
+\DoxyCodeLine{83 \textcolor{comment}{ * \(\backslash\)cdot\(\backslash\)left\(\backslash\)|\(\backslash\)left[\(\backslash\)mathbf\{J\}\string^\{\(\backslash\)mathrm\{T\}\} \(\backslash\)mathbf\{r\}\(\backslash\)right]\string^\{i\}\(\backslash\)right\(\backslash\)|\_2}}
+\DoxyCodeLine{84 \textcolor{comment}{ * /\(\backslash\)left\(\backslash\)|\(\backslash\)left[\(\backslash\)mathbf\{J\}\string^\{\(\backslash\)mathrm\{T\}\} \(\backslash\)mathbf\{r\}\(\backslash\)right]\string^\{i-\/1\}\(\backslash\)right\(\backslash\)|\_2. \(\backslash\)f]}}
+\DoxyCodeLine{85 \textcolor{comment}{ *}}
+\DoxyCodeLine{86 \textcolor{comment}{ * The algorithm terminates when the following tolerance thresholds are reached}}
+\DoxyCodeLine{87 \textcolor{comment}{ *}}
+\DoxyCodeLine{88 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{89 \textcolor{comment}{ * \(\backslash\)left\(\backslash\)|\(\backslash\)left[\(\backslash\)mathbf\{J\}\string^\{\(\backslash\)mathrm\{T\}\}}}
+\DoxyCodeLine{90 \textcolor{comment}{ * \(\backslash\)mathbf\{r\}\(\backslash\)right]\string^\{\(\backslash\)mathrm\{i\}\}\(\backslash\)right\(\backslash\)|\_2<\(\backslash\)operatorname\{tol\}\_\{\(\backslash\)text \{grad}}
+\DoxyCodeLine{91 \textcolor{comment}{ * \}\}\string^\(\backslash\)alpha \(\backslash\)text \{ and \}\(\backslash\)left\(\backslash\)|\(\backslash\)Delta}}
+\DoxyCodeLine{92 \textcolor{comment}{ * \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\string^\{\(\backslash\)mathrm\{i\}+1\}\(\backslash\)right\(\backslash\)|\_2<\(\backslash\)mathrm\{tol\}\_\{\(\backslash\)text \{inc}}
+\DoxyCodeLine{93 \textcolor{comment}{ * \}\}\string^\(\backslash\)alpha, \(\backslash\)f]}}
+\DoxyCodeLine{94 \textcolor{comment}{ *}}
+\DoxyCodeLine{95 \textcolor{comment}{ * The Jacobian is derived from the residual as}}
+\DoxyCodeLine{96 \textcolor{comment}{ *}}
+\DoxyCodeLine{97 \textcolor{comment}{ * \(\backslash\)f[}}
+\DoxyCodeLine{98 \textcolor{comment}{ * J = \(\backslash\)frac\{\(\backslash\)partial \(\backslash\)boldsymbol\{r\}\}\{\(\backslash\)partial \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\} =}}
+\DoxyCodeLine{99 \textcolor{comment}{ * \(\backslash\)frac\{\(\backslash\)partial \(\backslash\)mathbf\{E\}\}\{\(\backslash\)partial \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\} \(\backslash\)cdot}}
+\DoxyCodeLine{100 \textcolor{comment}{ * \(\backslash\)dot\{\(\backslash\)mathbf\{y\}\}+\(\backslash\)frac\{\(\backslash\)partial \(\backslash\)mathbf\{F\}\}\{\(\backslash\)partial \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\}}}
+\DoxyCodeLine{101 \textcolor{comment}{ * \(\backslash\)cdot \(\backslash\)mathbf\{y\}+\(\backslash\)frac\{\(\backslash\)partial \(\backslash\)mathbf\{c\}\}\{\(\backslash\)partial \(\backslash\)boldsymbol\{\(\backslash\)alpha\}\} \(\backslash\)f]}}
+\DoxyCodeLine{102 \textcolor{comment}{ *}}
+\DoxyCodeLine{103 \textcolor{comment}{ *}}
+\DoxyCodeLine{104 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{105 \textcolor{comment}{ */}}
+\DoxyCodeLine{106 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{107 \textcolor{keyword}{class }\mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{LevenbergMarquardtOptimizer}} \{}
+\DoxyCodeLine{108  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{109 \textcolor{comment}{  /**}}
+\DoxyCodeLine{110 \textcolor{comment}{   * @brief Construct a new LevenbergMarquardtOptimizer object}}
+\DoxyCodeLine{111 \textcolor{comment}{   *}}
+\DoxyCodeLine{112 \textcolor{comment}{   * @param model The 0D model}}
+\DoxyCodeLine{113 \textcolor{comment}{   * @param num\_obs Number of observations in optimization}}
+\DoxyCodeLine{114 \textcolor{comment}{   * @param num\_params Number of parameters in optimization}}
+\DoxyCodeLine{115 \textcolor{comment}{   * @param lambda0 Initial damping factor}}
+\DoxyCodeLine{116 \textcolor{comment}{   * @param tol\_grad Gradient tolerance}}
+\DoxyCodeLine{117 \textcolor{comment}{   * @param tol\_inc Parameter increment tolerance}}
+\DoxyCodeLine{118 \textcolor{comment}{   * @param max\_iter Maximum iterations}}
+\DoxyCodeLine{119 \textcolor{comment}{   */}}
+\DoxyCodeLine{120   \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{LevenbergMarquardtOptimizer}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}}* model, \textcolor{keywordtype}{int} num\_obs,}
+\DoxyCodeLine{121                               \textcolor{keywordtype}{int} num\_params, T lambda0, T tol\_grad, T tol\_inc,}
+\DoxyCodeLine{122                               \textcolor{keywordtype}{int} max\_iter);}
+\DoxyCodeLine{123 \textcolor{comment}{}}
+\DoxyCodeLine{124 \textcolor{comment}{  /**}}
+\DoxyCodeLine{125 \textcolor{comment}{   * @brief Destroy the LevenbergMarquardtOptimizer object}}
+\DoxyCodeLine{126 \textcolor{comment}{   *}}
+\DoxyCodeLine{127 \textcolor{comment}{   */}}
+\DoxyCodeLine{128   \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8c8f51fb27cb86a9ed85b510e8e5a00b}{\string~LevenbergMarquardtOptimizer}}();}
+\DoxyCodeLine{129 \textcolor{comment}{}}
+\DoxyCodeLine{130 \textcolor{comment}{  /**}}
+\DoxyCodeLine{131 \textcolor{comment}{   * @brief Run the optimization algorithm}}
+\DoxyCodeLine{132 \textcolor{comment}{   *}}
+\DoxyCodeLine{133 \textcolor{comment}{   * @param alpha Initial parameter vector alpha}}
+\DoxyCodeLine{134 \textcolor{comment}{   * @param y\_obs Matrix (num\_obs x n) with all observations for y}}
+\DoxyCodeLine{135 \textcolor{comment}{   * @param dy\_obs Matrix (num\_obs x n) with all observations for dy}}
+\DoxyCodeLine{136 \textcolor{comment}{   * @return Eigen::Matrix<T, Eigen::Dynamic, 1> Optimized parameter vector}}
+\DoxyCodeLine{137 \textcolor{comment}{   * alpha}}
+\DoxyCodeLine{138 \textcolor{comment}{   */}}
+\DoxyCodeLine{139   Eigen::Matrix<T, Eigen::Dynamic, 1> \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer_abc6feccece5ee987f65f76e01c3a8ba7}{run}}(}
+\DoxyCodeLine{140       Eigen::Matrix<T, Eigen::Dynamic, 1> alpha,}
+\DoxyCodeLine{141       std::vector<std::vector<T>>\& y\_obs, std::vector<std::vector<T>>\& dy\_obs);}
+\DoxyCodeLine{142 }
+\DoxyCodeLine{143  \textcolor{keyword}{private}:}
+\DoxyCodeLine{144   Eigen::SparseMatrix<T> jacobian;}
+\DoxyCodeLine{145   Eigen::Matrix<T, Eigen::Dynamic, 1> residual;}
+\DoxyCodeLine{146   Eigen::Matrix<T, Eigen::Dynamic, 1> delta;}
+\DoxyCodeLine{147   Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> mat;}
+\DoxyCodeLine{148   Eigen::Matrix<T, Eigen::Dynamic, 1> vec;}
+\DoxyCodeLine{149   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}}* model;}
+\DoxyCodeLine{150   T lambda;}
+\DoxyCodeLine{151 }
+\DoxyCodeLine{152   \textcolor{keywordtype}{int} num\_obs;}
+\DoxyCodeLine{153   \textcolor{keywordtype}{int} num\_params;}
+\DoxyCodeLine{154   \textcolor{keywordtype}{int} num\_eqns;}
+\DoxyCodeLine{155   \textcolor{keywordtype}{int} num\_vars;}
+\DoxyCodeLine{156   \textcolor{keywordtype}{int} num\_dpoints;}
+\DoxyCodeLine{157 }
+\DoxyCodeLine{158   T tol\_grad;}
+\DoxyCodeLine{159   T tol\_inc;}
+\DoxyCodeLine{160   \textcolor{keywordtype}{int} max\_iter;}
+\DoxyCodeLine{161 }
+\DoxyCodeLine{162   \textcolor{keywordtype}{void} update\_gradient(Eigen::Matrix<T, Eigen::Dynamic, 1>\& alpha,}
+\DoxyCodeLine{163                        std::vector<std::vector<T>>\& y\_obs,}
+\DoxyCodeLine{164                        std::vector<std::vector<T>>\& dy\_obs);}
+\DoxyCodeLine{165 }
+\DoxyCodeLine{166   \textcolor{keywordtype}{void} update\_delta(\textcolor{keywordtype}{bool} first\_step);}
+\DoxyCodeLine{167 \};}
+\DoxyCodeLine{168 }
+\DoxyCodeLine{169 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{170 \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8227cd7de1b9c31e356a0672611e6216}{LevenbergMarquardtOptimizer<T>::LevenbergMarquardtOptimizer}}(}
+\DoxyCodeLine{171     \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}}* model, \textcolor{keywordtype}{int} num\_obs, \textcolor{keywordtype}{int} num\_params, T lambda0, T tol\_grad,}
+\DoxyCodeLine{172     T tol\_inc, \textcolor{keywordtype}{int} max\_iter) \{}
+\DoxyCodeLine{173   this-\/>model = model;}
+\DoxyCodeLine{174   this-\/>num\_obs = num\_obs;}
+\DoxyCodeLine{175   this-\/>num\_params = num\_params;}
+\DoxyCodeLine{176   this-\/>num\_eqns = model-\/>\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a87c232296fb5bc54457e0967910ad0cc}{get\_num\_equations}}();}
+\DoxyCodeLine{177   this-\/>num\_vars = model-\/>\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_abf9dce4cb1946a3645850bba1ac7ba88}{get\_num\_variables}}();}
+\DoxyCodeLine{178   this-\/>num\_dpoints = this-\/>num\_obs * this-\/>num\_eqns;}
+\DoxyCodeLine{179   this-\/>lambda = lambda0;}
+\DoxyCodeLine{180   this-\/>tol\_grad = tol\_grad;}
+\DoxyCodeLine{181   this-\/>tol\_inc = tol\_inc;}
+\DoxyCodeLine{182   this-\/>max\_iter = max\_iter;}
+\DoxyCodeLine{183   jacobian = Eigen::SparseMatrix<T>(num\_dpoints, num\_params);}
+\DoxyCodeLine{184   residual = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num\_dpoints);}
+\DoxyCodeLine{185   mat =}
+\DoxyCodeLine{186       Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>(num\_params, num\_params);}
+\DoxyCodeLine{187   vec = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(num\_params);}
+\DoxyCodeLine{188 \}}
+\DoxyCodeLine{189 }
+\DoxyCodeLine{190 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{191 \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer_a8c8f51fb27cb86a9ed85b510e8e5a00b}{LevenbergMarquardtOptimizer<T>::\string~LevenbergMarquardtOptimizer}}() \{\}}
+\DoxyCodeLine{192 }
+\DoxyCodeLine{193 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{194 Eigen::Matrix<T, Eigen::Dynamic, 1> \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer_abc6feccece5ee987f65f76e01c3a8ba7}{LevenbergMarquardtOptimizer<T>::run}}(}
+\DoxyCodeLine{195     Eigen::Matrix<T, Eigen::Dynamic, 1> alpha,}
+\DoxyCodeLine{196     std::vector<std::vector<T>>\& y\_obs, std::vector<std::vector<T>>\& dy\_obs) \{}
+\DoxyCodeLine{197   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < max\_iter; i++) \{}
+\DoxyCodeLine{198     update\_gradient(alpha, y\_obs, dy\_obs);}
+\DoxyCodeLine{199     \textcolor{keywordflow}{if} (i == 0) \{}
+\DoxyCodeLine{200       update\_delta(\textcolor{keyword}{true});}
+\DoxyCodeLine{201     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{202       update\_delta(\textcolor{keyword}{false});}
+\DoxyCodeLine{203     \}}
+\DoxyCodeLine{204     alpha -\/= delta;}
+\DoxyCodeLine{205     T norm\_grad = vec.norm();}
+\DoxyCodeLine{206     T norm\_inc = delta.norm();}
+\DoxyCodeLine{207     std::cout << std::setprecision(1) << std::scientific << \textcolor{stringliteral}{"{}Iteration "{}}}
+\DoxyCodeLine{208               << i + 1 << \textcolor{stringliteral}{"{} | lambda: "{}} << lambda << \textcolor{stringliteral}{"{} | norm inc: "{}} << norm\_inc}
+\DoxyCodeLine{209               << \textcolor{stringliteral}{"{} | norm grad: "{}} << norm\_grad << std::endl;}
+\DoxyCodeLine{210     \textcolor{keywordflow}{if} ((norm\_grad < tol\_grad) \&\& (norm\_inc < tol\_inc)) \{}
+\DoxyCodeLine{211       \textcolor{keywordflow}{break};}
+\DoxyCodeLine{212     \}}
+\DoxyCodeLine{213     \textcolor{keywordflow}{if} (i >= max\_iter -\/ 1) \{}
+\DoxyCodeLine{214       std::cout << \textcolor{stringliteral}{"{}Maximum number of iterations reached"{}} << std::endl;}
+\DoxyCodeLine{215       \textcolor{keywordflow}{break};}
+\DoxyCodeLine{216     \}}
+\DoxyCodeLine{217   \}}
+\DoxyCodeLine{218   \textcolor{keywordflow}{return} alpha;}
+\DoxyCodeLine{219 \}}
+\DoxyCodeLine{220 }
+\DoxyCodeLine{221 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{222 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_o_p_t_1_1_levenberg_marquardt_optimizer}{LevenbergMarquardtOptimizer<T>::update\_gradient}}(}
+\DoxyCodeLine{223     Eigen::Matrix<T, Eigen::Dynamic, 1>\& alpha,}
+\DoxyCodeLine{224     std::vector<std::vector<T>>\& y\_obs, std::vector<std::vector<T>>\& dy\_obs) \{}
+\DoxyCodeLine{225   \textcolor{comment}{// Set jacobian and residual to zero}}
+\DoxyCodeLine{226   jacobian.setZero();}
+\DoxyCodeLine{227   residual.setZero();}
+\DoxyCodeLine{228 }
+\DoxyCodeLine{229   \textcolor{comment}{// Assemble gradient and residual}}
+\DoxyCodeLine{230   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < num\_obs; i++) \{}
+\DoxyCodeLine{231     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} j = 0; j < model-\/>get\_num\_blocks(\textcolor{keyword}{true}); j++) \{}
+\DoxyCodeLine{232       \textcolor{keyword}{auto} block = model-\/>get\_block(j);}
+\DoxyCodeLine{233       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} l = 0; l < block-\/>global\_eqn\_ids.size(); l++) \{}
+\DoxyCodeLine{234         block-\/>global\_eqn\_ids[l] += num\_eqns * i;}
+\DoxyCodeLine{235       \}}
+\DoxyCodeLine{236       block-\/>update\_gradient(jacobian, residual, alpha, y\_obs[i], dy\_obs[i]);}
+\DoxyCodeLine{237       \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} l = 0; l < block-\/>global\_eqn\_ids.size(); l++) \{}
+\DoxyCodeLine{238         block-\/>global\_eqn\_ids[l] -\/= num\_eqns * i;}
+\DoxyCodeLine{239       \}}
+\DoxyCodeLine{240     \}}
+\DoxyCodeLine{241   \}}
+\DoxyCodeLine{242 \}}
+\DoxyCodeLine{243 }
+\DoxyCodeLine{244 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{245 \textcolor{keywordtype}{void} LevenbergMarquardtOptimizer<T>::update\_delta(\textcolor{keywordtype}{bool} first\_step) \{}
+\DoxyCodeLine{246   \textcolor{comment}{// Cache old gradient vector and calulcate new one}}
+\DoxyCodeLine{247   Eigen::Matrix<T, Eigen::Dynamic, 1> vec\_old = vec;}
+\DoxyCodeLine{248   vec = jacobian.transpose() * residual;}
+\DoxyCodeLine{249 }
+\DoxyCodeLine{250   \textcolor{comment}{// Determine new lambda parameter from new and old gradient vector}}
+\DoxyCodeLine{251   \textcolor{keywordflow}{if} (!first\_step) \{}
+\DoxyCodeLine{252     lambda *= vec.norm() / vec\_old.norm();}
+\DoxyCodeLine{253   \}}
+\DoxyCodeLine{254 }
+\DoxyCodeLine{255   \textcolor{comment}{// Determine gradient matrix}}
+\DoxyCodeLine{256   Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> jacobian\_sq =}
+\DoxyCodeLine{257       jacobian.transpose() * jacobian;}
+\DoxyCodeLine{258   Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic> jacobian\_sq\_diag =}
+\DoxyCodeLine{259       jacobian\_sq.diagonal().asDiagonal();}
+\DoxyCodeLine{260   mat = jacobian\_sq + lambda * jacobian\_sq\_diag;}
+\DoxyCodeLine{261 }
+\DoxyCodeLine{262   \textcolor{comment}{// Solve for new delta}}
+\DoxyCodeLine{263   delta = mat.llt().solve(vec);}
+\DoxyCodeLine{264 \}}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266 \}  \textcolor{comment}{// namespace OPT}}
+\DoxyCodeLine{267 }
+\DoxyCodeLine{268 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_OPTIMIZE\_LEVENBERGMARQUARDT\_HPP\_}}
+
+\end{DoxyCode}

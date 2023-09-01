@@ -104,190 +104,106 @@
 \DoxyCodeLine{100 \textcolor{comment}{ * \(\backslash\)end\{array\}\(\backslash\)right]}}
 \DoxyCodeLine{101 \textcolor{comment}{ * \(\backslash\)f]}}
 \DoxyCodeLine{102 \textcolor{comment}{ *}}
-\DoxyCodeLine{103 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{104 \textcolor{comment}{ */}}
-\DoxyCodeLine{105 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{106 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{ClosedLoopRCRBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
-\DoxyCodeLine{107  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{108 \textcolor{comment}{  /**}}
-\DoxyCodeLine{109 \textcolor{comment}{   * @brief Parameters of the element.}}
-\DoxyCodeLine{110 \textcolor{comment}{   *}}
-\DoxyCodeLine{111 \textcolor{comment}{   * Struct containing all constant and/or time-\/dependent parameters of the}}
-\DoxyCodeLine{112 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{113 \textcolor{comment}{   */}}
-\DoxyCodeLine{114   \textcolor{keyword}{struct }\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters}{Parameters}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Parameters \{}
-\DoxyCodeLine{115     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters_aca5225c6f734de3ac1c32238b9dc9ca9}{Rp}};  \textcolor{comment}{///< Proximal resistance}}
-\DoxyCodeLine{116     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters_a97e6e9817b3934b0778e07bdbf4d0d5e}{C}};   \textcolor{comment}{///< Capacitance}}
-\DoxyCodeLine{117     T \mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters_a660855220ecd6aed0155aa8cad05aa0d}{Rd}};  \textcolor{comment}{///< Distal restistance}}
-\DoxyCodeLine{118   \};}
-\DoxyCodeLine{119 \textcolor{comment}{}}
-\DoxyCodeLine{120 \textcolor{comment}{  /**}}
-\DoxyCodeLine{121 \textcolor{comment}{   * @brief Construct a new ClosedLoopRCRBC object}}
-\DoxyCodeLine{122 \textcolor{comment}{   *}}
-\DoxyCodeLine{123 \textcolor{comment}{   * @param Rp Proximal resistance}}
-\DoxyCodeLine{124 \textcolor{comment}{   * @param C Capacitance}}
-\DoxyCodeLine{125 \textcolor{comment}{   * @param Rd Distal resistance}}
-\DoxyCodeLine{126 \textcolor{comment}{   * @param Pd Distal pressure}}
-\DoxyCodeLine{127 \textcolor{comment}{   * @param name Name}}
-\DoxyCodeLine{128 \textcolor{comment}{   */}}
-\DoxyCodeLine{129   \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a5d0d9fb9e5a63ffc0df22e586f8c8743}{ClosedLoopRCRBC}}(T Rp, T C, T Rd, \textcolor{keywordtype}{bool} closed\_loop\_outlet, std::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}});}
-\DoxyCodeLine{130 \textcolor{comment}{}}
-\DoxyCodeLine{131 \textcolor{comment}{  /**}}
-\DoxyCodeLine{132 \textcolor{comment}{   * @brief Destroy the ClosedLoopRCRBC object}}
-\DoxyCodeLine{133 \textcolor{comment}{   *}}
-\DoxyCodeLine{134 \textcolor{comment}{   */}}
-\DoxyCodeLine{135   \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad67f3ce2a4d56c2403237d0211a6f899}{\string~ClosedLoopRCRBC}}();}
-\DoxyCodeLine{136 \textcolor{comment}{}}
-\DoxyCodeLine{137 \textcolor{comment}{  /**}}
-\DoxyCodeLine{138 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
-\DoxyCodeLine{139 \textcolor{comment}{   *}}
-\DoxyCodeLine{140 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
-\DoxyCodeLine{141 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
-\DoxyCodeLine{142 \textcolor{comment}{   * element.}}
-\DoxyCodeLine{143 \textcolor{comment}{   *}}
-\DoxyCodeLine{144 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
-\DoxyCodeLine{145 \textcolor{comment}{   * equations at}}
-\DoxyCodeLine{146 \textcolor{comment}{   */}}
-\DoxyCodeLine{147   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aa2b928a00c70ffbb06e43170035dc9ae}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
-\DoxyCodeLine{148 \textcolor{comment}{}}
-\DoxyCodeLine{149 \textcolor{comment}{  /**}}
-\DoxyCodeLine{150 \textcolor{comment}{   * @brief Update parameters of a block.}}
-\DoxyCodeLine{151 \textcolor{comment}{   *}}
-\DoxyCodeLine{152 \textcolor{comment}{   * @param params New parameters.}}
-\DoxyCodeLine{153 \textcolor{comment}{   */}}
-\DoxyCodeLine{154   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad3b7765e29f386b086de147905312b03}{update\_block\_params}}(std::vector<T> new\_params);}
-\DoxyCodeLine{155 \textcolor{comment}{}}
-\DoxyCodeLine{156 \textcolor{comment}{  /**}}
-\DoxyCodeLine{157 \textcolor{comment}{   * @brief Return parameters of a block.}}
-\DoxyCodeLine{158 \textcolor{comment}{   *}}
-\DoxyCodeLine{159 \textcolor{comment}{   * @block\_params Block parameters.}}
-\DoxyCodeLine{160 \textcolor{comment}{   */}}
-\DoxyCodeLine{161   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a0156ce2ac6b46e01c9f658202ebbfacb}{get\_block\_params}}(std::vector<T> \&block\_params);}
+\DoxyCodeLine{103 \textcolor{comment}{ * \#\#\# Parameters}}
+\DoxyCodeLine{104 \textcolor{comment}{ *}}
+\DoxyCodeLine{105 \textcolor{comment}{ * Parameter sequence for constructing this block}}
+\DoxyCodeLine{106 \textcolor{comment}{ *}}
+\DoxyCodeLine{107 \textcolor{comment}{ * * `0` Proximal resistance}}
+\DoxyCodeLine{108 \textcolor{comment}{ * * `1` Capacitance}}
+\DoxyCodeLine{109 \textcolor{comment}{ * * `2` Distal resistance}}
+\DoxyCodeLine{110 \textcolor{comment}{ *}}
+\DoxyCodeLine{111 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{112 \textcolor{comment}{ */}}
+\DoxyCodeLine{113 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{114 \textcolor{keyword}{class }\mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{ClosedLoopRCRBC}} : \textcolor{keyword}{public} \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T> \{}
+\DoxyCodeLine{115  \textcolor{keyword}{public}:}
+\DoxyCodeLine{116   \textcolor{comment}{// Inherit constructors}}
+\DoxyCodeLine{117   \textcolor{keyword}{using }\mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>::Block;}
+\DoxyCodeLine{118 \textcolor{comment}{}}
+\DoxyCodeLine{119 \textcolor{comment}{  /**}}
+\DoxyCodeLine{120 \textcolor{comment}{   * @brief Local IDs of the parameters}}
+\DoxyCodeLine{121 \textcolor{comment}{   *}}
+\DoxyCodeLine{122 \textcolor{comment}{   */}}
+\DoxyCodeLine{123   \textcolor{keyword}{enum} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac4ec0d7777a0e17613a62d9161a0d603}{ParamId}} \{}
+\DoxyCodeLine{124     RP = 0,}
+\DoxyCodeLine{125     C = 1,}
+\DoxyCodeLine{126     RD = 2,}
+\DoxyCodeLine{127   \};}
+\DoxyCodeLine{128 \textcolor{comment}{}}
+\DoxyCodeLine{129 \textcolor{comment}{  /**}}
+\DoxyCodeLine{130 \textcolor{comment}{   * @brief Set up the degrees of freedom (DOF) of the block}}
+\DoxyCodeLine{131 \textcolor{comment}{   *}}
+\DoxyCodeLine{132 \textcolor{comment}{   * Set \(\backslash\)ref global\_var\_ids and \(\backslash\)ref global\_eqn\_ids of the element based on the}}
+\DoxyCodeLine{133 \textcolor{comment}{   * number of equations and the number of internal variables of the}}
+\DoxyCodeLine{134 \textcolor{comment}{   * element.}}
+\DoxyCodeLine{135 \textcolor{comment}{   *}}
+\DoxyCodeLine{136 \textcolor{comment}{   * @param dofhandler Degree-\/of-\/freedom handler to register variables and}}
+\DoxyCodeLine{137 \textcolor{comment}{   * equations at}}
+\DoxyCodeLine{138 \textcolor{comment}{   */}}
+\DoxyCodeLine{139   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aa2b928a00c70ffbb06e43170035dc9ae}{setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler);}
+\DoxyCodeLine{140 \textcolor{comment}{}}
+\DoxyCodeLine{141 \textcolor{comment}{  /**}}
+\DoxyCodeLine{142 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse}}
+\DoxyCodeLine{143 \textcolor{comment}{   system}}
+\DoxyCodeLine{144 \textcolor{comment}{   *}}
+\DoxyCodeLine{145 \textcolor{comment}{   * @param system System to update contributions at}}
+\DoxyCodeLine{146 \textcolor{comment}{   * @param parameters Parameters of the model}}
+\DoxyCodeLine{147 \textcolor{comment}{   */}}
+\DoxyCodeLine{148   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a018e03d4c50e6a276759c02da465557f}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{149                        std::vector<T> \&parameters);}
+\DoxyCodeLine{150 \textcolor{comment}{}}
+\DoxyCodeLine{151 \textcolor{comment}{  /**}}
+\DoxyCodeLine{152 \textcolor{comment}{   * @brief Number of triplets of element}}
+\DoxyCodeLine{153 \textcolor{comment}{   *}}
+\DoxyCodeLine{154 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{155 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{156 \textcolor{comment}{   */}}
+\DoxyCodeLine{157   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a258cc9d20f979c91d1b4a5949f237e84}{num\_triplets}} = \{}
+\DoxyCodeLine{158       \{\textcolor{stringliteral}{"{}F"{}}, 8\},}
+\DoxyCodeLine{159       \{\textcolor{stringliteral}{"{}E"{}}, 1\},}
+\DoxyCodeLine{160       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
+\DoxyCodeLine{161   \};}
 \DoxyCodeLine{162 \textcolor{comment}{}}
 \DoxyCodeLine{163 \textcolor{comment}{  /**}}
-\DoxyCodeLine{164 \textcolor{comment}{   * @brief Update the constant contributions of the element in a sparse system}}
+\DoxyCodeLine{164 \textcolor{comment}{   * @brief Get number of triplets of element}}
 \DoxyCodeLine{165 \textcolor{comment}{   *}}
-\DoxyCodeLine{166 \textcolor{comment}{   * @param system System to update contributions at}}
-\DoxyCodeLine{167 \textcolor{comment}{   */}}
-\DoxyCodeLine{168   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aee13a5851329b46c4589771fbfd97bfe}{update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system);}
-\DoxyCodeLine{169 \textcolor{comment}{}}
-\DoxyCodeLine{170 \textcolor{comment}{  /**}}
-\DoxyCodeLine{171 \textcolor{comment}{   * @brief Number of triplets of element}}
-\DoxyCodeLine{172 \textcolor{comment}{   *}}
-\DoxyCodeLine{173 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{174 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{175 \textcolor{comment}{   */}}
-\DoxyCodeLine{176   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a258cc9d20f979c91d1b4a5949f237e84}{num\_triplets}} = \{}
-\DoxyCodeLine{177       \{\textcolor{stringliteral}{"{}F"{}}, 8\},}
-\DoxyCodeLine{178       \{\textcolor{stringliteral}{"{}E"{}}, 1\},}
-\DoxyCodeLine{179       \{\textcolor{stringliteral}{"{}D"{}}, 0\},}
-\DoxyCodeLine{180   \};}
-\DoxyCodeLine{181 \textcolor{comment}{}}
-\DoxyCodeLine{182 \textcolor{comment}{  /**}}
-\DoxyCodeLine{183 \textcolor{comment}{   * @brief Get number of triplets of element}}
-\DoxyCodeLine{184 \textcolor{comment}{   *}}
-\DoxyCodeLine{185 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
-\DoxyCodeLine{186 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
-\DoxyCodeLine{187 \textcolor{comment}{   */}}
-\DoxyCodeLine{188   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}{get\_num\_triplets}}();}
-\DoxyCodeLine{189 \textcolor{comment}{}}
-\DoxyCodeLine{190 \textcolor{comment}{  /**}}
-\DoxyCodeLine{191 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
-\DoxyCodeLine{192 \textcolor{comment}{   *}}
-\DoxyCodeLine{193 \textcolor{comment}{   * Set the capacitance to 0.}}
-\DoxyCodeLine{194 \textcolor{comment}{   */}}
-\DoxyCodeLine{195   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aac95efa884dfda07ed4fdc84f4f2e916}{to\_steady}}();}
-\DoxyCodeLine{196 \textcolor{comment}{}}
-\DoxyCodeLine{197 \textcolor{comment}{  /**}}
-\DoxyCodeLine{198 \textcolor{comment}{   * @brief Convert the block to a steady behavior}}
-\DoxyCodeLine{199 \textcolor{comment}{   *}}
-\DoxyCodeLine{200 \textcolor{comment}{   * Set the capacitance to original value.}}
-\DoxyCodeLine{201 \textcolor{comment}{   */}}
-\DoxyCodeLine{202   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a4a40ddc294e504449b94a46941cf7fd8}{to\_unsteady}}();}
-\DoxyCodeLine{203 }
-\DoxyCodeLine{204  \textcolor{keyword}{private}:}
-\DoxyCodeLine{205   Parameters params;}
-\DoxyCodeLine{206   T c\_cache;}
-\DoxyCodeLine{207   \textcolor{keywordtype}{bool} closed\_loop\_outlet =}
-\DoxyCodeLine{208       \textcolor{keyword}{false};  \textcolor{comment}{///< Is this block connected to a closed-\/loop model?}}
-\DoxyCodeLine{209 \};}
-\DoxyCodeLine{210 }
-\DoxyCodeLine{211 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{212 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a5d0d9fb9e5a63ffc0df22e586f8c8743}{ClosedLoopRCRBC<T>::ClosedLoopRCRBC}}(T Rp, T C, T Rd, \textcolor{keywordtype}{bool} closed\_loop\_outlet,}
-\DoxyCodeLine{213                                     std::string name)}
-\DoxyCodeLine{214     : \mbox{\hyperlink{class_m_o_d_e_l_1_1_block}{Block}}<T>(name) \{}
-\DoxyCodeLine{215   this-\/>name = \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}};}
-\DoxyCodeLine{216   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters_aca5225c6f734de3ac1c32238b9dc9ca9}{Rp}} = Rp;}
-\DoxyCodeLine{217   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters_a97e6e9817b3934b0778e07bdbf4d0d5e}{C}} = C;}
-\DoxyCodeLine{218   this-\/>params.\mbox{\hyperlink{struct_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_1_1_parameters_a660855220ecd6aed0155aa8cad05aa0d}{Rd}} = Rd;}
-\DoxyCodeLine{219   this-\/>closed\_loop\_outlet = closed\_loop\_outlet;}
-\DoxyCodeLine{220 \}}
-\DoxyCodeLine{221 }
-\DoxyCodeLine{222 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{223 \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad67f3ce2a4d56c2403237d0211a6f899}{ClosedLoopRCRBC<T>::\string~ClosedLoopRCRBC}}() \{\}}
-\DoxyCodeLine{224 }
-\DoxyCodeLine{225 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{226 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aa2b928a00c70ffbb06e43170035dc9ae}{ClosedLoopRCRBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
-\DoxyCodeLine{227   \textcolor{comment}{// Block<T>::setup\_dofs\_(dofhandler, 3, 1);}}
-\DoxyCodeLine{228   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 3, \{\textcolor{stringliteral}{"{}P\_c"{}}\});}
-\DoxyCodeLine{229 \}}
-\DoxyCodeLine{230 }
-\DoxyCodeLine{231 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{232 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ad3b7765e29f386b086de147905312b03}{ClosedLoopRCRBC<T>::update\_block\_params}}(std::vector<T> new\_params) \{}
-\DoxyCodeLine{233   this-\/>params.Rp = new\_params[0];}
-\DoxyCodeLine{234   this-\/>params.C = new\_params[1];}
-\DoxyCodeLine{235   this-\/>params.Rd = new\_params[2];}
-\DoxyCodeLine{236 \}}
-\DoxyCodeLine{237 }
-\DoxyCodeLine{238 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{239 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a0156ce2ac6b46e01c9f658202ebbfacb}{ClosedLoopRCRBC<T>::get\_block\_params}}(std::vector<T> \&block\_params) \{}
-\DoxyCodeLine{240   \textcolor{keywordflow}{if} (block\_params.size() != 3) \{}
-\DoxyCodeLine{241     \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{242         \textcolor{stringliteral}{"{}Wrong vector size in get\_block\_params for ClosedLoopRCRBC. Size "{}}}
-\DoxyCodeLine{243         \textcolor{stringliteral}{"{}should be 3 but is currently "{}} +}
-\DoxyCodeLine{244         std::to\_string(block\_params.size()));}
-\DoxyCodeLine{245   \}}
-\DoxyCodeLine{246   block\_params[0] = this-\/>params.Rp;}
-\DoxyCodeLine{247   block\_params[1] = this-\/>params.C;}
-\DoxyCodeLine{248   block\_params[2] = this-\/>params.Rd;}
-\DoxyCodeLine{249 \}}
-\DoxyCodeLine{250 }
-\DoxyCodeLine{251 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{252 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aee13a5851329b46c4589771fbfd97bfe}{ClosedLoopRCRBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system) \{}
-\DoxyCodeLine{253   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = -\/1.0;}
-\DoxyCodeLine{254   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) = 1.0;}
-\DoxyCodeLine{255   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[0]) = 1.0;}
-\DoxyCodeLine{256   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) = -\/1.0;}
-\DoxyCodeLine{257   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[2]) = -\/1.0;}
-\DoxyCodeLine{258   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = 1.0;}
-\DoxyCodeLine{259 }
-\DoxyCodeLine{260   \textcolor{comment}{// Below values can be unsteady if needed (not currently implemented)}}
-\DoxyCodeLine{261   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[4]) =}
-\DoxyCodeLine{262       params.C;}
-\DoxyCodeLine{263   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) =}
-\DoxyCodeLine{264       -\/params.Rp;}
-\DoxyCodeLine{265   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[3]) =}
-\DoxyCodeLine{266       -\/params.Rd;}
-\DoxyCodeLine{267 \}}
-\DoxyCodeLine{268 }
-\DoxyCodeLine{269 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{270 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aac95efa884dfda07ed4fdc84f4f2e916}{ClosedLoopRCRBC<T>::to\_steady}}() \{}
-\DoxyCodeLine{271   c\_cache = params.C;}
-\DoxyCodeLine{272   params.C = 0.0;}
-\DoxyCodeLine{273 \}}
-\DoxyCodeLine{274 }
-\DoxyCodeLine{275 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{276 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a4a40ddc294e504449b94a46941cf7fd8}{ClosedLoopRCRBC<T>::to\_unsteady}}() \{}
-\DoxyCodeLine{277   params.C = c\_cache;}
-\DoxyCodeLine{278 \}}
-\DoxyCodeLine{279 }
-\DoxyCodeLine{280 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{281 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}{ClosedLoopRCRBC<T>::get\_num\_triplets}}() \{}
-\DoxyCodeLine{282   \textcolor{keywordflow}{return} num\_triplets;}
-\DoxyCodeLine{283 \}}
-\DoxyCodeLine{284 }
-\DoxyCodeLine{285 \}  \textcolor{comment}{// namespace MODEL}}
-\DoxyCodeLine{286 }
-\DoxyCodeLine{287 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_CLOSEDLOOPRCRBCBC\_HPP\_}}
+\DoxyCodeLine{166 \textcolor{comment}{   * Number of triplets that the element contributes to the global system}}
+\DoxyCodeLine{167 \textcolor{comment}{   * (relevant for sparse memory reservation)}}
+\DoxyCodeLine{168 \textcolor{comment}{   */}}
+\DoxyCodeLine{169   std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}{get\_num\_triplets}}();}
+\DoxyCodeLine{170 \};}
+\DoxyCodeLine{171 }
+\DoxyCodeLine{172 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{173 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_aa2b928a00c70ffbb06e43170035dc9ae}{ClosedLoopRCRBC<T>::setup\_dofs}}(\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler) \{}
+\DoxyCodeLine{174   \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9995a19d845d6ce92344713b979bdcd9}{Block<T>::setup\_dofs\_}}(dofhandler, 3, \{\textcolor{stringliteral}{"{}P\_c"{}}\});}
+\DoxyCodeLine{175 \}}
+\DoxyCodeLine{176 }
+\DoxyCodeLine{177 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{178 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_a018e03d4c50e6a276759c02da465557f}{ClosedLoopRCRBC<T>::update\_constant}}(\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA::SparseSystem<T>}} \&system,}
+\DoxyCodeLine{179                                          std::vector<T> \&parameters) \{}
+\DoxyCodeLine{180   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[1]) = -\/1.0;}
+\DoxyCodeLine{181   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[3]) = 1.0;}
+\DoxyCodeLine{182   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[0]) = 1.0;}
+\DoxyCodeLine{183   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[4]) = -\/1.0;}
+\DoxyCodeLine{184   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[2]) = -\/1.0;}
+\DoxyCodeLine{185   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[4]) = 1.0;}
+\DoxyCodeLine{186 }
+\DoxyCodeLine{187   \textcolor{comment}{// Below values can be unsteady if needed (not currently implemented)}}
+\DoxyCodeLine{188   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_a7e9cabf8b8343236a2d83d091cd6a530}{E}}.coeffRef(this-\/>global\_eqn\_ids[0], this-\/>global\_var\_ids[4]) =}
+\DoxyCodeLine{189       parameters[this-\/>global\_param\_ids[ParamId::C]];}
+\DoxyCodeLine{190   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[1], this-\/>global\_var\_ids[1]) =}
+\DoxyCodeLine{191       -\/parameters[this-\/>global\_param\_ids[ParamId::RP]];}
+\DoxyCodeLine{192   system.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system_af4182ac7c2657f2455fb69967a2bc87a}{F}}.coeffRef(this-\/>global\_eqn\_ids[2], this-\/>global\_var\_ids[3]) =}
+\DoxyCodeLine{193       -\/parameters[this-\/>global\_param\_ids[ParamId::RD]];}
+\DoxyCodeLine{194 \}}
+\DoxyCodeLine{195 }
+\DoxyCodeLine{196 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{197 std::map<std::string, int> \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c_ac46bf97d2b0b3ffe12dc13b0e4458abc}{ClosedLoopRCRBC<T>::get\_num\_triplets}}() \{}
+\DoxyCodeLine{198   \textcolor{keywordflow}{return} num\_triplets;}
+\DoxyCodeLine{199 \}}
+\DoxyCodeLine{200 }
+\DoxyCodeLine{201 \}  \textcolor{comment}{// namespace MODEL}}
+\DoxyCodeLine{202 }
+\DoxyCodeLine{203 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_MODEL\_CLOSEDLOOPRCRBCBC\_HPP\_}}
 
 \end{DoxyCode}

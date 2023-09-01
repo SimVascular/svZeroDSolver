@@ -1,0 +1,307 @@
+\hypertarget{solver_8hpp_source}{}\doxysection{solver.\+hpp}
+\label{solver_8hpp_source}\index{solve/solver.hpp@{solve/solver.hpp}}
+\mbox{\hyperlink{solver_8hpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// Copyright (c) Stanford University, The Regents of the University of}}
+\DoxyCodeLine{2 \textcolor{comment}{//               California, and others.}}
+\DoxyCodeLine{3 \textcolor{comment}{//}}
+\DoxyCodeLine{4 \textcolor{comment}{// All Rights Reserved.}}
+\DoxyCodeLine{5 \textcolor{comment}{//}}
+\DoxyCodeLine{6 \textcolor{comment}{// See Copyright-\/SimVascular.txt for additional details.}}
+\DoxyCodeLine{7 \textcolor{comment}{//}}
+\DoxyCodeLine{8 \textcolor{comment}{// Permission is hereby granted, free of charge, to any person obtaining}}
+\DoxyCodeLine{9 \textcolor{comment}{// a copy of this software and associated documentation files (the}}
+\DoxyCodeLine{10 \textcolor{comment}{// "{}Software"{}), to deal in the Software without restriction, including}}
+\DoxyCodeLine{11 \textcolor{comment}{// without limitation the rights to use, copy, modify, merge, publish,}}
+\DoxyCodeLine{12 \textcolor{comment}{// distribute, sublicense, and/or sell copies of the Software, and to}}
+\DoxyCodeLine{13 \textcolor{comment}{// permit persons to whom the Software is furnished to do so, subject}}
+\DoxyCodeLine{14 \textcolor{comment}{// to the following conditions:}}
+\DoxyCodeLine{15 \textcolor{comment}{//}}
+\DoxyCodeLine{16 \textcolor{comment}{// The above copyright notice and this permission notice shall be included}}
+\DoxyCodeLine{17 \textcolor{comment}{// in all copies or substantial portions of the Software.}}
+\DoxyCodeLine{18 \textcolor{comment}{//}}
+\DoxyCodeLine{19 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "{}AS}}
+\DoxyCodeLine{20 \textcolor{comment}{// IS"{} AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED}}
+\DoxyCodeLine{21 \textcolor{comment}{// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A}}
+\DoxyCodeLine{22 \textcolor{comment}{// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER}}
+\DoxyCodeLine{23 \textcolor{comment}{// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,}}
+\DoxyCodeLine{24 \textcolor{comment}{// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{25 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR}}
+\DoxyCodeLine{26 \textcolor{comment}{// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF}}
+\DoxyCodeLine{27 \textcolor{comment}{// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING}}
+\DoxyCodeLine{28 \textcolor{comment}{// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS}}
+\DoxyCodeLine{29 \textcolor{comment}{// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}\textcolor{comment}{}}
+\DoxyCodeLine{30 \textcolor{comment}{/**}}
+\DoxyCodeLine{31 \textcolor{comment}{ * @file solver.hpp}}
+\DoxyCodeLine{32 \textcolor{comment}{ * @brief SOLVE::Solver source file}}
+\DoxyCodeLine{33 \textcolor{comment}{ */}}
+\DoxyCodeLine{34 }
+\DoxyCodeLine{35 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{integrator_8hpp}{algebra/integrator.hpp}}"{}}}
+\DoxyCodeLine{36 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{state_8hpp}{algebra/state.hpp}}"{}}}
+\DoxyCodeLine{37 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{debug_8hpp}{helpers/debug.hpp}}"{}}}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{endswith_8hpp}{helpers/endswith.hpp}}"{}}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{configreader_8hpp}{io/configreader.hpp}}"{}}}
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{csvwriter_8hpp}{io/csvwriter.hpp}}"{}}}
+\DoxyCodeLine{41 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{model_8hpp}{model/model.hpp}}"{}}}
+\DoxyCodeLine{42 }
+\DoxyCodeLine{43 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_SOLVE\_SOLVER\_HPP\_}}
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#define SVZERODSOLVER\_SOLVE\_SOLVER\_HPP\_}}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_s_o_l_v_e}{SOLVE}} \{}
+\DoxyCodeLine{47 \textcolor{comment}{}}
+\DoxyCodeLine{48 \textcolor{comment}{/**}}
+\DoxyCodeLine{49 \textcolor{comment}{ * @brief Class for running 0D simulations.}}
+\DoxyCodeLine{50 \textcolor{comment}{ *}}
+\DoxyCodeLine{51 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{52 \textcolor{comment}{ */}}
+\DoxyCodeLine{53 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{54 \textcolor{keyword}{class }\mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{Solver}} \{}
+\DoxyCodeLine{55  \textcolor{keyword}{public}:\textcolor{comment}{}}
+\DoxyCodeLine{56 \textcolor{comment}{  /**}}
+\DoxyCodeLine{57 \textcolor{comment}{   * @brief Construct a new Solver object}}
+\DoxyCodeLine{58 \textcolor{comment}{   *}}
+\DoxyCodeLine{59 \textcolor{comment}{   * @param handler Configuration handler}}
+\DoxyCodeLine{60 \textcolor{comment}{   */}}
+\DoxyCodeLine{61   \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{Solver}}(\textcolor{keyword}{const} nlohmann::json\& config);}
+\DoxyCodeLine{62 \textcolor{comment}{}}
+\DoxyCodeLine{63 \textcolor{comment}{  /**}}
+\DoxyCodeLine{64 \textcolor{comment}{   * @brief Destroy the Solver object}}
+\DoxyCodeLine{65 \textcolor{comment}{   *}}
+\DoxyCodeLine{66 \textcolor{comment}{   */}}
+\DoxyCodeLine{67   \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_af0214e66e48ed5d74cd6e267b39b5a64}{\string~Solver}}();}
+\DoxyCodeLine{68 \textcolor{comment}{}}
+\DoxyCodeLine{69 \textcolor{comment}{  /**}}
+\DoxyCodeLine{70 \textcolor{comment}{   * @brief Run the simulation}}
+\DoxyCodeLine{71 \textcolor{comment}{   *}}
+\DoxyCodeLine{72 \textcolor{comment}{   */}}
+\DoxyCodeLine{73   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a020ddc106626055c1a7cbb2ad48452af}{run}}();}
+\DoxyCodeLine{74 \textcolor{comment}{}}
+\DoxyCodeLine{75 \textcolor{comment}{  /**}}
+\DoxyCodeLine{76 \textcolor{comment}{   * @brief Get the full result as a csv encoded string}}
+\DoxyCodeLine{77 \textcolor{comment}{   *}}
+\DoxyCodeLine{78 \textcolor{comment}{   * @return std::string Result}}
+\DoxyCodeLine{79 \textcolor{comment}{   */}}
+\DoxyCodeLine{80   std::string \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a525e7b39e377dee0c20fa70694806d1a}{get\_full\_result}}();}
+\DoxyCodeLine{81 \textcolor{comment}{}}
+\DoxyCodeLine{82 \textcolor{comment}{  /**}}
+\DoxyCodeLine{83 \textcolor{comment}{   * @brief Get the result of a single DOF over time}}
+\DoxyCodeLine{84 \textcolor{comment}{   *}}
+\DoxyCodeLine{85 \textcolor{comment}{   * @param dof\_name Name of the degree-\/of-\/freedom}}
+\DoxyCodeLine{86 \textcolor{comment}{   * @return Eigen::VectorXd Result}}
+\DoxyCodeLine{87 \textcolor{comment}{   */}}
+\DoxyCodeLine{88   Eigen::VectorXd \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a9ddc615c22133a4688252db27d95bf1b}{get\_single\_result}}(std::string dof\_name);}
+\DoxyCodeLine{89 \textcolor{comment}{}}
+\DoxyCodeLine{90 \textcolor{comment}{  /**}}
+\DoxyCodeLine{91 \textcolor{comment}{   * @brief Get the result of a single DOF averaged over time}}
+\DoxyCodeLine{92 \textcolor{comment}{   *}}
+\DoxyCodeLine{93 \textcolor{comment}{   * @param dof\_name Name of the degree-\/of-\/freedom}}
+\DoxyCodeLine{94 \textcolor{comment}{   * @return T Result}}
+\DoxyCodeLine{95 \textcolor{comment}{   */}}
+\DoxyCodeLine{96   T \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a2f31bfe5acf47d1ecc95834a57c74587}{get\_single\_result\_avg}}(std::string dof\_name);}
+\DoxyCodeLine{97 \textcolor{comment}{}}
+\DoxyCodeLine{98 \textcolor{comment}{  /**}}
+\DoxyCodeLine{99 \textcolor{comment}{   * @brief Get the time steps of the result}}
+\DoxyCodeLine{100 \textcolor{comment}{   *}}
+\DoxyCodeLine{101 \textcolor{comment}{   * @return std::vector<T>}}
+\DoxyCodeLine{102 \textcolor{comment}{   */}}
+\DoxyCodeLine{103   std::vector<T> \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_af78b5dc387e427bdafe29c4d78ef7184}{get\_times}}();}
+\DoxyCodeLine{104 \textcolor{comment}{}}
+\DoxyCodeLine{105 \textcolor{comment}{  /**}}
+\DoxyCodeLine{106 \textcolor{comment}{   * @brief Update the parameters of a block}}
+\DoxyCodeLine{107 \textcolor{comment}{   *}}
+\DoxyCodeLine{108 \textcolor{comment}{   * @param block\_name Name of the block}}
+\DoxyCodeLine{109 \textcolor{comment}{   * @param new\_params New parameters}}
+\DoxyCodeLine{110 \textcolor{comment}{   */}}
+\DoxyCodeLine{111   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a63171aaced9ed236cff17d04db248a79}{update\_block\_params}}(std::string block\_name, std::vector<T> new\_params);}
+\DoxyCodeLine{112 \textcolor{comment}{}}
+\DoxyCodeLine{113 \textcolor{comment}{  /**}}
+\DoxyCodeLine{114 \textcolor{comment}{   * @brief Write the result to a csv file.}}
+\DoxyCodeLine{115 \textcolor{comment}{   *}}
+\DoxyCodeLine{116 \textcolor{comment}{   * @param filename}}
+\DoxyCodeLine{117 \textcolor{comment}{   */}}
+\DoxyCodeLine{118   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_ab5c1374af6c1e0978fced888d6b10abe}{write\_result\_to\_csv}}(std::string filename);}
+\DoxyCodeLine{119 }
+\DoxyCodeLine{120  \textcolor{keyword}{private}:}
+\DoxyCodeLine{121   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} model;}
+\DoxyCodeLine{122   \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters}{IO::SimulationParameters<T>}} simparams;}
+\DoxyCodeLine{123   std::vector<ALGEBRA::State<T>> states;}
+\DoxyCodeLine{124   std::vector<T> times;}
+\DoxyCodeLine{125   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}} initial\_state;}
+\DoxyCodeLine{126 }
+\DoxyCodeLine{127   \textcolor{keywordtype}{void} sanity\_checks();}
+\DoxyCodeLine{128 \};}
+\DoxyCodeLine{129 }
+\DoxyCodeLine{130 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{131 \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_aff0d32426aeaecc43c3a22971dd8e61d}{Solver<T>::Solver}}(\textcolor{keyword}{const} nlohmann::json\& config) \{}
+\DoxyCodeLine{132   DEBUG\_MSG(\textcolor{stringliteral}{"{}Read simulation parameters"{}});}
+\DoxyCodeLine{133   simparams = IO::load\_simulation\_params<T>(config);}
+\DoxyCodeLine{134   DEBUG\_MSG(\textcolor{stringliteral}{"{}Load model"{}});}
+\DoxyCodeLine{135   model = \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}}();}
+\DoxyCodeLine{136   IO::load\_simulation\_model<T>(config, model);}
+\DoxyCodeLine{137   DEBUG\_MSG(\textcolor{stringliteral}{"{}Load initial condition"{}});}
+\DoxyCodeLine{138   initial\_state = IO::load\_initial\_condition<T>(config, model);}
+\DoxyCodeLine{139 }
+\DoxyCodeLine{140   DEBUG\_MSG(\textcolor{stringliteral}{"{}Cardiac cycle period "{}} << model.cardiac\_cycle\_period);}
+\DoxyCodeLine{141 }
+\DoxyCodeLine{142   \textcolor{comment}{// Calculate time step size}}
+\DoxyCodeLine{143   \textcolor{keywordflow}{if} (!simparams.sim\_coupled) \{}
+\DoxyCodeLine{144     simparams.sim\_time\_step\_size =}
+\DoxyCodeLine{145         model.cardiac\_cycle\_period / (T(simparams.sim\_pts\_per\_cycle) -\/ 1.0);}
+\DoxyCodeLine{146   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{147     simparams.sim\_time\_step\_size = simparams.sim\_external\_step\_size /}
+\DoxyCodeLine{148                                    (T(simparams.sim\_num\_time\_steps) -\/ 1.0);}
+\DoxyCodeLine{149   \}}
+\DoxyCodeLine{150   sanity\_checks();}
+\DoxyCodeLine{151 \}}
+\DoxyCodeLine{152 }
+\DoxyCodeLine{153 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{154 \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_af0214e66e48ed5d74cd6e267b39b5a64}{Solver<T>::\string~Solver}}() \{\}}
+\DoxyCodeLine{155 }
+\DoxyCodeLine{156 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{157 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a020ddc106626055c1a7cbb2ad48452af}{Solver<T>::run}}() \{}
+\DoxyCodeLine{158   \textcolor{keyword}{auto} state = initial\_state;}
+\DoxyCodeLine{159 }
+\DoxyCodeLine{160   \textcolor{comment}{// Create steady initial}}
+\DoxyCodeLine{161   \textcolor{keywordflow}{if} (simparams.sim\_steady\_initial) \{}
+\DoxyCodeLine{162     DEBUG\_MSG(\textcolor{stringliteral}{"{}Calculate steady initial condition"{}});}
+\DoxyCodeLine{163     T time\_step\_size\_steady = model.cardiac\_cycle\_period / 10.0;}
+\DoxyCodeLine{164     model.to\_steady();}
+\DoxyCodeLine{165     \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator\_steady(\&model, time\_step\_size\_steady, 0.1,}
+\DoxyCodeLine{166                                              simparams.sim\_abs\_tol,}
+\DoxyCodeLine{167                                              simparams.sim\_nliter);}
+\DoxyCodeLine{168     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < 31; i++) \{}
+\DoxyCodeLine{169       state = integrator\_steady.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_aebb35b3367bf90b2762b835064bc9941}{step}}(state, time\_step\_size\_steady * T(i));}
+\DoxyCodeLine{170     \}}
+\DoxyCodeLine{171     model.to\_unsteady();}
+\DoxyCodeLine{172   \}}
+\DoxyCodeLine{173 }
+\DoxyCodeLine{174   \textcolor{comment}{// Set-\/up integrator}}
+\DoxyCodeLine{175   DEBUG\_MSG(\textcolor{stringliteral}{"{}Setup time integration"{}});}
+\DoxyCodeLine{176   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator}{ALGEBRA::Integrator<T>}} integrator(\&model, simparams.sim\_time\_step\_size, 0.1,}
+\DoxyCodeLine{177                                     simparams.sim\_abs\_tol,}
+\DoxyCodeLine{178                                     simparams.sim\_nliter);}
+\DoxyCodeLine{179 }
+\DoxyCodeLine{180   \textcolor{comment}{// Initialize loop}}
+\DoxyCodeLine{181   states = std::vector<ALGEBRA::State<T>>();}
+\DoxyCodeLine{182   times = std::vector<T>();}
+\DoxyCodeLine{183   \textcolor{keywordflow}{if} (simparams.output\_all\_cycles) \{}
+\DoxyCodeLine{184     \textcolor{keywordtype}{int} num\_states =}
+\DoxyCodeLine{185         simparams.sim\_num\_time\_steps / simparams.output\_interval + 1;}
+\DoxyCodeLine{186     states.reserve(num\_states);}
+\DoxyCodeLine{187     times.reserve(num\_states);}
+\DoxyCodeLine{188   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{189     \textcolor{keywordtype}{int} num\_states =}
+\DoxyCodeLine{190         simparams.sim\_pts\_per\_cycle / simparams.output\_interval + 1;}
+\DoxyCodeLine{191     states.reserve(num\_states);}
+\DoxyCodeLine{192     times.reserve(num\_states);}
+\DoxyCodeLine{193   \}}
+\DoxyCodeLine{194   T time = 0.0;}
+\DoxyCodeLine{195 }
+\DoxyCodeLine{196   \textcolor{comment}{// Run integrator}}
+\DoxyCodeLine{197   DEBUG\_MSG(\textcolor{stringliteral}{"{}Run time integration"{}});}
+\DoxyCodeLine{198   \textcolor{keywordtype}{int} interval\_counter = 0;}
+\DoxyCodeLine{199   \textcolor{keywordtype}{int} start\_last\_cycle =}
+\DoxyCodeLine{200       simparams.sim\_num\_time\_steps -\/ simparams.sim\_pts\_per\_cycle;}
+\DoxyCodeLine{201   \textcolor{keywordflow}{if} (simparams.output\_all\_cycles || (0 >= start\_last\_cycle)) \{}
+\DoxyCodeLine{202     times.push\_back(time);}
+\DoxyCodeLine{203     states.push\_back(std::move(state));}
+\DoxyCodeLine{204   \}}
+\DoxyCodeLine{205   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 1; i < simparams.sim\_num\_time\_steps; i++) \{}
+\DoxyCodeLine{206     state = integrator.\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_integrator_aebb35b3367bf90b2762b835064bc9941}{step}}(state, time);}
+\DoxyCodeLine{207     interval\_counter += 1;}
+\DoxyCodeLine{208     time = simparams.sim\_time\_step\_size * T(i);}
+\DoxyCodeLine{209     \textcolor{keywordflow}{if} ((interval\_counter == simparams.output\_interval) ||}
+\DoxyCodeLine{210         (!simparams.output\_all\_cycles \&\& (i == start\_last\_cycle))) \{}
+\DoxyCodeLine{211       \textcolor{keywordflow}{if} (simparams.output\_all\_cycles || (i >= start\_last\_cycle)) \{}
+\DoxyCodeLine{212         times.push\_back(time);}
+\DoxyCodeLine{213         states.push\_back(std::move(state));}
+\DoxyCodeLine{214       \}}
+\DoxyCodeLine{215       interval\_counter = 0;}
+\DoxyCodeLine{216     \}}
+\DoxyCodeLine{217   \}}
+\DoxyCodeLine{218 }
+\DoxyCodeLine{219   \textcolor{comment}{// Make times start from 0}}
+\DoxyCodeLine{220   \textcolor{keywordflow}{if} (!simparams.output\_all\_cycles) \{}
+\DoxyCodeLine{221     T start\_time = times[0];}
+\DoxyCodeLine{222     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto}\& time : times) \{}
+\DoxyCodeLine{223       time -\/= start\_time;}
+\DoxyCodeLine{224     \}}
+\DoxyCodeLine{225   \}}
+\DoxyCodeLine{226 \}}
+\DoxyCodeLine{227 }
+\DoxyCodeLine{228 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{229 std::vector<T> \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_af78b5dc387e427bdafe29c4d78ef7184}{Solver<T>::get\_times}}() \{}
+\DoxyCodeLine{230   \textcolor{keywordflow}{return} times;}
+\DoxyCodeLine{231 \}}
+\DoxyCodeLine{232 }
+\DoxyCodeLine{233 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{234 std::string \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a525e7b39e377dee0c20fa70694806d1a}{Solver<T>::get\_full\_result}}() \{}
+\DoxyCodeLine{235   std::string output;}
+\DoxyCodeLine{236   \textcolor{keywordflow}{if} (simparams.output\_variable\_based) \{}
+\DoxyCodeLine{237     output =}
+\DoxyCodeLine{238         IO::to\_variable\_csv<T>(times, states, model, simparams.output\_mean\_only,}
+\DoxyCodeLine{239                                simparams.output\_derivative);}
+\DoxyCodeLine{240   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{241     output =}
+\DoxyCodeLine{242         IO::to\_vessel\_csv<T>(times, states, model, simparams.output\_mean\_only,}
+\DoxyCodeLine{243                              simparams.output\_derivative);}
+\DoxyCodeLine{244   \}}
+\DoxyCodeLine{245   \textcolor{keywordflow}{return} output;}
+\DoxyCodeLine{246 \}}
+\DoxyCodeLine{247 }
+\DoxyCodeLine{248 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{249 Eigen::VectorXd \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a9ddc615c22133a4688252db27d95bf1b}{Solver<T>::get\_single\_result}}(std::string dof\_name) \{}
+\DoxyCodeLine{250   \textcolor{keywordtype}{int} dof\_index = model.dofhandler.get\_variable\_index(dof\_name);}
+\DoxyCodeLine{251   \textcolor{keywordtype}{int} num\_states = states.size();}
+\DoxyCodeLine{252   Eigen::VectorXd result = Eigen::VectorXd::Zero(num\_states);}
+\DoxyCodeLine{253   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < num\_states; i++) result[i] = states[i].y[dof\_index];}
+\DoxyCodeLine{254   \textcolor{keywordflow}{return} result;}
+\DoxyCodeLine{255 \}}
+\DoxyCodeLine{256 }
+\DoxyCodeLine{257 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{258 T \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a2f31bfe5acf47d1ecc95834a57c74587}{Solver<T>::get\_single\_result\_avg}}(std::string dof\_name) \{}
+\DoxyCodeLine{259   \textcolor{keywordtype}{int} dof\_index = model.dofhandler.get\_variable\_index(dof\_name);}
+\DoxyCodeLine{260   \textcolor{keywordtype}{int} num\_states = states.size();}
+\DoxyCodeLine{261   Eigen::VectorXd result = Eigen::VectorXd::Zero(num\_states);}
+\DoxyCodeLine{262   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < num\_states; i++) result[i] = states[i].y[dof\_index];}
+\DoxyCodeLine{263   \textcolor{keywordflow}{return} result.mean();}
+\DoxyCodeLine{264 \}}
+\DoxyCodeLine{265 }
+\DoxyCodeLine{266 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{267 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_a63171aaced9ed236cff17d04db248a79}{Solver<T>::update\_block\_params}}(std::string block\_name,}
+\DoxyCodeLine{268                                     std::vector<T> new\_params) \{}
+\DoxyCodeLine{269   \textcolor{keyword}{auto} block = model.get\_block(block\_name);}
+\DoxyCodeLine{270   \textcolor{keywordflow}{if} (new\_params.size() != block-\/>global\_param\_ids.size()) \{}
+\DoxyCodeLine{271     \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{272         \textcolor{stringliteral}{"{}Parameter update failed! Number of provided parameters does not match "{}}}
+\DoxyCodeLine{273         \textcolor{stringliteral}{"{}with block parameters."{}});}
+\DoxyCodeLine{274   \}}
+\DoxyCodeLine{275   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < new\_params.size(); i++) \{}
+\DoxyCodeLine{276     model.get\_parameter(block-\/>global\_param\_ids[i])-\/>update(new\_params[i]);}
+\DoxyCodeLine{277   \}}
+\DoxyCodeLine{278 \}}
+\DoxyCodeLine{279 }
+\DoxyCodeLine{280 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{281 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver}{Solver<T>::sanity\_checks}}() \{}
+\DoxyCodeLine{282   \textcolor{comment}{// Check that steady initial is not used with ClosedLoopHeartAndPulmonary}}
+\DoxyCodeLine{283   \textcolor{keywordflow}{if} ((simparams.sim\_steady\_initial == \textcolor{keyword}{true}) \&\&}
+\DoxyCodeLine{284       (model.get\_block(\textcolor{stringliteral}{"{}CLH"{}}) != \textcolor{keyword}{nullptr})) \{}
+\DoxyCodeLine{285     std::runtime\_error(}
+\DoxyCodeLine{286         \textcolor{stringliteral}{"{}ERROR: Steady initial condition is not compatible with "{}}}
+\DoxyCodeLine{287         \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary block."{}});}
+\DoxyCodeLine{288   \}}
+\DoxyCodeLine{289 \}}
+\DoxyCodeLine{290 }
+\DoxyCodeLine{291 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{292 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_s_o_l_v_e_1_1_solver_ab5c1374af6c1e0978fced888d6b10abe}{Solver<T>::write\_result\_to\_csv}}(std::string filename) \{}
+\DoxyCodeLine{293   DEBUG\_MSG(\textcolor{stringliteral}{"{}Write output"{}});}
+\DoxyCodeLine{294   std::ofstream ofs(filename);}
+\DoxyCodeLine{295   ofs << get\_full\_result();}
+\DoxyCodeLine{296   ofs.close();}
+\DoxyCodeLine{297 \}}
+\DoxyCodeLine{298 }
+\DoxyCodeLine{299 \}  \textcolor{comment}{// namespace SOLVE}}
+\DoxyCodeLine{300 }
+\DoxyCodeLine{301 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_SOLVE\_SOLVER\_HPP\_}}
+
+\end{DoxyCode}

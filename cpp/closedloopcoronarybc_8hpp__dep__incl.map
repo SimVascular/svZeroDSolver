@@ -1,7 +1,23 @@
 <map id="model/closedloopcoronarybc.hpp" name="model/closedloopcoronarybc.hpp">
-<area shape="rect" id="node1" title="MODEL::ClosedLoopCoronaryBC source file." alt="" coords="5,5,216,32"/>
-<area shape="rect" id="node2" href="$configreader_8hpp.html" title="IO::ConfigReader source file." alt="" coords="45,80,176,107"/>
-<area shape="rect" id="node3" href="$main_8hpp.html" title="Main page documentation." alt="" coords="73,155,148,181"/>
-<area shape="rect" id="node4" href="$main_8cpp.html" title="Main routine of svZeroDSolver." alt="" coords="21,229,96,256"/>
-<area shape="rect" id="node5" href="$python_8cpp.html" title="Python binding for svZeroDSolver." alt="" coords="121,229,205,256"/>
+<area shape="rect" id="node1" title="MODEL::ClosedLoopCoronaryBC source file." alt="" coords="820,5,1031,31"/>
+<area shape="rect" id="node2" href="$model_8hpp.html" title="MODEL::Model source file." alt="" coords="1452,79,1572,104"/>
+<area shape="rect" id="node3" href="$integrator_8hpp.html" title="ALGEBRA::Integrator source file." alt="" coords="2355,152,2501,177"/>
+<area shape="rect" id="node4" href="$solver_8hpp.html" title="SOLVE::Solver source file." alt="" coords="2451,225,2567,251"/>
+<area shape="rect" id="node5" href="$sparsesystem_8hpp.html" title="ALGEBRA::SparseSystem source file." alt="" coords="1099,152,1272,177"/>
+<area shape="rect" id="node18" href="$configreader_8hpp.html" title="Helper functions for reading configurations." alt="" coords="2525,152,2656,177"/>
+<area shape="rect" id="node19" href="$csvwriter_8hpp.html" title="IO::write_csv source file." alt="" coords="2681,152,2794,177"/>
+<area shape="rect" id="node20" href="$calibrate_8hpp.html" title="OPT::calibrate source file." alt="" coords="2140,225,2287,251"/>
+<area shape="rect" id="node21" href="$levenbergmarquardtoptimizer_8hpp.html" title="OPT::LevenbergMarquardtOptimizer source file." alt="" coords="1965,152,2229,177"/>
+<area shape="rect" id="node6" href="$block_8hpp.html" title="MODEL::Block source file." alt="" coords="1006,225,1122,251"/>
+<area shape="rect" id="node7" href="$bloodvessel_8hpp.html" title="MODEL::BloodVessel source file." alt="" coords="264,299,419,324"/>
+<area shape="rect" id="node8" href="$bloodvesseljunction_8hpp.html" title="MODEL::BloodVesselJunction source file." alt="" coords="1405,372,1603,397"/>
+<area shape="rect" id="node9" href="$closedloop_r_c_rbc_8hpp.html" title="MODEL::ClosedLoopRCRBC source file." alt="" coords="1875,299,2063,324"/>
+<area shape="rect" id="node10" href="$closedloopheartpulmonary_8hpp.html" title="MODEL::ClosedLoopHeartPulmonary source file." alt="" coords="5,299,240,324"/>
+<area shape="rect" id="node11" href="$flowreferencebc_8hpp.html" title="MODEL::FlowReferenceBC source file." alt="" coords="1331,299,1507,324"/>
+<area shape="rect" id="node12" href="$junction_8hpp.html" title="MODEL::Junction source file." alt="" coords="1720,299,1851,324"/>
+<area shape="rect" id="node13" href="$openloopcoronarybc_8hpp.html" title="MODEL::OpenLoopCoronaryBC source file." alt="" coords="443,299,643,324"/>
+<area shape="rect" id="node14" href="$pressurereferencebc_8hpp.html" title="MODEL::PressureReferenceBC source file." alt="" coords="667,299,869,324"/>
+<area shape="rect" id="node15" href="$resistancebc_8hpp.html" title="MODEL::ResistanceBC source file." alt="" coords="945,299,1103,324"/>
+<area shape="rect" id="node16" href="$resistivejunction_8hpp.html" title="MODEL::ResistiveJunction source file." alt="" coords="1128,299,1307,324"/>
+<area shape="rect" id="node17" href="$windkesselbc_8hpp.html" title="MODEL::WindkesselBC source file." alt="" coords="1531,299,1695,324"/>
 </map>

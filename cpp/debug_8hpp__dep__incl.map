@@ -1,8 +1,7 @@
 <map id="helpers/debug.hpp" name="helpers/debug.hpp">
-<area shape="rect" id="node1" title="HELPERS::DEBUG source file." alt="" coords="126,5,253,32"/>
-<area shape="rect" id="node2" href="$integrator_8hpp.html" title="ALGEBRA::Integrator source file." alt="" coords="5,80,152,107"/>
-<area shape="rect" id="node3" href="$main_8hpp.html" title="Main page documentation." alt="" coords="152,155,227,181"/>
-<area shape="rect" id="node6" href="$configreader_8hpp.html" title="IO::ConfigReader source file." alt="" coords="227,80,357,107"/>
-<area shape="rect" id="node4" href="$main_8cpp.html" title="Main routine of svZeroDSolver." alt="" coords="100,229,175,256"/>
-<area shape="rect" id="node5" href="$python_8cpp.html" title="Python binding for svZeroDSolver." alt="" coords="199,229,283,256"/>
+<area shape="rect" id="node1" title="DEBUG_MSG source file." alt="" coords="177,5,303,31"/>
+<area shape="rect" id="node2" href="$integrator_8hpp.html" title="ALGEBRA::Integrator source file." alt="" coords="5,79,152,104"/>
+<area shape="rect" id="node3" href="$solver_8hpp.html" title="SOLVE::Solver source file." alt="" coords="131,152,247,177"/>
+<area shape="rect" id="node4" href="$configreader_8hpp.html" title="Helper functions for reading configurations." alt="" coords="227,79,357,104"/>
+<area shape="rect" id="node5" href="$calibrate_8hpp.html" title="OPT::calibrate source file." alt="" coords="381,79,528,104"/>
 </map>

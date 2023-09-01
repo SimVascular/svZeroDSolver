@@ -12,46 +12,23 @@ Pressure reference boundary condition.
 
 
 Inheritance diagram for MODEL\+::Pressure\+Reference\+BC\texorpdfstring{$<$}{<} T \texorpdfstring{$>$}{>}\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=219pt]{class_m_o_d_e_l_1_1_pressure_reference_b_c__inherit__graph}
-\end{center}
-\end{figure}
-\doxysubsection*{Classes}
-\begin{DoxyCompactItemize}
-\item 
-struct \mbox{\hyperlink{struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters}{Parameters}}
-\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{struct_m_o_d_e_l_1_1_pressure_reference_b_c_1_1_parameters}{Parameters}} of the element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+% FIG 0
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_aa1e603f3ef279db0872f3bd32773ec0e}{Pressure\+Reference\+BC}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$ P, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_acdcef422b1feed3413fea94584151281}{name}}, std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a2734001b61c75cf0e779e7b9eb9aaa6d}{coupling\+\_\+loc}}=\char`\"{}None\char`\"{})
-\begin{DoxyCompactList}\small\item\em Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}} object. \end{DoxyCompactList}\item 
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a687e158f42007c3dda8a1992e3b28137}{$\sim$\+Pressure\+Reference\+BC}} ()
-\begin{DoxyCompactList}\small\item\em Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}} object. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_aff1ef740afb66f254f8b14fdf8e5803d}{setup\+\_\+dofs}} (\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler}{DOFHandler}} \&dofhandler)
 \begin{DoxyCompactList}\small\item\em Set up the degrees of freedom (DOF) of the block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_ab99c756c1f25b133e4da8a19a0f002f6}{update\+\_\+block\+\_\+params}} (std\+::vector$<$ T $>$ new\+\_\+params)
-\begin{DoxyCompactList}\small\item\em Update parameters of a block. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a23d2a1599bba5d26842a5eaea24407eb}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system)
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a4234ca7dbbb314980c5b0037c4c71c66}{update\+\_\+constant}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the constant contributions of the element in a sparse system. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a015dd358bf5581ef46925959653b7018}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, T time)
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a25774ad8b3db85fc123558482ae95fd4}{update\+\_\+time}} (\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&system, std\+::vector$<$ T $>$ \&parameters)
 \begin{DoxyCompactList}\small\item\em Update the time-\/dependent contributions of the element in a sparse system. \end{DoxyCompactList}\item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a39ccdae0608ee6bff4ac1eba99b9a288}{get\+\_\+num\+\_\+triplets}} ()
-\begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_ad68608d53bde04b36f293b66165ce9f1}{to\+\_\+steady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to a steady behavior. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a3fbf3331a8987a8ee498f0b027be22a4}{to\+\_\+unsteady}} ()
-\begin{DoxyCompactList}\small\item\em Convert the block to an unsteady behavior. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Get number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\+::map$<$ std\+::string, int $>$ \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_adcdd1588ba282ee62f00ddafae198c0e}{num\+\_\+triplets}}
-\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\item 
-std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c_a2734001b61c75cf0e779e7b9eb9aaa6d}{coupling\+\_\+loc}}
-\begin{DoxyCompactList}\small\item\em Specify is this is an inlet or outlet to the sv\+ZeroD model when used for external coupling. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Number of triplets of element. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
@@ -68,10 +45,10 @@ Applies a predefined pressure at a boundary.
 \draw (1,0) to [short, l=, *-] (1,-1)
 node[ground]{$\hat{P}$};
 \end{circuitikz}
-\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md29}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md29}
+\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md23}{}\doxyparagraph{Governing equations}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md23}
 \[
 P=\hat{P}
-\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md30}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md30}
+\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md24}{}\doxyparagraph{Local contributions}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md24}
 \[
 \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
 \]
@@ -82,45 +59,19 @@ P=\hat{P}
 
 \[
 \mathbf{C}^{e}=\left[\hat{P}\right]
-\]
+\]\hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md25}{}\doxyparagraph{Parameters}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_autotoc_md25}
+\mbox{\hyperlink{class_m_o_d_e_l_1_1_parameter}{Parameter}} sequence for constructing this block
+
+
+\begin{DoxyItemize}
+\item {\ttfamily 0} Pressure
+\end{DoxyItemize}
 
 
 \begin{DoxyTemplParams}{Template Parameters}
 {\em T} & Scalar type (e.\+g. {\ttfamily float}, {\ttfamily double}) \\
 \hline
 \end{DoxyTemplParams}
-
-
-\doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_aa1e603f3ef279db0872f3bd32773ec0e}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_aa1e603f3ef279db0872f3bd32773ec0e}} 
-\index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!PressureReferenceBC@{PressureReferenceBC}}
-\index{PressureReferenceBC@{PressureReferenceBC}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{PressureReferenceBC()}{PressureReferenceBC()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::\+Pressure\+Reference\+BC (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{Time\+Dependent\+Parameter}}$<$ T $>$}]{P,  }\item[{std\+::string}]{name,  }\item[{std\+::string}]{coupling\+\_\+loc = {\ttfamily \char`\"{}None\char`\"{}} }\end{DoxyParamCaption})}
-
-
-
-Construct a new \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}} object. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em P} & Time dependent pressure \\
-\hline
-{\em name} & Name \\
-\hline
-\end{DoxyParams}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a687e158f42007c3dda8a1992e3b28137}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a687e158f42007c3dda8a1992e3b28137}} 
-\index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!````~PressureReferenceBC@{$\sim$PressureReferenceBC}}
-\index{````~PressureReferenceBC@{$\sim$PressureReferenceBC}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{$\sim$PressureReferenceBC()}{~PressureReferenceBC()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::$\sim$\mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}}}
-
-
-
-Destroy the \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{Pressure\+Reference\+BC}} object. 
-
 
 
 \doxysubsection{Member Function Documentation}
@@ -161,62 +112,12 @@ Set \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a0dc20753b52a12c3e8f094f26755cc60
 
 Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a70ccd1dd5919a360d520a6e8320dfecf}{MODEL\+::\+Block$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_ad68608d53bde04b36f293b66165ce9f1}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_ad68608d53bde04b36f293b66165ce9f1}} 
-\index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!to\_steady@{to\_steady}}
-\index{to\_steady@{to\_steady}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{to\_steady()}{to\_steady()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::to\+\_\+steady\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Convert the block to a steady behavior. 
-
-Converts the prescribed pressure to the constant mean of itself 
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a85fb185f31375f63ec3c0d8112ebd06a}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a3fbf3331a8987a8ee498f0b027be22a4}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a3fbf3331a8987a8ee498f0b027be22a4}} 
-\index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!to\_unsteady@{to\_unsteady}}
-\index{to\_unsteady@{to\_unsteady}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{to\_unsteady()}{to\_unsteady()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::to\+\_\+unsteady\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Convert the block to an unsteady behavior. 
-
-
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a4aeb18c50f3e2a2748d76d5488f928f3}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_ab99c756c1f25b133e4da8a19a0f002f6}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_ab99c756c1f25b133e4da8a19a0f002f6}} 
-\index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!update\_block\_params@{update\_block\_params}}
-\index{update\_block\_params@{update\_block\_params}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{update\_block\_params()}{update\_block\_params()}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::update\+\_\+block\+\_\+params (\begin{DoxyParamCaption}\item[{std\+::vector$<$ T $>$}]{new\+\_\+params }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
-
-
-
-Update parameters of a block. 
-
-
-\begin{DoxyParams}{Parameters}
-{\em params} & New parameters. \\
-\hline
-\end{DoxyParams}
-
-
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a9fe2ea21f3cbd60b4a5ed469e9c42fc3}{MODEL\+::\+Block$<$ T $>$}}.
-
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a23d2a1599bba5d26842a5eaea24407eb}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a23d2a1599bba5d26842a5eaea24407eb}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a4234ca7dbbb314980c5b0037c4c71c66}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a4234ca7dbbb314980c5b0037c4c71c66}} 
 \index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!update\_constant@{update\_constant}}
 \index{update\_constant@{update\_constant}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_constant()}{update\_constant()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::update\+\_\+constant (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -226,17 +127,19 @@ Update the constant contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
+{\em parameters} & Parameters of the model \\
+\hline
 \end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_aa1351a3b60e8060d6183045d382dbf6e}{MODEL\+::\+Block$<$ T $>$}}.
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_abd4e9b82b5c3cff5463a0b2ada6d4f16}{MODEL\+::\+Block$<$ T $>$}}.
 
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a015dd358bf5581ef46925959653b7018}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a015dd358bf5581ef46925959653b7018}} 
+\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a25774ad8b3db85fc123558482ae95fd4}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a25774ad8b3db85fc123558482ae95fd4}} 
 \index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!update\_time@{update\_time}}
 \index{update\_time@{update\_time}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
 \doxysubsubsection{\texorpdfstring{update\_time()}{update\_time()}}
 {\footnotesize\ttfamily template$<$typename T $>$ \\
-void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{T}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+void \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::update\+\_\+time (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_sparse_system}{ALGEBRA\+::\+Sparse\+System}}$<$ T $>$ \&}]{system,  }\item[{std\+::vector$<$ T $>$ \&}]{parameters }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
 
 
 
@@ -246,27 +149,16 @@ Update the time-\/dependent contributions of the element in a sparse system.
 \begin{DoxyParams}{Parameters}
 {\em system} & System to update contributions at \\
 \hline
-{\em time} & Current time \\
+{\em parameters} & Parameters of the model \\
 \hline
 \end{DoxyParams}
 
 
-Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_ac5d06fd3b4c7b517fc08b331f76c0d66}{MODEL\+::\+Block$<$ T $>$}}.
+Reimplemented from \mbox{\hyperlink{class_m_o_d_e_l_1_1_block_a01f77fe1ad91aa7b424a43c5dd8e4d8c}{MODEL\+::\+Block$<$ T $>$}}.
 
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_a2734001b61c75cf0e779e7b9eb9aaa6d}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_a2734001b61c75cf0e779e7b9eb9aaa6d}} 
-\index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!coupling\_loc@{coupling\_loc}}
-\index{coupling\_loc@{coupling\_loc}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}
-\doxysubsubsection{\texorpdfstring{coupling\_loc}{coupling\_loc}}
-{\footnotesize\ttfamily template$<$typename T $>$ \\
-std\+::string \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL\+::\+Pressure\+Reference\+BC}}$<$ T $>$\+::coupling\+\_\+loc}
-
-
-
-Specify is this is an inlet or outlet to the sv\+ZeroD model when used for external coupling. 
-
 \mbox{\Hypertarget{class_m_o_d_e_l_1_1_pressure_reference_b_c_adcdd1588ba282ee62f00ddafae198c0e}\label{class_m_o_d_e_l_1_1_pressure_reference_b_c_adcdd1588ba282ee62f00ddafae198c0e}} 
 \index{MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}!num\_triplets@{num\_triplets}}
 \index{num\_triplets@{num\_triplets}!MODEL::PressureReferenceBC$<$ T $>$@{MODEL::PressureReferenceBC$<$ T $>$}}

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['windkesselbc_0',['WindkesselBC',['../class_m_o_d_e_l_1_1_windkessel_b_c.html',1,'MODEL::WindkesselBC&lt; T &gt;'],['../class_m_o_d_e_l_1_1_windkessel_b_c.html#ae68b9bacd858103d6ff24cc16074b251',1,'MODEL::WindkesselBC::WindkesselBC()']]],
-  ['windkesselbc_2ehpp_1',['windkesselbc.hpp',['../windkesselbc_8hpp.html',1,'']]]
+  ['y_0',['y',['../class_a_l_g_e_b_r_a_1_1_state.html#a5e310eddee49852d84d0749cbf104e57',1,'ALGEBRA::State']]],
+  ['ydot_1',['ydot',['../class_a_l_g_e_b_r_a_1_1_state.html#aa1042453417a1af57edc93e3192270a9',1,'ALGEBRA::State']]]
 ];

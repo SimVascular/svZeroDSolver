@@ -33,709 +33,552 @@
 \DoxyCodeLine{29 \textcolor{comment}{// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}\textcolor{comment}{}}
 \DoxyCodeLine{30 \textcolor{comment}{/**}}
 \DoxyCodeLine{31 \textcolor{comment}{ * @file configreader.hpp}}
-\DoxyCodeLine{32 \textcolor{comment}{ * @brief IO::ConfigReader source file}}
+\DoxyCodeLine{32 \textcolor{comment}{ * @brief Helper functions for reading configurations}}
 \DoxyCodeLine{33 \textcolor{comment}{ */}}
 \DoxyCodeLine{34 \textcolor{preprocessor}{\#ifndef SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
 \DoxyCodeLine{35 \textcolor{preprocessor}{\#define SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
 \DoxyCodeLine{36 }
 \DoxyCodeLine{37 \textcolor{preprocessor}{\#include <list>}}
-\DoxyCodeLine{38 \textcolor{preprocessor}{\#include <stdexcept>}}
-\DoxyCodeLine{39 \textcolor{preprocessor}{\#include <string>}}
-\DoxyCodeLine{40 }
-\DoxyCodeLine{41 \textcolor{preprocessor}{\#include "{}../helpers/debug.hpp"{}}}
-\DoxyCodeLine{42 \textcolor{preprocessor}{\#include "{}../helpers/startswith.hpp"{}}}
-\DoxyCodeLine{43 \textcolor{preprocessor}{\#include "{}../model/block.hpp"{}}}
-\DoxyCodeLine{44 \textcolor{preprocessor}{\#include "{}../model/bloodvessel.hpp"{}}}
-\DoxyCodeLine{45 \textcolor{preprocessor}{\#include "{}../model/bloodvesseljunction.hpp"{}}}
-\DoxyCodeLine{46 \textcolor{preprocessor}{\#include "{}../model/closedloopRCRbc.hpp"{}}}
-\DoxyCodeLine{47 \textcolor{preprocessor}{\#include "{}../model/closedloopcoronarybc.hpp"{}}}
-\DoxyCodeLine{48 \textcolor{preprocessor}{\#include "{}../model/closedloopheartpulmonary.hpp"{}}}
-\DoxyCodeLine{49 \textcolor{preprocessor}{\#include "{}../model/flowreferencebc.hpp"{}}}
-\DoxyCodeLine{50 \textcolor{preprocessor}{\#include "{}../model/junction.hpp"{}}}
-\DoxyCodeLine{51 \textcolor{preprocessor}{\#include "{}../model/model.hpp"{}}}
-\DoxyCodeLine{52 \textcolor{preprocessor}{\#include "{}../model/node.hpp"{}}}
-\DoxyCodeLine{53 \textcolor{preprocessor}{\#include "{}../model/openloopcoronarybc.hpp"{}}}
-\DoxyCodeLine{54 \textcolor{preprocessor}{\#include "{}../model/pressurereferencebc.hpp"{}}}
-\DoxyCodeLine{55 \textcolor{preprocessor}{\#include "{}../model/resistancebc.hpp"{}}}
-\DoxyCodeLine{56 \textcolor{preprocessor}{\#include "{}../model/resistivejunction.hpp"{}}}
-\DoxyCodeLine{57 \textcolor{preprocessor}{\#include "{}../model/windkesselbc.hpp"{}}}
-\DoxyCodeLine{58 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{jsonhandler_8hpp}{./jsonhandler.hpp}}"{}}}
-\DoxyCodeLine{59 }
-\DoxyCodeLine{60 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_i_o}{IO}} \{}
-\DoxyCodeLine{61 \textcolor{comment}{}}
-\DoxyCodeLine{62 \textcolor{comment}{/**}}
-\DoxyCodeLine{63 \textcolor{comment}{ * @brief svZeroDSolver configuration reader.}}
-\DoxyCodeLine{64 \textcolor{comment}{ *}}
-\DoxyCodeLine{65 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
-\DoxyCodeLine{66 \textcolor{comment}{ */}}
-\DoxyCodeLine{67 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{68 \textcolor{keyword}{class }\mbox{\hyperlink{class_i_o_1_1_config_reader}{ConfigReader}} \{}
-\DoxyCodeLine{69  \textcolor{keyword}{public}:\textcolor{comment}{}}
-\DoxyCodeLine{70 \textcolor{comment}{  /**}}
-\DoxyCodeLine{71 \textcolor{comment}{   * @brief Construct a new Config Reader object}}
-\DoxyCodeLine{72 \textcolor{comment}{   */}}
-\DoxyCodeLine{73   \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{ConfigReader}}();}
-\DoxyCodeLine{74 \textcolor{comment}{}}
-\DoxyCodeLine{75 \textcolor{comment}{  /**}}
-\DoxyCodeLine{76 \textcolor{comment}{   * @brief Destroy the Config Reader object}}
-\DoxyCodeLine{77 \textcolor{comment}{   */}}
-\DoxyCodeLine{78   \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{\string~ConfigReader}}();}
-\DoxyCodeLine{79 \textcolor{comment}{}}
-\DoxyCodeLine{80 \textcolor{comment}{  /**}}
-\DoxyCodeLine{81 \textcolor{comment}{   * @brief Create model from configuration}}
-\DoxyCodeLine{82 \textcolor{comment}{   *}}
-\DoxyCodeLine{83 \textcolor{comment}{   * @param handler Configuration handler}}
-\DoxyCodeLine{84 \textcolor{comment}{   */}}
-\DoxyCodeLine{85   \textcolor{keywordtype}{void} \mbox{\hyperlink{class_i_o_1_1_config_reader_a920b46f9e97b98a6525442e5a8f5cebd}{load}}(\mbox{\hyperlink{class_i_o_1_1_json_handler}{JsonHandler}} \&handler);}
-\DoxyCodeLine{86 }
-\DoxyCodeLine{87   \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}} *\mbox{\hyperlink{class_i_o_1_1_config_reader_ae442b4d3b3c7891a0584bd6fbf895dce}{model}};           \textcolor{comment}{///< Simulation model}}
-\DoxyCodeLine{88   \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}} \mbox{\hyperlink{class_i_o_1_1_config_reader_abe9831cb10972b4982a766aac615cb6c}{initial\_state}};  \textcolor{comment}{///< Initial state}}
-\DoxyCodeLine{89 }
-\DoxyCodeLine{90   T \mbox{\hyperlink{class_i_o_1_1_config_reader_aaa79d0afffb88356f8d4ccbb7628309f}{sim\_cardiac\_cycle\_period}};  \textcolor{comment}{///< Cardiac cycle period.}}
-\DoxyCodeLine{91   T \mbox{\hyperlink{class_i_o_1_1_config_reader_a8ad19204e82a0f29790452485f36a2ba}{sim\_time\_step\_size}};        \textcolor{comment}{///< Simulation time step size}}
-\DoxyCodeLine{92   T \mbox{\hyperlink{class_i_o_1_1_config_reader_a46b1de73e58adb34d4e783e83e1e22e9}{sim\_abs\_tol}};               \textcolor{comment}{///< Absolute tolerance for simulation}}
-\DoxyCodeLine{93 }
-\DoxyCodeLine{94   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a4d7c56de89d9e7719726b9c620a92845}{sim\_num\_cycles}};      \textcolor{comment}{///< Number of cardiac cycles to simulate}}
-\DoxyCodeLine{95   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_af4bde4c7696a7af78e607707e111f5b9}{sim\_pts\_per\_cycle}};   \textcolor{comment}{///< Number of time steps per cardiac cycle}}
-\DoxyCodeLine{96   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a77fc4400616332eef67acb58ad071208}{sim\_num\_time\_steps}};  \textcolor{comment}{///< Total number of time steps}}
-\DoxyCodeLine{97   \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_a4e0c08c222cc1ede5011c867d22a7f9d}{sim\_nliter}};          \textcolor{comment}{///< Maximum number of non-\/linear iterations in time}\textcolor{comment}{}}
-\DoxyCodeLine{98 \textcolor{comment}{                           ///< integration}}
-\DoxyCodeLine{99 \textcolor{comment}{}  \textcolor{keywordtype}{int} \mbox{\hyperlink{class_i_o_1_1_config_reader_adf7c3390971a4ce76c8d4d7a6bd24cc1}{output\_interval}};     \textcolor{comment}{///< Interval of writing output}}
-\DoxyCodeLine{100 }
-\DoxyCodeLine{101   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_a1e593472af26af8f4bf98b158d996434}{sim\_steady\_initial}};  \textcolor{comment}{///< Start from steady solution}}
-\DoxyCodeLine{102   \textcolor{keywordtype}{bool}}
-\DoxyCodeLine{103       \mbox{\hyperlink{class_i_o_1_1_config_reader_acfee0686c847138a19ad12ad71d57750}{output\_variable\_based}};  \textcolor{comment}{///< Output variable based instead of vessel based}}
-\DoxyCodeLine{104   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_a4b5b5b7b81108221d204840937dbad35}{output\_mean\_only}};      \textcolor{comment}{///< Output only the mean value}}
-\DoxyCodeLine{105   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_a77d8dac5655f87b49476fd4f40029bb6}{output\_derivative}};     \textcolor{comment}{///< Output derivatives}}
-\DoxyCodeLine{106   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_ad872723e0b5862abc77290a2152556f0}{output\_last\_cycle\_only}};  \textcolor{comment}{///< Output only the last cardiac cycle}}
-\DoxyCodeLine{107 }
-\DoxyCodeLine{108   \textcolor{keywordtype}{bool} \mbox{\hyperlink{class_i_o_1_1_config_reader_a8d0522c13e13fda51056fd9ff111dc88}{sim\_coupled}};  \textcolor{comment}{///< Running 0D simulation coupled with external solver}}
-\DoxyCodeLine{109   T \mbox{\hyperlink{class_i_o_1_1_config_reader_ab1887c05ac836540409b779768181c08}{sim\_external\_step\_size}};  \textcolor{comment}{///< Step size of external solver if running}\textcolor{comment}{}}
-\DoxyCodeLine{110 \textcolor{comment}{                             ///< coupled}}
-\DoxyCodeLine{111 \textcolor{comment}{}\};}
-\DoxyCodeLine{112 }
-\DoxyCodeLine{113 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{114 \mbox{\hyperlink{class_i_o_1_1_config_reader_a62ff5f79acc744f70ef8e33723aedbb1}{ConfigReader<T>::ConfigReader}}() \{\}}
-\DoxyCodeLine{115 }
-\DoxyCodeLine{116 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{117 \mbox{\hyperlink{class_i_o_1_1_config_reader_a848b6ada6d5b8683418403e90b69b796}{ConfigReader<T>::\string~ConfigReader}}() \{\}}
-\DoxyCodeLine{118 }
-\DoxyCodeLine{119 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
-\DoxyCodeLine{120 \textcolor{keywordtype}{void} \mbox{\hyperlink{class_i_o_1_1_config_reader_a920b46f9e97b98a6525442e5a8f5cebd}{ConfigReader<T>::load}}(\mbox{\hyperlink{class_i_o_1_1_json_handler}{JsonHandler}} \&handler) \{}
-\DoxyCodeLine{121   DEBUG\_MSG(\textcolor{stringliteral}{"{}Start loading configuration"{}});}
-\DoxyCodeLine{122   \textcolor{comment}{// Initialize model pointer}}
-\DoxyCodeLine{123   model = \textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}}();}
-\DoxyCodeLine{124 }
-\DoxyCodeLine{125   \textcolor{comment}{// Load simulation parameters}}
-\DoxyCodeLine{126   DEBUG\_MSG(\textcolor{stringliteral}{"{}Load simulation parameters"{}});}
-\DoxyCodeLine{127   \textcolor{keyword}{auto} sim\_params = handler[\textcolor{stringliteral}{"{}simulation\_parameters"{}}];}
-\DoxyCodeLine{128   sim\_coupled = sim\_params.\mbox{\hyperlink{class_i_o_1_1_json_handler_a17d99d38baaddb9c207b08bf6e8d3041}{get\_bool}}(\textcolor{stringliteral}{"{}coupled\_simulation"{}}, \textcolor{keyword}{false});}
-\DoxyCodeLine{129   \textcolor{keywordflow}{if} (!sim\_coupled) \{}
-\DoxyCodeLine{130     sim\_num\_cycles = sim\_params.get\_int(\textcolor{stringliteral}{"{}number\_of\_cardiac\_cycles"{}});}
-\DoxyCodeLine{131     sim\_pts\_per\_cycle =}
-\DoxyCodeLine{132         sim\_params.get\_int(\textcolor{stringliteral}{"{}number\_of\_time\_pts\_per\_cardiac\_cycle"{}});}
-\DoxyCodeLine{133     sim\_num\_time\_steps = (sim\_pts\_per\_cycle -\/ 1) * sim\_num\_cycles + 1;}
-\DoxyCodeLine{134     sim\_external\_step\_size = 0.0;}
-\DoxyCodeLine{135   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{136     sim\_num\_cycles = 1;}
-\DoxyCodeLine{137     sim\_num\_time\_steps = sim\_params.get\_int(\textcolor{stringliteral}{"{}number\_of\_time\_pts"{}});}
-\DoxyCodeLine{138     sim\_pts\_per\_cycle = sim\_num\_time\_steps;}
-\DoxyCodeLine{139     sim\_external\_step\_size = sim\_params.get\_double(\textcolor{stringliteral}{"{}external\_step\_size"{}}, 0.1);}
-\DoxyCodeLine{140   \}}
-\DoxyCodeLine{141   sim\_cardiac\_cycle\_period = -\/1.0;  \textcolor{comment}{// Negative value indicates this has not}}
-\DoxyCodeLine{142                                     \textcolor{comment}{// been read from config file yet.}}
-\DoxyCodeLine{143   sim\_abs\_tol = sim\_params.get\_double(\textcolor{stringliteral}{"{}absolute\_tolerance"{}}, 1e-\/8);}
-\DoxyCodeLine{144   sim\_nliter = sim\_params.get\_int(\textcolor{stringliteral}{"{}maximum\_nonlinear\_iterations"{}}, 30);}
-\DoxyCodeLine{145   sim\_steady\_initial = sim\_params.get\_bool(\textcolor{stringliteral}{"{}steady\_initial"{}}, \textcolor{keyword}{true});}
-\DoxyCodeLine{146   output\_variable\_based = sim\_params.get\_bool(\textcolor{stringliteral}{"{}output\_variable\_based"{}}, \textcolor{keyword}{false});}
-\DoxyCodeLine{147   output\_interval = sim\_params.get\_int(\textcolor{stringliteral}{"{}output\_interval"{}}, 1);}
-\DoxyCodeLine{148   output\_mean\_only = sim\_params.get\_bool(\textcolor{stringliteral}{"{}output\_mean\_only"{}}, \textcolor{keyword}{false});}
-\DoxyCodeLine{149   output\_derivative = sim\_params.get\_bool(\textcolor{stringliteral}{"{}output\_derivative"{}}, \textcolor{keyword}{false});}
-\DoxyCodeLine{150   output\_last\_cycle\_only = sim\_params.get\_bool(\textcolor{stringliteral}{"{}output\_last\_cycle\_only"{}}, \textcolor{keyword}{false});}
-\DoxyCodeLine{151 }
-\DoxyCodeLine{152   \textcolor{comment}{// Create list to store block connections while generating blocks}}
-\DoxyCodeLine{153   std::vector<std::tuple<std::string\_view, std::string\_view>> connections;}
-\DoxyCodeLine{154   \textcolor{keywordtype}{int} block\_count = 0;}
-\DoxyCodeLine{155 }
-\DoxyCodeLine{156   \textcolor{comment}{// Create vessels}}
-\DoxyCodeLine{157   DEBUG\_MSG(\textcolor{stringliteral}{"{}Load vessels"{}});}
-\DoxyCodeLine{158   std::map<std::int64\_t, std::string\_view> vessel\_id\_map;}
-\DoxyCodeLine{159   \textcolor{keyword}{auto} vessels = handler[\textcolor{stringliteral}{"{}vessels"{}}];}
-\DoxyCodeLine{160   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < vessels.length(); i++) \{}
-\DoxyCodeLine{161     \textcolor{keyword}{auto} vessel\_config = vessels[i];}
-\DoxyCodeLine{162     \textcolor{keyword}{auto} vessel\_values = vessel\_config[\textcolor{stringliteral}{"{}zero\_d\_element\_values"{}}];}
-\DoxyCodeLine{163     std::string\_view vessel\_name = vessel\_config.\mbox{\hyperlink{class_i_o_1_1_json_handler_ad876611f56eea5354d1f535d83068d2b}{get\_string}}(\textcolor{stringliteral}{"{}vessel\_name"{}});}
-\DoxyCodeLine{164     vessel\_id\_map.insert(\{vessel\_config.get\_int(\textcolor{stringliteral}{"{}vessel\_id"{}}), vessel\_name\});}
-\DoxyCodeLine{165     \textcolor{keywordflow}{if} (vessel\_config.get\_string(\textcolor{stringliteral}{"{}zero\_d\_element\_type"{}}) == \textcolor{stringliteral}{"{}BloodVessel"{}}) \{}
-\DoxyCodeLine{166       T R = vessel\_values.get\_double(\textcolor{stringliteral}{"{}R\_poiseuille"{}});}
-\DoxyCodeLine{167       T C = vessel\_values.get\_double(\textcolor{stringliteral}{"{}C"{}}, 0.0);}
-\DoxyCodeLine{168       T L = vessel\_values.get\_double(\textcolor{stringliteral}{"{}L"{}}, 0.0);}
-\DoxyCodeLine{169       T stenosis\_coefficient =}
-\DoxyCodeLine{170           vessel\_values.get\_double(\textcolor{stringliteral}{"{}stenosis\_coefficient"{}}, 0.0);}
-\DoxyCodeLine{171       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel}{MODEL::BloodVessel<T>}}(}
-\DoxyCodeLine{172           R = R, C = C, L = L, stenosis\_coefficient = stenosis\_coefficient,}
-\DoxyCodeLine{173           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(vessel\_name)));}
-\DoxyCodeLine{174       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{175           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(vessel\_name), block\_count\});}
-\DoxyCodeLine{176       block\_count++;}
-\DoxyCodeLine{177       DEBUG\_MSG(\textcolor{stringliteral}{"{}Created vessel "{}} << vessel\_name);}
-\DoxyCodeLine{178     \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{179       \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown vessel type"{}});}
-\DoxyCodeLine{180     \}}
-\DoxyCodeLine{181 }
-\DoxyCodeLine{182     \textcolor{comment}{// Read connected boundary conditions}}
-\DoxyCodeLine{183     \textcolor{keywordflow}{if} (vessel\_config.has\_key(\textcolor{stringliteral}{"{}boundary\_conditions"{}})) \{}
-\DoxyCodeLine{184       \textcolor{keyword}{auto} vessel\_bc\_config = vessel\_config[\textcolor{stringliteral}{"{}boundary\_conditions"{}}];}
-\DoxyCodeLine{185       \textcolor{keywordflow}{if} (vessel\_bc\_config.has\_key(\textcolor{stringliteral}{"{}inlet"{}})) \{}
-\DoxyCodeLine{186         connections.push\_back(}
-\DoxyCodeLine{187             \{vessel\_bc\_config.get\_string(\textcolor{stringliteral}{"{}inlet"{}}), vessel\_name\});}
-\DoxyCodeLine{188       \}}
-\DoxyCodeLine{189       \textcolor{keywordflow}{if} (vessel\_bc\_config.has\_key(\textcolor{stringliteral}{"{}outlet"{}})) \{}
-\DoxyCodeLine{190         connections.push\_back(}
-\DoxyCodeLine{191             \{vessel\_name, vessel\_bc\_config.get\_string(\textcolor{stringliteral}{"{}outlet"{}})\});}
-\DoxyCodeLine{192       \}}
-\DoxyCodeLine{193     \}}
-\DoxyCodeLine{194   \}}
-\DoxyCodeLine{195 }
-\DoxyCodeLine{196   \textcolor{comment}{// Create map for boundary conditions to boundary condition type}}
-\DoxyCodeLine{197   DEBUG\_MSG(\textcolor{stringliteral}{"{}Create BC name to BC type map"{}});}
-\DoxyCodeLine{198   \textcolor{keyword}{auto} bc\_configs = handler[\textcolor{stringliteral}{"{}boundary\_conditions"{}}];}
-\DoxyCodeLine{199   std::map<std::string\_view, std::string\_view> bc\_type\_map;}
-\DoxyCodeLine{200   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < bc\_configs.length(); i++) \{}
-\DoxyCodeLine{201     \textcolor{keyword}{auto} bc\_config = bc\_configs[i];}
-\DoxyCodeLine{202     bc\_type\_map.insert(}
-\DoxyCodeLine{203         \{bc\_config.get\_string(\textcolor{stringliteral}{"{}bc\_name"{}}), bc\_config.get\_string(\textcolor{stringliteral}{"{}bc\_type"{}})\});}
-\DoxyCodeLine{204   \}}
-\DoxyCodeLine{205 }
-\DoxyCodeLine{206   \textcolor{keywordflow}{if} (handler.\mbox{\hyperlink{class_i_o_1_1_json_handler_a68342c5a1a5ba36ede8613843441c726}{has\_key}}(\textcolor{stringliteral}{"{}external\_solver\_coupling\_blocks"{}})) \{}
-\DoxyCodeLine{207     DEBUG\_MSG(\textcolor{stringliteral}{"{}Create external coupling blocks"{}});}
-\DoxyCodeLine{208     \textcolor{keyword}{auto} coupling\_configs = handler[\textcolor{stringliteral}{"{}external\_solver\_coupling\_blocks"{}}];}
-\DoxyCodeLine{209     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < coupling\_configs.length(); i++) \{}
-\DoxyCodeLine{210       \textcolor{keyword}{auto} coupling\_config = coupling\_configs[i];}
-\DoxyCodeLine{211       \textcolor{keyword}{auto} coupling\_type = coupling\_config.\mbox{\hyperlink{class_i_o_1_1_json_handler_ad876611f56eea5354d1f535d83068d2b}{get\_string}}(\textcolor{stringliteral}{"{}type"{}});}
-\DoxyCodeLine{212       \textcolor{keyword}{auto} coupling\_name = coupling\_config.get\_string(\textcolor{stringliteral}{"{}name"{}});}
-\DoxyCodeLine{213       \textcolor{keyword}{auto} coupling\_loc = coupling\_config.get\_string(\textcolor{stringliteral}{"{}location"{}});}
-\DoxyCodeLine{214       \textcolor{keywordtype}{bool} periodic = coupling\_config.get\_bool(\textcolor{stringliteral}{"{}periodic"{}}, \textcolor{keyword}{true});}
-\DoxyCodeLine{215       \textcolor{keyword}{auto} coupling\_values = coupling\_config[\textcolor{stringliteral}{"{}values"{}}];}
-\DoxyCodeLine{216 }
-\DoxyCodeLine{217       \textcolor{comment}{// Create coupling block}}
-\DoxyCodeLine{218       \textcolor{keyword}{auto} t\_coupling = coupling\_values.get\_double\_array(\textcolor{stringliteral}{"{}t"{}}, \{0.0\});}
-\DoxyCodeLine{219 }
-\DoxyCodeLine{220       \textcolor{keywordflow}{if} (coupling\_type == \textcolor{stringliteral}{"{}FLOW"{}}) \{}
-\DoxyCodeLine{221         \textcolor{keyword}{auto} Q\_coupling = coupling\_values.get\_double\_array(\textcolor{stringliteral}{"{}Q"{}});}
-\DoxyCodeLine{222 }
-\DoxyCodeLine{223         \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter}} q\_coupling\_param(t\_coupling, Q\_coupling,}
-\DoxyCodeLine{224                                                        periodic);}
-\DoxyCodeLine{225         \textcolor{keywordflow}{if} ((q\_coupling\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_aee6221393da44b0e6279986782cb7c9a}{isconstant}} == \textcolor{keyword}{false}) \&\&}
-\DoxyCodeLine{226             (q\_coupling\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a42597c37d10af47c080660a6677e0b7a}{isperiodic}} == \textcolor{keyword}{true})) \{}
-\DoxyCodeLine{227           \textcolor{keywordflow}{if} ((sim\_cardiac\_cycle\_period > 0.0) \&\&}
-\DoxyCodeLine{228               (q\_coupling\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}} != sim\_cardiac\_cycle\_period)) \{}
-\DoxyCodeLine{229             \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{230                 \textcolor{stringliteral}{"{}Inconsistent cardiac cycle period defined in "{}}}
-\DoxyCodeLine{231                 \textcolor{stringliteral}{"{}TimeDependentParameter"{}});}
-\DoxyCodeLine{232           \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{233             sim\_cardiac\_cycle\_period = q\_coupling\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}};}
-\DoxyCodeLine{234           \}}
-\DoxyCodeLine{235         \}}
-\DoxyCodeLine{236         model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL::FlowReferenceBC<T>}}(}
-\DoxyCodeLine{237             q\_coupling\_param, \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(coupling\_name),}
-\DoxyCodeLine{238             \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(coupling\_loc)));}
-\DoxyCodeLine{239         model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{240             \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(coupling\_name), block\_count\});}
-\DoxyCodeLine{241         block\_count++;}
-\DoxyCodeLine{242         model-\/>external\_coupling\_blocks.push\_back(}
-\DoxyCodeLine{243             \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(coupling\_name));}
-\DoxyCodeLine{244       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (coupling\_type == \textcolor{stringliteral}{"{}PRESSURE"{}}) \{}
-\DoxyCodeLine{245         \textcolor{keyword}{auto} P\_coupling = coupling\_values.get\_double\_array(\textcolor{stringliteral}{"{}P"{}});}
-\DoxyCodeLine{246         \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter}} p\_coupling\_param(t\_coupling, P\_coupling,}
-\DoxyCodeLine{247                                                        periodic);}
-\DoxyCodeLine{248         \textcolor{keywordflow}{if} ((p\_coupling\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_aee6221393da44b0e6279986782cb7c9a}{isconstant}} == \textcolor{keyword}{false}) \&\&}
-\DoxyCodeLine{249             (p\_coupling\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a42597c37d10af47c080660a6677e0b7a}{isperiodic}} == \textcolor{keyword}{true})) \{}
-\DoxyCodeLine{250           \textcolor{keywordflow}{if} ((sim\_cardiac\_cycle\_period > 0.0) \&\&}
-\DoxyCodeLine{251               (p\_coupling\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}} != sim\_cardiac\_cycle\_period)) \{}
-\DoxyCodeLine{252             \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{253                 \textcolor{stringliteral}{"{}Inconsistent cardiac cycle period defined in "{}}}
-\DoxyCodeLine{254                 \textcolor{stringliteral}{"{}TimeDependentParameter"{}});}
-\DoxyCodeLine{255           \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{256             sim\_cardiac\_cycle\_period = p\_coupling\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}};}
-\DoxyCodeLine{257           \}}
-\DoxyCodeLine{258         \}}
-\DoxyCodeLine{259         model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL::PressureReferenceBC<T>}}(}
-\DoxyCodeLine{260             p\_coupling\_param, \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(coupling\_name),}
-\DoxyCodeLine{261             \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(coupling\_loc)));}
-\DoxyCodeLine{262         model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{263             \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(coupling\_name), block\_count\});}
-\DoxyCodeLine{264         block\_count++;}
-\DoxyCodeLine{265         model-\/>external\_coupling\_blocks.push\_back(}
-\DoxyCodeLine{266             \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(coupling\_name));}
-\DoxyCodeLine{267       \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{268         \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{269             \textcolor{stringliteral}{"{}Error. Flowsolver coupling block types should be FLOW or "{}}}
-\DoxyCodeLine{270             \textcolor{stringliteral}{"{}PRESSURE."{}});}
-\DoxyCodeLine{271       \}}
-\DoxyCodeLine{272       DEBUG\_MSG(\textcolor{stringliteral}{"{}Created coupling block "{}} << coupling\_name);}
-\DoxyCodeLine{273 }
-\DoxyCodeLine{274       \textcolor{comment}{// Determine the type of connected block}}
-\DoxyCodeLine{275       \textcolor{keyword}{auto} connected\_block = coupling\_config.get\_string(\textcolor{stringliteral}{"{}connected\_block"{}});}
-\DoxyCodeLine{276       std::string\_view connected\_type;}
-\DoxyCodeLine{277       \textcolor{keywordtype}{int} found\_block = 0;}
-\DoxyCodeLine{278       \textcolor{keywordflow}{if} (connected\_block == \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary"{}}) \{}
-\DoxyCodeLine{279         connected\_type = \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary"{}};}
-\DoxyCodeLine{280         found\_block = 1;}
-\DoxyCodeLine{281       \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{282         \textcolor{keywordflow}{try} \{}
-\DoxyCodeLine{283           connected\_type = bc\_type\_map.at(connected\_block);}
-\DoxyCodeLine{284           found\_block = 1;}
-\DoxyCodeLine{285         \} \textcolor{keywordflow}{catch} (...) \{}
-\DoxyCodeLine{286         \}}
-\DoxyCodeLine{287         \textcolor{keywordflow}{if} (found\_block == 0) \{}
-\DoxyCodeLine{288           \textcolor{comment}{// Search for connected\_block in the list of vessel names}}
-\DoxyCodeLine{289           \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \textcolor{keyword}{const} vessel : vessel\_id\_map) \{}
-\DoxyCodeLine{290             \textcolor{keywordflow}{if} (connected\_block == vessel.second) \{}
-\DoxyCodeLine{291               connected\_type = \textcolor{stringliteral}{"{}BloodVessel"{}};}
-\DoxyCodeLine{292               found\_block = 1;}
-\DoxyCodeLine{293               \textcolor{keywordflow}{break};}
-\DoxyCodeLine{294             \}}
-\DoxyCodeLine{295           \}}
-\DoxyCodeLine{296         \}}
-\DoxyCodeLine{297         \textcolor{keywordflow}{if} (found\_block == 0) \{}
-\DoxyCodeLine{298           std::cout << \textcolor{stringliteral}{"{}Error! Could not connected type for block: "{}}}
-\DoxyCodeLine{299                     << connected\_block << std::endl;}
-\DoxyCodeLine{300           \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"{}Terminating."{}});}
-\DoxyCodeLine{301         \}}
-\DoxyCodeLine{302       \}  \textcolor{comment}{// connected\_block != "{}ClosedLoopHeartAndPulmonary"{}}}
-\DoxyCodeLine{303       \textcolor{comment}{// Create connections}}
-\DoxyCodeLine{304       \textcolor{keywordflow}{if} (coupling\_loc == \textcolor{stringliteral}{"{}inlet"{}}) \{}
-\DoxyCodeLine{305         std::vector<std::string\_view> possible\_types = \{}
-\DoxyCodeLine{306             \textcolor{stringliteral}{"{}RESISTANCE"{}},    \textcolor{stringliteral}{"{}RCR"{}},      \textcolor{stringliteral}{"{}ClosedLoopRCR"{}},}
-\DoxyCodeLine{307             \textcolor{stringliteral}{"{}SimplifiedRCR"{}}, \textcolor{stringliteral}{"{}CORONARY"{}}, \textcolor{stringliteral}{"{}ClosedLoopCoronary"{}},}
-\DoxyCodeLine{308             \textcolor{stringliteral}{"{}BloodVessel"{}}\};}
-\DoxyCodeLine{309         \textcolor{keywordflow}{if} (std::find(std::begin(possible\_types), std::end(possible\_types),}
-\DoxyCodeLine{310                       connected\_type) == std::end(possible\_types)) \{}
-\DoxyCodeLine{311           \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{312               \textcolor{stringliteral}{"{}Error: The specified connection type for inlet "{}}}
-\DoxyCodeLine{313               \textcolor{stringliteral}{"{}external\_coupling\_block is invalid."{}});}
-\DoxyCodeLine{314         \}}
-\DoxyCodeLine{315         connections.push\_back(\{coupling\_name, connected\_block\});}
-\DoxyCodeLine{316         DEBUG\_MSG(\textcolor{stringliteral}{"{}Created coupling block connection: "{}} << coupling\_name << \textcolor{stringliteral}{"{}-\/>"{}}}
-\DoxyCodeLine{317                                                         << connected\_block);}
-\DoxyCodeLine{318       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (coupling\_loc == \textcolor{stringliteral}{"{}outlet"{}}) \{}
-\DoxyCodeLine{319         std::vector<std::string\_view> possible\_types = \{}
-\DoxyCodeLine{320             \textcolor{stringliteral}{"{}ClosedLoopRCR"{}}, \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary"{}}, \textcolor{stringliteral}{"{}BloodVessel"{}}\};}
-\DoxyCodeLine{321         \textcolor{keywordflow}{if} (std::find(std::begin(possible\_types), std::end(possible\_types),}
-\DoxyCodeLine{322                       connected\_type) == std::end(possible\_types)) \{}
-\DoxyCodeLine{323           \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{324               \textcolor{stringliteral}{"{}Error: The specified connection type for outlet "{}}}
-\DoxyCodeLine{325               \textcolor{stringliteral}{"{}external\_coupling\_block is invalid."{}});}
-\DoxyCodeLine{326         \}}
-\DoxyCodeLine{327         \textcolor{comment}{// Add connection only for closedLoopRCR and BloodVessel. Connection to}}
-\DoxyCodeLine{328         \textcolor{comment}{// ClosedLoopHeartAndPulmonary will be handled in}}
-\DoxyCodeLine{329         \textcolor{comment}{// ClosedLoopHeartAndPulmonary creation.}}
-\DoxyCodeLine{330         \textcolor{keywordflow}{if} ((connected\_type == \textcolor{stringliteral}{"{}ClosedLoopRCR"{}}) ||}
-\DoxyCodeLine{331             (connected\_type == \textcolor{stringliteral}{"{}BloodVessel"{}})) \{}
-\DoxyCodeLine{332           connections.push\_back(\{connected\_block, coupling\_name\});}
-\DoxyCodeLine{333           DEBUG\_MSG(\textcolor{stringliteral}{"{}Created coupling block connection: "{}}}
-\DoxyCodeLine{334                     << connected\_block << \textcolor{stringliteral}{"{}-\/> "{}} << coupling\_name);}
-\DoxyCodeLine{335         \}  \textcolor{comment}{// connected\_type == "{}ClosedLoopRCR"{}}}
-\DoxyCodeLine{336       \}    \textcolor{comment}{// coupling\_loc}}
-\DoxyCodeLine{337     \}      \textcolor{comment}{// for (size\_t i = 0; i < coupling\_configs.length(); i++)}}
-\DoxyCodeLine{338   \}}
-\DoxyCodeLine{339 }
-\DoxyCodeLine{340   std::vector<std::string\_view> closed\_loop\_bcs;}
-\DoxyCodeLine{341 }
-\DoxyCodeLine{342   \textcolor{comment}{// Create boundary conditions}}
-\DoxyCodeLine{343   DEBUG\_MSG(\textcolor{stringliteral}{"{}Create boundary conditions"{}});}
-\DoxyCodeLine{344   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < bc\_configs.length(); i++) \{}
-\DoxyCodeLine{345     \textcolor{keyword}{auto} bc\_config = bc\_configs[i];}
-\DoxyCodeLine{346     \textcolor{keyword}{auto} bc\_type = bc\_config.get\_string(\textcolor{stringliteral}{"{}bc\_type"{}});}
-\DoxyCodeLine{347     \textcolor{keyword}{auto} bc\_name = bc\_config.get\_string(\textcolor{stringliteral}{"{}bc\_name"{}});}
-\DoxyCodeLine{348     \textcolor{keyword}{auto} bc\_values = bc\_config[\textcolor{stringliteral}{"{}bc\_values"{}}];}
-\DoxyCodeLine{349 }
-\DoxyCodeLine{350     \textcolor{keyword}{auto} t = bc\_values.get\_double\_array(\textcolor{stringliteral}{"{}t"{}}, \{0.0\});}
-\DoxyCodeLine{351 }
-\DoxyCodeLine{352     \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}RCR"{}}) \{}
-\DoxyCodeLine{353       T Rp = bc\_values.get\_double(\textcolor{stringliteral}{"{}Rp"{}});}
-\DoxyCodeLine{354       T C = bc\_values.get\_double(\textcolor{stringliteral}{"{}C"{}});}
-\DoxyCodeLine{355       T Rd = bc\_values.get\_double(\textcolor{stringliteral}{"{}Rd"{}});}
-\DoxyCodeLine{356       T Pd = bc\_values.get\_double(\textcolor{stringliteral}{"{}Pd"{}});}
-\DoxyCodeLine{357       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL::WindkesselBC<T>}}(}
-\DoxyCodeLine{358           Rp = Rp, C = C, Rd = Rd, Pd = Pd, \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name)));}
-\DoxyCodeLine{359       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{360           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name), block\_count\});}
-\DoxyCodeLine{361 }
-\DoxyCodeLine{362     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}ClosedLoopRCR"{}}) \{}
-\DoxyCodeLine{363       T Rp = bc\_values.get\_double(\textcolor{stringliteral}{"{}Rp"{}});}
-\DoxyCodeLine{364       T C = bc\_values.get\_double(\textcolor{stringliteral}{"{}C"{}});}
-\DoxyCodeLine{365       T Rd = bc\_values.get\_double(\textcolor{stringliteral}{"{}Rd"{}});}
-\DoxyCodeLine{366       \textcolor{keywordtype}{bool} closed\_loop\_outlet = bc\_values.get\_bool(\textcolor{stringliteral}{"{}closed\_loop\_outlet"{}});}
-\DoxyCodeLine{367       \textcolor{keywordflow}{if} (closed\_loop\_outlet == \textcolor{keyword}{true}) \{}
-\DoxyCodeLine{368         closed\_loop\_bcs.push\_back(bc\_name);}
-\DoxyCodeLine{369       \}}
-\DoxyCodeLine{370       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_r_c_r_b_c}{MODEL::ClosedLoopRCRBC<T>}}(}
-\DoxyCodeLine{371           Rp = Rp, C = C, Rd = Rd, closed\_loop\_outlet = closed\_loop\_outlet,}
-\DoxyCodeLine{372           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name)));}
-\DoxyCodeLine{373       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{374           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name), block\_count\});}
-\DoxyCodeLine{375     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}FLOW"{}}) \{}
-\DoxyCodeLine{376       \textcolor{keyword}{auto} Q = bc\_values.get\_double\_array(\textcolor{stringliteral}{"{}Q"{}});}
+\DoxyCodeLine{38 \textcolor{preprocessor}{\#include <nlohmann/json.hpp>}}
+\DoxyCodeLine{39 \textcolor{preprocessor}{\#include <stdexcept>}}
+\DoxyCodeLine{40 \textcolor{preprocessor}{\#include <string>}}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#include "{}../helpers/debug.hpp"{}}}
+\DoxyCodeLine{43 \textcolor{preprocessor}{\#include "{}../helpers/startswith.hpp"{}}}
+\DoxyCodeLine{44 \textcolor{preprocessor}{\#include "{}../model/model.hpp"{}}}
+\DoxyCodeLine{45 }
+\DoxyCodeLine{46 \textcolor{keyword}{namespace }\mbox{\hyperlink{namespace_i_o}{IO}} \{}
+\DoxyCodeLine{47 }
+\DoxyCodeLine{48 std::vector<double> get\_double\_array(\textcolor{keyword}{const} nlohmann::json\& data,}
+\DoxyCodeLine{49                                      std::string\_view key) \{}
+\DoxyCodeLine{50   std::vector<double> vector;}
+\DoxyCodeLine{51   \textcolor{keywordflow}{if} (!data[key].is\_array()) \{}
+\DoxyCodeLine{52     \textcolor{keywordflow}{return} \{data[key]\};}
+\DoxyCodeLine{53   \}}
+\DoxyCodeLine{54   \textcolor{keywordflow}{return} data[key].get<std::vector<double>>();}
+\DoxyCodeLine{55 \}}
+\DoxyCodeLine{56 }
+\DoxyCodeLine{57 std::vector<double> get\_double\_array(\textcolor{keyword}{const} nlohmann::json\& data,}
+\DoxyCodeLine{58                                      std::string\_view key,}
+\DoxyCodeLine{59                                      std::vector<double> default\_value) \{}
+\DoxyCodeLine{60   \textcolor{keywordflow}{if} (!data.contains(key)) \{}
+\DoxyCodeLine{61     \textcolor{keywordflow}{return} default\_value;}
+\DoxyCodeLine{62   \}}
+\DoxyCodeLine{63   \textcolor{keywordflow}{if} (!data[key].is\_array()) \{}
+\DoxyCodeLine{64     \textcolor{keywordflow}{return} \{data[key]\};}
+\DoxyCodeLine{65   \}}
+\DoxyCodeLine{66   \textcolor{keywordflow}{return} data[key].get<std::vector<double>>();}
+\DoxyCodeLine{67 \}}
+\DoxyCodeLine{68 \textcolor{comment}{}}
+\DoxyCodeLine{69 \textcolor{comment}{/**}}
+\DoxyCodeLine{70 \textcolor{comment}{ * @brief Simulation parameters}}
+\DoxyCodeLine{71 \textcolor{comment}{ *}}
+\DoxyCodeLine{72 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{73 \textcolor{comment}{ */}}
+\DoxyCodeLine{74 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{75 \textcolor{keyword}{struct }\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters}{SimulationParameters}} \{}
+\DoxyCodeLine{76   \textcolor{comment}{// Negative value indicates this has not}}
+\DoxyCodeLine{77   \textcolor{comment}{// been read from config file yet.}}
+\DoxyCodeLine{78   T \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_abd045ece29245dc4a391d6a902480ccf}{sim\_time\_step\_size}};  \textcolor{comment}{///< Simulation time step size}}
+\DoxyCodeLine{79   T \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a1e1a9b83a0004c18a457c6f02f8a118b}{sim\_abs\_tol}};         \textcolor{comment}{///< Absolute tolerance for simulation}}
+\DoxyCodeLine{80 }
+\DoxyCodeLine{81   \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_af28351fd9dc5d206038404cb6c715dbc}{sim\_num\_cycles}};      \textcolor{comment}{///< Number of cardiac cycles to simulate}}
+\DoxyCodeLine{82   \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a0ff85d618232176da62376d4398aa561}{sim\_pts\_per\_cycle}};   \textcolor{comment}{///< Number of time steps per cardiac cycle}}
+\DoxyCodeLine{83   \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a40096ad02712674a0a9cdbc15975197e}{sim\_num\_time\_steps}};  \textcolor{comment}{///< Total number of time steps}}
+\DoxyCodeLine{84   \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a46cc0e4aecef3b6545d1fab854b51dd7}{sim\_nliter}};          \textcolor{comment}{///< Maximum number of non-\/linear iterations in time}\textcolor{comment}{}}
+\DoxyCodeLine{85 \textcolor{comment}{                           ///< integration}}
+\DoxyCodeLine{86 \textcolor{comment}{}  \textcolor{keywordtype}{int} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a4314cc80e76ff7501645457a78535fcd}{output\_interval}};     \textcolor{comment}{///< Interval of writing output}}
+\DoxyCodeLine{87 }
+\DoxyCodeLine{88   \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a42827b3f7d7ae08b920299dd63c62081}{sim\_steady\_initial}};  \textcolor{comment}{///< Start from steady solution}}
+\DoxyCodeLine{89   \textcolor{keywordtype}{bool}}
+\DoxyCodeLine{90       \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a78ed266a04faf74ff320e34148362b3c}{output\_variable\_based}};  \textcolor{comment}{///< Output variable based instead of vessel based}}
+\DoxyCodeLine{91   \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_adee48f55067b1c99c0047e942f6b1ac4}{output\_mean\_only}};      \textcolor{comment}{///< Output only the mean value}}
+\DoxyCodeLine{92   \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_ae824ec01c76bd17bf6a3566bc576569b}{output\_derivative}};     \textcolor{comment}{///< Output derivatives}}
+\DoxyCodeLine{93   \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_accdf6481623cd676c177bc5a0d74a21c}{output\_all\_cycles}};     \textcolor{comment}{///< Output all cardiac cycles}}
+\DoxyCodeLine{94 }
+\DoxyCodeLine{95   \textcolor{keywordtype}{bool} \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a3d5ea1025e2873860a3c1ae899d7e56a}{sim\_coupled}};  \textcolor{comment}{///< Running 0D simulation coupled with external solver}}
+\DoxyCodeLine{96   T \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_ae50609648e91552974f40f0d6605574a}{sim\_external\_step\_size}};  \textcolor{comment}{///< Step size of external solver if running}\textcolor{comment}{}}
+\DoxyCodeLine{97 \textcolor{comment}{                             ///< coupled}}
+\DoxyCodeLine{98 \textcolor{comment}{}\};}
+\DoxyCodeLine{99 \textcolor{comment}{}}
+\DoxyCodeLine{100 \textcolor{comment}{/**}}
+\DoxyCodeLine{101 \textcolor{comment}{ * @brief Load the simulation parameters from a json configuration}}
+\DoxyCodeLine{102 \textcolor{comment}{ *}}
+\DoxyCodeLine{103 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{104 \textcolor{comment}{ * @param config The json configuration}}
+\DoxyCodeLine{105 \textcolor{comment}{ * @return SimulationParameters<T> Simulation parameters read from configuration}}
+\DoxyCodeLine{106 \textcolor{comment}{ */}}
+\DoxyCodeLine{107 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{108 \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters}{SimulationParameters<T>}} \mbox{\hyperlink{namespace_i_o_add684109fb8487834e371cbe517a2582}{load\_simulation\_params}}(\textcolor{keyword}{const} nlohmann::json\& config) \{}
+\DoxyCodeLine{109   DEBUG\_MSG(\textcolor{stringliteral}{"{}Loading simulation parameters"{}});}
+\DoxyCodeLine{110   \mbox{\hyperlink{struct_i_o_1_1_simulation_parameters}{SimulationParameters<T>}} sim\_params;}
+\DoxyCodeLine{111   \textcolor{keyword}{const} \textcolor{keyword}{auto}\& sim\_config = config[\textcolor{stringliteral}{"{}simulation\_parameters"{}}];}
+\DoxyCodeLine{112   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a3d5ea1025e2873860a3c1ae899d7e56a}{sim\_coupled}} = sim\_config.value(\textcolor{stringliteral}{"{}coupled\_simulation"{}}, \textcolor{keyword}{false});}
+\DoxyCodeLine{113   \textcolor{keywordflow}{if} (!sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a3d5ea1025e2873860a3c1ae899d7e56a}{sim\_coupled}}) \{}
+\DoxyCodeLine{114     sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_af28351fd9dc5d206038404cb6c715dbc}{sim\_num\_cycles}} = sim\_config[\textcolor{stringliteral}{"{}number\_of\_cardiac\_cycles"{}}];}
+\DoxyCodeLine{115     sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a0ff85d618232176da62376d4398aa561}{sim\_pts\_per\_cycle}} =}
+\DoxyCodeLine{116         sim\_config[\textcolor{stringliteral}{"{}number\_of\_time\_pts\_per\_cardiac\_cycle"{}}];}
+\DoxyCodeLine{117     sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a40096ad02712674a0a9cdbc15975197e}{sim\_num\_time\_steps}} =}
+\DoxyCodeLine{118         (sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a0ff85d618232176da62376d4398aa561}{sim\_pts\_per\_cycle}} -\/ 1) * sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_af28351fd9dc5d206038404cb6c715dbc}{sim\_num\_cycles}} + 1;}
+\DoxyCodeLine{119     sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_ae50609648e91552974f40f0d6605574a}{sim\_external\_step\_size}} = 0.0;}
+\DoxyCodeLine{120   \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{121     sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_af28351fd9dc5d206038404cb6c715dbc}{sim\_num\_cycles}} = 1;}
+\DoxyCodeLine{122     sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a40096ad02712674a0a9cdbc15975197e}{sim\_num\_time\_steps}} = sim\_config[\textcolor{stringliteral}{"{}number\_of\_time\_pts"{}}];}
+\DoxyCodeLine{123     sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a0ff85d618232176da62376d4398aa561}{sim\_pts\_per\_cycle}} = sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a40096ad02712674a0a9cdbc15975197e}{sim\_num\_time\_steps}};}
+\DoxyCodeLine{124     sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_ae50609648e91552974f40f0d6605574a}{sim\_external\_step\_size}} =}
+\DoxyCodeLine{125         sim\_config.value(\textcolor{stringliteral}{"{}external\_step\_size"{}}, 0.1);}
+\DoxyCodeLine{126   \}}
+\DoxyCodeLine{127   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a1e1a9b83a0004c18a457c6f02f8a118b}{sim\_abs\_tol}} = sim\_config.value(\textcolor{stringliteral}{"{}absolute\_tolerance"{}}, 1e-\/8);}
+\DoxyCodeLine{128   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a46cc0e4aecef3b6545d1fab854b51dd7}{sim\_nliter}} = sim\_config.value(\textcolor{stringliteral}{"{}maximum\_nonlinear\_iterations"{}}, 30);}
+\DoxyCodeLine{129   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a42827b3f7d7ae08b920299dd63c62081}{sim\_steady\_initial}} = sim\_config.value(\textcolor{stringliteral}{"{}steady\_initial"{}}, \textcolor{keyword}{true});}
+\DoxyCodeLine{130   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a78ed266a04faf74ff320e34148362b3c}{output\_variable\_based}} =}
+\DoxyCodeLine{131       sim\_config.value(\textcolor{stringliteral}{"{}output\_variable\_based"{}}, \textcolor{keyword}{false});}
+\DoxyCodeLine{132   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_a4314cc80e76ff7501645457a78535fcd}{output\_interval}} = sim\_config.value(\textcolor{stringliteral}{"{}output\_interval"{}}, 1);}
+\DoxyCodeLine{133   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_adee48f55067b1c99c0047e942f6b1ac4}{output\_mean\_only}} = sim\_config.value(\textcolor{stringliteral}{"{}output\_mean\_only"{}}, \textcolor{keyword}{false});}
+\DoxyCodeLine{134   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_ae824ec01c76bd17bf6a3566bc576569b}{output\_derivative}} = sim\_config.value(\textcolor{stringliteral}{"{}output\_derivative"{}}, \textcolor{keyword}{false});}
+\DoxyCodeLine{135   sim\_params.\mbox{\hyperlink{struct_i_o_1_1_simulation_parameters_accdf6481623cd676c177bc5a0d74a21c}{output\_all\_cycles}} = sim\_config.value(\textcolor{stringliteral}{"{}output\_all\_cycles"{}}, \textcolor{keyword}{false});}
+\DoxyCodeLine{136   DEBUG\_MSG(\textcolor{stringliteral}{"{}Finished loading simulation parameters"{}});}
+\DoxyCodeLine{137   \textcolor{keywordflow}{return} sim\_params;}
+\DoxyCodeLine{138 \}}
+\DoxyCodeLine{139 \textcolor{comment}{}}
+\DoxyCodeLine{140 \textcolor{comment}{/**}}
+\DoxyCodeLine{141 \textcolor{comment}{ * @brief Load model from a configuration}}
+\DoxyCodeLine{142 \textcolor{comment}{ *}}
+\DoxyCodeLine{143 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{144 \textcolor{comment}{ * @param config The json configuration}}
+\DoxyCodeLine{145 \textcolor{comment}{ */}}
+\DoxyCodeLine{146 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{147 \textcolor{keywordtype}{void} \mbox{\hyperlink{namespace_i_o_aa43ec6d81b581e9bc734a254c7a43acf}{load\_simulation\_model}}(\textcolor{keyword}{const} nlohmann::json\& config,}
+\DoxyCodeLine{148                            \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}}\& model) \{}
+\DoxyCodeLine{149   DEBUG\_MSG(\textcolor{stringliteral}{"{}Loading model"{}});}
+\DoxyCodeLine{150 }
+\DoxyCodeLine{151   \textcolor{comment}{// Create list to store block connections while generating blocks}}
+\DoxyCodeLine{152   std::vector<std::tuple<std::string, std::string>> connections;}
+\DoxyCodeLine{153   \textcolor{comment}{// Create vessels}}
+\DoxyCodeLine{154   DEBUG\_MSG(\textcolor{stringliteral}{"{}Load vessels"{}});}
+\DoxyCodeLine{155   std::map<int, std::string> vessel\_id\_map;}
+\DoxyCodeLine{156   \textcolor{keyword}{const} \textcolor{keyword}{auto}\& vessels = config[\textcolor{stringliteral}{"{}vessels"{}}];}
+\DoxyCodeLine{157   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < vessels.size(); i++) \{}
+\DoxyCodeLine{158     \textcolor{keyword}{const} \textcolor{keyword}{auto}\& vessel\_config = vessels[i];}
+\DoxyCodeLine{159     \textcolor{keyword}{const} \textcolor{keyword}{auto}\& vessel\_values = vessel\_config[\textcolor{stringliteral}{"{}zero\_d\_element\_values"{}}];}
+\DoxyCodeLine{160     \textcolor{keyword}{const} std::string vessel\_name = vessel\_config[\textcolor{stringliteral}{"{}vessel\_name"{}}];}
+\DoxyCodeLine{161     vessel\_id\_map.insert(\{vessel\_config[\textcolor{stringliteral}{"{}vessel\_id"{}}], vessel\_name\});}
+\DoxyCodeLine{162     \textcolor{keywordflow}{if} (vessel\_config[\textcolor{stringliteral}{"{}zero\_d\_element\_type"{}}] == \textcolor{stringliteral}{"{}BloodVessel"{}}) \{}
+\DoxyCodeLine{163       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::BLOODVESSEL,}
+\DoxyCodeLine{164                       \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(vessel\_values[\textcolor{stringliteral}{"{}R\_poiseuille"{}}]),}
+\DoxyCodeLine{165                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(vessel\_values.value(\textcolor{stringliteral}{"{}C"{}}, 0.0)),}
+\DoxyCodeLine{166                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(vessel\_values.value(\textcolor{stringliteral}{"{}L"{}}, 0.0)),}
+\DoxyCodeLine{167                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(}
+\DoxyCodeLine{168                            vessel\_values.value(\textcolor{stringliteral}{"{}stenosis\_coefficient"{}}, 0.0))\},}
+\DoxyCodeLine{169                       vessel\_name);}
+\DoxyCodeLine{170       DEBUG\_MSG(\textcolor{stringliteral}{"{}Created vessel "{}} << vessel\_name);}
+\DoxyCodeLine{171     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{172       \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown vessel type"{}});}
+\DoxyCodeLine{173     \}}
+\DoxyCodeLine{174 }
+\DoxyCodeLine{175     \textcolor{comment}{// Read connected boundary conditions}}
+\DoxyCodeLine{176     \textcolor{keywordflow}{if} (vessel\_config.contains(\textcolor{stringliteral}{"{}boundary\_conditions"{}})) \{}
+\DoxyCodeLine{177       \textcolor{keyword}{const} \textcolor{keyword}{auto}\& vessel\_bc\_config = vessel\_config[\textcolor{stringliteral}{"{}boundary\_conditions"{}}];}
+\DoxyCodeLine{178       \textcolor{keywordflow}{if} (vessel\_bc\_config.contains(\textcolor{stringliteral}{"{}inlet"{}})) \{}
+\DoxyCodeLine{179         connections.push\_back(\{vessel\_bc\_config[\textcolor{stringliteral}{"{}inlet"{}}], vessel\_name\});}
+\DoxyCodeLine{180       \}}
+\DoxyCodeLine{181       \textcolor{keywordflow}{if} (vessel\_bc\_config.contains(\textcolor{stringliteral}{"{}outlet"{}})) \{}
+\DoxyCodeLine{182         connections.push\_back(\{vessel\_name, vessel\_bc\_config[\textcolor{stringliteral}{"{}outlet"{}}]\});}
+\DoxyCodeLine{183       \}}
+\DoxyCodeLine{184     \}}
+\DoxyCodeLine{185   \}}
+\DoxyCodeLine{186 }
+\DoxyCodeLine{187   \textcolor{comment}{// Create map for boundary conditions to boundary condition type}}
+\DoxyCodeLine{188   DEBUG\_MSG(\textcolor{stringliteral}{"{}Create BC name to BC type map"{}});}
+\DoxyCodeLine{189   \textcolor{keyword}{const} \textcolor{keyword}{auto}\& bc\_configs = config[\textcolor{stringliteral}{"{}boundary\_conditions"{}}];}
+\DoxyCodeLine{190   std::map<std::string, std::string> bc\_type\_map;}
+\DoxyCodeLine{191   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < bc\_configs.size(); i++) \{}
+\DoxyCodeLine{192     \textcolor{keyword}{const} \textcolor{keyword}{auto}\& bc\_config = bc\_configs[i];}
+\DoxyCodeLine{193     std::string bc\_name = bc\_config[\textcolor{stringliteral}{"{}bc\_name"{}}];}
+\DoxyCodeLine{194     std::string bc\_type = bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}];}
+\DoxyCodeLine{195     bc\_type\_map.insert(\{bc\_name, bc\_type\});}
+\DoxyCodeLine{196   \}}
+\DoxyCodeLine{197 }
+\DoxyCodeLine{198   \textcolor{comment}{// Create external coupling blocks}}
+\DoxyCodeLine{199   \textcolor{keywordflow}{if} (config.contains(\textcolor{stringliteral}{"{}external\_solver\_coupling\_blocks"{}})) \{}
+\DoxyCodeLine{200     DEBUG\_MSG(\textcolor{stringliteral}{"{}Create external coupling blocks"{}});}
+\DoxyCodeLine{201     \textcolor{keyword}{const} \textcolor{keyword}{auto}\& coupling\_configs = config[\textcolor{stringliteral}{"{}external\_solver\_coupling\_blocks"{}}];}
+\DoxyCodeLine{202     \textcolor{keywordflow}{for} (\textcolor{keyword}{const} \textcolor{keyword}{auto}\& coupling\_config : coupling\_configs) \{}
+\DoxyCodeLine{203       std::string coupling\_type = coupling\_config[\textcolor{stringliteral}{"{}type"{}}];}
+\DoxyCodeLine{204       std::string coupling\_name = coupling\_config[\textcolor{stringliteral}{"{}name"{}}];}
+\DoxyCodeLine{205       std::string coupling\_loc = coupling\_config[\textcolor{stringliteral}{"{}location"{}}];}
+\DoxyCodeLine{206       \textcolor{keywordtype}{bool} periodic = coupling\_config.value(\textcolor{stringliteral}{"{}periodic"{}}, \textcolor{keyword}{true});}
+\DoxyCodeLine{207       \textcolor{keyword}{const} \textcolor{keyword}{auto}\& coupling\_values = coupling\_config[\textcolor{stringliteral}{"{}values"{}}];}
+\DoxyCodeLine{208 }
+\DoxyCodeLine{209       \textcolor{comment}{// Create coupling block}}
+\DoxyCodeLine{210       \textcolor{keyword}{auto} t\_coupling = get\_double\_array(coupling\_values, \textcolor{stringliteral}{"{}t"{}}, \{0.0\});}
+\DoxyCodeLine{211 }
+\DoxyCodeLine{212       \textcolor{keywordflow}{if} (coupling\_type == \textcolor{stringliteral}{"{}FLOW"{}}) \{}
+\DoxyCodeLine{213         \textcolor{keyword}{auto} Q\_coupling = get\_double\_array(coupling\_values, \textcolor{stringliteral}{"{}Q"{}});}
+\DoxyCodeLine{214         model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::FLOWBC,}
+\DoxyCodeLine{215                         \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t\_coupling, Q\_coupling, periodic)\},}
+\DoxyCodeLine{216                         coupling\_name);}
+\DoxyCodeLine{217       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (coupling\_type == \textcolor{stringliteral}{"{}PRESSURE"{}}) \{}
+\DoxyCodeLine{218         \textcolor{keyword}{auto} P\_coupling = get\_double\_array(coupling\_values, \textcolor{stringliteral}{"{}P"{}});}
+\DoxyCodeLine{219         model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::PRESSUREBC,}
+\DoxyCodeLine{220                         \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t\_coupling, P\_coupling, periodic)\},}
+\DoxyCodeLine{221                         coupling\_name);}
+\DoxyCodeLine{222       \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{223         \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{224             \textcolor{stringliteral}{"{}Error. Flowsolver coupling block types should be FLOW or "{}}}
+\DoxyCodeLine{225             \textcolor{stringliteral}{"{}PRESSURE."{}});}
+\DoxyCodeLine{226       \}}
+\DoxyCodeLine{227       DEBUG\_MSG(\textcolor{stringliteral}{"{}Created coupling block "{}} << coupling\_name);}
+\DoxyCodeLine{228 }
+\DoxyCodeLine{229       \textcolor{comment}{// Determine the type of connected block}}
+\DoxyCodeLine{230       std::string connected\_block = coupling\_config[\textcolor{stringliteral}{"{}connected\_block"{}}];}
+\DoxyCodeLine{231       std::string connected\_type;}
+\DoxyCodeLine{232       \textcolor{keywordtype}{int} found\_block = 0;}
+\DoxyCodeLine{233       \textcolor{keywordflow}{if} (connected\_block == \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary"{}}) \{}
+\DoxyCodeLine{234         connected\_type = \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary"{}};}
+\DoxyCodeLine{235         found\_block = 1;}
+\DoxyCodeLine{236       \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{237         \textcolor{keywordflow}{try} \{}
+\DoxyCodeLine{238           connected\_type = bc\_type\_map.at(connected\_block);}
+\DoxyCodeLine{239           found\_block = 1;}
+\DoxyCodeLine{240         \} \textcolor{keywordflow}{catch} (...) \{}
+\DoxyCodeLine{241         \}}
+\DoxyCodeLine{242         \textcolor{keywordflow}{if} (found\_block == 0) \{}
+\DoxyCodeLine{243           \textcolor{comment}{// Search for connected\_block in the list of vessel names}}
+\DoxyCodeLine{244           \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \textcolor{keyword}{const} vessel : vessel\_id\_map) \{}
+\DoxyCodeLine{245             \textcolor{keywordflow}{if} (connected\_block == vessel.second) \{}
+\DoxyCodeLine{246               connected\_type = \textcolor{stringliteral}{"{}BloodVessel"{}};}
+\DoxyCodeLine{247               found\_block = 1;}
+\DoxyCodeLine{248               \textcolor{keywordflow}{break};}
+\DoxyCodeLine{249             \}}
+\DoxyCodeLine{250           \}}
+\DoxyCodeLine{251         \}}
+\DoxyCodeLine{252         \textcolor{keywordflow}{if} (found\_block == 0) \{}
+\DoxyCodeLine{253           std::cout << \textcolor{stringliteral}{"{}Error! Could not connected type for block: "{}}}
+\DoxyCodeLine{254                     << connected\_block << std::endl;}
+\DoxyCodeLine{255           \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"{}Terminating."{}});}
+\DoxyCodeLine{256         \}}
+\DoxyCodeLine{257       \}  \textcolor{comment}{// connected\_block != "{}ClosedLoopHeartAndPulmonary"{}}}
+\DoxyCodeLine{258       \textcolor{comment}{// Create connections}}
+\DoxyCodeLine{259       \textcolor{keywordflow}{if} (coupling\_loc == \textcolor{stringliteral}{"{}inlet"{}}) \{}
+\DoxyCodeLine{260         std::vector<std::string> possible\_types = \{}
+\DoxyCodeLine{261             \textcolor{stringliteral}{"{}RESISTANCE"{}},    \textcolor{stringliteral}{"{}RCR"{}},      \textcolor{stringliteral}{"{}ClosedLoopRCR"{}},}
+\DoxyCodeLine{262             \textcolor{stringliteral}{"{}SimplifiedRCR"{}}, \textcolor{stringliteral}{"{}CORONARY"{}}, \textcolor{stringliteral}{"{}ClosedLoopCoronary"{}},}
+\DoxyCodeLine{263             \textcolor{stringliteral}{"{}BloodVessel"{}}\};}
+\DoxyCodeLine{264         \textcolor{keywordflow}{if} (std::find(std::begin(possible\_types), std::end(possible\_types),}
+\DoxyCodeLine{265                       connected\_type) == std::end(possible\_types)) \{}
+\DoxyCodeLine{266           \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{267               \textcolor{stringliteral}{"{}Error: The specified connection type for inlet "{}}}
+\DoxyCodeLine{268               \textcolor{stringliteral}{"{}external\_coupling\_block is invalid."{}});}
+\DoxyCodeLine{269         \}}
+\DoxyCodeLine{270         connections.push\_back(\{coupling\_name, connected\_block\});}
+\DoxyCodeLine{271         DEBUG\_MSG(\textcolor{stringliteral}{"{}Created coupling block connection: "{}} << coupling\_name << \textcolor{stringliteral}{"{}-\/>"{}}}
+\DoxyCodeLine{272                                                         << connected\_block);}
+\DoxyCodeLine{273       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (coupling\_loc == \textcolor{stringliteral}{"{}outlet"{}}) \{}
+\DoxyCodeLine{274         std::vector<std::string> possible\_types = \{}
+\DoxyCodeLine{275             \textcolor{stringliteral}{"{}ClosedLoopRCR"{}}, \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary"{}}, \textcolor{stringliteral}{"{}BloodVessel"{}}\};}
+\DoxyCodeLine{276         \textcolor{keywordflow}{if} (std::find(std::begin(possible\_types), std::end(possible\_types),}
+\DoxyCodeLine{277                       connected\_type) == std::end(possible\_types)) \{}
+\DoxyCodeLine{278           \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{279               \textcolor{stringliteral}{"{}Error: The specified connection type for outlet "{}}}
+\DoxyCodeLine{280               \textcolor{stringliteral}{"{}external\_coupling\_block is invalid."{}});}
+\DoxyCodeLine{281         \}}
+\DoxyCodeLine{282         \textcolor{comment}{// Add connection only for closedLoopRCR and BloodVessel. Connection to}}
+\DoxyCodeLine{283         \textcolor{comment}{// ClosedLoopHeartAndPulmonary will be handled in}}
+\DoxyCodeLine{284         \textcolor{comment}{// ClosedLoopHeartAndPulmonary creation.}}
+\DoxyCodeLine{285         \textcolor{keywordflow}{if} ((connected\_type == \textcolor{stringliteral}{"{}ClosedLoopRCR"{}}) ||}
+\DoxyCodeLine{286             (connected\_type == \textcolor{stringliteral}{"{}BloodVessel"{}})) \{}
+\DoxyCodeLine{287           connections.push\_back(\{connected\_block, coupling\_name\});}
+\DoxyCodeLine{288           DEBUG\_MSG(\textcolor{stringliteral}{"{}Created coupling block connection: "{}}}
+\DoxyCodeLine{289                     << connected\_block << \textcolor{stringliteral}{"{}-\/> "{}} << coupling\_name);}
+\DoxyCodeLine{290         \}  \textcolor{comment}{// connected\_type == "{}ClosedLoopRCR"{}}}
+\DoxyCodeLine{291       \}    \textcolor{comment}{// coupling\_loc}}
+\DoxyCodeLine{292     \}      \textcolor{comment}{// for (size\_t i = 0; i < coupling\_configs.length(); i++)}}
+\DoxyCodeLine{293   \}}
+\DoxyCodeLine{294 }
+\DoxyCodeLine{295   \textcolor{comment}{// Create boundary conditions}}
+\DoxyCodeLine{296   std::vector<std::string> closed\_loop\_bcs;}
+\DoxyCodeLine{297   DEBUG\_MSG(\textcolor{stringliteral}{"{}Create boundary conditions"{}});}
+\DoxyCodeLine{298   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < bc\_configs.size(); i++) \{}
+\DoxyCodeLine{299     \textcolor{keyword}{const} \textcolor{keyword}{auto}\& bc\_config = bc\_configs[i];}
+\DoxyCodeLine{300     std::string bc\_type = bc\_config[\textcolor{stringliteral}{"{}bc\_type"{}}];}
+\DoxyCodeLine{301     std::string bc\_name = bc\_config[\textcolor{stringliteral}{"{}bc\_name"{}}];}
+\DoxyCodeLine{302     \textcolor{keyword}{const} \textcolor{keyword}{auto}\& bc\_values = bc\_config[\textcolor{stringliteral}{"{}bc\_values"{}}];}
+\DoxyCodeLine{303 }
+\DoxyCodeLine{304     \textcolor{keyword}{auto} t = get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}t"{}}, \{0.0\});}
+\DoxyCodeLine{305     \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}RCR"{}}) \{}
+\DoxyCodeLine{306       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::WINDKESSELBC,}
+\DoxyCodeLine{307                       \{}
+\DoxyCodeLine{308                           model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Rp"{}}]),}
+\DoxyCodeLine{309                           model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}C"{}}]),}
+\DoxyCodeLine{310                           model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Rd"{}}]),}
+\DoxyCodeLine{311                           model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Pd"{}}]),}
+\DoxyCodeLine{312                       \},}
+\DoxyCodeLine{313                       bc\_name);}
+\DoxyCodeLine{314     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}ClosedLoopRCR"{}}) \{}
+\DoxyCodeLine{315       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::CLOSEDLOOPRCRBC,}
+\DoxyCodeLine{316                       \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Rp"{}}]),}
+\DoxyCodeLine{317                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}C"{}}]),}
+\DoxyCodeLine{318                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Rd"{}}])\},}
+\DoxyCodeLine{319                       bc\_name);}
+\DoxyCodeLine{320       \textcolor{keywordflow}{if} (bc\_values[\textcolor{stringliteral}{"{}closed\_loop\_outlet"{}}] == \textcolor{keyword}{true}) \{}
+\DoxyCodeLine{321         closed\_loop\_bcs.push\_back(bc\_name);}
+\DoxyCodeLine{322       \}}
+\DoxyCodeLine{323 }
+\DoxyCodeLine{324     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}FLOW"{}}) \{}
+\DoxyCodeLine{325       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(}
+\DoxyCodeLine{326           MODEL::BlockType::FLOWBC,}
+\DoxyCodeLine{327           \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}Q"{}}))\}, bc\_name);}
+\DoxyCodeLine{328 }
+\DoxyCodeLine{329     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}RESISTANCE"{}}) \{}
+\DoxyCodeLine{330       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(}
+\DoxyCodeLine{331           MODEL::BlockType::RESISTANCEBC,}
+\DoxyCodeLine{332           \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}R"{}})),}
+\DoxyCodeLine{333            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}Pd"{}}))\},}
+\DoxyCodeLine{334           bc\_name);}
+\DoxyCodeLine{335 }
+\DoxyCodeLine{336     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}PRESSURE"{}}) \{}
+\DoxyCodeLine{337       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(}
+\DoxyCodeLine{338           MODEL::BlockType::PRESSUREBC,}
+\DoxyCodeLine{339           \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}P"{}}))\}, bc\_name);}
+\DoxyCodeLine{340 }
+\DoxyCodeLine{341     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}CORONARY"{}}) \{}
+\DoxyCodeLine{342       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(}
+\DoxyCodeLine{343           MODEL::BlockType::OPENLOOPCORONARYBC,}
+\DoxyCodeLine{344           \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}Ra1"{}})),}
+\DoxyCodeLine{345            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}Ra2"{}})),}
+\DoxyCodeLine{346            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}Rv1"{}})),}
+\DoxyCodeLine{347            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}Ca"{}})),}
+\DoxyCodeLine{348            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}Cc"{}})),}
+\DoxyCodeLine{349            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}Pim"{}})),}
+\DoxyCodeLine{350            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(t, get\_double\_array(bc\_values, \textcolor{stringliteral}{"{}P\_v"{}}))\},}
+\DoxyCodeLine{351           bc\_name);}
+\DoxyCodeLine{352 }
+\DoxyCodeLine{353     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}ClosedLoopCoronary"{}}) \{}
+\DoxyCodeLine{354       std::string side = bc\_values[\textcolor{stringliteral}{"{}side"{}}];}
+\DoxyCodeLine{355       \mbox{\hyperlink{namespace_m_o_d_e_l_abfc4730d81d2da4910968e593aec2fe3}{MODEL::BlockType}} block\_type;}
+\DoxyCodeLine{356       \textcolor{keywordflow}{if} (side == \textcolor{stringliteral}{"{}left"{}}) \{}
+\DoxyCodeLine{357         block\_type = MODEL::BlockType::CLOSEDLOOPCORONARYLEFTBC;}
+\DoxyCodeLine{358       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (side == \textcolor{stringliteral}{"{}right"{}}) \{}
+\DoxyCodeLine{359         block\_type = MODEL::BlockType::CLOSEDLOOPCORONARYRIGHTBC;}
+\DoxyCodeLine{360       \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{361         \textcolor{keywordflow}{throw} std::runtime\_error(\textcolor{stringliteral}{"{}Invalid side for ClosedLoopCoronary"{}});}
+\DoxyCodeLine{362       \}}
+\DoxyCodeLine{363       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(block\_type,}
+\DoxyCodeLine{364                       \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Ra"{}}]),}
+\DoxyCodeLine{365                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Ram"{}}]),}
+\DoxyCodeLine{366                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Rv"{}}]),}
+\DoxyCodeLine{367                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Ca"{}}]),}
+\DoxyCodeLine{368                        model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(bc\_values[\textcolor{stringliteral}{"{}Cim"{}}])\},}
+\DoxyCodeLine{369                       bc\_name);}
+\DoxyCodeLine{370       closed\_loop\_bcs.push\_back(bc\_name);}
+\DoxyCodeLine{371 }
+\DoxyCodeLine{372     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{373       \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown boundary condition type"{}});}
+\DoxyCodeLine{374     \}}
+\DoxyCodeLine{375     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
+\DoxyCodeLine{376   \}}
 \DoxyCodeLine{377 }
-\DoxyCodeLine{378       \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter}} q\_param(t, Q);}
-\DoxyCodeLine{379       \textcolor{keywordflow}{if} ((q\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_aee6221393da44b0e6279986782cb7c9a}{isconstant}} == \textcolor{keyword}{false}) \&\& (q\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a42597c37d10af47c080660a6677e0b7a}{isperiodic}} == \textcolor{keyword}{true})) \{}
-\DoxyCodeLine{380         \textcolor{keywordflow}{if} ((sim\_cardiac\_cycle\_period > 0.0) \&\&}
-\DoxyCodeLine{381             (q\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}} != sim\_cardiac\_cycle\_period)) \{}
-\DoxyCodeLine{382           \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{383               \textcolor{stringliteral}{"{}Inconsistent cardiac cycle period defined in "{}}}
-\DoxyCodeLine{384               \textcolor{stringliteral}{"{}TimeDependentParameter"{}});}
-\DoxyCodeLine{385         \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{386           sim\_cardiac\_cycle\_period = q\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}};}
-\DoxyCodeLine{387         \}}
-\DoxyCodeLine{388       \}}
-\DoxyCodeLine{389       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_flow_reference_b_c}{MODEL::FlowReferenceBC<T>}}(}
-\DoxyCodeLine{390           q\_param, \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name)));}
-\DoxyCodeLine{391       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{392           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name), block\_count\});}
-\DoxyCodeLine{393 }
-\DoxyCodeLine{394     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}RESISTANCE"{}}) \{}
-\DoxyCodeLine{395       \textcolor{keyword}{auto} R = bc\_values.get\_double\_array(\textcolor{stringliteral}{"{}R"{}});}
-\DoxyCodeLine{396       \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter}} r\_param(t, R);}
-\DoxyCodeLine{397 }
-\DoxyCodeLine{398       \textcolor{keyword}{auto} Pd = bc\_values.get\_double\_array(\textcolor{stringliteral}{"{}Pd"{}});}
-\DoxyCodeLine{399       \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter}} pd\_param(t, Pd);}
-\DoxyCodeLine{400       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistance_b_c}{MODEL::ResistanceBC<T>}}(}
-\DoxyCodeLine{401           r\_param, pd\_param, \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name)));}
-\DoxyCodeLine{402       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{403           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name), block\_count\});}
-\DoxyCodeLine{404     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}PRESSURE"{}}) \{}
-\DoxyCodeLine{405       \textcolor{keyword}{auto} P = bc\_values.get\_double\_array(\textcolor{stringliteral}{"{}P"{}});}
-\DoxyCodeLine{406       \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter}} p\_param(t, P);}
-\DoxyCodeLine{407       \textcolor{keywordflow}{if} ((p\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_aee6221393da44b0e6279986782cb7c9a}{isconstant}} == \textcolor{keyword}{false}) \&\& (p\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a42597c37d10af47c080660a6677e0b7a}{isperiodic}} == \textcolor{keyword}{true})) \{}
-\DoxyCodeLine{408         \textcolor{keywordflow}{if} ((sim\_cardiac\_cycle\_period > 0.0) \&\&}
-\DoxyCodeLine{409             (p\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}} != sim\_cardiac\_cycle\_period)) \{}
-\DoxyCodeLine{410           \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{411               \textcolor{stringliteral}{"{}Inconsistent cardiac cycle period defined in "{}}}
-\DoxyCodeLine{412               \textcolor{stringliteral}{"{}TimeDependentParameter"{}});}
-\DoxyCodeLine{413         \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{414           sim\_cardiac\_cycle\_period = p\_param.\mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter_a2d104c267b7ac6a0ed71b05acd1cb36c}{cycle\_period}};}
-\DoxyCodeLine{415         \}}
-\DoxyCodeLine{416       \}}
-\DoxyCodeLine{417       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_pressure_reference_b_c}{MODEL::PressureReferenceBC<T>}}(}
-\DoxyCodeLine{418           p\_param, \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name)));}
-\DoxyCodeLine{419       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{420           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name), block\_count\});}
-\DoxyCodeLine{421     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}CORONARY"{}}) \{}
-\DoxyCodeLine{422       T Ra = bc\_values.get\_double(\textcolor{stringliteral}{"{}Ra1"{}});}
-\DoxyCodeLine{423       T Ram = bc\_values.get\_double(\textcolor{stringliteral}{"{}Ra2"{}});}
-\DoxyCodeLine{424       T Rv = bc\_values.get\_double(\textcolor{stringliteral}{"{}Rv1"{}});}
-\DoxyCodeLine{425       T Ca = bc\_values.get\_double(\textcolor{stringliteral}{"{}Ca"{}});}
-\DoxyCodeLine{426       T Cim = bc\_values.get\_double(\textcolor{stringliteral}{"{}Cc"{}});}
-\DoxyCodeLine{427 }
-\DoxyCodeLine{428       \textcolor{keyword}{auto} Pim = bc\_values.get\_double\_array(\textcolor{stringliteral}{"{}Pim"{}});}
-\DoxyCodeLine{429       \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter}} pim\_param(t, Pim);}
-\DoxyCodeLine{430       \textcolor{keyword}{auto} P\_v = bc\_values.get\_double\_array(\textcolor{stringliteral}{"{}P\_v"{}});}
-\DoxyCodeLine{431       \mbox{\hyperlink{class_m_o_d_e_l_1_1_time_dependent_parameter}{MODEL::TimeDependentParameter}} pv\_param(t, P\_v);}
-\DoxyCodeLine{432 }
-\DoxyCodeLine{433       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_open_loop_coronary_b_c}{MODEL::OpenLoopCoronaryBC<T>}}(}
-\DoxyCodeLine{434           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim, pim\_param, pv\_param,}
-\DoxyCodeLine{435           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name)));}
-\DoxyCodeLine{436       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{437           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name), block\_count\});}
-\DoxyCodeLine{438     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (bc\_type == \textcolor{stringliteral}{"{}ClosedLoopCoronary"{}}) \{}
-\DoxyCodeLine{439       \textcolor{keyword}{auto} Ra = bc\_values.get\_double(\textcolor{stringliteral}{"{}Ra"{}});}
-\DoxyCodeLine{440       \textcolor{keyword}{auto} Ram = bc\_values.get\_double(\textcolor{stringliteral}{"{}Ram"{}});}
-\DoxyCodeLine{441       \textcolor{keyword}{auto} Rv = bc\_values.get\_double(\textcolor{stringliteral}{"{}Rv"{}});}
-\DoxyCodeLine{442       \textcolor{keyword}{auto} Ca = bc\_values.get\_double(\textcolor{stringliteral}{"{}Ca"{}});}
-\DoxyCodeLine{443       \textcolor{keyword}{auto} Cim = bc\_values.get\_double(\textcolor{stringliteral}{"{}Cim"{}});}
-\DoxyCodeLine{444       \textcolor{keyword}{auto} side = bc\_values.get\_string(\textcolor{stringliteral}{"{}side"{}});}
-\DoxyCodeLine{445       closed\_loop\_bcs.push\_back(bc\_name);}
-\DoxyCodeLine{446       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_coronary_b_c}{MODEL::ClosedLoopCoronaryBC<T>}}(}
-\DoxyCodeLine{447           Ra = Ra, Ram = Ram, Rv = Rv, Ca = Ca, Cim = Cim,}
-\DoxyCodeLine{448           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(side), \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name)));}
-\DoxyCodeLine{449       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{450           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(bc\_name), block\_count\});}
-\DoxyCodeLine{451     \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{452       \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown boundary condition type"{}});}
-\DoxyCodeLine{453     \}}
-\DoxyCodeLine{454     block\_count++;}
-\DoxyCodeLine{455     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created boundary condition "{}} << bc\_name);}
-\DoxyCodeLine{456   \}}
-\DoxyCodeLine{457 }
-\DoxyCodeLine{458   \textcolor{comment}{// Create junctions}}
-\DoxyCodeLine{459   \textcolor{keyword}{auto} junctions = handler[\textcolor{stringliteral}{"{}junctions"{}}];}
-\DoxyCodeLine{460   \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < junctions.length(); i++) \{}
-\DoxyCodeLine{461     \textcolor{keyword}{auto} junction\_config = junctions[i];}
-\DoxyCodeLine{462     \textcolor{keyword}{auto} j\_type = junction\_config.\mbox{\hyperlink{class_i_o_1_1_json_handler_ad876611f56eea5354d1f535d83068d2b}{get\_string}}(\textcolor{stringliteral}{"{}junction\_type"{}});}
-\DoxyCodeLine{463     \textcolor{keyword}{auto} junction\_name = junction\_config.get\_string(\textcolor{stringliteral}{"{}junction\_name"{}});}
-\DoxyCodeLine{464     \textcolor{keywordflow}{if} ((j\_type == \textcolor{stringliteral}{"{}NORMAL\_JUNCTION"{}}) || (j\_type == \textcolor{stringliteral}{"{}internal\_junction"{}})) \{}
-\DoxyCodeLine{465       model-\/>blocks.push\_back(}
-\DoxyCodeLine{466           \textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL::Junction<T>}}(\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_name)));}
-\DoxyCodeLine{467       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{468           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_name), block\_count\});}
-\DoxyCodeLine{469     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (j\_type == \textcolor{stringliteral}{"{}resistive\_junction"{}}) \{}
-\DoxyCodeLine{470       \textcolor{keyword}{auto} junction\_values = junction\_config[\textcolor{stringliteral}{"{}junction\_values"{}}];}
-\DoxyCodeLine{471       \textcolor{keyword}{auto} R = junction\_values.get\_double\_array(\textcolor{stringliteral}{"{}R"{}});}
-\DoxyCodeLine{472       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_resistive_junction}{MODEL::ResistiveJunction<T>}}(}
-\DoxyCodeLine{473           R, \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_name)));}
-\DoxyCodeLine{474       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{475           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_name), block\_count\});}
-\DoxyCodeLine{476     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (j\_type == \textcolor{stringliteral}{"{}BloodVesselJunction"{}}) \{}
-\DoxyCodeLine{477       \textcolor{keyword}{auto} junction\_values = junction\_config[\textcolor{stringliteral}{"{}junction\_values"{}}];}
-\DoxyCodeLine{478       \textcolor{keyword}{auto} R = junction\_values.get\_double\_array(\textcolor{stringliteral}{"{}R\_poiseuille"{}});}
-\DoxyCodeLine{479       \textcolor{keyword}{auto} C = junction\_values.get\_double\_array(\textcolor{stringliteral}{"{}C"{}});}
-\DoxyCodeLine{480       \textcolor{keyword}{auto} L = junction\_values.get\_double\_array(\textcolor{stringliteral}{"{}L"{}});}
-\DoxyCodeLine{481       \textcolor{keyword}{auto} stenosis\_coefficient =}
-\DoxyCodeLine{482           junction\_values.get\_double\_array(\textcolor{stringliteral}{"{}stenosis\_coefficient"{}});}
-\DoxyCodeLine{483       model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL::BloodVesselJunction<T>}}(}
-\DoxyCodeLine{484           R, C, L, stenosis\_coefficient,}
-\DoxyCodeLine{485           \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_name)));}
-\DoxyCodeLine{486       model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{487           \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(junction\_name), block\_count\});}
-\DoxyCodeLine{488     \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{489       \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown junction type"{}});}
-\DoxyCodeLine{490     \}}
-\DoxyCodeLine{491     \textcolor{comment}{// Check for connections to inlet and outlet vessels and append to}}
-\DoxyCodeLine{492     \textcolor{comment}{// connections list}}
-\DoxyCodeLine{493     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} vessel\_id : junction\_config.get\_int\_array(\textcolor{stringliteral}{"{}inlet\_vessels"{}})) \{}
-\DoxyCodeLine{494       connections.push\_back(\{vessel\_id\_map[vessel\_id], junction\_name\});}
-\DoxyCodeLine{495     \}}
-\DoxyCodeLine{496     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} vessel\_id : junction\_config.get\_int\_array(\textcolor{stringliteral}{"{}outlet\_vessels"{}})) \{}
-\DoxyCodeLine{497       connections.push\_back(\{junction\_name, vessel\_id\_map[vessel\_id]\});}
-\DoxyCodeLine{498     \}}
-\DoxyCodeLine{499     block\_count++;}
-\DoxyCodeLine{500     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created junction "{}} << junction\_name);}
-\DoxyCodeLine{501   \}}
-\DoxyCodeLine{502 }
-\DoxyCodeLine{503   \textcolor{comment}{// Create closed-\/loop blocks}}
-\DoxyCodeLine{504   \textcolor{keywordtype}{bool} heartpulmonary\_block\_present =}
-\DoxyCodeLine{505       \textcolor{keyword}{false};  \textcolor{comment}{///< Flag to check if heart block is present (requires different}\textcolor{comment}{}}
-\DoxyCodeLine{506 \textcolor{comment}{              ///< handling)}}
-\DoxyCodeLine{507 \textcolor{comment}{}  \textcolor{keywordflow}{if} (handler.\mbox{\hyperlink{class_i_o_1_1_json_handler_a68342c5a1a5ba36ede8613843441c726}{has\_key}}(\textcolor{stringliteral}{"{}closed\_loop\_blocks"{}})) \{}
-\DoxyCodeLine{508     \textcolor{keyword}{auto} closed\_loop\_configs = handler[\textcolor{stringliteral}{"{}closed\_loop\_blocks"{}}];}
-\DoxyCodeLine{509     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < closed\_loop\_configs.length(); i++) \{}
-\DoxyCodeLine{510       \textcolor{keyword}{auto} closed\_loop\_config = closed\_loop\_configs[i];}
-\DoxyCodeLine{511       \textcolor{keyword}{auto} closed\_loop\_type = closed\_loop\_config.\mbox{\hyperlink{class_i_o_1_1_json_handler_ad876611f56eea5354d1f535d83068d2b}{get\_string}}(\textcolor{stringliteral}{"{}closed\_loop\_type"{}});}
-\DoxyCodeLine{512       \textcolor{keywordflow}{if} (closed\_loop\_type == \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary"{}}) \{}
-\DoxyCodeLine{513         \textcolor{keywordflow}{if} (heartpulmonary\_block\_present == \textcolor{keyword}{false}) \{}
-\DoxyCodeLine{514           heartpulmonary\_block\_present = \textcolor{keyword}{true};}
-\DoxyCodeLine{515           \textcolor{keywordflow}{if} (sim\_steady\_initial == \textcolor{keyword}{true}) \{}
-\DoxyCodeLine{516             std::runtime\_error(}
-\DoxyCodeLine{517                 \textcolor{stringliteral}{"{}ERROR: Steady initial condition is not compatible with "{}}}
-\DoxyCodeLine{518                 \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary block."{}});}
-\DoxyCodeLine{519           \}}
-\DoxyCodeLine{520           sim\_steady\_initial = \textcolor{keyword}{false};}
-\DoxyCodeLine{521           std::string\_view heartpulmonary\_name = \textcolor{stringliteral}{"{}CLH"{}};}
-\DoxyCodeLine{522           T cycle\_period =}
-\DoxyCodeLine{523               closed\_loop\_config.get\_double(\textcolor{stringliteral}{"{}cardiac\_cycle\_period"{}});}
-\DoxyCodeLine{524           \textcolor{keywordflow}{if} ((sim\_cardiac\_cycle\_period > 0.0) \&\&}
-\DoxyCodeLine{525               (cycle\_period != sim\_cardiac\_cycle\_period)) \{}
-\DoxyCodeLine{526             \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{527                 \textcolor{stringliteral}{"{}Inconsistent cardiac cycle period defined in "{}}}
-\DoxyCodeLine{528                 \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary."{}});}
-\DoxyCodeLine{529           \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{530             sim\_cardiac\_cycle\_period = cycle\_period;}
-\DoxyCodeLine{531           \}}
-\DoxyCodeLine{532           \textcolor{keyword}{auto} heart\_params = closed\_loop\_config[\textcolor{stringliteral}{"{}parameters"{}}];}
-\DoxyCodeLine{533           \textcolor{comment}{// Convert to std::map to keep model blocks independent of simdjson}}
-\DoxyCodeLine{534           std::map<std::string, T> param\_values;}
-\DoxyCodeLine{535           param\_values.insert(}
-\DoxyCodeLine{536               std::make\_pair(\textcolor{stringliteral}{"{}Tsa"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Tsa"{}})));}
-\DoxyCodeLine{537           param\_values.insert(}
-\DoxyCodeLine{538               std::make\_pair(\textcolor{stringliteral}{"{}tpwave"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}tpwave"{}})));}
-\DoxyCodeLine{539           param\_values.insert(}
-\DoxyCodeLine{540               std::make\_pair(\textcolor{stringliteral}{"{}Erv\_s"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Erv\_s"{}})));}
-\DoxyCodeLine{541           param\_values.insert(}
-\DoxyCodeLine{542               std::make\_pair(\textcolor{stringliteral}{"{}Elv\_s"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Elv\_s"{}})));}
-\DoxyCodeLine{543           param\_values.insert(}
-\DoxyCodeLine{544               std::make\_pair(\textcolor{stringliteral}{"{}iml"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}iml"{}})));}
-\DoxyCodeLine{545           param\_values.insert(}
-\DoxyCodeLine{546               std::make\_pair(\textcolor{stringliteral}{"{}imr"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}imr"{}})));}
-\DoxyCodeLine{547           param\_values.insert(}
-\DoxyCodeLine{548               std::make\_pair(\textcolor{stringliteral}{"{}Lra\_v"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Lra\_v"{}})));}
-\DoxyCodeLine{549           param\_values.insert(}
-\DoxyCodeLine{550               std::make\_pair(\textcolor{stringliteral}{"{}Rra\_v"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Rra\_v"{}})));}
-\DoxyCodeLine{551           param\_values.insert(}
-\DoxyCodeLine{552               std::make\_pair(\textcolor{stringliteral}{"{}Lrv\_a"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Lrv\_a"{}})));}
-\DoxyCodeLine{553           param\_values.insert(}
-\DoxyCodeLine{554               std::make\_pair(\textcolor{stringliteral}{"{}Rrv\_a"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Rrv\_a"{}})));}
-\DoxyCodeLine{555           param\_values.insert(}
-\DoxyCodeLine{556               std::make\_pair(\textcolor{stringliteral}{"{}Lla\_v"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Lla\_v"{}})));}
-\DoxyCodeLine{557           param\_values.insert(}
-\DoxyCodeLine{558               std::make\_pair(\textcolor{stringliteral}{"{}Rla\_v"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Rla\_v"{}})));}
-\DoxyCodeLine{559           param\_values.insert(}
-\DoxyCodeLine{560               std::make\_pair(\textcolor{stringliteral}{"{}Llv\_a"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Llv\_a"{}})));}
-\DoxyCodeLine{561           param\_values.insert(}
-\DoxyCodeLine{562               std::make\_pair(\textcolor{stringliteral}{"{}Rlv\_ao"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Rlv\_ao"{}})));}
-\DoxyCodeLine{563           param\_values.insert(}
-\DoxyCodeLine{564               std::make\_pair(\textcolor{stringliteral}{"{}Vrv\_u"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Vrv\_u"{}})));}
-\DoxyCodeLine{565           param\_values.insert(}
-\DoxyCodeLine{566               std::make\_pair(\textcolor{stringliteral}{"{}Vlv\_u"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Vlv\_u"{}})));}
-\DoxyCodeLine{567           param\_values.insert(}
-\DoxyCodeLine{568               std::make\_pair(\textcolor{stringliteral}{"{}Rpd"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Rpd"{}})));}
-\DoxyCodeLine{569           param\_values.insert(}
-\DoxyCodeLine{570               std::make\_pair(\textcolor{stringliteral}{"{}Cp"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Cp"{}})));}
-\DoxyCodeLine{571           param\_values.insert(}
-\DoxyCodeLine{572               std::make\_pair(\textcolor{stringliteral}{"{}Cpa"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Cpa"{}})));}
-\DoxyCodeLine{573           param\_values.insert(}
-\DoxyCodeLine{574               std::make\_pair(\textcolor{stringliteral}{"{}Kxp\_ra"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Kxp\_ra"{}})));}
-\DoxyCodeLine{575           param\_values.insert(}
-\DoxyCodeLine{576               std::make\_pair(\textcolor{stringliteral}{"{}Kxv\_ra"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Kxv\_ra"{}})));}
-\DoxyCodeLine{577           param\_values.insert(}
-\DoxyCodeLine{578               std::make\_pair(\textcolor{stringliteral}{"{}Kxp\_la"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Kxp\_la"{}})));}
-\DoxyCodeLine{579           param\_values.insert(}
-\DoxyCodeLine{580               std::make\_pair(\textcolor{stringliteral}{"{}Kxv\_la"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Kxv\_la"{}})));}
-\DoxyCodeLine{581           param\_values.insert(}
-\DoxyCodeLine{582               std::make\_pair(\textcolor{stringliteral}{"{}Emax\_ra"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Emax\_ra"{}})));}
-\DoxyCodeLine{583           param\_values.insert(}
-\DoxyCodeLine{584               std::make\_pair(\textcolor{stringliteral}{"{}Emax\_la"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Emax\_la"{}})));}
-\DoxyCodeLine{585           param\_values.insert(}
-\DoxyCodeLine{586               std::make\_pair(\textcolor{stringliteral}{"{}Vaso\_ra"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Vaso\_ra"{}})));}
-\DoxyCodeLine{587           param\_values.insert(}
-\DoxyCodeLine{588               std::make\_pair(\textcolor{stringliteral}{"{}Vaso\_la"{}}, heart\_params.get\_double(\textcolor{stringliteral}{"{}Vaso\_la"{}})));}
-\DoxyCodeLine{589           \textcolor{keywordflow}{if} (param\_values.size() == 27) \{}
-\DoxyCodeLine{590             model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_closed_loop_heart_pulmonary}{MODEL::ClosedLoopHeartPulmonary<T>}}(}
-\DoxyCodeLine{591                 param\_values, cycle\_period,}
-\DoxyCodeLine{592                 \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(heartpulmonary\_name)));}
-\DoxyCodeLine{593             model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{594                 \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(heartpulmonary\_name), block\_count\});}
-\DoxyCodeLine{595             block\_count++;}
-\DoxyCodeLine{596           \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{597             \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{598                 \textcolor{stringliteral}{"{}Error. ClosedLoopHeartAndPulmonary should have 27 parameters"{}});}
-\DoxyCodeLine{599           \}}
-\DoxyCodeLine{600           \textcolor{comment}{// Junction at inlet to heart}}
-\DoxyCodeLine{601           std::string\_view heart\_inlet\_junction\_name = \textcolor{stringliteral}{"{}J\_heart\_inlet"{}};}
-\DoxyCodeLine{602           connections.push\_back(}
-\DoxyCodeLine{603               \{heart\_inlet\_junction\_name, heartpulmonary\_name\});}
-\DoxyCodeLine{604           model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL::Junction<T>}}(}
-\DoxyCodeLine{605               \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(heart\_inlet\_junction\_name)));}
-\DoxyCodeLine{606           model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{607               \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(heart\_inlet\_junction\_name),}
-\DoxyCodeLine{608                block\_count\});}
-\DoxyCodeLine{609           block\_count++;}
-\DoxyCodeLine{610           \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} heart\_inlet\_elem : closed\_loop\_bcs) \{}
-\DoxyCodeLine{611             connections.push\_back(}
-\DoxyCodeLine{612                 \{heart\_inlet\_elem, heart\_inlet\_junction\_name\});}
-\DoxyCodeLine{613           \}}
-\DoxyCodeLine{614           \textcolor{comment}{// Junction at outlet from heart}}
-\DoxyCodeLine{615           std::string\_view heart\_outlet\_junction\_name = \textcolor{stringliteral}{"{}J\_heart\_outlet"{}};}
-\DoxyCodeLine{616           connections.push\_back(}
-\DoxyCodeLine{617               \{heartpulmonary\_name, heart\_outlet\_junction\_name\});}
-\DoxyCodeLine{618           model-\/>blocks.push\_back(\textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_junction}{MODEL::Junction<T>}}(}
-\DoxyCodeLine{619               \textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(heart\_outlet\_junction\_name)));}
-\DoxyCodeLine{620           model-\/>block\_index\_map.insert(}
-\DoxyCodeLine{621               \{\textcolor{keyword}{static\_cast<}std::string\textcolor{keyword}{>}(heart\_outlet\_junction\_name),}
-\DoxyCodeLine{622                block\_count\});}
-\DoxyCodeLine{623           \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} outlet\_block :}
-\DoxyCodeLine{624                closed\_loop\_config.get\_string\_array(\textcolor{stringliteral}{"{}outlet\_blocks"{}})) \{}
-\DoxyCodeLine{625             connections.push\_back(\{heart\_outlet\_junction\_name, outlet\_block\});}
-\DoxyCodeLine{626           \}}
-\DoxyCodeLine{627           block\_count++;}
-\DoxyCodeLine{628         \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{629           \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{630               \textcolor{stringliteral}{"{}Error. Only one ClosedLoopHeartAndPulmonary can be included."{}});}
-\DoxyCodeLine{631         \}}
-\DoxyCodeLine{632       \}}
-\DoxyCodeLine{633     \}}
-\DoxyCodeLine{634   \}}
-\DoxyCodeLine{635 }
-\DoxyCodeLine{636   \textcolor{comment}{// Create Connections}}
-\DoxyCodeLine{637   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&connection : connections) \{}
-\DoxyCodeLine{638     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&ele1 : model-\/>blocks) \{}
-\DoxyCodeLine{639       \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&ele2 : model-\/>blocks) \{}
-\DoxyCodeLine{640         \textcolor{keywordflow}{if} ((ele1-\/>name == std::get<0>(connection)) \&\&}
-\DoxyCodeLine{641             (ele2-\/>name == std::get<1>(connection))) \{}
-\DoxyCodeLine{642           model-\/>nodes.push\_back(}
-\DoxyCodeLine{643               \textcolor{keyword}{new} \mbox{\hyperlink{class_m_o_d_e_l_1_1_node}{MODEL::Node}}(ele1-\/>name + \textcolor{stringliteral}{"{}:"{}} + ele2-\/>name));}
-\DoxyCodeLine{644           DEBUG\_MSG(\textcolor{stringliteral}{"{}Created node "{}} << model-\/>nodes.back()-\/>name);}
-\DoxyCodeLine{645           ele1-\/>outlet\_nodes.push\_back(model-\/>nodes.back());}
-\DoxyCodeLine{646           ele2-\/>inlet\_nodes.push\_back(model-\/>nodes.back());}
-\DoxyCodeLine{647           model-\/>nodes.back()-\/>setup\_dofs(model-\/>dofhandler);}
-\DoxyCodeLine{648         \}}
-\DoxyCodeLine{649       \}}
-\DoxyCodeLine{650     \}}
-\DoxyCodeLine{651   \}}
-\DoxyCodeLine{652 }
-\DoxyCodeLine{653   \textcolor{comment}{// Sanity checks}}
-\DoxyCodeLine{654   \textcolor{keywordtype}{bool} model\_is\_valid = \textcolor{keyword}{true};}
-\DoxyCodeLine{655   \textcolor{keywordflow}{if} (block\_count != model-\/>blocks.size()) \{}
-\DoxyCodeLine{656     model\_is\_valid = \textcolor{keyword}{false};}
-\DoxyCodeLine{657   \}}
-\DoxyCodeLine{658   \textcolor{keywordflow}{if} (block\_count != model-\/>block\_index\_map.size()) \{}
-\DoxyCodeLine{659     model\_is\_valid = \textcolor{keyword}{false};}
-\DoxyCodeLine{660   \}}
-\DoxyCodeLine{661   \textcolor{keywordflow}{if} (model\_is\_valid == \textcolor{keyword}{false}) \{}
-\DoxyCodeLine{662     \textcolor{keywordflow}{throw} std::runtime\_error(}
-\DoxyCodeLine{663         \textcolor{stringliteral}{"{}Model sanity check failed: An unexpected error occured while loading "{}}}
-\DoxyCodeLine{664         \textcolor{stringliteral}{"{}the configuration. This is likely an implementation issue. Please "{}}}
-\DoxyCodeLine{665         \textcolor{stringliteral}{"{}contact a developer."{}});}
-\DoxyCodeLine{666   \}}
-\DoxyCodeLine{667 }
-\DoxyCodeLine{668   \textcolor{comment}{// Setup degrees of freedom of the system}}
-\DoxyCodeLine{669   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&block : model-\/>blocks) \{}
-\DoxyCodeLine{670     block-\/>setup\_dofs(model-\/>dofhandler);}
-\DoxyCodeLine{671   \}}
-\DoxyCodeLine{672 }
-\DoxyCodeLine{673   \textcolor{comment}{// Set value of cardiac cycle period}}
-\DoxyCodeLine{674   \textcolor{keywordflow}{if} (sim\_cardiac\_cycle\_period < 0.0) \{}
-\DoxyCodeLine{675     sim\_cardiac\_cycle\_period =}
-\DoxyCodeLine{676         1.0;  \textcolor{comment}{// If it has not been read from config or TimeDependentParameter}}
-\DoxyCodeLine{677               \textcolor{comment}{// yet, set as default value of 1.0}}
-\DoxyCodeLine{678   \}}
-\DoxyCodeLine{679   \textcolor{comment}{// Calculate time step size}}
-\DoxyCodeLine{680   \textcolor{keywordflow}{if} (!sim\_coupled) \{}
-\DoxyCodeLine{681     sim\_time\_step\_size =}
-\DoxyCodeLine{682         sim\_cardiac\_cycle\_period / (T(sim\_pts\_per\_cycle) -\/ 1.0);}
-\DoxyCodeLine{683   \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{684     sim\_time\_step\_size = sim\_external\_step\_size / (T(sim\_num\_time\_steps) -\/ 1.0);}
-\DoxyCodeLine{685   \}}
-\DoxyCodeLine{686 }
-\DoxyCodeLine{687   \textcolor{comment}{// Update block parameters that depend on DOFs and other params of other}}
-\DoxyCodeLine{688   \textcolor{comment}{// blocks For example, coronary block params that depend on heart block DOFs}}
-\DoxyCodeLine{689   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&block : model-\/>blocks) \{}
-\DoxyCodeLine{690     block-\/>set\_model\_dependent\_params(*model);}
-\DoxyCodeLine{691   \}}
-\DoxyCodeLine{692 }
-\DoxyCodeLine{693   \textcolor{comment}{// Read initial condition}}
-\DoxyCodeLine{694   initial\_state = \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a8b9bcbe746b0d2b87f7c0381ddf471a3}{ALGEBRA::State<T>::Zero}}(model-\/>dofhandler.size());}
-\DoxyCodeLine{695   \textcolor{comment}{// Initialize blocks that have fixed initial conditions}}
-\DoxyCodeLine{696   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} \&block : model-\/>blocks) \{}
-\DoxyCodeLine{697     block-\/>set\_ICs(initial\_state);}
-\DoxyCodeLine{698   \}}
-\DoxyCodeLine{699   \textcolor{keywordflow}{if} (handler.\mbox{\hyperlink{class_i_o_1_1_json_handler_a68342c5a1a5ba36ede8613843441c726}{has\_key}}(\textcolor{stringliteral}{"{}initial\_condition"{}})) \{}
-\DoxyCodeLine{700     \textcolor{keyword}{auto} initial\_condition = handler[\textcolor{stringliteral}{"{}initial\_condition"{}}];}
-\DoxyCodeLine{701     \textcolor{comment}{// Check for pressure\_all or flow\_all condition.}}
-\DoxyCodeLine{702     \textcolor{comment}{// This will initialize all pressure:* and flow:* variables.}}
-\DoxyCodeLine{703     T init\_p, init\_q;}
-\DoxyCodeLine{704     \textcolor{keywordtype}{bool} init\_p\_flag = initial\_condition.\mbox{\hyperlink{class_i_o_1_1_json_handler_a68342c5a1a5ba36ede8613843441c726}{has\_key}}(\textcolor{stringliteral}{"{}pressure\_all"{}});}
-\DoxyCodeLine{705     \textcolor{keywordtype}{bool} init\_q\_flag = initial\_condition.has\_key(\textcolor{stringliteral}{"{}flow\_all"{}});}
-\DoxyCodeLine{706     \textcolor{keywordflow}{if} (init\_p\_flag) \{}
-\DoxyCodeLine{707       init\_p = initial\_condition.get\_double(\textcolor{stringliteral}{"{}pressure\_all"{}});}
-\DoxyCodeLine{708     \}}
-\DoxyCodeLine{709     \textcolor{keywordflow}{if} (init\_q\_flag) \{}
-\DoxyCodeLine{710       init\_q = initial\_condition.get\_double(\textcolor{stringliteral}{"{}flow\_all"{}});}
-\DoxyCodeLine{711     \}}
-\DoxyCodeLine{712 }
-\DoxyCodeLine{713     \textcolor{comment}{// Loop through variables and check for initial conditions.}}
-\DoxyCodeLine{714     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model-\/>dofhandler.size(); i++) \{}
-\DoxyCodeLine{715       std::string var\_name = model-\/>dofhandler.variables[i];}
-\DoxyCodeLine{716       \textcolor{keywordtype}{double} default\_val = 0.0;}
-\DoxyCodeLine{717       \textcolor{keywordflow}{if} ((init\_p\_flag == \textcolor{keyword}{true}) \&\& ((var\_name.substr(0, 9) == \textcolor{stringliteral}{"{}pressure:"{}}) ||}
-\DoxyCodeLine{718                                     (var\_name.substr(0, 4) == \textcolor{stringliteral}{"{}P\_c:"{}}))) \{}
-\DoxyCodeLine{719         default\_val = init\_p;}
-\DoxyCodeLine{720         DEBUG\_MSG(\textcolor{stringliteral}{"{}pressure\_all initial condition for "{}} << var\_name);}
-\DoxyCodeLine{721       \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((init\_q\_flag == \textcolor{keyword}{true}) \&\& (var\_name.substr(0, 5) == \textcolor{stringliteral}{"{}flow:"{}})) \{}
-\DoxyCodeLine{722         default\_val = init\_q;}
-\DoxyCodeLine{723         DEBUG\_MSG(\textcolor{stringliteral}{"{}flow\_all initial condition for "{}} << var\_name);}
-\DoxyCodeLine{724       \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{725         DEBUG\_MSG(\textcolor{stringliteral}{"{}No initial condition found for "{}} << var\_name);}
-\DoxyCodeLine{726       \}}
-\DoxyCodeLine{727       initial\_state.y[i] = initial\_condition.get\_double(var\_name, default\_val);}
-\DoxyCodeLine{728     \}}
-\DoxyCodeLine{729   \}}
-\DoxyCodeLine{730   DEBUG\_MSG(\textcolor{stringliteral}{"{}[configreader] END"{}});}
-\DoxyCodeLine{731 \}}
-\DoxyCodeLine{732 }
-\DoxyCodeLine{733 \}  \textcolor{comment}{// namespace IO}}
-\DoxyCodeLine{734 }
-\DoxyCodeLine{735 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
+\DoxyCodeLine{378   \textcolor{comment}{// Create junctions}}
+\DoxyCodeLine{379   \textcolor{keywordflow}{for} (\textcolor{keyword}{const} \textcolor{keyword}{auto}\& junction\_config : config[\textcolor{stringliteral}{"{}junctions"{}}]) \{}
+\DoxyCodeLine{380     std::string j\_type = junction\_config[\textcolor{stringliteral}{"{}junction\_type"{}}];}
+\DoxyCodeLine{381     std::string junction\_name = junction\_config[\textcolor{stringliteral}{"{}junction\_name"{}}];}
+\DoxyCodeLine{382     \textcolor{keywordflow}{if} ((j\_type == \textcolor{stringliteral}{"{}NORMAL\_JUNCTION"{}}) || (j\_type == \textcolor{stringliteral}{"{}internal\_junction"{}})) \{}
+\DoxyCodeLine{383       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::JUNCTION, \{\}, junction\_name);}
+\DoxyCodeLine{384     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (j\_type == \textcolor{stringliteral}{"{}resistive\_junction"{}}) \{}
+\DoxyCodeLine{385       \textcolor{keyword}{const} \textcolor{keyword}{auto}\& junction\_values = junction\_config[\textcolor{stringliteral}{"{}junction\_values"{}}];}
+\DoxyCodeLine{386       std::vector<int> param\_ids;}
+\DoxyCodeLine{387       \textcolor{keywordflow}{for} (T value : junction\_values[\textcolor{stringliteral}{"{}R"{}}]) \{}
+\DoxyCodeLine{388         param\_ids.push\_back(model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(value));}
+\DoxyCodeLine{389       \}}
+\DoxyCodeLine{390       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::RESISTIVEJUNCTION, param\_ids,}
+\DoxyCodeLine{391                       junction\_name);}
+\DoxyCodeLine{392     \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (j\_type == \textcolor{stringliteral}{"{}BloodVesselJunction"{}}) \{}
+\DoxyCodeLine{393       \textcolor{keyword}{const} \textcolor{keyword}{auto}\& junction\_values = junction\_config[\textcolor{stringliteral}{"{}junction\_values"{}}];}
+\DoxyCodeLine{394       std::vector<int> param\_ids;}
+\DoxyCodeLine{395       \textcolor{keywordflow}{for} (T value : junction\_values[\textcolor{stringliteral}{"{}R\_poiseuille"{}}]) \{}
+\DoxyCodeLine{396         param\_ids.push\_back(model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(value));}
+\DoxyCodeLine{397       \}}
+\DoxyCodeLine{398       \textcolor{keywordflow}{for} (T value : junction\_values[\textcolor{stringliteral}{"{}L"{}}]) \{}
+\DoxyCodeLine{399         param\_ids.push\_back(model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(value));}
+\DoxyCodeLine{400       \}}
+\DoxyCodeLine{401       \textcolor{keywordflow}{for} (T value : junction\_values[\textcolor{stringliteral}{"{}stenosis\_coefficient"{}}]) \{}
+\DoxyCodeLine{402         param\_ids.push\_back(model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(value));}
+\DoxyCodeLine{403       \}}
+\DoxyCodeLine{404       model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::BLOODVESSELJUNCTION, param\_ids,}
+\DoxyCodeLine{405                       junction\_name);}
+\DoxyCodeLine{406     \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{407       \textcolor{keywordflow}{throw} std::invalid\_argument(\textcolor{stringliteral}{"{}Unknown junction type"{}});}
+\DoxyCodeLine{408     \}}
+\DoxyCodeLine{409     \textcolor{comment}{// Check for connections to inlet and outlet vessels and append to}}
+\DoxyCodeLine{410     \textcolor{comment}{// connections list}}
+\DoxyCodeLine{411     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} vessel\_id : junction\_config[\textcolor{stringliteral}{"{}inlet\_vessels"{}}]) \{}
+\DoxyCodeLine{412       connections.push\_back(\{vessel\_id\_map[vessel\_id], junction\_name\});}
+\DoxyCodeLine{413     \}}
+\DoxyCodeLine{414     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} vessel\_id : junction\_config[\textcolor{stringliteral}{"{}outlet\_vessels"{}}]) \{}
+\DoxyCodeLine{415       connections.push\_back(\{junction\_name, vessel\_id\_map[vessel\_id]\});}
+\DoxyCodeLine{416     \}}
+\DoxyCodeLine{417     DEBUG\_MSG(\textcolor{stringliteral}{"{}Created junction "{}} << junction\_name);}
+\DoxyCodeLine{418   \}}
+\DoxyCodeLine{419 }
+\DoxyCodeLine{420   \textcolor{comment}{// Create closed-\/loop blocks}}
+\DoxyCodeLine{421   \textcolor{keywordtype}{bool} heartpulmonary\_block\_present =}
+\DoxyCodeLine{422       \textcolor{keyword}{false};  \textcolor{comment}{///< Flag to check if heart block is present (requires different}\textcolor{comment}{}}
+\DoxyCodeLine{423 \textcolor{comment}{              ///< handling)}}
+\DoxyCodeLine{424 \textcolor{comment}{}  \textcolor{keywordflow}{if} (config.contains(\textcolor{stringliteral}{"{}closed\_loop\_blocks"{}})) \{}
+\DoxyCodeLine{425     \textcolor{keywordflow}{for} (\textcolor{keyword}{const} \textcolor{keyword}{auto}\& closed\_loop\_config : config[\textcolor{stringliteral}{"{}closed\_loop\_blocks"{}}]) \{}
+\DoxyCodeLine{426       std::string closed\_loop\_type = closed\_loop\_config[\textcolor{stringliteral}{"{}closed\_loop\_type"{}}];}
+\DoxyCodeLine{427       \textcolor{keywordflow}{if} (closed\_loop\_type == \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary"{}}) \{}
+\DoxyCodeLine{428         \textcolor{keywordflow}{if} (heartpulmonary\_block\_present == \textcolor{keyword}{false}) \{}
+\DoxyCodeLine{429           heartpulmonary\_block\_present = \textcolor{keyword}{true};}
+\DoxyCodeLine{430           std::string heartpulmonary\_name = \textcolor{stringliteral}{"{}CLH"{}};}
+\DoxyCodeLine{431           T cycle\_period = closed\_loop\_config[\textcolor{stringliteral}{"{}cardiac\_cycle\_period"{}}];}
+\DoxyCodeLine{432           \textcolor{keywordflow}{if} ((model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a53cd0e0f133a5a3fb8a3bc86ce3b46c3}{cardiac\_cycle\_period}} > 0.0) \&\&}
+\DoxyCodeLine{433               (cycle\_period != model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a53cd0e0f133a5a3fb8a3bc86ce3b46c3}{cardiac\_cycle\_period}})) \{}
+\DoxyCodeLine{434             \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{435                 \textcolor{stringliteral}{"{}Inconsistent cardiac cycle period defined in "{}}}
+\DoxyCodeLine{436                 \textcolor{stringliteral}{"{}ClosedLoopHeartAndPulmonary."{}});}
+\DoxyCodeLine{437           \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{438             model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a53cd0e0f133a5a3fb8a3bc86ce3b46c3}{cardiac\_cycle\_period}} = cycle\_period;}
+\DoxyCodeLine{439           \}}
+\DoxyCodeLine{440           \textcolor{keyword}{const} \textcolor{keyword}{auto}\& heart\_params = closed\_loop\_config[\textcolor{stringliteral}{"{}parameters"{}}];}
+\DoxyCodeLine{441           \textcolor{comment}{// Convert to std::map to keep model blocks independent of simdjson}}
+\DoxyCodeLine{442           model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::CLOSEDLOOPHEARTPULMONARY,}
+\DoxyCodeLine{443                           \{model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Tsa"{}}]),}
+\DoxyCodeLine{444                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}tpwave"{}}]),}
+\DoxyCodeLine{445                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Erv\_s"{}}]),}
+\DoxyCodeLine{446                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Elv\_s"{}}]),}
+\DoxyCodeLine{447                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}iml"{}}]),}
+\DoxyCodeLine{448                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}imr"{}}]),}
+\DoxyCodeLine{449                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Lra\_v"{}}]),}
+\DoxyCodeLine{450                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Rra\_v"{}}]),}
+\DoxyCodeLine{451                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Lrv\_a"{}}]),}
+\DoxyCodeLine{452                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Rrv\_a"{}}]),}
+\DoxyCodeLine{453                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Lla\_v"{}}]),}
+\DoxyCodeLine{454                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Rla\_v"{}}]),}
+\DoxyCodeLine{455                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Llv\_a"{}}]),}
+\DoxyCodeLine{456                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Rlv\_ao"{}}]),}
+\DoxyCodeLine{457                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Vrv\_u"{}}]),}
+\DoxyCodeLine{458                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Vlv\_u"{}}]),}
+\DoxyCodeLine{459                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Rpd"{}}]),}
+\DoxyCodeLine{460                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Cp"{}}]),}
+\DoxyCodeLine{461                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Cpa"{}}]),}
+\DoxyCodeLine{462                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Kxp\_ra"{}}]),}
+\DoxyCodeLine{463                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Kxv\_ra"{}}]),}
+\DoxyCodeLine{464                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Kxp\_la"{}}]),}
+\DoxyCodeLine{465                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Kxv\_la"{}}]),}
+\DoxyCodeLine{466                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Emax\_ra"{}}]),}
+\DoxyCodeLine{467                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Emax\_la"{}}]),}
+\DoxyCodeLine{468                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Vaso\_ra"{}}]),}
+\DoxyCodeLine{469                            model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a1840902a8446dd44f9f1c2c06021bcb0}{add\_parameter}}(heart\_params[\textcolor{stringliteral}{"{}Vaso\_la"{}}])\},}
+\DoxyCodeLine{470                           heartpulmonary\_name);}
+\DoxyCodeLine{471 }
+\DoxyCodeLine{472           \textcolor{comment}{// Junction at inlet to heart}}
+\DoxyCodeLine{473           std::string heart\_inlet\_junction\_name = \textcolor{stringliteral}{"{}J\_heart\_inlet"{}};}
+\DoxyCodeLine{474           connections.push\_back(}
+\DoxyCodeLine{475               \{heart\_inlet\_junction\_name, heartpulmonary\_name\});}
+\DoxyCodeLine{476           model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::JUNCTION, \{\},}
+\DoxyCodeLine{477                           heart\_inlet\_junction\_name);}
+\DoxyCodeLine{478           \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} heart\_inlet\_elem : closed\_loop\_bcs) \{}
+\DoxyCodeLine{479             connections.push\_back(}
+\DoxyCodeLine{480                 \{heart\_inlet\_elem, heart\_inlet\_junction\_name\});}
+\DoxyCodeLine{481           \}}
+\DoxyCodeLine{482 }
+\DoxyCodeLine{483           \textcolor{comment}{// Junction at outlet from heart}}
+\DoxyCodeLine{484           std::string heart\_outlet\_junction\_name = \textcolor{stringliteral}{"{}J\_heart\_outlet"{}};}
+\DoxyCodeLine{485           connections.push\_back(}
+\DoxyCodeLine{486               \{heartpulmonary\_name, heart\_outlet\_junction\_name\});}
+\DoxyCodeLine{487           model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_afbc4e91afadea5bddfc78241d54200c6}{add\_block}}(MODEL::BlockType::JUNCTION, \{\},}
+\DoxyCodeLine{488                           heart\_outlet\_junction\_name);}
+\DoxyCodeLine{489           \textcolor{keywordflow}{for} (\textcolor{keyword}{auto}\& outlet\_block : closed\_loop\_config[\textcolor{stringliteral}{"{}outlet\_blocks"{}}]) \{}
+\DoxyCodeLine{490             connections.push\_back(\{heart\_outlet\_junction\_name, outlet\_block\});}
+\DoxyCodeLine{491           \}}
+\DoxyCodeLine{492         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{493           \textcolor{keywordflow}{throw} std::runtime\_error(}
+\DoxyCodeLine{494               \textcolor{stringliteral}{"{}Error. Only one ClosedLoopHeartAndPulmonary can be included."{}});}
+\DoxyCodeLine{495         \}}
+\DoxyCodeLine{496       \}}
+\DoxyCodeLine{497     \}}
+\DoxyCodeLine{498   \}}
+\DoxyCodeLine{499 }
+\DoxyCodeLine{500   \textcolor{comment}{// Create Connections}}
+\DoxyCodeLine{501   \textcolor{keywordflow}{for} (\textcolor{keyword}{auto}\& connection : connections) \{}
+\DoxyCodeLine{502     \textcolor{keyword}{auto} ele1 = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_ac3ba9eb815bf3f94a35747034baa357c}{get\_block}}(std::get<0>(connection));}
+\DoxyCodeLine{503     \textcolor{keyword}{auto} ele2 = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_ac3ba9eb815bf3f94a35747034baa357c}{get\_block}}(std::get<1>(connection));}
+\DoxyCodeLine{504     model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_ac197ebdc9d40d717af919ddcdf6cc027}{add\_node}}(\{ele1\}, \{ele2\}, ele1-\/>get\_name() + \textcolor{stringliteral}{"{}:"{}} + ele2-\/>get\_name());}
+\DoxyCodeLine{505   \}}
+\DoxyCodeLine{506   \textcolor{comment}{// Finalize model}}
+\DoxyCodeLine{507   model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a39e6cc04b346f894bff1f9dad54ae89d}{finalize}}();}
+\DoxyCodeLine{508 \}}
+\DoxyCodeLine{509 \textcolor{comment}{}}
+\DoxyCodeLine{510 \textcolor{comment}{/**}}
+\DoxyCodeLine{511 \textcolor{comment}{ * @brief Load initial conditions from a configuration}}
+\DoxyCodeLine{512 \textcolor{comment}{ *}}
+\DoxyCodeLine{513 \textcolor{comment}{ * @tparam T Scalar type (e.g. `float`, `double`)}}
+\DoxyCodeLine{514 \textcolor{comment}{ * @param config The json configuration}}
+\DoxyCodeLine{515 \textcolor{comment}{ * @param model The model}}
+\DoxyCodeLine{516 \textcolor{comment}{ * @return ALGEBRA::State<T> Initial configuration for the model}}
+\DoxyCodeLine{517 \textcolor{comment}{ */}}
+\DoxyCodeLine{518 \textcolor{keyword}{template} <\textcolor{keyword}{typename} T>}
+\DoxyCodeLine{519 \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state}{ALGEBRA::State<T>}} \mbox{\hyperlink{namespace_i_o_a979a0a0b79eebfe2c7c3c424f16d806b}{load\_initial\_condition}}(\textcolor{keyword}{const} nlohmann::json\& config,}
+\DoxyCodeLine{520                                          \mbox{\hyperlink{class_m_o_d_e_l_1_1_model}{MODEL::Model<T>}}\& model) \{}
+\DoxyCodeLine{521   \textcolor{comment}{// Read initial condition}}
+\DoxyCodeLine{522   \textcolor{keyword}{auto} initial\_state = \mbox{\hyperlink{class_a_l_g_e_b_r_a_1_1_state_a8b9bcbe746b0d2b87f7c0381ddf471a3}{ALGEBRA::State<T>::Zero}}(model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_ae4ae29ea808709fe14cc767327e59ee0}{size}}());}
+\DoxyCodeLine{523 }
+\DoxyCodeLine{524   \textcolor{keywordflow}{if} (config.contains(\textcolor{stringliteral}{"{}initial\_condition"{}})) \{}
+\DoxyCodeLine{525     \textcolor{keyword}{const} \textcolor{keyword}{auto}\& initial\_condition = config[\textcolor{stringliteral}{"{}initial\_condition"{}}];}
+\DoxyCodeLine{526     \textcolor{comment}{// Check for pressure\_all or flow\_all condition.}}
+\DoxyCodeLine{527     \textcolor{comment}{// This will initialize all pressure:* and flow:* variables.}}
+\DoxyCodeLine{528     T init\_p, init\_q;}
+\DoxyCodeLine{529     \textcolor{keywordtype}{bool} init\_p\_flag = initial\_condition.contains(\textcolor{stringliteral}{"{}pressure\_all"{}});}
+\DoxyCodeLine{530     \textcolor{keywordtype}{bool} init\_q\_flag = initial\_condition.contains(\textcolor{stringliteral}{"{}flow\_all"{}});}
+\DoxyCodeLine{531     \textcolor{keywordflow}{if} (init\_p\_flag) \{}
+\DoxyCodeLine{532       init\_p = initial\_condition[\textcolor{stringliteral}{"{}pressure\_all"{}}];}
+\DoxyCodeLine{533     \}}
+\DoxyCodeLine{534     \textcolor{keywordflow}{if} (init\_q\_flag) \{}
+\DoxyCodeLine{535       init\_q = initial\_condition[\textcolor{stringliteral}{"{}flow\_all"{}}];}
+\DoxyCodeLine{536     \}}
+\DoxyCodeLine{537 }
+\DoxyCodeLine{538     \textcolor{comment}{// Loop through variables and check for initial conditions.}}
+\DoxyCodeLine{539     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_ae4ae29ea808709fe14cc767327e59ee0}{size}}(); i++) \{}
+\DoxyCodeLine{540       std::string var\_name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
+\DoxyCodeLine{541       \textcolor{keywordtype}{double} default\_val = 0.0;}
+\DoxyCodeLine{542       \textcolor{comment}{// If initial condition is not specified for this variable,}}
+\DoxyCodeLine{543       \textcolor{comment}{// check if pressure\_all/flow\_all are applicable}}
+\DoxyCodeLine{544       \textcolor{keywordflow}{if} (!initial\_condition.contains(var\_name)) \{}
+\DoxyCodeLine{545         \textcolor{keywordflow}{if} ((init\_p\_flag == \textcolor{keyword}{true}) \&\& ((var\_name.substr(0, 9) == \textcolor{stringliteral}{"{}pressure:"{}}) ||}
+\DoxyCodeLine{546                                       (var\_name.substr(0, 4) == \textcolor{stringliteral}{"{}P\_c:"{}}))) \{}
+\DoxyCodeLine{547           default\_val = init\_p;}
+\DoxyCodeLine{548           DEBUG\_MSG(\textcolor{stringliteral}{"{}pressure\_all initial condition for "{}} << var\_name);}
+\DoxyCodeLine{549         \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((init\_q\_flag == \textcolor{keyword}{true}) \&\&}
+\DoxyCodeLine{550                    (var\_name.substr(0, 5) == \textcolor{stringliteral}{"{}flow:"{}})) \{}
+\DoxyCodeLine{551           default\_val = init\_q;}
+\DoxyCodeLine{552           DEBUG\_MSG(\textcolor{stringliteral}{"{}flow\_all initial condition for "{}} << var\_name);}
+\DoxyCodeLine{553         \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{554           DEBUG\_MSG(\textcolor{stringliteral}{"{}No initial condition found for "{}}}
+\DoxyCodeLine{555                     << var\_name << \textcolor{stringliteral}{"{}. Using default value = 0."{}});}
+\DoxyCodeLine{556         \}}
+\DoxyCodeLine{557       \}}
+\DoxyCodeLine{558       initial\_state.y[i] = initial\_condition.value(var\_name, default\_val);}
+\DoxyCodeLine{559     \}}
+\DoxyCodeLine{560   \}}
+\DoxyCodeLine{561   \textcolor{keywordflow}{if} (config.contains(\textcolor{stringliteral}{"{}initial\_condition\_d"{}})) \{}
+\DoxyCodeLine{562     DEBUG\_MSG(\textcolor{stringliteral}{"{}Reading initial condition derivative"{}});}
+\DoxyCodeLine{563     \textcolor{keyword}{const} \textcolor{keyword}{auto}\& initial\_condition\_d = config[\textcolor{stringliteral}{"{}initial\_condition\_d"{}}];}
+\DoxyCodeLine{564     \textcolor{comment}{// Loop through variables and check for initial conditions.}}
+\DoxyCodeLine{565     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} i = 0; i < model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_ae4ae29ea808709fe14cc767327e59ee0}{size}}(); i++) \{}
+\DoxyCodeLine{566       std::string var\_name = model.\mbox{\hyperlink{class_m_o_d_e_l_1_1_model_a43b9cc3c9874be9c2baeae576271fbad}{dofhandler}}.\mbox{\hyperlink{class_m_o_d_e_l_1_1_d_o_f_handler_a3ea05b8362ccff4957585fb1f1c7b806}{variables}}[i];}
+\DoxyCodeLine{567       \textcolor{keywordflow}{if} (!initial\_condition\_d.contains(var\_name)) \{}
+\DoxyCodeLine{568         DEBUG\_MSG(\textcolor{stringliteral}{"{}No initial condition derivative found for "{}} << var\_name);}
+\DoxyCodeLine{569       \}}
+\DoxyCodeLine{570       initial\_state.ydot[i] = initial\_condition\_d.value(var\_name, 0.0);}
+\DoxyCodeLine{571     \}}
+\DoxyCodeLine{572   \}}
+\DoxyCodeLine{573   \textcolor{keywordflow}{return} initial\_state;}
+\DoxyCodeLine{574 \}}
+\DoxyCodeLine{575 }
+\DoxyCodeLine{576 \}  \textcolor{comment}{// namespace IO}}
+\DoxyCodeLine{577 }
+\DoxyCodeLine{578 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// SVZERODSOLVER\_IO\_CONFIGREADER\_HPP\_}}
 
 \end{DoxyCode}

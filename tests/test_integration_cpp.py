@@ -1,10 +1,12 @@
 import json
 import os
-from tempfile import TemporaryDirectory
 from io import StringIO
+from tempfile import TemporaryDirectory
 
 import numpy as np
 import pandas as pd
+import pytest
+
 import svzerodplus
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
@@ -505,3 +507,44 @@ def test_steady_flow_calibration(tmpdir):
     assert np.isclose(
         np.mean(calibrated_parameters["stenosis_coefficient"]), 0.0, rtol=RTOL_PRES
     )
+
+
+@pytest.mark.parametrize("model_id", ["0080_0001", "0104_0001", "0140_2001"])
+def test_calibration_vmr(model_id):
+    """Test actual models from the vascular model repository."""
+    with open(
+        os.path.join(
+            this_file_dir, "cases", "vmr", "input", f"{model_id}_calibrate_from_0d.json"
+        )
+    ) as ff:
+        config = json.load(ff)
+
+    with open(
+        os.path.join(
+            this_file_dir,
+            "cases",
+            "vmr",
+            "reference",
+            f"{model_id}_optimal_from_0d.json",
+        )
+    ) as ff:
+        reference = json.load(ff)
+
+    result = svzerodplus.calibrate(config)
+
+    for i, vessel in enumerate(reference["vessels"]):
+        for key, value in vessel["zero_d_element_values"].items():
+            np.isclose(
+                result["vessels"][i]["zero_d_element_values"][key],
+                value,
+                rtol=RTOL_PRES,
+            )
+
+    for i, junction in enumerate(reference["junctions"]):
+        if "junction_values" in junction:
+            for key, value in junction["junction_values"].items():
+                np.allclose(
+                    result["junctions"][i]["junction_values"][key],
+                    value,
+                    rtol=RTOL_PRES,
+                )

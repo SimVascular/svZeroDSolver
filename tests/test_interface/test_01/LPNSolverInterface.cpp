@@ -128,30 +128,12 @@ void LPNSolverInterface::load_library(const std::string& interface_lib)
 //
 //   file_name: The name of the LPN configuration file (JSON).
 //
-//void LPNSolverInterface::initialize(std::string file_name)
-//{
-//  lpn_initialize_(file_name, problem_id_, pts_per_cycle_, num_cycles_, num_output_steps_, block_names_, variable_names_);
-//  std::cout << "[LPNSolverInterface::initialize] Problem ID: " << problem_id_ << std::endl;
-//  system_size_ = variable_names_.size();
-//  std::cout << "[LPNSolverInterface::initialize] System size: " << system_size_ << std::endl;
-//  std::cout << "[LPNSolverInterface::initialize] End " << std::endl; //kmenon
-//  //solution_.resize(system_size_*num_output_steps_);
-//}
 void LPNSolverInterface::initialize(std::string file_name)
 {
   lpn_initialize_(file_name, problem_id_, pts_per_cycle_, num_cycles_, num_output_steps_, block_names_, variable_names_);
   std::cout << "[LPNSolverInterface::initialize] Problem ID: " << problem_id_ << std::endl;
   system_size_ = variable_names_.size();
-  //system_size_ = 253;
   std::cout << "[LPNSolverInterface::initialize] System size: " << system_size_ << std::endl;
-////solution_.resize(system_size_*num_output_steps_);
-//std::cout << "[LPNSolverInterface::initialize] mid1" << std::endl;
-//std::vector<double> y;
-//std::cout << "[LPNSolverInterface::initialize] mid2" << std::endl;
-//y.resize(system_size_);
-//std::cout << "[LPNSolverInterface::initialize] mid3" << std::endl;
-//lpn_return_y_(problem_id_, y);
-//std::cout << "[LPNSolverInterface::initialize] End " << std::endl; //kmenon
 }
 
 // Set the external time step variable in the svZeroD interface.
@@ -254,9 +236,7 @@ void LPNSolverInterface::update_state(std::vector<double> state_y, std::vector<d
 //
 void LPNSolverInterface::return_y(std::vector<double>& y)
 {
-  std::cout<<"[LPNSolverInterface::return_y] start" << std::endl;
   lpn_return_y_(problem_id_, y);
-  std::cout<<"[LPNSolverInterface::return_y] end" << std::endl;
 }
 
 // Return the 0D ydot state vector
@@ -267,7 +247,5 @@ void LPNSolverInterface::return_y(std::vector<double>& y)
 //
 void LPNSolverInterface::return_ydot(std::vector<double>& ydot)
 {
-  std::cout<<"[LPNSolverInterface::return_ydot] start" << std::endl;
-//lpn_return_ydot_(problem_id_, ydot);
-  std::cout<<"[LPNSolverInterface::return_ydot] end" << std::endl;
+  lpn_return_ydot_(problem_id_, ydot);
 }

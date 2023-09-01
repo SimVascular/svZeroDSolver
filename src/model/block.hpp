@@ -58,25 +58,14 @@ template <typename T>
 class Block {
  public:
   /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters {};
-
-  /**
    * @brief Construct a new Block object
    *
+   * @param id Global ID of the block
+   * @param param_ids Global IDs of the block parameters
+   * @param model The model to which the block belongs
    */
-  Block();
-
-  /**
-   * @brief Construct a new Block object
-   *
-   * @param name Name of the block
-   */
-  Block(std::string name);
+  explicit Block(int id, const std::vector<int> &param_ids,
+                 MODEL::Model<T> *model);
 
   /**
    * @brief Destroy the Block object
@@ -84,9 +73,25 @@ class Block {
    */
   ~Block();
 
-  std::string name;                  ///< Name of the block
-  std::vector<Node *> inlet_nodes;   ///< Inlet nodes
-  std::vector<Node *> outlet_nodes;  ///< Outlet nodes
+  /**
+   * @brief Copy the Block object
+   *
+   */
+  Block(const Block &) = delete;
+
+  int id;                  ///< Global ID of the block
+  MODEL::Model<T> *model;  ///< The model to which the block belongs
+
+  std::vector<Node<T> *> inlet_nodes;   ///< Inlet nodes
+  std::vector<Node<T> *> outlet_nodes;  ///< Outlet nodes
+
+  bool steady = false;  ///< Toggle steady behavior
+
+  /**
+   * @brief Global IDs for the block parameters.
+   *
+   */
+  std::vector<int> global_param_ids;  ///< IDs of the parameters
 
   /**
    * @brief Global variable indices of the local element contributions
@@ -113,6 +118,13 @@ class Block {
    * Equation indices correspond to rows in the global system.
    */
   std::vector<unsigned int> global_eqn_ids;
+
+  /**
+   * @brief Get the name of the block
+   *
+   * @return std::string Name of the block
+   */
+  std::string get_name();
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -142,76 +154,57 @@ class Block {
   virtual void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update for model-dependent variables that are set at the end of
-   * model construction
+   * @brief Setup parameters that depend on the model
    *
-   * @param model Model object to access model-dependent variables
    */
-  virtual void set_model_dependent_params(MODEL::Model<T> &model);
-
-  /**
-   * @brief Return parameter values
-   *
-   * @param message String to identify different requests
-   */
-  virtual void get_parameter_value(std::string message, T &param_value);
-
-  /**
-   * @brief Set block-specific initial conditions
-   *
-   * @param state State vector containing y and ydot
-   */
-  virtual void set_ICs(ALGEBRA::State<T> &state);
-
-  /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  virtual void update_block_params(std::vector<T> new_params);
-
-  /**
-   * @brief Return parameters of a block.
-   *
-   * @block_params Block parameters.
-   */
-  virtual void get_block_params(std::vector<T> &block_params);
+  virtual void setup_model_dependent_params();
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
+   *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  virtual void update_constant(ALGEBRA::SparseSystem<T> &system);
+  virtual void update_constant(ALGEBRA::SparseSystem<T> &system,
+                               std::vector<T> &parameters);
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
    *
    * @param system System to update contributions at
-   * @param time Current time
+   * @param parameters Parameters of the model
    */
-  virtual void update_time(ALGEBRA::SparseSystem<T> &system, T time);
+  virtual void update_time(ALGEBRA::SparseSystem<T> &system,
+                           std::vector<T> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
    * sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    * @param y Current solution
+   * @param dy Current derivate of the solution
    */
   virtual void update_solution(ALGEBRA::SparseSystem<T> &system,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+                               std::vector<T> &parameters,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
   /**
-   * @brief Convert the block to a steady behavior
+   * @brief Set the gradient of the block contributions with respect to the
+   * parameters
    *
+   * @param jacobian Jacobian with respect to the parameters
+   * @param alpha Current parameter vector
+   * @param residual Residual with respect to the parameters
+   * @param y Current solution
+   * @param dy Time-derivative of the current solution
    */
-  virtual void to_steady();
-
-  /**
-   * @brief Convert the block to an unsteady behavior
-   *
-   */
-  virtual void to_unsteady();
+  virtual void update_gradient(Eigen::SparseMatrix<T> &jacobian,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
+                               std::vector<T> &y, std::vector<T> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -232,17 +225,19 @@ class Block {
    * (relevant for sparse memory reservation)
    */
   virtual std::map<std::string, int> get_num_triplets();
-
- private:
-  Parameters params;  ///< Parameters of the element
 };
 
 template <typename T>
-Block<T>::Block() {}
+Block<T>::Block(int id, const std::vector<int> &param_ids,
+                MODEL::Model<T> *model) {
+  this->id = id;
+  this->global_param_ids = param_ids;
+  this->model = model;
+}
 
 template <typename T>
-Block<T>::Block(std::string name) {
-  this->name = name;
+std::string Block<T>::get_name() {
+  return this->model->get_block_name(this->id);
 }
 
 template <typename T>
@@ -266,12 +261,12 @@ void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
   // Register internal variables of block
   for (auto &int_name : internal_var_names) {
     global_var_ids.push_back(
-        dofhandler.register_variable(int_name + ":" + name));
+        dofhandler.register_variable(int_name + ":" + this->get_name()));
   }
 
   // Register equations of block
   for (unsigned int i = 0; i < num_equations; i++) {
-    global_eqn_ids.push_back(dofhandler.register_equation());
+    global_eqn_ids.push_back(dofhandler.register_equation(get_name()));
   }
 }
 
@@ -279,35 +274,30 @@ template <typename T>
 void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
 
 template <typename T>
-void Block<T>::set_model_dependent_params(MODEL::Model<T> &model) {}
+void Block<T>::setup_model_dependent_params() {}
 
 template <typename T>
-void Block<T>::get_parameter_value(std::string message, T &param_value) {}
+void Block<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                               std::vector<T> &parameters) {}
 
 template <typename T>
-void Block<T>::set_ICs(ALGEBRA::State<T> &state) {}
-
-template <typename T>
-void Block<T>::update_block_params(std::vector<T> new_params) {}
-
-template <typename T>
-void Block<T>::get_block_params(std::vector<T> &block_params) {}
-
-template <typename T>
-void Block<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {}
-
-template <typename T>
-void Block<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {}
+void Block<T>::update_time(ALGEBRA::SparseSystem<T> &system,
+                           std::vector<T> &parameters) {}
 
 template <typename T>
 void Block<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {}
+                               std::vector<T> &parameters,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {}
 
 template <typename T>
-void Block<T>::to_steady() {}
-
-template <typename T>
-void Block<T>::to_unsteady() {}
+void Block<T>::update_gradient(Eigen::SparseMatrix<T> &jacobian,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+                               Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
+                               std::vector<T> &y, std::vector<T> &dy) {
+  throw std::runtime_error("Gradient calculation not implemented for block " +
+                           get_name());
+}
 
 template <typename T>
 std::map<std::string, int> Block<T>::get_num_triplets() {

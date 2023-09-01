@@ -51,10 +51,10 @@ namespace MODEL {
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R$, *-] (3,0)
- * to [R, l=$R_{ste}$, -] (5,0) node[anchor=south] {$P_{C}$}
- * (5,0) to [L, l=$L$, *-*] (7,0)
+ * to [R, l=$R_{ste}$, -] (5,0)
+ * (5,0) to [L, l=$L$, -*] (7,0)
  * node[anchor=south]{$P_{out}$}
- * (5,0) to [C, l=$C$, *-] (5,-1.5)
+ * (5,0) to [C, l=$C$, -] (5,-1.5)
  * node[ground]{};
  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
@@ -67,40 +67,33 @@ namespace MODEL {
  * \f]
  *
  * \f[
- * Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{c}^{e}}{d t}=0
- * \f]
- *
- * \f[
- * P_{i n}^{e}-(R+R_{ste}) Q_{i n}^{e}-P_{c}=0
- * \f]
+ * Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{in}^{e}}{d t}+C(R+2R_{ste})\frac{d
+ * Q_{in}^{e}}{d t}=0 \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{i n}^{e} & Q_{in}^{e} &
- * P_{out}^{e} & Q_{out}^{e} & P_C\end{array}\right]^{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} & Q_{in}^{e} &
+ * P_{out}^{e} & Q_{out}^{e}\end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
- * 0 & 0 & 0 & -L & 0 \\
- * 0 & 0 & 0 & 0 & -C \\
- * 0 & 0 & 0 & 0 & 0
+ * \mathbf{F}^{e}=\left[\begin{array}{cccc}
+ * 1 & -R_{ste}-R & -1 & 0 \\
+ * 0 & 1 & 0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
- * 1 & -R_{ste}-R & -1 & 0 & 0 \\
- * 0 & 1 & 0 & -1 & 0 \\
- * 1 & -R_{ste}-R & 0 & 0 & -1
+ * \mathbf{E}^{e}=\left[\begin{array}{cccc}
+ * 0 & 0 & 0 & -L \\
+ * -C & C(R+2R_{ste}) & 0 & 0
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{D}^{e}=\left[\begin{array}{ccccc}
- * 0 & -R_{ste} & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0 & 0 \\
- * 0 & -R_{ste} & 0 & 0 & 0
+ * \mathbf{D}^{e}=\left[\begin{array}{cccc}
+ * 0 & -R_{ste} & 0 & 0 \\
+ * 0 & 2CK_{ste} sgn(Q_{in}^{e}) \dot{Q}_{in}^{e} & 0 & 0
  * \end{array}\right]
  * \f]
  *
@@ -110,40 +103,51 @@ namespace MODEL {
  * Parameters::stenosis_coefficient. \f$R\f$, \f$C\f$, and \f$L\f$ refer to
  * Poisieuille resistance, capacitance and inductance, respectively.
  *
+ * ### Gradient
+ *
+ * Gradient of the equations with respect to the parameters:
+ *
+ * \f[
+ * \mathbf{J}^{e} = \left[\begin{array}{cccc}
+ * -y_2 & 0 & -\dot{y}_4 & -|y_2|y_2 \\
+ * C\dot{y}_2 & (-\dot{y}_1+(R+2R_{ste})\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{r}^{e} = \left[\begin{array}{c}
+ * y_1-(R+R_{ste})y_2-y_3-L\dot{y}_4 \\
+ * y_2 - y_4 - C\dot{y}_1 + C(R+2R_{ste}) \dot{y}_2
+ * \end{array}\right]
+ * \f]
+ *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Poiseuille resistance
+ * * `1` Capacitance
+ * * `2` Inductance
+ * * `3` Stenosis coefficient
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
 class BloodVessel : public Block<T> {
  public:
+  // Inherit constructors
+  using Block<T>::Block;
+
   /**
-   * @brief Parameters of the element.
+   * @brief Local IDs of the parameters
    *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
    */
-  struct Parameters : public Block<T>::Parameters {
-    T R;                     ///< Poiseuille resistance
-    T C;                     ///< Capacitance
-    T L;                     ///< Inductance
-    T stenosis_coefficient;  ///< Stenosis Coefficient
+  enum ParamId {
+    RESISTANCE = 0,
+    CAPACITANCE = 1,
+    INDUCTANCE = 2,
+    STENOSIS_COEFFICIENT = 3,
   };
-
-  /**
-   * @brief Construct a new Blood Vessel object
-   *
-   * @param R Poiseuille resistance
-   * @param C Capacitance
-   * @param L Inductance
-   * @param stenosis_coefficient Stenosis Coefficient
-   * @param name Name
-   */
-  BloodVessel(T R, T C, T L, T stenosis_coefficient, std::string name);
-
-  /**
-   * @brief Destroy the Blood Vessel object
-   *
-   */
-  ~BloodVessel();
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -158,35 +162,43 @@ class BloodVessel : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  void update_block_params(std::vector<T> new_params);
-
-  /**
-   * @brief Return parameters of a block.
-   *
-   * @block_params Block parameters.
-   */
-  void get_block_params(std::vector<T> &block_params);
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse system
+   * @brief Update the constant contributions of the element in a sparse
+   system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
    * sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    * @param y Current solution
+   * @param dy Current derivate of the solution
    */
   void update_solution(ALGEBRA::SparseSystem<T> &system,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
+                       std::vector<T> &parameters,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
+
+  /**
+   * @brief Set the gradient of the block contributions with respect to the
+   * parameters
+   *
+   * @param jacobian Jacobian with respect to the parameters
+   * @param alpha Current parameter vector
+   * @param residual Residual with respect to the parameters
+   * @param y Current solution
+   * @param dy Time-derivative of the current solution
+   */
+  void update_gradient(Eigen::SparseMatrix<T> &jacobian,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
+                       std::vector<T> &y, std::vector<T> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -195,8 +207,8 @@ class BloodVessel : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> num_triplets = {
-      {"F", 10},
-      {"E", 2},
+      {"F", 5},
+      {"E", 3},
       {"D", 2},
   };
 
@@ -207,83 +219,106 @@ class BloodVessel : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> get_num_triplets();
-
- private:
-  Parameters params;
 };
 
 template <typename T>
-BloodVessel<T>::BloodVessel(T R, T C, T L, T stenosis_coefficient,
-                            std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.R = R;
-  this->params.C = C;
-  this->params.L = L;
-  this->params.stenosis_coefficient = stenosis_coefficient;
-}
-
-template <typename T>
-BloodVessel<T>::~BloodVessel() {}
-
-template <typename T>
 void BloodVessel<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 3, {"pressure_c"});
+  Block<T>::setup_dofs_(dofhandler, 2, {});
 }
 
 template <typename T>
-void BloodVessel<T>::update_block_params(std::vector<T> new_params) {
-  this->params.R = new_params[0];
-  this->params.C = new_params[1];
-  this->params.L = new_params[2];
-  this->params.stenosis_coefficient = new_params[3];
-}
+void BloodVessel<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                     std::vector<T> &parameters) {
+  // Get parameters
+  T capacitance = parameters[this->global_param_ids[ParamId::CAPACITANCE]];
+  T inductance = parameters[this->global_param_ids[ParamId::INDUCTANCE]];
 
-template <typename T>
-void BloodVessel<T>::get_block_params(std::vector<T> &block_params) {
-  if (block_params.size() != 4) {
-    throw std::runtime_error(
-        "Wrong vector size in get_block_params for BloodVessel. Size should be "
-        "4 but is currently " +
-        std::to_string(block_params.size()));
-  }
-  block_params[0] = this->params.R;
-  block_params[1] = this->params.C;
-  block_params[2] = this->params.L;
-  block_params[3] = this->params.stenosis_coefficient;
-}
-
-template <typename T>
-void BloodVessel<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+  // Set element contributions
   system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) =
-      -params.L;
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) =
-      -params.C;
-
+      -inductance;
+  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) =
+      -capacitance;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      -params.R;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
-
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
-
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[0]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) =
-      -params.R;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = -1.0;
 }
 
 template <typename T>
 void BloodVessel<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
-                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  T q_in = fabs(y[this->global_var_ids[1]]);
-  T fac1 = -params.stenosis_coefficient * q_in;
-  T fac2 = fac1 - params.R;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac2;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac2;
-  system.D.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = fac1;
-  system.D.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = fac1;
+                                     std::vector<T> &parameters,
+                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
+  // Get parameters
+  T resistance = parameters[this->global_param_ids[ParamId::RESISTANCE]];
+  T capacitance = parameters[this->global_param_ids[ParamId::CAPACITANCE]];
+  T stenosis_coeff =
+      parameters[this->global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
+  T q_in = y[this->global_var_ids[1]];
+  T dq_in = dy[this->global_var_ids[1]];
+  T stenosis_resistance = stenosis_coeff * fabs(q_in);
+
+  // Set element contributions
+  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
+      capacitance * (resistance + 2.0 * stenosis_resistance);
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
+      -resistance - stenosis_resistance;
+  system.D.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
+      -stenosis_resistance;
+
+  T sgn_q_in = (0.0 < q_in) - (q_in < 0.0);
+  system.D.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
+      2.0 * capacitance * stenosis_coeff * sgn_q_in * dq_in;
+}
+
+template <typename T>
+void BloodVessel<T>::update_gradient(
+    Eigen::SparseMatrix<T> &jacobian,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha, std::vector<T> &y,
+    std::vector<T> &dy) {
+  T y0 = y[this->global_var_ids[0]];
+  T y1 = y[this->global_var_ids[1]];
+  T y2 = y[this->global_var_ids[2]];
+  T y3 = y[this->global_var_ids[3]];
+
+  T dy0 = dy[this->global_var_ids[0]];
+  T dy1 = dy[this->global_var_ids[1]];
+  T dy3 = dy[this->global_var_ids[3]];
+
+  T resistance = alpha[this->global_param_ids[ParamId::RESISTANCE]];
+  T capacitance = alpha[this->global_param_ids[ParamId::CAPACITANCE]];
+  T inductance = alpha[this->global_param_ids[ParamId::INDUCTANCE]];
+  T stenosis_coeff = 0.0;
+  if (this->global_param_ids.size() > 3) {
+    stenosis_coeff =
+        alpha[this->global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
+  }
+  T stenosis_resistance = stenosis_coeff * fabs(y1);
+
+  jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[0]) = -y1;
+  jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[2]) = -dy3;
+
+  if (this->global_param_ids.size() > 3) {
+    jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[3]) =
+        -fabs(y1) * y1;
+  }
+
+  jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[0]) =
+      capacitance * dy1;
+  jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[1]) =
+      -dy0 + (resistance + 2 * stenosis_resistance) * dy1;
+
+  if (this->global_param_ids.size() > 3) {
+    jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[3]) =
+        2.0 * capacitance * fabs(y1) * dy1;
+  }
+
+  residual(this->global_eqn_ids[0]) =
+      y0 - (resistance + stenosis_resistance) * y1 - y2 - inductance * dy3;
+  residual(this->global_eqn_ids[1]) =
+      y1 - y3 - capacitance * dy0 +
+      capacitance * (resistance + 2.0 * stenosis_resistance) * dy1;
 }
 
 template <typename T>

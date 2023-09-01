@@ -36,7 +36,7 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
-#include "timedependentparameter.hpp"
+#include "parameter.hpp"
 
 namespace MODEL {
 
@@ -73,35 +73,19 @@ namespace MODEL {
  * \mathbf{C}^{e}=\left[\hat{Q}\right]
  * \f]
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Flow
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
 template <typename T>
 class FlowReferenceBC : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {
-    TimeDependentParameter<T> Q;  ///< Time-dependent flow
-  };
-
-  /**
-   * @brief Construct a new FlowReferenceBC object
-   *
-   * @param Q Time dependent flow
-   * @param name Name
-   */
-  FlowReferenceBC(TimeDependentParameter<T> Q, std::string name,
-                  std::string coupling_loc = "None");
-
-  /**
-   * @brief Destroy the FlowReferenceBC object
-   *
-   */
-  ~FlowReferenceBC();
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -116,27 +100,23 @@ class FlowReferenceBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
-   *
-   * @param params New parameters.
-   */
-  void update_block_params(std::vector<T> new_params);
-
-  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
    *
    * @param system System to update contributions at
-   * @param time Current time
+   * @param parameters Parameters of the model
    */
-  void update_time(ALGEBRA::SparseSystem<T> &system, T time);
+  void update_time(ALGEBRA::SparseSystem<T> &system,
+                   std::vector<T> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -157,47 +137,7 @@ class FlowReferenceBC : public Block<T> {
    * (relevant for sparse memory reservation)
    */
   std::map<std::string, int> get_num_triplets();
-
-  /**
-   * @brief Convert the block to a steady behavior
-   *
-   * Converts the prescribed flow to the constant mean of itself
-   *
-   */
-  void to_steady();
-
-  /**
-   * @brief Convert the block to an unsteady behavior
-   *
-   */
-  void to_unsteady();
-
-  /**
-   * @brief Specify is this is an inlet or outlet to the svZeroD model when used
-   * for external coupling.
-   *
-   */
-  std::string coupling_loc;
-
- private:
-  Parameters params;
-  bool external_coupling = false;
 };
-
-template <typename T>
-FlowReferenceBC<T>::FlowReferenceBC(TimeDependentParameter<T> Q,
-                                    std::string name, std::string coupling_loc)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.Q = Q;
-  this->coupling_loc = coupling_loc;
-  if (coupling_loc != "None") {
-    this->external_coupling = true;
-  }
-}
-
-template <typename T>
-FlowReferenceBC<T>::~FlowReferenceBC() {}
 
 template <typename T>
 void FlowReferenceBC<T>::setup_dofs(DOFHandler &dofhandler) {
@@ -205,35 +145,15 @@ void FlowReferenceBC<T>::setup_dofs(DOFHandler &dofhandler) {
 }
 
 template <typename T>
-void FlowReferenceBC<T>::update_block_params(std::vector<T> new_params) {
-  std::vector<T> t_new;
-  std::vector<T> Q_new;
-  int num_time_pts = (int)new_params[0];
-  for (int i = 0; i < num_time_pts; i++) {
-    t_new.push_back(new_params[1 + i]);
-    Q_new.push_back(new_params[1 + num_time_pts + i]);
-  }
-  this->params.Q.update_params(t_new, Q_new);
-}
-
-template <typename T>
-void FlowReferenceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system) {
+void FlowReferenceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
+                                         std::vector<T> &parameters) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
 }
 
 template <typename T>
-void FlowReferenceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system, T time) {
-  system.C(this->global_eqn_ids[0]) = -params.Q.get(time);
-}
-
-template <typename T>
-void FlowReferenceBC<T>::to_steady() {
-  params.Q.to_steady();
-}
-
-template <typename T>
-void FlowReferenceBC<T>::to_unsteady() {
-  params.Q.to_unsteady();
+void FlowReferenceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system,
+                                     std::vector<T> &parameters) {
+  system.C(this->global_eqn_ids[0]) = -parameters[this->global_param_ids[0]];
 }
 
 template <typename T>

@@ -36,8 +36,11 @@
 
 #include "../algebra/sparsesystem.hpp"
 #include "block.hpp"
+#include "closedloopheartpulmonary.hpp"
 
 namespace MODEL {
+
+enum Side { LEFT, RIGHT };
 
 /**
  * @brief Closed loop coronary boundary condition (connected to other blocks on
@@ -104,39 +107,30 @@ namespace MODEL {
  *
  * Assume \f$P_a=0\f$.
  *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Ra
+ * * `1` Ram
+ * * `2` Rv
+ * * `3` Ca
+ * * `4` Cim
+ *
  * @tparam T Scalar type (e.g. `float`, `double`)
+ * @tparam side Side of the block (e.g. `Side::LEFT`, `Side::RIGHT`)
  */
-template <typename T>
+template <typename T, Side side>
 class ClosedLoopCoronaryBC : public Block<T> {
  public:
-  /**
-   * @brief Parameters of the element.
-   *
-   * Struct containing all constant and/or time-dependent parameters of the
-   * element.
-   */
-  struct Parameters : public Block<T>::Parameters {
-    T Ra;
-    T Ram;
-    T Rv;
-    T Ca;
-    T Cim;
-  };
+  // Inherit constructors
+  using Block<T>::Block;
 
   /**
-   * @brief Construct a new ClosedLoopCoronaryBC object
-   *
-   * @param P Time dependent pressure
-   * @param name Name
-   */
-  ClosedLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim, std::string side,
-                       std::string name);
-
-  /**
-   * @brief Destroy the ClosedLoopCoronaryBC object
+   * @brief Local IDs of the parameters
    *
    */
-  ~ClosedLoopCoronaryBC();
+  enum ParamId { RA = 0, RAM = 1, RV = 2, CA = 3, CIM = 4 };
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -151,42 +145,33 @@ class ClosedLoopCoronaryBC : public Block<T> {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update parameters of a block.
+   * @brief Setup parameters that depend on the model
    *
-   * @param params New parameters.
    */
-  void update_block_params(std::vector<T> new_params);
-
-  /**
-   * @brief Return parameters of a block.
-   *
-   * @block_params Block parameters.
-   */
-  void get_block_params(std::vector<T> &block_params);
+  void setup_model_dependent_params();
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system);
+  void update_constant(ALGEBRA::SparseSystem<T> &system,
+                       std::vector<T> &parameters);
 
   /**
-   * @brief Update the solution-dependent contributions of the element
+   * @brief Update the solution-dependent contributions of the element in a
+   * sparse system
    *
    * @param system System to update contributions at
+   * @param parameters Parameters of the model
    * @param y Current solution
+   * @param dy Current derivate of the solution
    */
   void update_solution(ALGEBRA::SparseSystem<T> &system,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
-
-  /**
-   * @brief Update the solution-dependent contributions of t
-   *
-   * @param system System to update contributions at
-   * @param y Current solution
-   */
-  void set_model_dependent_params(MODEL::Model<T> &model);
+                       std::vector<T> &parameters,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -209,125 +194,75 @@ class ClosedLoopCoronaryBC : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 
  private:
-  Parameters params;
-  std::string side;      // Left or right coronary?
-  int ventricle_var_id;  // Index of either left or right ventricle
-  T im;                  // Either iml or imr based on left or right
+  int ventricle_var_id;  // Variable index of either left or right ventricle
+  int im_param_id;       // Index of parameter Im
 };
 
-template <typename T>
-ClosedLoopCoronaryBC<T>::ClosedLoopCoronaryBC(T Ra, T Ram, T Rv, T Ca, T Cim,
-                                              std::string side,
-                                              std::string name)
-    : Block<T>(name) {
-  this->name = name;
-  this->params.Ra = Ra;
-  this->params.Ram = Ram;
-  this->params.Rv = Rv;
-  this->params.Ca = Ca;
-  this->params.Cim = Cim;
-  this->side = side;
-  // this->closed_loop_outlet = true;
-}
-
-template <typename T>
-ClosedLoopCoronaryBC<T>::~ClosedLoopCoronaryBC() {}
-
-template <typename T>
-void ClosedLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
+template <typename T, Side side>
+void ClosedLoopCoronaryBC<T, side>::setup_dofs(DOFHandler &dofhandler) {
   Block<T>::setup_dofs_(dofhandler, 3, {"volume_im"});
 }
 
-template <typename T>
-void ClosedLoopCoronaryBC<T>::update_constant(
-    ALGEBRA::SparseSystem<T> &system) {
+template <typename T, Side side>
+void ClosedLoopCoronaryBC<T, side>::setup_model_dependent_params() {
+  auto heart_block = this->model->get_block("CLH");
+  if (side == Side::LEFT) {
+    im_param_id =
+        heart_block
+            ->global_param_ids[ClosedLoopHeartPulmonary<T>::ParamId::IML];
+    ventricle_var_id =
+        heart_block->global_var_ids[13];  // Solution ID for LV pressure
+  } else {
+    im_param_id =
+        heart_block
+            ->global_param_ids[ClosedLoopHeartPulmonary<T>::ParamId::IMR];
+    ventricle_var_id = heart_block->global_var_ids[6];
+  }
+}
+
+template <typename T, Side side>
+void ClosedLoopCoronaryBC<T, side>::update_constant(
+    ALGEBRA::SparseSystem<T> &system, std::vector<T> &parameters) {
+  T ra = parameters[this->global_param_ids[ParamId::RA]];
+  T ram = parameters[this->global_param_ids[ParamId::RAM]];
+  T rv = parameters[this->global_param_ids[ParamId::RV]];
+  T ca = parameters[this->global_param_ids[ParamId::CA]];
+  T cim = parameters[this->global_param_ids[ParamId::CIM]];
+
   system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) =
-      -params.Ram * params.Ca;
+      -ram * ca;
   system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      params.Ram * params.Ra * params.Ca;
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) =
-      -params.Ca;
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      params.Ca * params.Ra;
+      ram * ra * ca;
+  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = -ca;
+  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = ca * ra;
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) = -1.0;
 
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = -1.0;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      (params.Ra + params.Ram);
+      (ra + ram);
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) =
-      params.Rv;
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) = rv;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[2]) =
-      params.Cim;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[2]) = cim;
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) =
-      params.Cim * params.Rv;
+      cim * rv;
   system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = -1.0;
 }
 
-template <typename T>
-void ClosedLoopCoronaryBC<T>::update_solution(
-    ALGEBRA::SparseSystem<T> &system, Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
-  auto Pim = this->im * y[this->ventricle_var_id];
-  system.C(this->global_eqn_ids[2]) = -params.Cim * Pim;
+template <typename T, Side side>
+void ClosedLoopCoronaryBC<T, side>::update_solution(
+    ALGEBRA::SparseSystem<T> &system, std::vector<T> &parameters,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
+    Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
+  T cim = parameters[this->global_param_ids[ParamId::CIM]];
+  T im = parameters[im_param_id];
+  auto pim = im * y[this->ventricle_var_id];
+  system.C(this->global_eqn_ids[2]) = -cim * pim;
 }
 
-template <typename T>
-void ClosedLoopCoronaryBC<T>::set_model_dependent_params(
-    MODEL::Model<T> &model) {
-  T im_value = 0.0;
-  for (auto &block : model.blocks) {
-    if (block->name == "CLH") {
-      if (this->side == "left") {
-        block->get_parameter_value(
-            "iml",
-            im_value);  // Scaling for LV pressure -> intramyocardial pressure
-        this->ventricle_var_id =
-            block->global_var_ids[13];  // Solution ID for LV pressure
-      } else if (this->side == "right") {
-        block->get_parameter_value(
-            "imr",
-            im_value);  // Scaling for RV pressure -> intramyocardial pressure
-        this->ventricle_var_id = block->global_var_ids[6];
-      } else {
-        throw std::runtime_error(
-            "For closed loop coronary, 'side' should be either 'left' or "
-            "'right'");
-      }
-    }
-  }
-  this->im = im_value;
-}
-
-template <typename T>
-void ClosedLoopCoronaryBC<T>::update_block_params(std::vector<T> new_params) {
-  this->params.Ra = new_params[0];
-  this->params.Ram = new_params[1];
-  this->params.Rv = new_params[2];
-  this->params.Ca = new_params[3];
-  this->params.Cim = new_params[4];
-  this->im = new_params[5];
-}
-
-template <typename T>
-void ClosedLoopCoronaryBC<T>::get_block_params(std::vector<T> &block_params) {
-  if (block_params.size() != 6) {
-    throw std::runtime_error(
-        "Wrong vector size in get_block_params for ClosedLoopCoronaryBC. Size "
-        "should be 6 but is currently " +
-        std::to_string(block_params.size()));
-  }
-  block_params[0] = this->params.Ra;
-  block_params[1] = this->params.Ram;
-  block_params[2] = this->params.Rv;
-  block_params[3] = this->params.Ca;
-  block_params[4] = this->params.Cim;
-  block_params[5] = this->im;
-}
-
-template <typename T>
-std::map<std::string, int> ClosedLoopCoronaryBC<T>::get_num_triplets() {
+template <typename T, Side side>
+std::map<std::string, int> ClosedLoopCoronaryBC<T, side>::get_num_triplets() {
   return num_triplets;
 }
 

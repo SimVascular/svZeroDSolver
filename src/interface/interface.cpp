@@ -29,13 +29,13 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file interface.cpp
- * @brief svZeroDSolver callable interace.
+ * @brief svZeroDSolver callable interface.
  */
 #include "interface.h"
 
 #include <cmath>
 
-#include "io/jsonhandler.hpp"
+//#include "io/configreader.hpp"
 
 typedef double T;
 
@@ -121,45 +121,68 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   DEBUG_MSG("[initialize] problem_id: " << problem_id);
 
   // Create configuration reader.
-  IO::ConfigReader<T> reader;
-  std::ifstream input_file_stream(input_file);
-  std::stringstream buffer;
-  buffer << input_file_stream.rdbuf();
-  std::string json_config = buffer.str();
-  auto handler = IO::JsonHandler(json_config);
-  reader.load(handler);
+  std::ifstream ifs(input_file);
+  const auto& config = nlohmann::json::parse(ifs);
+  auto simparams = IO::load_simulation_params<T>(config);
+  auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
+  IO::load_simulation_model<T>(config, *model.get());
+  auto state = IO::load_initial_condition<T>(config, *model.get());
+
+  // Check that steady initial is not set when ClosedLoopHeartAndPulmonary is
+  // used
+  if ((simparams.sim_steady_initial == true) &&
+      (model->get_block("CLH") != nullptr)) {
+    std::runtime_error(
+        "ERROR: Steady initial condition is not compatible with "
+        "ClosedLoopHeartAndPulmonary block.");
+  }
+
+  // Set default cardiac cycle period if not set by model
+  if (model->cardiac_cycle_period < 0.0) {
+    model->cardiac_cycle_period =
+        1.0;  // If it has not been read from config or Parameter
+              // yet, set as default value of 1.0
+  }
+
+  // Calculate time step size
+  if (!simparams.sim_coupled) {
+    simparams.sim_time_step_size =
+        model->cardiac_cycle_period / (T(simparams.sim_pts_per_cycle) - 1.0);
+  } else {
+    simparams.sim_time_step_size = simparams.sim_external_step_size /
+                                   (T(simparams.sim_num_time_steps) - 1.0);
+  }
 
   // Create a model.
-  auto model = reader.model;
   interface->model_ = model;
 
   // Create a vector containing all block names
-  for (auto const& elem : model->block_index_map) {
-    block_names.push_back(elem.first);
+  for (size_t i = 0; i < model->get_num_blocks(); i++) {
+    block_names.push_back(model->get_block(i)->get_name());
   }
   variable_names = model->dofhandler.variables;
 
   // Get simulation parameters
-  interface->time_step_size_ = reader.sim_time_step_size;
-  interface->max_nliter_ = reader.sim_nliter;
-  interface->absolute_tolerance_ = reader.sim_abs_tol;
+  interface->time_step_size_ = simparams.sim_time_step_size;
+  interface->max_nliter_ = simparams.sim_nliter;
+  interface->absolute_tolerance_ = simparams.sim_abs_tol;
   interface->time_step_ = 0;
   interface->system_size_ = model->dofhandler.size();
-  interface->output_interval_ = reader.output_interval;
-  interface->num_time_steps_ = reader.sim_num_time_steps;
-  interface->pts_per_cycle_ = reader.sim_pts_per_cycle;
-  pts_per_cycle = reader.sim_pts_per_cycle;
-  num_cycles = reader.sim_num_cycles;
-  interface->external_step_size_ = reader.sim_external_step_size;
+  interface->output_interval_ = simparams.output_interval;
+  interface->num_time_steps_ = simparams.sim_num_time_steps;
+  interface->pts_per_cycle_ = simparams.sim_pts_per_cycle;
+  pts_per_cycle = simparams.sim_pts_per_cycle;
+  num_cycles = simparams.sim_num_cycles;
+  interface->external_step_size_ = simparams.sim_external_step_size;
 
   // For how many time steps are outputs being returned?
   // NOTE: Only tested num_output_steps = interface->num_time_steps_
-  if (reader.output_mean_only) {
+  if (simparams.output_mean_only) {
     num_output_steps = 1;
     throw std::runtime_error(
-        "ERROR: Option output_last_cycle_only has not been implemented when "
+        "ERROR: Option output_mean_only has not been implemented when "
         "using the svZeroDPlus interface library.");
-  } else if (reader.output_last_cycle_only) {
+  } else if (!simparams.output_all_cycles) {
     num_output_steps = interface->pts_per_cycle_;
     throw std::runtime_error(
         "ERROR: Option output_last_cycle_only has been implemented but not "
@@ -171,27 +194,23 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->num_output_steps_ = num_output_steps;
   DEBUG_MSG("[initialize] System size: " << interface->system_size_);
 
-  // Create initial state.
-  ALGEBRA::State<T> state = reader.initial_state;
-
   // Create steady initial state.
-  if (reader.sim_steady_initial) {
+  if (simparams.sim_steady_initial) {
     DEBUG_MSG("[initialize] ----- Calculating steady initial condition ----- ");
-    T time_step_size_steady = reader.sim_cardiac_cycle_period / 10.0;
+    T time_step_size_steady = model->cardiac_cycle_period / 10.0;
     DEBUG_MSG("[initialize] Create steady model ... ");
 
-    auto model_steady = reader.model;
+    auto model_steady = model;
     model_steady->to_steady();
-
     ALGEBRA::Integrator<T> integrator_steady(
-        *model_steady, time_step_size_steady, 0.1,
+        model_steady.get(), time_step_size_steady, 0.1,
         interface->absolute_tolerance_, interface->max_nliter_);
 
     for (size_t i = 0; i < 31; i++) {
-      state = integrator_steady.step(state, time_step_size_steady * T(i),
-                                     *model_steady);
+      state = integrator_steady.step(state, time_step_size_steady * T(i));
     }
   }
+  // TODO: Set back to unsteady
   interface->state_ = state;
 
   // Initialize states and times vectors because size is now known
@@ -200,8 +219,8 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 
   // Initialize integrator
   interface->integrator_ = ALGEBRA::Integrator<T>(
-      *model, interface->time_step_size_, 0.1, interface->absolute_tolerance_,
-      interface->max_nliter_);
+      model.get(), interface->time_step_size_, 0.1,
+      interface->absolute_tolerance_, interface->max_nliter_);
 
   DEBUG_MSG("[initialize] Done");
 }
@@ -239,19 +258,42 @@ void update_block_params(const int problem_id, std::string block_name,
   auto model = interface->model_;
 
   // Find the required block
-  // int block_index = model->block_index_map.at(block_name);
-  int block_index;
-  try {
-    block_index = model->block_index_map.at(block_name);
-  } catch (...) {
-    std::cout << "[update_block_params] Error! Could not find block with name: "
-              << block_name << std::endl;
-    throw std::runtime_error("Terminating.");
+  auto block = model->get_block(block_name);
+  if (block == nullptr) {
+    throw std::runtime_error("Could not find block with name " + block_name);
   }
-  auto block = model->blocks[block_index];
-
-  // Update params
-  block->update_block_params(params);
+  auto block_type = model->get_block_type(block_name);
+  // Update is handled differently for blocks that have time-varying parameters
+  // (PRESSUREBC and FLOWBC)
+  // TODO: Does this need to be done for OPENLOOPCORONARYBC and RESISTANCEBC
+  // too?
+  if ((block_type == MODEL::BlockType::PRESSUREBC) ||
+      (block_type == MODEL::BlockType::FLOWBC)) {
+    std::vector<T> times_new;
+    std::vector<T> values_new;
+    int num_time_pts = (int)params[0];
+    for (int i = 0; i < num_time_pts; i++) {
+      times_new.push_back(params[1 + i]);
+      values_new.push_back(params[1 + num_time_pts + i]);
+    }
+    model->get_parameter(block->global_param_ids[0])
+        ->update(times_new, values_new);
+  } else {
+    if (block->global_param_ids.size() != params.size()) {
+      throw std::runtime_error(
+          "New parameter vector (given size = " +
+          std::to_string(params.size()) +
+          ") does not match number of parameters of block " + block_name +
+          " (required size = " +
+          std::to_string(block->global_param_ids.size()) + ")");
+    }
+    for (size_t i = 0; i < params.size(); i++) {
+      model->get_parameter(block->global_param_ids[i])->update(params[i]);
+      // parameter_values vector needs to be seperately updated for constant
+      // parameters
+      model->update_parameter_value(block->global_param_ids[i], params[i]);
+    }
+  }
 }
 
 /**
@@ -265,19 +307,20 @@ void read_block_params(const int problem_id, std::string block_name,
                        std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
-
-  // Find the required block
-  int block_index;
-  try {
-    block_index = model->block_index_map.at(block_name);
-  } catch (...) {
-    std::cout << "[read_block_params] Error! Could not find block with name: "
-              << block_name << std::endl;
-    throw std::runtime_error("Terminating.");
+  auto block = model->get_block(block_name);
+  if (block == nullptr) {
+    throw std::runtime_error("Could not find block with name " + block_name);
   }
-  auto block = model->blocks[block_index];
-  // Read params
-  block->get_block_params(params);
+  if (params.size() != block->global_param_ids.size()) {
+    throw std::runtime_error(
+        "Parameter vector (given size = " + std::to_string(params.size()) +
+        ") does not match number of parameters of block " + block_name +
+        " (required size = " + std::to_string(block->global_param_ids.size()) +
+        ")");
+  }
+  for (size_t i = 0; i < params.size(); i++) {
+    params[i] = model->get_parameter_value(block->global_param_ids[i]);
+  }
 }
 
 /**
@@ -296,8 +339,7 @@ void get_block_node_IDs(const int problem_id, std::string block_name,
   auto model = interface->model_;
 
   // Find the required block
-  int block_index = model->block_index_map.at(block_name);
-  auto block = model->blocks[block_index];
+  auto block = model->get_block(block_name);
 
   // IDs are stored in the following format
   // {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet nodes,
@@ -354,7 +396,6 @@ void return_ydot(const int problem_id, std::vector<double>& ydot) {
   auto state = interface->state_;
   for (int i = 0; i < system_size; i++) {
     ydot[i] = state.ydot[i];
-    // std::cout<<"return_ydot: "<<ydot[i]<<std::endl;
   }
 }
 
@@ -401,11 +442,10 @@ void increment_time(const int problem_id, const double external_time,
   auto time_step_size = interface->time_step_size_;
   auto absolute_tolerance = interface->absolute_tolerance_;
   auto max_nliter = interface->max_nliter_;
-
-  ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
+  ALGEBRA::Integrator<T> integrator(model.get(), time_step_size, 0.1,
                                     absolute_tolerance, max_nliter);
   auto state = interface->state_;
-  interface->state_ = integrator.step(state, external_time, *model);
+  interface->state_ = integrator.step(state, external_time);
   interface->time_step_ += 1;
 
   for (int i = 0; i < state.y.size(); i++) {
@@ -438,10 +478,8 @@ void run_simulation(const int problem_id, const double external_time,
   auto system_size = interface->system_size_;
   auto num_output_steps = interface->num_output_steps_;
 
-  // ALGEBRA::Integrator<T> integrator(*model, time_step_size, 0.1,
-  //                                  absolute_tolerance, max_nliter);
   auto integrator = interface->integrator_;
-  integrator.update_params(*model, time_step_size);
+  integrator.update_params(time_step_size);
 
   auto state = interface->state_;
   T time = external_time;
@@ -454,9 +492,8 @@ void run_simulation(const int problem_id, const double external_time,
   error_code = 0;
   bool isNaN = false;
   for (int i = 1; i < num_time_steps; i++) {
-    // std::cout << "[run_simulation] time: " << time << std::endl;
     interface->time_step_ += 1;
-    state = integrator.step(state, time, *model);
+    state = integrator.step(state, time);
     // Check for NaNs in the state vector
     if ((i % 100) == 0) {
       for (int j = 0; j < system_size; j++) {

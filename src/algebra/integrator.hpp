@@ -84,18 +84,19 @@ class Integrator {
   Eigen::Matrix<T, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<T, Eigen::Dynamic, 1> ydot_am;
   SparseSystem<T> system;
+  MODEL::Model<T>* model;
 
  public:
   /**
    * @brief Construct a new Integrator object
    *
-   * @param system System of equations to integrate
+   * @param model The model to simulate
    * @param time_step_size Time step size for generalized-alpha step
    * @param rho Spectral radius for generalized-alpha step
    * @param atol Absolut tolerance for non-linear iteration termination
    * @param max_iter Maximum number of non-linear iterations
    */
-  Integrator(MODEL::Model<T> &model, T time_step_size, T rho, T atol,
+  Integrator(MODEL::Model<T>* model, T time_step_size, T rho, T atol,
              int max_iter);
 
   /**
@@ -120,25 +121,24 @@ class Integrator {
    * @brief Update integrator parameter and system matrices with model parameter
    * updates.
    *
-   * @param model ZeroD model being solved
    * @param time_step_size Time step size for 0D model
    */
-  void update_params(MODEL::Model<T> &model, T time_step_size);
+  void update_params(T time_step_size);
 
   /**
    * @brief Perform a time step
    *
    * @param state Current state
    * @param time Current time
-   * @param model The model
    * @return New state
    */
-  State<T> step(State<T> &state, T time, MODEL::Model<T> &model);
+  State<T> step(State<T>& state, T time);
 };
 
 template <typename T>
-Integrator<T>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
+Integrator<T>::Integrator(MODEL::Model<T>* model, T time_step_size, T rho,
                           T atol, int max_iter) {
+  this->model = model;
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
   alpha_m_inv = 1.0 / alpha_m;
@@ -149,7 +149,7 @@ Integrator<T>::Integrator(MODEL::Model<T> &model, T time_step_size, T rho,
   y_init_coeff = alpha_f * 0.5 * time_step_size;
   ydot_init_coeff = (1.0 + alpha_m * ((gamma - 0.5) * gamma_inv - 1.0));
 
-  size = model.dofhandler.size();
+  size = model->dofhandler.size();
   system = SparseSystem<T>(size);
   this->time_step_size = time_step_size;
   this->atol = atol;
@@ -179,18 +179,17 @@ void Integrator<T>::clean() {
 }
 
 template <typename T>
-void Integrator<T>::update_params(MODEL::Model<T> &model, T time_step_size) {
+void Integrator<T>::update_params(T time_step_size) {
   y_init_coeff = alpha_f * 0.5 * time_step_size;
   this->time_step_size = time_step_size;
   time_step_size_inv = 1.0 / time_step_size;
   y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;
-  model.update_constant(system);
-  model.update_time(system, 0.0);
+  model->update_constant(system);
+  model->update_time(system, 0.0);
 }
 
 template <typename T>
-State<T> Integrator<T>::step(State<T> &old_state, T time,
-                             MODEL::Model<T> &model) {
+State<T> Integrator<T>::step(State<T>& old_state, T time) {
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();
@@ -201,11 +200,11 @@ State<T> Integrator<T>::step(State<T> &old_state, T time,
   T new_time = time + alpha_f * time_step_size;
 
   // Update time-dependent element contributions in system
-  model.update_time(system, new_time);
+  model->update_time(system, new_time);
 
   for (size_t i = 0; i < max_iter; i++) {
     // Update solution-dependent element contribitions
-    model.update_solution(system, y_af);
+    model->update_solution(system, y_af, ydot_am);
 
     // Update residuum and check termination criteria
     system.update_residual(y_af, ydot_am);
@@ -216,7 +215,7 @@ State<T> Integrator<T>::step(State<T> &old_state, T time,
     // Abort if maximum number of non-linear iterations is reached
     else if (i == max_iter - 1) {
       throw std::runtime_error(
-          "Maxium number of non-linear iterations reached.");
+          "Maximum number of non-linear iterations reached.");
     }
 
     // Determine jacobian

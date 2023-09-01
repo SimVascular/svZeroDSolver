@@ -5,17 +5,6 @@ project(svZeroDSolver)
 include(FetchContent)
 
 # -----------------------------------------------------------------------------
-# Fetch simdjson
-# -----------------------------------------------------------------------------
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-FetchContent_Declare(
-  simdjson
-  GIT_REPOSITORY https://github.com/simdjson/simdjson.git
-  GIT_TAG  master
-  GIT_SHALLOW TRUE)
-FetchContent_MakeAvailable(simdjson)
-
-# -----------------------------------------------------------------------------
 # Fetch Eigen
 # -----------------------------------------------------------------------------
 FetchContent_Declare(
@@ -45,16 +34,40 @@ if(NOT pybind11_POPULATED)
 endif()
 
 # -----------------------------------------------------------------------------
+# Fetch nlohmann/json
+# -----------------------------------------------------------------------------
+FetchContent_Declare(
+    json
+    URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
+)
+FetchContent_MakeAvailable(json)
+
+# -----------------------------------------------------------------------------
+# Fetch pybind11_json
+# -----------------------------------------------------------------------------
+FetchContent_Declare(
+    pybind11_json
+    GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
+    GIT_TAG        master
+)
+FetchContent_MakeAvailable(pybind11_json)
+
+# -----------------------------------------------------------------------------
 # Set executable and python library
 # -----------------------------------------------------------------------------
-add_executable(svzerodsolver src/main.cpp)
-pybind11_add_module(libsvzerodsolver src/python.cpp)
+include_directories(src)
+add_executable(svzerodsolver applications/svzerodsolver.cpp)
+add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp)
+pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
 add_subdirectory("src/interface")
 
 # -----------------------------------------------------------------------------
 # Link libraries
 # -----------------------------------------------------------------------------
 target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
-target_link_libraries(svzerodsolver PRIVATE simdjson)
-target_link_libraries(libsvzerodsolver PRIVATE Eigen3::Eigen)
-target_link_libraries(libsvzerodsolver PRIVATE simdjson)
+target_link_libraries(svzerodsolver PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(svzerodcalibrator PRIVATE Eigen3::Eigen)
+target_link_libraries(svzerodcalibrator PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(svzerodplus PRIVATE Eigen3::Eigen)
+target_link_libraries(svzerodplus PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(svzerodplus PRIVATE pybind11_json)

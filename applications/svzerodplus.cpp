@@ -42,6 +42,9 @@
 
 namespace py = pybind11;
 
+py::module_ pd = py::module_::import("pandas");
+py::module_ io = py::module_::import("io");
+
 PYBIND11_MODULE(svzerodplus, m) {
   using Solver = SOLVE::Solver<double>;
   m.doc() = "svZeroDSolver";
@@ -65,7 +68,7 @@ PYBIND11_MODULE(svzerodplus, m) {
     const nlohmann::json& config_json = config;
     auto solver = Solver(config_json);
     solver.run();
-    return solver.get_full_result();
+    return pd.attr("read_csv")(io.attr("StringIO")(solver.get_full_result()));
   });
   m.def("calibrate", [](py::dict& config) {
     const nlohmann::json& config_json = config;

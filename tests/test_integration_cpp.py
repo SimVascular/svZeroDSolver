@@ -25,8 +25,7 @@ def run_test_case_by_name(name, output_variable_based=False, folder="."):
     testfile = os.path.join(this_file_dir, "cases", folder, name + ".json")
     with open(testfile) as ff:
         config = json.load(ff)
-    output = svzerodplus.simulate(config)
-    result = pd.read_csv(StringIO(output))
+    result = svzerodplus.simulate(config)
 
     if output_variable_based == False:
         output = {

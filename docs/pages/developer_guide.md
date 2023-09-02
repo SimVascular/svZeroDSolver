@@ -95,7 +95,7 @@ The documentation is automatically build in the GitHub CI/CD and published
 on GitHub pages. If you want to build the documentation locally, you can use:
 
 ```
-doxygen docs/cpp/Doxyfile
+doxygen docs/Doxyfile
 ```
 
 If you do not have Doxygen install you can do that with `brew install doxygen`

@@ -1,10 +1,7 @@
 import json
 import os
-from io import StringIO
-from tempfile import TemporaryDirectory
 
 import numpy as np
-import pandas as pd
 import pytest
 
 import svzerodplus

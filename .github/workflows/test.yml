@@ -17,7 +17,7 @@ jobs:
       - name: Install svZeroDPlus
         run: |
           conda create -n zerod python=3.9
-          conda run -n zerod pip install -e .
+          conda run -n zerod pip install -e ".[dev]"
       - name: Test the build
         run: |
           conda run -n zerod pytest

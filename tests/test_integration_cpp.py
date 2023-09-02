@@ -421,7 +421,7 @@ def test_steady_flow_confluencer_r():
     )  # daughter2 outlet flow
 
 
-def test_closed_loop_heart_single_vessel(tmpdir):
+def test_closed_loop_heart_single_vessel():
     results = run_test_case_by_name("closedLoopHeart_singleVessel")
     assert np.isclose(
         np.mean(np.array(results["pressure_in"][0])), 55.703345704742844, rtol=RTOL_PRES
@@ -437,7 +437,7 @@ def test_closed_loop_heart_single_vessel(tmpdir):
     )  # aortic inflow
 
 
-def test_closed_loop_heart_with_coronaries(tmpdir):
+def test_closed_loop_heart_with_coronaries():
     results = run_test_case_by_name("closedLoopHeart_withCoronaries")
     assert np.isclose(
         np.mean(np.array(results["pressure_in"][0])), 50.162313086833805, rtol=RTOL_PRES
@@ -453,7 +453,7 @@ def test_closed_loop_heart_with_coronaries(tmpdir):
     )  # max aortic flow
 
 
-def test_coupled_block_heart_single_vessel(tmpdir):
+def test_coupled_block_heart_single_vessel():
     result = run_test_case_by_name(
         "coupledBlock_closedLoopHeart_singleVessel", output_variable_based=True
     )
@@ -471,7 +471,7 @@ def test_coupled_block_heart_single_vessel(tmpdir):
     )  # min aortic pressure
 
 
-def test_coupled_block_heart_with_coronaries(tmpdir):
+def test_coupled_block_heart_with_coronaries():
     result = run_test_case_by_name(
         "coupledBlock_closedLoopHeart_withCoronaries", output_variable_based=True
     )
@@ -489,7 +489,7 @@ def test_coupled_block_heart_with_coronaries(tmpdir):
     )  # min aortic pressure
 
 
-def test_steady_flow_calibration(tmpdir):
+def test_steady_flow_calibration():
     with open(
         os.path.join(this_file_dir, "cases", "steadyFlow_calibration.json")
     ) as ff:

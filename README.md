@@ -9,14 +9,11 @@
 </div>
 
 svZeroDPlus is a fast simulation tool for modeling the hemodynamics of
-vascular networks using zero-dimensional (0D) lumped parameter models. There
-are two different implementations of the solver, a high performance C++
-version and an easy to use Python version. You can find more information about
-both under the following links:
+vascular networks using zero-dimensional (0D) lumped parameter models.
+You can find more information about svZeroDPlus under the following links:
 
-* [**C++ Documentation**](https://StanfordCBCL.github.io/svZeroDPlus/cpp)
-* [**C++ Developer Guide**](https://StanfordCBCL.github.io/svZeroDPlus/cpp/md_developer_guide.html)
-* [**Python Documentation**](https://StanfordCBCL.github.io/svZeroDPlus/python)
+* [**Documentation**](https://StanfordCBCL.github.io/svZeroDPlus)
+* [**Developer Guide**](https://StanfordCBCL.github.io/svZeroDPlus/md_developer_guide.html)
 * [**Wiki**](https://github.com/StanfordCBCL/svZeroDPlus/wiki)
 * [**Bug Reports**](https://github.com/StanfordCBCL/svZeroDPlus/issues)
 * [**Forum**](https://github.com/StanfordCBCL/svZeroDPlus/discussions)

@@ -47,7 +47,6 @@ py::module_ io = py::module_::import("io");
 
 PYBIND11_MODULE(svzerodplus, m) {
   using Solver = SOLVE::Solver<double>;
-  m.doc() = "svZeroDSolver";
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {
         const nlohmann::json& config_json = config;
@@ -58,7 +57,6 @@ PYBIND11_MODULE(svzerodplus, m) {
         const auto& config_json = nlohmann::json::parse(ifs);
         return std::unique_ptr<Solver>(new Solver(config_json));
       }))
-      .def("copy", [](Solver& solver) { return Solver(solver); })
       .def("run", &Solver::run)
       .def("get_single_result", &Solver::get_single_result)
       .def("get_single_result_avg", &Solver::get_single_result_avg)
@@ -66,8 +64,7 @@ PYBIND11_MODULE(svzerodplus, m) {
            [](Solver& solver) {
              auto result = solver.get_full_result();
              return pd.attr("read_csv")(io.attr("StringIO")(result));
-           })
-      .def("update_block_params", &Solver::update_block_params);
+           });
 
   m.def("simulate", [](py::dict& config) {
     const nlohmann::json& config_json = config;

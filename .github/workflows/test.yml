@@ -22,15 +22,28 @@ jobs:
           conda run -n zerod pip install -e .
       - name: Test the build
         run: |
-          conda run -n zerod pytest tests/test_integration_cpp.py -v --durations=0
-      - name: Generate code coverage
-        if: startsWith(matrix.os, 'ubuntu-22.04')
+          conda run -n zerod pytest tests/test_integration_cpp.py  -v --durations=0
+      - name: Build using CMake
         run: |
           mkdir Release
           cd Release
-          cmake -DENABLE_COVERAGE=ON ..
-          make -j2
-          cd ../tests
+          cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_COVERAGE=ON ..
+          cmake --build .
+      - name: Test interface
+        run: |
+          cd tests/test_interface
+          mkdir build_tests
+          cd build_tests
+          cmake ../
+          make
+          cd test_01
+          ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
+          cd ../test_02
+          ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
+      - name: Generate code coverage
+        if: startsWith(matrix.os, 'ubuntu-22.04')
+        run: |
+          cd tests
           conda run -n zerod pytest -v --durations=0 --coverage test_integration_cpp.py
           cd ../Release
           make coverage      

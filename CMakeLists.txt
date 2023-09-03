@@ -20,11 +20,11 @@ if(ENABLE_COVERAGE)
   # add coverage target
   add_custom_target(coverage
     # gather data
-    COMMAND ${LCOV} --directory . --capture --output-file coverage.info --ignore-errors inconsistent --ignore-errors gcov
+    COMMAND ${LCOV} --directory . --capture --output-file coverage.info --ignore-errors gcov
     # exclude externals
-    COMMAND ${LCOV} --remove coverage.info -o coverage.info --ignore-errors unused '/usr/*' '/opt/*' '_deps/*' '/Library' --ignore-errors inconsistent
+    COMMAND ${LCOV} --remove coverage.info -o coverage.info --ignore-errors unused '/usr/*' '/opt/*' '_deps/*' '/Library'
     # generate report
-    COMMAND ${GENHTML} --demangle-cpp -o coverage coverage.info --ignore-errors inconsistent --ignore-errors unmapped
+    COMMAND ${GENHTML} --demangle-cpp -o coverage coverage.info --ignore-errors unmapped
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 

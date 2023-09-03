@@ -1,3 +1,5 @@
+# PREFERRED BUILD SYSTEM IS CMAKE
+# This Makefile is being retained as an alternative option
 
 src=LPNSolverInterface.cpp main.cpp
 obj=$(src:.cpp=.o)

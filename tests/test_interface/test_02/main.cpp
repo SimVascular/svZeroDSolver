@@ -1,8 +1,4 @@
 // Test interfacing to svZeroDPlus. 
-//
-// Usage:
-//
-// svZeroD_interface_test SOLVER_JSON
 
 #include "LPNSolverInterface.h" 
 #include <iostream>
@@ -47,10 +43,15 @@ std::string check_simulation_results(double mean_aortic_flow, double mean_aortic
 int main(int argc, char** argv)
 {
   LPNSolverInterface interface;
+  
+  if (argc != 3) {
+    std::runtime_error("Usage: svZeroD_interface_test01 <path_to_svzeroDPlus_build_folder> <path_to_json_file>");
+  }
 
   // Load shared library and get interface functions.
   // File extension of the shared library depends on the system
-  std::string interface_lib_path = "../../../Release/src/interface/libsvzero_interface_library";
+  std::string svzerod_build_path = std::string(argv[1]);
+  std::string interface_lib_path = svzerod_build_path + "/src/interface/libsvzero_interface_library";
   std::string interface_lib_so = interface_lib_path + ".so";
   std::string interface_lib_dylib = interface_lib_path + ".dylib";
   std::ifstream lib_so_exists(interface_lib_so);
@@ -64,7 +65,7 @@ int main(int argc, char** argv)
   } 
 
   // Set up the svZeroD model
-  std::string file_name = std::string(argv[1]);
+  std::string file_name = std::string(argv[2]);
   interface.initialize(file_name);
 
   // Check number of variables and blocks

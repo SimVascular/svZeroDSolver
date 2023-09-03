@@ -31,12 +31,15 @@ jobs:
           cmake --build .
       - name: Test interface
         run: |
-          cd tests/test_interface/test_01/
+          cd tests/test_interface
+          mkdir build_tests
+          cd build_tests
+          cmake ../
           make
-          ./svZeroD_interface_test svzerod_3Dcoupling.json
-          cd ../test_02/
-          make
-          ./svZeroD_interface_test svzerod_tuned.json
+          cd test_01
+          ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
+          cd ../test_02
+          ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
   python:
     runs-on: ubuntu-latest
     steps:

@@ -2,14 +2,22 @@
 
 [TOC]
 
-svZeroDPlus is an application for performing different tasks with 0D hemodynamic
-computer models. It is written in C++ to enable the
-highest performance. It also offers a Python API for easily integrating it into
-other routines.
+svZeroDPlus is an application for performing simulations with 0D/lumped-parameter
+computer models for cardiovascular flows. 
 
-* <a href="https://github.com/StanfordCBCL/svZeroDPlus">Source
-repository</a>
-* <a href="https://simvascular.github.io">About SimVascular</a>
+Some noteworthy features of svZeroDPlus are:
+* It is completely modular. Users can create custom flow models by arranging 
+blocks corresponding to blood vessels, junctions, different types of 
+boundary conditions, etc. 
+* It is written in C++ to enable high-performance applications.
+* svZeroDPlus offers both a Python API and a C++ shared library to interface with other 
+Python or C++-based applications. This allows it to be used in a fully coupled manner 
+with other multi-physics solvers, and for parameter estimation, uncertainty 
+quantification, etc.
+* The svZeroDCalibrator application, which is included in svZeroDPlus, optimizes 0D
+blood vessel parameters to recapitulate given time-varying flow and pressure measurements 
+(for example, from a high-fidelity 3D simulation). This allows users to build accurate 
+0D models that reflect observed hemodynamics.
 
 Zero-dimensional (0D) models
 are lightweight methods to simulate bulk hemodynamic quantities in the
@@ -28,6 +36,10 @@ anatomies. These 0D models are governed by differential algebraic equations
 
 For more background information on 0D models, have a look at SimVascular's
 [ROM Simulation Guide](http://simvascular.github.io/docsROMSimulation.html).
+
+* <a href="https://github.com/StanfordCBCL/svZeroDPlus">Source
+repository</a>
+* <a href="https://simvascular.github.io">About SimVascular</a>
 
 # Installation
 
@@ -79,9 +91,7 @@ more helpful information in our [Developer Guide](@ref developer_guide).
 svZeroDSolver can be used to run zero-dimensional (0D) cardiovascular
 simulations based on a given configuration.
 
-## Run svZeroDSolver
-
-### From the command line
+## Run svZeroDSolver from the command line
 
 svZeroDSolver can be executed from the command line using a JSON configuration
 file.
@@ -92,12 +102,25 @@ svzerodsolver tests/cases/steadyFlow_RLC_R.json result_steadyFlow_RLC_R.csv
 
 The result will be written to a csv file.
 
-### In Python
+## Run svZeroDSolver from other programs
 
 For some applications it is beneficial to run svZeroDSolver directly
-from within another Python application. This can, for example, be
+from within another program. For example, this can be
 useful when many simulations need to be performed (e.g. for 
-calibration, uncertainty quantification, ...). Please make sure that
+calibration, uncertainty quantification, ...). It is also allows using
+svZeroDPlus with other solvers, for example as boundary conditions or
+forcing terms.
+
+### In C++
+
+SvZeroDPlus needs to be built using CMake to use the shared library interface.
+
+Detailed examples of interfacing with svZeroDPlus from C++ codes are available 
+in the test cases at `svZeroDPlus/tests/test_interface`. 
+
+### In Python
+
+Please make sure that
 you installed svZerodPlus via pip to enable this feature. We start by
 importing svzerodplus:
 
@@ -146,8 +169,7 @@ solver.get_single_result_avg("flow:INFLOW:branch0_seg0")
 >>> 5.0
 ```
 
-
-## Configuration (file)
+## Configuration
 
 svZeroDSolver is configured using either a JSON file or a Python
 dictionary. The top-level structure of both is:

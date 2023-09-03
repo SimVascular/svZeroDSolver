@@ -23,6 +23,23 @@ jobs:
       - name: Test the build
         run: |
           conda run -n zerod pytest tests/test_integration_cpp.py
+      - name: Build using CMake
+        run: |
+          mkdir Release
+          cd Release
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build .
+      - name: Test interface
+        run: |
+          cd tests/test_interface
+          mkdir build_tests
+          cd build_tests
+          cmake ../
+          make
+          cd test_01
+          ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
+          cd ../test_02
+          ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
   python:
     runs-on: ubuntu-latest
     steps:

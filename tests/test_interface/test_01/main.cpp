@@ -1,6 +1,6 @@
 // Test interfacing to svZeroDPlus. 
 
-#include "LPNSolverInterface.h" 
+#include "../LPNSolverInterface/LPNSolverInterface.h" 
 #include <iostream>
 #include <map>
 #include <fstream>
@@ -174,6 +174,12 @@ int main(int argc, char** argv)
   mean_aortic_pressure /= (double)interface.num_output_steps_;
   mean_bc_lca1_outlet_flow /= (double)interface.num_output_steps_;
   mean_bc_lca1_outlet_pressure /= (double)interface.num_output_steps_;
+  
+  std::cout <<"Simulation output: " << std::endl;
+  std::cout <<"Mean aortic flow = " << mean_aortic_flow << std::endl;
+  std::cout <<"Mean aortic pressure = " << mean_aortic_pressure << std::endl;
+  std::cout <<"Mean BC_lca1 outlet flow = " << mean_bc_lca1_outlet_flow << std::endl;
+  std::cout <<"Mean BC_lca1 outlet pressure = " << mean_bc_lca1_outlet_pressure << std::endl;
 
   // Compare mean flow/pressure in aorta and coronary with pre-computed ("correct") values
   double error_limit = 0.05;

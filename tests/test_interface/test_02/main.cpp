@@ -1,6 +1,6 @@
 // Test interfacing to svZeroDPlus. 
 
-#include "LPNSolverInterface.h" 
+#include "../LPNSolverInterface/LPNSolverInterface.h" 
 #include <iostream>
 #include <map>
 #include <fstream>

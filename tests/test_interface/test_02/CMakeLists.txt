@@ -56,7 +56,7 @@
 # Set executable and python library
 # -----------------------------------------------------------------------------
 # include_directories(src)
-add_executable(svZeroD_interface_test02 LPNSolverInterface.cpp  main.cpp)
+add_executable(svZeroD_interface_test02 ../LPNSolverInterface/LPNSolverInterface.cpp  main.cpp)
 target_link_libraries(svZeroD_interface_test02 ${CMAKE_DL_LIBS})
 # add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp)
 # pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)

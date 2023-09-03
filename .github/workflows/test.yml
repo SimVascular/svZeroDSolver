@@ -22,12 +22,12 @@ jobs:
           conda run -n zerod pip install -e .
       - name: Test the build
         run: |
-          conda run -n zerod pytest tests/test_integration_cpp.py  -v --durations=0
+          conda run -n zerod pytest tests/test_integration_cpp.py -v --durations=0
       - name: Build using CMake
         run: |
           mkdir Release
           cd Release
-          cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_COVERAGE=ON ..
+          cmake -DCMAKE_BUILD_TYPE=Release ..
           cmake --build .
       - name: Test interface
         run: |
@@ -43,10 +43,13 @@ jobs:
       - name: Generate code coverage
         if: startsWith(matrix.os, 'ubuntu-22.04')
         run: |
-          cd tests
-          conda run -n zerod pytest -v --durations=0 --coverage test_integration_cpp.py
+          cd Release
+          cmake -DENABLE_COVERAGE=ON ..
+          cmake --build .
+          cd ../tests
+          conda run -n zerod pytest test_integration_cpp.py -v --durations=0 --coverage
           cd ../Release
-          make coverage      
+          make coverage
       - name: Save coverage report
         if: startsWith(matrix.os, 'ubuntu-22.04')
         uses: actions/upload-artifact@v3

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Alpine Linux) (preloaded format=pdflatex 2023.9.1)  1 SEP 2023 15:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Alpine Linux) (preloaded format=pdflatex 2023.9.3)  3 SEP 2023 16:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1310,60 +1310,61 @@ File: ts1phv.fd 2020/03/25 scalable font definitions for TS1/phv.
 LaTeX Font Info:    Font shape `TS1/phv/m/n' will be
 (Font)              scaled to size 8.99994pt on input line 5.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 12.9599pt on input line 11.
+(Font)              scaled to size 12.9599pt on input line 19.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 12.
-LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
-(Font)              scaled to size 8.99994pt on input line 33.
+(Font)              scaled to size 10.79993pt on input line 20.
+ [1
 
-Underfull \hbox (badness 10000) detected at line 33
+
+]
+LaTeX Font Info:    Font shape `T1/phv/bc/n' will be
+(Font)              scaled to size 8.99994pt on input line 41.
+
+Underfull \hbox (badness 10000) detected at line 41
 [][][]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 36--37
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
 
  []
 
-[1
-
-
-] [2]
-Underfull \hbox (badness 10000) in paragraph at lines 161--161
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 172--172
 []\T1/phv/m/n/10 Output so-lu-tion based on vari-ables (i.[]
  []
 
 [3]
-Underfull \hbox (badness 1852) in paragraph at lines 196--196
+Underfull \hbox (badness 1852) in paragraph at lines 207--207
 \T1/pcr/m/n/10 R[]_[]poiseuille[]\T1/phv/m/n/10 : Poiseuille
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 196--196
+Underfull \hbox (badness 10000) in paragraph at lines 207--207
 \T1/pcr/m/n/10 stenosis[]_[]
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 196--196
+Underfull \hbox (badness 10000) in paragraph at lines 207--207
 \T1/pcr/m/n/10 coefficient[]\T1/phv/m/n/10 : Steno-sis
  []
 
-
-Overfull \hbox (2.32822pt too wide) in paragraph at lines 231--231
+[4]
+Overfull \hbox (2.32822pt too wide) in paragraph at lines 242--242
 [][]| 
  []
 
 
-Underfull \hbox (badness 812) in paragraph at lines 265--265
+Underfull \hbox (badness 812) in paragraph at lines 276--276
 []\T1/phv/m/n/10 Prescribed (tran-sient) pres-
  []
 
 
-Overfull \hbox (11.68141pt too wide) in paragraph at lines 265--265
+Overfull \hbox (11.68141pt too wide) in paragraph at lines 276--276
 [][]| 
  []
 
-[4] [5]) [6]
+[5]) [6]
 Chapter 2.
 (./md_developer_guide.tex [7
 
@@ -1808,10 +1809,10 @@ You may provide a definition with
 
  
 Here is how much of TeX's memory you used:
- 47461 strings out of 478238
- 1082309 string characters out of 5850422
- 1628476 words of memory out of 5000000
- 63345 multiletter control sequences out of 15000+600000
+ 47465 strings out of 478238
+ 1082381 string characters out of 5850422
+ 1628894 words of memory out of 5000000
+ 63347 multiletter control sequences out of 15000+600000
  546568 words of font info for 138 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,17n,117p,1705b,797s stack positions out of 10000i,1000n,20000p,200000b,200000s

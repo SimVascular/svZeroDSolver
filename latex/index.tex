@@ -1,14 +1,22 @@
-sv\+Zero\+DPlus is an application for performing different tasks with 0D hemodynamic computer models. It is written in C++ to enable the highest performance. It also offers a Python API for easily integrating it into other routines.
+sv\+Zero\+DPlus is an application for performing simulations with 0D/lumped-\/parameter computer models for cardiovascular flows.
+
+Some noteworthy features of sv\+Zero\+DPlus are\+:
+\begin{DoxyItemize}
+\item It is completely modular. Users can create custom flow models by arranging blocks corresponding to blood vessels, junctions, different types of boundary conditions, etc.
+\item It is written in C++ to enable high-\/performance applications.
+\item sv\+Zero\+DPlus offers both a Python API and a C++ shared library to interface with other Python or C++-\/based applications. This allows it to be used in a fully coupled manner with other multi-\/physics solvers, and for parameter estimation, uncertainty quantification, etc.
+\item The sv\+Zero\+DCalibrator application, which is included in sv\+Zero\+DPlus, optimizes 0D blood vessel parameters to recapitulate given time-\/varying flow and pressure measurements (for example, from a high-\/fidelity 3D simulation). This allows users to build accurate 0D models that reflect observed hemodynamics.
+\end{DoxyItemize}
+
+Zero-\/dimensional (0D) models are lightweight methods to simulate bulk hemodynamic quantities in the cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-\/dependent; they are unable to simulate spatial patterns in the hemodynamics. 0D models are analogous to electrical circuits. The flow rate simulated by 0D models represents electrical current, while the pressure represents voltage. Three primary building blocks of 0D models are resistors, capacitors, and inductors Resistance captures the viscous effects of blood flow, capacitance represents the compliance and distensibility of the vessel wall, and inductance represents the inertia of the blood flow. Different combinations of these building blocks, as well as others, can be formed to reflect the hemodynamics and physiology of different cardiovascular anatomies. These 0D models are governed by differential algebraic equations (DAEs).
+
+For more background information on 0D models, have a look at Sim\+Vascular\textquotesingle{}s \href{http://simvascular.github.io/docsROMSimulation.html}{\texttt{ ROM Simulation Guide}}.
 
 
 \begin{DoxyItemize}
 \item \href{https://github.com/StanfordCBCL/svZeroDPlus}{\texttt{ Source repository}}
 \item \href{https://simvascular.github.io}{\texttt{ About Sim\+Vascular}}
-\end{DoxyItemize}
-
-Zero-\/dimensional (0D) models are lightweight methods to simulate bulk hemodynamic quantities in the cardiovascular system. Unlike 3D and 1D models, 0D models are purely time-\/dependent; they are unable to simulate spatial patterns in the hemodynamics. 0D models are analogous to electrical circuits. The flow rate simulated by 0D models represents electrical current, while the pressure represents voltage. Three primary building blocks of 0D models are resistors, capacitors, and inductors Resistance captures the viscous effects of blood flow, capacitance represents the compliance and distensibility of the vessel wall, and inductance represents the inertia of the blood flow. Different combinations of these building blocks, as well as others, can be formed to reflect the hemodynamics and physiology of different cardiovascular anatomies. These 0D models are governed by differential algebraic equations (DAEs).
-
-For more background information on 0D models, have a look at Sim\+Vascular\textquotesingle{}s \href{http://simvascular.github.io/docsROMSimulation.html}{\texttt{ ROM Simulation Guide}}.\hypertarget{index_autotoc_md41}{}\doxysection{Installation}\label{index_autotoc_md41}
+\end{DoxyItemize}\hypertarget{index_autotoc_md41}{}\doxysection{Installation}\label{index_autotoc_md41}
 sv\+Zero\+DPlus can be installed in two different ways. For using the Python API, an installation via pip is recommended.\hypertarget{index_autotoc_md42}{}\doxysubsection{Using pip}\label{index_autotoc_md42}
 For a pip installation, simply run the following command (cloning of the repository is not required)\+:
 
@@ -52,8 +60,7 @@ If you want to build sv\+Zero\+DPlus manually from source, clone the repository 
 \end{DoxyRemark}
 \hypertarget{index_autotoc_md44}{}\doxysection{Developer Guide}\label{index_autotoc_md44}
 If you are a developer and want to contribute to sv\+Zero\+DSolver, you can find more helpful information in our \mbox{\hyperlink{md_developer_guide_developer_guide}{Developer Guide}}.\hypertarget{index_autotoc_md45}{}\doxysection{sv\+Zero\+DSolver}\label{index_autotoc_md45}
-sv\+Zero\+DSolver can be used to run zero-\/dimensional (0D) cardiovascular simulations based on a given configuration.\hypertarget{index_autotoc_md46}{}\doxysubsection{Run sv\+Zero\+DSolver}\label{index_autotoc_md46}
-\hypertarget{index_autotoc_md47}{}\doxysubsubsection{From the command line}\label{index_autotoc_md47}
+sv\+Zero\+DSolver can be used to run zero-\/dimensional (0D) cardiovascular simulations based on a given configuration.\hypertarget{index_autotoc_md46}{}\doxysubsection{Run sv\+Zero\+DSolver from the command line}\label{index_autotoc_md46}
 sv\+Zero\+DSolver can be executed from the command line using a JSON configuration file.
 
 
@@ -63,8 +70,12 @@ sv\+Zero\+DSolver can be executed from the command line using a JSON configurati
 \end{DoxyCode}
 
 
-The result will be written to a csv file.\hypertarget{index_autotoc_md48}{}\doxysubsubsection{In Python}\label{index_autotoc_md48}
-For some applications it is beneficial to run sv\+Zero\+DSolver directly from within another Python application. This can, for example, be useful when many simulations need to be performed (e.\+g. for calibration, uncertainty quantification, ...). Please make sure that you installed sv\+Zerod\+Plus via pip to enable this feature. We start by importing svzerodplus\+:
+The result will be written to a csv file.\hypertarget{index_autotoc_md47}{}\doxysubsection{Run sv\+Zero\+DSolver from other programs}\label{index_autotoc_md47}
+For some applications it is beneficial to run sv\+Zero\+DSolver directly from within another program. For example, this can be useful when many simulations need to be performed (e.\+g. for calibration, uncertainty quantification, ...). It is also allows using sv\+Zero\+DPlus with other solvers, for example as boundary conditions or forcing terms.\hypertarget{index_autotoc_md48}{}\doxysubsubsection{In C++}\label{index_autotoc_md48}
+Sv\+Zero\+DPlus needs to be built using CMake to use the shared library interface.
+
+Detailed examples of interfacing with sv\+Zero\+DPlus from C++ codes are available in the test cases at {\ttfamily sv\+Zero\+DPlus/tests/test\+\_\+interface}.\hypertarget{index_autotoc_md49}{}\doxysubsubsection{In Python}\label{index_autotoc_md49}
+Please make sure that you installed sv\+Zerod\+Plus via pip to enable this feature. We start by importing svzerodplus\+:
 
 
 \begin{DoxyCode}{0}
@@ -120,7 +131,7 @@ The simulation result is now saved in the solver instance. We can obtain results
 \DoxyCodeLine{>>> 5.0}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md49}{}\doxysubsection{Configuration (file)}\label{index_autotoc_md49}
+\hypertarget{index_autotoc_md50}{}\doxysubsection{Configuration}\label{index_autotoc_md50}
 sv\+Zero\+DSolver is configured using either a JSON file or a Python dictionary. The top-\/level structure of both is\+:
 
 
@@ -135,7 +146,7 @@ sv\+Zero\+DSolver is configured using either a JSON file or a Python dictionary.
 \end{DoxyCode}
 
 
-In the following sections, the individual categories are described in more detail.\hypertarget{index_autotoc_md50}{}\doxysubsubsection{Simulation parameters}\label{index_autotoc_md50}
+In the following sections, the individual categories are described in more detail.\hypertarget{index_autotoc_md51}{}\doxysubsubsection{Simulation parameters}\label{index_autotoc_md51}
 The sv\+Zero\+DSolver can be configured with the following options in the {\ttfamily simulation\+\_\+parameters} section of the input file. Parameters without a default value must be specified.
 
 \tabulinesep=1mm
@@ -159,7 +170,7 @@ output\+\_\+mean\+\_\+only   &Write only the mean values over every timestep to 
 output\+\_\+derivative   &Write time derivatives to output file   &false    \\\cline{1-3}
 output\+\_\+all\+\_\+cycles   &Write all cardiac cycles to output file   &false   \\\cline{1-3}
 \end{longtabu}
-\hypertarget{index_autotoc_md51}{}\doxysubsubsection{Vessels}\label{index_autotoc_md51}
+\hypertarget{index_autotoc_md52}{}\doxysubsubsection{Vessels}\label{index_autotoc_md52}
 More information about the vessels can be found in their respective class references.
 
 
@@ -194,7 +205,7 @@ Blood vessel with ~\newline
  {\ttfamily R\+\_\+poiseuille}\+: Poiseuille resistance ~\newline
  {\ttfamily stenosis\+\_\+coefficient}\+: Stenosis coefficient   \\\cline{1-4}
 \end{longtabu}
-\hypertarget{index_autotoc_md52}{}\doxysubsubsection{Junctions}\label{index_autotoc_md52}
+\hypertarget{index_autotoc_md53}{}\doxysubsubsection{Junctions}\label{index_autotoc_md53}
 More information about the junctions can be found in their respective class references.
 
 
@@ -229,7 +240,7 @@ Blood vessel ~\newline
  junction   &\mbox{\hyperlink{class_m_o_d_e_l_1_1_blood_vessel_junction}{MODEL\+::\+Blood\+Vessel\+Junction}}   &{\ttfamily Blood\+Vessel\+Junction}   &Same as for {\ttfamily Blood\+Vessel} element but ~\newline
  as ordered list for each inlet and outlet   \\\cline{1-4}
 \end{longtabu}
-\hypertarget{index_autotoc_md53}{}\doxysubsubsection{Boundary conditions}\label{index_autotoc_md53}
+\hypertarget{index_autotoc_md54}{}\doxysubsubsection{Boundary conditions}\label{index_autotoc_md54}
 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\{}
@@ -263,9 +274,9 @@ Windkessel   &\mbox{\hyperlink{class_m_o_d_e_l_1_1_windkessel_b_c}{MODEL\+::\+Wi
  {\ttfamily Rd}\+: Distal resistance ~\newline
  {\ttfamily Pd}\+: Distal pressure   \\\cline{1-4}
 \end{longtabu}
-\hypertarget{index_autotoc_md54}{}\doxysection{sv\+Zero\+DCalibrator}\label{index_autotoc_md54}
-sv\+Zero\+DCalibrator can be used to calibrate cardiovascular 0D models (i.\+e. infer optimal parameters for the 0D elements) based on a given transient result (i.\+e. from a 3D simulation).\hypertarget{index_autotoc_md55}{}\doxysubsection{Run sv\+Zero\+DCalibrator}\label{index_autotoc_md55}
-\hypertarget{index_autotoc_md56}{}\doxysubsubsection{From the command line}\label{index_autotoc_md56}
+\hypertarget{index_autotoc_md55}{}\doxysection{sv\+Zero\+DCalibrator}\label{index_autotoc_md55}
+sv\+Zero\+DCalibrator can be used to calibrate cardiovascular 0D models (i.\+e. infer optimal parameters for the 0D elements) based on a given transient result (i.\+e. from a 3D simulation).\hypertarget{index_autotoc_md56}{}\doxysubsection{Run sv\+Zero\+DCalibrator}\label{index_autotoc_md56}
+\hypertarget{index_autotoc_md57}{}\doxysubsubsection{From the command line}\label{index_autotoc_md57}
 sv\+Zero\+DCalibrator can be executed from the command line using a JSON configuration file.
 
 
@@ -275,7 +286,7 @@ sv\+Zero\+DCalibrator can be executed from the command line using a JSON configu
 \end{DoxyCode}
 
 
-The result will be written to a JSON file.\hypertarget{index_autotoc_md57}{}\doxysubsubsection{In Python}\label{index_autotoc_md57}
+The result will be written to a JSON file.\hypertarget{index_autotoc_md58}{}\doxysubsubsection{In Python}\label{index_autotoc_md58}
 sv\+Zero\+DCalibrator can also be called directly from Python. Please make sure that you installed sv\+Zerod\+Plus via pip to enable this feature. We start by importing svzerodplus\+:
 
 
@@ -286,7 +297,7 @@ sv\+Zero\+DCalibrator can also be called directly from Python. Please make sure 
 \DoxyCodeLine{my\_optimized\_config = svzerodplus.calibrate(my\_unoptimized\_config)}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md58}{}\doxysubsection{Configuration (file)}\label{index_autotoc_md58}
+\hypertarget{index_autotoc_md59}{}\doxysubsection{Configuration (file)}\label{index_autotoc_md59}
 In order to make sv\+Zero\+DCalibrator easy to use, it is based on a similar configuration file than sv\+Zero\+DSolver. Instead of the {\ttfamily simulation\+\_\+parameters} section, it has a section called {\ttfamily calibration\+\_\+parameters}. Additionally the optimization target (i.\+e. a given) 3D result is passed with the key {\ttfamily y} and it\textquotesingle{}s temporal derivative via {\ttfamily dy}. See {\ttfamily tests/cases/steady\+Flow\+\_\+calibration.\+json} for an example input file.
 
 
@@ -309,7 +320,7 @@ In order to make sv\+Zero\+DCalibrator easy to use, it is based on a similar con
 \DoxyCodeLine{\}}
 
 \end{DoxyCode}
-\hypertarget{index_autotoc_md59}{}\doxysubsubsection{Calibration parameters}\label{index_autotoc_md59}
+\hypertarget{index_autotoc_md60}{}\doxysubsubsection{Calibration parameters}\label{index_autotoc_md60}
 Here is a list of the parameters that can be specified in the {\ttfamily calibration\+\_\+parameters} section of the configuration file.
 
 \tabulinesep=1mm

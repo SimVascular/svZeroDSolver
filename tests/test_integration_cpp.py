@@ -383,6 +383,19 @@ def test_pulsatile_flow_r_rcr():
     )  # outlet flow
 
 
+def test_pulsatile_flow_r_rcr_mean():
+    # time-dependent results
+    res_time = run_test_case_by_name("pulsatileFlow_R_RCR")
+
+    # time-averaged results
+    res_mean = run_test_case_by_name("pulsatileFlow_R_RCR_mean")
+
+    # compare all time-dependent results to their average
+    tol = {"f": RTOL_FLOW, "p": RTOL_PRES}
+    for k, res in res_time.items():
+        assert np.isclose(np.mean(res[0]), res_mean[k][0][0], rtol=tol[k[0]])
+
+
 def test_pulsatile_flow_r_coronary():
     results = run_test_case_by_name("pulsatileFlow_R_coronary")
     assert np.isclose(

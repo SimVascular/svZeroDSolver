@@ -39,7 +39,6 @@
 #include <vector>
 
 #include "../algebra/state.hpp"
-#include "../helpers/startswith.hpp"
 #include "../model/model.hpp"
 
 namespace IO {

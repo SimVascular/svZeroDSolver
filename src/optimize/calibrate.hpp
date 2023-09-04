@@ -40,7 +40,6 @@
 #include <nlohmann/json.hpp>
 
 #include "helpers/debug.hpp"
-#include "helpers/endswith.hpp"
 #include "levenbergmarquardtoptimizer.hpp"
 #include "model/model.hpp"
 

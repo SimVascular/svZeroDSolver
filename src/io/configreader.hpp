@@ -40,7 +40,6 @@
 #include <string>
 
 #include "../helpers/debug.hpp"
-#include "../helpers/startswith.hpp"
 #include "../model/model.hpp"
 
 namespace IO {

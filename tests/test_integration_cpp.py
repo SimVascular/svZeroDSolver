@@ -396,6 +396,24 @@ def test_pulsatile_flow_r_rcr_mean():
         assert np.isclose(np.mean(res[0]), res_mean[k][0][0], rtol=tol[k[0]])
 
 
+def test_pulsatile_flow_r_rcr_derivative():
+    results = run_test_case_by_name("pulsatileFlow_R_RCR_derivative", output_variable_based=True)
+
+    # time step
+    dt = results["time"][1] - results["time"][0]
+
+    # fields to test
+    fields = ["pressure_in", "pressure_out", "flow_in", "flow_out"]
+
+    # use coarse absolute tolerances for gradient calculation
+    # we're comparing gradients from gen-alpha in svZeroDPlus with central differences in np.gradient
+    tol = {"f": 0.6, "p": 800.0}
+    for f in fields:
+        ref = np.gradient(results[f], dt)
+        res = results["d_" + f]
+        np.isclose(ref, res, atol=tol[f[0]])
+
+
 def test_pulsatile_flow_r_coronary():
     results = run_test_case_by_name("pulsatileFlow_R_coronary")
     assert np.isclose(

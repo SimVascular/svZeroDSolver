@@ -35,17 +35,15 @@ def execute_svzerodplus(testfile, mode):
 
     if coverage:
         # run via executable (slow)
-        out_name = "out"
-        exe = os.path.join(this_file_dir, "..", "Release", "svzerod")
-        subprocess.run([exe + mode, testfile, out_name])
-        if mode == "solver":
-            result = pd.read_csv(out_name)
-        elif mode == "calibrator":
-            with open(out_name) as ff:
-                result = json.load(ff)
-        else:
-            raise ValueError("unknown mode: " + mode)
-        os.remove(out_name)
+        with TemporaryDirectory() as tempdir:
+            out_name = os.path.join(tempdir, "out")
+            exe = os.path.join(this_file_dir, "..", "Release", "svzerod")
+            subprocess.run([exe + mode, testfile, out_name])
+            if mode == "solver":
+                result = pd.read_csv(out_name)
+            elif mode == "calibrator":
+                with open(out_name) as ff:
+                    result = json.load(ff)
     else:
         # run via Python binding (fast)
         if mode == "solver":
@@ -53,8 +51,6 @@ def execute_svzerodplus(testfile, mode):
             result = pd.read_csv(StringIO(output))
         elif mode == "calibrator":
             result = svzerodplus.calibrate(config)
-        else:
-            raise ValueError("unknown mode: " + mode)
 
     return result, config
 

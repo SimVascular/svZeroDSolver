@@ -4,15 +4,8 @@ import numpy as np
 import pytest
 
 
-@pytest.fixture
-def tempdir():
-    """Temporary directory for test purposes."""
-    with TemporaryDirectory() as tempdir:
-        yield tempdir
-
-
-# pass optional argument to test coverage (slower)
 def pytest_addoption(parser):
+    """Pass optional argument to test coverage (slower)"""
     parser.addoption(
         "--coverage",
         action="store_true",
@@ -20,6 +13,6 @@ def pytest_addoption(parser):
     )
 
 
-# weird workaround because store_true doesn't work
 def pytest_configure(config):
+    """Workaround because store_true doesn't work"""
     pytest.coverage = config.option.coverage == True

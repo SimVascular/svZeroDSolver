@@ -1,4 +1,4 @@
-# This workflow builds and deploys the html documentation for svZeroDSolver.
+# This workflow builds and deploys the html documentation for svZeroDPlus.
 name: Documentation
 on: [push, pull_request]
 permissions:

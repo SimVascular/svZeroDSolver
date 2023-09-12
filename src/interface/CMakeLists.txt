@@ -28,18 +28,22 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-set(lib svzero_interface_library)
+# This CMake file is used to build the shared library used to interface 
+# to the svZeroDSolver from other programs.
 
-file(GLOB MODEL_SRC_FILES ../model/*.cpp)
-file(GLOB IO_SRC_FILES ../io/*.cpp)
-file(GLOB ALGEBRA_SRC_FILES ../algebra/*.cpp)
+# Set the library name.
+set(lib svzero_interface)
 
 set(CXXSRCS interface.cpp )
 set(HDRS interface.h )
 
-add_library(${lib} SHARED ${CXXSRCS} ${MODEL_SRC_FILES} ${IO_SRC_FILES} ${ALGEBRA_SRC_FILES} )
+add_library(${lib} SHARED ${CXXSRCS}) 
 
 include_directories( .. )
 
+# Set the libraries that need to be linked to when building the library.
 target_link_libraries( ${lib} Eigen3::Eigen )
 target_link_libraries( ${lib} nlohmann_json::nlohmann_json ) 
+target_link_libraries( ${lib} svzero_algebra_library)
+target_link_libraries( ${lib} svzero_io_library)
+target_link_libraries( ${lib} svzero_model_library)

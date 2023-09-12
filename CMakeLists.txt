@@ -78,8 +78,20 @@ FetchContent_MakeAvailable(pybind11_json)
 # Set executable and python library
 # -----------------------------------------------------------------------------
 include_directories(src)
-add_executable(svzerodsolver applications/svzerodsolver.cpp)
-add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp)
+
+add_executable(svzerodsolver applications/svzerodsolver.cpp 
+  $<TARGET_OBJECTS:svzero_algebra_library> 
+  $<TARGET_OBJECTS:svzero_helpers_library> 
+  $<TARGET_OBJECTS:svzero_io_library> 
+  $<TARGET_OBJECTS:svzero_model_library> 
+  $<TARGET_OBJECTS:svzero_solve_library> 
+)
+
+add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
+  $<TARGET_OBJECTS:svzero_optimize_library> 
+  $<TARGET_OBJECTS:svzero_model_library> 
+)
+
 pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
 
 add_subdirectory("src/algebra")
@@ -95,16 +107,16 @@ add_subdirectory("src/solve")
 # -----------------------------------------------------------------------------
 target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodsolver PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(svzerodsolver PRIVATE svzero_algebra_library)
-target_link_libraries(svzerodsolver PRIVATE svzero_helpers_library)
-target_link_libraries(svzerodsolver PRIVATE svzero_io_library)
-target_link_libraries(svzerodsolver PRIVATE svzero_model_library)
-target_link_libraries(svzerodsolver PRIVATE svzero_solve_library)
+#target_link_libraries(svzerodsolver PRIVATE svzero_algebra_library)
+#target_link_libraries(svzerodsolver PRIVATE svzero_helpers_library)
+#target_link_libraries(svzerodsolver PRIVATE svzero_io_library)
+#target_link_libraries(svzerodsolver PRIVATE svzero_model_library)
+#target_link_libraries(svzerodsolver PRIVATE svzero_solve_library)
 
 target_link_libraries(svzerodcalibrator PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodcalibrator PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(svzerodcalibrator PRIVATE svzero_optimize_library)
-target_link_libraries(svzerodcalibrator PRIVATE svzero_model_library)
+#target_link_libraries(svzerodcalibrator PRIVATE svzero_optimize_library)
+#target_link_libraries(svzerodcalibrator PRIVATE svzero_model_library)
 
 target_link_libraries(svzerodplus PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodplus PRIVATE nlohmann_json::nlohmann_json)

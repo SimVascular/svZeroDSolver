@@ -1,6 +1,6 @@
 
 #include "SparseSystem.h"
-#include "Model.h"
+#include "../model/Model.h"
 
 namespace algebra {
 

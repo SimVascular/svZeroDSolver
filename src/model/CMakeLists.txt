@@ -1,5 +1,5 @@
 
-set(lib svzero_model_library)
+#set(lib svzero_model_library)
 message("##### svzero_model_library ######")
 
 set(CXXSRCS 
@@ -43,12 +43,16 @@ ResistiveJunction.h
 WindkesselBC.h
 )
 
-add_library(${lib} STATIC ${CXXSRCS} )
+#add_library(${lib} STATIC ${CXXSRCS} )
 
 include_directories( .. )
 
-target_link_libraries( ${lib} Eigen3::Eigen )
-target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
+target_sources(svzerodsolver PRIVATE ${CXXSRCS})
+target_sources(svzerodcalibrator PRIVATE ${CXXSRCS})
+
+
+#target_link_libraries( ${lib} Eigen3::Eigen )
+#target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
 
 
 

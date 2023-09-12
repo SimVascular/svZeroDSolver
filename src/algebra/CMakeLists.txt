@@ -1,20 +1,23 @@
 
-set(lib svzero_algebra_library)
+#set(lib svzero_algebra_library)
 
 message("##### svzero_algebra_library ######")
 
 set(CXXSRCS Integrator.cpp SparseSystem.cpp State.cpp )
+#set(HDRS Integrator.h SparseSystem.h State.h )
 
-set(HDRS Integrator.h SparseSystem.h State.h )
+include_directories(..)
 
-add_library(${lib} STATIC ${CXXSRCS} )
+target_sources(svzerodsolver PRIVATE ${CXXSRCS}) 
+target_sources(svzerodcalibrator PRIVATE ${CXXSRCS}) 
+
+#add_library(${lib} STATIC ${CXXSRCS} )
 #add_library(${lib} SHARED ${CXXSRCS} )
 
-include_directories(../model)
 
-target_link_libraries( ${lib} Eigen3::Eigen )
-target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
-target_link_libraries( ${lib} svzero_model_library)
+#target_link_libraries( ${lib} Eigen3::Eigen )
+#target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
+#target_link_libraries( ${lib} svzero_model_library)
 
 
 

@@ -1,0 +1,226 @@
+// Copyright (c) Stanford University, The Regents of the University of
+//               California, and others.
+//
+// All Rights Reserved.
+//
+// See Copyright-SimVascular.txt for additional details.
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject
+// to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+// IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/**
+ * @file bloodvesseljunction.hpp
+ * @brief MODEL::BloodVesselJunction source file
+ */
+#ifndef SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
+#define SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
+
+#include "../algebra/SparseSystem.h"
+#include "Block.h"
+#include "BlockType.h"
+#include "BloodVessel.h"
+
+namespace zd_model {
+/**
+ * @brief BloodVesselJunction
+ *
+ * Models a junction with one inlet and arbitrary outlets using
+ * modified blood vessel elements between each inlet and outlet pair.
+ *
+ * \f[
+ * \begin{circuitikz}
+ * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1,0.1) node[anchor=south]{$P_{in}$};
+ * \draw (1,0) to [short, *-] (2.5,0.75);
+ * \draw (1,0) to [short, *-] (2.5,-0.75);
+ * \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
+ * (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
+ * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{} to
+ * [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
+ * node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
+ * {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
+ * {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
+ * {$Q_{out,2}$}; \end{circuitikz} \f]
+ *
+ * Each blood vessel is modelled as:
+ *
+ * \f[
+ * \begin{circuitikz} \draw
+ * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1,0) node[anchor=south]{$P_{in}$}
+ * to [R, l=$R$, *-] (3,0)
+ * to [R, l=$R_{ste}$, -] (5,0)
+ * (5,0) to [L, l=$L$, -*] (7,0)
+ * node[anchor=south]{$P_{out}$};
+ * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
+ * \end{circuitikz}
+ * \f]
+ *
+ * ### Governing equations
+ *
+ * \f[
+ * Q_{in}-\sum_{i}^{n_{outlets}} Q_{out, i}
+ * \f]
+ *
+ * \f[
+ * P_{in}-P_{out,i} - (R+R_{ste}) \cdot Q_{out,i} -
+ * L \frac{d Q_{out,i}}{d t} \quad \forall i \in n_{outlets} \f]
+ *
+ * ### Local contributions
+ *
+ * \f[
+ * \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_{in}^{e} & Q_{in}^{e}
+ * & P_{out, 1}^{e} & Q_{out, 1}^{e} &
+ * \dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right] \f]
+ *
+ * \f[
+ * \mathbf{F}^{e} = \left[\begin{array}{lllllllll}
+ * 0 & 1 & 0 & -1 & 0 & -1 & 0 & -1 & \dots \\
+ * 1 & 0 & -1 & -R_{1}-R_{ste,1} & 0 & 0 & 0 & 0 & \dots\\
+ * 1 & 0 & 0 & 0 & -1 & -R_{2}-R_{ste,2} & 0& 0& \dots \\
+ * \vdots & & & & & \ddots & \ddots & &
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{E}^{e} = \left[\begin{array}{lllllllll}
+ * 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
+ * 0 & 0 & 0 & -L_{1} & 0 & 0 & 0 & 0 & \dots\\
+ * 0 & 0 & 0 & 0 & 0 & -L_{2} & 0 & 0 & \dots\\
+ * & & & & & \ddots & \ddots & &
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{D}^{e} = \left[\begin{array}{lllllllll}
+ * 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
+ * 0 & 0 & 0 &
+ * -R_{ste,1} & 0 & 0 & 0 & 0 & \dots\\
+ * 0 & 0 & 0 & 0 & 0 & -R_{ste,2} & 0 & 0 & \dots\\ & & & & & \ddots & \ddots &
+ * & \end{array}\right] \f]
+ *
+ * ### Gradient
+ *
+ * Gradient of the equations with respect to the parameters:
+ *
+ * \f[
+ * \mathbf{J}^{e} = \left[\begin{array}{lllllllll}
+ * 0 & 0 & \dots & 0 & 0 & \dots & 0 & 0 &
+ * \dots \\
+ * - y_4 & 0 & \dots & - \dot y_4 & 0 & \dots & |y_4| y_4 & 0 & \dots \\
+ * 0 & - y_6 & \dots & 0 & - \dot y_6 & \dots & 0 & |y_6| y_6 & \dots \\
+ * 0 & 0 & \ddots & 0 & 0 & \ddots & 0 & 0 & \ddots \\
+ * \end{array}\right]
+ * \f]
+ *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `i` Poiseuille resistance for inner blood vessel `i`
+ * * `i+num_outlets` Inductance for inner blood vessel `i`
+ * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
+ *
+ * @tparam T Scalar type (e.g. `float`, `double`)
+ */
+class BloodVesselJunction : public Block {
+ public:
+  // Inherit constructors
+  using Block::Block;
+
+  /**
+   * @brief Set up the degrees of freedom (DOF) of the block
+   *
+   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
+   * number of equations and the number of internal variables of the
+   * element.
+   *
+   * @param dofhandler Degree-of-freedom handler to register variables and
+   * equations at
+   */
+  void setup_dofs(DOFHandler &dofhandler);
+
+  /**
+   * @brief Update the constant contributions of the element in a sparse system
+   *
+   * @param system System to update contributions at
+   * @param parameters Parameters of the model
+   */
+  void update_constant(algebra::SparseSystem& system,
+                       std::vector<double>& parameters);
+
+  /**
+   * @brief Update the solution-dependent contributions of the element in a
+   * sparse system
+   *
+   * @param system System to update contributions at
+   * @param parameters Parameters of the model
+   * @param y Current solution
+   * @param dy Current derivate of the solution
+   */
+  virtual void update_solution(algebra::SparseSystem& system,
+                               std::vector<double> &parameters,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+
+  /**
+   * @brief Set the gradient of the block contributions with respect to the
+   * parameters
+   *
+   * @param jacobian Jacobian with respect to the parameters
+   * @param alpha Current parameter vector
+   * @param residual Residual with respect to the parameters
+   * @param y Current solution
+   * @param dy Time-derivative of the current solution
+   */
+  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
+                       std::vector<double> &y, std::vector<double> &dy);
+
+  /**
+   * @brief Number of triplets of element
+   *
+   * Number of triplets that the element contributes to the global system
+   * (relevant for sparse memory reservation)
+   */
+  std::map<std::string, int> num_triplets = {
+      {"F", 0},
+      {"E", 0},
+      {"D", 0},
+  };
+
+  /**
+   * @brief Get number of triplets of element
+   *
+   * Number of triplets that the element contributes to the global system
+   * (relevant for sparse memory reservation)
+   */
+  std::map<std::string, int> get_num_triplets();
+
+ private:
+  int num_outlets;
+};
+
+}  
+
+#endif  // SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_

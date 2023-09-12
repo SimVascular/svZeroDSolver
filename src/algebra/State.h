@@ -28,65 +28,63 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file svzerodsolver.cpp
- * @brief Main routine of svZeroDSolver
+ * @file state.hpp
+ * @brief ALGEBRA::State source file
  */
-#include "solve/Solver.h"
+#ifndef SVZERODSOLVER_ALGEBRA_STATE_HPP_
+#define SVZERODSOLVER_ALGEBRA_STATE_HPP_
 
+#include <Eigen/Core>
+
+namespace algebra {
 /**
+ * @brief State of the system.
  *
- * @brief svZeroDSolver main routine
+ * Stores the current state of a system, i.e. the current value and
+ * derivate of all variables.
  *
- * This is the main routine of the svZeroDSolver. It exectutes the following
- * steps:
- *
- * 1. Read the input file
- * 2. Create the 0D model
- * 3. (Optional) Solve for steady initial condition
- * 4. Run simulation
- * 5. Write output to file
- *
- * @param argc Number of command line arguments
- * @param argv Command line arguments
- * @return Return code
+ * @tparam T Scalar type (e.g. `float`, `double`)
  */
-int main(int argc, char* argv[]) 
-{
-  DEBUG_MSG("Starting svZeroDSolver");
+class State {
+ public:
+  Eigen::Matrix<double, Eigen::Dynamic, 1> y;     ///< Vector of solution quantities
+  Eigen::Matrix<double, Eigen::Dynamic, 1> ydot;  ///< Derivate of \ref y
 
-  // Get input and output file name
-  if (argc < 2 && argc > 3) {
-    std::runtime_error(
-        "Usage: svzerodsolver path/to/config.json "
-        "(optional:path/to/output.csv)");
-  }
+  /**
+   * @brief Construct a new State object
+   *
+   */
+  State();
 
-  std::string input_file = argv[1];
-  std::string output_file;
+  /**
+   * @brief Construct a new State object
+   *
+   * @param n Size of the state
+   */
+  State(unsigned int n);
 
-  if (argc == 3) {
-    output_file = argv[2];
+  /**
+   * @brief Destroy the State object
+   *
+   */
+  ~State();
 
-  } else {
-    // If output file is not provided, default is <path to .json>+"output.csv"
+  /**
+   * @brief Copy a State object
+   *
+   * @param state
+   */
+  State(const State &state);
 
-    std::size_t end_of_path = input_file.rfind("/");
-    if (end_of_path == std::string::npos) {
-      end_of_path = input_file.rfind("\\");  // For Windows paths (?)
-      if (end_of_path == std::string::npos) {
-        std::runtime_error("Could not find path to .json file.");
-      }
-    }
+  /**
+   * @brief Construct a new State object and initilaize with all zeros.
+   *
+   * @param n Size of the state
+   * @return New state initialized with all zeros
+   */
+  static State Zero(unsigned int n);
+};
 
-    output_file = input_file.substr(0, end_of_path) + "output.csv";
-  }
+}  
 
-  std::ifstream ifs(input_file);
-  const auto& config = nlohmann::json::parse(ifs);
-
-  auto solver = solve::Solver(config);
-  solver.run();
-  solver.write_result_to_csv(output_file);
-
-  return 0;
-}
+#endif  // SVZERODSOLVER_ALGEBRA_STATE_HPP_

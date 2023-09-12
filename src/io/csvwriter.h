@@ -28,65 +28,28 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file svzerodsolver.cpp
- * @brief Main routine of svZeroDSolver
+ * @file csvwriter.hpp
+ * @brief IO::write_csv source file
  */
-#include "solve/Solver.h"
+#ifndef SVZERODSOLVER_IO_CSVWRITER_HPP_
+#define SVZERODSOLVER_IO_CSVWRITER_HPP_
 
-/**
- *
- * @brief svZeroDSolver main routine
- *
- * This is the main routine of the svZeroDSolver. It exectutes the following
- * steps:
- *
- * 1. Read the input file
- * 2. Create the 0D model
- * 3. (Optional) Solve for steady initial condition
- * 4. Run simulation
- * 5. Write output to file
- *
- * @param argc Number of command line arguments
- * @param argv Command line arguments
- * @return Return code
- */
-int main(int argc, char* argv[]) 
-{
-  DEBUG_MSG("Starting svZeroDSolver");
+#include <fstream>
+#include <string>
+#include <vector>
 
-  // Get input and output file name
-  if (argc < 2 && argc > 3) {
-    std::runtime_error(
-        "Usage: svzerodsolver path/to/config.json "
-        "(optional:path/to/output.csv)");
-  }
+#include "../algebra/State.h"
+#include "../helpers/helpers.h"
+#include "../model/Model.h"
 
-  std::string input_file = argv[1];
-  std::string output_file;
+namespace io {
 
-  if (argc == 3) {
-    output_file = argv[2];
+std::string to_variable_csv(std::vector<double> &times, std::vector<algebra::State> &states,
+    zd_model::Model &model, bool mean = false, bool derivative = false);
 
-  } else {
-    // If output file is not provided, default is <path to .json>+"output.csv"
+std::string to_vessel_csv(std::vector<double> &times, std::vector<algebra::State> &states,
+    zd_model::Model &model, bool mean = false, bool derivative = false);
 
-    std::size_t end_of_path = input_file.rfind("/");
-    if (end_of_path == std::string::npos) {
-      end_of_path = input_file.rfind("\\");  // For Windows paths (?)
-      if (end_of_path == std::string::npos) {
-        std::runtime_error("Could not find path to .json file.");
-      }
-    }
+}  
 
-    output_file = input_file.substr(0, end_of_path) + "output.csv";
-  }
-
-  std::ifstream ifs(input_file);
-  const auto& config = nlohmann::json::parse(ifs);
-
-  auto solver = solve::Solver(config);
-  solver.run();
-  solver.write_result_to_csv(output_file);
-
-  return 0;
-}
+#endif  // SVZERODSOLVER_IO_CSVWRITER_HPP_

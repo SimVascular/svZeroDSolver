@@ -81,15 +81,31 @@ include_directories(src)
 add_executable(svzerodsolver applications/svzerodsolver.cpp)
 add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp)
 pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
+
+add_subdirectory("src/algebra")
+add_subdirectory("src/helpers")
 add_subdirectory("src/interface")
+add_subdirectory("src/io")
+add_subdirectory("src/model")
+add_subdirectory("src/optimize")
+add_subdirectory("src/solve")
 
 # -----------------------------------------------------------------------------
 # Link libraries
 # -----------------------------------------------------------------------------
 target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodsolver PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(svzerodsolver PRIVATE svzero_algebra_library)
+target_link_libraries(svzerodsolver PRIVATE svzero_helpers_library)
+target_link_libraries(svzerodsolver PRIVATE svzero_io_library)
+target_link_libraries(svzerodsolver PRIVATE svzero_model_library)
+target_link_libraries(svzerodsolver PRIVATE svzero_solve_library)
+
 target_link_libraries(svzerodcalibrator PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodcalibrator PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(svzerodcalibrator PRIVATE svzero_optimize_library)
+target_link_libraries(svzerodcalibrator PRIVATE svzero_model_library)
+
 target_link_libraries(svzerodplus PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodplus PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(svzerodplus PRIVATE pybind11_json)

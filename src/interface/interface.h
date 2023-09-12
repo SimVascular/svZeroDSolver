@@ -1,19 +1,18 @@
 
-#include "algebra/integrator.hpp"
-#include "algebra/sparsesystem.hpp"
-#include "algebra/state.hpp"
-#include "helpers/debug.hpp"
-#include "io/configreader.hpp"
-#include "io/csvwriter.hpp"
-#include "model/model.hpp"
+#include "algebra/Integrator.h"
+#include "algebra/SparseSystem.h"
+#include "algebra/State.h"
+#include "helpers/debug.h"
+#include "helpers/helpers.h"
+#include "io/io.h"
+#include "io/csvwriter.h"
+#include "model/Model.h"
 
 #include <map>
 #include <string>
 #include <vector>
 
-typedef double T;
-template <typename TT>
-using S = ALGEBRA::SparseSystem<TT>;
+using S = algebra::SparseSystem;
 
 /**
  * @brief Interface class for calling svZeroD from external programs
@@ -49,11 +48,11 @@ class SolverInterface
     int pts_per_cycle_ = 0;
     bool output_last_cycle_only_ = false;
 
-    std::shared_ptr<MODEL::Model<T>> model_;
-    ALGEBRA::Integrator<T> integrator_;
+    std::shared_ptr<zd_model::Model> model_;
+    algebra::Integrator integrator_;
 
-    ALGEBRA::State<double> state_;
+    algebra::State state_;
     std::vector<double> times_;
-    std::vector<ALGEBRA::State<T>> states_;
+    std::vector<algebra::State> states_;
 };
 

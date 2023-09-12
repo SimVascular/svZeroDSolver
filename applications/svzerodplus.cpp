@@ -36,14 +36,14 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
-#include "optimize/calibrate.hpp"
+#include "optimize/calibrate.h"
 #include "pybind11_json/pybind11_json.hpp"
-#include "solve/solver.hpp"
+#include "solve/Solver.h"
 
 namespace py = pybind11;
 
 PYBIND11_MODULE(svzerodplus, m) {
-  using Solver = SOLVE::Solver<double>;
+  using Solver = solve::Solver;
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {
         const nlohmann::json& config_json = config;

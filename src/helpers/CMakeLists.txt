@@ -1,17 +1,13 @@
 
-#set(lib svzero_helpers_library)
+set(lib svzero_helpers_library)
 message("##### svzero_helpers_library ######")
 
-#set(CXXSRCS helpers.cpp)
+set(CXXSRCS helpers.cpp)
+set(HDRS debug.h endswith.h helpers.h)
 
-#set(HDRS debug.h endswith.h helpers.h)
-
-#add_library(${lib} STATIC ${CXXSRCS} )
+add_library(${lib} SHARED ${CXXSRCS} )
 
 include_directories( .. )
-
-target_sources(svzerodsolver PRIVATE helpers.cpp) 
-target_sources(svzerodcalibrator PRIVATE helpers.cpp) 
 
 #target_link_libraries( ${lib} Eigen3::Eigen )
 #target_link_libraries( ${lib} nlohmann_json::nlohmann_json )

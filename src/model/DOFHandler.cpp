@@ -1,5 +1,6 @@
 
 #include "DOFHandler.h"
+#include <algorithm>  
 
 namespace zd_model {
 
@@ -46,7 +47,8 @@ int DOFHandler::register_equation(std::string name)
 
 int DOFHandler::get_index(std::string_view& name) 
 {
-  auto it = find(variables.begin(), variables.end(), name);
+  auto it = std::find(variables.begin(), variables.end(), name);
+
   if (it != variables.end()) {
     return it - variables.begin();
   } else {

@@ -36,7 +36,9 @@
 
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
+
 #include <iostream>
+#include <memory>
 
 // Forward declaration of Model
 namespace zd_model {

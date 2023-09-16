@@ -396,6 +396,15 @@ def test_pulsatile_flow_r_rcr_mean():
         assert np.isclose(np.mean(res[0]), res_mean[k][0][0], rtol=tol[k[0]])
 
 
+def test_pulsatile_flow_r_rcr_mean_variable():
+    # time-dependent results
+    res_time = run_test_case_by_name("pulsatileFlow_R_RCR_variable", output_variable_based=True)
+
+    # time-averaged results
+    res_mean = run_test_case_by_name("pulsatileFlow_R_RCR_mean_variable", output_variable_based=True)
+    sfsdfdsf
+
+
 def test_pulsatile_flow_r_rcr_derivative():
     results = run_test_case_by_name("pulsatileFlow_R_RCR_derivative", output_variable_based=True)
 

@@ -34,15 +34,14 @@
 #ifndef SVZERODSOLVER_IO_HPP_
 #define SVZERODSOLVER_IO_HPP_
 
+#include "helpers.h"
+#include "Model.h"
+#include "SimulationParameters.h"
+
 #include <list>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
-
-//#include "../helpers/debug.hpp"
-#include "../helpers/helpers.h"
-#include "../model/Model.h"
-#include "SimulationParameters.h"
 
 namespace io {
 

@@ -35,8 +35,6 @@
 
 #include <cmath>
 
-// #include "io/configreader.hpp"
-
 using S = algebra::SparseSystem;
 
 // Static member data.

@@ -28,15 +28,35 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Build the solver object files.
+
 set(lib svzero_solve_library)
 
-set(CXXSRCS Solver.cpp)
+set(CXXSRCS 
+  csvwriter.cpp 
+  helpers.cpp
+  io.cpp
+  SimulationParameters.cpp 
+  Solver.cpp
+)
 
-set(HDRS Solver.h)
+set(HDRS 
+  csvwriter.h 
+  debug.h 
+  io.h
+  helpers.h
+  endswith.h 
+  SimulationParameters.h 
+  Solver.h 
+)
 
 add_library(${lib} OBJECT ${CXXSRCS} )
 
-include_directories( .. )
+target_include_directories(${lib} PUBLIC
+  ${CMAKE_SOURCE_DIR}/src/algebra
+  ${CMAKE_SOURCE_DIR}/src/model
+  ${CMAKE_SOURCE_DIR}/src/solve
+)
 
 target_link_libraries( ${lib} Eigen3::Eigen )
 target_link_libraries( ${lib} nlohmann_json::nlohmann_json )

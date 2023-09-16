@@ -28,6 +28,8 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+# Build the model object files.
+
 set(lib svzero_model_library)
 
 set(CXXSRCS 
@@ -51,29 +53,33 @@ set(CXXSRCS
 )
 
 set(HDRS 
-Block.h
-BlockType.h
-BloodVessel.h
-BloodVesselJunction.h
-ClosedLoopCoronaryBC.h
-ClosedLoopHeartPulmonary.h
-ClosedLoopRCRBC.h
-DOFHandler.h
-FlowReferenceBC.h
-Junction.h
-Model.h
-Node.h
-OpenLoopCoronaryBC.h
-Parameter.h
-PressureReferenceBC.h
-ResistanceBC.h
-ResistiveJunction.h
-WindkesselBC.h
+  Block.h
+  BlockType.h
+  BloodVessel.h
+  BloodVesselJunction.h
+  ClosedLoopCoronaryBC.h
+  ClosedLoopHeartPulmonary.h
+  ClosedLoopRCRBC.h
+  DOFHandler.h
+  FlowReferenceBC.h
+  Junction.h
+  Model.h
+  Node.h
+  OpenLoopCoronaryBC.h
+  Parameter.h
+  PressureReferenceBC.h
+  ResistanceBC.h
+  ResistiveJunction.h
+  WindkesselBC.h
 )
 
-add_library(${lib} OBJECT ${CXXSRCS} )
+add_library(${lib} OBJECT ${CXXSRCS} ${HDRS})
 
-include_directories( .. )
+target_include_directories( ${lib} PUBLIC
+  ${CMAKE_SOURCE_DIR}/src/algebra
+  ${CMAKE_SOURCE_DIR}/src/model
+  ${CMAKE_SOURCE_DIR}/src/solve
+)
 
 target_link_libraries( ${lib} Eigen3::Eigen )
 target_link_libraries( ${lib} nlohmann_json::nlohmann_json )

@@ -39,10 +39,9 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-#include "helpers/debug.h"
-#include "helpers/helpers.h"
-//#include "levenbergmarquardtoptimizer.hpp"
-#include "model/Model.h"
+#include "debug.h"
+#include "helpers.h"
+#include "Model.h"
 
 namespace optimize {
 

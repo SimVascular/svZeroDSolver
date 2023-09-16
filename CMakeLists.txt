@@ -57,8 +57,10 @@ if(ENABLE_COVERAGE)
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 
-# Set the location to store binaries and libraries.
 # -----------------------------------------------------------------------------
+# Set the location to store the binaries and libraries created by this project.
+# -----------------------------------------------------------------------------
+#
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -66,7 +68,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # -----------------------------------------------------------------------------
 # Fetch Eigen
 # -----------------------------------------------------------------------------
-# Eigen is C++ template library for linear algebra.
+# Eigen is a header-only C++ template library for linear algebra.
 #
 FetchContent_Declare(
   Eigen
@@ -103,7 +105,7 @@ endif()
 # -----------------------------------------------------------------------------
 # Fetch nlohmann/json
 # -----------------------------------------------------------------------------
-# This is a C++ library for reading JSON files.
+# This is a C++ header-only library for reading JSON files.
 #
 FetchContent_Declare(
     json
@@ -133,12 +135,8 @@ FetchContent_MakeAvailable(pybind11_json)
 #   1) svzerodsolver
 #   2) svzerodcalibrator 
 #
-include_directories(src)
-
 add_executable(svzerodsolver applications/svzerodsolver.cpp 
   $<TARGET_OBJECTS:svzero_algebra_library> 
-  $<TARGET_OBJECTS:svzero_helpers_library> 
-  $<TARGET_OBJECTS:svzero_io_library> 
   $<TARGET_OBJECTS:svzero_model_library> 
   $<TARGET_OBJECTS:svzero_solve_library> 
 )
@@ -149,7 +147,7 @@ add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
 )
 
 # -----------------------------------------------------------------------------
-# Set the python library
+# Setup building of the svzerodplus Python extension module.
 # -----------------------------------------------------------------------------
 pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
 
@@ -157,16 +155,33 @@ pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
 # Add source sub-directories.
 # -----------------------------------------------------------------------------
 add_subdirectory("src/algebra")
-add_subdirectory("src/helpers")
 add_subdirectory("src/interface")
-add_subdirectory("src/io")
 add_subdirectory("src/model")
 add_subdirectory("src/optimize")
 add_subdirectory("src/solve")
 
 # -----------------------------------------------------------------------------
-# Set liink libraries for each application.
+# Set header file include directories.
 # -----------------------------------------------------------------------------
+#
+target_include_directories(svzerodsolver PUBLIC
+  ${CMAKE_SOURCE_DIR}/src/algebra
+  ${CMAKE_SOURCE_DIR}/src/model
+  ${CMAKE_SOURCE_DIR}/src/solve
+)
+
+target_include_directories(svzerodcalibrator PUBLIC 
+  ${CMAKE_SOURCE_DIR}/src/algebra
+  ${CMAKE_SOURCE_DIR}/src/model 
+  ${CMAKE_SOURCE_DIR}/src/optimize
+  ${CMAKE_SOURCE_DIR}/src/solve 
+)
+
+# -----------------------------------------------------------------------------
+# Set the libraries each application needs to link to.
+# -----------------------------------------------------------------------------
+# These are needed only for the header-only applications.
+#
 target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodsolver PRIVATE nlohmann_json::nlohmann_json)
 

@@ -34,8 +34,8 @@
 #ifndef SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_
 
-#include "../algebra/SparseSystem.h"
 #include "Block.h"
+#include "SparseSystem.h"
 
 namespace zd_model {
 /**

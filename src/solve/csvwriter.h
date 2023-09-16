@@ -28,37 +28,28 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file svzerodcalibrator.cpp
- * @brief Main routine for svZeroDCalibrator
+ * @file csvwriter.hpp
+ * @brief IO::write_csv source file
  */
-#include "calibrate.h"
+#ifndef SVZERODSOLVER_IO_CSVWRITER_HPP_
+#define SVZERODSOLVER_IO_CSVWRITER_HPP_
 
-// Setting scalar type to double
+#include "State.h"
+#include "helpers.h"
+#include "Model.h"
 
-int main(int argc, char* argv[]) 
-{
-  DEBUG_MSG("Starting svZeroDCalibrator");
+#include <fstream>
+#include <string>
+#include <vector>
 
-  // Get input and output file name
-  if (argc != 3) {
-    std::cout
-        << "Usage: svzerodcalibrator path/to/config.json path/to/output.json"
-        << std::endl;
-    exit(1);
-  }
+namespace io {
 
-  // Get input and output file names
-  std::string input_file = argv[1];
-  std::string output_file = argv[2];
+std::string to_variable_csv(std::vector<double> &times, std::vector<algebra::State> &states,
+    zd_model::Model &model, bool mean = false, bool derivative = false);
 
-  // Parse the configuration
-  DEBUG_MSG("Parse configuration");
-  std::ifstream ifs(input_file);
-  const auto& config = nlohmann::json::parse(ifs);
+std::string to_vessel_csv(std::vector<double> &times, std::vector<algebra::State> &states,
+    zd_model::Model &model, bool mean = false, bool derivative = false);
 
-  auto output_config = optimize::calibrate(config);
+}  
 
-  // Write optimized simulation config
-  std::ofstream o(output_file);
-  o << std::setw(4) << output_config << std::endl;
-}
+#endif  // SVZERODSOLVER_IO_CSVWRITER_HPP_

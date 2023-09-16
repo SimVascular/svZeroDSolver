@@ -34,9 +34,9 @@
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_
 
-#include "../algebra/SparseSystem.h"
 #include "Block.h"
 #include "ClosedLoopHeartPulmonary.h"
+#include "SparseSystem.h"
 
 namespace zd_model {
 

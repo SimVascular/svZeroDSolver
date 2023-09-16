@@ -34,10 +34,10 @@
 #ifndef SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
 #define SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
 
-#include <math.h>
-
-#include "../algebra/SparseSystem.h"
+#include "SparseSystem.h"
 #include "Block.h"
+
+#include <math.h>
 
 namespace zd_model {
 

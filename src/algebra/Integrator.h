@@ -36,8 +36,7 @@
 
 #include <Eigen/Dense>
 
-//#include "../helpers/debug.hpp"
-#include "../model/Model.h"
+#include "Model.h"
 #include "State.h"
 
 namespace algebra {

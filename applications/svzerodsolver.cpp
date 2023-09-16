@@ -31,7 +31,7 @@
  * @file svzerodsolver.cpp
  * @brief Main routine of svZeroDSolver
  */
-#include "solve/Solver.h"
+#include "Solver.h"
 
 /**
  *

@@ -34,12 +34,12 @@
 #ifndef SVZERODSOLVER_MODEL_PARAMETER_HPP_
 #define SVZERODSOLVER_MODEL_PARAMETER_HPP_
 
-#include <math.h>
+#include "DOFHandler.h"
 
+
+#include <math.h>
 #include <numeric>
 #include <vector>
-
-#include "DOFHandler.h"
 
 namespace zd_model {
 

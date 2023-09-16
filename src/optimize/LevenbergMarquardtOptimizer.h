@@ -37,7 +37,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 
-#include "model/Model.h"
+#include "Model.h"
 
 namespace optimize {
 

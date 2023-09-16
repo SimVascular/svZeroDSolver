@@ -28,37 +28,26 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file svzerodcalibrator.cpp
- * @brief Main routine for svZeroDCalibrator
+ * @file endswith.hpp
+ * @brief HELPERS::endswith source file
  */
-#include "calibrate.h"
+#ifndef SVZERODSOLVER_HELPERS_ENDSWITH_HPP_
+#define SVZERODSOLVER_HELPERS_ENDSWITH_HPP_
 
-// Setting scalar type to double
+#include <string>
 
-int main(int argc, char* argv[]) 
-{
-  DEBUG_MSG("Starting svZeroDCalibrator");
+namespace helpers {
+/**
+ * @brief Check if a string ends with the letters of another string
+ *
+ * @param str The string to check for the specified suffix
+ * @param suffix The suffix the string should be checked for
+ * @return true if strings ends with the suffix, otherwise false
+ */
+bool endswith(const std::string &str, const std::string &suffix);
 
-  // Get input and output file name
-  if (argc != 3) {
-    std::cout
-        << "Usage: svzerodcalibrator path/to/config.json path/to/output.json"
-        << std::endl;
-    exit(1);
-  }
+bool startswith(const std::string &str, const std::string &prefix);
 
-  // Get input and output file names
-  std::string input_file = argv[1];
-  std::string output_file = argv[2];
+}  
 
-  // Parse the configuration
-  DEBUG_MSG("Parse configuration");
-  std::ifstream ifs(input_file);
-  const auto& config = nlohmann::json::parse(ifs);
-
-  auto output_config = optimize::calibrate(config);
-
-  // Write optimized simulation config
-  std::ofstream o(output_file);
-  o << std::setw(4) << output_config << std::endl;
-}
+#endif  // SVZERODSOLVER_HELPERS_ENDSWITH_HPP_

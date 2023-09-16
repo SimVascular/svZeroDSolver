@@ -36,16 +36,12 @@
 
 #include <Eigen/Core>
 
+#include "SparseSystem.h"
+#include "DOFHandler.h"
+
 #include <list>
 #include <map>
 #include <vector>
-
-#include "../algebra/SparseSystem.h"
-#include "DOFHandler.h"
-
-/*
-#include "../algebra/state.hpp"
-*/
 
 namespace zd_model {
 

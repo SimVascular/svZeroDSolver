@@ -28,28 +28,30 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file csvwriter.hpp
- * @brief IO::write_csv source file
+ * @file endswith.hpp
+ * @brief HELPERS::endswith source file
  */
-#ifndef SVZERODSOLVER_IO_CSVWRITER_HPP_
-#define SVZERODSOLVER_IO_CSVWRITER_HPP_
+#ifndef SVZERODSOLVER_HELPERS_ENDSWITH_HPP_
+#define SVZERODSOLVER_HELPERS_ENDSWITH_HPP_
 
-#include <fstream>
 #include <string>
-#include <vector>
 
-#include "../algebra/State.h"
-#include "../helpers/helpers.h"
-#include "../model/Model.h"
+namespace HELPERS {
+/**
+ * @brief Check if a string ends with the letters of another string
+ *
+ * @param str The string to check for the specified suffix
+ * @param suffix The suffix the string should be checked for
+ * @return true if strings ends with the suffix, otherwise false
+ */
+bool endswith(const std::string &str, const std::string &suffix) {
+  if (str.length() >= suffix.length()) {
+    return (0 == str.compare(str.length() - suffix.length(), suffix.length(),
+                             suffix));
+  } else {
+    return false;
+  }
+}
+}  // namespace HELPERS
 
-namespace io {
-
-std::string to_variable_csv(std::vector<double> &times, std::vector<algebra::State> &states,
-    zd_model::Model &model, bool mean = false, bool derivative = false);
-
-std::string to_vessel_csv(std::vector<double> &times, std::vector<algebra::State> &states,
-    zd_model::Model &model, bool mean = false, bool derivative = false);
-
-}  
-
-#endif  // SVZERODSOLVER_IO_CSVWRITER_HPP_
+#endif  // SVZERODSOLVER_HELPERS_ENDSWITH_HPP_

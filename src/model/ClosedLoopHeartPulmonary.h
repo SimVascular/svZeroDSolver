@@ -34,12 +34,13 @@
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
 
+#include "SparseSystem.h"
+#include "Block.h"
+
+// [TODO] get rid of PI.
+#define PI 3.14159265
 #include <math.h>
 
-#include "../algebra/SparseSystem.h"
-//#include "../algebra/State.hpp"
-#include "Block.h"
-#define PI 3.14159265
 
 namespace zd_model {
 /**

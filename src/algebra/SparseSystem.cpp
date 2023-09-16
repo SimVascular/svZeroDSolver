@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "SparseSystem.h"
-#include "../model/Model.h"
+#include "Model.h"
 
 namespace algebra {
 

@@ -32,14 +32,14 @@
  * @brief SOLVE::Solver source file
  */
 
-#include "algebra/Integrator.h"
-#include "algebra/State.h"
-#include "helpers/debug.h"
-#include "helpers/helpers.h"
-#include "io/io.h"
-#include "io/csvwriter.h"
-#include "io/SimulationParameters.h"
-#include "model/Model.h"
+#include "Integrator.h"
+#include "State.h"
+#include "debug.h"
+#include "helpers.h"
+#include "io.h"
+#include "csvwriter.h"
+#include "SimulationParameters.h"
+#include "Model.h"
 
 #ifndef SVZERODSOLVER_SOLVE_SOLVER_HPP_
 #define SVZERODSOLVER_SOLVE_SOLVER_HPP_

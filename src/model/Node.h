@@ -34,11 +34,11 @@
 #ifndef SVZERODSOLVER_MODEL_NODE_HPP_
 #define SVZERODSOLVER_MODEL_NODE_HPP_
 
-#include <string>
-#include <vector>
-
 #include "BlockType.h"
 #include "DOFHandler.h"
+
+#include <string>
+#include <vector>
 
 namespace zd_model {
 

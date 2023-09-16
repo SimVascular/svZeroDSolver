@@ -28,14 +28,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "algebra/Integrator.h"
-#include "algebra/SparseSystem.h"
-#include "algebra/State.h"
-#include "helpers/debug.h"
-#include "helpers/helpers.h"
-#include "io/io.h"
-#include "io/csvwriter.h"
-#include "model/Model.h"
+#include "Integrator.h"
+#include "SparseSystem.h"
+#include "State.h"
+#include "debug.h"
+#include "helpers.h"
+#include "io.h"
+#include "csvwriter.h"
+#include "Model.h"
 
 #include <map>
 #include <string>

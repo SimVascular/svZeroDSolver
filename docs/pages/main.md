@@ -125,35 +125,35 @@ you installed svZerodPlus via pip to enable this feature. We start by
 importing svzerodplus:
 
 ```python
-import svzerodplus
+>>> import svzerodplus
 ```
 
 Next, we create a solver from our configuration. The configuration can
 be specified by either a path to a JSON file:
 
 ```python
-solver = svzerodplus.Solver("tests/cases/steadyFlow_RLC_R.json")
+>>> solver = svzerodplus.Solver("tests/cases/steadyFlow_RLC_R.json")
 ```
 
 or as a Python dictionary:
 
 ```python
-my_config = {...}
-solver = svzerodplus.Solver(my_config)
+>>> my_config = {...}
+>>> solver = svzerodplus.Solver(my_config)
 ```
 
 To run the simulation we add:
 
 ```python
-solver.run()
+>>> solver.run()
 ```
 
 The simulation result is now saved in the solver instance. We can obtain
 results for individual degrees-of-freedom (DOFs) as
 ```python
-solver.get_single_result("flow:INFLOW:branch0_seg0")
+>>> solver.get_single_result("flow:INFLOW:branch0_seg0")
 
->>> array([5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
+array([5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
        5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
        5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
        5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5., 5.,
@@ -164,10 +164,56 @@ The naming of the DOFs is similar to how results are written if the simulation
 option `output_variable_based` is activated (see below). We can also obtain
 the mean result for a DOF over time with:
 ```python
-solver.get_single_result_avg("flow:INFLOW:branch0_seg0")
+>>> solver.get_single_result_avg("flow:INFLOW:branch0_seg0")
 
->>> 5.0
+5.0
 ```
+
+Or the result of the full simulation as a pandas data frame:
+
+```python
+>>> solver.get_full_result()
+
+             name  time  flow_in  flow_out  pressure_in  pressure_out
+0    branch0_seg0  0.00      5.0       5.0       1100.0         600.0
+1    branch0_seg0  0.01      5.0       5.0       1100.0         600.0
+2    branch0_seg0  0.02      5.0       5.0       1100.0         600.0
+3    branch0_seg0  0.03      5.0       5.0       1100.0         600.0
+4    branch0_seg0  0.04      5.0       5.0       1100.0         600.0
+..            ...   ...      ...       ...          ...           ...
+96   branch0_seg0  0.96      5.0       5.0       1100.0         600.0
+97   branch0_seg0  0.97      5.0       5.0       1100.0         600.0
+98   branch0_seg0  0.98      5.0       5.0       1100.0         600.0
+99   branch0_seg0  0.99      5.0       5.0       1100.0         600.0
+100  branch0_seg0  1.00      5.0       5.0       1100.0         600.0
+
+[101 rows x 6 columns]
+```
+
+There is also a function to retrieve the full result directly based on a given configuration:
+
+```python
+
+>>> my_config = {...}
+>>> svzerodplus.simulate(my_config)
+
+             name  time  flow_in  flow_out  pressure_in  pressure_out
+0    branch0_seg0  0.00      5.0       5.0       1100.0         600.0
+1    branch0_seg0  0.01      5.0       5.0       1100.0         600.0
+2    branch0_seg0  0.02      5.0       5.0       1100.0         600.0
+3    branch0_seg0  0.03      5.0       5.0       1100.0         600.0
+4    branch0_seg0  0.04      5.0       5.0       1100.0         600.0
+..            ...   ...      ...       ...          ...           ...
+96   branch0_seg0  0.96      5.0       5.0       1100.0         600.0
+97   branch0_seg0  0.97      5.0       5.0       1100.0         600.0
+98   branch0_seg0  0.98      5.0       5.0       1100.0         600.0
+99   branch0_seg0  0.99      5.0       5.0       1100.0         600.0
+100  branch0_seg0  1.00      5.0       5.0       1100.0         600.0
+
+[101 rows x 6 columns]
+
+```
+
 
 ## Configuration
 

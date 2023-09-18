@@ -50,12 +50,12 @@ PYBIND11_MODULE(svzerodplus, m) {
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {
         const nlohmann::json& config_json = config;
-        return std::unique_ptr<Solver>(new Solver(config_json));
+        return Solver(config_json);
       }))
       .def(py::init([](std::string config_file) {
         std::ifstream ifs(config_file);
         const auto& config_json = nlohmann::json::parse(ifs);
-        return std::unique_ptr<Solver>(new Solver(config_json));
+        return Solver(config_json);
       }))
       .def("run", &Solver::run)
       .def("get_single_result", &Solver::get_single_result)

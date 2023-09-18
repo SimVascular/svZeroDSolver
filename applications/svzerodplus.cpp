@@ -42,9 +42,6 @@
 
 namespace py = pybind11;
 
-py::module_ pd = py::module_::import("pandas");
-py::module_ io = py::module_::import("io");
-
 PYBIND11_MODULE(svzerodplus, m) {
   using Solver = SOLVE::Solver<double>;
   py::class_<Solver>(m, "Solver")
@@ -60,19 +57,24 @@ PYBIND11_MODULE(svzerodplus, m) {
       .def("run", &Solver::run)
       .def("get_single_result", &Solver::get_single_result)
       .def("get_single_result_avg", &Solver::get_single_result_avg)
-      .def("get_full_result",
-           [](Solver& solver) {
-             auto result = solver.get_full_result();
-             return pd.attr("read_csv")(io.attr("StringIO")(result));
-           });
+      .def("get_full_result", [](Solver& solver) {
+        py::module_ pd = py::module_::import("pandas");
+        py::module_ io = py::module_::import("io");
+        auto result = solver.get_full_result();
+        return pd.attr("read_csv")(io.attr("StringIO")(result));
+      });
 
   m.def("simulate", [](py::dict& config) {
+    py::module_ pd = py::module_::import("pandas");
+    py::module_ io = py::module_::import("io");
     const nlohmann::json& config_json = config;
     auto solver = Solver(config_json);
     solver.run();
     return pd.attr("read_csv")(io.attr("StringIO")(solver.get_full_result()));
   });
   m.def("simulate", [](std::string config_file) {
+    py::module_ pd = py::module_::import("pandas");
+    py::module_ io = py::module_::import("io");
     std::ifstream ifs(config_file);
     const auto& config_json = nlohmann::json::parse(ifs);
     auto solver = Solver(config_json);

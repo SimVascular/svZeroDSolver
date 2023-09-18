@@ -35,8 +35,6 @@
 #include "Integrator.h"
 #include "State.h"
 #include "debug.h"
-#include "helpers.h"
-#include "io.h"
 #include "csvwriter.h"
 #include "SimulationParameters.h"
 #include "Model.h"

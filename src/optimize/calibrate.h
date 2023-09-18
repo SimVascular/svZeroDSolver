@@ -40,7 +40,6 @@
 #include <nlohmann/json.hpp>
 
 #include "debug.h"
-#include "helpers.h"
 #include "Model.h"
 
 namespace optimize {

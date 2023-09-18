@@ -31,7 +31,6 @@
 #ifndef SVZERODSOLVER_SIMULATIONPARAMETERS_HPP_
 #define SVZERODSOLVER_SIMULATIONPARAMETERS_HPP_
 
-#include "helpers.h"
 #include "Model.h"
 #include "State.h"
 

@@ -29,10 +29,32 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "SimulationParameters.h"
-#include "io.h"
 #include "State.h"
 
 namespace io {
+
+std::vector<double>
+get_double_array(const nlohmann::json& data, std::string_view key)
+{
+  std::vector<double> vector;
+  if (!data[key].is_array()) {
+    return {data[key]};
+  }
+  return data[key].get<std::vector<double>>();
+}
+
+std::vector<double>
+get_double_array(const nlohmann::json& data, std::string_view key,
+    std::vector<double> default_value)
+{
+  if (!data.contains(key)) {
+    return default_value;
+  }
+  if (!data[key].is_array()) {
+    return {data[key]};
+  }
+  return data[key].get<std::vector<double>>();
+}
 
 /**
  * @brief Load the simulation parameters from a json configuration

@@ -35,7 +35,6 @@
 #define SVZERODSOLVER_IO_CSVWRITER_HPP_
 
 #include "State.h"
-#include "helpers.h"
 #include "Model.h"
 
 #include <fstream>

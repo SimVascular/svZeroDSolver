@@ -33,6 +33,8 @@
  */
 #include "interface.h"
 
+#include "SimulationParameters.h"
+
 #include <cmath>
 
 using S = algebra::SparseSystem;

@@ -32,10 +32,10 @@
 #include "SparseSystem.h"
 #include "State.h"
 #include "debug.h"
-#include "helpers.h"
-#include "io.h"
 #include "csvwriter.h"
 #include "Model.h"
+
+#include <nlohmann/json.hpp>
 
 #include <map>
 #include <string>

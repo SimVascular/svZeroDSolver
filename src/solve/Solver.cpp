@@ -1,5 +1,7 @@
 #include "Solver.h"
 
+#include "csv_writer.h"
+
 namespace solve {
 
 Solver::Solver(const nlohmann::json& config) 

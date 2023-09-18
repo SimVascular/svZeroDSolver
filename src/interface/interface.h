@@ -32,7 +32,7 @@
 #include "SparseSystem.h"
 #include "State.h"
 #include "debug.h"
-#include "csvwriter.h"
+#include "csv_writer.h"
 #include "Model.h"
 
 #include <nlohmann/json.hpp>

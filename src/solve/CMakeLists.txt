@@ -33,13 +33,13 @@
 set(lib svzero_solve_library)
 
 set(CXXSRCS 
-  csvwriter.cpp 
+  csv_writer.cpp 
   SimulationParameters.cpp 
   Solver.cpp
 )
 
 set(HDRS 
-  csvwriter.h 
+  csv_writer.h 
   debug.h 
   SimulationParameters.h 
   Solver.h 

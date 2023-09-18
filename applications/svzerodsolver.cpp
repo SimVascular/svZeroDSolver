@@ -33,6 +33,8 @@
  */
 #include "Solver.h"
 
+#include <fstream>
+
 /**
  *
  * @brief svZeroDSolver main routine

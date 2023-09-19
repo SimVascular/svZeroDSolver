@@ -402,8 +402,17 @@ def test_pulsatile_flow_r_rcr_mean_variable():
 
     # time-averaged results
     res_mean = run_test_case_by_name("pulsatileFlow_R_RCR_mean_variable", output_variable_based=True)
-    sfsdfdsf
 
+    # fields and segments to test
+    fields = ["flow", "pressure"]
+    segments = {"in": "INFLOW:branch0_seg0", "out": "branch0_seg0:OUT"}
+
+    tol = {"f": RTOL_FLOW, "p": RTOL_PRES}
+    for f in fields:
+        for k, v in segments.items():
+            rt = np.mean(res_time[f + "_" + k])
+            rm = res_mean["y"][res_mean["name"] == f + ":" + v]
+            assert np.isclose(rt, rm, rtol=tol[f[0]])
 
 def test_pulsatile_flow_r_rcr_derivative():
     results = run_test_case_by_name("pulsatileFlow_R_RCR_derivative", output_variable_based=True)
@@ -420,7 +429,7 @@ def test_pulsatile_flow_r_rcr_derivative():
     for f in fields:
         ref = np.gradient(results[f], dt)
         res = results["d_" + f]
-        np.isclose(ref, res, atol=tol[f[0]])
+        assert np.all(np.isclose(ref, res, atol=tol[f[0]]))
 
 
 def test_pulsatile_flow_r_rcr_mean_derivative():
@@ -442,7 +451,7 @@ def test_pulsatile_flow_r_rcr_mean_derivative():
     for f in fields:
         ref = np.mean(np.gradient(res_time[f], dt))
         res = res_mean["d_" + f]
-        np.isclose(ref, res, atol=tol[f[0]])
+        assert np.isclose(ref, res, atol=tol[f[0]])
 
 
 def test_pulsatile_flow_r_coronary():

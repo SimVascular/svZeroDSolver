@@ -182,6 +182,12 @@ target_include_directories(svzerodcalibrator PUBLIC
   ${CMAKE_SOURCE_DIR}/src/solve 
 )
 
+target_include_directories(svzerodplus PUBLIC 
+  ${CMAKE_SOURCE_DIR}/src/algebra
+  ${CMAKE_SOURCE_DIR}/src/model 
+  ${CMAKE_SOURCE_DIR}/src/solve 
+)
+
 # -----------------------------------------------------------------------------
 # Set the libraries each application needs to link to.
 # -----------------------------------------------------------------------------

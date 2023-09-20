@@ -1,4 +1,4 @@
-# This workflow builds and deploys the html documentation for svZeroDPlus.
+# This workflow builds and deploys the html documentation for svZeroDSolver.
 name: Documentation
 on: [push, pull_request]
 permissions:
@@ -8,23 +8,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Make build directory
-        run: mkdir docs/build
+      - name: Make html directory
+        run: mkdir docs/html
       - name: Build doxygen documentation
         continue-on-error: true
         uses: mattnotmitt/doxygen-action@v1.9.5
         with:
           working-directory: '.'
-          doxyfile-path: 'docs/Doxyfile'
+          doxyfile-path: 'docs/cpp/Doxyfile'
           enable-latex: true
+      - name: Install sphinx dependencies
+        run: |
+          conda create -n zerod python=3.9
+          conda run -n zerod pip install -e .[dev]
+      - name: Build sphinx documentation
+        continue-on-error: true
+        run: |
+          conda run -n zerod sphinx-apidoc -o docs/python/source svzerodsolver
+          conda run -n zerod sphinx-build -b html -d docs/python/build/doctrees  docs/python/source docs/html/python
       - name: Save documentation
         uses: actions/upload-artifact@v3
         with:
           name: documentation
-          path: ./docs/build/html
+          path: ./docs/html
       - name: Deploy documentation
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/build/html
+          publish_dir: ./docs/html

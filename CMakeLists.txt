@@ -203,3 +203,8 @@ target_link_libraries(svzerodcalibrator PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(svzerodplus PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodplus PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(svzerodplus PRIVATE pybind11_json)
+target_link_libraries(svzerodplus PRIVATE svzero_algebra_library)
+target_link_libraries(svzerodplus PRIVATE svzero_model_library)
+target_link_libraries(svzerodplus PRIVATE svzero_optimize_library)
+target_link_libraries(svzerodplus PRIVATE svzero_solve_library)
+

@@ -185,6 +185,7 @@ target_include_directories(svzerodcalibrator PUBLIC
 target_include_directories(svzerodplus PUBLIC 
   ${CMAKE_SOURCE_DIR}/src/algebra
   ${CMAKE_SOURCE_DIR}/src/model 
+  ${CMAKE_SOURCE_DIR}/src/optimize
   ${CMAKE_SOURCE_DIR}/src/solve 
 )
 

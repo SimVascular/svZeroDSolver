@@ -90,7 +90,7 @@ std::string to_vessel_csv(std::vector<T> &times,
       continue;
     }
 
-    std::string name = block->get_name();
+    std::string name = model.get_block_name(i);
     inflow_dof = block->inlet_nodes[0]->flow_dof;
     outflow_dof = block->outlet_nodes[0]->flow_dof;
     inpres_dof = block->inlet_nodes[0]->pres_dof;

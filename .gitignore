@@ -18,11 +18,7 @@ __pycache__
 public
 
 # Documentation
-docs/html
-docs/python/source/*.rst
-!docs/python/source/index.rst
-!docs/python/source/modules.rst
-docs/python/build
+docs/build
 
 # C++ build and externals directories
 Release*/

@@ -2,6 +2,7 @@ import numpy as np
 
 from .utils import run_test_case_by_name, get_result, RTOL_FLOW, RTOL_PRES
 
+
 def test_steady_flow_R_R():
     results = run_test_case_by_name("steadyFlow_R_R")
     assert np.isclose(
@@ -410,4 +411,3 @@ def test_coupled_block_heart_with_coronaries():
     assert np.isclose(
         np.amin(aortic_pressure[-50:]), 38.80066561075395, rtol=RTOL_PRES
     )  # min aortic pressure
-

@@ -7,6 +7,7 @@ from .utils import run_test_case_by_name, RTOL_FLOW, RTOL_PRES
 ATOL = {"f": 0.6, "p": 800.0}
 ATOL_MEAN = {"f": 0.01, "p": 20.0}
 
+
 def test_pulsatile_flow_r_rcr_mean():
     # time-dependent results
     res_time = run_test_case_by_name("pulsatileFlow_R_RCR")
@@ -100,7 +101,9 @@ def test_pulsatile_flow_r_rcr_mean_derivative():
 
 def test_pulsatile_flow_r_rcr_mean_derivative_variable():
     # time-dependent results
-    res_time = run_test_case_by_name("pulsatileFlow_R_RCR_variable", output_variable_based=True)
+    res_time = run_test_case_by_name(
+        "pulsatileFlow_R_RCR_variable", output_variable_based=True
+    )
 
     # time-averaged results
     res_mean = run_test_case_by_name(

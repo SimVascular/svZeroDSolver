@@ -65,7 +65,7 @@ def run_test_case_by_name(name, output_variable_based=False, folder="."):
     # run test
     result, config = execute_svzerodplus(testfile, "solver")
 
-    if output_variable_based == False:
+    if not output_variable_based:
         output = {
             "pressure_in": {},
             "pressure_out": {},
@@ -73,38 +73,18 @@ def run_test_case_by_name(name, output_variable_based=False, folder="."):
             "flow_out": {},
         }
 
-        last_seg_id = 0
-
         for vessel in config["vessels"]:
             name = vessel["vessel_name"]
             branch_id, seg_id = name.split("_")
             branch_id, seg_id = int(branch_id[6:]), int(seg_id[3:])
-            vessel_id = vessel["vessel_id"]
 
-            if seg_id == 0:
-                output["pressure_in"][branch_id] = np.array(
-                    result[result.name == name]["pressure_in"]
-                )
-                output["flow_in"][branch_id] = np.array(
-                    result[result.name == name]["flow_in"]
-                )
-                output["pressure_out"][branch_id] = np.array(
-                    result[result.name == name]["pressure_out"]
-                )
-                output["flow_out"][branch_id] = np.array(
-                    result[result.name == name]["flow_out"]
-                )
-            elif seg_id > last_seg_id:
-                output["pressure_out"][branch_id] = np.array(
-                    result[result.name == name]["pressure_out"]
-                )
-                output["flow_out"][branch_id] = np.array(
-                    result[result.name == name]["flow_out"]
-                )
+            for f in ["pressure", "flow"]:
+                for l in ["in"] * (seg_id == 0) + ["out"]:
+                    n = f + "_" + l
+                    ids = result.name == name
+                    output[n][branch_id] = np.array(result[ids][n])
 
-            last_seg_id = seg_id
-
-    elif output_variable_based == True:
+    else:
         output = result
 
     return output

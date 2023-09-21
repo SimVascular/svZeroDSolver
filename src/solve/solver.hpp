@@ -35,7 +35,6 @@
 #include "algebra/integrator.hpp"
 #include "algebra/state.hpp"
 #include "helpers/debug.hpp"
-#include "helpers/endswith.hpp"
 #include "io/configreader.hpp"
 #include "io/csvwriter.hpp"
 #include "model/model.hpp"

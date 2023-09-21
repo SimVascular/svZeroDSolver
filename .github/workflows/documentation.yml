@@ -7,7 +7,7 @@ jobs:
   documentation:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Make build directory
         run: mkdir docs/build
       - name: Build doxygen documentation

@@ -246,7 +246,8 @@
         "number_of_time_pts_per_cardiac_cycle": 201,
         "output_all_cycles": true,
         "output_mean_only": true,
-        "output_derivative": true
+        "output_derivative": true,
+        "output_variable_based": true
     },
     "vessels": [
         {

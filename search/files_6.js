@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['junction_2ehpp_0',['junction.hpp',['../junction_8hpp.html',1,'']]]
+  ['levenbergmarquardtoptimizer_2ehpp_0',['levenbergmarquardtoptimizer.hpp',['../levenbergmarquardtoptimizer_8hpp.html',1,'']]]
 ];

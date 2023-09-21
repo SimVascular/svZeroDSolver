@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['increment_5ftime_0',['increment_time',['../interface_8cpp.html#acbedb01d5fb04dda72c27fce77cc4e92',1,'interface.cpp']]],
-  ['initialize_1',['initialize',['../interface_8cpp.html#ae89bc7b9995835597d98b9d77a123c70',1,'interface.cpp']]],
-  ['integrator_2',['Integrator',['../class_a_l_g_e_b_r_a_1_1_integrator.html#ae771d6d61f83d154c643846a480fd546',1,'ALGEBRA::Integrator::Integrator(MODEL::Model&lt; T &gt; *model, T time_step_size, T rho, T atol, int max_iter)'],['../class_a_l_g_e_b_r_a_1_1_integrator.html#af4f52400a2ba9332c32e2f3cb44de126',1,'ALGEBRA::Integrator::Integrator()']]]
+  ['levenbergmarquardtoptimizer_0',['LevenbergMarquardtOptimizer',['../class_o_p_t_1_1_levenberg_marquardt_optimizer.html#a8227cd7de1b9c31e356a0672611e6216',1,'OPT::LevenbergMarquardtOptimizer']]],
+  ['load_5finitial_5fcondition_1',['load_initial_condition',['../namespace_i_o.html#a979a0a0b79eebfe2c7c3c424f16d806b',1,'IO']]],
+  ['load_5fsimulation_5fmodel_2',['load_simulation_model',['../namespace_i_o.html#aa43ec6d81b581e9bc734a254c7a43acf',1,'IO']]],
+  ['load_5fsimulation_5fparams_3',['load_simulation_params',['../namespace_i_o.html#add684109fb8487834e371cbe517a2582',1,'IO']]]
 ];

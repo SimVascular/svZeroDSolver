@@ -34,10 +34,10 @@
 #ifndef SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
 
-#include "SparseSystem.h"
 #include "Block.h"
 #include "BlockType.h"
 #include "BloodVessel.h"
+#include "SparseSystem.h"
 
 namespace zd_model {
 /**
@@ -165,8 +165,8 @@ class BloodVesselJunction : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem& system,
-                       std::vector<double>& parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -177,7 +177,7 @@ class BloodVesselJunction : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  virtual void update_solution(algebra::SparseSystem& system,
+  virtual void update_solution(algebra::SparseSystem &system,
                                std::vector<double> &parameters,
                                Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                                Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
@@ -221,6 +221,6 @@ class BloodVesselJunction : public Block {
   int num_outlets;
 };
 
-}  
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_

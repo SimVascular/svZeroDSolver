@@ -32,29 +32,26 @@
 
 namespace zd_model {
 
-Parameter::Parameter(int id, double value) 
-{
+Parameter::Parameter(int id, double value) {
   this->id = id;
   update(value);
 }
 
 Parameter::Parameter(int id, const std::vector<double> &times,
-    const std::vector<double> &values, bool periodic) 
-{
+                     const std::vector<double> &values, bool periodic) {
   this->id = id;
   this->isperiodic = periodic;
   update(times, values);
 }
 
-void Parameter::update(double value) 
-{
+void Parameter::update(double value) {
   this->isconstant = true;
   this->isperiodic = true;
   this->value = value;
 }
 
-
-void Parameter::update(const std::vector<double> &times, const std::vector<double> &values) {
+void Parameter::update(const std::vector<double> &times,
+                       const std::vector<double> &values) {
   this->size = values.size();
 
   if (this->size == 1) {
@@ -70,8 +67,7 @@ void Parameter::update(const std::vector<double> &times, const std::vector<doubl
 
 Parameter::~Parameter() {}
 
-double Parameter::get(double time) 
-{
+double Parameter::get(double time) {
   // Return the constant value if parameter is constant
   if (isconstant) {
     return value;
@@ -103,8 +99,7 @@ double Parameter::get(double time)
          ((values[k] - values[l]) / (times[k] - times[l])) * (rtime - times[l]);
 }
 
-void Parameter::to_steady() 
-{
+void Parameter::to_steady() {
   if (isconstant) {
     return;
   }
@@ -114,13 +109,11 @@ void Parameter::to_steady()
   steady_converted = true;
 }
 
-void Parameter::to_unsteady() 
-{
+void Parameter::to_unsteady() {
   if (steady_converted) {
     isconstant = false;
     steady_converted = false;
   }
 }
 
-} 
-
+}  // namespace zd_model

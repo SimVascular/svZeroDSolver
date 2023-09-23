@@ -130,7 +130,8 @@ class OpenLoopCoronaryBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -163,6 +164,6 @@ class OpenLoopCoronaryBC : public Block {
   std::map<std::string, int> get_num_triplets();
 };
 
-}  
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_

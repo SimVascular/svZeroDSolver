@@ -33,22 +33,26 @@
  */
 
 #include "calibrate.h"
+
 #include "LevenbergMarquardtOptimizer.h"
 
 namespace optimize {
 
-nlohmann::json calibrate(const nlohmann::json &config) 
-{
+nlohmann::json calibrate(const nlohmann::json &config) {
   auto output_config = nlohmann::json(config);
 
   // Read calibration parameters
   DEBUG_MSG("Parse calibration parameters");
   auto const &calibration_parameters = config["calibration_parameters"];
-  double gradient_tol = calibration_parameters.value("tolerance_gradient", 1e-5);
-  double increment_tol = calibration_parameters.value("tolerance_increment", 1e-10);
+  double gradient_tol =
+      calibration_parameters.value("tolerance_gradient", 1e-5);
+  double increment_tol =
+      calibration_parameters.value("tolerance_increment", 1e-10);
   int max_iter = calibration_parameters.value("maximum_iterations", 100);
-  bool calibrate_stenosis = calibration_parameters.value("calibrate_stenosis_coefficient", true);
-  bool zero_capacitance = calibration_parameters.value("set_capacitance_to_zero", false);
+  bool calibrate_stenosis =
+      calibration_parameters.value("calibrate_stenosis_coefficient", true);
+  bool zero_capacitance =
+      calibration_parameters.value("set_capacitance_to_zero", false);
   double lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
 
   int num_params = 3;
@@ -225,9 +229,9 @@ nlohmann::json calibrate(const nlohmann::json &config)
 
   // Run optimization
   DEBUG_MSG("Start optimization");
-  auto lm_alg =
-      optimize::LevenbergMarquardtOptimizer(&model, num_obs, param_counter, lambda0,
-                                       gradient_tol, increment_tol, max_iter);
+  auto lm_alg = optimize::LevenbergMarquardtOptimizer(
+      &model, num_obs, param_counter, lambda0, gradient_tol, increment_tol,
+      max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 
@@ -294,5 +298,4 @@ nlohmann::json calibrate(const nlohmann::json &config)
   return output_config;
 }
 
-} 
-
+}  // namespace optimize

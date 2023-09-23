@@ -29,6 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ClosedLoopCoronaryBC.h"
+
 #include "Model.h"
 
 namespace zd_model {
@@ -37,22 +38,24 @@ void ClosedLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"volume_im"});
 }
 
-void ClosedLoopCoronaryBC::setup_model_dependent_params() 
-{
+void ClosedLoopCoronaryBC::setup_model_dependent_params() {
   auto heart_block = this->model->get_block("CLH");
 
   if (side == Side::LEFT) {
-    im_param_id = heart_block->global_param_ids[ClosedLoopHeartPulmonary::ParamId::IML];
-    ventricle_var_id = heart_block->global_var_ids[13];  // Solution ID for LV pressure
+    im_param_id =
+        heart_block->global_param_ids[ClosedLoopHeartPulmonary::ParamId::IML];
+    ventricle_var_id =
+        heart_block->global_var_ids[13];  // Solution ID for LV pressure
 
   } else {
-    im_param_id = heart_block->global_param_ids[ClosedLoopHeartPulmonary::ParamId::IMR];
+    im_param_id =
+        heart_block->global_param_ids[ClosedLoopHeartPulmonary::ParamId::IMR];
     ventricle_var_id = heart_block->global_var_ids[6];
   }
 }
 
-void ClosedLoopCoronaryBC::update_constant(algebra::SparseSystem &system, std::vector<double> &parameters) 
-{
+void ClosedLoopCoronaryBC::update_constant(algebra::SparseSystem &system,
+                                           std::vector<double> &parameters) {
   auto ra = parameters[this->global_param_ids[ParamId::RA]];
   auto ram = parameters[this->global_param_ids[ParamId::RAM]];
   auto rv = parameters[this->global_param_ids[ParamId::RV]];
@@ -83,17 +86,15 @@ void ClosedLoopCoronaryBC::update_constant(algebra::SparseSystem &system, std::v
 void ClosedLoopCoronaryBC::update_solution(
     algebra::SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) 
-{
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   auto cim = parameters[this->global_param_ids[ParamId::CIM]];
   auto im = parameters[im_param_id];
   auto pim = im * y[this->ventricle_var_id];
   system.C(this->global_eqn_ids[2]) = -cim * pim;
 }
 
-std::map<std::string, int> ClosedLoopCoronaryBC::get_num_triplets() 
-{
+std::map<std::string, int> ClosedLoopCoronaryBC::get_num_triplets() {
   return num_triplets;
 }
 
-}  
+}  // namespace zd_model

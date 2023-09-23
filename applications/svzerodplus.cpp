@@ -36,9 +36,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "Solver.h"
 #include "calibrate.h"
 #include "pybind11_json/pybind11_json.hpp"
-#include "Solver.h"
 
 namespace py = pybind11;
 

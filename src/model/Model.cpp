@@ -29,6 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Model.h"
+
 #include "Node.h"
 
 namespace zd_model {
@@ -37,69 +38,71 @@ Model::Model() {}
 
 Model::~Model() {}
 
-int Model::add_block(BlockType block_type, const std::vector<int> &block_param_ids, std::string_view name, bool internal) 
-{
-  //DEBUG_MSG("Adding block " << name << " with type " << block_type);
+int Model::add_block(BlockType block_type,
+                     const std::vector<int> &block_param_ids,
+                     std::string_view name, bool internal) {
+  // DEBUG_MSG("Adding block " << name << " with type " << block_type);
 
-  Block* block{nullptr};
-
+  Block *block{nullptr};
 
   switch (block_type) {
     case BlockType::BLOODVESSEL:
       block = new BloodVessel(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::JUNCTION:
       block = new Junction(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::BLOODVESSELJUNCTION:
       block = new BloodVesselJunction(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::RESISTIVEJUNCTION:
       block = new ResistiveJunction(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::FLOWBC:
-      block = new FlowReferenceBC(block_count, block_param_ids, this); 
-    break;
+      block = new FlowReferenceBC(block_count, block_param_ids, this);
+      break;
 
     case BlockType::RESISTANCEBC:
       block = new ResistanceBC(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::WINDKESSELBC:
       block = new WindkesselBC(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::PRESSUREBC:
       block = new PressureReferenceBC(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::OPENLOOPCORONARYBC:
       block = new OpenLoopCoronaryBC(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::CLOSEDLOOPCORONARYLEFTBC:
-      block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this, Side::LEFT);
-          //new ClosedLoopCoronaryBC<double, MODEL::Side::LEFT>(
-          //    block_count, block_param_ids, this));
-    break;
+      block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
+                                       Side::LEFT);
+      // new ClosedLoopCoronaryBC<double, MODEL::Side::LEFT>(
+      //     block_count, block_param_ids, this));
+      break;
 
     case BlockType::CLOSEDLOOPCORONARYRIGHTBC:
-      block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this, Side::RIGHT);
-      //block = new ClosedLoopCoronaryBC<double, MODEL::Side::RIGHT>(
-      //        block_count, block_param_ids, this));
-    break;
+      block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
+                                       Side::RIGHT);
+      // block = new ClosedLoopCoronaryBC<double, MODEL::Side::RIGHT>(
+      //         block_count, block_param_ids, this));
+      break;
 
     case BlockType::CLOSEDLOOPRCRBC:
       block = new ClosedLoopRCRBC(block_count, block_param_ids, this);
-    break;
+      break;
 
     case BlockType::CLOSEDLOOPHEARTPULMONARY:
       block = new ClosedLoopHeartPulmonary(block_count, block_param_ids, this);
-    break;
+      break;
 
     default:
       throw std::runtime_error(
@@ -121,8 +124,7 @@ int Model::add_block(BlockType block_type, const std::vector<int> &block_param_i
   return block_count++;
 }
 
-Block *Model::get_block(std::string_view name) 
-{
+Block *Model::get_block(std::string_view name) {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
@@ -132,8 +134,7 @@ Block *Model::get_block(std::string_view name)
   return blocks[block_index_map[name_string]].get();
 }
 
-Block *Model::get_block(int block_id) 
-{
+Block *Model::get_block(int block_id) {
   if (block_id >= blocks.size()) {
     return hidden_blocks[block_id - blocks.size()].get();
   }
@@ -141,8 +142,7 @@ Block *Model::get_block(int block_id)
   return blocks[block_id].get();
 }
 
-BlockType Model::get_block_type(std::string_view name) 
-{
+BlockType Model::get_block_type(std::string_view name) {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
@@ -152,36 +152,32 @@ BlockType Model::get_block_type(std::string_view name)
   return block_types[block_index_map[name_string]];
 }
 
-std::string Model::get_block_name(int block_id) 
-{
+std::string Model::get_block_name(int block_id) {
   return block_names[block_id];
 }
 
-int Model::add_node(const std::vector<Block*> &inlet_eles, const std::vector<Block *> &outlet_eles,
-                       std::string_view name) 
-{
-  //DEBUG_MSG("Adding node " << name);
-  auto node = std::shared_ptr<Node>( new Node(node_count, inlet_eles, outlet_eles, this));
+int Model::add_node(const std::vector<Block *> &inlet_eles,
+                    const std::vector<Block *> &outlet_eles,
+                    std::string_view name) {
+  // DEBUG_MSG("Adding node " << name);
+  auto node = std::shared_ptr<Node>(
+      new Node(node_count, inlet_eles, outlet_eles, this));
   nodes.push_back(node);
   node_names.push_back(static_cast<std::string>(name));
 
   return node_count++;
 }
 
-std::string Model::get_node_name(int node_id) 
-{
-  return node_names[node_id];
-}
+std::string Model::get_node_name(int node_id) { return node_names[node_id]; }
 
-int Model::add_parameter(double value) 
-{
+int Model::add_parameter(double value) {
   parameters.push_back(Parameter(parameter_count, value));
   parameter_values.push_back(parameters.back().get(0.0));
   return parameter_count++;
 }
 
-int Model::add_parameter(const std::vector<double> &times, const std::vector<double> &values, bool periodic) 
-{
+int Model::add_parameter(const std::vector<double> &times,
+                         const std::vector<double> &values, bool periodic) {
   auto param = Parameter(parameter_count, times, values, periodic);
   if (periodic && (param.isconstant == false)) {
     if ((this->cardiac_cycle_period > 0.0) &&
@@ -196,31 +192,26 @@ int Model::add_parameter(const std::vector<double> &times, const std::vector<dou
   return parameter_count++;
 }
 
-Parameter *Model::get_parameter(int param_id) {
-  return &parameters[param_id];
-}
+Parameter *Model::get_parameter(int param_id) { return &parameters[param_id]; }
 
-double Model::get_parameter_value(int param_id) 
-{
+double Model::get_parameter_value(int param_id) {
   return parameter_values[param_id];
 }
 
-void Model::update_parameter_value(int param_id, double param_value) 
-{
+void Model::update_parameter_value(int param_id, double param_value) {
   parameter_values[param_id] = param_value;
 }
 
-void Model::finalize() 
-{
-  //DEBUG_MSG("Setup degrees-of-freedom of nodes");
+void Model::finalize() {
+  // DEBUG_MSG("Setup degrees-of-freedom of nodes");
   for (auto &node : nodes) {
     node->setup_dofs(dofhandler);
   }
-  //DEBUG_MSG("Setup degrees-of-freedom of blocks");
+  // DEBUG_MSG("Setup degrees-of-freedom of blocks");
   for (auto &block : blocks) {
     block->setup_dofs(dofhandler);
   }
-  //DEBUG_MSG("Setup model-dependent parameters");
+  // DEBUG_MSG("Setup model-dependent parameters");
   for (auto &block : blocks) {
     block->setup_model_dependent_params();
   }
@@ -230,8 +221,7 @@ void Model::finalize()
   }
 }
 
-int Model::get_num_blocks(bool internal) 
-{
+int Model::get_num_blocks(bool internal) {
   int num_blocks = blocks.size();
 
   if (internal) {
@@ -241,16 +231,13 @@ int Model::get_num_blocks(bool internal)
   return num_blocks;
 }
 
-void Model::update_constant(algebra::SparseSystem& system) 
-{
+void Model::update_constant(algebra::SparseSystem &system) {
   for (auto block : blocks) {
     block->update_constant(system, parameter_values);
   }
 }
 
-
-void Model::update_time(algebra::SparseSystem& system, double time) 
-{
+void Model::update_time(algebra::SparseSystem &system, double time) {
   this->time = time;
 
   for (auto &param : parameters) {
@@ -260,19 +247,17 @@ void Model::update_time(algebra::SparseSystem& system, double time)
   for (auto block : blocks) {
     block->update_time(system, parameter_values);
   }
-
 }
 
-void Model::update_solution(algebra::SparseSystem& system, Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) 
-{
+void Model::update_solution(algebra::SparseSystem &system,
+                            Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                            Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   for (auto block : blocks) {
     block->update_solution(system, parameter_values, y, dy);
   }
 }
 
-void Model::to_steady() 
-{
+void Model::to_steady() {
   for (auto &param : parameters) {
     param.to_steady();
   }
@@ -289,13 +274,12 @@ void Model::to_steady()
   }
 }
 
-void Model::to_unsteady() 
-{
+void Model::to_unsteady() {
   for (auto &param : parameters) {
     param.to_unsteady();
   }
   for (auto &[param_id_capacitance, value] : param_value_cache) {
-    //DEBUG_MSG("Setting Windkessel capacitance back to " << value);
+    // DEBUG_MSG("Setting Windkessel capacitance back to " << value);
     parameters[param_id_capacitance].update(value);
   }
   for (size_t i = 0; i < get_num_blocks(true); i++) {
@@ -317,5 +301,4 @@ std::map<std::string, int> Model::get_num_triplets() {
   return num_triplets;
 }
 
-};  
-
+};  // namespace zd_model

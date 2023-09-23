@@ -40,11 +40,7 @@
 
 namespace zd_model {
 
-enum class Side { 
-  LEFT, 
-  RIGHT, 
-  NONE 
-};
+enum class Side { LEFT, RIGHT, NONE };
 
 /**
  * @brief Closed loop coronary boundary condition (connected to other blocks on
@@ -126,9 +122,9 @@ enum class Side {
  */
 class ClosedLoopCoronaryBC : public Block {
  public:
-
-   explicit ClosedLoopCoronaryBC(int id, const std::vector<int> &param_ids, Model *model, Side side) :
-      Block(id, param_ids, model), side{side}{};
+  explicit ClosedLoopCoronaryBC(int id, const std::vector<int> &param_ids,
+                                Model *model, Side side)
+      : Block(id, param_ids, model), side{side} {};
 
   /**
    * @brief Local IDs of the parameters
@@ -203,6 +199,6 @@ class ClosedLoopCoronaryBC : public Block {
   Side side{Side::NONE};
 };
 
-}  
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_

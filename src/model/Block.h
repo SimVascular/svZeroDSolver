@@ -35,13 +35,12 @@
 #define SVZERODSOLVER_MODEL_BLOCK_HPP_
 
 #include <Eigen/Core>
-
-#include "SparseSystem.h"
-#include "DOFHandler.h"
-
 #include <list>
 #include <map>
 #include <vector>
+
+#include "DOFHandler.h"
+#include "SparseSystem.h"
 
 namespace zd_model {
 
@@ -79,11 +78,11 @@ class Block {
    */
   Block(const Block &) = delete;
 
-  int id;                  ///< Global ID of the block
+  int id;        ///< Global ID of the block
   Model *model;  ///< The model to which the block belongs
 
-  std::vector<Node*> inlet_nodes;   ///< Inlet nodes
-  std::vector<Node*> outlet_nodes;  ///< Outlet nodes
+  std::vector<Node *> inlet_nodes;   ///< Inlet nodes
+  std::vector<Node *> outlet_nodes;  ///< Outlet nodes
 
   bool steady = false;  ///< Toggle steady behavior
 
@@ -139,7 +138,8 @@ class Block {
    * @param num_internal_vars Number of internal variables of the block
    */
 
-  void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations, std::list<std::string> internal_var_names);
+  void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
+                   std::list<std::string> internal_var_names);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -165,7 +165,8 @@ class Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  virtual void update_constant(algebra::SparseSystem& system, std::vector<double> &parameters);
+  virtual void update_constant(algebra::SparseSystem &system,
+                               std::vector<double> &parameters);
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
@@ -173,7 +174,8 @@ class Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  virtual void update_time(algebra::SparseSystem& system, std::vector<double> &parameters);
+  virtual void update_time(algebra::SparseSystem &system,
+                           std::vector<double> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -184,8 +186,10 @@ class Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  virtual void update_solution(algebra::SparseSystem& system, std::vector<double> &parameters,
-      Eigen::Matrix<double, Eigen::Dynamic, 1> &y, Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  virtual void update_solution(algebra::SparseSystem &system,
+                               std::vector<double> &parameters,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -197,9 +201,11 @@ class Block {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  virtual void update_gradient(Eigen::SparseMatrix<double> &jacobian, Eigen::Matrix<double, 
-      Eigen::Dynamic, 1> &residual, Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
-      std::vector<double> &y, std::vector<double> &dy);
+  virtual void update_gradient(
+      Eigen::SparseMatrix<double> &jacobian,
+      Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
+      Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha, std::vector<double> &y,
+      std::vector<double> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -222,5 +228,5 @@ class Block {
   virtual std::map<std::string, int> get_num_triplets();
 };
 
-};
+};  // namespace zd_model
 #endif

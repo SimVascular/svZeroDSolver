@@ -31,9 +31,9 @@
  * @file svzerodsolver.cpp
  * @brief Main routine of svZeroDSolver
  */
-#include "Solver.h"
-
 #include <fstream>
+
+#include "Solver.h"
 
 /**
  *
@@ -52,8 +52,7 @@
  * @param argv Command line arguments
  * @return Return code
  */
-int main(int argc, char* argv[]) 
-{
+int main(int argc, char* argv[]) {
   DEBUG_MSG("Starting svZeroDSolver");
 
   // Get input and output file name

@@ -17,16 +17,16 @@
 // in all copies or substantial portions of the Software.
 //
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHdouble HOLDERS AND CONTRIBUTORS "AS
-// IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUdouble NOdouble LIMITED
-// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENdouble SHALL THE COPYRIGHdouble OWNER
-// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUdouble NOdouble LIMITED TO,
-// PROCUREMENdouble OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-// LIABILITY, WHETHER IN CONTRACT, STRICdouble LIABILITY, OR TORdouble (INCLUDING
-// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUdouble OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUdouble NOdouble
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENdouble SHALL THE COPYRIGHdouble
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUdouble NOdouble
+// LIMITED TO, PROCUREMENdouble OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+// OF LIABILITY, WHETHER IN CONTRACT, STRICdouble LIABILITY, OR TORdouble
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUdouble OF THE USE OF
+// THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file levenbergmarquardtoptimizer.hpp
  * @brief OPT::LevenbergMarquardtOptimizer source file
@@ -117,8 +117,8 @@ class LevenbergMarquardtOptimizer {
    * @param max_iter Maximum iterations
    */
   LevenbergMarquardtOptimizer(zd_model::Model* model, int num_obs,
-                              int num_params, double lambda0, double tol_grad, double tol_inc,
-                              int max_iter);
+                              int num_params, double lambda0, double tol_grad,
+                              double tol_inc, int max_iter);
 
   /**
    * @brief Destroy the LevenbergMarquardtOptimizer object
@@ -137,7 +137,8 @@ class LevenbergMarquardtOptimizer {
    */
   Eigen::Matrix<double, Eigen::Dynamic, 1> run(
       Eigen::Matrix<double, Eigen::Dynamic, 1> alpha,
-      std::vector<std::vector<double>>& y_obs, std::vector<std::vector<double>>& dy_obs);
+      std::vector<std::vector<double>>& y_obs,
+      std::vector<std::vector<double>>& dy_obs);
 
  private:
   Eigen::SparseMatrix<double> jacobian;
@@ -165,7 +166,6 @@ class LevenbergMarquardtOptimizer {
   void update_delta(bool first_step);
 };
 
-
-}  
+}  // namespace optimize
 
 #endif  // SVZERODSOLVER_OPTIMIZE_LEVENBERGMARQUARDT_HPP_

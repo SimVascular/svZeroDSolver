@@ -34,11 +34,11 @@
 #ifndef SVZERODSOLVER_MODEL_NODE_HPP_
 #define SVZERODSOLVER_MODEL_NODE_HPP_
 
-#include "BlockType.h"
-#include "DOFHandler.h"
-
 #include <string>
 #include <vector>
+
+#include "BlockType.h"
+#include "DOFHandler.h"
 
 namespace zd_model {
 
@@ -64,7 +64,8 @@ class Node {
    * @param model The model to which the node belongs
    */
   Node(){};
-  Node(int id, const std::vector<Block*>& inlet_eles, const std::vector<Block*>& outlet_eles, Model *model);
+  Node(int id, const std::vector<Block *> &inlet_eles,
+       const std::vector<Block *> &outlet_eles, Model *model);
 
   /**
    * @brief Destroy the Node object
@@ -72,10 +73,10 @@ class Node {
    */
   ~Node();
 
-  int id;                               ///< Global ID of the block
-  std::vector<Block*> inlet_eles;   ///< Inlet element of the node
-  std::vector<Block*> outlet_eles;  ///< Outlet element of the node
-  Model *model;               ///< The model to which the node belongs
+  int id;                            ///< Global ID of the block
+  std::vector<Block *> inlet_eles;   ///< Inlet element of the node
+  std::vector<Block *> outlet_eles;  ///< Outlet element of the node
+  Model *model;                      ///< The model to which the node belongs
 
   unsigned int flow_dof;  ///< Global flow degree-of-freedom of the node
   unsigned int pres_dof;  ///< Global pressure degree-of-freedom of the node
@@ -100,6 +101,6 @@ class Node {
   void setup_dofs(DOFHandler &dofhandler);
 };
 
-}; 
+};  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_NODE_HPP_

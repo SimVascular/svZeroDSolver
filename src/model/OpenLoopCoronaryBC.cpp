@@ -32,13 +32,12 @@
 
 namespace zd_model {
 
-void OpenLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) 
-{
+void OpenLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {"volume_im"});
 }
 
-void OpenLoopCoronaryBC::update_constant(algebra::SparseSystem &system, std::vector<double> &parameters) 
-{
+void OpenLoopCoronaryBC::update_constant(algebra::SparseSystem &system,
+                                         std::vector<double> &parameters) {
   auto Ra = parameters[this->global_param_ids[0]];
   auto Ram = parameters[this->global_param_ids[1]];
   auto Rv = parameters[this->global_param_ids[2]];
@@ -77,8 +76,8 @@ void OpenLoopCoronaryBC::update_constant(algebra::SparseSystem &system, std::vec
   }
 }
 
-void OpenLoopCoronaryBC::update_time(algebra::SparseSystem &system, std::vector<double> &parameters) 
-{
+void OpenLoopCoronaryBC::update_time(algebra::SparseSystem &system,
+                                     std::vector<double> &parameters) {
   auto Ram = parameters[this->global_param_ids[1]];
   auto Rv = parameters[this->global_param_ids[2]];
   auto Cim = parameters[this->global_param_ids[4]];
@@ -95,9 +94,8 @@ void OpenLoopCoronaryBC::update_time(algebra::SparseSystem &system, std::vector<
   }
 }
 
-std::map<std::string, int> OpenLoopCoronaryBC::get_num_triplets() 
-{
+std::map<std::string, int> OpenLoopCoronaryBC::get_num_triplets() {
   return num_triplets;
 }
 
-} 
+}  // namespace zd_model

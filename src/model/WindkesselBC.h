@@ -161,6 +161,6 @@ class WindkesselBC : public Block {
   std::map<std::string, int> get_num_triplets();
 };
 
-}  
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_

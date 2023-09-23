@@ -125,7 +125,8 @@ class ResistiveJunction : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -152,6 +153,6 @@ class ResistiveJunction : public Block {
   int num_outlets;
 };
 
-}  
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_

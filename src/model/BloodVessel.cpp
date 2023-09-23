@@ -32,13 +32,12 @@
 
 namespace zd_model {
 
-void BloodVessel::setup_dofs(DOFHandler &dofhandler) 
-{
+void BloodVessel::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {});
 }
 
-void BloodVessel::update_constant(algebra::SparseSystem& system, std::vector<double> &parameters) 
-{
+void BloodVessel::update_constant(algebra::SparseSystem &system,
+                                  std::vector<double> &parameters) {
   // Get parameters
   double capacitance = parameters[this->global_param_ids[ParamId::CAPACITANCE]];
   double inductance = parameters[this->global_param_ids[ParamId::INDUCTANCE]];
@@ -54,10 +53,10 @@ void BloodVessel::update_constant(algebra::SparseSystem& system, std::vector<dou
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
 }
 
-void BloodVessel::update_solution(algebra::SparseSystem& system,
-                                     std::vector<double> &parameters,
-                                     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                                     Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+void BloodVessel::update_solution(
+    algebra::SparseSystem &system, std::vector<double> &parameters,
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   // Get parameters
   double resistance = parameters[this->global_param_ids[ParamId::RESISTANCE]];
   double capacitance = parameters[this->global_param_ids[ParamId::CAPACITANCE]];
@@ -134,5 +133,4 @@ std::map<std::string, int> BloodVessel::get_num_triplets() {
   return num_triplets;
 }
 
-}  
-
+}  // namespace zd_model

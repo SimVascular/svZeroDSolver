@@ -36,7 +36,6 @@
 
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
-
 #include <iostream>
 #include <memory>
 
@@ -80,13 +79,16 @@ class SparseSystem {
   Eigen::SparseMatrix<double> D;               ///< System matrix D
   Eigen::Matrix<double, Eigen::Dynamic, 1> C;  ///< System vector C
 
-  Eigen::SparseMatrix<double> jacobian;               ///< Jacobian of the system
-  Eigen::Matrix<double, Eigen::Dynamic, 1> residual;  ///< Residual of the system
-  Eigen::Matrix<double, Eigen::Dynamic, 1> dy;  ///< Solution increment of the system
+  Eigen::SparseMatrix<double> jacobian;  ///< Jacobian of the system
+  Eigen::Matrix<double, Eigen::Dynamic, 1>
+      residual;  ///< Residual of the system
+  Eigen::Matrix<double, Eigen::Dynamic, 1>
+      dy;  ///< Solution increment of the system
 
   std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<double>>> solver =
       std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<double>>>(
-          new Eigen::SparseLU<Eigen::SparseMatrix<double>>());  ///< Linear solver
+          new Eigen::SparseLU<Eigen::SparseMatrix<double>>());  ///< Linear
+                                                                ///< solver
 
   /**
    * @brief Reserve memory in system matrices based on number of triplets
@@ -123,7 +125,6 @@ class SparseSystem {
   void clean();
 };
 
-}  
-
+}  // namespace algebra
 
 #endif  // SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_

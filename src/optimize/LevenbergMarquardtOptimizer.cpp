@@ -30,14 +30,13 @@
 
 #include "LevenbergMarquardtOptimizer.h"
 
-#include <iomanip> 
+#include <iomanip>
 
 namespace optimize {
 
-LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(zd_model::Model* model, 
-    int num_obs, int num_params, double lambda0, double tol_grad, double tol_inc, 
-    int max_iter) 
-{
+LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
+    zd_model::Model* model, int num_obs, int num_params, double lambda0,
+    double tol_grad, double tol_inc, int max_iter) {
   this->model = model;
   this->num_obs = num_obs;
   this->num_params = num_params;
@@ -51,16 +50,17 @@ LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(zd_model::Model* model,
 
   jacobian = Eigen::SparseMatrix<double>(num_dpoints, num_params);
   residual = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(num_dpoints);
-  mat = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(num_params, num_params);
+  mat = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(num_params,
+                                                              num_params);
   vec = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(num_params);
 }
 
 LevenbergMarquardtOptimizer::~LevenbergMarquardtOptimizer() {}
 
-Eigen::Matrix<double, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer::run(Eigen::Matrix<double, 
-    Eigen::Dynamic, 1> alpha, std::vector<std::vector<double>>& y_obs, 
-    std::vector<std::vector<double>>& dy_obs) 
-{
+Eigen::Matrix<double, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer::run(
+    Eigen::Matrix<double, Eigen::Dynamic, 1> alpha,
+    std::vector<std::vector<double>>& y_obs,
+    std::vector<std::vector<double>>& dy_obs) {
   for (size_t i = 0; i < max_iter; i++) {
     update_gradient(alpha, y_obs, dy_obs);
 
@@ -87,9 +87,10 @@ Eigen::Matrix<double, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer::run(Eigen:
   return alpha;
 }
 
-void LevenbergMarquardtOptimizer::update_gradient(Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
-     std::vector<std::vector<double>>& y_obs, std::vector<std::vector<double>>& dy_obs) 
-{
+void LevenbergMarquardtOptimizer::update_gradient(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
+    std::vector<std::vector<double>>& y_obs,
+    std::vector<std::vector<double>>& dy_obs) {
   // Set jacobian and residual to zero
   jacobian.setZero();
   residual.setZero();
@@ -109,8 +110,7 @@ void LevenbergMarquardtOptimizer::update_gradient(Eigen::Matrix<double, Eigen::D
   }
 }
 
-void LevenbergMarquardtOptimizer::update_delta(bool first_step) 
-{
+void LevenbergMarquardtOptimizer::update_delta(bool first_step) {
   // Cache old gradient vector and calulcate new one
   Eigen::Matrix<double, Eigen::Dynamic, 1> vec_old = vec;
   vec = jacobian.transpose() * residual;
@@ -131,5 +131,4 @@ void LevenbergMarquardtOptimizer::update_delta(bool first_step)
   delta = mat.llt().solve(vec);
 }
 
-}  
-
+}  // namespace optimize

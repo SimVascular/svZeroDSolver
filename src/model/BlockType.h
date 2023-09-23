@@ -52,4 +52,3 @@ enum class BlockType {
 };
 
 #endif
-

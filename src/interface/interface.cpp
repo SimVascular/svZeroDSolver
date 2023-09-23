@@ -33,9 +33,9 @@
  */
 #include "interface.h"
 
-#include "SimulationParameters.h"
-
 #include <cmath>
+
+#include "SimulationParameters.h"
 
 using S = algebra::SparseSystem;
 
@@ -123,7 +123,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   auto simparams = io::load_simulation_params(config);
 
   auto model = std::shared_ptr<zd_model::Model>(new zd_model::Model());
-  //auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
+  // auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
 
   io::load_simulation_model(config, *model.get());
   auto state = io::load_initial_condition(config, *model.get());
@@ -146,8 +146,8 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 
   // Calculate time step size
   if (!simparams.sim_coupled) {
-    simparams.sim_time_step_size =
-        model->cardiac_cycle_period / (double(simparams.sim_pts_per_cycle) - 1.0);
+    simparams.sim_time_step_size = model->cardiac_cycle_period /
+                                   (double(simparams.sim_pts_per_cycle) - 1.0);
   } else {
     simparams.sim_time_step_size = simparams.sim_external_step_size /
                                    (double(simparams.sim_num_time_steps) - 1.0);
@@ -443,7 +443,7 @@ void increment_time(const int problem_id, const double external_time,
   auto absolute_tolerance = interface->absolute_tolerance_;
   auto max_nliter = interface->max_nliter_;
   algebra::Integrator integrator(model.get(), time_step_size, 0.1,
-                                    absolute_tolerance, max_nliter);
+                                 absolute_tolerance, max_nliter);
   auto state = interface->state_;
   interface->state_ = integrator.step(state, external_time);
   interface->time_step_ += 1;

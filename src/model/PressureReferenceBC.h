@@ -139,6 +139,6 @@ class PressureReferenceBC : public Block {
   std::map<std::string, int> get_num_triplets();
 };
 
-}  
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_PRESSUREREFERENCEBC_HPP_

@@ -35,9 +35,9 @@
 #include "Integrator.h"
 #include "State.h"
 #include "debug.h"
-//#include "csvwriter.h"
-#include "SimulationParameters.h"
+// #include "csvwriter.h"
 #include "Model.h"
+#include "SimulationParameters.h"
 
 #ifndef SVZERODSOLVER_SOLVE_SOLVER_HPP_
 #define SVZERODSOLVER_SOLVE_SOLVER_HPP_
@@ -106,7 +106,8 @@ class Solver {
    * @param block_name Name of the block
    * @param new_params New parameters
    */
-  void update_block_params(std::string block_name, std::vector<double> new_params);
+  void update_block_params(std::string block_name,
+                           std::vector<double> new_params);
 
   /**
    * @brief Write the result to a csv file.
@@ -125,7 +126,6 @@ class Solver {
   void sanity_checks();
 };
 
+}  // namespace solve
 
-}  
-
-#endif  
+#endif

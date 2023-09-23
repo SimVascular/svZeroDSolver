@@ -47,10 +47,9 @@ namespace io {
  * written
  * @return CSV encoded output string
  */
-std::string to_vessel_csv(std::vector<double> &times, std::vector<algebra::State> &states,
-    zd_model::Model &model, bool mean,
-    bool derivative) 
-{
+std::string to_vessel_csv(std::vector<double> &times,
+                          std::vector<algebra::State> &states,
+                          zd_model::Model &model, bool mean, bool derivative) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -77,7 +76,7 @@ std::string to_vessel_csv(std::vector<double> &times, std::vector<algebra::State
     auto block = model.get_block(i);
     // Extract global solution indices of the block
 
-    if (dynamic_cast<const zd_model::BloodVessel*>(block) == nullptr) {
+    if (dynamic_cast<const zd_model::BloodVessel *>(block) == nullptr) {
       continue;
     }
 
@@ -180,9 +179,10 @@ std::string to_vessel_csv(std::vector<double> &times, std::vector<algebra::State
  * written
  * @return CSV encoded output string
  */
-std::string to_variable_csv(std::vector<double> &times, std::vector<algebra::State> &states,
-    zd_model::Model &model, bool mean, bool derivative) 
-{
+std::string to_variable_csv(std::vector<double> &times,
+                            std::vector<algebra::State> &states,
+                            zd_model::Model &model, bool mean,
+                            bool derivative) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -250,5 +250,4 @@ std::string to_variable_csv(std::vector<double> &times, std::vector<algebra::Sta
   return out.str();
 }
 
-}  
-
+}  // namespace io

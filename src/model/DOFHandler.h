@@ -53,9 +53,12 @@ class DOFHandler {
   int eqn_counter;  ///< Equation counter
 
  public:
-  std::vector<std::string> variables;  ///< Variable names corresponding to the variable indices
-  std::map<std::string, int> variable_name_map;  ///< Map between variable name and index
-  std::vector<std::string> equations;  ///< Equation names corresponding to the equation indices
+  std::vector<std::string>
+      variables;  ///< Variable names corresponding to the variable indices
+  std::map<std::string, int>
+      variable_name_map;  ///< Map between variable name and index
+  std::vector<std::string>
+      equations;  ///< Equation names corresponding to the equation indices
 
   /**
    * @brief Construct a new DOFHandler object
@@ -123,6 +126,6 @@ class DOFHandler {
   int get_index(std::string_view& name);
 };
 
-}  // namespace MODEL
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_DOFHANDLER_HPP_

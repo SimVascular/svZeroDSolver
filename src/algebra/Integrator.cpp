@@ -32,9 +32,8 @@
 
 namespace algebra {
 
-Integrator::Integrator(zd_model::Model* model, double time_step_size, double rho,
-    double atol, int max_iter) 
-{
+Integrator::Integrator(zd_model::Model* model, double time_step_size,
+                       double rho, double atol, int max_iter) {
   this->model = model;
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
@@ -66,15 +65,13 @@ Integrator::Integrator() {}
 
 Integrator::~Integrator() {}
 
-void Integrator::clean() 
-{
+void Integrator::clean() {
   // Cannot be in destructor because dynamically allocated pointers will be lost
   // when objects are assigned from temporary objects.
   system.clean();
 }
 
-void Integrator::update_params(double time_step_size) 
-{
+void Integrator::update_params(double time_step_size) {
   y_init_coeff = alpha_f * 0.5 * time_step_size;
   this->time_step_size = time_step_size;
   time_step_size_inv = 1.0 / time_step_size;
@@ -83,8 +80,7 @@ void Integrator::update_params(double time_step_size)
   model->update_time(system, 0.0);
 }
 
-State Integrator::step(State& old_state, double time) 
-{
+State Integrator::step(State& old_state, double time) {
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();
@@ -131,5 +127,4 @@ State Integrator::step(State& old_state, double time)
 
   return new_state;
 }
-}  
-
+}  // namespace algebra

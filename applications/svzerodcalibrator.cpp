@@ -35,8 +35,7 @@
 
 // Setting scalar type to double
 
-int main(int argc, char* argv[]) 
-{
+int main(int argc, char* argv[]) {
   DEBUG_MSG("Starting svZeroDCalibrator");
 
   // Get input and output file name

@@ -29,13 +29,13 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "SimulationParameters.h"
+
 #include "State.h"
 
 namespace io {
 
-std::vector<double>
-get_double_array(const nlohmann::json& data, std::string_view key)
-{
+std::vector<double> get_double_array(const nlohmann::json& data,
+                                     std::string_view key) {
   std::vector<double> vector;
   if (!data[key].is_array()) {
     return {data[key]};
@@ -43,10 +43,9 @@ get_double_array(const nlohmann::json& data, std::string_view key)
   return data[key].get<std::vector<double>>();
 }
 
-std::vector<double>
-get_double_array(const nlohmann::json& data, std::string_view key,
-    std::vector<double> default_value)
-{
+std::vector<double> get_double_array(const nlohmann::json& data,
+                                     std::string_view key,
+                                     std::vector<double> default_value) {
   if (!data.contains(key)) {
     return default_value;
   }
@@ -63,10 +62,8 @@ get_double_array(const nlohmann::json& data, std::string_view key,
  * @param config The json configuration
  * @return SimulationParameters<T> Simulation parameters read from configuration
  */
-SimulationParameters 
-load_simulation_params(const nlohmann::json& config) 
-{
-  //DEBUG_MSG("Loading simulation parameters");
+SimulationParameters load_simulation_params(const nlohmann::json& config) {
+  // DEBUG_MSG("Loading simulation parameters");
   SimulationParameters sim_params;
   const auto& sim_config = config["simulation_parameters"];
   sim_params.sim_coupled = sim_config.value("coupled_simulation", false);
@@ -95,7 +92,7 @@ load_simulation_params(const nlohmann::json& config)
   sim_params.output_mean_only = sim_config.value("output_mean_only", false);
   sim_params.output_derivative = sim_config.value("output_derivative", false);
   sim_params.output_all_cycles = sim_config.value("output_all_cycles", false);
-  //DEBUG_MSG("Finished loading simulation parameters");
+  // DEBUG_MSG("Finished loading simulation parameters");
   return sim_params;
 }
 
@@ -105,15 +102,15 @@ load_simulation_params(const nlohmann::json& config)
  * @tparam T Scalar type (e.g. `float`, `double`)
  * @param config The json configuration
  */
-void load_simulation_model(const nlohmann::json& config, zd_model::Model& model) 
-{
-  //DEBUG_MSG("Loading model");
+void load_simulation_model(const nlohmann::json& config,
+                           zd_model::Model& model) {
+  // DEBUG_MSG("Loading model");
 
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
   // Create vessels
-  //DEBUG_MSG("Load vessels");
+  // DEBUG_MSG("Load vessels");
   std::map<int, std::string> vessel_id_map;
   const auto& vessels = config["vessels"];
 
@@ -131,7 +128,7 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
                        model.add_parameter(
                            vessel_values.value("stenosis_coefficient", 0.0))},
                       vessel_name);
-      //DEBUG_MSG("Created vessel " << vessel_name);
+      // DEBUG_MSG("Created vessel " << vessel_name);
     } else {
       throw std::invalid_argument("Unknown vessel type");
     }
@@ -149,7 +146,7 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
   }
 
   // Create map for boundary conditions to boundary condition type
-  //DEBUG_MSG("Create BC name to BC type map");
+  // DEBUG_MSG("Create BC name to BC type map");
   const auto& bc_configs = config["boundary_conditions"];
   std::map<std::string, std::string> bc_type_map;
   for (size_t i = 0; i < bc_configs.size(); i++) {
@@ -161,7 +158,7 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
 
   // Create external coupling blocks
   if (config.contains("external_solver_coupling_blocks")) {
-   // DEBUG_MSG("Create external coupling blocks");
+    // DEBUG_MSG("Create external coupling blocks");
     const auto& coupling_configs = config["external_solver_coupling_blocks"];
     for (const auto& coupling_config : coupling_configs) {
       std::string coupling_type = coupling_config["type"];
@@ -188,7 +185,7 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
             "Error. Flowsolver coupling block types should be FLOW or "
             "PRESSURE.");
       }
-      //DEBUG_MSG("Created coupling block " << coupling_name);
+      // DEBUG_MSG("Created coupling block " << coupling_name);
 
       // Determine the type of connected block
       std::string connected_block = coupling_config["connected_block"];
@@ -232,7 +229,8 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
               "external_coupling_block is invalid.");
         }
         connections.push_back({coupling_name, connected_block});
-        //DEBUG_MSG("Created coupling block connection: " << coupling_name << "->" << connected_block);
+        // DEBUG_MSG("Created coupling block connection: " << coupling_name <<
+        // "->" << connected_block);
       } else if (coupling_loc == "outlet") {
         std::vector<std::string> possible_types = {
             "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
@@ -248,7 +246,8 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
         if ((connected_type == "ClosedLoopRCR") ||
             (connected_type == "BloodVessel")) {
           connections.push_back({connected_block, coupling_name});
-          //DEBUG_MSG("Created coupling block connection: " << connected_block << "-> " << coupling_name);
+          // DEBUG_MSG("Created coupling block connection: " << connected_block
+          // << "-> " << coupling_name);
         }  // connected_type == "ClosedLoopRCR"
       }    // coupling_loc
     }      // for (size_t i = 0; i < coupling_configs.length(); i++)
@@ -256,7 +255,7 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
 
   // Create boundary conditions
   std::vector<std::string> closed_loop_bcs;
-  //DEBUG_MSG("Create boundary conditions");
+  // DEBUG_MSG("Create boundary conditions");
   for (size_t i = 0; i < bc_configs.size(); i++) {
     const auto& bc_config = bc_configs[i];
     std::string bc_type = bc_config["bc_type"];
@@ -334,7 +333,7 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
     } else {
       throw std::invalid_argument("Unknown boundary condition type");
     }
-    //DEBUG_MSG("Created boundary condition " << bc_name);
+    // DEBUG_MSG("Created boundary condition " << bc_name);
   }
 
   // Create junctions
@@ -376,7 +375,7 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
     for (int vessel_id : junction_config["outlet_vessels"]) {
       connections.push_back({junction_name, vessel_id_map[vessel_id]});
     }
-    //DEBUG_MSG("Created junction " << junction_name);
+    // DEBUG_MSG("Created junction " << junction_name);
   }
 
   // Create closed-loop blocks
@@ -477,9 +476,8 @@ void load_simulation_model(const nlohmann::json& config, zd_model::Model& model)
  * @param model The model
  * @return ALGEBRA::State<T> Initial configuration for the model
  */
-algebra::State 
-load_initial_condition(const nlohmann::json& config, zd_model::Model& model) 
-{
+algebra::State load_initial_condition(const nlohmann::json& config,
+                                      zd_model::Model& model) {
   // Read initial condition
   auto initial_state = algebra::State::Zero(model.dofhandler.size());
 
@@ -507,26 +505,27 @@ load_initial_condition(const nlohmann::json& config, zd_model::Model& model)
         if ((init_p_flag == true) && ((var_name.substr(0, 9) == "pressure:") ||
                                       (var_name.substr(0, 4) == "P_c:"))) {
           default_val = init_p;
-          //DEBUG_MSG("pressure_all initial condition for " << var_name);
+          // DEBUG_MSG("pressure_all initial condition for " << var_name);
         } else if ((init_q_flag == true) &&
                    (var_name.substr(0, 5) == "flow:")) {
           default_val = init_q;
-          //DEBUG_MSG("flow_all initial condition for " << var_name);
+          // DEBUG_MSG("flow_all initial condition for " << var_name);
         } else {
-          //DEBUG_MSG("No initial condition found for " << var_name << ". Using default value = 0.");
+          // DEBUG_MSG("No initial condition found for " << var_name << ". Using
+          // default value = 0.");
         }
       }
       initial_state.y[i] = initial_condition.value(var_name, default_val);
     }
   }
   if (config.contains("initial_condition_d")) {
-    //DEBUG_MSG("Reading initial condition derivative");
+    // DEBUG_MSG("Reading initial condition derivative");
     const auto& initial_condition_d = config["initial_condition_d"];
     // Loop through variables and check for initial conditions.
     for (size_t i = 0; i < model.dofhandler.size(); i++) {
       std::string var_name = model.dofhandler.variables[i];
       if (!initial_condition_d.contains(var_name)) {
-        //DEBUG_MSG("No initial condition derivative found for " << var_name);
+        // DEBUG_MSG("No initial condition derivative found for " << var_name);
       }
       initial_state.ydot[i] = initial_condition_d.value(var_name, 0.0);
     }
@@ -534,5 +533,4 @@ load_initial_condition(const nlohmann::json& config, zd_model::Model& model)
   return initial_state;
 }
 
-}  
-
+}  // namespace io

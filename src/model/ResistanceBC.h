@@ -113,7 +113,8 @@ class ResistanceBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(algebra::SparseSystem &system, std::vector<double> &parameters);
+  void update_time(algebra::SparseSystem &system,
+                   std::vector<double> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -136,6 +137,6 @@ class ResistanceBC : public Block {
   std::map<std::string, int> get_num_triplets();
 };
 
-}  // namespace MODEL
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_

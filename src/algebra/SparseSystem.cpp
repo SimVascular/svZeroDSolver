@@ -29,14 +29,14 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "SparseSystem.h"
+
 #include "Model.h"
 
 namespace algebra {
 
 SparseSystem::SparseSystem() {}
 
-SparseSystem::SparseSystem(unsigned int n) 
-{
+SparseSystem::SparseSystem(unsigned int n) {
   F = Eigen::SparseMatrix<double>(n, n);
   E = Eigen::SparseMatrix<double>(n, n);
   D = Eigen::SparseMatrix<double>(n, n);
@@ -49,15 +49,13 @@ SparseSystem::SparseSystem(unsigned int n)
 
 SparseSystem::~SparseSystem() {}
 
-void SparseSystem::clean() 
-{
+void SparseSystem::clean() {
   // Cannot be in destructor because dynamically allocated pointers will be lost
   // when objects are assigned from temporary objects.
-  //delete solver;
+  // delete solver;
 }
 
-void SparseSystem::reserve(zd_model::Model *model) 
-{
+void SparseSystem::reserve(zd_model::Model *model) {
   auto num_triplets = model->get_num_triplets();
   F.reserve(num_triplets["F"]);
   E.reserve(num_triplets["E"]);
@@ -82,27 +80,24 @@ void SparseSystem::reserve(zd_model::Model *model)
   solver->analyzePattern(jacobian);  // Let solver analyze pattern
 }
 
-void SparseSystem::update_residual( Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &ydot) 
-{
+void SparseSystem::update_residual(
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &ydot) {
   residual.setZero();
   residual -= C;
   residual.noalias() -= E * ydot;
   residual.noalias() -= F * y;
 }
 
-void SparseSystem::update_jacobian(double e_coeff) 
-{
+void SparseSystem::update_jacobian(double e_coeff) {
   jacobian.setZero();
   jacobian += F + D + E * e_coeff;
 }
 
-void SparseSystem::solve() 
-{
+void SparseSystem::solve() {
   solver->factorize(jacobian);
   dy.setZero();
   dy += solver->solve(residual);
 }
 
-}; 
-
+};  // namespace algebra

@@ -37,16 +37,16 @@ void WindkesselBC::setup_dofs(DOFHandler &dofhandler) {
 }
 
 void WindkesselBC::update_constant(algebra::SparseSystem &system,
-                                      
-std::vector<double> &parameters) {
+
+                                   std::vector<double> &parameters) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) = -1.0;
 }
 
 void WindkesselBC::update_time(algebra::SparseSystem &system,
-                                  
-std::vector<double> &parameters) {
+
+                               std::vector<double> &parameters) {
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
       -parameters[this->global_param_ids[2]] *
       parameters[this->global_param_ids[1]];
@@ -61,4 +61,4 @@ std::map<std::string, int> WindkesselBC::get_num_triplets() {
   return num_triplets;
 }
 
-}  
+}  // namespace zd_model

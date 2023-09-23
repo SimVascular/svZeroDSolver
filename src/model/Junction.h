@@ -89,8 +89,7 @@ namespace zd_model {
  */
 class Junction : public Block {
  public:
-
-   using Block::Block;
+  using Block::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -110,7 +109,8 @@ class Junction : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem& system, std::vector<double>& parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -151,6 +151,6 @@ class Junction : public Block {
   int num_outlets;
 };
 
-};
+};  // namespace zd_model
 
-#endif  
+#endif

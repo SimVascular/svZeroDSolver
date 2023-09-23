@@ -34,10 +34,10 @@
 #ifndef SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
 #define SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
 
-#include "SparseSystem.h"
-#include "Block.h"
-
 #include <math.h>
+
+#include "Block.h"
+#include "SparseSystem.h"
 
 namespace zd_model {
 
@@ -145,8 +145,8 @@ class BloodVessel : public Block {
     STENOSIS_COEFFICIENT = 3,
   };
 
-  explicit BloodVessel(int id, const std::vector<int> &param_ids, Model *model) : Block(id, param_ids, model){};
-
+  explicit BloodVessel(int id, const std::vector<int> &param_ids, Model *model)
+      : Block(id, param_ids, model){};
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -167,7 +167,8 @@ class BloodVessel : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem& system, std::vector<double> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -178,7 +179,8 @@ class BloodVessel : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(algebra::SparseSystem& system, std::vector<double> &parameters,
+  void update_solution(algebra::SparseSystem &system,
+                       std::vector<double> &parameters,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
@@ -192,7 +194,7 @@ class BloodVessel : public Block {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  void update_gradient(Eigen::SparseMatrix<double>& jacobian,
+  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
                        std::vector<double> &y, std::vector<double> &dy);
@@ -218,6 +220,6 @@ class BloodVessel : public Block {
   std::map<std::string, int> get_num_triplets();
 };
 
-}  
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_

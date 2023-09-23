@@ -34,12 +34,12 @@
 #ifndef SVZERODSOLVER_MODEL_PARAMETER_HPP_
 #define SVZERODSOLVER_MODEL_PARAMETER_HPP_
 
-#include "DOFHandler.h"
-
-
 #include <math.h>
+
 #include <numeric>
 #include <vector>
+
+#include "DOFHandler.h"
 
 namespace zd_model {
 
@@ -68,8 +68,8 @@ class Parameter {
    * @param times Time steps corresponding to the time-dependent values
    * @param values Values corresponding to the time steps
    */
-  Parameter(int id, const std::vector<double> &times, const std::vector<double> &values,
-            bool periodic = true);
+  Parameter(int id, const std::vector<double>& times,
+            const std::vector<double>& values, bool periodic = true);
 
   /**
    * @brief Destroy the Parameter object
@@ -77,11 +77,12 @@ class Parameter {
    */
   ~Parameter();
 
-  int id;                 ///< Global ID of the parameter
+  int id;                      ///< Global ID of the parameter
   std::vector<double> times;   ///< Time steps if parameter is time-dependent
   std::vector<double> values;  ///< Values if parameter is time-dependent
   double value;                ///< Value if parameter is constant
-  double cycle_period;   ///< Cardiac cycle period corresponding to the time sequence
+  double cycle_period;  ///< Cardiac cycle period corresponding to the time
+                        ///< sequence
   int size;         ///< Size of the time series if parameter is time-dependent
   bool isconstant;  ///< Bool value indicating if the parameter is constant
   bool isperiodic;  ///< Bool value indicating if the parameter is periodic with
@@ -100,7 +101,8 @@ class Parameter {
    * @param times Time steps corresponding to the values
    * @param values Values correspondong to the time steps
    */
-  void update(const std::vector<double>& times, const std::vector<double>& values);
+  void update(const std::vector<double>& times,
+              const std::vector<double>& values);
 
   /**
    * @brief Get the parameter value at the specified time.
@@ -126,6 +128,6 @@ class Parameter {
   bool steady_converted = false;
 };
 
-} 
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_PARAMETER_HPP_

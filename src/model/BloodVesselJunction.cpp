@@ -32,8 +32,7 @@
 
 namespace zd_model {
 
-void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) 
-{
+void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) {
   if (this->inlet_nodes.size() != 1) {
     throw std::runtime_error(
         "Blood vessel junction does not support multiple inlets.");
@@ -46,8 +45,8 @@ void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler)
   num_triplets["D"] = 2 * num_outlets;
 }
 
-void BloodVesselJunction::update_constant(algebra::SparseSystem& system, std::vector<double> &parameters) 
-{
+void BloodVesselJunction::update_constant(algebra::SparseSystem &system,
+                                          std::vector<double> &parameters) {
   // Mass conservation
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
 
@@ -67,15 +66,14 @@ void BloodVesselJunction::update_constant(algebra::SparseSystem& system, std::ve
 }
 
 void BloodVesselJunction::update_solution(
-    algebra::SparseSystem& system, std::vector<double> &parameters,
+    algebra::SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) 
-{
-
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   for (size_t i = 0; i < num_outlets; i++) {
     // Get parameters
     auto resistance = parameters[this->global_param_ids[i]];
-    auto stenosis_coeff = parameters[this->global_param_ids[2 * num_outlets + i]];
+    auto stenosis_coeff =
+        parameters[this->global_param_ids[2 * num_outlets + i]];
     auto q_out = y[this->global_var_ids[3 + 2 * i]];
     auto stenosis_resistance = stenosis_coeff * fabs(q_out);
 
@@ -89,11 +87,11 @@ void BloodVesselJunction::update_solution(
   }
 }
 
-void BloodVesselJunction::update_gradient( Eigen::SparseMatrix<double> &jacobian,
+void BloodVesselJunction::update_gradient(
+    Eigen::SparseMatrix<double> &jacobian,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha, std::vector<double> &y,
-    std::vector<double> &dy) 
-{
+    std::vector<double> &dy) {
   auto p_in = y[this->global_var_ids[0]];
   auto q_in = y[this->global_var_ids[1]];
 
@@ -133,9 +131,8 @@ void BloodVesselJunction::update_gradient( Eigen::SparseMatrix<double> &jacobian
   }
 }
 
-std::map<std::string, int> BloodVesselJunction::get_num_triplets() 
-{
+std::map<std::string, int> BloodVesselJunction::get_num_triplets() {
   return num_triplets;
 }
 
-}; 
+};  // namespace zd_model

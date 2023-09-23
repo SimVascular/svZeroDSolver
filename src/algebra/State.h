@@ -47,7 +47,8 @@ namespace algebra {
  */
 class State {
  public:
-  Eigen::Matrix<double, Eigen::Dynamic, 1> y;     ///< Vector of solution quantities
+  Eigen::Matrix<double, Eigen::Dynamic, 1>
+      y;  ///< Vector of solution quantities
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot;  ///< Derivate of \ref y
 
   /**
@@ -85,6 +86,6 @@ class State {
   static State Zero(unsigned int n);
 };
 
-}  
+}  // namespace algebra
 
 #endif  // SVZERODSOLVER_ALGEBRA_STATE_HPP_

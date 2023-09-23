@@ -29,7 +29,9 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "DOFHandler.h"
+
 #include <algorithm>  
+#include <stdexcept>
 
 namespace zd_model {
 

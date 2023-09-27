@@ -27,20 +27,13 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file blocktype.hpp
- * @brief MODEL::BlockType source file
- */
-#ifndef SVZERODSOLVER_MODEL_BLOCKTYPE_HPP_
-#define SVZERODSOLVER_MODEL_BLOCKTYPE_HPP_
 
-namespace MODEL {
+#ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
+#define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 
-/**
- * @brief Block types
- *
- */
-enum BlockType {
+namespace zd_model {
+
+enum class BlockType {
   BLOODVESSEL = 0,
   JUNCTION = 1,
   BLOODVESSELJUNCTION = 2,
@@ -56,6 +49,6 @@ enum BlockType {
   CLOSEDLOOPHEARTPULMONARY = 12
 };
 
-}  // namespace MODEL
+};
 
-#endif  // SVZERODSOLVER_MODEL_BLOCKTYPE_HPP_
+#endif

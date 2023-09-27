@@ -34,7 +34,9 @@
 #ifndef SVZERODSOLVER_ALGEBRA_STATE_HPP_
 #define SVZERODSOLVER_ALGEBRA_STATE_HPP_
 
-namespace ALGEBRA {
+#include <Eigen/Core>
+
+namespace algebra {
 /**
  * @brief State of the system.
  *
@@ -43,11 +45,11 @@ namespace ALGEBRA {
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
 class State {
  public:
-  Eigen::Matrix<T, Eigen::Dynamic, 1> y;     ///< Vector of solution quantities
-  Eigen::Matrix<T, Eigen::Dynamic, 1> ydot;  ///< Derivate of \ref y
+  Eigen::Matrix<double, Eigen::Dynamic, 1>
+      y;  ///< Vector of solution quantities
+  Eigen::Matrix<double, Eigen::Dynamic, 1> ydot;  ///< Derivate of \ref y
 
   /**
    * @brief Construct a new State object
@@ -84,31 +86,6 @@ class State {
   static State Zero(unsigned int n);
 };
 
-template <typename T>
-State<T>::State() {}
-
-template <typename T>
-State<T>::State(unsigned int n) {
-  y = Eigen::Matrix<T, Eigen::Dynamic, 1>(n);
-  ydot = Eigen::Matrix<T, Eigen::Dynamic, 1>(n);
-}
-
-template <typename T>
-State<T>::~State() {}
-
-template <typename T>
-State<T>::State(const State &state) {
-  y = state.y;
-  ydot = state.ydot;
-}
-
-template <typename T>
-State<T> State<T>::Zero(unsigned int n) {
-  static State<T> state(n);
-  state.y = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
-  state.ydot = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
-  return state;
-}
-}  // namespace ALGEBRA
+}  // namespace algebra
 
 #endif  // SVZERODSOLVER_ALGEBRA_STATE_HPP_

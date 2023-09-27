@@ -34,10 +34,11 @@
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBC_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBC_HPP_
 
-#include "../algebra/sparsesystem.hpp"
-#include "block.hpp"
+#include "Block.h"
+#include "SparseSystem.h"
 
-namespace MODEL {
+namespace zd_model {
+
 /**
  * @brief Closed-loop RCR boundary condition.
  *
@@ -110,11 +111,10 @@ namespace MODEL {
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
-class ClosedLoopRCRBC : public Block<T> {
+class ClosedLoopRCRBC : public Block {
  public:
   // Inherit constructors
-  using Block<T>::Block;
+  using Block::Block;
 
   /**
    * @brief Local IDs of the parameters
@@ -145,8 +145,8 @@ class ClosedLoopRCRBC : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -169,35 +169,6 @@ class ClosedLoopRCRBC : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 };
 
-template <typename T>
-void ClosedLoopRCRBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 3, {"P_c"});
-}
-
-template <typename T>
-void ClosedLoopRCRBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
-                                         std::vector<T> &parameters) {
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[2]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = 1.0;
-
-  // Below values can be unsteady if needed (not currently implemented)
-  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[4]) =
-      parameters[this->global_param_ids[ParamId::C]];
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      -parameters[this->global_param_ids[ParamId::RP]];
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) =
-      -parameters[this->global_param_ids[ParamId::RD]];
-}
-
-template <typename T>
-std::map<std::string, int> ClosedLoopRCRBC<T>::get_num_triplets() {
-  return num_triplets;
-}
-
-}  // namespace MODEL
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBCBC_HPP_

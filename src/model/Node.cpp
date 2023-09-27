@@ -27,109 +27,37 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file node.hpp
- * @brief MODEL::Node source file
- */
-#ifndef SVZERODSOLVER_MODEL_NODE_HPP_
-#define SVZERODSOLVER_MODEL_NODE_HPP_
 
-#include <string>
+#include "Node.h"
 
-#include "dofhandler.hpp"
+#include "Block.h"
+#include "Model.h"
 
-namespace MODEL {
+namespace zd_model {
 
-// Forward declaration of block
-template <typename T>
-class Block;
-
-/**
- * @brief Node
- *
- * Nodes connect two blocks with each other. Each node corresponds to a
- * flow and pressure value of the system.
- *
- * @tparam T Scalar type (e.g. `float`, `double`)
- */
-template <typename T>
-class Node {
- public:
-  /**
-   * @brief Construct a new Node object
-   *
-   * @param id Global ID of the node
-   * @param inlet_eles Inlet element of the node
-   * @param outlet_eles Outlet element of the node
-   * @param model The model to which the node belongs
-   */
-  Node(int id, const std::vector<Block<T> *> &inlet_eles,
-       const std::vector<Block<T> *> &outlet_eles, MODEL::Model<T> *model);
-
-  /**
-   * @brief Destroy the Node object
-   *
-   */
-  ~Node();
-
-  int id;                               ///< Global ID of the block
-  std::vector<Block<T> *> inlet_eles;   ///< Inlet element of the node
-  std::vector<Block<T> *> outlet_eles;  ///< Outlet element of the node
-  MODEL::Model<T> *model;               ///< The model to which the node belongs
-
-  unsigned int flow_dof;  ///< Global flow degree-of-freedom of the node
-  unsigned int pres_dof;  ///< Global pressure degree-of-freedom of the node
-
-  /**
-   * @brief Get the name of the node
-   *
-   * @return std::string Name of the node
-   */
-  std::string get_name();
-
-  /**
-   * @brief Set up the degrees of freedom (DOF) of the block
-   *
-   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
-   * number of equations and the number of internal variables of the
-   * element.
-   *
-   * @param dofhandler Degree-of-freedom handler to register variables and
-   * equations at
-   */
-  void setup_dofs(DOFHandler &dofhandler);
-};
-
-template <typename T>
-Node<T>::Node(int id, const std::vector<Block<T> *> &inlet_eles,
-              const std::vector<Block<T> *> &outlet_eles,
-              MODEL::Model<T> *model) {
+Node::Node(int id, const std::vector<Block *> &inlet_eles,
+           const std::vector<Block *> &outlet_eles, Model *model) {
   this->id = id;
   this->inlet_eles = inlet_eles;
   this->outlet_eles = outlet_eles;
   this->model = model;
+
   for (auto &inlet_ele : inlet_eles) {
     inlet_ele->outlet_nodes.push_back(this);
   }
+
   for (auto &outlet_ele : outlet_eles) {
     outlet_ele->inlet_nodes.push_back(this);
   }
 }
 
-template <typename T>
-Node<T>::~Node() {}
+Node::~Node() {}
 
-template <typename T>
-std::string Node<T>::get_name() {
-  return this->model->get_node_name(this->id);
-}
+std::string Node::get_name() { return this->model->get_node_name(this->id); }
 
-template <typename T>
-void Node<T>::setup_dofs(DOFHandler &dofhandler) {
+void Node::setup_dofs(DOFHandler &dofhandler) {
   flow_dof = dofhandler.register_variable("flow:" + get_name());
   pres_dof = dofhandler.register_variable("pressure:" + get_name());
 }
 
-}  // namespace MODEL
-
-#endif  // SVZERODSOLVER_MODEL_NODE_HPP_
+};  // namespace zd_model

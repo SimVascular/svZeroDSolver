@@ -27,225 +27,25 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file block.hpp
- * @brief MODEL::Block source file
- */
-#ifndef SVZERODSOLVER_MODEL_BLOCK_HPP_
-#define SVZERODSOLVER_MODEL_BLOCK_HPP_
 
-#include <map>
-#include <vector>
+#include "Block.h"
 
-#include "../algebra/sparsesystem.hpp"
-#include "../algebra/state.hpp"
-#include "dofhandler.hpp"
-#include "node.hpp"
+#include "Model.h"
 
-namespace MODEL {
+namespace zd_model {
 
-/**
- * @brief Base class for 0D model components.
- *
- * A MODEL::Block is the base class of 0D model elements. It is the place
- * where the contribution of an element to the global system is controlled.
- * It defines all relevant attributes and methods of an element and a few
- * common helpers for setting it up.
- *
- * @tparam T Scalar type (e.g. `float`, `double`)
- */
-template <typename T>
-class Block {
- public:
-  /**
-   * @brief Construct a new Block object
-   *
-   * @param id Global ID of the block
-   * @param param_ids Global IDs of the block parameters
-   * @param model The model to which the block belongs
-   */
-  explicit Block(int id, const std::vector<int> &param_ids,
-                 MODEL::Model<T> *model);
-
-  /**
-   * @brief Destroy the Block object
-   *
-   */
-  ~Block();
-
-  /**
-   * @brief Copy the Block object
-   *
-   */
-  Block(const Block &) = delete;
-
-  int id;                  ///< Global ID of the block
-  MODEL::Model<T> *model;  ///< The model to which the block belongs
-
-  std::vector<Node<T> *> inlet_nodes;   ///< Inlet nodes
-  std::vector<Node<T> *> outlet_nodes;  ///< Outlet nodes
-
-  bool steady = false;  ///< Toggle steady behavior
-
-  /**
-   * @brief Global IDs for the block parameters.
-   *
-   */
-  std::vector<int> global_param_ids;  ///< IDs of the parameters
-
-  /**
-   * @brief Global variable indices of the local element contributions
-   *
-   * Determines where the local element contributions are written to in
-   * the global system during assembly. The order of indices is:
-   *
-   * \f[
-   * [P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1,
-   * \dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \f]
-   *
-   * with \f$P_{in} \f$, \f$Q_{in} \f$, \f$P_{out} \f$, \f$Q_{out} \f$, and \f$V
-   * \f$ denoting inlet pressure, inlet flow, outlet pressure, outlet flow and
-   * an internal variable of the element, respectively.
-   *
-   * Variable indices correspond to columns in the global system.
-   *
-   */
-  std::vector<unsigned int> global_var_ids;
-
-  /**
-   * @brief Global equation indices of the local element contributions
-   *
-   * Equation indices correspond to rows in the global system.
-   */
-  std::vector<unsigned int> global_eqn_ids;
-
-  /**
-   * @brief Get the name of the block
-   *
-   * @return std::string Name of the block
-   */
-  std::string get_name();
-
-  /**
-   * @brief Set up the degrees of freedom (DOF) of the block
-   *
-   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
-   * number of equations and the number of internal variables of the
-   * element.
-   *
-   * @param dofhandler Degree-of-freedom handler to register variables and
-   * equations at
-   * @param num_equations Number of equations of the block
-   * @param num_internal_vars Number of internal variables of the block
-   */
-  void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
-                   std::list<std::string> internal_var_names);
-
-  /**
-   * @brief Set up the degrees of freedom (DOF) of the block
-   *
-   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
-   * number of equations and the number of internal variables of the
-   * element.
-   *
-   * @param dofhandler Degree-of-freedom handler to register variables and
-   * equations at
-   */
-  virtual void setup_dofs(DOFHandler &dofhandler);
-
-  /**
-   * @brief Setup parameters that depend on the model
-   *
-   */
-  virtual void setup_model_dependent_params();
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  virtual void update_constant(ALGEBRA::SparseSystem<T> &system,
-                               std::vector<T> &parameters);
-  /**
-   * @brief Update the time-dependent contributions of the element in a sparse
-   * system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  virtual void update_time(ALGEBRA::SparseSystem<T> &system,
-                           std::vector<T> &parameters);
-
-  /**
-   * @brief Update the solution-dependent contributions of the element in a
-   * sparse system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   * @param y Current solution
-   * @param dy Current derivate of the solution
-   */
-  virtual void update_solution(ALGEBRA::SparseSystem<T> &system,
-                               std::vector<T> &parameters,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
-
-  /**
-   * @brief Set the gradient of the block contributions with respect to the
-   * parameters
-   *
-   * @param jacobian Jacobian with respect to the parameters
-   * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
-   * @param y Current solution
-   * @param dy Time-derivative of the current solution
-   */
-  virtual void update_gradient(Eigen::SparseMatrix<T> &jacobian,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                               std::vector<T> &y, std::vector<T> &dy);
-
-  /**
-   * @brief Number of triplets of element
-   *
-   * Number of triplets that the element contributes to the global system
-   * (relevant for sparse memory reservation)
-   */
-  std::map<std::string, int> num_triplets = {
-      {"F", 0},
-      {"E", 0},
-      {"D", 0},
-  };
-
-  /**
-   * @brief Get number of triplets of element
-   *
-   * Number of triplets that the element contributes to the global system
-   * (relevant for sparse memory reservation)
-   */
-  virtual std::map<std::string, int> get_num_triplets();
-};
-
-template <typename T>
-Block<T>::Block(int id, const std::vector<int> &param_ids,
-                MODEL::Model<T> *model) {
+Block::Block(int id, const std::vector<int> &param_ids, Model *model) {
   this->id = id;
   this->global_param_ids = param_ids;
   this->model = model;
 }
 
-template <typename T>
-std::string Block<T>::get_name() {
-  return this->model->get_block_name(this->id);
-}
+std::string Block::get_name() { return this->model->get_block_name(this->id); }
 
-template <typename T>
-Block<T>::~Block() {}
+Block::~Block() {}
 
-template <typename T>
-void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
-                           std::list<std::string> internal_var_names) {
+void Block::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
+                        std::list<std::string> internal_var_names) {
   // Collect external DOFs from inlet nodes
   for (auto &inlet_node : inlet_nodes) {
     global_var_ids.push_back(inlet_node->pres_dof);
@@ -270,40 +70,29 @@ void Block<T>::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
   }
 }
 
-template <typename T>
-void Block<T>::setup_dofs(DOFHandler &dofhandler) {}
+void Block::setup_dofs(DOFHandler &dofhandler) {}
 
-template <typename T>
-void Block<T>::setup_model_dependent_params() {}
+void Block::setup_model_dependent_params() {}
 
-template <typename T>
-void Block<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
-                               std::vector<T> &parameters) {}
+void Block::update_constant(algebra::SparseSystem &system,
+                            std::vector<double> &parameters) {}
 
-template <typename T>
-void Block<T>::update_time(ALGEBRA::SparseSystem<T> &system,
-                           std::vector<T> &parameters) {}
+void Block::update_time(algebra::SparseSystem &system,
+                        std::vector<double> &parameters) {}
 
-template <typename T>
-void Block<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
-                               std::vector<T> &parameters,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {}
+void Block::update_solution(algebra::SparseSystem &system,
+                            std::vector<double> &parameters,
+                            Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                            Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {}
 
-template <typename T>
-void Block<T>::update_gradient(Eigen::SparseMatrix<T> &jacobian,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                               std::vector<T> &y, std::vector<T> &dy) {
+void Block::update_gradient(Eigen::SparseMatrix<double> &jacobian,
+                            Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
+                            Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
+                            std::vector<double> &y, std::vector<double> &dy) {
   throw std::runtime_error("Gradient calculation not implemented for block " +
                            get_name());
 }
 
-template <typename T>
-std::map<std::string, int> Block<T>::get_num_triplets() {
-  return num_triplets;
-}
+std::map<std::string, int> Block::get_num_triplets() { return num_triplets; }
 
-}  // namespace MODEL
-
-#endif  // SVZERODSOLVER_MODEL_BLOCK_HPP_
+};  // namespace zd_model

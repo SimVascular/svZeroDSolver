@@ -37,14 +37,14 @@
 #include <Eigen/Sparse>
 #include <Eigen/SparseLU>
 #include <iostream>
+#include <memory>
 
 // Forward declaration of Model
-namespace MODEL {
-template <typename T>
+namespace zd_model {
 class Model;
 }
 
-namespace ALGEBRA {
+namespace algebra {
 /**
  * @brief Sparse system
  *
@@ -53,7 +53,6 @@ namespace ALGEBRA {
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
 class SparseSystem {
  public:
   /**
@@ -75,25 +74,28 @@ class SparseSystem {
    */
   ~SparseSystem();
 
-  Eigen::SparseMatrix<T> F;               ///< System matrix F
-  Eigen::SparseMatrix<T> E;               ///< System matrix E
-  Eigen::SparseMatrix<T> D;               ///< System matrix D
-  Eigen::Matrix<T, Eigen::Dynamic, 1> C;  ///< System vector C
+  Eigen::SparseMatrix<double> F;               ///< System matrix F
+  Eigen::SparseMatrix<double> E;               ///< System matrix E
+  Eigen::SparseMatrix<double> D;               ///< System matrix D
+  Eigen::Matrix<double, Eigen::Dynamic, 1> C;  ///< System vector C
 
-  Eigen::SparseMatrix<T> jacobian;               ///< Jacobian of the system
-  Eigen::Matrix<T, Eigen::Dynamic, 1> residual;  ///< Residual of the system
-  Eigen::Matrix<T, Eigen::Dynamic, 1> dy;  ///< Solution increment of the system
+  Eigen::SparseMatrix<double> jacobian;  ///< Jacobian of the system
+  Eigen::Matrix<double, Eigen::Dynamic, 1>
+      residual;  ///< Residual of the system
+  Eigen::Matrix<double, Eigen::Dynamic, 1>
+      dy;  ///< Solution increment of the system
 
-  std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<T>>> solver =
-      std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<T>>>(
-          new Eigen::SparseLU<Eigen::SparseMatrix<T>>());  ///< Linear solver
+  std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<double>>> solver =
+      std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<double>>>(
+          new Eigen::SparseLU<Eigen::SparseMatrix<double>>());  ///< Linear
+                                                                ///< solver
 
   /**
    * @brief Reserve memory in system matrices based on number of triplets
    *
    * @param model The model to reserve space for in the system
    */
-  void reserve(MODEL::Model<T> *model);
+  void reserve(zd_model::Model *model);
 
   /**
    * @brief Update the residual of the system
@@ -101,15 +103,15 @@ class SparseSystem {
    * @param y Vector of current solution quantities
    * @param ydot Derivate of y
    */
-  void update_residual(Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &ydot);
+  void update_residual(Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &ydot);
 
   /**
    * @brief Update the jacobian of the system
    *
    * @param e_coeff Coefficent for system matrix \ref E
    */
-  void update_jacobian(T e_coeff);
+  void update_jacobian(double e_coeff);
 
   /**
    * @brief Solve the system
@@ -123,78 +125,6 @@ class SparseSystem {
   void clean();
 };
 
-template <typename T>
-SparseSystem<T>::SparseSystem() {}
-
-template <typename T>
-SparseSystem<T>::SparseSystem(unsigned int n) {
-  F = Eigen::SparseMatrix<T>(n, n);
-  E = Eigen::SparseMatrix<T>(n, n);
-  D = Eigen::SparseMatrix<T>(n, n);
-  C = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
-
-  jacobian = Eigen::SparseMatrix<T>(n, n);
-  residual = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
-  dy = Eigen::Matrix<T, Eigen::Dynamic, 1>::Zero(n);
-}
-
-template <typename T>
-SparseSystem<T>::~SparseSystem() {}
-
-template <typename T>
-void SparseSystem<T>::clean() {
-  // Cannot be in destructor because dynamically allocated pointers will be lost
-  // when objects are assigned from temporary objects.
-  delete solver;
-}
-
-template <typename T>
-void SparseSystem<T>::reserve(MODEL::Model<T> *model) {
-  auto num_triplets = model->get_num_triplets();
-  F.reserve(num_triplets["F"]);
-  E.reserve(num_triplets["E"]);
-  D.reserve(num_triplets["D"]);
-  model->update_constant(*this);
-  model->update_time(*this, 0.0);
-  Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_y =
-      Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
-  Eigen::Matrix<T, Eigen::Dynamic, 1> dummy_dy =
-      Eigen::Matrix<T, Eigen::Dynamic, 1>::Ones(residual.size());
-  model->update_solution(*this, dummy_y, dummy_dy);
-  F.makeCompressed();
-  E.makeCompressed();
-  D.makeCompressed();
-  jacobian.reserve(num_triplets["F"] + num_triplets["E"]);  // Just an estimate
-  update_jacobian(1.0);  // Update it once to have sparsity pattern
-  jacobian.makeCompressed();
-  solver->analyzePattern(jacobian);  // Let solver analyze pattern
-}
-
-template <typename T>
-void SparseSystem<T>::update_residual(
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &ydot) {
-  residual.setZero();
-  residual -= C;
-  residual.noalias() -= E * ydot;
-  residual.noalias() -= F * y;
-}
-
-template <typename T>
-void SparseSystem<T>::update_jacobian(T e_coeff) {
-  jacobian.setZero();
-  jacobian += F + D + E * e_coeff;
-}
-
-template <typename T>
-void SparseSystem<T>::solve() {
-  solver->factorize(jacobian);
-  dy.setZero();
-  dy += solver->solve(residual);
-}
-
-}  // namespace ALGEBRA
-
-#include "../model/model.hpp"
+}  // namespace algebra
 
 #endif  // SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_

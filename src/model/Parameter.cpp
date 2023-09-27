@@ -27,131 +27,33 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file parameter.hpp
- * @brief MODEL::Parameter source file
- */
-#ifndef SVZERODSOLVER_MODEL_PARAMETER_HPP_
-#define SVZERODSOLVER_MODEL_PARAMETER_HPP_
 
-#include <math.h>
+#include "Parameter.h"
 
-#include <numeric>
-#include <vector>
+namespace zd_model {
 
-#include "dofhandler.hpp"
-
-namespace MODEL {
-
-/**
- * @brief Model Parameter.
- *
- * This class handles constant parameters and time-dependent parameters that
- * need to be interpolated and periodically applied.
- *
- * @tparam T Scalar type (e.g. `float`, `double`)
- */
-template <typename T>
-class Parameter {
- public:
-  /**
-   * @brief Construct a new Parameter object
-   *
-   * @param id Global ID of the parameter
-   * @param value The value of the parameter
-   */
-  Parameter(int id, T value);
-
-  /**
-   * @brief Construct a new Parameter object
-   *
-   * @param id Global ID of the parameter
-   * @param times Time steps corresponding to the time-dependent values
-   * @param values Values corresponding to the time steps
-   */
-  Parameter(int id, const std::vector<T> &times, const std::vector<T> &values,
-            bool periodic = true);
-
-  /**
-   * @brief Destroy the Parameter object
-   *
-   */
-  ~Parameter();
-
-  int id;                 ///< Global ID of the parameter
-  std::vector<T> times;   ///< Time steps if parameter is time-dependent
-  std::vector<T> values;  ///< Values if parameter is time-dependent
-  T value;                ///< Value if parameter is constant
-  T cycle_period;   ///< Cardiac cycle period corresponding to the time sequence
-  int size;         ///< Size of the time series if parameter is time-dependent
-  bool isconstant;  ///< Bool value indicating if the parameter is constant
-  bool isperiodic;  ///< Bool value indicating if the parameter is periodic with
-                    ///< the cardiac cycle
-
-  /**
-   * @brief Update the parameter
-   *
-   * @param value Value of the parameter
-   */
-  void update(T value);
-
-  /**
-   * @brief Update the parameter
-   *
-   * @param times Time steps corresponding to the values
-   * @param values Values correspondong to the time steps
-   */
-  void update(const std::vector<T> &times, const std::vector<T> &values);
-
-  /**
-   * @brief Get the parameter value at the specified time.
-   *
-   * @param time Current time
-   * @return Value at the time
-   */
-  T get(T time);
-
-  /**
-   * @brief Convert the parameter into a steady mean state.
-   *
-   */
-  void to_steady();
-
-  /**
-   * @brief Convert the parameter back into an unsteady mean state.
-   *
-   */
-  void to_unsteady();
-
- private:
-  bool steady_converted = false;
-};
-
-template <typename T>
-Parameter<T>::Parameter(int id, T value) {
+Parameter::Parameter(int id, double value) {
   this->id = id;
   update(value);
 }
 
-template <typename T>
-Parameter<T>::Parameter(int id, const std::vector<T> &times,
-                        const std::vector<T> &values, bool periodic) {
+Parameter::Parameter(int id, const std::vector<double> &times,
+                     const std::vector<double> &values, bool periodic) {
   this->id = id;
   this->isperiodic = periodic;
   update(times, values);
 }
 
-template <typename T>
-void Parameter<T>::update(T value) {
+void Parameter::update(double value) {
   this->isconstant = true;
   this->isperiodic = true;
   this->value = value;
 }
 
-template <typename T>
-void Parameter<T>::update(const std::vector<T> &times,
-                          const std::vector<T> &values) {
+void Parameter::update(const std::vector<double> &times,
+                       const std::vector<double> &values) {
   this->size = values.size();
+
   if (this->size == 1) {
     this->value = values[0];
     this->isconstant = true;
@@ -163,18 +65,17 @@ void Parameter<T>::update(const std::vector<T> &times,
   }
 }
 
-template <typename T>
-Parameter<T>::~Parameter() {}
+Parameter::~Parameter() {}
 
-template <typename T>
-T Parameter<T>::get(T time) {
+double Parameter::get(double time) {
   // Return the constant value if parameter is constant
   if (isconstant) {
     return value;
   }
 
   // Determine the time within this->times (necessary to extrapolate)
-  T rtime;
+  double rtime;
+
   if (isperiodic == true) {
     rtime = fmod(time, cycle_period);
   } else {
@@ -198,24 +99,21 @@ T Parameter<T>::get(T time) {
          ((values[k] - values[l]) / (times[k] - times[l])) * (rtime - times[l]);
 }
 
-template <typename T>
-void Parameter<T>::to_steady() {
+void Parameter::to_steady() {
   if (isconstant) {
     return;
   }
-  value = std::accumulate(values.begin(), values.end(), 0.0) / T(size);
+
+  value = std::accumulate(values.begin(), values.end(), 0.0) / double(size);
   isconstant = true;
   steady_converted = true;
 }
 
-template <typename T>
-void Parameter<T>::to_unsteady() {
+void Parameter::to_unsteady() {
   if (steady_converted) {
     isconstant = false;
     steady_converted = false;
   }
 }
 
-}  // namespace MODEL
-
-#endif  // SVZERODSOLVER_MODEL_PARAMETER_HPP_
+}  // namespace zd_model

@@ -27,220 +27,21 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file closedloopheartpulmonary.hpp
- * @brief MODEL::ClosedLoopHeartPulmonary source file
- */
-#ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
-#define SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
 
-#include <math.h>
+#include "ClosedLoopHeartPulmonary.h"
 
-#include "../algebra/sparsesystem.hpp"
-#include "../algebra/state.hpp"
-#include "block.hpp"
-#define PI 3.14159265
+#include "Model.h"
 
-namespace MODEL {
-/**
- * @brief Heart and pulmonary circulation model
- *
- * Models the mechanics of the 4 heart chambers and pulmonary circulation
- *
- * Reference for equations and model structure: Sankaran, S., Moghadam, M. E.,
- * Kahn, A. M., Tseng, E. E., Guccione, J. M., & Marsden, A. L. (2012).
- * Patient-specific multiscale modeling of blood flow for coronary artery bypass
- * graft surgery. Annals of Biomedical Engineering, 40(10), 2228–2242.
- * https://doi.org/10.1007/s10439-012-0579-3
- *
- * TODO: Equations and circuit diagram
- *
- * ### Parameters
- *
- * Parameter sequence for constructing this block
- *
- * * `0` Atrial systole time fraction
- * * `1` Time for P-wave
- * * `2` Scaling for right ventricle elastance
- * * `3` Scaling for left ventricle elastance
- * * `4` Scaling for intramyocardial pressure (left coronaries)
- * * `5` Scaling for intramyocardial pressure (right coronaries)
- * * `6` Right atrium inductance
- * * `7` Right atrium outflow resistance
- * * `8` Right ventricle inductance
- * * `9` Right ventricle outflow resistance
- * * `10` Left atrium inductance
- * * `11` Left atrium outflow resistance
- * * `12` Left ventricle inductance
- * * `13` Left ventricle outflow resistance
- * * `14` Right ventricle unstressed volume
- * * `15` Left ventricle unstressed volume
- * * `16` Pulmonary resistance
- * * `17` Pulmonary capacitance
- * * `18` Aortic capacitance
- * * `19` Right atrium pressure scaling
- * * `20` Right atrium volume scaling
- * * `21` Left atrium pressure scaling
- * * `22` Left atrium volume scaling
- * * `23` Right atrium elastance
- * * `24` Left atrium elastance
- * * `25` Right atrium resting volume
- * * `26` Left atrium resting volume
- *
- * @tparam T Scalar type (e.g. `float`, `double`)
- */
-template <typename T>
-class ClosedLoopHeartPulmonary : public Block<T> {
- public:
-  // Inherit constructors
-  using Block<T>::Block;
+namespace zd_model {
 
-  /**
-   * @brief Local IDs of the parameters
-   *
-   */
-  enum ParamId {
-    TSA = 0,       ///< Fractions of cardiac cycle (not sure)
-    TPWAVE = 1,    ///< Fraction of cardiac cycle (P-wave)
-    ERV_S = 2,     ///< Scaling for right ventricle elastance
-    ELV_S = 3,     ///< Scaling for left ventricle elastance
-    IML = 4,       ///< Scaling for intramyocardial pressure (left coronaries)
-    IMR = 5,       ///< Scaling for intramyocardial pressure (right coronaries)
-    LRA_V = 6,     ///< Right atrium inductance
-    RRA_V = 7,     ///< Right atrium outflow resistance
-    LRV_A = 8,     ///< Right ventricle inductance
-    RRV_A = 9,     ///< Right ventricle outflow resistance
-    LLA_V = 10,    ///< Left atrium inductance
-    RLA_V = 11,    ///< Left atrium outflow resistance
-    LLV_A = 12,    ///< Left ventricle inductance
-    RLV_AO = 13,   ///< Left ventricle outflow resistance
-    VRV_U = 14,    ///< Right ventricle unstressed volume
-    VLV_U = 15,    ///< Left ventricle unstressed volume
-    RPD = 16,      ///< Pulmonary resistance
-    CP = 17,       ///< Pulmonary capacitance
-    CPA = 18,      ///< Aortic capacitance
-    KXP_RA = 19,   ///< Right atrium pressure-volume relationship (?)
-    KXV_RA = 20,   ///< Right atrium pressure-volume relationship (?)
-    KXP_LA = 21,   ///< Left atrium pressure-volume relationship (?)
-    KXV_LA = 22,   ///< Left atrium pressure-volume relationship (?)
-    EMAX_RA = 23,  ///< Right atrium elastance (?)
-    EMAX_LA = 24,  ///< Left atrium elastance (?)
-    VASO_RA = 25,  ///< Right atrium rest volume (?)
-    VASO_LA = 26,  ///< Left atrium rest volume (?)
-  };
-
-  /**
-   * @brief Set up the degrees of freedom (DOF) of the block
-   *
-   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
-   * number of equations and the number of internal variables of the
-   * element.
-   *
-   * @param dofhandler Degree-of-freedom handler to register variables and
-   * equations at
-   */
-  void setup_dofs(DOFHandler &dofhandler);
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse
-   system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  void update_constant(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters);
-
-  /**
-   * @brief Update the time-dependent contributions of the element in a sparse
-   * system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  void update_time(ALGEBRA::SparseSystem<T> &system,
-                   std::vector<T> &parameters);
-
-  /**
-   * @brief Update the solution-dependent contributions of the element in a
-   * sparse system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   * @param y Current solution
-   * @param dy Current derivate of the solution
-   */
-  void update_solution(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
-
-  /**
-   * @brief Number of triplets of element
-   *
-   * Number of triplets that the element contributes to the global system
-   * (relevant for sparse memory reservation)
-   */
-  std::map<std::string, int> num_triplets = {
-      {"F", 33},
-      {"E", 10},
-      {"D", 2},
-  };
-
-  /**
-   * @brief Get number of triplets of element
-   *
-   * Number of triplets that the element contributes to the global system
-   * (relevant for sparse memory reservation)
-   */
-  std::map<std::string, int> get_num_triplets();
-
- private:
-  // Below variables change every timestep and are then combined with
-  // expressions that are updated with solution
-  T AA;   // Atrial activation function
-  T Elv;  // LV elastance
-  T Erv;  // RV elastance
-  T psi_ra, psi_la, psi_ra_derivative,
-      psi_la_derivative;  // Expressions for atrial activation
-  T valves[16];
-
-  /**
-   * @brief Update the atrial activation and LV/RV elastance functions which
-   * depend on time
-   *
-   * @param parameters Parameters of the model
-   */
-  void get_activation_and_elastance_functions(std::vector<T> &parameters);
-
-  /**
-   * @brief Compute sub-expressions that are part of atrial elastance and
-   * depends on atrial volume from the solution vector
-   *
-   * @param parameters Parameters of the model
-   * @param y Current solution
-   */
-  void get_psi_ra_la(std::vector<T> &parameters,
-                     Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
-
-  /**
-   * @brief Valve positions for each heart chamber
-   *
-   * @param y Current solution
-   */
-  void get_valve_positions(Eigen::Matrix<T, Eigen::Dynamic, 1> &y);
-};
-
-template <typename T>
-void ClosedLoopHeartPulmonary<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 14,
-                        {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul",
-                         "P_LA", "V_LA", "Q_LA", "P_LV", "V_LV", "Q_LV"});
+void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
+  Block::setup_dofs_(dofhandler, 14,
+                     {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul", "P_LA",
+                      "V_LA", "Q_LA", "P_LV", "V_LV", "Q_LV"});
 }
 
-template <typename T>
-void ClosedLoopHeartPulmonary<T>::update_constant(
-    ALGEBRA::SparseSystem<T> &system, std::vector<T> &parameters) {
+void ClosedLoopHeartPulmonary::update_constant(
+    algebra::SparseSystem &system, std::vector<double> &parameters) {
   // DOF 2, Eq 1: Aortic pressure
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
       parameters[this->global_param_ids[ParamId::CPA]];
@@ -269,17 +70,15 @@ void ClosedLoopHeartPulmonary<T>::update_constant(
       parameters[this->global_param_ids[ParamId::LLV_A]];
 }
 
-template <typename T>
-void ClosedLoopHeartPulmonary<T>::update_time(ALGEBRA::SparseSystem<T> &system,
-                                              std::vector<T> &parameters) {
+void ClosedLoopHeartPulmonary::update_time(algebra::SparseSystem &system,
+                                           std::vector<double> &parameters) {
   this->get_activation_and_elastance_functions(parameters);
 }
 
-template <typename T>
-void ClosedLoopHeartPulmonary<T>::update_solution(
-    ALGEBRA::SparseSystem<T> &system, std::vector<T> &parameters,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
+void ClosedLoopHeartPulmonary::update_solution(
+    algebra::SparseSystem &system, std::vector<double> &parameters,
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   this->get_psi_ra_la(parameters, y);
   this->get_valve_positions(y);
 
@@ -390,13 +189,12 @@ void ClosedLoopHeartPulmonary<T>::update_solution(
       parameters[this->global_param_ids[ParamId::RLV_AO]] * valves[15];
 }
 
-template <typename T>
-void ClosedLoopHeartPulmonary<T>::get_activation_and_elastance_functions(
-    std::vector<T> &parameters) {
-  T T_cardiac = this->model->cardiac_cycle_period;
-  T Tsa = T_cardiac * parameters[this->global_param_ids[ParamId::TSA]];
-  T tpwave = T_cardiac / parameters[this->global_param_ids[ParamId::TPWAVE]];
-  T t_in_cycle = fmod(this->model->time, T_cardiac);
+void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
+    std::vector<double> &parameters) {
+  auto T_cardiac = this->model->cardiac_cycle_period;
+  auto Tsa = T_cardiac * parameters[this->global_param_ids[ParamId::TSA]];
+  auto tpwave = T_cardiac / parameters[this->global_param_ids[ParamId::TPWAVE]];
+  auto t_in_cycle = fmod(this->model->time, T_cardiac);
 
   // Activation function
   AA = 0.0;
@@ -413,7 +211,7 @@ void ClosedLoopHeartPulmonary<T>::get_activation_and_elastance_functions(
 
   // Elastance modes (copied from J. Tran's tuning framework)
   const int num_elast_modes = 25;
-  T Ft_elastance[num_elast_modes][2] = {
+  double Ft_elastance[num_elast_modes][2] = {
       {0.283748803, 0.000000000},   {0.031830626, -0.374299825},
       {-0.209472400, -0.018127770}, {0.020520047, 0.073971113},
       {0.008316883, -0.047249597},  {-0.041677660, 0.003212163},
@@ -429,19 +227,21 @@ void ClosedLoopHeartPulmonary<T>::get_activation_and_elastance_functions(
       {0.000004903, 0.000005805}};
 
   // RV and LV elastance
-  T Elv_i = 0.0;
-  for (auto i = 0; i < num_elast_modes; i++)
+  double Elv_i = 0.0;
+
+  for (auto i = 0; i < num_elast_modes; i++) {
     Elv_i = Elv_i +
             (Ft_elastance[i][0]) * cos(2.0 * PI * i * t_in_cycle / T_cardiac) -
             (Ft_elastance[i][1]) * sin(2.0 * PI * i * t_in_cycle / T_cardiac);
+  }
 
   Elv = Elv_i * parameters[this->global_param_ids[ParamId::ELV_S]];
   Erv = Elv_i * parameters[this->global_param_ids[ParamId::ERV_S]];
 }
 
-template <typename T>
-void ClosedLoopHeartPulmonary<T>::get_psi_ra_la(
-    std::vector<T> &parameters, Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+void ClosedLoopHeartPulmonary::get_psi_ra_la(
+    std::vector<double> &parameters,
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
   auto RA_volume = y[this->global_var_ids[4]];
   auto LA_volume = y[this->global_var_ids[11]];
   psi_ra =
@@ -467,9 +267,8 @@ void ClosedLoopHeartPulmonary<T>::get_psi_ra_la(
       parameters[this->global_param_ids[ParamId::KXV_LA]];
 }
 
-template <typename T>
-void ClosedLoopHeartPulmonary<T>::get_valve_positions(
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &y) {
+void ClosedLoopHeartPulmonary::get_valve_positions(
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
   std::fill(valves, valves + 16, 1.0);
 
   // RA to RV
@@ -507,11 +306,8 @@ void ClosedLoopHeartPulmonary<T>::get_valve_positions(
   }
 }
 
-template <typename T>
-std::map<std::string, int> ClosedLoopHeartPulmonary<T>::get_num_triplets() {
+std::map<std::string, int> ClosedLoopHeartPulmonary::get_num_triplets() {
   return num_triplets;
 }
 
-}  // namespace MODEL
-
-#endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
+}  // namespace zd_model

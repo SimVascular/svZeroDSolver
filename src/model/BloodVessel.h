@@ -36,10 +36,10 @@
 
 #include <math.h>
 
-#include "../algebra/sparsesystem.hpp"
-#include "block.hpp"
+#include "Block.h"
+#include "SparseSystem.h"
 
-namespace MODEL {
+namespace zd_model {
 
 /**
  * @brief Resistor-capacitor-inductor blood vessel with optional stenosis
@@ -132,12 +132,8 @@ namespace MODEL {
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
-class BloodVessel : public Block<T> {
+class BloodVessel : public Block {
  public:
-  // Inherit constructors
-  using Block<T>::Block;
-
   /**
    * @brief Local IDs of the parameters
    *
@@ -148,6 +144,9 @@ class BloodVessel : public Block<T> {
     INDUCTANCE = 2,
     STENOSIS_COEFFICIENT = 3,
   };
+
+  explicit BloodVessel(int id, const std::vector<int> &param_ids, Model *model)
+      : Block(id, param_ids, model){};
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -168,8 +167,8 @@ class BloodVessel : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -180,10 +179,10 @@ class BloodVessel : public Block<T> {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
+  void update_solution(algebra::SparseSystem &system,
+                       std::vector<double> &parameters,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -195,10 +194,10 @@ class BloodVessel : public Block<T> {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  void update_gradient(Eigen::SparseMatrix<T> &jacobian,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                       std::vector<T> &y, std::vector<T> &dy);
+  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
+                       std::vector<double> &y, std::vector<double> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -221,111 +220,6 @@ class BloodVessel : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 };
 
-template <typename T>
-void BloodVessel<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 2, {});
-}
-
-template <typename T>
-void BloodVessel<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
-                                     std::vector<T> &parameters) {
-  // Get parameters
-  T capacitance = parameters[this->global_param_ids[ParamId::CAPACITANCE]];
-  T inductance = parameters[this->global_param_ids[ParamId::INDUCTANCE]];
-
-  // Set element contributions
-  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) =
-      -inductance;
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) =
-      -capacitance;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
-}
-
-template <typename T>
-void BloodVessel<T>::update_solution(ALGEBRA::SparseSystem<T> &system,
-                                     std::vector<T> &parameters,
-                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                                     Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
-  // Get parameters
-  T resistance = parameters[this->global_param_ids[ParamId::RESISTANCE]];
-  T capacitance = parameters[this->global_param_ids[ParamId::CAPACITANCE]];
-  T stenosis_coeff =
-      parameters[this->global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
-  T q_in = y[this->global_var_ids[1]];
-  T dq_in = dy[this->global_var_ids[1]];
-  T stenosis_resistance = stenosis_coeff * fabs(q_in);
-
-  // Set element contributions
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      capacitance * (resistance + 2.0 * stenosis_resistance);
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      -resistance - stenosis_resistance;
-  system.D.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-      -stenosis_resistance;
-
-  T sgn_q_in = (0.0 < q_in) - (q_in < 0.0);
-  system.D.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-      2.0 * capacitance * stenosis_coeff * sgn_q_in * dq_in;
-}
-
-template <typename T>
-void BloodVessel<T>::update_gradient(
-    Eigen::SparseMatrix<T> &jacobian,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha, std::vector<T> &y,
-    std::vector<T> &dy) {
-  T y0 = y[this->global_var_ids[0]];
-  T y1 = y[this->global_var_ids[1]];
-  T y2 = y[this->global_var_ids[2]];
-  T y3 = y[this->global_var_ids[3]];
-
-  T dy0 = dy[this->global_var_ids[0]];
-  T dy1 = dy[this->global_var_ids[1]];
-  T dy3 = dy[this->global_var_ids[3]];
-
-  T resistance = alpha[this->global_param_ids[ParamId::RESISTANCE]];
-  T capacitance = alpha[this->global_param_ids[ParamId::CAPACITANCE]];
-  T inductance = alpha[this->global_param_ids[ParamId::INDUCTANCE]];
-  T stenosis_coeff = 0.0;
-  if (this->global_param_ids.size() > 3) {
-    stenosis_coeff =
-        alpha[this->global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
-  }
-  T stenosis_resistance = stenosis_coeff * fabs(y1);
-
-  jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[0]) = -y1;
-  jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[2]) = -dy3;
-
-  if (this->global_param_ids.size() > 3) {
-    jacobian.coeffRef(this->global_eqn_ids[0], this->global_param_ids[3]) =
-        -fabs(y1) * y1;
-  }
-
-  jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[0]) =
-      capacitance * dy1;
-  jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[1]) =
-      -dy0 + (resistance + 2 * stenosis_resistance) * dy1;
-
-  if (this->global_param_ids.size() > 3) {
-    jacobian.coeffRef(this->global_eqn_ids[1], this->global_param_ids[3]) =
-        2.0 * capacitance * fabs(y1) * dy1;
-  }
-
-  residual(this->global_eqn_ids[0]) =
-      y0 - (resistance + stenosis_resistance) * y1 - y2 - inductance * dy3;
-  residual(this->global_eqn_ids[1]) =
-      y1 - y3 - capacitance * dy0 +
-      capacitance * (resistance + 2.0 * stenosis_resistance) * dy1;
-}
-
-template <typename T>
-std::map<std::string, int> BloodVessel<T>::get_num_triplets() {
-  return num_triplets;
-}
-
-}  // namespace MODEL
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_

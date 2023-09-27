@@ -34,11 +34,11 @@
 #ifndef SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_
 #define SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_
 
-#include "../algebra/sparsesystem.hpp"
-#include "block.hpp"
-#include "parameter.hpp"
+#include "Block.h"
+#include "Parameter.h"
+#include "SparseSystem.h"
 
-namespace MODEL {
+namespace zd_model {
 
 /**
  * @brief Open loop coronary boundary condition based on \cite kim_coronary.
@@ -107,11 +107,10 @@ namespace MODEL {
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
-class OpenLoopCoronaryBC : public Block<T> {
+class OpenLoopCoronaryBC : public Block {
  public:
   // Inherit constructors
-  using Block<T>::Block;
+  using Block::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -131,8 +130,8 @@ class OpenLoopCoronaryBC : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -141,8 +140,8 @@ class OpenLoopCoronaryBC : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(ALGEBRA::SparseSystem<T> &system,
-                   std::vector<T> &parameters);
+  void update_time(algebra::SparseSystem &system,
+                   std::vector<double> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -165,74 +164,6 @@ class OpenLoopCoronaryBC : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 };
 
-template <typename T>
-void OpenLoopCoronaryBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 2, {"volume_im"});
-}
-
-template <typename T>
-void OpenLoopCoronaryBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
-                                            std::vector<T> &parameters) {
-  T Ra = parameters[this->global_param_ids[0]];
-  T Ram = parameters[this->global_param_ids[1]];
-  T Rv = parameters[this->global_param_ids[2]];
-  T Ca = parameters[this->global_param_ids[3]];
-  T Cim = parameters[this->global_param_ids[4]];
-  if (this->steady) {
-    // Different assmembly for steady block to avoid singular system
-    // and solve for the internal variable V_im inherently
-    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = -Cim;
-    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        Cim * (Ra + Ram);
-    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = 1.0;
-    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = -1.0;
-    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-        Ra + Ram + Rv;
-  } else {
-    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        Cim * Rv;
-    system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
-    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) =
-        Cim * Rv;
-    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
-        -Cim * Rv * Ra;
-    system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
-        -(Rv + Ram);
-
-    system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) =
-        -Ca * Cim * Rv;
-    system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
-        Ra * Ca * Cim * Rv;
-    system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) =
-        -Cim * Rv;
-    system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
-        -Cim * Rv * Ram;
-  }
-}
-
-template <typename T>
-void OpenLoopCoronaryBC<T>::update_time(ALGEBRA::SparseSystem<T> &system,
-                                        std::vector<T> &parameters) {
-  T Ram = parameters[this->global_param_ids[1]];
-  T Rv = parameters[this->global_param_ids[2]];
-  T Cim = parameters[this->global_param_ids[4]];
-  T Pim = parameters[this->global_param_ids[5]];
-  T Pv = parameters[this->global_param_ids[6]];
-  if (this->steady) {
-    system.C(this->global_eqn_ids[0]) = -Cim * Pim;
-    system.C(this->global_eqn_ids[1]) = Pv;
-  } else {
-    system.C(this->global_eqn_ids[0]) = Cim * (-Pim + Pv);
-    system.C(this->global_eqn_ids[1]) =
-        -Cim * (Rv + Ram) * Pim + Ram * Cim * Pv;
-  }
-}
-
-template <typename T>
-std::map<std::string, int> OpenLoopCoronaryBC<T>::get_num_triplets() {
-  return num_triplets;
-}
-
-}  // namespace MODEL
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_

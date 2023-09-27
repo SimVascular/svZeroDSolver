@@ -31,17 +31,10 @@
  * @file csvwriter.hpp
  * @brief IO::write_csv source file
  */
-#ifndef SVZERODSOLVER_IO_CSVWRITER_HPP_
-#define SVZERODSOLVER_IO_CSVWRITER_HPP_
 
-#include <fstream>
-#include <string>
-#include <vector>
+#include "csv_writer.h"
 
-#include "../algebra/state.hpp"
-#include "../model/model.hpp"
-
-namespace IO {
+namespace io {
 
 /**
  * @brief Write results vessel based.
@@ -54,11 +47,9 @@ namespace IO {
  * written
  * @return CSV encoded output string
  */
-template <typename T>
-std::string to_vessel_csv(std::vector<T> &times,
-                          std::vector<ALGEBRA::State<T>> &states,
-                          MODEL::Model<T> &model, bool mean = false,
-                          bool derivative = false) {
+std::string to_vessel_csv(std::vector<double> &times,
+                          std::vector<algebra::State> &states,
+                          zd_model::Model &model, bool mean, bool derivative) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -85,11 +76,11 @@ std::string to_vessel_csv(std::vector<T> &times,
     auto block = model.get_block(i);
     // Extract global solution indices of the block
 
-    if (dynamic_cast<const MODEL::BloodVessel<T> *>(block) == nullptr) {
+    if (dynamic_cast<const zd_model::BloodVessel *>(block) == nullptr) {
       continue;
     }
 
-    std::string name = model.get_block_name(i);
+    std::string name = block->get_name();
     inflow_dof = block->inlet_nodes[0]->flow_dof;
     outflow_dof = block->outlet_nodes[0]->flow_dof;
     inpres_dof = block->inlet_nodes[0]->pres_dof;
@@ -98,14 +89,15 @@ std::string to_vessel_csv(std::vector<T> &times,
     // Write the solution of the block to the output file
     if (derivative) {
       if (mean) {
-        T inflow_mean = 0.0;
-        T outflow_mean = 0.0;
-        T inpres_mean = 0.0;
-        T outpres_mean = 0.0;
-        T d_inflow_mean = 0.0;
-        T d_outflow_mean = 0.0;
-        T d_inpres_mean = 0.0;
-        T d_outpres_mean = 0.0;
+        double inflow_mean = 0.0;
+        double outflow_mean = 0.0;
+        double inpres_mean = 0.0;
+        double outpres_mean = 0.0;
+        double d_inflow_mean = 0.0;
+        double d_outflow_mean = 0.0;
+        double d_inpres_mean = 0.0;
+        double d_outpres_mean = 0.0;
+
         for (size_t i = 0; i < num_steps; i++) {
           inflow_mean += states[i].y[inflow_dof];
           outflow_mean += states[i].y[outflow_dof];
@@ -143,10 +135,11 @@ std::string to_vessel_csv(std::vector<T> &times,
       }
     } else {
       if (mean) {
-        T inflow_mean = 0.0;
-        T outflow_mean = 0.0;
-        T inpres_mean = 0.0;
-        T outpres_mean = 0.0;
+        double inflow_mean = 0.0;
+        double outflow_mean = 0.0;
+        double inpres_mean = 0.0;
+        double outpres_mean = 0.0;
+
         for (size_t i = 0; i < num_steps; i++) {
           inflow_mean += states[i].y[inflow_dof];
           outflow_mean += states[i].y[outflow_dof];
@@ -186,11 +179,10 @@ std::string to_vessel_csv(std::vector<T> &times,
  * written
  * @return CSV encoded output string
  */
-template <typename T>
-std::string to_variable_csv(std::vector<T> &times,
-                            std::vector<ALGEBRA::State<T>> &states,
-                            MODEL::Model<T> &model, bool mean = false,
-                            bool derivative = false) {
+std::string to_variable_csv(std::vector<double> &times,
+                            std::vector<algebra::State> &states,
+                            zd_model::Model &model, bool mean,
+                            bool derivative) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -207,8 +199,9 @@ std::string to_variable_csv(std::vector<T> &times,
     if (mean) {
       for (size_t i = 0; i < model.dofhandler.size(); i++) {
         std::string name = model.dofhandler.variables[i];
-        T mean_y = 0.0;
-        T mean_ydot = 0.0;
+        double mean_y = 0.0;
+        double mean_ydot = 0.0;
+
         for (size_t j = 0; j < num_steps; j++) {
           mean_y += states[j].y[i];
           mean_ydot += states[j].ydot[i];
@@ -234,7 +227,7 @@ std::string to_variable_csv(std::vector<T> &times,
     if (mean) {
       for (size_t i = 0; i < model.dofhandler.size(); i++) {
         std::string name = model.dofhandler.variables[i];
-        T mean_y = 0.0;
+        double mean_y = 0.0;
         for (size_t j = 0; j < num_steps; j++) {
           mean_y += states[j].y[i];
         }
@@ -256,6 +249,5 @@ std::string to_variable_csv(std::vector<T> &times,
 
   return out.str();
 }
-}  // namespace IO
 
-#endif  // SVZERODSOLVER_IO_CSVWRITER_HPP_
+}  // namespace io

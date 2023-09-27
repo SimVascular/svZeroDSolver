@@ -34,12 +34,12 @@
 #ifndef SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
 
-#include "../algebra/sparsesystem.hpp"
-#include "block.hpp"
-#include "blocktype.hpp"
-#include "bloodvessel.hpp"
+#include "Block.h"
+#include "BlockType.h"
+#include "BloodVessel.h"
+#include "SparseSystem.h"
 
-namespace MODEL {
+namespace zd_model {
 /**
  * @brief BloodVesselJunction
  *
@@ -142,11 +142,10 @@ namespace MODEL {
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
-class BloodVesselJunction : public Block<T> {
+class BloodVesselJunction : public Block {
  public:
   // Inherit constructors
-  using Block<T>::Block;
+  using Block::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -166,8 +165,8 @@ class BloodVesselJunction : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -178,10 +177,10 @@ class BloodVesselJunction : public Block<T> {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  virtual void update_solution(ALGEBRA::SparseSystem<T> &system,
-                               std::vector<T> &parameters,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-                               Eigen::Matrix<T, Eigen::Dynamic, 1> &dy);
+  virtual void update_solution(algebra::SparseSystem &system,
+                               std::vector<double> &parameters,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -193,10 +192,10 @@ class BloodVesselJunction : public Block<T> {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  void update_gradient(Eigen::SparseMatrix<T> &jacobian,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                       std::vector<T> &y, std::vector<T> &dy);
+  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
+                       std::vector<double> &y, std::vector<double> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -222,111 +221,6 @@ class BloodVesselJunction : public Block<T> {
   int num_outlets;
 };
 
-template <typename T>
-void BloodVesselJunction<T>::setup_dofs(DOFHandler &dofhandler) {
-  if (this->inlet_nodes.size() != 1) {
-    throw std::runtime_error(
-        "Blood vessel junction does not support multiple inlets.");
-  }
-  num_outlets = this->outlet_nodes.size();
-  Block<T>::setup_dofs_(dofhandler, num_outlets + 1, {});
-  num_triplets["F"] = 1 + 4 * num_outlets;
-  num_triplets["E"] = 3 * num_outlets;
-  num_triplets["D"] = 2 * num_outlets;
-}
-
-template <typename T>
-void BloodVesselJunction<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
-                                             std::vector<T> &parameters) {
-  // Mass conservation
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
-  for (size_t i = 0; i < num_outlets; i++) {
-    T inductance = parameters[this->global_param_ids[num_outlets + i]];
-    system.F.coeffRef(this->global_eqn_ids[0],
-                      this->global_var_ids[3 + 2 * i]) = -1.0;
-
-    system.F.coeffRef(this->global_eqn_ids[i + 1], this->global_var_ids[0]) =
-        1.0;
-    system.F.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_var_ids[2 + 2 * i]) = -1.0;
-
-    system.E.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_var_ids[3 + 2 * i]) = -inductance;
-  }
-}
-
-template <typename T>
-void BloodVesselJunction<T>::update_solution(
-    ALGEBRA::SparseSystem<T> &system, std::vector<T> &parameters,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &dy) {
-  for (size_t i = 0; i < num_outlets; i++) {
-    // Get parameters
-    T resistance = parameters[this->global_param_ids[i]];
-    T stenosis_coeff = parameters[this->global_param_ids[2 * num_outlets + i]];
-    T q_out = y[this->global_var_ids[3 + 2 * i]];
-    T stenosis_resistance = stenosis_coeff * fabs(q_out);
-
-    // Mass conservation
-    system.F.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_var_ids[3 + 2 * i]) =
-        -resistance - stenosis_resistance;
-
-    system.D.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_var_ids[3 + 2 * i]) = -stenosis_resistance;
-  }
-}
-
-template <typename T>
-void BloodVesselJunction<T>::update_gradient(
-    Eigen::SparseMatrix<T> &jacobian,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-    Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha, std::vector<T> &y,
-    std::vector<T> &dy) {
-  T p_in = y[this->global_var_ids[0]];
-  T q_in = y[this->global_var_ids[1]];
-
-  residual(this->global_eqn_ids[0]) = q_in;
-  for (size_t i = 0; i < num_outlets; i++) {
-    // Get parameters
-    T resistance = alpha[this->global_param_ids[i]];
-    T inductance = alpha[this->global_param_ids[num_outlets + i]];
-    T stenosis_coeff = 0.0;
-    if (this->global_param_ids.size() / num_outlets > 2) {
-      stenosis_coeff = alpha[this->global_param_ids[2 * num_outlets + i]];
-    }
-    T q_out = y[this->global_var_ids[3 + 2 * i]];
-    T p_out = y[this->global_var_ids[2 + 2 * i]];
-    T dq_out = dy[this->global_var_ids[3 + 2 * i]];
-    T stenosis_resistance = stenosis_coeff * fabs(q_out);
-
-    // Resistance
-    jacobian.coeffRef(this->global_eqn_ids[i + 1], this->global_param_ids[i]) =
-        -q_out;
-
-    // Inductance
-    jacobian.coeffRef(this->global_eqn_ids[i + 1],
-                      this->global_param_ids[num_outlets + i]) = -dq_out;
-
-    // Stenosis Coefficent
-    if (this->global_param_ids.size() / num_outlets > 2) {
-      jacobian.coeffRef(this->global_eqn_ids[i + 1],
-                        this->global_param_ids[2 * num_outlets + i]) =
-          -fabs(q_out) * q_out;
-    }
-
-    residual(this->global_eqn_ids[0]) -= q_out;
-    residual(this->global_eqn_ids[i + 1]) =
-        p_in - p_out - (resistance + stenosis_resistance) * q_out -
-        inductance * dq_out;
-  }
-}
-
-template <typename T>
-std::map<std::string, int> BloodVesselJunction<T>::get_num_triplets() {
-  return num_triplets;
-}
-
-}  // namespace MODEL
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_

@@ -34,11 +34,11 @@
 #ifndef SVZERODSOLVER_MODEL_PRESSUREREFERENCEBC_HPP_
 #define SVZERODSOLVER_MODEL_PRESSUREREFERENCEBC_HPP_
 
-#include "../algebra/sparsesystem.hpp"
-#include "block.hpp"
-#include "parameter.hpp"
+#include "Block.h"
+#include "Parameter.h"
+#include "SparseSystem.h"
 
-namespace MODEL {
+namespace zd_model {
 
 /**
  * @brief Pressure reference boundary condition.
@@ -82,11 +82,10 @@ namespace MODEL {
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
-class PressureReferenceBC : public Block<T> {
+class PressureReferenceBC : public Block {
  public:
   // Inherit constructors
-  using Block<T>::Block;
+  using Block::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -106,8 +105,8 @@ class PressureReferenceBC : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -116,8 +115,8 @@ class PressureReferenceBC : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(ALGEBRA::SparseSystem<T> &system,
-                   std::vector<T> &parameters);
+  void update_time(algebra::SparseSystem &system,
+                   std::vector<double> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -140,28 +139,6 @@ class PressureReferenceBC : public Block<T> {
   std::map<std::string, int> get_num_triplets();
 };
 
-template <typename T>
-void PressureReferenceBC<T>::setup_dofs(DOFHandler &dofhandler) {
-  Block<T>::setup_dofs_(dofhandler, 1, {});
-}
-
-template <typename T>
-void PressureReferenceBC<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
-                                             std::vector<T> &parameters) {
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-}
-
-template <typename T>
-void PressureReferenceBC<T>::update_time(ALGEBRA::SparseSystem<T> &system,
-                                         std::vector<T> &parameters) {
-  system.C(this->global_eqn_ids[0]) = -parameters[this->global_param_ids[0]];
-}
-
-template <typename T>
-std::map<std::string, int> PressureReferenceBC<T>::get_num_triplets() {
-  return num_triplets;
-}
-
-}  // namespace MODEL
+}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_PRESSUREREFERENCEBC_HPP_

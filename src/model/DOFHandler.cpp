@@ -27,104 +27,13 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file dofhandler.hpp
- * @brief MODEL::DOFHandler source file
- */
-#ifndef SVZERODSOLVER_MODEL_DOFHANDLER_HPP_
-#define SVZERODSOLVER_MODEL_DOFHANDLER_HPP_
 
-#include <map>
-#include <string>
-#include <vector>
+#include "DOFHandler.h"
 
-namespace MODEL {
+#include <algorithm>
+#include <stdexcept>
 
-/**
- * @brief Degree-of-freedom handler.
- *
- * This class handles degrees-of-freedom for model variables and
- * equations. It assigns each element with row and column indices which it
- * can use to assemble it's local contributions into the global system.
- */
-class DOFHandler {
- private:
-  int var_counter;  ///< Variable counter
-  int eqn_counter;  ///< Equation counter
-
- public:
-  std::vector<std::string>
-      variables;  ///< Variable names corresponding to the variable indices
-  std::map<std::string, int>
-      variable_name_map;  ///< Map between variable name and index
-  std::vector<std::string>
-      equations;  ///< Equation names corresponding to the equation indices
-
-  /**
-   * @brief Construct a new DOFHandler object
-   *
-   */
-  DOFHandler();
-
-  /**
-   * @brief Destroy the DOFHandler object
-   *
-   */
-  ~DOFHandler();
-
-  /**
-   * @brief Get the size of the system
-   *
-   * @return Size of the system
-   */
-  int size();
-
-  /**
-   * @brief Get the number of equations
-   *
-   * @return int Number of equations
-   */
-  int get_num_equations();
-
-  /**
-   * @brief Get the number of variables
-   *
-   * @return int Number of variables
-   */
-  int get_num_variables();
-
-  /**
-   * @brief Register a new variable at the DOFHandler.
-   *
-   * @param name Name of the variable
-   * @return Global index of the variable
-   */
-  int register_variable(std::string name);
-
-  /**
-   * @brief Get the index of a variable by its name
-   *
-   * @param name Name of the variable
-   * @return int Name of the variable
-   */
-  int get_variable_index(std::string name);
-
-  /**
-   * @brief Register a new equation at the DOFHandler
-   *
-   * @param name Name of the equation
-   * @return Global index of the equation
-   */
-  int register_equation(std::string name);
-
-  /**
-   * @brief Get the index of a variable
-   *
-   * @param name Name of the variable
-   * @return Index of variable with given name
-   */
-  int get_index(std::string_view& name);
-};
+namespace zd_model {
 
 DOFHandler::DOFHandler() {
   var_counter = 0;
@@ -155,7 +64,8 @@ int DOFHandler::register_equation(std::string name) {
 }
 
 int DOFHandler::get_index(std::string_view& name) {
-  auto it = find(variables.begin(), variables.end(), name);
+  auto it = std::find(variables.begin(), variables.end(), name);
+
   if (it != variables.end()) {
     return it - variables.begin();
   } else {
@@ -163,6 +73,4 @@ int DOFHandler::get_index(std::string_view& name) {
   }
 }
 
-}  // namespace MODEL
-
-#endif  // SVZERODSOLVER_MODEL_DOFHANDLER_HPP_
+}  // namespace zd_model

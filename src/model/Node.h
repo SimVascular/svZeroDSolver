@@ -35,14 +35,15 @@
 #define SVZERODSOLVER_MODEL_NODE_HPP_
 
 #include <string>
+#include <vector>
 
-#include "dofhandler.hpp"
+#include "BlockType.h"
+#include "DOFHandler.h"
 
-namespace MODEL {
+namespace zd_model {
 
-// Forward declaration of block
-template <typename T>
 class Block;
+class Model;
 
 /**
  * @brief Node
@@ -52,7 +53,6 @@ class Block;
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
 class Node {
  public:
   /**
@@ -63,8 +63,9 @@ class Node {
    * @param outlet_eles Outlet element of the node
    * @param model The model to which the node belongs
    */
-  Node(int id, const std::vector<Block<T> *> &inlet_eles,
-       const std::vector<Block<T> *> &outlet_eles, MODEL::Model<T> *model);
+  Node(){};
+  Node(int id, const std::vector<Block *> &inlet_eles,
+       const std::vector<Block *> &outlet_eles, Model *model);
 
   /**
    * @brief Destroy the Node object
@@ -72,10 +73,10 @@ class Node {
    */
   ~Node();
 
-  int id;                               ///< Global ID of the block
-  std::vector<Block<T> *> inlet_eles;   ///< Inlet element of the node
-  std::vector<Block<T> *> outlet_eles;  ///< Outlet element of the node
-  MODEL::Model<T> *model;               ///< The model to which the node belongs
+  int id;                            ///< Global ID of the block
+  std::vector<Block *> inlet_eles;   ///< Inlet element of the node
+  std::vector<Block *> outlet_eles;  ///< Outlet element of the node
+  Model *model;                      ///< The model to which the node belongs
 
   unsigned int flow_dof;  ///< Global flow degree-of-freedom of the node
   unsigned int pres_dof;  ///< Global pressure degree-of-freedom of the node
@@ -100,36 +101,6 @@ class Node {
   void setup_dofs(DOFHandler &dofhandler);
 };
 
-template <typename T>
-Node<T>::Node(int id, const std::vector<Block<T> *> &inlet_eles,
-              const std::vector<Block<T> *> &outlet_eles,
-              MODEL::Model<T> *model) {
-  this->id = id;
-  this->inlet_eles = inlet_eles;
-  this->outlet_eles = outlet_eles;
-  this->model = model;
-  for (auto &inlet_ele : inlet_eles) {
-    inlet_ele->outlet_nodes.push_back(this);
-  }
-  for (auto &outlet_ele : outlet_eles) {
-    outlet_ele->inlet_nodes.push_back(this);
-  }
-}
-
-template <typename T>
-Node<T>::~Node() {}
-
-template <typename T>
-std::string Node<T>::get_name() {
-  return this->model->get_node_name(this->id);
-}
-
-template <typename T>
-void Node<T>::setup_dofs(DOFHandler &dofhandler) {
-  flow_dof = dofhandler.register_variable("flow:" + get_name());
-  pres_dof = dofhandler.register_variable("pressure:" + get_name());
-}
-
-}  // namespace MODEL
+};  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_NODE_HPP_

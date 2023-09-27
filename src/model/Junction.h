@@ -34,10 +34,10 @@
 #ifndef SVZERODSOLVER_MODEL_JUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_JUNCTION_HPP_
 
-#include "../algebra/sparsesystem.hpp"
-#include "block.hpp"
+#include "Block.h"
+#include "SparseSystem.h"
 
-namespace MODEL {
+namespace zd_model {
 /**
  * @brief Junction
  *
@@ -87,11 +87,9 @@ namespace MODEL {
  *
  * @tparam T Scalar type (e.g. `float`, `double`)
  */
-template <typename T>
-class Junction : public Block<T> {
+class Junction : public Block {
  public:
-  // Inherit constructors
-  using Block<T>::Block;
+  using Block::Block;
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -111,8 +109,8 @@ class Junction : public Block<T> {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(ALGEBRA::SparseSystem<T> &system,
-                       std::vector<T> &parameters);
+  void update_constant(algebra::SparseSystem &system,
+                       std::vector<double> &parameters);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -124,10 +122,10 @@ class Junction : public Block<T> {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  void update_gradient(Eigen::SparseMatrix<T> &jacobian,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-                       Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                       std::vector<T> &y, std::vector<T> &dy);
+  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
+                       std::vector<double> &y, std::vector<double> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -149,60 +147,10 @@ class Junction : public Block<T> {
    */
   std::map<std::string, int> get_num_triplets();
 
-  unsigned int num_inlets;
-  unsigned int num_outlets;
+  int num_inlets;
+  int num_outlets;
 };
 
-template <typename T>
-void Junction<T>::setup_dofs(DOFHandler &dofhandler) {
-  // Set number of equations of a junction block based on number of
-  // inlets/outlets. Must be set before calling parent constructor
-  num_inlets = this->inlet_nodes.size();
-  num_outlets = this->outlet_nodes.size();
-  Block<T>::setup_dofs_(dofhandler, num_inlets + num_outlets, {});
-  num_triplets["F"] =
-      (num_inlets + num_outlets - 1) * 2 + num_inlets + num_outlets;
-}
+};  // namespace zd_model
 
-template <typename T>
-void Junction<T>::update_constant(ALGEBRA::SparseSystem<T> &system,
-                                  std::vector<T> &parameters) {
-  // Pressure conservation
-  for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++) {
-    system.F.coeffRef(this->global_eqn_ids[i], this->global_var_ids[0]) = 1.0;
-    system.F.coeffRef(this->global_eqn_ids[i],
-                      this->global_var_ids[2 * i + 2]) = -1.0;
-  }
-
-  // Mass conservation
-  for (size_t i = 1; i < num_inlets * 2; i = i + 2) {
-    system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets - 1],
-                      this->global_var_ids[i]) = 1.0;
-  }
-  for (size_t i = (num_inlets * 2) + 1; i < (num_inlets + num_outlets) * 2;
-       i = i + 2) {
-    system.F.coeffRef(this->global_eqn_ids[num_inlets + num_outlets - 1],
-                      this->global_var_ids[i]) = -1.0;
-  }
-}
-
-template <typename T>
-void Junction<T>::update_gradient(Eigen::SparseMatrix<T> &jacobian,
-                                  Eigen::Matrix<T, Eigen::Dynamic, 1> &residual,
-                                  Eigen::Matrix<T, Eigen::Dynamic, 1> &alpha,
-                                  std::vector<T> &y, std::vector<T> &dy) {
-  // Pressure conservation
-  residual(this->global_eqn_ids[0]) =
-      y[this->global_var_ids[0]] - y[this->global_var_ids[2]];
-  residual(this->global_eqn_ids[1]) =
-      y[this->global_var_ids[1]] - y[this->global_var_ids[3]];
-}
-
-template <typename T>
-std::map<std::string, int> Junction<T>::get_num_triplets() {
-  return num_triplets;
-}
-
-}  // namespace MODEL
-
-#endif  // SVZERODSOLVER_MODEL_JUNCTION_HPP_
+#endif

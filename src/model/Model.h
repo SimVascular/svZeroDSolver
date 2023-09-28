@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file model.h
- * @brief MODEL::Model source file
+ * @file Model.h
+ * @brief model::Model source file
  */
 
 #ifndef SVZERODSOLVER_MODEL_MODEL_HPP_
@@ -67,7 +67,6 @@ namespace zd_model {
  * This class represents a full 0D model. It contains attributes and
  * methods to store and modify 0D elements.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class Model {
  public:
@@ -104,7 +103,7 @@ class Model {
    * @brief Get a block by its name
    *
    * @param name Name of the Block
-   * @return Block<T>* The block
+   * @return Block* The block
    */
   Block *get_block(std::string_view name);
 
@@ -112,7 +111,7 @@ class Model {
    * @brief Get a block by its global ID
    *
    * @param block_id Global ID of the Block
-   * @return Block<T>* The block
+   * @return Block* The block
    */
   Block *get_block(int block_id);
 
@@ -173,7 +172,7 @@ class Model {
    * @brief Get a parameter by its global ID
    *
    * @param param_id Global ID of the parameter
-   * @return Parameter<T>* The parameter
+   * @return Parameter* The parameter
    */
   Parameter *get_parameter(int param_id);
 

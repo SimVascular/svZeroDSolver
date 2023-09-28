@@ -28,16 +28,15 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file solver.hpp
- * @brief SOLVE::Solver source file
+ * @file Solver.h
+ * @brief solve::Solver source file
  */
 
 #include "Integrator.h"
-#include "State.h"
-#include "debug.h"
-// #include "csvwriter.h"
 #include "Model.h"
 #include "SimulationParameters.h"
+#include "State.h"
+#include "debug.h"
 
 #ifndef SVZERODSOLVER_SOLVE_SOLVER_HPP_
 #define SVZERODSOLVER_SOLVE_SOLVER_HPP_
@@ -47,14 +46,13 @@ namespace solve {
 /**
  * @brief Class for running 0D simulations.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class Solver {
  public:
   /**
    * @brief Construct a new Solver object
    *
-   * @param handler Configuration handler
+   * @param config Configuration handler
    */
   Solver(const nlohmann::json& config);
 

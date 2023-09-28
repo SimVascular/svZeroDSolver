@@ -44,7 +44,7 @@ comment to format all your files:
 
 ```bash
 cd src
-find **/*.hpp **/*.cpp | xargs clang-format -i --style=Google
+find **/*.h **/*.cpp | xargs clang-format -i --style=Google
 ```
 
 You can also just check **if** a file would be formatted without actually formatting
@@ -52,7 +52,7 @@ it with:
 
 ```bash
 cd src
-find **/*.hpp **/*.cpp | xargs clang-format --dry-run --style=Google --Werror
+find **/*.h **/*.cpp | xargs clang-format --dry-run --style=Google --Werror
 ```
 
 The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and

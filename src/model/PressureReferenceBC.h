@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file pressurereferencebc.hpp
- * @brief MODEL::PressureReferenceBC source file
+ * @file PressureReferenceBC.h
+ * @brief model::PressureReferenceBC source file
  */
 #ifndef SVZERODSOLVER_MODEL_PRESSUREREFERENCEBC_HPP_
 #define SVZERODSOLVER_MODEL_PRESSUREREFERENCEBC_HPP_
@@ -80,7 +80,6 @@ namespace zd_model {
  *
  * * `0` Pressure
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class PressureReferenceBC : public Block {
  public:

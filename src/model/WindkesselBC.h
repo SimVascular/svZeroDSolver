@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file windkesselbc.hpp
- * @brief MODEL::WindkesselBC source file
+ * @file WindkesselBC.h
+ * @brief model::WindkesselBC source file
  */
 #ifndef SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_
 #define SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_
@@ -101,7 +101,6 @@ namespace zd_model {
  * * `2` Distal resistance
  * * `3` Distal pressure
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class WindkesselBC : public Block {
  public:

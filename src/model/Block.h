@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file block.hpp
- * @brief MODEL::Block source file
+ * @file Block.h
+ * @brief model::Block source file
  */
 #ifndef SVZERODSOLVER_MODEL_BLOCK_HPP_
 #define SVZERODSOLVER_MODEL_BLOCK_HPP_

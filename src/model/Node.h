@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file node.hpp
- * @brief MODEL::Node source file
+ * @file Node.h
+ * @brief model::Node source file
  */
 #ifndef SVZERODSOLVER_MODEL_NODE_HPP_
 #define SVZERODSOLVER_MODEL_NODE_HPP_
@@ -51,7 +51,6 @@ class Model;
  * Nodes connect two blocks with each other. Each node corresponds to a
  * flow and pressure value of the system.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class Node {
  public:

@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file parameter.hpp
- * @brief MODEL::Parameter source file
+ * @file Parameter.h
+ * @brief model::Parameter source file
  */
 #ifndef SVZERODSOLVER_MODEL_PARAMETER_HPP_
 #define SVZERODSOLVER_MODEL_PARAMETER_HPP_
@@ -49,7 +49,6 @@ namespace zd_model {
  * This class handles constant parameters and time-dependent parameters that
  * need to be interpolated and periodically applied.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class Parameter {
  public:

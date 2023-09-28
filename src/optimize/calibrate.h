@@ -28,9 +28,10 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file calibrate.hpp
- * @brief OPT::calibrate source file
+ * @file calibrate.h
+ * @brief opt::calibrate source file
  */
+
 #ifndef SVZERODSOLVER_OPTIMIZE_CALIBRATOR_HPP_
 #define SVZERODSOLVER_OPTIMIZE_CALIBRATOR_HPP_
 

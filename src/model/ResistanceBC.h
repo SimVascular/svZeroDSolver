@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file resistancebc.hpp
- * @brief MODEL::ResistanceBC source file
+ * @file ResistanceBC.h
+ * @brief model::ResistanceBC source file
  */
 #ifndef SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_
 #define SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_
@@ -78,7 +78,6 @@ namespace zd_model {
  * * `0` Resistance
  * * `1` Distal pressure
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class ResistanceBC : public Block {
  public:

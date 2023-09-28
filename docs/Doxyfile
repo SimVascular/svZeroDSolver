@@ -109,7 +109,7 @@ INPUT                  = "src" \
                          "docs/pages"
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.cpp \
-                         *.hpp \
+                         *.h \
                          *.inc \
                          *.markdown \
                          *.md \
@@ -122,7 +122,7 @@ EXCLUDE_SYMBOLS        =
 EXAMPLE_PATH           = 
 EXAMPLE_PATTERNS       = *
 EXAMPLE_RECURSIVE      = NO
-IMAGE_PATH             = images
+IMAGE_PATH             = "docs"
 INPUT_FILTER           =
 FILTER_PATTERNS        =
 FILTER_SOURCE_FILES    = NO
@@ -159,7 +159,6 @@ HTML_EXTRA_FILES       =
 HTML_COLORSTYLE_HUE    = 220
 HTML_COLORSTYLE_SAT    = 100
 HTML_COLORSTYLE_GAMMA  = 80
-HTML_TIMESTAMP         = YES
 HTML_DYNAMIC_SECTIONS  = NO
 HTML_INDEX_NUM_ENTRIES = 100
 GENERATE_DOCSET        = NO

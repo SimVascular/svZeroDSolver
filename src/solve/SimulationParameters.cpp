@@ -58,9 +58,8 @@ std::vector<double> get_double_array(const nlohmann::json& data,
 /**
  * @brief Load the simulation parameters from a json configuration
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  * @param config The json configuration
- * @return SimulationParameters<T> Simulation parameters read from configuration
+ * @return SimulationParameters Simulation parameters read from configuration
  */
 SimulationParameters load_simulation_params(const nlohmann::json& config) {
   // DEBUG_MSG("Loading simulation parameters");
@@ -99,7 +98,6 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
 /**
  * @brief Load model from a configuration
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  * @param config The json configuration
  */
 void load_simulation_model(const nlohmann::json& config,
@@ -471,10 +469,9 @@ void load_simulation_model(const nlohmann::json& config,
 /**
  * @brief Load initial conditions from a configuration
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  * @param config The json configuration
  * @param model The model
- * @return ALGEBRA::State<T> Initial configuration for the model
+ * @return algebra::State Initial configuration for the model
  */
 algebra::State load_initial_condition(const nlohmann::json& config,
                                       zd_model::Model& model) {

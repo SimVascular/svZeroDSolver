@@ -27,10 +27,6 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file csvwriter.hpp
- * @brief IO::write_csv source file
- */
 
 #include "csv_writer.h"
 
@@ -39,7 +35,6 @@ namespace io {
 /**
  * @brief Write results vessel based.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  * @param times Sequence of time steps corresponding to the solutions
  * @param states Sequence of states corresponding to the time steps
  * @param model The underlying model
@@ -171,7 +166,6 @@ std::string to_vessel_csv(std::vector<double> &times,
 /**
  * @brief Write results variable based.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  * @param times Sequence of time steps corresponding to the solutions
  * @param states Sequence of states corresponding to the time steps
  * @param model The underlying model

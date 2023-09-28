@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file flowreferencebc.hpp
- * @brief MODEL::FlowReferenceBC source file
+ * @file FlowReferenceBC.h
+ * @brief model::FlowReferenceBC source file
  */
 #ifndef SVZERODSOLVER_MODEL_FLOWREFERENCEBC_HPP_
 #define SVZERODSOLVER_MODEL_FLOWREFERENCEBC_HPP_
@@ -79,7 +79,6 @@ namespace zd_model {
  *
  * * `0` Flow
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class FlowReferenceBC : public Block {
  public:

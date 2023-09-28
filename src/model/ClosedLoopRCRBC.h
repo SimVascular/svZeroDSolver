@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file closedloopRCRbc.hpp
- * @brief MODEL::ClosedLoopRCRBC source file
+ * @file ClosedLoopRCRbc.h
+ * @brief model::ClosedLoopRCRBC source file
  */
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBC_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBC_HPP_
@@ -109,7 +109,6 @@ namespace zd_model {
  * * `1` Capacitance
  * * `2` Distal resistance
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class ClosedLoopRCRBC : public Block {
  public:

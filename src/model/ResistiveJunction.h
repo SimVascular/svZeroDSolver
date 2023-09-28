@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file resistivejunction.hpp
- * @brief MODEL::ResistiveJunction source file
+ * @file ResistiveJunction.h
+ * @brief model::ResistiveJunction source file
  */
 #ifndef SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_
@@ -100,7 +100,6 @@ namespace zd_model {
  *
  * * `i` Poiseuille resistance for inner blood vessel `i`
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class ResistiveJunction : public Block {
  public:

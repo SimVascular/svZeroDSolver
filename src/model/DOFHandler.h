@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file dofhandler.hpp
- * @brief MODEL::DOFHandler source file
+ * @file DofHandler.h
+ * @brief model::DOFHandler source file
  */
 #ifndef SVZERODSOLVER_MODEL_DOFHANDLER_HPP_
 #define SVZERODSOLVER_MODEL_DOFHANDLER_HPP_

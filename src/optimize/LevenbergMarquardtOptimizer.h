@@ -28,8 +28,8 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUdouble OF THE USE OF
 // THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file levenbergmarquardtoptimizer.hpp
- * @brief OPT::LevenbergMarquardtOptimizer source file
+ * @file LevenbergMarquardtOptimizer.h
+ * @brief opt::LevenbergMarquardtOptimizer source file
  */
 #ifndef SVZERODSOLVER_OPTIMIZE_LEVENBERGMARQUARDT_HPP_
 #define SVZERODSOLVER_OPTIMIZE_LEVENBERGMARQUARDT_HPP_
@@ -101,7 +101,6 @@ namespace optimize {
  * \cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \f]
  *
  *
- * @tparam double Scalar type (e.g. `float`, `double`)
  */
 class LevenbergMarquardtOptimizer {
  public:

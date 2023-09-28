@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file sparsesystem.hpp
- * @brief ALGEBRA::SparseSystem source file
+ * @file SparseSystem.h
+ * @brief algebra::SparseSystem source file
  */
 #ifndef SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_
 #define SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_
@@ -51,7 +51,6 @@ namespace algebra {
  * This class contains all attributes and methods to create, modify, and
  * solve sparse systems.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class SparseSystem {
  public:
@@ -120,7 +119,7 @@ class SparseSystem {
 
   /**
    * @brief Delete dynamically allocated memory (class member
-   * Eigen::SparseLU<Eigen::SparseMatrix<T>> *solver)
+   * Eigen::SparseLU<Eigen::SparseMatrix> *solver)
    */
   void clean();
 };

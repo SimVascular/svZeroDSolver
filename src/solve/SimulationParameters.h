@@ -44,7 +44,6 @@ namespace io {
 /**
  * @brief Simulation parameters
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 struct SimulationParameters {
   // Negative value indicates this has not

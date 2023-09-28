@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file state.hpp
- * @brief ALGEBRA::State source file
+ * @file State.h
+ * @brief algebra::State source file
  */
 #ifndef SVZERODSOLVER_ALGEBRA_STATE_HPP_
 #define SVZERODSOLVER_ALGEBRA_STATE_HPP_
@@ -43,7 +43,6 @@ namespace algebra {
  * Stores the current state of a system, i.e. the current value and
  * derivate of all variables.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class State {
  public:

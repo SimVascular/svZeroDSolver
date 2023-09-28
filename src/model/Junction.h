@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file junction.hpp
- * @brief MODEL::Junction source file
+ * @file Junction.h
+ * @brief model::Junction source file
  */
 #ifndef SVZERODSOLVER_MODEL_JUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_JUNCTION_HPP_
@@ -85,7 +85,6 @@ namespace zd_model {
  * \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right]
  * \quad \mathrm{with} \quad i \neq j \f]
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class Junction : public Block {
  public:

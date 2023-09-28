@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file bloodvesseljunction.hpp
- * @brief MODEL::BloodVesselJunction source file
+ * @file BloodVesselJunction.h
+ * @brief model::BloodVesselJunction source file
  */
 #ifndef SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
@@ -140,7 +140,6 @@ namespace zd_model {
  * * `i+num_outlets` Inductance for inner blood vessel `i`
  * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class BloodVesselJunction : public Block {
  public:

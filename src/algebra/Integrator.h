@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file integrator.hpp
- * @brief ALGEBRA::Integrator source file
+ * @file Integrator.h
+ * @brief algebra::Integrator source file
  */
 #ifndef SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 #define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
@@ -60,8 +60,7 @@ namespace algebra {
  * total number of global unknowns. The DAE system is solved implicitly using
  * the generalized-\f$\alpha\f$ method \cite JANSEN2000305.
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
- * `ALGEBRA::SparseSystem`)
+ * `algebra::SparseSystem`)
  */
 class Integrator {
  private:

@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file closedloopcoronarybc.hpp
- * @brief MODEL::ClosedLoopCoronaryBC source file
+ * @file ClosedLoopCoronaryBC.h
+ * @brief model::ClosedLoopCoronaryBC source file
  */
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_
@@ -117,8 +117,6 @@ enum class Side { LEFT, RIGHT, NONE };
  * * `3` Ca
  * * `4` Cim
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
- * @tparam side Side of the block (e.g. `Side::LEFT`, `Side::RIGHT`)
  */
 class ClosedLoopCoronaryBC : public Block {
  public:

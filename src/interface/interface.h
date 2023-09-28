@@ -27,6 +27,10 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/**
+ * @file interface.h
+ * @brief svZeroDSolver callable interface.
+ */
 
 #include <map>
 #include <nlohmann/json.hpp>
@@ -61,7 +65,6 @@ class SolverInterface {
   // This is set by the external solver via the interface.
   double external_step_size_ = 0.1;
 
-  // 0D solver parameters.
   // These are read in from the input JSON solver configuration file.
   double time_step_size_ = 0.0;
   int num_time_steps_ = 0;

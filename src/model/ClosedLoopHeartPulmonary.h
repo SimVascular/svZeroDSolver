@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file closedloopheartpulmonary.hpp
- * @brief MODEL::ClosedLoopHeartPulmonary source file
+ * @file ClosedLoopHeartPulmonary.h
+ * @brief model::ClosedLoopHeartPulmonary source file
  */
 #ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
 #define SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_
@@ -87,7 +87,6 @@ namespace zd_model {
  * * `25` Right atrium resting volume
  * * `26` Left atrium resting volume
  *
- * @tparam T Scalar type (e.g. `float`, `double`)
  */
 class ClosedLoopHeartPulmonary : public Block {
  public:

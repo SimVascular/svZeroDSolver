@@ -270,7 +270,7 @@ Vessels</h3>
 <th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Class   </th><th class="markdownTableHeadNone"><code>zero_d_element_type</code>   </th><th class="markdownTableHeadNone"><code>zero_d_element_values</code>    </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Blood vessel with <br  />
- optional stenosis   </td><td class="markdownTableBodyNone"><a class="el" href="class_m_o_d_e_l_1_1_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">MODEL::BloodVessel</a>   </td><td class="markdownTableBodyNone"><code>BloodVessel</code>   </td><td class="markdownTableBodyNone"><code>C</code>: Capacity <br  />
+ optional stenosis   </td><td class="markdownTableBodyNone">MODEL::BloodVessel   </td><td class="markdownTableBodyNone"><code>BloodVessel</code>   </td><td class="markdownTableBodyNone"><code>C</code>: Capacity <br  />
  <code>L</code>: Inductance <br  />
  <code>R_poiseuille</code>: Poiseuille resistance <br  />
  <code>stenosis_coefficient</code>: Stenosis coefficient   </td></tr>
@@ -291,13 +291,13 @@ Junctions</h3>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Purely mass <br  />
  conserving <br  />
- junction   </td><td class="markdownTableBodyNone"><a class="el" href="class_m_o_d_e_l_1_1_junction.html" title="Junction.">MODEL::Junction</a>   </td><td class="markdownTableBodyNone"><code>NORMAL_JUNCTION</code>   </td><td class="markdownTableBodyNone">-    </td></tr>
+ junction   </td><td class="markdownTableBodyNone">MODEL::Junction   </td><td class="markdownTableBodyNone"><code>NORMAL_JUNCTION</code>   </td><td class="markdownTableBodyNone">-    </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Resistive <br  />
- junction   </td><td class="markdownTableBodyNone"><a class="el" href="class_m_o_d_e_l_1_1_resistive_junction.html" title="ResistiveJunction.">MODEL::ResistiveJunction</a>   </td><td class="markdownTableBodyNone"><code>resistive_junction</code>   </td><td class="markdownTableBodyNone"><code>R</code>: Ordered list of resistances for all inlets and outlets    </td></tr>
+ junction   </td><td class="markdownTableBodyNone">MODEL::ResistiveJunction   </td><td class="markdownTableBodyNone"><code>resistive_junction</code>   </td><td class="markdownTableBodyNone"><code>R</code>: Ordered list of resistances for all inlets and outlets    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Blood vessel <br  />
- junction   </td><td class="markdownTableBodyNone"><a class="el" href="class_m_o_d_e_l_1_1_blood_vessel_junction.html" title="BloodVesselJunction.">MODEL::BloodVesselJunction</a>   </td><td class="markdownTableBodyNone"><code>BloodVesselJunction</code>   </td><td class="markdownTableBodyNone">Same as for <code>BloodVessel</code> element but <br  />
+ junction   </td><td class="markdownTableBodyNone">MODEL::BloodVesselJunction   </td><td class="markdownTableBodyNone"><code>BloodVesselJunction</code>   </td><td class="markdownTableBodyNone">Same as for <code>BloodVessel</code> element but <br  />
  as ordered list for each inlet and outlet   </td></tr>
 </table>
 <h3><a class="anchor" id="autotoc_md54"></a>
@@ -311,17 +311,17 @@ Boundary conditions</h3>
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Description   </th><th class="markdownTableHeadNone">Class   </th><th class="markdownTableHeadNone"><code>bc_type</code>   </th><th class="markdownTableHeadNone"><code>bc_values</code>    </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Prescribed (transient) flow   </td><td class="markdownTableBodyNone"><a class="el" href="class_m_o_d_e_l_1_1_flow_reference_b_c.html" title="Flow reference boundary condition.">MODEL::FlowReferenceBC</a>   </td><td class="markdownTableBodyNone"><code>FLOW</code>   </td><td class="markdownTableBodyNone"><code>Q</code>: Time-dependent flow values <br  />
+<td class="markdownTableBodyNone">Prescribed (transient) flow   </td><td class="markdownTableBodyNone">MODEL::FlowReferenceBC   </td><td class="markdownTableBodyNone"><code>FLOW</code>   </td><td class="markdownTableBodyNone"><code>Q</code>: Time-dependent flow values <br  />
  <code>t</code>: Time stamps    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Prescribed (transient) pressure   </td><td class="markdownTableBodyNone"><a class="el" href="class_m_o_d_e_l_1_1_pressure_reference_b_c.html" title="Pressure reference boundary condition.">MODEL::PressureReferenceBC</a>   </td><td class="markdownTableBodyNone"><code>PRESSURE</code>   </td><td class="markdownTableBodyNone"><code>P</code>: Time-dependent pressure values <br  />
+<td class="markdownTableBodyNone">Prescribed (transient) pressure   </td><td class="markdownTableBodyNone">MODEL::PressureReferenceBC   </td><td class="markdownTableBodyNone"><code>PRESSURE</code>   </td><td class="markdownTableBodyNone"><code>P</code>: Time-dependent pressure values <br  />
  <code>t</code>: Time stamps    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Resistance   </td><td class="markdownTableBodyNone"><a class="el" href="class_m_o_d_e_l_1_1_resistance_b_c.html" title="Resistance boundary condition.">MODEL::ResistanceBC</a>   </td><td class="markdownTableBodyNone"><code>RESISTANCE</code>   </td><td class="markdownTableBodyNone"><code>R</code>: Resistance <br  />
+<td class="markdownTableBodyNone">Resistance   </td><td class="markdownTableBodyNone">MODEL::ResistanceBC   </td><td class="markdownTableBodyNone"><code>RESISTANCE</code>   </td><td class="markdownTableBodyNone"><code>R</code>: Resistance <br  />
  <code>Pd</code>: Time-dependent distal pressure <br  />
  <code>t</code>: Time stamps    </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Windkessel   </td><td class="markdownTableBodyNone"><a class="el" href="class_m_o_d_e_l_1_1_windkessel_b_c.html" title="Windkessel RCR boundary condition.">MODEL::WindkesselBC</a>   </td><td class="markdownTableBodyNone"><code>RCR</code>   </td><td class="markdownTableBodyNone"><code>Rp</code>: Proximal resistance <br  />
+<td class="markdownTableBodyNone">Windkessel   </td><td class="markdownTableBodyNone">MODEL::WindkesselBC   </td><td class="markdownTableBodyNone"><code>RCR</code>   </td><td class="markdownTableBodyNone"><code>Rp</code>: Proximal resistance <br  />
  <code>C</code>: Capacitance <br  />
  <code>Rd</code>: Distal resistance <br  />
  <code>Pd</code>: Distal pressure   </td></tr>
@@ -385,7 +385,7 @@ Calibration parameters</h3>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 21 2023 16:09:13 for svZeroDPlus by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5
+Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.5
 </small></address>
 </body>
 </html>

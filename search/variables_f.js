@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['y_0',['y',['../class_a_l_g_e_b_r_a_1_1_state.html#a5e310eddee49852d84d0749cbf104e57',1,'ALGEBRA::State']]],
-  ['ydot_1',['ydot',['../class_a_l_g_e_b_r_a_1_1_state.html#aa1042453417a1af57edc93e3192270a9',1,'ALGEBRA::State']]]
+  ['y_0',['y',['../classalgebra_1_1_state.html#a9c176aead20a038854d9761c6275c02c',1,'algebra::State']]],
+  ['ydot_1',['ydot',['../classalgebra_1_1_state.html#a880199c0b981dd48f999bf6c9ce1af6c',1,'algebra::State']]]
 ];

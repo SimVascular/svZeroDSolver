@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['zero_0',['Zero',['../class_a_l_g_e_b_r_a_1_1_state.html#a8b9bcbe746b0d2b87f7c0381ddf471a3',1,'ALGEBRA::State']]]
+  ['zero_0',['Zero',['../classalgebra_1_1_state.html#a740da1afc7afc796afd24a35898e6af4',1,'algebra::State']]]
 ];

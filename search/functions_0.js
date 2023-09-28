@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['add_5fblock_0',['add_block',['../class_m_o_d_e_l_1_1_model.html#afbc4e91afadea5bddfc78241d54200c6',1,'MODEL::Model']]],
-  ['add_5fnode_1',['add_node',['../class_m_o_d_e_l_1_1_model.html#ac197ebdc9d40d717af919ddcdf6cc027',1,'MODEL::Model']]],
-  ['add_5fparameter_2',['add_parameter',['../class_m_o_d_e_l_1_1_model.html#a1840902a8446dd44f9f1c2c06021bcb0',1,'MODEL::Model::add_parameter(T value)'],['../class_m_o_d_e_l_1_1_model.html#a9db1f984f8bfc89d357707328b4cd2a5',1,'MODEL::Model::add_parameter(const std::vector&lt; T &gt; &amp;times, const std::vector&lt; T &gt; &amp;values, bool periodic=true)']]]
+  ['add_5fblock_0',['add_block',['../classzd__model_1_1_model.html#ae711e67edb0efed6c83051785288cfaa',1,'zd_model::Model']]],
+  ['add_5fnode_1',['add_node',['../classzd__model_1_1_model.html#a1b255300102920fe354abe9ff5029ab6',1,'zd_model::Model']]],
+  ['add_5fparameter_2',['add_parameter',['../classzd__model_1_1_model.html#a886de1e795af12193e06d114533e3026',1,'zd_model::Model::add_parameter(double value)'],['../classzd__model_1_1_model.html#a47315c59323baa49aa5838b3cd56b944',1,'zd_model::Model::add_parameter(const std::vector&lt; double &gt; &amp;times, const std::vector&lt; double &gt; &amp;values, bool periodic=true)']]]
 ];

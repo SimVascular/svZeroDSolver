@@ -27,61 +27,50 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file interface.h
- * @brief svZeroDSolver callable interface.
- */
 
-#include <map>
-#include <nlohmann/json.hpp>
-#include <string>
-#include <vector>
+#include "DOFHandler.h"
 
-#include "Integrator.h"
-#include "Model.h"
-#include "SparseSystem.h"
-#include "State.h"
-#include "csv_writer.h"
-#include "debug.h"
+#include <algorithm>
+#include <stdexcept>
 
-using S = algebra::SparseSystem;
+namespace zd_model {
 
-/**
- * @brief Interface class for calling svZeroD from external programs
- */
+DOFHandler::DOFHandler() {
+  var_counter = 0;
+  eqn_counter = 0;
+}
 
-class SolverInterface {
- public:
-  SolverInterface(const std::string& input_file_name);
-  ~SolverInterface();
+DOFHandler::~DOFHandler() {}
 
-  static int problem_id_count_;
-  static std::map<int, SolverInterface*> interface_list_;
+int DOFHandler::size() { return eqn_counter; }
 
-  int problem_id_ = 0;
-  std::string input_file_name_;
+int DOFHandler::get_num_equations() { return eqn_counter; }
 
-  // Parameters for the external solver (the calling program).
-  // This is set by the external solver via the interface.
-  double external_step_size_ = 0.1;
+int DOFHandler::get_num_variables() { return var_counter; }
 
-  // These are read in from the input JSON solver configuration file.
-  double time_step_size_ = 0.0;
-  int num_time_steps_ = 0;
-  double absolute_tolerance_ = 0.0;
-  int max_nliter_ = 0;
-  int time_step_ = 0.0;
-  int save_interval_counter_ = 0;
-  int output_interval_ = 0;
-  int system_size_ = 0;
-  int num_output_steps_ = 0;
-  int pts_per_cycle_ = 0;
-  bool output_last_cycle_only_ = false;
+int DOFHandler::register_variable(std::string name) {
+  variables.push_back(name);
+  variable_name_map.insert({name, var_counter});
+  return var_counter++;
+}
 
-  std::shared_ptr<zd_model::Model> model_;
-  algebra::Integrator integrator_;
+int DOFHandler::get_variable_index(std::string name) {
+  return variable_name_map[name];
+}
 
-  algebra::State state_;
-  std::vector<double> times_;
-  std::vector<algebra::State> states_;
-};
+int DOFHandler::register_equation(std::string name) {
+  equations.push_back(name);
+  return eqn_counter++;
+}
+
+int DOFHandler::get_index(std::string_view& name) {
+  auto it = std::find(variables.begin(), variables.end(), name);
+
+  if (it != variables.end()) {
+    return it - variables.begin();
+  } else {
+    throw std::runtime_error("No variable with that name");
+  }
+}
+
+}  // namespace zd_model

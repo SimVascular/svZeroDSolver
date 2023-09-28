@@ -1,10 +1,41 @@
+# Copyright (c) Stanford University, The Regents of the University of
+#               California, and others.
+#
+# All Rights Reserved.
+#
+# See Copyright-SimVascular.txt for additional details.
+#
+# Permission is hereby granted, free of charge, to any person obtaining
+# a copy of this software and associated documentation files (the
+# "Software"), to deal in the Software without restriction, including
+# without limitation the rights to use, copy, modify, merge, publish,
+# distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so, subject
+# to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included
+# in all copies or substantial portions of the Software.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+# IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+# TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+# PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+# OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+# PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+# LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+# NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+# SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
 cmake_minimum_required(VERSION 3.22)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 project(svZeroDSolver)
+
 include(FetchContent)
 
-# -----------------------------------------------------------------------------
 # Enable code coverage
 # -----------------------------------------------------------------------------
 set(ENABLE_COVERAGE OFF CACHE BOOL "Enable code coverage")
@@ -27,29 +58,50 @@ if(ENABLE_COVERAGE)
 endif()
 
 # -----------------------------------------------------------------------------
+# Set the location to store the binaries and libraries created by this project.
+# -----------------------------------------------------------------------------
+#
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# Need to add the -fPIC flag to build the interface shared library.
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+endif()
+
+# -----------------------------------------------------------------------------
 # Fetch Eigen
 # -----------------------------------------------------------------------------
+# Eigen is a header-only C++ template library for linear algebra.
+#
 FetchContent_Declare(
   Eigen
   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
   GIT_TAG master
   GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE)
+
 set(EIGEN_BUILD_DOC OFF)
 set(BUILD_TESTING OFF)
 set(EIGEN_BUILD_PKGCONFIG OFF)
 set( OFF)
+
 FetchContent_MakeAvailable(Eigen)
 
 # -----------------------------------------------------------------------------
 # Fetch pybind11
 # -----------------------------------------------------------------------------
+# pybind11 is a library used to create Python bindings of existing C++ code.
+#
 FetchContent_Declare(
     pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11
     GIT_TAG        master
 )
+
 FetchContent_GetProperties(pybind11)
+
 if(NOT pybind11_POPULATED)
     FetchContent_Populate(pybind11)
     add_subdirectory(${pybind11_SOURCE_DIR} ${pybind11_BINARY_DIR})
@@ -58,38 +110,101 @@ endif()
 # -----------------------------------------------------------------------------
 # Fetch nlohmann/json
 # -----------------------------------------------------------------------------
+# This is a C++ header-only library for reading JSON files.
+#
 FetchContent_Declare(
     json
     URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
 )
+
 FetchContent_MakeAvailable(json)
 
 # -----------------------------------------------------------------------------
 # Fetch pybind11_json
 # -----------------------------------------------------------------------------
+# pybind11_json is an nlohmann::json to pybind11 bridge that converts 
+# between nlohmann::json and py::object objects. 
+#
 FetchContent_Declare(
     pybind11_json
     GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
     GIT_TAG        master
 )
+
 FetchContent_MakeAvailable(pybind11_json)
 
 # -----------------------------------------------------------------------------
-# Set executable and python library
+# Set executables for each application.
 # -----------------------------------------------------------------------------
-include_directories(src)
-add_executable(svzerodsolver applications/svzerodsolver.cpp)
-add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp)
-pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
-add_subdirectory("src/interface")
+# There are two executables
+#   1) svzerodsolver
+#   2) svzerodcalibrator 
+#
+add_executable(svzerodsolver applications/svzerodsolver.cpp 
+  $<TARGET_OBJECTS:svzero_algebra_library> 
+  $<TARGET_OBJECTS:svzero_model_library> 
+  $<TARGET_OBJECTS:svzero_solve_library> 
+)
+
+add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
+  $<TARGET_OBJECTS:svzero_optimize_library> 
+  $<TARGET_OBJECTS:svzero_model_library> 
+)
 
 # -----------------------------------------------------------------------------
-# Link libraries
+# Setup building of the svzerodplus Python extension module.
 # -----------------------------------------------------------------------------
+pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
+
+# -----------------------------------------------------------------------------
+# Add source sub-directories.
+# -----------------------------------------------------------------------------
+add_subdirectory("src/algebra")
+add_subdirectory("src/interface")
+add_subdirectory("src/model")
+add_subdirectory("src/optimize")
+add_subdirectory("src/solve")
+
+# -----------------------------------------------------------------------------
+# Set header file include directories.
+# -----------------------------------------------------------------------------
+#
+target_include_directories(svzerodsolver PUBLIC
+  ${CMAKE_SOURCE_DIR}/src/algebra
+  ${CMAKE_SOURCE_DIR}/src/model
+  ${CMAKE_SOURCE_DIR}/src/solve
+)
+
+target_include_directories(svzerodcalibrator PUBLIC 
+  ${CMAKE_SOURCE_DIR}/src/algebra
+  ${CMAKE_SOURCE_DIR}/src/model 
+  ${CMAKE_SOURCE_DIR}/src/optimize
+  ${CMAKE_SOURCE_DIR}/src/solve 
+)
+
+target_include_directories(svzerodplus PUBLIC 
+  ${CMAKE_SOURCE_DIR}/src/algebra
+  ${CMAKE_SOURCE_DIR}/src/model 
+  ${CMAKE_SOURCE_DIR}/src/optimize
+  ${CMAKE_SOURCE_DIR}/src/solve 
+)
+
+# -----------------------------------------------------------------------------
+# Set the libraries each application needs to link to.
+# -----------------------------------------------------------------------------
+# These are needed only for the header-only applications.
+#
 target_link_libraries(svzerodsolver PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodsolver PRIVATE nlohmann_json::nlohmann_json)
+
 target_link_libraries(svzerodcalibrator PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodcalibrator PRIVATE nlohmann_json::nlohmann_json)
+
 target_link_libraries(svzerodplus PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodplus PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(svzerodplus PRIVATE pybind11_json)
+target_link_libraries(svzerodplus PRIVATE svzero_algebra_library)
+target_link_libraries(svzerodplus PRIVATE svzero_model_library)
+target_link_libraries(svzerodplus PRIVATE svzero_optimize_library)
+target_link_libraries(svzerodplus PRIVATE svzero_solve_library)
+

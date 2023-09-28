@@ -28,60 +28,31 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file interface.h
- * @brief svZeroDSolver callable interface.
+ * @file csv_writer.h
+ * @brief io::csv_writer source file
  */
+#ifndef SVZERODSOLVER_IO_CSVWRITER_HPP_
+#define SVZERODSOLVER_IO_CSVWRITER_HPP_
 
-#include <map>
-#include <nlohmann/json.hpp>
+#include <fstream>
 #include <string>
 #include <vector>
 
-#include "Integrator.h"
 #include "Model.h"
-#include "SparseSystem.h"
 #include "State.h"
-#include "csv_writer.h"
-#include "debug.h"
 
-using S = algebra::SparseSystem;
+namespace io {
 
-/**
- * @brief Interface class for calling svZeroD from external programs
- */
+std::string to_variable_csv(std::vector<double> &times,
+                            std::vector<algebra::State> &states,
+                            zd_model::Model &model, bool mean = false,
+                            bool derivative = false);
 
-class SolverInterface {
- public:
-  SolverInterface(const std::string& input_file_name);
-  ~SolverInterface();
+std::string to_vessel_csv(std::vector<double> &times,
+                          std::vector<algebra::State> &states,
+                          zd_model::Model &model, bool mean = false,
+                          bool derivative = false);
 
-  static int problem_id_count_;
-  static std::map<int, SolverInterface*> interface_list_;
+}  // namespace io
 
-  int problem_id_ = 0;
-  std::string input_file_name_;
-
-  // Parameters for the external solver (the calling program).
-  // This is set by the external solver via the interface.
-  double external_step_size_ = 0.1;
-
-  // These are read in from the input JSON solver configuration file.
-  double time_step_size_ = 0.0;
-  int num_time_steps_ = 0;
-  double absolute_tolerance_ = 0.0;
-  int max_nliter_ = 0;
-  int time_step_ = 0.0;
-  int save_interval_counter_ = 0;
-  int output_interval_ = 0;
-  int system_size_ = 0;
-  int num_output_steps_ = 0;
-  int pts_per_cycle_ = 0;
-  bool output_last_cycle_only_ = false;
-
-  std::shared_ptr<zd_model::Model> model_;
-  algebra::Integrator integrator_;
-
-  algebra::State state_;
-  std::vector<double> times_;
-  std::vector<algebra::State> states_;
-};
+#endif  // SVZERODSOLVER_IO_CSVWRITER_HPP_

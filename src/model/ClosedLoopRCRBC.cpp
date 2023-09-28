@@ -27,61 +27,35 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file interface.h
- * @brief svZeroDSolver callable interface.
- */
 
-#include <map>
-#include <nlohmann/json.hpp>
-#include <string>
-#include <vector>
+#include "ClosedLoopRCRBC.h"
 
-#include "Integrator.h"
-#include "Model.h"
-#include "SparseSystem.h"
-#include "State.h"
-#include "csv_writer.h"
-#include "debug.h"
+namespace zd_model {
 
-using S = algebra::SparseSystem;
+void ClosedLoopRCRBC::setup_dofs(DOFHandler &dofhandler) {
+  Block::setup_dofs_(dofhandler, 3, {"P_c"});
+}
 
-/**
- * @brief Interface class for calling svZeroD from external programs
- */
+void ClosedLoopRCRBC::update_constant(algebra::SparseSystem &system,
+                                      std::vector<double> &parameters) {
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -1.0;
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[3]) = 1.0;
+  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[0]) = 1.0;
+  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[4]) = -1.0;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[2]) = -1.0;
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = 1.0;
 
-class SolverInterface {
- public:
-  SolverInterface(const std::string& input_file_name);
-  ~SolverInterface();
+  // Below values can be unsteady if needed (not currently implemented)
+  system.E.coeffRef(this->global_eqn_ids[0], this->global_var_ids[4]) =
+      parameters[this->global_param_ids[ParamId::C]];
+  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
+      -parameters[this->global_param_ids[ParamId::RP]];
+  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[3]) =
+      -parameters[this->global_param_ids[ParamId::RD]];
+}
 
-  static int problem_id_count_;
-  static std::map<int, SolverInterface*> interface_list_;
+std::map<std::string, int> ClosedLoopRCRBC::get_num_triplets() {
+  return num_triplets;
+}
 
-  int problem_id_ = 0;
-  std::string input_file_name_;
-
-  // Parameters for the external solver (the calling program).
-  // This is set by the external solver via the interface.
-  double external_step_size_ = 0.1;
-
-  // These are read in from the input JSON solver configuration file.
-  double time_step_size_ = 0.0;
-  int num_time_steps_ = 0;
-  double absolute_tolerance_ = 0.0;
-  int max_nliter_ = 0;
-  int time_step_ = 0.0;
-  int save_interval_counter_ = 0;
-  int output_interval_ = 0;
-  int system_size_ = 0;
-  int num_output_steps_ = 0;
-  int pts_per_cycle_ = 0;
-  bool output_last_cycle_only_ = false;
-
-  std::shared_ptr<zd_model::Model> model_;
-  algebra::Integrator integrator_;
-
-  algebra::State state_;
-  std::vector<double> times_;
-  std::vector<algebra::State> states_;
-};
+}  // namespace zd_model

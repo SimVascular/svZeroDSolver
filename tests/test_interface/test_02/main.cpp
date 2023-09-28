@@ -51,7 +51,7 @@ int main(int argc, char** argv)
   // Load shared library and get interface functions.
   // File extension of the shared library depends on the system
   std::string svzerod_build_path = std::string(argv[1]);
-  std::string interface_lib_path = svzerod_build_path + "/src/interface/libsvzero_interface_library";
+  std::string interface_lib_path = svzerod_build_path + "/src/interface/libsvzero_interface";
   std::string interface_lib_so = interface_lib_path + ".so";
   std::string interface_lib_dylib = interface_lib_path + ".dylib";
   std::ifstream lib_so_exists(interface_lib_so);

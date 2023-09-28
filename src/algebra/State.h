@@ -28,60 +28,63 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file interface.h
- * @brief svZeroDSolver callable interface.
+ * @file State.h
+ * @brief algebra::State source file
  */
+#ifndef SVZERODSOLVER_ALGEBRA_STATE_HPP_
+#define SVZERODSOLVER_ALGEBRA_STATE_HPP_
 
-#include <map>
-#include <nlohmann/json.hpp>
-#include <string>
-#include <vector>
+#include <Eigen/Core>
 
-#include "Integrator.h"
-#include "Model.h"
-#include "SparseSystem.h"
-#include "State.h"
-#include "csv_writer.h"
-#include "debug.h"
-
-using S = algebra::SparseSystem;
-
+namespace algebra {
 /**
- * @brief Interface class for calling svZeroD from external programs
+ * @brief State of the system.
+ *
+ * Stores the current state of a system, i.e. the current value and
+ * derivate of all variables.
+ *
  */
-
-class SolverInterface {
+class State {
  public:
-  SolverInterface(const std::string& input_file_name);
-  ~SolverInterface();
+  Eigen::Matrix<double, Eigen::Dynamic, 1>
+      y;  ///< Vector of solution quantities
+  Eigen::Matrix<double, Eigen::Dynamic, 1> ydot;  ///< Derivate of \ref y
 
-  static int problem_id_count_;
-  static std::map<int, SolverInterface*> interface_list_;
+  /**
+   * @brief Construct a new State object
+   *
+   */
+  State();
 
-  int problem_id_ = 0;
-  std::string input_file_name_;
+  /**
+   * @brief Construct a new State object
+   *
+   * @param n Size of the state
+   */
+  State(unsigned int n);
 
-  // Parameters for the external solver (the calling program).
-  // This is set by the external solver via the interface.
-  double external_step_size_ = 0.1;
+  /**
+   * @brief Destroy the State object
+   *
+   */
+  ~State();
 
-  // These are read in from the input JSON solver configuration file.
-  double time_step_size_ = 0.0;
-  int num_time_steps_ = 0;
-  double absolute_tolerance_ = 0.0;
-  int max_nliter_ = 0;
-  int time_step_ = 0.0;
-  int save_interval_counter_ = 0;
-  int output_interval_ = 0;
-  int system_size_ = 0;
-  int num_output_steps_ = 0;
-  int pts_per_cycle_ = 0;
-  bool output_last_cycle_only_ = false;
+  /**
+   * @brief Copy a State object
+   *
+   * @param state
+   */
+  State(const State &state);
 
-  std::shared_ptr<zd_model::Model> model_;
-  algebra::Integrator integrator_;
-
-  algebra::State state_;
-  std::vector<double> times_;
-  std::vector<algebra::State> states_;
+  /**
+   * @brief Construct a new State object and initilaize with all zeros.
+   *
+   * @param n Size of the state
+   * @return New state initialized with all zeros
+   */
+  static State Zero(unsigned int n);
 };
+
+}  // namespace algebra
+
+#endif  // SVZERODSOLVER_ALGEBRA_STATE_HPP_

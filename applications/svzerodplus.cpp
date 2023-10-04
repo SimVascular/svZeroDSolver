@@ -43,7 +43,7 @@
 namespace py = pybind11;
 
 PYBIND11_MODULE(svzerodplus, m) {
-  using Solver = solve::Solver;
+  using Solver = Solver;
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {
         const nlohmann::json& config_json = config;
@@ -96,7 +96,7 @@ PYBIND11_MODULE(svzerodplus, m) {
     }
     std::ifstream ifs(argv[1]);
     const auto& config = nlohmann::json::parse(ifs);
-    auto solver = solve::Solver(config);
+    auto solver = Solver(config);
     solver.run();
     solver.write_result_to_csv(argv[2]);
   });

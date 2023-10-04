@@ -98,8 +98,7 @@ nlohmann::json calibrate(const nlohmann::json &config) {
       std::vector<int> param_ids;
       for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++)
         param_ids.push_back(param_counter++);
-      model.add_block(BlockType::BLOODVESSELJUNCTION, param_ids,
-                      junction_name);
+      model.add_block(BlockType::BLOODVESSELJUNCTION, param_ids, junction_name);
     }
     // Check for connections to inlet and outlet vessels and append to
     // connections list
@@ -223,9 +222,9 @@ nlohmann::json calibrate(const nlohmann::json &config) {
 
   // Run optimization
   DEBUG_MSG("Start optimization");
-  auto lm_alg = LevenbergMarquardtOptimizer(
-      &model, num_obs, param_counter, lambda0, gradient_tol, increment_tol,
-      max_iter);
+  auto lm_alg =
+      LevenbergMarquardtOptimizer(&model, num_obs, param_counter, lambda0,
+                                  gradient_tol, increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 
@@ -291,4 +290,3 @@ nlohmann::json calibrate(const nlohmann::json &config) {
 
   return output_config;
 }
-

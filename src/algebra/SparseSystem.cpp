@@ -97,4 +97,3 @@ void SparseSystem::solve() {
   dy.setZero();
   dy += solver->solve(residual);
 }
-

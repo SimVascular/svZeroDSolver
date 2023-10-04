@@ -58,4 +58,3 @@ void WindkesselBC::update_time(SparseSystem &system,
 std::map<std::string, int> WindkesselBC::get_num_triplets() {
   return num_triplets;
 }
-

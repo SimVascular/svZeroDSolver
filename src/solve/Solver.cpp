@@ -36,8 +36,7 @@ void Solver::run() {
     model.to_steady();
 
     Integrator integrator_steady(&model, time_step_size_steady, 0.1,
-                                          simparams.sim_abs_tol,
-                                          simparams.sim_nliter);
+                                 simparams.sim_abs_tol, simparams.sim_nliter);
 
     for (int i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
@@ -49,7 +48,7 @@ void Solver::run() {
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
   Integrator integrator(&model, simparams.sim_time_step_size, 0.1,
-                                 simparams.sim_abs_tol, simparams.sim_nliter);
+                        simparams.sim_abs_tol, simparams.sim_nliter);
 
   // Initialize loop
   states = std::vector<State>();
@@ -110,13 +109,12 @@ std::string Solver::get_full_result() {
   std::string output;
 
   if (simparams.output_variable_based) {
-    output =
-        to_variable_csv(times, states, model, simparams.output_mean_only,
-                            simparams.output_derivative);
+    output = to_variable_csv(times, states, model, simparams.output_mean_only,
+                             simparams.output_derivative);
 
   } else {
     output = to_vessel_csv(times, states, model, simparams.output_mean_only,
-                               simparams.output_derivative);
+                           simparams.output_derivative);
   }
 
   return output;
@@ -177,4 +175,3 @@ void Solver::write_result_to_csv(std::string filename) {
   ofs << get_full_result();
   ofs.close();
 }
-

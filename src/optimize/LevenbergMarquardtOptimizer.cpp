@@ -33,8 +33,8 @@
 #include <iomanip>
 
 LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
-    Model* model, int num_obs, int num_params, double lambda0,
-    double tol_grad, double tol_inc, int max_iter) {
+    Model* model, int num_obs, int num_params, double lambda0, double tol_grad,
+    double tol_inc, int max_iter) {
   this->model = model;
   this->num_obs = num_obs;
   this->num_params = num_params;

@@ -94,4 +94,3 @@ void ClosedLoopCoronaryBC::update_solution(
 std::map<std::string, int> ClosedLoopCoronaryBC::get_num_triplets() {
   return num_triplets;
 }
-

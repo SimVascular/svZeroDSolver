@@ -98,8 +98,7 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
  *
  * @param config The json configuration
  */
-void load_simulation_model(const nlohmann::json& config,
-                           Model& model) {
+void load_simulation_model(const nlohmann::json& config, Model& model) {
   // DEBUG_MSG("Loading model");
 
   // Create list to store block connections while generating blocks
@@ -344,8 +343,7 @@ void load_simulation_model(const nlohmann::json& config,
       for (double value : junction_values["R"]) {
         param_ids.push_back(model.add_parameter(value));
       }
-      model.add_block(BlockType::RESISTIVEJUNCTION, param_ids,
-                      junction_name);
+      model.add_block(BlockType::RESISTIVEJUNCTION, param_ids, junction_name);
     } else if (j_type == "BloodVesselJunction") {
       const auto& junction_values = junction_config["junction_values"];
       std::vector<int> param_ids;
@@ -358,8 +356,7 @@ void load_simulation_model(const nlohmann::json& config,
       for (double value : junction_values["stenosis_coefficient"]) {
         param_ids.push_back(model.add_parameter(value));
       }
-      model.add_block(BlockType::BLOODVESSELJUNCTION, param_ids,
-                      junction_name);
+      model.add_block(BlockType::BLOODVESSELJUNCTION, param_ids, junction_name);
     } else {
       throw std::invalid_argument("Unknown junction type");
     }
@@ -430,8 +427,7 @@ void load_simulation_model(const nlohmann::json& config,
           std::string heart_inlet_junction_name = "J_heart_inlet";
           connections.push_back(
               {heart_inlet_junction_name, heartpulmonary_name});
-          model.add_block(BlockType::JUNCTION, {},
-                          heart_inlet_junction_name);
+          model.add_block(BlockType::JUNCTION, {}, heart_inlet_junction_name);
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back(
                 {heart_inlet_elem, heart_inlet_junction_name});
@@ -441,8 +437,7 @@ void load_simulation_model(const nlohmann::json& config,
           std::string heart_outlet_junction_name = "J_heart_outlet";
           connections.push_back(
               {heartpulmonary_name, heart_outlet_junction_name});
-          model.add_block(BlockType::JUNCTION, {},
-                          heart_outlet_junction_name);
+          model.add_block(BlockType::JUNCTION, {}, heart_outlet_junction_name);
           for (auto& outlet_block : closed_loop_config["outlet_blocks"]) {
             connections.push_back({heart_outlet_junction_name, outlet_block});
           }
@@ -471,8 +466,7 @@ void load_simulation_model(const nlohmann::json& config,
  * @param model The model
  * @return State Initial configuration for the model
  */
-State load_initial_condition(const nlohmann::json& config,
-                                      Model& model) {
+State load_initial_condition(const nlohmann::json& config, Model& model) {
   // Read initial condition
   auto initial_state = State::Zero(model.dofhandler.size());
 
@@ -527,4 +521,3 @@ State load_initial_condition(const nlohmann::json& config,
   }
   return initial_state;
 }
-

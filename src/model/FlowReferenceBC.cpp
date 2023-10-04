@@ -47,4 +47,3 @@ void FlowReferenceBC::update_time(SparseSystem &system,
 std::map<std::string, int> FlowReferenceBC::get_num_triplets() {
   return num_triplets;
 }
-

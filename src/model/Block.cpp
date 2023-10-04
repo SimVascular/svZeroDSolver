@@ -75,8 +75,8 @@ void Block::setup_model_dependent_params() {}
 void Block::update_constant(SparseSystem &system,
                             std::vector<double> &parameters) {}
 
-void Block::update_time(SparseSystem &system,
-                        std::vector<double> &parameters) {}
+void Block::update_time(SparseSystem &system, std::vector<double> &parameters) {
+}
 
 void Block::update_solution(SparseSystem &system,
                             std::vector<double> &parameters,
@@ -92,4 +92,3 @@ void Block::update_gradient(Eigen::SparseMatrix<double> &jacobian,
 }
 
 std::map<std::string, int> Block::get_num_triplets() { return num_triplets; }
-

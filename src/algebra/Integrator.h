@@ -91,8 +91,8 @@ class Integrator {
    * @param atol Absolut tolerance for non-linear iteration termination
    * @param max_iter Maximum number of non-linear iterations
    */
-  Integrator(Model* model, double time_step_size, double rho,
-             double atol, int max_iter);
+  Integrator(Model* model, double time_step_size, double rho, double atol,
+             int max_iter);
 
   /**
    * @brief Construct a new Integrator object

@@ -68,11 +68,9 @@ struct SimulationParameters {
                                   ///< coupled
 };
 
-State load_initial_condition(const nlohmann::json& config,
-                                      Model& model);
+State load_initial_condition(const nlohmann::json& config, Model& model);
 
-void load_simulation_model(const nlohmann::json& config,
-                           Model& model);
+void load_simulation_model(const nlohmann::json& config, Model& model);
 
 SimulationParameters load_simulation_params(const nlohmann::json& config);
 

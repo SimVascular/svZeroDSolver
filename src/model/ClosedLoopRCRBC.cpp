@@ -55,4 +55,3 @@ void ClosedLoopRCRBC::update_constant(SparseSystem &system,
 std::map<std::string, int> ClosedLoopRCRBC::get_num_triplets() {
   return num_triplets;
 }
-

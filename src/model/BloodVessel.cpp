@@ -130,4 +130,3 @@ void BloodVessel::update_gradient(
 std::map<std::string, int> BloodVessel::get_num_triplets() {
   return num_triplets;
 }
-

@@ -132,4 +132,3 @@ void BloodVesselJunction::update_gradient(
 std::map<std::string, int> BloodVesselJunction::get_num_triplets() {
   return num_triplets;
 }
-

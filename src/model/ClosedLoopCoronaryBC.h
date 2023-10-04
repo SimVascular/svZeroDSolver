@@ -152,8 +152,7 @@ class ClosedLoopCoronaryBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system,
-                       std::vector<double> &parameters);
+  void update_constant(SparseSystem &system, std::vector<double> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -164,8 +163,7 @@ class ClosedLoopCoronaryBC : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem &system,
-                       std::vector<double> &parameters,
+  void update_solution(SparseSystem &system, std::vector<double> &parameters,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 

@@ -75,4 +75,3 @@ void Junction::update_gradient(
 }
 
 std::map<std::string, int> Junction::get_num_triplets() { return num_triplets; }
-

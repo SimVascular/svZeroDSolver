@@ -199,9 +199,9 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 
     auto model_steady = model;
     model_steady->to_steady();
-    Integrator integrator_steady(
-        model_steady.get(), time_step_size_steady, 0.1,
-        interface->absolute_tolerance_, interface->max_nliter_);
+    Integrator integrator_steady(model_steady.get(), time_step_size_steady, 0.1,
+                                 interface->absolute_tolerance_,
+                                 interface->max_nliter_);
 
     for (size_t i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
@@ -215,9 +215,9 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->states_.resize(num_output_steps);
 
   // Initialize integrator
-  interface->integrator_ = Integrator(
-      model.get(), interface->time_step_size_, 0.1,
-      interface->absolute_tolerance_, interface->max_nliter_);
+  interface->integrator_ =
+      Integrator(model.get(), interface->time_step_size_, 0.1,
+                 interface->absolute_tolerance_, interface->max_nliter_);
 
   DEBUG_MSG("[initialize] Done");
 }
@@ -439,8 +439,8 @@ void increment_time(const int problem_id, const double external_time,
   auto time_step_size = interface->time_step_size_;
   auto absolute_tolerance = interface->absolute_tolerance_;
   auto max_nliter = interface->max_nliter_;
-  Integrator integrator(model.get(), time_step_size, 0.1,
-                                 absolute_tolerance, max_nliter);
+  Integrator integrator(model.get(), time_step_size, 0.1, absolute_tolerance,
+                        max_nliter);
   auto state = interface->state_;
   interface->state_ = integrator.step(state, external_time);
   interface->time_step_ += 1;

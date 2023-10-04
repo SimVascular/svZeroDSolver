@@ -39,7 +39,6 @@
 
 #include "Model.h"
 
-
 /**
  * @brief Levenberg-Marquardt optimization class
  *
@@ -114,9 +113,9 @@ class LevenbergMarquardtOptimizer {
    * @param tol_inc Parameter increment tolerance
    * @param max_iter Maximum iterations
    */
-  LevenbergMarquardtOptimizer(Model* model, int num_obs,
-                              int num_params, double lambda0, double tol_grad,
-                              double tol_inc, int max_iter);
+  LevenbergMarquardtOptimizer(Model* model, int num_obs, int num_params,
+                              double lambda0, double tol_grad, double tol_inc,
+                              int max_iter);
 
   /**
    * @brief Destroy the LevenbergMarquardtOptimizer object

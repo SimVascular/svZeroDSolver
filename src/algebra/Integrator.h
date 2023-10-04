@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file Integrator.h
- * @brief algebra::Integrator source file
+ * @brief Integrator source file
  */
 #ifndef SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 #define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
@@ -58,7 +58,7 @@
  * total number of global unknowns. The DAE system is solved implicitly using
  * the generalized-\f$\alpha\f$ method \cite JANSEN2000305.
  *
- * `algebra::SparseSystem`)
+ * `SparseSystem`)
  */
 class Integrator {
  private:

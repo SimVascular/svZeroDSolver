@@ -30,13 +30,11 @@
 
 #include "WindkesselBC.h"
 
-namespace zd_model {
-
 void WindkesselBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {"pressure_c"});
 }
 
-void WindkesselBC::update_constant(algebra::SparseSystem &system,
+void WindkesselBC::update_constant(SparseSystem &system,
 
                                    std::vector<double> &parameters) {
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
@@ -44,7 +42,7 @@ void WindkesselBC::update_constant(algebra::SparseSystem &system,
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) = -1.0;
 }
 
-void WindkesselBC::update_time(algebra::SparseSystem &system,
+void WindkesselBC::update_time(SparseSystem &system,
 
                                std::vector<double> &parameters) {
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
@@ -61,4 +59,3 @@ std::map<std::string, int> WindkesselBC::get_num_triplets() {
   return num_triplets;
 }
 
-}  // namespace zd_model

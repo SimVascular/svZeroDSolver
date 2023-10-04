@@ -41,7 +41,6 @@
 #define PI 3.14159265
 #include <math.h>
 
-namespace zd_model {
 /**
  * @brief Heart and pulmonary circulation model
  *
@@ -146,7 +145,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem &system,
+  void update_constant(SparseSystem &system,
                        std::vector<double> &parameters);
 
   /**
@@ -156,7 +155,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(algebra::SparseSystem &system,
+  void update_time(SparseSystem &system,
                    std::vector<double> &parameters);
 
   /**
@@ -168,7 +167,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(algebra::SparseSystem &system,
+  void update_solution(SparseSystem &system,
                        std::vector<double> &parameters,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
@@ -228,7 +227,5 @@ class ClosedLoopHeartPulmonary : public Block {
    */
   void get_valve_positions(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
 };
-
-}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_

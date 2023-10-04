@@ -39,7 +39,6 @@
 
 #include "Model.h"
 
-namespace optimize {
 
 /**
  * @brief Levenberg-Marquardt optimization class
@@ -115,7 +114,7 @@ class LevenbergMarquardtOptimizer {
    * @param tol_inc Parameter increment tolerance
    * @param max_iter Maximum iterations
    */
-  LevenbergMarquardtOptimizer(zd_model::Model* model, int num_obs,
+  LevenbergMarquardtOptimizer(Model* model, int num_obs,
                               int num_params, double lambda0, double tol_grad,
                               double tol_inc, int max_iter);
 
@@ -145,7 +144,7 @@ class LevenbergMarquardtOptimizer {
   Eigen::Matrix<double, Eigen::Dynamic, 1> delta;
   Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> mat;
   Eigen::Matrix<double, Eigen::Dynamic, 1> vec;
-  zd_model::Model* model;
+  Model* model;
   double lambda;
 
   int num_obs;
@@ -164,7 +163,5 @@ class LevenbergMarquardtOptimizer {
 
   void update_delta(bool first_step);
 };
-
-}  // namespace optimize
 
 #endif  // SVZERODSOLVER_OPTIMIZE_LEVENBERGMARQUARDT_HPP_

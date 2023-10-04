@@ -38,8 +38,6 @@
 #include "ClosedLoopHeartPulmonary.h"
 #include "SparseSystem.h"
 
-namespace zd_model {
-
 enum class Side { LEFT, RIGHT, NONE };
 
 /**
@@ -154,7 +152,7 @@ class ClosedLoopCoronaryBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem &system,
+  void update_constant(SparseSystem &system,
                        std::vector<double> &parameters);
 
   /**
@@ -166,7 +164,7 @@ class ClosedLoopCoronaryBC : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(algebra::SparseSystem &system,
+  void update_solution(SparseSystem &system,
                        std::vector<double> &parameters,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
@@ -196,7 +194,5 @@ class ClosedLoopCoronaryBC : public Block {
   int im_param_id;       // Index of parameter Im
   Side side{Side::NONE};
 };
-
-}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_

@@ -38,8 +38,6 @@
 #include <string>
 #include <vector>
 
-namespace zd_model {
-
 /**
  * @brief Degree-of-freedom handler.
  *
@@ -125,7 +123,5 @@ class DOFHandler {
    */
   int get_index(std::string_view& name);
 };
-
-}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_DOFHANDLER_HPP_

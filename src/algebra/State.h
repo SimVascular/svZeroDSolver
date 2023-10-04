@@ -29,14 +29,13 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file State.h
- * @brief algebra::State source file
+ * @brief State source file
  */
 #ifndef SVZERODSOLVER_ALGEBRA_STATE_HPP_
 #define SVZERODSOLVER_ALGEBRA_STATE_HPP_
 
 #include <Eigen/Core>
 
-namespace algebra {
 /**
  * @brief State of the system.
  *
@@ -84,7 +83,5 @@ class State {
    */
   static State Zero(unsigned int n);
 };
-
-}  // namespace algebra
 
 #endif  // SVZERODSOLVER_ALGEBRA_STATE_HPP_

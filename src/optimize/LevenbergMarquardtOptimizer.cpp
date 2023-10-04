@@ -32,10 +32,8 @@
 
 #include <iomanip>
 
-namespace optimize {
-
 LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
-    zd_model::Model* model, int num_obs, int num_params, double lambda0,
+    Model* model, int num_obs, int num_params, double lambda0,
     double tol_grad, double tol_inc, int max_iter) {
   this->model = model;
   this->num_obs = num_obs;
@@ -130,5 +128,3 @@ void LevenbergMarquardtOptimizer::update_delta(bool first_step) {
   // Solve for new delta
   delta = mat.llt().solve(vec);
 }
-
-}  // namespace optimize

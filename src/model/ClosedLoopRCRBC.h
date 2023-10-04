@@ -37,8 +37,6 @@
 #include "Block.h"
 #include "SparseSystem.h"
 
-namespace zd_model {
-
 /**
  * @brief Closed-loop RCR boundary condition.
  *
@@ -144,7 +142,7 @@ class ClosedLoopRCRBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem &system,
+  void update_constant(SparseSystem &system,
                        std::vector<double> &parameters);
 
   /**
@@ -167,7 +165,5 @@ class ClosedLoopRCRBC : public Block {
    */
   std::map<std::string, int> get_num_triplets();
 };
-
-}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBCBC_HPP_

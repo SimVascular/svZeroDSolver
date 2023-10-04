@@ -39,8 +39,6 @@
 #include "Model.h"
 #include "State.h"
 
-namespace algebra {
-
 /**
  * @brief Generalized-alpha integrator
  *
@@ -81,7 +79,7 @@ class Integrator {
   Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
-  zd_model::Model* model;
+  Model* model;
 
  public:
   /**
@@ -93,7 +91,7 @@ class Integrator {
    * @param atol Absolut tolerance for non-linear iteration termination
    * @param max_iter Maximum number of non-linear iterations
    */
-  Integrator(zd_model::Model* model, double time_step_size, double rho,
+  Integrator(Model* model, double time_step_size, double rho,
              double atol, int max_iter);
 
   /**
@@ -131,7 +129,5 @@ class Integrator {
    */
   State step(State& state, double time);
 };
-
-}  // namespace algebra
 
 #endif  // SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_

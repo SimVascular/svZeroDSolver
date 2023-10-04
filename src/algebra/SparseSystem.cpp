@@ -32,8 +32,6 @@
 
 #include "Model.h"
 
-namespace algebra {
-
 SparseSystem::SparseSystem() {}
 
 SparseSystem::SparseSystem(unsigned int n) {
@@ -55,7 +53,7 @@ void SparseSystem::clean() {
   // delete solver;
 }
 
-void SparseSystem::reserve(zd_model::Model *model) {
+void SparseSystem::reserve(Model *model) {
   auto num_triplets = model->get_num_triplets();
   F.reserve(num_triplets["F"]);
   E.reserve(num_triplets["E"]);
@@ -100,4 +98,3 @@ void SparseSystem::solve() {
   dy += solver->solve(residual);
 }
 
-};  // namespace algebra

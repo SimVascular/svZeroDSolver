@@ -85,7 +85,7 @@ int main(int argc, char* argv[]) {
   std::ifstream ifs(input_file);
   const auto& config = nlohmann::json::parse(ifs);
 
-  auto solver = solve::Solver(config);
+  auto solver = Solver(config);
   solver.run();
   solver.write_result_to_csv(output_file);
 

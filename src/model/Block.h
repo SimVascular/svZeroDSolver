@@ -42,8 +42,6 @@
 #include "DOFHandler.h"
 #include "SparseSystem.h"
 
-namespace zd_model {
-
 class Node;
 class Model;
 
@@ -165,7 +163,7 @@ class Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  virtual void update_constant(algebra::SparseSystem &system,
+  virtual void update_constant(SparseSystem &system,
                                std::vector<double> &parameters);
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -174,7 +172,7 @@ class Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  virtual void update_time(algebra::SparseSystem &system,
+  virtual void update_time(SparseSystem &system,
                            std::vector<double> &parameters);
 
   /**
@@ -186,7 +184,7 @@ class Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  virtual void update_solution(algebra::SparseSystem &system,
+  virtual void update_solution(SparseSystem &system,
                                std::vector<double> &parameters,
                                Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                                Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
@@ -228,5 +226,4 @@ class Block {
   virtual std::map<std::string, int> get_num_triplets();
 };
 
-};  // namespace zd_model
 #endif

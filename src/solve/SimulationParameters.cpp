@@ -32,8 +32,6 @@
 
 #include "State.h"
 
-namespace io {
-
 std::vector<double> get_double_array(const nlohmann::json& data,
                                      std::string_view key) {
   std::vector<double> vector;
@@ -101,7 +99,7 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
  * @param config The json configuration
  */
 void load_simulation_model(const nlohmann::json& config,
-                           zd_model::Model& model) {
+                           Model& model) {
   // DEBUG_MSG("Loading model");
 
   // Create list to store block connections while generating blocks
@@ -119,7 +117,7 @@ void load_simulation_model(const nlohmann::json& config,
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
     if (vessel_config["zero_d_element_type"] == "BloodVessel") {
-      model.add_block(zd_model::BlockType::BLOODVESSEL,
+      model.add_block(BlockType::BLOODVESSEL,
                       {model.add_parameter(vessel_values["R_poiseuille"]),
                        model.add_parameter(vessel_values.value("C", 0.0)),
                        model.add_parameter(vessel_values.value("L", 0.0)),
@@ -170,12 +168,12 @@ void load_simulation_model(const nlohmann::json& config,
 
       if (coupling_type == "FLOW") {
         auto Q_coupling = get_double_array(coupling_values, "Q");
-        model.add_block(zd_model::BlockType::FLOWBC,
+        model.add_block(BlockType::FLOWBC,
                         {model.add_parameter(t_coupling, Q_coupling, periodic)},
                         coupling_name);
       } else if (coupling_type == "PRESSURE") {
         auto P_coupling = get_double_array(coupling_values, "P");
-        model.add_block(zd_model::BlockType::PRESSUREBC,
+        model.add_block(BlockType::PRESSUREBC,
                         {model.add_parameter(t_coupling, P_coupling, periodic)},
                         coupling_name);
       } else {
@@ -262,7 +260,7 @@ void load_simulation_model(const nlohmann::json& config,
 
     auto t = get_double_array(bc_values, "t", {0.0});
     if (bc_type == "RCR") {
-      model.add_block(zd_model::BlockType::WINDKESSELBC,
+      model.add_block(BlockType::WINDKESSELBC,
                       {
                           model.add_parameter(bc_values["Rp"]),
                           model.add_parameter(bc_values["C"]),
@@ -271,7 +269,7 @@ void load_simulation_model(const nlohmann::json& config,
                       },
                       bc_name);
     } else if (bc_type == "ClosedLoopRCR") {
-      model.add_block(zd_model::BlockType::CLOSEDLOOPRCRBC,
+      model.add_block(BlockType::CLOSEDLOOPRCRBC,
                       {model.add_parameter(bc_values["Rp"]),
                        model.add_parameter(bc_values["C"]),
                        model.add_parameter(bc_values["Rd"])},
@@ -282,24 +280,24 @@ void load_simulation_model(const nlohmann::json& config,
 
     } else if (bc_type == "FLOW") {
       model.add_block(
-          zd_model::BlockType::FLOWBC,
+          BlockType::FLOWBC,
           {model.add_parameter(t, get_double_array(bc_values, "Q"))}, bc_name);
 
     } else if (bc_type == "RESISTANCE") {
       model.add_block(
-          zd_model::BlockType::RESISTANCEBC,
+          BlockType::RESISTANCEBC,
           {model.add_parameter(t, get_double_array(bc_values, "R")),
            model.add_parameter(t, get_double_array(bc_values, "Pd"))},
           bc_name);
 
     } else if (bc_type == "PRESSURE") {
       model.add_block(
-          zd_model::BlockType::PRESSUREBC,
+          BlockType::PRESSUREBC,
           {model.add_parameter(t, get_double_array(bc_values, "P"))}, bc_name);
 
     } else if (bc_type == "CORONARY") {
       model.add_block(
-          zd_model::BlockType::OPENLOOPCORONARYBC,
+          BlockType::OPENLOOPCORONARYBC,
           {model.add_parameter(t, get_double_array(bc_values, "Ra1")),
            model.add_parameter(t, get_double_array(bc_values, "Ra2")),
            model.add_parameter(t, get_double_array(bc_values, "Rv1")),
@@ -311,11 +309,11 @@ void load_simulation_model(const nlohmann::json& config,
 
     } else if (bc_type == "ClosedLoopCoronary") {
       std::string side = bc_values["side"];
-      zd_model::BlockType block_type;
+      BlockType block_type;
       if (side == "left") {
-        block_type = zd_model::BlockType::CLOSEDLOOPCORONARYLEFTBC;
+        block_type = BlockType::CLOSEDLOOPCORONARYLEFTBC;
       } else if (side == "right") {
-        block_type = zd_model::BlockType::CLOSEDLOOPCORONARYRIGHTBC;
+        block_type = BlockType::CLOSEDLOOPCORONARYRIGHTBC;
       } else {
         throw std::runtime_error("Invalid side for ClosedLoopCoronary");
       }
@@ -339,14 +337,14 @@ void load_simulation_model(const nlohmann::json& config,
     std::string j_type = junction_config["junction_type"];
     std::string junction_name = junction_config["junction_name"];
     if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
-      model.add_block(zd_model::BlockType::JUNCTION, {}, junction_name);
+      model.add_block(BlockType::JUNCTION, {}, junction_name);
     } else if (j_type == "resistive_junction") {
       const auto& junction_values = junction_config["junction_values"];
       std::vector<int> param_ids;
       for (double value : junction_values["R"]) {
         param_ids.push_back(model.add_parameter(value));
       }
-      model.add_block(zd_model::BlockType::RESISTIVEJUNCTION, param_ids,
+      model.add_block(BlockType::RESISTIVEJUNCTION, param_ids,
                       junction_name);
     } else if (j_type == "BloodVesselJunction") {
       const auto& junction_values = junction_config["junction_values"];
@@ -360,7 +358,7 @@ void load_simulation_model(const nlohmann::json& config,
       for (double value : junction_values["stenosis_coefficient"]) {
         param_ids.push_back(model.add_parameter(value));
       }
-      model.add_block(zd_model::BlockType::BLOODVESSELJUNCTION, param_ids,
+      model.add_block(BlockType::BLOODVESSELJUNCTION, param_ids,
                       junction_name);
     } else {
       throw std::invalid_argument("Unknown junction type");
@@ -398,7 +396,7 @@ void load_simulation_model(const nlohmann::json& config,
           }
           const auto& heart_params = closed_loop_config["parameters"];
           // Convert to std::map to keep model blocks independent of simdjson
-          model.add_block(zd_model::BlockType::CLOSEDLOOPHEARTPULMONARY,
+          model.add_block(BlockType::CLOSEDLOOPHEARTPULMONARY,
                           {model.add_parameter(heart_params["Tsa"]),
                            model.add_parameter(heart_params["tpwave"]),
                            model.add_parameter(heart_params["Erv_s"]),
@@ -432,7 +430,7 @@ void load_simulation_model(const nlohmann::json& config,
           std::string heart_inlet_junction_name = "J_heart_inlet";
           connections.push_back(
               {heart_inlet_junction_name, heartpulmonary_name});
-          model.add_block(zd_model::BlockType::JUNCTION, {},
+          model.add_block(BlockType::JUNCTION, {},
                           heart_inlet_junction_name);
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back(
@@ -443,7 +441,7 @@ void load_simulation_model(const nlohmann::json& config,
           std::string heart_outlet_junction_name = "J_heart_outlet";
           connections.push_back(
               {heartpulmonary_name, heart_outlet_junction_name});
-          model.add_block(zd_model::BlockType::JUNCTION, {},
+          model.add_block(BlockType::JUNCTION, {},
                           heart_outlet_junction_name);
           for (auto& outlet_block : closed_loop_config["outlet_blocks"]) {
             connections.push_back({heart_outlet_junction_name, outlet_block});
@@ -471,12 +469,12 @@ void load_simulation_model(const nlohmann::json& config,
  *
  * @param config The json configuration
  * @param model The model
- * @return algebra::State Initial configuration for the model
+ * @return State Initial configuration for the model
  */
-algebra::State load_initial_condition(const nlohmann::json& config,
-                                      zd_model::Model& model) {
+State load_initial_condition(const nlohmann::json& config,
+                                      Model& model) {
   // Read initial condition
-  auto initial_state = algebra::State::Zero(model.dofhandler.size());
+  auto initial_state = State::Zero(model.dofhandler.size());
 
   if (config.contains("initial_condition")) {
     const auto& initial_condition = config["initial_condition"];
@@ -530,4 +528,3 @@ algebra::State load_initial_condition(const nlohmann::json& config,
   return initial_state;
 }
 
-}  // namespace io

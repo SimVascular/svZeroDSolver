@@ -117,205 +117,200 @@ $(function() {
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &quot;<a class="code" href="_block_8h.html">Block.h</a>&quot;</span></div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#include &quot;<a class="code" href="_sparse_system_8h.html">SparseSystem.h</a>&quot;</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">namespace </span>zd_model {</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"></span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * @brief Resistor-capacitor-inductor blood vessel with optional stenosis</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"></span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> * @brief Resistor-capacitor-inductor blood vessel with optional stenosis</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * Models the mechanical behavior of a bloodvessel with optional stenosis.</span></div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * Models the mechanical behavior of a bloodvessel with optional stenosis.</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * \begin{circuitikz} \draw</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> * \draw (1,0) node[anchor=south]{$P_{in}$}</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * to [R, l=$R$, *-] (3,0)</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * to [R, l=$R_{ste}$, -] (5,0)</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * (5,0) to [L, l=$L$, -*] (7,0)</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * node[anchor=south]{$P_{out}$}</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * (5,0) to [C, l=$C$, -] (5,-1.5)</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * node[ground]{};</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> * \end{circuitikz}</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * \begin{circuitikz} \draw</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * \draw (1,0) node[anchor=south]{$P_{in}$}</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> * to [R, l=$R$, *-] (3,0)</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> * to [R, l=$R_{ste}$, -] (5,0)</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * (5,0) to [L, l=$L$, -*] (7,0)</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * node[anchor=south]{$P_{out}$}</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * (5,0) to [C, l=$C$, -] (5,-1.5)</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * node[ground]{};</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * \end{circuitikz}</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * ### Governing equations</span></div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * ### Governing equations</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"> * P_{in}^{e}-P_{out}^{e}-(R+R_{ste}) Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> * \f]</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{in}^{e}}{d t}+C(R+2R_{ste})\frac{d</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * Q_{in}^{e}}{d t}=0 \f]</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> * P_{in}^{e}-P_{out}^{e}-(R+R_{ste}) Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment"> * Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{in}^{e}}{d t}+C(R+2R_{ste})\frac{d</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment"> * Q_{in}^{e}}{d t}=0 \f]</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * ### Local contributions</span></div>
 <div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * ### Local contributions</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} &amp; Q_{in}^{e} &amp;</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment"> * P_{out}^{e} &amp; Q_{out}^{e}\end{array}\right]^{T} \f]</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"> * \mathbf{F}^{e}=\left[\begin{array}{cccc}</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> * 1 &amp; -R_{ste}-R &amp; -1 &amp; 0 \\</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> * 0 &amp; 1 &amp; 0 &amp; -1</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> * \end{array}\right]</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * \f]</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> * \mathbf{E}^{e}=\left[\begin{array}{cccc}</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> * 0 &amp; 0 &amp; 0 &amp; -L \\</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * -C &amp; C(R+2R_{ste}) &amp; 0 &amp; 0</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> * \end{array}\right]</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * \f]</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * \mathbf{D}^{e}=\left[\begin{array}{cccc}</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> * 0 &amp; -R_{ste} &amp; 0 &amp; 0 \\</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> * 0 &amp; 2CK_{ste} sgn(Q_{in}^{e}) \dot{Q}_{in}^{e} &amp; 0 &amp; 0</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> * \end{array}\right]</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> * \f]</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> * with the stenosis resistance \f$ R_{ste}=K_{t} \frac{\rho}{2</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| \f$. The</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> * constant part of the equation is summarized in \ref</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"> * Parameters::stenosis_coefficient. \f$R\f$, \f$C\f$, and \f$L\f$ refer to</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment"> * Poisieuille resistance, capacitance and inductance, respectively.</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} &amp; Q_{in}^{e} &amp;</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"> * P_{out}^{e} &amp; Q_{out}^{e}\end{array}\right]^{T} \f]</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment"> * \mathbf{F}^{e}=\left[\begin{array}{cccc}</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"> * 1 &amp; -R_{ste}-R &amp; -1 &amp; 0 \\</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"> * 0 &amp; 1 &amp; 0 &amp; -1</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> * \end{array}\right]</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * \mathbf{E}^{e}=\left[\begin{array}{cccc}</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> * 0 &amp; 0 &amp; 0 &amp; -L \\</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> * -C &amp; C(R+2R_{ste}) &amp; 0 &amp; 0</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> * \end{array}\right]</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * \mathbf{D}^{e}=\left[\begin{array}{cccc}</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * 0 &amp; -R_{ste} &amp; 0 &amp; 0 \\</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * 0 &amp; 2CK_{ste} sgn(Q_{in}^{e}) \dot{Q}_{in}^{e} &amp; 0 &amp; 0</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> * \end{array}\right]</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> * with the stenosis resistance \f$ R_{ste}=K_{t} \frac{\rho}{2</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| \f$. The</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> * constant part of the equation is summarized in \ref</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> * Parameters::stenosis_coefficient. \f$R\f$, \f$C\f$, and \f$L\f$ refer to</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> * Poisieuille resistance, capacitance and inductance, respectively.</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment"> * ### Gradient</span></div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment"> * ### Gradient</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment"> * Gradient of the equations with respect to the parameters:</span></div>
 <div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment"> * Gradient of the equations with respect to the parameters:</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment"> * \mathbf{J}^{e} = \left[\begin{array}{cccc}</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment"> * -y_2 &amp; 0 &amp; -\dot{y}_4 &amp; -|y_2|y_2 \\</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment"> * C\dot{y}_2 &amp; (-\dot{y}_1+(R+2R_{ste})\dot{y}_2) &amp; 0 &amp; 2C|y_2|\dot{y}_2</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"> * \end{array}\right]</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment"> * \f]</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"> * \mathbf{r}^{e} = \left[\begin{array}{c}</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"> * y_1-(R+R_{ste})y_2-y_3-L\dot{y}_4 \\</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment"> * y_2 - y_4 - C\dot{y}_1 + C(R+2R_{ste}) \dot{y}_2</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment"> * \end{array}\right]</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"> * \mathbf{J}^{e} = \left[\begin{array}{cccc}</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"> * -y_2 &amp; 0 &amp; -\dot{y}_4 &amp; -|y_2|y_2 \\</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment"> * C\dot{y}_2 &amp; (-\dot{y}_1+(R+2R_{ste})\dot{y}_2) &amp; 0 &amp; 2C|y_2|\dot{y}_2</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment"> * \end{array}\right]</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"> * \mathbf{r}^{e} = \left[\begin{array}{c}</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment"> * y_1-(R+R_{ste})y_2-y_3-L\dot{y}_4 \\</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"> * y_2 - y_4 - C\dot{y}_1 + C(R+2R_{ste}) \dot{y}_2</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"> * \end{array}\right]</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"> * ### Parameters</span></div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment"> * ### Parameters</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment"> * Parameter sequence for constructing this block</span></div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment"> * Parameter sequence for constructing this block</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment"> * * `0` Poiseuille resistance</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment"> * * `1` Capacitance</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment"> * * `2` Inductance</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"> * * `3` Stenosis coefficient</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="classzd__model_1_1_blood_vessel.html">  134</a></span><span class="keyword">class </span><a class="code hl_class" href="classzd__model_1_1_blood_vessel.html">BloodVessel</a> : <span class="keyword">public</span> <a class="code hl_class" href="classzd__model_1_1_block.html">Block</a> {</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> <span class="keyword">public</span>:<span class="comment"></span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">   * @brief Local IDs of the parameters</span></div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno"><a class="line" href="classzd__model_1_1_blood_vessel.html#a897ef1206f35ab53ac80bb7263896a63">  140</a></span>  <span class="keyword">enum</span> <a class="code hl_enumeration" href="classzd__model_1_1_blood_vessel.html#a897ef1206f35ab53ac80bb7263896a63">ParamId</a> {</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    RESISTANCE = 0,</div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    CAPACITANCE = 1,</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    INDUCTANCE = 2,</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    STENOSIS_COEFFICIENT = 3,</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  };</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>  <span class="keyword">explicit</span> <a class="code hl_class" href="classzd__model_1_1_blood_vessel.html">BloodVessel</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::vector&lt;int&gt; &amp;param_ids, <a class="code hl_class" href="classzd__model_1_1_model.html">Model</a> *<a class="code hl_variable" href="classzd__model_1_1_block.html#a903d569c9f84cf6f1e9f495ea29e86c2">model</a>)</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>      : <a class="code hl_class" href="classzd__model_1_1_block.html">Block</a>(<a class="code hl_variable" href="classzd__model_1_1_block.html#a36acc8070dc9b6d84fbc1c4c436d524e">id</a>, param_ids, <a class="code hl_variable" href="classzd__model_1_1_block.html#a903d569c9f84cf6f1e9f495ea29e86c2">model</a>){};</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment"></span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment">   * @brief Set up the degrees of freedom (DOF) of the block</span></div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="comment">   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="comment">   * number of equations and the number of internal variables of the</span></div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="comment">   * element.</span></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="comment">   * equations at</span></div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classzd__model_1_1_blood_vessel.html#a4015bf165c64fef44b8009fdd55f4e78">setup_dofs</a>(DOFHandler &amp;dofhandler);</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment"></span> </div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment">   * @brief Update the constant contributions of the element in a sparse</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment">   system</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="comment">   * @param parameters Parameters of the model</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classzd__model_1_1_blood_vessel.html#a4374f707fa7061805c6a71a494012ed8">update_constant</a>(<a class="code hl_class" href="classalgebra_1_1_sparse_system.html">algebra::SparseSystem</a> &amp;system,</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                       std::vector&lt;double&gt; &amp;parameters);</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="comment"></span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment">   * @brief Update the solution-dependent contributions of the element in a</span></div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">   * sparse system</span></div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment">   * @param parameters Parameters of the model</span></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="comment">   * @param y Current solution</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment">   * @param dy Current derivate of the solution</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classzd__model_1_1_blood_vessel.html#a39bf567c2dd632754da2b05e91669c7a">update_solution</a>(<a class="code hl_class" href="classalgebra_1_1_sparse_system.html">algebra::SparseSystem</a> &amp;system,</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>                       std::vector&lt;double&gt; &amp;parameters,</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;y,</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;dy);</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment"></span> </div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment">   * @brief Set the gradient of the block contributions with respect to the</span></div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment">   * parameters</span></div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment">   * @param jacobian Jacobian with respect to the parameters</span></div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment">   * @param alpha Current parameter vector</span></div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span><span class="comment">   * @param residual Residual with respect to the parameters</span></div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span><span class="comment">   * @param y Current solution</span></div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment">   * @param dy Time-derivative of the current solution</span></div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classzd__model_1_1_blood_vessel.html#a4771247a892319a7bb31553b5d1acbf9">update_gradient</a>(Eigen::SparseMatrix&lt;double&gt; &amp;jacobian,</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;residual,</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;alpha,</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>                       std::vector&lt;double&gt; &amp;y, std::vector&lt;double&gt; &amp;dy);</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="comment"></span> </div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment">   * @brief Number of triplets of element</span></div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno"><a class="line" href="classzd__model_1_1_blood_vessel.html#a33ca081483e96893d0ac73e33080a352">  207</a></span>  std::map&lt;std::string, int&gt; <a class="code hl_variable" href="classzd__model_1_1_blood_vessel.html#a33ca081483e96893d0ac73e33080a352">num_triplets</a> = {</div>
-<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>      {<span class="stringliteral">&quot;F&quot;</span>, 5},</div>
-<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span>      {<span class="stringliteral">&quot;E&quot;</span>, 3},</div>
-<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>      {<span class="stringliteral">&quot;D&quot;</span>, 2},</div>
-<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>  };</div>
-<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="comment"></span> </div>
-<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="comment">   * @brief Get number of triplets of element</span></div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>  std::map&lt;std::string, int&gt; <a class="code hl_function" href="classzd__model_1_1_blood_vessel.html#ad152c2988cff831322c086244349e607">get_num_triplets</a>();</div>
-<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>};</div>
-<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span> </div>
-<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>}  <span class="comment">// namespace zd_model</span></div>
-<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment"> * * `0` Poiseuille resistance</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment"> * * `1` Capacitance</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment"> * * `2` Inductance</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment"> * * `3` Stenosis coefficient</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno"><a class="line" href="class_blood_vessel.html">  132</a></span><span class="keyword">class </span><a class="code hl_class" href="class_blood_vessel.html">BloodVessel</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_block.html">Block</a> {</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> <span class="keyword">public</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">   * @brief Local IDs of the parameters</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno"><a class="line" href="class_blood_vessel.html#a4eef5ad2e6905e259a1ac3d84b69199d">  138</a></span>  <span class="keyword">enum</span> <a class="code hl_enumeration" href="class_blood_vessel.html#a4eef5ad2e6905e259a1ac3d84b69199d">ParamId</a> {</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    RESISTANCE = 0,</div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    CAPACITANCE = 1,</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    INDUCTANCE = 2,</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    STENOSIS_COEFFICIENT = 3,</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>  };</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>  <span class="keyword">explicit</span> <a class="code hl_class" href="class_blood_vessel.html">BloodVessel</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>, <span class="keyword">const</span> std::vector&lt;int&gt; &amp;param_ids, <a class="code hl_class" href="class_model.html">Model</a> *<a class="code hl_variable" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>)</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>      : <a class="code hl_class" href="class_block.html">Block</a>(<a class="code hl_variable" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, param_ids, <a class="code hl_variable" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>){};</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment"></span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span><span class="comment">   * @brief Set up the degrees of freedom (DOF) of the block</span></div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment">   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the</span></div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment">   * number of equations and the number of internal variables of the</span></div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="comment">   * element.</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="comment">   * equations at</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#ad6237cd700152e4b9d9ac64f55d2e4fd">setup_dofs</a>(<a class="code hl_class" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler);</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="comment"></span> </div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment">   * @brief Update the constant contributions of the element in a sparse</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment">   system</span></div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span><span class="comment">   * @param parameters Parameters of the model</span></div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#a19c509ef1a65673cb11c92332ea8a6c3">update_constant</a>(<a class="code hl_class" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt;double&gt; &amp;parameters);</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment"></span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span><span class="comment">   * @brief Update the solution-dependent contributions of the element in a</span></div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="comment">   * sparse system</span></div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">   * @param parameters Parameters of the model</span></div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">   * @param y Current solution</span></div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span><span class="comment">   * @param dy Current derivate of the solution</span></div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#a0407f8cd7058bad643f6122b4339875e">update_solution</a>(<a class="code hl_class" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt;double&gt; &amp;parameters,</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;y,</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;dy);</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment"></span> </div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="comment">   * @brief Set the gradient of the block contributions with respect to the</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="comment">   * parameters</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span><span class="comment">   * @param jacobian Jacobian with respect to the parameters</span></div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment">   * @param alpha Current parameter vector</span></div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment">   * @param residual Residual with respect to the parameters</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="comment">   * @param y Current solution</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span><span class="comment">   * @param dy Time-derivative of the current solution</span></div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#aa3ad80f4b627051a00b52e2b1c254a55">update_gradient</a>(Eigen::SparseMatrix&lt;double&gt; &amp;jacobian,</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;residual,</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;alpha,</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>                       std::vector&lt;double&gt; &amp;y, std::vector&lt;double&gt; &amp;dy);</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment"></span> </div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span><span class="comment">   * @brief Number of triplets of element</span></div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno"><a class="line" href="class_blood_vessel.html#a81b768d9fe9f8f71215d74f47964a162">  203</a></span>  std::map&lt;std::string, int&gt; <a class="code hl_variable" href="class_blood_vessel.html#a81b768d9fe9f8f71215d74f47964a162">num_triplets</a> = {</div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>      {<span class="stringliteral">&quot;F&quot;</span>, 5},</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>      {<span class="stringliteral">&quot;E&quot;</span>, 3},</div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>      {<span class="stringliteral">&quot;D&quot;</span>, 2},</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>  };</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span><span class="comment"></span> </div>
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno">  209</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span><span class="comment">   * @brief Get number of triplets of element</span></div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>  std::map&lt;std::string, int&gt; <a class="code hl_function" href="class_blood_vessel.html#a84d647d883951c254af74cd45bfff2f8">get_num_triplets</a>();</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>};</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_</span></div>
 <div class="ttc" id="a_block_8h_html"><div class="ttname"><a href="_block_8h.html">Block.h</a></div><div class="ttdoc">model::Block source file</div></div>
-<div class="ttc" id="a_sparse_system_8h_html"><div class="ttname"><a href="_sparse_system_8h.html">SparseSystem.h</a></div><div class="ttdoc">algebra::SparseSystem source file</div></div>
-<div class="ttc" id="aclassalgebra_1_1_sparse_system_html"><div class="ttname"><a href="classalgebra_1_1_sparse_system.html">algebra::SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> SparseSystem.h:55</div></div>
-<div class="ttc" id="aclasszd__model_1_1_block_html"><div class="ttname"><a href="classzd__model_1_1_block.html">zd_model::Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition:</b> Block.h:58</div></div>
-<div class="ttc" id="aclasszd__model_1_1_block_html_a36acc8070dc9b6d84fbc1c4c436d524e"><div class="ttname"><a href="classzd__model_1_1_block.html#a36acc8070dc9b6d84fbc1c4c436d524e">zd_model::Block::id</a></div><div class="ttdeci">int id</div><div class="ttdoc">Global ID of the block.</div><div class="ttdef"><b>Definition:</b> Block.h:81</div></div>
-<div class="ttc" id="aclasszd__model_1_1_block_html_a903d569c9f84cf6f1e9f495ea29e86c2"><div class="ttname"><a href="classzd__model_1_1_block.html#a903d569c9f84cf6f1e9f495ea29e86c2">zd_model::Block::model</a></div><div class="ttdeci">Model * model</div><div class="ttdoc">The model to which the block belongs.</div><div class="ttdef"><b>Definition:</b> Block.h:82</div></div>
-<div class="ttc" id="aclasszd__model_1_1_blood_vessel_html"><div class="ttname"><a href="classzd__model_1_1_blood_vessel.html">zd_model::BloodVessel</a></div><div class="ttdoc">Resistor-capacitor-inductor blood vessel with optional stenosis.</div><div class="ttdef"><b>Definition:</b> BloodVessel.h:134</div></div>
-<div class="ttc" id="aclasszd__model_1_1_blood_vessel_html_a33ca081483e96893d0ac73e33080a352"><div class="ttname"><a href="classzd__model_1_1_blood_vessel.html#a33ca081483e96893d0ac73e33080a352">zd_model::BloodVessel::num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition:</b> BloodVessel.h:207</div></div>
-<div class="ttc" id="aclasszd__model_1_1_blood_vessel_html_a39bf567c2dd632754da2b05e91669c7a"><div class="ttname"><a href="classzd__model_1_1_blood_vessel.html#a39bf567c2dd632754da2b05e91669c7a">zd_model::BloodVessel::update_solution</a></div><div class="ttdeci">void update_solution(algebra::SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</div><div class="ttdoc">Update the solution-dependent contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:56</div></div>
-<div class="ttc" id="aclasszd__model_1_1_blood_vessel_html_a4015bf165c64fef44b8009fdd55f4e78"><div class="ttname"><a href="classzd__model_1_1_blood_vessel.html#a4015bf165c64fef44b8009fdd55f4e78">zd_model::BloodVessel::setup_dofs</a></div><div class="ttdeci">void setup_dofs(DOFHandler &amp;dofhandler)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:35</div></div>
-<div class="ttc" id="aclasszd__model_1_1_blood_vessel_html_a4374f707fa7061805c6a71a494012ed8"><div class="ttname"><a href="classzd__model_1_1_blood_vessel.html#a4374f707fa7061805c6a71a494012ed8">zd_model::BloodVessel::update_constant</a></div><div class="ttdeci">void update_constant(algebra::SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters)</div><div class="ttdoc">Update the constant contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:39</div></div>
-<div class="ttc" id="aclasszd__model_1_1_blood_vessel_html_a4771247a892319a7bb31553b5d1acbf9"><div class="ttname"><a href="classzd__model_1_1_blood_vessel.html#a4771247a892319a7bb31553b5d1acbf9">zd_model::BloodVessel::update_gradient</a></div><div class="ttdeci">void update_gradient(Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</div><div class="ttdoc">Set the gradient of the block contributions with respect to the parameters.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:82</div></div>
-<div class="ttc" id="aclasszd__model_1_1_blood_vessel_html_a897ef1206f35ab53ac80bb7263896a63"><div class="ttname"><a href="classzd__model_1_1_blood_vessel.html#a897ef1206f35ab53ac80bb7263896a63">zd_model::BloodVessel::ParamId</a></div><div class="ttdeci">ParamId</div><div class="ttdoc">Local IDs of the parameters.</div><div class="ttdef"><b>Definition:</b> BloodVessel.h:140</div></div>
-<div class="ttc" id="aclasszd__model_1_1_blood_vessel_html_ad152c2988cff831322c086244349e607"><div class="ttname"><a href="classzd__model_1_1_blood_vessel.html#ad152c2988cff831322c086244349e607">zd_model::BloodVessel::get_num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; get_num_triplets()</div><div class="ttdoc">Get number of triplets of element.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:132</div></div>
-<div class="ttc" id="aclasszd__model_1_1_model_html"><div class="ttname"><a href="classzd__model_1_1_model.html">zd_model::Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> Model.h:71</div></div>
+<div class="ttc" id="a_sparse_system_8h_html"><div class="ttname"><a href="_sparse_system_8h.html">SparseSystem.h</a></div><div class="ttdoc">SparseSystem source file.</div></div>
+<div class="ttc" id="aclass_block_html"><div class="ttname"><a href="class_block.html">Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition:</b> Block.h:56</div></div>
+<div class="ttc" id="aclass_block_html_a86f38c868a8dab090101db6492078071"><div class="ttname"><a href="class_block.html#a86f38c868a8dab090101db6492078071">Block::id</a></div><div class="ttdeci">int id</div><div class="ttdoc">Global ID of the block.</div><div class="ttdef"><b>Definition:</b> Block.h:79</div></div>
+<div class="ttc" id="aclass_block_html_a8d3c536c7e54fb03864d9afeb24610e6"><div class="ttname"><a href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">Block::model</a></div><div class="ttdeci">Model * model</div><div class="ttdoc">The model to which the block belongs.</div><div class="ttdef"><b>Definition:</b> Block.h:80</div></div>
+<div class="ttc" id="aclass_blood_vessel_html"><div class="ttname"><a href="class_blood_vessel.html">BloodVessel</a></div><div class="ttdoc">Resistor-capacitor-inductor blood vessel with optional stenosis.</div><div class="ttdef"><b>Definition:</b> BloodVessel.h:132</div></div>
+<div class="ttc" id="aclass_blood_vessel_html_a0407f8cd7058bad643f6122b4339875e"><div class="ttname"><a href="class_blood_vessel.html#a0407f8cd7058bad643f6122b4339875e">BloodVessel::update_solution</a></div><div class="ttdeci">void update_solution(SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</div><div class="ttdoc">Update the solution-dependent contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:54</div></div>
+<div class="ttc" id="aclass_blood_vessel_html_a19c509ef1a65673cb11c92332ea8a6c3"><div class="ttname"><a href="class_blood_vessel.html#a19c509ef1a65673cb11c92332ea8a6c3">BloodVessel::update_constant</a></div><div class="ttdeci">void update_constant(SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters)</div><div class="ttdoc">Update the constant contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:37</div></div>
+<div class="ttc" id="aclass_blood_vessel_html_a4eef5ad2e6905e259a1ac3d84b69199d"><div class="ttname"><a href="class_blood_vessel.html#a4eef5ad2e6905e259a1ac3d84b69199d">BloodVessel::ParamId</a></div><div class="ttdeci">ParamId</div><div class="ttdoc">Local IDs of the parameters.</div><div class="ttdef"><b>Definition:</b> BloodVessel.h:138</div></div>
+<div class="ttc" id="aclass_blood_vessel_html_a81b768d9fe9f8f71215d74f47964a162"><div class="ttname"><a href="class_blood_vessel.html#a81b768d9fe9f8f71215d74f47964a162">BloodVessel::num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition:</b> BloodVessel.h:203</div></div>
+<div class="ttc" id="aclass_blood_vessel_html_a84d647d883951c254af74cd45bfff2f8"><div class="ttname"><a href="class_blood_vessel.html#a84d647d883951c254af74cd45bfff2f8">BloodVessel::get_num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; get_num_triplets()</div><div class="ttdoc">Get number of triplets of element.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:130</div></div>
+<div class="ttc" id="aclass_blood_vessel_html_aa3ad80f4b627051a00b52e2b1c254a55"><div class="ttname"><a href="class_blood_vessel.html#aa3ad80f4b627051a00b52e2b1c254a55">BloodVessel::update_gradient</a></div><div class="ttdeci">void update_gradient(Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</div><div class="ttdoc">Set the gradient of the block contributions with respect to the parameters.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:80</div></div>
+<div class="ttc" id="aclass_blood_vessel_html_ad6237cd700152e4b9d9ac64f55d2e4fd"><div class="ttname"><a href="class_blood_vessel.html#ad6237cd700152e4b9d9ac64f55d2e4fd">BloodVessel::setup_dofs</a></div><div class="ttdeci">void setup_dofs(DOFHandler &amp;dofhandler)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition:</b> BloodVessel.cpp:33</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html"><div class="ttname"><a href="class_d_o_f_handler.html">DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:48</div></div>
+<div class="ttc" id="aclass_model_html"><div class="ttname"><a href="class_model.html">Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> Model.h:69</div></div>
+<div class="ttc" id="aclass_sparse_system_html"><div class="ttname"><a href="class_sparse_system.html">SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> SparseSystem.h:52</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -116,111 +116,107 @@ $(function() {
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &lt;map&gt;</span></div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &lt;string&gt;</span></div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">namespace </span>zd_model {</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"></span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * @brief Degree-of-freedom handler.</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * This class handles degrees-of-freedom for model variables and</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * equations. It assigns each element with row and column indices which it</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * can use to assemble it&#39;s local contributions into the global system.</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classzd__model_1_1_d_o_f_handler.html">   50</a></span><span class="keyword">class </span><a class="code hl_class" href="classzd__model_1_1_d_o_f_handler.html">DOFHandler</a> {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <span class="keywordtype">int</span> var_counter;  <span class="comment">///&lt; Variable counter</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="keywordtype">int</span> eqn_counter;  <span class="comment">///&lt; Equation counter</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  std::vector&lt;std::string&gt;</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="classzd__model_1_1_d_o_f_handler.html#a5ffed3e55239dedadb0a410d8ddae3c5">   57</a></span>      <a class="code hl_variable" href="classzd__model_1_1_d_o_f_handler.html#a5ffed3e55239dedadb0a410d8ddae3c5">variables</a>;  <span class="comment">///&lt; Variable names corresponding to the variable indices</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  std::map&lt;std::string, int&gt;</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="classzd__model_1_1_d_o_f_handler.html#a4c50be6f5ea3dc8d0ddc8949fe19196c">   59</a></span>      <a class="code hl_variable" href="classzd__model_1_1_d_o_f_handler.html#a4c50be6f5ea3dc8d0ddc8949fe19196c">variable_name_map</a>;  <span class="comment">///&lt; Map between variable name and index</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  std::vector&lt;std::string&gt;</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classzd__model_1_1_d_o_f_handler.html#a9358ed6e07e362ff9c18cb1b5b9976d7">   61</a></span>      <a class="code hl_variable" href="classzd__model_1_1_d_o_f_handler.html#a9358ed6e07e362ff9c18cb1b5b9976d7">equations</a>;  <span class="comment">///&lt; Equation names corresponding to the equation indices</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"></span> </div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">   * @brief Construct a new DOFHandler object</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#ad83765da20cdaf810e25cb432c3a7f06">DOFHandler</a>();</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment"></span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">   * @brief Destroy the DOFHandler object</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#ade14a21480a0b5f91010b0448d58252c">~DOFHandler</a>();</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"></span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">   * @brief Get the size of the system</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment">   * @return Size of the system</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#a8d9c12e702a4ba61549a6f10d62500b4">size</a>();</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"></span> </div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">   * @brief Get the number of equations</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment">   * @return int Number of equations</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#a5253bb376571481e5bd4394b463873ac">get_num_equations</a>();</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"></span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">   * @brief Get the number of variables</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">   * @return int Number of variables</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#aa73414e1f45639234315189e3733c150">get_num_variables</a>();</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"></span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">   * @brief Register a new variable at the DOFHandler.</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">   * @param name Name of the variable</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment">   * @return Global index of the variable</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#a8c12b46d5e5d583811eb73521e0c80cf">register_variable</a>(std::string name);</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"></span> </div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">   * @brief Get the index of a variable by its name</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">   * @param name Name of the variable</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">   * @return int Name of the variable</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#a031fdbea3a4607bd4d36409d6ec82454">get_variable_index</a>(std::string name);</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment"></span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">   * @brief Register a new equation at the DOFHandler</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">   * @param name Name of the equation</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">   * @return Global index of the equation</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#aa9ad29904b4783690d634a9ba9cc7697">register_equation</a>(std::string name);</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"></span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">   * @brief Get the index of a variable</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">   * @param name Name of the variable</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">   * @return Index of variable with given name</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="classzd__model_1_1_d_o_f_handler.html#a8f9a02b4174960a251d0fc2df964ae41">get_index</a>(std::string_view&amp; name);</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>};</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>}  <span class="comment">// namespace zd_model</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_DOFHANDLER_HPP_</span></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html">zd_model::DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:50</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_a031fdbea3a4607bd4d36409d6ec82454"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#a031fdbea3a4607bd4d36409d6ec82454">zd_model::DOFHandler::get_variable_index</a></div><div class="ttdeci">int get_variable_index(std::string name)</div><div class="ttdoc">Get the index of a variable by its name.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:57</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_a4c50be6f5ea3dc8d0ddc8949fe19196c"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#a4c50be6f5ea3dc8d0ddc8949fe19196c">zd_model::DOFHandler::variable_name_map</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; variable_name_map</div><div class="ttdoc">Map between variable name and index.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:59</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_a5253bb376571481e5bd4394b463873ac"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#a5253bb376571481e5bd4394b463873ac">zd_model::DOFHandler::get_num_equations</a></div><div class="ttdeci">int get_num_equations()</div><div class="ttdoc">Get the number of equations.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:47</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_a5ffed3e55239dedadb0a410d8ddae3c5"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#a5ffed3e55239dedadb0a410d8ddae3c5">zd_model::DOFHandler::variables</a></div><div class="ttdeci">std::vector&lt; std::string &gt; variables</div><div class="ttdoc">Variable names corresponding to the variable indices.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:57</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_a8c12b46d5e5d583811eb73521e0c80cf"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#a8c12b46d5e5d583811eb73521e0c80cf">zd_model::DOFHandler::register_variable</a></div><div class="ttdeci">int register_variable(std::string name)</div><div class="ttdoc">Register a new variable at the DOFHandler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:51</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_a8d9c12e702a4ba61549a6f10d62500b4"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#a8d9c12e702a4ba61549a6f10d62500b4">zd_model::DOFHandler::size</a></div><div class="ttdeci">int size()</div><div class="ttdoc">Get the size of the system.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:45</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_a8f9a02b4174960a251d0fc2df964ae41"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#a8f9a02b4174960a251d0fc2df964ae41">zd_model::DOFHandler::get_index</a></div><div class="ttdeci">int get_index(std::string_view &amp;name)</div><div class="ttdoc">Get the index of a variable.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:66</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_a9358ed6e07e362ff9c18cb1b5b9976d7"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#a9358ed6e07e362ff9c18cb1b5b9976d7">zd_model::DOFHandler::equations</a></div><div class="ttdeci">std::vector&lt; std::string &gt; equations</div><div class="ttdoc">Equation names corresponding to the equation indices.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:61</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_aa73414e1f45639234315189e3733c150"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#aa73414e1f45639234315189e3733c150">zd_model::DOFHandler::get_num_variables</a></div><div class="ttdeci">int get_num_variables()</div><div class="ttdoc">Get the number of variables.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:49</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_aa9ad29904b4783690d634a9ba9cc7697"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#aa9ad29904b4783690d634a9ba9cc7697">zd_model::DOFHandler::register_equation</a></div><div class="ttdeci">int register_equation(std::string name)</div><div class="ttdoc">Register a new equation at the DOFHandler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:61</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_ad83765da20cdaf810e25cb432c3a7f06"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#ad83765da20cdaf810e25cb432c3a7f06">zd_model::DOFHandler::DOFHandler</a></div><div class="ttdeci">DOFHandler()</div><div class="ttdoc">Construct a new DOFHandler object.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:38</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html_ade14a21480a0b5f91010b0448d58252c"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html#ade14a21480a0b5f91010b0448d58252c">zd_model::DOFHandler::~DOFHandler</a></div><div class="ttdeci">~DOFHandler()</div><div class="ttdoc">Destroy the DOFHandler object.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:43</div></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment"></span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> * @brief Degree-of-freedom handler.</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * This class handles degrees-of-freedom for model variables and</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * equations. It assigns each element with row and column indices which it</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * can use to assemble it&#39;s local contributions into the global system.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="class_d_o_f_handler.html">   48</a></span><span class="keyword">class </span><a class="code hl_class" href="class_d_o_f_handler.html">DOFHandler</a> {</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>  <span class="keywordtype">int</span> var_counter;  <span class="comment">///&lt; Variable counter</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>  <span class="keywordtype">int</span> eqn_counter;  <span class="comment">///&lt; Equation counter</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  std::vector&lt;std::string&gt;</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="class_d_o_f_handler.html#a228c455dfe97bd9cff7d18f894c6972d">   55</a></span>      <a class="code hl_variable" href="class_d_o_f_handler.html#a228c455dfe97bd9cff7d18f894c6972d">variables</a>;  <span class="comment">///&lt; Variable names corresponding to the variable indices</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  std::map&lt;std::string, int&gt;</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_d_o_f_handler.html#ad7465274e716de328b3f45f02296b75e">   57</a></span>      <a class="code hl_variable" href="class_d_o_f_handler.html#ad7465274e716de328b3f45f02296b75e">variable_name_map</a>;  <span class="comment">///&lt; Map between variable name and index</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  std::vector&lt;std::string&gt;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="class_d_o_f_handler.html#a6b1bf2155c070700a3701f49583fb5c0">   59</a></span>      <a class="code hl_variable" href="class_d_o_f_handler.html#a6b1bf2155c070700a3701f49583fb5c0">equations</a>;  <span class="comment">///&lt; Equation names corresponding to the equation indices</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"></span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">   * @brief Construct a new DOFHandler object</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <a class="code hl_function" href="class_d_o_f_handler.html#add890fc143cbe289e692d67c102e0d0c">DOFHandler</a>();</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"></span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">   * @brief Destroy the DOFHandler object</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <a class="code hl_function" href="class_d_o_f_handler.html#a4dcb698385a03fff3d2c02d615ee73e9">~DOFHandler</a>();</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"></span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">   * @brief Get the size of the system</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">   * @return Size of the system</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_d_o_f_handler.html#aad150438cea2151430f7f1cab1a569e7">size</a>();</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"></span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment">   * @brief Get the number of equations</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">   * @return int Number of equations</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_d_o_f_handler.html#acd3c01c48992149224ce67b6d36fd3f7">get_num_equations</a>();</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"></span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">   * @brief Get the number of variables</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">   * @return int Number of variables</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_d_o_f_handler.html#a5b72a663aa754a94cf42e0f2e285040e">get_num_variables</a>();</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"></span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment">   * @brief Register a new variable at the DOFHandler.</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">   * @param name Name of the variable</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">   * @return Global index of the variable</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_d_o_f_handler.html#ab26dd8b9d6ad1de027998d53642c3a04">register_variable</a>(std::string name);</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"></span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">   * @brief Get the index of a variable by its name</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">   * @param name Name of the variable</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">   * @return int Name of the variable</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_d_o_f_handler.html#ae0a8005c34b304ad02f4e7e3981b4612">get_variable_index</a>(std::string name);</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment"></span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">   * @brief Register a new equation at the DOFHandler</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">   * @param name Name of the equation</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">   * @return Global index of the equation</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_d_o_f_handler.html#aea669c54585869276a8c0a00ce015ff9">register_equation</a>(std::string name);</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment"></span> </div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">   * @brief Get the index of a variable</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">   * @param name Name of the variable</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">   * @return Index of variable with given name</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_d_o_f_handler.html#aef23162fb55d2c4ef70476ba2c31945a">get_index</a>(std::string_view&amp; name);</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>};</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_DOFHANDLER_HPP_</span></div>
+<div class="ttc" id="aclass_d_o_f_handler_html"><div class="ttname"><a href="class_d_o_f_handler.html">DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:48</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_a228c455dfe97bd9cff7d18f894c6972d"><div class="ttname"><a href="class_d_o_f_handler.html#a228c455dfe97bd9cff7d18f894c6972d">DOFHandler::variables</a></div><div class="ttdeci">std::vector&lt; std::string &gt; variables</div><div class="ttdoc">Variable names corresponding to the variable indices.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:55</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_a4dcb698385a03fff3d2c02d615ee73e9"><div class="ttname"><a href="class_d_o_f_handler.html#a4dcb698385a03fff3d2c02d615ee73e9">DOFHandler::~DOFHandler</a></div><div class="ttdeci">~DOFHandler()</div><div class="ttdoc">Destroy the DOFHandler object.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:41</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_a5b72a663aa754a94cf42e0f2e285040e"><div class="ttname"><a href="class_d_o_f_handler.html#a5b72a663aa754a94cf42e0f2e285040e">DOFHandler::get_num_variables</a></div><div class="ttdeci">int get_num_variables()</div><div class="ttdoc">Get the number of variables.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:47</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_a6b1bf2155c070700a3701f49583fb5c0"><div class="ttname"><a href="class_d_o_f_handler.html#a6b1bf2155c070700a3701f49583fb5c0">DOFHandler::equations</a></div><div class="ttdeci">std::vector&lt; std::string &gt; equations</div><div class="ttdoc">Equation names corresponding to the equation indices.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:59</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_aad150438cea2151430f7f1cab1a569e7"><div class="ttname"><a href="class_d_o_f_handler.html#aad150438cea2151430f7f1cab1a569e7">DOFHandler::size</a></div><div class="ttdeci">int size()</div><div class="ttdoc">Get the size of the system.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:43</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_ab26dd8b9d6ad1de027998d53642c3a04"><div class="ttname"><a href="class_d_o_f_handler.html#ab26dd8b9d6ad1de027998d53642c3a04">DOFHandler::register_variable</a></div><div class="ttdeci">int register_variable(std::string name)</div><div class="ttdoc">Register a new variable at the DOFHandler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:49</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_acd3c01c48992149224ce67b6d36fd3f7"><div class="ttname"><a href="class_d_o_f_handler.html#acd3c01c48992149224ce67b6d36fd3f7">DOFHandler::get_num_equations</a></div><div class="ttdeci">int get_num_equations()</div><div class="ttdoc">Get the number of equations.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:45</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_ad7465274e716de328b3f45f02296b75e"><div class="ttname"><a href="class_d_o_f_handler.html#ad7465274e716de328b3f45f02296b75e">DOFHandler::variable_name_map</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; variable_name_map</div><div class="ttdoc">Map between variable name and index.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:57</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_add890fc143cbe289e692d67c102e0d0c"><div class="ttname"><a href="class_d_o_f_handler.html#add890fc143cbe289e692d67c102e0d0c">DOFHandler::DOFHandler</a></div><div class="ttdeci">DOFHandler()</div><div class="ttdoc">Construct a new DOFHandler object.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:36</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_ae0a8005c34b304ad02f4e7e3981b4612"><div class="ttname"><a href="class_d_o_f_handler.html#ae0a8005c34b304ad02f4e7e3981b4612">DOFHandler::get_variable_index</a></div><div class="ttdeci">int get_variable_index(std::string name)</div><div class="ttdoc">Get the index of a variable by its name.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:55</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_aea669c54585869276a8c0a00ce015ff9"><div class="ttname"><a href="class_d_o_f_handler.html#aea669c54585869276a8c0a00ce015ff9">DOFHandler::register_equation</a></div><div class="ttdeci">int register_equation(std::string name)</div><div class="ttdoc">Register a new equation at the DOFHandler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:59</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html_aef23162fb55d2c4ef70476ba2c31945a"><div class="ttname"><a href="class_d_o_f_handler.html#aef23162fb55d2c4ef70476ba2c31945a">DOFHandler::get_index</a></div><div class="ttdeci">int get_index(std::string_view &amp;name)</div><div class="ttdoc">Get the index of a variable.</div><div class="ttdef"><b>Definition:</b> DOFHandler.cpp:64</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

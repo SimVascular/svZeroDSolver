@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['jacobian_0',['jacobian',['../classalgebra_1_1_sparse_system.html#af4b6534ae89cceb46131958a8c573f67',1,'algebra::SparseSystem']]]
+  ['jacobian_0',['jacobian',['../class_sparse_system.html#ae68dcf82fa22bc7479dba6cbc9b87f2d',1,'SparseSystem']]]
 ];

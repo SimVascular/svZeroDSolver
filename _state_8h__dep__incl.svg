@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title="algebra::State source file">
+<g id="a_node1"><a xlink:title="State source file.">
 <polygon fill="#999999" stroke="#666666" points="218.39,-129 136.39,-129 136.39,-110 218.39,-110 218.39,-129"/>
 <text text-anchor="middle" x="177.39" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">algebra/State.h</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="_integrator_8h.html" target="_top" xlink:title="algebra::Integrator source file">
+<g id="a_node2"><a xlink:href="_integrator_8h.html" target="_top" xlink:title="Integrator source file.">
 <polygon fill="white" stroke="#666666" points="227.39,-74 127.39,-74 127.39,-55 227.39,-55 227.39,-74"/>
 <text text-anchor="middle" x="177.39" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">algebra/Integrator.h</text>
 </a>
@@ -50,7 +50,7 @@
 <!-- Node4 -->
 <g id="node4" class="node">
 <title>Node4</title>
-<g id="a_node4"><a xlink:href="_solver_8h.html" target="_top" xlink:title="solve::Solver source file">
+<g id="a_node4"><a xlink:href="_solver_8h.html" target="_top" xlink:title="Solver source file.">
 <polygon fill="white" stroke="#666666" points="294.39,-19 216.39,-19 216.39,0 294.39,0 294.39,-19"/>
 <text text-anchor="middle" x="255.39" y="-7" font-family="Helvetica,sans-Serif" font-size="10.00">solve/Solver.h</text>
 </a>
@@ -80,7 +80,7 @@
 <!-- Node6 -->
 <g id="node6" class="node">
 <title>Node6</title>
-<g id="a_node6"><a xlink:href="csv__writer_8h.html" target="_top" xlink:title="io::csv_writer source file">
+<g id="a_node6"><a xlink:href="csv__writer_8h.html" target="_top" xlink:title="csv_writer source file">
 <polygon fill="white" stroke="#666666" points="108.89,-74 13.89,-74 13.89,-55 108.89,-55 108.89,-74"/>
 <text text-anchor="middle" x="61.39" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">solve/csv_writer.h</text>
 </a>

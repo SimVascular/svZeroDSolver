@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['global_5feqn_5fids_0',['global_eqn_ids',['../classzd__model_1_1_block.html#ae3ba4d390385a6d6e478283ac1097542',1,'zd_model::Block']]],
-  ['global_5fparam_5fids_1',['global_param_ids',['../classzd__model_1_1_block.html#a3abed508ae98d25792f85717452ad3f1',1,'zd_model::Block']]],
-  ['global_5fvar_5fids_2',['global_var_ids',['../classzd__model_1_1_block.html#a0d9959675cf66139adbea1a3d13b0e59',1,'zd_model::Block']]]
+  ['global_5feqn_5fids_0',['global_eqn_ids',['../class_block.html#a78612e0c44f457e850a270c1121ac746',1,'Block']]],
+  ['global_5fparam_5fids_1',['global_param_ids',['../class_block.html#a1340395052b260178d7dcca13bc9fc62',1,'Block']]],
+  ['global_5fvar_5fids_2',['global_var_ids',['../class_block.html#a383e2d0cd1873c826d185ddc7833b08e',1,'Block']]]
 ];

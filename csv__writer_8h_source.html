@@ -108,7 +108,7 @@ $(function() {
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span><span class="comment"></span></div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">/**</span></div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * @file csv_writer.h</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief io::csv_writer source file</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief csv_writer source file</span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#ifndef SVZERODSOLVER_IO_CSVWRITER_HPP_</span></div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#define SVZERODSOLVER_IO_CSVWRITER_HPP_</span></div>
@@ -120,24 +120,20 @@ $(function() {
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#include &quot;<a class="code" href="_model_8h.html">Model.h</a>&quot;</span></div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#include &quot;<a class="code" href="_state_8h.html">State.h</a>&quot;</span></div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="keyword">namespace </span>io {</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>std::string to_variable_csv(std::vector&lt;double&gt; &amp;times,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>                            std::vector&lt;algebra::State&gt; &amp;states,</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>                            <a class="code hl_class" href="classzd__model_1_1_model.html">zd_model::Model</a> &amp;model, <span class="keywordtype">bool</span> mean = <span class="keyword">false</span>,</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                            <span class="keywordtype">bool</span> derivative = <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>std::string to_vessel_csv(std::vector&lt;double&gt; &amp;times,</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>                          std::vector&lt;algebra::State&gt; &amp;states,</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                          <a class="code hl_class" href="classzd__model_1_1_model.html">zd_model::Model</a> &amp;model, <span class="keywordtype">bool</span> mean = <span class="keyword">false</span>,</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>                          <span class="keywordtype">bool</span> derivative = <span class="keyword">false</span>);</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}  <span class="comment">// namespace io</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_IO_CSVWRITER_HPP_</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>std::string <a class="code hl_function" href="csv__writer_8h.html#ade40d4580a781fefa58c53d2c8389f93">to_variable_csv</a>(std::vector&lt;double&gt; &amp;times,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>                            std::vector&lt;State&gt; &amp;states, <a class="code hl_class" href="class_model.html">Model</a> &amp;model,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>                            <span class="keywordtype">bool</span> mean = <span class="keyword">false</span>, <span class="keywordtype">bool</span> derivative = <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>std::string <a class="code hl_function" href="csv__writer_8h.html#a1c87410c8ce2cb029fa53c41d4e0a8af">to_vessel_csv</a>(std::vector&lt;double&gt; &amp;times,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>                          std::vector&lt;State&gt; &amp;states, <a class="code hl_class" href="class_model.html">Model</a> &amp;model,</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>                          <span class="keywordtype">bool</span> mean = <span class="keyword">false</span>, <span class="keywordtype">bool</span> derivative = <span class="keyword">false</span>);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_IO_CSVWRITER_HPP_</span></div>
 <div class="ttc" id="a_model_8h_html"><div class="ttname"><a href="_model_8h.html">Model.h</a></div><div class="ttdoc">model::Model source file</div></div>
-<div class="ttc" id="a_state_8h_html"><div class="ttname"><a href="_state_8h.html">State.h</a></div><div class="ttdoc">algebra::State source file</div></div>
-<div class="ttc" id="aclasszd__model_1_1_model_html"><div class="ttname"><a href="classzd__model_1_1_model.html">zd_model::Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> Model.h:71</div></div>
+<div class="ttc" id="a_state_8h_html"><div class="ttname"><a href="_state_8h.html">State.h</a></div><div class="ttdoc">State source file.</div></div>
+<div class="ttc" id="aclass_model_html"><div class="ttname"><a href="class_model.html">Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> Model.h:69</div></div>
+<div class="ttc" id="acsv__writer_8h_html_a1c87410c8ce2cb029fa53c41d4e0a8af"><div class="ttname"><a href="csv__writer_8h.html#a1c87410c8ce2cb029fa53c41d4e0a8af">to_vessel_csv</a></div><div class="ttdeci">std::string to_vessel_csv(std::vector&lt; double &gt; &amp;times, std::vector&lt; State &gt; &amp;states, Model &amp;model, bool mean=false, bool derivative=false)</div><div class="ttdoc">Write results vessel based.</div><div class="ttdef"><b>Definition:</b> csv_writer.cpp:43</div></div>
+<div class="ttc" id="acsv__writer_8h_html_ade40d4580a781fefa58c53d2c8389f93"><div class="ttname"><a href="csv__writer_8h.html#ade40d4580a781fefa58c53d2c8389f93">to_variable_csv</a></div><div class="ttdeci">std::string to_variable_csv(std::vector&lt; double &gt; &amp;times, std::vector&lt; State &gt; &amp;states, Model &amp;model, bool mean=false, bool derivative=false)</div><div class="ttdoc">Write results variable based.</div><div class="ttdef"><b>Definition:</b> csv_writer.cpp:174</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

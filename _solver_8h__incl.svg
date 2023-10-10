@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title="solve::Solver source file">
+<g id="a_node1"><a xlink:title="Solver source file.">
 <polygon fill="#999999" stroke="#666666" points="1192,-404 1114,-404 1114,-385 1192,-385 1192,-404"/>
 <text text-anchor="middle" x="1153" y="-392" font-family="Helvetica,sans-Serif" font-size="10.00">solve/Solver.h</text>
 </a>
@@ -20,7 +20,7 @@
 <!-- Node2 -->
 <g id="node2" class="node">
 <title>Node2</title>
-<g id="a_node2"><a xlink:href="_integrator_8h.html" target="_top" xlink:title="algebra::Integrator source file">
+<g id="a_node2"><a xlink:href="_integrator_8h.html" target="_top" xlink:title="Integrator source file.">
 <polygon fill="white" stroke="#666666" points="1185.5,-349 1120.5,-349 1120.5,-330 1185.5,-330 1185.5,-349"/>
 <text text-anchor="middle" x="1153" y="-337" font-family="Helvetica,sans-Serif" font-size="10.00">Integrator.h</text>
 </a>
@@ -50,7 +50,7 @@
 <!-- Node35 -->
 <g id="node35" class="node">
 <title>Node35</title>
-<g id="a_node35"><a xlink:href="_state_8h.html" target="_top" xlink:title="algebra::State source file">
+<g id="a_node35"><a xlink:href="_state_8h.html" target="_top" xlink:title="State source file.">
 <polygon fill="white" stroke="#666666" points="1237.5,-294 1190.5,-294 1190.5,-275 1237.5,-275 1237.5,-294"/>
 <text text-anchor="middle" x="1214" y="-282" font-family="Helvetica,sans-Serif" font-size="10.00">State.h</text>
 </a>
@@ -491,7 +491,7 @@
 <!-- Node14 -->
 <g id="node14" class="node">
 <title>Node14</title>
-<g id="a_node14"><a xlink:href="_sparse_system_8h.html" target="_top" xlink:title="algebra::SparseSystem source file">
+<g id="a_node14"><a xlink:href="_sparse_system_8h.html" target="_top" xlink:title="SparseSystem source file.">
 <polygon fill="white" stroke="#666666" points="705,-74 617,-74 617,-55 705,-55 705,-74"/>
 <text text-anchor="middle" x="661" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">SparseSystem.h</text>
 </a>

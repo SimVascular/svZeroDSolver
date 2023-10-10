@@ -115,136 +115,132 @@ $(function() {
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &quot;<a class="code" href="_block_8h.html">Block.h</a>&quot;</span></div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &quot;<a class="code" href="_sparse_system_8h.html">SparseSystem.h</a>&quot;</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">namespace </span>zd_model {<span class="comment"></span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> * @brief ResistiveJunction</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * Models a junction with arbitrary resistive inlets and outlets. Across all</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * inlets and outlets of the junction, mass is conserved.</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * \begin{circuitikz}</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * \draw [-latex] (0.25,1.4) node[left] {$Q_{in,1}$} -- (0.85,1.1);</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * \draw [-latex] (0.25,-1.4) node[left] {$Q_{in,1}$} -- (0.85,-1.1);</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> * \draw (1,1.0) node[anchor=south]{$P_{in,1}$} to [R, , l=$R_{in,1}$, *-*]</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> * (3.0,0) node[anchor=north] {$P_{C}$}; \draw (1,-1.0)</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * node[anchor=north]{$P_{in, 2}$} to [R, , l=$R_{in,2}$, *-*] (3.0,0); \draw</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * (3,0) node[anchor=south]{} to [R, l=$R_{out,1}$, -*] (5,1.0); \draw (4.3,1.1)</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * node[anchor=south] {$P_{out,1}$}; \draw (3,0) node[anchor=south]{} to [R,</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * l=$R_{out,2}$, -*] (5,-1.0); \draw (4.3,-1.1) node[anchor=north]</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * {$P_{out,2}$}; \draw [-latex] (5.15,1.1) -- (5.75,1.4) node[right]</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * {$Q_{out,1}$}; \draw [-latex] (5.15,-1.1) -- (5.75,-1.4) node[right]</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * {$Q_{out,2}$}; \end{circuitikz} \f]</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * ### Governing equations</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> * \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> * \f]</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment"> * P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment"> * \f]</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}</span></div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> * \f]</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> * ### Local contributions</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment"> * \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e}</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment"> * &amp; \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"> * \dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e} &amp; P_{C}\end{array}\right] \f]</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> * Mass conservation</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> * &amp; -1 &amp; 0 &amp; -1 &amp; \dots &amp; 0\end{array}\right] \f]</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> * \underbrace{1}_{P_{in,i}} &amp; \underbrace{-R_{in,i}}_{Q_{in,i}} &amp; \dots &amp;</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * \underbrace{-1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> * i\in n_{inlets}  \f]</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * \underbrace{-1}_{P_{out,j}} &amp; \underbrace{-R_{out,j}}_{Q_{out,j}} &amp; \dots &amp;</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> * j\in n_{oulets}  \f]</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> * ### Parameters</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> * Parameter sequence for constructing this block</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> * * `i` Poiseuille resistance for inner blood vessel `i`</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="classzd__model_1_1_resistive_junction.html">  104</a></span><span class="keyword">class </span><a class="code hl_class" href="classzd__model_1_1_resistive_junction.html">ResistiveJunction</a> : <span class="keyword">public</span> <a class="code hl_class" href="classzd__model_1_1_block.html">Block</a> {</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  <span class="comment">// Inherit constructors</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  <span class="keyword">using </span><a class="code hl_function" href="classzd__model_1_1_block.html#ae2ef126fb605801cca48760c2c4ac3ac">Block::Block</a>;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment"></span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">   * @brief Set up the degrees of freedom (DOF) of the block</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">   * number of equations and the number of internal variables of the</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">   * element.</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">   * equations at</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classzd__model_1_1_resistive_junction.html#a1e6287e6bc6ac80a89c4c122e096ca64">setup_dofs</a>(<a class="code hl_class" href="classzd__model_1_1_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler);</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment"></span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">   * @brief Update the constant contributions of the element in a sparse system</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">   * @param system System to update contributions at</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">   * @param parameters Parameters of the model</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classzd__model_1_1_resistive_junction.html#a8cfd061bef99a245832a6173458288de">update_constant</a>(<a class="code hl_class" href="classalgebra_1_1_sparse_system.html">algebra::SparseSystem</a> &amp;system,</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>                       std::vector&lt;double&gt; &amp;parameters);</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment"></span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment">   * @brief Number of triplets of element</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno"><a class="line" href="classzd__model_1_1_resistive_junction.html#a2c14d736d255fcff7fecbf1b57d7662f">  136</a></span>  std::map&lt;std::string, int&gt; <a class="code hl_variable" href="classzd__model_1_1_resistive_junction.html#a2c14d736d255fcff7fecbf1b57d7662f">num_triplets</a> = {</div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>      {<span class="stringliteral">&quot;F&quot;</span>, 0},</div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>      {<span class="stringliteral">&quot;E&quot;</span>, 0},</div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
-<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>  };</div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment"></span> </div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">   * @brief Get number of triplets of element</span></div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>  std::map&lt;std::string, int&gt; <a class="code hl_function" href="classzd__model_1_1_resistive_junction.html#ad339713f36156781752c17b884e66b81">get_num_triplets</a>();</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>  <span class="keywordtype">int</span> num_inlets;</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>  <span class="keywordtype">int</span> num_outlets;</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>};</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>}  <span class="comment">// namespace zd_model</span></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span> </div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment"></span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"> * @brief ResistiveJunction</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> * Models a junction with arbitrary resistive inlets and outlets. Across all</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> * inlets and outlets of the junction, mass is conserved.</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * \begin{circuitikz}</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * \draw [-latex] (0.25,1.4) node[left] {$Q_{in,1}$} -- (0.85,1.1);</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * \draw [-latex] (0.25,-1.4) node[left] {$Q_{in,1}$} -- (0.85,-1.1);</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * \draw (1,1.0) node[anchor=south]{$P_{in,1}$} to [R, , l=$R_{in,1}$, *-*]</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> * (3.0,0) node[anchor=north] {$P_{C}$}; \draw (1,-1.0)</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> * node[anchor=north]{$P_{in, 2}$} to [R, , l=$R_{in,2}$, *-*] (3.0,0); \draw</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * (3,0) node[anchor=south]{} to [R, l=$R_{out,1}$, -*] (5,1.0); \draw (4.3,1.1)</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * node[anchor=south] {$P_{out,1}$}; \draw (3,0) node[anchor=south]{} to [R,</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * l=$R_{out,2}$, -*] (5,-1.0); \draw (4.3,-1.1) node[anchor=north]</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * {$P_{out,2}$}; \draw [-latex] (5.15,1.1) -- (5.75,1.4) node[right]</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * {$Q_{out,1}$}; \draw [-latex] (5.15,-1.1) -- (5.75,-1.4) node[right]</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * {$Q_{out,2}$}; \end{circuitikz} \f]</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> * ### Governing equations</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"> * P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment"> * P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"> * \f]</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment"> * ### Local contributions</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment"> * \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e}</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment"> * &amp; \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment"> * \dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e} &amp; P_{C}\end{array}\right] \f]</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment"> * Mass conservation</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"> * \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0</span></div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment"> * &amp; -1 &amp; 0 &amp; -1 &amp; \dots &amp; 0\end{array}\right] \f]</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment"> * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment"> * \underbrace{1}_{P_{in,i}} &amp; \underbrace{-R_{in,i}}_{Q_{in,i}} &amp; \dots &amp;</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment"> * \underbrace{-1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"> * i\in n_{inlets}  \f]</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"> * \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment"> * \underbrace{-1}_{P_{out,j}} &amp; \underbrace{-R_{out,j}}_{Q_{out,j}} &amp; \dots &amp;</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment"> * \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"> * j\in n_{oulets}  \f]</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"> * ### Parameters</span></div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"> * Parameter sequence for constructing this block</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment"> * * `i` Poiseuille resistance for inner blood vessel `i`</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="class_resistive_junction.html">  103</a></span><span class="keyword">class </span><a class="code hl_class" href="class_resistive_junction.html">ResistiveJunction</a> : <span class="keyword">public</span> <a class="code hl_class" href="class_block.html">Block</a> {</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <span class="comment">// Inherit constructors</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  <span class="keyword">using </span><a class="code hl_function" href="class_block.html#a443cdfaf01e71a8e12b072b525355412">Block::Block</a>;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment"></span> </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">   * @brief Set up the degrees of freedom (DOF) of the block</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   * number of equations and the number of internal variables of the</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">   * element.</span></div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">   * equations at</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_resistive_junction.html#a0f566683ef2a747f3157f6f07d4c49ec">setup_dofs</a>(<a class="code hl_class" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler);</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment"></span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">   * @brief Update the constant contributions of the element in a sparse system</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">   * @param system System to update contributions at</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">   * @param parameters Parameters of the model</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_resistive_junction.html#aca5165c8316adc06219b3d92b32138ba">update_constant</a>(<a class="code hl_class" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt;double&gt; &amp;parameters);</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment"></span> </div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">   * @brief Number of triplets of element</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno"><a class="line" href="class_resistive_junction.html#a21a268b0f2f3ab54b0c62d13c0cced7c">  134</a></span>  std::map&lt;std::string, int&gt; <a class="code hl_variable" href="class_resistive_junction.html#a21a268b0f2f3ab54b0c62d13c0cced7c">num_triplets</a> = {</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>      {<span class="stringliteral">&quot;F&quot;</span>, 0},</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>      {<span class="stringliteral">&quot;E&quot;</span>, 0},</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>  };</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span><span class="comment"></span> </div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span><span class="comment">   * @brief Get number of triplets of element</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>  std::map&lt;std::string, int&gt; <a class="code hl_function" href="class_resistive_junction.html#a7dc17fae92d0a8bb2b33c141c5f198ee">get_num_triplets</a>();</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>  <span class="keywordtype">int</span> num_inlets;</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>  <span class="keywordtype">int</span> num_outlets;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>};</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span> </div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_RESISTIVEJUNCTION_HPP_</span></div>
 <div class="ttc" id="a_block_8h_html"><div class="ttname"><a href="_block_8h.html">Block.h</a></div><div class="ttdoc">model::Block source file</div></div>
-<div class="ttc" id="a_sparse_system_8h_html"><div class="ttname"><a href="_sparse_system_8h.html">SparseSystem.h</a></div><div class="ttdoc">algebra::SparseSystem source file</div></div>
-<div class="ttc" id="aclassalgebra_1_1_sparse_system_html"><div class="ttname"><a href="classalgebra_1_1_sparse_system.html">algebra::SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> SparseSystem.h:55</div></div>
-<div class="ttc" id="aclasszd__model_1_1_block_html"><div class="ttname"><a href="classzd__model_1_1_block.html">zd_model::Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition:</b> Block.h:58</div></div>
-<div class="ttc" id="aclasszd__model_1_1_block_html_ae2ef126fb605801cca48760c2c4ac3ac"><div class="ttname"><a href="classzd__model_1_1_block.html#ae2ef126fb605801cca48760c2c4ac3ac">zd_model::Block::Block</a></div><div class="ttdeci">Block(int id, const std::vector&lt; int &gt; &amp;param_ids, Model *model)</div><div class="ttdoc">Construct a new Block object.</div><div class="ttdef"><b>Definition:</b> Block.cpp:37</div></div>
-<div class="ttc" id="aclasszd__model_1_1_d_o_f_handler_html"><div class="ttname"><a href="classzd__model_1_1_d_o_f_handler.html">zd_model::DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:50</div></div>
-<div class="ttc" id="aclasszd__model_1_1_resistive_junction_html"><div class="ttname"><a href="classzd__model_1_1_resistive_junction.html">zd_model::ResistiveJunction</a></div><div class="ttdoc">ResistiveJunction.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.h:104</div></div>
-<div class="ttc" id="aclasszd__model_1_1_resistive_junction_html_a1e6287e6bc6ac80a89c4c122e096ca64"><div class="ttname"><a href="classzd__model_1_1_resistive_junction.html#a1e6287e6bc6ac80a89c4c122e096ca64">zd_model::ResistiveJunction::setup_dofs</a></div><div class="ttdeci">void setup_dofs(DOFHandler &amp;dofhandler)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.cpp:35</div></div>
-<div class="ttc" id="aclasszd__model_1_1_resistive_junction_html_a2c14d736d255fcff7fecbf1b57d7662f"><div class="ttname"><a href="classzd__model_1_1_resistive_junction.html#a2c14d736d255fcff7fecbf1b57d7662f">zd_model::ResistiveJunction::num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.h:136</div></div>
-<div class="ttc" id="aclasszd__model_1_1_resistive_junction_html_a8cfd061bef99a245832a6173458288de"><div class="ttname"><a href="classzd__model_1_1_resistive_junction.html#a8cfd061bef99a245832a6173458288de">zd_model::ResistiveJunction::update_constant</a></div><div class="ttdeci">void update_constant(algebra::SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters)</div><div class="ttdoc">Update the constant contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.cpp:44</div></div>
-<div class="ttc" id="aclasszd__model_1_1_resistive_junction_html_ad339713f36156781752c17b884e66b81"><div class="ttname"><a href="classzd__model_1_1_resistive_junction.html#ad339713f36156781752c17b884e66b81">zd_model::ResistiveJunction::get_num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; get_num_triplets()</div><div class="ttdoc">Get number of triplets of element.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.cpp:79</div></div>
+<div class="ttc" id="a_sparse_system_8h_html"><div class="ttname"><a href="_sparse_system_8h.html">SparseSystem.h</a></div><div class="ttdoc">SparseSystem source file.</div></div>
+<div class="ttc" id="aclass_block_html"><div class="ttname"><a href="class_block.html">Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition:</b> Block.h:56</div></div>
+<div class="ttc" id="aclass_block_html_a443cdfaf01e71a8e12b072b525355412"><div class="ttname"><a href="class_block.html#a443cdfaf01e71a8e12b072b525355412">Block::Block</a></div><div class="ttdeci">Block(int id, const std::vector&lt; int &gt; &amp;param_ids, Model *model)</div><div class="ttdoc">Construct a new Block object.</div><div class="ttdef"><b>Definition:</b> Block.cpp:35</div></div>
+<div class="ttc" id="aclass_d_o_f_handler_html"><div class="ttname"><a href="class_d_o_f_handler.html">DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition:</b> DOFHandler.h:48</div></div>
+<div class="ttc" id="aclass_resistive_junction_html"><div class="ttname"><a href="class_resistive_junction.html">ResistiveJunction</a></div><div class="ttdoc">ResistiveJunction.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.h:103</div></div>
+<div class="ttc" id="aclass_resistive_junction_html_a0f566683ef2a747f3157f6f07d4c49ec"><div class="ttname"><a href="class_resistive_junction.html#a0f566683ef2a747f3157f6f07d4c49ec">ResistiveJunction::setup_dofs</a></div><div class="ttdeci">void setup_dofs(DOFHandler &amp;dofhandler)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.cpp:33</div></div>
+<div class="ttc" id="aclass_resistive_junction_html_a21a268b0f2f3ab54b0c62d13c0cced7c"><div class="ttname"><a href="class_resistive_junction.html#a21a268b0f2f3ab54b0c62d13c0cced7c">ResistiveJunction::num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.h:134</div></div>
+<div class="ttc" id="aclass_resistive_junction_html_a7dc17fae92d0a8bb2b33c141c5f198ee"><div class="ttname"><a href="class_resistive_junction.html#a7dc17fae92d0a8bb2b33c141c5f198ee">ResistiveJunction::get_num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; get_num_triplets()</div><div class="ttdoc">Get number of triplets of element.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.cpp:77</div></div>
+<div class="ttc" id="aclass_resistive_junction_html_aca5165c8316adc06219b3d92b32138ba"><div class="ttname"><a href="class_resistive_junction.html#aca5165c8316adc06219b3d92b32138ba">ResistiveJunction::update_constant</a></div><div class="ttdeci">void update_constant(SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters)</div><div class="ttdoc">Update the constant contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition:</b> ResistiveJunction.cpp:42</div></div>
+<div class="ttc" id="aclass_sparse_system_html"><div class="ttname"><a href="class_sparse_system.html">SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> SparseSystem.h:52</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

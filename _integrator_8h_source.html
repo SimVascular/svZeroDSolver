@@ -108,7 +108,7 @@ $(function() {
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span><span class="comment"></span></div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">/**</span></div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * @file Integrator.h</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief algebra::Integrator source file</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief Integrator source file</span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> */</span></div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#ifndef SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_</span></div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_</span></div>
@@ -117,114 +117,110 @@ $(function() {
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &quot;<a class="code" href="_model_8h.html">Model.h</a>&quot;</span></div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#include &quot;<a class="code" href="_state_8h.html">State.h</a>&quot;</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">namespace </span>algebra {</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"></span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * @brief Generalized-alpha integrator</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * This class handles the time integration scheme for solving 0D blood</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * flow system.</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * Flow rate, pressure, and other hemodynamic quantities in 0D models of</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> * vascular anatomies are governed by a system of nonlinear</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> * differential-algebraic equations (DAEs):</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * \f[</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> * \mathbf{E}(\mathbf{y}, t) \cdot \dot{\mathbf{y}}+\mathbf{F}(\mathbf{y}, t)</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * \cdot \mathbf{y}+\mathbf{c}(\mathbf{y}, t)=\mathbf{0} \f]</span></div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * Here, \f$y\f$ is the vector of solution quantities and \f$\dot{y}\f$ is the</span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * time derivative of \f$y\f$. \f$N\f$ is the total number of equations and the</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> * total number of global unknowns. The DAE system is solved implicitly using</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * the generalized-\f$\alpha\f$ method \cite JANSEN2000305.</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span><span class="comment"> * `algebra::SparseSystem`)</span></div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="classalgebra_1_1_integrator.html">   65</a></span><span class="keyword">class </span><a class="code hl_class" href="classalgebra_1_1_integrator.html">Integrator</a> {</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keywordtype">double</span> alpha_m;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keywordtype">double</span> alpha_f;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="keywordtype">double</span> alpha_m_inv;</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <span class="keywordtype">double</span> alpha_f_inv;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keywordtype">double</span> gamma;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keywordtype">double</span> gamma_inv;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <span class="keywordtype">double</span> time_step_size;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keywordtype">double</span> time_step_size_inv;</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  <span class="keywordtype">double</span> y_dot_coeff;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <span class="keywordtype">double</span> atol;</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  <span class="keywordtype">double</span> y_init_coeff;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="keywordtype">double</span> ydot_init_coeff;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  <span class="keywordtype">int</span> max_iter;</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <span class="keywordtype">int</span> size;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; y_af;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; ydot_am;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <a class="code hl_class" href="classalgebra_1_1_sparse_system.html">SparseSystem</a> system;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <a class="code hl_class" href="classzd__model_1_1_model.html">zd_model::Model</a>* model;</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> <span class="keyword">public</span>:<span class="comment"></span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">   * @brief Construct a new Integrator object</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">   * @param model The model to simulate</span></div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">   * @param time_step_size Time step size for generalized-alpha step</span></div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">   * @param rho Spectral radius for generalized-alpha step</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   * @param atol Absolut tolerance for non-linear iteration termination</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">   * @param max_iter Maximum number of non-linear iterations</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  <a class="code hl_function" href="classalgebra_1_1_integrator.html#a3b369b65d5be5ca6cddf6936f396434e">Integrator</a>(<a class="code hl_class" href="classzd__model_1_1_model.html">zd_model::Model</a>* model, <span class="keywordtype">double</span> time_step_size, <span class="keywordtype">double</span> rho,</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>             <span class="keywordtype">double</span> atol, <span class="keywordtype">int</span> max_iter);</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment"></span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment">   * @brief Construct a new Integrator object</span></div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  <a class="code hl_function" href="classalgebra_1_1_integrator.html#a3b369b65d5be5ca6cddf6936f396434e">Integrator</a>();</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment"></span> </div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">   * @brief Destroy the Integrator object</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  <a class="code hl_function" href="classalgebra_1_1_integrator.html#ad58072755ebca2e701fe34973951e152">~Integrator</a>();</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"></span> </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   * @brief Delete dynamically allocated memory (in class member</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">   * SparseSystem&lt;double&gt; system).</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classalgebra_1_1_integrator.html#a2f97e1218602e3a7fed5de7dd0326a7a">clean</a>();</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment"></span> </div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">   * @brief Update integrator parameter and system matrices with model parameter</span></div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">   * updates.</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">   * @param time_step_size Time step size for 0D model</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classalgebra_1_1_integrator.html#ae313a5d6612bcbb749bf7f0d6d8e325b">update_params</a>(<span class="keywordtype">double</span> time_step_size);</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment"></span> </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">   * @brief Perform a time step</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">   * @param state Current state</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">   * @param time Current time</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment">   * @return New state</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  <a class="code hl_class" href="classalgebra_1_1_state.html">State</a> <a class="code hl_function" href="classalgebra_1_1_integrator.html#ad51f3cb83623618aaa9e7a61c4354da2">step</a>(<a class="code hl_class" href="classalgebra_1_1_state.html">State</a>&amp; state, <span class="keywordtype">double</span> time);</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>};</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>}  <span class="comment">// namespace algebra</span></div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
-<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment"></span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="comment"> * @brief Generalized-alpha integrator</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"> * This class handles the time integration scheme for solving 0D blood</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * flow system.</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * Flow rate, pressure, and other hemodynamic quantities in 0D models of</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * vascular anatomies are governed by a system of nonlinear</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> * differential-algebraic equations (DAEs):</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> * \f[</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * \mathbf{E}(\mathbf{y}, t) \cdot \dot{\mathbf{y}}+\mathbf{F}(\mathbf{y}, t)</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * \cdot \mathbf{y}+\mathbf{c}(\mathbf{y}, t)=\mathbf{0} \f]</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> * Here, \f$y\f$ is the vector of solution quantities and \f$\dot{y}\f$ is the</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment"> * time derivative of \f$y\f$. \f$N\f$ is the total number of equations and the</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span><span class="comment"> * total number of global unknowns. The DAE system is solved implicitly using</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"> * the generalized-\f$\alpha\f$ method \cite JANSEN2000305.</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment"> * `SparseSystem`)</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="class_integrator.html">   63</a></span><span class="keyword">class </span><a class="code hl_class" href="class_integrator.html">Integrator</a> {</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  <span class="keywordtype">double</span> alpha_m;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  <span class="keywordtype">double</span> alpha_f;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  <span class="keywordtype">double</span> alpha_m_inv;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  <span class="keywordtype">double</span> alpha_f_inv;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  <span class="keywordtype">double</span> gamma;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <span class="keywordtype">double</span> gamma_inv;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  <span class="keywordtype">double</span> time_step_size;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keywordtype">double</span> time_step_size_inv;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <span class="keywordtype">double</span> y_dot_coeff;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>  <span class="keywordtype">double</span> atol;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>  <span class="keywordtype">double</span> y_init_coeff;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <span class="keywordtype">double</span> ydot_init_coeff;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  <span class="keywordtype">int</span> max_iter;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="keywordtype">int</span> size;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; y_af;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; ydot_am;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <a class="code hl_class" href="class_sparse_system.html">SparseSystem</a> system;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <a class="code hl_class" href="class_model.html">Model</a>* model;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> <span class="keyword">public</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">   * @brief Construct a new Integrator object</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">   * @param model The model to simulate</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">   * @param time_step_size Time step size for generalized-alpha step</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">   * @param rho Spectral radius for generalized-alpha step</span></div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">   * @param atol Absolut tolerance for non-linear iteration termination</span></div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">   * @param max_iter Maximum number of non-linear iterations</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  <a class="code hl_function" href="class_integrator.html#a91fdfba81971dfa13ba22521d11b7c46">Integrator</a>(<a class="code hl_class" href="class_model.html">Model</a>* model, <span class="keywordtype">double</span> time_step_size, <span class="keywordtype">double</span> rho, <span class="keywordtype">double</span> atol,</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>             <span class="keywordtype">int</span> max_iter);</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"></span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">   * @brief Construct a new Integrator object</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  <a class="code hl_function" href="class_integrator.html#a91fdfba81971dfa13ba22521d11b7c46">Integrator</a>();</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment"></span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">   * @brief Destroy the Integrator object</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  <a class="code hl_function" href="class_integrator.html#a951d50d45bd02af21f590741f83c0d73">~Integrator</a>();</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment"></span> </div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">   * @brief Delete dynamically allocated memory (in class member</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">   * SparseSystem&lt;double&gt; system).</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_integrator.html#a3c686bc1682a3701f08a1215b6658bdd">clean</a>();</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"></span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">   * @brief Update integrator parameter and system matrices with model parameter</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">   * updates.</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">   * @param time_step_size Time step size for 0D model</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_integrator.html#af94747571cee99eeac36367f95517e7c">update_params</a>(<span class="keywordtype">double</span> time_step_size);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"></span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">   * @brief Perform a time step</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">   * @param state Current state</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">   * @param time Current time</span></div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">   * @return New state</span></div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  <a class="code hl_class" href="class_state.html">State</a> <a class="code hl_function" href="class_integrator.html#a2f7c91b2cae33fc81830e82ba50f60ee">step</a>(<a class="code hl_class" href="class_state.html">State</a>&amp; state, <span class="keywordtype">double</span> time);</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>};</div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_</span></div>
 <div class="ttc" id="a_model_8h_html"><div class="ttname"><a href="_model_8h.html">Model.h</a></div><div class="ttdoc">model::Model source file</div></div>
-<div class="ttc" id="a_state_8h_html"><div class="ttname"><a href="_state_8h.html">State.h</a></div><div class="ttdoc">algebra::State source file</div></div>
-<div class="ttc" id="aclassalgebra_1_1_integrator_html"><div class="ttname"><a href="classalgebra_1_1_integrator.html">algebra::Integrator</a></div><div class="ttdoc">Generalized-alpha integrator.</div><div class="ttdef"><b>Definition:</b> Integrator.h:65</div></div>
-<div class="ttc" id="aclassalgebra_1_1_integrator_html_a2f97e1218602e3a7fed5de7dd0326a7a"><div class="ttname"><a href="classalgebra_1_1_integrator.html#a2f97e1218602e3a7fed5de7dd0326a7a">algebra::Integrator::clean</a></div><div class="ttdeci">void clean()</div><div class="ttdoc">Delete dynamically allocated memory (in class member SparseSystem&lt;double&gt; system).</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:68</div></div>
-<div class="ttc" id="aclassalgebra_1_1_integrator_html_a3b369b65d5be5ca6cddf6936f396434e"><div class="ttname"><a href="classalgebra_1_1_integrator.html#a3b369b65d5be5ca6cddf6936f396434e">algebra::Integrator::Integrator</a></div><div class="ttdeci">Integrator()</div><div class="ttdoc">Construct a new Integrator object.</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:64</div></div>
-<div class="ttc" id="aclassalgebra_1_1_integrator_html_ad51f3cb83623618aaa9e7a61c4354da2"><div class="ttname"><a href="classalgebra_1_1_integrator.html#ad51f3cb83623618aaa9e7a61c4354da2">algebra::Integrator::step</a></div><div class="ttdeci">State step(State &amp;state, double time)</div><div class="ttdoc">Perform a time step.</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:83</div></div>
-<div class="ttc" id="aclassalgebra_1_1_integrator_html_ad58072755ebca2e701fe34973951e152"><div class="ttname"><a href="classalgebra_1_1_integrator.html#ad58072755ebca2e701fe34973951e152">algebra::Integrator::~Integrator</a></div><div class="ttdeci">~Integrator()</div><div class="ttdoc">Destroy the Integrator object.</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:66</div></div>
-<div class="ttc" id="aclassalgebra_1_1_integrator_html_ae313a5d6612bcbb749bf7f0d6d8e325b"><div class="ttname"><a href="classalgebra_1_1_integrator.html#ae313a5d6612bcbb749bf7f0d6d8e325b">algebra::Integrator::update_params</a></div><div class="ttdeci">void update_params(double time_step_size)</div><div class="ttdoc">Update integrator parameter and system matrices with model parameter updates.</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:74</div></div>
-<div class="ttc" id="aclassalgebra_1_1_sparse_system_html"><div class="ttname"><a href="classalgebra_1_1_sparse_system.html">algebra::SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> SparseSystem.h:55</div></div>
-<div class="ttc" id="aclassalgebra_1_1_state_html"><div class="ttname"><a href="classalgebra_1_1_state.html">algebra::State</a></div><div class="ttdoc">State of the system.</div><div class="ttdef"><b>Definition:</b> State.h:47</div></div>
-<div class="ttc" id="aclasszd__model_1_1_model_html"><div class="ttname"><a href="classzd__model_1_1_model.html">zd_model::Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> Model.h:71</div></div>
+<div class="ttc" id="a_state_8h_html"><div class="ttname"><a href="_state_8h.html">State.h</a></div><div class="ttdoc">State source file.</div></div>
+<div class="ttc" id="aclass_integrator_html"><div class="ttname"><a href="class_integrator.html">Integrator</a></div><div class="ttdoc">Generalized-alpha integrator.</div><div class="ttdef"><b>Definition:</b> Integrator.h:63</div></div>
+<div class="ttc" id="aclass_integrator_html_a2f7c91b2cae33fc81830e82ba50f60ee"><div class="ttname"><a href="class_integrator.html#a2f7c91b2cae33fc81830e82ba50f60ee">Integrator::step</a></div><div class="ttdeci">State step(State &amp;state, double time)</div><div class="ttdoc">Perform a time step.</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:81</div></div>
+<div class="ttc" id="aclass_integrator_html_a3c686bc1682a3701f08a1215b6658bdd"><div class="ttname"><a href="class_integrator.html#a3c686bc1682a3701f08a1215b6658bdd">Integrator::clean</a></div><div class="ttdeci">void clean()</div><div class="ttdoc">Delete dynamically allocated memory (in class member SparseSystem&lt;double&gt; system).</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:66</div></div>
+<div class="ttc" id="aclass_integrator_html_a91fdfba81971dfa13ba22521d11b7c46"><div class="ttname"><a href="class_integrator.html#a91fdfba81971dfa13ba22521d11b7c46">Integrator::Integrator</a></div><div class="ttdeci">Integrator()</div><div class="ttdoc">Construct a new Integrator object.</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:62</div></div>
+<div class="ttc" id="aclass_integrator_html_a951d50d45bd02af21f590741f83c0d73"><div class="ttname"><a href="class_integrator.html#a951d50d45bd02af21f590741f83c0d73">Integrator::~Integrator</a></div><div class="ttdeci">~Integrator()</div><div class="ttdoc">Destroy the Integrator object.</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:64</div></div>
+<div class="ttc" id="aclass_integrator_html_af94747571cee99eeac36367f95517e7c"><div class="ttname"><a href="class_integrator.html#af94747571cee99eeac36367f95517e7c">Integrator::update_params</a></div><div class="ttdeci">void update_params(double time_step_size)</div><div class="ttdoc">Update integrator parameter and system matrices with model parameter updates.</div><div class="ttdef"><b>Definition:</b> Integrator.cpp:72</div></div>
+<div class="ttc" id="aclass_model_html"><div class="ttname"><a href="class_model.html">Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition:</b> Model.h:69</div></div>
+<div class="ttc" id="aclass_sparse_system_html"><div class="ttname"><a href="class_sparse_system.html">SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition:</b> SparseSystem.h:52</div></div>
+<div class="ttc" id="aclass_state_html"><div class="ttname"><a href="class_state.html">State</a></div><div class="ttdoc">State of the system.</div><div class="ttdef"><b>Definition:</b> State.h:46</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

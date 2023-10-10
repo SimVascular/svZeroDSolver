@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['finalize_0',['finalize',['../classzd__model_1_1_model.html#a71d16896e986204de1e6d58e59ba1bbc',1,'zd_model::Model']]]
+  ['finalize_0',['finalize',['../class_model.html#a15a519aed6d0924b98b00ed6899c62b5',1,'Model']]]
 ];

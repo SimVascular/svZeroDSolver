@@ -11,7 +11,7 @@
 <!-- Node1 -->
 <g id="node1" class="node">
 <title>Node1</title>
-<g id="a_node1"><a xlink:title="io::csv_writer source file">
+<g id="a_node1"><a xlink:title="csv_writer source file">
 <polygon fill="#999999" stroke="#666666" points="1740.5,-349 1645.5,-349 1645.5,-330 1740.5,-330 1740.5,-349"/>
 <text text-anchor="middle" x="1693" y="-337" font-family="Helvetica,sans-Serif" font-size="10.00">solve/csv_writer.h</text>
 </a>
@@ -80,7 +80,7 @@
 <!-- Node34 -->
 <g id="node34" class="node">
 <title>Node34</title>
-<g id="a_node34"><a xlink:href="_state_8h.html" target="_top" xlink:title="algebra::State source file">
+<g id="a_node34"><a xlink:href="_state_8h.html" target="_top" xlink:title="State source file.">
 <polygon fill="white" stroke="#666666" points="1716.5,-294 1669.5,-294 1669.5,-275 1716.5,-275 1716.5,-294"/>
 <text text-anchor="middle" x="1693" y="-282" font-family="Helvetica,sans-Serif" font-size="10.00">State.h</text>
 </a>
@@ -446,7 +446,7 @@
 <!-- Node13 -->
 <g id="node13" class="node">
 <title>Node13</title>
-<g id="a_node13"><a xlink:href="_sparse_system_8h.html" target="_top" xlink:title="algebra::SparseSystem source file">
+<g id="a_node13"><a xlink:href="_sparse_system_8h.html" target="_top" xlink:title="SparseSystem source file.">
 <polygon fill="white" stroke="#666666" points="769,-74 681,-74 681,-55 769,-55 769,-74"/>
 <text text-anchor="middle" x="725" y="-62" font-family="Helvetica,sans-Serif" font-size="10.00">SparseSystem.h</text>
 </a>

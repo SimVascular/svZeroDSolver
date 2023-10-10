@@ -30,8 +30,6 @@
 
 #include "State.h"
 
-namespace algebra {
-
 State::State() {}
 
 State::State(unsigned int n) {
@@ -52,5 +50,3 @@ State State::Zero(unsigned int n) {
   state.ydot = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
   return state;
 }
-
-}  // namespace algebra

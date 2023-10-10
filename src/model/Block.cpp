@@ -32,8 +32,6 @@
 
 #include "Model.h"
 
-namespace zd_model {
-
 Block::Block(int id, const std::vector<int> &param_ids, Model *model) {
   this->id = id;
   this->global_param_ids = param_ids;
@@ -74,13 +72,13 @@ void Block::setup_dofs(DOFHandler &dofhandler) {}
 
 void Block::setup_model_dependent_params() {}
 
-void Block::update_constant(algebra::SparseSystem &system,
+void Block::update_constant(SparseSystem &system,
                             std::vector<double> &parameters) {}
 
-void Block::update_time(algebra::SparseSystem &system,
-                        std::vector<double> &parameters) {}
+void Block::update_time(SparseSystem &system, std::vector<double> &parameters) {
+}
 
-void Block::update_solution(algebra::SparseSystem &system,
+void Block::update_solution(SparseSystem &system,
                             std::vector<double> &parameters,
                             Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                             Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {}
@@ -94,5 +92,3 @@ void Block::update_gradient(Eigen::SparseMatrix<double> &jacobian,
 }
 
 std::map<std::string, int> Block::get_num_triplets() { return num_triplets; }
-
-};  // namespace zd_model

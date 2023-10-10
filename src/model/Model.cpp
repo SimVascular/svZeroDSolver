@@ -32,8 +32,6 @@
 
 #include "Node.h"
 
-namespace zd_model {
-
 Model::Model() {}
 
 Model::~Model() {}
@@ -231,13 +229,13 @@ int Model::get_num_blocks(bool internal) {
   return num_blocks;
 }
 
-void Model::update_constant(algebra::SparseSystem &system) {
+void Model::update_constant(SparseSystem &system) {
   for (auto block : blocks) {
     block->update_constant(system, parameter_values);
   }
 }
 
-void Model::update_time(algebra::SparseSystem &system, double time) {
+void Model::update_time(SparseSystem &system, double time) {
   this->time = time;
 
   for (auto &param : parameters) {
@@ -249,7 +247,7 @@ void Model::update_time(algebra::SparseSystem &system, double time) {
   }
 }
 
-void Model::update_solution(algebra::SparseSystem &system,
+void Model::update_solution(SparseSystem &system,
                             Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                             Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   for (auto block : blocks) {
@@ -300,5 +298,3 @@ std::map<std::string, int> Model::get_num_triplets() {
   }
   return num_triplets;
 }
-
-};  // namespace zd_model

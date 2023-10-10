@@ -31,8 +31,6 @@
 #ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 #define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 
-namespace zd_model {
-
 enum class BlockType {
   BLOODVESSEL = 0,
   JUNCTION = 1,
@@ -47,8 +45,6 @@ enum class BlockType {
   CLOSEDLOOPCORONARYRIGHTBC = 10,
   CLOSEDLOOPRCRBC = 11,
   CLOSEDLOOPHEARTPULMONARY = 12
-};
-
 };
 
 #endif

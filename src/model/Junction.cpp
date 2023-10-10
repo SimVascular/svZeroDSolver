@@ -30,8 +30,6 @@
 
 #include "Junction.h"
 
-namespace zd_model {
-
 void Junction::setup_dofs(DOFHandler &dofhandler) {
   // Set number of equations of a junction block based on number of
   // inlets/outlets. Must be set before calling parent constructor
@@ -42,7 +40,7 @@ void Junction::setup_dofs(DOFHandler &dofhandler) {
       (num_inlets + num_outlets - 1) * 2 + num_inlets + num_outlets;
 }
 
-void Junction::update_constant(algebra::SparseSystem &system,
+void Junction::update_constant(SparseSystem &system,
                                std::vector<double> &parameters) {
   // Pressure conservation
   for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++) {
@@ -77,5 +75,3 @@ void Junction::update_gradient(
 }
 
 std::map<std::string, int> Junction::get_num_triplets() { return num_triplets; }
-
-};  // namespace zd_model

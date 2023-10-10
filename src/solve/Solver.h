@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file Solver.h
- * @brief solve::Solver source file
+ * @brief Solver source file
  */
 
 #include "Integrator.h"
@@ -40,8 +40,6 @@
 
 #ifndef SVZERODSOLVER_SOLVE_SOLVER_HPP_
 #define SVZERODSOLVER_SOLVE_SOLVER_HPP_
-
-namespace solve {
 
 /**
  * @brief Class for running 0D simulations.
@@ -115,15 +113,13 @@ class Solver {
   void write_result_to_csv(std::string filename);
 
  private:
-  zd_model::Model model;
-  io::SimulationParameters simparams;
-  std::vector<algebra::State> states;
+  Model model;
+  SimulationParameters simparams;
+  std::vector<State> states;
   std::vector<double> times;
-  algebra::State initial_state;
+  State initial_state;
 
   void sanity_checks();
 };
-
-}  // namespace solve
 
 #endif

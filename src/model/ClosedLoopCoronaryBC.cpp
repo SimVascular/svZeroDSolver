@@ -32,8 +32,6 @@
 
 #include "Model.h"
 
-namespace zd_model {
-
 void ClosedLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"volume_im"});
 }
@@ -54,7 +52,7 @@ void ClosedLoopCoronaryBC::setup_model_dependent_params() {
   }
 }
 
-void ClosedLoopCoronaryBC::update_constant(algebra::SparseSystem &system,
+void ClosedLoopCoronaryBC::update_constant(SparseSystem &system,
                                            std::vector<double> &parameters) {
   auto ra = parameters[this->global_param_ids[ParamId::RA]];
   auto ram = parameters[this->global_param_ids[ParamId::RAM]];
@@ -84,7 +82,7 @@ void ClosedLoopCoronaryBC::update_constant(algebra::SparseSystem &system,
 }
 
 void ClosedLoopCoronaryBC::update_solution(
-    algebra::SparseSystem &system, std::vector<double> &parameters,
+    SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   auto cim = parameters[this->global_param_ids[ParamId::CIM]];
@@ -96,5 +94,3 @@ void ClosedLoopCoronaryBC::update_solution(
 std::map<std::string, int> ClosedLoopCoronaryBC::get_num_triplets() {
   return num_triplets;
 }
-
-}  // namespace zd_model

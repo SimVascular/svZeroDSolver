@@ -44,7 +44,7 @@
 #include "csv_writer.h"
 #include "debug.h"
 
-using S = algebra::SparseSystem;
+using S = SparseSystem;
 
 /**
  * @brief Interface class for calling svZeroD from external programs
@@ -78,10 +78,10 @@ class SolverInterface {
   int pts_per_cycle_ = 0;
   bool output_last_cycle_only_ = false;
 
-  std::shared_ptr<zd_model::Model> model_;
-  algebra::Integrator integrator_;
+  std::shared_ptr<Model> model_;
+  Integrator integrator_;
 
-  algebra::State state_;
+  State state_;
   std::vector<double> times_;
-  std::vector<algebra::State> states_;
+  std::vector<State> states_;
 };

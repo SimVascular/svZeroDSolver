@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file SparseSystem.h
- * @brief algebra::SparseSystem source file
+ * @brief SparseSystem source file
  */
 #ifndef SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_
 #define SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_
@@ -40,11 +40,8 @@
 #include <memory>
 
 // Forward declaration of Model
-namespace zd_model {
 class Model;
-}
 
-namespace algebra {
 /**
  * @brief Sparse system
  *
@@ -94,7 +91,7 @@ class SparseSystem {
    *
    * @param model The model to reserve space for in the system
    */
-  void reserve(zd_model::Model *model);
+  void reserve(Model *model);
 
   /**
    * @brief Update the residual of the system
@@ -123,7 +120,5 @@ class SparseSystem {
    */
   void clean();
 };
-
-}  // namespace algebra
 
 #endif  // SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_

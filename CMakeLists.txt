@@ -154,6 +154,8 @@ add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
 # -----------------------------------------------------------------------------
 # Setup building of the svzerodplus Python extension module.
 # -----------------------------------------------------------------------------
+# Replace EXCLUDE_FROM_ALL with SHARED to test building the Python 
+# shared library.
 pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
 
 # -----------------------------------------------------------------------------

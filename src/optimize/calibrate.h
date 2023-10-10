@@ -43,10 +43,6 @@
 #include "Model.h"
 #include "debug.h"
 
-namespace optimize {
-
 nlohmann::json calibrate(const nlohmann::json &config);
-
-}
 
 #endif  // SVZERODSOLVER_OPTIMIZE_CALIBRATOR_HPP_

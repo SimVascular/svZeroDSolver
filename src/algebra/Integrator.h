@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file Integrator.h
- * @brief algebra::Integrator source file
+ * @brief Integrator source file
  */
 #ifndef SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 #define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
@@ -38,8 +38,6 @@
 
 #include "Model.h"
 #include "State.h"
-
-namespace algebra {
 
 /**
  * @brief Generalized-alpha integrator
@@ -60,7 +58,7 @@ namespace algebra {
  * total number of global unknowns. The DAE system is solved implicitly using
  * the generalized-\f$\alpha\f$ method \cite JANSEN2000305.
  *
- * `algebra::SparseSystem`)
+ * `SparseSystem`)
  */
 class Integrator {
  private:
@@ -81,7 +79,7 @@ class Integrator {
   Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
-  zd_model::Model* model;
+  Model* model;
 
  public:
   /**
@@ -93,8 +91,8 @@ class Integrator {
    * @param atol Absolut tolerance for non-linear iteration termination
    * @param max_iter Maximum number of non-linear iterations
    */
-  Integrator(zd_model::Model* model, double time_step_size, double rho,
-             double atol, int max_iter);
+  Integrator(Model* model, double time_step_size, double rho, double atol,
+             int max_iter);
 
   /**
    * @brief Construct a new Integrator object
@@ -131,7 +129,5 @@ class Integrator {
    */
   State step(State& state, double time);
 };
-
-}  // namespace algebra
 
 #endif  // SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_

@@ -33,8 +33,6 @@
 #include <algorithm>
 #include <stdexcept>
 
-namespace zd_model {
-
 DOFHandler::DOFHandler() {
   var_counter = 0;
   eqn_counter = 0;
@@ -72,5 +70,3 @@ int DOFHandler::get_index(std::string_view& name) {
     throw std::runtime_error("No variable with that name");
   }
 }
-
-}  // namespace zd_model

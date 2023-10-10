@@ -30,8 +30,6 @@
 
 #include "Parameter.h"
 
-namespace zd_model {
-
 Parameter::Parameter(int id, double value) {
   this->id = id;
   update(value);
@@ -115,5 +113,3 @@ void Parameter::to_unsteady() {
     steady_converted = false;
   }
 }
-
-}  // namespace zd_model

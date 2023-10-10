@@ -29,7 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
  * @file csv_writer.h
- * @brief io::csv_writer source file
+ * @brief csv_writer source file
  */
 #ifndef SVZERODSOLVER_IO_CSVWRITER_HPP_
 #define SVZERODSOLVER_IO_CSVWRITER_HPP_
@@ -41,18 +41,12 @@
 #include "Model.h"
 #include "State.h"
 
-namespace io {
-
 std::string to_variable_csv(std::vector<double> &times,
-                            std::vector<algebra::State> &states,
-                            zd_model::Model &model, bool mean = false,
-                            bool derivative = false);
+                            std::vector<State> &states, Model &model,
+                            bool mean = false, bool derivative = false);
 
 std::string to_vessel_csv(std::vector<double> &times,
-                          std::vector<algebra::State> &states,
-                          zd_model::Model &model, bool mean = false,
-                          bool derivative = false);
-
-}  // namespace io
+                          std::vector<State> &states, Model &model,
+                          bool mean = false, bool derivative = false);
 
 #endif  // SVZERODSOLVER_IO_CSVWRITER_HPP_

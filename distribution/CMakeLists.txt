@@ -26,7 +26,7 @@ if(ENABLE_DISTRIBUTION)
   # define install targets
   set(CPACK_OUTPUT_FILE_PREFIX ${CMAKE_BINARY_DIR}/distribution)
 
-  # create the installer (only solver)
-  install(TARGETS svzerodsolver RUNTIME DESTINATION bin COMPONENT executable)
+  # create the installer for both solver and calibrator
+  install(TARGETS svzerodsolver svzerodcalibrator RUNTIME DESTINATION bin COMPONENT executable)
   include(CPack)
 endif()

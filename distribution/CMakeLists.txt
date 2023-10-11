@@ -13,6 +13,8 @@ if(ENABLE_DISTRIBUTION)
 
   if(APPLE)
     set(CPACK_GENERATOR "productbuild")
+  elseif(LINUX)
+    set(CPACK_GENERATOR DEB)
   endif(APPLE)
 
   # define install targets

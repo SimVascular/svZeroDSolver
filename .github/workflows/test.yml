@@ -26,7 +26,7 @@ jobs:
         run: |
           mkdir Release
           cd Release
-          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
           cmake --build .
       - name: Test interface
         run: |
@@ -55,3 +55,14 @@ jobs:
         with:
           name: coverage_report
           path: Release/coverage
+      - name: Build installer
+        run: |
+          cd Release
+          cpack
+          cp distribution/svZeroDPlus_* ..
+      - name: Upload installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }} installer
+          path: svZeroDPlus_*
+          if-no-files-found: error

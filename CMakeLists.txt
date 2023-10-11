@@ -208,3 +208,7 @@ target_link_libraries(svzerodplus PRIVATE svzero_model_library)
 target_link_libraries(svzerodplus PRIVATE svzero_optimize_library)
 target_link_libraries(svzerodplus PRIVATE svzero_solve_library)
 
+
+# Create distribution
+set(ENABLE_DISTRIBUTION OFF CACHE BOOL "Enable installer build")
+add_subdirectory("distribution")

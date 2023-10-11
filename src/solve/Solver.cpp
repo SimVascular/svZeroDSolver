@@ -2,16 +2,14 @@
 
 #include "csv_writer.h"
 
-namespace solve {
-
 Solver::Solver(const nlohmann::json& config) {
   DEBUG_MSG("Read simulation parameters");
-  simparams = io::load_simulation_params(config);
+  simparams = load_simulation_params(config);
   DEBUG_MSG("Load model");
-  model = zd_model::Model();
-  io::load_simulation_model(config, model);
+  model = Model();
+  load_simulation_model(config, model);
   DEBUG_MSG("Load initial condition");
-  initial_state = io::load_initial_condition(config, model);
+  initial_state = load_initial_condition(config, model);
 
   DEBUG_MSG("Cardiac cycle period " << model.cardiac_cycle_period);
 
@@ -37,9 +35,8 @@ void Solver::run() {
     double time_step_size_steady = model.cardiac_cycle_period / 10.0;
     model.to_steady();
 
-    algebra::Integrator integrator_steady(&model, time_step_size_steady, 0.1,
-                                          simparams.sim_abs_tol,
-                                          simparams.sim_nliter);
+    Integrator integrator_steady(&model, time_step_size_steady, 0.1,
+                                 simparams.sim_abs_tol, simparams.sim_nliter);
 
     for (int i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
@@ -50,11 +47,11 @@ void Solver::run() {
 
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  algebra::Integrator integrator(&model, simparams.sim_time_step_size, 0.1,
-                                 simparams.sim_abs_tol, simparams.sim_nliter);
+  Integrator integrator(&model, simparams.sim_time_step_size, 0.1,
+                        simparams.sim_abs_tol, simparams.sim_nliter);
 
   // Initialize loop
-  states = std::vector<algebra::State>();
+  states = std::vector<State>();
   times = std::vector<double>();
 
   if (simparams.output_all_cycles) {
@@ -112,13 +109,12 @@ std::string Solver::get_full_result() {
   std::string output;
 
   if (simparams.output_variable_based) {
-    output =
-        io::to_variable_csv(times, states, model, simparams.output_mean_only,
-                            simparams.output_derivative);
+    output = to_variable_csv(times, states, model, simparams.output_mean_only,
+                             simparams.output_derivative);
 
   } else {
-    output = io::to_vessel_csv(times, states, model, simparams.output_mean_only,
-                               simparams.output_derivative);
+    output = to_vessel_csv(times, states, model, simparams.output_mean_only,
+                           simparams.output_derivative);
   }
 
   return output;
@@ -179,5 +175,3 @@ void Solver::write_result_to_csv(std::string filename) {
   ofs << get_full_result();
   ofs.close();
 }
-
-}  // namespace solve

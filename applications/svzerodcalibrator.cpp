@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
   std::ifstream ifs(input_file);
   const auto& config = nlohmann::json::parse(ifs);
 
-  auto output_config = optimize::calibrate(config);
+  auto output_config = calibrate(config);
 
   // Write optimized simulation config
   std::ofstream o(output_file);

@@ -59,8 +59,6 @@
 #include "ResistiveJunction.h"
 #include "WindkesselBC.h"
 
-namespace zd_model {
-
 /**
  * @brief Model of 0D elements
  *
@@ -204,7 +202,7 @@ class Model {
    *
    * @param system System to update contributions at
    */
-  void update_constant(algebra::SparseSystem &system);
+  void update_constant(SparseSystem &system);
 
   /**
    * @brief Update the time-dependent contributions of all elements in a sparse
@@ -213,7 +211,7 @@ class Model {
    * @param system System to update contributions at
    * @param time Current time
    */
-  void update_time(algebra::SparseSystem &system, double time);
+  void update_time(SparseSystem &system, double time);
 
   /**
    * @brief Update the solution-dependent contributions of all elements in a
@@ -223,7 +221,7 @@ class Model {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(algebra::SparseSystem &system,
+  void update_solution(SparseSystem &system,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
@@ -277,7 +275,5 @@ class Model {
   std::vector<Parameter> parameters;     ///< Parameters of the model
   std::vector<double> parameter_values;  ///< Current values of the parameters
 };
-
-};  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_MODEL_HPP_

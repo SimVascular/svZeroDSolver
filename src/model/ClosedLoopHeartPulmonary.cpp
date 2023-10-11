@@ -32,8 +32,6 @@
 
 #include "Model.h"
 
-namespace zd_model {
-
 void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 14,
                      {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul", "P_LA",
@@ -41,7 +39,7 @@ void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
 }
 
 void ClosedLoopHeartPulmonary::update_constant(
-    algebra::SparseSystem &system, std::vector<double> &parameters) {
+    SparseSystem &system, std::vector<double> &parameters) {
   // DOF 2, Eq 1: Aortic pressure
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
       parameters[this->global_param_ids[ParamId::CPA]];
@@ -70,13 +68,13 @@ void ClosedLoopHeartPulmonary::update_constant(
       parameters[this->global_param_ids[ParamId::LLV_A]];
 }
 
-void ClosedLoopHeartPulmonary::update_time(algebra::SparseSystem &system,
+void ClosedLoopHeartPulmonary::update_time(SparseSystem &system,
                                            std::vector<double> &parameters) {
   this->get_activation_and_elastance_functions(parameters);
 }
 
 void ClosedLoopHeartPulmonary::update_solution(
-    algebra::SparseSystem &system, std::vector<double> &parameters,
+    SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   this->get_psi_ra_la(parameters, y);
@@ -309,5 +307,3 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
 std::map<std::string, int> ClosedLoopHeartPulmonary::get_num_triplets() {
   return num_triplets;
 }
-
-}  // namespace zd_model

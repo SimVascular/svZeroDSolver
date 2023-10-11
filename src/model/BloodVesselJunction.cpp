@@ -30,8 +30,6 @@
 
 #include "BloodVesselJunction.h"
 
-namespace zd_model {
-
 void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) {
   if (this->inlet_nodes.size() != 1) {
     throw std::runtime_error(
@@ -45,7 +43,7 @@ void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) {
   num_triplets["D"] = 2 * num_outlets;
 }
 
-void BloodVesselJunction::update_constant(algebra::SparseSystem &system,
+void BloodVesselJunction::update_constant(SparseSystem &system,
                                           std::vector<double> &parameters) {
   // Mass conservation
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
@@ -66,7 +64,7 @@ void BloodVesselJunction::update_constant(algebra::SparseSystem &system,
 }
 
 void BloodVesselJunction::update_solution(
-    algebra::SparseSystem &system, std::vector<double> &parameters,
+    SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   for (size_t i = 0; i < num_outlets; i++) {
@@ -134,5 +132,3 @@ void BloodVesselJunction::update_gradient(
 std::map<std::string, int> BloodVesselJunction::get_num_triplets() {
   return num_triplets;
 }
-
-};  // namespace zd_model

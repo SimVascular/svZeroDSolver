@@ -37,7 +37,6 @@
 #include "Block.h"
 #include "SparseSystem.h"
 
-namespace zd_model {
 /**
  * @brief Junction
  *
@@ -108,8 +107,7 @@ class Junction : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem &system,
-                       std::vector<double> &parameters);
+  void update_constant(SparseSystem &system, std::vector<double> &parameters);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -149,7 +147,5 @@ class Junction : public Block {
   int num_inlets;
   int num_outlets;
 };
-
-};  // namespace zd_model
 
 #endif

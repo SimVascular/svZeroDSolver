@@ -38,8 +38,6 @@
 #include "Parameter.h"
 #include "SparseSystem.h"
 
-namespace zd_model {
-
 /**
  * @brief Resistance boundary condition.
  *
@@ -102,8 +100,7 @@ class ResistanceBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(algebra::SparseSystem &system,
-                       std::vector<double> &parameters);
+  void update_constant(SparseSystem &system, std::vector<double> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -112,8 +109,7 @@ class ResistanceBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(algebra::SparseSystem &system,
-                   std::vector<double> &parameters);
+  void update_time(SparseSystem &system, std::vector<double> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -135,7 +131,5 @@ class ResistanceBC : public Block {
    */
   std::map<std::string, int> get_num_triplets();
 };
-
-}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_

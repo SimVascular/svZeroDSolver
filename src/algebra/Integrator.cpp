@@ -30,10 +30,8 @@
 
 #include "Integrator.h"
 
-namespace algebra {
-
-Integrator::Integrator(zd_model::Model* model, double time_step_size,
-                       double rho, double atol, int max_iter) {
+Integrator::Integrator(Model* model, double time_step_size, double rho,
+                       double atol, int max_iter) {
   this->model = model;
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
@@ -127,4 +125,3 @@ State Integrator::step(State& old_state, double time) {
 
   return new_state;
 }
-}  // namespace algebra

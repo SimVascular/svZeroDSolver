@@ -32,8 +32,6 @@
 
 #include "LevenbergMarquardtOptimizer.h"
 
-namespace optimize {
-
 nlohmann::json calibrate(const nlohmann::json &config) {
   auto output_config = nlohmann::json(config);
 
@@ -57,7 +55,7 @@ nlohmann::json calibrate(const nlohmann::json &config) {
   }
 
   // Setup model
-  auto model = zd_model::Model();
+  auto model = Model();
   std::vector<std::tuple<std::string, std::string>> connections;
   std::vector<std::tuple<std::string, std::string>> inlet_connections;
   std::vector<std::tuple<std::string, std::string>> outlet_connections;
@@ -73,7 +71,7 @@ nlohmann::json calibrate(const nlohmann::json &config) {
     std::vector<int> param_ids;
     for (size_t k = 0; k < num_params; k++)
       param_ids.push_back(param_counter++);
-    model.add_block(zd_model::BlockType::BLOODVESSEL, param_ids, vessel_name);
+    model.add_block(BlockType::BLOODVESSEL, param_ids, vessel_name);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);
 
@@ -95,13 +93,12 @@ nlohmann::json calibrate(const nlohmann::json &config) {
     auto const &outlet_vessels = junction_config["outlet_vessels"];
     int num_outlets = outlet_vessels.size();
     if (num_outlets == 1) {
-      model.add_block(zd_model::BlockType::JUNCTION, {}, junction_name);
+      model.add_block(BlockType::JUNCTION, {}, junction_name);
     } else {
       std::vector<int> param_ids;
       for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++)
         param_ids.push_back(param_counter++);
-      model.add_block(zd_model::BlockType::BLOODVESSELJUNCTION, param_ids,
-                      junction_name);
+      model.add_block(BlockType::BLOODVESSELJUNCTION, param_ids, junction_name);
     }
     // Check for connections to inlet and outlet vessels and append to
     // connections list
@@ -225,9 +222,9 @@ nlohmann::json calibrate(const nlohmann::json &config) {
 
   // Run optimization
   DEBUG_MSG("Start optimization");
-  auto lm_alg = optimize::LevenbergMarquardtOptimizer(
-      &model, num_obs, param_counter, lambda0, gradient_tol, increment_tol,
-      max_iter);
+  auto lm_alg =
+      LevenbergMarquardtOptimizer(&model, num_obs, param_counter, lambda0,
+                                  gradient_tol, increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 
@@ -293,5 +290,3 @@ nlohmann::json calibrate(const nlohmann::json &config) {
 
   return output_config;
 }
-
-}  // namespace optimize

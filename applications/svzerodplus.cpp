@@ -43,7 +43,7 @@
 namespace py = pybind11;
 
 PYBIND11_MODULE(svzerodplus, m) {
-  using Solver = solve::Solver;
+  using Solver = Solver;
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {
         const nlohmann::json& config_json = config;
@@ -83,7 +83,7 @@ PYBIND11_MODULE(svzerodplus, m) {
   });
   m.def("calibrate", [](py::dict& config) {
     const nlohmann::json& config_json = config;
-    return optimize::calibrate(config);
+    return calibrate(config);
   });
   m.def("run_simulation_cli", []() {
     py::module_ sys = py::module_::import("sys");
@@ -96,7 +96,7 @@ PYBIND11_MODULE(svzerodplus, m) {
     }
     std::ifstream ifs(argv[1]);
     const auto& config = nlohmann::json::parse(ifs);
-    auto solver = solve::Solver(config);
+    auto solver = Solver(config);
     solver.run();
     solver.write_result_to_csv(argv[2]);
   });
@@ -111,7 +111,7 @@ PYBIND11_MODULE(svzerodplus, m) {
     }
     std::ifstream ifs(argv[1]);
     const auto& config = nlohmann::json::parse(ifs);
-    auto output_config = optimize::calibrate(config);
+    auto output_config = calibrate(config);
     std::ofstream o(argv[2]);
     o << std::setw(4) << output_config << std::endl;
   });

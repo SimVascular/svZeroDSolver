@@ -39,8 +39,6 @@
 #include "Model.h"
 #include "State.h"
 
-namespace io {
-
 /**
  * @brief Simulation parameters
  *
@@ -70,14 +68,10 @@ struct SimulationParameters {
                                   ///< coupled
 };
 
-algebra::State load_initial_condition(const nlohmann::json& config,
-                                      zd_model::Model& model);
+State load_initial_condition(const nlohmann::json& config, Model& model);
 
-void load_simulation_model(const nlohmann::json& config,
-                           zd_model::Model& model);
+void load_simulation_model(const nlohmann::json& config, Model& model);
 
 SimulationParameters load_simulation_params(const nlohmann::json& config);
-
-}  // namespace io
 
 #endif

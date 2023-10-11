@@ -40,8 +40,6 @@
 #include "BlockType.h"
 #include "DOFHandler.h"
 
-namespace zd_model {
-
 class Block;
 class Model;
 
@@ -99,7 +97,5 @@ class Node {
    */
   void setup_dofs(DOFHandler &dofhandler);
 };
-
-};  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_NODE_HPP_

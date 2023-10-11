@@ -41,8 +41,6 @@
 
 #include "DOFHandler.h"
 
-namespace zd_model {
-
 /**
  * @brief Model Parameter.
  *
@@ -126,7 +124,5 @@ class Parameter {
  private:
   bool steady_converted = false;
 };
-
-}  // namespace zd_model
 
 #endif  // SVZERODSOLVER_MODEL_PARAMETER_HPP_

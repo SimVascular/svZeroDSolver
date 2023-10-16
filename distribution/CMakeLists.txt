@@ -35,12 +35,17 @@ if(ENABLE_DISTRIBUTION)
           RUNTIME DESTINATION bin
           COMPONENT executable)
 
+  # add the interface header
+  install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/interface/interface.h DESTINATION include COMPONENT headers)
+
   # add interface library
   if(APPLE)
-    install(FILES ${CMAKE_BINARY_DIR}/src/interface/libsvzero_interface.dylib DESTINATION lib)
+    install(FILES ${CMAKE_BINARY_DIR}/src/interface/libsvzero_interface.dylib DESTINATION lib COMPONENT libraries)
   elseif(LINUX)
-    install(FILES ${CMAKE_BINARY_DIR}/src/interface/libsvzero_interface.so DESTINATION lib)
+    install(FILES ${CMAKE_BINARY_DIR}/src/interface/libsvzero_interface.so DESTINATION lib COMPONENT libraries)
   endif(APPLE)
+
+  set(CPACK_COMPONENTS_ALL executable libraries headers)
 
   include(CPack)
 endif()

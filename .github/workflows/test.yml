@@ -26,15 +26,15 @@ jobs:
         run: |
           mkdir Release
           cd Release
-          cmake -DCMAKE_BUILD_TYPE=Release ..
-          cmake --build .
+          cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
+          make -j2
       - name: Test interface
         run: |
           cd tests/test_interface
           mkdir build_tests
           cd build_tests
           cmake ../
-          make
+          make -j2
           cd test_01
           ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
           cd ../test_02
@@ -44,7 +44,7 @@ jobs:
         run: |
           cd Release
           cmake -DENABLE_COVERAGE=ON ..
-          cmake --build .
+          make -j2
           cd ../tests
           conda run -n zerod pytest -v --durations=0 --coverage
           cd ../Release
@@ -55,3 +55,14 @@ jobs:
         with:
           name: coverage_report
           path: Release/coverage
+      - name: Build installer
+        run: |
+          cd Release
+          cpack
+          cp distribution/svZeroDPlus_* ..
+      - name: Upload installer
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.os }} installer
+          path: svZeroDPlus_*
+          if-no-files-found: error

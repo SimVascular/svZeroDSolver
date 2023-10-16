@@ -33,7 +33,7 @@ if(ENABLE_DISTRIBUTION)
   # create the installer for both solver and calibrator
   install(TARGETS svzerodsolver svzerodcalibrator
           RUNTIME DESTINATION bin
-          COMPONENT executable)
+          COMPONENT applications)
 
   # add the interface header
   install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/../src/interface/interface.h DESTINATION include COMPONENT headers)
@@ -45,7 +45,7 @@ if(ENABLE_DISTRIBUTION)
     install(FILES ${CMAKE_BINARY_DIR}/src/interface/libsvzero_interface.so DESTINATION lib COMPONENT libraries)
   endif(APPLE)
 
-  set(CPACK_COMPONENTS_ALL executable libraries headers)
+  set(CPACK_COMPONENTS_ALL applications libraries headers)
 
   include(CPack)
 endif()

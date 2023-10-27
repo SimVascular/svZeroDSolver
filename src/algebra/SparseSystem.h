@@ -48,6 +48,40 @@ class Model;
  * This class contains all attributes and methods to create, modify, and
  * solve sparse systems.
  *
+ * Flow rate, pressure, and other hemodynamic quantities in 0D models of
+ * vascular anatomies are governed by a system of nonlinear
+ * differential-algebraic equations (DAEs):
+ *
+ * \f[
+ * \mathbf{r}(\boldsymbol{\alpha}, \mathbf{y},\dot{\mathbf{y}}, t) =
+ * \mathbf{E}(\boldsymbol{\alpha}) \cdot \dot{\mathbf{y}} +
+ * \mathbf{F}(\boldsymbol{\alpha}) \cdot \mathbf{y} +
+ * \mathbf{c}(\mathbf{y},\dot{\mathbf{y}}, t) = \mathbf{0}
+ * \f]
+ *
+ * where \f$\mathbf{r},\textbf{y},\textbf{c} \in \mathbb{R}^{N}\f$ and
+ * \f$\textbf{E},\textbf{F} \in \mathbb{R}^{N \times N}\f$. Here,
+ * \f$\textbf{r}\f$ is the residual, \f$\textbf{y}\f$ is the vector of solution
+ * quantities and \f$\dot{\textbf{y}}\f$ is its time derivative. \f$N\f$ is the
+ * total number of equations and the total number of global unknowns. The DAE
+ * system is solved implicitly using the generalized-\f$\alpha\f$ method in
+ * Integrator. We then use the Newton-Raphson method to iteratively solve
+ *
+ * \f[
+ * \mathbf{K}^{i} \cdot \Delta\mathbf{y}^{i} = - \mathbf{r}^{i},
+ * \f]
+ *
+ * with solution increment \f$\Delta\mathbf{y}\f$ in iteration \f$i\f$. The
+ * linearization of the time-discretized system is
+ *
+ * \f[
+ * \mathbf{K} =
+ * \frac{\partial \mathbf{r}}{\partial \mathbf{y}} =
+ * \mathbf{F} + \frac{\partial \mathbf{c}}{\partial \mathbf{y}} + c_\text{time}
+ * \left( \mathbf{E} + \frac{\partial \mathbf{c}}{\partial \dot{\mathbf{y}}}
+ * \right), \f]
+ *
+ * with time factor \f$c_\text{time}\f$ provided by Integrator.
  */
 class SparseSystem {
  public:

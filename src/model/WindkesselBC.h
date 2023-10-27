@@ -91,6 +91,8 @@
  * \end{array}\right]
  * \f]
  *
+ * See \cite vignon04.
+ *
  * ### Parameters
  *
  * Parameter sequence for constructing this block

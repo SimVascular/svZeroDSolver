@@ -49,7 +49,7 @@
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R$, *-] (3,0)
- * to [R, l=$R_{ste}$, -] (5,0)
+ * to [R, l=$S$, -] (5,0)
  * (5,0) to [L, l=$L$, -*] (7,0)
  * node[anchor=south]{$P_{out}$}
  * (5,0) to [C, l=$C$, -] (5,-1.5)
@@ -61,42 +61,61 @@
  * ### Governing equations
  *
  * \f[
- * P_{in}^{e}-P_{out}^{e}-(R+R_{ste}) Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
- * \f]
+ * P_\text{in}^{e}-P_\text{out}^{e} - (R + S|Q_\text{in}|) Q_\text{in}^{e}-L
+ * \dot{Q}_\text{out}^{e}=0 \f]
  *
  * \f[
- * Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{in}^{e}}{d t}+C(R+2R_{ste})\frac{d
- * Q_{in}^{e}}{d t}=0 \f]
+ * Q_\text{in}^{e}-Q_\text{out}^{e} - C \dot{P}_\text{in}^{e}+C(R +
+ * 2S|Q_\text{in}|) \dot{Q}_{in}^{e}=0 \f]
  *
  * ### Local contributions
  *
  * \f[
  * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} & Q_{in}^{e} &
- * P_{out}^{e} & Q_{out}^{e}\end{array}\right]^{T} \f]
+ * P_{out}^{e} & Q_{out}^{e}\end{array}\right]^\text{T} \f]
  *
  * \f[
  * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -R_{ste}-R & -1 & 0 \\
- * 0 & 1 & 0 & -1
+ * 1 & -R & -1 &  0 \\
+ * 0 &  1 &  0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{cccc}
- * 0 & 0 & 0 & -L \\
- * -C & C(R+2R_{ste}) & 0 & 0
+ *  0 &  0 & 0 & -L \\
+ * -C & CR & 0 &  0
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{D}^{e}=\left[\begin{array}{cccc}
- * 0 & -R_{ste} & 0 & 0 \\
- * 0 & 2CK_{ste} sgn(Q_{in}^{e}) \dot{Q}_{in}^{e} & 0 & 0
+ * \mathbf{c}^{e} = S|Q_\text{in}|
+ * \left[\begin{array}{c}
+ * -Q_\text{in} \\
+ * 2C\dot{Q}_\text{in}
  * \end{array}\right]
  * \f]
  *
- * with the stenosis resistance \f$ R_{ste}=K_{t} \frac{\rho}{2
- * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| \f$. The
+ * \f[
+ * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+ *  S \text{sgn} (Q_\text{in})
+ * \left[\begin{array}{cccc}
+ * 0 & -Q_\text{in}        & 0 & 0 \\
+ * 0 & 2C\dot{Q}_\text{in} & 0 & 0
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+ *  S|Q_\text{in}|
+ * \left[\begin{array}{cccc}
+ * 0 &  0 & 0 & 0 \\
+ * 0 & 2C & 0 & 0
+ * \end{array}\right]
+ * \f]
+ *
+ * with the stenosis resistance \f$ S=K_{t} \frac{\rho}{2
+ * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} \f$. The
  * constant part of the equation is summarized in \ref
  * Parameters::stenosis_coefficient. \f$R\f$, \f$C\f$, and \f$L\f$ refer to
  * Poisieuille resistance, capacitance and inductance, respectively.
@@ -108,14 +127,7 @@
  * \f[
  * \mathbf{J}^{e} = \left[\begin{array}{cccc}
  * -y_2 & 0 & -\dot{y}_4 & -|y_2|y_2 \\
- * C\dot{y}_2 & (-\dot{y}_1+(R+2R_{ste})\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
- * \end{array}\right]
- * \f]
- *
- * \f[
- * \mathbf{r}^{e} = \left[\begin{array}{c}
- * y_1-(R+R_{ste})y_2-y_3-L\dot{y}_4 \\
- * y_2 - y_4 - C\dot{y}_1 + C(R+2R_{ste}) \dot{y}_2
+ * C\dot{y}_2 & (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
  * \end{array}\right]
  * \f]
  *

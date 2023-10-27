@@ -94,7 +94,8 @@ void Solver::run() {
     }
   }
 
-  DEBUG_MSG("Avg. number of nonlinear iterations per time step: " << integrator.avg_nonlin_iter());
+  DEBUG_MSG("Avg. number of nonlinear iterations per time step: "
+            << integrator.avg_nonlin_iter());
 
   // Make times start from 0
   if (!simparams.output_all_cycles) {

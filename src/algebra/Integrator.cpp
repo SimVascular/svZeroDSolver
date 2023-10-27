@@ -92,11 +92,11 @@ State Integrator::step(State& old_state, double time) {
   model->update_time(system, new_time);
 
   // Count total number of step calls
-  n_iter ++;
+  n_iter++;
 
   for (size_t i = 0; i < max_iter; i++) {
     // Count total number of nonlinear iterations
-    n_nonlin_iter ++;
+    n_nonlin_iter++;
 
     // Update solution-dependent element contribitions
     model->update_solution(system, y_af, ydot_am);

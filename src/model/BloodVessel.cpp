@@ -49,7 +49,8 @@ void BloodVessel::update_constant(SparseSystem &system,
   system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) =
       capacitance * resistance;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = -resistance;
+  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =
+      -resistance;
   system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
   system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
@@ -69,7 +70,8 @@ void BloodVessel::update_solution(
 
   // Set element contributions
   system.C(this->global_eqn_ids[0]) = stenosis_resistance * -q_in;
-  system.C(this->global_eqn_ids[1]) = stenosis_resistance * 2.0 * capacitance * dq_in;
+  system.C(this->global_eqn_ids[1]) =
+      stenosis_resistance * 2.0 * capacitance * dq_in;
 
   double sgn_q_in = (0.0 < q_in) - (q_in < 0.0);
   system.dC_dy.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) =

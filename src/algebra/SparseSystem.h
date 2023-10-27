@@ -72,7 +72,8 @@ class SparseSystem {
 
   Eigen::SparseMatrix<double> F;               ///< System matrix F
   Eigen::SparseMatrix<double> E;               ///< System matrix E
-  Eigen::SparseMatrix<double> D;               ///< System matrix D
+  Eigen::SparseMatrix<double> dC_dy;           ///< System matrix dC/dy
+  Eigen::SparseMatrix<double> dC_dydot;        ///< System matrix dC/dydot
   Eigen::Matrix<double, Eigen::Dynamic, 1> C;  ///< System vector C
 
   Eigen::SparseMatrix<double> jacobian;  ///< Jacobian of the system

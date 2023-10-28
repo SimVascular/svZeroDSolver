@@ -43,14 +43,7 @@
  *
  * Applies a predefined pressure at a boundary.
  *
- * \f[
- * \begin{circuitikz}
- * \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
- * \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
- * \draw (1,0) to [short, l=, *-] (1,-1)
- * node[ground]{$\hat{P}$};
- * \end{circuitikz}
- * \f]
+ * \image html pressure_reference_b_c_dark.png
  *
  * ### Governing equations
  *
@@ -79,6 +72,14 @@
  * * `0` Pressure
  *
  */
+//  * \f[
+//  * \begin{circuitikz}
+//  * \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
+//  * \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
+//  * \draw (1,0) to [short, l=, *-] (1,-1)
+//  * node[ground]{$\hat{P}$};
+//  * \end{circuitikz}
+//  * \f]
 class PressureReferenceBC : public Block {
  public:
   // Inherit constructors

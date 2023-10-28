@@ -40,39 +40,16 @@
 #include "SparseSystem.h"
 
 /**
- * @brief BloodVesselJunction
+ * @brief Junction between blood vessels
  *
  * Models a junction with one inlet and arbitrary outlets using
  * modified blood vessel elements between each inlet and outlet pair.
  *
- * \f[
- * \begin{circuitikz}
- * \draw node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0.1) node[anchor=south]{$P_\text{in}$};
- * \draw (1,0) to [short, *-] (2.5,0.75);
- * \draw (1,0) to [short, *-] (2.5,-0.75);
- * \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
- * (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
- * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{} to
- * [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
- * node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
- * {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
- * {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
- * {$Q_{out,2}$}; \end{circuitikz} \f]
+ * \image html blood_vessel_junction_dark.png
  *
  * Each blood vessel is modelled as:
  *
- * \f[
- * \begin{circuitikz} \draw
- * node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_\text{in}$}
- * to [R, l=$R$, *-] (3,0)
- * to [R, l=$S$, -] (5,0)
- * (5,0) to [L, l=$L$, -*] (7,0)
- * node[anchor=south]{$P_\text{out}$};
- * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_\text{out}$};
- * \end{circuitikz}
- * \f]
+ * \image html blood_vessel_junction_individual_dark.png
  *
  * ### Governing equations
  *
@@ -140,6 +117,33 @@
  * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
  *
  */
+//  * \f[
+//  * \begin{circuitikz}
+//  * \draw node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1,0.1) node[anchor=south]{$P_\text{in}$};
+//  * \draw (1,0) to [short, *-] (2.5,0.75);
+//  * \draw (1,0) to [short, *-] (2.5,-0.75);
+//  * \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
+//  * (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
+//  * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{} to
+//  * [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
+//  * node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
+//  * {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
+//  * {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
+//  * {$Q_{out,2}$}; \end{circuitikz}
+//  * \f]
+// 
+//  * \f[
+//  * \begin{circuitikz} \draw
+//  * node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1,0) node[anchor=south]{$P_\text{in}$}
+//  * to [R, l=$R$, *-] (3,0)
+//  * to [R, l=$S$, -] (5,0)
+//  * (5,0) to [L, l=$L$, -*] (7,0)
+//  * node[anchor=south]{$P_\text{out}$};
+//  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_\text{out}$};
+//  * \end{circuitikz}
+//  * \f]
 class BloodVesselJunction : public Block {
  public:
   // Inherit constructors

@@ -44,19 +44,7 @@
  *
  * Models the mechanical behavior of a bloodvessel with optional stenosis.
  *
- * \f[
- * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [R, l=$R$, *-] (3,0)
- * to [R, l=$S$, -] (5,0)
- * (5,0) to [L, l=$L$, -*] (7,0)
- * node[anchor=south]{$P_{out}$}
- * (5,0) to [C, l=$C$, -] (5,-1.5)
- * node[ground]{};
- * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
- * \end{circuitikz}
- * \f]
+ * \image html blood_vessel_dark.png
  *
  * ### Governing equations
  *
@@ -141,6 +129,19 @@
  * * `3` Stenosis coefficient
  *
  */
+//  * \f[
+//  * \begin{circuitikz} \draw
+//  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1,0) node[anchor=south]{$P_{in}$}
+//  * to [R, l=$R$, *-] (3,0)
+//  * to [R, l=$S$, -] (5,0)
+//  * (5,0) to [L, l=$L$, -*] (7,0)
+//  * node[anchor=south]{$P_{out}$}
+//  * (5,0) to [C, l=$C$, -] (5,-1.5)
+//  * node[ground]{};
+//  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
+//  * \end{circuitikz}
+//  * \f]
 class BloodVessel : public Block {
  public:
   /**

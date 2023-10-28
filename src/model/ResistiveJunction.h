@@ -95,7 +95,8 @@
 //  * \draw (1,1.0) node[anchor=south]{$P_{in,1}$} to [R, , l=$R_{in,1}$, *-*]
 //  * (3.0,0) node[anchor=north] {$P_{C}$}; \draw (1,-1.0)
 //  * node[anchor=north]{$P_{in, 2}$} to [R, , l=$R_{in,2}$, *-*] (3.0,0); \draw
-//  * (3,0) node[anchor=south]{} to [R, l=$R_{out,1}$, -*] (5,1.0); \draw (4.3,1.1)
+//  * (3,0) node[anchor=south]{} to [R, l=$R_{out,1}$, -*] (5,1.0); \draw
+//  (4.3,1.1)
 //  * node[anchor=south] {$P_{out,1}$}; \draw (3,0) node[anchor=south]{} to [R,
 //  * l=$R_{out,2}$, -*] (5,-1.0); \draw (4.3,-1.1) node[anchor=north]
 //  * {$P_{out,2}$}; \draw [-latex] (5.15,1.1) -- (5.75,1.4) node[right]

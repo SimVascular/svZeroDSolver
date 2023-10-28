@@ -125,14 +125,15 @@
 //  * \draw (1,0) to [short, *-] (2.5,-0.75);
 //  * \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
 //  * (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
-//  * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{} to
+//  * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{}
+//  to
 //  * [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
 //  * node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
 //  * {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
 //  * {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
 //  * {$Q_{out,2}$}; \end{circuitikz}
 //  * \f]
-// 
+//
 //  * \f[
 //  * \begin{circuitikz} \draw
 //  * node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);

@@ -105,12 +105,16 @@ Code Style</h2>
 <p >We follow the <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>.</p>
 <h2><a class="anchor" id="autotoc_md38"></a>
 Formatting</h2>
-<p >We use <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a> to automatically format our code accoring to the <a href="https://google.github.io/styleguide/cppguide.html">Google Style</a>. This increases readability and maintainability of the code while enabling you to focus on coding. Before committing any changes, you can run the following comment to format all your files:</p>
-<div class="fragment"><div class="line">cd src</div>
-<div class="line">find **/*.h **/*.cpp | xargs clang-format -i --style=Google</div>
+<p >We use <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a> to automatically format our code accoring to the <a href="https://google.github.io/styleguide/cppguide.html">Google Style</a>, as specified in the <code>.clang-format</code> file. This increases readability and maintainability of the code while enabling you to focus on coding.</p>
+<p >There are tools for your favorite IDE to automatically format your code. Examples are:</p><ul>
+<li><a href="https://marketplace.visualstudio.com/items?itemName=xaver.clang-format">Visual Studio Code</a></li>
+<li><a href="https://github.com/rhysd/vim-clang-format">vim</a></li>
+<li><a href="https://clang.llvm.org/docs/ClangFormat.html">and many more</a></li>
+</ul>
+<p >Before committing any changes, you can run the following comment <b>from your build folder</b> to format all your files:</p>
+<div class="fragment"><div class="line">make codeformat</div>
 </div><!-- fragment --><p >You can also just check <b>if</b> a file would be formatted without actually formatting it with:</p>
-<div class="fragment"><div class="line">cd src</div>
-<div class="line">find **/*.h **/*.cpp | xargs clang-format --dry-run --style=Google --Werror</div>
+<div class="fragment"><div class="line">make codecheck</div>
 </div><!-- fragment --><p >The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and indicates on merge requests when the code doesnt yet meet all style requirements.</p>
 <p >On Sherlock at Stanford, clang-format is included in the <code>llvm</code> module.</p>
 <h2><a class="anchor" id="autotoc_md39"></a>

@@ -1,0 +1,4 @@
+# see clang-format documentation: https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+# specifies the code style: https://google.github.io/styleguide/cppguide.html
+BasedOnStyle: Google

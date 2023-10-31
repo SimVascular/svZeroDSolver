@@ -11,5 +11,7 @@ jobs:
           sudo apt install clang-format
       - name: Run clang-format
         run: |
-          cd src
-          find **/*.h **/*.cpp | xargs clang-format --dry-run --style=Google --Werror
+          mkdir Release
+          cd Release
+          cmake ..
+          make codecheck

@@ -107,14 +107,14 @@ class Block {
    * Variable indices correspond to columns in the global system.
    *
    */
-  std::vector<unsigned int> global_var_ids;
+  std::vector<int> global_var_ids;
 
   /**
    * @brief Global equation indices of the local element contributions
    *
    * Equation indices correspond to rows in the global system.
    */
-  std::vector<unsigned int> global_eqn_ids;
+  std::vector<int> global_eqn_ids;
 
   /**
    * @brief Get the name of the block
@@ -136,7 +136,7 @@ class Block {
    * @param num_internal_vars Number of internal variables of the block
    */
 
-  void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
+  void setup_dofs_(DOFHandler &dofhandler, int num_equations,
                    std::list<std::string> internal_var_names);
 
   /**

@@ -83,13 +83,13 @@ double Parameter::get(double time) {
 
   // Determine the lower and upper element for interpolation
   auto i = lower_bound(times.begin(), times.end(), rtime);
-  unsigned int k = i - times.begin();
+  int k = i - times.begin();
   if (i == times.end())
     --i;
   else if (*i == rtime) {
     return values[k];
   }
-  unsigned int l = k ? k - 1 : 1;
+  int l = k ? k - 1 : 1;
 
   // Perform linear interpolation
   // TODO: Implement periodic cubic spline

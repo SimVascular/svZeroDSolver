@@ -34,7 +34,7 @@
 
 SparseSystem::SparseSystem() {}
 
-SparseSystem::SparseSystem(unsigned int n) {
+SparseSystem::SparseSystem(int n) {
   F = Eigen::SparseMatrix<double>(n, n);
   E = Eigen::SparseMatrix<double>(n, n);
   D = Eigen::SparseMatrix<double>(n, n);

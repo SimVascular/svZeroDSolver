@@ -62,7 +62,7 @@ class SparseSystem {
    *
    * @param n Size of the system
    */
-  SparseSystem(unsigned int n);
+  SparseSystem(int n);
 
   /**
    * @brief Destroy the Sparse System object

@@ -60,7 +60,7 @@ class State {
    *
    * @param n Size of the state
    */
-  State(unsigned int n);
+  State(int n);
 
   /**
    * @brief Destroy the State object
@@ -81,7 +81,7 @@ class State {
    * @param n Size of the state
    * @return New state initialized with all zeros
    */
-  static State Zero(unsigned int n);
+  static State Zero(int n);
 };
 
 #endif  // SVZERODSOLVER_ALGEBRA_STATE_HPP_

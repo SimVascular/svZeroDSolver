@@ -75,8 +75,8 @@ class Node {
   std::vector<Block *> outlet_eles;  ///< Outlet element of the node
   Model *model;                      ///< The model to which the node belongs
 
-  unsigned int flow_dof;  ///< Global flow degree-of-freedom of the node
-  unsigned int pres_dof;  ///< Global pressure degree-of-freedom of the node
+  int flow_dof;  ///< Global flow degree-of-freedom of the node
+  int pres_dof;  ///< Global pressure degree-of-freedom of the node
 
   /**
    * @brief Get the name of the node

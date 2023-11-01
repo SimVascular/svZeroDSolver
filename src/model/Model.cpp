@@ -44,61 +44,61 @@ int Model::add_block(BlockType block_type,
   Block *block{nullptr};
 
   switch (block_type) {
-    case BlockType::BLOODVESSEL:
+    case BlockType::blood_vessel:
       block = new BloodVessel(block_count, block_param_ids, this);
       break;
 
-    case BlockType::JUNCTION:
+    case BlockType::junction:
       block = new Junction(block_count, block_param_ids, this);
       break;
 
-    case BlockType::BLOODVESSELJUNCTION:
+    case BlockType::blood_vessel_junction:
       block = new BloodVesselJunction(block_count, block_param_ids, this);
       break;
 
-    case BlockType::RESISTIVEJUNCTION:
+    case BlockType::resistive_junction:
       block = new ResistiveJunction(block_count, block_param_ids, this);
       break;
 
-    case BlockType::FLOWBC:
+    case BlockType::flow_bc:
       block = new FlowReferenceBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::RESISTANCEBC:
+    case BlockType::resistnce_bc:
       block = new ResistanceBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::WINDKESSELBC:
+    case BlockType::windkessel_bc:
       block = new WindkesselBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::PRESSUREBC:
+    case BlockType::pressure_bc:
       block = new PressureReferenceBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::OPENLOOPCORONARYBC:
+    case BlockType::open_loop_coronary_bc:
       block = new OpenLoopCoronaryBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::CLOSEDLOOPCORONARYLEFTBC:
+    case BlockType::closed_loop_coronary_lefT_bc:
       block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
                                        Side::LEFT);
       // new ClosedLoopCoronaryBC<double, MODEL::Side::LEFT>(
       //     block_count, block_param_ids, this));
       break;
 
-    case BlockType::CLOSEDLOOPCORONARYRIGHTBC:
+    case BlockType::closed_loop_coronary_right_bc:
       block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
                                        Side::RIGHT);
       // block = new ClosedLoopCoronaryBC<double, MODEL::Side::RIGHT>(
       //         block_count, block_param_ids, this));
       break;
 
-    case BlockType::CLOSEDLOOPRCRBC:
+    case BlockType::closed_loop_rcr_bc:
       block = new ClosedLoopRCRBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::CLOSEDLOOPHEARTPULMONARY:
+    case BlockType::closed_loop_heart_pulmonary:
       block = new ClosedLoopHeartPulmonary(block_count, block_param_ids, this);
       break;
 
@@ -262,8 +262,8 @@ void Model::to_steady() {
 
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->steady = true;
-    if ((block_types[i] == BlockType::WINDKESSELBC) ||
-        (block_types[i] == BlockType::CLOSEDLOOPRCRBC)) {
+    if ((block_types[i] == BlockType::windkessel_bc) ||
+        (block_types[i] == BlockType::closed_loop_rcr_bc)) {
       int param_id_capacitance = blocks[i]->global_param_ids[1];
       double value = parameters[param_id_capacitance].get(0.0);
       param_value_cache.insert({param_id_capacitance, value});

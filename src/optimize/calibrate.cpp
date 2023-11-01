@@ -71,7 +71,7 @@ nlohmann::json calibrate(const nlohmann::json &config) {
     std::vector<int> param_ids;
     for (size_t k = 0; k < num_params; k++)
       param_ids.push_back(param_counter++);
-    model.add_block(BlockType::BLOODVESSEL, param_ids, vessel_name);
+    model.add_block(BlockType::blood_vessel, param_ids, vessel_name);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);
 
@@ -92,20 +92,26 @@ nlohmann::json calibrate(const nlohmann::json &config) {
     std::string junction_name = junction_config["junction_name"];
     auto const &outlet_vessels = junction_config["outlet_vessels"];
     int num_outlets = outlet_vessels.size();
+
     if (num_outlets == 1) {
-      model.add_block(BlockType::JUNCTION, {}, junction_name);
+      model.add_block(BlockType::junction, {}, junction_name);
+
     } else {
       std::vector<int> param_ids;
       for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++)
         param_ids.push_back(param_counter++);
-      model.add_block(BlockType::BLOODVESSELJUNCTION, param_ids, junction_name);
+      model.add_block(BlockType::blood_vessel_junction, param_ids, junction_name);
     }
+
     // Check for connections to inlet and outlet vessels and append to
     // connections list
-    for (auto vessel_id : junction_config["inlet_vessels"])
+    for (auto vessel_id : junction_config["inlet_vessels"]) {
       connections.push_back({vessel_id_map[vessel_id], junction_name});
-    for (auto vessel_id : outlet_vessels)
+    }
+
+    for (auto vessel_id : outlet_vessels) {
       connections.push_back({junction_name, vessel_id_map[vessel_id]});
+    }
     DEBUG_MSG("Created junction " << junction_name);
   }
 

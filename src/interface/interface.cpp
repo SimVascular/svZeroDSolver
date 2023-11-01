@@ -264,8 +264,8 @@ void update_block_params(const int problem_id, std::string block_name,
   // (PRESSUREBC and FLOWBC)
   // TODO: Does this need to be done for OPENLOOPCORONARYBC and RESISTANCEBC
   // too?
-  if ((block_type == BlockType::PRESSUREBC) ||
-      (block_type == BlockType::FLOWBC)) {
+  if ((block_type == BlockType::pressure_bc) ||
+      (block_type == BlockType::flow_bc)) {
     std::vector<double> times_new;
     std::vector<double> values_new;
     int num_time_pts = (int)params[0];

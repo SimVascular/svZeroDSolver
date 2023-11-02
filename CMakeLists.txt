@@ -214,3 +214,18 @@ target_link_libraries(svzerodplus PRIVATE svzero_solve_library)
 # Create distribution
 set(ENABLE_DISTRIBUTION OFF CACHE BOOL "Enable installer build")
 add_subdirectory("distribution")
+
+
+# -----------------------------------------------------------------------------
+# Enforce and check code format
+# -----------------------------------------------------------------------------
+# set paths of files to format
+set(SDIR ${PROJECT_SOURCE_DIR}/src/**/)
+
+# format the code
+add_custom_target(codeformat
+  COMMAND find ${SDIR}/*.h ${SDIR}/*.cpp | xargs clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format -i)
+
+# check code format
+add_custom_target(codecheck
+  COMMAND find ${SDIR}/*.h ${SDIR}/*.cpp | xargs clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format --dry-run --Werror)

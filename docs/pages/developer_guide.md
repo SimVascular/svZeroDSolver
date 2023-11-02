@@ -37,22 +37,27 @@ We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppgu
 ## Formatting
 
 We use [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to automatically 
-format our code accoring to the [Google Style](https://google.github.io/styleguide/cppguide.html).
-This increases readability and maintainability of the code while enabling you
-to focus on coding. Before committing any changes, you can run the following
-comment to format all your files:
+format our code accoring to the [Google Style](https://google.github.io/styleguide/cppguide.html), 
+as specified in the `.clang-format` file. This increases readability and maintainability of the code 
+while enabling you to focus on coding.
+
+There are tools for your favorite IDE to automatically format your code. Examples are:
+- [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format)
+- [vim](https://github.com/rhysd/vim-clang-format)
+- [and many more](https://clang.llvm.org/docs/ClangFormat.html)
+
+Before committing any changes, you can run the following
+comment **from your build folder** to format all your files:
 
 ```bash
-cd src
-find **/*.h **/*.cpp | xargs clang-format -i --style=Google
+make codeformat
 ```
 
 You can also just check **if** a file would be formatted without actually formatting
 it with:
 
 ```bash
-cd src
-find **/*.h **/*.cpp | xargs clang-format --dry-run --style=Google --Werror
+make codecheck
 ```
 
 The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and

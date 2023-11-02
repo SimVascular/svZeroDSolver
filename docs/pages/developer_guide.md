@@ -70,19 +70,25 @@ inspiration, you can look at the existing source files and how they use
 documentation. In the following you can find a short recap of the most important
 commands:
 
-* **Latex equations**: For inline equations use `\f$a+b=c\f$` and for block equations use:
+### Latex equations
+For inline equations use `\f$a+b=c\f$` and for block equations use:
 ```
 \f[
 a+b=c
 \f]
 ```
-* **Citation**: If you want to cite a piece literature in your documentation, add
-    a respective BibTeX citation to `docs/cpp/references.bib` and use `\cite name_of_citation` to
-    cite the document.
-* **Drawing circuits**: As the elements of the svZeroDSolver are often represented
-    in the form of electrical circuits, we make use of [CircuiTikZ](https://ctan.org/pkg/circuitikz?lang=en)
-    to draw circuits in the documentation. The start a CircuitTikZ drawing use
-    the following command:
+
+### Citations
+If you want to cite a piece literature in your documentation, add
+a respective BibTeX citation to `docs/cpp/references.bib` and use `\cite name_of_citation` to
+cite the document.
+
+
+### Drawing circuits
+As the elements of the svZeroDSolver are often represented
+in the form of electrical circuits, we use [CircuiTikZ](https://ctan.org/pkg/circuitikz?lang=en)
+to draw circuits in the documentation (see blocks in Block for examples). 
+To start a CircuitTikZ drawing use the following command:
 ```
 \f[
 \begin{circuitikz}
@@ -90,13 +96,27 @@ a+b=c
 \end{circuitikz}
 \f]
 ```
+We currently use MathJax, which only supports [a couple of LaTeX packages](https://docs.mathjax.org/en/latest/input/tex/extensions/index.html). In our `Doxyfile`, this is set as `USE_MATHJAX = YES`. The equations look nicer than without MathJax. Unfortunately, CircuiTikZ is currently not supported by MathJax. Thus, we store all current schematics already compiled in `docs/png`.
 
+If you are adding new schematics, you can follow these steps:
+1. Set `USE_MATHJAX = NO` in `docs/Doxyfile`
+2. Locally build Doxygen (see next section)
+3. Copy `png` output from `docs/build/latex` to `docs/png`
+4. Include image with `\image html FILENAME_dark.png` in `.h`/`.cpp` Doxygen
+5. Set `USE_MATHJAX = YES` in `docs/Doxyfile`
+6. Locally build Doxygen again
+7. Check if LaTeX and schematic look nice
+8. Commit your changes and new `png`
+
+
+### Build
 The documentation is automatically build in the GitHub CI/CD and published
 on GitHub pages. If you want to build the documentation locally, you can use:
 
 ```
 doxygen docs/Doxyfile
 ```
+You can then view the documentation locally in your browser by opening `docs/build/html/index.html`.
 
 If you do not have Doxygen install you can do that with `brew install doxygen`
 on macOS or with `sudo apt-get install doxygen` on Linux.

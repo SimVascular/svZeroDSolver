@@ -52,4 +52,3 @@ void ClosedLoopRCRBC::update_constant(SparseSystem &system,
       -parameters[this->global_param_ids[ParamId::RD]];
 }
 
-//std::map<std::string, int> ClosedLoopRCRBC::get_num_triplets() { return num_triplets; }

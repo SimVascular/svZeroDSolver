@@ -91,4 +91,3 @@ void ClosedLoopCoronaryBC::update_solution(
   system.C(this->global_eqn_ids[2]) = -cim * pim;
 }
 
-//std::map<std::string, int> ClosedLoopCoronaryBC::get_num_triplets() { return num_triplets; }

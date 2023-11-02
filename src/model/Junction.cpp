@@ -74,4 +74,3 @@ void Junction::update_gradient(
       y[this->global_var_ids[1]] - y[this->global_var_ids[3]];
 }
 
-//std::map<std::string, int> Junction::get_num_triplets() { return num_triplets; }

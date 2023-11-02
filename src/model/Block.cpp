@@ -92,6 +92,4 @@ void Block::update_gradient(Eigen::SparseMatrix<double> &jacobian,
 }
 
 TripletsContributions Block::get_num_triplets() { return num_triplets; }
-//std::map<std::string, int> Block::get_num_triplets() { return num_triplets; }
-
 

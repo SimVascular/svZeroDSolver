@@ -74,4 +74,3 @@ void ResistiveJunction::update_constant(SparseSystem &system,
   }
 }
 
-//std::map<std::string, int> ResistiveJunction::get_num_triplets() { return num_triplets; }

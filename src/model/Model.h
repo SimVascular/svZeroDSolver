@@ -245,7 +245,8 @@ class Model {
    *
    * @return Number of triplets that are used in each system matrix
    */
-  std::map<std::string, int> get_num_triplets();
+  //std::map<std::string, int> get_num_triplets();
+  TripletsContributions get_num_triplets();
 
   /**
    * @brief Get the number of blocks in the model

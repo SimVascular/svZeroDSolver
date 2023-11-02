@@ -285,16 +285,22 @@ void Model::to_unsteady() {
   }
 }
 
-std::map<std::string, int> Model::get_num_triplets() {
-  std::map<std::string, int> num_triplets = {
-      {"F", 0},
-      {"E", 0},
-      {"D", 0},
-  };
+TripletsContributions Model::get_num_triplets() {
+  TripletsContributions triplets_sum;
+  triplets_sum.F = 0;
+  triplets_sum.E = 0;
+  triplets_sum.D = 0;
+
+  /*
   for (auto &elem : blocks) {
     for (auto &[key, value] : elem->get_num_triplets()) {
       num_triplets[key] += value;
     }
   }
-  return num_triplets;
+  */
+  for (auto &elem : blocks) {
+    triplets_sum += elem->get_num_triplets();
+  }
+
+  return triplets_sum;
 }

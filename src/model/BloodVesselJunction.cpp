@@ -38,9 +38,9 @@ void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) {
 
   num_outlets = this->outlet_nodes.size();
   Block::setup_dofs_(dofhandler, num_outlets + 1, {});
-  num_triplets["F"] = 1 + 4 * num_outlets;
-  num_triplets["E"] = 3 * num_outlets;
-  num_triplets["D"] = 2 * num_outlets;
+  num_triplets.F = 1 + 4 * num_outlets;
+  num_triplets.E = 3 * num_outlets;
+  num_triplets.D = 2 * num_outlets;
 }
 
 void BloodVesselJunction::update_constant(SparseSystem &system,
@@ -129,6 +129,4 @@ void BloodVesselJunction::update_gradient(
   }
 }
 
-std::map<std::string, int> BloodVesselJunction::get_num_triplets() {
-  return num_triplets;
-}
+//std::map<std::string, int> BloodVesselJunction::get_num_triplets() { return num_triplets; }

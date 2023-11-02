@@ -127,6 +127,4 @@ void BloodVessel::update_gradient(
       capacitance * (resistance + 2.0 * stenosis_resistance) * dy1;
 }
 
-std::map<std::string, int> BloodVessel::get_num_triplets() {
-  return num_triplets;
-}
+//std::map<std::string, int> BloodVessel::get_num_triplets() { return num_triplets; }

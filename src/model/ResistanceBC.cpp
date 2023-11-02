@@ -46,6 +46,4 @@ void ResistanceBC::update_time(SparseSystem &system,
   system.C(this->global_eqn_ids[0]) = -parameters[this->global_param_ids[1]];
 }
 
-std::map<std::string, int> ResistanceBC::get_num_triplets() {
-  return num_triplets;
-}
+//std::map<std::string, int> ResistanceBC::get_num_triplets() { return num_triplets; }

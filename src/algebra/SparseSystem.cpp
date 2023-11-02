@@ -55,9 +55,9 @@ void SparseSystem::clean() {
 
 void SparseSystem::reserve(Model *model) {
   auto num_triplets = model->get_num_triplets();
-  F.reserve(num_triplets["F"]);
-  E.reserve(num_triplets["E"]);
-  D.reserve(num_triplets["D"]);
+  F.reserve(num_triplets.F);
+  E.reserve(num_triplets.E);
+  D.reserve(num_triplets.D);
   model->update_constant(*this);
   model->update_time(*this, 0.0);
 
@@ -72,7 +72,7 @@ void SparseSystem::reserve(Model *model) {
   F.makeCompressed();
   E.makeCompressed();
   D.makeCompressed();
-  jacobian.reserve(num_triplets["F"] + num_triplets["E"]);  // Just an estimate
+  jacobian.reserve(num_triplets.F + num_triplets.E);  // Just an estimate
   update_jacobian(1.0);  // Update it once to have sparsity pattern
   jacobian.makeCompressed();
   solver->analyzePattern(jacobian);  // Let solver analyze pattern

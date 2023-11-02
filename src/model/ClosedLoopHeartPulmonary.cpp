@@ -304,6 +304,4 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   }
 }
 
-std::map<std::string, int> ClosedLoopHeartPulmonary::get_num_triplets() {
-  return num_triplets;
-}
+//std::map<std::string, int> ClosedLoopHeartPulmonary::get_num_triplets() { return num_triplets; }

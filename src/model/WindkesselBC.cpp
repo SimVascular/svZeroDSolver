@@ -55,6 +55,4 @@ void WindkesselBC::update_time(SparseSystem &system,
   system.C(this->global_eqn_ids[1]) = parameters[this->global_param_ids[3]];
 }
 
-std::map<std::string, int> WindkesselBC::get_num_triplets() {
-  return num_triplets;
-}
+//std::map<std::string, int> WindkesselBC::get_num_triplets() { return num_triplets; }

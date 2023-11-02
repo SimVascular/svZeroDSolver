@@ -92,6 +92,4 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
   }
 }
 
-std::map<std::string, int> OpenLoopCoronaryBC::get_num_triplets() {
-  return num_triplets;
-}
+//std::map<std::string, int> OpenLoopCoronaryBC::get_num_triplets() { return num_triplets; }

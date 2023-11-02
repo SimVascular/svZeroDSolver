@@ -36,7 +36,7 @@ void Junction::setup_dofs(DOFHandler &dofhandler) {
   num_inlets = this->inlet_nodes.size();
   num_outlets = this->outlet_nodes.size();
   Block::setup_dofs_(dofhandler, num_inlets + num_outlets, {});
-  num_triplets["F"] =
+  num_triplets.F =
       (num_inlets + num_outlets - 1) * 2 + num_inlets + num_outlets;
 }
 
@@ -74,4 +74,4 @@ void Junction::update_gradient(
       y[this->global_var_ids[1]] - y[this->global_var_ids[3]];
 }
 
-std::map<std::string, int> Junction::get_num_triplets() { return num_triplets; }
+//std::map<std::string, int> Junction::get_num_triplets() { return num_triplets; }

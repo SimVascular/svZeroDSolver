@@ -36,7 +36,7 @@ void ResistiveJunction::setup_dofs(DOFHandler &dofhandler) {
   num_inlets = this->inlet_nodes.size();
   num_outlets = this->outlet_nodes.size();
   Block::setup_dofs_(dofhandler, num_inlets + num_outlets + 1, {"pressure_c"});
-  num_triplets["F"] = (num_inlets + num_outlets) * 4;
+  num_triplets.F = (num_inlets + num_outlets) * 4;
 }
 
 void ResistiveJunction::update_constant(SparseSystem &system,
@@ -74,6 +74,4 @@ void ResistiveJunction::update_constant(SparseSystem &system,
   }
 }
 
-std::map<std::string, int> ResistiveJunction::get_num_triplets() {
-  return num_triplets;
-}
+//std::map<std::string, int> ResistiveJunction::get_num_triplets() { return num_triplets; }

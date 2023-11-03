@@ -12,7 +12,7 @@ jobs:
         run: mkdir docs/build
       - name: Build doxygen documentation
         continue-on-error: true
-        uses: mattnotmitt/doxygen-action@v1.9.5
+        uses: mattnotmitt/doxygen-action@edge
         with:
           working-directory: '.'
           doxyfile-path: 'docs/Doxyfile'

@@ -24,7 +24,7 @@
 */
 var menudata={children:[
 {text:"Main Page",url:"index.html"},
-{text:"Developer Guide",url:"md_developer_guide.html#developer_guide"},
+{text:"Developer Guide",url:"developer_guide.html"},
 {text:"Classes",url:"annotated.html",children:[
 {text:"Class List",url:"annotated.html"},
 {text:"Class Index",url:"classes.html"},

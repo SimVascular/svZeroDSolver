@@ -1,6 +1,9 @@
 <map id="solve/debug.h" name="solve/debug.h">
-<area shape="rect" id="node1" title="DEBUG_MSG source file." alt="" coords="181,5,283,31"/>
-<area shape="rect" id="node2" href="$interface_8h.html" title="svZeroDSolver callable interface." alt="" coords="5,79,141,104"/>
-<area shape="rect" id="node3" href="$calibrate_8h.html" title="opt::calibrate source file" alt="" coords="165,79,299,104"/>
-<area shape="rect" id="node4" href="$_solver_8h.html" title="Solver source file." alt="" coords="323,79,427,104"/>
+<area shape="rect" id="Node000001" title="DEBUG_MSG source file." alt="" coords="180,5,281,31"/>
+<area shape="rect" id="Node000002" href="$interface_8h.html" title="svZeroDSolver callable interface." alt="" coords="5,79,141,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,40,101,81,99,76,189,35"/>
+<area shape="rect" id="Node000003" href="$calibrate_8h.html" title="opt::calibrate source file" alt="" coords="164,79,297,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="233,46,233,79,228,79,228,46"/>
+<area shape="rect" id="Node000004" href="$_solver_8h.html" title="Solver source file." alt="" coords="320,79,423,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="269,36,349,76,346,81,267,41"/>
 </map>

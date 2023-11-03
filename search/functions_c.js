@@ -6,7 +6,7 @@ var searchData=
   ['size_3',['size',['../class_d_o_f_handler.html#aad150438cea2151430f7f1cab1a569e7',1,'DOFHandler']]],
   ['solve_4',['solve',['../class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a',1,'SparseSystem']]],
   ['solver_5',['Solver',['../class_solver.html#aa9e68ab5310adf5606ac9f363c3cee1c',1,'Solver']]],
-  ['sparsesystem_6',['SparseSystem',['../class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553',1,'SparseSystem::SparseSystem()'],['../class_sparse_system.html#a75e4747aa84a6ec7709c43394bc09b06',1,'SparseSystem::SparseSystem(unsigned int n)']]],
-  ['state_7',['State',['../class_state.html#ab91bb1dd5aa6260ab2a456581daf9ec2',1,'State::State()'],['../class_state.html#a466aafb98e7819c2df1251156d9bc546',1,'State::State(unsigned int n)'],['../class_state.html#a5107a6d9c2cd2ae0da0a32c13b1e906f',1,'State::State(const State &amp;state)']]],
+  ['sparsesystem_6',['sparsesystem',['../class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553',1,'SparseSystem::SparseSystem()'],['../class_sparse_system.html#a75e4747aa84a6ec7709c43394bc09b06',1,'SparseSystem::SparseSystem(unsigned int n)']]],
+  ['state_7',['state',['../class_state.html#ab91bb1dd5aa6260ab2a456581daf9ec2',1,'State::State()'],['../class_state.html#a466aafb98e7819c2df1251156d9bc546',1,'State::State(unsigned int n)'],['../class_state.html#a5107a6d9c2cd2ae0da0a32c13b1e906f',1,'State::State(const State &amp;state)']]],
   ['step_8',['step',['../class_integrator.html#a2f7c91b2cae33fc81830e82ba50f60ee',1,'Integrator']]]
 ];

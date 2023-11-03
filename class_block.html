@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -696,12 +703,12 @@ Public Attributes</h2></td></tr>
 <p>Global variable indices of the local element contributions. </p>
 <p >Determines where the local element contributions are written to in the global system during assembly. The order of indices is:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_5_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 [P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1,
-\dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \]" src="form_5.png" width="326" height="16"/></picture>
+\dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \]
 </p>
-<p >with <picture><source srcset="form_6_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in} $" src="form_6.png" width="18" height="13"/></picture>, <picture><source srcset="form_7_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in} $" src="form_7.png" width="19" height="13"/></picture>, <picture><source srcset="form_8_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out} $" src="form_8.png" width="23" height="13"/></picture>, <picture><source srcset="form_9_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out} $" src="form_9.png" width="24" height="13"/></picture>, and <picture><source srcset="form_10_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$V
-$" src="form_10.png" width="10" height="10"/></picture> denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.</p>
+<p >with \(P_{in} \), \(Q_{in} \), \(P_{out} \), \(Q_{out} \), and \(V
+\) denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.</p>
 <p >Variable indices correspond to columns in the global system. </p>
 
 </div>

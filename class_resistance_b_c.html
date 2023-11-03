@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -183,38 +190,32 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Resistance boundary condition. </p>
-<p class="formulaDsp">
-<picture><source srcset="form_72_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\begin{circuitikz} \draw
-node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-\draw (1.0,0) to [R, l=$R$, *-*] (3,0)
-node[anchor=south]{$P_{d}$};
-\end{circuitikz}
-\]" src="form_72.png" width="139" height="30"/></picture>
-</p>
+<div class="image">
+<img src="resistance_b_c_dark.png" alt=""/>
+</div>
 <h3><a class="anchor" id="autotoc_md26"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_73_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 P-P_d=R \cdot Q
-\]" src="form_73.png" width="84" height="13"/></picture>
+\]
 </p>
 <h3><a class="anchor" id="autotoc_md27"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} &amp; Q^{e}\end{array}\right]^{T}
-\]" src="form_52.png" width="104" height="19"/></picture>
+\]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_74_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{F}^{e}=\left[\begin{array}{ll}1 &amp; -R\end{array}\right]
-\]" src="form_74.png" width="90" height="16"/></picture>
+\]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_75_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{C}^{e}=\left[-P_d\right]
-\]" src="form_75.png" width="61" height="14"/></picture>
+\]
 </p>
 <h3><a class="anchor" id="autotoc_md28"></a>
 Parameters</h3>

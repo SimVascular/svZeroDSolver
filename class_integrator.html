@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -102,18 +109,46 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2f7c91b2cae33fc81830e82ba50f60ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_state.html">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_integrator.html#a2f7c91b2cae33fc81830e82ba50f60ee">step</a> (<a class="el" href="class_state.html">State</a> &amp;state, double time)</td></tr>
 <tr class="memdesc:a2f7c91b2cae33fc81830e82ba50f60ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a time step.  <a href="class_integrator.html#a2f7c91b2cae33fc81830e82ba50f60ee">More...</a><br /></td></tr>
 <tr class="separator:a2f7c91b2cae33fc81830e82ba50f60ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7406846602ad1644e25998ee3d901bdd"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_integrator.html#a7406846602ad1644e25998ee3d901bdd">avg_nonlin_iter</a> ()</td></tr>
+<tr class="memdesc:a7406846602ad1644e25998ee3d901bdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get average number of nonlinear iterations in all step calls.  <a href="class_integrator.html#a7406846602ad1644e25998ee3d901bdd">More...</a><br /></td></tr>
+<tr class="separator:a7406846602ad1644e25998ee3d901bdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Generalized-alpha integrator. </p>
-<p >This class handles the time integration scheme for solving 0D blood flow system.</p>
-<p >Flow rate, pressure, and other hemodynamic quantities in 0D models of vascular anatomies are governed by a system of nonlinear differential-algebraic equations (DAEs):</p>
-<p class="formulaDsp">
-<picture><source srcset="form_0_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{E}(\mathbf{y}, t) \cdot \dot{\mathbf{y}}+\mathbf{F}(\mathbf{y}, t)
-\cdot \mathbf{y}+\mathbf{c}(\mathbf{y}, t)=\mathbf{0} \]" src="form_0.png" width="196" height="14"/></picture>
+<p >This class handles the time integration scheme for solving 0D blood flow system using the generalized- \(\alpha\) method <a class="el" href="citelist.html#CITEREF_JANSEN2000305">[1]</a>.</p>
+<p >We are interested in solving the DAE system defined in <a class="el" href="class_sparse_system.html" title="Sparse system.">SparseSystem</a> for the solutions, \(\mathbf{y}_{n+1}\) and \(\dot{\mathbf{y}}_{n+1}\), at the next time, \(t_{n+1}\), using the known solutions, \(\mathbf{y}_{n}\) and \(\dot{\mathbf{y}}_{n}\), at the current time, \(t_{n}\). Note that \(t_{n+1} = t_{n} + \Delta t\), where \(\Delta t\) is the time step size.</p>
+<p >Using the generalized- \(\alpha\) method, we launch a predictor step and a series of multi-corrector steps to solve for \(\mathbf{y}_{n+1}\) and \(\dot{\mathbf{y}}_{n+1}\). Similar to other predictor-corrector schemes, we evaluate the solutions at intermediate times between \(t_{n}\) and \(t_{n + 1}\). However, in the generalized- \(\alpha\) method, we evaluate \(\mathbf{y}\) and \(\dot{\mathbf{y}}\) at different intermediate times. Specifically, we evaluate \(\mathbf{y}\) at \(t_{n+\alpha_{f}}\) and \(\dot{\mathbf{y}}\) at \(t_{n+\alpha_{m}}\), where \(t_{n+\alpha_{f}} = t_{n} +
+\alpha_{f}\Delta t\) and \(t_{n+\alpha_{m}} = t_{n} + \alpha_{m}\Delta
+t\). Here, \(\alpha_{m}\) and \(\alpha_{f}\) are the generalized- \(\alpha\) parameters, where \(\alpha_{m} = \frac{3 - \rho}{2
++ 2\rho}\) and \(\alpha_{f} = \frac{1}{1 + \rho}\). In the 0D solver, we set the spectral radius, \(\rho\), to be \(0.1\). For each time step, the procedure works as follows.</p>
+<ol type="1">
+<li>\(\textbf{Predictor step}\): First, we make an initial guess for \(\mathbf{y}_{n+1}\) and \(\dot{\mathbf{y}}_{n+1}\),  <p class="formulaDsp">
+\[
+\mathbf{y}_{n+1} = \mathbf{y}_{n},\\
+\dot{\mathbf{y}}_{n+1} = \frac{\gamma - 1}{\gamma}\dot{\mathbf{y}}_{n},
+\]
 </p>
-<p >Here, <picture><source srcset="form_1_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$y$" src="form_1.png" width="8" height="9"/></picture> is the vector of solution quantities and <picture><source srcset="form_2_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\dot{y}$" src="form_2.png" width="8" height="11"/></picture> is the time derivative of <picture><source srcset="form_1_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$y$" src="form_1.png" width="8" height="9"/></picture>. <picture><source srcset="form_3_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$N$" src="form_3.png" width="11" height="10"/></picture> is the total number of equations and the total number of global unknowns. The DAE system is solved implicitly using the generalized- <picture><source srcset="form_4_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha$" src="form_4.png" width="8" height="6"/></picture> method <a class="el" href="citelist.html#CITEREF_JANSEN2000305">[1]</a>.</p>
-<p ><code><a class="el" href="class_sparse_system.html" title="Sparse system.">SparseSystem</a></code>) </p>
+ where \(\gamma = 0.5 + \alpha_{m} - \alpha_{f}\).</li>
+<li>\(\textbf{Initiator step}\): Then, we initialize the values of \(\dot{\mathbf{y}}_{n+\alpha_{m}}\) and \(\mathbf{y}_{n+\alpha_{f}}\),  <p class="formulaDsp">
+\[\dot{\mathbf{y}}_{n+\alpha_{m}}^{k=0} = \dot{\mathbf{y}}_{n} +
+\alpha_{m}\left(\dot{\mathbf{y}}_{n+1} - \dot{\mathbf{y}}_{n}\right),\\
+\mathbf{y}_{n+\alpha_{f}}^{k=0} = \mathbf{y}_{n} +
+\alpha_{f}\left(\mathbf{y}_{n+1} - \mathbf{y}_{n}\right).\]
+</p>
+</li>
+<li>\(\textbf{Multi-corrector step}\): Then, for \(k \in \left[0, N_{int}
+- 1\right]\), we iteratively update our guess of \(\dot{\mathbf{y}}_{n+\alpha_{m}}^{k}\) and \(\mathbf{y}_{n+\alpha_{f}}^{k}\). We desire the residual,  \(\textbf{r}\left(\dot{\mathbf{y}}_{n+\alpha_{m}}^{k + 1},
+\mathbf{y}_{n+\alpha_{f}}^{k + 1}, t_{n+\alpha_{f}}\right)\), to be \(\textbf{0}\). We solve this system using Newton's method. For details,see <a class="el" href="class_sparse_system.html" title="Sparse system.">SparseSystem</a>.</li>
+<li>\(\textbf{Update step}\): Finally, we update \(\mathbf{y}_{n+1}\) and \(\dot{\mathbf{y}}_{n+1}\) using our final value of \(\dot{\mathbf{y}}_{n+\alpha_{m}}\) and \(\mathbf{y}_{n+\alpha_{f}}\). <p class="formulaDsp">
+\[
+\mathbf{y}_{n+1} = \mathbf{y}_{n} +
+\frac{\mathbf{y}_{n+\alpha_{f}}^{N_{int}} -
+\mathbf{y}_{n}}{\alpha_{f}},\\ \dot{\mathbf{y}}_{n+1} =
+\dot{\mathbf{y}}_{n} + \frac{\dot{\mathbf{y}}_{n+\alpha_{m}}^{N_{int}} -
+\dot{\mathbf{y}}_{n}}{\alpha_{m}} \]
+</p>
+ </li>
+</ol>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad6e4f6a6409bec36c05ddc6a3fead000" name="ad6e4f6a6409bec36c05ddc6a3fead000"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad6e4f6a6409bec36c05ddc6a3fead000">&#9670;&#160;</a></span>Integrator() <span class="overload">[1/2]</span></h2>
@@ -212,6 +247,25 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7406846602ad1644e25998ee3d901bdd" name="a7406846602ad1644e25998ee3d901bdd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7406846602ad1644e25998ee3d901bdd">&#9670;&#160;</a></span>avg_nonlin_iter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Integrator::avg_nonlin_iter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get average number of nonlinear iterations in all step calls. </p>
+
+</div>
+</div>
 <a id="a3c686bc1682a3701f08a1215b6658bdd" name="a3c686bc1682a3701f08a1215b6658bdd"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3c686bc1682a3701f08a1215b6658bdd">&#9670;&#160;</a></span>clean()</h2>
 

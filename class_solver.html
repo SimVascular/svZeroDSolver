@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -114,6 +121,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Class for running 0D simulations. </p>
+<p >The solver solves for pressure and flow rate at the nodes of the lumped-parameter system <a class="el" href="citelist.html#CITEREF_pfaller22">[3]</a>. The lumped-parameter network is documented in <a class="el" href="class_sparse_system.html" title="Sparse system.">SparseSystem</a>. Refer to <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a> for the time discretization. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa9e68ab5310adf5606ac9f363c3cee1c" name="aa9e68ab5310adf5606ac9f363c3cee1c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa9e68ab5310adf5606ac9f363c3cee1c">&#9670;&#160;</a></span>Solver()</h2>

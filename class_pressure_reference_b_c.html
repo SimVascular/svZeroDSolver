@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -184,39 +191,32 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Pressure reference boundary condition. </p>
 <p >Applies a predefined pressure at a boundary.</p>
-<p class="formulaDsp">
-<picture><source srcset="form_68_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\begin{circuitikz}
-\draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
-\draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
-\draw (1,0) to [short, l=, *-] (1,-1)
-node[ground]{$\hat{P}$};
-\end{circuitikz}
-\]" src="form_68.png" width="65" height="70"/></picture>
-</p>
+<div class="image">
+<img src="pressure_reference_b_c_dark.png" alt=""/>
+</div>
 <h3><a class="anchor" id="autotoc_md23"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_69_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 P=\hat{P}
-\]" src="form_69.png" width="36" height="13"/></picture>
+\]
 </p>
 <h3><a class="anchor" id="autotoc_md24"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} &amp; Q^{e}\end{array}\right]^{T}
-\]" src="form_52.png" width="104" height="19"/></picture>
+\]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_70_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{F}^{e}=\left[\begin{array}{ll}1 &amp; 0\end{array}\right]
-\]" src="form_70.png" width="78" height="16"/></picture>
+\]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_71_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{C}^{e}=\left[\hat{P}\right]
-\]" src="form_71.png" width="51" height="24"/></picture>
+\]
 </p>
 <h3><a class="anchor" id="autotoc_md25"></a>
 Parameters</h3>

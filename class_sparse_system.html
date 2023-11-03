@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -118,9 +125,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a3232006b0680ade9ef0bf4df6f0dfd2d"><td class="memItemLeft" align="right" valign="top">Eigen::SparseMatrix&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">E</a></td></tr>
 <tr class="memdesc:a3232006b0680ade9ef0bf4df6f0dfd2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">System matrix E.  <a href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">More...</a><br /></td></tr>
 <tr class="separator:a3232006b0680ade9ef0bf4df6f0dfd2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8fa42538f281f40a40e7c66f33445646"><td class="memItemLeft" align="right" valign="top">Eigen::SparseMatrix&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a8fa42538f281f40a40e7c66f33445646">D</a></td></tr>
-<tr class="memdesc:a8fa42538f281f40a40e7c66f33445646"><td class="mdescLeft">&#160;</td><td class="mdescRight">System matrix D.  <a href="class_sparse_system.html#a8fa42538f281f40a40e7c66f33445646">More...</a><br /></td></tr>
-<tr class="separator:a8fa42538f281f40a40e7c66f33445646"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11d6d844d7ce60c8b4f29c35fd12bd3c"><td class="memItemLeft" align="right" valign="top">Eigen::SparseMatrix&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c">dC_dy</a></td></tr>
+<tr class="memdesc:a11d6d844d7ce60c8b4f29c35fd12bd3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">System matrix dC/dy.  <a href="class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c">More...</a><br /></td></tr>
+<tr class="separator:a11d6d844d7ce60c8b4f29c35fd12bd3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ae84bdf7fbe99730215a3c8642b88a0"><td class="memItemLeft" align="right" valign="top">Eigen::SparseMatrix&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0">dC_dydot</a></td></tr>
+<tr class="memdesc:a3ae84bdf7fbe99730215a3c8642b88a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">System matrix dC/dydot.  <a href="class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0">More...</a><br /></td></tr>
+<tr class="separator:a3ae84bdf7fbe99730215a3c8642b88a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a460c06c938cca205928ad95517d26ddf"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a460c06c938cca205928ad95517d26ddf">C</a></td></tr>
 <tr class="memdesc:a460c06c938cca205928ad95517d26ddf"><td class="mdescLeft">&#160;</td><td class="mdescRight">System vector C.  <a href="class_sparse_system.html#a460c06c938cca205928ad95517d26ddf">More...</a><br /></td></tr>
 <tr class="separator:a460c06c938cca205928ad95517d26ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -138,7 +148,32 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Sparse system. </p>
-<p >This class contains all attributes and methods to create, modify, and solve sparse systems. </p>
+<p >This class contains all attributes and methods to create, modify, and solve sparse systems.</p>
+<p >Flow rate, pressure, and other hemodynamic quantities in 0D models of vascular anatomies are governed by a system of nonlinear differential-algebraic equations (DAEs):</p>
+<p class="formulaDsp">
+\[
+\mathbf{r}(\boldsymbol{\alpha}, \mathbf{y},\dot{\mathbf{y}}, t) =
+\mathbf{E}(\boldsymbol{\alpha}) \cdot \dot{\mathbf{y}} +
+\mathbf{F}(\boldsymbol{\alpha}) \cdot \mathbf{y} +
+\mathbf{c}(\mathbf{y},\dot{\mathbf{y}}, t) = \mathbf{0}
+\]
+</p>
+<p >where \(\mathbf{r},\textbf{y},\textbf{c} \in \mathbb{R}^{N}\) and \(\textbf{E},\textbf{F} \in \mathbb{R}^{N \times N}\). Here, \(\textbf{r}\) is the residual, \(\textbf{y}\) is the vector of solution quantities and \(\dot{\textbf{y}}\) is its time derivative. \(N\) is the total number of equations and the total number of global unknowns. The DAE system is solved implicitly using the generalized- \(\alpha\) method in <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a>. We then use the Newton-Raphson method to iteratively solve</p>
+<p class="formulaDsp">
+\[
+\mathbf{K}^{i} \cdot \Delta\mathbf{y}^{i} = - \mathbf{r}^{i},
+\]
+</p>
+<p >with solution increment \(\Delta\mathbf{y}\) in iteration \(i\). The linearization of the time-discretized system is</p>
+<p class="formulaDsp">
+\[
+\mathbf{K} =
+\frac{\partial \mathbf{r}}{\partial \mathbf{y}} =
+\mathbf{F} + \frac{\partial \mathbf{c}}{\partial \mathbf{y}} + c_\text{time}
+\left( \mathbf{E} + \frac{\partial \mathbf{c}}{\partial \dot{\mathbf{y}}}
+\right), \]
+</p>
+<p >with time factor \(c_\text{time}\) provided by <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a563e7760b7e4e66ea6e26cfc3ebfc553" name="a563e7760b7e4e66ea6e26cfc3ebfc553"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a563e7760b7e4e66ea6e26cfc3ebfc553">&#9670;&#160;</a></span>SparseSystem() <span class="overload">[1/2]</span></h2>
@@ -349,19 +384,35 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8fa42538f281f40a40e7c66f33445646" name="a8fa42538f281f40a40e7c66f33445646"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fa42538f281f40a40e7c66f33445646">&#9670;&#160;</a></span>D</h2>
+<a id="a11d6d844d7ce60c8b4f29c35fd12bd3c" name="a11d6d844d7ce60c8b4f29c35fd12bd3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11d6d844d7ce60c8b4f29c35fd12bd3c">&#9670;&#160;</a></span>dC_dy</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::SparseMatrix&lt;double&gt; SparseSystem::D</td>
+          <td class="memname">Eigen::SparseMatrix&lt;double&gt; SparseSystem::dC_dy</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>System matrix D. </p>
+<p>System matrix dC/dy. </p>
+
+</div>
+</div>
+<a id="a3ae84bdf7fbe99730215a3c8642b88a0" name="a3ae84bdf7fbe99730215a3c8642b88a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ae84bdf7fbe99730215a3c8642b88a0">&#9670;&#160;</a></span>dC_dydot</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::SparseMatrix&lt;double&gt; SparseSystem::dC_dydot</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>System matrix dC/dydot. </p>
 
 </div>
 </div>

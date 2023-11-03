@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -190,50 +197,39 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>num_outlets</b></td></
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p ><a class="el" href="class_junction.html" title="Junction.">Junction</a>. </p>
 <p >Models a junction with arbitrary inlets and outlets. Across all inlets and outlets of the junction, mass is conserved and pressure is continuous.</p>
-<p class="formulaDsp">
-<picture><source srcset="form_55_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\begin{circuitikz}
-\draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-\draw (1,0) node[anchor=south]{$P_{in}$} to [short, *-*] (3.0,0);
-\draw (3,0) node[anchor=south]{} to [short, -*] (4.5,1.0);
-\draw (4.3,1.1) node[anchor=south] {$P_{out,1}$};
-\draw (3,0) node[anchor=south]{} to [short, -*] (4.5,-1.0);
-\draw (4.3,-1.1) node[anchor=north] {$P_{out,2}$};
-\draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
-\draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
-\end{circuitikz}
-\]" src="form_55.png" width="248" height="120"/></picture>
-</p>
+<div class="image">
+<img src="junction_dark.png" alt=""/>
+</div>
 <h3><a class="anchor" id="autotoc_md18"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
-\]" src="form_56.png" width="145" height="38"/></picture>
+\]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
-\]" src="form_57.png" width="119" height="14"/></picture>
+\]
 </p>
 <h3><a class="anchor" id="autotoc_md19"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_58_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e} &amp;
 \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
-\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_58.png" width="428" height="16"/></picture>
+\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]
 </p>
 <p >Mass conservation</p>
 <p class="formulaDsp">
-<picture><source srcset="form_59_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0 &amp;
--1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_59.png" width="265" height="16"/></picture>
+-1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]
 </p>
 <p >Due to the pressure continuity, we can write for all independent pressure pairs: </p><p class="formulaDsp">
-<picture><source srcset="form_60_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
+\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
 \underbrace{1}_{P_i} &amp; \dots &amp; \underbrace{1}_{P_j} &amp; \dots\end{array}\right]
-\quad \mathrm{with} \quad i \neq j \]" src="form_60.png" width="299" height="31"/></picture>
+\quad \mathrm{with} \quad i \neq j \]
 </p>
  </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0b82be82678747aaf1dc304df9edc1be" name="a0b82be82678747aaf1dc304df9edc1be"></a>

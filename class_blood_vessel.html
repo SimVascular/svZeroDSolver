@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -200,84 +207,85 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Resistor-capacitor-inductor blood vessel with optional stenosis. </p>
 <p >Models the mechanical behavior of a bloodvessel with optional stenosis.</p>
-<p class="formulaDsp">
-<picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\begin{circuitikz} \draw
-node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-\draw (1,0) node[anchor=south]{$P_{in}$}
-to [R, l=$R$, *-] (3,0)
-to [R, l=$R_{ste}$, -] (5,0)
-(5,0) to [L, l=$L$, -*] (7,0)
-node[anchor=south]{$P_{out}$}
-(5,0) to [C, l=$C$, -] (5,-1.5)
-node[ground]{};
-\draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
-\end{circuitikz}
-\]" src="form_11.png" width="336" height="96"/></picture>
-</p>
+<div class="image">
+<img src="blood_vessel_dark.png" alt=""/>
+</div>
 <h3><a class="anchor" id="autotoc_md0"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_12_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-P_{in}^{e}-P_{out}^{e}-(R+R_{ste}) Q_{in}^{e}-L\frac{d Q_{out}^{e}}{dt}=0
-\]" src="form_12.png" width="231" height="28"/></picture>
+\[
+P_\text{in}^{e}-P_\text{out}^{e} - (R + S|Q_\text{in}|) Q_\text{in}^{e}-L
+\dot{Q}_\text{out}^{e}=0 \]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_13_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-Q_{i n}^{e}-Q_{o u t}^{e}-C \frac{d P_{in}^{e}}{d t}+C(R+2R_{ste})\frac{d
-Q_{in}^{e}}{d t}=0 \]" src="form_13.png" width="255" height="28"/></picture>
+\[
+Q_\text{in}^{e}-Q_\text{out}^{e} - C \dot{P}_\text{in}^{e}+C(R +
+2S|Q_\text{in}|) \dot{Q}_{in}^{e}=0 \]
 </p>
 <h3><a class="anchor" id="autotoc_md1"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_14_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} &amp; Q_{in}^{e} &amp;
-P_{out}^{e} &amp; Q_{out}^{e}\end{array}\right]^{T} \]" src="form_14.png" width="185" height="19"/></picture>
+P_{out}^{e} &amp; Q_{out}^{e}\end{array}\right]^\text{T} \]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_15_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{F}^{e}=\left[\begin{array}{cccc}
-1 &amp; -R_{ste}-R &amp; -1 &amp; 0 \\
-0 &amp; 1 &amp; 0 &amp; -1
+1 &amp; -R &amp; -1 &amp;  0 \\
+0 &amp;  1 &amp;  0 &amp; -1
 \end{array}\right]
-\]" src="form_15.png" width="186" height="31"/></picture>
+\]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_16_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{E}^{e}=\left[\begin{array}{cccc}
-0 &amp; 0 &amp; 0 &amp; -L \\
--C &amp; C(R+2R_{ste}) &amp; 0 &amp; 0
+ 0 &amp;  0 &amp; 0 &amp; -L \\
+-C &amp; CR &amp; 0 &amp;  0
 \end{array}\right]
-\]" src="form_16.png" width="209" height="31"/></picture>
+\]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_17_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{D}^{e}=\left[\begin{array}{cccc}
-0 &amp; -R_{ste} &amp; 0 &amp; 0 \\
-0 &amp; 2CK_{ste} sgn(Q_{in}^{e}) \dot{Q}_{in}^{e} &amp; 0 &amp; 0
+\[
+\mathbf{c}^{e} = S|Q_\text{in}|
+\left[\begin{array}{c}
+-Q_\text{in} \\
+2C\dot{Q}_\text{in}
 \end{array}\right]
-\]" src="form_17.png" width="221" height="31"/></picture>
+\]
 </p>
-<p >with the stenosis resistance <picture><source srcset="form_18_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ R_{ste}=K_{t} \frac{\rho}{2
-A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2}|Q_{in}^{e}| $" src="form_18.png" width="163" height="26"/></picture>. The constant part of the equation is summarized in Parameters::stenosis_coefficient. <picture><source srcset="form_19_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_19.png" width="10" height="10"/></picture>, <picture><source srcset="form_20_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_20.png" width="10" height="10"/></picture>, and <picture><source srcset="form_21_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_21.png" width="9" height="10"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
+<p class="formulaDsp">
+\[
+\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+ S \text{sgn} (Q_\text{in})
+\left[\begin{array}{cccc}
+0 &amp; -Q_\text{in}        &amp; 0 &amp; 0 \\
+0 &amp; 2C\dot{Q}_\text{in} &amp; 0 &amp; 0
+\end{array}\right]
+\]
+</p>
+<p class="formulaDsp">
+\[
+\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+ S|Q_\text{in}|
+\left[\begin{array}{cccc}
+0 &amp;  0 &amp; 0 &amp; 0 \\
+0 &amp; 2C &amp; 0 &amp; 0
+\end{array}\right]
+\]
+</p>
+<p >with the stenosis resistance \( S=K_{t} \frac{\rho}{2
+A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} \). The constant part of the equation is summarized in Parameters::stenosis_coefficient. \(R\), \(C\), and \(L\) refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
 <h3><a class="anchor" id="autotoc_md2"></a>
 Gradient</h3>
 <p >Gradient of the equations with respect to the parameters:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_22_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{J}^{e} = \left[\begin{array}{cccc}
 -y_2 &amp; 0 &amp; -\dot{y}_4 &amp; -|y_2|y_2 \\
-C\dot{y}_2 &amp; (-\dot{y}_1+(R+2R_{ste})\dot{y}_2) &amp; 0 &amp; 2C|y_2|\dot{y}_2
+C\dot{y}_2 &amp; (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) &amp; 0 &amp; 2C|y_2|\dot{y}_2
 \end{array}\right]
-\]" src="form_22.png" width="301" height="31"/></picture>
-</p>
-<p class="formulaDsp">
-<picture><source srcset="form_23_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{r}^{e} = \left[\begin{array}{c}
-y_1-(R+R_{ste})y_2-y_3-L\dot{y}_4 \\
-y_2 - y_4 - C\dot{y}_1 + C(R+2R_{ste}) \dot{y}_2
-\end{array}\right]
-\]" src="form_23.png" width="226" height="31"/></picture>
+\]
 </p>
 <h3><a class="anchor" id="autotoc_md3"></a>
 Parameters</h3>

@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -77,8 +84,13 @@ $(function() {
 <ul><li class="level1"><a href="#autotoc_md35">Architecture</a><ul><li class="level2"><a href="#autotoc_md36">Build in debug mode</a></li>
 <li class="level2"><a href="#autotoc_md37">Code Style</a></li>
 <li class="level2"><a href="#autotoc_md38">Formatting</a></li>
-<li class="level2"><a href="#autotoc_md39">Documentation</a></li>
-<li class="level2"><a href="#autotoc_md40">Profiling</a></li>
+<li class="level2"><a href="#autotoc_md39">Documentation</a><ul><li class="level3"><a href="#autotoc_md40">Latex equations</a></li>
+<li class="level3"><a href="#autotoc_md41">Citations</a></li>
+<li class="level3"><a href="#autotoc_md42">Drawing circuits</a></li>
+<li class="level3"><a href="#autotoc_md43">Build</a></li>
+</ul>
+</li>
+<li class="level2"><a href="#autotoc_md44">Profiling</a></li>
 </ul>
 </li>
 </ul>
@@ -120,23 +132,39 @@ Formatting</h2>
 <h2><a class="anchor" id="autotoc_md39"></a>
 Documentation</h2>
 <p >We use <a href="https://doxygen.nl">Doxygen</a> to automatically build an html documentation from source code. Please have at Doxygen's <a href="https://www.doxygen.nl/manual/docblocks.html">Documentation Guide</a> for an introduction into the syntax of writing documentation in C++. For more inspiration, you can look at the existing source files and how they use documentation. In the following you can find a short recap of the most important commands:</p>
-<ul>
-<li><b>Latex equations</b>: For inline equations use <code>\f$a+b=c\f$</code> and for block equations use: <div class="fragment"><div class="line">\f[</div>
+<h3><a class="anchor" id="autotoc_md40"></a>
+Latex equations</h3>
+<p >For inline equations use <code>\f$a+b=c\f$</code> and for block equations use: </p><div class="fragment"><div class="line">\f[</div>
 <div class="line">a+b=c</div>
 <div class="line">\f]</div>
-</div><!-- fragment --></li>
-<li><b>Citation</b>: If you want to cite a piece literature in your documentation, add a respective BibTeX citation to <code>docs/cpp/references.bib</code> and use <code>\cite name_of_citation</code> to cite the document.</li>
-<li><b>Drawing circuits</b>: As the elements of the svZeroDSolver are often represented in the form of electrical circuits, we make use of <a href="https://ctan.org/pkg/circuitikz?lang=en">CircuiTikZ</a> to draw circuits in the documentation. The start a CircuitTikZ drawing use the following command: <div class="fragment"><div class="line">\f[</div>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md41"></a>
+Citations</h3>
+<p >If you want to cite a piece literature in your documentation, add a respective BibTeX citation to <code>docs/cpp/references.bib</code> and use <code>\cite name_of_citation</code> to cite the document.</p>
+<h3><a class="anchor" id="autotoc_md42"></a>
+Drawing circuits</h3>
+<p >As the elements of the svZeroDSolver are often represented in the form of electrical circuits, we use <a href="https://ctan.org/pkg/circuitikz?lang=en">CircuiTikZ</a> to draw circuits in the documentation (see blocks in <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> for examples). To start a CircuitTikZ drawing use the following command: </p><div class="fragment"><div class="line">\f[</div>
 <div class="line">\begin{circuitikz}</div>
 <div class="line">...</div>
 <div class="line">\end{circuitikz}</div>
 <div class="line">\f]</div>
-</div><!-- fragment --></li>
-</ul>
-<p >The documentation is automatically build in the GitHub CI/CD and published on GitHub pages. If you want to build the documentation locally, you can use:</p>
+</div><!-- fragment --><p> We currently use MathJax, which only supports <a href="https://docs.mathjax.org/en/latest/input/tex/extensions/index.html">a couple of LaTeX packages</a>. In our <code>Doxyfile</code>, this is set as <code>USE_MATHJAX = YES</code>. The equations look nicer than without MathJax. Unfortunately, CircuiTikZ is currently not supported by MathJax. Thus, we store all current schematics already compiled in <code>docs/png</code>.</p>
+<p >If you are adding new schematics, you can follow these steps:</p><ol type="1">
+<li>Set <code>USE_MATHJAX = NO</code> in <code>docs/Doxyfile</code></li>
+<li>Locally build Doxygen (see next section)</li>
+<li>Copy <code>png</code> output from <code>docs/build/latex</code> to <code>docs/png</code></li>
+<li>Include image with <code>\image html FILENAME_dark.png</code> in <code>.h</code>/<code>.cpp</code> Doxygen</li>
+<li>Set <code>USE_MATHJAX = YES</code> in <code>docs/Doxyfile</code></li>
+<li>Locally build Doxygen again</li>
+<li>Check if LaTeX and schematic look nice</li>
+<li>Commit your changes and new <code>png</code></li>
+</ol>
+<h3><a class="anchor" id="autotoc_md43"></a>
+Build</h3>
+<p >The documentation is automatically built in the GitHub CI/CD and published on GitHub pages. If you want to build the documentation locally, you can use:</p>
 <div class="fragment"><div class="line">doxygen docs/Doxyfile</div>
-</div><!-- fragment --><p >If you do not have Doxygen install you can do that with <code>brew install doxygen</code> on macOS or with <code>sudo apt-get install doxygen</code> on Linux.</p>
-<h2><a class="anchor" id="autotoc_md40"></a>
+</div><!-- fragment --><p> You can then view the documentation locally in your browser by opening <code>docs/build/html/index.html</code>.</p>
+<p >If you do not have Doxygen install you can do that with <code>brew install doxygen</code> on macOS or with <code>sudo apt-get install doxygen</code> on Linux.</p>
+<h2><a class="anchor" id="autotoc_md44"></a>
 Profiling</h2>
 <p >Profiling helps to easily identify bottlenecks in the code. A profiling report lists the executation time spend on certain parts of the code. If you experience performance issue with svZeroDSolver, you can follow this guide to create a profiling report. The generation of profiling reports requires <a href="https://docs.docker.com/get-docker/">Docker</a> to be installed on your machine.</p>
 <div class="fragment"><div class="line">docker build -t profile_svzerodplus -f container/profiling/Dockerfile .</div>

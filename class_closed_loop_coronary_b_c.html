@@ -12,6 +12,13 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -201,73 +208,59 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p >Closed loop coronary boundary condition (connected to other blocks on both sides). </p>
-<p class="formulaDsp">
-<picture><source srcset="form_33_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\begin{circuitikz} \draw
-node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-\draw (1,0) node[anchor=south]{$P_{in}$}
-to [R, l=$R_a$, *-] (3,0)
-to [R, l=$R_{am}$, -] (5,0)
-to [R, l=$R_v$, *-*] (7,0)
-node[anchor=south]{$P_{out}$}
-(5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
-node[left]{$P_{im}$}
-(3,0) to [C, l=$C_a$, -*] (3,-1.5)
-node[left]{$P_a$};
-\draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
-\end{circuitikz}
-\]" src="form_33.png" width="336" height="81"/></picture>
-</p>
+<div class="image">
+<img src="closed_loop_coronary_b_c_dark.png" alt=""/>
+</div>
 <h3><a class="anchor" id="autotoc_md8"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_34_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a
 \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a
-\frac{dQ_{in}}{dt} = 0 \]" src="form_34.png" width="456" height="28"/></picture>
+\frac{dQ_{in}}{dt} = 0 \]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_35_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
-\frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \]" src="form_35.png" width="315" height="28"/></picture>
+\frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_36_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
-\]" src="form_36.png" width="239" height="13"/></picture>
+\]
 </p>
 <h3><a class="anchor" id="autotoc_md9"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_37_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} &amp; Q^{in} &amp; P_{out} &amp; Q_{out}
-&amp; V_{im}^{e}\end{array}\right]^{T}, \]" src="form_37.png" width="224" height="19"/></picture>
+&amp; V_{im}^{e}\end{array}\right]^{T}, \]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_38_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{E}^{e}=\left[\begin{array}{ccccc}
 -R_{am} C_{a} &amp; R_{am} R_{a} C_{a} &amp; 0 &amp; 0 &amp; 0 \\
 -C_{a} &amp; R_{a} C_{a} &amp; 0 &amp; 0 &amp; -1 \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
-\end{array}\right] \]" src="form_38.png" width="240" height="46"/></picture>
+\end{array}\right] \]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_39_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{F}^{e}=\left[\begin{array}{ccccc}
 -1 &amp; R_{am} + R_{a} &amp; 1 &amp; R_v &amp; 0 \\
 0 &amp; 1 &amp; 0 &amp; -1 &amp; 0 \\
 0 &amp; 0 &amp; C_{im} &amp; C_{im} R_v &amp; -1 \\
-\end{array}\right] \]" src="form_39.png" width="253" height="46"/></picture>
+\end{array}\right] \]
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_40_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 C_{a} R_{am} \frac{d P_{a}}{d t} \\
 C_{a}\frac{d P_{a}}{d t} \\
 -C_{im} P_{im}
-\end{array}\right] \]" src="form_40.png" width="113" height="48"/></picture>
+\end{array}\right] \]
 </p>
-<p >Assume <picture><source srcset="form_41_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_41.png" width="36" height="13"/></picture>.</p>
+<p >Assume \(P_a=0\).</p>
 <h3><a class="anchor" id="autotoc_md10"></a>
 Parameters</h3>
 <p ><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

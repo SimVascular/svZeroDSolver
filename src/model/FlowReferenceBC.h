@@ -43,13 +43,7 @@
  *
  * Applies a prescribed flow to a boundary.
  *
- * \f[
- * \begin{circuitikz} \draw
- * node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
- * \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
- * \end{circuitikz}
- * \f]
+ * \image html flow_reference_b_c_dark.png
  *
  * ### Governing equations
  *
@@ -78,6 +72,13 @@
  * * `0` Flow
  *
  */
+//  * \f[
+//  * \begin{circuitikz} \draw
+//  * node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
+//  * \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
+//  * \end{circuitikz}
+//  * \f]
 class FlowReferenceBC : public Block {
  public:
   // Inherit constructors

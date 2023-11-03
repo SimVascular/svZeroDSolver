@@ -41,13 +41,7 @@
 /**
  * @brief Resistance boundary condition.
  *
- * \f[
- * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1.0,0) to [R, l=$R$, *-*] (3,0)
- * node[anchor=south]{$P_{d}$};
- * \end{circuitikz}
- * \f]
+ * \image html resistance_b_c_dark.png
  *
  * ### Governing equations
  *
@@ -77,6 +71,13 @@
  * * `1` Distal pressure
  *
  */
+//  * \f[
+//  * \begin{circuitikz} \draw
+//  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1.0,0) to [R, l=$R$, *-*] (3,0)
+//  * node[anchor=south]{$P_{d}$};
+//  * \end{circuitikz}
+//  * \f]
 class ResistanceBC : public Block {
  public:
   // Inherit constructors

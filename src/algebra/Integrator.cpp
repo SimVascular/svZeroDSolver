@@ -91,7 +91,13 @@ State Integrator::step(State& old_state, double time) {
   // Update time-dependent element contributions in system
   model->update_time(system, new_time);
 
+  // Count total number of step calls
+  n_iter++;
+
   for (size_t i = 0; i < max_iter; i++) {
+    // Count total number of nonlinear iterations
+    n_nonlin_iter++;
+
     // Update solution-dependent element contribitions
     model->update_solution(system, y_af, ydot_am);
 
@@ -124,4 +130,8 @@ State Integrator::step(State& old_state, double time) {
   new_state.ydot += old_state.ydot + (ydot_am - old_state.ydot) * alpha_m_inv;
 
   return new_state;
+}
+
+double Integrator::avg_nonlin_iter() {
+  return (double)n_nonlin_iter / (double)n_iter;
 }

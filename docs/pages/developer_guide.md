@@ -115,7 +115,7 @@ If you are adding new schematics, you can follow these steps:
 
 
 ### Build
-The documentation is automatically build in the GitHub CI/CD and published
+The documentation is automatically built in the GitHub CI/CD and published
 on GitHub pages. If you want to build the documentation locally, you can use:
 
 ```

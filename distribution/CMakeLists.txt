@@ -18,7 +18,7 @@ if(ENABLE_DISTRIBUTION)
   set(CPACK_PACKAGE_FILE_NAME "${CPACK_PACKAGE_NAME}_${CPACK_PACKAGE_VERSION}")
 
   # define install location
-  set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local/sv/${CPACK_PACKAGE_NAME}/${CPACK_PACKAGE_VERSION}")
+  set(CPACK_PACKAGING_INSTALL_PREFIX "/usr/local/sv/svZeroDSolver/${CPACK_PACKAGE_VERSION}")
 
   # define install target within build folder
   set(CPACK_OUTPUT_FILE_PREFIX ${CMAKE_BINARY_DIR}/distribution)

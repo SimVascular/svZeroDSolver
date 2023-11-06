@@ -68,12 +68,6 @@ class Parameter {
   Parameter(int id, const std::vector<double>& times,
             const std::vector<double>& values, bool periodic = true);
 
-  /**
-   * @brief Destroy the Parameter object
-   *
-   */
-  ~Parameter();
-
   int id;                      ///< Global ID of the parameter
   std::vector<double> times;   ///< Time steps if parameter is time-dependent
   std::vector<double> values;  ///< Values if parameter is time-dependent
@@ -81,8 +75,8 @@ class Parameter {
   double cycle_period;  ///< Cardiac cycle period corresponding to the time
                         ///< sequence
   int size;         ///< Size of the time series if parameter is time-dependent
-  bool isconstant;  ///< Bool value indicating if the parameter is constant
-  bool isperiodic;  ///< Bool value indicating if the parameter is periodic with
+  bool is_constant;  ///< Bool value indicating if the parameter is constant
+  bool is_periodic;  ///< Bool value indicating if the parameter is periodic with
                     ///< the cardiac cycle
 
   /**

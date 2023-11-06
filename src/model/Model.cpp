@@ -177,7 +177,7 @@ int Model::add_parameter(double value) {
 int Model::add_parameter(const std::vector<double> &times,
                          const std::vector<double> &values, bool periodic) {
   auto param = Parameter(parameter_count, times, values, periodic);
-  if (periodic && (param.isconstant == false)) {
+  if (periodic && (param.is_constant == false)) {
     if ((this->cardiac_cycle_period > 0.0) &&
         (param.cycle_period != this->cardiac_cycle_period)) {
       throw std::runtime_error(

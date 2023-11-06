@@ -36,11 +36,11 @@ void FlowReferenceBC::setup_dofs(DOFHandler &dofhandler) {
 
 void FlowReferenceBC::update_constant(SparseSystem &system,
                                       std::vector<double> &parameters) {
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[1]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = 1.0;
 }
 
 void FlowReferenceBC::update_time(SparseSystem &system,
                                   std::vector<double> &parameters) {
-  system.C(this->global_eqn_ids[0]) = -parameters[this->global_param_ids[0]];
+  system.C(global_eqn_ids[0]) = -parameters[global_param_ids[0]];
 }
 

@@ -79,7 +79,7 @@ class Solver {
    * @param dof_name Name of the degree-of-freedom
    * @return Eigen::VectorXd Result
    */
-  Eigen::VectorXd get_single_result(std::string dof_name);
+  Eigen::VectorXd get_single_result(const std::string& dof_name);
 
   /**
    * @brief Get the result of a single DOF averaged over time
@@ -87,7 +87,7 @@ class Solver {
    * @param dof_name Name of the degree-of-freedom
    * @return T Result
    */
-  double get_single_result_avg(std::string dof_name);
+  double get_single_result_avg(const std::string& dof_name);
 
   /**
    * @brief Get the time steps of the result
@@ -102,15 +102,15 @@ class Solver {
    * @param block_name Name of the block
    * @param new_params New parameters
    */
-  void update_block_params(std::string block_name,
-                           std::vector<double> new_params);
+  void update_block_params(const std::string& block_name,
+                           const std::vector<double>& new_params);
 
   /**
    * @brief Write the result to a csv file.
    *
    * @param filename
    */
-  void write_result_to_csv(std::string filename);
+  void write_result_to_csv(const std::string& filename);
 
  private:
   Model model;

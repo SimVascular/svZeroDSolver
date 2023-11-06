@@ -38,7 +38,7 @@ Model::~Model() {}
 
 int Model::add_block(BlockType block_type,
                      const std::vector<int> &block_param_ids,
-                     std::string_view name, bool internal) {
+                     const std::string_view& name, bool internal) {
   // DEBUG_MSG("Adding block " << name << " with type " << block_type);
 
   Block *block{nullptr};
@@ -122,7 +122,7 @@ int Model::add_block(BlockType block_type,
   return block_count++;
 }
 
-Block *Model::get_block(std::string_view name) {
+Block *Model::get_block(const std::string_view& name) {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
@@ -140,7 +140,7 @@ Block *Model::get_block(int block_id) {
   return blocks[block_id].get();
 }
 
-BlockType Model::get_block_type(std::string_view name) {
+BlockType Model::get_block_type(const std::string_view& name) {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
@@ -150,13 +150,13 @@ BlockType Model::get_block_type(std::string_view name) {
   return block_types[block_index_map[name_string]];
 }
 
-std::string Model::get_block_name(int block_id) {
+std::string Model::get_block_name(int block_id) const {
   return block_names[block_id];
 }
 
 int Model::add_node(const std::vector<Block *> &inlet_eles,
                     const std::vector<Block *> &outlet_eles,
-                    std::string_view name) {
+                    const std::string_view& name) {
   // DEBUG_MSG("Adding node " << name);
   auto node = std::shared_ptr<Node>(
       new Node(node_count, inlet_eles, outlet_eles, this));
@@ -166,7 +166,7 @@ int Model::add_node(const std::vector<Block *> &inlet_eles,
   return node_count++;
 }
 
-std::string Model::get_node_name(int node_id) { return node_names[node_id]; }
+std::string Model::get_node_name(int node_id) const { return node_names[node_id]; }
 
 int Model::add_parameter(double value) {
   parameters.push_back(Parameter(parameter_count, value));
@@ -219,7 +219,7 @@ void Model::finalize() {
   }
 }
 
-int Model::get_num_blocks(bool internal) {
+int Model::get_num_blocks(bool internal) const {
   int num_blocks = blocks.size();
 
   if (internal) {

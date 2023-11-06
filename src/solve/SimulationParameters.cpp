@@ -33,7 +33,7 @@
 #include "State.h"
 
 std::vector<double> get_double_array(const nlohmann::json& data,
-                                     std::string_view key) {
+                                     const std::string_view& key) {
   std::vector<double> vector;
   if (!data[key].is_array()) {
     return {data[key]};
@@ -42,8 +42,8 @@ std::vector<double> get_double_array(const nlohmann::json& data,
 }
 
 std::vector<double> get_double_array(const nlohmann::json& data,
-                                     std::string_view key,
-                                     std::vector<double> default_value) {
+                                     const std::string_view& key,
+                                     const std::vector<double>& default_value) {
   if (!data.contains(key)) {
     return default_value;
   }

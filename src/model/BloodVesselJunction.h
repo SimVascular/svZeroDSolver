@@ -40,82 +40,59 @@
 #include "SparseSystem.h"
 
 /**
- * @brief BloodVesselJunction
+ * @brief Junction between blood vessels
  *
  * Models a junction with one inlet and arbitrary outlets using
  * modified blood vessel elements between each inlet and outlet pair.
  *
- * \f[
- * \begin{circuitikz}
- * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0.1) node[anchor=south]{$P_{in}$};
- * \draw (1,0) to [short, *-] (2.5,0.75);
- * \draw (1,0) to [short, *-] (2.5,-0.75);
- * \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
- * (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
- * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{} to
- * [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
- * node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
- * {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
- * {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
- * {$Q_{out,2}$}; \end{circuitikz} \f]
+ * \image html blood_vessel_junction_dark.png
  *
  * Each blood vessel is modelled as:
  *
- * \f[
- * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [R, l=$R$, *-] (3,0)
- * to [R, l=$R_{ste}$, -] (5,0)
- * (5,0) to [L, l=$L$, -*] (7,0)
- * node[anchor=south]{$P_{out}$};
- * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
- * \end{circuitikz}
- * \f]
+ * \image html blood_vessel_junction_individual_dark.png
  *
  * ### Governing equations
  *
  * \f[
- * Q_{in}-\sum_{i}^{n_{outlets}} Q_{out, i}
+ * Q_\text{in}-\sum_{i}^{n_{outlets}} Q_{out, i} = 0
  * \f]
  *
  * \f[
- * P_{in}-P_{out,i} - (R+R_{ste}) \cdot Q_{out,i} -
- * L \frac{d Q_{out,i}}{d t} \quad \forall i \in n_{outlets} \f]
+ * P_\text{in}-P_{\text{out},i} - (R+S|Q_{\text{out},i}|) \cdot Q_{\text{out},i}
+ * - L \dot{Q}_{\text{out},i} = 0 \quad \forall i \in n_{outlets} \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_{in}^{e} & Q_{in}^{e}
+ * \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_\text{in}^{e} & Q_\text{in}^{e}
  * & P_{out, 1}^{e} & Q_{out, 1}^{e} &
  * \dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right] \f]
  *
  * \f[
- * \mathbf{F}^{e} = \left[\begin{array}{lllllllll}
- * 0 & 1 & 0 & -1 & 0 & -1 & 0 & -1 & \dots \\
- * 1 & 0 & -1 & -R_{1}-R_{ste,1} & 0 & 0 & 0 & 0 & \dots\\
- * 1 & 0 & 0 & 0 & -1 & -R_{2}-R_{ste,2} & 0& 0& \dots \\
- * \vdots & & & & & \ddots & \ddots & &
+ * \mathbf{F}^{e} = \left[\begin{array}{ccccccc}
+ * 0 & 1 & 0 & -1 & 0 & -1 & \dots \\
+ * 1 & 0 & -1 & -R_1 & 0 & 0 & \\
+ * 1 & 0 & 0 & 0 & -1 & -R_2 & \\
+ * \vdots & & & & & & \ddots
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{E}^{e} = \left[\begin{array}{lllllllll}
- * 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
- * 0 & 0 & 0 & -L_{1} & 0 & 0 & 0 & 0 & \dots\\
- * 0 & 0 & 0 & 0 & 0 & -L_{2} & 0 & 0 & \dots\\
- * & & & & & \ddots & \ddots & &
+ * \mathbf{E}^{e} = \left[\begin{array}{ccccccc}
+ * 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
+ * 0 & 0 & 0 & -L_1 & 0 & 0 & \\
+ * 0 & 0 & 0 & 0 & 0 & -L_2 & \\
+ * \vdots & & & & & & \ddots
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{D}^{e} = \left[\begin{array}{lllllllll}
- * 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
- * 0 & 0 & 0 &
- * -R_{ste,1} & 0 & 0 & 0 & 0 & \dots\\
- * 0 & 0 & 0 & 0 & 0 & -R_{ste,2} & 0 & 0 & \dots\\ & & & & & \ddots & \ddots &
- * & \end{array}\right] \f]
+ * \mathbf{c}^{e} = \left[\begin{array}{c}
+ * 0 \\
+ * - S_1 |Q_{\text{in},1}| Q_{\text{in},1} \\
+ * - S_2 |Q_{\text{in},2}| Q_{\text{in},2} \\
+ * \vdots
+ * \end{array}\right] \f]
  *
  * ### Gradient
  *
@@ -140,6 +117,34 @@
  * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
  *
  */
+//  * \f[
+//  * \begin{circuitikz}
+//  * \draw node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1,0.1) node[anchor=south]{$P_\text{in}$};
+//  * \draw (1,0) to [short, *-] (2.5,0.75);
+//  * \draw (1,0) to [short, *-] (2.5,-0.75);
+//  * \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
+//  * (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
+//  * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{}
+//  to
+//  * [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
+//  * node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
+//  * {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
+//  * {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
+//  * {$Q_{out,2}$}; \end{circuitikz}
+//  * \f]
+//
+//  * \f[
+//  * \begin{circuitikz} \draw
+//  * node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1,0) node[anchor=south]{$P_\text{in}$}
+//  * to [R, l=$R$, *-] (3,0)
+//  * to [R, l=$S$, -] (5,0)
+//  * (5,0) to [L, l=$L$, -*] (7,0)
+//  * node[anchor=south]{$P_\text{out}$};
+//  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_\text{out}$};
+//  * \end{circuitikz}
+//  * \f]
 class BloodVesselJunction : public Block {
  public:
   // Inherit constructors

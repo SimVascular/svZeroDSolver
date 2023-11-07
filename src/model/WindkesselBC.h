@@ -42,17 +42,7 @@
  *
  * Models the mechanical behavior of a Windkessel boundary condition.
  *
- * \f[
- * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [R, l=$R_p$, *-] (3,0)
- * to [R, l=$R_d$, *-*] (5,0)
- * node[anchor=south]{$P_{ref}$}
- * (3,0) to [C, l=$C$, *-] (3,-1.5)
- * node[ground]{$P_{C}$};
- * \end{circuitikz}
- * \f]
+ * \image html windkessel_b_c_dark.png
  *
  * ### Governing equations
  *
@@ -91,6 +81,8 @@
  * \end{array}\right]
  * \f]
  *
+ * See \cite vignon04.
+ *
  * ### Parameters
  *
  * Parameter sequence for constructing this block
@@ -101,6 +93,17 @@
  * * `3` Distal pressure
  *
  */
+//  * \f[
+//  * \begin{circuitikz} \draw
+//  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1,0) node[anchor=south]{$P_{in}$}
+//  * to [R, l=$R_p$, *-] (3,0)
+//  * to [R, l=$R_d$, *-*] (5,0)
+//  * node[anchor=south]{$P_{ref}$}
+//  * (3,0) to [C, l=$C$, *-] (3,-1.5)
+//  * node[ground]{$P_{C}$};
+//  * \end{circuitikz}
+//  * \f]
 class WindkesselBC : public Block {
  public:
   // Inherit constructors

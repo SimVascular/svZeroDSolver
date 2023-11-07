@@ -44,6 +44,10 @@
 /**
  * @brief Class for running 0D simulations.
  *
+ * The solver solves for pressure and flow rate at the nodes of the
+ * lumped-parameter system \cite pfaller22. The lumped-parameter network is
+ * documented in SparseSystem. Refer to Integrator for the time discretization.
+ *
  */
 class Solver {
  public:
@@ -52,7 +56,7 @@ class Solver {
    *
    * @param config Configuration handler
    */
-  Solver(const nlohmann::json& config);
+  Solver(const nlohmann::json &config);
 
   /**
    * @brief Run the simulation

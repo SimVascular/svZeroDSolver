@@ -41,7 +41,20 @@
 /**
  * @brief Open loop coronary boundary condition based on \cite kim_coronary.
  *
- * \image html open_loop_coronary_b_c_dark.png
+ * \f[
+ * \begin{circuitikz} \draw
+ * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1,0) node[anchor=south]{$P_{in}$}
+ * to [R, l=$R_a$, *-] (3,0)
+ * to [R, l=$R_{am}$, -] (5,0)
+ * to [R, l=$R_v$, *-*] (7,0)
+ * node[anchor=south]{$P_{v}$}
+ * (5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
+ * node[left]{$P_{im}$}
+ * (3,0) to [C, l=$C_a$, -*] (3,-1.5)
+ * node[left]{$P_a$};
+ * \end{circuitikz}
+ * \f]
  *
  * ### Governing equations
  *
@@ -91,20 +104,6 @@
  * * `6` Pv
  *
  */
-//  * \f[
-//  * \begin{circuitikz} \draw
-//  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-//  * \draw (1,0) node[anchor=south]{$P_{in}$}
-//  * to [R, l=$R_a$, *-] (3,0)
-//  * to [R, l=$R_{am}$, -] (5,0)
-//  * to [R, l=$R_v$, *-*] (7,0)
-//  * node[anchor=south]{$P_{v}$}
-//  * (5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
-//  * node[left]{$P_{im}$}
-//  * (3,0) to [C, l=$C_a$, -*] (3,-1.5)
-//  * node[left]{$P_a$};
-//  * \end{circuitikz}
-//  * \f]
 class OpenLoopCoronaryBC : public Block {
  public:
   // Inherit constructors

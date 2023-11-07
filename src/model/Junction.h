@@ -43,7 +43,18 @@
  * Models a junction with arbitrary inlets and outlets. Across all inlets and
  * outlets of the junction, mass is conserved and pressure is continuous.
  *
- * \image html junction_dark.png
+ * \f[
+ * \begin{circuitikz}
+ * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1,0) node[anchor=south]{$P_{in}$} to [short, *-*] (3.0,0);
+ * \draw (3,0) node[anchor=south]{} to [short, -*] (4.5,1.0);
+ * \draw (4.3,1.1) node[anchor=south] {$P_{out,1}$};
+ * \draw (3,0) node[anchor=south]{} to [short, -*] (4.5,-1.0);
+ * \draw (4.3,-1.1) node[anchor=north] {$P_{out,2}$};
+ * \draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
+ * \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
+ * \end{circuitikz}
+ * \f]
  *
  * ### Governing equations
  *
@@ -74,18 +85,6 @@
  * \quad \mathrm{with} \quad i \neq j \f]
  *
  */
-//  * \f[
-//  * \begin{circuitikz}
-//  * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-//  * \draw (1,0) node[anchor=south]{$P_{in}$} to [short, *-*] (3.0,0);
-//  * \draw (3,0) node[anchor=south]{} to [short, -*] (4.5,1.0);
-//  * \draw (4.3,1.1) node[anchor=south] {$P_{out,1}$};
-//  * \draw (3,0) node[anchor=south]{} to [short, -*] (4.5,-1.0);
-//  * \draw (4.3,-1.1) node[anchor=north] {$P_{out,2}$};
-//  * \draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
-//  * \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
-//  * \end{circuitikz}
-//  * \f]
 class Junction : public Block {
  public:
   using Block::Block;

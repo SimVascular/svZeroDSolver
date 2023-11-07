@@ -33,35 +33,28 @@
 #include <algorithm>
 #include <stdexcept>
 
-DOFHandler::DOFHandler() {
-  var_counter = 0;
-  eqn_counter = 0;
-}
+int DOFHandler::size() const { return eqn_counter; }
 
-DOFHandler::~DOFHandler() {}
+int DOFHandler::get_num_equations() const { return eqn_counter; }
 
-int DOFHandler::size() { return eqn_counter; }
+int DOFHandler::get_num_variables() const { return var_counter; }
 
-int DOFHandler::get_num_equations() { return eqn_counter; }
-
-int DOFHandler::get_num_variables() { return var_counter; }
-
-int DOFHandler::register_variable(std::string name) {
+int DOFHandler::register_variable(const std::string& name) {
   variables.push_back(name);
   variable_name_map.insert({name, var_counter});
   return var_counter++;
 }
 
-int DOFHandler::get_variable_index(std::string name) {
-  return variable_name_map[name];
+int DOFHandler::get_variable_index(const std::string& name) const {
+  return variable_name_map.at(name);
 }
 
-int DOFHandler::register_equation(std::string name) {
+int DOFHandler::register_equation(const std::string& name) {
   equations.push_back(name);
   return eqn_counter++;
 }
 
-int DOFHandler::get_index(std::string_view& name) {
+int DOFHandler::get_index(const std::string_view& name) const {
   auto it = std::find(variables.begin(), variables.end(), name);
 
   if (it != variables.end()) {

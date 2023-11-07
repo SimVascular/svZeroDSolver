@@ -34,7 +34,7 @@
 
 SparseSystem::SparseSystem() {}
 
-SparseSystem::SparseSystem(unsigned int n) {
+SparseSystem::SparseSystem(int n) {
   F = Eigen::SparseMatrix<double>(n, n);
   E = Eigen::SparseMatrix<double>(n, n);
   dC_dy = Eigen::SparseMatrix<double>(n, n);
@@ -56,10 +56,11 @@ void SparseSystem::clean() {
 
 void SparseSystem::reserve(Model *model) {
   auto num_triplets = model->get_num_triplets();
-  F.reserve(num_triplets["F"]);
-  E.reserve(num_triplets["E"]);
-  dC_dy.reserve(num_triplets["D"]);
-  dC_dydot.reserve(num_triplets["D"]);
+  F.reserve(num_triplets.F);
+  E.reserve(num_triplets.E);
+  dC_dy.reserve(num_triplets.D);
+  dC_dydot.reserve(num_triplets.D);
+
   model->update_constant(*this);
   model->update_time(*this, 0.0);
 
@@ -75,7 +76,7 @@ void SparseSystem::reserve(Model *model) {
   E.makeCompressed();
   dC_dy.makeCompressed();
   dC_dydot.makeCompressed();
-  jacobian.reserve(num_triplets["F"] + num_triplets["E"]);  // Just an estimate
+  jacobian.reserve(num_triplets.F + num_triplets.E);  // Just an estimate
   update_jacobian(1.0);  // Update it once to have sparsity pattern
   jacobian.makeCompressed();
   solver->analyzePattern(jacobian);  // Let solver analyze pattern

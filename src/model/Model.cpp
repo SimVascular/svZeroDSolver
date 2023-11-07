@@ -38,67 +38,67 @@ Model::~Model() {}
 
 int Model::add_block(BlockType block_type,
                      const std::vector<int> &block_param_ids,
-                     std::string_view name, bool internal) {
+                     const std::string_view &name, bool internal) {
   // DEBUG_MSG("Adding block " << name << " with type " << block_type);
 
   Block *block{nullptr};
 
   switch (block_type) {
-    case BlockType::BLOODVESSEL:
+    case BlockType::blood_vessel:
       block = new BloodVessel(block_count, block_param_ids, this);
       break;
 
-    case BlockType::JUNCTION:
+    case BlockType::junction:
       block = new Junction(block_count, block_param_ids, this);
       break;
 
-    case BlockType::BLOODVESSELJUNCTION:
+    case BlockType::blood_vessel_junction:
       block = new BloodVesselJunction(block_count, block_param_ids, this);
       break;
 
-    case BlockType::RESISTIVEJUNCTION:
+    case BlockType::resistive_junction:
       block = new ResistiveJunction(block_count, block_param_ids, this);
       break;
 
-    case BlockType::FLOWBC:
+    case BlockType::flow_bc:
       block = new FlowReferenceBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::RESISTANCEBC:
+    case BlockType::resistnce_bc:
       block = new ResistanceBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::WINDKESSELBC:
+    case BlockType::windkessel_bc:
       block = new WindkesselBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::PRESSUREBC:
+    case BlockType::pressure_bc:
       block = new PressureReferenceBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::OPENLOOPCORONARYBC:
+    case BlockType::open_loop_coronary_bc:
       block = new OpenLoopCoronaryBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::CLOSEDLOOPCORONARYLEFTBC:
+    case BlockType::closed_loop_coronary_lefT_bc:
       block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
                                        Side::LEFT);
       // new ClosedLoopCoronaryBC<double, MODEL::Side::LEFT>(
       //     block_count, block_param_ids, this));
       break;
 
-    case BlockType::CLOSEDLOOPCORONARYRIGHTBC:
+    case BlockType::closed_loop_coronary_right_bc:
       block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
                                        Side::RIGHT);
       // block = new ClosedLoopCoronaryBC<double, MODEL::Side::RIGHT>(
       //         block_count, block_param_ids, this));
       break;
 
-    case BlockType::CLOSEDLOOPRCRBC:
+    case BlockType::closed_loop_rcr_bc:
       block = new ClosedLoopRCRBC(block_count, block_param_ids, this);
       break;
 
-    case BlockType::CLOSEDLOOPHEARTPULMONARY:
+    case BlockType::closed_loop_heart_pulmonary:
       block = new ClosedLoopHeartPulmonary(block_count, block_param_ids, this);
       break;
 
@@ -122,17 +122,17 @@ int Model::add_block(BlockType block_type,
   return block_count++;
 }
 
-Block *Model::get_block(std::string_view name) {
+Block *Model::get_block(const std::string_view &name) const {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
     return nullptr;
   }
 
-  return blocks[block_index_map[name_string]].get();
+  return blocks[block_index_map.at(name_string)].get();
 }
 
-Block *Model::get_block(int block_id) {
+Block *Model::get_block(int block_id) const {
   if (block_id >= blocks.size()) {
     return hidden_blocks[block_id - blocks.size()].get();
   }
@@ -140,23 +140,23 @@ Block *Model::get_block(int block_id) {
   return blocks[block_id].get();
 }
 
-BlockType Model::get_block_type(std::string_view name) {
+BlockType Model::get_block_type(const std::string_view &name) const {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
     throw std::runtime_error("Could not find block with name " + name_string);
   }
 
-  return block_types[block_index_map[name_string]];
+  return block_types[block_index_map.at(name_string)];
 }
 
-std::string Model::get_block_name(int block_id) {
+std::string Model::get_block_name(int block_id) const {
   return block_names[block_id];
 }
 
 int Model::add_node(const std::vector<Block *> &inlet_eles,
                     const std::vector<Block *> &outlet_eles,
-                    std::string_view name) {
+                    const std::string_view &name) {
   // DEBUG_MSG("Adding node " << name);
   auto node = std::shared_ptr<Node>(
       new Node(node_count, inlet_eles, outlet_eles, this));
@@ -166,7 +166,9 @@ int Model::add_node(const std::vector<Block *> &inlet_eles,
   return node_count++;
 }
 
-std::string Model::get_node_name(int node_id) { return node_names[node_id]; }
+std::string Model::get_node_name(int node_id) const {
+  return node_names[node_id];
+}
 
 int Model::add_parameter(double value) {
   parameters.push_back(Parameter(parameter_count, value));
@@ -177,7 +179,7 @@ int Model::add_parameter(double value) {
 int Model::add_parameter(const std::vector<double> &times,
                          const std::vector<double> &values, bool periodic) {
   auto param = Parameter(parameter_count, times, values, periodic);
-  if (periodic && (param.isconstant == false)) {
+  if (periodic && (param.is_constant == false)) {
     if ((this->cardiac_cycle_period > 0.0) &&
         (param.cycle_period != this->cardiac_cycle_period)) {
       throw std::runtime_error(
@@ -192,7 +194,7 @@ int Model::add_parameter(const std::vector<double> &times,
 
 Parameter *Model::get_parameter(int param_id) { return &parameters[param_id]; }
 
-double Model::get_parameter_value(int param_id) {
+double Model::get_parameter_value(int param_id) const {
   return parameter_values[param_id];
 }
 
@@ -219,7 +221,7 @@ void Model::finalize() {
   }
 }
 
-int Model::get_num_blocks(bool internal) {
+int Model::get_num_blocks(bool internal) const {
   int num_blocks = blocks.size();
 
   if (internal) {
@@ -262,8 +264,8 @@ void Model::to_steady() {
 
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->steady = true;
-    if ((block_types[i] == BlockType::WINDKESSELBC) ||
-        (block_types[i] == BlockType::CLOSEDLOOPRCRBC)) {
+    if ((block_types[i] == BlockType::windkessel_bc) ||
+        (block_types[i] == BlockType::closed_loop_rcr_bc)) {
       int param_id_capacitance = blocks[i]->global_param_ids[1];
       double value = parameters[param_id_capacitance].get(0.0);
       param_value_cache.insert({param_id_capacitance, value});
@@ -285,16 +287,12 @@ void Model::to_unsteady() {
   }
 }
 
-std::map<std::string, int> Model::get_num_triplets() {
-  std::map<std::string, int> num_triplets = {
-      {"F", 0},
-      {"E", 0},
-      {"D", 0},
-  };
+TripletsContributions Model::get_num_triplets() const {
+  TripletsContributions triplets_sum;
+
   for (auto &elem : blocks) {
-    for (auto &[key, value] : elem->get_num_triplets()) {
-      num_triplets[key] += value;
-    }
+    triplets_sum += elem->get_num_triplets();
   }
-  return num_triplets;
+
+  return triplets_sum;
 }

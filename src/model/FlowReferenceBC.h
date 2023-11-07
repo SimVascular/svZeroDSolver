@@ -118,19 +118,7 @@ class FlowReferenceBC : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  std::map<std::string, int> num_triplets = {
-      {"F", 1},
-      {"E", 0},
-      {"D", 0},
-  };
-
-  /**
-   * @brief Get number of triplets of element
-   *
-   * Number of triplets that the element contributes to the global system
-   * (relevant for sparse memory reservation)
-   */
-  std::map<std::string, int> get_num_triplets();
+  TripletsContributions num_triplets{1, 0, 0};
 };
 
 #endif  // SVZERODSOLVER_MODEL_FLOWREFERENCEBC_HPP_

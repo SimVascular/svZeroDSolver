@@ -175,19 +175,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  std::map<std::string, int> num_triplets = {
-      {"F", 33},
-      {"E", 10},
-      {"D", 2},
-  };
-
-  /**
-   * @brief Get number of triplets of element
-   *
-   * Number of triplets that the element contributes to the global system
-   * (relevant for sparse memory reservation)
-   */
-  std::map<std::string, int> get_num_triplets();
+  TripletsContributions num_triplets{33, 10, 2};
 
  private:
   // Below variables change every timestep and are then combined with

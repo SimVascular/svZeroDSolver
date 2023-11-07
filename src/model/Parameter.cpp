@@ -38,43 +38,41 @@ Parameter::Parameter(int id, double value) {
 Parameter::Parameter(int id, const std::vector<double> &times,
                      const std::vector<double> &values, bool periodic) {
   this->id = id;
-  this->isperiodic = periodic;
+  this->is_periodic = periodic;
   update(times, values);
 }
 
-void Parameter::update(double value) {
-  this->isconstant = true;
-  this->isperiodic = true;
-  this->value = value;
+void Parameter::update(double update_value) {
+  is_constant = true;
+  is_periodic = true;
+  value = update_value;
 }
 
-void Parameter::update(const std::vector<double> &times,
-                       const std::vector<double> &values) {
-  this->size = values.size();
+void Parameter::update(const std::vector<double> &update_times,
+                       const std::vector<double> &update_values) {
+  this->size = update_values.size();
 
-  if (this->size == 1) {
-    this->value = values[0];
-    this->isconstant = true;
+  if (size == 1) {
+    value = update_values[0];
+    is_constant = true;
   } else {
-    this->times = times;
-    this->values = values;
-    this->cycle_period = times.back() - times[0];
-    this->isconstant = false;
+    times = update_times;
+    values = update_values;
+    cycle_period = update_times.back() - update_times[0];
+    is_constant = false;
   }
 }
 
-Parameter::~Parameter() {}
-
 double Parameter::get(double time) {
   // Return the constant value if parameter is constant
-  if (isconstant) {
+  if (is_constant) {
     return value;
   }
 
   // Determine the time within this->times (necessary to extrapolate)
   double rtime;
 
-  if (isperiodic == true) {
+  if (is_periodic == true) {
     rtime = fmod(time, cycle_period);
   } else {
     // this->times is not periodic when running with external solver
@@ -83,33 +81,34 @@ double Parameter::get(double time) {
 
   // Determine the lower and upper element for interpolation
   auto i = lower_bound(times.begin(), times.end(), rtime);
-  unsigned int k = i - times.begin();
-  if (i == times.end())
+  int k = i - times.begin();
+
+  if (i == times.end()) {
     --i;
-  else if (*i == rtime) {
+  } else if (*i == rtime) {
     return values[k];
   }
-  unsigned int l = k ? k - 1 : 1;
+  int m = k ? k - 1 : 1;
 
   // Perform linear interpolation
   // TODO: Implement periodic cubic spline
-  return values[l] +
-         ((values[k] - values[l]) / (times[k] - times[l])) * (rtime - times[l]);
+  return values[m] +
+         ((values[k] - values[m]) / (times[k] - times[m])) * (rtime - times[m]);
 }
 
 void Parameter::to_steady() {
-  if (isconstant) {
+  if (is_constant) {
     return;
   }
 
   value = std::accumulate(values.begin(), values.end(), 0.0) / double(size);
-  isconstant = true;
+  is_constant = true;
   steady_converted = true;
 }
 
 void Parameter::to_unsteady() {
   if (steady_converted) {
-    isconstant = false;
+    is_constant = false;
     steady_converted = false;
   }
 }

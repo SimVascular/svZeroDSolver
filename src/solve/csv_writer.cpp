@@ -40,9 +40,9 @@
  * written
  * @return CSV encoded output string
  */
-std::string to_vessel_csv(std::vector<double> &times,
-                          std::vector<State> &states, Model &model, bool mean,
-                          bool derivative) {
+std::string to_vessel_csv(const std::vector<double> &times,
+                          const std::vector<State> &states, const Model &model,
+                          bool mean, bool derivative) {
   // Create string stream to buffer output
   std::stringstream out;
 
@@ -61,10 +61,10 @@ std::string to_vessel_csv(std::vector<double> &times,
   // Determine number of time steps
   int num_steps = times.size();
 
-  unsigned int inflow_dof;
-  unsigned int outflow_dof;
-  unsigned int inpres_dof;
-  unsigned int outpres_dof;
+  int inflow_dof;
+  int outflow_dof;
+  int inpres_dof;
+  int outpres_dof;
   for (size_t i = 0; i < model.get_num_blocks(); i++) {
     auto block = model.get_block(i);
     // Extract global solution indices of the block
@@ -171,9 +171,9 @@ std::string to_vessel_csv(std::vector<double> &times,
  * written
  * @return CSV encoded output string
  */
-std::string to_variable_csv(std::vector<double> &times,
-                            std::vector<State> &states, Model &model, bool mean,
-                            bool derivative) {
+std::string to_variable_csv(const std::vector<double> &times,
+                            const std::vector<State> &states,
+                            const Model &model, bool mean, bool derivative) {
   // Create string stream to buffer output
   std::stringstream out;
 

@@ -32,19 +32,19 @@
 #define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 
 enum class BlockType {
-  BLOODVESSEL = 0,
-  JUNCTION = 1,
-  BLOODVESSELJUNCTION = 2,
-  RESISTIVEJUNCTION = 3,
-  FLOWBC = 4,
-  PRESSUREBC = 5,
-  RESISTANCEBC = 6,
-  WINDKESSELBC = 7,
-  OPENLOOPCORONARYBC = 8,
-  CLOSEDLOOPCORONARYLEFTBC = 9,
-  CLOSEDLOOPCORONARYRIGHTBC = 10,
-  CLOSEDLOOPRCRBC = 11,
-  CLOSEDLOOPHEARTPULMONARY = 12
+  blood_vessel = 0,
+  junction = 1,
+  blood_vessel_junction = 2,
+  resistive_junction = 3,
+  flow_bc = 4,
+  pressure_bc = 5,
+  resistnce_bc = 6,
+  windkessel_bc = 7,
+  open_loop_coronary_bc = 8,
+  closed_loop_coronary_lefT_bc = 9,
+  closed_loop_coronary_right_bc = 10,
+  closed_loop_rcr_bc = 11,
+  closed_loop_heart_pulmonary = 12
 };
 
 #endif

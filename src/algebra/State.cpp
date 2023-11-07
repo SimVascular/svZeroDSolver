@@ -32,7 +32,7 @@
 
 State::State() {}
 
-State::State(unsigned int n) {
+State::State(int n) {
   y = Eigen::Matrix<double, Eigen::Dynamic, 1>(n);
   ydot = Eigen::Matrix<double, Eigen::Dynamic, 1>(n);
 }
@@ -44,7 +44,8 @@ State::State(const State &state) {
   ydot = state.ydot;
 }
 
-State State::Zero(unsigned int n) {
+State State::Zero(int n) {
+  // [TODO] what's going on here, returing a static State?
   static State state(n);
   state.y = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
   state.ydot = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);

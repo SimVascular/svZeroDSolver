@@ -42,8 +42,8 @@ std::string Block::get_name() { return this->model->get_block_name(this->id); }
 
 Block::~Block() {}
 
-void Block::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
-                        std::list<std::string> internal_var_names) {
+void Block::setup_dofs_(DOFHandler &dofhandler, int num_equations,
+                        const std::list<std::string> &internal_var_names) {
   // Collect external DOFs from inlet nodes
   for (auto &inlet_node : inlet_nodes) {
     global_var_ids.push_back(inlet_node->pres_dof);
@@ -63,7 +63,7 @@ void Block::setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
   }
 
   // Register equations of block
-  for (unsigned int i = 0; i < num_equations; i++) {
+  for (int i = 0; i < num_equations; i++) {
     global_eqn_ids.push_back(dofhandler.register_equation(get_name()));
   }
 }
@@ -91,4 +91,4 @@ void Block::update_gradient(Eigen::SparseMatrix<double> &jacobian,
                            get_name());
 }
 
-std::map<std::string, int> Block::get_num_triplets() { return num_triplets; }
+TripletsContributions Block::get_num_triplets() { return num_triplets; }

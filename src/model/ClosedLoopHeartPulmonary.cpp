@@ -41,44 +41,44 @@ void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
 void ClosedLoopHeartPulmonary::update_constant(
     SparseSystem &system, std::vector<double> &parameters) {
   // DOF 2, Eq 1: Aortic pressure
-  system.E.coeffRef(this->global_eqn_ids[1], this->global_var_ids[2]) =
-      parameters[this->global_param_ids[ParamId::CPA]];
+  system.E.coeffRef(global_eqn_ids[1], global_var_ids[2]) =
+      parameters[global_param_ids[ParamId::CPA]];
   // DOF 4, Eq 2: Right atrium volume
-  system.E.coeffRef(this->global_eqn_ids[2], this->global_var_ids[4]) = 1.0;
+  system.E.coeffRef(global_eqn_ids[2], global_var_ids[4]) = 1.0;
   // DOF 5, Eq 3: Right atrium outflow
-  system.E.coeffRef(this->global_eqn_ids[3], this->global_var_ids[5]) =
-      parameters[this->global_param_ids[ParamId::LRA_V]];
+  system.E.coeffRef(global_eqn_ids[3], global_var_ids[5]) =
+      parameters[global_param_ids[ParamId::LRA_V]];
   // DOF 7, Eq 5: Right ventricle volume
-  system.E.coeffRef(this->global_eqn_ids[5], this->global_var_ids[7]) = 1.0;
+  system.E.coeffRef(global_eqn_ids[5], global_var_ids[7]) = 1.0;
   // DOF 8, Eq 6: Right ventricle outflow
-  system.E.coeffRef(this->global_eqn_ids[6], this->global_var_ids[8]) =
-      parameters[this->global_param_ids[ParamId::LRV_A]];
+  system.E.coeffRef(global_eqn_ids[6], global_var_ids[8]) =
+      parameters[global_param_ids[ParamId::LRV_A]];
   // DOF 9, Eq 7: Pulmonary pressure
-  system.E.coeffRef(this->global_eqn_ids[7], this->global_var_ids[9]) =
-      parameters[this->global_param_ids[ParamId::CP]];
+  system.E.coeffRef(global_eqn_ids[7], global_var_ids[9]) =
+      parameters[global_param_ids[ParamId::CP]];
   // DOF 11, Eq 9: Left atrium volume
-  system.E.coeffRef(this->global_eqn_ids[9], this->global_var_ids[11]) = 1.0;
+  system.E.coeffRef(global_eqn_ids[9], global_var_ids[11]) = 1.0;
   // DOF 12, Eq 10: Left atrium outflow
-  system.E.coeffRef(this->global_eqn_ids[10], this->global_var_ids[12]) =
-      parameters[this->global_param_ids[ParamId::LLA_V]];
+  system.E.coeffRef(global_eqn_ids[10], global_var_ids[12]) =
+      parameters[global_param_ids[ParamId::LLA_V]];
   // DOF 14, Eq 12: Left ventricle volume
-  system.E.coeffRef(this->global_eqn_ids[12], this->global_var_ids[14]) = 1.0;
+  system.E.coeffRef(global_eqn_ids[12], global_var_ids[14]) = 1.0;
   // DOF 15, Eq 13: Left ventricle outflow
-  system.E.coeffRef(this->global_eqn_ids[13], this->global_var_ids[15]) =
-      parameters[this->global_param_ids[ParamId::LLV_A]];
+  system.E.coeffRef(global_eqn_ids[13], global_var_ids[15]) =
+      parameters[global_param_ids[ParamId::LLV_A]];
 }
 
 void ClosedLoopHeartPulmonary::update_time(SparseSystem &system,
                                            std::vector<double> &parameters) {
-  this->get_activation_and_elastance_functions(parameters);
+  get_activation_and_elastance_functions(parameters);
 }
 
 void ClosedLoopHeartPulmonary::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
-  this->get_psi_ra_la(parameters, y);
-  this->get_valve_positions(y);
+  get_psi_ra_la(parameters, y);
+  get_valve_positions(y);
 
   // F and C matrices depend on time and solution
   // Specifying all terms here, including constant terms (which can instead be
@@ -87,112 +87,101 @@ void ClosedLoopHeartPulmonary::update_solution(
   // [P_in,Q_in,P_out,Q_out,internal variables...]
 
   // DOF 0, Eq 0: Right atrium pressure
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[0], this->global_var_ids[4]) =
-      -this->AA * parameters[this->global_param_ids[ParamId::EMAX_RA]];
-  system.C(this->global_eqn_ids[0]) =
-      this->AA * parameters[this->global_param_ids[ParamId::EMAX_RA]] *
-          parameters[this->global_param_ids[ParamId::VASO_RA]] +
-      psi_ra * (this->AA - 1.0);
-  system.dC_dy.coeffRef(this->global_eqn_ids[0], this->global_var_ids[4]) =
-      psi_ra_derivative * (this->AA - 1.0);
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
+      -AA * parameters[global_param_ids[ParamId::EMAX_RA]];
+  system.C(global_eqn_ids[0]) =
+      AA * parameters[global_param_ids[ParamId::EMAX_RA]] *
+          parameters[global_param_ids[ParamId::VASO_RA]] +
+      psi_ra * (AA - 1.0);
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
+      psi_ra_derivative * (AA - 1.0);
 
   // DOF 1: Flow into right atrium (no equation)
 
   // DOF 2, Eq 1: Aortic pressure
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[15]) =
-      -valves[15];
-  system.F.coeffRef(this->global_eqn_ids[1], this->global_var_ids[3]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[15]) = -valves[15];
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = 1.0;
 
   // DOF 3: Flow into aorta (no equation)
 
   // DOF 4, Eq 2: Right atrium volume
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[5]) =
-      1.0 * valves[5];
-  system.F.coeffRef(this->global_eqn_ids[2], this->global_var_ids[1]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[5]) = 1.0 * valves[5];
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[1]) = -1.0;
 
   // DOF 5, Eq 3: Right atrium outflow
-  system.F.coeffRef(this->global_eqn_ids[3], this->global_var_ids[5]) =
-      parameters[this->global_param_ids[ParamId::RRA_V]] * valves[5];
-  system.F.coeffRef(this->global_eqn_ids[3], this->global_var_ids[0]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[3], this->global_var_ids[6]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[5]) =
+      parameters[global_param_ids[ParamId::RRA_V]] * valves[5];
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[0]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[6]) = 1.0;
 
   // DOF 6, Eq 4: Right ventricle pressure
-  system.F.coeffRef(this->global_eqn_ids[4], this->global_var_ids[6]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[4], this->global_var_ids[7]) =
-      -this->Erv;
-  system.C(this->global_eqn_ids[4]) =
-      this->Erv * parameters[this->global_param_ids[ParamId::VRV_U]];
+  system.F.coeffRef(global_eqn_ids[4], global_var_ids[6]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[4], global_var_ids[7]) = -Erv;
+  system.C(global_eqn_ids[4]) =
+      Erv * parameters[global_param_ids[ParamId::VRV_U]];
 
   // DOF 7, Eq 5: Right ventricle volume
-  system.F.coeffRef(this->global_eqn_ids[5], this->global_var_ids[5]) =
-      -1.0 * valves[5];
-  system.F.coeffRef(this->global_eqn_ids[5], this->global_var_ids[8]) =
-      1.0 * valves[8];
+  system.F.coeffRef(global_eqn_ids[5], global_var_ids[5]) = -1.0 * valves[5];
+  system.F.coeffRef(global_eqn_ids[5], global_var_ids[8]) = 1.0 * valves[8];
 
   // DOF 8, Eq 6: Right ventricle outflow
-  system.F.coeffRef(this->global_eqn_ids[6], this->global_var_ids[6]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[6], this->global_var_ids[9]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[6], this->global_var_ids[8]) =
-      parameters[this->global_param_ids[ParamId::RRV_A]] * valves[8];
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[6]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[9]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[8]) =
+      parameters[global_param_ids[ParamId::RRV_A]] * valves[8];
 
   // DOF 9, Eq 7: Pulmonary pressure
-  system.F.coeffRef(this->global_eqn_ids[7], this->global_var_ids[8]) =
-      -valves[8];
-  system.F.coeffRef(this->global_eqn_ids[7], this->global_var_ids[9]) =
-      1.0 / parameters[this->global_param_ids[ParamId::RPD]];
-  system.F.coeffRef(this->global_eqn_ids[7], this->global_var_ids[10]) =
-      -1.0 / parameters[this->global_param_ids[ParamId::RPD]];
+  system.F.coeffRef(global_eqn_ids[7], global_var_ids[8]) = -valves[8];
+  system.F.coeffRef(global_eqn_ids[7], global_var_ids[9]) =
+      1.0 / parameters[global_param_ids[ParamId::RPD]];
+  system.F.coeffRef(global_eqn_ids[7], global_var_ids[10]) =
+      -1.0 / parameters[global_param_ids[ParamId::RPD]];
 
   // DOF 10, Eq 8: Left atrium pressure
-  system.F.coeffRef(this->global_eqn_ids[8], this->global_var_ids[10]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[8], this->global_var_ids[11]) =
-      -this->AA * parameters[this->global_param_ids[ParamId::EMAX_LA]];
-  system.C(this->global_eqn_ids[8]) =
-      this->AA * parameters[this->global_param_ids[ParamId::EMAX_LA]] *
-          parameters[this->global_param_ids[ParamId::VASO_LA]] +
-      psi_la * (this->AA - 1.0);
-  system.dC_dy.coeffRef(this->global_eqn_ids[8], this->global_var_ids[11]) =
-      psi_la_derivative * (this->AA - 1.0);
+  system.F.coeffRef(global_eqn_ids[8], global_var_ids[10]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[8], global_var_ids[11]) =
+      -AA * parameters[global_param_ids[ParamId::EMAX_LA]];
+  system.C(global_eqn_ids[8]) =
+      AA * parameters[global_param_ids[ParamId::EMAX_LA]] *
+          parameters[global_param_ids[ParamId::VASO_LA]] +
+      psi_la * (AA - 1.0);
+  system.dC_dy.coeffRef(global_eqn_ids[8], global_var_ids[11]) =
+      psi_la_derivative * (AA - 1.0);
 
   // DOF 11, Eq 9: Left atrium volume
-  system.F.coeffRef(this->global_eqn_ids[9], this->global_var_ids[8]) =
-      -1.0 * valves[8];
-  system.F.coeffRef(this->global_eqn_ids[9], this->global_var_ids[12]) =
-      1.0 * valves[12];
+  system.F.coeffRef(global_eqn_ids[9], global_var_ids[8]) = -1.0 * valves[8];
+  system.F.coeffRef(global_eqn_ids[9], global_var_ids[12]) = 1.0 * valves[12];
 
   // DOF 12, Eq 10: Left atrium outflow
-  system.F.coeffRef(this->global_eqn_ids[10], this->global_var_ids[10]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[10], this->global_var_ids[13]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[10], this->global_var_ids[12]) =
-      parameters[this->global_param_ids[ParamId::RLA_V]] * valves[12];
+  system.F.coeffRef(global_eqn_ids[10], global_var_ids[10]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[10], global_var_ids[13]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[10], global_var_ids[12]) =
+      parameters[global_param_ids[ParamId::RLA_V]] * valves[12];
 
   // DOF 13, Eq 11: Left ventricle pressure
-  system.F.coeffRef(this->global_eqn_ids[11], this->global_var_ids[13]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[11], this->global_var_ids[14]) =
-      -this->Elv;
-  system.C(this->global_eqn_ids[11]) =
-      this->Elv * parameters[this->global_param_ids[ParamId::VLV_U]];
+  system.F.coeffRef(global_eqn_ids[11], global_var_ids[13]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[11], global_var_ids[14]) = -Elv;
+  system.C(global_eqn_ids[11]) =
+      Elv * parameters[global_param_ids[ParamId::VLV_U]];
 
   // DOF 14, Eq 12: Left ventricle volume
-  system.F.coeffRef(this->global_eqn_ids[12], this->global_var_ids[12]) =
-      -1.0 * valves[12];
-  system.F.coeffRef(this->global_eqn_ids[12], this->global_var_ids[15]) =
-      1.0 * valves[15];
+  system.F.coeffRef(global_eqn_ids[12], global_var_ids[12]) = -1.0 * valves[12];
+  system.F.coeffRef(global_eqn_ids[12], global_var_ids[15]) = 1.0 * valves[15];
 
   // DOF 15, Eq 13: Left ventricle outflow
-  system.F.coeffRef(this->global_eqn_ids[13], this->global_var_ids[13]) = -1.0;
-  system.F.coeffRef(this->global_eqn_ids[13], this->global_var_ids[2]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[13], this->global_var_ids[15]) =
-      parameters[this->global_param_ids[ParamId::RLV_AO]] * valves[15];
+  system.F.coeffRef(global_eqn_ids[13], global_var_ids[13]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[13], global_var_ids[2]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[13], global_var_ids[15]) =
+      parameters[global_param_ids[ParamId::RLV_AO]] * valves[15];
 }
 
 void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
     std::vector<double> &parameters) {
-  auto T_cardiac = this->model->cardiac_cycle_period;
-  auto Tsa = T_cardiac * parameters[this->global_param_ids[ParamId::TSA]];
-  auto tpwave = T_cardiac / parameters[this->global_param_ids[ParamId::TPWAVE]];
-  auto t_in_cycle = fmod(this->model->time, T_cardiac);
+  auto T_cardiac = model->cardiac_cycle_period;
+  auto Tsa = T_cardiac * parameters[global_param_ids[ParamId::TSA]];
+  auto tpwave = T_cardiac / parameters[global_param_ids[ParamId::TPWAVE]];
+  auto t_in_cycle = fmod(model->time, T_cardiac);
 
   // Activation function
   AA = 0.0;
@@ -233,36 +222,34 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
             (Ft_elastance[i][1]) * sin(2.0 * PI * i * t_in_cycle / T_cardiac);
   }
 
-  Elv = Elv_i * parameters[this->global_param_ids[ParamId::ELV_S]];
-  Erv = Elv_i * parameters[this->global_param_ids[ParamId::ERV_S]];
+  Elv = Elv_i * parameters[global_param_ids[ParamId::ELV_S]];
+  Erv = Elv_i * parameters[global_param_ids[ParamId::ERV_S]];
 }
 
 void ClosedLoopHeartPulmonary::get_psi_ra_la(
     std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
-  auto RA_volume = y[this->global_var_ids[4]];
-  auto LA_volume = y[this->global_var_ids[11]];
-  psi_ra =
-      parameters[this->global_param_ids[ParamId::KXP_RA]] *
-      (exp((RA_volume - parameters[this->global_param_ids[ParamId::VASO_RA]]) *
-           parameters[this->global_param_ids[ParamId::KXV_RA]]) -
-       1.0);
-  psi_la =
-      parameters[this->global_param_ids[ParamId::KXP_LA]] *
-      (exp((LA_volume - parameters[this->global_param_ids[ParamId::VASO_LA]]) *
-           parameters[this->global_param_ids[ParamId::KXV_LA]]) -
-       1.0);
+  auto RA_volume = y[global_var_ids[4]];
+  auto LA_volume = y[global_var_ids[11]];
+  psi_ra = parameters[global_param_ids[ParamId::KXP_RA]] *
+           (exp((RA_volume - parameters[global_param_ids[ParamId::VASO_RA]]) *
+                parameters[global_param_ids[ParamId::KXV_RA]]) -
+            1.0);
+  psi_la = parameters[global_param_ids[ParamId::KXP_LA]] *
+           (exp((LA_volume - parameters[global_param_ids[ParamId::VASO_LA]]) *
+                parameters[global_param_ids[ParamId::KXV_LA]]) -
+            1.0);
 
   psi_ra_derivative =
-      parameters[this->global_param_ids[ParamId::KXP_RA]] *
-      exp((RA_volume - parameters[this->global_param_ids[ParamId::VASO_RA]]) *
-          parameters[this->global_param_ids[ParamId::KXV_RA]]) *
-      parameters[this->global_param_ids[ParamId::KXV_RA]];
+      parameters[global_param_ids[ParamId::KXP_RA]] *
+      exp((RA_volume - parameters[global_param_ids[ParamId::VASO_RA]]) *
+          parameters[global_param_ids[ParamId::KXV_RA]]) *
+      parameters[global_param_ids[ParamId::KXV_RA]];
   psi_la_derivative =
-      parameters[this->global_param_ids[ParamId::KXP_LA]] *
-      exp((LA_volume - parameters[this->global_param_ids[ParamId::VASO_LA]]) *
-          parameters[this->global_param_ids[ParamId::KXV_LA]]) *
-      parameters[this->global_param_ids[ParamId::KXV_LA]];
+      parameters[global_param_ids[ParamId::KXP_LA]] *
+      exp((LA_volume - parameters[global_param_ids[ParamId::VASO_LA]]) *
+          parameters[global_param_ids[ParamId::KXV_LA]]) *
+      parameters[global_param_ids[ParamId::KXV_LA]];
 }
 
 void ClosedLoopHeartPulmonary::get_valve_positions(
@@ -270,40 +257,36 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   std::fill(valves, valves + 16, 1.0);
 
   // RA to RV
-  auto pressure_ra = y[this->global_var_ids[0]];
-  auto pressure_rv = y[this->global_var_ids[6]];
-  auto outflow_ra = y[this->global_var_ids[5]];
+  auto pressure_ra = y[global_var_ids[0]];
+  auto pressure_rv = y[global_var_ids[6]];
+  auto outflow_ra = y[global_var_ids[5]];
   if ((pressure_ra <= pressure_rv) and (outflow_ra <= 0.0)) {
     valves[5] = 0.0;
-    y[this->global_var_ids[5]] = 0.0;
+    y[global_var_ids[5]] = 0.0;
   }
 
   // RV to pulmonary
-  auto pressure_pulmonary = y[this->global_var_ids[9]];
-  auto outflow_rv = y[this->global_var_ids[8]];
+  auto pressure_pulmonary = y[global_var_ids[9]];
+  auto outflow_rv = y[global_var_ids[8]];
   if ((pressure_rv <= pressure_pulmonary) and (outflow_rv <= 0.0)) {
     valves[8] = 0.0;
-    y[this->global_var_ids[8]] = 0.0;
+    y[global_var_ids[8]] = 0.0;
   }
 
   // LA to LV
-  auto pressure_la = y[this->global_var_ids[10]];
-  auto pressure_lv = y[this->global_var_ids[13]];
-  auto outflow_la = y[this->global_var_ids[12]];
+  auto pressure_la = y[global_var_ids[10]];
+  auto pressure_lv = y[global_var_ids[13]];
+  auto outflow_la = y[global_var_ids[12]];
   if ((pressure_la <= pressure_lv) and (outflow_la <= 0.0)) {
     valves[12] = 0.0;
-    y[this->global_var_ids[12]] = 0.0;
+    y[global_var_ids[12]] = 0.0;
   }
 
   // LV to aorta
-  auto pressure_aorta = y[this->global_var_ids[2]];
-  auto outflow_lv = y[this->global_var_ids[15]];
+  auto pressure_aorta = y[global_var_ids[2]];
+  auto outflow_lv = y[global_var_ids[15]];
   if ((pressure_lv <= pressure_aorta) and (outflow_lv <= 0.0)) {
     valves[15] = 0.0;
-    y[this->global_var_ids[15]] = 0.0;
+    y[global_var_ids[15]] = 0.0;
   }
-}
-
-std::map<std::string, int> ClosedLoopHeartPulmonary::get_num_triplets() {
-  return num_triplets;
 }

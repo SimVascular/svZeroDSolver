@@ -42,6 +42,25 @@
 #include "DOFHandler.h"
 #include "SparseSystem.h"
 
+/**
+ * @brief The number of triplets that the element contributes
+ * to the global system.
+ */
+struct TripletsContributions {
+  TripletsContributions(){};
+  TripletsContributions(int F, int E, int D) : F(F), E(E), D(D){};
+  TripletsContributions operator+=(const TripletsContributions &other) {
+    F += other.F;
+    E += other.E;
+    D += other.D;
+    return *this;
+  };
+
+  int F{0};
+  int E{0};
+  int D{0};
+};
+
 class Node;
 class Model;
 
@@ -107,14 +126,14 @@ class Block {
    * Variable indices correspond to columns in the global system.
    *
    */
-  std::vector<unsigned int> global_var_ids;
+  std::vector<int> global_var_ids;
 
   /**
    * @brief Global equation indices of the local element contributions
    *
    * Equation indices correspond to rows in the global system.
    */
-  std::vector<unsigned int> global_eqn_ids;
+  std::vector<int> global_eqn_ids;
 
   /**
    * @brief Get the name of the block
@@ -136,8 +155,8 @@ class Block {
    * @param num_internal_vars Number of internal variables of the block
    */
 
-  void setup_dofs_(DOFHandler &dofhandler, unsigned int num_equations,
-                   std::list<std::string> internal_var_names);
+  void setup_dofs_(DOFHandler &dofhandler, int num_equations,
+                   const std::list<std::string> &internal_var_names);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -211,11 +230,7 @@ class Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  std::map<std::string, int> num_triplets = {
-      {"F", 0},
-      {"E", 0},
-      {"D", 0},
-  };
+  TripletsContributions num_triplets;
 
   /**
    * @brief Get number of triplets of element
@@ -223,7 +238,7 @@ class Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  virtual std::map<std::string, int> get_num_triplets();
+  virtual TripletsContributions get_num_triplets();
 };
 
 #endif

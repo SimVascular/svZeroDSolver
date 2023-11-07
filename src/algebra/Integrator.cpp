@@ -59,8 +59,9 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   system.reserve(model);
 }
 
+// Must declare default constructord and dedtructor
+// because of Eigen.
 Integrator::Integrator() {}
-
 Integrator::~Integrator() {}
 
 void Integrator::clean() {
@@ -78,7 +79,7 @@ void Integrator::update_params(double time_step_size) {
   model->update_time(system, 0.0);
 }
 
-State Integrator::step(State& old_state, double time) {
+State Integrator::step(const State& old_state, double time) {
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();

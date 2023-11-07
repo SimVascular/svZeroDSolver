@@ -60,23 +60,16 @@ class Node {
    * @param outlet_eles Outlet element of the node
    * @param model The model to which the node belongs
    */
-  Node(){};
   Node(int id, const std::vector<Block *> &inlet_eles,
        const std::vector<Block *> &outlet_eles, Model *model);
-
-  /**
-   * @brief Destroy the Node object
-   *
-   */
-  ~Node();
 
   int id;                            ///< Global ID of the block
   std::vector<Block *> inlet_eles;   ///< Inlet element of the node
   std::vector<Block *> outlet_eles;  ///< Outlet element of the node
-  Model *model;                      ///< The model to which the node belongs
+  Model *model{nullptr};             ///< The model to which the node belongs
 
-  unsigned int flow_dof;  ///< Global flow degree-of-freedom of the node
-  unsigned int pres_dof;  ///< Global pressure degree-of-freedom of the node
+  int flow_dof{0};  ///< Global flow degree-of-freedom of the node
+  int pres_dof{0};  ///< Global pressure degree-of-freedom of the node
 
   /**
    * @brief Get the name of the node

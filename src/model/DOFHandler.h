@@ -47,8 +47,8 @@
  */
 class DOFHandler {
  private:
-  int var_counter;  ///< Variable counter
-  int eqn_counter;  ///< Equation counter
+  int var_counter{0};  ///< Variable counter
+  int eqn_counter{0};  ///< Equation counter
 
  public:
   std::vector<std::string>
@@ -59,37 +59,25 @@ class DOFHandler {
       equations;  ///< Equation names corresponding to the equation indices
 
   /**
-   * @brief Construct a new DOFHandler object
-   *
-   */
-  DOFHandler();
-
-  /**
-   * @brief Destroy the DOFHandler object
-   *
-   */
-  ~DOFHandler();
-
-  /**
    * @brief Get the size of the system
    *
    * @return Size of the system
    */
-  int size();
+  int size() const;
 
   /**
    * @brief Get the number of equations
    *
    * @return int Number of equations
    */
-  int get_num_equations();
+  int get_num_equations() const;
 
   /**
    * @brief Get the number of variables
    *
    * @return int Number of variables
    */
-  int get_num_variables();
+  int get_num_variables() const;
 
   /**
    * @brief Register a new variable at the DOFHandler.
@@ -97,7 +85,7 @@ class DOFHandler {
    * @param name Name of the variable
    * @return Global index of the variable
    */
-  int register_variable(std::string name);
+  int register_variable(const std::string& name);
 
   /**
    * @brief Get the index of a variable by its name
@@ -105,7 +93,7 @@ class DOFHandler {
    * @param name Name of the variable
    * @return int Name of the variable
    */
-  int get_variable_index(std::string name);
+  int get_variable_index(const std::string& name) const;
 
   /**
    * @brief Register a new equation at the DOFHandler
@@ -113,7 +101,7 @@ class DOFHandler {
    * @param name Name of the equation
    * @return Global index of the equation
    */
-  int register_equation(std::string name);
+  int register_equation(const std::string& name);
 
   /**
    * @brief Get the index of a variable
@@ -121,7 +109,7 @@ class DOFHandler {
    * @param name Name of the variable
    * @return Index of variable with given name
    */
-  int get_index(std::string_view& name);
+  int get_index(const std::string_view& name) const;
 };
 
 #endif  // SVZERODSOLVER_MODEL_DOFHANDLER_HPP_

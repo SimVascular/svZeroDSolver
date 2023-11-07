@@ -95,7 +95,7 @@ class Model {
    * @return int Global ID of the block
    */
   int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
-                std::string_view name, bool internal = false);
+                const std::string_view &name, bool internal = false);
 
   /**
    * @brief Get a block by its name
@@ -103,7 +103,7 @@ class Model {
    * @param name Name of the Block
    * @return Block* The block
    */
-  Block *get_block(std::string_view name);
+  Block *get_block(const std::string_view &name) const;
 
   /**
    * @brief Get a block by its global ID
@@ -111,7 +111,7 @@ class Model {
    * @param block_id Global ID of the Block
    * @return Block* The block
    */
-  Block *get_block(int block_id);
+  Block *get_block(int block_id) const;
 
   /**
    * @brief Get a block type by its name
@@ -119,7 +119,7 @@ class Model {
    * @param block_id Global ID of the Block
    * @return BlockType The block type
    */
-  BlockType get_block_type(std::string_view name);
+  BlockType get_block_type(const std::string_view &name) const;
 
   /**
    * @brief Get the name of a block by it's ID
@@ -127,7 +127,7 @@ class Model {
    * @param block_id Global ID of the block
    * @return std::string Name of the block
    */
-  std::string get_block_name(int block_id);
+  std::string get_block_name(int block_id) const;
 
   /**
    * @brief Add a node to the model
@@ -137,7 +137,8 @@ class Model {
    * @return int Global ID of the node
    */
   int add_node(const std::vector<Block *> &inlet_eles,
-               const std::vector<Block *> &outlet_eles, std::string_view name);
+               const std::vector<Block *> &outlet_eles,
+               const std::string_view &name);
 
   /**
    * @brief Get the name of a node by it's ID
@@ -145,7 +146,7 @@ class Model {
    * @param node_id Global ID of the node
    * @return std::string Name of the node
    */
-  std::string get_node_name(int node_id);
+  std::string get_node_name(int node_id) const;
 
   /**
    * @brief Add a constant model parameter
@@ -180,7 +181,7 @@ class Model {
    * @param param_id Global ID of the parameter
    * @return T Current value of the parameter
    */
-  double get_parameter_value(int param_id);
+  double get_parameter_value(int param_id) const;
 
   /**
    * @brief Update the current value of a parameter
@@ -245,14 +246,15 @@ class Model {
    *
    * @return Number of triplets that are used in each system matrix
    */
-  std::map<std::string, int> get_num_triplets();
+  // std::map<std::string, int> get_num_triplets();
+  TripletsContributions get_num_triplets() const;
 
   /**
    * @brief Get the number of blocks in the model
    *
    * @return int Number of blocks
    */
-  int get_num_blocks(bool internal = false);
+  int get_num_blocks(bool internal = false) const;
 
  private:
   int block_count = 0;

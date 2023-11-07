@@ -49,8 +49,6 @@ Node::Node(int id, const std::vector<Block *> &inlet_eles,
   }
 }
 
-Node::~Node() {}
-
 std::string Node::get_name() { return this->model->get_node_name(this->id); }
 
 void Node::setup_dofs(DOFHandler &dofhandler) {

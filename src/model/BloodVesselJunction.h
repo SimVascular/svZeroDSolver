@@ -63,7 +63,7 @@
  * \f]
  *
  * Each blood vessel is modelled as:
- * 
+ *
  * \f[
  * \begin{circuitikz} \draw
  * node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);

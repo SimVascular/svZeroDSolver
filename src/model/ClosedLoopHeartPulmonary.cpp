@@ -87,14 +87,14 @@ void ClosedLoopHeartPulmonary::update_solution(
   // [P_in,Q_in,P_out,Q_out,internal variables...]
 
   // DOF 0, Eq 0: Right atrium pressure
-  system.F.coeffRef(global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[0], this->global_var_ids[4]) =
-      -this->AA * parameters[this->global_param_ids[ParamId::EMAX_RA]];
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
+      -AA * parameters[global_param_ids[ParamId::EMAX_RA]];
   system.C(global_eqn_ids[0]) =
-      this->AA * parameters[this->global_param_ids[ParamId::EMAX_RA]] *
-          parameters[this->global_param_ids[ParamId::VASO_RA]] +
+      AA * parameters[global_param_ids[ParamId::EMAX_RA]] *
+          parameters[global_param_ids[ParamId::VASO_RA]] +
       psi_ra * (AA - 1.0);
-  system.dC_dy.coeffRef(tglobal_eqn_ids[0], this->global_var_ids[4]) =
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
       psi_ra_derivative * (AA - 1.0);
 
   // DOF 1: Flow into right atrium (no equation)
@@ -145,15 +145,15 @@ void ClosedLoopHeartPulmonary::update_solution(
       -1.0 / parameters[global_param_ids[ParamId::RPD]];
 
   // DOF 10, Eq 8: Left atrium pressure
-  system.F.coeffRef(this->global_eqn_ids[8], this->global_var_ids[10]) = 1.0;
-  system.F.coeffRef(this->global_eqn_ids[8], this->global_var_ids[11]) =
-      -this->AA * parameters[this->global_param_ids[ParamId::EMAX_LA]];
-  system.C(this->global_eqn_ids[8]) =
-      this->AA * parameters[this->global_param_ids[ParamId::EMAX_LA]] *
-          parameters[this->global_param_ids[ParamId::VASO_LA]] +
-      psi_la * (this->AA - 1.0);
-  system.dC_dy.coeffRef(this->global_eqn_ids[8], this->global_var_ids[11]) =
-      psi_la_derivative * (this->AA - 1.0);
+  system.F.coeffRef(global_eqn_ids[8], global_var_ids[10]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[8], global_var_ids[11]) =
+      -AA * parameters[global_param_ids[ParamId::EMAX_LA]];
+  system.C(global_eqn_ids[8]) =
+      AA * parameters[global_param_ids[ParamId::EMAX_LA]] *
+          parameters[global_param_ids[ParamId::VASO_LA]] +
+      psi_la * (AA - 1.0);
+  system.dC_dy.coeffRef(global_eqn_ids[8], global_var_ids[11]) =
+      psi_la_derivative * (AA - 1.0);
 
   // DOF 11, Eq 9: Left atrium volume
   system.F.coeffRef(global_eqn_ids[9], global_var_ids[8]) =

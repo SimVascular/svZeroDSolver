@@ -120,6 +120,8 @@ class Integrator {
   double ydot_init_coeff{0.0};
   int max_iter{0};
   int size{0};
+  int n_iter{0};
+  int n_nonlin_iter{0};
   Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;

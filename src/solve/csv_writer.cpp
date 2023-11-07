@@ -41,7 +41,7 @@
  * @return CSV encoded output string
  */
 std::string to_vessel_csv(const std::vector<double> &times,
-                          const std::vector<State> &states, Model &model, bool mean,
+                          const std::vector<State> &states, const Model &model, bool mean,
                           bool derivative) {
   // Create string stream to buffer output
   std::stringstream out;
@@ -171,8 +171,8 @@ std::string to_vessel_csv(const std::vector<double> &times,
  * written
  * @return CSV encoded output string
  */
-std::string to_variable_csv(std::vector<double> &times,
-                            std::vector<State> &states, Model &model, bool mean,
+std::string to_variable_csv(const std::vector<double> &times,
+                            const std::vector<State> &states, const Model &model, bool mean,
                             bool derivative) {
   // Create string stream to buffer output
   std::stringstream out;

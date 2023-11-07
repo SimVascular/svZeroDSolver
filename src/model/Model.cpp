@@ -122,17 +122,17 @@ int Model::add_block(BlockType block_type,
   return block_count++;
 }
 
-Block *Model::get_block(const std::string_view& name) {
+Block *Model::get_block(const std::string_view& name) const {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
     return nullptr;
   }
 
-  return blocks[block_index_map[name_string]].get();
+  return blocks[block_index_map.at(name_string)].get();
 }
 
-Block *Model::get_block(int block_id) {
+Block *Model::get_block(int block_id) const {
   if (block_id >= blocks.size()) {
     return hidden_blocks[block_id - blocks.size()].get();
   }
@@ -140,14 +140,14 @@ Block *Model::get_block(int block_id) {
   return blocks[block_id].get();
 }
 
-BlockType Model::get_block_type(const std::string_view& name) {
+BlockType Model::get_block_type(const std::string_view& name) const {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
     throw std::runtime_error("Could not find block with name " + name_string);
   }
 
-  return block_types[block_index_map[name_string]];
+  return block_types[block_index_map.at(name_string)];
 }
 
 std::string Model::get_block_name(int block_id) const {
@@ -192,7 +192,7 @@ int Model::add_parameter(const std::vector<double> &times,
 
 Parameter *Model::get_parameter(int param_id) { return &parameters[param_id]; }
 
-double Model::get_parameter_value(int param_id) {
+double Model::get_parameter_value(int param_id) const {
   return parameter_values[param_id];
 }
 
@@ -285,7 +285,7 @@ void Model::to_unsteady() {
   }
 }
 
-TripletsContributions Model::get_num_triplets() {
+TripletsContributions Model::get_num_triplets() const {
   TripletsContributions triplets_sum;
 
   for (auto &elem : blocks) {

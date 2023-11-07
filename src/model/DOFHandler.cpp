@@ -45,8 +45,8 @@ int DOFHandler::register_variable(const std::string& name) {
   return var_counter++;
 }
 
-int DOFHandler::get_variable_index(const std::string& name) {
-  return variable_name_map[name];
+int DOFHandler::get_variable_index(const std::string& name) const {
+  return variable_name_map.at(name);
 }
 
 int DOFHandler::register_equation(const std::string& name) {
@@ -54,7 +54,7 @@ int DOFHandler::register_equation(const std::string& name) {
   return eqn_counter++;
 }
 
-int DOFHandler::get_index(const std::string_view& name) {
+int DOFHandler::get_index(const std::string_view& name) const {
   auto it = std::find(variables.begin(), variables.end(), name);
 
   if (it != variables.end()) {

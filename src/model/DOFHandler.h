@@ -93,7 +93,7 @@ class DOFHandler {
    * @param name Name of the variable
    * @return int Name of the variable
    */
-  int get_variable_index(const std::string& name);
+  int get_variable_index(const std::string& name) const;
 
   /**
    * @brief Register a new equation at the DOFHandler
@@ -109,7 +109,7 @@ class DOFHandler {
    * @param name Name of the variable
    * @return Index of variable with given name
    */
-  int get_index(const std::string_view& name);
+  int get_index(const std::string_view& name) const;
 };
 
 #endif  // SVZERODSOLVER_MODEL_DOFHANDLER_HPP_

@@ -118,12 +118,6 @@ class LevenbergMarquardtOptimizer {
                               int max_iter);
 
   /**
-   * @brief Destroy the LevenbergMarquardtOptimizer object
-   *
-   */
-  ~LevenbergMarquardtOptimizer();
-
-  /**
    * @brief Run the optimization algorithm
    *
    * @param alpha Initial parameter vector alpha

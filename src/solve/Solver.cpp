@@ -24,7 +24,7 @@ Solver::Solver(const nlohmann::json& config) {
   sanity_checks();
 }
 
-Solver::~Solver() {}
+//Solver::~Solver() {}
 
 void Solver::run() {
   auto state = initial_state;
@@ -103,9 +103,9 @@ void Solver::run() {
   }
 }
 
-std::vector<double> Solver::get_times() { return times; }
+std::vector<double> Solver::get_times() const { return times; }
 
-std::string Solver::get_full_result() {
+std::string Solver::get_full_result() const {
   std::string output;
 
   if (simparams.output_variable_based) {
@@ -120,7 +120,7 @@ std::string Solver::get_full_result() {
   return output;
 }
 
-Eigen::VectorXd Solver::get_single_result(const std::string& dof_name) {
+Eigen::VectorXd Solver::get_single_result(const std::string& dof_name) const {
   int dof_index = model.dofhandler.get_variable_index(dof_name);
   int num_states = states.size();
   Eigen::VectorXd result = Eigen::VectorXd::Zero(num_states);
@@ -132,7 +132,7 @@ Eigen::VectorXd Solver::get_single_result(const std::string& dof_name) {
   return result;
 }
 
-double Solver::get_single_result_avg(const std::string& dof_name) {
+double Solver::get_single_result_avg(const std::string& dof_name) const {
   int dof_index = model.dofhandler.get_variable_index(dof_name);
   int num_states = states.size();
   Eigen::VectorXd result = Eigen::VectorXd::Zero(num_states);
@@ -169,7 +169,7 @@ void Solver::sanity_checks() {
   }
 }
 
-void Solver::write_result_to_csv(const std::string& filename) {
+void Solver::write_result_to_csv(const std::string& filename) const {
   DEBUG_MSG("Write output");
   std::ofstream ofs(filename);
   ofs << get_full_result();

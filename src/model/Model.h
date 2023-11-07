@@ -103,7 +103,7 @@ class Model {
    * @param name Name of the Block
    * @return Block* The block
    */
-  Block *get_block(const std::string_view& name);
+  Block *get_block(const std::string_view& name) const;
 
   /**
    * @brief Get a block by its global ID
@@ -111,7 +111,7 @@ class Model {
    * @param block_id Global ID of the Block
    * @return Block* The block
    */
-  Block *get_block(int block_id);
+  Block *get_block(int block_id) const;
 
   /**
    * @brief Get a block type by its name
@@ -119,7 +119,7 @@ class Model {
    * @param block_id Global ID of the Block
    * @return BlockType The block type
    */
-  BlockType get_block_type(const std::string_view& name);
+  BlockType get_block_type(const std::string_view& name) const;
 
   /**
    * @brief Get the name of a block by it's ID
@@ -180,7 +180,7 @@ class Model {
    * @param param_id Global ID of the parameter
    * @return T Current value of the parameter
    */
-  double get_parameter_value(int param_id);
+  double get_parameter_value(int param_id) const;
 
   /**
    * @brief Update the current value of a parameter
@@ -246,7 +246,7 @@ class Model {
    * @return Number of triplets that are used in each system matrix
    */
   //std::map<std::string, int> get_num_triplets();
-  TripletsContributions get_num_triplets();
+  TripletsContributions get_num_triplets() const;
 
   /**
    * @brief Get the number of blocks in the model

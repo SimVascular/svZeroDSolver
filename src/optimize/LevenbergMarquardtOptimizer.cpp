@@ -53,8 +53,6 @@ LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
   vec = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(num_params);
 }
 
-LevenbergMarquardtOptimizer::~LevenbergMarquardtOptimizer() {}
-
 Eigen::Matrix<double, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer::run(
     Eigen::Matrix<double, Eigen::Dynamic, 1> alpha,
     std::vector<std::vector<double>>& y_obs,

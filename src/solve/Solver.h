@@ -55,12 +55,6 @@ class Solver {
   Solver(const nlohmann::json& config);
 
   /**
-   * @brief Destroy the Solver object
-   *
-   */
-  ~Solver();
-
-  /**
    * @brief Run the simulation
    *
    */
@@ -71,7 +65,7 @@ class Solver {
    *
    * @return std::string Result
    */
-  std::string get_full_result();
+  std::string get_full_result() const;
 
   /**
    * @brief Get the result of a single DOF over time
@@ -79,7 +73,7 @@ class Solver {
    * @param dof_name Name of the degree-of-freedom
    * @return Eigen::VectorXd Result
    */
-  Eigen::VectorXd get_single_result(const std::string& dof_name);
+  Eigen::VectorXd get_single_result(const std::string& dof_name) const;
 
   /**
    * @brief Get the result of a single DOF averaged over time
@@ -87,14 +81,14 @@ class Solver {
    * @param dof_name Name of the degree-of-freedom
    * @return T Result
    */
-  double get_single_result_avg(const std::string& dof_name);
+  double get_single_result_avg(const std::string& dof_name) const;
 
   /**
    * @brief Get the time steps of the result
    *
    * @return std::vector<double>
    */
-  std::vector<double> get_times();
+  std::vector<double> get_times() const;
 
   /**
    * @brief Update the parameters of a block
@@ -110,7 +104,7 @@ class Solver {
    *
    * @param filename
    */
-  void write_result_to_csv(const std::string& filename);
+  void write_result_to_csv(const std::string& filename) const;
 
  private:
   Model model;

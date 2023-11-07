@@ -46,14 +46,14 @@ void BloodVessel::update_constant(SparseSystem &system,
       -inductance;
   system.E.coeffRef(global_eqn_ids[1], global_var_ids[0]) =
       -capacitance;
-  system.E.coeffRef(global_eqn_ids[1], global_var_ids[1]) =
+  system.E.coeffRef(global_eqn_ids[1], this->global_var_ids[1]) =
       capacitance * resistance;
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
+  system.F.coeffRef(global_eqn_ids[0], this->global_var_ids[0]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[0], this->global_var_ids[1]) =
       -resistance;
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
-  system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[0], this->global_var_ids[2]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[1], this->global_var_ids[1]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[1], this->global_var_ids[3]) = -1.0;
 }
 
 void BloodVessel::update_solution(
@@ -74,12 +74,12 @@ void BloodVessel::update_solution(
       stenosis_resistance * 2.0 * capacitance * dq_in;
 
   double sgn_q_in = (0.0 < q_in) - (q_in < 0.0);
-  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
+  system.dC_dy.coeffRef(global_eqn_ids[0], this->global_var_ids[1]) =
       stenosis_coeff * sgn_q_in * -2.0 * q_in;
-  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[1]) =
+  system.dC_dy.coeffRef(global_eqn_ids[1], this->global_var_ids[1]) =
       stenosis_coeff * sgn_q_in * 2.0 * capacitance * dq_in;
 
-  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[1]) =
+  system.dC_dydot.coeffRef(global_eqn_ids[1], this->global_var_ids[1]) =
       stenosis_resistance * 2.0 * capacitance;
 }
 

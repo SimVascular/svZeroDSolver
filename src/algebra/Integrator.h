@@ -106,26 +106,24 @@
  */
 class Integrator {
  private:
-  double alpha_m;
-  double alpha_f;
-  double alpha_m_inv;
-  double alpha_f_inv;
-  double gamma;
-  double gamma_inv;
-  double time_step_size;
-  double time_step_size_inv;
-  double y_dot_coeff;
-  double atol;
-  double y_init_coeff;
-  double ydot_init_coeff;
-  int max_iter;
-  int size;
-  int n_iter = 0;
-  int n_nonlin_iter = 0;
+  double alpha_m{0.0};
+  double alpha_f{0.0};
+  double alpha_m_inv{0.0};
+  double alpha_f_inv{0.0};
+  double gamma{0.0};
+  double gamma_inv{0.0};
+  double time_step_size{0.0};
+  double time_step_size_inv{0.0};
+  double y_dot_coeff{0.0};
+  double atol{0.0};
+  double y_init_coeff{0.0};
+  double ydot_init_coeff{0.0};
+  int max_iter{0};
+  int size{0};
   Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
-  Model *model;
+  Model* model{nullptr};
 
  public:
   /**
@@ -173,7 +171,7 @@ class Integrator {
    * @param time Current time
    * @return New state
    */
-  State step(const State &state, double time);
+  State step(const State& state, double time);
 
   /**
    * @brief Get average number of nonlinear iterations in all step calls

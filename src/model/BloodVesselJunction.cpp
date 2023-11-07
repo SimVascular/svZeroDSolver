@@ -55,7 +55,7 @@ void BloodVesselJunction::update_constant(SparseSystem &system,
                       global_var_ids[3 + 2 * i]) = -1.0;
     system.F.coeffRef(global_eqn_ids[i + 1],
                       global_var_ids[3 + 2 * i]) = -resistance;
-    system.F.coeffRef(global_eqn_ids[i + 1], global_var_ids[0]) =
+    system.F.coeffRef(global_eqn_ids[i + 1], this->global_var_ids[0]) =
         1.0;
     system.F.coeffRef(global_eqn_ids[i + 1],
                       global_var_ids[2 + 2 * i]) = -1.0;
@@ -78,7 +78,7 @@ void BloodVesselJunction::update_solution(
 
     // Mass conservation
     system.C(global_eqn_ids[i + 1]) = -stenosis_resistance * q_out;
-    system.dC_dy.coeffRef(global_eqn_ids[i + 1],
+    system.dC_dy.coeffRef(tglobal_eqn_ids[i + 1],
                           global_var_ids[3 + 2 * i]) =
         -2.0 * stenosis_resistance;
   }

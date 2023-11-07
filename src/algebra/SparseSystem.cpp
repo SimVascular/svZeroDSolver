@@ -58,8 +58,10 @@ void SparseSystem::reserve(Model *model) {
   auto num_triplets = model->get_num_triplets();
   F.reserve(num_triplets.F);
   E.reserve(num_triplets.E);
+  D.reserve(num_triplets.D);
   dC_dy.reserve(num_triplets.D);
   dC_dydot.reserve(num_triplets.D);
+
   model->update_constant(*this);
   model->update_time(*this, 0.0);
 

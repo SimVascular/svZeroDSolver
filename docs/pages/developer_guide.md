@@ -88,7 +88,6 @@ If you want to cite a piece literature in your documentation, add
 a respective BibTeX citation to `docs/cpp/references.bib` and use `\cite name_of_citation` to
 cite the document.
 
-
 ### Drawing circuits
 As the elements of the svZeroDSolver are often represented
 in the form of electrical circuits, we use [CircuiTikZ](https://ctan.org/pkg/circuitikz?lang=en)
@@ -101,18 +100,6 @@ To start a CircuitTikZ drawing use the following command:
 \end{circuitikz}
 \f]
 ```
-We currently use MathJax, which only supports [a couple of LaTeX packages](https://docs.mathjax.org/en/latest/input/tex/extensions/index.html). In our `Doxyfile`, this is set as `USE_MATHJAX = YES`. The equations look nicer than without MathJax. Unfortunately, CircuiTikZ is currently not supported by MathJax. Thus, we store all current schematics already compiled in `docs/png`.
-
-If you are adding new schematics, you can follow these steps:
-1. Set `USE_MATHJAX = NO` in `docs/Doxyfile`
-2. Locally build Doxygen (see next section)
-3. Copy `png` output from `docs/build/latex` to `docs/png`
-4. Include image with `\image html FILENAME_dark.png` in `.h`/`.cpp` Doxygen
-5. Set `USE_MATHJAX = YES` in `docs/Doxyfile`
-6. Locally build Doxygen again
-7. Check if LaTeX and schematic look nice
-8. Commit your changes and new `png`
-
 
 ### Build
 The documentation is automatically built in the GitHub CI/CD and published

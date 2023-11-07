@@ -29,3 +29,8 @@ Debug*/
 externals/
 *.so
 build
+
+# IDE
+.cproject
+.project
+.settings

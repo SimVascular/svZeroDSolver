@@ -59,7 +59,7 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   system.reserve(model);
 }
 
-// Must declare default constructord and dedtructor 
+// Must declare default constructord and dedtructor
 // because of Eigen.
 Integrator::Integrator() {}
 Integrator::~Integrator() {}

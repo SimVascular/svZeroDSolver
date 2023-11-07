@@ -43,4 +43,3 @@ void PressureReferenceBC::update_time(SparseSystem &system,
                                       std::vector<double> &parameters) {
   system.C(global_eqn_ids[0]) = -parameters[global_param_ids[0]];
 }
-

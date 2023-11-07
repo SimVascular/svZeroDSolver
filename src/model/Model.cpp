@@ -38,7 +38,7 @@ Model::~Model() {}
 
 int Model::add_block(BlockType block_type,
                      const std::vector<int> &block_param_ids,
-                     const std::string_view& name, bool internal) {
+                     const std::string_view &name, bool internal) {
   // DEBUG_MSG("Adding block " << name << " with type " << block_type);
 
   Block *block{nullptr};
@@ -122,7 +122,7 @@ int Model::add_block(BlockType block_type,
   return block_count++;
 }
 
-Block *Model::get_block(const std::string_view& name) const {
+Block *Model::get_block(const std::string_view &name) const {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
@@ -140,7 +140,7 @@ Block *Model::get_block(int block_id) const {
   return blocks[block_id].get();
 }
 
-BlockType Model::get_block_type(const std::string_view& name) const {
+BlockType Model::get_block_type(const std::string_view &name) const {
   auto name_string = static_cast<std::string>(name);
 
   if (block_index_map.find(name_string) == block_index_map.end()) {
@@ -156,7 +156,7 @@ std::string Model::get_block_name(int block_id) const {
 
 int Model::add_node(const std::vector<Block *> &inlet_eles,
                     const std::vector<Block *> &outlet_eles,
-                    const std::string_view& name) {
+                    const std::string_view &name) {
   // DEBUG_MSG("Adding node " << name);
   auto node = std::shared_ptr<Node>(
       new Node(node_count, inlet_eles, outlet_eles, this));
@@ -166,7 +166,9 @@ int Model::add_node(const std::vector<Block *> &inlet_eles,
   return node_count++;
 }
 
-std::string Model::get_node_name(int node_id) const { return node_names[node_id]; }
+std::string Model::get_node_name(int node_id) const {
+  return node_names[node_id];
+}
 
 int Model::add_parameter(double value) {
   parameters.push_back(Parameter(parameter_count, value));

@@ -118,8 +118,7 @@ class ResistanceBC : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{1,0,0};
-
+  TripletsContributions num_triplets{1, 0, 0};
 };
 
 #endif  // SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_

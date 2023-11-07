@@ -46,31 +46,22 @@ void OpenLoopCoronaryBC::update_constant(SparseSystem &system,
     // Different assmembly for steady block to avoid singular system
     // and solve for the internal variable V_im inherently
     system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -Cim;
-    system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
-        Cim * (Ra + Ram);
+    system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = Cim * (Ra + Ram);
     system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = 1.0;
     system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = -1.0;
-    system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) =
-        Ra + Ram + Rv;
+    system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = Ra + Ram + Rv;
   } else {
-    system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
-        Cim * Rv;
+    system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = Cim * Rv;
     system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
-    system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) =
-        Cim * Rv;
-    system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) =
-        -Cim * Rv * Ra;
-    system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) =
-        -(Rv + Ram);
+    system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = Cim * Rv;
+    system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = -Cim * Rv * Ra;
+    system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -(Rv + Ram);
 
-    system.E.coeffRef(global_eqn_ids[0], global_var_ids[0]) =
-        -Ca * Cim * Rv;
+    system.E.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -Ca * Cim * Rv;
     system.E.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
         Ra * Ca * Cim * Rv;
-    system.E.coeffRef(global_eqn_ids[0], global_var_ids[2]) =
-        -Cim * Rv;
-    system.E.coeffRef(global_eqn_ids[1], global_var_ids[2]) =
-        -Cim * Rv * Ram;
+    system.E.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -Cim * Rv;
+    system.E.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -Cim * Rv * Ram;
   }
 }
 
@@ -87,8 +78,6 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
     system.C(global_eqn_ids[1]) = Pv;
   } else {
     system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv);
-    system.C(global_eqn_ids[1]) =
-        -Cim * (Rv + Ram) * Pim + Ram * Cim * Pv;
+    system.C(global_eqn_ids[1]) = -Cim * (Rv + Ram) * Pim + Ram * Cim * Pv;
   }
 }
-

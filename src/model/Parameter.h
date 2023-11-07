@@ -74,10 +74,10 @@ class Parameter {
   double value;                ///< Value if parameter is constant
   double cycle_period;  ///< Cardiac cycle period corresponding to the time
                         ///< sequence
-  int size;         ///< Size of the time series if parameter is time-dependent
+  int size;          ///< Size of the time series if parameter is time-dependent
   bool is_constant;  ///< Bool value indicating if the parameter is constant
-  bool is_periodic;  ///< Bool value indicating if the parameter is periodic with
-                    ///< the cardiac cycle
+  bool is_periodic;  ///< Bool value indicating if the parameter is periodic
+                     ///< with the cardiac cycle
 
   /**
    * @brief Update the parameter

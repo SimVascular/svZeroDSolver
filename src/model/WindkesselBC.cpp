@@ -46,12 +46,10 @@ void WindkesselBC::update_time(SparseSystem &system,
 
                                std::vector<double> &parameters) {
   system.E.coeffRef(global_eqn_ids[1], global_var_ids[2]) =
-      -parameters[global_param_ids[2]] *
-      parameters[global_param_ids[1]];
+      -parameters[global_param_ids[2]] * parameters[global_param_ids[1]];
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
       -parameters[global_param_ids[0]];
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) =
       parameters[global_param_ids[2]];
   system.C(global_eqn_ids[1]) = parameters[global_param_ids[3]];
 }
-

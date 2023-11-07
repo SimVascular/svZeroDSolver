@@ -121,7 +121,6 @@ class PressureReferenceBC : public Block {
    * (relevant for sparse memory reservation)
    */
   TripletsContributions num_triplets{1, 0, 0};
-
 };
 
 #endif  // SVZERODSOLVER_MODEL_PRESSUREREFERENCEBC_HPP_

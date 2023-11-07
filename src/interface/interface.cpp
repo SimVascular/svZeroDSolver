@@ -72,8 +72,7 @@ extern "C" void run_simulation(int problem_id, const double external_time,
                                std::vector<double>& output_solutions,
                                int& error_code);
 
-extern "C" void update_block_params(int problem_id,
-                                    std::string block_name,
+extern "C" void update_block_params(int problem_id, std::string block_name,
                                     std::vector<double>& params);
 
 extern "C" void read_block_params(int problem_id, std::string block_name,
@@ -82,8 +81,7 @@ extern "C" void read_block_params(int problem_id, std::string block_name,
 extern "C" void get_block_node_IDs(int problem_id, std::string block_name,
                                    std::vector<int>& IDs);
 
-extern "C" void update_state(int problem_id,
-                             std::vector<double> new_state_y,
+extern "C" void update_state(int problem_id, std::vector<double> new_state_y,
                              std::vector<double> new_state_ydot);
 
 extern "C" void return_y(int problem_id, std::vector<double>& ydot);

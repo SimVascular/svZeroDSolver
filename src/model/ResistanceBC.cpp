@@ -45,4 +45,3 @@ void ResistanceBC::update_time(SparseSystem &system,
       -parameters[global_param_ids[0]];
   system.C(global_eqn_ids[0]) = -parameters[global_param_ids[1]];
 }
-

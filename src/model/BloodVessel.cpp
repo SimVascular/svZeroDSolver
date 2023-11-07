@@ -42,15 +42,12 @@ void BloodVessel::update_constant(SparseSystem &system,
   double resistance = parameters[global_param_ids[ParamId::RESISTANCE]];
 
   // Set element contributions
-  system.E.coeffRef(global_eqn_ids[0], global_var_ids[3]) =
-      -inductance;
-  system.E.coeffRef(global_eqn_ids[1], global_var_ids[0]) =
-      -capacitance;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[3]) = -inductance;
+  system.E.coeffRef(global_eqn_ids[1], global_var_ids[0]) = -capacitance;
   system.E.coeffRef(global_eqn_ids[1], global_var_ids[1]) =
       capacitance * resistance;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
-      -resistance;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -resistance;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
@@ -70,8 +67,7 @@ void BloodVessel::update_solution(
 
   // Set element contributions
   system.C(global_eqn_ids[0]) = stenosis_resistance * -q_in;
-  system.C(global_eqn_ids[1]) =
-      stenosis_resistance * 2.0 * capacitance * dq_in;
+  system.C(global_eqn_ids[1]) = stenosis_resistance * 2.0 * capacitance * dq_in;
 
   double sgn_q_in = (0.0 < q_in) - (q_in < 0.0);
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
@@ -103,8 +99,7 @@ void BloodVessel::update_gradient(
   double stenosis_coeff = 0.0;
 
   if (global_param_ids.size() > 3) {
-    stenosis_coeff =
-        alpha[global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
+    stenosis_coeff = alpha[global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
   }
   auto stenosis_resistance = stenosis_coeff * fabs(y1);
 
@@ -112,12 +107,10 @@ void BloodVessel::update_gradient(
   jacobian.coeffRef(global_eqn_ids[0], global_param_ids[2]) = -dy3;
 
   if (global_param_ids.size() > 3) {
-    jacobian.coeffRef(global_eqn_ids[0], global_param_ids[3]) =
-        -fabs(y1) * y1;
+    jacobian.coeffRef(global_eqn_ids[0], global_param_ids[3]) = -fabs(y1) * y1;
   }
 
-  jacobian.coeffRef(global_eqn_ids[1], global_param_ids[0]) =
-      capacitance * dy1;
+  jacobian.coeffRef(global_eqn_ids[1], global_param_ids[0]) = capacitance * dy1;
   jacobian.coeffRef(global_eqn_ids[1], global_param_ids[1]) =
       -dy0 + (resistance + 2 * stenosis_resistance) * dy1;
 
@@ -132,4 +125,3 @@ void BloodVessel::update_gradient(
       y1 - y3 - capacitance * dy0 +
       capacitance * (resistance + 2.0 * stenosis_resistance) * dy1;
 }
-

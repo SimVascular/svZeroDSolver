@@ -45,8 +45,7 @@ void Junction::update_constant(SparseSystem &system,
   // Pressure conservation
   for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++) {
     system.F.coeffRef(global_eqn_ids[i], global_var_ids[0]) = 1.0;
-    system.F.coeffRef(global_eqn_ids[i],
-                      global_var_ids[2 * i + 2]) = -1.0;
+    system.F.coeffRef(global_eqn_ids[i], global_var_ids[2 * i + 2]) = -1.0;
   }
 
   // Mass conservation
@@ -67,10 +66,7 @@ void Junction::update_gradient(
     Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha, std::vector<double> &y,
     std::vector<double> &dy) {
   // Pressure conservation
-  residual(global_eqn_ids[0]) =
-      y[global_var_ids[0]] - y[global_var_ids[2]];
+  residual(global_eqn_ids[0]) = y[global_var_ids[0]] - y[global_var_ids[2]];
 
-  residual(global_eqn_ids[1]) =
-      y[global_var_ids[1]] - y[global_var_ids[3]];
+  residual(global_eqn_ids[1]) = y[global_var_ids[1]] - y[global_var_ids[3]];
 }
-

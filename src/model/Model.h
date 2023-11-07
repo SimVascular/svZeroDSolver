@@ -95,7 +95,7 @@ class Model {
    * @return int Global ID of the block
    */
   int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
-                const std::string_view& name, bool internal = false);
+                const std::string_view &name, bool internal = false);
 
   /**
    * @brief Get a block by its name
@@ -103,7 +103,7 @@ class Model {
    * @param name Name of the Block
    * @return Block* The block
    */
-  Block *get_block(const std::string_view& name) const;
+  Block *get_block(const std::string_view &name) const;
 
   /**
    * @brief Get a block by its global ID
@@ -119,7 +119,7 @@ class Model {
    * @param block_id Global ID of the Block
    * @return BlockType The block type
    */
-  BlockType get_block_type(const std::string_view& name) const;
+  BlockType get_block_type(const std::string_view &name) const;
 
   /**
    * @brief Get the name of a block by it's ID
@@ -137,7 +137,8 @@ class Model {
    * @return int Global ID of the node
    */
   int add_node(const std::vector<Block *> &inlet_eles,
-               const std::vector<Block *> &outlet_eles, const std::string_view& name);
+               const std::vector<Block *> &outlet_eles,
+               const std::string_view &name);
 
   /**
    * @brief Get the name of a node by it's ID
@@ -245,7 +246,7 @@ class Model {
    *
    * @return Number of triplets that are used in each system matrix
    */
-  //std::map<std::string, int> get_num_triplets();
+  // std::map<std::string, int> get_num_triplets();
   TripletsContributions get_num_triplets() const;
 
   /**

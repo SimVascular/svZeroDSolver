@@ -359,7 +359,8 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       for (double value : junction_values["stenosis_coefficient"]) {
         param_ids.push_back(model.add_parameter(value));
       }
-      model.add_block(BlockType::blood_vessel_junction, param_ids, junction_name);
+      model.add_block(BlockType::blood_vessel_junction, param_ids,
+                      junction_name);
     } else {
       throw std::invalid_argument("Unknown junction type");
     }

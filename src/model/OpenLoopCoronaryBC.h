@@ -146,7 +146,6 @@ class OpenLoopCoronaryBC : public Block {
    * (relevant for sparse memory reservation)
    */
   TripletsContributions num_triplets{5, 4, 0};
-
 };
 
 #endif  // SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_

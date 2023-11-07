@@ -43,14 +43,13 @@
 #include "SparseSystem.h"
 
 /**
- * @brief The number of triplets that the element contributes 
+ * @brief The number of triplets that the element contributes
  * to the global system.
  */
 struct TripletsContributions {
-  TripletsContributions() {};
-  TripletsContributions(int F, int E, int D) : F(F), E(E), D(D) { } ;
-  TripletsContributions operator+=(const TripletsContributions& other)
-  {
+  TripletsContributions(){};
+  TripletsContributions(int F, int E, int D) : F(F), E(E), D(D){};
+  TripletsContributions operator+=(const TripletsContributions &other) {
     F += other.F;
     E += other.E;
     D += other.D;
@@ -157,7 +156,7 @@ class Block {
    */
 
   void setup_dofs_(DOFHandler &dofhandler, int num_equations,
-                   const std::list<std::string>& internal_var_names);
+                   const std::list<std::string> &internal_var_names);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -231,7 +230,7 @@ class Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-   TripletsContributions num_triplets;
+  TripletsContributions num_triplets;
 
   /**
    * @brief Get number of triplets of element

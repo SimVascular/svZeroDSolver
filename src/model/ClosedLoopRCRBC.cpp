@@ -51,4 +51,3 @@ void ClosedLoopRCRBC::update_constant(SparseSystem &system,
   system.F.coeffRef(global_eqn_ids[2], global_var_ids[3]) =
       -parameters[global_param_ids[ParamId::RD]];
 }
-

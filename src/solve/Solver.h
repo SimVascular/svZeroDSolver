@@ -56,7 +56,7 @@ class Solver {
    *
    * @param config Configuration handler
    */
-  Solver(const nlohmann::json &config);
+  Solver(const nlohmann::json& config);
 
   /**
    * @brief Run the simulation

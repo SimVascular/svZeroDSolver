@@ -100,7 +100,8 @@ nlohmann::json calibrate(const nlohmann::json &config) {
       std::vector<int> param_ids;
       for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++)
         param_ids.push_back(param_counter++);
-      model.add_block(BlockType::blood_vessel_junction, param_ids, junction_name);
+      model.add_block(BlockType::blood_vessel_junction, param_ids,
+                      junction_name);
     }
 
     // Check for connections to inlet and outlet vessels and append to

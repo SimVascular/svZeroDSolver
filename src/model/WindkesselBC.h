@@ -146,7 +146,6 @@ class WindkesselBC : public Block {
    * (relevant for sparse memory reservation)
    */
   TripletsContributions num_triplets{5, 1, 0};
-
 };
 
 #endif  // SVZERODSOLVER_MODEL_WINDKESSELBC_HPP_

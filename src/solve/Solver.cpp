@@ -24,7 +24,7 @@ Solver::Solver(const nlohmann::json& config) {
   sanity_checks();
 }
 
-//Solver::~Solver() {}
+// Solver::~Solver() {}
 
 void Solver::run() {
   auto state = initial_state;

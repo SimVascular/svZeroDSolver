@@ -213,8 +213,7 @@ class BloodVessel : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{5,3,2};
-
+  TripletsContributions num_triplets{5, 3, 2};
 };
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_

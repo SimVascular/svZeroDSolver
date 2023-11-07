@@ -202,38 +202,24 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">   */</span></div>
-<div class="foldopen" id="foldopen00120" data-start="{" data-end="};">
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno"><a class="line" href="class_resistance_b_c.html#a00bdcbedef43f1ef3297e89170006fb1">  120</a></span>  std::map&lt;std::string, int&gt; <a class="code hl_variable" href="class_resistance_b_c.html#a00bdcbedef43f1ef3297e89170006fb1">num_triplets</a> = {</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>      {<span class="stringliteral">&quot;F&quot;</span>, 1},</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>      {<span class="stringliteral">&quot;E&quot;</span>, 0},</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  };</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno"><a class="line" href="class_resistance_b_c.html#aee6b859cb79f8d9fba8fb99dc55ec81e">  120</a></span>  <a class="code hl_struct" href="struct_triplets_contributions.html">TripletsContributions</a> <a class="code hl_variable" href="class_resistance_b_c.html#aee6b859cb79f8d9fba8fb99dc55ec81e">num_triplets</a>{1, 0, 0};</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>};</div>
 </div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment"></span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">   * @brief Get number of triplets of element</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>  std::map&lt;std::string, int&gt; <a class="code hl_function" href="class_resistance_b_c.html#a849e87395ff2b36f81c1439de5e5224c">get_num_triplets</a>();</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>};</div>
-</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_RESISTANCEBC_HPP_</span></div>
 <div class="ttc" id="a_block_8h_html"><div class="ttname"><a href="_block_8h.html">Block.h</a></div><div class="ttdoc">model::Block source file</div></div>
 <div class="ttc" id="a_parameter_8h_html"><div class="ttname"><a href="_parameter_8h.html">Parameter.h</a></div><div class="ttdoc">model::Parameter source file</div></div>
 <div class="ttc" id="a_sparse_system_8h_html"><div class="ttname"><a href="_sparse_system_8h.html">SparseSystem.h</a></div><div class="ttdoc">SparseSystem source file.</div></div>
-<div class="ttc" id="aclass_block_html"><div class="ttname"><a href="class_block.html">Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition</b> Block.h:56</div></div>
+<div class="ttc" id="aclass_block_html"><div class="ttname"><a href="class_block.html">Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition</b> Block.h:75</div></div>
 <div class="ttc" id="aclass_block_html_a443cdfaf01e71a8e12b072b525355412"><div class="ttname"><a href="class_block.html#a443cdfaf01e71a8e12b072b525355412">Block::Block</a></div><div class="ttdeci">Block(int id, const std::vector&lt; int &gt; &amp;param_ids, Model *model)</div><div class="ttdoc">Construct a new Block object.</div><div class="ttdef"><b>Definition</b> Block.cpp:35</div></div>
 <div class="ttc" id="aclass_d_o_f_handler_html"><div class="ttname"><a href="class_d_o_f_handler.html">DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition</b> DOFHandler.h:48</div></div>
 <div class="ttc" id="aclass_resistance_b_c_html"><div class="ttname"><a href="class_resistance_b_c.html">ResistanceBC</a></div><div class="ttdoc">Resistance boundary condition.</div><div class="ttdef"><b>Definition</b> ResistanceBC.h:80</div></div>
-<div class="ttc" id="aclass_resistance_b_c_html_a00bdcbedef43f1ef3297e89170006fb1"><div class="ttname"><a href="class_resistance_b_c.html#a00bdcbedef43f1ef3297e89170006fb1">ResistanceBC::num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition</b> ResistanceBC.h:120</div></div>
 <div class="ttc" id="aclass_resistance_b_c_html_a0875a4700ee386c0cde7fb4c876bbfe8"><div class="ttname"><a href="class_resistance_b_c.html#a0875a4700ee386c0cde7fb4c876bbfe8">ResistanceBC::setup_dofs</a></div><div class="ttdeci">void setup_dofs(DOFHandler &amp;dofhandler)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition</b> ResistanceBC.cpp:33</div></div>
 <div class="ttc" id="aclass_resistance_b_c_html_a5b5c6ac5398ece719035c5e9629fad6d"><div class="ttname"><a href="class_resistance_b_c.html#a5b5c6ac5398ece719035c5e9629fad6d">ResistanceBC::update_constant</a></div><div class="ttdeci">void update_constant(SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters)</div><div class="ttdoc">Update the constant contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition</b> ResistanceBC.cpp:37</div></div>
 <div class="ttc" id="aclass_resistance_b_c_html_a67eedd468f2f7821ac55740119435340"><div class="ttname"><a href="class_resistance_b_c.html#a67eedd468f2f7821ac55740119435340">ResistanceBC::update_time</a></div><div class="ttdeci">void update_time(SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters)</div><div class="ttdoc">Update the time-dependent contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition</b> ResistanceBC.cpp:42</div></div>
-<div class="ttc" id="aclass_resistance_b_c_html_a849e87395ff2b36f81c1439de5e5224c"><div class="ttname"><a href="class_resistance_b_c.html#a849e87395ff2b36f81c1439de5e5224c">ResistanceBC::get_num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; get_num_triplets()</div><div class="ttdoc">Get number of triplets of element.</div><div class="ttdef"><b>Definition</b> ResistanceBC.cpp:49</div></div>
+<div class="ttc" id="aclass_resistance_b_c_html_aee6b859cb79f8d9fba8fb99dc55ec81e"><div class="ttname"><a href="class_resistance_b_c.html#aee6b859cb79f8d9fba8fb99dc55ec81e">ResistanceBC::num_triplets</a></div><div class="ttdeci">TripletsContributions num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition</b> ResistanceBC.h:120</div></div>
 <div class="ttc" id="aclass_sparse_system_html"><div class="ttname"><a href="class_sparse_system.html">SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:86</div></div>
+<div class="ttc" id="astruct_triplets_contributions_html"><div class="ttname"><a href="struct_triplets_contributions.html">TripletsContributions</a></div><div class="ttdoc">The number of triplets that the element contributes to the global system.</div><div class="ttdef"><b>Definition</b> Block.h:49</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['windkesselbc_0',['WindkesselBC',['../class_windkessel_b_c.html',1,'']]]
+  ['tripletscontributions_0',['TripletsContributions',['../struct_triplets_contributions.html',1,'']]]
 ];

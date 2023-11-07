@@ -87,30 +87,27 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa9e68ab5310adf5606ac9f363c3cee1c" id="r_aa9e68ab5310adf5606ac9f363c3cee1c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#aa9e68ab5310adf5606ac9f363c3cee1c">Solver</a> (const nlohmann::json &amp;config)</td></tr>
 <tr class="memdesc:aa9e68ab5310adf5606ac9f363c3cee1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_solver.html" title="Class for running 0D simulations.">Solver</a> object.  <br /></td></tr>
 <tr class="separator:aa9e68ab5310adf5606ac9f363c3cee1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba52d3c92fafceb6fe39f937f2d73db3" id="r_aba52d3c92fafceb6fe39f937f2d73db3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#aba52d3c92fafceb6fe39f937f2d73db3">~Solver</a> ()</td></tr>
-<tr class="memdesc:aba52d3c92fafceb6fe39f937f2d73db3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_solver.html" title="Class for running 0D simulations.">Solver</a> object.  <br /></td></tr>
-<tr class="separator:aba52d3c92fafceb6fe39f937f2d73db3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f31e2d38dacd7e828c1bf428eb2ed96" id="r_a1f31e2d38dacd7e828c1bf428eb2ed96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96">run</a> ()</td></tr>
 <tr class="memdesc:a1f31e2d38dacd7e828c1bf428eb2ed96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the simulation.  <br /></td></tr>
 <tr class="separator:a1f31e2d38dacd7e828c1bf428eb2ed96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a483570e46b99d58f7597c7feac0da4d9" id="r_a483570e46b99d58f7597c7feac0da4d9"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#a483570e46b99d58f7597c7feac0da4d9">get_full_result</a> ()</td></tr>
-<tr class="memdesc:a483570e46b99d58f7597c7feac0da4d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the full result as a csv encoded string.  <br /></td></tr>
-<tr class="separator:a483570e46b99d58f7597c7feac0da4d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2c5fe330aa16b0e967db5439c5204ce0" id="r_a2c5fe330aa16b0e967db5439c5204ce0"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#a2c5fe330aa16b0e967db5439c5204ce0">get_single_result</a> (std::string dof_name)</td></tr>
-<tr class="memdesc:a2c5fe330aa16b0e967db5439c5204ce0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the result of a single DOF over time.  <br /></td></tr>
-<tr class="separator:a2c5fe330aa16b0e967db5439c5204ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f62776e856c08a366eb4cf1fbec941b" id="r_a5f62776e856c08a366eb4cf1fbec941b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#a5f62776e856c08a366eb4cf1fbec941b">get_single_result_avg</a> (std::string dof_name)</td></tr>
-<tr class="memdesc:a5f62776e856c08a366eb4cf1fbec941b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the result of a single DOF averaged over time.  <br /></td></tr>
-<tr class="separator:a5f62776e856c08a366eb4cf1fbec941b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9255e298a960325e03461df989a4d2d" id="r_ae9255e298a960325e03461df989a4d2d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#ae9255e298a960325e03461df989a4d2d">get_times</a> ()</td></tr>
-<tr class="memdesc:ae9255e298a960325e03461df989a4d2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time steps of the result.  <br /></td></tr>
-<tr class="separator:ae9255e298a960325e03461df989a4d2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba7fb6df2e2f88a70a4fce4d0085b275" id="r_aba7fb6df2e2f88a70a4fce4d0085b275"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#aba7fb6df2e2f88a70a4fce4d0085b275">update_block_params</a> (std::string block_name, std::vector&lt; double &gt; new_params)</td></tr>
-<tr class="memdesc:aba7fb6df2e2f88a70a4fce4d0085b275"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the parameters of a block.  <br /></td></tr>
-<tr class="separator:aba7fb6df2e2f88a70a4fce4d0085b275"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73670bfa9cb46c8422c035f6e77b1fc8" id="r_a73670bfa9cb46c8422c035f6e77b1fc8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#a73670bfa9cb46c8422c035f6e77b1fc8">write_result_to_csv</a> (std::string filename)</td></tr>
-<tr class="memdesc:a73670bfa9cb46c8422c035f6e77b1fc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the result to a csv file.  <br /></td></tr>
-<tr class="separator:a73670bfa9cb46c8422c035f6e77b1fc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebf2a9aa50d3e557fd8023863e690a8e" id="r_aebf2a9aa50d3e557fd8023863e690a8e"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#aebf2a9aa50d3e557fd8023863e690a8e">get_full_result</a> () const</td></tr>
+<tr class="memdesc:aebf2a9aa50d3e557fd8023863e690a8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the full result as a csv encoded string.  <br /></td></tr>
+<tr class="separator:aebf2a9aa50d3e557fd8023863e690a8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac45b6a9a598c4c9ed7c1995b4903c929" id="r_ac45b6a9a598c4c9ed7c1995b4903c929"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#ac45b6a9a598c4c9ed7c1995b4903c929">get_single_result</a> (const std::string &amp;dof_name) const</td></tr>
+<tr class="memdesc:ac45b6a9a598c4c9ed7c1995b4903c929"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the result of a single DOF over time.  <br /></td></tr>
+<tr class="separator:ac45b6a9a598c4c9ed7c1995b4903c929"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbdd386a547676b658b5b1070040fbe4" id="r_abbdd386a547676b658b5b1070040fbe4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#abbdd386a547676b658b5b1070040fbe4">get_single_result_avg</a> (const std::string &amp;dof_name) const</td></tr>
+<tr class="memdesc:abbdd386a547676b658b5b1070040fbe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the result of a single DOF averaged over time.  <br /></td></tr>
+<tr class="separator:abbdd386a547676b658b5b1070040fbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac12a4bb26d17f412029796323eaf8070" id="r_ac12a4bb26d17f412029796323eaf8070"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#ac12a4bb26d17f412029796323eaf8070">get_times</a> () const</td></tr>
+<tr class="memdesc:ac12a4bb26d17f412029796323eaf8070"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the time steps of the result.  <br /></td></tr>
+<tr class="separator:ac12a4bb26d17f412029796323eaf8070"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafe41a17384998ccc28856521666cff7" id="r_aafe41a17384998ccc28856521666cff7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#aafe41a17384998ccc28856521666cff7">update_block_params</a> (const std::string &amp;block_name, const std::vector&lt; double &gt; &amp;new_params)</td></tr>
+<tr class="memdesc:aafe41a17384998ccc28856521666cff7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the parameters of a block.  <br /></td></tr>
+<tr class="separator:aafe41a17384998ccc28856521666cff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad213408fb2b5e0433c29454bec9e6443" id="r_ad213408fb2b5e0433c29454bec9e6443"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_solver.html#ad213408fb2b5e0433c29454bec9e6443">write_result_to_csv</a> (const std::string &amp;filename) const</td></tr>
+<tr class="memdesc:ad213408fb2b5e0433c29454bec9e6443"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the result to a csv file.  <br /></td></tr>
+<tr class="separator:ad213408fb2b5e0433c29454bec9e6443"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class for running 0D simulations. </p>
@@ -142,28 +139,9 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aba52d3c92fafceb6fe39f937f2d73db3" name="aba52d3c92fafceb6fe39f937f2d73db3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba52d3c92fafceb6fe39f937f2d73db3">&#9670;&#160;</a></span>~Solver()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Solver::~Solver </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Destroy the <a class="el" href="class_solver.html" title="Class for running 0D simulations.">Solver</a> object. </p>
-
-</div>
-</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a483570e46b99d58f7597c7feac0da4d9" name="a483570e46b99d58f7597c7feac0da4d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a483570e46b99d58f7597c7feac0da4d9">&#9670;&#160;</a></span>get_full_result()</h2>
+<a id="aebf2a9aa50d3e557fd8023863e690a8e" name="aebf2a9aa50d3e557fd8023863e690a8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebf2a9aa50d3e557fd8023863e690a8e">&#9670;&#160;</a></span>get_full_result()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,7 +150,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">std::string Solver::get_full_result </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -182,8 +160,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a2c5fe330aa16b0e967db5439c5204ce0" name="a2c5fe330aa16b0e967db5439c5204ce0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2c5fe330aa16b0e967db5439c5204ce0">&#9670;&#160;</a></span>get_single_result()</h2>
+<a id="ac45b6a9a598c4c9ed7c1995b4903c929" name="ac45b6a9a598c4c9ed7c1995b4903c929"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac45b6a9a598c4c9ed7c1995b4903c929">&#9670;&#160;</a></span>get_single_result()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -191,9 +169,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">Eigen::VectorXd Solver::get_single_result </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>dof_name</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -209,8 +187,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5f62776e856c08a366eb4cf1fbec941b" name="a5f62776e856c08a366eb4cf1fbec941b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5f62776e856c08a366eb4cf1fbec941b">&#9670;&#160;</a></span>get_single_result_avg()</h2>
+<a id="abbdd386a547676b658b5b1070040fbe4" name="abbdd386a547676b658b5b1070040fbe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abbdd386a547676b658b5b1070040fbe4">&#9670;&#160;</a></span>get_single_result_avg()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -218,9 +196,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">double Solver::get_single_result_avg </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>dof_name</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -236,8 +214,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ae9255e298a960325e03461df989a4d2d" name="ae9255e298a960325e03461df989a4d2d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9255e298a960325e03461df989a4d2d">&#9670;&#160;</a></span>get_times()</h2>
+<a id="ac12a4bb26d17f412029796323eaf8070" name="ac12a4bb26d17f412029796323eaf8070"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac12a4bb26d17f412029796323eaf8070">&#9670;&#160;</a></span>get_times()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -246,7 +224,7 @@ Public Member Functions</h2></td></tr>
           <td class="memname">std::vector&lt; double &gt; Solver::get_times </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -275,8 +253,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aba7fb6df2e2f88a70a4fce4d0085b275" name="aba7fb6df2e2f88a70a4fce4d0085b275"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba7fb6df2e2f88a70a4fce4d0085b275">&#9670;&#160;</a></span>update_block_params()</h2>
+<a id="aafe41a17384998ccc28856521666cff7" name="aafe41a17384998ccc28856521666cff7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafe41a17384998ccc28856521666cff7">&#9670;&#160;</a></span>update_block_params()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -284,13 +262,13 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Solver::update_block_params </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>block_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; double &gt;&#160;</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
           <td class="paramname"><em>new_params</em>&#160;</td>
         </tr>
         <tr>
@@ -312,8 +290,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a73670bfa9cb46c8422c035f6e77b1fc8" name="a73670bfa9cb46c8422c035f6e77b1fc8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73670bfa9cb46c8422c035f6e77b1fc8">&#9670;&#160;</a></span>write_result_to_csv()</h2>
+<a id="ad213408fb2b5e0433c29454bec9e6443" name="ad213408fb2b5e0433c29454bec9e6443"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad213408fb2b5e0433c29454bec9e6443">&#9670;&#160;</a></span>write_result_to_csv()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -321,9 +299,9 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void Solver::write_result_to_csv </td>
           <td>(</td>
-          <td class="paramtype">std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>filename</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">

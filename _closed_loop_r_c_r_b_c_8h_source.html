@@ -237,37 +237,23 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
 <div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
 <div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span><span class="comment">   */</span></div>
-<div class="foldopen" id="foldopen00153" data-start="{" data-end="};">
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno"><a class="line" href="class_closed_loop_r_c_r_b_c.html#aae4dfb9edfb31d65148f42c7769c1e4a">  153</a></span>  std::map&lt;std::string, int&gt; <a class="code hl_variable" href="class_closed_loop_r_c_r_b_c.html#aae4dfb9edfb31d65148f42c7769c1e4a">num_triplets</a> = {</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>      {<span class="stringliteral">&quot;F&quot;</span>, 8},</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>      {<span class="stringliteral">&quot;E&quot;</span>, 1},</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>  };</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno"><a class="line" href="class_closed_loop_r_c_r_b_c.html#aea28d78775993cf4bd04b1e2289cb815">  153</a></span>  <a class="code hl_struct" href="struct_triplets_contributions.html">TripletsContributions</a> <a class="code hl_variable" href="class_closed_loop_r_c_r_b_c.html#aea28d78775993cf4bd04b1e2289cb815">num_triplets</a>{8, 1, 0};</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>};</div>
 </div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="comment"></span> </div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="comment">   * @brief Get number of triplets of element</span></div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment">   * Number of triplets that the element contributes to the global system</span></div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  std::map&lt;std::string, int&gt; <a class="code hl_function" href="class_closed_loop_r_c_r_b_c.html#ad87df61c26ec3584981a03ba9376bda0">get_num_triplets</a>();</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>};</div>
-</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBCBC_HPP_</span></div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_CLOSEDLOOPRCRBCBC_HPP_</span></div>
 <div class="ttc" id="a_block_8h_html"><div class="ttname"><a href="_block_8h.html">Block.h</a></div><div class="ttdoc">model::Block source file</div></div>
 <div class="ttc" id="a_sparse_system_8h_html"><div class="ttname"><a href="_sparse_system_8h.html">SparseSystem.h</a></div><div class="ttdoc">SparseSystem source file.</div></div>
-<div class="ttc" id="aclass_block_html"><div class="ttname"><a href="class_block.html">Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition</b> Block.h:56</div></div>
+<div class="ttc" id="aclass_block_html"><div class="ttname"><a href="class_block.html">Block</a></div><div class="ttdoc">Base class for 0D model components.</div><div class="ttdef"><b>Definition</b> Block.h:75</div></div>
 <div class="ttc" id="aclass_block_html_a443cdfaf01e71a8e12b072b525355412"><div class="ttname"><a href="class_block.html#a443cdfaf01e71a8e12b072b525355412">Block::Block</a></div><div class="ttdeci">Block(int id, const std::vector&lt; int &gt; &amp;param_ids, Model *model)</div><div class="ttdoc">Construct a new Block object.</div><div class="ttdef"><b>Definition</b> Block.cpp:35</div></div>
 <div class="ttc" id="aclass_closed_loop_r_c_r_b_c_html"><div class="ttname"><a href="class_closed_loop_r_c_r_b_c.html">ClosedLoopRCRBC</a></div><div class="ttdoc">Closed-loop RCR boundary condition.</div><div class="ttdef"><b>Definition</b> ClosedLoopRCRBC.h:111</div></div>
 <div class="ttc" id="aclass_closed_loop_r_c_r_b_c_html_a7a1cb81e167a5bffb9d0a70275a0952a"><div class="ttname"><a href="class_closed_loop_r_c_r_b_c.html#a7a1cb81e167a5bffb9d0a70275a0952a">ClosedLoopRCRBC::update_constant</a></div><div class="ttdeci">void update_constant(SparseSystem &amp;system, std::vector&lt; double &gt; &amp;parameters)</div><div class="ttdoc">Update the constant contributions of the element in a sparse system.</div><div class="ttdef"><b>Definition</b> ClosedLoopRCRBC.cpp:37</div></div>
 <div class="ttc" id="aclass_closed_loop_r_c_r_b_c_html_a92a7412d2182da75b38c07f36e5e1911"><div class="ttname"><a href="class_closed_loop_r_c_r_b_c.html#a92a7412d2182da75b38c07f36e5e1911">ClosedLoopRCRBC::setup_dofs</a></div><div class="ttdeci">void setup_dofs(DOFHandler &amp;dofhandler)</div><div class="ttdoc">Set up the degrees of freedom (DOF) of the block.</div><div class="ttdef"><b>Definition</b> ClosedLoopRCRBC.cpp:33</div></div>
-<div class="ttc" id="aclass_closed_loop_r_c_r_b_c_html_aae4dfb9edfb31d65148f42c7769c1e4a"><div class="ttname"><a href="class_closed_loop_r_c_r_b_c.html#aae4dfb9edfb31d65148f42c7769c1e4a">ClosedLoopRCRBC::num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition</b> ClosedLoopRCRBC.h:153</div></div>
 <div class="ttc" id="aclass_closed_loop_r_c_r_b_c_html_ad3c99b49f4df21159932d4a192e997c8"><div class="ttname"><a href="class_closed_loop_r_c_r_b_c.html#ad3c99b49f4df21159932d4a192e997c8">ClosedLoopRCRBC::ParamId</a></div><div class="ttdeci">ParamId</div><div class="ttdoc">Local IDs of the parameters.</div><div class="ttdef"><b>Definition</b> ClosedLoopRCRBC.h:120</div></div>
-<div class="ttc" id="aclass_closed_loop_r_c_r_b_c_html_ad87df61c26ec3584981a03ba9376bda0"><div class="ttname"><a href="class_closed_loop_r_c_r_b_c.html#ad87df61c26ec3584981a03ba9376bda0">ClosedLoopRCRBC::get_num_triplets</a></div><div class="ttdeci">std::map&lt; std::string, int &gt; get_num_triplets()</div><div class="ttdoc">Get number of triplets of element.</div><div class="ttdef"><b>Definition</b> ClosedLoopRCRBC.cpp:55</div></div>
+<div class="ttc" id="aclass_closed_loop_r_c_r_b_c_html_aea28d78775993cf4bd04b1e2289cb815"><div class="ttname"><a href="class_closed_loop_r_c_r_b_c.html#aea28d78775993cf4bd04b1e2289cb815">ClosedLoopRCRBC::num_triplets</a></div><div class="ttdeci">TripletsContributions num_triplets</div><div class="ttdoc">Number of triplets of element.</div><div class="ttdef"><b>Definition</b> ClosedLoopRCRBC.h:153</div></div>
 <div class="ttc" id="aclass_d_o_f_handler_html"><div class="ttname"><a href="class_d_o_f_handler.html">DOFHandler</a></div><div class="ttdoc">Degree-of-freedom handler.</div><div class="ttdef"><b>Definition</b> DOFHandler.h:48</div></div>
 <div class="ttc" id="aclass_sparse_system_html"><div class="ttname"><a href="class_sparse_system.html">SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:86</div></div>
+<div class="ttc" id="astruct_triplets_contributions_html"><div class="ttname"><a href="struct_triplets_contributions.html">TripletsContributions</a></div><div class="ttdoc">The number of triplets that the element contributes to the global system.</div><div class="ttdef"><b>Definition</b> Block.h:49</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

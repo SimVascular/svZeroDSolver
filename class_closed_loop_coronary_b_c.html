@@ -123,9 +123,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1db28c7e75b828f26056009de7539ec0" id="r_a1db28c7e75b828f26056009de7539ec0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#a1db28c7e75b828f26056009de7539ec0">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
 <tr class="memdesc:a1db28c7e75b828f26056009de7539ec0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a1db28c7e75b828f26056009de7539ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad12fd3b8db4be0209178046e2f5884a2" id="r_ad12fd3b8db4be0209178046e2f5884a2"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#ad12fd3b8db4be0209178046e2f5884a2">get_num_triplets</a> ()</td></tr>
-<tr class="memdesc:ad12fd3b8db4be0209178046e2f5884a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
-<tr class="separator:ad12fd3b8db4be0209178046e2f5884a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_block"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_block')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_block.html">Block</a></td></tr>
 <tr class="memitem:a443cdfaf01e71a8e12b072b525355412 inherit pub_methods_class_block" id="r_a443cdfaf01e71a8e12b072b525355412"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a443cdfaf01e71a8e12b072b525355412">Block</a> (int <a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, const std::vector&lt; int &gt; &amp;param_ids, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>)</td></tr>
 <tr class="memdesc:a443cdfaf01e71a8e12b072b525355412 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
@@ -139,21 +136,24 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a31dd6de05c5e40eec70ba7994d6f0528 inherit pub_methods_class_block" id="r_a31dd6de05c5e40eec70ba7994d6f0528"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a31dd6de05c5e40eec70ba7994d6f0528">get_name</a> ()</td></tr>
 <tr class="memdesc:a31dd6de05c5e40eec70ba7994d6f0528 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
 <tr class="separator:a31dd6de05c5e40eec70ba7994d6f0528 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3d59c2f9f8ded7ce59b1b14285c3d14 inherit pub_methods_class_block" id="r_aa3d59c2f9f8ded7ce59b1b14285c3d14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#aa3d59c2f9f8ded7ce59b1b14285c3d14">setup_dofs_</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, unsigned int num_equations, std::list&lt; std::string &gt; internal_var_names)</td></tr>
-<tr class="memdesc:aa3d59c2f9f8ded7ce59b1b14285c3d14 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
-<tr class="separator:aa3d59c2f9f8ded7ce59b1b14285c3d14 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc10af316c08e7a78881726e9288b2b0 inherit pub_methods_class_block" id="r_afc10af316c08e7a78881726e9288b2b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#afc10af316c08e7a78881726e9288b2b0">setup_dofs_</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, int num_equations, const std::list&lt; std::string &gt; &amp;internal_var_names)</td></tr>
+<tr class="memdesc:afc10af316c08e7a78881726e9288b2b0 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
+<tr class="separator:afc10af316c08e7a78881726e9288b2b0 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block" id="r_a75efe51f152ba4c3f8bab02012ec0dff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a75efe51f152ba4c3f8bab02012ec0dff">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block" id="r_a96663232888eeb564e5f37db98fc655f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a96663232888eeb564e5f37db98fc655f">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block contributions with respect to the parameters.  <br /></td></tr>
 <tr class="separator:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
+<tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
+<tr class="separator:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:ad77225c6edd06e02d562bae39e5286fd" id="r_ad77225c6edd06e02d562bae39e5286fd"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#ad77225c6edd06e02d562bae39e5286fd">num_triplets</a></td></tr>
-<tr class="memdesc:ad77225c6edd06e02d562bae39e5286fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of triplets of element.  <br /></td></tr>
-<tr class="separator:ad77225c6edd06e02d562bae39e5286fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fa85877a6cd292772b4373595b3eec7" id="r_a3fa85877a6cd292772b4373595b3eec7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#a3fa85877a6cd292772b4373595b3eec7">num_triplets</a> {9, 5, 0}</td></tr>
+<tr class="memdesc:a3fa85877a6cd292772b4373595b3eec7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of triplets of element.  <br /></td></tr>
+<tr class="separator:a3fa85877a6cd292772b4373595b3eec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_class_block"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_class_block')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="class_block.html">Block</a></td></tr>
 <tr class="memitem:a86f38c868a8dab090101db6492078071 inherit pub_attribs_class_block" id="r_a86f38c868a8dab090101db6492078071"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a></td></tr>
 <tr class="memdesc:a86f38c868a8dab090101db6492078071 inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global ID of the block.  <br /></td></tr>
@@ -173,15 +173,15 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a1340395052b260178d7dcca13bc9fc62 inherit pub_attribs_class_block" id="r_a1340395052b260178d7dcca13bc9fc62"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a1340395052b260178d7dcca13bc9fc62">global_param_ids</a></td></tr>
 <tr class="memdesc:a1340395052b260178d7dcca13bc9fc62 inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global IDs for the block parameters.  <br /></td></tr>
 <tr class="separator:a1340395052b260178d7dcca13bc9fc62 inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a383e2d0cd1873c826d185ddc7833b08e inherit pub_attribs_class_block" id="r_a383e2d0cd1873c826d185ddc7833b08e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a383e2d0cd1873c826d185ddc7833b08e">global_var_ids</a></td></tr>
-<tr class="memdesc:a383e2d0cd1873c826d185ddc7833b08e inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global variable indices of the local element contributions.  <br /></td></tr>
-<tr class="separator:a383e2d0cd1873c826d185ddc7833b08e inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78612e0c44f457e850a270c1121ac746 inherit pub_attribs_class_block" id="r_a78612e0c44f457e850a270c1121ac746"><td class="memItemLeft" align="right" valign="top">std::vector&lt; unsigned int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a78612e0c44f457e850a270c1121ac746">global_eqn_ids</a></td></tr>
-<tr class="memdesc:a78612e0c44f457e850a270c1121ac746 inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global equation indices of the local element contributions.  <br /></td></tr>
-<tr class="separator:a78612e0c44f457e850a270c1121ac746 inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada904ff7a691e8019925ca2ac7f3cf60 inherit pub_attribs_class_block" id="r_ada904ff7a691e8019925ca2ac7f3cf60"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string, int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ada904ff7a691e8019925ca2ac7f3cf60">num_triplets</a></td></tr>
-<tr class="memdesc:ada904ff7a691e8019925ca2ac7f3cf60 inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of triplets of element.  <br /></td></tr>
-<tr class="separator:ada904ff7a691e8019925ca2ac7f3cf60 inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab64718f69f658fd3f66eb959f9349b9e inherit pub_attribs_class_block" id="r_ab64718f69f658fd3f66eb959f9349b9e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ab64718f69f658fd3f66eb959f9349b9e">global_var_ids</a></td></tr>
+<tr class="memdesc:ab64718f69f658fd3f66eb959f9349b9e inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global variable indices of the local element contributions.  <br /></td></tr>
+<tr class="separator:ab64718f69f658fd3f66eb959f9349b9e inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7851447ef34b1f916a056b572713e9db inherit pub_attribs_class_block" id="r_a7851447ef34b1f916a056b572713e9db"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7851447ef34b1f916a056b572713e9db">global_eqn_ids</a></td></tr>
+<tr class="memdesc:a7851447ef34b1f916a056b572713e9db inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global equation indices of the local element contributions.  <br /></td></tr>
+<tr class="separator:a7851447ef34b1f916a056b572713e9db inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7388d573014251179f564ccef95ad52e inherit pub_attribs_class_block" id="r_a7388d573014251179f564ccef95ad52e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7388d573014251179f564ccef95ad52e">num_triplets</a></td></tr>
+<tr class="memdesc:a7388d573014251179f564ccef95ad52e inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of triplets of element.  <br /></td></tr>
+<tr class="separator:a7388d573014251179f564ccef95ad52e inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Closed loop coronary boundary condition (connected to other blocks on both sides). </p>
@@ -280,36 +280,6 @@ Parameters</h3>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad12fd3b8db4be0209178046e2f5884a2" name="ad12fd3b8db4be0209178046e2f5884a2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad12fd3b8db4be0209178046e2f5884a2">&#9670;&#160;</a></span>get_num_triplets()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::map&lt; std::string, int &gt; ClosedLoopCoronaryBC::get_num_triplets </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Get number of triplets of element. </p>
-<p>Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) </p>
-
-<p>Reimplemented from <a class="el" href="class_block.html#a29db876ca8ea7bfc0e3a0470b4ff1d02">Block</a>.</p>
-
-</div>
-</div>
 <a id="a68544fff99d896fc69632d809f31cff3" name="a68544fff99d896fc69632d809f31cff3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a68544fff99d896fc69632d809f31cff3">&#9670;&#160;</a></span>setup_dofs()</h2>
 
@@ -335,7 +305,7 @@ Parameters</h3>
 </div><div class="memdoc">
 
 <p>Set up the degrees of freedom (DOF) of the block. </p>
-<p>Set <a class="el" href="class_block.html#a383e2d0cd1873c826d185ddc7833b08e">global_var_ids</a> and <a class="el" href="class_block.html#a78612e0c44f457e850a270c1121ac746">global_eqn_ids</a> of the element based on the number of equations and the number of internal variables of the element.</p>
+<p>Set <a class="el" href="class_block.html#ab64718f69f658fd3f66eb959f9349b9e">global_var_ids</a> and <a class="el" href="class_block.html#a7851447ef34b1f916a056b572713e9db">global_eqn_ids</a> of the element based on the number of equations and the number of internal variables of the element.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">dofhandler</td><td>Degree-of-freedom handler to register variables and equations at </td></tr>
@@ -485,23 +455,18 @@ Parameters</h3>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="ad77225c6edd06e02d562bae39e5286fd" name="ad77225c6edd06e02d562bae39e5286fd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad77225c6edd06e02d562bae39e5286fd">&#9670;&#160;</a></span>num_triplets</h2>
+<a id="a3fa85877a6cd292772b4373595b3eec7" name="a3fa85877a6cd292772b4373595b3eec7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fa85877a6cd292772b4373595b3eec7">&#9670;&#160;</a></span>num_triplets</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">std::map&lt;std::string, int&gt; ClosedLoopCoronaryBC::num_triplets</td>
+          <td class="memname"><a class="el" href="struct_triplets_contributions.html">TripletsContributions</a> ClosedLoopCoronaryBC::num_triplets {9, 5, 0}</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">      {<span class="stringliteral">&quot;F&quot;</span>, 9},</div>
-<div class="line">      {<span class="stringliteral">&quot;E&quot;</span>, 5},</div>
-<div class="line">      {<span class="stringliteral">&quot;D&quot;</span>, 0},</div>
-<div class="line">  }</div>
-</div><!-- fragment -->
+
 <p>Number of triplets of element. </p>
 <p>Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) </p>
 

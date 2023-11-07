@@ -99,9 +99,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af94747571cee99eeac36367f95517e7c" id="r_af94747571cee99eeac36367f95517e7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_integrator.html#af94747571cee99eeac36367f95517e7c">update_params</a> (double time_step_size)</td></tr>
 <tr class="memdesc:af94747571cee99eeac36367f95517e7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update integrator parameter and system matrices with model parameter updates.  <br /></td></tr>
 <tr class="separator:af94747571cee99eeac36367f95517e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f7c91b2cae33fc81830e82ba50f60ee" id="r_a2f7c91b2cae33fc81830e82ba50f60ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_state.html">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_integrator.html#a2f7c91b2cae33fc81830e82ba50f60ee">step</a> (<a class="el" href="class_state.html">State</a> &amp;state, double time)</td></tr>
-<tr class="memdesc:a2f7c91b2cae33fc81830e82ba50f60ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a time step.  <br /></td></tr>
-<tr class="separator:a2f7c91b2cae33fc81830e82ba50f60ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14f39fb28ea119b053932b265cc6b035" id="r_a14f39fb28ea119b053932b265cc6b035"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_state.html">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_integrator.html#a14f39fb28ea119b053932b265cc6b035">step</a> (const <a class="el" href="class_state.html">State</a> &amp;state, double time)</td></tr>
+<tr class="memdesc:a14f39fb28ea119b053932b265cc6b035"><td class="mdescLeft">&#160;</td><td class="mdescRight">Perform a time step.  <br /></td></tr>
+<tr class="separator:a14f39fb28ea119b053932b265cc6b035"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7406846602ad1644e25998ee3d901bdd" id="r_a7406846602ad1644e25998ee3d901bdd"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_integrator.html#a7406846602ad1644e25998ee3d901bdd">avg_nonlin_iter</a> ()</td></tr>
 <tr class="memdesc:a7406846602ad1644e25998ee3d901bdd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get average number of nonlinear iterations in all step calls.  <br /></td></tr>
 <tr class="separator:a7406846602ad1644e25998ee3d901bdd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -278,8 +278,8 @@ t$" src="form_15.png" width="110" height="14"/></picture>. Here, <picture><sourc
 
 </div>
 </div>
-<a id="a2f7c91b2cae33fc81830e82ba50f60ee" name="a2f7c91b2cae33fc81830e82ba50f60ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f7c91b2cae33fc81830e82ba50f60ee">&#9670;&#160;</a></span>step()</h2>
+<a id="a14f39fb28ea119b053932b265cc6b035" name="a14f39fb28ea119b053932b265cc6b035"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14f39fb28ea119b053932b265cc6b035">&#9670;&#160;</a></span>step()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -287,7 +287,7 @@ t$" src="form_15.png" width="110" height="14"/></picture>. Here, <picture><sourc
         <tr>
           <td class="memname"><a class="el" href="class_state.html">State</a> Integrator::step </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="class_state.html">State</a> &amp;&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_state.html">State</a> &amp;&#160;</td>
           <td class="paramname"><em>state</em>, </td>
         </tr>
         <tr>

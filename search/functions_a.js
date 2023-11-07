@@ -1,4 +1,7 @@
 var searchData=
 [
-  ['parameter_0',['parameter',['../class_parameter.html#a573c6ac756b8136bd7c3a6ff9d7f7987',1,'Parameter::Parameter(int id, double value)'],['../class_parameter.html#a847adf3c9dd04498c5865f3d597216d6',1,'Parameter::Parameter(int id, const std::vector&lt; double &gt; &amp;times, const std::vector&lt; double &gt; &amp;values, bool periodic=true)']]]
+  ['register_5fequation_0',['register_equation',['../class_d_o_f_handler.html#ac8a9df3b1ecafd8996eb48f1bacb7b00',1,'DOFHandler']]],
+  ['register_5fvariable_1',['register_variable',['../class_d_o_f_handler.html#a0bd43f0560bf0f8f9880555eed418ed9',1,'DOFHandler']]],
+  ['reserve_2',['reserve',['../class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898',1,'SparseSystem']]],
+  ['run_3',['run',['../class_levenberg_marquardt_optimizer.html#af61872e32f3638b60631ad3fc834ab3f',1,'LevenbergMarquardtOptimizer::run()'],['../class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96',1,'Solver::run()']]]
 ];

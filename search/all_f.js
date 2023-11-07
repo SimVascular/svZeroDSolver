@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['register_5fequation_0',['register_equation',['../class_d_o_f_handler.html#aea669c54585869276a8c0a00ce015ff9',1,'DOFHandler']]],
-  ['register_5fvariable_1',['register_variable',['../class_d_o_f_handler.html#ab26dd8b9d6ad1de027998d53642c3a04',1,'DOFHandler']]],
+  ['register_5fequation_0',['register_equation',['../class_d_o_f_handler.html#ac8a9df3b1ecafd8996eb48f1bacb7b00',1,'DOFHandler']]],
+  ['register_5fvariable_1',['register_variable',['../class_d_o_f_handler.html#a0bd43f0560bf0f8f9880555eed418ed9',1,'DOFHandler']]],
   ['reserve_2',['reserve',['../class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898',1,'SparseSystem']]],
   ['residual_3',['residual',['../class_sparse_system.html#a4e30e790f39ac0f6dd65b902acddaa99',1,'SparseSystem']]],
   ['resistancebc_4',['ResistanceBC',['../class_resistance_b_c.html',1,'']]],

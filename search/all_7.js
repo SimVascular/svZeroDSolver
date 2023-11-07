@@ -12,6 +12,6 @@ var searchData=
   ['integrator_9',['integrator',['../class_integrator.html#a91fdfba81971dfa13ba22521d11b7c46',1,'Integrator::Integrator()'],['../class_integrator.html#ad6e4f6a6409bec36c05ddc6a3fead000',1,'Integrator::Integrator(Model *model, double time_step_size, double rho, double atol, int max_iter)'],['../class_integrator.html',1,'Integrator']]],
   ['integrator_2eh_10',['Integrator.h',['../_integrator_8h.html',1,'']]],
   ['interface_2eh_11',['interface.h',['../interface_8h.html',1,'']]],
-  ['isconstant_12',['isconstant',['../class_parameter.html#a88ef395532eefa9bc88c3a7cca15ac7f',1,'Parameter']]],
-  ['isperiodic_13',['isperiodic',['../class_parameter.html#a3193f5215faab8b7ce2959d684a86949',1,'Parameter']]]
+  ['is_5fconstant_12',['is_constant',['../class_parameter.html#ad9b65a1bb5095a9838d052e251f90ebf',1,'Parameter']]],
+  ['is_5fperiodic_13',['is_periodic',['../class_parameter.html#ab8f83f1250a623d59c74b225817f2b16',1,'Parameter']]]
 ];

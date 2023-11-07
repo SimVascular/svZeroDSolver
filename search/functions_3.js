@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dofhandler_0',['DOFHandler',['../class_d_o_f_handler.html#add890fc143cbe289e692d67c102e0d0c',1,'DOFHandler']]]
+  ['finalize_0',['finalize',['../class_model.html#a15a519aed6d0924b98b00ed6899c62b5',1,'Model']]]
 ];

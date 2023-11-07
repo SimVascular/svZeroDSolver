@@ -12,13 +12,6 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  extensions: ["tex2jax.js"],
-  jax: ["input/TeX","output/HTML-CSS"],
-});
-</script>
-<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -178,75 +171,100 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_junction.html" title="Junction.">Junction</a> between blood vessels. </p>
 <p>Models a junction with one inlet and arbitrary outlets using modified blood vessel elements between each inlet and outlet pair.</p>
-<div class="image">
-<img src="blood_vessel_junction_dark.png" alt=""/>
-</div>
+<p class="formulaDsp">
+<picture><source srcset="form_69_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  \begin{circuitikz}
+  \draw node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
+  \draw (1,0.1) node[anchor=south]{$P_\text{in}$};
+  \draw (1,0) to [short, *-] (2.5,0.75);
+  \draw (1,0) to [short, *-] (2.5,-0.75);
+  \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
+  (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
+  node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{}
+to
+  [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
+  node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
+  {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
+  {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
+  {$Q_{out,2}$}; \end{circuitikz}
+  \]" src="form_69.png" width="255" height="86"/></picture>
+</p>
 <p>Each blood vessel is modelled as:</p>
-<div class="image">
-<img src="blood_vessel_junction_individual_dark.png" alt=""/>
-</div>
+<p class="formulaDsp">
+<picture><source srcset="form_70_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  \begin{circuitikz} \draw
+  node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
+  \draw (1,0) node[anchor=south]{$P_\text{in}$}
+  to [R, l=$R$, *-] (3,0)
+  to [R, l=$S$, -] (5,0)
+  (5,0) to [L, l=$L$, -*] (7,0)
+  node[anchor=south]{$P_\text{out}$};
+  \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_\text{out}$};
+  \end{circuitikz}
+  \]" src="form_70.png" width="336" height="30"/></picture>
+</p>
 <h3><a class="anchor" id="autotoc_md4"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-\[
-Q_\text{in}-\sum_{i}^{n_{outlets}} Q_{out, i} = 0
-\]
+<picture><source srcset="form_71_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  Q_\text{in}-\sum_{i}^{n_{outlets}} Q_{out, i} = 0
+  \]" src="form_71.png" width="126" height="36"/></picture>
 </p>
 <p class="formulaDsp">
-\[
-P_\text{in}-P_{\text{out},i} - (R+S|Q_{\text{out},i}|) \cdot Q_{\text{out},i}
-- L \dot{Q}_{\text{out},i} = 0 \quad \forall i \in n_{outlets} \]
+<picture><source srcset="form_72_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  P_\text{in}-P_{\text{out},i} - (R+S|Q_{\text{out},i}|) \cdot Q_{\text{out},i}
+  - L \dot{Q}_{\text{out},i} = 0 \quad \forall i \in n_{outlets} \]" src="form_72.png" width="354" height="16"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md5"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-\[
-\mathbf{y}^{e}=\left[\begin{array}{lllllll}P_\text{in}^{e} &amp; Q_\text{in}^{e}
-&amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
-\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]
+<picture><source srcset="form_73_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_\text{in}^{e} &amp; Q_\text{in}^{e}
+  &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
+  \dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_73.png" width="304" height="16"/></picture>
 </p>
 <p class="formulaDsp">
-\[
-\mathbf{F}^{e} = \left[\begin{array}{ccccccc}
-0 &amp; 1 &amp; 0 &amp; -1 &amp; 0 &amp; -1 &amp; \dots \\
-1 &amp; 0 &amp; -1 &amp; -R_1 &amp; 0 &amp; 0 &amp; \\
-1 &amp; 0 &amp; 0 &amp; 0 &amp; -1 &amp; -R_2 &amp; \\
-\vdots &amp; &amp; &amp; &amp; &amp; &amp; \ddots
-\end{array}\right]
-\]
+<picture><source srcset="form_74_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  \mathbf{F}^{e} = \left[\begin{array}{ccccccc}
+  0 &amp; 1 &amp; 0 &amp; -1 &amp; 0 &amp; -1 &amp; \dots \\
+  1 &amp; 0 &amp; -1 &amp; -R_1 &amp; 0 &amp; 0 &amp; \\
+  1 &amp; 0 &amp; 0 &amp; 0 &amp; -1 &amp; -R_2 &amp; \\
+  \vdots &amp; &amp; &amp; &amp; &amp; &amp; \ddots
+  \end{array}\right]
+  \]" src="form_74.png" width="240" height="68"/></picture>
 </p>
 <p class="formulaDsp">
-\[
-\mathbf{E}^{e} = \left[\begin{array}{ccccccc}
-0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \dots \\
-0 &amp; 0 &amp; 0 &amp; -L_1 &amp; 0 &amp; 0 &amp; \\
-0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -L_2 &amp; \\
-\vdots &amp; &amp; &amp; &amp; &amp; &amp; \ddots
-\end{array}\right]
-\]
+<picture><source srcset="form_75_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  \mathbf{E}^{e} = \left[\begin{array}{ccccccc}
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \dots \\
+  0 &amp; 0 &amp; 0 &amp; -L_1 &amp; 0 &amp; 0 &amp; \\
+  0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -L_2 &amp; \\
+  \vdots &amp; &amp; &amp; &amp; &amp; &amp; \ddots
+  \end{array}\right]
+  \]" src="form_75.png" width="219" height="68"/></picture>
 </p>
 <p class="formulaDsp">
-\[
-\mathbf{c}^{e} = \left[\begin{array}{c}
-0 \\
-- S_1 |Q_{\text{in},1}| Q_{\text{in},1} \\
-- S_2 |Q_{\text{in},2}| Q_{\text{in},2} \\
-\vdots
-\end{array}\right] \]
+<picture><source srcset="form_76_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  \mathbf{c}^{e} = \left[\begin{array}{c}
+  0 \\
+  - S_1 |Q_{\text{in},1}| Q_{\text{in},1} \\
+  - S_2 |Q_{\text{in},2}| Q_{\text{in},2} \\
+  \vdots
+  \end{array}\right] \]" src="form_76.png" width="138" height="68"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md6"></a>
 Gradient</h3>
 <p>Gradient of the equations with respect to the parameters:</p>
 <p class="formulaDsp">
-\[
-\mathbf{J}^{e} = \left[\begin{array}{lllllllll}
-0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp;
-\dots \\
-- y_4 &amp; 0 &amp; \dots &amp; - \dot y_4 &amp; 0 &amp; \dots &amp; |y_4| y_4 &amp; 0 &amp; \dots \\
-0 &amp; - y_6 &amp; \dots &amp; 0 &amp; - \dot y_6 &amp; \dots &amp; 0 &amp; |y_6| y_6 &amp; \dots \\
-0 &amp; 0 &amp; \ddots &amp; 0 &amp; 0 &amp; \ddots &amp; 0 &amp; 0 &amp; \ddots \\
-\end{array}\right]
-\]
+<picture><source srcset="form_77_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+  \mathbf{J}^{e} = \left[\begin{array}{lllllllll}
+  0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp;
+  \dots \\
+  - y_4 &amp; 0 &amp; \dots &amp; - \dot y_4 &amp; 0 &amp; \dots &amp; |y_4| y_4 &amp; 0 &amp; \dots \\
+  0 &amp; - y_6 &amp; \dots &amp; 0 &amp; - \dot y_6 &amp; \dots &amp; 0 &amp; |y_6| y_6 &amp; \dots \\
+  0 &amp; 0 &amp; \ddots &amp; 0 &amp; 0 &amp; \ddots &amp; 0 &amp; 0 &amp; \ddots \\
+  \end{array}\right]
+  \]" src="form_77.png" width="349" height="69"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md7"></a>
 Parameters</h3>

@@ -12,13 +12,6 @@
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  extensions: ["tex2jax.js"],
-  jax: ["input/TeX","output/HTML-CSS"],
-});
-</script>
-<script type="text/javascript" async="async" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 <link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
 </head>
@@ -146,18 +139,7 @@ Drawing circuits</h3>
 <div class="line">...</div>
 <div class="line">\end{circuitikz}</div>
 <div class="line">\f]</div>
-</div><!-- fragment --><p> We currently use MathJax, which only supports <a href="https://docs.mathjax.org/en/latest/input/tex/extensions/index.html">a couple of LaTeX packages</a>. In our <code>Doxyfile</code>, this is set as <code>USE_MATHJAX = YES</code>. The equations look nicer than without MathJax. Unfortunately, CircuiTikZ is currently not supported by MathJax. Thus, we store all current schematics already compiled in <code>docs/png</code>.</p>
-<p>If you are adding new schematics, you can follow these steps:</p><ol type="1">
-<li>Set <code>USE_MATHJAX = NO</code> in <code>docs/Doxyfile</code></li>
-<li>Locally build Doxygen (see next section)</li>
-<li>Copy <code>png</code> output from <code>docs/build/latex</code> to <code>docs/png</code></li>
-<li>Include image with <code>\image html FILENAME_dark.png</code> in <code>.h</code>/<code>.cpp</code> Doxygen</li>
-<li>Set <code>USE_MATHJAX = YES</code> in <code>docs/Doxyfile</code></li>
-<li>Locally build Doxygen again</li>
-<li>Check if LaTeX and schematic look nice</li>
-<li>Commit your changes and new <code>png</code></li>
-</ol>
-<h3><a class="anchor" id="autotoc_md43"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md43"></a>
 Build</h3>
 <p>The documentation is automatically built in the GitHub CI/CD and published on GitHub pages. If you want to build the documentation locally, you can use:</p>
 <div class="fragment"><div class="line">doxygen docs/Doxyfile</div>

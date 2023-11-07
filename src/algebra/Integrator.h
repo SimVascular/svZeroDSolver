@@ -43,43 +43,89 @@
  * @brief Generalized-alpha integrator
  *
  * This class handles the time integration scheme for solving 0D blood
- * flow system.
+ * flow system using the generalized-\f$\alpha\f$ method \cite JANSEN2000305.
  *
- * Flow rate, pressure, and other hemodynamic quantities in 0D models of
- * vascular anatomies are governed by a system of nonlinear
- * differential-algebraic equations (DAEs):
+ * We are interested in solving the DAE system defined in SparseSystem for the
+ * solutions, \f$\mathbf{y}_{n+1}\f$ and \f$\dot{\mathbf{y}}_{n+1}\f$, at the
+ * next time, \f$t_{n+1}\f$, using the known solutions, \f$\mathbf{y}_{n}\f$
+ * and \f$\dot{\mathbf{y}}_{n}\f$, at the current time, \f$t_{n}\f$. Note that
+ * \f$t_{n+1} = t_{n} + \Delta t\f$, where \f$\Delta t\f$ is the time step
+ * size.
  *
+ * Using the generalized-\f$\alpha\f$ method, we launch a predictor step
+ * and a series of multi-corrector steps to solve for \f$\mathbf{y}_{n+1}\f$
+ * and \f$\dot{\mathbf{y}}_{n+1}\f$. Similar to other predictor-corrector
+ * schemes, we evaluate the solutions at intermediate times between \f$t_{n}\f$
+ * and \f$t_{n + 1}\f$. However, in the generalized-\f$\alpha\f$ method, we
+ * evaluate \f$\mathbf{y}\f$ and \f$\dot{\mathbf{y}}\f$ at different
+ * intermediate times. Specifically, we evaluate \f$\mathbf{y}\f$ at
+ * \f$t_{n+\alpha_{f}}\f$ and \f$\dot{\mathbf{y}}\f$ at
+ * \f$t_{n+\alpha_{m}}\f$, where \f$t_{n+\alpha_{f}} = t_{n} +
+ * \alpha_{f}\Delta t\f$ and \f$t_{n+\alpha_{m}} = t_{n} + \alpha_{m}\Delta
+ * t\f$. Here, \f$\alpha_{m}\f$ and \f$\alpha_{f}\f$ are the
+ * generalized-\f$\alpha\f$ parameters, where \f$\alpha_{m} = \frac{3 - \rho}{2
+ * + 2\rho}\f$ and \f$\alpha_{f} = \frac{1}{1 + \rho}\f$. In the 0D solver, we
+ * set the spectral radius, \f$\rho\f$, to be \f$0.1\f$. For each time step, the
+ * procedure works as follows.
+ *
+ * 1. \f$\textbf{Predictor step}\f$: First, we make an initial guess for
+ * \f$\mathbf{y}_{n+1}\f$ and \f$\dot{\mathbf{y}}_{n+1}\f$,
  * \f[
- * \mathbf{E}(\mathbf{y}, t) \cdot \dot{\mathbf{y}}+\mathbf{F}(\mathbf{y}, t)
- * \cdot \mathbf{y}+\mathbf{c}(\mathbf{y}, t)=\mathbf{0} \f]
+ * \mathbf{y}_{n+1} = \mathbf{y}_{n},\\
+ * \dot{\mathbf{y}}_{n+1} = \frac{\gamma - 1}{\gamma}\dot{\mathbf{y}}_{n},
+ * \f]
+ * where \f$\gamma = 0.5 + \alpha_{m} - \alpha_{f}\f$.
  *
- * Here, \f$y\f$ is the vector of solution quantities and \f$\dot{y}\f$ is the
- * time derivative of \f$y\f$. \f$N\f$ is the total number of equations and the
- * total number of global unknowns. The DAE system is solved implicitly using
- * the generalized-\f$\alpha\f$ method \cite JANSEN2000305.
+ * 2. \f$\textbf{Initiator step}\f$: Then, we initialize the values of
+ * \f$\dot{\mathbf{y}}_{n+\alpha_{m}}\f$ and
+ * \f$\mathbf{y}_{n+\alpha_{f}}\f$,
+ * \f[\dot{\mathbf{y}}_{n+\alpha_{m}}^{k=0} = \dot{\mathbf{y}}_{n} +
+ * \alpha_{m}\left(\dot{\mathbf{y}}_{n+1} - \dot{\mathbf{y}}_{n}\right),\\
+ * \mathbf{y}_{n+\alpha_{f}}^{k=0} = \mathbf{y}_{n} +
+ * \alpha_{f}\left(\mathbf{y}_{n+1} - \mathbf{y}_{n}\right).\f]
  *
- * `SparseSystem`)
+ * 3. \f$\textbf{Multi-corrector step}\f$: Then, for \f$k \in \left[0, N_{int}
+ * - 1\right]\f$, we iteratively update our guess of
+ * \f$\dot{\mathbf{y}}_{n+\alpha_{m}}^{k}\f$ and
+ * \f$\mathbf{y}_{n+\alpha_{f}}^{k}\f$. We desire the residual,
+ * \f$\textbf{r}\left(\dot{\mathbf{y}}_{n+\alpha_{m}}^{k + 1},
+ * \mathbf{y}_{n+\alpha_{f}}^{k + 1}, t_{n+\alpha_{f}}\right)\f$, to be
+ * \f$\textbf{0}\f$. We solve this system using Newton's method. For details,see
+ * SparseSystem.
+ *
+ * 4. \f$\textbf{Update step}\f$: Finally, we update \f$\mathbf{y}_{n+1}\f$ and
+ * \f$\dot{\mathbf{y}}_{n+1}\f$ using our final value of
+ * \f$\dot{\mathbf{y}}_{n+\alpha_{m}}\f$ and
+ * \f$\mathbf{y}_{n+\alpha_{f}}\f$. \f[
+ * \mathbf{y}_{n+1} = \mathbf{y}_{n} +
+ * \frac{\mathbf{y}_{n+\alpha_{f}}^{N_{int}} -
+ * \mathbf{y}_{n}}{\alpha_{f}},\\ \dot{\mathbf{y}}_{n+1} =
+ * \dot{\mathbf{y}}_{n} + \frac{\dot{\mathbf{y}}_{n+\alpha_{m}}^{N_{int}} -
+ * \dot{\mathbf{y}}_{n}}{\alpha_{m}} \f]
+ *
  */
 class Integrator {
  private:
-  double alpha_m{0.0};
-  double alpha_f{0.0};
-  double alpha_m_inv{0.0};
-  double alpha_f_inv{0.0};
-  double gamma{0.0};
-  double gamma_inv{0.0};
-  double time_step_size{0.0};
-  double time_step_size_inv{0.0};
-  double y_dot_coeff{0.0};
-  double atol{0.0};
-  double y_init_coeff{0.0};
-  double ydot_init_coeff{0.0};
-  int max_iter{0};
-  int size{0};
+  double alpha_m;
+  double alpha_f;
+  double alpha_m_inv;
+  double alpha_f_inv;
+  double gamma;
+  double gamma_inv;
+  double time_step_size;
+  double time_step_size_inv;
+  double y_dot_coeff;
+  double atol;
+  double y_init_coeff;
+  double ydot_init_coeff;
+  int max_iter;
+  int size;
+  int n_iter = 0;
+  int n_nonlin_iter = 0;
   Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
-  Model* model{nullptr};
+  Model *model;
 
  public:
   /**
@@ -91,7 +137,7 @@ class Integrator {
    * @param atol Absolut tolerance for non-linear iteration termination
    * @param max_iter Maximum number of non-linear iterations
    */
-  Integrator(Model* model, double time_step_size, double rho, double atol,
+  Integrator(Model *model, double time_step_size, double rho, double atol,
              int max_iter);
 
   /**
@@ -127,7 +173,13 @@ class Integrator {
    * @param time Current time
    * @return New state
    */
-  State step(const State& state, double time);
+  State step(const State &state, double time);
+
+  /**
+   * @brief Get average number of nonlinear iterations in all step calls
+   *
+   */
+  double avg_nonlin_iter();
 };
 
 #endif  // SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_

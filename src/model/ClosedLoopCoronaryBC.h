@@ -44,21 +44,7 @@ enum class Side { LEFT, RIGHT, NONE };
  * @brief Closed loop coronary boundary condition (connected to other blocks on
  * both sides).
  *
- * \f[
- * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [R, l=$R_a$, *-] (3,0)
- * to [R, l=$R_{am}$, -] (5,0)
- * to [R, l=$R_v$, *-*] (7,0)
- * node[anchor=south]{$P_{out}$}
- * (5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
- * node[left]{$P_{im}$}
- * (3,0) to [C, l=$C_a$, -*] (3,-1.5)
- * node[left]{$P_a$};
- * \draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
- * \end{circuitikz}
- * \f]
+ * \image html closed_loop_coronary_b_c_dark.png
  *
  * ### Governing equations
  *
@@ -116,6 +102,21 @@ enum class Side { LEFT, RIGHT, NONE };
  * * `4` Cim
  *
  */
+//  * \f[
+//  * \begin{circuitikz} \draw
+//  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+//  * \draw (1,0) node[anchor=south]{$P_{in}$}
+//  * to [R, l=$R_a$, *-] (3,0)
+//  * to [R, l=$R_{am}$, -] (5,0)
+//  * to [R, l=$R_v$, *-*] (7,0)
+//  * node[anchor=south]{$P_{out}$}
+//  * (5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
+//  * node[left]{$P_{im}$}
+//  * (3,0) to [C, l=$C_a$, -*] (3,-1.5)
+//  * node[left]{$P_a$};
+//  * \draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
+//  * \end{circuitikz}
+//  * \f]
 class ClosedLoopCoronaryBC : public Block {
  public:
   explicit ClosedLoopCoronaryBC(int id, const std::vector<int> &param_ids,

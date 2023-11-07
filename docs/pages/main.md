@@ -34,12 +34,19 @@ reflect the hemodynamics and physiology of different cardiovascular
 anatomies. These 0D models are governed by differential algebraic equations
 (DAEs).
 
-For more background information on 0D models, have a look at SimVascular's
-[ROM Simulation Guide](http://simvascular.github.io/docsROMSimulation.html).
+For more background information on 0D models, have a look at the detailed documentation:
+- System of equations: SparseSystem
+- Time integration: Integrator
+- Overview of available 0D elements (blocks): Block
 
-* <a href="https://github.com/StanfordCBCL/svZeroDPlus">Source
-repository</a>
-* <a href="https://simvascular.github.io">About SimVascular</a>
+You can find more details about governing equations in individual blocks, for example:
+- BloodVessel
+- BloodVesselJunction
+- WindkesselBC
+
+For implementation details, have a look at the [source code](https://github.com/StanfordCBCL/svZeroDPlus).
+
+[About SimVascular](https://simvascular.github.io)
 
 # Installation
 

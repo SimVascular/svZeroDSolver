@@ -2,6 +2,9 @@
 __pycache__
 *.pyc
 
+# simulation output
+*.csv
+
 # macOS file system
 .DS_Store
 
@@ -26,3 +29,8 @@ Debug*/
 externals/
 *.so
 build
+
+# IDE
+.cproject
+.project
+.settings

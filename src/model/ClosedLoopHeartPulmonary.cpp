@@ -94,7 +94,7 @@ void ClosedLoopHeartPulmonary::update_solution(
       AA * parameters[global_param_ids[ParamId::EMAX_RA]] *
           parameters[global_param_ids[ParamId::VASO_RA]] +
       psi_ra * (AA - 1.0);
-  system.D.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
       psi_ra_derivative * (AA - 1.0);
 
   // DOF 1: Flow into right atrium (no equation)
@@ -152,7 +152,7 @@ void ClosedLoopHeartPulmonary::update_solution(
       AA * parameters[global_param_ids[ParamId::EMAX_LA]] *
           parameters[global_param_ids[ParamId::VASO_LA]] +
       psi_la * (AA - 1.0);
-  system.D.coeffRef(global_eqn_ids[8], global_var_ids[11]) =
+  system.dC_dy.coeffRef(global_eqn_ids[8], global_var_ids[11]) =
       psi_la_derivative * (AA - 1.0);
 
   // DOF 11, Eq 9: Left atrium volume

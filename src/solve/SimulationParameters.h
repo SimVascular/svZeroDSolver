@@ -52,9 +52,10 @@ struct SimulationParameters {
   int sim_num_cycles{0};      ///< Number of cardiac cycles to simulate
   int sim_pts_per_cycle{0};   ///< Number of time steps per cardiac cycle
   int sim_num_time_steps{0};  ///< Total number of time steps
-  int sim_nliter{0};       ///< Maximum number of non-linear iterations in time
-                           ///< integration
-  int output_interval{0};  ///< Interval of writing output
+  int sim_nliter{0};  ///< Maximum number of non-linear iterations in time
+                      ///< integration
+  double sim_rho_infty{0.0};  ///< Spectral radius of generalized-alpha
+  int output_interval{0};     ///< Interval of writing output
 
   bool sim_steady_initial{0};  ///< Start from steady solution
   bool output_variable_based{

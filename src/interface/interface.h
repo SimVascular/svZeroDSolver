@@ -67,6 +67,7 @@ class SolverInterface {
 
   // These are read in from the input JSON solver configuration file.
   double time_step_size_ = 0.0;
+  double rho_infty_ = 0.0;
   int num_time_steps_ = 0;
   double absolute_tolerance_ = 0.0;
   int max_nliter_ = 0;

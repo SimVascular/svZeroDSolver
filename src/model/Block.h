@@ -56,6 +56,12 @@ struct TripletsContributions {
    * @param D Contributions to D matrix
    */
   TripletsContributions(int F, int E, int D) : F(F), E(E), D(D){};
+  /**
+   * @brief The number of triplets that the element contributes
+   * to the global system.
+   * @param other TripletsContributions object to add to the 
+   * number of contributions
+   */
   TripletsContributions operator+=(const TripletsContributions &other) {
     F += other.F;
     E += other.E;

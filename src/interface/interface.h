@@ -44,8 +44,6 @@
 #include "csv_writer.h"
 #include "debug.h"
 
-//using S = SparseSystem;
-
 /**
  * @brief Interface class for calling svZeroD from external programs
  */
@@ -56,7 +54,7 @@ class SolverInterface {
    * @param input_file_name The 0D JSON file which specifies the model
    */
   SolverInterface(const std::string& input_file_name);
-  
+
   /**
    * @brief Destroy the interface object
    */
@@ -75,7 +73,7 @@ class SolverInterface {
    * @brief ID of current interface
    */
   int problem_id_ = 0;
-  
+
   /**
    * @brief 0D input (JSON) file
    */
@@ -112,8 +110,8 @@ class SolverInterface {
   /**
    * @brief Current time step
    */
-  //int save_interval_counter_ = 0;
-  //int output_interval_ = 0;
+  // int save_interval_counter_ = 0;
+  // int output_interval_ = 0;
   /**
    * @brief The size of the 0D system
    */

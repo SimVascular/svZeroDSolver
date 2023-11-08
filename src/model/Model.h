@@ -116,7 +116,7 @@ class Model {
   /**
    * @brief Get a block type by its name
    *
-   * @param name The name of the block 
+   * @param name The name of the block
    * @return BlockType The block type
    */
   BlockType get_block_type(const std::string_view &name) const;
@@ -253,7 +253,7 @@ class Model {
   /**
    * @brief Get the number of blocks in the model
    *
-   * @param internal Toggle whether to return internal/hidden blocks 
+   * @param internal Toggle whether to return internal/hidden blocks
    *
    * @return int Number of blocks
    */

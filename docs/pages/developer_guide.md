@@ -47,7 +47,7 @@ There are tools for your favorite IDE to automatically format your code. Example
 - [and many more](https://clang.llvm.org/docs/ClangFormat.html)
 
 Before committing any changes, you can run the following
-comment **from your build folder** to format all your files:
+command **from your build folder** to format all your files:
 
 ```bash
 make codeformat

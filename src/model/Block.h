@@ -48,6 +48,13 @@
  */
 struct TripletsContributions {
   TripletsContributions(){};
+  /**
+   * @brief The number of triplets that the element contributes
+   * to the global system.
+   * @param F Contributions to F matrix
+   * @param E Contributions to E matrix
+   * @param D Contributions to D matrix
+   */
   TripletsContributions(int F, int E, int D) : F(F), E(E), D(D){};
   TripletsContributions operator+=(const TripletsContributions &other) {
     F += other.F;
@@ -56,8 +63,17 @@ struct TripletsContributions {
     return *this;
   };
 
+  /**
+   * @brief Contributions to F matrix
+   */
   int F{0};
+  /**
+   * @brief Contributions to E matrix
+   */
   int E{0};
+  /**
+   * @brief Contributions to D matrix
+   */
   int D{0};
 };
 
@@ -237,6 +253,8 @@ class Block {
    *
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
+   *
+   * @return TripletsContributions Number of triplets of element
    */
   virtual TripletsContributions get_num_triplets();
 };

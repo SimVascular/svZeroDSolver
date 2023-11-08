@@ -118,7 +118,6 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   auto simparams = load_simulation_params(config);
 
   auto model = std::shared_ptr<Model>(new Model());
-  // auto model = std::shared_ptr<MODEL::Model<T>>(new MODEL::Model<T>());
 
   load_simulation_model(config, *model.get());
   auto state = load_initial_condition(config, *model.get());
@@ -163,7 +162,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->absolute_tolerance_ = simparams.sim_abs_tol;
   interface->time_step_ = 0;
   interface->system_size_ = model->dofhandler.size();
-  interface->output_interval_ = simparams.output_interval;
+  //interface->output_interval_ = simparams.output_interval;
   interface->num_time_steps_ = simparams.sim_num_time_steps;
   interface->pts_per_cycle_ = simparams.sim_pts_per_cycle;
   pts_per_cycle = simparams.sim_pts_per_cycle;

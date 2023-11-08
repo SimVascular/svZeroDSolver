@@ -115,9 +115,8 @@
  * \f]
  *
  * with the stenosis resistance \f$ S=K_{t} \frac{\rho}{2
- * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} \f$. The
- * constant part of the equation is summarized in \ref
- * Parameters::stenosis_coefficient. \f$R\f$, \f$C\f$, and \f$L\f$ refer to
+ * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} \f$.
+ * \f$R\f$, \f$C\f$, and \f$L\f$ refer to
  * Poisieuille resistance, capacitance and inductance, respectively.
  *
  * ### Gradient

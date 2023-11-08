@@ -43,6 +43,9 @@
 #include "Model.h"
 #include "debug.h"
 
+/**
+ * @brief Main function to run the 0D model calibration.
+ */
 nlohmann::json calibrate(const nlohmann::json &config);
 
 #endif  // SVZERODSOLVER_OPTIMIZE_CALIBRATOR_HPP_

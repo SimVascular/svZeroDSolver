@@ -38,6 +38,10 @@
 #include "SparseSystem.h"
 
 // [TODO] get rid of PI.
+/**
+ * @brief Define PI
+ *
+ */
 #define PI 3.14159265
 #include <math.h>
 

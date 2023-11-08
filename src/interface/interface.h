@@ -44,7 +44,7 @@
 #include "csv_writer.h"
 #include "debug.h"
 
-using S = SparseSystem;
+//using S = SparseSystem;
 
 /**
  * @brief Interface class for calling svZeroD from external programs

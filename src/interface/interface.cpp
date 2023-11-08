@@ -34,7 +34,7 @@
 
 #include "SimulationParameters.h"
 
-using S = SparseSystem;
+//using S = SparseSystem;
 
 // Static member data.
 int SolverInterface::problem_id_count_ = 0;

@@ -154,6 +154,13 @@ class BloodVessel : public Block {
     STENOSIS_COEFFICIENT = 3,
   };
 
+  /**
+   * @brief Construct a new BloodVessel object
+   *
+   * @param id Global ID of the block
+   * @param param_ids Global IDs of the block parameters
+   * @param model The model to which the block belongs
+   */
   explicit BloodVessel(int id, const std::vector<int> &param_ids, Model *model)
       : Block(id, param_ids, model){};
 

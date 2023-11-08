@@ -152,7 +152,7 @@ class Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    * @param num_equations Number of equations of the block
-   * @param num_internal_vars Number of internal variables of the block
+   * @param internal_var_names Number of internal variables of the block
    */
 
   void setup_dofs_(DOFHandler &dofhandler, int num_equations,

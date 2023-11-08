@@ -53,6 +53,7 @@ struct TripletsContributions {
    * to the global system.
    * @param F Contributions to F matrix
    * @param E Contributions to E matrix
+   * @param D Contributions to E matrix
    */
   TripletsContributions(int F, int E, int D) : F(F), E(E), D(D){};
   /**

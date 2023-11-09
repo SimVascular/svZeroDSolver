@@ -111,7 +111,8 @@ class Integrator {
   double gamma{0.0};
   double time_step_size{0.0};
   double ydot_init_coeff{0.0};
-  double y_dot_coeff{0.0};
+  double y_coeff{0.0};
+  double y_coeff_jacobian{0.0};
   double atol{0.0};
   int max_iter{0};
   int size{0};

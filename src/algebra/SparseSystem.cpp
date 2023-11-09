@@ -77,7 +77,7 @@ void SparseSystem::reserve(Model *model) {
   dC_dy.makeCompressed();
   dC_dydot.makeCompressed();
   jacobian.reserve(num_triplets.F + num_triplets.E);  // Just an estimate
-  update_jacobian(1.0);  // Update it once to have sparsity pattern
+  update_jacobian(1.0, 1.0);  // Update it once to have sparsity pattern
   jacobian.makeCompressed();
   solver->analyzePattern(jacobian);  // Let solver analyze pattern
 }
@@ -91,9 +91,11 @@ void SparseSystem::update_residual(
   residual.noalias() -= F * y;
 }
 
-void SparseSystem::update_jacobian(double time_coeff) {
+void SparseSystem::update_jacobian(double time_coeff_ydot,
+                                   double time_coeff_y) {
   jacobian.setZero();
-  jacobian += E + dC_dydot + (F + dC_dy) * time_coeff;
+  jacobian += (E + dC_dydot) * time_coeff_ydot;
+  jacobian += (F + dC_dy) * time_coeff_y;
 }
 
 void SparseSystem::solve() {

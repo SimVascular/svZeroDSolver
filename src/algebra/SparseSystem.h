@@ -142,7 +142,7 @@ class SparseSystem {
    *
    * @param e_coeff Coefficent for system matrix \ref E
    */
-  void update_jacobian(double e_coeff);
+  void update_jacobian(double time_coeff_ydot, double time_coeff_y);
 
   /**
    * @brief Solve the system

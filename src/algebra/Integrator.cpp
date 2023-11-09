@@ -37,7 +37,8 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   alpha_f = 1.0 / (1.0 + rho);
   gamma = 0.5 + alpha_m - alpha_f;
   ydot_init_coeff = 1.0 - 1.0 / gamma;;
-  y_dot_coeff = gamma * time_step_size;
+  y_coeff = gamma * time_step_size;
+  y_coeff_jacobian = alpha_f * y_coeff;
 
   size = model->dofhandler.size();
   system = SparseSystem(size);
@@ -65,7 +66,8 @@ void Integrator::clean() {
 
 void Integrator::update_params(double time_step_size) {
   this->time_step_size = time_step_size;
-  y_dot_coeff = gamma * time_step_size;
+  y_coeff = gamma * time_step_size;
+  y_coeff_jacobian = alpha_f * y_coeff;
   model->update_constant(system);
   model->update_time(system, 0.0);
 }
@@ -114,14 +116,14 @@ State Integrator::step(const State& old_state, double time) {
     }
 
     // Evaluate Jacobian
-    system.update_jacobian(y_dot_coeff);
+    system.update_jacobian(alpha_m, y_coeff_jacobian);
 
     // Solve system for increment in ydot
     system.solve();
 
     // Update the solution
     new_state.ydot += system.dydot;
-    new_state.y += system.dydot * y_dot_coeff;
+    new_state.y += system.dydot * y_coeff;
   }
 
   return new_state;

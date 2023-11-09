@@ -169,6 +169,11 @@ class ClosedLoopHeartPulmonary : public Block {
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
+  /**
+   * @brief Modify the solution after solving it
+   *
+   * @param y Current solution
+   */
   void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
 
   /**

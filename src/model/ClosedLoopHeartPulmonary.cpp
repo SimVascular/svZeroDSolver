@@ -289,7 +289,6 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
 
 void ClosedLoopHeartPulmonary::post_solve(
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
-  for (size_t i = 0; i < 16; i++) {
+  for (size_t i = 0; i < 16; i++)
     if (valves[i] < 0.5) y[global_var_ids[i]] = 0.0;
-  }
 }

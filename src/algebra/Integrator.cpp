@@ -39,9 +39,8 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   alpha_f_inv = 1.0 / alpha_f;
   gamma = 0.5 + alpha_m - alpha_f;
   gamma_inv = 1.0 / gamma;
-
-  y_init_coeff = alpha_f * 0.5 * time_step_size;
-  ydot_init_coeff = (1.0 + alpha_m * ((gamma - 0.5) * gamma_inv - 1.0));
+  ydot_init_coeff = (gamma - 1.0) * gamma_inv;
+  y_dot_coeff = gamma * time_step_size;
 
   size = model->dofhandler.size();
   system = SparseSystem(size);
@@ -52,8 +51,6 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
 
   y_af = Eigen::Matrix<double, Eigen::Dynamic, 1>(size);
   ydot_am = Eigen::Matrix<double, Eigen::Dynamic, 1>(size);
-
-  y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;
 
   // Make some memory reservations
   system.reserve(model);
@@ -71,10 +68,8 @@ void Integrator::clean() {
 }
 
 void Integrator::update_params(double time_step_size) {
-  y_init_coeff = alpha_f * 0.5 * time_step_size;
   this->time_step_size = time_step_size;
-  time_step_size_inv = 1.0 / time_step_size;
-  y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;
+  y_dot_coeff = gamma * time_step_size;
   model->update_constant(system);
   model->update_time(system, 0.0);
 }
@@ -83,11 +78,11 @@ State Integrator::step(const State& old_state, double time) {
   // Predictor + initiator step
   y_af.setZero();
   ydot_am.setZero();
-  y_af += old_state.y + old_state.ydot * y_init_coeff;
+  y_af += old_state.y;
   ydot_am += old_state.ydot * ydot_init_coeff;
 
-  // Determine new time
-  double new_time = time + alpha_f * time_step_size;
+  // Determine new time (evaluate terms at generalized mid-point)
+  double new_time = time + time_step_size * alpha_f;
 
   // Update time-dependent element contributions in system
   model->update_time(system, new_time);
@@ -127,8 +122,8 @@ State Integrator::step(const State& old_state, double time) {
 
   // Set new state
   State new_state = State::Zero(size);
-  new_state.y += old_state.y + (y_af - old_state.y) * alpha_f_inv;
-  new_state.ydot += old_state.ydot + (ydot_am - old_state.ydot) * alpha_m_inv;
+  new_state.y += old_state.y + (y_af - old_state.y) * alpha_f;
+  new_state.ydot += old_state.ydot + (ydot_am - old_state.ydot) * alpha_m;
 
   return new_state;
 }

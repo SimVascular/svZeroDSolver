@@ -48,7 +48,6 @@ void Solver::run() {
 
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  std::cout << simparams.sim_rho_infty << std::endl;
   Integrator integrator(&model, simparams.sim_time_step_size,
                         simparams.sim_rho_infty, simparams.sim_abs_tol,
                         simparams.sim_nliter);

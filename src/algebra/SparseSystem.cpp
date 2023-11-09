@@ -43,7 +43,7 @@ SparseSystem::SparseSystem(int n) {
 
   jacobian = Eigen::SparseMatrix<double>(n, n);
   residual = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
-  dy = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
+  dydot = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
 }
 
 SparseSystem::~SparseSystem() {}
@@ -91,13 +91,13 @@ void SparseSystem::update_residual(
   residual.noalias() -= F * y;
 }
 
-void SparseSystem::update_jacobian(double e_coeff) {
+void SparseSystem::update_jacobian(double time_coeff) {
   jacobian.setZero();
-  jacobian += F + dC_dy + (E + dC_dydot) * e_coeff;
+  jacobian += E + dC_dydot + (F + dC_dy) * time_coeff;
 }
 
 void SparseSystem::solve() {
   solver->factorize(jacobian);
-  dy.setZero();
-  dy += solver->solve(residual);
+  dydot.setZero();
+  dydot += solver->solve(residual);
 }

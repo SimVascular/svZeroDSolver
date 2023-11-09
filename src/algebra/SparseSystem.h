@@ -114,7 +114,7 @@ class SparseSystem {
   Eigen::Matrix<double, Eigen::Dynamic, 1>
       residual;  ///< Residual of the system
   Eigen::Matrix<double, Eigen::Dynamic, 1>
-      dy;  ///< Solution increment of the system
+      dydot;  ///< Solution increment of the system
 
   std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<double>>> solver =
       std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<double>>>(

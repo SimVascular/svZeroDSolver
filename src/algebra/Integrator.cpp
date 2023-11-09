@@ -35,11 +35,8 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   this->model = model;
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
-  alpha_m_inv = 1.0 / alpha_m;
-  alpha_f_inv = 1.0 / alpha_f;
   gamma = 0.5 + alpha_m - alpha_f;
-  gamma_inv = 1.0 / gamma;
-  ydot_init_coeff = (gamma - 1.0) * gamma_inv;
+  ydot_init_coeff = 1.0 - 1.0 / gamma;;
   y_dot_coeff = gamma * time_step_size;
 
   size = model->dofhandler.size();

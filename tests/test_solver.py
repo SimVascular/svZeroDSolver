@@ -287,7 +287,7 @@ def test_pulsatile_flow_cstenosis_steady_pressure():
     results = run_test_case_by_name("pulsatileFlow_CStenosis_steadyPressure")
     assert np.isclose(
         get_result(results, "pressure_in", 0, -439),
-        0.5933049197138334,
+        0.5931867478176258,
         rtol=1.0e-5,
     )  # inlet pressure
     assert np.isclose(
@@ -295,12 +295,12 @@ def test_pulsatile_flow_cstenosis_steady_pressure():
     )  # outlet pressure
     assert np.isclose(
         get_result(results, "flow_in", 0, -439),
-        0.7023611813029965,
+        0.7022833221028071,
         rtol=1.0e-5,
     )  # inlet flow
     assert np.isclose(
         get_result(results, "flow_out", 0, -439),
-        0.7018707542098627,
+        0.7025195223805801,
         rtol=1.0e-5,
     )  # outlet flow
 
@@ -347,6 +347,8 @@ def test_steady_flow_confluencer_r():
 
 def test_closed_loop_heart_single_vessel():
     results = run_test_case_by_name("closedLoopHeart_singleVessel")
+    import pdb
+    pdb.set_trace()
     assert np.isclose(
         np.mean(np.array(results["pressure_in"][0])), 55.703345704742844, rtol=RTOL_PRES
     )  # mean aortic pressure

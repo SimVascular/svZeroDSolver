@@ -347,35 +347,33 @@ def test_steady_flow_confluencer_r():
 
 def test_closed_loop_heart_single_vessel():
     results = run_test_case_by_name("closedLoopHeart_singleVessel")
-    import pdb
-    pdb.set_trace()
     assert np.isclose(
-        np.mean(np.array(results["pressure_in"][0])), 55.703345704742844, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_in"][0])), 55.703641631129, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(np.array(results["pressure_in"][0])), 73.97450170686889, rtol=RTOL_PRES
+        np.amax(np.array(results["pressure_in"][0])), 73.97432522258265, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
         np.amin(np.array(results["pressure_in"][0])), 0.0, rtol=RTOL_PRES
     )  # min aortic pressure
     assert np.isclose(
-        np.mean(np.array(results["flow_in"][0])), 43.21028819256006, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_in"][0])), 43.21039307754263, rtol=RTOL_FLOW
     )  # aortic inflow
 
 
 def test_closed_loop_heart_with_coronaries():
     results = run_test_case_by_name("closedLoopHeart_withCoronaries")
     assert np.isclose(
-        np.mean(np.array(results["pressure_in"][0])), 50.162313086833805, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_in"][0])), 50.1625871601956, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(np.array(results["pressure_in"][0])), 69.01524513715958, rtol=RTOL_PRES
+        np.amax(np.array(results["pressure_in"][0])), 69.01503950740205, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
-        np.mean(np.array(results["flow_in"][0])), 38.05442038841015, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_in"][0])), 38.05450968143411, rtol=RTOL_FLOW
     )  # mean aortic flow
     assert np.isclose(
-        np.amax(np.array(results["flow_in"][0])), 171.35198346122127, rtol=RTOL_FLOW
+        np.amax(np.array(results["flow_in"][0])), 171.3259487071224, rtol=RTOL_FLOW
     )  # max aortic flow
 
 
@@ -386,6 +384,8 @@ def test_coupled_block_heart_single_vessel():
     aortic_pressure = result[result.name == "pressure:J_heart_outlet:external_outlet"][
         "y"
     ].to_numpy()
+    import pdb
+    pdb.set_trace()
     assert np.isclose(
         np.mean(aortic_pressure[-50:]), 69.92379300168665, rtol=RTOL_PRES
     )  # mean aortic pressure

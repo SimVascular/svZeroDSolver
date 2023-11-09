@@ -169,6 +169,8 @@ class ClosedLoopHeartPulmonary : public Block {
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
+  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+
   /**
    * @brief Number of triplets of element
    *

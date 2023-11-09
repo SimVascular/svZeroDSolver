@@ -83,6 +83,8 @@ void Block::update_solution(SparseSystem &system,
                             Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                             Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {}
 
+void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {}
+
 void Block::update_gradient(Eigen::SparseMatrix<double> &jacobian,
                             Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
                             Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,

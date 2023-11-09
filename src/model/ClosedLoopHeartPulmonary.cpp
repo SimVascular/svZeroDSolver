@@ -262,7 +262,6 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   auto outflow_ra = y[global_var_ids[5]];
   if ((pressure_ra <= pressure_rv) and (outflow_ra <= 0.0)) {
     valves[5] = 0.0;
-    y[global_var_ids[5]] = 0.0;
   }
 
   // RV to pulmonary
@@ -270,7 +269,6 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   auto outflow_rv = y[global_var_ids[8]];
   if ((pressure_rv <= pressure_pulmonary) and (outflow_rv <= 0.0)) {
     valves[8] = 0.0;
-    y[global_var_ids[8]] = 0.0;
   }
 
   // LA to LV
@@ -279,7 +277,6 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   auto outflow_la = y[global_var_ids[12]];
   if ((pressure_la <= pressure_lv) and (outflow_la <= 0.0)) {
     valves[12] = 0.0;
-    y[global_var_ids[12]] = 0.0;
   }
 
   // LV to aorta
@@ -287,6 +284,12 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   auto outflow_lv = y[global_var_ids[15]];
   if ((pressure_lv <= pressure_aorta) and (outflow_lv <= 0.0)) {
     valves[15] = 0.0;
-    y[global_var_ids[15]] = 0.0;
+  }
+}
+
+void ClosedLoopHeartPulmonary::post_solve(
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+  for (size_t i = 0; i < 16; i++) {
+    if (valves[i] < 0.5) y[global_var_ids[i]] = 0.0;
   }
 }

@@ -123,6 +123,9 @@ State Integrator::step(const State& old_state, double time) {
     new_state.ydot += system.dydot;
     new_state.y += system.dydot * y_coeff;
 
+    // Perform any post-solve actions on blocks
+    // model->post_solve(new_state.y);
+
     // Count total number of nonlinear iterations
     n_nonlin_iter++;
   }

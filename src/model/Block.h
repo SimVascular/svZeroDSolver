@@ -208,6 +208,8 @@ class Block {
                                Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                                Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
+  virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+
   /**
    * @brief Set the gradient of the block contributions with respect to the
    * parameters

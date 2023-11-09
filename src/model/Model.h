@@ -226,6 +226,8 @@ class Model {
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
+  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+
   /**
    * @brief Convert the blocks to a steady behavior
    *

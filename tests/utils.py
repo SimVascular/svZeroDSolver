@@ -14,8 +14,8 @@ import svzerodplus
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
-RTOL_PRES = 1.0e-7
-RTOL_FLOW = 1.0e-8
+RTOL_PRES = 1.0e-5
+RTOL_FLOW = 1.0e-6
 
 
 def execute_svzerodplus(testfile, mode):

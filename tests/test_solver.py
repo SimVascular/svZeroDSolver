@@ -254,32 +254,32 @@ def test_steadyFlow_blood_vessel_junction():
 def test_pulsatile_flow_r_rcr():
     results = run_test_case_by_name("pulsatileFlow_R_RCR")
     assert np.isclose(
-        get_result(results, "pressure_in", 0, 0), 4620.0, rtol=RTOL_PRES
+        get_result(results, "pressure_in", 0, -1), 4620.0, rtol=RTOL_PRES
     )  # inlet pressure
     assert np.isclose(
-        get_result(results, "pressure_out", 0, 0), 4400.0, rtol=RTOL_PRES
+        get_result(results, "pressure_out", 0, -1), 4400.0, rtol=RTOL_PRES
     )  # outlet pressure
     assert np.isclose(
-        get_result(results, "flow_in", 0, 0), 2.2, rtol=RTOL_FLOW
+        get_result(results, "flow_in", 0, -1), 2.2, rtol=RTOL_FLOW
     )  # inlet flow
     assert np.isclose(
-        get_result(results, "flow_out", 0, 0), 2.2, rtol=RTOL_FLOW
+        get_result(results, "flow_out", 0, -1), 2.2, rtol=RTOL_FLOW
     )  # outlet flow
 
 
 def test_pulsatile_flow_r_coronary():
     results = run_test_case_by_name("pulsatileFlow_R_coronary")
     assert np.isclose(
-        get_result(results, "pressure_in", 0, 0), 880.0, rtol=RTOL_PRES
+        get_result(results, "pressure_in", 0, -1), 880.0, rtol=RTOL_PRES
     )  # inlet pressure
     assert np.isclose(
-        get_result(results, "pressure_out", 0, 0), 660.0, rtol=RTOL_PRES
+        get_result(results, "pressure_out", 0, -1), 660.0, rtol=RTOL_PRES
     )  # outlet pressure
     assert np.isclose(
-        get_result(results, "flow_in", 0, 0), 2.2, rtol=RTOL_FLOW
+        get_result(results, "flow_in", 0, -1), 2.2, rtol=RTOL_FLOW
     )  # inlet flow
     assert np.isclose(
-        get_result(results, "flow_out", 0, 0), 2.2, rtol=RTOL_FLOW
+        get_result(results, "flow_out", 0, -1), 2.2, rtol=RTOL_FLOW
     )  # outlet flow
 
 

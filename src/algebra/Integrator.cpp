@@ -82,7 +82,7 @@ State Integrator::step(const State& old_state, double time) {
   ydot_am += old_state.ydot * ydot_init_coeff;
 
   // Determine new time (evaluate terms at generalized mid-point)
-  double new_time = time + time_step_size * alpha_f;
+  double new_time = time + alpha_f * time_step_size;
 
   // Update time-dependent element contributions in system
   model->update_time(system, new_time);

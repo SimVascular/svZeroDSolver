@@ -36,7 +36,8 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
   gamma = 0.5 + alpha_m - alpha_f;
-  ydot_init_coeff = 1.0 - 1.0 / gamma;;
+  ydot_init_coeff = 1.0 - 1.0 / gamma;
+
   y_coeff = gamma * time_step_size;
   y_coeff_jacobian = alpha_f * y_coeff;
 
@@ -89,9 +90,6 @@ State Integrator::step(const State& old_state, double time) {
 
   // Non-linear Newton-Raphson iterations
   for (size_t i = 0; i < max_iter; i++) {
-    // Count total number of nonlinear iterations
-    n_nonlin_iter++;
-
     // Initiator: Evaluate the iterates at the intermediate time levels
     ydot_am.setZero();
     y_af.setZero();
@@ -124,6 +122,9 @@ State Integrator::step(const State& old_state, double time) {
     // Update the solution
     new_state.ydot += system.dydot;
     new_state.y += system.dydot * y_coeff;
+
+    // Count total number of nonlinear iterations
+    n_nonlin_iter++;
   }
 
   return new_state;

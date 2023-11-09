@@ -40,30 +40,61 @@ void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
 
 void ClosedLoopHeartPulmonary::update_constant(
     SparseSystem &system, std::vector<double> &parameters) {
+  // DOF 0, Eq 0: Right atrium pressure
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
+
   // DOF 2, Eq 1: Aortic pressure
   system.E.coeffRef(global_eqn_ids[1], global_var_ids[2]) =
       parameters[global_param_ids[ParamId::CPA]];
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = 1.0;
+
   // DOF 4, Eq 2: Right atrium volume
   system.E.coeffRef(global_eqn_ids[2], global_var_ids[4]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[1]) = -1.0;
+
   // DOF 5, Eq 3: Right atrium outflow
   system.E.coeffRef(global_eqn_ids[3], global_var_ids[5]) =
       parameters[global_param_ids[ParamId::LRA_V]];
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[0]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[6]) = 1.0;
+
+  // DOF 6, Eq 4: Right ventricle pressure
+  system.F.coeffRef(global_eqn_ids[4], global_var_ids[6]) = 1.0;
+
   // DOF 7, Eq 5: Right ventricle volume
   system.E.coeffRef(global_eqn_ids[5], global_var_ids[7]) = 1.0;
+
   // DOF 8, Eq 6: Right ventricle outflow
   system.E.coeffRef(global_eqn_ids[6], global_var_ids[8]) =
       parameters[global_param_ids[ParamId::LRV_A]];
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[6]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[9]) = 1.0;
+
   // DOF 9, Eq 7: Pulmonary pressure
   system.E.coeffRef(global_eqn_ids[7], global_var_ids[9]) =
       parameters[global_param_ids[ParamId::CP]];
+
+  // DOF 10, Eq 8: Left atrium pressure
+  system.F.coeffRef(global_eqn_ids[8], global_var_ids[10]) = 1.0;
+
   // DOF 11, Eq 9: Left atrium volume
   system.E.coeffRef(global_eqn_ids[9], global_var_ids[11]) = 1.0;
+
   // DOF 12, Eq 10: Left atrium outflow
   system.E.coeffRef(global_eqn_ids[10], global_var_ids[12]) =
       parameters[global_param_ids[ParamId::LLA_V]];
+  system.F.coeffRef(global_eqn_ids[10], global_var_ids[10]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[10], global_var_ids[13]) = 1.0;
+
+  // DOF 13, Eq 11: Left ventricle pressure
+  system.F.coeffRef(global_eqn_ids[11], global_var_ids[13]) = 1.0;
+
   // DOF 14, Eq 12: Left ventricle volume
   system.E.coeffRef(global_eqn_ids[12], global_var_ids[14]) = 1.0;
+
   // DOF 15, Eq 13: Left ventricle outflow
+  system.F.coeffRef(global_eqn_ids[13], global_var_ids[2]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[13], global_var_ids[13]) = -1.0;
   system.E.coeffRef(global_eqn_ids[13], global_var_ids[15]) =
       parameters[global_param_ids[ParamId::LLV_A]];
 }
@@ -87,7 +118,6 @@ void ClosedLoopHeartPulmonary::update_solution(
   // [P_in,Q_in,P_out,Q_out,internal variables...]
 
   // DOF 0, Eq 0: Right atrium pressure
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
       -AA * parameters[global_param_ids[ParamId::EMAX_RA]];
   system.C(global_eqn_ids[0]) =
@@ -101,22 +131,17 @@ void ClosedLoopHeartPulmonary::update_solution(
 
   // DOF 2, Eq 1: Aortic pressure
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[15]) = -valves[15];
-  system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = 1.0;
 
   // DOF 3: Flow into aorta (no equation)
 
   // DOF 4, Eq 2: Right atrium volume
   system.F.coeffRef(global_eqn_ids[2], global_var_ids[5]) = 1.0 * valves[5];
-  system.F.coeffRef(global_eqn_ids[2], global_var_ids[1]) = -1.0;
 
   // DOF 5, Eq 3: Right atrium outflow
   system.F.coeffRef(global_eqn_ids[3], global_var_ids[5]) =
       parameters[global_param_ids[ParamId::RRA_V]] * valves[5];
-  system.F.coeffRef(global_eqn_ids[3], global_var_ids[0]) = -1.0;
-  system.F.coeffRef(global_eqn_ids[3], global_var_ids[6]) = 1.0;
 
   // DOF 6, Eq 4: Right ventricle pressure
-  system.F.coeffRef(global_eqn_ids[4], global_var_ids[6]) = 1.0;
   system.F.coeffRef(global_eqn_ids[4], global_var_ids[7]) = -Erv;
   system.C(global_eqn_ids[4]) =
       Erv * parameters[global_param_ids[ParamId::VRV_U]];
@@ -126,8 +151,6 @@ void ClosedLoopHeartPulmonary::update_solution(
   system.F.coeffRef(global_eqn_ids[5], global_var_ids[8]) = 1.0 * valves[8];
 
   // DOF 8, Eq 6: Right ventricle outflow
-  system.F.coeffRef(global_eqn_ids[6], global_var_ids[6]) = -1.0;
-  system.F.coeffRef(global_eqn_ids[6], global_var_ids[9]) = 1.0;
   system.F.coeffRef(global_eqn_ids[6], global_var_ids[8]) =
       parameters[global_param_ids[ParamId::RRV_A]] * valves[8];
 
@@ -139,7 +162,6 @@ void ClosedLoopHeartPulmonary::update_solution(
       -1.0 / parameters[global_param_ids[ParamId::RPD]];
 
   // DOF 10, Eq 8: Left atrium pressure
-  system.F.coeffRef(global_eqn_ids[8], global_var_ids[10]) = 1.0;
   system.F.coeffRef(global_eqn_ids[8], global_var_ids[11]) =
       -AA * parameters[global_param_ids[ParamId::EMAX_LA]];
   system.C(global_eqn_ids[8]) =
@@ -154,13 +176,10 @@ void ClosedLoopHeartPulmonary::update_solution(
   system.F.coeffRef(global_eqn_ids[9], global_var_ids[12]) = 1.0 * valves[12];
 
   // DOF 12, Eq 10: Left atrium outflow
-  system.F.coeffRef(global_eqn_ids[10], global_var_ids[10]) = -1.0;
-  system.F.coeffRef(global_eqn_ids[10], global_var_ids[13]) = 1.0;
   system.F.coeffRef(global_eqn_ids[10], global_var_ids[12]) =
       parameters[global_param_ids[ParamId::RLA_V]] * valves[12];
 
   // DOF 13, Eq 11: Left ventricle pressure
-  system.F.coeffRef(global_eqn_ids[11], global_var_ids[13]) = 1.0;
   system.F.coeffRef(global_eqn_ids[11], global_var_ids[14]) = -Elv;
   system.C(global_eqn_ids[11]) =
       Elv * parameters[global_param_ids[ParamId::VLV_U]];
@@ -170,8 +189,6 @@ void ClosedLoopHeartPulmonary::update_solution(
   system.F.coeffRef(global_eqn_ids[12], global_var_ids[15]) = 1.0 * valves[15];
 
   // DOF 15, Eq 13: Left ventricle outflow
-  system.F.coeffRef(global_eqn_ids[13], global_var_ids[13]) = -1.0;
-  system.F.coeffRef(global_eqn_ids[13], global_var_ids[2]) = 1.0;
   system.F.coeffRef(global_eqn_ids[13], global_var_ids[15]) =
       parameters[global_param_ids[ParamId::RLV_AO]] * valves[15];
 }

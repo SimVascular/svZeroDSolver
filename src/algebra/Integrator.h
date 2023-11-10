@@ -71,7 +71,7 @@
  * the BDF2 scheme and \f$\rho=1.0\f$ equals the trapezoidal rule. For each time
  * step \f$n\f$, the procedure works as follows.
  *
- * 1. **Predict** the new time step based on the assumption of a constant
+ * **Predict** the new time step based on the assumption of a constant
  * solution \f$\mathbf{y}\f$ and consistent time derivative
  * \f$\dot{\mathbf{y}}\f$: \f[ \dot{\mathbf y}_{n+1}^0 = \frac{\gamma-1}{\gamma}
  * \dot{\mathbf y}_n, \f] \f[ \mathbf y_{n+1}^0 = \mathbf y_n. \f] with
@@ -79,7 +79,7 @@
  * Newton-Raphson iterations \f$i\f$ as follows, until the residual is smaller
  * than an absolute error\f$||\mathbf r||_\infty < \epsilon_\text{abs}\f$:
  *
- * 2. **Initiate** the iterates at the intermediate time levels:
+ * 1. **Initiate** the iterates at the intermediate time levels:
  * \f[
  * \dot{\mathbf y}_{n+\alpha_m}^i = \dot{\mathbf y}_n + \alpha_m \left(
  * \dot{\mathbf y}_{n+1}^i - \dot{\mathbf y}_n  \right),
@@ -89,7 +89,7 @@
  * \mathbf y_n \right).
  * \f]
  *
- * 3. **Solve** for the increment \f$\Delta\dot{\mathbf{y}}\f$ in the linear
+ * 2. **Solve** for the increment \f$\Delta\dot{\mathbf{y}}\f$ in the linear
  * system:
  * \f[
  * \mathbf K(\mathbf y_{n+\alpha_f}^i, \dot{\mathbf y}_{n+\alpha_m}^i) \cdot
@@ -97,7 +97,7 @@
  * \dot{\mathbf y}_{n+\alpha_m}^i).
  * \f]
  *
- * 4. **Update** the solution vectors:
+ * 3. **Update** the solution vectors:
  * \f[
  * \dot{\mathbf y}_{n+1}^{i+1} = \dot{\mathbf y}_{n+1}^i + \Delta
  * \dot{\mathbf y}_{n+1}^i,

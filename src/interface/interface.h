@@ -108,11 +108,6 @@ class SolverInterface {
    */
   int time_step_ = 0.0;
   /**
-   * @brief Current time step
-   */
-  // int save_interval_counter_ = 0;
-  // int output_interval_ = 0;
-  /**
    * @brief The size of the 0D system
    */
   int system_size_ = 0;

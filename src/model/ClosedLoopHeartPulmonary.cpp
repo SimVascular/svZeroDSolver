@@ -75,8 +75,8 @@ void ClosedLoopHeartPulmonary::update_time(SparseSystem &system,
 
 void ClosedLoopHeartPulmonary::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   get_psi_ra_la(parameters, y);
   get_valve_positions(y);
 
@@ -228,7 +228,7 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
 
 void ClosedLoopHeartPulmonary::get_psi_ra_la(
     std::vector<double> &parameters,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
   auto RA_volume = y[global_var_ids[4]];
   auto LA_volume = y[global_var_ids[11]];
   psi_ra = parameters[global_param_ids[ParamId::KXP_RA]] *
@@ -253,7 +253,7 @@ void ClosedLoopHeartPulmonary::get_psi_ra_la(
 }
 
 void ClosedLoopHeartPulmonary::get_valve_positions(
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
   std::fill(valves, valves + 16, 1.0);
 
   // RA to RV

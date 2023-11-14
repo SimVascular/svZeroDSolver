@@ -78,10 +78,10 @@ void Block::update_constant(SparseSystem &system,
 void Block::update_time(SparseSystem &system, std::vector<double> &parameters) {
 }
 
-void Block::update_solution(SparseSystem &system,
-                            std::vector<double> &parameters,
-                            Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                            Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {}
+void Block::update_solution(
+    SparseSystem &system, std::vector<double> &parameters,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {}
 
 void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {}
 

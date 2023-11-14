@@ -47,7 +47,7 @@ There are tools for your favorite IDE to automatically format your code. Example
 - [and many more](https://clang.llvm.org/docs/ClangFormat.html)
 
 Before committing any changes, you can run the following
-comment **from your build folder** to format all your files:
+command **from your build folder** to format all your files:
 
 ```bash
 make codeformat
@@ -58,6 +58,13 @@ it with:
 
 ```bash
 make codecheck
+```
+
+If the above commands do not work on your platform (it does not work on Sherlock at Stanford)
+you can run the following command **from the svZeroDPlus folder** to format all your files:
+
+```bash
+find src/**/*.h src/**/*.cpp | xargs clang-format -style=Google -i
 ```
 
 The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and
@@ -72,7 +79,12 @@ We use [Doxygen](https://doxygen.nl) to automatically build an html documentatio
 from source code. Please have at Doxygen's [Documentation Guide](https://www.doxygen.nl/manual/docblocks.html)
 for an introduction into the syntax of writing documentation in C++. For more
 inspiration, you can look at the existing source files and how they use
-documentation. In the following you can find a short recap of the most important
+documentation. 
+
+**NOTE: Undocumented code will fail the automated code checks on Github 
+and cannot be merged.**
+
+In the following you can find a short recap of the most important
 commands:
 
 ### Latex equations

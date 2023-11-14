@@ -36,6 +36,9 @@
 
 #include <iostream>
 
+/**
+ * @brief DEBUG_MSG Macro to print debug messages for debug build
+ */
 #ifndef NDEBUG
 #define DEBUG_MSG(str)                                   \
   do {                                                   \

@@ -116,7 +116,7 @@ class Model {
   /**
    * @brief Get a block type by its name
    *
-   * @param block_id Global ID of the Block
+   * @param name The name of the block
    * @return BlockType The block type
    */
   BlockType get_block_type(const std::string_view &name) const;
@@ -134,6 +134,7 @@ class Model {
    *
    * @param inlet_eles Inlet blocks of the node
    * @param outlet_eles Outlet blocks of the node
+   * @param name Name of node
    * @return int Global ID of the node
    */
   int add_node(const std::vector<Block *> &inlet_eles,
@@ -251,6 +252,8 @@ class Model {
 
   /**
    * @brief Get the number of blocks in the model
+   *
+   * @param internal Toggle whether to return internal/hidden blocks
    *
    * @return int Number of blocks
    */

@@ -142,7 +142,8 @@ class SparseSystem {
   /**
    * @brief Update the jacobian of the system
    *
-   * @param e_coeff Coefficent for system matrix \ref E
+   * @param time_coeff_ydot Coefficent ydot-dependent part of jacobian
+   * @param time_coeff_y Coefficent ydot-dependent part of jacobian
    */
   void update_jacobian(double time_coeff_ydot, double time_coeff_y);
 

@@ -122,11 +122,10 @@ class ClosedLoopCoronaryBC : public Block {
                                 Model *model, Side side)
       : Block(id, param_ids, model), side{side} {};
 
-  /**
-   * @brief Specify input parameter names
-   *
-   */
-  static const std::vector<std::string> input_params;
+  static const BlockClass block_class;  ///< Class of this block
+  static const std::string input_name;  ///< Name of block in input file
+  static const std::vector<std::string>
+      input_params;  ///< List of input parameter names
 
   /**
    * @brief Local IDs of the parameters

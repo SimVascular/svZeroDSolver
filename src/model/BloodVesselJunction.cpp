@@ -30,6 +30,9 @@
 
 #include "BloodVesselJunction.h"
 
+// Define block properties
+const BlockClass block_class = BlockClass::junction;
+const std::string input_name = "BloodVesselJunction";
 const std::vector<std::string> BloodVesselJunction::input_params = {
     "R_poiseuille", "L", "stenosis_coefficient"};
 

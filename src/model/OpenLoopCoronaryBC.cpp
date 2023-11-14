@@ -30,6 +30,9 @@
 
 #include "OpenLoopCoronaryBC.h"
 
+// Define block properties
+const BlockClass block_class = BlockClass::boundary_condition;
+const std::string input_name = "CORONARY";
 const std::vector<std::string> OpenLoopCoronaryBC::input_params = {
     "Ra1", "Ra2", "Rv1", "Ca", "Cc", "Pim", "P_v"};
 

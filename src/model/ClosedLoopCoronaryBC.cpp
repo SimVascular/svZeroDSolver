@@ -32,6 +32,9 @@
 
 #include "Model.h"
 
+// Define block properties
+const BlockClass block_class = BlockClass::boundary_condition;
+const std::string input_name = "ClosedLoopCoronary";
 const std::vector<std::string> ClosedLoopCoronaryBC::input_params = {
     "Ra", "Ram", "Rv", "Ca", "Cim"};
 

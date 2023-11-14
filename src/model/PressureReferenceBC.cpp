@@ -30,6 +30,9 @@
 
 #include "PressureReferenceBC.h"
 
+// Define block properties
+const BlockClass block_class = BlockClass::boundary_condition;
+const std::string input_name = "PRESSURE";
 const std::vector<std::string> PressureReferenceBC::input_params = {"P"};
 
 void PressureReferenceBC::setup_dofs(DOFHandler &dofhandler) {

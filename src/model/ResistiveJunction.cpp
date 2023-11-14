@@ -30,6 +30,9 @@
 
 #include "ResistiveJunction.h"
 
+// Define block properties
+const BlockClass block_class = BlockClass::junction;
+const std::string input_name = "resistive_junction";
 const std::vector<std::string> ResistiveJunction::input_params = {"R"};
 
 void ResistiveJunction::setup_dofs(DOFHandler &dofhandler) {

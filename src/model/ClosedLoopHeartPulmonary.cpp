@@ -32,6 +32,9 @@
 
 #include "Model.h"
 
+// Define block properties
+const BlockClass block_class = BlockClass::closed_loop;
+const std::string input_name = "ClosedLoopHeartAndPulmonary";
 const std::vector<std::string> ClosedLoopHeartPulmonary::input_params = {
     "Tsa",    "tpwave", "Erv_s",   "Elv_s",   "iml",     "imr",    "Lra_v",
     "Rra_v",  "Lrv_a",  "Rrv_a",   "Lla_v",   "Rla_v",   "Llv_a",  "Rlv_ao",

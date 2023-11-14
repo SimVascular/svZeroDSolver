@@ -30,6 +30,9 @@
 
 #include "WindkesselBC.h"
 
+// Define block properties
+const BlockClass block_class = BlockClass::boundary_condition;
+const std::string input_name = "RCR";
 const std::vector<std::string> WindkesselBC::input_params = {"Rp", "C", "Rd", "Pd"};
 
 void WindkesselBC::setup_dofs(DOFHandler &dofhandler) {

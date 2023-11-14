@@ -107,11 +107,10 @@ class ResistiveJunction : public Block {
   // Inherit constructors
   using Block::Block;
 
-  /**
-   * @brief Specify input parameter names
-   *
-   */
-  static const std::vector<std::string> input_params;
+  static const BlockClass block_class;  ///< Class of this block
+  static const std::string input_name;  ///< Name of block in input file
+  static const std::vector<std::string>
+      input_params;  ///< List of input parameter names
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

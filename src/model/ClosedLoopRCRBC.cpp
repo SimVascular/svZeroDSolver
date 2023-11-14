@@ -30,6 +30,9 @@
 
 #include "ClosedLoopRCRBC.h"
 
+// Define block properties
+const BlockClass block_class = BlockClass::boundary_condition;
+const std::string input_name = "ClosedLoopRCR";
 const std::vector<std::string> ClosedLoopRCRBC::input_params = {
     "Rp", "C", "Rd"};
 

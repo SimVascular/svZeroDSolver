@@ -38,6 +38,10 @@
 #include "ClosedLoopHeartPulmonary.h"
 #include "SparseSystem.h"
 
+/**
+ * @brief Specify whether this BC is on a left or right coronary artery.
+ *
+ */
 enum class Side { LEFT, RIGHT, NONE };
 
 /**
@@ -118,6 +122,14 @@ enum class Side { LEFT, RIGHT, NONE };
  */
 class ClosedLoopCoronaryBC : public Block {
  public:
+  /**
+   * @brief Construct a ClosedLoopCoronaryBC object.
+   *
+   * @param id Global ID of the block
+   * @param param_ids Global IDs of the block parameters
+   * @param model The model to which the block belongs
+   * @param side Specify if this is a left or right coronary artery
+   */
   explicit ClosedLoopCoronaryBC(int id, const std::vector<int> &param_ids,
                                 Model *model, Side side)
       : Block(id, param_ids, model), side{side} {};

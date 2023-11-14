@@ -205,6 +205,8 @@ class Integrator {
   /**
    * @brief Get average number of nonlinear iterations in all step calls
    *
+   * @return Average number of nonlinear iterations in all step calls
+   *
    */
   double avg_nonlin_iter();
 };

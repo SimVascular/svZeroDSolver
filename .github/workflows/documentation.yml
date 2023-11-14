@@ -11,8 +11,8 @@ jobs:
       - name: Make build directory
         run: mkdir docs/build
       - name: Build doxygen documentation
-        continue-on-error: true
-        uses: mattnotmitt/doxygen-action@v1.9.5
+        continue-on-error: false
+        uses: mattnotmitt/doxygen-action@edge
         with:
           working-directory: '.'
           doxyfile-path: 'docs/Doxyfile'

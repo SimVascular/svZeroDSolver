@@ -133,10 +133,13 @@ void ClosedLoopHeartPulmonary::update_solution(
   get_psi_ra_la(parameters, y);
   get_valve_positions(y);
 
-  // F and C matrices depend on time and solution
-  // Specifying all terms here, including constant terms (which can instead be
-  // specified in update_constant) for readability (Doesn't seem to make a
-  // difference to compute time) DOF IDs are arranged as inflow
+  // Technically, F matrix and C vector neither depend on time nor solution
+  // However, we treat F here as constant (despite the solution-dependent
+  // update) since only 0/1 entries of the valves change, which are assumed
+  // constant in the linearization. Thus, F behaves here like a constant block
+  // for the assembly in SparseSystem
+
+  // DOF IDs are arranged as inflow
   // [P_in,Q_in,P_out,Q_out,internal variables...]
 
   // DOF 0, Eq 0: Right atrium pressure

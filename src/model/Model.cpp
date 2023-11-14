@@ -46,7 +46,8 @@ Model::Model() {
   block_factory_map = {
       {"BloodVessel", block_factory<BloodVessel>()},
       {"BloodVesselJunction", block_factory<BloodVesselJunction>()},
-      {"ClosedLoopCoronary", block_factory<ClosedLoopCoronaryBC>()},
+      {"ClosedLoopCoronaryLeft", block_factory<ClosedLoopCoronaryLeftBC>()},
+      {"ClosedLoopCoronaryRight", block_factory<ClosedLoopCoronaryRightBC>()},
       {"ClosedLoopHeartAndPulmonary",
        block_factory<ClosedLoopHeartPulmonary>()},
       {"ClosedLoopRCR", block_factory<ClosedLoopRCRBC>()},
@@ -64,11 +65,33 @@ Model::~Model() {}
 int Model::add_block(BlockType block_type,
                      const std::vector<int> &block_param_ids,
                      const std::string_view &name, bool internal) {
-  // Get block from factory
-  auto it = block_factory_map.find(name);
-  if (it == block_factory_map.end()) {
+  // todo: delete (temporary)
+  std::map<BlockType, std::string_view> type_name_map = {
+      {BlockType::blood_vessel, "BloodVessel"},
+      {BlockType::blood_vessel_junction, "BloodVesselJunction"},
+      {BlockType::closed_loop_coronary_left_bc, "ClosedLoopCoronaryLeft"},
+      {BlockType::closed_loop_coronary_right_bc, "ClosedLoopCoronaryRight"},
+      {BlockType::closed_loop_heart_pulmonary, "ClosedLoopHeartAndPulmonary"},
+      {BlockType::closed_loop_rcr_bc, "ClosedLoopRCR"},
+      {BlockType::open_loop_coronary_bc, "CORONARY"},
+      {BlockType::flow_bc, "FLOW"},
+      {BlockType::junction, "NORMAL_JUNCTION"},
+      {BlockType::pressure_bc, "PRESSURE"},
+      {BlockType::windkessel_bc, "RCR"},
+      {BlockType::resistance_bc, "RESISTANCE"},
+      {BlockType::resistive_junction, "resistive_junction"}};
+  auto it0 = type_name_map.find(block_type);
+  if (it0 == type_name_map.end()) {
     throw std::runtime_error(
         "Adding block to model failed: Invalid block type!");
+  }
+  std::string_view block_name = it0->second;
+
+  // Get block from factory
+  auto it = block_factory_map.find(block_name);
+  if (it == block_factory_map.end()) {
+    throw std::runtime_error(
+        "Adding block to model failed: Invalid block name!");
   }
 
   Block *block = it->second(block_count, block_param_ids, this);

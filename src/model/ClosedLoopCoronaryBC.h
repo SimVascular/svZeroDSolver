@@ -38,8 +38,6 @@
 #include "ClosedLoopHeartPulmonary.h"
 #include "SparseSystem.h"
 
-enum class Side { LEFT, RIGHT, NONE };
-
 /**
  * @brief Closed loop coronary boundary condition (connected to other blocks on
  * both sides).
@@ -122,7 +120,6 @@ class ClosedLoopCoronaryBC : public Block {
                                 Model *model)
       : Block(id, param_ids, model){};
       
-  static const BlockType block_type;    ///< Type of this block
   static const BlockClass block_class;  ///< Class of this block
   static const std::vector<InputParameter>
       input_params;  ///< List of input parameter names
@@ -149,7 +146,7 @@ class ClosedLoopCoronaryBC : public Block {
    * @brief Setup parameters that depend on the model
    *
    */
-  void setup_model_dependent_params();
+  virtual void setup_model_dependent_params() = 0;
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -180,10 +177,9 @@ class ClosedLoopCoronaryBC : public Block {
    */
   TripletsContributions num_triplets{9, 5, 0};
 
- private:
+ protected:
   int ventricle_var_id;  // Variable index of either left or right ventricle
   int im_param_id;       // Index of parameter Im
-  Side side{Side::NONE};
 };
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_

@@ -27,32 +27,32 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/**
+ * @file ClosedLoopCoronaryBC.h
+ * @brief Right side of ClosedLoopCoronaryBC
+ */
+#ifndef SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYRIGHTBC_HPP_
+#define SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYRIGHTBC_HPP_
 
-#ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
-#define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
+#include "ClosedLoopCoronaryBC.h"
 
-enum class BlockType {
-  blood_vessel = 0,
-  junction = 1,
-  blood_vessel_junction = 2,
-  resistive_junction = 3,
-  flow_bc = 4,
-  pressure_bc = 5,
-  resistance_bc = 6,
-  windkessel_bc = 7,
-  open_loop_coronary_bc = 8,
-  closed_loop_coronary_left_bc = 9,
-  closed_loop_coronary_right_bc = 10,
-  closed_loop_rcr_bc = 11,
-  closed_loop_heart_pulmonary = 12
+/**
+ * @brief Right side of closed loop coronary boundary condition
+ * ClosedLoopCoronaryBC.
+ */
+class ClosedLoopCoronaryRightBC : public ClosedLoopCoronaryBC {
+ public:
+  explicit ClosedLoopCoronaryRightBC(int id, const std::vector<int> &param_ids,
+                                     Model *model)
+      : ClosedLoopCoronaryBC(id, param_ids, model){};
+
+  static const BlockType block_type;  ///< Type of this block
+
+  /**
+   * @brief Setup parameters that depend on the model
+   *
+   */
+  void setup_model_dependent_params();
 };
 
-enum class BlockClass {
-  vessel = 0,
-  junction = 1,
-  boundary_condition = 2,
-  closed_loop = 3,
-  external = 4
-};
-
-#endif
+#endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYRIGHTBC_HPP_

@@ -37,6 +37,8 @@ set(CXXSRCS
   BloodVessel.cpp
   BloodVesselJunction.cpp
   ClosedLoopCoronaryBC.cpp
+  ClosedLoopCoronaryLeftBC.cpp
+  ClosedLoopCoronaryRightBC.cpp
   ClosedLoopHeartPulmonary.cpp
   ClosedLoopRCRBC.cpp
   DOFHandler.cpp
@@ -59,6 +61,8 @@ set(HDRS
   BloodVessel.h
   BloodVesselJunction.h
   ClosedLoopCoronaryBC.h
+  ClosedLoopCoronaryLeftBC.h
+  ClosedLoopCoronaryRightBC.h
   ClosedLoopHeartPulmonary.h
   ClosedLoopRCRBC.h
   DOFHandler.h

@@ -33,8 +33,6 @@
 #include "Model.h"
 
 // Define block properties
-const BlockType ClosedLoopCoronaryBC::block_type =
-    BlockType::closed_loop_coronary;
 const BlockClass ClosedLoopCoronaryBC::block_class =
     BlockClass::boundary_condition;
 const std::vector<InputParameter> ClosedLoopCoronaryBC::input_params = {
@@ -43,22 +41,6 @@ const std::vector<InputParameter> ClosedLoopCoronaryBC::input_params = {
 
 void ClosedLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"volume_im"});
-}
-
-void ClosedLoopCoronaryBC::setup_model_dependent_params() {
-  auto heart_block = model->get_block("CLH");
-
-  if (side == Side::LEFT) {
-    im_param_id =
-        heart_block->global_param_ids[ClosedLoopHeartPulmonary::ParamId::IML];
-    ventricle_var_id =
-        heart_block->global_var_ids[13];  // Solution ID for LV pressure
-
-  } else {
-    im_param_id =
-        heart_block->global_param_ids[ClosedLoopHeartPulmonary::ParamId::IMR];
-    ventricle_var_id = heart_block->global_var_ids[6];
-  }
 }
 
 void ClosedLoopCoronaryBC::update_constant(SparseSystem &system,

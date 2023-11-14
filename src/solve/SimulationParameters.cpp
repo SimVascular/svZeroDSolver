@@ -213,10 +213,14 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       }  // connected_block != "ClosedLoopHeartAndPulmonary"
       // Create connections
       if (coupling_loc == "inlet") {
-        std::vector<std::string> possible_types = {
-            "RESISTANCE",    "RCR",      "ClosedLoopRCR",
-            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
-            "BloodVessel"};
+        std::vector<std::string> possible_types = {"RESISTANCE",
+                                                   "RCR",
+                                                   "ClosedLoopRCR",
+                                                   "SimplifiedRCR",
+                                                   "CORONARY",
+                                                   "ClosedLoopCoronaryLeft",
+                                                   "ClosedLoopCoronaryRight",
+                                                   "BloodVessel"};
         if (std::find(std::begin(possible_types), std::end(possible_types),
                       connected_type) == std::end(possible_types)) {
           throw std::runtime_error(
@@ -306,23 +310,23 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
            model.add_parameter(t, get_double_array(bc_values, "P_v"))},
           bc_name);
 
-    } else if (bc_type == "ClosedLoopCoronary") {
-      std::string side = bc_values["side"];
-      BlockType block_type;
-      if (side == "left") {
-        block_type = BlockType::closed_loop_coronary;
-      } else if (side == "right") {
-        block_type = BlockType::closed_loop_coronary;
-      } else {
-        throw std::runtime_error("Invalid side for ClosedLoopCoronary");
-      }
-      model.add_block(block_type,
+    } else if (bc_type == "ClosedLoopCoronaryLeft") {
+      model.add_block(BlockType::closed_loop_coronary_left_bc,
                       {model.add_parameter(bc_values["Ra"]),
                        model.add_parameter(bc_values["Ram"]),
                        model.add_parameter(bc_values["Rv"]),
                        model.add_parameter(bc_values["Ca"]),
-                       model.add_parameter(bc_values["Cim"]),
-                       model.add_parameter(bc_values["side"])},
+                       model.add_parameter(bc_values["Cim"])},
+                      bc_name);
+      closed_loop_bcs.push_back(bc_name);
+
+    } else if (bc_type == "ClosedLoopCoronaryRight") {
+      model.add_block(BlockType::closed_loop_coronary_right_bc,
+                      {model.add_parameter(bc_values["Ra"]),
+                       model.add_parameter(bc_values["Ram"]),
+                       model.add_parameter(bc_values["Rv"]),
+                       model.add_parameter(bc_values["Ca"]),
+                       model.add_parameter(bc_values["Cim"])},
                       bc_name);
       closed_loop_bcs.push_back(bc_name);
 

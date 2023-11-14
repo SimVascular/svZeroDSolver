@@ -28,31 +28,17 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
-#define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
+#include "ClosedLoopCoronaryLeftBC.h"
 
-enum class BlockType {
-  blood_vessel = 0,
-  junction = 1,
-  blood_vessel_junction = 2,
-  resistive_junction = 3,
-  flow_bc = 4,
-  pressure_bc = 5,
-  resistance_bc = 6,
-  windkessel_bc = 7,
-  open_loop_coronary_bc = 8,
-  closed_loop_coronary_left_bc = 9,
-  closed_loop_coronary_right_bc = 10,
-  closed_loop_rcr_bc = 11,
-  closed_loop_heart_pulmonary = 12
-};
+#include "Model.h"
 
-enum class BlockClass {
-  vessel = 0,
-  junction = 1,
-  boundary_condition = 2,
-  closed_loop = 3,
-  external = 4
-};
+const BlockType ClosedLoopCoronaryLeftBC::block_type =
+    BlockType::closed_loop_coronary_left_bc;
 
-#endif
+void ClosedLoopCoronaryLeftBC::setup_model_dependent_params() {
+  auto heart_block = model->get_block("CLH");
+  im_param_id =
+      heart_block->global_param_ids[ClosedLoopHeartPulmonary::ParamId::IML];
+  ventricle_var_id =
+      heart_block->global_var_ids[13];  // Solution ID for LV pressure
+}

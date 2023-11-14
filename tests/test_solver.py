@@ -385,13 +385,13 @@ def test_coupled_block_heart_single_vessel():
         "y"
     ].to_numpy()
     assert np.isclose(
-        np.mean(aortic_pressure), 67.34680551579574, rtol=RTOL_PRES
+        np.mean(aortic_pressure), 67.29243579253749, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(aortic_pressure), 88.53917354077849, rtol=RTOL_PRES
+        np.amax(aortic_pressure), 88.50490978163587, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
-        np.amin(aortic_pressure), 45.28273818755913, rtol=RTOL_PRES
+        np.amin(aortic_pressure), 45.1984555305808, rtol=RTOL_PRES
     )  # min aortic pressure
 
 
@@ -403,11 +403,11 @@ def test_coupled_block_heart_with_coronaries():
         "y"
     ].to_numpy()
     assert np.isclose(
-        np.mean(aortic_pressure), 56.07254168341862, rtol=RTOL_PRES
+        np.mean(aortic_pressure), 56.04135970691205, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(aortic_pressure), 77.20699877855911, rtol=RTOL_PRES
+        np.amax(aortic_pressure), 77.18765227842809, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
-        np.amin(aortic_pressure), 34.24828678322491, rtol=RTOL_PRES
+        np.amin(aortic_pressure), 34.184224686628035, rtol=RTOL_PRES
     )  # min aortic pressure

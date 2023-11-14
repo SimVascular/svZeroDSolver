@@ -106,8 +106,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9999d0cb5ae475bf19f557893c11efb4" id="r_a9999d0cb5ae475bf19f557893c11efb4"><td class="memItemLeft" align="right" valign="top"><a id="a9999d0cb5ae475bf19f557893c11efb4" name="a9999d0cb5ae475bf19f557893c11efb4"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>BloodVessel</b> (int <a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, const std::vector&lt; int &gt; &amp;param_ids, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>)</td></tr>
+<tr class="memitem:a9999d0cb5ae475bf19f557893c11efb4" id="r_a9999d0cb5ae475bf19f557893c11efb4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blood_vessel.html#a9999d0cb5ae475bf19f557893c11efb4">BloodVessel</a> (int <a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, const std::vector&lt; int &gt; &amp;param_ids, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>)</td></tr>
+<tr class="memdesc:a9999d0cb5ae475bf19f557893c11efb4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a> object.  <br /></td></tr>
 <tr class="separator:a9999d0cb5ae475bf19f557893c11efb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad6237cd700152e4b9d9ac64f55d2e4fd" id="r_ad6237cd700152e4b9d9ac64f55d2e4fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blood_vessel.html#ad6237cd700152e4b9d9ac64f55d2e4fd">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:ad6237cd700152e4b9d9ac64f55d2e4fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
@@ -264,7 +264,7 @@ P_{out}^{e} &amp; Q_{out}^{e}\end{array}\right]^\text{T} \]" src="form_58.png" w
 \]" src="form_63.png" width="188" height="33"/></picture>
 </p>
 <p>with the stenosis resistance <picture><source srcset="form_64_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ S=K_{t} \frac{\rho}{2
-A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} $" src="form_64.png" width="119" height="26"/></picture>. The constant part of the equation is summarized in Parameters::stenosis_coefficient. <picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_65.png" width="10" height="10"/></picture>, <picture><source srcset="form_66_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_66.png" width="10" height="10"/></picture>, and <picture><source srcset="form_67_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_67.png" width="9" height="10"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
+A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} $" src="form_64.png" width="119" height="26"/></picture>. <picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_65.png" width="10" height="10"/></picture>, <picture><source srcset="form_66_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_66.png" width="10" height="10"/></picture>, and <picture><source srcset="form_67_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_67.png" width="9" height="10"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
 <h3><a class="anchor" id="autotoc_md2"></a>
 Gradient</h3>
 <p>Gradient of the equations with respect to the parameters:</p>
@@ -299,6 +299,59 @@ Parameters</h3>
 </div><div class="memdoc">
 
 <p>Local IDs of the parameters. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a9999d0cb5ae475bf19f557893c11efb4" name="a9999d0cb5ae475bf19f557893c11efb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9999d0cb5ae475bf19f557893c11efb4">&#9670;&#160;</a></span>BloodVessel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">BloodVessel::BloodVessel </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>param_ids</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_model.html">Model</a> *&#160;</td>
+          <td class="paramname"><em>model</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a new <a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>Global ID of the block </td></tr>
+    <tr><td class="paramname">param_ids</td><td>Global IDs of the block parameters </td></tr>
+    <tr><td class="paramname">model</td><td>The model to which the block belongs </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

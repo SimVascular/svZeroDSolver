@@ -1,9 +1,15 @@
 var searchData=
 [
-  ['e_0',['E',['../class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d',1,'SparseSystem']]],
-  ['elv_5fs_1',['ELV_S',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a6f95a98086ca72fd4f88be974717c511',1,'ClosedLoopHeartPulmonary']]],
-  ['emax_5fla_2',['EMAX_LA',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834aaa12cd2fa898d3ea945d3f43655dbeb0',1,'ClosedLoopHeartPulmonary']]],
-  ['emax_5fra_3',['EMAX_RA',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a457ef0b5e897001b7f85a0ecb3276b69',1,'ClosedLoopHeartPulmonary']]],
-  ['equations_4',['equations',['../class_d_o_f_handler.html#a6b1bf2155c070700a3701f49583fb5c0',1,'DOFHandler::equations'],['../class_closed_loop_r_c_r_b_c.html#autotoc_md12',1,'Governing equations'],['../class_windkessel_b_c.html#autotoc_md32',1,'Governing equations'],['../class_resistive_junction.html#autotoc_md29',1,'Governing equations'],['../class_resistance_b_c.html#autotoc_md26',1,'Governing equations'],['../class_pressure_reference_b_c.html#autotoc_md23',1,'Governing equations'],['../class_open_loop_coronary_b_c.html#autotoc_md20',1,'Governing equations'],['../class_junction.html#autotoc_md18',1,'Governing equations'],['../class_flow_reference_b_c.html#autotoc_md15',1,'Governing equations'],['../class_closed_loop_coronary_b_c.html#autotoc_md8',1,'Governing equations'],['../class_blood_vessel_junction.html#autotoc_md4',1,'Governing equations'],['../class_blood_vessel.html#autotoc_md0',1,'Governing equations'],['../developer_guide.html#autotoc_md40',1,'Latex equations']]],
-  ['erv_5fs_5',['ERV_S',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834ade6493b2555cd0d05591b4138c558c56',1,'ClosedLoopHeartPulmonary']]]
+  ['d_0',['D',['../struct_triplets_contributions.html#af6f46e2570097d7bd24b54c107872964',1,'TripletsContributions']]],
+  ['dc_5fdy_1',['dC_dy',['../class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c',1,'SparseSystem']]],
+  ['dc_5fdydot_2',['dC_dydot',['../class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0',1,'SparseSystem']]],
+  ['debug_20mode_3',['Build in debug mode',['../developer_guide.html#autotoc_md36',1,'']]],
+  ['debug_2eh_4',['debug.h',['../debug_8h.html',1,'']]],
+  ['debug_5fmsg_5',['DEBUG_MSG',['../debug_8h.html#af1206b4d3bda8c4c8c9257f369a9e9e1',1,'debug.h']]],
+  ['developer_20guide_6',['developer guide',['../developer_guide.html',1,'Developer Guide'],['../index.html#autotoc_md48',1,'Developer Guide']]],
+  ['documentation_7',['Documentation',['../developer_guide.html#autotoc_md39',1,'']]],
+  ['dofhandler_8',['dofhandler',['../class_d_o_f_handler.html',1,'DOFHandler'],['../class_model.html#afe47a4ac7609b53d9b9b476609162fcb',1,'Model::dofhandler']]],
+  ['dofhandler_2eh_9',['DOFHandler.h',['../_d_o_f_handler_8h.html',1,'']]],
+  ['drawing_20circuits_10',['Drawing circuits',['../developer_guide.html#autotoc_md42',1,'']]],
+  ['dy_11',['dy',['../class_sparse_system.html#a891651cdc0344153e6fc04ee1620933f',1,'SparseSystem']]]
 ];

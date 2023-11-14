@@ -1,14 +1,15 @@
 var searchData=
 [
-  ['parameter_0',['parameter',['../class_parameter.html#a573c6ac756b8136bd7c3a6ff9d7f7987',1,'Parameter::Parameter(int id, double value)'],['../class_parameter.html#a847adf3c9dd04498c5865f3d597216d6',1,'Parameter::Parameter(int id, const std::vector&lt; double &gt; &amp;times, const std::vector&lt; double &gt; &amp;values, bool periodic=true)'],['../class_parameter.html',1,'Parameter']]],
-  ['parameter_2eh_1',['Parameter.h',['../_parameter_8h.html',1,'']]],
-  ['parameters_2',['parameters',['../index.html#autotoc_md64',1,'Calibration parameters'],['../class_closed_loop_heart_pulmonary.html#autotoc_md11',1,'Parameters'],['../class_windkessel_b_c.html#autotoc_md34',1,'Parameters'],['../class_resistive_junction.html#autotoc_md31',1,'Parameters'],['../class_resistance_b_c.html#autotoc_md28',1,'Parameters'],['../class_pressure_reference_b_c.html#autotoc_md25',1,'Parameters'],['../class_open_loop_coronary_b_c.html#autotoc_md22',1,'Parameters'],['../class_flow_reference_b_c.html#autotoc_md17',1,'Parameters'],['../class_closed_loop_r_c_r_b_c.html#autotoc_md14',1,'Parameters'],['../class_closed_loop_coronary_b_c.html#autotoc_md10',1,'Parameters'],['../class_blood_vessel_junction.html#autotoc_md7',1,'Parameters'],['../class_blood_vessel.html#autotoc_md3',1,'Parameters'],['../index.html#autotoc_md55',1,'Simulation parameters']]],
-  ['paramid_3',['paramid',['../class_closed_loop_r_c_r_b_c.html#ad3c99b49f4df21159932d4a192e997c8',1,'ClosedLoopRCRBC::ParamId'],['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834',1,'ClosedLoopHeartPulmonary::ParamId'],['../class_closed_loop_coronary_b_c.html#a453c63634858b265c9f631e26e4c937e',1,'ClosedLoopCoronaryBC::ParamId'],['../class_blood_vessel.html#a4eef5ad2e6905e259a1ac3d84b69199d',1,'BloodVessel::ParamId']]],
-  ['pip_4',['Using pip',['../index.html#autotoc_md46',1,'']]],
-  ['pres_5fdof_5',['pres_dof',['../class_node.html#a24e040196c90b66c93ec778011fd5308',1,'Node']]],
-  ['pressurereferencebc_6',['PressureReferenceBC',['../class_pressure_reference_b_c.html',1,'']]],
-  ['pressurereferencebc_2eh_7',['PressureReferenceBC.h',['../_pressure_reference_b_c_8h.html',1,'']]],
-  ['profiling_8',['Profiling',['../developer_guide.html#autotoc_md44',1,'']]],
-  ['programs_9',['Run svZeroDSolver from other programs',['../index.html#autotoc_md51',1,'']]],
-  ['python_10',['python',['../index.html#autotoc_md53',1,'In Python'],['../index.html#autotoc_md62',1,'In Python']]]
+  ['openloopcoronarybc_0',['OpenLoopCoronaryBC',['../class_open_loop_coronary_b_c.html',1,'']]],
+  ['openloopcoronarybc_2eh_1',['OpenLoopCoronaryBC.h',['../_open_loop_coronary_b_c_8h.html',1,'']]],
+  ['operator_2b_3d_2',['operator+=',['../struct_triplets_contributions.html#ac3e912c1e238de000b8b1f12dc0852cf',1,'TripletsContributions']]],
+  ['other_20programs_3',['Run svZeroDSolver from other programs',['../index.html#autotoc_md51',1,'']]],
+  ['outlet_5feles_4',['outlet_eles',['../class_node.html#a78df87c57bf4a8d40dd7f679663b7cc3',1,'Node']]],
+  ['outlet_5fnodes_5',['outlet_nodes',['../class_block.html#ad5daa270479e8f80ef2f7aa9447f3172',1,'Block']]],
+  ['output_5fall_5fcycles_6',['output_all_cycles',['../struct_simulation_parameters.html#a3781dcd107cdc76e5c04cd5d7589a4ff',1,'SimulationParameters']]],
+  ['output_5fderivative_7',['output_derivative',['../struct_simulation_parameters.html#acf01880c7d28c91d7f05dbd5615e124c',1,'SimulationParameters']]],
+  ['output_5finterval_8',['output_interval',['../struct_simulation_parameters.html#a91fb3af39c933a78f3517925a28e72a7',1,'SimulationParameters']]],
+  ['output_5flast_5fcycle_5fonly_5f_9',['output_last_cycle_only_',['../class_solver_interface.html#a3e5a39bc1c8fe7ffa6cce8f487a919bf',1,'SolverInterface']]],
+  ['output_5fmean_5fonly_10',['output_mean_only',['../struct_simulation_parameters.html#a76a3f769988224f5d1469f96b639516f',1,'SimulationParameters']]],
+  ['output_5fvariable_5fbased_11',['output_variable_based',['../struct_simulation_parameters.html#ab25065e02877aff1d32846df3858cf83',1,'SimulationParameters']]]
 ];

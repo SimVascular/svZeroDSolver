@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['outlet_5feles_0',['outlet_eles',['../class_node.html#a78df87c57bf4a8d40dd7f679663b7cc3',1,'Node']]],
-  ['outlet_5fnodes_1',['outlet_nodes',['../class_block.html#ad5daa270479e8f80ef2f7aa9447f3172',1,'Block']]],
-  ['output_5fall_5fcycles_2',['output_all_cycles',['../struct_simulation_parameters.html#a3781dcd107cdc76e5c04cd5d7589a4ff',1,'SimulationParameters']]],
-  ['output_5fderivative_3',['output_derivative',['../struct_simulation_parameters.html#acf01880c7d28c91d7f05dbd5615e124c',1,'SimulationParameters']]],
-  ['output_5finterval_4',['output_interval',['../struct_simulation_parameters.html#a91fb3af39c933a78f3517925a28e72a7',1,'SimulationParameters']]],
-  ['output_5fmean_5fonly_5',['output_mean_only',['../struct_simulation_parameters.html#a76a3f769988224f5d1469f96b639516f',1,'SimulationParameters']]],
-  ['output_5fvariable_5fbased_6',['output_variable_based',['../struct_simulation_parameters.html#ab25065e02877aff1d32846df3858cf83',1,'SimulationParameters']]]
+  ['num_5finlets_0',['num_inlets',['../class_junction.html#a9ff699f5e265220087a8e24c3c68100c',1,'Junction']]],
+  ['num_5foutlets_1',['num_outlets',['../class_junction.html#ae5c6f6b876d9ff290ec26503839af90d',1,'Junction']]],
+  ['num_5foutput_5fsteps_5f_2',['num_output_steps_',['../class_solver_interface.html#a77ac3f88750a6e1ab737780e2e0a7b7c',1,'SolverInterface']]],
+  ['num_5ftime_5fsteps_5f_3',['num_time_steps_',['../class_solver_interface.html#a5b625552f7df164c9efa69dfbe98d6a8',1,'SolverInterface']]],
+  ['num_5ftriplets_4',['num_triplets',['../class_windkessel_b_c.html#a17c2ab69af3386b7c342a83d2ca2c225',1,'WindkesselBC::num_triplets'],['../class_resistive_junction.html#aed64d3bc5f287ded4b0ce4c0bc7231e6',1,'ResistiveJunction::num_triplets'],['../class_resistance_b_c.html#aee6b859cb79f8d9fba8fb99dc55ec81e',1,'ResistanceBC::num_triplets'],['../class_pressure_reference_b_c.html#af18b1f669caea76f832e165869957c69',1,'PressureReferenceBC::num_triplets'],['../class_open_loop_coronary_b_c.html#a8011608a3323ab83d1e8e8ebd8463a5b',1,'OpenLoopCoronaryBC::num_triplets'],['../class_junction.html#aa0b4aaab9fe55c85dd4a5fe6e81c951f',1,'Junction::num_triplets'],['../class_flow_reference_b_c.html#af76423e0e994859b071fa1066d562aa4',1,'FlowReferenceBC::num_triplets'],['../class_closed_loop_r_c_r_b_c.html#aea28d78775993cf4bd04b1e2289cb815',1,'ClosedLoopRCRBC::num_triplets'],['../class_closed_loop_heart_pulmonary.html#ad450e49a8e052e712f0c574871c72599',1,'ClosedLoopHeartPulmonary::num_triplets'],['../class_closed_loop_coronary_b_c.html#a3fa85877a6cd292772b4373595b3eec7',1,'ClosedLoopCoronaryBC::num_triplets'],['../class_blood_vessel_junction.html#a2f14946aa7dcb678dc69f5dbd37545eb',1,'BloodVesselJunction::num_triplets'],['../class_blood_vessel.html#ac693e09dac076ba52505292f03d04624',1,'BloodVessel::num_triplets'],['../class_block.html#a7388d573014251179f564ccef95ad52e',1,'Block::num_triplets']]]
 ];

@@ -115,15 +115,19 @@ Formatting</h2>
 <li><a href="https://github.com/rhysd/vim-clang-format">vim</a></li>
 <li><a href="https://clang.llvm.org/docs/ClangFormat.html">and many more</a></li>
 </ul>
-<p>Before committing any changes, you can run the following comment <b>from your build folder</b> to format all your files:</p>
+<p>Before committing any changes, you can run the following command <b>from your build folder</b> to format all your files:</p>
 <div class="fragment"><div class="line">make codeformat</div>
 </div><!-- fragment --><p>You can also just check <b>if</b> a file would be formatted without actually formatting it with:</p>
 <div class="fragment"><div class="line">make codecheck</div>
+</div><!-- fragment --><p>If the above commands do not work on your platform (it does not work on Sherlock at Stanford) you can run the following command <b>from the svZeroDPlus folder</b> to format all your files:</p>
+<div class="fragment"><div class="line">find src/**/*.h src/**/*.cpp | xargs clang-format -style=Google -i</div>
 </div><!-- fragment --><p>The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and indicates on merge requests when the code doesnt yet meet all style requirements.</p>
 <p>On Sherlock at Stanford, clang-format is included in the <code>llvm</code> module.</p>
 <h2><a class="anchor" id="autotoc_md39"></a>
 Documentation</h2>
-<p>We use <a href="https://doxygen.nl">Doxygen</a> to automatically build an html documentation from source code. Please have at Doxygen's <a href="https://www.doxygen.nl/manual/docblocks.html">Documentation Guide</a> for an introduction into the syntax of writing documentation in C++. For more inspiration, you can look at the existing source files and how they use documentation. In the following you can find a short recap of the most important commands:</p>
+<p>We use <a href="https://doxygen.nl">Doxygen</a> to automatically build an html documentation from source code. Please have at Doxygen's <a href="https://www.doxygen.nl/manual/docblocks.html">Documentation Guide</a> for an introduction into the syntax of writing documentation in C++. For more inspiration, you can look at the existing source files and how they use documentation.</p>
+<p><b>NOTE: Undocumented code will fail the automated code checks on Github and cannot be merged.</b></p>
+<p>In the following you can find a short recap of the most important commands:</p>
 <h3><a class="anchor" id="autotoc_md40"></a>
 Latex equations</h3>
 <p>For inline equations use <code>\f$a+b=c\f$</code> and for block equations use: </p><div class="fragment"><div class="line">\f[</div>

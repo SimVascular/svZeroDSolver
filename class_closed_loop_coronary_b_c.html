@@ -108,8 +108,8 @@ Public Types</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a295db5c44fec3da8e27ce9d9929ccb2a" id="r_a295db5c44fec3da8e27ce9d9929ccb2a"><td class="memItemLeft" align="right" valign="top"><a id="a295db5c44fec3da8e27ce9d9929ccb2a" name="a295db5c44fec3da8e27ce9d9929ccb2a"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ClosedLoopCoronaryBC</b> (int <a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, const std::vector&lt; int &gt; &amp;param_ids, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>, Side side)</td></tr>
+<tr class="memitem:a295db5c44fec3da8e27ce9d9929ccb2a" id="r_a295db5c44fec3da8e27ce9d9929ccb2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#a295db5c44fec3da8e27ce9d9929ccb2a">ClosedLoopCoronaryBC</a> (int <a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, const std::vector&lt; int &gt; &amp;param_ids, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>, <a class="el" href="_closed_loop_coronary_b_c_8h.html#a8c0137d7160ad71b6ed265c53c99ed00">Side</a> side)</td></tr>
+<tr class="memdesc:a295db5c44fec3da8e27ce9d9929ccb2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a <a class="el" href="class_closed_loop_coronary_b_c.html" title="Closed loop coronary boundary condition (connected to other blocks on both sides).">ClosedLoopCoronaryBC</a> object.  <br /></td></tr>
 <tr class="separator:a295db5c44fec3da8e27ce9d9929ccb2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68544fff99d896fc69632d809f31cff3" id="r_a68544fff99d896fc69632d809f31cff3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#a68544fff99d896fc69632d809f31cff3">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:a68544fff99d896fc69632d809f31cff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
@@ -276,6 +276,66 @@ Parameters</h3>
 </div><div class="memdoc">
 
 <p>Local IDs of the parameters. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a295db5c44fec3da8e27ce9d9929ccb2a" name="a295db5c44fec3da8e27ce9d9929ccb2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a295db5c44fec3da8e27ce9d9929ccb2a">&#9670;&#160;</a></span>ClosedLoopCoronaryBC()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ClosedLoopCoronaryBC::ClosedLoopCoronaryBC </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>id</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>param_ids</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_model.html">Model</a> *&#160;</td>
+          <td class="paramname"><em>model</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="_closed_loop_coronary_b_c_8h.html#a8c0137d7160ad71b6ed265c53c99ed00">Side</a>&#160;</td>
+          <td class="paramname"><em>side</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Construct a <a class="el" href="class_closed_loop_coronary_b_c.html" title="Closed loop coronary boundary condition (connected to other blocks on both sides).">ClosedLoopCoronaryBC</a> object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">id</td><td>Global ID of the block </td></tr>
+    <tr><td class="paramname">param_ids</td><td>Global IDs of the block parameters </td></tr>
+    <tr><td class="paramname">model</td><td>The model to which the block belongs </td></tr>
+    <tr><td class="paramname">side</td><td>Specify if this is a left or right coronary artery </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

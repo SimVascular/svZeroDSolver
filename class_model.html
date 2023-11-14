@@ -296,6 +296,7 @@ Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">inlet_eles</td><td>Inlet blocks of the node </td></tr>
     <tr><td class="paramname">outlet_eles</td><td>Outlet blocks of the node </td></tr>
+    <tr><td class="paramname">name</td><td>Name of node </td></tr>
   </table>
   </dd>
 </dl>
@@ -494,7 +495,7 @@ Public Attributes</h2></td></tr>
 <p>Get a block type by its name. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">block_id</td><td>Global ID of the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> </td></tr>
+    <tr><td class="paramname">name</td><td>The name of the block </td></tr>
   </table>
   </dd>
 </dl>
@@ -546,6 +547,12 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the number of blocks in the model. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">internal</td><td>Toggle whether to return internal/hidden blocks</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>int Number of blocks </dd></dl>
 
 </div>

@@ -126,11 +126,17 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#include &quot;<a class="code" href="_model_8h.html">Model.h</a>&quot;</span></div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#include &quot;<a class="code" href="debug_8h.html">debug.h</a>&quot;</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>nlohmann::json calibrate(<span class="keyword">const</span> nlohmann::json &amp;config);</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_OPTIMIZE_CALIBRATOR_HPP_</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment"></span> </div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> * @brief Main function to run the 0D model calibration.</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * @param config JSON configuration for 0D model</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * @return Calibrated JSON configuration for the 0D model</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>nlohmann::json <a class="code hl_function" href="calibrate_8h.html#a1fea91ed9c49249a6fdea6260eed604b">calibrate</a>(<span class="keyword">const</span> nlohmann::json &amp;config);</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_OPTIMIZE_CALIBRATOR_HPP_</span></div>
 <div class="ttc" id="a_model_8h_html"><div class="ttname"><a href="_model_8h.html">Model.h</a></div><div class="ttdoc">model::Model source file</div></div>
+<div class="ttc" id="acalibrate_8h_html_a1fea91ed9c49249a6fdea6260eed604b"><div class="ttname"><a href="calibrate_8h.html#a1fea91ed9c49249a6fdea6260eed604b">calibrate</a></div><div class="ttdeci">nlohmann::json calibrate(const nlohmann::json &amp;config)</div><div class="ttdoc">Main function to run the 0D model calibration.</div><div class="ttdef"><b>Definition</b> calibrate.cpp:35</div></div>
 <div class="ttc" id="adebug_8h_html"><div class="ttname"><a href="debug_8h.html">debug.h</a></div><div class="ttdoc">DEBUG_MSG source file.</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

@@ -72,7 +72,15 @@ We use [Doxygen](https://doxygen.nl) to automatically build an html documentatio
 from source code. Please have at Doxygen's [Documentation Guide](https://www.doxygen.nl/manual/docblocks.html)
 for an introduction into the syntax of writing documentation in C++. For more
 inspiration, you can look at the existing source files and how they use
-documentation. In the following you can find a short recap of the most important
+documentation. 
+
+> **&#9432;** Note that undocumented code will fail the automated code checks 
+on Github and cannot be merged.
+
+**Note that undocumented code will fail the automated code checks on Github 
+and cannot be merged.**
+
+In the following you can find a short recap of the most important
 commands:
 
 ### Latex equations

@@ -216,7 +216,8 @@ EXTRA_PACKAGES         = {tikz} \
                          {circuitikz} \
                          {amsmath} \
                          {amsfonts} \
-                         {amssymb}
+                         {amssymb} \
+                         [utf8]{inputenc}
 LATEX_HEADER           =
 LATEX_FOOTER           =
 LATEX_EXTRA_FILES      =

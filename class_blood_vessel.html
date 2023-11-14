@@ -115,9 +115,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a19c509ef1a65673cb11c92332ea8a6c3" id="r_a19c509ef1a65673cb11c92332ea8a6c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blood_vessel.html#a19c509ef1a65673cb11c92332ea8a6c3">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a19c509ef1a65673cb11c92332ea8a6c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a19c509ef1a65673cb11c92332ea8a6c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0407f8cd7058bad643f6122b4339875e" id="r_a0407f8cd7058bad643f6122b4339875e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blood_vessel.html#a0407f8cd7058bad643f6122b4339875e">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
-<tr class="memdesc:a0407f8cd7058bad643f6122b4339875e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
-<tr class="separator:a0407f8cd7058bad643f6122b4339875e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74feb5d48dff1f52145d211716b30843" id="r_a74feb5d48dff1f52145d211716b30843"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blood_vessel.html#a74feb5d48dff1f52145d211716b30843">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
+<tr class="memdesc:a74feb5d48dff1f52145d211716b30843"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="separator:a74feb5d48dff1f52145d211716b30843"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3ad80f4b627051a00b52e2b1c254a55" id="r_aa3ad80f4b627051a00b52e2b1c254a55"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_blood_vessel.html#aa3ad80f4b627051a00b52e2b1c254a55">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:aa3ad80f4b627051a00b52e2b1c254a55"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block contributions with respect to the parameters.  <br /></td></tr>
 <tr class="separator:aa3ad80f4b627051a00b52e2b1c254a55"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -143,6 +143,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block" id="r_a75efe51f152ba4c3f8bab02012ec0dff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a75efe51f152ba4c3f8bab02012ec0dff">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="separator:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="separator:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,7 +188,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Resistor-capacitor-inductor blood vessel with optional stenosis. </p>
 <p>Models the mechanical behavior of a bloodvessel with optional stenosis.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_55_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_53_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -197,84 +200,84 @@ node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
 \end{circuitikz}
-\]" src="form_55.png" width="336" height="96"/></picture>
+\]" src="form_53.png" width="336" height="96"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md0"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_54_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_\text{in}^{e}-P_\text{out}^{e} - (R + S|Q_\text{in}|) Q_\text{in}^{e}-L
-\dot{Q}_\text{out}^{e}=0 \]" src="form_56.png" width="229" height="16"/></picture>
+\dot{Q}_\text{out}^{e}=0 \]" src="form_54.png" width="229" height="16"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_55_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 Q_\text{in}^{e}-Q_\text{out}^{e} - C \dot{P}_\text{in}^{e}+C(R +
-2S|Q_\text{in}|) \dot{Q}_{in}^{e}=0 \]" src="form_57.png" width="244" height="16"/></picture>
+2S|Q_\text{in}|) \dot{Q}_{in}^{e}=0 \]" src="form_55.png" width="244" height="16"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md1"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_58_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} &amp; Q_{in}^{e} &amp;
-P_{out}^{e} &amp; Q_{out}^{e}\end{array}\right]^\text{T} \]" src="form_58.png" width="184" height="19"/></picture>
+P_{out}^{e} &amp; Q_{out}^{e}\end{array}\right]^\text{T} \]" src="form_56.png" width="184" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_59_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{cccc}
 1 &amp; -R &amp; -1 &amp;  0 \\
 0 &amp;  1 &amp;  0 &amp; -1
 \end{array}\right]
-\]" src="form_59.png" width="149" height="31"/></picture>
+\]" src="form_57.png" width="149" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_60_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_58_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{cccc}
  0 &amp;  0 &amp; 0 &amp; -L \\
 -C &amp; CR &amp; 0 &amp;  0
 \end{array}\right]
-\]" src="form_60.png" width="156" height="31"/></picture>
+\]" src="form_58.png" width="156" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_61_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_59_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e} = S|Q_\text{in}|
 \left[\begin{array}{c}
 -Q_\text{in} \\
 2C\dot{Q}_\text{in}
 \end{array}\right]
-\]" src="form_61.png" width="123" height="31"/></picture>
+\]" src="form_59.png" width="123" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_62_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_60_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  S \text{sgn} (Q_\text{in})
 \left[\begin{array}{cccc}
 0 &amp; -Q_\text{in}        &amp; 0 &amp; 0 \\
 0 &amp; 2C\dot{Q}_\text{in} &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_62.png" width="228" height="33"/></picture>
+\]" src="form_60.png" width="228" height="33"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_63_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_61_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
  S|Q_\text{in}|
 \left[\begin{array}{cccc}
 0 &amp;  0 &amp; 0 &amp; 0 \\
 0 &amp; 2C &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_63.png" width="188" height="33"/></picture>
+\]" src="form_61.png" width="188" height="33"/></picture>
 </p>
-<p>with the stenosis resistance <picture><source srcset="form_64_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ S=K_{t} \frac{\rho}{2
-A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} $" src="form_64.png" width="119" height="26"/></picture>. <picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_65.png" width="10" height="10"/></picture>, <picture><source srcset="form_66_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_66.png" width="10" height="10"/></picture>, and <picture><source srcset="form_67_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_67.png" width="9" height="10"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
+<p>with the stenosis resistance <picture><source srcset="form_62_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ S=K_{t} \frac{\rho}{2
+A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} $" src="form_62.png" width="119" height="26"/></picture>. <picture><source srcset="form_63_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_63.png" width="10" height="10"/></picture>, <picture><source srcset="form_64_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_64.png" width="10" height="10"/></picture>, and <picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_65.png" width="9" height="10"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
 <h3><a class="anchor" id="autotoc_md2"></a>
 Gradient</h3>
 <p>Gradient of the equations with respect to the parameters:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_68_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_66_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{J}^{e} = \left[\begin{array}{cccc}
 -y_2 &amp; 0 &amp; -\dot{y}_4 &amp; -|y_2|y_2 \\
 C\dot{y}_2 &amp; (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) &amp; 0 &amp; 2C|y_2|\dot{y}_2
 \end{array}\right]
-\]" src="form_68.png" width="311" height="31"/></picture>
+\]" src="form_66.png" width="311" height="31"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md3"></a>
 Parameters</h3>
@@ -508,8 +511,8 @@ Parameters</h3>
 
 </div>
 </div>
-<a id="a0407f8cd7058bad643f6122b4339875e" name="a0407f8cd7058bad643f6122b4339875e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0407f8cd7058bad643f6122b4339875e">&#9670;&#160;</a></span>update_solution()</h2>
+<a id="a74feb5d48dff1f52145d211716b30843" name="a74feb5d48dff1f52145d211716b30843"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74feb5d48dff1f52145d211716b30843">&#9670;&#160;</a></span>update_solution()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -532,13 +535,13 @@ Parameters</h3>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>dy</em>&#160;</td>
         </tr>
         <tr>
@@ -565,7 +568,7 @@ Parameters</h3>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="class_block.html#a601b2e856c7fa56b8c3898b0cfa57b69">Block</a>.</p>
+<p>Reimplemented from <a class="el" href="class_block.html#a3d48d0c71bf9f5b416f01a6414b0da78">Block</a>.</p>
 
 </div>
 </div>

@@ -117,9 +117,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75efe51f152ba4c3f8bab02012ec0dff" id="r_a75efe51f152ba4c3f8bab02012ec0dff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a75efe51f152ba4c3f8bab02012ec0dff">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a75efe51f152ba4c3f8bab02012ec0dff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a75efe51f152ba4c3f8bab02012ec0dff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a601b2e856c7fa56b8c3898b0cfa57b69" id="r_a601b2e856c7fa56b8c3898b0cfa57b69"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a601b2e856c7fa56b8c3898b0cfa57b69">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
-<tr class="memdesc:a601b2e856c7fa56b8c3898b0cfa57b69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
-<tr class="separator:a601b2e856c7fa56b8c3898b0cfa57b69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d48d0c71bf9f5b416f01a6414b0da78" id="r_a3d48d0c71bf9f5b416f01a6414b0da78"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a3d48d0c71bf9f5b416f01a6414b0da78">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
+<tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="separator:a3d48d0c71bf9f5b416f01a6414b0da78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="separator:ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96663232888eeb564e5f37db98fc655f" id="r_a96663232888eeb564e5f37db98fc655f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a96663232888eeb564e5f37db98fc655f">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:a96663232888eeb564e5f37db98fc655f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block contributions with respect to the parameters.  <br /></td></tr>
 <tr class="separator:a96663232888eeb564e5f37db98fc655f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -307,6 +310,42 @@ Public Attributes</h2></td></tr>
 <p>Get number of triplets of element. </p>
 <p>Number of triplets that the element contributes to the global system (relevant for sparse memory reservation)</p>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_triplets_contributions.html" title="The number of triplets that the element contributes to the global system.">TripletsContributions</a> Number of triplets of element </dd></dl>
+
+</div>
+</div>
+<a id="ad4999d98ef4cd47bf8892c4e62142d1e" name="ad4999d98ef4cd47bf8892c4e62142d1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4999d98ef4cd47bf8892c4e62142d1e">&#9670;&#160;</a></span>post_solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Block::post_solve </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Modify the solution after solving it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>Current solution </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_closed_loop_heart_pulmonary.html#a8de59851cdbda41fe55f3b38cb6d3556">ClosedLoopHeartPulmonary</a>.</p>
 
 </div>
 </div>
@@ -536,8 +575,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a601b2e856c7fa56b8c3898b0cfa57b69" name="a601b2e856c7fa56b8c3898b0cfa57b69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a601b2e856c7fa56b8c3898b0cfa57b69">&#9670;&#160;</a></span>update_solution()</h2>
+<a id="a3d48d0c71bf9f5b416f01a6414b0da78" name="a3d48d0c71bf9f5b416f01a6414b0da78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d48d0c71bf9f5b416f01a6414b0da78">&#9670;&#160;</a></span>update_solution()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -560,13 +599,13 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>dy</em>&#160;</td>
         </tr>
         <tr>
@@ -593,7 +632,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_blood_vessel.html#a0407f8cd7058bad643f6122b4339875e">BloodVessel</a>, <a class="el" href="class_blood_vessel_junction.html#a11da92db2e6ce7288ce7fa28a02c9356">BloodVesselJunction</a>, <a class="el" href="class_closed_loop_coronary_b_c.html#a1db28c7e75b828f26056009de7539ec0">ClosedLoopCoronaryBC</a>, and <a class="el" href="class_closed_loop_heart_pulmonary.html#a233d3aaf26be4d32418fdb038f906693">ClosedLoopHeartPulmonary</a>.</p>
+<p>Reimplemented in <a class="el" href="class_blood_vessel.html#a74feb5d48dff1f52145d211716b30843">BloodVessel</a>, <a class="el" href="class_blood_vessel_junction.html#ac5f485c4d9dbf15546d6705b9874fc09">BloodVesselJunction</a>, <a class="el" href="class_closed_loop_coronary_b_c.html#ad843df3843a56496426ad3decb2c2870">ClosedLoopCoronaryBC</a>, and <a class="el" href="class_closed_loop_heart_pulmonary.html#a1959e182e271fd13611e4fb062e80973">ClosedLoopHeartPulmonary</a>.</p>
 
 </div>
 </div>
@@ -694,12 +733,12 @@ Public Attributes</h2></td></tr>
 <p>Global variable indices of the local element contributions. </p>
 <p>Determines where the local element contributions are written to in the global system during assembly. The order of indices is:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_49_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_47_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 [P_{in}^1, Q_{in}^1, \dots, P_{in}^n, Q_{in}^n, P_{out}^1, Q_{out}^1,
-\dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \]" src="form_49.png" width="326" height="16"/></picture>
+\dots, P_{out}^m, Q_{out}^m, V^{1}, \dots, V^{p}] \]" src="form_47.png" width="326" height="16"/></picture>
 </p>
-<p>with <picture><source srcset="form_50_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in} $" src="form_50.png" width="18" height="13"/></picture>, <picture><source srcset="form_51_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in} $" src="form_51.png" width="19" height="13"/></picture>, <picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out} $" src="form_52.png" width="23" height="13"/></picture>, <picture><source srcset="form_53_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out} $" src="form_53.png" width="24" height="13"/></picture>, and <picture><source srcset="form_54_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$V
-$" src="form_54.png" width="10" height="10"/></picture> denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.</p>
+<p>with <picture><source srcset="form_48_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in} $" src="form_48.png" width="18" height="13"/></picture>, <picture><source srcset="form_49_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in} $" src="form_49.png" width="19" height="13"/></picture>, <picture><source srcset="form_50_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out} $" src="form_50.png" width="23" height="13"/></picture>, <picture><source srcset="form_51_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out} $" src="form_51.png" width="24" height="13"/></picture>, and <picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$V
+$" src="form_52.png" width="10" height="10"/></picture> denoting inlet pressure, inlet flow, outlet pressure, outlet flow and an internal variable of the element, respectively.</p>
 <p>Variable indices correspond to columns in the global system. </p>
 
 </div>

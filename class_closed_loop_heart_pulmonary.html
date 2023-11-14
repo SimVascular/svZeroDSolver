@@ -161,9 +161,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:acc5fc1f179c96cf3f83bd1134a3d2ca0" id="r_acc5fc1f179c96cf3f83bd1134a3d2ca0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_heart_pulmonary.html#acc5fc1f179c96cf3f83bd1134a3d2ca0">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:acc5fc1f179c96cf3f83bd1134a3d2ca0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:acc5fc1f179c96cf3f83bd1134a3d2ca0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a233d3aaf26be4d32418fdb038f906693" id="r_a233d3aaf26be4d32418fdb038f906693"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_heart_pulmonary.html#a233d3aaf26be4d32418fdb038f906693">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
-<tr class="memdesc:a233d3aaf26be4d32418fdb038f906693"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
-<tr class="separator:a233d3aaf26be4d32418fdb038f906693"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1959e182e271fd13611e4fb062e80973" id="r_a1959e182e271fd13611e4fb062e80973"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_heart_pulmonary.html#a1959e182e271fd13611e4fb062e80973">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
+<tr class="memdesc:a1959e182e271fd13611e4fb062e80973"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="separator:a1959e182e271fd13611e4fb062e80973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8de59851cdbda41fe55f3b38cb6d3556" id="r_a8de59851cdbda41fe55f3b38cb6d3556"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_heart_pulmonary.html#a8de59851cdbda41fe55f3b38cb6d3556">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:a8de59851cdbda41fe55f3b38cb6d3556"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="separator:a8de59851cdbda41fe55f3b38cb6d3556"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a443cdfaf01e71a8e12b072b525355412" id="r_a443cdfaf01e71a8e12b072b525355412"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_heart_pulmonary.html#a443cdfaf01e71a8e12b072b525355412">Block</a> (int <a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, const std::vector&lt; int &gt; &amp;param_ids, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>)</td></tr>
 <tr class="memdesc:a443cdfaf01e71a8e12b072b525355412"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
 <tr class="separator:a443cdfaf01e71a8e12b072b525355412"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -421,6 +424,42 @@ Parameters</h3>
 
 </div>
 </div>
+<a id="a8de59851cdbda41fe55f3b38cb6d3556" name="a8de59851cdbda41fe55f3b38cb6d3556"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8de59851cdbda41fe55f3b38cb6d3556">&#9670;&#160;</a></span>post_solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ClosedLoopHeartPulmonary::post_solve </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Modify the solution after solving it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>Current solution </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">Block</a>.</p>
+
+</div>
+</div>
 <a id="a0ce791a34f00060fb7b13ead61622cf2" name="a0ce791a34f00060fb7b13ead61622cf2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ce791a34f00060fb7b13ead61622cf2">&#9670;&#160;</a></span>setup_dofs()</h2>
 
@@ -505,8 +544,8 @@ Parameters</h3>
 
 </div>
 </div>
-<a id="a233d3aaf26be4d32418fdb038f906693" name="a233d3aaf26be4d32418fdb038f906693"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a233d3aaf26be4d32418fdb038f906693">&#9670;&#160;</a></span>update_solution()</h2>
+<a id="a1959e182e271fd13611e4fb062e80973" name="a1959e182e271fd13611e4fb062e80973"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1959e182e271fd13611e4fb062e80973">&#9670;&#160;</a></span>update_solution()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -529,13 +568,13 @@ Parameters</h3>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>dy</em>&#160;</td>
         </tr>
         <tr>
@@ -562,7 +601,7 @@ Parameters</h3>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="class_block.html#a601b2e856c7fa56b8c3898b0cfa57b69">Block</a>.</p>
+<p>Reimplemented from <a class="el" href="class_block.html#a3d48d0c71bf9f5b416f01a6414b0da78">Block</a>.</p>
 
 </div>
 </div>

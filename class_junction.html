@@ -127,9 +127,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block" id="r_a75efe51f152ba4c3f8bab02012ec0dff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a75efe51f152ba4c3f8bab02012ec0dff">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block" id="r_a601b2e856c7fa56b8c3898b0cfa57b69"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a601b2e856c7fa56b8c3898b0cfa57b69">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
-<tr class="memdesc:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
-<tr class="separator:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block" id="r_a3d48d0c71bf9f5b416f01a6414b0da78"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a3d48d0c71bf9f5b416f01a6414b0da78">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
+<tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="separator:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="separator:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="separator:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,7 +181,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p><a class="el" href="class_junction.html" title="Junction.">Junction</a>. </p>
 <p>Models a junction with arbitrary inlets and outlets. Across all inlets and outlets of the junction, mass is conserved and pressure is continuous.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_100_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_98_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz}
 \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$} to [short, *-*] (3.0,0);
@@ -189,38 +192,38 @@ Public Attributes</h2></td></tr>
 \draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
 \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
 \end{circuitikz}
-\]" src="form_100.png" width="248" height="120"/></picture>
+\]" src="form_98.png" width="248" height="120"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md18"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_101_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_99_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
-\]" src="form_101.png" width="145" height="38"/></picture>
+\]" src="form_99.png" width="145" height="38"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_102_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_100_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
-\]" src="form_102.png" width="119" height="14"/></picture>
+\]" src="form_100.png" width="119" height="14"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md19"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_103_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_101_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e} &amp;
 \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
-\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_103.png" width="428" height="16"/></picture>
+\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_101.png" width="428" height="16"/></picture>
 </p>
 <p>Mass conservation</p>
 <p class="formulaDsp">
-<picture><source srcset="form_104_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_102_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0 &amp;
--1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_104.png" width="265" height="16"/></picture>
+-1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_102.png" width="265" height="16"/></picture>
 </p>
 <p>Due to the pressure continuity, we can write for all independent pressure pairs: </p><p class="formulaDsp">
-<picture><source srcset="form_105_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
+<picture><source srcset="form_103_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
 \underbrace{1}_{P_i} &amp; \dots &amp; \underbrace{1}_{P_j} &amp; \dots\end{array}\right]
-\quad \mathrm{with} \quad i \neq j \]" src="form_105.png" width="299" height="31"/></picture>
+\quad \mathrm{with} \quad i \neq j \]" src="form_103.png" width="299" height="31"/></picture>
 </p>
  </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a0b82be82678747aaf1dc304df9edc1be" name="a0b82be82678747aaf1dc304df9edc1be"></a>

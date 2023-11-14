@@ -100,9 +100,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9922d0e459f45c7dda13f80797fb04b9" id="r_a9922d0e459f45c7dda13f80797fb04b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a9922d0e459f45c7dda13f80797fb04b9">update_residual</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;ydot)</td></tr>
 <tr class="memdesc:a9922d0e459f45c7dda13f80797fb04b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the residual of the system.  <br /></td></tr>
 <tr class="separator:a9922d0e459f45c7dda13f80797fb04b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8b36720235fa60b357f03da5375b8cb8" id="r_a8b36720235fa60b357f03da5375b8cb8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a8b36720235fa60b357f03da5375b8cb8">update_jacobian</a> (double e_coeff)</td></tr>
-<tr class="memdesc:a8b36720235fa60b357f03da5375b8cb8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the jacobian of the system.  <br /></td></tr>
-<tr class="separator:a8b36720235fa60b357f03da5375b8cb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ed1b27201071e55303753c3333d85ba" id="r_a9ed1b27201071e55303753c3333d85ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a9ed1b27201071e55303753c3333d85ba">update_jacobian</a> (double time_coeff_ydot, double time_coeff_y)</td></tr>
+<tr class="memdesc:a9ed1b27201071e55303753c3333d85ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the jacobian of the system.  <br /></td></tr>
+<tr class="separator:a9ed1b27201071e55303753c3333d85ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f292fe3a47e938a487eb89d0df0211a" id="r_a5f292fe3a47e938a487eb89d0df0211a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a">solve</a> ()</td></tr>
 <tr class="memdesc:a5f292fe3a47e938a487eb89d0df0211a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solve the system.  <br /></td></tr>
 <tr class="separator:a5f292fe3a47e938a487eb89d0df0211a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -133,9 +133,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a4e30e790f39ac0f6dd65b902acddaa99" id="r_a4e30e790f39ac0f6dd65b902acddaa99"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a4e30e790f39ac0f6dd65b902acddaa99">residual</a></td></tr>
 <tr class="memdesc:a4e30e790f39ac0f6dd65b902acddaa99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Residual of the system.  <br /></td></tr>
 <tr class="separator:a4e30e790f39ac0f6dd65b902acddaa99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a891651cdc0344153e6fc04ee1620933f" id="r_a891651cdc0344153e6fc04ee1620933f"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#a891651cdc0344153e6fc04ee1620933f">dy</a></td></tr>
-<tr class="memdesc:a891651cdc0344153e6fc04ee1620933f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solution increment of the system.  <br /></td></tr>
-<tr class="separator:a891651cdc0344153e6fc04ee1620933f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8eb89978b168443906d319aba4e1bb6" id="r_ac8eb89978b168443906d319aba4e1bb6"><td class="memItemLeft" align="right" valign="top">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6">dydot</a></td></tr>
+<tr class="memdesc:ac8eb89978b168443906d319aba4e1bb6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solution increment of the system.  <br /></td></tr>
+<tr class="separator:ac8eb89978b168443906d319aba4e1bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef37a5347e9b8b23a3cd6d24cd965ad7" id="r_aef37a5347e9b8b23a3cd6d24cd965ad7"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; Eigen::SparseLU&lt; Eigen::SparseMatrix&lt; double &gt; &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sparse_system.html#aef37a5347e9b8b23a3cd6d24cd965ad7">solver</a></td></tr>
 <tr class="separator:aef37a5347e9b8b23a3cd6d24cd965ad7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -144,29 +144,30 @@ Public Attributes</h2></td></tr>
 <p>This class contains all attributes and methods to create, modify, and solve sparse systems.</p>
 <p>Flow rate, pressure, and other hemodynamic quantities in 0D models of vascular anatomies are governed by a system of nonlinear differential-algebraic equations (DAEs):</p>
 <p class="formulaDsp">
-<picture><source srcset="form_37_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_35_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{r}(\boldsymbol{\alpha}, \mathbf{y},\dot{\mathbf{y}}, t) =
 \mathbf{E}(\boldsymbol{\alpha}) \cdot \dot{\mathbf{y}} +
 \mathbf{F}(\boldsymbol{\alpha}) \cdot \mathbf{y} +
 \mathbf{c}(\mathbf{y},\dot{\mathbf{y}}, t) = \mathbf{0}
-\]" src="form_37.png" width="271" height="14"/></picture>
+\]" src="form_35.png" width="271" height="14"/></picture>
 </p>
-<p>where <picture><source srcset="form_38_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\mathbf{r},\textbf{y},\textbf{c} \in \mathbb{R}^{N}$" src="form_38.png" width="65" height="14"/></picture> and <picture><source srcset="form_39_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\textbf{E},\textbf{F} \in \mathbb{R}^{N \times N}$" src="form_39.png" width="75" height="14"/></picture>. Here, <picture><source srcset="form_40_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\textbf{r}$" src="form_40.png" width="8" height="6"/></picture> is the residual, <picture><source srcset="form_41_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\textbf{y}$" src="form_41.png" width="9" height="9"/></picture> is the vector of solution quantities and <picture><source srcset="form_42_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\dot{\textbf{y}}$" src="form_42.png" width="9" height="13"/></picture> is its time derivative. <picture><source srcset="form_43_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$N$" src="form_43.png" width="11" height="10"/></picture> is the total number of equations and the total number of global unknowns. The DAE system is solved implicitly using the generalized- <picture><source srcset="form_0_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha$" src="form_0.png" width="8" height="6"/></picture> method in <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a>. We then use the Newton-Raphson method to iteratively solve</p>
+<p>where <picture><source srcset="form_36_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\mathbf{r},\textbf{y},\textbf{c} \in \mathbb{R}^{N}$" src="form_36.png" width="65" height="14"/></picture> and <picture><source srcset="form_37_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\textbf{E},\textbf{F} \in \mathbb{R}^{N \times N}$" src="form_37.png" width="75" height="14"/></picture>. Here, <picture><source srcset="form_38_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\textbf{r}$" src="form_38.png" width="8" height="6"/></picture> is the residual, <picture><source srcset="form_39_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\textbf{y}$" src="form_39.png" width="9" height="9"/></picture> is the vector of solution quantities and <picture><source srcset="form_40_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\dot{\textbf{y}}$" src="form_40.png" width="9" height="13"/></picture> is its time derivative. <picture><source srcset="form_41_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$N$" src="form_41.png" width="11" height="10"/></picture> is the total number of equations and the total number of global unknowns. The DAE system is solved implicitly using the generalized- <picture><source srcset="form_0_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha$" src="form_0.png" width="8" height="6"/></picture> method in <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a>. We then use the Newton-Raphson method to iteratively solve</p>
+<p class="formulaDsp">
+<picture><source srcset="form_42_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\mathbf{K}^{i} \cdot \Delta\mathbf{y}^{i} = - \mathbf{r}^{i},
+\]" src="form_42.png" width="86" height="15"/></picture>
+</p>
+<p>with solution increment <picture><source srcset="form_43_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\Delta\mathbf{y}$" src="form_43.png" width="18" height="13"/></picture> in iteration <picture><source srcset="form_27_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$i$" src="form_27.png" width="5" height="9"/></picture>. The linearization of the time-discretized system is</p>
 <p class="formulaDsp">
 <picture><source srcset="form_44_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{K}^{i} \cdot \Delta\mathbf{y}^{i} = - \mathbf{r}^{i},
-\]" src="form_44.png" width="86" height="15"/></picture>
-</p>
-<p>with solution increment <picture><source srcset="form_45_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\Delta\mathbf{y}$" src="form_45.png" width="18" height="13"/></picture> in iteration <picture><source srcset="form_46_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$i$" src="form_46.png" width="5" height="9"/></picture>. The linearization of the time-discretized system is</p>
-<p class="formulaDsp">
-<picture><source srcset="form_47_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{K} =
 \frac{\partial \mathbf{r}}{\partial \mathbf{y}} =
-\mathbf{F} + \frac{\partial \mathbf{c}}{\partial \mathbf{y}} + c_\text{time}
-\left( \mathbf{E} + \frac{\partial \mathbf{c}}{\partial \dot{\mathbf{y}}}
-\right), \]" src="form_47.png" width="214" height="31"/></picture>
+c_{\dot{\mathbf{y}}} \left( \mathbf{E} + \frac{\partial \mathbf{c}}{\partial
+\dot{\mathbf{y}}} \right) +
+c_{\mathbf{y}} \left( \mathbf{F} + \frac{\partial \mathbf{c}}{\partial
+\mathbf{y}} \right), \]" src="form_44.png" width="234" height="31"/></picture>
 </p>
-<p>with time factor <picture><source srcset="form_48_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$c_\text{time}$" src="form_48.png" width="25" height="9"/></picture> provided by <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a>. </p>
+<p>with time factors <picture><source srcset="form_45_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$c_{\dot{\mathbf{y}}}=\alpha_m$" src="form_45.png" width="45" height="10"/></picture> and <picture><source srcset="form_46_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$c_{\mathbf{y}}=\alpha_f\gamma\Delta t$" src="form_46.png" width="65" height="14"/></picture> provided by <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a>. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a563e7760b7e4e66ea6e26cfc3ebfc553" name="a563e7760b7e4e66ea6e26cfc3ebfc553"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a563e7760b7e4e66ea6e26cfc3ebfc553">&#9670;&#160;</a></span>SparseSystem() <span class="overload">[1/2]</span></h2>
@@ -297,8 +298,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8b36720235fa60b357f03da5375b8cb8" name="a8b36720235fa60b357f03da5375b8cb8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8b36720235fa60b357f03da5375b8cb8">&#9670;&#160;</a></span>update_jacobian()</h2>
+<a id="a9ed1b27201071e55303753c3333d85ba" name="a9ed1b27201071e55303753c3333d85ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ed1b27201071e55303753c3333d85ba">&#9670;&#160;</a></span>update_jacobian()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -307,8 +308,18 @@ Public Attributes</h2></td></tr>
           <td class="memname">void SparseSystem::update_jacobian </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>e_coeff</em></td><td>)</td>
+          <td class="paramname"><em>time_coeff_ydot</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>time_coeff_y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -316,7 +327,8 @@ Public Attributes</h2></td></tr>
 <p>Update the jacobian of the system. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">e_coeff</td><td>Coefficent for system matrix <a class="el" href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">E</a> </td></tr>
+    <tr><td class="paramname">time_coeff_ydot</td><td>Coefficent ydot-dependent part of jacobian </td></tr>
+    <tr><td class="paramname">time_coeff_y</td><td>Coefficent ydot-dependent part of jacobian </td></tr>
   </table>
   </dd>
 </dl>
@@ -409,14 +421,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a891651cdc0344153e6fc04ee1620933f" name="a891651cdc0344153e6fc04ee1620933f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a891651cdc0344153e6fc04ee1620933f">&#9670;&#160;</a></span>dy</h2>
+<a id="ac8eb89978b168443906d319aba4e1bb6" name="ac8eb89978b168443906d319aba4e1bb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac8eb89978b168443906d319aba4e1bb6">&#9670;&#160;</a></span>dydot</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; SparseSystem::dy</td>
+          <td class="memname">Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; SparseSystem::dydot</td>
         </tr>
       </table>
 </div><div class="memdoc">

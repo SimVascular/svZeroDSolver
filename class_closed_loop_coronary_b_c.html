@@ -120,9 +120,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a56feb81dd848b40b872ce98cbb4a8540" id="r_a56feb81dd848b40b872ce98cbb4a8540"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#a56feb81dd848b40b872ce98cbb4a8540">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a56feb81dd848b40b872ce98cbb4a8540"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a56feb81dd848b40b872ce98cbb4a8540"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1db28c7e75b828f26056009de7539ec0" id="r_a1db28c7e75b828f26056009de7539ec0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#a1db28c7e75b828f26056009de7539ec0">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
-<tr class="memdesc:a1db28c7e75b828f26056009de7539ec0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
-<tr class="separator:a1db28c7e75b828f26056009de7539ec0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad843df3843a56496426ad3decb2c2870" id="r_ad843df3843a56496426ad3decb2c2870"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_closed_loop_coronary_b_c.html#ad843df3843a56496426ad3decb2c2870">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
+<tr class="memdesc:ad843df3843a56496426ad3decb2c2870"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="separator:ad843df3843a56496426ad3decb2c2870"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_block"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_block')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_block.html">Block</a></td></tr>
 <tr class="memitem:a443cdfaf01e71a8e12b072b525355412 inherit pub_methods_class_block" id="r_a443cdfaf01e71a8e12b072b525355412"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a443cdfaf01e71a8e12b072b525355412">Block</a> (int <a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, const std::vector&lt; int &gt; &amp;param_ids, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>)</td></tr>
 <tr class="memdesc:a443cdfaf01e71a8e12b072b525355412 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
@@ -142,6 +142,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block" id="r_a75efe51f152ba4c3f8bab02012ec0dff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a75efe51f152ba4c3f8bab02012ec0dff">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="separator:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block" id="r_a96663232888eeb564e5f37db98fc655f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a96663232888eeb564e5f37db98fc655f">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block contributions with respect to the parameters.  <br /></td></tr>
 <tr class="separator:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,7 +189,7 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Closed loop coronary boundary condition (connected to other blocks on both sides). </p>
 <p class="formulaDsp">
-<picture><source srcset="form_78_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_76_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -200,58 +203,58 @@ node[left]{$P_{im}$}
 node[left]{$P_a$};
 \draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
 \end{circuitikz}
-\]" src="form_78.png" width="336" height="81"/></picture>
+\]" src="form_76.png" width="336" height="81"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md8"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_79_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_77_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a
 \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a
-\frac{dQ_{in}}{dt} = 0 \]" src="form_79.png" width="456" height="28"/></picture>
+\frac{dQ_{in}}{dt} = 0 \]" src="form_77.png" width="456" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_80_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_78_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
-\frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \]" src="form_80.png" width="315" height="28"/></picture>
+\frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \]" src="form_78.png" width="315" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_81_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_79_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
-\]" src="form_81.png" width="239" height="13"/></picture>
+\]" src="form_79.png" width="239" height="13"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md9"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_82_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_80_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} &amp; Q^{in} &amp; P_{out} &amp; Q_{out}
-&amp; V_{im}^{e}\end{array}\right]^{T}, \]" src="form_82.png" width="224" height="19"/></picture>
+&amp; V_{im}^{e}\end{array}\right]^{T}, \]" src="form_80.png" width="224" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_83_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_81_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{ccccc}
 -R_{am} C_{a} &amp; R_{am} R_{a} C_{a} &amp; 0 &amp; 0 &amp; 0 \\
 -C_{a} &amp; R_{a} C_{a} &amp; 0 &amp; 0 &amp; -1 \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
-\end{array}\right] \]" src="form_83.png" width="240" height="46"/></picture>
+\end{array}\right] \]" src="form_81.png" width="240" height="46"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_82_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ccccc}
 -1 &amp; R_{am} + R_{a} &amp; 1 &amp; R_v &amp; 0 \\
 0 &amp; 1 &amp; 0 &amp; -1 &amp; 0 \\
 0 &amp; 0 &amp; C_{im} &amp; C_{im} R_v &amp; -1 \\
-\end{array}\right] \]" src="form_84.png" width="253" height="46"/></picture>
+\end{array}\right] \]" src="form_82.png" width="253" height="46"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_85_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_83_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 C_{a} R_{am} \frac{d P_{a}}{d t} \\
 C_{a}\frac{d P_{a}}{d t} \\
 -C_{im} P_{im}
-\end{array}\right] \]" src="form_85.png" width="113" height="48"/></picture>
+\end{array}\right] \]" src="form_83.png" width="113" height="48"/></picture>
 </p>
-<p>Assume <picture><source srcset="form_86_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_86.png" width="36" height="13"/></picture>.</p>
+<p>Assume <picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_84.png" width="36" height="13"/></picture>.</p>
 <h3><a class="anchor" id="autotoc_md10"></a>
 Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
@@ -453,8 +456,8 @@ Parameters</h3>
 
 </div>
 </div>
-<a id="a1db28c7e75b828f26056009de7539ec0" name="a1db28c7e75b828f26056009de7539ec0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1db28c7e75b828f26056009de7539ec0">&#9670;&#160;</a></span>update_solution()</h2>
+<a id="ad843df3843a56496426ad3decb2c2870" name="ad843df3843a56496426ad3decb2c2870"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad843df3843a56496426ad3decb2c2870">&#9670;&#160;</a></span>update_solution()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -477,13 +480,13 @@ Parameters</h3>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>y</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
           <td class="paramname"><em>dy</em>&#160;</td>
         </tr>
         <tr>
@@ -510,7 +513,7 @@ Parameters</h3>
   </dd>
 </dl>
 
-<p>Reimplemented from <a class="el" href="class_block.html#a601b2e856c7fa56b8c3898b0cfa57b69">Block</a>.</p>
+<p>Reimplemented from <a class="el" href="class_block.html#a3d48d0c71bf9f5b416f01a6414b0da78">Block</a>.</p>
 
 </div>
 </div>

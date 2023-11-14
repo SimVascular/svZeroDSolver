@@ -124,9 +124,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a98bac8f1f93e2876efa7a7d59e302569 inherit pub_methods_class_block" id="r_a98bac8f1f93e2876efa7a7d59e302569"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a98bac8f1f93e2876efa7a7d59e302569">setup_model_dependent_params</a> ()</td></tr>
 <tr class="memdesc:a98bac8f1f93e2876efa7a7d59e302569 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameters that depend on the model.  <br /></td></tr>
 <tr class="separator:a98bac8f1f93e2876efa7a7d59e302569 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block" id="r_a601b2e856c7fa56b8c3898b0cfa57b69"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a601b2e856c7fa56b8c3898b0cfa57b69">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
-<tr class="memdesc:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
-<tr class="separator:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block" id="r_a3d48d0c71bf9f5b416f01a6414b0da78"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a3d48d0c71bf9f5b416f01a6414b0da78">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
+<tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="separator:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="separator:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block" id="r_a96663232888eeb564e5f37db98fc655f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a96663232888eeb564e5f37db98fc655f">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block contributions with respect to the parameters.  <br /></td></tr>
 <tr class="separator:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -172,7 +175,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Windkessel RCR boundary condition. </p>
 <p>Models the mechanical behavior of a Windkessel boundary condition.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -182,52 +185,52 @@ node[anchor=south]{$P_{ref}$}
 (3,0) to [C, l=$C$, *-] (3,-1.5)
 node[ground]{$P_{C}$};
 \end{circuitikz}
-\]" src="form_129.png" width="214" height="96"/></picture>
+\]" src="form_127.png" width="214" height="96"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md32"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
-\]" src="form_130.png" width="189" height="28"/></picture>
+\]" src="form_128.png" width="189" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
-\]" src="form_131.png" width="114" height="14"/></picture>
+\]" src="form_129.png" width="114" height="14"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md33"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} &amp; Q^{e} &amp;
-P_{c}^{e}\end{array}\right]^{T} \]" src="form_132.png" width="131" height="19"/></picture>
+P_{c}^{e}\end{array}\right]^{T} \]" src="form_130.png" width="131" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 &amp; 0 &amp; -R_{d} C \\
 0 &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_133.png" width="126" height="31"/></picture>
+\]" src="form_131.png" width="126" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_134_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ccc}
 0 &amp; R_{d} &amp; -1 \\
 1 &amp; -R_{p} &amp; -1
 \end{array}\right]
-\]" src="form_134.png" width="126" height="31"/></picture>
+\]" src="form_132.png" width="126" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_135_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
-\]" src="form_135.png" width="76" height="31"/></picture>
+\]" src="form_133.png" width="76" height="31"/></picture>
 </p>
-<p>See <a class="el" href="citelist.html#CITEREF_vignon04">[4]</a>.</p>
+<p>See <a class="el" href="citelist.html#CITEREF_vignon04">[5]</a>.</p>
 <h3><a class="anchor" id="autotoc_md34"></a>
 Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

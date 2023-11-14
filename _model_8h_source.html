@@ -313,61 +313,68 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;dy);</div>
 <div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="comment"></span> </div>
 <div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="comment">   * @brief Convert the blocks to a steady behavior</span></div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="comment">   * @brief Modify the solution after solving it</span></div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_model.html#ac7fb5f5b690063e23e3a54b0f5d7b6d7">to_steady</a>();</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span><span class="comment"></span> </div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><span class="comment">   * @brief Convert the blocks to an unsteady behavior</span></div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_model.html#a78157bd7409586bf16117e4cb66ad13a">to_unsteady</a>();</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span><span class="comment"></span> </div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="comment">   * @brief Get number of triplets all elements</span></div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="comment">   * Get the number of triplets the elements contribute to the global system</span></div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="comment">   * @return Number of triplets that are used in each system matrix</span></div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>  <span class="comment">// std::map&lt;std::string, int&gt; get_num_triplets();</span></div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>  <a class="code hl_struct" href="struct_triplets_contributions.html">TripletsContributions</a> <a class="code hl_function" href="class_model.html#ab5034dbf60991e67d52cdecf29abc47d">get_num_triplets</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="comment"></span> </div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="comment">   * @brief Get the number of blocks in the model</span></div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="comment">   * @param internal Toggle whether to return internal/hidden blocks</span></div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span><span class="comment">   * @return int Number of blocks</span></div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_model.html#af33fd555a40f38bbe50c9aa2fc4b3e21">get_num_blocks</a>(<span class="keywordtype">bool</span> internal = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span> </div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span>  <span class="keywordtype">int</span> block_count = 0;</div>
-<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span>  <span class="keywordtype">int</span> node_count = 0;</div>
-<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span>  <span class="keywordtype">int</span> parameter_count = 0;</div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>  std::map&lt;int, double&gt; param_value_cache;</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span> </div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>  std::vector&lt;std::shared_ptr&lt;Block&gt;&gt; blocks;  <span class="comment">///&lt; Blocks of the model</span></div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>  std::vector&lt;BlockType&gt; block_types;          <span class="comment">///&lt; Types of the blocks</span></div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>  std::vector&lt;std::string&gt; block_names;        <span class="comment">///&lt; Names of the blocks</span></div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>  std::map&lt;std::string, int&gt;</div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>      block_index_map;  <span class="comment">///&lt; Map between block name and index</span></div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span> </div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>  std::vector&lt;std::shared_ptr&lt;Block&gt;&gt;</div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>      hidden_blocks;  <span class="comment">///&lt; Hidden blocks of the model</span></div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span> </div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>  std::vector&lt;std::shared_ptr&lt;Node&gt;&gt; nodes;  <span class="comment">///&lt; Nodes of the model</span></div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>  std::vector&lt;std::string&gt; node_names;       <span class="comment">///&lt; Names of the nodes</span></div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span> </div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>  std::vector&lt;Parameter&gt; parameters;     <span class="comment">///&lt; Parameters of the model</span></div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>  std::vector&lt;double&gt; parameter_values;  <span class="comment">///&lt; Current values of the parameters</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>};</div>
-</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span><span class="comment">   * @param y Current solution</span></div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_model.html#a9f6ce7f8b525fb3d84e3fb578653c05f">post_solve</a>(Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;y);</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span><span class="comment"></span> </div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span><span class="comment">   * @brief Convert the blocks to a steady behavior</span></div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_model.html#ac7fb5f5b690063e23e3a54b0f5d7b6d7">to_steady</a>();</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span><span class="comment"></span> </div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span><span class="comment">   * @brief Convert the blocks to an unsteady behavior</span></div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_model.html#a78157bd7409586bf16117e4cb66ad13a">to_unsteady</a>();</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span><span class="comment"></span> </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span><span class="comment">   * @brief Get number of triplets all elements</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span><span class="comment">   * Get the number of triplets the elements contribute to the global system</span></div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span><span class="comment">   * (relevant for sparse memory reservation)</span></div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span><span class="comment">   * @return Number of triplets that are used in each system matrix</span></div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>  <span class="comment">// std::map&lt;std::string, int&gt; get_num_triplets();</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>  <a class="code hl_struct" href="struct_triplets_contributions.html">TripletsContributions</a> <a class="code hl_function" href="class_model.html#ab5034dbf60991e67d52cdecf29abc47d">get_num_triplets</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span><span class="comment"></span> </div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00261" name="l00261"></a><span class="lineno">  261</span><span class="comment">   * @brief Get the number of blocks in the model</span></div>
+<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00263" name="l00263"></a><span class="lineno">  263</span><span class="comment">   * @param internal Toggle whether to return internal/hidden blocks</span></div>
+<div class="line"><a id="l00264" name="l00264"></a><span class="lineno">  264</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00265" name="l00265"></a><span class="lineno">  265</span><span class="comment">   * @return int Number of blocks</span></div>
+<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>  <span class="keywordtype">int</span> <a class="code hl_function" href="class_model.html#af33fd555a40f38bbe50c9aa2fc4b3e21">get_num_blocks</a>(<span class="keywordtype">bool</span> internal = <span class="keyword">false</span>) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>  <span class="keywordtype">int</span> block_count = 0;</div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>  <span class="keywordtype">int</span> node_count = 0;</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span>  <span class="keywordtype">int</span> parameter_count = 0;</div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>  std::map&lt;int, double&gt; param_value_cache;</div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span> </div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>  std::vector&lt;std::shared_ptr&lt;Block&gt;&gt; blocks;  <span class="comment">///&lt; Blocks of the model</span></div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>  std::vector&lt;BlockType&gt; block_types;          <span class="comment">///&lt; Types of the blocks</span></div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>  std::vector&lt;std::string&gt; block_names;        <span class="comment">///&lt; Names of the blocks</span></div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>  std::map&lt;std::string, int&gt;</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>      block_index_map;  <span class="comment">///&lt; Map between block name and index</span></div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>  std::vector&lt;std::shared_ptr&lt;Block&gt;&gt;</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>      hidden_blocks;  <span class="comment">///&lt; Hidden blocks of the model</span></div>
 <div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span> </div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_MODEL_HPP_</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>  std::vector&lt;std::shared_ptr&lt;Node&gt;&gt; nodes;  <span class="comment">///&lt; Nodes of the model</span></div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>  std::vector&lt;std::string&gt; node_names;       <span class="comment">///&lt; Names of the nodes</span></div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span> </div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>  std::vector&lt;Parameter&gt; parameters;     <span class="comment">///&lt; Parameters of the model</span></div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>  std::vector&lt;double&gt; parameter_values;  <span class="comment">///&lt; Current values of the parameters</span></div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>};</div>
+</div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_MODEL_MODEL_HPP_</span></div>
 <div class="ttc" id="a_block_8h_html"><div class="ttname"><a href="_block_8h.html">Block.h</a></div><div class="ttdoc">model::Block source file</div></div>
 <div class="ttc" id="a_blood_vessel_8h_html"><div class="ttname"><a href="_blood_vessel_8h.html">BloodVessel.h</a></div><div class="ttdoc">model::BloodVessel source file</div></div>
 <div class="ttc" id="a_blood_vessel_junction_8h_html"><div class="ttname"><a href="_blood_vessel_junction_8h.html">BloodVesselJunction.h</a></div><div class="ttdoc">model::BloodVesselJunction source file</div></div>
@@ -396,13 +403,14 @@ $(document).ready(function() { init_codefold(0); });
 <div class="ttc" id="aclass_model_html_a3b7de6bf5cd52e736f1c12c0e4b92c76"><div class="ttname"><a href="class_model.html#a3b7de6bf5cd52e736f1c12c0e4b92c76">Model::add_block</a></div><div class="ttdeci">int add_block(BlockType block_type, const std::vector&lt; int &gt; &amp;block_param_ids, const std::string_view &amp;name, bool internal=false)</div><div class="ttdoc">Add a block to the model.</div><div class="ttdef"><b>Definition</b> Model.cpp:39</div></div>
 <div class="ttc" id="aclass_model_html_a3e04c2123ba490a0eda60ff54afc22a7"><div class="ttname"><a href="class_model.html#a3e04c2123ba490a0eda60ff54afc22a7">Model::update_constant</a></div><div class="ttdeci">void update_constant(SparseSystem &amp;system)</div><div class="ttdoc">Update the constant contributions of all elements in a sparse system.</div><div class="ttdef"><b>Definition</b> Model.cpp:234</div></div>
 <div class="ttc" id="aclass_model_html_a3f83e95429fee19daecf9ca5d5252c1a"><div class="ttname"><a href="class_model.html#a3f83e95429fee19daecf9ca5d5252c1a">Model::get_block_type</a></div><div class="ttdeci">BlockType get_block_type(const std::string_view &amp;name) const</div><div class="ttdoc">Get a block type by its name.</div><div class="ttdef"><b>Definition</b> Model.cpp:143</div></div>
-<div class="ttc" id="aclass_model_html_a78157bd7409586bf16117e4cb66ad13a"><div class="ttname"><a href="class_model.html#a78157bd7409586bf16117e4cb66ad13a">Model::to_unsteady</a></div><div class="ttdeci">void to_unsteady()</div><div class="ttdoc">Convert the blocks to an unsteady behavior.</div><div class="ttdef"><b>Definition</b> Model.cpp:277</div></div>
+<div class="ttc" id="aclass_model_html_a78157bd7409586bf16117e4cb66ad13a"><div class="ttname"><a href="class_model.html#a78157bd7409586bf16117e4cb66ad13a">Model::to_unsteady</a></div><div class="ttdeci">void to_unsteady()</div><div class="ttdoc">Convert the blocks to an unsteady behavior.</div><div class="ttdef"><b>Definition</b> Model.cpp:283</div></div>
 <div class="ttc" id="aclass_model_html_a8ce031238b1407330ce0adca578d1bb7"><div class="ttname"><a href="class_model.html#a8ce031238b1407330ce0adca578d1bb7">Model::add_parameter</a></div><div class="ttdeci">int add_parameter(double value)</div><div class="ttdoc">Add a constant model parameter.</div><div class="ttdef"><b>Definition</b> Model.cpp:173</div></div>
 <div class="ttc" id="aclass_model_html_a923b97e77cd284f3163637b8fa1187ab"><div class="ttname"><a href="class_model.html#a923b97e77cd284f3163637b8fa1187ab">Model::cardiac_cycle_period</a></div><div class="ttdeci">double cardiac_cycle_period</div><div class="ttdoc">Cardiac cycle period.</div><div class="ttdef"><b>Definition</b> Model.h:85</div></div>
 <div class="ttc" id="aclass_model_html_a9b8ebfbff548d6e22190ee99c7b01ebc"><div class="ttname"><a href="class_model.html#a9b8ebfbff548d6e22190ee99c7b01ebc">Model::get_block</a></div><div class="ttdeci">Block * get_block(const std::string_view &amp;name) const</div><div class="ttdoc">Get a block by its name.</div><div class="ttdef"><b>Definition</b> Model.cpp:125</div></div>
-<div class="ttc" id="aclass_model_html_ab5034dbf60991e67d52cdecf29abc47d"><div class="ttname"><a href="class_model.html#ab5034dbf60991e67d52cdecf29abc47d">Model::get_num_triplets</a></div><div class="ttdeci">TripletsContributions get_num_triplets() const</div><div class="ttdoc">Get number of triplets all elements.</div><div class="ttdef"><b>Definition</b> Model.cpp:290</div></div>
+<div class="ttc" id="aclass_model_html_a9f6ce7f8b525fb3d84e3fb578653c05f"><div class="ttname"><a href="class_model.html#a9f6ce7f8b525fb3d84e3fb578653c05f">Model::post_solve</a></div><div class="ttdeci">void post_solve(Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</div><div class="ttdoc">Modify the solution after solving it.</div><div class="ttdef"><b>Definition</b> Model.cpp:260</div></div>
+<div class="ttc" id="aclass_model_html_ab5034dbf60991e67d52cdecf29abc47d"><div class="ttname"><a href="class_model.html#ab5034dbf60991e67d52cdecf29abc47d">Model::get_num_triplets</a></div><div class="ttdeci">TripletsContributions get_num_triplets() const</div><div class="ttdoc">Get number of triplets all elements.</div><div class="ttdef"><b>Definition</b> Model.cpp:296</div></div>
 <div class="ttc" id="aclass_model_html_ac08e6be5375c12b4f09dfd3e88552e46"><div class="ttname"><a href="class_model.html#ac08e6be5375c12b4f09dfd3e88552e46">Model::time</a></div><div class="ttdeci">double time</div><div class="ttdoc">Current time.</div><div class="ttdef"><b>Definition</b> Model.h:86</div></div>
-<div class="ttc" id="aclass_model_html_ac7fb5f5b690063e23e3a54b0f5d7b6d7"><div class="ttname"><a href="class_model.html#ac7fb5f5b690063e23e3a54b0f5d7b6d7">Model::to_steady</a></div><div class="ttdeci">void to_steady()</div><div class="ttdoc">Convert the blocks to a steady behavior.</div><div class="ttdef"><b>Definition</b> Model.cpp:260</div></div>
+<div class="ttc" id="aclass_model_html_ac7fb5f5b690063e23e3a54b0f5d7b6d7"><div class="ttname"><a href="class_model.html#ac7fb5f5b690063e23e3a54b0f5d7b6d7">Model::to_steady</a></div><div class="ttdeci">void to_steady()</div><div class="ttdoc">Convert the blocks to a steady behavior.</div><div class="ttdef"><b>Definition</b> Model.cpp:266</div></div>
 <div class="ttc" id="aclass_model_html_ad6ebd2062a0b823db841a0b88baac4c0"><div class="ttname"><a href="class_model.html#ad6ebd2062a0b823db841a0b88baac4c0">Model::~Model</a></div><div class="ttdeci">~Model()</div><div class="ttdoc">Destroy the Model object.</div><div class="ttdef"><b>Definition</b> Model.cpp:37</div></div>
 <div class="ttc" id="aclass_model_html_ae3b375de5f6df4faf74a95d64748e048"><div class="ttname"><a href="class_model.html#ae3b375de5f6df4faf74a95d64748e048">Model::Model</a></div><div class="ttdeci">Model()</div><div class="ttdoc">Construct a new Model object.</div><div class="ttdef"><b>Definition</b> Model.cpp:35</div></div>
 <div class="ttc" id="aclass_model_html_aed4cc9690760cc207241b5dd33497b8d"><div class="ttname"><a href="class_model.html#aed4cc9690760cc207241b5dd33497b8d">Model::update_solution</a></div><div class="ttdeci">void update_solution(SparseSystem &amp;system, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</div><div class="ttdoc">Update the solution-dependent contributions of all elements in a sparse system.</div><div class="ttdef"><b>Definition</b> Model.cpp:252</div></div>
@@ -411,7 +419,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="ttc" id="aclass_model_html_af73b0937d32dfbf085d7f74fe02e55b9"><div class="ttname"><a href="class_model.html#af73b0937d32dfbf085d7f74fe02e55b9">Model::get_parameter</a></div><div class="ttdeci">Parameter * get_parameter(int param_id)</div><div class="ttdoc">Get a parameter by its global ID.</div><div class="ttdef"><b>Definition</b> Model.cpp:195</div></div>
 <div class="ttc" id="aclass_model_html_afe47a4ac7609b53d9b9b476609162fcb"><div class="ttname"><a href="class_model.html#afe47a4ac7609b53d9b9b476609162fcb">Model::dofhandler</a></div><div class="ttdeci">DOFHandler dofhandler</div><div class="ttdoc">Degree-of-freedom handler of the model.</div><div class="ttdef"><b>Definition</b> Model.h:83</div></div>
 <div class="ttc" id="aclass_parameter_html"><div class="ttname"><a href="class_parameter.html">Parameter</a></div><div class="ttdoc">Model Parameter.</div><div class="ttdef"><b>Definition</b> Parameter.h:51</div></div>
-<div class="ttc" id="aclass_sparse_system_html"><div class="ttname"><a href="class_sparse_system.html">SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:86</div></div>
+<div class="ttc" id="aclass_sparse_system_html"><div class="ttname"><a href="class_sparse_system.html">SparseSystem</a></div><div class="ttdoc">Sparse system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:88</div></div>
 <div class="ttc" id="astruct_triplets_contributions_html"><div class="ttname"><a href="struct_triplets_contributions.html">TripletsContributions</a></div><div class="ttdoc">The number of triplets that the element contributes to the global system.</div><div class="ttdef"><b>Definition</b> Block.h:49</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

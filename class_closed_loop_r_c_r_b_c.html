@@ -138,9 +138,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block" id="r_a75efe51f152ba4c3f8bab02012ec0dff"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a75efe51f152ba4c3f8bab02012ec0dff">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a75efe51f152ba4c3f8bab02012ec0dff inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block" id="r_a601b2e856c7fa56b8c3898b0cfa57b69"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a601b2e856c7fa56b8c3898b0cfa57b69">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
-<tr class="memdesc:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
-<tr class="separator:a601b2e856c7fa56b8c3898b0cfa57b69 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block" id="r_a3d48d0c71bf9f5b416f01a6414b0da78"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a3d48d0c71bf9f5b416f01a6414b0da78">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
+<tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="separator:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="separator:ad4999d98ef4cd47bf8892c4e62142d1e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block" id="r_a96663232888eeb564e5f37db98fc655f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a96663232888eeb564e5f37db98fc655f">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block contributions with respect to the parameters.  <br /></td></tr>
 <tr class="separator:a96663232888eeb564e5f37db98fc655f inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -186,7 +189,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Closed-loop RCR boundary condition. </p>
 <p>Models the mechanical behavior of a Windkessel boundary condition that is connected to other blocks on both sides.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_87_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_85_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -197,57 +200,57 @@ node[anchor=south]{$P_{out}$}
 node[ground]{$P_{C}$};
 \draw [-latex] (5.2,0) -- (6.0,0) node[right] {$Q_{out}$} ;
 \end{circuitikz}
-\]" src="form_87.png" width="266" height="96"/></picture>
+\]" src="form_85.png" width="266" height="96"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md12"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_88_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_86_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 C \frac{d P_c}{dt} + Q_{out} -Q_{in} = 0
-\]" src="form_88.png" width="131" height="28"/></picture>
+\]" src="form_86.png" width="131" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_89_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_87_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_{in}-P_{c}-R_{p} Q_{in}=0
-\]" src="form_89.png" width="120" height="14"/></picture>
+\]" src="form_87.png" width="120" height="14"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_90_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_88_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_{c} - P_{out} - R_{d} Q_{out}=0
-\]" src="form_90.png" width="130" height="13"/></picture>
+\]" src="form_88.png" width="130" height="13"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md13"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_91_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_89_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp; P_{out} &amp; Q_{out} &amp;
-P_{c}\end{array}\right]^{T} \]" src="form_91.png" width="205" height="19"/></picture>
+P_{c}\end{array}\right]^{T} \]" src="form_89.png" width="205" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_92_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_90_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 &amp; 0 &amp; 0 &amp; 0 &amp; C \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
 \end{array}\right]
-\]" src="form_92.png" width="143" height="46"/></picture>
+\]" src="form_90.png" width="143" height="46"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_93_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_91_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ccccc}
 0 &amp; -1 &amp; 1 &amp; 0 &amp; 0 \\
 1 &amp; -R_p &amp; 0 &amp; 0 &amp; -1 \\
 0 &amp; 0 &amp; -1 &amp; -R_d &amp; +1 \\
 \end{array}\right]
-\]" src="form_93.png" width="195" height="46"/></picture>
+\]" src="form_91.png" width="195" height="46"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_94_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_92_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 0 \\
 0
 \end{array}\right]
-\]" src="form_94.png" width="59" height="31"/></picture>
+\]" src="form_92.png" width="59" height="31"/></picture>
 </p>
 <h3><a class="anchor" id="autotoc_md14"></a>
 Parameters</h3>

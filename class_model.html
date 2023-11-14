@@ -139,6 +139,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aed4cc9690760cc207241b5dd33497b8d" id="r_aed4cc9690760cc207241b5dd33497b8d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#aed4cc9690760cc207241b5dd33497b8d">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
 <tr class="memdesc:aed4cc9690760cc207241b5dd33497b8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of all elements in a sparse system.  <br /></td></tr>
 <tr class="separator:aed4cc9690760cc207241b5dd33497b8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f6ce7f8b525fb3d84e3fb578653c05f" id="r_a9f6ce7f8b525fb3d84e3fb578653c05f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#a9f6ce7f8b525fb3d84e3fb578653c05f">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:a9f6ce7f8b525fb3d84e3fb578653c05f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="separator:a9f6ce7f8b525fb3d84e3fb578653c05f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac7fb5f5b690063e23e3a54b0f5d7b6d7" id="r_ac7fb5f5b690063e23e3a54b0f5d7b6d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#ac7fb5f5b690063e23e3a54b0f5d7b6d7">to_steady</a> ()</td></tr>
 <tr class="memdesc:ac7fb5f5b690063e23e3a54b0f5d7b6d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the blocks to a steady behavior.  <br /></td></tr>
 <tr class="separator:ac7fb5f5b690063e23e3a54b0f5d7b6d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -629,6 +632,32 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>T Current value of the parameter </dd></dl>
+
+</div>
+</div>
+<a id="a9f6ce7f8b525fb3d84e3fb578653c05f" name="a9f6ce7f8b525fb3d84e3fb578653c05f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f6ce7f8b525fb3d84e3fb578653c05f">&#9670;&#160;</a></span>post_solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::post_solve </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Modify the solution after solving it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>Current solution </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

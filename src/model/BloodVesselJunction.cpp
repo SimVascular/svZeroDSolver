@@ -33,8 +33,9 @@
 // Define block properties
 const BlockClass block_class = BlockClass::junction;
 const std::string input_name = "BloodVesselJunction";
-const std::vector<std::string> BloodVesselJunction::input_params = {
-    "R_poiseuille", "L", "stenosis_coefficient"};
+const std::vector<InputParameter> BloodVesselJunction::input_params = {
+    InputParameter("R_poiseuille"), InputParameter("L"),
+    InputParameter("stenosis_coefficient")};
 
 void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) {
   if (inlet_nodes.size() != 1) {

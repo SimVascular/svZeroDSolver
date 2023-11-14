@@ -35,11 +35,21 @@
 // Define block properties
 const BlockClass block_class = BlockClass::closed_loop;
 const std::string input_name = "ClosedLoopHeartAndPulmonary";
-const std::vector<std::string> ClosedLoopHeartPulmonary::input_params = {
-    "Tsa",    "tpwave", "Erv_s",   "Elv_s",   "iml",     "imr",    "Lra_v",
-    "Rra_v",  "Lrv_a",  "Rrv_a",   "Lla_v",   "Rla_v",   "Llv_a",  "Rlv_ao",
-    "Vrv_u",  "Vlv_u",  "Rpd",     "Cp",      "Cpa",     "Kxp_ra", "Kxv_ra",
-    "Kxp_la", "Kxv_la", "Emax_ra", "Emax_la", "Vaso_ra", "Vaso_la"};
+const std::vector<InputParameter> ClosedLoopHeartPulmonary::input_params = {
+    InputParameter("Tsa"),     InputParameter("tpwave"),
+    InputParameter("Erv_s"),   InputParameter("Elv_s"),
+    InputParameter("iml"),     InputParameter("imr"),
+    InputParameter("Lra_v"),   InputParameter("Rra_v"),
+    InputParameter("Lrv_a"),   InputParameter("Rrv_a"),
+    InputParameter("Lla_v"),   InputParameter("Rla_v"),
+    InputParameter("Llv_a"),   InputParameter("Rlv_ao"),
+    InputParameter("Vrv_u"),   InputParameter("Vlv_u"),
+    InputParameter("Rpd"),     InputParameter("Cp"),
+    InputParameter("Cpa"),     InputParameter("Kxp_ra"),
+    InputParameter("Kxv_ra"),  InputParameter("Kxp_la"),
+    InputParameter("Kxv_la"),  InputParameter("Emax_ra"),
+    InputParameter("Emax_la"), InputParameter("Vaso_ra"),
+    InputParameter("Vaso_la")};
 
 void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 14,

@@ -33,7 +33,8 @@
 // Define block properties
 const BlockClass block_class = BlockClass::boundary_condition;
 const std::string input_name = "RESISTANCE";
-const std::vector<std::string> ResistanceBC::input_params = {"R", "Pd"};
+const std::vector<InputParameter> ResistanceBC::input_params = {
+    InputParameter("R", false, true), InputParameter("Pd", false, true)};
 
 void ResistanceBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 1, {});

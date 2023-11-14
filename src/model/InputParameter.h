@@ -27,25 +27,31 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+/**
+ * @file InputParameter.h
+ * @brief Class for input parameters
+ */
+#ifndef SVZERODSOLVER_MODEL_INPUT_PARAMETER_HPP_
+#define SVZERODSOLVER_MODEL_INPUT_PARAMETER_HPP_
 
-#include "PressureReferenceBC.h"
+#include <string>
+/**
+ * @brief Input file Parameter.
+ *
+ */
+class InputParameter {
+ public:
+  /**
+   * @brief Construct a new InputParameter object
+   *
+   */
+  InputParameter(const std::string name, const bool is_optional = false,
+                 const bool is_array = false, const double default_val = 0.0);
 
-// Define block properties
-const BlockClass block_class = BlockClass::boundary_condition;
-const std::string input_name = "PRESSURE";
-const std::vector<InputParameter> PressureReferenceBC::input_params = {
-    InputParameter("P", false, true)};
+  std::string name;    ///< Name in input file
+  bool is_optional;    ///< Is this parameter optional
+  bool is_array;       ///< Is this parameter an array (or a scalar)
+  double default_val;  ///< Default value (if parameter is optional)
+};
 
-void PressureReferenceBC::setup_dofs(DOFHandler &dofhandler) {
-  Block::setup_dofs_(dofhandler, 1, {});
-}
-
-void PressureReferenceBC::update_constant(SparseSystem &system,
-                                          std::vector<double> &parameters) {
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
-}
-
-void PressureReferenceBC::update_time(SparseSystem &system,
-                                      std::vector<double> &parameters) {
-  system.C(global_eqn_ids[0]) = -parameters[global_param_ids[0]];
-}
+#endif  // SVZERODSOLVER_MODEL_INPUT_PARAMETER_HPP_

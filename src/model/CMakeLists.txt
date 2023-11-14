@@ -41,6 +41,7 @@ set(CXXSRCS
   ClosedLoopRCRBC.cpp
   DOFHandler.cpp
   FlowReferenceBC.cpp
+  InputParameter.cpp
   Junction.cpp
   Model.cpp
   Node.cpp
@@ -62,6 +63,7 @@ set(HDRS
   ClosedLoopRCRBC.h
   DOFHandler.h
   FlowReferenceBC.h
+  InputParameter.h
   Junction.h
   Model.h
   Node.h

@@ -35,8 +35,9 @@
 // Define block properties
 const BlockClass block_class = BlockClass::boundary_condition;
 const std::string input_name = "ClosedLoopCoronary";
-const std::vector<std::string> ClosedLoopCoronaryBC::input_params = {
-    "Ra", "Ram", "Rv", "Ca", "Cim"};
+const std::vector<InputParameter> ClosedLoopCoronaryBC::input_params = {
+    InputParameter("Ra"), InputParameter("Ram"), InputParameter("Rv"),
+    InputParameter("Ca"), InputParameter("Cim")};
 
 void ClosedLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"volume_im"});

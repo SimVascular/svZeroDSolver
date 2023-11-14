@@ -28,24 +28,12 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "PressureReferenceBC.h"
+#include "InputParameter.h"
 
-// Define block properties
-const BlockClass block_class = BlockClass::boundary_condition;
-const std::string input_name = "PRESSURE";
-const std::vector<InputParameter> PressureReferenceBC::input_params = {
-    InputParameter("P", false, true)};
-
-void PressureReferenceBC::setup_dofs(DOFHandler &dofhandler) {
-  Block::setup_dofs_(dofhandler, 1, {});
-}
-
-void PressureReferenceBC::update_constant(SparseSystem &system,
-                                          std::vector<double> &parameters) {
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
-}
-
-void PressureReferenceBC::update_time(SparseSystem &system,
-                                      std::vector<double> &parameters) {
-  system.C(global_eqn_ids[0]) = -parameters[global_param_ids[0]];
+InputParameter::InputParameter(const std::string name, const bool is_optional,
+                               const bool is_array, const double default_val) {
+  this->name = name;
+  this->is_optional = is_optional;
+  this->is_array = is_array;
+  this->default_val = default_val;
 }

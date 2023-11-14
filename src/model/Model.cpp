@@ -35,7 +35,7 @@
 
 Model::Model() {
   // Add all blocks to factory
-  blockFactoryMap = {
+  block_factory_map = {
       {BlockType::blood_vessel,
        [](int count, const std::vector<int> &params, Model *model) {
          return new BloodVessel(count, params, model);
@@ -96,8 +96,8 @@ int Model::add_block(BlockType block_type,
                      const std::vector<int> &block_param_ids,
                      const std::string_view &name, bool internal) {
   // Get block from factory
-  auto it = blockFactoryMap.find(block_type);
-  if (it == blockFactoryMap.end()) {
+  auto it = block_factory_map.find(block_type);
+  if (it == block_factory_map.end()) {
     throw std::runtime_error(
         "Adding block to model failed: Invalid block type!");
   }

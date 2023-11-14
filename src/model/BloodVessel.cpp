@@ -33,8 +33,9 @@
 // Define block properties
 const BlockClass block_class = BlockClass::vessel;
 const std::string input_name = "BloodVessel";
-const std::vector<std::string> BloodVessel::input_params = {
-    "R_poiseuille", "C", "L", "stenosis_coefficient"};
+const std::vector<InputParameter> BloodVessel::input_params = {
+    InputParameter("R_poiseuille"), InputParameter("C", true),
+    InputParameter("L", true), InputParameter("stenosis_coefficient", true)};
 
 void BloodVessel::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {});

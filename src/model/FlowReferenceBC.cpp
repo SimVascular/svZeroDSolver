@@ -33,7 +33,8 @@
 // Define block properties
 const BlockClass block_class = BlockClass::boundary_condition;
 const std::string input_name = "FLOW";
-const std::vector<std::string> FlowReferenceBC::input_params = {"Q"};
+const std::vector<InputParameter> FlowReferenceBC::input_params = {
+    InputParameter("Q", false, true)};
 
 void FlowReferenceBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 1, {});

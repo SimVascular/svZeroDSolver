@@ -124,7 +124,7 @@ class ClosedLoopCoronaryBC : public Block {
 
   static const BlockClass block_class;  ///< Class of this block
   static const std::string input_name;  ///< Name of block in input file
-  static const std::vector<std::string>
+  static const std::vector<InputParameter>
       input_params;  ///< List of input parameter names
 
   /**

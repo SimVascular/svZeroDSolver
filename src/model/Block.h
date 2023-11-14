@@ -42,6 +42,7 @@
 #include "DOFHandler.h"
 #include "SparseSystem.h"
 #include "BlockType.h"
+#include "InputParameter.h"
 
 /**
  * @brief The number of triplets that the element contributes
@@ -101,7 +102,7 @@ class Block {
 
   static BlockClass block_class;  ///< Class of this block
   static std::string input_name;  ///< Name of block in input file
-  static std::vector<std::string>
+  static std::vector<InputParameter>
       input_params;  ///< List of input parameter names
 
   std::vector<Node *> inlet_nodes;   ///< Inlet nodes

@@ -51,7 +51,8 @@ enum class BlockClass {
   vessel = 0,
   junction = 1,
   boundary_condition = 2,
-  closed_loop = 3
+  closed_loop = 3,
+  external = 4
 };
 
 #endif

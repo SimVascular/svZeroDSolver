@@ -32,6 +32,9 @@
 
 #include "Model.h"
 
+const std::vector<std::string> ClosedLoopCoronaryBC::input_params = {
+    "Ra", "Ram", "Rv", "Ca", "Cim"};
+
 void ClosedLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"volume_im"});
 }

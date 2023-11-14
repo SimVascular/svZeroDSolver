@@ -30,6 +30,9 @@
 
 #include "OpenLoopCoronaryBC.h"
 
+const std::vector<std::string> OpenLoopCoronaryBC::input_params = {
+    "Ra1", "Ra2", "Rv1", "Ca", "Cc", "Pim", "P_v"};
+
 void OpenLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {"volume_im"});
 }

@@ -30,6 +30,8 @@
 
 #include "WindkesselBC.h"
 
+const std::vector<std::string> WindkesselBC::input_params = {"Rp", "C", "Rd", "Pd"};
+
 void WindkesselBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {"pressure_c"});
 }

@@ -30,6 +30,9 @@
 
 #include "ClosedLoopRCRBC.h"
 
+const std::vector<std::string> ClosedLoopRCRBC::input_params = {
+    "Rp", "C", "Rd"};
+
 void ClosedLoopRCRBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"P_c"});
 }

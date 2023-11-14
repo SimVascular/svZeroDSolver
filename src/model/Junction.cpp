@@ -30,6 +30,8 @@
 
 #include "Junction.h"
 
+const std::vector<std::string> Junction::input_params = {};
+
 void Junction::setup_dofs(DOFHandler &dofhandler) {
   // Set number of equations of a junction block based on number of
   // inlets/outlets. Must be set before calling parent constructor

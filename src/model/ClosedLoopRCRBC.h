@@ -114,6 +114,12 @@ class ClosedLoopRCRBC : public Block {
   using Block::Block;
 
   /**
+   * @brief Specify input parameter names
+   *
+   */
+  static const std::vector<std::string> input_params;
+
+  /**
    * @brief Local IDs of the parameters
    *
    */

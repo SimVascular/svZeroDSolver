@@ -30,6 +30,8 @@
 
 #include "FlowReferenceBC.h"
 
+const std::vector<std::string> FlowReferenceBC::input_params = {"Q"};
+
 void FlowReferenceBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 1, {});
 }

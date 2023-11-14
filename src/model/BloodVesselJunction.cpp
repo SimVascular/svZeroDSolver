@@ -30,6 +30,9 @@
 
 #include "BloodVesselJunction.h"
 
+const std::vector<std::string> BloodVesselJunction::input_params = {
+    "R_poiseuille", "L", "stenosis_coefficient"};
+
 void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) {
   if (inlet_nodes.size() != 1) {
     throw std::runtime_error(

@@ -30,6 +30,9 @@
 
 #include "BloodVessel.h"
 
+const std::vector<std::string> BloodVessel::input_params = {
+    "R_poiseuille", "C", "L", "stenosis_coefficient"};
+
 void BloodVessel::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {});
 }

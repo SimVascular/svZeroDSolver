@@ -84,6 +84,12 @@ class FlowReferenceBC : public Block {
   using Block::Block;
 
   /**
+   * @brief Specify input parameter names
+   *
+   */
+  static const std::vector<std::string> input_params;
+
+  /**
    * @brief Set up the degrees of freedom (DOF) of the block
    *
    * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the

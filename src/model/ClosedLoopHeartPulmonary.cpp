@@ -32,6 +32,12 @@
 
 #include "Model.h"
 
+const std::vector<std::string> ClosedLoopHeartPulmonary::input_params = {
+    "Tsa",    "tpwave", "Erv_s",   "Elv_s",   "iml",     "imr",    "Lra_v",
+    "Rra_v",  "Lrv_a",  "Rrv_a",   "Lla_v",   "Rla_v",   "Llv_a",  "Rlv_ao",
+    "Vrv_u",  "Vlv_u",  "Rpd",     "Cp",      "Cpa",     "Kxp_ra", "Kxv_ra",
+    "Kxp_la", "Kxv_la", "Emax_ra", "Emax_la", "Vaso_ra", "Vaso_la"};
+
 void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 14,
                      {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul", "P_LA",

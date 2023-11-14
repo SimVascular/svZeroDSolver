@@ -98,6 +98,8 @@ class Block {
   int id;        ///< Global ID of the block
   Model *model;  ///< The model to which the block belongs
 
+  static std::vector<std::string> input_params;  ///< List of input parameter names
+
   std::vector<Node *> inlet_nodes;   ///< Inlet nodes
   std::vector<Node *> outlet_nodes;  ///< Outlet nodes
 

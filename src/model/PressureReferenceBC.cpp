@@ -30,6 +30,8 @@
 
 #include "PressureReferenceBC.h"
 
+const std::vector<std::string> PressureReferenceBC::input_params = {"P"};
+
 void PressureReferenceBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 1, {});
 }

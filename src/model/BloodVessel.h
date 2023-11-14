@@ -154,6 +154,12 @@ class BloodVessel : public Block {
     STENOSIS_COEFFICIENT = 3,
   };
 
+  /**
+   * @brief Specify input parameter names
+   *
+   */
+  static const std::vector<std::string> input_params;
+
   explicit BloodVessel(int id, const std::vector<int> &param_ids, Model *model)
       : Block(id, param_ids, model){};
 

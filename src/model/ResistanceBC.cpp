@@ -30,6 +30,8 @@
 
 #include "ResistanceBC.h"
 
+const std::vector<std::string> ResistanceBC::input_params = {"R", "Pd"};
+
 void ResistanceBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 1, {});
 }

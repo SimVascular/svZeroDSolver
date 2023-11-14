@@ -189,9 +189,8 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
     AA = (0.5) * (1.0 - cos(2.0 * M_PI * (t_in_cycle - tpwave + Tsa) / Tsa));
   } else if ((t_in_cycle >= (T_cardiac - Tsa) + tpwave) and
              (t_in_cycle < T_cardiac)) {
-    AA =
-        (0.5) *
-        (1.0 - cos(2.0 * M_PI * (t_in_cycle - tpwave - (T_cardiac - Tsa)) / Tsa));
+    AA = (0.5) * (1.0 - cos(2.0 * M_PI *
+                            (t_in_cycle - tpwave - (T_cardiac - Tsa)) / Tsa));
   } else {
     AA = 0.0;
   }
@@ -217,9 +216,10 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
   double Elv_i = 0.0;
 
   for (auto i = 0; i < num_elast_modes; i++) {
-    Elv_i = Elv_i +
-            (Ft_elastance[i][0]) * cos(2.0 * M_PI * i * t_in_cycle / T_cardiac) -
-            (Ft_elastance[i][1]) * sin(2.0 * M_PI * i * t_in_cycle / T_cardiac);
+    Elv_i =
+        Elv_i +
+        (Ft_elastance[i][0]) * cos(2.0 * M_PI * i * t_in_cycle / T_cardiac) -
+        (Ft_elastance[i][1]) * sin(2.0 * M_PI * i * t_in_cycle / T_cardiac);
   }
 
   Elv = Elv_i * parameters[global_param_ids[ParamId::ELV_S]];

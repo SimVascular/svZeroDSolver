@@ -60,6 +60,13 @@ it with:
 make codecheck
 ```
 
+If the above commands do not work on your platform (it does not work on Sherlock at Stanford)
+you can run the following command **from the svZeroDPlus folder** to format all your files:
+
+```bash
+find src/**/*.h src/**/*.cpp | xargs clang-format -style=Google -i
+```
+
 The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and
 indicates on merge requests when the code doesnt yet meet all style
 requirements.

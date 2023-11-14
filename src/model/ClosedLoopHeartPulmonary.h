@@ -37,9 +37,13 @@
 #include "Block.h"
 #include "SparseSystem.h"
 
-// [TODO] get rid of PI.
-#define PI 3.14159265
-#include <math.h>
+/**
+ * @brief Define math constants (for M_PI)
+ *
+ */
+#define _USE_MATH_DEFINES
+
+#include <cmath>
 
 /**
  * @brief Heart and pulmonary circulation model

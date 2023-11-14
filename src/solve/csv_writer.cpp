@@ -38,6 +38,7 @@
  * @param model The underlying model
  * @param mean Toggle whether only the mean over all time steps should be
  * written
+ * @param derivative Toggle whether to output time-derivatives
  * @return CSV encoded output string
  */
 std::string to_vessel_csv(const std::vector<double> &times,
@@ -169,6 +170,7 @@ std::string to_vessel_csv(const std::vector<double> &times,
  * @param model The underlying model
  * @param mean Toggle whether only the mean over all time steps should be
  * written
+ * @param derivative Toggle whether to output time-derivatives
  * @return CSV encoded output string
  */
 std::string to_variable_csv(const std::vector<double> &times,

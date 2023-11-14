@@ -162,19 +162,19 @@ void ClosedLoopHeartPulmonary::update_solution(
   system.F.coeffRef(global_eqn_ids[7], global_var_ids[8]) = -valves[8];
 
   // DOF 4, Eq 2: Right atrium volume
-  system.F.coeffRef(global_eqn_ids[2], global_var_ids[5]) = 1.0 * valves[5];
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[5]) = valves[5];
 
   // DOF 7, Eq 5: Right ventricle volume
-  system.F.coeffRef(global_eqn_ids[5], global_var_ids[5]) = -1.0 * valves[5];
-  system.F.coeffRef(global_eqn_ids[5], global_var_ids[8]) = 1.0 * valves[8];
+  system.F.coeffRef(global_eqn_ids[5], global_var_ids[5]) = -valves[5];
+  system.F.coeffRef(global_eqn_ids[5], global_var_ids[8]) = valves[8];
 
   // DOF 11, Eq 9: Left atrium volume
-  system.F.coeffRef(global_eqn_ids[9], global_var_ids[8]) = -1.0 * valves[8];
-  system.F.coeffRef(global_eqn_ids[9], global_var_ids[12]) = 1.0 * valves[12];
+  system.F.coeffRef(global_eqn_ids[9], global_var_ids[8]) = -valves[8];
+  system.F.coeffRef(global_eqn_ids[9], global_var_ids[12]) = valves[12];
 
   // DOF 14, Eq 12: Left ventricle volume
-  system.F.coeffRef(global_eqn_ids[12], global_var_ids[12]) = -1.0 * valves[12];
-  system.F.coeffRef(global_eqn_ids[12], global_var_ids[15]) = 1.0 * valves[15];
+  system.F.coeffRef(global_eqn_ids[12], global_var_ids[12]) = -valves[12];
+  system.F.coeffRef(global_eqn_ids[12], global_var_ids[15]) = valves[15];
 
   // DOF 5, Eq 3: Right atrium outflow
   system.F.coeffRef(global_eqn_ids[3], global_var_ids[5]) =

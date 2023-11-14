@@ -30,82 +30,79 @@
 
 #include "Model.h"
 
+#include "BlockFactory.h"
 #include "Node.h"
 
-Model::Model() {}
+Model::Model() {
+  // Add all blocks to factory
+  blockFactoryMap = {
+      {BlockType::blood_vessel,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new BloodVessel(count, params, model);
+       }},
+      {BlockType::junction,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new Junction(count, params, model);
+       }},
+      {BlockType::blood_vessel_junction,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new BloodVesselJunction(count, params, model);
+       }},
+      {BlockType::resistive_junction,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new ResistiveJunction(count, params, model);
+       }},
+      {BlockType::flow_bc,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new FlowReferenceBC(count, params, model);
+       }},
+      {BlockType::resistance_bc,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new ResistanceBC(count, params, model);
+       }},
+      {BlockType::windkessel_bc,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new WindkesselBC(count, params, model);
+       }},
+      {BlockType::pressure_bc,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new PressureReferenceBC(count, params, model);
+       }},
+      {BlockType::open_loop_coronary_bc,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new OpenLoopCoronaryBC(count, params, model);
+       }},
+      {BlockType::closed_loop_coronary_lefT_bc,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new ClosedLoopCoronaryBC(count, params, model, Side::LEFT);
+       }},
+      {BlockType::closed_loop_coronary_right_bc,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new ClosedLoopCoronaryBC(count, params, model, Side::RIGHT);
+       }},
+      {BlockType::closed_loop_rcr_bc,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new ClosedLoopRCRBC(count, params, model);
+       }},
+      {BlockType::closed_loop_heart_pulmonary,
+       [](int count, const std::vector<int> &params, Model *model) {
+         return new ClosedLoopHeartPulmonary(count, params, model);
+       }}};
+}
 
 Model::~Model() {}
 
 int Model::add_block(BlockType block_type,
                      const std::vector<int> &block_param_ids,
                      const std::string_view &name, bool internal) {
-  // DEBUG_MSG("Adding block " << name << " with type " << block_type);
-
-  Block *block{nullptr};
-
-  switch (block_type) {
-    case BlockType::blood_vessel:
-      block = new BloodVessel(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::junction:
-      block = new Junction(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::blood_vessel_junction:
-      block = new BloodVesselJunction(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::resistive_junction:
-      block = new ResistiveJunction(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::flow_bc:
-      block = new FlowReferenceBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::resistnce_bc:
-      block = new ResistanceBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::windkessel_bc:
-      block = new WindkesselBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::pressure_bc:
-      block = new PressureReferenceBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::open_loop_coronary_bc:
-      block = new OpenLoopCoronaryBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::closed_loop_coronary_lefT_bc:
-      block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
-                                       Side::LEFT);
-      // new ClosedLoopCoronaryBC<double, MODEL::Side::LEFT>(
-      //     block_count, block_param_ids, this));
-      break;
-
-    case BlockType::closed_loop_coronary_right_bc:
-      block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
-                                       Side::RIGHT);
-      // block = new ClosedLoopCoronaryBC<double, MODEL::Side::RIGHT>(
-      //         block_count, block_param_ids, this));
-      break;
-
-    case BlockType::closed_loop_rcr_bc:
-      block = new ClosedLoopRCRBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::closed_loop_heart_pulmonary:
-      block = new ClosedLoopHeartPulmonary(block_count, block_param_ids, this);
-      break;
-
-    default:
-      throw std::runtime_error(
-          "Adding block to model failed: Invalid block type!");
+  // Get block from factory
+  auto it = blockFactoryMap.find(block_type);
+  if (it == blockFactoryMap.end()) {
+    throw std::runtime_error(
+        "Adding block to model failed: Invalid block type!");
   }
+
+  Block *block = it->second(block_count, block_param_ids, this);
 
   auto name_string = static_cast<std::string>(name);
 

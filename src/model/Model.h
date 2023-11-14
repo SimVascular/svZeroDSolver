@@ -43,6 +43,7 @@
 #include <vector>
 
 #include "Block.h"
+#include "BlockFactory.h"
 #include "BloodVessel.h"
 #include "BloodVesselJunction.h"
 #include "ClosedLoopCoronaryBC.h"
@@ -68,6 +69,9 @@
  */
 class Model {
  public:
+  /// Factory that holds all implemented blocks
+  std::map<BlockType, BlockFactoryFunc> blockFactoryMap;
+
   /**
    * @brief Construct a new Model object
    *

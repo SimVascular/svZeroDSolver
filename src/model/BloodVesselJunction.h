@@ -35,7 +35,6 @@
 #define SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
 
 #include "Block.h"
-#include "BlockType.h"
 #include "BloodVessel.h"
 #include "SparseSystem.h"
 

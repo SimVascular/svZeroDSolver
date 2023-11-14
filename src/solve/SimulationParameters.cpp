@@ -284,7 +284,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
     } else if (bc_type == "RESISTANCE") {
       model.add_block(
-          BlockType::resistnce_bc,
+          BlockType::resistance_bc,
           {model.add_parameter(t, get_double_array(bc_values, "R")),
            model.add_parameter(t, get_double_array(bc_values, "Pd"))},
           bc_name);

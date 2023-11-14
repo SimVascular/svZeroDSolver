@@ -28,23 +28,13 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
-#define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
+#ifndef SVZERODSOLVER_MODEL_BLOCK_FACTORY_HPP_
+#define SVZERODSOLVER_MODEL_BLOCK_FACTORY_HPP_
 
-enum class BlockType {
-  blood_vessel = 0,
-  junction = 1,
-  blood_vessel_junction = 2,
-  resistive_junction = 3,
-  flow_bc = 4,
-  pressure_bc = 5,
-  resistance_bc = 6,
-  windkessel_bc = 7,
-  open_loop_coronary_bc = 8,
-  closed_loop_coronary_lefT_bc = 9,
-  closed_loop_coronary_right_bc = 10,
-  closed_loop_rcr_bc = 11,
-  closed_loop_heart_pulmonary = 12
-};
+#include <functional>
+#include <vector>
+#include "Block.h" 
+
+using BlockFactoryFunc = std::function<Block*(int, const std::vector<int>&, Model*)>;
 
 #endif

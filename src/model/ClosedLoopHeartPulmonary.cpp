@@ -32,25 +32,6 @@
 
 #include "Model.h"
 
-// Define block properties
-const BlockClass block_class = BlockClass::closed_loop;
-const std::string input_name = "ClosedLoopHeartAndPulmonary";
-const std::vector<InputParameter> ClosedLoopHeartPulmonary::input_params = {
-    InputParameter("Tsa"),     InputParameter("tpwave"),
-    InputParameter("Erv_s"),   InputParameter("Elv_s"),
-    InputParameter("iml"),     InputParameter("imr"),
-    InputParameter("Lra_v"),   InputParameter("Rra_v"),
-    InputParameter("Lrv_a"),   InputParameter("Rrv_a"),
-    InputParameter("Lla_v"),   InputParameter("Rla_v"),
-    InputParameter("Llv_a"),   InputParameter("Rlv_ao"),
-    InputParameter("Vrv_u"),   InputParameter("Vlv_u"),
-    InputParameter("Rpd"),     InputParameter("Cp"),
-    InputParameter("Cpa"),     InputParameter("Kxp_ra"),
-    InputParameter("Kxv_ra"),  InputParameter("Kxp_la"),
-    InputParameter("Kxv_la"),  InputParameter("Emax_ra"),
-    InputParameter("Emax_la"), InputParameter("Vaso_ra"),
-    InputParameter("Vaso_la")};
-
 void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 14,
                      {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul", "P_LA",

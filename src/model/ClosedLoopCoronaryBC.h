@@ -119,13 +119,15 @@ enum class Side { LEFT, RIGHT, NONE };
 class ClosedLoopCoronaryBC : public Block {
  public:
   explicit ClosedLoopCoronaryBC(int id, const std::vector<int> &param_ids,
-                                Model *model, Side side)
-      : Block(id, param_ids, model), side{side} {};
+                                Model *model)
+      : Block(id, param_ids, model){};
 
-  static const BlockClass block_class;  ///< Class of this block
-  static const std::string input_name;  ///< Name of block in input file
-  static const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  // Define block properties
+  const BlockType block_type = BlockType::closed_loop_coronary;
+  const BlockClass block_class = BlockClass::boundary_condition;
+  const std::vector<InputParameter> input_params = {
+      InputParameter("Ra"), InputParameter("Ram"), InputParameter("Rv"),
+      InputParameter("Ca"), InputParameter("Cim")};
 
   /**
    * @brief Local IDs of the parameters

@@ -310,9 +310,9 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       std::string side = bc_values["side"];
       BlockType block_type;
       if (side == "left") {
-        block_type = BlockType::closed_loop_coronary_lefT_bc;
+        block_type = BlockType::closed_loop_coronary;
       } else if (side == "right") {
-        block_type = BlockType::closed_loop_coronary_right_bc;
+        block_type = BlockType::closed_loop_coronary;
       } else {
         throw std::runtime_error("Invalid side for ClosedLoopCoronary");
       }
@@ -321,7 +321,8 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
                        model.add_parameter(bc_values["Ram"]),
                        model.add_parameter(bc_values["Rv"]),
                        model.add_parameter(bc_values["Ca"]),
-                       model.add_parameter(bc_values["Cim"])},
+                       model.add_parameter(bc_values["Cim"]),
+                       model.add_parameter(bc_values["side"])},
                       bc_name);
       closed_loop_bcs.push_back(bc_name);
 

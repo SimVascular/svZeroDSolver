@@ -70,7 +70,7 @@
 class Model {
  public:
   /// Factory that holds all implemented blocks
-  std::map<BlockType, BlockFactoryFunc> block_factory_map;
+  std::map<std::string_view, BlockFactoryFunc> block_factory_map;
 
   /**
    * @brief Construct a new Model object

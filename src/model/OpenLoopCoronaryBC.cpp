@@ -30,15 +30,6 @@
 
 #include "OpenLoopCoronaryBC.h"
 
-// Define block properties
-const BlockClass block_class = BlockClass::boundary_condition;
-const std::string input_name = "CORONARY";
-const std::vector<InputParameter> OpenLoopCoronaryBC::input_params = {
-    InputParameter("Ra1", false, true), InputParameter("Ra2", false, true),
-    InputParameter("Rv1", false, true), InputParameter("Ca", false, true),
-    InputParameter("Cc", false, true),  InputParameter("Pim", false, true),
-    InputParameter("P_v", false, true)};
-
 void OpenLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {"volume_im"});
 }

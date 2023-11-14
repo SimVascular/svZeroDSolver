@@ -41,10 +41,9 @@ enum class BlockType {
   resistance_bc = 6,
   windkessel_bc = 7,
   open_loop_coronary_bc = 8,
-  closed_loop_coronary_lefT_bc = 9,
-  closed_loop_coronary_right_bc = 10,
-  closed_loop_rcr_bc = 11,
-  closed_loop_heart_pulmonary = 12
+  closed_loop_coronary = 9,
+  closed_loop_rcr_bc = 10,
+  closed_loop_heart_pulmonary = 11
 };
 
 enum class BlockClass {

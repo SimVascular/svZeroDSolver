@@ -30,12 +30,6 @@
 
 #include "ClosedLoopRCRBC.h"
 
-// Define block properties
-const BlockClass block_class = BlockClass::boundary_condition;
-const std::string input_name = "ClosedLoopRCR";
-const std::vector<InputParameter> ClosedLoopRCRBC::input_params = {
-    InputParameter("Rp"), InputParameter("C"), InputParameter("Rd")};
-
 void ClosedLoopRCRBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"P_c"});
 }

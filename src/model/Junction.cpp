@@ -30,11 +30,6 @@
 
 #include "Junction.h"
 
-// Define block properties
-const BlockClass block_class = BlockClass::junction;
-const std::string input_name = "NORMAL_JUNCTION";
-const std::vector<std::string> Junction::input_params = {};
-
 void Junction::setup_dofs(DOFHandler &dofhandler) {
   // Set number of equations of a junction block based on number of
   // inlets/outlets. Must be set before calling parent constructor

@@ -92,10 +92,24 @@ class ClosedLoopHeartPulmonary : public Block {
   // Inherit constructors
   using Block::Block;
 
-  static const BlockClass block_class;  ///< Class of this block
-  static const std::string input_name;  ///< Name of block in input file
-  static const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  // Define block properties
+  const BlockType block_type = BlockType::closed_loop_heart_pulmonary;
+  const BlockClass block_class = BlockClass::closed_loop;
+  const std::vector<InputParameter> input_params = {
+      InputParameter("Tsa"),     InputParameter("tpwave"),
+      InputParameter("Erv_s"),   InputParameter("Elv_s"),
+      InputParameter("iml"),     InputParameter("imr"),
+      InputParameter("Lra_v"),   InputParameter("Rra_v"),
+      InputParameter("Lrv_a"),   InputParameter("Rrv_a"),
+      InputParameter("Lla_v"),   InputParameter("Rla_v"),
+      InputParameter("Llv_a"),   InputParameter("Rlv_ao"),
+      InputParameter("Vrv_u"),   InputParameter("Vlv_u"),
+      InputParameter("Rpd"),     InputParameter("Cp"),
+      InputParameter("Cpa"),     InputParameter("Kxp_ra"),
+      InputParameter("Kxv_ra"),  InputParameter("Kxp_la"),
+      InputParameter("Kxv_la"),  InputParameter("Emax_ra"),
+      InputParameter("Emax_la"), InputParameter("Vaso_ra"),
+      InputParameter("Vaso_la")};
 
   /**
    * @brief Local IDs of the parameters

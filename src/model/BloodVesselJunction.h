@@ -146,10 +146,12 @@ class BloodVesselJunction : public Block {
   // Inherit constructors
   using Block::Block;
 
-  static const BlockClass block_class;  ///< Class of this block
-  static const std::string input_name;  ///< Name of block in input file
-  static const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  // Define block properties
+  const BlockType block_type = BlockType::blood_vessel_junction;
+  const BlockClass block_class = BlockClass::junction;
+  const std::vector<InputParameter> input_params = {
+      InputParameter("R_poiseuille"), InputParameter("L"),
+      InputParameter("stenosis_coefficient")};
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

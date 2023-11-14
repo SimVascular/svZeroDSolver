@@ -100,8 +100,8 @@ class Block {
   int id;        ///< Global ID of the block
   Model *model;  ///< The model to which the block belongs
 
+  static BlockType block_type;  ///< Type of this block
   static BlockClass block_class;  ///< Class of this block
-  static std::string input_name;  ///< Name of block in input file
   static std::vector<InputParameter>
       input_params;  ///< List of input parameter names
 

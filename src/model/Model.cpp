@@ -33,61 +33,30 @@
 #include "BlockFactory.h"
 #include "Node.h"
 
+template <typename BlockType>
+BlockFactoryFunc block_factory() {
+  return
+      [](int count, const std::vector<int> &params, Model *model) -> Block * {
+        return new BlockType(count, params, model);
+      };
+}
+
 Model::Model() {
   // Add all blocks to factory
   block_factory_map = {
-      {BlockType::blood_vessel,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new BloodVessel(count, params, model);
-       }},
-      {BlockType::junction,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new Junction(count, params, model);
-       }},
-      {BlockType::blood_vessel_junction,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new BloodVesselJunction(count, params, model);
-       }},
-      {BlockType::resistive_junction,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new ResistiveJunction(count, params, model);
-       }},
-      {BlockType::flow_bc,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new FlowReferenceBC(count, params, model);
-       }},
-      {BlockType::resistance_bc,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new ResistanceBC(count, params, model);
-       }},
-      {BlockType::windkessel_bc,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new WindkesselBC(count, params, model);
-       }},
-      {BlockType::pressure_bc,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new PressureReferenceBC(count, params, model);
-       }},
-      {BlockType::open_loop_coronary_bc,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new OpenLoopCoronaryBC(count, params, model);
-       }},
-      {BlockType::closed_loop_coronary_lefT_bc,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new ClosedLoopCoronaryBC(count, params, model, Side::LEFT);
-       }},
-      {BlockType::closed_loop_coronary_right_bc,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new ClosedLoopCoronaryBC(count, params, model, Side::RIGHT);
-       }},
-      {BlockType::closed_loop_rcr_bc,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new ClosedLoopRCRBC(count, params, model);
-       }},
-      {BlockType::closed_loop_heart_pulmonary,
-       [](int count, const std::vector<int> &params, Model *model) {
-         return new ClosedLoopHeartPulmonary(count, params, model);
-       }}};
+      {"BloodVessel", block_factory<BloodVessel>()},
+      {"BloodVesselJunction", block_factory<BloodVesselJunction>()},
+      {"ClosedLoopCoronary", block_factory<ClosedLoopCoronaryBC>()},
+      {"ClosedLoopHeartAndPulmonary",
+       block_factory<ClosedLoopHeartPulmonary>()},
+      {"ClosedLoopRCR", block_factory<ClosedLoopRCRBC>()},
+      {"CORONARY", block_factory<OpenLoopCoronaryBC>()},
+      {"FLOW", block_factory<FlowReferenceBC>()},
+      {"NORMAL_JUNCTION", block_factory<Junction>()},
+      {"PRESSURE", block_factory<PressureReferenceBC>()},
+      {"RCR", block_factory<WindkesselBC>()},
+      {"RESISTANCE", block_factory<ResistanceBC>()},
+      {"resistive_junction", block_factory<ResistiveJunction>()}};
 }
 
 Model::~Model() {}
@@ -96,7 +65,7 @@ int Model::add_block(BlockType block_type,
                      const std::vector<int> &block_param_ids,
                      const std::string_view &name, bool internal) {
   // Get block from factory
-  auto it = block_factory_map.find(block_type);
+  auto it = block_factory_map.find(name);
   if (it == block_factory_map.end()) {
     throw std::runtime_error(
         "Adding block to model failed: Invalid block type!");

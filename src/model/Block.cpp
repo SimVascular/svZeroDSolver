@@ -32,15 +32,18 @@
 
 #include "Model.h"
 
-Block::Block(int id, const std::vector<int> &param_ids, Model *model) {
+Block::Block(int id, Model *model) {
   this->id = id;
-  this->global_param_ids = param_ids;
   this->model = model;
 }
 
 std::string Block::get_name() { return this->model->get_block_name(this->id); }
 
 Block::~Block() {}
+
+void Block::setup_params_(const std::vector<int> &param_ids){
+  this->global_param_ids = param_ids;
+}
 
 void Block::setup_dofs_(DOFHandler &dofhandler, int num_equations,
                         const std::list<std::string> &internal_var_names) {

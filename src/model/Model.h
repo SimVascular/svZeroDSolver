@@ -101,8 +101,6 @@ class Model {
    */
   int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
                 const std::string_view &name, bool internal = false);
-  int add_block(const std::string_view &name,
-                const std::vector<int> &block_param_ids, bool internal = false);
 
   /**
    * @brief Get a block by its name

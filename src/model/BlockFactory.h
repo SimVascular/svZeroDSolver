@@ -35,6 +35,6 @@
 #include <vector>
 #include "Block.h" 
 
-using BlockFactoryFunc = std::function<Block*(int, const std::vector<int>&, Model*)>;
+using BlockFactoryFunc = std::function<Block*(int, Model*)>;
 
 #endif

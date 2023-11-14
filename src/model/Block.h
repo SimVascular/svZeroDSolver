@@ -80,10 +80,9 @@ class Block {
    * @brief Construct a new Block object
    *
    * @param id Global ID of the block
-   * @param param_ids Global IDs of the block parameters
    * @param model The model to which the block belongs
    */
-  explicit Block(int id, const std::vector<int> &param_ids, Model *model);
+  explicit Block(int id, Model *model);
 
   /**
    * @brief Destroy the Block object
@@ -100,10 +99,9 @@ class Block {
   int id;        ///< Global ID of the block
   Model *model;  ///< The model to which the block belongs
 
-  BlockType block_type;    ///< Type of this block
-  BlockClass block_class;  ///< Class of this block
-  std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  BlockType block_type;                      ///< Type of this block
+  BlockClass block_class;                    ///< Class of this block
+  std::vector<InputParameter> input_params;  ///< List of input parameter names
 
   std::vector<Node *> inlet_nodes;   ///< Inlet nodes
   std::vector<Node *> outlet_nodes;  ///< Outlet nodes
@@ -148,6 +146,12 @@ class Block {
    * @return std::string Name of the block
    */
   std::string get_name();
+
+  /**
+   * @brief Setup parameter IDs for the block
+   * @param param_ids Global IDs of the block parameters
+   */
+  void setup_params_(const std::vector<int> &param_ids);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

@@ -83,6 +83,7 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   sim_params.sim_abs_tol = sim_config.value("absolute_tolerance", 1e-8);
   sim_params.sim_nliter = sim_config.value("maximum_nonlinear_iterations", 30);
   sim_params.sim_steady_initial = sim_config.value("steady_initial", true);
+  sim_params.sim_rho_infty = sim_config.value("rho_infty", 0.5);
   sim_params.output_variable_based =
       sim_config.value("output_variable_based", false);
   sim_params.output_interval = sim_config.value("output_interval", 1);

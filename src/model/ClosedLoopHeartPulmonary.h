@@ -170,8 +170,15 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param dy Current derivate of the solution
    */
   void update_solution(SparseSystem &system, std::vector<double> &parameters,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+
+  /**
+   * @brief Modify the solution after solving it
+   *
+   * @param y Current solution
+   */
+  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
 
   /**
    * @brief Number of triplets of element
@@ -207,14 +214,14 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param y Current solution
    */
   void get_psi_ra_la(std::vector<double> &parameters,
-                     Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+                     const Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
 
   /**
    * @brief Valve positions for each heart chamber
    *
    * @param y Current solution
    */
-  void get_valve_positions(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+  void get_valve_positions(const Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
 };
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_

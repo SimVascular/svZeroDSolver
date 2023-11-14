@@ -91,6 +91,12 @@ class SolverInterface {
    * @brief 0D time step size
    */
   double time_step_size_ = 0.0;
+
+  /**
+   * @brief Spectral radius of generalized alpha integrator
+   */
+  double rho_infty_ = 0.0;
+
   /**
    * @brief Number of 0D time steps
    */

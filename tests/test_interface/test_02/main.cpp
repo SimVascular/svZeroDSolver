@@ -333,7 +333,7 @@ int main(int argc, char** argv)
 
   // Check if outputs are correct
   is_wrong = false;
-  error_msg = check_simulation_results(mean_aortic_flow, mean_aortic_pressure, mean_bc_lca1_outlet_flow, mean_bc_lca1_outlet_pressure, 63.3137, 101.139, 0.135942, 3.17525, is_wrong);
+  error_msg = check_simulation_results(mean_aortic_flow, mean_aortic_pressure, mean_bc_lca1_outlet_flow, mean_bc_lca1_outlet_pressure, 63.329, 101.158, 0.135971, 3.17321, is_wrong);
   if (is_wrong) {
     throw std::runtime_error("After restart simulation, error in the following quantities: "+error_msg);
   }

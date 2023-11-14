@@ -194,8 +194,8 @@ class BloodVessel : public Block {
    * @param dy Current derivate of the solution
    */
   void update_solution(SparseSystem &system, std::vector<double> &parameters,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the

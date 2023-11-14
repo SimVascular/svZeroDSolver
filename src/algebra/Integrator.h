@@ -44,6 +44,8 @@
  *
  * This class handles the time integration scheme for solving 0D blood
  * flow system using the generalized-\f$\alpha\f$ method \cite JANSEN2000305.
+ * The specific implementation in this solver is based on \cite bazilevs13
+ * (Section 4.6.2).
  *
  * We are interested in solving the DAE system defined in SparseSystem for the
  * solutions, \f$\mathbf{y}_{n+1}\f$ and \f$\dot{\mathbf{y}}_{n+1}\f$, at the
@@ -64,60 +66,85 @@
  * \alpha_{f}\Delta t\f$ and \f$t_{n+\alpha_{m}} = t_{n} + \alpha_{m}\Delta
  * t\f$. Here, \f$\alpha_{m}\f$ and \f$\alpha_{f}\f$ are the
  * generalized-\f$\alpha\f$ parameters, where \f$\alpha_{m} = \frac{3 - \rho}{2
- * + 2\rho}\f$ and \f$\alpha_{f} = \frac{1}{1 + \rho}\f$. In the 0D solver, we
- * set the spectral radius, \f$\rho\f$, to be \f$0.1\f$. For each time step, the
- * procedure works as follows.
+ * + 2\rho}\f$ and \f$\alpha_{f} = \frac{1}{1 + \rho}\f$. We
+ * set the default spectral radius \f$\rho=0.5\f$, whereas \f$\rho=0.0\f$ equals
+ * the BDF2 scheme and \f$\rho=1.0\f$ equals the trapezoidal rule. For each time
+ * step \f$n\f$, the procedure works as follows.
  *
- * 1. \f$\textbf{Predictor step}\f$: First, we make an initial guess for
- * \f$\mathbf{y}_{n+1}\f$ and \f$\dot{\mathbf{y}}_{n+1}\f$,
+ * **Predict** the new time step based on the assumption of a constant
+ * solution \f$\mathbf{y}\f$ and consistent time derivative
+ * \f$\dot{\mathbf{y}}\f$: \f[ \dot{\mathbf y}_{n+1}^0 = \frac{\gamma-1}{\gamma}
+ * \dot{\mathbf y}_n, \f] \f[ \mathbf y_{n+1}^0 = \mathbf y_n. \f] with
+ * \f$\gamma = \frac{1}{2} + \alpha_m - \alpha_f\f$. We then iterate through
+ * Newton-Raphson iterations \f$i\f$ as follows, until the residual is smaller
+ * than an absolute error\f$||\mathbf r||_\infty < \epsilon_\text{abs}\f$:
+ *
+ * 1. **Initiate** the iterates at the intermediate time levels:
  * \f[
- * \mathbf{y}_{n+1} = \mathbf{y}_{n},\\
- * \dot{\mathbf{y}}_{n+1} = \frac{\gamma - 1}{\gamma}\dot{\mathbf{y}}_{n},
+ * \dot{\mathbf y}_{n+\alpha_m}^i = \dot{\mathbf y}_n + \alpha_m \left(
+ * \dot{\mathbf y}_{n+1}^i - \dot{\mathbf y}_n  \right),
  * \f]
- * where \f$\gamma = 0.5 + \alpha_{m} - \alpha_{f}\f$.
+ * \f[
+ * \mathbf y_{n+\alpha_f}^i= \mathbf y_n + \alpha_f \left( \mathbf y_{n+1}^i -
+ * \mathbf y_n \right).
+ * \f]
  *
- * 2. \f$\textbf{Initiator step}\f$: Then, we initialize the values of
- * \f$\dot{\mathbf{y}}_{n+\alpha_{m}}\f$ and
- * \f$\mathbf{y}_{n+\alpha_{f}}\f$,
- * \f[\dot{\mathbf{y}}_{n+\alpha_{m}}^{k=0} = \dot{\mathbf{y}}_{n} +
- * \alpha_{m}\left(\dot{\mathbf{y}}_{n+1} - \dot{\mathbf{y}}_{n}\right),\\
- * \mathbf{y}_{n+\alpha_{f}}^{k=0} = \mathbf{y}_{n} +
- * \alpha_{f}\left(\mathbf{y}_{n+1} - \mathbf{y}_{n}\right).\f]
+ * 2. **Solve** for the increment \f$\Delta\dot{\mathbf{y}}\f$ in the linear
+ * system:
+ * \f[
+ * \mathbf K(\mathbf y_{n+\alpha_f}^i, \dot{\mathbf y}_{n+\alpha_m}^i) \cdot
+ * \Delta \dot{\mathbf y}_{n+1}^i = - \mathbf r(\mathbf y_{n+\alpha_f}^i,
+ * \dot{\mathbf y}_{n+\alpha_m}^i).
+ * \f]
  *
- * 3. \f$\textbf{Multi-corrector step}\f$: Then, for \f$k \in \left[0, N_{int}
- * - 1\right]\f$, we iteratively update our guess of
- * \f$\dot{\mathbf{y}}_{n+\alpha_{m}}^{k}\f$ and
- * \f$\mathbf{y}_{n+\alpha_{f}}^{k}\f$. We desire the residual,
- * \f$\textbf{r}\left(\dot{\mathbf{y}}_{n+\alpha_{m}}^{k + 1},
- * \mathbf{y}_{n+\alpha_{f}}^{k + 1}, t_{n+\alpha_{f}}\right)\f$, to be
- * \f$\textbf{0}\f$. We solve this system using Newton's method. For details,see
- * SparseSystem.
- *
- * 4. \f$\textbf{Update step}\f$: Finally, we update \f$\mathbf{y}_{n+1}\f$ and
- * \f$\dot{\mathbf{y}}_{n+1}\f$ using our final value of
- * \f$\dot{\mathbf{y}}_{n+\alpha_{m}}\f$ and
- * \f$\mathbf{y}_{n+\alpha_{f}}\f$. \f[
- * \mathbf{y}_{n+1} = \mathbf{y}_{n} +
- * \frac{\mathbf{y}_{n+\alpha_{f}}^{N_{int}} -
- * \mathbf{y}_{n}}{\alpha_{f}},\\ \dot{\mathbf{y}}_{n+1} =
- * \dot{\mathbf{y}}_{n} + \frac{\dot{\mathbf{y}}_{n+\alpha_{m}}^{N_{int}} -
- * \dot{\mathbf{y}}_{n}}{\alpha_{m}} \f]
+ * 3. **Update** the solution vectors:
+ * \f[
+ * \dot{\mathbf y}_{n+1}^{i+1} = \dot{\mathbf y}_{n+1}^i + \Delta
+ * \dot{\mathbf y}_{n+1}^i,
+ * \f]
+ * \f[
+ * \mathbf y_{n+1}^{i+1} = \mathbf y_{n+1}^i + \Delta \dot{\mathbf y}_{n+1}^i
+ * \gamma \Delta t_n.
+ * \f]
  *
  */
+
+//  * 3. \f$\textbf{Multi-corrector step}\f$: Then, for \f$k \in \left[0,
+//  N_{int}
+//  * - 1\right]\f$, we iteratively update our guess of
+//  * \f$\dot{\mathbf{y}}_{n+\alpha_{m}}^{k}\f$ and
+//  * \f$\mathbf{y}_{n+\alpha_{f}}^{k}\f$. We desire the residual,
+//  * \f$\textbf{r}\left(\dot{\mathbf{y}}_{n+\alpha_{m}}^{k + 1},
+//  * \mathbf{y}_{n+\alpha_{f}}^{k + 1}, t_{n+\alpha_{f}}\right)\f$, to be
+//  * \f$\textbf{0}\f$. We solve this system using Newton's method. For
+//  details,see
+//  * SparseSystem.
+//  *
+//  * where \f$\gamma = 0.5 + \alpha_{m} - \alpha_{f}\f$.
+//  *
+//  * 4. \f$\textbf{Update step}\f$: Finally, we update \f$\mathbf{y}_{n+1}\f$
+//  and
+//  * \f$\dot{\mathbf{y}}_{n+1}\f$ using our final value of
+//  * \f$\dot{\mathbf{y}}_{n+\alpha_{m}}\f$ and
+//  * \f$\mathbf{y}_{n+\alpha_{f}}\f$. \f[
+//  * \mathbf{y}_{n+1} = \mathbf{y}_{n} +
+//  * \frac{\mathbf{y}_{n+\alpha_{f}}^{N_{int}} -
+//  * \mathbf{y}_{n}}{\alpha_{f}},\\ \dot{\mathbf{y}}_{n+1} =
+//  * \dot{\mathbf{y}}_{n} + \frac{\dot{\mathbf{y}}_{n+\alpha_{m}}^{N_{int}} -
+//  * \dot{\mathbf{y}}_{n}}{\alpha_{m}} \f]
+//  *
+//  */
+
 class Integrator {
  private:
   double alpha_m{0.0};
   double alpha_f{0.0};
-  double alpha_m_inv{0.0};
-  double alpha_f_inv{0.0};
   double gamma{0.0};
-  double gamma_inv{0.0};
   double time_step_size{0.0};
-  double time_step_size_inv{0.0};
-  double y_dot_coeff{0.0};
-  double atol{0.0};
-  double y_init_coeff{0.0};
   double ydot_init_coeff{0.0};
+  double y_coeff{0.0};
+  double y_coeff_jacobian{0.0};
+  double atol{0.0};
   int max_iter{0};
   int size{0};
   int n_iter{0};

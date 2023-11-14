@@ -287,7 +287,7 @@ def test_pulsatile_flow_cstenosis_steady_pressure():
     results = run_test_case_by_name("pulsatileFlow_CStenosis_steadyPressure")
     assert np.isclose(
         get_result(results, "pressure_in", 0, -439),
-        0.5933049197138334,
+        0.5931867478176258,
         rtol=1.0e-5,
     )  # inlet pressure
     assert np.isclose(
@@ -295,12 +295,12 @@ def test_pulsatile_flow_cstenosis_steady_pressure():
     )  # outlet pressure
     assert np.isclose(
         get_result(results, "flow_in", 0, -439),
-        0.7023611813029965,
+        0.7022833221028071,
         rtol=1.0e-5,
     )  # inlet flow
     assert np.isclose(
         get_result(results, "flow_out", 0, -439),
-        0.7018707542098627,
+        0.7025195223805801,
         rtol=1.0e-5,
     )  # outlet flow
 
@@ -348,32 +348,32 @@ def test_steady_flow_confluencer_r():
 def test_closed_loop_heart_single_vessel():
     results = run_test_case_by_name("closedLoopHeart_singleVessel")
     assert np.isclose(
-        np.mean(np.array(results["pressure_in"][0])), 55.703345704742844, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_in"][0])), 55.703641631129, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(np.array(results["pressure_in"][0])), 73.97450170686889, rtol=RTOL_PRES
+        np.amax(np.array(results["pressure_in"][0])), 73.97432522258265, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
         np.amin(np.array(results["pressure_in"][0])), 0.0, rtol=RTOL_PRES
     )  # min aortic pressure
     assert np.isclose(
-        np.mean(np.array(results["flow_in"][0])), 43.21028819256006, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_in"][0])), 43.21039307754263, rtol=RTOL_FLOW
     )  # aortic inflow
 
 
 def test_closed_loop_heart_with_coronaries():
     results = run_test_case_by_name("closedLoopHeart_withCoronaries")
     assert np.isclose(
-        np.mean(np.array(results["pressure_in"][0])), 50.162313086833805, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_in"][0])), 50.1625871601956, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(np.array(results["pressure_in"][0])), 69.01524513715958, rtol=RTOL_PRES
+        np.amax(np.array(results["pressure_in"][0])), 69.01503950740205, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
-        np.mean(np.array(results["flow_in"][0])), 38.05442038841015, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_in"][0])), 38.05450968143411, rtol=RTOL_FLOW
     )  # mean aortic flow
     assert np.isclose(
-        np.amax(np.array(results["flow_in"][0])), 171.35198346122127, rtol=RTOL_FLOW
+        np.amax(np.array(results["flow_in"][0])), 171.3259487071224, rtol=RTOL_FLOW
     )  # max aortic flow
 
 
@@ -385,13 +385,13 @@ def test_coupled_block_heart_single_vessel():
         "y"
     ].to_numpy()
     assert np.isclose(
-        np.mean(aortic_pressure[-50:]), 69.92379300168665, rtol=RTOL_PRES
+        np.mean(aortic_pressure), 67.29243579253749, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(aortic_pressure[-50:]), 91.44472791507646, rtol=RTOL_PRES
+        np.amax(aortic_pressure), 88.50490978163587, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
-        np.amin(aortic_pressure[-50:]), 49.246695924657494, rtol=RTOL_PRES
+        np.amin(aortic_pressure), 45.1984555305808, rtol=RTOL_PRES
     )  # min aortic pressure
 
 
@@ -403,11 +403,11 @@ def test_coupled_block_heart_with_coronaries():
         "y"
     ].to_numpy()
     assert np.isclose(
-        np.mean(aortic_pressure[-50:]), 59.52487958523876, rtol=RTOL_PRES
+        np.mean(aortic_pressure), 56.04135970691205, rtol=RTOL_PRES
     )  # mean aortic pressure
     assert np.isclose(
-        np.amax(aortic_pressure[-50:]), 81.0040824877808, rtol=RTOL_PRES
+        np.amax(aortic_pressure), 77.18765227842809, rtol=RTOL_PRES
     )  # max aortic pressure
     assert np.isclose(
-        np.amin(aortic_pressure[-50:]), 38.80066561075395, rtol=RTOL_PRES
+        np.amin(aortic_pressure), 34.184224686628035, rtol=RTOL_PRES
     )  # min aortic pressure

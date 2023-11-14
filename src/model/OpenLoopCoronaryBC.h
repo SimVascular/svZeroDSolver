@@ -109,14 +109,10 @@ class OpenLoopCoronaryBC : public Block {
   // Inherit constructors
   using Block::Block;
 
-  // Define block properties
-  const BlockType block_type = BlockType::open_loop_coronary_bc;
-  const BlockClass block_class = BlockClass::boundary_condition;
-  const std::vector<InputParameter> input_params = {
-      InputParameter("Ra1", false, true), InputParameter("Ra2", false, true),
-      InputParameter("Rv1", false, true), InputParameter("Ca", false, true),
-      InputParameter("Cc", false, true),  InputParameter("Pim", false, true),
-      InputParameter("P_v", false, true)};
+  static const BlockType block_type;    ///< Type of this block
+  static const BlockClass block_class;  ///< Class of this block
+  static const std::vector<InputParameter>
+      input_params;  ///< List of input parameter names
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

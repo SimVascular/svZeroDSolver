@@ -113,11 +113,10 @@ class ClosedLoopRCRBC : public Block {
   // Inherit constructors
   using Block::Block;
 
-  // Define block properties
-  const BlockType block_type = BlockType::closed_loop_rcr_bc;
-  const BlockClass block_class = BlockClass::boundary_condition;
-  const std::vector<InputParameter> input_params = {
-      InputParameter("Rp"), InputParameter("C"), InputParameter("Rd")};
+  static const BlockType block_type;    ///< Type of this block
+  static const BlockClass block_class;  ///< Class of this block
+  static const std::vector<InputParameter>
+      input_params;  ///< List of input parameter names
 
   /**
    * @brief Local IDs of the parameters

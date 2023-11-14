@@ -121,13 +121,11 @@ class ClosedLoopCoronaryBC : public Block {
   explicit ClosedLoopCoronaryBC(int id, const std::vector<int> &param_ids,
                                 Model *model)
       : Block(id, param_ids, model){};
-
-  // Define block properties
-  const BlockType block_type = BlockType::closed_loop_coronary;
-  const BlockClass block_class = BlockClass::boundary_condition;
-  const std::vector<InputParameter> input_params = {
-      InputParameter("Ra"), InputParameter("Ram"), InputParameter("Rv"),
-      InputParameter("Ca"), InputParameter("Cim")};
+      
+  static const BlockType block_type;    ///< Type of this block
+  static const BlockClass block_class;  ///< Class of this block
+  static const std::vector<InputParameter>
+      input_params;  ///< List of input parameter names
 
   /**
    * @brief Local IDs of the parameters

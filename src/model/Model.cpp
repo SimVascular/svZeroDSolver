@@ -88,6 +88,32 @@ int Model::add_block(BlockType block_type,
   return block_count++;
 }
 
+int Model::add_block(const std::string_view &name,
+                     const std::vector<int> &block_param_ids, bool internal) {
+  // Get block from factory
+  auto it = block_factory_map.find(name);
+  if (it == block_factory_map.end()) {
+    throw std::runtime_error(
+        "Adding block to model failed: Invalid block type!");
+  }
+
+  Block *block = it->second(block_count, block_param_ids, this);
+
+  auto name_string = static_cast<std::string>(name);
+
+  if (internal) {
+    hidden_blocks.push_back(std::shared_ptr<Block>(block));
+  } else {
+    blocks.push_back(std::shared_ptr<Block>(block));
+  }
+
+  block_types.push_back(block->block_type);
+  block_index_map.insert({name_string, block_count});
+  block_names.push_back(name_string);
+
+  return block_count++;
+}
+
 Block *Model::get_block(const std::string_view &name) const {
   auto name_string = static_cast<std::string>(name);
 

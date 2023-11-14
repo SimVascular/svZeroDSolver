@@ -30,6 +30,12 @@
 
 #include "ResistiveJunction.h"
 
+// Define block properties
+const BlockType ResistiveJunction::block_type = BlockType::resistive_junction;
+const BlockClass ResistiveJunction::block_class = BlockClass::junction;
+const std::vector<InputParameter> ResistiveJunction::input_params = {
+    InputParameter("R")};
+
 void ResistiveJunction::setup_dofs(DOFHandler &dofhandler) {
   // Set number of equations of a junction block based on number of
   // inlets/outlets. Must be set before calling parent constructor

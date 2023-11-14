@@ -39,10 +39,10 @@
 #include <map>
 #include <vector>
 
-#include "DOFHandler.h"
-#include "SparseSystem.h"
 #include "BlockType.h"
+#include "DOFHandler.h"
 #include "InputParameter.h"
+#include "SparseSystem.h"
 
 /**
  * @brief The number of triplets that the element contributes
@@ -100,9 +100,9 @@ class Block {
   int id;        ///< Global ID of the block
   Model *model;  ///< The model to which the block belongs
 
-  static BlockType block_type;  ///< Type of this block
-  static BlockClass block_class;  ///< Class of this block
-  static std::vector<InputParameter>
+  BlockType block_type;    ///< Type of this block
+  BlockClass block_class;  ///< Class of this block
+  std::vector<InputParameter>
       input_params;  ///< List of input parameter names
 
   std::vector<Node *> inlet_nodes;   ///< Inlet nodes

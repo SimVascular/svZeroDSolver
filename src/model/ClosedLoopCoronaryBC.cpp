@@ -32,6 +32,15 @@
 
 #include "Model.h"
 
+// Define block properties
+const BlockType ClosedLoopCoronaryBC::block_type =
+    BlockType::closed_loop_coronary;
+const BlockClass ClosedLoopCoronaryBC::block_class =
+    BlockClass::boundary_condition;
+const std::vector<InputParameter> ClosedLoopCoronaryBC::input_params = {
+    InputParameter("Ra"), InputParameter("Ram"), InputParameter("Rv"),
+    InputParameter("Ca"), InputParameter("Cim")};
+
 void ClosedLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"volume_im"});
 }

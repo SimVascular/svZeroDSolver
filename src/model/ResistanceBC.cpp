@@ -30,6 +30,12 @@
 
 #include "ResistanceBC.h"
 
+// Define block properties
+const BlockType ResistanceBC::block_type = BlockType::resistance_bc;
+const BlockClass ResistanceBC::block_class = BlockClass::boundary_condition;
+const std::vector<InputParameter> ResistanceBC::input_params = {
+    InputParameter("R", false, true), InputParameter("Pd", false, true)};
+
 void ResistanceBC::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 1, {});
 }

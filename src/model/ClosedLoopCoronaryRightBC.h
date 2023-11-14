@@ -42,9 +42,8 @@
  */
 class ClosedLoopCoronaryRightBC : public ClosedLoopCoronaryBC {
  public:
-  explicit ClosedLoopCoronaryRightBC(int id, const std::vector<int> &param_ids,
-                                     Model *model)
-      : ClosedLoopCoronaryBC(id, param_ids, model){};
+  // Inherit constructors
+  using ClosedLoopCoronaryBC::ClosedLoopCoronaryBC;
 
   static const BlockType block_type;  ///< Type of this block
 

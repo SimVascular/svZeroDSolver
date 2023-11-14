@@ -143,6 +143,9 @@
  */
 class BloodVessel : public Block {
  public:
+  // Inherit constructors
+  using Block::Block;
+
   static const BlockType block_type;    ///< Type of this block
   static const BlockClass block_class;  ///< Class of this block
   static const std::vector<InputParameter>
@@ -158,9 +161,6 @@ class BloodVessel : public Block {
     INDUCTANCE = 2,
     STENOSIS_COEFFICIENT = 3,
   };
-
-  explicit BloodVessel(int id, const std::vector<int> &param_ids, Model *model)
-      : Block(id, param_ids, model){};
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

@@ -116,10 +116,9 @@
  */
 class ClosedLoopCoronaryBC : public Block {
  public:
-  explicit ClosedLoopCoronaryBC(int id, const std::vector<int> &param_ids,
-                                Model *model)
-      : Block(id, param_ids, model){};
-      
+  // Inherit constructors
+  using Block::Block;
+  
   static const BlockClass block_class;  ///< Class of this block
   static const std::vector<InputParameter>
       input_params;  ///< List of input parameter names

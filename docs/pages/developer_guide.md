@@ -74,11 +74,8 @@ for an introduction into the syntax of writing documentation in C++. For more
 inspiration, you can look at the existing source files and how they use
 documentation. 
 
-> **&#9432;** Note that undocumented code will fail the automated code checks 
-on Github and cannot be merged.
-
-**Note that undocumented code will fail the automated code checks on Github 
-and cannot be merged.**
+==**Note that undocumented code will fail the automated code checks on Github 
+and cannot be merged.**==
 
 In the following you can find a short recap of the most important
 commands:

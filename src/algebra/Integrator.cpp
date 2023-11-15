@@ -35,25 +35,20 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   this->model = model;
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
-  alpha_m_inv = 1.0 / alpha_m;
-  alpha_f_inv = 1.0 / alpha_f;
   gamma = 0.5 + alpha_m - alpha_f;
-  gamma_inv = 1.0 / gamma;
+  ydot_init_coeff = 1.0 - 1.0 / gamma;
 
-  y_init_coeff = alpha_f * 0.5 * time_step_size;
-  ydot_init_coeff = (1.0 + alpha_m * ((gamma - 0.5) * gamma_inv - 1.0));
+  y_coeff = gamma * time_step_size;
+  y_coeff_jacobian = alpha_f * y_coeff;
 
   size = model->dofhandler.size();
   system = SparseSystem(size);
   this->time_step_size = time_step_size;
   this->atol = atol;
   this->max_iter = max_iter;
-  time_step_size_inv = 1.0 / time_step_size;
 
   y_af = Eigen::Matrix<double, Eigen::Dynamic, 1>(size);
   ydot_am = Eigen::Matrix<double, Eigen::Dynamic, 1>(size);
-
-  y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;
 
   // Make some memory reservations
   system.reserve(model);
@@ -71,39 +66,43 @@ void Integrator::clean() {
 }
 
 void Integrator::update_params(double time_step_size) {
-  y_init_coeff = alpha_f * 0.5 * time_step_size;
   this->time_step_size = time_step_size;
-  time_step_size_inv = 1.0 / time_step_size;
-  y_dot_coeff = alpha_m * alpha_f_inv * gamma_inv * time_step_size_inv;
+  y_coeff = gamma * time_step_size;
+  y_coeff_jacobian = alpha_f * y_coeff;
   model->update_constant(system);
   model->update_time(system, 0.0);
 }
 
 State Integrator::step(const State& old_state, double time) {
-  // Predictor + initiator step
-  y_af.setZero();
-  ydot_am.setZero();
-  y_af += old_state.y + old_state.ydot * y_init_coeff;
-  ydot_am += old_state.ydot * ydot_init_coeff;
+  // Predictor: Constant y, consistent ydot
+  State new_state = State::Zero(size);
+  new_state.ydot += old_state.ydot * ydot_init_coeff;
+  new_state.y += old_state.y;
 
-  // Determine new time
+  // Determine new time (evaluate terms at generalized mid-point)
   double new_time = time + alpha_f * time_step_size;
 
-  // Update time-dependent element contributions in system
+  // Evaluate time-dependent element contributions in system
   model->update_time(system, new_time);
 
   // Count total number of step calls
   n_iter++;
 
+  // Non-linear Newton-Raphson iterations
   for (size_t i = 0; i < max_iter; i++) {
-    // Count total number of nonlinear iterations
-    n_nonlin_iter++;
+    // Initiator: Evaluate the iterates at the intermediate time levels
+    ydot_am.setZero();
+    y_af.setZero();
+    ydot_am += old_state.ydot + (new_state.ydot - old_state.ydot) * alpha_m;
+    y_af += old_state.y + (new_state.y - old_state.y) * alpha_f;
 
     // Update solution-dependent element contribitions
     model->update_solution(system, y_af, ydot_am);
 
-    // Update residuum and check termination criteria
+    // Evaluate residual
     system.update_residual(y_af, ydot_am);
+
+    // Check termination criterium
     if (system.residual.cwiseAbs().maxCoeff() < atol) {
       break;
     }
@@ -114,21 +113,22 @@ State Integrator::step(const State& old_state, double time) {
           "Maximum number of non-linear iterations reached.");
     }
 
-    // Determine jacobian
-    system.update_jacobian(y_dot_coeff);
+    // Evaluate Jacobian
+    system.update_jacobian(alpha_m, y_coeff_jacobian);
 
-    // Solve system
+    // Solve system for increment in ydot
     system.solve();
 
-    // Add increment to solution
-    y_af += system.dy;
-    ydot_am += system.dy * y_dot_coeff;
-  }
+    // Perform post-solve actions on blocks
+    model->post_solve(new_state.y);
 
-  // Set new state
-  State new_state = State::Zero(size);
-  new_state.y += old_state.y + (y_af - old_state.y) * alpha_f_inv;
-  new_state.ydot += old_state.ydot + (ydot_am - old_state.ydot) * alpha_m_inv;
+    // Update the solution
+    new_state.ydot += system.dydot;
+    new_state.y += system.dydot * y_coeff;
+
+    // Count total number of nonlinear iterations
+    n_nonlin_iter++;
+  }
 
   return new_state;
 }

@@ -185,19 +185,19 @@ int main(int argc, char** argv)
   double error_limit = 0.05;
   std::vector<std::string> wrong_quantities;
   bool is_wrong = false;
-  if (abs(mean_aortic_flow - 268.01)/268.01 > error_limit) {
+  if (abs(mean_aortic_flow / 268.23 - 1.0) > error_limit) {
     is_wrong = true;
     wrong_quantities.push_back("Mean aortic flow");
   }
-  if (abs(mean_aortic_pressure - 113.447)/113.447 > error_limit) {
+  if (abs(mean_aortic_pressure / 113.443 - 1.0) > error_limit) {
     is_wrong = true;
     wrong_quantities.push_back("Mean aortic pressure");
   }
-  if (abs(mean_bc_lca1_outlet_flow - 0.00861502)/0.00861502 > error_limit) {
+  if (abs(mean_bc_lca1_outlet_flow / 0.00755739 - 1.0) > error_limit) {
     is_wrong = true;
     wrong_quantities.push_back("Mean BC_lca1 outlet flow");
   }
-  if (abs(mean_bc_lca1_outlet_pressure - 5.86198)/5.86198 > error_limit) {
+  if (abs(mean_bc_lca1_outlet_pressure / 5.88295 - 1.0) > error_limit) {
     is_wrong = true;
     wrong_quantities.push_back("Mean BC_lca1 outlet pressure");
   }

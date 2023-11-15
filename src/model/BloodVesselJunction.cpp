@@ -64,8 +64,8 @@ void BloodVesselJunction::update_constant(SparseSystem &system,
 
 void BloodVesselJunction::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   for (size_t i = 0; i < num_outlets; i++) {
     // Get parameters
     auto stenosis_coeff = parameters[global_param_ids[2 * num_outlets + i]];

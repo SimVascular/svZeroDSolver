@@ -79,8 +79,8 @@ void ClosedLoopCoronaryBC::update_constant(SparseSystem &system,
 
 void ClosedLoopCoronaryBC::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   auto cim = parameters[global_param_ids[ParamId::CIM]];
   auto im = parameters[im_param_id];
   auto pim = im * y[ventricle_var_id];

@@ -77,11 +77,13 @@ class Model;
  * \f[
  * \mathbf{K} =
  * \frac{\partial \mathbf{r}}{\partial \mathbf{y}} =
- * \mathbf{F} + \frac{\partial \mathbf{c}}{\partial \mathbf{y}} + c_\text{time}
- * \left( \mathbf{E} + \frac{\partial \mathbf{c}}{\partial \dot{\mathbf{y}}}
- * \right), \f]
+ * c_{\dot{\mathbf{y}}} \left( \mathbf{E} + \frac{\partial \mathbf{c}}{\partial
+ * \dot{\mathbf{y}}} \right) +
+ * c_{\mathbf{y}} \left( \mathbf{F} + \frac{\partial \mathbf{c}}{\partial
+ * \mathbf{y}} \right), \f]
  *
- * with time factor \f$c_\text{time}\f$ provided by Integrator.
+ * with time factors \f$c_{\dot{\mathbf{y}}}=\alpha_m\f$ and
+ * \f$c_{\mathbf{y}}=\alpha_f\gamma\Delta t\f$ provided by Integrator.
  */
 class SparseSystem {
  public:
@@ -114,7 +116,7 @@ class SparseSystem {
   Eigen::Matrix<double, Eigen::Dynamic, 1>
       residual;  ///< Residual of the system
   Eigen::Matrix<double, Eigen::Dynamic, 1>
-      dy;  ///< Solution increment of the system
+      dydot;  ///< Solution increment of the system
 
   std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<double>>> solver =
       std::shared_ptr<Eigen::SparseLU<Eigen::SparseMatrix<double>>>(
@@ -140,9 +142,10 @@ class SparseSystem {
   /**
    * @brief Update the jacobian of the system
    *
-   * @param e_coeff Coefficent for system matrix \ref E
+   * @param time_coeff_ydot Coefficent ydot-dependent part of jacobian
+   * @param time_coeff_y Coefficent ydot-dependent part of jacobian
    */
-  void update_jacobian(double e_coeff);
+  void update_jacobian(double time_coeff_ydot, double time_coeff_y);
 
   /**
    * @brief Solve the system

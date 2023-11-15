@@ -43,7 +43,7 @@ SparseSystem::SparseSystem(int n) {
 
   jacobian = Eigen::SparseMatrix<double>(n, n);
   residual = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
-  dy = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
+  dydot = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
 }
 
 SparseSystem::~SparseSystem() {}
@@ -77,7 +77,7 @@ void SparseSystem::reserve(Model *model) {
   dC_dy.makeCompressed();
   dC_dydot.makeCompressed();
   jacobian.reserve(num_triplets.F + num_triplets.E);  // Just an estimate
-  update_jacobian(1.0);  // Update it once to have sparsity pattern
+  update_jacobian(1.0, 1.0);  // Update it once to have sparsity pattern
   jacobian.makeCompressed();
   solver->analyzePattern(jacobian);  // Let solver analyze pattern
 }
@@ -91,13 +91,15 @@ void SparseSystem::update_residual(
   residual.noalias() -= F * y;
 }
 
-void SparseSystem::update_jacobian(double e_coeff) {
+void SparseSystem::update_jacobian(double time_coeff_ydot,
+                                   double time_coeff_y) {
   jacobian.setZero();
-  jacobian += F + dC_dy + (E + dC_dydot) * e_coeff;
+  jacobian += (E + dC_dydot) * time_coeff_ydot;
+  jacobian += (F + dC_dy) * time_coeff_y;
 }
 
 void SparseSystem::solve() {
   solver->factorize(jacobian);
-  dy.setZero();
-  dy += solver->solve(residual);
+  dydot.setZero();
+  dydot += solver->solve(residual);
 }

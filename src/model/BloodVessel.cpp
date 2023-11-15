@@ -55,8 +55,8 @@ void BloodVessel::update_constant(SparseSystem &system,
 
 void BloodVessel::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   // Get parameters
   double capacitance = parameters[global_param_ids[ParamId::CAPACITANCE]];
   double stenosis_coeff =

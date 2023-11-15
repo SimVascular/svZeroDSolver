@@ -48,7 +48,21 @@
  */
 struct TripletsContributions {
   TripletsContributions(){};
+  /**
+   * @brief Set the number of triplets that the element contributes
+   * to the global system.
+   * @param F Contributions to F matrix
+   * @param E Contributions to E matrix
+   * @param D Contributions to dC/dy matrix
+   */
   TripletsContributions(int F, int E, int D) : F(F), E(E), D(D){};
+  /**
+   * @brief Set the number of triplets that the element contributes
+   * to the global system.
+   * @param other TripletsContributions object to add to the
+   * number of contributions
+   * @return The number of triplets
+   */
   TripletsContributions operator+=(const TripletsContributions &other) {
     F += other.F;
     E += other.E;
@@ -56,8 +70,17 @@ struct TripletsContributions {
     return *this;
   };
 
+  /**
+   * @brief Contributions to F matrix
+   */
   int F{0};
+  /**
+   * @brief Contributions to E matrix
+   */
   int E{0};
+  /**
+   * @brief Contributions to dC/dy matrix
+   */
   int D{0};
 };
 
@@ -152,7 +175,7 @@ class Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    * @param num_equations Number of equations of the block
-   * @param num_internal_vars Number of internal variables of the block
+   * @param internal_var_names Number of internal variables of the block
    */
 
   void setup_dofs_(DOFHandler &dofhandler, int num_equations,
@@ -203,10 +226,17 @@ class Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  virtual void update_solution(SparseSystem &system,
-                               std::vector<double> &parameters,
-                               Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                               Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  virtual void update_solution(
+      SparseSystem &system, std::vector<double> &parameters,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+
+  /**
+   * @brief Modify the solution after solving it
+   *
+   * @param y Current solution
+   */
+  virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -237,6 +267,8 @@ class Block {
    *
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
+   *
+   * @return TripletsContributions Number of triplets of element
    */
   virtual TripletsContributions get_num_triplets();
 };

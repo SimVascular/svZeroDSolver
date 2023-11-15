@@ -58,6 +58,7 @@
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"
 #include "WindkesselBC.h"
+#include "Valve.h"
 
 /**
  * @brief Model of 0D elements

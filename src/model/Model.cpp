@@ -102,6 +102,10 @@ int Model::add_block(BlockType block_type,
       block = new ClosedLoopHeartPulmonary(block_count, block_param_ids, this);
       break;
 
+    case BlockType::valve:
+      block = new Valve(block_count, block_param_ids, this);
+      break;
+
     default:
       throw std::runtime_error(
           "Adding block to model failed: Invalid block type!");

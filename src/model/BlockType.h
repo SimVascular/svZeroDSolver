@@ -31,6 +31,8 @@
 #ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 #define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 
+#include <string>
+
 enum class BlockType {
   blood_vessel = 0,
   junction = 1,
@@ -53,6 +55,20 @@ enum class BlockClass {
   boundary_condition = 2,
   closed_loop = 3,
   external = 4
+};
+
+struct InputParameter {
+  std::string name;    ///< Name in input file
+  bool is_optional;    ///< Is this parameter optional
+  bool is_array;       ///< Is this parameter an array (or a scalar)
+  double default_val;  ///< Default value (if parameter is optional)
+
+  InputParameter(const std::string name, bool is_optional = false,
+                 bool is_array = false, double default_val = 0.0)
+      : name(name),
+        is_optional(is_optional),
+        is_array(is_array),
+        default_val(default_val) {}
 };
 
 #endif

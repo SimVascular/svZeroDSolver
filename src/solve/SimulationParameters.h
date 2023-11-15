@@ -69,6 +69,10 @@ struct SimulationParameters {
                                        ///< running coupled
 };
 
+void generate_block(Model& model, const nlohmann::json& config,
+                    const std::string& block_name, const std::string_view& name,
+                    bool internal = false, bool periodic = false);
+
 State load_initial_condition(const nlohmann::json& config, Model& model);
 
 void load_simulation_model(const nlohmann::json& config, Model& model);

@@ -90,6 +90,8 @@ class Model {
   double cardiac_cycle_period = -1.0;  ///< Cardiac cycle period
   double time = 0.0;                   ///< Current time
 
+  Block *create_block(const std::string &block_name);
+
   /**
    * @brief Add a block to the model
    *
@@ -101,6 +103,8 @@ class Model {
    */
   int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
                 const std::string_view &name, bool internal = false);
+  int add_block(Block *block, const std::string_view &name,
+                const std::vector<int> &block_param_ids, bool internal = false);
 
   /**
    * @brief Get a block by its name

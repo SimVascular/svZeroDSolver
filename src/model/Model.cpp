@@ -35,10 +35,9 @@
 
 template <typename block_type>
 BlockFactoryFunc block_factory() {
-  return
-      [](int count, Model *model) -> Block * {
-        return new block_type(count, model);
-      };
+  return [](int count, Model *model) -> Block * {
+    return new block_type(count, model);
+  };
 }
 
 Model::Model() {
@@ -66,7 +65,7 @@ int Model::add_block(BlockType block_type,
                      const std::vector<int> &block_param_ids,
                      const std::string_view &name, bool internal) {
   // todo: delete (temporary)
-  std::map<BlockType, std::string_view> type_name_map = {
+  std::map<BlockType, std::string> type_name_map = {
       {BlockType::blood_vessel, "BloodVessel"},
       {BlockType::blood_vessel_junction, "BloodVesselJunction"},
       {BlockType::closed_loop_coronary_left_bc, "ClosedLoopCoronaryLeft"},
@@ -85,7 +84,7 @@ int Model::add_block(BlockType block_type,
     throw std::runtime_error(
         "Adding block to model failed: Invalid block type!");
   }
-  std::string_view block_name = it0->second;
+  std::string block_name = it0->second;
 
   // Get block from factory
   auto it = block_factory_map.find(block_name);
@@ -105,7 +104,37 @@ int Model::add_block(BlockType block_type,
     blocks.push_back(std::shared_ptr<Block>(block));
   }
 
-  block_types.push_back(block_type);
+  block_types.push_back(block->block_type);
+  block_index_map.insert({name_string, block_count});
+  block_names.push_back(name_string);
+
+  return block_count++;
+}
+
+Block *Model::create_block(const std::string &block_name) {
+  // Get block from factory
+  auto it = block_factory_map.find(block_name);
+  if (it == block_factory_map.end()) {
+    throw std::runtime_error(
+        "Adding block to model failed: Invalid block name!");
+  }
+  Block *block = it->second(block_count, this);
+  std::cout << block->id << std::endl;
+  std::cout << block->input_params.size() << std::endl;
+  return block;
+}
+
+int Model::add_block(Block *block, const std::string_view &name,
+                     const std::vector<int> &block_param_ids, bool internal) {
+  auto name_string = static_cast<std::string>(name);
+
+  if (internal) {
+    hidden_blocks.push_back(std::shared_ptr<Block>(block));
+  } else {
+    blocks.push_back(std::shared_ptr<Block>(block));
+  }
+
+  block_types.push_back(block->block_type);
   block_index_map.insert({name_string, block_count});
   block_names.push_back(name_string);
 

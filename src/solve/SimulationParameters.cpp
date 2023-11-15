@@ -53,6 +53,60 @@ std::vector<double> get_double_array(const nlohmann::json& data,
   return data[key].get<std::vector<double>>();
 }
 
+void generate_block(Model& model, const nlohmann::json& config,
+                    const std::string& block_name, const std::string_view& name,
+                    bool internal, bool periodic) {
+  std::cout << "generate_block" << std::endl;
+  // Generate block from factory
+  auto block = model.create_block(block_name);
+  std::cout << "create_block" << std::endl;
+  std::cout << (block->block_class == BlockClass::vessel) << std::endl;
+  std::cout << (block->block_type == BlockType::blood_vessel) << std::endl;
+  block->input_params[0];
+  std::cout << "wtf" << std::endl;
+  std::cout << block->input_params[0].is_optional << std::endl;
+  std::cout << block->input_params[0].name << std::endl;
+
+  // Read block input parameters
+  // todo: improve error checking
+  std::vector<int> block_param_ids;
+  int new_id;
+  for (const InputParameter& param : block->input_params) {
+    std::cout << param.name << std::endl;
+    if (param.is_array) {
+      // Get parameter vector
+      std::vector<double> val;
+      if (param.is_optional) {
+        val = get_double_array(config, param.name, {param.default_val});
+      } else {
+        val = get_double_array(config, param.name);
+      }
+
+      // Get time vector
+      std::vector<double> time = get_double_array(config, "t", {0.0});
+
+      // Add parameters to model
+      new_id = model.add_parameter(time, val, periodic);
+    } else {
+      // Get scalar parameter
+      double val;
+      if (param.is_optional) {
+        val = config.value(param.name, param.default_val);
+      } else {
+        val = config[param.name];
+      }
+
+      // Add parameter to model
+      new_id = model.add_parameter(val);
+    }
+    // Store parameter IDs
+    block_param_ids.push_back(new_id);
+  }
+
+  // Add block to model (with parameter IDs)
+  model.add_block(block, name, block_param_ids, internal);
+}
+
 /**
  * @brief Load the simulation parameters from a json configuration
  *
@@ -115,18 +169,22 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     const std::string vessel_name = vessel_config["vessel_name"];
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
-    if (vessel_config["zero_d_element_type"] == "BloodVessel") {
-      model.add_block(BlockType::blood_vessel,
-                      {model.add_parameter(vessel_values["R_poiseuille"]),
-                       model.add_parameter(vessel_values.value("C", 0.0)),
-                       model.add_parameter(vessel_values.value("L", 0.0)),
-                       model.add_parameter(
-                           vessel_values.value("stenosis_coefficient", 0.0))},
-                      vessel_name);
-      // DEBUG_MSG("Created vessel " << vessel_name);
-    } else {
-      throw std::invalid_argument("Unknown vessel type");
-    }
+    generate_block(model, vessel_values, vessel_config["zero_d_element_type"],
+                   vessel_name);
+
+    // if (vessel_config["zero_d_element_type"] == "BloodVessel") {
+    //   model.add_block(BlockType::blood_vessel,
+    //                   {model.add_parameter(vessel_values["R_poiseuille"]),
+    //                    model.add_parameter(vessel_values.value("C", 0.0)),
+    //                    model.add_parameter(vessel_values.value("L", 0.0)),
+    //                    model.add_parameter(
+    //                        vessel_values.value("stenosis_coefficient",
+    //                        0.0))},
+    //                   vessel_name);
+    //   // DEBUG_MSG("Created vessel " << vessel_name);
+    // } else {
+    //   throw std::invalid_argument("Unknown vessel type");
+    // }
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
@@ -239,13 +297,14 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
               "Error: The specified connection type for outlet "
               "external_coupling_block is invalid.");
         }
-        // Add connection only for closedLoopRCR and BloodVessel. Connection to
-        // ClosedLoopHeartAndPulmonary will be handled in
+        // Add connection only for closedLoopRCR and BloodVessel. Connection
+        // to ClosedLoopHeartAndPulmonary will be handled in
         // ClosedLoopHeartAndPulmonary creation.
         if ((connected_type == "ClosedLoopRCR") ||
             (connected_type == "BloodVessel")) {
           connections.push_back({connected_block, coupling_name});
-          // DEBUG_MSG("Created coupling block connection: " << connected_block
+          // DEBUG_MSG("Created coupling block connection: " <<
+          // connected_block
           // << "-> " << coupling_name);
         }  // connected_type == "ClosedLoopRCR"
       }    // coupling_loc
@@ -509,8 +568,8 @@ State load_initial_condition(const nlohmann::json& config, Model& model) {
           default_val = init_q;
           // DEBUG_MSG("flow_all initial condition for " << var_name);
         } else {
-          // DEBUG_MSG("No initial condition found for " << var_name << ". Using
-          // default value = 0.");
+          // DEBUG_MSG("No initial condition found for " << var_name << ".
+          // Using default value = 0.");
         }
       }
       initial_state.y[i] = initial_condition.value(var_name, default_val);
@@ -523,7 +582,8 @@ State load_initial_condition(const nlohmann::json& config, Model& model) {
     for (size_t i = 0; i < model.dofhandler.size(); i++) {
       std::string var_name = model.dofhandler.variables[i];
       if (!initial_condition_d.contains(var_name)) {
-        // DEBUG_MSG("No initial condition derivative found for " << var_name);
+        // DEBUG_MSG("No initial condition derivative found for " <<
+        // var_name);
       }
       initial_state.ydot[i] = initial_condition_d.value(var_name, 0.0);
     }

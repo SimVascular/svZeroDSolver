@@ -28,9 +28,9 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "Valve.h"
+#include "ValveTanh.h"
 
-void Valve::setup_dofs(DOFHandler &dofhandler) {
+void ValveTanh::setup_dofs(DOFHandler &dofhandler) {
   // set_up_dofs args: dofhandler (passed in), num equations, list of internal variable names (strings)
   // 2 eqns, one for Pressure, one for Flow
   Block::setup_dofs_(dofhandler, 2, {});
@@ -38,7 +38,7 @@ void Valve::setup_dofs(DOFHandler &dofhandler) {
 
 // update_constant updates matrices E and F from E(y,t)*y_dot + F(y,t)*y + c(y,t) = 0 
 // with terms that DO NOT DEPEND ON THE SOLUTION
-void Valve::update_constant(SparseSystem &system,
+void ValveTanh::update_constant(SparseSystem &system,
                                   std::vector<double> &parameters) {
   // Set element contributions
   // coeffRef args are the indices (i,j) of the matrix
@@ -55,7 +55,7 @@ void Valve::update_constant(SparseSystem &system,
 
 // update_solution updates matrices E and F from E(y,t)*y_dot + F(y,t)*y + c(y,t) = 0 
 // with terms that DO DEPEND ON THE SOLUTION (will change with each time step)
-void Valve::update_solution(
+void ValveTanh::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {

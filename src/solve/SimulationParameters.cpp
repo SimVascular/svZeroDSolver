@@ -453,6 +453,25 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       }
     }
   }
+  
+  if (config.contains("valves")) {
+    for (const auto& valve_config : config["valves"]) {
+      std::string valve_type = valve_config["type"];
+      std::string valve_name = valve_config["name"];
+      const auto& valve_values = valve_config["values"];
+      if (valve_type == "tanh") {
+        model.add_block(BlockType::valve_tanh,
+                      {model.add_parameter(valve_values["Rmax"]),
+                       model.add_parameter(valve_values["Rmin"]),
+                       model.add_parameter(valve_values["Steepness"])},
+                       valve_name);
+      }
+      std::string upstream_name = valve_config["upstream_block"];
+      std::string downstream_name = valve_config["downstream_block"];
+      connections.push_back({upstream_name, valve_name});
+      connections.push_back({valve_name, downstream_name});
+    }
+  }  
 
   // Create Connections
   for (auto& connection : connections) {

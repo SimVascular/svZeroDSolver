@@ -102,8 +102,8 @@ int Model::add_block(BlockType block_type,
       block = new ClosedLoopHeartPulmonary(block_count, block_param_ids, this);
       break;
 
-    case BlockType::valve:
-      block = new Valve(block_count, block_param_ids, this);
+    case BlockType::valve_tanh:
+      block = new ValveTanh(block_count, block_param_ids, this);
       break;
 
     default:

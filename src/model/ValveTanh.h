@@ -28,11 +28,11 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file Valve.h
- * @brief model::Valve source file
+ * @file ValveTanh.h
+ * @brief model::ValveTanh source file
  */
-#ifndef SVZERODSOLVER_MODEL_VALVE_HPP_
-#define SVZERODSOLVER_MODEL_VALVE_HPP_
+#ifndef SVZERODSOLVER_MODEL_VALVETANH_HPP_
+#define SVZERODSOLVER_MODEL_VALVETANH_HPP_
 
 #include <math.h>
 
@@ -40,9 +40,9 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Valve block.
+ * @brief Valve (tanh) block.
  *
- * Models the pressure drop across a diode-like valve, which is implemented as a non-linear resistor.
+ * Models the pressure drop across a diode-like valve, which is implemented as a non-linear hyperbolic-tangent resistor.
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -116,7 +116,7 @@
  * * `2` Steepness of sigmoid function
  *
  */
-class Valve : public Block {
+class ValveTanh : public Block {
  public:
   
   // Inherit constructors
@@ -132,7 +132,7 @@ class Valve : public Block {
     STEEPNESS = 2,
   };
 
-//explicit Valve(int id, const std::vector<int> &param_ids, Model *model)
+//explicit ValveTanh(int id, const std::vector<int> &param_ids, Model *model)
 //    : Block(id, param_ids, model){};
 
   /**
@@ -178,4 +178,4 @@ class Valve : public Block {
   TripletsContributions num_triplets{5, 0, 0};
 };
 
-#endif  // SVZERODSOLVER_MODEL_VALVE_HPP_
+#endif  // SVZERODSOLVER_MODEL_VALVETANH_HPP_

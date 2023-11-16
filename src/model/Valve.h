@@ -39,6 +39,72 @@
 #include "Block.h"
 #include "SparseSystem.h"
 
+/**
+ * @brief Valve block.
+ *
+ * Models the pressure drop across a diode-like valve, which is implemented as a non-linear resistor.
+ *
+ * \f[
+ * \begin{circuitikz} \draw
+ * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1.0,0) to [D, l=$R_v$, *-*] (3,0)
+ * node[anchor=south]{$P_{d}$};
+ * \end{circuitikz}
+ * \f]
+ *
+ * ### Governing equations
+ *
+ * \f[
+ * Q_{in}-Q_{out}=0
+ * \f]
+ *
+ * \f[
+ * P_{in}-P_{out}-R_{v}Q^{in}=0
+ * \f]
+ *
+ * where
+ * \f[
+ * R_{v}=\frac{1}{2}\[1+tanh\{k(P_{in}-P_P{out})\}\]
+ * \f]
+ *
+ * ### Local contributions
+ *
+ * \f[
+ * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out}\end{array}\right]^{T} \f]
+ *
+ * \f[
+ * \mathbf{E}^{e}=\left[\begin{array}{cccc}
+ * 0 & 0 & 0 & 0 \\
+ * 0 & 0 & 0 & 0
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{F}^{e}=\left[\begin{array}{cccc}
+ * 1 & -R_{v} & -1 & 0 \\
+ * 0 &      1 &  0 & -1
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{c}^{e}=\left[\begin{array}{c}
+ * 0 \\
+ * 0
+ * \end{array}\right]
+ * \f]
+ *
+ * See \cite pfaller2019importance.
+ *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Maximum (closed) valve resistance
+ * * `1` Minimum (open) valve resistance
+ * * `2` Steepness of sigmoid function
+ *
+ */
 class Valve : public Block {
  public:
   /**
@@ -51,13 +117,13 @@ class Valve : public Block {
     STEEP = 2,
   };
 
-  explicit Valve(int id, const std::vector<int> &param_ids, Model *model)
-      : Block(id, param_ids, model){};
+//explicit Valve(int id, const std::vector<int> &param_ids, Model *model)
+//    : Block(id, param_ids, model){};
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
    *
-   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
+   * Set global_var_ids and global_eqn_ids of the element based on the
    * number of equations and the number of internal variables of the
    * element.
    *

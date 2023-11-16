@@ -55,16 +55,11 @@
  * ### Governing equations
  *
  * \f[
+ * P_{in}-P_{out}-Q_{in}\[R_{min} + (R_{max}-R_{min})\frac{1}{2}\[1+tanh\{k(P_{out}-P_P{in})\}\]\]=0
+ * \f]
+ *
+ * \f[
  * Q_{in}-Q_{out}=0
- * \f]
- *
- * \f[
- * P_{in}-P_{out}-R_{v}Q^{in}=0
- * \f]
- *
- * where
- * \f[
- * R_{v}=\frac{1}{2}\[1+tanh\{k(P_{in}-P_P{out})\}\]
  * \f]
  *
  * ### Local contributions
@@ -82,15 +77,31 @@
  *
  * \f[
  * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -R_{v} & -1 & 0 \\
- * 0 &      1 &  0 & -1
+ * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0 \\
+ * 0 &      1                 &  0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
- * 0 \\
+ * -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
  * 0
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+ * \left[\begin{array}{cccc}
+ * \frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] & -2Q_\text{in} & -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} & -\frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] & 0 \\
+ * 0 & 0 & 0 & 0
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+ * \left[\begin{array}{cccc}
+ * 0 & 0 & 0 & 0 \\
+ * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
  *
@@ -107,6 +118,10 @@
  */
 class Valve : public Block {
  public:
+  
+  // Inherit constructors
+  using Block::Block;
+  
   /**
    * @brief Local IDs of the parameters
    *
@@ -114,7 +129,7 @@ class Valve : public Block {
   enum ParamId {
     RMAX = 0,
     RMIN = 1,
-    STEEP = 2,
+    STEEPNESS = 2,
   };
 
 //explicit Valve(int id, const std::vector<int> &param_ids, Model *model)

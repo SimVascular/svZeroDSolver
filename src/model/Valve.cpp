@@ -40,16 +40,15 @@ void Valve::setup_dofs(DOFHandler &dofhandler) {
 // with terms that DO NOT DEPEND ON THE SOLUTION
 void Valve::update_constant(SparseSystem &system,
                                   std::vector<double> &parameters) {
-
-  // The following section refers to the equation from https://simvascular.github.io/documentation/rom_simulation.html#0d-solver
-  // where E(y,t)*y_dot + F(y,t)*y + c(y,t) = 0 describes a system of nonlinear differential-algebraic equations
-
   // Set element contributions
   // coeffRef args are the indices (i,j) of the matrix
   // global_eqn_ids: number of rows in the matrix, set in setup_dofs
   // global_var_ids: number of columns, organized as pressure and flow of all inlets and then all outlets of the block
+  double Rmin = parameters[global_param_ids[ParamId::RMIN]];
+  double Rmax = parameters[global_param_ids[ParamId::RMAX]];
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -0.5*(Rmax+Rmin);
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
 }
@@ -60,16 +59,25 @@ void Valve::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
-  // Get parameters
+  // Get states
   double p_in = y[global_var_ids[0]];
   double p_out = y[global_var_ids[2]];
+  double q_in = y[global_var_ids[1]];
+  // Get parameters
   double Rmin = parameters[global_param_ids[ParamId::RMIN]];
   double Rmax = parameters[global_param_ids[ParamId::RMAX]];
-  double steep = parameters[global_param_ids[ParamId::STEEP]];
+  double steep = parameters[global_param_ids[ParamId::STEEPNESS]];
 
-  // Determine valve resistance
-  double resistance = Rmin + (Rmax-Rmin)*(1 + tanh((p_out - p_in)/steep)) / 2;
+  // Nonlinear term
+  system.C(global_eqn_ids[0]) = -0.5*q_in*(Rmax-Rmin)*tanh(steep*(p_out - p_in));
 
-  // Set element contributions
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -resistance;
+  // Derivatives of non-linear term
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 0.5*q_in*(Rmax-Rmin)*steep*(1.0-tanh(steep*(p_out - p_in))*tanh(steep*(p_out - p_in)));
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -0.5*(Rmax-Rmin)*tanh(steep*(p_out - p_in));
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -0.5*q_in*(Rmax-Rmin)*steep*(1.0-tanh(steep*(p_out - p_in))*tanh(steep*(p_out - p_in)));
+
+//// Determine valve resistance
+//double resistance = Rmin + (Rmax-Rmin)*(1 + tanh((p_out - p_in)/steep)) / 2;
+//// Set element contributions
+//system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -resistance;
 }

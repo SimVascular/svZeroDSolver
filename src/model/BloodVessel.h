@@ -100,7 +100,7 @@
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  *  S \text{sgn} (Q_\text{in})
  * \left[\begin{array}{cccc}
- * 0 & -Q_\text{in}        & 0 & 0 \\
+ * 0 & -2Q_\text{in}        & 0 & 0 \\
  * 0 & 2C\dot{Q}_\text{in} & 0 & 0
  * \end{array}\right]
  * \f]

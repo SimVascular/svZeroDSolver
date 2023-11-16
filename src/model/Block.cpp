@@ -32,16 +32,11 @@
 
 #include "Model.h"
 
-Block::Block(int id, Model *model) {
-  this->id = id;
-  this->model = model;
-}
-
 std::string Block::get_name() { return this->model->get_block_name(this->id); }
 
 Block::~Block() {}
 
-void Block::setup_params_(const std::vector<int> &param_ids){
+void Block::setup_params_(const std::vector<int> &param_ids) {
   this->global_param_ids = param_ids;
 }
 

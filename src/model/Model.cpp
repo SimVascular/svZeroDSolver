@@ -119,13 +119,14 @@ Block *Model::create_block(const std::string &block_name) {
         "Adding block to model failed: Invalid block name!");
   }
   Block *block = it->second(block_count, this);
-  std::cout << block->id << std::endl;
-  std::cout << block->input_params.size() << std::endl;
   return block;
 }
 
 int Model::add_block(Block *block, const std::string_view &name,
                      const std::vector<int> &block_param_ids, bool internal) {
+  // Set global parameter IDs
+  block->setup_params_(block_param_ids);
+
   auto name_string = static_cast<std::string>(name);
 
   if (internal) {

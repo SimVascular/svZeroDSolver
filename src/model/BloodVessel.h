@@ -143,14 +143,6 @@
  */
 class BloodVessel : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
-
-  static const BlockType block_type;    ///< Type of this block
-  static const BlockClass block_class;  ///< Class of this block
-  static const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
-
   /**
    * @brief Local IDs of the parameters
    *
@@ -161,6 +153,12 @@ class BloodVessel : public Block {
     INDUCTANCE = 2,
     STENOSIS_COEFFICIENT = 3,
   };
+
+  BloodVessel(int id, Model *model)
+      : Block(id, model, BlockType::blood_vessel, BlockClass::vessel,
+              {InputParameter("R_poiseuille"), InputParameter("C", true),
+               InputParameter("L", true),
+               InputParameter("stenosis_coefficient", true)}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

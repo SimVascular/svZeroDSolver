@@ -79,13 +79,11 @@
  */
 class ResistanceBC : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
-
-  static const BlockType block_type;    ///< Type of this block
-  static const BlockClass block_class;  ///< Class of this block
-  static const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  ResistanceBC(int id, Model *model)
+      : Block(id, model, BlockType::resistance_bc,
+              BlockClass::boundary_condition,
+              {InputParameter("R", false, true),
+               InputParameter("Pd", false, true)}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

@@ -116,12 +116,11 @@
  */
 class ClosedLoopCoronaryBC : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
-  
-  static const BlockClass block_class;  ///< Class of this block
-  static const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  ClosedLoopCoronaryBC(int id, Model *model, BlockType block_type)
+      : Block(
+            id, model, block_type, BlockClass::boundary_condition,
+            {InputParameter("Ra"), InputParameter("Ram"), InputParameter("Rv"),
+             InputParameter("Ca"), InputParameter("Cim")}) {}
 
   /**
    * @brief Local IDs of the parameters

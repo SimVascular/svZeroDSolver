@@ -81,13 +81,9 @@
  */
 class PressureReferenceBC : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
-
-  static const BlockType block_type;    ///< Type of this block
-  static const BlockClass block_class;  ///< Class of this block
-  static const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  PressureReferenceBC(int id, Model *model)
+      : Block(id, model, BlockType::pressure_bc, BlockClass::boundary_condition,
+              {InputParameter("P", false, true)}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

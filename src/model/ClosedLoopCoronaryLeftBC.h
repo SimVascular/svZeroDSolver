@@ -42,10 +42,9 @@
  */
 class ClosedLoopCoronaryLeftBC : public ClosedLoopCoronaryBC {
  public:
-  // Inherit constructors
-  using ClosedLoopCoronaryBC::ClosedLoopCoronaryBC;
-
-  static const BlockType block_type;  ///< Type of this block
+  ClosedLoopCoronaryLeftBC(int id, Model *model)
+      : ClosedLoopCoronaryBC(id, model,
+                             BlockType::closed_loop_coronary_left_bc) {}
 
   /**
    * @brief Setup parameters that depend on the model

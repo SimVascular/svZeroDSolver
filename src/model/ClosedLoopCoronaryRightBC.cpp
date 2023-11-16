@@ -32,9 +32,6 @@
 
 #include "Model.h"
 
-const BlockType ClosedLoopCoronaryRightBC::block_type =
-    BlockType::closed_loop_coronary_right_bc;
-
 void ClosedLoopCoronaryRightBC::setup_model_dependent_params() {
   auto heart_block = model->get_block("CLH");
   im_param_id =

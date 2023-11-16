@@ -56,23 +56,14 @@ std::vector<double> get_double_array(const nlohmann::json& data,
 void generate_block(Model& model, const nlohmann::json& config,
                     const std::string& block_name, const std::string_view& name,
                     bool internal, bool periodic) {
-  std::cout << "generate_block" << std::endl;
   // Generate block from factory
   auto block = model.create_block(block_name);
-  std::cout << "create_block" << std::endl;
-  std::cout << (block->block_class == BlockClass::vessel) << std::endl;
-  std::cout << (block->block_type == BlockType::blood_vessel) << std::endl;
-  block->input_params[0];
-  std::cout << "wtf" << std::endl;
-  std::cout << block->input_params[0].is_optional << std::endl;
-  std::cout << block->input_params[0].name << std::endl;
 
   // Read block input parameters
   // todo: improve error checking
   std::vector<int> block_param_ids;
   int new_id;
   for (const InputParameter& param : block->input_params) {
-    std::cout << param.name << std::endl;
     if (param.is_array) {
       // Get parameter vector
       std::vector<double> val;
@@ -171,20 +162,6 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
     generate_block(model, vessel_values, vessel_config["zero_d_element_type"],
                    vessel_name);
-
-    // if (vessel_config["zero_d_element_type"] == "BloodVessel") {
-    //   model.add_block(BlockType::blood_vessel,
-    //                   {model.add_parameter(vessel_values["R_poiseuille"]),
-    //                    model.add_parameter(vessel_values.value("C", 0.0)),
-    //                    model.add_parameter(vessel_values.value("L", 0.0)),
-    //                    model.add_parameter(
-    //                        vessel_values.value("stenosis_coefficient",
-    //                        0.0))},
-    //                   vessel_name);
-    //   // DEBUG_MSG("Created vessel " << vessel_name);
-    // } else {
-    //   throw std::invalid_argument("Unknown vessel type");
-    // }
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {

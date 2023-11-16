@@ -75,13 +75,31 @@ class Model;
  */
 class Block {
  public:
+  int id;                        ///< Global ID of the block
+  Model *model;                  ///< The model to which the block belongs
+  const BlockType block_type;    ///< Type of this block
+  const BlockClass block_class;  ///< Class of this block
+  const std::vector<InputParameter>
+      input_params;  ///< List of input parameter names
+
+  std::vector<Node *> inlet_nodes;   ///< Inlet nodes
+  std::vector<Node *> outlet_nodes;  ///< Outlet nodes
+
+  bool steady = false;  ///< Toggle steady behavior
+
   /**
    * @brief Construct a new Block object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  explicit Block(int id, Model *model);
+  Block(int id, Model *model, BlockType block_type, BlockClass block_class,
+        std::vector<InputParameter> input_params)
+      : id(id),
+        model(model),
+        block_type(block_type),
+        block_class(block_class),
+        input_params(input_params) {}
 
   /**
    * @brief Destroy the Block object
@@ -94,19 +112,6 @@ class Block {
    *
    */
   Block(const Block &) = delete;
-
-  int id;        ///< Global ID of the block
-  Model *model;  ///< The model to which the block belongs
-
-  BlockType block_type;                      ///< Type of this block
-  BlockClass block_class;                    ///< Class of this block
-  std::vector<InputParameter> input_params;  ///< List of input parameter names
-
-  std::vector<Node *> inlet_nodes;   ///< Inlet nodes
-  std::vector<Node *> outlet_nodes;  ///< Outlet nodes
-
-  bool steady = false;  ///< Toggle steady behavior
-
   /**
    * @brief Global IDs for the block parameters.
    *

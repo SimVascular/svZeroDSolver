@@ -80,13 +80,9 @@
  */
 class FlowReferenceBC : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
-
-  static const BlockType block_type;    ///< Type of this block
-  static const BlockClass block_class;  ///< Class of this block
-  static const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  FlowReferenceBC(int id, Model *model)
+      : Block(id, model, BlockType::flow_bc, BlockClass::boundary_condition,
+              {InputParameter("Q", false, true)}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

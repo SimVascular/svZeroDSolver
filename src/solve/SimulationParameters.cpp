@@ -63,36 +63,46 @@ int generate_block(Model& model, const nlohmann::json& config,
   // todo: improve error checking
   std::vector<int> block_param_ids;
   int new_id;
-  for (const InputParameter& param : block->input_params) {
-    if (param.is_array) {
-      // Get parameter vector
-      std::vector<double> val;
-      if (param.is_optional) {
-        val = get_double_array(config, param.name, {param.default_val});
-      } else {
-        val = get_double_array(config, param.name);
+
+  // Only blood_vessel_junction has lists of parameters
+  if (block->block_type == BlockType::blood_vessel_junction) {
+    for (const InputParameter& param : block->input_params) {
+      for (double value : config[param.name]) {
+        block_param_ids.push_back(model.add_parameter(value));
       }
-
-      // Get time vector
-      std::vector<double> time = get_double_array(config, "t", {0.0});
-
-      // Add parameters to model
-      new_id = model.add_parameter(time, val, periodic);
-
-    } else {
-      // Get scalar parameter
-      double val;
-      if (param.is_optional) {
-        val = config.value(param.name, param.default_val);
-      } else {
-        val = config[param.name];
-      }
-
-      // Add parameter to model
-      new_id = model.add_parameter(val);
     }
-    // Store parameter IDs
-    block_param_ids.push_back(new_id);
+  } else {
+    for (const InputParameter& param : block->input_params) {
+      if (param.is_array) {
+        // Get parameter vector
+        std::vector<double> val;
+        if (param.is_optional) {
+          val = get_double_array(config, param.name, {param.default_val});
+        } else {
+          val = get_double_array(config, param.name);
+        }
+
+        // Get time vector
+        std::vector<double> time = get_double_array(config, "t", {0.0});
+
+        // Add parameters to model
+        new_id = model.add_parameter(time, val, periodic);
+
+      } else {
+        // Get scalar parameter
+        double val;
+        if (param.is_optional) {
+          val = config.value(param.name, param.default_val);
+        } else {
+          val = config[param.name];
+        }
+
+        // Add parameter to model
+        new_id = model.add_parameter(val);
+      }
+      // Store parameter IDs
+      block_param_ids.push_back(new_id);
+    }
   }
 
   // Add block to model (with parameter IDs)
@@ -231,10 +241,14 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       }  // connected_block != "ClosedLoopHeartAndPulmonary"
       // Create connections
       if (coupling_loc == "inlet") {
-        std::vector<std::string> possible_types = {
-            "RESISTANCE",    "RCR",      "ClosedLoopRCR",
-            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
-            "BloodVessel"};
+        std::vector<std::string> possible_types = {"RESISTANCE",
+                                                   "RCR",
+                                                   "ClosedLoopRCR",
+                                                   "SimplifiedRCR",
+                                                   "CORONARY",
+                                                   "ClosedLoopCoronaryLeft",
+                                                   "ClosedLoopCoronaryRight",
+                                                   "BloodVessel"};
         if (std::find(std::begin(possible_types), std::end(possible_types),
                       connected_type) == std::end(possible_types)) {
           throw std::runtime_error(
@@ -297,20 +311,6 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
     if (!junction_config.contains("junction_values")) {
       generate_block(model, {}, j_type, junction_name);
-    } else if (j_type == "BloodVesselJunction") {
-      const auto& junction_values = junction_config["junction_values"];
-      std::vector<int> param_ids;
-      for (double value : junction_values["R_poiseuille"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
-      for (double value : junction_values["L"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
-      for (double value : junction_values["stenosis_coefficient"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
-      model.add_block(BlockType::blood_vessel_junction, param_ids,
-                      junction_name);
     } else {
       generate_block(model, junction_config["junction_values"], j_type,
                      junction_name);

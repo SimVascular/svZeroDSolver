@@ -109,12 +109,6 @@ int generate_block(Model& model, const nlohmann::json& config,
   return model.add_block(block, name, block_param_ids, internal);
 }
 
-/**
- * @brief Load the simulation parameters from a json configuration
- *
- * @param config The json configuration
- * @return SimulationParameters Simulation parameters read from configuration
- */
 SimulationParameters load_simulation_params(const nlohmann::json& config) {
   // DEBUG_MSG("Loading simulation parameters");
   SimulationParameters sim_params;
@@ -149,11 +143,6 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   return sim_params;
 }
 
-/**
- * @brief Load model from a configuration
- *
- * @param config The json configuration
- */
 void load_simulation_model(const nlohmann::json& config, Model& model) {
   // DEBUG_MSG("Loading model");
 
@@ -161,33 +150,11 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
   std::vector<std::tuple<std::string, std::string>> connections;
 
   // Create vessels
-  // DEBUG_MSG("Load vessels");
   std::map<int, std::string> vessel_id_map;
   const auto& vessels = config["vessels"];
-
-  for (size_t i = 0; i < vessels.size(); i++) {
-    const auto& vessel_config = vessels[i];
-    const auto& vessel_values = vessel_config["zero_d_element_values"];
-    const std::string vessel_name = vessel_config["vessel_name"];
-    vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
-
-    generate_block(model, vessel_values, vessel_config["zero_d_element_type"],
-                   vessel_name);
-
-    // Read connected boundary conditions
-    if (vessel_config.contains("boundary_conditions")) {
-      const auto& vessel_bc_config = vessel_config["boundary_conditions"];
-      if (vessel_bc_config.contains("inlet")) {
-        connections.push_back({vessel_bc_config["inlet"], vessel_name});
-      }
-      if (vessel_bc_config.contains("outlet")) {
-        connections.push_back({vessel_name, vessel_bc_config["outlet"]});
-      }
-    }
-  }
+  read_vessels(model, connections, vessels, vessel_id_map);
 
   // Create map for boundary conditions to boundary condition type
-  // DEBUG_MSG("Create BC name to BC type map");
   const auto& bc_configs = config["boundary_conditions"];
   std::map<std::string, std::string> bc_type_map;
   for (size_t i = 0; i < bc_configs.size(); i++) {
@@ -298,8 +265,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       if (bc_values["closed_loop_outlet"] == true) {
         closed_loop_bcs.push_back(bc_name);
       }
-    }
-    if (block->block_class == BlockClass::closed_loop) {
+    } else if (block->block_class == BlockClass::closed_loop) {
       closed_loop_bcs.push_back(bc_name);
     }
   }
@@ -391,13 +357,33 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
   model.finalize();
 }
 
-/**
- * @brief Load initial conditions from a configuration
- *
- * @param config The json configuration
- * @param model The model
- * @return State Initial configuration for the model
- */
+void read_vessels(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& vessels, std::map<int, std::string>& vessel_id_map) {
+  // Loop all vessels
+  for (size_t i = 0; i < vessels.size(); i++) {
+    const auto& vessel_config = vessels[i];
+    const auto& vessel_values = vessel_config["zero_d_element_values"];
+    const std::string vessel_name = vessel_config["vessel_name"];
+    vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
+
+    generate_block(model, vessel_values, vessel_config["zero_d_element_type"],
+                   vessel_name);
+
+    // Read connected boundary conditions
+    if (vessel_config.contains("boundary_conditions")) {
+      const auto& vessel_bc_config = vessel_config["boundary_conditions"];
+      if (vessel_bc_config.contains("inlet")) {
+        connections.push_back({vessel_bc_config["inlet"], vessel_name});
+      }
+      if (vessel_bc_config.contains("outlet")) {
+        connections.push_back({vessel_name, vessel_bc_config["outlet"]});
+      }
+    }
+  }
+}
+
 State load_initial_condition(const nlohmann::json& config, Model& model) {
   // Read initial condition
   auto initial_state = State::Zero(model.dofhandler.size());

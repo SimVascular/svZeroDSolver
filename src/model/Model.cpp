@@ -41,7 +41,7 @@ BlockFactoryFunc block_factory() {
 }
 
 Model::Model() {
-  // Add all blocks to factory
+  // Add all implemented blocks to factory
   block_factory_map = {
       {"BloodVessel", block_factory<BloodVessel>()},
       {"BloodVesselJunction", block_factory<BloodVesselJunction>()},
@@ -60,56 +60,6 @@ Model::Model() {
 }
 
 Model::~Model() {}
-
-int Model::add_block(BlockType block_type,
-                     const std::vector<int> &block_param_ids,
-                     const std::string_view &name, bool internal) {
-  // todo: delete (temporary)
-  std::map<BlockType, std::string> type_name_map = {
-      {BlockType::blood_vessel, "BloodVessel"},
-      {BlockType::blood_vessel_junction, "BloodVesselJunction"},
-      {BlockType::closed_loop_coronary_left_bc, "ClosedLoopCoronaryLeft"},
-      {BlockType::closed_loop_coronary_right_bc, "ClosedLoopCoronaryRight"},
-      {BlockType::closed_loop_heart_pulmonary, "ClosedLoopHeartAndPulmonary"},
-      {BlockType::closed_loop_rcr_bc, "ClosedLoopRCR"},
-      {BlockType::open_loop_coronary_bc, "CORONARY"},
-      {BlockType::flow_bc, "FLOW"},
-      {BlockType::junction, "NORMAL_JUNCTION"},
-      {BlockType::pressure_bc, "PRESSURE"},
-      {BlockType::windkessel_bc, "RCR"},
-      {BlockType::resistance_bc, "RESISTANCE"},
-      {BlockType::resistive_junction, "resistive_junction"}};
-  auto it0 = type_name_map.find(block_type);
-  if (it0 == type_name_map.end()) {
-    throw std::runtime_error(
-        "Adding block to model failed: Invalid block type!");
-  }
-  std::string block_name = it0->second;
-
-  // Get block from factory
-  auto it = block_factory_map.find(block_name);
-  if (it == block_factory_map.end()) {
-    throw std::runtime_error(
-        "Adding block to model failed: Invalid block name!");
-  }
-
-  Block *block = it->second(block_count, this);
-  block->setup_params_(block_param_ids);
-
-  auto name_string = static_cast<std::string>(name);
-
-  if (internal) {
-    hidden_blocks.push_back(std::shared_ptr<Block>(block));
-  } else {
-    blocks.push_back(std::shared_ptr<Block>(block));
-  }
-
-  block_types.push_back(block->block_type);
-  block_index_map.insert({name_string, block_count});
-  block_names.push_back(name_string);
-
-  return block_count++;
-}
 
 Block *Model::create_block(const std::string &block_name) {
   // Get block from factory
@@ -140,6 +90,16 @@ int Model::add_block(Block *block, const std::string_view &name,
   block_names.push_back(name_string);
 
   return block_count++;
+}
+
+int Model::add_block(const std::string &block_name,
+                     const std::vector<int> &block_param_ids,
+                     const std::string_view &name, bool internal) {
+  // Generate block from factory
+  auto block = this->create_block(block_name);
+
+  // Add block to model
+  return this->add_block(block, name, block_param_ids, internal);
 }
 
 Block *Model::get_block(const std::string_view &name) const {

@@ -99,19 +99,7 @@ class Model {
   Block *create_block(const std::string &block_name);
 
   /**
-   * @brief Add a block to the model
-   *
-   * @param block_type Type of the block
-   * @param block_param_ids Global IDs of the parameters of the block
-   * @param name The name of the block
-   * @param internal Toggle whether block is internal
-   * @return int Global ID of the block
-   */
-  int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
-                const std::string_view &name, bool internal = false);
-
-  /**
-   * @brief Add a block to the model
+   * @brief Add a block to the model (without parameters)
    *
    * @param block_type Type of the block
    * @param name The name of the block
@@ -121,6 +109,18 @@ class Model {
    */
   int add_block(Block *block, const std::string_view &name,
                 const std::vector<int> &block_param_ids, bool internal = false);
+
+  /**
+   * @brief Add a block to the model (with parameters)
+   *
+   * @param block_name Type of the block
+   * @param block_param_ids Global IDs of the parameters of the block
+   * @param name The name of the block
+   * @param internal Toggle whether block is internal
+   * @return int Global ID of the block
+   */
+  int add_block(const std::string &block_name, const std::vector<int> &block_param_ids,
+                const std::string_view &name, bool internal = false);
 
   /**
    * @brief Get a block by its name

@@ -102,6 +102,12 @@ void load_simulation_model(const nlohmann::json& config, Model& model);
 void read_vessels(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& vessels, std::map<int, std::string>& vessel_id_map);
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
+
+void read_coupling(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
+    std::map<std::string, std::string>& bc_type_map);
 
 #endif

@@ -231,14 +231,10 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       }  // connected_block != "ClosedLoopHeartAndPulmonary"
       // Create connections
       if (coupling_loc == "inlet") {
-        std::vector<std::string> possible_types = {"RESISTANCE",
-                                                   "RCR",
-                                                   "ClosedLoopRCR",
-                                                   "SimplifiedRCR",
-                                                   "CORONARY",
-                                                   "ClosedLoopCoronaryLeft",
-                                                   "ClosedLoopCoronaryRight",
-                                                   "BloodVessel"};
+        std::vector<std::string> possible_types = {
+            "RESISTANCE",    "RCR",      "ClosedLoopRCR",
+            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
+            "BloodVessel"};
         if (std::find(std::begin(possible_types), std::end(possible_types),
                       connected_type) == std::end(possible_types)) {
           throw std::runtime_error(
@@ -257,14 +253,13 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
               "Error: The specified connection type for outlet "
               "external_coupling_block is invalid.");
         }
-        // Add connection only for closedLoopRCR and BloodVessel. Connection
-        // to ClosedLoopHeartAndPulmonary will be handled in
+        // Add connection only for closedLoopRCR and BloodVessel. Connection to
+        // ClosedLoopHeartAndPulmonary will be handled in
         // ClosedLoopHeartAndPulmonary creation.
         if ((connected_type == "ClosedLoopRCR") ||
             (connected_type == "BloodVessel")) {
           connections.push_back({connected_block, coupling_name});
-          // DEBUG_MSG("Created coupling block connection: " <<
-          // connected_block
+          // DEBUG_MSG("Created coupling block connection: " << connected_block
           // << "-> " << coupling_name);
         }  // connected_type == "ClosedLoopRCR"
       }    // coupling_loc

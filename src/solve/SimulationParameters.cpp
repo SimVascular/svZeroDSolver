@@ -53,11 +53,10 @@ std::vector<double> get_double_array(const nlohmann::json& data,
   return data[key].get<std::vector<double>>();
 }
 
-void generate_block(Model& model, const nlohmann::json& config,
-                    const std::string& block_name, const std::string_view& name,
-                    bool internal, bool periodic) {
+int generate_block(Model& model, const nlohmann::json& config,
+                   const std::string& block_name, const std::string_view& name,
+                   bool internal, bool periodic) {
   // Generate block from factory
-  std::cout << block_name << std::endl;
   auto block = model.create_block(block_name);
 
   // Read block input parameters
@@ -65,7 +64,6 @@ void generate_block(Model& model, const nlohmann::json& config,
   std::vector<int> block_param_ids;
   int new_id;
   for (const InputParameter& param : block->input_params) {
-    std::cout << param.name << std::endl;
     if (param.is_array) {
       // Get parameter vector
       std::vector<double> val;
@@ -80,15 +78,9 @@ void generate_block(Model& model, const nlohmann::json& config,
 
       // Add parameters to model
       new_id = model.add_parameter(time, val, periodic);
-      for (auto it : time) {
-        std::cout << it << std::endl;
-      }
-      for (auto it : val) {
-        std::cout << it << std::endl;
-      }
+
     } else {
       // Get scalar parameter
-      // std::cout<<config[param.name].is_array()<<std::endl;
       double val;
       if (param.is_optional) {
         val = config.value(param.name, param.default_val);
@@ -97,7 +89,6 @@ void generate_block(Model& model, const nlohmann::json& config,
       }
 
       // Add parameter to model
-      std::cout << val << std::endl;
       new_id = model.add_parameter(val);
     }
     // Store parameter IDs
@@ -105,10 +96,7 @@ void generate_block(Model& model, const nlohmann::json& config,
   }
 
   // Add block to model (with parameter IDs)
-  model.add_block(block, name, block_param_ids, internal);
-
-  // if (block->block_class == BlockClass::closed_loop)
-  //   closed_loop_bcs.push_back(name);
+  return model.add_block(block, name, block_param_ids, internal);
 }
 
 /**
@@ -310,81 +298,19 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     std::string bc_name = bc_config["bc_name"];
     const auto& bc_values = bc_config["bc_values"];
 
-    // generate_block(model, bc_values, bc_type, bc_name);
+    int block_id = generate_block(model, bc_values, bc_type, bc_name);
 
-    auto t = get_double_array(bc_values, "t", {0.0});
-    if (bc_type == "RCR") {
-      model.add_block(BlockType::windkessel_bc,
-                      {
-                          model.add_parameter(bc_values["Rp"]),
-                          model.add_parameter(bc_values["C"]),
-                          model.add_parameter(bc_values["Rd"]),
-                          model.add_parameter(bc_values["Pd"]),
-                      },
-                      bc_name);
-    } else if (bc_type == "ClosedLoopRCR") {
-      model.add_block(BlockType::closed_loop_rcr_bc,
-                      {model.add_parameter(bc_values["Rp"]),
-                       model.add_parameter(bc_values["C"]),
-                       model.add_parameter(bc_values["Rd"])},
-                      bc_name);
+    // Keep track of closed loop blocks
+    Block* block = model.get_block(block_id);
+
+    if (block->block_type == BlockType::closed_loop_rcr_bc) {
       if (bc_values["closed_loop_outlet"] == true) {
         closed_loop_bcs.push_back(bc_name);
       }
-
-    } else if (bc_type == "FLOW") {
-      model.add_block(
-          BlockType::flow_bc,
-          {model.add_parameter(t, get_double_array(bc_values, "Q"))}, bc_name);
-
-    } else if (bc_type == "RESISTANCE") {
-      model.add_block(
-          BlockType::resistance_bc,
-          {model.add_parameter(t, get_double_array(bc_values, "R")),
-           model.add_parameter(t, get_double_array(bc_values, "Pd"))},
-          bc_name);
-
-    } else if (bc_type == "PRESSURE") {
-      model.add_block(
-          BlockType::pressure_bc,
-          {model.add_parameter(t, get_double_array(bc_values, "P"))}, bc_name);
-
-    } else if (bc_type == "CORONARY") {
-      model.add_block(
-          BlockType::open_loop_coronary_bc,
-          {model.add_parameter(t, get_double_array(bc_values, "Ra1")),
-           model.add_parameter(t, get_double_array(bc_values, "Ra2")),
-           model.add_parameter(t, get_double_array(bc_values, "Rv1")),
-           model.add_parameter(t, get_double_array(bc_values, "Ca")),
-           model.add_parameter(t, get_double_array(bc_values, "Cc")),
-           model.add_parameter(t, get_double_array(bc_values, "Pim")),
-           model.add_parameter(t, get_double_array(bc_values, "P_v"))},
-          bc_name);
-
-    } else if (bc_type == "ClosedLoopCoronaryLeft") {
-      model.add_block(BlockType::closed_loop_coronary_left_bc,
-                      {model.add_parameter(bc_values["Ra"]),
-                       model.add_parameter(bc_values["Ram"]),
-                       model.add_parameter(bc_values["Rv"]),
-                       model.add_parameter(bc_values["Ca"]),
-                       model.add_parameter(bc_values["Cim"])},
-                      bc_name);
-      closed_loop_bcs.push_back(bc_name);
-
-    } else if (bc_type == "ClosedLoopCoronaryRight") {
-      model.add_block(BlockType::closed_loop_coronary_right_bc,
-                      {model.add_parameter(bc_values["Ra"]),
-                       model.add_parameter(bc_values["Ram"]),
-                       model.add_parameter(bc_values["Rv"]),
-                       model.add_parameter(bc_values["Ca"]),
-                       model.add_parameter(bc_values["Cim"])},
-                      bc_name);
-      closed_loop_bcs.push_back(bc_name);
-
-    } else {
-      throw std::invalid_argument("Unknown boundary condition type");
     }
-    // DEBUG_MSG("Created boundary condition " << bc_name);
+    if (block->block_class == BlockClass::closed_loop) {
+      closed_loop_bcs.push_back(bc_name);
+    }
   }
 
   // Create junctions
@@ -445,36 +371,9 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
             model.cardiac_cycle_period = cycle_period;
           }
           const auto& heart_params = closed_loop_config["parameters"];
-          // Convert to std::map to keep model blocks independent of simdjson
-          model.add_block(BlockType::closed_loop_heart_pulmonary,
-                          {model.add_parameter(heart_params["Tsa"]),
-                           model.add_parameter(heart_params["tpwave"]),
-                           model.add_parameter(heart_params["Erv_s"]),
-                           model.add_parameter(heart_params["Elv_s"]),
-                           model.add_parameter(heart_params["iml"]),
-                           model.add_parameter(heart_params["imr"]),
-                           model.add_parameter(heart_params["Lra_v"]),
-                           model.add_parameter(heart_params["Rra_v"]),
-                           model.add_parameter(heart_params["Lrv_a"]),
-                           model.add_parameter(heart_params["Rrv_a"]),
-                           model.add_parameter(heart_params["Lla_v"]),
-                           model.add_parameter(heart_params["Rla_v"]),
-                           model.add_parameter(heart_params["Llv_a"]),
-                           model.add_parameter(heart_params["Rlv_ao"]),
-                           model.add_parameter(heart_params["Vrv_u"]),
-                           model.add_parameter(heart_params["Vlv_u"]),
-                           model.add_parameter(heart_params["Rpd"]),
-                           model.add_parameter(heart_params["Cp"]),
-                           model.add_parameter(heart_params["Cpa"]),
-                           model.add_parameter(heart_params["Kxp_ra"]),
-                           model.add_parameter(heart_params["Kxv_ra"]),
-                           model.add_parameter(heart_params["Kxp_la"]),
-                           model.add_parameter(heart_params["Kxv_la"]),
-                           model.add_parameter(heart_params["Emax_ra"]),
-                           model.add_parameter(heart_params["Emax_la"]),
-                           model.add_parameter(heart_params["Vaso_ra"]),
-                           model.add_parameter(heart_params["Vaso_la"])},
-                          heartpulmonary_name);
+
+          generate_block(model, heart_params, closed_loop_type,
+                         heartpulmonary_name);
 
           // Junction at inlet to heart
           std::string heart_inlet_junction_name = "J_heart_inlet";

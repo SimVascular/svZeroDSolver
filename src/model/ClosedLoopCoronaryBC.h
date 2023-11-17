@@ -118,7 +118,7 @@ class ClosedLoopCoronaryBC : public Block {
  public:
   ClosedLoopCoronaryBC(int id, Model *model, BlockType block_type)
       : Block(
-            id, model, block_type, BlockClass::boundary_condition,
+            id, model, block_type, BlockClass::closed_loop,
             {InputParameter("Ra"), InputParameter("Ram"), InputParameter("Rv"),
              InputParameter("Ca"), InputParameter("Cim")}) {}
 

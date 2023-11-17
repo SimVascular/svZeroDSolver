@@ -30,7 +30,6 @@
 
 #include "BloodVessel.h"
 
-
 void BloodVessel::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {});
 }

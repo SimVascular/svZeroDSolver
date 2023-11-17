@@ -113,7 +113,7 @@ class ClosedLoopRCRBC : public Block {
   ClosedLoopRCRBC(int id, Model *model)
       : Block(
             id, model, BlockType::closed_loop_rcr_bc,
-            BlockClass::boundary_condition,
+            BlockClass::closed_loop,
             {InputParameter("Rp"), InputParameter("C"), InputParameter("Rd")}) {
   }
 

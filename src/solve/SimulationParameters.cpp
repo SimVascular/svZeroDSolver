@@ -57,6 +57,7 @@ void generate_block(Model& model, const nlohmann::json& config,
                     const std::string& block_name, const std::string_view& name,
                     bool internal, bool periodic) {
   // Generate block from factory
+  std::cout << block_name << std::endl;
   auto block = model.create_block(block_name);
 
   // Read block input parameters
@@ -64,6 +65,7 @@ void generate_block(Model& model, const nlohmann::json& config,
   std::vector<int> block_param_ids;
   int new_id;
   for (const InputParameter& param : block->input_params) {
+    std::cout << param.name << std::endl;
     if (param.is_array) {
       // Get parameter vector
       std::vector<double> val;
@@ -78,8 +80,15 @@ void generate_block(Model& model, const nlohmann::json& config,
 
       // Add parameters to model
       new_id = model.add_parameter(time, val, periodic);
+      for (auto it : time) {
+        std::cout << it << std::endl;
+      }
+      for (auto it : val) {
+        std::cout << it << std::endl;
+      }
     } else {
       // Get scalar parameter
+      // std::cout<<config[param.name].is_array()<<std::endl;
       double val;
       if (param.is_optional) {
         val = config.value(param.name, param.default_val);
@@ -88,6 +97,7 @@ void generate_block(Model& model, const nlohmann::json& config,
       }
 
       // Add parameter to model
+      std::cout << val << std::endl;
       new_id = model.add_parameter(val);
     }
     // Store parameter IDs
@@ -96,6 +106,9 @@ void generate_block(Model& model, const nlohmann::json& config,
 
   // Add block to model (with parameter IDs)
   model.add_block(block, name, block_param_ids, internal);
+
+  // if (block->block_class == BlockClass::closed_loop)
+  //   closed_loop_bcs.push_back(name);
 }
 
 /**
@@ -297,6 +310,8 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     std::string bc_name = bc_config["bc_name"];
     const auto& bc_values = bc_config["bc_values"];
 
+    // generate_block(model, bc_values, bc_type, bc_name);
+
     auto t = get_double_array(bc_values, "t", {0.0});
     if (bc_type == "RCR") {
       model.add_block(BlockType::windkessel_bc,
@@ -377,17 +392,8 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     std::string j_type = junction_config["junction_type"];
     std::string junction_name = junction_config["junction_name"];
 
-    if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
-      model.add_block(BlockType::junction, {}, junction_name);
-
-    } else if (j_type == "resistive_junction") {
-      const auto& junction_values = junction_config["junction_values"];
-      std::vector<int> param_ids;
-      for (double value : junction_values["R"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
-      model.add_block(BlockType::resistive_junction, param_ids, junction_name);
-
+    if (!junction_config.contains("junction_values")) {
+      generate_block(model, {}, j_type, junction_name);
     } else if (j_type == "BloodVesselJunction") {
       const auto& junction_values = junction_config["junction_values"];
       std::vector<int> param_ids;
@@ -403,8 +409,10 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       model.add_block(BlockType::blood_vessel_junction, param_ids,
                       junction_name);
     } else {
-      throw std::invalid_argument("Unknown junction type");
+      generate_block(model, junction_config["junction_values"], j_type,
+                     junction_name);
     }
+
     // Check for connections to inlet and outlet vessels and append to
     // connections list
     for (int vessel_id : junction_config["inlet_vessels"]) {

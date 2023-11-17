@@ -55,8 +55,8 @@ set(CXXSRCS
 )
 
 set(HDRS 
-  BlockType.h
   Block.h
+  BlockType.h
   BloodVessel.h
   BloodVesselJunction.h
   ClosedLoopCoronaryBC.h

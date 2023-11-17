@@ -75,8 +75,8 @@ class Model;
  */
 class Block {
  public:
-  int id;                        ///< Global ID of the block
-  Model *model;                  ///< The model to which the block belongs
+  const int id;                  ///< Global ID of the block
+  const Model *model;            ///< The model to which the block belongs
   const BlockType block_type;    ///< Type of this block
   const BlockClass block_class;  ///< Class of this block
   const std::vector<InputParameter>

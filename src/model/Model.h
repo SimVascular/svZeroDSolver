@@ -90,6 +90,12 @@ class Model {
   double cardiac_cycle_period = -1.0;  ///< Cardiac cycle period
   double time = 0.0;                   ///< Current time
 
+  /**
+   * @brief Create a new block
+   *
+   * @param name The block name (defined in block_factory_map)
+   * @return int Global ID of the block
+   */
   Block *create_block(const std::string &block_name);
 
   /**
@@ -103,6 +109,16 @@ class Model {
    */
   int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
                 const std::string_view &name, bool internal = false);
+
+  /**
+   * @brief Add a block to the model
+   *
+   * @param block_type Type of the block
+   * @param name The name of the block
+   * @param block_param_ids Global IDs of the parameters of the block
+   * @param internal Toggle whether block is internal
+   * @return int Global ID of the block
+   */
   int add_block(Block *block, const std::string_view &name,
                 const std::vector<int> &block_param_ids, bool internal = false);
 

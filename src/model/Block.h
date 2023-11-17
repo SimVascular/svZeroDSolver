@@ -92,6 +92,9 @@ class Block {
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
+   * @param block_type The specific type of block
+   * @param block_class The class the block belongs to (e.g. vessel, junction)
+   * @param input_params The parameters the block takes from the input file
    */
   Block(int id, Model *model, BlockType block_type, BlockClass block_class,
         std::vector<InputParameter> input_params)

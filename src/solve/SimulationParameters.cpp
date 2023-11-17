@@ -198,25 +198,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       bool periodic = coupling_config.value("periodic", true);
       const auto& coupling_values = coupling_config["values"];
 
-      // Create coupling block
-      auto t_coupling = get_double_array(coupling_values, "t", {0.0});
-
-      if (coupling_type == "FLOW") {
-        auto Q_coupling = get_double_array(coupling_values, "Q");
-        model.add_block(BlockType::flow_bc,
-                        {model.add_parameter(t_coupling, Q_coupling, periodic)},
-                        coupling_name);
-      } else if (coupling_type == "PRESSURE") {
-        auto P_coupling = get_double_array(coupling_values, "P");
-        model.add_block(BlockType::pressure_bc,
-                        {model.add_parameter(t_coupling, P_coupling, periodic)},
-                        coupling_name);
-      } else {
-        throw std::runtime_error(
-            "Error. Flowsolver coupling block types should be FLOW or "
-            "PRESSURE.");
-      }
-      // DEBUG_MSG("Created coupling block " << coupling_name);
+      generate_block(model, coupling_values, coupling_type, coupling_name);
 
       // Determine the type of connected block
       std::string connected_block = coupling_config["connected_block"];
@@ -379,7 +361,9 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
           std::string heart_inlet_junction_name = "J_heart_inlet";
           connections.push_back(
               {heart_inlet_junction_name, heartpulmonary_name});
-          model.add_block(BlockType::junction, {}, heart_inlet_junction_name);
+          generate_block(model, {}, "NORMAL_JUNCTION",
+                         heart_inlet_junction_name);
+
           for (auto heart_inlet_elem : closed_loop_bcs) {
             connections.push_back(
                 {heart_inlet_elem, heart_inlet_junction_name});
@@ -389,7 +373,8 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
           std::string heart_outlet_junction_name = "J_heart_outlet";
           connections.push_back(
               {heartpulmonary_name, heart_outlet_junction_name});
-          model.add_block(BlockType::junction, {}, heart_outlet_junction_name);
+          generate_block(model, {}, "NORMAL_JUNCTION",
+                         heart_outlet_junction_name);
           for (auto& outlet_block : closed_loop_config["outlet_blocks"]) {
             connections.push_back({heart_outlet_junction_name, outlet_block});
           }

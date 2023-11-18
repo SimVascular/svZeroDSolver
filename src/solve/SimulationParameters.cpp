@@ -121,6 +121,15 @@ int generate_block(Model& model, const nlohmann::json& config,
   return model.add_block(block, name, block_param_ids, internal);
 }
 
+void validate_input(const nlohmann::json& config) {
+  if (!config.contains("simulation_parameters")) {
+    throw std::runtime_error("Define simulation_parameters");
+  }
+  if (!config.contains("boundary_conditions")) {
+    throw std::runtime_error("Define at least one boundary condition");
+  }
+}
+
 SimulationParameters load_simulation_params(const nlohmann::json& config) {
   SimulationParameters sim_params;
   const auto& sim_config = config["simulation_parameters"];
@@ -154,9 +163,6 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
 }
 
 void load_simulation_model(const nlohmann::json& config, Model& model) {
-  // Validate the input file
-  validate_input(config);
-
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
@@ -206,12 +212,6 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
   // Finalize model
   model.finalize();
-}
-
-void validate_input(const nlohmann::json& config) {
-  if (!config.contains("boundary_conditions")) {
-    throw std::runtime_error("Define at least one boundary condition");
-  }
 }
 
 void create_vessels(

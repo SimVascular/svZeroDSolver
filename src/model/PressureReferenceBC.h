@@ -81,6 +81,12 @@
  */
 class PressureReferenceBC : public Block {
  public:
+  /**
+   * @brief Construct a new PressureReferenceBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   PressureReferenceBC(int id, Model *model)
       : Block(id, model, BlockType::pressure_bc, BlockClass::boundary_condition,
               {InputParameter("P", false, true)}) {}

@@ -93,7 +93,7 @@ class Model {
   /**
    * @brief Create a new block
    *
-   * @param name The block name (defined in block_factory_map)
+   * @param block_name The block name (defined in block_factory_map)
    * @return int Global ID of the block
    */
   Block *create_block(const std::string &block_name);
@@ -101,7 +101,7 @@ class Model {
   /**
    * @brief Add a block to the model (without parameters)
    *
-   * @param block_type Type of the block
+   * @param block The block to add
    * @param name The name of the block
    * @param block_param_ids Global IDs of the parameters of the block
    * @param internal Toggle whether block is internal

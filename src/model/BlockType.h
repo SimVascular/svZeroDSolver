@@ -57,20 +57,20 @@ enum class BlockClass {
   external = 4
 };
 
-/**
- * @brief Handles input parameters
- *
- * @param name Name in input file
- * @param is_optional Is this parameter optional
- * @param is_array Is this parameter an array (or a scalar)
- * @param default_val Default value (if parameter is optional)
- */
 struct InputParameter {
-  std::string name;
-  bool is_optional;
-  bool is_array;
-  double default_val;
+  std::string name;    ///< Name in input file
+  bool is_optional;    ///< Is this parameter optional?
+  bool is_array;       ///< Is this parameter an array?
+  double default_val;  ///< Default value (if parameter is optional)
 
+  /**
+   * @brief Handles input parameters
+   *
+   * @param name Name in input file
+   * @param is_optional Is this parameter optional?
+   * @param is_array Is this parameter an array?
+   * @param default_val Default value (if parameter is optional)
+   */
   InputParameter(const std::string name, bool is_optional = false,
                  bool is_array = false, double default_val = 0.0)
       : name(name),

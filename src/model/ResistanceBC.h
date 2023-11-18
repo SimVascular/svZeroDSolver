@@ -79,6 +79,12 @@
  */
 class ResistanceBC : public Block {
  public:
+  /**
+   * @brief Construct a new ResistanceBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   ResistanceBC(int id, Model *model)
       : Block(id, model, BlockType::resistance_bc,
               BlockClass::boundary_condition,

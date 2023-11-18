@@ -106,6 +106,12 @@
  */
 class OpenLoopCoronaryBC : public Block {
  public:
+  /**
+   * @brief Construct a new OpenLoopCoronaryBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   OpenLoopCoronaryBC(int id, Model *model)
       : Block(
             id, model, BlockType::open_loop_coronary_bc,

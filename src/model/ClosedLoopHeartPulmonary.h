@@ -93,6 +93,12 @@
  */
 class ClosedLoopHeartPulmonary : public Block {
  public:
+  /**
+   * @brief Construct a new ClosedLoopHeartPulmonary object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   ClosedLoopHeartPulmonary(int id, Model *model)
       : Block(id, model, BlockType::closed_loop_heart_pulmonary,
               BlockClass::closed_loop,

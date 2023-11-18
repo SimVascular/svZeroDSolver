@@ -110,6 +110,12 @@
  */
 class ClosedLoopRCRBC : public Block {
  public:
+  /**
+   * @brief Construct a new ClosedLoopRCRBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   ClosedLoopRCRBC(int id, Model *model)
       : Block(
             id, model, BlockType::closed_loop_rcr_bc,

@@ -105,6 +105,12 @@
  */
 class WindkesselBC : public Block {
  public:
+  /**
+   * @brief Construct a new WindkesselBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   WindkesselBC(int id, Model *model)
       : Block(id, model, BlockType::windkessel_bc,
               BlockClass::boundary_condition,

@@ -104,6 +104,12 @@
  */
 class ResistiveJunction : public Block {
  public:
+  /**
+   * @brief Construct a new ResistiveJunction object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   ResistiveJunction(int id, Model *model)
       : Block(id, model, BlockType::resistive_junction, BlockClass::junction,
               {InputParameter("R")}) {}

@@ -143,6 +143,12 @@
  */
 class BloodVesselJunction : public Block {
  public:
+  /**
+   * @brief Construct a new BloodVesselJunction object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   BloodVesselJunction(int id, Model *model)
       : Block(id, model, BlockType::blood_vessel_junction, BlockClass::junction,
               {InputParameter("R_poiseuille"), InputParameter("L"),

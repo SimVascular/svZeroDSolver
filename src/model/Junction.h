@@ -92,6 +92,12 @@ class Junction : public Block {
   static const std::vector<InputParameter>
       input_params;  ///< List of input parameter names
 
+  /**
+   * @brief Construct a new Junction object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   Junction(int id, Model *model)
       : Block(id, model, BlockType::junction, BlockClass::junction, {}) {}
   /**

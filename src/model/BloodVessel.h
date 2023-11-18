@@ -157,7 +157,6 @@ class BloodVessel : public Block {
    * @brief Construct a new BloodVessel object
    *
    * @param id Global ID of the block
-   * @param param_ids Global IDs of the block parameters
    * @param model The model to which the block belongs
    */
   BloodVessel(int id, Model *model)

@@ -121,7 +121,7 @@ class ClosedLoopCoronaryBC : public Block {
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
-   * @param block_type The specific type of block
+   * @param block_type The specific type of block (left or right)
    */
   ClosedLoopCoronaryBC(int id, Model *model, BlockType block_type)
       : Block(
@@ -183,8 +183,8 @@ class ClosedLoopCoronaryBC : public Block {
   TripletsContributions num_triplets{9, 5, 0};
 
  protected:
-  int ventricle_var_id;  // Variable index of either left or right ventricle
-  int im_param_id;       // Index of parameter Im
+  int ventricle_var_id;  ///< Variable index of either left or right ventricle
+  int im_param_id;       ///< Index of parameter Im
 };
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_

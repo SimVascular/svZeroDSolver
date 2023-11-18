@@ -64,6 +64,7 @@ class Parameter {
    * @param id Global ID of the parameter
    * @param times Time steps corresponding to the time-dependent values
    * @param values Values corresponding to the time steps
+   * @param periodic Is this parameter periodic with a cardiac cycle?
    */
   Parameter(int id, const std::vector<double>& times,
             const std::vector<double>& values, bool periodic = true);

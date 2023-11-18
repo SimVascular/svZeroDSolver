@@ -179,10 +179,10 @@ class BloodVesselJunction : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  virtual void update_solution(SparseSystem &system,
-                               std::vector<double> &parameters,
-                               Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                               Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  virtual void update_solution(
+      SparseSystem &system, std::vector<double> &parameters,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the

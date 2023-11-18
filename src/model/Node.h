@@ -81,7 +81,7 @@ class Node {
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
    *
-   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
+   * Set global_var_ids and global_eqn_ids of the element based on the
    * number of equations and the number of internal variables of the
    * element.
    *

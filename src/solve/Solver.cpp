@@ -36,8 +36,9 @@ void Solver::run() {
     double time_step_size_steady = model.cardiac_cycle_period / 10.0;
     model.to_steady();
 
-    Integrator integrator_steady(&model, time_step_size_steady, 0.1,
-                                 simparams.sim_abs_tol, simparams.sim_nliter);
+    Integrator integrator_steady(&model, time_step_size_steady,
+                                 simparams.sim_rho_infty, simparams.sim_abs_tol,
+                                 simparams.sim_nliter);
 
     for (int i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
@@ -48,8 +49,9 @@ void Solver::run() {
 
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  Integrator integrator(&model, simparams.sim_time_step_size, 0.1,
-                        simparams.sim_abs_tol, simparams.sim_nliter);
+  Integrator integrator(&model, simparams.sim_time_step_size,
+                        simparams.sim_rho_infty, simparams.sim_abs_tol,
+                        simparams.sim_nliter);
 
   // Initialize loop
   states = std::vector<State>();

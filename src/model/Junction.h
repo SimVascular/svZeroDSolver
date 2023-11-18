@@ -137,7 +137,15 @@ class Junction : public Block {
    */
   TripletsContributions num_triplets{0, 0, 0};
 
+  /**
+   * @brief Number of inlets to the block.
+   *
+   */
   int num_inlets;
+  /**
+   * @brief Number of outlets from the block.
+   *
+   */
   int num_outlets;
 };
 

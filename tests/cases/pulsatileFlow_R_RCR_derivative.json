@@ -243,7 +243,8 @@
     "simulation_parameters": {
         "number_of_cardiac_cycles": 10,
         "number_of_time_pts_per_cardiac_cycle": 201,
-        "output_derivative": true
+        "output_derivative": true,
+        "rho_infty": 0.0
     },
     "vessels": [
         {

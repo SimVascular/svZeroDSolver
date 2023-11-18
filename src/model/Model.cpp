@@ -237,6 +237,12 @@ void Model::update_solution(SparseSystem &system,
   }
 }
 
+void Model::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+  for (auto block : blocks) {
+    block->post_solve(y);
+  }
+}
+
 void Model::to_steady() {
   for (auto &param : parameters) {
     param.to_steady();

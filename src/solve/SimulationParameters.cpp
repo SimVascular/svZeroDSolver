@@ -265,32 +265,6 @@ void create_bounary_conditions(Model& model, const nlohmann::json& config,
   }
 }
 
-void create_junctions(
-    Model& model,
-    std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map) {
-  for (const auto& junction_config : config) {
-    std::string j_type = junction_config["junction_type"];
-    std::string junction_name = junction_config["junction_name"];
-
-    if (!junction_config.contains("junction_values")) {
-      generate_block(model, {}, j_type, junction_name);
-    } else {
-      generate_block(model, junction_config["junction_values"], j_type,
-                     junction_name);
-    }
-
-    // Check for connections to inlet and outlet vessels and append to
-    // connections list
-    for (int vessel_id : junction_config["inlet_vessels"]) {
-      connections.push_back({vessel_id_map[vessel_id], junction_name});
-    }
-    for (int vessel_id : junction_config["outlet_vessels"]) {
-      connections.push_back({junction_name, vessel_id_map[vessel_id]});
-    }
-  }
-}
-
 void create_coupling(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
@@ -369,6 +343,32 @@ void create_coupling(
       }  // connected_type == "ClosedLoopRCR"
     }    // coupling_loc
   }      // for (size_t i = 0; i < coupling_configs.length(); i++)
+}
+
+void create_junctions(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map) {
+  for (const auto& junction_config : config) {
+    std::string j_type = junction_config["junction_type"];
+    std::string junction_name = junction_config["junction_name"];
+
+    if (!junction_config.contains("junction_values")) {
+      generate_block(model, {}, j_type, junction_name);
+    } else {
+      generate_block(model, junction_config["junction_values"], j_type,
+                     junction_name);
+    }
+
+    // Check for connections to inlet and outlet vessels and append to
+    // connections list
+    for (int vessel_id : junction_config["inlet_vessels"]) {
+      connections.push_back({vessel_id_map[vessel_id], junction_name});
+    }
+    for (int vessel_id : junction_config["outlet_vessels"]) {
+      connections.push_back({junction_name, vessel_id_map[vessel_id]});
+    }
+  }
 }
 
 void create_closed_loop(

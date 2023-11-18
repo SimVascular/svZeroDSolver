@@ -32,30 +32,32 @@
 
 #include "State.h"
 
-double get_param_scalar(const nlohmann::json& data,
-                        const InputParameter& param) {
+bool get_param_scalar(const nlohmann::json& data, const InputParameter& param,
+                      double& val) {
   if (data.contains(param.name)) {
-    return data[param.name];
+    val = data[param.name];
   } else {
     if (param.is_optional) {
-      return param.default_val;
+      val = param.default_val;
     } else {
-      throw std::runtime_error("Parameter " + param.name + " is mandatory");
+      return true;
     }
   }
+  return false;
 }
 
-std::vector<double> get_param_vector(const nlohmann::json& data,
-                                     const InputParameter& param) {
+bool get_param_vector(const nlohmann::json& data, const InputParameter& param,
+                      std::vector<double>& val) {
   if (data.contains(param.name)) {
-    return data[param.name].get<std::vector<double>>();
+    val = data[param.name].get<std::vector<double>>();
   } else {
     if (param.is_optional) {
-      return {param.default_val};
+      val = {param.default_val};
     } else {
-      throw std::runtime_error("Parameter " + param.name + " is mandatory");
+      return true;
     }
   }
+  return false;
 }
 
 int generate_block(Model& model, const nlohmann::json& config,
@@ -79,18 +81,33 @@ int generate_block(Model& model, const nlohmann::json& config,
     for (const InputParameter& param : block->input_params) {
       if (param.is_array) {
         // Get parameter vector
-        std::vector<double> val = get_param_vector(config, param);
+        std::vector<double> val;
+        if (get_param_vector(config, param, val)) {
+          throw std::runtime_error("Parameter " + param.name +
+                                   " is mandatory in " + block_name +
+                                   " block " + static_cast<std::string>(name));
+        }
 
         // Get time vector
-        InputParameter t_param{"t", true, true, 0.0};
-        std::vector<double> time = get_param_vector(config, t_param);
+        InputParameter t_param{"t", false, true};
+        std::vector<double> time;
+        if (get_param_vector(config, t_param, time)) {
+          throw std::runtime_error("Parameter " + t_param.name +
+                                   " is mandatory in " + block_name +
+                                   " block " + static_cast<std::string>(name));
+        }
 
         // Add parameters to model
         new_id = model.add_parameter(time, val, periodic);
 
       } else {
         // Get scalar parameter
-        double val = get_param_scalar(config, param);
+        double val;
+        if (get_param_scalar(config, param, val)) {
+          throw std::runtime_error("Parameter " + param.name +
+                                   " is mandatory in " + block_name +
+                                   " block " + static_cast<std::string>(name));
+        }
 
         // Add parameter to model
         new_id = model.add_parameter(val);

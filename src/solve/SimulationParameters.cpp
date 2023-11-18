@@ -83,7 +83,7 @@ int generate_block(Model& model, const nlohmann::json& config,
         // Get parameter vector
         std::vector<double> val;
         if (get_param_vector(config, param, val)) {
-          throw std::runtime_error("Parameter " + param.name +
+          throw std::runtime_error("Array parameter " + param.name +
                                    " is mandatory in " + block_name +
                                    " block " + static_cast<std::string>(name));
         }
@@ -92,7 +92,7 @@ int generate_block(Model& model, const nlohmann::json& config,
         InputParameter t_param{"t", false, true};
         std::vector<double> time;
         if (get_param_vector(config, t_param, time)) {
-          throw std::runtime_error("Parameter " + t_param.name +
+          throw std::runtime_error("Array parameter " + t_param.name +
                                    " is mandatory in " + block_name +
                                    " block " + static_cast<std::string>(name));
         }
@@ -104,7 +104,7 @@ int generate_block(Model& model, const nlohmann::json& config,
         // Get scalar parameter
         double val;
         if (get_param_scalar(config, param, val)) {
-          throw std::runtime_error("Parameter " + param.name +
+          throw std::runtime_error("Scalar parameter " + param.name +
                                    " is mandatory in " + block_name +
                                    " block " + static_cast<std::string>(name));
         }
@@ -154,12 +154,17 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
 }
 
 void load_simulation_model(const nlohmann::json& config, Model& model) {
+  // Validate the input file
+  validate_input(config);
+
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
   // Create vessels
   std::map<int, std::string> vessel_id_map;
-  create_vessels(model, connections, config["vessels"], vessel_id_map);
+  if (config.contains("vessels")) {
+    create_vessels(model, connections, config["vessels"], vessel_id_map);
+  }
 
   // Create map for boundary conditions to boundary condition type
   std::map<std::string, std::string> bc_type_map;
@@ -182,7 +187,9 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
                             closed_loop_bcs);
 
   // Create junctions
-  create_junctions(model, connections, config["junctions"], vessel_id_map);
+  if (config.contains("junctions")) {
+    create_junctions(model, connections, config["junctions"], vessel_id_map);
+  }
 
   // Create closed-loop blocks
   if (config.contains("closed_loop_blocks")) {
@@ -199,6 +206,12 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
   // Finalize model
   model.finalize();
+}
+
+void validate_input(const nlohmann::json& config) {
+  if (!config.contains("boundary_conditions")) {
+    throw std::runtime_error("Define at least one boundary condition");
+  }
 }
 
 void create_vessels(

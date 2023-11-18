@@ -99,6 +99,8 @@ SimulationParameters load_simulation_params(const nlohmann::json& config);
  */
 void load_simulation_model(const nlohmann::json& config, Model& model);
 
+void validate_input(const nlohmann::json& config);
+
 void create_vessels(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,

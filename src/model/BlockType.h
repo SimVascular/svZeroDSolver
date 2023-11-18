@@ -57,6 +57,7 @@ enum class BlockClass {
   external = 4
 };
 
+/// @brief Handles input parameters
 struct InputParameter {
   std::string name;    ///< Name in input file
   bool is_optional;    ///< Is this parameter optional?

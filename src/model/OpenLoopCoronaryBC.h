@@ -109,13 +109,13 @@ class OpenLoopCoronaryBC : public Block {
   OpenLoopCoronaryBC(int id, Model *model)
       : Block(id, model, BlockType::open_loop_coronary_bc,
               BlockClass::boundary_condition,
-              {InputParameter("Ra1", false, true),
-               InputParameter("Ra2", false, true),
-               InputParameter("Rv1", false, true),
-               InputParameter("Ca", false, true),
-               InputParameter("Cc", false, true),
+              {InputParameter("Ra1"),
+               InputParameter("Ra2"),
+               InputParameter("Rv1"),
+               InputParameter("Ca"),
+               InputParameter("Cc"),
                InputParameter("Pim", false, true),
-               InputParameter("P_v", false, true)}) {}
+               InputParameter("P_v")}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

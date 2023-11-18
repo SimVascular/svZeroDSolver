@@ -66,7 +66,7 @@ Block *Model::create_block(const std::string &block_name) {
   auto it = block_factory_map.find(block_name);
   if (it == block_factory_map.end()) {
     throw std::runtime_error(
-        "Adding block to model failed: Invalid block name!");
+        "Adding block to model failed: Invalid block name " + block_name);
   }
   Block *block = it->second(block_count, this);
   return block;

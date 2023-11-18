@@ -114,4 +114,9 @@ void read_bounary_conditions(Model& model, const nlohmann::json& config,
                              std::map<std::string, std::string>& bc_type_map,
                              std::vector<std::string>& closed_loop_bcs);
 
+void read_junctions(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
+
 #endif

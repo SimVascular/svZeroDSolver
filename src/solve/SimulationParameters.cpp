@@ -171,26 +171,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
                           closed_loop_bcs);
 
   // Create junctions
-  for (const auto& junction_config : config["junctions"]) {
-    std::string j_type = junction_config["junction_type"];
-    std::string junction_name = junction_config["junction_name"];
-
-    if (!junction_config.contains("junction_values")) {
-      generate_block(model, {}, j_type, junction_name);
-    } else {
-      generate_block(model, junction_config["junction_values"], j_type,
-                     junction_name);
-    }
-
-    // Check for connections to inlet and outlet vessels and append to
-    // connections list
-    for (int vessel_id : junction_config["inlet_vessels"]) {
-      connections.push_back({vessel_id_map[vessel_id], junction_name});
-    }
-    for (int vessel_id : junction_config["outlet_vessels"]) {
-      connections.push_back({junction_name, vessel_id_map[vessel_id]});
-    }
-  }
+  read_junctions(model, connections, config["junctions"], vessel_id_map);
 
   // Create closed-loop blocks
   bool heartpulmonary_block_present =
@@ -302,6 +283,32 @@ void read_bounary_conditions(Model& model, const nlohmann::json& config,
       }
     } else if (block->block_class == BlockClass::closed_loop) {
       closed_loop_bcs.push_back(bc_name);
+    }
+  }
+}
+
+void read_junctions(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map) {
+  for (const auto& junction_config : config) {
+    std::string j_type = junction_config["junction_type"];
+    std::string junction_name = junction_config["junction_name"];
+
+    if (!junction_config.contains("junction_values")) {
+      generate_block(model, {}, j_type, junction_name);
+    } else {
+      generate_block(model, junction_config["junction_values"], j_type,
+                     junction_name);
+    }
+
+    // Check for connections to inlet and outlet vessels and append to
+    // connections list
+    for (int vessel_id : junction_config["inlet_vessels"]) {
+      connections.push_back({vessel_id_map[vessel_id], junction_name});
+    }
+    for (int vessel_id : junction_config["outlet_vessels"]) {
+      connections.push_back({junction_name, vessel_id_map[vessel_id]});
     }
   }
 }

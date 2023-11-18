@@ -149,14 +149,11 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
   // Create vessels
   std::map<int, std::string> vessel_id_map;
-  const auto& vessels = config["vessels"];
-  read_vessels(model, connections, vessels, vessel_id_map);
+  read_vessels(model, connections, config["vessels"], vessel_id_map);
 
   // Create map for boundary conditions to boundary condition type
-  const auto& bc_configs = config["boundary_conditions"];
   std::map<std::string, std::string> bc_type_map;
-  for (size_t i = 0; i < bc_configs.size(); i++) {
-    const auto& bc_config = bc_configs[i];
+  for (const auto& bc_config : config["boundary_conditions"]) {
     std::string bc_name = bc_config["bc_name"];
     std::string bc_type = bc_config["bc_type"];
     bc_type_map.insert({bc_name, bc_type});
@@ -164,35 +161,14 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
   // Create external coupling blocks
   if (config.contains("external_solver_coupling_blocks")) {
-    // DEBUG_MSG("Create external coupling blocks");
-    const auto& coupling_configs = config["external_solver_coupling_blocks"];
-
-    read_coupling(model, connections, coupling_configs, vessel_id_map,
-                  bc_type_map);
+    read_coupling(model, connections, config["external_solver_coupling_blocks"],
+                  vessel_id_map, bc_type_map);
   }
 
   // Create boundary conditions
   std::vector<std::string> closed_loop_bcs;
-  // DEBUG_MSG("Create boundary conditions");
-  for (size_t i = 0; i < bc_configs.size(); i++) {
-    const auto& bc_config = bc_configs[i];
-    std::string bc_type = bc_config["bc_type"];
-    std::string bc_name = bc_config["bc_name"];
-    const auto& bc_values = bc_config["bc_values"];
-
-    int block_id = generate_block(model, bc_values, bc_type, bc_name);
-
-    // Keep track of closed loop blocks
-    Block* block = model.get_block(block_id);
-
-    if (block->block_type == BlockType::closed_loop_rcr_bc) {
-      if (bc_values["closed_loop_outlet"] == true) {
-        closed_loop_bcs.push_back(bc_name);
-      }
-    } else if (block->block_class == BlockClass::closed_loop) {
-      closed_loop_bcs.push_back(bc_name);
-    }
-  }
+  read_bounary_conditions(model, config["boundary_conditions"], bc_type_map,
+                          closed_loop_bcs);
 
   // Create junctions
   for (const auto& junction_config : config["junctions"]) {
@@ -214,7 +190,6 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     for (int vessel_id : junction_config["outlet_vessels"]) {
       connections.push_back({junction_name, vessel_id_map[vessel_id]});
     }
-    // DEBUG_MSG("Created junction " << junction_name);
   }
 
   // Create closed-loop blocks
@@ -304,6 +279,29 @@ void read_vessels(
       if (vessel_bc_config.contains("outlet")) {
         connections.push_back({vessel_name, vessel_bc_config["outlet"]});
       }
+    }
+  }
+}
+
+void read_bounary_conditions(Model& model, const nlohmann::json& config,
+                             std::map<std::string, std::string>& bc_type_map,
+                             std::vector<std::string>& closed_loop_bcs) {
+  for (const auto& bc_config : config) {
+    std::string bc_type = bc_config["bc_type"];
+    std::string bc_name = bc_config["bc_name"];
+    const auto& bc_values = bc_config["bc_values"];
+
+    int block_id = generate_block(model, bc_values, bc_type, bc_name);
+
+    // Keep track of closed loop blocks
+    Block* block = model.get_block(block_id);
+
+    if (block->block_type == BlockType::closed_loop_rcr_bc) {
+      if (bc_values["closed_loop_outlet"] == true) {
+        closed_loop_bcs.push_back(bc_name);
+      }
+    } else if (block->block_class == BlockClass::closed_loop) {
+      closed_loop_bcs.push_back(bc_name);
     }
   }
 }

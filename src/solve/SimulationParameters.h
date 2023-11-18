@@ -110,4 +110,8 @@ void read_coupling(
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
     std::map<std::string, std::string>& bc_type_map);
 
+void read_bounary_conditions(Model& model, const nlohmann::json& config,
+                             std::map<std::string, std::string>& bc_type_map,
+                             std::vector<std::string>& closed_loop_bcs);
+
 #endif

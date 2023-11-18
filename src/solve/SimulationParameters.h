@@ -99,24 +99,29 @@ SimulationParameters load_simulation_params(const nlohmann::json& config);
  */
 void load_simulation_model(const nlohmann::json& config, Model& model);
 
-void read_vessels(
+void create_vessels(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
 
-void read_coupling(
+void create_coupling(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
     std::map<std::string, std::string>& bc_type_map);
 
-void read_bounary_conditions(Model& model, const nlohmann::json& config,
+void create_bounary_conditions(Model& model, const nlohmann::json& config,
                              std::map<std::string, std::string>& bc_type_map,
                              std::vector<std::string>& closed_loop_bcs);
 
-void read_junctions(
+void create_junctions(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
+
+void create_closed_loop(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::vector<std::string>& closed_loop_bcs);
 
 #endif

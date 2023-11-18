@@ -149,7 +149,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
   // Create vessels
   std::map<int, std::string> vessel_id_map;
-  read_vessels(model, connections, config["vessels"], vessel_id_map);
+  create_vessels(model, connections, config["vessels"], vessel_id_map);
 
   // Create map for boundary conditions to boundary condition type
   std::map<std::string, std::string> bc_type_map;
@@ -161,70 +161,23 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
   // Create external coupling blocks
   if (config.contains("external_solver_coupling_blocks")) {
-    read_coupling(model, connections, config["external_solver_coupling_blocks"],
-                  vessel_id_map, bc_type_map);
+    create_coupling(model, connections,
+                    config["external_solver_coupling_blocks"], vessel_id_map,
+                    bc_type_map);
   }
 
   // Create boundary conditions
   std::vector<std::string> closed_loop_bcs;
-  read_bounary_conditions(model, config["boundary_conditions"], bc_type_map,
-                          closed_loop_bcs);
+  create_bounary_conditions(model, config["boundary_conditions"], bc_type_map,
+                            closed_loop_bcs);
 
   // Create junctions
-  read_junctions(model, connections, config["junctions"], vessel_id_map);
+  create_junctions(model, connections, config["junctions"], vessel_id_map);
 
   // Create closed-loop blocks
-  bool heartpulmonary_block_present =
-      false;  ///< Flag to check if heart block is present (requires different
-              ///< handling)
   if (config.contains("closed_loop_blocks")) {
-    for (const auto& closed_loop_config : config["closed_loop_blocks"]) {
-      std::string closed_loop_type = closed_loop_config["closed_loop_type"];
-      if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
-        if (heartpulmonary_block_present == false) {
-          heartpulmonary_block_present = true;
-          std::string heartpulmonary_name = "CLH";
-          double cycle_period = closed_loop_config["cardiac_cycle_period"];
-          if ((model.cardiac_cycle_period > 0.0) &&
-              (cycle_period != model.cardiac_cycle_period)) {
-            throw std::runtime_error(
-                "Inconsistent cardiac cycle period defined in "
-                "ClosedLoopHeartAndPulmonary.");
-          } else {
-            model.cardiac_cycle_period = cycle_period;
-          }
-          const auto& heart_params = closed_loop_config["parameters"];
-
-          generate_block(model, heart_params, closed_loop_type,
-                         heartpulmonary_name);
-
-          // Junction at inlet to heart
-          std::string heart_inlet_junction_name = "J_heart_inlet";
-          connections.push_back(
-              {heart_inlet_junction_name, heartpulmonary_name});
-          generate_block(model, {}, "NORMAL_JUNCTION",
-                         heart_inlet_junction_name);
-
-          for (auto heart_inlet_elem : closed_loop_bcs) {
-            connections.push_back(
-                {heart_inlet_elem, heart_inlet_junction_name});
-          }
-
-          // Junction at outlet from heart
-          std::string heart_outlet_junction_name = "J_heart_outlet";
-          connections.push_back(
-              {heartpulmonary_name, heart_outlet_junction_name});
-          generate_block(model, {}, "NORMAL_JUNCTION",
-                         heart_outlet_junction_name);
-          for (auto& outlet_block : closed_loop_config["outlet_blocks"]) {
-            connections.push_back({heart_outlet_junction_name, outlet_block});
-          }
-        } else {
-          throw std::runtime_error(
-              "Error. Only one ClosedLoopHeartAndPulmonary can be included.");
-        }
-      }
-    }
+    create_closed_loop(model, connections, config["closed_loop_blocks"],
+                       closed_loop_bcs);
   }
 
   // Create Connections
@@ -233,11 +186,12 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     auto ele2 = model.get_block(std::get<1>(connection));
     model.add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
   }
+
   // Finalize model
   model.finalize();
 }
 
-void read_vessels(
+void create_vessels(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& vessels, std::map<int, std::string>& vessel_id_map) {
@@ -264,9 +218,9 @@ void read_vessels(
   }
 }
 
-void read_bounary_conditions(Model& model, const nlohmann::json& config,
-                             std::map<std::string, std::string>& bc_type_map,
-                             std::vector<std::string>& closed_loop_bcs) {
+void create_bounary_conditions(Model& model, const nlohmann::json& config,
+                               std::map<std::string, std::string>& bc_type_map,
+                               std::vector<std::string>& closed_loop_bcs) {
   for (const auto& bc_config : config) {
     std::string bc_type = bc_config["bc_type"];
     std::string bc_name = bc_config["bc_name"];
@@ -287,7 +241,7 @@ void read_bounary_conditions(Model& model, const nlohmann::json& config,
   }
 }
 
-void read_junctions(
+void create_junctions(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map) {
@@ -313,7 +267,7 @@ void read_junctions(
   }
 }
 
-void read_coupling(
+void create_coupling(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
@@ -391,6 +345,58 @@ void read_coupling(
       }  // connected_type == "ClosedLoopRCR"
     }    // coupling_loc
   }      // for (size_t i = 0; i < coupling_configs.length(); i++)
+}
+
+void create_closed_loop(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::vector<std::string>& closed_loop_bcs) {
+  ///< Flag to check if heart block is present (requires different handling)
+  bool heartpulmonary_block_present = false;
+  for (const auto& closed_loop_config : config) {
+    std::string closed_loop_type = closed_loop_config["closed_loop_type"];
+    if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
+      if (heartpulmonary_block_present == false) {
+        heartpulmonary_block_present = true;
+        std::string heartpulmonary_name = "CLH";
+        double cycle_period = closed_loop_config["cardiac_cycle_period"];
+        if ((model.cardiac_cycle_period > 0.0) &&
+            (cycle_period != model.cardiac_cycle_period)) {
+          throw std::runtime_error(
+              "Inconsistent cardiac cycle period defined in "
+              "ClosedLoopHeartAndPulmonary.");
+        } else {
+          model.cardiac_cycle_period = cycle_period;
+        }
+        const auto& heart_params = closed_loop_config["parameters"];
+
+        generate_block(model, heart_params, closed_loop_type,
+                       heartpulmonary_name);
+
+        // Junction at inlet to heart
+        std::string heart_inlet_junction_name = "J_heart_inlet";
+        connections.push_back({heart_inlet_junction_name, heartpulmonary_name});
+        generate_block(model, {}, "NORMAL_JUNCTION", heart_inlet_junction_name);
+
+        for (auto heart_inlet_elem : closed_loop_bcs) {
+          connections.push_back({heart_inlet_elem, heart_inlet_junction_name});
+        }
+
+        // Junction at outlet from heart
+        std::string heart_outlet_junction_name = "J_heart_outlet";
+        connections.push_back(
+            {heartpulmonary_name, heart_outlet_junction_name});
+        generate_block(model, {}, "NORMAL_JUNCTION",
+                       heart_outlet_junction_name);
+        for (auto& outlet_block : closed_loop_config["outlet_blocks"]) {
+          connections.push_back({heart_outlet_junction_name, outlet_block});
+        }
+      } else {
+        throw std::runtime_error(
+            "Error. Only one ClosedLoopHeartAndPulmonary can be included.");
+      }
+    }
+  }
 }
 
 State load_initial_condition(const nlohmann::json& config, Model& model) {

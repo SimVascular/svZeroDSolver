@@ -64,8 +64,8 @@ int generate_block(Model& model, const nlohmann::json& config,
   std::vector<int> block_param_ids;
   int new_id;
 
-  // Only blood_vessel_junction has lists of parameters
-  if (block->block_type == BlockType::blood_vessel_junction) {
+  // Input parameters are given as a list
+  if (block->input_params_list) {
     for (const InputParameter& param : block->input_params) {
       for (double value : config[param.name]) {
         block_param_ids.push_back(model.add_parameter(value));
@@ -110,7 +110,6 @@ int generate_block(Model& model, const nlohmann::json& config,
 }
 
 SimulationParameters load_simulation_params(const nlohmann::json& config) {
-  // DEBUG_MSG("Loading simulation parameters");
   SimulationParameters sim_params;
   const auto& sim_config = config["simulation_parameters"];
   sim_params.sim_coupled = sim_config.value("coupled_simulation", false);
@@ -139,7 +138,6 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   sim_params.output_mean_only = sim_config.value("output_mean_only", false);
   sim_params.output_derivative = sim_config.value("output_derivative", false);
   sim_params.output_all_cycles = sim_config.value("output_all_cycles", false);
-  // DEBUG_MSG("Finished loading simulation parameters");
   return sim_params;
 }
 

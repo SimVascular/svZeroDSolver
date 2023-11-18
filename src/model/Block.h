@@ -85,7 +85,8 @@ class Block {
   std::vector<Node *> inlet_nodes;   ///< Inlet nodes
   std::vector<Node *> outlet_nodes;  ///< Outlet nodes
 
-  bool steady = false;  ///< Toggle steady behavior
+  bool steady = false;             ///< Toggle steady behavior
+  bool input_params_list = false;  ///< Are input parameters given as a list?
 
   /**
    * @brief Construct a new Block object

@@ -457,8 +457,8 @@ State load_initial_condition(const nlohmann::json& config, Model& model) {
           default_val = init_q;
           // DEBUG_MSG("flow_all initial condition for " << var_name);
         } else {
-          // DEBUG_MSG("No initial condition found for " << var_name << ".
-          // Using default value = 0.");
+          // DEBUG_MSG("No initial condition found for " << var_name << ". Using
+          // default value = 0.");
         }
       }
       initial_state.y[i] = initial_condition.value(var_name, default_val);
@@ -471,8 +471,7 @@ State load_initial_condition(const nlohmann::json& config, Model& model) {
     for (size_t i = 0; i < model.dofhandler.size(); i++) {
       std::string var_name = model.dofhandler.variables[i];
       if (!initial_condition_d.contains(var_name)) {
-        // DEBUG_MSG("No initial condition derivative found for " <<
-        // var_name);
+        // DEBUG_MSG("No initial condition derivative found for " << var_name);
       }
       initial_state.ydot[i] = initial_condition_d.value(var_name, 0.0);
     }

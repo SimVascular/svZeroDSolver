@@ -65,8 +65,7 @@ Block *Model::create_block(const std::string &block_name) {
   // Get block from factory
   auto it = block_factory_map.find(block_name);
   if (it == block_factory_map.end()) {
-    throw std::runtime_error(
-        "Invalid block name " + block_name);
+    throw std::runtime_error("Invalid block name " + block_name);
   }
   Block *block = it->second(block_count, this);
   return block;

@@ -33,7 +33,8 @@
 
 #include <functional>
 #include <vector>
-#include "Block.h" 
+
+#include "Block.h"
 
 using BlockFactoryFunc = std::function<Block*(int, Model*)>;
 

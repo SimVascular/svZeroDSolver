@@ -38,92 +38,83 @@
 #include "ClosedLoopHeartPulmonary.h"
 #include "SparseSystem.h"
 
-<<<<<<< HEAD
-=======
 /**
- * @brief Specify whether this BC is on a left or right coronary artery.
+ * @brief Closed loop coronary boundary condition (connected to other blocks
+ * on both sides).
+ *
+ * \f[
+ * \begin{circuitikz} \draw
+ * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1,0) node[anchor=south]{$P_{in}$}
+ * to [R, l=$R_a$, *-] (3,0)
+ * to [R, l=$R_{am}$, -] (5,0)
+ * to [R, l=$R_v$, *-*] (7,0)
+ * node[anchor=south]{$P_{out}$}
+ * (5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
+ * node[left]{$P_{im}$}
+ * (3,0) to [C, l=$C_a$, -*] (3,-1.5)
+ * node[left]{$P_a$};
+ * \draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
+ * \end{circuitikz}
+ * \f]
+ *
+ * ### Governing equations
+ *
+ * \f[
+ * P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a
+ * \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a
+ * \frac{dQ_{in}}{dt} = 0 \f]
+ *
+ * \f[
+ * Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
+ * \frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \f]
+ *
+ * \f[
+ * C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
+ * \f]
+ *
+ * ### Local contributions
+ *
+ * \f[
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} &
+ * Q_{out} & V_{im}^{e}\end{array}\right]^{T}, \f]
+ *
+ * \f[
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
+ * -R_{am} C_{a} & R_{am} R_{a} C_{a} & 0 & 0 & 0 \\
+ * -C_{a} & R_{a} C_{a} & 0 & 0 & -1 \\
+ * 0 & 0 & 0 & 0 & 0 \\
+ * \end{array}\right] \f]
+ *
+ *
+ * \f[
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * -1 & R_{am} + R_{a} & 1 & R_v & 0 \\
+ * 0 & 1 & 0 & -1 & 0 \\
+ * 0 & 0 & C_{im} & C_{im} R_v & -1 \\
+ * \end{array}\right] \f]
+ *
+ * \f[
+ * \mathbf{c}^{e}=\left[\begin{array}{c}
+ * C_{a} R_{am} \frac{d P_{a}}{d t} \\
+ * C_{a}\frac{d P_{a}}{d t} \\
+ * -C_{im} P_{im}
+ * \end{array}\right] \f]
+ *
+ * Assume \f$P_a=0\f$.
+ *
+ * ### Parameters
+ *
+ * Parameter sequence for constructing this block
+ *
+ * * `0` Ra
+ * * `1` Ram
+ * * `2` Rv
+ * * `3` Ca
+ * * `4` Cim
  *
  */
-enum class Side { LEFT, RIGHT, NONE };
-
->>>>>>> master
-    /**
-     * @brief Closed loop coronary boundary condition (connected to other blocks
-     * on both sides).
-     *
-     * \f[
-     * \begin{circuitikz} \draw
-     * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-     * \draw (1,0) node[anchor=south]{$P_{in}$}
-     * to [R, l=$R_a$, *-] (3,0)
-     * to [R, l=$R_{am}$, -] (5,0)
-     * to [R, l=$R_v$, *-*] (7,0)
-     * node[anchor=south]{$P_{out}$}
-     * (5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
-     * node[left]{$P_{im}$}
-     * (3,0) to [C, l=$C_a$, -*] (3,-1.5)
-     * node[left]{$P_a$};
-     * \draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
-     * \end{circuitikz}
-     * \f]
-     *
-     * ### Governing equations
-     *
-     * \f[
-     * P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a
-     * \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a
-     * \frac{dQ_{in}}{dt} = 0 \f]
-     *
-     * \f[
-     * Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
-     * \frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \f]
-     *
-     * \f[
-     * C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
-     * \f]
-     *
-     * ### Local contributions
-     *
-     * \f[
-     * \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} &
-     * Q_{out} & V_{im}^{e}\end{array}\right]^{T}, \f]
-     *
-     * \f[
-     * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
-     * -R_{am} C_{a} & R_{am} R_{a} C_{a} & 0 & 0 & 0 \\
-     * -C_{a} & R_{a} C_{a} & 0 & 0 & -1 \\
-     * 0 & 0 & 0 & 0 & 0 \\
-     * \end{array}\right] \f]
-     *
-     *
-     * \f[
-     * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
-     * -1 & R_{am} + R_{a} & 1 & R_v & 0 \\
-     * 0 & 1 & 0 & -1 & 0 \\
-     * 0 & 0 & C_{im} & C_{im} R_v & -1 \\
-     * \end{array}\right] \f]
-     *
-     * \f[
-     * \mathbf{c}^{e}=\left[\begin{array}{c}
-     * C_{a} R_{am} \frac{d P_{a}}{d t} \\
-     * C_{a}\frac{d P_{a}}{d t} \\
-     * -C_{im} P_{im}
-     * \end{array}\right] \f]
-     *
-     * Assume \f$P_a=0\f$.
-     *
-     * ### Parameters
-     *
-     * Parameter sequence for constructing this block
-     *
-     * * `0` Ra
-     * * `1` Ram
-     * * `2` Rv
-     * * `3` Ca
-     * * `4` Cim
-     *
-     */
-    class ClosedLoopCoronaryBC : public Block {
+class ClosedLoopCoronaryBC : public Block {
  public:
   /**
    * @brief Construct a ClosedLoopCoronaryBC object.

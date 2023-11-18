@@ -119,7 +119,8 @@ class Model {
    * @param internal Toggle whether block is internal
    * @return int Global ID of the block
    */
-  int add_block(const std::string &block_name, const std::vector<int> &block_param_ids,
+  int add_block(const std::string &block_name,
+                const std::vector<int> &block_param_ids,
                 const std::string_view &name, bool internal = false);
 
   /**

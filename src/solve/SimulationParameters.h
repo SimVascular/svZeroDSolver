@@ -114,8 +114,8 @@ void create_coupling(
     std::map<std::string, std::string>& bc_type_map);
 
 void create_bounary_conditions(Model& model, const nlohmann::json& config,
-                             std::map<std::string, std::string>& bc_type_map,
-                             std::vector<std::string>& closed_loop_bcs);
+                               std::map<std::string, std::string>& bc_type_map,
+                               std::vector<std::string>& closed_loop_bcs);
 
 void create_junctions(
     Model& model,

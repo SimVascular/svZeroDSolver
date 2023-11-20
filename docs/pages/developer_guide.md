@@ -30,6 +30,14 @@ cmake -DCMAKE_BUILD_TYPE=Debug ..
 cmake --build .
 ```
 
+## Install with pip
+
+Execute this command in the root folder to install the current source:
+```bash
+pip install -e ".[dev]"
+```
+This is useful when continuously running the integration tests during development.
+
 ## Code Style
 
 We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).

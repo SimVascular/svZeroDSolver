@@ -69,6 +69,7 @@ struct InputParameter {
    *
    * @param is_optional Is this parameter optional?
    * @param is_array Is this parameter an array?
+   * @param is_number Is this parameter a number?
    * @param default_val Default value (if parameter is optional)
    */
   InputParameter(bool is_optional = false, bool is_array = false,

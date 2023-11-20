@@ -59,24 +59,23 @@ enum class BlockClass {
 
 /// @brief Handles input parameters
 struct InputParameter {
-  std::string name;    ///< Name in input file
   bool is_optional;    ///< Is this parameter optional?
   bool is_array;       ///< Is this parameter an array?
+  bool is_number;      ///< Is this parameter a number?
   double default_val;  ///< Default value (if parameter is optional)
 
   /**
    * @brief Handles input parameters
    *
-   * @param name Name in input file
    * @param is_optional Is this parameter optional?
    * @param is_array Is this parameter an array?
    * @param default_val Default value (if parameter is optional)
    */
-  InputParameter(const std::string name, bool is_optional = false,
-                 bool is_array = false, double default_val = 0.0)
-      : name(name),
-        is_optional(is_optional),
+  InputParameter(bool is_optional = false, bool is_array = false,
+                 bool is_number = true, double default_val = 0.0)
+      : is_optional(is_optional),
         is_array(is_array),
+        is_number(is_number),
         default_val(default_val) {}
 };
 

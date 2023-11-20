@@ -102,8 +102,8 @@ class Block {
   const Model *model;            ///< The model to which the block belongs
   const BlockType block_type;    ///< Type of this block
   const BlockClass block_class;  ///< Class of this block
-  const std::vector<InputParameter>
-      input_params;  ///< List of input parameter names
+  const std::vector<std::pair<std::string, InputParameter>>
+      input_params;  ///< Map from name to input parameter
 
   std::vector<Node *> inlet_nodes;   ///< Inlet nodes
   std::vector<Node *> outlet_nodes;  ///< Outlet nodes
@@ -121,7 +121,7 @@ class Block {
    * @param input_params The parameters the block takes from the input file
    */
   Block(int id, Model *model, BlockType block_type, BlockClass block_class,
-        std::vector<InputParameter> input_params)
+        std::vector<std::pair<std::string, InputParameter>> input_params)
       : id(id),
         model(model),
         block_type(block_type),

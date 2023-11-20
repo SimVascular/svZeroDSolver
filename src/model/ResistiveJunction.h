@@ -112,7 +112,7 @@ class ResistiveJunction : public Block {
    */
   ResistiveJunction(int id, Model *model)
       : Block(id, model, BlockType::resistive_junction, BlockClass::junction,
-              {InputParameter("R")}) {}
+              {{"R", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

@@ -88,7 +88,8 @@ class FlowReferenceBC : public Block {
    */
   FlowReferenceBC(int id, Model *model)
       : Block(id, model, BlockType::flow_bc, BlockClass::boundary_condition,
-              {InputParameter("Q", false, true)}) {}
+              {{"t", InputParameter(false, true)},
+               {"Q", InputParameter(false, true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

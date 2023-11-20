@@ -88,7 +88,7 @@ class ResistanceBC : public Block {
   ResistanceBC(int id, Model *model)
       : Block(id, model, BlockType::resistance_bc,
               BlockClass::boundary_condition,
-              {InputParameter("R"), InputParameter("Pd")}) {}
+              {{"R", InputParameter()}, {"Pd", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

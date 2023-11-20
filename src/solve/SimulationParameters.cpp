@@ -32,10 +32,10 @@
 
 #include "State.h"
 
-bool get_param_scalar(const nlohmann::json& data, const InputParameter& param,
-                      double& val) {
-  if (data.contains(param.name)) {
-    val = data[param.name];
+bool get_param_scalar(const nlohmann::json& data, const std::string& name,
+                      const InputParameter& param, double& val) {
+  if (data.contains(name)) {
+    val = data[name];
   } else {
     if (param.is_optional) {
       val = param.default_val;
@@ -46,14 +46,25 @@ bool get_param_scalar(const nlohmann::json& data, const InputParameter& param,
   return false;
 }
 
-bool get_param_vector(const nlohmann::json& data, const InputParameter& param,
-                      std::vector<double>& val) {
-  if (data.contains(param.name)) {
-    val = data[param.name].get<std::vector<double>>();
+bool get_param_vector(const nlohmann::json& data, const std::string& name,
+                      const InputParameter& param, std::vector<double>& val) {
+  if (data.contains(name)) {
+    val = data[name].get<std::vector<double>>();
   } else {
     if (param.is_optional) {
       val = {param.default_val};
     } else {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool has_parameter(
+    const std::vector<std::pair<std::string, InputParameter>>& params,
+    const std::string& name) {
+  for (const auto& pair : params) {
+    if (pair.first == name) {
       return true;
     }
   }
@@ -70,41 +81,68 @@ int generate_block(Model& model, const nlohmann::json& config,
   std::vector<int> block_param_ids;
   int new_id;
 
+  for (auto& el : config.items()) {
+    // Ignore comments (starting with _)
+    if (el.key()[0] == '_') {
+      continue;
+    }
+
+    // Check if json input is a parameter
+    if (!has_parameter(block->input_params, el.key())) {
+      throw std::runtime_error("Unknown parameter " + el.key() +
+                               " defined in " + block_name + " block " +
+                               static_cast<std::string>(name));
+    }
+  }
+
   // Input parameters are given as a list
   if (block->input_params_list) {
-    for (const InputParameter& param : block->input_params) {
-      for (double value : config[param.name]) {
+    for (const auto& it : block->input_params) {
+      // todo: check error here
+      for (double value : config[it.first]) {
         block_param_ids.push_back(model.add_parameter(value));
       }
     }
   } else {
-    for (const InputParameter& param : block->input_params) {
-      if (param.is_array) {
+    for (const auto& it : block->input_params) {
+      // Time parameter is read at the same time as time-dependent value
+      if (it.first.compare("t") == 0) {
+        continue;
+      }
+
+      // Skip reading parameters that are not a number
+      if (!it.second.is_number) {
+        continue;
+      }
+
+      // Get vector parameter
+      if (it.second.is_array) {
         // Get parameter vector
         std::vector<double> val;
-        if (get_param_vector(config, param, val)) {
-          throw std::runtime_error("Array parameter " + param.name +
+        if (get_param_vector(config, it.first, it.second, val)) {
+          throw std::runtime_error("Array parameter " + it.first +
                                    " is mandatory in " + block_name +
                                    " block " + static_cast<std::string>(name));
         }
 
         // Get time vector
-        InputParameter t_param{"t", false, true};
+        InputParameter t_param{false, true};
         std::vector<double> time;
-        if (get_param_vector(config, t_param, time)) {
-          throw std::runtime_error("Array parameter " + t_param.name +
-                                   " is mandatory in " + block_name +
-                                   " block " + static_cast<std::string>(name));
+        if (get_param_vector(config, "t", t_param, time)) {
+          throw std::runtime_error("Array parameter t is mandatory in " +
+                                   block_name + " block " +
+                                   static_cast<std::string>(name));
         }
 
         // Add parameters to model
         new_id = model.add_parameter(time, val, periodic);
+      }
 
-      } else {
-        // Get scalar parameter
+      // Get scalar parameter
+      else {
         double val;
-        if (get_param_scalar(config, param, val)) {
-          throw std::runtime_error("Scalar parameter " + param.name +
+        if (get_param_scalar(config, it.first, it.second, val)) {
+          throw std::runtime_error("Scalar parameter " + it.first +
                                    " is mandatory in " + block_name +
                                    " block " + static_cast<std::string>(name));
         }

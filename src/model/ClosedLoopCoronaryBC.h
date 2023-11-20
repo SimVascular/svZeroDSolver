@@ -124,10 +124,12 @@ class ClosedLoopCoronaryBC : public Block {
    * @param block_type The specific type of block (left or right)
    */
   ClosedLoopCoronaryBC(int id, Model *model, BlockType block_type)
-      : Block(
-            id, model, block_type, BlockClass::closed_loop,
-            {InputParameter("Ra"), InputParameter("Ram"), InputParameter("Rv"),
-             InputParameter("Ca"), InputParameter("Cim")}) {}
+      : Block(id, model, block_type, BlockClass::closed_loop,
+              {{"Ra", InputParameter()},
+               {"Ram", InputParameter()},
+               {"Rv", InputParameter()},
+               {"Ca", InputParameter()},
+               {"Cim", InputParameter()}}) {}
 
   /**
    * @brief Local IDs of the parameters

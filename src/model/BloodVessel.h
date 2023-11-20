@@ -161,9 +161,10 @@ class BloodVessel : public Block {
    */
   BloodVessel(int id, Model *model)
       : Block(id, model, BlockType::blood_vessel, BlockClass::vessel,
-              {InputParameter("R_poiseuille"), InputParameter("C", true),
-               InputParameter("L", true),
-               InputParameter("stenosis_coefficient", true)}) {}
+              {{"R_poiseuille", InputParameter()},
+               {"C", InputParameter(true)},
+               {"L", InputParameter(true)},
+               {"stenosis_coefficient", InputParameter(true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

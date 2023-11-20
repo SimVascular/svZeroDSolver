@@ -89,7 +89,8 @@ class PressureReferenceBC : public Block {
    */
   PressureReferenceBC(int id, Model *model)
       : Block(id, model, BlockType::pressure_bc, BlockClass::boundary_condition,
-              {InputParameter("P", false, true)}) {}
+              {{"t", InputParameter(false, true)},
+               {"P", InputParameter(false, true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

@@ -117,11 +117,12 @@ class ClosedLoopRCRBC : public Block {
    * @param model The model to which the block belongs
    */
   ClosedLoopRCRBC(int id, Model *model)
-      : Block(
-            id, model, BlockType::closed_loop_rcr_bc,
-            BlockClass::boundary_condition,
-            {InputParameter("Rp"), InputParameter("C"), InputParameter("Rd")}) {
-  }
+      : Block(id, model, BlockType::closed_loop_rcr_bc,
+              BlockClass::boundary_condition,
+              {{"Rp", InputParameter()},
+               {"C", InputParameter()},
+               {"Rd", InputParameter()},
+               {"closed_loop_outlet", InputParameter(true, false, false)}}) {}
 
   /**
    * @brief Local IDs of the parameters

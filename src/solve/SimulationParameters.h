@@ -38,6 +38,7 @@
 
 #include "Model.h"
 #include "State.h"
+#include "debug.h"
 
 /**
  * @brief Simulation parameters

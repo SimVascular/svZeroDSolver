@@ -42,6 +42,7 @@
 #include <string>
 #include <vector>
 
+#include "debug.h"
 #include "Block.h"
 #include "BloodVessel.h"
 #include "BloodVesselJunction.h"

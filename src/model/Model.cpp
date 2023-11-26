@@ -29,7 +29,6 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Model.h"
-
 #include "Node.h"
 
 Model::Model() {}
@@ -207,15 +206,15 @@ void Model::update_parameter_value(int param_id, double param_value) {
 }
 
 void Model::finalize() {
-  // DEBUG_MSG("Setup degrees-of-freedom of nodes");
+  DEBUG_MSG("Setup degrees-of-freedom of nodes");
   for (auto &node : nodes) {
     node->setup_dofs(dofhandler);
   }
-  // DEBUG_MSG("Setup degrees-of-freedom of blocks");
+  DEBUG_MSG("Setup degrees-of-freedom of blocks");
   for (auto &block : blocks) {
     block->setup_dofs(dofhandler);
   }
-  // DEBUG_MSG("Setup model-dependent parameters");
+  DEBUG_MSG("Setup model-dependent parameters");
   for (auto &block : blocks) {
     block->setup_model_dependent_params();
   }

@@ -38,6 +38,7 @@
 
 #include "Block.h"
 #include "SparseSystem.h"
+#include "debug.h"
 
 /**
  * @brief Valve (tanh) block.
@@ -175,7 +176,7 @@ class ValveTanh : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{5, 0, 0};
+  TripletsContributions num_triplets{5, 0, 3};
 };
 
 #endif  // SVZERODSOLVER_MODEL_VALVETANH_HPP_

@@ -40,6 +40,7 @@ void ValveTanh::setup_dofs(DOFHandler &dofhandler) {
 // with terms that DO NOT DEPEND ON THE SOLUTION
 void ValveTanh::update_constant(SparseSystem &system,
                                   std::vector<double> &parameters) {
+  std::cout<<"In update_const"<<std::endl;
   // Set element contributions
   // coeffRef args are the indices (i,j) of the matrix
   // global_eqn_ids: number of rows in the matrix, set in setup_dofs
@@ -59,6 +60,8 @@ void ValveTanh::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+
+  std::cout<<"In update_sim"<<std::endl;
   // Get states
   double p_in = y[global_var_ids[0]];
   double p_out = y[global_var_ids[2]];

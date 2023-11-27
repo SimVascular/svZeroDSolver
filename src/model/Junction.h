@@ -87,8 +87,19 @@
  */
 class Junction : public Block {
  public:
-  using Block::Block;
+  static const BlockType block_type;    ///< Type of this block
+  static const BlockClass block_class;  ///< Class of this block
+  static const std::vector<InputParameter>
+      input_params;  ///< List of input parameter names
 
+  /**
+   * @brief Construct a new Junction object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  Junction(int id, Model *model)
+      : Block(id, model, BlockType::junction, BlockClass::junction, {}) {}
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
    *

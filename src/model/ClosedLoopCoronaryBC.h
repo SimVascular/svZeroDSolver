@@ -39,14 +39,8 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Specify whether this BC is on a left or right coronary artery.
- *
- */
-enum class Side { LEFT, RIGHT, NONE };
-
-/**
- * @brief Closed loop coronary boundary condition (connected to other blocks on
- * both sides).
+ * @brief Closed loop coronary boundary condition (connected to other blocks
+ * on both sides).
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -82,8 +76,8 @@ enum class Side { LEFT, RIGHT, NONE };
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} & Q_{out}
- * & V_{im}^{e}\end{array}\right]^{T}, \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} &
+ * Q_{out} & V_{im}^{e}\end{array}\right]^{T}, \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
@@ -126,13 +120,16 @@ class ClosedLoopCoronaryBC : public Block {
    * @brief Construct a ClosedLoopCoronaryBC object.
    *
    * @param id Global ID of the block
-   * @param param_ids Global IDs of the block parameters
    * @param model The model to which the block belongs
-   * @param side Specify if this is a left or right coronary artery
+   * @param block_type The specific type of block (left or right)
    */
-  explicit ClosedLoopCoronaryBC(int id, const std::vector<int> &param_ids,
-                                Model *model, Side side)
-      : Block(id, param_ids, model), side{side} {};
+  ClosedLoopCoronaryBC(int id, Model *model, BlockType block_type)
+      : Block(id, model, block_type, BlockClass::closed_loop,
+              {{"Ra", InputParameter()},
+               {"Ram", InputParameter()},
+               {"Rv", InputParameter()},
+               {"Ca", InputParameter()},
+               {"Cim", InputParameter()}}) {}
 
   /**
    * @brief Local IDs of the parameters
@@ -156,7 +153,7 @@ class ClosedLoopCoronaryBC : public Block {
    * @brief Setup parameters that depend on the model
    *
    */
-  void setup_model_dependent_params();
+  virtual void setup_model_dependent_params() = 0;
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -187,10 +184,9 @@ class ClosedLoopCoronaryBC : public Block {
    */
   TripletsContributions num_triplets{9, 5, 0};
 
- private:
-  int ventricle_var_id;  // Variable index of either left or right ventricle
-  int im_param_id;       // Index of parameter Im
-  Side side{Side::NONE};
+ protected:
+  int ventricle_var_id;  ///< Variable index of either left or right ventricle
+  int im_param_id;       ///< Index of parameter Im
 };
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYBC_HPP_

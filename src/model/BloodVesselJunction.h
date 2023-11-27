@@ -35,7 +35,6 @@
 #define SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
 
 #include "Block.h"
-#include "BlockType.h"
 #include "BloodVessel.h"
 #include "SparseSystem.h"
 
@@ -144,8 +143,19 @@
  */
 class BloodVesselJunction : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
+  /**
+   * @brief Construct a new BloodVesselJunction object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  BloodVesselJunction(int id, Model *model)
+      : Block(id, model, BlockType::blood_vessel_junction, BlockClass::junction,
+              {{"R_poiseuille", InputParameter()},
+               {"L", InputParameter()},
+               {"stenosis_coefficient", InputParameter()}}) {
+    input_params_list = true;
+  }
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

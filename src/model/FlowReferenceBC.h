@@ -80,8 +80,16 @@
  */
 class FlowReferenceBC : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
+  /**
+   * @brief Construct a new FlowReferenceBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  FlowReferenceBC(int id, Model *model)
+      : Block(id, model, BlockType::flow_bc, BlockClass::boundary_condition,
+              {{"t", InputParameter(false, true)},
+               {"Q", InputParameter(false, true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

@@ -39,6 +39,7 @@
 #include <map>
 #include <vector>
 
+#include "BlockType.h"
 #include "DOFHandler.h"
 #include "SparseSystem.h"
 
@@ -97,14 +98,35 @@ class Model;
  */
 class Block {
  public:
+  const int id;                  ///< Global ID of the block
+  const Model *model;            ///< The model to which the block belongs
+  const BlockType block_type;    ///< Type of this block
+  const BlockClass block_class;  ///< Class of this block
+  const std::vector<std::pair<std::string, InputParameter>>
+      input_params;  ///< Map from name to input parameter
+
+  std::vector<Node *> inlet_nodes;   ///< Inlet nodes
+  std::vector<Node *> outlet_nodes;  ///< Outlet nodes
+
+  bool steady = false;             ///< Toggle steady behavior
+  bool input_params_list = false;  ///< Are input parameters given as a list?
+
   /**
    * @brief Construct a new Block object
    *
    * @param id Global ID of the block
-   * @param param_ids Global IDs of the block parameters
    * @param model The model to which the block belongs
+   * @param block_type The specific type of block
+   * @param block_class The class the block belongs to (e.g. vessel, junction)
+   * @param input_params The parameters the block takes from the input file
    */
-  explicit Block(int id, const std::vector<int> &param_ids, Model *model);
+  Block(int id, Model *model, BlockType block_type, BlockClass block_class,
+        std::vector<std::pair<std::string, InputParameter>> input_params)
+      : id(id),
+        model(model),
+        block_type(block_type),
+        block_class(block_class),
+        input_params(input_params) {}
 
   /**
    * @brief Destroy the Block object
@@ -117,15 +139,6 @@ class Block {
    *
    */
   Block(const Block &) = delete;
-
-  int id;        ///< Global ID of the block
-  Model *model;  ///< The model to which the block belongs
-
-  std::vector<Node *> inlet_nodes;   ///< Inlet nodes
-  std::vector<Node *> outlet_nodes;  ///< Outlet nodes
-
-  bool steady = false;  ///< Toggle steady behavior
-
   /**
    * @brief Global IDs for the block parameters.
    *
@@ -164,6 +177,12 @@ class Block {
    * @return std::string Name of the block
    */
   std::string get_name();
+
+  /**
+   * @brief Setup parameter IDs for the block
+   * @param param_ids Global IDs of the block parameters
+   */
+  void setup_params_(const std::vector<int> &param_ids);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

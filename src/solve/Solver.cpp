@@ -3,6 +3,7 @@
 #include "csv_writer.h"
 
 Solver::Solver(const nlohmann::json& config) {
+  validate_input(config);
   DEBUG_MSG("Read simulation parameters");
   simparams = load_simulation_params(config);
   DEBUG_MSG("Load model");

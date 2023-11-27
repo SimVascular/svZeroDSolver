@@ -61,11 +61,11 @@ Model::Model() {
 
 Model::~Model() {}
 
-Block *Model::create_block(const std::string &block_name) {
+Block *Model::create_block(const std::string &block_type) {
   // Get block from factory
-  auto it = block_factory_map.find(block_name);
+  auto it = block_factory_map.find(block_type);
   if (it == block_factory_map.end()) {
-    throw std::runtime_error("Invalid block name " + block_name);
+    throw std::runtime_error("Invalid block type " + block_type);
   }
   Block *block = it->second(block_count, this);
   return block;

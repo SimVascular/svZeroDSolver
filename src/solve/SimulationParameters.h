@@ -107,15 +107,15 @@ void create_vessels(
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
 
-void create_coupling(
+void create_external_coupling(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
     std::map<std::string, std::string>& bc_type_map);
 
-void create_bounary_conditions(Model& model, const nlohmann::json& config,
-                               std::map<std::string, std::string>& bc_type_map,
-                               std::vector<std::string>& closed_loop_bcs);
+void create_boundary_conditions(Model& model, const nlohmann::json& config,
+                                std::map<std::string, std::string>& bc_type_map,
+                                std::vector<std::string>& closed_loop_bcs);
 
 void create_junctions(
     Model& model,

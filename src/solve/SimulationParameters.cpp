@@ -72,10 +72,10 @@ bool has_parameter(
 }
 
 int generate_block(Model& model, const nlohmann::json& config,
-                   const std::string& block_name, const std::string_view& name,
+                   const std::string& block_type, const std::string_view& name,
                    bool internal, bool periodic) {
   // Generate block from factory
-  auto block = model.create_block(block_name);
+  auto block = model.create_block(block_type);
 
   // Read block input parameters
   std::vector<int> block_param_ids;
@@ -90,7 +90,7 @@ int generate_block(Model& model, const nlohmann::json& config,
     // Check if json input is a parameter
     if (!has_parameter(block->input_params, el.key())) {
       throw std::runtime_error("Unknown parameter " + el.key() +
-                               " defined in " + block_name + " block " +
+                               " defined in " + block_type + " block " +
                                static_cast<std::string>(name));
     }
   }
@@ -121,7 +121,7 @@ int generate_block(Model& model, const nlohmann::json& config,
         std::vector<double> val;
         if (get_param_vector(config, it.first, it.second, val)) {
           throw std::runtime_error("Array parameter " + it.first +
-                                   " is mandatory in " + block_name +
+                                   " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
         }
 
@@ -130,7 +130,7 @@ int generate_block(Model& model, const nlohmann::json& config,
         std::vector<double> time;
         if (get_param_vector(config, "t", t_param, time)) {
           throw std::runtime_error("Array parameter t is mandatory in " +
-                                   block_name + " block " +
+                                   block_type + " block " +
                                    static_cast<std::string>(name));
         }
 
@@ -143,7 +143,7 @@ int generate_block(Model& model, const nlohmann::json& config,
         double val;
         if (get_param_scalar(config, it.first, it.second, val)) {
           throw std::runtime_error("Scalar parameter " + it.first +
-                                   " is mandatory in " + block_name +
+                                   " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
         }
 
@@ -221,15 +221,15 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 
   // Create external coupling blocks
   if (config.contains("external_solver_coupling_blocks")) {
-    create_coupling(model, connections,
-                    config["external_solver_coupling_blocks"], vessel_id_map,
-                    bc_type_map);
+    create_external_coupling(model, connections,
+                             config["external_solver_coupling_blocks"],
+                             vessel_id_map, bc_type_map);
   }
 
   // Create boundary conditions
   std::vector<std::string> closed_loop_bcs;
-  create_bounary_conditions(model, config["boundary_conditions"], bc_type_map,
-                            closed_loop_bcs);
+  create_boundary_conditions(model, config["boundary_conditions"], bc_type_map,
+                             closed_loop_bcs);
 
   // Create junctions
   if (config.contains("junctions")) {
@@ -280,9 +280,9 @@ void create_vessels(
   }
 }
 
-void create_bounary_conditions(Model& model, const nlohmann::json& config,
-                               std::map<std::string, std::string>& bc_type_map,
-                               std::vector<std::string>& closed_loop_bcs) {
+void create_boundary_conditions(Model& model, const nlohmann::json& config,
+                                std::map<std::string, std::string>& bc_type_map,
+                                std::vector<std::string>& closed_loop_bcs) {
   for (const auto& bc_config : config) {
     std::string bc_type = bc_config["bc_type"];
     std::string bc_name = bc_config["bc_name"];
@@ -303,7 +303,7 @@ void create_bounary_conditions(Model& model, const nlohmann::json& config,
   }
 }
 
-void create_coupling(
+void create_external_coupling(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,

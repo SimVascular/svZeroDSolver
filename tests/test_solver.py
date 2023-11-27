@@ -431,5 +431,5 @@ def test_valve_tanh():
         np.mean(downstream_pressure[-101:]), 2.3075212120642763, rtol=RTOL_PRES
     )
     assert np.isclose(
-        np.amean(upstream_flow[-101:]), 0.0011986721268213844, rtol=RTOL_FLOW
+        np.mean(upstream_flow[-101:]), 0.0011986721268213844, rtol=RTOL_FLOW
     )

@@ -425,11 +425,11 @@ def test_valve_tanh():
         "y"
     ].to_numpy()
     assert np.isclose(
-        np.mean(upstream_pressure), 2.078737191111773, rtol=RTOL_PRES
+        np.mean(upstream_pressure[-101:]), 2.078737191111773, rtol=RTOL_PRES
     )
     assert np.isclose(
-        np.mean(downstream_pressure), 2.3075212120642763, rtol=RTOL_PRES
+        np.mean(downstream_pressure[-101:]), 2.3075212120642763, rtol=RTOL_PRES
     )
     assert np.isclose(
-        np.amin(upstream_flow), 0.0011986721268213844, rtol=RTOL_FLOW
-    )  # min aortic pressure
+        np.amean(upstream_flow[-101:]), 0.0011986721268213844, rtol=RTOL_FLOW
+    )

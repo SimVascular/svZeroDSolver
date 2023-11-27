@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['model_0',['Model',['../class_model.html#ae3b375de5f6df4faf74a95d64748e048',1,'Model']]]
+  ['levenbergmarquardtoptimizer_0',['LevenbergMarquardtOptimizer',['../class_levenberg_marquardt_optimizer.html#aa980a5ddaabb60eff200a12bf90c4430',1,'LevenbergMarquardtOptimizer']]]
 ];

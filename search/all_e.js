@@ -1,9 +1,9 @@
 var searchData=
 [
-  ['openloopcoronarybc_0',['OpenLoopCoronaryBC',['../class_open_loop_coronary_b_c.html',1,'']]],
+  ['openloopcoronarybc_0',['openloopcoronarybc',['../class_open_loop_coronary_b_c.html',1,'OpenLoopCoronaryBC'],['../class_open_loop_coronary_b_c.html#a7034ac11f20b4322fc47904243506564',1,'OpenLoopCoronaryBC::OpenLoopCoronaryBC()']]],
   ['openloopcoronarybc_2eh_1',['OpenLoopCoronaryBC.h',['../_open_loop_coronary_b_c_8h.html',1,'']]],
   ['operator_2b_3d_2',['operator+=',['../struct_triplets_contributions.html#ac3e912c1e238de000b8b1f12dc0852cf',1,'TripletsContributions']]],
-  ['other_20programs_3',['Run svZeroDSolver from other programs',['../index.html#autotoc_md51',1,'']]],
+  ['other_20programs_3',['Run svZeroDSolver from other programs',['../index.html#autotoc_md52',1,'']]],
   ['outlet_5feles_4',['outlet_eles',['../class_node.html#a78df87c57bf4a8d40dd7f679663b7cc3',1,'Node']]],
   ['outlet_5fnodes_5',['outlet_nodes',['../class_block.html#ad5daa270479e8f80ef2f7aa9447f3172',1,'Block']]],
   ['output_5fall_5fcycles_6',['output_all_cycles',['../struct_simulation_parameters.html#a3781dcd107cdc76e5c04cd5d7589a4ff',1,'SimulationParameters']]],

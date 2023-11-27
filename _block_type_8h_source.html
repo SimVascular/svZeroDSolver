@@ -115,23 +115,66 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_</span></div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_</span></div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">enum class</span> BlockType {</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  blood_vessel = 0,</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  junction = 1,</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  blood_vessel_junction = 2,</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  resistive_junction = 3,</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  flow_bc = 4,</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  pressure_bc = 5,</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  resistnce_bc = 6,</div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  windkessel_bc = 7,</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  open_loop_coronary_bc = 8,</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  closed_loop_coronary_lefT_bc = 9,</div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  closed_loop_coronary_right_bc = 10,</div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  closed_loop_rcr_bc = 11,</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  closed_loop_heart_pulmonary = 12</div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>};</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">enum class</span> BlockType {</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  blood_vessel = 0,</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  junction = 1,</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  blood_vessel_junction = 2,</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  resistive_junction = 3,</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  flow_bc = 4,</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  pressure_bc = 5,</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  resistance_bc = 6,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  windkessel_bc = 7,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  open_loop_coronary_bc = 8,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  closed_loop_coronary_left_bc = 9,</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  closed_loop_coronary_right_bc = 10,</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>  closed_loop_rcr_bc = 11,</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  closed_loop_heart_pulmonary = 12</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>};</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keyword">enum class</span> BlockClass {</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  vessel = 0,</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  junction = 1,</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  boundary_condition = 2,</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>  closed_loop = 3,</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>  external = 4</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>};</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment"></span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">/// @brief Handles input parameters</span></div>
+<div class="foldopen" id="foldopen00061" data-start="{" data-end="};">
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="struct_input_parameter.html">   61</a></span><span class="comment"></span><span class="keyword">struct </span><a class="code hl_struct" href="struct_input_parameter.html">InputParameter</a> {</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="struct_input_parameter.html#aebb43b4cd77daade78f5ed431220e1d8">   62</a></span>  <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_input_parameter.html#aebb43b4cd77daade78f5ed431220e1d8">is_optional</a>;    <span class="comment">///&lt; Is this parameter optional?</span></div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="struct_input_parameter.html#a23b23e0f27ee3a4556f4154f195e6280">   63</a></span>  <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_input_parameter.html#a23b23e0f27ee3a4556f4154f195e6280">is_array</a>;       <span class="comment">///&lt; Is this parameter an array?</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="struct_input_parameter.html#aa8ff4bcbc244608a53a21c74ee0ec39c">   64</a></span>  <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_input_parameter.html#aa8ff4bcbc244608a53a21c74ee0ec39c">is_number</a>;      <span class="comment">///&lt; Is this parameter a number?</span></div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="struct_input_parameter.html#a78e504bb2df780943585c29e333005b8">   65</a></span>  <span class="keywordtype">double</span> <a class="code hl_variable" href="struct_input_parameter.html#a78e504bb2df780943585c29e333005b8">default_val</a>;  <span class="comment">///&lt; Default value (if parameter is optional)</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment"></span> </div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">   * @brief Handles input parameters</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">   * @param is_optional Is this parameter optional?</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">   * @param is_array Is this parameter an array?</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">   * @param is_number Is this parameter a number?</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">   * @param default_val Default value (if parameter is optional)</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">   */</span></div>
+<div class="foldopen" id="foldopen00075" data-start="{" data-end="}">
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="struct_input_parameter.html#a8192e830399ab16439dd2e4c7e4a5d3d">   75</a></span>  <a class="code hl_function" href="struct_input_parameter.html#a8192e830399ab16439dd2e4c7e4a5d3d">InputParameter</a>(<span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_input_parameter.html#aebb43b4cd77daade78f5ed431220e1d8">is_optional</a> = <span class="keyword">false</span>, <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_input_parameter.html#a23b23e0f27ee3a4556f4154f195e6280">is_array</a> = <span class="keyword">false</span>,</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>                 <span class="keywordtype">bool</span> <a class="code hl_variable" href="struct_input_parameter.html#aa8ff4bcbc244608a53a21c74ee0ec39c">is_number</a> = <span class="keyword">true</span>, <span class="keywordtype">double</span> <a class="code hl_variable" href="struct_input_parameter.html#a78e504bb2df780943585c29e333005b8">default_val</a> = 0.0)</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>      : <a class="code hl_variable" href="struct_input_parameter.html#aebb43b4cd77daade78f5ed431220e1d8">is_optional</a>(<a class="code hl_variable" href="struct_input_parameter.html#aebb43b4cd77daade78f5ed431220e1d8">is_optional</a>),</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <a class="code hl_variable" href="struct_input_parameter.html#a23b23e0f27ee3a4556f4154f195e6280">is_array</a>(<a class="code hl_variable" href="struct_input_parameter.html#a23b23e0f27ee3a4556f4154f195e6280">is_array</a>),</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        <a class="code hl_variable" href="struct_input_parameter.html#aa8ff4bcbc244608a53a21c74ee0ec39c">is_number</a>(<a class="code hl_variable" href="struct_input_parameter.html#aa8ff4bcbc244608a53a21c74ee0ec39c">is_number</a>),</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <a class="code hl_variable" href="struct_input_parameter.html#a78e504bb2df780943585c29e333005b8">default_val</a>(<a class="code hl_variable" href="struct_input_parameter.html#a78e504bb2df780943585c29e333005b8">default_val</a>) {}</div>
+</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>};</div>
+</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="preprocessor">#endif</span></div>
+<div class="ttc" id="astruct_input_parameter_html"><div class="ttname"><a href="struct_input_parameter.html">InputParameter</a></div><div class="ttdoc">Handles input parameters.</div><div class="ttdef"><b>Definition</b> BlockType.h:61</div></div>
+<div class="ttc" id="astruct_input_parameter_html_a23b23e0f27ee3a4556f4154f195e6280"><div class="ttname"><a href="struct_input_parameter.html#a23b23e0f27ee3a4556f4154f195e6280">InputParameter::is_array</a></div><div class="ttdeci">bool is_array</div><div class="ttdoc">Is this parameter an array?</div><div class="ttdef"><b>Definition</b> BlockType.h:63</div></div>
+<div class="ttc" id="astruct_input_parameter_html_a78e504bb2df780943585c29e333005b8"><div class="ttname"><a href="struct_input_parameter.html#a78e504bb2df780943585c29e333005b8">InputParameter::default_val</a></div><div class="ttdeci">double default_val</div><div class="ttdoc">Default value (if parameter is optional)</div><div class="ttdef"><b>Definition</b> BlockType.h:65</div></div>
+<div class="ttc" id="astruct_input_parameter_html_a8192e830399ab16439dd2e4c7e4a5d3d"><div class="ttname"><a href="struct_input_parameter.html#a8192e830399ab16439dd2e4c7e4a5d3d">InputParameter::InputParameter</a></div><div class="ttdeci">InputParameter(bool is_optional=false, bool is_array=false, bool is_number=true, double default_val=0.0)</div><div class="ttdoc">Handles input parameters.</div><div class="ttdef"><b>Definition</b> BlockType.h:75</div></div>
+<div class="ttc" id="astruct_input_parameter_html_aa8ff4bcbc244608a53a21c74ee0ec39c"><div class="ttname"><a href="struct_input_parameter.html#aa8ff4bcbc244608a53a21c74ee0ec39c">InputParameter::is_number</a></div><div class="ttdeci">bool is_number</div><div class="ttdoc">Is this parameter a number?</div><div class="ttdef"><b>Definition</b> BlockType.h:64</div></div>
+<div class="ttc" id="astruct_input_parameter_html_aebb43b4cd77daade78f5ed431220e1d8"><div class="ttname"><a href="struct_input_parameter.html#aebb43b4cd77daade78f5ed431220e1d8">InputParameter::is_optional</a></div><div class="ttdeci">bool is_optional</div><div class="ttdoc">Is this parameter optional?</div><div class="ttdef"><b>Definition</b> BlockType.h:62</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

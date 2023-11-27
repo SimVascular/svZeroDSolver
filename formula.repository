@@ -250,8 +250,8 @@ Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
 C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
 \]
 \_form#80=224x19:\[
-\mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} & Q_{out}
-& V_{im}^{e}\end{array}\right]^{T}, \]
+\mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} &
+Q_{out} & V_{im}^{e}\end{array}\right]^{T}, \]
 \_form#81=240x46:\[
 \mathbf{E}^{e}=\left[\begin{array}{ccccc}
 -R_{am} C_{a} & R_{am} R_{a} C_{a} & 0 & 0 & 0 \\

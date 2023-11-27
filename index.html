@@ -74,29 +74,29 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="toc"><h3>Table of Contents</h3>
-<ul><li class="level1"><a href="#autotoc_md45">Installation</a><ul><li class="level2"><a href="#autotoc_md46">Using pip</a></li>
-<li class="level2"><a href="#autotoc_md47">Using CMake</a></li>
+<ul><li class="level1"><a href="#autotoc_md46">Installation</a><ul><li class="level2"><a href="#autotoc_md47">Using pip</a></li>
+<li class="level2"><a href="#autotoc_md48">Using CMake</a></li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md48">Developer Guide</a></li>
-<li class="level1"><a href="#autotoc_md49">svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md50">Run svZeroDSolver from the command line</a></li>
-<li class="level2"><a href="#autotoc_md51">Run svZeroDSolver from other programs</a><ul><li class="level3"><a href="#autotoc_md52">In C++</a></li>
-<li class="level3"><a href="#autotoc_md53">In Python</a></li>
+<li class="level1"><a href="#autotoc_md49">Developer Guide</a></li>
+<li class="level1"><a href="#autotoc_md50">svZeroDSolver</a><ul><li class="level2"><a href="#autotoc_md51">Run svZeroDSolver from the command line</a></li>
+<li class="level2"><a href="#autotoc_md52">Run svZeroDSolver from other programs</a><ul><li class="level3"><a href="#autotoc_md53">In C++</a></li>
+<li class="level3"><a href="#autotoc_md54">In Python</a></li>
 </ul>
 </li>
-<li class="level2"><a href="#autotoc_md54">Configuration</a><ul><li class="level3"><a href="#autotoc_md55">Simulation parameters</a></li>
-<li class="level3"><a href="#autotoc_md56">Vessels</a></li>
-<li class="level3"><a href="#autotoc_md57">Junctions</a></li>
-<li class="level3"><a href="#autotoc_md58">Boundary conditions</a></li>
+<li class="level2"><a href="#autotoc_md55">Configuration</a><ul><li class="level3"><a href="#autotoc_md56">Simulation parameters</a></li>
+<li class="level3"><a href="#autotoc_md57">Vessels</a></li>
+<li class="level3"><a href="#autotoc_md58">Junctions</a></li>
+<li class="level3"><a href="#autotoc_md59">Boundary conditions</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="level1"><a href="#autotoc_md59">svZeroDCalibrator</a><ul><li class="level2"><a href="#autotoc_md60">Run svZeroDCalibrator</a><ul><li class="level3"><a href="#autotoc_md61">From the command line</a></li>
-<li class="level3"><a href="#autotoc_md62">In Python</a></li>
+<li class="level1"><a href="#autotoc_md60">svZeroDCalibrator</a><ul><li class="level2"><a href="#autotoc_md61">Run svZeroDCalibrator</a><ul><li class="level3"><a href="#autotoc_md62">From the command line</a></li>
+<li class="level3"><a href="#autotoc_md63">In Python</a></li>
 </ul>
 </li>
-<li class="level2"><a href="#autotoc_md63">Configuration (file)</a><ul><li class="level3"><a href="#autotoc_md64">Calibration parameters</a></li>
+<li class="level2"><a href="#autotoc_md64">Configuration (file)</a><ul><li class="level3"><a href="#autotoc_md65">Calibration parameters</a></li>
 </ul>
 </li>
 </ul>
@@ -123,14 +123,14 @@ $(function() {
 </ul>
 <p>For implementation details, have a look at the <a href="https://github.com/StanfordCBCL/svZeroDPlus">source code</a>.</p>
 <p><a href="https://simvascular.github.io">About SimVascular</a></p>
-<h1><a class="anchor" id="autotoc_md45"></a>
+<h1><a class="anchor" id="autotoc_md46"></a>
 Installation</h1>
 <p>svZeroDPlus can be installed in two different ways. For using the Python API, an installation via pip is recommended.</p>
-<h2><a class="anchor" id="autotoc_md46"></a>
+<h2><a class="anchor" id="autotoc_md47"></a>
 Using pip</h2>
 <p>For a pip installation, simply run the following command (cloning of the repository is not required):</p>
 <div class="fragment"><div class="line">pip install git+https://github.com/StanfordCBCL/svZeroDPlus.git</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md47"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md48"></a>
 Using CMake</h2>
 <p>If you want to build svZeroDPlus manually from source, clone the repository and run the following commands from the top directory of the project:</p>
 <div class="fragment"><div class="line">mkdir Release</div>
@@ -149,25 +149,25 @@ Using CMake</h2>
 </div><!-- fragment --><p></p>
 </details>
 </dd></dl>
-<h1><a class="anchor" id="autotoc_md48"></a>
+<h1><a class="anchor" id="autotoc_md49"></a>
 Developer Guide</h1>
 <p>If you are a developer and want to contribute to svZeroDSolver, you can find more helpful information in our <a class="el" href="developer_guide.html">Developer Guide</a>.</p>
-<h1><a class="anchor" id="autotoc_md49"></a>
+<h1><a class="anchor" id="autotoc_md50"></a>
 svZeroDSolver</h1>
 <p>svZeroDSolver can be used to run zero-dimensional (0D) cardiovascular simulations based on a given configuration.</p>
-<h2><a class="anchor" id="autotoc_md50"></a>
+<h2><a class="anchor" id="autotoc_md51"></a>
 Run svZeroDSolver from the command line</h2>
 <p>svZeroDSolver can be executed from the command line using a JSON configuration file.</p>
 <div class="fragment"><div class="line">svzerodsolver tests/cases/steadyFlow_RLC_R.json result_steadyFlow_RLC_R.csv</div>
 </div><!-- fragment --><p>The result will be written to a csv file.</p>
-<h2><a class="anchor" id="autotoc_md51"></a>
+<h2><a class="anchor" id="autotoc_md52"></a>
 Run svZeroDSolver from other programs</h2>
 <p>For some applications it is beneficial to run svZeroDSolver directly from within another program. For example, this can be useful when many simulations need to be performed (e.g. for calibration, uncertainty quantification, ...). It is also allows using svZeroDPlus with other solvers, for example as boundary conditions or forcing terms.</p>
-<h3><a class="anchor" id="autotoc_md52"></a>
+<h3><a class="anchor" id="autotoc_md53"></a>
 In C++</h3>
 <p>SvZeroDPlus needs to be built using CMake to use the shared library interface.</p>
 <p>Detailed examples of interfacing with svZeroDPlus from C++ codes are available in the test cases at <code>svZeroDPlus/tests/test_interface</code>.</p>
-<h3><a class="anchor" id="autotoc_md53"></a>
+<h3><a class="anchor" id="autotoc_md54"></a>
 In Python</h3>
 <p>Please make sure that you installed svZerodPlus via pip to enable this feature. We start by importing svzerodplus:</p>
 <div class="fragment"><div class="line">&gt;&gt;&gt; <span class="keyword">import</span> svzerodplus</div>
@@ -224,7 +224,7 @@ In Python</h3>
 <div class="line">100  branch0_seg0  1.00      5.0       5.0       1100.0         600.0</div>
 <div class="line"> </div>
 <div class="line">[101 rows x 6 columns]</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md54"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md55"></a>
 Configuration</h2>
 <p>svZeroDSolver is configured using either a JSON file or a Python dictionary. The top-level structure of both is:</p>
 <div class="fragment"><div class="line">{</div>
@@ -234,7 +234,7 @@ Configuration</h2>
 <div class="line">    <span class="stringliteral">&quot;boundary_conditions&quot;</span>: [...]</div>
 <div class="line">}</div>
 </div><!-- fragment --><p>In the following sections, the individual categories are described in more detail.</p>
-<h3><a class="anchor" id="autotoc_md55"></a>
+<h3><a class="anchor" id="autotoc_md56"></a>
 Simulation parameters</h3>
 <p>The svZeroDSolver can be configured with the following options in the <code>simulation_parameters</code> section of the input file. Parameters without a default value must be specified.</p>
 <table class="markdownTable">
@@ -261,7 +261,7 @@ Simulation parameters</h3>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">output_all_cycles   </td><td class="markdownTableBodyNone">Write all cardiac cycles to output file   </td><td class="markdownTableBodyNone">false   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md56"></a>
+<h3><a class="anchor" id="autotoc_md57"></a>
 Vessels</h3>
 <p>More information about the vessels can be found in their respective class references.</p>
 <div class="fragment"><div class="line">{</div>
@@ -284,7 +284,7 @@ Vessels</h3>
  <code>R_poiseuille</code>: Poiseuille resistance <br  />
  <code>stenosis_coefficient</code>: Stenosis coefficient   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md57"></a>
+<h3><a class="anchor" id="autotoc_md58"></a>
 Junctions</h3>
 <p>More information about the junctions can be found in their respective class references.</p>
 <div class="fragment"><div class="line">{</div>
@@ -309,7 +309,7 @@ Junctions</h3>
  junction   </td><td class="markdownTableBodyNone">MODEL::BloodVesselJunction   </td><td class="markdownTableBodyNone"><code><a class="el" href="class_blood_vessel_junction.html" title="Junction between blood vessels.">BloodVesselJunction</a></code>   </td><td class="markdownTableBodyNone">Same as for <code><a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a></code> element but <br  />
  as ordered list for each inlet and outlet   </td></tr>
 </table>
-<h3><a class="anchor" id="autotoc_md58"></a>
+<h3><a class="anchor" id="autotoc_md59"></a>
 Boundary conditions</h3>
 <div class="fragment"><div class="line">{</div>
 <div class="line">    <span class="stringliteral">&quot;bc_name&quot;</span>: <span class="stringliteral">&quot;INFLOW&quot;</span>, <span class="comment"># Name of the boundary condition</span></div>
@@ -335,24 +335,24 @@ Boundary conditions</h3>
  <code>Rd</code>: Distal resistance <br  />
  <code>Pd</code>: Distal pressure   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md59"></a>
+<h1><a class="anchor" id="autotoc_md60"></a>
 svZeroDCalibrator</h1>
 <p>svZeroDCalibrator can be used to calibrate cardiovascular 0D models (i.e. infer optimal parameters for the 0D elements) based on a given transient result (i.e. from a 3D simulation).</p>
-<h2><a class="anchor" id="autotoc_md60"></a>
+<h2><a class="anchor" id="autotoc_md61"></a>
 Run svZeroDCalibrator</h2>
-<h3><a class="anchor" id="autotoc_md61"></a>
+<h3><a class="anchor" id="autotoc_md62"></a>
 From the command line</h3>
 <p>svZeroDCalibrator can be executed from the command line using a JSON configuration file.</p>
 <div class="fragment"><div class="line">svzerodcalibrator path/to/input_file.json path/to/output_file.json</div>
 </div><!-- fragment --><p>The result will be written to a JSON file.</p>
-<h3><a class="anchor" id="autotoc_md62"></a>
+<h3><a class="anchor" id="autotoc_md63"></a>
 In Python</h3>
 <p>svZeroDCalibrator can also be called directly from Python. Please make sure that you installed svZerodPlus via pip to enable this feature. We start by importing svzerodplus:</p>
 <div class="fragment"><div class="line"><span class="keyword">import</span> svzerodplus</div>
 <div class="line"> </div>
 <div class="line">my_unoptimized_config = {...}</div>
 <div class="line">my_optimized_config = svzerodplus.calibrate(my_unoptimized_config)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md63"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md64"></a>
 Configuration (file)</h2>
 <p>In order to make svZeroDCalibrator easy to use, it is based on a similar configuration file than svZeroDSolver. Instead of the <code>simulation_parameters</code> section, it has a section called <code>calibration_parameters</code>. Additionally the optimization target (i.e. a given) 3D result is passed with the key <code>y</code> and it's temporal derivative via <code>dy</code>. See <code>tests/cases/steadyFlow_calibration.json</code> for an example input file.</p>
 <div class="fragment"><div class="line">{</div>
@@ -371,7 +371,7 @@ Configuration (file)</h2>
 <div class="line">      ...</div>
 <div class="line">    },</div>
 <div class="line">}</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md64"></a>
+</div><!-- fragment --><h3><a class="anchor" id="autotoc_md65"></a>
 Calibration parameters</h3>
 <p>Here is a list of the parameters that can be specified in the <code>calibration_parameters</code> section of the configuration file.</p>
 <table class="markdownTable">

@@ -91,9 +91,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad6ebd2062a0b823db841a0b88baac4c0" id="r_ad6ebd2062a0b823db841a0b88baac4c0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#ad6ebd2062a0b823db841a0b88baac4c0">~Model</a> ()</td></tr>
 <tr class="memdesc:ad6ebd2062a0b823db841a0b88baac4c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_model.html" title="Model of 0D elements.">Model</a> object.  <br /></td></tr>
 <tr class="separator:ad6ebd2062a0b823db841a0b88baac4c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b7de6bf5cd52e736f1c12c0e4b92c76" id="r_a3b7de6bf5cd52e736f1c12c0e4b92c76"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#a3b7de6bf5cd52e736f1c12c0e4b92c76">add_block</a> (BlockType block_type, const std::vector&lt; int &gt; &amp;block_param_ids, const std::string_view &amp;name, bool internal=false)</td></tr>
-<tr class="memdesc:a3b7de6bf5cd52e736f1c12c0e4b92c76"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a block to the model.  <br /></td></tr>
-<tr class="separator:a3b7de6bf5cd52e736f1c12c0e4b92c76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac84901f4ab500658ec842b199c5ad7fd" id="r_ac84901f4ab500658ec842b199c5ad7fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_block.html">Block</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#ac84901f4ab500658ec842b199c5ad7fd">create_block</a> (const std::string &amp;block_name)</td></tr>
+<tr class="memdesc:ac84901f4ab500658ec842b199c5ad7fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new block.  <br /></td></tr>
+<tr class="separator:ac84901f4ab500658ec842b199c5ad7fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a758b22387d02d03218900d2fff7cf49b" id="r_a758b22387d02d03218900d2fff7cf49b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#a758b22387d02d03218900d2fff7cf49b">add_block</a> (<a class="el" href="class_block.html">Block</a> *block, const std::string_view &amp;name, const std::vector&lt; int &gt; &amp;block_param_ids, bool internal=false)</td></tr>
+<tr class="memdesc:a758b22387d02d03218900d2fff7cf49b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a block to the model (without parameters)  <br /></td></tr>
+<tr class="separator:a758b22387d02d03218900d2fff7cf49b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6df7a16f2d54619f66c9775f595bf912" id="r_a6df7a16f2d54619f66c9775f595bf912"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#a6df7a16f2d54619f66c9775f595bf912">add_block</a> (const std::string &amp;block_name, const std::vector&lt; int &gt; &amp;block_param_ids, const std::string_view &amp;name, bool internal=false)</td></tr>
+<tr class="memdesc:a6df7a16f2d54619f66c9775f595bf912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a block to the model (with parameters)  <br /></td></tr>
+<tr class="separator:a6df7a16f2d54619f66c9775f595bf912"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b8ebfbff548d6e22190ee99c7b01ebc" id="r_a9b8ebfbff548d6e22190ee99c7b01ebc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_block.html">Block</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#a9b8ebfbff548d6e22190ee99c7b01ebc">get_block</a> (const std::string_view &amp;name) const</td></tr>
 <tr class="memdesc:a9b8ebfbff548d6e22190ee99c7b01ebc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a block by its name.  <br /></td></tr>
 <tr class="separator:a9b8ebfbff548d6e22190ee99c7b01ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,6 +163,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:aefd9dbcdaffe50910d91af391621daa4" id="r_aefd9dbcdaffe50910d91af391621daa4"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::string_view, BlockFactoryFunc &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#aefd9dbcdaffe50910d91af391621daa4">block_factory_map</a></td></tr>
+<tr class="memdesc:aefd9dbcdaffe50910d91af391621daa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Factory that holds all implemented blocks.  <br /></td></tr>
+<tr class="separator:aefd9dbcdaffe50910d91af391621daa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe47a4ac7609b53d9b9b476609162fcb" id="r_afe47a4ac7609b53d9b9b476609162fcb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_d_o_f_handler.html">DOFHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#afe47a4ac7609b53d9b9b476609162fcb">dofhandler</a></td></tr>
 <tr class="memdesc:afe47a4ac7609b53d9b9b476609162fcb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Degree-of-freedom handler of the model.  <br /></td></tr>
 <tr class="separator:afe47a4ac7609b53d9b9b476609162fcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -210,8 +219,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3b7de6bf5cd52e736f1c12c0e4b92c76" name="a3b7de6bf5cd52e736f1c12c0e4b92c76"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b7de6bf5cd52e736f1c12c0e4b92c76">&#9670;&#160;</a></span>add_block()</h2>
+<a id="a758b22387d02d03218900d2fff7cf49b" name="a758b22387d02d03218900d2fff7cf49b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a758b22387d02d03218900d2fff7cf49b">&#9670;&#160;</a></span>add_block() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -219,8 +228,60 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="memname">int Model::add_block </td>
           <td>(</td>
-          <td class="paramtype">BlockType&#160;</td>
-          <td class="paramname"><em>block_type</em>, </td>
+          <td class="paramtype"><a class="el" href="class_block.html">Block</a> *&#160;</td>
+          <td class="paramname"><em>block</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string_view &amp;&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>block_param_ids</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>internal</em> = <code>false</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a block to the model (without parameters) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block</td><td>The block to add </td></tr>
+    <tr><td class="paramname">name</td><td>The name of the block </td></tr>
+    <tr><td class="paramname">block_param_ids</td><td>Global IDs of the parameters of the block </td></tr>
+    <tr><td class="paramname">internal</td><td>Toggle whether block is internal </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Global ID of the block </dd></dl>
+
+</div>
+</div>
+<a id="a6df7a16f2d54619f66c9775f595bf912" name="a6df7a16f2d54619f66c9775f595bf912"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6df7a16f2d54619f66c9775f595bf912">&#9670;&#160;</a></span>add_block() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Model::add_block </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>block_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -248,10 +309,10 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Add a block to the model. </p>
+<p>Add a block to the model (with parameters) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">block_type</td><td>Type of the block </td></tr>
+    <tr><td class="paramname">block_name</td><td>Type of the block </td></tr>
     <tr><td class="paramname">block_param_ids</td><td>Global IDs of the parameters of the block </td></tr>
     <tr><td class="paramname">name</td><td>The name of the block </td></tr>
     <tr><td class="paramname">internal</td><td>Toggle whether block is internal </td></tr>
@@ -376,6 +437,33 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int Global ID of the parameter </dd></dl>
+
+</div>
+</div>
+<a id="ac84901f4ab500658ec842b199c5ad7fd" name="ac84901f4ab500658ec842b199c5ad7fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac84901f4ab500658ec842b199c5ad7fd">&#9670;&#160;</a></span>create_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_block.html">Block</a> * Model::create_block </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>block_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create a new block. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block_name</td><td>The block name (defined in block_factory_map) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int Global ID of the block </dd></dl>
 
 </div>
 </div>
@@ -844,6 +932,22 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="aefd9dbcdaffe50910d91af391621daa4" name="aefd9dbcdaffe50910d91af391621daa4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefd9dbcdaffe50910d91af391621daa4">&#9670;&#160;</a></span>block_factory_map</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::map&lt;std::string_view, BlockFactoryFunc&gt; Model::block_factory_map</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Factory that holds all implemented blocks. </p>
+
+</div>
+</div>
 <a id="a923b97e77cd284f3163637b8fa1187ab" name="a923b97e77cd284f3163637b8fa1187ab"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a923b97e77cd284f3163637b8fa1187ab">&#9670;&#160;</a></span>cardiac_cycle_period</h2>
 

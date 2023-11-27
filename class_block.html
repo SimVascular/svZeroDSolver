@@ -85,14 +85,14 @@ $(function() {
 <div class="dynheader">
 Inheritance diagram for Block:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="class_block__inherit__graph.svg" width="296" height="579"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="class_block__inherit__graph.svg" width="534" height="579"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a443cdfaf01e71a8e12b072b525355412" id="r_a443cdfaf01e71a8e12b072b525355412"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a443cdfaf01e71a8e12b072b525355412">Block</a> (int <a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a>, const std::vector&lt; int &gt; &amp;param_ids, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a>)</td></tr>
-<tr class="memdesc:a443cdfaf01e71a8e12b072b525355412"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
-<tr class="separator:a443cdfaf01e71a8e12b072b525355412"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2fe80c4d04a82a550f41d8b89ac3bcb9" id="r_a2fe80c4d04a82a550f41d8b89ac3bcb9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9">Block</a> (int <a class="el" href="class_block.html#a5d18d0d232066b097a4d2f181ad5efe2">id</a>, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>, BlockType <a class="el" href="class_block.html#ae306263ee87b44a0fc397bf6276c3a15">block_type</a>, BlockClass <a class="el" href="class_block.html#a4a7e01f2e19e5d0e4c947ccdc433467f">block_class</a>, std::vector&lt; std::pair&lt; std::string, <a class="el" href="struct_input_parameter.html">InputParameter</a> &gt; &gt; <a class="el" href="class_block.html#a3005e28a4e947ca92fa4499c5a7f5c8c">input_params</a>)</td></tr>
+<tr class="memdesc:a2fe80c4d04a82a550f41d8b89ac3bcb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
+<tr class="separator:a2fe80c4d04a82a550f41d8b89ac3bcb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19d1bd0e1cef6a865ed2745a2e648405" id="r_a19d1bd0e1cef6a865ed2745a2e648405"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a19d1bd0e1cef6a865ed2745a2e648405">~Block</a> ()</td></tr>
 <tr class="memdesc:a19d1bd0e1cef6a865ed2745a2e648405"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
 <tr class="separator:a19d1bd0e1cef6a865ed2745a2e648405"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -102,6 +102,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a31dd6de05c5e40eec70ba7994d6f0528" id="r_a31dd6de05c5e40eec70ba7994d6f0528"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a31dd6de05c5e40eec70ba7994d6f0528">get_name</a> ()</td></tr>
 <tr class="memdesc:a31dd6de05c5e40eec70ba7994d6f0528"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
 <tr class="separator:a31dd6de05c5e40eec70ba7994d6f0528"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08fb7d659427c235fc3f64ab0d042ea9" id="r_a08fb7d659427c235fc3f64ab0d042ea9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a08fb7d659427c235fc3f64ab0d042ea9">setup_params_</a> (const std::vector&lt; int &gt; &amp;param_ids)</td></tr>
+<tr class="memdesc:a08fb7d659427c235fc3f64ab0d042ea9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameter IDs for the block.  <br /></td></tr>
+<tr class="separator:a08fb7d659427c235fc3f64ab0d042ea9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc10af316c08e7a78881726e9288b2b0" id="r_afc10af316c08e7a78881726e9288b2b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#afc10af316c08e7a78881726e9288b2b0">setup_dofs_</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, int num_equations, const std::list&lt; std::string &gt; &amp;internal_var_names)</td></tr>
 <tr class="memdesc:afc10af316c08e7a78881726e9288b2b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
 <tr class="separator:afc10af316c08e7a78881726e9288b2b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,12 +135,21 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a86f38c868a8dab090101db6492078071" id="r_a86f38c868a8dab090101db6492078071"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a86f38c868a8dab090101db6492078071">id</a></td></tr>
-<tr class="memdesc:a86f38c868a8dab090101db6492078071"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global ID of the block.  <br /></td></tr>
-<tr class="separator:a86f38c868a8dab090101db6492078071"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d3c536c7e54fb03864d9afeb24610e6" id="r_a8d3c536c7e54fb03864d9afeb24610e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a8d3c536c7e54fb03864d9afeb24610e6">model</a></td></tr>
-<tr class="memdesc:a8d3c536c7e54fb03864d9afeb24610e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The model to which the block belongs.  <br /></td></tr>
-<tr class="separator:a8d3c536c7e54fb03864d9afeb24610e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d18d0d232066b097a4d2f181ad5efe2" id="r_a5d18d0d232066b097a4d2f181ad5efe2"><td class="memItemLeft" align="right" valign="top">const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a5d18d0d232066b097a4d2f181ad5efe2">id</a></td></tr>
+<tr class="memdesc:a5d18d0d232066b097a4d2f181ad5efe2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global ID of the block.  <br /></td></tr>
+<tr class="separator:a5d18d0d232066b097a4d2f181ad5efe2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a608c3330612de2419da47e0f4532a8d9" id="r_a608c3330612de2419da47e0f4532a8d9"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_model.html">Model</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a></td></tr>
+<tr class="memdesc:a608c3330612de2419da47e0f4532a8d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">The model to which the block belongs.  <br /></td></tr>
+<tr class="separator:a608c3330612de2419da47e0f4532a8d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae306263ee87b44a0fc397bf6276c3a15" id="r_ae306263ee87b44a0fc397bf6276c3a15"><td class="memItemLeft" align="right" valign="top">const BlockType&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ae306263ee87b44a0fc397bf6276c3a15">block_type</a></td></tr>
+<tr class="memdesc:ae306263ee87b44a0fc397bf6276c3a15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of this block.  <br /></td></tr>
+<tr class="separator:ae306263ee87b44a0fc397bf6276c3a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a7e01f2e19e5d0e4c947ccdc433467f" id="r_a4a7e01f2e19e5d0e4c947ccdc433467f"><td class="memItemLeft" align="right" valign="top">const BlockClass&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a4a7e01f2e19e5d0e4c947ccdc433467f">block_class</a></td></tr>
+<tr class="memdesc:a4a7e01f2e19e5d0e4c947ccdc433467f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class of this block.  <br /></td></tr>
+<tr class="separator:a4a7e01f2e19e5d0e4c947ccdc433467f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3005e28a4e947ca92fa4499c5a7f5c8c" id="r_a3005e28a4e947ca92fa4499c5a7f5c8c"><td class="memItemLeft" align="right" valign="top">const std::vector&lt; std::pair&lt; std::string, <a class="el" href="struct_input_parameter.html">InputParameter</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a3005e28a4e947ca92fa4499c5a7f5c8c">input_params</a></td></tr>
+<tr class="memdesc:a3005e28a4e947ca92fa4499c5a7f5c8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map from name to input parameter.  <br /></td></tr>
+<tr class="separator:a3005e28a4e947ca92fa4499c5a7f5c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae24abf7c7632e5ed77a8d49212b80afe" id="r_ae24abf7c7632e5ed77a8d49212b80afe"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_node.html">Node</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ae24abf7c7632e5ed77a8d49212b80afe">inlet_nodes</a></td></tr>
 <tr class="memdesc:ae24abf7c7632e5ed77a8d49212b80afe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Inlet nodes.  <br /></td></tr>
 <tr class="separator:ae24abf7c7632e5ed77a8d49212b80afe"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -147,6 +159,9 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:adbe1e8cae1e8881588a16590e95ae0bf" id="r_adbe1e8cae1e8881588a16590e95ae0bf"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#adbe1e8cae1e8881588a16590e95ae0bf">steady</a> = false</td></tr>
 <tr class="memdesc:adbe1e8cae1e8881588a16590e95ae0bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Toggle steady behavior.  <br /></td></tr>
 <tr class="separator:adbe1e8cae1e8881588a16590e95ae0bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05f1232b81a42e7b0c4d6781deb5bb53" id="r_a05f1232b81a42e7b0c4d6781deb5bb53"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a05f1232b81a42e7b0c4d6781deb5bb53">input_params_list</a> = false</td></tr>
+<tr class="memdesc:a05f1232b81a42e7b0c4d6781deb5bb53"><td class="mdescLeft">&#160;</td><td class="mdescRight">Are input parameters given as a list?  <br /></td></tr>
+<tr class="separator:a05f1232b81a42e7b0c4d6781deb5bb53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1340395052b260178d7dcca13bc9fc62" id="r_a1340395052b260178d7dcca13bc9fc62"><td class="memItemLeft" align="right" valign="top">std::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a1340395052b260178d7dcca13bc9fc62">global_param_ids</a></td></tr>
 <tr class="memdesc:a1340395052b260178d7dcca13bc9fc62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global IDs for the block parameters.  <br /></td></tr>
 <tr class="separator:a1340395052b260178d7dcca13bc9fc62"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -164,8 +179,8 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Base class for 0D model components. </p>
 <p>A <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> is the base class of 0D model elements. It is the place where the contribution of an element to the global system is controlled. It defines all relevant attributes and methods of an element and a few common helpers for setting it up. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a443cdfaf01e71a8e12b072b525355412" name="a443cdfaf01e71a8e12b072b525355412"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a443cdfaf01e71a8e12b072b525355412">&#9670;&#160;</a></span>Block() <span class="overload">[1/2]</span></h2>
+<a id="a2fe80c4d04a82a550f41d8b89ac3bcb9" name="a2fe80c4d04a82a550f41d8b89ac3bcb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fe80c4d04a82a550f41d8b89ac3bcb9">&#9670;&#160;</a></span>Block() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -182,14 +197,26 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
-          <td class="paramname"><em>param_ids</em>, </td>
+          <td class="paramtype"><a class="el" href="class_model.html">Model</a> *&#160;</td>
+          <td class="paramname"><em>model</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="class_model.html">Model</a> *&#160;</td>
-          <td class="paramname"><em>model</em>&#160;</td>
+          <td class="paramtype">BlockType&#160;</td>
+          <td class="paramname"><em>block_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">BlockClass&#160;</td>
+          <td class="paramname"><em>block_class</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; std::pair&lt; std::string, <a class="el" href="struct_input_parameter.html">InputParameter</a> &gt; &gt;&#160;</td>
+          <td class="paramname"><em>input_params</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -199,7 +226,7 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">explicit</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -208,8 +235,10 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>Global ID of the block </td></tr>
-    <tr><td class="paramname">param_ids</td><td>Global IDs of the block parameters </td></tr>
     <tr><td class="paramname">model</td><td>The model to which the block belongs </td></tr>
+    <tr><td class="paramname">block_type</td><td>The specific type of block </td></tr>
+    <tr><td class="paramname">block_class</td><td>The class the block belongs to (e.g. vessel, junction) </td></tr>
+    <tr><td class="paramname">input_params</td><td>The parameters the block takes from the input file </td></tr>
   </table>
   </dd>
 </dl>
@@ -456,7 +485,33 @@ Public Attributes</h2></td></tr>
 
 <p>Setup parameters that depend on the model. </p>
 
-<p>Reimplemented in <a class="el" href="class_closed_loop_coronary_b_c.html#afe0dc467820687d3f0db4d2060ebe123">ClosedLoopCoronaryBC</a>.</p>
+<p>Reimplemented in <a class="el" href="class_closed_loop_coronary_left_b_c.html#a55ade751b8565fc15dbde59d327251ae">ClosedLoopCoronaryLeftBC</a>, <a class="el" href="class_closed_loop_coronary_right_b_c.html#a84a11dceaaa444b95c309bbf3ec9b057">ClosedLoopCoronaryRightBC</a>, and <a class="el" href="class_closed_loop_coronary_b_c.html#aea3b2b4d74f0fc5fbb792c9b26c05ae1">ClosedLoopCoronaryBC</a>.</p>
+
+</div>
+</div>
+<a id="a08fb7d659427c235fc3f64ab0d042ea9" name="a08fb7d659427c235fc3f64ab0d042ea9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08fb7d659427c235fc3f64ab0d042ea9">&#9670;&#160;</a></span>setup_params_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Block::setup_params_ </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>param_ids</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setup parameter IDs for the block. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">param_ids</td><td>Global IDs of the block parameters </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -684,6 +739,38 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a4a7e01f2e19e5d0e4c947ccdc433467f" name="a4a7e01f2e19e5d0e4c947ccdc433467f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4a7e01f2e19e5d0e4c947ccdc433467f">&#9670;&#160;</a></span>block_class</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const BlockClass Block::block_class</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Class of this block. </p>
+
+</div>
+</div>
+<a id="ae306263ee87b44a0fc397bf6276c3a15" name="ae306263ee87b44a0fc397bf6276c3a15"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae306263ee87b44a0fc397bf6276c3a15">&#9670;&#160;</a></span>block_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const BlockType Block::block_type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Type of this block. </p>
+
+</div>
+</div>
 <a id="a7851447ef34b1f916a056b572713e9db" name="a7851447ef34b1f916a056b572713e9db"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7851447ef34b1f916a056b572713e9db">&#9670;&#160;</a></span>global_eqn_ids</h2>
 
@@ -743,14 +830,14 @@ $" src="form_52.png" width="10" height="10"/></picture> denoting inlet pressure,
 
 </div>
 </div>
-<a id="a86f38c868a8dab090101db6492078071" name="a86f38c868a8dab090101db6492078071"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a86f38c868a8dab090101db6492078071">&#9670;&#160;</a></span>id</h2>
+<a id="a5d18d0d232066b097a4d2f181ad5efe2" name="a5d18d0d232066b097a4d2f181ad5efe2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d18d0d232066b097a4d2f181ad5efe2">&#9670;&#160;</a></span>id</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int Block::id</td>
+          <td class="memname">const int Block::id</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -775,14 +862,46 @@ $" src="form_52.png" width="10" height="10"/></picture> denoting inlet pressure,
 
 </div>
 </div>
-<a id="a8d3c536c7e54fb03864d9afeb24610e6" name="a8d3c536c7e54fb03864d9afeb24610e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d3c536c7e54fb03864d9afeb24610e6">&#9670;&#160;</a></span>model</h2>
+<a id="a3005e28a4e947ca92fa4499c5a7f5c8c" name="a3005e28a4e947ca92fa4499c5a7f5c8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3005e28a4e947ca92fa4499c5a7f5c8c">&#9670;&#160;</a></span>input_params</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_model.html">Model</a>* Block::model</td>
+          <td class="memname">const std::vector&lt;std::pair&lt;std::string, <a class="el" href="struct_input_parameter.html">InputParameter</a>&gt; &gt; Block::input_params</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Map from name to input parameter. </p>
+
+</div>
+</div>
+<a id="a05f1232b81a42e7b0c4d6781deb5bb53" name="a05f1232b81a42e7b0c4d6781deb5bb53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05f1232b81a42e7b0c4d6781deb5bb53">&#9670;&#160;</a></span>input_params_list</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Block::input_params_list = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Are input parameters given as a list? </p>
+
+</div>
+</div>
+<a id="a608c3330612de2419da47e0f4532a8d9" name="a608c3330612de2419da47e0f4532a8d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a608c3330612de2419da47e0f4532a8d9">&#9670;&#160;</a></span>model</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const <a class="el" href="class_model.html">Model</a>* Block::model</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -1,23 +1,28 @@
 <map id="model/ClosedLoopCoronaryBC.h" name="model/ClosedLoopCoronaryBC.h">
 <area shape="rect" id="Node000001" title="model::ClosedLoopCoronaryBC source file" alt="" coords="355,5,563,31"/>
-<area shape="rect" id="Node000002" href="$_model_8h.html" title="model::Model source file" alt="" coords="407,79,512,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="462,46,462,79,457,79,457,46"/>
-<area shape="rect" id="Node000003" href="$_integrator_8h.html" title="Integrator source file." alt="" coords="206,160,339,186"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="418,114,302,162,300,157,416,109"/>
-<area shape="rect" id="Node000004" href="$interface_8h.html" title="svZeroDSolver callable interface." alt="" coords="101,241,236,267"/>
-<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="392,103,278,122,228,137,196,155,182,175,174,198,170,241,165,240,169,197,177,172,192,151,226,132,276,117,391,98"/>
-<area shape="rect" id="Node000005" href="$_solver_8h.html" title="Solver source file." alt="" coords="782,241,886,267"/>
-<area shape="poly" id="edge10_Node000002_Node000005" title=" " alt="" coords="528,94,773,113,885,129,924,139,945,151,952,162,954,173,945,195,932,211,916,225,880,243,877,238,913,220,929,208,941,192,948,172,947,164,941,155,922,144,884,135,772,118,527,99"/>
-<area shape="rect" id="Node000006" href="$_levenberg_marquardt_optimizer_8h.html" title="opt::LevenbergMarquardtOptimizer source file" alt="" coords="363,153,555,193"/>
-<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="462,120,462,152,457,152,457,120"/>
-<area shape="rect" id="Node000007" href="$calibrate_8h.html" title="opt::calibrate source file" alt="" coords="580,160,712,186"/>
-<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="503,109,618,157,616,162,501,114"/>
-<area shape="rect" id="Node000008" href="$_simulation_parameters_8h_source.html" title=" " alt="" coords="737,160,931,186"/>
-<area shape="poly" id="edge8_Node000002_Node000008" title=" " alt="" coords="528,105,776,157,775,162,527,110"/>
-<area shape="rect" id="Node000009" href="$csv__writer_8h.html" title="csv_writer source file" alt="" coords="5,160,132,186"/>
-<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="392,108,150,155,119,162,118,157,149,150,391,103"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="246,198,186,243,183,239,243,193"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="334,187,352,191,472,210,592,226,782,246,781,251,591,231,471,215,351,196,333,192"/>
-<area shape="poly" id="edge9_Node000008_Node000005" title=" " alt="" coords="837,202,837,241,831,241,831,202"/>
-<area shape="poly" id="edge12_Node000009_Node000004" title=" " alt="" coords="97,193,155,239,152,243,94,198"/>
+<area shape="rect" id="Node000002" href="$_closed_loop_coronary_left_b_c_8h.html" title="Left side of ClosedLoopCoronaryBC." alt="" coords="268,79,448,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="434,43,384,81,381,77,430,38"/>
+<area shape="rect" id="Node000011" href="$_closed_loop_coronary_right_b_c_8h_source.html" title=" " alt="" coords="472,79,652,120"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="488,38,538,77,535,81,485,43"/>
+<area shape="rect" id="Node000003" href="$_model_8h.html" title="model::Model source file" alt="" coords="407,168,512,193"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="396,127,445,165,442,169,393,131"/>
+<area shape="rect" id="Node000004" href="$_integrator_8h.html" title="Integrator source file." alt="" coords="206,249,339,275"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="418,202,302,251,300,246,416,197"/>
+<area shape="rect" id="Node000005" href="$interface_8h.html" title="svZeroDSolver callable interface." alt="" coords="101,330,236,356"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="392,192,278,211,228,225,196,243,182,263,174,287,170,330,165,329,169,286,177,261,192,239,226,221,276,206,391,186"/>
+<area shape="rect" id="Node000006" href="$_solver_8h.html" title="Solver source file." alt="" coords="782,330,886,356"/>
+<area shape="poly" id="edge11_Node000003_Node000006" title=" " alt="" coords="528,183,773,202,885,218,924,228,945,239,952,250,954,261,945,283,932,300,916,313,880,332,877,327,913,309,929,296,941,281,948,261,947,252,941,243,922,233,884,223,772,207,527,188"/>
+<area shape="rect" id="Node000007" href="$_levenberg_marquardt_optimizer_8h.html" title="opt::LevenbergMarquardtOptimizer source file" alt="" coords="363,241,555,282"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="462,209,462,241,457,241,457,209"/>
+<area shape="rect" id="Node000008" href="$calibrate_8h.html" title="opt::calibrate source file" alt="" coords="580,249,712,275"/>
+<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="503,197,618,246,616,251,501,202"/>
+<area shape="rect" id="Node000009" href="$_simulation_parameters_8h_source.html" title=" " alt="" coords="737,249,931,275"/>
+<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="528,194,776,246,775,251,527,199"/>
+<area shape="rect" id="Node000010" href="$csv__writer_8h.html" title="csv_writer source file" alt="" coords="5,249,132,275"/>
+<area shape="poly" id="edge12_Node000003_Node000010" title=" " alt="" coords="392,197,150,244,119,251,118,246,149,239,391,192"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="246,286,186,332,183,327,243,282"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="334,276,352,279,472,299,592,314,782,334,781,340,591,320,471,304,351,285,333,281"/>
+<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="837,290,837,329,831,329,831,290"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="97,282,155,327,152,332,94,286"/>
+<area shape="poly" id="edge15_Node000011_Node000003" title=" " alt="" coords="526,131,477,169,473,165,523,127"/>
 </map>

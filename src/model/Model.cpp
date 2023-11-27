@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "Node.h"
 #include "Model.h"
+#include "Node.h"
 
 Model::Model() {}
 

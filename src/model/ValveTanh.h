@@ -50,7 +50,7 @@
  * \begin{circuitikz} \draw
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
- * \draw (1.0,0) to [D, l=$R_v$, *-*] (3,0)
+ * to [D, l=$R_v$, *-*] (3,0)
  * node[anchor=south]{$P_{out}$};
  * \end{circuitikz}
  * \f]
@@ -59,7 +59,8 @@
  *
  * \f[
  * P_{in}-P_{out}-Q_{in}\left[R_{min} +
- * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\left{k(P_{out}-P{in})\right}\right]\right]=0 \f]
+ * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\left{k(P_{out}-P{in})\right}\right]\right]=0
+ * \f]
  *
  * \f[
  * Q_{in}-Q_{out}=0
@@ -99,10 +100,11 @@
  * 0 & 0 & 0 & 0 \end{array}\right] \f]
  * where,
  * \f[
- * A = \frac{1}{2} k Q_{in} (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
+ * A = \frac{1}{2} k Q_{in}
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
  * B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
- * C = -\frac{1}{2} k Q_{in} (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right]
- * \f]
+ * C = -\frac{1}{2} k Q_{in}
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =

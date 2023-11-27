@@ -29,7 +29,6 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Model.h"
-#include "Node.h"
 
 Model::Model() {}
 

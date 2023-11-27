@@ -102,7 +102,11 @@
  * \f[
  * A = \frac{1}{2} k Q_{in}
  * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
+ * \f]
+ * \f[
  * B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+ * \f]
+ * \f[
  * C = -\frac{1}{2} k Q_{in}
  * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
  *

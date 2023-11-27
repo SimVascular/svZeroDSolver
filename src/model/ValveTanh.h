@@ -57,8 +57,8 @@
  * ### Governing equations
  *
  * \f[
- * P_{in}-P_{out}-Q_{in}\[R_{min} +
- * (R_{max}-R_{min})\frac{1}{2}\[1+tanh\{k(P_{out}-P_P{in})\}\]\]=0 \f]
+ * P_{in}-P_{out}-Q_{in}\left[R_{min} +
+ * (R_{max}-R_{min})\frac{1}{2}(1+tanh\{k(P_{out}-P_P{in})\})\right]=0 \f]
  *
  * \f[
  * Q_{in}-Q_{out}=0
@@ -94,9 +94,9 @@
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  * \left[\begin{array}{cccc}
- * \frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] &
+ * \frac{1}{2} k Q_{in} (R_{max}-R_{min}) \left[1-tanh^2\{k(P_{out}-P_{in})\}\right] &
  * -2Q_\text{in} & -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} &
- * -\frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] & 0
+ * -\frac{1}{2} k Q_{in} (R_{max}-R_{min}) \left[1-tanh^2\{k(P_{out}-P_{in})\}\right] & 0
  * \\ 0 & 0 & 0 & 0 \end{array}\right] \f]
  *
  * \f[

@@ -59,7 +59,7 @@
  *
  * \f[
  * P_{in}-P_{out}-Q_{in}\left[R_{min} +
- * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\left{k(P_{out}-P{in})\right}\right]\right]=0
+ * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
  * \f]
  *
  * \f[

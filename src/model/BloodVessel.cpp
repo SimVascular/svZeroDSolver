@@ -44,7 +44,8 @@ void BloodVessel::update_constant(SparseSystem &system,
   // Set element contributions
   // coeffRef args are the indices (i,j) of the matrix
   // global_eqn_ids: number of rows in the matrix, set in setup_dofs
-  // global_var_ids: number of columns, organized as pressure and flow of all inlets and then all outlets of the block
+  // global_var_ids: number of columns, organized as pressure and flow of all
+  // inlets and then all outlets of the block
   system.E.coeffRef(global_eqn_ids[0], global_var_ids[3]) = -inductance;
   system.E.coeffRef(global_eqn_ids[1], global_var_ids[0]) = -capacitance;
   system.E.coeffRef(global_eqn_ids[1], global_var_ids[1]) =

@@ -50,7 +50,7 @@
  *
  * Models the mechanics of the 4 heart chambers and pulmonary circulation
  *
- * References: \cite sankaran2012patient and \cite menon2023predictors 
+ * References: \cite sankaran2012patient and \cite menon2023predictors
  *
  * TODO: Equations and circuit diagram
  *

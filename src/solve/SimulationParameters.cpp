@@ -225,8 +225,8 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
               "external_coupling_block is invalid.");
         }
         connections.push_back({coupling_name, connected_block});
-        DEBUG_MSG("Created coupling block connection: " << coupling_name <<
-        "->" << connected_block);
+        DEBUG_MSG("Created coupling block connection: " << coupling_name << "->"
+                                                        << connected_block);
       } else if (coupling_loc == "outlet") {
         std::vector<std::string> possible_types = {
             "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
@@ -242,8 +242,8 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
         if ((connected_type == "ClosedLoopRCR") ||
             (connected_type == "BloodVessel")) {
           connections.push_back({connected_block, coupling_name});
-          DEBUG_MSG("Created coupling block connection: " << connected_block
-          << "-> " << coupling_name);
+          DEBUG_MSG("Created coupling block connection: "
+                    << connected_block << "-> " << coupling_name);
         }  // connected_type == "ClosedLoopRCR"
       }    // coupling_loc
     }      // for (size_t i = 0; i < coupling_configs.length(); i++)
@@ -453,7 +453,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       }
     }
   }
-  
+
   if (config.contains("valves")) {
     for (const auto& valve_config : config["valves"]) {
       std::string valve_type = valve_config["type"];
@@ -461,10 +461,10 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       const auto& valve_values = valve_config["values"];
       if (valve_type == "tanh") {
         model.add_block(BlockType::valve_tanh,
-                      {model.add_parameter(valve_values["Rmax"]),
-                       model.add_parameter(valve_values["Rmin"]),
-                       model.add_parameter(valve_values["Steepness"])},
-                       valve_name);
+                        {model.add_parameter(valve_values["Rmax"]),
+                         model.add_parameter(valve_values["Rmin"]),
+                         model.add_parameter(valve_values["Steepness"])},
+                        valve_name);
       }
       std::string upstream_name = valve_config["upstream_block"];
       std::string downstream_name = valve_config["downstream_block"];
@@ -472,7 +472,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       connections.push_back({valve_name, downstream_name});
       DEBUG_MSG("Created valve " << valve_name);
     }
-  }  
+  }
 
   // Create Connections
   for (auto& connection : connections) {
@@ -525,7 +525,8 @@ State load_initial_condition(const nlohmann::json& config, Model& model) {
           default_val = init_q;
           DEBUG_MSG("flow_all initial condition for " << var_name);
         } else {
-          DEBUG_MSG("No initial condition found for " << var_name << ". Using default value = 0.");
+          DEBUG_MSG("No initial condition found for "
+                    << var_name << ". Using default value = 0.");
         }
       }
       initial_state.y[i] = initial_condition.value(var_name, default_val);

@@ -43,7 +43,8 @@
 /**
  * @brief Valve (tanh) block.
  *
- * Models the pressure drop across a diode-like valve, which is implemented as a non-linear hyperbolic-tangent resistor.
+ * Models the pressure drop across a diode-like valve, which is implemented as a
+ * non-linear hyperbolic-tangent resistor.
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -56,8 +57,8 @@
  * ### Governing equations
  *
  * \f[
- * P_{in}-P_{out}-Q_{in}\[R_{min} + (R_{max}-R_{min})\frac{1}{2}\[1+tanh\{k(P_{out}-P_P{in})\}\]\]=0
- * \f]
+ * P_{in}-P_{out}-Q_{in}\[R_{min} +
+ * (R_{max}-R_{min})\frac{1}{2}\[1+tanh\{k(P_{out}-P_P{in})\}\]\]=0 \f]
  *
  * \f[
  * Q_{in}-Q_{out}=0
@@ -93,10 +94,10 @@
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  * \left[\begin{array}{cccc}
- * \frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] & -2Q_\text{in} & -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} & -\frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] & 0 \\
- * 0 & 0 & 0 & 0
- * \end{array}\right]
- * \f]
+ * \frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] &
+ * -2Q_\text{in} & -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} &
+ * -\frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] & 0
+ * \\ 0 & 0 & 0 & 0 \end{array}\right] \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
@@ -119,10 +120,9 @@
  */
 class ValveTanh : public Block {
  public:
-  
   // Inherit constructors
   using Block::Block;
-  
+
   /**
    * @brief Local IDs of the parameters
    *
@@ -133,8 +133,8 @@ class ValveTanh : public Block {
     STEEPNESS = 2,
   };
 
-//explicit ValveTanh(int id, const std::vector<int> &param_ids, Model *model)
-//    : Block(id, param_ids, model){};
+  // explicit ValveTanh(int id, const std::vector<int> &param_ids, Model *model)
+  //    : Block(id, param_ids, model){};
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

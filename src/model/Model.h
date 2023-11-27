@@ -42,7 +42,6 @@
 #include <string>
 #include <vector>
 
-#include "debug.h"
 #include "Block.h"
 #include "BloodVessel.h"
 #include "BloodVesselJunction.h"
@@ -58,8 +57,9 @@
 #include "PressureReferenceBC.h"
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"
-#include "WindkesselBC.h"
 #include "ValveTanh.h"
+#include "WindkesselBC.h"
+#include "debug.h"
 
 /**
  * @brief Model of 0D elements

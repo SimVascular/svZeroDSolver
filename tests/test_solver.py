@@ -411,3 +411,25 @@ def test_coupled_block_heart_with_coronaries():
     assert np.isclose(
         np.amin(aortic_pressure), 34.184224686628035, rtol=RTOL_PRES
     )  # min aortic pressure
+
+
+def test_valve_tanh():
+    result = run_test_case_by_name("valve_tanh", output_variable_based=True)
+    upstream_pressure = result[result.name == "pressure:upstream_vessel:valve"][
+        "y"
+    ].to_numpy()
+    downstream_pressure = result[result.name == "pressure:valve:downstream_vessel"][
+        "y"
+    ].to_numpy()
+    upstream_flow = result[result.name == "flow:upstream_vessel:valve"][
+        "y"
+    ].to_numpy()
+    assert np.isclose(
+        np.mean(upstream_pressure), 2.078737191111773, rtol=RTOL_PRES
+    )
+    assert np.isclose(
+        np.mean(downstream_pressure), 2.3075212120642763, rtol=RTOL_PRES
+    )
+    assert np.isclose(
+        np.amin(upstream_flow), 0.0011986721268213844, rtol=RTOL_FLOW
+    )  # min aortic pressure

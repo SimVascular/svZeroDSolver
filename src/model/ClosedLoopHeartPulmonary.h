@@ -89,8 +89,29 @@
  */
 class ClosedLoopHeartPulmonary : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
+  /**
+   * @brief Construct a new ClosedLoopHeartPulmonary object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  ClosedLoopHeartPulmonary(int id, Model *model)
+      : Block(id, model, BlockType::closed_loop_heart_pulmonary,
+              BlockClass::closed_loop,
+              {{"Tsa", InputParameter()},     {"tpwave", InputParameter()},
+               {"Erv_s", InputParameter()},   {"Elv_s", InputParameter()},
+               {"iml", InputParameter()},     {"imr", InputParameter()},
+               {"Lra_v", InputParameter()},   {"Rra_v", InputParameter()},
+               {"Lrv_a", InputParameter()},   {"Rrv_a", InputParameter()},
+               {"Lla_v", InputParameter()},   {"Rla_v", InputParameter()},
+               {"Llv_a", InputParameter()},   {"Rlv_ao", InputParameter()},
+               {"Vrv_u", InputParameter()},   {"Vlv_u", InputParameter()},
+               {"Rpd", InputParameter()},     {"Cp", InputParameter()},
+               {"Cpa", InputParameter()},     {"Kxp_ra", InputParameter()},
+               {"Kxv_ra", InputParameter()},  {"Kxp_la", InputParameter()},
+               {"Kxv_la", InputParameter()},  {"Emax_ra", InputParameter()},
+               {"Emax_la", InputParameter()}, {"Vaso_ra", InputParameter()},
+               {"Vaso_la", InputParameter()}}) {}
 
   /**
    * @brief Local IDs of the parameters

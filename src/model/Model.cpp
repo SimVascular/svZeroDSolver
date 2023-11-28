@@ -30,84 +30,49 @@
 
 #include "Model.h"
 
-Model::Model() {}
+template <typename block_type>
+BlockFactoryFunc block_factory() {
+  return [](int count, Model *model) -> Block * {
+    return new block_type(count, model);
+  };
+}
+
+Model::Model() {
+  // Add all implemented blocks to factory
+  block_factory_map = {
+      {"BloodVessel", block_factory<BloodVessel>()},
+      {"BloodVesselJunction", block_factory<BloodVesselJunction>()},
+      {"ClosedLoopCoronaryLeft", block_factory<ClosedLoopCoronaryLeftBC>()},
+      {"ClosedLoopCoronaryRight", block_factory<ClosedLoopCoronaryRightBC>()},
+      {"ClosedLoopHeartAndPulmonary",
+       block_factory<ClosedLoopHeartPulmonary>()},
+      {"ClosedLoopRCR", block_factory<ClosedLoopRCRBC>()},
+      {"CORONARY", block_factory<OpenLoopCoronaryBC>()},
+      {"FLOW", block_factory<FlowReferenceBC>()},
+      {"NORMAL_JUNCTION", block_factory<Junction>()},
+      {"PRESSURE", block_factory<PressureReferenceBC>()},
+      {"RCR", block_factory<WindkesselBC>()},
+      {"RESISTANCE", block_factory<ResistanceBC>()},
+      {"resistive_junction", block_factory<ResistiveJunction>()}},
+      {"ValveTanh", block_factory<ValveTanh>()}};
+}
 
 Model::~Model() {}
 
-int Model::add_block(BlockType block_type,
-                     const std::vector<int> &block_param_ids,
-                     const std::string_view &name, bool internal) {
-  // DEBUG_MSG("Adding block " << name << " with type " << block_type);
-
-  Block *block{nullptr};
-
-  switch (block_type) {
-    case BlockType::blood_vessel:
-      block = new BloodVessel(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::junction:
-      block = new Junction(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::blood_vessel_junction:
-      block = new BloodVesselJunction(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::resistive_junction:
-      block = new ResistiveJunction(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::flow_bc:
-      block = new FlowReferenceBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::resistnce_bc:
-      block = new ResistanceBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::windkessel_bc:
-      block = new WindkesselBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::pressure_bc:
-      block = new PressureReferenceBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::open_loop_coronary_bc:
-      block = new OpenLoopCoronaryBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::closed_loop_coronary_lefT_bc:
-      block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
-                                       Side::LEFT);
-      // new ClosedLoopCoronaryBC<double, MODEL::Side::LEFT>(
-      //     block_count, block_param_ids, this));
-      break;
-
-    case BlockType::closed_loop_coronary_right_bc:
-      block = new ClosedLoopCoronaryBC(block_count, block_param_ids, this,
-                                       Side::RIGHT);
-      // block = new ClosedLoopCoronaryBC<double, MODEL::Side::RIGHT>(
-      //         block_count, block_param_ids, this));
-      break;
-
-    case BlockType::closed_loop_rcr_bc:
-      block = new ClosedLoopRCRBC(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::closed_loop_heart_pulmonary:
-      block = new ClosedLoopHeartPulmonary(block_count, block_param_ids, this);
-      break;
-
-    case BlockType::valve_tanh:
-      block = new ValveTanh(block_count, block_param_ids, this);
-      break;
-
-    default:
-      throw std::runtime_error(
-          "Adding block to model failed: Invalid block type!");
+Block *Model::create_block(const std::string &block_type) {
+  // Get block from factory
+  auto it = block_factory_map.find(block_type);
+  if (it == block_factory_map.end()) {
+    throw std::runtime_error("Invalid block type " + block_type);
   }
+  Block *block = it->second(block_count, this);
+  return block;
+}
+
+int Model::add_block(Block *block, const std::string_view &name,
+                     const std::vector<int> &block_param_ids, bool internal) {
+  // Set global parameter IDs
+  block->setup_params_(block_param_ids);
 
   auto name_string = static_cast<std::string>(name);
 
@@ -117,11 +82,21 @@ int Model::add_block(BlockType block_type,
     blocks.push_back(std::shared_ptr<Block>(block));
   }
 
-  block_types.push_back(block_type);
+  block_types.push_back(block->block_type);
   block_index_map.insert({name_string, block_count});
   block_names.push_back(name_string);
 
   return block_count++;
+}
+
+int Model::add_block(const std::string &block_name,
+                     const std::vector<int> &block_param_ids,
+                     const std::string_view &name, bool internal) {
+  // Generate block from factory
+  auto block = this->create_block(block_name);
+
+  // Add block to model
+  return this->add_block(block, name, block_param_ids, internal);
 }
 
 Block *Model::get_block(const std::string_view &name) const {

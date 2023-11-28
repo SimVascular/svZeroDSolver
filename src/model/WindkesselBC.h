@@ -105,8 +105,19 @@
  */
 class WindkesselBC : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
+  /**
+   * @brief Construct a new WindkesselBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  WindkesselBC(int id, Model *model)
+      : Block(id, model, BlockType::windkessel_bc,
+              BlockClass::boundary_condition,
+              {{"Rp", InputParameter()},
+               {"C", InputParameter()},
+               {"Rd", InputParameter()},
+               {"Pd", InputParameter(true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

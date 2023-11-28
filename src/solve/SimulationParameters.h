@@ -71,10 +71,61 @@ struct SimulationParameters {
                                        ///< running coupled
 };
 
+int generate_block(Model& model, const nlohmann::json& config,
+                   const std::string& block_name, const std::string_view& name,
+                   bool internal = false, bool periodic = true);
+
+/**
+ * @brief Load initial conditions from a configuration
+ *
+ * @param config The json configuration
+ * @param model The model
+ * @return State Initial configuration for the model
+ */
 State load_initial_condition(const nlohmann::json& config, Model& model);
 
+/**
+ * @brief Load the simulation parameters from a json configuration
+ *
+ * @param config The json configuration
+ * @return SimulationParameters Simulation parameters read from configuration
+ */
+SimulationParameters load_simulation_params(const nlohmann::json& config);
+
+/**
+ * @brief Load model from a configuration
+ *
+ * @param config The json configuration
+ * @param model The 0D model
+ * @
+ */
 void load_simulation_model(const nlohmann::json& config, Model& model);
 
-SimulationParameters load_simulation_params(const nlohmann::json& config);
+void validate_input(const nlohmann::json& config);
+
+void create_vessels(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
+
+void create_external_coupling(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
+    std::map<std::string, std::string>& bc_type_map);
+
+void create_boundary_conditions(Model& model, const nlohmann::json& config,
+                                std::map<std::string, std::string>& bc_type_map,
+                                std::vector<std::string>& closed_loop_bcs);
+
+void create_junctions(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
+
+void create_closed_loop(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::vector<std::string>& closed_loop_bcs);
 
 #endif

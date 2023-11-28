@@ -32,33 +32,142 @@
 
 #include "State.h"
 
-std::vector<double> get_double_array(const nlohmann::json& data,
-                                     const std::string_view& key) {
-  std::vector<double> vector;
-  if (!data[key].is_array()) {
-    return {data[key]};
+bool get_param_scalar(const nlohmann::json& data, const std::string& name,
+                      const InputParameter& param, double& val) {
+  if (data.contains(name)) {
+    val = data[name];
+  } else {
+    if (param.is_optional) {
+      val = param.default_val;
+    } else {
+      return true;
+    }
   }
-  return data[key].get<std::vector<double>>();
+  return false;
 }
 
-std::vector<double> get_double_array(const nlohmann::json& data,
-                                     const std::string_view& key,
-                                     const std::vector<double>& default_value) {
-  if (!data.contains(key)) {
-    return default_value;
+bool get_param_vector(const nlohmann::json& data, const std::string& name,
+                      const InputParameter& param, std::vector<double>& val) {
+  if (data.contains(name)) {
+    val = data[name].get<std::vector<double>>();
+  } else {
+    if (param.is_optional) {
+      val = {param.default_val};
+    } else {
+      return true;
+    }
   }
-  if (!data[key].is_array()) {
-    return {data[key]};
-  }
-  return data[key].get<std::vector<double>>();
+  return false;
 }
 
-/**
- * @brief Load the simulation parameters from a json configuration
- *
- * @param config The json configuration
- * @return SimulationParameters Simulation parameters read from configuration
- */
+bool has_parameter(
+    const std::vector<std::pair<std::string, InputParameter>>& params,
+    const std::string& name) {
+  for (const auto& pair : params) {
+    if (pair.first == name) {
+      return true;
+    }
+  }
+  return false;
+}
+
+int generate_block(Model& model, const nlohmann::json& config,
+                   const std::string& block_type, const std::string_view& name,
+                   bool internal, bool periodic) {
+  // Generate block from factory
+  auto block = model.create_block(block_type);
+
+  // Read block input parameters
+  std::vector<int> block_param_ids;
+  int new_id;
+
+  for (auto& el : config.items()) {
+    // Ignore comments (starting with _)
+    if (el.key()[0] == '_') {
+      continue;
+    }
+
+    // Check if json input is a parameter
+    if (!has_parameter(block->input_params, el.key())) {
+      throw std::runtime_error("Unknown parameter " + el.key() +
+                               " defined in " + block_type + " block " +
+                               static_cast<std::string>(name));
+    }
+  }
+
+  // Input parameters are given as a list
+  if (block->input_params_list) {
+    for (const auto& it : block->input_params) {
+      // todo: check error here
+      for (double value : config[it.first]) {
+        block_param_ids.push_back(model.add_parameter(value));
+      }
+    }
+  } else {
+    for (const auto& it : block->input_params) {
+      // Time parameter is read at the same time as time-dependent value
+      if (it.first.compare("t") == 0) {
+        continue;
+      }
+
+      // Skip reading parameters that are not a number
+      if (!it.second.is_number) {
+        continue;
+      }
+
+      // Get vector parameter
+      if (it.second.is_array) {
+        // Get parameter vector
+        std::vector<double> val;
+        if (get_param_vector(config, it.first, it.second, val)) {
+          throw std::runtime_error("Array parameter " + it.first +
+                                   " is mandatory in " + block_type +
+                                   " block " + static_cast<std::string>(name));
+        }
+
+        // Get time vector
+        InputParameter t_param{false, true};
+        std::vector<double> time;
+        if (get_param_vector(config, "t", t_param, time)) {
+          throw std::runtime_error("Array parameter t is mandatory in " +
+                                   block_type + " block " +
+                                   static_cast<std::string>(name));
+        }
+
+        // Add parameters to model
+        new_id = model.add_parameter(time, val, periodic);
+      }
+
+      // Get scalar parameter
+      else {
+        double val;
+        if (get_param_scalar(config, it.first, it.second, val)) {
+          throw std::runtime_error("Scalar parameter " + it.first +
+                                   " is mandatory in " + block_type +
+                                   " block " + static_cast<std::string>(name));
+        }
+
+        // Add parameter to model
+        new_id = model.add_parameter(val);
+      }
+      // Store parameter IDs
+      block_param_ids.push_back(new_id);
+    }
+  }
+
+  // Add block to model (with parameter IDs)
+  return model.add_block(block, name, block_param_ids, internal);
+}
+
+void validate_input(const nlohmann::json& config) {
+  if (!config.contains("simulation_parameters")) {
+    throw std::runtime_error("Define simulation_parameters");
+  }
+  if (!config.contains("boundary_conditions")) {
+    throw std::runtime_error("Define at least one boundary condition");
+  }
+}
+
 SimulationParameters load_simulation_params(const nlohmann::json& config) {
   DEBUG_MSG("Loading simulation parameters");
   SimulationParameters sim_params;
@@ -94,40 +203,78 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   return sim_params;
 }
 
-/**
- * @brief Load model from a configuration
- *
- * @param config The json configuration
- */
 void load_simulation_model(const nlohmann::json& config, Model& model) {
   DEBUG_MSG("Loading model");
-
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
   // Create vessels
-  DEBUG_MSG("Load vessels");
+  DEBUG_MSG("Loading vessels");
   std::map<int, std::string> vessel_id_map;
-  const auto& vessels = config["vessels"];
+  if (config.contains("vessels")) {
+    create_vessels(model, connections, config["vessels"], vessel_id_map);
+  }
 
+  // Create map for boundary conditions to boundary condition type
+  std::map<std::string, std::string> bc_type_map;
+  for (const auto& bc_config : config["boundary_conditions"]) {
+    std::string bc_name = bc_config["bc_name"];
+    std::string bc_type = bc_config["bc_type"];
+    bc_type_map.insert({bc_name, bc_type});
+  }
+
+  // Create external coupling blocks
+  if (config.contains("external_solver_coupling_blocks")) {
+    create_external_coupling(model, connections,
+                             config["external_solver_coupling_blocks"],
+                             vessel_id_map, bc_type_map);
+  }
+
+  // Create boundary conditions
+  std::vector<std::string> closed_loop_bcs;
+  create_boundary_conditions(model, config["boundary_conditions"], bc_type_map,
+                             closed_loop_bcs);
+
+  // Create junctions
+  if (config.contains("junctions")) {
+    create_junctions(model, connections, config["junctions"], vessel_id_map);
+  }
+
+  // Create closed-loop blocks
+  if (config.contains("closed_loop_blocks")) {
+    create_closed_loop(model, connections, config["closed_loop_blocks"],
+                       closed_loop_bcs);
+  }
+  
+  // Create valves
+  if (config.contains("valves")) {
+    create_valves(model, connections, config["valves"]);
+  }
+
+  // Create Connections
+  for (auto& connection : connections) {
+    auto ele1 = model.get_block(std::get<0>(connection));
+    auto ele2 = model.get_block(std::get<1>(connection));
+    model.add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
+  }
+
+  // Finalize model
+  model.finalize();
+}
+
+void create_vessels(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& vessels, std::map<int, std::string>& vessel_id_map) {
+  // Loop all vessels
   for (size_t i = 0; i < vessels.size(); i++) {
     const auto& vessel_config = vessels[i];
     const auto& vessel_values = vessel_config["zero_d_element_values"];
     const std::string vessel_name = vessel_config["vessel_name"];
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
-    if (vessel_config["zero_d_element_type"] == "BloodVessel") {
-      model.add_block(BlockType::blood_vessel,
-                      {model.add_parameter(vessel_values["R_poiseuille"]),
-                       model.add_parameter(vessel_values.value("C", 0.0)),
-                       model.add_parameter(vessel_values.value("L", 0.0)),
-                       model.add_parameter(
-                           vessel_values.value("stenosis_coefficient", 0.0))},
-                      vessel_name);
-      DEBUG_MSG("Created vessel " << vessel_name);
-    } else {
-      throw std::invalid_argument("Unknown vessel type");
-    }
+    generate_block(model, vessel_values, vessel_config["zero_d_element_type"],
+                   vessel_name);
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
@@ -140,231 +287,240 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
       }
     }
   }
+}
 
-  // Create map for boundary conditions to boundary condition type
-  DEBUG_MSG("Create BC name to BC type map");
-  const auto& bc_configs = config["boundary_conditions"];
-  std::map<std::string, std::string> bc_type_map;
-  for (size_t i = 0; i < bc_configs.size(); i++) {
-    const auto& bc_config = bc_configs[i];
-    std::string bc_name = bc_config["bc_name"];
-    std::string bc_type = bc_config["bc_type"];
-    bc_type_map.insert({bc_name, bc_type});
-  }
+//// Create map for boundary conditions to boundary condition type
+//DEBUG_MSG("Create BC name to BC type map");
+//const auto& bc_configs = config["boundary_conditions"];
+//std::map<std::string, std::string> bc_type_map;
+//for (size_t i = 0; i < bc_configs.size(); i++) {
+//  const auto& bc_config = bc_configs[i];
+//  std::string bc_name = bc_config["bc_name"];
+//  std::string bc_type = bc_config["bc_type"];
+//  bc_type_map.insert({bc_name, bc_type});
+//}
 
-  // Create external coupling blocks
-  if (config.contains("external_solver_coupling_blocks")) {
-    DEBUG_MSG("Create external coupling blocks");
-    const auto& coupling_configs = config["external_solver_coupling_blocks"];
-    for (const auto& coupling_config : coupling_configs) {
-      std::string coupling_type = coupling_config["type"];
-      std::string coupling_name = coupling_config["name"];
-      std::string coupling_loc = coupling_config["location"];
-      bool periodic = coupling_config.value("periodic", true);
-      const auto& coupling_values = coupling_config["values"];
+//// Create external coupling blocks
+//if (config.contains("external_solver_coupling_blocks")) {
+//  DEBUG_MSG("Create external coupling blocks");
+//  const auto& coupling_configs = config["external_solver_coupling_blocks"];
+//  for (const auto& coupling_config : coupling_configs) {
+//    std::string coupling_type = coupling_config["type"];
+//    std::string coupling_name = coupling_config["name"];
+//    std::string coupling_loc = coupling_config["location"];
+//    bool periodic = coupling_config.value("periodic", true);
+//    const auto& coupling_values = coupling_config["values"];
 
-      // Create coupling block
-      auto t_coupling = get_double_array(coupling_values, "t", {0.0});
+//    // Create coupling block
+//    auto t_coupling = get_double_array(coupling_values, "t", {0.0});
 
-      if (coupling_type == "FLOW") {
-        auto Q_coupling = get_double_array(coupling_values, "Q");
-        model.add_block(BlockType::flow_bc,
-                        {model.add_parameter(t_coupling, Q_coupling, periodic)},
-                        coupling_name);
-      } else if (coupling_type == "PRESSURE") {
-        auto P_coupling = get_double_array(coupling_values, "P");
-        model.add_block(BlockType::pressure_bc,
-                        {model.add_parameter(t_coupling, P_coupling, periodic)},
-                        coupling_name);
-      } else {
-        throw std::runtime_error(
-            "Error. Flowsolver coupling block types should be FLOW or "
-            "PRESSURE.");
-      }
-      DEBUG_MSG("Created coupling block " << coupling_name);
+//    if (coupling_type == "FLOW") {
+//      auto Q_coupling = get_double_array(coupling_values, "Q");
+//      model.add_block(BlockType::flow_bc,
+//                      {model.add_parameter(t_coupling, Q_coupling, periodic)},
+//                      coupling_name);
+//    } else if (coupling_type == "PRESSURE") {
+//      auto P_coupling = get_double_array(coupling_values, "P");
+//      model.add_block(BlockType::pressure_bc,
+//                      {model.add_parameter(t_coupling, P_coupling, periodic)},
+//                      coupling_name);
+//    } else {
+//      throw std::runtime_error(
+//          "Error. Flowsolver coupling block types should be FLOW or "
+//          "PRESSURE.");
+//    }
+//    DEBUG_MSG("Created coupling block " << coupling_name);
 
-      // Determine the type of connected block
-      std::string connected_block = coupling_config["connected_block"];
-      std::string connected_type;
-      int found_block = 0;
-      if (connected_block == "ClosedLoopHeartAndPulmonary") {
-        connected_type = "ClosedLoopHeartAndPulmonary";
-        found_block = 1;
-      } else {
-        try {
-          connected_type = bc_type_map.at(connected_block);
-          found_block = 1;
-        } catch (...) {
-        }
-        if (found_block == 0) {
-          // Search for connected_block in the list of vessel names
-          for (auto const vessel : vessel_id_map) {
-            if (connected_block == vessel.second) {
-              connected_type = "BloodVessel";
-              found_block = 1;
-              break;
-            }
-          }
-        }
-        if (found_block == 0) {
-          std::cout << "Error! Could not connected type for block: "
-                    << connected_block << std::endl;
-          throw std::runtime_error("Terminating.");
-        }
-      }  // connected_block != "ClosedLoopHeartAndPulmonary"
-      // Create connections
-      if (coupling_loc == "inlet") {
-        std::vector<std::string> possible_types = {
-            "RESISTANCE",    "RCR",      "ClosedLoopRCR",
-            "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
-            "BloodVessel"};
-        if (std::find(std::begin(possible_types), std::end(possible_types),
-                      connected_type) == std::end(possible_types)) {
-          throw std::runtime_error(
-              "Error: The specified connection type for inlet "
-              "external_coupling_block is invalid.");
-        }
-        connections.push_back({coupling_name, connected_block});
-        DEBUG_MSG("Created coupling block connection: " << coupling_name << "->"
-                                                        << connected_block);
-      } else if (coupling_loc == "outlet") {
-        std::vector<std::string> possible_types = {
-            "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
-        if (std::find(std::begin(possible_types), std::end(possible_types),
-                      connected_type) == std::end(possible_types)) {
-          throw std::runtime_error(
-              "Error: The specified connection type for outlet "
-              "external_coupling_block is invalid.");
-        }
-        // Add connection only for closedLoopRCR and BloodVessel. Connection to
-        // ClosedLoopHeartAndPulmonary will be handled in
-        // ClosedLoopHeartAndPulmonary creation.
-        if ((connected_type == "ClosedLoopRCR") ||
-            (connected_type == "BloodVessel")) {
-          connections.push_back({connected_block, coupling_name});
-          DEBUG_MSG("Created coupling block connection: "
-                    << connected_block << "-> " << coupling_name);
-        }  // connected_type == "ClosedLoopRCR"
-      }    // coupling_loc
-    }      // for (size_t i = 0; i < coupling_configs.length(); i++)
-  }
+//    // Determine the type of connected block
+//    std::string connected_block = coupling_config["connected_block"];
+//    std::string connected_type;
+//    int found_block = 0;
+//    if (connected_block == "ClosedLoopHeartAndPulmonary") {
+//      connected_type = "ClosedLoopHeartAndPulmonary";
+//      found_block = 1;
+//    } else {
+//      try {
+//        connected_type = bc_type_map.at(connected_block);
+//        found_block = 1;
+//      } catch (...) {
+//      }
+//      if (found_block == 0) {
+//        // Search for connected_block in the list of vessel names
+//        for (auto const vessel : vessel_id_map) {
+//          if (connected_block == vessel.second) {
+//            connected_type = "BloodVessel";
+//            found_block = 1;
+//            break;
+//          }
+//        }
+//      }
+//      if (found_block == 0) {
+//        std::cout << "Error! Could not connected type for block: "
+//                  << connected_block << std::endl;
+//        throw std::runtime_error("Terminating.");
+//      }
+//    }  // connected_block != "ClosedLoopHeartAndPulmonary"
+//    // Create connections
+//    if (coupling_loc == "inlet") {
+//      std::vector<std::string> possible_types = {
+//          "RESISTANCE",    "RCR",      "ClosedLoopRCR",
+//          "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
+//          "BloodVessel"};
+//      if (std::find(std::begin(possible_types), std::end(possible_types),
+//                    connected_type) == std::end(possible_types)) {
+//        throw std::runtime_error(
+//            "Error: The specified connection type for inlet "
+//            "external_coupling_block is invalid.");
+//      }
+//      connections.push_back({coupling_name, connected_block});
+//      DEBUG_MSG("Created coupling block connection: " << coupling_name << "->"
+//                                                      << connected_block);
+//    } else if (coupling_loc == "outlet") {
+//      std::vector<std::string> possible_types = {
+//          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
+//      if (std::find(std::begin(possible_types), std::end(possible_types),
+//                    connected_type) == std::end(possible_types)) {
+//        throw std::runtime_error(
+//            "Error: The specified connection type for outlet "
+//            "external_coupling_block is invalid.");
+//      }
+//      // Add connection only for closedLoopRCR and BloodVessel. Connection to
+//      // ClosedLoopHeartAndPulmonary will be handled in
+//      // ClosedLoopHeartAndPulmonary creation.
+//      if ((connected_type == "ClosedLoopRCR") ||
+//          (connected_type == "BloodVessel")) {
+//        connections.push_back({connected_block, coupling_name});
+//        DEBUG_MSG("Created coupling block connection: "
+//                  << connected_block << "-> " << coupling_name);
+//      }  // connected_type == "ClosedLoopRCR"
+//    }    // coupling_loc
+//  }      // for (size_t i = 0; i < coupling_configs.length(); i++)
+//}
 
-  // Create boundary conditions
-  std::vector<std::string> closed_loop_bcs;
-  DEBUG_MSG("Create boundary conditions");
-  for (size_t i = 0; i < bc_configs.size(); i++) {
-    const auto& bc_config = bc_configs[i];
+//// Create boundary conditions
+//std::vector<std::string> closed_loop_bcs;
+//DEBUG_MSG("Create boundary conditions");
+//for (size_t i = 0; i < bc_configs.size(); i++) {
+//  const auto& bc_config = bc_configs[i];
+void create_boundary_conditions(Model& model, const nlohmann::json& config,
+                                std::map<std::string, std::string>& bc_type_map,
+                                std::vector<std::string>& closed_loop_bcs) {
+  for (const auto& bc_config : config) {
     std::string bc_type = bc_config["bc_type"];
     std::string bc_name = bc_config["bc_name"];
     const auto& bc_values = bc_config["bc_values"];
 
-    auto t = get_double_array(bc_values, "t", {0.0});
-    if (bc_type == "RCR") {
-      model.add_block(BlockType::windkessel_bc,
-                      {
-                          model.add_parameter(bc_values["Rp"]),
-                          model.add_parameter(bc_values["C"]),
-                          model.add_parameter(bc_values["Rd"]),
-                          model.add_parameter(bc_values["Pd"]),
-                      },
-                      bc_name);
-    } else if (bc_type == "ClosedLoopRCR") {
-      model.add_block(BlockType::closed_loop_rcr_bc,
-                      {model.add_parameter(bc_values["Rp"]),
-                       model.add_parameter(bc_values["C"]),
-                       model.add_parameter(bc_values["Rd"])},
-                      bc_name);
+    int block_id = generate_block(model, bc_values, bc_type, bc_name);
+
+    // Keep track of closed loop blocks
+    Block* block = model.get_block(block_id);
+
+    if (block->block_type == BlockType::closed_loop_rcr_bc) {
       if (bc_values["closed_loop_outlet"] == true) {
         closed_loop_bcs.push_back(bc_name);
       }
-
-    } else if (bc_type == "FLOW") {
-      model.add_block(
-          BlockType::flow_bc,
-          {model.add_parameter(t, get_double_array(bc_values, "Q"))}, bc_name);
-
-    } else if (bc_type == "RESISTANCE") {
-      model.add_block(
-          BlockType::resistnce_bc,
-          {model.add_parameter(t, get_double_array(bc_values, "R")),
-           model.add_parameter(t, get_double_array(bc_values, "Pd"))},
-          bc_name);
-
-    } else if (bc_type == "PRESSURE") {
-      model.add_block(
-          BlockType::pressure_bc,
-          {model.add_parameter(t, get_double_array(bc_values, "P"))}, bc_name);
-
-    } else if (bc_type == "CORONARY") {
-      model.add_block(
-          BlockType::open_loop_coronary_bc,
-          {model.add_parameter(t, get_double_array(bc_values, "Ra1")),
-           model.add_parameter(t, get_double_array(bc_values, "Ra2")),
-           model.add_parameter(t, get_double_array(bc_values, "Rv1")),
-           model.add_parameter(t, get_double_array(bc_values, "Ca")),
-           model.add_parameter(t, get_double_array(bc_values, "Cc")),
-           model.add_parameter(t, get_double_array(bc_values, "Pim")),
-           model.add_parameter(t, get_double_array(bc_values, "P_v"))},
-          bc_name);
-
-    } else if (bc_type == "ClosedLoopCoronary") {
-      std::string side = bc_values["side"];
-      BlockType block_type;
-      if (side == "left") {
-        block_type = BlockType::closed_loop_coronary_lefT_bc;
-      } else if (side == "right") {
-        block_type = BlockType::closed_loop_coronary_right_bc;
-      } else {
-        throw std::runtime_error("Invalid side for ClosedLoopCoronary");
-      }
-      model.add_block(block_type,
-                      {model.add_parameter(bc_values["Ra"]),
-                       model.add_parameter(bc_values["Ram"]),
-                       model.add_parameter(bc_values["Rv"]),
-                       model.add_parameter(bc_values["Ca"]),
-                       model.add_parameter(bc_values["Cim"])},
-                      bc_name);
+    } else if (block->block_class == BlockClass::closed_loop) {
       closed_loop_bcs.push_back(bc_name);
-
-    } else {
-      throw std::invalid_argument("Unknown boundary condition type");
     }
     DEBUG_MSG("Created boundary condition " << bc_name);
   }
+}
 
-  // Create junctions
-  for (const auto& junction_config : config["junctions"]) {
+void create_external_coupling(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
+    std::map<std::string, std::string>& bc_type_map) {
+  for (const auto& coupling_config : config) {
+    std::string coupling_type = coupling_config["type"];
+    std::string coupling_name = coupling_config["name"];
+    std::string coupling_loc = coupling_config["location"];
+    bool periodic = coupling_config.value("periodic", true);
+    const auto& coupling_values = coupling_config["values"];
+
+    generate_block(model, coupling_values, coupling_type, coupling_name);
+
+    // Determine the type of connected block
+    std::string connected_block = coupling_config["connected_block"];
+    std::string connected_type;
+    int found_block = 0;
+    if (connected_block == "ClosedLoopHeartAndPulmonary") {
+      connected_type = "ClosedLoopHeartAndPulmonary";
+      found_block = 1;
+    } else {
+      try {
+        connected_type = bc_type_map.at(connected_block);
+        found_block = 1;
+      } catch (...) {
+      }
+      if (found_block == 0) {
+        // Search for connected_block in the list of vessel names
+        for (auto const vessel : vessel_id_map) {
+          if (connected_block == vessel.second) {
+            connected_type = "BloodVessel";
+            found_block = 1;
+            break;
+          }
+        }
+      }
+      if (found_block == 0) {
+        std::cout << "Error! Could not connected type for block: "
+                  << connected_block << std::endl;
+        throw std::runtime_error("Terminating.");
+      }
+    }  // connected_block != "ClosedLoopHeartAndPulmonary"
+    // Create connections
+    if (coupling_loc == "inlet") {
+      std::vector<std::string> possible_types = {"RESISTANCE",
+                                                 "RCR",
+                                                 "ClosedLoopRCR",
+                                                 "SimplifiedRCR",
+                                                 "CORONARY",
+                                                 "ClosedLoopCoronaryLeft",
+                                                 "ClosedLoopCoronaryRight",
+                                                 "BloodVessel"};
+      if (std::find(std::begin(possible_types), std::end(possible_types),
+                    connected_type) == std::end(possible_types)) {
+        throw std::runtime_error(
+            "Error: The specified connection type for inlet "
+            "external_coupling_block is invalid.");
+      }
+      connections.push_back({coupling_name, connected_block});
+    } else if (coupling_loc == "outlet") {
+      std::vector<std::string> possible_types = {
+          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
+      if (std::find(std::begin(possible_types), std::end(possible_types),
+                    connected_type) == std::end(possible_types)) {
+        throw std::runtime_error(
+            "Error: The specified connection type for outlet "
+            "external_coupling_block is invalid.");
+      }
+      // Add connection only for closedLoopRCR and BloodVessel. Connection to
+      // ClosedLoopHeartAndPulmonary will be handled in
+      // ClosedLoopHeartAndPulmonary creation.
+      if ((connected_type == "ClosedLoopRCR") ||
+          (connected_type == "BloodVessel")) {
+        connections.push_back({connected_block, coupling_name});
+      }  // connected_type == "ClosedLoopRCR"
+    }    // coupling_loc
+  }      // for (size_t i = 0; i < coupling_configs.length(); i++)
+}
+
+void create_junctions(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map) {
+  for (const auto& junction_config : config) {
     std::string j_type = junction_config["junction_type"];
     std::string junction_name = junction_config["junction_name"];
 
-    if ((j_type == "NORMAL_JUNCTION") || (j_type == "internal_junction")) {
-      model.add_block(BlockType::junction, {}, junction_name);
-
-    } else if (j_type == "resistive_junction") {
-      const auto& junction_values = junction_config["junction_values"];
-      std::vector<int> param_ids;
-      for (double value : junction_values["R"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
-      model.add_block(BlockType::resistive_junction, param_ids, junction_name);
-
-    } else if (j_type == "BloodVesselJunction") {
-      const auto& junction_values = junction_config["junction_values"];
-      std::vector<int> param_ids;
-      for (double value : junction_values["R_poiseuille"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
-      for (double value : junction_values["L"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
-      for (double value : junction_values["stenosis_coefficient"]) {
-        param_ids.push_back(model.add_parameter(value));
-      }
-      model.add_block(BlockType::blood_vessel_junction, param_ids,
-                      junction_name);
+    if (!junction_config.contains("junction_values")) {
+      generate_block(model, {}, j_type, junction_name);
     } else {
-      throw std::invalid_argument("Unknown junction type");
+      generate_block(model, junction_config["junction_values"], j_type,
+                     junction_name);
     }
+
     // Check for connections to inlet and outlet vessels and append to
     // connections list
     for (int vessel_id : junction_config["inlet_vessels"]) {
@@ -375,122 +531,79 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     }
     DEBUG_MSG("Created junction " << junction_name);
   }
-
-  // Create closed-loop blocks
-  bool heartpulmonary_block_present =
-      false;  ///< Flag to check if heart block is present (requires different
-              ///< handling)
-  if (config.contains("closed_loop_blocks")) {
-    for (const auto& closed_loop_config : config["closed_loop_blocks"]) {
-      std::string closed_loop_type = closed_loop_config["closed_loop_type"];
-      if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
-        if (heartpulmonary_block_present == false) {
-          heartpulmonary_block_present = true;
-          std::string heartpulmonary_name = "CLH";
-          double cycle_period = closed_loop_config["cardiac_cycle_period"];
-          if ((model.cardiac_cycle_period > 0.0) &&
-              (cycle_period != model.cardiac_cycle_period)) {
-            throw std::runtime_error(
-                "Inconsistent cardiac cycle period defined in "
-                "ClosedLoopHeartAndPulmonary.");
-          } else {
-            model.cardiac_cycle_period = cycle_period;
-          }
-          const auto& heart_params = closed_loop_config["parameters"];
-          // Convert to std::map to keep model blocks independent of simdjson
-          model.add_block(BlockType::closed_loop_heart_pulmonary,
-                          {model.add_parameter(heart_params["Tsa"]),
-                           model.add_parameter(heart_params["tpwave"]),
-                           model.add_parameter(heart_params["Erv_s"]),
-                           model.add_parameter(heart_params["Elv_s"]),
-                           model.add_parameter(heart_params["iml"]),
-                           model.add_parameter(heart_params["imr"]),
-                           model.add_parameter(heart_params["Lra_v"]),
-                           model.add_parameter(heart_params["Rra_v"]),
-                           model.add_parameter(heart_params["Lrv_a"]),
-                           model.add_parameter(heart_params["Rrv_a"]),
-                           model.add_parameter(heart_params["Lla_v"]),
-                           model.add_parameter(heart_params["Rla_v"]),
-                           model.add_parameter(heart_params["Llv_a"]),
-                           model.add_parameter(heart_params["Rlv_ao"]),
-                           model.add_parameter(heart_params["Vrv_u"]),
-                           model.add_parameter(heart_params["Vlv_u"]),
-                           model.add_parameter(heart_params["Rpd"]),
-                           model.add_parameter(heart_params["Cp"]),
-                           model.add_parameter(heart_params["Cpa"]),
-                           model.add_parameter(heart_params["Kxp_ra"]),
-                           model.add_parameter(heart_params["Kxv_ra"]),
-                           model.add_parameter(heart_params["Kxp_la"]),
-                           model.add_parameter(heart_params["Kxv_la"]),
-                           model.add_parameter(heart_params["Emax_ra"]),
-                           model.add_parameter(heart_params["Emax_la"]),
-                           model.add_parameter(heart_params["Vaso_ra"]),
-                           model.add_parameter(heart_params["Vaso_la"])},
-                          heartpulmonary_name);
-
-          // Junction at inlet to heart
-          std::string heart_inlet_junction_name = "J_heart_inlet";
-          connections.push_back(
-              {heart_inlet_junction_name, heartpulmonary_name});
-          model.add_block(BlockType::junction, {}, heart_inlet_junction_name);
-          for (auto heart_inlet_elem : closed_loop_bcs) {
-            connections.push_back(
-                {heart_inlet_elem, heart_inlet_junction_name});
-          }
-
-          // Junction at outlet from heart
-          std::string heart_outlet_junction_name = "J_heart_outlet";
-          connections.push_back(
-              {heartpulmonary_name, heart_outlet_junction_name});
-          model.add_block(BlockType::junction, {}, heart_outlet_junction_name);
-          for (auto& outlet_block : closed_loop_config["outlet_blocks"]) {
-            connections.push_back({heart_outlet_junction_name, outlet_block});
-          }
-        } else {
-          throw std::runtime_error(
-              "Error. Only one ClosedLoopHeartAndPulmonary can be included.");
-        }
-      }
-    }
-  }
-
-  if (config.contains("valves")) {
-    for (const auto& valve_config : config["valves"]) {
-      std::string valve_type = valve_config["type"];
-      std::string valve_name = valve_config["name"];
-      const auto& valve_values = valve_config["values"];
-      if (valve_type == "tanh") {
-        model.add_block(BlockType::valve_tanh,
-                        {model.add_parameter(valve_values["Rmax"]),
-                         model.add_parameter(valve_values["Rmin"]),
-                         model.add_parameter(valve_values["Steepness"])},
-                        valve_name);
-      }
-      std::string upstream_name = valve_config["upstream_block"];
-      std::string downstream_name = valve_config["downstream_block"];
-      connections.push_back({upstream_name, valve_name});
-      connections.push_back({valve_name, downstream_name});
-      DEBUG_MSG("Created valve " << valve_name);
-    }
-  }
-
-  // Create Connections
-  for (auto& connection : connections) {
-    auto ele1 = model.get_block(std::get<0>(connection));
-    auto ele2 = model.get_block(std::get<1>(connection));
-    model.add_node({ele1}, {ele2}, ele1->get_name() + ":" + ele2->get_name());
-  }
-  // Finalize model
-  model.finalize();
 }
 
-/**
- * @brief Load initial conditions from a configuration
- *
- * @param config The json configuration
- * @param model The model
- * @return State Initial configuration for the model
- */
+void create_closed_loop(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, std::vector<std::string>& closed_loop_bcs) {
+  ///< Flag to check if heart block is present (requires different handling)
+  bool heartpulmonary_block_present = false;
+  for (const auto& closed_loop_config : config) {
+    std::string closed_loop_type = closed_loop_config["closed_loop_type"];
+    if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
+      if (heartpulmonary_block_present == false) {
+        heartpulmonary_block_present = true;
+        std::string heartpulmonary_name = "CLH";
+        double cycle_period = closed_loop_config["cardiac_cycle_period"];
+        if ((model.cardiac_cycle_period > 0.0) &&
+            (cycle_period != model.cardiac_cycle_period)) {
+          throw std::runtime_error(
+              "Inconsistent cardiac cycle period defined in "
+              "ClosedLoopHeartAndPulmonary.");
+        } else {
+          model.cardiac_cycle_period = cycle_period;
+        }
+        const auto& heart_params = closed_loop_config["parameters"];
+
+        generate_block(model, heart_params, closed_loop_type,
+                       heartpulmonary_name);
+
+        // Junction at inlet to heart
+        std::string heart_inlet_junction_name = "J_heart_inlet";
+        connections.push_back({heart_inlet_junction_name, heartpulmonary_name});
+        generate_block(model, {}, "NORMAL_JUNCTION", heart_inlet_junction_name);
+
+        for (auto heart_inlet_elem : closed_loop_bcs) {
+          connections.push_back({heart_inlet_elem, heart_inlet_junction_name});
+        }
+
+        // Junction at outlet from heart
+        std::string heart_outlet_junction_name = "J_heart_outlet";
+        connections.push_back(
+            {heartpulmonary_name, heart_outlet_junction_name});
+        generate_block(model, {}, "NORMAL_JUNCTION",
+                       heart_outlet_junction_name);
+        for (auto& outlet_block : closed_loop_config["outlet_blocks"]) {
+          connections.push_back({heart_outlet_junction_name, outlet_block});
+        }
+      } else {
+        throw std::runtime_error(
+            "Error. Only one ClosedLoopHeartAndPulmonary can be included.");
+      }
+    }
+  }
+}
+
+void create_valves(Model& model,std::vector<std::tuple<std::string, std::string>>& connections, const nlohmann::json& config) {
+  for (const auto& valve_config : config) {
+    std::string valve_type = valve_config["type"];
+    std::string valve_name = valve_config["name"];
+    generate_block(model, valve_config["values"], valve_type, valve_name);
+//  const auto& valve_values = valve_config["values"];
+//  if (valve_type == "tanh") {
+//    model.add_block(BlockType::valve_tanh,
+//                    {model.add_parameter(valve_values["Rmax"]),
+//                     model.add_parameter(valve_values["Rmin"]),
+//                     model.add_parameter(valve_values["Steepness"])},
+//                    valve_name);
+//  }
+    connections.push_back({valve_config["upstream_block"], valve_name});
+    connections.push_back({valve_name, valve_config["downstream_block"]});
+    DEBUG_MSG("Created valve " << valve_name);
+  }
+}
+
 State load_initial_condition(const nlohmann::json& config, Model& model) {
   // Read initial condition
   auto initial_state = State::Zero(model.dofhandler.size());

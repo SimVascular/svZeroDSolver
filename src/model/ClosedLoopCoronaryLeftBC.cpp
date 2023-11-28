@@ -28,57 +28,14 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
-#define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
+#include "ClosedLoopCoronaryLeftBC.h"
 
-#include <string>
+#include "Model.h"
 
-enum class BlockType {
-  blood_vessel = 0,
-  junction = 1,
-  blood_vessel_junction = 2,
-  resistive_junction = 3,
-  flow_bc = 4,
-  pressure_bc = 5,
-  resistance_bc = 6,
-  windkessel_bc = 7,
-  open_loop_coronary_bc = 8,
-  closed_loop_coronary_left_bc = 9,
-  closed_loop_coronary_right_bc = 10,
-  closed_loop_rcr_bc = 11,
-  closed_loop_heart_pulmonary = 12,
-  valve_tanh = 13
-};
-
-enum class BlockClass {
-  vessel = 0,
-  junction = 1,
-  boundary_condition = 2,
-  closed_loop = 3,
-  external = 4
-};
-
-/// @brief Handles input parameters
-struct InputParameter {
-  bool is_optional;    ///< Is this parameter optional?
-  bool is_array;       ///< Is this parameter an array?
-  bool is_number;      ///< Is this parameter a number?
-  double default_val;  ///< Default value (if parameter is optional)
-
-  /**
-   * @brief Handles input parameters
-   *
-   * @param is_optional Is this parameter optional?
-   * @param is_array Is this parameter an array?
-   * @param is_number Is this parameter a number?
-   * @param default_val Default value (if parameter is optional)
-   */
-  InputParameter(bool is_optional = false, bool is_array = false,
-                 bool is_number = true, double default_val = 0.0)
-      : is_optional(is_optional),
-        is_array(is_array),
-        is_number(is_number),
-        default_val(default_val) {}
-};
-
-#endif
+void ClosedLoopCoronaryLeftBC::setup_model_dependent_params() {
+  auto heart_block = model->get_block("CLH");
+  im_param_id =
+      heart_block->global_param_ids[ClosedLoopHeartPulmonary::ParamId::IML];
+  ventricle_var_id =
+      heart_block->global_var_ids[13];  // Solution ID for LV pressure
+}

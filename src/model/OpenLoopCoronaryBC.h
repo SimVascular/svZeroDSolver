@@ -106,8 +106,24 @@
  */
 class OpenLoopCoronaryBC : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
+  /**
+   * @brief Construct a new OpenLoopCoronaryBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  OpenLoopCoronaryBC(int id, Model *model)
+      : Block(id, model, BlockType::open_loop_coronary_bc,
+              BlockClass::boundary_condition,
+              {{"Ra1", InputParameter()},
+               {"Ra2", InputParameter()},
+               {"Rv1", InputParameter()},
+               {"Ca", InputParameter()},
+               {"Cc", InputParameter()},
+               {"t", InputParameter(false, true)},
+               {"Pim", InputParameter(false, true)},
+               {"P_v", InputParameter()},
+               {"closed_loop_outlet", InputParameter(true, false, false)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

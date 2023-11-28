@@ -27,7 +27,10 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+/**
+ * @file SimulationParameters.h
+ * @brief Source file to read simulation configuration
+ */
 #ifndef SVZERODSOLVER_SIMULATIONPARAMETERS_HPP_
 #define SVZERODSOLVER_SIMULATIONPARAMETERS_HPP_
 
@@ -71,8 +74,19 @@ struct SimulationParameters {
                                        ///< running coupled
 };
 
+/**
+ * @brief Generate a new block
+ *
+ * @param model The model that teh block is added to
+ * @param config The json configuration
+ * @param block_type The type of block
+ * @param name The name of the block
+ * @param internal Is this an internal block? This is relevane for the calibrator
+ * @param periodic Is this block periodic with the cardiac cycle? This is relevant for coupling with external solvers
+ * @return int The block count
+ */
 int generate_block(Model& model, const nlohmann::json& config,
-                   const std::string& block_name, const std::string_view& name,
+                   const std::string& block_type, const std::string_view& name,
                    bool internal = false, bool periodic = true);
 
 /**

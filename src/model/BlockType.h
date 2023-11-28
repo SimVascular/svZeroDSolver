@@ -27,7 +27,10 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+/**
+ * @file BlockType.h
+ * @brief Specifies the types of blocks and their parameters
+ */
 #ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 #define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 
@@ -55,7 +58,8 @@ enum class BlockClass {
   junction = 1,
   boundary_condition = 2,
   closed_loop = 3,
-  external = 4
+  external = 4,
+  valve = 5
 };
 
 /// @brief Handles input parameters

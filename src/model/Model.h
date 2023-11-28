@@ -43,9 +43,11 @@
 #include <vector>
 
 #include "Block.h"
+#include "BlockFactory.h"
 #include "BloodVessel.h"
 #include "BloodVesselJunction.h"
-#include "ClosedLoopCoronaryBC.h"
+#include "ClosedLoopCoronaryLeftBC.h"
+#include "ClosedLoopCoronaryRightBC.h"
 #include "ClosedLoopHeartPulmonary.h"
 #include "ClosedLoopRCRBC.h"
 #include "DOFHandler.h"
@@ -68,6 +70,9 @@
  */
 class Model {
  public:
+  /// Factory that holds all implemented blocks
+  std::map<std::string_view, BlockFactoryFunc> block_factory_map;
+
   /**
    * @brief Construct a new Model object
    *
@@ -86,15 +91,36 @@ class Model {
   double time = 0.0;                   ///< Current time
 
   /**
-   * @brief Add a block to the model
+   * @brief Create a new block
    *
-   * @param block_type Type of the block
+   * @param block_name The block name (defined in block_factory_map)
+   * @return int Global ID of the block
+   */
+  Block *create_block(const std::string &block_name);
+
+  /**
+   * @brief Add a block to the model (without parameters)
+   *
+   * @param block The block to add
+   * @param name The name of the block
+   * @param block_param_ids Global IDs of the parameters of the block
+   * @param internal Toggle whether block is internal
+   * @return int Global ID of the block
+   */
+  int add_block(Block *block, const std::string_view &name,
+                const std::vector<int> &block_param_ids, bool internal = false);
+
+  /**
+   * @brief Add a block to the model (with parameters)
+   *
+   * @param block_name Type of the block
    * @param block_param_ids Global IDs of the parameters of the block
    * @param name The name of the block
    * @param internal Toggle whether block is internal
    * @return int Global ID of the block
    */
-  int add_block(BlockType block_type, const std::vector<int> &block_param_ids,
+  int add_block(const std::string &block_name,
+                const std::vector<int> &block_param_ids,
                 const std::string_view &name, bool internal = false);
 
   /**

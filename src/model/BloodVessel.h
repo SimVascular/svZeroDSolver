@@ -157,11 +157,14 @@ class BloodVessel : public Block {
    * @brief Construct a new BloodVessel object
    *
    * @param id Global ID of the block
-   * @param param_ids Global IDs of the block parameters
    * @param model The model to which the block belongs
    */
-  explicit BloodVessel(int id, const std::vector<int> &param_ids, Model *model)
-      : Block(id, param_ids, model){};
+  BloodVessel(int id, Model *model)
+      : Block(id, model, BlockType::blood_vessel, BlockClass::vessel,
+              {{"R_poiseuille", InputParameter()},
+               {"C", InputParameter(true)},
+               {"L", InputParameter(true)},
+               {"stenosis_coefficient", InputParameter(true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

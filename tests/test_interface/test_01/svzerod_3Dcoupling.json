@@ -13,272 +13,249 @@
                 "Rp": 0.14517763,
                 "Rd": 1.46790713,
                 "C": 0.25116364,
-                "unsteady": false,
                 "closed_loop_outlet": true
             }
         },
         {
             "bc_name": "BC_lca1",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 145.27234317,
                 "Ram": 236.06755765,
                 "Rv": 290.06461147,
                 "Cim": 0.00105039,
-                "Ca": 0.00010326,
-                "side": "left"
+                "Ca": 0.00010326
             }
         },
         {
             "bc_name": "BC_lca10",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 264.50228916,
                 "Ram": 429.81621988,
                 "Rv": 528.13048970,
                 "Cim": 0.00066247,
-                "Ca": 0.00006513,
-                "side": "left"
+                "Ca": 0.00006513
             }
         },
         {
             "bc_name": "BC_lca11",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 242.34288877,
                 "Ram": 393.80719426,
                 "Rv": 483.88491806,
                 "Cim": 0.00070852,
-                "Ca": 0.00006966,
-                "side": "left"
+                "Ca": 0.00006966
             }
         },
         {
             "bc_name": "BC_lca12",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 434.80456767,
                 "Ram": 706.55742246,
                 "Rv": 868.17225653,
                 "Cim": 0.00045194,
-                "Ca": 0.00004440,
-                "side": "left"
+                "Ca": 0.00004440
             }
         },
         {
             "bc_name": "BC_lca2",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 215.56835732,
                 "Ram": 350.29858065,
                 "Rv": 430.42433573,
                 "Cim": 0.00077533,
-                "Ca": 0.00007617,
-                "side": "left"
+                "Ca": 0.00007617
             }
         },
         {
             "bc_name": "BC_lca3",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 128.32140944,
                 "Ram": 208.52229034,
                 "Rv": 256.21876096,
                 "Cim": 0.00115556,
-                "Ca": 0.00011358,
-                "side": "left"
+                "Ca": 0.00011358
             }
         },
         {
             "bc_name": "BC_lca4",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 485.25934900,
                 "Ram": 788.54644212,
                 "Rv": 968.91508361,
                 "Cim": 0.00041538,
-                "Ca": 0.00004083,
-                "side": "left"
+                "Ca": 0.00004083
             }
         },
         {
             "bc_name": "BC_lca5",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 220.09705473,
                 "Ram": 357.65771393,
                 "Rv": 439.46676478,
                 "Cim": 0.00076305,
-                "Ca": 0.00007498,
-                "side": "left"
+                "Ca": 0.00007498
             }
         },
         {
             "bc_name": "BC_lca6",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 312.82644777,
                 "Ram": 508.34297763,
                 "Rv": 624.61911227,
                 "Cim": 0.00058227,
-                "Ca": 0.00005727,
-                "side": "left"
+                "Ca": 0.00005727
             }
         },
         {
             "bc_name": "BC_lca7",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 187.95513270,
                 "Ram": 305.42709064,
                 "Rv": 375.28913867,
                 "Cim": 0.00086153,
-                "Ca": 0.00008467,
-                "side": "left"
+                "Ca": 0.00008467
             }
         },
         {
             "bc_name": "BC_lca8",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 353.61869908,
                 "Ram": 574.63038601,
                 "Rv": 706.06881062,
                 "Cim": 0.00052984,
-                "Ca": 0.00005210,
-                "side": "left"
+                "Ca": 0.00005210
             }
         },
         {
             "bc_name": "BC_lca9",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
                 "Ra": 169.53550051,
                 "Ram": 275.49518834,
                 "Rv": 338.51074481,
                 "Cim": 0.00093274,
-                "Ca": 0.00009166,
-                "side": "left"
+                "Ca": 0.00009166
             }
         },
         {
             "bc_name": "BC_rca1",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 80.29184258,
                 "Ram": 130.47424420,
                 "Rv": 160.31834838,
                 "Cim": 0.00141371,
-                "Ca": 0.00017264,
-                "side": "right"
+                "Ca": 0.00017264
             }
         },
         {
             "bc_name": "BC_rca10",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 218.08868882,
                 "Ram": 354.39411934,
                 "Rv": 435.45666992,
                 "Cim": 0.00065544,
-                "Ca": 0.00008004,
-                "side": "right"
+                "Ca": 0.00008004
             }
         },
         {
             "bc_name": "BC_rca2",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 105.20903691,
                 "Ram": 170.96468497,
                 "Rv": 210.07039433,
                 "Cim": 0.00114837,
-                "Ca": 0.00014026,
-                "side": "right"
+                "Ca": 0.00014026
             }
         },
         {
             "bc_name": "BC_rca3",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 186.14291060,
                 "Ram": 302.48222973,
                 "Rv": 371.67068322,
                 "Cim": 0.00074037,
-                "Ca": 0.00009038,
-                "side": "right"
+                "Ca": 0.00009038
             }
         },
         {
             "bc_name": "BC_rca4",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 193.76088038,
                 "Ram": 314.86143062,
                 "Rv": 386.88144804,
                 "Cim": 0.00071786,
-                "Ca": 0.00008767,
-                "side": "right"
+                "Ca": 0.00008767
             }
         },
         {
             "bc_name": "BC_rca5",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 124.95088751,
                 "Ram": 203.04519220,
                 "Rv": 249.48885552,
                 "Cim": 0.00100610,
-                "Ca": 0.00012286,
-                "side": "right"
+                "Ca": 0.00012286
             }
         },
         {
             "bc_name": "BC_rca6",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 218.27513756,
                 "Ram": 354.69709853,
                 "Rv": 435.82895125,
                 "Cim": 0.00065505,
-                "Ca": 0.00007994,
-                "side": "right"
+                "Ca": 0.00007994
             }
         },
         {
             "bc_name": "BC_rca7",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 178.05349026,
                 "Ram": 289.33692167,
                 "Rv": 355.51857526,
                 "Cim": 0.00076610,
-                "Ca": 0.00009357,
-                "side": "right"
+                "Ca": 0.00009357
             }
         },
         {
             "bc_name": "BC_rca8",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 173.61664735,
                 "Ram": 282.12705194,
                 "Rv": 346.65955170,
                 "Cim": 0.00078117,
-                "Ca": 0.00009540,
-                "side": "right"
+                "Ca": 0.00009540
             }
         },
         {
             "bc_name": "BC_rca9",
-            "bc_type": "ClosedLoopCoronary",
+            "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
                 "Ra": 162.07275385,
                 "Ram": 263.36822500,
                 "Rv": 323.60991327,
                 "Cim": 0.00082363,
-                "Ca": 0.00010053,
-                "side": "right"
+                "Ca": 0.00010053
             }
         }
     ],

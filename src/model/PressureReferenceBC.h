@@ -81,8 +81,16 @@
  */
 class PressureReferenceBC : public Block {
  public:
-  // Inherit constructors
-  using Block::Block;
+  /**
+   * @brief Construct a new PressureReferenceBC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  PressureReferenceBC(int id, Model *model)
+      : Block(id, model, BlockType::pressure_bc, BlockClass::boundary_condition,
+              {{"t", InputParameter(false, true)},
+               {"P", InputParameter(false, true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

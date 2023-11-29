@@ -62,27 +62,4 @@ enum class BlockClass {
   valve = 5
 };
 
-// @brief Handles input parameters
-struct InputParameter {
-  bool is_optional;    ///< Is this parameter optional?
-  bool is_array;       ///< Is this parameter an array?
-  bool is_number;      ///< Is this parameter a number?
-  double default_val;  ///< Default value (if parameter is optional)
-
-  /**
-   * @brief Handles input parameters
-   *
-   * @param is_optional Is this parameter optional?
-   * @param is_array Is this parameter an array?
-   * @param is_number Is this parameter a number?
-   * @param default_val Default value (if parameter is optional)
-   */
-  InputParameter(bool is_optional = false, bool is_array = false,
-                 bool is_number = true, double default_val = 0.0)
-      : is_optional(is_optional),
-        is_array(is_array),
-        is_number(is_number),
-        default_val(default_val) {}
-};
-
 #endif

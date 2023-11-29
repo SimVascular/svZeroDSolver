@@ -129,8 +129,6 @@
  */
 class ValveTanh : public Block {
  public:
-  // Inherit constructors
-//using Block::Block;
 
   /**
    * @brief Local IDs of the parameters
@@ -142,9 +140,6 @@ class ValveTanh : public Block {
     STEEPNESS = 2,
   };
 
-  // explicit ValveTanh(int id, const std::vector<int> &param_ids, Model *model)
-  //    : Block(id, param_ids, model){};
-  //
   /**
    * @brief Construct a new ValveTanh object
    *

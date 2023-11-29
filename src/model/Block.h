@@ -41,8 +41,8 @@
 
 #include "BlockType.h"
 #include "DOFHandler.h"
-#include "SparseSystem.h"
 #include "Parameter.h"
+#include "SparseSystem.h"
 
 /**
  * @brief The number of triplets that the element contributes

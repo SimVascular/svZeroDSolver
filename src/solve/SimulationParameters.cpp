@@ -94,8 +94,9 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
     }
   }
 
-  // The rest of this function reads the parameters for each block, adds them to the model, and stores the corresponding param IDs in each block
-  // Handle input parameters given as a list differently
+  // The rest of this function reads the parameters for each block, adds them to
+  // the model, and stores the corresponding param IDs in each block Handle
+  // input parameters given as a list differently
   if (block->input_params_list) {
     for (const auto& block_param : block->input_params) {
       // todo: check error here
@@ -119,7 +120,8 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       if (block_param.second.is_array) {
         // Get parameter vector
         std::vector<double> val;
-        if (get_param_vector(block_params_json, block_param.first, block_param.second, val)) {
+        if (get_param_vector(block_params_json, block_param.first,
+                             block_param.second, val)) {
           throw std::runtime_error("Array parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
@@ -141,7 +143,8 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       // Get scalar parameter
       else {
         double val;
-        if (get_param_scalar(block_params_json, block_param.first, block_param.second, val)) {
+        if (get_param_scalar(block_params_json, block_param.first,
+                             block_param.second, val)) {
           throw std::runtime_error("Scalar parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
@@ -245,7 +248,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     create_closed_loop(model, connections, config["closed_loop_blocks"],
                        closed_loop_bcs);
   }
-  
+
   // Create valves
   if (config.contains("valves")) {
     create_valves(model, connections, config["valves"]);
@@ -472,7 +475,10 @@ void create_closed_loop(
   }
 }
 
-void create_valves(Model& model, std::vector<std::tuple<std::string, std::string>>& connections, const nlohmann::json& config) {
+void create_valves(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config) {
   for (const auto& valve_config : config) {
     std::string valve_type = valve_config["type"];
     std::string valve_name = valve_config["name"];

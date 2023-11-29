@@ -129,7 +129,6 @@
  */
 class ValveTanh : public Block {
  public:
-
   /**
    * @brief Local IDs of the parameters
    *

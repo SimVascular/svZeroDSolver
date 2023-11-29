@@ -57,7 +57,8 @@ enum class BlockType {
 };
 
 /**
- * @brief The classes/categories of blocks supported. Some classes require special handling (e.g. closed_loop).
+ * @brief The classes/categories of blocks supported. Some classes require
+ * special handling (e.g. closed_loop).
  */
 enum class BlockClass {
   vessel = 0,

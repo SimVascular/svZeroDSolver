@@ -269,7 +269,7 @@
     ],
     "valves": [
         {
-            "type": "tanh",
+            "type": "ValveTanh",
             "name": "valve",
             "values": {
                 "Rmax": 100000.0,

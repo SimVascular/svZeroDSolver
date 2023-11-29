@@ -71,7 +71,7 @@ bool has_parameter(
   return false;
 }
 
-int generate_block(Model& model, const nlohmann::json& config,
+int generate_block(Model& model, const nlohmann::json& block_params_json,
                    const std::string& block_type, const std::string_view& name,
                    bool internal, bool periodic) {
   // Generate block from factory
@@ -81,13 +81,14 @@ int generate_block(Model& model, const nlohmann::json& config,
   std::vector<int> block_param_ids;
   int new_id;
 
-  for (auto& el : config.items()) {
+  // Check that all parameters defined for the current block are valid
+  for (auto& el : block_params_json.items()) {
     // Ignore comments (starting with _)
     if (el.key()[0] == '_') {
       continue;
     }
 
-    // Check if json input is a parameter
+    // Check if json input is a valid parameter for the current block
     if (!has_parameter(block->input_params, el.key())) {
       throw std::runtime_error("Unknown parameter " + el.key() +
                                " defined in " + block_type + " block " +
@@ -95,32 +96,33 @@ int generate_block(Model& model, const nlohmann::json& config,
     }
   }
 
-  // Input parameters are given as a list
+  // The rest of this function reads the parameters for each block, adds them to the model, and stores the corresponding param IDs in each block
+  // Handle input parameters given as a list differently
   if (block->input_params_list) {
-    for (const auto& it : block->input_params) {
+    for (const auto& block_param : block->input_params) {
       // todo: check error here
-      for (double value : config[it.first]) {
+      for (double value : block_params_json[block_param.first]) {
         block_param_ids.push_back(model.add_parameter(value));
       }
     }
   } else {
-    for (const auto& it : block->input_params) {
+    for (const auto& block_param : block->input_params) {
       // Time parameter is read at the same time as time-dependent value
-      if (it.first.compare("t") == 0) {
+      if (block_param.first.compare("t") == 0) {
         continue;
       }
 
       // Skip reading parameters that are not a number
-      if (!it.second.is_number) {
+      if (!block_param.second.is_number) {
         continue;
       }
 
       // Get vector parameter
-      if (it.second.is_array) {
+      if (block_param.second.is_array) {
         // Get parameter vector
         std::vector<double> val;
-        if (get_param_vector(config, it.first, it.second, val)) {
-          throw std::runtime_error("Array parameter " + it.first +
+        if (get_param_vector(block_params_json, block_param.first, block_param.second, val)) {
+          throw std::runtime_error("Array parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
         }
@@ -128,7 +130,7 @@ int generate_block(Model& model, const nlohmann::json& config,
         // Get time vector
         InputParameter t_param{false, true};
         std::vector<double> time;
-        if (get_param_vector(config, "t", t_param, time)) {
+        if (get_param_vector(block_params_json, "t", t_param, time)) {
           throw std::runtime_error("Array parameter t is mandatory in " +
                                    block_type + " block " +
                                    static_cast<std::string>(name));
@@ -141,8 +143,8 @@ int generate_block(Model& model, const nlohmann::json& config,
       // Get scalar parameter
       else {
         double val;
-        if (get_param_scalar(config, it.first, it.second, val)) {
-          throw std::runtime_error("Scalar parameter " + it.first +
+        if (get_param_scalar(block_params_json, block_param.first, block_param.second, val)) {
+          throw std::runtime_error("Scalar parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
         }
@@ -585,7 +587,7 @@ void create_closed_loop(
   }
 }
 
-void create_valves(Model& model,std::vector<std::tuple<std::string, std::string>>& connections, const nlohmann::json& config) {
+void create_valves(Model& model, std::vector<std::tuple<std::string, std::string>>& connections, const nlohmann::json& config) {
   for (const auto& valve_config : config) {
     std::string valve_type = valve_config["type"];
     std::string valve_name = valve_config["name"];

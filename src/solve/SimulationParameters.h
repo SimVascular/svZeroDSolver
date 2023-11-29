@@ -142,4 +142,6 @@ void create_closed_loop(
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::vector<std::string>& closed_loop_bcs);
 
+void create_valves(Model& model, std::vector<std::tuple<std::string, std::string>>& connections, const nlohmann::json& config);
+
 #endif

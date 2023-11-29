@@ -62,7 +62,7 @@ enum class BlockClass {
   valve = 5
 };
 
-/// @brief Handles input parameters
+// @brief Handles input parameters
 struct InputParameter {
   bool is_optional;    ///< Is this parameter optional?
   bool is_array;       ///< Is this parameter an array?

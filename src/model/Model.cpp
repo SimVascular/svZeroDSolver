@@ -53,7 +53,7 @@ Model::Model() {
       {"PRESSURE", block_factory<PressureReferenceBC>()},
       {"RCR", block_factory<WindkesselBC>()},
       {"RESISTANCE", block_factory<ResistanceBC>()},
-      {"resistive_junction", block_factory<ResistiveJunction>()}},
+      {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()}};
 }
 

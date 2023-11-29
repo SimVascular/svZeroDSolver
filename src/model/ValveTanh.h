@@ -130,7 +130,7 @@
 class ValveTanh : public Block {
  public:
   // Inherit constructors
-  using Block::Block;
+//using Block::Block;
 
   /**
    * @brief Local IDs of the parameters
@@ -144,6 +144,18 @@ class ValveTanh : public Block {
 
   // explicit ValveTanh(int id, const std::vector<int> &param_ids, Model *model)
   //    : Block(id, param_ids, model){};
+  //
+  /**
+   * @brief Construct a new ValveTanh object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  ValveTanh(int id, Model *model)
+      : Block(id, model, BlockType::valve_tanh, BlockClass::valve,
+              {{"Rmax", InputParameter()},
+               {"Rmin", InputParameter()},
+               {"Steepness", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

@@ -120,7 +120,9 @@ class Parameter {
   bool steady_converted = false;
 };
 
-// @brief Handles input parameters
+/**
+ * @brief Handles the properties of input parameters
+ */
 struct InputParameter {
   bool is_optional;    ///< Is this parameter optional?
   bool is_array;       ///< Is this parameter an array?

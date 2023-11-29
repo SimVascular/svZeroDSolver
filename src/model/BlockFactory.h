@@ -39,6 +39,9 @@
 
 #include "Block.h"
 
+/**
+ * @brief General functional for the creation of different types of blocks
+ */
 using BlockFactoryFunc = std::function<Block*(int, Model*)>;
 
 #endif

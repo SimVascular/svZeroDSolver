@@ -36,6 +36,9 @@
 
 #include <string>
 
+/**
+ * @brief The types of blocks supported by the solver
+ */
 enum class BlockType {
   blood_vessel = 0,
   junction = 1,
@@ -53,6 +56,9 @@ enum class BlockType {
   valve_tanh = 13
 };
 
+/**
+ * @brief The classes/categories of blocks supported. Some classes require special handling (e.g. closed_loop).
+ */
 enum class BlockClass {
   vessel = 0,
   junction = 1,

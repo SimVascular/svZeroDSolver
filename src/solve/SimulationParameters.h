@@ -75,39 +75,39 @@ struct SimulationParameters {
 };
 
 /**
- * @brief Generate a new block
+ * @brief Generate a new block and add its parameters to the model
  *
- * @param model The model that teh block is added to
- * @param config The json configuration
+ * @param model The model that the block is added to
+ * @param block_params_json The JSON configuration containing the block parameter values
  * @param block_type The type of block
  * @param name The name of the block
- * @param internal Is this an internal block? This is relevane for the calibrator
+ * @param internal Is this an internal block? This is relevant for the calibrator
  * @param periodic Is this block periodic with the cardiac cycle? This is relevant for coupling with external solvers
  * @return int The block count
  */
-int generate_block(Model& model, const nlohmann::json& config,
+int generate_block(Model& model, const nlohmann::json& block_params_json,
                    const std::string& block_type, const std::string_view& name,
                    bool internal = false, bool periodic = true);
 
 /**
- * @brief Load initial conditions from a configuration
+ * @brief Load initial conditions from a JSON configuration
  *
- * @param config The json configuration
+ * @param config The JSON configuration
  * @param model The model
  * @return State Initial configuration for the model
  */
 State load_initial_condition(const nlohmann::json& config, Model& model);
 
 /**
- * @brief Load the simulation parameters from a json configuration
+ * @brief Load the simulation parameters from a JSON configuration
  *
- * @param config The json configuration
+ * @param config The JSON configuration
  * @return SimulationParameters Simulation parameters read from configuration
  */
 SimulationParameters load_simulation_params(const nlohmann::json& config);
 
 /**
- * @brief Load model from a configuration
+ * @brief Load the 0D block in the model from a configuration
  *
  * @param config The json configuration
  * @param model The 0D model
@@ -115,33 +115,86 @@ SimulationParameters load_simulation_params(const nlohmann::json& config);
  */
 void load_simulation_model(const nlohmann::json& config, Model& model);
 
+/**
+ * @brief Check that the JSON configuration has the required inputs
+ *
+ * @param config The JSON configuration
+ */
 void validate_input(const nlohmann::json& config);
 
+/**
+ * @brief Handle the creation of vessel blocks and connections with boundary conditions
+ *
+ * @param model The model the block is associated with
+ * @param connections Vector storing the connections between blocks
+ * @param config The JSON configuration containing all the vessels
+ * @param vessel_id_map Map between vessel names and IDs
+ */
 void create_vessels(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
 
+/**
+ * @brief Handle the creation of external coupling blocks and connections with other blocks
+ *
+ * @param model The model the block is associated with
+ * @param connections Vector storing the connections between blocks
+ * @param config The JSON configuration containing all the external coupling blocks
+ * @param vessel_id_map Map between vessel names and IDs
+ * @param bc_type_map Map between boundary condition names and their types
+ */
 void create_external_coupling(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
     std::map<std::string, std::string>& bc_type_map);
 
+/**
+ * @brief Handle the creation of boundary condition blocks
+ *
+ * @param model The model the block is associated with
+ * @param config The JSON configuration containing all the boundary condition blocks
+ * @param bc_type_map Map between boundary condition names and their types
+ * @param closed_loop_bcs List of boundary conditions that should be connected to a closed loop heart block
+ */
 void create_boundary_conditions(Model& model, const nlohmann::json& config,
                                 std::map<std::string, std::string>& bc_type_map,
                                 std::vector<std::string>& closed_loop_bcs);
 
+/**
+ * @brief Handle the creation of junctions and their connections
+ *
+ * @param model The model the block is associated with
+ * @param connections Vector storing the connections between blocks
+ * @param config The JSON configuration containing all the junctions
+ * @param vessel_id_map Map between vessel names and IDs
+ */
 void create_junctions(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
 
+/**
+ * @brief Handle the creation of closed-loop blocks and associated connections
+ *
+ * @param model The model the block is associated with
+ * @param connections Vector storing the connections between blocks
+ * @param config The JSON configuration containing all the closed loop blocks
+ * @param closed_loop_bcs List of boundary conditions that should be connected to a closed loop heart block
+ */
 void create_closed_loop(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, std::vector<std::string>& closed_loop_bcs);
 
+/**
+ * @brief Handle the creation of valves and their associated connections
+ *
+ * @param model The model the block is associated with
+ * @param connections Vector storing the connections between blocks
+ * @param config The JSON configuration containing all the closed loop blocks
+ */
 void create_valves(Model& model, std::vector<std::tuple<std::string, std::string>>& connections, const nlohmann::json& config);
 
 #endif

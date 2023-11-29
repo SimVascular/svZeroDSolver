@@ -30,8 +30,6 @@
 
 #include "SimulationParameters.h"
 
-#include "State.h"
-
 bool get_param_scalar(const nlohmann::json& data, const std::string& name,
                       const InputParameter& param, double& val) {
   if (data.contains(name)) {
@@ -291,119 +289,6 @@ void create_vessels(
   }
 }
 
-//// Create map for boundary conditions to boundary condition type
-//DEBUG_MSG("Create BC name to BC type map");
-//const auto& bc_configs = config["boundary_conditions"];
-//std::map<std::string, std::string> bc_type_map;
-//for (size_t i = 0; i < bc_configs.size(); i++) {
-//  const auto& bc_config = bc_configs[i];
-//  std::string bc_name = bc_config["bc_name"];
-//  std::string bc_type = bc_config["bc_type"];
-//  bc_type_map.insert({bc_name, bc_type});
-//}
-
-//// Create external coupling blocks
-//if (config.contains("external_solver_coupling_blocks")) {
-//  DEBUG_MSG("Create external coupling blocks");
-//  const auto& coupling_configs = config["external_solver_coupling_blocks"];
-//  for (const auto& coupling_config : coupling_configs) {
-//    std::string coupling_type = coupling_config["type"];
-//    std::string coupling_name = coupling_config["name"];
-//    std::string coupling_loc = coupling_config["location"];
-//    bool periodic = coupling_config.value("periodic", true);
-//    const auto& coupling_values = coupling_config["values"];
-
-//    // Create coupling block
-//    auto t_coupling = get_double_array(coupling_values, "t", {0.0});
-
-//    if (coupling_type == "FLOW") {
-//      auto Q_coupling = get_double_array(coupling_values, "Q");
-//      model.add_block(BlockType::flow_bc,
-//                      {model.add_parameter(t_coupling, Q_coupling, periodic)},
-//                      coupling_name);
-//    } else if (coupling_type == "PRESSURE") {
-//      auto P_coupling = get_double_array(coupling_values, "P");
-//      model.add_block(BlockType::pressure_bc,
-//                      {model.add_parameter(t_coupling, P_coupling, periodic)},
-//                      coupling_name);
-//    } else {
-//      throw std::runtime_error(
-//          "Error. Flowsolver coupling block types should be FLOW or "
-//          "PRESSURE.");
-//    }
-//    DEBUG_MSG("Created coupling block " << coupling_name);
-
-//    // Determine the type of connected block
-//    std::string connected_block = coupling_config["connected_block"];
-//    std::string connected_type;
-//    int found_block = 0;
-//    if (connected_block == "ClosedLoopHeartAndPulmonary") {
-//      connected_type = "ClosedLoopHeartAndPulmonary";
-//      found_block = 1;
-//    } else {
-//      try {
-//        connected_type = bc_type_map.at(connected_block);
-//        found_block = 1;
-//      } catch (...) {
-//      }
-//      if (found_block == 0) {
-//        // Search for connected_block in the list of vessel names
-//        for (auto const vessel : vessel_id_map) {
-//          if (connected_block == vessel.second) {
-//            connected_type = "BloodVessel";
-//            found_block = 1;
-//            break;
-//          }
-//        }
-//      }
-//      if (found_block == 0) {
-//        std::cout << "Error! Could not connected type for block: "
-//                  << connected_block << std::endl;
-//        throw std::runtime_error("Terminating.");
-//      }
-//    }  // connected_block != "ClosedLoopHeartAndPulmonary"
-//    // Create connections
-//    if (coupling_loc == "inlet") {
-//      std::vector<std::string> possible_types = {
-//          "RESISTANCE",    "RCR",      "ClosedLoopRCR",
-//          "SimplifiedRCR", "CORONARY", "ClosedLoopCoronary",
-//          "BloodVessel"};
-//      if (std::find(std::begin(possible_types), std::end(possible_types),
-//                    connected_type) == std::end(possible_types)) {
-//        throw std::runtime_error(
-//            "Error: The specified connection type for inlet "
-//            "external_coupling_block is invalid.");
-//      }
-//      connections.push_back({coupling_name, connected_block});
-//      DEBUG_MSG("Created coupling block connection: " << coupling_name << "->"
-//                                                      << connected_block);
-//    } else if (coupling_loc == "outlet") {
-//      std::vector<std::string> possible_types = {
-//          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
-//      if (std::find(std::begin(possible_types), std::end(possible_types),
-//                    connected_type) == std::end(possible_types)) {
-//        throw std::runtime_error(
-//            "Error: The specified connection type for outlet "
-//            "external_coupling_block is invalid.");
-//      }
-//      // Add connection only for closedLoopRCR and BloodVessel. Connection to
-//      // ClosedLoopHeartAndPulmonary will be handled in
-//      // ClosedLoopHeartAndPulmonary creation.
-//      if ((connected_type == "ClosedLoopRCR") ||
-//          (connected_type == "BloodVessel")) {
-//        connections.push_back({connected_block, coupling_name});
-//        DEBUG_MSG("Created coupling block connection: "
-//                  << connected_block << "-> " << coupling_name);
-//      }  // connected_type == "ClosedLoopRCR"
-//    }    // coupling_loc
-//  }      // for (size_t i = 0; i < coupling_configs.length(); i++)
-//}
-
-//// Create boundary conditions
-//std::vector<std::string> closed_loop_bcs;
-//DEBUG_MSG("Create boundary conditions");
-//for (size_t i = 0; i < bc_configs.size(); i++) {
-//  const auto& bc_config = bc_configs[i];
 void create_boundary_conditions(Model& model, const nlohmann::json& config,
                                 std::map<std::string, std::string>& bc_type_map,
                                 std::vector<std::string>& closed_loop_bcs) {
@@ -592,14 +477,6 @@ void create_valves(Model& model, std::vector<std::tuple<std::string, std::string
     std::string valve_type = valve_config["type"];
     std::string valve_name = valve_config["name"];
     generate_block(model, valve_config["values"], valve_type, valve_name);
-//  const auto& valve_values = valve_config["values"];
-//  if (valve_type == "tanh") {
-//    model.add_block(BlockType::valve_tanh,
-//                    {model.add_parameter(valve_values["Rmax"]),
-//                     model.add_parameter(valve_values["Rmin"]),
-//                     model.add_parameter(valve_values["Steepness"])},
-//                    valve_name);
-//  }
     connections.push_back({valve_config["upstream_block"], valve_name});
     connections.push_back({valve_name, valve_config["downstream_block"]});
     DEBUG_MSG("Created valve " << valve_name);

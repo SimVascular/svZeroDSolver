@@ -254,6 +254,11 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     create_valves(model, connections, config["valves"]);
   }
 
+  // Create chambers
+  if (config.contains("chambers")) {
+    create_chambers(model, connections, config["chambers"]);
+  }
+
   // Create Connections
   for (auto& connection : connections) {
     auto ele1 = model.get_block(std::get<0>(connection));
@@ -486,6 +491,20 @@ void create_valves(
     connections.push_back({valve_config["upstream_block"], valve_name});
     connections.push_back({valve_name, valve_config["downstream_block"]});
     DEBUG_MSG("Created valve " << valve_name);
+  }
+}
+
+void create_chambers(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config) {
+  for (const auto& chamber_config : config) {
+    std::string chamber_type = chamber_config["type"];
+    std::string chamber_name = chamber_config["name"];
+    generate_block(model, chamber_config["values"], chamber_type, chamber_name);
+    //connections.push_back({chamber_config["upstream_block"], chamber_name});
+    //connections.push_back({chamber_name, chamber_config["downstream_block"]});
+    DEBUG_MSG("Created chamber " << chamber_name);
   }
 }
 

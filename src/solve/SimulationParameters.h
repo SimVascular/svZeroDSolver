@@ -209,4 +209,16 @@ void create_valves(
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config);
 
+/**
+ * @brief Handle the creation of chambers
+ *
+ * @param model The model the block is associated with
+ * @param connections Vector storing the connections between blocks
+ * @param config The JSON configuration containing all the closed loop blocks
+ */
+void create_chambers(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config);
+
 #endif

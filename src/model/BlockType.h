@@ -53,7 +53,8 @@ enum class BlockType {
   closed_loop_coronary_right_bc = 10,
   closed_loop_rcr_bc = 11,
   closed_loop_heart_pulmonary = 12,
-  valve_tanh = 13
+  valve_tanh = 13,
+  chamber_kerckhoffs = 14
 };
 
 /**
@@ -66,7 +67,8 @@ enum class BlockClass {
   boundary_condition = 2,
   closed_loop = 3,
   external = 4,
-  valve = 5
+  valve = 5,
+  chamber = 6
 };
 
 #endif

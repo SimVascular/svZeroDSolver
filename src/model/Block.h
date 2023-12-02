@@ -41,6 +41,7 @@
 
 #include "BlockType.h"
 #include "DOFHandler.h"
+#include "Parameter.h"
 #include "SparseSystem.h"
 
 /**

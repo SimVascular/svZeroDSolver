@@ -14,7 +14,6 @@ You can find more information about svZeroDPlus under the following links:
 
 * [**Documentation**](https://StanfordCBCL.github.io/svZeroDPlus)
 * [**Developer Guide**](https://StanfordCBCL.github.io/svZeroDPlus/developer_guide.html)
-* [**Wiki**](https://github.com/StanfordCBCL/svZeroDPlus/wiki)
 * [**Bug Reports**](https://github.com/StanfordCBCL/svZeroDPlus/issues)
 * [**Forum**](https://github.com/StanfordCBCL/svZeroDPlus/discussions)
 * [**About SimVascular**](https://simvascular.github.io)

@@ -30,8 +30,6 @@
 
 #include "SimulationParameters.h"
 
-#include "State.h"
-
 bool get_param_scalar(const nlohmann::json& data, const std::string& name,
                       const InputParameter& param, double& val) {
   if (data.contains(name)) {
@@ -71,7 +69,7 @@ bool has_parameter(
   return false;
 }
 
-int generate_block(Model& model, const nlohmann::json& config,
+int generate_block(Model& model, const nlohmann::json& block_params_json,
                    const std::string& block_type, const std::string_view& name,
                    bool internal, bool periodic) {
   // Generate block from factory
@@ -81,13 +79,14 @@ int generate_block(Model& model, const nlohmann::json& config,
   std::vector<int> block_param_ids;
   int new_id;
 
-  for (auto& el : config.items()) {
+  // Check that all parameters defined for the current block are valid
+  for (auto& el : block_params_json.items()) {
     // Ignore comments (starting with _)
     if (el.key()[0] == '_') {
       continue;
     }
 
-    // Check if json input is a parameter
+    // Check if json input is a valid parameter for the current block
     if (!has_parameter(block->input_params, el.key())) {
       throw std::runtime_error("Unknown parameter " + el.key() +
                                " defined in " + block_type + " block " +
@@ -95,32 +94,35 @@ int generate_block(Model& model, const nlohmann::json& config,
     }
   }
 
-  // Input parameters are given as a list
+  // The rest of this function reads the parameters for each block, adds them to
+  // the model, and stores the corresponding param IDs in each block Handle
+  // input parameters given as a list differently
   if (block->input_params_list) {
-    for (const auto& it : block->input_params) {
+    for (const auto& block_param : block->input_params) {
       // todo: check error here
-      for (double value : config[it.first]) {
+      for (double value : block_params_json[block_param.first]) {
         block_param_ids.push_back(model.add_parameter(value));
       }
     }
   } else {
-    for (const auto& it : block->input_params) {
+    for (const auto& block_param : block->input_params) {
       // Time parameter is read at the same time as time-dependent value
-      if (it.first.compare("t") == 0) {
+      if (block_param.first.compare("t") == 0) {
         continue;
       }
 
       // Skip reading parameters that are not a number
-      if (!it.second.is_number) {
+      if (!block_param.second.is_number) {
         continue;
       }
 
       // Get vector parameter
-      if (it.second.is_array) {
+      if (block_param.second.is_array) {
         // Get parameter vector
         std::vector<double> val;
-        if (get_param_vector(config, it.first, it.second, val)) {
-          throw std::runtime_error("Array parameter " + it.first +
+        if (get_param_vector(block_params_json, block_param.first,
+                             block_param.second, val)) {
+          throw std::runtime_error("Array parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
         }
@@ -128,7 +130,7 @@ int generate_block(Model& model, const nlohmann::json& config,
         // Get time vector
         InputParameter t_param{false, true};
         std::vector<double> time;
-        if (get_param_vector(config, "t", t_param, time)) {
+        if (get_param_vector(block_params_json, "t", t_param, time)) {
           throw std::runtime_error("Array parameter t is mandatory in " +
                                    block_type + " block " +
                                    static_cast<std::string>(name));
@@ -141,8 +143,9 @@ int generate_block(Model& model, const nlohmann::json& config,
       // Get scalar parameter
       else {
         double val;
-        if (get_param_scalar(config, it.first, it.second, val)) {
-          throw std::runtime_error("Scalar parameter " + it.first +
+        if (get_param_scalar(block_params_json, block_param.first,
+                             block_param.second, val)) {
+          throw std::runtime_error("Scalar parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
         }
@@ -169,6 +172,7 @@ void validate_input(const nlohmann::json& config) {
 }
 
 SimulationParameters load_simulation_params(const nlohmann::json& config) {
+  DEBUG_MSG("Loading simulation parameters");
   SimulationParameters sim_params;
   const auto& sim_config = config["simulation_parameters"];
   sim_params.sim_coupled = sim_config.value("coupled_simulation", false);
@@ -198,14 +202,17 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   sim_params.output_mean_only = sim_config.value("output_mean_only", false);
   sim_params.output_derivative = sim_config.value("output_derivative", false);
   sim_params.output_all_cycles = sim_config.value("output_all_cycles", false);
+  DEBUG_MSG("Finished loading simulation parameters");
   return sim_params;
 }
 
 void load_simulation_model(const nlohmann::json& config, Model& model) {
+  DEBUG_MSG("Loading model");
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
   // Create vessels
+  DEBUG_MSG("Loading vessels");
   std::map<int, std::string> vessel_id_map;
   if (config.contains("vessels")) {
     create_vessels(model, connections, config["vessels"], vessel_id_map);
@@ -240,6 +247,11 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
   if (config.contains("closed_loop_blocks")) {
     create_closed_loop(model, connections, config["closed_loop_blocks"],
                        closed_loop_bcs);
+  }
+
+  // Create valves
+  if (config.contains("valves")) {
+    create_valves(model, connections, config["valves"]);
   }
 
   // Create Connections
@@ -300,6 +312,7 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
     } else if (block->block_class == BlockClass::closed_loop) {
       closed_loop_bcs.push_back(bc_name);
     }
+    DEBUG_MSG("Created boundary condition " << bc_name);
   }
 }
 
@@ -406,6 +419,7 @@ void create_junctions(
     for (int vessel_id : junction_config["outlet_vessels"]) {
       connections.push_back({junction_name, vessel_id_map[vessel_id]});
     }
+    DEBUG_MSG("Created junction " << junction_name);
   }
 }
 
@@ -461,6 +475,22 @@ void create_closed_loop(
   }
 }
 
+void create_valves(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config) {
+  for (const auto& valve_config : config) {
+    std::string valve_type = valve_config["type"];
+    std::string valve_name = valve_config["name"];
+    generate_block(model, valve_config["params"], valve_type, valve_name);
+    connections.push_back(
+        {valve_config["params"]["upstream_block"], valve_name});
+    connections.push_back(
+        {valve_name, valve_config["params"]["downstream_block"]});
+    DEBUG_MSG("Created valve " << valve_name);
+  }
+}
+
 State load_initial_condition(const nlohmann::json& config, Model& model) {
   // Read initial condition
   auto initial_state = State::Zero(model.dofhandler.size());
@@ -489,27 +519,27 @@ State load_initial_condition(const nlohmann::json& config, Model& model) {
         if ((init_p_flag == true) && ((var_name.substr(0, 9) == "pressure:") ||
                                       (var_name.substr(0, 4) == "P_c:"))) {
           default_val = init_p;
-          // DEBUG_MSG("pressure_all initial condition for " << var_name);
+          DEBUG_MSG("pressure_all initial condition for " << var_name);
         } else if ((init_q_flag == true) &&
                    (var_name.substr(0, 5) == "flow:")) {
           default_val = init_q;
-          // DEBUG_MSG("flow_all initial condition for " << var_name);
+          DEBUG_MSG("flow_all initial condition for " << var_name);
         } else {
-          // DEBUG_MSG("No initial condition found for " << var_name << ". Using
-          // default value = 0.");
+          DEBUG_MSG("No initial condition found for "
+                    << var_name << ". Using default value = 0.");
         }
       }
       initial_state.y[i] = initial_condition.value(var_name, default_val);
     }
   }
   if (config.contains("initial_condition_d")) {
-    // DEBUG_MSG("Reading initial condition derivative");
+    DEBUG_MSG("Reading initial condition derivative");
     const auto& initial_condition_d = config["initial_condition_d"];
     // Loop through variables and check for initial conditions.
     for (size_t i = 0; i < model.dofhandler.size(); i++) {
       std::string var_name = model.dofhandler.variables[i];
       if (!initial_condition_d.contains(var_name)) {
-        // DEBUG_MSG("No initial condition derivative found for " << var_name);
+        DEBUG_MSG("No initial condition derivative found for " << var_name);
       }
       initial_state.ydot[i] = initial_condition_d.value(var_name, 0.0);
     }

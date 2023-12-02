@@ -28,105 +28,94 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file BloodVessel.h
- * @brief model::BloodVessel source file
+ * @file ValveTanh.h
+ * @brief model::ValveTanh source file
  */
-#ifndef SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
-#define SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
+#ifndef SVZERODSOLVER_MODEL_VALVETANH_HPP_
+#define SVZERODSOLVER_MODEL_VALVETANH_HPP_
 
 #include <math.h>
 
 #include "Block.h"
 #include "SparseSystem.h"
+#include "debug.h"
 
 /**
- * @brief Resistor-capacitor-inductor blood vessel with optional stenosis
+ * @brief Valve (tanh) block.
  *
- * Models the mechanical behavior of a bloodvessel with optional stenosis.
+ * Models the pressure drop across a diode-like valve, which is implemented as a
+ * non-linear hyperbolic-tangent resistor. See \cite pfaller2019importance
+ * (equations 16 and 22).
  *
  * \f[
  * \begin{circuitikz} \draw
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [R, l=$R$, *-] (3,0)
- * to [R, l=$S$, -] (5,0)
- * (5,0) to [L, l=$L$, -*] (7,0)
- * node[anchor=south]{$P_{out}$}
- * (5,0) to [C, l=$C$, -] (5,-1.5)
- * node[ground]{};
- * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
+ * to [D, l=$R_v$, *-*] (3,0)
+ * node[anchor=south]{$P_{out}$};
  * \end{circuitikz}
  * \f]
  *
  * ### Governing equations
  *
  * \f[
- * P_\text{in}^{e}-P_\text{out}^{e} - (R + S|Q_\text{in}|) Q_\text{in}^{e}-L
- * \dot{Q}_\text{out}^{e}=0 \f]
+ * P_{in}-P_{out}-Q_{in}\left[R_{min} +
+ * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
+ * \f]
  *
  * \f[
- * Q_\text{in}^{e}-Q_\text{out}^{e} - C \dot{P}_\text{in}^{e}+C(R +
- * 2S|Q_\text{in}|) \dot{Q}_{in}^{e}=0 \f]
+ * Q_{in}-Q_{out}=0
+ * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} & Q_{in}^{e} &
- * P_{out}^{e} & Q_{out}^{e}\end{array}\right]^\text{T} \f]
- *
- * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -R & -1 &  0 \\
- * 0 &  1 &  0 & -1
- * \end{array}\right]
- * \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out}\end{array}\right]^{T} \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{cccc}
- *  0 &  0 & 0 & -L \\
- * -C & CR & 0 &  0
+ * 0 & 0 & 0 & 0 \\
+ * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{c}^{e} = S|Q_\text{in}|
- * \left[\begin{array}{c}
- * -Q_\text{in} \\
- * 2C\dot{Q}_\text{in}
+ * \mathbf{F}^{e}=\left[\begin{array}{cccc}
+ * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0 \\
+ * 0 &      1                 &  0 & -1
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{c}^{e}=\left[\begin{array}{c}
+ * -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+ * 0
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
- *  S \text{sgn} (Q_\text{in})
  * \left[\begin{array}{cccc}
- * 0 & -2Q_\text{in}        & 0 & 0 \\
- * 0 & 2C\dot{Q}_\text{in} & 0 & 0
- * \end{array}\right]
+ * A & B & C & 0 \\
+ * 0 & 0 & 0 & 0 \end{array}\right] \f]
+ * where,
+ * \f[
+ * A = \frac{1}{2} k Q_{in}
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
  * \f]
+ * \f[
+ * B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+ * \f]
+ * \f[
+ * C = -\frac{1}{2} k Q_{in}
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- *  S|Q_\text{in}|
  * \left[\begin{array}{cccc}
- * 0 &  0 & 0 & 0 \\
- * 0 & 2C & 0 & 0
- * \end{array}\right]
- * \f]
- *
- * with the stenosis resistance \f$ S=K_{t} \frac{\rho}{2
- * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} \f$.
- * \f$R\f$, \f$C\f$, and \f$L\f$ refer to
- * Poisieuille resistance, capacitance and inductance, respectively.
- *
- * ### Gradient
- *
- * Gradient of the equations with respect to the parameters:
- *
- * \f[
- * \mathbf{J}^{e} = \left[\begin{array}{cccc}
- * -y_2 & 0 & -\dot{y}_4 & -|y_2|y_2 \\
- * C\dot{y}_2 & (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
+ * 0 & 0 & 0 & 0 \\
+ * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
  *
@@ -134,42 +123,41 @@
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Poiseuille resistance
- * * `1` Capacitance
- * * `2` Inductance
- * * `3` Stenosis coefficient
+ * * `0` Maximum (closed) valve resistance
+ * * `1` Minimum (open) valve resistance
+ * * `2` Steepness of sigmoid function
  *
  */
-class BloodVessel : public Block {
+class ValveTanh : public Block {
  public:
   /**
    * @brief Local IDs of the parameters
    *
    */
   enum ParamId {
-    RESISTANCE = 0,
-    CAPACITANCE = 1,
-    INDUCTANCE = 2,
-    STENOSIS_COEFFICIENT = 3,
+    RMAX = 0,
+    RMIN = 1,
+    STEEPNESS = 2,
   };
 
   /**
-   * @brief Construct a new BloodVessel object
+   * @brief Construct a new ValveTanh object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  BloodVessel(int id, Model *model)
-      : Block(id, model, BlockType::blood_vessel, BlockClass::vessel,
-              {{"R_poiseuille", InputParameter()},
-               {"C", InputParameter(true)},
-               {"L", InputParameter(true)},
-               {"stenosis_coefficient", InputParameter(true)}}) {}
+  ValveTanh(int id, Model *model)
+      : Block(id, model, BlockType::valve_tanh, BlockClass::valve,
+              {{"Rmax", InputParameter()},
+               {"Rmin", InputParameter()},
+               {"Steepness", InputParameter()},
+               {"upstream_block", InputParameter(false, false, false)},
+               {"downstream_block", InputParameter(false, false, false)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
    *
-   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on the
+   * Set global_var_ids and global_eqn_ids of the element based on the
    * number of equations and the number of internal variables of the
    * element.
    *
@@ -201,27 +189,12 @@ class BloodVessel : public Block {
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
   /**
-   * @brief Set the gradient of the block contributions with respect to the
-   * parameters
-   *
-   * @param jacobian Jacobian with respect to the parameters
-   * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
-   * @param y Current solution
-   * @param dy Time-derivative of the current solution
-   */
-  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
-                       std::vector<double> &y, std::vector<double> &dy);
-
-  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{5, 3, 2};
+  TripletsContributions num_triplets{5, 0, 3};
 };
 
-#endif  // SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
+#endif  // SVZERODSOLVER_MODEL_VALVETANH_HPP_

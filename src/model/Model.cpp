@@ -30,9 +30,6 @@
 
 #include "Model.h"
 
-#include "BlockFactory.h"
-#include "Node.h"
-
 template <typename block_type>
 BlockFactoryFunc block_factory() {
   return [](int count, Model *model) -> Block * {
@@ -56,7 +53,8 @@ Model::Model() {
       {"PRESSURE", block_factory<PressureReferenceBC>()},
       {"RCR", block_factory<WindkesselBC>()},
       {"RESISTANCE", block_factory<ResistanceBC>()},
-      {"resistive_junction", block_factory<ResistiveJunction>()}};
+      {"resistive_junction", block_factory<ResistiveJunction>()},
+      {"ValveTanh", block_factory<ValveTanh>()}};
 }
 
 Model::~Model() {}
@@ -182,15 +180,15 @@ void Model::update_parameter_value(int param_id, double param_value) {
 }
 
 void Model::finalize() {
-  // DEBUG_MSG("Setup degrees-of-freedom of nodes");
+  DEBUG_MSG("Setup degrees-of-freedom of nodes");
   for (auto &node : nodes) {
     node->setup_dofs(dofhandler);
   }
-  // DEBUG_MSG("Setup degrees-of-freedom of blocks");
+  DEBUG_MSG("Setup degrees-of-freedom of blocks");
   for (auto &block : blocks) {
     block->setup_dofs(dofhandler);
   }
-  // DEBUG_MSG("Setup model-dependent parameters");
+  DEBUG_MSG("Setup model-dependent parameters");
   for (auto &block : blocks) {
     block->setup_model_dependent_params();
   }

@@ -1,39 +1,47 @@
 <map id="model/ClosedLoopCoronaryBC.h" name="model/ClosedLoopCoronaryBC.h">
-<area shape="rect" id="Node000001" title="model::ClosedLoopCoronaryBC source file" alt="" coords="345,5,553,31"/>
-<area shape="rect" id="Node000002" href="$_block_8h.html" title="model::Block source file" alt="" coords="347,153,412,178"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="445,32,394,140,389,137,441,30"/>
-<area shape="rect" id="Node000010" href="$_sparse_system_8h.html" title="SparseSystem source file." alt="" coords="500,226,616,252"/>
-<area shape="poly" id="edge21_Node000001_Node000010" title=" " alt="" coords="454,31,462,64,476,104,509,163,542,212,538,215,505,166,472,106,457,66,449,32"/>
-<area shape="rect" id="Node000015" href="$_closed_loop_heart_pulmonary_8h.html" title="model::ClosedLoopHeartPulmonary source file" alt="" coords="487,79,680,105"/>
-<area shape="poly" id="edge17_Node000001_Node000015" title=" " alt="" coords="473,29,548,69,546,74,470,34"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="279,226,363,252"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="372,180,342,216,338,213,368,177"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="387,226,425,252"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="386,178,399,211,394,213,381,179"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="199,300,245,326"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="399,177,418,192,435,211,445,232,444,243,439,254,427,264,409,274,362,289,261,309,260,304,361,284,407,269,424,260,435,250,439,242,439,233,431,214,415,196,396,181"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="5,300,63,326"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="347,170,269,173,171,182,81,199,47,212,25,228,19,241,17,255,24,285,19,286,12,255,14,239,21,225,45,207,79,194,170,176,268,168,347,164"/>
-<area shape="rect" id="Node000007" href="$_block_type_8h_source.html" title=" " alt="" coords="36,226,128,252"/>
-<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="348,177,144,226,142,221,346,172"/>
-<area shape="rect" id="Node000009" href="$_d_o_f_handler_8h.html" title="model::DOFHandler source file" alt="" coords="152,226,255,252"/>
-<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="350,181,248,223,246,218,348,176"/>
-<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="411,176,514,218,513,223,409,181"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="89,300,142,326"/>
-<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="90,251,106,285,101,287,85,253"/>
-<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="209,252,218,284,212,286,204,253"/>
-<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="176,255,78,296,76,291,174,250"/>
-<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="190,255,144,292,140,288,187,250"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="662,300,761,326"/>
-<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="585,250,673,291,671,296,583,255"/>
-<area shape="rect" id="Node000012" title=" " alt="" coords="336,300,452,326"/>
-<area shape="poly" id="edge14_Node000010_Node000012" title=" " alt="" coords="531,255,437,296,435,291,529,250"/>
-<area shape="rect" id="Node000013" title=" " alt="" coords="476,300,547,326"/>
-<area shape="poly" id="edge15_Node000010_Node000013" title=" " alt="" coords="553,254,530,288,525,285,548,251"/>
-<area shape="rect" id="Node000014" title=" " alt="" coords="571,300,638,326"/>
-<area shape="poly" id="edge16_Node000010_Node000014" title=" " alt="" coords="568,251,591,285,586,288,563,254"/>
-<area shape="poly" id="edge18_Node000015_Node000002" title=" " alt="" coords="550,108,427,150,425,145,548,103"/>
-<area shape="poly" id="edge19_Node000015_Node000010" title=" " alt="" coords="584,105,565,211,560,210,579,105"/>
-<area shape="rect" id="Node000016" title=" " alt="" coords="596,153,653,178"/>
-<area shape="poly" id="edge20_Node000015_Node000016" title=" " alt="" coords="592,104,612,138,608,141,588,106"/>
+<area shape="rect" id="Node000001" title="model::ClosedLoopCoronaryBC source file" alt="" coords="448,5,657,31"/>
+<area shape="rect" id="Node000002" href="$_block_8h.html" title="model::Block source file" alt="" coords="435,153,499,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="548,33,484,140,480,138,543,30"/>
+<area shape="rect" id="Node000013" href="$_sparse_system_8h.html" title="SparseSystem source file." alt="" coords="645,226,761,252"/>
+<area shape="poly" id="edge26_Node000001_Node000013" title=" " alt="" coords="557,31,564,65,580,103,602,136,628,167,678,214,675,218,624,170,598,139,575,106,559,66,552,32"/>
+<area shape="rect" id="Node000018" href="$_closed_loop_heart_pulmonary_8h.html" title="model::ClosedLoopHeartPulmonary source file" alt="" coords="591,79,784,105"/>
+<area shape="poly" id="edge22_Node000001_Node000018" title=" " alt="" coords="577,29,652,69,650,74,574,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="474,226,559,252"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="478,177,502,212,497,215,473,180"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="583,226,621,252"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="491,177,570,218,568,223,489,181"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,374,52,399"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="435,169,345,171,231,179,174,187,123,197,82,211,54,228,35,258,26,292,24,327,26,358,21,358,19,327,21,291,30,255,51,224,80,206,122,192,173,182,230,174,345,166,435,164"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="296,374,353,399"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="468,179,458,261,450,303,443,327,427,344,409,357,369,376,367,371,406,353,424,340,438,324,445,302,452,260,463,178"/>
+<area shape="rect" id="Node000007" href="$_block_type_8h.html" title="Specifies the types of blocks and their parameters." alt="" coords="65,226,157,252"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="435,176,173,228,172,223,434,171"/>
+<area shape="rect" id="Node000009" href="$_d_o_f_handler_8h.html" title="model::DOFHandler source file" alt="" coords="100,300,203,326"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="435,176,357,195,312,210,268,229,218,259,177,292,174,288,215,255,266,224,310,205,356,190,434,170"/>
+<area shape="rect" id="Node000010" href="$_parameter_8h.html" title="model::Parameter source file" alt="" coords="279,226,370,252"/>
+<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="444,181,364,221,361,217,442,176"/>
+<area shape="poly" id="edge17_Node000002_Node000013" title=" " alt="" coords="501,174,649,219,648,224,499,179"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="91,374,145,399"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="106,254,92,286,88,306,90,325,104,359,99,361,85,326,83,305,87,285,101,252"/>
+<area shape="poly" id="edge9_Node000009_Node000005" title=" " alt="" coords="132,329,63,368,61,363,129,324"/>
+<area shape="poly" id="edge11_Node000009_Node000006" title=" " alt="" coords="182,324,282,365,280,370,180,329"/>
+<area shape="poly" id="edge10_Node000009_Node000008" title=" " alt="" coords="148,327,132,361,128,358,143,325"/>
+<area shape="poly" id="edge15_Node000010_Node000006" title=" " alt="" coords="327,252,327,358,322,358,322,252"/>
+<area shape="poly" id="edge16_Node000010_Node000009" title=" " alt="" coords="296,255,196,296,194,291,294,250"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="226,300,287,326"/>
+<area shape="poly" id="edge13_Node000010_Node000011" title=" " alt="" coords="315,254,280,291,276,287,311,250"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="362,300,429,326"/>
+<area shape="poly" id="edge14_Node000010_Node000012" title=" " alt="" coords="338,250,374,287,371,291,334,254"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="726,300,824,326"/>
+<area shape="poly" id="edge18_Node000013_Node000014" title=" " alt="" coords="717,250,754,287,750,291,713,254"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="849,300,965,326"/>
+<area shape="poly" id="edge19_Node000013_Node000015" title=" " alt="" coords="739,250,859,292,857,297,737,255"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="540,300,611,326"/>
+<area shape="poly" id="edge20_Node000013_Node000016" title=" " alt="" coords="683,255,612,294,609,290,680,250"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="635,300,702,326"/>
+<area shape="poly" id="edge21_Node000013_Node000017" title=" " alt="" coords="700,253,683,287,679,285,695,251"/>
+<area shape="poly" id="edge23_Node000018_Node000002" title=" " alt="" coords="651,108,515,152,513,146,649,103"/>
+<area shape="poly" id="edge24_Node000018_Node000013" title=" " alt="" coords="691,105,703,211,698,211,686,105"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="725,153,783,178"/>
+<area shape="poly" id="edge25_Node000018_Node000019" title=" " alt="" coords="700,103,734,139,730,143,696,107"/>
 </map>

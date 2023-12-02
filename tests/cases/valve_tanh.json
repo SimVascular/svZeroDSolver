@@ -12,7 +12,7 @@
     "simulation_parameters": {
         "number_of_cardiac_cycles": 5,
         "number_of_time_pts_per_cardiac_cycle": 101,
-        "output_all_cycles": true,
+        "output_all_cycles": false,
         "steady_initial": true,
         "output_variable_based": true
     },
@@ -271,13 +271,13 @@
         {
             "type": "ValveTanh",
             "name": "valve",
-            "values": {
+            "params": {
                 "Rmax": 100000.0,
                 "Rmin": 100.0,
-                "Steepness": 100.0
-            },
-            "upstream_block": "upstream_vessel",
-            "downstream_block": "downstream_vessel"
+                "Steepness": 100.0,
+                "upstream_block": "upstream_vessel",
+                "downstream_block": "downstream_vessel"
+            }
         }
     ]
 }

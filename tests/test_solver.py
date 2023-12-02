@@ -425,11 +425,11 @@ def test_valve_tanh():
         "y"
     ].to_numpy()
     assert np.isclose(
-        np.mean(upstream_pressure[-101:]), 2.078737191111773, rtol=RTOL_PRES
+        np.mean(upstream_pressure), 2.078737191111773, rtol=RTOL_PRES
     )
     assert np.isclose(
-        np.mean(downstream_pressure[-101:]), 2.307521212064276, rtol=RTOL_PRES
+        np.mean(downstream_pressure), 2.307521212064276, rtol=RTOL_PRES
     )
     assert np.isclose(
-        np.mean(upstream_flow[-101:]), 0.0011986721268213833, rtol=RTOL_FLOW
+        np.mean(upstream_flow), 0.0011986721268213833, rtol=RTOL_FLOW
     )

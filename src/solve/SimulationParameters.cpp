@@ -482,9 +482,11 @@ void create_valves(
   for (const auto& valve_config : config) {
     std::string valve_type = valve_config["type"];
     std::string valve_name = valve_config["name"];
-    generate_block(model, valve_config["values"], valve_type, valve_name);
-    connections.push_back({valve_config["upstream_block"], valve_name});
-    connections.push_back({valve_name, valve_config["downstream_block"]});
+    generate_block(model, valve_config["params"], valve_type, valve_name);
+    connections.push_back(
+        {valve_config["params"]["upstream_block"], valve_name});
+    connections.push_back(
+        {valve_name, valve_config["params"]["downstream_block"]});
     DEBUG_MSG("Created valve " << valve_name);
   }
 }

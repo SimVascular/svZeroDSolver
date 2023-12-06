@@ -123,7 +123,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   // Check that steady initial is not set when ClosedLoopHeartAndPulmonary is
   // used
   if ((simparams.sim_steady_initial == true) &&
-      (model->get_block("CLH") != nullptr)) {
+      (model->has_block("CLH"))) {
     std::runtime_error(
         "ERROR: Steady initial condition is not compatible with "
         "ClosedLoopHeartAndPulmonary block.");
@@ -251,9 +251,6 @@ void update_block_params(int problem_id, std::string block_name,
 
   // Find the required block
   auto block = model->get_block(block_name);
-  if (block == nullptr) {
-    throw std::runtime_error("Could not find block with name " + block_name);
-  }
   auto block_type = model->get_block_type(block_name);
   // Update is handled differently for blocks that have time-varying parameters
   // (PRESSUREBC and FLOWBC)
@@ -300,9 +297,6 @@ void read_block_params(int problem_id, std::string block_name,
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto block = model->get_block(block_name);
-  if (block == nullptr) {
-    throw std::runtime_error("Could not find block with name " + block_name);
-  }
   if (params.size() != block->global_param_ids.size()) {
     throw std::runtime_error(
         "Parameter vector (given size = " + std::to_string(params.size()) +

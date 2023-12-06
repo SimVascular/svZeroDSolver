@@ -89,7 +89,13 @@ class JsonWrapper {
               const int& id)
       : jsonObj(json[name][id]), component(name), block_id(id) {}
 
-  /// Wrap error check around key retrieval
+  /**
+   * @brief Wrap error check around key retrieval (throws error if key doesn't
+   * exist)
+   *
+   * @param key Key to retrieve from JSON object
+   * @return JSON entry of key
+   */
   const nlohmann::json& operator()(const std::string& key) const {
     if (!jsonObj.contains(key)) {
       throw std::runtime_error("Key " + key + " not found in element number " +
@@ -99,13 +105,24 @@ class JsonWrapper {
     return jsonObj.at(key);  // at() is used for const access
   }
 
-  /// Forwarding value functions from nlohmann::json
+  /**
+   * @brief Forwarding value function from nlohmann::json
+   *
+   * @param key Key to retrieve from JSON object
+   * @param default_value Default value for the key
+   * @return JSON entry of key
+   */
   template <typename T>
   T value(const std::string& key, const T& default_value) const {
     return jsonObj.value(key, default_value);
   }
 
-  /// Forwarding contains functions from nlohmann::json
+  /**
+   * @brief Forwarding contains function from nlohmann::json
+   *
+   * @param key Key to retrieve from JSON object
+   * @return bool Does the key exist?
+   */
   bool contains(const std::string& key) const { return jsonObj.contains(key); }
 
  private:
@@ -171,7 +188,8 @@ void validate_input(const nlohmann::json& config);
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
- * @param config The JSON configuration containing all the vessels
+ * @param config The JSON configuration
+ * @param component Name of the component to retrieve from config
  * @param vessel_id_map Map between vessel names and IDs
  */
 void create_vessels(
@@ -186,8 +204,8 @@ void create_vessels(
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
- * @param config The JSON configuration containing all the external coupling
- * blocks
+ * @param config The JSON configuration
+ * @param component Name of the component to retrieve from config
  * @param vessel_id_map Map between vessel names and IDs
  * @param bc_type_map Map between boundary condition names and their types
  */
@@ -202,8 +220,8 @@ void create_external_coupling(
  * @brief Handle the creation of boundary condition blocks
  *
  * @param model The model the block is associated with
- * @param config The JSON configuration containing all the boundary condition
- * blocks
+ * @param config The JSON configuration
+ * @param component Name of the component to retrieve from config
  * @param bc_type_map Map between boundary condition names and their types
  * @param closed_loop_bcs List of boundary conditions that should be connected
  * to a closed loop heart block
@@ -218,7 +236,8 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
- * @param config The JSON configuration containing all the junctions
+ * @param config The JSON configuration
+ * @param component Name of the component to retrieve from config
  * @param vessel_id_map Map between vessel names and IDs
  */
 void create_junctions(
@@ -232,7 +251,8 @@ void create_junctions(
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
- * @param config The JSON configuration containing all the closed loop blocks
+ * @param config The JSON configuration
+ * @param component Name of the component to retrieve from config
  * @param closed_loop_bcs List of boundary conditions that should be connected
  * to a closed loop heart block
  */
@@ -247,7 +267,8 @@ void create_closed_loop(
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
- * @param config The JSON configuration containing all the closed loop blocks
+ * @param config The JSON configuration
+ * @param component Name of the component to retrieve from config
  */
 void create_valves(
     Model& model,

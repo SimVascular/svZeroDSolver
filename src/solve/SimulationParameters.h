@@ -75,7 +75,7 @@ struct SimulationParameters {
 };
 
 /// @brief Wrapper class for nlohmann:json with error checking
-class JsonWrapper {
+class JsonWrapper : public nlohmann::json {
  public:
   /**
    * @brief Wrap around JSON configuration with detailed error message in case
@@ -87,46 +87,30 @@ class JsonWrapper {
    */
   JsonWrapper(const nlohmann::json& json, const std::string& name,
               const int& id)
-      : jsonObj(json[name][id]), component(name), block_id(id) {}
+      : nlohmann::json(json[name][id]), component(name), block_id(id) {}
 
   /**
-   * @brief Wrap error check around key retrieval (throws error if key doesn't
-   * exist)
+   * @brief Wrap error check around key retrieval (throws detailed error if key
+   * doesn't exist)
    *
    * @param key Key to retrieve from JSON object
    * @return JSON entry of key
    */
-  const nlohmann::json& operator()(const std::string& key) const {
-    if (!jsonObj.contains(key)) {
-      throw std::runtime_error("Key " + key + " not found in element number " +
-                               std::to_string(block_id) + " of component " +
-                               component);
+  const nlohmann::json& operator[](const char* key) const {
+    if (!this->contains(key)) {
+      throw std::runtime_error(
+          "Key " + std::string(key) + " not found in element number " +
+          std::to_string(block_id) + " of component " + component);
     }
-    return jsonObj.at(key);  // at() is used for const access
+    return this->at(key);
   }
 
-  /**
-   * @brief Forwarding value function from nlohmann::json
-   *
-   * @param key Key to retrieve from JSON object
-   * @param default_value Default value for the key
-   * @return JSON entry of key
-   */
-  template <typename T>
-  T value(const std::string& key, const T& default_value) const {
-    return jsonObj.value(key, default_value);
-  }
-
-  /**
-   * @brief Forwarding contains function from nlohmann::json
-   *
-   * @param key Key to retrieve from JSON object
-   * @return bool Does the key exist?
-   */
-  bool contains(const std::string& key) const { return jsonObj.contains(key); }
+  // Inherit functions
+  using nlohmann::json::contains;
+  using nlohmann::json::value;
+  using nlohmann::json::operator[];
 
  private:
-  nlohmann::json jsonObj;
   std::string component;
   int block_id;
 };

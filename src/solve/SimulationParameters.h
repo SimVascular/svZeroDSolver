@@ -74,17 +74,22 @@ struct SimulationParameters {
                                        ///< running coupled
 };
 
-/**
- * @brief Wrapper class for nlohmann:json with error checking
- *
- */
+/// @brief Wrapper class for nlohmann:json with error checking
 class JsonWrapper {
  public:
+  /**
+   * @brief Wrap around JSON configuration with detailed error message in case
+   * key is not found in configuration
+   *
+   * @param json JSON configuration
+   * @param name Name of the JSON configuration to be extracted
+   * @param id Index of JSON sub-list to be extracted
+   */
   JsonWrapper(const nlohmann::json& json, const std::string& name,
               const int& id)
       : jsonObj(json[name][id]), component(name), block_id(id) {}
 
-  // Wrap error check around key retrieval
+  /// Wrap error check around key retrieval
   const nlohmann::json& operator()(const std::string& key) const {
     if (!jsonObj.contains(key)) {
       throw std::runtime_error("Key " + key + " not found in element number " +
@@ -94,13 +99,13 @@ class JsonWrapper {
     return jsonObj.at(key);  // at() is used for const access
   }
 
-  // Forwarding value functions from nlohmann::json
+  /// Forwarding value functions from nlohmann::json
   template <typename T>
   T value(const std::string& key, const T& default_value) const {
     return jsonObj.value(key, default_value);
   }
 
-  // Forwarding contains functions from nlohmann::json
+  /// Forwarding contains functions from nlohmann::json
   bool contains(const std::string& key) const { return jsonObj.contains(key); }
 
  private:

@@ -122,8 +122,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
 
   // Check that steady initial is not set when ClosedLoopHeartAndPulmonary is
   // used
-  if ((simparams.sim_steady_initial == true) &&
-      (model->has_block("CLH"))) {
+  if ((simparams.sim_steady_initial == true) && (model->has_block("CLH"))) {
     std::runtime_error(
         "ERROR: Steady initial condition is not compatible with "
         "ClosedLoopHeartAndPulmonary block.");

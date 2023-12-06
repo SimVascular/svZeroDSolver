@@ -102,8 +102,7 @@ int Model::add_block(const std::string &block_name,
 bool Model::has_block(const std::string &name) const {
   if (block_index_map.find(name) == block_index_map.end()) {
     return false;
-  }
-  else {
+  } else {
     return true;
   }
 }

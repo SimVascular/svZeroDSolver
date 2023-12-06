@@ -167,8 +167,7 @@ void Solver::update_block_params(const std::string& block_name,
 
 void Solver::sanity_checks() {
   // Check that steady initial is not used with ClosedLoopHeartAndPulmonary
-  if ((simparams.sim_steady_initial == true) &&
-      (model.has_block("CLH"))) {
+  if ((simparams.sim_steady_initial == true) && (model.has_block("CLH"))) {
     std::runtime_error(
         "ERROR: Steady initial condition is not compatible with "
         "ClosedLoopHeartAndPulmonary block.");

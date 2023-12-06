@@ -75,6 +75,41 @@ struct SimulationParameters {
 };
 
 /**
+ * @brief Wrapper class for nlohmann:json with error checking
+ *
+ */
+class JsonWrapper {
+ public:
+  JsonWrapper(const nlohmann::json& json, const std::string& name,
+              const int& id)
+      : jsonObj(json[name][id]), component(name), block_id(id) {}
+
+  // Wrap error check around key retrieval
+  const nlohmann::json& operator()(const std::string& key) const {
+    if (!jsonObj.contains(key)) {
+      throw std::runtime_error("Key " + key + " not found in element number " +
+                               std::to_string(block_id) + " of component " +
+                               component);
+    }
+    return jsonObj.at(key);  // at() is used for const access
+  }
+
+  // Forwarding value functions from nlohmann::json
+  template <typename T>
+  T value(const std::string& key, const T& default_value) const {
+    return jsonObj.value(key, default_value);
+  }
+
+  // Forwarding contains functions from nlohmann::json
+  bool contains(const std::string& key) const { return jsonObj.contains(key); }
+
+ private:
+  nlohmann::json jsonObj;
+  std::string component;
+  int block_id;
+};
+
+/**
  * @brief Generate a new block and add its parameters to the model
  *
  * @param model The model that the block is added to
@@ -137,7 +172,8 @@ void validate_input(const nlohmann::json& config);
 void create_vessels(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
+    const nlohmann::json& config, const std::string& component,
+    std::map<int, std::string>& vessel_id_map);
 
 /**
  * @brief Handle the creation of external coupling blocks and connections with
@@ -153,7 +189,8 @@ void create_vessels(
 void create_external_coupling(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
+    const nlohmann::json& config, const std::string& component,
+    std::map<int, std::string>& vessel_id_map,
     std::map<std::string, std::string>& bc_type_map);
 
 /**
@@ -167,6 +204,7 @@ void create_external_coupling(
  * to a closed loop heart block
  */
 void create_boundary_conditions(Model& model, const nlohmann::json& config,
+                                const std::string& component,
                                 std::map<std::string, std::string>& bc_type_map,
                                 std::vector<std::string>& closed_loop_bcs);
 
@@ -181,7 +219,8 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
 void create_junctions(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map);
+    const nlohmann::json& config, const std::string& component,
+    std::map<int, std::string>& vessel_id_map);
 
 /**
  * @brief Handle the creation of closed-loop blocks and associated connections
@@ -195,7 +234,8 @@ void create_junctions(
 void create_closed_loop(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config, std::vector<std::string>& closed_loop_bcs);
+    const nlohmann::json& config, const std::string& component,
+    std::vector<std::string>& closed_loop_bcs);
 
 /**
  * @brief Handle the creation of valves and their associated connections
@@ -207,6 +247,6 @@ void create_closed_loop(
 void create_valves(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config);
+    const nlohmann::json& config, const std::string& component);
 
 #endif

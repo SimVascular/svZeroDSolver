@@ -82,7 +82,8 @@ class JsonWrapper : public nlohmann::json {
    * key is not found in configuration
    *
    * @param json JSON configuration
-   * @param name Name of the JSON configuration to be extracted
+   * @param component Name of the JSON sub-list to be extracted
+   * @param name_str Name string of the JSON sub-list to be extracted
    * @param id Index of JSON sub-list to be extracted
    */
   JsonWrapper(const nlohmann::json& json, const std::string& component,

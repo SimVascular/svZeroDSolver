@@ -108,6 +108,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_simulation_parameters.html">SimulationParameters</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simulation parameters.  <a href="struct_simulation_parameters.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_json_wrapper.html">JsonWrapper</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapper class for nlohmann:json with error checking.  <a href="class_json_wrapper.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -126,30 +129,30 @@ Functions</h2></td></tr>
 <tr class="memitem:af79ad080bd74ff4d6ad832e1e77a9cd8" id="r_af79ad080bd74ff4d6ad832e1e77a9cd8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#af79ad080bd74ff4d6ad832e1e77a9cd8">validate_input</a> (const nlohmann::json &amp;config)</td></tr>
 <tr class="memdesc:af79ad080bd74ff4d6ad832e1e77a9cd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check that the JSON configuration has the required inputs.  <br /></td></tr>
 <tr class="separator:af79ad080bd74ff4d6ad832e1e77a9cd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e4ee7370f37569b407e0686dbf992ba" id="r_a4e4ee7370f37569b407e0686dbf992ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#a4e4ee7370f37569b407e0686dbf992ba">create_vessels</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, std::map&lt; int, std::string &gt; &amp;vessel_id_map)</td></tr>
-<tr class="memdesc:a4e4ee7370f37569b407e0686dbf992ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of vessel blocks and connections with boundary conditions.  <br /></td></tr>
-<tr class="separator:a4e4ee7370f37569b407e0686dbf992ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad06ce19373979646aa7d2e13e67c0654" id="r_ad06ce19373979646aa7d2e13e67c0654"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#ad06ce19373979646aa7d2e13e67c0654">create_external_coupling</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, std::map&lt; int, std::string &gt; &amp;vessel_id_map, std::map&lt; std::string, std::string &gt; &amp;bc_type_map)</td></tr>
-<tr class="memdesc:ad06ce19373979646aa7d2e13e67c0654"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of external coupling blocks and connections with other blocks.  <br /></td></tr>
-<tr class="separator:ad06ce19373979646aa7d2e13e67c0654"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2717f68d47ee2e5baf203ce1bf28fa02" id="r_a2717f68d47ee2e5baf203ce1bf28fa02"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#a2717f68d47ee2e5baf203ce1bf28fa02">create_boundary_conditions</a> (<a class="el" href="class_model.html">Model</a> &amp;model, const nlohmann::json &amp;config, std::map&lt; std::string, std::string &gt; &amp;bc_type_map, std::vector&lt; std::string &gt; &amp;closed_loop_bcs)</td></tr>
-<tr class="memdesc:a2717f68d47ee2e5baf203ce1bf28fa02"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of boundary condition blocks.  <br /></td></tr>
-<tr class="separator:a2717f68d47ee2e5baf203ce1bf28fa02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79bfe5d81b653c63ee67a1a665895515" id="r_a79bfe5d81b653c63ee67a1a665895515"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#a79bfe5d81b653c63ee67a1a665895515">create_junctions</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, std::map&lt; int, std::string &gt; &amp;vessel_id_map)</td></tr>
-<tr class="memdesc:a79bfe5d81b653c63ee67a1a665895515"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of junctions and their connections.  <br /></td></tr>
-<tr class="separator:a79bfe5d81b653c63ee67a1a665895515"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afa44dfce38a949188671ed13fe34706c" id="r_afa44dfce38a949188671ed13fe34706c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#afa44dfce38a949188671ed13fe34706c">create_closed_loop</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, std::vector&lt; std::string &gt; &amp;closed_loop_bcs)</td></tr>
-<tr class="memdesc:afa44dfce38a949188671ed13fe34706c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of closed-loop blocks and associated connections.  <br /></td></tr>
-<tr class="separator:afa44dfce38a949188671ed13fe34706c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec29ab24315b21877c096165a54e4c3f" id="r_aec29ab24315b21877c096165a54e4c3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#aec29ab24315b21877c096165a54e4c3f">create_valves</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config)</td></tr>
-<tr class="memdesc:aec29ab24315b21877c096165a54e4c3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of valves and their associated connections.  <br /></td></tr>
-<tr class="separator:aec29ab24315b21877c096165a54e4c3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dea569efa823bdb66eb3abfb1c29d43" id="r_a8dea569efa823bdb66eb3abfb1c29d43"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#a8dea569efa823bdb66eb3abfb1c29d43">create_vessels</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, const std::string &amp;component, std::map&lt; int, std::string &gt; &amp;vessel_id_map)</td></tr>
+<tr class="memdesc:a8dea569efa823bdb66eb3abfb1c29d43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of vessel blocks and connections with boundary conditions.  <br /></td></tr>
+<tr class="separator:a8dea569efa823bdb66eb3abfb1c29d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad36cd0e293d3cc8a490003db53888cd4" id="r_ad36cd0e293d3cc8a490003db53888cd4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#ad36cd0e293d3cc8a490003db53888cd4">create_external_coupling</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, const std::string &amp;component, std::map&lt; int, std::string &gt; &amp;vessel_id_map, std::map&lt; std::string, std::string &gt; &amp;bc_type_map)</td></tr>
+<tr class="memdesc:ad36cd0e293d3cc8a490003db53888cd4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of external coupling blocks and connections with other blocks.  <br /></td></tr>
+<tr class="separator:ad36cd0e293d3cc8a490003db53888cd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48762868893c37068ff5c57c29484ba9" id="r_a48762868893c37068ff5c57c29484ba9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#a48762868893c37068ff5c57c29484ba9">create_boundary_conditions</a> (<a class="el" href="class_model.html">Model</a> &amp;model, const nlohmann::json &amp;config, const std::string &amp;component, std::map&lt; std::string, std::string &gt; &amp;bc_type_map, std::vector&lt; std::string &gt; &amp;closed_loop_bcs)</td></tr>
+<tr class="memdesc:a48762868893c37068ff5c57c29484ba9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of boundary condition blocks.  <br /></td></tr>
+<tr class="separator:a48762868893c37068ff5c57c29484ba9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e4a9c0e210b2c64b811d990af86d4ad" id="r_a1e4a9c0e210b2c64b811d990af86d4ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#a1e4a9c0e210b2c64b811d990af86d4ad">create_junctions</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, const std::string &amp;component, std::map&lt; int, std::string &gt; &amp;vessel_id_map)</td></tr>
+<tr class="memdesc:a1e4a9c0e210b2c64b811d990af86d4ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of junctions and their connections.  <br /></td></tr>
+<tr class="separator:a1e4a9c0e210b2c64b811d990af86d4ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0f5d9a69550f398dc9f7176c4cdc812" id="r_aa0f5d9a69550f398dc9f7176c4cdc812"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#aa0f5d9a69550f398dc9f7176c4cdc812">create_closed_loop</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, const std::string &amp;component, std::vector&lt; std::string &gt; &amp;closed_loop_bcs)</td></tr>
+<tr class="memdesc:aa0f5d9a69550f398dc9f7176c4cdc812"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of closed-loop blocks and associated connections.  <br /></td></tr>
+<tr class="separator:aa0f5d9a69550f398dc9f7176c4cdc812"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ff24c97813996bd089d3142c5d31375" id="r_a5ff24c97813996bd089d3142c5d31375"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="_simulation_parameters_8h.html#a5ff24c97813996bd089d3142c5d31375">create_valves</a> (<a class="el" href="class_model.html">Model</a> &amp;model, std::vector&lt; std::tuple&lt; std::string, std::string &gt; &gt; &amp;connections, const nlohmann::json &amp;config, const std::string &amp;component)</td></tr>
+<tr class="memdesc:a5ff24c97813996bd089d3142c5d31375"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handle the creation of valves and their associated connections.  <br /></td></tr>
+<tr class="separator:a5ff24c97813996bd089d3142c5d31375"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Source file to read simulation configuration. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
-<a id="a2717f68d47ee2e5baf203ce1bf28fa02" name="a2717f68d47ee2e5baf203ce1bf28fa02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2717f68d47ee2e5baf203ce1bf28fa02">&#9670;&#160;</a></span>create_boundary_conditions()</h2>
+<a id="a48762868893c37068ff5c57c29484ba9" name="a48762868893c37068ff5c57c29484ba9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48762868893c37068ff5c57c29484ba9">&#9670;&#160;</a></span>create_boundary_conditions()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -165,6 +168,12 @@ Functions</h2></td></tr>
           <td></td>
           <td class="paramtype">const nlohmann::json &amp;&#160;</td>
           <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>component</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -190,7 +199,8 @@ Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
-    <tr><td class="paramname">config</td><td>The JSON configuration containing all the boundary condition blocks </td></tr>
+    <tr><td class="paramname">config</td><td>The JSON configuration </td></tr>
+    <tr><td class="paramname">component</td><td>Name of the component to retrieve from config </td></tr>
     <tr><td class="paramname">bc_type_map</td><td>Map between boundary condition names and their types </td></tr>
     <tr><td class="paramname">closed_loop_bcs</td><td>List of boundary conditions that should be connected to a closed loop heart block </td></tr>
   </table>
@@ -199,8 +209,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="afa44dfce38a949188671ed13fe34706c" name="afa44dfce38a949188671ed13fe34706c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afa44dfce38a949188671ed13fe34706c">&#9670;&#160;</a></span>create_closed_loop()</h2>
+<a id="aa0f5d9a69550f398dc9f7176c4cdc812" name="aa0f5d9a69550f398dc9f7176c4cdc812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0f5d9a69550f398dc9f7176c4cdc812">&#9670;&#160;</a></span>create_closed_loop()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,6 +236,12 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>component</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">std::vector&lt; std::string &gt; &amp;&#160;</td>
           <td class="paramname"><em>closed_loop_bcs</em>&#160;</td>
         </tr>
@@ -242,7 +258,8 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
     <tr><td class="paramname">connections</td><td>Vector storing the connections between blocks </td></tr>
-    <tr><td class="paramname">config</td><td>The JSON configuration containing all the closed loop blocks </td></tr>
+    <tr><td class="paramname">config</td><td>The JSON configuration </td></tr>
+    <tr><td class="paramname">component</td><td>Name of the component to retrieve from config </td></tr>
     <tr><td class="paramname">closed_loop_bcs</td><td>List of boundary conditions that should be connected to a closed loop heart block </td></tr>
   </table>
   </dd>
@@ -251,8 +268,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="ad06ce19373979646aa7d2e13e67c0654" name="ad06ce19373979646aa7d2e13e67c0654"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad06ce19373979646aa7d2e13e67c0654">&#9670;&#160;</a></span>create_external_coupling()</h2>
+<a id="ad36cd0e293d3cc8a490003db53888cd4" name="ad36cd0e293d3cc8a490003db53888cd4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad36cd0e293d3cc8a490003db53888cd4">&#9670;&#160;</a></span>create_external_coupling()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -274,6 +291,12 @@ Functions</h2></td></tr>
           <td></td>
           <td class="paramtype">const nlohmann::json &amp;&#160;</td>
           <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>component</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -300,7 +323,8 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
     <tr><td class="paramname">connections</td><td>Vector storing the connections between blocks </td></tr>
-    <tr><td class="paramname">config</td><td>The JSON configuration containing all the external coupling blocks </td></tr>
+    <tr><td class="paramname">config</td><td>The JSON configuration </td></tr>
+    <tr><td class="paramname">component</td><td>Name of the component to retrieve from config </td></tr>
     <tr><td class="paramname">vessel_id_map</td><td>Map between vessel names and IDs </td></tr>
     <tr><td class="paramname">bc_type_map</td><td>Map between boundary condition names and their types </td></tr>
   </table>
@@ -309,8 +333,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a79bfe5d81b653c63ee67a1a665895515" name="a79bfe5d81b653c63ee67a1a665895515"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79bfe5d81b653c63ee67a1a665895515">&#9670;&#160;</a></span>create_junctions()</h2>
+<a id="a1e4a9c0e210b2c64b811d990af86d4ad" name="a1e4a9c0e210b2c64b811d990af86d4ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e4a9c0e210b2c64b811d990af86d4ad">&#9670;&#160;</a></span>create_junctions()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -336,6 +360,12 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>component</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">std::map&lt; int, std::string &gt; &amp;&#160;</td>
           <td class="paramname"><em>vessel_id_map</em>&#160;</td>
         </tr>
@@ -352,7 +382,8 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
     <tr><td class="paramname">connections</td><td>Vector storing the connections between blocks </td></tr>
-    <tr><td class="paramname">config</td><td>The JSON configuration containing all the junctions </td></tr>
+    <tr><td class="paramname">config</td><td>The JSON configuration </td></tr>
+    <tr><td class="paramname">component</td><td>Name of the component to retrieve from config </td></tr>
     <tr><td class="paramname">vessel_id_map</td><td>Map between vessel names and IDs </td></tr>
   </table>
   </dd>
@@ -360,8 +391,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aec29ab24315b21877c096165a54e4c3f" name="aec29ab24315b21877c096165a54e4c3f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec29ab24315b21877c096165a54e4c3f">&#9670;&#160;</a></span>create_valves()</h2>
+<a id="a5ff24c97813996bd089d3142c5d31375" name="a5ff24c97813996bd089d3142c5d31375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ff24c97813996bd089d3142c5d31375">&#9670;&#160;</a></span>create_valves()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -382,7 +413,13 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const nlohmann::json &amp;&#160;</td>
-          <td class="paramname"><em>config</em>&#160;</td>
+          <td class="paramname"><em>config</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>component</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -397,15 +434,16 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
     <tr><td class="paramname">connections</td><td>Vector storing the connections between blocks </td></tr>
-    <tr><td class="paramname">config</td><td>The JSON configuration containing all the closed loop blocks </td></tr>
+    <tr><td class="paramname">config</td><td>The JSON configuration </td></tr>
+    <tr><td class="paramname">component</td><td>Name of the component to retrieve from config </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a4e4ee7370f37569b407e0686dbf992ba" name="a4e4ee7370f37569b407e0686dbf992ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e4ee7370f37569b407e0686dbf992ba">&#9670;&#160;</a></span>create_vessels()</h2>
+<a id="a8dea569efa823bdb66eb3abfb1c29d43" name="a8dea569efa823bdb66eb3abfb1c29d43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8dea569efa823bdb66eb3abfb1c29d43">&#9670;&#160;</a></span>create_vessels()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -431,6 +469,12 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>component</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
           <td class="paramtype">std::map&lt; int, std::string &gt; &amp;&#160;</td>
           <td class="paramname"><em>vessel_id_map</em>&#160;</td>
         </tr>
@@ -447,7 +491,8 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
     <tr><td class="paramname">connections</td><td>Vector storing the connections between blocks </td></tr>
-    <tr><td class="paramname">config</td><td>The JSON configuration containing all the vessels </td></tr>
+    <tr><td class="paramname">config</td><td>The JSON configuration </td></tr>
+    <tr><td class="paramname">component</td><td>Name of the component to retrieve from config </td></tr>
     <tr><td class="paramname">vessel_id_map</td><td>Map between vessel names and IDs </td></tr>
   </table>
   </dd>

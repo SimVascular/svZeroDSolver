@@ -100,6 +100,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6df7a16f2d54619f66c9775f595bf912" id="r_a6df7a16f2d54619f66c9775f595bf912"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#a6df7a16f2d54619f66c9775f595bf912">add_block</a> (const std::string &amp;block_name, const std::vector&lt; int &gt; &amp;block_param_ids, const std::string_view &amp;name, bool internal=false)</td></tr>
 <tr class="memdesc:a6df7a16f2d54619f66c9775f595bf912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a block to the model (with parameters)  <br /></td></tr>
 <tr class="separator:a6df7a16f2d54619f66c9775f595bf912"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc36e7c0be46ee4c31f954e9312251d3" id="r_abc36e7c0be46ee4c31f954e9312251d3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#abc36e7c0be46ee4c31f954e9312251d3">has_block</a> (const std::string &amp;name) const</td></tr>
+<tr class="memdesc:abc36e7c0be46ee4c31f954e9312251d3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a block with given name exists.  <br /></td></tr>
+<tr class="separator:abc36e7c0be46ee4c31f954e9312251d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9b8ebfbff548d6e22190ee99c7b01ebc" id="r_a9b8ebfbff548d6e22190ee99c7b01ebc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_block.html">Block</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_model.html#a9b8ebfbff548d6e22190ee99c7b01ebc">get_block</a> (const std::string_view &amp;name) const</td></tr>
 <tr class="memdesc:a9b8ebfbff548d6e22190ee99c7b01ebc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a block by its name.  <br /></td></tr>
 <tr class="separator:a9b8ebfbff548d6e22190ee99c7b01ebc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -720,6 +723,33 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>T Current value of the parameter </dd></dl>
+
+</div>
+</div>
+<a id="abc36e7c0be46ee4c31f954e9312251d3" name="abc36e7c0be46ee4c31f954e9312251d3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc36e7c0be46ee4c31f954e9312251d3">&#9670;&#160;</a></span>has_block()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Model::has_block </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Check if a block with given name exists. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>bool whether block exists </dd></dl>
 
 </div>
 </div>

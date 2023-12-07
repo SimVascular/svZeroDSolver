@@ -78,6 +78,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
   // Read block input parameters
   std::vector<int> block_param_ids;
   int new_id;
+  int err;
 
   // Check that all parameters defined for the current block are valid
   for (auto& el : block_params_json.items()) {
@@ -120,8 +121,9 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       if (block_param.second.is_array) {
         // Get parameter vector
         std::vector<double> val;
-        if (get_param_vector(block_params_json, block_param.first,
-                             block_param.second, val)) {
+        err = get_param_vector(block_params_json, block_param.first,
+                               block_param.second, val);
+        if (err) {
           throw std::runtime_error("Array parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
@@ -130,7 +132,8 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
         // Get time vector
         InputParameter t_param{false, true};
         std::vector<double> time;
-        if (get_param_vector(block_params_json, "t", t_param, time)) {
+        err = get_param_vector(block_params_json, "t", t_param, time);
+        if (err) {
           throw std::runtime_error("Array parameter t is mandatory in " +
                                    block_type + " block " +
                                    static_cast<std::string>(name));
@@ -143,8 +146,9 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       // Get scalar parameter
       else {
         double val;
-        if (get_param_scalar(block_params_json, block_param.first,
-                             block_param.second, val)) {
+        err = get_param_scalar(block_params_json, block_param.first,
+                               block_param.second, val);
+        if (err) {
           throw std::runtime_error("Scalar parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
@@ -211,47 +215,56 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
+  // Move through different component names
+  std::string component;
+
   // Create vessels
   DEBUG_MSG("Loading vessels");
+  component = "vessels";
   std::map<int, std::string> vessel_id_map;
-  if (config.contains("vessels")) {
-    create_vessels(model, connections, config["vessels"], vessel_id_map);
+  if (config.contains(component)) {
+    create_vessels(model, connections, config, component, vessel_id_map);
   }
 
   // Create map for boundary conditions to boundary condition type
+  component = "boundary_conditions";
   std::map<std::string, std::string> bc_type_map;
-  for (const auto& bc_config : config["boundary_conditions"]) {
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& bc_config = JsonWrapper(config, component, "bc_name", i);
     std::string bc_name = bc_config["bc_name"];
     std::string bc_type = bc_config["bc_type"];
     bc_type_map.insert({bc_name, bc_type});
   }
 
   // Create external coupling blocks
-  if (config.contains("external_solver_coupling_blocks")) {
-    create_external_coupling(model, connections,
-                             config["external_solver_coupling_blocks"],
+  component = "external_solver_coupling_blocks";
+  if (config.contains(component)) {
+    create_external_coupling(model, connections, config, component,
                              vessel_id_map, bc_type_map);
   }
 
   // Create boundary conditions
+  component = "boundary_conditions";
   std::vector<std::string> closed_loop_bcs;
-  create_boundary_conditions(model, config["boundary_conditions"], bc_type_map,
+  create_boundary_conditions(model, config, component, bc_type_map,
                              closed_loop_bcs);
 
   // Create junctions
-  if (config.contains("junctions")) {
-    create_junctions(model, connections, config["junctions"], vessel_id_map);
+  component = "junctions";
+  if (config.contains(component)) {
+    create_junctions(model, connections, config, component, vessel_id_map);
   }
 
   // Create closed-loop blocks
-  if (config.contains("closed_loop_blocks")) {
-    create_closed_loop(model, connections, config["closed_loop_blocks"],
-                       closed_loop_bcs);
+  component = "closed_loop_blocks";
+  if (config.contains(component)) {
+    create_closed_loop(model, connections, config, component, closed_loop_bcs);
   }
 
-  // Create valves
-  if (config.contains("valves")) {
-    create_valves(model, connections, config["valves"]);
+  // Create valvescomponent
+  component = "valves";
+  if (config.contains(component)) {
+    create_valves(model, connections, config, component);
   }
 
   // Create Connections
@@ -268,10 +281,12 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
 void create_vessels(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& vessels, std::map<int, std::string>& vessel_id_map) {
+    const nlohmann::json& config, const std::string& component,
+    std::map<int, std::string>& vessel_id_map) {
   // Loop all vessels
-  for (size_t i = 0; i < vessels.size(); i++) {
-    const auto& vessel_config = vessels[i];
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& vessel_config =
+        JsonWrapper(config, component, "vessel_name", i);
     const auto& vessel_values = vessel_config["zero_d_element_values"];
     const std::string vessel_name = vessel_config["vessel_name"];
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
@@ -293,9 +308,11 @@ void create_vessels(
 }
 
 void create_boundary_conditions(Model& model, const nlohmann::json& config,
+                                const std::string& component,
                                 std::map<std::string, std::string>& bc_type_map,
                                 std::vector<std::string>& closed_loop_bcs) {
-  for (const auto& bc_config : config) {
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& bc_config = JsonWrapper(config, component, "bc_name", i);
     std::string bc_type = bc_config["bc_type"];
     std::string bc_name = bc_config["bc_name"];
     const auto& bc_values = bc_config["bc_values"];
@@ -319,9 +336,12 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
 void create_external_coupling(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map,
+    const nlohmann::json& config, const std::string& component,
+    std::map<int, std::string>& vessel_id_map,
     std::map<std::string, std::string>& bc_type_map) {
-  for (const auto& coupling_config : config) {
+  // Loop all external coupling blocks
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& coupling_config = JsonWrapper(config, component, "name", i);
     std::string coupling_type = coupling_config["type"];
     std::string coupling_name = coupling_config["name"];
     std::string coupling_loc = coupling_config["location"];
@@ -399,8 +419,12 @@ void create_external_coupling(
 void create_junctions(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config, std::map<int, std::string>& vessel_id_map) {
-  for (const auto& junction_config : config) {
+    const nlohmann::json& config, const std::string& component,
+    std::map<int, std::string>& vessel_id_map) {
+  // Loop all junctions
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& junction_config =
+        JsonWrapper(config, component, "junction_name", i);
     std::string j_type = junction_config["junction_type"];
     std::string junction_name = junction_config["junction_name"];
 
@@ -426,10 +450,14 @@ void create_junctions(
 void create_closed_loop(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config, std::vector<std::string>& closed_loop_bcs) {
+    const nlohmann::json& config, const std::string& component,
+    std::vector<std::string>& closed_loop_bcs) {
   ///< Flag to check if heart block is present (requires different handling)
   bool heartpulmonary_block_present = false;
-  for (const auto& closed_loop_config : config) {
+
+  // Loop all closed loop blocks
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& closed_loop_config = JsonWrapper(config, component, "name", i);
     std::string closed_loop_type = closed_loop_config["closed_loop_type"];
     if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
       if (heartpulmonary_block_present == false) {
@@ -478,8 +506,10 @@ void create_closed_loop(
 void create_valves(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config) {
-  for (const auto& valve_config : config) {
+    const nlohmann::json& config, const std::string& component) {
+  // Loop all valves
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& valve_config = JsonWrapper(config, component, "name", i);
     std::string valve_type = valve_config["type"];
     std::string valve_name = valve_config["name"];
     generate_block(model, valve_config["params"], valve_type, valve_name);

@@ -85,9 +85,12 @@ class JsonWrapper : public nlohmann::json {
    * @param name Name of the JSON configuration to be extracted
    * @param id Index of JSON sub-list to be extracted
    */
-  JsonWrapper(const nlohmann::json& json, const std::string& name,
-              const int& id)
-      : nlohmann::json(json[name][id]), component(name), block_id(id) {}
+  JsonWrapper(const nlohmann::json& json, const std::string& component,
+              const std::string& name_str, const int& id)
+      : nlohmann::json(json[component][id]),
+        component(component),
+        name_str(name_str),
+        block_id(id) {}
 
   /**
    * @brief Wrap error check around key retrieval (throws detailed error if key
@@ -98,9 +101,16 @@ class JsonWrapper : public nlohmann::json {
    */
   const nlohmann::json& operator[](const char* key) const {
     if (!this->contains(key)) {
-      throw std::runtime_error(
-          "Key " + std::string(key) + " not found in element number " +
-          std::to_string(block_id) + " of component " + component);
+      if (this->contains(name_str)) {
+        const std::string name = this->at(name_str);
+        throw std::runtime_error("Key " + std::string(key) +
+                                 " not found in element " + name +
+                                 " of component " + component);
+      } else {
+        throw std::runtime_error(
+            "Key " + std::string(key) + " not found in element number " +
+            std::to_string(block_id) + " of component " + component);
+      }
     }
     return this->at(key);
   }
@@ -112,6 +122,7 @@ class JsonWrapper : public nlohmann::json {
 
  private:
   std::string component;
+  std::string name_str;
   int block_id;
 };
 

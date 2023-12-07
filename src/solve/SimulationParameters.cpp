@@ -78,6 +78,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
   // Read block input parameters
   std::vector<int> block_param_ids;
   int new_id;
+  int err;
 
   // Check that all parameters defined for the current block are valid
   for (auto& el : block_params_json.items()) {
@@ -120,8 +121,9 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       if (block_param.second.is_array) {
         // Get parameter vector
         std::vector<double> val;
-        if (get_param_vector(block_params_json, block_param.first,
-                             block_param.second, val)) {
+        err = get_param_vector(block_params_json, block_param.first,
+                               block_param.second, val);
+        if (err) {
           throw std::runtime_error("Array parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));
@@ -130,7 +132,8 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
         // Get time vector
         InputParameter t_param{false, true};
         std::vector<double> time;
-        if (get_param_vector(block_params_json, "t", t_param, time)) {
+        err = get_param_vector(block_params_json, "t", t_param, time);
+        if (err) {
           throw std::runtime_error("Array parameter t is mandatory in " +
                                    block_type + " block " +
                                    static_cast<std::string>(name));
@@ -143,8 +146,9 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       // Get scalar parameter
       else {
         double val;
-        if (get_param_scalar(block_params_json, block_param.first,
-                             block_param.second, val)) {
+        err = get_param_scalar(block_params_json, block_param.first,
+                               block_param.second, val);
+        if (err) {
           throw std::runtime_error("Scalar parameter " + block_param.first +
                                    " is mandatory in " + block_type +
                                    " block " + static_cast<std::string>(name));

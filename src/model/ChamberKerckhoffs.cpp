@@ -32,13 +32,10 @@
 #include "Model.h"
 
 void ChamberKH::setup_dofs(DOFHandler &dofhandler) {
-  // set_up_dofs args: dofhandler (passed in), num equations, list of internal variable names (strings)
   // 2 eqns, one for Pressure, one for Volume
   Block::setup_dofs_(dofhandler, 4, {"Pc", "Vc"});
 }
 
-// update_constant updates matrices E and F from E(y,t)*y_dot + F(y,t)*y + c(y,t) = 0 
-// with terms that DO NOT DEPEND ON THE SOLUTION
 void ChamberKH::update_constant(SparseSystem &system,
                                   std::vector<double> &parameters) {
   // Set element contributions
@@ -55,10 +52,10 @@ void ChamberKH::update_constant(SparseSystem &system,
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[4]) = -1.0;
 
-  // Eq 2: Pc/L - P_out/L - dQ_out = 0
-  system.F.coeffRef(global_eqn_ids[2], global_var_ids[4]) = 1.0/L;
-  system.F.coeffRef(global_eqn_ids[2], global_var_ids[2]) = -1.0/L;
-  system.E.coeffRef(global_eqn_ids[2], global_var_ids[3]) = -1.0;
+  // Eq 2: Pc - P_out - L*dQ_out = 0
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[4]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[2]) = -1.0;
+  system.E.coeffRef(global_eqn_ids[2], global_var_ids[3]) = -L;
 
   // Eq 3: Q_in - Q_out - dVc = 0
   system.F.coeffRef(global_eqn_ids[3], global_var_ids[1]) = 1.0;

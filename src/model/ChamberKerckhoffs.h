@@ -48,30 +48,45 @@
  * \f[
  * \begin{circuitikz} \draw
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1.0,0) to [D, l=$R_v$, *-*] (3,0)
- * node[anchor=south]{$P_{d}$};
+ * \draw (1,0) node[anchor=south]{$P_{in}$}
+ * to [R, l=$R_p$, *-] (3,0)
+ * node[anchor=south]{$P_{C}$}
+ * to [R, l=$R_d$, *-*] (5,0)
+ * node[anchor=south]{$P_{ref}$}
+ * (3,0) to [C, l=$C$, *-] (3,-1.5)
+ * node[ground]{};
  * \end{circuitikz}
  * \f]
  *
  * ### Governing equations
  *
  * \f[
- * P_{in}-P_{out}-Q_{in}\[R_{min} + (R_{max}-R_{min})\frac{1}{2}\[1+tanh\{k(P_{out}-P_P{in})\}\]\]=0
+ * P_{c}-E(t)\left[Vc(t)-V_{rest}\right]=0
  * \f]
  *
  * \f[
- * Q_{in}-Q_{out}=0
+ * P_{in}-P_{c}=0
+ * \f]
+ *
+ * \f[
+ * P_{c} - P_{out} - L\dot{Q}_{out}=0
+ * \f]
+ *
+ * \f[
+ * Q_{in} - Q_{out} - \dot{V}_{c}=0
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
- * P_{out} & Q_{out}\end{array}\right]^{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llllll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out} & P_c & V_c\end{array}\right]^{T} \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{cccc}
  * 0 & 0 & 0 & 0 \\
+ * 0 & 0 & 0 & 0 \\
+ * 0 & 0 & 0 & -L \\
  * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
@@ -198,8 +213,7 @@ class ChamberKH : public Block {
   double Vrest;  // Rest Volume
 
   /**
-   * @brief Update the atrial activation and LV/RV elastance functions which
-   * depend on time
+   * @brief Update the elastance functions which depend on time
    *
    * @param parameters Parameters of the model
    */

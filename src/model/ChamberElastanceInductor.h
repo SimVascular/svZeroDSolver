@@ -36,6 +36,7 @@
 
 #include <math.h>
 
+#include "Model.h"
 #include "Block.h"
 #include "SparseSystem.h"
 #include "debug.h"

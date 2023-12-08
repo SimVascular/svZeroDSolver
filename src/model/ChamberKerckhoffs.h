@@ -50,7 +50,6 @@
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R_p$, *-] (3,0)
- * node[anchor=south]{$P_{C}$}
  * to [R, l=$R_d$, *-*] (5,0)
  * node[anchor=south]{$P_{ref}$}
  * (3,0) to [C, l=$C$, *-] (3,-1.5)
@@ -80,7 +79,7 @@
  *
  * \f[
  * \mathbf{y}^{e}=\left[\begin{array}{llllll}P_{in} & Q_{in} &
- * P_{out} & Q_{out} & P_c & V_c\end{array}\right]^{T} \f]
+ * P_{out} & Q_{out} & P_c & V_c \end{array}\right]^{T} \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{cccc}

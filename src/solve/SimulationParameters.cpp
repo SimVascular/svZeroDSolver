@@ -267,14 +267,10 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     create_valves(model, connections, config, component);
   }
 
-  // Create valves
-  if (config.contains("valves")) {
-    create_valves(model, connections, config["valves"], component);
-  }
-
   // Create chambers
-  if (config.contains("chambers")) {
-    create_chambers(model, connections, config["chambers"], component);
+  component = "chambers";
+  if (config.contains(component)) {
+    create_chambers(model, connections, config, component);
   }
 
   // Create Connections

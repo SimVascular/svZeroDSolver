@@ -47,7 +47,6 @@
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R_p$, *-] (3,0)
- * node[anchor=south]{$P_{C}$}
  * to [R, l=$R_d$, *-*] (5,0)
  * node[anchor=south]{$P_{ref}$}
  * (3,0) to [C, l=$C$, *-] (3,-1.5)

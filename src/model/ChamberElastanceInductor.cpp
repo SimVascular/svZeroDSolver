@@ -28,15 +28,15 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "ChamberKerckhoffs.h"
+#include "ChamberElastanceInductor.h"
 #include "Model.h"
 
-void ChamberKH::setup_dofs(DOFHandler &dofhandler) {
+void ChamberElastanceInductor::setup_dofs(DOFHandler &dofhandler) {
   // Internal variable is chamber volume
   Block::setup_dofs_(dofhandler, 3, {"Vc"});
 }
 
-void ChamberKH::update_constant(SparseSystem &system,
+void ChamberElastanceInductor::update_constant(SparseSystem &system,
                                   std::vector<double> &parameters) {
 
   double L = parameters[global_param_ids[ParamId::IMPEDANCE]];
@@ -55,7 +55,7 @@ void ChamberKH::update_constant(SparseSystem &system,
   system.E.coeffRef(global_eqn_ids[2], global_var_ids[4]) = -1.0;
 }
 
-void ChamberKH::update_time(SparseSystem &system, std::vector<double> &parameters) {
+void ChamberElastanceInductor::update_time(SparseSystem &system, std::vector<double> &parameters) {
   get_elastance_values(parameters);
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
@@ -63,7 +63,7 @@ void ChamberKH::update_time(SparseSystem &system, std::vector<double> &parameter
   system.C.coeffRef(global_eqn_ids[0]) = Elas * Vrest;
 }
 
-void ChamberKH::get_elastance_values(std::vector<double> &parameters) {
+void ChamberElastanceInductor::get_elastance_values(std::vector<double> &parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Emin = parameters[global_param_ids[ParamId::EMIN]];
   double Vrd = parameters[global_param_ids[ParamId::VRD]];

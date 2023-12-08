@@ -46,7 +46,7 @@
 #include "BlockFactory.h"
 #include "BloodVessel.h"
 #include "BloodVesselJunction.h"
-#include "ChamberKerckhoffs.h"
+#include "ChamberElastanceInductor.h"
 #include "ClosedLoopCoronaryLeftBC.h"
 #include "ClosedLoopCoronaryRightBC.h"
 #include "ClosedLoopHeartPulmonary.h"

@@ -28,11 +28,11 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file ChamberKerckhoffs.h
- * @brief model::ChamberKH source file
+ * @file ChamberElastanceInductor.h
+ * @brief model::ChamberElastanceInductor source file
  */
-#ifndef SVZERODSOLVER_MODEL_CHAMBERKH_HPP_
-#define SVZERODSOLVER_MODEL_CHAMBERKH_HPP_
+#ifndef SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_
+#define SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_
 
 #include <math.h>
 
@@ -41,9 +41,9 @@
 #include "debug.h"
 
 /**
- * @brief Chamber (Kerckhoffs, 2006) block.
+ * @brief Cardiac chamber with elastance and inductor.
  *
- * Models a chamber as a time-varying capacitor based on an elastance and a set of volumes.
+ * Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) and an inductor. Details in \cite kerckhoffs2007coupling (equations 1 and 2). This is also similar to the model in \cite sankaran2012patient and \cite menon2023predictor. 
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -53,7 +53,7 @@
  * node[anchor=south]{}
  * to [L, l=$L$, *-*] (3,0)
  * node[anchor=south]{$P_{out}$}
- * (3,0) to [vC, l=$E$, *-] (1,-1.5)
+ * (1,0) to [vC, l=$E$, *-] (1,-1.5)
  * node[ground]{};
  * \draw [-latex] (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} ;
  * \end{circuitikz}
@@ -62,11 +62,11 @@
  * ### Governing equations
  *
  * \f[
- * P_{in}-E(t)\left[V_c-V_{rest}\right]=0
+ * P_{in}-E(t)(V_c-V_{rest})=0
  * \f]
  *
  * \f[
- * P_{in}-P_{out}-L\dot{Q}_out=0
+ * P_{in}-P_{out}-L\dot{Q}_{out}=0
  * \f]
  *
  * \f[
@@ -106,7 +106,7 @@
  * In the above equations,
  *
  * \f[
- * V_{rest}(t)= \left[1-A(t)\right](V_{rd}-V_{rs})+V_{rs}
+ * V_{rest}(t)= \{1-A(t)\}(V_{rd}-V_{rs})+V_{rs}
  * \f]
  *
  * \f[
@@ -131,7 +131,7 @@
  * * `6` Impedance: Impedance of the outflow
  *
  */
-class ChamberKH : public Block {
+class ChamberElastanceInductor : public Block {
  public:
   
   /**
@@ -140,8 +140,8 @@ class ChamberKH : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  ChamberKH(int id, Model *model)
-      : Block(id, model, BlockType::chamber_kerckhoffs, BlockClass::chamber,
+  ChamberElastanceInductor(int id, Model *model)
+      : Block(id, model, BlockType::chamber_elastance_inductor, BlockClass::chamber,
               {{"Emax", InputParameter()},
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
@@ -214,4 +214,4 @@ class ChamberKH : public Block {
   void get_elastance_values(std::vector<double> &parameters);
 };
 
-#endif  // SVZERODSOLVER_MODEL_CHAMBERKH_HPP_
+#endif  // SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_

@@ -32,42 +32,34 @@
 #include "Model.h"
 
 void ChamberKH::setup_dofs(DOFHandler &dofhandler) {
-  // 2 eqns, one for Pressure, one for Volume
-  Block::setup_dofs_(dofhandler, 4, {"Pc", "Vc"});
+  // Internal variable is chamber volume
+  Block::setup_dofs_(dofhandler, 3, {"Vc"});
 }
 
 void ChamberKH::update_constant(SparseSystem &system,
                                   std::vector<double> &parameters) {
-  // Set element contributions
-  // coeffRef args are the indices (i,j) of the matrix
-  // global_eqn_ids: number of rows in the matrix, set in setup_dofs
-  // global_var_ids: number of columns, organized as pressure and flow of all inlets and then all outlets of the block
 
   double L = parameters[global_param_ids[ParamId::IMPEDANCE]];
 
-  // Eq 0: Pc - E(t)(Vc - Vrest) = 0
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = 1.0;
+  // Eq 0: P_in - E(t)(Vc - Vrest) = 0
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
 
-  // Eq 1: P_in - Pc = 0
+  // Eq 1: P_in - P_out - L*dQ_out = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[1], global_var_ids[4]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -1.0;
+  system.E.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -L;
 
-  // Eq 2: Pc - P_out - L*dQ_out = 0
-  system.F.coeffRef(global_eqn_ids[2], global_var_ids[4]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[2], global_var_ids[2]) = -1.0;
-  system.E.coeffRef(global_eqn_ids[2], global_var_ids[3]) = -L;
-
-  // Eq 3: Q_in - Q_out - dVc = 0
-  system.F.coeffRef(global_eqn_ids[3], global_var_ids[1]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[3], global_var_ids[3]) = -1.0;
-  system.E.coeffRef(global_eqn_ids[3], global_var_ids[5]) = -1.0;
+  // Eq 2: Q_in - Q_out - dVc = 0
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[1]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[3]) = -1.0;
+  system.E.coeffRef(global_eqn_ids[2], global_var_ids[4]) = -1.0;
 }
 
 void ChamberKH::update_time(SparseSystem &system, std::vector<double> &parameters) {
   get_elastance_values(parameters);
 
-  // Eq 0: Pc - E(t)(Vc - Vrest) = Pc - E(t)*Vc + E(t)*Vrest = 0
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[5]) = -1 * Elas;
+  // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -1 * Elas;
   system.C.coeffRef(global_eqn_ids[0]) = Elas * Vrest;
 }
 

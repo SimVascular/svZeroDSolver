@@ -95,13 +95,13 @@
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Ra
- * * `1` Ram
- * * `2` Rv
- * * `3` Ca
- * * `4` Cim
- * * `5` Pim
- * * `6` Pv
+ * * `0` Ra: Small artery resistance
+ * * `1` Ram: Microvascualr resistance
+ * * `2` Rv: Venous resistance
+ * * `3` Ca: Small artery capacitance
+ * * `4` Cim: Intramyocardial capacitance
+ * * `5` Pim: Intramyocardial pressure
+ * * `6` Pv: Venous pressure
  *
  */
 class OpenLoopCoronaryBC : public Block {

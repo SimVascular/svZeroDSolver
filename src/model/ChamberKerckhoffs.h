@@ -49,86 +49,86 @@
  * \begin{circuitikz} \draw
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to (3,0)
- * node[anchor=south]{$P_{c}$}
- * to [L, l=$L$, *-*] (5,0)
+ * to (1,0)
+ * node[anchor=south]{}
+ * to [L, l=$L$, *-*] (3,0)
  * node[anchor=south]{$P_{out}$}
- * (3,0) to [vC, l=$E$, *-] (3,-1.5)
+ * (3,0) to [vC, l=$E$, *-] (1,-1.5)
  * node[ground]{};
- * \draw [-latex] (5.2,0) -- (6.0,0) node[right] {$Q_{out}$} ;
+ * \draw [-latex] (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} ;
  * \end{circuitikz}
  * \f]
  *
  * ### Governing equations
  *
  * \f[
- * P_{in}-P_{out}-Q_{in}\left[R_{min} +
- * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
+ * P_{in}-E(t)\left[V_c-V_{rest}\right]=0
  * \f]
  *
  * \f[
- * Q_{in}-Q_{out}=0
+ * P_{in}-P_{out}-L\dot{Q}_out=0
+ * \f]
+ *
+ * \f[
+ * Q_{in}-Q_{out}-\dot{V}_c=0
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
- * P_{out} & Q_{out}\end{array}\right]^{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out} & V_c\end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{cccc}
- * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
+ * 0 & 0 & 0 & 0 & 0\\
+ * 0 & 0 & 0 & -L & 0\\
+ * 0 & 0 & 0 & 0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0 \\
- * 0 &      1                 &  0 & -1
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * 1 & 0 &  0 & 0  & E(t) \\
+ * 1 & 0 & -1 & 0  & 0 \\
+ * 0 & 1 &  0 & -1 & 0
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
- * -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+ * E(t)V_{rest} \\
+ * 0 \\
  * 0
  * \end{array}\right]
  * \f]
  *
- * \f[
- * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
- * \left[\begin{array}{cccc}
- * A & B & C & 0 \\
- * 0 & 0 & 0 & 0 \end{array}\right] \f]
- * where,
- * \f[
- * A = \frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
- * \f]
- * \f[
- * B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
- * \f]
- * \f[
- * C = -\frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
+ * In the above equations,
  *
  * \f[
- * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- * \left[\begin{array}{cccc}
- * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0
- * \end{array}\right]
+ * V_{rest}(t)= \left[1-A(t)\right](V_{rd}-V_{rs})+V_{rs}
  * \f]
+ *
+ * \f[
+ * A(t)=-\frac{1}{2}cos(2 \pi T_{contract}/T_{twitch})
+ * \f]
+ *
+ * \f[
+ * E(t)=(E_{max}-E_{min})A(t) + E_{min}
+ * \f]
+ *
  *
  * ### Parameters
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Maximum (closed) valve resistance
- * * `1` Minimum (open) valve resistance
- * * `2` Steepness of sigmoid function
+ * * `0` Emax: Maximum elastance
+ * * `1` Emin: Minimum elastance
+ * * `2` Vrd: Rest diastolic volume
+ * * `3` Vrs: Rest systolic volume
+ * * `4` t_active: Activation time
+ * * `5` t_twitch: Twitch time
+ * * `6` Impedance: Impedance of the outflow
  *
  */
 class ChamberKH : public Block {
@@ -163,9 +163,6 @@ class ChamberKH : public Block {
     TTWITCH = 5,
     IMPEDANCE = 6
   };
-
-//explicit ChamberKH(int id, const std::vector<int> &param_ids, Model *model)
-//    : Block(id, param_ids, model){};
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -203,11 +200,9 @@ class ChamberKH : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{8, 2, 1};
+  TripletsContributions num_triplets{6, 2, 0};
 
   private:
-  // Below variables change every timestep and are then combined with
-  // expressions that are updated with solution
   double Elas;   // Chamber Elastance
   double Vrest;  // Rest Volume
 

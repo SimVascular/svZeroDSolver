@@ -107,11 +107,11 @@
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Ra
- * * `1` Ram
- * * `2` Rv
- * * `3` Ca
- * * `4` Cim
+ * * `0` Ra: Small artery resistance
+ * * `1` Ram: Microvascular resistance
+ * * `2` Rv: Venous resistance
+ * * `3` Ca: Small artery capacitance
+ * * `4` Cim: Intramyocardial capacitance
  *
  */
 class ClosedLoopCoronaryBC : public Block {

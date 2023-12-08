@@ -277,6 +277,7 @@ void create_valves(
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
  * @param config The JSON configuration containing all the closed loop blocks
+ * @param component Name of the component to retrieve from config
  */
 void create_chambers(
     Model& model,

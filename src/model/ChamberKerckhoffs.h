@@ -60,32 +60,23 @@
  * ### Governing equations
  *
  * \f[
- * P_{c}-E(t)\left[Vc(t)-V_{rest}\right]=0
+ * P_{in}-P_{out}-Q_{in}\left[R_{min} +
+ * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
  * \f]
  *
  * \f[
- * P_{in}-P_{c}=0
- * \f]
- *
- * \f[
- * P_{c} - P_{out} - L\dot{Q}_{out}=0
- * \f]
- *
- * \f[
- * Q_{in} - Q_{out} - \dot{V}_{c}=0
+ * Q_{in}-Q_{out}=0
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llllll}P_{in} & Q_{in} &
- * P_{out} & Q_{out} & P_c & V_c \end{array}\right]^{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out}\end{array}\right]^{T} \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{cccc}
  * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & -L \\
  * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
@@ -107,10 +98,19 @@
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  * \left[\begin{array}{cccc}
- * \frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] & -2Q_\text{in} & -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} & -\frac{1}{2} k Q_{in} (R_{max}-R_{min}) \[1-tanh^2\{k(P_{out}-P_{in})\}\] & 0 \\
- * 0 & 0 & 0 & 0
- * \end{array}\right]
+ * A & B & C & 0 \\
+ * 0 & 0 & 0 & 0 \end{array}\right] \f]
+ * where,
+ * \f[
+ * A = \frac{1}{2} k Q_{in}
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
  * \f]
+ * \f[
+ * B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+ * \f]
+ * \f[
+ * C = -\frac{1}{2} k Q_{in}
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
@@ -119,8 +119,6 @@
  * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
- *
- * See \cite pfaller2019importance.
  *
  * ### Parameters
  *

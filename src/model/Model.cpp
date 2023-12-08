@@ -100,11 +100,19 @@ int Model::add_block(const std::string &block_name,
   return this->add_block(block, name, block_param_ids, internal);
 }
 
+bool Model::has_block(const std::string &name) const {
+  if (block_index_map.find(name) == block_index_map.end()) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
 Block *Model::get_block(const std::string_view &name) const {
   auto name_string = static_cast<std::string>(name);
 
-  if (block_index_map.find(name_string) == block_index_map.end()) {
-    return nullptr;
+  if (!has_block(name_string)) {
+    throw std::runtime_error("No block defined with name " + name_string);
   }
 
   return blocks[block_index_map.at(name_string)].get();

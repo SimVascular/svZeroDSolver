@@ -44,7 +44,8 @@
  * @brief Valve (tanh) block.
  *
  * Models the pressure drop across a diode-like valve, which is implemented as a
- * non-linear hyperbolic-tangent resistor. See \cite pfaller2019importance.
+ * non-linear hyperbolic-tangent resistor. See \cite pfaller2019importance
+ * (equations 16 and 22).
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -149,7 +150,9 @@ class ValveTanh : public Block {
       : Block(id, model, BlockType::valve_tanh, BlockClass::valve,
               {{"Rmax", InputParameter()},
                {"Rmin", InputParameter()},
-               {"Steepness", InputParameter()}}) {}
+               {"Steepness", InputParameter()},
+               {"upstream_block", InputParameter(false, false, false)},
+               {"downstream_block", InputParameter(false, false, false)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

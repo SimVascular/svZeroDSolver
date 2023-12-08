@@ -84,10 +84,4 @@ void ValveTanh::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) =
       -0.5 * q_in * (Rmax - Rmin) * steep *
       (1.0 - tanh(steep * (p_out - p_in)) * tanh(steep * (p_out - p_in)));
-
-  //// Determine valve resistance
-  // double resistance = Rmin + (Rmax-Rmin)*(1 + tanh((p_out - p_in)/steep)) /
-  // 2;
-  //// Set element contributions
-  // system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -resistance;
 }

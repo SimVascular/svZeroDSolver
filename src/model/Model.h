@@ -127,6 +127,14 @@ class Model {
                 const std::string_view &name, bool internal = false);
 
   /**
+   * @brief Check if a block with given name exists
+   *
+   * @param name Name of the Block
+   * @return bool whether block exists
+   */
+  bool has_block(const std::string &name) const;
+
+  /**
    * @brief Get a block by its name
    *
    * @param name Name of the Block

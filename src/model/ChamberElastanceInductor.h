@@ -44,10 +44,9 @@
  * @brief Cardiac chamber with elastance and inductor.
  *
  * Models a cardiac chamber as a time-varying capacitor (elastance with
- * specified resting volumes) and an inductor. Details in 
- * \cite kerckhoffs2007coupling (equations 1 and 2). This is also 
- * similar to the model in \cite sankaran2012patient 
- * and \cite menon2023predictors.
+ * specified resting volumes) and an inductor. See \cite kerckhoffs2007coupling
+ * (equations 1 and 2). The addition of the inductor is similar to the models in
+ * \cite sankaran2012patient and \cite menon2023predictors.
  *
  * This chamber block can be connected to other blocks using junctions.
  *

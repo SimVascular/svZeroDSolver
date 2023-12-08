@@ -29,7 +29,6 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "ChamberElastanceInductor.h"
-#include "Model.h"
 
 void ChamberElastanceInductor::setup_dofs(DOFHandler &dofhandler) {
   // Internal variable is chamber volume

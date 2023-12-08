@@ -171,6 +171,46 @@ def test_steady_flow_bifurcationr_r1():
     )  # daughter2 outlet flow
 
 
+def test_steady_flow_bifurcationr_r1():
+    results = run_test_case_by_name("steadyFlow_bifurcationR_R1_blockNames")
+    assert np.isclose(
+        get_result(results, "pressure_in", 0, -1), 1100.0, rtol=RTOL_PRES
+    )  # parent inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 0, -1), 600.0, rtol=RTOL_PRES
+    )  # parent outlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_in", 1, -1), 600.0, rtol=RTOL_PRES
+    )  # daughter1 inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 1, -1), 350.0, rtol=RTOL_PRES
+    )  # daughter1 outlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_in", 2, -1), 600.0, rtol=RTOL_PRES
+    )  # daughter2 inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 2, -1), 350.0, rtol=RTOL_PRES
+    )  # daughter2 outlet pressure
+    assert np.isclose(
+        get_result(results, "flow_in", 0, -1), 5.0, rtol=RTOL_FLOW
+    )  # parent inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 0, -1), 5.0, rtol=RTOL_FLOW
+    )  # parent outlet flow
+    assert np.isclose(
+        get_result(results, "flow_in", 1, -1), 2.5, rtol=RTOL_FLOW
+    )  # daughter1 inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 1, -1), 2.5, rtol=RTOL_FLOW
+    )  # daughter1 outlet flow
+    assert np.isclose(
+        get_result(results, "flow_in", 2, -1), 2.5, rtol=RTOL_FLOW
+    )  # daughter2 inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 2, -1), 2.5, rtol=RTOL_FLOW
+    )  # daughter2 outlet flow
+
+
 def test_steady_flow_bifurcationr_r2():
     results = run_test_case_by_name("steadyFlow_bifurcationR_R2")
     assert np.isclose(

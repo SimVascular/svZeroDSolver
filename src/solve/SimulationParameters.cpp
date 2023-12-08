@@ -441,13 +441,21 @@ void create_junctions(
                      junction_name);
     }
 
-    // Check for connections to inlet and outlet vessels and append to
-    // connections list
-    for (int vessel_id : junction_config["inlet_vessels"]) {
-      connections.push_back({vessel_id_map[vessel_id], junction_name});
-    }
-    for (int vessel_id : junction_config["outlet_vessels"]) {
-      connections.push_back({junction_name, vessel_id_map[vessel_id]});
+    // Check for connections to inlets and outlets (either vessel IDs or block names) and append to connections list
+    if (junction_config.contains("inlet_vessels") && junction_config.contains("outlet_vessels")) {
+      for (int vessel_id : junction_config["inlet_vessels"]) {
+        connections.push_back({vessel_id_map[vessel_id], junction_name});
+      }
+      for (int vessel_id : junction_config["outlet_vessels"]) {
+        connections.push_back({junction_name, vessel_id_map[vessel_id]});
+      }
+    } else if (junction_config.contains("inlet_blocks") && junction_config.contains("outlet_blocks")) {
+      for (std::string block_name : junction_config["inlet_blocks"]) {
+        connections.push_back({block_name, junction_name});
+      }
+      for (std::string block_name : junction_config["outlet_blocks"]) {
+        connections.push_back({junction_name, block_name});
+      }
     }
     DEBUG_MSG("Created junction " << junction_name);
   }

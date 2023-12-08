@@ -43,7 +43,7 @@
 /**
  * @brief Cardiac chamber with elastance and inductor.
  *
- * Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) and an inductor. Details in \cite kerckhoffs2007coupling (equations 1 and 2). This is also similar to the model in \cite sankaran2012patient and \cite menon2023predictor. 
+ * Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) and an inductor. Details in \cite kerckhoffs2007coupling (equations 1 and 2). This is also similar to the model in \cite sankaran2012patient and \cite menon2023predictors. 
  *
  * \f[
  * \begin{circuitikz} \draw

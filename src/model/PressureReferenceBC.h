@@ -61,7 +61,7 @@
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
+ * \mathbf{y}^{e}=\left[\begin{array}{ll}P & Q\end{array}\right]^{T}
  * \f]
  *
  * \f[

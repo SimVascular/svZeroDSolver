@@ -441,15 +441,18 @@ void create_junctions(
                      junction_name);
     }
 
-    // Check for connections to inlets and outlets (either vessel IDs or block names) and append to connections list
-    if (junction_config.contains("inlet_vessels") && junction_config.contains("outlet_vessels")) {
+    // Check for connections to inlets and outlets (either vessel IDs or block
+    // names) and append to connections list
+    if (junction_config.contains("inlet_vessels") &&
+        junction_config.contains("outlet_vessels")) {
       for (int vessel_id : junction_config["inlet_vessels"]) {
         connections.push_back({vessel_id_map[vessel_id], junction_name});
       }
       for (int vessel_id : junction_config["outlet_vessels"]) {
         connections.push_back({junction_name, vessel_id_map[vessel_id]});
       }
-    } else if (junction_config.contains("inlet_blocks") && junction_config.contains("outlet_blocks")) {
+    } else if (junction_config.contains("inlet_blocks") &&
+               junction_config.contains("outlet_blocks")) {
       for (std::string block_name : junction_config["inlet_blocks"]) {
         connections.push_back({block_name, junction_name});
       }
@@ -544,8 +547,9 @@ void create_chambers(
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
-    //connections.push_back({chamber_config["upstream_block"], chamber_name});
-    //connections.push_back({chamber_name, chamber_config["downstream_block"]});
+    // connections.push_back({chamber_config["upstream_block"], chamber_name});
+    // connections.push_back({chamber_name,
+    // chamber_config["downstream_block"]});
     DEBUG_MSG("Created chamber " << chamber_name);
   }
 }

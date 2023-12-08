@@ -43,7 +43,12 @@
 /**
  * @brief Cardiac chamber with elastance and inductor.
  *
- * Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) and an inductor. Details in \cite kerckhoffs2007coupling (equations 1 and 2). This is also similar to the model in \cite sankaran2012patient and \cite menon2023predictors. 
+ * Models a cardiac chamber as a time-varying capacitor (elastance with
+ * specified resting volumes) and an inductor. Details in \cite
+ * kerckhoffs2007coupling (equations 1 and 2). This is also similar to the model
+ * in \cite sankaran2012patient and \cite menon2023predictors.
+ *
+ * This chamber block can be connected to other blocks using junctions.
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -133,7 +138,6 @@
  */
 class ChamberElastanceInductor : public Block {
  public:
-  
   /**
    * @brief Construct a new BloodVessel object
    *
@@ -141,7 +145,8 @@ class ChamberElastanceInductor : public Block {
    * @param model The model to which the block belongs
    */
   ChamberElastanceInductor(int id, Model *model)
-      : Block(id, model, BlockType::chamber_elastance_inductor, BlockClass::chamber,
+      : Block(id, model, BlockType::chamber_elastance_inductor,
+              BlockClass::chamber,
               {{"Emax", InputParameter()},
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
@@ -149,7 +154,7 @@ class ChamberElastanceInductor : public Block {
                {"t_active", InputParameter()},
                {"t_twitch", InputParameter()},
                {"Impedance", InputParameter()}}) {}
-  
+
   /**
    * @brief Local IDs of the parameters
    *
@@ -202,7 +207,7 @@ class ChamberElastanceInductor : public Block {
    */
   TripletsContributions num_triplets{6, 2, 0};
 
-  private:
+ private:
   double Elas;   // Chamber Elastance
   double Vrest;  // Rest Volume
 

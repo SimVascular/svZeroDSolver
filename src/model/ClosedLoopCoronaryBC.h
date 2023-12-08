@@ -39,8 +39,9 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Closed loop coronary boundary condition (connected to other blocks
- * on both sides).
+ * @brief Closed loop coronary boundary condition which is connected to 
+ * other blocks on both sides and the intramyocardial pressure is 
+ * specified by the pressure in a heart block (not as a parameter). 
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -76,8 +77,8 @@
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllll}P^{in} & Q^{in} & P_{out} &
- * Q_{out} & V_{im}^{e}\end{array}\right]^{T}, \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} & P_{out} &
+ * Q_{out} & V_{im}\end{array}\right]^{T}, \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{ccccc}

@@ -95,6 +95,7 @@
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
  * 0 \\
+ * 0 \\
  * 0
  * \end{array}\right]
  * \f]

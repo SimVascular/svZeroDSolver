@@ -449,8 +449,8 @@ def test_chamber_elastance_inductor():
         np.mean(chamber_volume), 96.06121284527609, rtol=RTOL_FLOW
     )
     assert np.isclose(
-        np.mean(upstream_pressure), 17.38453729434615, rtol=RTOL_PRES
+        np.mean(chamber_pressure), 17.38453729434615, rtol=RTOL_PRES
     )
     assert np.isclose(
-        np.mean(downstream_pressure), 65.59618030991734, rtol=RTOL_PRES
+        np.mean(outlet_pressure), 65.59618030991734, rtol=RTOL_PRES
     )

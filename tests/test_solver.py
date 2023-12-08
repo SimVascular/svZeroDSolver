@@ -433,3 +433,24 @@ def test_valve_tanh():
     assert np.isclose(
         np.mean(upstream_flow), 0.0011986721268213833, rtol=RTOL_FLOW
     )
+
+def test_chamber_elastance_inductor():
+    result = run_test_case_by_name("chamber_elastance_inductor", output_variable_based=True)
+    chamber_volume = result[result.name == "Vc:ventricle"][
+        "y"
+    ].to_numpy()
+    chamber_pressure = result[result.name == "pressure:valve0:ventricle"][
+        "y"
+    ].to_numpy()
+    outlet_pressure = result[result.name == "pressure:valve1:vessel"][
+        "y"
+    ].to_numpy()
+    assert np.isclose(
+        np.mean(chamber_volume), 96.06121284527609, rtol=RTOL_FLOW
+    )
+    assert np.isclose(
+        np.mean(upstream_pressure), 17.38453729434615, rtol=RTOL_PRES
+    )
+    assert np.isclose(
+        np.mean(downstream_pressure), 65.59618030991734, rtol=RTOL_PRES
+    )

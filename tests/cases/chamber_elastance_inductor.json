@@ -6,8 +6,14 @@
                                             "inlet:",
                                                 "pressure = sinusoid from 0 to 10 over 0.17s, then 0 for the rest of cycle",
                                             "outlet:",
-                                                "Resistance: Rd = 1000, Pd = 0"
+                                                "Resistance: Rd = 1000, Pd = 64"
                                    ]
+    },
+    "simulation_parameters": {
+        "number_of_cardiac_cycles": 30,
+        "number_of_time_pts_per_cardiac_cycle": 101,
+        "output_all_cycles": false,
+        "output_variable_based":true
     },
     "boundary_conditions": [
         {
@@ -232,12 +238,6 @@
         }
     ],
     "junctions": [],
-    "simulation_parameters": {
-        "number_of_cardiac_cycles": 30,
-        "number_of_time_pts_per_cardiac_cycle": 101,
-        "output_all_cycles": true,
-        "output_variable_based":true
-    },
     "vessels": [
         {
             "boundary_conditions": {
@@ -245,7 +245,7 @@
             },
             "vessel_id": 0,
             "vessel_length": 10.0,
-            "vessel_name": "branch0_seg0",
+            "vessel_name": "vessel",
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
                 "C": 0.0001,
@@ -257,29 +257,29 @@
         {
             "type": "ValveTanh",
             "name": "valve0",
-            "values": {
+            "params": {
                 "Rmax": 100000.0,
                 "Rmin": 100.0,
-                "Steepness": 100.0
-            },
-            "upstream_block": "INLET",
-            "downstream_block": "ventricle"
+                "Steepness": 100.0,
+                "upstream_block": "INLET",
+                "downstream_block": "ventricle"
+            }
         },
         {
             "type": "ValveTanh",
             "name": "valve1",
-            "values": {
+            "params": {
                 "Rmax": 100000.0,
                 "Rmin": 100.0,
-                "Steepness": 100.0
-            },
-            "upstream_block": "ventricle",
-            "downstream_block": "branch0_seg0"
+                "Steepness": 100.0,
+                "upstream_block": "ventricle",
+                "downstream_block": "vessel"
+            }
         }
     ],
     "chambers": [
         {
-            "type": "Chamber_Kerckhoffs",
+            "type": "ChamberElastanceInductor",
             "name": "ventricle",
             "values": {
                 "Emax": 1.057,

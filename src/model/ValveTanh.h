@@ -123,9 +123,11 @@
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Maximum (closed) valve resistance
- * * `1` Minimum (open) valve resistance
- * * `2` Steepness of sigmoid function
+ * * `0` Rmax: Maximum (closed) valve resistance
+ * * `1` Rmin: Minimum (open) valve resistance
+ * * `2` Steepness: Steepness of sigmoid function
+ * * `3` upstream_block: Name of block connected upstream
+ * * `4` downstream_block: Name of block connected downstream
  *
  */
 class ValveTanh : public Block {

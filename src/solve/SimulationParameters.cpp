@@ -534,8 +534,9 @@ void create_valves(
 void create_chambers(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
-    const nlohmann::json& config) {
-  for (const auto& chamber_config : config) {
+    const nlohmann::json& config, const std::string& component) {
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& chamber_config = JsonWrapper(config, component, "name", i);
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);

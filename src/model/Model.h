@@ -59,7 +59,9 @@
 #include "PressureReferenceBC.h"
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"
+#include "ValveTanh.h"
 #include "WindkesselBC.h"
+#include "debug.h"
 
 /**
  * @brief Model of 0D elements
@@ -122,6 +124,14 @@ class Model {
   int add_block(const std::string &block_name,
                 const std::vector<int> &block_param_ids,
                 const std::string_view &name, bool internal = false);
+
+  /**
+   * @brief Check if a block with given name exists
+   *
+   * @param name Name of the Block
+   * @return bool whether block exists
+   */
+  bool has_block(const std::string &name) const;
 
   /**
    * @brief Get a block by its name

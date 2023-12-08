@@ -51,6 +51,7 @@ set(CXXSRCS
   PressureReferenceBC.cpp
   ResistanceBC.cpp
   ResistiveJunction.cpp
+  ValveTanh.cpp
   WindkesselBC.cpp
 )
 
@@ -74,6 +75,7 @@ set(HDRS
   PressureReferenceBC.h
   ResistanceBC.h
   ResistiveJunction.h
+  ValveTanh.h
   WindkesselBC.h
 )
 

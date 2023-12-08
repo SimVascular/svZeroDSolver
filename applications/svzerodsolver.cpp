@@ -57,8 +57,7 @@ int main(int argc, char* argv[]) {
 
   // Get input and output file name
   if (argc < 2 || argc > 3) {
-    std::cout << "Usage: svzerodsolver path/to/config.json [path/to/output.csv]" << std::endl;;
-    return 1;
+    throw std::runtime_error("Usage: svzerodsolver path/to/config.json [optional:path/to/output.csv]");
   }
 
   std::string input_file_name = argv[1];
@@ -75,12 +74,11 @@ int main(int argc, char* argv[]) {
       end_of_path = input_file_name.rfind("\\");  // For Windows paths (?)
 
       if (end_of_path == std::string::npos) {
-        std::cout << "[svzerodsolver] Error: Could not create a default output file." << std::endl;
-        return 1;
+        throw std::runtime_error("Error: No output file path provided. Tried to create a default output file but could not find the simulation directory from the input JSON file path.");
       }
     }
 
-    output_file_name = input_file_name.substr(0, end_of_path) + "output.csv";
+    output_file_name = input_file_name.substr(0, end_of_path) + "/output.csv";
     std::cout << "[svzerodsolver] Output will be written to '" << output_file_name << "'." << std::endl;;
   }
 

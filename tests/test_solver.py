@@ -254,32 +254,32 @@ def test_steadyFlow_blood_vessel_junction():
 def test_pulsatile_flow_r_rcr():
     results = run_test_case_by_name("pulsatileFlow_R_RCR")
     assert np.isclose(
-        get_result(results, "pressure_in", 0, 0), 4620.0, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_in"][0])), 4630.973018148328, rtol=RTOL_PRES
     )  # inlet pressure
     assert np.isclose(
-        get_result(results, "pressure_out", 0, 0), 4400.0, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_out"][0])), 4410.973018148602, rtol=RTOL_PRES
     )  # outlet pressure
     assert np.isclose(
-        get_result(results, "flow_in", 0, 0), 2.2, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_in"][0])), 2.2, rtol=RTOL_FLOW
     )  # inlet flow
     assert np.isclose(
-        get_result(results, "flow_out", 0, 0), 2.2, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_out"][0])), 2.2, rtol=RTOL_FLOW
     )  # outlet flow
 
 
 def test_pulsatile_flow_r_coronary():
     results = run_test_case_by_name("pulsatileFlow_R_coronary")
     assert np.isclose(
-        get_result(results, "pressure_in", 0, 0), 880.0, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_in"][0])), 880.7264415091931, rtol=RTOL_PRES
     )  # inlet pressure
     assert np.isclose(
-        get_result(results, "pressure_out", 0, 0), 660.0, rtol=RTOL_PRES
+        np.mean(np.array(results["pressure_out"][0])), 660.7264415092841, rtol=RTOL_PRES
     )  # outlet pressure
     assert np.isclose(
-        get_result(results, "flow_in", 0, 0), 2.2, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_in"][0])), 2.2, rtol=RTOL_FLOW
     )  # inlet flow
     assert np.isclose(
-        get_result(results, "flow_out", 0, 0), 2.2, rtol=RTOL_FLOW
+        np.mean(np.array(results["flow_out"][0])), 2.2, rtol=RTOL_FLOW
     )  # outlet flow
 
 
@@ -411,3 +411,25 @@ def test_coupled_block_heart_with_coronaries():
     assert np.isclose(
         np.amin(aortic_pressure), 34.184224686628035, rtol=RTOL_PRES
     )  # min aortic pressure
+
+
+def test_valve_tanh():
+    result = run_test_case_by_name("valve_tanh", output_variable_based=True)
+    upstream_pressure = result[result.name == "pressure:upstream_vessel:valve"][
+        "y"
+    ].to_numpy()
+    downstream_pressure = result[result.name == "pressure:valve:downstream_vessel"][
+        "y"
+    ].to_numpy()
+    upstream_flow = result[result.name == "flow:upstream_vessel:valve"][
+        "y"
+    ].to_numpy()
+    assert np.isclose(
+        np.mean(upstream_pressure), 2.078737191111773, rtol=RTOL_PRES
+    )
+    assert np.isclose(
+        np.mean(downstream_pressure), 2.307521212064276, rtol=RTOL_PRES
+    )
+    assert np.isclose(
+        np.mean(upstream_flow), 0.0011986721268213833, rtol=RTOL_FLOW
+    )

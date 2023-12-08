@@ -50,11 +50,7 @@
  *
  * Models the mechanics of the 4 heart chambers and pulmonary circulation
  *
- * Reference for equations and model structure: Sankaran, S., Moghadam, M. E.,
- * Kahn, A. M., Tseng, E. E., Guccione, J. M., & Marsden, A. L. (2012).
- * Patient-specific multiscale modeling of blood flow for coronary artery bypass
- * graft surgery. Annals of Biomedical Engineering, 40(10), 2228–2242.
- * https://doi.org/10.1007/s10439-012-0579-3
+ * References: \cite sankaran2012patient and \cite menon2023predictors
  *
  * TODO: Equations and circuit diagram
  *

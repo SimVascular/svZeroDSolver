@@ -27,12 +27,18 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+/**
+ * @file BlockType.h
+ * @brief Specifies the types of blocks and their parameters
+ */
 #ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 #define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 
 #include <string>
 
+/**
+ * @brief The types of blocks supported by the solver
+ */
 enum class BlockType {
   blood_vessel = 0,
   junction = 1,
@@ -46,38 +52,21 @@ enum class BlockType {
   closed_loop_coronary_left_bc = 9,
   closed_loop_coronary_right_bc = 10,
   closed_loop_rcr_bc = 11,
-  closed_loop_heart_pulmonary = 12
+  closed_loop_heart_pulmonary = 12,
+  valve_tanh = 13
 };
 
+/**
+ * @brief The classes/categories of blocks supported. Some classes require
+ * special handling (e.g. closed_loop).
+ */
 enum class BlockClass {
   vessel = 0,
   junction = 1,
   boundary_condition = 2,
   closed_loop = 3,
-  external = 4
-};
-
-/// @brief Handles input parameters
-struct InputParameter {
-  bool is_optional;    ///< Is this parameter optional?
-  bool is_array;       ///< Is this parameter an array?
-  bool is_number;      ///< Is this parameter a number?
-  double default_val;  ///< Default value (if parameter is optional)
-
-  /**
-   * @brief Handles input parameters
-   *
-   * @param is_optional Is this parameter optional?
-   * @param is_array Is this parameter an array?
-   * @param is_number Is this parameter a number?
-   * @param default_val Default value (if parameter is optional)
-   */
-  InputParameter(bool is_optional = false, bool is_array = false,
-                 bool is_number = true, double default_val = 0.0)
-      : is_optional(is_optional),
-        is_array(is_array),
-        is_number(is_number),
-        default_val(default_val) {}
+  external = 4,
+  valve = 5
 };
 
 #endif

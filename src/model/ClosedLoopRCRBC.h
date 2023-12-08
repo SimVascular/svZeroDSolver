@@ -48,10 +48,11 @@
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R_p$, *-] (3,0)
+ * node[anchor=south]{$P_{c}$}
  * to [R, l=$R_d$, *-*] (5,0)
  * node[anchor=south]{$P_{out}$}
  * (3,0) to [C, l=$C$, *-] (3,-1.5)
- * node[ground]{$P_{C}$};
+ * node[ground]{};
  * \draw [-latex] (5.2,0) -- (6.0,0) node[right] {$Q_{out}$} ;
  * \end{circuitikz}
  * \f]
@@ -73,7 +74,7 @@
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}=\left[\begin{array}{lllll}P_{in} & Q_{in} & P_{out} & Q_{out} &
+ * \mathbf{y}^e=\left[\begin{array}{lllll}P_{in} & Q_{in} & P_{out} & Q_{out} &
  * P_{c}\end{array}\right]^{T} \f]
  *
  * \f[

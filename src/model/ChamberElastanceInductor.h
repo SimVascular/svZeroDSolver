@@ -28,133 +28,147 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file ValveTanh.h
- * @brief model::ValveTanh source file
+ * @file ChamberElastanceInductor.h
+ * @brief model::ChamberElastanceInductor source file
  */
-#ifndef SVZERODSOLVER_MODEL_VALVETANH_HPP_
-#define SVZERODSOLVER_MODEL_VALVETANH_HPP_
+#ifndef SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_
+#define SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_
 
 #include <math.h>
 
 #include "Block.h"
+#include "Model.h"
 #include "SparseSystem.h"
 #include "debug.h"
 
 /**
- * @brief Valve (tanh) block.
+ * @brief Cardiac chamber with elastance and inductor.
  *
- * Models the pressure drop across a diode-like valve, which is implemented as a
- * non-linear hyperbolic-tangent resistor. See \cite pfaller2019importance
- * (equations 16 and 22).
+ * Models a cardiac chamber as a time-varying capacitor (elastance with
+ * specified resting volumes) and an inductor. See \cite kerckhoffs2007coupling
+ * (equations 1 and 2). The addition of the inductor is similar to the models in
+ * \cite sankaran2012patient and \cite menon2023predictors.
+ *
+ * This chamber block can be connected to other blocks using junctions.
  *
  * \f[
  * \begin{circuitikz} \draw
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [D, l=$R_v$, *-*] (3,0)
- * node[anchor=south]{$P_{out}$};
+ * to (1,0)
+ * node[anchor=south]{}
+ * to [L, l=$L$, *-*] (3,0)
+ * node[anchor=south]{$P_{out}$}
+ * (1,0) to [vC, l=$E$, *-] (1,-1.5)
+ * node[ground]{};
+ * \draw [-latex] (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} ;
  * \end{circuitikz}
  * \f]
  *
  * ### Governing equations
  *
  * \f[
- * P_{in}-P_{out}-Q_{in}\left[R_{min} +
- * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
+ * P_{in}-E(t)(V_c-V_{rest})=0
  * \f]
  *
  * \f[
- * Q_{in}-Q_{out}=0
+ * P_{in}-P_{out}-L\dot{Q}_{out}=0
+ * \f]
+ *
+ * \f[
+ * Q_{in}-Q_{out}-\dot{V}_c=0
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
- * P_{out} & Q_{out}\end{array}\right]^{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out} & V_c\end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{cccc}
- * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
+ * 0 & 0 & 0 & 0 & 0\\
+ * 0 & 0 & 0 & -L & 0\\
+ * 0 & 0 & 0 & 0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0 \\
- * 0 &      1                 &  0 & -1
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * 1 & 0 &  0 & 0  & E(t) \\
+ * 1 & 0 & -1 & 0  & 0 \\
+ * 0 & 1 &  0 & -1 & 0
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
- * -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+ * E(t)V_{rest} \\
+ * 0 \\
  * 0
  * \end{array}\right]
  * \f]
  *
- * \f[
- * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
- * \left[\begin{array}{cccc}
- * A & B & C & 0 \\
- * 0 & 0 & 0 & 0 \end{array}\right] \f]
- * where,
- * \f[
- * A = \frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
- * \f]
- * \f[
- * B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
- * \f]
- * \f[
- * C = -\frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
+ * In the above equations,
  *
  * \f[
- * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- * \left[\begin{array}{cccc}
- * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0
- * \end{array}\right]
+ * V_{rest}(t)= \{1-A(t)\}(V_{rd}-V_{rs})+V_{rs}
  * \f]
+ *
+ * \f[
+ * A(t)=-\frac{1}{2}cos(2 \pi T_{contract}/T_{twitch})
+ * \f]
+ *
+ * \f[
+ * E(t)=(E_{max}-E_{min})A(t) + E_{min}
+ * \f]
+ *
  *
  * ### Parameters
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Rmax: Maximum (closed) valve resistance
- * * `1` Rmin: Minimum (open) valve resistance
- * * `2` Steepness: Steepness of sigmoid function
- * * `3` upstream_block: Name of block connected upstream
- * * `4` downstream_block: Name of block connected downstream
+ * * `0` Emax: Maximum elastance
+ * * `1` Emin: Minimum elastance
+ * * `2` Vrd: Rest diastolic volume
+ * * `3` Vrs: Rest systolic volume
+ * * `4` t_active: Activation time
+ * * `5` t_twitch: Twitch time
+ * * `6` Impedance: Impedance of the outflow
  *
  */
-class ValveTanh : public Block {
+class ChamberElastanceInductor : public Block {
  public:
+  /**
+   * @brief Construct a new BloodVessel object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
+  ChamberElastanceInductor(int id, Model *model)
+      : Block(id, model, BlockType::chamber_elastance_inductor,
+              BlockClass::chamber,
+              {{"Emax", InputParameter()},
+               {"Emin", InputParameter()},
+               {"Vrd", InputParameter()},
+               {"Vrs", InputParameter()},
+               {"t_active", InputParameter()},
+               {"t_twitch", InputParameter()},
+               {"Impedance", InputParameter()}}) {}
+
   /**
    * @brief Local IDs of the parameters
    *
    */
   enum ParamId {
-    RMAX = 0,
-    RMIN = 1,
-    STEEPNESS = 2,
+    EMAX = 0,
+    EMIN = 1,
+    VRD = 2,
+    VRS = 3,
+    TACTIVE = 4,
+    TTWITCH = 5,
+    IMPEDANCE = 6
   };
-
-  /**
-   * @brief Construct a new ValveTanh object
-   *
-   * @param id Global ID of the block
-   * @param model The model to which the block belongs
-   */
-  ValveTanh(int id, Model *model)
-      : Block(id, model, BlockType::valve_tanh, BlockClass::valve,
-              {{"Rmax", InputParameter()},
-               {"Rmin", InputParameter()},
-               {"Steepness", InputParameter()},
-               {"upstream_block", InputParameter(false, false, false)},
-               {"downstream_block", InputParameter(false, false, false)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -178,17 +192,13 @@ class ValveTanh : public Block {
   void update_constant(SparseSystem &system, std::vector<double> &parameters);
 
   /**
-   * @brief Update the solution-dependent contributions of the element in a
-   * sparse system
+   * @brief Update the time-dependent contributions of the element in a sparse
+   * system
    *
    * @param system System to update contributions at
    * @param parameters Parameters of the model
-   * @param y Current solution
-   * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem &system, std::vector<double> &parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  void update_time(SparseSystem &system, std::vector<double> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -196,7 +206,18 @@ class ValveTanh : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{5, 0, 3};
+  TripletsContributions num_triplets{6, 2, 0};
+
+ private:
+  double Elas;   // Chamber Elastance
+  double Vrest;  // Rest Volume
+
+  /**
+   * @brief Update the elastance functions which depend on time
+   *
+   * @param parameters Parameters of the model
+   */
+  void get_elastance_values(std::vector<double> &parameters);
 };
 
-#endif  // SVZERODSOLVER_MODEL_VALVETANH_HPP_
+#endif  // SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_

@@ -43,6 +43,12 @@
  * Models a junction with arbitrary inlets and outlets. Across all inlets and
  * outlets of the junction, mass is conserved and pressure is continuous.
  *
+ * Inlets and outlets can be specified in two ways. Either using `inlet_vessels`
+ * and `outlet_vessels` keys in the JSON file, with the corresponding lists
+ * specifying vessel IDs, or using `inlet_blocks` and `outlet_blocks` keys, with
+ * the corresponding lists specifying the names of blocks as strings.
+ *
+ *
  * \f[
  * \begin{circuitikz}
  * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);

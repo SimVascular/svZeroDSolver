@@ -171,6 +171,46 @@ def test_steady_flow_bifurcationr_r1():
     )  # daughter2 outlet flow
 
 
+def test_steady_flow_bifurcationr_r1():
+    results = run_test_case_by_name("steadyFlow_bifurcationR_R1_blockNames")
+    assert np.isclose(
+        get_result(results, "pressure_in", 0, -1), 1100.0, rtol=RTOL_PRES
+    )  # parent inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 0, -1), 600.0, rtol=RTOL_PRES
+    )  # parent outlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_in", 1, -1), 600.0, rtol=RTOL_PRES
+    )  # daughter1 inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 1, -1), 350.0, rtol=RTOL_PRES
+    )  # daughter1 outlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_in", 2, -1), 600.0, rtol=RTOL_PRES
+    )  # daughter2 inlet pressure
+    assert np.isclose(
+        get_result(results, "pressure_out", 2, -1), 350.0, rtol=RTOL_PRES
+    )  # daughter2 outlet pressure
+    assert np.isclose(
+        get_result(results, "flow_in", 0, -1), 5.0, rtol=RTOL_FLOW
+    )  # parent inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 0, -1), 5.0, rtol=RTOL_FLOW
+    )  # parent outlet flow
+    assert np.isclose(
+        get_result(results, "flow_in", 1, -1), 2.5, rtol=RTOL_FLOW
+    )  # daughter1 inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 1, -1), 2.5, rtol=RTOL_FLOW
+    )  # daughter1 outlet flow
+    assert np.isclose(
+        get_result(results, "flow_in", 2, -1), 2.5, rtol=RTOL_FLOW
+    )  # daughter2 inlet flow
+    assert np.isclose(
+        get_result(results, "flow_out", 2, -1), 2.5, rtol=RTOL_FLOW
+    )  # daughter2 outlet flow
+
+
 def test_steady_flow_bifurcationr_r2():
     results = run_test_case_by_name("steadyFlow_bifurcationR_R2")
     assert np.isclose(
@@ -432,4 +472,25 @@ def test_valve_tanh():
     )
     assert np.isclose(
         np.mean(upstream_flow), 0.0011986721268213833, rtol=RTOL_FLOW
+    )
+
+def test_chamber_elastance_inductor():
+    result = run_test_case_by_name("chamber_elastance_inductor", output_variable_based=True)
+    chamber_volume = result[result.name == "Vc:ventricle"][
+        "y"
+    ].to_numpy()
+    chamber_pressure = result[result.name == "pressure:valve0:ventricle"][
+        "y"
+    ].to_numpy()
+    outlet_pressure = result[result.name == "pressure:valve1:vessel"][
+        "y"
+    ].to_numpy()
+    assert np.isclose(
+        np.mean(chamber_volume), 96.06121284527609, rtol=RTOL_FLOW
+    )
+    assert np.isclose(
+        np.mean(chamber_pressure), 17.38453729434615, rtol=RTOL_PRES
+    )
+    assert np.isclose(
+        np.mean(outlet_pressure), 65.59618030991734, rtol=RTOL_PRES
     )

@@ -267,6 +267,12 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     create_valves(model, connections, config, component);
   }
 
+  // Create chambers
+  component = "chambers";
+  if (config.contains(component)) {
+    create_chambers(model, connections, config, component);
+  }
+
   // Create Connections
   for (auto& connection : connections) {
     auto ele1 = model.get_block(std::get<0>(connection));
@@ -435,13 +441,24 @@ void create_junctions(
                      junction_name);
     }
 
-    // Check for connections to inlet and outlet vessels and append to
-    // connections list
-    for (int vessel_id : junction_config["inlet_vessels"]) {
-      connections.push_back({vessel_id_map[vessel_id], junction_name});
-    }
-    for (int vessel_id : junction_config["outlet_vessels"]) {
-      connections.push_back({junction_name, vessel_id_map[vessel_id]});
+    // Check for connections to inlets and outlets (either vessel IDs or block
+    // names) and append to connections list
+    if (junction_config.contains("inlet_vessels") &&
+        junction_config.contains("outlet_vessels")) {
+      for (int vessel_id : junction_config["inlet_vessels"]) {
+        connections.push_back({vessel_id_map[vessel_id], junction_name});
+      }
+      for (int vessel_id : junction_config["outlet_vessels"]) {
+        connections.push_back({junction_name, vessel_id_map[vessel_id]});
+      }
+    } else if (junction_config.contains("inlet_blocks") &&
+               junction_config.contains("outlet_blocks")) {
+      for (std::string block_name : junction_config["inlet_blocks"]) {
+        connections.push_back({block_name, junction_name});
+      }
+      for (std::string block_name : junction_config["outlet_blocks"]) {
+        connections.push_back({junction_name, block_name});
+      }
     }
     DEBUG_MSG("Created junction " << junction_name);
   }
@@ -518,6 +535,19 @@ void create_valves(
     connections.push_back(
         {valve_name, valve_config["params"]["downstream_block"]});
     DEBUG_MSG("Created valve " << valve_name);
+  }
+}
+
+void create_chambers(
+    Model& model,
+    std::vector<std::tuple<std::string, std::string>>& connections,
+    const nlohmann::json& config, const std::string& component) {
+  for (size_t i = 0; i < config[component].size(); i++) {
+    const auto& chamber_config = JsonWrapper(config, component, "name", i);
+    std::string chamber_type = chamber_config["type"];
+    std::string chamber_name = chamber_config["name"];
+    generate_block(model, chamber_config["values"], chamber_type, chamber_name);
+    DEBUG_MSG("Created chamber " << chamber_name);
   }
 }
 

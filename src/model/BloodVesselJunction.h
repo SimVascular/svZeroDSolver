@@ -88,9 +88,9 @@
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_\text{in}^{e} & Q_\text{in}^{e}
- * & P_{out, 1}^{e} & Q_{out, 1}^{e} &
- * \dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right] \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_\text{in} & Q_\text{in}
+ * & P_{out, 1} & Q_{out, 1} &
+ * \dots & P_{out, i} & Q_{out, i}\end{array}\right] \f]
  *
  * \f[
  * \mathbf{F}^{e} = \left[\begin{array}{ccccccc}

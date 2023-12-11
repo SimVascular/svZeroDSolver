@@ -61,18 +61,18 @@
  * ### Governing equations
  *
  * \f[
- * P_\text{in}^{e}-P_\text{out}^{e} - (R + S|Q_\text{in}|) Q_\text{in}^{e}-L
- * \dot{Q}_\text{out}^{e}=0 \f]
+ * P_\text{in}-P_\text{out} - (R + S|Q_\text{in}|) Q_\text{in}-L
+ * \dot{Q}_\text{out}=0 \f]
  *
  * \f[
- * Q_\text{in}^{e}-Q_\text{out}^{e} - C \dot{P}_\text{in}^{e}+C(R +
- * 2S|Q_\text{in}|) \dot{Q}_{in}^{e}=0 \f]
+ * Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}+C(R +
+ * 2S|Q_\text{in}|) \dot{Q}_{in}=0 \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n}^{e} & Q_{in}^{e} &
- * P_{out}^{e} & Q_{out}^{e}\end{array}\right]^\text{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n} & Q_{in} &
+ * P_{out} & Q_{out}\end{array}\right]^\text{T} \f]
  *
  * \f[
  * \mathbf{F}^{e}=\left[\begin{array}{cccc}

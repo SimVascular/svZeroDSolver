@@ -68,11 +68,11 @@ class Model;
  * Integrator. We then use the Newton-Raphson method to iteratively solve
  *
  * \f[
- * \mathbf{K}^{i} \cdot \Delta\mathbf{y}^{i} = - \mathbf{r}^{i},
+ * \mathbf{K}^{i} \cdot \Delta\dot{\mathbf{y}}^{i} = - \mathbf{r}^{i},
  * \f]
  *
- * with solution increment \f$\Delta\mathbf{y}\f$ in iteration \f$i\f$. The
- * linearization of the time-discretized system is
+ * with solution increment \f$\Delta\dot{\mathbf{y}}^{i}\f$ in iteration
+ * \f$i\f$. The linearization of the time-discretized system is
  *
  * \f[
  * \mathbf{K} =

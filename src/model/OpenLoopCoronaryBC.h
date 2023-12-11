@@ -59,9 +59,9 @@
  * ### Governing equations
  *
  * \f[
- * C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
- * \frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a}
- * C_{i m} R_{v} \frac{d Q^{e}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}^{e}}{d
+ * C_{i m} R_{v} Q_{in}-V_{i m}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
+ * \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v} \frac{d P_{in}}{d t}+R_{a} C_{a}
+ * C_{i m} R_{v} \frac{d Q_{in}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d
  * t}=0 \f]
  *
  * \f[
@@ -72,8 +72,8 @@
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} & V_{i
- * m}^{e}\end{array}\right]^{T}, \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} & Q_{in} & V_{i
+ * m}\end{array}\right]^{T}, \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} & R_{a} C_{a}
@@ -95,13 +95,13 @@
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Ra
- * * `1` Ram
- * * `2` Rv
- * * `3` Ca
- * * `4` Cim
- * * `5` Pim
- * * `6` Pv
+ * * `0` Ra: Small artery resistance
+ * * `1` Ram: Microvascualr resistance
+ * * `2` Rv: Venous resistance
+ * * `3` Ca: Small artery capacitance
+ * * `4` Cim: Intramyocardial capacitance
+ * * `5` Pim: Intramyocardial pressure
+ * * `6` Pv: Venous pressure
  *
  */
 class OpenLoopCoronaryBC : public Block {

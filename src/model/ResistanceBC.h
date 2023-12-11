@@ -44,7 +44,8 @@
  * \f[
  * \begin{circuitikz} \draw
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1.0,0) to [R, l=$R$, *-*] (3,0)
+ * \draw (1.0,0) node[anchor=south]{$P_{in}$}
+ * to [R, l=$R$, *-*] (3,0)
  * node[anchor=south]{$P_{d}$};
  * \end{circuitikz}
  * \f]
@@ -52,13 +53,13 @@
  * ### Governing equations
  *
  * \f[
- * P-P_d=R \cdot Q
+ * P_{in}-P_d=R \cdot Q_{in}
  * \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
+ * \mathbf{y}^{e}=\left[\begin{array}{ll}P_{in} & Q_{in}\end{array}\right]^{T}
  * \f]
  *
  * \f[

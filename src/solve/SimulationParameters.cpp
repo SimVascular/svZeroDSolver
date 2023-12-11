@@ -547,9 +547,6 @@ void create_chambers(
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
-    // connections.push_back({chamber_config["upstream_block"], chamber_name});
-    // connections.push_back({chamber_name,
-    // chamber_config["downstream_block"]});
     DEBUG_MSG("Created chamber " << chamber_name);
   }
 }

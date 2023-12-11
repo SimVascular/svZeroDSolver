@@ -201,70 +201,72 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Closed-loop RCR boundary condition. </p>
 <p>Models the mechanical behavior of a Windkessel boundary condition that is connected to other blocks on both sides.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_85_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_96_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_p$, *-] (3,0)
+node[anchor=south]{$P_{c}$}
 to [R, l=$R_d$, *-*] (5,0)
 node[anchor=south]{$P_{out}$}
 (3,0) to [C, l=$C$, *-] (3,-1.5)
-node[ground]{$P_{C}$};
+node[ground]{};
 \draw [-latex] (5.2,0) -- (6.0,0) node[right] {$Q_{out}$} ;
 \end{circuitikz}
-\]" src="form_85.png" width="266" height="96"/></picture>
+\]" src="form_96.png" width="266" height="96"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md12"></a>
+<h3><a class="anchor" id="autotoc_md15"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_86_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_97_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 C \frac{d P_c}{dt} + Q_{out} -Q_{in} = 0
-\]" src="form_86.png" width="131" height="28"/></picture>
+\]" src="form_97.png" width="131" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_87_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_98_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_{in}-P_{c}-R_{p} Q_{in}=0
-\]" src="form_87.png" width="120" height="14"/></picture>
+\]" src="form_98.png" width="120" height="14"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_88_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_99_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_{c} - P_{out} - R_{d} Q_{out}=0
-\]" src="form_88.png" width="130" height="13"/></picture>
+\]" src="form_99.png" width="130" height="13"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md13"></a>
+<h3><a class="anchor" id="autotoc_md16"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_89_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{y}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp; P_{out} &amp; Q_{out} &amp;
-P_{c}\end{array}\right]^{T} \]" src="form_89.png" width="205" height="19"/></picture>
+<picture><source srcset="form_100_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\mathbf{y}^e=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp; P_{out} &amp; Q_{out} &amp;
+P_{c}\end{array}\right]^{T} \]" src="form_100.png" width="210" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_90_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_101_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 &amp; 0 &amp; 0 &amp; 0 &amp; C \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
 \end{array}\right]
-\]" src="form_90.png" width="143" height="46"/></picture>
+\]" src="form_101.png" width="143" height="46"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_91_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_102_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ccccc}
 0 &amp; -1 &amp; 1 &amp; 0 &amp; 0 \\
 1 &amp; -R_p &amp; 0 &amp; 0 &amp; -1 \\
 0 &amp; 0 &amp; -1 &amp; -R_d &amp; +1 \\
 \end{array}\right]
-\]" src="form_91.png" width="195" height="46"/></picture>
+\]" src="form_102.png" width="195" height="46"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_92_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_103_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
+0 \\
 0 \\
 0
 \end{array}\right]
-\]" src="form_92.png" width="59" height="31"/></picture>
+\]" src="form_103.png" width="60" height="46"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md14"></a>
+<h3><a class="anchor" id="autotoc_md17"></a>
 Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
 <ul>

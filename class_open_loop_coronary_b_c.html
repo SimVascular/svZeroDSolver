@@ -78,7 +78,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[3]</a>.  
+<p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>.  
  <a href="class_open_loop_coronary_b_c.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_open_loop_coronary_b_c_8h_source.html">OpenLoopCoronaryBC.h</a>&gt;</code></p>
@@ -184,9 +184,9 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a7388d573014251179f564ccef95ad52e inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[3]</a>. </p>
+<div class="textblock"><p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>. </p>
 <p class="formulaDsp">
-<picture><source srcset="form_104_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_115_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -199,59 +199,59 @@ node[left]{$P_{im}$}
 (3,0) to [C, l=$C_a$, -*] (3,-1.5)
 node[left]{$P_a$};
 \end{circuitikz}
-\]" src="form_104.png" width="279" height="81"/></picture>
+\]" src="form_115.png" width="279" height="81"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md20"></a>
+<h3><a class="anchor" id="autotoc_md23"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_105_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-C_{i m} R_{v} Q^{e}-V_{i m}^{e}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
-\frac{d V_{i m}^{e}}{d t}-C_{a} C_{i m} R_{v} \frac{d P^{e}}{d t}+R_{a} C_{a}
-C_{i m} R_{v} \frac{d Q^{e}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}^{e}}{d
-t}=0 \]" src="form_105.png" width="555" height="28"/></picture>
+<picture><source srcset="form_116_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+C_{i m} R_{v} Q_{in}-V_{i m}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
+\frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v} \frac{d P_{in}}{d t}+R_{a} C_{a}
+C_{i m} R_{v} \frac{d Q_{in}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d
+t}=0 \]" src="form_116.png" width="566" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_106_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v}
 P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i
-m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]" src="form_106.png" width="568" height="28"/></picture>
+m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]" src="form_117.png" width="568" height="28"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md21"></a>
+<h3><a class="anchor" id="autotoc_md24"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_107_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} &amp; Q^{e} &amp; V_{i
-m}^{e}\end{array}\right]^{T}, \]" src="form_107.png" width="141" height="19"/></picture>
+<picture><source srcset="form_118_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} &amp; Q_{in} &amp; V_{i
+m}\end{array}\right]^{T}, \]" src="form_118.png" width="150" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_108_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_119_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} &amp; R_{a} C_{a}
 C_{i m} R_{v} &amp; -C_{i m} R_{v} \\ 0 &amp; 0 &amp; -C_{i m} R_{v} R_{a
-m}\end{array}\right] \]" src="form_108.png" width="281" height="31"/></picture>
+m}\end{array}\right] \]" src="form_119.png" width="281" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_109_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_120_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ccc}0 &amp; C_{i m} R_{v} &amp; -1 \\C_{i m} R_{v}
-&amp; -C_{i m} R_{v} R_{a} &amp; -\left(R_{v}+R_{a m}\right)\end{array}\right] \]" src="form_109.png" width="256" height="31"/></picture>
+&amp; -C_{i m} R_{v} R_{a} &amp; -\left(R_{v}+R_{a m}\right)\end{array}\right] \]" src="form_120.png" width="256" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_110_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_121_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)+C_{a}
 C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i
-m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]" src="form_110.png" width="249" height="31"/></picture>
+m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]" src="form_121.png" width="249" height="31"/></picture>
 </p>
-<p>Assume <picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_84.png" width="36" height="13"/></picture>.</p>
-<h3><a class="anchor" id="autotoc_md22"></a>
+<p>Assume <picture><source srcset="form_95_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_95.png" width="36" height="13"/></picture>.</p>
+<h3><a class="anchor" id="autotoc_md25"></a>
 Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
 <ul>
-<li><code>0</code> Ra</li>
-<li><code>1</code> Ram</li>
-<li><code>2</code> Rv</li>
-<li><code>3</code> Ca</li>
-<li><code>4</code> Cim</li>
-<li><code>5</code> Pim</li>
-<li><code>6</code> Pv </li>
+<li><code>0</code> Ra: Small artery resistance</li>
+<li><code>1</code> Ram: Microvascualr resistance</li>
+<li><code>2</code> Rv: Venous resistance</li>
+<li><code>3</code> Ca: Small artery capacitance</li>
+<li><code>4</code> Cim: Intramyocardial capacitance</li>
+<li><code>5</code> Pim: Intramyocardial pressure</li>
+<li><code>6</code> Pv: Venous pressure </li>
 </ul>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a7034ac11f20b4322fc47904243506564" name="a7034ac11f20b4322fc47904243506564"></a>

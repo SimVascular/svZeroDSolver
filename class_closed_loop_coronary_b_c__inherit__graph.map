@@ -1,5 +1,5 @@
 <map id="ClosedLoopCoronaryBC" name="ClosedLoopCoronaryBC">
-<area shape="rect" id="Node000001" title="Closed loop coronary boundary condition (connected to other blocks on both sides)." alt="" coords="121,79,280,105"/>
+<area shape="rect" id="Node000001" title="Closed loop coronary boundary condition which is connected to other blocks on both sides and the intr..." alt="" coords="121,79,280,105"/>
 <area shape="rect" id="Node000003" href="$class_closed_loop_coronary_left_b_c.html" title="Left side of closed loop coronary boundary condition ClosedLoopCoronaryBC." alt="" coords="5,153,188,178"/>
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,116,116,154,113,150,169,111"/>
 <area shape="rect" id="Node000004" href="$class_closed_loop_coronary_right_b_c.html" title="Right side of closed loop coronary boundary condition ClosedLoopCoronaryBC." alt="" coords="211,153,401,178"/>

@@ -186,39 +186,40 @@ Public Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Resistance boundary condition. </p>
 <p class="formulaDsp">
-<picture><source srcset="form_115_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
-\draw (1.0,0) to [R, l=$R$, *-*] (3,0)
+\draw (1.0,0) node[anchor=south]{$P_{in}$}
+to [R, l=$R$, *-*] (3,0)
 node[anchor=south]{$P_{d}$};
 \end{circuitikz}
-\]" src="form_115.png" width="139" height="30"/></picture>
+\]" src="form_127.png" width="139" height="30"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md26"></a>
+<h3><a class="anchor" id="autotoc_md29"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_116_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-P-P_d=R \cdot Q
-\]" src="form_116.png" width="84" height="13"/></picture>
+<picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+P_{in}-P_d=R \cdot Q_{in}
+\]" src="form_128.png" width="103" height="13"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md27"></a>
+<h3><a class="anchor" id="autotoc_md30"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_95_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} &amp; Q^{e}\end{array}\right]^{T}
-\]" src="form_95.png" width="104" height="19"/></picture>
+<picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\mathbf{y}^{e}=\left[\begin{array}{ll}P_{in} &amp; Q_{in}\end{array}\right]^{T}
+\]" src="form_129.png" width="111" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ll}1 &amp; -R\end{array}\right]
-\]" src="form_117.png" width="90" height="16"/></picture>
+\]" src="form_130.png" width="90" height="16"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_118_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{C}^{e}=\left[-P_d\right]
-\]" src="form_118.png" width="61" height="14"/></picture>
+\]" src="form_131.png" width="61" height="14"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md28"></a>
+<h3><a class="anchor" id="autotoc_md31"></a>
 Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
 <ul>

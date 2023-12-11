@@ -1,72 +1,76 @@
 <map id="model/Block.h" name="model/Block.h">
-<area shape="rect" id="Node000001" title="model::Block source file" alt="" coords="922,5,1025,31"/>
-<area shape="rect" id="Node000002" href="$_block_factory_8h.html" title="Define the block factory functional." alt="" coords="5,153,152,178"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="906,22,739,23,525,30,417,37,318,48,234,63,172,81,145,97,122,116,89,154,85,150,118,112,142,92,169,77,232,57,317,43,416,32,524,25,739,17,906,16"/>
-<area shape="rect" id="Node000003" href="$_model_8h.html" title="model::Model source file" alt="" coords="774,315,879,341"/>
-<area shape="poly" id="edge33_Node000001_Node000003" title=" " alt="" coords="906,22,730,25,512,34,407,41,318,51,251,65,229,72,216,81,200,107,194,125,192,147,196,173,208,201,230,232,264,265,291,276,340,286,483,303,774,322,773,327,482,308,340,291,289,281,261,269,226,235,203,204,191,174,186,148,188,124,195,104,213,77,227,68,250,59,317,46,407,36,511,28,730,20,906,17"/>
-<area shape="rect" id="Node000011" href="$_blood_vessel_8h.html" title="model::BloodVessel source file" alt="" coords="227,79,370,105"/>
-<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="906,28,389,82,371,84,370,79,389,76,906,23"/>
-<area shape="rect" id="Node000012" href="$_blood_vessel_junction_8h.html" title="model::BloodVesselJunction source file" alt="" coords="277,153,469,178"/>
-<area shape="poly" id="edge18_Node000001_Node000012" title=" " alt="" coords="906,25,673,43,556,60,508,70,473,81,445,97,421,117,385,154,381,151,417,113,442,93,471,77,507,65,555,54,673,38,906,20"/>
-<area shape="rect" id="Node000013" href="$_closed_loop_coronary_b_c_8h.html" title="model::ClosedLoopCoronaryBC source file" alt="" coords="500,153,708,178"/>
-<area shape="poly" id="edge19_Node000001_Node000013" title=" " alt="" coords="906,25,790,33,657,45,544,61,506,70,486,81,480,91,480,101,486,111,496,120,526,137,561,150,559,155,524,141,493,124,482,114,475,103,475,90,482,77,504,65,543,55,657,39,790,28,905,20"/>
-<area shape="rect" id="Node000016" href="$_closed_loop_heart_pulmonary_8h.html" title="model::ClosedLoopHeartPulmonary source file" alt="" coords="496,79,728,105"/>
-<area shape="poly" id="edge24_Node000001_Node000016" title=" " alt="" coords="907,35,674,81,673,76,906,30"/>
-<area shape="rect" id="Node000017" href="$_closed_loop_r_c_r_b_c_8h.html" title="model::ClosedLoopRCRBC source file" alt="" coords="752,79,936,105"/>
-<area shape="poly" id="edge27_Node000001_Node000017" title=" " alt="" coords="939,41,867,81,865,76,937,37"/>
-<area shape="rect" id="Node000018" href="$_flow_reference_b_c_8h.html" title="model::FlowReferenceBC source file" alt="" coords="839,153,1014,178"/>
-<area shape="poly" id="edge29_Node000001_Node000018" title=" " alt="" coords="968,47,950,106,933,153,928,151,945,104,963,45"/>
-<area shape="rect" id="Node000019" href="$_junction_8h.html" title="model::Junction source file" alt="" coords="1011,79,1130,105"/>
-<area shape="poly" id="edge31_Node000001_Node000019" title=" " alt="" coords="1003,38,1056,76,1053,81,1000,43"/>
-<area shape="rect" id="Node000020" href="$_open_loop_coronary_b_c_8h.html" title="model::OpenLoopCoronaryBC source file" alt="" coords="940,234,1140,260"/>
-<area shape="poly" id="edge34_Node000001_Node000020" title=" " alt="" coords="1041,22,1069,29,1097,40,1124,56,1145,78,1154,100,1154,123,1146,146,1131,168,1094,207,1059,235,1056,231,1091,203,1127,165,1141,144,1149,122,1149,101,1140,80,1120,60,1095,44,1067,34,1039,27"/>
-<area shape="rect" id="Node000021" href="$_pressure_reference_b_c_8h.html" title="model::PressureReferenceBC source file" alt="" coords="1164,234,1364,260"/>
-<area shape="poly" id="edge36_Node000001_Node000021" title=" " alt="" coords="1041,25,1106,43,1138,58,1168,77,1205,115,1232,159,1251,201,1263,232,1258,234,1246,203,1227,162,1200,118,1165,81,1136,62,1104,48,1039,30"/>
-<area shape="rect" id="Node000022" href="$_resistance_b_c_8h.html" title="model::ResistanceBC source file" alt="" coords="1257,79,1410,105"/>
-<area shape="poly" id="edge38_Node000001_Node000022" title=" " alt="" coords="1040,30,1272,76,1271,81,1039,35"/>
-<area shape="rect" id="Node000023" href="$_resistive_junction_8h.html" title="model::ResistiveJunction source file" alt="" coords="1365,153,1539,178"/>
-<area shape="poly" id="edge40_Node000001_Node000023" title=" " alt="" coords="1040,17,1139,21,1251,30,1354,48,1394,61,1423,77,1437,94,1447,114,1454,152,1449,153,1442,116,1433,97,1419,81,1392,66,1352,53,1250,36,1138,26,1040,23"/>
-<area shape="rect" id="Node000024" href="$_valve_tanh_8h.html" title="model::ValveTanh source file" alt="" coords="1500,234,1633,260"/>
-<area shape="poly" id="edge42_Node000001_Node000024" title=" " alt="" coords="1041,21,1260,41,1371,57,1450,76,1484,90,1510,104,1531,122,1553,151,1562,173,1568,195,1570,233,1565,234,1562,196,1557,174,1548,154,1528,126,1507,108,1482,95,1448,82,1370,62,1260,46,1040,26"/>
-<area shape="rect" id="Node000025" href="$_windkessel_b_c_8h.html" title="model::WindkesselBC source file" alt="" coords="1613,153,1768,178"/>
-<area shape="poly" id="edge44_Node000001_Node000025" title=" " alt="" coords="1041,18,1172,23,1333,32,1487,50,1549,62,1596,77,1623,93,1648,113,1683,150,1679,154,1645,117,1620,97,1593,81,1548,67,1486,55,1333,38,1172,28,1040,23"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,190,127,230,148,249,172,265,222,282,290,296,460,313,636,322,773,324,773,329,636,327,460,319,290,301,220,287,169,269,145,254,123,234,91,193"/>
-<area shape="rect" id="Node000004" href="$_integrator_8h.html" title="Integrator source file." alt="" coords="574,396,706,422"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="785,350,669,398,667,393,783,345"/>
-<area shape="rect" id="Node000005" href="$interface_8h.html" title="svZeroDSolver callable interface." alt="" coords="468,477,604,503"/>
-<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="759,339,645,358,595,373,563,391,549,411,541,434,538,477,532,476,536,433,544,408,559,387,593,368,644,353,758,334"/>
-<area shape="rect" id="Node000006" href="$_solver_8h.html" title="Solver source file." alt="" coords="1150,477,1253,503"/>
-<area shape="poly" id="edge11_Node000003_Node000006" title=" " alt="" coords="895,330,1140,349,1252,365,1291,375,1312,387,1319,398,1321,409,1313,431,1300,447,1283,461,1247,479,1245,474,1280,456,1296,444,1308,428,1316,408,1314,400,1309,391,1289,380,1251,371,1140,354,895,335"/>
-<area shape="rect" id="Node000007" href="$_levenberg_marquardt_optimizer_8h.html" title="opt::LevenbergMarquardtOptimizer source file" alt="" coords="730,389,923,429"/>
-<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="829,356,829,388,824,388,824,356"/>
-<area shape="rect" id="Node000008" href="$calibrate_8h.html" title="opt::calibrate source file" alt="" coords="947,396,1079,422"/>
-<area shape="poly" id="edge8_Node000003_Node000008" title=" " alt="" coords="870,345,986,393,984,398,868,350"/>
-<area shape="rect" id="Node000009" href="$_simulation_parameters_8h.html" title="Source file to read simulation configuration." alt="" coords="1104,396,1298,422"/>
-<area shape="poly" id="edge9_Node000003_Node000009" title=" " alt="" coords="895,341,1144,393,1143,398,894,346"/>
-<area shape="rect" id="Node000010" href="$csv__writer_8h.html" title="csv_writer source file" alt="" coords="373,396,499,422"/>
-<area shape="poly" id="edge12_Node000003_Node000010" title=" " alt="" coords="759,344,518,391,487,398,486,393,517,386,758,339"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="613,434,553,479,550,475,610,429"/>
-<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="701,423,719,427,839,446,959,462,1149,482,1149,487,959,467,839,451,718,432,700,428"/>
-<area shape="poly" id="edge10_Node000009_Node000006" title=" " alt="" coords="1204,438,1204,477,1199,477,1199,438"/>
-<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="464,429,522,475,519,479,461,434"/>
-<area shape="poly" id="edge17_Node000011_Node000003" title=" " alt="" coords="283,119,268,153,262,188,266,216,280,241,305,265,341,283,392,297,454,307,522,315,661,323,773,324,773,330,661,328,522,320,453,313,391,302,339,288,302,269,276,245,261,218,257,188,263,152,279,117"/>
-<area shape="poly" id="edge15_Node000011_Node000012" title=" " alt="" coords="324,114,363,150,359,154,320,117"/>
-<area shape="poly" id="edge16_Node000012_Node000003" title=" " alt="" coords="348,190,330,208,316,228,311,248,313,257,318,265,340,276,383,287,509,303,654,315,773,322,773,327,653,320,509,309,382,292,338,281,314,269,308,259,306,248,312,226,326,205,344,187"/>
-<area shape="rect" id="Node000014" href="$_closed_loop_coronary_left_b_c_8h.html" title="Left side of ClosedLoopCoronaryBC." alt="" coords="328,226,509,267"/>
-<area shape="poly" id="edge20_Node000013_Node000014" title=" " alt="" coords="563,187,466,228,464,223,560,182"/>
-<area shape="rect" id="Node000015" href="$_closed_loop_coronary_right_b_c_8h.html" title="Right side of ClosedLoopCoronaryBC." alt="" coords="532,226,713,267"/>
-<area shape="poly" id="edge22_Node000013_Node000015" title=" " alt="" coords="613,193,620,225,615,227,608,194"/>
-<area shape="poly" id="edge21_Node000014_Node000003" title=" " alt="" coords="524,266,774,314,773,319,523,271"/>
-<area shape="poly" id="edge23_Node000015_Node000003" title=" " alt="" coords="688,270,796,312,794,317,686,275"/>
-<area shape="poly" id="edge26_Node000016_Node000003" title=" " alt="" coords="658,109,691,127,722,151,758,193,788,240,824,313,819,316,783,242,754,196,718,155,688,132,655,114"/>
-<area shape="poly" id="edge25_Node000016_Node000013" title=" " alt="" coords="611,120,608,152,603,152,606,119"/>
-<area shape="poly" id="edge28_Node000017_Node000003" title=" " alt="" coords="837,120,829,153,825,200,824,246,828,314,823,315,819,246,820,199,824,152,832,119"/>
-<area shape="poly" id="edge30_Node000018_Node000003" title=" " alt="" coords="910,193,886,228,835,316,831,313,882,225,906,190"/>
-<area shape="poly" id="edge32_Node000019_Node000003" title=" " alt="" coords="1064,121,1050,151,1028,180,1003,199,980,207,956,214,929,228,840,316,836,313,926,224,954,209,978,202,1001,194,1025,176,1046,148,1060,118"/>
-<area shape="poly" id="edge35_Node000020_Node000003" title=" " alt="" coords="994,268,860,317,858,312,992,263"/>
-<area shape="poly" id="edge37_Node000021_Node000003" title=" " alt="" coords="1182,265,880,320,879,314,1181,260"/>
-<area shape="poly" id="edge39_Node000022_Node000003" title=" " alt="" coords="1341,119,1356,177,1368,201,1378,225,1384,248,1384,258,1378,269,1351,282,1303,293,1165,310,1008,321,880,327,880,322,1008,316,1165,305,1303,288,1350,277,1374,265,1379,257,1379,249,1373,227,1363,203,1351,179,1335,121"/>
-<area shape="poly" id="edge41_Node000023_Node000003" title=" " alt="" coords="1454,194,1445,233,1436,253,1421,269,1391,281,1338,292,1186,309,1017,320,880,327,880,322,1016,315,1186,304,1337,287,1390,276,1418,265,1431,250,1440,232,1448,193"/>
-<area shape="poly" id="edge43_Node000024_Node000003" title=" " alt="" coords="1496,266,1471,270,1302,291,1135,307,880,326,880,321,1135,302,1301,286,1470,264,1495,260"/>
-<area shape="poly" id="edge45_Node000025_Node000003" title=" " alt="" coords="1689,195,1675,234,1663,253,1647,269,1602,285,1524,297,1303,314,1063,324,880,328,880,323,1063,319,1303,309,1523,292,1601,279,1644,265,1659,250,1670,232,1684,193"/>
+<area shape="rect" id="Node000001" title="model::Block source file" alt="" coords="814,5,917,31"/>
+<area shape="rect" id="Node000002" href="$_block_factory_8h.html" title="Define the block factory functional." alt="" coords="1694,153,1840,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="933,16,1100,18,1315,25,1424,33,1524,43,1608,58,1672,77,1700,92,1725,112,1760,150,1756,154,1721,116,1697,97,1670,81,1607,63,1523,49,1423,38,1315,31,1100,23,932,22"/>
+<area shape="rect" id="Node000003" href="$_model_8h.html" title="model::Model source file" alt="" coords="742,315,847,341"/>
+<area shape="poly" id="edge36_Node000001_Node000003" title=" " alt="" coords="799,22,617,24,390,33,282,40,189,50,119,64,97,72,83,81,66,107,60,126,58,148,63,173,75,201,98,232,132,265,165,278,225,289,398,306,590,317,742,322,741,328,590,322,398,311,225,294,164,283,129,269,94,236,70,204,58,175,53,148,55,124,62,105,79,77,94,67,118,59,188,45,282,35,390,27,617,19,799,17"/>
+<area shape="rect" id="Node000007" href="$_chamber_elastance_inductor_8h.html" title="model::ChamberElastanceInductor source file" alt="" coords="86,396,312,422"/>
+<area shape="poly" id="edge21_Node000001_Node000007" title=" " alt="" coords="798,24,615,29,384,40,176,58,103,69,61,81,37,98,20,115,11,136,8,164,8,248,12,276,24,300,41,322,63,342,114,373,162,393,159,398,111,377,60,346,38,326,19,303,7,277,3,248,3,164,6,134,16,112,33,94,59,77,102,63,176,52,384,35,615,24,798,18"/>
+<area shape="rect" id="Node000012" href="$_blood_vessel_8h.html" title="model::BloodVessel source file" alt="" coords="94,79,237,105"/>
+<area shape="poly" id="edge16_Node000001_Node000012" title=" " alt="" coords="798,28,256,82,238,84,237,78,256,76,798,23"/>
+<area shape="rect" id="Node000013" href="$_blood_vessel_junction_8h.html" title="model::BloodVesselJunction source file" alt="" coords="145,153,338,178"/>
+<area shape="poly" id="edge20_Node000001_Node000013" title=" " alt="" coords="798,25,686,31,553,42,428,58,377,69,340,81,313,97,288,117,253,154,249,150,284,113,310,93,338,77,376,64,427,53,552,37,686,26,798,19"/>
+<area shape="rect" id="Node000014" href="$_closed_loop_coronary_b_c_8h.html" title="model::ClosedLoopCoronaryBC source file" alt="" coords="368,153,576,178"/>
+<area shape="poly" id="edge22_Node000001_Node000014" title=" " alt="" coords="798,25,676,32,536,43,415,60,374,70,353,81,346,91,347,101,353,111,363,120,394,137,429,150,427,155,391,141,360,124,348,114,342,103,341,90,349,77,372,65,414,55,535,38,676,27,798,20"/>
+<area shape="rect" id="Node000017" href="$_closed_loop_heart_pulmonary_8h.html" title="model::ClosedLoopHeartPulmonary source file" alt="" coords="363,79,595,105"/>
+<area shape="poly" id="edge27_Node000001_Node000017" title=" " alt="" coords="799,34,545,81,544,76,798,29"/>
+<area shape="rect" id="Node000018" href="$_closed_loop_r_c_r_b_c_8h.html" title="model::ClosedLoopRCRBC source file" alt="" coords="619,79,803,105"/>
+<area shape="poly" id="edge30_Node000001_Node000018" title=" " alt="" coords="827,40,738,81,736,76,824,35"/>
+<area shape="rect" id="Node000019" href="$_flow_reference_b_c_8h.html" title="model::FlowReferenceBC source file" alt="" coords="707,153,882,178"/>
+<area shape="poly" id="edge32_Node000001_Node000019" title=" " alt="" coords="855,46,803,153,798,151,851,44"/>
+<area shape="rect" id="Node000020" href="$_junction_8h.html" title="model::Junction source file" alt="" coords="907,153,1026,178"/>
+<area shape="poly" id="edge34_Node000001_Node000020" title=" " alt="" coords="881,44,918,103,958,151,954,154,914,106,877,46"/>
+<area shape="rect" id="Node000021" href="$_open_loop_coronary_b_c_8h.html" title="model::OpenLoopCoronaryBC source file" alt="" coords="928,79,1128,105"/>
+<area shape="poly" id="edge37_Node000001_Node000021" title=" " alt="" coords="908,35,1001,76,999,81,906,40"/>
+<area shape="rect" id="Node000022" href="$_pressure_reference_b_c_8h.html" title="model::PressureReferenceBC source file" alt="" coords="1152,79,1352,105"/>
+<area shape="poly" id="edge39_Node000001_Node000022" title=" " alt="" coords="933,29,1186,76,1185,81,932,34"/>
+<area shape="rect" id="Node000023" href="$_resistance_b_c_8h.html" title="model::ResistanceBC source file" alt="" coords="1153,234,1306,260"/>
+<area shape="poly" id="edge41_Node000001_Node000023" title=" " alt="" coords="932,20,1051,27,1186,39,1303,55,1344,65,1366,77,1378,100,1377,123,1366,146,1347,169,1299,208,1254,236,1251,231,1296,203,1344,165,1361,144,1372,122,1373,101,1362,81,1342,70,1302,60,1186,44,1050,32,932,25"/>
+<area shape="rect" id="Node000024" href="$_resistive_junction_8h.html" title="model::ResistiveJunction source file" alt="" coords="1331,234,1504,260"/>
+<area shape="poly" id="edge43_Node000001_Node000024" title=" " alt="" coords="933,20,1199,39,1323,56,1367,65,1391,77,1406,95,1416,115,1425,160,1426,202,1422,234,1417,233,1420,202,1420,161,1411,117,1401,98,1388,81,1365,71,1323,61,1199,45,932,25"/>
+<area shape="rect" id="Node000025" href="$_valve_tanh_8h.html" title="model::ValveTanh source file" alt="" coords="1478,153,1610,178"/>
+<area shape="poly" id="edge45_Node000001_Node000025" title=" " alt="" coords="933,18,1059,22,1212,32,1357,49,1416,62,1460,77,1485,93,1508,113,1538,151,1534,154,1504,117,1482,97,1458,81,1415,67,1356,55,1212,37,1059,28,933,23"/>
+<area shape="rect" id="Node000026" href="$_windkessel_b_c_8h.html" title="model::WindkesselBC source file" alt="" coords="1578,234,1734,260"/>
+<area shape="poly" id="edge47_Node000001_Node000026" title=" " alt="" coords="932,20,1228,38,1384,54,1448,65,1497,76,1537,89,1568,102,1596,121,1625,151,1638,172,1647,194,1657,233,1652,234,1642,196,1633,174,1621,154,1592,125,1566,107,1535,94,1495,82,1447,70,1384,60,1228,43,932,25"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="1772,194,1768,233,1760,253,1747,269,1727,280,1696,289,1603,304,1481,315,1342,322,1058,329,847,330,847,324,1058,323,1342,317,1481,309,1603,299,1694,284,1725,275,1744,265,1755,250,1762,232,1766,194"/>
+<area shape="rect" id="Node000004" href="$_integrator_8h.html" title="Integrator source file." alt="" coords="978,396,1110,422"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="848,343,1006,393,1005,398,847,348"/>
+<area shape="rect" id="Node000005" href="$interface_8h.html" title="svZeroDSolver callable interface." alt="" coords="1130,477,1265,503"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="863,330,1105,349,1215,366,1253,375,1274,387,1281,398,1282,408,1274,431,1252,459,1224,479,1221,475,1248,455,1270,428,1277,408,1276,399,1270,391,1251,380,1214,371,1104,355,863,335"/>
+<area shape="rect" id="Node000006" href="$_solver_8h.html" title="Solver source file." alt="" coords="516,477,620,503"/>
+<area shape="poly" id="edge13_Node000003_Node000006" title=" " alt="" coords="727,335,693,341,657,352,624,368,595,390,582,411,574,435,570,477,565,477,569,434,577,409,591,387,621,363,655,347,691,336,726,330"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="727,339,312,391,265,398,265,393,312,386,726,334"/>
+<area shape="rect" id="Node000008" href="$_levenberg_marquardt_optimizer_8h.html" title="opt::LevenbergMarquardtOptimizer source file" alt="" coords="605,389,798,429"/>
+<area shape="poly" id="edge9_Node000003_Node000008" title=" " alt="" coords="770,353,726,390,723,386,767,349"/>
+<area shape="rect" id="Node000009" href="$calibrate_8h.html" title="opt::calibrate source file" alt="" coords="822,396,954,422"/>
+<area shape="poly" id="edge10_Node000003_Node000009" title=" " alt="" coords="822,349,875,394,872,398,819,353"/>
+<area shape="rect" id="Node000010" href="$_simulation_parameters_8h.html" title="Source file to read simulation configuration." alt="" coords="336,396,531,422"/>
+<area shape="poly" id="edge11_Node000003_Node000010" title=" " alt="" coords="727,347,490,398,489,393,726,341"/>
+<area shape="rect" id="Node000011" href="$csv__writer_8h.html" title="csv_writer source file" alt="" coords="1134,396,1261,422"/>
+<area shape="poly" id="edge14_Node000003_Node000011" title=" " alt="" coords="863,337,985,359,1123,386,1152,393,1151,398,1122,391,984,364,862,343"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="1082,427,1175,474,1173,479,1080,432"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="984,428,967,432,776,464,620,485,620,480,775,459,966,427,982,423"/>
+<area shape="poly" id="edge8_Node000007_Node000003" title=" " alt="" coords="303,391,336,386,741,334,742,339,336,391,304,396"/>
+<area shape="poly" id="edge12_Node000010_Node000006" title=" " alt="" coords="468,428,549,474,546,479,465,432"/>
+<area shape="poly" id="edge15_Node000011_Node000005" title=" " alt="" coords="1200,438,1200,477,1195,477,1195,438"/>
+<area shape="poly" id="edge19_Node000012_Node000003" title=" " alt="" coords="151,119,136,153,130,188,134,217,148,242,173,265,204,276,261,286,421,303,742,322,741,327,420,309,260,292,203,281,171,269,144,245,129,218,125,188,131,152,146,117"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="191,114,230,150,227,154,187,117"/>
+<area shape="poly" id="edge18_Node000013_Node000003" title=" " alt="" coords="216,190,199,208,185,228,179,248,181,257,186,265,214,279,267,290,424,307,600,318,742,323,742,328,600,323,424,313,266,296,212,284,182,269,176,259,174,248,180,226,194,205,213,186"/>
+<area shape="rect" id="Node000015" href="$_closed_loop_coronary_left_b_c_8h.html" title="Left side of ClosedLoopCoronaryBC." alt="" coords="401,226,581,267"/>
+<area shape="poly" id="edge23_Node000014_Node000015" title=" " alt="" coords="481,193,489,225,483,227,476,194"/>
+<area shape="rect" id="Node000016" href="$_closed_loop_coronary_right_b_c_8h.html" title="Right side of ClosedLoopCoronaryBC." alt="" coords="197,226,377,267"/>
+<area shape="poly" id="edge25_Node000014_Node000016" title=" " alt="" coords="431,187,334,228,332,223,429,182"/>
+<area shape="poly" id="edge24_Node000015_Node000003" title=" " alt="" coords="582,269,748,312,747,317,581,274"/>
+<area shape="poly" id="edge26_Node000016_Node000003" title=" " alt="" coords="393,265,742,317,742,322,392,270"/>
+<area shape="poly" id="edge29_Node000017_Node000003" title=" " alt="" coords="519,109,590,150,627,180,654,206,680,233,715,265,779,313,776,317,712,269,676,237,650,210,624,184,586,155,517,114"/>
+<area shape="poly" id="edge28_Node000017_Node000014" title=" " alt="" coords="479,120,476,152,470,152,473,120"/>
+<area shape="poly" id="edge31_Node000018_Node000003" title=" " alt="" coords="702,119,695,148,697,178,715,219,739,257,785,313,781,316,735,261,710,222,692,179,690,147,697,118"/>
+<area shape="poly" id="edge33_Node000019_Node000003" title=" " alt="" coords="797,194,797,314,792,314,792,194"/>
+<area shape="poly" id="edge35_Node000020_Node000003" title=" " alt="" coords="944,191,810,316,806,312,941,187"/>
+<area shape="poly" id="edge38_Node000021_Node000003" title=" " alt="" coords="1042,119,1047,149,1046,165,1041,180,1023,207,1000,231,947,270,890,299,840,317,839,312,888,294,944,266,996,227,1018,204,1036,177,1041,163,1042,149,1036,120"/>
+<area shape="poly" id="edge40_Node000022_Node000003" title=" " alt="" coords="1228,117,1129,190,1063,232,994,269,919,298,848,318,847,313,917,293,992,265,1061,228,1126,186,1224,112"/>
+<area shape="poly" id="edge42_Node000023_Node000003" title=" " alt="" coords="1155,266,1134,270,848,320,847,315,1133,264,1154,260"/>
+<area shape="poly" id="edge44_Node000024_Node000003" title=" " alt="" coords="1344,265,1318,270,1054,303,848,324,848,319,1054,298,1317,264,1343,260"/>
+<area shape="poly" id="edge46_Node000025_Node000003" title=" " alt="" coords="1547,194,1540,233,1531,253,1518,269,1480,284,1413,296,1222,314,1012,324,848,328,848,323,1012,318,1222,308,1412,291,1478,279,1514,265,1527,250,1535,232,1542,193"/>
+<area shape="poly" id="edge48_Node000026_Node000003" title=" " alt="" coords="1587,265,1560,270,1354,293,1151,310,848,327,848,322,1151,305,1354,288,1560,264,1586,260"/>
 </map>

@@ -1,6 +1,6 @@
 <map id="ClosedLoopCoronaryLeftBC" name="ClosedLoopCoronaryLeftBC">
 <area shape="rect" id="Node000001" title="Left side of closed loop coronary boundary condition ClosedLoopCoronaryBC." alt="" coords="5,153,188,178"/>
-<area shape="rect" id="Node000002" href="$class_closed_loop_coronary_b_c.html" title="Closed loop coronary boundary condition (connected to other blocks on both sides)." alt="" coords="17,79,176,105"/>
+<area shape="rect" id="Node000002" href="$class_closed_loop_coronary_b_c.html" title="Closed loop coronary boundary condition which is connected to other blocks on both sides and the intr..." alt="" coords="17,79,176,105"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,120,99,152,94,152,94,120"/>
 <area shape="rect" id="Node000003" href="$class_block.html" title="Base class for 0D model components." alt="" coords="69,5,124,31"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="99,46,99,79,94,79,94,46"/>

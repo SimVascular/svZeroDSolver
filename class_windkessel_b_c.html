@@ -187,63 +187,64 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Windkessel RCR boundary condition. </p>
 <p>Models the mechanical behavior of a Windkessel boundary condition.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_139_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_152_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_p$, *-] (3,0)
+node[anchor=south]{$P_{c}$}
 to [R, l=$R_d$, *-*] (5,0)
 node[anchor=south]{$P_{ref}$}
 (3,0) to [C, l=$C$, *-] (3,-1.5)
-node[ground]{$P_{C}$};
+node[ground]{};
 \end{circuitikz}
-\]" src="form_139.png" width="214" height="96"/></picture>
+\]" src="form_152.png" width="214" height="96"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md35"></a>
+<h3><a class="anchor" id="autotoc_md38"></a>
 Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_140_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_153_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
-\]" src="form_140.png" width="189" height="28"/></picture>
+\]" src="form_153.png" width="189" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_141_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_154_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
-\]" src="form_141.png" width="114" height="14"/></picture>
+\]" src="form_154.png" width="114" height="14"/></picture>
 </p>
-<h3><a class="anchor" id="autotoc_md36"></a>
+<h3><a class="anchor" id="autotoc_md39"></a>
 Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_142_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_155_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} &amp; Q^{e} &amp;
-P_{c}^{e}\end{array}\right]^{T} \]" src="form_142.png" width="131" height="19"/></picture>
+P_{c}^{e}\end{array}\right]^{T} \]" src="form_155.png" width="131" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_143_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_156_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 &amp; 0 &amp; -R_{d} C \\
 0 &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_143.png" width="126" height="31"/></picture>
+\]" src="form_156.png" width="126" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_144_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_157_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ccc}
 0 &amp; R_{d} &amp; -1 \\
 1 &amp; -R_{p} &amp; -1
 \end{array}\right]
-\]" src="form_144.png" width="126" height="31"/></picture>
+\]" src="form_157.png" width="126" height="31"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_145_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_158_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
-\]" src="form_145.png" width="76" height="31"/></picture>
+\]" src="form_158.png" width="76" height="31"/></picture>
 </p>
-<p>See <a class="el" href="citelist.html#CITEREF_vignon04">[8]</a>.</p>
-<h3><a class="anchor" id="autotoc_md37"></a>
+<p>See <a class="el" href="citelist.html#CITEREF_vignon04">[9]</a>.</p>
+<h3><a class="anchor" id="autotoc_md40"></a>
 Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
 <ul>

@@ -44,7 +44,7 @@
  * outlets of the junction, mass is conserved and pressure is continuous.
  *
  * Inlets and outlets can be specified in two ways. Either using `inlet_vessels`
- * and `outlet_vessels` keys in teh JSON file, with the corresponding lists
+ * and `outlet_vessels` keys in the JSON file, with the corresponding lists
  * specifying vessel IDs, or using `inlet_blocks` and `outlet_blocks` keys, with
  * the corresponding lists specifying the names of blocks as strings.
  *

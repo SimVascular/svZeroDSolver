@@ -44,7 +44,7 @@ You can find more details about governing equations in individual blocks, for ex
 - BloodVesselJunction
 - WindkesselBC
 
-For implementation details, have a look at the [source code](https://github.com/StanfordCBCL/svZeroDSolver).
+For implementation details, have a look at the [source code](https://github.com/simvascular/svZeroDSolver).
 
 [About SimVascular](https://simvascular.github.io)
 
@@ -59,7 +59,7 @@ For a pip installation, simply run the following command
 (cloning of the repository is not required):
 
 ```bash
-pip install git+https://github.com/StanfordCBCL/svZeroDSolver.git
+pip install git+https://github.com/simvascular/svZeroDSolver.git
 ```
 
 ## Using CMake

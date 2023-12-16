@@ -177,7 +177,8 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
     num_output_steps = interface->pts_per_cycle_;
     throw std::runtime_error(
         "ERROR: Option output_last_cycle_only has been implemented but not "
-        "tested when using the svZeroDSolver interface library. Please test this "
+        "tested when using the svZeroDSolver interface library. Please test "
+        "this "
         "functionality before removing this message.");
   } else {
     num_output_steps = interface->num_time_steps_;
@@ -510,7 +511,8 @@ void run_simulation(int problem_id, const double external_time,
     start_time = interface->times_[start_idx];
     throw std::runtime_error(
         "ERROR: Option output_last_cycle_only has been implemented but not "
-        "tested when using the svZeroDSolver interface library. Please test this "
+        "tested when using the svZeroDSolver interface library. Please test "
+        "this "
         "functionality before removing this message.");
   }
   for (int t = start_idx; t < num_output_steps; t++) {

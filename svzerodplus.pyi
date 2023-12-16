@@ -1,7 +1,7 @@
-# This file contains the stubs for the public Python interface of svZeroDPlus.
+# This file contains the stubs for the public Python interface of svZeroDSolver.
 # This is necessary for supporting auto-completion in Visual Studio Code or
 # PyCharm.
-"""svZeroDPlus Python interface."""
+"""svZeroDSolver Python interface."""
 from __future__ import annotations
 import numpy
 import typing

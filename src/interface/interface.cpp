@@ -278,7 +278,7 @@ void update_block_params(int problem_id, std::string block_name,
     for (size_t i = 0; i < params.size(); i++) {
       model->get_parameter(block->global_param_ids[i])->update(params[i]);
       // parameter_values vector needs to be seperately updated for constant
-      // parameters
+      // parameters. This does not need to be done for time-dependent parameters because it is handled in Model::update_time
       model->update_parameter_value(block->global_param_ids[i], params[i]);
     }
   }

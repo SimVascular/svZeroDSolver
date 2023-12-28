@@ -55,6 +55,7 @@ PYBIND11_MODULE(svzerodplus, m) {
         return Solver(config_json);
       }))
       .def("run", &Solver::run)
+      .def("get_times", &Solver::get_times)
       .def("get_single_result", &Solver::get_single_result)
       .def("get_single_result_avg", &Solver::get_single_result_avg)
       .def("update_block_params", &Solver::update_block_params)

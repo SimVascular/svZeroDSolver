@@ -163,7 +163,7 @@ void Solver::update_block_params(const std::string& block_name,
   for (size_t i = 0; i < new_params.size(); i++) {
     model.get_parameter(block->global_param_ids[i])->update(new_params[i]);
     // parameter_values vector needs to be seperately updated for constant parameters. This does not need to be done for time-dependent parameters because it is handled in Model::update_time
-    model->update_parameter_value(block->global_param_ids[i], new_params[i]);
+    model.update_parameter_value(block->global_param_ids[i], new_params[i]);
   }
 }
 

@@ -8,29 +8,32 @@ Solver::Solver(const nlohmann::json& config) {
   simparams = load_simulation_params(config);
   DEBUG_MSG("Load model");
   //model = Model();
-  auto model = std::shared_ptr<Model>(new Model());
+  this->model = std::shared_ptr<Model>(new Model());
   //load_simulation_model(config, model);
-  load_simulation_model(config, *model.get());
+  load_simulation_model(config, *this->model.get());
   DEBUG_MSG("Load initial condition");
   //initial_state = load_initial_condition(config, model);
-  initial_state = load_initial_condition(config, *model.get());
+  initial_state = load_initial_condition(config, *this->model.get());
 
   //DEBUG_MSG("Cardiac cycle period " << model.cardiac_cycle_period);
-  DEBUG_MSG("Cardiac cycle period " << model->cardiac_cycle_period);
+  DEBUG_MSG("Cardiac cycle period " << this->model->cardiac_cycle_period);
 
   // Calculate time step size
   if (!simparams.sim_coupled) {
     //simparams.sim_time_step_size = model.cardiac_cycle_period /
-    simparams.sim_time_step_size = model->cardiac_cycle_period /
+    simparams.sim_time_step_size = this->model->cardiac_cycle_period /
                                    (double(simparams.sim_pts_per_cycle) - 1.0);
   } else {
     simparams.sim_time_step_size = simparams.sim_external_step_size /
                                    (double(simparams.sim_num_time_steps) - 1.0);
   }
   //std::cout<<"[Solver] cardiac_cycle_period = "<<model.cardiac_cycle_period<<std::endl;
-  std::cout<<"[Solver] cardiac_cycle_period = "<<model->cardiac_cycle_period<<std::endl;
+  std::cout<<"[Solver] cardiac_cycle_period = "<<this->model->cardiac_cycle_period<<std::endl;
+  std::cout<<"[Solver] test0"<<std::endl;
   sanity_checks();
-  this->model = model;
+  std::cout<<"[Solver] test1"<<std::endl;
+  //this->model = model;
+  std::cout<<"[Solver] test2"<<std::endl;
 }
 
 // Solver::~Solver() {}
@@ -47,13 +50,14 @@ void Solver::run() {
     DEBUG_MSG("Calculate steady initial condition");
     //double time_step_size_steady = model.cardiac_cycle_period / 10.0;
     double time_step_size_steady = this->model->cardiac_cycle_period / 10.0;
-    auto model_steady = this->model;
-    model_steady->to_steady();
+    //auto model_steady = this->model;
+    //model_steady->to_steady();
+    this->model->to_steady();
 
 //  Integrator integrator_steady(&model, time_step_size_steady,
 //                               simparams.sim_rho_infty, simparams.sim_abs_tol,
 //                               simparams.sim_nliter);
-    Integrator integrator_steady(model_steady.get(), time_step_size_steady,
+    Integrator integrator_steady(this->model.get(), time_step_size_steady,
                                  simparams.sim_rho_infty, simparams.sim_abs_tol,
                                  simparams.sim_nliter);
 
@@ -62,6 +66,7 @@ void Solver::run() {
     }
 
     //model.to_unsteady();
+    this->model->to_unsteady();
   }
   std::cout<<"test2"<<std::endl;
 
@@ -107,17 +112,17 @@ void Solver::run() {
   }
   std::cout<<"test5"<<std::endl;
   std::cout<<time<<std::endl;
-  for (int i = 0; i<23; i++) {
-    std::cout<<state.y[i]<<" ";
-  }
+//for (int i = 0; i<23; i++) {
+//  std::cout<<state.y[i]<<" ";
+//}
   std::cout<<std::endl;
 
   for (int i = 1; i < simparams.sim_num_time_steps; i++) {
     if ( i < 2) {
         std::cout<<i<<" ";
-        for (int j = 0; j<23; j++) {
-          std::cout<<state.y[j]<<" ";
-        }
+//      for (int j = 0; j<23; j++) {
+//        std::cout<<state.y[j]<<" ";
+//      }
         std::cout<<std::endl;
     }
     //std::cout<<"test"<<" ";
@@ -221,6 +226,7 @@ void Solver::update_block_params(const std::string& block_name,
 }
 
 void Solver::sanity_checks() {
+  std::cout<<"[sanity_check] test0"<<std::endl;
   // Check that steady initial is not used with ClosedLoopHeartAndPulmonary
   //if ((simparams.sim_steady_initial == true) && (model.has_block("CLH"))) {
   if ((simparams.sim_steady_initial == true) && (this->model->has_block("CLH"))) {
@@ -228,6 +234,7 @@ void Solver::sanity_checks() {
         "ERROR: Steady initial condition is not compatible with "
         "ClosedLoopHeartAndPulmonary block.");
   }
+  std::cout<<"[sanity_check] test1"<<std::endl;
 }
 
 void Solver::write_result_to_csv(const std::string& filename) const {

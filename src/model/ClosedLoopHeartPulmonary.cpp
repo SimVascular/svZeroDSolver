@@ -125,9 +125,6 @@ void ClosedLoopHeartPulmonary::update_time(SparseSystem &system,
   system.C(global_eqn_ids[11]) =
       Elv * parameters[global_param_ids[ParamId::VLV_U]];
 
-  if (model->time < 2e-3) {
-      std::cout<<"[update_time] "<<AA<<" "<<Erv<<" "<<Elv<<" "<<this->model->time<<std::endl;
-  }
 }
 
 void ClosedLoopHeartPulmonary::update_solution(
@@ -199,9 +196,6 @@ void ClosedLoopHeartPulmonary::update_solution(
   system.F.coeffRef(global_eqn_ids[13], global_var_ids[15]) =
       parameters[global_param_ids[ParamId::RLV_AO]] * valves[15];
   
-//if (model->time < 2e-3) {
-//    std::cout<<"[update_solution] "<<psi_ra<<" "<<psi_ra_derivative<<" "<<psi_la<<" "<<psi_la_derivative<<" "<<valves[5]<<" "<<valves[8]<<" "<<valves[12]<<" "<<valves[15]<<std::endl;
-//}
 }
 
 void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
@@ -253,9 +247,6 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
 
   Elv = Elv_i * parameters[global_param_ids[ParamId::ELV_S]];
   Erv = Elv_i * parameters[global_param_ids[ParamId::ERV_S]];
-//if (model->time < 2e-3) {
-//  std::cout<<"[activation_and_elastance] "<<T_cardiac<<" "<<Tsa<<" "<<tpwave<<" "<<t_in_cycle<<std::endl;
-//}
 
 }
 

@@ -162,7 +162,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       block_param_ids.push_back(new_id);
     }
   }
-  std::cout<<"[generate_block] cardiac_cycle_period = "<<model.cardiac_cycle_period<<std::endl;
+  
   // Add block to model (with parameter IDs)
   return model.add_block(block, name, block_param_ids, internal);
 }
@@ -492,7 +492,6 @@ void create_closed_loop(
         }
         const auto& heart_params = closed_loop_config["parameters"];
         
-        std::cout<<"[create_closed_loop] cardiac_cycle_period = "<<model.cardiac_cycle_period<<std::endl;
         generate_block(model, heart_params, closed_loop_type,
                        heartpulmonary_name);
 

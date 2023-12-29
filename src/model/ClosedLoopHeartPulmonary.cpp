@@ -124,7 +124,6 @@ void ClosedLoopHeartPulmonary::update_time(SparseSystem &system,
   system.F.coeffRef(global_eqn_ids[11], global_var_ids[14]) = -Elv;
   system.C(global_eqn_ids[11]) =
       Elv * parameters[global_param_ids[ParamId::VLV_U]];
-
 }
 
 void ClosedLoopHeartPulmonary::update_solution(
@@ -195,13 +194,11 @@ void ClosedLoopHeartPulmonary::update_solution(
   // DOF 15, Eq 13: Left ventricle outflow
   system.F.coeffRef(global_eqn_ids[13], global_var_ids[15]) =
       parameters[global_param_ids[ParamId::RLV_AO]] * valves[15];
-  
 }
 
 void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
     std::vector<double> &parameters) {
   auto T_cardiac = model->cardiac_cycle_period;
-  //auto T_cardiac = 1.0169;
   auto Tsa = T_cardiac * parameters[global_param_ids[ParamId::TSA]];
   auto tpwave = T_cardiac / parameters[global_param_ids[ParamId::TPWAVE]];
   auto t_in_cycle = fmod(model->time, T_cardiac);
@@ -247,7 +244,6 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
 
   Elv = Elv_i * parameters[global_param_ids[ParamId::ELV_S]];
   Erv = Elv_i * parameters[global_param_ids[ParamId::ERV_S]];
-
 }
 
 void ClosedLoopHeartPulmonary::get_psi_ra_la(

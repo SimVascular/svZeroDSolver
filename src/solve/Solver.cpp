@@ -114,15 +114,11 @@ std::string Solver::get_full_result() const {
   std::string output;
 
   if (simparams.output_variable_based) {
-//  output = to_variable_csv(times, states, model, simparams.output_mean_only,
-//                           simparams.output_derivative);
     output = to_variable_csv(times, states, *this->model.get(), simparams.output_mean_only,
                              simparams.output_derivative);
 
 
   } else {
-//  output = to_vessel_csv(times, states, model, simparams.output_mean_only,
-//                         simparams.output_derivative);
     output = to_vessel_csv(times, states, *this->model.get(), simparams.output_mean_only,
                            simparams.output_derivative);
   }
@@ -131,7 +127,6 @@ std::string Solver::get_full_result() const {
 }
 
 Eigen::VectorXd Solver::get_single_result(const std::string& dof_name) const {
-  //int dof_index = model.dofhandler.get_variable_index(dof_name);
   int dof_index = this->model->dofhandler.get_variable_index(dof_name);
   int num_states = states.size();
   Eigen::VectorXd result = Eigen::VectorXd::Zero(num_states);
@@ -144,7 +139,6 @@ Eigen::VectorXd Solver::get_single_result(const std::string& dof_name) const {
 }
 
 double Solver::get_single_result_avg(const std::string& dof_name) const {
-  //int dof_index = model.dofhandler.get_variable_index(dof_name);
   int dof_index = this->model->dofhandler.get_variable_index(dof_name);
   int num_states = states.size();
   Eigen::VectorXd result = Eigen::VectorXd::Zero(num_states);
@@ -158,7 +152,6 @@ double Solver::get_single_result_avg(const std::string& dof_name) const {
 
 void Solver::update_block_params(const std::string& block_name,
                                  const std::vector<double>& new_params) {
-  //auto block = model.get_block(block_name);
   auto block = this->model->get_block(block_name);
 
   if (new_params.size() != block->global_param_ids.size()) {
@@ -168,10 +161,8 @@ void Solver::update_block_params(const std::string& block_name,
   }
 
   for (size_t i = 0; i < new_params.size(); i++) {
-    //model.get_parameter(block->global_param_ids[i])->update(new_params[i]);
     this->model->get_parameter(block->global_param_ids[i])->update(new_params[i]);
     // parameter_values vector needs to be seperately updated for constant parameters. This does not need to be done for time-dependent parameters because it is handled in Model::update_time
-    //model.update_parameter_value(block->global_param_ids[i], new_params[i]);
     this->model->update_parameter_value(block->global_param_ids[i], new_params[i]);
   }
 }

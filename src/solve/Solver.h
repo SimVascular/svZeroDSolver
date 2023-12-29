@@ -111,7 +111,6 @@ class Solver {
   void write_result_to_csv(const std::string& filename) const;
 
  private:
-  //Model model;
   std::shared_ptr<Model> model;
   SimulationParameters simparams;
   std::vector<State> states;

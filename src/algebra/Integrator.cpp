@@ -79,15 +79,18 @@ State Integrator::step(const State& old_state, double time) {
   new_state.ydot += old_state.ydot * ydot_init_coeff;
   new_state.y += old_state.y;
 
+  //std::cout<<"[step] 0"<<std::endl;
   // Determine new time (evaluate terms at generalized mid-point)
   double new_time = time + alpha_f * time_step_size;
-
+  
+  //std::cout<<"[step] 1"<<std::endl;
   // Evaluate time-dependent element contributions in system
   model->update_time(system, new_time);
 
   // Count total number of step calls
   n_iter++;
 
+  //std::cout<<"[step] 2"<<std::endl;
   // Non-linear Newton-Raphson iterations
   for (size_t i = 0; i < max_iter; i++) {
     // Initiator: Evaluate the iterates at the intermediate time levels
@@ -95,9 +98,16 @@ State Integrator::step(const State& old_state, double time) {
     y_af.setZero();
     ydot_am += old_state.ydot + (new_state.ydot - old_state.ydot) * alpha_m;
     y_af += old_state.y + (new_state.y - old_state.y) * alpha_f;
+    
+//  if (i==0) {
+//      for (int j = 0; j<23; j++){
+//          std::cout<<
+//      }
 
+    //std::cout<<"[step] 2-1"<<std::endl;
     // Update solution-dependent element contribitions
     model->update_solution(system, y_af, ydot_am);
+    //std::cout<<"[step] 2-2"<<std::endl;
 
     // Evaluate residual
     system.update_residual(y_af, ydot_am);
@@ -116,11 +126,14 @@ State Integrator::step(const State& old_state, double time) {
     // Evaluate Jacobian
     system.update_jacobian(alpha_m, y_coeff_jacobian);
 
+    //std::cout<<"[step] 2-3"<<std::endl;
     // Solve system for increment in ydot
     system.solve();
+    //std::cout<<"[step] 2-4"<<std::endl;
 
     // Perform post-solve actions on blocks
     model->post_solve(new_state.y);
+    //std::cout<<"[step] 2-5"<<std::endl;
 
     // Update the solution
     new_state.ydot += system.dydot;
@@ -129,6 +142,7 @@ State Integrator::step(const State& old_state, double time) {
     // Count total number of nonlinear iterations
     n_nonlin_iter++;
   }
+  //std::cout<<"[step] 3"<<std::endl;
 
   return new_state;
 }

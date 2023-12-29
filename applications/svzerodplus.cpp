@@ -92,7 +92,7 @@ PYBIND11_MODULE(svzerodplus, m) {
     auto argv = sys.attr("argv").cast<std::vector<std::string>>();
     if (argv.size() != 3) {
       std::cout
-          << "Usage: svzerodsolver path/to/config.json path/to/output.json"
+          << "Usage: svzerodsolver path/to/config.json path/to/output.csv"
           << std::endl;
       exit(1);
     }

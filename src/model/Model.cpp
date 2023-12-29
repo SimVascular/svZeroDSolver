@@ -225,6 +225,9 @@ void Model::update_constant(SparseSystem &system) {
 
 void Model::update_time(SparseSystem &system, double time) {
   this->time = time;
+  if (time < 2e-3) {
+    std::cout<<"[model::update_time] "<<this->time<<" "<<time<<std::endl;
+  }
 
   for (auto &param : parameters) {
     parameter_values[param.id] = param.get(time);

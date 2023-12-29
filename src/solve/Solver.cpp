@@ -155,9 +155,7 @@ void Solver::update_block_params(const std::string& block_name,
   auto block = this->model->get_block(block_name);
 
   if (new_params.size() != block->global_param_ids.size()) {
-    throw std::runtime_error(
-        "Parameter update failed! Number of provided parameters does not match "
-        "with block parameters.");
+    throw std::runtime_error("New parameter vector (given size = " + std::to_string(new_params.size()) + ") does not match number of parameters of block " + block_name + " (required size = " + std::to_string(block->global_param_ids.size()) + ")");
   }
 
   for (size_t i = 0; i < new_params.size(); i++) {

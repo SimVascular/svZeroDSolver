@@ -165,6 +165,16 @@ void Solver::update_block_params(const std::string& block_name,
   }
 }
 
+std::vector<double> Solver::read_block_params(const std::string& block_name) {
+  auto block = this->model->get_block(block_name);
+  std::vector<double> params(block->global_param_ids.size());
+  for (size_t i = 0; i < block->global_param_ids.size(); i++) {
+    params[i] = this->model->get_parameter_value(block->global_param_ids[i]);
+  }
+  return params;
+}
+
+
 void Solver::sanity_checks() {
   // Check that steady initial is not used with ClosedLoopHeartAndPulmonary
   if ((simparams.sim_steady_initial == true) && (this->model->has_block("CLH"))) {

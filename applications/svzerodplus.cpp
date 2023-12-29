@@ -59,6 +59,7 @@ PYBIND11_MODULE(svzerodplus, m) {
       .def("get_single_result", &Solver::get_single_result)
       .def("get_single_result_avg", &Solver::get_single_result_avg)
       .def("update_block_params", &Solver::update_block_params)
+      .def("read_block_params", &Solver::read_block_params)
       .def("get_full_result", [](Solver& solver) {
         py::module_ pd = py::module_::import("pandas");
         py::module_ io = py::module_::import("io");

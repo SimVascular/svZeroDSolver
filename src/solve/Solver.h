@@ -102,6 +102,13 @@ class Solver {
    */
   void update_block_params(const std::string& block_name,
                            const std::vector<double>& new_params);
+  
+  /**
+   * @brief Read the parameters of a block
+   *
+   * @param block_name Name of the block
+   */
+  std::vector<double> read_block_params(const std::string& block_name);
 
   /**
    * @brief Write the result to a csv file.

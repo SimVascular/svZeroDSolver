@@ -222,8 +222,9 @@ class Model {
   double get_parameter_value(int param_id) const;
 
   /**
-   * @brief Update the current value of a parameter in the `parameter_values` vector. 
-   * Note that this is different from updating the value within each parameter object, which is done in Parameter::update() 
+   * @brief Update the current value of a parameter in the `parameter_values`
+   * vector. Note that this is different from updating the value within each
+   * parameter object, which is done in Parameter::update()
    *
    * @param param_id Global ID of the parameter
    * @param param_value The new parameter value
@@ -322,8 +323,16 @@ class Model {
   std::vector<std::shared_ptr<Node>> nodes;  ///< Nodes of the model
   std::vector<std::string> node_names;       ///< Names of the nodes
 
-  std::vector<Parameter> parameters;     ///< Parameters of the model. This vector stores the parameter objects and is primarily used to update `parameter_values` at each time-step for time-dependent parameters and also for steady initial conditions.
-  std::vector<double> parameter_values;  ///< Current values of the parameters. This is passed to blocks to set up the linear system in `update_constant`, `update_time` and `update_solution`. 
+  std::vector<Parameter>
+      parameters;  ///< Parameters of the model. This vector stores the
+                   ///< parameter objects and is primarily used to update
+                   ///< `parameter_values` at each time-step for time-dependent
+                   ///< parameters and also for steady initial conditions.
+  std::vector<double>
+      parameter_values;  ///< Current values of the parameters. This is passed
+                         ///< to blocks to set up the linear system in
+                         ///< `update_constant`, `update_time` and
+                         ///< `update_solution`.
 };
 
 #endif  // SVZERODSOLVER_MODEL_MODEL_HPP_

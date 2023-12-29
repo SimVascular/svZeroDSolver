@@ -97,7 +97,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
 
   // The rest of this function reads the parameters for each block, adds them to
   // the model, and stores the corresponding param IDs in each block
-  
+
   // Handle input parameters given as a list differently
   if (block->input_params_list) {
     for (const auto& block_param : block->input_params) {
@@ -162,7 +162,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       block_param_ids.push_back(new_id);
     }
   }
-  
+
   // Add block to model (with parameter IDs)
   return model.add_block(block, name, block_param_ids, internal);
 }
@@ -491,7 +491,7 @@ void create_closed_loop(
           model.cardiac_cycle_period = cycle_period;
         }
         const auto& heart_params = closed_loop_config["parameters"];
-        
+
         generate_block(model, heart_params, closed_loop_type,
                        heartpulmonary_name);
 

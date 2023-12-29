@@ -22,7 +22,7 @@ Solver::Solver(const nlohmann::json& config) {
     simparams.sim_time_step_size = simparams.sim_external_step_size /
                                    (double(simparams.sim_num_time_steps) - 1.0);
   }
-  
+
   sanity_checks();
 }
 
@@ -114,13 +114,14 @@ std::string Solver::get_full_result() const {
   std::string output;
 
   if (simparams.output_variable_based) {
-    output = to_variable_csv(times, states, *this->model.get(), simparams.output_mean_only,
+    output = to_variable_csv(times, states, *this->model.get(),
+                             simparams.output_mean_only,
                              simparams.output_derivative);
 
-
   } else {
-    output = to_vessel_csv(times, states, *this->model.get(), simparams.output_mean_only,
-                           simparams.output_derivative);
+    output =
+        to_vessel_csv(times, states, *this->model.get(),
+                      simparams.output_mean_only, simparams.output_derivative);
   }
 
   return output;
@@ -155,13 +156,22 @@ void Solver::update_block_params(const std::string& block_name,
   auto block = this->model->get_block(block_name);
 
   if (new_params.size() != block->global_param_ids.size()) {
-    throw std::runtime_error("New parameter vector (given size = " + std::to_string(new_params.size()) + ") does not match number of parameters of block " + block_name + " (required size = " + std::to_string(block->global_param_ids.size()) + ")");
+    throw std::runtime_error(
+        "New parameter vector (given size = " +
+        std::to_string(new_params.size()) +
+        ") does not match number of parameters of block " + block_name +
+        " (required size = " + std::to_string(block->global_param_ids.size()) +
+        ")");
   }
 
   for (size_t i = 0; i < new_params.size(); i++) {
-    this->model->get_parameter(block->global_param_ids[i])->update(new_params[i]);
-    // parameter_values vector needs to be seperately updated for constant parameters. This does not need to be done for time-dependent parameters because it is handled in Model::update_time
-    this->model->update_parameter_value(block->global_param_ids[i], new_params[i]);
+    this->model->get_parameter(block->global_param_ids[i])
+        ->update(new_params[i]);
+    // parameter_values vector needs to be seperately updated for constant
+    // parameters. This does not need to be done for time-dependent parameters
+    // because it is handled in Model::update_time
+    this->model->update_parameter_value(block->global_param_ids[i],
+                                        new_params[i]);
   }
 }
 
@@ -174,10 +184,10 @@ std::vector<double> Solver::read_block_params(const std::string& block_name) {
   return params;
 }
 
-
 void Solver::sanity_checks() {
   // Check that steady initial is not used with ClosedLoopHeartAndPulmonary
-  if ((simparams.sim_steady_initial == true) && (this->model->has_block("CLH"))) {
+  if ((simparams.sim_steady_initial == true) &&
+      (this->model->has_block("CLH"))) {
     std::runtime_error(
         "ERROR: Steady initial condition is not compatible with "
         "ClosedLoopHeartAndPulmonary block.");

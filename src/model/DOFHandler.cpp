@@ -49,7 +49,7 @@ int DOFHandler::get_variable_index(const std::string& name) const {
   try {
     return variable_name_map.at(name);
   } catch (...) {
-    std::string error_msg = "ERROR: Variable name '"+name+"' not found.";
+    std::string error_msg = "ERROR: Variable name '" + name + "' not found.";
     throw std::runtime_error(error_msg);
   }
 }

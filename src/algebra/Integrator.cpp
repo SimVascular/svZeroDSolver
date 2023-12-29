@@ -81,7 +81,7 @@ State Integrator::step(const State& old_state, double time) {
 
   // Determine new time (evaluate terms at generalized mid-point)
   double new_time = time + alpha_f * time_step_size;
-  
+
   // Evaluate time-dependent element contributions in system
   model->update_time(system, new_time);
 
@@ -95,7 +95,7 @@ State Integrator::step(const State& old_state, double time) {
     y_af.setZero();
     ydot_am += old_state.ydot + (new_state.ydot - old_state.ydot) * alpha_m;
     y_af += old_state.y + (new_state.y - old_state.y) * alpha_f;
-    
+
     // Update solution-dependent element contribitions
     model->update_solution(system, y_af, ydot_am);
 

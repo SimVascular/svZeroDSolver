@@ -200,8 +200,9 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
     for (size_t i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
     }
+    model_steady->to_unsteady();
   }
-  // TODO: Set back to unsteady
+  
   interface->state_ = state;
 
   // Initialize states and times vectors because size is now known

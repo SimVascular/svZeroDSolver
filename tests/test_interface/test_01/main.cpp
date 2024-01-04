@@ -1,4 +1,4 @@
-// Test interfacing to svZeroDPlus. 
+// Test interfacing to svZeroSolver. 
 
 #include "../LPNSolverInterface/LPNSolverInterface.h" 
 #include <iostream>
@@ -14,7 +14,7 @@ int main(int argc, char** argv)
   LPNSolverInterface interface;
 
   if (argc != 3) {
-    std::runtime_error("Usage: svZeroD_interface_test01 <path_to_svzeroDPlus_build_folder> <path_to_json_file>");
+    std::runtime_error("Usage: svZeroD_interface_test01 <path_to_svzeroDSolver_build_folder> <path_to_json_file>");
   }
   
   // Load shared library and get interface functions.

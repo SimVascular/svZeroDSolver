@@ -7,10 +7,10 @@ if(ENABLE_DISTRIBUTION)
 
   # add description (shown in installer)
   set(CPACK_PACKAGE_VERSION "${TODAY}")
-  set(CPACK_PACKAGE_NAME "svZeroDPlus")
+  set(CPACK_PACKAGE_NAME "svZeroDSolver")
   set(CPACK_PACKAGE_VENDOR "SimVascular.org")
   set(CPACK_PACKAGE_CONTACT "SimVascular <sv@simvascular.org>")
-  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "svZeroDPlus is a fast lumped-parameter solver for blood flow and pressure in hemodynamic networks")
+  set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "svZeroDSolver is a fast lumped-parameter solver for blood flow and pressure in hemodynamic networks")
   set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE.txt")
   set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/readme.txt")
 

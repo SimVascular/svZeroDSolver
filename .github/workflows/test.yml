@@ -1,4 +1,4 @@
-# This workflow builds and tests svZeroDPlus. It is built and tested on
+# This workflow builds and tests svZeroDSolver. It is built and tested on
 # different versions of ubuntu and macOS.
 name: Build and test
 on: [push, pull_request]
@@ -14,7 +14,7 @@ jobs:
       - name: Install ubuntu dependencies
         if: startsWith(matrix.os, 'ubuntu')
         run: sudo apt update && sudo apt install build-essential cmake lcov
-      - name: Install svZeroDPlus
+      - name: Install svZeroDSolver
         run: |
           conda create -n zerod python=3.11.4
           conda run -n zerod pip install -e ".[dev]"
@@ -59,10 +59,10 @@ jobs:
         run: |
           cd Release
           cpack
-          cp distribution/svZeroDPlus_* ..
+          cp distribution/svZeroDSolver_* ..
       - name: Upload installer
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.os }} installer
-          path: svZeroDPlus_*
+          path: svZeroDSolver_*
           if-no-files-found: error

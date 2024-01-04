@@ -1,20 +1,20 @@
-@mainpage svZeroDPlus
+@mainpage svZeroDSolver
 
 [TOC]
 
-svZeroDPlus is an application for performing simulations with 0D/lumped-parameter
+svZeroDSolver is an application for performing simulations with 0D/lumped-parameter
 computer models for cardiovascular flows. 
 
-Some noteworthy features of svZeroDPlus are:
+Some noteworthy features of svZeroDSolver are:
 * It is completely modular. Users can create custom flow models by arranging 
 blocks corresponding to blood vessels, junctions, different types of 
 boundary conditions, etc. 
 * It is written in C++ to enable high-performance applications.
-* svZeroDPlus offers both a Python API and a C++ shared library to interface with other 
+* svZeroDSolver offers both a Python API and a C++ shared library to interface with other 
 Python or C++-based applications. This allows it to be used in a fully coupled manner 
 with other multi-physics solvers, and for parameter estimation, uncertainty 
 quantification, etc.
-* The svZeroDCalibrator application, which is included in svZeroDPlus, optimizes 0D
+* The svZeroDCalibrator application, which is included in svZeroDSolver, optimizes 0D
 blood vessel parameters to recapitulate given time-varying flow and pressure measurements 
 (for example, from a high-fidelity 3D simulation). This allows users to build accurate 
 0D models that reflect observed hemodynamics.
@@ -44,13 +44,13 @@ You can find more details about governing equations in individual blocks, for ex
 - BloodVesselJunction
 - WindkesselBC
 
-For implementation details, have a look at the [source code](https://github.com/StanfordCBCL/svZeroDPlus).
+For implementation details, have a look at the [source code](https://github.com/simvascular/svZeroDSolver).
 
 [About SimVascular](https://simvascular.github.io)
 
 # Installation
 
-svZeroDPlus can be installed in two different ways. For using the Python
+svZeroDSolver can be installed in two different ways. For using the Python
 API, an installation via pip is recommended.
 
 ## Using pip
@@ -59,12 +59,12 @@ For a pip installation, simply run the following command
 (cloning of the repository is not required):
 
 ```bash
-pip install git+https://github.com/StanfordCBCL/svZeroDPlus.git
+pip install git+https://github.com/simvascular/svZeroDSolver.git
 ```
 
 ## Using CMake
 
-If you want to build svZeroDPlus manually from source, clone the repository
+If you want to build svZeroDSolver manually from source, clone the repository
 and run the following commands from the top directory of the project:
 
 ```bash
@@ -115,38 +115,38 @@ For some applications it is beneficial to run svZeroDSolver directly
 from within another program. For example, this can be
 useful when many simulations need to be performed (e.g. for 
 calibration, uncertainty quantification, ...). It is also allows using
-svZeroDPlus with other solvers, for example as boundary conditions or
+svZeroDSolver with other solvers, for example as boundary conditions or
 forcing terms.
 
 ### In C++
 
-SvZeroDPlus needs to be built using CMake to use the shared library interface.
+SvZeroDSolver needs to be built using CMake to use the shared library interface.
 
-Detailed examples of interfacing with svZeroDPlus from C++ codes are available 
-in the test cases at `svZeroDPlus/tests/test_interface`. 
+Detailed examples of interfacing with svZeroDSolver from C++ codes are available 
+in the test cases at `svZeroDSolver/tests/test_interface`. 
 
 ### In Python
 
 Please make sure that
-you installed svZerodPlus via pip to enable this feature. We start by
-importing svzerodplus:
+you installed svZerodSolver via pip to enable this feature. We start by
+importing pysvzerod:
 
 ```python
->>> import svzerodplus
+>>> import pysvzerod
 ```
 
 Next, we create a solver from our configuration. The configuration can
 be specified by either a path to a JSON file:
 
 ```python
->>> solver = svzerodplus.Solver("tests/cases/steadyFlow_RLC_R.json")
+>>> solver = pysvzerod.Solver("tests/cases/steadyFlow_RLC_R.json")
 ```
 
 or as a Python dictionary:
 
 ```python
 >>> my_config = {...}
->>> solver = svzerodplus.Solver(my_config)
+>>> solver = pysvzerod.Solver(my_config)
 ```
 
 To run the simulation we add:
@@ -202,7 +202,7 @@ There is also a function to retrieve the full result directly based on a given c
 ```python
 
 >>> my_config = {...}
->>> svzerodplus.simulate(my_config)
+>>> pysvzerod.simulate(my_config)
 
              name  time  flow_in  flow_out  pressure_in  pressure_out
 0    branch0_seg0  0.00      5.0       5.0       1100.0         600.0
@@ -342,14 +342,14 @@ The result will be written to a JSON file.
 ### In Python
 
 svZeroDCalibrator can also be called directly from Python.
-Please make sure that you installed svZerodPlus via pip to enable this feature. We start by
-importing svzerodplus:
+Please make sure that you installed svZerodSolver via pip to enable this feature. We start by
+importing pysvzerod:
 
 ```python
-import svzerodplus
+import pysvzerod
 
 my_unoptimized_config = {...}
-my_optimized_config = svzerodplus.calibrate(my_unoptimized_config)
+my_optimized_config = pysvzerod.calibrate(my_unoptimized_config)
 ```
 
 ## Configuration (file)

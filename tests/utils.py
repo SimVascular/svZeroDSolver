@@ -10,7 +10,7 @@ import pandas as pd
 # (run executables instead of Python interface, much slower)
 from pytest import coverage
 
-import svzerodplus
+import pysvzerod
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -18,12 +18,12 @@ RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-8
 
 
-def execute_svzerodplus(testfile, mode):
-    """Execute svzerodplus (via Python interface or executable).
+def execute_pysvzerod(testfile, mode):
+    """Execute pysvzerod (via Python interface or executable).
 
     Args:
         testfile: Path to the input file.
-        mode: svZeroDPlus application (solver or calibrator).
+        mode: svZeroDSolver application (solver or calibrator).
     """
     assert mode in ["solver", "calibrator"], "unknown mode: " + mode
 
@@ -45,9 +45,9 @@ def execute_svzerodplus(testfile, mode):
     else:
         # run via Python binding (fast)
         if mode == "solver":
-            result = svzerodplus.simulate(config)
+            result = pysvzerod.simulate(config)
         elif mode == "calibrator":
-            result = svzerodplus.calibrate(config)
+            result = pysvzerod.calibrate(config)
 
     return result, config
 
@@ -63,7 +63,7 @@ def run_test_case_by_name(name, output_variable_based=False, folder="."):
     testfile = os.path.join(this_file_dir, "cases", name + ".json")
 
     # run test
-    result, config = execute_svzerodplus(testfile, "solver")
+    result, config = execute_pysvzerod(testfile, "solver")
 
     if not output_variable_based:
         output = {

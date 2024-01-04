@@ -153,11 +153,11 @@ add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
 )
 
 # -----------------------------------------------------------------------------
-# Setup building of the svzerodplus Python extension module.
+# Setup building of the pysvzerod Python extension module.
 # -----------------------------------------------------------------------------
 # Replace EXCLUDE_FROM_ALL with SHARED to test building the Python 
 # shared library.
-pybind11_add_module(svzerodplus EXCLUDE_FROM_ALL applications/svzerodplus.cpp)
+pybind11_add_module(pysvzerod EXCLUDE_FROM_ALL applications/pysvzerod.cpp)
 
 # -----------------------------------------------------------------------------
 # Add source sub-directories.
@@ -185,7 +185,7 @@ target_include_directories(svzerodcalibrator PUBLIC
   ${CMAKE_SOURCE_DIR}/src/solve 
 )
 
-target_include_directories(svzerodplus PUBLIC 
+target_include_directories(pysvzerod PUBLIC 
   ${CMAKE_SOURCE_DIR}/src/algebra
   ${CMAKE_SOURCE_DIR}/src/model 
   ${CMAKE_SOURCE_DIR}/src/optimize
@@ -203,13 +203,13 @@ target_link_libraries(svzerodsolver PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(svzerodcalibrator PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodcalibrator PRIVATE nlohmann_json::nlohmann_json)
 
-target_link_libraries(svzerodplus PRIVATE Eigen3::Eigen)
-target_link_libraries(svzerodplus PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(svzerodplus PRIVATE pybind11_json)
-target_link_libraries(svzerodplus PRIVATE svzero_algebra_library)
-target_link_libraries(svzerodplus PRIVATE svzero_model_library)
-target_link_libraries(svzerodplus PRIVATE svzero_optimize_library)
-target_link_libraries(svzerodplus PRIVATE svzero_solve_library)
+target_link_libraries(pysvzerod PRIVATE Eigen3::Eigen)
+target_link_libraries(pysvzerod PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(pysvzerod PRIVATE pybind11_json)
+target_link_libraries(pysvzerod PRIVATE svzero_algebra_library)
+target_link_libraries(pysvzerod PRIVATE svzero_model_library)
+target_link_libraries(pysvzerod PRIVATE svzero_optimize_library)
+target_link_libraries(pysvzerod PRIVATE svzero_solve_library)
 
 
 # Create distribution

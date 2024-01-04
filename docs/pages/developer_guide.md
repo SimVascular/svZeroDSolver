@@ -4,15 +4,15 @@
 
 # Architecture
 
-svZeroDPlus is written in a highly modular manner to enable reuse of code
+svZeroDSolver is written in a highly modular manner to enable reuse of code
 for many different applications. It is divided into a header based library
 in the `src` directory and a collection of different applications in the
 `applications` folder. Each application is written for a different use-case
-of svZeroDPlus, namely:
+of svZeroDSolver, namely:
 
 * svZeroDCalibrator in `svzerodcalibrator.cpp`
 * svZerodSolver in `svzerodsolver.cpp`
-* Python API in `svzerodplus.cpp`
+* Python API in `pysvzerod.cpp`
 
 The header-based library in the `src` folder contains classes and functions that are collectively used by
 all applications. A good overview over the general architecture can be found in the
@@ -21,7 +21,7 @@ all applications. A good overview over the general architecture can be found in 
 
 ## Build in debug mode
 
-For debug purposes it is recommended to build svZeroDPlus in Debug mode.
+For debug purposes it is recommended to build svZeroDSolver in Debug mode.
 
 ```bash
 mkdir Debug
@@ -69,7 +69,7 @@ make codecheck
 ```
 
 If the above commands do not work on your platform (it does not work on Sherlock at Stanford)
-you can run the following command **from the svZeroDPlus folder** to format all your files:
+you can run the following command **from the svZeroDSolver folder** to format all your files:
 
 ```bash
 find src/**/*.h src/**/*.cpp | xargs clang-format -style=Google -i
@@ -142,8 +142,8 @@ to create a profiling report. The generation of profiling reports requires
 [Docker](https://docs.docker.com/get-docker/) to be installed on your machine.
 
 ```docker
-docker build -t profile_svzerodplus -f container/profiling/Dockerfile .
-docker run -it -v $(PWD):/opt/data --rm profile_svzerodplus path/to/simulation_config.json
+docker build -t profile_svzerodsolver -f container/profiling/Dockerfile .
+docker run -it -v $(PWD):/opt/data --rm profile_svzerodsolver path/to/simulation_config.json
 ```
 
 This will generate a file called `profiling_report.pdf` in your current working directory.

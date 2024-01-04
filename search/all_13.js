@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['the_20command_20line_0',['the command line',['../index.html#autotoc_md68',1,'From the command line'],['../index.html#autotoc_md57',1,'Run svZeroDSolver from the command line']]],
+  ['the_20command_20line_0',['The command line',['../index.html#autotoc_md68',1,'From the command line'],['../index.html#autotoc_md57',1,'Run svZeroDSolver from the command line']]],
   ['time_1',['time',['../class_model.html#ac08e6be5375c12b4f09dfd3e88552e46',1,'Model']]],
   ['time_5fstep_5f_2',['time_step_',['../class_solver_interface.html#a992186401a640e55a22ae5b254224490',1,'SolverInterface']]],
   ['time_5fstep_5fsize_5f_3',['time_step_size_',['../class_solver_interface.html#a4cc8d48204c7142d5f2982b0a79b8dd9',1,'SolverInterface']]],
@@ -11,6 +11,6 @@ var searchData=
   ['to_5fvariable_5fcsv_8',['to_variable_csv',['../csv__writer_8h.html#a8fc1d74c1f35adb345932d3fb4d10743',1,'csv_writer.cpp']]],
   ['to_5fvessel_5fcsv_9',['to_vessel_csv',['../csv__writer_8h.html#ac48926c8eb95d86a9e8062380cefca61',1,'csv_writer.cpp']]],
   ['tpwave_10',['TPWAVE',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a4e474adbe16fe359a385bd29f4c7aa1c',1,'ClosedLoopHeartPulmonary']]],
-  ['tripletscontributions_11',['tripletscontributions',['../struct_triplets_contributions.html#ab48a11935f0cc7cbb76b42b12515d87f',1,'TripletsContributions::TripletsContributions()'],['../struct_triplets_contributions.html',1,'TripletsContributions']]],
+  ['tripletscontributions_11',['TripletsContributions',['../struct_triplets_contributions.html',1,'TripletsContributions'],['../struct_triplets_contributions.html#ab48a11935f0cc7cbb76b42b12515d87f',1,'TripletsContributions::TripletsContributions()']]],
   ['tsa_12',['TSA',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834ab6887bb9b481690dc6e79f6a3cc003e4',1,'ClosedLoopHeartPulmonary']]]
 ];

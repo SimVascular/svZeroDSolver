@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['openloopcoronarybc_0',['openloopcoronarybc',['../class_open_loop_coronary_b_c.html',1,'OpenLoopCoronaryBC'],['../class_open_loop_coronary_b_c.html#a7034ac11f20b4322fc47904243506564',1,'OpenLoopCoronaryBC::OpenLoopCoronaryBC()']]],
+  ['openloopcoronarybc_0',['OpenLoopCoronaryBC',['../class_open_loop_coronary_b_c.html',1,'OpenLoopCoronaryBC'],['../class_open_loop_coronary_b_c.html#a7034ac11f20b4322fc47904243506564',1,'OpenLoopCoronaryBC::OpenLoopCoronaryBC()']]],
   ['openloopcoronarybc_2eh_1',['OpenLoopCoronaryBC.h',['../_open_loop_coronary_b_c_8h.html',1,'']]],
   ['operator_2b_3d_2',['operator+=',['../struct_triplets_contributions.html#ac3e912c1e238de000b8b1f12dc0852cf',1,'TripletsContributions']]],
   ['operator_5b_5d_3',['operator[]',['../class_json_wrapper.html#a359ebc2cb4a90ef24b035acb049ab58e',1,'JsonWrapper']]],

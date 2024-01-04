@@ -3,7 +3,7 @@ var searchData=
   ['validate_5finput_0',['validate_input',['../_simulation_parameters_8h.html#af79ad080bd74ff4d6ad832e1e77a9cd8',1,'SimulationParameters.cpp']]],
   ['value_1',['value',['../class_parameter.html#a48e21d83cbd2310c2738f85036b589ab',1,'Parameter']]],
   ['values_2',['values',['../class_parameter.html#a2019cf5a9101294ce18a42308871f876',1,'Parameter']]],
-  ['valvetanh_3',['valvetanh',['../class_valve_tanh.html',1,'ValveTanh'],['../class_valve_tanh.html#a66d087287a5aaea92a853d00039c8ae3',1,'ValveTanh::ValveTanh()']]],
+  ['valvetanh_3',['ValveTanh',['../class_valve_tanh.html',1,'ValveTanh'],['../class_valve_tanh.html#a66d087287a5aaea92a853d00039c8ae3',1,'ValveTanh::ValveTanh()']]],
   ['valvetanh_2eh_4',['ValveTanh.h',['../_valve_tanh_8h.html',1,'']]],
   ['variable_5fname_5fmap_5',['variable_name_map',['../class_d_o_f_handler.html#ad7465274e716de328b3f45f02296b75e',1,'DOFHandler']]],
   ['variables_6',['variables',['../class_d_o_f_handler.html#a228c455dfe97bd9cff7d18f894c6972d',1,'DOFHandler']]],

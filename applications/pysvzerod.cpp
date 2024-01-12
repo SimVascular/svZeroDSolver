@@ -28,7 +28,7 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file svzerodplus.cpp
+ * @file pysvzerod.cpp
  * @brief Python interface for svZeroDSolver
  */
 #include <pybind11/eigen.h>
@@ -42,7 +42,7 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(svzerodplus, m) {
+PYBIND11_MODULE(pysvzerod, m) {
   using Solver = Solver;
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {

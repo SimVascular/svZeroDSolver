@@ -3,7 +3,7 @@ import numpy as np
 from .utils import run_test_case_by_name, RTOL_FLOW, RTOL_PRES
 
 # use coarse absolute tolerances for gradient calculation
-# we're comparing gradients from gen-alpha in svZeroDPlus with central differences in np.gradient
+# we're comparing gradients from gen-alpha in svZeroDSolver with central differences in np.gradient
 ATOL = {"f": 0.6, "p": 800.0}
 ATOL_MEAN = {"f": 0.01, "p": 20.0}
 

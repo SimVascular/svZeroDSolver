@@ -10,7 +10,7 @@
 
 svZeroDSolver is a fast simulation tool for modeling the hemodynamics of
 vascular networks using zero-dimensional (0D) lumped parameter models.
-You can find more information about svZeroDPlus under the following links:
+You can find more information under the following links:
 
 * [**Documentation**](https://simvascular.github.io/svZeroDSolver)
 * [**Developer Guide**](https://simvascular.github.io/svZeroDSolver/developer_guide.html)

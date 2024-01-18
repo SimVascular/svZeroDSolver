@@ -55,8 +55,11 @@ PYBIND11_MODULE(pysvzerod, m) {
         return Solver(config_json);
       }))
       .def("run", &Solver::run)
+      .def("get_times", &Solver::get_times)
       .def("get_single_result", &Solver::get_single_result)
       .def("get_single_result_avg", &Solver::get_single_result_avg)
+      .def("update_block_params", &Solver::update_block_params)
+      .def("read_block_params", &Solver::read_block_params)
       .def("get_full_result", [](Solver& solver) {
         py::module_ pd = py::module_::import("pandas");
         py::module_ io = py::module_::import("io");
@@ -90,7 +93,7 @@ PYBIND11_MODULE(pysvzerod, m) {
     auto argv = sys.attr("argv").cast<std::vector<std::string>>();
     if (argv.size() != 3) {
       std::cout
-          << "Usage: svzerodsolver path/to/config.json path/to/output.json"
+          << "Usage: svzerodsolver path/to/config.json path/to/output.csv"
           << std::endl;
       exit(1);
     }

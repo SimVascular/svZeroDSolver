@@ -46,7 +46,12 @@ int DOFHandler::register_variable(const std::string& name) {
 }
 
 int DOFHandler::get_variable_index(const std::string& name) const {
-  return variable_name_map.at(name);
+  try {
+    return variable_name_map.at(name);
+  } catch (...) {
+    std::string error_msg = "ERROR: Variable name '" + name + "' not found.";
+    throw std::runtime_error(error_msg);
+  }
 }
 
 int DOFHandler::register_equation(const std::string& name) {

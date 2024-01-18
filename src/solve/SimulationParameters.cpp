@@ -96,8 +96,9 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
   }
 
   // The rest of this function reads the parameters for each block, adds them to
-  // the model, and stores the corresponding param IDs in each block Handle
-  // input parameters given as a list differently
+  // the model, and stores the corresponding param IDs in each block
+
+  // Handle input parameters given as a list differently
   if (block->input_params_list) {
     for (const auto& block_param : block->input_params) {
       // todo: check error here

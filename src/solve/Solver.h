@@ -83,14 +83,14 @@ class Solver {
    * @brief Get the result of a single DOF averaged over time
    *
    * @param dof_name Name of the degree-of-freedom
-   * @return T Result
+   * @return double Result
    */
   double get_single_result_avg(const std::string& dof_name) const;
 
   /**
    * @brief Get the time steps of the result
    *
-   * @return std::vector<double>
+   * @return std::vector<double> Vector of times
    */
   std::vector<double> get_times() const;
 
@@ -104,6 +104,15 @@ class Solver {
                            const std::vector<double>& new_params);
 
   /**
+   * @brief Read the parameters of a block
+   *
+   * @param block_name Name of the block
+   *
+   * @return std::vector<double> Block parameters
+   */
+  std::vector<double> read_block_params(const std::string& block_name);
+
+  /**
    * @brief Write the result to a csv file.
    *
    * @param filename
@@ -111,7 +120,7 @@ class Solver {
   void write_result_to_csv(const std::string& filename) const;
 
  private:
-  Model model;
+  std::shared_ptr<Model> model;
   SimulationParameters simparams;
   std::vector<State> states;
   std::vector<double> times;

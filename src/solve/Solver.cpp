@@ -7,25 +7,24 @@ Solver::Solver(const nlohmann::json& config) {
   DEBUG_MSG("Read simulation parameters");
   simparams = load_simulation_params(config);
   DEBUG_MSG("Load model");
-  model = Model();
-  load_simulation_model(config, model);
+  this->model = std::shared_ptr<Model>(new Model());
+  load_simulation_model(config, *this->model.get());
   DEBUG_MSG("Load initial condition");
-  initial_state = load_initial_condition(config, model);
+  initial_state = load_initial_condition(config, *this->model.get());
 
-  DEBUG_MSG("Cardiac cycle period " << model.cardiac_cycle_period);
+  DEBUG_MSG("Cardiac cycle period " << this->model->cardiac_cycle_period);
 
   // Calculate time step size
   if (!simparams.sim_coupled) {
-    simparams.sim_time_step_size = model.cardiac_cycle_period /
+    simparams.sim_time_step_size = this->model->cardiac_cycle_period /
                                    (double(simparams.sim_pts_per_cycle) - 1.0);
   } else {
     simparams.sim_time_step_size = simparams.sim_external_step_size /
                                    (double(simparams.sim_num_time_steps) - 1.0);
   }
+
   sanity_checks();
 }
-
-// Solver::~Solver() {}
 
 void Solver::run() {
   auto state = initial_state;
@@ -33,10 +32,10 @@ void Solver::run() {
   // Create steady initial
   if (simparams.sim_steady_initial) {
     DEBUG_MSG("Calculate steady initial condition");
-    double time_step_size_steady = model.cardiac_cycle_period / 10.0;
-    model.to_steady();
+    double time_step_size_steady = this->model->cardiac_cycle_period / 10.0;
+    this->model->to_steady();
 
-    Integrator integrator_steady(&model, time_step_size_steady,
+    Integrator integrator_steady(this->model.get(), time_step_size_steady,
                                  simparams.sim_rho_infty, simparams.sim_abs_tol,
                                  simparams.sim_nliter);
 
@@ -44,12 +43,12 @@ void Solver::run() {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
     }
 
-    model.to_unsteady();
+    this->model->to_unsteady();
   }
 
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  Integrator integrator(&model, simparams.sim_time_step_size,
+  Integrator integrator(this->model.get(), simparams.sim_time_step_size,
                         simparams.sim_rho_infty, simparams.sim_abs_tol,
                         simparams.sim_nliter);
 
@@ -115,19 +114,21 @@ std::string Solver::get_full_result() const {
   std::string output;
 
   if (simparams.output_variable_based) {
-    output = to_variable_csv(times, states, model, simparams.output_mean_only,
+    output = to_variable_csv(times, states, *this->model.get(),
+                             simparams.output_mean_only,
                              simparams.output_derivative);
 
   } else {
-    output = to_vessel_csv(times, states, model, simparams.output_mean_only,
-                           simparams.output_derivative);
+    output =
+        to_vessel_csv(times, states, *this->model.get(),
+                      simparams.output_mean_only, simparams.output_derivative);
   }
 
   return output;
 }
 
 Eigen::VectorXd Solver::get_single_result(const std::string& dof_name) const {
-  int dof_index = model.dofhandler.get_variable_index(dof_name);
+  int dof_index = this->model->dofhandler.get_variable_index(dof_name);
   int num_states = states.size();
   Eigen::VectorXd result = Eigen::VectorXd::Zero(num_states);
 
@@ -139,7 +140,7 @@ Eigen::VectorXd Solver::get_single_result(const std::string& dof_name) const {
 }
 
 double Solver::get_single_result_avg(const std::string& dof_name) const {
-  int dof_index = model.dofhandler.get_variable_index(dof_name);
+  int dof_index = this->model->dofhandler.get_variable_index(dof_name);
   int num_states = states.size();
   Eigen::VectorXd result = Eigen::VectorXd::Zero(num_states);
 
@@ -152,22 +153,41 @@ double Solver::get_single_result_avg(const std::string& dof_name) const {
 
 void Solver::update_block_params(const std::string& block_name,
                                  const std::vector<double>& new_params) {
-  auto block = model.get_block(block_name);
+  auto block = this->model->get_block(block_name);
 
   if (new_params.size() != block->global_param_ids.size()) {
     throw std::runtime_error(
-        "Parameter update failed! Number of provided parameters does not match "
-        "with block parameters.");
+        "New parameter vector (given size = " +
+        std::to_string(new_params.size()) +
+        ") does not match number of parameters of block " + block_name +
+        " (required size = " + std::to_string(block->global_param_ids.size()) +
+        ")");
   }
 
   for (size_t i = 0; i < new_params.size(); i++) {
-    model.get_parameter(block->global_param_ids[i])->update(new_params[i]);
+    this->model->get_parameter(block->global_param_ids[i])
+        ->update(new_params[i]);
+    // parameter_values vector needs to be seperately updated for constant
+    // parameters. This does not need to be done for time-dependent parameters
+    // because it is handled in Model::update_time
+    this->model->update_parameter_value(block->global_param_ids[i],
+                                        new_params[i]);
   }
+}
+
+std::vector<double> Solver::read_block_params(const std::string& block_name) {
+  auto block = this->model->get_block(block_name);
+  std::vector<double> params(block->global_param_ids.size());
+  for (size_t i = 0; i < block->global_param_ids.size(); i++) {
+    params[i] = this->model->get_parameter_value(block->global_param_ids[i]);
+  }
+  return params;
 }
 
 void Solver::sanity_checks() {
   // Check that steady initial is not used with ClosedLoopHeartAndPulmonary
-  if ((simparams.sim_steady_initial == true) && (model.has_block("CLH"))) {
+  if ((simparams.sim_steady_initial == true) &&
+      (this->model->has_block("CLH"))) {
     std::runtime_error(
         "ERROR: Steady initial condition is not compatible with "
         "ClosedLoopHeartAndPulmonary block.");

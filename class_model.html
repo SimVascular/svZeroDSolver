@@ -136,7 +136,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a1fb6ae5e83aa6c8434b6339b13418193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current value of a parameter.  <br /></td></tr>
 <tr class="separator:a1fb6ae5e83aa6c8434b6339b13418193"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a7d76f45c6f43c5d3eef139937bd108" id="r_a1a7d76f45c6f43c5d3eef139937bd108"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1a7d76f45c6f43c5d3eef139937bd108">update_parameter_value</a> (int param_id, double param_value)</td></tr>
-<tr class="memdesc:a1a7d76f45c6f43c5d3eef139937bd108"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the current value of a parameter.  <br /></td></tr>
+<tr class="memdesc:a1a7d76f45c6f43c5d3eef139937bd108"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the current value of a parameter in the <code>parameter_values</code> vector. Note that this is different from updating the value within each parameter object, which is done in <a class="el" href="class_parameter.html#af0334e323aafea384432a8ed10f8d19a" title="Update the parameter.">Parameter::update()</a>  <br /></td></tr>
 <tr class="separator:a1a7d76f45c6f43c5d3eef139937bd108"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15a519aed6d0924b98b00ed6899c62b5" id="r_a15a519aed6d0924b98b00ed6899c62b5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15a519aed6d0924b98b00ed6899c62b5">finalize</a> ()</td></tr>
 <tr class="memdesc:a15a519aed6d0924b98b00ed6899c62b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finalize the model after all blocks, nodes and parameters have been added.  <br /></td></tr>
@@ -817,7 +817,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Update the current value of a parameter. </p>
+<p>Update the current value of a parameter in the <code>parameter_values</code> vector. Note that this is different from updating the value within each parameter object, which is done in <a class="el" href="class_parameter.html#af0334e323aafea384432a8ed10f8d19a" title="Update the parameter.">Parameter::update()</a> </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">param_id</td><td>Global ID of the parameter </td></tr>

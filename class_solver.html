@@ -107,6 +107,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aafe41a17384998ccc28856521666cff7" id="r_aafe41a17384998ccc28856521666cff7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aafe41a17384998ccc28856521666cff7">update_block_params</a> (const std::string &amp;block_name, const std::vector&lt; double &gt; &amp;new_params)</td></tr>
 <tr class="memdesc:aafe41a17384998ccc28856521666cff7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the parameters of a block.  <br /></td></tr>
 <tr class="separator:aafe41a17384998ccc28856521666cff7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c0efb666ac941cf0d49c666b6356483" id="r_a0c0efb666ac941cf0d49c666b6356483"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c0efb666ac941cf0d49c666b6356483">read_block_params</a> (const std::string &amp;block_name)</td></tr>
+<tr class="memdesc:a0c0efb666ac941cf0d49c666b6356483"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the parameters of a block.  <br /></td></tr>
+<tr class="separator:a0c0efb666ac941cf0d49c666b6356483"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad213408fb2b5e0433c29454bec9e6443" id="r_ad213408fb2b5e0433c29454bec9e6443"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad213408fb2b5e0433c29454bec9e6443">write_result_to_csv</a> (const std::string &amp;filename) const</td></tr>
 <tr class="memdesc:ad213408fb2b5e0433c29454bec9e6443"><td class="mdescLeft">&#160;</td><td class="mdescRight">Write the result to a csv file.  <br /></td></tr>
 <tr class="separator:ad213408fb2b5e0433c29454bec9e6443"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -209,7 +212,7 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>T Result </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>double Result </dd></dl>
 
 </div>
 </div>
@@ -229,7 +232,33 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Get the time steps of the result. </p>
-<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; Vector of times </dd></dl>
+
+</div>
+</div>
+<a id="a0c0efb666ac941cf0d49c666b6356483" name="a0c0efb666ac941cf0d49c666b6356483"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c0efb666ac941cf0d49c666b6356483">&#9670;&#160;</a></span>read_block_params()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Solver::read_block_params </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>block_name</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read the parameters of a block. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">block_name</td><td>Name of the block</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>std::vector&lt;double&gt; <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> parameters </dd></dl>
 
 </div>
 </div>

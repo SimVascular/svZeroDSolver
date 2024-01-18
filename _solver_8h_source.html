@@ -170,14 +170,14 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment">   * @brief Get the result of a single DOF averaged over time</span></div>
 <div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">   *</span></div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment">   * @param dof_name Name of the degree-of-freedom</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">   * @return T Result</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">   * @return double Result</span></div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">   */</span></div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  <span class="keywordtype">double</span> <a class="code hl_function" href="class_solver.html#abbdd386a547676b658b5b1070040fbe4">get_single_result_avg</a>(<span class="keyword">const</span> std::string&amp; dof_name) <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment"></span> </div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span><span class="comment">  /**</span></div>
 <div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment">   * @brief Get the time steps of the result</span></div>
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   * @return std::vector&lt;double&gt;</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   * @return std::vector&lt;double&gt; Vector of times</span></div>
 <div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">   */</span></div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  std::vector&lt;double&gt; <a class="code hl_function" href="class_solver.html#ac12a4bb26d17f412029796323eaf8070">get_times</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"></span> </div>
@@ -191,38 +191,47 @@ $(function() { codefold.init(0); });
 <div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>                           <span class="keyword">const</span> std::vector&lt;double&gt;&amp; new_params);</div>
 <div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment"></span> </div>
 <div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">   * @brief Write the result to a csv file.</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">   * @brief Read the parameters of a block</span></div>
 <div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">   * @param filename</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_solver.html#ad213408fb2b5e0433c29454bec9e6443">write_result_to_csv</a>(<span class="keyword">const</span> std::string&amp; filename) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  <a class="code hl_class" href="class_model.html">Model</a> model;</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  <a class="code hl_struct" href="struct_simulation_parameters.html">SimulationParameters</a> simparams;</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  std::vector&lt;State&gt; states;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  std::vector&lt;double&gt; times;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  <a class="code hl_class" href="class_state.html">State</a> initial_state;</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  <span class="keywordtype">void</span> sanity_checks();</div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>};</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">   * @param block_name Name of the block</span></div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">   * @return std::vector&lt;double&gt; Block parameters</span></div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  std::vector&lt;double&gt; <a class="code hl_function" href="class_solver.html#a0c0efb666ac941cf0d49c666b6356483">read_block_params</a>(<span class="keyword">const</span> std::string&amp; block_name);</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment"></span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">   * @brief Write the result to a csv file.</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">   * @param filename</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_solver.html#ad213408fb2b5e0433c29454bec9e6443">write_result_to_csv</a>(<span class="keyword">const</span> std::string&amp; filename) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  std::shared_ptr&lt;Model&gt; model;</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  <a class="code hl_struct" href="struct_simulation_parameters.html">SimulationParameters</a> simparams;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>  std::vector&lt;State&gt; states;</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>  std::vector&lt;double&gt; times;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>  <a class="code hl_class" href="class_state.html">State</a> initial_state;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>  <span class="keywordtype">void</span> sanity_checks();</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>};</div>
 </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="a_integrator_8h_html"><div class="ttname"><a href="_integrator_8h.html">Integrator.h</a></div><div class="ttdoc">Integrator source file.</div></div>
 <div class="ttc" id="a_model_8h_html"><div class="ttname"><a href="_model_8h.html">Model.h</a></div><div class="ttdoc">model::Model source file</div></div>
 <div class="ttc" id="a_simulation_parameters_8h_html"><div class="ttname"><a href="_simulation_parameters_8h.html">SimulationParameters.h</a></div><div class="ttdoc">Source file to read simulation configuration.</div></div>
 <div class="ttc" id="a_state_8h_html"><div class="ttname"><a href="_state_8h.html">State.h</a></div><div class="ttdoc">State source file.</div></div>
-<div class="ttc" id="aclass_model_html"><div class="ttname"><a href="class_model.html">Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition</b> Model.h:74</div></div>
 <div class="ttc" id="aclass_solver_html"><div class="ttname"><a href="class_solver.html">Solver</a></div><div class="ttdoc">Class for running 0D simulations.</div><div class="ttdef"><b>Definition</b> Solver.h:52</div></div>
-<div class="ttc" id="aclass_solver_html_a1f31e2d38dacd7e828c1bf428eb2ed96"><div class="ttname"><a href="class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96">Solver::run</a></div><div class="ttdeci">void run()</div><div class="ttdoc">Run the simulation.</div><div class="ttdef"><b>Definition</b> Solver.cpp:30</div></div>
+<div class="ttc" id="aclass_solver_html_a0c0efb666ac941cf0d49c666b6356483"><div class="ttname"><a href="class_solver.html#a0c0efb666ac941cf0d49c666b6356483">Solver::read_block_params</a></div><div class="ttdeci">std::vector&lt; double &gt; read_block_params(const std::string &amp;block_name)</div><div class="ttdoc">Read the parameters of a block.</div><div class="ttdef"><b>Definition</b> Solver.cpp:178</div></div>
+<div class="ttc" id="aclass_solver_html_a1f31e2d38dacd7e828c1bf428eb2ed96"><div class="ttname"><a href="class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96">Solver::run</a></div><div class="ttdeci">void run()</div><div class="ttdoc">Run the simulation.</div><div class="ttdef"><b>Definition</b> Solver.cpp:29</div></div>
 <div class="ttc" id="aclass_solver_html_aa9e68ab5310adf5606ac9f363c3cee1c"><div class="ttname"><a href="class_solver.html#aa9e68ab5310adf5606ac9f363c3cee1c">Solver::Solver</a></div><div class="ttdeci">Solver(const nlohmann::json &amp;config)</div><div class="ttdoc">Construct a new Solver object.</div><div class="ttdef"><b>Definition</b> Solver.cpp:5</div></div>
-<div class="ttc" id="aclass_solver_html_aafe41a17384998ccc28856521666cff7"><div class="ttname"><a href="class_solver.html#aafe41a17384998ccc28856521666cff7">Solver::update_block_params</a></div><div class="ttdeci">void update_block_params(const std::string &amp;block_name, const std::vector&lt; double &gt; &amp;new_params)</div><div class="ttdoc">Update the parameters of a block.</div><div class="ttdef"><b>Definition</b> Solver.cpp:153</div></div>
-<div class="ttc" id="aclass_solver_html_abbdd386a547676b658b5b1070040fbe4"><div class="ttname"><a href="class_solver.html#abbdd386a547676b658b5b1070040fbe4">Solver::get_single_result_avg</a></div><div class="ttdeci">double get_single_result_avg(const std::string &amp;dof_name) const</div><div class="ttdoc">Get the result of a single DOF averaged over time.</div><div class="ttdef"><b>Definition</b> Solver.cpp:141</div></div>
-<div class="ttc" id="aclass_solver_html_ac12a4bb26d17f412029796323eaf8070"><div class="ttname"><a href="class_solver.html#ac12a4bb26d17f412029796323eaf8070">Solver::get_times</a></div><div class="ttdeci">std::vector&lt; double &gt; get_times() const</div><div class="ttdoc">Get the time steps of the result.</div><div class="ttdef"><b>Definition</b> Solver.cpp:112</div></div>
-<div class="ttc" id="aclass_solver_html_ac45b6a9a598c4c9ed7c1995b4903c929"><div class="ttname"><a href="class_solver.html#ac45b6a9a598c4c9ed7c1995b4903c929">Solver::get_single_result</a></div><div class="ttdeci">Eigen::VectorXd get_single_result(const std::string &amp;dof_name) const</div><div class="ttdoc">Get the result of a single DOF over time.</div><div class="ttdef"><b>Definition</b> Solver.cpp:129</div></div>
-<div class="ttc" id="aclass_solver_html_ad213408fb2b5e0433c29454bec9e6443"><div class="ttname"><a href="class_solver.html#ad213408fb2b5e0433c29454bec9e6443">Solver::write_result_to_csv</a></div><div class="ttdeci">void write_result_to_csv(const std::string &amp;filename) const</div><div class="ttdoc">Write the result to a csv file.</div><div class="ttdef"><b>Definition</b> Solver.cpp:177</div></div>
-<div class="ttc" id="aclass_solver_html_aebf2a9aa50d3e557fd8023863e690a8e"><div class="ttname"><a href="class_solver.html#aebf2a9aa50d3e557fd8023863e690a8e">Solver::get_full_result</a></div><div class="ttdeci">std::string get_full_result() const</div><div class="ttdoc">Get the full result as a csv encoded string.</div><div class="ttdef"><b>Definition</b> Solver.cpp:114</div></div>
+<div class="ttc" id="aclass_solver_html_aafe41a17384998ccc28856521666cff7"><div class="ttname"><a href="class_solver.html#aafe41a17384998ccc28856521666cff7">Solver::update_block_params</a></div><div class="ttdeci">void update_block_params(const std::string &amp;block_name, const std::vector&lt; double &gt; &amp;new_params)</div><div class="ttdoc">Update the parameters of a block.</div><div class="ttdef"><b>Definition</b> Solver.cpp:154</div></div>
+<div class="ttc" id="aclass_solver_html_abbdd386a547676b658b5b1070040fbe4"><div class="ttname"><a href="class_solver.html#abbdd386a547676b658b5b1070040fbe4">Solver::get_single_result_avg</a></div><div class="ttdeci">double get_single_result_avg(const std::string &amp;dof_name) const</div><div class="ttdoc">Get the result of a single DOF averaged over time.</div><div class="ttdef"><b>Definition</b> Solver.cpp:142</div></div>
+<div class="ttc" id="aclass_solver_html_ac12a4bb26d17f412029796323eaf8070"><div class="ttname"><a href="class_solver.html#ac12a4bb26d17f412029796323eaf8070">Solver::get_times</a></div><div class="ttdeci">std::vector&lt; double &gt; get_times() const</div><div class="ttdoc">Get the time steps of the result.</div><div class="ttdef"><b>Definition</b> Solver.cpp:111</div></div>
+<div class="ttc" id="aclass_solver_html_ac45b6a9a598c4c9ed7c1995b4903c929"><div class="ttname"><a href="class_solver.html#ac45b6a9a598c4c9ed7c1995b4903c929">Solver::get_single_result</a></div><div class="ttdeci">Eigen::VectorXd get_single_result(const std::string &amp;dof_name) const</div><div class="ttdoc">Get the result of a single DOF over time.</div><div class="ttdef"><b>Definition</b> Solver.cpp:130</div></div>
+<div class="ttc" id="aclass_solver_html_ad213408fb2b5e0433c29454bec9e6443"><div class="ttname"><a href="class_solver.html#ad213408fb2b5e0433c29454bec9e6443">Solver::write_result_to_csv</a></div><div class="ttdeci">void write_result_to_csv(const std::string &amp;filename) const</div><div class="ttdoc">Write the result to a csv file.</div><div class="ttdef"><b>Definition</b> Solver.cpp:197</div></div>
+<div class="ttc" id="aclass_solver_html_aebf2a9aa50d3e557fd8023863e690a8e"><div class="ttname"><a href="class_solver.html#aebf2a9aa50d3e557fd8023863e690a8e">Solver::get_full_result</a></div><div class="ttdeci">std::string get_full_result() const</div><div class="ttdoc">Get the full result as a csv encoded string.</div><div class="ttdef"><b>Definition</b> Solver.cpp:113</div></div>
 <div class="ttc" id="aclass_state_html"><div class="ttname"><a href="class_state.html">State</a></div><div class="ttdoc">State of the system.</div><div class="ttdef"><b>Definition</b> State.h:46</div></div>
 <div class="ttc" id="adebug_8h_html"><div class="ttname"><a href="debug_8h.html">debug.h</a></div><div class="ttdoc">DEBUG_MSG source file.</div></div>
 <div class="ttc" id="astruct_simulation_parameters_html"><div class="ttname"><a href="struct_simulation_parameters.html">SimulationParameters</a></div><div class="ttdoc">Simulation parameters.</div><div class="ttdef"><b>Definition</b> SimulationParameters.h:50</div></div>

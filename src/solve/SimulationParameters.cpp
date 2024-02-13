@@ -74,7 +74,6 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
                    bool internal, bool periodic) {
   // Generate block from factory
   auto block = model.create_block(block_type);
-  std::cout << "[generate_block] periodic: " << periodic << std::endl;
 
   // Read block input parameters
   std::vector<int> block_param_ids;
@@ -354,8 +353,6 @@ void create_external_coupling(
     std::string coupling_name = coupling_config["name"];
     std::string coupling_loc = coupling_config["location"];
     bool periodic = coupling_config.value("periodic", true);
-    std::cout << "[create_external_coupling] periodic: " << periodic
-              << std::endl;
     const auto& coupling_values = coupling_config["values"];
 
     generate_block(model, coupling_values, coupling_type, coupling_name, 0,

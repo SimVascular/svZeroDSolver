@@ -253,6 +253,8 @@ void update_block_params(int problem_id, std::string block_name,
   // Find the required block
   auto block = model->get_block(block_name);
   auto block_type = model->get_block_type(block_name);
+  std::cout<<"[sv0D::update_block_params] params = "<<params[0]<<" "<<params[1]<<" "<<params[2]<<" "<<params[3]<<" "<<params[4]<<std::endl;
+  std::cout<<"[sv0D::update_block_params] block_name, block_type: "<<block_name<<std::endl;
   // Update is handled differently for blocks that have time-varying parameters
   // (PRESSUREBC and FLOWBC)
   // TODO: Does this need to be done for OPENLOOPCORONARYBC and RESISTANCEBC
@@ -497,6 +499,8 @@ void run_simulation(int problem_id, const double external_time,
     time += time_step_size;
     interface->times_[i] = time;
     interface->states_[i] = state;
+    //kmenon
+    std::cout<<"[interface] time, state: "<<time<<" "<<state.y[0]<<" "<<state.y[1]<<" "<<state.y[2]<<std::endl;
   }
   interface->state_ = state;
 

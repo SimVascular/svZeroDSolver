@@ -1,4 +1,6 @@
-// Test interfacing to svZeroDSolver. 
+// Test interfacing to svZeroDSolver.
+// This test mimics the coupling of svZeroDSolver with an external parameter estimation code (eg. Tulip)
+// A coronary model is used and parameters of the BCs are updated and then compared to a reference solution
 
 #include "../LPNSolverInterface/LPNSolverInterface.h" 
 #include <iostream>

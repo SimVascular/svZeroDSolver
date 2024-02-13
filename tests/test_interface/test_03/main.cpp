@@ -1,4 +1,7 @@
-// Test interfacing to svZeroSolver. 
+// Test interfacing to svZeroSolver.
+// This test mimics an external 3D solver (svSolver/svFSI) interfacing with svZeroDSolver
+// The model consists of an RCR BC which acts as a Neumann BC for an external solver
+// It mimics two consecutive time steps of an external solver
 
 #include "../LPNSolverInterface/LPNSolverInterface.h" 
 #include <iostream>
@@ -53,11 +56,6 @@ int main(int argc, char** argv)
   std::vector<double> init_state_y = {-6.2506662304695681e+01, -3.8067539421845140e+04, -3.0504233282976966e+04};
   std::vector<double> init_state_ydot = {-3.0873806830951793e+01, -2.5267653962355386e+05, -2.4894080899699836e+05};
 
-//// Interface blocks flow boundary conditions (neumann boundary conditions for the 3D flow solver)
-//std::map<std::string,std::vector<double>> interface_block_params = {
-//                                          {"RCR_coupling", {223.7, 223.19}}};
-//std::vector<double> interface_times = {0.082147, 0.08307};
-
   // Get variable IDs for inlet to RCR block
   std::vector<int> IDs;
   std::string block_name = "RCR"; 
@@ -71,19 +69,6 @@ int main(int argc, char** argv)
   int rcr_inlet_pressure_id = IDs[2];
  
   // Update block parameters with current flow from 3D solver
-//for (const auto block_params : interface_block_params) {
-//  std::vector<double> new_params(5);
-//  std::vector<double> params = block_params.second;
-//  // Format of new_params for flow/pressure blocks: 
-//  // [N, time_1, time_2, ..., time_N, value1, value2, ..., value_N]
-//  // where N is number of time points and value* is flow/pressure
-//  new_params[0] = 2.0;
-//  for (int i = 0; i < 2; i++) {
-//    new_params[1+i] = interface_times[i];
-//    new_params[3+i] = params[i];
-//  }
-//  interface.update_block_params(block_params.first, new_params); 
-//}
   std::vector<double> new_params(5);
   std::vector<double> params = {-6.2506662041472836e+01, -6.2599344518688739e+01};
   std::vector<double> interface_times = {1.9899999999999796e+00, 1.9949999999999795e+00};

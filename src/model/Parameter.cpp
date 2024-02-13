@@ -29,6 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Parameter.h"
+#include <iostream>
 
 Parameter::Parameter(int id, double value) {
   this->id = id;

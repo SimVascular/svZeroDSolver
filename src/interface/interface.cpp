@@ -254,7 +254,7 @@ void update_block_params(int problem_id, std::string block_name,
   auto block = model->get_block(block_name);
   auto block_type = model->get_block_type(block_name);
   std::cout<<"[sv0D::update_block_params] params = "<<params[0]<<" "<<params[1]<<" "<<params[2]<<" "<<params[3]<<" "<<params[4]<<std::endl;
-  std::cout<<"[sv0D::update_block_params] block_name, block_type: "<<block_name<<std::endl;
+  //std::cout<<"[sv0D::update_block_params] block_name, block_type: "<<block_name<<std::endl;
   // Update is handled differently for blocks that have time-varying parameters
   // (PRESSUREBC and FLOWBC)
   // TODO: Does this need to be done for OPENLOOPCORONARYBC and RESISTANCEBC
@@ -415,6 +415,8 @@ void update_state(int problem_id, std::vector<double> new_state_y,
     state.ydot[i] = new_state_ydot[i];
   }
   interface->state_ = state;
+  std::cout<<"[interface::update_state] y: "<<state.y[0]<<" "<<state.y[1]<<" "<<state.y[2]<<std::endl;
+  std::cout<<"[interface::update_state] ydot: "<<state.ydot[0]<<" "<<state.ydot[1]<<" "<<state.ydot[2]<<std::endl;
 }
 
 /**

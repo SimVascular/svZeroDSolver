@@ -5,3 +5,4 @@ project(svZeroDSolverInterfaceTests)
 
 add_subdirectory("test_01/")
 add_subdirectory("test_02/")
+add_subdirectory("test_03/")

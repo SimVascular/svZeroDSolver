@@ -354,8 +354,10 @@ void create_external_coupling(
     std::string coupling_loc = coupling_config["location"];
     bool periodic = coupling_config.value("periodic", true);
     const auto& coupling_values = coupling_config["values"];
+    const bool internal = false;
 
-    generate_block(model, coupling_values, coupling_type, coupling_name);
+    generate_block(model, coupling_values, coupling_type, coupling_name,
+                   internal, periodic);
 
     // Determine the type of connected block
     std::string connected_block = coupling_config["connected_block"];

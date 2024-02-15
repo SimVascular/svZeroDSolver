@@ -1,4 +1,7 @@
 // Test interfacing to svZeroSolver. 
+// This test mimics an external 3D solver (svSolver/svFSI) interfacing with svZeroDSolver
+// The model consists of a closed-loop heart model with coronary BCs
+// It is run for one time step of the external solver
 
 #include "../LPNSolverInterface/LPNSolverInterface.h" 
 #include <iostream>

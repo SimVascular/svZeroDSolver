@@ -178,6 +178,13 @@ int Model::add_parameter(const std::vector<double> &times,
   return parameter_count++;
 }
 
+int Model::add_parameter(const std::string expression_string) {
+  auto param = Parameter(parameter_count, expression_string);
+  parameter_values.push_back(param.get(0.0));
+  parameters.push_back(std::move(param));
+  return parameter_count++;
+}
+
 Parameter *Model::get_parameter(int param_id) { return &parameters[param_id]; }
 
 double Model::get_parameter_value(int param_id) const {

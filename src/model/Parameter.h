@@ -39,6 +39,10 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <cstdio>
+#include <string>
+
+#include "exprtk.hpp"
 
 #include "DOFHandler.h"
 
@@ -70,6 +74,13 @@ class Parameter {
   Parameter(int id, const std::vector<double>& times,
             const std::vector<double>& values, bool periodic = true);
 
+  /**
+   * @brief Construct a new Parameter object
+   *
+   * @param id Global ID of the parameter
+   * @param expression_string string with time-dependent function to get values
+   */
+  Parameter(int id, const std::string expression_string);
   int id;                      ///< Global ID of the parameter
   std::vector<double> times;   ///< Time steps if parameter is time-dependent
   std::vector<double> values;  ///< Values if parameter is time-dependent
@@ -80,6 +91,9 @@ class Parameter {
   bool is_constant;  ///< Bool value indicating if the parameter is constant
   bool is_periodic;  ///< Bool value indicating if the parameter is periodic
                      ///< with the cardiac cycle
+  bool is_function;           ///< Bool value indicating if the parameter is a function
+  std::string expression_string;  ///< String with value function
+
 
   /**
    * @brief Update the parameter
@@ -96,6 +110,14 @@ class Parameter {
    */
   void update(const std::vector<double>& times,
               const std::vector<double>& values);
+
+  /**
+   * @brief Update the parameter
+   *
+   * @param expression_string String with function
+   * @param update_value Value at time step
+   */
+  void update(const std::string update_string);
 
   /**
    * @brief Get the parameter value at the specified time.
@@ -128,6 +150,7 @@ struct InputParameter {
   bool is_optional;    ///< Is this parameter optional?
   bool is_array;       ///< Is this parameter an array?
   bool is_number;      ///< Is this parameter a number?
+  bool is_function;    ///< Is this parameter a time-dependent function?
   double default_val;  ///< Default value (if parameter is optional)
 
   /**
@@ -139,10 +162,11 @@ struct InputParameter {
    * @param default_val Default value (if parameter is optional)
    */
   InputParameter(bool is_optional = false, bool is_array = false,
-                 bool is_number = true, double default_val = 0.0)
+                 bool is_number = true, bool is_function = false, double default_val = 0.0)
       : is_optional(is_optional),
         is_array(is_array),
         is_number(is_number),
+        is_function(is_function),
         default_val(default_val) {}
 };
 

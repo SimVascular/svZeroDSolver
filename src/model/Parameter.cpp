@@ -29,6 +29,10 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Parameter.h"
+#include <cstdio>
+#include <string>
+
+#include "exprtk.hpp"
 
 Parameter::Parameter(int id, double value) {
   this->id = id;
@@ -40,6 +44,12 @@ Parameter::Parameter(int id, const std::vector<double> &times,
   this->id = id;
   this->is_periodic = periodic;
   update(times, values);
+}
+
+Parameter::Parameter(int id, const std::string expression_string) {
+  this->id = id;
+  this->expression_string = expression_string;
+  update(expression_string);
 }
 
 void Parameter::update(double update_value) {
@@ -63,6 +73,12 @@ void Parameter::update(const std::vector<double> &update_times,
   }
 }
 
+
+void Parameter::update(const std::string update_string) {
+  is_function = true;
+  expression_string = update_string;
+}
+
 double Parameter::get(double time) {
   // Return the constant value if parameter is constant
   if (is_constant) {
@@ -77,6 +93,29 @@ double Parameter::get(double time) {
   } else {
     // this->times is not periodic when running with external solver
     rtime = time;
+  }
+
+  if (is_function == true) {
+    // Adapted from example from Basic Design example at http://www.partow.net/programming/exprtk/index.html
+    typedef double T;
+
+    typedef exprtk::symbol_table<T> symbol_table_t;
+    typedef exprtk::expression<T>   expression_t;
+    typedef exprtk::parser<T>       parser_t;
+
+    T t = T(time);
+
+    symbol_table_t symbol_table;
+    symbol_table.add_variable("t",t);
+
+    expression_t expression;
+    expression.register_symbol_table(symbol_table);
+
+    parser_t parser;
+
+    parser.compile(expression_string, expression);
+    T value = expression.value();
+    return value;
   }
 
   // Determine the lower and upper element for interpolation

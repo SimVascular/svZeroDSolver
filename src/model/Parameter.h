@@ -15,6 +15,10 @@
 #include <numeric>
 #include <string>
 #include <vector>
+#include <cstdio>
+#include <string>
+
+#include "exprtk.hpp"
 
 #include "../ThirdParty/exprtk.hpp"
 #include "DOFHandler.h"
@@ -64,12 +68,9 @@ class Parameter {
   bool is_constant;  ///< Bool value indicating if the parameter is constant
   bool is_periodic;  ///< Bool value indicating if the parameter is periodic
                      ///< with the cardiac cycle
-  bool is_function;  ///< Bool value indicating if the parameter is a function
+  bool is_function;           ///< Bool value indicating if the parameter is a function
   std::string expression_string;  ///< String with value function
-  double time_value = 0.0;        ///< Time value passed into expression
-  exprtk::symbol_table<double> symbol_table;  ///< Symbol table to store time t
-  exprtk::expression<double>
-      expression;  ///< exprtk object from input expression string
+
 
   /**
    * @brief Update the parameter
@@ -90,7 +91,8 @@ class Parameter {
   /**
    * @brief Update the parameter
    *
-   * @param update_string String with function
+   * @param expression_string String with function
+   * @param update_value Value at time step
    */
   void update(const std::string update_string);
 
@@ -138,8 +140,7 @@ struct InputParameter {
    * @param default_val Default value (if parameter is optional)
    */
   InputParameter(bool is_optional = false, bool is_array = false,
-                 bool is_number = true, bool is_function = false,
-                 double default_val = 0.0)
+                 bool is_number = true, bool is_function = false, double default_val = 0.0)
       : is_optional(is_optional),
         is_array(is_array),
         is_number(is_number),

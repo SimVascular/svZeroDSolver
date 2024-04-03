@@ -1,6 +1,10 @@
 // SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "Parameter.h"
+#include <cstdio>
+#include <string>
+
+#include "exprtk.hpp"
 
 #include <cstdio>
 #include <string>
@@ -44,40 +48,10 @@ void Parameter::update(const std::vector<double> &update_times,
   }
 }
 
+
 void Parameter::update(const std::string update_string) {
   is_function = true;
-  is_constant = false;
   expression_string = update_string;
-  time_value = 0.0;
-
-  expression.release();
-  symbol_table.clear();
-
-  symbol_table.add_variable("t", time_value);
-  expression.register_symbol_table(symbol_table);
-
-  exprtk::parser<double> parser;
-
-  if (!parser.compile(expression_string, expression)) {
-    is_function = false;
-
-    printf("Error: %s\tExpression: %s\n", parser.error().c_str(),
-           expression_string.c_str());
-
-    for (std::size_t i = 0; i < parser.error_count(); ++i) {
-      typedef exprtk::parser_error::type err_t;
-      const auto error = parser.get_error(i);
-
-      printf(
-          "Error: %02d  Position: %02d Type: [%14s] Msg: %s\tExpression: %s\n",
-          static_cast<unsigned int>(i),
-          static_cast<unsigned int>(error.token.position),
-          exprtk::parser_error::to_str(error.mode).c_str(),
-          error.diagnostic.c_str(), expression_string.c_str());
-    }
-    std::runtime_error("Error when compiling the function provided in 'fn'.");
-    return;
-  }
 }
 
 double Parameter::get(double time) {
@@ -97,11 +71,26 @@ double Parameter::get(double time) {
   }
 
   if (is_function == true) {
-    // exprtk docs say that this assignment will result in undefined behaviour,
-    // but this seems to be the only way for the symbol table to actually get
-    // updated and no undefined behavior has been noted in testing
-    symbol_table.get_variable("t")->ref() = time;
-    return expression.value();
+    // Adapted from example from Basic Design example at http://www.partow.net/programming/exprtk/index.html
+    typedef double T;
+
+    typedef exprtk::symbol_table<T> symbol_table_t;
+    typedef exprtk::expression<T>   expression_t;
+    typedef exprtk::parser<T>       parser_t;
+
+    T t = T(time);
+
+    symbol_table_t symbol_table;
+    symbol_table.add_variable("t",t);
+
+    expression_t expression;
+    expression.register_symbol_table(symbol_table);
+
+    parser_t parser;
+
+    parser.compile(expression_string, expression);
+    T value = expression.value();
+    return value;
   }
 
   // Determine the lower and upper element for interpolation

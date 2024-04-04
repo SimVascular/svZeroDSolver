@@ -52,6 +52,29 @@ def execute_pysvzerod(testfile, mode):
     return result, config
 
 
+def run_with_reference(
+        ref,
+        test_config
+        ):
+
+    res = pysvzerod.simulate(test_config)
+
+    if res.shape[1] == 6:
+        # we have a result with fields [name, time, p_in, p_out, q_in, q_out]
+        for field in ["pressure_in", "pressure_out", "flow_in", "flow_out"]:
+            if "pressure" in field:
+                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_PRES)
+            elif "flow" in field:
+                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_FLOW)
+    else:
+        # we have a result with fields [name, time, y] and the result must be compared based on the name field. name is of format [flow:vessel:outlet]
+        for index, row in res.iterrows():
+            if "flow" in row["name"]:
+                assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_FLOW)
+            elif "pressure" in row["name"]:
+                assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_PRES)
+
+
 def run_test_case_by_name(name, output_variable_based=False, folder="."):
     """Run a test case by its case name.
 

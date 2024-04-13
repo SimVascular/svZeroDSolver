@@ -170,10 +170,10 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
 
           // Add parameter to model
           new_id = model.add_parameter(val);
+        }
       }
       // Store parameter IDs
       block_param_ids.push_back(new_id);
-      }
     }
   }
   // Add block to model (with parameter IDs)

@@ -29,10 +29,9 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Parameter.h"
+
 #include <cstdio>
 #include <string>
-
-#include "exprtk.hpp"
 
 Parameter::Parameter(int id, double value) {
   this->id = id;
@@ -73,7 +72,6 @@ void Parameter::update(const std::vector<double> &update_times,
   }
 }
 
-
 void Parameter::update(const std::string update_string) {
   is_function = true;
   expression_string = update_string;
@@ -96,25 +94,20 @@ double Parameter::get(double time) {
   }
 
   if (is_function == true) {
-    // Adapted from example from Basic Design example at http://www.partow.net/programming/exprtk/index.html
-    typedef double T;
+    // Adapted from example from Basic Design example at
+    // http://www.partow.net/programming/exprtk/index.html
+    double t = time;
 
-    typedef exprtk::symbol_table<T> symbol_table_t;
-    typedef exprtk::expression<T>   expression_t;
-    typedef exprtk::parser<T>       parser_t;
+    exprtk::symbol_table<double> symbol_table;
+    symbol_table.add_variable("t", t);
 
-    T t = T(time);
-
-    symbol_table_t symbol_table;
-    symbol_table.add_variable("t",t);
-
-    expression_t expression;
+    exprtk::expression<double> expression;
     expression.register_symbol_table(symbol_table);
 
-    parser_t parser;
+    exprtk::parser<double> parser;
 
     parser.compile(expression_string, expression);
-    T value = expression.value();
+    double value = expression.value();
     return value;
   }
 

@@ -8,7 +8,7 @@ void FlowReferenceBC::setup_dofs(DOFHandler &dofhandler) {
 
 void FlowReferenceBC::update_constant(SparseSystem &system,
                                       std::vector<double> &parameters) {
-  //std::cout << system << std::endl;
+  // std::cout << system << std::endl;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = 1.0;
 }
 

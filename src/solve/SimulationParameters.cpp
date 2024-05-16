@@ -481,8 +481,8 @@ void create_external_coupling(
           (connected_type == "BloodVessel")) {
         connections.push_back({connected_block, coupling_name});
       }  // connected_type == "ClosedLoopRCR"
-    }   // coupling_loc
-  }     // for (size_t i = 0; i < coupling_configs.length(); i++)
+    }    // coupling_loc
+  }      // for (size_t i = 0; i < coupling_configs.length(); i++)
 }
 
 void create_junctions(

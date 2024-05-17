@@ -46,6 +46,7 @@ void Parameter::update(const std::vector<double> &update_times,
 
 void Parameter::update(const std::string update_string) {
   is_function = true;
+  is_constant = false;
   expression_string = update_string;
 }
 

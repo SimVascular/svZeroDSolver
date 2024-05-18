@@ -57,6 +57,8 @@ void Solver::run() {
     this->model->to_unsteady();
   }
 
+  this->model->setup_initial_state_dependent_parameters(state);
+
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
   Integrator integrator(this->model.get(), simparams.sim_time_step_size,

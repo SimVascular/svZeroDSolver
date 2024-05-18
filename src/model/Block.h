@@ -43,6 +43,7 @@
 #include "DOFHandler.h"
 #include "Parameter.h"
 #include "SparseSystem.h"
+#include "State.h"
 
 /**
  * @brief The number of triplets that the element contributes
@@ -226,6 +227,13 @@ class Block {
    *
    */
   virtual void setup_model_dependent_params();
+
+  /**
+   * @brief Setup parameters that depend on the initial state
+   *
+   * @param initial_state The initial state of the system
+   */
+  virtual void setup_initial_state_dependent_params(State initial_state);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system

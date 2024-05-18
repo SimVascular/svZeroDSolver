@@ -77,7 +77,13 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
     system.C(global_eqn_ids[0]) = -Cim * Pim;
     system.C(global_eqn_ids[1]) = Pv;
   } else {
-    system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv);
-    system.C(global_eqn_ids[1]) = -Cim * (Rv + Ram) * Pim + Ram * Cim * Pv;
+    //system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv);
+    system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv + this->Pim_0 - this->P_Cim_0);
+    system.C(global_eqn_ids[1]) = -Cim * (Rv + Ram) * Pim + Ram * Cim * Pv -Cim * (Rv + Ram) * (this->P_Cim_0 - this->Pim_0);
   }
+}
+
+void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_state) {
+  P_Cim_0 = 0.0;
+  Pim_0 = 0.0;
 }

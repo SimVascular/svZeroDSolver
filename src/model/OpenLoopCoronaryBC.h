@@ -144,6 +144,13 @@ class OpenLoopCoronaryBC : public Block {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
+   * @brief Setup parameters that depend on the initial state
+   *
+   * @param initial_state The initial state of the system
+   */
+  void setup_initial_state_dependent_params(State initial_state);
+
+  /**
    * @brief Update the constant contributions of the element in a sparse system
    *
    * @param system System to update contributions at
@@ -167,6 +174,10 @@ class OpenLoopCoronaryBC : public Block {
    * (relevant for sparse memory reservation)
    */
   TripletsContributions num_triplets{5, 4, 0};
+
+ protected:
+  double P_Cim_0 = 0;  ///< Pressure proximal to Cim/Vim at initial state
+  double Pim_0 = 0;    ///< Pim at initial state
 };
 
 #endif  // SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_

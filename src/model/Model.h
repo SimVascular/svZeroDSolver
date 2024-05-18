@@ -63,6 +63,7 @@
 #include "ValveTanh.h"
 #include "WindkesselBC.h"
 #include "debug.h"
+#include "State.h"
 
 /**
  * @brief Model of 0D elements
@@ -334,6 +335,12 @@ class Model {
    * @return double Largest Windkessel time constant of model
    */
   double get_largest_windkessel_time_constant();
+  /**
+   * @brief Setup model parameters that depend on the initial state
+   *
+   * @param initial_state The initial state
+   */
+  void setup_initial_state_dependent_parameters(State initial_state);
 
  private:
   int block_count = 0;

@@ -127,6 +127,8 @@ class Solver {
   State initial_state;
 
   void sanity_checks();
+  std::vector<std::pair<int, int>> get_vessel_caps_dof_indices();
+  bool check_vessel_cap_convergence(const std::vector<State>& states_last_two_cycles);
 };
 
 #endif

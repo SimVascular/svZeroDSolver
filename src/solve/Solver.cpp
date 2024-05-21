@@ -80,9 +80,25 @@ void Solver::run() {
     times.push_back(time);
     states.push_back(std::move(state));
   }
-
+  
+  int num_time_pts_in_two_cycles;
+  std::vector<State> states_last_two_cycles;
+  int last_two_cycles_time_pt_counter = 1;
+  if (simparams.use_cycle_to_cycle_error) {
+      num_time_pts_in_two_cycles = 2 * (simparams.sim_pts_per_cycle - 1) + 1;
+      states_last_two_cycles = std::vector<State>(num_time_pts_in_two_cycles, state);
+  }
   for (int i = 1; i < simparams.sim_num_time_steps; i++) {
     state = integrator.step(state, time);
+    if (simparams.use_cycle_to_cycle_error) {
+      if (last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles - 1) {
+          std::rotate(states_last_two_cycles.begin(), states_last_two_cycles.begin() + 1, states_last_two_cycles.end());
+      }
+      states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
+      if (last_two_cycles_time_pt_counter < num_time_pts_in_two_cycles - 1) {
+          last_two_cycles_time_pt_counter += 1;
+      }
+    }
     interval_counter += 1;
     time = simparams.sim_time_step_size * double(i);
 
@@ -95,6 +111,34 @@ void Solver::run() {
       interval_counter = 0;
     }
   }
+  
+  if (simparams.use_cycle_to_cycle_error) {
+      assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles - 1);
+      double converged = check_vessel_cap_convergence(states_last_two_cycles);
+      int extra_num_cycles = 0;
+      
+      while (!converged) {
+          for (int i = 1; i < simparams.sim_pts_per_cycle; i++) {
+            state = integrator.step(state, time);
+            std::rotate(states_last_two_cycles.begin(), states_last_two_cycles.begin() + 1, states_last_two_cycles.end());
+            states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
+            interval_counter += 1;
+            time = simparams.sim_time_step_size * double(i);
+
+            if ((interval_counter == simparams.output_interval) ||
+                (!simparams.output_all_cycles && (i == start_last_cycle))) {
+              if (simparams.output_all_cycles || (i >= start_last_cycle)) {
+                times.push_back(time);
+                states.push_back(std::move(state));
+              }
+              interval_counter = 0;
+            }
+          }
+          extra_num_cycles++;
+          converged = check_vessel_cap_convergence(states_last_two_cycles);
+      }
+      DEBUG_MSG("Ran simulation for " << extra_num_cycles << " more cycles for convergence");
+  }
 
   DEBUG_MSG("Avg. number of nonlinear iterations per time step: "
             << integrator.avg_nonlin_iter());
@@ -106,6 +150,76 @@ void Solver::run() {
       time -= start_time;
     }
   }
+}
+
+std::vector<std::pair<int, int>> Solver::get_vessel_caps_dof_indices() {
+    std::vector<std::pair<int, int>> vessel_caps_dof_indices; // todo: use reserve() function to preallocate space for speedup
+    
+    for (size_t i = 0; i < this->model->get_num_blocks(); i++) {
+      auto block = this->model->get_block(i);
+
+      if (dynamic_cast<const BloodVessel *>(block) == nullptr) {
+        continue;
+      }
+      
+      if (block->block_class == BlockClass::vessel) {
+          if ((block->vessel_type == VesselType::inlet) || (block->vessel_type == VesselType::both))
+          {
+              int inflow_dof = block->inlet_nodes[0]->flow_dof;
+              int inpres_dof = block->inlet_nodes[0]->pres_dof;
+              std::pair<int, int> dofs {inflow_dof, inpres_dof};
+              vessel_caps_dof_indices.push_back(dofs);
+          }
+          else if ((block->vessel_type == VesselType::outlet) || (block->vessel_type == VesselType::both))
+          {
+              int outflow_dof = block->outlet_nodes[0]->flow_dof;
+              int outpres_dof = block->outlet_nodes[0]->pres_dof;
+              std::pair<int, int> dofs {outflow_dof, outpres_dof};
+              vessel_caps_dof_indices.push_back(dofs);
+          }
+      }
+    }
+    
+    return vessel_caps_dof_indices;
+}
+
+bool Solver::check_vessel_cap_convergence(const std::vector<State>& states_last_two_cycles) {
+    // get results at caps (both inlets and outlets) for vessels
+    std::vector<std::pair<int, int>> vessel_caps_dof_indices = get_vessel_caps_dof_indices();
+    
+    // compute mean flow for last cycle
+    // compute mean flow for second to last cycle
+    // compute mean pressure for last cycle
+    // compute mean pressure for second to last cycle
+    double converged = true;
+    for (std::pair<int, int> dof_indices : vessel_caps_dof_indices) {
+        double mean_flow_second_to_last_cycle = 0.0;
+        double mean_pressure_second_to_last_cycle = 0.0;
+        double mean_flow_last_cycle = 0.0;
+        double mean_pressure_last_cycle = 0.0;
+
+        for (size_t i = 0; i < simparams.sim_pts_per_cycle; i++) {
+          mean_flow_second_to_last_cycle += states_last_two_cycles[i].y[dof_indices.first];
+          mean_pressure_second_to_last_cycle += states_last_two_cycles[i].y[dof_indices.second];
+          mean_flow_last_cycle += states_last_two_cycles[simparams.sim_pts_per_cycle - 1 + i].y[dof_indices.first];
+          mean_pressure_last_cycle += states_last_two_cycles[simparams.sim_pts_per_cycle - 1 + i].y[dof_indices.second];
+        }
+        mean_flow_second_to_last_cycle /= simparams.sim_pts_per_cycle;
+        mean_pressure_second_to_last_cycle /= simparams.sim_pts_per_cycle;
+        mean_flow_last_cycle /= simparams.sim_pts_per_cycle;
+        mean_pressure_last_cycle /= simparams.sim_pts_per_cycle;
+        
+        double cycle_to_cycle_error_flow = abs((mean_flow_last_cycle - mean_flow_second_to_last_cycle) / mean_flow_second_to_last_cycle);
+        double cycle_to_cycle_error_pressure = abs((mean_pressure_last_cycle - mean_pressure_second_to_last_cycle) / mean_pressure_second_to_last_cycle);
+        
+        if (cycle_to_cycle_error_flow > simparams.sim_cycle_to_cycle_error || cycle_to_cycle_error_pressure > simparams.sim_cycle_to_cycle_error)
+        {
+            converged = false;
+            break;
+        }
+    }
+    
+    return converged;
 }
 
 std::vector<double> Solver::get_times() const { return times; }

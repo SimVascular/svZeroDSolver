@@ -188,6 +188,11 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
         sim_config["number_of_time_pts_per_cardiac_cycle"];
     sim_params.sim_num_time_steps =
         (sim_params.sim_pts_per_cycle - 1) * sim_params.sim_num_cycles + 1;
+    sim_params.use_cycle_to_cycle_error = sim_config.value("use_cycle_to_cycle_error", false);
+    if (sim_params.use_cycle_to_cycle_error) {
+        assert(sim_params.sim_num_cycles >= 2); // need at least two cycles to compute cycle-to-cycle error
+        sim_params.sim_cycle_to_cycle_error = sim_config.value("sim_cycle_to_cycle_percent_error", 1.0) / 100;
+    }
     sim_params.sim_external_step_size = 0.0;
 
   } else {
@@ -306,9 +311,16 @@ void create_vessels(
       const auto& vessel_bc_config = vessel_config["boundary_conditions"];
       if (vessel_bc_config.contains("inlet")) {
         connections.push_back({vessel_bc_config["inlet"], vessel_name});
+        if (vessel_bc_config.contains("outlet")) {
+            model.get_block(vessel_name)->update_vessel_type(VesselType::both);
+        }
+        else {
+            model.get_block(vessel_name)->update_vessel_type(VesselType::inlet);
+        }
       }
       if (vessel_bc_config.contains("outlet")) {
         connections.push_back({vessel_name, vessel_bc_config["outlet"]});
+        model.get_block(vessel_name)->update_vessel_type(VesselType::outlet);
       }
     }
   }

@@ -25,9 +25,6 @@ Solver::Solver(const nlohmann::json& config) {
         (simparams.sim_pts_per_cycle - 1) * simparams.sim_num_cycles + 1;
   }
 
-  // last here - create new test case with single rcr and new test case with two
-  // rcr BCs
-
   // Calculate time step size
   if (!simparams.sim_coupled) {
     simparams.sim_time_step_size = this->model->cardiac_cycle_period /
@@ -199,9 +196,7 @@ void Solver::run() {
 }
 
 std::vector<std::pair<int, int>> Solver::get_vessel_caps_dof_indices() {
-  std::vector<std::pair<int, int>>
-      vessel_caps_dof_indices;  // todo: use reserve() function to preallocate
-                                // space for speedup
+  std::vector<std::pair<int, int>> vessel_caps_dof_indices;
 
   for (size_t i = 0; i < this->model->get_num_blocks(); i++) {
     auto block = this->model->get_block(i);

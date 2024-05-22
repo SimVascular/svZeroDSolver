@@ -188,10 +188,13 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
         sim_config["number_of_time_pts_per_cardiac_cycle"];
     sim_params.sim_num_time_steps =
         (sim_params.sim_pts_per_cycle - 1) * sim_params.sim_num_cycles + 1;
-    sim_params.use_cycle_to_cycle_error = sim_config.value("use_cycle_to_cycle_error", false);
+    sim_params.use_cycle_to_cycle_error =
+        sim_config.value("use_cycle_to_cycle_error", false);
     if (sim_params.use_cycle_to_cycle_error) {
-        assert(sim_params.sim_num_cycles >= 2); // need at least two cycles to compute cycle-to-cycle error
-        sim_params.sim_cycle_to_cycle_error = sim_config.value("sim_cycle_to_cycle_percent_error", 1.0) / 100;
+      assert(sim_params.sim_num_cycles >=
+             2);  // need at least two cycles to compute cycle-to-cycle error
+      sim_params.sim_cycle_to_cycle_error =
+          sim_config.value("sim_cycle_to_cycle_percent_error", 1.0) / 100;
     }
     sim_params.sim_external_step_size = 0.0;
 
@@ -312,10 +315,9 @@ void create_vessels(
       if (vessel_bc_config.contains("inlet")) {
         connections.push_back({vessel_bc_config["inlet"], vessel_name});
         if (vessel_bc_config.contains("outlet")) {
-            model.get_block(vessel_name)->update_vessel_type(VesselType::both);
-        }
-        else {
-            model.get_block(vessel_name)->update_vessel_type(VesselType::inlet);
+          model.get_block(vessel_name)->update_vessel_type(VesselType::both);
+        } else {
+          model.get_block(vessel_name)->update_vessel_type(VesselType::inlet);
         }
       }
       if (vessel_bc_config.contains("outlet")) {
@@ -341,13 +343,13 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
     // Keep track of closed loop blocks
     Block* block = model.get_block(block_id);
 
-    if (block->block_type == BlockType::windkessel_bc)
-    {
-        model.update_has_windkessel_bc(true);
-        double Rd = bc_values["Rd"];
-        double C = bc_values["C"];
-        double time_constant = Rd * C;
-        model.update_largest_windkessel_time_constant(std::max(model.get_largest_windkessel_time_constant(), time_constant));
+    if (block->block_type == BlockType::windkessel_bc) {
+      model.update_has_windkessel_bc(true);
+      double Rd = bc_values["Rd"];
+      double C = bc_values["C"];
+      double time_constant = Rd * C;
+      model.update_largest_windkessel_time_constant(std::max(
+          model.get_largest_windkessel_time_constant(), time_constant));
     }
 
     if (block->block_type == BlockType::closed_loop_rcr_bc) {

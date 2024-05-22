@@ -74,11 +74,6 @@ enum class BlockClass {
 /**
  * @brief The types of vessel blocks supported.
  */
-enum class VesselType {
-  inlet = 0,
-  outlet = 1,
-  both = 2,
-  neither = 3
-};
+enum class VesselType { inlet = 0, outlet = 1, both = 2, neither = 3 };
 
 #endif

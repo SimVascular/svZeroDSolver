@@ -289,10 +289,16 @@ TripletsContributions Model::get_num_triplets() const {
   return triplets_sum;
 }
 
-void Model::update_has_windkessel_bc(bool has_windkessel) { has_windkessel_bc = has_windkessel; }
+void Model::update_has_windkessel_bc(bool has_windkessel) {
+  has_windkessel_bc = has_windkessel;
+}
 
-void Model::update_largest_windkessel_time_constant(double time_constant) { largest_windkessel_time_constant = time_constant; }
+void Model::update_largest_windkessel_time_constant(double time_constant) {
+  largest_windkessel_time_constant = time_constant;
+}
 
 bool Model::get_has_windkessel_bc() { return has_windkessel_bc; }
 
-double Model::get_largest_windkessel_time_constant() { return largest_windkessel_time_constant; }
+double Model::get_largest_windkessel_time_constant() {
+  return largest_windkessel_time_constant;
+}

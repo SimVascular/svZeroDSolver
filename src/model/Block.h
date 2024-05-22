@@ -179,7 +179,7 @@ class Block {
    * @return std::string Name of the block
    */
   std::string get_name();
-  
+
   /**
    * @brief Update vessel type of the block
    */

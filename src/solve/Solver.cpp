@@ -13,6 +13,13 @@ Solver::Solver(const nlohmann::json& config) {
   initial_state = load_initial_condition(config, *this->model.get());
 
   DEBUG_MSG("Cardiac cycle period " << this->model->cardiac_cycle_period);
+  
+  if (!simparams.sim_coupled && simparams.use_cycle_to_cycle_error && this->model->get_has_windkessel_bc()) {
+      simparams.sim_num_cycles = int(ceil(-1 * this->model->get_largest_windkessel_time_constant() / this->model->cardiac_cycle_period * log(simparams.sim_cycle_to_cycle_error))); // equation 21 of Pfaller 2021
+      simparams.sim_num_time_steps = (simparams.sim_pts_per_cycle - 1) * simparams.sim_num_cycles + 1;
+  }
+  
+  // last here - create new test case with single rcr and new test case with two rcr BCs
 
   // Calculate time step size
   if (!simparams.sim_coupled) {
@@ -113,31 +120,43 @@ void Solver::run() {
   }
   
   if (simparams.use_cycle_to_cycle_error) {
-      assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles - 1);
-      double converged = check_vessel_cap_convergence(states_last_two_cycles);
-      int extra_num_cycles = 0;
+      std::vector<std::pair<int, int>> vessel_caps_dof_indices = get_vessel_caps_dof_indices();
       
-      while (!converged) {
-          for (int i = 1; i < simparams.sim_pts_per_cycle; i++) {
-            state = integrator.step(state, time);
-            std::rotate(states_last_two_cycles.begin(), states_last_two_cycles.begin() + 1, states_last_two_cycles.end());
-            states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
-            interval_counter += 1;
-            time = simparams.sim_time_step_size * double(i);
+      if (!(this->model->get_has_windkessel_bc())) {
+          assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles - 1);
+          double converged = check_vessel_cap_convergence(states_last_two_cycles, vessel_caps_dof_indices);
+          int extra_num_cycles = 0;
+          
+          while (!converged) {
+              for (size_t i = 1; i < simparams.sim_pts_per_cycle; i++) {
+                state = integrator.step(state, time);
+                std::rotate(states_last_two_cycles.begin(), states_last_two_cycles.begin() + 1, states_last_two_cycles.end());
+                states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
+                interval_counter += 1;
+                time = simparams.sim_time_step_size * double(i);
 
-            if ((interval_counter == simparams.output_interval) ||
-                (!simparams.output_all_cycles && (i == start_last_cycle))) {
-              if (simparams.output_all_cycles || (i >= start_last_cycle)) {
-                times.push_back(time);
-                states.push_back(std::move(state));
+                if ((interval_counter == simparams.output_interval) ||
+                    (!simparams.output_all_cycles && (i == start_last_cycle))) {
+                  if (simparams.output_all_cycles || (i >= start_last_cycle)) {
+                    times.push_back(time);
+                    states.push_back(std::move(state));
+                  }
+                  interval_counter = 0;
+                }
               }
-              interval_counter = 0;
-            }
+              extra_num_cycles++;
+              converged = check_vessel_cap_convergence(states_last_two_cycles, vessel_caps_dof_indices);
           }
-          extra_num_cycles++;
-          converged = check_vessel_cap_convergence(states_last_two_cycles);
+          DEBUG_MSG("Ran simulation for " << extra_num_cycles << " more cycles for convergence");
+      } else {
+          for (const std::pair<int, int>& dof_indices : vessel_caps_dof_indices) {
+              std::pair<double, double> cycle_to_cycle_errors_in_flow_and_pressure = get_cycle_to_cycle_errors_in_flow_and_pressure(states_last_two_cycles, dof_indices);
+              double cycle_to_cycle_error_flow = cycle_to_cycle_errors_in_flow_and_pressure.first;
+              double cycle_to_cycle_error_pressure = cycle_to_cycle_errors_in_flow_and_pressure.second;
+              std::cout << "Percent error between last two simulated cardiac cycles for dof index " << dof_indices.first  << " (mean flow)    : " << cycle_to_cycle_error_flow * 100.0     << std::endl;
+              std::cout << "Percent error between last two simulated cardiac cycles for dof index " << dof_indices.second << " (mean pressure): " << cycle_to_cycle_error_pressure * 100.0 << std::endl;
+          }
       }
-      DEBUG_MSG("Ran simulation for " << extra_num_cycles << " more cycles for convergence");
   }
 
   DEBUG_MSG("Avg. number of nonlinear iterations per time step: "
@@ -157,10 +176,6 @@ std::vector<std::pair<int, int>> Solver::get_vessel_caps_dof_indices() {
     
     for (size_t i = 0; i < this->model->get_num_blocks(); i++) {
       auto block = this->model->get_block(i);
-
-      if (dynamic_cast<const BloodVessel *>(block) == nullptr) {
-        continue;
-      }
       
       if (block->block_class == BlockClass::vessel) {
           if ((block->vessel_type == VesselType::inlet) || (block->vessel_type == VesselType::both))
@@ -183,34 +198,12 @@ std::vector<std::pair<int, int>> Solver::get_vessel_caps_dof_indices() {
     return vessel_caps_dof_indices;
 }
 
-bool Solver::check_vessel_cap_convergence(const std::vector<State>& states_last_two_cycles) {
-    // get results at caps (both inlets and outlets) for vessels
-    std::vector<std::pair<int, int>> vessel_caps_dof_indices = get_vessel_caps_dof_indices();
-    
-    // compute mean flow for last cycle
-    // compute mean flow for second to last cycle
-    // compute mean pressure for last cycle
-    // compute mean pressure for second to last cycle
+bool Solver::check_vessel_cap_convergence(const std::vector<State>& states_last_two_cycles, const std::vector<std::pair<int, int>>& vessel_caps_dof_indices) {
     double converged = true;
-    for (std::pair<int, int> dof_indices : vessel_caps_dof_indices) {
-        double mean_flow_second_to_last_cycle = 0.0;
-        double mean_pressure_second_to_last_cycle = 0.0;
-        double mean_flow_last_cycle = 0.0;
-        double mean_pressure_last_cycle = 0.0;
-
-        for (size_t i = 0; i < simparams.sim_pts_per_cycle; i++) {
-          mean_flow_second_to_last_cycle += states_last_two_cycles[i].y[dof_indices.first];
-          mean_pressure_second_to_last_cycle += states_last_two_cycles[i].y[dof_indices.second];
-          mean_flow_last_cycle += states_last_two_cycles[simparams.sim_pts_per_cycle - 1 + i].y[dof_indices.first];
-          mean_pressure_last_cycle += states_last_two_cycles[simparams.sim_pts_per_cycle - 1 + i].y[dof_indices.second];
-        }
-        mean_flow_second_to_last_cycle /= simparams.sim_pts_per_cycle;
-        mean_pressure_second_to_last_cycle /= simparams.sim_pts_per_cycle;
-        mean_flow_last_cycle /= simparams.sim_pts_per_cycle;
-        mean_pressure_last_cycle /= simparams.sim_pts_per_cycle;
-        
-        double cycle_to_cycle_error_flow = abs((mean_flow_last_cycle - mean_flow_second_to_last_cycle) / mean_flow_second_to_last_cycle);
-        double cycle_to_cycle_error_pressure = abs((mean_pressure_last_cycle - mean_pressure_second_to_last_cycle) / mean_pressure_second_to_last_cycle);
+    for (const std::pair<int, int>& dof_indices : vessel_caps_dof_indices) {
+        std::pair<double, double> cycle_to_cycle_errors_in_flow_and_pressure = get_cycle_to_cycle_errors_in_flow_and_pressure(states_last_two_cycles, dof_indices);
+        double cycle_to_cycle_error_flow = cycle_to_cycle_errors_in_flow_and_pressure.first;
+        double cycle_to_cycle_error_pressure = cycle_to_cycle_errors_in_flow_and_pressure.second;
         
         if (cycle_to_cycle_error_flow > simparams.sim_cycle_to_cycle_error || cycle_to_cycle_error_pressure > simparams.sim_cycle_to_cycle_error)
         {
@@ -220,6 +213,31 @@ bool Solver::check_vessel_cap_convergence(const std::vector<State>& states_last_
     }
     
     return converged;
+}
+
+std::pair<double, double> Solver::get_cycle_to_cycle_errors_in_flow_and_pressure(const std::vector<State>& states_last_two_cycles, const std::pair<int, int>& dof_indices) {
+    double mean_flow_second_to_last_cycle = 0.0;
+    double mean_pressure_second_to_last_cycle = 0.0;
+    double mean_flow_last_cycle = 0.0;
+    double mean_pressure_last_cycle = 0.0;
+
+    for (size_t i = 0; i < simparams.sim_pts_per_cycle; i++) {
+      mean_flow_second_to_last_cycle += states_last_two_cycles[i].y[dof_indices.first];
+      mean_pressure_second_to_last_cycle += states_last_two_cycles[i].y[dof_indices.second];
+      mean_flow_last_cycle += states_last_two_cycles[simparams.sim_pts_per_cycle - 1 + i].y[dof_indices.first];
+      mean_pressure_last_cycle += states_last_two_cycles[simparams.sim_pts_per_cycle - 1 + i].y[dof_indices.second];
+    }
+    mean_flow_second_to_last_cycle /= simparams.sim_pts_per_cycle;
+    mean_pressure_second_to_last_cycle /= simparams.sim_pts_per_cycle;
+    mean_flow_last_cycle /= simparams.sim_pts_per_cycle;
+    mean_pressure_last_cycle /= simparams.sim_pts_per_cycle;
+    
+    double cycle_to_cycle_error_flow = abs((mean_flow_last_cycle - mean_flow_second_to_last_cycle) / mean_flow_second_to_last_cycle);
+    double cycle_to_cycle_error_pressure = abs((mean_pressure_last_cycle - mean_pressure_second_to_last_cycle) / mean_pressure_second_to_last_cycle);
+    
+    std::pair<double, double> cycle_to_cycle_errors_in_flow_and_pressure {cycle_to_cycle_error_flow, cycle_to_cycle_error_pressure};
+    
+    return cycle_to_cycle_errors_in_flow_and_pressure;
 }
 
 std::vector<double> Solver::get_times() const { return times; }

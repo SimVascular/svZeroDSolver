@@ -341,6 +341,15 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
     // Keep track of closed loop blocks
     Block* block = model.get_block(block_id);
 
+    if (block->block_type == BlockType::windkessel_bc)
+    {
+        model.update_has_windkessel_bc(true);
+        double Rd = bc_values["Rd"];
+        double C = bc_values["C"];
+        double time_constant = Rd * C;
+        model.update_largest_windkessel_time_constant(std::max(model.get_largest_windkessel_time_constant(), time_constant));
+    }
+
     if (block->block_type == BlockType::closed_loop_rcr_bc) {
       if (bc_values["closed_loop_outlet"] == true) {
         closed_loop_bcs.push_back(bc_name);

@@ -128,7 +128,8 @@ class Solver {
 
   void sanity_checks();
   std::vector<std::pair<int, int>> get_vessel_caps_dof_indices();
-  bool check_vessel_cap_convergence(const std::vector<State>& states_last_two_cycles);
+  bool check_vessel_cap_convergence(const std::vector<State>& states_last_two_cycles, const std::vector<std::pair<int, int>>& vessel_caps_dof_indices);
+  std::pair<double, double> get_cycle_to_cycle_errors_in_flow_and_pressure(const std::vector<State>& states_last_two_cycles, const std::pair<int, int>& dof_indices);
 };
 
 #endif

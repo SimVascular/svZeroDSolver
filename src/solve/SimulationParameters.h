@@ -55,7 +55,7 @@ struct SimulationParameters {
 
   int sim_num_cycles{0};      ///< Number of cardiac cycles to simulate
   int sim_pts_per_cycle{0};   ///< Number of time steps per cardiac cycle
-  bool use_cycle_to_cycle_error{false};     ///< Use cycle-to-cycle error
+  bool use_cycle_to_cycle_error{false};     ///< If model does not have RCR boundary conditions, simulate model to convergence (based on cycle-to-cycle error of last two cardiac cycles); if it does, update number of cardiac cycles to simulate to be value estimated from equation 21 of Pfaller 2021
   double sim_cycle_to_cycle_error{0};       ///< Cycle-to-cycle error
   int sim_num_time_steps{0};  ///< Total number of time steps
   int sim_nliter{0};  ///< Maximum number of non-linear iterations in time

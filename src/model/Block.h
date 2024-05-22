@@ -183,7 +183,7 @@ class Block {
   /**
    * @brief Update vessel type of the block
    *
-   * @param Type of vessel
+   * @param type Type of vessel
    */
   void update_vessel_type(VesselType type);
 

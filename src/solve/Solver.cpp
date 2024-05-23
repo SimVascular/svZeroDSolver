@@ -159,8 +159,9 @@ void Solver::run() {
         converged = check_vessel_cap_convergence(states_last_two_cycles,
                                                  vessel_caps_dof_indices);
       }
-      DEBUG_MSG("Ran simulation for " << extra_num_cycles
-                                      << " more cycles for convergence");
+      std::cout << "Ran simulation for " << extra_num_cycles
+                << " more cycles to converge flow and pressures at caps"
+                << std::endl;
     } else {
       for (const std::pair<int, int>& dof_indices : vessel_caps_dof_indices) {
         std::pair<double, double> cycle_to_cycle_errors_in_flow_and_pressure =

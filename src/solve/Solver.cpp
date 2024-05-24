@@ -94,24 +94,26 @@ void Solver::run() {
 
   int num_time_pts_in_two_cycles;
   std::vector<State> states_last_two_cycles;
-  int last_two_cycles_time_pt_counter = 1;
+  int last_two_cycles_time_pt_counter = 0;
   if (simparams.use_cycle_to_cycle_error) {
     num_time_pts_in_two_cycles = 2 * (simparams.sim_pts_per_cycle - 1) + 1;
     states_last_two_cycles =
         std::vector<State>(num_time_pts_in_two_cycles, state);
   }
   for (int i = 1; i < simparams.sim_num_time_steps; i++) {
-    state = integrator.step(state, time);
     if (simparams.use_cycle_to_cycle_error) {
-      if (last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles - 1) {
-        std::rotate(states_last_two_cycles.begin(),
-                    states_last_two_cycles.begin() + 1,
-                    states_last_two_cycles.end());
+      if (i == simparams.sim_num_time_steps - num_time_pts_in_two_cycles + 1) {
+        // add first state
+        states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
+        last_two_cycles_time_pt_counter +=
+            1;  // last_two_cycles_time_pt_counter becomes 1
       }
+    }
+    state = integrator.step(state, time);
+    if (simparams.use_cycle_to_cycle_error &&
+        last_two_cycles_time_pt_counter > 0) {
       states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
-      if (last_two_cycles_time_pt_counter < num_time_pts_in_two_cycles - 1) {
-        last_two_cycles_time_pt_counter += 1;
-      }
+      last_two_cycles_time_pt_counter += 1;
     }
     interval_counter += 1;
     time = simparams.sim_time_step_size * double(i);
@@ -131,18 +133,21 @@ void Solver::run() {
         get_vessel_caps_dof_indices();
 
     if (!(this->model->get_has_windkessel_bc())) {
-      assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles - 1);
+      assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles);
       double converged = check_vessel_cap_convergence(states_last_two_cycles,
                                                       vessel_caps_dof_indices);
       int extra_num_cycles = 0;
 
       while (!converged) {
+        std::rotate(
+            states_last_two_cycles.begin(),
+            states_last_two_cycles.begin() + simparams.sim_pts_per_cycle - 1,
+            states_last_two_cycles.end());
+        last_two_cycles_time_pt_counter = simparams.sim_pts_per_cycle;
         for (size_t i = 1; i < simparams.sim_pts_per_cycle; i++) {
           state = integrator.step(state, time);
-          std::rotate(states_last_two_cycles.begin(),
-                      states_last_two_cycles.begin() + 1,
-                      states_last_two_cycles.end());
           states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
+          last_two_cycles_time_pt_counter += 1;
           interval_counter += 1;
           time = simparams.sim_time_step_size * double(i);
 
@@ -158,6 +163,7 @@ void Solver::run() {
         extra_num_cycles++;
         converged = check_vessel_cap_convergence(states_last_two_cycles,
                                                  vessel_caps_dof_indices);
+        assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles);
       }
       std::cout << "Ran simulation for " << extra_num_cycles
                 << " more cycles to converge flow and pressures at caps"

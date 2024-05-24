@@ -127,6 +127,46 @@ class Solver {
   State initial_state;
 
   void sanity_checks();
+
+  /**
+   * @brief Get indices of flow and pressure degrees-of-freedom in solution
+   * vector for all vessel caps
+   *
+   * @return std::vector<std::pair<int, int>> Indices of flow and pressure
+   * degrees-of-freedom in solution vector for all vessel caps
+   */
+  std::vector<std::pair<int, int>> get_vessel_caps_dof_indices();
+
+  /**
+   * @brief Check if flows and pressures for all vessel caps have converged,
+   * based on cycle-to-cycle error for last two simulated cardiac cycles
+   *
+   * @param states_last_two_cycles Vector of solution states for last two
+   * simulated cardiac cycles
+   * @param vessel_caps_dof_indices Indices of flow and pressure
+   * degrees-of-freedom in solution vector for all vessel caps
+   *
+   * @return bool True if flows and pressures for all vessel caps have converged
+   */
+  bool check_vessel_cap_convergence(
+      const std::vector<State>& states_last_two_cycles,
+      const std::vector<std::pair<int, int>>& vessel_caps_dof_indices);
+
+  /**
+   * @brief Get cycle-to-cycle errors for flow and pressure for a single vessel
+   * cap
+   *
+   * @param states_last_two_cycles Vector of solution states for last two
+   * simulated cardiac cycles
+   * @param dof_indices Indices of flow and pressure degrees-of-freedom in
+   * solution vector for a single vessel cap
+   *
+   * @return std::pair<double, double> Cycle-to-cycle errors for flow and
+   * pressure
+   */
+  std::pair<double, double> get_cycle_to_cycle_errors_in_flow_and_pressure(
+      const std::vector<State>& states_last_two_cycles,
+      const std::pair<int, int>& dof_indices);
 };
 
 #endif

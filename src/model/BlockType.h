@@ -71,4 +71,9 @@ enum class BlockClass {
   chamber = 6
 };
 
+/**
+ * @brief The types of vessel blocks supported.
+ */
+enum class VesselType { inlet = 0, outlet = 1, both = 2, neither = 3 };
+
 #endif

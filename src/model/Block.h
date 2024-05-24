@@ -103,6 +103,7 @@ class Block {
   const Model *model;            ///< The model to which the block belongs
   const BlockType block_type;    ///< Type of this block
   const BlockClass block_class;  ///< Class of this block
+  VesselType vessel_type = VesselType::neither;  ///< Vessel type of this block
   const std::vector<std::pair<std::string, InputParameter>>
       input_params;  ///< Map from name to input parameter
 
@@ -178,6 +179,13 @@ class Block {
    * @return std::string Name of the block
    */
   std::string get_name();
+
+  /**
+   * @brief Update vessel type of the block
+   *
+   * @param type Type of vessel
+   */
+  void update_vessel_type(VesselType type);
 
   /**
    * @brief Setup parameter IDs for the block

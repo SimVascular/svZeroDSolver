@@ -8,5 +8,6 @@ var searchData=
   ['flowreferencebc_2eh_5',['FlowReferenceBC.h',['../_flow_reference_b_c_8h.html',1,'']]],
   ['formatting_6',['Formatting',['../developer_guide.html#autotoc_md45',1,'']]],
   ['from_20other_20programs_7',['Run svZeroDSolver from other programs',['../index.html#autotoc_md58',1,'']]],
-  ['from_20the_20command_20line_8',['From the command line',['../index.html#autotoc_md68',1,'From the command line'],['../index.html#autotoc_md57',1,'Run svZeroDSolver from the command line']]]
+  ['from_20the_20command_20line_8',['From the command line',['../index.html#autotoc_md68',1,'']]],
+  ['from_20the_20command_20line_9',['Run svZeroDSolver from the command line',['../index.html#autotoc_md57',1,'']]]
 ];

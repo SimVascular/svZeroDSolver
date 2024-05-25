@@ -84,8 +84,22 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
 }
 
 void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_state, std::vector<double> &parameters) {
-  P_Cim_0 = 0.0;
-  Pim_0 = 0.0;
-  //auto Pim = parameters[global_param_ids[5]];
-  //Pim_0 = Pim.get(0.0);
+  //P_Cim_0 = 0.0;
+  //Pim_0 = 0.0;
+  //auto Rv = parameters[global_param_ids[2]];
+  //auto Pv = parameters[global_param_ids[6]];
+  //auto Q_im = initial_state.ydot[global_var_ids[2]];
+  auto P_in = initial_state.y[global_var_ids[0]];
+  auto Q_in = initial_state.y[global_var_ids[1]];
+  auto P_in_dot = initial_state.ydot[global_var_ids[0]];
+  auto Q_in_dot = initial_state.ydot[global_var_ids[1]];
+  auto Ra = parameters[global_param_ids[0]];
+  auto Ram = parameters[global_param_ids[1]];
+  auto Ca = parameters[global_param_ids[3]];
+  auto P_Ca = P_in - Ra*Q_in;
+  auto P_Ca_dot = P_in_dot - Ra*Q_in_dot; 
+  auto Q_am = Q_in - Ca*P_Ca_dot;
+  P_Cim_0 = P_Ca - Ram*Q_am;
+  //P_Cim_0 = Pv + Rv*Q_out;
+  Pim_0 = parameters[global_param_ids[5]];
 }

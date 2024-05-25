@@ -293,7 +293,7 @@ TripletsContributions Model::get_num_triplets() const {
 void Model::setup_initial_state_dependent_parameters(State initial_state) {
   DEBUG_MSG("Setup initial state dependent parameters");
   for (auto &block : blocks) {
-    block->setup_initial_state_dependent_params(initial_state);
+    block->setup_initial_state_dependent_params(initial_state, parameter_values);
   }
 }
 

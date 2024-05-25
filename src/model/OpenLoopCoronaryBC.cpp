@@ -83,7 +83,9 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
   }
 }
 
-void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_state) {
+void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_state, std::vector<double> &parameters) {
   P_Cim_0 = 0.0;
   Pim_0 = 0.0;
+  //auto Pim = parameters[global_param_ids[5]];
+  //Pim_0 = Pim.get(0.0);
 }

@@ -147,8 +147,9 @@ class OpenLoopCoronaryBC : public Block {
    * @brief Setup parameters that depend on the initial state
    *
    * @param initial_state The initial state of the system
+   * @param parameters The parameter values vector (at time 0)
    */
-  void setup_initial_state_dependent_params(State initial_state);
+  void setup_initial_state_dependent_params(State initial_state, std::vector<double> &parameters);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system

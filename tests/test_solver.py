@@ -1,3 +1,5 @@
+import os
+import json
 import numpy as np
 import os
 import json
@@ -345,6 +347,43 @@ def test_pulsatile_flow_r_coronary():
     assert np.isclose(
         np.mean(np.array(results["flow_out"][0])), 2.2, rtol=RTOL_FLOW
     )  # outlet flow
+
+
+def test_pulsatile_flow_r_coronary_cycle_error():
+    name = "pulsatileFlow_R_coronary_cycle_error"
+    
+    # read configuration
+    this_file_dir = os.path.abspath(os.path.dirname(__file__))
+    testfile = os.path.join(this_file_dir, "cases", name + ".json")
+    with open(testfile) as ff:
+        config = json.load(ff)
+    
+    sim_pts_per_cycle = config["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"]
+    num_time_pts_in_two_cycles = int(2 * (sim_pts_per_cycle - 1) + 1)
+    results = run_test_case_by_name(name)
+    
+    for qoi in ["pressure_in", "pressure_out", "flow_in", "flow_out"]:
+        mean_qoi_second_to_last_cycle = np.mean(np.array(results[qoi][0])[-num_time_pts_in_two_cycles:-sim_pts_per_cycle+1])
+        mean_qoi_last_cycle = np.mean(np.array(results[qoi][0])[-sim_pts_per_cycle:])
+        cycle_to_cycle_percent_error_flow = abs((mean_qoi_last_cycle - mean_qoi_second_to_last_cycle) / mean_qoi_second_to_last_cycle) * 100.0
+        assert(cycle_to_cycle_percent_error_flow <= config["simulation_parameters"]["sim_cycle_to_cycle_percent_error"])
+
+
+def test_pulsatileFlow_bifurcationR_RCR_cycle_error():
+    name = "pulsatileFlow_bifurcationR_RCR_cycle_error"
+    
+    # read configuration
+    this_file_dir = os.path.abspath(os.path.dirname(__file__))
+    testfile = os.path.join(this_file_dir, "cases", name + ".json")
+    with open(testfile) as ff:
+        config = json.load(ff)
+    
+    sim_pts_per_cycle = config["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"]
+    results = run_test_case_by_name(name)
+    num_time_steps = len(np.array(results["flow_in"][0]))
+    num_cycles_simulated = int((num_time_steps - 1) / (sim_pts_per_cycle - 1))
+    
+    assert(num_cycles_simulated == 33)
 
 
 def test_pulsatile_flow_cstenosis_steady_pressure():

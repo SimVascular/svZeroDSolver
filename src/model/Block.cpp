@@ -34,6 +34,8 @@
 
 std::string Block::get_name() { return this->model->get_block_name(this->id); }
 
+void Block::update_vessel_type(VesselType type) { vessel_type = type; }
+
 Block::~Block() {}
 
 void Block::setup_params_(const std::vector<int> &param_ids) {

@@ -9,6 +9,9 @@ from .utils import run_test_case_by_name, get_result, run_with_reference, RTOL_F
 
 
 def test_all():
+    '''
+    run all test cases and compare against stored reference solution
+    '''
 
     this_file_dir = os.path.abspath(os.path.dirname(__file__))
 

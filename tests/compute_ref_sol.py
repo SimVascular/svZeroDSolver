@@ -21,6 +21,5 @@ def compute_all_ref_sol():
         with open(os.path.join('tests/cases/results', 'result_' + file), 'w') as f:
             f.write(result.to_json())
 
-    
 
         

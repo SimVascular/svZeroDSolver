@@ -107,7 +107,10 @@ double Parameter::get(double time) {
 
     exprtk::parser<double> parser;
 
-    parser.compile(expression_string, expression);
+    // Compile the parser and check that the input expression is valid
+    if (!parser.compile(expression_string, expression)) {
+      std::runtime_error("Error when compiling the function provided in 'fn'.");
+    }
     double value = expression.value();
     return value;
   }

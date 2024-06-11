@@ -313,6 +313,36 @@ class Model {
    */
   int get_num_blocks(bool internal = false) const;
 
+  /**
+   * @brief Specify if model has at least one Windkessel boundary condition
+   *
+   * @param has_windkessel Toggle if model has at least one Windkessel boundary
+   * condition
+   */
+  void update_has_windkessel_bc(bool has_windkessel);
+
+  /**
+   * @brief Update model with largest time constant among all Windkessel
+   * boundary conditions present in model
+   *
+   * @param time_constant Largest Windkessel time constant
+   */
+  void update_largest_windkessel_time_constant(double time_constant);
+
+  /**
+   * @brief Check if model has at least one Windkessel boundary condition
+   *
+   * @return bool True if model has at least one Windkessel boundary condition
+   */
+  bool get_has_windkessel_bc();
+
+  /**
+   * @brief Get largest Windkessel time constant in model
+   *
+   * @return double Largest Windkessel time constant of model
+   */
+  double get_largest_windkessel_time_constant();
+
  private:
   int block_count = 0;
   int node_count = 0;
@@ -341,6 +371,9 @@ class Model {
                          ///< to blocks to set up the linear system in
                          ///< `update_constant`, `update_time` and
                          ///< `update_solution`.
+
+  bool has_windkessel_bc = false;
+  double largest_windkessel_time_constant = 0.0;
 };
 
 #endif  // SVZERODSOLVER_MODEL_MODEL_HPP_

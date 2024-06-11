@@ -17,7 +17,7 @@
 #include <vector>
 
 #include "DOFHandler.h"
-#include "exprtk.hpp"
+#include "../ThirdParty/exprtk.hpp"
 
 /**
  * @brief Model Parameter.

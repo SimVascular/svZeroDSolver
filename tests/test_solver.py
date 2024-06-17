@@ -362,7 +362,7 @@ def test_pulsatileFlow_bifurcationR_RCR_cycle_error():
     
     assert(num_cycles_simulated == 33)
 
-@pytest.mark.first
+
 def test_pulsatile_flow_cstenosis_steady_pressure():
     results = run_test_case_by_name("pulsatileFlow_CStenosis_steadyPressure")
     assert np.isclose(
@@ -384,7 +384,7 @@ def test_pulsatile_flow_cstenosis_steady_pressure():
         rtol=1.0e-5,
     )  # outlet flow
 
-@pytest.mark.second()
+
 def test_steady_flow_confluencer_r():
     results = run_test_case_by_name("steadyFlow_confluenceR_R")
     assert np.isclose(

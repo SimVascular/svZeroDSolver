@@ -45,9 +45,42 @@ void Parameter::update(const std::vector<double> &update_times,
 }
 
 void Parameter::update(const std::string update_string) {
-  is_function = true;
-  is_constant = false;
-  expression_string = update_string;
+   is_function = true;
+   is_constant = false;
+   expression_string = update_string;
+   time_value = 0.0;
+
+   expression.release();
+   symbol_table.clear();
+
+   symbol_table.add_variable("t", time_value);
+   expression.register_symbol_table(symbol_table);
+
+   exprtk::parser<double> parser;
+
+   if (!parser.compile(expression_string, expression))
+   {
+      is_function = false;
+
+      printf("Error: %s\tExpression: %s\n",
+             parser.error().c_str(),
+             expression_string.c_str());
+
+      for (std::size_t i = 0; i < parser.error_count(); ++i)
+      {
+         typedef exprtk::parser_error::type err_t;
+         const auto error = parser.get_error(i);
+
+         printf("Error: %02d  Position: %02d Type: [%14s] Msg: %s\tExpression: %s\n",
+                static_cast<unsigned int>(i),
+                static_cast<unsigned int>(error.token.position),
+                exprtk::parser_error::to_str(error.mode).c_str(),
+                error.diagnostic.c_str(),
+                expression_string.c_str());
+      }
+      std::runtime_error("Error when compiling the function provided in 'fn'.");
+      return;
+   }
 }
 
 double Parameter::get(double time) {
@@ -67,24 +100,8 @@ double Parameter::get(double time) {
   }
 
   if (is_function == true) {
-    // Adapted from example from Basic Design example at
-    // http://www.partow.net/programming/exprtk/index.html
-    double t = time;
-
-    exprtk::symbol_table<double> symbol_table;
-    symbol_table.add_variable("t", t);
-
-    exprtk::expression<double> expression;
-    expression.register_symbol_table(symbol_table);
-
-    exprtk::parser<double> parser;
-
-    // Compile the parser and check that the input expression is valid
-    if (!parser.compile(expression_string, expression)) {
-      std::runtime_error("Error when compiling the function provided in 'fn'.");
-    }
-    double value = expression.value();
-    return value;
+    time_value = time;
+    return expression.value();
   }
 
   // Determine the lower and upper element for interpolation

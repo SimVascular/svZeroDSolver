@@ -89,8 +89,6 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
   // Generate block from factory
   auto block = model.create_block(block_type);
 
-  std::cout << name << std::endl;
-
   // Read block input parameters
   std::vector<int> block_param_ids;
   int new_id;
@@ -99,7 +97,6 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
   // Check that all parameters defined for the current block are valid
   for (auto& el : block_params_json.items()) {
 
-    std::cout << el.key() << std::endl;
     // Ignore comments (starting with _)
     if (el.key()[0] == '_') {
       continue;
@@ -141,7 +138,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
         std::string expression_string;
         err = get_param_string(block_params_json, block_param.first,
                                block_param.second, expression_string);
-        if (expression_string.length() <= 1) {
+        if (expression_string.length() < 1) {
             continue;
         }
         new_id = model.add_parameter(expression_string);

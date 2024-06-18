@@ -110,7 +110,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
         std::string expression_string;
         err = get_param_string(block_params_json, block_param.first,
                                block_param.second, expression_string);
-        if (expression_string.length() < 1) {
+        if (expression_string.length() <= 1) {
             continue;
         }
         new_id = model.add_parameter(expression_string);

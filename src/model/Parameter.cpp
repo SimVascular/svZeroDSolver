@@ -45,42 +45,39 @@ void Parameter::update(const std::vector<double> &update_times,
 }
 
 void Parameter::update(const std::string update_string) {
-   is_function = true;
-   is_constant = false;
-   expression_string = update_string;
-   time_value = 0.0;
+  is_function = true;
+  is_constant = false;
+  expression_string = update_string;
+  time_value = 0.0;
 
-   expression.release();
-   symbol_table.clear();
+  expression.release();
+  symbol_table.clear();
 
-   symbol_table.add_variable("t", time_value);
-   expression.register_symbol_table(symbol_table);
+  symbol_table.add_variable("t", time_value);
+  expression.register_symbol_table(symbol_table);
 
-   exprtk::parser<double> parser;
+  exprtk::parser<double> parser;
 
-   if (!parser.compile(expression_string, expression))
-   {
-      is_function = false;
+  if (!parser.compile(expression_string, expression)) {
+    is_function = false;
 
-      printf("Error: %s\tExpression: %s\n",
-             parser.error().c_str(),
-             expression_string.c_str());
+    printf("Error: %s\tExpression: %s\n", parser.error().c_str(),
+           expression_string.c_str());
 
-      for (std::size_t i = 0; i < parser.error_count(); ++i)
-      {
-         typedef exprtk::parser_error::type err_t;
-         const auto error = parser.get_error(i);
+    for (std::size_t i = 0; i < parser.error_count(); ++i) {
+      typedef exprtk::parser_error::type err_t;
+      const auto error = parser.get_error(i);
 
-         printf("Error: %02d  Position: %02d Type: [%14s] Msg: %s\tExpression: %s\n",
-                static_cast<unsigned int>(i),
-                static_cast<unsigned int>(error.token.position),
-                exprtk::parser_error::to_str(error.mode).c_str(),
-                error.diagnostic.c_str(),
-                expression_string.c_str());
-      }
-      std::runtime_error("Error when compiling the function provided in 'fn'.");
-      return;
-   }
+      printf(
+          "Error: %02d  Position: %02d Type: [%14s] Msg: %s\tExpression: %s\n",
+          static_cast<unsigned int>(i),
+          static_cast<unsigned int>(error.token.position),
+          exprtk::parser_error::to_str(error.mode).c_str(),
+          error.diagnostic.c_str(), expression_string.c_str());
+    }
+    std::runtime_error("Error when compiling the function provided in 'fn'.");
+    return;
+  }
 }
 
 double Parameter::get(double time) {
@@ -101,8 +98,9 @@ double Parameter::get(double time) {
 
   if (is_function == true) {
     time_value = time;
-    // Docs say that thi assignment will result in undefined behaviour, 
-    // but this seems to be the only way for the symbol table to actually get updated
+    // Docs say that thi assignment will result in undefined behaviour,
+    // but this seems to be the only way for the symbol table to actually get
+    // updated
     symbol_table.get_variable("t")->ref() = time;
     return expression.value();
   }

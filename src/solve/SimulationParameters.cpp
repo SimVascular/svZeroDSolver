@@ -96,7 +96,6 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
 
   // Check that all parameters defined for the current block are valid
   for (auto& el : block_params_json.items()) {
-
     // Ignore comments (starting with _)
     if (el.key()[0] == '_') {
       continue;
@@ -123,7 +122,6 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
     }
   } else {
     for (const auto& block_param : block->input_params) {
-
       // Time parameter is read at the same time as time-dependent value
       if (block_param.first.compare("t") == 0) {
         continue;
@@ -139,7 +137,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
         err = get_param_string(block_params_json, block_param.first,
                                block_param.second, expression_string);
         if (expression_string.length() <= 1) {
-            continue;
+          continue;
         }
         new_id = model.add_parameter(expression_string);
       } else {
@@ -477,8 +475,8 @@ void create_external_coupling(
           (connected_type == "BloodVessel")) {
         connections.push_back({connected_block, coupling_name});
       }  // connected_type == "ClosedLoopRCR"
-    }    // coupling_loc
-  }      // for (size_t i = 0; i < coupling_configs.length(); i++)
+    }  // coupling_loc
+  }  // for (size_t i = 0; i < coupling_configs.length(); i++)
 }
 
 void create_junctions(

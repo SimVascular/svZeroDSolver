@@ -1,6 +1,7 @@
 import os
 import json
 import numpy as np
+import pytest
 
 from .utils import run_test_case_by_name, get_result, RTOL_FLOW, RTOL_PRES
 

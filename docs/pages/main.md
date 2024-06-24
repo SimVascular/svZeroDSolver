@@ -26,7 +26,7 @@ time-dependent; they are unable to simulate spatial patterns in the
 hemodynamics. 0D models are analogous to electrical circuits. The flow rate
 simulated by 0D models represents electrical current, while the pressure
 represents voltage. Three primary building blocks of 0D models are resistors,
-capacitors, and inductors Resistance captures the viscous effects of blood
+capacitors, and inductors. Resistance captures the viscous effects of blood
 flow, capacitance represents the compliance and distensibility of the vessel
 wall, and inductance represents the inertia of the blood flow. Different
 combinations of these building blocks, as well as others, can be formed to
@@ -34,19 +34,26 @@ reflect the hemodynamics and physiology of different cardiovascular
 anatomies. These 0D models are governed by differential algebraic equations
 (DAEs).
 
-For more background information on 0D models, have a look at the detailed documentation:
-- System of equations: SparseSystem
-- Time integration: Integrator
-- Overview of available 0D elements (blocks): Block
+The main categories of blocks implemented in svZeroDSolver are:
+- Blood vessels
+- Junctions
+- Boundary conditions
+- Heart chambers
+- Heart valves
 
-You can find more details about governing equations in individual blocks, for example:
+For an overview of available 0D elements (blocks) see: Block
+
+You can find more details about governing equations in individual blocks in their respective documentation pages. For example:
 - BloodVessel
 - BloodVesselJunction
 - WindkesselBC
 
 For implementation details, have a look at the [source code](https://github.com/simvascular/svZeroDSolver).
+Mathematics details can be found in the following classes:
+- System of equations: SparseSystem
+- Time integration: Integrator
 
-[About SimVascular](https://simvascular.github.io)
+[More information about SimVascular](https://simvascular.github.io)
 
 # Installation
 
@@ -258,11 +265,14 @@ output_interval                         | The frequency of writing timesteps to 
 output_mean_only                        | Write only the mean values over every timestep to output file | false
 output_derivative                       | Write time derivatives to output file | false
 output_all_cycles                       | Write all cardiac cycles to output file | false
+use_cycle_to_cycle_error                | Use cycle-to-cycle error to determine number of cycles for convergence | false
+sim_cycle_to_cycle_percent_error        | Percentage error threshold for cycle-to-cycle pressure and flow difference | 1.0
 
+The option `use_cycle_to_cycle_error` allows the solver to change the number of cardiac cycles it runs depending on the cycle-to-cycle convergence of the simulation. For simulations with no RCR boundary conditions, the simulation will add extra cardiac cycles until the difference between the mean pressure and flow in consecutive cycles is below the threshold set by `sim_cycle_to_cycle_percent_error` at all inlets and outlets of the model. If there is at least one RCR boundary condition, the number of cycles is determined based on equation 21 of \cite pfaller21, using the RCR boundary condition with the largest time constant.
 
 ### Vessels
 
-More information about the vessels can be found in their respective class references.
+More information about the vessels can be found in their respective class references. Below is a template vessel block with boundary conditions, `INFLOW` and `OUT`, at its inlet and outlet respectively.
 
 ```python
 {
@@ -284,7 +294,7 @@ Blood vessel with \n optional stenosis   | MODEL::BloodVessel       | `BloodVess
 
 ### Junctions
 
-More information about the junctions can be found in their respective class references.
+More information about the junctions can be found in their respective class references. Below is a template junction block that connects vessel ID 0 with vessel IDs 1 and 2.
 
 ```python
 {
@@ -304,6 +314,8 @@ Blood vessel \n junction              | MODEL::BloodVesselJunction  | `BloodVess
 
 ### Boundary conditions
 
+More information about the boundary conditions can be found in their respective class references. Below is a template `FLOW` boundary condition.
+
 ```python
 {
     "bc_name": "INFLOW", # Name of the boundary condition
@@ -314,11 +326,15 @@ Blood vessel \n junction              | MODEL::BloodVesselJunction  | `BloodVess
 
 Description                           | Class                       | `bc_type`             | `bc_values`
 ------------------------------------- | --------------------------- | --------------------- | ----------- 
-Prescribed (transient) flow           | MODEL::FlowReferenceBC      | `FLOW`                | `Q`: Time-dependent flow values \n `t`: Time stamps
-Prescribed (transient) pressure       | MODEL::PressureReferenceBC  | `PRESSURE`            | `P`: Time-dependent pressure values \n `t`: Time stamps
+Prescribed (transient) flow           | MODEL::FlowReferenceBC      | `FLOW`                | `Q`: Time-dependent flow values \n `t`: Time steps \n `fn`: Mathematical expression
+Prescribed (transient) pressure       | MODEL::PressureReferenceBC  | `PRESSURE`            | `P`: Time-dependent pressure values \n `t`: Time steps \n `fn`: Mathematical expression
 Resistance                            | MODEL::ResistanceBC         | `RESISTANCE`          | `R`: Resistance \n `Pd`: Time-dependent distal pressure \n `t`: Time stamps
 Windkessel                            | MODEL::WindkesselBC         | `RCR`                 | `Rp`: Proximal resistance \n `C`: Capacitance \n `Rd`: Distal resistance \n `Pd`: Distal pressure
+Coronary outlet                       | MODEL::OpenLoopCoronaryBC   | `CORONARY`            | `Ra`: Proximal resistance \n `Ram`: Microvascular resistance \n `Rv`: Venous resistance \n `Ca`: Small artery capacitance \n `Cim`: Intramyocardial capacitance \n `Pim`: Intramyocardial pressure \n `Pv`: Venous pressure
 
+The above table describes the most commonly used boundary conditions. In addition, svZeroDSolver includes various closed-loop boundary conditions. Examples can be found in `svZeroDSolver/tests/cases`.
+
+Note that the `FLOW` and `PRESSURE` boundary conditions accept mathematical expressions in `bc_values`. For an example where values of the boundary condition are specified as a function of time, see `svZeroDSolver/tests/cases/pulsatileFlow_R_RCR.json`. For an example with a mathematical expression for the boundary condition, see `svZeroDSolver/tests/cases/timeDep_Flow.json`. 
 
 # svZeroDCalibrator
 

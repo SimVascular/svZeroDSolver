@@ -40,6 +40,7 @@ pip install -e ".[dev]"
 ```
 This is useful when continuously running the integration tests during development.
 
+<<<<<<< HEAD
 # Contributing to svZeroDSolver
 
 **NOTE: To contribute new developments to the main branch of svZeroDSolver, developers must first open an issue on the svZeroDSolver Github repository to describe the planned changes.** 

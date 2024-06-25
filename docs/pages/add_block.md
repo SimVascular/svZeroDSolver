@@ -4,6 +4,8 @@
 
 Below are details on the steps required to implement a new block in svZeroDSolver.
 
+*Note: The best way to implement a new block is to look at examples of existing block classes. See the `ValveTanh` class for an example.*
+
 # 1. Add the new block to the relevant lists/dictionaries.
 
 * `BlockType` in src/model/BlockType.h
@@ -11,11 +13,11 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   * *Note: In `block_factory_map`, the dictionary key should match the string specifying the type of block in the `.json` configuration/input file, and the dictionary value should match the class constructor name for the block.*
 * If the new block requires special handling that is different from the current blocks (most new blocks do not), add a new category to `BlockClass` in src/model/BlockType.h
 
-# 2. Create a new class inherited from `Block` for the new block.
+# 2. Create a class for the new block 
 
-* *Note: The best way to implement a new block is to look at examples of existing block classes. See the `ValveTanh` class for an example.*
+## The new class will be inherited from `Block`.
 
-* Define a constructor of the form:
+## Define a constructor of the form:
 ```
     GenericBlock(int id, Model *model) 
     : Block(id, model, BlockType::block_type, BlockClass::block_class,
@@ -30,6 +32,42 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   * The properties of each parameter are defined by `InputParameter`, which specifies whether it is optional, an array, a scalar, a function, and its default value.
   * The names `Param_1`, ... , `Param_N` should be the same as the parameter names within the block definition in the `.json` configuration/input file.
 
+## The class should have a `setup_dofs(DOFHandler &dofhandler)` function.
+  * This function typically only includes a call to the following function:
+  ```
+  Block::setup_dofs_(DOFHandler &dofhandler, int num_equations, const std::list<std::string> &internal_var_names)
+  ```
+  * In the above function, `num_equations` is the number of governing equations for the new block. 
+  * `internal_var_names` is a list of strings that specify names for variables that are internal to the block, i.e. all variables for the block apart from the flow and pressure at the block's inlets and outlets.
+
+## The class should have a `TripletsContributions num_triplets{*, *, *}` object. 
+  * This specifies how many elements the governing equations of the block contribute to the global `F`, `E` and `dC_dy` matrices respectively. Details are in Step 3 below. 
+
+* The class should have an `update_constant` function and may also contain `update_time` and `update_solution` functions. These functions implement the governing equations for the block. Details are in Step 4 below.
+
+## *(Optional)* The class can have an  `enum ParamId` object that relates the parameter indices to their names. 
+  * This makes it easier to reference the parameters while implementing the governing equations of the block (discussed below). 
+  * The order of parameters in the `ParamId` object should match the order in the constructor. 
+
+# 2. Create a class for the new block 
+
+* The new class will be inherited from `Block`.
+<p> <br> </p>
+* Define a constructor of the form:
+```
+    GenericBlock(int id, Model *model) 
+    : Block(id, model, BlockType::block_type, BlockClass::block_class,
+    {{Param_1, InputParameter()}, 
+    {Param_2, InputParameter()}, 
+    ..., 
+    {Param_N, InputParameter()}}) {}
+```
+  * `GenericBlock` is the name of the new class
+  * `block_type` and `block_class` are the same as what was added in Step 1 above.
+  * The names of the input parameters of the block are `Param_1`, ... , `Param_N`. 
+  * The properties of each parameter are defined by `InputParameter`, which specifies whether it is optional, an array, a scalar, a function, and its default value.
+  * The names `Param_1`, ... , `Param_N` should be the same as the parameter names within the block definition in the `.json` configuration/input file.
+<p> <br> </p>
 * The class should have a `setup_dofs(DOFHandler &dofhandler)` function.
   * This function typically only includes a call to the following function:
   ```
@@ -41,13 +79,13 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 * The class should have a `TripletsContributions num_triplets{*, *, *}` object. 
   * This specifies how many elements the governing equations of the block contribute to the global `F`, `E` and `dC_dy` matrices respectively. Details are in Step 3 below. 
 
-* The class should have an `update_constant` function and may also contain `update_time` and `update_solution` functions. These functions implement the governing equations for the block. Details are in Step 3 below.
+* The class should have an `update_constant` function and may also contain `update_time` and `update_solution` functions. These functions implement the governing equations for the block. Details are in Step 4 below.
 
 * *(Optional)* The class can have an  `enum ParamId` object that relates the parameter indices to their names. 
   * This makes it easier to reference the parameters while implementing the governing equations of the block (discussed below). 
   * The order of parameters in the `ParamId` object should match the order in the constructor. 
 
-# 3. Implement the governing equations for the block.
+# 3. Set up the governing equations for the block.
 
 * The local state vector for each block is always arranged as `[P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]`. 
   
@@ -95,6 +133,8 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
   
   * In this case, the block has 3 contributions to `F`, 2 contributions to `E`, and 2 constributions to `dC_dy`. So the class will have a member `TripletsContributions num_triplets{3, 2, 2}`.
 
+# 4. Implement the matrix equations for the block.
+
 * Implement the `update_constant`, `update_time` and `update_solution` functions.
 
   * All matrix elements that are constant are specified in `update_constant(SparseSystem &system, std::vector<double> &parameters)`.
@@ -123,5 +163,7 @@ system.dC_dy.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[
   
   * For the derivative of this term with respect to `P_in`, `current_block_variable_id = 0` and for the derivative of this term with respect to `P_out`, `current_block_variable_id = 2`.
 
-# 4. Add the new files (`GenericBlock.h` and `GenericBlock.cpp`) to `src/model/CMakeLists.txt`
+# 4. Add the new block to the build system 
+
+* Add `GenericBlock.h` and `GenericBlock.cpp` to `src/model/CMakeLists.txt`
 

@@ -97,8 +97,9 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
 # 4. Implement the matrix equations for the block.
 
 * Implement the `update_constant`, `update_time` and `update_solution` functions.
-  * All matrix elements that are constant are specified in `update_constant`.
-  * Matrix elements that depend only on time (not the solution of the problem itself) are specified in `update_time`. 
+  * All matrix elements that are constant are specified in `update_constant`.\
+  * Matrix elements that depend only on time (not the solution of the problem itself) are specified in `update_time`.
+  \
   * Matrix elements that change with the solution (i.e. depend on the state variables themselves) are specified in `update_solution`. 
   * Not all blocks will require the `update_time` and `update_solution` functions.
 

@@ -13,11 +13,11 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   * *Note: In `block_factory_map`, the dictionary key should match the string specifying the type of block in the `.json` configuration/input file, and the dictionary value should match the class constructor name for the block.*
 * If the new block requires special handling that is different from the current blocks (most new blocks do not), add a new category to `BlockClass` in src/model/BlockType.h
 
+<p> <br> </p>
+
 # 2. Create a class for the new block 
 
-* The new class will be inherited from `Block`.
-<p> <br> </p>
-* Define a constructor of the form:
+* The new class will be inherited from `Block`. Define a constructor of the form:
 ```
     GenericBlock(int id, Model *model) 
     : Block(id, model, BlockType::block_type, BlockClass::block_class,
@@ -31,7 +31,9 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   * The names of the input parameters of the block are `Param_1`, ... , `Param_N`. 
   * The properties of each parameter are defined by `InputParameter`, which specifies whether it is optional, an array, a scalar, a function, and its default value.
   * The names `Param_1`, ... , `Param_N` should be the same as the parameter names within the block definition in the `.json` configuration/input file.
+
 <p> <br> </p>
+
 * The class should have a `setup_dofs(DOFHandler &dofhandler)` function.
   * This function typically only includes a call to the following function:
   ```
@@ -39,17 +41,23 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   ```
   * In the above function, `num_equations` is the number of governing equations for the new block. 
   * `internal_var_names` is a list of strings that specify names for variables that are internal to the block, i.e. all variables for the block apart from the flow and pressure at the block's inlets and outlets.
-<br>
+
+<p> <br> </p>
+
 * The class should have a `TripletsContributions num_triplets{*, *, *}` object. 
   * This specifies how many elements the governing equations of the block contribute to the global `F`, `E` and `dC_dy` matrices respectively. Details are in Step 3 below. 
 
 <p> <br> </p>
 
-* The class should have an `update_constant` function and may also contain `update_time` and `update_solution` functions. These functions implement the governing equations for the block. Details are in Step 4 below.
+* The class should have an `update_constant` function and may also contain `update_time` and `update_solution` functions. These functions implement the governing equations for the block. Details are in Steps 3-4 below.
+
+<p> <br> </p>
 
 * *(Optional)* The class can have an  `enum ParamId` object that relates the parameter indices to their names. 
   * This makes it easier to reference the parameters while implementing the governing equations of the block (discussed below). 
   * The order of parameters in the `ParamId` object should match the order in the constructor. 
+
+<p> <br> </p>
 
 # 3. Set up the governing equations for the block.
 
@@ -58,6 +66,8 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   * Here, `InternalVariable*` refers to any variable in the governing equations that are not the inlet and outlet flow and pressure. These are the same as those discussed above in the function `setup_dofs`.
   
   * The length of the state vector is typically four (inlet and outlet pressure and flow) plus the number of internal variables.
+
+<p> <br> </p>
 
 * The equations should be written in the form `E(t)*ydot + F(t)*y + C(y,t) = 0`. 
   
@@ -74,6 +84,8 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   * `C` is a vector containing all non-linear and constant terms in the equation. 
   
   * If the equation contains non-linear terms, the developer should also derive the derivative of `C` with respect to `y` and `ydot`. These will be stored in the block's `dC_dy` and `dC_dydot` matrices, both of which are size `number_of_equations*size_of_state_vector`.
+
+<p> <br> </p>
 
 * For example, let's assume a block has the following non-linear governing equations:
 ```
@@ -111,6 +123,8 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
   
   * Not all blocks will require the `update_time` and `update_solution` functions.
 
+<p> <br> </p>
+
 * The elements of the `E`, `F`, `dC_dy` and `dC_dydot` matrices are populated using the syntax 
 ```
 system.F.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[current_block_variable_ids]) = a
@@ -118,7 +132,11 @@ system.F.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[curr
   
   * Here, `current_block_equation_id` goes from 0 to `number_of_equations-1` (for the current block) and `current_block_variable_ids` goes from 0 to `size_of_state_vector-1` for the current block. 
 
+<p> <br> </p>
+
 * If the block contains non-linear equations, these terms must be specified in `update_solution` as `system.C(global_eqn_ids[current_block_equation_id]) = non_linear_term`.
+
+<p> <br> </p>
 
 * For non-linear equations, the derivative of the term specified above with respect to each state variable must also be provided. This goes into a `dC_dy` matrix using the following syntax 
 ```
@@ -130,6 +148,8 @@ system.dC_dy.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[
   * For example, if the non-linear term is in the first equation, `current_block_equation_id = 0`. 
   
   * For the derivative of this term with respect to `P_in`, `current_block_variable_id = 0` and for the derivative of this term with respect to `P_out`, `current_block_variable_id = 2`.
+
+<p> <br> </p>
 
 # 4. Add the new block to the build system 
 

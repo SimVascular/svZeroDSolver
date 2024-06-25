@@ -43,7 +43,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 ## The class should have a `TripletsContributions num_triplets{*, *, *}` object. 
   * This specifies how many elements the governing equations of the block contribute to the global `F`, `E` and `dC_dy` matrices respectively. Details are in Step 3 below. 
 
-* The class should have an `update_constant` function and may also contain `update_time` and `update_solution` functions. These functions implement the governing equations for the block. Details are in Step 4 below.
+## The class should have an `update_constant` function and may also contain `update_time` and `update_solution` functions. These functions implement the governing equations for the block. Details are in Step 4 below.
 
 ## *(Optional)* The class can have an  `enum ParamId` object that relates the parameter indices to their names. 
   * This makes it easier to reference the parameters while implementing the governing equations of the block (discussed below). 
@@ -137,11 +137,13 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
 
 * Implement the `update_constant`, `update_time` and `update_solution` functions.
 
-  * All matrix elements that are constant are specified in `update_constant(SparseSystem &system, std::vector<double> &parameters)`.
+  * All matrix elements that are constant are specified in `update_constant`.
 
-  * Matrix elements that depend only on time (not the solution of the problem itself) are specified in `update_time(SparseSystem &system, std::vector<double> &parameters)`. 
+  * Matrix elements that depend only on time (not the solution of the problem itself) are specified in `update_time`. 
 
-  * Matrix elements that change with the solution (i.e. depend on the state variables themselves) are specified in `update_solution`. Not all blocks will require the latter two functions.
+  * Matrix elements that change with the solution (i.e. depend on the state variables themselves) are specified in `update_solution`. 
+  
+  * Not all blocks will require the `update_time` and `update_solution` functions.
 
 * The elements of the `E`, `F`, `dC_dy` and `dC_dydot` matrices are populated using the syntax 
 ```

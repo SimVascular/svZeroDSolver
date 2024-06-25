@@ -88,7 +88,7 @@ In addition, `svZeroDSolver` is integrated into the `Simvascular` project, which
 
 Future development plans include a graphical interface to create circuit representations of existing zero-dimensional models, as well as functionality to create `svZeroDSolver`-compatible `.json` configuration files directly from graphical (circuit) representations of user-specified circulatory models. 
 We are also expanding the available blocks to more accurately model hemodynamics, such as by using data-driven models for pressure losses at abritrarily shaped vascular junctions.
-The development team actively implements new features, blocks and test cases to expand the capabilities of svZeroDSolver and ensure its accuracy and speed.  
+The development team actively implements new features, blocks and test cases to build on the capabilities of svZeroDSolver and ensure its accuracy and speed.  
 
 # Acknowledgments
 

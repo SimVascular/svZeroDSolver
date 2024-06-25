@@ -36,33 +36,56 @@ This is useful when continuously running the integration tests during developmen
 
 ## Adding new blocks
 
-**1. Add the new block to the following lists/dictionaries:**
-- `BlockType` in src/model/BlockType.h
-- `block_factory_map` in src/model/Model.cpp. Here the dictionary key should match the string that specifies the type of block read from the JSON config file.
-- If required, `BlockClass` if it's a new kind of block that might require special handling (most blocks don't).
+The modular architecture of svZeroDSolver relies on "blocks", such as blood vessels, junctions, valves, boundary conditions, etc. These blocks are assembled in a manner specified by the `.json` configuration file, which dictates the assembled governing equations for the model. We are always interested in adding new blocks to expand the funcitonality of svZeroDSolver.
 
-**2. Create a new class inherited from `Block` for the new block. Specific things to pay attention to:**
-- Define a constructor of the form:
-`GenericBlock(int id, Model *model) : Block(id, model, BlockType::block_type, BlockClass::block_class, {{"Param1", InputParameter()}, {"Param2", InputParameter()}, ..., {"ParamN", InputParameter()}}) {}`
-- In the constructor, `GenericBlock` is the name of the new class
-- `block_type` and `block_class` are the same as what was added in Step 1 above.
-- The input parameters of the block are `Param1`, ... , `ParamN`. The properties of each parameter is defined by `InputParameter`, which specifies whether it is optional, an array, a scalar, and its default value. See `InputParameter` in `Parameter.h` for details.
-- The names `Param1`, ... , `ParamN` should be the same as the strings read from the JSON config file.
-- The class can have an  `enum ParamId` object that relates the parameter indices to their names. This makes it easier to reference the parameters while implementing the governing equations of the block (discussed below). The order of parameters in the `ParamId` object should match the order in the constructor.
-- The class should have `setup_dofs` and `update_constant` functions. It should also have a `TripletsContributions num_triplets{?, ?, ?}` object that specifies how many elements the governing equations of the block contribute to the `F`, `E` and `dCdy` matrices respectively. The class may also contain `update_time` and `update_solution` functions. Details are below.
+To add a new block, developers must first open an issue to describe the planned block on the svZeroDSolver Github repository. The new block should be implemented in a feature branch of the developer's fork of svZeroDSolver. Once the new block is implemented, the developer should open a pull request from the feature branch and link the relevant issue.
+
+Below are details on the steps required to implement a new block in svZeroDSolver.
+
+**1. Add the new block to the following lists/dictionaries:**
+* `BlockType` in src/model/BlockType.h
+* `block_factory_map` in src/model/Model.cpp
+  * *Note:* In `block_factory_map`, the dictionary key should match the string specifying the type of block in the `.json` configuration/input file, and the dictionary value should match the class constructor name for the block.
+* If the new block requires special handling that is different from the current blocks (most new blocks do not), add a new category to `BlockClass` in src/model/BlockType.h
+
+**2. Create a new class inherited from `Block` for the new block.**
+* Define a constructor of the form:
+```GenericBlock(int id, Model *model) : Block(id, model, BlockType::block_type, BlockClass::block_class, {{"Param_1", InputParameter()}, {"Param_2", InputParameter()}, ..., {"Param_N", InputParameter()}}) {}```
+  * In the constructor, `GenericBlock` is the name of the new class
+  * `block_type` and `block_class` are the same as what was added in Step 1 above.
+  * The input parameters of the block are `Param_1`, ... , `Param_N`. 
+  * The properties of each parameter are defined by `InputParameter`, which specifies whether it is optional, an array, a scalar, a function, and its default value. See `InputParameter` for details.
+  * The names `Param_1`, ... , `Param_N` should be the same as the parameter names within the block definition in the `.json` configuration/input file.
+* The class should have a `setup_dofs(DOFHandler &dofhandler)` function.
+  * This function typically only includes a call to the following function:
+  ```Block::setup_dofs_(DOFHandler &dofhandler, int num_equations, const std::list<std::string> &internal_var_names)```
+  * In the above function, `num_equations` is the number of governing equations for the new block. `internal_var_names` is a list of strings that specify names for variables that are internal to the block, i.e. all variables for the block apart from the flow and pressure at the block's inlets and outlets.
+* The class should have a `TripletsContributions num_triplets{?, ?, ?}` object. 
+  * This specifies how many elements the governing equations of the block contribute to the global `F`, `E` and `dCdy` matrices respectively. Details are below. 
+* The class should have an `update_constant` function and may also contain `update_time` and `update_solution` functions. These funtions implement the governing equations for the block. Details are below.
+* (Optional) The class can have an  `enum ParamId` object that relates the parameter indices to their names. 
+  * This makes it easier to reference the parameters while implementing the governing equations of the block (discussed below). 
+  * The order of parameters in the `ParamId` object should match the order in the constructor. 
+* The best way to implement a new block class is to look at examples of existing block classes.
+  * See the `ValveTanh` class for an example.
 
 **3. Now implement the governing equations for the block.**
-- The local state vector for each block is always arranged as `[P_in, Q_in, P_out, Q_out, InternalVariable1, ..., InternalVariableN]`. Here, `InternalVariable*` refers to any variable in the governing equations that are not in the inlet and outlet flow and pressure.
-- The equations should be written in the form `E(t)*ydot + F(t)*y + c(y,t) = 0`. Here, `y` is the local state vector mentioned above, `ydot` is the time-derivative of the state vector, `E` and `F` are matrices and `c` is a vector containing all non-linear and constant terms in the equation. `E` and `F` are size (number_of_equations*size_of_state_vector), while `c` is length number_of_equations.
-- All matrix elements that are constant are specified in `update_constant`. Matrix elements that depend only on time (not the solution of the problem itself) are specified in `update_time`. Matrix elements that change with the solution (i.e. depend on the state variables themselves) are specified in `update_solution`. Not all blocks will require the latter two functions.
-- The elements of the `E` and `F` matrix are populated using the syntax `system.F.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[current_block_variable_ids]) = A`. Here, `current_block_equation_id` goes from 0 to number_of_equations (for the current block) and `current_block_variable_ids` goes from 0 to size_of_state_vector for the current block. The indices correspond to the block's local state vector mentioned above.
-- If the block contains non-linear equations, these terms must be specified in `update_solution` as `system.C(global_eqn_ids[current_block_equation_id]) = non_linear_term`.
-- For non-linear equations, the derivative of the term specified above with respect to each state variable must also be provided. This goes into a `dC_dy` matrix using the following syntax `system.dC_dy.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[current_block_variable_id]) = A`, where `A` is the derivative of the non-linear term in the equation with ID `current_block_equation_id` with respect to the local state variable with ID `current_block_variable_id'. For example, if the non-linear term is in the first equation, `current_block_equation_id = 0`. For the derivative of this term with respect to `P_in`, `current_block_variable_id = 0` and for the derivative of this term with respect to `P_out`, `current_block_variable_id = 2`.
+* The local state vector for each block is always arranged as `[P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]`. 
+  * Here, `InternalVariable*` refers to any variable in the governing equations that are not the inlet and outlet flow and pressure. These are the same as those discussed above in the function `setup_dofs(DOFHandler &dofhandler)`.
+  * The length of the state vector is typically four (inlet and outlet pressure and flow) plus the number of internal variables.
+* The equations should be written in the form `E(t)*ydot + F(t)*y + c(y,t) = 0`. 
+* The equations should be written in the form $$E(t)*ydot + F(t)*y + c(y,t) = 0$$. 
+  * `y` is the local state vector mentioned above 
+  * `ydot` is the time-derivative of the local state vector 
+  * `E` and `F` are matrices of size 
+  * `c` is a vector containing all non-linear and constant terms in the equation. 
+  * `E` and `F` are size (number_of_equations*size_of_state_vector), while `c` is length number_of_equations.
+* All matrix elements that are constant are specified in `update_constant`. Matrix elements that depend only on time (not the solution of the problem itself) are specified in `update_time`. Matrix elements that change with the solution (i.e. depend on the state variables themselves) are specified in `update_solution`. Not all blocks will require the latter two functions.
+* The elements of the `E` and `F` matrix are populated using the syntax `system.F.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[current_block_variable_ids]) = A`. Here, `current_block_equation_id` goes from 0 to number_of_equations (for the current block) and `current_block_variable_ids` goes from 0 to size_of_state_vector for the current block. The indices correspond to the block's local state vector mentioned above.
+* If the block contains non-linear equations, these terms must be specified in `update_solution` as `system.C(global_eqn_ids[current_block_equation_id]) = non_linear_term`.
+* For non-linear equations, the derivative of the term specified above with respect to each state variable must also be provided. This goes into a `dC_dy` matrix using the following syntax `system.dC_dy.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[current_block_variable_id]) = A`, where `A` is the derivative of the non-linear term in the equation with ID `current_block_equation_id` with respect to the local state variable with ID `current_block_variable_id'. For example, if the non-linear term is in the first equation, `current_block_equation_id = 0`. For the derivative of this term with respect to `P_in`, `current_block_variable_id = 0` and for the derivative of this term with respect to `P_out`, `current_block_variable_id = 2`.
 
 **4. Add the new files (`GenericBlock.h` and `GenericBlock.cpp`) to src/model/CMakeLists.txt**
-
-This looks quite daunting when listed out like this. We need a way to explain this better before putting it into the documentation.
-
 
 ## Code Style
 

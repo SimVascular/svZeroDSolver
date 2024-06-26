@@ -18,6 +18,8 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 # 2. Create a class for the new block 
 
+## Class constructor
+
 * The new class will be inherited from `Block`. Define a constructor of the form:
 ```
     GenericBlock(int id, Model *model) 
@@ -35,6 +37,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 <p> <br> </p>
 
+## Set up the degrees of freedom
 * The class should have a `setup_dofs(DOFHandler &dofhandler)` function.
   * This function typically only includes a call to the following function:
   ```
@@ -44,6 +47,8 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   * `internal_var_names` is a list of strings that specify names for variables that are internal to the block, i.e. all variables for the block apart from the flow and pressure at the block's inlets and outlets.
 
 <p> <br> </p>
+
+## Other class members
 
 * The class should have a `TripletsContributions num_triplets{*, *, *}` object. 
   * This specifies how many elements the governing equations of the block contribute to the global `F`, `E` and `dC_dy` matrices respectively. 
@@ -63,12 +68,16 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 # 3. Set up the governing equations for the block.
 
+## State vector
+
 * The local state vector for each block is always arranged as `y = [P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]`.   
   * Here, `InternalVariable*` refers to any variable in the governing equations that are not the inlet and outlet flow and pressure. These are the same as those discussed above in the function `setup_dofs`.
   * The corresponding time-derivative of this state vector is `ydot = dP_in/dt, dQ_in/dt, ...]`.
   * *Note: The length of the state vector is typically four (inlet and outlet pressure and flow) plus the number of internal variables.*
 
 <p> <br> </p>
+
+## Governing equations
 
 * The equations should be written in the form `E(t)*ydot + F(t)*y + C(y,ydot,t) = 0`. 
   * `y` is the local state vector mentioned above. 
@@ -81,7 +90,9 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 <p> <br> </p>
 
-* **Example:** Assume a block has the following non-linear governing equations:
+### An example
+
+Assume a block has the following non-linear governing equations:
 ```
 a*dQ_in/dt + b*P_in + c*(dP_in/dt)*Q_in + d = 0
 ```
@@ -101,6 +112,8 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
 
 # 4. Implement the matrix equations for the block.
 
+## Functions that implement the equations
+
 * Implement the `update_constant`, `update_time` and `update_solution` functions.
   * All matrix elements that are constant are specified in `update_constant`.
   * Matrix elements that depend only on time (not the state variables) are specified in `update_time`.
@@ -108,6 +121,8 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
   * *Note: Not all blocks will require the `update_time` and `update_solution` functions.*
 
 <p> <br> </p>
+
+## Implementation details
 
 * The elements of the matrices `E`, `F`, `dC_dy` and `dC_dydot` are populated using the following syntax:  
 ```

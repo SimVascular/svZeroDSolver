@@ -41,7 +41,7 @@ We introduce `svZeroDSolver`, an efficient and modular package for performing lu
 As part of the `Simvascular` open-source project, `svZeroDSolver` allows users to go from medical imaging to fast zero-dimensional evaluations of patient-specific hemodynamics.
 `svZeroDSolver` is written in C++ using an object-oriented framework.
 It designed so that simply specifying a `.json` dictionary of lumped-parameter "blocks" -- such as blood vessels, valves, heart chambers, junctions between blood vessels, and boundary conditions (along with their associated parameters) -- allows the code to automatically assemble and solve the governing equations corresponding to the user-specified vascular model.
-In addition, the package includes Python and C++ APIs to facilitate its use with other software packages.
+In addition, the package includes Python and C++ APIs to facilitate interfacing it with other software packages.
 For example, it can be integrated into Python-based optimization and uncertainty quantification applications.
 It can also be interfaced with high-performance C++/Fortran software for high-fidelity cardiovascular flow simulations, where `svZeroDSolver` can conveniently provide lumped-parameter boundary conditions.
 `svZeroDSolver` also includes an application, called `svZeroDCalibrator`, to automatically calibrate parameters of a given zero-dimensional model to recapitulate independent measurements of hemodynamics at specific anatomical locations from high-fidelity simulations -- thus improving the accuracy of zero-dimensional simulations.

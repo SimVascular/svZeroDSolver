@@ -44,8 +44,8 @@ This is useful when continuously running the integration tests during developmen
   * Alternatively, the developer can run the tests locally. 
     * The build tests can be run using the `pip` install and `pytest`. 
     * The tests for the C++ interface require the `CMake` install and can be run by building the tests in `svZeroDSolver/tests/test_interface`. 
-    * Code formatting can be performed using the instructions in the [Formatting](#formatting) section below. 
-    * The documentation can be built following the instructions in the [Documentation](#documentation) section below. 
+    * Code formatting can be performed using the instructions in the [Formatting] section below. 
+    * The documentation can be built following the instructions in the [Documentation] section below. 
 * Once all the tests are passing, the developer should open a pull request from the feature branch and link the relevant issue.
 
 # Adding new blocks

@@ -74,7 +74,7 @@ This allows users to build more accurate zero-dimensional models than those typi
 The accuracy of `svZeroDSolver` is assessed using continuous integration tests and has also been verified by comparing with high-fidelity three dimensional simulations [@pfaller22].
 This combination of features makes `svZeroDSolver` uniquely applicable to a wide range of applications in cardiovascular biomechanics.
 
-![Various zero-dimensional "blocks" included in the package at the time of writing.\label{fig:blocks}](blocks.png){ width=80% }
+![Various zero-dimensional "blocks" included in `svZeroDSolver` at the time of writing.\label{fig:blocks}](blocks.png){ width=80% }
 
 # Software details
 
@@ -100,9 +100,9 @@ Examples of configuration files to run `svZeroDSolver` simulations using the var
 The repository also includes examples demonstrating the simple API for interfacing between `svZeroDSolver` and external C++ software packages in `svZeroDSolver/tests/test_inetrface`.
 Details on creating zero-dimensional simulations from three-dimensional models using the `Simvascular` graphical interface are available on the [Simvascular documentation](https://simvascular.github.io/documentation/rom_simulation.html).
 
-Future development plans include a graphical interface to create circuit representations of existing zero-dimensional models, as well as functionality to create `svZeroDSolver`-compatible `.json` configuration files directly from graphical (circuit) representations of user-specified circulatory models. 
-We are also expanding the available blocks to more accurately model hemodynamics, such as by using data-driven models for pressure losses at abritrarily shaped vascular junctions.
-The development team actively implements new features, blocks and test cases to build on the capabilities of svZeroDSolver and ensure its accuracy and speed.  
+Future development plans include a graphical interface to create circuit representations of existing zero-dimensional models, as well as functionality to create `svZeroDSolver`-compatible `.json` configuration files directly from graphical (circuit) representations of user-specified circulatory models.
+We are also expanding the available blocks to more accurately model hemodynamics, such as by using data-driven models for pressure losses at arbitrarily shaped vascular junctions.
+The development team actively implements new features, blocks and test cases to build on the capabilities of svZeroDSolver and ensure its accuracy and speed.
 
 # Acknowledgments
 

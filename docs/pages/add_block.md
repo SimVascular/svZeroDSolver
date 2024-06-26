@@ -6,7 +6,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 *Note: The best way to implement a new block is to look at examples of existing block classes. See the `ValveTanh` class for an example.*
 
-# 1. Name the new block
+## 1. Name the new block
 
 * The name should then be added to the following lists/dictionaries:
   * `BlockType` in src/model/BlockType.h
@@ -16,7 +16,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 <p> <br> </p>
 
-# 2. Create a class for the new block 
+## 2. Create a class for the new block 
 
 ### Class constructor
 
@@ -66,7 +66,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 <p> <br> </p>
 
-# 3. Set up the governing equations for the block
+## 3. Set up the governing equations for the block
 
 ### State vector
 
@@ -110,7 +110,7 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
 
 <p> <br> </p>
 
-# 4. Implement the matrix equations for the block
+## 4. Implement the matrix equations for the block
 
 ### Functions that contain the equations
 

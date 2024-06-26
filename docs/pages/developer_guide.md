@@ -34,11 +34,23 @@ pip install -e ".[dev]"
 ```
 This is useful when continuously running the integration tests during development.
 
+# Contributing to svZeroDSolver
+
+**NOTE: To contribute new developments to the main branch of svZeroDSolver, developers must first open an issue on the svZeroDSolver Github repository to describe the planned changes.** 
+
+* The changes should be implemented in a feature branch of the developer's fork of svZeroDSolver. 
+* Once the changes are implemented, the developer should make sure the build, documentation, and code format tests are passing on the user's feature branch. 
+  * The tests are automatically run when pushing changes to the developer's remote branch on Github. 
+  * Alternatively, the developer can run the tests locally. 
+    * The build tests can be run using the `pip` install and `pytest`. 
+    * The tests for the C++ interface require the `CMake` install and can be run by building the tests in `svZeroDSolver/tests/test_interface`. 
+    * Code formatting can be performed using the instructions in the [Formatting](#formatting) section below. 
+    * The documentation can be built following the instructions in the [Documentation](#documentation) section below. 
+* Once all the tests are passing, the developer should open a pull request from the feature branch and link the relevant issue.
+
 # Adding new blocks
 
 The modular architecture of svZeroDSolver relies on "blocks", such as blood vessels, junctions, valves, boundary conditions, etc. These blocks are assembled in a manner specified by the `.json` configuration file, which dictates the assembled governing equations for the model. We are always interested in adding new blocks to expand the funcitonality of svZeroDSolver.
-
-To add a new block, developers must first open an issue to describe the planned block on the svZeroDSolver Github repository. The new block should be implemented in a feature branch of the developer's fork of svZeroDSolver. Once the new block is implemented, the developer should open a pull request from the feature branch and link the relevant issue.
 
 Detailed steps required to implement a new block in svZeroDSolver are available [here](@ref add_block).
 

@@ -18,7 +18,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 # 2. Create a class for the new block 
 
-## Class constructor
+### Class constructor
 
 * The new class will be inherited from `Block`. Define a constructor of the form:
 ```
@@ -37,7 +37,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 <p> <br> </p>
 
-## Set up the degrees of freedom
+### Set up the degrees of freedom
 * The class should have a `setup_dofs(DOFHandler &dofhandler)` function.
   * This function typically only includes a call to the following function:
   ```
@@ -48,7 +48,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 <p> <br> </p>
 
-## Other class members
+### Other class members
 
 * The class should have a `TripletsContributions num_triplets{*, *, *}` object. 
   * This specifies how many elements the governing equations of the block contribute to the global `F`, `E` and `dC_dy` matrices respectively. 
@@ -66,9 +66,9 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 <p> <br> </p>
 
-# 3. Set up the governing equations for the block.
+# 3. Set up the governing equations for the block
 
-## State vector
+### State vector
 
 * The local state vector for each block is always arranged as `y = [P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]`.   
   * Here, `InternalVariable*` refers to any variable in the governing equations that are not the inlet and outlet flow and pressure. These are the same as those discussed above in the function `setup_dofs`.
@@ -77,7 +77,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 <p> <br> </p>
 
-## Governing equations
+### Governing equations
 
 * The equations should be written in the form `E(t)*ydot + F(t)*y + C(y,ydot,t) = 0`. 
   * `y` is the local state vector mentioned above. 
@@ -110,9 +110,9 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
 
 <p> <br> </p>
 
-# 4. Implement the matrix equations for the block.
+# 4. Implement the matrix equations for the block
 
-## Functions that implement the equations
+### Functions that contain the equations
 
 * Implement the `update_constant`, `update_time` and `update_solution` functions.
   * All matrix elements that are constant are specified in `update_constant`.
@@ -122,7 +122,7 @@ e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
 
 <p> <br> </p>
 
-## Implementation details
+### Implementation details
 
 * The elements of the matrices `E`, `F`, `dC_dy` and `dC_dydot` are populated using the following syntax:  
 ```

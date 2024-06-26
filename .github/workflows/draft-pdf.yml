@@ -1,11 +1,11 @@
 name: Draft PDF
-on:
-  push:
-    paths:
-	  - paper.md
-      - paper.bib
-      - blocks.png
-      - .github/workflows/draft-pdf.yml
+on: [push]
+# push:
+#   paths:
+#     - paper.md
+#     - paper.bib
+#     - blocks.png
+#     - .github/workflows/draft-pdf.yml
 
 jobs:
   paper:

@@ -100,7 +100,7 @@ cmake --build .
 If you are a developer and want to contribute to svZeroDSolver, you can find
 more helpful information in our [Developer Guide](@ref developer_guide).
 
-# svZeroDSolver
+# svZeroDSolver - Quick Guide
 
 svZeroDSolver can be used to run zero-dimensional (0D) cardiovascular
 simulations based on a given configuration.
@@ -336,7 +336,7 @@ The above table describes the most commonly used boundary conditions. In additio
 
 Note that the `FLOW` and `PRESSURE` boundary conditions accept mathematical expressions in `bc_values`. For an example where values of the boundary condition are specified as a function of time, see `svZeroDSolver/tests/cases/pulsatileFlow_R_RCR.json`. For an example with a mathematical expression for the boundary condition, see `svZeroDSolver/tests/cases/timeDep_Flow.json`. 
 
-# svZeroDCalibrator
+# svZeroDCalibrator - Quick Guide
 
 svZeroDCalibrator can be used to calibrate cardiovascular 0D models (i.e. infer optimal
 parameters for the 0D elements) based on a given transient result (i.e. from a

@@ -44,8 +44,8 @@ This is useful when continuously running the integration tests during developmen
   * Alternatively, the developer can run the tests locally. 
     * The build tests can be run using the `pip` install and `pytest`. 
     * The tests for the C++ interface require the `CMake` install and can be run by building the tests in `svZeroDSolver/tests/test_interface`. 
-    * Code formatting can be performed using the instructions in the [Formatting] section below. 
-    * The documentation can be built following the instructions in the [Documentation] section below. 
+    * Code formatting can be performed following the instructions in the Formatting section below. 
+    * The documentation can be built following the instructions in the Documentation section below. 
 * Once all the tests are passing, the developer should open a pull request from the feature branch and link the relevant issue.
 
 # Adding new blocks
@@ -119,12 +119,12 @@ a+b=c
 \f]
 ```
 
-### Citations
+## Citations
 If you want to cite a piece literature in your documentation, add
 a respective BibTeX citation to `docs/references.bib` and use `\cite name_of_citation` to
 cite the document.
 
-### Drawing circuits
+## Drawing circuits
 As the elements of the svZeroDSolver are often represented
 in the form of electrical circuits, we use [CircuiTikZ](https://ctan.org/pkg/circuitikz?lang=en)
 to draw circuits in the documentation (see blocks in Block for examples). 
@@ -137,7 +137,7 @@ To start a CircuitTikZ drawing use the following command:
 \f]
 ```
 
-### Build
+## Build
 The documentation is automatically built in the GitHub CI/CD and published
 on GitHub pages. If you want to build the documentation locally, you can use:
 
@@ -149,7 +149,7 @@ You can then view the documentation locally in your browser by opening `docs/bui
 If you do not have Doxygen install you can do that with `brew install doxygen`
 on macOS or with `sudo apt-get install doxygen` on Linux.
 
-## Profiling
+# Profiling
 
 Profiling helps to easily identify bottlenecks in the code. A profiling report
 lists the executation time spend on certain parts of the code. If you experience

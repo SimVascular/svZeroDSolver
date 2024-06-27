@@ -38,7 +38,7 @@ Computational modeling of cardiovascular blood flow has emerged as a valuable to
 While simulations of blood flow can be performed using various high and low-fidelity techniques, lumped-parameter or zero-dimensional modeling is a low-order technique that is widely used in various applications that require quick estimation of bulk flow quantities, such as flow and pressure at specific anatomical locations.
 
 We introduce [`svZeroDSolver`](https://github.com/simvascular/svZeroDSolver), an efficient and modular package for performing lumped-parameter (zero-dimensional) simulations of cardiovascular blood flow.
-As part of the [`Simvascular` open-source project](https://simvascular.github.io/), `svZeroDSolver` allows users to go from medical imaging to fast zero-dimensional evaluations of patient-specific hemodynamics.
+As part of the [`Simvascular`](https://simvascular.github.io/) open-source project, `svZeroDSolver` allows users to go from medical imaging to fast zero-dimensional evaluations of patient-specific hemodynamics.
 `svZeroDSolver` is written in C++ using an object-oriented framework.
 It designed so that simply specifying a `.json` dictionary of lumped-parameter "blocks" -- such as blood vessels, valves, heart chambers, junctions between blood vessels, and boundary conditions (along with their associated parameters) -- allows the code to automatically assemble and solve the governing equations corresponding to the user-specified vascular model.
 In addition, the package includes Python and C++ APIs to facilitate interfacing it with other software packages.

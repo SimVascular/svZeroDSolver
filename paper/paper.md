@@ -16,9 +16,11 @@ authors:
  - name: Martin R. Pfaller
    affiliation: 1
    equal-contrib: true
+ - name: Kaitlin E. Harold
+   affiliation: 1
  - name: Jonathan Pham
    affiliation: 1
- - name: Kaitlin E. Harold
+ - name: Aekaansh Verma
    affiliation: 1
  - name: Dave Parker
    affiliation: 1
@@ -68,6 +70,7 @@ This has been used in previous work on uncertainty quantification [@zanoni2024;@
 In particular, the C++ interface has been succesfully coupled with high-fidelity multi-physics solvers `svSolver` and `svFSI`, which are part of the widely used `Simvascular` open-source software project for cardiovascular biomechanics simulations [@Updegrove2017;@Zhu2022].
 `svZeroDSolver` has also been integrated into the graphical user interface of the `Simvascular` project.
 This allows users to leverage the functionality in `Simvascular` to generate three-dimensional patient-specific anatomical models from medical images, and subsequently perform patient-specific zero-dimensional simulations of blood flow by automatically converting the three-dimensional anatomy into a zero-dimensional model [@pfaller22].
+Using this pipeline, previous work has demonstrated improved convergence of three-dimensional simulations when using corresponding zero-dimensional simulation results as initial conditions [@pfaller21].
 
 In addition, the `svZeroDCalibrator` application within `svZeroDSolver` includes functionality to improve the accuracy of zero-dimensional models by optimizing the parameters of blood vessels to recapitulate observed hemodynamics from measurements or high-fidelity simulations.
 This allows users to build more accurate zero-dimensional models than those typically based on purely the anatomy of the vascular region of interest [@richter2024bayesian].
@@ -106,6 +109,6 @@ The development team actively implements new features, blocks and test cases to 
 
 # Acknowledgments
 
-This work was supported by ???. Previous contributions to the software by Dr. Aekaansh Verma are acknowledged.
+This work was supported by NSF grant ???.
 
 # References

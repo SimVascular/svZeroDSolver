@@ -100,9 +100,9 @@ a*dQ_in/dt + b*P_in + c*(dP_in/dt)*Q_in + d = 0
 e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
 ```
 
-\f$e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0\f$
+\f$edP_out/dt + fQ_outQ_out + gP_out + hI_1 = 0\f$
 
-\f$$e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0\f$$
+\f$$edP_out/dt + fQ_outQ_out + gP_out + hI_1 = 0\f$$
 
   * For this block, the `P_in` and `Q_in` are the pressure and flow at the inlet respectively, `P_out` and `Q_out` are the pressure and flow at the outlet, and `I_1` is an internal variable. 
   * The state vector is `[P_in, Q_in, P_out, Q_out, I_1]`.

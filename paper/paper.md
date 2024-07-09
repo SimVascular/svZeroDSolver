@@ -22,8 +22,6 @@ authors:
    affiliation: 1
  - name: Aekaansh Verma
    affiliation: 1
- - name: Dave Parker
-   affiliation: 1
  - name: Alison L. Marsden
    affiliation: 1
    corresponding: true

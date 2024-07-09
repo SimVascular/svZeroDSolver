@@ -100,7 +100,7 @@ cmake --build .
 If you are a developer and want to contribute to svZeroDSolver, you can find
 more helpful information in our [Developer Guide](@ref developer_guide).
 
-# svZeroDSolver - Quick Guide
+# svZeroDSolver - Quick User Guide
 
 svZeroDSolver can be used to run zero-dimensional (0D) cardiovascular
 simulations based on a given configuration.
@@ -114,7 +114,7 @@ file.
 svzerodsolver tests/cases/steadyFlow_RLC_R.json result_steadyFlow_RLC_R.csv
 ```
 
-The result will be written to a csv file.
+The result will be written to a CSV file.
 
 ## Run svZeroDSolver from other programs
 
@@ -227,7 +227,6 @@ There is also a function to retrieve the full result directly based on a given c
 [101 rows x 6 columns]
 
 ```
-
 
 ## Configuration
 
@@ -359,8 +358,24 @@ They can also be specified as a mathematica expression as follow:
 ```
 For an example with a mathematical expression for the boundary condition, see `svZeroDSolver/tests/cases/timeDep_Flow.json`. 
 
+## Simulation Outputs
 
-# svZeroDCalibrator - Quick Guide
+When running `svZeroDSolver` from the command-line using `svzerodsolver <name_of_configuration_file>.json <name_of_output_file>.csv` , the outputs will be saved in the specified CSV file. The format of the file depends on the user-specified configuration within the `simulation_parameters` block of the JSON configuration file. 
+
+If `output_variable_based` is set to `true`, the CSV file will contain all the degrees-of-freedom in the simulation. Otherwise, only the flow and pressure at the inlets and outlets of vessels is written. 
+
+The degrees-of-freedom (DOFs) follow the following naming scheme:
+
+- Flow DOFs are labelled `flow:<name_of_upstream_block>:<name_of_downstream_block>`.
+- Pressure DOFs are labelled `pressure:<name_of_upstream_block>:<name_of_downstream_block>`.
+- Internal DOFs (i.e., variables internal to a block and not connected to upstream/downstream blocks) are labelled `<variable_name>:<block_name>`. The internal variables for each block are listed in the blocks' [class documentation](https://simvascular.github.io/svZeroDSolver/annotated.html). 
+
+When the outputs are written in the variable-based and vessel-based forms, the user can specify whether they want outputs written for all cardiac cycles or just the last cardiac cycle using the `output_all_cycles` option. By default, only the last cycle is written. This makes the simulation more efficient. 
+
+The number of timesteps between each time the output is written is specified by `output_interval`. By default, output is written at every time step. 
+
+
+# svZeroDCalibrator - Quick User Guide
 
 svZeroDCalibrator can be used to calibrate cardiovascular 0D models (i.e. infer optimal
 parameters for the 0D elements) based on a given transient result (i.e. from a

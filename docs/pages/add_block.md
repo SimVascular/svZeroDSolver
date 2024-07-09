@@ -94,6 +94,10 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 * Assume a block has the following non-linear governing equations:
 
+\f a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 \f$
+
+\f$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 \f$
+
   * For this block, \f$P_{in}\f$ and \f$Q_{in}\f$ are the pressure and flow at the inlet respectively, \f$P_{out}\f$ and \f$Q_{out}\f$ are the pressure and flow at the outlet, and \f$I_{1}\f$ is an internal variable. 
   * The contributions to the local `F` matrix are `F[0,0] = b`, `F[1,2] = g` and `F[1,4] = h`.
   * The contributions to the local `E` matrix are `E[0,1] = a` and `E[1,2] = e`.

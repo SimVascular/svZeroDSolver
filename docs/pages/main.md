@@ -360,7 +360,11 @@ For an example with a mathematical expression for the boundary condition, see `s
 
 ## Simulation Outputs
 
-When running `svZeroDSolver` from the command-line using `svzerodsolver <name_of_configuration_file>.json <name_of_output_file>.csv` , the outputs will be saved in the specified CSV file. The format of the file depends on the user-specified configuration within the `simulation_parameters` block of the JSON configuration file. 
+The siumulation outputs will be saved in the specified CSV file (`<name_of_output_file>.csv`) when running `svZeroDSolver` from the command line as follows:
+```bash
+svzerodsolver <name_of_configuration_file>.json <name_of_output_file>.csv
+```
+If the name of the CSV file is not specified, the default is `output.csv`. The format of the file depends on the user-specified configuration within the `simulation_parameters` block of the JSON configuration file. 
 
 If `output_variable_based` is set to `true`, the CSV file will contain all the degrees-of-freedom in the simulation. Otherwise, only the flow and pressure at the inlets and outlets of vessels is written. 
 

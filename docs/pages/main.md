@@ -340,8 +340,8 @@ Note that the `FLOW` and `PRESSURE` boundary conditions accept mathematical expr
     "bc_name": "INFLOW", # Name of the boundary condition
     "bc_type": "FLOW", # Type of the boundary condition
     "bc_values": {
-        "Q": [ ..., ..., ... ],
-        "t": [ ..., ..., ... ]
+        "Q": [ ..., ..., ... ], # Comma-separated list of values
+        "t": [ ..., ..., ... ]  # Comma-separated list of corresponding time stamps
     }
 },
 ```

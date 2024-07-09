@@ -93,17 +93,13 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 ### An example
 
 * Assume a block has the following non-linear governing equations:
-```
-a*dQ_in/dt + b*P_in + c*(dP_in/dt)*Q_in + d = 0
-```
-```
-e*dP_out/dt + f*Q_out*Q_out + g*P_out + h*I_1 = 0
-```
 
-\f$ e dP_out /dt + fQ_out Q_out + gP_out + hI_1 = 0 \f$
+\f$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0
 
-  * For this block, the `P_in` and `Q_in` are the pressure and flow at the inlet respectively, `P_out` and `Q_out` are the pressure and flow at the outlet, and `I_1` is an internal variable. 
-  * The state vector is `[P_in, Q_in, P_out, Q_out, I_1]`.
+\f$ e \frac{dP_{out}}{dt} + f {Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 \f$
+
+  * For this block, \f$P_{in}\f$ and \f$Q_{in}\f$ are the pressure and flow at the inlet respectively, \f$P_{out}\f$ and \f$Q_{out}\f$ are the pressure and flow at the outlet, and \f$I_{1}\f$ is an internal variable. 
+  * The state vector is \f$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]\f$.
   * The contributions to the local `F` matrix are `F[0,0] = b`, `F[1,2] = g` and `F[1,4] = h`.
   * The contributions to the local `E` matrix are `E[0,1] = a` and `E[1,2] = e`.
   * The contributions to the local `C` vector are `C[0] = c*(dP_in/dt)*Q_in + d` and `C[1] = f*Q_out*Q_out`.

@@ -253,20 +253,20 @@ The svZeroDSolver can be configured with the following options in the
 default value must be specified.
 
 
-Parameter key                           | Description                               | Default value
---------------------------------------- | ----------------------------------------- | ----------- 
-number_of_cardiac_cycles                | Number of cardiac cycles to simulate      | -
-number_of_time_pts_per_cardiac_cycle    | Number of time steps per cardiac cycle    | -
-absolute_tolerance                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
-maximum_nonlinear_iterations            | Maximum number of nonlinear iterations for time integration | \f$30\f$
-steady_initial                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
-output_variable_based                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false
-output_interval                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
-output_mean_only                        | Write only the mean values over every timestep to output file | false
-output_derivative                       | Write time derivatives to output file | false
-output_all_cycles                       | Write all cardiac cycles to output file | false
-use_cycle_to_cycle_error                | Use cycle-to-cycle error to determine number of cycles for convergence | false
-sim_cycle_to_cycle_percent_error        | Percentage error threshold for cycle-to-cycle pressure and flow difference | 1.0
+Parameter key                             | Description                               | Default value
+----------------------------------------- | ----------------------------------------- | ----------- 
+`number_of_cardiac_cycles`                | Number of cardiac cycles to simulate      | -
+`number_of_time_pts_per_cardiac_cycle`    | Number of time steps per cardiac cycle    | -
+`absolute_tolerance`                      | Absolute tolerance for time integration   | \f$10^{-8}\f$
+`maximum_nonlinear_iterations`            | Maximum number of nonlinear iterations for time integration | \f$30\f$
+`steady_initial`                          | Toggle whether to use the steady solution as the initial condition for the simulation | true
+`output_variable_based`                   | Output solution based on variables (i.e. flow+pressure at nodes and internal variables) | false
+`output_interval`                         | The frequency of writing timesteps to the output (1 means every time step is written to output) | \f$1\f$
+`output_mean_only`                        | Write only the mean values over every timestep to output file | false
+`output_derivative`                       | Write time derivatives to output file | false
+`output_all_cycles`                       | Write all cardiac cycles to output file | false
+`use_cycle_to_cycle_error`                | Use cycle-to-cycle error to determine number of cycles for convergence | false
+`sim_cycle_to_cycle_percent_error`        | Percentage error threshold for cycle-to-cycle pressure and flow difference | 1.0
 
 The option `use_cycle_to_cycle_error` allows the solver to change the number of cardiac cycles it runs depending on the cycle-to-cycle convergence of the simulation. For simulations with no RCR boundary conditions, the simulation will add extra cardiac cycles until the difference between the mean pressure and flow in consecutive cycles is below the threshold set by `sim_cycle_to_cycle_percent_error` at all inlets and outlets of the model. If there is at least one RCR boundary condition, the number of cycles is determined based on equation 21 of \cite pfaller21, using the RCR boundary condition with the largest time constant.
 
@@ -287,9 +287,9 @@ More information about the vessels can be found in their respective class refere
 }
 ```
 
-Description                           | Class                       | `zero_d_element_type` | `zero_d_element_values`
-------------------------------------- | --------------------------- | --------------------- | ------------------------
-Blood vessel with \n optional stenosis   | MODEL::BloodVessel       | `BloodVessel`         | `C`: Capacity \n `L`: Inductance \n `R_poiseuille`: Poiseuille resistance \n `stenosis_coefficient`: Stenosis coefficient
+Description                              | Class                       | `zero_d_element_type` | `zero_d_element_values`
+---------------------------------------- | --------------------------- | --------------------- | ------------------------
+Blood vessel with \n optional stenosis   | BloodVessel                 | `BloodVessel`         | `C`: Capacity \n `L`: Inductance \n `R_poiseuille`: Poiseuille resistance \n `stenosis_coefficient`: Stenosis coefficient
 
 
 ### Junctions
@@ -306,11 +306,11 @@ More information about the junctions can be found in their respective class refe
 }
 ```
 
-Description                           | Class                       | `junction_type`       | `junction_values`
-------------------------------------- | --------------------------- | --------------------- | ----------- 
-Purely mass \n conserving \n junction | MODEL::Junction             | `NORMAL_JUNCTION`     | -
-Resistive \n junction                 | MODEL::ResistiveJunction    | `resistive_junction`  | `R`: Ordered list of resistances for all inlets and outlets
-Blood vessel \n junction              | MODEL::BloodVesselJunction  | `BloodVesselJunction` | Same as for `BloodVessel` element but \n as ordered list for each inlet and outlet
+Description                           | Class                | `junction_type`       | `junction_values`
+------------------------------------- | ---------------------| --------------------- | ----------- 
+Purely mass \n conserving \n junction | Junction             | `NORMAL_JUNCTION`     | -
+Resistive \n junction                 | ResistiveJunction    | `resistive_junction`  | `R`: Ordered list of resistances for all inlets and outlets
+Blood vessel \n junction              | BloodVesselJunction  | `BloodVesselJunction` | Same as for `BloodVessel` element but \n as ordered list for each inlet and outlet
 
 ### Boundary conditions
 
@@ -324,17 +324,41 @@ More information about the boundary conditions can be found in their respective 
 },
 ```
 
-Description                           | Class                       | `bc_type`             | `bc_values`
-------------------------------------- | --------------------------- | --------------------- | ----------- 
-Prescribed (transient) flow           | MODEL::FlowReferenceBC      | `FLOW`                | `Q`: Time-dependent flow values \n `t`: Time steps \n `fn`: Mathematical expression
-Prescribed (transient) pressure       | MODEL::PressureReferenceBC  | `PRESSURE`            | `P`: Time-dependent pressure values \n `t`: Time steps \n `fn`: Mathematical expression
-Resistance                            | MODEL::ResistanceBC         | `RESISTANCE`          | `R`: Resistance \n `Pd`: Time-dependent distal pressure \n `t`: Time stamps
-Windkessel                            | MODEL::WindkesselBC         | `RCR`                 | `Rp`: Proximal resistance \n `C`: Capacitance \n `Rd`: Distal resistance \n `Pd`: Distal pressure
-Coronary outlet                       | MODEL::OpenLoopCoronaryBC   | `CORONARY`            | `Ra`: Proximal resistance \n `Ram`: Microvascular resistance \n `Rv`: Venous resistance \n `Ca`: Small artery capacitance \n `Cim`: Intramyocardial capacitance \n `Pim`: Intramyocardial pressure \n `Pv`: Venous pressure
+Description                           | Class                  | `bc_type`             | `bc_values`
+------------------------------------- | ---------------------- | --------------------- | ----------- 
+Prescribed (transient) flow           | FlowReferenceBC        | `FLOW`                | `Q`: Time-dependent flow values \n `t`: Time steps \n `fn`: Mathematical expression \n Note: Either specify `Q` and `t` together, or just `fn`
+Prescribed (transient) pressure       | PressureReferenceBC    | `PRESSURE`            | `P`: Time-dependent pressure values \n `t`: Time steps \n `fn`: Mathematical expression \n Note: Either specify `Q` and `t` together, or just `fn`
+Resistance                            | ResistanceBC           | `RESISTANCE`          | `R`: Resistance \n `Pd`: Time-dependent distal pressure \n `t`: Time stamps
+Windkessel                            | WindkesselBC           | `RCR`                 | `Rp`: Proximal resistance \n `C`: Capacitance \n `Rd`: Distal resistance \n `Pd`: Distal pressure
+Coronary outlet                       | OpenLoopCoronaryBC     | `CORONARY`            | `Ra`: Proximal resistance \n `Ram`: Microvascular resistance \n `Rv`: Venous resistance \n `Ca`: Small artery capacitance \n `Cim`: Intramyocardial capacitance \n `Pim`: Intramyocardial pressure \n `Pv`: Venous pressure
 
 The above table describes the most commonly used boundary conditions. In addition, svZeroDSolver includes various closed-loop boundary conditions. Examples can be found in `svZeroDSolver/tests/cases`.
 
-Note that the `FLOW` and `PRESSURE` boundary conditions accept mathematical expressions in `bc_values`. For an example where values of the boundary condition are specified as a function of time, see `svZeroDSolver/tests/cases/pulsatileFlow_R_RCR.json`. For an example with a mathematical expression for the boundary condition, see `svZeroDSolver/tests/cases/timeDep_Flow.json`. 
+Note that the `FLOW` and `PRESSURE` boundary conditions accept mathematical expressions in `bc_values`. For example, values of the boundary condition can be specified as a function of time as follow: 
+```python
+{
+    "bc_name": "INFLOW", # Name of the boundary condition
+    "bc_type": "FLOW", # Type of the boundary condition
+    "bc_values": {
+        "Q": [ ..., ..., ... ],
+        "t": [ ..., ..., ... ]
+    }
+},
+```
+See `svZeroDSolver/tests/cases/pulsatileFlow_R_RCR.json` for an example.
+
+They can also be specified as a mathematica expression as follow: 
+```python
+{
+    "bc_name": "INFLOW", # Name of the boundary condition
+    "bc_type": "FLOW", # Type of the boundary condition
+    "bc_values": {
+        "fn": "2.0 * (4*atan(1.)) * cos(2.0 * (4*atan(1.)) * t)"
+    }
+},
+```
+For an example with a mathematical expression for the boundary condition, see `svZeroDSolver/tests/cases/timeDep_Flow.json`. 
+
 
 # svZeroDCalibrator - Quick Guide
 

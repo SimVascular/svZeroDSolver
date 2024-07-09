@@ -94,7 +94,11 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 * Assume a block has the following non-linear governing equations:
 
-\f$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0
+\f[ 
+a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 
+\f]
+
+\f$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 \f$
 
 \f$ e \frac{dP_{out}}{dt} + f {Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 \f$
 

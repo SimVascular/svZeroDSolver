@@ -17,6 +17,7 @@ jobs:
       - name: Install svZeroDSolver
         run: |
           export PATH="/usr/share/miniconda/bin:$PATH"
+          alias conda="$CONDA/bin/conda"
           conda create -n zerod python=3.11.4
           conda run -n zerod pip install -e ".[dev]"
       - name: Test the build

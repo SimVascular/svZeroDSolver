@@ -1,10 +1,14 @@
 var searchData=
 [
-  ['e_0',['E',['../class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d',1,'SparseSystem::E'],['../struct_triplets_contributions.html#a6d259056f32a5f2bca1366494b78e4fb',1,'TripletsContributions::E']]],
-  ['elv_5fs_1',['ELV_S',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a6f95a98086ca72fd4f88be974717c511',1,'ClosedLoopHeartPulmonary']]],
-  ['emax_5fla_2',['EMAX_LA',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834aaa12cd2fa898d3ea945d3f43655dbeb0',1,'ClosedLoopHeartPulmonary']]],
-  ['emax_5fra_3',['EMAX_RA',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a457ef0b5e897001b7f85a0ecb3276b69',1,'ClosedLoopHeartPulmonary']]],
-  ['equations_4',['equations',['../class_d_o_f_handler.html#a6b1bf2155c070700a3701f49583fb5c0',1,'DOFHandler::equations'],['../class_blood_vessel.html#autotoc_md0',1,'Governing equations'],['../class_blood_vessel_junction.html#autotoc_md4',1,'Governing equations'],['../class_chamber_elastance_inductor.html#autotoc_md8',1,'Governing equations'],['../class_closed_loop_coronary_b_c.html#autotoc_md11',1,'Governing equations'],['../class_closed_loop_r_c_r_b_c.html#autotoc_md15',1,'Governing equations'],['../class_flow_reference_b_c.html#autotoc_md18',1,'Governing equations'],['../class_junction.html#autotoc_md21',1,'Governing equations'],['../class_open_loop_coronary_b_c.html#autotoc_md23',1,'Governing equations'],['../class_pressure_reference_b_c.html#autotoc_md26',1,'Governing equations'],['../class_resistance_b_c.html#autotoc_md29',1,'Governing equations'],['../class_resistive_junction.html#autotoc_md32',1,'Governing equations'],['../class_valve_tanh.html#autotoc_md35',1,'Governing equations'],['../class_windkessel_b_c.html#autotoc_md38',1,'Governing equations'],['../developer_guide.html#autotoc_md47',1,'Latex equations']]],
-  ['erv_5fs_5',['ERV_S',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834ade6493b2555cd0d05591b4138c558c56',1,'ClosedLoopHeartPulmonary']]],
-  ['external_5fstep_5fsize_5f_6',['external_step_size_',['../class_solver_interface.html#a20dc4a36f4a612e5fb29240f3cf8ffc2',1,'SolverInterface']]]
+  ['a_20class_20for_20the_20new_20block_0',['2. Create a class for the new block.',['../add_block.html#autotoc_md42',1,'']]],
+  ['absolute_5ftolerance_5f_1',['absolute_tolerance_',['../class_solver_interface.html#ab713aaec77be384880c87410c4f974e8',1,'SolverInterface']]],
+  ['add_20the_20new_20block_20to_20the_20build_20system_2',['4. Add the new block to the build system.',['../add_block.html#autotoc_md52',1,'']]],
+  ['add_5fblock_3',['add_block',['../class_model.html#a758b22387d02d03218900d2fff7cf49b',1,'Model::add_block(Block *block, const std::string_view &amp;name, const std::vector&lt; int &gt; &amp;block_param_ids, bool internal=false)'],['../class_model.html#a6df7a16f2d54619f66c9775f595bf912',1,'Model::add_block(const std::string &amp;block_name, const std::vector&lt; int &gt; &amp;block_param_ids, const std::string_view &amp;name, bool internal=false)']]],
+  ['add_5fnode_4',['add_node',['../class_model.html#a0aaea98a5661dccd899515bcbe677e1f',1,'Model']]],
+  ['add_5fparameter_5',['add_parameter',['../class_model.html#a8ce031238b1407330ce0adca578d1bb7',1,'Model::add_parameter(double value)'],['../class_model.html#a657c4a5066ca7377773b260271e5ea29',1,'Model::add_parameter(const std::vector&lt; double &gt; &amp;times, const std::vector&lt; double &gt; &amp;values, bool periodic=true)']]],
+  ['adding_20new_20blocks_6',['Adding New Blocks',['../add_block.html',1,'']]],
+  ['adding_20new_20blocks_7',['Adding new blocks',['../developer_guide.html#autotoc_md57',1,'']]],
+  ['an_20example_8',['An example',['../add_block.html#autotoc_md49',1,'']]],
+  ['architecture_9',['Architecture',['../developer_guide.html#autotoc_md53',1,'']]],
+  ['avg_5fnonlin_5fiter_10',['avg_nonlin_iter',['../class_integrator.html#a7406846602ad1644e25998ee3d901bdd',1,'Integrator']]]
 ];

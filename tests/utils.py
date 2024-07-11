@@ -14,8 +14,8 @@ import pysvzerod
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
-RTOL_PRES = 1.0e-6
-RTOL_FLOW = 1.0e-7
+RTOL_PRES = 1.0e-7
+RTOL_FLOW = 1.0e-8
 
 
 def execute_pysvzerod(testfile, mode):
@@ -88,7 +88,7 @@ def run_with_reference(
                     # we are on the last result for this branch
                     avg_ref_flow.append(ref.loc[row.name].y)
                     avg_res_flow.append(row.y)
-                    assert np.isclose(np.array(avg_res_flow).mean(), np.array(avg_ref_flow).mean(), rtol=RTOL_FLOW)
+                    assert np.isclose(np.array(avg_res_flow).all(), np.array(avg_ref_flow).all(), rtol=RTOL_FLOW)
                     avg_res_flow = []
                     avg_ref_flow = []
                     
@@ -97,7 +97,7 @@ def run_with_reference(
                     # we are on the last row
                     avg_ref_pres.append(ref.loc[row.name].y)
                     avg_res_pres.append(row.y)
-                    assert np.isclose(np.array(avg_res_pres).mean(), np.array(avg_ref_pres).mean(), rtol=RTOL_PRES)
+                    assert np.isclose(np.array(avg_res_pres).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
                 elif row["name"] == res.iloc[index + 1]["name"]:
                     # we are compilng the results for a branch
                     avg_ref_pres.append(ref.loc[row.name].y)
@@ -109,7 +109,8 @@ def run_with_reference(
                     # we are on the last result for this branch
                     avg_ref_pres.append(ref.loc[row.name].y)
                     avg_res_pres.append(row.y)
-                    assert np.isclose(np.array(avg_res_pres).mean(), np.array(avg_ref_pres).mean(), rtol=RTOL_PRES)
+                    # round the result to 10 decimal places to avoid floating point errors with reference solution computed on ubuntu OS
+                    assert np.isclose(np.array(avg_res_pres).round(10).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
                     avg_res_pres = []
                     avg_ref_pres = []
 

@@ -135,8 +135,8 @@ def test_time_dependent_block():
     # compare time-dependent results to the calculated values
     for i, t in enumerate(time):
         # may be unsteady at the beginning
-        if t < 0.1:
+        if i < 15:
             continue
         calc_val = 2.0 * (4*np.arctan(1.)) * np.cos(2.0 * (4*np.arctan(1.)) * t)
-        assert np.isclose(flow[i], calc_val, rtol=0.01)
-        assert np.isclose(pressure[i], calc_val, rtol=0.01)
+        assert np.isclose(flow[i], calc_val, rtol=0.003)
+        assert np.isclose(pressure[i], calc_val, rtol=0.003)

@@ -14,7 +14,7 @@
             "bc_name": "INLET",
             "bc_type": "PRESSURE",
             "bc_values": {
-                "fn": "2.0 * (4*atan(1.)) * COS(2.0 * (4*atan(1.)) * t)"
+                "fn": "2.0 * (4*ATAN(1.)) * COS(2.0 * (4*ATAN(1.)) * t)"
             }
         },
         {

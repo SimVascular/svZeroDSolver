@@ -125,10 +125,9 @@ double Parameter::get(double time) {
   }
 
   if (is_function == true) {
-    time_value = time;
-    // Docs say that thi assignment will result in undefined behaviour,
+    // exprtk docs say that this assignment will result in undefined behaviour,
     // but this seems to be the only way for the symbol table to actually get
-    // updated
+    // updated and no undefined behavior has been noted in testing
     symbol_table.get_variable("t")->ref() = time;
     return expression.value();
   }

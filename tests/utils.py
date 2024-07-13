@@ -52,6 +52,69 @@ def execute_pysvzerod(testfile, mode):
     return result, config
 
 
+def run_with_reference(
+        ref,
+        test_config
+        ):
+
+
+    res = pysvzerod.simulate(test_config)
+
+    if res.shape[1] == 6:
+        # we have a result with fields [name, time, p_in, p_out, q_in, q_out]
+        for field in ["pressure_in", "pressure_out", "flow_in", "flow_out"]:
+            if "pressure" in field:
+                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_PRES)
+            elif "flow" in field:
+                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_FLOW)
+    else:
+        # we have a result with fields [name, time, y] and the result must be compared based on the name field. name is of format [flow:vessel:outlet]
+        # we will compare the average of each branch
+        avg_res_flow = []
+        avg_ref_flow = []
+        avg_res_pres = []
+        avg_ref_pres = []
+        for index, row in res.iterrows():
+
+            if "flow" in row["name"]:
+                if row["name"] == res.iloc[index + 1]["name"]:
+                    # we are compilng the results for a branch
+                    avg_ref_flow.append(ref.loc[row.name].y)
+                    avg_res_flow.append(row.y)
+                elif avg_res_flow == []:
+                    # there is only one result for this branch
+                    assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_FLOW)
+                else:
+                    # we are on the last result for this branch
+                    avg_ref_flow.append(ref.loc[row.name].y)
+                    avg_res_flow.append(row.y)
+                    assert np.isclose(np.array(avg_res_flow).all(), np.array(avg_ref_flow).all(), rtol=RTOL_FLOW)
+                    avg_res_flow = []
+                    avg_ref_flow = []
+                    
+            elif "pressure" in row["name"]:
+                if index == len(res) - 1:
+                    # we are on the last row
+                    avg_ref_pres.append(ref.loc[row.name].y)
+                    avg_res_pres.append(row.y)
+                    assert np.isclose(np.array(avg_res_pres).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
+                elif row["name"] == res.iloc[index + 1]["name"]:
+                    # we are compilng the results for a branch
+                    avg_ref_pres.append(ref.loc[row.name].y)
+                    avg_res_pres.append(row.y)
+                elif avg_res_pres == []:
+                    # there is only one result for this branch
+                    assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_PRES)
+                else:
+                    # we are on the last result for this branch
+                    avg_ref_pres.append(ref.loc[row.name].y)
+                    avg_res_pres.append(row.y)
+                    # round the result to 10 decimal places to avoid floating point errors with reference solution computed on ubuntu OS
+                    assert np.isclose(np.array(avg_res_pres).round(10).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
+                    avg_res_pres = []
+                    avg_ref_pres = []
+
+
 def run_test_case_by_name(name, output_variable_based=False, folder="."):
     """Run a test case by its case name.
 

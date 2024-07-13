@@ -14,12 +14,8 @@ of svZeroDSolver, namely:
 * svZerodSolver in `svzerodsolver.cpp`
 * Python API in `pysvzerod.cpp`
 
-The header-based library in the `src` folder contains classes and functions that are collectively used by
-all applications. A good overview over the general architecture can be found in the
-<a href="namespaces.html">list of namespaces</a>.
 
-
-## Build in debug mode
+# Build in debug mode
 
 For debug purposes it is recommended to build svZeroDSolver in Debug mode.
 
@@ -30,7 +26,7 @@ cmake -DCMAKE_BUILD_TYPE=Debug ..
 cmake --build .
 ```
 
-## Install with pip
+# Install with pip
 
 Execute this command in the root folder to install the current source:
 ```bash
@@ -38,7 +34,27 @@ pip install -e ".[dev]"
 ```
 This is useful when continuously running the integration tests during development.
 
-## Code Style
+# Contributing to svZeroDSolver
+
+**NOTE: To contribute new developments to the main branch of svZeroDSolver, developers must first open an issue on the svZeroDSolver Github repository to describe the planned changes.** 
+
+* The changes should be implemented in a feature branch of the developer's fork of svZeroDSolver. 
+* Once the changes are implemented, the developer should make sure the build, documentation, and code format tests are passing on the user's feature branch. 
+  * The tests are automatically run when pushing changes to the developer's remote branch on Github. 
+  * Alternatively, the developer can run the tests locally. 
+    * The build tests can be run using the `pip` install and `pytest`. 
+    * The tests for the C++ interface require the `CMake` install and can be run by building the tests in `svZeroDSolver/tests/test_interface`. 
+    * Code formatting can be performed following the instructions in the Formatting section below. 
+    * The documentation can be built following the instructions in the Documentation section below. 
+* Once all the tests are passing, the developer should open a pull request from the feature branch and link the relevant issue.
+
+# Adding new blocks
+
+The modular architecture of svZeroDSolver relies on "blocks", such as blood vessels, junctions, valves, boundary conditions, etc. These blocks are assembled in a manner specified by the `.json` configuration file, which dictates the assembled governing equations for the model. We are always interested in adding new blocks to expand the funcitonality of svZeroDSolver.
+
+Detailed steps required to implement a new block in svZeroDSolver are available [here](@ref add_block).
+
+# Code Style
 
 We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
 
@@ -81,7 +97,7 @@ requirements.
 
 On Sherlock at Stanford, clang-format is included in the `llvm` module.
 
-## Documentation
+# Documentation
 
 We use [Doxygen](https://doxygen.nl) to automatically build an html documentation
 from source code. Please have at Doxygen's [Documentation Guide](https://www.doxygen.nl/manual/docblocks.html)
@@ -95,7 +111,7 @@ and cannot be merged.**
 In the following you can find a short recap of the most important
 commands:
 
-### Latex equations
+## Latex equations
 For inline equations use `\f$a+b=c\f$` and for block equations use:
 ```
 \f[
@@ -103,12 +119,12 @@ a+b=c
 \f]
 ```
 
-### Citations
+## Citations
 If you want to cite a piece literature in your documentation, add
-a respective BibTeX citation to `docs/cpp/references.bib` and use `\cite name_of_citation` to
+a respective BibTeX citation to `docs/references.bib` and use `\cite name_of_citation` to
 cite the document.
 
-### Drawing circuits
+## Drawing circuits
 As the elements of the svZeroDSolver are often represented
 in the form of electrical circuits, we use [CircuiTikZ](https://ctan.org/pkg/circuitikz?lang=en)
 to draw circuits in the documentation (see blocks in Block for examples). 
@@ -121,7 +137,7 @@ To start a CircuitTikZ drawing use the following command:
 \f]
 ```
 
-### Build
+## Build
 The documentation is automatically built in the GitHub CI/CD and published
 on GitHub pages. If you want to build the documentation locally, you can use:
 
@@ -133,7 +149,7 @@ You can then view the documentation locally in your browser by opening `docs/bui
 If you do not have Doxygen install you can do that with `brew install doxygen`
 on macOS or with `sudo apt-get install doxygen` on Linux.
 
-## Profiling
+# Profiling
 
 Profiling helps to easily identify bottlenecks in the code. A profiling report
 lists the executation time spend on certain parts of the code. If you experience

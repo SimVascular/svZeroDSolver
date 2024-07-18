@@ -20,6 +20,8 @@ authors:
    affiliation: 1
  - name: Jonathan Pham
    affiliation: 1
+ - name: Nicholas Dorn
+   affiliation: 1
  - name: Aekaansh Verma
    affiliation: 1
  - name: Alison L. Marsden
@@ -42,9 +44,9 @@ As part of the [`SimVascular`](https://simvascular.github.io/) open-source proje
 `svZeroDSolver` is written in C++ using an object-oriented framework.
 It designed so that simply specifying a `.json` dictionary of lumped-parameter "blocks" -- such as blood vessels, valves, heart chambers, junctions between blood vessels, and boundary conditions (along with their associated parameters) -- allows the code to automatically assemble and solve the governing equations corresponding to the user-specified vascular model.
 In addition, the package includes Python and C++ APIs to facilitate interfacing it with other software packages.
-For example, it can be integrated into Python-based optimization and uncertainty quantification applications.
-It can also be interfaced with high-performance C++/Fortran software for high-fidelity cardiovascular flow simulations, where `svZeroDSolver` can conveniently provide lumped-parameter boundary conditions.
-`svZeroDSolver` also includes an application, called `svZeroDCalibrator`, to automatically calibrate parameters of a given zero-dimensional model to recapitulate hemodynamics at specific anatomical locations from independent measurements or high-fidelity simulations -- thus improving the accuracy of zero-dimensional models.
+For example, it can be integrated into Python-based optimization and uncertainty quantification applications [@zanoni2024;@Lee2024;@richter2024bayesian].
+It can also be interfaced with high-performance C++/Fortran software for high-fidelity cardiovascular flow simulations, where `svZeroDSolver` can conveniently provide lumped-parameter boundary conditions [@menon2023predictors;@menon2024personalized].
+`svZeroDSolver` also includes an application, called `svZeroDCalibrator`, to automatically calibrate parameters of a given zero-dimensional model to recapitulate hemodynamics at specific anatomical locations from independent measurements or high-fidelity simulations -- thus improving the accuracy of zero-dimensional models [@richter2024bayesian].
 
 # Statement of need
 
@@ -95,7 +97,7 @@ The input to `svZeroDSolver` is a `.json` file which specifies the simulation pa
 Each of these blocks generally requires several parameters which can be specified using a steady value, a list of time-varying values, or a mathematical function which is parsed using [exprtk](https://github.com/ArashPartow/exprtk).
 The solver can either run simulations for a specified number of time steps and cardiac cycles, or until the difference in mean quantities between consecutive cardiac cycles is below a given threshold.
 
-`svZeroDSolver` currently has implementations of different types of blood vessel blocks with non-linear resistors to model vascular stenoses, junctions between blood vessels, a heart valve block modeled using a hyperbolic tangent function, a cardiac chamber block modeled as a time-varying capacitor and inductor, and several different boundary condition blocks including simple flow, pressure and resistors blocks, windkessel boundary conditions, coronary boundary conditions that include the intramyocardial pressure experienced by coronary arteries, as well as closed-loop versions of windkessel and coronary boundary conditions that allow a user to build a closed-loop circulation model [@Kim2009;@kimcoronary;@menon2023predictors;@menon2024personalized].
+`svZeroDSolver` currently has implementations of different types of blood vessel blocks with non-linear resistors to model vascular stenoses, junctions between blood vessels, a heart valve block modeled using a hyperbolic tangent function, a cardiac chamber block modeled as a time-varying capacitor and inductor, and several different boundary condition blocks including simple flow, pressure and resistors blocks, windkessel boundary conditions, coronary boundary conditions that include the intramyocardial pressure experienced by coronary arteries, as well as closed-loop versions of windkessel and coronary boundary conditions that allow a user to build a closed-loop circulation model [@Vignon-Clementel2006;@Kim2009;@kimcoronary;@Mirramezani2019;@menon2023predictors;@menon2024personalized].
 
 Examples of configuration files to run `svZeroDSolver` simulations using the various available blocks are in `svZeroDSolver/tests/cases`.
 The repository also includes examples demonstrating the simple API for interfacing between `svZeroDSolver` and external C++ software packages in `svZeroDSolver/tests/test_inetrface`.

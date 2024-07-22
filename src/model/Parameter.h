@@ -67,7 +67,7 @@ class Parameter {
                      ///< with the cardiac cycle
   bool is_function;  ///< Bool value indicating if the parameter is a function
   std::string expression_string;  ///< String with value function
-  double time_value = 0.0;        ///< Time value passed into expression
+  double* time_value = nullptr;        ///< Time value passed into expression
   exprtk::symbol_table<double> symbol_table;  ///< Symbol table to store time t
   exprtk::expression<double>
       expression;  ///< exprtk object from input expression string

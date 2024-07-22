@@ -76,12 +76,17 @@ void Parameter::update(const std::string update_string) {
   is_function = true;
   is_constant = false;
   expression_string = update_string;
-  time_value = 0.0;
+  time_value = nullptr;
 
   expression.release();
   symbol_table.clear();
 
-  symbol_table.add_variable("t", time_value);
+  if (!symbol_table.create_variable("t")) {
+    std::runtime_error("Error failed to create time_value in symbol_table.");
+    return;
+  }
+   
+  time_value = &symbol_table.get_variable("t")->ref();  
   expression.register_symbol_table(symbol_table);
 
   exprtk::parser<double> parser;
@@ -125,10 +130,8 @@ double Parameter::get(double time) {
   }
 
   if (is_function == true) {
-    // exprtk docs say that this assignment will result in undefined behaviour,
-    // but this seems to be the only way for the symbol table to actually get
-    // updated and no undefined behavior has been noted in testing
-    symbol_table.get_variable("t")->ref() = time;
+    assert(time_value != nullptr);
+    *time_value = time;
     return expression.value();
   }
 

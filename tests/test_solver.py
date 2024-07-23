@@ -27,9 +27,9 @@ def test_all():
 
     for file in testfiles:
 
-        with open(os.path.join(this_file_dir, 'cases', file), "r") as f:
-            config = json.load(f)
+        # with open(os.path.join(this_file_dir, 'cases', file), "r") as f:
+        #     config = json.load(f)
 
         ref = pd.read_json(os.path.join(results_dir, 'result_' + file))
 
-        run_with_reference(ref, config)
+        run_with_reference(ref, os.path.join(this_file_dir, 'cases', file))

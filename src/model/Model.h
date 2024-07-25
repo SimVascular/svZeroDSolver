@@ -18,6 +18,7 @@
 #include "Block.h"
 #include "BlockFactory.h"
 #include "BloodVessel.h"
+#include "BloodVesselCRL.h"
 #include "BloodVesselJunction.h"
 #include "ChamberElastanceInductor.h"
 #include "ChamberSphere.h"
@@ -38,6 +39,8 @@
 #include "ValveTanh.h"
 #include "WindkesselBC.h"
 #include "debug.h"
+#include "RegazzoniChamber.h"
+#include "RegazzoniValve.h"
 
 /**
  * @brief Model of 0D elements

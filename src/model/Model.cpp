@@ -28,7 +28,13 @@ Model::Model() {
       {"RESISTANCE", block_factory<ResistanceBC>()},
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
-      {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()}};
+      {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
+      {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
+      {"RegazzoniValve", block_factory<RegazzoniValve>()},
+      {"RegazzoniChamber", block_factory<RegazzoniChamber>()}};
+
+
+      
 }
 
 Model::~Model() {}
@@ -113,10 +119,10 @@ std::string Model::get_block_name(int block_id) const {
   return block_names[block_id];
 }
 
-int Model::add_node(const std::vector<Block*>& inlet_eles,
-                    const std::vector<Block*>& outlet_eles,
-                    const std::string_view& name) {
-  // DEBUG_MSG("Adding node " << name);
+int Model::add_node(const std::vector<Block *> &inlet_eles,
+                    const std::vector<Block *> &outlet_eles,
+                    const std::string_view &name) {
+  DEBUG_MSG("Adding node " << name);
   auto node = std::shared_ptr<Node>(
       new Node(node_count, inlet_eles, outlet_eles, this));
   nodes.push_back(node);
@@ -173,6 +179,10 @@ void Model::finalize() {
   DEBUG_MSG("Setup model-dependent parameters");
   for (auto& block : blocks) {
     block->setup_model_dependent_params();
+  }
+
+  if (cardiac_cycle_period < 0.0) {
+    cardiac_cycle_period =  0.6896551724137931;
   }
 }
 

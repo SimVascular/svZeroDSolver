@@ -28,108 +28,105 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file BloodVesselJunction.h
- * @brief model::BloodVesselJunction source file
+ * @file BloodVesselCRL.h
+ * @brief model::BloodVesselCRL source file
  */
-#ifndef SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
-#define SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
+#ifndef SVZERODSOLVER_MODEL_BLOODVESSELCRL_HPP_
+#define SVZERODSOLVER_MODEL_BLOODVESSELCRL_HPP_
+
+#include <math.h>
 
 #include "Block.h"
-#include "BloodVessel.h"
-#include "BloodVesselCRL.h"
 #include "SparseSystem.h"
 
 /**
- * @brief Junction between blood vessels
+ * @brief Resistor-capacitor-inductor blood vessel with optional stenosis
  *
- * Models a junction with one inlet and arbitrary outlets using
- * modified blood vessel elements between each inlet and outlet pair.
- *
- * \f[
- * \begin{circuitikz}
- * \draw node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0.1) node[anchor=south]{$P_\text{in}$};
- * \draw (1,0) to [short, *-] (2.5,0.75);
- * \draw (1,0) to [short, *-] (2.5,-0.75);
- * \draw (2.5,0.75) node[anchor=south]{} to [generic, l_=$BV_{1}$, -*]
- * (4.5,0.75); \draw (2.4,0.75) node[anchor=south]{}; \draw (4.6,0.75)
- * node[anchor=south] {$P_{out,1}$}; \draw (2.5,-0.75) node[anchor=south]{}
- to
- * [generic, l^=$BV_{2}$, -*] (4.5,-0.75); \draw (2.4,-0.75)
- * node[anchor=north]{}; \draw (4.6,-0.75) node[anchor=north]
- * {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
- * {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
- * {$Q_{out,2}$}; \end{circuitikz}
- * \f]
- *
- * Each blood vessel is modelled as:
+ * Models the mechanical behavior of a bloodvesselCRL with optional stenosis.
  *
  * \f[
  * \begin{circuitikz} \draw
- * node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_\text{in}$}
+ * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to [R, l=$R$, *-] (3,0)
  * to [R, l=$S$, -] (5,0)
  * (5,0) to [L, l=$L$, -*] (7,0)
- * node[anchor=south]{$P_\text{out}$};
- * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_\text{out}$};
+ * node[anchor=south]{$P_{out}$}
+ * (5,0) to [C, l=$C$, -] (5,-1.5)
+ * node[ground]{};
+ * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
  * \f]
  *
  * ### Governing equations
  *
  * \f[
- * Q_\text{in}-\sum_{i}^{n_{outlets}} Q_{out, i} = 0
- * \f]
+ * P_\text{in}-P_\text{out} - (R + S|Q_\text{in}|) Q_\text{in}-L
+ * \dot{Q}_\text{out}=0 \f]
  *
  * \f[
- * P_\text{in}-P_{\text{out},i} - (R+S|Q_{\text{out},i}|) \cdot Q_{\text{out},i}
- * - L \dot{Q}_{\text{out},i} = 0 \quad \forall i \in n_{outlets} \f]
+ * Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}+C(R +
+ * 2S|Q_\text{in}|) \dot{Q}_{in}=0 \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_\text{in} & Q_\text{in}
- * & P_{out, 1} & Q_{out, 1} &
- * \dots & P_{out, i} & Q_{out, i}\end{array}\right] \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n} & Q_{in} &
+ * P_{out} & Q_{out}\end{array}\right]^\text{T} \f]
  *
  * \f[
- * \mathbf{F}^{e} = \left[\begin{array}{ccccccc}
- * 0 & 1 & 0 & -1 & 0 & -1 & \dots \\
- * 1 & 0 & -1 & -R_1 & 0 & 0 & \\
- * 1 & 0 & 0 & 0 & -1 & -R_2 & \\
- * \vdots & & & & & & \ddots
+ * \mathbf{F}^{e}=\left[\begin{array}{cccc}
+ * 1 & -R & -1 &  0 \\
+ * 0 &  1 &  0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{E}^{e} = \left[\begin{array}{ccccccc}
- * 0 & 0 & 0 & 0 & 0 & 0 & \dots \\
- * 0 & 0 & 0 & -L_1 & 0 & 0 & \\
- * 0 & 0 & 0 & 0 & 0 & -L_2 & \\
- * \vdots & & & & & & \ddots
+ * \mathbf{E}^{e}=\left[\begin{array}{cccc}
+ *  0 &  0 & 0 & -L \\
+ * -C & CR & 0 &  0
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{c}^{e} = \left[\begin{array}{c}
- * 0 \\
- * - S_1 |Q_{\text{in},1}| Q_{\text{in},1} \\
- * - S_2 |Q_{\text{in},2}| Q_{\text{in},2} \\
- * \vdots
- * \end{array}\right] \f]
+ * \mathbf{c}^{e} = S|Q_\text{in}|
+ * \left[\begin{array}{c}
+ * -Q_\text{in} \\
+ * 2C\dot{Q}_\text{in}
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+ *  S \text{sgn} (Q_\text{in})
+ * \left[\begin{array}{cccc}
+ * 0 & -2Q_\text{in}        & 0 & 0 \\
+ * 0 & 2C\dot{Q}_\text{in} & 0 & 0
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+ *  S|Q_\text{in}|
+ * \left[\begin{array}{cccc}
+ * 0 &  0 & 0 & 0 \\
+ * 0 & 2C & 0 & 0
+ * \end{array}\right]
+ * \f]
+ *
+ * with the stenosis resistance \f$ S=K_{t} \frac{\rho}{2
+ * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} \f$.
+ * \f$R\f$, \f$C\f$, and \f$L\f$ refer to
+ * Poisieuille resistance, capacitance and inductance, respectively.
  *
  * ### Gradient
  *
  * Gradient of the equations with respect to the parameters:
  *
  * \f[
- * \mathbf{J}^{e} = \left[\begin{array}{lllllllll}
- * 0 & 0 & \dots & 0 & 0 & \dots & 0 & 0 &
- * \dots \\
- * - y_4 & 0 & \dots & - \dot y_4 & 0 & \dots & |y_4| y_4 & 0 & \dots \\
- * 0 & - y_6 & \dots & 0 & - \dot y_6 & \dots & 0 & |y_6| y_6 & \dots \\
- * 0 & 0 & \ddots & 0 & 0 & \ddots & 0 & 0 & \ddots \\
+ * \mathbf{J}^{e} = \left[\begin{array}{cccc}
+ * -y_2 & 0 & -\dot{y}_4 & -|y_2|y_2 \\
+ * C\dot{y}_2 & (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
  * \end{array}\right]
  * \f]
  *
@@ -137,26 +134,37 @@
  *
  * Parameter sequence for constructing this block
  *
- * * `i` Poiseuille resistance for inner blood vessel `i`
- * * `i+num_outlets` Inductance for inner blood vessel `i`
- * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
+ * * `0` Poiseuille resistance
+ * * `1` Capacitance
+ * * `2` Inductance
+ * * `3` Stenosis coefficient
  *
  */
-class BloodVesselJunction : public Block {
+class BloodVesselCRL : public Block {
  public:
   /**
-   * @brief Construct a new BloodVesselJunction object
+   * @brief Local IDs of the parameters
+   *
+   */
+  enum ParamId {
+    RESISTANCE = 0,
+    CAPACITANCE = 1,
+    INDUCTANCE = 2,
+    STENOSIS_COEFFICIENT = 3,
+  };
+
+  /**
+   * @brief Construct a new BloodVesselCRL object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  BloodVesselJunction(int id, Model *model)
-      : Block(id, model, BlockType::blood_vessel_junction, BlockClass::junction,
+  BloodVesselCRL(int id, Model *model)
+      : Block(id, model, BlockType::blood_vessel_CRL, BlockClass::vessel,
               {{"R_poiseuille", InputParameter()},
-               {"L", InputParameter()},
-               {"stenosis_coefficient", InputParameter()}}) {
-    input_params_list = true;
-  }
+               {"C", InputParameter(true)},
+               {"L", InputParameter(true)},
+               {"stenosis_coefficient", InputParameter(true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -171,7 +179,8 @@ class BloodVesselJunction : public Block {
   void setup_dofs(DOFHandler &dofhandler);
 
   /**
-   * @brief Update the constant contributions of the element in a sparse system
+   * @brief Update the constant contributions of the element in a sparse
+   system
    *
    * @param system System to update contributions at
    * @param parameters Parameters of the model
@@ -187,10 +196,9 @@ class BloodVesselJunction : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  virtual void update_solution(
-      SparseSystem &system, std::vector<double> &parameters,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  void update_solution(SparseSystem &system, std::vector<double> &parameters,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -213,10 +221,7 @@ class BloodVesselJunction : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets;
-
- private:
-  int num_outlets;
+  TripletsContributions num_triplets{5, 3, 2};
 };
 
-#endif  // SVZERODSOLVER_MODEL_BLOODVESSELJUNCTION_HPP_
+#endif  // SVZERODSOLVER_MODEL_BLOODVESSELCRL_HPP_

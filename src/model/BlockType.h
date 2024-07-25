@@ -54,7 +54,10 @@ enum class BlockType {
   closed_loop_rcr_bc = 11,
   closed_loop_heart_pulmonary = 12,
   valve_tanh = 13,
-  chamber_elastance_inductor = 14
+  chamber_elastance_inductor = 14,
+  blood_vessel_CRL = 15,
+  regazzoni_chamber = 16,
+  regazzoni_valve =17
 };
 
 /**

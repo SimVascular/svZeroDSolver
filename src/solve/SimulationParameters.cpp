@@ -420,28 +420,30 @@ void create_external_coupling(
                                                  "CORONARY",
                                                  "ClosedLoopCoronaryLeft",
                                                  "ClosedLoopCoronaryRight",
-                                                 "BloodVessel"};
+                                                 "BloodVessel",
+                                                 "BloodVesselA",
+                                                 "BloodVesselCRL"};
       if (std::find(std::begin(possible_types), std::end(possible_types),
                     connected_type) == std::end(possible_types)) {
         throw std::runtime_error(
-            "Error: The specified connection type for inlet "
+            "Error: The specified connection type for inlet"
             "external_coupling_block is invalid.");
       }
       connections.push_back({coupling_name, connected_block});
     } else if (coupling_loc == "outlet") {
       std::vector<std::string> possible_types = {
-          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
+          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel", "BloodVesselCRL", "BloodVessel"};
       if (std::find(std::begin(possible_types), std::end(possible_types),
                     connected_type) == std::end(possible_types)) {
         throw std::runtime_error(
             "Error: The specified connection type for outlet "
             "external_coupling_block is invalid.");
       }
-      // Add connection only for closedLoopRCR and BloodVessel. Connection to
+      // Add connection only for closedLoopRCR and BloodVessel and BloodVesselCRL. Connection to
       // ClosedLoopHeartAndPulmonary will be handled in
       // ClosedLoopHeartAndPulmonary creation.
       if ((connected_type == "ClosedLoopRCR") ||
-          (connected_type == "BloodVessel")) {
+          (connected_type == "BloodVessel") || (connected_type == "BloodVesselCRL" ) || (connected_type == "BloodVesselA" )) {
         connections.push_back({connected_block, coupling_name});
       }  // connected_type == "ClosedLoopRCR"
     }    // coupling_loc

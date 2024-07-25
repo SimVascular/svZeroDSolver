@@ -69,10 +69,10 @@ std::string to_vessel_csv(const std::vector<double> &times,
   for (size_t i = 0; i < model.get_num_blocks(); i++) {
     auto block = model.get_block(i);
     // Extract global solution indices of the block
-
-    if (dynamic_cast<const BloodVessel *>(block) == nullptr) {
+    if (dynamic_cast<const BloodVessel *>(block) == nullptr || dynamic_cast<const BloodVesselCRL *>(block) == nullptr) {
       continue;
     }
+
 
     std::string name = block->get_name();
     inflow_dof = block->inlet_nodes[0]->flow_dof;

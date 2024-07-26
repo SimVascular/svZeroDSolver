@@ -1238,7 +1238,7 @@
     "simulation_parameters": {
         "number_of_cardiac_cycles": 10,
         "number_of_time_pts_per_cardiac_cycle": 100,
-        "output_variable_based": true
+        "output_variable_based": false
     },
     "vessels": [
         {

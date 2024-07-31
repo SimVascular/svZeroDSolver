@@ -23,6 +23,6 @@ jobs:
       - name: Test build
         run: |
           pwd
-          cd ../tests/cases
+          cd tests/cases
           ../../Release/svzerodsolver pulsatileFlow_R_RCR_mean.json results.csv
           rm results.csv

@@ -1,12 +1,12 @@
 <map id="model/ClosedLoopCoronaryRightBC.h" name="model/ClosedLoopCoronaryRightBC.h">
 <area shape="rect" id="Node000001" title="Right side of ClosedLoopCoronaryBC." alt="" coords="373,5,553,46"/>
-<area shape="rect" id="Node000002" href="$_closed_loop_coronary_b_c_8h.html" title="model::ClosedLoopCoronaryBC source file" alt="" coords="379,94,548,120"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="466,46,466,78,461,78,461,46"/>
+<area shape="rect" id="Node000002" href="$_closed_loop_coronary_b_c_8h.html" title="model::ClosedLoopCoronaryBC source file" alt="" coords="378,94,548,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="466,46,466,78,460,78,460,46"/>
 <area shape="rect" id="Node000003" href="$_block_8h.html" title="model::Block source file" alt="" coords="338,241,402,267"/>
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="458,121,388,230,384,227,453,119"/>
 <area shape="rect" id="Node000015" href="$_sparse_system_8h.html" title="SparseSystem source file." alt="" coords="564,315,680,341"/>
 <area shape="poly" id="edge28_Node000002_Node000015" title=" " alt="" coords="468,119,476,153,492,192,516,225,543,255,595,303,592,307,539,259,511,228,488,195,471,155,462,121"/>
-<area shape="rect" id="Node000019" href="$_closed_loop_heart_pulmonary_8h.html" title="model::ClosedLoopHeartPulmonary source file" alt="" coords="501,168,695,193"/>
+<area shape="rect" id="Node000019" href="$_closed_loop_heart_pulmonary_8h.html" title="model::ClosedLoopHeartPulmonary source file" alt="" coords="501,168,694,193"/>
 <area shape="poly" id="edge24_Node000002_Node000019" title=" " alt="" coords="487,118,563,158,560,162,485,123"/>
 <area shape="rect" id="Node000004" title=" " alt="" coords="393,315,477,341"/>
 <area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="383,265,416,302,412,305,379,269"/>
@@ -23,7 +23,7 @@
 <area shape="rect" id="Node000011" href="$_parameter_8h.html" title="model::Parameter source file" alt="" coords="278,315,369,341"/>
 <area shape="poly" id="edge13_Node000003_Node000011" title=" " alt="" coords="364,269,342,303,337,300,360,266"/>
 <area shape="poly" id="edge19_Node000003_Node000015" title=" " alt="" coords="403,262,566,308,564,313,402,267"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="91,462,145,488"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="91,462,144,488"/>
 <area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="96,341,89,375,87,394,90,414,104,448,99,450,85,415,82,394,84,374,91,340"/>
 <area shape="poly" id="edge10_Node000010_Node000006" title=" " alt="" coords="132,417,63,457,61,452,129,413"/>
 <area shape="poly" id="edge12_Node000010_Node000007" title=" " alt="" coords="168,413,215,450,212,455,165,417"/>

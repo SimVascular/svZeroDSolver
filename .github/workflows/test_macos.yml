@@ -1,0 +1,27 @@
+# This workflow builds and tests svZeroDSolver. It is built and tested on
+# different versions of ubuntu and macOS.
+name: Test Macos_latest
+on: [push]
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+      - name: Build using CMake
+        run: |
+          mkdir Release
+          cd Release
+          cmake -DCMAKE_BUILD_TYPE=DEBUG -DENABLE_DISTRIBUTION=ON ..
+          make -j2
+      - name: Test build
+        run: |
+          cd ../tests/cases
+          ../../build/svzerodsolver pulsatileFlow_R_RCR_mean.json results.csv
+          rm results.csv

@@ -99,7 +99,7 @@ class Model {
    * @param block_name The block name (defined in block_factory_map)
    * @return int Global ID of the block
    */
-  Block *create_block(const std::string &block_name);
+  std::shared_ptr<Block> create_block(const std::string &block_name);
 
   /**
    * @brief Add a block to the model (without parameters)
@@ -110,7 +110,7 @@ class Model {
    * @param internal Toggle whether block is internal
    * @return int Global ID of the block
    */
-  int add_block(Block *block, const std::string_view &name,
+  int add_block(std::shared_ptr<Block> block, const std::string_view &name,
                 const std::vector<int> &block_param_ids, bool internal = false);
 
   /**

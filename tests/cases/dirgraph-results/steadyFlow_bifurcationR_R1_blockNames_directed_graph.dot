@@ -1,0 +1,11 @@
+strict digraph  {
+BC0_inlet;
+V0;
+V1;
+BC1_outlet;
+V2;
+BC2_outlet;
+BC0_inlet -> V0;
+V1 -> BC1_outlet;
+V2 -> BC2_outlet;
+}

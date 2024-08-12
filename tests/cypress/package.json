@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "flask run --host=0.0.0.0 --port=8901",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },

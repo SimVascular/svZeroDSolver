@@ -614,7 +614,6 @@ def save_directed_graph(block_list, connect_list, directed_graph_file_path, draw
         plt.close("all")
 
 
-
 def set_up_0d_network(zero_d_solver_input_file_path: object, output_dir, name_type: object, inlet_block: object = False, draw_directed_graph: object = False) -> object:
     """
     Purpose:

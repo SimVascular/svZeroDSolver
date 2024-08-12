@@ -54,12 +54,11 @@ edge {
     opacity: 0;
 }
 
-
- body {
+body {
         padding: 2%;
         font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
         font-size: 13px;
-      }
+}
 
 .dropdown-container {
     display: flex;
@@ -70,11 +69,6 @@ edge {
     margin-left: 10px; /* Adjust as needed */
 }
 
-/* #ccc {
-    position: relative; /* Ensure it stays in place
-    z-index: 1;
-}
-*/
 
 .double-input-container > div {
     display: inline-block;        /* Enables flex layout */
@@ -92,7 +86,6 @@ edge {
     flex-grow: 1;         /* Allows inputs to expand */
     margin-right: 10px;   /* Space between inputs */
 }
-
 
 
 .container {
@@ -174,46 +167,45 @@ edge {
   padding-top: 0; /* Remove top padding */
 }
 
+h1 {
+    opacity: 1;
+    font-family: sans-serif;
+    font-size: 3em;
+    font-weight: bold;
+    text-align:center;
+}
 
-      h1 {
-        opacity: 1;
-        font-family: sans-serif;
-        font-size: 3em;
-        font-weight: bold;
-        text-align:center;
-      }
-
-    label {
-        font-size: 18px; /* Increase the font size of the label
-        display: block; /* Make labels appear on a new line for better organization */
-        margin-bottom: 5px; /* Add some space below the label */
-    }
-
-
-    select, input {
-        width: 160px; /* Set a larger width */
-        height: 25px; /* Set a taller height */
-        font-size: 15px; /* Increase the font size for better readability */
-        margin: 10px; /* Add some margin for spacing */
-    }
+label {
+    font-size: 18px; /* Increase the font size of the label
+    display: block; /* Make labels appear on a new line for better organization */
+    margin-bottom: 5px; /* Add some space below the label */
+}
 
 
-     #buttons {
-      position: absolute;
-      font-family: Open Sans;
-      font-size: 20px; /* Adjusted to fit better */
-      right: 10px;
-      top: 100px;
-      z-index: 99999;
-      margin: 1em;
-    }
+select, input {
+    width: 160px; /* Set a larger width */
+    height: 25px; /* Set a taller height */
+    font-size: 15px; /* Increase the font size for better readability */
+    margin: 10px; /* Add some margin for spacing */
+}
 
-    #buttons button {
-      width: 90px; /* Set a fixed width */
-      height: 50px; /* Set a fixed height */
-      display: block; /* Make buttons block-level to stack vertically */
-      margin-bottom: 10px; /* Space between buttons */
-    }
+
+ #buttons {
+  position: absolute;
+  font-family: Open Sans;
+  font-size: 20px; /* Adjusted to fit better */
+  right: 10px;
+  top: 100px;
+  z-index: 99999;
+  margin: 1em;
+}
+
+#buttons button {
+  width: 90px; /* Set a fixed width */
+  height: 50px; /* Set a fixed height */
+  display: block; /* Make buttons block-level to stack vertically */
+  margin-bottom: 10px; /* Space between buttons */
+}
 
 #nodeInfoModal {
   position: fixed;

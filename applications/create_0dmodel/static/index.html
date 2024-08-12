@@ -1,28 +1,22 @@
 <!DOCTYPE>
-
 <html>
-
   <head>
       <title>Vasculature Simulation </title>
-
       <link rel="stylesheet" href="static/css/style.css">
       <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
       <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
 
     <!-- for testing with local version of cytoscape.js -->
-    <!--<script src="../cytoscape.js/build/cytoscape.js"></script>-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.js"></script>
       <script src="/static/js/cytoscape-edgehandles.js"></script>
       <script src="/static/js/app.js"></script>
       <script type="module">
         import cytoscapeDomNode from 'https://cdn.skypack.dev/cytoscape-dom-node';
-        </script>
-
-
+      </script>
   </head>
 
   <body>
-    <h1>No Code Vasculature Simulation Platform</h1>
+    <h1>No Code 0d Vasculature Simulation Platform</h1>
     <div class="container">
         <button class="collapsible">Instructions</button>
         <div class="content">
@@ -159,8 +153,6 @@
           <button id="submitVesselButton">Submit</button>
       </div>
     </div>
-
-
     <div id="cy"></div>
     <div id="buttons">
         <button id="draw-on">Draw mode on</button>

@@ -23,9 +23,10 @@ jobs:
           #alias conda="$CONDA/bin/conda"
           conda create -n zerod python=3.11.4
           conda run -n zerod pip install -e ".[dev]"
-      - name: Install Networkx
+      - name: Install Dirgraph test dependencies
         run: |
             conda run -n zerod pip install networkx
+            conda install -n zerod pydot
       - name: Test the build
         run: |
           cd tests

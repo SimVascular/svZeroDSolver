@@ -1,9 +1,0 @@
-{
-  "name": "test-app",
-  "version": "1.0.0",
-  "scripts": {
-    "start": "FLASK_APP=applications/create_0dmodel/app.py flask run --host=0.0.0.0 --port=8901",
-    "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
-  }
-}

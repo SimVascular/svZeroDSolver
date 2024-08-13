@@ -1,6 +1,6 @@
 import pysvzerod
 import pandas as pd
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import networkx as nx
 import json
 import dash
@@ -68,7 +68,6 @@ valve_info = {}
 if 'valves' in parameters:
     for valve in parameters['valves']:
         valve_info[valve['name']] = valve['params']
-
 
 chamber_info = {}
 if 'chambers' in parameters:

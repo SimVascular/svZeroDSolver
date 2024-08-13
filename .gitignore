@@ -35,3 +35,6 @@ build
 .project
 .settings
 *.swp
+
+#Node Modules
+node_modules/

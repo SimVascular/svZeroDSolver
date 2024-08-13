@@ -30,8 +30,8 @@ jobs:
 
       - name: Start Flask server
         run: |
-              FLASK_APP=app.py flask run --host=0.0.0.0 --port=8901 &
-              sleep 10  # Wait for the server to start
+            FLASK_APP=applications/create_0dmodel/app.py flask run --host=0.0.0.0 --port=8901 &
+            sleep 10  # Wait for the server to start
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5

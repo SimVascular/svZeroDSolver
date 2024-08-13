@@ -1,21 +1,9 @@
 {
-  "name": "gui-app",
+  "name": "test-app",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "flask run --host=0.0.0.0 --port=8901",
+    "start": "FLASK_APP=applications/create_0dmodel/app.py flask run --host=0.0.0.0 --port=8901",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@4tw/cypress-drag-drop": "^2.2.5",
-    "cypress": "^13.13.2"
-  },
-  "dependencies": {
-    "cypress-drag-drop": "^1.1.1"
   }
 }

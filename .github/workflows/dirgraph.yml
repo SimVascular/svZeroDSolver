@@ -22,5 +22,5 @@ jobs:
 
       - name: Run tests
         run: |
-          cd tests
-          pytest -v --durations=0 tests/test_dirgraph.py
+          pytest tests/test_dirgraph.py
+

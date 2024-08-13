@@ -46,7 +46,6 @@
     "common-tags": "^1.8.2",
     "core-util-is": "^1.0.2",
     "cross-spawn": "^7.0.3",
-    "cypress": "^13.13.2",
     "dashdash": "^1.14.1",
     "dayjs": "^1.11.12",
     "debug": "^4.3.6",
@@ -171,14 +170,14 @@
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
-  "@4tw/cypress-drag-drop": "^2.2.5",
-  "cypress": "^13.13.2"
+    "@4tw/cypress-drag-drop": "^2.2.5",
+    "cypress": "^13.13.2"
   },
   "scripts": {
     "start": "FLASK_APP=applications/create_0dmodel/app.py flask run --host=0.0.0.0 --port=8901",
-     "cypress:open": "cypress open",
-      "cypress:run": "cypress run",
-      "test": "npm run cypress:run"
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "npm run cypress:run"
   },
   "keywords": [],
   "author": "",

@@ -35,3 +35,6 @@ build
 .project
 .settings
 *.swp
+
+# Node Modules for Cypress Testing
+node_modules/

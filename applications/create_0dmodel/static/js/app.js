@@ -1,4 +1,18 @@
-document.addEventListener('DOMContentLoaded', function() {
+function updateBoundaryConditionTypeVisibility() {
+        const nodeType = document.getElementById('node-type').value;
+        const boundaryConditionTypeContainer = document.getElementById('boundary-condition-type-container');
+        if (nodeType === 'boundary_condition') {
+            boundaryConditionTypeContainer.style.display = 'block';
+            requestAnimationFrame(() => {
+              const dropdownHeight = boundaryConditionTypeContainer.offsetHeight;
+              window.scrollBy(0, dropdownHeight);
+            });
+        } else {
+            boundaryConditionTypeContainer.style.display = 'none';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
     const vessel_icon = '/static/css/vessel.png';
     const valve_icon = '/static/css/valve.png';
     const chamber_icon = '/static/css/chamber.png';
@@ -541,19 +555,6 @@ document.addEventListener('DOMContentLoaded', function() {
         hideNodeInfoModal()
     }
 
-    function updateBoundaryConditionTypeVisibility() {
-        const nodeType = document.getElementById('node-type').value;
-        const boundaryConditionTypeContainer = document.getElementById('boundary-condition-type-container');
-        if (nodeType === 'boundary_condition') {
-            boundaryConditionTypeContainer.style.display = 'block';
-            requestAnimationFrame(() => {
-              const dropdownHeight = boundaryConditionTypeContainer.offsetHeight;
-              window.scrollBy(0, dropdownHeight);
-            });
-        } else {
-            boundaryConditionTypeContainer.style.display = 'none';
-        }
-    }
 
     // Function to show the modal form
     function showNodeInfoModal(nodeType) {

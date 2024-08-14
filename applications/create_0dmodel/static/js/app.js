@@ -314,6 +314,10 @@ function updateBoundaryConditionTypeVisibility() {
                 break;
             }
         });
+        if (detected_objects.junctions.length === 0) delete detected_objects.junctions;
+        if (detected_objects.vessels.length === 0) delete detected_objects.vessels;
+        if (detected_objects.valves.length === 0) delete detected_objects.valves;
+        if (detected_objects.chambers.length === 0) delete detected_objects.chambers;
         return detected_objects;
     }
 
@@ -340,7 +344,7 @@ function updateBoundaryConditionTypeVisibility() {
     function getUpstream(node) {
         let inboundEdges = node.incomers('edge');
         if (inboundEdges.length > 0) {
-            return inboundEdges[0].source().data('id');
+            return inboundEdges[0].source().data('name');
         }
         return;
     }
@@ -348,7 +352,7 @@ function updateBoundaryConditionTypeVisibility() {
     function getDownstream(node) {
         let outboundEdges = node.outgoers('edge');
         if (outboundEdges.length > 0) {
-            return outboundEdges[0].target().data('id');
+            return outboundEdges[0].target().data('name');
         }
         return;
     }

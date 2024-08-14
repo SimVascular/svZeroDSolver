@@ -45,7 +45,7 @@ import importlib
 import argparse
 from collections import defaultdict
 
-# Loads a json impact file and extracts necessary information to draw an electrical circuit
+# Loads a json file and extracts necessary information to draw the directed graph
 def load_json_input_file(fpath, name_type, inlet_block_type):
     with open(fpath, 'rb') as fp:
         d = json.load(fp)
@@ -105,8 +105,6 @@ def load_json_input_file(fpath, name_type, inlet_block_type):
         type=[x['bc_type'] for x in bcs],
     ))
 
-
-
     if 'valves' not in d:
         df_valves = pd.DataFrame(columns=['name', 'type', 'upstream', 'downstream'])
     else:
@@ -118,7 +116,6 @@ def load_json_input_file(fpath, name_type, inlet_block_type):
             downstream = [x['params']['downstream_block'] for x in valves]
         ))
         create_valve_blocks(d, df_vessels, df_valves, name_type)
-
 
     if 'chambers' not in d:
         df_chambers= pd.DataFrame(columns=['name', 'type'])
@@ -600,18 +597,25 @@ def save_directed_graph(block_list, connect_list, directed_graph_file_path, draw
     pos = nx.nx_pydot.pydot_layout(G,
                                    prog='dot')
     options = {"alpha": 0.2}
-    nx.draw_networkx_nodes(G, pos, node_color='blue', node_size=300, **options)
-    nx.draw_networkx_labels(G, pos, font_size='6')
-    nx.draw_networkx_edges(G, pos, node_size=300)
 
-    nx.nx_pydot.write_dot(G, directed_graph_file_path + ".dot")
-
-    if draw_directed_graph == True:
+    if draw_directed_graph:
         plt.figure(figsize=(20, 11))
         plt.tight_layout()
+
+        # Drawing the graph
+        nx.draw_networkx_nodes(G, pos, node_color='blue', node_size=300, **options)
+        nx.draw_networkx_labels(G, pos, font_size=6)
+        nx.draw_networkx_edges(G, pos, node_size=300)
+        nx.nx_pydot.write_dot(G, directed_graph_file_path + ".dot")
+
+        # Save and show the graph
         plt.savefig(directed_graph_file_path + ".png", format="PNG", dpi=100)
         plt.show()
         plt.close("all")
+    else:
+        # Drawing the graph
+        nx.nx_pydot.write_dot(G, directed_graph_file_path + ".dot")
+
 
 
 def set_up_0d_network(zero_d_solver_input_file_path: object, output_dir, name_type: object, inlet_block: object = False, draw_directed_graph: object = False) -> object:

@@ -11,18 +11,30 @@ import os
 from dirgraph_utils import set_up_0d_network
 
 
+'''
+This file enables the visualization of 0D simulation results in a web app that displays the 0D network 
+as a directed graph. Users can interactively select nodes to view their parameters and simulation results.
+
+Simply provide the filepath for your simulation input JSON file and specify the directory where 
+you want to save the output directed graph.
+
+Created by Emilin Mathew (emilinm@stanford.edu) 
+'''
+
+
 def dirgraph(filepath, output_dir):
     solver = pysvzerod.Solver(filepath)
     solver.run()
     results = pd.DataFrame(solver.get_full_result())
+    # If you want to export the simulation results as a csv
     # results.to_csv('insert_file_name', sep=',', index=False, encoding='utf-8')
     with open(filepath, 'r') as infile:
         parameters = json.load(infile)
 
     set_up_0d_network(
         filepath,
-        name_type='id',  # will take either 'id' or 'name',
-        draw_directed_graph=False,
+        name_type='id',  # Will take either 'id' or 'name',
+        draw_directed_graph=False,  # Enter false if you don't want to save the directed graph
         output_dir=output_dir
     )
     base_name = filepath.rsplit('/', 1)[-1]
@@ -31,6 +43,7 @@ def dirgraph(filepath, output_dir):
     return results, parameters, G
 
 
+# Input filepath for 0d simulation & specify the output directory.
 results, parameters, G = dirgraph(
     filepath=''
     , output_dir='')
@@ -261,7 +274,6 @@ bc_trace = go.Scatter(
     )
 )
 
-# Create Scatter objects for vessels and junctions with different symbols and colors
 vessel_trace = go.Scatter(
     name = 'Vessel',
     x=vessel_x,
@@ -412,7 +424,7 @@ def toggle_modal(open_clicks, close_clicks, current_style):
     [Input('network-graph', 'clickData')]
 )
 
-
+# This adds a box around the node that the user selected
 def update_graphs(clickData):
     # Initialize empty figures to handle cases with no data or no node clicks
     empty_fig = go.Figure(layout=go.Layout(title="Click on a node to see data"))

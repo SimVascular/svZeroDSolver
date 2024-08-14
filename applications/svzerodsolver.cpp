@@ -61,6 +61,7 @@ int main(int argc, char* argv[]) {
   }
 
   std::string input_file_name = argv[1];
+  std::string output_file_path;
   std::string output_file_name;
 
   if (argc == 3) {
@@ -74,11 +75,15 @@ int main(int argc, char* argv[]) {
       end_of_path = input_file_name.rfind("\\");  // For Windows paths (?)
 
       if (end_of_path == std::string::npos) {
-        throw std::runtime_error("Error: No output file path provided. Tried to create a default output file but could not find the simulation directory from the input JSON file path.");
+        output_file_path = ".";
+        //throw std::runtime_error("Error: No output file path provided. Tried to create a default output file but could not find the simulation directory from the input JSON file path.");
       }
+    } else {
+      output_file_path = input_file_name.substr(0, end_of_path);
     }
 
-    output_file_name = input_file_name.substr(0, end_of_path) + "/output.csv";
+    //output_file_name = input_file_name.substr(0, end_of_path) + "/output.csv";
+    output_file_name = output_file_path + "/output.csv";
     std::cout << "[svzerodsolver] Output will be written to '" << output_file_name << "'." << std::endl;;
   }
 

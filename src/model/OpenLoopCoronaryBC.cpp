@@ -74,12 +74,15 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
   auto Pv = parameters[global_param_ids[6]];
 
   if (steady) {
-    system.C(global_eqn_ids[0]) = -Cim * Pim;
+    std::cout<<this->P_Cim_0 << " " <<this->Pim_0<<std::endl;
+    //system.C(global_eqn_ids[0]) = -Cim * Pim;
+    system.C(global_eqn_ids[0]) = Cim * (Pim - this->Pim_0 + this->P_Cim_0);
     system.C(global_eqn_ids[1]) = Pv;
   } else {
+    std::cout<<this->P_Cim_0 << " " <<this->Pim_0<<std::endl;
     //system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv);
     system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv + this->Pim_0 - this->P_Cim_0);
-    system.C(global_eqn_ids[1]) = -Cim * (Rv + Ram) * Pim + (Ram * Cim * Pv) - (Cim * (Rv + Ram) * (this->P_Cim_0 - this->Pim_0));
+    system.C(global_eqn_ids[1]) = (Ram * Cim * Pv) - Cim * (Rv + Ram) * (Pim + this->P_Cim_0 - this->Pim_0);
   }
 }
 
@@ -99,7 +102,7 @@ void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_stat
   auto P_Ca = P_in - Ra*Q_in;
   auto P_Ca_dot = P_in_dot - Ra*Q_in_dot; 
   auto Q_am = Q_in - Ca*P_Ca_dot;
-  P_Cim_0 = P_Ca - Ram*Q_am;
+  this->P_Cim_0 = P_Ca - Ram*Q_am;
   //P_Cim_0 = Pv + Rv*Q_out;
-  Pim_0 = parameters[global_param_ids[5]];
+  this->Pim_0 = parameters[global_param_ids[5]];
 }

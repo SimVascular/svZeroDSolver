@@ -31,7 +31,10 @@ jobs:
 
       - name: Start Flask Application
         run: |
-        FLASK_APP= applications/create_0dmodel/app.py flask run --host=0.0.0.0 --port=8902 &
+          cd applications/create_0dmodel
+          FLASK_APP=app.py flask run --host=0.0.0.0 --port=8902 &
+        env:
+          FLASK_ENV: development
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5

@@ -33,8 +33,9 @@ jobs:
         run: ls -al applications/create_0dmodel
 
       - name: Run Flask Application
-        run: FLASK_APP=../applications/create_0dmodel/app.py flask run --host=0.0.0.0 --port=8902
-        working-directory: tests/cypress
+        run: |
+          cd ../applications/create_0dmodel
+          python app.py
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5

@@ -21,6 +21,9 @@ jobs:
         with:
             python-version: '3.10'  # Use the Python version compatible with your Flask app
 
+      - name: Print Current Directory
+        run: pwd
+
       - name: Install Flask dependencies
         run: |
               python -m pip install --upgrade pip
@@ -29,5 +32,5 @@ jobs:
       - name: Run Cypress tests
         uses: cypress-io/github-action@v5
         with:
-          start: npm start
-          working-directory: tests/cypress
+            start: cd ../ && npm start
+            working-directory: tests/cypress

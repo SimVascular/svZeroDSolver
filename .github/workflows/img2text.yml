@@ -1,3 +1,6 @@
+# This workflow uses Cypress for end to end testing of the 0d model GUI.
+# Created by Emilin Mathew (emilinm@stanford.edu)
+
 name: e2e-tests
 on: [push]
 jobs:

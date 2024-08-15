@@ -20,6 +20,6 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {},
     baseUrl: 'http://localhost:8902',
     "supportFile": false,
-    specPattern: 'tests/cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    specPattern: 'e2e/**/*.cy.{js,jsx,ts,tsx}',
   },
 })

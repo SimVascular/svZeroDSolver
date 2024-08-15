@@ -174,7 +174,7 @@
     "cypress": "^13.13.2"
   },
   "scripts": {
-    "start": "FLASK_APP= applications/create_0dmodel/app.py flask run --host=0.0.0.0 --port=8902",
+    "start": "FLASK_APP= ../applications/create_0dmodel/app.py flask run --host=0.0.0.0 --port=8902",
     "cypress:open": "cypress open --config-file tests/cypress/cypress.config.js",
     "cypress:run": "cypress run --config-file tests/cypress/cypress.config.js",
     "test": "npm run cypress:run"

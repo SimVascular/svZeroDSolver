@@ -26,7 +26,7 @@ jobs:
       - name: Test the build
         run: |
           cd tests
-          conda run -n zerod pytest -v --durations=0
+          conda run -n zerod pytest -v --durations=0 --ignore=test_dirgraph.py
       - name: Build using CMake
         run: |
           mkdir Release

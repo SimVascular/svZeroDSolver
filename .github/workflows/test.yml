@@ -52,6 +52,7 @@ jobs:
           make -j2
           cd ../tests
           conda run -n zerod pytest -v --durations=0 --coverage
+          conda run -n zerod pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
           cd ../Release
           make coverage
       - name: Save coverage report

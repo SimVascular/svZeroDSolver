@@ -31,7 +31,7 @@ jobs:
 
       - name: Start Flask Application
         run: |
-            cd ../applications/create_0dmodel
+            cd applications/create_0dmodel
             FLASK_APP=app.py flask run --host=0.0.0.0 --port=8902 &
 
       - name: Run Cypress tests

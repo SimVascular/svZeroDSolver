@@ -26,15 +26,9 @@ jobs:
               python -m pip install --upgrade pip
               python -m pip install flask 
 
-      - name: List files in the root directory
-        run: ls -al
-
-      - name: List files in applications/create_0dmodel
-        run: ls -al applications/create_0dmodel
-
       - name: Run Flask Application
         run: |
-          cd ../applications/create_0dmodel
+          cd applications/create_0dmodel
           python app.py
 
       - name: Run Cypress tests

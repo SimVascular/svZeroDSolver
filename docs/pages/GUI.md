@@ -45,5 +45,3 @@ If there are any incorrect connections or patterns, an alert will prompt you
 to make necessary changes so the network can be processed by svZeroDSolver.
 7. Open the downloaded JSON file and add any additional information, 
 such as boundary condition data, before running it through svZeroDSolver.
-
-<img src="/Users/emilinmathew/Desktop/Screen Recording 2024-08-07 at 3.21.02 PM.mov" title="GUI Demonstration"/>

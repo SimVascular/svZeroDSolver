@@ -74,12 +74,12 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
   auto Pv = parameters[global_param_ids[6]];
 
   if (steady) {
-    std::cout<<this->P_Cim_0 << " " <<this->Pim_0<<std::endl;
+    //std::cout<<this->P_Cim_0 << " " <<this->Pim_0<<std::endl;
     //system.C(global_eqn_ids[0]) = -Cim * Pim;
 //  system.C(global_eqn_ids[0]) = Cim * (Pim - this->Pim_0 + this->P_Cim_0);
     system.C(global_eqn_ids[1]) = Pv;
   } else {
-    std::cout<<this->P_Cim_0 << " " <<this->Pim_0<<std::endl;
+    //std::cout<<this->P_Cim_0 << " " <<this->Pim_0<<std::endl;
     //system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv);
     system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv + this->Pim_0 - this->P_Cim_0);
     system.C(global_eqn_ids[1]) = (Ram * Cim * Pv) - Cim * (Rv + Ram) * (Pim + this->P_Cim_0 - this->Pim_0);
@@ -87,10 +87,10 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
 }
 
 void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_state, std::vector<double> &parameters) {
-  if (steady) {
+//if (steady) {
 //  this->P_Cim_0 = 220.0;
 //  this->Pim_0 = parameters[global_param_ids[5]];
-  } else {
+//} else {
     //P_Cim_0 = 0.0;
     //Pim_0 = 0.0;
     //auto Rv = parameters[global_param_ids[2]];
@@ -110,5 +110,5 @@ void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_stat
     //std::cout << P_Ca << " " << P_Ca_dot << " " << Ram << " " << Q_am << std::endl;
     this->P_Cim_0 = P_Ca - Ram*Q_am;
     this->Pim_0 = parameters[global_param_ids[5]];
-  }
+//}
 }

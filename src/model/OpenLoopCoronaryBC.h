@@ -60,15 +60,15 @@
  * ### Governing equations
  *
  * \f[
- * C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} (-P_{i m}+P_{v})-C_{i m}\left(P_{c i m}(0)-P_{i m}(0)\right)-C_{i m} R_{v}
+ * C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} (-P_{c i m}(0)+P_{i m}(0)-P_{i m}+P_{v})-C_{i m} R_{v}
  * \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v} \frac{d P_{in}}{d t}+R_{a} C_{a}
  * C_{i m} R_{v} \frac{d Q_{in}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d
  * t}=0 \f]
  *
  * \f[
- * C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i m} R_{v}
- * P_{i m}-C_{i m}R_{v}\left(P_{c i m}(0)-P_{i m}(0)\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t}-R_{a m} V_{i
- * m}-C_{i m} R_{a m} P_{i m}-C_{i m}R_{a m}\left(P_{c i m}(0)-P_{i m}(0)\right)+R_{a m} C_{i m} P_{v}=0 \f]
+ * C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i m}(R_{v}_R_{a m})
+ * \left(P_{c i m}(0)-P_{i m}(0)+P_{i m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t}
+ * -R_{a m} V_{i m}+R_{a m} C_{i m} P_{v}=0 \f]
  *
  * ### Local contributions
  *
@@ -86,9 +86,8 @@
  * & -C_{i m} R_{v} R_{a} & -\left(R_{v}+R_{a m}\right)\end{array}\right] \f]
  *
  * \f[
- * \mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)-C_{i m}\left(P_{c i m}(0)-P_{i m}(0)\right)+C_{a}
- * C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i
- * m}-C_{i m}\left(R_{a m} + R_{v}\right)\left(P_{cim}(0)-P_{i m}(0)\right)+R_{a m} C_{i m} P_{v}\end{array}\right] \f]
+ * \mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i m}(0)+P_{v}\right)+C_{a}
+ * C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v} + R_{a m}\right)\left(P_{cim}(0)-P_{i m}(0)+P_{i m}\right)+R_{a m} C_{i m} P_{v}\end{array}\right] \f]
  *
  * Assume \f$P_a=0\f$.
  *

@@ -105,7 +105,9 @@
  *
  * ### Internal variables
  *
- * * pressure_c: Pressure at the capacitor
+ * Names of internal variables in this block's output:
+ *
+ * * `pressure_c`: Pressure at the capacitor
  *
  */
 class WindkesselBC : public Block {

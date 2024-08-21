@@ -138,7 +138,9 @@
  *
  * ### Internal variables
  *
- * * Vc: Chamber volume
+ * Names of internal variables in this block's output:
+ *
+ * * `Vc`: Chamber volume
  *
  */
 class ChamberElastanceInductor : public Block {

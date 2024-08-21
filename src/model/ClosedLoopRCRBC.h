@@ -111,7 +111,9 @@
  *
  * ### Internal variables
  *
- * * P_c: Pressure at the capacitor
+ * Names of internal variables in this block's output:
+ *
+ * * `P_c`: Pressure at the capacitor
  *
  */
 class ClosedLoopRCRBC : public Block {

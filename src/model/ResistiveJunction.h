@@ -103,7 +103,9 @@
  *
  * ### Internal variables
  *
- * * pressure_c: Pressure at the center of the junction
+ * Names of internal variables in this block's output:
+ *
+ * * `pressure_c`: Pressure at the center of the junction
  *
  */
 class ResistiveJunction : public Block {

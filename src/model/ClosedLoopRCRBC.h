@@ -109,6 +109,10 @@
  * * `1` Capacitance
  * * `2` Distal resistance
  *
+ * ### Internal variables
+ *
+ * * P_c: Pressure at the capacitor
+ *
  */
 class ClosedLoopRCRBC : public Block {
  public:

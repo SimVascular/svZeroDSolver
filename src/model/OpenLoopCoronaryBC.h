@@ -103,6 +103,10 @@
  * * `5` Pim: Intramyocardial pressure
  * * `6` Pv: Venous pressure
  *
+ * ### Internal variables
+ *
+ * * volume_im: Intramyocardial volume
+ *
  */
 class OpenLoopCoronaryBC : public Block {
  public:

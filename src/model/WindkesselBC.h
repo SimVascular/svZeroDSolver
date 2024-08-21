@@ -103,6 +103,10 @@
  * * `2` Distal resistance
  * * `3` Distal pressure
  *
+ * ### Internal variables
+ *
+ * * pressure_c: Pressure at the capacitor
+ *
  */
 class WindkesselBC : public Block {
  public:

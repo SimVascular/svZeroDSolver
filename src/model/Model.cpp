@@ -254,6 +254,7 @@ void Model::to_steady() {
     param.to_steady();
   }
 
+  // Special handling for time-varying capacitance
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->steady = true;
     if ((block_types[i] == BlockType::windkessel_bc) ||

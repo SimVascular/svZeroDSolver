@@ -177,6 +177,8 @@ class OpenLoopCoronaryBC : public Block {
   TripletsContributions num_triplets{5, 4, 0};
 
  protected:
+  //double P_Cim_0 = 220;  ///< Pressure proximal to Cim/Vim at initial state
+  //double Pim_0 = 1000;    ///< Pim at initial state
   double P_Cim_0 = 0;  ///< Pressure proximal to Cim/Vim at initial state
   double Pim_0 = 0;    ///< Pim at initial state
 };

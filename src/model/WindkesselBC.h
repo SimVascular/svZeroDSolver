@@ -58,11 +58,11 @@
  * ### Governing equations
  *
  * \f[
- * R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
+ * R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
  * \f]
  *
  * \f[
- * P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
+ * P_{in}-P_{c}-R_{p} Q_{in}=0
  * \f]
  *
  * ### Local contributions

@@ -142,7 +142,7 @@
  *
  * ### Internal variables
  *
- * This block has no internal variables. 
+ * This block has no internal variables.
  *
  */
 class BloodVesselJunction : public Block {

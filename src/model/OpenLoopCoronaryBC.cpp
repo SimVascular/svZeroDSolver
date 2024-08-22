@@ -76,12 +76,16 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
   if (steady) {
     system.C(global_eqn_ids[1]) = Pv;
   } else {
-    system.C(global_eqn_ids[0]) = Cim * (-Pim + Pv + this->Pim_0 - this->P_Cim_0);
-    system.C(global_eqn_ids[1]) = (Ram * Cim * Pv) - Cim * (Rv + Ram) * (Pim + this->P_Cim_0 - this->Pim_0);
+    system.C(global_eqn_ids[0]) =
+        Cim * (-Pim + Pv + this->Pim_0 - this->P_Cim_0);
+    system.C(global_eqn_ids[1]) =
+        (Ram * Cim * Pv) -
+        Cim * (Rv + Ram) * (Pim + this->P_Cim_0 - this->Pim_0);
   }
 }
 
-void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_state, std::vector<double> &parameters) {
+void OpenLoopCoronaryBC::setup_initial_state_dependent_params(
+    State initial_state, std::vector<double> &parameters) {
   auto P_in = initial_state.y[global_var_ids[0]];
   auto Q_in = initial_state.y[global_var_ids[1]];
   auto P_in_dot = initial_state.ydot[global_var_ids[0]];
@@ -90,12 +94,12 @@ void OpenLoopCoronaryBC::setup_initial_state_dependent_params(State initial_stat
   auto Ram = parameters[global_param_ids[1]];
   auto Ca = parameters[global_param_ids[3]];
   // Pressure proximal to Ca and distal to Ra
-  auto P_Ca = P_in - Ra*Q_in;
-  auto P_Ca_dot = P_in_dot - Ra*Q_in_dot;
+  auto P_Ca = P_in - Ra * Q_in;
+  auto P_Ca_dot = P_in_dot - Ra * Q_in_dot;
   // Flow into Ram (inflow minus flow into Ca)
-  auto Q_am = Q_in - Ca*P_Ca_dot;
+  auto Q_am = Q_in - Ca * P_Ca_dot;
   // Pressure proximal to Cim/Vim and distal to Ram
-  this->P_Cim_0 = P_Ca - Ram*Q_am;
+  this->P_Cim_0 = P_Ca - Ram * Q_am;
   // Initial intramyocardial pressure
   this->Pim_0 = parameters[global_param_ids[5]];
 }

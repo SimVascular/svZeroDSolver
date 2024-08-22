@@ -45,7 +45,7 @@ void Solver::run() {
     DEBUG_MSG("Calculate steady initial condition");
     double time_step_size_steady = this->model->cardiac_cycle_period / 10.0;
     this->model->to_steady();
-    
+
     Integrator integrator_steady(this->model.get(), time_step_size_steady,
                                  simparams.sim_rho_infty, simparams.sim_abs_tol,
                                  simparams.sim_nliter);
@@ -57,7 +57,7 @@ void Solver::run() {
     this->model->to_unsteady();
   }
 
-  // Use the initial condition (steady or user-provided) to set up parameters 
+  // Use the initial condition (steady or user-provided) to set up parameters
   // which depend on the initial condition
   this->model->setup_initial_state_dependent_parameters(state);
 

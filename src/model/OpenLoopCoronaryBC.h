@@ -60,15 +60,16 @@
  * ### Governing equations
  *
  * \f[
- * C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i m}+P_{v}\right)-C_{i m} R_{v}
- * \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v} \frac{d P_{in}}{d t}+R_{a} C_{a}
- * C_{i m} R_{v} \frac{d Q_{in}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d
- * t}=0 \f]
+ * C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
+ * m}+P_{v}\right)-C_{i m} R_{v} \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v}
+ * \frac{d P_{in}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q_{in}}{d t}+C_{a}
+ * C_{i m} R_{v} \frac{d P_{a}}{d t}=0 \f]
  *
  * \f[
- * C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i m}\left(R_{v}+R_{a m}\right)
- * \left(P_{c i m}(0)-P_{i m}(0)+P_{i m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t}
- * -R_{a m} V_{i m}+R_{a m} C_{i m} P_{v}=0 \f]
+ * C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
+ * m}\left(R_{v}+R_{a m}\right) \left(P_{c i m}(0)-P_{i m}(0)+P_{i
+ * m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} -R_{a m} V_{i m}+R_{a
+ * m} C_{i m} P_{v}=0 \f]
  *
  * ### Local contributions
  *
@@ -86,8 +87,10 @@
  * & -C_{i m} R_{v} R_{a} & -\left(R_{v}+R_{a m}\right)\end{array}\right] \f]
  *
  * \f[
- * \mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i m}(0)+P_{v}\right)+C_{a}
- * C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v} + R_{a m}\right)\left(P_{cim}(0)-P_{i m}(0)+P_{i m}\right)+R_{a m} C_{i m} P_{v}\end{array}\right] \f]
+ * \mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
+ * m}(0)+P_{v}\right)+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i
+ * m}\left(R_{v} + R_{a m}\right)\left(P_{cim}(0)-P_{i m}(0)+P_{i m}\right)+R_{a
+ * m} C_{i m} P_{v}\end{array}\right] \f]
  *
  * Assume \f$P_a=0\f$.
  *
@@ -149,7 +152,8 @@ class OpenLoopCoronaryBC : public Block {
    * @param initial_state The initial state of the system
    * @param parameters The parameter values vector (at time 0)
    */
-  void setup_initial_state_dependent_params(State initial_state, std::vector<double> &parameters);
+  void setup_initial_state_dependent_params(State initial_state,
+                                            std::vector<double> &parameters);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system

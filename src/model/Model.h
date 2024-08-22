@@ -60,10 +60,10 @@
 #include "PressureReferenceBC.h"
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"
+#include "State.h"
 #include "ValveTanh.h"
 #include "WindkesselBC.h"
 #include "debug.h"
-#include "State.h"
 
 /**
  * @brief Model of 0D elements

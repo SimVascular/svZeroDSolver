@@ -1,3 +1,4 @@
+import sys
 import pysvzerod
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,27 +16,29 @@ from dirgraph_utils import set_up_0d_network
 This file enables the visualization of 0D simulation results in a web app that displays the 0D network 
 as a directed graph. Users can interactively select nodes to view their parameters and simulation results.
 
-Simply provide the filepath for your simulation input JSON file and specify the directory where 
-you want to save the output directed graph.
+Enter the filepath for your simulation input JSON file and the directory where 
+you want to save the output directed graph as command line arguments to run the script. 
+If you want to save the raw svZeroDSolver simulation results, add "export-csv" as the third command line argument.
 
-Created by Emilin Mathew (emilinm@stanford.edu) 
 '''
 
-
-def dirgraph(filepath, output_dir):
+def dirgraph(filepath, output_dir, export_csv):
     solver = pysvzerod.Solver(filepath)
     solver.run()
     results = pd.DataFrame(solver.get_full_result())
-    # If you want to export the simulation results as a csv
-    # results.to_csv('insert_file_name', sep=',', index=False, encoding='utf-8')
+
+    if export_csv:
+        results.to_csv('results.csv', sep=',', index=False, encoding='utf-8')
+        print(f"Results exported to results.csv")
+
     with open(filepath, 'r') as infile:
         parameters = json.load(infile)
 
     set_up_0d_network(
         filepath,
-        name_type='id',  # Will take either 'id' or 'name',
-        draw_directed_graph=False,  # Enter false if you don't want to save the directed graph
-        output_dir=output_dir
+        name_type='id', # Options 'name' or 'id' specifies whether vessel names or ids should be used for each node
+        draw_directed_graph= False,  # Enter True if you want to save the directed graph
+        output_dir= output_dir
     )
     base_name = filepath.rsplit('/', 1)[-1]
     output_file = os.path.join(output_dir, os.path.splitext(base_name)[0] + "_directed_graph.dot")
@@ -43,13 +46,28 @@ def dirgraph(filepath, output_dir):
     return results, parameters, G
 
 
-# Input filepath for 0d simulation & specify the output directory.
-results, parameters, G = dirgraph(
-    filepath=''
-    , output_dir='')
+def main():
+    # Check if the correct number of arguments is provided
+    if len(sys.argv) < 3:
+        print("Please pass in at least two arguments: 1) svZeroDSolver input (json file) 2) Output directory to store the results.")
+        sys.exit(1)
 
+    # Retrieve arguments
+    filepath = sys.argv[1]
+    output_dir = sys.argv[2]
 
-# Mapping vessel names to IDs
+    export_csv = False
+
+    if len(sys.argv) > 3 and sys.argv[3] == 'export_csv':
+        export_csv = True
+
+    # Call the dirgraph function with the provided arguments
+    return dirgraph(filepath, output_dir, export_csv)
+
+if __name__ == '__main__':
+    results, parameters, G = main()
+
+# Mapping vessel names to IDs. The block parameters are obtained from the user's input json file. 
 vessel_name_to_vessel_id_map = {}
 vessel_id_to_vessel_name_map = {}
 vessel_params = {}

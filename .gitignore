@@ -36,5 +36,5 @@ build
 .settings
 *.swp
 
-#Node Modules
+# Node modules (for directed graph visualization)
 node_modules/

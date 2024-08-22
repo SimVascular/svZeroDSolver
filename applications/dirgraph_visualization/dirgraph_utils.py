@@ -24,12 +24,12 @@ try:
     import matplotlib.pyplot as plt  # only needed if you want to visualize the 0d model as a directed graph
 except ImportError:
     print(
-        "\nmatplotlib.pyplot not found. matplotlib.pyplot is needed only if you want to visualize your 0d model as a directed graph.")
+        "\nmatplotlib.pyplot not found. matplotlib.pyplot is needed for visualizing the 0D model.")
 
 try:
     import networkx as nx  # only needed if you want to visualize the 0d model as a directed graph
 except ImportError:
-    print("\nnetworkx not found. networkx is needed only if you want to visualize your 0d model as a directed graph.")
+    print("\nnetworkx not found. networkx is needed for visualizing the 0D model.")
 
 try:
     from profilehooks import profile  # only needed if you want to profile this script
@@ -46,13 +46,27 @@ import argparse
 from collections import defaultdict
 
 # Loads a json file and extracts necessary information to draw the directed graph
-def load_json_input_file(fpath, name_type, inlet_block_type):
+def load_json_input_file(fpath, name_type):
+    """
+    Purpose:
+        Parses through the input JSON file to create pandas DataFrames for each 0D element type
+        and prepares data for further processing.
+
+    Inputs:
+        fpath (str): Path to the JSON file.
+        name_type (str): How to name nodes, either "id" or "name".
+
+    Returns:
+        d: A dictionary containing pandas DataFrames for each 0D element type and updated entries of blocks & block_names
+    """
+
     with open(fpath, 'rb') as fp:
         d = json.load(fp)
     blocks = {}  # {block_name : block_object}
     d.update({"blocks": blocks})
     dirgraph_steady_bc.create_block_to_boundary_condition_map(d)
     d.update({"block_names": list(d["blocks"].keys())})
+    vessel_id_map = get_vessel_name_to_vessel_id_map(d)
 
     if 'vessels' not in d or len(d['vessels']) == 0:
         df_vessels = pd.DataFrame()
@@ -71,22 +85,44 @@ def load_json_input_file(fpath, name_type, inlet_block_type):
         df_junctions_expanded = pd.DataFrame()
 
     else:
-        if inlet_block_type:
-            inlet = 'inlet_blocks'
-            outlet = 'outlet_blocks'
-        else:
-            inlet = 'inlet_vessels'
-            outlet = 'outlet_vessels'
-
-            # Create separate lists for inlets and outlets
+        # Create separate lists for inlets and outlets
         junction_inlets = []
         junction_outlets = []
+
         for junction in d['junctions']:
             junction_name = junction['junction_name']
-            for block in junction.get(inlet, []):
-                junction_inlets.append({'junction_name': junction_name, 'block_name': "V" + str(block), 'direction': 'inlet'})
-            for block in junction.get(outlet, []):
-                junction_outlets.append({'junction_name': junction_name, 'block_name': "V" + str(block), 'direction': 'outlet'})
+
+            # Check for inlet and outlet blocks
+            if 'inlet_blocks' in junction:
+                for block in junction['inlet_blocks']:
+                    if block in vessel_id_map:
+                        junction_inlets.append(
+                            {'junction_name': junction_name, 'block_name': "V" + str(vessel_id_map[block]),
+                             'direction': 'inlet', 'type': 'vessel'})
+                    else:
+                        junction_inlets.append(
+                            {'junction_name': junction_name, 'block_name': block,
+                             'direction': 'inlet', 'type': 'block'})
+                for block in junction['outlet_blocks']:
+                    if block in vessel_id_map:
+                        junction_inlets.append(
+                            {'junction_name': junction_name, 'block_name': "V" + str(vessel_id_map[block]),
+                             'direction': 'outlet', 'type': 'vessel'})
+                    else:
+                        junction_inlets.append(
+                            {'junction_name': junction_name, 'block_name': block,
+                             'direction': 'outlet', 'type': 'block'})
+
+            # Check for inlet and outlet vessels
+            if 'inlet_vessels' in junction:
+                for vessel in junction['inlet_vessels']:
+                    junction_inlets.append(
+                        {'junction_name': junction_name, 'block_name': "V" + str(vessel), 'direction': 'inlet',
+                         'type': 'vessel'})
+                for vessel in junction['outlet_vessels']:
+                    junction_outlets.append(
+                        {'junction_name': junction_name, 'block_name': "V" + str(vessel), 'direction': 'outlet',
+                         'type': 'vessel'})
 
         # Create DataFrames from the lists
         df_junctions_inlets = pd.DataFrame(junction_inlets)
@@ -119,7 +155,6 @@ def load_json_input_file(fpath, name_type, inlet_block_type):
 
     if 'chambers' not in d:
         df_chambers= pd.DataFrame(columns=['name', 'type'])
-
     else:
         chambers = d['chambers']
         df_chambers = pd.DataFrame(dict(
@@ -137,6 +172,20 @@ def load_json_input_file(fpath, name_type, inlet_block_type):
 
 
 def create_valve_blocks(d, df_vessels, df_valves, name_type):
+    """
+        Purpose:
+            Create the valve blocks for the 0d model.
+        Inputs:
+            d = dict of parameters
+            df_vessels = df of vessel specific data (because valves are often connected to vessels)
+            df_valves = df ov valve specific data
+            name_type: How to name nodes, either "id" or "name".
+        Returns:
+            void, but updates d["blocks"] to include the valve blocks, where
+                d["blocks"] = {block_name : block_object}
+        """
+    if df_valves.empty:
+        return
     valve_blocks = {}  # {block_name: block_object}
 
     if name_type == 'id':
@@ -195,15 +244,17 @@ def create_chamber_blocks(d, df_chambers, df_junctions_expanded, df_valves):
        Purpose:
            Create the chamber blocks for the 0d model.
        Inputs:
-           dict parameters
-               = created from function utils.extract_info_from_solver_input_file
-           str name_type
-               = str specified by either 'name' or 'id' that specifies whether
-                 vessel names or ids should be used for each node
+           d = dict of parameters
+           df_chambers = df of chamber specific data
+           df_junctions_expanded = df of junctions (modified to have inlets & outlets clearly structured)
+           df_valves = df ov valve specific data
+
        Returns:
-           void, but updates parameters["blocks"] to include the chamber, where
-               parameters["blocks"] = {block_name : block_object}
+           void, but updates d["blocks"] to include the chamber blocks, where
+               d["blocks"] = {block_name : block_object}
        """
+    if df_chambers.empty:
+        return
     chamber_blocks = {} # {block_name: block_object}
 
     def process_chamber(row):
@@ -250,10 +301,9 @@ def create_junction_blocks(d, df_junctions_expanded, name_type):
     Purpose:
         Create the junction blocks for the 0d model.
     Inputs:
-        dict parameters
-            = created from function utils.extract_info_from_solver_input_file
-        str name_type
-            = str specified by either 'name' or 'id' that specifies whether
+        d = dict of parameters
+        df_junctions_expanded = df of junctions (modified to have inlets & outlets clearly structured)
+        name_type = str specified by either 'name' or 'id' that specifies whether
               vessel names or ids should be used for each node
     Returns:
         void, but updates parameters["blocks"] to include the junction_blocks, where
@@ -306,6 +356,16 @@ def create_junction_blocks(d, df_junctions_expanded, name_type):
 
 
 def get_vessel_list(parameters, name_type):
+    """
+        Purpose:
+            Returns a list of all vessel ids or names based on name_type.
+        Inputs:
+            parameters = dict of parameters
+            name_type = str specified by either 'name' or 'id' that specifies whether
+                  vessel names or ids should be used to iterate through parameters["vessels"]
+        Returns:
+            returns a list of vessel ids or vessel names
+    """
     vessel_id_list = []
     for vessel in parameters["vessels"]:
         if name_type == 'id':
@@ -320,11 +380,12 @@ def get_vessel_block_helpers(d, df_vessels, df_junctions_expanded, df_valves, na
     Purpose:
         Create helper dictionaries to support the creation of the vessel blocks.
     Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-        str name_type
-            = str specified by either 'name' or 'id' that specifies whether
-              vessel names or ids should be used for each node
+        d = dict of parameters
+        df_vessels = df of vessel specific data (because valves are often connected to vessels)
+        df_junctions_expanded = df of junctions (modified to have inlets & outlets clearly structured)
+        df_valves = df ov valve specific data
+        name_type: How to name nodes, either "id" or "name".
+
     Returns:
         dict vessel_blocks_connecting_block_lists
             = {vessel_id : connecting_block_list}
@@ -365,15 +426,25 @@ def get_vessel_block_helpers(d, df_vessels, df_junctions_expanded, df_valves, na
 
         df_vessels.drop(columns=['bc_block_name', 'flow_direction'], inplace=True)
 
-
     for _, row in df_junctions_expanded.iterrows():
-        vessel_id = row['block_name']
-        id = int(vessel_id[1:])
         junction_name = row['junction_name']
+        block_or_vessel_name = row['block_name']  # This is the generic 'block_name' that could be a vessel or a block
         direction = +1 if row['direction'] == 'inlet' else -1
 
-        df_vessels.loc[df_vessels['vessel_id'] == id, 'connecting_block_list'].apply(lambda x: x.append(junction_name))
-        df_vessels.loc[df_vessels['vessel_id'] == id, 'flow_directions'].apply(lambda x: x.append(direction))
+        if row['type'] == 'vessel':
+            vessel_id = int(block_or_vessel_name[1:])  # Strip the 'V' and convert to integer
+            # Update the connecting_block_list and flow_directions for the vessel
+            df_vessels.loc[df_vessels['vessel_id'] == vessel_id, 'connecting_block_list'] = df_vessels.loc[
+                df_vessels['vessel_id'] == vessel_id, 'connecting_block_list'].apply(lambda x: x + [junction_name])
+            df_vessels.loc[df_vessels['vessel_id'] == vessel_id, 'flow_directions'] = df_vessels.loc[
+                df_vessels['vessel_id'] == vessel_id, 'flow_directions'].apply(lambda x: x + [direction])
+        elif row['type'] == 'block':
+            # Update the connecting_block_list and flow_directions for the block
+            df_vessels.loc[df_vessels['name'] == block_or_vessel_name, 'connecting_block_list'] = df_vessels.loc[
+                df_vessels['name'] == block_or_vessel_name, 'connecting_block_list'].apply(
+                lambda x: x + [junction_name])
+            df_vessels.loc[df_vessels['name'] == block_or_vessel_name, 'flow_directions'] = df_vessels.loc[
+                df_vessels['name'] == block_or_vessel_name, 'flow_directions'].apply(lambda x: x + [direction])
 
     # Process valves
     for _, row in df_valves.iterrows():
@@ -400,13 +471,11 @@ def create_vessel_blocks(d, df_vessels, df_junctions_expanded, df_valves, name_t
     Purpose:
         Create the vessel blocks for the 0d model.
     Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-        module custom_0d_elements_arguments
-            = module to call custom 0d element arguments from
-        str name_type
-            = str specified by either 'name' or 'id' that specifies whether
-              vessel names or ids should be used for each node
+        d = dict of parameters
+        df_vessels = df of vessel specific data (because valves are often connected to vessels)
+        df_junctions_expanded = df of junctions (modified to have inlets & outlets clearly structured)
+        df_valves = df ov valve specific data
+        name_type: How to name nodes, either "id" or "name".
     Returns:
         void, but updates parameters["blocks"] to include the vessel_blocks, where
             parameters["blocks"] = {block_name : block_object}
@@ -424,7 +493,6 @@ def create_vessel_blocks(d, df_vessels, df_junctions_expanded, df_valves, name_t
             name=block_name,
             flow_directions=flow_directions
         )
-
     d["blocks"].update(vessel_blocks)
 
 
@@ -433,13 +501,9 @@ def create_outlet_bc_blocks(d, df_valves, name_type):
     Purpose:
         Create the outlet bc (boundary condition) blocks for the 0d model.
     Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-        module custom_0d_elements_arguments
-            = module to call custom 0d element arguments from
-        str name_type
-            = str specified by either 'name' or 'id' that specifies whether
-              vessel names or ids should be used for each node
+        d = dict of parameters
+        df_valves = df ov valve specific data
+        name_type: How to name nodes, either "id" or "name".
     Returns:
         void, but updates parameters["blocks"] to include the outlet_bc_blocks, where
             parameters["blocks"] = {block_name : block_object}
@@ -477,15 +541,13 @@ def create_inlet_bc_blocks(d, df_valves, name_type):
     Purpose:
         Create the inlet bc (boundary condition) blocks for the 0d model.
     Inputs:
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-        module custom_0d_elements_arguments
-            = module to call custom 0d element arguments from
+        d = dict of parameters
+        df_valves = df ov valve specific data
+        name_type: How to name nodes, either "id" or "name".
     Returns:
         void, but updates parameters["blocks"] to include the inlet_bc_blocks, where
             parameters["blocks"] = {block_name : block_object}
     """
-
     name_type = name_type.lower()
     inlet_bc_blocks = {}
     inlet_vessels_of_model = dirgraph_steady_bc.get_ids_of_cap_vessels(d, "inlet")
@@ -493,7 +555,6 @@ def create_inlet_bc_blocks(d, df_valves, name_type):
     vessel_name_get = get_vessel_id_to_vessel_name_map(d)
 
     # Process valves
-
     for _, valve in df_valves.iterrows():
         valve_name = valve['name']
         if valve_name not in block_to_boundary_condition_map or 'inlet' not in block_to_boundary_condition_map[
@@ -519,7 +580,6 @@ def create_inlet_bc_blocks(d, df_valves, name_type):
             name=block_name,
             flow_directions=flow_directions
         )
-
     d["blocks"].update(inlet_bc_blocks)
 
 
@@ -527,14 +587,11 @@ def create_inlet_bc_blocks(d, df_valves, name_type):
 def run_network_util(zero_d_solver_input_file_path, d, draw_directed_graph, output_dir):
     """
     Purpose:
-        Run functions from network_util_NR to execute the 0d simulation and generate simulation results (pressure, flow rates).
+        Creates and saves the directed graph. Will open an image if draw_directed_graph is set to true.
     Inputs:
-        string zero_d_solver_input_file_path
-            = path to the 0d solver input file
-        dict parameters
-            -- created from function utils.extract_info_from_solver_input_file
-        boolean draw_directed_graph
-            = True to visualize the 0d model as a directed graph using networkx -- saves the graph to a .png file (hierarchical graph layout) and a networkx .dot file; False, otherwise. .dot file can be opened with neato from graphviz to visualize the directed in a different format.
+        string zero_d_solver_input_file_path = path to the 0d solver input file
+        d = dict of parameters
+        boolean draw_directed_graph = True to visualize the 0d model as a directed graph using networkx
     Returns:
         list block_list
             = list of blocks (nodes)
@@ -544,14 +601,20 @@ def run_network_util(zero_d_solver_input_file_path, d, draw_directed_graph, outp
     block_list = list(d["blocks"].values())
     connect_list, wire_dict = dirgraph_connections.connect_blocks_by_inblock_list(block_list)
     case_name = zero_d_solver_input_file_path.rsplit('/', 1)[-1]
-    # directed_graph_file_path = output_dir + '/' + os.path.splitext(case_name)[0] + "_directed_graph"
     directed_graph_file_path = os.path.join(output_dir, os.path.splitext(case_name)[0] + "_directed_graph")
     save_directed_graph(block_list, connect_list, directed_graph_file_path, draw_directed_graph)
-
     return block_list, connect_list
 
 
 def get_vessel_id_to_length_map(parameters):
+    """
+    Purpose:
+        Creates a map with key vessel id and value vessel length.
+    Inputs:
+        parameters = dict of parameters
+    Returns:
+        vessel_id_to_length_map
+    """
     vessel_id_to_length_map = {}
     for vessel in parameters["vessels"]:
         vessel_id = vessel["vessel_id"]
@@ -561,6 +624,14 @@ def get_vessel_id_to_length_map(parameters):
 
 
 def get_vessel_id_to_vessel_name_map(parameters):
+    """
+    Purpose:
+        Creates a map with key vessel id and value vessel name.
+    Inputs:
+        parameters = dict of parameters
+    Returns:
+        vessel_id_to_vessel_name_map
+    """
     vessel_id_to_vessel_name_map = {}
     for vessel in parameters["vessels"]:
         vessel_id = vessel["vessel_id"]
@@ -569,6 +640,14 @@ def get_vessel_id_to_vessel_name_map(parameters):
     return vessel_id_to_vessel_name_map
 
 def get_vessel_name_to_vessel_id_map(parameters):
+    """
+    Purpose:
+        Creates a map with key vessel name and value vessel id.
+    Inputs:
+        parameters = dict of parameters
+    Returns:
+        vessel_name_to_vessel_id_map
+    """
     vessel_name_to_vessel_id_map = {}
     for vessel in parameters["vessels"]:
         vessel_name = vessel["vessel_name"]
@@ -580,7 +659,7 @@ def get_vessel_name_to_vessel_id_map(parameters):
 def save_directed_graph(block_list, connect_list, directed_graph_file_path, draw_directed_graph):
     """
     Purpose:
-        Visualize the 0d model as a directed graph -- save the graph in a hierarchical graph layout to a .png file; also save a networkx .dot file that can be opened with neato via graphviz to visualize the graph in a different layout.
+        Visualize and saves the 0d model as a directed graph
     Inputs:
         list block_list
             = [list of all of the 0d LPNBlock objects]
@@ -589,8 +668,10 @@ def save_directed_graph(block_list, connect_list, directed_graph_file_path, draw
                 where blockA and blockB are connected to each other, and blockA_index and blockB_index are the index locations at which the blockA and blockB objects are stored in block_list
         string directed_graph_file_path
             = name of the hierarchical graph .png file and networkx .dot file that will be saved
+        draw_directed_graph (bool): Determines if the directed graph should be displayed.
     Returns:
-        void, but saves a .png file visualizing the 0d model as a directed graph, as well as a networkx .dot file that can be opened with neato via graphviz to visualize the graph in a different layout
+        void, but saves a .png file visualizing the 0d model as a directed graph if draw_directed_graph = True,
+        as well as a networkx .dot file
     """
     G = nx.DiGraph()
     G.add_edges_from([(block_list[tpl[0]].name, block_list[tpl[1]].name) for tpl in connect_list])
@@ -616,30 +697,24 @@ def save_directed_graph(block_list, connect_list, directed_graph_file_path, draw
         # Drawing the graph
         nx.nx_pydot.write_dot(G, directed_graph_file_path + ".dot")
 
-
-
-def set_up_0d_network(zero_d_solver_input_file_path: object, output_dir, name_type: object, inlet_block: object = False, draw_directed_graph: object = False) -> object:
+def set_up_0d_network(zero_d_solver_input_file_path: object, output_dir, name_type: object, draw_directed_graph: object = False) -> object:
     """
     Purpose:
-        Create all network_util_NR::LPNBlock objects for the 0d model and run the 0d simulation.
+        Create all network_util_NR::LPNBlock objects for the 0d model.
     Inputs:
         string zero_d_solver_input_file_path
             = path to the 0d solver input file
+        string output_dir = path to save the directed graph dot file + directed graph png.
         str name_type
             = str specified by either 'name' or 'id' that specifies whether
               vessel names or ids should be used for each node
         boolean draw_directed_graph
             = True to visualize the 0d model as a directed graph using networkx -- saves the graph to a .png file (hierarchical graph layout) and a networkx .dot file; False, otherwise. .dot file can be opened with neato from graphviz to visualize the directed in a different format.
-        boolean use_custom_0d_elements
-            = True to use user-defined, custom 0d elements in the 0d model; False, otherwire
-        string custom_0d_elements_arguments_file_path
-            = path to user-defined custom 0d element file
-    Caveats:
-        The save_results_branch option works only for 0d models with the branching structure where each vessel is modeled as a single branch with 1 or multiple sub-segments
+
     Returns:
         void
     """
-    d = load_json_input_file(zero_d_solver_input_file_path, name_type, inlet_block)
+    d = load_json_input_file(zero_d_solver_input_file_path, name_type)
     block_list, connect_list = run_network_util(
         zero_d_solver_input_file_path,
         d,

@@ -59,7 +59,6 @@ def load_json_input_file(fpath, name_type):
     Returns:
         d: A dictionary containing pandas DataFrames for each 0D element type and updated entries of blocks & block_names
     """
-
     with open(fpath, 'rb') as fp:
         d = json.load(fp)
     blocks = {}  # {block_name : block_object}
@@ -70,7 +69,6 @@ def load_json_input_file(fpath, name_type):
 
     if 'vessels' not in d or len(d['vessels']) == 0:
         df_vessels = pd.DataFrame()
-
     else:
         df_vessels = pd.DataFrame(dict(
         inlet=[x.get('boundary_conditions', {}).get('inlet') for x in d['vessels']],
@@ -78,7 +76,6 @@ def load_json_input_file(fpath, name_type):
         name=[x['vessel_name'] for x in d['vessels']],
         vessel_id=[x['vessel_id'] for x in d['vessels']]
     ))
-
 
     if 'junctions' not in d:
         df_junctions = pd.DataFrame()
@@ -97,8 +94,7 @@ def load_json_input_file(fpath, name_type):
                 for block in junction['inlet_blocks']:
                     if block in vessel_id_map:
                         junction_inlets.append(
-                            {'junction_name': junction_name, 'block_name': "V" + str(vessel_id_map[block]),
-                             'direction': 'inlet', 'type': 'vessel'})
+                                {'junction_name': junction_name, 'block_name': "V" + str(vessel_id_map[block]), 'direction': 'inlet', 'type': 'vessel'})
                     else:
                         junction_inlets.append(
                             {'junction_name': junction_name, 'block_name': block,
@@ -106,8 +102,7 @@ def load_json_input_file(fpath, name_type):
                 for block in junction['outlet_blocks']:
                     if block in vessel_id_map:
                         junction_inlets.append(
-                            {'junction_name': junction_name, 'block_name': "V" + str(vessel_id_map[block]),
-                             'direction': 'outlet', 'type': 'vessel'})
+                                {'junction_name': junction_name, 'block_name': "V" + str(vessel_id_map[block]), 'direction': 'outlet', 'type': 'vessel'})
                     else:
                         junction_inlets.append(
                             {'junction_name': junction_name, 'block_name': block,
@@ -122,7 +117,7 @@ def load_json_input_file(fpath, name_type):
                 for vessel in junction['outlet_vessels']:
                     junction_outlets.append(
                         {'junction_name': junction_name, 'block_name': "V" + str(vessel), 'direction': 'outlet',
-                         'type': 'vessel'})
+                        'type': 'vessel'})
 
         # Create DataFrames from the lists
         df_junctions_inlets = pd.DataFrame(junction_inlets)
@@ -130,9 +125,7 @@ def load_json_input_file(fpath, name_type):
 
         # Concatenate the DataFrames to form a unified junctions DataFrame
         df_junctions = pd.concat([df_junctions_inlets, df_junctions_outlets], ignore_index=True)
-
         df_junctions_expanded = pd.concat([df_junctions_inlets, df_junctions_outlets], ignore_index=True)
-
         create_junction_blocks(d, df_junctions_expanded, name_type)
 
     bcs = d['boundary_conditions']
@@ -161,7 +154,6 @@ def load_json_input_file(fpath, name_type):
             name = [x['name'] for x in chambers],
             type=[x['type'] for x in chambers],
         ))
-
         create_chamber_blocks(d, df_chambers, df_junctions_expanded, df_valves)
 
     create_outlet_bc_blocks(d, df_valves, name_type)
@@ -264,12 +256,14 @@ def create_chamber_blocks(d, df_chambers, df_junctions_expanded, df_valves):
 
         if not df_junctions_expanded.empty:
             # Junction Processing
-            inlet_matches = df_junctions_expanded[(df_junctions_expanded['block_name'] == chamber_name) & (df_junctions_expanded['direction'] == 'inlet')]
+            inlet_matches = df_junctions_expanded[
+                (df_junctions_expanded['block_name'] == chamber_name) & (df_junctions_expanded['direction'] == 'inlet')]
             for _, match in inlet_matches.iterrows():
                 connecting_block_list.append(match['junction_name'])
                 flow_directions.append(+1)
 
-            outlet_matches = df_junctions_expanded[(df_junctions_expanded['block_name'] == chamber_name) & (df_junctions_expanded['direction'] == 'outlet')]
+            outlet_matches = df_junctions_expanded[(df_junctions_expanded['block_name'] == chamber_name) & (
+                        df_junctions_expanded['direction'] == 'outlet')]
             for _, match in outlet_matches.iterrows():
                 connecting_block_list.append(match['junction_name'])
                 flow_directions.append(-1)
@@ -311,12 +305,10 @@ def create_junction_blocks(d, df_junctions_expanded, name_type):
     """
     if df_junctions_expanded.empty:
         return
-
     junction_blocks = {}  # {block_name: block_object}
 
     def process_junction(row):
         junction_name = row['junction_name']
-
         if not junction_name.startswith("J") or not junction_name[1:].isnumeric():
             message = f"Error. Joint name, {junction_name}, is not 'J' followed by numeric values. The 0D solver assumes that all joint names are 'J' followed by numeric values in the 0d solver input file. Note that the joint names are the same as the junction names."
             raise RuntimeError(message)
@@ -333,7 +325,7 @@ def create_junction_blocks(d, df_junctions_expanded, name_type):
 
         # Outlet Processing
         outlet_matches = df_junctions_expanded[(df_junctions_expanded['junction_name'] == junction_name) & (
-                    df_junctions_expanded['direction'] == 'outlet')]
+                df_junctions_expanded['direction'] == 'outlet')]
         for _, match in outlet_matches.iterrows():
             connecting_block_list.append(match['block_name'])
             flow_directions.append(+1)
@@ -463,7 +455,6 @@ def get_vessel_block_helpers(d, df_vessels, df_junctions_expanded, df_valves, na
     vessel_blocks_flow_directions = df_vessels.set_index('vessel_id')['flow_directions'].to_dict()
     vessel_blocks_names = df_vessels.set_index('vessel_id')['block_name'].to_dict()
     return vessel_blocks_connecting_block_lists, vessel_blocks_flow_directions, vessel_blocks_names
-
 
 
 def create_vessel_blocks(d, df_vessels, df_junctions_expanded, df_valves, name_type):

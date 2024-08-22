@@ -62,13 +62,13 @@
  * \f[
  * C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
  * m}+P_{v}\right)-C_{i m} R_{v} \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v}
- * \frac{d P_{in}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q_{in}}{d t}+C_{a}
+ * \frac{d P_{in}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q_{in}}{d t}\\+C_{a}
  * C_{i m} R_{v} \frac{d P_{a}}{d t}=0 \f]
  *
  * \f[
  * C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
  * m}\left(R_{v}+R_{a m}\right) \left(P_{c i m}(0)-P_{i m}(0)+P_{i
- * m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} -R_{a m} V_{i m}+R_{a
+ * m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} \\-R_{a m} V_{i m}+R_{a
  * m} C_{i m} P_{v}=0 \f]
  *
  * ### Local contributions

@@ -71,6 +71,13 @@
  * m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} \\-R_{a m} V_{i m}+R_{a
  * m} C_{i m} P_{v}=0 \f]
  *
+ * \f{eqnarray*}{
+ * &C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
+ * m}\left(R_{v}+R_{a m}\right) \left(P_{c i m}(0)-P_{i m}(0)+P_{i
+ * m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} \\ &-R_{a m} V_{i m}+R_{a
+ * m} C_{i m} P_{v}=0 
+ * \f}
+ *
  * ### Local contributions
  *
  * \f[

@@ -40,7 +40,6 @@ def run_program(zero_d_solver_input_file_path, tmp_path):
     set_up_0d_network(
         zero_d_solver_input_file_path,
         name_type='id',
-        inlet_block=False,
         draw_directed_graph=False,
         output_dir = tmp_path
     )

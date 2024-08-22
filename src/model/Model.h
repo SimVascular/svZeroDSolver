@@ -338,7 +338,7 @@ class Model {
   /**
    * @brief Setup model parameters that depend on the initial state
    *
-   * @param initial_state The initial state
+   * @param initial_state The initial state vector
    */
   void setup_initial_state_dependent_parameters(State initial_state);
 

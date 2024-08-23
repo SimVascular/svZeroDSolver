@@ -114,6 +114,12 @@
  * * `3` Ca: Small artery capacitance
  * * `4` Cim: Intramyocardial capacitance
  *
+ * ### Internal variables
+ *
+ * Names of internal variables in this block's output:
+ *
+ * * `volume_im`: Intramyocardial volume
+ *
  */
 class ClosedLoopCoronaryBC : public Block {
  public:

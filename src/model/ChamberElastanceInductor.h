@@ -136,6 +136,12 @@
  * * `5` t_twitch: Twitch time
  * * `6` Impedance: Impedance of the outflow
  *
+ * ### Internal variables
+ *
+ * Names of internal variables in this block's output:
+ *
+ * * `Vc`: Chamber volume
+ *
  */
 class ChamberElastanceInductor : public Block {
  public:

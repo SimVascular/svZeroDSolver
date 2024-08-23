@@ -90,6 +90,10 @@
  * \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right]
  * \quad \mathrm{with} \quad i \neq j \f]
  *
+ * ### Internal variables
+ *
+ * This block has no internal variables.
+ *
  */
 class Junction : public Block {
  public:

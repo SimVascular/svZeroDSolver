@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['name_20the_20new_20block_0',['1. Name the new block.',['../add_block.html#autotoc_md41',1,'']]],
-  ['new_20block_1',['new block',['../add_block.html#autotoc_md41',1,'1. Name the new block.'],['../add_block.html#autotoc_md42',1,'2. Create a class for the new block.']]],
-  ['new_20block_20to_20the_20build_20system_2',['4. Add the new block to the build system.',['../add_block.html#autotoc_md52',1,'']]],
+  ['name_20the_20new_20block_0',['1. Name the new block.',['../add_block.html#autotoc_md55',1,'']]],
+  ['new_20block_1',['new block',['../add_block.html#autotoc_md55',1,'1. Name the new block.'],['../add_block.html#autotoc_md56',1,'2. Create a class for the new block.']]],
+  ['new_20block_20to_20the_20build_20system_2',['4. Add the new block to the build system.',['../add_block.html#autotoc_md66',1,'']]],
   ['new_20blocks_3',['Adding New Blocks',['../add_block.html',1,'']]],
-  ['new_20blocks_4',['Adding new blocks',['../developer_guide.html#autotoc_md57',1,'']]],
+  ['new_20blocks_4',['Adding new blocks',['../developer_guide.html#autotoc_md71',1,'']]],
   ['node_5',['Node',['../class_node.html',1,'Node'],['../class_node.html#a08ee879d148fda7087955418dfd04464',1,'Node::Node()']]],
   ['node_2eh_6',['Node.h',['../_node_8h.html',1,'']]],
   ['num_5finlets_7',['num_inlets',['../class_junction.html#a9ff699f5e265220087a8e24c3c68100c',1,'Junction']]],

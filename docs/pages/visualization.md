@@ -50,7 +50,7 @@ Pass a third argument `export_csv` optionally if you want to save svZeroDSolver 
       and display the results along with the corresponding nodes on a local Flask server.
 
 ```bash
-python applications/dirgraph_visualization/visualize_simulation.py 'tests/cases/chamber_elastance_inductor.json' './output/circuit_img/dir_graph'
+python applications/svZeroDVisualization/visualize_simulation.py 'tests/cases/chamber_elastance_inductor.json' './output/circuit_img/dir_graph'
 ```
 
 2. Once the server is open, you can click on a node to inspect further. 

@@ -4,7 +4,7 @@ import os
 import sys
 
 # Append the 'applications/dirgraph' directory to the system path for imports
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../applications/dirgraph_visualization')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../applications/svZeroDVisualization')))
 
 # Import the function from applications/dirgraph
 from dirgraph_utils import set_up_0d_network

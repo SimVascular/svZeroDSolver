@@ -1,4 +1,5 @@
 import sys
+import argparse
 import pysvzerod
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -47,22 +48,35 @@ def dirgraph(filepath, output_dir, export_csv):
 
 
 def main():
-    # Check if the correct number of arguments is provided
-    if len(sys.argv) < 3:
-        print("Please pass in at least two arguments: 1) svZeroDSolver input (json file) 2) Output directory to store the results.")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(
+        description="Generate a directed graph visualization of your 0d network from the JSON input file."
+    )
 
-    # Retrieve arguments
-    filepath = sys.argv[1]
-    output_dir = sys.argv[2]
+    # Positional arguments
+    parser.add_argument(
+        'filepath',
+        type=str,
+        help="Path to the svZeroDSolver input JSON file."
+    )
 
-    export_csv = False
+    parser.add_argument(
+        'output_dir',
+        type=str,
+        help="Directory to store the visualization results."
+    )
 
-    if len(sys.argv) > 3 and sys.argv[3] == 'export_csv':
-        export_csv = True
+    # Optional argument
+    parser.add_argument(
+        '--export_csv',
+        action='store_true',
+        help="If specified, export the results as CSV files."
+    )
+
+    # Parse the arguments
+    args = parser.parse_args()
 
     # Call the dirgraph function with the provided arguments
-    return dirgraph(filepath, output_dir, export_csv)
+    return dirgraph(args.filepath, args.output_dir, args.export_csv)
 
 if __name__ == '__main__':
     results, parameters, G = main()

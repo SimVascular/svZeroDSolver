@@ -1,11 +1,11 @@
 # This workflow uses Cypress for end to end testing of the 0d model GUI.
 # Created by Emilin Mathew (emilinm@stanford.edu)
 
-name: e2e-tests
-on: [push]
+name: GUI-tests
+on: [push, pull_request]
 jobs:
   cypress-run:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest, macos-latest]
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -23,9 +23,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
             python-version: '3.10'  # Use the Python version compatible with your Flask app
-
-      - name: Print Current Directory
-        run: pwd
 
       - name: Install Flask dependencies
         run: |

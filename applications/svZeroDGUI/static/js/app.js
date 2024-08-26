@@ -1,28 +1,44 @@
+/**
+ * app.js
+ *
+ * This script handles the interactive functionality of the svZeroDGUI application,
+ * including event listeners for UI elements such as collapsible sections,
+ * form inputs, and dynamic content toggling.
+ */
+
+// Toggles visibility of the boundary condition type container based on selected node type.
 function updateBoundaryConditionTypeVisibility() {
-        const nodeType = document.getElementById('node-type').value;
-        const boundaryConditionTypeContainer = document.getElementById('boundary-condition-type-container');
-        if (nodeType === 'boundary_condition') {
-            boundaryConditionTypeContainer.style.display = 'block';
-            requestAnimationFrame(() => {
-              const dropdownHeight = boundaryConditionTypeContainer.offsetHeight;
-              window.scrollBy(0, dropdownHeight);
-            });
-        } else {
-            boundaryConditionTypeContainer.style.display = 'none';
-        }
+    const nodeType = document.getElementById('node-type').value;
+    const boundaryConditionTypeContainer = document.getElementById('boundary-condition-type-container');
+    if (nodeType === 'boundary_condition') {
+        boundaryConditionTypeContainer.style.display = 'block';
+        // Scroll to reveal the container
+        requestAnimationFrame(() => {
+          const dropdownHeight = boundaryConditionTypeContainer.offsetHeight;
+          window.scrollBy(0, dropdownHeight);
+        });
+    } else {
+        boundaryConditionTypeContainer.style.display = 'none';
     }
+}
 
-    document.addEventListener('DOMContentLoaded', function() {
-    const vessel_icon = '/static/css/vessel.png';
-    const valve_icon = '/static/css/valve.png';
-    const chamber_icon = '/static/css/chamber.png';
-    const junction_icon = '/static/css/junction.png';
-    const resistance_icon = '/static/css/resistance.png';
-    const pressure_icon = '/static/css/pressure.png';
-    const RCR_icon = '/static/css/RCR.png';
-    const coronary_icon = '/static/css/coronary.png';
-    const flow_icon = '/static/css/flow.png';
+/*
+ * Defines the file paths for the icons used in the application.
+ * These icons represent different components within the model, such as vessels,
+ * valves, chambers, junctions, and various types of boundary conditions.
+ */
+const vessel_icon = '/static/css/vessel.png';
+const valve_icon = '/static/css/valve.png';
+const chamber_icon = '/static/css/chamber.png';
+const junction_icon = '/static/css/junction.png';
+const resistance_icon = '/static/css/resistance.png';
+const pressure_icon = '/static/css/pressure.png';
+const RCR_icon = '/static/css/RCR.png';
+const coronary_icon = '/static/css/coronary.png';
+const flow_icon = '/static/css/flow.png';
 
+
+document.addEventListener('DOMContentLoaded', function() {
     let simulation_parameters_dict = {}
     var deleteMode = false;
 
@@ -60,22 +76,22 @@ function updateBoundaryConditionTypeVisibility() {
     cy.domNode(); // Register the domNode extension for making HTML classes for each node to assist Cypress testing
 
     cy.on('tap', function(event) {
-       if (event.target === cy) {
+       if (event.target === cy) {  // Filters clicks to those within the cytoscape drawing container.
             let nodeName = document.getElementById('node-name').value.trim();
             let nodeType = document.getElementById('node-type').value;
             let boundaryConditionType = nodeType === 'boundary_condition' ? document.getElementById('boundary-condition-type').value : null;
 
             if (nodeName !== "") {
                 let pos = event.position || event.cyRenderedPosition;
-//                let nodeId = node_count[nodeType];
                 let nodeId = `${nodeType}-${node_count[nodeType]}`;
                 node_count[nodeType] += 1;
 
                 let color;
                 if (nodeType === 'boundary_condition') {
+                    // Sets the icons and edge color for each node
                     switch (boundaryConditionType) {
                         case 'FLOW':
-                            color = '#FF00FF'; //hexadecimal
+                            color = '#FF00FF';
                             node_icon = flow_icon;
                             break;
                         case 'RESISTANCE':
@@ -87,11 +103,11 @@ function updateBoundaryConditionTypeVisibility() {
                             node_icon = pressure_icon;
                             break;
                         case 'RCR':
-                            color = '#ADD8E6'; // light blue
+                            color = '#ADD8E6';
                             node_icon = RCR_icon;
                             break;
                         case 'CORONARY':
-                            color = '#800020'; // burgandy
+                            color = '#800020';
                             node_icon = coronary_icon;
                             break;
                         default:
@@ -101,11 +117,11 @@ function updateBoundaryConditionTypeVisibility() {
                 } else {
                     switch (nodeType) {
                         case 'vessel':
-                            color = '#C41E3A'; // red
+                            color = '#C41E3A';
                             node_icon = vessel_icon;
                             break;
                         case 'valve':
-                            color = 'black'; // mid dark blue
+                            color = 'black';
                             node_icon = valve_icon; // https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Fheart-valve-disease-line-icon-vector-47167009&psig=AOvVaw39gwsTXwtIDM9KxgEODvmZ&ust=1721929537132000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLi788edwIcDFQAAAAAdAAAAABAE
                             break;
                         case 'chamber':
@@ -113,7 +129,7 @@ function updateBoundaryConditionTypeVisibility() {
                             node_icon = chamber_icon;
                             break;
                         case 'junction':
-                            color = '#046791'; // blue
+                            color = '#046791';
                             node_icon = junction_icon;
                             break;
                         default:
@@ -124,7 +140,7 @@ function updateBoundaryConditionTypeVisibility() {
             }
             let div = document.createElement("div");
             div.innerHTML = "";
-            div.classList.add('draggable'); // Adds custom class
+            div.classList.add('draggable'); // Adds custom class so the nodes can be tracked in Cypress E2E testing
             div.style.width = '30px';
             div.style.height = '30px';
             let newNode = cy.add({
@@ -150,15 +166,16 @@ function updateBoundaryConditionTypeVisibility() {
 
 
     var eh = cy.edgehandles({
-        enabled: false // initializes the edge handle as turned off until user clicks draw on button
+        enabled: false // Initializes the edge handle as turned off until user clicks draw on button
     });
 
-
-    document.querySelector('#draw-on').addEventListener('click', function() {
+   // Enables edge drawing when the user clicks the draw-on button
+   document.querySelector('#draw-on').addEventListener('click', function() {
         eh.enableDrawMode();
         eh.enable();
-    });
+   });
 
+    // Disables edge drawing when the user clicks the draw-off button
     document.querySelector('#draw-off').addEventListener('click', function() {
         eh.disableDrawMode();
         eh.disable();
@@ -182,6 +199,7 @@ function updateBoundaryConditionTypeVisibility() {
         return { vesselLength, R, C, L };
     }
 
+    // Exports the 0d network to a json file
     function exportGraphData() {
         let detected_objects = {
             simulation_parameters: simulation_parameters_dict,
@@ -314,6 +332,7 @@ function updateBoundaryConditionTypeVisibility() {
                 break;
             }
         });
+        // If any of the lists are empty, delete them from the json file.
         if (detected_objects.junctions.length === 0) delete detected_objects.junctions;
         if (detected_objects.vessels.length === 0) delete detected_objects.vessels;
         if (detected_objects.valves.length === 0) delete detected_objects.valves;
@@ -321,6 +340,7 @@ function updateBoundaryConditionTypeVisibility() {
         return detected_objects;
     }
 
+    // Returns the boundary condition inlet if present.
     function getInlet(node) {
         let inboundEdges = node.incomers('edge');
         if (inboundEdges.length > 0) {
@@ -331,6 +351,7 @@ function updateBoundaryConditionTypeVisibility() {
         return;
     }
 
+    // Returns the boundary condition outlet if present.
     function getOutlet(node) {
         let outboundEdges = node.outgoers('edge');
         if (outboundEdges.length > 0) {
@@ -341,6 +362,7 @@ function updateBoundaryConditionTypeVisibility() {
         return;
     }
 
+    // Returns the upstream node if present.
     function getUpstream(node) {
         let inboundEdges = node.incomers('edge');
         if (inboundEdges.length > 0) {
@@ -349,6 +371,7 @@ function updateBoundaryConditionTypeVisibility() {
         return;
     }
 
+    // Returns the downstream node if present.
     function getDownstream(node) {
         let outboundEdges = node.outgoers('edge');
         if (outboundEdges.length > 0) {
@@ -357,6 +380,7 @@ function updateBoundaryConditionTypeVisibility() {
         return;
     }
 
+    // Returns the inlet vessels to a node.
     function getInletVessels(node) {
         let inboundEdges = node.incomers('edge');
         let inletVessels = [];
@@ -370,11 +394,10 @@ function updateBoundaryConditionTypeVisibility() {
                 inletVessels.push(vessel_id);
             }
         });
-
         return inletVessels;
-
     }
 
+    // Returns the outlet vessels to a node.
     function getOutletVessels(node) {
           let outboundEdges = node.outgoers('edge');
           let outletVessels = [];
@@ -390,7 +413,7 @@ function updateBoundaryConditionTypeVisibility() {
           return outletVessels;
     }
 
-
+    // Handles the downloading logic.
     function downloadJSON(data, filename = 'graph_data.json') {
         let blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         let url = URL.createObjectURL(blob);
@@ -403,16 +426,19 @@ function updateBoundaryConditionTypeVisibility() {
     }
     window.downloadJSON = downloadJSON;
 
+    // Returns how many incoming connections there are to a node.
     function consistency_inlet(node) {
         let inboundEdges = node.incomers('edge');
         return inboundEdges.length;
     }
 
+    // Returns how many outgoing connections there are to a node.
     function consistency_outlet(node) {
         let outboundEdges = node.outgoers('edge');
         return outboundEdges.length;
     }
 
+    // Debugger for creating 0d models. Ensures all proper connections are present within the drawn graph.
     function Consistency_Check(data) {
         let alerts = [];
         let inletCounts = {};
@@ -469,7 +495,6 @@ function updateBoundaryConditionTypeVisibility() {
                                 oneToOneJunctions[outlets[0]] = name; // Store junction by outlet
                             }
                             junctionInletsMap[name] = inlets;
-
                             break;
                         default:
                             break;
@@ -477,7 +502,6 @@ function updateBoundaryConditionTypeVisibility() {
         });
 
         console.log(oneToOneJunctions);
-
 
         // Initialize a dictionary to store junctions and their inlets that are 1:1 outlets
         let junctionToInletsFromOneToOne = {};
@@ -501,7 +525,7 @@ function updateBoundaryConditionTypeVisibility() {
             }
         });
 
-        // Check the counts
+        // Check the counts to make sure a vessel is inlet to a junction max once.
         for (let vessel in inletCounts) {
             if (inletCounts[vessel] > 1) {
                 console.log(`Checking vessel: ${vessel}, Count: ${inletCounts[vessel]}`);
@@ -509,6 +533,7 @@ function updateBoundaryConditionTypeVisibility() {
             }
         }
 
+        // Check the counts to make sure a vessel is outlet to a junction max once.
         for (let vessel in outletCounts) {
             if (outletCounts[vessel] > 1) {
                 alerts.push(`Vessel ${vessel} is an outlet to more than one junction`);
@@ -531,8 +556,7 @@ function updateBoundaryConditionTypeVisibility() {
 
     window.Consistency_Check = Consistency_Check;
 
-
-// Event listener for the Export to JSON button
+    // Event listener for the Export to JSON button
     document.getElementById('export-json').addEventListener('click', function() {
         let graphData = exportGraphData();
         if (Consistency_Check(graphData) == 1) {
@@ -540,9 +564,9 @@ function updateBoundaryConditionTypeVisibility() {
         }
     });
 
-
     let currentNode = null;
 
+    // Sets styling for the simulation parameters form.
     function setSimParameters() {
         document.getElementById('nodeInfoModal').style.display = 'block';
         document.getElementById('SimParametersForm').style.display = 'block';
@@ -550,6 +574,7 @@ function updateBoundaryConditionTypeVisibility() {
         document.getElementById('junctionForm').style.display = 'none';
     }
 
+    // Parses the results from the simulation parameters form once the user submits it.
     function submitSimParameters() {
         simulation_parameters_dict.number_of_cardiac_cycles = parseInt(document.getElementById('numcycles').value, 10);
         simulation_parameters_dict.number_of_time_pts_per_cardiac_cycle = parseInt(document.getElementById('numtimepts').value,10);
@@ -558,7 +583,6 @@ function updateBoundaryConditionTypeVisibility() {
         document.getElementById('nodeInfoModal').style.display = 'none';
         hideNodeInfoModal()
     }
-
 
     // Function to show the modal form
     function showNodeInfoModal(nodeType) {
@@ -576,12 +600,12 @@ function updateBoundaryConditionTypeVisibility() {
         }
     }
 
+    // Show or hide the junction parameters form based on the selected junction type
     document.getElementById('junction-type').addEventListener('change', function() {
         if (this.value === 'BloodVesselJunction') {
             document.getElementById('Junction_Parameters_Form').style.display = 'block';
         }
     });
-
 
     // Function to hide the modal form
     function hideNodeInfoModal() {
@@ -589,6 +613,7 @@ function updateBoundaryConditionTypeVisibility() {
         document.getElementById('vesselForm').style.display = 'none'; // Hide the form
     }
 
+    // Show or hide the custom Young's modulus input field based on the selected value
     document.getElementById('young_mod_input').addEventListener('change', function() {
         if (this.value === 'custom') {
             document.getElementById('custom_young_mod').style.display = 'inline';
@@ -597,6 +622,7 @@ function updateBoundaryConditionTypeVisibility() {
         }
     });
 
+    // Show or hide the custom viscosity (mu) input field based on the selected value
     document.getElementById('mu_input').addEventListener('change', function() {
         if (this.value === 'custom') {
             document.getElementById('custom_mu').style.display = 'inline';
@@ -605,6 +631,7 @@ function updateBoundaryConditionTypeVisibility() {
         }
     });
 
+    // Show or hide the custom wall thickness (h) input field based on the selected value
     document.getElementById('h_input').addEventListener('change', function() {
         if (this.value === 'custom') {
             document.getElementById('custom_thickness').style.display = 'inline';
@@ -613,6 +640,7 @@ function updateBoundaryConditionTypeVisibility() {
         }
     });
 
+    // Show or hide the custom density (rho) input field based on the selected value
     document.getElementById('rho_input').addEventListener('change', function() {
         if (this.value === 'custom') {
             document.getElementById('custom_rho').style.display = 'inline';
@@ -621,6 +649,7 @@ function updateBoundaryConditionTypeVisibility() {
         }
     });
 
+    // Parses the information the user inputted for a junction node.
     function submitJunctionInfo() {
         let additionalData = {};
         let junction_type = document.getElementById('junction-type').value;
@@ -695,7 +724,7 @@ function updateBoundaryConditionTypeVisibility() {
         hideNodeInfoModal(); // Hide the modal form
     }
 
-
+    // Toggles the text on the delete-mode-button.
     function toggleDeleteMode() {
             deleteMode = !deleteMode;
             if (deleteMode) {
@@ -726,9 +755,11 @@ function updateBoundaryConditionTypeVisibility() {
 
     });
 
+    // Get all elements with the class 'collapsible'
     var coll = document.getElementsByClassName("collapsible");
     var i;
 
+    // Loop through all collapsible elements and add a click event listener to toggle visibility of their associated content
     for (i = 0; i < coll.length; i++) {
         coll[i].addEventListener("click", function() {
         this.classList.toggle("active");

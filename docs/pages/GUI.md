@@ -29,8 +29,11 @@ generating and managing 0D input files through a graphical interface.
 
 
 # How to Use
-1. Navigate to the `applications folder` and then to the `create_0dmodel` subdirectory.
+1. Navigate to the `applications` folder and then to the `create_0dmodel` subdirectory.
 2. Launch the `app.py` file.
+```bash
+python applications/svZeroDGUI/app.py
+```
 3. Select a node type and name the node.
 - For vessels, after drawing the node, click on it to open a form 
 where you can enter details such as vessel length, diameter, and more.

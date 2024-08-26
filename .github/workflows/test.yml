@@ -35,15 +35,15 @@ jobs:
           make -j2
       - name: Test interface
         run: |
-            cd tests/test_interface
-            mkdir build_tests
-            cd build_tests
-            cmake ../
-            make -j2
-            cd test_01
-            ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
-            cd ../test_02
-            ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
+          cd tests/test_interface
+          mkdir build_tests
+          cd build_tests
+          cmake ../
+          make -j2
+          cd test_01
+          ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
+          cd ../test_02
+          ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
       - name: Generate code coverage
         if: startsWith(matrix.os, 'ubuntu-22.04')
         run: |

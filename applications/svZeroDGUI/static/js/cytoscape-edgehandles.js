@@ -1,3 +1,19 @@
+/**
+ * cytoscape-edgehandles.js
+ *
+ * This file contains the implementation of edge handles for Cytoscape.js.
+ * It enables interactive edge creation between nodes in a Cytoscape graph.
+ * Users can click and drag from one node to another to create an edge.
+ *
+ * Key features include:
+ * - Initialization and configuration of edge handles.
+ * - Handling of edge creation, including visual feedback and edge type selection.
+ * - Custom callbacks for different stages of edge creation (start, stop, complete).
+ *
+ * Was downloaded from: https://github.com/cytoscape/cytoscape.js-edgehandles
+ */
+
+
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("lodash.memoize"), require("lodash.throttle"));

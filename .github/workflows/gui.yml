@@ -37,7 +37,7 @@ jobs:
 
       - name: Start Flask Application
         run: |
-          cd applications/create_0dmodel
+          cd applications/svZeroDGUI
           FLASK_APP=app.py flask run --host=0.0.0.0 --port=8902 &
         env:
           FLASK_ENV: development

@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Sets the icons and edge color for each node
                     switch (boundaryConditionType) {
                         case 'FLOW':
-                            color = '#FF00FF';
+                            color = '#FF00FF';  // Magenta
                             node_icon = flow_icon;
                             break;
                         case 'RESISTANCE':
@@ -103,11 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             node_icon = pressure_icon;
                             break;
                         case 'RCR':
-                            color = '#ADD8E6';
+                            color = '#ADD8E6';  // Light Blue
                             node_icon = RCR_icon;
                             break;
                         case 'CORONARY':
-                            color = '#800020';
+                            color = '#800020';  // Burgundy
                             node_icon = coronary_icon;
                             break;
                         default:
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 } else {
                     switch (nodeType) {
-                        case 'vessel':
+                        case 'vessel':  // Cardinal Red
                             color = '#C41E3A';
                             node_icon = vessel_icon;
                             break;
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             node_icon = chamber_icon;
                             break;
                         case 'junction':
-                            color = '#046791';
+                            color = '#046791';  // Dark Blue
                             node_icon = junction_icon;
                             break;
                         default:

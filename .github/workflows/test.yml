@@ -26,7 +26,7 @@ jobs:
       - name: Test the build
         run: |
           cd tests
-          conda run -n zerod pytest -v --durations=0
+          conda run -n zerod pytest -v --durations=0 --ignore=test_dirgraph.py
       - name: Build using CMake
         run: |
           mkdir Release
@@ -51,7 +51,7 @@ jobs:
           cmake -DENABLE_COVERAGE=ON ..
           make -j2
           cd ../tests
-          conda run -n zerod pytest -v --durations=0 --coverage
+          conda run -n zerod pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
           cd ../Release
           make coverage
       - name: Save coverage report

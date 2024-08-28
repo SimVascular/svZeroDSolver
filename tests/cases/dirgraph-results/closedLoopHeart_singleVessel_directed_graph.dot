@@ -1,0 +1,5 @@
+strict digraph  {
+V0;
+BC0_outlet;
+V0 -> BC0_outlet;
+}

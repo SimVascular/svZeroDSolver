@@ -8,12 +8,13 @@ var searchData=
   ['debug_5fmsg_5',['DEBUG_MSG',['../debug_8h.html#af1206b4d3bda8c4c8c9257f369a9e9e1',1,'debug.h']]],
   ['default_5fval_6',['default_val',['../struct_input_parameter.html#a78e504bb2df780943585c29e333005b8',1,'InputParameter']]],
   ['degrees_20of_20freedom_7',['Set up the degrees of freedom',['../add_block.html#autotoc_md58',1,'']]],
-  ['details_8',['Implementation details',['../add_block.html#autotoc_md65',1,'']]],
-  ['developer_20guide_9',['Developer Guide',['../developer_guide.html',1,'Developer Guide'],['../index.html#autotoc_md83',1,'Developer Guide']]],
-  ['documentation_10',['Documentation',['../developer_guide.html#autotoc_md74',1,'']]],
-  ['dofhandler_11',['DOFHandler',['../class_d_o_f_handler.html',1,'']]],
-  ['dofhandler_12',['dofhandler',['../class_model.html#afe47a4ac7609b53d9b9b476609162fcb',1,'Model']]],
-  ['dofhandler_2eh_13',['DOFHandler.h',['../_d_o_f_handler_8h.html',1,'']]],
-  ['drawing_20circuits_14',['Drawing circuits',['../developer_guide.html#autotoc_md77',1,'']]],
-  ['dydot_15',['dydot',['../class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6',1,'SparseSystem']]]
+  ['dependencies_8',['Installing Dependencies',['../visualization.html#autotoc_md103',1,'']]],
+  ['details_9',['Implementation details',['../add_block.html#autotoc_md65',1,'']]],
+  ['developer_20guide_10',['Developer Guide',['../developer_guide.html',1,'Developer Guide'],['../index.html#autotoc_md83',1,'Developer Guide']]],
+  ['documentation_11',['Documentation',['../developer_guide.html#autotoc_md74',1,'']]],
+  ['dofhandler_12',['DOFHandler',['../class_d_o_f_handler.html',1,'']]],
+  ['dofhandler_13',['dofhandler',['../class_model.html#afe47a4ac7609b53d9b9b476609162fcb',1,'Model']]],
+  ['dofhandler_2eh_14',['DOFHandler.h',['../_d_o_f_handler_8h.html',1,'']]],
+  ['drawing_20circuits_15',['Drawing circuits',['../developer_guide.html#autotoc_md77',1,'']]],
+  ['dydot_16',['dydot',['../class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6',1,'SparseSystem']]]
 ];

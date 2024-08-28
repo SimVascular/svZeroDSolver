@@ -1,7 +1,7 @@
 var searchData=
 [
   ['bibliography_0',['Bibliography',['../citelist.html',1,'']]],
-  ['block_1',['Block',['../class_block.html',1,'Block'],['../class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9',1,'Block::Block(int id, Model *model, BlockType block_type, BlockClass block_class, std::vector&lt; std::pair&lt; std::string, InputParameter &gt; &gt; input_params)'],['../class_block.html#a0b82be82678747aaf1dc304df9edc1be',1,'Block::Block(const Block &amp;)=delete']]],
+  ['block_1',['Block',['../class_block.html',1,'Block'],['../class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9',1,'Block::Block(int id, Model *model, BlockType block_type, BlockClass block_class, std::vector&lt; std::pair&lt; std::string, InputParameter &gt; &gt; input_params)'],['../class_block.html#a0b82be82678747aaf1dc304df9edc1be',1,'Block::Block(const Block &amp;)=delete'],['../visualization.html#autotoc_md105',1,'How to Visualize a New Block']]],
   ['block_2',['block',['../add_block.html#autotoc_md55',1,'1. Name the new block.'],['../add_block.html#autotoc_md56',1,'2. Create a class for the new block.'],['../add_block.html#autotoc_md60',1,'3. Set up the governing equations for the block.'],['../add_block.html#autotoc_md64',1,'4. Implement the matrix equations for the block.']]],
   ['block_20to_20the_20build_20system_3',['4. Add the new block to the build system.',['../add_block.html#autotoc_md66',1,'']]],
   ['block_2eh_4',['Block.h',['../_block_8h.html',1,'']]],

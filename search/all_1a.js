@@ -14,6 +14,8 @@ var searchData=
   ['vessel_5ftype_11',['vessel_type',['../class_block.html#a9e2b54d7b72d518cd1d7aecf2047bc41',1,'Block']]],
   ['vessels_12',['Vessels',['../index.html#autotoc_md91',1,'']]],
   ['vesseltype_13',['VesselType',['../_block_type_8h.html#afa39c7ec7cc0926b332fcd2d77425edb',1,'BlockType.h']]],
-  ['vlv_5fu_14',['VLV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a9540110a7d23ead2b4b881d925d8d066',1,'ClosedLoopHeartPulmonary']]],
-  ['vrv_5fu_15',['VRV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a1c090907252c029c48166bf1a910c551',1,'ClosedLoopHeartPulmonary']]]
+  ['visualization_20guide_14',['Visualization Guide',['../visualization.html',1,'']]],
+  ['visualize_20a_20new_20block_15',['How to Visualize a New Block',['../visualization.html#autotoc_md105',1,'']]],
+  ['vlv_5fu_16',['VLV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a9540110a7d23ead2b4b881d925d8d066',1,'ClosedLoopHeartPulmonary']]],
+  ['vrv_5fu_17',['VRV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a1c090907252c029c48166bf1a910c551',1,'ClosedLoopHeartPulmonary']]]
 ];

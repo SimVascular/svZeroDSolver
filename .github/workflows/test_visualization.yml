@@ -6,7 +6,7 @@ jobs:
   test:
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-latest, macos-13, macos-latest]
+        os: [ubuntu-22.04, macos-13]
       fail-fast: false
     runs-on: ${{ matrix.os }}
 
@@ -25,11 +25,16 @@ jobs:
           pip install -r tests/requirements.txt
 
       - name: Install Graphviz
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y graphviz
 
+      - name: Install Graphviz (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install graphviz
+
       - name: Run tests
         run: |
           pytest tests/test_dirgraph.py
-

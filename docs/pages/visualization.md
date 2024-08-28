@@ -41,7 +41,7 @@ argparse
 
 
 # How to Use
-Note: Note: Files related to this application are in the `applications`folder, within the `dirgraph_visualization` subdirectory.
+Note: Files related to this application are in the `applications`folder, within the `dirgraph_visualization` subdirectory.
 
 
 1. Command Line Execution: Pass the filepath to your input JSON file and the output_directory where you want the visualization to be saved as command line arguments. 

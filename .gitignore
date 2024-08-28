@@ -36,5 +36,5 @@ build
 .settings
 *.swp
 
-# Node Modules for Cypress Testing
+# Node modules (for directed graph visualization)
 node_modules/

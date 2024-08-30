@@ -28,15 +28,16 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "RegazzoniChamber.h"
+#include "KungVentricle.h"
 
-void RegazzoniChamber::setup_dofs(DOFHandler &dofhandler) {
+void KungVentricle::setup_dofs(DOFHandler &dofhandler) {
   // Internal variable is chamber volume
   Block::setup_dofs_(dofhandler, 3, {"Vc"});
 }
 
-void RegazzoniChamber::update_constant(
+void KungVentricle::update_constant(
     SparseSystem &system, std::vector<double> &parameters) {
+  double L = parameters[global_param_ids[ParamId::IMPEDANCE]];
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
@@ -44,6 +45,7 @@ void RegazzoniChamber::update_constant(
   // Eq 1: P_in - P_out - L*dQ_out = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -1.0;
+  system.E.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -L;
 
   // Eq 2: Q_in - Q_out - dVc = 0
   system.F.coeffRef(global_eqn_ids[2], global_var_ids[1]) = 1.0;
@@ -51,39 +53,37 @@ void RegazzoniChamber::update_constant(
   system.E.coeffRef(global_eqn_ids[2], global_var_ids[4]) = -1.0;
 }
 
-void RegazzoniChamber::update_time(SparseSystem &system,
+void KungVentricle::update_time(SparseSystem &system,
                                            std::vector<double> &parameters) {
   get_elastance_values(parameters);
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -1 * Elas;
-  system.C.coeffRef(global_eqn_ids[0]) = Elas * parameters[global_param_ids[ParamId::VREST]];
+  system.C.coeffRef(global_eqn_ids[0]) = Elas * Vrest;
 }
 
-void RegazzoniChamber::get_elastance_values(
+void KungVentricle::get_elastance_values(
     std::vector<double> &parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
-  double Epass = parameters[global_param_ids[ParamId::EPASS]];
-  double Vrest = parameters[global_param_ids[ParamId::VREST]];
-  double contract_start = parameters[global_param_ids[ParamId::CSTART]];
-  double relax_start = parameters[global_param_ids[ParamId::RSTART]];  
-  double contract_duration = parameters[global_param_ids[ParamId::CDUR]];
-  double relax_duration = parameters[global_param_ids[ParamId::RDUR]];
+  double Emin = parameters[global_param_ids[ParamId::EMIN]];
+  double Vrd = parameters[global_param_ids[ParamId::VRD]];
+  double Vrs = parameters[global_param_ids[ParamId::VRS]];
+  double t_active = parameters[global_param_ids[ParamId::TACTIVE]];
+  double t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
 
-  auto T_HB = model->cardiac_cycle_period;
+  auto T_cardiac = model->cardiac_cycle_period;
+  auto t_in_cycle = fmod(model->time, T_cardiac);
 
-  double phi = 0;
-
-  auto piecewise_condition = fmod(model->time - contract_start, T_HB);
-
-  if (0 <= piecewise_condition && piecewise_condition < contract_duration){
-    phi = 0.5 * (1 - cos((M_PI * piecewise_condition) / contract_duration));
-  } else {
-    piecewise_condition = fmod(model->time - relax_start, T_HB);
-    if (0 <= piecewise_condition && piecewise_condition < relax_duration){
-      phi = 0.5 * (1 + cos((M_PI * piecewise_condition) / relax_duration));
-    }
+  double t_contract = 0;
+  if (t_in_cycle >= t_active) {
+    t_contract = t_in_cycle - t_active;
   }
 
-  Elas = Epass + Emax * phi;
+  double act = 0;
+  if (t_contract <= t_twitch) {
+    act = -0.5 * cos(2 * M_PI * t_contract / t_twitch) + 0.5;
+  }
+
+  Vrest = (1.0 - act) * (Vrd - Vrs) + Vrs;
+  Elas = (Emax - Emin) * act + Emin;
 }

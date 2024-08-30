@@ -9,6 +9,10 @@ Solver::Solver(const nlohmann::json& config) {
   DEBUG_MSG("Load model");
   this->model = std::shared_ptr<Model>(new Model());
   load_simulation_model(config, *this->model.get());
+  std::cout << "What is passed along: " << simparams.sim_cardiac_period << std::endl;
+  if (simparams.sim_cardiac_period > 0) {
+    this->model->cardiac_cycle_period = simparams.sim_cardiac_period;
+  }
   DEBUG_MSG("Load initial condition");
   initial_state = load_initial_condition(config, *this->model.get());
 

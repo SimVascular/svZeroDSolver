@@ -30,7 +30,8 @@ enum class BlockType {
   chamber_elastance_inductor = 14,
   blood_vessel_CRL = 15,
   regazzoni_chamber = 16,
-  regazzoni_valve =17
+  regazzoni_valve = 17,
+  kung_ventricle = 18
 };
 
 /**

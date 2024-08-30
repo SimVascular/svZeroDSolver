@@ -31,7 +31,8 @@ Model::Model() {
       {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
       {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
       {"RegazzoniValve", block_factory<RegazzoniValve>()},
-      {"RegazzoniChamber", block_factory<RegazzoniChamber>()}};
+      {"RegazzoniChamber", block_factory<RegazzoniChamber>()},
+      {"KungVentricle", block_factory<RegazzoniChamber>()}};
 
 
       
@@ -182,7 +183,7 @@ void Model::finalize() {
   }
 
   if (cardiac_cycle_period < 0.0) {
-    cardiac_cycle_period =  0.6896551724137931;
+    cardiac_cycle_period =  1.0;
   }
 }
 

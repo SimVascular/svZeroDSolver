@@ -21,6 +21,7 @@ blood vessel parameters to recapitulate given time-varying flow and pressure mea
 * The svZeroDVisualization application enables users to visualize their 0D network and interactively select nodes to view simulation results. 
 * The svZeroDGUI application allows users to generate input files for svZeroDSolver by drawing the network on an easy-to-use GUI. This provides an alternative to manually creating files and is useful for users without access to a 3D model.
 
+
 Zero-dimensional (0D) models
 are lightweight methods to simulate bulk hemodynamic quantities in the
 cardiovascular system. Unlike 3D and 1D models, 0D models are purely

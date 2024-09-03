@@ -2,7 +2,6 @@ import pytest
 import filecmp
 import os
 import sys
-import networkx as nx
 
 # Append the 'applications/dirgraph' directory to the system path for imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../applications/svZeroDVisualization')))

@@ -1,4 +1,3 @@
-<<<<<<< HEAD:applications/svZeroDGUI/static/js/app.js
 /**
  * app.js
  *
@@ -6,32 +5,6 @@
  * including event listeners for UI elements such as collapsible sections,
  * form inputs, and dynamic content toggling.
  */
-=======
-function updateBoundaryConditionTypeVisibility() {
-        const nodeType = document.getElementById('node-type').value;
-        const boundaryConditionTypeContainer = document.getElementById('boundary-condition-type-container');
-        if (nodeType === 'boundary_condition') {
-            boundaryConditionTypeContainer.style.display = 'block';
-            requestAnimationFrame(() => {
-              const dropdownHeight = boundaryConditionTypeContainer.offsetHeight;
-              window.scrollBy(0, dropdownHeight);
-            });
-        } else {
-            boundaryConditionTypeContainer.style.display = 'none';
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-    const vessel_icon = '/static/css/vessel.png';
-    const valve_icon = '/static/css/valve.png';
-    const chamber_icon = '/static/css/chamber.png';
-    const junction_icon = '/static/css/junction.png';
-    const resistance_icon = '/static/css/resistance.png';
-    const pressure_icon = '/static/css/pressure.png';
-    const RCR_icon = '/static/css/RCR.png';
-    const coronary_icon = '/static/css/coronary.png';
-    const flow_icon = '/static/css/flow.png';
->>>>>>> d883a1f (Locally all cypress tests working):applications/create_0dmodel/static/js/app.js
 
 // Toggles visibility of the boundary condition type container based on selected node type.
 function updateBoundaryConditionTypeVisibility() {
@@ -611,10 +584,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hideNodeInfoModal()
     }
 
-<<<<<<< HEAD:applications/svZeroDGUI/static/js/app.js
-=======
 
->>>>>>> d883a1f (Locally all cypress tests working):applications/create_0dmodel/static/js/app.js
     // Function to show the modal form
     function showNodeInfoModal(nodeType) {
         document.getElementById('nodeInfoModal').style.display = 'block';

@@ -35,10 +35,10 @@ generating and managing 0D input files through a graphical interface.
 python applications/svZeroDGUI/app.py
 ```
 3. Select a node type and name the node.
-- For vessels, after drawing the node, click on it to open a form 
+    - For vessels, after drawing the node, click on it to open a form 
 where you can enter details such as vessel length, diameter, and more.
-- For junctions, click the node to specify if it’s a Normal Junction 
-or a Blood Vessel junction.
+    - For junctions, click the node to specify if it’s a Normal %Junction 
+or a Blood Vessel %Junction.
 4. To draw edges between nodes, toggle the `Draw on` button on the right. 
 Once active, you can start connecting nodes by drawing edges between them.
 5. When you wish to stop drawing edges and continue adding or moving nodes, 

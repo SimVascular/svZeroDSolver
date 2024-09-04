@@ -1,7 +1,7 @@
 var searchData=
 [
   ['name_20the_20new_20block_0',['1. Name the new block.',['../add_block.html#autotoc_md55',1,'']]],
-  ['new_20block_1',['How to Visualize a New Block',['../visualization.html#autotoc_md105',1,'']]],
+  ['new_20block_1',['How to Visualize a New Block',['../visualization.html#autotoc_md108',1,'']]],
   ['new_20block_2',['new block',['../add_block.html#autotoc_md55',1,'1. Name the new block.'],['../add_block.html#autotoc_md56',1,'2. Create a class for the new block.']]],
   ['new_20block_20to_20the_20build_20system_3',['4. Add the new block to the build system.',['../add_block.html#autotoc_md66',1,'']]],
   ['new_20blocks_4',['Adding New Blocks',['../add_block.html',1,'']]],

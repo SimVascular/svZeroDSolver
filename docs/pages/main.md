@@ -18,8 +18,11 @@ quantification, etc.
 blood vessel parameters to recapitulate given time-varying flow and pressure measurements 
 (for example, from a high-fidelity 3D simulation). This allows users to build accurate 
 0D models that reflect observed hemodynamics.
-* The svZeroDVisualization application enables users to visualize their 0D network and interactively select nodes to view simulation results. 
-* The svZeroDGUI application allows users to generate input files for svZeroDSolver by drawing the network on an easy-to-use GUI. This provides an alternative to manually creating files and is useful for users without access to a 3D model.
+* The svZeroDVisualization application enables users to visualize their 0D network and 
+interactively select nodes to view simulation results. 
+* The svZeroDGUI application allows users to generate input files for svZeroDSolver by 
+drawing the network on an easy-to-use GUI. This provides an alternative to manually 
+creating files and is useful for users without access to a 3D model.
 
 
 Zero-dimensional (0D) models
@@ -97,11 +100,6 @@ cmake --build .
 ```
 
 </details>
-
-# Developer Guide
-
-If you are a developer and want to contribute to svZeroDSolver, you can find
-more helpful information in our [Developer Guide](@ref developer_guide).
 
 # svZeroDSolver - Quick User Guide
 
@@ -382,6 +380,15 @@ When the outputs are written in the variable-based and vessel-based forms, the u
 The number of timesteps between each time the output is written is specified by `output_interval`. By default, output is written at every time step. 
 
 
+# Graphical User Interfaces - Quick User Guide
+
+The svZeroDSolver package includes two graphical interfaces - svZeroDVisualization and svZeroDGUI.
+
+The svZeroDVisualization application allows users visualize the connectivity of 0D models and the simulated hemodynamics in each block. A user guide is available [here](@ref visualization).
+
+The svZeroDGUI application  allows users to create 0D models using an interactive drag-drop graphical interface. Details are available [here](@ref GUI).
+
+
 # svZeroDCalibrator - Quick User Guide
 
 svZeroDCalibrator can be used to calibrate cardiovascular 0D models (i.e. infer optimal
@@ -454,3 +461,8 @@ maximum_iterations                      | Maximum calibration iterations        
 calibrate_stenosis_coefficient          | Toggle whether stenosis coefficient should be calibrated        | True
 set_capacitance_to_zero                 | Toggle whether all capacitances should be manually set to zero  | False
 initial_damping_factor                  | Initial damping factor for Levenberg-Marquardt optimization  | 1.0
+
+# Developer Guide
+
+If you are a developer and want to contribute to svZeroDSolver, you can find
+more helpful information in our [Developer Guide](@ref developer_guide).

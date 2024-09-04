@@ -54,7 +54,7 @@ The modular architecture of svZeroDSolver relies on "blocks", such as blood vess
 
 Detailed steps required to implement a new block in svZeroDSolver are available [here](@ref add_block).
 
-Steps required to visualize a new block with svZeroDSolver Visualization application are available [here](@ref visualization)."
+Steps required to visualize a new block with svZeroDSolver Visualization application are available [here](@ref visualization).
 
 # Code Style
 

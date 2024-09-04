@@ -88,60 +88,9 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Adding New Blocks</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="toc"><h3>Table of Contents</h3>
-<ul>
-  <li class="level1 empty">
-    <ul>
-      <li class="level2">
-        <a href="#autotoc_md55">1. Name the new block.</a>
-      </li>
-      <li class="level2">
-        <a href="#autotoc_md56">2. Create a class for the new block.</a>
-        <ul>
-          <li class="level3">
-            <a href="#autotoc_md57">Class constructor</a>
-          </li>
-          <li class="level3">
-            <a href="#autotoc_md58">Set up the degrees of freedom</a>
-          </li>
-          <li class="level3">
-            <a href="#autotoc_md59">Other class members</a>
-          </li>
-        </ul>
-      </li>
-      <li class="level2">
-        <a href="#autotoc_md60">3. Set up the governing equations for the block.</a>
-        <ul>
-          <li class="level3">
-            <a href="#autotoc_md61">State vector</a>
-          </li>
-          <li class="level3">
-            <a href="#autotoc_md62">Governing equations</a>
-          </li>
-          <li class="level3">
-            <a href="#autotoc_md63">An example</a>
-          </li>
-        </ul>
-      </li>
-      <li class="level2">
-        <a href="#autotoc_md64">4. Implement the matrix equations for the block.</a>
-        <ul>
-          <li class="level3">
-            <a href="#autotoc_md65">Implementation details</a>
-          </li>
-        </ul>
-      </li>
-      <li class="level2">
-        <a href="#autotoc_md66">4. Add the new block to the build system.</a>
-      </li>
-    </ul>
-  </li>
-</ul>
-</div>
 <div class="textblock"><p>Below are details on the steps required to implement a new block in svZeroDSolver.</p>
 <p><em>Note: The best way to implement a new block is to look at examples of existing block classes. See the <code><a class="el" href="class_valve_tanh.html" title="Valve (tanh) block.">ValveTanh</a></code> class for an example.</em></p>
-<h2><a class="anchor" id="autotoc_md55"></a>
-1. Name the new block.</h2>
+<h2>1. Name the new block.</h2>
 <ul>
 <li>The name should then be added to the following lists/dictionaries:<ul>
 <li><code>BlockType</code> in <a class="el" href="_block_type_8h.html" title="Specifies the types of blocks and their parameters.">src/model/BlockType.h</a></li>
@@ -153,10 +102,8 @@ $(function(){ initResizable(false); });
 </ul>
 <p><br  />
  </p>
-<h2><a class="anchor" id="autotoc_md56"></a>
-2. Create a class for the new block.</h2>
-<h3><a class="anchor" id="autotoc_md57"></a>
-Class constructor</h3>
+<h2>2. Create a class for the new block.</h2>
+<h3>Class constructor</h3>
 <ul>
 <li>The new class will be inherited from <code><a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a></code>. Define a constructor of the form: <div class="fragment"><div class="line">MyNewBlock(int id, Model *model) </div>
 <div class="line">: Block(id, model, BlockType::block_type, BlockClass::block_class,</div>
@@ -175,8 +122,7 @@ Class constructor</h3>
 </ul>
 <p><br  />
  </p>
-<h3><a class="anchor" id="autotoc_md58"></a>
-Set up the degrees of freedom</h3>
+<h3>Set up the degrees of freedom</h3>
 <ul>
 <li>The class must have a <code>setup_dofs(<a class="el" href="class_d_o_f_handler.html" title="Degree-of-freedom handler.">DOFHandler</a> &amp;dofhandler)</code> function.<ul>
 <li>This function typically only includes a call to the following function: <div class="fragment"><div class="line">Block::setup_dofs_(DOFHandler &amp;dofhandler, int num_equations, const std::list&lt;std::string&gt; &amp;internal_var_names)</div>
@@ -188,8 +134,7 @@ Set up the degrees of freedom</h3>
 </ul>
 <p><br  />
  </p>
-<h3><a class="anchor" id="autotoc_md59"></a>
-Other class members</h3>
+<h3>Other class members</h3>
 <ul>
 <li>The class should have a <code><a class="el" href="struct_triplets_contributions.html" title="The number of triplets that the element contributes to the global system.">TripletsContributions</a> num_triplets{*, *, *}</code> object.<ul>
 <li>This specifies how many elements the governing equations of the block contribute to the global <code>F</code>, <code>E</code> and <code>dC_dy</code> matrices respectively.</li>
@@ -213,10 +158,8 @@ Other class members</h3>
 </ul>
 <p><br  />
  </p>
-<h2><a class="anchor" id="autotoc_md60"></a>
-3. Set up the governing equations for the block.</h2>
-<h3><a class="anchor" id="autotoc_md61"></a>
-State vector</h3>
+<h2>3. Set up the governing equations for the block.</h2>
+<h3><a class="el" href="class_state.html" title="State of the system.">State</a> vector</h3>
 <ul>
 <li>The local state vector for each block is always arranged as <code>y = [P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]</code>. <br  />
 <ul>
@@ -228,8 +171,7 @@ State vector</h3>
 </ul>
 <p><br  />
  </p>
-<h3><a class="anchor" id="autotoc_md62"></a>
-Governing equations</h3>
+<h3>Governing equations</h3>
 <ul>
 <li>The equations should be written in the form <code>E(t)*ydot + F(t)*y + C(y,ydot,t) = 0</code>.<ul>
 <li><code>y</code> is the local state vector mentioned above.</li>
@@ -244,8 +186,7 @@ Governing equations</h3>
 </ul>
 <p><br  />
  </p>
-<h3><a class="anchor" id="autotoc_md63"></a>
-An example</h3>
+<h3>An example</h3>
 <ul>
 <li><p class="startli">Assume a block has the following non-linear governing equations:</p>
 <p class="startli"><picture><source srcset="form_173_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $" src="form_173.png" width="270" height="26"/></picture></p>
@@ -263,8 +204,7 @@ An example</h3>
 </ul>
 <p><br  />
  </p>
-<h2><a class="anchor" id="autotoc_md64"></a>
-4. Implement the matrix equations for the block.</h2>
+<h2>4. Implement the matrix equations for the block.</h2>
 <ul>
 <li>Implement the <code>update_constant</code>, <code>update_time</code> and <code>update_solution</code> functions.<ul>
 <li>All matrix elements that are constant must be specified in <code>update_constant</code>.</li>
@@ -276,8 +216,7 @@ An example</h3>
 </ul>
 <p><br  />
  </p>
-<h3><a class="anchor" id="autotoc_md65"></a>
-Implementation details</h3>
+<h3>Implementation details</h3>
 <ul>
 <li>The elements of the matrices <code>E</code>, <code>F</code>, <code>dC_dy</code> and <code>dC_dydot</code> are populated using the following syntax: <br  />
  <div class="fragment"><div class="line">system.F.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[current_block_variable_ids]) = a</div>
@@ -312,8 +251,7 @@ Implementation details</h3>
 </ul>
 <p><br  />
  </p>
-<h2><a class="anchor" id="autotoc_md66"></a>
-4. Add the new block to the build system.</h2>
+<h2>4. Add the new block to the build system.</h2>
 <ul>
 <li>Add <code>MyNewBlock.h</code> and <code>MyNewBlock.cpp</code> to <code>src/model/CMakeLists.txt</code> </li>
 </ul>

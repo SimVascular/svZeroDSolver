@@ -1,20 +1,6 @@
 var searchData=
 [
-  ['d_0',['D',['../struct_triplets_contributions.html#af6f46e2570097d7bd24b54c107872964',1,'TripletsContributions']]],
-  ['dc_5fdy_1',['dC_dy',['../class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c',1,'SparseSystem']]],
-  ['dc_5fdydot_2',['dC_dydot',['../class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0',1,'SparseSystem']]],
-  ['debug_20mode_3',['Build in debug mode',['../developer_guide.html#autotoc_md68',1,'']]],
-  ['debug_2eh_4',['debug.h',['../debug_8h.html',1,'']]],
-  ['debug_5fmsg_5',['DEBUG_MSG',['../debug_8h.html#af1206b4d3bda8c4c8c9257f369a9e9e1',1,'debug.h']]],
-  ['default_5fval_6',['default_val',['../struct_input_parameter.html#a78e504bb2df780943585c29e333005b8',1,'InputParameter']]],
-  ['degrees_20of_20freedom_7',['Set up the degrees of freedom',['../add_block.html#autotoc_md58',1,'']]],
-  ['dependencies_8',['Installing Dependencies',['../visualization.html#autotoc_md106',1,'']]],
-  ['details_9',['Implementation details',['../add_block.html#autotoc_md65',1,'']]],
-  ['developer_20guide_10',['Developer Guide',['../developer_guide.html',1,'Developer Guide'],['../index.html#autotoc_md86',1,'Developer Guide']]],
-  ['documentation_11',['Documentation',['../developer_guide.html#autotoc_md74',1,'']]],
-  ['dofhandler_12',['DOFHandler',['../class_d_o_f_handler.html',1,'']]],
-  ['dofhandler_13',['dofhandler',['../class_model.html#afe47a4ac7609b53d9b9b476609162fcb',1,'Model']]],
-  ['dofhandler_2eh_14',['DOFHandler.h',['../_d_o_f_handler_8h.html',1,'']]],
-  ['drawing_20circuits_15',['Drawing circuits',['../developer_guide.html#autotoc_md77',1,'']]],
-  ['dydot_16',['dydot',['../class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6',1,'SparseSystem']]]
+  ['has_5fblock_0',['has_block',['../class_model.html#abc36e7c0be46ee4c31f954e9312251d3',1,'Model']]],
+  ['how_20to_20use_1',['How to Use',['../_g_u_i.html#autotoc_md10',1,'How to Use'],['../visualization.html#autotoc_md19',1,'How to Use']]],
+  ['how_20to_20visualize_20a_20new_20block_2',['How to Visualize a New Block',['../visualization.html#autotoc_md20',1,'']]]
 ];

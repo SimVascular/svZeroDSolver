@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['1_20name_20the_20new_20block_0',['1. Name the new block.',['../add_block.html#autotoc_md55',1,'']]]
+  ['_5fuse_5fmath_5fdefines_0',['_USE_MATH_DEFINES',['../_closed_loop_heart_pulmonary_8h.html#a525335710b53cb064ca56b936120431e',1,'ClosedLoopHeartPulmonary.h']]]
 ];

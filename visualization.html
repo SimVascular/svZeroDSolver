@@ -91,37 +91,35 @@ $(function(){ initResizable(false); });
 <div class="toc"><h3>Table of Contents</h3>
 <ul>
   <li class="level1">
-    <a href="#autotoc_md104">About</a>
+    <a href="#autotoc_md16">About</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md105">Architecture</a>
+    <a href="#autotoc_md17">Architecture</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md106">Installing Dependencies</a>
+    <a href="#autotoc_md18">Installing Dependencies</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md107">How to Use</a>
+    <a href="#autotoc_md19">How to Use</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md108">How to Visualize a New Block</a>
+    <a href="#autotoc_md20">How to Visualize a New Block</a>
   </li>
 </ul>
 </div>
-<div class="textblock"><h1><a class="anchor" id="autotoc_md104"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md16"></a>
 About</h1>
 <p>svZeroDVisualization is a web application designed for visualizing 0D simulation results and the 0D network. It allows users to interactively explore and analyze their simulation data through an intuitive interface. This application is available in the <code>applications</code> folder.</p>
-<h1><a class="anchor" id="autotoc_md105"></a>
+<h1><a class="anchor" id="autotoc_md17"></a>
 Architecture</h1>
 <p>svZeroDVisualization is built using a robust architecture that includes:</p><ul>
 <li>Frontend: Utilizes HTML, CSS, Dash, and Plotly for creating a dynamic and interactive user interface. This setup allows for effective visualization and interaction with the 0D network and simulation results.</li>
 <li>Backend: Powered by a Flask application that handles the server-side logic. It leverages NetworkX for managing and visualizing the network graph and a Python code to determine network connections.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md106"></a>
+<h1><a class="anchor" id="autotoc_md18"></a>
 Installing Dependencies</h1>
 <ol type="1">
-<li>We recommend using a virtual environment to help manage project-specific dependencies and avoid conflicts with other projects.</li>
-</ol>
-<ul>
+<li>We recommend using a virtual environment to help manage project-specific dependencies and avoid conflicts with other projects.<ul>
 <li>Using venv: <div class="fragment"><div class="line">python -m venv venv</div>
 <div class="line">source venv/bin/activate  # On Windows use `venv\Scripts\activate`</div>
 </div><!-- fragment --></li>
@@ -129,7 +127,7 @@ Installing Dependencies</h1>
 <div class="line">conda activate myenv</div>
 </div><!-- fragment --></li>
 </ul>
-<ol type="1">
+</li>
 <li>Install the necessary packages: <div class="fragment"><div class="line">pysvzerod</div>
 <div class="line">pandas</div>
 <div class="line">matplotlib</div>
@@ -140,23 +138,23 @@ Installing Dependencies</h1>
 <div class="line">argparse</div>
 </div><!-- fragment --></li>
 </ol>
-<h1><a class="anchor" id="autotoc_md107"></a>
+<h1><a class="anchor" id="autotoc_md19"></a>
 How to Use</h1>
 <p>Note: Files related to this application are in the <code>applications</code>folder, within the <code>dirgraph_visualization</code> subdirectory.</p>
 <ol type="1">
-<li>Command Line Execution: Pass the filepath to your input JSON file and the output_directory where you want the visualization to be saved as command line arguments. Pass a third argument <code>export_csv</code> optionally if you want to save svZeroDSolver raw output.<ul>
-<li>The program will execute svZeroDSolver, generate a directed graph visualization of your network, parse simulation results, and display the results along with the corresponding nodes on a local Flask server.</li>
+<li>Command line execution: Pass the file path to your input JSON file and the output directory where you want the visualization to be saved as command line arguments.<ul>
+<li>Pass a third argument <code>export_csv</code> optionally if you want to save svZeroDSolver raw output.</li>
+<li>The program will execute svZeroDSolver, generate a directed graph visualization of your network, parse simulation results, and display the results along with the corresponding nodes on a local Flask server. <div class="fragment"><div class="line">python applications/svZeroDVisualization/visualize_simulation.py &#39;tests/cases/chamber_elastance_inductor.json&#39; &#39;./output/circuit_img/dir_graph&#39;</div>
+</div><!-- fragment --></li>
 </ul>
 </li>
-</ol>
-<div class="fragment"><div class="line">python applications/svZeroDVisualization/visualize_simulation.py &#39;tests/cases/chamber_elastance_inductor.json&#39; &#39;./output/circuit_img/dir_graph&#39;</div>
-</div><!-- fragment --><ol type="1">
-<li>Once the server is open, you can click on a node to inspect further. The data for that node will be displayed, including the simulation parameters input for that node, pressure/flow data, and any internal variables if present.<ul>
+<li>Once the server is open, you can click on a node to inspect further.<ul>
+<li>The data for that node will be displayed, including the simulation parameters input for that node, pressure/flow data, and any internal variables if present.</li>
 <li>Additional features include the ability to download figures and use the trace function for more detailed inspection of network elements. The trace feature allows users to filter the view by specific element types, such as isolating and examining only the blood vessels or identifying the locations of the chambers within the network. This functionality enhances the ability to focus on and analyze particular components of the network with precision.</li>
 </ul>
 </li>
 </ol>
-<h1><a class="anchor" id="autotoc_md108"></a>
+<h1><a class="anchor" id="autotoc_md20"></a>
 How to Visualize a New Block</h1>
 <ol type="1">
 <li><b>Update JSON Parsing</b>:<ul>
@@ -164,7 +162,7 @@ How to Visualize a New Block</h1>
 <li>Update the <code>load_json_input_file</code> function to create a new pandas DataFrame for the new block type.</li>
 </ul>
 </li>
-<li><b>Create a New Function for the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> Type</b>:<ul>
+<li><b>Create a New Function for the Block Type</b>:<ul>
 <li>Develop a function that processes the new block type. This function should take in:<ul>
 <li><code>d</code> (the dictionary of parameters loaded from the JSON file)</li>
 <li>Any relevant DataFrames (e.g., <code>df_vessels</code>, <code>junctions_expanded</code>)</li>
@@ -178,16 +176,16 @@ How to Visualize a New Block</h1>
 </li>
 </ul>
 </li>
-<li><b>Update the <a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> Dictionary</b>:<ul>
+<li><b>Update the Parameter Dictionary</b>:<ul>
 <li>Add the newly created blocks to the <code>d["blocks"]</code> dictionary.</li>
 </ul>
 </li>
-<li><b>Update Existing Functions</b>:</li>
-</ol>
-<ul>
+<li><b>Update Existing Functions</b>:<ul>
 <li>Ensure that the new block type is integrated into the existing block structure, allowing it to interact with other components in the visualization.</li>
 <li>For instance, if the new block type can be connected to vessels, make sure to update functions like <code>create_vessel_blocks</code> to handle connections involving the new block type. This includes updating any relevant functions that create or manage connections between blocks.</li>
 </ul>
+</li>
+</ol>
 <p>By following these steps, you will ensure that the new block type is properly parsed, processed, and integrated into the visualization system. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

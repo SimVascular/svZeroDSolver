@@ -16,38 +16,36 @@ svZeroDVisualization is built using a robust architecture that includes:
 # Installing Dependencies 
 1. We recommend using a virtual environment to help manage project-specific 
 dependencies and avoid conflicts with other projects.
-- Using venv:
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-```
-- Using Conda:
-```bash
-conda create --name myenv python=3.12  # Replace with your desired Python version
-conda activate myenv
-```
+    - Using venv:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
+    - Using Conda:
+    ```bash
+    conda create --name myenv python=3.12  # Replace with your desired Python version
+    conda activate myenv
+    ```
 
 2. Install the necessary packages:
-```bash
-pysvzerod
-pandas
-matplotlib
-networkx
-dash
-plotly
-numpy
-argparse
-```
+    ```bash
+    pysvzerod
+    pandas
+    matplotlib
+    networkx
+    dash
+    plotly
+    numpy
+    argparse
+    ```
 
 
 # How to Use
 Note: Files related to this application are in the `applications`folder, within the `dirgraph_visualization` subdirectory.
 
-1. **Command Line Execution:** Pass the file path to your input JSON file and the output_directory where you want the visualization to be saved as command line arguments. 
+1. Command line execution: Pass the file path to your input JSON file and the output directory where you want the visualization to be saved as command line arguments. 
     - Pass a third argument `export_csv` optionally if you want to save svZeroDSolver raw output.
-    - The program will execute svZeroDSolver, generate a directed graph visualization of your network, parse simulation results, 
-      and display the results along with the corresponding nodes on a local Flask server.
-
+    - The program will execute svZeroDSolver, generate a directed graph visualization of your network, parse simulation results, and display the results along with the corresponding nodes on a local Flask server.
     ```bash
     python applications/svZeroDVisualization/visualize_simulation.py 'tests/cases/chamber_elastance_inductor.json' './output/circuit_img/dir_graph'
     ```

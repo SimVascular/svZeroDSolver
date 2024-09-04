@@ -379,13 +379,14 @@ When the outputs are written in the variable-based and vessel-based forms, the u
 
 The number of timesteps between each time the output is written is specified by `output_interval`. By default, output is written at every time step. 
 
+
 # Graphical User Interfaces - Quick User Guide
 
 The svZeroDSolver package includes two graphical interfaces - svZeroDVisualization and svZeroDGUI.
 
-The svZeroDVisualization application allows users visualize the connectivity of 0D models and the simulated hemodynamics in each block. A user guide is available [here](@visualization).
+The svZeroDVisualization application allows users visualize the connectivity of 0D models and the simulated hemodynamics in each block. A user guide is available [here](@ref visualization).
 
-The svZeroDGUI application  allows users to create 0D models using an interactive drag-drop graphical interface. Details are available [here](@GUI).
+The svZeroDGUI application  allows users to create 0D models using an interactive drag-drop graphical interface. Details are available [here](@ref GUI).
 
 
 # svZeroDCalibrator - Quick User Guide

@@ -142,6 +142,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a98bac8f1f93e2876efa7a7d59e302569 inherit pub_methods_class_block" id="r_a98bac8f1f93e2876efa7a7d59e302569"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a98bac8f1f93e2876efa7a7d59e302569">setup_model_dependent_params</a> ()</td></tr>
 <tr class="memdesc:a98bac8f1f93e2876efa7a7d59e302569 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameters that depend on the model.  <br /></td></tr>
 <tr class="separator:a98bac8f1f93e2876efa7a7d59e302569 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3242f9b5c7d9ecb94e80cccfba3b2a0a inherit pub_methods_class_block" id="r_a3242f9b5c7d9ecb94e80cccfba3b2a0a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a3242f9b5c7d9ecb94e80cccfba3b2a0a">setup_initial_state_dependent_params</a> (<a class="el" href="class_state.html">State</a> initial_state, std::vector&lt; double &gt; &amp;parameters)</td></tr>
+<tr class="memdesc:a3242f9b5c7d9ecb94e80cccfba3b2a0a inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameters that depend on the initial state.  <br /></td></tr>
+<tr class="separator:a3242f9b5c7d9ecb94e80cccfba3b2a0a inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block" id="r_a3d48d0c71bf9f5b416f01a6414b0da78"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a3d48d0c71bf9f5b416f01a6414b0da78">update_solution</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;dy)</td></tr>
 <tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a3d48d0c71bf9f5b416f01a6414b0da78 inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,43 +227,43 @@ node[ground]{};
 <h3>Governing equations</h3>
 <p class="formulaDsp">
 <picture><source srcset="form_153_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
+R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
 \]" src="form_153.png" width="283" height="41"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_154_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
-\]" src="form_154.png" width="171" height="21"/></picture>
+<picture><source srcset="form_98_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+P_{in}-P_{c}-R_{p} Q_{in}=0
+\]" src="form_98.png" width="180" height="21"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_155_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_154_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} &amp; Q^{e} &amp;
-P_{c}^{e}\end{array}\right]^{T} \]" src="form_155.png" width="197" height="28"/></picture>
+P_{c}^{e}\end{array}\right]^{T} \]" src="form_154.png" width="197" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_156_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_155_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 &amp; 0 &amp; -R_{d} C \\
 0 &amp; 0 &amp; 0
+\end{array}\right]
+\]" src="form_155.png" width="189" height="47"/></picture>
+</p>
+<p class="formulaDsp">
+<picture><source srcset="form_156_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+\mathbf{F}^{e}=\left[\begin{array}{ccc}
+0 &amp; R_{d} &amp; -1 \\
+1 &amp; -R_{p} &amp; -1
 \end{array}\right]
 \]" src="form_156.png" width="189" height="47"/></picture>
 </p>
 <p class="formulaDsp">
 <picture><source srcset="form_157_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{F}^{e}=\left[\begin{array}{ccc}
-0 &amp; R_{d} &amp; -1 \\
-1 &amp; -R_{p} &amp; -1
-\end{array}\right]
-\]" src="form_157.png" width="189" height="47"/></picture>
-</p>
-<p class="formulaDsp">
-<picture><source srcset="form_158_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
-\]" src="form_158.png" width="114" height="47"/></picture>
+\]" src="form_157.png" width="114" height="47"/></picture>
 </p>
 <p>See <a class="el" href="citelist.html#CITEREF_vignon04">[10]</a>.</p>
 <h3>Parameters</h3>

@@ -88,6 +88,7 @@ $(function(){ initResizable(false); });
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="class_open_loop_coronary_b_c-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">OpenLoopCoronaryBC Class Reference</div></div>
 </div><!--header-->
@@ -111,6 +112,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a79d526c7da0236851794d3b81cdf82b6" id="r_a79d526c7da0236851794d3b81cdf82b6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a79d526c7da0236851794d3b81cdf82b6">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:a79d526c7da0236851794d3b81cdf82b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
 <tr class="separator:a79d526c7da0236851794d3b81cdf82b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76c97e377cfabf53480bd1679c247c72" id="r_a76c97e377cfabf53480bd1679c247c72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a76c97e377cfabf53480bd1679c247c72">setup_initial_state_dependent_params</a> (<a class="el" href="class_state.html">State</a> initial_state, std::vector&lt; double &gt; &amp;parameters)</td></tr>
+<tr class="memdesc:a76c97e377cfabf53480bd1679c247c72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameters that depend on the initial state.  <br /></td></tr>
+<tr class="separator:a76c97e377cfabf53480bd1679c247c72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af0c9a0955ec9b9347965b9e79759e9cb" id="r_af0c9a0955ec9b9347965b9e79759e9cb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af0c9a0955ec9b9347965b9e79759e9cb">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:af0c9a0955ec9b9347965b9e79759e9cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:af0c9a0955ec9b9347965b9e79759e9cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -203,6 +207,15 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a7388d573014251179f564ccef95ad52e inherit pub_attribs_class_block" id="r_a7388d573014251179f564ccef95ad52e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7388d573014251179f564ccef95ad52e">num_triplets</a></td></tr>
 <tr class="memdesc:a7388d573014251179f564ccef95ad52e inherit pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of triplets of element.  <br /></td></tr>
 <tr class="separator:a7388d573014251179f564ccef95ad52e inherit pub_attribs_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:abe21aade7d8a1d42b5467693fa6be63e" id="r_abe21aade7d8a1d42b5467693fa6be63e"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abe21aade7d8a1d42b5467693fa6be63e">P_Cim_0</a> = 0</td></tr>
+<tr class="memdesc:abe21aade7d8a1d42b5467693fa6be63e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pressure proximal to Cim/Vim at initial state.  <br /></td></tr>
+<tr class="separator:abe21aade7d8a1d42b5467693fa6be63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2f7d9ae55d3eaaff85a46d864a13487" id="r_aa2f7d9ae55d3eaaff85a46d864a13487"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa2f7d9ae55d3eaaff85a46d864a13487">Pim_0</a> = 0</td></tr>
+<tr class="memdesc:aa2f7d9ae55d3eaaff85a46d864a13487"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pim at initial state.  <br /></td></tr>
+<tr class="separator:aa2f7d9ae55d3eaaff85a46d864a13487"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>. </p>
@@ -211,8 +224,9 @@ Public Attributes</h2></td></tr>
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
-to [R, l=$R_a$, *-] (3,0)
+to [R, l=$R_a$, *-*] (3,0)
 to [R, l=$R_{am}$, -] (5,0)
+node[anchor=south]{$P_{cim}$}
 to [R, l=$R_v$, *-*] (7,0)
 node[anchor=south]{$P_{v}$}
 (5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
@@ -224,17 +238,19 @@ node[left]{$P_a$};
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_116_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-C_{i m} R_{v} Q_{in}-V_{i m}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
-\frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v} \frac{d P_{in}}{d t}+R_{a} C_{a}
-C_{i m} R_{v} \frac{d Q_{in}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d
-t}=0 \]" src="form_116.png" width="849" height="41"/></picture>
+<picture><source srcset="form_116_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}
+&amp;C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
+m}+P_{v}\right)-C_{i m} R_{v} \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v}
+\frac{d P_{in}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q_{in}}{d t}\\ &amp;+C_{a}
+C_{i m} R_{v} \frac{d P_{a}}{d t}=0
+\end{eqnarray*}" src="form_116.png" width="878" height="56"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v}
-P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i
-m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]" src="form_117.png" width="851" height="41"/></picture>
+<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}
+&amp;C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
+m}\left(R_{v}+R_{a m}\right) \left(P_{c i m}(0)-P_{i m}(0)+P_{i
+m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} \\ &amp;-R_{a m} V_{i
+m}+R_{a m} C_{i m} P_{v}=0 \end{eqnarray*}" src="form_117.png" width="812" height="51"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
@@ -255,9 +271,10 @@ m}\end{array}\right] \]" src="form_119.png" width="422" height="47"/></picture>
 </p>
 <p class="formulaDsp">
 <picture><source srcset="form_121_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
-\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)+C_{a}
-C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i
-m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]" src="form_121.png" width="373" height="47"/></picture>
+\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
+m}(0)+P_{v}\right)+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i
+m}\left(R_{v} + R_{a m}\right)\left(P_{cim}(0)-P_{i m}(0)+P_{i m}\right)+R_{a
+m} C_{i m} P_{v}\end{array}\right] \]" src="form_121.png" width="549" height="47"/></picture>
 </p>
 <p>Assume <picture><source srcset="form_95_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_95.png" width="54" height="19"/></picture>.</p>
 <h3>Parameters</h3>
@@ -349,6 +366,46 @@ m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]" src="form_121.png" width="373" he
 </dl>
 
 <p>Reimplemented from <a class="el" href="class_block.html#a51da88989c9ae7d558cbbf73a574a930">Block</a>.</p>
+
+</div>
+</div>
+<a id="a76c97e377cfabf53480bd1679c247c72" name="a76c97e377cfabf53480bd1679c247c72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76c97e377cfabf53480bd1679c247c72">&#9670;&#160;</a></span>setup_initial_state_dependent_params()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void OpenLoopCoronaryBC::setup_initial_state_dependent_params </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_state.html">State</a></td>          <td class="paramname"><span class="paramname"><em>initial_state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>parameters</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setup parameters that depend on the initial state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">initial_state</td><td>The initial state of the system </td></tr>
+    <tr><td class="paramname">parameters</td><td>The parameter values vector (at time 0) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="class_block.html#a3242f9b5c7d9ecb94e80cccfba3b2a0a">Block</a>.</p>
 
 </div>
 </div>
@@ -447,6 +504,54 @@ m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]" src="form_121.png" width="373" he
 
 <p>Number of triplets of element. </p>
 <p>Number of triplets that the element contributes to the global system (relevant for sparse memory reservation) </p>
+
+</div>
+</div>
+<a id="abe21aade7d8a1d42b5467693fa6be63e" name="abe21aade7d8a1d42b5467693fa6be63e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abe21aade7d8a1d42b5467693fa6be63e">&#9670;&#160;</a></span>P_Cim_0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double OpenLoopCoronaryBC::P_Cim_0 = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pressure proximal to Cim/Vim at initial state. </p>
+
+</div>
+</div>
+<a id="aa2f7d9ae55d3eaaff85a46d864a13487" name="aa2f7d9ae55d3eaaff85a46d864a13487"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2f7d9ae55d3eaaff85a46d864a13487">&#9670;&#160;</a></span>Pim_0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double OpenLoopCoronaryBC::Pim_0 = 0</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pim at initial state. </p>
 
 </div>
 </div>

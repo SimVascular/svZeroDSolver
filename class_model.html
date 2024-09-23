@@ -190,6 +190,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4ac4ccacb29373074c0fccb6da37e588" id="r_a4ac4ccacb29373074c0fccb6da37e588"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4ac4ccacb29373074c0fccb6da37e588">get_largest_windkessel_time_constant</a> ()</td></tr>
 <tr class="memdesc:a4ac4ccacb29373074c0fccb6da37e588"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get largest Windkessel time constant in model.  <br /></td></tr>
 <tr class="separator:a4ac4ccacb29373074c0fccb6da37e588"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2625998960136af98d3fdb8437db5c8f" id="r_a2625998960136af98d3fdb8437db5c8f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2625998960136af98d3fdb8437db5c8f">setup_initial_state_dependent_parameters</a> (<a class="el" href="class_state.html">State</a> initial_state)</td></tr>
+<tr class="memdesc:a2625998960136af98d3fdb8437db5c8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup model parameters that depend on the initial state.  <br /></td></tr>
+<tr class="separator:a2625998960136af98d3fdb8437db5c8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -794,6 +797,31 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">y</td><td>Current solution </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2625998960136af98d3fdb8437db5c8f" name="a2625998960136af98d3fdb8437db5c8f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2625998960136af98d3fdb8437db5c8f">&#9670;&#160;</a></span>setup_initial_state_dependent_parameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::setup_initial_state_dependent_parameters </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_state.html">State</a></td>          <td class="paramname"><span class="paramname"><em>initial_state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Setup model parameters that depend on the initial state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">initial_state</td><td>The initial state vector </td></tr>
   </table>
   </dd>
 </dl>

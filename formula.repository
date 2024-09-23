@@ -423,8 +423,9 @@ P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
-to [R, l=$R_a$, *-] (3,0)
+to [R, l=$R_a$, *-*] (3,0)
 to [R, l=$R_{am}$, -] (5,0)
+node[anchor=south]{$P_{cim}$}
 to [R, l=$R_v$, *-*] (7,0)
 node[anchor=south]{$P_{v}$}
 (5,0) to [C, l=$C_{im} \;V_{im}$, -*] (5,-1.5)
@@ -433,15 +434,17 @@ node[left]{$P_{im}$}
 node[left]{$P_a$};
 \end{circuitikz}
 \]
-\_form#116=849x41:\[
-C_{i m} R_{v} Q_{in}-V_{i m}-C_{i m} P_{i m}+C_{i m} P_{v}-C_{i m} R_{v}
-\frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v} \frac{d P_{in}}{d t}+R_{a} C_{a}
-C_{i m} R_{v} \frac{d Q_{in}}{d t}+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d
-t}=0 \]
-\_form#117=851x41:\[
-C_{i m} R_v P^{e}-C_{i m} R_{v} R_{a} Q^{e}-R_{v} V_{i m}^{e}-C_{i m} R_{v}
-P_{i m}-C_{i m} R_{v} R_{a m} \frac{d V_{i m}^{e}}{d t}-R_{a m} V_{i
-m}^{e}-C_{i m} R_{a m} P_{i m}+R_{a m} C_{i m} P_{v}=0 \]
+\_form#116=878x56:\begin{eqnarray*}
+&C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
+m}+P_{v}\right)-C_{i m} R_{v} \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v}
+\frac{d P_{in}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q_{in}}{d t}\\ &+C_{a}
+C_{i m} R_{v} \frac{d P_{a}}{d t}=0
+\end{eqnarray*}
+\_form#117=812x51:\begin{eqnarray*}
+&C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
+m}\left(R_{v}+R_{a m}\right) \left(P_{c i m}(0)-P_{i m}(0)+P_{i
+m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} \\ &-R_{a m} V_{i
+m}+R_{a m} C_{i m} P_{v}=0 \end{eqnarray*}
 \_form#118=225x28:\[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} & Q_{in} & V_{i
 m}\end{array}\right]^{T}, \]
@@ -452,10 +455,11 @@ m}\end{array}\right] \]
 \_form#120=384x47:\[
 \mathbf{F}^{e}=\left[\begin{array}{ccc}0 & C_{i m} R_{v} & -1 \\C_{i m} R_{v}
 & -C_{i m} R_{v} R_{a} & -\left(R_{v}+R_{a m}\right)\end{array}\right] \]
-\_form#121=373x47:\[
-\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{v}\right)+C_{a}
-C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i m}\left(R_{v}+R_{a m}\right) P_{i
-m}+R_{a m} C_{i m} P_{v}\end{array}\right] \]
+\_form#121=549x47:\[
+\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
+m}(0)+P_{v}\right)+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i
+m}\left(R_{v} + R_{a m}\right)\left(P_{cim}(0)-P_{i m}(0)+P_{i m}\right)+R_{a
+m} C_{i m} P_{v}\end{array}\right] \]
 \_form#122=98x105:\[
 \begin{circuitikz}
 \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
@@ -606,82 +610,79 @@ node[ground]{};
 \end{circuitikz}
 \]
 \_form#153=283x41:\[
-R_{d} Q^{e}-P_{c}^{e}+P_{r e f}-R_{d} C \frac{d P_{c}^{e}}{d t}=0
+R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
 \]
-\_form#154=171x21:\[
-P^{e}-P_{c}^{e}-R_{p} Q^{e}=0
-\]
-\_form#155=197x28:\[
+\_form#154=197x28:\[
 \mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} &
 P_{c}^{e}\end{array}\right]^{T} \]
-\_form#156=189x47:\[
+\_form#155=189x47:\[
 \mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 & 0 & -R_{d} C \\
 0 & 0 & 0
 \end{array}\right]
 \]
-\_form#157=189x47:\[
+\_form#156=189x47:\[
 \mathbf{F}^{e}=\left[\begin{array}{ccc}
 0 & R_{d} & -1 \\
 1 & -R_{p} & -1
 \end{array}\right]
 \]
-\_form#158=114x47:\[
+\_form#157=114x47:\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
 \]
-\_form#159=388x21:\[
+\_form#158=388x21:\[
 \boldsymbol{r}(\boldsymbol{\alpha}, \boldsymbol{y}, \boldsymbol{\dot{y}}) =
 \boldsymbol{E}(\boldsymbol{\alpha}, \boldsymbol{y}) \cdot
 \dot{\boldsymbol{y}}+\boldsymbol{F}(\boldsymbol{\alpha}, \boldsymbol{y})
 \cdot \boldsymbol{y}+\boldsymbol{c}(\boldsymbol{\alpha}, \boldsymbol{y}) \]
-\_form#160=64x21:$\boldsymbol{y} \in \mathbb{R}^{N}$
-\_form#161=62x19:$\boldsymbol{\alpha} \in
+\_form#159=64x21:$\boldsymbol{y} \in \mathbb{R}^{N}$
+\_form#160=62x19:$\boldsymbol{\alpha} \in
 \mathbb{R}^{P}$
-\_form#162=111x21:$\boldsymbol{E},\boldsymbol{F} \in
+\_form#161=111x21:$\boldsymbol{E},\boldsymbol{F} \in
 \mathbb{R}^{NxN}$
-\_form#163=58x19:$\boldsymbol{c} \in
+\_form#162=58x19:$\boldsymbol{c} \in
 \mathbb{R}^{N}$
-\_form#164=291x56:\[
+\_form#163=291x56:\[
 \min _\alpha S, \quad \mathrm { with } \quad S=\sum_i^D
 r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \]
-\_form#165=13x13:$\boldsymbol{y}$
-\_form#166=13x19:$\boldsymbol{\dot{y}}$
-\_form#167=15x15:$D$
-\_form#168=161x21:\[
+\_form#164=13x13:$\boldsymbol{y}$
+\_form#165=13x19:$\boldsymbol{\dot{y}}$
+\_form#166=15x15:$D$
+\_form#167=161x21:\[
 \boldsymbol{\alpha}^{i+1}=\boldsymbol{\alpha}^{i}+\Delta
 \boldsymbol{\alpha}^{i+1} \]
-\_form#169=53x17:$\Delta \boldsymbol{\alpha}^{i+1} $
-\_form#170=656x38:\[
+\_form#168=53x17:$\Delta \boldsymbol{\alpha}^{i+1} $
+\_form#169=656x38:\[
 \left[\mathbf{J}^{\mathrm{T}} \mathbf{J}+\lambda
 \operatorname{diag}\left(\mathbf{J}^{\mathrm{T}} \mathbf{J}\right)\right]^{i}
 \cdot \Delta \boldsymbol{\alpha}^{i+1}=-\left[\mathbf{J}^{\mathrm{T}}
 \mathbf{r}\right]^{i}, \quad \lambda^{i}=\lambda^{i-1}
 \cdot\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i}\right\|_2
 /\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i-1}\right\|_2. \]
-\_form#171=371x36:\[
+\_form#170=371x36:\[
 \left\|\left[\mathbf{J}^{\mathrm{T}}
 \mathbf{r}\right]^{\mathrm{i}}\right\|_2<\operatorname{tol}_{\text {grad
 }}^\alpha \text { and }\left\|\Delta
 \boldsymbol{\alpha}^{\mathrm{i}+1}\right\|_2<\mathrm{tol}_{\text {inc
 }}^\alpha, \]
-\_form#172=276x41:\[
+\_form#171=276x41:\[
 J = \frac{\partial \boldsymbol{r}}{\partial \boldsymbol{\alpha}} =
 \frac{\partial \mathbf{E}}{\partial \boldsymbol{\alpha}} \cdot
 \dot{\mathbf{y}}+\frac{\partial \mathbf{F}}{\partial \boldsymbol{\alpha}}
 \cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \]
-\_form#173=270x26:$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $
-\_form#174=311x26:$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $
-\_form#175=26x19:$P_{in}$
-\_form#176=28x19:$Q_{in}$
-\_form#177=34x19:$P_{out}$
-\_form#178=36x19:$Q_{out}$
-\_form#179=17x19:$I_{1}$
-\_form#180=188x21:$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$
-\_form#181=38x17:$10^{-8}$
-\_form#182=21x13:$30$
-\_form#183=8x13:$1$
-\_form#184=38x17:$10^{-5}$
-\_form#185=45x17:$10^{-10}$
+\_form#172=270x26:$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $
+\_form#173=311x26:$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $
+\_form#174=26x19:$P_{in}$
+\_form#175=28x19:$Q_{in}$
+\_form#176=34x19:$P_{out}$
+\_form#177=36x19:$Q_{out}$
+\_form#178=17x19:$I_{1}$
+\_form#179=188x21:$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$
+\_form#180=38x17:$10^{-8}$
+\_form#181=21x13:$30$
+\_form#182=8x13:$1$
+\_form#183=38x17:$10^{-5}$
+\_form#184=45x17:$10^{-10}$

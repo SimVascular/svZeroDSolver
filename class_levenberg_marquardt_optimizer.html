@@ -110,54 +110,54 @@ Public Member Functions</h2></td></tr>
 <div class="textblock"><p>Levenberg-Marquardt optimization class. </p>
 <p>The 0D residual (assuming no time-dependency in parameters) is</p>
 <p class="formulaDsp">
-<picture><source srcset="form_159_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_158_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \boldsymbol{r}(\boldsymbol{\alpha}, \boldsymbol{y}, \boldsymbol{\dot{y}}) =
 \boldsymbol{E}(\boldsymbol{\alpha}, \boldsymbol{y}) \cdot
 \dot{\boldsymbol{y}}+\boldsymbol{F}(\boldsymbol{\alpha}, \boldsymbol{y})
-\cdot \boldsymbol{y}+\boldsymbol{c}(\boldsymbol{\alpha}, \boldsymbol{y}) \]" src="form_159.png" width="388" height="21"/></picture>
+\cdot \boldsymbol{y}+\boldsymbol{c}(\boldsymbol{\alpha}, \boldsymbol{y}) \]" src="form_158.png" width="388" height="21"/></picture>
 </p>
-<p>with solution vector <picture><source srcset="form_160_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{y} \in \mathbb{R}^{N}$" src="form_160.png" width="64" height="21"/></picture> (flow and pressure at nodes), LPN parameters  <picture><source srcset="form_161_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{\alpha} \in
-\mathbb{R}^{P}$" src="form_161.png" width="62" height="19"/></picture>, system matrices  <picture><source srcset="form_162_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{E},\boldsymbol{F} \in
-\mathbb{R}^{NxN}$" src="form_162.png" width="111" height="21"/></picture>, and system vector  <picture><source srcset="form_163_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{c} \in
-\mathbb{R}^{N}$" src="form_163.png" width="58" height="19"/></picture>.</p>
+<p>with solution vector <picture><source srcset="form_159_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{y} \in \mathbb{R}^{N}$" src="form_159.png" width="64" height="21"/></picture> (flow and pressure at nodes), LPN parameters  <picture><source srcset="form_160_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{\alpha} \in
+\mathbb{R}^{P}$" src="form_160.png" width="62" height="19"/></picture>, system matrices  <picture><source srcset="form_161_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{E},\boldsymbol{F} \in
+\mathbb{R}^{NxN}$" src="form_161.png" width="111" height="21"/></picture>, and system vector  <picture><source srcset="form_162_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{c} \in
+\mathbb{R}^{N}$" src="form_162.png" width="58" height="19"/></picture>.</p>
 <p>The least squares problem can be formulated as</p>
 <p class="formulaDsp">
-<picture><source srcset="form_164_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_163_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \min _\alpha S, \quad \mathrm { with } \quad S=\sum_i^D
-r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \]" src="form_164.png" width="291" height="56"/></picture>
+r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \]" src="form_163.png" width="291" height="56"/></picture>
 </p>
-<p>with given solution vectors <picture><source srcset="form_165_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{y}$" src="form_165.png" width="13" height="13"/></picture>, <picture><source srcset="form_166_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{\dot{y}}$" src="form_166.png" width="13" height="19"/></picture> at all datapoints <picture><source srcset="form_167_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$D$" src="form_167.png" width="15" height="15"/></picture>. The parameter vector is iteratively improved according to</p>
+<p>with given solution vectors <picture><source srcset="form_164_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{y}$" src="form_164.png" width="13" height="13"/></picture>, <picture><source srcset="form_165_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{\dot{y}}$" src="form_165.png" width="13" height="19"/></picture> at all datapoints <picture><source srcset="form_166_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$D$" src="form_166.png" width="15" height="15"/></picture>. The parameter vector is iteratively improved according to</p>
 <p class="formulaDsp">
-<picture><source srcset="form_168_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_167_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \boldsymbol{\alpha}^{i+1}=\boldsymbol{\alpha}^{i}+\Delta
-\boldsymbol{\alpha}^{i+1} \]" src="form_168.png" width="161" height="21"/></picture>
+\boldsymbol{\alpha}^{i+1} \]" src="form_167.png" width="161" height="21"/></picture>
 </p>
-<p>wherein the increment <picture><source srcset="form_169_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\Delta \boldsymbol{\alpha}^{i+1} $" src="form_169.png" width="53" height="17"/></picture> is determined by solving the following system:</p>
+<p>wherein the increment <picture><source srcset="form_168_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\Delta \boldsymbol{\alpha}^{i+1} $" src="form_168.png" width="53" height="17"/></picture> is determined by solving the following system:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_170_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_169_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \left[\mathbf{J}^{\mathrm{T}} \mathbf{J}+\lambda
 \operatorname{diag}\left(\mathbf{J}^{\mathrm{T}} \mathbf{J}\right)\right]^{i}
 \cdot \Delta \boldsymbol{\alpha}^{i+1}=-\left[\mathbf{J}^{\mathrm{T}}
 \mathbf{r}\right]^{i}, \quad \lambda^{i}=\lambda^{i-1}
 \cdot\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i}\right\|_2
-/\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i-1}\right\|_2. \]" src="form_170.png" width="656" height="38"/></picture>
+/\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i-1}\right\|_2. \]" src="form_169.png" width="656" height="38"/></picture>
 </p>
 <p>The algorithm terminates when the following tolerance thresholds are reached</p>
 <p class="formulaDsp">
-<picture><source srcset="form_171_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_170_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \left\|\left[\mathbf{J}^{\mathrm{T}}
 \mathbf{r}\right]^{\mathrm{i}}\right\|_2&lt;\operatorname{tol}_{\text {grad
 }}^\alpha \text { and }\left\|\Delta
 \boldsymbol{\alpha}^{\mathrm{i}+1}\right\|_2&lt;\mathrm{tol}_{\text {inc
-}}^\alpha, \]" src="form_171.png" width="371" height="36"/></picture>
+}}^\alpha, \]" src="form_170.png" width="371" height="36"/></picture>
 </p>
 <p>The Jacobian is derived from the residual as</p>
 <p class="formulaDsp">
-<picture><source srcset="form_172_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_171_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 J = \frac{\partial \boldsymbol{r}}{\partial \boldsymbol{\alpha}} =
 \frac{\partial \mathbf{E}}{\partial \boldsymbol{\alpha}} \cdot
 \dot{\mathbf{y}}+\frac{\partial \mathbf{F}}{\partial \boldsymbol{\alpha}}
-\cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \]" src="form_172.png" width="276" height="41"/></picture>
+\cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \]" src="form_171.png" width="276" height="41"/></picture>
 </p>
  </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa980a5ddaabb60eff200a12bf90c4430" name="aa980a5ddaabb60eff200a12bf90c4430"></a>

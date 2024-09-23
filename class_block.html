@@ -132,6 +132,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a98bac8f1f93e2876efa7a7d59e302569" id="r_a98bac8f1f93e2876efa7a7d59e302569"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98bac8f1f93e2876efa7a7d59e302569">setup_model_dependent_params</a> ()</td></tr>
 <tr class="memdesc:a98bac8f1f93e2876efa7a7d59e302569"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameters that depend on the model.  <br /></td></tr>
 <tr class="separator:a98bac8f1f93e2876efa7a7d59e302569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3242f9b5c7d9ecb94e80cccfba3b2a0a" id="r_a3242f9b5c7d9ecb94e80cccfba3b2a0a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3242f9b5c7d9ecb94e80cccfba3b2a0a">setup_initial_state_dependent_params</a> (<a class="el" href="class_state.html">State</a> initial_state, std::vector&lt; double &gt; &amp;parameters)</td></tr>
+<tr class="memdesc:a3242f9b5c7d9ecb94e80cccfba3b2a0a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameters that depend on the initial state.  <br /></td></tr>
+<tr class="separator:a3242f9b5c7d9ecb94e80cccfba3b2a0a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81244b2b437aef62407d5f06b78b379f" id="r_a81244b2b437aef62407d5f06b78b379f"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81244b2b437aef62407d5f06b78b379f">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
 <tr class="memdesc:a81244b2b437aef62407d5f06b78b379f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="separator:a81244b2b437aef62407d5f06b78b379f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -457,6 +460,46 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a3242f9b5c7d9ecb94e80cccfba3b2a0a" name="a3242f9b5c7d9ecb94e80cccfba3b2a0a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3242f9b5c7d9ecb94e80cccfba3b2a0a">&#9670;&#160;</a></span>setup_initial_state_dependent_params()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Block::setup_initial_state_dependent_params </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_state.html">State</a></td>          <td class="paramname"><span class="paramname"><em>initial_state</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>parameters</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Setup parameters that depend on the initial state. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">initial_state</td><td>The initial state of the system </td></tr>
+    <tr><td class="paramname">parameters</td><td>The parameter values vector (at time 0) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_open_loop_coronary_b_c.html#a76c97e377cfabf53480bd1679c247c72">OpenLoopCoronaryBC</a>.</p>
 
 </div>
 </div>

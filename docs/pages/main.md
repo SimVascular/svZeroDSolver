@@ -92,10 +92,10 @@ cmake --build .
   <summary>**Building on Sherlock**</summary>
 
 ```bash
-module load cmake/3.23.1 gcc/12.1.0 binutils/2.38
+module load cmake/3.23.1 gcc/14.2.0 binutils/2.38
 mkdir Release
 cd Release
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/14.2.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/14.2.0/bin/gcc ..
 cmake --build .
 ```
 

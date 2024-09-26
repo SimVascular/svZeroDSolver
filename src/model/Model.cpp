@@ -261,6 +261,7 @@ void Model::to_steady() {
     param.to_steady();
   }
 
+  // Special handling for time-varying capacitance
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->steady = true;
     if ((block_types[i] == BlockType::windkessel_bc) ||
@@ -294,6 +295,14 @@ TripletsContributions Model::get_num_triplets() const {
   }
 
   return triplets_sum;
+}
+
+void Model::setup_initial_state_dependent_parameters(State initial_state) {
+  DEBUG_MSG("Setup initial state dependent parameters");
+  for (auto &block : blocks) {
+    block->setup_initial_state_dependent_params(initial_state,
+                                                parameter_values);
+  }
 }
 
 void Model::update_has_windkessel_bc(bool has_windkessel) {

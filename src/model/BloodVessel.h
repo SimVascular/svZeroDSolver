@@ -139,6 +139,10 @@
  * * `2` Inductance
  * * `3` Stenosis coefficient
  *
+ * ### Internal variables
+ *
+ * This block has no internal variables.
+ *
  */
 class BloodVessel : public Block {
  public:

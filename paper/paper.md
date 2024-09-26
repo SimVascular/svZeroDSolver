@@ -39,7 +39,7 @@ bibliography: paper.bib
 # Summary
 
 Computational modeling of cardiovascular blood flow has emerged as a valuable tool in the diagnosis and treatment of cardiovascular disease [@menon2024cardiovascular].
-While simulations of blood flow can be performed using various high and low-fidelity techniques, lumped-parameter or zero-dimensional modeling is a low-order technique that is widely used in various applications that require quick estimation of bulk flow quantities, such as flow and pressure at specific anatomical locations [@PFALLER2024449].
+While simulations of blood flow can be performed using high and low-fidelity techniques, lumped-parameter or zero-dimensional modeling is a widely used low-order technique in applications which require quick estimation of bulk flow quantities, such as flow and pressure at specific anatomical locations [@PFALLER2024449].
 
 We introduce [`svZeroDSolver`](https://github.com/simvascular/svZeroDSolver), an efficient and modular package for performing lumped-parameter (zero-dimensional) simulations of cardiovascular blood flow.
 As part of the [`SimVascular`](https://simvascular.github.io/) open-source project, `svZeroDSolver` and `SimVascular` together allow users to go from medical imaging to fast zero-dimensional evaluations of patient-specific hemodynamics.
@@ -47,21 +47,21 @@ As part of the [`SimVascular`](https://simvascular.github.io/) open-source proje
 Simply specifying a `.json` dictionary of lumped-parameter "blocks" -- such as blood vessels, junctions between blood vessels, and boundary conditions (along with their associated parameters) -- allows the code to automatically assemble and solve the governing equations corresponding to the user-specified vascular model.
 In addition, the package includes Python and C++ interfaces to facilitate its use with other software packages.
 For example, it can be integrated into Python-based optimization and uncertainty quantification applications [@zanoni2024;@Lee2024;@richter2024bayesian;@menon2024personalizeduncertainty].
-It can also be interfaced with high-performance C++/Fortran software for high-fidelity cardiovascular flow simulations, where `svZeroDSolver` can conveniently provide lumped-parameter boundary conditions [@menon2023predictors;@menon2024personalized].
-`svZeroDSolver` includes an application, called `svZeroDCalibrator`, to automatically calibrate parameters of a given zero-dimensional model to recapitulate hemodynamics at specific anatomical locations from independent measurements or high-fidelity simulations -- thus improving the accuracy of zero-dimensional models [@richter2024bayesian].
+It can also be interfaced with C++/Fortran software for high-fidelity cardiovascular flow simulations, where `svZeroDSolver` can conveniently provide physiological lumped-parameter boundary conditions [@menon2023predictors;@menon2024personalized].
+`svZeroDSolver` includes an application, called `svZeroDCalibrator`, to automatically calibrate parameters of a given zero-dimensional model based independent hemodynamic measurements or high-fidelity simulations -- thus improving the accuracy of zero-dimensional models [@richter2024bayesian].
 It also includes graphical interfaces to interactively create lumped-parameter models for simulations, as well as to visualize the simulated anatomy and hemodynamics.
 
 # Statement of need
 
-The ability to non-invasively quantify patient-specific hemodynamics via computational simulations has been shown to improve patient outcomes and reduce invasive clinical procedures in large randomized clinical trials [@TAYLOR2023]. 
+Non-invasive quantification of patient-specific hemodynamics via computational simulations has improved patient outcomes and reduced invasive clinical procedures in large randomized clinical trials [@TAYLOR2023]. 
 Computational modeling is also a promising tool for non-invasive and personalized optimization of clinical treatments and surgery [@Marsden2014]. 
 
-Previous work has used a variety of techniques to model cardiovascular blood flow, all of which can be broadly categorized based on their level of fidelity. 
+Previous work has used several techniques to model cardiovascular blood flow, all of which can be broadly categorized based on their level of fidelity. 
 High-fidelity models generally involve simulations of the full three-dimensional flow-field within anatomical regions of interest [@menon2024cardiovascular;@Updegrove2017]. 
-While these are the most accurate and informative, they are computationally expensive (each simulation can take several hours or days on hundreds of CPU cores) and therefore not feasible for use within typical clinical settings or for applications, such as optimization, which often require thousands of evaluations.
+While these are the most accurate and informative, they are computationally expensive (each simulation can take several hours or days on hundreds of CPU cores) and therefore not practical in typical clinical settings or for applications, such as optimization and uncertainty quantification, which often require thousands of model evaluations.
 On the other end of the spectrum, lumped-parameter or zero-dimensional models provide information about bulk hemodynamics, such as flow rate and pressure, at specific anatomical regions of interest.
-While these models are not spatially-resolved, they are very valuable in applications that require near real-time quantification of bulk hemodynamics, as well as applications that rely on thousands of repeated model evaluations, such as optimization and uncertainty quantification [@zanoni2024;@Lee2024;@richter2024bayesian;@menon2024personalizeduncertainty].
-They are also used in conjunction with high-fidelity simulations where lumped-parameter models are used as boundary conditions [@menon2023predictors;@menon2024personalized].
+While these models are not spatially-resolved, they are valuable in applications which require near real-time quantification of bulk hemodynamics, as well as those that rely on thousands of repeated model evaluations [@zanoni2024;@Lee2024;@richter2024bayesian;@menon2024personalizeduncertainty].
+They are also commonly used in conjunction with high-fidelity simulations where lumped-parameter models are used as physiological boundary conditions [@menon2023predictors;@menon2024personalized].
 
 `svZeroDSolver`, which is a part of the `SimVascular` open-source project, is a new open-source software package that enables fast evaluation of zero-dimensional hemodynamics.
 One major challenge in zero-dimensional modeling that `svZeroDSolver` addresses is that different clinical applications (and individual clinical cases within the same application) often require unique anatomical arrangements of blood vessels, heart valves, etc. Moreover, distinct anatomical configurations are governed by a distinct set of governing equations. 
@@ -70,10 +70,10 @@ In contrast, the modularity of `svZeroDSolver` allows users to easily create arb
 
 Another unique feature of `svZeroDSolver` is its ability to easily interface with other C++ and Python packages.
 This has been used in previous work on uncertainty quantification [@zanoni2024;@Lee2024;@richter2024bayesian;menon2024personalizeduncertainty] as well as in multi-scale simulations coupling three-dimensional hemodynamics with zero-dimensional representations of downstream circulation [@menon2023predictors;@menon2024personalized].
-The C++ interface has been coupled with high-fidelity multi-physics solvers `svSolver` and `svFSI`, which are part of the widely used `SimVascular` open-source software project for cardiovascular biomechanics simulations [@Updegrove2017;@Zhu2022].
+The C++ interface has been coupled with the high-fidelity multi-physics solver [`svFSIplus`](https://github.com/SimVascular/svFSIplus), which is part of the widely used `SimVascular` open-source software project for cardiovascular biomechanics simulations [@Updegrove2017;@Zhu2022].
 `svZeroDSolver` has also been integrated into the graphical user interface of the `SimVascular` project.
 This allows users to leverage the functionality in `SimVascular` to generate three-dimensional patient-specific anatomical models from medical images, and subsequently perform patient-specific zero-dimensional simulations of blood flow by automatically converting the three-dimensional anatomy into a zero-dimensional model [@pfaller22]. 
-The automatic conversion of arbitrary patient-specific anatomies to zero-dimensional simulations is possible to due the modular nature of `svZeroDSolver`.
+The automatic conversion of arbitrary patient-specific anatomies to zero-dimensional simulations is possible due to the modular nature of `svZeroDSolver`.
 Using this pipeline, previous work has demonstrated accelerated convergence of three-dimensional simulations when using corresponding zero-dimensional simulation results as initial conditions [@pfaller21].
 
 In addition, `svZeroDSolver` includes several applications to augment its functionality. 
@@ -81,7 +81,7 @@ The `svZeroDCalibrator` application improves the accuracy of zero-dimensional mo
 This allows users to build more accurate zero-dimensional models than those typically based purely on the anatomy of the vascular region of interest [@richter2024bayesian]. 
 The `svZeroDGUI` application is a web-based graphical interface that allows users to create zero-dimensional simulations by interactively dragging-and-dropping individual blood vessels, heart chambers, boundary conditions, connections between these blocks, etc.
 Another graphical application, `svZeroDVisualization`, is an interface to visualize the lumped-paramater structure of given anatomical models as well as the simulated hemodynamics within each block. 
-Together, these graphical interfaces make `svZeroDSolver` intuitive for a wide range of users, potentially expanding its use from research to intructional and clinical contexts. 
+Together, these graphical interfaces make `svZeroDSolver` intuitive for a wide range of users, potentially expanding its use from research to instructional and clinical contexts. 
 The functionality and accuracy of `svZeroDSolver` is assessed using continuous integration tests on GitHub, and has also been verified by comparing with high-fidelity three dimensional simulations [@pfaller22].
 This combination of features makes `svZeroDSolver` uniquely applicable to a wide range of applications in cardiovascular biomechanics.
 
@@ -101,7 +101,7 @@ Details on the modular implementation of the blocks, along with their governing 
 We use the [Eigen package](https://gitlab.com/libeigen/eigen) to represent and solve these sparse linear systems [@eigenweb].
 Mathematical details on this implementation are provided in the [`SparseSystem`](https://simvascular.github.io/svZeroDSolver/class_sparse_system.html#details) and [`Integrator`](https://simvascular.github.io/svZeroDSolver/class_integrator.html#details) classes in the documentation.
 
-`svZeroDSolver` currently has implementations of different types of blood vessel blocks with non-linear resistors to model vascular stenoses, junctions between blood vessels, a heart valve block modeled using a hyperbolic tangent function, a cardiac chamber block modeled as a time-varying capacitor and inductor, and several different boundary condition blocks including simple flow, pressure and resistors blocks, windkessel boundary conditions, coronary boundary conditions that include the intramyocardial pressure experienced by coronary arteries, as well as closed-loop versions of windkessel and coronary boundary conditions that allow a user to build a closed-loop circulation model [@Vignon-Clementel2006;@Kim2009;@kimcoronary;@Mirramezani2019;@menon2023predictors;@menon2024personalized].
+`svZeroDSolver` currently has implementations of different types of blood vessel blocks with non-linear resistors to model vascular stenoses, junctions between blood vessels, a heart valve block modeled using a hyperbolic tangent function, a cardiac chamber block modeled as a time-varying capacitor and inductor, and several boundary condition blocks including simple flow, pressure and resistors blocks, windkessel boundary conditions, coronary boundary conditions that include the intramyocardial pressure experienced by coronary arteries, as well as two-sided versions of windkessel and coronary boundary conditions that allow a user to build closed-loop circulation models [@Vignon-Clementel2006;@Kim2009;@kimcoronary;@Mirramezani2019;@menon2023predictors;@menon2024personalized].
 The input to `svZeroDSolver` is a `.json` file which specifies the simulation parameters (number of time steps, cardiac cycles, etc.), the types of blocks to be included in the specific model, the boundary conditions, and how the blocks are connected (typically using `junction` blocks).
 Each of these blocks generally requires several parameters which can be specified using a steady value or a list of time-varying values.
 The solver can either run simulations for a specified number of time steps and cardiac cycles, or until the difference in mean quantities between consecutive cardiac cycles is below a given threshold.
@@ -119,6 +119,6 @@ The development team actively implements new features, blocks and test cases to 
 
 # Acknowledgments
 
-This work was supported by grant ???, by the National Heart, Lung, and Blood Institute of the National Institutes of Health under Award Numbers R01HL141712 and K99HL161313, and the Stanford Maternal and Child Health Institute.
+This work was supported by National Science Foundation grants 1663671 and 2310909, by the National Heart, Lung, and Blood Institute of the National Institutes of Health under Award Numbers R01HL141712 and K99HL161313, and the Stanford Maternal and Child Health Institute.
 
 # References

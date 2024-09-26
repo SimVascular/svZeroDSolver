@@ -58,7 +58,7 @@ def run_with_reference(
         ):
 
 
-    res = pysvzerod.simulate(test_config)
+    res, config = execute_pysvzerod(test_config, "solver")
 
     if res.shape[1] == 6:
         # we have a result with fields [name, time, p_in, p_out, q_in, q_out]

@@ -72,6 +72,9 @@ void Block::setup_dofs(DOFHandler &dofhandler) {}
 
 void Block::setup_model_dependent_params() {}
 
+void Block::setup_initial_state_dependent_params(
+    State initial_state, std::vector<double> &parameters) {}
+
 void Block::update_constant(SparseSystem &system,
                             std::vector<double> &parameters) {}
 

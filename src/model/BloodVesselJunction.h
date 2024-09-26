@@ -36,6 +36,7 @@
 
 #include "Block.h"
 #include "BloodVessel.h"
+#include "BloodVesselCRL.h"
 #include "SparseSystem.h"
 
 /**
@@ -139,6 +140,10 @@
  * * `i` Poiseuille resistance for inner blood vessel `i`
  * * `i+num_outlets` Inductance for inner blood vessel `i`
  * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
+ *
+ * ### Internal variables
+ *
+ * This block has no internal variables.
  *
  */
 class BloodVesselJunction : public Block {

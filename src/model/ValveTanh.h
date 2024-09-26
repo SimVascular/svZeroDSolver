@@ -129,6 +129,10 @@
  * * `3` upstream_block: Name of block connected upstream
  * * `4` downstream_block: Name of block connected downstream
  *
+ * ### Internal variables
+ *
+ * This block has no internal variables.
+ *
  */
 class ValveTanh : public Block {
  public:

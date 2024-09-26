@@ -101,6 +101,12 @@
  *
  * * `i` Poiseuille resistance for inner blood vessel `i`
  *
+ * ### Internal variables
+ *
+ * Names of internal variables in this block's output:
+ *
+ * * `pressure_c`: Pressure at the center of the junction
+ *
  */
 class ResistiveJunction : public Block {
  public:

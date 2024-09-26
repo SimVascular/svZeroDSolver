@@ -1,0 +1,49 @@
+# This workflow uses Cypress for end-to-end testing of the 0D model GUI.
+
+name: GUI-tests
+
+on: [push, pull_request]
+
+jobs:
+  cypress-run:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: tests/cypress
+        run: npm install
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # Use the Python version compatible with your Flask app
+
+      - name: Install Flask dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install flask
+
+      - name: Start Flask Application
+        run: |
+          cd applications/svZeroDGUI
+          FLASK_APP=app.py flask run --host=0.0.0.0 --port=8902 &
+        env:
+          FLASK_ENV: development
+
+      - name: Run Cypress tests
+        uses: cypress-io/github-action@v5
+        with:
+          start: npm start
+          working-directory: tests/cypress

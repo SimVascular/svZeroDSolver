@@ -55,7 +55,14 @@ Model::Model() {
       {"RESISTANCE", block_factory<ResistanceBC>()},
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
-      {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()}};
+      {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
+      {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
+      {"RegazzoniValve", block_factory<RegazzoniValve>()},
+      {"RegazzoniChamber", block_factory<RegazzoniChamber>()},
+      {"KungVentricle", block_factory<RegazzoniChamber>()}};
+
+
+      
 }
 
 Model::~Model() {}
@@ -143,7 +150,7 @@ std::string Model::get_block_name(int block_id) const {
 int Model::add_node(const std::vector<Block *> &inlet_eles,
                     const std::vector<Block *> &outlet_eles,
                     const std::string_view &name) {
-  // DEBUG_MSG("Adding node " << name);
+  DEBUG_MSG("Adding node " << name);
   auto node = std::shared_ptr<Node>(
       new Node(node_count, inlet_eles, outlet_eles, this));
   nodes.push_back(node);
@@ -203,7 +210,7 @@ void Model::finalize() {
   }
 
   if (cardiac_cycle_period < 0.0) {
-    cardiac_cycle_period = 1.0;
+    cardiac_cycle_period =  1.0;
   }
 }
 
@@ -254,6 +261,7 @@ void Model::to_steady() {
     param.to_steady();
   }
 
+  // Special handling for time-varying capacitance
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->steady = true;
     if ((block_types[i] == BlockType::windkessel_bc) ||
@@ -287,6 +295,14 @@ TripletsContributions Model::get_num_triplets() const {
   }
 
   return triplets_sum;
+}
+
+void Model::setup_initial_state_dependent_parameters(State initial_state) {
+  DEBUG_MSG("Setup initial state dependent parameters");
+  for (auto &block : blocks) {
+    block->setup_initial_state_dependent_params(initial_state,
+                                                parameter_values);
+  }
 }
 
 void Model::update_has_windkessel_bc(bool has_windkessel) {

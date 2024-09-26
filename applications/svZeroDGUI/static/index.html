@@ -1,0 +1,164 @@
+<!DOCTYPE>
+<html>
+  <head>
+      <title>Vasculature Simulation </title>
+      <link rel="stylesheet" href="static/css/style.css">
+      <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+      <script src="https://unpkg.com/cytoscape/dist/cytoscape.min.js"></script>
+
+    <!-- for testing with local version of cytoscape.js -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.10/lodash.js"></script>
+      <script src="/static/js/cytoscape-edgehandles.js"></script>
+      <script src="/static/js/app.js"></script>
+      <script type="module">
+        import cytoscapeDomNode from 'https://cdn.skypack.dev/cytoscape-dom-node';
+      </script>
+  </head>
+
+  <body>
+    <h1>No Code 0d Vasculature Generation Platform</h1>
+    <div class="container">
+        <button class="collapsible">Instructions</button>
+        <div class="content">
+          <p>This program allows you to draw a cardiovascular pathway and export it as a JSON file, structured as input for SimVascular’s ZeroD Solver.</p>
+          <ol>
+            <li>From the dropdown, select the node type you would like to insert.</li>
+            <li>Type in the node name.</li>
+            <li>To create an edge, click draw mode on and connect two nodes at a time.</li>
+            <li>Repeat steps 1-3 until the architecture is fully drawn.</li>
+            <li>To delete a node, simply click on it.</li>
+            <li>Click Export to JSON to download the text file. Once you get the text file, you can manually add data points.</li>
+          </ol>
+        </div>
+
+        <label for="node-type">Select node type:</label>
+        <select id="node-type" onchange="updateBoundaryConditionTypeVisibility()">
+            <option value="vessel">Vessel</option>
+            <option value="valve">Valve</option>
+            <option value="chamber">Chamber</option>
+            <option value="junction">Junction</option>
+            <option value="boundary_condition">Boundary Condition</option>
+        </select>
+        <div id="boundary-condition-type-container" style="display:none;">
+            <label for="boundary-condition-type">Select boundary condition type:</label>
+            <select id="boundary-condition-type">
+                <option value="FLOW">Flow</option>
+                <option value="RESISTANCE">Resistance</option>
+                <option value="PRESSURE">Pressure</option>
+                <option value="RCR">RCR</option>
+                <option value="CORONARY">Coronary</option>
+            </select>
+        </div>
+
+        <label for="node-name">Node name:</label>
+        <input type="text" id="node-name" placeholder="Enter node name">
+
+    </div>
+    <!-- Modal for collecting node information -->
+    <div id="nodeInfoModal" style="display:none;">
+        <div id="SimParametersForm" style="display:none;">
+            <p id="form-title">Enter Simulation Parameters</p>
+            <label for="numcycles">Number of Cardiac Cycles:</label>
+            <input type="number" id="numcycles"><br>
+            <label for="numtimepts">Number of Time Points per Cardiac Cycles:</label>
+            <input type="number" id="numtimepts"><br>
+            <label for="output_all_cycles">Output All Cycles:</label>
+            <input type="text" id="output_all_cycles"><br>
+            <label for="output_variable_based">Output Variable Based:</label>
+            <input type="text" id="output_variable_based"><br>
+            <button id="submitSimParamButton">Submit</button>
+        </div>
+
+        <div id="junctionForm" style="display:none;">
+            <p id="form-title">Junction Variables</p>
+            <label for="junction-type"> Junction Type</label>
+            <select id="junction-type">
+                <option value="NORMAL_JUNCTION">Normal Junction </option>
+                <option value="BloodVesselJunction">Blood Vessel Junction </option>
+            </select>
+            <div id="Junction_Parameters_Form" style="display:none;">
+                <p id="form-title">Enter Junction Parameters</p>
+                <div class="double-input-container">
+                    <div>
+                        <label for="R_poiseuille1">R_poiseuille</label>
+                        <input type="number" id="R_poiseuille1">
+                    </div>
+                    <div>
+                        <label for="R_poiseuille2">R_poiseuille</label>
+                        <input type="number" id="R_poiseuille2"><br>
+                    </div>
+                    <div>
+                        <label for="L1">L:</label>
+                        <input type="number" id="L1">
+                    </div>
+                    <div>
+                        <label for="L2">L:</label>
+                        <input type="number" id="L2"><br>
+                    </div>
+                    <div>
+                        <label for="junction_stenosis_coefficient1">Stenosis Coefficient:</label>
+                        <input type="number" id="junction_stenosis_coefficient1">
+                    </div>
+                    <div>
+                        <label for="junction_stenosis_coefficient2">Stenosis Coefficient:</label>
+                        <input type="number" id="junction_stenosis_coefficient2">
+                    </div>
+                </div>
+            </div>
+            <button id="submitJunctionButton">Submit</button>
+        </div>
+
+      <div id="vesselForm" style="display:none;">
+          <p id="form-title">Enter Vessel Information</p>
+          <label for="vesselLengthInput">Vessel Length (cm):</label>
+          <input type="number" id="vesselLengthInput"><br>
+          <label for="vesselRadiusInput">Vessel Radius (cm):</label>
+          <input type="number" id="vesselRadiusInput"><br>
+          <label for="vesselStenosisDiameterInput">Stenosis Diameter:</label>
+          <input type="number" id="vesselStenosisDiameterInput"><br>
+
+
+          <p id="form-title">Solver Variables</p>
+          <label for="young_mod_input"> Young's Modulus:</label>
+          <select id="young_mod_input">
+<!--              the actual option value is in dyn/cm² -->
+                <option value="2,500,000">Aorta (2.5 * 10^6 dyn/cm^2) </option>
+                <option value="11,500,000">Coronary Arteries (1.15 * 10^7 dyn/cm^2) </option>
+                <option value="8900000">Cerebral (8.9 * 10^6 dyn/cm^2) </option>
+               <option value="custom">Custom</option>
+          </select>
+          <input type="number" id="custom_young_mod" style="display:none;" placeholder="Please enter in dyn/cm²)"><br>
+
+          <label for="mu_input"> &micro; :</label>
+          <select id="mu_input">
+                <option value="0.025">Standard (2.5 mPa * s) </option>
+               <option value="custom">Custom</option>
+          </select>
+          <input type="number" id="custom_mu" style="display:none;" placeholder="Please enter in mPa/s"><br>
+
+          <label for="h_input"> Vessel Thickness:</label>
+          <select id="h_input">
+                <option value="0.10">Standard (10%) </option>
+               <option value="custom">Custom</option>
+          </select>
+          <input type="number" id="custom_thickness" style="display:none;" placeholder="Enter custom value (decimal)"><br>
+
+          <label for="rho_input"> &#961; :</label>
+          <select id="rho_input">
+                <option value="1.06">Standard (1.06 g/cm^3) </option>
+               <option value="custom">Custom</option>
+          </select>
+          <input type="number" id="custom_rho" style="display:none;" placeholder="Please enter in g/cm^3"><br>
+
+          <button id="submitVesselButton">Submit</button>
+      </div>
+    </div>
+    <div id="cy"></div>
+    <div id="buttons">
+        <button id="draw-on">Draw mode on</button>
+        <button id="draw-off">Draw mode off</button>
+        <button id="export-json">Export to JSON</button>
+        <button id="delete-mode-button">Enter Delete Mode</button>
+    </div>
+  </body>
+</html>

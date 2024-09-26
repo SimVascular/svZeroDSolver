@@ -19,3 +19,4 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     """Workaround because store_true doesn't work"""
     pytest.coverage = config.option.coverage == True
+

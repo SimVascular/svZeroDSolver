@@ -1,0 +1,71 @@
+{
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 5,
+    "number_of_time_pts_per_cardiac_cycle": 5,
+    "output_all_cycles": false,
+    "output_variable_based": false
+  },
+  "boundary_conditions": [
+    {
+      "bc_name": "INFLOW",
+      "bc_type": "FLOW",
+      "bc_values": {
+        "Q": [],
+        "t": []
+      }
+    },
+    {
+      "bc_name": "OUT",
+      "bc_type": "RESISTANCE",
+      "bc_values": {
+        "Pd": "",
+        "R": ""
+      }
+    }
+  ],
+  "junctions": [
+    {
+      "inlet_vessels": [
+        0
+      ],
+      "junction_name": "J0",
+      "outlet_vessels": [
+        1
+      ]
+    }
+  ],
+  "vessels": [
+    {
+      "boundary_conditions": {
+        "inlet": "INFLOW"
+      },
+      "vessel_id": 0,
+      "vessel_length": 1,
+      "vessel_name": "vessel0",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 23.561944901923447,
+        "L": 0.33740847935481816,
+        "R_poiseuille": 0.06366197723675814,
+        "stenosis_coefficient": 0
+      }
+    },
+    {
+      "boundary_conditions": {
+        "outlet": "OUT"
+      },
+      "vessel_id": 1,
+      "vessel_length": 1,
+      "vessel_name": "vessel1",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 23.561944901923447,
+        "L": 0.33740847935481816,
+        "R_poiseuille": 0.06366197723675814,
+        "stenosis_coefficient": 0
+      }
+    }
+  ],
+  "valves": [],
+  "chambers": []
+}

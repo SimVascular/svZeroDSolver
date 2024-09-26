@@ -77,6 +77,10 @@
  * * `0` Resistance
  * * `1` Distal pressure
  *
+ * ### Internal variables
+ *
+ * This block has no internal variables.
+ *
  */
 class ResistanceBC : public Block {
  public:

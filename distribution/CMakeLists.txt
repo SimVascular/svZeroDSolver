@@ -25,10 +25,12 @@ if(ENABLE_DISTRIBUTION)
 
   if(APPLE)
     set(CPACK_GENERATOR "productbuild")
-  elseif(LINUX)
+  endif()
+
+  if(${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CPACK_GENERATOR DEB)
     set(CPACK_DEBIAN_PACKAGE_DEPENDS "")
-  endif(APPLE)
+  endif()
 
   # create the installer for both solver and calibrator
   install(TARGETS svzerodsolver svzerodcalibrator

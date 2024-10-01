@@ -86,6 +86,23 @@
  * * `25` Right atrium resting volume
  * * `26` Left atrium resting volume
  *
+ * ### Internal variables
+ *
+ * Names of internal variables in this block's output:
+ *
+ * * `V_RA`: Right atrium volume
+ * * `Q_RA`: Right atrium outflow
+ * * `P_RV`: Right ventricle pressure
+ * * `V_RV`: Right ventricle volume
+ * * `Q_RV`: Right ventricle outflow
+ * * `P_pul`: Pulmonary pressure
+ * * `P_LA`: Left atrium pressure
+ * * `V_LA`: Left atrium volume
+ * * `Q_LA`: Left atrium outflow
+ * * `P_LV`: Left ventricle pressure
+ * * `V_LV`: Left ventricle volume
+ * * `Q_LV`: Left ventricle outflow
+ *
  */
 class ClosedLoopHeartPulmonary : public Block {
  public:

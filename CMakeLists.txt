@@ -148,6 +148,7 @@ add_executable(svzerodsolver applications/svzerodsolver.cpp
 )
 
 add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
+  $<TARGET_OBJECTS:svzero_algebra_library> 
   $<TARGET_OBJECTS:svzero_optimize_library> 
   $<TARGET_OBJECTS:svzero_model_library> 
 )

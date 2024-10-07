@@ -54,8 +54,8 @@ def test_directed_graph_generation(setup_files):
 
     generated_dot_file_path = tmp_path / (os.path.splitext(os.path.basename(input_file_path))[0] + "_directed_graph.dot")
 
-    filecmp.clear_cache()
-    assert filecmp.cmp(generated_dot_file_path, expected_dot_file_path), \
+    #filecmp.clear_cache()
+    assert filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow = False), \
         f"The generated dot file '{generated_dot_file_path}' does not match the expected dot file '{expected_dot_file_path}'."
 
 if __name__ == "__main__":

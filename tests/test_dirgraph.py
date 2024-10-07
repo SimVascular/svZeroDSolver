@@ -54,24 +54,35 @@ def test_directed_graph_generation(setup_files):
 
     generated_dot_file_path = tmp_path / (os.path.splitext(os.path.basename(input_file_path))[0] + "_directed_graph.dot")
 
-    filecmp.clear_cache()
-    if filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow=False) == False:
-        with open(generated_dot_file_path, 'r') as generated_dot_file:
-            with open(expected_dot_file_path, 'r') as expected_dot_file:
-                generated_lines = generated_dot_file.readlines()
-                expected_lines = expected_dot_file.readlines()
-                if len(generated_lines) == len(expected_lines):
-                    print("Below is a comparison of the generated and expected dot files:")
-                    for line_num in range(len(generated_lines)):
-                        print("--- Generated dot file:", generated_lines[line_num])
-                        print("---  Expected dot file:", expected_lines[line_num])
-                        print("--- Generated dot file:", " ".join(generated_lines[line_num].split()))
-                        print("---  Expected dot file:", " ".join(expected_lines[line_num].split()))
-                else:
-                    print("ERROR: The generated and expected dot files do not have the same number of lines.")
-        
-        raise RuntimeError(f"The generated dot file '{generated_dot_file_path}' does not match the expected dot file '{expected_dot_file_path}'.")
-
+    with open(generated_dot_file_path, 'r') as generated_dot_file:
+        with open(expected_dot_file_path, 'r') as expected_dot_file:
+            generated_lines = generated_dot_file.readlines()
+            expected_lines = expected_dot_file.readlines()
+            match = True
+            if len(generated_lines) == len(expected_lines):
+                for line_num in range(len(generated_lines)):
+                    # Remove spaces and other characters that should not be in the comparison
+                    clean_generated_line = " ".join(generated_lines[line_num].split())
+                    clean_expected_line = " ".join(expected_lines[line_num].split())
+                    # Compare lines and print lines if they don't match
+                    if clean_generated_line != clean_expected_line:
+                        print("\nThe following line does not match:")
+                        print("--- Generated dot file:", clean_generated_line) 
+                        print("---  Expected dot file:", clean_expected_line)
+                        match = False
+                
+            #   print("Below is a comparison of the generated and expected dot files:")
+            #   for line_num in range(len(generated_lines)):
+            #       print("--- Generated dot file:", generated_lines[line_num])
+            #       print("---  Expected dot file:", expected_lines[line_num])
+            #       print("--- Generated dot file:", " ".join(generated_lines[line_num].split()))
+            #       print("---  Expected dot file:", " ".join(expected_lines[line_num].split()))
+            else:
+                raise RuntimeError(f"ERROR: The generated dot file '{generated_dot_file_path}' and the expected dot file '{expected_dot_file_path}' do not have the same number of lines.")
+            
+            if not match:
+                raise RuntimeError(f"The generated dot file '{generated_dot_file_path}' does not match the expected dot file '{expected_dot_file_path}'.")
+    
 #   filecmp.clear_cache()
 #   assert filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow = False), \
 #       f"The generated dot file '{generated_dot_file_path}' does not match the expected dot file '{expected_dot_file_path}'."

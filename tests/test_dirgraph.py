@@ -54,7 +54,19 @@ def test_directed_graph_generation(setup_files):
 
     generated_dot_file_path = tmp_path / (os.path.splitext(os.path.basename(input_file_path))[0] + "_directed_graph.dot")
 
-    #filecmp.clear_cache()
+    filecmp.clear_cache()
+    if filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow = False) == False:
+        file1 = open(generated_dot_file_path, 'r')
+        file2 = open(expected_dot_file_path, 'r')
+
+        for line1 in file1:
+            for line2 in file2:
+                if line1 != line2:
+                    print("ERROR in following lines:")
+                    print(line1)
+                    print(line2)
+    
+    filecmp.clear_cache()
     assert filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow = False), \
         f"The generated dot file '{generated_dot_file_path}' does not match the expected dot file '{expected_dot_file_path}'."
 

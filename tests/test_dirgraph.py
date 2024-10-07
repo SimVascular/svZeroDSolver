@@ -55,20 +55,24 @@ def test_directed_graph_generation(setup_files):
     generated_dot_file_path = tmp_path / (os.path.splitext(os.path.basename(input_file_path))[0] + "_directed_graph.dot")
 
     filecmp.clear_cache()
-    if filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow = False) == False:
-        file1 = open(generated_dot_file_path, 'r')
-        file2 = open(expected_dot_file_path, 'r')
+    if filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow=False) == False:
+        with open(generated_dot_file_path, 'r') as generated_dot_file:
+            with open(expected_dot_file_path, 'r') as expected_dot_file:
+                generated_lines = generated_dot_file.readlines()
+                expected_lines = expected_dot_file.readlines()
+                if len(generated_lines) == len(expected_lines):
+                    print("Below is a comparison of the generated and expected dot files:")
+                    for line_num in range(len(generated_lines)):
+                        print("--- Generated dot file:", generated_lines[line_num])
+                        print("---  Expected dot file:", expected_lines[line_num])
+                else:
+                    print("ERROR: The generated and expected dot files do not have the same number of lines.")
+        
+        raise RuntimeError(f"The generated dot file '{generated_dot_file_path}' does not match the expected dot file '{expected_dot_file_path}'.")
 
-        for line1 in file1:
-            for line2 in file2:
-                if line1 != line2:
-                    print("ERROR in following lines:")
-                    print(line1)
-                    print(line2)
-    
-    filecmp.clear_cache()
-    assert filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow = False), \
-        f"The generated dot file '{generated_dot_file_path}' does not match the expected dot file '{expected_dot_file_path}'."
+#   filecmp.clear_cache()
+#   assert filecmp.cmp(generated_dot_file_path, expected_dot_file_path, shallow = False), \
+#       f"The generated dot file '{generated_dot_file_path}' does not match the expected dot file '{expected_dot_file_path}'."
 
 if __name__ == "__main__":
     pytest.main()

@@ -65,6 +65,8 @@ def test_directed_graph_generation(setup_files):
                     for line_num in range(len(generated_lines)):
                         print("--- Generated dot file:", generated_lines[line_num])
                         print("---  Expected dot file:", expected_lines[line_num])
+                        print("--- Generated dot file:", " ".join(generated_lines[line_num].split()))
+                        print("---  Expected dot file:", " ".join(expected_lines[line_num].split()))
                 else:
                     print("ERROR: The generated and expected dot files do not have the same number of lines.")
         

@@ -40,7 +40,7 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Resistor-capacitor-inductor blood vessel with optional stenosis
+ * @brief Capacitor-resistor-inductor blood vessel with optional stenosis
  *
  * Models the mechanical behavior of a bloodvesselCRL with optional stenosis.
  *
@@ -52,7 +52,7 @@
  * to [R, l=$S$, -] (5,0)
  * (5,0) to [L, l=$L$, -*] (7,0)
  * node[anchor=south]{$P_{out}$}
- * (5,0) to [C, l=$C$, -] (5,-1.5)
+ * (0,0) to [C, l=$C$, -] (0,-1.5)
  * node[ground]{};
  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
@@ -61,12 +61,11 @@
  * ### Governing equations
  *
  * \f[
- * P_\text{in}-P_\text{out} - (R + S|Q_\text{in}|) Q_\text{in}-L
+ * P_\text{in}-P_\text{out} - (R + S|Q_\text{out}|) Q_\text{out}-L
  * \dot{Q}_\text{out}=0 \f]
  *
  * \f[
- * Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}+C(R +
- * 2S|Q_\text{in}|) \dot{Q}_{in}=0 \f]
+ * Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}=0 \f]
  *
  * ### Local contributions
  *
@@ -76,7 +75,7 @@
  *
  * \f[
  * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -R & -1 &  0 \\
+ * 1 & 0 & -1 &  -R \\
  * 0 &  1 &  0 & -1
  * \end{array}\right]
  * \f]
@@ -84,15 +83,15 @@
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{cccc}
  *  0 &  0 & 0 & -L \\
- * -C & CR & 0 &  0
+ * -C & 0 & 0 &  0
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{c}^{e} = S|Q_\text{in}|
+ * \mathbf{c}^{e} = S|Q_\text{out}|
  * \left[\begin{array}{c}
- * -Q_\text{in} \\
- * 2C\dot{Q}_\text{in}
+ * -Q_\text{out} \\
+ * 0
  * \end{array}\right]
  * \f]
  *
@@ -100,17 +99,17 @@
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  *  S \text{sgn} (Q_\text{in})
  * \left[\begin{array}{cccc}
- * 0 & -2Q_\text{in}        & 0 & 0 \\
- * 0 & 2C\dot{Q}_\text{in} & 0 & 0
+ * 0 & -2Q_\text{out}        & 0 & 0 \\
+ * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- *  S|Q_\text{in}|
+ *  S|Q_\text{out}|
  * \left[\begin{array}{cccc}
  * 0 &  0 & 0 & 0 \\
- * 0 & 2C & 0 & 0
+ * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
  *
@@ -125,8 +124,8 @@
  *
  * \f[
  * \mathbf{J}^{e} = \left[\begin{array}{cccc}
- * -y_2 & 0 & -\dot{y}_4 & -|y_2|y_2 \\
- * C\dot{y}_2 & (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
+ * -y_3 & 0 & -\dot{y}_3 & -|y_3|y_3 \\
+ * 0 & 0 & -\dot{y}_0 & 0 \\
  * \end{array}\right]
  * \f]
  *

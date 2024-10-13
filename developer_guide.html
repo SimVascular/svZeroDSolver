@@ -120,10 +120,14 @@ $(function(){ initResizable(false); });
 Architecture</h1>
 <p>svZeroDSolver is written in a highly modular manner to enable reuse of code for many different applications. It is divided into a header based library in the <code>src</code> directory and a collection of different applications in the <code>applications</code> folder. Each application is written for a different use-case of svZeroDSolver, namely:</p>
 <ul>
-<li>svZeroDCalibrator in <code>svzerodcalibrator.cpp</code></li>
 <li>svZerodSolver in <code>svzerodsolver.cpp</code></li>
 <li>Python API in <code>pysvzerod.cpp</code></li>
+<li>svZeroDCalibrator in <code>svzerodcalibrator.cpp</code></li>
+<li>svZeroDVisualization for visualizing 0D models and results</li>
+<li>svZeroDGUI for creating new 0D models grahically.</li>
 </ul>
+<p><a class="el" href="visualization.html">Architecture for svZeroDVisualization</a>.</p>
+<p><a class="el" href="_g_u_i.html">Architecture for svZeroDGUI</a>.</p>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Build in debug mode</h1>
 <p>For debug purposes it is recommended to build svZeroDSolver in Debug mode.</p>

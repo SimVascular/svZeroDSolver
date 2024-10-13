@@ -352,7 +352,7 @@ svZeroDSolver - Quick User Guide</h1>
  <code>Pv</code>: Venous pressure   </td></tr>
 </table>
 <p>The above table describes the most commonly used boundary conditions. In addition, svZeroDSolver includes various closed-loop boundary conditions. Examples can be found in <code>svZeroDSolver/tests/cases</code>.</p>
-<p>Note that the <code>FLOW</code> and <code>PRESSURE</code> boundary conditions accept mathematical expressions in <code>bc_values</code>. For example, values of the boundary condition can be specified as a function of time as follow: </p><div class="fragment"><div class="line">{</div>
+<p>Values of the boundary condition can be specified as a function of time as follow: </p><div class="fragment"><div class="line">{</div>
 <div class="line">    <span class="stringliteral">&quot;bc_name&quot;</span>: <span class="stringliteral">&quot;INFLOW&quot;</span>, <span class="comment"># Name of the boundary condition</span></div>
 <div class="line">    <span class="stringliteral">&quot;bc_type&quot;</span>: <span class="stringliteral">&quot;FLOW&quot;</span>, <span class="comment"># Type of the boundary condition</span></div>
 <div class="line">    <span class="stringliteral">&quot;bc_values&quot;</span>: {</div>
@@ -361,16 +361,8 @@ svZeroDSolver - Quick User Guide</h1>
 <div class="line">    }</div>
 <div class="line">},</div>
 </div><!-- fragment --><p> See <code>svZeroDSolver/tests/cases/pulsatileFlow_R_RCR.json</code> for an example.</p>
-<p>They can also be specified as a mathematica expression as follow: </p><div class="fragment"><div class="line">{</div>
-<div class="line">    <span class="stringliteral">&quot;bc_name&quot;</span>: <span class="stringliteral">&quot;INFLOW&quot;</span>, <span class="comment"># Name of the boundary condition</span></div>
-<div class="line">    <span class="stringliteral">&quot;bc_type&quot;</span>: <span class="stringliteral">&quot;FLOW&quot;</span>, <span class="comment"># Type of the boundary condition</span></div>
-<div class="line">    <span class="stringliteral">&quot;bc_values&quot;</span>: {</div>
-<div class="line">        <span class="stringliteral">&quot;fn&quot;</span>: <span class="stringliteral">&quot;2.0 * (4*atan(1.)) * cos(2.0 * (4*atan(1.)) * t)&quot;</span></div>
-<div class="line">    }</div>
-<div class="line">},</div>
-</div><!-- fragment --><p> For an example with a mathematical expression for the boundary condition, see <code>svZeroDSolver/tests/cases/timeDep_Flow.json</code>.</p>
 <h2>Simulation Outputs</h2>
-<p>The siumulation outputs will be saved in the specified CSV file (<code>&lt;name_of_output_file&gt;.csv</code>) when running <code>svZeroDSolver</code> from the command line as follows: </p><div class="fragment"><div class="line">svzerodsolver &lt;name_of_configuration_file&gt;.json &lt;name_of_output_file&gt;.csv</div>
+<p>The simulation outputs will be saved in the specified CSV file (<code>&lt;name_of_output_file&gt;.csv</code>) when running <code>svZeroDSolver</code> from the command line as follows: </p><div class="fragment"><div class="line">svzerodsolver &lt;name_of_configuration_file&gt;.json &lt;name_of_output_file&gt;.csv</div>
 </div><!-- fragment --><p> If the name of the CSV file is not specified, the default is <code>output.csv</code>. The format of the file depends on the user-specified configuration within the <code>simulation_parameters</code> block of the JSON configuration file.</p>
 <p>If <code>output_variable_based</code> is set to <code>true</code>, the CSV file will contain all the degrees-of-freedom in the simulation. Otherwise, only the flow and pressure at the inlets and outlets of vessels is written.</p>
 <p>The degrees-of-freedom (DOFs) follow the following naming scheme:</p>

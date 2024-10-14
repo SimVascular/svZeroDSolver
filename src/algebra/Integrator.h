@@ -45,7 +45,9 @@
  * This class handles the time integration scheme for solving 0D blood
  * flow system using the generalized-\f$\alpha\f$ method \cite JANSEN2000305.
  *
- * Mathematical details are available on the <a href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory">SimVascular documentation</a>.
+ * Mathematical details are available on the <a
+ * href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory">SimVascular
+ * documentation</a>.
  */
 
 class Integrator {

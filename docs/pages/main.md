@@ -1,7 +1,5 @@
 @mainpage svZeroDSolver
 
-[TOC]
-
 svZeroDSolver is an application for performing simulations with 0D/lumped-parameter computer models for cardiovascular flows. 
 
 An overview of svZeroDSolver, its features, and applications is available [on the SimVascular website](https://simvascular.github.io/documentation/rom_simulation.html#0d-solver).

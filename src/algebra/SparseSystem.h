@@ -48,8 +48,10 @@ class Model;
  * This class contains all attributes and methods to create, modify, and
  * solve sparse systems.
  *
- * Mathematical details related to setting up the governing system of 
- * equations are available on the <a href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory">SimVascular documentation</a>.
+ * Mathematical details related to setting up the governing system of
+ * equations are available on the <a
+ * href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory">SimVascular
+ * documentation</a>.
  *
  */
 class SparseSystem {

@@ -156,3 +156,9 @@ system.dC_dy.coeffRef(global_eqn_ids[current_block_equation_id], global_var_ids[
 
 * Add `MyNewBlock.h` and `MyNewBlock.cpp` to `src/model/CMakeLists.txt`
 
+<p> <br> </p>
+
+## 5. Add the new block to svZeroDVisualization. 
+
+* Follow the instructions [here](@ref visualization) to make sure your new block can be visualized graphically. 
+

@@ -10,9 +10,15 @@ in the `src` directory and a collection of different applications in the
 `applications` folder. Each application is written for a different use-case
 of svZeroDSolver, namely:
 
-* svZeroDCalibrator in `svzerodcalibrator.cpp`
 * svZerodSolver in `svzerodsolver.cpp`
 * Python API in `pysvzerod.cpp`
+* svZeroDCalibrator in `svzerodcalibrator.cpp`
+* svZeroDVisualization for visualizing 0D models and results
+* svZeroDGUI for creating new 0D models grahically.
+
+[Architecture for svZeroDVisualization](@ref visualization).
+
+[Architecture for svZeroDGUI](@ref GUI).
 
 
 # Build in debug mode

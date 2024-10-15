@@ -92,10 +92,10 @@ cmake --build .
   <summary>**Building on Sherlock**</summary>
 
 ```bash
-module load cmake/3.23.1 gcc/12.1.0 binutils/2.38
+module load cmake/3.23.1 gcc/14.2.0 binutils/2.38
 mkdir Release
 cd Release
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/12.1.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/12.1.0/bin/gcc ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=/share/software/user/open/gcc/14.2.0/bin/g++ -DCMAKE_C_COMPILER=/share/software/user/open/gcc/14.2.0/bin/gcc ..
 cmake --build .
 ```
 
@@ -334,7 +334,7 @@ Coronary outlet                       | OpenLoopCoronaryBC     | `CORONARY`     
 
 The above table describes the most commonly used boundary conditions. In addition, svZeroDSolver includes various closed-loop boundary conditions. Examples can be found in `svZeroDSolver/tests/cases`.
 
-Note that the `FLOW` and `PRESSURE` boundary conditions accept mathematical expressions in `bc_values`. For example, values of the boundary condition can be specified as a function of time as follow: 
+Values of the boundary condition can be specified as a function of time as follow: 
 ```python
 {
     "bc_name": "INFLOW", # Name of the boundary condition
@@ -347,21 +347,22 @@ Note that the `FLOW` and `PRESSURE` boundary conditions accept mathematical expr
 ```
 See `svZeroDSolver/tests/cases/pulsatileFlow_R_RCR.json` for an example.
 
-They can also be specified as a mathematica expression as follow: 
-```python
-{
-    "bc_name": "INFLOW", # Name of the boundary condition
-    "bc_type": "FLOW", # Type of the boundary condition
-    "bc_values": {
-        "fn": "2.0 * (4*atan(1.)) * cos(2.0 * (4*atan(1.)) * t)"
-    }
-},
-```
-For an example with a mathematical expression for the boundary condition, see `svZeroDSolver/tests/cases/timeDep_Flow.json`. 
+<!--Uncomment below when the time-varying functionailty is merged-->
+<!--For `FLOW` and `PRESSURE` boundary conditions, they can also be specified as a mathematical expression as follow: -->
+<!--```python-->
+<!--{-->
+<!--    "bc_name": "INFLOW", # Name of the boundary condition-->
+<!--    "bc_type": "FLOW", # Type of the boundary condition-->
+<!--    "bc_values": {-->
+<!--        "fn": "2.0 * (4*atan(1.)) * cos(2.0 * (4*atan(1.)) * t)"-->
+<!--    }-->
+<!--},-->
+<!--```-->
+<!--For an example with a mathematical expression for the boundary condition, see `svZeroDSolver/tests/cases/timeDep_Flow.json`. -->
 
 ## Simulation Outputs
 
-The siumulation outputs will be saved in the specified CSV file (`<name_of_output_file>.csv`) when running `svZeroDSolver` from the command line as follows:
+The simulation outputs will be saved in the specified CSV file (`<name_of_output_file>.csv`) when running `svZeroDSolver` from the command line as follows:
 ```bash
 svzerodsolver <name_of_configuration_file>.json <name_of_output_file>.csv
 ```

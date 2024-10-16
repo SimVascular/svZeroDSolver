@@ -97,7 +97,7 @@ $(function(){ initResizable(false); });
     <a href="#autotoc_md9">Architecture</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md10">How to Use</a>
+    <a href="#autotoc_md10">User guide</a>
   </li>
 </ul>
 </div>
@@ -112,24 +112,8 @@ Architecture</h1>
 <li>Backend: Flask app, Node.js for server-side logic, and Cypress for testing. This architecture supports an intuitive user experience for generating and managing 0D input files through a graphical interface.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md10"></a>
-How to Use</h1>
-<ol type="1">
-<li>Create a virtual environment with the required <code>flask</code> dependency. If using <code>conda</code>, use the below commands: <div class="fragment"><div class="line">conda create -n svZeroDGUI python=3.10 flask</div>
-<div class="line">conda activate svZeroDGUI</div>
-</div><!-- fragment --></li>
-<li>Navigate to the <code>applications</code> folder and then to the <code>create_0dmodel</code> subdirectory.</li>
-<li>Launch the <code>app.py</code> file. <div class="fragment"><div class="line">python applications/svZeroDGUI/app.py</div>
-</div><!-- fragment --></li>
-<li>Select a node type and name the node.<ul>
-<li>For vessels, after drawing the node, click on it to open a form where you can enter details such as vessel length, diameter, and more.</li>
-<li>For junctions, click the node to specify if it’s a Normal Junction or a Blood Vessel Junction.</li>
-</ul>
-</li>
-<li>To draw edges between nodes, toggle the <code>Draw on</code> button on the right. Once active, you can start connecting nodes by drawing edges between them.</li>
-<li>When you wish to stop drawing edges and continue adding or moving nodes, click the <code>Draw off</code> button.</li>
-<li>Once you’ve completed the network, click <code>Export to JSON</code> on the right. If there are any incorrect connections or patterns, an alert will prompt you to make necessary changes so the network can be processed by svZeroDSolver.</li>
-<li>Open the downloaded JSON file and add any additional information, such as boundary condition data, before running it through svZeroDSolver. </li>
-</ol>
+User guide</h1>
+<p>A user guide is available on the <a href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-gui">SimVascular website</a>. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->
 <!-- start footer part -->

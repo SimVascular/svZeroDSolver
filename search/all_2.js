@@ -1,7 +1,7 @@
 var searchData=
 [
   ['bibliography_0',['Bibliography',['../citelist.html',1,'']]],
-  ['block_1',['Block',['../class_block.html',1,'Block'],['../class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9',1,'Block::Block(int id, Model *model, BlockType block_type, BlockClass block_class, std::vector&lt; std::pair&lt; std::string, InputParameter &gt; &gt; input_params)'],['../class_block.html#a0b82be82678747aaf1dc304df9edc1be',1,'Block::Block(const Block &amp;)=delete'],['../visualization.html#autotoc_md20',1,'How to Visualize a New Block']]],
+  ['block_1',['Block',['../class_block.html',1,'Block'],['../class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9',1,'Block::Block(int id, Model *model, BlockType block_type, BlockClass block_class, std::vector&lt; std::pair&lt; std::string, InputParameter &gt; &gt; input_params)'],['../class_block.html#a0b82be82678747aaf1dc304df9edc1be',1,'Block::Block(const Block &amp;)=delete'],['../visualization.html#autotoc_md16',1,'How to Visualize a New Block']]],
   ['block_2eh_2',['Block.h',['../_block_8h.html',1,'']]],
   ['block_5fclass_3',['block_class',['../class_block.html#a4a7e01f2e19e5d0e4c947ccdc433467f',1,'Block::block_class'],['../class_junction.html#a5566b94a58feddead02d2508989a3de0',1,'Junction::block_class']]],
   ['block_5ffactory_5fmap_4',['block_factory_map',['../class_model.html#aefd9dbcdaffe50910d91af391621daa4',1,'Model']]],

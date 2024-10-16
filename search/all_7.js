@@ -24,7 +24,7 @@ var searchData=
   ['global_5feqn_5fids_21',['global_eqn_ids',['../class_block.html#a7851447ef34b1f916a056b572713e9db',1,'Block']]],
   ['global_5fparam_5fids_22',['global_param_ids',['../class_block.html#a1340395052b260178d7dcca13bc9fc62',1,'Block']]],
   ['global_5fvar_5fids_23',['global_var_ids',['../class_block.html#ab64718f69f658fd3f66eb959f9349b9e',1,'Block']]],
-  ['graphical_20user_20interfaces_20quick_20user_20guide_24',['Graphical User Interfaces - Quick User Guide',['../index.html#autotoc_md13',1,'']]],
-  ['gui_20guide_25',['GUI Guide',['../_g_u_i.html',1,'']]],
-  ['guide_26',['Guide',['../developer_guide.html',1,'Developer Guide'],['../index.html#autotoc_md15',1,'Developer Guide'],['../index.html#autotoc_md13',1,'Graphical User Interfaces - Quick User Guide'],['../_g_u_i.html',1,'GUI Guide'],['../index.html#autotoc_md14',1,'svZeroDCalibrator - Quick User Guide'],['../index.html#autotoc_md12',1,'svZeroDSolver - Quick User Guide'],['../visualization.html',1,'Visualization Guide']]]
+  ['gui_20guide_24',['GUI Guide',['../_g_u_i.html',1,'']]],
+  ['guide_25',['Guide',['../developer_guide.html',1,'Developer Guide'],['../index.html#autotoc_md11',1,'Developer Guide'],['../_g_u_i.html',1,'GUI Guide'],['../visualization.html',1,'Visualization Guide']]],
+  ['guide_26',['User guide',['../_g_u_i.html#autotoc_md10',1,'']]]
 ];

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['new_20block_0',['How to Visualize a New Block',['../visualization.html#autotoc_md20',1,'']]],
+  ['new_20block_0',['How to Visualize a New Block',['../visualization.html#autotoc_md16',1,'']]],
   ['new_20blocks_1',['Adding New Blocks',['../add_block.html',1,'']]],
   ['new_20blocks_2',['Adding new blocks',['../developer_guide.html#autotoc_md4',1,'']]],
   ['node_3',['Node',['../class_node.html',1,'Node'],['../class_node.html#a08ee879d148fda7087955418dfd04464',1,'Node::Node()']]],

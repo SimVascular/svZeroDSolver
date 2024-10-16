@@ -91,32 +91,32 @@ $(function(){ initResizable(false); });
 <div class="toc"><h3>Table of Contents</h3>
 <ul>
   <li class="level1">
-    <a href="#autotoc_md16">About</a>
+    <a href="#autotoc_md12">About</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md17">Architecture</a>
+    <a href="#autotoc_md13">Architecture</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md18">Installing Dependencies</a>
+    <a href="#autotoc_md14">Installing Dependencies</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md19">How to Use</a>
+    <a href="#autotoc_md15">How to Use</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md20">How to Visualize a New Block</a>
+    <a href="#autotoc_md16">How to Visualize a New Block</a>
   </li>
 </ul>
 </div>
-<div class="textblock"><h1><a class="anchor" id="autotoc_md16"></a>
+<div class="textblock"><h1><a class="anchor" id="autotoc_md12"></a>
 About</h1>
 <p>svZeroDVisualization is a web application designed for visualizing 0D simulation results and the 0D network. It allows users to interactively explore and analyze their simulation data through an intuitive interface. This application is available in the <code>applications</code> folder.</p>
-<h1><a class="anchor" id="autotoc_md17"></a>
+<h1><a class="anchor" id="autotoc_md13"></a>
 Architecture</h1>
 <p>svZeroDVisualization is built using a robust architecture that includes:</p><ul>
 <li>Frontend: Utilizes HTML, CSS, Dash, and Plotly for creating a dynamic and interactive user interface. This setup allows for effective visualization and interaction with the 0D network and simulation results.</li>
 <li>Backend: Powered by a Flask application that handles the server-side logic. It leverages NetworkX for managing and visualizing the network graph and a Python code to determine network connections.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md18"></a>
+<h1><a class="anchor" id="autotoc_md14"></a>
 Installing Dependencies</h1>
 <ol type="1">
 <li>We recommend using a virtual environment to help manage project-specific dependencies and avoid conflicts with other projects.<ul>
@@ -138,23 +138,10 @@ Installing Dependencies</h1>
 <div class="line">argparse</div>
 </div><!-- fragment --></li>
 </ol>
-<h1><a class="anchor" id="autotoc_md19"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
 How to Use</h1>
-<p>Note: Files related to this application are in the <code>applications</code>folder, within the <code>dirgraph_visualization</code> subdirectory.</p>
-<ol type="1">
-<li>Command line execution: Pass the file path to your input JSON file and the output directory where you want the visualization to be saved as command line arguments.<ul>
-<li>Pass a third argument <code>export_csv</code> optionally if you want to save svZeroDSolver raw output.</li>
-<li>The program will execute svZeroDSolver, generate a directed graph visualization of your network, parse simulation results, and display the results along with the corresponding nodes on a local Flask server. <div class="fragment"><div class="line">python applications/svZeroDVisualization/visualize_simulation.py &#39;tests/cases/chamber_elastance_inductor.json&#39; &#39;./output/circuit_img/dir_graph&#39;</div>
-</div><!-- fragment --></li>
-</ul>
-</li>
-<li>Once the server is open, you can click on a node to inspect further.<ul>
-<li>The data for that node will be displayed, including the simulation parameters input for that node, pressure/flow data, and any internal variables if present.</li>
-<li>Additional features include the ability to download figures and use the trace function for more detailed inspection of network elements. The trace feature allows users to filter the view by specific element types, such as isolating and examining only the blood vessels or identifying the locations of the chambers within the network. This functionality enhances the ability to focus on and analyze particular components of the network with precision.</li>
-</ul>
-</li>
-</ol>
-<h1><a class="anchor" id="autotoc_md20"></a>
+<p>A user guide is available on the <a href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-visualization">SimVascular website</a>.</p>
+<h1><a class="anchor" id="autotoc_md16"></a>
 How to Visualize a New Block</h1>
 <ol type="1">
 <li><b>Update JSON Parsing</b>:<ul>

@@ -227,7 +227,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Resistor-capacitor-inductor blood vessel with optional stenosis. </p>
 <p>Models the mechanical behavior of a bloodvessel with optional stenosis.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_53_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_7_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -239,81 +239,81 @@ node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
 \end{circuitikz}
-\]" src="form_53.png" width="504" height="144"/></picture>
+\]" src="form_7.png" width="504" height="144"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_54_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_8_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_\text{in}-P_\text{out} - (R + S|Q_\text{in}|) Q_\text{in}-L
-\dot{Q}_\text{out}=0 \]" src="form_54.png" width="343" height="24"/></picture>
+\dot{Q}_\text{out}=0 \]" src="form_8.png" width="343" height="24"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_55_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_9_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}+C(R +
-2S|Q_\text{in}|) \dot{Q}_{in}=0 \]" src="form_55.png" width="366" height="24"/></picture>
+2S|Q_\text{in}|) \dot{Q}_{in}=0 \]" src="form_9.png" width="366" height="24"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_10_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out}\end{array}\right]^\text{T} \]" src="form_56.png" width="276" height="28"/></picture>
+P_{out} &amp; Q_{out}\end{array}\right]^\text{T} \]" src="form_10.png" width="276" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{cccc}
 1 &amp; -R &amp; -1 &amp;  0 \\
 0 &amp;  1 &amp;  0 &amp; -1
 \end{array}\right]
-\]" src="form_57.png" width="223" height="47"/></picture>
+\]" src="form_11.png" width="223" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_58_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_12_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{cccc}
  0 &amp;  0 &amp; 0 &amp; -L \\
 -C &amp; CR &amp; 0 &amp;  0
 \end{array}\right]
-\]" src="form_58.png" width="234" height="47"/></picture>
+\]" src="form_12.png" width="234" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_59_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_13_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e} = S|Q_\text{in}|
 \left[\begin{array}{c}
 -Q_\text{in} \\
 2C\dot{Q}_\text{in}
 \end{array}\right]
-\]" src="form_59.png" width="184" height="47"/></picture>
+\]" src="form_13.png" width="184" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_60_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_14_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  S \text{sgn} (Q_\text{in})
 \left[\begin{array}{cccc}
 0 &amp; -2Q_\text{in}        &amp; 0 &amp; 0 \\
 0 &amp; 2C\dot{Q}_\text{in} &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_60.png" width="341" height="49"/></picture>
+\]" src="form_14.png" width="341" height="49"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_61_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_15_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
  S|Q_\text{in}|
 \left[\begin{array}{cccc}
 0 &amp;  0 &amp; 0 &amp; 0 \\
 0 &amp; 2C &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_61.png" width="281" height="49"/></picture>
+\]" src="form_15.png" width="281" height="49"/></picture>
 </p>
-<p>with the stenosis resistance  <picture><source srcset="form_62_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ S=K_{t} \frac{\rho}{2
-A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} $" src="form_62.png" width="178" height="39"/></picture>. <picture><source srcset="form_63_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_63.png" width="15" height="15"/></picture>, <picture><source srcset="form_64_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_64.png" width="15" height="15"/></picture>, and <picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_65.png" width="13" height="15"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
+<p>with the stenosis resistance  <picture><source srcset="form_16_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ S=K_{t} \frac{\rho}{2
+A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} $" src="form_16.png" width="178" height="39"/></picture>. <picture><source srcset="form_17_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_17.png" width="15" height="15"/></picture>, <picture><source srcset="form_18_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_18.png" width="15" height="15"/></picture>, and <picture><source srcset="form_19_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_19.png" width="13" height="15"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
 <h3>Gradient</h3>
 <p>Gradient of the equations with respect to the parameters:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_66_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_20_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{J}^{e} = \left[\begin{array}{cccc}
 -y_2 &amp; 0 &amp; -\dot{y}_4 &amp; -|y_2|y_2 \\
 C\dot{y}_2 &amp; (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) &amp; 0 &amp; 2C|y_2|\dot{y}_2
 \end{array}\right]
-\]" src="form_66.png" width="467" height="47"/></picture>
+\]" src="form_20.png" width="467" height="47"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

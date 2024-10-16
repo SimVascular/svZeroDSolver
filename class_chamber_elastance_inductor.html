@@ -231,10 +231,10 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Cardiac chamber with elastance and inductor. </p>
-<p>Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) and an inductor. See <a class="el" href="citelist.html#CITEREF_kerckhoffs2007coupling">[3]</a> (equations 1 and 2). The addition of the inductor is similar to the models in <a class="el" href="citelist.html#CITEREF_sankaran2012patient">[9]</a> and <a class="el" href="citelist.html#CITEREF_menon2023predictors">[5]</a>.</p>
+<p>Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) and an inductor. See <a class="el" href="citelist.html#CITEREF_kerckhoffs2007coupling">[2]</a> (equations 1 and 2). The addition of the inductor is similar to the models in <a class="el" href="citelist.html#CITEREF_sankaran2012patient">[7]</a> and <a class="el" href="citelist.html#CITEREF_menon2023predictors">[4]</a>.</p>
 <p>This chamber block can be connected to other blocks using junctions.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_76_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_30_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
@@ -246,72 +246,72 @@ node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw [-latex] (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} ;
 \end{circuitikz}
-\]" src="form_76.png" width="294" height="144"/></picture>
+\]" src="form_30.png" width="294" height="144"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_77_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_31_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_{in}-E(t)(V_c-V_{rest})=0
-\]" src="form_77.png" width="216" height="21"/></picture>
+\]" src="form_31.png" width="216" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_78_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_32_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 P_{in}-P_{out}-L\dot{Q}_{out}=0
-\]" src="form_78.png" width="193" height="23"/></picture>
+\]" src="form_32.png" width="193" height="23"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_79_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_33_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 Q_{in}-Q_{out}-\dot{V}_c=0
-\]" src="form_79.png" width="167" height="23"/></picture>
+\]" src="form_33.png" width="167" height="23"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_80_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_34_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out} &amp; V_c\end{array}\right]^{T} \]" src="form_80.png" width="313" height="28"/></picture>
+P_{out} &amp; Q_{out} &amp; V_c\end{array}\right]^{T} \]" src="form_34.png" width="313" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_81_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_35_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; -L &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; -1
 \end{array}\right]
-\]" src="form_81.png" width="240" height="69"/></picture>
+\]" src="form_35.png" width="240" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_82_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_36_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 &amp; 0 &amp;  0 &amp; 0  &amp; E(t) \\
 1 &amp; 0 &amp; -1 &amp; 0  &amp; 0 \\
 0 &amp; 1 &amp;  0 &amp; -1 &amp; 0
 \end{array}\right]
-\]" src="form_82.png" width="263" height="69"/></picture>
+\]" src="form_36.png" width="263" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_83_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_37_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 \mathbf{c}^{e}=\left[\begin{array}{c}
 E(t)V_{rest} \\
 0 \\
 0
 \end{array}\right]
-\]" src="form_83.png" width="158" height="69"/></picture>
+\]" src="form_37.png" width="158" height="69"/></picture>
 </p>
 <p>In the above equations,</p>
 <p class="formulaDsp">
-<picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_38_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 V_{rest}(t)= \{1-A(t)\}(V_{rd}-V_{rs})+V_{rs}
-\]" src="form_84.png" width="309" height="21"/></picture>
+\]" src="form_38.png" width="309" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_85_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_39_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 A(t)=-\frac{1}{2}cos(2 \pi T_{contract}/T_{twitch})
-\]" src="form_85.png" width="281" height="39"/></picture>
+\]" src="form_39.png" width="281" height="39"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_86_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
+<picture><source srcset="form_40_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[
 E(t)=(E_{max}-E_{min})A(t) + E_{min}
-\]" src="form_86.png" width="287" height="21"/></picture>
+\]" src="form_40.png" width="287" height="21"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

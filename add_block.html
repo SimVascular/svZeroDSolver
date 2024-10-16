@@ -189,10 +189,10 @@ $(function(){ initResizable(false); });
 <h3>An example</h3>
 <ul>
 <li><p class="startli">Assume a block has the following non-linear governing equations:</p>
-<p class="startli"><picture><source srcset="form_172_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $" src="form_172.png" width="270" height="26"/></picture></p>
-<p class="startli"><picture><source srcset="form_173_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $" src="form_173.png" width="311" height="26"/></picture></p><ul>
-<li>For this block, <picture><source srcset="form_174_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in}$" src="form_174.png" width="26" height="19"/></picture> and <picture><source srcset="form_175_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in}$" src="form_175.png" width="28" height="19"/></picture> are the pressure and flow at the inlet respectively, <picture><source srcset="form_176_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out}$" src="form_176.png" width="34" height="19"/></picture> and <picture><source srcset="form_177_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out}$" src="form_177.png" width="36" height="19"/></picture> are the pressure and flow at the outlet, and <picture><source srcset="form_178_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$I_{1}$" src="form_178.png" width="17" height="19"/></picture> is an internal variable.</li>
-<li>The state vector is <picture><source srcset="form_179_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$" src="form_179.png" width="188" height="21"/></picture>.</li>
+<p class="startli"><picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $" src="form_126.png" width="270" height="26"/></picture></p>
+<p class="startli"><picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $" src="form_127.png" width="311" height="26"/></picture></p><ul>
+<li>For this block, <picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in}$" src="form_128.png" width="26" height="19"/></picture> and <picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in}$" src="form_129.png" width="28" height="19"/></picture> are the pressure and flow at the inlet respectively, <picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out}$" src="form_130.png" width="34" height="19"/></picture> and <picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out}$" src="form_131.png" width="36" height="19"/></picture> are the pressure and flow at the outlet, and <picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$I_{1}$" src="form_132.png" width="17" height="19"/></picture> is an internal variable.</li>
+<li>The state vector is <picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$" src="form_133.png" width="188" height="21"/></picture>.</li>
 <li>The contributions to the local <code>F</code> matrix are <code>F[0,0] = b</code>, <code>F[1,2] = g</code> and <code>F[1,4] = h</code>.</li>
 <li>The contributions to the local <code>E</code> matrix are <code>E[0,1] = a</code> and <code>E[1,2] = e</code>.</li>
 <li>The contributions to the local <code>C</code> vector are <code>C[0] = c*(dP_in/dt)*Q_in + d</code> and <code>C[1] = f*Q_out*Q_out</code>.</li>
@@ -253,7 +253,13 @@ $(function(){ initResizable(false); });
  </p>
 <h2>4. Add the new block to the build system.</h2>
 <ul>
-<li>Add <code>MyNewBlock.h</code> and <code>MyNewBlock.cpp</code> to <code>src/model/CMakeLists.txt</code> </li>
+<li>Add <code>MyNewBlock.h</code> and <code>MyNewBlock.cpp</code> to <code>src/model/CMakeLists.txt</code></li>
+</ul>
+<p><br  />
+ </p>
+<h2>5. Add the new block to svZeroDVisualization.</h2>
+<ul>
+<li>Follow the instructions <a class="el" href="visualization.html">here</a> to make sure your new block can be visualized graphically. </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

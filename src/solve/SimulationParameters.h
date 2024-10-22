@@ -50,8 +50,8 @@
 struct SimulationParameters {
   // Negative value indicates this has not
   // been read from config file yet.
-  double sim_time_step_size{0.0};  ///< Simulation time step size
-  double sim_abs_tol{0.0};         ///< Absolute tolerance for simulation
+  double sim_time_step_size{0.0};   ///< Simulation time step size
+  double sim_abs_tol{0.0};          ///< Absolute tolerance for simulation
   double sim_cardiac_period{-1.0};  ///< Cardiac period
 
   int sim_num_cycles{0};     ///< Number of cardiac cycles to simulate

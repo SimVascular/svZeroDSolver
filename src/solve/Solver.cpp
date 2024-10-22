@@ -9,6 +9,14 @@ Solver::Solver(const nlohmann::json& config) {
   DEBUG_MSG("Load model");
   this->model = std::shared_ptr<Model>(new Model());
   load_simulation_model(config, *this->model.get());
+  // Model will return 1 if cardiac period isn't explicitly defined
+  // Sim params will return 1 if cardiac period isn't explicitly defined
+  // Will cause an error when there is no period defined in model (closed loop)
+  // but it is defined to be smaller than one in paramters
+  // Will also cause an error when the opposite is done
+  // Default simparams to be negative one when not being used --> ignore it
+  // Model will always default to being one
+  // If simparmas is set just override and print a message?
   if (simparams.sim_cardiac_period > 0) {
     this->model->cardiac_cycle_period = simparams.sim_cardiac_period;
   }

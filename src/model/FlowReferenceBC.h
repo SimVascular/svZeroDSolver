@@ -77,6 +77,10 @@
  *
  * * `0` Flow
  *
+ * ### Internal variables
+ *
+ * This block has no internal variables.
+ *
  */
 class FlowReferenceBC : public Block {
  public:

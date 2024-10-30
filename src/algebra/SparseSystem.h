@@ -48,42 +48,11 @@ class Model;
  * This class contains all attributes and methods to create, modify, and
  * solve sparse systems.
  *
- * Flow rate, pressure, and other hemodynamic quantities in 0D models of
- * vascular anatomies are governed by a system of nonlinear
- * differential-algebraic equations (DAEs):
+ * Mathematical details related to setting up the governing system of
+ * equations are available on the <a
+ * href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory">SimVascular
+ * documentation</a>.
  *
- * \f[
- * \mathbf{r}(\boldsymbol{\alpha}, \mathbf{y},\dot{\mathbf{y}}, t) =
- * \mathbf{E}(\boldsymbol{\alpha}) \cdot \dot{\mathbf{y}} +
- * \mathbf{F}(\boldsymbol{\alpha}) \cdot \mathbf{y} +
- * \mathbf{c}(\mathbf{y},\dot{\mathbf{y}}, t) = \mathbf{0}
- * \f]
- *
- * where \f$\mathbf{r},\textbf{y},\textbf{c} \in \mathbb{R}^{N}\f$ and
- * \f$\textbf{E},\textbf{F} \in \mathbb{R}^{N \times N}\f$. Here,
- * \f$\textbf{r}\f$ is the residual, \f$\textbf{y}\f$ is the vector of solution
- * quantities and \f$\dot{\textbf{y}}\f$ is its time derivative. \f$N\f$ is the
- * total number of equations and the total number of global unknowns. The DAE
- * system is solved implicitly using the generalized-\f$\alpha\f$ method in
- * Integrator. We then use the Newton-Raphson method to iteratively solve
- *
- * \f[
- * \mathbf{K}^{i} \cdot \Delta\dot{\mathbf{y}}^{i} = - \mathbf{r}^{i},
- * \f]
- *
- * with solution increment \f$\Delta\dot{\mathbf{y}}^{i}\f$ in iteration
- * \f$i\f$. The linearization of the time-discretized system is
- *
- * \f[
- * \mathbf{K} =
- * \frac{\partial \mathbf{r}}{\partial \mathbf{y}} =
- * c_{\dot{\mathbf{y}}} \left( \mathbf{E} + \frac{\partial \mathbf{c}}{\partial
- * \dot{\mathbf{y}}} \right) +
- * c_{\mathbf{y}} \left( \mathbf{F} + \frac{\partial \mathbf{c}}{\partial
- * \mathbf{y}} \right), \f]
- *
- * with time factors \f$c_{\dot{\mathbf{y}}}=\alpha_m\f$ and
- * \f$c_{\mathbf{y}}=\alpha_f\gamma\Delta t\f$ provided by Integrator.
  */
 class SparseSystem {
  public:

@@ -78,6 +78,10 @@
  *
  * * `0` Pressure
  *
+ * ### Internal variables
+ *
+ * This block has no internal variables.
+ *
  */
 class PressureReferenceBC : public Block {
  public:

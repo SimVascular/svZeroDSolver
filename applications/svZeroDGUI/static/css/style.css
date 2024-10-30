@@ -1,0 +1,266 @@
+/*
+  Stylesheet for svZeroDGUI App
+
+  This CSS file contains the styling rules for various components
+  of the svZeroDGUI web application. It includes styles for
+  the main container, headings, form elements, buttons, modals, and
+  more to ensure a consistent and user-friendly interface.
+
+  Key sections include:
+  - Scrollable container layout (#cy)
+  - Typography and heading styles (h1)
+  - Form and input field styling (label, select, input)
+  - Button styling (#buttons and nested button elements)
+  - Modal window design (#nodeInfoModal)
+  - Hidden forms and elements (#vesselForm, #form-title)
+*/
+
+
+/* Selector for elements with the 'draggable' class */
+.draggable {
+    background-color: transparent;
+    width: 30px;
+    height: 30px;
+}
+
+/* Selector for edges */
+edge {
+    curve-style: bezier;
+    target-arrow-shape: triangle;
+}
+
+/* Style for the extension: Selector for elements with the 'eh-handle' class */
+.eh-handle {
+    background-color: black;
+    width: 12px;
+    height: 12px;
+    shape: ellipse;
+    overlay-opacity: 0;
+    border-width: 12px; /* Makes the handle easier to hit */
+    border-opacity: 0;
+}
+
+/* Selector for elements with the 'eh-hover' class */
+.eh-hover {
+    background-color: black;
+}
+
+/* Selector for elements with the 'eh-source' class */
+.eh-source {
+    border-width: 2px;
+    border-color: black;
+}
+
+/* Selector for elements with the 'eh-target' class */
+.eh-target {
+    border-width: 2px;
+    border-color: black;
+}
+
+/* Selector for elements with the 'eh-preview' or 'eh-ghost-edge' classes */
+.eh-preview,
+.eh-ghost-edge {
+    background-color: black;
+    line-color: black;
+    target-arrow-color: black;
+    source-arrow-color: black;
+}
+
+/* Selector for elements with both the 'eh-ghost-edge' and 'eh-preview-active' classes */
+.eh-ghost-edge.eh-preview-active {
+    opacity: 0;
+}
+
+/* Contains styling for the cytoscape drawing and buttons */
+body {
+    padding: 2%;
+    font-family: helvetica neue, helvetica, liberation sans, arial, sans-serif;
+    font-size: 13px;
+}
+
+/* Display information for the dropdown containers for selecting node elements */
+.dropdown-container {
+    display: flex;
+    align-items: center;
+}
+/* Position for the boundary condition drop down container */
+#boundary-condition-type-container {
+    margin-left: 10px; /* Adjust as needed */
+}
+
+/* Styling for the junction parameter form so there's two input boxes side by side
+ for R, L, and stenosis values */
+.double-input-container > div {
+    display: inline-block;        /* Enables flex layout */
+    align-items: center;  /* Centers items vertically */
+    justify-content: flex-start; /* Aligns items to the left */
+    margin-bottom: 10px;  /* Adds space between rows */
+}
+
+/* Additional styling for the input-label interaction for junction parameter form  */
+.double-input-container label {
+    margin-right: 5px;    /* Space between label and input */
+    white-space: nowrap;  /* Prevents labels from wrapping */
+}
+
+/* Additional styling for the inputs to the junction parameter form 0 */
+.double-input-container input {
+    flex-grow: 1;         /* Allows inputs to expand */
+    margin-right: 10px;   /* Space between inputs */
+}
+
+/* Styling for the node,
+boundary condition, and node name selection containers */
+.container {
+  width: 80%;
+  margin: auto;
+  padding-top: 20px;
+  overflow: auto; /* Allow scrolling if content overflows */
+}
+
+/* Styling for the instruction collapsible */
+.collapsible {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 12px;
+  width: 100%; /* Ensures it takes full width of the container */
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 20px;
+  display: block;
+  margin-bottom: 10px; /* Space between button and content */
+}
+
+/* Before the collapsible is selected, it will show a + indicating
+ the user to open the instructions */
+.collapsible:after {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: white;
+  float: right;
+  margin-left: 5px;
+
+}
+/* Once the user opens the instructions collapsible,
+the + sign will become a - sign so the user can close the collapsible */
+.active:after {
+  content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+/* Styling for the text in the instructions collapsible */
+.content {
+  padding: 12px;
+  display: none;
+  overflow: hidden;
+  background-color: #f9f9f9;
+  font-size: 15px;
+  max-height: 0; /* Start with no height */
+  transition: max-height 0.2s ease-out;
+}
+
+/* Hover and Active State Styling */
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+/* Instructions Content Styling */
+.instructions-content {
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  margin-top: 0; /* Ensure no extra margin */
+}
+
+/* Display Collapsible Content When Active */
+.collapsible.active + .content {
+  display: block;
+  max-height: 200px; /* Adjust to the height needed for the content */
+}
+
+/* Instructions Margin and Padding */
+.instructions {
+  margin-bottom: 0; /* Ensure no extra margin */
+  padding-bottom: 0; /* Remove bottom padding */
+}
+
+/* Cytoscape Container Styling */
+#cy {
+  overflow: auto; /* Allow scrolling if content overflows */
+  width: 80%;
+  height: 70%;
+  margin: auto;
+  margin-top: 0; /* Remove top margin */
+  border: 3px solid #ccc;
+  position: relative;
+  z-index: 1;
+  padding-top: 0; /* Remove top padding */
+}
+
+/* Main Heading Styling */
+h1 {
+    opacity: 1;
+    font-family: sans-serif;
+    font-size: 3em;
+    font-weight: bold;
+    text-align:center;
+}
+
+/* Label Styling */
+label {
+    font-size: 18px; /* Increase the font size of the label
+    display: block; /* Make labels appear on a new line for better organization */
+    margin-bottom: 5px; /* Add some space below the label */
+}
+
+/* Input and Select Styling */
+select, input {
+    width: 160px; /* Set a larger width */
+    height: 25px; /* Set a taller height */
+    font-size: 15px; /* Increase the font size for better readability */
+    margin: 10px; /* Add some margin for spacing */
+}
+
+/* Button Container Styling */
+#buttons {
+  position: absolute;
+  font-family: Open Sans;
+  font-size: 20px; /* Adjusted to fit better */
+  right: 10px;
+  top: 100px;
+  z-index: 99999;
+  margin: 1em;
+}
+
+/* Button Styling */
+#buttons button {
+  width: 90px; /* Set a fixed width */
+  height: 50px; /* Set a fixed height */
+  display: block; /* Make buttons block-level to stack vertically */
+  margin-bottom: 10px; /* Space between buttons */
+}
+
+/* Modal Styling */
+#nodeInfoModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border: 1px solid #ccc;
+  z-index: 1000;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  display: none; /* Ensure the modal is hidden by default */
+}
+
+/* Vessel Form Styling */
+#vesselForm {
+  display: none; /* Ensure the form is hidden by default */
+}
+
+/* Form Title Styling */
+#form-title {
+    font-size: 20px;
+}

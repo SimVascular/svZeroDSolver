@@ -1,0 +1,10 @@
+# Requirements for running test_dirgraph pytest
+
+pytest
+pydot
+numpy
+pandas
+tqdm
+matplotlib
+networkx
+profilehooks

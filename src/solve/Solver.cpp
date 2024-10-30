@@ -40,7 +40,7 @@ Solver::Solver(const nlohmann::json& config) {
 void Solver::run() {
   auto state = initial_state;
 
-  // Create steady initial
+  // Create steady initial condition
   if (simparams.sim_steady_initial) {
     DEBUG_MSG("Calculate steady initial condition");
     double time_step_size_steady = this->model->cardiac_cycle_period / 10.0;
@@ -56,6 +56,10 @@ void Solver::run() {
 
     this->model->to_unsteady();
   }
+
+  // Use the initial condition (steady or user-provided) to set up parameters
+  // which depend on the initial condition
+  this->model->setup_initial_state_dependent_parameters(state);
 
   // Set-up integrator
   DEBUG_MSG("Setup time integration");

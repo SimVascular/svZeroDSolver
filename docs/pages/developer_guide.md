@@ -10,9 +10,15 @@ in the `src` directory and a collection of different applications in the
 `applications` folder. Each application is written for a different use-case
 of svZeroDSolver, namely:
 
-* svZeroDCalibrator in `svzerodcalibrator.cpp`
 * svZerodSolver in `svzerodsolver.cpp`
 * Python API in `pysvzerod.cpp`
+* svZeroDCalibrator in `svzerodcalibrator.cpp`
+* svZeroDVisualization for visualizing 0D models and results
+* svZeroDGUI for creating new 0D models grahically.
+
+[Architecture for svZeroDVisualization](@ref visualization).
+
+[Architecture for svZeroDGUI](@ref GUI).
 
 
 # Build in debug mode
@@ -53,6 +59,8 @@ This is useful when continuously running the integration tests during developmen
 The modular architecture of svZeroDSolver relies on "blocks", such as blood vessels, junctions, valves, boundary conditions, etc. These blocks are assembled in a manner specified by the `.json` configuration file, which dictates the assembled governing equations for the model. We are always interested in adding new blocks to expand the funcitonality of svZeroDSolver.
 
 Detailed steps required to implement a new block in svZeroDSolver are available [here](@ref add_block).
+
+Steps required to visualize a new block with svZeroDSolver Visualization application are available [here](@ref visualization).
 
 # Code Style
 

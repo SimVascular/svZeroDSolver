@@ -54,7 +54,8 @@ void Parameter::update(const std::string update_string) {
   symbol_table.clear();
 
   if (!symbol_table.create_variable("t")) {
-    throw std::runtime_error("Error failed to create time_value in symbol_table.");
+    throw std::runtime_error(
+        "Error failed to create time_value in symbol_table.");
     return;
   }
 
@@ -82,7 +83,8 @@ void Parameter::update(const std::string update_string) {
           exprtk::parser_error::to_str(error.mode).c_str(),
           error.diagnostic.c_str(), expression_string.c_str());
     }
-    throw std::runtime_error("Error when compiling the function provided in 'fn'.");
+    throw std::runtime_error(
+        "Error when compiling the function provided in 'fn'.");
     return;
   }
 }

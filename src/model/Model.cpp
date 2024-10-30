@@ -32,7 +32,7 @@
 
 template <typename block_type>
 BlockFactoryFunc block_factory() {
-  return [](int count, Model *model) -> std::shared_ptr<Block>{
+  return [](int count, Model *model) -> std::shared_ptr<Block> {
     return std::make_shared<block_type>(count, model);
   };
 }

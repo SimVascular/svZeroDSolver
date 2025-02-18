@@ -41,6 +41,7 @@ Model::Model() {
   // Add all implemented blocks to factory
   block_factory_map = {
       {"BloodVessel", block_factory<BloodVessel>()},
+      {"BloodVesselNew", block_factory<BloodVesselNew>()},
       {"BloodVesselJunction", block_factory<BloodVesselJunction>()},
       {"ClosedLoopCoronaryLeft", block_factory<ClosedLoopCoronaryLeftBC>()},
       {"ClosedLoopCoronaryRight", block_factory<ClosedLoopCoronaryRightBC>()},

@@ -45,6 +45,7 @@
 #include "Block.h"
 #include "BlockFactory.h"
 #include "BloodVessel.h"
+#include "BloodVesselNew.h"
 #include "BloodVesselJunction.h"
 #include "ChamberElastanceInductor.h"
 #include "ClosedLoopCoronaryLeftBC.h"

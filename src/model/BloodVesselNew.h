@@ -164,7 +164,7 @@ class BloodVesselNew : public Block {
    * @param model The model to which the block belongs
    */
   BloodVesselNew(int id, Model *model)
-      : Block(id, model, BlockType::blood_vessel, BlockClass::vessel,
+      : Block(id, model, BlockType::blood_vessel_new, BlockClass::vessel,
               {{"R_poiseuille", InputParameter()},
                {"C", InputParameter(true)},
                {"L", InputParameter(true)},

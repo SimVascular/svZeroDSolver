@@ -48,7 +48,7 @@
             "vessel_id": 0,
             "vessel_length": 10.0,
             "vessel_name": "branch0_seg0",
-            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_type": "BloodVesselNew",
             "zero_d_element_values": {
                 "R_poiseuille": 100.0,
                 "stenosis_coefficient": 100.0

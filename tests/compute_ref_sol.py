@@ -26,4 +26,5 @@ def compute_ref_sol(testname):
 
     # print for confirmation
     print(f'Reference solution for test case {testname} computed and saved to {result_filename}. Please verify that the results are as expected.')
-    
+
+compute_ref_sol("closedLoopDefinedPeriod.json")

@@ -27,29 +27,6 @@ interactive elements and graphical networks.
 This architecture supports an intuitive user experience for 
 generating and managing 0D input files through a graphical interface.
 
+# User guide
 
-# How to Use
-1. Create a virtual environment with the required `flask` dependency. If using `conda`, use the below commands:
-    ```bash
-    conda create -n svZeroDGUI python=3.10 flask
-    conda activate svZeroDGUI
-    ```
-2. Navigate to the `applications` folder and then to the `create_0dmodel` subdirectory.
-3. Launch the `app.py` file.
-    ```bash
-    python applications/svZeroDGUI/app.py
-    ```
-4. Select a node type and name the node.
-    - For vessels, after drawing the node, click on it to open a form 
-where you can enter details such as vessel length, diameter, and more.
-    - For junctions, click the node to specify if it’s a Normal %Junction 
-or a Blood Vessel %Junction.
-5. To draw edges between nodes, toggle the `Draw on` button on the right. 
-Once active, you can start connecting nodes by drawing edges between them.
-6. When you wish to stop drawing edges and continue adding or moving nodes, 
-click the `Draw off` button.
-7. Once you’ve completed the network, click `Export to JSON` on the right. 
-If there are any incorrect connections or patterns, an alert will prompt you 
-to make necessary changes so the network can be processed by svZeroDSolver.
-8. Open the downloaded JSON file and add any additional information, 
-such as boundary condition data, before running it through svZeroDSolver.
+A user guide is available on the [SimVascular website](https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-gui). 

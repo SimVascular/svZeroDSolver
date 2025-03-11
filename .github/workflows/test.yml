@@ -8,7 +8,10 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-latest, macos-13, macos-latest]
+        version: [13] # GCC version
       fail-fast: false
+      env:
+        GCC_V: ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
@@ -23,12 +26,13 @@ jobs:
           #alias conda="$CONDA/bin/conda"
           conda create -n zerod python=3.11.4
       - name: Install dependencies to get correct version numbers (Ubuntu)
-        #if: startsWith(matrix.os, 'ubuntu-latest')
         if: startsWith(matrix.os, 'ubuntu')
-        run: conda install -n zerod -c conda-forge libstdcxx-ng=13 gcc=13
+        run: conda install -n zerod -c conda-forge libstdcxx-ng=${GCC_V} gcc=${GCC_V}
       - name: Install dependencies to get correct version numbers (MacOS)
         if: startsWith(matrix.os, 'macos')
-        run: conda install -n zerod -c conda-forge gcc=13
+        run: |
+          brew install gcc@${{ env.GCC_V }}
+          ln -s /usr/local/bin/gcc-${{ env.GCC_V }} /usr/local/bin/gcc
       - name: Install svZeroDSolver
         run: conda run -n zerod pip install -e ".[dev]"
       - name: Install Networkx

@@ -10,8 +10,8 @@ jobs:
         os: [ubuntu-22.04, ubuntu-latest, macos-13, macos-latest]
         version: [13] # GCC version
       fail-fast: false
-      env:
-        GCC_V: ${{ matrix.version }}
+    env:
+      GCC_V: ${{ matrix.version }}
     steps:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3

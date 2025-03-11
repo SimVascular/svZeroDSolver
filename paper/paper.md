@@ -85,6 +85,13 @@ Together, these graphical interfaces make `svZeroDSolver` intuitive for a wide r
 The functionality and accuracy of `svZeroDSolver` is assessed using continuous integration tests on GitHub, and has also been verified by comparing with high-fidelity three dimensional simulations [@pfaller22].
 This combination of features makes `svZeroDSolver` uniquely applicable to a wide range of applications in cardiovascular biomechanics.
 
+While there are other open-source projects that provide the functionality for cardiovascular flow modeling, and specifically zero-dimensional flow modeling, `svZeroDSolver` has several features that distinguish it from previous work. 
+For one, prior packages have primarily focused on multi-physics finite element modeling for cardiovascular biomechanics [@crimson2021;@Zhu2022;@AFRICA2024109039;Hirschvogel2024]. 
+While these projects allow the implementation of simple zero-dimensional models, usually as boundary conditions to three-dimensional models, the primary focus is on the modeling of full three-dimensional fluid and tissue mechanics. 
+There are also packages aimed at reduced-order modeling for cardiovascular flows [@Agdestein2018]. In particular, the `SimVascular` project includes `svOneDSolver` for the purpose of one-dimensional blood flow modeling.
+In contrast to these packages, the purpose of `svZeroDSolver` is to provide a modular framework specifically for simulating zero-dimensional flows in a variety of simple and complex anatomies -- by leveraging the modular nature of the code.
+The unique features listed above allow the use of `svZeroDSolver` both as a stand-along zero-dimensional flow solver for unique and patient-specific anatomies, as well as in conjunction with the aforementioned multi-physics solvers as boundary conditions, for parameters estimation and uncertainty quantification, or even as an instructional tool using its graphical interfaces.  
+
 ![Various zero-dimensional "blocks" included in `svZeroDSolver` at the time of writing.\label{fig:blocks}](blocks.png){ width=80% }
 
 # Software details

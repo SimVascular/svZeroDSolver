@@ -17,6 +17,7 @@ jobs:
       - name: Install ubuntu dependencies
         if: startsWith(matrix.os, 'ubuntu')
         run: sudo apt update && sudo apt install build-essential cmake lcov
+        run: sudo apt install --only-upgrade libstdc++6
       - name: Install svZeroDSolver
         run: |
           #export PATH="/usr/share/miniconda/bin:$PATH"

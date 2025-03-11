@@ -11,6 +11,11 @@ sys.path.append(os.path.dirname(__file__))
 
 from .utils import run_test_case_by_name, get_result, run_with_reference, RTOL_FLOW, RTOL_PRES
 
+EXPECTED_FAILURES = {
+    'closedLoopHeart_singleVessel_mistmatchPeriod.json',
+    'pulsatileFlow_R_RCR_mismatchPeriod.json'
+}
+
 @pytest.mark.parametrize("testfile", ['chamber_elastance_inductor.json', 
                                       'steadyFlow_R_R.json', 
                                       'pulsatileFlow_R_coronary_cycle_error.json', 
@@ -41,7 +46,10 @@ from .utils import run_test_case_by_name, get_result, run_with_reference, RTOL_F
                                       'steadyFlow_blood_vessel_junction.json', 
                                       'valve_tanh.json', 
                                       'pulsatileFlow_bifurcationR_RCR_cycle_error.json', 
-                                      'pulsatileFlow_R_RCR_mean_derivative_variable.json'
+                                      'pulsatileFlow_R_RCR_mean_derivative_variable.json',
+                                      'closedLoopHeart_singleVessel_mistmatchPeriod.json',
+                                      'pulsatileFlow_R_RCR_mismatchPeriod.json',
+                                      'pulsatileFlow_CStenosis_steadyPressure_definedPeriod.json'
                                       ])
 def test_solver(testfile):
     '''
@@ -51,6 +59,9 @@ def test_solver(testfile):
     this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
     results_dir = os.path.join(this_file_dir, 'cases', 'results')
+
+    if testfile in EXPECTED_FAILURES:
+        pytest.xfail(reason=f"Known failure for test case: {testfile}")
 
     ref = pd.read_json(os.path.join(results_dir, f'result_{testfile}'))
 

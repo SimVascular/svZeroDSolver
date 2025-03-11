@@ -10,7 +10,7 @@ jobs:
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
           #wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/apt.llvm.org.asc
-          sudo apt-get install clang-format-19
+          sudo apt-get install clang-format-20
       - name: Run clang-format
         run: |
           mkdir Release

@@ -27,7 +27,8 @@ jobs:
           #echo "test1"
           #conda install -n zerod libgcc-ng
           echo "test2"
-          conda install -n zerod -c conda-forge libgcc-ng
+          #conda install -n zerod -c conda-forge libgcc-ng
+          conda install -n zerod -c conda-forge libstdcxx-ng=13
           echo "Checked versions"
           conda run -n zerod pip install -e ".[dev]"
           strings /usr/share/miniconda/envs/zerod/bin/../lib/libstdc++.so.6 | grep GLIBCXX

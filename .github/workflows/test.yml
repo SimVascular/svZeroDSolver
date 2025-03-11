@@ -24,6 +24,10 @@ jobs:
           conda create -n zerod python=3.11.4
           echo "Created environment"
           strings /usr/share/miniconda/envs/zerod/bin/../lib/libstdc++.so.6 | grep GLIBCXX
+          echo "test1"
+          conda run -n zerod install libgcc-ng
+          echo "test2"
+          conda run -n zerod install -c conda-forge libgcc-ng
           echo "Checked versions"
           conda run -n zerod pip install -e ".[dev]"
           strings /usr/share/miniconda/envs/zerod/bin/../lib/libstdc++.so.6 | grep GLIBCXX

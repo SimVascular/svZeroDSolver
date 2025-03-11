@@ -23,8 +23,11 @@ jobs:
           #alias conda="$CONDA/bin/conda"
           conda create -n zerod python=3.11.4
       - name: Quick-fix dependencies to get correct version numbers
-        if: startsWith(matrix.os, 'ubuntu-latest')
-          conda install -n zerod -c conda-forge libstdcxx-ng=13
+        #if: startsWith(matrix.os, 'ubuntu-latest')
+        if: startsWith(matrix.os, 'ubuntu')
+        run: conda install -n zerod -c conda-forge libstdcxx-ng=13 gcc=13
+        if: startsWith(matrix.os, 'macos')
+        run: conda install -n zerod -c conda-forge gcc=13
       - name: Install svZeroDSolver
           conda run -n zerod pip install -e ".[dev]"
       - name: Install Networkx

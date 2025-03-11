@@ -22,11 +22,11 @@ jobs:
           #export PATH="/usr/share/miniconda/bin:$PATH"
           #alias conda="$CONDA/bin/conda"
           conda create -n zerod python=3.11.4
+          echo "Created environment"
           strings /usr/share/miniconda/envs/zerod/bin/../lib/libstdc++.so.6 | grep GLIBCXX
-          #conda run -n zerod install -c conda-forge libstdcxx-ng --update-deps
-          conda run -n zerod install -c conda-forge libstdcxx-ng
-          strings /usr/share/miniconda/envs/zerod/bin/../lib/libstdc++.so.6 | grep GLIBCXX
+          echo "Checked versions"
           conda run -n zerod pip install -e ".[dev]"
+          strings /usr/share/miniconda/envs/zerod/bin/../lib/libstdc++.so.6 | grep GLIBCXX
       - name: Install Networkx
         run: |
             conda run -n zerod pip install networkx

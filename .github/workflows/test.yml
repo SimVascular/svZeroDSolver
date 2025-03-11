@@ -30,7 +30,7 @@ jobs:
         if: startsWith(matrix.os, 'macos')
         run: conda install -n zerod -c conda-forge gcc=13
       - name: Install svZeroDSolver
-          conda run -n zerod pip install -e ".[dev]"
+        run: conda run -n zerod pip install -e ".[dev]"
       - name: Install Networkx
         run: |
             conda run -n zerod pip install networkx

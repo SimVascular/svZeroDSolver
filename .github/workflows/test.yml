@@ -16,7 +16,7 @@ jobs:
           auto-update-conda: true
       - name: Install ubuntu dependencies
         if: startsWith(matrix.os, 'ubuntu')
-        run: sudo apt update && sudo apt install build-essential cmake lcov && strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBCXX && strings /usr/share/miniconda/envs/zerod/lib/libstdc++.so.6 | grep GLIBCXX
+        run: sudo apt update && sudo apt install build-essential cmake lcov && strings /usr/lib/x86_64-linux-gnu/libstdc++.so.6 | grep GLIBCXX
       - name: Install svZeroDSolver
         run: |
           #export PATH="/usr/share/miniconda/bin:$PATH"

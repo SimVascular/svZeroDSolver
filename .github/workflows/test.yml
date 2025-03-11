@@ -59,7 +59,7 @@ jobs:
           make coverage
       - name: Save coverage report
         if: startsWith(matrix.os, 'ubuntu-22.04')
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage_report
           path: Release/coverage
@@ -74,7 +74,7 @@ jobs:
           cpack
           cp distribution/svZeroDSolver_* ..
       - name: Upload installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }} installer
           path: svZeroDSolver_*

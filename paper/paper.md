@@ -11,30 +11,30 @@ authors:
    equal-contrib: true
    affiliation: 1
  - name: Jakob Richter
-   affiliation: 3
-   equal-contrib: true
- - name: Martin R. Pfaller
    affiliation: 2
    equal-contrib: true
+ - name: Martin R. Pfaller
+   affiliation: 3
+   equal-contrib: true
  - name: Jonathan Pham
-   affiliation: 1
+   affiliation: 2
  - name: Emilin M. Mathew
-   affiliation: 1
+   affiliation: 2
  - name: Kaitlin E. Harold
-   affiliation: 1
+   affiliation: 2
  - name: Nicholas C. Dorn
-   affiliation: 1
+   affiliation: 2
  - name: Aekaansh Verma
-   affiliation: 1
+   affiliation: 2
  - name: Alison L. Marsden
-   affiliation: 1
+   affiliation: 2
    corresponding: true
 affiliations:
  - name: Georgia Institute of Technology, Atlanta, GA, United States of America
    index: 1
- - name: Yale University, New Haven, CT, United States of America
-   index: 2
  - name: Stanford University, Stanford, CA, United States of America
+   index: 2
+ - name: Yale University, New Haven, CT, United States of America
    index: 3
 date: March 2025
 bibliography: paper.bib

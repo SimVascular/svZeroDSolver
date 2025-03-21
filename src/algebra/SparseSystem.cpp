@@ -100,8 +100,9 @@ void SparseSystem::update_jacobian(double time_coeff_ydot,
 
 void SparseSystem::solve() {
   solver->factorize(jacobian);
-  if (solver->info() != Eigen::Success)
-    throw std::runtime_error("System is singular");
+  if (solver->info() != Eigen::Success) {
+    throw std::runtime_error("System is singular. Check your model (connections, boundary conditions, parameters).");
+  }
   dydot.setZero();
   dydot += solver->solve(residual);
 }

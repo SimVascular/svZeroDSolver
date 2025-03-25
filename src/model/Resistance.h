@@ -88,8 +88,8 @@
  *
  * \f[
  * \mathbf{J}^{e} = \left[\begin{array}{cccc}
- * -y_2 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0
+ * -y_2 \\
+ * 0
  * \end{array}\right]
  * \f]
  *

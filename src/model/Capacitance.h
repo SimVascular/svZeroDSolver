@@ -90,8 +90,8 @@
  *
  * \f[
  * \mathbf{J}^{e} = \left[\begin{array}{cccc}
- * 0 & 0 & 0 & 0 \\
- * -\dot{y}_1 & 0 & 0 & 0
+ * 0 \\
+ * -\dot{y}_1
  * \end{array}\right]
  * \f]
  *

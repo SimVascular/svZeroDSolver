@@ -122,7 +122,9 @@ class Resistance : public Block {
    */
   Resistance(int id, Model *model)
       : Block(id, model, BlockType::resistance, BlockClass::vessel,
-              {{"R", InputParameter()}}) {}
+              {{"R", InputParameter()}}) {
+    is_vessel = true;
+  }
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

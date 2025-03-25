@@ -122,7 +122,9 @@ class Inductance : public Block {
    */
   Inductance(int id, Model *model)
       : Block(id, model, BlockType::inductance, BlockClass::vessel,
-              {{"L", InputParameter()}}) {}
+              {{"L", InputParameter()}}) {
+    is_vessel = true;
+  }
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

@@ -124,7 +124,9 @@ class Capacitance : public Block {
    */
   Capacitance(int id, Model *model)
       : Block(id, model, BlockType::capacitance, BlockClass::vessel,
-              {{"C", InputParameter()}}) {}
+              {{"C", InputParameter()}}) {
+    is_vessel = true;
+  }
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

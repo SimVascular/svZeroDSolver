@@ -38,11 +38,11 @@ void Capacitance::update_constant(SparseSystem &system,
                                   std::vector<double> &parameters) {
   double capacitance = parameters[global_param_ids[ParamId::CAPACITANCE]];
 
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
-  system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
-  system.E.coeffRef(global_eqn_ids[1], global_var_ids[0]) = -capacitance;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[3]) = -1.0;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -capacitance;
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -1.0;
 }
 
 void Capacitance::update_gradient(
@@ -59,8 +59,8 @@ void Capacitance::update_gradient(
 
   auto capacitance = alpha[global_param_ids[ParamId::CAPACITANCE]];
 
-  jacobian.coeffRef(global_eqn_ids[1], global_param_ids[0]) = -dy0;
+  jacobian.coeffRef(global_eqn_ids[0], global_param_ids[0]) = -dy0;
 
-  residual(global_eqn_ids[0]) = y0 - y2;
-  residual(global_eqn_ids[1]) = y1 - y3 - capacitance * dy0;
+  residual(global_eqn_ids[0]) = y1 - y3 - capacitance * dy0;
+  residual(global_eqn_ids[1]) = y0 - y2;
 }

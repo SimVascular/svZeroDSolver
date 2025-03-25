@@ -40,9 +40,9 @@ void Inductance::update_constant(SparseSystem &system,
 
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[3]) = -inductance;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
-  system.E.coeffRef(global_eqn_ids[0], global_var_ids[3]) = -inductance;
 }
 
 void Inductance::update_gradient(

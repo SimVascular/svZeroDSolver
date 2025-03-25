@@ -168,7 +168,9 @@ class BloodVessel : public Block {
               {{"R_poiseuille", InputParameter()},
                {"C", InputParameter(true)},
                {"L", InputParameter(true)},
-               {"stenosis_coefficient", InputParameter(true)}}) {}
+               {"stenosis_coefficient", InputParameter(true)}}) {
+    is_vessel = true;
+  }
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

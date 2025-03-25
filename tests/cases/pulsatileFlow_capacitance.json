@@ -245,8 +245,8 @@
         }
     ],
     "simulation_parameters": {
-        "number_of_cardiac_cycles": 5,
-        "number_of_time_pts_per_cardiac_cycle": 100
+        "number_of_cardiac_cycles": 20,
+        "number_of_time_pts_per_cardiac_cycle": 201
     },
     "vessels": [
         {

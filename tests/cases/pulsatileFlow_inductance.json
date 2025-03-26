@@ -245,7 +245,7 @@
         }
     ],
     "simulation_parameters": {
-        "number_of_cardiac_cycles": 10,
+        "number_of_cardiac_cycles": 2,
         "number_of_time_pts_per_cardiac_cycle": 201,
         "output_all_cycles": true
     },

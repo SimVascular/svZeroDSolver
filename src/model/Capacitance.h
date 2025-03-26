@@ -46,13 +46,13 @@
  *
  * \f[
  * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [short, *-*] (7,0)
- * node[anchor=south]{$P_{out}$}
- * (4,0) to [C, l=$C$, -] (4,-1.5)
- * node[ground]{};
- * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
+ *   node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ *   (1,0) node[anchor=south]{$P_{in}$}
+ *   to [short, -*] (1,0)
+ *   to [C, l=$C$] (5,0)
+ *   to [short, -*] (7,0)
+ *   node[anchor=south]{$P_{out}$}
+ *   (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
  * \f]
  *

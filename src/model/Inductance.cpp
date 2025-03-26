@@ -44,23 +44,3 @@ void Inductance::update_constant(SparseSystem &system,
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
 }
-
-void Inductance::update_gradient(
-    Eigen::SparseMatrix<double> &jacobian,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha, std::vector<double> &y,
-    std::vector<double> &dy) {
-  auto y0 = y[global_var_ids[0]];  // P_in
-  auto y1 = y[global_var_ids[1]];  // Q_in
-  auto y2 = y[global_var_ids[2]];  // P_out
-  auto y3 = y[global_var_ids[3]];  // Q_out
-
-  auto dy3 = dy[global_var_ids[3]];  // dQ_out/dt
-
-  auto inductance = alpha[global_param_ids[ParamId::INDUCTANCE]];
-
-  jacobian.coeffRef(global_eqn_ids[0], global_param_ids[0]) = -dy3;
-
-  residual(global_eqn_ids[0]) = y0 - y2 - inductance * dy3;
-  residual(global_eqn_ids[1]) = y1 - y3;
-}

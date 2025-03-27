@@ -50,7 +50,7 @@
  * to the global system.
  */
 struct TripletsContributions {
-  TripletsContributions(){};
+  TripletsContributions() {};
   /**
    * @brief Set the number of triplets that the element contributes
    * to the global system.
@@ -58,7 +58,7 @@ struct TripletsContributions {
    * @param E Contributions to E matrix
    * @param D Contributions to dC/dy matrix
    */
-  TripletsContributions(int F, int E, int D) : F(F), E(E), D(D){};
+  TripletsContributions(int F, int E, int D) : F(F), E(E), D(D) {};
   /**
    * @brief Set the number of triplets that the element contributes
    * to the global system.
@@ -113,6 +113,7 @@ class Block {
 
   bool steady = false;             ///< Toggle steady behavior
   bool input_params_list = false;  ///< Are input parameters given as a list?
+  bool is_vessel = false;          ///< Is this block a blood vessel?
 
   /**
    * @brief Construct a new Block object

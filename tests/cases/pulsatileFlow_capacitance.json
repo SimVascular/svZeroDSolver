@@ -1,0 +1,63 @@
+{
+    "description": {
+            "description of test case" : "pulsatile flow -> Capacitance -> Steady Pressure",
+            "analytical results" : [   "Boundary conditions:",
+                                            "inlet:",
+                                                "steady inflow: Q_in = 10.0",
+                                            "outlet:",
+                                                "zero outflow: Q_out = 0.0",
+                                        "Solution:",
+                                            "P_in = P_out = Q_in/C * t"
+                                   ]
+    },
+    "boundary_conditions": [
+        {
+            "bc_name": "INFLOW",
+            "bc_type": "FLOW",
+            "bc_values": {
+                "Q": [
+                    10.0,
+                    10.0
+                ],
+                "t": [
+                    0.0,
+                    1.0
+                ]
+            }
+        },
+        {
+            "bc_name": "OUT",
+            "bc_type": "FLOW",
+            "bc_values": {
+                "Q": [
+                    0.0,
+                    0.0
+                ],
+                "t": [
+                    0.0,
+                    1.0
+                ]
+            }
+        }
+    ],
+    "simulation_parameters": {
+        "number_of_cardiac_cycles": 2,
+        "number_of_time_pts_per_cardiac_cycle": 11,
+        "steady_initial": false
+    },
+    "vessels": [
+        {
+            "boundary_conditions": {
+                "inlet": "INFLOW",
+                "outlet": "OUT"
+            },
+            "vessel_id": 0,
+            "vessel_length": 10.0,
+            "vessel_name": "branch0_seg0",
+            "zero_d_element_type": "Capacitance",
+            "zero_d_element_values": {
+                "C": 0.001
+            }
+        }
+    ]
+}

@@ -25,7 +25,6 @@ Solver::Solver(const nlohmann::json& config) {
   } else {
     this->model->cardiac_cycle_period = simparams.sim_cardiac_period;
   }
-
   DEBUG_MSG("Load initial condition");
   initial_state = load_initial_condition(config, *this->model.get());
 

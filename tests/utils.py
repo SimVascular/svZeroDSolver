@@ -2,13 +2,15 @@ import json
 import os
 import subprocess
 from tempfile import TemporaryDirectory
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 import numpy as np
 import pandas as pd
 
 # global boolean to perform coverage testing
 # (run executables instead of Python interface, much slower)
-from pytest import coverage
+import coverage
 
 import pysvzerod
 
@@ -58,61 +60,47 @@ def run_with_reference(
         ):
 
 
-    res, config = execute_pysvzerod(test_config, "solver")
+    res = pysvzerod.simulate(test_config)
 
-    if res.shape[1] == 6:
-        # we have a result with fields [name, time, p_in, p_out, q_in, q_out]
-        for field in ["pressure_in", "pressure_out", "flow_in", "flow_out"]:
-            if "pressure" in field:
-                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_PRES)
-            elif "flow" in field:
-                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_FLOW)
+    if res.shape[1] >= 6:
+        # we have a result with fields [name, time, p_in, p_out, q_in, q_out] SOME HAVE GREATTER LENGTH NEED TO ADDRESS
+        pressure_cols = ["pressures_in", "pressure_out"]
+        flow_cols = ["flow_in", "flow_out"]
+
+        bool_df = pd.DataFrame(index=res.index, columns=res.columns, dtype=bool)
+
+        for col in res.columns:
+            tol = RTOL_PRES if col in pressure_cols else RTOL_FLOW if col in flow_cols else None
+            if tol is not None:
+                check = np.abs(res[col] - ref[col]) < tol
+                bool_df[col] = check  # True if difference is below tolerance
+
+        if not bool_df.all().all():  # Check if any value exceeded tolerance
+            # Extract only differing rows/columns for a cleaner error message
+            differing_locs = np.where(~bool_df)  # Shows only the out-of-tolerance values
+            differing_indices = res.index[differing_locs[0]]
+            differing_columns = res.columns[differing_locs[1]]
+
+            if differing_indices.any():  # If any differences are found
+                diff_locations = list(zip(differing_indices, differing_columns))
+                raise AssertionError(f"Differences exceed tolerance at:\n{diff_locations}")
+
     else:
         # we have a result with fields [name, time, y] and the result must be compared based on the name field. name is of format [flow:vessel:outlet]
         # we will compare the average of each branch
-        avg_res_flow = []
-        avg_ref_flow = []
-        avg_res_pres = []
-        avg_ref_pres = []
-        for index, row in res.iterrows():
 
-            if "flow" in row["name"]:
-                if row["name"] == res.iloc[index + 1]["name"]:
-                    # we are compilng the results for a branch
-                    avg_ref_flow.append(ref.loc[row.name].y)
-                    avg_res_flow.append(row.y)
-                elif avg_res_flow == []:
-                    # there is only one result for this branch
-                    assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_FLOW)
-                else:
-                    # we are on the last result for this branch
-                    avg_ref_flow.append(ref.loc[row.name].y)
-                    avg_res_flow.append(row.y)
-                    assert np.isclose(np.array(avg_res_flow).all(), np.array(avg_ref_flow).all(), rtol=RTOL_FLOW)
-                    avg_res_flow = []
-                    avg_ref_flow = []
-                    
-            elif "pressure" in row["name"]:
-                if index == len(res) - 1:
-                    # we are on the last row
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                    assert np.isclose(np.array(avg_res_pres).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
-                elif row["name"] == res.iloc[index + 1]["name"]:
-                    # we are compilng the results for a branch
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                elif avg_res_pres == []:
-                    # there is only one result for this branch
-                    assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_PRES)
-                else:
-                    # we are on the last result for this branch
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                    # round the result to 10 decimal places to avoid floating point errors with reference solution computed on ubuntu OS
-                    assert np.isclose(np.array(avg_res_pres).round(10).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
-                    avg_res_pres = []
-                    avg_ref_pres = []
+        # Merge both datasets on 'Object' and 't' to align values
+        res_merged = ref.merge(res, on=["name", "time"], suffixes=("_expected", "_actual"))
+
+        # Compute absolute difference
+        res_merged["Difference"] = abs(res_merged["y_expected"] - res_merged["y_actual"])
+
+        # Apply object-specific tolerance
+        res_merged["Within_Tolerance"] = res_merged.apply(
+            lambda row: row["Difference"] <= RTOL_FLOW if "flow" in row["name"] else RTOL_PRES, axis=1
+        )
+
+        assert res_merged["Within_Tolerance"].all()
 
 
 def run_test_case_by_name(name, output_variable_based=False, folder="."):
@@ -157,3 +145,122 @@ def get_result(result_array, field, branch, time_step):
     """ "Get results at specific field, branch, branch_node and time step."""
     # extract result
     return result_array[field][branch][time_step]
+
+
+def plot_res_vs_ref_sol(testfile):
+    '''
+    plot the results of a test case against the reference solution
+    :param testfile: path to the test case json file
+    '''
+
+    # read reference solution
+    ref_sol = pd.read_json(os.path.join(this_file_dir, "cases", "results", "result_" + os.path.basename(testfile)))
+    # read result
+    result = pysvzerod.simulate(testfile)
+    
+    if result.shape[1] == 6:
+        # we have a result with fields [name, time, p_in, p_out, q_in, q_out]
+        # plot results
+        fig, ax = plt.subplots(2, 2, figsize=(10, 10))
+        # plot pressure_in
+        ax[0, 0].plot(result["time"], result["pressure_in"], label="pysvzerod")
+        ax[0, 0].plot(ref_sol["time"], ref_sol["pressure_in"], label="reference solution")
+        ax[0, 0].set_title("Pressure In")
+        ax[0, 0].set_xlabel("Time")
+        ax[0, 0].set_ylabel("Pressure [Pa]")
+        ax[0, 0].legend()
+        # plot pressure_out
+        ax[0, 1].plot(result["time"], result["pressure_out"], label="pysvzerod")
+        ax[0, 1].plot(ref_sol["time"], ref_sol["pressure_out"], label="reference solution")
+        ax[0, 1].set_title("Pressure Out")
+        ax[0, 1].set_xlabel("Time")
+        ax[0, 1].set_ylabel("Pressure [Pa]")
+        ax[0, 1].legend()
+        # plot flow_in
+        ax[1, 0].plot(result["time"], result["flow_in"], label="pysvzerod")
+        ax[1, 0].plot(ref_sol["time"], ref_sol["flow_in"], label="reference solution")
+        ax[1, 0].set_title("Flow In")
+        ax[1, 0].set_xlabel("Time")
+        ax[1, 0].set_ylabel("Flow [m^3/s]")
+        ax[1, 0].legend()
+        # plot flow_out
+        ax[1, 1].plot(result["time"], result["flow_out"], label="pysvzerod")
+        ax[1, 1].plot(ref_sol["time"], ref_sol["flow_out"], label="reference solution")
+        ax[1, 1].set_title("Flow Out")
+        ax[1, 1].set_xlabel("Time")
+        ax[1, 1].set_ylabel("Flow [m^3/s]")
+        ax[1, 1].legend()
+        # show plot
+        plt.tight_layout()
+        plt.show()
+
+    else:
+        # we have a result with fields [name, time, y] and the result must be compared based on the name field. name is of format [flow:vessel:outlet]
+
+        
+        grouped_by_name = result.groupby("name")
+
+        # plot the groups with flow in the name using seaborn lineplot
+        fig, ax = plt.subplots(1, 2, figsize=(10, 5))
+        for name, group in grouped_by_name:
+            if "flow" in name:
+                group = group.sort_values("time")
+                group["y"] = group["y"].astype(float)
+                group["time"] = group["time"].astype(float)
+                # plot the group in a subplot
+                ax[0].plot(group["time"], group["y"], label=name, marker="o")
+            elif "pressure" in name:
+                group = group.sort_values("time")
+                group["y"] = group["y"].astype(float)
+                group["time"] = group["time"].astype(float)
+                # plot the group
+                ax[1].plot(group["time"], group["y"], label=name, marker="o")
+
+        # plot the reference solution
+        ref_grouped_by_name = ref_sol.groupby("name")
+        for name, group in ref_grouped_by_name:
+            if "flow" in name:
+                group = group.sort_values("time")
+                group["y"] = group["y"].astype(float)
+                group["time"] = group["time"].astype(float)
+                # plot the group
+                ax[0].plot(group["time"], group["y"], label=name + " (ref)", linestyle="--")
+            elif "pressure" in name:
+                group = group.sort_values("time")
+                group["y"] = group["y"].astype(float)
+                group["time"] = group["time"].astype(float)
+                # plot the group
+                ax[1].plot(group["time"], group["y"], label=name + " (ref)", linestyle="--")
+        
+        ax[0].set_title("Flow")
+        ax[0].set_xlabel("Time")
+        ax[0].set_ylabel("Flow [m^3/s]")
+        ax[0].legend()
+
+        ax[1].set_title("Pressure")
+        ax[1].set_xlabel("Time")
+        ax[1].set_ylabel("Pressure [Pa]")
+        ax[1].legend()
+
+        plt.tight_layout()
+        plt.show()
+        
+        # sns.lineplot(data=grouped_by_name, x="time", y="y", hue="name", palette="tab10")
+        
+
+            
+
+        
+if __name__ == "__main__":
+    # plot the results of a test case against the reference solution for valve tanh
+    # testfile = os.path.join(this_file_dir, "cases", "valve_tanh.json")
+    # plot_res_vs_ref_sol(testfile)
+    # # plot the results of a test case against the reference solution for chamber elastance inductor
+    # testfile = os.path.join(this_file_dir, "cases", "chamber_elastance_inductor.json")
+    # plot_res_vs_ref_sol(testfile)
+
+    # test_config = json.load(open(os.path.join(this_file_dir, "cases", "pulsatileFlow_R_coronary_cycle_error.json")))
+    # ref_sol = pd.read_json(os.path.join(this_file_dir, "cases", "results", "result_pulsatileFlow_R_coronary_cycle_error.json"))
+    # run_with_reference(ref_sol, test_config)
+
+    pysvzerod.simulate(os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_withCoronaries.json"))

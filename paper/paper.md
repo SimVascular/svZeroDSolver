@@ -104,7 +104,8 @@ However, their focus is on multi-physics simulations of cardiovascular biomechan
 The `CellML` and `CVSim`  packages include a limited set of stand-alone zero-dimensional flow models for specific anatomies/applications [@cellml; @heldt2010cvsim], but they do not provide the modular functionality to specify unique anatomical models.
 In addition, there have been other packages that use zero-dimensional modeling techniques with a focus on statistical analysis, cardiac electromechanics, or specific anatomical models [@HUTTARY2017104; @REGAZZONI2021104641; @rosalia2021object].
 However, these packages are either not focused on zero-dimensional modeling or use MATLAB implementations, which require software licenses and are not free to use. 
-In contrast, the purpose of `svZeroDSolver` is to provide an open-source framework specifically for simulating zero-dimensional flows in a variety of simple and complex anatomies that can be designed in a user-specific and application-specific manner -- by leveraging the modular nature of the code.
+
+In contrast to these existing packages, the purpose of `svZeroDSolver` is to provide an open-source framework specifically for simulating zero-dimensional flows in a variety of simple and complex anatomies that can be designed in a user-specific and application-specific manner -- by leveraging the modular nature of the code.
 The unique features listed above allow the use of `svZeroDSolver` both as a stand-alone zero-dimensional flow solver for unique and patient-specific anatomies, as well as in conjunction with the aforementioned multi-physics solvers as boundary conditions, for parameters estimation and uncertainty quantification, or even as an instructional tool using its graphical interfaces.  
 
 ![Various zero-dimensional "blocks" included in `svZeroDSolver` at the time of writing.\label{fig:blocks}](blocks.png){ width=80% }

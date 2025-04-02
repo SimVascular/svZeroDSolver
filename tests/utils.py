@@ -157,6 +157,8 @@ def plot_res_vs_ref_sol(testfile):
     ref_sol = pd.read_json(os.path.join(this_file_dir, "cases", "results", "result_" + os.path.basename(testfile)))
     # read result
     result = pysvzerod.simulate(testfile)
+
+    ref_marker = "--"  # marker for the reference solution
     
     if result.shape[1] == 6:
         # we have a result with fields [name, time, p_in, p_out, q_in, q_out]
@@ -164,28 +166,28 @@ def plot_res_vs_ref_sol(testfile):
         fig, ax = plt.subplots(2, 2, figsize=(10, 10))
         # plot pressure_in
         ax[0, 0].plot(result["time"], result["pressure_in"], label="pysvzerod")
-        ax[0, 0].plot(ref_sol["time"], ref_sol["pressure_in"], label="reference solution")
+        ax[0, 0].plot(ref_sol["time"], ref_sol["pressure_in"], label="reference solution", linestyle=ref_marker)
         ax[0, 0].set_title("Pressure In")
         ax[0, 0].set_xlabel("Time")
         ax[0, 0].set_ylabel("Pressure [Pa]")
         ax[0, 0].legend()
         # plot pressure_out
         ax[0, 1].plot(result["time"], result["pressure_out"], label="pysvzerod")
-        ax[0, 1].plot(ref_sol["time"], ref_sol["pressure_out"], label="reference solution")
+        ax[0, 1].plot(ref_sol["time"], ref_sol["pressure_out"], label="reference solution", linestyle=ref_marker)
         ax[0, 1].set_title("Pressure Out")
         ax[0, 1].set_xlabel("Time")
         ax[0, 1].set_ylabel("Pressure [Pa]")
         ax[0, 1].legend()
         # plot flow_in
         ax[1, 0].plot(result["time"], result["flow_in"], label="pysvzerod")
-        ax[1, 0].plot(ref_sol["time"], ref_sol["flow_in"], label="reference solution")
+        ax[1, 0].plot(ref_sol["time"], ref_sol["flow_in"], label="reference solution", linestyle=ref_marker)
         ax[1, 0].set_title("Flow In")
         ax[1, 0].set_xlabel("Time")
         ax[1, 0].set_ylabel("Flow [m^3/s]")
         ax[1, 0].legend()
         # plot flow_out
         ax[1, 1].plot(result["time"], result["flow_out"], label="pysvzerod")
-        ax[1, 1].plot(ref_sol["time"], ref_sol["flow_out"], label="reference solution")
+        ax[1, 1].plot(ref_sol["time"], ref_sol["flow_out"], label="reference solution", linestyle=ref_marker)
         ax[1, 1].set_title("Flow Out")
         ax[1, 1].set_xlabel("Time")
         ax[1, 1].set_ylabel("Flow [m^3/s]")
@@ -208,13 +210,13 @@ def plot_res_vs_ref_sol(testfile):
                 group["y"] = group["y"].astype(float)
                 group["time"] = group["time"].astype(float)
                 # plot the group in a subplot
-                ax[0].plot(group["time"], group["y"], label=name, marker="o")
+                ax[0].plot(group["time"], group["y"], label=name)
             elif "pressure" in name:
                 group = group.sort_values("time")
                 group["y"] = group["y"].astype(float)
                 group["time"] = group["time"].astype(float)
                 # plot the group
-                ax[1].plot(group["time"], group["y"], label=name, marker="o")
+                ax[1].plot(group["time"], group["y"], label=name)
 
         # plot the reference solution
         ref_grouped_by_name = ref_sol.groupby("name")
@@ -244,16 +246,3 @@ def plot_res_vs_ref_sol(testfile):
 
         plt.tight_layout()
         plt.show()
-        
-        # sns.lineplot(data=grouped_by_name, x="time", y="y", hue="name", palette="tab10")
-        
-
-            
-
-        
-if __name__ == "__main__":
-    # plot the results of a test case against the reference solution for valve tanh
-    testfile = os.path.join(this_file_dir, "cases", "steadyFlow_R_coronary.json")
-    plot_res_vs_ref_sol(testfile)
-    
-    # pysvzerod.simulate(os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_withCoronaries.json"))

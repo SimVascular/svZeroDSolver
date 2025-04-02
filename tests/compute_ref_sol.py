@@ -2,6 +2,8 @@ import os
 import json
 import pysvzerod
 
+this_file_dir = os.path.abspath(os.path.dirname(__file__))
+
 def compute_ref_sol(testname):
     '''
     compute reference solution for a test case
@@ -15,10 +17,10 @@ def compute_ref_sol(testname):
     # testfiles.remove("steadyFlow_calibration.json")
 
     # compute result
-    result = pysvzerod.simulate(json.load(open(os.path.join('cases', testname))))
+    result = pysvzerod.simulate(json.load(open(os.path.join(this_file_dir, 'cases', testname))))
 
     # save result
-    result_filename = os.path.join('cases/results', 'result_' + testname)
+    result_filename = os.path.join(this_file_dir, 'cases', 'results', 'result_' + testname)
 
     # save to json
     with open(result_filename, 'w') as f:

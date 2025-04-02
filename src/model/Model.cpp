@@ -55,7 +55,10 @@ Model::Model() {
       {"RESISTANCE", block_factory<ResistanceBC>()},
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
-      {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()}};
+      {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
+      {"Resistance", block_factory<Resistance>()},
+      {"Capacitance", block_factory<Capacitance>()},
+      {"Inductance", block_factory<Inductance>()}};
 }
 
 Model::~Model() {}

@@ -253,14 +253,7 @@ def plot_res_vs_ref_sol(testfile):
         
 if __name__ == "__main__":
     # plot the results of a test case against the reference solution for valve tanh
-    # testfile = os.path.join(this_file_dir, "cases", "valve_tanh.json")
-    # plot_res_vs_ref_sol(testfile)
-    # # plot the results of a test case against the reference solution for chamber elastance inductor
-    # testfile = os.path.join(this_file_dir, "cases", "chamber_elastance_inductor.json")
-    # plot_res_vs_ref_sol(testfile)
-
-    # test_config = json.load(open(os.path.join(this_file_dir, "cases", "pulsatileFlow_R_coronary_cycle_error.json")))
-    # ref_sol = pd.read_json(os.path.join(this_file_dir, "cases", "results", "result_pulsatileFlow_R_coronary_cycle_error.json"))
-    # run_with_reference(ref_sol, test_config)
-
-    pysvzerod.simulate(os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_withCoronaries.json"))
+    testfile = os.path.join(this_file_dir, "cases", "steadyFlow_R_coronary.json")
+    plot_res_vs_ref_sol(testfile)
+    
+    # pysvzerod.simulate(os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_withCoronaries.json"))

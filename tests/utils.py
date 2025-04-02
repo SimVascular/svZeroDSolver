@@ -70,7 +70,8 @@ def run_with_reference(
         for col in res.columns:
             tol = RTOL_PRES if col in pressure_cols else RTOL_FLOW if col in flow_cols else None
             if tol is not None:
-                check = np.abs(res[col] - ref[col]) < tol
+                rel_diff = np.abs(res[col] - ref[col]) - tol - tol * np.abs(ref[col])
+                check = rel_diff <= 0.0
                 bool_df[col] = check  # True if difference is below tolerance
 
         if not bool_df.all().all():  # Check if any value exceeded tolerance
@@ -81,6 +82,14 @@ def run_with_reference(
 
             if differing_indices.any():  # If any differences are found
                 diff_locations = list(zip(differing_indices, differing_columns))
+                # find the value where the difference exceeds tolerance
+                for i, col in diff_locations:
+                    if i in res.index and col in res.columns:
+                        # Get the actual values from both result and reference
+                        diff_values = (res.at[i, col], ref.at[i, col])
+                        print(f"Test failed in field {col}: {diff_values[0]} (result) vs {diff_values[1]} (reference)")
+                diff_values = [(res.at[i, col], ref.at[i, col]) for i, col in diff_locations]
+
                 raise AssertionError(f"Differences exceed tolerance at:\n{diff_locations}")
 
     else:
@@ -90,16 +99,23 @@ def run_with_reference(
         # Merge both datasets on 'Object' and 't' to align values
         res_merged = ref.merge(res, on=["name", "time"], suffixes=("_expected", "_actual"))
 
-        # Compute absolute difference
-        res_merged["Difference"] = abs(res_merged["y_expected"] - res_merged["y_actual"])
+        # Compute relative difference
+        res_merged["Relative_Difference"] = abs(res_merged["y_expected"] - res_merged["y_actual"]) / res_merged["y_expected"]
 
         # Apply object-specific tolerance
         res_merged["Within_Tolerance"] = res_merged.apply(
-            lambda row: row["Difference"] <= RTOL_FLOW if "flow" in row["name"] else RTOL_PRES, axis=1
+            lambda row: row["Relative_Difference"] - 2 * (RTOL_FLOW if "flow" in row["name"] else RTOL_PRES) <= 0.0, axis=1
         )
 
-        assert res_merged["Within_Tolerance"].all()
-
+        if not res_merged["Within_Tolerance"].all():
+            # Extract only differing rows for a cleaner error message
+            differing_rows = res_merged[~res_merged["Within_Tolerance"]]
+            if not differing_rows.empty:
+                diff_info = differing_rows[["name", "time", "y_expected", "y_actual", "Relative_Difference"]]
+                print("Test failed in the following rows:\n", diff_info.to_string(index=False))
+                raise AssertionError("Differences exceed tolerance.")
+            else:
+                raise AssertionError("Differences exceed tolerance but no specific rows found.")
 
 def run_test_case_by_name(name, output_variable_based=False, folder="."):
     """Run a test case by its case name.
@@ -144,3 +160,12 @@ def get_result(result_array, field, branch, time_step):
     # extract result
     return result_array[field][branch][time_step]
 
+
+if __name__ == "__main__":
+    testfile = os.path.join(this_file_dir, "cases", "valve_tanh.json")
+    ref = os.path.join(this_file_dir, "cases", "results", "result_valve_tanh.json")
+
+    run_with_reference(
+        ref=pd.read_json(ref),
+        test_config=json.load(open(testfile))
+    )

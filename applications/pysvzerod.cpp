@@ -1,6 +1,4 @@
-// This file is part of svZeroDSolver licensed under Stanford University, The Regents of the University of 
-//                                                   California, and others.
-// 
+// This file is part of svZeroDSolver licensed under the MIT License
 // See the LICENSE.md file for license information
 /**
  * @file pysvzerod.cpp

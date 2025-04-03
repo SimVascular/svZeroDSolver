@@ -35,7 +35,7 @@ void BloodVesselCRL::setup_dofs(DOFHandler &dofhandler) {
 }
 
 void BloodVesselCRL::update_constant(SparseSystem &system,
-                                  std::vector<double> &parameters) {
+                                     std::vector<double> &parameters) {
   // Get parameters
   double capacitance = parameters[global_param_ids[ParamId::CAPACITANCE]];
   double inductance = parameters[global_param_ids[ParamId::INDUCTANCE]];
@@ -106,11 +106,9 @@ void BloodVesselCRL::update_gradient(
     jacobian.coeffRef(global_eqn_ids[0], global_param_ids[3]) = -fabs(y3) * y3;
   }
 
-  jacobian.coeffRef(global_eqn_ids[1], global_param_ids[1]) =
-      -dy0;
+  jacobian.coeffRef(global_eqn_ids[1], global_param_ids[1]) = -dy0;
 
   residual(global_eqn_ids[0]) =
       y0 - (resistance + stenosis_resistance) * y3 - y2 - inductance * dy3;
-  residual(global_eqn_ids[1]) =
-      y1 - y3 - capacitance * dy0;
+  residual(global_eqn_ids[1]) = y1 - y3 - capacitance * dy0;
 }

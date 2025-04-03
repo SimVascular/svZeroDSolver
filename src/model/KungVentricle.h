@@ -146,8 +146,7 @@ class KungVentricle : public Block {
    * @param model The model to which the block belongs
    */
   KungVentricle(int id, Model *model)
-      : Block(id, model, BlockType::kung_ventricle,
-              BlockClass::chamber,
+      : Block(id, model, BlockType::kung_ventricle, BlockClass::chamber,
               {{"Emax", InputParameter()},
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},

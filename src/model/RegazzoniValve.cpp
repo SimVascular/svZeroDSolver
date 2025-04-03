@@ -39,7 +39,7 @@ void RegazzoniValve::setup_dofs(DOFHandler &dofhandler) {
 // update_constant updates matrices E and F from E(y,t)*y_dot + F(y,t)*y +
 // c(y,t) = 0 with terms that DO NOT DEPEND ON THE SOLUTION
 void RegazzoniValve::update_constant(SparseSystem &system,
-                                std::vector<double> &parameters) {
+                                     std::vector<double> &parameters) {
   // Set element contributions
   // coeffRef args are the indices (i,j) of the matrix
   // global_eqn_ids: number of rows in the matrix, set in setup_dofs
@@ -71,13 +71,11 @@ void RegazzoniValve::update_solution(
 
   double resistance = 0;
 
-  if (p_out < p_in){
+  if (p_out < p_in) {
     resistance = Rmin;
   } else {
     resistance = Rmax;
   }
-  
+
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -resistance;
-
 }
-

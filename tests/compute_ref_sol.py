@@ -29,6 +29,18 @@ def compute_ref_sol(testname):
     # print for confirmation
     print(f'Reference solution for test case {testname} computed and saved to {result_filename}. Please verify that the results are as expected.')
     
+def compute_all_ref_sol():
+    """
+    Compute reference solutions for all test cases in the 'cases' directory.
+    This function iterates through all JSON files in the 'cases' directory
+    and computes their reference solutions.
+    """
+    testfiles = [f for f in os.listdir(os.path.join(this_file_dir, 'cases')) if f.endswith('.json')]
+    testfiles.remove("steadyFlow_calibration.json")
+    for testfile in testfiles:
+        compute_ref_sol(testfile)
+
+
 if __name__ == "__main__":
     # compute the reference solution for a specified test case
     import sys
@@ -36,6 +48,10 @@ if __name__ == "__main__":
         print("Usage: python compute_ref_sol.py <test_case_name>")
         sys.exit(1)
     else:
-        print('computing reference solution for test case:', sys.argv[1])
-        test_case_name = sys.argv[1]
-        compute_ref_sol(test_case_name)
+        if sys.argv[1] == "all":
+            compute_all_ref_sol()
+        else:
+            # compute reference solution for a single test case
+            print('computing reference solution for test case:', sys.argv[1])
+            test_case_name = sys.argv[1]
+            compute_ref_sol(test_case_name)

@@ -90,7 +90,7 @@ def run_with_reference(
                         print(f"Test failed in field {col}: {diff_values[0]} (result) vs {diff_values[1]} (reference)")
                 diff_values = [(res.at[i, col], ref.at[i, col]) for i, col in diff_locations]
 
-                raise AssertionError(f"Differences exceed tolerance at:\n{diff_locations}")
+                raise AssertionError(f"Differences exceed tolerance.")
 
     else:
         # we have a result with fields [name, time, y] and the result must be compared based on the name field. name is of format [flow:vessel:outlet]

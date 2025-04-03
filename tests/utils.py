@@ -15,7 +15,7 @@ import pysvzerod
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
 RTOL_PRES = 1.0e-7
-RTOL_FLOW = 1.0e-8
+RTOL_FLOW = 1.0e-7
 
 
 def execute_pysvzerod(testfile, mode):

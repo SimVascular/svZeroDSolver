@@ -102,7 +102,7 @@ def run_with_reference(
         # Compute relative difference
         def compute_relative_difference(row):
             tol = RTOL_FLOW if "flow" in row["name"] else RTOL_PRES
-            return abs(row["y_actual"] - row["y_expected"]) - tol - (tol * row["y_expected"])
+            return abs(row["y_actual"] - row["y_expected"]) - tol - (tol * abs(row["y_expected"]))
         res_merged["Relative_Difference"] = res_merged.apply(compute_relative_difference, axis=1)
 
         # Apply object-specific tolerance
@@ -162,13 +162,3 @@ def get_result(result_array, field, branch, time_step):
     """ "Get results at specific field, branch, branch_node and time step."""
     # extract result
     return result_array[field][branch][time_step]
-
-
-if __name__ == "__main__":
-    testfile = os.path.join(this_file_dir, "cases", "valve_tanh.json")
-    ref = os.path.join(this_file_dir, "cases", "results", "result_valve_tanh.json")
-
-    run_with_reference(
-        ref=pd.read_json(ref),
-        test_config=json.load(open(testfile))
-    )

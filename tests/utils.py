@@ -62,7 +62,7 @@ def run_with_reference(
 
     if res.shape[1] >= 6:
         # we have a result with fields [name, time, p_in, p_out, q_in, q_out] SOME HAVE GREATTER LENGTH NEED TO ADDRESS
-        pressure_cols = ["pressures_in", "pressure_out"]
+        pressure_cols = ["pressure_in", "pressure_out"]
         flow_cols = ["flow_in", "flow_out"]
 
         bool_df = pd.DataFrame(index=res.index, columns=res.columns, dtype=bool)
@@ -87,7 +87,8 @@ def run_with_reference(
                     if i in res.index and col in res.columns:
                         # Get the actual values from both result and reference
                         diff_values = (res.at[i, col], ref.at[i, col])
-                        print(f"Test failed in field {col}: {diff_values[0]} (result) vs {diff_values[1]} (reference)")
+                        tol = RTOL_PRES if col in pressure_cols else RTOL_FLOW if col in flow_cols else None
+                        print(f"Test failed in field {col}: {diff_values[0]} (result) vs {diff_values[1]} (reference) with relative difference {abs(diff_values[0] - diff_values[1]) - tol - tol * np.abs(diff_values[1])} greater than zero.")
                 diff_values = [(res.at[i, col], ref.at[i, col]) for i, col in diff_locations]
 
                 raise AssertionError(f"Differences exceed tolerance.")

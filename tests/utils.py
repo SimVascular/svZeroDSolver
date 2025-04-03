@@ -100,11 +100,14 @@ def run_with_reference(
         res_merged = ref.merge(res, on=["name", "time"], suffixes=("_expected", "_actual"))
 
         # Compute relative difference
-        res_merged["Relative_Difference"] = abs(res_merged["y_expected"] - res_merged["y_actual"]) / res_merged["y_expected"]
+        def compute_relative_difference(row):
+            tol = RTOL_FLOW if "flow" in row["name"] else RTOL_PRES
+            return abs(row["y_actual"] - row["y_expected"]) - tol - (tol * row["y_expected"])
+        res_merged["Relative_Difference"] = res_merged.apply(compute_relative_difference, axis=1)
 
         # Apply object-specific tolerance
         res_merged["Within_Tolerance"] = res_merged.apply(
-            lambda row: row["Relative_Difference"] - 2 * (RTOL_FLOW if "flow" in row["name"] else RTOL_PRES) <= 0.0, axis=1
+            lambda row: row["Relative_Difference"] <= 0.0, axis=1
         )
 
         if not res_merged["Within_Tolerance"].all():

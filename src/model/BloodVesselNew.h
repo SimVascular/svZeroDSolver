@@ -151,10 +151,15 @@ class BloodVesselNew : public Block {
    *
    */
   enum ParamId {
-    RESISTANCE = 0,
-    CAPACITANCE = 1,
-    INDUCTANCE = 2,
-    STENOSIS_COEFFICIENT = 3,
+    rho = 0,
+    d = 1,
+    Ro = 2,
+    W1 = 3,
+    W2 = 4,
+    eta = 5,
+    a = 6,
+    sigma_o = 7,
+
   };
 
   /**
@@ -165,10 +170,14 @@ class BloodVesselNew : public Block {
    */
   BloodVesselNew(int id, Model *model)
       : Block(id, model, BlockType::blood_vessel_new, BlockClass::vessel,
-              {{"R_poiseuille", InputParameter()},
-               {"C", InputParameter(true)},
-               {"L", InputParameter(true)},
-               {"stenosis_coefficient", InputParameter(true)}}) {}
+              {{"rho", InputParameter(true)},
+               {"d", InputParameter(true)},
+               {"Ro", InputParameter(true)},
+               {"W1", InputParameter(true)},
+               {"W2", InputParameter(true)},
+               {"eta", InputParameter(true)},
+               {"a", InputParameter(true)},
+               {"sigma_o", InputParameter(true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -225,7 +234,7 @@ class BloodVesselNew : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{5, 3, 2};
+  TripletsContributions num_triplets{0, 0, 8};
 };
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSELNEW_HPP_

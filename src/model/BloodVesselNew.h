@@ -159,7 +159,6 @@ class BloodVesselNew : public Block {
     eta = 5,
     a = 6,
     sigma_o = 7,
-
   };
 
   /**
@@ -170,14 +169,14 @@ class BloodVesselNew : public Block {
    */
   BloodVesselNew(int id, Model *model)
       : Block(id, model, BlockType::blood_vessel_new, BlockClass::vessel,
-              {{"rho", InputParameter(true)},
-               {"d", InputParameter(true)},
-               {"Ro", InputParameter(true)},
-               {"W1", InputParameter(true)},
-               {"W2", InputParameter(true)},
-               {"eta", InputParameter(true)},
-               {"a", InputParameter(true)},
-               {"sigma_o", InputParameter(true)}}) {}
+              {{"rho", InputParameter()},
+               {"d", InputParameter()},
+               {"Ro", InputParameter()},
+               {"W1", InputParameter()},
+               {"W2", InputParameter()},
+               {"eta", InputParameter()},
+               {"a", InputParameter()},
+               {"sigma_o", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -223,10 +222,10 @@ class BloodVesselNew : public Block {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
-                       std::vector<double> &y, std::vector<double> &dy);
+  // void update_gradient(Eigen::SparseMatrix<double> &jacobian,
+  //                      Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
+  //                      Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
+  //                      std::vector<double> &y, std::vector<double> &dy);
 
   /**
    * @brief Number of triplets of element
@@ -234,7 +233,7 @@ class BloodVesselNew : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{0, 0, 8};
+  TripletsContributions num_triplets{0, 0, 20};
 };
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSELNEW_HPP_

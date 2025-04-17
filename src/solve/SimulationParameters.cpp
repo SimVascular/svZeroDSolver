@@ -205,7 +205,7 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
     sim_params.sim_external_step_size =
         sim_config.value("external_step_size", 0.1);
   }
-  sim_params.sim_abs_tol = sim_config.value("absolute_tolerance", 1e-8);
+  sim_params.sim_abs_tol = sim_config.value("absolute_tolerance", 1e-9);
   sim_params.sim_nliter = sim_config.value("maximum_nonlinear_iterations", 30);
   sim_params.sim_steady_initial = sim_config.value("steady_initial", true);
   sim_params.sim_rho_infty = sim_config.value("rho_infty", 0.5);

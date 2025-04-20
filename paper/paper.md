@@ -52,7 +52,7 @@ Simply specifying a `.json` dictionary of lumped-parameter "blocks" -- such as b
 In addition, the package includes Python and C++ interfaces to facilitate its use with other software packages.
 For example, it can be integrated into Python-based optimization and uncertainty quantification applications [@zanoni2024; @Lee2024; @richter2024bayesian; @menon2024personalizeduncertainty].
 It can also be interfaced with C++/Fortran software for high-fidelity cardiovascular flow simulations, where `svZeroDSolver` can conveniently provide physiological lumped-parameter boundary conditions [@menon2023predictors; @menon2024personalized].
-`svZeroDSolver` includes an application, called `svZeroDCalibrator`, to automatically calibrate parameters of a given zero-dimensional model based independent hemodynamic measurements or high-fidelity simulations -- thus improving the accuracy of zero-dimensional models [@richter2024bayesian].
+`svZeroDSolver` includes an application, called `svZeroDCalibrator`, to automatically calibrate parameters of a given zero-dimensional model based on independent hemodynamic measurements or high-fidelity simulations -- thus improving the accuracy of zero-dimensional models [@richter2024bayesian].
 It also includes graphical interfaces to interactively create lumped-parameter models for simulations, as well as to visualize the simulated anatomy and hemodynamics.
 
 # Statement of need
@@ -93,14 +93,16 @@ This combination of features makes `svZeroDSolver` uniquely applicable to a wide
 
 While there are other open-source projects that provide the functionality for cardiovascular flow modeling, and specifically zero-dimensional flow modeling, `svZeroDSolver` has several features that distinguish it from previous work. 
 In particular, prior packages have primarily focused on multi-physics finite element modeling for cardiovascular biomechanics [@crimson2021; @Zhu2022; @AFRICA2024109039; @Hirschvogel2024]. 
-Although these projects allow the implementation of simple zero-dimensional models, usually as boundary conditions to three-dimensional models, the primary focus is on the modeling of full three-dimensional fluid and tissue mechanics. 
+Although these projects allow the implementation of simple zero-dimensional models, either as boundary conditions to three-dimensional models or as simple stand-alone zero-dimensional models, the primary focus is on the modeling of full three-dimensional fluid and tissue mechanics. 
+Due to this, they generally lack the variety and/or modular functionality to create a broad range of user-specified zero-dimensional flow models. 
 There are, however, packages aimed specifically at reduced-order modeling for cardiovascular flows.
 For example, the `SimVascular` project includes [`svOneDSolver`](https://github.com/SimVascular/svOneDSolver) for the purpose of one-dimensional blood flow modeling.
 Another popular package for one-dimensional blood flow simulations is `Nektar1D` [@alastruey2012arterial].
 Similarly, `Artery.FE` implements one-dimensional blood flow modeling using the FEniCS finite element framework [@Agdestein2018], the `VaMpy` toolkit includes a package for modeling one-dimensional blood flow using the Lax-Wendroff finite difference method [@Diem-2017], and `openBF` is a finite volume implementation of one-dimensional blood flow [@benemerito2024openbf].
 
-In the zero-dimensional modeling context, `CRIMSON` [@crimson2021] and `lifex-cfd` [@AFRICA2024109039] include the ability to simulate simple zero-dimensional blood flow models, primarily as boundary conditions to three-dimensional simulations.
-However, their focus is on multi-physics simulations of cardiovascular biomechanics, therefore they are not stand-alone and modular zero-dimensional flow solvers.
+In the zero-dimensional modeling context, `CRIMSON` [@crimson2021], `lifex-cfd` [@AFRICA2024109039], and `Ambit` [@Hirschvogel2024] include the ability to simulate simple zero-dimensional blood flow models.
+However, as mentioned above, their focus is on multi-physics simulations of cardiovascular biomechanics. 
+Therefore, they support a limited set of stand-alone zero-dimensional models and do not feature the modularity that enables the creation of a large variety of zero-dimensional models as in `svZeroDSolver`.
 The `CellML` and `CVSim`  packages include a limited set of stand-alone zero-dimensional flow models for specific anatomies/applications [@cellml; @heldt2010cvsim], but they do not provide the modular functionality to specify unique anatomical models.
 In addition, there have been other packages that use zero-dimensional modeling techniques with a focus on statistical analysis, cardiac electromechanics, or specific anatomical models [@HUTTARY2017104; @REGAZZONI2021104641; @rosalia2021object].
 However, these packages are either not focused on zero-dimensional modeling or use MATLAB implementations, which require software licenses and are not free to use. 

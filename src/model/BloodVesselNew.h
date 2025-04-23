@@ -151,14 +151,17 @@ class BloodVesselNew : public Block {
    *
    */
   enum ParamId {
-    rho = 0,
-    d = 1,
-    Ro = 2,
-    W1 = 3,
-    W2 = 4,
-    eta = 5,
-    a = 6,
+    rho = 1,
+    d = 2,
+    Ro = 3,
+    W1 = 4,
+    W2 = 5,
+    eta = 6,
     sigma_o = 7,
+    EMAX = 8,
+    EMIN = 9,
+    TACTIVE = 10,
+    TTWITCH = 11
   };
 
   /**
@@ -169,13 +172,16 @@ class BloodVesselNew : public Block {
    */
   BloodVesselNew(int id, Model *model)
       : Block(id, model, BlockType::blood_vessel_new, BlockClass::vessel,
-              {{"rho", InputParameter()},
+              {{"Emax", InputParameter()},
+               {"Emin", InputParameter()},
+               {"t_active", InputParameter()},
+               {"t_twitch", InputParameter()},
+               {"rho", InputParameter()},
                {"d", InputParameter()},
                {"Ro", InputParameter()},
                {"W1", InputParameter()},
                {"W2", InputParameter()},
                {"eta", InputParameter()},
-               {"a", InputParameter()},
                {"sigma_o", InputParameter()}}) {}
 
   /**
@@ -197,35 +203,40 @@ class BloodVesselNew : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  // void update_constant(SparseSystem &system, std::vector<double> &parameters);
 
-  /**
-   * @brief Update the solution-dependent contributions of the element in a
-   * sparse system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   * @param y Current solution
-   * @param dy Current derivate of the solution
-   */
+  // /**
+  //  * @brief Update the solution-dependent contributions of the element in a
+  //  * sparse system
+  //  *
+  //  * @param system System to update contributions at
+  //  * @param parameters Parameters of the model
+  //  * @param y Current solution
+  //  * @param dy Current derivate of the solution
+  //  */
   void update_solution(SparseSystem &system, std::vector<double> &parameters,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
-  /**
-   * @brief Set the gradient of the block contributions with respect to the
-   * parameters
+ /**
+   * @brief Update the time-dependent contributions of the element in a sparse
+   * system
    *
-   * @param jacobian Jacobian with respect to the parameters
-   * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
-   * @param y Current solution
-   * @param dy Time-derivative of the current solution
+   * @param system System to update contributions at
+   * @param parameters Parameters of the model
    */
-  // void update_gradient(Eigen::SparseMatrix<double> &jacobian,
-  //                      Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-  //                      Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
-  //                      std::vector<double> &y, std::vector<double> &dy);
+  void update_time(SparseSystem &system, std::vector<double> &parameters, const Eigen::VectorXd &y,
+    const Eigen::VectorXd &dy);
+
+  private:
+    double a;   // Chamber Elastance
+
+  /**
+   * @brief Update the elastance functions which depend on time
+   *
+   * @param parameters Parameters of the model
+   */
+  void get_elastance_values(std::vector<double> &parameters);
 
   /**
    * @brief Number of triplets of element
@@ -233,7 +244,7 @@ class BloodVesselNew : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{0, 0, 20};
+  TripletsContributions num_triplets{0, 0, 16};
 };
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSELNEW_HPP_

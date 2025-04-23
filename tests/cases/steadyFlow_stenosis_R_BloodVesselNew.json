@@ -17,8 +17,8 @@
             "bc_type": "FLOW",
             "bc_values": {
                 "Q": [
-                    0,
-                    0
+                    5,
+                    5
                 ],
                 "t": [
                     0.0,
@@ -28,16 +28,16 @@
         },
         {
             "bc_name": "OUT",
-            "bc_type": "RESISTANCE",
+            "bc_type": "PRESSURE",
             "bc_values": {
-                "Pd": 0,
-                "R": 0
+                "P": [10000, 10000],
+                "t": [0, 1]
             }
         }
     ],
     "simulation_parameters": {
-        "number_of_cardiac_cycles": 2,
-        "number_of_time_pts_per_cardiac_cycle": 5,
+        "number_of_cardiac_cycles": 1,
+        "number_of_time_pts_per_cardiac_cycle": 50,
         "steady_initial": false
     },
     "vessels": [
@@ -51,14 +51,17 @@
             "vessel_name": "branch0_seg0",
             "zero_d_element_type": "BloodVesselNew",
             "zero_d_element_values": {
-                "rho" : 1000.0000, 
-                "d" : 0.0142, 
-                "Ro" : 0.0236, 
-                "W1" : 1.0000, 
-                "W2" : 1.0000, 
-                "eta" : 70.0000, 
-                "a" : 1.0000,
-                "sigma_o" : 124000.0000
+                "rho" : 1.0,
+                "d" : 1.42,
+                "Ro" : 2.36,
+                "W1" : 0.11,
+                "W2" : 1900.0,
+                "eta" : 700.0, 
+                "sigma_o" : 1240000.0000,
+                "Emax": 1.057,
+                "Emin": 0.091,
+                "t_active": 0.2,
+                "t_twitch": 0.3
             }
         }
     ]

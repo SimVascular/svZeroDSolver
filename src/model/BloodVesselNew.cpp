@@ -43,7 +43,6 @@ void BloodVesselNew::update_solution(
     const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
   // Get parameters
   double rho = parameters[global_param_ids[ParamId::rho]];
-  std::cout<<rho<<std::endl;
   double d = parameters[global_param_ids[ParamId::d]];
   double Ro = parameters[global_param_ids[ParamId::Ro]];
   double W1 = parameters[global_param_ids[ParamId::W1]];
@@ -62,8 +61,6 @@ void BloodVesselNew::update_solution(
   double V = y[global_var_ids[8]]; 
 
 
-  std::cout<<Qin<<std::endl;
-
   double Pin_ = dy[global_var_ids[0]]; 
   double Qin_ = dy[global_var_ids[1]]; 
   double Pout_ = dy[global_var_ids[2]]; 
@@ -78,13 +75,10 @@ void BloodVesselNew::update_solution(
   // Set element contributions
   system.C(global_eqn_ids[0]) = -Pout*pow(r/Ro+1.0,2.0)+d*rho*v_+(S*d*(r/Ro+1.0))/Ro;
   system.C(global_eqn_ids[1]) = -S+tau-(1.0/pow(r/Ro+1.0,6.0)*4.0-4.0)*(W1+W2*pow(r/Ro+1.0,2.0))+1.0/(Ro*Ro)*eta*(1.0/pow(r/Ro+1.0,1.2E+1)*2.0-1.0)*(Ro*2.0+r*2.0)*2.0;
-  system.C(global_eqn_ids[2]) = tau_-a*sigma_o+a*tau;
   system.C(global_eqn_ids[3]) = Qin-Qout-V_;
   system.C(global_eqn_ids[4]) = -V_+(Ro*Ro)*v*M_PI*pow(r/Ro+1.0,2.0)*4.0;
   system.C(global_eqn_ids[5]) = r_-v;
   system.C(global_eqn_ids[6]) = Pin-Pout;
-
-  std::cout<<"wtf1"<<std::endl;
 
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -pow(r/Ro+1.0,2.0);
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -1.0/(Ro*Ro)*(Pout*Ro*2.0-S*d+Pout*r*2.0);
@@ -106,9 +100,6 @@ void BloodVesselNew::update_solution(
   system.dC_dydot.coeffRef(global_eqn_ids[3], global_var_ids[8]) = -1.0;
   system.dC_dydot.coeffRef(global_eqn_ids[4], global_var_ids[8]) = -1.0;
   system.dC_dydot.coeffRef(global_eqn_ids[5], global_var_ids[4]) = 1.0;
-
-
-  std::cout<<"wtf2"<<std::endl;
 }
 
 
@@ -120,6 +111,8 @@ void BloodVesselNew::update_time(SparseSystem &system,
   
   double tau = y[global_var_ids[7]];
   double tau_ = dy[global_var_ids[7]];
+
+  // a = 0.0;
   
   system.C.coeffRef(global_eqn_ids[2]) = tau_ - a * sigma_o + a * tau;
   system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[7]) = a;
@@ -127,25 +120,17 @@ void BloodVesselNew::update_time(SparseSystem &system,
 
 void BloodVesselNew::get_elastance_values(
     std::vector<double> &parameters) {
-  double Emax = parameters[global_param_ids[ParamId::EMAX]];
-  double Emin = parameters[global_param_ids[ParamId::EMIN]];
-  double t_active = parameters[global_param_ids[ParamId::TACTIVE]];
-  double t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
-  
+  double alpha_max = parameters[global_param_ids[ParamId::alpha_max]];
+  double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
+  double tsys = parameters[global_param_ids[ParamId::tsys]];
+  double tdias = parameters[global_param_ids[ParamId::tdias]];
+  double steepness = parameters[global_param_ids[ParamId::steepness]];
 
-  auto T_cardiac = model->cardiac_cycle_period;
-  auto t_in_cycle = fmod(model->time, T_cardiac);
-
-  double t_contract = 0;
-  if (t_in_cycle >= t_active) {
-  t_contract = t_in_cycle - t_active;
-  }
-
-  double act = 0;
-  if (t_contract <= t_twitch) {
-  act = -0.5 * cos(2 * M_PI * t_contract / t_twitch) + 0.5;
-  }
-
-  a = (Emax - Emin) * act + Emin; // CHANGED "ELAS" TO "a" TO MATCH REST OF SCRIPT
+  double t = model->time;
+  double S_plus = 0.5*(1 + tanh(t/steepness));
+  double S_minus = 0.5*(1 - tanh(t/steepness));
+  double f = S_plus * (t-tsys) * S_minus *(t- tdias);
+  double A = alpha_max*f + alpha_min*(1-f);
+  double a = abs(A);
 
 }

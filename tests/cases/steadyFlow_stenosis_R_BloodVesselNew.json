@@ -17,8 +17,8 @@
             "bc_type": "FLOW",
             "bc_values": {
                 "Q": [
-                    5,
-                    5
+                    0,
+                    0
                 ],
                 "t": [
                     0.0,
@@ -30,15 +30,16 @@
             "bc_name": "OUT",
             "bc_type": "PRESSURE",
             "bc_values": {
-                "P": [10000, 10000],
+                "P": [0, 0],
                 "t": [0, 1]
             }
         }
     ],
     "simulation_parameters": {
         "number_of_cardiac_cycles": 1,
-        "number_of_time_pts_per_cardiac_cycle": 50,
-        "steady_initial": false
+        "number_of_time_pts_per_cardiac_cycle": 1000,
+        "steady_initial": false,
+        "output_variable_based": true
     },
     "vessels": [
         {
@@ -58,10 +59,11 @@
                 "W2" : 1900.0,
                 "eta" : 700.0, 
                 "sigma_o" : 1240000.0000,
-                "Emax": 1.057,
-                "Emin": 0.091,
-                "t_active": 0.2,
-                "t_twitch": 0.3
+                "alpha_max": 5.0,
+                "alpha_min": -30.0,
+                "tsys": 0.172,
+                "tdias": 0.484,
+                "steepness": 0.005
             }
         }
     ]

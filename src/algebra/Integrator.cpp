@@ -95,6 +95,8 @@ State Integrator::step(const State& old_state, double time) {
     y_af.setZero();
     ydot_am += old_state.ydot + (new_state.ydot - old_state.ydot) * alpha_m;
     y_af += old_state.y + (new_state.y - old_state.y) * alpha_f;
+    std::cout << Eigen::MatrixXd(y_af) << std::endl;
+    std::cout<<"iteration: "<<i<<std::endl;
 
     // Update solution-dependent element contribitions
     model->update_solution(system, y_af, ydot_am);

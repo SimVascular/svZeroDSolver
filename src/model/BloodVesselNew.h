@@ -158,10 +158,11 @@ class BloodVesselNew : public Block {
     W2 = 5,
     eta = 6,
     sigma_o = 7,
-    EMAX = 8,
-    EMIN = 9,
-    TACTIVE = 10,
-    TTWITCH = 11
+    alpha_max = 8,
+    alpha_min = 9,
+    tsys = 10,
+    tdias = 11,
+    steepness = 12
   };
 
   /**
@@ -172,17 +173,18 @@ class BloodVesselNew : public Block {
    */
   BloodVesselNew(int id, Model *model)
       : Block(id, model, BlockType::blood_vessel_new, BlockClass::vessel,
-              {{"Emax", InputParameter()},
-               {"Emin", InputParameter()},
-               {"t_active", InputParameter()},
-               {"t_twitch", InputParameter()},
-               {"rho", InputParameter()},
+              {{"rho", InputParameter()},
                {"d", InputParameter()},
                {"Ro", InputParameter()},
                {"W1", InputParameter()},
                {"W2", InputParameter()},
                {"eta", InputParameter()},
-               {"sigma_o", InputParameter()}}) {}
+               {"sigma_o", InputParameter()},
+               {"alpha_max", InputParameter()},
+               {"alpha_min", InputParameter()},
+               {"tsys", InputParameter()},
+               {"tdias", InputParameter()},
+               {"steepness", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

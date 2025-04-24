@@ -41,8 +41,6 @@ jobs:
         run: |
           choco install mingw --no-progress
           conda install -y -c conda-forge cmake graphviz python-graphviz pydot
-          $Env:CMAKE_GENERATOR = 'MinGW Makefiles'
-          Write-Host "→ Using CMAKE_GENERATOR = $Env:CMAKE_GENERATOR"
           pip install --upgrade cmake-setuptools
 
       - name: Install POISX-like svZeroDSolver
@@ -53,6 +51,8 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
+          $Env:CMAKE_GENERATOR = 'MinGW Makefiles'
+          Write-Host "→ Using CMAKE_GENERATOR = $Env:CMAKE_GENERATOR"
           pip install --no-build-isolation -v .[dev]
           pip show pysvzerod
 

@@ -34,7 +34,7 @@
 #ifndef SVZERODSOLVER_MODEL_PARAMETER_HPP_
 #define SVZERODSOLVER_MODEL_PARAMETER_HPP_
 
-#include <cmath.h>
+#include <math.h>
 
 #include <iostream>
 #include <numeric>

@@ -58,6 +58,22 @@ if(ENABLE_COVERAGE)
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 
+if (WIN32 AND MSVC)
+    # CMake ≥ 3.15 has a proper variable
+    if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.15")
+        set(CMAKE_MSVC_RUNTIME_LIBRARY
+                "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    else()
+        # CMake < 3.15: manually swap /MD → /MT in all flags for static
+        # versions of the runtime libraries
+        foreach(_var
+                CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
+                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_SHARED_LINKER_FLAGS)
+            string(REPLACE "/MD" "/MT" ${_var} "${${_var}}")
+        endforeach()
+    endif()
+endif()
 # -----------------------------------------------------------------------------
 # Set the location to store the binaries and libraries created by this project.
 # -----------------------------------------------------------------------------
@@ -159,7 +175,38 @@ add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
 # -----------------------------------------------------------------------------
 # Replace EXCLUDE_FROM_ALL with SHARED to test building the Python 
 # shared library.
-pybind11_add_module(pysvzerod EXCLUDE_FROM_ALL applications/pysvzerod.cpp)
+
+pybind11_add_module(pysvzerod applications/pysvzerod.cpp)
+if(WIN32 AND "${CMAKE_GENERATOR}" STREQUAL "MinGW Makefiles")
+    message(STATUS ">> Applying static‑link flags to pysvzerod")
+
+    include(CheckCXXCompilerFlag)
+    set(_static_flags
+            -static
+            -static-libgcc
+            -static-libstdc++
+    )
+    # test for winpthread support before adding
+    check_cxx_compiler_flag("-static-libwinpthread" HAVE_WINPTHREAD)
+    if(HAVE_WINPTHREAD)
+        list(APPEND _static_flags -static-libwinpthread)
+    else()
+        find_package(Threads REQUIRED)
+        target_link_libraries(pysvzerod PRIVATE Threads::Threads)
+    endif()
+    # apply to compile *and* link
+    foreach(_f IN LISTS _static_flags)
+        target_compile_options(pysvzerod PRIVATE ${_f})
+        # CMake ≥3.13:
+        target_link_options   (pysvzerod PRIVATE ${_f})
+    endforeach()
+
+    # verify in the configure log for static compilation:
+    get_target_property(_ccopts pysvzerod COMPILE_OPTIONS)
+    message(STATUS ">>> pysvzerod COMPILE_OPTIONS = ${_ccopts}")
+    get_target_property(_lnkopts pysvzerod LINK_OPTIONS)
+    message(STATUS ">>> pysvzerod LINK_OPTIONS   = ${_lnkopts}")
+endif()
 
 # -----------------------------------------------------------------------------
 # Add source sub-directories.
@@ -232,3 +279,18 @@ add_custom_target(codeformat
 # check code format
 add_custom_target(codecheck
   COMMAND find ${SDIR}/*.h ${SDIR}/*.cpp | xargs clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format --dry-run --Werror)
+
+# standard install target locations
+install(TARGETS pysvzerod
+        LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+        RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+)
+
+# append correct suffix for windows python runtime files
+if (WIN32)
+    set_target_properties(pysvzerod PROPERTIES
+            PREFIX ""
+            SUFFIX ".pyd"
+    )
+endif()

@@ -34,11 +34,12 @@
 #ifndef SVZERODSOLVER_MODEL_PARAMETER_HPP_
 #define SVZERODSOLVER_MODEL_PARAMETER_HPP_
 
-#include <math.h>
+#include <cmath.h>
 
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <algorithm>
 
 #include "DOFHandler.h"
 

@@ -1,5 +1,59 @@
 
+#if defined(_WIN32) || defined(_WIN64)
+/* ----------  Windows implementation  ---------- */
+#include <windows.h>
+#ifdef interface
+  #undef interface
+#endif
+
+using dl_handle_t = HMODULE;
+// Define windows flags to emulate <dlfcn.h>
+#ifndef RTLD_LAZY
+  #define RTLD_LAZY   0
+  #define RTLD_NOW    0
+  #define RTLD_GLOBAL 0
+  #define RTLD_LOCAL  0
+#endif
+
+inline dl_handle_t dlopen(const char* file, int /*flags*/)
+{
+  /* LoadLibraryA allows UTF-8 compatible narrow strings under MSVC ≥ 2015 */
+  return ::LoadLibraryA(file);
+}
+
+inline void* dlsym(dl_handle_t handle, const char* symbol)
+{
+  return reinterpret_cast<void*>(::GetProcAddress(handle, symbol));
+}
+
+inline int dlclose(dl_handle_t handle)
+{
+  return ::FreeLibrary(handle) ? 0 : 1;  // 0 = success, POSIX-style
+}
+
+/* Store the last error message in a local static buffer and return a C-string
+ * (roughly mimicking the POSIX API).
+ */
+inline const char* dlerror()
+{
+  static char  buf[256];
+  DWORD        code = ::GetLastError();
+  if (code == 0) return nullptr;
+
+  ::FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM |
+                       FORMAT_MESSAGE_IGNORE_INSERTS,
+                   nullptr,
+                   code,
+                   MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                   buf, sizeof(buf), nullptr);
+  return buf;
+}
+#else
+/* ----------  POSIX / Unix-like  ---------- */
 #include <dlfcn.h>
+using dl_handle_t = void*;
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
@@ -62,7 +116,7 @@ class LPNSolverInterface
     std::string lpn_set_external_step_size_name_;
     void (*lpn_set_external_step_size_)(const int, double);
 
-    void* library_handle_ = nullptr;
+    dl_handle_t library_handle_ = nullptr;
     int problem_id_ = 0;
     int system_size_ = 0;
     int num_cycles_ = 0;

@@ -207,7 +207,7 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
   AA = 0.0;
   if (t_in_cycle <= tpwave) {
     AA = (0.5) * (1.0 - cos(2.0 * M_PI * (t_in_cycle - tpwave + Tsa) / Tsa));
-  } else if ((t_in_cycle >= (T_cardiac - Tsa) + tpwave) and
+  } else if ((t_in_cycle >= (T_cardiac - Tsa) + tpwave) &&
              (t_in_cycle < T_cardiac)) {
     AA = (0.5) * (1.0 - cos(2.0 * M_PI *
                             (t_in_cycle - tpwave - (T_cardiac - Tsa)) / Tsa));
@@ -280,14 +280,14 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   auto pressure_ra = y[global_var_ids[0]];
   auto pressure_rv = y[global_var_ids[6]];
   auto outflow_ra = y[global_var_ids[5]];
-  if ((pressure_ra <= pressure_rv) and (outflow_ra <= 0.0)) {
+  if ((pressure_ra <= pressure_rv) && (outflow_ra <= 0.0)) {
     valves[5] = 0.0;
   }
 
   // RV to pulmonary
   auto pressure_pulmonary = y[global_var_ids[9]];
   auto outflow_rv = y[global_var_ids[8]];
-  if ((pressure_rv <= pressure_pulmonary) and (outflow_rv <= 0.0)) {
+  if ((pressure_rv <= pressure_pulmonary) && (outflow_rv <= 0.0)) {
     valves[8] = 0.0;
   }
 
@@ -295,14 +295,14 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   auto pressure_la = y[global_var_ids[10]];
   auto pressure_lv = y[global_var_ids[13]];
   auto outflow_la = y[global_var_ids[12]];
-  if ((pressure_la <= pressure_lv) and (outflow_la <= 0.0)) {
+  if ((pressure_la <= pressure_lv) && (outflow_la <= 0.0)) {
     valves[12] = 0.0;
   }
 
   // LV to aorta
   auto pressure_aorta = y[global_var_ids[2]];
   auto outflow_lv = y[global_var_ids[15]];
-  if ((pressure_lv <= pressure_aorta) and (outflow_lv <= 0.0)) {
+  if ((pressure_lv <= pressure_aorta) && (outflow_lv <= 0.0)) {
     valves[15] = 0.0;
   }
 }

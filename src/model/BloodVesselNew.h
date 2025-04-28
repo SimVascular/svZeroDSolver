@@ -151,18 +151,18 @@ class BloodVesselNew : public Block {
    *
    */
   enum ParamId {
-    rho = 1,
-    d = 2,
-    Ro = 3,
-    W1 = 4,
-    W2 = 5,
-    eta = 6,
-    sigma_o = 7,
-    alpha_max = 8,
-    alpha_min = 9,
-    tsys = 10,
-    tdias = 11,
-    steepness = 12
+    rho = 0,
+    d = 1,
+    Ro = 2,
+    W1 = 3,
+    W2 = 4,
+    eta = 5,
+    sigma_o = 6,
+    alpha_max = 7,
+    alpha_min = 8,
+    tsys = 9,
+    tdias = 10,
+    steepness = 11
   };
 
   /**
@@ -227,11 +227,12 @@ class BloodVesselNew : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(SparseSystem &system, std::vector<double> &parameters, const Eigen::VectorXd &y,
-    const Eigen::VectorXd &dy);
+  // void update_time(SparseSystem &system, std::vector<double> &parameters, const Eigen::VectorXd &y,
+  //   const Eigen::VectorXd &dy);
 
-  private:
-    double a;   // Chamber Elastance
+  // private:
+  //   double a = 0.0;   // Chamber Elastance
+  //   double a_plus = 0.0; // Chamber elastance max
 
   /**
    * @brief Update the elastance functions which depend on time
@@ -239,6 +240,10 @@ class BloodVesselNew : public Block {
    * @param parameters Parameters of the model
    */
   void get_elastance_values(std::vector<double> &parameters);
+    private:
+      double a = 0.0;   // Chamber Elastance
+      double a_plus = 0.0; // Chamber elastance max
+
 
   /**
    * @brief Number of triplets of element
@@ -246,7 +251,7 @@ class BloodVesselNew : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{0, 0, 16};
+  TripletsContributions num_triplets{0, 0, 18};
 };
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSELNEW_HPP_

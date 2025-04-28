@@ -38,9 +38,13 @@ void Capacitance::update_constant(SparseSystem &system,
                                   std::vector<double> &parameters) {
   double capacitance = parameters[global_param_ids[ParamId::CAPACITANCE]];
 
+  // Q_{in}  - Q_{out} - C \dot{P}_{in} - C \dot{P}_{out} = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[3]) = -1.0;
   system.E.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -capacitance;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -capacitance;
+
+  // P_{in} - P_{out} = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -1.0;
 }

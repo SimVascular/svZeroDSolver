@@ -139,12 +139,12 @@ void BloodVesselNew::get_elastance_values(
   a_plus = std::max(a_t, 0.0); // |a(t)|+ = max(a(t), 0)
   
 
-  std::cout << f << std::endl;
-  std::cout << "S_plus: " << S_plus << std::endl;
-  std::cout << "S_minus: " << S_minus << std::endl;
-  std::cout << "time: " << t_in_cycle << std::endl;
-  std::cout << "a: " << a << std::endl;
-  std::cout << "a_plus: " << a_plus << std::endl;
+  // std::cout << f << std::endl;
+  // std::cout << "S_plus: " << S_plus << std::endl;
+  // std::cout << "S_minus: " << S_minus << std::endl;
+  // std::cout << "time: " << t_in_cycle << std::endl;
+  // std::cout << "a: " << a << std::endl;
+  // std::cout << "a_plus: " << a_plus << std::endl;
   
   // if (t_in_cycle <= tsys) {
   //   f = 0.0; // Before systole

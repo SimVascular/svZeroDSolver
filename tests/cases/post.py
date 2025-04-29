@@ -6,11 +6,37 @@ import numpy as np
 out_name = "out.csv"
 res = pd.read_csv(out_name)
 
-name = "tau:branch0_seg0"
-ids = res.name == name
-out = np.array(res[ids])
-plt.plot(np.array(res[ids].time), np.array(res[ids].y), label=name)
-plt.show()
+variables = ['flow:INFLOW:ventricle',
+             'flow:ventricle:J0',
+             'pressure:INFLOW:ventricle',
+             'pressure:ventricle:J0',
+             'r:ventricle',
+             'v:ventricle',
+             'S:ventricle',
+             'tau:ventricle',
+             'V:ventricle']
+fig, axs = plt.subplots(5, 2, figsize=(12, 15))
+axs = axs.ravel()
+
+for idx, var in enumerate(variables):
+    name = f"{var}"
+    ids = res.name == name
+    axs[idx].plot(np.array(res[ids].time), np.array(res[ids].y), label=var)
+    axs[idx].set_xlabel('Time')
+    axs[idx].set_ylabel(var)
+    axs[idx].legend()
+
+plt.tight_layout()
+plt.savefig('output_plot.pdf')
+
+
+
+
+# name = "tau:ventricle"
+# ids = res.name == name
+# out = np.array(res[ids])
+# plt.plot(np.array(res[ids].time), np.array(res[ids].y), label=name)
+# plt.show()
 
 # # # Load out.csv for time values
 # out_name = "out.csv"
@@ -21,7 +47,7 @@ plt.show()
 # res_screen = pd.read_csv(screen_out_name, header=None)  # Load without headers
 
 # # Extract time values from out.csv
-# time_name = "tau:branch0_seg0"
+# time_name = "tau:ventricle"
 # time_ids = res_out.name == time_name
 # time_values = np.array(res_out[time_ids].time)
 

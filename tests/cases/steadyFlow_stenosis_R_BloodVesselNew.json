@@ -21,8 +21,8 @@
                     0
                 ],
                 "t": [
-                    0.0,
-                    1.0
+                    0,
+                    1
                 ]
             }
         },
@@ -39,32 +39,57 @@
         "number_of_cardiac_cycles": 1,
         "number_of_time_pts_per_cardiac_cycle": 1000,
         "steady_initial": false,
-        "output_variable_based": true
+        "output_variable_based": true,
+        "absolute_tolerance": 1e-9,
+        "output_all_cycles": true
     },
     "vessels": [
         {
             "boundary_conditions": {
-                "inlet": "INFLOW",
-                "outlet": "OUT"
+                "inlet": "INFLOW"
             },
             "vessel_id": 0,
             "vessel_length": 10.0,
-            "vessel_name": "branch0_seg0",
+            "vessel_name": "ventricle",
             "zero_d_element_type": "BloodVesselNew",
             "zero_d_element_values": {
-                "rho" : 1.0,
-                "d" : 1.42,
-                "Ro" : 2.36,
-                "W1" : 50000,
-                "W2" : 400,
-                "eta" : 700.0, 
-                "sigma_o" : 90.7E4,
-                "alpha_max": 5.0,
+                "rho" : 1e3,
+                "d" : 0.01,
+                "Ro" : 0.05,
+                "W1" : 10e3,
+                "W2" : 40,
+                "eta" : 10.0, 
+                "sigma_o" : 185e3,
+                "alpha_max": 30.0,
                 "alpha_min": -30.0,
                 "tsys": 0.170,
                 "tdias": 0.484,
                 "steepness": 0.005
             }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "OUT"
+            },
+            "vessel_id": 1,
+            "vessel_name": "downstream",
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 1.0e7,
+                "C": 1.0e-9
+            }
+        }
+    ],
+    "junctions": [
+        {
+            "inlet_vessels": [
+                0
+            ],
+            "junction_name": "J0",
+            "junction_type": "NORMAL_JUNCTION",
+            "outlet_vessels": [
+                1
+            ]
         }
     ]
 }

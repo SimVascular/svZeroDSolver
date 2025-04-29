@@ -6,10 +6,10 @@ import numpy as np
 out_name = "out.csv"
 res = pd.read_csv(out_name)
 
-variables = ['flow:INFLOW:ventricle',
-             'flow:ventricle:J0',
-             'pressure:INFLOW:ventricle',
-             'pressure:ventricle:J0',
+variables = ['flow:inlet_valve:ventricle',
+             'flow:ventricle:outlet_valve',
+             'pressure:inlet_valve:ventricle',
+             'pressure:ventricle:outlet_valve',
              'r:ventricle',
              'v:ventricle',
              'S:ventricle',

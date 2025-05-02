@@ -144,7 +144,7 @@
  * This block has no internal variables.
  *
  */
-class BloodVesselNew : public Block {
+class ChamberSphere : public Block {
  public:
   /**
    * @brief Local IDs of the parameters
@@ -171,7 +171,7 @@ class BloodVesselNew : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  BloodVesselNew(int id, Model *model)
+  ChamberSphere(int id, Model *model)
       : Block(id, model, BlockType::blood_vessel_new, BlockClass::vessel,
               {{"rho", InputParameter()},
                {"d", InputParameter()},

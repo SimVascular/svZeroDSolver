@@ -28,15 +28,15 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "BloodVesselNew.h"
+#include "ChamberSphere.h"
 
 #include "Model.h"
 
-void BloodVesselNew::setup_dofs(DOFHandler &dofhandler) {
-  Block::setup_dofs_(dofhandler, 7, {"r", "v", "S", "tau", "V"});
+void ChamberSphere::setup_dofs(DOFHandler &dofhandler) {
+  Block::setup_dofs_(dofhandler, 9, {"r", "v", "S", "tau", "V"});
 }
 
-void BloodVesselNew::update_constant(SparseSystem &system,
+void ChamberSphere::update_constant(SparseSystem &system,
                                      std::vector<double> &parameters) {
   double rho = parameters[global_param_ids[ParamId::rho]];
   double d = parameters[global_param_ids[ParamId::d]];
@@ -64,14 +64,14 @@ void BloodVesselNew::update_constant(SparseSystem &system,
   system.F.coeffRef(global_eqn_ids[6], global_var_ids[2]) = -1.0;
 }
 
-void BloodVesselNew::update_time(SparseSystem &system,
+void ChamberSphere::update_time(SparseSystem &system,
                                  std::vector<double> &parameters) {
   get_elastance_values(parameters);
   system.C(global_eqn_ids[2]) = -a_plus * sigma_o;
   system.F.coeffRef(global_eqn_ids[2], global_var_ids[7]) = a;
 }
 
-void BloodVesselNew::update_solution(
+void ChamberSphere::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
     const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
@@ -124,23 +124,21 @@ void BloodVesselNew::update_solution(
       -4.0 * eta * CCsqr * (2.0 / pow(CC, 6) - 1.0);
 }
 
-void BloodVesselNew::get_elastance_values(std::vector<double> &parameters) {
-  double alpha_max = parameters[global_param_ids[ParamId::alpha_max]];
-  double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
-  double tsys = parameters[global_param_ids[ParamId::tsys]];
-  double tdias = parameters[global_param_ids[ParamId::tdias]];
-  double steepness = parameters[global_param_ids[ParamId::steepness]];
+void ChamberSphere::get_elastance_values(std::vector<double> &parameters) {
+  const double alpha_max = parameters[global_param_ids[ParamId::alpha_max]];
+  const double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
+  const double tsys = parameters[global_param_ids[ParamId::tsys]];
+  const double tdias = parameters[global_param_ids[ParamId::tdias]];
+  const double steepness = parameters[global_param_ids[ParamId::steepness]];
 
-  double t = model->time;
+  const auto T_cardiac = model->cardiac_cycle_period;
+  const auto t_in_cycle = fmod(model->time, T_cardiac);
 
-  auto T_cardiac = model->cardiac_cycle_period;
-  auto t_in_cycle = fmod(model->time, T_cardiac);
+  const double S_plus = 0.5 * (1.0 + tanh((t_in_cycle - tsys) / steepness));
+  const double S_minus = 0.5 * (1.0 - tanh((t_in_cycle - tdias) / steepness));
 
-  double S_plus = 0.5 * (1.0 + tanh((t_in_cycle - tsys) / steepness));
-  double S_minus = 0.5 * (1.0 - tanh((t_in_cycle - tdias) / steepness));
-
-  double f = S_plus * S_minus;
-  double a_t = alpha_max * f + alpha_min * (1 - f);
+  const double f = S_plus * S_minus;
+  const double a_t = alpha_max * f + alpha_min * (1.0 - f);
 
   a = std::abs(a_t);
   a_plus = std::max(a_t, 0.0);

@@ -50,7 +50,7 @@
             "vessel_id": 0,
             "vessel_length": 10.0,
             "vessel_name": "branch0_seg0",
-            "zero_d_element_type": "BloodVesselNew",
+            "zero_d_element_type": "ChamberSphere",
             "zero_d_element_values": {
                 "rho" : 1.0,
                 "d" : 1.42,

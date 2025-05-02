@@ -36,6 +36,7 @@ set(CXXSRCS
   Block.cpp
   BloodVessel.cpp
   BloodVesselJunction.cpp
+  Capacitance.cpp
   ChamberElastanceInductor.cpp
   ClosedLoopCoronaryBC.cpp
   ClosedLoopCoronaryLeftBC.cpp
@@ -44,12 +45,14 @@ set(CXXSRCS
   ClosedLoopRCRBC.cpp
   DOFHandler.cpp
   FlowReferenceBC.cpp
+  Inductance.cpp
   Junction.cpp
   Model.cpp
   Node.cpp
   OpenLoopCoronaryBC.cpp
   Parameter.cpp
   PressureReferenceBC.cpp
+  Resistance.cpp
   ResistanceBC.cpp
   ResistiveJunction.cpp
   ValveTanh.cpp
@@ -61,6 +64,7 @@ set(HDRS
   BlockType.h
   BloodVessel.h
   BloodVesselJunction.h
+  Capacitance.h
   ChamberElastanceInductor.h
   ClosedLoopCoronaryBC.h
   ClosedLoopCoronaryLeftBC.h
@@ -69,12 +73,14 @@ set(HDRS
   ClosedLoopRCRBC.h
   DOFHandler.h
   FlowReferenceBC.h
+  Inductance.h
   Junction.h
   Model.h
   Node.h
   OpenLoopCoronaryBC.h
   Parameter.h
   PressureReferenceBC.h
+  Resistance.h
   ResistanceBC.h
   ResistiveJunction.h
   ValveTanh.h

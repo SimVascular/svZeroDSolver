@@ -1,6 +1,7 @@
 import os
 import json
 import pysvzerod
+import argparse
 
 def compute_ref_sol(testname):
     '''
@@ -8,17 +9,11 @@ def compute_ref_sol(testname):
 
     :param testname: name of the test case json to compute reference solution for
     '''
-
-    # testfiles = [f for f in os.listdir('tests/cases') if os.path.isfile(os.path.join('tests/cases', f))]
-
-    # we only want to test the solver, not the calibrator
-    # testfiles.remove("steadyFlow_calibration.json")
-
     # compute result
-    result = pysvzerod.simulate(json.load(open(os.path.join('tests/cases', testname))))
+    result = pysvzerod.simulate(json.load(open(os.path.join('cases', testname))))
 
     # save result
-    result_filename = os.path.join('tests/cases/results', 'result_' + testname)
+    result_filename = os.path.join('cases', 'results', 'result_' + testname)
 
     # save to json
     with open(result_filename, 'w') as f:
@@ -26,4 +21,9 @@ def compute_ref_sol(testname):
 
     # print for confirmation
     print(f'Reference solution for test case {testname} computed and saved to {result_filename}. Please verify that the results are as expected.')
-    
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Compute reference solution for a test case')
+    parser.add_argument('testname', help='name of the test case json file')
+    args = parser.parse_args()
+    compute_ref_sol(args.testname)

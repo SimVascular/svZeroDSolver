@@ -42,7 +42,8 @@ from .utils import run_test_case_by_name, get_result, run_with_reference, RTOL_F
                                       'steadyFlow_blood_vessel_junction.json', 
                                       'valve_tanh.json', 
                                       'pulsatileFlow_bifurcationR_RCR_cycle_error.json', 
-                                      'pulsatileFlow_R_RCR_mean_derivative_variable.json'
+                                      'pulsatileFlow_R_RCR_mean_derivative_variable.json',
+                                      'chamber_sphere.json'
                                       ])
 def test_solver(testfile):
     '''

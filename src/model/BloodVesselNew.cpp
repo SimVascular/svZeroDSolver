@@ -29,23 +29,52 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "BloodVesselNew.h"
+
 #include "Model.h"
 
-
 void BloodVesselNew::setup_dofs(DOFHandler &dofhandler) {
-  Block::setup_dofs_(dofhandler, 7, {"r","v","S","tau","V"});
+  Block::setup_dofs_(dofhandler, 7, {"r", "v", "S", "tau", "V"});
 }
 
+void BloodVesselNew::update_constant(SparseSystem &system,
+                                     std::vector<double> &parameters) {
+  double rho = parameters[global_param_ids[ParamId::rho]];
+  double d = parameters[global_param_ids[ParamId::d]];
+
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[5]) = d * rho;
+  system.E.coeffRef(global_eqn_ids[2], global_var_ids[7]) = 1.0;
+
+  //
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[6]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[7]) = 1.0;
+
+  // Qin - Qout - dV/dt = 0
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[1]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[3]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[8]) = -1.0;
+
+  system.F.coeffRef(global_eqn_ids[4], global_var_ids[8]) = -1.0;
+
+  // dr/dt - v = 0
+  system.F.coeffRef(global_eqn_ids[5], global_var_ids[4]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[5], global_var_ids[5]) = -1.0;
+
+  // Pin - Pout = 0
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[0]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[2]) = -1.0;
+}
+
+void BloodVesselNew::update_time(SparseSystem &system,
+                                 std::vector<double> &parameters) {
+  get_elastance_values(parameters);
+  system.C(global_eqn_ids[2]) = -a_plus * sigma_o;
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[7]) = a;
+}
 
 void BloodVesselNew::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
     const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
-    
-  get_elastance_values(parameters);  
-  // Get parameters
-  
-  double rho = parameters[global_param_ids[ParamId::rho]];
   double d = parameters[global_param_ids[ParamId::d]];
   double Ro = parameters[global_param_ids[ParamId::Ro]];
   double W1 = parameters[global_param_ids[ParamId::W1]];
@@ -53,69 +82,49 @@ void BloodVesselNew::update_solution(
   double eta = parameters[global_param_ids[ParamId::eta]];
   double sigma_o = parameters[global_param_ids[ParamId::sigma_o]];
 
-  double Pin = y[global_var_ids[0]]; 
-  double Qin = y[global_var_ids[1]]; 
-  double Pout = y[global_var_ids[2]]; 
-  double Qout = y[global_var_ids[3]]; 
-  double r = y[global_var_ids[4]]; 
-  double v = y[global_var_ids[5]]; 
-  double S = y[global_var_ids[6]]; 
-  double tau = y[global_var_ids[7]]; 
-  double V = y[global_var_ids[8]]; 
+  // y = [Pin, Qin, Pout, Qout, r, v, S, tau, V]
+  //     [0,     1,    2,    3, 4, 5, 6,   7, 8]
 
+  double Pout = y[global_var_ids[2]];
+  double r = y[global_var_ids[4]];
+  double v = y[global_var_ids[5]];
+  double S = y[global_var_ids[6]];
+  double tau = y[global_var_ids[7]];
 
-  double Pin_ = dy[global_var_ids[0]]; 
-  double Qin_ = dy[global_var_ids[1]]; 
-  double Pout_ = dy[global_var_ids[2]]; 
-  double Qout_ = dy[global_var_ids[3]]; 
-  double r_ = dy[global_var_ids[4]]; 
-  double v_ = dy[global_var_ids[5]]; 
-  double S_ = dy[global_var_ids[6]]; 
-  double tau_ = dy[global_var_ids[7]]; 
+  double r_ = dy[global_var_ids[4]];
   double V_ = dy[global_var_ids[8]];
-  
 
-  // Set element contributions
-  system.C(global_eqn_ids[0]) = -Pout*pow(r/Ro+1.0,2.0)+d*rho*v_+(S*d*(r/Ro+1.0))/Ro;
-  system.C(global_eqn_ids[1]) = -S+tau-(1.0/pow(r/Ro+1.0,6.0)*4.0-4.0)*(W1+W2*pow(r/Ro+1.0,2.0))-(eta*r_*(1.0/pow(r/Ro+1.0,1.2E+1)*2.0-1.0)*((r*2.0)/Ro+2.0)*2.0)/Ro;
-  system.C(global_eqn_ids[2]) = tau_-a_plus*sigma_o+a*tau;
-  system.C(global_eqn_ids[3]) = Qin-Qout-V_;
-  system.C(global_eqn_ids[4]) = -V_+(Ro*Ro)*v*M_PI*pow(r/Ro+1.0,2.0)*4.0;
-  system.C(global_eqn_ids[5]) = r_-v;
-  system.C(global_eqn_ids[6]) = Pin-Pout;
+  double rRo = r / Ro;
+  double CCsqr = rRo + 1.0;
+  double CC = CCsqr * CCsqr;
+  double W_term = W1 + W2 * CC;
+  double power_term = 4.0 * (1.0 / pow(CC, 3) - 1.0);
+  double eta_term =
+      (2.0 / pow(CC, 6) - 1.0) * (2.0 * CCsqr) * 2.0 * eta * r_ / Ro;
 
-  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -pow(r/Ro+1.0,2.0);
-  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -1.0/(Ro*Ro)*(Pout*Ro*2.0-S*d+Pout*r*2.0);
-  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) = 1.0/(Ro*Ro)*d*(Ro+r);
-  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) = (Ro*Ro*Ro*Ro)*1.0/pow(Ro+r,7.0)*((Ro*Ro)*W1+(Ro*Ro)*W2+W2*(r*r)+Ro*W2*r*2.0)*2.4E+1+pow(Ro,1.0E+1)*eta*r_*1.0/pow(Ro+r,1.2E+1)*9.6E+1-1.0/(Ro*Ro)*W2*(Ro+r)*((Ro*Ro*Ro*Ro*Ro*Ro)*1.0/pow(Ro+r,6.0)*4.0-4.0)*2.0-1.0/(Ro*Ro)*eta*r_*(pow(Ro,1.2E+1)*1.0/pow(Ro+r,1.2E+1)*2.0-1.0)*4.0;
-  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[6]) = -1.0;
-  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[7]) = 1.0;
-  system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[7]) = a;
-  system.dC_dy.coeffRef(global_eqn_ids[3], global_var_ids[1]) = 1.0;
-  system.dC_dy.coeffRef(global_eqn_ids[3], global_var_ids[3]) = -1.0;
-  system.dC_dy.coeffRef(global_eqn_ids[4], global_var_ids[4]) = v*M_PI*(Ro+r)*8.0;
-  system.dC_dy.coeffRef(global_eqn_ids[4], global_var_ids[5]) = M_PI*pow(Ro+r,2.0)*4.0;
-  system.dC_dy.coeffRef(global_eqn_ids[5], global_var_ids[5]) = -1.0;
-  system.dC_dy.coeffRef(global_eqn_ids[6], global_var_ids[0]) = 1.0;
-  system.dC_dy.coeffRef(global_eqn_ids[6], global_var_ids[2]) = -1.0;
+  system.C(global_eqn_ids[0]) = -Pout * CC + (S * d * CCsqr) / Ro;
+  system.C(global_eqn_ids[1]) = -power_term * W_term - eta_term;
+  system.C(global_eqn_ids[4]) = -V_ + 4.0 * M_PI * Ro * Ro * v * CC;
 
-  system.dC_dydot.coeffRef(global_eqn_ids[0], global_var_ids[5]) = d*rho;
-  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) = 1.0/(Ro*Ro)*eta*(Ro+r)*(pow(Ro,1.2E+1)*1.0/pow(Ro+r,1.2E+1)*2.0-1.0)*-4.0;
-  system.dC_dydot.coeffRef(global_eqn_ids[2], global_var_ids[7]) = 1.0;
-  system.dC_dydot.coeffRef(global_eqn_ids[3], global_var_ids[8]) = -1.0;
-  system.dC_dydot.coeffRef(global_eqn_ids[4], global_var_ids[8]) = -1.0;
-  system.dC_dydot.coeffRef(global_eqn_ids[5], global_var_ids[4]) = 1.0;
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -CC;
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
+      -2.0 * (Pout * CCsqr - S * d / 2.0) / Ro;
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) = d * CCsqr / Ro;
 
-  // std::cout << "Pin: " << Pin << std::endl;
-  // std::cout << "Qin: " << Qin << std::endl;
-  // std::cout << "Pout: " << Pout << std::endl;
-  // std::cout << "Qout: " << Qout << std::endl;
-  
+  double common_factor = 1.0 / pow(CCsqr, 7);
+  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+      24.0 * Ro * Ro * common_factor * (W1 + W2 * CC) +
+      96.0 * pow(Ro, 10) * eta * r_ / pow(CC, 6) -
+      8.0 * W2 * CCsqr * (pow(CC, -3) - 1.0) -
+      4.0 * eta * r_ * (2.0 / pow(CC, 6) - 1.0);
+  system.dC_dy.coeffRef(global_eqn_ids[4], global_var_ids[4]) =
+      8.0 * M_PI * v * (Ro + r);
+  system.dC_dy.coeffRef(global_eqn_ids[4], global_var_ids[5]) = 4.0 * M_PI * CC;
+  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+      -4.0 * eta * CCsqr * (2.0 / pow(CC, 6) - 1.0);
 }
 
-
-void BloodVesselNew::get_elastance_values(
-    std::vector<double> &parameters) {
+void BloodVesselNew::get_elastance_values(std::vector<double> &parameters) {
   double alpha_max = parameters[global_param_ids[ParamId::alpha_max]];
   double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
   double tsys = parameters[global_param_ids[ParamId::tsys]];
@@ -130,35 +139,9 @@ void BloodVesselNew::get_elastance_values(
   double S_plus = 0.5 * (1.0 + tanh((t_in_cycle - tsys) / steepness));
   double S_minus = 0.5 * (1.0 - tanh((t_in_cycle - tdias) / steepness));
 
-  // // Activation indicator function f(t)
-  double f = S_plus*S_minus;
-
+  double f = S_plus * S_minus;
   double a_t = alpha_max * f + alpha_min * (1 - f);
 
   a = std::abs(a_t);
-  a_plus = std::max(a_t, 0.0); // |a(t)|+ = max(a(t), 0)
-  
-
-  std::cout << f << std::endl;
-  std::cout << "S_plus: " << S_plus << std::endl;
-  std::cout << "S_minus: " << S_minus << std::endl;
-  std::cout << "time: " << t_in_cycle << std::endl;
-  std::cout << "a: " << a << std::endl;
-  std::cout << "a_plus: " << a_plus << std::endl;
-  
-  // if (t_in_cycle <= tsys) {
-  //   f = 0.0; // Before systole
-  // } else if (t_in_cycle <= tdias) {
-  //   f = 1.0; // Plateau during systole
-  // } else {
-  //   f = 0.0; // After diastole
-  // }
-
-  // double S_plus = 0.5 * (1.0 + tanh((t_in_cycle - tsys) / steepness));
-  // double S_minus = 0.5 * (1.0 - tanh((t_in_cycle - tdias) / steepness));
-
-  // // // Activation indicator function f(t)
-  // double f = S_plus*S_minus;
-
+  a_plus = std::max(a_t, 0.0);
 }
-

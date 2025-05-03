@@ -13,31 +13,25 @@
     },
     "boundary_conditions": [
         {
-            "bc_name": "INFLOW",
-            "bc_type": "FLOW",
+            "bc_name": "IN",
+            "bc_type": "PRESSURE",
             "bc_values": {
-                "Q": [
-                    0,
-                    0
-                ],
-                "t": [
-                    0,
-                    1
-                ]
+                "P": [2150, 2150],
+                "t": [0, 1]
             }
         },
         {
             "bc_name": "OUT",
             "bc_type": "PRESSURE",
             "bc_values": {
-                "P": [0, 0],
+                "P": [13332.2, 13332.2],
                 "t": [0, 1]
             }
         }
     ],
     "simulation_parameters": {
         "number_of_cardiac_cycles": 1,
-        "number_of_time_pts_per_cardiac_cycle": 100,
+        "number_of_time_pts_per_cardiac_cycle": 500,
         "steady_initial": false,
         "output_variable_based": true,
         "absolute_tolerance": 1e-9,
@@ -46,13 +40,13 @@
     "vessels": [
         {
             "boundary_conditions": {
-                "inlet": "INFLOW"
+                "inlet": "IN"
             },
             "vessel_id": 0,
             "vessel_name": "upstream_vessel",
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
-                "R_poiseuille": 1.0e7,
+                "R_poiseuille": 1.0e6,
                 "C": 1.0e-9
             }
         },
@@ -95,9 +89,9 @@
             "type": "ValveTanh",
             "name": "inlet_valve",
             "params": {
-                "Rmax": 6.6650e9,
-                "Rmin": 2.6660e4,
-                "Steepness": 18.75e-4,
+                "Rmax": 7e8,
+                "Rmin": 0,
+                "Steepness": 5.75e-4,
                 "upstream_block": "upstream_vessel",
                 "downstream_block": "ventricle"
             }
@@ -107,8 +101,8 @@
             "name": "outlet_valve",
             "params": {
                 "Rmax": 6.6650e9,
-                "Rmin": 2.6660e5,
-                "Steepness": 18.75e-4,
+                "Rmin": 0,
+                "Steepness": 5.75e-4,
                 "upstream_block": "ventricle",
                 "downstream_block": "downstream_vessel"
             }

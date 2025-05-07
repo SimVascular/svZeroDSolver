@@ -28,24 +28,29 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "Inductance.h"
+#include "ParallelRC.h"
 
-void Inductance::setup_dofs(DOFHandler &dofhandler) {
+void ParallelRC::setup_dofs(DOFHandler &dofhandler) {
+  // 4 equations and 2 internal variables (Q_R and Q_C)
   Block::setup_dofs_(dofhandler, 2, {});
 }
 
-void Inductance::update_constant(SparseSystem &system,
-                                 std::vector<double> &parameters) {
-  double inductance = parameters[global_param_ids[ParamId::INDUCTANCE]];
+void ParallelRC::update_constant(SparseSystem &system,
+                                std::vector<double> &parameters) {
+  double resistance = parameters[global_param_ids[ParamId::RESISTANCE]];
+  double capacitance = parameters[global_param_ids[ParamId::CAPACITANCE]];
+  const double rc = resistance * capacitance;
 
   // unknowns: y = [P_in, Q_in, P_out, Q_out]
 
-  // P_{in} - P_{out} - L * \dot{Q}_{in} = 0
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
-  system.E.coeffRef(global_eqn_ids[0], global_var_ids[3]) = -inductance;
-
-  // Q_{in} - Q_{out} = 0
+  // R*C*Q_in - (P_in - P_out) - R*C*(dP_in - dP_out)/dt = 0
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -rc;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[2]) = rc;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = resistance;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = 1.0;
+  
+  // Q_in - Q_out = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
 }

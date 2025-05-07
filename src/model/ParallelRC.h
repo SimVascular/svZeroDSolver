@@ -28,11 +28,11 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file Capacitance.h
- * @brief model::Capacitance source file
+ * @file ParallelRC.h
+ * @brief model::ParallelRC source file
  */
-#ifndef SVZERODSOLVER_MODEL_CAPACITANCE_HPP_
-#define SVZERODSOLVER_MODEL_CAPACITANCE_HPP_
+#ifndef SVZERODSOLVER_MODEL_PARALLEL_RC_HPP_
+#define SVZERODSOLVER_MODEL_PARALLEL_RC_HPP_
 
 #include <math.h>
 
@@ -40,19 +40,21 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Simple capacitance element for 0D blood flow modeling
+ * @brief Parallel RC circuit element for 0D blood flow modeling
  *
- * Models a pure capacitance element relating flow to change in pressure.
+ * Models a parallel resistor and capacitor with shared pressure at
+ * both the inlet and outlet.
  *
  * \f[
  * \begin{circuitikz} \draw
  *   node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  *   (1,0) node[anchor=south]{$P_{in}$}
- *   to [short, -*] (1,0)
- *   to [C, l=$C$] (5,0)
- *   to [short, -*] (7,0)
+ *   to [short, -*] (2,0)
+ *   to [R, l=$R$] (5,0)
+ *   to [short, -*] (6,0)
  *   node[anchor=south]{$P_{out}$}
  *   (7.2,0) -- (8,0) node[right] {$Q_{out}$};
+ *   (2,0) to (2,-2) to [C, l=$C$] (6,-2) to (6,0);
  * \end{circuitikz}
  * \f]
  *
@@ -62,58 +64,53 @@
  * P_\text{in}-P_\text{out} = 0 \f]
  *
  * \f[
- * Q_\text{in} - C (\dot{P}_\text{in} - \dot{P}_\text{out}) = 0 \f]
+ * Q_\text{in} - Q_R - Q_C - Q_\text{out} = 0 \f]
+ * 
+ * \f[
+ * P_\text{in} - P_\text{out} - R \cdot Q_R = 0 \f]
+ * 
+ * \f[
+ * Q_C - C (\dot{P}_\text{in} - \dot{P}_\text{out}) = 0 \f]
  *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n} & Q_{in} &
- * P_{out} & Q_{out}\end{array}\right]^\text{T} \f]
- *
- * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 0 & 1 &  0 & 0 \\
- * 1 & 0 & -1 & 0
- * \end{array}\right]
- * \f]
- *
- * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{cccc}
- * -C &  0 & C & 0 \\
- *  0 &  0 & 0 & 0
- * \end{array}\right]
- * \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llllll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out} & Q_R & Q_C\end{array}\right]^\text{T} \f]
  *
  * ### Parameters
  *
  * Parameter sequence for constructing this block
  *
- * * `0` Capacitance value
+ * * `0` Resistance value
+ * * `1` Capacitance value
  *
  * ### Internal variables
  *
- * This block has no internal variables.
+ * This block has two internal variables: Q_R and Q_C.
  *
  */
-class Capacitance : public Block {
+class ParallelRC : public Block {
  public:
   /**
    * @brief Local IDs of the parameters
    *
    */
   enum ParamId {
-    CAPACITANCE = 0,
+    RESISTANCE = 0,
+    CAPACITANCE = 1,
   };
 
   /**
-   * @brief Construct a new Capacitance object
+   * @brief Construct a new ParallelRC object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  Capacitance(int id, Model *model)
-      : Block(id, model, BlockType::capacitance, BlockClass::vessel,
-              {{"C", InputParameter()}}) {
+  ParallelRC(int id, Model *model)
+      : Block(id, model, BlockType::parallel_rc, BlockClass::vessel,
+              {{"R", InputParameter()},
+               {"C", InputParameter()}}) {
     is_vessel = true;
   }
 
@@ -144,7 +141,7 @@ class Capacitance : public Block {
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{4, 1, 0};
+  TripletsContributions num_triplets{10, 1, 0};
 };
 
-#endif  // SVZERODSOLVER_MODEL_CAPACITANCE_HPP_
+#endif  // SVZERODSOLVER_MODEL_PARALLEL_RC_HPP_

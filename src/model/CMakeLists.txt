@@ -51,6 +51,7 @@ set(CXXSRCS
   Node.cpp
   OpenLoopCoronaryBC.cpp
   Parameter.cpp
+  ParallelRC.cpp
   PressureReferenceBC.cpp
   Resistance.cpp
   ResistanceBC.cpp
@@ -79,6 +80,7 @@ set(HDRS
   Node.h
   OpenLoopCoronaryBC.h
   Parameter.h
+  ParallelRC.h
   PressureReferenceBC.h
   Resistance.h
   ResistanceBC.h

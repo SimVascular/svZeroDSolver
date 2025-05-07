@@ -38,9 +38,14 @@ void Resistance::update_constant(SparseSystem &system,
                                  std::vector<double> &parameters) {
   double resistance = parameters[global_param_ids[ParamId::RESISTANCE]];
 
+  // unknowns: y = [P_in, Q_in, P_out, Q_out]
+
+  // P_{in} - P_{out} - R * Q_{in} = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -resistance;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
+
+  // Q_{in} - Q_{out} = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
 }

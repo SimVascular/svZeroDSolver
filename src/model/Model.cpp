@@ -29,6 +29,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "Model.h"
+#include "ParallelRC.h"
 
 template <typename block_type>
 BlockFactoryFunc block_factory() {
@@ -58,7 +59,8 @@ Model::Model() {
       {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
       {"Resistance", block_factory<Resistance>()},
       {"Capacitance", block_factory<Capacitance>()},
-      {"Inductance", block_factory<Inductance>()}};
+      {"Inductance", block_factory<Inductance>()},
+      {"ParallelRC", block_factory<ParallelRC>()}};
 }
 
 Model::~Model() {}

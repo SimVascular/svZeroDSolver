@@ -57,7 +57,8 @@ enum class BlockType {
   chamber_elastance_inductor = 14,
   resistance = 15,
   capacitance = 16,
-  inductance = 17
+  inductance = 17,
+  parallel_rc = 18
 };
 
 /**

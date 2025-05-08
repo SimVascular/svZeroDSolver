@@ -30,6 +30,7 @@
 
 #include "Model.h"
 #include "ParallelRC.h"
+#include "ParallelRL.h"
 
 template <typename block_type>
 BlockFactoryFunc block_factory() {
@@ -60,7 +61,8 @@ Model::Model() {
       {"Resistance", block_factory<Resistance>()},
       {"Capacitance", block_factory<Capacitance>()},
       {"Inductance", block_factory<Inductance>()},
-      {"ParallelRC", block_factory<ParallelRC>()}};
+      {"ParallelRC", block_factory<ParallelRC>()},
+      {"ParallelRL", block_factory<ParallelRL>()}};
 }
 
 Model::~Model() {}

@@ -45,6 +45,7 @@ set(CXXSRCS
   ClosedLoopRCRBC.cpp
   DOFHandler.cpp
   FlowReferenceBC.cpp
+  FourElementWindkesselBC.cpp
   Inductance.cpp
   Junction.cpp
   Model.cpp
@@ -57,6 +58,7 @@ set(CXXSRCS
   Resistance.cpp
   ResistanceBC.cpp
   ResistiveJunction.cpp
+  SerialRC.cpp
   ValveTanh.cpp
   WindkesselBC.cpp
 )
@@ -75,6 +77,7 @@ set(HDRS
   ClosedLoopRCRBC.h
   DOFHandler.h
   FlowReferenceBC.h
+  FourElementWindkesselBC.h
   Inductance.h
   Junction.h
   Model.h
@@ -87,6 +90,7 @@ set(HDRS
   Resistance.h
   ResistanceBC.h
   ResistiveJunction.h
+  SerialRC.h
   ValveTanh.h
   WindkesselBC.h
 )

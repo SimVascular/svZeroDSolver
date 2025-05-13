@@ -31,6 +31,8 @@
 #include "Model.h"
 #include "ParallelRC.h"
 #include "ParallelRL.h"
+#include "SerialRC.h"
+#include "FourElementWindkesselBC.h"
 
 template <typename block_type>
 BlockFactoryFunc block_factory() {
@@ -54,6 +56,7 @@ Model::Model() {
       {"NORMAL_JUNCTION", block_factory<Junction>()},
       {"PRESSURE", block_factory<PressureReferenceBC>()},
       {"RCR", block_factory<WindkesselBC>()},
+      {"RDCR", block_factory<FourElementWindkesselBC>()},
       {"RESISTANCE", block_factory<ResistanceBC>()},
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
@@ -62,7 +65,8 @@ Model::Model() {
       {"Capacitance", block_factory<Capacitance>()},
       {"Inductance", block_factory<Inductance>()},
       {"ParallelRC", block_factory<ParallelRC>()},
-      {"ParallelRL", block_factory<ParallelRL>()}};
+      {"ParallelRL", block_factory<ParallelRL>()},
+      {"SerialRC", block_factory<SerialRC>()}};
 }
 
 Model::~Model() {}

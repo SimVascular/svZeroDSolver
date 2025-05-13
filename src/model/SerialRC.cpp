@@ -27,60 +27,27 @@
 // LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-/**
- * @file BlockType.h
- * @brief Specifies the types of blocks and their parameters
- */
-#ifndef SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
-#define SVZERODSOLVER_MODEL_BLOCK_TYPE_HPP_
 
-#include <string>
+#include "SerialRC.h"
 
-/**
- * @brief The types of blocks supported by the solver
- */
-enum class BlockType {
-  blood_vessel = 0,
-  junction = 1,
-  blood_vessel_junction = 2,
-  resistive_junction = 3,
-  flow_bc = 4,
-  pressure_bc = 5,
-  resistance_bc = 6,
-  windkessel_bc = 7,
-  open_loop_coronary_bc = 8,
-  closed_loop_coronary_left_bc = 9,
-  closed_loop_coronary_right_bc = 10,
-  closed_loop_rcr_bc = 11,
-  closed_loop_heart_pulmonary = 12,
-  valve_tanh = 13,
-  chamber_elastance_inductor = 14,
-  resistance = 15,
-  capacitance = 16,
-  inductance = 17,
-  parallel_rc = 18,
-  parallel_rl = 19,
-  serial_rc = 20,
-  four_element_windkessel_bc = 21
-};
+void SerialRC::setup_dofs(DOFHandler &dofhandler) {
+  Block::setup_dofs_(dofhandler, 2, {});
+}
 
-/**
- * @brief The classes/categories of blocks supported. Some classes require
- * special handling (e.g. closed_loop).
- */
-enum class BlockClass {
-  vessel = 0,
-  junction = 1,
-  boundary_condition = 2,
-  closed_loop = 3,
-  external = 4,
-  valve = 5,
-  chamber = 6
-};
+void SerialRC::update_constant(SparseSystem &system,
+                              std::vector<double> &parameters) {
+  double resistance = parameters[global_param_ids[ParamId::RESISTANCE]];
+  double capacitance = parameters[global_param_ids[ParamId::CAPACITANCE]];
 
-/**
- * @brief The types of vessel blocks supported.
- */
-enum class VesselType { inlet = 0, outlet = 1, both = 2, neither = 3 };
+  // unknowns: y = [P_in, Q_in, P_out, Q_out]
 
-#endif
+  // Resistor: Q_in - C*dP_in/dt + R*C*dQ_in/dt + C*dP_out/dt = 0
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = 1.0;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -capacitance;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[1]) = resistance*capacitance;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[2]) = capacitance;
+
+  // Q_in - Q_out = 0
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
+  system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
+}

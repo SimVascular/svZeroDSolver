@@ -152,12 +152,12 @@ class ChamberSphere : public Block {
    */
   enum ParamId {
     rho = 0,
-    d = 1,
-    Ro = 2,
+    thick0 = 1,
+    radius0 = 2,
     W1 = 3,
     W2 = 4,
     eta = 5,
-    sigma_o = 6,
+    sigma_max = 6,
     alpha_max = 7,
     alpha_min = 8,
     tsys = 9,
@@ -174,12 +174,12 @@ class ChamberSphere : public Block {
   ChamberSphere(int id, Model *model)
       : Block(id, model, BlockType::blood_vessel_new, BlockClass::vessel,
               {{"rho", InputParameter()},
-               {"d", InputParameter()},
-               {"Ro", InputParameter()},
+               {"thick0", InputParameter()},
+               {"radius0", InputParameter()},
                {"W1", InputParameter()},
                {"W2", InputParameter()},
                {"eta", InputParameter()},
-               {"sigma_o", InputParameter()},
+               {"sigma_max", InputParameter()},
                {"alpha_max", InputParameter()},
                {"alpha_min", InputParameter()},
                {"tsys", InputParameter()},
@@ -205,7 +205,26 @@ class ChamberSphere : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  // void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+
+  /**
+   * @brief Update the time-dependent contributions of the element in a sparse
+   * system
+   *
+   * @param system System to update contributions at
+   * @param parameters Parameters of the model
+   */
+  void update_time(SparseSystem &system, std::vector<double> &parameters);
+
+  /**
+   * @brief Update the constant contributions of the element in a sparse
+   system
+   *
+   * @param system System to update contributions at
+   * @param parameters Parameters of the model
+   */
+  // void update_constant(SparseSystem &system, std::vector<double>
+  // &parameters);
 
   // /**
   //  * @brief Update the solution-dependent contributions of the element in a
@@ -220,30 +239,16 @@ class ChamberSphere : public Block {
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
- /**
-   * @brief Update the time-dependent contributions of the element in a sparse
-   * system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  // void update_time(SparseSystem &system, std::vector<double> &parameters, const Eigen::VectorXd &y,
-  //   const Eigen::VectorXd &dy);
-
-  // private:
-  //   double a = 0.0;   // Chamber Elastance
-  //   double a_plus = 0.0; // Chamber elastance max
-
   /**
    * @brief Update the elastance functions which depend on time
    *
    * @param parameters Parameters of the model
    */
   void get_elastance_values(std::vector<double> &parameters);
-    private:
-      double a = 0.0;   // Chamber Elastance
-      double a_plus = 0.0; // Chamber elastance max
 
+ private:
+  double act = 0.0;       // activation function
+  double act_plus = 0.0;  // act_plus = max(act, 0)
 
   /**
    * @brief Number of triplets of element

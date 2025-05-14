@@ -3,50 +3,50 @@ variables:
   - Qin
   - Pout
   - Qout
-  - r
-  - v
-  - S
+  - radius
+  - velo
+  - stress
   - tau
-  - V
+  - volume
 
 derivatives:
-  - dPin
-  - dQin
-  - dPout
-  - dQout
-  - dr
-  - dv
-  - dS
-  - dtau
-  - dV
+  - dPin_dt
+  - dQin_dt
+  - dPout_dt
+  - dQout_dt
+  - dradius_dt
+  - dvelo_dt
+  - dstress_dt
+  - dtau_dt
+  - dvolume_dt
 
 constants:
   - rho
-  - d
-  - Ro
+  - thick0
+  - radius0
   - W1
   - W2
   - eta
-  - a
-  - a_plus
-  - sigma_o
+  - act
+  - act_plus
+  - sigma_max
 
 time_dependent:
-  - a
-  - a_plus
+  - act
+  - act_plus
 
 helper_functions: |
-  def C(r):
-      return (1 + (r / Ro)) ** 2
+  def CG(radius):
+      return (1 + (radius / radius0)) ** 2
 
-  def C_(r, dr):
-      return 2 * (1 + (r / Ro)) * (1 / Ro) * dr
+  def dCG(radius, dradius_dt):
+      return 2 * (1 + (radius / radius0)) * (1 / radius0) * dradius_dt
 
 residuals:
-  - rho * d * dv + (d / Ro) * (1 + (r / Ro)) * S - Pout * C(r)
-  - -S + tau + 4 * (1 - C(r) ** -3) * (W1 + C(r) * W2) + 2 * eta * C_(r, dr) * (1 - 2 * C(r) ** -6)
-  - dtau + a * tau - sigma_o * a_plus
-  - 4 * pi * Ro ** 2 * C(r) * v - dV
-  - dr - v
-  - Qin - Qout - dV
+  - rho * thick0 * dvelo_dt + (thick0 / radius0) * (1 + (radius / radius0)) * stress - Pout * CG(radius)
+  - -stress + tau + 4 * (1 - CG(radius) ** -3) * (W1 + CG(radius) * W2) + 2 * eta * dCG(radius, dradius_dt) * (1 - 2 * CG(radius) ** -6)
+  - 4 * pi * radius0 ** 2 * CG(radius) * velo - dvolume_dt
+  - dtau_dt + act * tau - sigma_max * act_plus
+  - dradius_dt - velo
+  - Qin - Qout - dvolume_dt
   - Pin - Pout

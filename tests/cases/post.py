@@ -10,11 +10,11 @@ variables = ['flow:inlet_valve:ventricle',
              'flow:ventricle:outlet_valve',
              'pressure:inlet_valve:ventricle',
              'pressure:ventricle:outlet_valve',
-             'r:ventricle',
-             'v:ventricle',
-             'S:ventricle',
+             'radius:ventricle',
+             'velo:ventricle',
+             'stress:ventricle',
              'tau:ventricle',
-             'V:ventricle']
+             'volume:ventricle']
 
 # Conversion factors for each variable
 # Flows: m^3/s -> mL/s (multiply by 1e6)
@@ -30,6 +30,8 @@ y_axis_titles = ['Inlet Flow (mL/s)', 'Outlet Flow (mL/s)', 'Inlet Pressure (mmH
 
 fig, axs = plt.subplots(6, 2, figsize=(12, 24))
 axs = axs.ravel()
+
+# print(res.name.unique())
 
 for idx, var in enumerate(variables):
     name = f"{var}"
@@ -57,7 +59,7 @@ axs[9].legend()
 
 # --- PV loop plot ---
 pressure_ids = res.name == 'pressure:ventricle:outlet_valve'
-volume_ids = res.name == 'V:ventricle'
+volume_ids = res.name == 'volume:ventricle'
 
 volume = np.array(res[volume_ids].y) * 1e6  # Convert to mL
 pressure = np.array(res[pressure_ids].y) / 133.322  # Convert to mmHg

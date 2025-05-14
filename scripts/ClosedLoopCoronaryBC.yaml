@@ -1,0 +1,32 @@
+variables:
+  - Pin
+  - Qin
+  - Pout
+  - Qout
+  - Vim
+  - Pa
+
+derivatives:
+  - dPin_dt
+  - dQin_dt
+  - dPout_dt
+  - dQout_dt
+  - dVim_dt
+  - dPa_dt
+
+constants:
+  - Ra
+  - Ram
+  - Rv
+  - Ca
+  - Cim
+  - Pim
+
+time_dependent:
+  - Pim
+
+residuals:
+  - Pout - Pin + (Ram + Ra) * Qin + Rv * Qout + Ram * Ca * dPa_dt - Ram * Ca * dPin_dt + Ram * Ra * Ca * dQin_dt
+  - Qin - Qout + Ca * dPa_dt - Ca * dPin_dt + Ca * Ra * dQin_dt - dVim_dt
+  - Cim * Pout + Cim * Rv * Qout - Cim * Pim - Vim
+  - Pa - Pin - Ra * Qin

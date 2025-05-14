@@ -1,4 +1,4 @@
-from sympy import symbols, Matrix, simplify, pi
+from sympy import symbols, Matrix, simplify, pi, Abs
 from sympy.printing import ccode
 import re
 import pdb
@@ -9,14 +9,16 @@ def load_model(filepath):
     with open(filepath, 'r') as file:
         data = yaml.safe_load(file)
 
-    variables = Matrix(symbols(' '.join(data['variables'])))
-    derivatives = Matrix(symbols(' '.join(data['derivatives'])))
-    constants = symbols(' '.join(data['constants']))
+    variables = Matrix(symbols(' '.join(data['variables']), real=True))
+    derivatives = Matrix(symbols(' '.join(data['derivatives']), real=True))
+    constants = symbols(' '.join(data['constants']), real=True)
 
     context = {str(s): s for s in list(variables) + list(derivatives) + list(constants)}
     context['pi'] = pi
+    context['abs'] = Abs
 
-    exec(data['helper_functions'], context, context)
+    if 'helper_functions' in data:
+        exec(data['helper_functions'], context, context)
     residual_exprs = [eval(res, context, context) for res in data['residuals']]
 
     residuals = Matrix(residual_exprs)
@@ -76,7 +78,10 @@ def replace_symbolic_indices(expr, base):
     return pattern.sub(rf'{base}[global_var_ids[\1]]', expr)
 
 def format_cpp_expr(expr):
-    cpp_expr = ccode(expr).replace('3.141592653589793', 'M_PI')
+    try:
+        cpp_expr = ccode(expr).replace('3.141592653589793', 'M_PI')
+    except:
+        pdb.set_trace()
     cpp_expr = replace_symbolic_indices(cpp_expr, 'y')
     cpp_expr = replace_symbolic_indices(cpp_expr, 'dy')
     return cpp_expr

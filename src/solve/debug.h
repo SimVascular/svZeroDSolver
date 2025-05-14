@@ -40,9 +40,9 @@
  * @brief DEBUG_MSG Macro to print debug messages for debug build
  */
 #ifndef NDEBUG
-#define DEBUG_MSG(str)                                    \
-  do {                                                    \
-    std::cout << "[DEBUG MESSAGE] " << str << std::endl;  \
+#define DEBUG_MSG(str)                                   \
+  do {                                                   \
+    std::cout << "[DEBUG MESSAGE] " << str << std::endl; \
   } while (false)
 #else
 #define DEBUG_MSG(str) \

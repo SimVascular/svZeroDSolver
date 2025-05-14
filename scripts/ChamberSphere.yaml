@@ -1,0 +1,52 @@
+variables:
+  - Pin
+  - Qin
+  - Pout
+  - Qout
+  - r
+  - v
+  - S
+  - tau
+  - V
+
+derivatives:
+  - dPin
+  - dQin
+  - dPout
+  - dQout
+  - dr
+  - dv
+  - dS
+  - dtau
+  - dV
+
+constants:
+  - rho
+  - d
+  - Ro
+  - W1
+  - W2
+  - eta
+  - a
+  - a_plus
+  - sigma_o
+
+time_dependent:
+  - a
+  - a_plus
+
+helper_functions: |
+  def C(r):
+      return (1 + (r / Ro)) ** 2
+
+  def C_(r, dr):
+      return 2 * (1 + (r / Ro)) * (1 / Ro) * dr
+
+residuals:
+  - rho * d * dv + (d / Ro) * (1 + (r / Ro)) * S - Pout * C(r)
+  - -S + tau + 4 * (1 - C(r) ** -3) * (W1 + C(r) * W2) + 2 * eta * C_(r, dr) * (1 - 2 * C(r) ** -6)
+  - dtau + a * tau - sigma_o * a_plus
+  - 4 * pi * Ro ** 2 * C(r) * v - dV
+  - dr - v
+  - Qin - Qout - dV
+  - Pin - Pout

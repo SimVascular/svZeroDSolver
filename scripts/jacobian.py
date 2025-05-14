@@ -3,6 +3,7 @@ from sympy.printing import ccode
 import re
 import pdb
 import yaml
+import argparse
 
 def load_model(filepath):
     with open(filepath, 'r') as file:
@@ -66,6 +67,11 @@ def partition_terms(E, F, c, dc_dy, dc_ddy, time_dependent_symbols):
                 parts[target].append((label, i, j, mat[i, j]))
     return parts
 
+def get_expressions(parts, type):
+    expressions = [part[-1] for part in parts]
+    deps = set().union(*(expr.free_symbols for expr in expressions))
+    return deps.intersection(type)
+
 def replace_symbolic_indices(expr, base):
     pattern = re.compile(rf'\b{base}(\d+)\b')
     return pattern.sub(rf'{base}[global_var_ids[\1]]', expr)
@@ -84,18 +90,41 @@ def print_system(parts):
                 str += f"[{part[2]}]"
             print(str + f" = {format_cpp_expr(part[-1])};")
 
-def print_constants(parts):
+def print_constants(parts, constants, time_dependent):
+    for out in get_expressions(parts, constants):
+        if out in time_dependent:
+            print(f"  // compute time dependent constant {out}")
+        else:
+            print(f"  const double {out} = parameters[global_param_ids[ParamId::{out}]];")
 
-    pdb.set_trace()
+def print_variables(parts, y, dy):
+    for out in get_expressions(parts, y):
+        for name, vec in zip(['y', 'dy'], [y, dy]):
+            if out in vec:
+                index = next(i for i, sym in enumerate(vec) if sym == out)
+                print(f"  const double {out} = {name}[global_var_ids[{index}]];")
 
 def main(yaml_path):
+    # read model from yaml file
     y, dy, constants, residuals, time_dependent = load_model(yaml_path)
+
+    # extract linear and nonlinear terms
     E, F = extract_linear(residuals, y, dy)
     c, dc_dy, dc_ddy = extract_nonlinear(residuals, E, F, y, dy)
+
+    # split into constant, time dependent and solution parts
     parts = partition_terms(E, F, c, dc_dy, dc_ddy, time_dependent)
+
+    # print C++ code
     for section in ['constant', 'time', 'solution']:
         print(f'update_{section}')
+        print_constants(parts[section], constants, time_dependent)
+        print_variables(parts[section], y, dy)
         print_system(parts[section])
-        print('\n')
+        print()
 
-main("ChamberSphere.yaml")
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Process YAML model file to generate C++ code for svZeroDSolver')
+    parser.add_argument('yaml_file', help='Path to YAML model file')
+    args = parser.parse_args()
+    main(args.yaml_file)

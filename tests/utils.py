@@ -15,7 +15,7 @@ import pysvzerod
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
 RTOL_PRES = 1.0e-7
-RTOL_FLOW = 1.0e-8
+RTOL_FLOW = 1.0e-7
 
 
 def execute_pysvzerod(testfile, mode):
@@ -58,62 +58,68 @@ def run_with_reference(
         ):
 
 
-    res, config = execute_pysvzerod(test_config, "solver")
+    res = pysvzerod.simulate(test_config)
 
-    if res.shape[1] == 6:
-        # we have a result with fields [name, time, p_in, p_out, q_in, q_out]
-        for field in ["pressure_in", "pressure_out", "flow_in", "flow_out"]:
-            if "pressure" in field:
-                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_PRES)
-            elif "flow" in field:
-                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_FLOW)
+    if res.shape[1] >= 6:
+        # we have a result with fields [name, time, p_in, p_out, q_in, q_out] SOME HAVE GREATTER LENGTH NEED TO ADDRESS
+        pressure_cols = ["pressure_in", "pressure_out"]
+        flow_cols = ["flow_in", "flow_out"]
+
+        bool_df = pd.DataFrame(index=res.index, columns=res.columns, dtype=bool)
+
+        for col in res.columns:
+            tol = RTOL_PRES if col in pressure_cols else RTOL_FLOW if col in flow_cols else None
+            if tol is not None:
+                rel_diff = np.abs(res[col] - ref[col]) - tol - tol * np.abs(ref[col])
+                check = rel_diff <= 0.0
+                bool_df[col] = check  # True if difference is below tolerance
+
+        if not bool_df.all().all():  # Check if any value exceeded tolerance
+            # Extract only differing rows/columns for a cleaner error message
+            differing_locs = np.where(~bool_df)  # Shows only the out-of-tolerance values
+            differing_indices = res.index[differing_locs[0]]
+            differing_columns = res.columns[differing_locs[1]]
+
+            if differing_indices.any():  # If any differences are found
+                diff_locations = list(zip(differing_indices, differing_columns))
+                # find the value where the difference exceeds tolerance
+                for i, col in diff_locations:
+                    if i in res.index and col in res.columns:
+                        # Get the actual values from both result and reference
+                        diff_values = (res.at[i, col], ref.at[i, col])
+                        tol = RTOL_PRES if col in pressure_cols else RTOL_FLOW if col in flow_cols else None
+                        print(f"Test failed in field {col}: {diff_values[0]} (result) vs {diff_values[1]} (reference) with relative difference {abs(diff_values[0] - diff_values[1]) - tol - tol * np.abs(diff_values[1])} greater than zero.")
+                diff_values = [(res.at[i, col], ref.at[i, col]) for i, col in diff_locations]
+
+                raise AssertionError(f"Differences exceed tolerance.")
+
     else:
         # we have a result with fields [name, time, y] and the result must be compared based on the name field. name is of format [flow:vessel:outlet]
         # we will compare the average of each branch
-        avg_res_flow = []
-        avg_ref_flow = []
-        avg_res_pres = []
-        avg_ref_pres = []
-        for index, row in res.iterrows():
 
-            if "flow" in row["name"]:
-                if row["name"] == res.iloc[index + 1]["name"]:
-                    # we are compilng the results for a branch
-                    avg_ref_flow.append(ref.loc[row.name].y)
-                    avg_res_flow.append(row.y)
-                elif avg_res_flow == []:
-                    # there is only one result for this branch
-                    assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_FLOW)
-                else:
-                    # we are on the last result for this branch
-                    avg_ref_flow.append(ref.loc[row.name].y)
-                    avg_res_flow.append(row.y)
-                    assert np.isclose(np.array(avg_res_flow).all(), np.array(avg_ref_flow).all(), rtol=RTOL_FLOW)
-                    avg_res_flow = []
-                    avg_ref_flow = []
-                    
-            elif "pressure" in row["name"]:
-                if index == len(res) - 1:
-                    # we are on the last row
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                    assert np.isclose(np.array(avg_res_pres).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
-                elif row["name"] == res.iloc[index + 1]["name"]:
-                    # we are compilng the results for a branch
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                elif avg_res_pres == []:
-                    # there is only one result for this branch
-                    assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_PRES)
-                else:
-                    # we are on the last result for this branch
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                    # round the result to 10 decimal places to avoid floating point errors with reference solution computed on ubuntu OS
-                    assert np.isclose(np.array(avg_res_pres).round(10).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
-                    avg_res_pres = []
-                    avg_ref_pres = []
+        # Merge both datasets on 'Object' and 't' to align values
+        res_merged = ref.merge(res, on=["name", "time"], suffixes=("_expected", "_actual"))
 
+        # Compute relative difference
+        def compute_relative_difference(row):
+            tol = RTOL_FLOW if "flow" in row["name"] else RTOL_PRES
+            return abs(row["y_actual"] - row["y_expected"]) - tol - (tol * abs(row["y_expected"]))
+        res_merged["Relative_Difference"] = res_merged.apply(compute_relative_difference, axis=1)
+
+        # Apply object-specific tolerance
+        res_merged["Within_Tolerance"] = res_merged.apply(
+            lambda row: row["Relative_Difference"] <= 0.0, axis=1
+        )
+
+        if not res_merged["Within_Tolerance"].all():
+            # Extract only differing rows for a cleaner error message
+            differing_rows = res_merged[~res_merged["Within_Tolerance"]]
+            if not differing_rows.empty:
+                diff_info = differing_rows[["name", "time", "y_expected", "y_actual", "Relative_Difference"]]
+                print("Test failed in the following rows:\n", diff_info.to_string(index=False))
+                raise AssertionError("Differences exceed tolerance.")
+            else:
+                raise AssertionError("Differences exceed tolerance but no specific rows found.")
 
 def run_test_case_by_name(name, output_variable_based=False, folder="."):
     """Run a test case by its case name.

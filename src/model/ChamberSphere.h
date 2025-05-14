@@ -31,8 +31,8 @@
  * @file BloodVessel.h
  * @brief model::BloodVessel source file
  */
-#ifndef SVZERODSOLVER_MODEL_BLOODVESSELNEW_HPP_
-#define SVZERODSOLVER_MODEL_BLOODVESSELNEW_HPP_
+#ifndef SVZERODSOLVER_MODEL_ChamberSphere_HPP_
+#define SVZERODSOLVER_MODEL_ChamberSphere_HPP_
 
 #include <math.h>
 
@@ -205,26 +205,7 @@ class ChamberSphere : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  // void update_constant(SparseSystem &system, std::vector<double>
-  // &parameters);
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse
-   system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
-
-  /**
-   * @brief Update the time-dependent contributions of the element in a sparse
-   * system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  void update_time(SparseSystem &system, std::vector<double> &parameters);
+  // void update_constant(SparseSystem &system, std::vector<double> &parameters);
 
   // /**
   //  * @brief Update the solution-dependent contributions of the element in a
@@ -239,15 +220,14 @@ class ChamberSphere : public Block {
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
-  /**
+ /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
    *
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  // void update_time(SparseSystem &system, std::vector<double> &parameters,
-  // const Eigen::VectorXd &y,
+  // void update_time(SparseSystem &system, std::vector<double> &parameters, const Eigen::VectorXd &y,
   //   const Eigen::VectorXd &dy);
 
   // private:
@@ -260,10 +240,10 @@ class ChamberSphere : public Block {
    * @param parameters Parameters of the model
    */
   void get_elastance_values(std::vector<double> &parameters);
+    private:
+      double a = 0.0;   // Chamber Elastance
+      double a_plus = 0.0; // Chamber elastance max
 
- private:
-  double a = 0.0;       // Chamber Elastance
-  double a_plus = 0.0;  // Chamber elastance max
 
   /**
    * @brief Number of triplets of element
@@ -274,4 +254,4 @@ class ChamberSphere : public Block {
   TripletsContributions num_triplets{0, 0, 18};
 };
 
-#endif  // SVZERODSOLVER_MODEL_BLOODVESSELNEW_HPP_
+#endif  // SVZERODSOLVER_MODEL_ChamberSphere_HPP_

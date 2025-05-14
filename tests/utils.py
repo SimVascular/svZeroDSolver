@@ -30,7 +30,6 @@ def execute_pysvzerod(testfile, mode):
     # read configuration
     with open(testfile) as ff:
         config = json.load(ff)
-
     if coverage:
         # run via executable (slow)
         with TemporaryDirectory() as tempdir:
@@ -57,8 +56,7 @@ def run_with_reference(
         test_config
         ):
 
-
-    res = pysvzerod.simulate(test_config)
+    res, _ = execute_pysvzerod(test_config, "solver")
 
     if res.shape[1] >= 6:
         # we have a result with fields [name, time, p_in, p_out, q_in, q_out] SOME HAVE GREATTER LENGTH NEED TO ADDRESS

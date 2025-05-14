@@ -28,8 +28,8 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file BloodVessel.h
- * @brief model::BloodVessel source file
+ * @file ChamberSphere.h
+ * @brief model::ChamberSphere source file
  */
 #ifndef SVZERODSOLVER_MODEL_ChamberSphere_HPP_
 #define SVZERODSOLVER_MODEL_ChamberSphere_HPP_
@@ -40,108 +40,71 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Resistor-capacitor-inductor blood vessel with optional stenosis
+ * @brief Spherical heart chamber model
  *
- * Models the mechanical behavior of a bloodvessel with optional stenosis.
+ * Models the mechanical behavior of a spherical heart chamber with active contraction.
  *
+ * ### Helper Functions
+ * 
+ * Cauchy-Green deformation tensor and time derivative:
  * \f[
- * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [R, l=$R$, *-] (3,0)
- * to [R, l=$S$, -] (5,0)
- * (5,0) to [L, l=$L$, -*] (7,0)
- * node[anchor=south]{$P_{out}$}
- * (5,0) to [C, l=$C$, -] (5,-1.5)
- * node[ground]{};
- * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
- * \end{circuitikz}
+ * C(r) = (1 + \frac{r}{r_0})^2
+ * \dot{C}(r, \dot{r}) = 2 * (1 + \frac{r}{r_0}) \frac{\dot{r}}{r_0}
  * \f]
  *
  * ### Governing equations
  *
+ * 1. Balance of linear momentum:
  * \f[
- * P_\text{in}-P_\text{out} - (R + S|Q_\text{in}|) Q_\text{in}-L
- * \dot{Q}_\text{out}=0 \f]
- *
- * \f[
- * Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}+C(R +
- * 2S|Q_\text{in}|) \dot{Q}_{in}=0 \f]
- *
- * ### Local contributions
- *
- * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n} & Q_{in} &
- * P_{out} & Q_{out}\end{array}\right]^\text{T} \f]
- *
- * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -R & -1 &  0 \\
- * 0 &  1 &  0 & -1
- * \end{array}\right]
+ * \rho d_0 \dot{v} + (d_0 / r_0) (1 + \frac{r}{r_0}) S - P_\text{out} C(r) = 0
  * \f]
  *
+ * 2. Spherical stress:
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{cccc}
- *  0 &  0 & 0 & -L \\
- * -C & CR & 0 &  0
- * \end{array}\right]
+ * -S + \tau + 4 (1 - C(r)^{-3}) (W_1 + C(r) W_2) + 2 \eta \dot{C}(r, \dot{r}) (1 - 2 C(r)^{-6}) = 0
  * \f]
  *
+ * 3. Volume change:
  * \f[
- * \mathbf{c}^{e} = S|Q_\text{in}|
- * \left[\begin{array}{c}
- * -Q_\text{in} \\
- * 2C\dot{Q}_\text{in}
- * \end{array}\right]
+ * 4 \pi r_0^2 C(r)v - \dot{V} = 0
  * \f]
  *
+ * 4. Active stress:
  * \f[
- * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
- *  S \text{sgn} (Q_\text{in})
- * \left[\begin{array}{cccc}
- * 0 & -2Q_\text{in}        & 0 & 0 \\
- * 0 & 2C\dot{Q}_\text{in} & 0 & 0
- * \end{array}\right]
+ * \dot{\tau} + a \tau - sigma_\text{max} a_+ = 0, \quad a_+ = \max(a, 0)
  * \f]
  *
+ * 5. Acceleration:
  * \f[
- * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- *  S|Q_\text{in}|
- * \left[\begin{array}{cccc}
- * 0 &  0 & 0 & 0 \\
- * 0 & 2C & 0 & 0
- * \end{array}\right]
+ * \dot{r} - v = 0
  * \f]
  *
- * with the stenosis resistance \f$ S=K_{t} \frac{\rho}{2
- * A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} \f$.
- * \f$R\f$, \f$C\f$, and \f$L\f$ refer to
- * Poisieuille resistance, capacitance and inductance, respectively.
- *
- * ### Gradient
- *
- * Gradient of the equations with respect to the parameters:
- *
+ * 6. Conservation of mass:
  * \f[
- * \mathbf{J}^{e} = \left[\begin{array}{cccc}
- * -y_2 & 0 & -\dot{y}_4 & -|y_2|y_2 \\
- * C\dot{y}_2 & (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
- * \end{array}\right]
+ * Q_\text{in} - Q_\text{out} - \dot{V} = 0
+ * \f]
+ *
+ * 7. Pressure equality:
+ * \f[
+ * \text{Pin} - \text{Pout} = 0
  * \f]
  *
  * ### Parameters
  *
- * Parameter sequence for constructing this block
+ * Parameter sequence for constructing this block:
  *
- * * `0` Poiseuille resistance
- * * `1` Capacitance
- * * `2` Inductance
- * * `3` Stenosis coefficient
- *
- * ### Internal variables
- *
- * This block has no internal variables.
+ * * `rho` - Density
+ * * `thick0` - Wall thickness
+ * * `radius0` - Reference radius
+ * * `W1` - Material constant 1
+ * * `W2` - Material constant 2
+ * * `eta` - Viscosity parameter
+ * * `sigma_max` - Maximum active stress
+ * * `alpha_max` - Maximum activation parameter
+ * * `alpha_min` - Minimum activation parameter
+ * * `tsys` - Systole timing parameter
+ * * `tdias` - Diastole timing parameter
+ * * `steepness` - Activation steepness parameter
  *
  */
 class ChamberSphere : public Block {
@@ -166,13 +129,13 @@ class ChamberSphere : public Block {
   };
 
   /**
-   * @brief Construct a new BloodVessel object
+   * @brief Construct a new ChamberSphere object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
   ChamberSphere(int id, Model *model)
-      : Block(id, model, BlockType::blood_vessel_new, BlockClass::vessel,
+      : Block(id, model, BlockType::chamber_sphere, BlockClass::vessel,
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
                {"radius0", InputParameter()},

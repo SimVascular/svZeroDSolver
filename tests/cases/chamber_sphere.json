@@ -1,15 +1,6 @@
 {
     "description": {
-            "description of test case" : "steady flow -> stenosis -> R",
-            "analytical results" : [    "Boundary conditions:",
-                                            "inlet:",
-                                                "flow rate: Q = 5",
-                                            "outlet:",
-                                                "resistance + distal pressure: R = 100, Pd = 100",
-                                        "Solutions:",
-                                            "outlet pressure = Q * R + Pd =  5 * 100 + 100 = 600",
-                                            "inlet pressure = outlet pressure + Q * (R_poiseuille + stenosis_coefficient * abs(Q)) = 600 + 5 * (100 + 100 * abs(5)) = 3600"
-                                   ]
+            "description of test case" : "runs a simple 0D model of a cardiac chamber with inlet and outlet valves"
     },
     "boundary_conditions": [
         {

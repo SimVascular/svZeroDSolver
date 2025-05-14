@@ -33,30 +33,45 @@
 #include "Model.h"
 
 void ChamberSphere::setup_dofs(DOFHandler &dofhandler) {
-  Block::setup_dofs_(dofhandler, 7, {"radius", "velo", "stress", "tau", "volume"});
+  Block::setup_dofs_(dofhandler, 7,
+                     {"radius", "velo", "stress", "tau", "volume"});
 }
 
 void ChamberSphere::update_constant(SparseSystem &system,
                                     std::vector<double> &parameters) {
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
   const double rho = parameters[global_param_ids[ParamId::rho]];
-
+  
+  // balance of linear momentum
   system.E.coeffRef(global_eqn_ids[0], global_var_ids[5]) = rho * thick0;
+
+  // spherical stress
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[6]) = -1;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[7]) = 1;
+
+  // volume change
   system.E.coeffRef(global_eqn_ids[2], global_var_ids[8]) = -1;
+
+  // active stress
   system.E.coeffRef(global_eqn_ids[3], global_var_ids[7]) = 1;
+
+  // acceleration
   system.E.coeffRef(global_eqn_ids[4], global_var_ids[4]) = 1;
   system.F.coeffRef(global_eqn_ids[4], global_var_ids[5]) = -1;
+
+  // conservation of mass
   system.F.coeffRef(global_eqn_ids[5], global_var_ids[1]) = 1;
   system.F.coeffRef(global_eqn_ids[5], global_var_ids[3]) = -1;
   system.E.coeffRef(global_eqn_ids[5], global_var_ids[8]) = -1;
+
+  // pressure equality
   system.F.coeffRef(global_eqn_ids[6], global_var_ids[0]) = 1;
   system.F.coeffRef(global_eqn_ids[6], global_var_ids[2]) = -1;
 }
 
 void ChamberSphere::update_time(SparseSystem &system,
                                 std::vector<double> &parameters) {
+  // active stress
   get_elastance_values(parameters);
   system.F.coeffRef(global_eqn_ids[3], global_var_ids[7]) = act;
 }
@@ -70,13 +85,15 @@ void ChamberSphere::update_solution(
   const double eta = parameters[global_param_ids[ParamId::eta]];
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
   const double sigma_max = parameters[global_param_ids[ParamId::sigma_max]];
-  // compute time dependent constant act_plus
+
   const double radius0 = parameters[global_param_ids[ParamId::radius0]];
   const double velo = y[global_var_ids[5]];
   const double dradius_dt = dy[global_var_ids[4]];
   const double Pout = y[global_var_ids[2]];
   const double radius = y[global_var_ids[4]];
   const double stress = y[global_var_ids[6]];
+
+  // balance of momentum
   system.C.coeffRef(global_eqn_ids[0]) =
       (radius + radius0) * (-Pout * (radius + radius0) + stress * thick0) /
       pow(radius0, 2);
@@ -86,6 +103,8 @@ void ChamberSphere::update_solution(
       (-2 * Pout * (radius + radius0) + stress * thick0) / pow(radius0, 2);
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) =
       thick0 * (radius + radius0) / pow(radius0, 2);
+
+  // spherical stress
   system.C.coeffRef(global_eqn_ids[1]) =
       4 *
       (dradius_dt * eta * (-2 * pow(radius0, 12) + pow(radius + radius0, 12)) +
@@ -102,12 +121,16 @@ void ChamberSphere::update_solution(
   system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
       -4 * eta * (2 * pow(radius0, 12) - pow(radius + radius0, 12)) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
+
+  // volume change
   system.C.coeffRef(global_eqn_ids[2]) =
       4 * M_PI * velo * pow(radius + radius0, 2);
   system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[4]) =
       8 * M_PI * velo * (radius + radius0);
   system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[5]) =
       4 * M_PI * pow(radius + radius0, 2);
+
+  // active stress
   system.C.coeffRef(global_eqn_ids[3]) = -act_plus * sigma_max;
 }
 

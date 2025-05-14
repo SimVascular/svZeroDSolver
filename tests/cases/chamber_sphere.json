@@ -13,58 +13,100 @@
     },
     "boundary_conditions": [
         {
-            "bc_name": "INFLOW",
-            "bc_type": "FLOW",
+            "bc_name": "IN",
+            "bc_type": "PRESSURE",
             "bc_values": {
-                "Q": [
-                    0,
-                    0
-                ],
-                "t": [
-                    0.0,
-                    1.0
-                ]
+                "P": [2150, 2150],
+                "t": [0, 1]
             }
         },
         {
             "bc_name": "OUT",
             "bc_type": "PRESSURE",
             "bc_values": {
-                "P": [0, 0],
+                "P": [13332.2, 13332.2],
                 "t": [0, 1]
             }
         }
     ],
     "simulation_parameters": {
         "number_of_cardiac_cycles": 1,
-        "number_of_time_pts_per_cardiac_cycle": 1000,
+        "number_of_time_pts_per_cardiac_cycle": 500,
         "steady_initial": false,
-        "output_variable_based": true
+        "output_variable_based": true,
+        "absolute_tolerance": 1e-9,
+        "output_all_cycles": true
     },
     "vessels": [
         {
             "boundary_conditions": {
-                "inlet": "INFLOW",
-                "outlet": "OUT"
+                "inlet": "IN"
             },
             "vessel_id": 0,
-            "vessel_length": 10.0,
-            "vessel_name": "branch0_seg0",
-            "zero_d_element_type": "ChamberSphere",
+            "vessel_name": "upstream_vessel",
+            "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
-                "rho" : 1.0,
-                "d" : 1.42,
-                "Ro" : 2.36,
-                "W1" : 50000,
-                "W2" : 400,
-                "eta" : 0.0, 
-                "sigma_o" : 90.7E0,
-                "alpha_max": 5.0,
+                "R_poiseuille": 1.0e6,
+                "C": 1.0e-9
+            }
+        },
+        {
+            "boundary_conditions": {},
+            "vessel_id": 1,
+            "vessel_length": 10.0,
+            "vessel_name": "ventricle",
+            "zero_d_element_type": "BloodVesselNew",
+            "zero_d_element_values": {
+                "rho" : 1e3,
+                "d" : 0.01,
+                "Ro" : 0.05,
+                "W1" : 10e3,
+                "W2" : 40,
+                "eta" : 10.0, 
+                "sigma_o" : 185e3,
+                "alpha_max": 30.0,
                 "alpha_min": -30.0,
                 "tsys": 0.170,
                 "tdias": 0.484,
                 "steepness": 0.005
             }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "OUT"
+            },
+            "vessel_id": 2,
+            "vessel_name": "downstream_vessel",
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 1.0e7,
+                "C": 1.0e-9
+            }
         }
-    ]
+    ],
+    "valves": [
+        {
+            "type": "ValveTanh",
+            "name": "inlet_valve",
+            "params": {
+                "Rmax": 7e8,
+                "Rmin": 0,
+                "Steepness": 5.75e-4,
+                "upstream_block": "upstream_vessel",
+                "downstream_block": "ventricle"
+            }
+        },
+        {
+            "type": "ValveTanh",
+            "name": "outlet_valve",
+            "params": {
+                "Rmax": 6.6650e9,
+                "Rmin": 0,
+                "Steepness": 5.75e-4,
+                "upstream_block": "ventricle",
+                "downstream_block": "downstream_vessel"
+            }
+        }
+    ],
+    "junctions": []
 }

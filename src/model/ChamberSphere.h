@@ -42,36 +42,51 @@
 /**
  * @brief Spherical heart chamber model
  *
- * Models the mechanical behavior of a spherical heart chamber with active contraction.
+ * Models the mechanical behavior of a spherical heart chamber with active
+ * contraction. For reference, see \cite caruel13 Equations (13a-b) for
+ * continuum mechanics (without length-dependent contraction valves, vessels)
+ and \cite
+ * pfaller2019importance Equations (12-16) for the simplified active contraction
+ * model.
  *
  * ### Helper Functions
- * 
+ *
  * Cauchy-Green deformation tensor and time derivative:
  * \f[
- * C(r) = (1 + \frac{r}{r_0})^2
- * \dot{C}(r, \dot{r}) = 2 * (1 + \frac{r}{r_0}) \frac{\dot{r}}{r_0}
+ * C = \left(1 + \frac{r}{r_0} \right)^2
+ * \f]
+ * \f[
+ * \dot{C} = 2 \left(1 + \frac{r}{r_0} \right) \frac{\dot{r}}{r_0}
  * \f]
  *
  * ### Governing equations
  *
  * 1. Balance of linear momentum:
  * \f[
- * \rho d_0 \dot{v} + (d_0 / r_0) (1 + \frac{r}{r_0}) S - P_\text{out} C(r) = 0
+ * \rho d_0 \dot{v} + \frac{d_0}{r_0} \left(1 + \frac{r}{r_0} \right) S -
+ P_\text{out} C = 0
  * \f]
  *
  * 2. Spherical stress:
  * \f[
- * -S + \tau + 4 (1 - C(r)^{-3}) (W_1 + C(r) W_2) + 2 \eta \dot{C}(r, \dot{r}) (1 - 2 C(r)^{-6}) = 0
+ * -S + \tau + 4 (1 - C^{-3}) (W_1 + C W_2) + 2 \eta \dot{C}
+ * (1 - 2 C^{-6}) = 0
  * \f]
  *
  * 3. Volume change:
  * \f[
- * 4 \pi r_0^2 C(r)v - \dot{V} = 0
+ * 4 \pi r_0^2 Cv - \dot{V} = 0
  * \f]
  *
  * 4. Active stress:
  * \f[
- * \dot{\tau} + a \tau - sigma_\text{max} a_+ = 0, \quad a_+ = \max(a, 0)
+ * \dot{\tau} + a \tau - \sigma_\text{max} a_+ = 0, \quad a_+ = \max(a, 0),
+ \quad a = f\alpha_\text{max} + (1 - f)\alpha_\text{min}
+ * \f]
+ * with indicator function
+ * \f[
+ * f = S_+ \cdot S_-, \quad S_\pm = \frac{1}{2} \left(1.0 \pm \text{tanh}\left(
+ \frac{t - t_\text{sys/dias}} {\gamma} \right) \right)
  * \f]
  *
  * 5. Acceleration:
@@ -86,25 +101,35 @@
  *
  * 7. Pressure equality:
  * \f[
- * \text{Pin} - \text{Pout} = 0
+ * P_\text{in} - P_\text{out} = 0
  * \f]
  *
  * ### Parameters
  *
  * Parameter sequence for constructing this block:
  *
- * * `rho` - Density
- * * `thick0` - Wall thickness
- * * `radius0` - Reference radius
- * * `W1` - Material constant 1
- * * `W2` - Material constant 2
- * * `eta` - Viscosity parameter
- * * `sigma_max` - Maximum active stress
- * * `alpha_max` - Maximum activation parameter
- * * `alpha_min` - Minimum activation parameter
- * * `tsys` - Systole timing parameter
- * * `tdias` - Diastole timing parameter
- * * `steepness` - Activation steepness parameter
+ * * `rho` - Density \f$\rho\f$
+ * * `thick0` - Wall thickness \f$d_0\f$
+ * * `radius0` - Reference radius \f$r_0\f$
+ * * `W1` - Material constant \f$W_1\f$
+ * * `W2` - Material constant \f$W_2\f$
+ * * `eta` - Viscosity parameter \f$\eta\f$
+ * * `sigma_max` - Maximum active stress \f$\sigma_\text{max}\f$
+ * * `alpha_max` - Maximum activation parameter \f$\alpha_\text{max}\f$
+ * * `alpha_min` - Minimum activation parameter \f$\alpha_\text{min}\f$
+ * * `tsys` - Systole timing parameter \f$t_\text{sys}\f$
+ * * `tdias` - Diastole timing parameter \f$t_\text{dias}\f$
+ * * `steepness` - Activation steepness parameter \f$\gamma\f$
+ *
+ * ### Internal variables
+ *
+ * Names of internal variables in this block's output:
+ *
+ * * `radius` - Chamber radius \f$r\f$
+ * * `velo` - Chamber velocity \f$\dot{r}\f$
+ * * `stress` - Spherical stress \f$S\f$
+ * * `tau` - Active stress \f$\tau\f$
+ * * `volume` - Chamber volume \f$V\f$
  *
  */
 class ChamberSphere : public Block {

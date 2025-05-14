@@ -399,7 +399,7 @@ void create_external_coupling(
         // Search for connected_block in the list of vessel names
         for (auto const vessel : vessel_id_map) {
           if (connected_block == vessel.second) {
-            connected_type = "ChamberSphere";
+            connected_type = "BloodVessel";
             found_block = 1;
             break;
           }
@@ -420,7 +420,7 @@ void create_external_coupling(
                                                  "CORONARY",
                                                  "ClosedLoopCoronaryLeft",
                                                  "ClosedLoopCoronaryRight",
-                                                 "ChamberSphere"};
+                                                 "BloodVessel"};
       if (std::find(std::begin(possible_types), std::end(possible_types),
                     connected_type) == std::end(possible_types)) {
         throw std::runtime_error(
@@ -430,7 +430,7 @@ void create_external_coupling(
       connections.push_back({coupling_name, connected_block});
     } else if (coupling_loc == "outlet") {
       std::vector<std::string> possible_types = {
-          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "ChamberSphere"};
+          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
       if (std::find(std::begin(possible_types), std::end(possible_types),
                     connected_type) == std::end(possible_types)) {
         throw std::runtime_error(
@@ -441,7 +441,7 @@ void create_external_coupling(
       // ClosedLoopHeartAndPulmonary will be handled in
       // ClosedLoopHeartAndPulmonary creation.
       if ((connected_type == "ClosedLoopRCR") ||
-          (connected_type == "ChamberSphere")) {
+          (connected_type == "BloodVessel")) {
         connections.push_back({connected_block, coupling_name});
       }  // connected_type == "ClosedLoopRCR"
     }  // coupling_loc

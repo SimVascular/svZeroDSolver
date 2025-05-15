@@ -225,9 +225,9 @@ class ClosedLoopHeartPulmonary : public Block {
  private:
   // Below variables change every timestep and are then combined with
   // expressions that are updated with solution
-  double AA;   // Atrial activation function
-  double Elv;  // LV elastance
-  double Erv;  // RV elastance
+  double AA = 0.0;   // Atrial activation function
+  double Elv = 0.0;  // LV elastance
+  double Erv = 0.0;  // RV elastance
   double psi_ra, psi_la, psi_ra_derivative,
       psi_la_derivative;  // Expressions for atrial activation
   double valves[16];

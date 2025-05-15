@@ -1,6 +1,6 @@
 {
     "description": {
-            "description of test case" : "pulsatile flow -> R -> coronary"
+        "description of test case": "pulsatile flow -> R -> coronary"
     },
     "boundary_conditions": [
         {
@@ -239,10 +239,11 @@
     "simulation_parameters": {
         "number_of_cardiac_cycles": 20,
         "number_of_time_pts_per_cardiac_cycle": 201,
+        "absolute_tolerance": 1e-09,
         "output_all_cycles": true,
-        "use_cycle_to_cycle_error" : true,
-        "sim_cycle_to_cycle_percent_error" : 1.0,
-        "steady_initial" : false
+        "use_cycle_to_cycle_error": true,
+        "sim_cycle_to_cycle_percent_error": 1.0,
+        "steady_initial": false
     },
     "vessels": [
         {

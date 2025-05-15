@@ -1,10 +1,11 @@
 {
     "description": {
-            "description of test case" : "Closed-loop circulation with two RCR outlets and two coronary outlets"
+        "description of test case": "Closed-loop circulation with two RCR outlets and two coronary outlets"
     },
     "simulation_parameters": {
         "number_of_cardiac_cycles": 1,
         "number_of_time_pts_per_cardiac_cycle": 10000,
+        "absolute_tolerance": 1e-09,
         "steady_initial": false
     },
     "boundary_conditions": [
@@ -12,16 +13,11 @@
             "bc_name": "LCA",
             "bc_type": "ClosedLoopCoronaryLeft",
             "bc_values": {
-                "_comment_": "Ra_total = 67.540250*0.361748 = 24.432550357",
-                "_comment_": "Ra = (0.32/0.84)*Ra_total",
-                "_comment_": "Ram = (0.52/0.84)*Ra_total",
+                "_comment_": "Ca = 0.000110*5.022065",
                 "Ra": 9.307638231,
                 "Ram": 15.124912126,
-                "_comment_": "Rv = 12.864810*2.586199",
                 "Rv": 33.270958757,
-                "_comment_": "Cim = 0.000890*4.198904",
                 "Cim": 0.003737025,
-                "_comment_": "Ca = 0.000110*5.022065",
                 "Ca": 0.000552427
             }
         },
@@ -29,16 +25,11 @@
             "bc_name": "RCA",
             "bc_type": "ClosedLoopCoronaryRight",
             "bc_values": {
-                "_comment_": "Ra_total = 41.778304*0.361748 = 15.113217915",
-                "_comment_": "Ra = (0.32/0.84)*Ra_total",
-                "_comment_": "Ram = (0.52/0.84)*Ra_total",
+                "_comment_": "Ca = 0.000110*9.599613",
                 "Ra": 5.757416349,
                 "Ram": 9.355801566,
-                "_comment_": "Rv = 7.957772*2.586199",
                 "Rv": 20.580381989,
-                "_comment_": "Cim = 0.000890*3.891162",
                 "Cim": 0.003463134,
-                "_comment_": "Ca = 0.000110*9.599613",
                 "Ca": 0.001055957
             }
         },
@@ -46,12 +37,9 @@
             "bc_name": "RCR_aorta",
             "bc_type": "ClosedLoopRCR",
             "bc_values": {
-                "_comment_": "R_total = 1.570879*0.948914 = 1.490629075",
-                "_comment_": "Rp = 0.09*R_total",
-                "_comment_": "Rd = 0.91*R_total",
+                "_comment_": "C = 0.228215*1.044637",
                 "Rp": 0.134156617,
                 "Rd": 1.356472458,
-                "_comment_": "C = 0.228215*1.044637",
                 "C": 0.238401833,
                 "closed_loop_outlet": true
             }
@@ -60,12 +48,9 @@
             "bc_name": "RCR_aorta_br",
             "bc_type": "ClosedLoopRCR",
             "bc_values": {
-                "_comment_": "R_total = 6.922824*0.948914 = 6.569164613",
-                "_comment_": "Rp = 0.09*R_total",
-                "_comment_": "Rd = 0.91*R_total",
+                "_comment_": "C = 0.051785*1.044637",
                 "Rp": 0.591224815,
                 "Rd": 5.977939798,
-                "_comment_": "C = 0.051785*1.044637",
                 "C": 0.054096527,
                 "closed_loop_outlet": true
             }
@@ -82,9 +67,8 @@
             "vessel_name": "branch0_seg0",
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
-                "_comment_": "R = 4.464119/1333.34",
-                "R_poiseuille": 0.003348073,
                 "_comment_": "L = 5.25/1333.34",
+                "R_poiseuille": 0.003348073,
                 "L": 0.00393748
             }
         },
@@ -98,9 +82,8 @@
             "vessel_name": "branch1_seg0",
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
-                "_comment_": "R = 111.152028/1333.34",
-                "R_poiseuille": 0.083363604,
                 "_comment_": "L = 5.25/1333.34",
+                "R_poiseuille": 0.083363604,
                 "L": 0.00393748
             }
         },
@@ -114,9 +97,8 @@
             "vessel_name": "branch2_seg0",
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
-                "_comment_": "R = 5855.832840/1333.34",
-                "R_poiseuille": 4.391852671,
                 "_comment_": "L = 10.0/1333.34",
+                "R_poiseuille": 4.391852671,
                 "L": 0.007499963
             }
         },
@@ -130,9 +112,8 @@
             "vessel_name": "branch3_seg0",
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
-                "_comment_": "R = 3013.987966/1333.34",
-                "R_poiseuille": 2.260479672,
                 "_comment_": "L = 10.0/1333.34",
+                "R_poiseuille": 2.260479672,
                 "L": 0.007499963
             }
         }
@@ -146,37 +127,29 @@
                 "branch3_seg0"
             ],
             "closed_loop_type": "ClosedLoopHeartAndPulmonary",
-            "cardiac_cycle_period": 1.0169, 
+            "cardiac_cycle_period": 1.0169,
             "parameters": {
-                "Tsa": 0.407420,
+                "Tsa": 0.40742,
                 "tpwave": 8.976868,
                 "Erv_s": 2.125279,
                 "Elv_s": 3.125202,
                 "iml": 0.509365,
                 "imr": 0.806369,
-                "_comment_": "Lrv_a = 0.249155/pConv",
+                "_comment_": "Rpd = 1.120725 * this->Rpd_base /pConv",
                 "Lrv_a": 0.000186865,
-                "_comment_": "Rrv_a = 0.993637 * this->Rrv_base /pConv",
                 "Rrv_a": 0.035061704,
-                "_comment_": "Lra_v = 0.289378/pConv",
                 "Lra_v": 0.000217032,
-                "_comment_": "Rra_v = 10.516664/pConv",
                 "Rra_v": 0.007887459,
-                "_comment_": "Lla_v = 0.469052/pConv",
                 "Lla_v": 0.000351787,
-                "_comment_": "Rla_v = 7.081136/pConv",
                 "Rla_v": 0.005310825,
-                "_comment_": "Rlv_ao = 0.972624 * this->Rlv_base /pConv",
                 "Rlv_ao": 0.034320234,
-                "_comment_": "Llv_a = 0.147702/pConv",
                 "Llv_a": 0.000110776,
                 "Vrv_u": 9.424629,
                 "Vlv_u": 5.606007,
-                "_comment_": "Rpd = 1.120725 * this->Rpd_base /pConv",
                 "Rpd": 0.098865401,
                 "Cp": 1.090989,
                 "Cpa": 0.556854,
-                "Kxp_ra": 9.222440,
+                "Kxp_ra": 9.22244,
                 "Kxv_ra": 0.004837,
                 "Emax_ra": 0.208858,
                 "Vaso_ra": 4.848742,

@@ -13,7 +13,7 @@
             "bc_name": "RCR_aorta",
             "bc_type": "ClosedLoopRCR",
             "bc_values": {
-                "_comment_": "C = 0.228215*1.044637",
+                "_comment_": "C = 0.228215*1.044637, R_total = 1.570879*0.948914 = 1.490629075, Rp = 0.09*R_total, Rd = 0.91*R_total",
                 "Rp": 0.134156617,
                 "Rd": 1.356472458,
                 "C": 0.238401833,
@@ -32,7 +32,7 @@
             "vessel_length": 10.0,
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
-                "_comment_": "L = 5.25/1333.34",
+                "_comment_": "L = 5.25/1333.34, R = 4.464119/1333.34",
                 "R_poiseuille": 0.003348073,
                 "L": 0.004
             }
@@ -46,13 +46,13 @@
             "closed_loop_type": "ClosedLoopHeartAndPulmonary",
             "cardiac_cycle_period": 1.0169,
             "parameters": {
+                "_comment_": "Lrv_a = 0.249155/pConv, Rrv_a = 0.993637 * this->Rrv_base /pConv, Lra_v = 0.289378/pConv, Rra_v = 10.516664/pConv, Lla_v = 0.469052/pConv, Rla_v = 7.081136/pConv, Rlv_ao = 0.972624 * this->Rlv_base /pConv, Llv_a = 0.147702/pConv, Rpd = 1.120725 * this->Rpd_base /pConv",
                 "Tsa": 0.40742,
                 "tpwave": 8.976868,
                 "Erv_s": 2.125279,
                 "Elv_s": 3.125202,
                 "iml": 0.509365,
                 "imr": 0.806369,
-                "_comment_": "Rpd = 1.120725 * this->Rpd_base /pConv",
                 "Lrv_a": 0.000186865,
                 "Rrv_a": 0.035061704,
                 "Lra_v": 0.000217032,

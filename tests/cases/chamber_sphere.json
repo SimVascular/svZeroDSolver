@@ -34,6 +34,7 @@
                 "inlet": "IN"
             },
             "vessel_id": 0,
+            "vessel_length": 2.0,
             "vessel_name": "upstream_vessel",
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {
@@ -44,7 +45,7 @@
         {
             "boundary_conditions": {},
             "vessel_id": 1,
-            "vessel_length": 10.0,
+            "vessel_length": 1.0,
             "vessel_name": "ventricle",
             "zero_d_element_type": "ChamberSphere",
             "zero_d_element_values": {
@@ -67,6 +68,7 @@
                 "outlet": "OUT"
             },
             "vessel_id": 2,
+            "vessel_length": 1.0,
             "vessel_name": "downstream_vessel",
             "zero_d_element_type": "BloodVessel",
             "zero_d_element_values": {

@@ -45,9 +45,8 @@
  * Models the mechanical behavior of a spherical heart chamber with active
  * contraction. For reference, see \cite caruel13 Equations (13a-b) for
  * continuum mechanics (without length-dependent contraction valves, vessels)
- and \cite
- * pfaller2019importance Equations (12-16) for the simplified active contraction
- * model.
+ * and \cite pfaller2019importance Equations (12-16) for the simplified active
+ * contraction model.
  *
  * ### Helper Functions
  *
@@ -205,24 +204,14 @@ class ChamberSphere : public Block {
   void update_time(SparseSystem &system, std::vector<double> &parameters);
 
   /**
-   * @brief Update the constant contributions of the element in a sparse
-   system
+   * @brief Update the solution-dependent contributions of the element in a
+   * sparse system
    *
    * @param system System to update contributions at
    * @param parameters Parameters of the model
+   * @param y Current solution
+   * @param dy Current derivate of the solution
    */
-  // void update_constant(SparseSystem &system, std::vector<double>
-  // &parameters);
-
-  // /**
-  //  * @brief Update the solution-dependent contributions of the element in a
-  //  * sparse system
-  //  *
-  //  * @param system System to update contributions at
-  //  * @param parameters Parameters of the model
-  //  * @param y Current solution
-  //  * @param dy Current derivate of the solution
-  //  */
   void update_solution(SparseSystem &system, std::vector<double> &parameters,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);

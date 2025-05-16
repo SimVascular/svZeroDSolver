@@ -6,7 +6,7 @@ import sys
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
-def compute_ref_sol(testname):
+def compute_reference_solution(testname):
     '''
     compute reference solution for a test case
 
@@ -25,8 +25,7 @@ def compute_ref_sol(testname):
     result_filename = os.path.join(this_file_dir, 'cases', 'results', 'result_' + testname)
 
     # save to json
-    with open(result_filename, 'w') as f:
-        f.write(result.to_json())
+    result.to_json(result_filename)
 
     # print for confirmation
     print(f'Reference solution for test case {testname} computed and saved to {result_filename}. Please verify that the results are as expected.')
@@ -43,7 +42,8 @@ def compute_all_ref_sol(tolerance=None):
         if tolerance is not None:
             set_absolute_tolerance(testfile, tolerance)
 
-        compute_ref_sol(testfile)
+        compute_reference_solution(testfile)
+
 
 def set_absolute_tolerance(case_name, tolerance):
     """
@@ -88,7 +88,7 @@ def main():
         print("Computing reference solution for test case:", args.test_case_name)
         if args.abs_tol is not None:
             set_absolute_tolerance(args.test_case_name, args.abs_tol)
-        compute_ref_sol(args.test_case_name)
+        compute_reference_solution(args.test_case_name)
 
 if __name__ == "__main__":
     

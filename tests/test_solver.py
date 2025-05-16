@@ -9,7 +9,7 @@ import pytest
 import sys
 sys.path.append(os.path.dirname(__file__))
 
-from .utils import run_test_case_by_name, get_result, run_with_reference, RTOL_FLOW, RTOL_PRES
+from .utils import run_with_reference, RTOL_FLOW, RTOL_PRES
 
 @pytest.mark.parametrize("testfile", ['chamber_elastance_inductor.json', 
                                       'steadyFlow_R_R.json', 

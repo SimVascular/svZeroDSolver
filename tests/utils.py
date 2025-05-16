@@ -66,6 +66,7 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
     results = []
 
     if output_variable_based:
+        print(ref, res)
         assert len(res) == len(ref), "Result and reference must have the same number of rows"
 
         name = ref["name"]

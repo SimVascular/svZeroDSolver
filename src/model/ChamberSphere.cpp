@@ -41,7 +41,7 @@ void ChamberSphere::update_constant(SparseSystem &system,
                                     std::vector<double> &parameters) {
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
   const double rho = parameters[global_param_ids[ParamId::rho]];
-  
+
   // balance of linear momentum
   system.E.coeffRef(global_eqn_ids[0], global_var_ids[5]) = rho * thick0;
 

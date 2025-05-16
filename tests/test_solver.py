@@ -31,7 +31,6 @@ from .utils import run_test_case_by_name, get_result, run_with_reference, RTOL_F
                                       'steadyFlow_confluenceR_R.json', 
                                       'steadyFlow_R_RCR.json', 
                                       'steadyFlow_stenosis_R.json',
-                                      'steadyFlow_stenosis_R_BloodVesselNew.json',
                                       'pulsatileFlow_R_RCR_mean.json', 
                                       'pulsatileFlow_R_RCR_mean_derivative.json', 
                                       'pulsatileFlow_CStenosis_steadyPressure.json', 

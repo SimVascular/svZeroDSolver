@@ -27,7 +27,6 @@ def compute_reference_solution(testname):
     # save to json
     result.to_json(result_filename)
 
-    # print for confirmation
     print(f'Reference solution for test case {testname} computed and saved to {result_filename}. Please verify that the results are as expected.')
     
 def compute_all_ref_sol(tolerance=None):

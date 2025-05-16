@@ -67,47 +67,41 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
 
     if output_variable_based:
         assert len(res) == len(ref), "Result and reference must have the same number of rows"
-        # merged = ref[["name", "time", "y"]].merge(res[["name", "y"]], on="name", suffixes=("_expected", "_actual"))
-
-        print(res, ref)
 
         name = ref["name"]
         y_expected = ref["y"]
         y_actual = res["y"]
         tol = RTOL_FLOW if "flow" in name else RTOL_PRES
-        rel_diff = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
-        within_tol = rel_diff <= 0.0
+        diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
+        within_tol = diff_vs_zero <= 0.0
 
-        for var_name, (rd, wt) in zip(name, zip(rel_diff, within_tol)):
-            # name = res.loc[idx, "name"] if "name" in res.columns else str(idx)
+        for var_name, (rd, wt) in zip(name, zip(diff_vs_zero, within_tol)):
 
             variable, block_name = var_name.split(":", 1)
 
             results.append({
                 "variable": variable,
                 "name": block_name,
-                "relative_difference": rd,
+                "rel_diff minus tol": rd,
                 "within_tolerance": wt
             })
 
     else:
-        # Assume 'res' and 'ref' have the same index and column names
         for col in res.columns:
-            # Determine tolerance based on variable name
             tol = RTOL_PRES if "pressure" in col else RTOL_FLOW if "flow" in col else None
             if tol is None:
                 continue
 
-            rel_diff = abs(res[col] - ref[col]) - tol - (tol * abs(ref[col]))
-            within_tol = rel_diff <= 0.0
+            diff_vs_zero = abs(res[col] - ref[col]) - tol - (tol * abs(ref[col]))
+            within_tol = diff_vs_zero <= 0.0
 
             # Extract name from index or fallback if index is not informative
-            for idx, (rd, wt) in zip(res.index, zip(rel_diff, within_tol)):
+            for idx, (rd, wt) in zip(res.index, zip(diff_vs_zero, within_tol)):
                 name = res.loc[idx, "name"] if "name" in res.columns else str(idx)
                 results.append({
                     "variable": col,
                     "name": name,
-                    "relative_difference": rd,
+                    "rel_diff minus tol": rd,
                     "within_tolerance": wt
                 })
 
@@ -125,16 +119,13 @@ def run_with_reference(
 
     output_variable_based = config["simulation_parameters"].get("output_variable_based", False)
 
-    diff = compare_result_with_reference(res, ref, output_variable_based)
+    difference = compare_result_with_reference(res, ref, output_variable_based)
 
-    print(diff)
-
-    if not diff["within_tolerance"].all():
+    if not difference["within_tolerance"].all():
         # Extract only differing rows for a cleaner error message
-        differing_rows = diff[~diff["within_tolerance"]]
+        differing_rows = difference[~difference["within_tolerance"]]
         if not differing_rows.empty:
-            diff_info = differing_rows[["name", "relative_difference"]]
-            # print("Test failed in the following rows:\n", diff_info.to_string(index=False))
+            print("Test failed in the following rows:\n", differing_rows.to_string(index=False))
             raise AssertionError("Differences exceed tolerance.")
         else:
             raise AssertionError("Differences exceed tolerance but no specific rows found.")

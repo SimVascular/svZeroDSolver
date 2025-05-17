@@ -60,30 +60,30 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
         output_variable_based: whether to compare based on columns (True) or row-based with 'name' field (False)
 
     Returns:
-        pd.DataFrame with columns: ["variable", "name", "relative_difference", "within_tolerance"]
+        pd.DataFrame with columns: ["variable", "name", "y_expected", "y_actual", "rel_diff - tol", "within_tolerance"]
     '''
 
     results = []
 
     if output_variable_based:
-        print(ref, res)
         assert len(res) == len(ref), "Result and reference must have the same number of rows"
 
         name = ref["name"]
         y_expected = ref["y"]
         y_actual = res["y"]
-        tol = RTOL_FLOW if "flow" in name else RTOL_PRES
+        tol = name.map(lambda n: RTOL_FLOW if "flow" in n else RTOL_PRES)
+
         diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
         within_tol = diff_vs_zero <= 0.0
 
-        for var_name, (rd, wt) in zip(name, zip(diff_vs_zero, within_tol)):
-
+        for var_name, y_e, y_a, rd, wt in zip(name, y_expected, y_actual, diff_vs_zero, within_tol):
             variable, block_name = var_name.split(":", 1)
-
             results.append({
                 "variable": variable,
                 "name": block_name,
-                "rel_diff minus tol": rd,
+                "y_expected": y_e,
+                "y_actual": y_a,
+                "rel_diff - tol": rd,
                 "within_tolerance": wt
             })
 
@@ -93,21 +93,25 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
             if tol is None:
                 continue
 
-            diff_vs_zero = abs(res[col] - ref[col]) - tol - (tol * abs(ref[col]))
+            y_expected = ref[col]
+            y_actual = res[col]
+            diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
             within_tol = diff_vs_zero <= 0.0
 
-            # Extract name from index or fallback if index is not informative
-            for idx, (rd, wt) in zip(res.index, zip(diff_vs_zero, within_tol)):
+            for idx, y_e, y_a, rd, wt in zip(res.index, y_expected, y_actual, diff_vs_zero, within_tol):
                 name = res.loc[idx, "name"] if "name" in res.columns else str(idx)
                 results.append({
                     "variable": col,
                     "name": name,
-                    "rel_diff minus tol": rd,
+                    "y_expected": y_e,
+                    "y_actual": y_a,
+                    "rel_diff - tol": rd,
                     "within_tolerance": wt
                 })
 
-
-    return pd.DataFrame(results, columns=["variable", "name", "relative_difference", "within_tolerance"])
+    return pd.DataFrame(results, columns=[
+        "variable", "name", "y_expected", "y_actual", "rel_diff - tol", "within_tolerance"
+    ])
 
 
 def run_with_reference(

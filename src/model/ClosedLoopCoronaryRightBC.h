@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the University of California, and others.
-// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
+// University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 /**
  * @file ClosedLoopCoronaryRightBC.h
  * @brief Right side of ClosedLoopCoronaryBC

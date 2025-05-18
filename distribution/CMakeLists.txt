@@ -11,7 +11,7 @@ if(ENABLE_DISTRIBUTION)
   set(CPACK_PACKAGE_VENDOR "SimVascular.org")
   set(CPACK_PACKAGE_CONTACT "SimVascular <sv@simvascular.org>")
   set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "svZeroDSolver is a fast lumped-parameter solver for blood flow and pressure in hemodynamic networks")
-  set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE.txt")
+  set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE.md")
   set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/readme.txt")
 
   # define executale file name

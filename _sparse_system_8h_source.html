@@ -92,156 +92,129 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">SparseSystem.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="_sparse_system_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// Copyright (c) Stanford University, The Regents of the University of</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">//               California, and others.</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//</span></div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">// All Rights Reserved.</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment">//</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment">// See Copyright-SimVascular.txt for additional details.</span></div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="comment">//</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="comment">// Permission is hereby granted, free of charge, to any person obtaining</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="comment">// a copy of this software and associated documentation files (the</span></div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">// &quot;Software&quot;), to deal in the Software without restriction, including</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">// without limitation the rights to use, copy, modify, merge, publish,</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="comment">// distribute, sublicense, and/or sell copies of the Software, and to</span></div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="comment">// permit persons to whom the Software is furnished to do so, subject</span></div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="comment">// to the following conditions:</span></div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">//</span></div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="comment">// The above copyright notice and this permission notice shall be included</span></div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment">// in all copies or substantial portions of the Software.</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">//</span></div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment">// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment">// IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment">// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment">// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment">// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment">// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment">// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span><span class="comment"></span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="comment"> * @file SparseSystem.h</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment"> * @brief SparseSystem source file</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment"> */</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#ifndef SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#define SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &lt;Eigen/Sparse&gt;</span></div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &lt;Eigen/SparseLU&gt;</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">// Forward declaration of Model</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">class </span><a class="code hl_class" href="class_model.html">Model</a>;</div>
+<a href="_sparse_system_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">// University of California, and others. SPDX-License-Identifier: BSD-3-Clause</span><span class="comment"></span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment"> * @file SparseSystem.h</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="comment"> * @brief SparseSystem source file</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="comment"> */</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#ifndef SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#define SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;Eigen/Sparse&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;Eigen/SparseLU&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="comment">// Forward declaration of Model</span></div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keyword">class </span><a class="code hl_class" href="class_model.html">Model</a>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="comment"></span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="comment">/**</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="comment"> * @brief Sparse system</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment"> * This class contains all attributes and methods to create, modify, and</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * solve sparse systems.</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * Mathematical details related to setting up the governing system of</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * equations are available on the &lt;a</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> * href=&quot;https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory&quot;&gt;SimVascular</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment"> * documentation&lt;/a&gt;.</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment"> *</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment"> */</span></div>
+<div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="class_sparse_system.html">   30</a></span><span class="keyword">class </span><a class="code hl_function" href="class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553">SparseSystem</a> {</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> <span class="keyword">public</span>:<span class="comment"></span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="comment">   * @brief Construct a new Sparse System object</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  <a class="code hl_function" href="class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553">SparseSystem</a>();</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="comment"></span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="comment">   * @brief Construct a new Sparse System object</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="comment">   * @param n Size of the system</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <a class="code hl_function" href="class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553">SparseSystem</a>(<span class="keywordtype">int</span> n);</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="comment"></span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">/**</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment"> * @brief Sparse system</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment"> * This class contains all attributes and methods to create, modify, and</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="comment"> * solve sparse systems.</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="comment"> * Mathematical details related to setting up the governing system of</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="comment"> * equations are available on the &lt;a</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="comment"> * href=&quot;https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory&quot;&gt;SimVascular</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="comment"> * documentation&lt;/a&gt;.</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span><span class="comment"> *</span></div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="comment"> */</span></div>
-<div class="foldopen" id="foldopen00057" data-start="{" data-end="};">
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_sparse_system.html">   57</a></span><span class="keyword">class </span><a class="code hl_function" href="class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553">SparseSystem</a> {</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> <span class="keyword">public</span>:<span class="comment"></span></div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="comment">   * @brief Construct a new Sparse System object</span></div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <a class="code hl_function" href="class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553">SparseSystem</a>();</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="comment"></span> </div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">   * @brief Construct a new Sparse System object</span></div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">   * @param n Size of the system</span></div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <a class="code hl_function" href="class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553">SparseSystem</a>(<span class="keywordtype">int</span> n);</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment"></span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">   * @brief Destroy the Sparse System object</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>  <a class="code hl_function" href="class_sparse_system.html#ada5a51014afd567054a789042123a090">~SparseSystem</a>();</div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a79d67142eeb95cdecd9b12954c1091ad">   78</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#a79d67142eeb95cdecd9b12954c1091ad">F</a>;               <span class="comment">///&lt; System matrix F</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">   79</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">E</a>;               <span class="comment">///&lt; System matrix E</span></div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c">   80</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c">dC_dy</a>;           <span class="comment">///&lt; System matrix dC/dy</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0">   81</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0">dC_dydot</a>;        <span class="comment">///&lt; System matrix dC/dydot</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a460c06c938cca205928ad95517d26ddf">   82</a></span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; <a class="code hl_variable" href="class_sparse_system.html#a460c06c938cca205928ad95517d26ddf">C</a>;  <span class="comment">///&lt; System vector C</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno"><a class="line" href="class_sparse_system.html#ae68dcf82fa22bc7479dba6cbc9b87f2d">   84</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#ae68dcf82fa22bc7479dba6cbc9b87f2d">jacobian</a>;  <span class="comment">///&lt; Jacobian of the system</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a4e30e790f39ac0f6dd65b902acddaa99">   86</a></span>      <a class="code hl_variable" href="class_sparse_system.html#a4e30e790f39ac0f6dd65b902acddaa99">residual</a>;  <span class="comment">///&lt; Residual of the system</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt;</div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6">   88</a></span>      <a class="code hl_variable" href="class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6">dydot</a>;  <span class="comment">///&lt; Solution increment of the system</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno"><a class="line" href="class_sparse_system.html#aef37a5347e9b8b23a3cd6d24cd965ad7">   90</a></span>  std::shared_ptr&lt;Eigen::SparseLU&lt;Eigen::SparseMatrix&lt;double&gt;&gt;&gt; <a class="code hl_variable" href="class_sparse_system.html#aef37a5347e9b8b23a3cd6d24cd965ad7">solver</a> =</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>      std::shared_ptr&lt;Eigen::SparseLU&lt;Eigen::SparseMatrix&lt;double&gt;&gt;&gt;(</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>          <span class="keyword">new</span> Eigen::SparseLU&lt;Eigen::SparseMatrix&lt;double&gt;&gt;());  <span class="comment">///&lt; Linear</span><span class="comment"></span></div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">                                                                ///&lt; solver</span></div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment"></span> </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment">   * @brief Reserve memory in system matrices based on number of triplets</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">   * @param model The model to reserve space for in the system</span></div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898">reserve</a>(<a class="code hl_class" href="class_model.html">Model</a> *model);</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span><span class="comment"></span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span><span class="comment">   * @brief Update the residual of the system</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="comment">   * @param y Vector of current solution quantities</span></div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="comment">   * @param ydot Derivate of y</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a9922d0e459f45c7dda13f80797fb04b9">update_residual</a>(Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;y,</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;ydot);</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment"></span> </div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="comment">   * @brief Update the jacobian of the system</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment">   *</span></div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">   * @param time_coeff_ydot Coefficent ydot-dependent part of jacobian</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">   * @param time_coeff_y Coefficent ydot-dependent part of jacobian</span></div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a9ed1b27201071e55303753c3333d85ba">update_jacobian</a>(<span class="keywordtype">double</span> time_coeff_ydot, <span class="keywordtype">double</span> time_coeff_y);</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment"></span> </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">   * @brief Solve the system</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a">solve</a>();</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment"></span> </div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">  /**</span></div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span><span class="comment">   * @brief Delete dynamically allocated memory (class member</span></div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span><span class="comment">   * Eigen::SparseLU&lt;Eigen::SparseMatrix&gt; *solver)</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a1c118c164aa168ff6f53993a09e3c043">clean</a>();</div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>};</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="comment">   * @brief Destroy the Sparse System object</span></div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>  <a class="code hl_function" href="class_sparse_system.html#ada5a51014afd567054a789042123a090">~SparseSystem</a>();</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a79d67142eeb95cdecd9b12954c1091ad">   51</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#a79d67142eeb95cdecd9b12954c1091ad">F</a>;               <span class="comment">///&lt; System matrix F</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">   52</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">E</a>;               <span class="comment">///&lt; System matrix E</span></div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c">   53</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c">dC_dy</a>;           <span class="comment">///&lt; System matrix dC/dy</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0">   54</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0">dC_dydot</a>;        <span class="comment">///&lt; System matrix dC/dydot</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a460c06c938cca205928ad95517d26ddf">   55</a></span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; <a class="code hl_variable" href="class_sparse_system.html#a460c06c938cca205928ad95517d26ddf">C</a>;  <span class="comment">///&lt; System vector C</span></div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_sparse_system.html#ae68dcf82fa22bc7479dba6cbc9b87f2d">   57</a></span>  Eigen::SparseMatrix&lt;double&gt; <a class="code hl_variable" href="class_sparse_system.html#ae68dcf82fa22bc7479dba6cbc9b87f2d">jacobian</a>;  <span class="comment">///&lt; Jacobian of the system</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="class_sparse_system.html#a4e30e790f39ac0f6dd65b902acddaa99">   59</a></span>      <a class="code hl_variable" href="class_sparse_system.html#a4e30e790f39ac0f6dd65b902acddaa99">residual</a>;  <span class="comment">///&lt; Residual of the system</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>  Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6">   61</a></span>      <a class="code hl_variable" href="class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6">dydot</a>;  <span class="comment">///&lt; Solution increment of the system</span></div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="class_sparse_system.html#aef37a5347e9b8b23a3cd6d24cd965ad7">   63</a></span>  std::shared_ptr&lt;Eigen::SparseLU&lt;Eigen::SparseMatrix&lt;double&gt;&gt;&gt; <a class="code hl_variable" href="class_sparse_system.html#aef37a5347e9b8b23a3cd6d24cd965ad7">solver</a> =</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>      std::shared_ptr&lt;Eigen::SparseLU&lt;Eigen::SparseMatrix&lt;double&gt;&gt;&gt;(</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>          <span class="keyword">new</span> Eigen::SparseLU&lt;Eigen::SparseMatrix&lt;double&gt;&gt;());  <span class="comment">///&lt; Linear</span><span class="comment"></span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span><span class="comment">                                                                ///&lt; solver</span></div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="comment"></span> </div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span><span class="comment">   * @brief Reserve memory in system matrices based on number of triplets</span></div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span><span class="comment">   * @param model The model to reserve space for in the system</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898">reserve</a>(<a class="code hl_class" href="class_model.html">Model</a> *model);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="comment"></span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="comment">   * @brief Update the residual of the system</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span><span class="comment">   * @param y Vector of current solution quantities</span></div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span><span class="comment">   * @param ydot Derivate of y</span></div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a9922d0e459f45c7dda13f80797fb04b9">update_residual</a>(Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;y,</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;ydot);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="comment"></span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span><span class="comment">   * @brief Update the jacobian of the system</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">   *</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">   * @param time_coeff_ydot Coefficent ydot-dependent part of jacobian</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="comment">   * @param time_coeff_y Coefficent ydot-dependent part of jacobian</span></div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a9ed1b27201071e55303753c3333d85ba">update_jacobian</a>(<span class="keywordtype">double</span> time_coeff_ydot, <span class="keywordtype">double</span> time_coeff_y);</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="comment"></span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   * @brief Solve the system</span></div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a">solve</a>();</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="comment"></span> </div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span><span class="comment">  /**</span></div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span><span class="comment">   * @brief Delete dynamically allocated memory (class member</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">   * Eigen::SparseLU&lt;Eigen::SparseMatrix&gt; *solver)</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment">   */</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_sparse_system.html#a1c118c164aa168ff6f53993a09e3c043">clean</a>();</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>};</div>
 </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_</span></div>
-<div class="ttc" id="aclass_model_html"><div class="ttname"><a href="class_model.html">Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition</b> Model.h:75</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a11d6d844d7ce60c8b4f29c35fd12bd3c"><div class="ttname"><a href="class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c">SparseSystem::dC_dy</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; dC_dy</div><div class="ttdoc">System matrix dC/dy.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:80</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a175040c26141bbe53e98bfd0cf3e4898"><div class="ttname"><a href="class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898">SparseSystem::reserve</a></div><div class="ttdeci">void reserve(Model *model)</div><div class="ttdoc">Reserve memory in system matrices based on number of triplets.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:57</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a1c118c164aa168ff6f53993a09e3c043"><div class="ttname"><a href="class_sparse_system.html#a1c118c164aa168ff6f53993a09e3c043">SparseSystem::clean</a></div><div class="ttdeci">void clean()</div><div class="ttdoc">Delete dynamically allocated memory (class member Eigen::SparseLU&lt;Eigen::SparseMatrix&gt; *solver)</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:51</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a3232006b0680ade9ef0bf4df6f0dfd2d"><div class="ttname"><a href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">SparseSystem::E</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; E</div><div class="ttdoc">System matrix E.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:79</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a3ae84bdf7fbe99730215a3c8642b88a0"><div class="ttname"><a href="class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0">SparseSystem::dC_dydot</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; dC_dydot</div><div class="ttdoc">System matrix dC/dydot.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:81</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a460c06c938cca205928ad95517d26ddf"><div class="ttname"><a href="class_sparse_system.html#a460c06c938cca205928ad95517d26ddf">SparseSystem::C</a></div><div class="ttdeci">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; C</div><div class="ttdoc">System vector C.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:82</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a4e30e790f39ac0f6dd65b902acddaa99"><div class="ttname"><a href="class_sparse_system.html#a4e30e790f39ac0f6dd65b902acddaa99">SparseSystem::residual</a></div><div class="ttdeci">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; residual</div><div class="ttdoc">Residual of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:86</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a563e7760b7e4e66ea6e26cfc3ebfc553"><div class="ttname"><a href="class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553">SparseSystem::SparseSystem</a></div><div class="ttdeci">SparseSystem()</div><div class="ttdoc">Construct a new Sparse System object.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:35</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a5f292fe3a47e938a487eb89d0df0211a"><div class="ttname"><a href="class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a">SparseSystem::solve</a></div><div class="ttdeci">void solve()</div><div class="ttdoc">Solve the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:101</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a79d67142eeb95cdecd9b12954c1091ad"><div class="ttname"><a href="class_sparse_system.html#a79d67142eeb95cdecd9b12954c1091ad">SparseSystem::F</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; F</div><div class="ttdoc">System matrix F.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:78</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a9922d0e459f45c7dda13f80797fb04b9"><div class="ttname"><a href="class_sparse_system.html#a9922d0e459f45c7dda13f80797fb04b9">SparseSystem::update_residual</a></div><div class="ttdeci">void update_residual(Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;ydot)</div><div class="ttdoc">Update the residual of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:85</div></div>
-<div class="ttc" id="aclass_sparse_system_html_a9ed1b27201071e55303753c3333d85ba"><div class="ttname"><a href="class_sparse_system.html#a9ed1b27201071e55303753c3333d85ba">SparseSystem::update_jacobian</a></div><div class="ttdeci">void update_jacobian(double time_coeff_ydot, double time_coeff_y)</div><div class="ttdoc">Update the jacobian of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:94</div></div>
-<div class="ttc" id="aclass_sparse_system_html_ac8eb89978b168443906d319aba4e1bb6"><div class="ttname"><a href="class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6">SparseSystem::dydot</a></div><div class="ttdeci">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; dydot</div><div class="ttdoc">Solution increment of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:88</div></div>
-<div class="ttc" id="aclass_sparse_system_html_ada5a51014afd567054a789042123a090"><div class="ttname"><a href="class_sparse_system.html#ada5a51014afd567054a789042123a090">SparseSystem::~SparseSystem</a></div><div class="ttdeci">~SparseSystem()</div><div class="ttdoc">Destroy the Sparse System object.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:49</div></div>
-<div class="ttc" id="aclass_sparse_system_html_ae68dcf82fa22bc7479dba6cbc9b87f2d"><div class="ttname"><a href="class_sparse_system.html#ae68dcf82fa22bc7479dba6cbc9b87f2d">SparseSystem::jacobian</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; jacobian</div><div class="ttdoc">Jacobian of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:84</div></div>
-<div class="ttc" id="aclass_sparse_system_html_aef37a5347e9b8b23a3cd6d24cd965ad7"><div class="ttname"><a href="class_sparse_system.html#aef37a5347e9b8b23a3cd6d24cd965ad7">SparseSystem::solver</a></div><div class="ttdeci">std::shared_ptr&lt; Eigen::SparseLU&lt; Eigen::SparseMatrix&lt; double &gt; &gt; &gt; solver</div><div class="ttdef"><b>Definition</b> SparseSystem.h:90</div></div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="preprocessor">#endif  </span><span class="comment">// SVZERODSOLVER_ALGREBRA_SPARSESYSTEM_HPP_</span></div>
+<div class="ttc" id="aclass_model_html"><div class="ttname"><a href="class_model.html">Model</a></div><div class="ttdoc">Model of 0D elements.</div><div class="ttdef"><b>Definition</b> Model.h:48</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a11d6d844d7ce60c8b4f29c35fd12bd3c"><div class="ttname"><a href="class_sparse_system.html#a11d6d844d7ce60c8b4f29c35fd12bd3c">SparseSystem::dC_dy</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; dC_dy</div><div class="ttdoc">System matrix dC/dy.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:53</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a175040c26141bbe53e98bfd0cf3e4898"><div class="ttname"><a href="class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898">SparseSystem::reserve</a></div><div class="ttdeci">void reserve(Model *model)</div><div class="ttdoc">Reserve memory in system matrices based on number of triplets.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:30</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a1c118c164aa168ff6f53993a09e3c043"><div class="ttname"><a href="class_sparse_system.html#a1c118c164aa168ff6f53993a09e3c043">SparseSystem::clean</a></div><div class="ttdeci">void clean()</div><div class="ttdoc">Delete dynamically allocated memory (class member Eigen::SparseLU&lt;Eigen::SparseMatrix&gt; *solver)</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:24</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a3232006b0680ade9ef0bf4df6f0dfd2d"><div class="ttname"><a href="class_sparse_system.html#a3232006b0680ade9ef0bf4df6f0dfd2d">SparseSystem::E</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; E</div><div class="ttdoc">System matrix E.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:52</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a3ae84bdf7fbe99730215a3c8642b88a0"><div class="ttname"><a href="class_sparse_system.html#a3ae84bdf7fbe99730215a3c8642b88a0">SparseSystem::dC_dydot</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; dC_dydot</div><div class="ttdoc">System matrix dC/dydot.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:54</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a460c06c938cca205928ad95517d26ddf"><div class="ttname"><a href="class_sparse_system.html#a460c06c938cca205928ad95517d26ddf">SparseSystem::C</a></div><div class="ttdeci">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; C</div><div class="ttdoc">System vector C.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:55</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a4e30e790f39ac0f6dd65b902acddaa99"><div class="ttname"><a href="class_sparse_system.html#a4e30e790f39ac0f6dd65b902acddaa99">SparseSystem::residual</a></div><div class="ttdeci">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; residual</div><div class="ttdoc">Residual of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:59</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a563e7760b7e4e66ea6e26cfc3ebfc553"><div class="ttname"><a href="class_sparse_system.html#a563e7760b7e4e66ea6e26cfc3ebfc553">SparseSystem::SparseSystem</a></div><div class="ttdeci">SparseSystem()</div><div class="ttdoc">Construct a new Sparse System object.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:8</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a5f292fe3a47e938a487eb89d0df0211a"><div class="ttname"><a href="class_sparse_system.html#a5f292fe3a47e938a487eb89d0df0211a">SparseSystem::solve</a></div><div class="ttdeci">void solve()</div><div class="ttdoc">Solve the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:74</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a79d67142eeb95cdecd9b12954c1091ad"><div class="ttname"><a href="class_sparse_system.html#a79d67142eeb95cdecd9b12954c1091ad">SparseSystem::F</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; F</div><div class="ttdoc">System matrix F.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:51</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a9922d0e459f45c7dda13f80797fb04b9"><div class="ttname"><a href="class_sparse_system.html#a9922d0e459f45c7dda13f80797fb04b9">SparseSystem::update_residual</a></div><div class="ttdeci">void update_residual(Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;ydot)</div><div class="ttdoc">Update the residual of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:58</div></div>
+<div class="ttc" id="aclass_sparse_system_html_a9ed1b27201071e55303753c3333d85ba"><div class="ttname"><a href="class_sparse_system.html#a9ed1b27201071e55303753c3333d85ba">SparseSystem::update_jacobian</a></div><div class="ttdeci">void update_jacobian(double time_coeff_ydot, double time_coeff_y)</div><div class="ttdoc">Update the jacobian of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:67</div></div>
+<div class="ttc" id="aclass_sparse_system_html_ac8eb89978b168443906d319aba4e1bb6"><div class="ttname"><a href="class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6">SparseSystem::dydot</a></div><div class="ttdeci">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; dydot</div><div class="ttdoc">Solution increment of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:61</div></div>
+<div class="ttc" id="aclass_sparse_system_html_ada5a51014afd567054a789042123a090"><div class="ttname"><a href="class_sparse_system.html#ada5a51014afd567054a789042123a090">SparseSystem::~SparseSystem</a></div><div class="ttdeci">~SparseSystem()</div><div class="ttdoc">Destroy the Sparse System object.</div><div class="ttdef"><b>Definition</b> SparseSystem.cpp:22</div></div>
+<div class="ttc" id="aclass_sparse_system_html_ae68dcf82fa22bc7479dba6cbc9b87f2d"><div class="ttname"><a href="class_sparse_system.html#ae68dcf82fa22bc7479dba6cbc9b87f2d">SparseSystem::jacobian</a></div><div class="ttdeci">Eigen::SparseMatrix&lt; double &gt; jacobian</div><div class="ttdoc">Jacobian of the system.</div><div class="ttdef"><b>Definition</b> SparseSystem.h:57</div></div>
+<div class="ttc" id="aclass_sparse_system_html_aef37a5347e9b8b23a3cd6d24cd965ad7"><div class="ttname"><a href="class_sparse_system.html#aef37a5347e9b8b23a3cd6d24cd965ad7">SparseSystem::solver</a></div><div class="ttdeci">std::shared_ptr&lt; Eigen::SparseLU&lt; Eigen::SparseMatrix&lt; double &gt; &gt; &gt; solver</div><div class="ttdef"><b>Definition</b> SparseSystem.h:63</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

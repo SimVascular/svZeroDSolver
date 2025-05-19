@@ -8,7 +8,8 @@ import pandas as pd
 
 # global boolean to perform coverage testing
 # (run executables instead of Python interface, much slower)
-from pytest import coverage
+# from pytest import coverage
+coverage = False
 
 import pysvzerod
 
@@ -70,19 +71,23 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
 
         name = ref["name"]
         y_expected = ref["y"]
+        t_reference = ref["time"]
         y_actual = res["y"]
+        t_result = res["time"]
         tol = name.map(lambda n: RTOL_FLOW if "flow" in n else RTOL_PRES)
 
         diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
         within_tol = diff_vs_zero <= 0.0
 
-        for var_name, y_e, y_a, rd, wt in zip(name, y_expected, y_actual, diff_vs_zero, within_tol):
+        for var_name, t_e, y_e, t_a, y_a, rd, wt in zip(name, t_reference, y_expected, t_result, y_actual, diff_vs_zero, within_tol):
             variable, block_name = var_name.split(":", 1)
             results.append({
                 "variable": variable,
                 "name": block_name,
+                "t_reference": t_e,
                 "y_expected": y_e,
-                "y_actual": y_a,
+                "t_result": t_a,
+                "y_result": y_a,
                 "rel_diff - tol": rd,
                 "within_tolerance": wt
             })
@@ -91,7 +96,7 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
         for col in res.columns:
             tol = RTOL_PRES if "pressure" in col else RTOL_FLOW if "flow" in col else None
             if tol is None:
-                continue
+                    continue
 
             y_expected = ref[col]
             y_actual = res[col]
@@ -100,17 +105,21 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
 
             for idx, y_e, y_a, rd, wt in zip(res.index, y_expected, y_actual, diff_vs_zero, within_tol):
                 name = res.loc[idx, "name"] if "name" in res.columns else str(idx)
+                t_e = ref.loc[idx, "time"] if "time" in ref.columns else None
+                t_a = res.loc[idx, "time"] if "time" in res.columns else None
                 results.append({
                     "variable": col,
                     "name": name,
+                    "t_reference": t_e,
                     "y_expected": y_e,
-                    "y_actual": y_a,
+                    "t_result": t_a,
+                    "y_result": y_a,
                     "rel_diff - tol": rd,
                     "within_tolerance": wt
                 })
 
     return pd.DataFrame(results, columns=[
-        "variable", "name", "y_expected", "y_actual", "rel_diff - tol", "within_tolerance"
+        "variable", "name", "t_reference", "y_expected", "t_result", "y_result", "rel_diff - tol", "within_tolerance"
     ])
 
 

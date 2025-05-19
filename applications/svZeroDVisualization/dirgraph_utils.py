@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the University of California, and others.
+# SPDX-License-Identifier: BSD-3-Clause
 """
 This code will create a directed graph by reading a .json file.
 """

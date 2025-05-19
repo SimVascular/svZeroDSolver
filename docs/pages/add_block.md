@@ -2,7 +2,7 @@
 
 [TOC]
 
-Below are details on the steps required to implement a new block in svZeroDSolver.
+Below are details on the steps required to implement a new block in svZeroDSolver. To help with defining the block matrices, you can use the [Jacobian Generator](@ref jacobian).
 
 *Note: The best way to implement a new block is to look at examples of existing block classes. See the `ValveTanh` class for an example.*
 
@@ -68,6 +68,8 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 ## 3. Set up the governing equations for the block.
 
+Use the [Jacobian Generator](@ref jacobian) to calculate matrix contributions symbolically.
+
 ### State vector
 
 * The local state vector for each block is always arranged as `y = [P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]`.   
@@ -111,7 +113,7 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 ## 4. Implement the matrix equations for the block.
 
-* Implement the `update_constant`, `update_time` and `update_solution` functions.
+* Implement the `update_constant`, `update_time` and `update_solution` functions (which can be output by the [Jacobian Generator](@ref jacobian)).
   * All matrix elements that are constant must be specified in `update_constant`.
   * Matrix elements that depend only on time (not the state variables) must be specified in `update_time`.
   * Matrix elements that change with the solution (i.e. depend on the state variables themselves) must be specified in `update_solution`. 

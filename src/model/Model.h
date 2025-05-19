@@ -20,6 +20,7 @@
 #include "BloodVessel.h"
 #include "BloodVesselJunction.h"
 #include "ChamberElastanceInductor.h"
+#include "ChamberSphere.h"
 #include "ClosedLoopCoronaryLeftBC.h"
 #include "ClosedLoopCoronaryRightBC.h"
 #include "ClosedLoopHeartPulmonary.h"

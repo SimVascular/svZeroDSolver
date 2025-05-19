@@ -3,13 +3,12 @@ name: Codechecks
 on: [push, pull_request]
 jobs:
   clang-format:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo apt-get install clang-format-19
+          brew install clang-format
       - name: Run clang-format
         run: |
           mkdir Release

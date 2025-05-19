@@ -1,33 +1,5 @@
-// Copyright (c) Stanford University, The Regents of the University of
-//               California, and others.
-//
-// All Rights Reserved.
-//
-// See Copyright-SimVascular.txt for additional details.
-//
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject
-// to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-// IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
+// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
+// University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "ClosedLoopHeartPulmonary.h"
 
 #include "Model.h"
@@ -207,7 +179,7 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
   AA = 0.0;
   if (t_in_cycle <= tpwave) {
     AA = (0.5) * (1.0 - cos(2.0 * M_PI * (t_in_cycle - tpwave + Tsa) / Tsa));
-  } else if ((t_in_cycle >= (T_cardiac - Tsa) + tpwave) and
+  } else if ((t_in_cycle >= (T_cardiac - Tsa) + tpwave) &&
              (t_in_cycle < T_cardiac)) {
     AA = (0.5) * (1.0 - cos(2.0 * M_PI *
                             (t_in_cycle - tpwave - (T_cardiac - Tsa)) / Tsa));
@@ -280,14 +252,14 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   auto pressure_ra = y[global_var_ids[0]];
   auto pressure_rv = y[global_var_ids[6]];
   auto outflow_ra = y[global_var_ids[5]];
-  if ((pressure_ra <= pressure_rv) and (outflow_ra <= 0.0)) {
+  if ((pressure_ra <= pressure_rv) && (outflow_ra <= 0.0)) {
     valves[5] = 0.0;
   }
 
   // RV to pulmonary
   auto pressure_pulmonary = y[global_var_ids[9]];
   auto outflow_rv = y[global_var_ids[8]];
-  if ((pressure_rv <= pressure_pulmonary) and (outflow_rv <= 0.0)) {
+  if ((pressure_rv <= pressure_pulmonary) && (outflow_rv <= 0.0)) {
     valves[8] = 0.0;
   }
 
@@ -295,14 +267,14 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
   auto pressure_la = y[global_var_ids[10]];
   auto pressure_lv = y[global_var_ids[13]];
   auto outflow_la = y[global_var_ids[12]];
-  if ((pressure_la <= pressure_lv) and (outflow_la <= 0.0)) {
+  if ((pressure_la <= pressure_lv) && (outflow_la <= 0.0)) {
     valves[12] = 0.0;
   }
 
   // LV to aorta
   auto pressure_aorta = y[global_var_ids[2]];
   auto outflow_lv = y[global_var_ids[15]];
-  if ((pressure_lv <= pressure_aorta) and (outflow_lv <= 0.0)) {
+  if ((pressure_lv <= pressure_aorta) && (outflow_lv <= 0.0)) {
     valves[15] = 0.0;
   }
 }

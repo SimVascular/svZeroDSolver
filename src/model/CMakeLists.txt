@@ -9,6 +9,7 @@ set(CXXSRCS
   Block.cpp
   BloodVessel.cpp
   BloodVesselJunction.cpp
+  Capacitance.cpp
   ChamberElastanceInductor.cpp
   ClosedLoopCoronaryBC.cpp
   ClosedLoopCoronaryLeftBC.cpp
@@ -17,14 +18,20 @@ set(CXXSRCS
   ClosedLoopRCRBC.cpp
   DOFHandler.cpp
   FlowReferenceBC.cpp
+  FourElementWindkesselBC.cpp
+  Inductance.cpp
   Junction.cpp
   Model.cpp
   Node.cpp
   OpenLoopCoronaryBC.cpp
   Parameter.cpp
+  ParallelRC.cpp
+  ParallelRL.cpp
   PressureReferenceBC.cpp
+  Resistance.cpp
   ResistanceBC.cpp
   ResistiveJunction.cpp
+  SerialRC.cpp
   ValveTanh.cpp
   WindkesselBC.cpp
 )
@@ -34,6 +41,7 @@ set(HDRS
   BlockType.h
   BloodVessel.h
   BloodVesselJunction.h
+  Capacitance.h
   ChamberElastanceInductor.h
   ClosedLoopCoronaryBC.h
   ClosedLoopCoronaryLeftBC.h
@@ -42,14 +50,20 @@ set(HDRS
   ClosedLoopRCRBC.h
   DOFHandler.h
   FlowReferenceBC.h
+  FourElementWindkesselBC.h
+  Inductance.h
   Junction.h
   Model.h
   Node.h
   OpenLoopCoronaryBC.h
   Parameter.h
+  ParallelRC.h
+  ParallelRL.h
   PressureReferenceBC.h
+  Resistance.h
   ResistanceBC.h
   ResistiveJunction.h
+  SerialRC.h
   ValveTanh.h
   WindkesselBC.h
 )

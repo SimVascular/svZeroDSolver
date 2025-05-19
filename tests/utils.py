@@ -8,8 +8,7 @@ import pandas as pd
 
 # global boolean to perform coverage testing
 # (run executables instead of Python interface, much slower)
-# from pytest import coverage
-coverage = False
+from pytest import coverage
 
 import pysvzerod
 

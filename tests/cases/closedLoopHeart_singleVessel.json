@@ -4,7 +4,7 @@
     },
     "simulation_parameters": {
         "number_of_cardiac_cycles": 10,
-        "number_of_time_pts_per_cardiac_cycle": 10000,
+        "number_of_time_pts_per_cardiac_cycle": 100,
         "absolute_tolerance": 1e-8,
         "steady_initial": false
     },

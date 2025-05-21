@@ -3,7 +3,7 @@
         "description of test case": "Closed-loop circulation with one vessel (aorta) connected on either side to the heart model."
     },
     "simulation_parameters": {
-        "number_of_cardiac_cycles": 20,
+        "number_of_cardiac_cycles": 100,
         "number_of_time_pts_per_cardiac_cycle": 100,
         "absolute_tolerance": 1e-08,
         "steady_initial": false,

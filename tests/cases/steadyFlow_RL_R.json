@@ -1,17 +1,18 @@
 {
     "description": {
-            "description of test case" : "steady flow -> RL -> R",
-            "analytical results" : [    "Notes:",
-                                            "At steady state for constant flow, dQ/dt = 0",
-                                        "Boundary conditions:",
-                                            "inlet:",
-                                                "flow rate: Q = 5",
-                                            "outlet:",
-                                                "resistance + distal pressure: R = 100, Pd = 100",
-                                        "Solutions:",
-                                            "outlet pressure = Q * R + Pd =  5 * 100 + 100 = 600",
-                                            "inlet pressure = outlet pressure + Q * R_poiseuille = 600 + 5 * 100 = 1100"
-                                   ]
+        "description of test case": "steady flow -> RL -> R",
+        "analytical results": [
+            "Notes:",
+            "At steady state for constant flow, dQ/dt = 0",
+            "Boundary conditions:",
+            "inlet:",
+            "flow rate: Q = 5",
+            "outlet:",
+            "resistance + distal pressure: R = 100, Pd = 100",
+            "Solutions:",
+            "outlet pressure = Q * R + Pd =  5 * 100 + 100 = 600",
+            "inlet pressure = outlet pressure + Q * R_poiseuille = 600 + 5 * 100 = 1100"
+        ]
     },
     "boundary_conditions": [
         {
@@ -39,7 +40,8 @@
     ],
     "simulation_parameters": {
         "number_of_cardiac_cycles": 30,
-        "number_of_time_pts_per_cardiac_cycle": 101
+        "number_of_time_pts_per_cardiac_cycle": 101,
+        "absolute_tolerance": 1e-09
     },
     "vessels": [
         {

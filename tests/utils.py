@@ -199,7 +199,7 @@ def get_result(result_array, field, branch, time_step):
 #     and number_of_cardiac_cycles.
 
 #     """
-#     cardiac_cycle_period = 0.99
+#     cardiac_cycle_period = 0.999
 
 #     json_paths = [os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_singleVessel.json"),
 #                   os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_withCoronaries.json"),]
@@ -211,7 +211,7 @@ def get_result(result_array, field, branch, time_step):
 #             data = json.load(f)
 
 #         sim_params = data.get("simulation_parameters", {})
-#         num_pts_per_cycle = sim_params.get("number_of_time_pts_per_cardiac_cycle", 100)
+#         num_pts_per_cycle = sim_params.get("number_of_time_pts_per_cardiac_cycle", 1000)
 #         total_pts = num_pts_per_cycle
 
 #         # set cardiac cycle period
@@ -224,6 +224,7 @@ def get_result(result_array, field, branch, time_step):
 
 #             # Create a uniform time grid from t[0] to t[-1]
 #             t_uniform = np.linspace(0.0, cardiac_cycle_period, total_pts, endpoint=True)
+#             t_uniform = np.floor(t_uniform * 1000) / 1000
 
 #             # Interpolate Q to match new time points
 #             interp_q = interp1d(t_uniform, q_original, kind='linear', fill_value="extrapolate")

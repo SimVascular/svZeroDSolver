@@ -199,7 +199,7 @@ def get_result(result_array, field, branch, time_step):
 #     and number_of_cardiac_cycles.
 
 #     """
-#     cardiac_cycle_period = 0.999
+#     cardiac_cycle_period = 0.99
 
 #     json_paths = [os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_singleVessel.json"),
 #                   os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_withCoronaries.json"),]
@@ -211,7 +211,7 @@ def get_result(result_array, field, branch, time_step):
 #             data = json.load(f)
 
 #         sim_params = data.get("simulation_parameters", {})
-#         num_pts_per_cycle = sim_params.get("number_of_time_pts_per_cardiac_cycle", 1000)
+#         num_pts_per_cycle = sim_params.get("number_of_time_pts_per_cardiac_cycle", 100)
 #         total_pts = num_pts_per_cycle
 
 #         # set cardiac cycle period

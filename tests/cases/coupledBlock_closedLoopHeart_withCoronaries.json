@@ -3,7 +3,7 @@
         "description of test case": "Coupled block specifying inflow (from different simulation) into two RCR blocks and two coronary blocks, all connected to closed-loop heart model. Outlet flow from heart model is also specified using coupled block."
     },
     "simulation_parameters": {
-        "number_of_cardiac_cycles": 10,
+        "number_of_cardiac_cycles": 20,
         "number_of_time_pts_per_cardiac_cycle": 1000,
         "absolute_tolerance": 1e-09,
         "steady_initial": false,

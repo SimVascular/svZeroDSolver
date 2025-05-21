@@ -8,8 +8,8 @@ import pandas as pd
 
 # global boolean to perform coverage testing
 # (run executables instead of Python interface, much slower)
-# from pytest import coverage
-coverage = False
+from pytest import coverage
+# coverage = False
 
 import pysvzerod
 
@@ -190,53 +190,53 @@ def get_result(result_array, field, branch, time_step):
     return result_array[field][branch][time_step]
 
 
-from scipy.interpolate import interp1d
+# from scipy.interpolate import interp1d
 
-def resample_external_solver_inputs():
-    """
-    Load JSON files, resample external_solver_coupling_blocks["values"]["t"] and ["Q"]
-    to a uniform time grid defined by simulation_parameters["number_of_time_pts_per_cardiac_cycle"]
-    and number_of_cardiac_cycles.
+# def resample_external_solver_inputs():
+#     """
+#     Load JSON files, resample external_solver_coupling_blocks["values"]["t"] and ["Q"]
+#     to a uniform time grid defined by simulation_parameters["number_of_time_pts_per_cardiac_cycle"]
+#     and number_of_cardiac_cycles.
 
-    """
+#     """
 
-    json_paths = [os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_singleVessel.json"),
-                  os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_withCoronaries.json"),]
+#     json_paths = [os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_singleVessel.json"),
+#                   os.path.join(this_file_dir, "cases", "coupledBlock_closedLoopHeart_withCoronaries.json"),]
 
-    updated_jsons = {}
+#     updated_jsons = {}
 
-    for path in json_paths:
-        with open(path, "r") as f:
-            data = json.load(f)
+#     for path in json_paths:
+#         with open(path, "r") as f:
+#             data = json.load(f)
 
-        sim_params = data.get("simulation_parameters", {})
-        num_pts_per_cycle = sim_params.get("number_of_time_pts_per_cardiac_cycle", 100)
-        total_pts = num_pts_per_cycle
+#         sim_params = data.get("simulation_parameters", {})
+#         num_pts_per_cycle = sim_params.get("number_of_time_pts_per_cardiac_cycle", 100)
+#         total_pts = num_pts_per_cycle
 
-        # Estimate total time from last point in original t
-        for block in data.get("external_solver_coupling_blocks", []):
-            t_original = np.array(block["values"]["t"], dtype=np.float64)
-            q_original = np.array(block["values"]["Q"], dtype=np.float64)
+#         # Estimate total time from last point in original t
+#         for block in data.get("external_solver_coupling_blocks", []):
+#             t_original = np.array(block["values"]["t"], dtype=np.float64)
+#             q_original = np.array(block["values"]["Q"], dtype=np.float64)
 
-            # Create a uniform time grid from t[0] to t[-1]
-            t_uniform = np.linspace(t_original[0], t_original[-1], total_pts, endpoint=True)
+#             # Create a uniform time grid from t[0] to t[-1]
+#             t_uniform = np.linspace(t_original[0], t_original[-1], total_pts, endpoint=True)
 
-            # Interpolate Q to match new time points
-            interp_q = interp1d(t_original, q_original, kind='linear', fill_value="extrapolate")
-            q_uniform = interp_q(t_uniform)
+#             # Interpolate Q to match new time points
+#             interp_q = interp1d(t_original, q_original, kind='linear', fill_value="extrapolate")
+#             q_uniform = interp_q(t_uniform)
 
-            # Update the JSON block
-            block["values"]["t"] = t_uniform.tolist()
-            block["values"]["Q"] = q_uniform.tolist()
+#             # Update the JSON block
+#             block["values"]["t"] = t_uniform.tolist()
+#             block["values"]["Q"] = q_uniform.tolist()
 
-        updated_jsons[path] = data
+#         updated_jsons[path] = data
     
-    # Save the updated JSON files
-    for path, updated_data in updated_jsons.items():
-        with open(path, "w") as f:
-            json.dump(updated_data, f, indent=4)
-            print(f"Updated JSON saved to {path}")
+#     # Save the updated JSON files
+#     for path, updated_data in updated_jsons.items():
+#         with open(path, "w") as f:
+#             json.dump(updated_data, f, indent=4)
+#             print(f"Updated JSON saved to {path}")
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    resample_external_solver_inputs()
+#     resample_external_solver_inputs()

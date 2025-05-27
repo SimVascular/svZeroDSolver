@@ -1,20 +1,21 @@
 {
     "description": {
-            "description of test case" : "pulsatile pressure -> RC vessel -> valve -> RC vessel -> R BC",
-            "analytical results" : [
-                                        "Boundary conditions:",
-                                            "inlet:",
-                                                "Pressure: P(t) = 2.5*SIN(2*PI()*t) + 2.2",
-                                            "outlet:",
-                                                "Resistance: Rd = 1000, Pd = 1.00"
-                                   ]
+        "description of test case": "pulsatile pressure -> RC vessel -> valve -> RC vessel -> R BC",
+        "analytical results": [
+            "Boundary conditions:",
+            "inlet:",
+            "Pressure: P(t) = 2.5*SIN(2*PI()*t) + 2.2",
+            "outlet:",
+            "Resistance: Rd = 1000, Pd = 1.00"
+        ]
     },
     "simulation_parameters": {
         "number_of_cardiac_cycles": 5,
         "number_of_time_pts_per_cardiac_cycle": 101,
         "output_all_cycles": false,
         "steady_initial": true,
-        "output_variable_based": true
+        "output_variable_based": true,
+        "absolute_tolerance": 1e-09
     },
     "boundary_conditions": [
         {

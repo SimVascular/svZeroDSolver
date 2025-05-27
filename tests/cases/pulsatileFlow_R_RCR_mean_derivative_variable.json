@@ -1,20 +1,21 @@
 {
     "description": {
-            "description of test case" : "pulsatile flow -> R -> RCR",
-            "analytical results" : [    "Notes:",
-                                            "Let t0 = start of cardiac cycle",
-                                            "Notice that the inflow waveform has a period of 1 second",
-                                        "Boundary conditions:",
-                                            "inlet:",
-                                                "flow rate: Q(t) = 2.5*SIN(2*PI()*t) + 2.2",
-                                            "outlet:",
-                                                "RCR + distal pressure: Rp = 1000, Rd = 1000, Pd = 0",
-                                        "Solutions:",
-                                            "inlet flow  (at time = t0) = Q(t = 0) = 2.2",
-                                            "outlet flow (at time = t0) = Q(t = 0) = 2.2",
-                                            "outlet pressure (at time = t0) = Q(t = 0) * (Rp + Rd) + Pd =  2.2 * (1000 + 1000) + 0 = 4400",
-                                            "inlet pressure (at time = t0) = outlet pressure + Q(t = 0) * R_poiseuille = 4400 + 2.2 * 100 = 4620"
-                                   ]
+        "description of test case": "pulsatile flow -> R -> RCR",
+        "analytical results": [
+            "Notes:",
+            "Let t0 = start of cardiac cycle",
+            "Notice that the inflow waveform has a period of 1 second",
+            "Boundary conditions:",
+            "inlet:",
+            "flow rate: Q(t) = 2.5*SIN(2*PI()*t) + 2.2",
+            "outlet:",
+            "RCR + distal pressure: Rp = 1000, Rd = 1000, Pd = 0",
+            "Solutions:",
+            "inlet flow  (at time = t0) = Q(t = 0) = 2.2",
+            "outlet flow (at time = t0) = Q(t = 0) = 2.2",
+            "outlet pressure (at time = t0) = Q(t = 0) * (Rp + Rd) + Pd =  2.2 * (1000 + 1000) + 0 = 4400",
+            "inlet pressure (at time = t0) = outlet pressure + Q(t = 0) * R_poiseuille = 4400 + 2.2 * 100 = 4620"
+        ]
     },
     "boundary_conditions": [
         {
@@ -246,7 +247,8 @@
         "output_all_cycles": true,
         "output_mean_only": true,
         "output_derivative": true,
-        "output_variable_based": true
+        "output_variable_based": true,
+        "absolute_tolerance": 1e-09
     },
     "vessels": [
         {

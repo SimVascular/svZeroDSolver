@@ -51,7 +51,7 @@ def execute_pysvzerod(testfile, mode):
 
     return result, config
 
-def compare_result_with_reference(res, ref, output_variable_based=False):
+def compare_result_with_reference(res, ref, rtol_pres=1.0e-7, rtol_flow=1.0e-7, output_variable_based=False):
     '''
     Compare the result with the reference.
 
@@ -74,7 +74,7 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
         t_reference = ref["time"]
         y_actual = res["y"]
         t_result = res["time"]
-        tol = name.map(lambda n: RTOL_FLOW if "flow" in n else RTOL_PRES)
+        tol = name.map(lambda n: rtol_flow if "flow" in n else rtol_pres)
 
         diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
         within_tol = diff_vs_zero <= 0.0
@@ -94,7 +94,7 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
 
     else:
         for col in res.columns:
-            tol = RTOL_PRES if "pressure" in col else RTOL_FLOW if "flow" in col else None
+            tol = rtol_pres if "pressure" in col else rtol_flow if "flow" in col else None
             if tol is None:
                     continue
 
@@ -125,7 +125,9 @@ def compare_result_with_reference(res, ref, output_variable_based=False):
 
 def run_with_reference(
         ref,
-        test_config
+        test_config,
+        rtol_pres=1.0e-7,
+        rtol_flow=1.0e-7,
         ):
 
 
@@ -133,7 +135,7 @@ def run_with_reference(
 
     output_variable_based = config["simulation_parameters"].get("output_variable_based", False)
 
-    difference = compare_result_with_reference(res, ref, output_variable_based)
+    difference = compare_result_with_reference(res, ref, rtol_pres, rtol_flow, output_variable_based)
 
     if not difference["within_tolerance"].all():
         # Extract only differing rows for a cleaner error message

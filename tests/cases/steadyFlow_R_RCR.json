@@ -1,17 +1,18 @@
 {
     "description": {
-            "description of test case" : "steady flow -> R -> RCR",
-            "analytical results" : [    "Notes:",
-                                            "At steady state for constant flow, capacitor is fully charged",
-                                        "Boundary conditions:",
-                                            "inlet:",
-                                                "flow rate: Q = 5",
-                                            "outlet:",
-                                                "RCR + distal pressure: Rp = 1000, Rd = 1000, Pd = 0",
-                                        "Solutions:",
-                                            "outlet pressure = Q * (Rp + Rd) + Pd =  5 * (1000 + 1000) + 0 = 10000",
-                                            "inlet pressure = outlet pressure + Q * R_poiseuille = 10000 + 5 * 100 = 10500"
-                                   ]
+        "description of test case": "steady flow -> R -> RCR",
+        "analytical results": [
+            "Notes:",
+            "At steady state for constant flow, capacitor is fully charged",
+            "Boundary conditions:",
+            "inlet:",
+            "flow rate: Q = 5",
+            "outlet:",
+            "RCR + distal pressure: Rp = 1000, Rd = 1000, Pd = 0",
+            "Solutions:",
+            "outlet pressure = Q * (Rp + Rd) + Pd =  5 * (1000 + 1000) + 0 = 10000",
+            "inlet pressure = outlet pressure + Q * R_poiseuille = 10000 + 5 * 100 = 10500"
+        ]
     },
     "boundary_conditions": [
         {
@@ -41,7 +42,8 @@
     ],
     "simulation_parameters": {
         "number_of_cardiac_cycles": 30,
-        "number_of_time_pts_per_cardiac_cycle": 101
+        "number_of_time_pts_per_cardiac_cycle": 101,
+        "absolute_tolerance": 1e-09
     },
     "vessels": [
         {

@@ -1,17 +1,18 @@
 {
     "description": {
-            "description of test case" : "pulsatile flow -> bifurcation (with R's) -> RCR",
-            "analytical results" : [   "Boundary conditions:",
-                                            "inlet:",
-                                                "flow rate: Q(t) = 2.5*SIN(2*PI()*t) + 2.2",
-                                            "outlet1:",
-                                                "RCR: Rp = 1000, C = 0.0001, Rd = 70000, Pd = 0",
-                                            "outlet2:",
-                                                "RCR: Rp = 1000, C = 0.0001, Rd = 10000, Pd = 0",
-                                        "Cardiac cycle period = 1",
-                                        "Solutions:",
-                                            "n_infinity = ceil(-max(Rd_1 * C_1, Rd_2 * C_2) / period * ln(sim_cycle_to_cycle_percent_error / 100) ) = ceil(-max(70000 * 0.0001, 10000 * 0.0001) / 1.0 * ln(1.0 / 100)) = 33"
-                                   ]
+        "description of test case": "pulsatile flow -> bifurcation (with R's) -> RCR",
+        "analytical results": [
+            "Boundary conditions:",
+            "inlet:",
+            "flow rate: Q(t) = 2.5*SIN(2*PI()*t) + 2.2",
+            "outlet1:",
+            "RCR: Rp = 1000, C = 0.0001, Rd = 70000, Pd = 0",
+            "outlet2:",
+            "RCR: Rp = 1000, C = 0.0001, Rd = 10000, Pd = 0",
+            "Cardiac cycle period = 1",
+            "Solutions:",
+            "n_infinity = ceil(-max(Rd_1 * C_1, Rd_2 * C_2) / period * ln(sim_cycle_to_cycle_percent_error / 100) ) = ceil(-max(70000 * 0.0001, 10000 * 0.0001) / 1.0 * ln(1.0 / 100)) = 33"
+        ]
     },
     "boundary_conditions": [
         {
@@ -263,10 +264,11 @@
     "simulation_parameters": {
         "number_of_cardiac_cycles": 3,
         "number_of_time_pts_per_cardiac_cycle": 5,
+        "absolute_tolerance": 1e-09,
         "output_all_cycles": true,
-        "use_cycle_to_cycle_error" : true,
-        "sim_cycle_to_cycle_percent_error" : 1.0,
-        "steady_initial" : false
+        "use_cycle_to_cycle_error": true,
+        "sim_cycle_to_cycle_percent_error": 1.0,
+        "steady_initial": false
     },
     "vessels": [
         {

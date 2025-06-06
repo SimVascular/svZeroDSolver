@@ -1,23 +1,24 @@
 {
     "description": {
-            "description of test case" : "steady flow -> confluence (with R's) -> R",
-            "analytical results" : [   "Boundary conditions:",
-                                            "inlet0:",
-                                                "flow rate: Q0 = 5",
-                                            "inlet1:",
-                                                "flow rate: Q1 = 10",
-                                            "outlet:",
-                                                "resistance + distal pressure: R = 100, Pd = 100",
-                                        "Solutions:",
-                                            "outlet flow = Qo = Q0 + Q1 = 5 + 10 = 15",
-                                            "outlet pressure = Po = Qo * R + Pd =  15 * 100 + 100 = 1600",
-                                            "junction flow = Qc = Qo = 15",
-                                            "junction pressure = Pc = Qc * R_poiseuille2 + Po = 15 * 300 + 1600 = 6100",
-                                            "inlet flow0 = Qi0 = Q0 = 5",
-                                            "inlet flow1 = Qi1 = Q1 = 10",
-                                            "inlet pressure0 = R_poiseuille0 * Qi0 + Pc = 100 * 5 + 6100 = 6600",
-                                            "inlet pressure1 = R_poiseuille1 * Qi1 + Pc = 200 * 10 + 6100 = 8100"
-                                   ]
+        "description of test case": "steady flow -> confluence (with R's) -> R",
+        "analytical results": [
+            "Boundary conditions:",
+            "inlet0:",
+            "flow rate: Q0 = 5",
+            "inlet1:",
+            "flow rate: Q1 = 10",
+            "outlet:",
+            "resistance + distal pressure: R = 100, Pd = 100",
+            "Solutions:",
+            "outlet flow = Qo = Q0 + Q1 = 5 + 10 = 15",
+            "outlet pressure = Po = Qo * R + Pd =  15 * 100 + 100 = 1600",
+            "junction flow = Qc = Qo = 15",
+            "junction pressure = Pc = Qc * R_poiseuille2 + Po = 15 * 300 + 1600 = 6100",
+            "inlet flow0 = Qi0 = Q0 = 5",
+            "inlet flow1 = Qi1 = Q1 = 10",
+            "inlet pressure0 = R_poiseuille0 * Qi0 + Pc = 100 * 5 + 6100 = 6600",
+            "inlet pressure1 = R_poiseuille1 * Qi1 + Pc = 200 * 10 + 6100 = 8100"
+        ]
     },
     "boundary_conditions": [
         {
@@ -60,7 +61,7 @@
     "junctions": [
         {
             "inlet_vessels": [
-                0, 
+                0,
                 1
             ],
             "junction_name": "J0",
@@ -72,7 +73,8 @@
     ],
     "simulation_parameters": {
         "number_of_cardiac_cycles": 2,
-        "number_of_time_pts_per_cardiac_cycle": 5
+        "number_of_time_pts_per_cardiac_cycle": 5,
+        "absolute_tolerance": 1e-09
     },
     "vessels": [
         {

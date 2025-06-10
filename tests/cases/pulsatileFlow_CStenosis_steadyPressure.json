@@ -1,15 +1,16 @@
 {
     "description": {
-            "description of test case" : "sine flow -> C + stenosis -> constant pressure",
-            "analytical results" : [    "Boundary conditions:",
-                                            "inlet:",
-                                                "flow rate: Q(t) = SIN(t)",
-                                            "outlet:",
-                                                "pressure: Pd = 0.1",
-                                        "Solutions:",
-                                            "inlet pressure = abs( SIN(t) ) * SIN(t) + 0.1",
-                                            "outlet flow = SIN(t)"
-                                   ]
+        "description of test case": "sine flow -> C + stenosis -> constant pressure",
+        "analytical results": [
+            "Boundary conditions:",
+            "inlet:",
+            "flow rate: Q(t) = SIN(t)",
+            "outlet:",
+            "pressure: Pd = 0.1",
+            "Solutions:",
+            "inlet pressure = abs( SIN(t) ) * SIN(t) + 0.1",
+            "outlet flow = SIN(t)"
+        ]
     },
     "boundary_conditions": [
         {
@@ -239,7 +240,8 @@
     ],
     "simulation_parameters": {
         "number_of_cardiac_cycles": 30,
-        "number_of_time_pts_per_cardiac_cycle": 501
+        "number_of_time_pts_per_cardiac_cycle": 501,
+        "absolute_tolerance": 1e-09
     },
     "vessels": [
         {

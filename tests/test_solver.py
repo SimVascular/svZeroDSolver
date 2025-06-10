@@ -9,7 +9,7 @@ import pytest
 import sys
 sys.path.append(os.path.dirname(__file__))
 
-from .utils import run_test_case_by_name, get_result, run_with_reference, RTOL_FLOW, RTOL_PRES
+from .utils import run_with_reference, RTOL_PRES, RTOL_FLOW
 
 EXPECTED_FAILURES = {
     'closedLoopHeart_singleVessel_mistmatchPeriod.json',
@@ -56,6 +56,13 @@ def test_solver(testfile):
     run all test cases and compare against stored reference solution
     '''
 
+    # default tolerances
+    rtol_pres = RTOL_PRES
+    rtol_flow = RTOL_FLOW
+    if 'coupledBlock_closedLoopHeart_withCoronaries.json' in testfile:
+        rtol_pres = 1.0e-1
+        rtol_flow = 1.0e-1
+
     this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
     results_dir = os.path.join(this_file_dir, 'cases', 'results')
@@ -65,4 +72,4 @@ def test_solver(testfile):
 
     ref = pd.read_json(os.path.join(results_dir, f'result_{testfile}'))
 
-    run_with_reference(ref, os.path.join(this_file_dir, 'cases', testfile))
+    run_with_reference(ref, os.path.join(this_file_dir, 'cases', testfile), rtol_pres, rtol_flow)

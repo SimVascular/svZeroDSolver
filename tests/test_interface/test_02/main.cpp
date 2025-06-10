@@ -6,6 +6,8 @@
 #include <iostream>
 #include <map>
 #include <fstream>
+#include <filesystem>
+namespace fs = std::filesystem;
 
 //---------------------------------------------------------------------------------------
 // Compare mean flow/pressure in aorta and coronary with pre-computed ("correct") values
@@ -52,19 +54,20 @@ int main(int argc, char** argv)
 
   // Load shared library and get interface functions.
   // File extension of the shared library depends on the system
-  std::string svzerod_build_path = std::string(argv[1]);
-  std::string interface_lib_path = svzerod_build_path + "/src/interface/libsvzero_interface";
-  std::string interface_lib_so = interface_lib_path + ".so";
-  std::string interface_lib_dylib = interface_lib_path + ".dylib";
-  std::ifstream lib_so_exists(interface_lib_so);
-  std::ifstream lib_dylib_exists(interface_lib_dylib);
-  if (lib_so_exists) {
-    interface.load_library(interface_lib_so);
-  } else if (lib_dylib_exists) {
-    interface.load_library(interface_lib_dylib);
+  fs::path build_dir   = argv[1];
+  fs::path iface_dir   = build_dir / "src" / "interface";
+  fs::path lib_so = iface_dir / "libsvzero_interface.so";
+  fs::path lib_dylib = iface_dir / "libsvzero_interface.dylib";
+  fs::path lib_dll = iface_dir / "libsvzero_interface.dll";
+  if (fs::exists(lib_so)) {
+    interface.load_library(lib_so.string());
+  } else if (fs::exists(lib_dylib)) {
+    interface.load_library(lib_dylib.string());
+  } else if (fs::exists(lib_dll)) {
+    interface.load_library(lib_dll.string());
   } else {
-    throw std::runtime_error("Could not find shared libraries " + interface_lib_so + " or " + interface_lib_dylib);
-  } 
+    throw std::runtime_error("Could not find shared libraries " + lib_so.string() + " or " + lib_dylib.string() + " or " + lib_dll.string() + " !");
+  }
 
   // Set up the svZeroD model
   std::string file_name = std::string(argv[2]);

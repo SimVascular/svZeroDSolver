@@ -27,11 +27,7 @@ Model::Model() {
       {"RESISTANCE", block_factory<ResistanceBC>()},
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
-      {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
-      {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
-      {"RegazzoniValve", block_factory<RegazzoniValve>()},
-      {"RegazzoniChamber", block_factory<RegazzoniChamber>()},
-      {"KungVentricle", block_factory<RegazzoniChamber>()}};
+      {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()}};
 }
 
 Model::~Model() {}

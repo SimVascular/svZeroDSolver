@@ -409,9 +409,9 @@ void create_external_coupling(
             "Error: The specified connection type for outlet "
             "external_coupling_block is invalid.");
       }
-      // Add connection only for closedLoopRCR and BloodVessel. Connection to 
-      // ClosedLoopHeartAndPulmonary will be
-      // handled in ClosedLoopHeartAndPulmonary creation.
+      // Add connection only for closedLoopRCR and BloodVessel. Connection to
+      // ClosedLoopHeartAndPulmonary will be handled in
+      // ClosedLoopHeartAndPulmonary creation.
       if ((connected_type == "ClosedLoopRCR") ||
           (connected_type == "BloodVessel")) {
         connections.push_back({connected_block, coupling_name});

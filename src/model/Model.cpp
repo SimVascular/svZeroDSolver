@@ -115,7 +115,7 @@ std::string Model::get_block_name(int block_id) const {
 int Model::add_node(const std::vector<Block *> &inlet_eles,
                     const std::vector<Block *> &outlet_eles,
                     const std::string_view &name) {
-  DEBUG_MSG("Adding node " << name);
+  // DEBUG_MSG("Adding node " << name);
   auto node = std::shared_ptr<Node>(
       new Node(node_count, inlet_eles, outlet_eles, this));
   nodes.push_back(node);

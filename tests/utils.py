@@ -17,7 +17,6 @@ this_file_dir = os.path.abspath(os.path.dirname(__file__))
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-7
 
-
 def execute_pysvzerod(testfile, mode):
     """Execute pysvzerod (via Python interface or executable).
 
@@ -30,6 +29,7 @@ def execute_pysvzerod(testfile, mode):
     # read configuration
     with open(testfile) as ff:
         config = json.load(ff)
+
     if coverage:
         # run via executable (slow)
         with TemporaryDirectory() as tempdir:
@@ -50,74 +50,102 @@ def execute_pysvzerod(testfile, mode):
 
     return result, config
 
+def compare_result_with_reference(res, ref, rtol_pres, rtol_flow, output_variable_based=False):
+    '''
+    Compare the result with the reference.
+
+    Args:
+        res: result as pandas DataFrame 
+        ref: reference result as pandas DataFrame
+        output_variable_based: whether to compare based on columns (True) or row-based with 'name' field (False)
+
+    Returns:
+        pd.DataFrame with columns: ["variable", "name", "y_expected", "y_actual", "rel_diff - tol", "within_tolerance"]
+    '''
+
+    results = []
+
+    if output_variable_based:
+        assert len(res) == len(ref), "Result and reference must have the same number of rows"
+
+        name = ref["name"]
+        y_expected = ref["y"]
+        t_reference = ref["time"]
+        y_actual = res["y"]
+        t_result = res["time"]
+        tol = name.map(lambda n: rtol_flow if "flow" in n else rtol_pres)
+
+        diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
+        within_tol = diff_vs_zero <= 0.0
+
+        for var_name, t_e, y_e, t_a, y_a, rd, wt in zip(name, t_reference, y_expected, t_result, y_actual, diff_vs_zero, within_tol):
+            variable, block_name = var_name.split(":", 1)
+            results.append({
+                "variable": variable,
+                "name": block_name,
+                "t_reference": t_e,
+                "y_expected": y_e,
+                "t_result": t_a,
+                "y_result": y_a,
+                "rel_diff - tol": rd,
+                "within_tolerance": wt
+            })
+
+    else:
+        for col in res.columns:
+            tol = rtol_pres if "pressure" in col else rtol_flow if "flow" in col else None
+            if tol is None:
+                    continue
+
+            y_expected = ref[col]
+            y_actual = res[col]
+            diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
+            within_tol = diff_vs_zero <= 0.0
+
+            for idx, y_e, y_a, rd, wt in zip(res.index, y_expected, y_actual, diff_vs_zero, within_tol):
+                name = res.loc[idx, "name"] if "name" in res.columns else str(idx)
+                t_e = ref.loc[idx, "time"] if "time" in ref.columns else None
+                t_a = res.loc[idx, "time"] if "time" in res.columns else None
+                results.append({
+                    "variable": col,
+                    "name": name,
+                    "t_reference": t_e,
+                    "y_expected": y_e,
+                    "t_result": t_a,
+                    "y_result": y_a,
+                    "rel_diff - tol": rd,
+                    "within_tolerance": wt
+                })
+
+    return pd.DataFrame(results, columns=[
+        "variable", "name", "t_reference", "y_expected", "t_result", "y_result", "rel_diff - tol", "within_tolerance"
+    ])
+
 
 def run_with_reference(
         ref,
-        test_config
+        test_config,
+        rtol_pres,
+        rtol_flow
         ):
 
-    res, _ = execute_pysvzerod(test_config, "solver")
 
-    if res.shape[1] >= 6:
-        # we have a result with fields [name, time, p_in, p_out, q_in, q_out] SOME HAVE GREATTER LENGTH NEED TO ADDRESS
-        pressure_cols = ["pressure_in", "pressure_out"]
-        flow_cols = ["flow_in", "flow_out"]
+    res, config = execute_pysvzerod(test_config, "solver")
 
-        bool_df = pd.DataFrame(index=res.index, columns=res.columns, dtype=bool)
+    output_variable_based = config["simulation_parameters"].get("output_variable_based", False)
 
-        for col in res.columns:
-            tol = RTOL_PRES if col in pressure_cols else RTOL_FLOW if col in flow_cols else None
-            if tol is not None:
-                rel_diff = np.abs(res[col] - ref[col]) - tol - tol * np.abs(ref[col])
-                check = rel_diff <= 0.0
-                bool_df[col] = check  # True if difference is below tolerance
+    difference = compare_result_with_reference(res, ref, rtol_pres, rtol_flow, output_variable_based)
 
-        if not bool_df.all().all():  # Check if any value exceeded tolerance
-            # Extract only differing rows/columns for a cleaner error message
-            differing_locs = np.where(~bool_df)  # Shows only the out-of-tolerance values
-            differing_indices = res.index[differing_locs[0]]
-            differing_columns = res.columns[differing_locs[1]]
+    if not difference["within_tolerance"].all():
+        # Extract only differing rows for a cleaner error message
+        differing_rows = difference[~difference["within_tolerance"]]
+        if not differing_rows.empty:
+            print("Test failed in the following rows:\n", differing_rows.to_string(index=False))
+            raise AssertionError("Differences exceed tolerance.")
+        else:
+            raise AssertionError("Differences exceed tolerance but no specific rows found.")
 
-            if differing_indices.any():  # If any differences are found
-                diff_locations = list(zip(differing_indices, differing_columns))
-                # find the value where the difference exceeds tolerance
-                for i, col in diff_locations:
-                    if i in res.index and col in res.columns:
-                        # Get the actual values from both result and reference
-                        diff_values = (res.at[i, col], ref.at[i, col])
-                        tol = RTOL_PRES if col in pressure_cols else RTOL_FLOW if col in flow_cols else None
-                        print(f"Test failed in field {col}: {diff_values[0]} (result) vs {diff_values[1]} (reference) with relative difference {abs(diff_values[0] - diff_values[1]) - tol - tol * np.abs(diff_values[1])} greater than zero.")
-                diff_values = [(res.at[i, col], ref.at[i, col]) for i, col in diff_locations]
 
-                raise AssertionError(f"Differences exceed tolerance.")
-
-    else:
-        # we have a result with fields [name, time, y] and the result must be compared based on the name field. name is of format [flow:vessel:outlet]
-        # we will compare the average of each branch
-
-        # Merge both datasets on 'Object' and 't' to align values
-        res_merged = ref.merge(res, on=["name", "time"], suffixes=("_expected", "_actual"))
-
-        # Compute relative difference
-        def compute_relative_difference(row):
-            tol = RTOL_FLOW if "flow" in row["name"] else RTOL_PRES
-            return abs(row["y_actual"] - row["y_expected"]) - tol - (tol * abs(row["y_expected"]))
-        res_merged["Relative_Difference"] = res_merged.apply(compute_relative_difference, axis=1)
-
-        # Apply object-specific tolerance
-        res_merged["Within_Tolerance"] = res_merged.apply(
-            lambda row: row["Relative_Difference"] <= 0.0, axis=1
-        )
-
-        if not res_merged["Within_Tolerance"].all():
-            # Extract only differing rows for a cleaner error message
-            differing_rows = res_merged[~res_merged["Within_Tolerance"]]
-            if not differing_rows.empty:
-                diff_info = differing_rows[["name", "time", "y_expected", "y_actual", "Relative_Difference"]]
-                print("Test failed in the following rows:\n", diff_info.to_string(index=False))
-                raise AssertionError("Differences exceed tolerance.")
-            else:
-                raise AssertionError("Differences exceed tolerance but no specific rows found.")
 
 def run_test_case_by_name(name, output_variable_based=False, folder="."):
     """Run a test case by its case name.

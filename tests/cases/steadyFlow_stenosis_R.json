@@ -1,15 +1,16 @@
 {
     "description": {
-            "description of test case" : "steady flow -> stenosis -> R",
-            "analytical results" : [    "Boundary conditions:",
-                                            "inlet:",
-                                                "flow rate: Q = 5",
-                                            "outlet:",
-                                                "resistance + distal pressure: R = 100, Pd = 100",
-                                        "Solutions:",
-                                            "outlet pressure = Q * R + Pd =  5 * 100 + 100 = 600",
-                                            "inlet pressure = outlet pressure + Q * (R_poiseuille + stenosis_coefficient * abs(Q)) = 600 + 5 * (100 + 100 * abs(5)) = 3600"
-                                   ]
+        "description of test case": "steady flow -> stenosis -> R",
+        "analytical results": [
+            "Boundary conditions:",
+            "inlet:",
+            "flow rate: Q = 5",
+            "outlet:",
+            "resistance + distal pressure: R = 100, Pd = 100",
+            "Solutions:",
+            "outlet pressure = Q * R + Pd =  5 * 100 + 100 = 600",
+            "inlet pressure = outlet pressure + Q * (R_poiseuille + stenosis_coefficient * abs(Q)) = 600 + 5 * (100 + 100 * abs(5)) = 3600"
+        ]
     },
     "boundary_conditions": [
         {
@@ -37,7 +38,8 @@
     ],
     "simulation_parameters": {
         "number_of_cardiac_cycles": 2,
-        "number_of_time_pts_per_cardiac_cycle": 5
+        "number_of_time_pts_per_cardiac_cycle": 5,
+        "absolute_tolerance": 1e-09
     },
     "vessels": [
         {

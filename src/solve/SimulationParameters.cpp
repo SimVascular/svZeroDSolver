@@ -169,7 +169,6 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
           sim_config.value("sim_cycle_to_cycle_percent_error", 1.0) / 100;
     }
     sim_params.sim_external_step_size = 0.0;
-
   } else {
     sim_params.sim_num_cycles = 1;
     sim_params.sim_num_time_steps = sim_config["number_of_time_pts"];
@@ -187,6 +186,7 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   sim_params.output_mean_only = sim_config.value("output_mean_only", false);
   sim_params.output_derivative = sim_config.value("output_derivative", false);
   sim_params.output_all_cycles = sim_config.value("output_all_cycles", false);
+  sim_params.sim_cardiac_period = sim_config.value("cardiac_period", 0.0);
   DEBUG_MSG("Finished loading simulation parameters");
   return sim_params;
 }
@@ -392,28 +392,33 @@ void create_external_coupling(
                                                  "CORONARY",
                                                  "ClosedLoopCoronaryLeft",
                                                  "ClosedLoopCoronaryRight",
-                                                 "BloodVessel"};
+                                                 "BloodVessel",
+                                                 "BloodVesselA",
+                                                 "BloodVesselCRL"};
       if (std::find(std::begin(possible_types), std::end(possible_types),
                     connected_type) == std::end(possible_types)) {
         throw std::runtime_error(
-            "Error: The specified connection type for inlet "
+            "Error: The specified connection type for inlet"
             "external_coupling_block is invalid.");
       }
       connections.push_back({coupling_name, connected_block});
     } else if (coupling_loc == "outlet") {
       std::vector<std::string> possible_types = {
-          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
+          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel",
+          "BloodVesselCRL", "BloodVessel"};
       if (std::find(std::begin(possible_types), std::end(possible_types),
                     connected_type) == std::end(possible_types)) {
         throw std::runtime_error(
             "Error: The specified connection type for outlet "
             "external_coupling_block is invalid.");
       }
-      // Add connection only for closedLoopRCR and BloodVessel. Connection to
-      // ClosedLoopHeartAndPulmonary will be handled in
-      // ClosedLoopHeartAndPulmonary creation.
+      // Add connection only for closedLoopRCR and BloodVessel and
+      // BloodVesselCRL. Connection to ClosedLoopHeartAndPulmonary will be
+      // handled in ClosedLoopHeartAndPulmonary creation.
       if ((connected_type == "ClosedLoopRCR") ||
-          (connected_type == "BloodVessel")) {
+          (connected_type == "BloodVessel") ||
+          (connected_type == "BloodVesselCRL") ||
+          (connected_type == "BloodVesselA")) {
         connections.push_back({connected_block, coupling_name});
       }  // connected_type == "ClosedLoopRCR"
     }  // coupling_loc

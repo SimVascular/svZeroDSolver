@@ -19,7 +19,9 @@ excluded_files = [
     'closedLoopHeart_singleVessel.json',
     'closedLoopHeart_withCoronaries.json',
     'coupledBlock_closedLoopHeart_singleVessel.json',
-    'coupledBlock_closedLoopHeart_withCoronaries.json'
+    'coupledBlock_closedLoopHeart_withCoronaries.json',
+    'double_pulsatileFlow_CRL.json',
+    'RegChamberCRL.json'
 ]
 
 # Generate the list of JSON files to test

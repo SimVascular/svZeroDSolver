@@ -15,8 +15,7 @@ import pysvzerod
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
 RTOL_PRES = 1.0e-7
-RTOL_FLOW = 1.0e-8
-
+RTOL_FLOW = 1.0e-7
 
 def execute_pysvzerod(testfile, mode):
     """Execute pysvzerod (via Python interface or executable).
@@ -51,68 +50,101 @@ def execute_pysvzerod(testfile, mode):
 
     return result, config
 
+def compare_result_with_reference(res, ref, rtol_pres, rtol_flow, output_variable_based=False):
+    '''
+    Compare the result with the reference.
+
+    Args:
+        res: result as pandas DataFrame 
+        ref: reference result as pandas DataFrame
+        output_variable_based: whether to compare based on columns (True) or row-based with 'name' field (False)
+
+    Returns:
+        pd.DataFrame with columns: ["variable", "name", "y_expected", "y_actual", "rel_diff - tol", "within_tolerance"]
+    '''
+
+    results = []
+
+    if output_variable_based:
+        assert len(res) == len(ref), "Result and reference must have the same number of rows"
+
+        name = ref["name"]
+        y_expected = ref["y"]
+        t_reference = ref["time"]
+        y_actual = res["y"]
+        t_result = res["time"]
+        tol = name.map(lambda n: rtol_flow if "flow" in n else rtol_pres)
+
+        diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
+        within_tol = diff_vs_zero <= 0.0
+
+        for var_name, t_e, y_e, t_a, y_a, rd, wt in zip(name, t_reference, y_expected, t_result, y_actual, diff_vs_zero, within_tol):
+            variable, block_name = var_name.split(":", 1)
+            results.append({
+                "variable": variable,
+                "name": block_name,
+                "t_reference": t_e,
+                "y_expected": y_e,
+                "t_result": t_a,
+                "y_result": y_a,
+                "rel_diff - tol": rd,
+                "within_tolerance": wt
+            })
+
+    else:
+        for col in res.columns:
+            tol = rtol_pres if "pressure" in col else rtol_flow if "flow" in col else None
+            if tol is None:
+                    continue
+
+            y_expected = ref[col]
+            y_actual = res[col]
+            diff_vs_zero = abs(y_actual - y_expected) - tol - (tol * abs(y_expected))
+            within_tol = diff_vs_zero <= 0.0
+
+            for idx, y_e, y_a, rd, wt in zip(res.index, y_expected, y_actual, diff_vs_zero, within_tol):
+                name = res.loc[idx, "name"] if "name" in res.columns else str(idx)
+                t_e = ref.loc[idx, "time"] if "time" in ref.columns else None
+                t_a = res.loc[idx, "time"] if "time" in res.columns else None
+                results.append({
+                    "variable": col,
+                    "name": name,
+                    "t_reference": t_e,
+                    "y_expected": y_e,
+                    "t_result": t_a,
+                    "y_result": y_a,
+                    "rel_diff - tol": rd,
+                    "within_tolerance": wt
+                })
+
+    return pd.DataFrame(results, columns=[
+        "variable", "name", "t_reference", "y_expected", "t_result", "y_result", "rel_diff - tol", "within_tolerance"
+    ])
+
 
 def run_with_reference(
         ref,
-        test_config
+        test_config,
+        rtol_pres,
+        rtol_flow
         ):
 
 
     res, config = execute_pysvzerod(test_config, "solver")
 
-    if res.shape[1] == 6:
-        # we have a result with fields [name, time, p_in, p_out, q_in, q_out]
-        for field in ["pressure_in", "pressure_out", "flow_in", "flow_out"]:
-            if "pressure" in field:
-                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_PRES)
-            elif "flow" in field:
-                assert np.isclose(res[field].to_numpy().all(), ref[field].to_numpy().all(), rtol=RTOL_FLOW)
-    else:
-        # we have a result with fields [name, time, y] and the result must be compared based on the name field. name is of format [flow:vessel:outlet]
-        # we will compare the average of each branch
-        avg_res_flow = []
-        avg_ref_flow = []
-        avg_res_pres = []
-        avg_ref_pres = []
-        for index, row in res.iterrows():
+    output_variable_based = config["simulation_parameters"].get("output_variable_based", False)
 
-            if "flow" in row["name"]:
-                if row["name"] == res.iloc[index + 1]["name"]:
-                    # we are compilng the results for a branch
-                    avg_ref_flow.append(ref.loc[row.name].y)
-                    avg_res_flow.append(row.y)
-                elif avg_res_flow == []:
-                    # there is only one result for this branch
-                    assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_FLOW)
-                else:
-                    # we are on the last result for this branch
-                    avg_ref_flow.append(ref.loc[row.name].y)
-                    avg_res_flow.append(row.y)
-                    assert np.isclose(np.array(avg_res_flow).all(), np.array(avg_ref_flow).all(), rtol=RTOL_FLOW)
-                    avg_res_flow = []
-                    avg_ref_flow = []
-                    
-            elif "pressure" in row["name"]:
-                if index == len(res) - 1:
-                    # we are on the last row
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                    assert np.isclose(np.array(avg_res_pres).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
-                elif row["name"] == res.iloc[index + 1]["name"]:
-                    # we are compilng the results for a branch
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                elif avg_res_pres == []:
-                    # there is only one result for this branch
-                    assert np.isclose(row.y, ref.loc[row.name].y, rtol=RTOL_PRES)
-                else:
-                    # we are on the last result for this branch
-                    avg_ref_pres.append(ref.loc[row.name].y)
-                    avg_res_pres.append(row.y)
-                    # round the result to 10 decimal places to avoid floating point errors with reference solution computed on ubuntu OS
-                    assert np.isclose(np.array(avg_res_pres).round(10).all(), np.array(avg_ref_pres).all(), rtol=RTOL_PRES)
-                    avg_res_pres = []
-                    avg_ref_pres = []
+    difference = compare_result_with_reference(res, ref, rtol_pres, rtol_flow, output_variable_based)
+
+    if not difference["within_tolerance"].all():
+        # Extract only differing rows for a cleaner error message
+        differing_rows = difference[~difference["within_tolerance"]]
+        if not differing_rows.empty:
+            print("Test failed in the following rows:\n", differing_rows.to_string(index=False))
+            raise AssertionError("Differences exceed tolerance.")
+        else:
+            raise AssertionError("Differences exceed tolerance but no specific rows found.")
+
 
 
 def run_test_case_by_name(name, output_variable_based=False, folder="."):

@@ -1,32 +1,5 @@
-// Copyright (c) Stanford University, The Regents of the University of
-//               California, and others.
-//
-// All Rights Reserved.
-//
-// See Copyright-SimVascular.txt for additional details.
-//
-// Permission is hereby granted, free of charge, to any person obtaining
-// a copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to
-// permit persons to whom the Software is furnished to do so, subject
-// to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
-// IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
-// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
-// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
-// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
-// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
-// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
-// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
-// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
+// University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 /**
  * @file SparseSystem.h
  * @brief SparseSystem source file
@@ -48,42 +21,11 @@ class Model;
  * This class contains all attributes and methods to create, modify, and
  * solve sparse systems.
  *
- * Flow rate, pressure, and other hemodynamic quantities in 0D models of
- * vascular anatomies are governed by a system of nonlinear
- * differential-algebraic equations (DAEs):
+ * Mathematical details related to setting up the governing system of
+ * equations are available on the <a
+ * href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory">SimVascular
+ * documentation</a>.
  *
- * \f[
- * \mathbf{r}(\boldsymbol{\alpha}, \mathbf{y},\dot{\mathbf{y}}, t) =
- * \mathbf{E}(\boldsymbol{\alpha}) \cdot \dot{\mathbf{y}} +
- * \mathbf{F}(\boldsymbol{\alpha}) \cdot \mathbf{y} +
- * \mathbf{c}(\mathbf{y},\dot{\mathbf{y}}, t) = \mathbf{0}
- * \f]
- *
- * where \f$\mathbf{r},\textbf{y},\textbf{c} \in \mathbb{R}^{N}\f$ and
- * \f$\textbf{E},\textbf{F} \in \mathbb{R}^{N \times N}\f$. Here,
- * \f$\textbf{r}\f$ is the residual, \f$\textbf{y}\f$ is the vector of solution
- * quantities and \f$\dot{\textbf{y}}\f$ is its time derivative. \f$N\f$ is the
- * total number of equations and the total number of global unknowns. The DAE
- * system is solved implicitly using the generalized-\f$\alpha\f$ method in
- * Integrator. We then use the Newton-Raphson method to iteratively solve
- *
- * \f[
- * \mathbf{K}^{i} \cdot \Delta\dot{\mathbf{y}}^{i} = - \mathbf{r}^{i},
- * \f]
- *
- * with solution increment \f$\Delta\dot{\mathbf{y}}^{i}\f$ in iteration
- * \f$i\f$. The linearization of the time-discretized system is
- *
- * \f[
- * \mathbf{K} =
- * \frac{\partial \mathbf{r}}{\partial \mathbf{y}} =
- * c_{\dot{\mathbf{y}}} \left( \mathbf{E} + \frac{\partial \mathbf{c}}{\partial
- * \dot{\mathbf{y}}} \right) +
- * c_{\mathbf{y}} \left( \mathbf{F} + \frac{\partial \mathbf{c}}{\partial
- * \mathbf{y}} \right), \f]
- *
- * with time factors \f$c_{\dot{\mathbf{y}}}=\alpha_m\f$ and
- * \f$c_{\mathbf{y}}=\alpha_f\gamma\Delta t\f$ provided by Integrator.
  */
 class SparseSystem {
  public:

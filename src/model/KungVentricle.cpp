@@ -35,8 +35,8 @@ void KungVentricle::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"Vc"});
 }
 
-void KungVentricle::update_constant(
-    SparseSystem &system, std::vector<double> &parameters) {
+void KungVentricle::update_constant(SparseSystem &system,
+                                    std::vector<double> &parameters) {
   double L = parameters[global_param_ids[ParamId::IMPEDANCE]];
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
@@ -54,7 +54,7 @@ void KungVentricle::update_constant(
 }
 
 void KungVentricle::update_time(SparseSystem &system,
-                                           std::vector<double> &parameters) {
+                                std::vector<double> &parameters) {
   get_elastance_values(parameters);
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
@@ -62,8 +62,7 @@ void KungVentricle::update_time(SparseSystem &system,
   system.C.coeffRef(global_eqn_ids[0]) = Elas * Vrest;
 }
 
-void KungVentricle::get_elastance_values(
-    std::vector<double> &parameters) {
+void KungVentricle::get_elastance_values(std::vector<double> &parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Emin = parameters[global_param_ids[ParamId::EMIN]];
   double Vrd = parameters[global_param_ids[ParamId::VRD]];

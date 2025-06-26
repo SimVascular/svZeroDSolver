@@ -35,9 +35,8 @@ void RegazzoniChamber::setup_dofs(DOFHandler &dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"Vc"});
 }
 
-void RegazzoniChamber::update_constant(
-    SparseSystem &system, std::vector<double> &parameters) {
-
+void RegazzoniChamber::update_constant(SparseSystem &system,
+                                       std::vector<double> &parameters) {
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
 
@@ -52,21 +51,21 @@ void RegazzoniChamber::update_constant(
 }
 
 void RegazzoniChamber::update_time(SparseSystem &system,
-                                           std::vector<double> &parameters) {
+                                   std::vector<double> &parameters) {
   get_elastance_values(parameters);
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -1 * Elas;
-  system.C.coeffRef(global_eqn_ids[0]) = Elas * parameters[global_param_ids[ParamId::VREST]];
+  system.C.coeffRef(global_eqn_ids[0]) =
+      Elas * parameters[global_param_ids[ParamId::VREST]];
 }
 
-void RegazzoniChamber::get_elastance_values(
-    std::vector<double> &parameters) {
+void RegazzoniChamber::get_elastance_values(std::vector<double> &parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Epass = parameters[global_param_ids[ParamId::EPASS]];
   double Vrest = parameters[global_param_ids[ParamId::VREST]];
   double contract_start = parameters[global_param_ids[ParamId::CSTART]];
-  double relax_start = parameters[global_param_ids[ParamId::RSTART]];  
+  double relax_start = parameters[global_param_ids[ParamId::RSTART]];
   double contract_duration = parameters[global_param_ids[ParamId::CDUR]];
   double relax_duration = parameters[global_param_ids[ParamId::RDUR]];
 
@@ -76,11 +75,11 @@ void RegazzoniChamber::get_elastance_values(
 
   auto piecewise_condition = fmod(model->time - contract_start, T_HB);
 
-  if (0 <= piecewise_condition && piecewise_condition < contract_duration){
+  if (0 <= piecewise_condition && piecewise_condition < contract_duration) {
     phi = 0.5 * (1 - cos((M_PI * piecewise_condition) / contract_duration));
   } else {
     piecewise_condition = fmod(model->time - relax_start, T_HB);
-    if (0 <= piecewise_condition && piecewise_condition < relax_duration){
+    if (0 <= piecewise_condition && piecewise_condition < relax_duration) {
       phi = 0.5 * (1 + cos((M_PI * piecewise_condition) / relax_duration));
     }
   }

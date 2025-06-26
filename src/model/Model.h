@@ -32,14 +32,14 @@
 #include "OpenLoopCoronaryBC.h"
 #include "Parameter.h"
 #include "PressureReferenceBC.h"
+#include "RegazzoniChamber.h"
+#include "RegazzoniValve.h"
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"
 #include "State.h"
 #include "ValveTanh.h"
 #include "WindkesselBC.h"
 #include "debug.h"
-#include "RegazzoniChamber.h"
-#include "RegazzoniValve.h"
 
 /**
  * @brief Model of 0D elements

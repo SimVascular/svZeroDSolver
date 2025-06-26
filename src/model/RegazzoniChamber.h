@@ -146,13 +146,12 @@ class RegazzoniChamber : public Block {
    * @param model The model to which the block belongs
    */
   RegazzoniChamber(int id, Model *model)
-      : Block(id, model, BlockType::regazzoni_chamber,
-              BlockClass::chamber,
+      : Block(id, model, BlockType::regazzoni_chamber, BlockClass::chamber,
               {{"Emax", InputParameter()},
                {"Epass", InputParameter()},
                {"Vrest", InputParameter()},
                {"contract_start", InputParameter()},
-               {"relax_start", InputParameter()},               
+               {"relax_start", InputParameter()},
                {"contract_duration", InputParameter()},
                {"relax_duration", InputParameter()}}) {}
 
@@ -209,7 +208,7 @@ class RegazzoniChamber : public Block {
   TripletsContributions num_triplets{6, 2, 0};
 
  private:
-  double Elas;   // Chamber Elastance
+  double Elas;  // Chamber Elastance
 
   /**
    * @brief Update the elastance functions which depend on time

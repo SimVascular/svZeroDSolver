@@ -32,9 +32,6 @@ Model::Model() {
       {"RegazzoniValve", block_factory<RegazzoniValve>()},
       {"RegazzoniChamber", block_factory<RegazzoniChamber>()},
       {"KungVentricle", block_factory<RegazzoniChamber>()}};
-
-
-      
 }
 
 Model::~Model() {}
@@ -182,7 +179,7 @@ void Model::finalize() {
   }
 
   if (cardiac_cycle_period < 0.0) {
-    cardiac_cycle_period =  1.0;
+    cardiac_cycle_period = 1.0;
   }
 }
 

@@ -43,7 +43,8 @@ std::string to_vessel_csv(const std::vector<double> &times,
     auto block = model.get_block(i);
     // Extract global solution indices of the block
 
-    if (dynamic_cast<const BloodVessel *>(block) == nullptr) {
+    if (dynamic_cast<const BloodVessel *>(block) == nullptr &&
+        dynamic_cast<const ChamberSphere *>(block) == nullptr) {
       continue;
     }
 

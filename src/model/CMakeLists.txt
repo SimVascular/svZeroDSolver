@@ -9,6 +9,7 @@ set(CXXSRCS
   Block.cpp
   BloodVessel.cpp
   BloodVesselJunction.cpp
+  ChamberSphere.cpp
   ChamberElastanceInductor.cpp
   ClosedLoopCoronaryBC.cpp
   ClosedLoopCoronaryLeftBC.cpp
@@ -34,6 +35,7 @@ set(HDRS
   BlockType.h
   BloodVessel.h
   BloodVesselJunction.h
+  ChamberSphere.h
   ChamberElastanceInductor.h
   ClosedLoopCoronaryBC.h
   ClosedLoopCoronaryLeftBC.h

@@ -225,7 +225,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Closed-loop RCR boundary condition. </p>
 <p>Models the mechanical behavior of a Windkessel boundary condition that is connected to other blocks on both sides.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_50_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
+<picture><source srcset="form_77_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_p$, *-] (3,0)
@@ -236,49 +236,49 @@ node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw [-latex] (5.2,0) -- (6.0,0) node[right] {$Q_{out}$} ;
 \end{circuitikz}
-\]" src="form_50.png" width="399" height="144"/></picture>
+\]" src="form_77.png" width="399" height="144"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_51_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[C \frac{d P_c}{dt} + Q_{out} -Q_{in} = 0
-\]" src="form_51.png" width="197" height="41"/></picture>
+<picture><source srcset="form_78_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[C \frac{d P_c}{dt} + Q_{out} -Q_{in} = 0
+\]" src="form_78.png" width="197" height="41"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{in}-P_{c}-R_{p} Q_{in}=0
-\]" src="form_52.png" width="180" height="21"/></picture>
+<picture><source srcset="form_79_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{in}-P_{c}-R_{p} Q_{in}=0
+\]" src="form_79.png" width="180" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_53_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{c} - P_{out} - R_{d} Q_{out}=0
-\]" src="form_53.png" width="195" height="19"/></picture>
+<picture><source srcset="form_80_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{c} - P_{out} - R_{d} Q_{out}=0
+\]" src="form_80.png" width="195" height="19"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_54_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^e=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp; P_{out} &amp; Q_{out} &amp;
-P_{c}\end{array}\right]^{T} \]" src="form_54.png" width="315" height="28"/></picture>
+<picture><source srcset="form_81_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^e=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp; P_{out} &amp; Q_{out} &amp;
+P_{c}\end{array}\right]^{T} \]" src="form_81.png" width="315" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_55_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_82_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 &amp; 0 &amp; 0 &amp; 0 &amp; C \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
 \end{array}\right]
-\]" src="form_55.png" width="214" height="69"/></picture>
+\]" src="form_82.png" width="214" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_83_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 0 &amp; -1 &amp; 1 &amp; 0 &amp; 0 \\
 1 &amp; -R_p &amp; 0 &amp; 0 &amp; -1 \\
 0 &amp; 0 &amp; -1 &amp; -R_d &amp; +1 \\
 \end{array}\right]
-\]" src="form_56.png" width="293" height="69"/></picture>
+\]" src="form_83.png" width="293" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{c}^{e}=\left[\begin{array}{c}
 0 \\
 0 \\
 0
 \end{array}\right]
-\]" src="form_57.png" width="90" height="69"/></picture>
+\]" src="form_84.png" width="90" height="69"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

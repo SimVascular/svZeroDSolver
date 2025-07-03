@@ -223,78 +223,78 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Valve (tanh) block. </p>
-<p>Models the pressure drop across a diode-like valve, which is implemented as a non-linear hyperbolic-tangent resistor. See <a class="el" href="citelist.html#CITEREF_pfaller2019importance">[5]</a> (equations 16 and 22).</p>
+<p>Models the pressure drop across a diode-like valve, which is implemented as a non-linear hyperbolic-tangent resistor. See <a class="el" href="citelist.html#CITEREF_pfaller2019importance">[6]</a> (equations 16 and 22).</p>
 <p class="formulaDsp">
-<picture><source srcset="form_94_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
+<picture><source srcset="form_121_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [D, l=$R_v$, *-*] (3,0)
 node[anchor=south]{$P_{out}$};
 \end{circuitikz}
-\]" src="form_94.png" width="212" height="62"/></picture>
+\]" src="form_121.png" width="212" height="62"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_95_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{in}-P_{out}-Q_{in}\left[R_{min} +
+<picture><source srcset="form_122_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{in}-P_{out}-Q_{in}\left[R_{min} +
 (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
-\]" src="form_95.png" width="617" height="47"/></picture>
+\]" src="form_122.png" width="617" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_96_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[Q_{in}-Q_{out}=0
-\]" src="form_96.png" width="126" height="19"/></picture>
+<picture><source srcset="form_123_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[Q_{in}-Q_{out}=0
+\]" src="form_123.png" width="126" height="19"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_97_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out}\end{array}\right]^{T} \]" src="form_97.png" width="278" height="28"/></picture>
+<picture><source srcset="form_124_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} &amp; Q_{in} &amp;
+P_{out} &amp; Q_{out}\end{array}\right]^{T} \]" src="form_124.png" width="278" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_98_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{E}^{e}=\left[\begin{array}{cccc}
+<picture><source srcset="form_125_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{E}^{e}=\left[\begin{array}{cccc}
 0 &amp; 0 &amp; 0 &amp; 0 \\
 0 &amp; 0 &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_98.png" width="174" height="47"/></picture>
+\]" src="form_125.png" width="174" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_99_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{cccc}
+<picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{cccc}
 1 &amp; -(R_{max}+R_{min})/2.0 &amp; -1 &amp; 0 \\
 0 &amp;      1                 &amp;  0 &amp; -1
 \end{array}\right]
-\]" src="form_99.png" width="366" height="47"/></picture>
+\]" src="form_126.png" width="366" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_100_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{c}^{e}=\left[\begin{array}{c}
 -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
 0
 \end{array}\right]
-\]" src="form_100.png" width="426" height="47"/></picture>
+\]" src="form_127.png" width="426" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_101_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+<picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
 \left[\begin{array}{cccc}
 A &amp; B &amp; C &amp; 0 \\
-0 &amp; 0 &amp; 0 &amp; 0 \end{array}\right] \]" src="form_101.png" width="229" height="49"/></picture>
+0 &amp; 0 &amp; 0 &amp; 0 \end{array}\right] \]" src="form_128.png" width="229" height="49"/></picture>
 </p>
 <p> where,    </p><p class="formulaDsp">
-<picture><source srcset="form_102_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[A = \frac{1}{2} k Q_{in}
+<picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[A = \frac{1}{2} k Q_{in}
 (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
-\]" src="form_102.png" width="443" height="39"/></picture>
+\]" src="form_129.png" width="443" height="39"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_103_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
-\]" src="form_103.png" width="362" height="39"/></picture>
+<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+\]" src="form_130.png" width="362" height="39"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_104_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[C = -\frac{1}{2} k Q_{in}
-(R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \]" src="form_104.png" width="458" height="39"/></picture>
+<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[C = -\frac{1}{2} k Q_{in}
+(R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \]" src="form_131.png" width="458" height="39"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_105_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+<picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
 \left[\begin{array}{cccc}
 0 &amp; 0 &amp; 0 &amp; 0 \\
 0 &amp; 0 &amp; 0 &amp; 0
 \end{array}\right]
-\]" src="form_105.png" width="212" height="49"/></picture>
+\]" src="form_132.png" width="212" height="49"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

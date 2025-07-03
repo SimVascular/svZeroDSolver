@@ -88,7 +88,7 @@ $(function(){ initResizable(false); });
   <div class="headertitle"><div class="title">Adding New Blocks</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Below are details on the steps required to implement a new block in svZeroDSolver.</p>
+<div class="textblock"><p>Below are details on the steps required to implement a new block in svZeroDSolver. To help with defining the block matrices, you can use the <a class="el" href="jacobian.html">Jacobian Generator</a>.</p>
 <p><em>Note: The best way to implement a new block is to look at examples of existing block classes. See the <code><a class="el" href="class_valve_tanh.html" title="Valve (tanh) block.">ValveTanh</a></code> class for an example.</em></p>
 <h2>1. Name the new block.</h2>
 <ul>
@@ -159,6 +159,7 @@ $(function(){ initResizable(false); });
 <p><br  />
  </p>
 <h2>3. Set up the governing equations for the block.</h2>
+<p>Use the <a class="el" href="jacobian.html">Jacobian Generator</a> to calculate matrix contributions symbolically.</p>
 <h3><a class="el" href="class_state.html" title="State of the system.">State</a> vector</h3>
 <ul>
 <li>The local state vector for each block is always arranged as <code>y = [P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]</code>. <br  />
@@ -189,10 +190,10 @@ $(function(){ initResizable(false); });
 <h3>An example</h3>
 <ul>
 <li><p class="startli">Assume a block has the following non-linear governing equations:</p>
-<p class="startli"><picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $" src="form_126.png" width="270" height="26"/></picture></p>
-<p class="startli"><picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $" src="form_127.png" width="311" height="26"/></picture></p><ul>
-<li>For this block, <picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in}$" src="form_128.png" width="26" height="19"/></picture> and <picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in}$" src="form_129.png" width="28" height="19"/></picture> are the pressure and flow at the inlet respectively, <picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out}$" src="form_130.png" width="34" height="19"/></picture> and <picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out}$" src="form_131.png" width="36" height="19"/></picture> are the pressure and flow at the outlet, and <picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$I_{1}$" src="form_132.png" width="17" height="19"/></picture> is an internal variable.</li>
-<li>The state vector is <picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$" src="form_133.png" width="188" height="21"/></picture>.</li>
+<p class="startli"><picture><source srcset="form_153_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $" src="form_153.png" width="270" height="26"/></picture></p>
+<p class="startli"><picture><source srcset="form_154_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $" src="form_154.png" width="311" height="26"/></picture></p><ul>
+<li>For this block, <picture><source srcset="form_155_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in}$" src="form_155.png" width="26" height="19"/></picture> and <picture><source srcset="form_156_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in}$" src="form_156.png" width="28" height="19"/></picture> are the pressure and flow at the inlet respectively, <picture><source srcset="form_157_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out}$" src="form_157.png" width="34" height="19"/></picture> and <picture><source srcset="form_158_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out}$" src="form_158.png" width="36" height="19"/></picture> are the pressure and flow at the outlet, and <picture><source srcset="form_159_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$I_{1}$" src="form_159.png" width="17" height="19"/></picture> is an internal variable.</li>
+<li>The state vector is <picture><source srcset="form_160_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$" src="form_160.png" width="188" height="21"/></picture>.</li>
 <li>The contributions to the local <code>F</code> matrix are <code>F[0,0] = b</code>, <code>F[1,2] = g</code> and <code>F[1,4] = h</code>.</li>
 <li>The contributions to the local <code>E</code> matrix are <code>E[0,1] = a</code> and <code>E[1,2] = e</code>.</li>
 <li>The contributions to the local <code>C</code> vector are <code>C[0] = c*(dP_in/dt)*Q_in + d</code> and <code>C[1] = f*Q_out*Q_out</code>.</li>
@@ -206,7 +207,7 @@ $(function(){ initResizable(false); });
  </p>
 <h2>4. Implement the matrix equations for the block.</h2>
 <ul>
-<li>Implement the <code>update_constant</code>, <code>update_time</code> and <code>update_solution</code> functions.<ul>
+<li>Implement the <code>update_constant</code>, <code>update_time</code> and <code>update_solution</code> functions (which can be output by the <a class="el" href="jacobian.html">Jacobian Generator</a>).<ul>
 <li>All matrix elements that are constant must be specified in <code>update_constant</code>.</li>
 <li>Matrix elements that depend only on time (not the state variables) must be specified in <code>update_time</code>.</li>
 <li>Matrix elements that change with the solution (i.e. depend on the state variables themselves) must be specified in <code>update_solution</code>.</li>

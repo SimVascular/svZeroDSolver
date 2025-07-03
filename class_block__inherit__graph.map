@@ -1,35 +1,37 @@
 <map id="Block" name="Block">
-<area shape="rect" id="Node000001" title="Base class for 0D model components." alt="" coords="5,327,60,352"/>
+<area shape="rect" id="Node000001" title="Base class for 0D model components." alt="" coords="5,351,60,376"/>
 <area shape="rect" id="Node000002" href="$class_blood_vessel.html" title="Resistor&#45;capacitor&#45;inductor blood vessel with optional stenosis." alt="" coords="152,5,246,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="35,311,44,246,59,166,79,90,92,61,106,40,127,26,151,18,153,24,129,31,110,44,96,63,84,92,64,167,49,247,40,312"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="34,335,43,265,57,177,78,95,91,63,106,40,127,26,151,18,153,23,129,31,110,44,96,65,83,97,62,178,48,266,39,335"/>
 <area shape="rect" id="Node000003" href="$class_blood_vessel_junction.html" title="Junction between blood vessels." alt="" coords="128,55,271,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="31,311,35,263,46,204,68,143,85,114,106,90,126,76,129,81,109,93,89,118,73,145,51,205,40,264,36,311"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="30,335,32,283,42,218,52,183,65,149,83,117,106,90,126,76,129,80,109,93,87,121,70,151,57,185,47,219,38,284,36,336"/>
 <area shape="rect" id="Node000004" href="$class_chamber_elastance_inductor.html" title="Cardiac chamber with elastance and inductor." alt="" coords="111,104,288,130"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="34,311,40,272,53,226,74,179,88,158,106,139,122,128,125,132,109,143,93,161,79,182,58,228,45,273,39,312"/>
-<area shape="rect" id="Node000005" href="$class_closed_loop_coronary_b_c.html" title="Closed loop coronary boundary condition which is connected to other blocks on both sides and the intr..." alt="" coords="120,153,279,179"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="38,310,61,249,80,216,106,188,123,177,126,182,109,192,84,219,65,251,43,312"/>
-<area shape="rect" id="Node000008" href="$class_closed_loop_heart_pulmonary.html" title="Heart and pulmonary circulation model." alt="" coords="108,203,291,228"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="45,311,70,273,87,254,106,237,127,227,129,231,109,242,90,257,74,276,49,314"/>
-<area shape="rect" id="Node000009" href="$class_closed_loop_r_c_r_b_c.html" title="Closed&#45;loop RCR boundary condition." alt="" coords="132,252,267,278"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="61,315,107,286,135,276,137,281,109,291,63,319"/>
-<area shape="rect" id="Node000010" href="$class_flow_reference_b_c.html" title="Flow reference boundary condition." alt="" coords="136,301,262,327"/>
-<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="75,330,135,321,136,326,76,336"/>
-<area shape="rect" id="Node000011" href="$class_junction.html" title="Junction." alt="" coords="164,351,234,376"/>
-<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="76,343,164,356,163,361,75,348"/>
-<area shape="rect" id="Node000012" href="$class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary." alt="" coords="124,400,274,426"/>
-<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="64,360,109,386,137,397,135,402,107,391,61,364"/>
-<area shape="rect" id="Node000013" href="$class_pressure_reference_b_c.html" title="Pressure reference boundary condition." alt="" coords="124,449,274,475"/>
-<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="49,365,74,402,90,420,109,436,130,446,127,451,106,440,87,424,70,405,45,368"/>
-<area shape="rect" id="Node000014" href="$class_resistance_b_c.html" title="Resistance boundary condition." alt="" coords="147,499,252,524"/>
-<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="43,366,66,427,84,459,109,485,127,496,148,503,146,508,125,501,106,490,80,462,61,430,38,368"/>
-<area shape="rect" id="Node000015" href="$class_resistive_junction.html" title="ResistiveJunction." alt="" coords="137,548,262,574"/>
-<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="39,367,45,405,58,451,79,496,93,517,109,535,138,551,135,555,106,539,89,520,74,499,53,452,40,406,34,368"/>
-<area shape="rect" id="Node000016" href="$class_valve_tanh.html" title="Valve (tanh) block." alt="" coords="158,597,241,623"/>
-<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="36,367,40,415,51,473,73,533,89,560,109,584,132,598,158,605,157,611,130,603,106,588,85,563,68,535,46,474,35,415,31,368"/>
-<area shape="rect" id="Node000017" href="$class_windkessel_b_c.html" title="Windkessel RCR boundary condition." alt="" coords="146,647,252,672"/>
-<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="40,368,49,432,64,512,85,586,97,614,110,634,127,646,147,653,145,658,124,650,106,637,92,617,79,588,59,513,44,433,35,368"/>
-<area shape="rect" id="Node000006" href="$class_closed_loop_coronary_left_b_c.html" title="Left side of closed loop coronary boundary condition ClosedLoopCoronaryBC." alt="" coords="342,129,525,155"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="294,154,342,149,342,154,294,159"/>
-<area shape="rect" id="Node000007" href="$class_closed_loop_coronary_right_b_c.html" title="Right side of closed loop coronary boundary condition ClosedLoopCoronaryBC." alt="" coords="339,179,528,204"/>
-<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="294,174,339,179,338,184,294,179"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="32,335,37,292,49,239,71,185,87,161,106,139,121,128,124,132,109,143,91,164,76,188,54,241,43,293,38,335"/>
+<area shape="rect" id="Node000005" href="$class_chamber_sphere.html" title="Spherical heart chamber model." alt="" coords="142,153,256,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="35,335,43,301,57,262,77,222,106,188,122,177,141,170,143,175,125,182,109,192,81,225,62,264,48,303,41,336"/>
+<area shape="rect" id="Node000006" href="$class_closed_loop_coronary_b_c.html" title="Closed loop coronary boundary condition which is connected to other blocks on both sides and the intr..." alt="" coords="120,203,279,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="41,335,65,285,83,259,106,237,125,227,127,231,109,242,87,263,70,288,45,337"/>
+<area shape="rect" id="Node000009" href="$class_closed_loop_heart_pulmonary.html" title="Heart and pulmonary circulation model." alt="" coords="108,252,291,278"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="51,337,75,310,106,287,130,276,132,281,109,291,79,314,55,340"/>
+<area shape="rect" id="Node000010" href="$class_closed_loop_r_c_r_b_c.html" title="Closed&#45;loop RCR boundary condition." alt="" coords="132,301,267,327"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="74,346,107,336,144,325,146,330,108,341,75,352"/>
+<area shape="rect" id="Node000011" href="$class_flow_reference_b_c.html" title="Flow reference boundary condition." alt="" coords="136,351,262,376"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="75,361,136,361,136,366,75,366"/>
+<area shape="rect" id="Node000012" href="$class_junction.html" title="Junction." alt="" coords="164,400,234,426"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="75,375,108,386,164,402,163,407,107,391,74,381"/>
+<area shape="rect" id="Node000013" href="$class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary." alt="" coords="124,449,274,475"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="55,387,79,413,109,436,132,446,130,451,106,440,75,417,51,390"/>
+<area shape="rect" id="Node000014" href="$class_pressure_reference_b_c.html" title="Pressure reference boundary condition." alt="" coords="124,499,274,524"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="45,390,70,439,87,464,109,485,127,496,125,500,106,490,83,468,65,442,41,392"/>
+<area shape="rect" id="Node000015" href="$class_resistance_b_c.html" title="Resistance boundary condition." alt="" coords="147,548,252,574"/>
+<area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="41,391,48,424,62,463,81,502,109,535,127,546,148,553,146,558,125,551,106,539,77,505,57,465,43,426,35,392"/>
+<area shape="rect" id="Node000016" href="$class_resistive_junction.html" title="ResistiveJunction." alt="" coords="137,597,262,623"/>
+<area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="38,392,43,434,54,486,76,539,91,563,109,584,138,600,136,605,106,588,87,566,71,542,49,488,37,435,32,392"/>
+<area shape="rect" id="Node000017" href="$class_valve_tanh.html" title="Valve (tanh) block." alt="" coords="158,647,241,672"/>
+<area shape="poly" id="edge16_Node000001_Node000017" title=" " alt="" coords="36,391,38,443,47,508,57,542,70,576,87,606,109,634,132,648,158,655,156,660,130,653,106,637,83,610,65,578,52,544,42,509,32,444,30,392"/>
+<area shape="rect" id="Node000018" href="$class_windkessel_b_c.html" title="Windkessel RCR boundary condition." alt="" coords="146,696,252,722"/>
+<area shape="poly" id="edge17_Node000001_Node000018" title=" " alt="" coords="39,392,48,461,62,549,83,630,96,662,110,683,126,695,147,702,145,707,124,700,106,687,91,664,78,632,57,550,43,462,34,392"/>
+<area shape="rect" id="Node000007" href="$class_closed_loop_coronary_left_b_c.html" title="Left side of closed loop coronary boundary condition ClosedLoopCoronaryBC." alt="" coords="342,179,525,204"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="294,203,342,198,342,204,294,208"/>
+<area shape="rect" id="Node000008" href="$class_closed_loop_coronary_right_b_c.html" title="Right side of closed loop coronary boundary condition ClosedLoopCoronaryBC." alt="" coords="339,228,528,254"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="294,223,339,228,338,233,294,228"/>
 </map>

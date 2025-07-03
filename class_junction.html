@@ -231,7 +231,7 @@ Static Public Attributes</h2></td></tr>
 <p>Models a junction with arbitrary inlets and outlets. Across all inlets and outlets of the junction, mass is conserved and pressure is continuous.</p>
 <p>Inlets and outlets can be specified in two ways. Either using <code>inlet_vessels</code> and <code>outlet_vessels</code> keys in the JSON file, with the corresponding lists specifying vessel IDs, or using <code>inlet_blocks</code> and <code>outlet_blocks</code> keys, with the corresponding lists specifying the names of blocks as strings.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_63_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz}
+<picture><source srcset="form_90_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz}
 \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$} to [short, *-*] (3.0,0);
 \draw (3,0) node[anchor=south]{} to [short, -*] (4.5,1.0);
@@ -241,32 +241,32 @@ Static Public Attributes</h2></td></tr>
 \draw [-latex] (4.65,1.1) -- (5.25,1.5) node[right] {$Q_{out,1}$};
 \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
 \end{circuitikz}
-\]" src="form_63.png" width="371" height="180"/></picture>
+\]" src="form_90.png" width="371" height="180"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_64_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
-\]" src="form_64.png" width="218" height="56"/></picture>
+<picture><source srcset="form_91_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
+\]" src="form_91.png" width="218" height="56"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
-\]" src="form_65.png" width="178" height="21"/></picture>
+<picture><source srcset="form_92_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
+\]" src="form_92.png" width="178" height="21"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_66_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e} &amp;
+<picture><source srcset="form_93_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e} &amp;
 \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
-\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_66.png" width="641" height="24"/></picture>
+\dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e}\end{array}\right] \]" src="form_93.png" width="641" height="24"/></picture>
 </p>
 <p>Mass conservation</p>
 <p class="formulaDsp">
-<picture><source srcset="form_67_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0 &amp;
--1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_67.png" width="398" height="24"/></picture>
+<picture><source srcset="form_94_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0 &amp;
+-1 &amp; 0 &amp; -1 &amp; \dots\end{array}\right] \]" src="form_94.png" width="398" height="24"/></picture>
 </p>
 <p>Due to the pressure continuity, we can write for all independent pressure pairs:   </p><p class="formulaDsp">
-<picture><source srcset="form_68_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
+<picture><source srcset="form_95_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
 \underbrace{1}_{P_i} &amp; \dots &amp; \underbrace{1}_{P_j} &amp; \dots\end{array}\right]
-\quad \mathrm{with} \quad i \neq j \]" src="form_68.png" width="448" height="47"/></picture>
+\quad \mathrm{with} \quad i \neq j \]" src="form_95.png" width="448" height="47"/></picture>
 </p>
 <h3>Internal variables</h3>
 <p>This block has no internal variables. </p>

@@ -94,7 +94,7 @@ $(function(){ initResizable(false); });
 </div><!--header-->
 <div class="contents">
 
-<p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[3]</a>.  
+<p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_open_loop_coronary_b_c_8h_source.html">OpenLoopCoronaryBC.h</a>&gt;</code></p>
@@ -218,9 +218,9 @@ Protected Attributes</h2></td></tr>
 <tr class="separator:aa2f7d9ae55d3eaaff85a46d864a13487"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[3]</a>. </p>
+<div class="textblock"><p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>. </p>
 <p class="formulaDsp">
-<picture><source srcset="form_69_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
+<picture><source srcset="form_96_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_a$, *-*] (3,0)
@@ -233,43 +233,43 @@ node[left]{$P_{im}$}
 (3,0) to [C, l=$C_a$, -*] (3,-1.5)
 node[left]{$P_a$};
 \end{circuitikz}
-\]" src="form_69.png" width="418" height="122"/></picture>
+\]" src="form_96.png" width="418" height="122"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_70_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}&amp;C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
+<picture><source srcset="form_97_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}&amp;C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
 m}+P_{v}\right)-C_{i m} R_{v} \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v}
 \frac{d P_{in}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q_{in}}{d t}\\ &amp;+C_{a}
 C_{i m} R_{v} \frac{d P_{a}}{d t}=0
-\end{eqnarray*}" src="form_70.png" width="878" height="56"/></picture>
+\end{eqnarray*}" src="form_97.png" width="878" height="56"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_71_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}&amp;C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
+<picture><source srcset="form_98_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}&amp;C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
 m}\left(R_{v}+R_{a m}\right) \left(P_{c i m}(0)-P_{i m}(0)+P_{i
 m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} \\ &amp;-R_{a m} V_{i
-m}+R_{a m} C_{i m} P_{v}=0 \end{eqnarray*}" src="form_71.png" width="812" height="51"/></picture>
+m}+R_{a m} C_{i m} P_{v}=0 \end{eqnarray*}" src="form_98.png" width="812" height="51"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_72_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} &amp; Q_{in} &amp; V_{i
-m}\end{array}\right]^{T}, \]" src="form_72.png" width="225" height="28"/></picture>
+<picture><source srcset="form_99_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} &amp; Q_{in} &amp; V_{i
+m}\end{array}\right]^{T}, \]" src="form_99.png" width="225" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_73_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} &amp; R_{a} C_{a}
+<picture><source srcset="form_100_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} &amp; R_{a} C_{a}
 C_{i m} R_{v} &amp; -C_{i m} R_{v} \\ 0 &amp; 0 &amp; -C_{i m} R_{v} R_{a
-m}\end{array}\right] \]" src="form_73.png" width="422" height="47"/></picture>
+m}\end{array}\right] \]" src="form_100.png" width="422" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_74_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{ccc}0 &amp; C_{i m} R_{v} &amp; -1 \\C_{i m} R_{v}
-&amp; -C_{i m} R_{v} R_{a} &amp; -\left(R_{v}+R_{a m}\right)\end{array}\right] \]" src="form_74.png" width="384" height="47"/></picture>
+<picture><source srcset="form_101_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{ccc}0 &amp; C_{i m} R_{v} &amp; -1 \\C_{i m} R_{v}
+&amp; -C_{i m} R_{v} R_{a} &amp; -\left(R_{v}+R_{a m}\right)\end{array}\right] \]" src="form_101.png" width="384" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_75_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
+<picture><source srcset="form_102_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
 m}(0)+P_{v}\right)+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i
 m}\left(R_{v} + R_{a m}\right)\left(P_{cim}(0)-P_{i m}(0)+P_{i m}\right)+R_{a
-m} C_{i m} P_{v}\end{array}\right] \]" src="form_75.png" width="549" height="47"/></picture>
+m} C_{i m} P_{v}\end{array}\right] \]" src="form_102.png" width="549" height="47"/></picture>
 </p>
-<p>Assume <picture><source srcset="form_49_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_49.png" width="54" height="19"/></picture>.</p>
+<p>Assume <picture><source srcset="form_76_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_76.png" width="54" height="19"/></picture>.</p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
 <ul>

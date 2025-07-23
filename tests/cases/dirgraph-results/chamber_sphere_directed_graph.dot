@@ -1,0 +1,15 @@
+strict digraph {
+inlet_valve;
+V1;
+outlet_valve;
+V2;
+BC0_inlet;
+V0;
+BC2_outlet;
+inlet_valve -> V1;
+V1 -> outlet_valve;
+outlet_valve -> V2;
+V2 -> BC2_outlet;
+BC0_inlet -> V0;
+V0 -> inlet_valve;
+}

@@ -10,6 +10,7 @@ set(CXXSRCS
   BloodVessel.cpp
   BloodVesselCRL.cpp
   BloodVesselJunction.cpp
+  ChamberSphere.cpp
   ChamberElastanceInductor.cpp
   ClosedLoopCoronaryBC.cpp
   ClosedLoopCoronaryLeftBC.cpp
@@ -38,6 +39,7 @@ set(HDRS
   BloodVessel.h
   BloodVesselCRL.h
   BloodVesselJunction.h
+  ChamberSphere.h
   ChamberElastanceInductor.h
   ClosedLoopCoronaryBC.h
   ClosedLoopCoronaryLeftBC.h

@@ -1,0 +1,52 @@
+variables:
+  - Pin
+  - Qin
+  - Pout
+  - Qout
+  - radius
+  - velo
+  - stress
+  - tau
+  - volume
+
+derivatives:
+  - dPin_dt
+  - dQin_dt
+  - dPout_dt
+  - dQout_dt
+  - dradius_dt
+  - dvelo_dt
+  - dstress_dt
+  - dtau_dt
+  - dvolume_dt
+
+constants:
+  - rho
+  - thick0
+  - radius0
+  - W1
+  - W2
+  - eta
+  - act
+  - act_plus
+  - sigma_max
+
+time_dependent:
+  - act
+  - act_plus
+
+helper_functions: |
+  def CG(radius):
+      return (1 + (radius / radius0)) ** 2
+
+  def dCG(radius, dradius_dt):
+      return 2 * (1 + (radius / radius0)) * (1 / radius0) * dradius_dt
+
+residuals:
+  - rho * thick0 * dvelo_dt + (thick0 / radius0) * (1 + (radius / radius0)) * stress - Pout * CG(radius)
+  - -stress + tau + 4 * (1 - CG(radius) ** -3) * (W1 + CG(radius) * W2) + 2 * eta * dCG(radius, dradius_dt) * (1 - 2 * CG(radius) ** -6)
+  - 4 * pi * radius0 ** 2 * CG(radius) * velo - dvolume_dt
+  - dtau_dt + act * tau - sigma_max * act_plus
+  - dradius_dt - velo
+  - Qin - Qout - dvolume_dt
+  - Pin - Pout

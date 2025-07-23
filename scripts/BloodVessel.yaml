@@ -1,0 +1,21 @@
+variables:
+  - Pin
+  - Qin
+  - Pout
+  - Qout
+
+derivatives:
+  - dPin_dt
+  - dQin_dt
+  - dPout_dt
+  - dQout_dt
+
+constants:
+  - R
+  - C
+  - L
+  - S
+
+residuals:
+  - Pin - Pout - (R + S * abs(Qin)) * Qin - L * dQout_dt
+  - Qin - Qout - C * dPin_dt + C * (R + 2 * S * abs(Qin)) * dQin_dt

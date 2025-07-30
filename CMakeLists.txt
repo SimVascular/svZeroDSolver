@@ -5,6 +5,9 @@ set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_EXTENSIONS         OFF)
+set(CMAKE_VERBOSE_MAKEFILE        ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 project(svZeroDSolver)
 
@@ -31,22 +34,32 @@ if(ENABLE_COVERAGE)
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 endif()
 
-if (WIN32 AND MSVC)
-    # CMake ≥ 3.15 has a proper variable
-    if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.15")
-        set(CMAKE_MSVC_RUNTIME_LIBRARY
-                "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-    else()
-        # CMake < 3.15: manually swap /MD → /MT in all flags for static
-        # versions of the runtime libraries
-        foreach(_var
-                CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
-                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-                CMAKE_SHARED_LINKER_FLAGS)
-            string(REPLACE "/MD" "/MT" ${_var} "${${_var}}")
-        endforeach()
-    endif()
+# Enable sanitizer build
+# -----------------------------------------------------------------------------
+set(ENABLE_SANITIZERS OFF CACHE BOOL "Enable sanitizer build")
+if ((ENABLE_SANITIZERS) AND (CMAKE_BUILD_TYPE STREQUAL "Debug"))
+  message("Enabling sanitizers: ASAN, LSAN, USAN")
+
+  add_compile_options( -fsanitize=address      )
+  add_compile_options( -fsanitize=leak         )
+  add_compile_options( -fsanitize=undefined    )
+  add_compile_options( -fno-omit-frame-pointer )
+
+  add_link_options   ( -fsanitize=address      )
+  add_link_options   ( -fsanitize=leak         )
+  add_link_options   ( -fsanitize=undefined    )
+  add_link_options   ( -fno-omit-frame-pointer )
+
+  # add_compile_options( -fsanitize=memory               )
+  # add_compile_options( -fsanitize-memory-track-origins )
+  # add_compile_options( -fsanitize=fuzzer-no-link       )
+  # add_link_options   ( -fsanitize=memory               )
+  # add_link_options   ( -fsanitize-memory-track-origins )
+  # add_link_options   ( -fsanitize=fuzzer-no-link       )
+
+  #set(CMAKE_EXE_LINKER_FLAGS -fuse-ld=gold)
 endif()
+
 # -----------------------------------------------------------------------------
 # Set the location to store the binaries and libraries created by this project.
 # -----------------------------------------------------------------------------

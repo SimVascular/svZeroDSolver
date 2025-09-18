@@ -101,9 +101,9 @@
  * * `2` Steepness: Steepness of sigmoid function
  * * `3` upstream_block: Name of block connected upstream
  * * `4` downstream_block: Name of block connected downstream
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "valves": [
  *         {
  *             "type": "ValveTanh",

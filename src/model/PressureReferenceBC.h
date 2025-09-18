@@ -50,9 +50,9 @@
  * Parameter sequence for constructing this block
  *
  * * `0` Pressure
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "boundary_conditions": [
  *         {
  *             "bc_name": "OUT",

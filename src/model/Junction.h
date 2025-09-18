@@ -62,9 +62,9 @@
  * pairs: \f[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
  * \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right]
  * \quad \mathrm{with} \quad i \neq j \f]
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "junctions": [
  *         {
  *             "inlet_vessels": [

@@ -112,9 +112,9 @@
  * * `i` Poiseuille resistance for inner blood vessel `i`
  * * `i+num_outlets` Inductance for inner blood vessel `i`
  * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "junctions": [
  *         {
  *             "inlet_vessels": [

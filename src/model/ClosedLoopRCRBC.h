@@ -81,16 +81,16 @@
  * * `0` Proximal resistance
  * * `1` Capacitance
  * * `2` Distal resistance
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "boundary_conditions": [
  *         {
  *             "bc_name": "RCR_aorta",
  *             "bc_type": "ClosedLoopRCR",
  *             "bc_values": {
- *                 "_comment_": "R_total = 1.570879*0.948914 = 1.490629075, Rp = 0.09*R_total, Rd = 0.91*R_total, C = 0.228215*1.044637",
- *                 "Rp": 0.134156617,
+ *                 "_comment_": "R_total = 1.570879*0.948914 = 1.490629075, Rp =
+ * 0.09*R_total, Rd = 0.91*R_total, C = 0.228215*1.044637", "Rp": 0.134156617,
  *                 "Rd": 1.356472458,
  *                 "C": 0.238401833,
  *                 "closed_loop_outlet": true

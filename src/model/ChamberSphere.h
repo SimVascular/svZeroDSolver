@@ -92,9 +92,9 @@
  * * `tsys` - Systole timing parameter \f$t_\text{sys}\f$
  * * `tdias` - Diastole timing parameter \f$t_\text{dias}\f$
  * * `steepness` - Activation steepness parameter \f$\gamma\f$
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "vessels": [
  *        {
  *            "boundary_conditions": {},
@@ -108,7 +108,7 @@
  *                "radius0" : 0.05,
  *                "W1" : 10e3,
  *                "W2" : 40,
- *                "eta" : 10.0, 
+ *                "eta" : 10.0,
  *                "sigma_max" : 185e3,
  *                "alpha_max": 30.0,
  *                "alpha_min": -30.0,

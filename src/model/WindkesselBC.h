@@ -75,7 +75,7 @@
  * * `1` Capacitance
  * * `2` Distal resistance
  * * `3` Distal pressure
- * 
+ *
  * ### Usage in json configuration file
  *
  *     "boundary_conditions": [

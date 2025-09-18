@@ -79,9 +79,9 @@
  * * `4` Cim: Intramyocardial capacitance
  * * `5` Pim: Intramyocardial pressure
  * * `6` Pv: Venous pressure
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "boundary_conditions": [
  *         {
  *             "bc_name": "OUT",

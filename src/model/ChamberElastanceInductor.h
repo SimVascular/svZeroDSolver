@@ -108,9 +108,9 @@
  * * `4` t_active: Activation time
  * * `5` t_twitch: Twitch time
  * * `6` Impedance: Impedance of the outflow
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "chambers": [
  *         {
  *             "type": "ChamberElastanceInductor",

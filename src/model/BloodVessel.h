@@ -113,7 +113,7 @@
  * * `3` Stenosis coefficient
  *
  * ### Usage in json configuration file
- * 
+ *
  *     "vessels": [
  *        {
  *            "vessel_id": 0,

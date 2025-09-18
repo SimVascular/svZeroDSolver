@@ -12,9 +12,9 @@
 /**
  * @brief Right side of closed loop coronary boundary condition
  * ClosedLoopCoronaryBC.
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "boundary_conditions": [
  *         {
  *             "bc_name": "RCA",

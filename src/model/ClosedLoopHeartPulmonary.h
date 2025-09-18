@@ -58,9 +58,9 @@
  * * `24` Left atrium elastance
  * * `25` Right atrium resting volume
  * * `26` Left atrium resting volume
- * 
+ *
  * ### Usage in json configuration file
- * 
+ *
  *     "closed_loop_blocks": [
  *          {
  *              "outlet_blocks": [

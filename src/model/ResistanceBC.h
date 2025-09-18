@@ -49,6 +49,19 @@
  *
  * * `0` Resistance
  * * `1` Distal pressure
+ * 
+ * ### Usage in json configuration file
+ * 
+ *     "boundary_conditions": [
+ *         {
+ *             "bc_name": "OUT",
+ *             "bc_type": "RESISTANCE",
+ *             "bc_values": {
+ *                 "R": 100.0,
+ *                 "Pd": 1000.0
+ *             }
+ *         }
+ *     ]
  *
  * ### Internal variables
  *

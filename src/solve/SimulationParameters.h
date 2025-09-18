@@ -23,14 +23,13 @@
  * 
  * For example:
  * 
- * "simulation_parameters": {
- *   "number_of_cardiac_cycles": 30,
- *   "number_of_time_pts_per_cardiac_cycle": 201,
- *   "output_all_cycles": true
- *  }
+ *      "simulation_parameters": {
+ *         "number_of_cardiac_cycles": 30,
+ *         "number_of_time_pts_per_cardiac_cycle": 201,
+ *         "output_all_cycles": true
+ *      }
  *
  * each parameter in the documentation may be specified using the attribute name and a value which takes the type of the attribute.
- *
  *
  */
 struct SimulationParameters {

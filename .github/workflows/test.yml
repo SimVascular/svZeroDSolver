@@ -1,0 +1,164 @@
+# This workflow builds and tests svZeroDSolver. It is built and tested on
+# different versions of ubuntu and macOS.
+name: Build and test
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-22.04, ubuntu-latest, macos-13, macos-latest, windows-latest]
+        version: [13] # GCC version
+      fail-fast: false
+    env:
+      GCC_V: ${{ matrix.version }}
+      CONDA_ENV: zerod
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          activate-environment: ${{env.CONDA_ENV}}
+          python-version: "3.11.4"
+      - name: Install ubuntu dependencies
+        if: startsWith(matrix.os, 'ubuntu')
+        run: sudo apt update && sudo apt install build-essential cmake lcov
+
+      - name: Install dependencies to get correct version numbers (Ubuntu)
+        if: startsWith(matrix.os, 'ubuntu')
+        run: conda install -c conda-forge libstdcxx-ng=${GCC_V} gcc=${GCC_V}
+
+      - name: Install dependencies to get correct version numbers (MacOS)
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew install gcc@${GCC_V}
+          ln -s /usr/local/bin/gcc-${GCC_V} /usr/local/bin/gcc
+
+      - name: Install dependencies for windows
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          choco install mingw --no-progress
+          conda install -y -c conda-forge cmake graphviz python-graphviz pydot
+          pip install --upgrade cmake-setuptools
+
+      - name: Install POISX-like svZeroDSolver
+        if: ${{!startsWith(matrix.os, 'windows')}}
+        run: conda run pip install -e ".[dev]"
+
+      - name: Install Windows svZeroDSolver
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          $Env:CMAKE_GENERATOR = 'MinGW Makefiles'
+          Write-Host "→ Using CMAKE_GENERATOR = $Env:CMAKE_GENERATOR"
+          pip install --no-build-isolation -v .[dev]
+          pip show pysvzerod
+
+      - name: Install Networkx
+        run: |
+            conda run pip install networkx
+
+      - name: Test the build
+        run: |
+          cd tests
+          conda run pytest -v --durations=0 --ignore=test_dirgraph.py
+
+      - name: Build using CMake for POISX-like Systems
+        if: ${{!startsWith(matrix.os, 'windows')}}
+        run: |
+          mkdir Release
+          cd Release
+          cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
+          make -j2
+
+      - name: Build using CMake for Windows Systems
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          mkdir Release
+          cd Release
+          cmake -G "MinGW Makefiles" `
+                -DCMAKE_BUILD_TYPE=Release `
+                -DENABLE_DISTRIBUTION=ON `
+                ..
+          cmake --build . --parallel 2
+
+      - name: Test interface POISX-like Systems
+        if: ${{!startsWith(matrix.os, 'windows')}}
+        run: |
+          cd tests/test_interface
+          mkdir build_tests
+          cd build_tests
+          cmake ../
+          make -j2
+          cd test_01
+          ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
+          cd ../test_02
+          ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
+
+      - name: Test interface Windows Systems
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          cd tests/test_interface
+          mkdir build_tests
+          cd build_tests
+          cmake -G "MinGW Makefiles" ..
+          cmake --build . --parallel 2
+          cd test_01
+          ./svZeroD_interface_test01.exe `
+            ../../../../Release `
+            ../../test_01/svzerod_3Dcoupling.json
+          
+          cd ../test_02
+          ./svZeroD_interface_test02 `
+            ../../../../Release `
+            ../../test_02/svzerod_tuned.json
+
+      - name: Generate code coverage
+        if: startsWith(matrix.os, 'ubuntu-22.04')
+        run: |
+          cd Release
+          cmake -DENABLE_COVERAGE=ON ..
+          make -j2
+          cd ../tests
+          conda run pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
+          cd ../Release
+          make coverage
+
+      - name: Save coverage report
+        if: startsWith(matrix.os, 'ubuntu-22.04')
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage_report
+          path: Release/coverage
+
+      - name: Upload coverage reports to Codecov
+        if: startsWith(matrix.os, 'ubuntu-22.04')
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Build installer POISX-like Systems
+        if: ${{!startsWith(matrix.os, 'windows')}}
+        run: |
+          cd Release
+          cpack
+          cp distribution/svZeroDSolver_* ..
+
+      - name: Build installer Windows Systems
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          cd Release
+          cpack
+          Copy-Item distribution\svZeroDSolver_* -Destination ..\
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }} installer
+          path: svZeroDSolver_*
+          if-no-files-found: error

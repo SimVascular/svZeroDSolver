@@ -1,0 +1,30 @@
+# This workflow builds and deploys the html documentation for svZeroDSolver.
+name: Documentation
+on: [push, pull_request]
+permissions:
+  contents: write
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Make build directory
+        run: mkdir docs/build
+      - name: Build doxygen documentation
+        continue-on-error: false
+        uses: mattnotmitt/doxygen-action@edge
+        with:
+          working-directory: '.'
+          doxyfile-path: 'docs/Doxyfile'
+          enable-latex: true
+      - name: Save documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: ./docs/build/html
+      - name: Deploy documentation
+        if: github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/build/html

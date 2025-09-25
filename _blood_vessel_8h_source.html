@@ -234,7 +234,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span><span class="comment">   * @param model The model to which the block belongs</span></div>
 <div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span><span class="comment">   */</span></div>
 <div class="foldopen" id="foldopen00139" data-start="{" data-end="}">
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="class_blood_vessel.html#abafeb419a584ad09fcd25827324c9afc">  139</a></span>  <a class="code hl_function" href="class_blood_vessel.html#abafeb419a584ad09fcd25827324c9afc">BloodVessel</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>, <a class="code hl_class" href="class_model.html">Model</a> *<a class="code hl_variable" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>)</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="class_blood_vessel.html#abafeb419a584ad09fcd25827324c9afc">  139</a></span>  <a class="code hl_function" href="class_blood_vessel.html#abafeb419a584ad09fcd25827324c9afc">BloodVessel</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>, <a class="code hl_class" href="class_model.html">Model</a>* <a class="code hl_variable" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>)</div>
 <div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>      : <a class="code hl_function" href="class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9">Block</a>(<a class="code hl_variable" href="class_block.html#a5d18d0d232066b097a4d2f181ad5efe2">id</a>, <a class="code hl_variable" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>, <a class="code hl_enumeration" href="_block_type_8h.html#a54420623f26ab6bb61042b41cccf37a3">BlockType</a>::blood_vessel, <a class="code hl_enumeration" href="_block_type_8h.html#aef4629c3f968cbb691cddca5b9d3e950">BlockClass</a>::vessel,</div>
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>              {{<span class="stringliteral">&quot;R_poiseuille&quot;</span>, <a class="code hl_struct" href="struct_input_parameter.html">InputParameter</a>()},</div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>               {<span class="stringliteral">&quot;C&quot;</span>, <a class="code hl_struct" href="struct_input_parameter.html">InputParameter</a>(<span class="keyword">true</span>)},</div>
@@ -252,7 +252,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span><span class="comment">   * equations at</span></div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#ad6237cd700152e4b9d9ac64f55d2e4fd">setup_dofs</a>(DOFHandler &amp;dofhandler);</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#ad6237cd700152e4b9d9ac64f55d2e4fd">setup_dofs</a>(DOFHandler&amp; dofhandler);</div>
 <div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="comment"></span> </div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span><span class="comment">  /**</span></div>
 <div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span><span class="comment">   * @brief Update the constant contributions of the element in a sparse</span></div>
@@ -261,7 +261,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span><span class="comment">   * @param system System to update contributions at</span></div>
 <div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span><span class="comment">   * @param parameters Parameters of the model</span></div>
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#a19c509ef1a65673cb11c92332ea8a6c3">update_constant</a>(SparseSystem &amp;system, std::vector&lt;double&gt; &amp;parameters);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#a19c509ef1a65673cb11c92332ea8a6c3">update_constant</a>(SparseSystem&amp; system, std::vector&lt;double&gt;&amp; parameters);</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span><span class="comment"></span> </div>
 <div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span><span class="comment">  /**</span></div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span><span class="comment">   * @brief Update the solution-dependent contributions of the element in a</span></div>
@@ -272,9 +272,9 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span><span class="comment">   * @param y Current solution</span></div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span><span class="comment">   * @param dy Current derivate of the solution</span></div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#a74feb5d48dff1f52145d211716b30843">update_solution</a>(SparseSystem &amp;system, std::vector&lt;double&gt; &amp;parameters,</div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                       <span class="keyword">const</span> Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;y,</div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>                       <span class="keyword">const</span> Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;dy);</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#a74feb5d48dff1f52145d211716b30843">update_solution</a>(SparseSystem&amp; system, std::vector&lt;double&gt;&amp; parameters,</div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>                       <span class="keyword">const</span> Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt;&amp; y,</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>                       <span class="keyword">const</span> Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt;&amp; dy);</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span><span class="comment"></span> </div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span><span class="comment">  /**</span></div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="comment">   * @brief Set the gradient of the block contributions with respect to the</span></div>
@@ -286,10 +286,10 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span><span class="comment">   * @param y Current solution</span></div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span><span class="comment">   * @param dy Time-derivative of the current solution</span></div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#aa3ad80f4b627051a00b52e2b1c254a55">update_gradient</a>(Eigen::SparseMatrix&lt;double&gt; &amp;jacobian,</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;residual,</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;alpha,</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                       std::vector&lt;double&gt; &amp;y, std::vector&lt;double&gt; &amp;dy);</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_blood_vessel.html#aa3ad80f4b627051a00b52e2b1c254a55">update_gradient</a>(Eigen::SparseMatrix&lt;double&gt;&amp; jacobian,</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt;&amp; residual,</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>                       Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt;&amp; alpha,</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>                       std::vector&lt;double&gt;&amp; y, std::vector&lt;double&gt;&amp; dy);</div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="comment"></span> </div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span><span class="comment">  /**</span></div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="comment">   * @brief Number of triplets of element</span></div>

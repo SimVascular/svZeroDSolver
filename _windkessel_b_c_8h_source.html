@@ -187,7 +187,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span><span class="comment">   * @param model The model to which the block belongs</span></div>
 <div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span><span class="comment">   */</span></div>
 <div class="foldopen" id="foldopen00094" data-start="{" data-end="}">
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="class_windkessel_b_c.html#adeb87767f52e5fc5d90a873f59e9ea74">   94</a></span>  <a class="code hl_function" href="class_windkessel_b_c.html#adeb87767f52e5fc5d90a873f59e9ea74">WindkesselBC</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>, <a class="code hl_class" href="class_model.html">Model</a> *<a class="code hl_variable" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>)</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="class_windkessel_b_c.html#adeb87767f52e5fc5d90a873f59e9ea74">   94</a></span>  <a class="code hl_function" href="class_windkessel_b_c.html#adeb87767f52e5fc5d90a873f59e9ea74">WindkesselBC</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>, <a class="code hl_class" href="class_model.html">Model</a>* <a class="code hl_variable" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>)</div>
 <div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>      : <a class="code hl_function" href="class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9">Block</a>(<a class="code hl_variable" href="class_block.html#a5d18d0d232066b097a4d2f181ad5efe2">id</a>, <a class="code hl_variable" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>, <a class="code hl_enumeration" href="_block_type_8h.html#a54420623f26ab6bb61042b41cccf37a3">BlockType</a>::windkessel_bc,</div>
 <div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>              <a class="code hl_enumeration" href="_block_type_8h.html#aef4629c3f968cbb691cddca5b9d3e950">BlockClass</a>::boundary_condition,</div>
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>              {{<span class="stringliteral">&quot;Rp&quot;</span>, <a class="code hl_struct" href="struct_input_parameter.html">InputParameter</a>()},</div>
@@ -206,7 +206,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">   * @param dofhandler Degree-of-freedom handler to register variables and</span></div>
 <div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">   * equations at</span></div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_windkessel_b_c.html#a1ea44ed8e21f32f70b7f44584d2ca3d7">setup_dofs</a>(DOFHandler &amp;dofhandler);</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_windkessel_b_c.html#a1ea44ed8e21f32f70b7f44584d2ca3d7">setup_dofs</a>(DOFHandler&amp; dofhandler);</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span><span class="comment"></span> </div>
 <div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="comment">  /**</span></div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span><span class="comment">   * @brief Update the constant contributions of the element in a sparse</span></div>
@@ -215,7 +215,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span><span class="comment">   * @param system System to update contributions at</span></div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="comment">   * @param parameters Parameters of the model</span></div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_windkessel_b_c.html#a0c410e30ab0133239720e07cfc31568b">update_constant</a>(SparseSystem &amp;system, std::vector&lt;double&gt; &amp;parameters);</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_windkessel_b_c.html#a0c410e30ab0133239720e07cfc31568b">update_constant</a>(SparseSystem&amp; system, std::vector&lt;double&gt;&amp; parameters);</div>
 <div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="comment"></span> </div>
 <div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span><span class="comment">  /**</span></div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span><span class="comment">   * @brief Update the time-dependent contributions of the element in a sparse</span></div>
@@ -224,7 +224,7 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="comment">   * @param system System to update contributions at</span></div>
 <div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span><span class="comment">   * @param parameters Parameters of the model</span></div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span><span class="comment">   */</span></div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_windkessel_b_c.html#a449724f738e1635aa5a20ff84f24ea44">update_time</a>(SparseSystem &amp;system, std::vector&lt;double&gt; &amp;parameters);</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="class_windkessel_b_c.html#a449724f738e1635aa5a20ff84f24ea44">update_time</a>(SparseSystem&amp; system, std::vector&lt;double&gt;&amp; parameters);</div>
 <div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="comment"></span> </div>
 <div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span><span class="comment">  /**</span></div>
 <div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="comment">   * @brief Number of triplets of element</span></div>

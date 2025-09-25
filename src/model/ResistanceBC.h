@@ -76,7 +76,7 @@ class ResistanceBC : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  ResistanceBC(int id, Model *model)
+  ResistanceBC(int id, Model* model)
       : Block(id, model, BlockType::resistance_bc,
               BlockClass::boundary_condition,
               {{"R", InputParameter()}, {"Pd", InputParameter()}}) {}
@@ -91,7 +91,7 @@ class ResistanceBC : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -99,7 +99,7 @@ class ResistanceBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -108,7 +108,7 @@ class ResistanceBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(SparseSystem &system, std::vector<double> &parameters);
+  void update_time(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Number of triplets of element

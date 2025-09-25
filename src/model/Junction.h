@@ -97,7 +97,7 @@ class Junction : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  Junction(int id, Model *model)
+  Junction(int id, Model* model)
       : Block(id, model, BlockType::junction, BlockClass::junction, {}) {}
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -109,7 +109,7 @@ class Junction : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -117,7 +117,7 @@ class Junction : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -129,10 +129,10 @@ class Junction : public Block {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
-                       std::vector<double> &y, std::vector<double> &dy);
+  void update_gradient(Eigen::SparseMatrix<double>& jacobian,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
+                       std::vector<double>& y, std::vector<double>& dy);
 
   /**
    * @brief Number of triplets of element

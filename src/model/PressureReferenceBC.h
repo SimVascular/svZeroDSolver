@@ -83,7 +83,7 @@ class PressureReferenceBC : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  PressureReferenceBC(int id, Model *model)
+  PressureReferenceBC(int id, Model* model)
       : Block(id, model, BlockType::pressure_bc, BlockClass::boundary_condition,
               {{"t", InputParameter(false, true)},
                {"P", InputParameter(false, true)}}) {}
@@ -98,7 +98,7 @@ class PressureReferenceBC : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -106,7 +106,7 @@ class PressureReferenceBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -115,7 +115,7 @@ class PressureReferenceBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(SparseSystem &system, std::vector<double> &parameters);
+  void update_time(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Number of triplets of element

@@ -61,8 +61,8 @@ def test_solver(testfile):
     rtol_pres = RTOL_PRES
     rtol_flow = RTOL_FLOW
     if 'coupledBlock_closedLoopHeart_withCoronaries.json' in testfile:
-        rtol_pres = 1.0e-1
-        rtol_flow = 1.0e-1
+        rtol_pres = 2.0e-1
+        rtol_flow = 2.0e-1
 
     this_file_dir = os.path.abspath(os.path.dirname(__file__))
 

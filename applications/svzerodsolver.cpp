@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the University of California, and others.
-// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
+// University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 /**
  * @file svzerodsolver.cpp
  * @brief Main routine of svZeroDSolver
@@ -30,7 +30,9 @@ int main(int argc, char* argv[]) {
 
   // Get input and output file name
   if (argc < 2 || argc > 3) {
-    throw std::runtime_error("Usage: svzerodsolver path/to/config.json [optional:path/to/output.csv]");
+    throw std::runtime_error(
+        "Usage: svzerodsolver path/to/config.json "
+        "[optional:path/to/output.csv]");
   }
 
   std::string input_file_name = argv[1];
@@ -56,23 +58,27 @@ int main(int argc, char* argv[]) {
     }
 
     output_file_name = output_file_path + "/output.csv";
-    std::cout << "[svzerodsolver] Output will be written to '" << output_file_name << "'." << std::endl;;
+    std::cout << "[svzerodsolver] Output will be written to '"
+              << output_file_name << "'." << std::endl;
+    ;
   }
 
   std::ifstream input_file(input_file_name);
 
   if (!input_file.is_open()) {
-    std::cerr << "[svzerodsolver] Error: The input file '" << input_file_name << "' cannot be opened." << std::endl;
+    std::cerr << "[svzerodsolver] Error: The input file '" << input_file_name
+              << "' cannot be opened." << std::endl;
     return 1;
   }
 
   nlohmann::json config;
 
-  try { 
+  try {
     config = nlohmann::json::parse(input_file);
 
   } catch (const nlohmann::json::parse_error& e) {
-    std::cout << "[svzerodsolver] Error: Parsing the input file '" << input_file_name << "' has failed." << std::endl;
+    std::cout << "[svzerodsolver] Error: Parsing the input file '"
+              << input_file_name << "' has failed." << std::endl;
     std::cout << "[svzerodsolver] Details of the parsing error: " << std::endl;
     std::cout << e.what() << std::endl;
     return 1;

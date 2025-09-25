@@ -40,7 +40,7 @@ struct TripletsContributions {
    * number of contributions
    * @return The number of triplets
    */
-  TripletsContributions operator+=(const TripletsContributions &other) {
+  TripletsContributions operator+=(const TripletsContributions& other) {
     F += other.F;
     E += other.E;
     D += other.D;
@@ -75,15 +75,15 @@ class Model;
 class Block {
  public:
   const int id;                  ///< Global ID of the block
-  const Model *model;            ///< The model to which the block belongs
+  const Model* model;            ///< The model to which the block belongs
   const BlockType block_type;    ///< Type of this block
   const BlockClass block_class;  ///< Class of this block
   VesselType vessel_type = VesselType::neither;  ///< Vessel type of this block
   const std::vector<std::pair<std::string, InputParameter>>
       input_params;  ///< Map from name to input parameter
 
-  std::vector<Node *> inlet_nodes;   ///< Inlet nodes
-  std::vector<Node *> outlet_nodes;  ///< Outlet nodes
+  std::vector<Node*> inlet_nodes;   ///< Inlet nodes
+  std::vector<Node*> outlet_nodes;  ///< Outlet nodes
 
   bool steady = false;             ///< Toggle steady behavior
   bool input_params_list = false;  ///< Are input parameters given as a list?
@@ -97,7 +97,7 @@ class Block {
    * @param block_class The class the block belongs to (e.g. vessel, junction)
    * @param input_params The parameters the block takes from the input file
    */
-  Block(int id, Model *model, BlockType block_type, BlockClass block_class,
+  Block(int id, Model* model, BlockType block_type, BlockClass block_class,
         std::vector<std::pair<std::string, InputParameter>> input_params)
       : id(id),
         model(model),
@@ -115,7 +115,7 @@ class Block {
    * @brief Copy the Block object
    *
    */
-  Block(const Block &) = delete;
+  Block(const Block&) = delete;
   /**
    * @brief Global IDs for the block parameters.
    *
@@ -166,7 +166,7 @@ class Block {
    * @brief Setup parameter IDs for the block
    * @param param_ids Global IDs of the block parameters
    */
-  void setup_params_(const std::vector<int> &param_ids);
+  void setup_params_(const std::vector<int>& param_ids);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -181,8 +181,8 @@ class Block {
    * @param internal_var_names Number of internal variables of the block
    */
 
-  void setup_dofs_(DOFHandler &dofhandler, int num_equations,
-                   const std::list<std::string> &internal_var_names);
+  void setup_dofs_(DOFHandler& dofhandler, int num_equations,
+                   const std::list<std::string>& internal_var_names);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -194,7 +194,7 @@ class Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  virtual void setup_dofs(DOFHandler &dofhandler);
+  virtual void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Setup parameters that depend on the model
@@ -209,7 +209,7 @@ class Block {
    * @param parameters The parameter values vector (at time 0)
    */
   virtual void setup_initial_state_dependent_params(
-      State initial_state, std::vector<double> &parameters);
+      State initial_state, std::vector<double>& parameters);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -217,8 +217,8 @@ class Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  virtual void update_constant(SparseSystem &system,
-                               std::vector<double> &parameters);
+  virtual void update_constant(SparseSystem& system,
+                               std::vector<double>& parameters);
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
    * system
@@ -226,8 +226,8 @@ class Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  virtual void update_time(SparseSystem &system,
-                           std::vector<double> &parameters);
+  virtual void update_time(SparseSystem& system,
+                           std::vector<double>& parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -239,16 +239,16 @@ class Block {
    * @param dy Current derivate of the solution
    */
   virtual void update_solution(
-      SparseSystem &system, std::vector<double> &parameters,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+      SparseSystem& system, std::vector<double>& parameters,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
 
   /**
    * @brief Modify the solution after solving it
    *
    * @param y Current solution
    */
-  virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+  virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -261,10 +261,10 @@ class Block {
    * @param dy Time-derivative of the current solution
    */
   virtual void update_gradient(
-      Eigen::SparseMatrix<double> &jacobian,
-      Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-      Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha, std::vector<double> &y,
-      std::vector<double> &dy);
+      Eigen::SparseMatrix<double>& jacobian,
+      Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
+      Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
+      std::vector<double>& dy);
 
   /**
    * @brief Number of triplets of element

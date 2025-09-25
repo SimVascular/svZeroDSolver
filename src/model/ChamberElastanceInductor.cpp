@@ -2,13 +2,13 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "ChamberElastanceInductor.h"
 
-void ChamberElastanceInductor::setup_dofs(DOFHandler &dofhandler) {
+void ChamberElastanceInductor::setup_dofs(DOFHandler& dofhandler) {
   // Internal variable is chamber volume
   Block::setup_dofs_(dofhandler, 3, {"Vc"});
 }
 
 void ChamberElastanceInductor::update_constant(
-    SparseSystem &system, std::vector<double> &parameters) {
+    SparseSystem& system, std::vector<double>& parameters) {
   double L = parameters[global_param_ids[ParamId::IMPEDANCE]];
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
@@ -25,8 +25,8 @@ void ChamberElastanceInductor::update_constant(
   system.E.coeffRef(global_eqn_ids[2], global_var_ids[4]) = -1.0;
 }
 
-void ChamberElastanceInductor::update_time(SparseSystem &system,
-                                           std::vector<double> &parameters) {
+void ChamberElastanceInductor::update_time(SparseSystem& system,
+                                           std::vector<double>& parameters) {
   get_elastance_values(parameters);
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
@@ -35,7 +35,7 @@ void ChamberElastanceInductor::update_time(SparseSystem &system,
 }
 
 void ChamberElastanceInductor::get_elastance_values(
-    std::vector<double> &parameters) {
+    std::vector<double>& parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Emin = parameters[global_param_ids[ParamId::EMIN]];
   double Vrd = parameters[global_param_ids[ParamId::VRD]];

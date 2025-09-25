@@ -2,12 +2,12 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "OpenLoopCoronaryBC.h"
 
-void OpenLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
+void OpenLoopCoronaryBC::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {"volume_im"});
 }
 
-void OpenLoopCoronaryBC::update_constant(SparseSystem &system,
-                                         std::vector<double> &parameters) {
+void OpenLoopCoronaryBC::update_constant(SparseSystem& system,
+                                         std::vector<double>& parameters) {
   auto Ra = parameters[global_param_ids[0]];
   auto Ram = parameters[global_param_ids[1]];
   auto Rv = parameters[global_param_ids[2]];
@@ -37,8 +37,8 @@ void OpenLoopCoronaryBC::update_constant(SparseSystem &system,
   }
 }
 
-void OpenLoopCoronaryBC::update_time(SparseSystem &system,
-                                     std::vector<double> &parameters) {
+void OpenLoopCoronaryBC::update_time(SparseSystem& system,
+                                     std::vector<double>& parameters) {
   auto Ram = parameters[global_param_ids[1]];
   auto Rv = parameters[global_param_ids[2]];
   auto Cim = parameters[global_param_ids[4]];
@@ -57,7 +57,7 @@ void OpenLoopCoronaryBC::update_time(SparseSystem &system,
 }
 
 void OpenLoopCoronaryBC::setup_initial_state_dependent_params(
-    State initial_state, std::vector<double> &parameters) {
+    State initial_state, std::vector<double>& parameters) {
   auto P_in = initial_state.y[global_var_ids[0]];
   auto Q_in = initial_state.y[global_var_ids[1]];
   auto P_in_dot = initial_state.ydot[global_var_ids[0]];

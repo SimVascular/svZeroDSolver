@@ -71,7 +71,7 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 FetchContent_Declare(
   Eigen
   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-  GIT_TAG master
+  GIT_TAG 3.4.0
   GIT_SHALLOW TRUE
   GIT_PROGRESS TRUE)
 

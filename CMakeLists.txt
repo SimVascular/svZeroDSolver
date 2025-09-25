@@ -65,6 +65,10 @@ endif()
 # -----------------------------------------------------------------------------
 # Eigen is a header-only C++ template library for linear algebra.
 #
+
+# Tell FetchContent not to re-check for updates once Eigen is downloaded
+set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
+
 FetchContent_Declare(
   Eigen
   GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git

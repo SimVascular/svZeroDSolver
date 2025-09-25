@@ -2,12 +2,12 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "ClosedLoopRCRBC.h"
 
-void ClosedLoopRCRBC::setup_dofs(DOFHandler &dofhandler) {
+void ClosedLoopRCRBC::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"P_c"});
 }
 
-void ClosedLoopRCRBC::update_constant(SparseSystem &system,
-                                      std::vector<double> &parameters) {
+void ClosedLoopRCRBC::update_constant(SparseSystem& system,
+                                      std::vector<double>& parameters) {
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = -1.0;
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[3]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;

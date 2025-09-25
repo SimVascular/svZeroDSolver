@@ -89,7 +89,7 @@ class ResistiveJunction : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  ResistiveJunction(int id, Model *model)
+  ResistiveJunction(int id, Model* model)
       : Block(id, model, BlockType::resistive_junction, BlockClass::junction,
               {{"R", InputParameter()}}) {}
 
@@ -103,7 +103,7 @@ class ResistiveJunction : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -111,7 +111,7 @@ class ResistiveJunction : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Number of triplets of element

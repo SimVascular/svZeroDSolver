@@ -109,6 +109,27 @@
  * * `5` t_twitch: Twitch time
  * * `6` Impedance: Impedance of the outflow
  *
+ * ### Usage in json configuration file
+ *
+ *     "chambers": [
+ *         {
+ *             "type": "ChamberElastanceInductor",
+ *             "name": "ventricle",
+ *             "values": {
+ *                 "Emax": 1.057,
+ *                 "Emin": 0.091,
+ *                 "Vrd": 26.1,
+ *                 "Vrs": 18.0,
+ *                 "t_active": 0.2,
+ *                 "t_twitch": 0.3,
+ *                 "Impedance": 0.000351787
+ *             }
+ *         }
+ *     ],
+ *     "initial_condition": {
+ *         "Vc:ventricle": 96.07
+ *     }
+ *
  * ### Internal variables
  *
  * Names of internal variables in this block's output:
@@ -119,7 +140,7 @@
 class ChamberElastanceInductor : public Block {
  public:
   /**
-   * @brief Construct a new BloodVessel object
+   * @brief Construct a new ChamberElastanceInductor object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs

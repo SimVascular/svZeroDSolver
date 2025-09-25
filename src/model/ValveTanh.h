@@ -102,6 +102,22 @@
  * * `3` upstream_block: Name of block connected upstream
  * * `4` downstream_block: Name of block connected downstream
  *
+ * ### Usage in json configuration file
+ *
+ *     "valves": [
+ *         {
+ *             "type": "ValveTanh",
+ *             "name": "valve",
+ *             "params": {
+ *                 "Rmax": 100000.0,
+ *                 "Rmin": 100.0,
+ *                 "Steepness": 100.0,
+ *                 "upstream_block": "upstream_vessel",
+ *                 "downstream_block": "downstream_vessel"
+ *             }
+ *         }
+ *     ]
+ *
  * ### Internal variables
  *
  * This block has no internal variables.

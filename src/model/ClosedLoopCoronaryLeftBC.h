@@ -12,6 +12,22 @@
 /**
  * @brief Left side of closed loop coronary boundary condition
  * ClosedLoopCoronaryBC.
+ *
+ * ### Usage in json configuration file
+ *
+ *     "boundary_conditions": [
+ *          {
+ *              "bc_name": "LCA",
+ *              "bc_type": "ClosedLoopCoronaryLeft",
+ *              "bc_values": {
+ *                  "Ra": 9.307638231,
+ *                  "Ram": 15.124912126,
+ *                  "Rv": 33.270958757,
+ *                  "Cim": 0.003737025,
+ *                  "Ca": 0.000552427
+ *              }
+ *          }
+ *     ]
  */
 class ClosedLoopCoronaryLeftBC : public ClosedLoopCoronaryBC {
  public:

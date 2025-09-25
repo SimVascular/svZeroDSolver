@@ -51,6 +51,25 @@
  *
  * * `0` Pressure
  *
+ * ### Usage in json configuration file
+ *
+ *     "boundary_conditions": [
+ *         {
+ *             "bc_name": "OUT",
+ *             "bc_type": "PRESSURE",
+ *             "bc_values": {
+ *                 "P": [
+ *                     1000.0,
+ *                     1000.0
+ *                 ],
+ *                 "t": [
+ *                     0.0,
+ *                     1.0
+ *                 ]
+ *             }
+ *         }
+ *     ]
+ *
  * ### Internal variables
  *
  * This block has no internal variables.

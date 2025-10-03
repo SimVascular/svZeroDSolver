@@ -45,9 +45,8 @@ std::string to_vessel_csv(const std::vector<double> &times,
 
     if (dynamic_cast<const BloodVessel *>(block) == nullptr &&
         dynamic_cast<const ChamberSphere *>(block) == nullptr &&
-        dynamic_cast<const BloodVesselCRL *>(block) == nullptr &&
-        dynamic_cast<const RegazzoniChamber *>(block) == nullptr &&
-        dynamic_cast<const RegazzoniValve *>(block) == nullptr) {
+        dynamic_cast<const PiecewiseCosineChamber *>(block) == nullptr &&
+        dynamic_cast<const PiecewiseValve *>(block) == nullptr) {
       continue;
     }
 

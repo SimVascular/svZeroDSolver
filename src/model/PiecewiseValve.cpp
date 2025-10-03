@@ -28,9 +28,9 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include "RegazzoniValve.h"
+#include "PiecewiseValve.h"
 
-void RegazzoniValve::setup_dofs(DOFHandler &dofhandler) {
+void PiecewiseValve::setup_dofs(DOFHandler &dofhandler) {
   // set_up_dofs args: dofhandler (passed in), num equations, list of internal
   // variable names (strings) 2 eqns, one for Pressure, one for Flow
   Block::setup_dofs_(dofhandler, 2, {});
@@ -38,7 +38,7 @@ void RegazzoniValve::setup_dofs(DOFHandler &dofhandler) {
 
 // update_constant updates matrices E and F from E(y,t)*y_dot + F(y,t)*y +
 // c(y,t) = 0 with terms that DO NOT DEPEND ON THE SOLUTION
-void RegazzoniValve::update_constant(SparseSystem &system,
+void PiecewiseValve::update_constant(SparseSystem &system,
                                      std::vector<double> &parameters) {
   // Set element contributions
   // coeffRef args are the indices (i,j) of the matrix
@@ -57,7 +57,7 @@ void RegazzoniValve::update_constant(SparseSystem &system,
 // update_solution updates matrices E and F from E(y,t)*y_dot + F(y,t)*y +
 // c(y,t) = 0 with terms that DO DEPEND ON THE SOLUTION (will change with each
 // time step)
-void RegazzoniValve::update_solution(
+void PiecewiseValve::update_solution(
     SparseSystem &system, std::vector<double> &parameters,
     const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {

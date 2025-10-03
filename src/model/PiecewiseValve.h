@@ -28,11 +28,11 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file RegazzoniValve.h
- * @brief model::RegazzoniValve source file
+ * @file PiecewiseValve.h
+ * @brief model::PiecewiseValve source file
  */
-#ifndef SVZERODSOLVER_MODEL_RegazzoniValve_HPP_
-#define SVZERODSOLVER_MODEL_RegazzoniValve_HPP_
+#ifndef SVZERODSOLVER_MODEL_PiecewiseValve_HPP_
+#define SVZERODSOLVER_MODEL_PiecewiseValve_HPP_
 
 #include <math.h>
 
@@ -130,7 +130,7 @@
  * * `4` downstream_block: Name of block connected downstream
  *
  */
-class RegazzoniValve : public Block {
+class PiecewiseValve : public Block {
  public:
   /**
    * @brief Local IDs of the parameters
@@ -143,13 +143,13 @@ class RegazzoniValve : public Block {
   };
 
   /**
-   * @brief Construct a new RegazzoniValve object
+   * @brief Construct a new PiecewiseValve object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  RegazzoniValve(int id, Model *model)
-      : Block(id, model, BlockType::regazzoni_valve, BlockClass::valve,
+  PiecewiseValve(int id, Model *model)
+      : Block(id, model, BlockType::piecewise_valve, BlockClass::valve,
               {{"Rmax", InputParameter()},
                {"Rmin", InputParameter()},
                {"upstream_block", InputParameter(false, false, false)},
@@ -198,4 +198,4 @@ class RegazzoniValve : public Block {
   TripletsContributions num_triplets{5, 0, 3};
 };
 
-#endif  // SVZERODSOLVER_MODEL_RegazzoniValve_HPP_
+#endif  // SVZERODSOLVER_MODEL_PiecewiseValve_HPP_

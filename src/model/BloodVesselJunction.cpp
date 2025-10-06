@@ -3,7 +3,7 @@
 
 #include "BloodVesselJunction.h"
 
-void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) {
+void BloodVesselJunction::setup_dofs(DOFHandler& dofhandler) {
   if (inlet_nodes.size() != 1) {
     throw std::runtime_error(
         "Blood vessel junction does not support multiple inlets.");
@@ -16,8 +16,8 @@ void BloodVesselJunction::setup_dofs(DOFHandler &dofhandler) {
   num_triplets.D = 2 * num_outlets;
 }
 
-void BloodVesselJunction::update_constant(SparseSystem &system,
-                                          std::vector<double> &parameters) {
+void BloodVesselJunction::update_constant(SparseSystem& system,
+                                          std::vector<double>& parameters) {
   // Mass conservation
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = 1.0;
 
@@ -36,9 +36,9 @@ void BloodVesselJunction::update_constant(SparseSystem &system,
 }
 
 void BloodVesselJunction::update_solution(
-    SparseSystem &system, std::vector<double> &parameters,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    SparseSystem& system, std::vector<double>& parameters,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
   for (size_t i = 0; i < num_outlets; i++) {
     // Get parameters
     auto stenosis_coeff = parameters[global_param_ids[2 * num_outlets + i]];
@@ -53,10 +53,10 @@ void BloodVesselJunction::update_solution(
 }
 
 void BloodVesselJunction::update_gradient(
-    Eigen::SparseMatrix<double> &jacobian,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha, std::vector<double> &y,
-    std::vector<double> &dy) {
+    Eigen::SparseMatrix<double>& jacobian,
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
+    std::vector<double>& dy) {
   auto p_in = y[global_var_ids[0]];
   auto q_in = y[global_var_ids[1]];
 

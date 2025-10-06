@@ -74,7 +74,7 @@ class Model {
    * @param block_name The block name (defined in block_factory_map)
    * @return int Global ID of the block
    */
-  Block *create_block(const std::string &block_name);
+  Block* create_block(const std::string& block_name);
 
   /**
    * @brief Add a block to the model (without parameters)
@@ -85,8 +85,8 @@ class Model {
    * @param internal Toggle whether block is internal
    * @return int Global ID of the block
    */
-  int add_block(Block *block, const std::string_view &name,
-                const std::vector<int> &block_param_ids, bool internal = false);
+  int add_block(Block* block, const std::string_view& name,
+                const std::vector<int>& block_param_ids, bool internal = false);
 
   /**
    * @brief Add a block to the model (with parameters)
@@ -97,9 +97,9 @@ class Model {
    * @param internal Toggle whether block is internal
    * @return int Global ID of the block
    */
-  int add_block(const std::string &block_name,
-                const std::vector<int> &block_param_ids,
-                const std::string_view &name, bool internal = false);
+  int add_block(const std::string& block_name,
+                const std::vector<int>& block_param_ids,
+                const std::string_view& name, bool internal = false);
 
   /**
    * @brief Check if a block with given name exists
@@ -107,7 +107,7 @@ class Model {
    * @param name Name of the Block
    * @return bool whether block exists
    */
-  bool has_block(const std::string &name) const;
+  bool has_block(const std::string& name) const;
 
   /**
    * @brief Get a block by its name
@@ -115,7 +115,7 @@ class Model {
    * @param name Name of the Block
    * @return Block* The block
    */
-  Block *get_block(const std::string_view &name) const;
+  Block* get_block(const std::string_view& name) const;
 
   /**
    * @brief Get a block by its global ID
@@ -123,7 +123,7 @@ class Model {
    * @param block_id Global ID of the Block
    * @return Block* The block
    */
-  Block *get_block(int block_id) const;
+  Block* get_block(int block_id) const;
 
   /**
    * @brief Get a block type by its name
@@ -131,7 +131,7 @@ class Model {
    * @param name The name of the block
    * @return BlockType The block type
    */
-  BlockType get_block_type(const std::string_view &name) const;
+  BlockType get_block_type(const std::string_view& name) const;
 
   /**
    * @brief Get the name of a block by it's ID
@@ -149,9 +149,9 @@ class Model {
    * @param name Name of node
    * @return int Global ID of the node
    */
-  int add_node(const std::vector<Block *> &inlet_eles,
-               const std::vector<Block *> &outlet_eles,
-               const std::string_view &name);
+  int add_node(const std::vector<Block*>& inlet_eles,
+               const std::vector<Block*>& outlet_eles,
+               const std::string_view& name);
 
   /**
    * @brief Get the name of a node by it's ID
@@ -177,8 +177,8 @@ class Model {
    * @param periodic Toggle whether parameter is periodic
    * @return int Global ID of the parameter
    */
-  int add_parameter(const std::vector<double> &times,
-                    const std::vector<double> &values, bool periodic = true);
+  int add_parameter(const std::vector<double>& times,
+                    const std::vector<double>& values, bool periodic = true);
 
   /**
    * @brief Get a parameter by its global ID
@@ -186,7 +186,7 @@ class Model {
    * @param param_id Global ID of the parameter
    * @return Parameter* The parameter
    */
-  Parameter *get_parameter(int param_id);
+  Parameter* get_parameter(int param_id);
 
   /**
    * @brief Get the current value of a parameter
@@ -218,7 +218,7 @@ class Model {
    *
    * @param system System to update contributions at
    */
-  void update_constant(SparseSystem &system);
+  void update_constant(SparseSystem& system);
 
   /**
    * @brief Update the time-dependent contributions of all elements in a sparse
@@ -227,7 +227,7 @@ class Model {
    * @param system System to update contributions at
    * @param time Current time
    */
-  void update_time(SparseSystem &system, double time);
+  void update_time(SparseSystem& system, double time);
 
   /**
    * @brief Update the solution-dependent contributions of all elements in a
@@ -237,16 +237,16 @@ class Model {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem &system,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  void update_solution(SparseSystem& system,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
 
   /**
    * @brief Modify the solution after solving it
    *
    * @param y Current solution
    */
-  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Convert the blocks to a steady behavior

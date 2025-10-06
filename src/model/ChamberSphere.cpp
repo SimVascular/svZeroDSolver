@@ -5,13 +5,13 @@
 
 #include "Model.h"
 
-void ChamberSphere::setup_dofs(DOFHandler &dofhandler) {
+void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 7,
                      {"radius", "velo", "stress", "tau", "volume"});
 }
 
-void ChamberSphere::update_constant(SparseSystem &system,
-                                    std::vector<double> &parameters) {
+void ChamberSphere::update_constant(SparseSystem& system,
+                                    std::vector<double>& parameters) {
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
   const double rho = parameters[global_param_ids[ParamId::rho]];
 
@@ -42,17 +42,17 @@ void ChamberSphere::update_constant(SparseSystem &system,
   system.F.coeffRef(global_eqn_ids[6], global_var_ids[2]) = -1;
 }
 
-void ChamberSphere::update_time(SparseSystem &system,
-                                std::vector<double> &parameters) {
+void ChamberSphere::update_time(SparseSystem& system,
+                                std::vector<double>& parameters) {
   // active stress
   get_elastance_values(parameters);
   system.F.coeffRef(global_eqn_ids[3], global_var_ids[7]) = act;
 }
 
 void ChamberSphere::update_solution(
-    SparseSystem &system, std::vector<double> &parameters,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    SparseSystem& system, std::vector<double>& parameters,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
   const double W1 = parameters[global_param_ids[ParamId::W1]];
   const double W2 = parameters[global_param_ids[ParamId::W2]];
   const double eta = parameters[global_param_ids[ParamId::eta]];
@@ -107,7 +107,7 @@ void ChamberSphere::update_solution(
   system.C.coeffRef(global_eqn_ids[3]) = -act_plus * sigma_max;
 }
 
-void ChamberSphere::get_elastance_values(std::vector<double> &parameters) {
+void ChamberSphere::get_elastance_values(std::vector<double>& parameters) {
   const double alpha_max = parameters[global_param_ids[ParamId::alpha_max]];
   const double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
   const double tsys = parameters[global_param_ids[ParamId::tsys]];

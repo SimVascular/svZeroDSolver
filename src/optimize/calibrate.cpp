@@ -44,8 +44,8 @@ nlohmann::json calibrate(const nlohmann::json& config) {
     std::vector<int> param_ids;
     for (size_t k = 0; k < num_params; k++)
       param_ids.push_back(param_counter++);
-    std::string block_type = 
-       vessel_config["zero_d_element_type"].get<std::string>();
+    std::string block_type =
+        vessel_config["zero_d_element_type"].get<std::string>();
     model.add_block(block_type, param_ids, vessel_name);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);

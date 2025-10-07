@@ -29,10 +29,8 @@ Model::Model() {
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
       {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
-      {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
-      {"RegazzoniValve", block_factory<RegazzoniValve>()},
-      {"RegazzoniChamber", block_factory<RegazzoniChamber>()},
-      {"KungVentricle", block_factory<RegazzoniChamber>()}};
+      {"PiecewiseValve", block_factory<PiecewiseValve>()},
+      {"PiecewiseCosineChamber", block_factory<PiecewiseCosineChamber>()}};
 }
 
 Model::~Model() {}
@@ -117,9 +115,9 @@ std::string Model::get_block_name(int block_id) const {
   return block_names[block_id];
 }
 
-int Model::add_node(const std::vector<Block *> &inlet_eles,
-                    const std::vector<Block *> &outlet_eles,
-                    const std::string_view &name) {
+int Model::add_node(const std::vector<Block*>& inlet_eles,
+                    const std::vector<Block*>& outlet_eles,
+                    const std::string_view& name) {
   DEBUG_MSG("Adding node " << name);
   auto node = std::shared_ptr<Node>(
       new Node(node_count, inlet_eles, outlet_eles, this));

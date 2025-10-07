@@ -186,6 +186,7 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   sim_params.output_mean_only = sim_config.value("output_mean_only", false);
   sim_params.output_derivative = sim_config.value("output_derivative", false);
   sim_params.output_all_cycles = sim_config.value("output_all_cycles", false);
+  sim_params.sim_cardiac_period = sim_config.value("cardiac_period", 0.0);
   DEBUG_MSG("Finished loading simulation parameters");
   return sim_params;
 }
@@ -411,12 +412,11 @@ void create_external_coupling(
             "Error: The specified connection type for outlet "
             "external_coupling_block is invalid.");
       }
-      // Add connection only for closedLoopRCR and BloodVessel and
-      // BloodVesselCRL. Connection to ClosedLoopHeartAndPulmonary will be
+      // Add connection only for closedLoopRCR and BloodVessel
+      // Connection to ClosedLoopHeartAndPulmonary will be
       // handled in ClosedLoopHeartAndPulmonary creation.
       if ((connected_type == "ClosedLoopRCR") ||
           (connected_type == "BloodVessel") ||
-          (connected_type == "BloodVesselCRL") ||
           (connected_type == "BloodVesselA")) {
         connections.push_back({connected_block, coupling_name});
       }  // connected_type == "ClosedLoopRCR"

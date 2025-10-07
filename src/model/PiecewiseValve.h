@@ -44,7 +44,7 @@
  * @brief Valve (tanh) block.
  *
  * Models the pressure drop across a diode-like valve, which is implemented as a
- * non-linear hyperbolic-tangent resistor. See \cite pfaller2019importance
+ * non-linear piecewise resistor. See \cite Regazzoni2022
  * (equations 16 and 22).
  *
  * \f[
@@ -59,8 +59,7 @@
  * ### Governing equations
  *
  * \f[
- * P_{in}-P_{out}-Q_{in}\left[R_{min} +
- * (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
+ * P_{in}-P_{out}-Q_{in}\left[R(P_{out},P_{in})\right]=0
  * \f]
  *
  * \f[
@@ -68,6 +67,14 @@
  * \f]
  *
  * ### Local contributions
+ *
+ * \f[
+ * R_i(p_1, p_2) =
+ * \begin{cases}
+ * R_{\min}, & p_1 < p_2, \\[0.5em]
+ * R_{\max}, & p_1 \ge p_2.
+ * \end{cases}
+ * \f]
  *
  * \f[
  * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
@@ -82,40 +89,15 @@
  *
  * \f[
  * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0 \\
+ * 1 & -(R(P_{in},P_{out})) & -1 & 0 \\
  * 0 &      1                 &  0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
- * -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+ * 0 \\
  * 0
- * \end{array}\right]
- * \f]
- *
- * \f[
- * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
- * \left[\begin{array}{cccc}
- * A & B & C & 0 \\
- * 0 & 0 & 0 & 0 \end{array}\right] \f]
- * where,
- * \f[
- * A = \frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
- * \f]
- * \f[
- * B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
- * \f]
- * \f[
- * C = -\frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
- *
- * \f[
- * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- * \left[\begin{array}{cccc}
- * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
  *
@@ -125,9 +107,8 @@
  *
  * * `0` Rmax: Maximum (closed) valve resistance
  * * `1` Rmin: Minimum (open) valve resistance
- * * `2` Steepness: Steepness of sigmoid function
- * * `3` upstream_block: Name of block connected upstream
- * * `4` downstream_block: Name of block connected downstream
+ * * `2` upstream_block: Name of block connected upstream
+ * * `3` downstream_block: Name of block connected downstream
  *
  */
 class PiecewiseValve : public Block {

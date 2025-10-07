@@ -21,6 +21,6 @@
  * @param config JSON configuration for 0D model
  * @return Calibrated JSON configuration for the 0D model
  */
-nlohmann::json calibrate(const nlohmann::json &config);
+nlohmann::json calibrate(const nlohmann::json& config);
 
 #endif  // SVZERODSOLVER_OPTIMIZE_CALIBRATOR_HPP_

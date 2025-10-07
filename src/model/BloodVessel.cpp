@@ -3,12 +3,12 @@
 
 #include "BloodVessel.h"
 
-void BloodVessel::setup_dofs(DOFHandler &dofhandler) {
+void BloodVessel::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {});
 }
 
-void BloodVessel::update_constant(SparseSystem &system,
-                                  std::vector<double> &parameters) {
+void BloodVessel::update_constant(SparseSystem& system,
+                                  std::vector<double>& parameters) {
   // Get parameters
   double capacitance = parameters[global_param_ids[ParamId::CAPACITANCE]];
   double inductance = parameters[global_param_ids[ParamId::INDUCTANCE]];
@@ -31,9 +31,9 @@ void BloodVessel::update_constant(SparseSystem &system,
 }
 
 void BloodVessel::update_solution(
-    SparseSystem &system, std::vector<double> &parameters,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    SparseSystem& system, std::vector<double>& parameters,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
   // Get parameters
   double capacitance = parameters[global_param_ids[ParamId::CAPACITANCE]];
   double stenosis_coeff =
@@ -57,10 +57,10 @@ void BloodVessel::update_solution(
 }
 
 void BloodVessel::update_gradient(
-    Eigen::SparseMatrix<double> &jacobian,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha, std::vector<double> &y,
-    std::vector<double> &dy) {
+    Eigen::SparseMatrix<double>& jacobian,
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
+    std::vector<double>& dy) {
   auto y0 = y[global_var_ids[0]];
   auto y1 = y[global_var_ids[1]];
   auto y2 = y[global_var_ids[2]];

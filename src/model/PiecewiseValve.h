@@ -31,8 +31,8 @@
  * @file PiecewiseValve.h
  * @brief model::PiecewiseValve source file
  */
-#ifndef SVZERODSOLVER_MODEL_PiecewiseValve_HPP_
-#define SVZERODSOLVER_MODEL_PiecewiseValve_HPP_
+#ifndef SVZERODSOLVER_MODEL_PIECEWISE_VALVE_HPP_
+#define SVZERODSOLVER_MODEL_PIECEWISE_VALVE_HPP_
 
 #include <math.h>
 

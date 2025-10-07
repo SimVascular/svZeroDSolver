@@ -40,7 +40,7 @@ void PiecewiseCosineChamber::update_constant(SparseSystem &system,
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
 
-  // Eq 1: P_in - P_out - L*dQ_out = 0
+  // Eq 1: P_in - P_out = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -1.0;
 

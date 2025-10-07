@@ -31,8 +31,9 @@
  * @file PiecewiseCosineChamber.h
  * @brief model::PiecewiseCosineChamber source file
  */
-#ifndef SVZERODSOLVER_MODEL_PiecewiseCosineChamber_HPP_
-#define SVZERODSOLVER_MODEL_PiecewiseCosineChamber_HPP_
+
+#ifndef SVZERODSOLVER_MODEL_PIECEWISECOSINECHAMBER_HPP_
+#define SVZERODSOLVER_MODEL_PIECEWISECOSINECHAMBER_HPP_
 
 #include <math.h>
 
@@ -42,128 +43,104 @@
 #include "debug.h"
 
 /**
- * @brief Cardiac chamber with time-varying elastance (0D model).
+ * @brief Cardiac chamber with piecewise elastance and inductor.
  *
- * Models a cardiac chamber as a time-varying capacitance (elastance) with an
- * unstressed (reference) volume. Pressures are given by an elastance law,
- * and inter-compartment flows are set by valve “diodes” whose resistance
- * switches between R_min (forward flow) and R_max (closed valve), consistent
- * with the closed-loop 0D formulation shown in the figures (Eqs. (6)–(7f), (8)–(9)).
+ * Models a cardiac chamber as a time-varying capacitor (elastance with
+ * specified resting volumes) and an inductor. See \cite Regazzoni2022
  *
- * This chamber block connects to the rest of the circulation through junctions
- * and valves; the valves obey the piecewise resistance below.
+ * This chamber block can be connected to other blocks using junctions.
  *
- * ### Diagram (conceptual)
  * \f[
  * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
- * \draw (1,0) node[anchor=south]{$p_{in}$}
- * to (1,0)
- * node[anchor=south]{}
- * to [generic, l=$R_i(p_{in},p_{out})$, *-*] (3,0)
- * node[anchor=south]{$p_{out}$}
- * (1,0) to [vC, l=$E_i(t)$, *-] (1,-1.5)
- * node[ground]{};
- * \draw [-latex] (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} ;
+ * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0)
+ * (1,0) node[anchor=south]{$P_{in}$}
+ * to (3,0)
+ * node[anchor=south]{$P_{out}$}
+ * (1,0) to [vC, l=$E$, *-] (1,-1.5)
+ * node[ground]{}
+ * (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} ;
  * \end{circuitikz}
  * \f]
  *
- * ### Governing relations for a chamber \(i\in\{\text{LA},\text{LV},\text{RA},\text{RV}\}\)
+ * ### Governing equations
  *
- * **Elastance (pressure–volume law):**
  * \f[
- * p_i(t) \;=\; p_{\mathrm{EX}}(t) \;+\; E_i(t)\,\big(V_i(t) - V_{0,i}\big).
- * \tag{7a–7d form}
+ * P_{in}-E(t)(V_c-V_{rest})=0
  * \f]
  *
- * **Mass conservation in the chamber:**
  * \f[
- * \dot V_i(t) \;=\; Q_{in,i}(t) - Q_{out,i}(t).
+ * P_{in}-P_{out}=0
  * \f]
  *
- * **Valve (non-ideal diode) flow laws (examples):**
  * \f[
- * Q_{\mathrm{MV}}(t) = \dfrac{p_{\mathrm{LA}}(t) - p_{\mathrm{LV}}(t)}
- * {R_{\mathrm{MV}}\!\big(p_{\mathrm{LA}},p_{\mathrm{LV}}\big)},\quad
- * Q_{\mathrm{AV}}(t) = \dfrac{p_{\mathrm{LV}}(t) - p_{\mathrm{AR}}^{\mathrm{SYS}}(t)}
- * {R_{\mathrm{AV}}\!\big(p_{\mathrm{LV}},p_{\mathrm{AR}}^{\mathrm{SYS}}\big)},
- * \tag{7e–7f form}
+ * Q_{in}-Q_{out}-\dot{V}_c=0
  * \f]
- * with analogous definitions for \(Q_{\mathrm{TV}}\) and \(Q_{\mathrm{PV}}\).
  *
- * **Valve resistance switching (for } i\in\{\mathrm{MV},\mathrm{AV},\mathrm{TV},\mathrm{PV}\}):**
+ * ### Local contributions
+ *
  * \f[
- * R_i(p_1,p_2) =
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out} & V_c\end{array}\right]^{T} \f]
+ *
+ * \f[
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
+ * 0 & 0 & 0 & 0 & 0\\
+ * 0 & 0 & 0 & 0 & 0\\
+ * 0 & 0 & 0 & 0 & -1
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * 1 & 0 &  0 & 0  & E(t) \\
+ * 1 & 0 & -1 & 0  & 0 \\
+ * 0 & 1 &  0 & -1 & 0
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{c}^{e}=\left[\begin{array}{c}
+ * E(t)V_{rest} \\
+ * 0 \\
+ * 0
+ * \end{array}\right]
+ * \f]
+ *
+ * In the above equations,
+ * 
+ * \f[
+ * E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \, 
+ * \phi\!\left(t, t_C^i, t_R^i, T_C^i, T_R^i\right),
+ * \f]
+ * 
+ * \f[
+ * \phi(t, t_C, t_R, T_C, T_R) =
  * \begin{cases}
- * R_{\min}, & p_1 < p_2 \quad \text{(forward/open)} \\
- * R_{\max}, & p_1 \ge p_2 \quad \text{(closed/backward)}
- * \end{cases}
- * \f]
- * where \(p_1\) is the upstream pressure (ahead of the leaflets in the flow
- * direction) and \(p_2\) is downstream. Choose \(R_{\max}\) large so that
- * leakage when closed is negligible; \(R_{\min}>0\) adds small forward losses.
- *
- * ### Chamber activation and time-varying elastance
- *
- * Piecewise activation \(\phi(t,\;t_C,\;t_R,\;T_C,\;T_R)\) over the heartbeat
- * period \(T_{HB}\) (Eq. (8)):
- * \f[
- * \phi(t,t_C,t_R,T_C,T_R) =
- * \begin{cases}
- * \tfrac{1}{2}\Big[1-\cos\!\big(\tfrac{\pi}{T_C}\,\mathrm{mod}(t-t_C,T_{HB})\big)\Big],
- * & 0 \le \mathrm{mod}(t-t_C,T_{HB}) < T_C,\\[6pt]
- * \tfrac{1}{2}\Big[1+\cos\!\big(\tfrac{\pi}{T_R}\,\mathrm{mod}(t-t_R,T_{HB})\big)\Big],
- * & 0 \le \mathrm{mod}(t-t_R,T_{HB}) < T_R,\\[6pt]
+ * \frac{1}{2}\left[1 - \cos\!\left(\frac{\pi}{T_C} \operatorname{mod}(t - t_C, T_{\mathrm{HB}})\right)\right], & \text{if } 0 \le \operatorname{mod}(t - t_C, T_{\mathrm{HB}}) < T_C, \\[1.2em]
+ * \frac{1}{2}\left[1 + \cos\!\left(\frac{\pi}{T_R} \operatorname{mod}(t - t_R, T_{\mathrm{HB}})\right)\right], & \text{if } 0 \le \operatorname{mod}(t - t_R, T_{\mathrm{HB}}) < T_R, \\[1.2em]
  * 0, & \text{otherwise.}
  * \end{cases}
- * \tag{8}
  * \f]
- *
- * Time-varying elastance (Eq. (9)):
- * \f[
- * E_i(t) \;=\; E_i^{\mathrm{pass}} \;+\; E_{i}^{\mathrm{act,max}}\;\phi\!\left(
- * t,\;t_C^i,\;t_R^i,\;T_C^i,\;T_R^i\right).
- * \tag{9}
- * \f]
- *
- * Here \(V_{0,i}\) is the chamber’s unstressed volume; \(p_{\mathrm{EX}}(t)\)
- * is extracardiac/pericardial pressure (often set to \(0\) for simplicity).
- *
- * ### Local unknowns (example ordering for a chamber element)
- * \f[
- * \mathbf{y}^{e}=\big[p_{in}\;\;Q_{in}\;\;p_{out}\;\;Q_{out}\;\;V_i\big]^T.
- * \f]
- * In a minimal (no-inductor) chamber, the residuals are formed from:
- * \f[
- * \begin{aligned}
- * &p_{in}-p_{\mathrm{EX}}-E_i(t)(V_i-V_{0,i})=0,\\
- * &Q_{in}-Q_{out}-\dot V_i=0,\\
- * &Q_{out}-\dfrac{p_{in}-p_{out}}{R_i(p_{in},p_{out})}=0,
- * \end{aligned}
- * \f]
- * which can be assembled into your global system. (If you maintain an
- * inductor model elsewhere, add the corresponding \(L\,\dot Q\) term there.)
  *
  * ### Parameters
- * Provide parameters per chamber \(i\):
- * - `E_pass`  (\(E_i^{\mathrm{pass}}\)) – passive elastance
- * - `E_act_max` (\(E_i^{\mathrm{act,max}}\)) – active elastance amplitude
- * - `V0` (\(V_{0,i}\)) – unstressed volume
- * - `tC`, `tR` – start times of contraction and relaxation
- * - `TC`, `TR` – durations of contraction and relaxation
- * - `T_HB` – heartbeat period
- * - `p_ex` (optional) – extracardiac pressure (default 0)
  *
- * Valve parameters (used by the adjoining valve elements):
- * - `Rmin`, `Rmax` – minimum/maximum valve resistances in the diode law above
+ * Parameter sequence for constructing this block
  *
- * ### Notes
- * - Set \(R_{\max}\gg R_{\min}\) to suppress backflow while allowing negligible
- *   leakage; \(R_{\min}>0\) adds realistic dissipation during forward flow.
- * - With this formulation, an “ideal” valve would be \(R_{\min}=0\), \(R_{\max}=+\infty\),
- *   but we avoid that for numerical stability, matching the figures.
+ * * `0` Emax: Maximum elastance
+ * * `1` Epass: Passive elastance
+ * * `2` Vrest: Rest diastolic volume 
+ * * `3` contract_start: Contract start time
+ * * `4` relax_start: Relax start time
+ * * `5` contract_duration: Contract duration
+ * * `6` relax_duration: Relaxation duration
+ *
+ * ### Internal variables
+ *
+ * Names of internal variables in this block's output:
+ *
+ * * `Vc`: Chamber volume
+ *
  */
-
 class PiecewiseCosineChamber : public Block {
  public:
   /**
@@ -173,7 +150,8 @@ class PiecewiseCosineChamber : public Block {
    * @param model The model to which the block belongs
    */
   PiecewiseCosineChamber(int id, Model *model)
-      : Block(id, model, BlockType::piecewise_cosine_chamber, BlockClass::chamber,
+      : Block(id, model, BlockType::piecewise_cosine_chamber, 
+        BlockClass::chamber,
               {{"Emax", InputParameter()},
                {"Epass", InputParameter()},
                {"Vrest", InputParameter()},
@@ -245,4 +223,4 @@ class PiecewiseCosineChamber : public Block {
   void get_elastance_values(std::vector<double> &parameters);
 };
 
-#endif  // SVZERODSOLVER_MODEL_PiecewiseCosineChamber_HPP_
+#endif  // SVZERODSOLVER_MODEL_PIECEWISECOSINECHAMBER_HPP_

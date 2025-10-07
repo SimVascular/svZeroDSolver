@@ -36,7 +36,7 @@ void PiecewiseCosineChamber::setup_dofs(DOFHandler &dofhandler) {
 }
 
 void PiecewiseCosineChamber::update_constant(SparseSystem &system,
-                                       std::vector<double> &parameters) {
+                                             std::vector<double> &parameters) {
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
 
@@ -51,7 +51,7 @@ void PiecewiseCosineChamber::update_constant(SparseSystem &system,
 }
 
 void PiecewiseCosineChamber::update_time(SparseSystem &system,
-                                   std::vector<double> &parameters) {
+                                         std::vector<double> &parameters) {
   get_elastance_values(parameters);
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
@@ -60,7 +60,8 @@ void PiecewiseCosineChamber::update_time(SparseSystem &system,
       Elas * parameters[global_param_ids[ParamId::VREST]];
 }
 
-void PiecewiseCosineChamber::get_elastance_values(std::vector<double> &parameters) {
+void PiecewiseCosineChamber::get_elastance_values(
+    std::vector<double> &parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Epass = parameters[global_param_ids[ParamId::EPASS]];
   double Vrest = parameters[global_param_ids[ParamId::VREST]];

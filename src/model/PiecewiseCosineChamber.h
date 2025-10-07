@@ -107,20 +107,21 @@
  * \f]
  *
  * In the above equations,
- * 
+ *
  * \f[
- * E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \, 
+ * E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
  * \phi\!\left(t, t_C^i, t_R^i, T_C^i, T_R^i\right),
  * \f]
- * 
+ *
  * \f[
  * \phi(t, t_C, t_R, T_C, T_R) =
  * \begin{cases}
- * \frac{1}{2}\left[1 - \cos\!\left(\frac{\pi}{T_C} \operatorname{mod}(t - t_C, T_{\mathrm{HB}})\right)\right], & \text{if } 0 \le \operatorname{mod}(t - t_C, T_{\mathrm{HB}}) < T_C, \\[1.2em]
- * \frac{1}{2}\left[1 + \cos\!\left(\frac{\pi}{T_R} \operatorname{mod}(t - t_R, T_{\mathrm{HB}})\right)\right], & \text{if } 0 \le \operatorname{mod}(t - t_R, T_{\mathrm{HB}}) < T_R, \\[1.2em]
- * 0, & \text{otherwise.}
- * \end{cases}
- * \f]
+ * \frac{1}{2}\left[1 - \cos\!\left(\frac{\pi}{T_C} \operatorname{mod}(t - t_C,
+ * T_{\mathrm{HB}})\right)\right], & \text{if } 0 \le \operatorname{mod}(t -
+ * t_C, T_{\mathrm{HB}}) < T_C, \\[1.2em] \frac{1}{2}\left[1 +
+ * \cos\!\left(\frac{\pi}{T_R} \operatorname{mod}(t - t_R,
+ * T_{\mathrm{HB}})\right)\right], & \text{if } 0 \le \operatorname{mod}(t -
+ * t_R, T_{\mathrm{HB}}) < T_R, \\[1.2em] 0, & \text{otherwise.} \end{cases} \f]
  *
  * ### Parameters
  *
@@ -128,7 +129,7 @@
  *
  * * `0` Emax: Maximum elastance
  * * `1` Epass: Passive elastance
- * * `2` Vrest: Rest diastolic volume 
+ * * `2` Vrest: Rest diastolic volume
  * * `3` contract_start: Contract start time
  * * `4` relax_start: Relax start time
  * * `5` contract_duration: Contract duration
@@ -150,8 +151,8 @@ class PiecewiseCosineChamber : public Block {
    * @param model The model to which the block belongs
    */
   PiecewiseCosineChamber(int id, Model *model)
-      : Block(id, model, BlockType::piecewise_cosine_chamber, 
-        BlockClass::chamber,
+      : Block(id, model, BlockType::piecewise_cosine_chamber,
+              BlockClass::chamber,
               {{"Emax", InputParameter()},
                {"Epass", InputParameter()},
                {"Vrest", InputParameter()},

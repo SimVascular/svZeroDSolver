@@ -4,14 +4,14 @@
 
 #include "Model.h"
 
-void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler &dofhandler) {
+void ClosedLoopHeartPulmonary::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 14,
                      {"V_RA", "Q_RA", "P_RV", "V_RV", "Q_RV", "P_pul", "P_LA",
                       "V_LA", "Q_LA", "P_LV", "V_LV", "Q_LV"});
 }
 
 void ClosedLoopHeartPulmonary::update_constant(
-    SparseSystem &system, std::vector<double> &parameters) {
+    SparseSystem& system, std::vector<double>& parameters) {
   // DOF 0, Eq 0: Right atrium pressure
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
 
@@ -75,8 +75,8 @@ void ClosedLoopHeartPulmonary::update_constant(
       parameters[global_param_ids[ParamId::LLV_A]];
 }
 
-void ClosedLoopHeartPulmonary::update_time(SparseSystem &system,
-                                           std::vector<double> &parameters) {
+void ClosedLoopHeartPulmonary::update_time(SparseSystem& system,
+                                           std::vector<double>& parameters) {
   get_activation_and_elastance_functions(parameters);
 
   // DOF 0, Eq 0: Right atrium pressure
@@ -99,9 +99,9 @@ void ClosedLoopHeartPulmonary::update_time(SparseSystem &system,
 }
 
 void ClosedLoopHeartPulmonary::update_solution(
-    SparseSystem &system, std::vector<double> &parameters,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    SparseSystem& system, std::vector<double>& parameters,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
   get_psi_ra_la(parameters, y);
   get_valve_positions(y);
 
@@ -169,7 +169,7 @@ void ClosedLoopHeartPulmonary::update_solution(
 }
 
 void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
-    std::vector<double> &parameters) {
+    std::vector<double>& parameters) {
   auto T_cardiac = model->cardiac_cycle_period;
   auto Tsa = T_cardiac * parameters[global_param_ids[ParamId::TSA]];
   auto tpwave = T_cardiac / parameters[global_param_ids[ParamId::TPWAVE]];
@@ -219,8 +219,8 @@ void ClosedLoopHeartPulmonary::get_activation_and_elastance_functions(
 }
 
 void ClosedLoopHeartPulmonary::get_psi_ra_la(
-    std::vector<double> &parameters,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+    std::vector<double>& parameters,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   auto RA_volume = y[global_var_ids[4]];
   auto LA_volume = y[global_var_ids[11]];
   psi_ra = parameters[global_param_ids[ParamId::KXP_RA]] *
@@ -245,7 +245,7 @@ void ClosedLoopHeartPulmonary::get_psi_ra_la(
 }
 
 void ClosedLoopHeartPulmonary::get_valve_positions(
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   std::fill(valves, valves + 16, 1.0);
 
   // RA to RV
@@ -280,7 +280,7 @@ void ClosedLoopHeartPulmonary::get_valve_positions(
 }
 
 void ClosedLoopHeartPulmonary::post_solve(
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   for (size_t i = 0; i < 16; i++)
     if (valves[i] < 0.5) y[global_var_ids[i]] = 0.0;
 }

@@ -148,12 +148,18 @@ jobs:
           cpack
           cp distribution/svZeroDSolver_* ..
 
+      - name: Install NSIS
+        if: startsWith(matrix.os, 'windows')
+        run: choco install nsis -y
+
       - name: Build installer Windows Systems
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
+          # NSIS will be at C:\Program Files (x86)\NSIS\Bin
+          echo "C:\Program Files (x86)\NSIS\Bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           cd Release
-          cpack
+          cpack -C Release
           Copy-Item distribution\svZeroDSolver_* -Destination ..\
 
       - name: Upload installer

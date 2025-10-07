@@ -4,12 +4,12 @@
 
 #include "Model.h"
 
-void ClosedLoopCoronaryBC::setup_dofs(DOFHandler &dofhandler) {
+void ClosedLoopCoronaryBC::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 3, {"volume_im"});
 }
 
-void ClosedLoopCoronaryBC::update_constant(SparseSystem &system,
-                                           std::vector<double> &parameters) {
+void ClosedLoopCoronaryBC::update_constant(SparseSystem& system,
+                                           std::vector<double>& parameters) {
   auto ra = parameters[global_param_ids[ParamId::RA]];
   auto ram = parameters[global_param_ids[ParamId::RAM]];
   auto rv = parameters[global_param_ids[ParamId::RV]];
@@ -34,9 +34,9 @@ void ClosedLoopCoronaryBC::update_constant(SparseSystem &system,
 }
 
 void ClosedLoopCoronaryBC::update_solution(
-    SparseSystem &system, std::vector<double> &parameters,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    SparseSystem& system, std::vector<double>& parameters,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
   auto cim = parameters[global_param_ids[ParamId::CIM]];
   auto im = parameters[im_param_id];
   auto pim = im * y[ventricle_var_id];

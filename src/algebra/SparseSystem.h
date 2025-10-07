@@ -70,7 +70,7 @@ class SparseSystem {
    *
    * @param model The model to reserve space for in the system
    */
-  void reserve(Model *model);
+  void reserve(Model* model);
 
   /**
    * @brief Update the residual of the system
@@ -78,8 +78,8 @@ class SparseSystem {
    * @param y Vector of current solution quantities
    * @param ydot Derivate of y
    */
-  void update_residual(Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &ydot);
+  void update_residual(Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot);
 
   /**
    * @brief Update the jacobian of the system

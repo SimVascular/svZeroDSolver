@@ -148,7 +148,7 @@ class PiecewiseValve : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  PiecewiseValve(int id, Model *model)
+  PiecewiseValve(int id, Model* model)
       : Block(id, model, BlockType::piecewise_valve, BlockClass::valve,
               {{"Rmax", InputParameter()},
                {"Rmin", InputParameter()},
@@ -165,7 +165,7 @@ class PiecewiseValve : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse
@@ -174,7 +174,7 @@ class PiecewiseValve : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -185,9 +185,9 @@ class PiecewiseValve : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem &system, std::vector<double> &parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  void update_solution(SparseSystem& system, std::vector<double>& parameters,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
 
   /**
    * @brief Number of triplets of element

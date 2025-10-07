@@ -30,7 +30,7 @@
 
 #include "PiecewiseValve.h"
 
-void PiecewiseValve::setup_dofs(DOFHandler &dofhandler) {
+void PiecewiseValve::setup_dofs(DOFHandler& dofhandler) {
   // set_up_dofs args: dofhandler (passed in), num equations, list of internal
   // variable names (strings) 2 eqns, one for Pressure, one for Flow
   Block::setup_dofs_(dofhandler, 2, {});
@@ -38,8 +38,8 @@ void PiecewiseValve::setup_dofs(DOFHandler &dofhandler) {
 
 // update_constant updates matrices E and F from E(y,t)*y_dot + F(y,t)*y +
 // c(y,t) = 0 with terms that DO NOT DEPEND ON THE SOLUTION
-void PiecewiseValve::update_constant(SparseSystem &system,
-                                     std::vector<double> &parameters) {
+void PiecewiseValve::update_constant(SparseSystem& system,
+                                     std::vector<double>& parameters) {
   // Set element contributions
   // coeffRef args are the indices (i,j) of the matrix
   // global_eqn_ids: number of rows in the matrix, set in setup_dofs
@@ -58,9 +58,9 @@ void PiecewiseValve::update_constant(SparseSystem &system,
 // c(y,t) = 0 with terms that DO DEPEND ON THE SOLUTION (will change with each
 // time step)
 void PiecewiseValve::update_solution(
-    SparseSystem &system, std::vector<double> &parameters,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy) {
+    SparseSystem& system, std::vector<double>& parameters,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
   // Get states
   double p_in = y[global_var_ids[0]];
   double p_out = y[global_var_ids[2]];

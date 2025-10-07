@@ -7,8 +7,8 @@ Parameter::Parameter(int id, double value) {
   update(value);
 }
 
-Parameter::Parameter(int id, const std::vector<double> &times,
-                     const std::vector<double> &values, bool periodic) {
+Parameter::Parameter(int id, const std::vector<double>& times,
+                     const std::vector<double>& values, bool periodic) {
   this->id = id;
   this->is_periodic = periodic;
   update(times, values);
@@ -20,8 +20,8 @@ void Parameter::update(double update_value) {
   value = update_value;
 }
 
-void Parameter::update(const std::vector<double> &update_times,
-                       const std::vector<double> &update_values) {
+void Parameter::update(const std::vector<double>& update_times,
+                       const std::vector<double>& update_values) {
   this->size = update_values.size();
 
   if (size == 1) {

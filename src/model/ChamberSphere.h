@@ -131,7 +131,7 @@ class ChamberSphere : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  ChamberSphere(int id, Model* model)
+  ChamberSphere(int id, Model *model)
       : Block(id, model, BlockType::chamber_sphere, BlockClass::vessel,
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
@@ -156,7 +156,7 @@ class ChamberSphere : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler& dofhandler);
+  void setup_dofs(DOFHandler &dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse
@@ -165,7 +165,7 @@ class ChamberSphere : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem& system, std::vector<double>& parameters);
+  void update_constant(SparseSystem &system, std::vector<double> &parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -174,7 +174,7 @@ class ChamberSphere : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(SparseSystem& system, std::vector<double>& parameters);
+  void update_time(SparseSystem &system, std::vector<double> &parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -185,16 +185,16 @@ class ChamberSphere : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem& system, std::vector<double>& parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
+  void update_solution(SparseSystem &system, std::vector<double> &parameters,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
 
   /**
    * @brief Update the elastance functions which depend on time
    *
    * @param parameters Parameters of the model
    */
-  void get_elastance_values(std::vector<double>& parameters);
+  void get_elastance_values(std::vector<double> &parameters);
 
  private:
   double act = 0.0;       // activation function

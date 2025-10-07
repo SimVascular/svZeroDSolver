@@ -1,11 +1,38 @@
-// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
-// University of California, and others. SPDX-License-Identifier: BSD-3-Clause
+// Copyright (c) Stanford University, The Regents of the University of
+//               California, and others.
+//
+// All Rights Reserved.
+//
+// See Copyright-SimVascular.txt for additional details.
+//
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to
+// permit persons to whom the Software is furnished to do so, subject
+// to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+// IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+// TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+// PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER
+// OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /**
- * @file BloodVessel.h
- * @brief model::BloodVessel source file
+ * @file BloodVesselCRL.h
+ * @brief model::BloodVesselCRL source file
  */
-#ifndef SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
-#define SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
+#ifndef SVZERODSOLVER_MODEL_BLOODVESSELCRL_HPP_
+#define SVZERODSOLVER_MODEL_BLOODVESSELCRL_HPP_
 
 #include <math.h>
 
@@ -13,9 +40,9 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Resistor-capacitor-inductor blood vessel with optional stenosis
+ * @brief Capacitor-resistor-inductor blood vessel with optional stenosis
  *
- * Models the mechanical behavior of a bloodvessel with optional stenosis.
+ * Models the mechanical behavior of a bloodvesselCRL with optional stenosis.
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -25,7 +52,7 @@
  * to [R, l=$S$, -] (5,0)
  * (5,0) to [L, l=$L$, -*] (7,0)
  * node[anchor=south]{$P_{out}$}
- * (5,0) to [C, l=$C$, -] (5,-1.5)
+ * (0,0) to [C, l=$C$, -] (0,-1.5)
  * node[ground]{};
  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}
@@ -34,12 +61,11 @@
  * ### Governing equations
  *
  * \f[
- * P_\text{in}-P_\text{out} - (R + S|Q_\text{in}|) Q_\text{in}-L
+ * P_\text{in}-P_\text{out} - (R + S|Q_\text{out}|) Q_\text{out}-L
  * \dot{Q}_\text{out}=0 \f]
  *
  * \f[
- * Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}+C(R +
- * 2S|Q_\text{in}|) \dot{Q}_{in}=0 \f]
+ * Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}=0 \f]
  *
  * ### Local contributions
  *
@@ -49,7 +75,7 @@
  *
  * \f[
  * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -R & -1 &  0 \\
+ * 1 & 0 & -1 &  -R \\
  * 0 &  1 &  0 & -1
  * \end{array}\right]
  * \f]
@@ -57,15 +83,15 @@
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{cccc}
  *  0 &  0 & 0 & -L \\
- * -C & CR & 0 &  0
+ * -C & 0 & 0 &  0
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{c}^{e} = S|Q_\text{in}|
+ * \mathbf{c}^{e} = S|Q_\text{out}|
  * \left[\begin{array}{c}
- * -Q_\text{in} \\
- * 2C\dot{Q}_\text{in}
+ * -Q_\text{out} \\
+ * 0
  * \end{array}\right]
  * \f]
  *
@@ -73,17 +99,17 @@
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  *  S \text{sgn} (Q_\text{in})
  * \left[\begin{array}{cccc}
- * 0 & -2Q_\text{in}        & 0 & 0 \\
- * 0 & 2C\dot{Q}_\text{in} & 0 & 0
+ * 0 & -2Q_\text{out}        & 0 & 0 \\
+ * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- *  S|Q_\text{in}|
+ *  S|Q_\text{out}|
  * \left[\begin{array}{cccc}
  * 0 &  0 & 0 & 0 \\
- * 0 & 2C & 0 & 0
+ * 0 & 0 & 0 & 0
  * \end{array}\right]
  * \f]
  *
@@ -98,8 +124,8 @@
  *
  * \f[
  * \mathbf{J}^{e} = \left[\begin{array}{cccc}
- * -y_2 & 0 & -\dot{y}_4 & -|y_2|y_2 \\
- * C\dot{y}_2 & (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) & 0 & 2C|y_2|\dot{y}_2
+ * -y_3 & 0 & -\dot{y}_3 & -|y_3|y_3 \\
+ * 0 & 0 & -\dot{y}_0 & 0 \\
  * \end{array}\right]
  * \f]
  *
@@ -112,12 +138,8 @@
  * * `2` Inductance
  * * `3` Stenosis coefficient
  *
- * ### Internal variables
- *
- * This block has no internal variables.
- *
  */
-class BloodVessel : public Block {
+class BloodVesselCRL : public Block {
  public:
   /**
    * @brief Local IDs of the parameters
@@ -131,13 +153,13 @@ class BloodVessel : public Block {
   };
 
   /**
-   * @brief Construct a new BloodVessel object
+   * @brief Construct a new BloodVesselCRL object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  BloodVessel(int id, Model *model)
-      : Block(id, model, BlockType::blood_vessel, BlockClass::vessel,
+  BloodVesselCRL(int id, Model *model)
+      : Block(id, model, BlockType::blood_vessel_CRL, BlockClass::vessel,
               {{"R_poiseuille", InputParameter()},
                {"C", InputParameter(true)},
                {"L", InputParameter(true)},
@@ -201,4 +223,4 @@ class BloodVessel : public Block {
   TripletsContributions num_triplets{5, 3, 2};
 };
 
-#endif  // SVZERODSOLVER_MODEL_BLOODVESSEL_HPP_
+#endif  // SVZERODSOLVER_MODEL_BLOODVESSELCRL_HPP_

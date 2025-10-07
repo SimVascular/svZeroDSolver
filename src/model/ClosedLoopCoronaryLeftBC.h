@@ -21,7 +21,7 @@ class ClosedLoopCoronaryLeftBC : public ClosedLoopCoronaryBC {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  ClosedLoopCoronaryLeftBC(int id, Model* model)
+  ClosedLoopCoronaryLeftBC(int id, Model *model)
       : ClosedLoopCoronaryBC(id, model,
                              BlockType::closed_loop_coronary_left_bc) {}
 

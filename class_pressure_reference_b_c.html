@@ -242,7 +242,24 @@ node[ground]{$\hat{P}$};
 <ul>
 <li><code>0</code> Pressure</li>
 </ul>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"boundary_conditions": [
+    {
+        "bc_name": "OUT",
+        "bc_type": "PRESSURE",
+        "bc_values": {
+            "P": [
+                1000.0,
+                1000.0
+            ],
+            "t": [
+                0.0,
+                1.0
+            ]
+        }
+    }
+]
+</pre><h3>Internal variables</h3>
 <p>This block has no internal variables. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac9804e951e57d7a7e87bb9c928650c2a" name="ac9804e951e57d7a7e87bb9c928650c2a"></a>

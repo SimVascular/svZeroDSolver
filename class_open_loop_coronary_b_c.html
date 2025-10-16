@@ -281,7 +281,30 @@ m} C_{i m} P_{v}\end{array}\right] \]" src="form_102.png" width="549" height="47
 <li><code>5</code> Pim: Intramyocardial pressure</li>
 <li><code>6</code> Pv: Venous pressure</li>
 </ul>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"boundary_conditions": [
+    {
+        "bc_name": "OUT",
+        "bc_type": "CORONARY",
+        "bc_values": {
+            "Ca": 0.0001,
+            "Cc": 0.0001,
+            "Pim": [
+                1000.0,
+                1000.0
+            ],
+            "P_v": 0.0,
+            "Ra1": 100.0,
+            "Ra2": 100.0,
+            "Rv1": 100.0,
+            "t": [
+                0.0,
+                1.0
+            ]
+        }
+    }
+]
+</pre><h3>Internal variables</h3>
 <p>Names of internal variables in this block's output:</p>
 <ul>
 <li><code>volume_im</code>: Intramyocardial volume </li>

@@ -268,7 +268,21 @@ Static Public Attributes</h2></td></tr>
 \underbrace{1}_{P_i} &amp; \dots &amp; \underbrace{1}_{P_j} &amp; \dots\end{array}\right]
 \quad \mathrm{with} \quad i \neq j \]" src="form_95.png" width="448" height="47"/></picture>
 </p>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"junctions": [
+    {
+        "inlet_vessels": [
+            0
+        ],
+        "junction_name": "J0",
+        "junction_type": "NORMAL_JUNCTION",
+        "outlet_vessels": [
+            1,
+            2
+        ]
+    }
+]
+</pre><h3>Internal variables</h3>
 <p>This block has no internal variables. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="abe3444b8a5e9a2f6d07059e4837b8fc0" name="abe3444b8a5e9a2f6d07059e4837b8fc0"></a>

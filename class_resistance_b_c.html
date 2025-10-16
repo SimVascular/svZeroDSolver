@@ -242,7 +242,18 @@ node[anchor=south]{$P_{d}$};
 <li><code>0</code> Resistance</li>
 <li><code>1</code> Distal pressure</li>
 </ul>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"boundary_conditions": [
+    {
+        "bc_name": "OUT",
+        "bc_type": "RESISTANCE",
+        "bc_values": {
+            "R": 100.0,
+            "Pd": 1000.0
+        }
+    }
+]
+</pre><h3>Internal variables</h3>
 <p>This block has no internal variables. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a30d3b325f9a07f7751c866febaa177f8" name="a30d3b325f9a07f7751c866febaa177f8"></a>

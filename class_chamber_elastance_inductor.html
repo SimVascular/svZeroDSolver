@@ -128,7 +128,7 @@ Public Types</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a89e1bda39756e55d9e038a6864543ac6" id="r_a89e1bda39756e55d9e038a6864543ac6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89e1bda39756e55d9e038a6864543ac6">ChamberElastanceInductor</a> (int <a class="el" href="class_block.html#a5d18d0d232066b097a4d2f181ad5efe2">id</a>, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>)</td></tr>
-<tr class="memdesc:a89e1bda39756e55d9e038a6864543ac6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a> object.  <br /></td></tr>
+<tr class="memdesc:a89e1bda39756e55d9e038a6864543ac6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_chamber_elastance_inductor.html" title="Cardiac chamber with elastance and inductor.">ChamberElastanceInductor</a> object.  <br /></td></tr>
 <tr class="separator:a89e1bda39756e55d9e038a6864543ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a099329d4c4e8860fb43704c126aa122e" id="r_a099329d4c4e8860fb43704c126aa122e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a099329d4c4e8860fb43704c126aa122e">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:a099329d4c4e8860fb43704c126aa122e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
@@ -313,7 +313,26 @@ E(t)V_{rest} \\
 <li><code>5</code> t_twitch: Twitch time</li>
 <li><code>6</code> Impedance: Impedance of the outflow</li>
 </ul>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"chambers": [
+    {
+        "type": "ChamberElastanceInductor",
+        "name": "ventricle",
+        "values": {
+            "Emax": 1.057,
+            "Emin": 0.091,
+            "Vrd": 26.1,
+            "Vrs": 18.0,
+            "t_active": 0.2,
+            "t_twitch": 0.3,
+            "Impedance": 0.000351787
+        }
+    }
+],
+"initial_condition": {
+    "Vc:ventricle": 96.07
+}
+</pre><h3>Internal variables</h3>
 <p>Names of internal variables in this block's output:</p>
 <ul>
 <li><code>Vc</code>: Chamber volume </li>
@@ -363,7 +382,7 @@ E(t)V_{rest} \\
 </table>
 </div><div class="memdoc">
 
-<p>Construct a new <a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a> object. </p>
+<p>Construct a new <a class="el" href="class_chamber_elastance_inductor.html" title="Cardiac chamber with elastance and inductor.">ChamberElastanceInductor</a> object. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">id</td><td>Global ID of the block </td></tr>

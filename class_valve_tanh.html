@@ -305,7 +305,21 @@ A &amp; B &amp; C &amp; 0 \\
 <li><code>3</code> upstream_block: Name of block connected upstream</li>
 <li><code>4</code> downstream_block: Name of block connected downstream</li>
 </ul>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"valves": [
+    {
+        "type": "ValveTanh",
+        "name": "valve",
+        "params": {
+            "Rmax": 100000.0,
+            "Rmin": 100.0,
+            "Steepness": 100.0,
+            "upstream_block": "upstream_vessel",
+            "downstream_block": "downstream_vessel"
+        }
+    }
+]
+</pre><h3>Internal variables</h3>
 <p>This block has no internal variables. </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="aed587a7809bf2e7f74cc5fa0100c1be1" name="aed587a7809bf2e7f74cc5fa0100c1be1"></a>

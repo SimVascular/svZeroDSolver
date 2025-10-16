@@ -235,7 +235,21 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Right side of closed loop coronary boundary condition <a class="el" href="class_closed_loop_coronary_b_c.html" title="Closed loop coronary boundary condition which is connected to other blocks on both sides and the intr...">ClosedLoopCoronaryBC</a>. </p>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"boundary_conditions": [
+    {
+        "bc_name": "RCA",
+        "bc_type": "ClosedLoopCoronaryRight",
+        "bc_values": {
+            "Ra": 5.757416349,
+            "Ram": 9.355801566,
+            "Rv": 20.580381989,
+            "Cim": 0.003463134,
+            "Ca": 0.001055957
+        }
+    }
+]
+</pre> </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a0914913747281b82aa963553c7bde55e" name="a0914913747281b82aa963553c7bde55e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0914913747281b82aa963553c7bde55e">&#9670;&#160;</a></span>ClosedLoopCoronaryRightBC()</h2>
 

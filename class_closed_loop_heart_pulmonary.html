@@ -305,7 +305,53 @@ Public Attributes</h2></td></tr>
 <li><code>25</code> Right atrium resting volume</li>
 <li><code>26</code> Left atrium resting volume</li>
 </ul>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"closed_loop_blocks": [
+     {
+         "outlet_blocks": [
+             "branch0_seg0"
+         ],
+         "closed_loop_type": "ClosedLoopHeartAndPulmonary",
+         "cardiac_cycle_period": 1.0169,
+         "parameters": {
+             "Tsa": 0.40742,
+             "tpwave": 8.976868,
+             "Erv_s": 2.125279,
+             "Elv_s": 3.125202,
+             "iml": 0.509365,
+             "imr": 0.806369,
+             "Lrv_a": 0.000186865,
+             "Rrv_a": 0.035061704,
+             "Lra_v": 0.000217032,
+             "Rra_v": 0.007887459,
+             "Lla_v": 0.000351787,
+             "Rla_v": 0.005310825,
+             "Rlv_ao": 0.034320234,
+             "Llv_a": 0.000110776,
+             "Vrv_u": 9.424629,
+             "Vlv_u": 5.606007,
+             "Rpd": 0.098865401,
+             "Cp": 1.090989,
+             "Cpa": 0.556854,
+             "Kxp_ra": 9.22244,
+             "Kxv_ra": 0.004837,
+             "Emax_ra": 0.208858,
+             "Vaso_ra": 4.848742,
+             "Kxp_la": 9.194992,
+             "Kxv_la": 0.008067,
+             "Emax_la": 0.303119,
+             "Vaso_la": 9.355754
+         }
+     }
+],
+"initial_condition": {
+    "V_RA:CLH": 38.43,
+    "V_RV:CLH": 96.07,
+    "V_LA:CLH": 38.43,
+    "V_LV:CLH": 96.07,
+    "P_pul:CLH": 8.0
+}
+</pre><h3>Internal variables</h3>
 <p>Names of internal variables in this block's output:</p>
 <ul>
 <li><code>V_RA</code>: Right atrium volume</li>

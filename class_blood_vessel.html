@@ -313,7 +313,22 @@ C\dot{y}_2 &amp; (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) &amp; 0 &amp; 2C|y_2|
 <li><code>2</code> Inductance</li>
 <li><code>3</code> Stenosis coefficient</li>
 </ul>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"vessels": [
+   {
+       "vessel_id": 0,
+       "vessel_length": 10.0,
+       "vessel_name": "branch0_seg0",
+       "zero_d_element_type": "BloodVessel",
+       "zero_d_element_values": {
+           "R_poiseuille": 100.0,
+           "C": 1.0e-5,
+           "L": 1.0e-6,
+           "stenosis_coefficient": 0.0
+       }
+   }
+]
+</pre><h3>Internal variables</h3>
 <p>This block has no internal variables. </p>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a4eef5ad2e6905e259a1ac3d84b69199d" name="a4eef5ad2e6905e259a1ac3d84b69199d"></a>

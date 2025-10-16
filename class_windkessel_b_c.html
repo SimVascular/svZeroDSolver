@@ -267,7 +267,20 @@ P_{r e f} \\
 <li><code>2</code> Distal resistance</li>
 <li><code>3</code> Distal pressure</li>
 </ul>
-<h3>Internal variables</h3>
+<h3>Usage in json configuration file</h3>
+<pre class="fragment">"boundary_conditions": [
+    {
+        "bc_name": "OUT",
+        "bc_type": "RCR",
+        "bc_values": {
+            "C": 0.0001,
+            "Pd": 0.0,
+            "Rd": 1000.0,
+            "Rp": 1000.0
+        }
+    }
+]
+</pre><h3>Internal variables</h3>
 <p>Names of internal variables in this block's output:</p>
 <ul>
 <li><code>pressure_c</code>: Pressure at the capacitor </li>

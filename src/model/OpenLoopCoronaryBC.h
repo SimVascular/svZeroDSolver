@@ -80,6 +80,31 @@
  * * `5` Pim: Intramyocardial pressure
  * * `6` Pv: Venous pressure
  *
+ * ### Usage in json configuration file
+ *
+ *     "boundary_conditions": [
+ *         {
+ *             "bc_name": "OUT",
+ *             "bc_type": "CORONARY",
+ *             "bc_values": {
+ *                 "Ca": 0.0001,
+ *                 "Cc": 0.0001,
+ *                 "Pim": [
+ *                     1000.0,
+ *                     1000.0
+ *                 ],
+ *                 "P_v": 0.0,
+ *                 "Ra1": 100.0,
+ *                 "Ra2": 100.0,
+ *                 "Rv1": 100.0,
+ *                 "t": [
+ *                     0.0,
+ *                     1.0
+ *                 ]
+ *             }
+ *         }
+ *     ]
+ *
  * ### Internal variables
  *
  * Names of internal variables in this block's output:

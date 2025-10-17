@@ -74,7 +74,7 @@ Steps required to visualize a new block with svZeroDSolver Visualization applica
 
 We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
 
-## Formatting
+## Formatting {#formatting}
 
 We use [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to automatically 
 format our code accoring to the [Google Style](https://google.github.io/styleguide/cppguide.html), 
@@ -117,7 +117,7 @@ requirements.
 
 On Sherlock at Stanford, clang-format is included in the `llvm` module.
 
-# Documentation
+# Documentation {#documentation}
 
 We use [Doxygen](https://doxygen.nl) to automatically build an html documentation
 from source code. Please have at Doxygen's [Documentation Guide](https://www.doxygen.nl/manual/docblocks.html)

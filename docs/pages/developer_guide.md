@@ -48,15 +48,18 @@ This is useful when continuously running the integration tests during developmen
 * Once the changes are implemented, the developer should make sure the build, documentation, and code format tests are passing on the user's feature branch. 
 
 # Testing code changes
-* Tests are automatically run as Github workflows when pushing changes to the developer's remote branch on Github.
+* Tests are automatically run as Github workflows when pushing changes to the developer's remote branch on Github. These tests are defined in the `.github/workflows` directory.
 * It may be helpful and more efficient to run the build tests locally with each incremental change the developer makes. This can be done by following these steps:
   1. If you do not have `pytest` installed in your virtual environment, install it with `pip install pytest`
   2. We first need to build the svZeroDSolver project. This can be done by running `pip install -e .` from the svZeroDSolver directory
-  3. from the main svZeroDSolver directory, `cd tests`.
+  3. From the main svZeroDSolver directory, `cd tests`.
   4. Now that you are in the `tests` directory, run `pytest`. The terminal output will show which tests are passing.
+    * To run a specific subset of tests matching a certain pattern, e.g., only the calibrator, you can use `pytest -k calibrator`. 
+    * To see all simulation output, run `pytest -sv`.
+    * If you want to run the tests using the binaries in the `Release` directory instead of the python module, you can call `pytest --coverage`
 * The tests for the C++ interface require the `CMake` install and can be run by building the tests in `svZeroDSolver/tests/test_interface`.
-* Code formatting can be performed following the instructions in the Formatting section below. 
-* The documentation can be built following the instructions in the Documentation section below. 
+* Code formatting can be performed following the instructions in the [Formatting](#formatting) section. 
+* The documentation can be built following the instructions in the [Documentation](#documentation) section. 
 * Once all the tests are passing, the developer should open a pull request from the feature branch and link the relevant issue.
 
 # Adding new blocks
@@ -83,7 +86,9 @@ There are tools for your favorite IDE to automatically format your code. Example
 - [vim](https://github.com/rhysd/vim-clang-format)
 - [and many more](https://clang.llvm.org/docs/ClangFormat.html)
 
-Before formatting the code with clang-format, ensure that you have latest clang-format version by running `clang-format --version`
+Before formatting the code with clang-format, ensure that you have latest clang-format version by running `clang-format --version`. To upgrade `clang-format` use the following commands
+  * on MacOS: `brew upgrade clang-format`
+  * on Ubuntu: `sudo apt upgrade clang-format`
 
 Before committing any changes, run the following
 command **from your build folder** to format all your files:

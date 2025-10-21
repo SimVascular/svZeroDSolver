@@ -40,7 +40,7 @@ Solver::Solver(const nlohmann::json& config) {
   sanity_checks();
 }
 
-void Solver::run() {
+void Solver::setup_initial() {
   auto state = initial_state;
 
   // Create steady initial condition
@@ -63,14 +63,18 @@ void Solver::run() {
   // Use the initial condition (steady or user-provided) to set up parameters
   // which depend on the initial condition
   this->model->setup_initial_state_dependent_parameters(state);
+  DEBUG_MSG("Setup initial");
+}
 
+
+void Solver::setup_integrator() {
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
   Integrator integrator(this->model.get(), simparams.sim_time_step_size,
                         simparams.sim_rho_infty, simparams.sim_abs_tol,
                         simparams.sim_nliter);
 
-  // Initialize loop
+  // Initialize loop 
   states = std::vector<State>();
   times = std::vector<double>();
 
@@ -87,112 +91,139 @@ void Solver::run() {
     times.reserve(num_states);
   }
   double time = 0.0;
+}
 
+
+void Solver::run_integration() {
   // Run integrator
   DEBUG_MSG("Run time integration");
   int interval_counter = 0;
+  DEBUG_MSG("Set interval counter to 0");
   int start_last_cycle =
       simparams.sim_num_time_steps - simparams.sim_pts_per_cycle;
+  DEBUG_MSG("Set start_last_cycle to " << start_last_cycle);
 
   if (simparams.output_all_cycles || (0 >= start_last_cycle)) {
     times.push_back(time);
     states.push_back(std::move(state));
+    DEBUG_MSG("Added initial state and time");
   }
 
   int num_time_pts_in_two_cycles;
   std::vector<State> states_last_two_cycles;
   int last_two_cycles_time_pt_counter = 0;
+  DEBUG_MSG("Initialized tracking variables");
+
   if (simparams.use_cycle_to_cycle_error) {
     num_time_pts_in_two_cycles = 2 * (simparams.sim_pts_per_cycle - 1) + 1;
     states_last_two_cycles =
         std::vector<State>(num_time_pts_in_two_cycles, state);
+    DEBUG_MSG("Initialized cycle to cycle error tracking with " << num_time_pts_in_two_cycles << " points");
   }
+
   for (int i = 1; i < simparams.sim_num_time_steps; i++) {
+    DEBUG_MSG("Starting timestep " << i);
+    
     if (simparams.use_cycle_to_cycle_error) {
       if (i == simparams.sim_num_time_steps - num_time_pts_in_two_cycles + 1) {
-        // add first state
         states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
-        last_two_cycles_time_pt_counter +=
-            1;  // last_two_cycles_time_pt_counter becomes 1
+        last_two_cycles_time_pt_counter += 1;
+        DEBUG_MSG("Started collecting states for last two cycles");
       }
     }
+
     state = integrator.step(state, time);
+    DEBUG_MSG("Completed integration step at time " << time);
+
     if (simparams.use_cycle_to_cycle_error &&
         last_two_cycles_time_pt_counter > 0) {
       states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
       last_two_cycles_time_pt_counter += 1;
+      DEBUG_MSG("Stored state for cycle to cycle error at index " << last_two_cycles_time_pt_counter-1);
     }
+
     interval_counter += 1;
     time = simparams.sim_time_step_size * double(i);
+    DEBUG_MSG("Updated time to " << time);
 
     if ((interval_counter == simparams.output_interval) ||
         (!simparams.output_all_cycles && (i == start_last_cycle))) {
       if (simparams.output_all_cycles || (i >= start_last_cycle)) {
         times.push_back(time);
         states.push_back(std::move(state));
+        DEBUG_MSG("Stored output state at time " << time);
       }
       interval_counter = 0;
+      DEBUG_MSG("Reset interval counter");
     }
   }
 
   if (simparams.use_cycle_to_cycle_error) {
     std::vector<std::pair<int, int>> vessel_caps_dof_indices =
         get_vessel_caps_dof_indices();
+    DEBUG_MSG("Got vessel caps DOF indices");
 
     if (!(this->model->get_has_windkessel_bc())) {
+      DEBUG_MSG("No Windkessel BC detected");
       assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles);
       double converged = check_vessel_cap_convergence(states_last_two_cycles,
                                                       vessel_caps_dof_indices);
+      DEBUG_MSG("Initial convergence check result: " << converged);                                                    
       int extra_num_cycles = 0;
 
       while (!converged) {
+        DEBUG_MSG("Starting additional convergence cycle");
         std::rotate(
             states_last_two_cycles.begin(),
             states_last_two_cycles.begin() + simparams.sim_pts_per_cycle - 1,
             states_last_two_cycles.end());
+        DEBUG_MSG("Rotated states array");    
+        
         last_two_cycles_time_pt_counter = simparams.sim_pts_per_cycle;
         for (size_t i = 1; i < simparams.sim_pts_per_cycle; i++) {
           state = integrator.step(state, time);
+          DEBUG_MSG("Completed extra integration step at time " << time);
+          
           states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
           last_two_cycles_time_pt_counter += 1;
           interval_counter += 1;
           time = simparams.sim_time_step_size * double(i);
+          DEBUG_MSG("Updated time to " << time);
 
           if ((interval_counter == simparams.output_interval) ||
               (!simparams.output_all_cycles && (i == start_last_cycle))) {
             if (simparams.output_all_cycles || (i >= start_last_cycle)) {
               times.push_back(time);
               states.push_back(std::move(state));
+              DEBUG_MSG("Stored extra output state");
             }
             interval_counter = 0;
           }
         }
         extra_num_cycles++;
+        DEBUG_MSG("Completed extra cycle " << extra_num_cycles);
+        
         converged = check_vessel_cap_convergence(states_last_two_cycles,
                                                  vessel_caps_dof_indices);
+        DEBUG_MSG("New convergence check result: " << converged);
+        
         assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles);
       }
       std::cout << "Ran simulation for " << extra_num_cycles
                 << " more cycles to converge flow and pressures at caps"
                 << std::endl;
     } else {
+      DEBUG_MSG("Windkessel BC detected - checking final errors");
       for (const std::pair<int, int>& dof_indices : vessel_caps_dof_indices) {
         std::pair<double, double> cycle_to_cycle_errors_in_flow_and_pressure =
             get_cycle_to_cycle_errors_in_flow_and_pressure(
                 states_last_two_cycles, dof_indices);
+        DEBUG_MSG("Calculated cycle to cycle errors");
+        
         double cycle_to_cycle_error_flow =
             cycle_to_cycle_errors_in_flow_and_pressure.first;
         double cycle_to_cycle_error_pressure =
             cycle_to_cycle_errors_in_flow_and_pressure.second;
-        std::cout << "Percent error between last two simulated cardiac cycles "
-                     "for dof index "
-                  << dof_indices.first
-                  << " (mean flow)    : " << cycle_to_cycle_error_flow * 100.0
-                  << std::endl;
-        std::cout << "Percent error between last two simulated cardiac cycles "
-                     "for dof index "
-                  << dof_indices.second << " (mean pressure): "
-                  << cycle_to_cycle_error_pressure * 100.0 << std::endl;
       }
     }
   }
@@ -207,6 +238,7 @@ void Solver::run() {
       time -= start_time;
     }
   }
+  DEBUG_MSG("Ran time integration");
 }
 
 std::vector<std::pair<int, int>> Solver::get_vessel_caps_dof_indices() {

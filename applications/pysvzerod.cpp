@@ -27,7 +27,9 @@ PYBIND11_MODULE(pysvzerod, m) {
         const auto& config_json = nlohmann::json::parse(ifs);
         return Solver(config_json);
       }))
-      .def("run", &Solver::run)
+      .def("setup_initial", &Solver::setup_initial)
+      .def("setup_integrator", &Solver::setup_integrator)
+      .def("run_integration", &Solver::run_integration)
       .def("get_times", &Solver::get_times)
       .def("get_single_result", &Solver::get_single_result)
       .def("get_single_result_avg", &Solver::get_single_result_avg)
@@ -45,7 +47,9 @@ PYBIND11_MODULE(pysvzerod, m) {
     py::module_ io = py::module_::import("io");
     const nlohmann::json& config_json = config;
     auto solver = Solver(config_json);
-    solver.run();
+    solver.setup_initial();
+    solver.setup_integrator();
+    solver.run_integration();
     return pd.attr("read_csv")(io.attr("StringIO")(solver.get_full_result()));
   });
   m.def("simulate", [](std::string config_file) {
@@ -54,7 +58,9 @@ PYBIND11_MODULE(pysvzerod, m) {
     std::ifstream ifs(config_file);
     const auto& config_json = nlohmann::json::parse(ifs);
     auto solver = Solver(config_json);
-    solver.run();
+    solver.setup_initial();
+    solver.setup_integrator();
+    solver.run_integration();
     return pd.attr("read_csv")(io.attr("StringIO")(solver.get_full_result()));
   });
   m.def("calibrate", [](py::dict& config) {
@@ -73,7 +79,9 @@ PYBIND11_MODULE(pysvzerod, m) {
     std::ifstream ifs(argv[1]);
     const auto& config = nlohmann::json::parse(ifs);
     auto solver = Solver(config);
-    solver.run();
+    solver.setup_initial();
+    solver.setup_integrator();
+    solver.run_integration();
     solver.write_result_to_csv(argv[2]);
   });
   m.def("run_calibration_cli", []() {

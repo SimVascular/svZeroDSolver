@@ -31,11 +31,28 @@ class Solver {
    */
   Solver(const nlohmann::json& config);
 
+//   /**
+//    * @brief Run the simulation
+//    *
+//    */
+//   void run();
+
   /**
-   * @brief Run the simulation
+  * @brief Set up and initialize the simulation parameters and model
+  */
+  void setup_initial();
+
+  /**
+   * @brief Set up integrator
    *
    */
-  void run();
+  void setup_integrator();
+
+  /**
+   * @brief Run the integration
+   *
+   */
+   void run_integration();
 
   /**
    * @brief Get the full result as a csv encoded string
@@ -98,6 +115,11 @@ class Solver {
   std::vector<State> states;
   std::vector<double> times;
   State initial_state;
+
+  // Time integration variables added as class variables
+  Integrator integrator;
+  double time;
+  State state;
 
   void sanity_checks();
 

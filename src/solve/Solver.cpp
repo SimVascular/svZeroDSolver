@@ -57,7 +57,7 @@ Solver::Solver(const nlohmann::json& config) {
 }
 
 void Solver::setup_initial() {
-  auto state = initial_state;
+  state = initial_state;
 
   // Create steady initial condition
   if (simparams.sim_steady_initial) {
@@ -86,7 +86,7 @@ void Solver::setup_initial() {
 void Solver::setup_integrator() {
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  Integrator integrator(this->model.get(), simparams.sim_time_step_size,
+  integrator = Integrator(this->model.get(), simparams.sim_time_step_size,
                         simparams.sim_rho_infty, simparams.sim_abs_tol,
                         simparams.sim_nliter);
 
@@ -106,7 +106,7 @@ void Solver::setup_integrator() {
     states.reserve(num_states);
     times.reserve(num_states);
   }
-  double time = 0.0;
+  time = 0.0;
 }
 
 

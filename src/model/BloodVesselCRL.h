@@ -52,7 +52,7 @@
  * to [R, l=$S$, -] (5,0)
  * (5,0) to [L, l=$L$, -*] (7,0)
  * node[anchor=south]{$P_{out}$}
- * (0,0) to [C, l=$C$, -] (0,-1.5)
+ * (1,0) to [C, l=$C$, -] (1,-1.5)
  * node[ground]{};
  * \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
  * \end{circuitikz}

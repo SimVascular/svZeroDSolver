@@ -85,9 +85,7 @@ int main(int argc, char* argv[]) {
   }
 
   auto solver = Solver(config);
-  solver.setup_initial();
-  solver.setup_integrator();
-  solver.run_integration();
+  solver.run();
   solver.write_result_to_csv(output_file_name);
 
   return 0;

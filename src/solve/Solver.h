@@ -55,6 +55,11 @@ class Solver {
    void run_integration();
 
   /**
+   * @brief Run the simulation
+   */
+  void run();
+
+  /**
    * @brief Get the full result as a csv encoded string
    *
    * @return std::string Result

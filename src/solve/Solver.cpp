@@ -257,6 +257,14 @@ void Solver::run_integration() {
   DEBUG_MSG("Ran time integration");
 }
 
+
+void Solver::run() {
+  setup_initial();
+  setup_integrator();
+  run_integration();
+}
+
+
 std::vector<std::pair<int, int>> Solver::get_vessel_caps_dof_indices() {
   std::vector<std::pair<int, int>> vessel_caps_dof_indices;
 

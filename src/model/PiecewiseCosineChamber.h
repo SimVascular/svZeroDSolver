@@ -51,14 +51,14 @@
  * This chamber block can be connected to other blocks using junctions.
  *
  * \f[
- * \begin{circuitikz} \draw
- * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0)
- * (1,0) node[anchor=south]{$P_{in}$}
- * to (3,0)
- * node[anchor=south]{$P_{out}$}
+ * \begin{circuitikz}
+ * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
+ * \draw (1,0) node[anchor=south]{$P_{in}$}
+ * to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}
+ * (3,0) to[short, *-*] (4,0) node[anchor=south]{$P_{out}$};
  * (1,0) to [vC, l=$E$, *-] (1,-1.5)
- * node[ground]{}
- * (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} ;
+ * node[ground]{};
+ * \draw (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} [-latex];
  * \end{circuitikz}
  * \f]
  *

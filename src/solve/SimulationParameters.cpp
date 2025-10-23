@@ -392,9 +392,7 @@ void create_external_coupling(
                                                  "CORONARY",
                                                  "ClosedLoopCoronaryLeft",
                                                  "ClosedLoopCoronaryRight",
-                                                 "BloodVessel",
-                                                 "BloodVesselA",
-                                                 "BloodVesselCRL"};
+                                                 "BloodVessel"};
       if (std::find(std::begin(possible_types), std::end(possible_types),
                     connected_type) == std::end(possible_types)) {
         throw std::runtime_error(

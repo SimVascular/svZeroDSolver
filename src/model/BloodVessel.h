@@ -112,6 +112,23 @@
  * * `2` Inductance
  * * `3` Stenosis coefficient
  *
+ * ### Usage in json configuration file
+ *
+ *     "vessels": [
+ *        {
+ *            "vessel_id": 0,
+ *            "vessel_length": 10.0,
+ *            "vessel_name": "branch0_seg0",
+ *            "zero_d_element_type": "BloodVessel",
+ *            "zero_d_element_values": {
+ *                "R_poiseuille": 100.0,
+ *                "C": 1.0e-5,
+ *                "L": 1.0e-6,
+ *                "stenosis_coefficient": 0.0
+ *            }
+ *        }
+ *     ]
+ *
  * ### Internal variables
  *
  * This block has no internal variables.
@@ -136,7 +153,7 @@ class BloodVessel : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  BloodVessel(int id, Model *model)
+  BloodVessel(int id, Model* model)
       : Block(id, model, BlockType::blood_vessel, BlockClass::vessel,
               {{"R_poiseuille", InputParameter()},
                {"C", InputParameter(true)},
@@ -153,7 +170,7 @@ class BloodVessel : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse
@@ -162,7 +179,7 @@ class BloodVessel : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -173,9 +190,9 @@ class BloodVessel : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem &system, std::vector<double> &parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  void update_solution(SparseSystem& system, std::vector<double>& parameters,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -187,10 +204,10 @@ class BloodVessel : public Block {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  void update_gradient(Eigen::SparseMatrix<double> &jacobian,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha,
-                       std::vector<double> &y, std::vector<double> &dy);
+  void update_gradient(Eigen::SparseMatrix<double>& jacobian,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
+                       Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
+                       std::vector<double>& y, std::vector<double>& dy);
 
   /**
    * @brief Number of triplets of element

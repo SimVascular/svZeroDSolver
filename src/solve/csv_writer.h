@@ -14,13 +14,13 @@
 #include "Model.h"
 #include "State.h"
 
-std::string to_variable_csv(const std::vector<double> &times,
-                            const std::vector<State> &states,
-                            const Model &model, bool mean = false,
+std::string to_variable_csv(const std::vector<double>& times,
+                            const std::vector<State>& states,
+                            const Model& model, bool mean = false,
                             bool derivative = false);
 
-std::string to_vessel_csv(const std::vector<double> &times,
-                          const std::vector<State> &states, const Model &model,
+std::string to_vessel_csv(const std::vector<double>& times,
+                          const std::vector<State>& states, const Model& model,
                           bool mean = false, bool derivative = false);
 
 #endif  // SVZERODSOLVER_IO_CSVWRITER_HPP_

@@ -12,7 +12,7 @@ State::State(int n) {
 
 State::~State() {}
 
-State::State(const State &state) {
+State::State(const State& state) {
   y = state.y;
   ydot = state.ydot;
 }

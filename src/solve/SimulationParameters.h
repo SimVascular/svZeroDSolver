@@ -19,15 +19,29 @@
 /**
  * @brief Simulation parameters
  *
+ * Each of these can be set from the .json configuration file as part of the
+ * dict which is keyed by "simulation_parameters".
+ *
+ * For example:
+ *
+ *      "simulation_parameters": {
+ *         "number_of_cardiac_cycles": 30,
+ *         "number_of_time_pts_per_cardiac_cycle": 201,
+ *         "output_all_cycles": true
+ *      }
+ *
+ * each parameter in the documentation may be specified using the attribute name
+ * and a value which takes the type of the attribute.
+ *
  */
 struct SimulationParameters {
   // Negative value indicates this has not
   // been read from config file yet.
-  double sim_time_step_size{0.0};  ///< Simulation time step size
-  double sim_abs_tol{0.0};         ///< Absolute tolerance for simulation
-
-  int sim_num_cycles{0};     ///< Number of cardiac cycles to simulate
-  int sim_pts_per_cycle{0};  ///< Number of time steps per cardiac cycle
+  double sim_time_step_size{0.0};   ///< Simulation time step size
+  double sim_abs_tol{0.0};          ///< Absolute tolerance for simulation
+  double sim_cardiac_period{-1.0};  ///< Cardiac period
+  int sim_num_cycles{0};            ///< Number of cardiac cycles to simulate
+  int sim_pts_per_cycle{0};         ///< Number of time steps per cardiac cycle
   bool use_cycle_to_cycle_error{
       false};  ///< If model does not have RCR boundary conditions, simulate
                ///< model to convergence (based on cycle-to-cycle error of last

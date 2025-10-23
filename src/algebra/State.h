@@ -46,7 +46,7 @@ class State {
    *
    * @param state
    */
-  State(const State &state);
+  State(const State& state);
 
   /**
    * @brief Construct a new State object and initilaize with all zeros.

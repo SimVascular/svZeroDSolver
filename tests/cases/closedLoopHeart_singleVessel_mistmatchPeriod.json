@@ -1,0 +1,99 @@
+{
+    "description": {
+            "description of test case" : "Closed-loop circulation with one vessel (aorta) connected on either side to the heart model."
+    },
+    "simulation_parameters": {
+        "number_of_cardiac_cycles": 1,
+        "number_of_time_pts_per_cardiac_cycle": 10000,
+        "steady_initial": false,
+        "cardiac_period": 0.67
+    },
+    "boundary_conditions": [
+        {
+            "bc_name": "RCR_aorta",
+            "bc_type": "ClosedLoopRCR",
+            "bc_values": {
+                "_comment_": "R_total = 1.570879*0.948914 = 1.490629075",
+                "_comment_": "Rp = 0.09*R_total",
+                "_comment_": "Rd = 0.91*R_total",
+                "Rp": 0.134156617,
+                "Rd": 1.356472458,
+                "_comment_": "C = 0.228215*1.044637",
+                "C": 0.238401833,
+                "closed_loop_outlet": true
+            }
+        }
+    ],
+    "vessels": [
+        {
+            "_comment_": "aorta",
+            "vessel_name": "branch0_seg0",
+            "boundary_conditions": {
+                "outlet": "RCR_aorta"
+            },
+            "vessel_id": 0,
+            "vessel_length": 10.0,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "_comment_": "R = 4.464119/1333.34",
+                "R_poiseuille": 0.003348073,
+                "_comment_": "L = 5.25/1333.34",
+                "L": 0.004
+            }
+        }
+    ],
+    "closed_loop_blocks": [
+        {
+            "outlet_blocks": [
+                "branch0_seg0"
+            ],
+            "closed_loop_type": "ClosedLoopHeartAndPulmonary",
+            "cardiac_cycle_period": 1.0169, 
+            "parameters": {
+                "Tsa": 0.407420,
+                "tpwave": 8.976868,
+                "Erv_s": 2.125279,
+                "Elv_s": 3.125202,
+                "iml": 0.509365,
+                "imr": 0.806369,
+                "_comment_": "Lrv_a = 0.249155/pConv",
+                "Lrv_a": 0.000186865,
+                "_comment_": "Rrv_a = 0.993637 * this->Rrv_base /pConv",
+                "Rrv_a": 0.035061704,
+                "_comment_": "Lra_v = 0.289378/pConv",
+                "Lra_v": 0.000217032,
+                "_comment_": "Rra_v = 10.516664/pConv",
+                "Rra_v": 0.007887459,
+                "_comment_": "Lla_v = 0.469052/pConv",
+                "Lla_v": 0.000351787,
+                "_comment_": "Rla_v = 7.081136/pConv",
+                "Rla_v": 0.005310825,
+                "_comment_": "Rlv_ao = 0.972624 * this->Rlv_base /pConv",
+                "Rlv_ao": 0.034320234,
+                "_comment_": "Llv_a = 0.147702/pConv",
+                "Llv_a": 0.000110776,
+                "Vrv_u": 9.424629,
+                "Vlv_u": 5.606007,
+                "_comment_": "Rpd = 1.120725 * this->Rpd_base /pConv",
+                "Rpd": 0.098865401,
+                "Cp": 1.090989,
+                "Cpa": 0.556854,
+                "Kxp_ra": 9.222440,
+                "Kxv_ra": 0.004837,
+                "Emax_ra": 0.208858,
+                "Vaso_ra": 4.848742,
+                "Kxp_la": 9.194992,
+                "Kxv_la": 0.008067,
+                "Emax_la": 0.303119,
+                "Vaso_la": 9.355754
+            }
+        }
+    ],
+    "initial_condition": {
+        "V_RA:CLH": 38.43,
+        "V_RV:CLH": 96.07,
+        "V_LA:CLH": 38.43,
+        "V_LV:CLH": 96.07,
+        "P_pul:CLH": 8.0
+    }
+}

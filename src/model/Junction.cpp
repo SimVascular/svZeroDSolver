@@ -2,7 +2,7 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "Junction.h"
 
-void Junction::setup_dofs(DOFHandler &dofhandler) {
+void Junction::setup_dofs(DOFHandler& dofhandler) {
   // Set number of equations of a junction block based on number of
   // inlets/outlets. Must be set before calling parent constructor
   num_inlets = inlet_nodes.size();
@@ -12,8 +12,8 @@ void Junction::setup_dofs(DOFHandler &dofhandler) {
       (num_inlets + num_outlets - 1) * 2 + num_inlets + num_outlets;
 }
 
-void Junction::update_constant(SparseSystem &system,
-                               std::vector<double> &parameters) {
+void Junction::update_constant(SparseSystem& system,
+                               std::vector<double>& parameters) {
   // Pressure conservation
   for (size_t i = 0; i < (num_inlets + num_outlets - 1); i++) {
     system.F.coeffRef(global_eqn_ids[i], global_var_ids[0]) = 1.0;
@@ -33,10 +33,10 @@ void Junction::update_constant(SparseSystem &system,
 }
 
 void Junction::update_gradient(
-    Eigen::SparseMatrix<double> &jacobian,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &residual,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &alpha, std::vector<double> &y,
-    std::vector<double> &dy) {
+    Eigen::SparseMatrix<double>& jacobian,
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
+    std::vector<double>& dy) {
   // Pressure conservation
   residual(global_eqn_ids[0]) = y[global_var_ids[0]] - y[global_var_ids[2]];
 

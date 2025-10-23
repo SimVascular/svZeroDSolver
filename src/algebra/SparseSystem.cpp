@@ -27,7 +27,7 @@ void SparseSystem::clean() {
   // delete solver;
 }
 
-void SparseSystem::reserve(Model *model) {
+void SparseSystem::reserve(Model* model) {
   auto num_triplets = model->get_num_triplets();
   F.reserve(num_triplets.F);
   E.reserve(num_triplets.E);
@@ -56,8 +56,8 @@ void SparseSystem::reserve(Model *model) {
 }
 
 void SparseSystem::update_residual(
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-    Eigen::Matrix<double, Eigen::Dynamic, 1> &ydot) {
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
   residual.setZero();
   residual -= C;
   residual.noalias() -= E * ydot;

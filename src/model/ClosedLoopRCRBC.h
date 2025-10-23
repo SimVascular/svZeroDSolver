@@ -82,6 +82,22 @@
  * * `1` Capacitance
  * * `2` Distal resistance
  *
+ * ### Usage in json configuration file
+ *
+ *     "boundary_conditions": [
+ *         {
+ *             "bc_name": "RCR_aorta",
+ *             "bc_type": "ClosedLoopRCR",
+ *             "bc_values": {
+ *                 "_comment_": "R_total = 1.570879*0.948914 = 1.490629075, Rp =
+ * 0.09*R_total, Rd = 0.91*R_total, C = 0.228215*1.044637", "Rp": 0.134156617,
+ *                 "Rd": 1.356472458,
+ *                 "C": 0.238401833,
+ *                 "closed_loop_outlet": true
+ *             }
+ *         }
+ *     ]
+ *
  * ### Internal variables
  *
  * Names of internal variables in this block's output:
@@ -97,7 +113,7 @@ class ClosedLoopRCRBC : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  ClosedLoopRCRBC(int id, Model *model)
+  ClosedLoopRCRBC(int id, Model* model)
       : Block(id, model, BlockType::closed_loop_rcr_bc,
               BlockClass::boundary_condition,
               {{"Rp", InputParameter()},
@@ -125,7 +141,7 @@ class ClosedLoopRCRBC : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse
@@ -134,7 +150,7 @@ class ClosedLoopRCRBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Number of triplets of element

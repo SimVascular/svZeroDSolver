@@ -59,6 +59,54 @@
  * * `25` Right atrium resting volume
  * * `26` Left atrium resting volume
  *
+ * ### Usage in json configuration file
+ *
+ *     "closed_loop_blocks": [
+ *          {
+ *              "outlet_blocks": [
+ *                  "branch0_seg0"
+ *              ],
+ *              "closed_loop_type": "ClosedLoopHeartAndPulmonary",
+ *              "cardiac_cycle_period": 1.0169,
+ *              "parameters": {
+ *                  "Tsa": 0.40742,
+ *                  "tpwave": 8.976868,
+ *                  "Erv_s": 2.125279,
+ *                  "Elv_s": 3.125202,
+ *                  "iml": 0.509365,
+ *                  "imr": 0.806369,
+ *                  "Lrv_a": 0.000186865,
+ *                  "Rrv_a": 0.035061704,
+ *                  "Lra_v": 0.000217032,
+ *                  "Rra_v": 0.007887459,
+ *                  "Lla_v": 0.000351787,
+ *                  "Rla_v": 0.005310825,
+ *                  "Rlv_ao": 0.034320234,
+ *                  "Llv_a": 0.000110776,
+ *                  "Vrv_u": 9.424629,
+ *                  "Vlv_u": 5.606007,
+ *                  "Rpd": 0.098865401,
+ *                  "Cp": 1.090989,
+ *                  "Cpa": 0.556854,
+ *                  "Kxp_ra": 9.22244,
+ *                  "Kxv_ra": 0.004837,
+ *                  "Emax_ra": 0.208858,
+ *                  "Vaso_ra": 4.848742,
+ *                  "Kxp_la": 9.194992,
+ *                  "Kxv_la": 0.008067,
+ *                  "Emax_la": 0.303119,
+ *                  "Vaso_la": 9.355754
+ *              }
+ *          }
+ *     ],
+ *     "initial_condition": {
+ *         "V_RA:CLH": 38.43,
+ *         "V_RV:CLH": 96.07,
+ *         "V_LA:CLH": 38.43,
+ *         "V_LV:CLH": 96.07,
+ *         "P_pul:CLH": 8.0
+ *     }
+ *
  * ### Internal variables
  *
  * Names of internal variables in this block's output:
@@ -85,7 +133,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  ClosedLoopHeartPulmonary(int id, Model *model)
+  ClosedLoopHeartPulmonary(int id, Model* model)
       : Block(id, model, BlockType::closed_loop_heart_pulmonary,
               BlockClass::closed_loop,
               {{"Tsa", InputParameter()},     {"tpwave", InputParameter()},
@@ -147,7 +195,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse
@@ -156,7 +204,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -165,7 +213,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(SparseSystem &system, std::vector<double> &parameters);
+  void update_time(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -176,16 +224,16 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem &system, std::vector<double> &parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  void update_solution(SparseSystem& system, std::vector<double>& parameters,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
 
   /**
    * @brief Modify the solution after solving it
    *
    * @param y Current solution
    */
-  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Number of triplets of element
@@ -211,7 +259,7 @@ class ClosedLoopHeartPulmonary : public Block {
    *
    * @param parameters Parameters of the model
    */
-  void get_activation_and_elastance_functions(std::vector<double> &parameters);
+  void get_activation_and_elastance_functions(std::vector<double>& parameters);
 
   /**
    * @brief Compute sub-expressions that are part of atrial elastance and
@@ -220,15 +268,15 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param parameters Parameters of the model
    * @param y Current solution
    */
-  void get_psi_ra_la(std::vector<double> &parameters,
-                     const Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+  void get_psi_ra_la(std::vector<double>& parameters,
+                     const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Valve positions for each heart chamber
    *
    * @param y Current solution
    */
-  void get_valve_positions(const Eigen::Matrix<double, Eigen::Dynamic, 1> &y);
+  void get_valve_positions(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 };
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPHEARTPULMONARY_HPP_

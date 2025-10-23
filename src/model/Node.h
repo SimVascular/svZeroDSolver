@@ -33,13 +33,13 @@ class Node {
    * @param outlet_eles Outlet element of the node
    * @param model The model to which the node belongs
    */
-  Node(int id, const std::vector<Block *> &inlet_eles,
-       const std::vector<Block *> &outlet_eles, Model *model);
+  Node(int id, const std::vector<Block*>& inlet_eles,
+       const std::vector<Block*>& outlet_eles, Model* model);
 
-  int id;                            ///< Global ID of the block
-  std::vector<Block *> inlet_eles;   ///< Inlet element of the node
-  std::vector<Block *> outlet_eles;  ///< Outlet element of the node
-  Model *model{nullptr};             ///< The model to which the node belongs
+  int id;                           ///< Global ID of the block
+  std::vector<Block*> inlet_eles;   ///< Inlet element of the node
+  std::vector<Block*> outlet_eles;  ///< Outlet element of the node
+  Model* model{nullptr};            ///< The model to which the node belongs
 
   int flow_dof{0};  ///< Global flow degree-of-freedom of the node
   int pres_dof{0};  ///< Global pressure degree-of-freedom of the node
@@ -61,7 +61,7 @@ class Node {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 };
 
 #endif  // SVZERODSOLVER_MODEL_NODE_HPP_

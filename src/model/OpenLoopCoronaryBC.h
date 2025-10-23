@@ -80,6 +80,31 @@
  * * `5` Pim: Intramyocardial pressure
  * * `6` Pv: Venous pressure
  *
+ * ### Usage in json configuration file
+ *
+ *     "boundary_conditions": [
+ *         {
+ *             "bc_name": "OUT",
+ *             "bc_type": "CORONARY",
+ *             "bc_values": {
+ *                 "Ca": 0.0001,
+ *                 "Cc": 0.0001,
+ *                 "Pim": [
+ *                     1000.0,
+ *                     1000.0
+ *                 ],
+ *                 "P_v": 0.0,
+ *                 "Ra1": 100.0,
+ *                 "Ra2": 100.0,
+ *                 "Rv1": 100.0,
+ *                 "t": [
+ *                     0.0,
+ *                     1.0
+ *                 ]
+ *             }
+ *         }
+ *     ]
+ *
  * ### Internal variables
  *
  * Names of internal variables in this block's output:
@@ -95,7 +120,7 @@ class OpenLoopCoronaryBC : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  OpenLoopCoronaryBC(int id, Model *model)
+  OpenLoopCoronaryBC(int id, Model* model)
       : Block(id, model, BlockType::open_loop_coronary_bc,
               BlockClass::boundary_condition,
               {{"Ra1", InputParameter()},
@@ -118,7 +143,7 @@ class OpenLoopCoronaryBC : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Setup parameters that depend on the initial state
@@ -127,7 +152,7 @@ class OpenLoopCoronaryBC : public Block {
    * @param parameters The parameter values vector (at time 0)
    */
   void setup_initial_state_dependent_params(State initial_state,
-                                            std::vector<double> &parameters);
+                                            std::vector<double>& parameters);
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -135,7 +160,7 @@ class OpenLoopCoronaryBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -144,7 +169,7 @@ class OpenLoopCoronaryBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(SparseSystem &system, std::vector<double> &parameters);
+  void update_time(SparseSystem& system, std::vector<double>& parameters);
 
   /**
    * @brief Number of triplets of element

@@ -51,7 +51,7 @@
  * This chamber block can be connected to other blocks using junctions.
  *
  * \f[
- * \begin{circuitikz} 
+ * \begin{circuitikz}
  * \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
  * to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}

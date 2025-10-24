@@ -53,7 +53,14 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          $Env:CMAKE_GENERATOR = 'Ninja'
+          $env:CMAKE_GENERATOR = "Ninja"
+          $env:CMAKE_BUILD_PARALLEL_LEVEL = "2"
+          $env:CMAKE_ARGS = @(
+            "-DBUILD_TESTING=OFF",
+            "-DEIGEN_TEST_NO_FORTRAN=ON",
+            "-DEIGEN_BUILD_DOC=OFF",
+            "-DEIGEN_BUILD_PKGCONFIG=OFF"
+          ) -join " "
           pip install --no-build-isolation -v .[dev]
           pip show pysvzerod
 

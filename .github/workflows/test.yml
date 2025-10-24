@@ -35,13 +35,19 @@ jobs:
           brew install gcc@${GCC_V}
           ln -s /usr/local/bin/gcc-${GCC_V} /usr/local/bin/gcc
 
-      - name: Install dependencies for windows
+      - name: Install dependencies for Windows
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          choco install mingw --no-progress
           conda install -y -c conda-forge cmake graphviz python-graphviz pydot
           pip install --upgrade cmake-setuptools
+          pip install --upgrade ninja
+
+      - name: Setup MSVC Developer Command Prompt
+        if: startsWith(matrix.os, 'windows')
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Install POISX-like svZeroDSolver
         if: ${{!startsWith(matrix.os, 'windows')}}
@@ -51,8 +57,6 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          $Env:CMAKE_GENERATOR = 'MinGW Makefiles'
-          Write-Host "→ Using CMAKE_GENERATOR = $Env:CMAKE_GENERATOR"
           pip install --no-build-isolation -v .[dev]
           pip show pysvzerod
 
@@ -79,8 +83,7 @@ jobs:
         run: |
           mkdir Release
           cd Release
-          cmake -G "MinGW Makefiles" `
-                -DCMAKE_BUILD_TYPE=Release `
+          cmake -DCMAKE_BUILD_TYPE=Release `
                 -DENABLE_DISTRIBUTION=ON `
                 ..
           cmake --build . --parallel 2
@@ -105,7 +108,7 @@ jobs:
           cd tests/test_interface
           mkdir build_tests
           cd build_tests
-          cmake -G "MinGW Makefiles" ..
+          cmake ..
           cmake --build . --parallel 2
           cd test_01
           ./svZeroD_interface_test01.exe `

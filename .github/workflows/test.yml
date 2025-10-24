@@ -20,7 +20,6 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          auto-activate-base: true
           python-version: "3.11.4"
       - name: Install ubuntu dependencies
         if: startsWith(matrix.os, 'ubuntu')
@@ -28,7 +27,7 @@ jobs:
 
       - name: Install dependencies to get correct version numbers (Ubuntu)
         if: startsWith(matrix.os, 'ubuntu')
-        run: conda install -n base -c conda-forge compilers sysroot_linux-64 ninja libstdcxx-ng=${GCC_V} gcc=${GCC_V}
+        run: conda install -c conda-forge compilers sysroot_linux-64 ninja libstdcxx-ng=${GCC_V} gcc=${GCC_V}
 
       - name: Install dependencies to get correct version numbers (MacOS)
         if: startsWith(matrix.os, 'macos')
@@ -40,8 +39,8 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          conda install -n base -y -c conda-forge cmake graphviz python-graphviz pydot
-          conda run -n base pip install --upgrade ninja
+          conda install -y -c conda-forge cmake graphviz python-graphviz pydot
+          pip install --upgrade ninja
 
       - name: Setup MSVC Developer Command Prompt
         if: startsWith(matrix.os, 'windows')
@@ -51,7 +50,7 @@ jobs:
 
       - name: Install POSIX-like svZeroDSolver
         if: ${{!startsWith(matrix.os, 'windows')}}
-        run: conda run -n base pip install -e ".[dev]"
+        run: pip install -e ".[dev]"
 
       - name: Install Windows svZeroDSolver
         if: startsWith(matrix.os, 'windows')
@@ -65,17 +64,17 @@ jobs:
             "-DEIGEN_BUILD_DOC=OFF",
             "-DEIGEN_BUILD_PKGCONFIG=OFF"
           ) -join " "
-          conda run -n base pip install -v .[dev]
-          conda run -n base pip show pysvzerod
+          pip install -v .[dev]
+          pip show pysvzerod
 
       - name: Install Networkx
         run: |
-            conda run -n base pip install networkx
+            pip install networkx
 
       - name: Test the build
         run: |
           cd tests
-          conda run -n base pytest -v --durations=0 --ignore=test_dirgraph.py
+          pytest -v --durations=0 --ignore=test_dirgraph.py
 
       - name: Build using CMake for POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
@@ -135,7 +134,7 @@ jobs:
           cmake -DENABLE_COVERAGE=ON ..
           make -j2
           cd ../tests
-          conda run -n base pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
+          pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
           cd ../Release
           make coverage
 

@@ -17,17 +17,19 @@ jobs:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          auto-update-conda: true
-          python-version: "3.11.4"
+          python-version: "3.11"
+
       - name: Install ubuntu dependencies
         if: startsWith(matrix.os, 'ubuntu')
         run: sudo apt update && sudo apt install build-essential cmake lcov
 
-      - name: Install dependencies to get correct version numbers (Ubuntu)
-        if: startsWith(matrix.os, 'ubuntu')
-        run: conda install -c conda-forge compilers sysroot_linux-64 ninja libstdcxx-ng=${GCC_V} gcc=${GCC_V}
+      # - name: Install dependencies to get correct version numbers (Ubuntu)
+      #   if: startsWith(matrix.os, 'ubuntu')
+      #   run: conda install -c conda-forge compilers sysroot_linux-64 ninja libstdcxx-ng=${GCC_V} gcc=${GCC_V}
 
       - name: Install dependencies to get correct version numbers (MacOS)
         if: startsWith(matrix.os, 'macos')
@@ -35,12 +37,12 @@ jobs:
           brew install gcc@${GCC_V}
           ln -s /usr/local/bin/gcc-${GCC_V} /usr/local/bin/gcc
 
-      - name: Install dependencies for Windows
-        if: startsWith(matrix.os, 'windows')
-        shell: pwsh
-        run: |
-          conda install -y -c conda-forge cmake graphviz python-graphviz pydot
-          pip install --upgrade ninja
+      # - name: Install dependencies for Windows
+      #   if: startsWith(matrix.os, 'windows')
+      #   shell: pwsh
+      #   run: |
+      #     conda install -y -c conda-forge cmake graphviz python-graphviz pydot
+      #     pip install --upgrade ninja
 
       - name: Setup MSVC Developer Command Prompt
         if: startsWith(matrix.os, 'windows')

@@ -12,7 +12,9 @@ jobs:
       fail-fast: false
     env:
       GCC_V: ${{ matrix.version }}
-      PYTHONPATH: ${{ github.workspace }}
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3

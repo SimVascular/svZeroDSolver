@@ -76,10 +76,7 @@ jobs:
         run: |
           mkdir Release
           cd Release
-          cmake -G "MinGW Makefiles" `
-                -DCMAKE_BUILD_TYPE=Release `
-                -DENABLE_DISTRIBUTION=ON `
-                ..
+          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
           cmake --build . --parallel 2
 
       - name: Test interface POISX-like Systems
@@ -102,7 +99,7 @@ jobs:
           cd tests/test_interface
           mkdir build_tests
           cd build_tests
-          cmake -G "MinGW Makefiles" ..
+          cmake -G Ninja ..
           cmake --build . --parallel 2
           cd test_01
           ./svZeroD_interface_test01.exe `

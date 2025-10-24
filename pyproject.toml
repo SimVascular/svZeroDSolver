@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools >= 40.9.0", "wheel", "cmake_setuptools"]
-build-backend = "setuptools.build_meta"
+requires = ["scikit-build-core>=0.10", "cmake", "pybind11"]
+build-backend = "scikit_build_core.build"
 
 [tool.pytest.ini_options]
 addopts = """

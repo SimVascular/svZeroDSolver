@@ -40,7 +40,6 @@ jobs:
         shell: pwsh
         run: |
           conda install -y -c conda-forge cmake graphviz python-graphviz pydot
-          pip install --upgrade cmake-setuptools
           pip install --upgrade ninja
 
       - name: Setup MSVC Developer Command Prompt

@@ -18,7 +18,6 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          activate-environment: base
           auto-activate-base: true
           python-version: "3.11.4"
       - name: Install ubuntu dependencies

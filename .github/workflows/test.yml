@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies to get correct version numbers (Ubuntu)
         if: startsWith(matrix.os, 'ubuntu')
-        run: conda install -c conda-forge compilers sysroot_linux-64 ninja libstdcxx-ng=${GCC_V} gcc=${GCC_V}
+        run: conda install -n base -c conda-forge compilers sysroot_linux-64 ninja libstdcxx-ng=${GCC_V} gcc=${GCC_V}
 
       - name: Install dependencies to get correct version numbers (MacOS)
         if: startsWith(matrix.os, 'macos')
@@ -40,8 +40,8 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          conda install -y -c conda-forge cmake graphviz python-graphviz pydot
-          pip install --upgrade ninja
+          conda install -n base -y -c conda-forge cmake graphviz python-graphviz pydot
+          conda run -n base pip install --upgrade ninja
 
       - name: Setup MSVC Developer Command Prompt
         if: startsWith(matrix.os, 'windows')
@@ -65,8 +65,8 @@ jobs:
             "-DEIGEN_BUILD_DOC=OFF",
             "-DEIGEN_BUILD_PKGCONFIG=OFF"
           ) -join " "
-          pip install -v .[dev]
-          pip show pysvzerod
+          conda run -n base pip install -v .[dev]
+          conda run -n base pip show pysvzerod
 
       - name: Install Networkx
         run: |

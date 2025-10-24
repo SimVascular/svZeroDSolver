@@ -52,7 +52,7 @@ jobs:
 
       - name: Install POSIX-like svZeroDSolver
         if: ${{!startsWith(matrix.os, 'windows')}}
-        run: pip install -e ".[dev]"
+        run: python -m pip install -e ".[dev]"
 
       - name: Install Windows svZeroDSolver
         if: startsWith(matrix.os, 'windows')
@@ -66,17 +66,12 @@ jobs:
             "-DEIGEN_BUILD_DOC=OFF",
             "-DEIGEN_BUILD_PKGCONFIG=OFF"
           ) -join " "
-          pip install -v .[dev]
-          pip show pysvzerod
-
-      - name: Install Networkx
-        run: |
-            pip install networkx
+          python -m pip install -v .[dev]
 
       - name: Test the build
         run: |
           cd tests
-          pytest -v --durations=0 --ignore=test_dirgraph.py
+          python -m pytest -v --durations=0 --ignore=test_dirgraph.py
 
       - name: Build using CMake for POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
@@ -136,7 +131,7 @@ jobs:
           cmake -DENABLE_COVERAGE=ON ..
           make -j2
           cd ../tests
-          pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
+          python -m pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
           cd ../Release
           make coverage
 

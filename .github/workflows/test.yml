@@ -53,9 +53,12 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
+          $paths = $env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch '^C:\\mingw64\\bin$') -and ($_ -notmatch '^C:\\tools\\mingw64\\bin$') }
+          $env:PATH = ($paths -join ';')
           $env:CMAKE_GENERATOR = "Ninja"
           $env:CMAKE_BUILD_PARALLEL_LEVEL = "2"
           $env:CMAKE_ARGS = @(
+            "-DCMAKE_POLICY_DEFAULT_CMP0077=NEW",
             "-DBUILD_TESTING=OFF",
             "-DEIGEN_TEST_NO_FORTRAN=ON",
             "-DEIGEN_BUILD_DOC=OFF",

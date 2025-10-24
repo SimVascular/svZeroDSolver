@@ -218,6 +218,15 @@ void Solver::run_integration() {
             cycle_to_cycle_errors_in_flow_and_pressure.first;
         double cycle_to_cycle_error_pressure =
             cycle_to_cycle_errors_in_flow_and_pressure.second;
+        std::cout << "Percent error between last two simulated cardiac cycles "
+            "for dof index "
+         << dof_indices.first
+         << " (mean flow)    : " << cycle_to_cycle_error_flow * 100.0
+         << std::endl;
+        std::cout << "Percent error between last two simulated cardiac cycles "
+            "for dof index "
+         << dof_indices.second << " (mean pressure): "
+         << cycle_to_cycle_error_pressure * 100.0 << std::endl;    
       }
     }
   }

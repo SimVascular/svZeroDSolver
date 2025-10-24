@@ -82,15 +82,14 @@ void Solver::setup_initial() {
   DEBUG_MSG("Setup initial");
 }
 
-
 void Solver::setup_integrator() {
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
   integrator = Integrator(this->model.get(), simparams.sim_time_step_size,
-                        simparams.sim_rho_infty, simparams.sim_abs_tol,
-                        simparams.sim_nliter);
+                          simparams.sim_rho_infty, simparams.sim_abs_tol,
+                          simparams.sim_nliter);
 
-  // Initialize loop 
+  // Initialize loop
   states = std::vector<State>();
   times = std::vector<double>();
 
@@ -108,7 +107,6 @@ void Solver::setup_integrator() {
   }
   time = 0.0;
 }
-
 
 void Solver::run_integration() {
   // Run integrator
@@ -131,11 +129,11 @@ void Solver::run_integration() {
     num_time_pts_in_two_cycles = 2 * (simparams.sim_pts_per_cycle - 1) + 1;
     states_last_two_cycles =
         std::vector<State>(num_time_pts_in_two_cycles, state);
-    DEBUG_MSG("Initialized cycle to cycle error tracking with " << num_time_pts_in_two_cycles << " points");
+    DEBUG_MSG("Initialized cycle to cycle error tracking with "
+              << num_time_pts_in_two_cycles << " points");
   }
 
   for (int i = 1; i < simparams.sim_num_time_steps; i++) {
-    
     if (simparams.use_cycle_to_cycle_error) {
       if (i == simparams.sim_num_time_steps - num_time_pts_in_two_cycles + 1) {
         states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
@@ -171,19 +169,19 @@ void Solver::run_integration() {
     if (!(this->model->get_has_windkessel_bc())) {
       assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles);
       double converged = check_vessel_cap_convergence(states_last_two_cycles,
-                                                      vessel_caps_dof_indices);                                                  
+                                                      vessel_caps_dof_indices);
       int extra_num_cycles = 0;
 
       while (!converged) {
         std::rotate(
             states_last_two_cycles.begin(),
             states_last_two_cycles.begin() + simparams.sim_pts_per_cycle - 1,
-            states_last_two_cycles.end());   
-        
+            states_last_two_cycles.end());
+
         last_two_cycles_time_pt_counter = simparams.sim_pts_per_cycle;
         for (size_t i = 1; i < simparams.sim_pts_per_cycle; i++) {
           state = integrator.step(state, time);
-          
+
           states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
           last_two_cycles_time_pt_counter += 1;
           interval_counter += 1;
@@ -199,10 +197,10 @@ void Solver::run_integration() {
           }
         }
         extra_num_cycles++;
-        
+
         converged = check_vessel_cap_convergence(states_last_two_cycles,
                                                  vessel_caps_dof_indices);
-        
+
         assert(last_two_cycles_time_pt_counter == num_time_pts_in_two_cycles);
       }
       std::cout << "Ran simulation for " << extra_num_cycles
@@ -213,20 +211,20 @@ void Solver::run_integration() {
         std::pair<double, double> cycle_to_cycle_errors_in_flow_and_pressure =
             get_cycle_to_cycle_errors_in_flow_and_pressure(
                 states_last_two_cycles, dof_indices);
-        
+
         double cycle_to_cycle_error_flow =
             cycle_to_cycle_errors_in_flow_and_pressure.first;
         double cycle_to_cycle_error_pressure =
             cycle_to_cycle_errors_in_flow_and_pressure.second;
         std::cout << "Percent error between last two simulated cardiac cycles "
-            "for dof index "
-         << dof_indices.first
-         << " (mean flow)    : " << cycle_to_cycle_error_flow * 100.0
-         << std::endl;
+                     "for dof index "
+                  << dof_indices.first
+                  << " (mean flow)    : " << cycle_to_cycle_error_flow * 100.0
+                  << std::endl;
         std::cout << "Percent error between last two simulated cardiac cycles "
-            "for dof index "
-         << dof_indices.second << " (mean pressure): "
-         << cycle_to_cycle_error_pressure * 100.0 << std::endl;    
+                     "for dof index "
+                  << dof_indices.second << " (mean pressure): "
+                  << cycle_to_cycle_error_pressure * 100.0 << std::endl;
       }
     }
   }
@@ -244,13 +242,11 @@ void Solver::run_integration() {
   DEBUG_MSG("Ran time integration");
 }
 
-
 void Solver::run() {
   setup_initial();
   setup_integrator();
   run_integration();
 }
-
 
 std::vector<std::pair<int, int>> Solver::get_vessel_caps_dof_indices() {
   std::vector<std::pair<int, int>> vessel_caps_dof_indices;

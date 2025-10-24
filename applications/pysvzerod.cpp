@@ -27,9 +27,7 @@ PYBIND11_MODULE(pysvzerod, m) {
         const auto& config_json = nlohmann::json::parse(ifs);
         return Solver(config_json);
       }))
-      .def("setup_initial", &Solver::setup_initial)
-      .def("setup_integrator", &Solver::setup_integrator)
-      .def("run_integration", &Solver::run_integration)
+      .def("run", &Solver::run)
       .def("get_times", &Solver::get_times)
       .def("get_single_result", &Solver::get_single_result)
       .def("get_single_result_avg", &Solver::get_single_result_avg)

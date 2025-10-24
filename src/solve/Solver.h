@@ -31,12 +31,6 @@ class Solver {
    */
   Solver(const nlohmann::json& config);
 
-  //   /**
-  //    * @brief Run the simulation
-  //    *
-  //    */
-  //   void run();
-
   /**
    * @brief Set up and initialize the simulation parameters and model
    */
@@ -118,13 +112,11 @@ class Solver {
   std::shared_ptr<Model> model;
   SimulationParameters simparams;
   std::vector<State> states;
-  std::vector<double> times;
   State initial_state;
-
-  // Time integration variables added as class variables
-  Integrator integrator;
-  double time;
   State state;
+  std::vector<double> times;
+  double time;
+  Integrator integrator;
 
   void sanity_checks();
 

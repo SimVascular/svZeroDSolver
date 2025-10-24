@@ -15,7 +15,6 @@ dev = [
   "pytest>=7",
   "networkx>=2.8",
   "graphviz",
-  "python-graphviz",
   "pydot",
 ]
 

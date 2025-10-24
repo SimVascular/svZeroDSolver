@@ -12,14 +12,14 @@ jobs:
       fail-fast: false
     env:
       GCC_V: ${{ matrix.version }}
-      CONDA_ENV: zerod
       PYTHONPATH: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
         with:
           auto-update-conda: true
-          activate-environment: ${{env.CONDA_ENV}}
+          activate-environment: base
+          auto-activate-base: true
           python-version: "3.11.4"
       - name: Install ubuntu dependencies
         if: startsWith(matrix.os, 'ubuntu')
@@ -48,9 +48,9 @@ jobs:
         with:
           arch: x64
 
-      - name: Install POISX-like svZeroDSolver
+      - name: Install POSIX-like svZeroDSolver
         if: ${{!startsWith(matrix.os, 'windows')}}
-        run: conda run pip install -e ".[dev]"
+        run: conda run -n base pip install -e ".[dev]"
 
       - name: Install Windows svZeroDSolver
         if: startsWith(matrix.os, 'windows')
@@ -61,14 +61,14 @@ jobs:
 
       - name: Install Networkx
         run: |
-            conda run pip install networkx
+            conda run -n base pip install networkx
 
       - name: Test the build
         run: |
           cd tests
-          conda run pytest -v --durations=0 --ignore=test_dirgraph.py
+          conda run -n base pytest -v --durations=0 --ignore=test_dirgraph.py
 
-      - name: Build using CMake for POISX-like Systems
+      - name: Build using CMake for POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
         run: |
           mkdir Release
@@ -87,7 +87,7 @@ jobs:
                 ..
           cmake --build . --parallel 2
 
-      - name: Test interface POISX-like Systems
+      - name: Test interface POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
         run: |
           cd tests/test_interface
@@ -126,7 +126,7 @@ jobs:
           cmake -DENABLE_COVERAGE=ON ..
           make -j2
           cd ../tests
-          conda run pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
+          conda run -n base pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
           cd ../Release
           make coverage
 
@@ -143,7 +143,7 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Build installer POISX-like Systems
+      - name: Build installer POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
         run: |
           cd Release

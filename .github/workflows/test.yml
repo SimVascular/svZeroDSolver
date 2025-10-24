@@ -56,7 +56,7 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          pip install --no-build-isolation -v .[dev]
+          pip install -v .[dev]
           pip show pysvzerod
 
       - name: Install Networkx

@@ -53,7 +53,16 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          $paths = $env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch '^C:\\mingw64\\bin$') -and ($_ -notmatch '^C:\\tools\\mingw64\\bin$') }
+          $blockList = @(
+            '^C:\\mingw64\\bin$',
+            '^C:\\tools\\mingw64\\bin$',
+            '^C:\\Strawberry\\c\\bin$',
+            '^C:\\Strawberry\\perl\\site\\bin$',
+            '^C:\\Strawberry\\perl\\bin$'
+          )
+          $env:PATH = ($env:PATH -split ';' | Where-Object {
+            $_ -and (-not ($blockList | ForEach-Object { $_ -as [regex] } | Where-Object { $_.IsMatch($_) }))
+          }) -join ';'
           $env:PATH = ($paths -join ';')
           $env:CMAKE_GENERATOR = "Ninja"
           $env:CMAKE_BUILD_PARALLEL_LEVEL = "2"

@@ -6,7 +6,12 @@ cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project(svZeroDSolver)
+project(svZeroDSolver LANGUAGES C CXX)
+
+# Force Eigen & superprojects to skip docs/tests/fortran no matter what
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(EIGEN_BUILD_DOC OFF CACHE BOOL "" FORCE)
+set(EIGEN_TEST_FORTRAN OFF CACHE BOOL "" FORCE)
 
 include(FetchContent)
 

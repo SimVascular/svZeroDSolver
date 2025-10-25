@@ -53,31 +53,51 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
-          $parts = $env:PATH -split ';'
-          $filtered = foreach ($p in $parts) { if ($p -and ($p -notmatch $pattern)) { $p } }
-          $env:PATH = ($filtered -join ';')
-          Write-Host "PATH after scrub:"; ($env:PATH -split ';') | ForEach-Object { "  $_" }
+          cmake --version
+          python -V
 
+          # 1) Scrub MinGW/Strawberry so CMake can't "discover" gfortran/gcc by accident
+          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
+          $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
+
+          # 2) Install build deps + Ninja
+          python -m pip install --upgrade pip
+          pip install --upgrade cmake-setuptools ninja
+
+          # 3) Ensure Ninja is discoverable and tell CMake EXACTLY which one to run
+          $ninja = "C:\Miniconda\envs\zerod\Scripts\ninja.exe"
+          if (-not (Test-Path $ninja)) {
+            # Fallback: GitHub image ships another ninja in VS; add both common locations
+            $candidates = @(
+              "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe",
+              "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\ninja.exe"
+            )
+            foreach ($c in $candidates) { if (Test-Path $c) { $ninja = $c; break } }
+          }
+          if (-not (Test-Path $ninja)) { throw "ninja.exe not found on this runner" }
+
+          # Put ninja's directory at the front of PATH and export explicit generator/make program
+          $env:PATH = (Split-Path $ninja) + ";" + $env:PATH
           $env:CMAKE_GENERATOR = 'Ninja'
+          $env:CMAKE_MAKE_PROGRAM = $ninja
           $env:CMAKE_BUILD_PARALLEL_LEVEL = '2'
 
-          # *** Add the conda env Scripts (where pip dropped ninja.exe) ***
-          $env:PATH = "C:\Miniconda\envs\zerod\Scripts;$env:PATH"
-
-          # *** Tell CMake exactly which ninja to use (belt-and-suspenders) ***
-          $ninja = "C:\Miniconda\envs\zerod\Scripts\ninja.exe"
-          if (Test-Path $ninja) { $env:CMAKE_MAKE_PROGRAM = $ninja }
-
+          # 4) (Optional) Quiet pybind11 compat warning and ensure Eigen tests/docs stay off
           $env:CMAKE_ARGS = @(
             '-DCMAKE_POLICY_DEFAULT_CMP0077=NEW',
             '-DBUILD_TESTING=OFF',
             '-DEIGEN_BUILD_DOC=OFF',
             '-DEIGEN_TEST_FORTRAN=OFF',
             '-DEIGEN_TEST_CXX11=OFF',
-            '-DEIGEN_TEST_NOQT=ON'
+            '-DEIGEN_TEST_NOQT=ON',
+            '-DPYBIND11_FINDPYTHON=NEW'
           ) -join ' '
 
+          # 5) Confirm what CMake will see
+          Write-Host "Using generator: $env:CMAKE_GENERATOR"
+          Write-Host "Using ninja: $env:CMAKE_MAKE_PROGRAM"
+
+          # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
           pip install --no-build-isolation -v .[dev]
           pip show pysvzerod
 

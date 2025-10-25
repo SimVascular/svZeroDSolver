@@ -53,26 +53,24 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          $blockList = @(
-            '^C:\\mingw64\\bin$',
-            '^C:\\tools\\mingw64\\bin$',
-            '^C:\\Strawberry\\c\\bin$',
-            '^C:\\Strawberry\\perl\\site\\bin$',
-            '^C:\\Strawberry\\perl\\bin$'
-          )
-          $env:PATH = ($env:PATH -split ';' | Where-Object {
-            $_ -and (-not ($blockList | ForEach-Object { $_ -as [regex] } | Where-Object { $_.IsMatch($_) }))
-          }) -join ';'
-          $env:PATH = ($paths -join ';')
-          $env:CMAKE_GENERATOR = "Ninja"
-          $env:CMAKE_BUILD_PARALLEL_LEVEL = "2"
+          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
+          $parts = $env:PATH -split ';'
+          $filtered = foreach ($p in $parts) { if ($p -and ($p -notmatch $pattern)) { $p } }
+          $env:PATH = ($filtered -join ';')
+          Write-Host "PATH after scrub:"; ($env:PATH -split ';') | ForEach-Object { "  $_" }
+
+          $env:CMAKE_GENERATOR = 'Ninja'
+          $env:CMAKE_BUILD_PARALLEL_LEVEL = '2'
+
           $env:CMAKE_ARGS = @(
-            "-DCMAKE_POLICY_DEFAULT_CMP0077=NEW",
-            "-DBUILD_TESTING=OFF",
-            "-DEIGEN_TEST_NO_FORTRAN=ON",
-            "-DEIGEN_BUILD_DOC=OFF",
-            "-DEIGEN_BUILD_PKGCONFIG=OFF"
-          ) -join " "
+            '-DCMAKE_POLICY_DEFAULT_CMP0077=NEW',
+            '-DBUILD_TESTING=OFF',
+            '-DEIGEN_BUILD_DOC=OFF',
+            '-DEIGEN_TEST_FORTRAN=OFF',
+            '-DEIGEN_TEST_CXX11=OFF',
+            '-DEIGEN_TEST_NOQT=ON'
+          ) -join ' '
+
           pip install --no-build-isolation -v .[dev]
           pip show pysvzerod
 

@@ -62,6 +62,13 @@ jobs:
           $env:CMAKE_GENERATOR = 'Ninja'
           $env:CMAKE_BUILD_PARALLEL_LEVEL = '2'
 
+          # *** Add the conda env Scripts (where pip dropped ninja.exe) ***
+          $env:PATH = "C:\Miniconda\envs\zerod\Scripts;$env:PATH"
+
+          # *** Tell CMake exactly which ninja to use (belt-and-suspenders) ***
+          $ninja = "C:\Miniconda\envs\zerod\Scripts\ninja.exe"
+          if (Test-Path $ninja) { $env:CMAKE_MAKE_PROGRAM = $ninja }
+
           $env:CMAKE_ARGS = @(
             '-DCMAKE_POLICY_DEFAULT_CMP0077=NEW',
             '-DBUILD_TESTING=OFF',

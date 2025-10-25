@@ -1,12 +1,15 @@
 # SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the University of California, and others.
 # SPDX-License-Identifier: BSD-3-Clause
 
-set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.18)
+cmake_policy(SET CMP0077 NEW)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 project(svZeroDSolver LANGUAGES C CXX)
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Force Eigen & superprojects to skip docs/tests/fortran no matter what
 set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
@@ -14,6 +17,7 @@ set(EIGEN_BUILD_DOC OFF CACHE BOOL "" FORCE)
 set(EIGEN_TEST_FORTRAN OFF CACHE BOOL "" FORCE)
 
 include(FetchContent)
+set(PYBIND11_FINDPYTHON NEW CACHE STRING "" FORCE)
 
 # Enable code coverage
 # -----------------------------------------------------------------------------
@@ -83,7 +87,6 @@ FetchContent_Declare(
 set(EIGEN_BUILD_DOC OFF)
 set(BUILD_TESTING OFF)
 set(EIGEN_BUILD_PKGCONFIG OFF)
-set( OFF)
 
 FetchContent_MakeAvailable(Eigen)
 

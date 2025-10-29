@@ -125,20 +125,82 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
+          $ErrorActionPreference = 'Stop'
+          $ProgressPreference = 'SilentlyContinue'
+
+          # Build the test interface binaries
           cd tests/test_interface
-          mkdir build_tests
+          mkdir build_tests -Force
           cd build_tests
-          cmake -G "Ninja" ..
+          cmake -G Ninja .. | Write-Host
           cmake --build . --parallel 2
-          cd test_01
-          ./svZeroD_interface_test01.exe `
-            ../../../../Release `
-            ../../test_01/svzerod_3Dcoupling.json
-          
-          cd ../test_02
-          ./svZeroD_interface_test02 `
-            ../../../../Release `
-            ../../test_02/svzerod_tuned.json
+
+          # Locate Release solver exe
+          $repoRoot  = Resolve-Path "$PSScriptRoot/../../.."
+          $releaseDir = Join-Path $repoRoot "Release"
+          if (-not (Test-Path $releaseDir)) {
+            Write-Host "Release dir missing. Repo root contents:"
+            Get-ChildItem $repoRoot
+            throw "Release directory not found: $releaseDir"
+          }
+          $solverExe = Join-Path $releaseDir "svzerodsolver.exe"
+          if (-not (Test-Path $solverExe)) {
+            Write-Host "Release dir contents:"
+            Get-ChildItem $releaseDir -Recurse
+            throw "svzerodsolver.exe not found in $releaseDir"
+          }
+
+          # Make JSON paths absolute
+          $json01 = Resolve-Path "../test_01/svzerod_3Dcoupling.json"
+          $json02 = Resolve-Path "../test_02/svzerod_tuned.json"
+
+          # Paths to test executables
+          $t01 = Resolve-Path "test_01/svZeroD_interface_test01.exe"
+          $t02 = Resolve-Path "test_02/svZeroD_interface_test02.exe"
+          $t03 = Resolve-Path "test_03/svZeroD_interface_test03.exe"
+
+          # Keep MinGW out of PATH at runtime too
+          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
+          $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
+          $env:OMP_NUM_THREADS = '1'
+
+          function Run-TestBin {
+            param(
+              [Parameter(Mandatory=$true)][string]$Exe,
+              [Parameter(Mandatory=$true)][string[]]$Args,
+              [int]$TimeoutSec = 300
+            )
+            Write-Host "→ Running: $Exe $($Args -join ' ')"
+            $psi = New-Object System.Diagnostics.ProcessStartInfo
+            $psi.FileName = $Exe
+            $psi.Arguments = ($Args -join ' ')
+            $psi.RedirectStandardOutput = $true
+            $psi.RedirectStandardError  = $true
+            $psi.UseShellExecute = $false
+            $psi.CreateNoWindow = $true
+            $p = New-Object System.Diagnostics.Process
+            $p.StartInfo = $psi
+            [void]$p.Start()
+            if (-not $p.WaitForExit($TimeoutSec * 1000)) {
+              try { $p.Kill() } catch {}
+              throw "Timed out after ${TimeoutSec}s: $Exe"
+            }
+            $out = $p.StandardOutput.ReadToEnd()
+            $err = $p.StandardError.ReadToEnd()
+            if ($out) { Write-Host $out }
+            if ($err) { Write-Host $err }
+            if ($p.ExitCode -ne 0) {
+              throw "Exit code $($p.ExitCode): $Exe"
+            }
+            Write-Host "✓ OK: $Exe"
+          }
+
+          Write-Host "Solver:   $solverExe"
+          Write-Host "JSON 01:  $json01"
+          Write-Host "JSON 02:  $json02"
+
+          Run-TestBin -Exe $t01 -Args @("$releaseDir", "$json01") -TimeoutSec 240
+          Run-TestBin -Exe $t02 -Args @("$releaseDir", "$json02") -TimeoutSec 240
 
       - name: Generate code coverage
         if: startsWith(matrix.os, 'ubuntu-22.04')

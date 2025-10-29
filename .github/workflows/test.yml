@@ -93,7 +93,7 @@ jobs:
       - name: Test the build
         run: |
           cd tests
-          conda run pytest -v --durations=0 --ignore=test_dirgraph.py
+          python -m pytest -v --durations=0 --ignore=test_dirgraph.py
 
       - name: Build using CMake for POISX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}

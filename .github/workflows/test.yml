@@ -108,10 +108,24 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
+          # 0) Scrub MinGW/Strawberry from PATH so CMake can't find gfortran
+          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
+          $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
+
           mkdir Release
           cd Release
-          cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
+          cmake -G "Ninja" `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DENABLE_DISTRIBUTION=ON `
+            -DEIGEN_BUILD_DOC=OFF `
+            -DEIGEN_TEST_FORTRAN=OFF `
+            -DEIGEN_TEST_CXX11=OFF `
+            -DEIGEN_TEST_NOQT=ON `
+            -DEIGEN_BUILD_BLAS=OFF `      # <-- key: don’t enter Eigen/blas
+            -DCMAKE_Fortran_COMPILER:FILEPATH= "" `  # belt-and-suspenders: disable Fortran
+            ..
           cmake --build . --parallel 2
+
 
       - name: Test interface POISX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}

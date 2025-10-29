@@ -39,45 +39,56 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          cmake --version
-          python -V
+          $ErrorActionPreference = 'Stop'
 
-          # Scrub MinGW/Strawberry
+          # 1) Keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)
           $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
-          $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
+          $env:PATH = (($env:PATH -split ';' | ? { $_ -and ($_ -notmatch $pattern) }) -join ';')
 
-          # Tooling
-          python -m pip install --upgrade pip
-          pip install --upgrade cmake ninja pytest numpy pandas
-
-          # Find ninja explicitly
-          $ninja = (Get-Command ninja).Source
-          if (-not $ninja) { throw "ninja.exe not found" }
-
-          # Configure + build to a known dir
-          $py = (Get-Command python).Source
-          $build = "$PWD\build_py"
+          # 2) One build dir for everything: executables + Python module
+          $build = Join-Path $env:GITHUB_WORKSPACE 'build'
           cmake -S . -B $build -G Ninja `
             -DCMAKE_BUILD_TYPE=Release `
-            -DPython_EXECUTABLE="$py" `
-            -DBUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON
-
+            -DEIGEN_BUILD_BLAS=OFF `
+            -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
+            -DCMAKE_Fortran_COMPILER:FILEPATH=""
           cmake --build $build --parallel 2
 
-          # The CMakeLists already sets:
-          #   set_target_properties(pysvzerod PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/python)
-          # On Windows it also sets SUFFIX ".pyd"
-          # So the module lands in: $build/python/*.pyd
-          $pydDir = Join-Path $build "python"
-          if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd not found at $pydDir" }
-
-          # Expose the module to Python
+          # 3) Make the Python extension importable
+          $pydDir = Join-Path $build 'python'
+          if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd dir not found: $pydDir" }
           $env:PYTHONPATH = "$pydDir;$env:PYTHONPATH"
-          "PYTHONPATH=$pydDir;$env:PYTHONPATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
-          python -c "import sys,importlib;print('PYTHONPATH ok:', r'$pydDir' in sys.path); import pysvzerod; print('pysvzerod loaded')"
+          python -c "import pysvzerod; print('pysvzerod ok:', pysvzerod.__doc__ is not None)"
 
+          # 4) Run Python tests
+          cd (Join-Path $env:GITHUB_WORKSPACE 'tests')
+          python -m pytest -v --durations=0 --ignore=test_dirgraph.py
+
+          # 5) Build interface tests
+          $itSrc = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface'
+          $itBld = Join-Path $itSrc 'build_tests'
+          cmake -S $itSrc -B $itBld -G Ninja
+          cmake --build $itBld --parallel 2
+
+          # 6) Run interface tests (absolute paths, simple + explicit)
+          $solverDir = $build
+          $t01 = Join-Path $itBld 'test_01/svZeroD_interface_test01.exe'
+          $t02 = Join-Path $itBld 'test_02/svZeroD_interface_test02.exe'
+          $json01 = Join-Path $itSrc 'test_01/svzerod_3Dcoupling.json'
+          $json02 = Join-Path $itSrc 'test_02/svzerod_tuned.json'
+
+          & $t01 $solverDir $json01; if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          & $t02 $solverDir $json02; if ($LASTEXITCODE) { exit $LASTEXITCODE }
+
+          # build installer
+          choco install nsis -y
+          echo "C:\Program Files (x86)\NSIS\Bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          cd Release
+          cpack -C Release
+          Copy-Item distribution\svZeroDSolver_* -Destination ..\
 
       - name: Test the build
+        if: ${{!startsWith(matrix.os, 'windows')}}
         run: |
           cd tests
           python -m pytest -v --durations=0 --ignore=test_dirgraph.py
@@ -89,24 +100,6 @@ jobs:
           cd Release
           cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
           make -j2
-
-      - name: Build using CMake for Windows Systems
-        if: startsWith(matrix.os, 'windows')
-        shell: pwsh
-        run: |
-          # 0) Scrub MinGW/Strawberry from PATH so CMake can't find gfortran
-          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
-          $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
-
-          mkdir Release
-          cd Release
-          cmake -G "Ninja" `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DPython_EXECUTABLE="$py" `
-            -DBUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
-            ..
-          cmake --build . --parallel 2
-
 
       - name: Test interface POISX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
@@ -120,87 +113,6 @@ jobs:
           ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
           cd ../test_02
           ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
-
-      - name: Test interface Windows Systems
-        if: startsWith(matrix.os, 'windows')
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $ProgressPreference = 'SilentlyContinue'
-
-          # Build the test interface binaries
-          cd tests/test_interface
-          mkdir build_tests -Force
-          cd build_tests
-          cmake -G Ninja .. | Write-Host
-          cmake --build . --parallel 2
-
-          # Locate Release solver exe
-          $repoRoot  = Resolve-Path "$PSScriptRoot/../../.."
-          $releaseDir = Join-Path $repoRoot "Release"
-          if (-not (Test-Path $releaseDir)) {
-            Write-Host "Release dir missing. Repo root contents:"
-            Get-ChildItem $repoRoot
-            throw "Release directory not found: $releaseDir"
-          }
-          $solverExe = Join-Path $releaseDir "svzerodsolver.exe"
-          if (-not (Test-Path $solverExe)) {
-            Write-Host "Release dir contents:"
-            Get-ChildItem $releaseDir -Recurse
-            throw "svzerodsolver.exe not found in $releaseDir"
-          }
-
-          # Make JSON paths absolute
-          $json01 = Resolve-Path "../test_01/svzerod_3Dcoupling.json"
-          $json02 = Resolve-Path "../test_02/svzerod_tuned.json"
-
-          # Paths to test executables
-          $t01 = Resolve-Path "test_01/svZeroD_interface_test01.exe"
-          $t02 = Resolve-Path "test_02/svZeroD_interface_test02.exe"
-          $t03 = Resolve-Path "test_03/svZeroD_interface_test03.exe"
-
-          # Keep MinGW out of PATH at runtime too
-          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
-          $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
-          $env:OMP_NUM_THREADS = '1'
-
-          function Run-TestBin {
-            param(
-              [Parameter(Mandatory=$true)][string]$Exe,
-              [Parameter(Mandatory=$true)][string[]]$Args,
-              [int]$TimeoutSec = 300
-            )
-            Write-Host "→ Running: $Exe $($Args -join ' ')"
-            $psi = New-Object System.Diagnostics.ProcessStartInfo
-            $psi.FileName = $Exe
-            $psi.Arguments = ($Args -join ' ')
-            $psi.RedirectStandardOutput = $true
-            $psi.RedirectStandardError  = $true
-            $psi.UseShellExecute = $false
-            $psi.CreateNoWindow = $true
-            $p = New-Object System.Diagnostics.Process
-            $p.StartInfo = $psi
-            [void]$p.Start()
-            if (-not $p.WaitForExit($TimeoutSec * 1000)) {
-              try { $p.Kill() } catch {}
-              throw "Timed out after ${TimeoutSec}s: $Exe"
-            }
-            $out = $p.StandardOutput.ReadToEnd()
-            $err = $p.StandardError.ReadToEnd()
-            if ($out) { Write-Host $out }
-            if ($err) { Write-Host $err }
-            if ($p.ExitCode -ne 0) {
-              throw "Exit code $($p.ExitCode): $Exe"
-            }
-            Write-Host "✓ OK: $Exe"
-          }
-
-          Write-Host "Solver:   $solverExe"
-          Write-Host "JSON 01:  $json01"
-          Write-Host "JSON 02:  $json02"
-
-          Run-TestBin -Exe $t01 -Args @("$releaseDir", "$json01") -TimeoutSec 240
-          Run-TestBin -Exe $t02 -Args @("$releaseDir", "$json02") -TimeoutSec 240
 
       - name: Generate code coverage
         if: startsWith(matrix.os, 'ubuntu-22.04')
@@ -232,20 +144,6 @@ jobs:
           cd Release
           cpack
           cp distribution/svZeroDSolver_* ..
-
-      - name: Install NSIS
-        if: startsWith(matrix.os, 'windows')
-        run: choco install nsis -y
-
-      - name: Build installer Windows Systems
-        if: startsWith(matrix.os, 'windows')
-        shell: pwsh
-        run: |
-          # NSIS will be at C:\Program Files (x86)\NSIS\Bin
-          echo "C:\Program Files (x86)\NSIS\Bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          cd Release
-          cpack -C Release
-          Copy-Item distribution\svZeroDSolver_* -Destination ..\
 
       - name: Upload installer
         uses: actions/upload-artifact@v4

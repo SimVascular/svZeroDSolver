@@ -92,14 +92,14 @@ jobs:
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
-          python -m pip install --upgrade cmake cmake-setuptools ninja pytest
+          python -m pip install --upgrade cmake cmake-setuptools numpy ninja pytest pandas graphviz networkx pydot
 
           # 1) Keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)
           $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
           $env:PATH = (($env:PATH -split ';' | ? { $_ -and ($_ -notmatch $pattern) }) -join ';')
 
           # 2) One build dir for everything: executables + Python module
-          $build = Join-Path $env:GITHUB_WORKSPACE 'build'
+          $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
           cmake -S . -B $build -G Ninja `
             -DCMAKE_BUILD_TYPE=Release `
             -DEIGEN_BUILD_BLAS=OFF `

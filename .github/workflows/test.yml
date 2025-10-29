@@ -87,6 +87,7 @@ jobs:
 
           # Expose the module to Python
           $env:PYTHONPATH = "$pydDir;$env:PYTHONPATH"
+          "PYTHONPATH=$pydDir;$env:PYTHONPATH" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           python -c "import sys,importlib;print('PYTHONPATH ok:', r'$pydDir' in sys.path); import pysvzerod; print('pysvzerod loaded')"
 
 

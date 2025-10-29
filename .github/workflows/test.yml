@@ -117,7 +117,7 @@ jobs:
           cmake -G "Ninja" `
             -DCMAKE_BUILD_TYPE=Release `
             -DPython_EXECUTABLE="$py" `
-            -DBUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON
+            -DBUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
             ..
           cmake --build . --parallel 2
 

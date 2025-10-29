@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dependencies to get correct version numbers (Ubuntu)
         if: startsWith(matrix.os, 'ubuntu')
-        run: conda install -c conda-forge libstdcxx-ng=${GCC_V} gcc=${GCC_V}
+        run: conda install -c conda-forge libstdcxx-ng=${GCC_V} gcc=${GCC_V} graphviz python-graphviz
 
       - name: Install dependencies to get correct version numbers (MacOS)
         if: startsWith(matrix.os, 'macos')

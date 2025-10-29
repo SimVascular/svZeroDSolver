@@ -116,13 +116,8 @@ jobs:
           cd Release
           cmake -G "Ninja" `
             -DCMAKE_BUILD_TYPE=Release `
-            -DENABLE_DISTRIBUTION=ON `
-            -DEIGEN_BUILD_DOC=OFF `
-            -DEIGEN_TEST_FORTRAN=OFF `
-            -DEIGEN_TEST_CXX11=OFF `
-            -DEIGEN_TEST_NOQT=ON `
-            -DEIGEN_BUILD_BLAS=OFF `      # <-- key: don’t enter Eigen/blas
-            -DCMAKE_Fortran_COMPILER:FILEPATH= "" `  # belt-and-suspenders: disable Fortran
+            -DPython_EXECUTABLE="$py" `
+            -DBUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON
             ..
           cmake --build . --parallel 2
 

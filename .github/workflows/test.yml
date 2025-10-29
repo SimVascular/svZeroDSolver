@@ -49,85 +49,46 @@ jobs:
         if: ${{!startsWith(matrix.os, 'windows')}}
         run: conda run pip install -e ".[dev]"
 
-      - name: Install Windows svZeroDSolver
+      - name: Install Windows svZeroDSolver (build the Python .pyd via CMake)
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
           cmake --version
           python -V
 
-          # 1) Scrub MinGW/Strawberry so CMake can't "discover" gfortran/gcc by accident
+          # Scrub MinGW/Strawberry
           $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
           $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
 
-          # 2) Install build deps + Ninja
+          # Tooling
           python -m pip install --upgrade pip
-          python -m pip install --upgrade cmake cmake-setuptools ninja
+          pip install --upgrade cmake ninja pytest numpy pandas
 
-          # 3) Ensure Ninja is discoverable and tell CMake EXACTLY which one to run
-          $ninja = "C:\Miniconda\envs\zerod\Scripts\ninja.exe"
-          if (-not (Test-Path $ninja)) {
-            # Fallback: GitHub image ships another ninja in VS; add both common locations
-            $candidates = @(
-              "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe",
-              "C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\ninja.exe"
-            )
-            foreach ($c in $candidates) { if (Test-Path $c) { $ninja = $c; break } }
-          }
-          if (-not (Test-Path $ninja)) { throw "ninja.exe not found on this runner" }
+          # Find ninja explicitly
+          $ninja = (Get-Command ninja).Source
+          if (-not $ninja) { throw "ninja.exe not found" }
 
-          # Put ninja's directory at the front of PATH and export explicit generator/make program
-          $env:PATH = (Split-Path $ninja) + ";" + $env:PATH
-          $env:CMAKE_GENERATOR = 'Ninja'
-          $env:CMAKE_MAKE_PROGRAM = $ninja
-          $env:CMAKE_BUILD_PARALLEL_LEVEL = '2'
-
-          # 4) (Optional) Quiet pybind11 compat warning and ensure Eigen tests/docs stay off
-          $env:CMAKE_ARGS = @(
-            '-DCMAKE_POLICY_DEFAULT_CMP0077=NEW',
-            '-DBUILD_TESTING=OFF',
-            '-DEIGEN_BUILD_DOC=OFF',
-            '-DEIGEN_TEST_FORTRAN=OFF',
-            '-DEIGEN_TEST_CXX11=OFF',
-            '-DEIGEN_TEST_NOQT=ON',
-            '-DPYBIND11_FINDPYTHON=NEW'
-          ) -join ' '
-
-          # already computed $ninja path earlier
-          $env:CMAKE_ARGS = "$env:CMAKE_ARGS -G Ninja -DCMAKE_MAKE_PROGRAM=$ninja"
-          # also nail the Python used by pybind11/CMake
+          # Configure + build to a known dir
           $py = (Get-Command python).Source
-          $env:CMAKE_ARGS = "$env:CMAKE_ARGS -DPython_EXECUTABLE=$py"
+          $build = "$PWD\build_py"
+          cmake -S . -B $build -G Ninja `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DPython_EXECUTABLE="$py" `
+            -DBUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON
 
-          $cmakeBin = "$env:CONDA_PREFIX\Lib\site-packages\cmake\data\bin"
-          $env:PATH  = "$cmakeBin;$env:PATH"
+          cmake --build $build --parallel 2
 
-          # 5) Confirm what CMake will see
-          Write-Host "Using generator: $env:CMAKE_GENERATOR"
-          Write-Host "Using ninja: $env:CMAKE_MAKE_PROGRAM"
+          # The CMakeLists already sets:
+          #   set_target_properties(pysvzerod PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/python)
+          # On Windows it also sets SUFFIX ".pyd"
+          # So the module lands in: $build/python/*.pyd
+          $pydDir = Join-Path $build "python"
+          if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd not found at $pydDir" }
 
-          $env:CMAKE_ARGS = "$env:CMAKE_ARGS -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+          # Expose the module to Python
+          $env:PYTHONPATH = "$pydDir;$env:PYTHONPATH"
+          python -c "import sys,importlib;print('PYTHONPATH ok:', r'$pydDir' in sys.path); import pysvzerod; print('pysvzerod loaded')"
 
-          $cmakeBin = "$env:CONDA_PREFIX\Lib\site-packages\cmake\data\bin"
-          if (Test-Path $cmakeBin) {
-            $env:PATH = "$cmakeBin;$env:PATH"
-            Write-Host "PATH += $cmakeBin"
-          } else {
-            Write-Host "WARNING: cmake bin not found at $cmakeBin"
-          }
-          cmake --version
-          python -c "import shutil; print('cmake from Python:', shutil.which('cmake'))"
-
-
-
-          # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
-          python -m pip install -vv --no-build-isolation .[dev]
-          python -m pip show pysvzerod
-
-          Get-ChildItem -Recurse -Filter CMakeCache.txt | Select-Object -First 1 | ForEach-Object {
-            Write-Host "=== CMakeCache.txt ==="
-            Get-Content $_ | Select-String -Pattern "CMAKE_GENERATOR|CMAKE_MAKE_PROGRAM|CMAKE_BUILD_TOOL|Python_EXECUTABLE"
-          }
 
       - name: Test the build
         run: |

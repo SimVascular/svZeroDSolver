@@ -117,19 +117,21 @@ jobs:
           python -m pytest -v --durations=0 --ignore=test_dirgraph.py
 
           # 5) Build interface tests
-          $itSrc = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface'
-          $itBld = Join-Path $itSrc 'build_tests'
-          cmake -S $itSrc -B $itBld -G Ninja
-          cmake --build $itBld --parallel 2
+          cd tests/test_interface
+          mkdir build_tests
+          cd build_tests
+          cmake -S ../ -B . -G Ninja
+          cmake --build . --parallel 2
 
-          # 6) Run interface tests (absolute paths, simple + explicit)
-          $t01 = Join-Path $itBld 'test_01/svZeroD_interface_test01.exe'
-          $t02 = Join-Path $itBld 'test_02/svZeroD_interface_test02.exe'
-          $json01 = Join-Path $itSrc 'test_01/svzerod_3Dcoupling.json'
-          $json02 = Join-Path $itSrc 'test_02/svzerod_tuned.json'
-
-          & $t01 $build $json01; if ($LASTEXITCODE) { exit $LASTEXITCODE }
-          & $t02 $build $json02; if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          cd test_01
+          ./svZeroD_interface_test01.exe `
+            ../../../../Release `
+            ../../test_01/svzerod_3Dcoupling.json
+          
+          cd ../test_02
+          ./svZeroD_interface_test02 `
+            ../../../../Release `
+            ../../test_02/svzerod_tuned.json
 
           # build installer
           choco install nsis -y

@@ -19,6 +19,8 @@ set(EIGEN_TEST_FORTRAN OFF CACHE BOOL "" FORCE)
 
 include(FetchContent)
 set(PYBIND11_FINDPYTHON NEW CACHE STRING "" FORCE)
+find_package(Python COMPONENTS Interpreter Development REQUIRED)
+message(STATUS "Using Python: ${Python_EXECUTABLE} (${Python_VERSION})")
 
 # Enable code coverage
 # -----------------------------------------------------------------------------
@@ -96,7 +98,6 @@ FetchContent_MakeAvailable(Eigen)
 # -----------------------------------------------------------------------------
 # pybind11 is a library used to create Python bindings of existing C++ code.
 #
-set(PYBIND11_PYTHON_VERSION 3.8 CACHE STRING "")
 FetchContent_Declare(
     pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11

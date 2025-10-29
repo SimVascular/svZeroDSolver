@@ -61,7 +61,7 @@ jobs:
           $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
 
           # 2) Install build deps + Ninja
-          python -m pip install --upgrade pip
+          pip install --upgrade pip
           pip install --upgrade cmake cmake-setuptools ninja
 
           # 3) Ensure Ninja is discoverable and tell CMake EXACTLY which one to run

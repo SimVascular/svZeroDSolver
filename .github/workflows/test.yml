@@ -98,7 +98,7 @@ jobs:
           Write-Host "Using ninja: $env:CMAKE_MAKE_PROGRAM"
 
           # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
-          pip install --no-build-isolation -v .[dev]
+          pip install -vv .[dev]
           pip show pysvzerod
 
       - name: Test the build

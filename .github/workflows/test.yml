@@ -99,11 +99,26 @@ jobs:
           $py = (Get-Command python).Source
           $env:CMAKE_ARGS = "$env:CMAKE_ARGS -DPython_EXECUTABLE=$py"
 
+          $cmakeBin = "$env:CONDA_PREFIX\Lib\site-packages\cmake\data\bin"
+          $env:PATH  = "$cmakeBin;$env:PATH"
+
           # 5) Confirm what CMake will see
           Write-Host "Using generator: $env:CMAKE_GENERATOR"
           Write-Host "Using ninja: $env:CMAKE_MAKE_PROGRAM"
 
           $env:CMAKE_ARGS = "$env:CMAKE_ARGS -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+
+          $cmakeBin = "$env:CONDA_PREFIX\Lib\site-packages\cmake\data\bin"
+          if (Test-Path $cmakeBin) {
+            $env:PATH = "$cmakeBin;$env:PATH"
+            Write-Host "PATH += $cmakeBin"
+          } else {
+            Write-Host "WARNING: cmake bin not found at $cmakeBin"
+          }
+          cmake --version
+          python -c "import shutil; print('cmake from Python:', shutil.which('cmake'))"
+
+
 
           # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
           python -m pip install -v .[dev]

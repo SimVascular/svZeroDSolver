@@ -31,26 +31,16 @@ class Solver {
    */
   Solver(const nlohmann::json& config);
 
-  /**
-   * @brief Set up and initialize the simulation parameters and model
-   */
+  /// Set up and initialize the simulation parameters and model
   void setup_initial();
 
-  /**
-   * @brief Set up integrator
-   *
-   */
+  /// Set up integrator
   void setup_integrator();
 
-  /**
-   * @brief Run the integration
-   *
-   */
+  /// Run the integration
   void run_integration();
 
-  /**
-   * @brief Run the simulation
-   */
+  /// Run the simulation
   void run();
 
   /**

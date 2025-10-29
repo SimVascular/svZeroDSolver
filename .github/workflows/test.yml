@@ -8,32 +8,18 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-22.04, ubuntu-latest, macos-13, macos-latest, windows-latest]
-        version: [13] # GCC version
       fail-fast: false
     env:
-      GCC_V: ${{ matrix.version }}
-      CONDA_ENV: zerod
       PYTHONPATH: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v3
+      - uses: actions/setup-python@v5
         with:
-          auto-update-conda: true
-          activate-environment: ${{env.CONDA_ENV}}
           python-version: "3.11.4"
+
       - name: Install ubuntu dependencies
         if: startsWith(matrix.os, 'ubuntu')
-        run: sudo apt update && sudo apt install build-essential cmake lcov
-
-      - name: Install dependencies to get correct version numbers (Ubuntu)
-        if: startsWith(matrix.os, 'ubuntu')
-        run: conda install -c conda-forge libstdcxx-ng=${GCC_V} gcc=${GCC_V} graphviz python-graphviz
-
-      - name: Install dependencies to get correct version numbers (MacOS)
-        if: startsWith(matrix.os, 'macos')
-        run: |
-          brew install gcc@${GCC_V}
-          ln -s /usr/local/bin/gcc-${GCC_V} /usr/local/bin/gcc
+        run: sudo apt update && sudo apt install build-essential cmake lcov graphviz
 
       - name: Setup MSVC dev cmd
         if: startsWith(matrix.os, 'windows')
@@ -128,7 +114,11 @@ jobs:
           cd tests/test_interface
           mkdir build_tests
           cd build_tests
-          cmake ../
+          cmake -G "Ninja" `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DPython_EXECUTABLE="$py" `
+            -DBUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
+            ..
           make -j2
           cd test_01
           ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json

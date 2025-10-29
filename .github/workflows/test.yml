@@ -43,7 +43,7 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          pip install --upgrade cmake cmake-setuptools ninja
+          python -m pip install --upgrade cmake cmake-setuptools ninja
 
       - name: Install POISX-like svZeroDSolver
         if: ${{!startsWith(matrix.os, 'windows')}}
@@ -61,8 +61,8 @@ jobs:
           $env:PATH = (($env:PATH -split ';' | Where-Object { $_ -and ($_ -notmatch $pattern) }) -join ';')
 
           # 2) Install build deps + Ninja
-          pip install --upgrade pip
-          pip install --upgrade cmake cmake-setuptools ninja
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade cmake cmake-setuptools ninja
 
           # 3) Ensure Ninja is discoverable and tell CMake EXACTLY which one to run
           $ninja = "C:\Miniconda\envs\zerod\Scripts\ninja.exe"
@@ -111,8 +111,8 @@ jobs:
           }
 
           # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
-          pip install -v --no-build-isolation .[dev]
-          pip show pysvzerod
+          python -m pip install -v --no-build-isolation .[dev]
+          python -m pip show pysvzerod
 
       - name: Test the build
         run: |

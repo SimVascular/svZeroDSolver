@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the University of California, and others.
 # SPDX-License-Identifier: BSD-3-Clause
 
+set(CMAKE_POLICY_VERSION_MINIMUM 3.18)
 cmake_minimum_required(VERSION 3.18)
 cmake_policy(SET CMP0077 NEW)
 

@@ -105,14 +105,14 @@ jobs:
 
           $env:CMAKE_ARGS = "$env:CMAKE_ARGS -DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
 
+          # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
+          python -m pip install -v .[dev]
+          python -m pip show pysvzerod
+
           Get-ChildItem -Recurse -Filter CMakeCache.txt | Select-Object -First 1 | ForEach-Object {
             Write-Host "=== CMakeCache.txt ==="
             Get-Content $_ | Select-String -Pattern "CMAKE_GENERATOR|CMAKE_MAKE_PROGRAM|CMAKE_BUILD_TOOL|Python_EXECUTABLE"
           }
-
-          # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
-          python -m pip install -v --no-build-isolation .[dev]
-          python -m pip show pysvzerod
 
       - name: Test the build
         run: |

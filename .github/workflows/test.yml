@@ -121,7 +121,7 @@ jobs:
 
 
           # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
-          python -m pip install -v .[dev]
+          python -m pip install -vv --no-build-isolation .[dev]
           python -m pip show pysvzerod
 
           Get-ChildItem -Recurse -Filter CMakeCache.txt | Select-Object -First 1 | ForEach-Object {

@@ -21,71 +21,9 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: sudo apt update && sudo apt install build-essential cmake lcov graphviz
 
-      - name: Setup MSVC dev cmd
-        if: startsWith(matrix.os, 'windows')
-        uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Install dependencies for Windows
-        if: startsWith(matrix.os, 'windows')
-        shell: pwsh
-        run: |
-          python -m pip install --upgrade cmake cmake-setuptools ninja
-
-      - name: Install POISX-like svZeroDSolver
+      - name: Install POSIX-like
         if: ${{!startsWith(matrix.os, 'windows')}}
         run: python -m pip install -e ".[dev]"
-
-      - name: Install Windows svZeroDSolver (build the Python .pyd via CMake)
-        if: startsWith(matrix.os, 'windows')
-        shell: pwsh
-        run: |
-          $ErrorActionPreference = 'Stop'
-
-          # 1) Keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)
-          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
-          $env:PATH = (($env:PATH -split ';' | ? { $_ -and ($_ -notmatch $pattern) }) -join ';')
-
-          # 2) One build dir for everything: executables + Python module
-          $build = Join-Path $env:GITHUB_WORKSPACE 'build'
-          cmake -S . -B $build -G Ninja `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DEIGEN_BUILD_BLAS=OFF `
-            -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
-            -DCMAKE_Fortran_COMPILER:FILEPATH=""
-          cmake --build $build --parallel 2
-
-          # 3) Make the Python extension importable
-          $pydDir = Join-Path $build 'python'
-          if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd dir not found: $pydDir" }
-          $env:PYTHONPATH = "$pydDir;$env:PYTHONPATH"
-          python -c "import pysvzerod; print('pysvzerod ok:', pysvzerod.__doc__ is not None)"
-
-          # 4) Run Python tests
-          cd (Join-Path $env:GITHUB_WORKSPACE 'tests')
-          python -m pytest -v --durations=0 --ignore=test_dirgraph.py
-
-          # 5) Build interface tests
-          $itSrc = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface'
-          $itBld = Join-Path $itSrc 'build_tests'
-          cmake -S $itSrc -B $itBld -G Ninja
-          cmake --build $itBld --parallel 2
-
-          # 6) Run interface tests (absolute paths, simple + explicit)
-          $solverDir = $build
-          $t01 = Join-Path $itBld 'test_01/svZeroD_interface_test01.exe'
-          $t02 = Join-Path $itBld 'test_02/svZeroD_interface_test02.exe'
-          $json01 = Join-Path $itSrc 'test_01/svzerod_3Dcoupling.json'
-          $json02 = Join-Path $itSrc 'test_02/svzerod_tuned.json'
-
-          & $t01 $solverDir $json01; if ($LASTEXITCODE) { exit $LASTEXITCODE }
-          & $t02 $solverDir $json02; if ($LASTEXITCODE) { exit $LASTEXITCODE }
-
-          # build installer
-          choco install nsis -y
-          echo "C:\Program Files (x86)\NSIS\Bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-          cd Release
-          cpack -C Release
-          Copy-Item distribution\svZeroDSolver_* -Destination ..\
 
       - name: Test the build
         if: ${{!startsWith(matrix.os, 'windows')}}
@@ -93,7 +31,7 @@ jobs:
           cd tests
           python -m pytest -v --durations=0 --ignore=test_dirgraph.py
 
-      - name: Build using CMake for POISX-like Systems
+      - name: Build using CMake for POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
         run: |
           mkdir Release
@@ -101,7 +39,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
           make -j2
 
-      - name: Test interface POISX-like Systems
+      - name: Test interface POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
         run: |
           cd tests/test_interface
@@ -138,12 +76,67 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
-      - name: Build installer POISX-like Systems
+      - name: Build installer POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}
         run: |
           cd Release
           cpack
           cp distribution/svZeroDSolver_* ..
+
+      - name: Setup MSVC dev cmd
+        if: startsWith(matrix.os, 'windows')
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install and test Windows
+        if: startsWith(matrix.os, 'windows')
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          python -m pip install --upgrade cmake cmake-setuptools ninja pytest
+
+          # 1) Keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)
+          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
+          $env:PATH = (($env:PATH -split ';' | ? { $_ -and ($_ -notmatch $pattern) }) -join ';')
+
+          # 2) One build dir for everything: executables + Python module
+          $build = Join-Path $env:GITHUB_WORKSPACE 'build'
+          cmake -S . -B $build -G Ninja `
+            -DCMAKE_BUILD_TYPE=Release `
+            -DEIGEN_BUILD_BLAS=OFF `
+            -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
+            -DCMAKE_Fortran_COMPILER:FILEPATH=""
+          cmake --build $build --parallel 2
+
+          # 3) Make the Python extension importable
+          $pydDir = Join-Path $build 'python'
+          if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd dir not found: $pydDir" }
+          $env:PYTHONPATH = "$pydDir;$env:PYTHONPATH"
+
+          # 4) Run Python tests
+          cd (Join-Path $env:GITHUB_WORKSPACE 'tests')
+          python -m pytest -v --durations=0 --ignore=test_dirgraph.py
+
+          # 5) Build interface tests
+          $itSrc = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface'
+          $itBld = Join-Path $itSrc 'build_tests'
+          cmake -S $itSrc -B $itBld -G Ninja
+          cmake --build $itBld --parallel 2
+
+          # 6) Run interface tests (absolute paths, simple + explicit)
+          $t01 = Join-Path $itBld 'test_01/svZeroD_interface_test01.exe'
+          $t02 = Join-Path $itBld 'test_02/svZeroD_interface_test02.exe'
+          $json01 = Join-Path $itSrc 'test_01/svzerod_3Dcoupling.json'
+          $json02 = Join-Path $itSrc 'test_02/svzerod_tuned.json'
+
+          & $t01 $build $json01; if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          & $t02 $build $json02; if ($LASTEXITCODE) { exit $LASTEXITCODE }
+
+          # build installer
+          choco install nsis -y
+          echo "C:\Program Files (x86)\NSIS\Bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          cd $build
+          cpack -C Release
+          Copy-Item distribution\svZeroDSolver_* -Destination ..\
 
       - name: Upload installer
         uses: actions/upload-artifact@v4

@@ -43,7 +43,7 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          pip install --upgrade cmake-setuptools ninja
+          pip install --upgrade cmake cmake-setuptools ninja
 
       - name: Install POISX-like svZeroDSolver
         if: ${{!startsWith(matrix.os, 'windows')}}
@@ -62,7 +62,7 @@ jobs:
 
           # 2) Install build deps + Ninja
           python -m pip install --upgrade pip
-          pip install --upgrade cmake-setuptools ninja
+          pip install --upgrade cmake cmake-setuptools ninja
 
           # 3) Ensure Ninja is discoverable and tell CMake EXACTLY which one to run
           $ninja = "C:\Miniconda\envs\zerod\Scripts\ninja.exe"

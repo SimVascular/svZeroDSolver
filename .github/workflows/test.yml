@@ -128,11 +128,7 @@ jobs:
           cd tests/test_interface
           mkdir build_tests
           cd build_tests
-          cmake -G "Ninja" `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DPython_EXECUTABLE="$py" `
-            -DBUILD_TESTING=OFF -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
-            ..
+          cmake -G "Ninja" ..
           cmake --build . --parallel 2
           cd test_01
           ./svZeroD_interface_test01.exe `

@@ -93,12 +93,18 @@ jobs:
             '-DPYBIND11_FINDPYTHON=NEW'
           ) -join ' '
 
+          # already computed $ninja path earlier
+          $env:CMAKE_ARGS = "$env:CMAKE_ARGS -G Ninja -DCMAKE_MAKE_PROGRAM=$ninja"
+          # also nail the Python used by pybind11/CMake
+          $py = (Get-Command python).Source
+          $env:CMAKE_ARGS = "$env:CMAKE_ARGS -DPython_EXECUTABLE=$py"
+
           # 5) Confirm what CMake will see
           Write-Host "Using generator: $env:CMAKE_GENERATOR"
           Write-Host "Using ninja: $env:CMAKE_MAKE_PROGRAM"
 
           # 6) Build the wheel via setuptools+cmake_setuptools (inherits env above)
-          pip install -v .[dev]
+          pip install -v --no-build-isolation .[dev]
           pip show pysvzerod
 
       - name: Test the build

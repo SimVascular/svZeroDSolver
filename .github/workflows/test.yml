@@ -130,7 +130,7 @@ jobs:
           # Check paths for test_01
           Write-Host "`n=== Checking test_01 paths ==="
           Test-Path "test_01/svZeroD_interface_test01.exe" | ForEach-Object { Write-Host "svZeroD_interface_test01.exe exists: $_" }
-          Test-Path "../../../../Release" | ForEach-Object { Write-Host "Release exists (top-level): $_" }
+          Test-Path "$build" | ForEach-Object { Write-Host "Release exists (top-level): $_" }
           Test-Path "../../test_01/svzerod_3Dcoupling.json" | ForEach-Object { Write-Host "svzerod_3Dcoupling.json exists: $_" }
 
           # Check paths for test_02

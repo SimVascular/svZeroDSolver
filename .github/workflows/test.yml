@@ -123,9 +123,8 @@ jobs:
           cmake -S ../ -B . -G Ninja
           cmake --build . --parallel 2
 
-
-          $test1 = Join-Path $env:GITHUB_WORKSPACE 'test_01/svzerod_3Dcoupling.json'
-          $test2 = Join-Path $env:GITHUB_WORKSPACE 'test_02/svzerod_tuned.json'
+          $test1 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_01/svzerod_3Dcoupling.json'
+          $test2 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_02/svzerod_tuned.json'
 
           # Check paths for test_01
           Write-Host "`n=== Checking test_01 paths ==="

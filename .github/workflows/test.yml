@@ -123,24 +123,26 @@ jobs:
           cmake -S ../ -B . -G Ninja
           cmake --build . --parallel 2
 
-          Write-Host "Current directory: $(Get-Location)"
-          Write-Host "Contents of current directory:"
-          Get-ChildItem -Force
+
+          $test1 = Join-Path $env:GITHUB_WORKSPACE 'test_01/svzerod_3Dcoupling.json'
+          $test2 = Join-Path $env:GITHUB_WORKSPACE 'test_02/svzerod_tuned.json'
 
           # Check paths for test_01
           Write-Host "`n=== Checking test_01 paths ==="
           Test-Path "test_01/svZeroD_interface_test01.exe" | ForEach-Object { Write-Host "svZeroD_interface_test01.exe exists: $_" }
           Test-Path "$build" | ForEach-Object { Write-Host "Release exists (top-level): $_" }
-          Test-Path "../../test_01/svzerod_3Dcoupling.json" | ForEach-Object { Write-Host "svzerod_3Dcoupling.json exists: $_" }
+          Test-Path "$test1" | ForEach-Object { Write-Host "svzerod_3Dcoupling.json exists: $_" }
 
           # Check paths for test_02
           Write-Host "`n=== Checking test_02 paths ==="
           Test-Path "test_02/svZeroD_interface_test02.exe" | ForEach-Object { Write-Host "svZeroD_interface_test02.exe exists: $_" }
-          Test-Path "../../test_02/svzerod_tuned.json" | ForEach-Object { Write-Host "svzerod_tuned.json exists: $_" }
+          Test-Path "$test2" | ForEach-Object { Write-Host "svzerod_tuned.json exists: $_" }
 
-          # Print tree for visibility
-          Write-Host "`n=== Directory tree (2 levels) ==="
-          Get-ChildItem -Recurse -Depth 2 | Select-Object FullName
+          # run interface tests
+          cd test_01
+          ./svZeroD_interface_test01 "$build" "$test1"
+          cd ../test_02
+          ./svZeroD_interface_test02 "$build" "$test2"
 
           # build installer
           choco install nsis -y

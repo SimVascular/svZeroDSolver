@@ -122,6 +122,7 @@ jobs:
           cd build_tests
           cmake -S ../ -B . -G Ninja
           cmake --build . --parallel 2
+          cd ..
           
           Write-Host "Current directory: $(Get-Location)"
           Write-Host "Contents of current directory:"

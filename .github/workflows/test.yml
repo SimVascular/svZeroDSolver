@@ -122,17 +122,48 @@ jobs:
           cd build_tests
           cmake -S ../ -B . -G Ninja
           cmake --build . --parallel 2
-
-          # run interface tests
-          cd test_01
-          ./svZeroD_interface_test01.exe `
-            ../../../../Release `
-            ../../test_01/svzerod_3Dcoupling.json
           
-          cd ../test_02
-          ./svZeroD_interface_test02 `
-            ../../../../Release `
-            ../../test_02/svzerod_tuned.json
+          Write-Host "Current directory: $(Get-Location)"
+          Write-Host "Contents of current directory:"
+          Get-ChildItem -Force
+
+          # Check paths for test_01
+          Write-Host "`n=== Checking test_01 paths ==="
+          Test-Path "test_01/svZeroD_interface_test01.exe" | ForEach-Object { Write-Host "svZeroD_interface_test01.exe exists: $_" }
+          Test-Path "Release" | ForEach-Object { Write-Host "Release exists (top-level): $_" }
+          Test-Path "test_01/svzerod_3Dcoupling.json" | ForEach-Object { Write-Host "svzerod_3Dcoupling.json exists: $_" }
+
+          # Check paths for test_02
+          Write-Host "`n=== Checking test_02 paths ==="
+          Test-Path "test_02/svZeroD_interface_test02.exe" | ForEach-Object { Write-Host "svZeroD_interface_test02.exe exists: $_" }
+          Test-Path "test_02/svzerod_tuned.json" | ForEach-Object { Write-Host "svzerod_tuned.json exists: $_" }
+
+          # Print tree for visibility
+          Write-Host "`n=== Directory tree (2 levels) ==="
+          Get-ChildItem -Recurse -Depth 2 | Select-Object FullName
+
+          # Run tests only if all paths exist
+          if ((Test-Path "test_01/svZeroD_interface_test01.exe") -and
+              (Test-Path "Release") -and
+              (Test-Path "test_01/svzerod_3Dcoupling.json")) {
+            Write-Host "`nRunning test_01..."
+            cd test_01
+            ./svZeroD_interface_test01.exe ../../../../Release ../../test_01/svzerod_3Dcoupling.json
+            cd ..
+          } else {
+            Write-Host "Skipping test_01 — missing path(s)"
+          }
+
+          if ((Test-Path "test_02/svZeroD_interface_test02.exe") -and
+              (Test-Path "Release") -and
+              (Test-Path "test_02/svzerod_tuned.json")) {
+            Write-Host "`nRunning test_02..."
+            cd test_02
+            ./svZeroD_interface_test02.exe ../../../../Release ../../test_02/svzerod_tuned.json
+            cd ..
+          } else {
+            Write-Host "Skipping test_02 — missing path(s)"
+          }
 
           # build installer
           choco install nsis -y

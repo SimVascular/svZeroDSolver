@@ -125,6 +125,17 @@ jobs:
 
           $test1 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
           $test2 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_02/svzerod_tuned.json'
+          
+          $test1Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
+          $test2Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_02/svzerod_tuned.json'
+
+          # Confirm test EXEs exist
+          $test1Exe = Join-Path (Join-Path (Get-Location) 'test_01') 'svZeroD_interface_test01.exe'
+          $test2Exe = Join-Path (Join-Path (Get-Location) 'test_02') 'svZeroD_interface_test02.exe'
+          Write-Host "`n=== Interface test binaries ==="
+          Test-Path $test1Exe | % { "test_01 exe exists: $_" }
+          Test-Path $test2Exe | % { "test_02 exe exists: $_" }
+
 
           # Helper to run with timeout + capture logs
           function Run-TestExe {

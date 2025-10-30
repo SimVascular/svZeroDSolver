@@ -100,15 +100,12 @@ jobs:
 
           # one build dir for everything: executables + Python module
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
-          cmake -$build -G Ninja `
+          cd $build
+          cmake -G Ninja `
             -DCMAKE_BUILD_TYPE=Release `
             -DENABLE_DISTRIBUTION=ON `
-            -DCMAKE_BUILD_TYPE=Release `
-            -DEIGEN_BUILD_BLAS=OFF `
-            -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
-            -DCMAKE_Fortran_COMPILER:FILEPATH="" `
             ..
-          cmake --build $build --parallel 2
+          cmake --build . --parallel 2
 
           Write-Host "`n=== Release tree (3 levels) ==="
           $root = Join-Path $env:GITHUB_WORKSPACE 'Release/src/interface/'

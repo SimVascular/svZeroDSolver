@@ -109,7 +109,7 @@ jobs:
           cmake --build $build --parallel 2
 
           Write-Host "`n=== Release tree (3 levels) ==="
-          $root = Join-Path $env:GITHUB_WORKSPACE 'Release/src/interface/'
+          $root = Join-Path $env:GITHUB_WORKSPACE 'Release'
           if (-not (Test-Path $root)) {
             Write-Host "Release directory not found: $root"
             exit 1
@@ -118,6 +118,7 @@ jobs:
             $indent = '  ' * (($_.FullName.Split([IO.Path]::DirectorySeparatorChar).Count - $root.Split([IO.Path]::DirectorySeparatorChar).Count - 1))
             Write-Host "$indent$($_.Name)"
           }
+          Write-Host "`n=== Release tree (3 levels) ==="
 
           # make the Python extension importable
           $pydDir = Join-Path $build 'python'

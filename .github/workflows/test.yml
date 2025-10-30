@@ -98,7 +98,7 @@ jobs:
           $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
           $env:PATH = (($env:PATH -split ';' | ? { $_ -and ($_ -notmatch $pattern) }) -join ';')
 
-          # 2) One build dir for everything: executables + Python module
+          # one build dir for everything: executables + Python module
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
           cmake -S . -B $build -G Ninja `
             -DCMAKE_BUILD_TYPE=Release `
@@ -107,22 +107,23 @@ jobs:
             -DCMAKE_Fortran_COMPILER:FILEPATH=""
           cmake --build $build --parallel 2
 
-          # 3) Make the Python extension importable
+          # make the Python extension importable
           $pydDir = Join-Path $build 'python'
           if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd dir not found: $pydDir" }
           $env:PYTHONPATH = "$pydDir;$env:PYTHONPATH"
 
-          # 4) Run Python tests
+          # run integration tests
           cd (Join-Path $env:GITHUB_WORKSPACE 'tests')
           python -m pytest -v --durations=0 --ignore=test_dirgraph.py
 
-          # 5) Build interface tests
-          cd tests/test_interface
+          # build interface tests
+          cd test_interface
           mkdir build_tests
           cd build_tests
           cmake -S ../ -B . -G Ninja
           cmake --build . --parallel 2
 
+          # run interface tests
           cd test_01
           ./svZeroD_interface_test01.exe `
             ../../../../Release `

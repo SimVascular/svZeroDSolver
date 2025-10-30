@@ -120,7 +120,10 @@ jobs:
           cd test_interface
           mkdir build_tests
           cd build_tests
-          cmake -S ../ -B . -G Ninja
+          cmake -G Ninja `
+                -DCMAKE_BUILD_TYPE=Release `
+                -DENABLE_DISTRIBUTION=ON `
+                ..
           cmake --build . --parallel 2
 
           $test1 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'

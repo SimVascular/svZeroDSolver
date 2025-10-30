@@ -136,6 +136,17 @@ jobs:
           Test-Path $test1Exe | % { "test_01 exe exists: $_" }
           Test-Path $test2Exe | % { "test_02 exe exists: $_" }
 
+          Write-Host "`n=== Release tree (3 levels) ==="
+          $root = Join-Path $env:GITHUB_WORKSPACE 'Release'
+          if (-not (Test-Path $root)) {
+            Write-Host "Release directory not found: $root"
+            exit 1
+          }
+          Get-ChildItem -Path $root -Recurse -Depth 3 | ForEach-Object {
+            $indent = '  ' * (($_.FullName.Split([IO.Path]::DirectorySeparatorChar).Count - $root.Split([IO.Path]::DirectorySeparatorChar).Count - 1))
+            Write-Host "$indent$($_.Name)"
+          }
+
 
           # Helper to run with timeout + capture logs
           function Run-TestExe {
@@ -172,6 +183,22 @@ jobs:
           cd $build
           cpack -C Release
           Copy-Item distribution\svZeroDSolver_* -Destination ..\
+
+      - name: Upload debug artifacts (Windows)
+        if: startsWith(matrix.os, 'windows')
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-debug-artifacts
+          path: |
+            Release/solver_help_out.txt
+            Release/solver_help_err.txt
+            tests/test_interface/build_tests/test_01/out.txt
+            tests/test_interface/build_tests/test_01/err.txt
+            tests/test_interface/build_tests/test_01/*.dmp
+            tests/test_interface/build_tests/test_02/out.txt
+            tests/test_interface/build_tests/test_02/err.txt
+            tests/test_interface/build_tests/test_02/*.dmp
+          if-no-files-found: ignore
 
       - name: Upload installer
         uses: actions/upload-artifact@v4

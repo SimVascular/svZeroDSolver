@@ -100,12 +100,26 @@ jobs:
 
           # one build dir for everything: executables + Python module
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
-          cmake -S . -B $build -G Ninja `
+          cmake -$build -G Ninja ``
+            -DCMAKE_BUILD_TYPE=Release `
+            -DENABLE_DISTRIBUTION=ON `
             -DCMAKE_BUILD_TYPE=Release `
             -DEIGEN_BUILD_BLAS=OFF `
             -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
             -DCMAKE_Fortran_COMPILER:FILEPATH=""
+            ..
           cmake --build $build --parallel 2
+
+          Write-Host "`n=== Release tree (3 levels) ==="
+          $root = Join-Path $env:GITHUB_WORKSPACE 'Release/src/interface/'
+          if (-not (Test-Path $root)) {
+            Write-Host "Release directory not found: $root"
+            exit 1
+          }
+          Get-ChildItem -Path $root -Recurse -Depth 3 | ForEach-Object {
+            $indent = '  ' * (($_.FullName.Split([IO.Path]::DirectorySeparatorChar).Count - $root.Split([IO.Path]::DirectorySeparatorChar).Count - 1))
+            Write-Host "$indent$($_.Name)"
+          }
 
           # make the Python extension importable
           $pydDir = Join-Path $build 'python'
@@ -120,10 +134,7 @@ jobs:
           cd test_interface
           mkdir build_tests
           cd build_tests
-          cmake -G Ninja `
-                -DCMAKE_BUILD_TYPE=Release `
-                -DENABLE_DISTRIBUTION=ON `
-                ..
+          cmake -G Ninja ..
           cmake --build . --parallel 2
 
           $test1 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
@@ -138,19 +149,6 @@ jobs:
           Write-Host "`n=== Interface test binaries ==="
           Test-Path $test1Exe | % { "test_01 exe exists: $_" }
           Test-Path $test2Exe | % { "test_02 exe exists: $_" }
-
-          Write-Host "`n=== Release tree (3 levels) ==="
-          $root = Join-Path $env:GITHUB_WORKSPACE 'Release/src/interface/'
-          if (-not (Test-Path $root)) {
-            Write-Host "Release directory not found: $root"
-            exit 1
-          }
-          Get-ChildItem -Path $root -Recurse -Depth 3 | ForEach-Object {
-            $indent = '  ' * (($_.FullName.Split([IO.Path]::DirectorySeparatorChar).Count - $root.Split([IO.Path]::DirectorySeparatorChar).Count - 1))
-            Write-Host "$indent$($_.Name)"
-          }
-
-
 
           # Helper to run with timeout + capture logs
           function Run-TestExe {

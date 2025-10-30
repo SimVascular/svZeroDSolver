@@ -137,7 +137,7 @@ jobs:
           Test-Path $test2Exe | % { "test_02 exe exists: $_" }
 
           Write-Host "`n=== Release tree (3 levels) ==="
-          $root = Join-Path $env:GITHUB_WORKSPACE 'Release'
+          $root = Join-Path $env:GITHUB_WORKSPACE 'Release/src/interface/'
           if (-not (Test-Path $root)) {
             Write-Host "Release directory not found: $root"
             exit 1
@@ -146,7 +146,7 @@ jobs:
             $indent = '  ' * (($_.FullName.Split([IO.Path]::DirectorySeparatorChar).Count - $root.Split([IO.Path]::DirectorySeparatorChar).Count - 1))
             Write-Host "$indent$($_.Name)"
           }
-            
+
 
 
           # Helper to run with timeout + capture logs

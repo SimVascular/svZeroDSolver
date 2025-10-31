@@ -154,16 +154,18 @@ jobs:
           if (Test-Path (Join-Path $build 'bin')) { $env:PATH = "$($build)\bin;$env:PATH" }
 
           # ctypes smoke test (surface missing dependent)
-          python - << 'PY'
+          $code = @"
           import ctypes, sys
-          dll = r'''%s'''
+          dll = r'$iface'
+          print('Trying to load:', dll)
           try:
               ctypes.CDLL(dll)
-              print("ctypes: loaded OK:", dll)
+              print('Loaded OK')
           except OSError as e:
-              print("ctypes: FAILED to load:", dll, "->", e)
+              print('FAILED to load:', e)
               sys.exit(1)
-          PY
+          "@
+          $code | python -
 
           # Paths to JSON test data
           $test1Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'

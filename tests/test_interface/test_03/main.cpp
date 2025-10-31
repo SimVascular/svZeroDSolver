@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
   LPNSolverInterface interface;
 
   if (argc != 3) {
-    std::runtime_error(
+    throw std::runtime_error(
         "Usage: svZeroD_interface_test03 <path_to_svzeroDSolver_build_folder> "
         "<path_to_json_file>");
   }

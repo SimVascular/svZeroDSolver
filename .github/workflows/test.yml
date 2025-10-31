@@ -120,6 +120,9 @@ jobs:
           }
           Write-Host "`n=== Release tree (3 levels) ==="
 
+          $libpath = Join-Path $build 'src/interface/libsvzero_interface.dll'
+          Test-Path $libpath | % { "libpath exists: $_" }
+
           # make the Python extension importable
           $pydDir = Join-Path $build 'python'
           if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd dir not found: $pydDir" }

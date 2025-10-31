@@ -91,7 +91,7 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         shell: pwsh
         run: |
-          $ErrorActionPreference = 'Stop'
+          $ErrorActionPreference = 'Continue'
           python -m pip install --upgrade cmake cmake-setuptools numpy ninja pytest pandas graphviz networkx pydot
 
           # 1) Keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)

@@ -5,6 +5,12 @@
 
 #include <cmath>
 
+#if defined(_WIN32) || defined(__CYGWIN__)
+#define SVZEROD_INTERFACE_API __declspec(dllexport)
+#else
+#define SVZEROD_INTERFACE_API
+#endif
+
 #include "SimulationParameters.h"
 
 // Static member data.
@@ -26,39 +32,6 @@ SolverInterface::~SolverInterface() {}
 //            Callable interface functions              //
 //////////////////////////////////////////////////////////
 
-extern "C" void initialize(std::string input_file, int& problem_id,
-                           int& pts_per_cycle, int& num_cycles,
-                           int& num_output_steps,
-                           std::vector<std::string>& block_names,
-                           std::vector<std::string>& variable_names);
-
-extern "C" void set_external_step_size(int problem_id,
-                                       double external_step_size);
-
-extern "C" void increment_time(int problem_id, const double external_time,
-                               std::vector<double>& solution);
-
-extern "C" void run_simulation(int problem_id, const double external_time,
-                               std::vector<double>& output_times,
-                               std::vector<double>& output_solutions,
-                               int& error_code);
-
-extern "C" void update_block_params(int problem_id, std::string block_name,
-                                    std::vector<double>& params);
-
-extern "C" void read_block_params(int problem_id, std::string block_name,
-                                  std::vector<double>& params);
-
-extern "C" void get_block_node_IDs(int problem_id, std::string block_name,
-                                   std::vector<int>& IDs);
-
-extern "C" void update_state(int problem_id, std::vector<double> new_state_y,
-                             std::vector<double> new_state_ydot);
-
-extern "C" void return_y(int problem_id, std::vector<double>& ydot);
-
-extern "C" void return_ydot(int problem_id, std::vector<double>& ydot);
-
 /**
  * @brief Initialize the 0D solver interface.
  *
@@ -70,10 +43,11 @@ extern "C" void return_ydot(int problem_id, std::vector<double>& ydot);
  * @param block_names Vector of all the 0D block names.
  * @param variable_names Vector of all the 0D variable names.
  */
-void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
-                int& num_cycles, int& num_output_steps,
-                std::vector<std::string>& block_names,
-                std::vector<std::string>& variable_names) {
+extern "C" SVZEROD_INTERFACE_API void initialize(
+    std::string input_file_arg, int& problem_id, int& pts_per_cycle,
+    int& num_cycles, int& num_output_steps,
+    std::vector<std::string>& block_names,
+    std::vector<std::string>& variable_names) {
   DEBUG_MSG("========== svZeroD initialize ==========");
   std::string input_file(input_file_arg);
   DEBUG_MSG("[initialize] input_file: " << input_file);
@@ -198,7 +172,8 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
  * @param problem_id The returned ID used to identify the 0D problem.
  * @param external_step_size The time step size of the external program.
  */
-void set_external_step_size(int problem_id, double external_step_size) {
+extern "C" SVZEROD_INTERFACE_API void set_external_step_size(
+    int problem_id, double external_step_size) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -218,8 +193,8 @@ void set_external_step_size(int problem_id, double external_step_size) {
  * @param block name The name of the block to update.
  * @param params New parameters for the block (structure depends on block type).
  */
-void update_block_params(int problem_id, std::string block_name,
-                         std::vector<double>& params) {
+extern "C" SVZEROD_INTERFACE_API void update_block_params(
+    int problem_id, std::string block_name, std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -267,8 +242,8 @@ void update_block_params(int problem_id, std::string block_name,
  * @param block name The name of the block to read.
  * @param params Parameters of the block (structure depends on block type).
  */
-void read_block_params(int problem_id, std::string block_name,
-                       std::vector<double>& params) {
+extern "C" SVZEROD_INTERFACE_API void read_block_params(
+    int problem_id, std::string block_name, std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto block = model->get_block(block_name);
@@ -294,8 +269,8 @@ void read_block_params(int problem_id, std::string block_name,
  * order: {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet
  * nodes, outlet flow[0], outlet pressure[0],...}.
  */
-void get_block_node_IDs(int problem_id, std::string block_name,
-                        std::vector<int>& IDs) {
+extern "C" SVZEROD_INTERFACE_API void get_block_node_IDs(
+    int problem_id, std::string block_name, std::vector<int>& IDs) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -324,7 +299,8 @@ void get_block_node_IDs(int problem_id, std::string block_name,
  * @param problem_id The ID used to identify the 0D problem.
  * @param y The state vector containing all state.y degrees-of-freedom.
  */
-void return_y(int problem_id, std::vector<double>& y) {
+extern "C" SVZEROD_INTERFACE_API void return_y(int problem_id,
+                                                std::vector<double>& y) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;
@@ -345,7 +321,8 @@ void return_y(int problem_id, std::vector<double>& y) {
  * @param problem_id The ID used to identify the 0D problem.
  * @param ydot The state vector containing all state.ydot degrees-of-freedom.
  */
-void return_ydot(int problem_id, std::vector<double>& ydot) {
+extern "C" SVZEROD_INTERFACE_API void return_ydot(int problem_id,
+                                                   std::vector<double>& ydot) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;
@@ -369,8 +346,9 @@ void return_ydot(int problem_id, std::vector<double>& ydot) {
  * @param new_state_ydot The new state vector containing all state.ydot
  * degrees-of-freedom.
  */
-void update_state(int problem_id, std::vector<double> new_state_y,
-                  std::vector<double> new_state_ydot) {
+extern "C" SVZEROD_INTERFACE_API void update_state(
+    int problem_id, std::vector<double> new_state_y,
+    std::vector<double> new_state_ydot) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;
@@ -395,8 +373,8 @@ void update_state(int problem_id, std::vector<double> new_state_y,
  * @param external_time The current time in the external program.
  * @param solution The solution vector containing all degrees-of-freedom.
  */
-void increment_time(int problem_id, const double external_time,
-                    std::vector<double>& solution) {
+extern "C" SVZEROD_INTERFACE_API void increment_time(
+    int problem_id, const double external_time, std::vector<double>& solution) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -426,9 +404,10 @@ void increment_time(int problem_id, const double external_time,
  * @param error_code This is 1 if a NaN is found in the solution vector, 0
  * otherwise.
  */
-void run_simulation(int problem_id, const double external_time,
-                    std::vector<double>& output_times,
-                    std::vector<double>& output_solutions, int& error_code) {
+extern "C" SVZEROD_INTERFACE_API void run_simulation(
+    int problem_id, const double external_time,
+    std::vector<double>& output_times,
+    std::vector<double>& output_solutions, int& error_code) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 

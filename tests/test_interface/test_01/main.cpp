@@ -273,25 +273,40 @@ int main(int argc, char** argv) {
     std::cout << "[step] query block node IDs...\n"; flush_now();
     // Get variable IDs for all interface blocks
     for (const auto& block_params : interface_block_params) {
+      std::cout << "[dbg] whaddup\n"; flush_now();
       std::vector<int> IDs;
       const std::string& block_name = block_params.first;
       std::cout << "[dbg] Processing block: " << block_name << "\n"; flush_now();
       interface.get_block_node_IDs(block_name, IDs);
+      std::cout << "[dbg] Got IDs array size: " << IDs.size() << "\n"; flush_now();
       if (IDs.size() < 2) throw std::runtime_error("IDs too small for " + block_name);
       int num_inlet_nodes  = IDs[0];
       int num_outlet_nodes = IDs[1 + num_inlet_nodes * 2];
       std::cout << "[dbg] " << block_name << ": inlets=" << num_inlet_nodes 
-          << ", outlets=" << num_outlet_nodes << "\n"; flush_now();
+        << ", outlets=" << num_outlet_nodes << "\n"; flush_now();
+      
+      std::cout << "[dbg] First few IDs: ";
+      for(size_t i = 0; i < std::min(size_t(5), IDs.size()); i++) {
+        std::cout << IDs[i] << " ";
+      }
+      std::cout << "\n"; flush_now();
+
       if (block_name == "outlet_aorta") {
+      std::cout << "[dbg] Checking outlet_aorta constraints\n"; flush_now();
       if ((num_inlet_nodes != 1) || (num_outlet_nodes != 0)) {
+        std::cout << "[err] outlet_aorta constraint failed\n"; flush_now();
         throw std::runtime_error("Wrong number of inlets/outlets for outlet_aorta");
       }
       } else {
+      std::cout << "[dbg] Checking standard block constraints\n"; flush_now();
       if ((num_inlet_nodes != 0) || (num_outlet_nodes != 1)) {
+        std::cout << "[err] Standard block constraint failed\n"; flush_now();
         throw std::runtime_error("Wrong number of inlets/outlets for " + block_name);
       }
       }
+      std::cout << "[dbg] Block " << block_name << " passed constraints\n"; flush_now();
     }
+    std::cout << "[dbg] seeya\n"; flush_now();
     // Outlet from heart block
     std::vector<int> IDs;
     std::string block_name = "J_heart_outlet";

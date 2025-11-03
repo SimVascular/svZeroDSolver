@@ -194,7 +194,8 @@ extern "C" SVZEROD_INTERFACE_API void set_external_step_size(
  * @param params New parameters for the block (structure depends on block type).
  */
 extern "C" SVZEROD_INTERFACE_API void update_block_params(
-    int problem_id, const std::string& block_name, std::vector<double>& params) {
+    int problem_id, const std::string& block_name,
+    std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -243,7 +244,8 @@ extern "C" SVZEROD_INTERFACE_API void update_block_params(
  * @param params Parameters of the block (structure depends on block type).
  */
 extern "C" SVZEROD_INTERFACE_API void read_block_params(
-    int problem_id, const std::string& block_name, std::vector<double>& params) {
+    int problem_id, const std::string& block_name,
+    std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto block = model->get_block(block_name);
@@ -300,7 +302,7 @@ extern "C" SVZEROD_INTERFACE_API void get_block_node_IDs(
  * @param y The state vector containing all state.y degrees-of-freedom.
  */
 extern "C" SVZEROD_INTERFACE_API void return_y(int problem_id,
-                                                std::vector<double>& y) {
+                                               std::vector<double>& y) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;
@@ -322,7 +324,7 @@ extern "C" SVZEROD_INTERFACE_API void return_y(int problem_id,
  * @param ydot The state vector containing all state.ydot degrees-of-freedom.
  */
 extern "C" SVZEROD_INTERFACE_API void return_ydot(int problem_id,
-                                                   std::vector<double>& ydot) {
+                                                  std::vector<double>& ydot) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;
@@ -406,8 +408,8 @@ extern "C" SVZEROD_INTERFACE_API void increment_time(
  */
 extern "C" SVZEROD_INTERFACE_API void run_simulation(
     int problem_id, const double external_time,
-    std::vector<double>& output_times,
-    std::vector<double>& output_solutions, int& error_code) {
+    std::vector<double>& output_times, std::vector<double>& output_solutions,
+    int& error_code) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 

@@ -44,7 +44,7 @@ SolverInterface::~SolverInterface() {}
  * @param variable_names Vector of all the 0D variable names.
  */
 extern "C" SVZEROD_INTERFACE_API void initialize(
-    std::string input_file_arg, int& problem_id, int& pts_per_cycle,
+    const std::string& input_file_arg, int& problem_id, int& pts_per_cycle,
     int& num_cycles, int& num_output_steps,
     std::vector<std::string>& block_names,
     std::vector<std::string>& variable_names) {
@@ -194,7 +194,7 @@ extern "C" SVZEROD_INTERFACE_API void set_external_step_size(
  * @param params New parameters for the block (structure depends on block type).
  */
 extern "C" SVZEROD_INTERFACE_API void update_block_params(
-    int problem_id, std::string block_name, std::vector<double>& params) {
+    int problem_id, const std::string& block_name, std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -243,7 +243,7 @@ extern "C" SVZEROD_INTERFACE_API void update_block_params(
  * @param params Parameters of the block (structure depends on block type).
  */
 extern "C" SVZEROD_INTERFACE_API void read_block_params(
-    int problem_id, std::string block_name, std::vector<double>& params) {
+    int problem_id, const std::string& block_name, std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto block = model->get_block(block_name);
@@ -270,7 +270,7 @@ extern "C" SVZEROD_INTERFACE_API void read_block_params(
  * nodes, outlet flow[0], outlet pressure[0],...}.
  */
 extern "C" SVZEROD_INTERFACE_API void get_block_node_IDs(
-    int problem_id, std::string block_name, std::vector<int>& IDs) {
+    int problem_id, const std::string& block_name, std::vector<int>& IDs) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
 
@@ -347,8 +347,8 @@ extern "C" SVZEROD_INTERFACE_API void return_ydot(int problem_id,
  * degrees-of-freedom.
  */
 extern "C" SVZEROD_INTERFACE_API void update_state(
-    int problem_id, std::vector<double> new_state_y,
-    std::vector<double> new_state_ydot) {
+    int problem_id, const std::vector<double>& new_state_y,
+    const std::vector<double>& new_state_ydot) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
   auto system_size = interface->system_size_;

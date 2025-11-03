@@ -275,41 +275,54 @@ int main(int argc, char** argv) {
     for (const auto& block_params : interface_block_params) {
       std::vector<int> IDs;
       const std::string& block_name = block_params.first;
+      std::cout << "[dbg] Processing block: " << block_name << "\n"; flush_now();
       interface.get_block_node_IDs(block_name, IDs);
       if (IDs.size() < 2) throw std::runtime_error("IDs too small for " + block_name);
       int num_inlet_nodes  = IDs[0];
       int num_outlet_nodes = IDs[1 + num_inlet_nodes * 2];
+      std::cout << "[dbg] " << block_name << ": inlets=" << num_inlet_nodes 
+          << ", outlets=" << num_outlet_nodes << "\n"; flush_now();
       if (block_name == "outlet_aorta") {
-        if ((num_inlet_nodes != 1) || (num_outlet_nodes != 0)) {
-          throw std::runtime_error("Wrong number of inlets/outlets for outlet_aorta");
-        }
+      if ((num_inlet_nodes != 1) || (num_outlet_nodes != 0)) {
+        throw std::runtime_error("Wrong number of inlets/outlets for outlet_aorta");
+      }
       } else {
-        if ((num_inlet_nodes != 0) || (num_outlet_nodes != 1)) {
-          throw std::runtime_error("Wrong number of inlets/outlets for " + block_name);
-        }
+      if ((num_inlet_nodes != 0) || (num_outlet_nodes != 1)) {
+        throw std::runtime_error("Wrong number of inlets/outlets for " + block_name);
+      }
       }
     }
     // Outlet from heart block
     std::vector<int> IDs;
     std::string block_name = "J_heart_outlet";
+    std::cout << "[dbg] Processing heart outlet block\n"; flush_now();
     interface.get_block_node_IDs(block_name, IDs);
     int num_inlet_nodes = IDs[0];
     int num_outlet_nodes = IDs[1 + num_inlet_nodes * 2];
+    std::cout << "[dbg] Heart outlet: inlets=" << num_inlet_nodes 
+          << ", outlets=" << num_outlet_nodes << "\n"; flush_now();
     if ((num_inlet_nodes != 1) && (num_outlet_nodes != 1)) {
       throw std::runtime_error("Wrong number of inlets/outlets for J_heart_outlet");
     }
     int aortic_inlet_flow_id = IDs[1];
     int aortic_inlet_pressure_id = IDs[2];
+    std::cout << "[dbg] Aortic IDs: flow=" << aortic_inlet_flow_id 
+          << ", pressure=" << aortic_inlet_pressure_id << "\n"; flush_now();
     // Outlet from coronary
     block_name = "BC_lca1";
+    std::cout << "[dbg] Processing coronary block\n"; flush_now();
     interface.get_block_node_IDs(block_name, IDs);
     num_inlet_nodes = IDs[0];
     num_outlet_nodes = IDs[1 + num_inlet_nodes * 2];
+    std::cout << "[dbg] Coronary: inlets=" << num_inlet_nodes 
+          << ", outlets=" << num_outlet_nodes << "\n"; flush_now();
     if ((num_inlet_nodes != 1) && (num_outlet_nodes != 1)) {
       throw std::runtime_error("Wrong number of inlets/outlets for BC_lca1");
     }
     int bc_lca1_outlet_flow_id = IDs[4];
     int bc_lca1_outlet_pressure_id = IDs[5];
+    std::cout << "[dbg] Coronary IDs: flow=" << bc_lca1_outlet_flow_id 
+          << ", pressure=" << bc_lca1_outlet_pressure_id << "\n"; flush_now();
     std::cout << "[ok  ] block node IDs\n"; flush_now();
 
     // Update block parameters with current flow from 3D solver

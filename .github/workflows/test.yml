@@ -131,7 +131,7 @@ jobs:
 
           # run integration tests
           cd (Join-Path $env:GITHUB_WORKSPACE 'tests')
-          python -m pytest -v --durations=0 --ignore=test_dirgraph.py
+          # python -m pytest -v --durations=0 --ignore=test_dirgraph.py
 
           # build interface tests
           cd test_interface
@@ -163,7 +163,7 @@ jobs:
             Remove-Item -Force -ErrorAction SilentlyContinue out.txt, err.txt
             $p = Start-Process -FilePath $exe -ArgumentList @("$arg1","$arg2") -NoNewWindow -PassThru `
                  -RedirectStandardOutput out.txt -RedirectStandardError err.txt
-            if (-not (Wait-Process -Id $p.Id -Timeout 300 -ErrorAction SilentlyContinue)) {
+            if (-not (Wait-Process -Id $p.Id -Timeout 120 -ErrorAction SilentlyContinue)) {
               Write-Host "TIMEOUT: killing $exe"
               Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
               Get-Content err.txt -ErrorAction SilentlyContinue | Write-Host

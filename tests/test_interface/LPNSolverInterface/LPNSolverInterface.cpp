@@ -142,9 +142,12 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
 void LPNSolverInterface::initialize(std::string file_name) {
   lpn_initialize_(file_name, problem_id_, pts_per_cycle_, num_cycles_,
                   num_output_steps_, block_names_, variable_names_);
+  DEBUG_MSG("wtf1");
   std::cout << "[LPNSolverInterface::initialize] Problem ID: " << problem_id_
             << std::endl;
+  DEBUG_MSG("wtf2");
   system_size_ = variable_names_.size();
+  DEBUG_MSG("wtf3");
   std::cout << "[LPNSolverInterface::initialize] System size: " << system_size_
             << std::endl;
 }

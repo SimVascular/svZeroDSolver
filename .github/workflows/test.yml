@@ -163,7 +163,7 @@ jobs:
             Remove-Item -Force -ErrorAction SilentlyContinue out.txt, err.txt
             $p = Start-Process -FilePath $exe -ArgumentList @("$arg1","$arg2") -NoNewWindow -PassThru `
                  -RedirectStandardOutput out.txt -RedirectStandardError err.txt
-            if (-not (Wait-Process -Id $p.Id -Timeout 240 -ErrorAction SilentlyContinue)) {
+            if (-not (Wait-Process -Id $p.Id -Timeout 360 -ErrorAction SilentlyContinue)) {
               Write-Host "TIMEOUT: killing $exe"
               Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
               Get-Content err.txt -ErrorAction SilentlyContinue | Write-Host

@@ -7,9 +7,64 @@
 #include <fstream>
 #include <iostream>
 #include <map>
+#include <cstdlib>   // std::getenv
+
+#ifdef _WIN32
+  #define NOMINMAX
+  #include <windows.h>
+#endif
 
 #include "../LPNSolverInterface/LPNSolverInterface.h"
 namespace fs = std::filesystem;
+
+static inline void flush_now() { std::cout.flush(); std::cerr.flush(); }
+static inline bool debug_on() {
+  const char* v = std::getenv("SVZERO_DEBUG");
+  return v && *v && std::string(v) != "0";
+}
+
+#ifdef _WIN32
+static std::string win_err(DWORD e) {
+  LPVOID buf = nullptr;
+  DWORD n = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
+                               FORMAT_MESSAGE_IGNORE_INSERTS,
+                           NULL, e, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+                           (LPSTR)&buf, 0, NULL);
+  std::string s = (n && buf) ? std::string((LPSTR)buf, n) : "Unknown error";
+  if (buf) LocalFree(buf);
+  return s;
+}
+
+// Make sure Windows can find DLLs in iface_dir without touching global PATH
+static void add_dll_search_dir(const fs::path& p) {
+  using SetDefaultDllDirectories_t = BOOL (WINAPI*)(DWORD);
+  auto setDef = (SetDefaultDllDirectories_t)
+      GetProcAddress(GetModuleHandleA("kernel32.dll"), "SetDefaultDllDirectories");
+  if (setDef) {
+    setDef(LOAD_LIBRARY_SEARCH_DEFAULT_DIRS | LOAD_LIBRARY_SEARCH_USER_DIRS);
+    AddDllDirectory(reinterpret_cast<PCWSTR>(std::wstring(p.wstring()).c_str()));
+  } else {
+    SetDllDirectoryW(std::wstring(p.wstring()).c_str()); // older Windows fallback
+  }
+}
+
+// LoadLibrary preflight so missing dependencies are surfaced clearly
+static void preflight_load(const fs::path& dll) {
+  std::wcerr << L"[dbg] Preflight LoadLibraryW: " << dll.wstring() << L"\n";
+  HMODULE h = LoadLibraryW(dll.wstring().c_str());
+  if (!h) {
+    DWORD e = GetLastError();
+    std::cerr << "[err] LoadLibraryW failed: " << e << " (" << win_err(e) << ")\n";
+    std::cerr << "[hint] Ensure this folder is in DLL search path: "
+              << dll.parent_path().string() << "\n";
+    flush_now();
+    throw std::runtime_error("LoadLibrary preflight failed");
+  }
+  std::cerr << "[ok ] LoadLibraryW succeeded; FreeLibrary()\n";
+  FreeLibrary(h);
+  flush_now();
+}
+#endif
 
 //------
 // main
@@ -36,18 +91,31 @@ int main(int argc, char** argv) {
   fs::path iface_dir = build_dir / "src" / "interface";
   fs::path lib_so = iface_dir / "libsvzero_interface.so";
   fs::path lib_dylib = iface_dir / "libsvzero_interface.dylib";
-  fs::path lib_dll = iface_dir / "libsvzero_interface.dll";
-  if (fs::exists(lib_so)) {
-    interface.load_library(lib_so.string());
-  } else if (fs::exists(lib_dylib)) {
-    interface.load_library(lib_dylib.string());
-  } else if (fs::exists(lib_dll)) {
-    interface.load_library(lib_dll.string());
-  } else {
-    throw std::runtime_error("Could not find shared libraries " +
-                             lib_so.string() + " or " + lib_dylib.string() +
-                             " or " + lib_dll.string() + " !");
+#ifdef _WIN32
+  fs::path lib_dll1 = iface_dir / "libsvzero_interface.dll"; // with prefix (our CMake patch)
+  fs::path lib_dll2 = iface_dir / "svzero_interface.dll";    // fallback without prefix
+#endif
+
+  std::string lib_to_load;
+#ifdef _WIN32
+  if (fs::exists(lib_dll1)) lib_to_load = lib_dll1.string();
+  else if (fs::exists(lib_dll2)) lib_to_load = lib_dll2.string();
+#else
+  if (fs::exists(lib_so)) lib_to_load = lib_so.string();
+  else if (fs::exists(lib_dylib)) lib_to_load = lib_dylib.string();
+#endif
+  if (lib_to_load.empty()) {
+    std::cerr << "[err] Could not find shared library in " << iface_dir.string() << "\n";
+    flush_now();
+    throw std::runtime_error("Could not find shared library!");
   }
+
+#ifdef _WIN32
+  add_dll_search_dir(iface_dir);
+  preflight_load(fs::path(lib_to_load));
+#endif
+
+  interface.load_library(lib_to_load);
 
   // Set up the svZeroD model
   std::string file_name = std::string(argv[2]);

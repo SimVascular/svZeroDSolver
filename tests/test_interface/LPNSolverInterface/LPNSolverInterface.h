@@ -84,7 +84,7 @@ class LPNSolverInterface {
 
   // Interface functions.
   std::string lpn_initialize_name_;
-  void (*lpn_initialize_)(const std::string&, int&, int&, int&, int&,
+  void (*lpn_initialize_)(const char*, int&, int&, int&, int&,
                           std::vector<std::string>&, std::vector<std::string>&);
 
   std::string lpn_increment_time_name_;
@@ -98,15 +98,15 @@ class LPNSolverInterface {
                               int& error_code);
 
   std::string lpn_update_block_params_name_;
-  void (*lpn_update_block_params_)(const int, const std::string&,
+  void (*lpn_update_block_params_)(const int, const char*,
                                    std::vector<double>& new_params);
 
   std::string lpn_read_block_params_name_;
-  void (*lpn_read_block_params_)(const int, const std::string&,
+  void (*lpn_read_block_params_)(const int, const char*,
                                  std::vector<double>& block_params);
 
   std::string lpn_get_block_node_IDs_name_;
-  void (*lpn_get_block_node_IDs_)(const int, const std::string&,
+  void (*lpn_get_block_node_IDs_)(const int, const char*,
                                   std::vector<int>& block_params);
 
   std::string lpn_update_state_name_;

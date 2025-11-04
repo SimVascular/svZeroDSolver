@@ -157,7 +157,7 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
 //   file_name: The name of the LPN configuration file (JSON).
 //
 void LPNSolverInterface::initialize(const std::string& file_name) {
-  lpn_initialize_(file_name, problem_id_, pts_per_cycle_, num_cycles_,
+  lpn_initialize_(file_name.c_str(), problem_id_, pts_per_cycle_, num_cycles_,
                   num_output_steps_, block_names_, variable_names_);
   std::cout << "[LPNSolverInterface::initialize] Problem ID: " << problem_id_
             << std::endl;
@@ -219,7 +219,7 @@ void LPNSolverInterface::run_simulation(const double time,
 //
 void LPNSolverInterface::update_block_params(const std::string& block_name,
                                              std::vector<double>& new_params) {
-  lpn_update_block_params_(problem_id_, block_name, new_params);
+  lpn_update_block_params_(problem_id_, block_name.c_str(), new_params);
 }
 
 // Read the paramaters of a particular 0D block
@@ -232,7 +232,7 @@ void LPNSolverInterface::update_block_params(const std::string& block_name,
 //
 void LPNSolverInterface::read_block_params(const std::string& block_name,
                                            std::vector<double>& block_params) {
-  lpn_read_block_params_(problem_id_, block_name, block_params);
+  lpn_read_block_params_(problem_id_, block_name.c_str(), block_params);
 }
 
 // Get the IDs of the inlet/outlet variables of a given block in the state
@@ -246,7 +246,7 @@ void LPNSolverInterface::read_block_params(const std::string& block_name,
 //
 void LPNSolverInterface::get_block_node_IDs(const std::string& block_name,
                                             std::vector<int>& IDs) {
-  lpn_get_block_node_IDs_(problem_id_, block_name, IDs);
+  lpn_get_block_node_IDs_(problem_id_, block_name.c_str(), IDs);
 }
 
 // Overwrite the y and ydot state vectors in the 0D solver

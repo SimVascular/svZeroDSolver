@@ -154,6 +154,11 @@ int main(int argc, char** argv) {
       return 2;
     }
     std::cout << "[dbg] using library   : " << lib_to_load << "\n";
+    std::cout << "[dbg] library exists  : " << (fs::exists(lib_to_load) ? "yes" : "no") << "\n";
+    if (fs::exists(lib_to_load)) {
+      std::cout << "[dbg] library size    : " << fs::file_size(lib_to_load) << " bytes\n";
+      std::cout << "[dbg] library abs path: " << fs::absolute(lib_to_load) << "\n";
+    }
     flush_now();
 
 #ifdef _WIN32

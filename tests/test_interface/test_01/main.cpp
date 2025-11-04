@@ -170,11 +170,31 @@ int main(int argc, char** argv) {
     // Set up the svZeroD model
     const std::string file_name = std::string(argv[2]);
     std::cout << "[step] initialize: " << file_name << "\n"; flush_now();
+    std::cout << "[dbg] Current working directory: " << fs::current_path() << "\n"; flush_now();
+    std::cout << "[dbg] argv[1] (build dir): " << argv[1] << "\n"; flush_now();
+    std::cout << "[dbg] argv[2] (json file): " << argv[2] << "\n"; flush_now();
+
     if (!fs::exists(file_name)) {
       std::cerr << "[err] JSON file does not exist: " << file_name << "\n";
       flush_now();
       return 3;
     }
+
+    std::cout << "[dbg] JSON file exists, size: " << fs::file_size(file_name) << " bytes\n"; flush_now();
+    std::cout << "[dbg] Absolute path: " << fs::absolute(file_name) << "\n"; flush_now();
+
+    // Verify we can read the file
+    std::ifstream test_read(file_name);
+    if (!test_read.is_open() || !test_read.good()) {
+      std::cerr << "[err] Cannot open JSON file for reading: " << file_name << "\n";
+      flush_now();
+      return 3;
+    }
+    std::string first_line;
+    std::getline(test_read, first_line);
+    std::cout << "[dbg] First line of JSON: " << first_line.substr(0, std::min(size_t(80), first_line.size())) << "\n"; flush_now();
+    test_read.close();
+
     interface.initialize(file_name);
     std::cout << "[ok  ] initialize\n"; flush_now();
 

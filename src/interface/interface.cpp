@@ -59,6 +59,9 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
 
   // Create configuration reader.
   std::ifstream ifs(input_file);
+  if (!ifs.is_open() || !ifs.good()) {
+    throw std::runtime_error("Failed to open input file: " + input_file);
+  }
   const auto& config = nlohmann::json::parse(ifs);
   auto simparams = load_simulation_params(config);
 

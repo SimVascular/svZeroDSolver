@@ -163,7 +163,17 @@ int main(int argc, char** argv) {
 
   // Set up the svZeroD model
   std::string file_name = std::string(argv[2]);
+  std::cout << "[step] initialize: " << file_name << "\n"; flush_now();
+  if (!fs::exists(file_name)) {
+    std::cerr << "[err] JSON file does not exist: " << file_name << "\n";
+    std::cerr << "[err] Current directory: " << fs::current_path() << "\n";
+    std::cerr << "[err] argv[1] (build): " << argv[1] << "\n";
+    std::cerr << "[err] argv[2] (json):  " << argv[2] << "\n";
+    flush_now();
+    throw std::runtime_error("JSON file not found");
+  }
   interface.initialize(file_name);
+  std::cout << "[ok  ] initialize\n"; flush_now();
 
   // Check number of variables and blocks
   if (interface.system_size_ != 253) {

@@ -94,6 +94,12 @@ static void preflight_load(const fs::path& dll) {
 #endif
 
 int main(int argc, char** argv) {
+  // Disable output buffering immediately - critical for Windows CI
+  std::setvbuf(stdout, nullptr, _IONBF, 0);
+  std::setvbuf(stderr, nullptr, _IONBF, 0);
+  std::cout.setf(std::ios::unitbuf);
+  std::cerr.setf(std::ios::unitbuf);
+
   try {
     if (argc != 3) {
       throw std::runtime_error(
@@ -305,7 +311,9 @@ int main(int argc, char** argv) {
       }
       }
       std::cout << "[dbg] Block " << block_name << " passed constraints\n"; flush_now();
+      std::cout << "[dbg] End of iteration for " << block_name << "\n"; flush_now();
     }
+    std::cout << "[dbg] Completed all block iterations\n"; flush_now();
     std::cout << "[dbg] seeya\n"; flush_now();
     // Outlet from heart block
     std::vector<int> IDs;

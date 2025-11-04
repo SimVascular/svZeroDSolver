@@ -16,6 +16,12 @@ namespace fs = std::filesystem;
 //------
 //
 int main(int argc, char** argv) {
+  // Disable output buffering immediately - critical for Windows CI
+  std::setvbuf(stdout, nullptr, _IONBF, 0);
+  std::setvbuf(stderr, nullptr, _IONBF, 0);
+  std::cout.setf(std::ios::unitbuf);
+  std::cerr.setf(std::ios::unitbuf);
+
   LPNSolverInterface interface;
 
   if (argc != 3) {

@@ -46,18 +46,13 @@ endif()
 
 if (WIN32 AND MSVC)
     # CMake ≥ 3.15 has a proper variable
+    # Use dynamic CRT (/MD or /MDd) so EXE and DLL share the same heap.
+    # This is required when passing STL containers across DLL boundaries.
     if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.15")
         set(CMAKE_MSVC_RUNTIME_LIBRARY
-                "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+                "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
     else()
-        # CMake < 3.15: manually swap /MD → /MT in all flags for static
-        # versions of the runtime libraries
-        foreach(_var
-                CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
-                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-                CMAKE_SHARED_LINKER_FLAGS)
-            string(REPLACE "/MD" "/MT" ${_var} "${${_var}}")
-        endforeach()
+        # CMake < 3.15: /MD is the default, so no changes needed
     endif()
 endif()
 # -----------------------------------------------------------------------------

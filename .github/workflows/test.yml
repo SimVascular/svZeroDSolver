@@ -92,7 +92,6 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
-          $ErrorActionPreference = 'Continue'
           python -m pip install --upgrade cmake cmake-setuptools numpy ninja pytest pandas graphviz networkx pydot
 
           # 1) Keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)
@@ -129,6 +128,8 @@ jobs:
           cmake --build . --parallel 2
 
           # run interface tests
+          $test1Exe = Join-Path (Join-Path (Get-Location) 'test_01') 'svZeroD_interface_test01.exe'
+          $test2Exe = Join-Path (Join-Path (Get-Location) 'test_02') 'svZeroD_interface_test02.exe'
           $test1Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
           $test2Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_02/svzerod_tuned.json'
           & $test1Exe $build $test1Json

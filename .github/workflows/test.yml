@@ -156,34 +156,11 @@ jobs:
           Test-Path $test1Exe | % { "test_01 exe exists: $_" }
           Test-Path $test2Exe | % { "test_02 exe exists: $_" }
 
-          # Helper to run with timeout + capture logs
-          function Run-TestExe {
-            param([string]$exe, [string]$arg1, [string]$arg2, [string]$wd)
-            Push-Location $wd
-            Remove-Item -Force -ErrorAction SilentlyContinue out.txt, err.txt
-            $p = Start-Process -FilePath $exe -ArgumentList @("$arg1","$arg2") -NoNewWindow -PassThru `
-                 -RedirectStandardOutput out.txt -RedirectStandardError err.txt
-            if (-not (Wait-Process -Id $p.Id -Timeout 360 -ErrorAction SilentlyContinue)) {
-              Write-Host "TIMEOUT: killing $exe"
-              Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
-              Get-Content err.txt -ErrorAction SilentlyContinue | Write-Host
-              Get-Content out.txt -ErrorAction SilentlyContinue | Write-Host
-              throw "Timed out running $exe"
-            }
-            $exit = $p.ExitCode
-            Pop-Location
-            if ($exit -ne 0) {
-              Write-Host "`n--- stdout ---"; Get-Content (Join-Path $wd 'out.txt') -ErrorAction SilentlyContinue
-              Write-Host "`n--- stderr ---"; Get-Content (Join-Path $wd 'err.txt') -ErrorAction SilentlyContinue
-              throw "$exe exited with code $exit"
-            }
-          }
-
           # Run test_01 from its own dir with hard timeout and logs
-          Run-TestExe -exe $test1Exe -arg1 $build -arg2 $test1Json -wd (Join-Path (Get-Location) 'test_01')
+          $test1Exe $build $test1Json
 
           # Run test_02 likewise
-          Run-TestExe -exe $test2Exe -arg1 $build -arg2 $test2Json -wd (Join-Path (Get-Location) 'test_02')
+          $test2Exe $build $test2Json
 
           # build installer
           choco install nsis -y

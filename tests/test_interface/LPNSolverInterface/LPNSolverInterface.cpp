@@ -21,7 +21,13 @@ LPNSolverInterface::LPNSolverInterface() {
   lpn_set_external_step_size_name_ = "set_external_step_size";
 }
 
-LPNSolverInterface::~LPNSolverInterface() { dlclose(library_handle_); }
+LPNSolverInterface::~LPNSolverInterface() {
+#ifndef _WIN32
+  // On Windows, FreeLibrary can hang during process exit due to DLL cleanup issues.
+  // Skip explicit unload; the OS will clean up when the process terminates.
+  dlclose(library_handle_);
+#endif
+}
 
 //--------------
 // load_library

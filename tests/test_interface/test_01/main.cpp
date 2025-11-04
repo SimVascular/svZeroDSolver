@@ -87,8 +87,8 @@ static void preflight_load(const fs::path& dll) {
     flush_now();
     throw std::runtime_error("LoadLibrary preflight failed");
   }
-  std::cerr << "[ok ] LoadLibraryW succeeded; FreeLibrary()\n";
-  FreeLibrary(h);
+  std::cerr << "[ok ] LoadLibraryW succeeded (keeping loaded)\n";
+  // Don't call FreeLibrary - leave it loaded to avoid double load/unload issues
   flush_now();
 }
 #endif
@@ -437,6 +437,7 @@ int main(int argc, char** argv) {
     }
 
     std::cout << "[PASS] interface test 01\n"; flush_now();
+    std::cout << "[dbg] About to return from main\n"; flush_now();
     return 0;
 
   } catch (const std::exception& e) {

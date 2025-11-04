@@ -22,11 +22,22 @@ LPNSolverInterface::LPNSolverInterface() {
 }
 
 LPNSolverInterface::~LPNSolverInterface() {
+  std::cerr << "[dbg] LPNSolverInterface destructor called\n";
+  std::cerr.flush();
 #ifndef _WIN32
   // On Windows, FreeLibrary can hang during process exit due to DLL cleanup issues.
   // Skip explicit unload; the OS will clean up when the process terminates.
+  std::cerr << "[dbg] Calling dlclose\n";
+  std::cerr.flush();
   dlclose(library_handle_);
+  std::cerr << "[dbg] dlclose returned\n";
+  std::cerr.flush();
+#else
+  std::cerr << "[dbg] Skipping dlclose on Windows\n";
+  std::cerr.flush();
 #endif
+  std::cerr << "[dbg] LPNSolverInterface destructor finished\n";
+  std::cerr.flush();
 }
 
 //--------------

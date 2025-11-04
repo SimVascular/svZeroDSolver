@@ -60,8 +60,8 @@ static void preflight_load(const fs::path& dll) {
     flush_now();
     throw std::runtime_error("LoadLibrary preflight failed");
   }
-  std::cerr << "[ok ] LoadLibraryW succeeded; FreeLibrary()\n";
-  FreeLibrary(h);
+  std::cerr << "[ok ] LoadLibraryW succeeded (keeping loaded)\n";
+  // Don't call FreeLibrary - leave it loaded to avoid double load/unload issues
   flush_now();
 }
 #endif

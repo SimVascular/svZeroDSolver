@@ -139,7 +139,7 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
 //
 //   file_name: The name of the LPN configuration file (JSON).
 //
-void LPNSolverInterface::initialize(std::string file_name) {
+void LPNSolverInterface::initialize(const std::string& file_name) {
   lpn_initialize_(file_name, problem_id_, pts_per_cycle_, num_cycles_,
                   num_output_steps_, block_names_, variable_names_);
   std::cout << "[LPNSolverInterface::initialize] Problem ID: " << problem_id_
@@ -200,7 +200,7 @@ void LPNSolverInterface::run_simulation(const double time,
 //
 //   new_params: The new parameters for the 0D block.
 //
-void LPNSolverInterface::update_block_params(std::string block_name,
+void LPNSolverInterface::update_block_params(const std::string& block_name,
                                              std::vector<double>& new_params) {
   lpn_update_block_params_(problem_id_, block_name, new_params);
 }
@@ -213,7 +213,7 @@ void LPNSolverInterface::update_block_params(std::string block_name,
 //
 //   new_params: The parameters for the 0D block.
 //
-void LPNSolverInterface::read_block_params(std::string block_name,
+void LPNSolverInterface::read_block_params(const std::string& block_name,
                                            std::vector<double>& block_params) {
   lpn_read_block_params_(problem_id_, block_name, block_params);
 }
@@ -227,7 +227,7 @@ void LPNSolverInterface::read_block_params(std::string block_name,
 //
 //   IDs: The solution IDs of the inlet and outlet nodes for the block.
 //
-void LPNSolverInterface::get_block_node_IDs(std::string block_name,
+void LPNSolverInterface::get_block_node_IDs(const std::string& block_name,
                                             std::vector<int>& IDs) {
   lpn_get_block_node_IDs_(problem_id_, block_name, IDs);
 }

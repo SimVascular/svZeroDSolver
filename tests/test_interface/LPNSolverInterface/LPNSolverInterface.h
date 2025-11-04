@@ -67,15 +67,15 @@ class LPNSolverInterface {
   ~LPNSolverInterface();
 
   void load_library(const std::string& interface_lib);
-  void initialize(std::string file_name);
+  void initialize(const std::string& file_name);
   void increment_time(const double time, std::vector<double>& solution);
   void run_simulation(const double time, std::vector<double>& output_times,
                       std::vector<double>& output_solutions, int& error_code);
-  void update_block_params(std::string block_name,
+  void update_block_params(const std::string& block_name,
                            std::vector<double>& new_params);
-  void read_block_params(std::string block_name,
+  void read_block_params(const std::string& block_name,
                          std::vector<double>& block_params);
-  void get_block_node_IDs(std::string block_name, std::vector<int>& IDs);
+  void get_block_node_IDs(const std::string& block_name, std::vector<int>& IDs);
   void update_state(std::vector<double> state_y,
                     std::vector<double> state_ydot);
   void return_y(std::vector<double>& y);

@@ -143,9 +143,6 @@ jobs:
           $iface = Join-Path $build 'src\interface\libsvzero_interface.dll'
           python -c "import ctypes,sys; dll=r'$iface'; print('Trying to load:',dll); ctypes.CDLL(dll); print('Loaded OK')"
 
-          $test1 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
-          $test2 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_02/svzerod_tuned.json'
-          
           $test1Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
           $test2Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_02/svzerod_tuned.json'
 
@@ -157,10 +154,10 @@ jobs:
           Test-Path $test2Exe | % { "test_02 exe exists: $_" }
 
           # Run test_01 from its own dir with hard timeout and logs
-          $test1Exe $build $test1Json
+          & $test1Exe $build $test1Json
 
           # Run test_02 likewise
-          $test2Exe $build $test2Json
+          & $test2Exe $build $test2Json
 
           # build installer
           choco install nsis -y

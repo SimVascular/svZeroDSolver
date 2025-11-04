@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-latest, macos-13, macos-latest, windows-latest]
+        os: [ubuntu-22.04, ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     env:
       PYTHONPATH: ${{ github.workspace }}
@@ -36,7 +36,7 @@ jobs:
         run: |
           mkdir Release
           cd Release
-          cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_DISTRIBUTION=ON ..
+          cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
           make -j2
 
       - name: Test interface POSIX-like Systems
@@ -102,24 +102,12 @@ jobs:
           # one build dir for everything: executables + Python module
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
           cmake -S . -B $build -G Ninja `
-            -DCMAKE_BUILD_TYPE=Debug `
+            -DCMAKE_BUILD_TYPE=Release `
             -DEIGEN_BUILD_BLAS=OFF `
             -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
             -DCMAKE_Fortran_COMPILER:FILEPATH="" `
             -DENABLE_DISTRIBUTION=ON
           cmake --build $build --parallel 2
-
-          Write-Host "`n=== Release tree (3 levels) ==="
-          $root = Join-Path $env:GITHUB_WORKSPACE 'Release'
-          if (-not (Test-Path $root)) {
-            Write-Host "Release directory not found: $root"
-            exit 1
-          }
-          Get-ChildItem -Path $root -Recurse -Depth 3 | ForEach-Object {
-            $indent = '  ' * (($_.FullName.Split([IO.Path]::DirectorySeparatorChar).Count - $root.Split([IO.Path]::DirectorySeparatorChar).Count - 1))
-            Write-Host "$indent$($_.Name)"
-          }
-          Write-Host "`n=== Release tree (3 levels) ==="
 
           $libpath = Join-Path $build 'src/interface/libsvzero_interface.dll'
           Test-Path $libpath | % { "libpath exists: $_" }
@@ -131,7 +119,7 @@ jobs:
 
           # run integration tests
           cd (Join-Path $env:GITHUB_WORKSPACE 'tests')
-          # python -m pytest -v --durations=0 --ignore=test_dirgraph.py
+          python -m pytest -v --durations=0 --ignore=test_dirgraph.py
 
           # build interface tests
           cd test_interface
@@ -140,23 +128,10 @@ jobs:
           cmake -G Ninja ..
           cmake --build . --parallel 2
 
-          $iface = Join-Path $build 'src\interface\libsvzero_interface.dll'
-          python -c "import ctypes,sys; dll=r'$iface'; print('Trying to load:',dll); ctypes.CDLL(dll); print('Loaded OK')"
-
+          # run interface tests
           $test1Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
           $test2Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_02/svzerod_tuned.json'
-
-          # Confirm test EXEs exist
-          $test1Exe = Join-Path (Join-Path (Get-Location) 'test_01') 'svZeroD_interface_test01.exe'
-          $test2Exe = Join-Path (Join-Path (Get-Location) 'test_02') 'svZeroD_interface_test02.exe'
-          Write-Host "`n=== Interface test binaries ==="
-          Test-Path $test1Exe | % { "test_01 exe exists: $_" }
-          Test-Path $test2Exe | % { "test_02 exe exists: $_" }
-
-          # Run test_01 from its own dir with hard timeout and logs
           & $test1Exe $build $test1Json
-
-          # Run test_02 likewise
           & $test2Exe $build $test2Json
 
           # build installer
@@ -165,22 +140,6 @@ jobs:
           cd $build
           cpack -C Release
           Copy-Item distribution\svZeroDSolver_* -Destination ..\
-
-      - name: Upload debug artifacts (Windows)
-        if: startsWith(matrix.os, 'windows')
-        uses: actions/upload-artifact@v4
-        with:
-          name: windows-debug-artifacts
-          path: |
-            Release/solver_help_out.txt
-            Release/solver_help_err.txt
-            tests/test_interface/build_tests/test_01/out.txt
-            tests/test_interface/build_tests/test_01/err.txt
-            tests/test_interface/build_tests/test_01/*.dmp
-            tests/test_interface/build_tests/test_02/out.txt
-            tests/test_interface/build_tests/test_02/err.txt
-            tests/test_interface/build_tests/test_02/*.dmp
-          if-no-files-found: ignore
 
       - name: Upload installer
         uses: actions/upload-artifact@v4

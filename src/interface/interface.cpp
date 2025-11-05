@@ -54,14 +54,6 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
 
   DEBUG_MSG("========== svZeroD initialize ==========");
 
-  // Clear output vectors to ensure clean state
-  std::cerr << "[DLL:initialize] About to clear vectors\n";
-  std::cerr.flush();
-  block_names.clear();
-  variable_names.clear();
-  std::cerr << "[DLL:initialize] Vectors cleared\n";
-  std::cerr.flush();
-
   // Convert C string to std::string inside DLL to avoid ABI issues
   std::string input_file(input_file_arg ? input_file_arg : "");
   DEBUG_MSG("[initialize] input_file: " << input_file);

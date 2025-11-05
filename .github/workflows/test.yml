@@ -94,23 +94,16 @@ jobs:
         run: |
           python -m pip install --upgrade cmake cmake-setuptools numpy ninja pytest pandas graphviz networkx pydot
 
-          # 1) Keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)
-          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
-          $env:PATH = (($env:PATH -split ';' | ? { $_ -and ($_ -notmatch $pattern) }) -join ';')
-
           # one build dir for everything: executables + Python module
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
           cmake -S . -B $build -G Ninja `
             -DCMAKE_BUILD_TYPE=Release `
             -DEIGEN_BUILD_BLAS=OFF `
-            -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
-            -DCMAKE_Fortran_COMPILER:FILEPATH="" `
             -DENABLE_DISTRIBUTION=ON
           cmake --build $build --parallel 2
 
           # make the Python extension importable
           $pydDir = Join-Path $build 'python'
-          if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd dir not found: $pydDir" }
           $env:PYTHONPATH = "$pydDir;$env:PYTHONPATH"
 
           # run integration tests

@@ -150,6 +150,12 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
     dlclose(library_handle_);
     return;
   }
+
+  // Get accessor functions for block/variable names
+  *(void**)(&lpn_get_block_names_count_) = dlsym(library_handle_, "get_block_names_count");
+  *(void**)(&lpn_get_block_name_) = dlsym(library_handle_, "get_block_name");
+  *(void**)(&lpn_get_variable_names_count_) = dlsym(library_handle_, "get_variable_names_count");
+  *(void**)(&lpn_get_variable_name_) = dlsym(library_handle_, "get_variable_name");
 }
 
 // Initialze the LPN solver.
@@ -163,9 +169,30 @@ void LPNSolverInterface::initialize(const std::string& file_name) {
                   num_output_steps_, block_names_, variable_names_);
   std::cout << "[LPNSolverInterface::initialize] Problem ID: " << problem_id_
             << std::endl;
+
+  // Use accessor functions to populate vectors (since DLL can't modify them directly)
+  block_names_.clear();
+  int block_count = lpn_get_block_names_count_(problem_id_);
+  for (int i = 0; i < block_count; i++) {
+    const char* name = lpn_get_block_name_(problem_id_, i);
+    if (name) {
+      block_names_.push_back(name);
+    }
+  }
+
+  variable_names_.clear();
+  int var_count = lpn_get_variable_names_count_(problem_id_);
+  for (int i = 0; i < var_count; i++) {
+    const char* name = lpn_get_variable_name_(problem_id_, i);
+    if (name) {
+      variable_names_.push_back(name);
+    }
+  }
+
   system_size_ = variable_names_.size();
   std::cout << "[LPNSolverInterface::initialize] System size: " << system_size_
             << std::endl;
+  std::cout << "[LPNSolverInterface::initialize] Block names: " << block_names_.size() << std::endl;
 }
 
 // Set the external time step variable in the svZeroD interface.

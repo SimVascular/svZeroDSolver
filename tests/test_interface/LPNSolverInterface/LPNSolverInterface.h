@@ -122,6 +122,12 @@ class LPNSolverInterface {
   std::string lpn_set_external_step_size_name_;
   void (*lpn_set_external_step_size_)(const int, double);
 
+  // Accessor functions for block/variable names
+  int (*lpn_get_block_names_count_)(int);
+  const char* (*lpn_get_block_name_)(int, int);
+  int (*lpn_get_variable_names_count_)(int);
+  const char* (*lpn_get_variable_name_)(int, int);
+
   dl_handle_t library_handle_ = nullptr;
   int problem_id_ = 0;
   int system_size_ = 0;

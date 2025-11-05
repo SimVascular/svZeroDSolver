@@ -132,45 +132,18 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
   }
   interface->variable_names_ = model->dofhandler.variables;
 
-  std::cerr << "[DLL:initialize] Internal vectors populated, copying to caller\n";
+  std::cerr << "[DLL:initialize] Internal vectors populated\n";
   std::cerr << "[DLL:initialize] block_names size: " << interface->block_names_.size() << "\n";
   std::cerr << "[DLL:initialize] variable_names size: " << interface->variable_names_.size() << "\n";
   std::cerr.flush();
 
-  // Copy to caller's vectors element-by-element using indexed assignment (safest way)
-  // This avoids any resizing operations on the caller's vectors
-  for (size_t i = 0; i < interface->block_names_.size(); i++) {
-    if (i < block_names.size()) {
-      // Assign to existing element
-      block_names[i] = interface->block_names_[i].c_str();
-    } else {
-      // Need to grow - try push_back
-      try {
-        block_names.push_back(interface->block_names_[i].c_str());
-      } catch (...) {
-        std::cerr << "[DLL:initialize] Failed to push_back block_name " << i << "\n";
-        std::cerr.flush();
-        // Can't modify caller's vector - just skip
-        break;
-      }
-    }
-  }
+  // WORKAROUND: Cannot safely modify caller's vectors from DLL
+  // Instead, pass back counts and let wrapper use accessor functions
+  // For now, just ignore the passed-in vectors
+  (void)block_names;
+  (void)variable_names;
 
-  for (size_t i = 0; i < interface->variable_names_.size(); i++) {
-    if (i < variable_names.size()) {
-      variable_names[i] = interface->variable_names_[i].c_str();
-    } else {
-      try {
-        variable_names.push_back(interface->variable_names_[i].c_str());
-      } catch (...) {
-        std::cerr << "[DLL:initialize] Failed to push_back variable_name " << i << "\n";
-        std::cerr.flush();
-        break;
-      }
-    }
-  }
-
-  std::cerr << "[DLL:initialize] Finished copying to caller's vectors\n";
+  std::cerr << "[DLL:initialize] Skipping vector copy (use accessor functions instead)\n";
   std::cerr.flush();
 
   // Get simulation parameters
@@ -566,4 +539,42 @@ extern "C" SVZEROD_INTERFACE_API void run_simulation(
 
   // Release dynamic memory
   // integrator.clean();
+}
+
+/**
+ * @brief Get number of block names
+ */
+extern "C" SVZEROD_INTERFACE_API int get_block_names_count(int problem_id) {
+  auto interface = SolverInterface::interface_list_[problem_id];
+  return static_cast<int>(interface->block_names_.size());
+}
+
+/**
+ * @brief Get block name by index (returns pointer to internal string)
+ */
+extern "C" SVZEROD_INTERFACE_API const char* get_block_name(int problem_id, int index) {
+  auto interface = SolverInterface::interface_list_[problem_id];
+  if (index < 0 || index >= static_cast<int>(interface->block_names_.size())) {
+    return nullptr;
+  }
+  return interface->block_names_[index].c_str();
+}
+
+/**
+ * @brief Get number of variable names
+ */
+extern "C" SVZEROD_INTERFACE_API int get_variable_names_count(int problem_id) {
+  auto interface = SolverInterface::interface_list_[problem_id];
+  return static_cast<int>(interface->variable_names_.size());
+}
+
+/**
+ * @brief Get variable name by index (returns pointer to internal string)
+ */
+extern "C" SVZEROD_INTERFACE_API const char* get_variable_name(int problem_id, int index) {
+  auto interface = SolverInterface::interface_list_[problem_id];
+  if (index < 0 || index >= static_cast<int>(interface->variable_names_.size())) {
+    return nullptr;
+  }
+  return interface->variable_names_[index].c_str();
 }

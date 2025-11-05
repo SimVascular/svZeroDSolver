@@ -67,15 +67,15 @@ class LPNSolverInterface {
   ~LPNSolverInterface();
 
   void load_library(const std::string& interface_lib);
-  void initialize(const std::string& file_name);
+  void initialize(std::string file_name);
   void increment_time(const double time, std::vector<double>& solution);
   void run_simulation(const double time, std::vector<double>& output_times,
                       std::vector<double>& output_solutions, int& error_code);
-  void update_block_params(const std::string& block_name,
+  void update_block_params(std::string block_name,
                            std::vector<double>& new_params);
-  void read_block_params(const std::string& block_name,
+  void read_block_params(std::string block_name,
                          std::vector<double>& block_params);
-  void get_block_node_IDs(const std::string& block_name, std::vector<int>& IDs);
+  void get_block_node_IDs(std::string block_name, std::vector<int>& IDs);
   void update_state(std::vector<double> state_y,
                     std::vector<double> state_ydot);
   void return_y(std::vector<double>& y);
@@ -84,7 +84,7 @@ class LPNSolverInterface {
 
   // Interface functions.
   std::string lpn_initialize_name_;
-  void (*lpn_initialize_)(const std::string&, int&, int&, int&, int&,
+  void (*lpn_initialize_)(std::string, int&, int&, int&, int&,
                           std::vector<std::string>&, std::vector<std::string>&);
 
   std::string lpn_increment_time_name_;
@@ -98,15 +98,15 @@ class LPNSolverInterface {
                               int& error_code);
 
   std::string lpn_update_block_params_name_;
-  void (*lpn_update_block_params_)(const int, const std::string&,
+  void (*lpn_update_block_params_)(const int, std::string,
                                    std::vector<double>& new_params);
 
   std::string lpn_read_block_params_name_;
-  void (*lpn_read_block_params_)(const int, const std::string&,
+  void (*lpn_read_block_params_)(const int, std::string,
                                  std::vector<double>& block_params);
 
   std::string lpn_get_block_node_IDs_name_;
-  void (*lpn_get_block_node_IDs_)(const int, const std::string&,
+  void (*lpn_get_block_node_IDs_)(const int, std::string,
                                   std::vector<int>& block_params);
 
   std::string lpn_update_state_name_;

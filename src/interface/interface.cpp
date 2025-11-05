@@ -115,19 +115,28 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
   // Create a model.
   interface->model_ = model;
 
-  // Create vectors inside DLL, then swap to avoid cross-DLL allocation issues
-  std::vector<std::string> temp_block_names;
-  std::vector<std::string> temp_variable_names;
+  std::cerr << "[DLL:initialize] About to populate block_names\n";
+  std::cerr.flush();
 
-  // Create a vector containing all block names
-  for (size_t i = 0; i < model->get_num_blocks(); i++) {
-    temp_block_names.push_back(model->get_block(i)->get_name());
+  // Resize caller's vectors and copy elements individually to avoid cross-DLL issues
+  size_t num_blocks = model->get_num_blocks();
+  block_names.resize(num_blocks);
+  for (size_t i = 0; i < num_blocks; i++) {
+    const std::string& name = model->get_block(i)->get_name();
+    block_names[i].assign(name.c_str(), name.length());
   }
-  temp_variable_names = model->dofhandler.variables;
 
-  // Swap with caller's vectors
-  block_names.swap(temp_block_names);
-  variable_names.swap(temp_variable_names);
+  std::cerr << "[DLL:initialize] Block names populated, now variable_names\n";
+  std::cerr.flush();
+
+  const auto& vars = model->dofhandler.variables;
+  variable_names.resize(vars.size());
+  for (size_t i = 0; i < vars.size(); i++) {
+    variable_names[i].assign(vars[i].c_str(), vars[i].length());
+  }
+
+  std::cerr << "[DLL:initialize] Variable names populated\n";
+  std::cerr.flush();
 
   // Get simulation parameters
   interface->time_step_size_ = simparams.sim_time_step_size;

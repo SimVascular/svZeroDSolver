@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-22.04, ubuntu-latest, macos-13, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
     env:
       PYTHONPATH: ${{ github.workspace }}
@@ -53,7 +53,7 @@ jobs:
           ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
 
       - name: Generate code coverage
-        if: startsWith(matrix.os, 'ubuntu-22.04')
+        if: startsWith(matrix.os, 'ubuntu-latest')
         run: |
           cd Release
           cmake -DENABLE_COVERAGE=ON ..
@@ -64,14 +64,14 @@ jobs:
           make coverage
 
       - name: Save coverage report
-        if: startsWith(matrix.os, 'ubuntu-22.04')
+        if: startsWith(matrix.os, 'ubuntu-latest')
         uses: actions/upload-artifact@v4
         with:
           name: coverage_report
           path: Release/coverage
 
       - name: Upload coverage reports to Codecov
-        if: startsWith(matrix.os, 'ubuntu-22.04')
+        if: startsWith(matrix.os, 'ubuntu-latest')
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -92,7 +92,6 @@ jobs:
         continue-on-error: true
         shell: pwsh
         run: |
-          $ErrorActionPreference = 'Continue'
           python -m pip install --upgrade cmake cmake-setuptools numpy ninja pytest pandas graphviz networkx pydot
 
           # 1) Keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)
@@ -109,21 +108,6 @@ jobs:
             -DENABLE_DISTRIBUTION=ON
           cmake --build $build --parallel 2
 
-          Write-Host "`n=== Release tree (3 levels) ==="
-          $root = Join-Path $env:GITHUB_WORKSPACE 'Release'
-          if (-not (Test-Path $root)) {
-            Write-Host "Release directory not found: $root"
-            exit 1
-          }
-          Get-ChildItem -Path $root -Recurse -Depth 3 | ForEach-Object {
-            $indent = '  ' * (($_.FullName.Split([IO.Path]::DirectorySeparatorChar).Count - $root.Split([IO.Path]::DirectorySeparatorChar).Count - 1))
-            Write-Host "$indent$($_.Name)"
-          }
-          Write-Host "`n=== Release tree (3 levels) ==="
-
-          $libpath = Join-Path $build 'src/interface/libsvzero_interface.dll'
-          Test-Path $libpath | % { "libpath exists: $_" }
-
           # make the Python extension importable
           $pydDir = Join-Path $build 'python'
           if (-not (Test-Path $pydDir)) { throw "pysvzerod .pyd dir not found: $pydDir" }
@@ -131,59 +115,7 @@ jobs:
 
           # run integration tests
           cd (Join-Path $env:GITHUB_WORKSPACE 'tests')
-          # python -m pytest -v --durations=0 --ignore=test_dirgraph.py
-
-          # build interface tests
-          cd test_interface
-          mkdir build_tests
-          cd build_tests
-          cmake -G Ninja ..
-          cmake --build . --parallel 2
-
-          $iface = Join-Path $build 'src\interface\libsvzero_interface.dll'
-          python -c "import ctypes,sys; dll=r'$iface'; print('Trying to load:',dll); ctypes.CDLL(dll); print('Loaded OK')"
-
-          $test1 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
-          $test2 = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_02/svzerod_tuned.json'
-          
-          $test1Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_01/svzerod_3Dcoupling.json'
-          $test2Json = Join-Path $env:GITHUB_WORKSPACE 'tests/test_interface/test_02/svzerod_tuned.json'
-
-          # Confirm test EXEs exist
-          $test1Exe = Join-Path (Join-Path (Get-Location) 'test_01') 'svZeroD_interface_test01.exe'
-          $test2Exe = Join-Path (Join-Path (Get-Location) 'test_02') 'svZeroD_interface_test02.exe'
-          Write-Host "`n=== Interface test binaries ==="
-          Test-Path $test1Exe | % { "test_01 exe exists: $_" }
-          Test-Path $test2Exe | % { "test_02 exe exists: $_" }
-
-          # Helper to run with timeout + capture logs
-          function Run-TestExe {
-            param([string]$exe, [string]$arg1, [string]$arg2, [string]$wd)
-            Push-Location $wd
-            Remove-Item -Force -ErrorAction SilentlyContinue out.txt, err.txt
-            $p = Start-Process -FilePath $exe -ArgumentList @("$arg1","$arg2") -NoNewWindow -PassThru `
-                 -RedirectStandardOutput out.txt -RedirectStandardError err.txt
-            if (-not (Wait-Process -Id $p.Id -Timeout 360 -ErrorAction SilentlyContinue)) {
-              Write-Host "TIMEOUT: killing $exe"
-              Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
-              Get-Content err.txt -ErrorAction SilentlyContinue | Write-Host
-              Get-Content out.txt -ErrorAction SilentlyContinue | Write-Host
-              throw "Timed out running $exe"
-            }
-            $exit = $p.ExitCode
-            Pop-Location
-            if ($exit -ne 0) {
-              Write-Host "`n--- stdout ---"; Get-Content (Join-Path $wd 'out.txt') -ErrorAction SilentlyContinue
-              Write-Host "`n--- stderr ---"; Get-Content (Join-Path $wd 'err.txt') -ErrorAction SilentlyContinue
-              throw "$exe exited with code $exit"
-            }
-          }
-
-          # Run test_01 from its own dir with hard timeout and logs
-          Run-TestExe -exe $test1Exe -arg1 $build -arg2 $test1Json -wd (Join-Path (Get-Location) 'test_01')
-
-          # Run test_02 likewise
-          Run-TestExe -exe $test2Exe -arg1 $build -arg2 $test2Json -wd (Join-Path (Get-Location) 'test_02')
+          python -m pytest -v --durations=0 --ignore=test_dirgraph.py
 
           # build installer
           choco install nsis -y

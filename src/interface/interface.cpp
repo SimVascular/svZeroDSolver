@@ -54,14 +54,14 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
 
   DEBUG_MSG("========== svZeroD initialize ==========");
 
-  // WORKAROUND: Replace caller's vectors with new ones created in DLL
-  // This works with /MD because they share the same heap
-  std::vector<std::string> new_block_names;
-  std::vector<std::string> new_variable_names;
-  block_names = std::move(new_block_names);
-  variable_names = std::move(new_variable_names);
+  // WORKAROUND: Destroy and reconstruct vectors in-place using DLL's allocator
+  // This is unsafe but works with /MD (shared heap)
+  block_names.~vector();
+  new (&block_names) std::vector<std::string>();
+  variable_names.~vector();
+  new (&variable_names) std::vector<std::string>();
 
-  std::cerr << "[DLL:initialize] Vectors replaced with DLL-allocated ones\n";
+  std::cerr << "[DLL:initialize] Vectors reconstructed with DLL allocator\n";
   std::cerr.flush();
 
   // Convert C string to std::string inside DLL to avoid ABI issues

@@ -62,6 +62,8 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
     dlclose(library_handle_);
     return;
   }
+  std::cerr << "[load_library] Successfully loaded 'initialize' function pointer\n";
+  std::cerr.flush();
 
   // Get a pointer to the svzero 'increment_time' function.
   *(void**)(&lpn_increment_time_) = dlsym(library_handle_, "increment_time");

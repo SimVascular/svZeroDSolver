@@ -48,11 +48,19 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
     int& num_cycles, int& num_output_steps,
     std::vector<std::string>& block_names,
     std::vector<std::string>& variable_names) {
+  // Print immediately to see if we enter the function
+  std::cerr << "[DLL:initialize] ENTRY POINT REACHED\n";
+  std::cerr.flush();
+
   DEBUG_MSG("========== svZeroD initialize ==========");
 
   // Clear output vectors to ensure clean state
+  std::cerr << "[DLL:initialize] About to clear vectors\n";
+  std::cerr.flush();
   block_names.clear();
   variable_names.clear();
+  std::cerr << "[DLL:initialize] Vectors cleared\n";
+  std::cerr.flush();
 
   // Convert C string to std::string inside DLL to avoid ABI issues
   std::string input_file(input_file_arg ? input_file_arg : "");

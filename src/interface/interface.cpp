@@ -54,6 +54,16 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
 
   DEBUG_MSG("========== svZeroD initialize ==========");
 
+  // WORKAROUND: Replace caller's vectors with new ones created in DLL
+  // This works with /MD because they share the same heap
+  std::vector<std::string> new_block_names;
+  std::vector<std::string> new_variable_names;
+  block_names = std::move(new_block_names);
+  variable_names = std::move(new_variable_names);
+
+  std::cerr << "[DLL:initialize] Vectors replaced with DLL-allocated ones\n";
+  std::cerr.flush();
+
   // Convert C string to std::string inside DLL to avoid ABI issues
   std::string input_file(input_file_arg ? input_file_arg : "");
   DEBUG_MSG("[initialize] input_file: " << input_file);
@@ -118,22 +128,15 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
   std::cerr << "[DLL:initialize] About to populate block_names\n";
   std::cerr.flush();
 
-  // Resize caller's vectors and copy elements individually to avoid cross-DLL issues
-  size_t num_blocks = model->get_num_blocks();
-  block_names.resize(num_blocks);
-  for (size_t i = 0; i < num_blocks; i++) {
-    const std::string& name = model->get_block(i)->get_name();
-    block_names[i].assign(name.c_str(), name.length());
+  // Now we can safely push_back since vectors are DLL-allocated
+  for (size_t i = 0; i < model->get_num_blocks(); i++) {
+    block_names.push_back(model->get_block(i)->get_name());
   }
 
   std::cerr << "[DLL:initialize] Block names populated, now variable_names\n";
   std::cerr.flush();
 
-  const auto& vars = model->dofhandler.variables;
-  variable_names.resize(vars.size());
-  for (size_t i = 0; i < vars.size(); i++) {
-    variable_names[i].assign(vars[i].c_str(), vars[i].length());
-  }
+  variable_names = model->dofhandler.variables;
 
   std::cerr << "[DLL:initialize] Variable names populated\n";
   std::cerr.flush();

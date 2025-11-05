@@ -156,6 +156,10 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
   *(void**)(&lpn_get_block_name_) = dlsym(library_handle_, "get_block_name");
   *(void**)(&lpn_get_variable_names_count_) = dlsym(library_handle_, "get_variable_names_count");
   *(void**)(&lpn_get_variable_name_) = dlsym(library_handle_, "get_variable_name");
+
+  // Get accessor functions for block node IDs
+  *(void**)(&lpn_get_block_node_IDs_size_) = dlsym(library_handle_, "get_block_node_IDs_size");
+  *(void**)(&lpn_get_block_node_ID_) = dlsym(library_handle_, "get_block_node_ID");
 }
 
 // Initialze the LPN solver.
@@ -275,7 +279,15 @@ void LPNSolverInterface::read_block_params(const std::string& block_name,
 //
 void LPNSolverInterface::get_block_node_IDs(const std::string& block_name,
                                             std::vector<int>& IDs) {
+  // Call DLL function (it stores result internally)
   lpn_get_block_node_IDs_(problem_id_, block_name.c_str(), IDs);
+
+  // Retrieve result using accessor functions
+  IDs.clear();
+  int size = lpn_get_block_node_IDs_size_();
+  for (int i = 0; i < size; i++) {
+    IDs.push_back(lpn_get_block_node_ID_(i));
+  }
 }
 
 // Overwrite the y and ydot state vectors in the 0D solver

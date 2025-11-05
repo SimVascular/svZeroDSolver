@@ -324,6 +324,9 @@ extern "C" SVZEROD_INTERFACE_API void read_block_params(
  * order: {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet
  * nodes, outlet flow[0], outlet pressure[0],...}.
  */
+// Store last query result to avoid cross-DLL vector issues
+static std::vector<int> last_block_node_IDs;
+
 extern "C" SVZEROD_INTERFACE_API void get_block_node_IDs(
     int problem_id, const char* block_name_arg, std::vector<int>& IDs) {
   auto interface = SolverInterface::interface_list_[problem_id];
@@ -338,17 +341,37 @@ extern "C" SVZEROD_INTERFACE_API void get_block_node_IDs(
   // IDs are stored in the following format
   // {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet nodes,
   // outlet flow[0], outlet pressure[0],...}
-  IDs.clear();
-  IDs.push_back(block->inlet_nodes.size());
+  last_block_node_IDs.clear();
+  last_block_node_IDs.push_back(block->inlet_nodes.size());
   for (int i = 0; i < block->inlet_nodes.size(); i++) {
-    IDs.push_back(block->inlet_nodes[i]->flow_dof);
-    IDs.push_back(block->inlet_nodes[i]->pres_dof);
+    last_block_node_IDs.push_back(block->inlet_nodes[i]->flow_dof);
+    last_block_node_IDs.push_back(block->inlet_nodes[i]->pres_dof);
   }
-  IDs.push_back(block->outlet_nodes.size());
+  last_block_node_IDs.push_back(block->outlet_nodes.size());
   for (int i = 0; i < block->outlet_nodes.size(); i++) {
-    IDs.push_back(block->outlet_nodes[i]->flow_dof);
-    IDs.push_back(block->outlet_nodes[i]->pres_dof);
+    last_block_node_IDs.push_back(block->outlet_nodes[i]->flow_dof);
+    last_block_node_IDs.push_back(block->outlet_nodes[i]->pres_dof);
   }
+
+  // Cannot safely modify caller's vector - ignore it
+  (void)IDs;
+}
+
+/**
+ * @brief Get the last block node IDs result size
+ */
+extern "C" SVZEROD_INTERFACE_API int get_block_node_IDs_size() {
+  return static_cast<int>(last_block_node_IDs.size());
+}
+
+/**
+ * @brief Get block node ID by index from last query
+ */
+extern "C" SVZEROD_INTERFACE_API int get_block_node_ID(int index) {
+  if (index < 0 || index >= static_cast<int>(last_block_node_IDs.size())) {
+    return -1;
+  }
+  return last_block_node_IDs[index];
 }
 
 /**

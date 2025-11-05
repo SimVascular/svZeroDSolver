@@ -128,6 +128,10 @@ class LPNSolverInterface {
   int (*lpn_get_variable_names_count_)(int);
   const char* (*lpn_get_variable_name_)(int, int);
 
+  // Accessor functions for block node IDs
+  int (*lpn_get_block_node_IDs_size_)();
+  int (*lpn_get_block_node_ID_)(int);
+
   dl_handle_t library_handle_ = nullptr;
   int problem_id_ = 0;
   int system_size_ = 0;

@@ -7,7 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-22.04, ubuntu-latest, macos-13, macos-latest, windows-latest]
       fail-fast: false
     env:
       PYTHONPATH: ${{ github.workspace }}
@@ -36,7 +36,7 @@ jobs:
         run: |
           mkdir Release
           cd Release
-          cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
+          cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_DISTRIBUTION=ON ..
           make -j2
 
       - name: Test interface POSIX-like Systems
@@ -53,7 +53,7 @@ jobs:
           ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
 
       - name: Generate code coverage
-        if: startsWith(matrix.os, 'ubuntu-latest')
+        if: startsWith(matrix.os, 'ubuntu-22.04')
         run: |
           cd Release
           cmake -DENABLE_COVERAGE=ON ..
@@ -64,14 +64,14 @@ jobs:
           make coverage
 
       - name: Save coverage report
-        if: startsWith(matrix.os, 'ubuntu-latest')
+        if: startsWith(matrix.os, 'ubuntu-22.04')
         uses: actions/upload-artifact@v4
         with:
           name: coverage_report
           path: Release/coverage
 
       - name: Upload coverage reports to Codecov
-        if: startsWith(matrix.os, 'ubuntu-latest')
+        if: startsWith(matrix.os, 'ubuntu-22.04')
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
@@ -102,12 +102,24 @@ jobs:
           # one build dir for everything: executables + Python module
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
           cmake -S . -B $build -G Ninja `
-            -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_BUILD_TYPE=Debug `
             -DEIGEN_BUILD_BLAS=OFF `
             -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
             -DCMAKE_Fortran_COMPILER:FILEPATH="" `
             -DENABLE_DISTRIBUTION=ON
           cmake --build $build --parallel 2
+
+          Write-Host "`n=== Release tree (3 levels) ==="
+          $root = Join-Path $env:GITHUB_WORKSPACE 'Release'
+          if (-not (Test-Path $root)) {
+            Write-Host "Release directory not found: $root"
+            exit 1
+          }
+          Get-ChildItem -Path $root -Recurse -Depth 3 | ForEach-Object {
+            $indent = '  ' * (($_.FullName.Split([IO.Path]::DirectorySeparatorChar).Count - $root.Split([IO.Path]::DirectorySeparatorChar).Count - 1))
+            Write-Host "$indent$($_.Name)"
+          }
+          Write-Host "`n=== Release tree (3 levels) ==="
 
           $libpath = Join-Path $build 'src/interface/libsvzero_interface.dll'
           Test-Path $libpath | % { "libpath exists: $_" }
@@ -168,12 +180,10 @@ jobs:
           }
 
           # Run test_01 from its own dir with hard timeout and logs
-          # Run-TestExe -exe $test1Exe -arg1 $build -arg2 $test1Json -wd (Join-Path (Get-Location) 'test_01')
-          & $test1Exe $build $test1Json
+          Run-TestExe -exe $test1Exe -arg1 $build -arg2 $test1Json -wd (Join-Path (Get-Location) 'test_01')
 
           # Run test_02 likewise
-          # Run-TestExe -exe $test2Exe -arg1 $build -arg2 $test2Json -wd (Join-Path (Get-Location) 'test_02')
-          & $test2Exe $build $test2Json
+          Run-TestExe -exe $test2Exe -arg1 $build -arg2 $test2Json -wd (Join-Path (Get-Location) 'test_02')
 
           # build installer
           choco install nsis -y

@@ -44,30 +44,13 @@ SolverInterface::~SolverInterface() {}
  * @param variable_names Vector of all the 0D variable names.
  */
 extern "C" SVZEROD_INTERFACE_API void initialize(
-    const char* input_file_arg, int& problem_id, int& pts_per_cycle,
+    const std::string& input_file_arg, int& problem_id, int& pts_per_cycle,
     int& num_cycles, int& num_output_steps,
     std::vector<std::string>& block_names,
     std::vector<std::string>& variable_names) {
-  // Print immediately to see if we enter the function
-  std::cerr << "[DLL:initialize] ENTRY POINT REACHED\n";
-  std::cerr.flush();
-
   DEBUG_MSG("========== svZeroD initialize ==========");
-
-  // WORKAROUND: Copy strings element by element using C strings to avoid vector reallocation
-  // We'll populate the vectors without calling resize/clear/etc
-  std::cerr << "[DLL:initialize] Preparing to populate vectors safely\n";
-  std::cerr.flush();
-
-  // Convert C string to std::string inside DLL to avoid ABI issues
-  std::string input_file(input_file_arg ? input_file_arg : "");
+  std::string input_file(input_file_arg);
   DEBUG_MSG("[initialize] input_file: " << input_file);
-
-  // Always print this to help debug Release builds
-  std::cerr << "[DLL:initialize] Received file path: " << input_file << std::endl;
-  std::cerr << "[DLL:initialize] Path length: " << input_file.length() << std::endl;
-  std::cerr.flush();
-
   std::string output_file = "svzerod.csv";
 
   auto interface = new SolverInterface(input_file);
@@ -75,16 +58,7 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
   DEBUG_MSG("[initialize] problem_id: " << problem_id);
 
   // Create configuration reader.
-  std::cerr << "[DLL:initialize] Opening file..." << std::endl;
-  std::cerr.flush();
   std::ifstream ifs(input_file);
-  if (!ifs.is_open() || !ifs.good()) {
-    std::cerr << "[DLL:initialize] FAILED to open file!" << std::endl;
-    std::cerr.flush();
-    throw std::runtime_error("Failed to open input file: " + input_file);
-  }
-  std::cerr << "[DLL:initialize] File opened successfully" << std::endl;
-  std::cerr.flush();
   const auto& config = nlohmann::json::parse(ifs);
   auto simparams = load_simulation_params(config);
 
@@ -120,31 +94,11 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
   // Create a model.
   interface->model_ = model;
 
-  std::cerr << "[DLL:initialize] About to populate internal vectors\n";
-  std::cerr.flush();
-
-  // Populate DLL-internal vectors (safe because they're allocated in DLL)
-  interface->block_names_.clear();
-  interface->variable_names_.clear();
-
+  // Create a vector containing all block names
   for (size_t i = 0; i < model->get_num_blocks(); i++) {
-    interface->block_names_.push_back(model->get_block(i)->get_name());
+    block_names.push_back(model->get_block(i)->get_name());
   }
-  interface->variable_names_ = model->dofhandler.variables;
-
-  std::cerr << "[DLL:initialize] Internal vectors populated\n";
-  std::cerr << "[DLL:initialize] block_names size: " << interface->block_names_.size() << "\n";
-  std::cerr << "[DLL:initialize] variable_names size: " << interface->variable_names_.size() << "\n";
-  std::cerr.flush();
-
-  // WORKAROUND: Cannot safely modify caller's vectors from DLL
-  // Instead, pass back counts and let wrapper use accessor functions
-  // For now, just ignore the passed-in vectors
-  (void)block_names;
-  (void)variable_names;
-
-  std::cerr << "[DLL:initialize] Skipping vector copy (use accessor functions instead)\n";
-  std::cerr.flush();
+  variable_names = model->dofhandler.variables;
 
   // Get simulation parameters
   interface->time_step_size_ = simparams.sim_time_step_size;
@@ -240,13 +194,10 @@ extern "C" SVZEROD_INTERFACE_API void set_external_step_size(
  * @param params New parameters for the block (structure depends on block type).
  */
 extern "C" SVZEROD_INTERFACE_API void update_block_params(
-    int problem_id, const char* block_name_arg,
+    int problem_id, const std::string& block_name,
     std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
-
-  // Convert C string to std::string inside DLL to avoid ABI issues
-  std::string block_name(block_name_arg ? block_name_arg : "");
 
   // Find the required block
   auto block = model->get_block(block_name);
@@ -293,14 +244,10 @@ extern "C" SVZEROD_INTERFACE_API void update_block_params(
  * @param params Parameters of the block (structure depends on block type).
  */
 extern "C" SVZEROD_INTERFACE_API void read_block_params(
-    int problem_id, const char* block_name_arg,
+    int problem_id, const std::string& block_name,
     std::vector<double>& params) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
-
-  // Convert C string to std::string inside DLL to avoid ABI issues
-  std::string block_name(block_name_arg ? block_name_arg : "");
-
   auto block = model->get_block(block_name);
   if (params.size() != block->global_param_ids.size()) {
     throw std::runtime_error(
@@ -324,16 +271,10 @@ extern "C" SVZEROD_INTERFACE_API void read_block_params(
  * order: {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet
  * nodes, outlet flow[0], outlet pressure[0],...}.
  */
-// Store last query result to avoid cross-DLL vector issues
-static std::vector<int> last_block_node_IDs;
-
 extern "C" SVZEROD_INTERFACE_API void get_block_node_IDs(
-    int problem_id, const char* block_name_arg, std::vector<int>& IDs) {
+    int problem_id, const std::string& block_name, std::vector<int>& IDs) {
   auto interface = SolverInterface::interface_list_[problem_id];
   auto model = interface->model_;
-
-  // Convert C string to std::string inside DLL to avoid ABI issues
-  std::string block_name(block_name_arg ? block_name_arg : "");
 
   // Find the required block
   auto block = model->get_block(block_name);
@@ -341,37 +282,17 @@ extern "C" SVZEROD_INTERFACE_API void get_block_node_IDs(
   // IDs are stored in the following format
   // {num inlet nodes, inlet flow[0], inlet pressure[0],..., num outlet nodes,
   // outlet flow[0], outlet pressure[0],...}
-  last_block_node_IDs.clear();
-  last_block_node_IDs.push_back(block->inlet_nodes.size());
+  IDs.clear();
+  IDs.push_back(block->inlet_nodes.size());
   for (int i = 0; i < block->inlet_nodes.size(); i++) {
-    last_block_node_IDs.push_back(block->inlet_nodes[i]->flow_dof);
-    last_block_node_IDs.push_back(block->inlet_nodes[i]->pres_dof);
+    IDs.push_back(block->inlet_nodes[i]->flow_dof);
+    IDs.push_back(block->inlet_nodes[i]->pres_dof);
   }
-  last_block_node_IDs.push_back(block->outlet_nodes.size());
+  IDs.push_back(block->outlet_nodes.size());
   for (int i = 0; i < block->outlet_nodes.size(); i++) {
-    last_block_node_IDs.push_back(block->outlet_nodes[i]->flow_dof);
-    last_block_node_IDs.push_back(block->outlet_nodes[i]->pres_dof);
+    IDs.push_back(block->outlet_nodes[i]->flow_dof);
+    IDs.push_back(block->outlet_nodes[i]->pres_dof);
   }
-
-  // Cannot safely modify caller's vector - ignore it
-  (void)IDs;
-}
-
-/**
- * @brief Get the last block node IDs result size
- */
-extern "C" SVZEROD_INTERFACE_API int get_block_node_IDs_size() {
-  return static_cast<int>(last_block_node_IDs.size());
-}
-
-/**
- * @brief Get block node ID by index from last query
- */
-extern "C" SVZEROD_INTERFACE_API int get_block_node_ID(int index) {
-  if (index < 0 || index >= static_cast<int>(last_block_node_IDs.size())) {
-    return -1;
-  }
-  return last_block_node_IDs[index];
 }
 
 /**
@@ -562,42 +483,4 @@ extern "C" SVZEROD_INTERFACE_API void run_simulation(
 
   // Release dynamic memory
   // integrator.clean();
-}
-
-/**
- * @brief Get number of block names
- */
-extern "C" SVZEROD_INTERFACE_API int get_block_names_count(int problem_id) {
-  auto interface = SolverInterface::interface_list_[problem_id];
-  return static_cast<int>(interface->block_names_.size());
-}
-
-/**
- * @brief Get block name by index (returns pointer to internal string)
- */
-extern "C" SVZEROD_INTERFACE_API const char* get_block_name(int problem_id, int index) {
-  auto interface = SolverInterface::interface_list_[problem_id];
-  if (index < 0 || index >= static_cast<int>(interface->block_names_.size())) {
-    return nullptr;
-  }
-  return interface->block_names_[index].c_str();
-}
-
-/**
- * @brief Get number of variable names
- */
-extern "C" SVZEROD_INTERFACE_API int get_variable_names_count(int problem_id) {
-  auto interface = SolverInterface::interface_list_[problem_id];
-  return static_cast<int>(interface->variable_names_.size());
-}
-
-/**
- * @brief Get variable name by index (returns pointer to internal string)
- */
-extern "C" SVZEROD_INTERFACE_API const char* get_variable_name(int problem_id, int index) {
-  auto interface = SolverInterface::interface_list_[problem_id];
-  if (index < 0 || index >= static_cast<int>(interface->variable_names_.size())) {
-    return nullptr;
-  }
-  return interface->variable_names_[index].c_str();
 }

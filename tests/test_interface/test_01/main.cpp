@@ -87,8 +87,8 @@ static void preflight_load(const fs::path& dll) {
     flush_now();
     throw std::runtime_error("LoadLibrary preflight failed");
   }
-  std::cerr << "[ok ] LoadLibraryW succeeded (keeping loaded)\n";
-  // Don't call FreeLibrary - leave it loaded to avoid double load/unload issues
+  std::cerr << "[ok ] LoadLibraryW succeeded; FreeLibrary()\n";
+  FreeLibrary(h);
   flush_now();
 }
 #endif
@@ -154,11 +154,6 @@ int main(int argc, char** argv) {
       return 2;
     }
     std::cout << "[dbg] using library   : " << lib_to_load << "\n";
-    std::cout << "[dbg] library exists  : " << (fs::exists(lib_to_load) ? "yes" : "no") << "\n";
-    if (fs::exists(lib_to_load)) {
-      std::cout << "[dbg] library size    : " << fs::file_size(lib_to_load) << " bytes\n";
-      std::cout << "[dbg] library abs path: " << fs::absolute(lib_to_load) << "\n";
-    }
     flush_now();
 
 #ifdef _WIN32
@@ -175,11 +170,12 @@ int main(int argc, char** argv) {
     // Set up the svZeroD model
     const std::string file_name = std::string(argv[2]);
     std::cout << "[step] initialize: " << file_name << "\n"; flush_now();
-    std::cout << "[dbg] About to call interface.initialize()\n"; flush_now();
-
+    if (!fs::exists(file_name)) {
+      std::cerr << "[err] JSON file does not exist: " << file_name << "\n";
+      flush_now();
+      return 3;
+    }
     interface.initialize(file_name);
-
-    std::cout << "[dbg] interface.initialize() returned\n"; flush_now();
     std::cout << "[ok  ] initialize\n"; flush_now();
 
     // Check number of variables and blocks
@@ -441,7 +437,6 @@ int main(int argc, char** argv) {
     }
 
     std::cout << "[PASS] interface test 01\n"; flush_now();
-    std::cout << "[dbg] About to return from main\n"; flush_now();
     return 0;
 
   } catch (const std::exception& e) {

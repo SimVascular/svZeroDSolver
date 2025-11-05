@@ -84,7 +84,7 @@ class LPNSolverInterface {
 
   // Interface functions.
   std::string lpn_initialize_name_;
-  void (*lpn_initialize_)(const char*, int&, int&, int&, int&,
+  void (*lpn_initialize_)(const std::string&, int&, int&, int&, int&,
                           std::vector<std::string>&, std::vector<std::string>&);
 
   std::string lpn_increment_time_name_;
@@ -98,15 +98,15 @@ class LPNSolverInterface {
                               int& error_code);
 
   std::string lpn_update_block_params_name_;
-  void (*lpn_update_block_params_)(const int, const char*,
+  void (*lpn_update_block_params_)(const int, const std::string&,
                                    std::vector<double>& new_params);
 
   std::string lpn_read_block_params_name_;
-  void (*lpn_read_block_params_)(const int, const char*,
+  void (*lpn_read_block_params_)(const int, const std::string&,
                                  std::vector<double>& block_params);
 
   std::string lpn_get_block_node_IDs_name_;
-  void (*lpn_get_block_node_IDs_)(const int, const char*,
+  void (*lpn_get_block_node_IDs_)(const int, const std::string&,
                                   std::vector<int>& block_params);
 
   std::string lpn_update_state_name_;
@@ -121,16 +121,6 @@ class LPNSolverInterface {
 
   std::string lpn_set_external_step_size_name_;
   void (*lpn_set_external_step_size_)(const int, double);
-
-  // Accessor functions for block/variable names
-  int (*lpn_get_block_names_count_)(int);
-  const char* (*lpn_get_block_name_)(int, int);
-  int (*lpn_get_variable_names_count_)(int);
-  const char* (*lpn_get_variable_name_)(int, int);
-
-  // Accessor functions for block node IDs
-  int (*lpn_get_block_node_IDs_size_)();
-  int (*lpn_get_block_node_ID_)(int);
 
   dl_handle_t library_handle_ = nullptr;
   int problem_id_ = 0;

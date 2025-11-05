@@ -53,16 +53,6 @@ class SolverInterface {
   std::string input_file_name_;
 
   /**
-   * @brief Block names (stored in DLL to avoid cross-boundary issues)
-   */
-  std::vector<std::string> block_names_;
-
-  /**
-   * @brief Variable names (stored in DLL to avoid cross-boundary issues)
-   */
-  std::vector<std::string> variable_names_;
-
-  /**
    * @brief Time step size of the external program
    *
    * This is required for coupling with a 3D solver

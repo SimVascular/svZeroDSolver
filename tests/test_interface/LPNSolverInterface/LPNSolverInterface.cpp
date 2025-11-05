@@ -21,24 +21,7 @@ LPNSolverInterface::LPNSolverInterface() {
   lpn_set_external_step_size_name_ = "set_external_step_size";
 }
 
-LPNSolverInterface::~LPNSolverInterface() {
-  std::cerr << "[dbg] LPNSolverInterface destructor called\n";
-  std::cerr.flush();
-#ifndef _WIN32
-  // On Windows, FreeLibrary can hang during process exit due to DLL cleanup issues.
-  // Skip explicit unload; the OS will clean up when the process terminates.
-  std::cerr << "[dbg] Calling dlclose\n";
-  std::cerr.flush();
-  dlclose(library_handle_);
-  std::cerr << "[dbg] dlclose returned\n";
-  std::cerr.flush();
-#else
-  std::cerr << "[dbg] Skipping dlclose on Windows\n";
-  std::cerr.flush();
-#endif
-  std::cerr << "[dbg] LPNSolverInterface destructor finished\n";
-  std::cerr.flush();
-}
+LPNSolverInterface::~LPNSolverInterface() { dlclose(library_handle_); }
 
 //--------------
 // load_library
@@ -62,8 +45,6 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
     dlclose(library_handle_);
     return;
   }
-  std::cerr << "[load_library] Successfully loaded 'initialize' function pointer\n";
-  std::cerr.flush();
 
   // Get a pointer to the svzero 'increment_time' function.
   *(void**)(&lpn_increment_time_) = dlsym(library_handle_, "increment_time");
@@ -150,16 +131,6 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
     dlclose(library_handle_);
     return;
   }
-
-  // Get accessor functions for block/variable names
-  *(void**)(&lpn_get_block_names_count_) = dlsym(library_handle_, "get_block_names_count");
-  *(void**)(&lpn_get_block_name_) = dlsym(library_handle_, "get_block_name");
-  *(void**)(&lpn_get_variable_names_count_) = dlsym(library_handle_, "get_variable_names_count");
-  *(void**)(&lpn_get_variable_name_) = dlsym(library_handle_, "get_variable_name");
-
-  // Get accessor functions for block node IDs
-  *(void**)(&lpn_get_block_node_IDs_size_) = dlsym(library_handle_, "get_block_node_IDs_size");
-  *(void**)(&lpn_get_block_node_ID_) = dlsym(library_handle_, "get_block_node_ID");
 }
 
 // Initialze the LPN solver.
@@ -169,34 +140,13 @@ void LPNSolverInterface::load_library(const std::string& interface_lib) {
 //   file_name: The name of the LPN configuration file (JSON).
 //
 void LPNSolverInterface::initialize(const std::string& file_name) {
-  lpn_initialize_(file_name.c_str(), problem_id_, pts_per_cycle_, num_cycles_,
+  lpn_initialize_(file_name, problem_id_, pts_per_cycle_, num_cycles_,
                   num_output_steps_, block_names_, variable_names_);
   std::cout << "[LPNSolverInterface::initialize] Problem ID: " << problem_id_
             << std::endl;
-
-  // Use accessor functions to populate vectors (since DLL can't modify them directly)
-  block_names_.clear();
-  int block_count = lpn_get_block_names_count_(problem_id_);
-  for (int i = 0; i < block_count; i++) {
-    const char* name = lpn_get_block_name_(problem_id_, i);
-    if (name) {
-      block_names_.push_back(name);
-    }
-  }
-
-  variable_names_.clear();
-  int var_count = lpn_get_variable_names_count_(problem_id_);
-  for (int i = 0; i < var_count; i++) {
-    const char* name = lpn_get_variable_name_(problem_id_, i);
-    if (name) {
-      variable_names_.push_back(name);
-    }
-  }
-
   system_size_ = variable_names_.size();
   std::cout << "[LPNSolverInterface::initialize] System size: " << system_size_
             << std::endl;
-  std::cout << "[LPNSolverInterface::initialize] Block names: " << block_names_.size() << std::endl;
 }
 
 // Set the external time step variable in the svZeroD interface.
@@ -252,7 +202,7 @@ void LPNSolverInterface::run_simulation(const double time,
 //
 void LPNSolverInterface::update_block_params(const std::string& block_name,
                                              std::vector<double>& new_params) {
-  lpn_update_block_params_(problem_id_, block_name.c_str(), new_params);
+  lpn_update_block_params_(problem_id_, block_name, new_params);
 }
 
 // Read the paramaters of a particular 0D block
@@ -265,7 +215,7 @@ void LPNSolverInterface::update_block_params(const std::string& block_name,
 //
 void LPNSolverInterface::read_block_params(const std::string& block_name,
                                            std::vector<double>& block_params) {
-  lpn_read_block_params_(problem_id_, block_name.c_str(), block_params);
+  lpn_read_block_params_(problem_id_, block_name, block_params);
 }
 
 // Get the IDs of the inlet/outlet variables of a given block in the state
@@ -279,15 +229,7 @@ void LPNSolverInterface::read_block_params(const std::string& block_name,
 //
 void LPNSolverInterface::get_block_node_IDs(const std::string& block_name,
                                             std::vector<int>& IDs) {
-  // Call DLL function (it stores result internally)
-  lpn_get_block_node_IDs_(problem_id_, block_name.c_str(), IDs);
-
-  // Retrieve result using accessor functions
-  IDs.clear();
-  int size = lpn_get_block_node_IDs_size_();
-  for (int i = 0; i < size; i++) {
-    IDs.push_back(lpn_get_block_node_ID_(i));
-  }
+  lpn_get_block_node_IDs_(problem_id_, block_name, IDs);
 }
 
 // Overwrite the y and ydot state vectors in the 0D solver

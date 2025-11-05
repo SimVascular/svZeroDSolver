@@ -50,6 +50,10 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
     std::vector<std::string>& variable_names) {
   DEBUG_MSG("========== svZeroD initialize ==========");
 
+  // Clear output vectors to ensure clean state
+  block_names.clear();
+  variable_names.clear();
+
   // Convert C string to std::string inside DLL to avoid ABI issues
   std::string input_file(input_file_arg ? input_file_arg : "");
   DEBUG_MSG("[initialize] input_file: " << input_file);
@@ -111,11 +115,19 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
   // Create a model.
   interface->model_ = model;
 
+  // Create vectors inside DLL, then swap to avoid cross-DLL allocation issues
+  std::vector<std::string> temp_block_names;
+  std::vector<std::string> temp_variable_names;
+
   // Create a vector containing all block names
   for (size_t i = 0; i < model->get_num_blocks(); i++) {
-    block_names.push_back(model->get_block(i)->get_name());
+    temp_block_names.push_back(model->get_block(i)->get_name());
   }
-  variable_names = model->dofhandler.variables;
+  temp_variable_names = model->dofhandler.variables;
+
+  // Swap with caller's vectors
+  block_names.swap(temp_block_names);
+  variable_names.swap(temp_variable_names);
 
   // Get simulation parameters
   interface->time_step_size_ = simparams.sim_time_step_size;

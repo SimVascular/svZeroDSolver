@@ -54,14 +54,9 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
 
   DEBUG_MSG("========== svZeroD initialize ==========");
 
-  // WORKAROUND: Destroy and reconstruct vectors in-place using DLL's allocator
-  // This is unsafe but works with /MD (shared heap)
-  block_names.~vector();
-  new (&block_names) std::vector<std::string>();
-  variable_names.~vector();
-  new (&variable_names) std::vector<std::string>();
-
-  std::cerr << "[DLL:initialize] Vectors reconstructed with DLL allocator\n";
+  // WORKAROUND: Copy strings element by element using C strings to avoid vector reallocation
+  // We'll populate the vectors without calling resize/clear/etc
+  std::cerr << "[DLL:initialize] Preparing to populate vectors safely\n";
   std::cerr.flush();
 
   // Convert C string to std::string inside DLL to avoid ABI issues
@@ -128,15 +123,37 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
   std::cerr << "[DLL:initialize] About to populate block_names\n";
   std::cerr.flush();
 
-  // Now we can safely push_back since vectors are DLL-allocated
-  for (size_t i = 0; i < model->get_num_blocks(); i++) {
-    block_names.push_back(model->get_block(i)->get_name());
+  // Use reserve and emplace_back with C strings to minimize allocations
+  size_t num_blocks = model->get_num_blocks();
+  try {
+    block_names.reserve(num_blocks);
+    std::cerr << "[DLL:initialize] Reserved space for " << num_blocks << " blocks\n";
+    std::cerr.flush();
+
+    for (size_t i = 0; i < num_blocks; i++) {
+      const std::string& name = model->get_block(i)->get_name();
+      block_names.emplace_back(name.c_str(), name.size());
+    }
+  } catch (const std::exception& e) {
+    std::cerr << "[DLL:initialize] Exception in block_names: " << e.what() << "\n";
+    std::cerr.flush();
+    throw;
   }
 
   std::cerr << "[DLL:initialize] Block names populated, now variable_names\n";
   std::cerr.flush();
 
-  variable_names = model->dofhandler.variables;
+  const auto& vars = model->dofhandler.variables;
+  try {
+    variable_names.reserve(vars.size());
+    for (const auto& var : vars) {
+      variable_names.emplace_back(var.c_str(), var.size());
+    }
+  } catch (const std::exception& e) {
+    std::cerr << "[DLL:initialize] Exception in variable_names: " << e.what() << "\n";
+    std::cerr.flush();
+    throw;
+  }
 
   std::cerr << "[DLL:initialize] Variable names populated\n";
   std::cerr.flush();

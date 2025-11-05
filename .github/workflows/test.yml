@@ -36,7 +36,7 @@ jobs:
         run: |
           mkdir Release
           cd Release
-          cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_DISTRIBUTION=ON ..
+          cmake -DCMAKE_BUILD_TYPE=Release -DENABLE_DISTRIBUTION=ON ..
           make -j2
 
       - name: Test interface POSIX-like Systems
@@ -102,7 +102,7 @@ jobs:
           # one build dir for everything: executables + Python module
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
           cmake -S . -B $build -G Ninja `
-            -DCMAKE_BUILD_TYPE=Debug `
+            -DCMAKE_BUILD_TYPE=Release `
             -DEIGEN_BUILD_BLAS=OFF `
             -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
             -DCMAKE_Fortran_COMPILER:FILEPATH="" `

@@ -120,42 +120,57 @@ extern "C" SVZEROD_INTERFACE_API void initialize(
   // Create a model.
   interface->model_ = model;
 
-  std::cerr << "[DLL:initialize] About to populate block_names\n";
+  std::cerr << "[DLL:initialize] About to populate internal vectors\n";
   std::cerr.flush();
 
-  // Use reserve and emplace_back with C strings to minimize allocations
-  size_t num_blocks = model->get_num_blocks();
-  try {
-    block_names.reserve(num_blocks);
-    std::cerr << "[DLL:initialize] Reserved space for " << num_blocks << " blocks\n";
-    std::cerr.flush();
+  // Populate DLL-internal vectors (safe because they're allocated in DLL)
+  interface->block_names_.clear();
+  interface->variable_names_.clear();
 
-    for (size_t i = 0; i < num_blocks; i++) {
-      const std::string& name = model->get_block(i)->get_name();
-      block_names.emplace_back(name.c_str(), name.size());
-    }
-  } catch (const std::exception& e) {
-    std::cerr << "[DLL:initialize] Exception in block_names: " << e.what() << "\n";
-    std::cerr.flush();
-    throw;
+  for (size_t i = 0; i < model->get_num_blocks(); i++) {
+    interface->block_names_.push_back(model->get_block(i)->get_name());
   }
+  interface->variable_names_ = model->dofhandler.variables;
 
-  std::cerr << "[DLL:initialize] Block names populated, now variable_names\n";
+  std::cerr << "[DLL:initialize] Internal vectors populated, copying to caller\n";
+  std::cerr << "[DLL:initialize] block_names size: " << interface->block_names_.size() << "\n";
+  std::cerr << "[DLL:initialize] variable_names size: " << interface->variable_names_.size() << "\n";
   std::cerr.flush();
 
-  const auto& vars = model->dofhandler.variables;
-  try {
-    variable_names.reserve(vars.size());
-    for (const auto& var : vars) {
-      variable_names.emplace_back(var.c_str(), var.size());
+  // Copy to caller's vectors element-by-element using indexed assignment (safest way)
+  // This avoids any resizing operations on the caller's vectors
+  for (size_t i = 0; i < interface->block_names_.size(); i++) {
+    if (i < block_names.size()) {
+      // Assign to existing element
+      block_names[i] = interface->block_names_[i].c_str();
+    } else {
+      // Need to grow - try push_back
+      try {
+        block_names.push_back(interface->block_names_[i].c_str());
+      } catch (...) {
+        std::cerr << "[DLL:initialize] Failed to push_back block_name " << i << "\n";
+        std::cerr.flush();
+        // Can't modify caller's vector - just skip
+        break;
+      }
     }
-  } catch (const std::exception& e) {
-    std::cerr << "[DLL:initialize] Exception in variable_names: " << e.what() << "\n";
-    std::cerr.flush();
-    throw;
   }
 
-  std::cerr << "[DLL:initialize] Variable names populated\n";
+  for (size_t i = 0; i < interface->variable_names_.size(); i++) {
+    if (i < variable_names.size()) {
+      variable_names[i] = interface->variable_names_[i].c_str();
+    } else {
+      try {
+        variable_names.push_back(interface->variable_names_[i].c_str());
+      } catch (...) {
+        std::cerr << "[DLL:initialize] Failed to push_back variable_name " << i << "\n";
+        std::cerr.flush();
+        break;
+      }
+    }
+  }
+
+  std::cerr << "[DLL:initialize] Finished copying to caller's vectors\n";
   std::cerr.flush();
 
   // Get simulation parameters

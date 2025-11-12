@@ -388,9 +388,11 @@ app.layout = html.Div([
         figure={
             'data': [edge_trace, vessel_trace, chamber_trace, valve_trace, junction_trace, bc_trace],
             'layout': go.Layout(
-                title='Network Graph',
-                titlefont_size=30,
-                title_x=0.5,
+                title={
+                    'text': 'Network Graph',
+                    'x': 0.5,
+                    'font': {'size': 30}
+                },
                 showlegend=True,
                 hovermode='closest',
                 margin=dict(b=20, l=0, r=0, t=50),
@@ -469,9 +471,11 @@ def update_graphs(clickData):
     fig = go.Figure(
         data=[edge_trace, vessel_trace, chamber_trace, valve_trace, junction_trace, bc_trace],
         layout=go.Layout(
-            title='Network Graph',
-            titlefont_size=30,
-            title_x=0.5,
+            title={
+                'text': 'Network Graph',
+                'x': 0.5,
+                'font': {'size': 30}
+            },
             showlegend=True,
             hovermode='closest',
             margin=dict(b=20, l=0, r=0, t=50),
@@ -651,4 +655,4 @@ def update_graphs(clickData):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True)

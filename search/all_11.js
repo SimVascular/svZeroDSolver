@@ -15,5 +15,6 @@ var searchData=
   ['rpd_12',['RPD',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834acf92f0599c691a94432469a5296bd1c3',1,'ClosedLoopHeartPulmonary']]],
   ['rra_5fv_13',['RRA_V',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a11161e89e276a8ad745faaac47b55743',1,'ClosedLoopHeartPulmonary']]],
   ['rrv_5fa_14',['RRV_A',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834af8d614e94693618f6c1bd00d6e76bf9b',1,'ClosedLoopHeartPulmonary']]],
-  ['run_15',['run',['../class_levenberg_marquardt_optimizer.html#af61872e32f3638b60631ad3fc834ab3f',1,'LevenbergMarquardtOptimizer::run()'],['../class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96',1,'Solver::run()']]]
+  ['run_15',['run',['../class_levenberg_marquardt_optimizer.html#af61872e32f3638b60631ad3fc834ab3f',1,'LevenbergMarquardtOptimizer::run()'],['../class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96',1,'Solver::run()']]],
+  ['run_5fintegration_16',['run_integration',['../class_solver.html#a60726d2498d4c405660bba52f8c0fa65',1,'Solver']]]
 ];

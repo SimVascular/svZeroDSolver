@@ -102,6 +102,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa9e68ab5310adf5606ac9f363c3cee1c" id="r_aa9e68ab5310adf5606ac9f363c3cee1c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa9e68ab5310adf5606ac9f363c3cee1c">Solver</a> (const nlohmann::json &amp;config)</td></tr>
 <tr class="memdesc:aa9e68ab5310adf5606ac9f363c3cee1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_solver.html" title="Class for running 0D simulations.">Solver</a> object.  <br /></td></tr>
 <tr class="separator:aa9e68ab5310adf5606ac9f363c3cee1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5e3e14b05f92b27a938df410e08d3e1" id="r_ab5e3e14b05f92b27a938df410e08d3e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5e3e14b05f92b27a938df410e08d3e1">setup_initial</a> ()</td></tr>
+<tr class="memdesc:ab5e3e14b05f92b27a938df410e08d3e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up and initialize the simulation parameters and model.  <br /></td></tr>
+<tr class="separator:ab5e3e14b05f92b27a938df410e08d3e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bbb5c4a7f35e44bbaa4341178242b65" id="r_a3bbb5c4a7f35e44bbaa4341178242b65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3bbb5c4a7f35e44bbaa4341178242b65">setup_integrator</a> ()</td></tr>
+<tr class="memdesc:a3bbb5c4a7f35e44bbaa4341178242b65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up integrator.  <br /></td></tr>
+<tr class="separator:a3bbb5c4a7f35e44bbaa4341178242b65"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a60726d2498d4c405660bba52f8c0fa65" id="r_a60726d2498d4c405660bba52f8c0fa65"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60726d2498d4c405660bba52f8c0fa65">run_integration</a> ()</td></tr>
+<tr class="memdesc:a60726d2498d4c405660bba52f8c0fa65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the integration.  <br /></td></tr>
+<tr class="separator:a60726d2498d4c405660bba52f8c0fa65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1f31e2d38dacd7e828c1bf428eb2ed96" id="r_a1f31e2d38dacd7e828c1bf428eb2ed96"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f31e2d38dacd7e828c1bf428eb2ed96">run</a> ()</td></tr>
 <tr class="memdesc:a1f31e2d38dacd7e828c1bf428eb2ed96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the simulation.  <br /></td></tr>
 <tr class="separator:a1f31e2d38dacd7e828c1bf428eb2ed96"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -291,6 +300,63 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Run the simulation. </p>
+
+</div>
+</div>
+<a id="a60726d2498d4c405660bba52f8c0fa65" name="a60726d2498d4c405660bba52f8c0fa65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a60726d2498d4c405660bba52f8c0fa65">&#9670;&#160;</a></span>run_integration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Solver::run_integration </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Run the integration. </p>
+
+</div>
+</div>
+<a id="ab5e3e14b05f92b27a938df410e08d3e1" name="ab5e3e14b05f92b27a938df410e08d3e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5e3e14b05f92b27a938df410e08d3e1">&#9670;&#160;</a></span>setup_initial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Solver::setup_initial </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set up and initialize the simulation parameters and model. </p>
+
+</div>
+</div>
+<a id="a3bbb5c4a7f35e44bbaa4341178242b65" name="a3bbb5c4a7f35e44bbaa4341178242b65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bbb5c4a7f35e44bbaa4341178242b65">&#9670;&#160;</a></span>setup_integrator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Solver::setup_integrator </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set up integrator. </p>
 
 </div>
 </div>

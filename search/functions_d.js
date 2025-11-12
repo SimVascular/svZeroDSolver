@@ -6,5 +6,6 @@ var searchData=
   ['reserve_3',['reserve',['../class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898',1,'SparseSystem']]],
   ['resistancebc_4',['ResistanceBC',['../class_resistance_b_c.html#a30d3b325f9a07f7751c866febaa177f8',1,'ResistanceBC']]],
   ['resistivejunction_5',['ResistiveJunction',['../class_resistive_junction.html#a93315135b8f0c0bf7c868d46a5c038ac',1,'ResistiveJunction']]],
-  ['run_6',['run',['../class_levenberg_marquardt_optimizer.html#af61872e32f3638b60631ad3fc834ab3f',1,'LevenbergMarquardtOptimizer::run()'],['../class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96',1,'Solver::run()']]]
+  ['run_6',['run',['../class_levenberg_marquardt_optimizer.html#af61872e32f3638b60631ad3fc834ab3f',1,'LevenbergMarquardtOptimizer::run()'],['../class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96',1,'Solver::run()']]],
+  ['run_5fintegration_7',['run_integration',['../class_solver.html#a60726d2498d4c405660bba52f8c0fa65',1,'Solver']]]
 ];

@@ -103,13 +103,16 @@ $(function(){ initResizable(false); });
     <a href="#autotoc_md3">Contributing to svZeroDSolver</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md4">Adding new blocks</a>
+    <a href="#autotoc_md4">Testing code changes</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md5">Code Style</a>
+    <a href="#autotoc_md5">Adding new blocks</a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md6">Documentation</a>
+    <a href="#autotoc_md6">Code Style</a>
+  </li>
+  <li class="level1">
+    <a href="#documentation">Documentation</a>
   </li>
   <li class="level1">
     <a href="#autotoc_md7">Profiling</a>
@@ -144,35 +147,50 @@ Contributing to svZeroDSolver</h1>
 <p><b>NOTE: To contribute new developments to the main branch of svZeroDSolver, developers must first open an issue on the svZeroDSolver Github repository to describe the planned changes.</b></p>
 <ul>
 <li>The changes should be implemented in a feature branch of the developer's fork of svZeroDSolver.</li>
-<li>Once the changes are implemented, the developer should make sure the build, documentation, and code format tests are passing on the user's feature branch.<ul>
-<li>The tests are automatically run when pushing changes to the developer's remote branch on Github.</li>
-<li>Alternatively, the developer can run the tests locally.<ul>
-<li>The build tests can be run using the <code>pip</code> install and <code>pytest</code>.</li>
-<li>The tests for the C++ interface require the <code>CMake</code> install and can be run by building the tests in <code>svZeroDSolver/tests/test_interface</code>.</li>
-<li>Code formatting can be performed following the instructions in the Formatting section below.</li>
-<li>The documentation can be built following the instructions in the Documentation section below.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Once all the tests are passing, the developer should open a pull request from the feature branch and link the relevant issue.</li>
+<li>Once the changes are implemented, the developer should make sure the build, documentation, and code format tests are passing on the user's feature branch.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md4"></a>
+Testing code changes</h1>
+<ul>
+<li>Tests are automatically run as Github workflows when pushing changes to the developer's remote branch on Github. These tests are defined in the <code>.github/workflows</code> directory.</li>
+<li>It may be helpful and more efficient to run the build tests locally with each incremental change the developer makes. This can be done by following these steps:<ol type="1">
+<li>If you do not have <code>pytest</code> installed in your virtual environment, install it with <code>pip install pytest</code></li>
+<li>We first need to build the svZeroDSolver project. This can be done by running <code>pip install -e .</code> from the svZeroDSolver directory</li>
+<li>From the main svZeroDSolver directory, <code>cd tests</code>.</li>
+<li>Now that you are in the <code>tests</code> directory, run <code>pytest</code>. The terminal output will show which tests are passing.<ul>
+<li>To run a specific subset of tests matching a certain pattern, e.g., only the calibrator, you can use <code>pytest -k calibrator</code>.</li>
+<li>To see all simulation output, run <code>pytest -sv</code>.</li>
+<li>If you want to run the tests using the binaries in the <code>Release</code> directory instead of the python module, you can call <code>pytest --coverage</code></li>
+</ul>
+</li>
+</ol>
+</li>
+<li>The tests for the C++ interface require the <code>CMake</code> install and can be run by building the tests in <code>svZeroDSolver/tests/test_interface</code>.</li>
+<li>Code formatting can be performed following the instructions in the <a class="el" href="#formatting">Formatting</a> section.</li>
+<li>The documentation can be built following the instructions in the <a class="el" href="#documentation">Documentation</a> section.</li>
+<li>Once all the tests are passing, the developer should open a pull request from the feature branch and link the relevant issue.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md5"></a>
 Adding new blocks</h1>
 <p>The modular architecture of svZeroDSolver relies on "blocks", such as blood vessels, junctions, valves, boundary conditions, etc. These blocks are assembled in a manner specified by the <code>.json</code> configuration file, which dictates the assembled governing equations for the model. We are always interested in adding new blocks to expand the funcitonality of svZeroDSolver.</p>
 <p>Detailed steps required to implement a new block in svZeroDSolver are available <a class="el" href="add_block.html">here</a>.</p>
 <p>Steps required to visualize a new block with svZeroDSolver Visualization application are available <a class="el" href="visualization.html">here</a>.</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Code Style</h1>
 <p>We follow the <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>.</p>
-<h2>Formatting</h2>
+<h2><a class="anchor" id="formatting"></a>
+Formatting</h2>
 <p>We use <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a> to automatically format our code accoring to the <a href="https://google.github.io/styleguide/cppguide.html">Google Style</a>, as specified in the <code>.clang-format</code> file. This increases readability and maintainability of the code while enabling you to focus on coding.</p>
 <p>There are tools for your favorite IDE to automatically format your code. Examples are:</p><ul>
 <li><a href="https://marketplace.visualstudio.com/items?itemName=xaver.clang-format">Visual Studio Code</a></li>
 <li><a href="https://github.com/rhysd/vim-clang-format">vim</a></li>
 <li><a href="https://clang.llvm.org/docs/ClangFormat.html">and many more</a></li>
 </ul>
-<p>Before committing any changes, you can run the following command <b>from your build folder</b> to format all your files:</p>
+<p>Before formatting the code with clang-format, ensure that you have latest clang-format version by running <code>clang-format --version</code>. To upgrade <code>clang-format</code> use the following commands</p><ul>
+<li>on MacOS: <code>brew upgrade clang-format</code></li>
+<li>on Ubuntu: <code>sudo apt upgrade clang-format</code></li>
+</ul>
+<p>Before committing any changes, run the following command <b>from your build folder</b> to format all your files:</p>
 <div class="fragment"><div class="line">make codeformat</div>
 </div><!-- fragment --><p>You can also just check <b>if</b> a file would be formatted without actually formatting it with:</p>
 <div class="fragment"><div class="line">make codecheck</div>
@@ -180,7 +198,7 @@ Code Style</h1>
 <div class="fragment"><div class="line">find src/**/*.h src/**/*.cpp | xargs clang-format -style=Google -i</div>
 </div><!-- fragment --><p>The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and indicates on merge requests when the code doesnt yet meet all style requirements.</p>
 <p>On Sherlock at Stanford, clang-format is included in the <code>llvm</code> module.</p>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<h1><a class="anchor" id="documentation"></a>
 Documentation</h1>
 <p>We use <a href="https://doxygen.nl">Doxygen</a> to automatically build an html documentation from source code. Please have at Doxygen's <a href="https://www.doxygen.nl/manual/docblocks.html">Documentation Guide</a> for an introduction into the syntax of writing documentation in C++. For more inspiration, you can look at the existing source files and how they use documentation.</p>
 <p><b>NOTE: Undocumented code will fail the automated code checks on Github and cannot be merged.</b></p>

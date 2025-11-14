@@ -83,7 +83,8 @@ State Integrator::step(const State& old_state, double time) {
     // Abort if maximum number of non-linear iterations is reached
     else if (i == max_iter - 1) {
       throw std::runtime_error(
-          "Maximum number of non-linear iterations reached.");
+          "Maximum number of non-linear iterations reached at time " +
+          std::to_string(time));
     }
 
     // Evaluate Jacobian

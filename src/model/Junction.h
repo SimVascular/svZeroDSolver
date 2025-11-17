@@ -63,6 +63,22 @@
  * \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right]
  * \quad \mathrm{with} \quad i \neq j \f]
  *
+ * ### Usage in json configuration file
+ *
+ *     "junctions": [
+ *         {
+ *             "inlet_vessels": [
+ *                 0
+ *             ],
+ *             "junction_name": "J0",
+ *             "junction_type": "NORMAL_JUNCTION",
+ *             "outlet_vessels": [
+ *                 1,
+ *                 2
+ *             ]
+ *         }
+ *     ]
+ *
  * ### Internal variables
  *
  * This block has no internal variables.

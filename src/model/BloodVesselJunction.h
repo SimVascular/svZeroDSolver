@@ -114,6 +114,40 @@
  * * `i+num_outlets` Inductance for inner blood vessel `i`
  * * `i+2*num_outlets` Stenosis coefficient for inner blood vessel `i`
  *
+ * ### Usage in json configuration file
+ *
+ *     "junctions": [
+ *         {
+ *             "inlet_vessels": [
+ *                 0
+ *             ],
+ *             "junction_name": "J0",
+ *             "junction_type": "BloodVesselJunction",
+ *             "junction_values": {
+ *                 "R_poiseuille": [
+ *                     100,
+ *                     200
+ *                 ],
+ *                 "C": [
+ *                     0.0,
+ *                     0.0
+ *                 ],
+ *                 "L": [
+ *                     0.0,
+ *                     0.0
+ *                 ],
+ *                 "stenosis_coefficient": [
+ *                     0.0,
+ *                     0.0
+ *                 ]
+ *             },
+ *             "outlet_vessels": [
+ *                 1,
+ *                 2
+ *             ]
+ *         }
+ *     ]
+ *
  * ### Internal variables
  *
  * This block has no internal variables.

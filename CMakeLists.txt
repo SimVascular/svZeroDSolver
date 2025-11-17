@@ -1,14 +1,27 @@
 # SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the University of California, and others.
 # SPDX-License-Identifier: BSD-3-Clause
 
-set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
-cmake_minimum_required(VERSION 3.5)
+set(CMAKE_POLICY_VERSION_MINIMUM 3.18)
+cmake_minimum_required(VERSION 3.18)
+cmake_policy(SET CMP0077 NEW)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-project(svZeroDSolver)
+project(svZeroDSolver LANGUAGES C CXX)
+
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+# Force Eigen & superprojects to skip docs/tests/fortran no matter what
+set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(EIGEN_BUILD_DOC OFF CACHE BOOL "" FORCE)
+set(EIGEN_TEST_FORTRAN OFF CACHE BOOL "" FORCE)
+set(EIGEN_BUILD_BLAS OFF CACHE BOOL "" FORCE)
 
 include(FetchContent)
+set(PYBIND11_FINDPYTHON NEW CACHE STRING "" FORCE)
+find_package(Python COMPONENTS Interpreter Development REQUIRED)
+message(STATUS "Using Python: ${Python_EXECUTABLE} (${Python_VERSION})")
 
 # Enable code coverage
 # -----------------------------------------------------------------------------
@@ -33,18 +46,13 @@ endif()
 
 if (WIN32 AND MSVC)
     # CMake ≥ 3.15 has a proper variable
+    # Use dynamic CRT (/MD or /MDd) so EXE and DLL share the same heap.
+    # This is required when passing STL containers across DLL boundaries.
     if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.15")
         set(CMAKE_MSVC_RUNTIME_LIBRARY
-                "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+                "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
     else()
-        # CMake < 3.15: manually swap /MD → /MT in all flags for static
-        # versions of the runtime libraries
-        foreach(_var
-                CMAKE_C_FLAGS CMAKE_C_FLAGS_DEBUG CMAKE_C_FLAGS_RELEASE
-                CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG CMAKE_CXX_FLAGS_RELEASE
-                CMAKE_SHARED_LINKER_FLAGS)
-            string(REPLACE "/MD" "/MT" ${_var} "${${_var}}")
-        endforeach()
+        # CMake < 3.15: /MD is the default, so no changes needed
     endif()
 endif()
 # -----------------------------------------------------------------------------
@@ -75,7 +83,6 @@ FetchContent_Declare(
 set(EIGEN_BUILD_DOC OFF)
 set(BUILD_TESTING OFF)
 set(EIGEN_BUILD_PKGCONFIG OFF)
-set( OFF)
 
 FetchContent_MakeAvailable(Eigen)
 
@@ -84,7 +91,6 @@ FetchContent_MakeAvailable(Eigen)
 # -----------------------------------------------------------------------------
 # pybind11 is a library used to create Python bindings of existing C++ code.
 #
-set(PYBIND11_PYTHON_VERSION 3.8 CACHE STRING "")
 FetchContent_Declare(
     pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11

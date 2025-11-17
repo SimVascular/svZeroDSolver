@@ -50,6 +50,25 @@
  *
  * * `0` Flow
  *
+ * ### Usage in json configuration file
+ *
+ *     "boundary_conditions": [
+ *         {
+ *             "bc_name": "INFLOW",
+ *             "bc_type": "FLOW",
+ *             "bc_values": {
+ *                 "Q": [
+ *                     5.0,
+ *                     5.0
+ *                 ],
+ *                 "t": [
+ *                     0.0,
+ *                     1.0
+ *                 ]
+ *             }
+ *         }
+ *     ]
+ *
  * ### Internal variables
  *
  * This block has no internal variables.

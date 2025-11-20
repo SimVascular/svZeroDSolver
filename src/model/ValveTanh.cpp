@@ -4,8 +4,9 @@
 
 void ValveTanh::setup_dofs(DOFHandler& dofhandler) {
   // set_up_dofs args: dofhandler (passed in), num equations, list of internal
-  // variable names (strings) 2 eqns, one for Pressure, one for Flow
-  Block::setup_dofs_(dofhandler, 2, {});
+  // variable names (strings) 3 eqns, one for Pressure, one for Flow, one for
+  // the valve status output
+  Block::setup_dofs_(dofhandler, 3, {"valve_status"});
 }
 
 // update_constant updates matrices E and F from E(y,t)*y_dot + F(y,t)*y +
@@ -25,6 +26,7 @@ void ValveTanh::update_constant(SparseSystem& system,
       -0.5 * (Rmax + Rmin);
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
+  system.F.coeffRef(global_eqn_ids[2], global_var_ids[4]) = 1.0;
 }
 
 // update_solution updates matrices E and F from E(y,t)*y_dot + F(y,t)*y +
@@ -38,16 +40,18 @@ void ValveTanh::update_solution(
   double p_in = y[global_var_ids[0]];
   double p_out = y[global_var_ids[2]];
   double q_in = y[global_var_ids[1]];
+  double valve_status = y[global_var_ids[4]];
   // Get parameters
   double Rmin = parameters[global_param_ids[ParamId::RMIN]];
   double Rmax = parameters[global_param_ids[ParamId::RMAX]];
   double steep = parameters[global_param_ids[ParamId::STEEPNESS]];
 
-  // Nonlinear term
+  // Nonlinear terms
   system.C(global_eqn_ids[0]) =
       -0.5 * q_in * (Rmax - Rmin) * tanh(steep * (p_out - p_in));
+  system.C(global_eqn_ids[2]) = -0.5 * (1 + tanh(steep * (p_out - p_in)));
 
-  // Derivatives of non-linear term
+  // Derivatives of non-linear terms
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[0]) =
       0.5 * q_in * (Rmax - Rmin) * steep *
       (1.0 - tanh(steep * (p_out - p_in)) * tanh(steep * (p_out - p_in)));
@@ -56,4 +60,8 @@ void ValveTanh::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) =
       -0.5 * q_in * (Rmax - Rmin) * steep *
       (1.0 - tanh(steep * (p_out - p_in)) * tanh(steep * (p_out - p_in)));
+  system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[0]) =
+      0.5 * steep / pow(cosh(steep * (p_in - p_out)), 2);
+  system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[2]) =
+      -0.5 * steep / pow(cosh(steep * (p_in - p_out)), 2);
 }

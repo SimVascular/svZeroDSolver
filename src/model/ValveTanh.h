@@ -190,6 +190,9 @@ class ValveTanh : public Block {
    * (relevant for sparse memory reservation)
    */
   TripletsContributions num_triplets{5, 0, 3};
+
+ private:
+  double valve_status = -1.0;  // 0=closed, 1=open
 };
 
 #endif  // SVZERODSOLVER_MODEL_VALVETANH_HPP_

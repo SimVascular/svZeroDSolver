@@ -48,7 +48,7 @@
  *
  * \f[
  * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
- * P_{out} & Q_{out}\end{array}\right]^{T} & \text{valve\_status}\f]
+ * P_{out} & Q_{out} & \text{valve\_status} \end{array}\right]^{T} \f]
  *
  * \f[
  * \mathbf{E}^{e}=\left[\begin{array}{ccccc}

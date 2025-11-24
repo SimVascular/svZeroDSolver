@@ -90,10 +90,10 @@
  * \f]
  * \f[
  * C = -\frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] 
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right]
  * \f]
  * \f[
- * D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} } 
+ * D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
  * \f]
  *
  * \f[

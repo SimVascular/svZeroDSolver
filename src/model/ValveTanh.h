@@ -47,18 +47,18 @@
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
  * P_{out} & Q_{out}\end{array}\right]^{T} & \text{valve\_status}\f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{cccc}
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
  * 0 & 0 & 0 & 0 & 0 \\
  * 0 & 0 & 0 & 0 & 0 \\
  * \end{array}\right]
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{cccc}
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
  * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0  & 0\\
  * 0 &      1                 &  0 & -1 & 0\\
  * 0 &      0                 &  0 & 7  & 1
@@ -75,7 +75,7 @@
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
- * \left[\begin{array}{cccc}
+ * \left[\begin{array}{ccccc}
  * A & B &  C & 0 & 0\\
  * 0 & 0 &  0 & 0 & 0\\
  * D & 0 & -D & 0 & 0
@@ -90,13 +90,15 @@
  * \f]
  * \f[
  * C = -\frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] 
+ * \f]
  * \f[
- * D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\}} \f]
+ * D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} } 
+ * \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- * \left[\begin{array}{cccc}
+ * \left[\begin{array}{ccccc}
  * 0 & 0 & 0 & 0 & 0\\
  * 0 & 0 & 0 & 0 & 0\\
  * 0 & 0 & 0 & 0 & 0

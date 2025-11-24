@@ -40,28 +40,29 @@ void ValveTanh::update_solution(
   double p_in = y[global_var_ids[0]];
   double p_out = y[global_var_ids[2]];
   double q_in = y[global_var_ids[1]];
-  double valve_status = y[global_var_ids[4]];
   // Get parameters
   double Rmin = parameters[global_param_ids[ParamId::RMIN]];
   double Rmax = parameters[global_param_ids[ParamId::RMAX]];
   double steep = parameters[global_param_ids[ParamId::STEEPNESS]];
 
+  //Helper functions
+  double fun_tanh = tanh(steep * (p_out - p_in));
+  double fun_cosh = 0.5 * steep / pow(cosh(steep * (p_in - p_out)), 2);
+  
   // Nonlinear terms
   system.C(global_eqn_ids[0]) =
-      -0.5 * q_in * (Rmax - Rmin) * tanh(steep * (p_out - p_in));
-  system.C(global_eqn_ids[2]) = -0.5 * (1 + tanh(steep * (p_out - p_in)));
+      -0.5 * q_in * (Rmax - Rmin) * fun_tanh;
+  system.C(global_eqn_ids[2]) = -0.5 * (1 + fun_tanh);
 
   // Derivatives of non-linear terms
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[0]) =
-      0.5 * q_in * (Rmax - Rmin) * steep *
-      (1.0 - tanh(steep * (p_out - p_in)) * tanh(steep * (p_out - p_in)));
+      0.5 * q_in * (Rmax - Rmin) * steep * (1.0 - pow(fun_tanh,2));
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
-      -0.5 * (Rmax - Rmin) * tanh(steep * (p_out - p_in));
+      -0.5 * (Rmax - Rmin) * fun_tanh;
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) =
-      -0.5 * q_in * (Rmax - Rmin) * steep *
-      (1.0 - tanh(steep * (p_out - p_in)) * tanh(steep * (p_out - p_in)));
+      -0.5 * q_in * (Rmax - Rmin) * steep * (1.0 - pow(fun_tanh,2));
   system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[0]) =
-      0.5 * steep / pow(cosh(steep * (p_in - p_out)), 2);
+      fun_cosh;
   system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[2]) =
-      -0.5 * steep / pow(cosh(steep * (p_in - p_out)), 2);
+      -fun_cosh;
 }

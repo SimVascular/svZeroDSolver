@@ -39,7 +39,7 @@
  * \f[
  * Q_{in}-Q_{out}=0
  * \f]
- *  
+ *
  * \f[
  * \text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
  * \f]

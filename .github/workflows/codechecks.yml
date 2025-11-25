@@ -1,4 +1,6 @@
-# This workflow checks for compliance with the Google C++ style guide.
+# This workflow checks for compliance with:
+# - *.cpp/*.h files (clang-format, .clang-format)
+# - *.json (Prettier, .prettierrc)
 name: Codechecks
 on: [push, pull_request]
 jobs:
@@ -15,3 +17,23 @@ jobs:
           cd Release
           cmake ..
           make codecheck
+          
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v4
+      - name: Install Prettier
+        run: |
+          brew install npm
+          npm init -y
+          npm install prettier
+      - name: Run Prettier check
+        run: |
+          npm run check || (
+            echo ""
+            echo "JSON formatting is incorrect."
+            echo "Run 'npm run format' locally and commit the changes."
+            exit 1
+          )

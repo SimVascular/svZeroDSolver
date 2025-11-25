@@ -1,0 +1,1098 @@
+{
+    "simulation_parameters": {
+        "number_of_cardiac_cycles": 6,
+        "number_of_time_pts_per_cardiac_cycle": 1000,
+        "steady_initial": false,
+        "output_all_cycles": true,
+        "output_variable_based": true
+    },
+    "boundary_conditions": [
+        {
+            "bc_name": "BC_RCR1",
+            "bc_type": "ClosedLoopRCR",
+            "bc_values": {
+                "Rp": 0.14517763,
+                "Rd": 1.46790713,
+                "C": 0.25116364,
+                "closed_loop_outlet": true
+            }
+        },
+        {
+            "bc_name": "BC_lca1",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 145.27234317,
+                "Ram": 236.06755765,
+                "Rv": 290.06461147,
+                "Cim": 0.00105039,
+                "Ca": 0.00010326
+            }
+        },
+        {
+            "bc_name": "BC_lca10",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 264.50228916,
+                "Ram": 429.81621988,
+                "Rv": 528.13048970,
+                "Cim": 0.00066247,
+                "Ca": 0.00006513
+            }
+        },
+        {
+            "bc_name": "BC_lca11",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 242.34288877,
+                "Ram": 393.80719426,
+                "Rv": 483.88491806,
+                "Cim": 0.00070852,
+                "Ca": 0.00006966
+            }
+        },
+        {
+            "bc_name": "BC_lca12",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 434.80456767,
+                "Ram": 706.55742246,
+                "Rv": 868.17225653,
+                "Cim": 0.00045194,
+                "Ca": 0.00004440
+            }
+        },
+        {
+            "bc_name": "BC_lca2",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 215.56835732,
+                "Ram": 350.29858065,
+                "Rv": 430.42433573,
+                "Cim": 0.00077533,
+                "Ca": 0.00007617
+            }
+        },
+        {
+            "bc_name": "BC_lca3",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 128.32140944,
+                "Ram": 208.52229034,
+                "Rv": 256.21876096,
+                "Cim": 0.00115556,
+                "Ca": 0.00011358
+            }
+        },
+        {
+            "bc_name": "BC_lca4",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 485.25934900,
+                "Ram": 788.54644212,
+                "Rv": 968.91508361,
+                "Cim": 0.00041538,
+                "Ca": 0.00004083
+            }
+        },
+        {
+            "bc_name": "BC_lca5",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 220.09705473,
+                "Ram": 357.65771393,
+                "Rv": 439.46676478,
+                "Cim": 0.00076305,
+                "Ca": 0.00007498
+            }
+        },
+        {
+            "bc_name": "BC_lca6",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 312.82644777,
+                "Ram": 508.34297763,
+                "Rv": 624.61911227,
+                "Cim": 0.00058227,
+                "Ca": 0.00005727
+            }
+        },
+        {
+            "bc_name": "BC_lca7",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 187.95513270,
+                "Ram": 305.42709064,
+                "Rv": 375.28913867,
+                "Cim": 0.00086153,
+                "Ca": 0.00008467
+            }
+        },
+        {
+            "bc_name": "BC_lca8",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 353.61869908,
+                "Ram": 574.63038601,
+                "Rv": 706.06881062,
+                "Cim": 0.00052984,
+                "Ca": 0.00005210
+            }
+        },
+        {
+            "bc_name": "BC_lca9",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 169.53550051,
+                "Ram": 275.49518834,
+                "Rv": 338.51074481,
+                "Cim": 0.00093274,
+                "Ca": 0.00009166
+            }
+        },
+        {
+            "bc_name": "BC_rca1",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 80.29184258,
+                "Ram": 130.47424420,
+                "Rv": 160.31834838,
+                "Cim": 0.00141371,
+                "Ca": 0.00017264
+            }
+        },
+        {
+            "bc_name": "BC_rca10",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 218.08868882,
+                "Ram": 354.39411934,
+                "Rv": 435.45666992,
+                "Cim": 0.00065544,
+                "Ca": 0.00008004
+            }
+        },
+        {
+            "bc_name": "BC_rca2",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 105.20903691,
+                "Ram": 170.96468497,
+                "Rv": 210.07039433,
+                "Cim": 0.00114837,
+                "Ca": 0.00014026
+            }
+        },
+        {
+            "bc_name": "BC_rca3",
+            "bc_type": "ClosedLoopCoronaryLeft",
+            "bc_values": {
+                "Ra": 186.14291060,
+                "Ram": 302.48222973,
+                "Rv": 371.67068322,
+                "Cim": 0.00074037,
+                "Ca": 0.00009038
+            }
+        },
+        {
+            "bc_name": "BC_rca4",
+            "bc_type": "ClosedLoopCoronaryRight",
+            "bc_values": {
+                "Ra": 193.76088038,
+                "Ram": 314.86143062,
+                "Rv": 386.88144804,
+                "Cim": 0.00071786,
+                "Ca": 0.00008767
+            }
+        },
+        {
+            "bc_name": "BC_rca5",
+            "bc_type": "ClosedLoopCoronaryRight",
+            "bc_values": {
+                "Ra": 124.95088751,
+                "Ram": 203.04519220,
+                "Rv": 249.48885552,
+                "Cim": 0.00100610,
+                "Ca": 0.00012286
+            }
+        },
+        {
+            "bc_name": "BC_rca6",
+            "bc_type": "ClosedLoopCoronaryRight",
+            "bc_values": {
+                "Ra": 218.27513756,
+                "Ram": 354.69709853,
+                "Rv": 435.82895125,
+                "Cim": 0.00065505,
+                "Ca": 0.00007994
+            }
+        },
+        {
+            "bc_name": "BC_rca7",
+            "bc_type": "ClosedLoopCoronaryRight",
+            "bc_values": {
+                "Ra": 178.05349026,
+                "Ram": 289.33692167,
+                "Rv": 355.51857526,
+                "Cim": 0.00076610,
+                "Ca": 0.00009357
+            }
+        },
+        {
+            "bc_name": "BC_rca8",
+            "bc_type": "ClosedLoopCoronaryRight",
+            "bc_values": {
+                "Ra": 173.61664735,
+                "Ram": 282.12705194,
+                "Rv": 346.65955170,
+                "Cim": 0.00078117,
+                "Ca": 0.00009540
+            }
+        },
+        {
+            "bc_name": "BC_rca9",
+            "bc_type": "ClosedLoopCoronaryRight",
+            "bc_values": {
+                "Ra": 162.07275385,
+                "Ram": 263.36822500,
+                "Rv": 323.60991327,
+                "Cim": 0.00082363,
+                "Ca": 0.00010053
+            }
+        }
+    ],
+    "vessels": [
+        {
+            "vessel_name": "aorta",
+            "vessel_id": 0,
+            "vessel_length": 0.66112316,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.00000967,
+                "L": 0.00007322,
+                "C": 0.03796592,
+                "stenosis_coefficient": 0.00000000
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_RCR1"
+            },
+            "vessel_name": "aorta_outlet",
+            "vessel_id": 1,
+            "vessel_length": 1.75194297,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.00002617,
+                "L": 0.00019606,
+                "C": 0.09956642,
+                "stenosis_coefficient": 0.00000000
+            }
+        },
+        {
+            "vessel_name": "branch2_seg0",
+            "vessel_id": 2,
+            "vessel_length": 4.12881563,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.04701796,
+                "L": 0.01275703,
+                "C": 0.00849882,
+                "stenosis_coefficient": 0.00552872
+            }
+        },
+        {
+            "vessel_name": "branch3_seg0",
+            "vessel_id": 3,
+            "vessel_length": 1.14204214,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.21456086,
+                "L": 0.01433248,
+                "C": 0.00057876,
+                "stenosis_coefficient": 0.00000000
+            }
+        },
+        {
+            "vessel_name": "branch4_seg0",
+            "vessel_id": 4,
+            "vessel_length": 0.52897498,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.48018432,
+                "L": 0.01459240,
+                "C": 0.00012196,
+                "stenosis_coefficient": 0.00000044
+            }
+        },
+        {
+            "vessel_name": "branch5_seg0",
+            "vessel_id": 5,
+            "vessel_length": 1.81322649,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.94887937,
+                "L": 0.03797839,
+                "C": 0.00055059,
+                "stenosis_coefficient": 0.04093514
+            }
+        },
+        {
+            "vessel_name": "branch6_seg0",
+            "vessel_id": 6,
+            "vessel_length": 1.12500965,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 2.27041077,
+                "L": 0.04627382,
+                "C": 0.00017395,
+                "stenosis_coefficient": 0.00662043
+            }
+        },
+        {
+            "vessel_name": "branch7_seg0",
+            "vessel_id": 7,
+            "vessel_length": 0.79203945,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.79856153,
+                "L": 0.02302675,
+                "C": 0.00017327,
+                "stenosis_coefficient": 0.00000000
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca1"
+            },
+            "vessel_name": "lca1",
+            "vessel_id": 8,
+            "vessel_length": 4.28071029,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 20.29815063,
+                "L": 0.26989273,
+                "C": 0.00002639,
+                "stenosis_coefficient": 1.99849135
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca10"
+            },
+            "vessel_name": "lca10",
+            "vessel_id": 9,
+            "vessel_length": 0.87523345,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 24.54508224,
+                "L": 0.13419898,
+                "C": 0.00000188,
+                "stenosis_coefficient": 3.42088449
+            }
+        },
+        {
+            "vessel_name": "branch10_seg0",
+            "vessel_id": 10,
+            "vessel_length": 0.71170083,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.32283384,
+                "L": 0.01387852,
+                "C": 0.00001204,
+                "stenosis_coefficient": 0.00000000
+            }
+        },
+        {
+            "vessel_name": "branch11_seg0",
+            "vessel_id": 11,
+            "vessel_length": 4.62351211,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 3.61412480,
+                "L": 0.11835663,
+                "C": 0.00005957,
+                "stenosis_coefficient": 14.00573414
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca11"
+            },
+            "vessel_name": "lca11",
+            "vessel_id": 12,
+            "vessel_length": 2.31158288,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 22.44186019,
+                "L": 0.20853991,
+                "C": 0.00000932,
+                "stenosis_coefficient": 1.66010823
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca12"
+            },
+            "vessel_name": "lca12",
+            "vessel_id": 13,
+            "vessel_length": 6.88744833,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 35.86392182,
+                "L": 0.45505417,
+                "C": 0.00004017,
+                "stenosis_coefficient": 6.40569879
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca2"
+            },
+            "vessel_name": "lca2",
+            "vessel_id": 14,
+            "vessel_length": 6.88258878,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 16.33057337,
+                "L": 0.30695991,
+                "C": 0.00006396,
+                "stenosis_coefficient": 0.93156876
+            }
+        },
+        {
+            "vessel_name": "branch15_seg0",
+            "vessel_id": 15,
+            "vessel_length": 1.65325150,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 6.43502136,
+                "L": 0.09443859,
+                "C": 0.00001199,
+                "stenosis_coefficient": 0.13505610
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca3"
+            },
+            "vessel_name": "lca3",
+            "vessel_id": 16,
+            "vessel_length": 0.61111855,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 3.35785775,
+                "L": 0.04147620,
+                "C": 0.00000345,
+                "stenosis_coefficient": 0.02251603
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca4"
+            },
+            "vessel_name": "lca4",
+            "vessel_id": 17,
+            "vessel_length": 2.23023369,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 30.40222928,
+                "L": 0.23841465,
+                "C": 0.00000736,
+                "stenosis_coefficient": 10.17051450
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca5"
+            },
+            "vessel_name": "lca5",
+            "vessel_id": 18,
+            "vessel_length": 3.45268608,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 19.69933014,
+                "L": 0.23878624,
+                "C": 0.00001908,
+                "stenosis_coefficient": 1.85344297
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca6"
+            },
+            "vessel_name": "lca6",
+            "vessel_id": 19,
+            "vessel_length": 1.40311067,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 16.57757459,
+                "L": 0.13964053,
+                "C": 0.00000504,
+                "stenosis_coefficient": 0.22107556
+            }
+        },
+        {
+            "vessel_name": "branch20_seg0",
+            "vessel_id": 20,
+            "vessel_length": 1.11230760,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 4.41271486,
+                "L": 0.06414612,
+                "C": 0.00000689,
+                "stenosis_coefficient": 0.64069732
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca7"
+            },
+            "vessel_name": "lca7",
+            "vessel_id": 21,
+            "vessel_length": 1.36712305,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 9.78248188,
+                "L": 0.10588474,
+                "C": 0.00000661,
+                "stenosis_coefficient": 0.47214903
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca8"
+            },
+            "vessel_name": "lca8",
+            "vessel_id": 22,
+            "vessel_length": 1.94613639,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 36.94014009,
+                "L": 0.24549403,
+                "C": 0.00000528,
+                "stenosis_coefficient": 0.44274105
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_lca9"
+            },
+            "vessel_name": "lca9",
+            "vessel_id": 23,
+            "vessel_length": 1.71324850,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 8.55904537,
+                "L": 0.11087353,
+                "C": 0.00001024,
+                "stenosis_coefficient": 1.61692094
+            }
+        },
+        {
+            "vessel_name": "branch24_seg0",
+            "vessel_id": 24,
+            "vessel_length": 2.49802491,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.03934789,
+                "L": 0.00907746,
+                "C": 0.00026594,
+                "stenosis_coefficient": 0.00000000
+            }
+        },
+        {
+            "vessel_name": "branch25_seg0",
+            "vessel_id": 25,
+            "vessel_length": 2.80679680,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.33806796,
+                "L": 0.02820412,
+                "C": 0.00010806,
+                "stenosis_coefficient": 0.70557854
+            }
+        },
+        {
+            "vessel_name": "branch26_seg0",
+            "vessel_id": 26,
+            "vessel_length": 5.66814626,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 1.67039723,
+                "L": 0.08909133,
+                "C": 0.00013951,
+                "stenosis_coefficient": 0.13068133
+            }
+        },
+        {
+            "vessel_name": "branch27_seg0",
+            "vessel_id": 27,
+            "vessel_length": 3.21876810,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 5.26722925,
+                "L": 0.11921777,
+                "C": 0.00003362,
+                "stenosis_coefficient": 0.00972055
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca1"
+            },
+            "vessel_name": "rca1",
+            "vessel_id": 28,
+            "vessel_length": 1.64389655,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 5.55012415,
+                "L": 0.08745681,
+                "C": 0.00001240,
+                "stenosis_coefficient": 0.37631306
+            }
+        },
+        {
+            "vessel_name": "branch29_seg0",
+            "vessel_id": 29,
+            "vessel_length": 0.70812320,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 0.27550269,
+                "L": 0.01278858,
+                "C": 0.00001573,
+                "stenosis_coefficient": 0.00006426
+            }
+        },
+        {
+            "vessel_name": "branch30_seg0",
+            "vessel_id": 30,
+            "vessel_length": 2.84248391,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 5.31519922,
+                "L": 0.11254179,
+                "C": 0.00002880,
+                "stenosis_coefficient": 0.36678610
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca10"
+            },
+            "vessel_name": "rca10",
+            "vessel_id": 31,
+            "vessel_length": 1.21839472,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 15.19167032,
+                "L": 0.12456665,
+                "C": 0.00000424,
+                "stenosis_coefficient": 1.61300559
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca2"
+            },
+            "vessel_name": "rca2",
+            "vessel_id": 32,
+            "vessel_length": 3.27087111,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 7.74895513,
+                "L": 0.14576670,
+                "C": 0.00003042,
+                "stenosis_coefficient": 0.26740420
+            }
+        },
+        {
+            "vessel_name": "branch33_seg0",
+            "vessel_id": 33,
+            "vessel_length": 3.86406358,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 6.89361845,
+                "L": 0.14943447,
+                "C": 0.00004142,
+                "stenosis_coefficient": 0.30197805
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca3"
+            },
+            "vessel_name": "rca3",
+            "vessel_id": 34,
+            "vessel_length": 3.79211944,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 20.26259566,
+                "L": 0.25380114,
+                "C": 0.00002178,
+                "stenosis_coefficient": 0.97491397
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca4"
+            },
+            "vessel_name": "rca4",
+            "vessel_id": 35,
+            "vessel_length": 2.62440581,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 19.25114116,
+                "L": 0.20580161,
+                "C": 0.00001250,
+                "stenosis_coefficient": 0.21767635
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca5"
+            },
+            "vessel_name": "rca5",
+            "vessel_id": 36,
+            "vessel_length": 2.67001331,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 10.92529052,
+                "L": 0.15637893,
+                "C": 0.00001796,
+                "stenosis_coefficient": 3.72519237
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca6"
+            },
+            "vessel_name": "rca6",
+            "vessel_id": 37,
+            "vessel_length": 0.70154505,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 8.53998736,
+                "L": 0.07086984,
+                "C": 0.00000247,
+                "stenosis_coefficient": 0.10919271
+            }
+        },
+        {
+            "vessel_name": "branch38_seg0",
+            "vessel_id": 38,
+            "vessel_length": 2.35200908,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 2.86606254,
+                "L": 0.07517395,
+                "C": 0.00002622,
+                "stenosis_coefficient": 0.05925971
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca7"
+            },
+            "vessel_name": "rca7",
+            "vessel_id": 39,
+            "vessel_length": 2.40530257,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 13.88168541,
+                "L": 0.16730580,
+                "C": 0.00001320,
+                "stenosis_coefficient": 0.22733188
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca8"
+            },
+            "vessel_name": "rca8",
+            "vessel_id": 40,
+            "vessel_length": 0.98298044,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 8.71842056,
+                "L": 0.08476106,
+                "C": 0.00000418,
+                "stenosis_coefficient": 0.05314967
+            }
+        },
+        {
+            "boundary_conditions": {
+                "outlet": "BC_rca9"
+            },
+            "vessel_name": "rca9",
+            "vessel_id": 41,
+            "vessel_length": 0.57759712,
+            "zero_d_element_type": "BloodVessel",
+            "zero_d_element_values": {
+                "R_poiseuille": 3.41266911,
+                "L": 0.04065038,
+                "C": 0.00000313,
+                "stenosis_coefficient": 0.00000000
+            }
+        }
+    ],
+    "junctions": [
+        {
+            "junction_name": "J0",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                0
+            ],
+            "outlet_vessels": [
+                1,
+                2,
+                24
+            ]
+        },
+        {
+            "junction_name": "J1",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                2
+            ],
+            "outlet_vessels": [
+                3,
+                10
+            ]
+        },
+        {
+            "junction_name": "J2",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                3
+            ],
+            "outlet_vessels": [
+                4,
+                19
+            ]
+        },
+        {
+            "junction_name": "J3",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                4
+            ],
+            "outlet_vessels": [
+                5,
+                15,
+                20
+            ]
+        },
+        {
+            "junction_name": "J4",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                5
+            ],
+            "outlet_vessels": [
+                6,
+                23
+            ]
+        },
+        {
+            "junction_name": "J5",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                6
+            ],
+            "outlet_vessels": [
+                7,
+                18
+            ]
+        },
+        {
+            "junction_name": "J6",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                7
+            ],
+            "outlet_vessels": [
+                8,
+                9
+            ]
+        },
+        {
+            "junction_name": "J7",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                10
+            ],
+            "outlet_vessels": [
+                11,
+                13
+            ]
+        },
+        {
+            "junction_name": "J8",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                11
+            ],
+            "outlet_vessels": [
+                12,
+                14
+            ]
+        },
+        {
+            "junction_name": "J9",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                15
+            ],
+            "outlet_vessels": [
+                16,
+                17
+            ]
+        },
+        {
+            "junction_name": "J10",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                20
+            ],
+            "outlet_vessels": [
+                21,
+                22
+            ]
+        },
+        {
+            "junction_name": "J11",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                24
+            ],
+            "outlet_vessels": [
+                25,
+                32
+            ]
+        },
+        {
+            "junction_name": "J12",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                25
+            ],
+            "outlet_vessels": [
+                26,
+                33,
+                36
+            ]
+        },
+        {
+            "junction_name": "J13",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                26
+            ],
+            "outlet_vessels": [
+                27,
+                29
+            ]
+        },
+        {
+            "junction_name": "J14",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                27
+            ],
+            "outlet_vessels": [
+                28,
+                37
+            ]
+        },
+        {
+            "junction_name": "J15",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                29
+            ],
+            "outlet_vessels": [
+                30,
+                38
+            ]
+        },
+        {
+            "junction_name": "J16",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                30
+            ],
+            "outlet_vessels": [
+                31,
+                41
+            ]
+        },
+        {
+            "junction_name": "J17",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                33
+            ],
+            "outlet_vessels": [
+                34,
+                35
+            ]
+        },
+        {
+            "junction_name": "J18",
+            "junction_type": "NORMAL_JUNCTION",
+            "inlet_vessels": [
+                38
+            ],
+            "outlet_vessels": [
+                39,
+                40
+            ]
+        }
+    ],
+    "closed_loop_blocks": [
+        {
+            "outlet_blocks": [
+                "aorta"
+            ],
+            "closed_loop_type": "ClosedLoopHeartAndPulmonary",
+            "cardiac_cycle_period": 0.9231,
+            "parameters": {
+                "Tsa": 0.403594,
+                "tpwave": 8.975463,
+                "Erv_s": 1.557941,
+                "Elv_s": 3.536852,
+                "iml": 0.588690,
+                "imr": 0.994136,
+                "Lrv_a": 0.000375,
+                "Rrv_a": 0.039082,
+                "Lra_v": 0.000375,
+                "Rra_v": 0.007390,
+                "Lla_v": 0.000375,
+                "Rla_v": 0.006480,
+                "Rlv_ao": 0.025915,
+                "Llv_a": 0.000130,
+                "Vrv_u": 2.574133,
+                "Vlv_u": -4.220641,
+                "Rpd": 0.074351,
+                "Cp": 1.089993,
+                "Cpa": 0.352885,
+                "Kxp_ra": 8.646988,
+                "Kxv_ra": 0.004883,
+                "Emax_ra": 0.300000,
+                "Vaso_ra": 4.175754,
+                "Kxp_la": 8.149902,
+                "Kxv_la": 0.008012,
+                "Emax_la": 0.309459,
+                "Vaso_la": 8.093518
+            }
+        }
+    ],
+    "initial_condition": {
+        "V_RA:CLH": 31.20,
+        "V_RV:CLH": 97.50,
+        "V_LA:CLH": 31.20,
+        "V_LV:CLH": 97.50,
+        "P_pul:CLH": 8.0,
+        "pressure_all": 69.00
+    }
+}

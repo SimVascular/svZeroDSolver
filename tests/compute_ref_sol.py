@@ -90,5 +90,4 @@ def main():
         compute_reference_solution(args.test_case_name)
 
 if __name__ == "__main__":
-    
     main()

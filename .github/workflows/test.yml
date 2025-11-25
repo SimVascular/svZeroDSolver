@@ -59,7 +59,7 @@ jobs:
           cmake -DENABLE_COVERAGE=ON ..
           make -j2
           cd ../tests
-          python -m pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
+          python -m pytest -v --durations=0 --coverage --ignore=test_dirgraph.py --junitxml=junit.xml -o junit_family=legacy
           cd ../Release
           make coverage
 
@@ -75,6 +75,12 @@ jobs:
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      
+      - name: Upload test results to Codecov
+        if: startsWith(matrix.os, 'ubuntu-latest')
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Build installer POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}

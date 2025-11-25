@@ -72,19 +72,13 @@ Steps required to visualize a new block with svZeroDSolver Visualization applica
 
 # Code Style
 
-We follow the [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html).
-
-## Formatting {#formatting}
-
-We use [clang-format](https://clang.llvm.org/docs/ClangFormat.html) to automatically 
-format our code accoring to the [Google Style](https://google.github.io/styleguide/cppguide.html), 
-as specified in the `.clang-format` file. This increases readability and maintainability of the code 
+We use automatic code formatting for certain files to increase readability and maintainability of the code 
 while enabling you to focus on coding.
 
-There are tools for your favorite IDE to automatically format your code. Examples are:
-- [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format)
-- [vim](https://github.com/rhysd/vim-clang-format)
-- [and many more](https://clang.llvm.org/docs/ClangFormat.html)
+## Formatting {#formatting}
+The following files are automatically formatted:
+- Source code (`.cpp, .h`): [clang-format](https://clang.llvm.org/docs/ClangFormat.html) as specified in `.clang-format` (defaults to [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html))
+- Test cases and results (`.json`): [Prettier](https://prettier.io/) as specified in `.prettierrc`
 
 Before formatting the code with clang-format, ensure that you have latest clang-format version by running `clang-format --version`. To upgrade `clang-format` use the following commands
   * on MacOS: `brew upgrade clang-format`
@@ -116,6 +110,27 @@ indicates on merge requests when the code doesnt yet meet all style
 requirements.
 
 On Sherlock at Stanford, clang-format is included in the `llvm` module.
+
+## Visual Studio Code
+Install [clang-format](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode). To automatically format your files on save, add to your user settings (on macOS, press `Cmd+Shift+P`, type "Preferences: Open User Settings (JSON)")
+```json
+  "editor.formatOnSave": true,
+  "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  },
+```
+
+## Vim
+Install [clang-format](https://github.com/rhysd/vim-clang-format) and [Prettier](https://github.com/prettier/vim-prettier).
+
+## Other editors
+See [clang-format](https://clang.llvm.org/docs/ClangFormat.html) and [Prettier](https://prettier.io/docs/editors.html).
 
 # Documentation {#documentation}
 

@@ -112,7 +112,7 @@ requirements.
 On Sherlock at Stanford, clang-format is included in the `llvm` module.
 
 ## Visual Studio Code
-Install [clang-format](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode). To automatically format your files on save, add to your user settings (on macOS, press `Cmd+Shift+P`, type "Preferences: Open User Settings (JSON)")
+Install the [clang-format](https://marketplace.visualstudio.com/items?itemName=xaver.clang-format) and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) plugins. To automatically format your files on save, add to your user settings (on macOS, press `Cmd+Shift+P`, type "Preferences: Open User Settings (JSON)")
 ```json
   "editor.formatOnSave": true,
   "[cpp]": {
@@ -127,7 +127,7 @@ Install [clang-format](https://marketplace.visualstudio.com/items?itemName=xaver
 ```
 
 ## Vim
-Install [clang-format](https://github.com/rhysd/vim-clang-format) and [Prettier](https://github.com/prettier/vim-prettier).
+Install the [clang-format](https://github.com/rhysd/vim-clang-format) and [Prettier](https://github.com/prettier/vim-prettier) plugins.
 
 ## Other editors
 See [clang-format](https://clang.llvm.org/docs/ClangFormat.html) and [Prettier](https://prettier.io/docs/editors.html).

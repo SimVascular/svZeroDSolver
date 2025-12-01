@@ -51,7 +51,7 @@
  * P_{out} & Q_{out} & \text{valve\_status} \end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\mathbf{0} 
+ * \mathbf{E}^{e}=\mathbf{0}
  * \f]
  *
  * \f[
@@ -95,7 +95,7 @@
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- *  \mathbf{E}^{e}=\mathbf{0} 
+ *  \mathbf{E}^{e}=\mathbf{0}
  * \f]
  *
  * ### Parameters

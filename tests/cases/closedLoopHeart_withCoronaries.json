@@ -1,170 +1,170 @@
 {
-    "description": {
-        "description of test case": "Closed-loop circulation with two RCR outlets and two coronary outlets"
+  "description": {
+    "description of test case": "Closed-loop circulation with two RCR outlets and two coronary outlets"
+  },
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 10,
+    "number_of_time_pts_per_cardiac_cycle": 100,
+    "absolute_tolerance": 1e-9,
+    "steady_initial": false
+  },
+  "boundary_conditions": [
+    {
+      "bc_name": "LCA",
+      "bc_type": "ClosedLoopCoronaryLeft",
+      "bc_values": {
+        "_comment_": "Ra_total = 67.540250*0.361748 = 24.432550357, Ra = (0.32/0.84)*Ra_total, Ram = (0.52/0.84)*Ra_total, Ca = 0.000110*5.022065, Rv = 12.864810*2.586199, Cim = 0.000890*4.198904",
+        "Ra": 9.307638231,
+        "Ram": 15.124912126,
+        "Rv": 33.270958757,
+        "Cim": 0.003737025,
+        "Ca": 0.000552427
+      }
     },
-    "simulation_parameters": {
-        "number_of_cardiac_cycles": 10,
-        "number_of_time_pts_per_cardiac_cycle": 100,
-        "absolute_tolerance": 1e-09,
-        "steady_initial": false
+    {
+      "bc_name": "RCA",
+      "bc_type": "ClosedLoopCoronaryRight",
+      "bc_values": {
+        "_comment_": "Ra_total = 41.778304*0.361748 = 15.113217915, Ra = (0.32/0.84)*Ra_total, Ram = (0.52/0.84)*Ra_total, Ca = 0.000110*9.599613, Rv = 7.957772*2.586199, Cim = 0.000890*3.891162",
+        "Ra": 5.757416349,
+        "Ram": 9.355801566,
+        "Rv": 20.580381989,
+        "Cim": 0.003463134,
+        "Ca": 0.001055957
+      }
     },
-    "boundary_conditions": [
-        {
-            "bc_name": "LCA",
-            "bc_type": "ClosedLoopCoronaryLeft",
-            "bc_values": {
-                "_comment_": "Ra_total = 67.540250*0.361748 = 24.432550357, Ra = (0.32/0.84)*Ra_total, Ram = (0.52/0.84)*Ra_total, Ca = 0.000110*5.022065, Rv = 12.864810*2.586199, Cim = 0.000890*4.198904",
-                "Ra": 9.307638231,
-                "Ram": 15.124912126,
-                "Rv": 33.270958757,
-                "Cim": 0.003737025,
-                "Ca": 0.000552427
-            }
-        },
-        {
-            "bc_name": "RCA",
-            "bc_type": "ClosedLoopCoronaryRight",
-            "bc_values": {
-                "_comment_": "Ra_total = 41.778304*0.361748 = 15.113217915, Ra = (0.32/0.84)*Ra_total, Ram = (0.52/0.84)*Ra_total, Ca = 0.000110*9.599613, Rv = 7.957772*2.586199, Cim = 0.000890*3.891162",
-                "Ra": 5.757416349,
-                "Ram": 9.355801566,
-                "Rv": 20.580381989,
-                "Cim": 0.003463134,
-                "Ca": 0.001055957
-            }
-        },
-        {
-            "bc_name": "RCR_aorta",
-            "bc_type": "ClosedLoopRCR",
-            "bc_values": {
-                "_comment_": "R_total = 1.570879*0.948914 = 1.490629075, Rp = 0.09*R_total, Rd = 0.91*R_total, C = 0.228215*1.044637",
-                "Rp": 0.134156617,
-                "Rd": 1.356472458,
-                "C": 0.238401833,
-                "closed_loop_outlet": true
-            }
-        },
-        {
-            "bc_name": "RCR_aorta_br",
-            "bc_type": "ClosedLoopRCR",
-            "bc_values": {
-                "_comment_": "R_total = 6.922824*0.948914 = 6.569164613, Rp = 0.09*R_total, Rd = 0.91*R_total, C = 0.051785*1.044637",
-                "Rp": 0.591224815,
-                "Rd": 5.977939798,
-                "C": 0.054096527,
-                "closed_loop_outlet": true
-            }
-        }
-    ],
-    "vessels": [
-        {
-            "_comment_": "aorta",
-            "boundary_conditions": {
-                "outlet": "RCR_aorta"
-            },
-            "vessel_id": 0,
-            "vessel_length": 10.0,
-            "vessel_name": "branch0_seg0",
-            "zero_d_element_type": "BloodVessel",
-            "zero_d_element_values": {
-                "_comment_": "R = 4.464119/1333.34, L = 5.25/1333.34",
-                "R_poiseuille": 0.003348073,
-                "L": 0.00393748
-            }
-        },
-        {
-            "_comment_": "aorta_br",
-            "boundary_conditions": {
-                "outlet": "RCR_aorta_br"
-            },
-            "vessel_id": 1,
-            "vessel_length": 10.0,
-            "vessel_name": "branch1_seg0",
-            "zero_d_element_type": "BloodVessel",
-            "zero_d_element_values": {
-                "_comment_": "R = 111.152028/1333.34, L = 5.25/1333.34",
-                "R_poiseuille": 0.083363604,
-                "L": 0.00393748
-            }
-        },
-        {
-            "_comment_": "lca",
-            "boundary_conditions": {
-                "outlet": "LCA"
-            },
-            "vessel_id": 2,
-            "vessel_length": 10.0,
-            "vessel_name": "branch2_seg0",
-            "zero_d_element_type": "BloodVessel",
-            "zero_d_element_values": {
-                "_comment_": "R = 5855.832840/1333.34, L = 10.0/1333.34",
-                "R_poiseuille": 4.391852671,
-                "L": 0.007499963
-            }
-        },
-        {
-            "_comment_": "rca",
-            "boundary_conditions": {
-                "outlet": "RCA"
-            },
-            "vessel_id": 3,
-            "vessel_length": 10.0,
-            "vessel_name": "branch3_seg0",
-            "zero_d_element_type": "BloodVessel",
-            "zero_d_element_values": {
-                "_comment_": "R = 3013.987966/1333.34, L = 10.0/1333.34",
-                "R_poiseuille": 2.260479672,
-                "L": 0.007499963
-            }
-        }
-    ],
-    "closed_loop_blocks": [
-        {
-            "outlet_blocks": [
-                "branch0_seg0",
-                "branch1_seg0",
-                "branch2_seg0",
-                "branch3_seg0"
-            ],
-            "closed_loop_type": "ClosedLoopHeartAndPulmonary",
-            "cardiac_cycle_period": 1.0169,
-            "parameters": {
-                "_comment_": "Lrv_a = 0.249155/pConv, Rrv_a = 0.993637 * this->Rrv_base /pConv, Lra_v = 0.289378/pConv, Rra_v = 10.516664/pConv, Lla_v = 0.469052/pConv, Rla_v = 7.081136/pConv, Rlv_ao = 0.972624 * this->Rlv_base /pConv, Llv_a = 0.147702/pConv, Rpd = 1.120725 * this->Rpd_base /pConv",
-                "Tsa": 0.40742,
-                "tpwave": 8.976868,
-                "Erv_s": 2.125279,
-                "Elv_s": 3.125202,
-                "iml": 0.509365,
-                "imr": 0.806369,
-                "Lrv_a": 0.000186865,
-                "Rrv_a": 0.035061704,
-                "Lra_v": 0.000217032,
-                "Rra_v": 0.007887459,
-                "Lla_v": 0.000351787,
-                "Rla_v": 0.005310825,
-                "Rlv_ao": 0.034320234,
-                "Llv_a": 0.000110776,
-                "Vrv_u": 9.424629,
-                "Vlv_u": 5.606007,
-                "Rpd": 0.098865401,
-                "Cp": 1.090989,
-                "Cpa": 0.556854,
-                "Kxp_ra": 9.22244,
-                "Kxv_ra": 0.004837,
-                "Emax_ra": 0.208858,
-                "Vaso_ra": 4.848742,
-                "Kxp_la": 9.194992,
-                "Kxv_la": 0.008067,
-                "Emax_la": 0.303119,
-                "Vaso_la": 9.355754
-            }
-        }
-    ],
-    "initial_condition": {
-        "V_RA:CLH": 38.43,
-        "V_RV:CLH": 96.07,
-        "V_LA:CLH": 38.43,
-        "V_LV:CLH": 96.07,
-        "P_pul:CLH": 8.0
+    {
+      "bc_name": "RCR_aorta",
+      "bc_type": "ClosedLoopRCR",
+      "bc_values": {
+        "_comment_": "R_total = 1.570879*0.948914 = 1.490629075, Rp = 0.09*R_total, Rd = 0.91*R_total, C = 0.228215*1.044637",
+        "Rp": 0.134156617,
+        "Rd": 1.356472458,
+        "C": 0.238401833,
+        "closed_loop_outlet": true
+      }
+    },
+    {
+      "bc_name": "RCR_aorta_br",
+      "bc_type": "ClosedLoopRCR",
+      "bc_values": {
+        "_comment_": "R_total = 6.922824*0.948914 = 6.569164613, Rp = 0.09*R_total, Rd = 0.91*R_total, C = 0.051785*1.044637",
+        "Rp": 0.591224815,
+        "Rd": 5.977939798,
+        "C": 0.054096527,
+        "closed_loop_outlet": true
+      }
     }
+  ],
+  "vessels": [
+    {
+      "_comment_": "aorta",
+      "boundary_conditions": {
+        "outlet": "RCR_aorta"
+      },
+      "vessel_id": 0,
+      "vessel_length": 10.0,
+      "vessel_name": "branch0_seg0",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "_comment_": "R = 4.464119/1333.34, L = 5.25/1333.34",
+        "R_poiseuille": 0.003348073,
+        "L": 0.00393748
+      }
+    },
+    {
+      "_comment_": "aorta_br",
+      "boundary_conditions": {
+        "outlet": "RCR_aorta_br"
+      },
+      "vessel_id": 1,
+      "vessel_length": 10.0,
+      "vessel_name": "branch1_seg0",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "_comment_": "R = 111.152028/1333.34, L = 5.25/1333.34",
+        "R_poiseuille": 0.083363604,
+        "L": 0.00393748
+      }
+    },
+    {
+      "_comment_": "lca",
+      "boundary_conditions": {
+        "outlet": "LCA"
+      },
+      "vessel_id": 2,
+      "vessel_length": 10.0,
+      "vessel_name": "branch2_seg0",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "_comment_": "R = 5855.832840/1333.34, L = 10.0/1333.34",
+        "R_poiseuille": 4.391852671,
+        "L": 0.007499963
+      }
+    },
+    {
+      "_comment_": "rca",
+      "boundary_conditions": {
+        "outlet": "RCA"
+      },
+      "vessel_id": 3,
+      "vessel_length": 10.0,
+      "vessel_name": "branch3_seg0",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "_comment_": "R = 3013.987966/1333.34, L = 10.0/1333.34",
+        "R_poiseuille": 2.260479672,
+        "L": 0.007499963
+      }
+    }
+  ],
+  "closed_loop_blocks": [
+    {
+      "outlet_blocks": [
+        "branch0_seg0",
+        "branch1_seg0",
+        "branch2_seg0",
+        "branch3_seg0"
+      ],
+      "closed_loop_type": "ClosedLoopHeartAndPulmonary",
+      "cardiac_cycle_period": 1.0169,
+      "parameters": {
+        "_comment_": "Lrv_a = 0.249155/pConv, Rrv_a = 0.993637 * this->Rrv_base /pConv, Lra_v = 0.289378/pConv, Rra_v = 10.516664/pConv, Lla_v = 0.469052/pConv, Rla_v = 7.081136/pConv, Rlv_ao = 0.972624 * this->Rlv_base /pConv, Llv_a = 0.147702/pConv, Rpd = 1.120725 * this->Rpd_base /pConv",
+        "Tsa": 0.40742,
+        "tpwave": 8.976868,
+        "Erv_s": 2.125279,
+        "Elv_s": 3.125202,
+        "iml": 0.509365,
+        "imr": 0.806369,
+        "Lrv_a": 0.000186865,
+        "Rrv_a": 0.035061704,
+        "Lra_v": 0.000217032,
+        "Rra_v": 0.007887459,
+        "Lla_v": 0.000351787,
+        "Rla_v": 0.005310825,
+        "Rlv_ao": 0.034320234,
+        "Llv_a": 0.000110776,
+        "Vrv_u": 9.424629,
+        "Vlv_u": 5.606007,
+        "Rpd": 0.098865401,
+        "Cp": 1.090989,
+        "Cpa": 0.556854,
+        "Kxp_ra": 9.22244,
+        "Kxv_ra": 0.004837,
+        "Emax_ra": 0.208858,
+        "Vaso_ra": 4.848742,
+        "Kxp_la": 9.194992,
+        "Kxv_la": 0.008067,
+        "Emax_la": 0.303119,
+        "Vaso_la": 9.355754
+      }
+    }
+  ],
+  "initial_condition": {
+    "V_RA:CLH": 38.43,
+    "V_RV:CLH": 96.07,
+    "V_LA:CLH": 38.43,
+    "V_LV:CLH": 96.07,
+    "P_pul:CLH": 8.0
+  }
 }

@@ -25,13 +25,9 @@
   ],
   "junctions": [
     {
-      "inlet_vessels": [
-        0
-      ],
+      "inlet_vessels": [0],
       "junction_name": "J0",
-      "outlet_vessels": [
-        1
-      ]
+      "outlet_vessels": [1]
     }
   ],
   "vessels": [

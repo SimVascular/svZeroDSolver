@@ -256,10 +256,12 @@ set(SDIR ${PROJECT_SOURCE_DIR}/src/**/)
 
 # format the code
 add_custom_target(codeformat
+  COMMAND npm run format
   COMMAND find ${SDIR}/*.h ${SDIR}/*.cpp | xargs clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format -i)
 
 # check code format
 add_custom_target(codecheck
+  COMMAND npm run check
   COMMAND find ${SDIR}/*.h ${SDIR}/*.cpp | xargs clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format --dry-run --Werror)
 
 set_target_properties(pysvzerod PROPERTIES

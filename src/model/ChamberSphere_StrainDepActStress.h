@@ -129,12 +129,6 @@ class ChamberSphere_StrainDepActStress : public Block {
     W1 = 3,
     W2 = 4,
     eta = 5,
-    // sigma_max = 6,
-    // alpha_max = 7,
-    // alpha_min = 8,
-    // tsys = 9,
-    // tdias = 10,
-    // steepness = 11
     E_s = 6,
     mu = 7,
     alpha_r = 8,
@@ -157,12 +151,6 @@ class ChamberSphere_StrainDepActStress : public Block {
                {"W1", InputParameter()},
                {"W2", InputParameter()},
                {"eta", InputParameter()},
-            //    {"sigma_max", InputParameter()},
-            //    {"alpha_max", InputParameter()},
-            //    {"alpha_min", InputParameter()},
-            //    {"tsys", InputParameter()},
-            //    {"tdias", InputParameter()},
-            //    {"steepness", InputParameter()},
                {"E_s", InputParameter()},
                {"mu", InputParameter()},
                {"alpha_r", InputParameter()},
@@ -230,8 +218,6 @@ class ChamberSphere_StrainDepActStress : public Block {
   double u_plus = 0.0; //positive part of activation function
   double u_minus = 0.0; // negative part of activation function
 
-//   double act = 0.0;       // activation function
-//   double act_plus = 0.0;  // act_plus = max(act, 0)
 
   /**
    * @brief Number of triplets of element

@@ -36,6 +36,7 @@ set(HDRS
   BloodVessel.h
   BloodVesselJunction.h
   ChamberSphere.h
+  ChamberSphere_StrainDepActStress.h
   ChamberElastanceInductor.h
   ClosedLoopCoronaryBC.h
   ClosedLoopCoronaryLeftBC.h

@@ -51,17 +51,14 @@
  * P_{out} & Q_{out} & \text{valve\_status} \end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
- * 0 & 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0 & 0 \\
- * \end{array}\right]
+ * \mathbf{E}^{e}=\mathbf{0} 
  * \f]
  *
  * \f[
  * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
  * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0  & 0\\
  * 0 &      1                 &  0 & -1 & 0\\
- * 0 &      0                 &  0 & 7  & 1
+ * 0 &      0                 &  0 & 0  & 1
  * \end{array}\right]
  * \f]
  *
@@ -98,11 +95,7 @@
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- * \left[\begin{array}{ccccc}
- * 0 & 0 & 0 & 0 & 0\\
- * 0 & 0 & 0 & 0 & 0\\
- * 0 & 0 & 0 & 0 & 0
- * \end{array}\right]
+ *  \mathbf{E}^{e}=\mathbf{0} 
  * \f]
  *
  * ### Parameters

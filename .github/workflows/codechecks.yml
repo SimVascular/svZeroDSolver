@@ -1,14 +1,19 @@
-# This workflow checks for compliance with the Google C++ style guide.
+# This workflow checks for compliance with:
+# - *.cpp/*.h files (clang-format, .clang-format)
+# - *.json (Prettier, .prettierrc)
 name: Codechecks
 on: [push, pull_request]
 jobs:
-  clang-format:
+  code-format:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
           brew install clang-format
+          brew install npm
+          npm init -y
+          npm install prettier
       - name: Run clang-format
         run: |
           mkdir Release

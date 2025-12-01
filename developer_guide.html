@@ -177,14 +177,12 @@ Adding new blocks</h1>
 <p>Steps required to visualize a new block with svZeroDSolver Visualization application are available <a class="el" href="visualization.html">here</a>.</p>
 <h1><a class="anchor" id="autotoc_md6"></a>
 Code Style</h1>
-<p>We follow the <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>.</p>
+<p>We use automatic code formatting for certain files to increase readability and maintainability of the code while enabling you to focus on coding.</p>
 <h2><a class="anchor" id="formatting"></a>
 Formatting</h2>
-<p>We use <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a> to automatically format our code accoring to the <a href="https://google.github.io/styleguide/cppguide.html">Google Style</a>, as specified in the <code>.clang-format</code> file. This increases readability and maintainability of the code while enabling you to focus on coding.</p>
-<p>There are tools for your favorite IDE to automatically format your code. Examples are:</p><ul>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=xaver.clang-format">Visual Studio Code</a></li>
-<li><a href="https://github.com/rhysd/vim-clang-format">vim</a></li>
-<li><a href="https://clang.llvm.org/docs/ClangFormat.html">and many more</a></li>
+<p>The following files are automatically formatted:</p><ul>
+<li>Source code (<code>.cpp, .h</code>): <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a> as specified in <code>.clang-format</code> (defaults to <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>)</li>
+<li>Test cases and results (<code>.json</code>): <a href="https://prettier.io/">Prettier</a> as specified in <code>.prettierrc</code></li>
 </ul>
 <p>Before formatting the code with clang-format, ensure that you have latest clang-format version by running <code>clang-format --version</code>. To upgrade <code>clang-format</code> use the following commands</p><ul>
 <li>on MacOS: <code>brew upgrade clang-format</code></li>
@@ -198,6 +196,21 @@ Formatting</h2>
 <div class="fragment"><div class="line">find src/**/*.h src/**/*.cpp | xargs clang-format -style=Google -i</div>
 </div><!-- fragment --><p>The latter check is also performed in the GitHub CI/CD (a.k.a. Actions) and indicates on merge requests when the code doesnt yet meet all style requirements.</p>
 <p>On Sherlock at Stanford, clang-format is included in the <code>llvm</code> module.</p>
+<h2>Visual Studio Code</h2>
+<p>Install the <a href="https://marketplace.visualstudio.com/items?itemName=xaver.clang-format">clang-format</a> and <a href="https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode">Prettier</a> plugins. To automatically format your files on save, add to your user settings (on macOS, press <code>Cmd+Shift+P</code>, type "Preferences: Open User Settings (JSON)") </p><div class="fragment"><div class="line">&quot;editor.formatOnSave&quot;: true,</div>
+<div class="line">&quot;[cpp]&quot;: {</div>
+<div class="line">  &quot;editor.defaultFormatter&quot;: &quot;xaver.clang-format&quot;</div>
+<div class="line">},</div>
+<div class="line">&quot;[json]&quot;: {</div>
+<div class="line">  &quot;editor.defaultFormatter&quot;: &quot;esbenp.prettier-vscode&quot;,</div>
+<div class="line">},</div>
+<div class="line">&quot;[jsonc]&quot;: {</div>
+<div class="line">  &quot;editor.defaultFormatter&quot;: &quot;esbenp.prettier-vscode&quot;,</div>
+<div class="line">},</div>
+</div><!-- fragment --><h2>Vim</h2>
+<p>Install the <a href="https://github.com/rhysd/vim-clang-format">clang-format</a> and <a href="https://github.com/prettier/vim-prettier">Prettier</a> plugins.</p>
+<h2>Other editors</h2>
+<p>See <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a> and <a href="https://prettier.io/docs/editors.html">Prettier</a>.</p>
 <h1><a class="anchor" id="documentation"></a>
 Documentation</h1>
 <p>We use <a href="https://doxygen.nl">Doxygen</a> to automatically build an html documentation from source code. Please have at Doxygen's <a href="https://www.doxygen.nl/manual/docblocks.html">Documentation Guide</a> for an introduction into the syntax of writing documentation in C++. For more inspiration, you can look at the existing source files and how they use documentation.</p>

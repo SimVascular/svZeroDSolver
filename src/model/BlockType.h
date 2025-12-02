@@ -28,7 +28,9 @@ enum class BlockType {
   closed_loop_heart_pulmonary = 12,
   valve_tanh = 13,
   chamber_elastance_inductor = 14,
-  chamber_sphere = 15
+  chamber_sphere = 15,
+  piecewise_cosine_chamber = 17,
+  piecewise_valve = 18
 };
 
 /**

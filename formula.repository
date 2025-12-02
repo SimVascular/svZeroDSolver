@@ -433,41 +433,44 @@ node[anchor=south]{$P_{out}$};
 \]
 \_form#123=126x19:\[Q_{in}-Q_{out}=0
 \]
-\_form#124=278x28:\[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
-P_{out} & Q_{out}\end{array}\right]^{T} \]
-\_form#125=174x47:\[\mathbf{E}^{e}=\left[\begin{array}{cccc}
-0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0
+\_form#124=356x39:\[\text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
+\]
+\_form#125=392x28:\[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
+P_{out} & Q_{out} & \text{valve\_status} \end{array}\right]^{T} \]
+\_form#126=58x15:\[\mathbf{E}^{e}=\mathbf{0}
+\]
+\_form#127=399x69:\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+1 & -(R_{max}+R_{min})/2.0 & -1 & 0  & 0\\
+0 &      1                 &  0 & -1 & 0\\
+0 &      0                 &  0 & 0  & 1
 \end{array}\right]
 \]
-\_form#126=366x47:\[\mathbf{F}^{e}=\left[\begin{array}{cccc}
-1 & -(R_{max}+R_{min})/2.0 & -1 & 0 \\
-0 &      1                 &  0 & -1
-\end{array}\right]
-\]
-\_form#127=426x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}
+\_form#128=431x69:\[\mathbf{c}^{e}=\left[\begin{array}{c}
 -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
-0
+0 \\
+-\frac{1}{2}\left[1+tanh\{k(P_{out}-P_{in})\}\right]
 \end{array}\right]
 \]
-\_form#128=229x49:\[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
-\left[\begin{array}{cccc}
-A & B & C & 0 \\
-0 & 0 & 0 & 0 \end{array}\right] \]
-\_form#129=443x39:\[A = \frac{1}{2} k Q_{in}
+\_form#129=278x69:\[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+\left[\begin{array}{ccccc}
+A & B &  C & 0 & 0\\
+0 & 0 &  0 & 0 & 0\\
+D & 0 & -D & 0 & 0
+\end{array}\right] \]
+\_form#130=443x39:\[A = \frac{1}{2} k Q_{in}
 (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
 \]
-\_form#130=362x39:\[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+\_form#131=362x39:\[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
 \]
-\_form#131=458x39:\[C = -\frac{1}{2} k Q_{in}
-(R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \]
-\_form#132=212x49:\[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
-\left[\begin{array}{cccc}
-0 & 0 & 0 & 0 \\
-0 & 0 & 0 & 0
-\end{array}\right]
+\_form#132=458x39:\[C = -\frac{1}{2} k Q_{in}
+(R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right]
 \]
-\_form#133=321x144:\[\begin{circuitikz} \draw
+\_form#133=233x45:\[D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
+\]
+\_form#134=143x49:\[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+ \mathbf{E}^{e}=\mathbf{0}
+\]
+\_form#135=321x144:\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_p$, *-] (3,0)
@@ -478,64 +481,64 @@ node[anchor=south]{$P_{ref}$}
 node[ground]{};
 \end{circuitikz}
 \]
-\_form#134=283x41:\[R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
+\_form#136=283x41:\[R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
 \]
-\_form#135=197x28:\[\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} &
+\_form#137=197x28:\[\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} &
 P_{c}^{e}\end{array}\right]^{T} \]
-\_form#136=189x47:\[\mathbf{E}^{e}=\left[\begin{array}{ccc}
+\_form#138=189x47:\[\mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 & 0 & -R_{d} C \\
 0 & 0 & 0
 \end{array}\right]
 \]
-\_form#137=189x47:\[\mathbf{F}^{e}=\left[\begin{array}{ccc}
+\_form#139=189x47:\[\mathbf{F}^{e}=\left[\begin{array}{ccc}
 0 & R_{d} & -1 \\
 1 & -R_{p} & -1
 \end{array}\right]
 \]
-\_form#138=114x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}
+\_form#140=114x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
 \]
-\_form#139=388x21:\[\boldsymbol{r}(\boldsymbol{\alpha}, \boldsymbol{y}, \boldsymbol{\dot{y}}) =
+\_form#141=388x21:\[\boldsymbol{r}(\boldsymbol{\alpha}, \boldsymbol{y}, \boldsymbol{\dot{y}}) =
 \boldsymbol{E}(\boldsymbol{\alpha}, \boldsymbol{y}) \cdot
 \dot{\boldsymbol{y}}+\boldsymbol{F}(\boldsymbol{\alpha}, \boldsymbol{y})
 \cdot \boldsymbol{y}+\boldsymbol{c}(\boldsymbol{\alpha}, \boldsymbol{y}) \]
-\_form#140=64x21:$\boldsymbol{y} \in \mathbb{R}^{N}$
-\_form#141=62x19:$\boldsymbol{\alpha} \in
+\_form#142=64x21:$\boldsymbol{y} \in \mathbb{R}^{N}$
+\_form#143=62x19:$\boldsymbol{\alpha} \in
 \mathbb{R}^{P}$
-\_form#142=111x21:$\boldsymbol{E},\boldsymbol{F} \in
+\_form#144=111x21:$\boldsymbol{E},\boldsymbol{F} \in
 \mathbb{R}^{NxN}$
-\_form#143=58x19:$\boldsymbol{c} \in
+\_form#145=58x19:$\boldsymbol{c} \in
 \mathbb{R}^{N}$
-\_form#144=291x56:\[\min _\alpha S, \quad \mathrm { with } \quad S=\sum_i^D
+\_form#146=291x56:\[\min _\alpha S, \quad \mathrm { with } \quad S=\sum_i^D
 r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \]
-\_form#145=13x13:$\boldsymbol{y}$
-\_form#146=13x19:$\boldsymbol{\dot{y}}$
-\_form#147=15x15:$D$
-\_form#148=161x21:\[\boldsymbol{\alpha}^{i+1}=\boldsymbol{\alpha}^{i}+\Delta
+\_form#147=13x13:$\boldsymbol{y}$
+\_form#148=13x19:$\boldsymbol{\dot{y}}$
+\_form#149=15x15:$D$
+\_form#150=161x21:\[\boldsymbol{\alpha}^{i+1}=\boldsymbol{\alpha}^{i}+\Delta
 \boldsymbol{\alpha}^{i+1} \]
-\_form#149=53x17:$\Delta \boldsymbol{\alpha}^{i+1} $
-\_form#150=656x38:\[\left[\mathbf{J}^{\mathrm{T}} \mathbf{J}+\lambda
+\_form#151=53x17:$\Delta \boldsymbol{\alpha}^{i+1} $
+\_form#152=656x38:\[\left[\mathbf{J}^{\mathrm{T}} \mathbf{J}+\lambda
 \operatorname{diag}\left(\mathbf{J}^{\mathrm{T}} \mathbf{J}\right)\right]^{i}
 \cdot \Delta \boldsymbol{\alpha}^{i+1}=-\left[\mathbf{J}^{\mathrm{T}}
 \mathbf{r}\right]^{i}, \quad \lambda^{i}=\lambda^{i-1}
 \cdot\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i}\right\|_2
 /\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i-1}\right\|_2. \]
-\_form#151=371x36:\[\left\|\left[\mathbf{J}^{\mathrm{T}}
+\_form#153=371x36:\[\left\|\left[\mathbf{J}^{\mathrm{T}}
 \mathbf{r}\right]^{\mathrm{i}}\right\|_2<\operatorname{tol}_{\text {grad
 }}^\alpha \text { and }\left\|\Delta
 \boldsymbol{\alpha}^{\mathrm{i}+1}\right\|_2<\mathrm{tol}_{\text {inc
 }}^\alpha, \]
-\_form#152=276x41:\[J = \frac{\partial \boldsymbol{r}}{\partial \boldsymbol{\alpha}} =
+\_form#154=276x41:\[J = \frac{\partial \boldsymbol{r}}{\partial \boldsymbol{\alpha}} =
 \frac{\partial \mathbf{E}}{\partial \boldsymbol{\alpha}} \cdot
 \dot{\mathbf{y}}+\frac{\partial \mathbf{F}}{\partial \boldsymbol{\alpha}}
 \cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \]
-\_form#153=270x26:$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $
-\_form#154=311x26:$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $
-\_form#155=26x19:$P_{in}$
-\_form#156=28x19:$Q_{in}$
-\_form#157=34x19:$P_{out}$
-\_form#158=36x19:$Q_{out}$
-\_form#159=17x19:$I_{1}$
-\_form#160=188x21:$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$
+\_form#155=270x26:$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $
+\_form#156=311x26:$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $
+\_form#157=26x19:$P_{in}$
+\_form#158=28x19:$Q_{in}$
+\_form#159=34x19:$P_{out}$
+\_form#160=36x19:$Q_{out}$
+\_form#161=17x19:$I_{1}$
+\_form#162=188x21:$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$

@@ -32,8 +32,10 @@ constants:
   - rho
   - thick0
   - radius0
-  - W1
-  - W2
+  - C0
+  - C1
+  - C2
+  - C3
   - eta
   - E_s
   - mu
@@ -61,10 +63,12 @@ helper_functions: |
   def dCG(radius, dradius_dt):
       return 2 * (1 + (radius / radius0)) * (1 / radius0) * dradius_dt
 
-# omitted strain dependency of m_0 and n_0 -> will be added in ChamberSphere_StrainDepActStress Block
+  def invariant1(radius):    
+      return 1 / ((1 + (radius / radius0)) **4) + 2 * (1 + (radius / radius0)) **2
+
 residuals:
   - rho * thick0 * dvelo_dt + (thick0 / radius0) * (1 + (radius / radius0)) * stress - Pout * CG(radius)
-  - -stress + tau + 4 * (1 - CG(radius) ** -3) * (W1 + CG(radius) * W2) + 2 * eta * dCG(radius, dradius_dt) * (1 - 2 * CG(radius) ** -6)
+  - -stress + tau + 4 * (1 - CG(radius) ** -3) * (C0 * exp(C1 * (invariant1(radius) - 3) ** 2) * 2 * (invariant1(radius) - 3)) *  2 * C2 * exp(C3 * (CG(radius)-1) **2) * 2 * (CG(radius) - 1) + 2 * eta * dCG(radius, dradius_dt) * (1 - 2 * CG(radius) ** -6)
   - 4 * pi * radius0 ** 2 * CG(radius) * velo - dvolume_dt
   - dradius_dt - velo
   - Qin - Qout - dvolume_dt

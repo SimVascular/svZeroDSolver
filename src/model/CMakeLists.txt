@@ -10,6 +10,7 @@ set(CXXSRCS
   BloodVessel.cpp
   BloodVesselJunction.cpp
   ChamberSphere.cpp
+  ChamberSphere_StrainDepActStress.cpp
   ChamberElastanceInductor.cpp
   ClosedLoopCoronaryBC.cpp
   ClosedLoopCoronaryLeftBC.cpp

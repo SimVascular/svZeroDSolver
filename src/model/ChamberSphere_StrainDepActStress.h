@@ -216,7 +216,6 @@ class ChamberSphere_StrainDepActStress : public Block {
                                  const double e_c);
 
  private:
-
   double n_0 = 0.0; //activation stain-dependence
   double m_0 = 0.0; //relaxation strain-dependence 
   double u_plus = 0.0; //positive part of activation function

@@ -1,4 +1,4 @@
-from sympy import symbols, Matrix, simplify, pi, Abs
+from sympy import symbols, Matrix, diff, simplify, pi, Abs
 from sympy.printing import ccode
 import re
 import pdb
@@ -25,7 +25,6 @@ def load_model(filepath):
     time_dependent = {context[s] for s in data.get('time_dependent', [])}
 
     assert len(variables) == len(derivatives), f"Number of variables must be equal to number of derivatives"
-    assert len(variables) - 2 == len(residuals), f"Number of residuals must be number of unknowns minus 2"
 
     return variables, derivatives, constants, residuals, time_dependent
 
@@ -50,22 +49,42 @@ def extract_nonlinear(residuals, E, F, y, dy):
     dC_dydot = simplify(C.jacobian(dy))
     return C, dC_dy, dC_dydot
 
+def is_linear_in(expr, variables):
+    expr = simplify(expr)
+
+    # 1. No quadratic terms: second derivative wrt each variable is zero
+    for v in variables:
+        if simplify(diff(expr, v, 2)) != 0:
+            return False
+
+    # 2. No cross terms: mixed second derivatives must all be zero
+    for i, vi in enumerate(variables):
+        for vj in variables[i+1:]:
+            if simplify(diff(expr, vi, vj)) != 0:
+                return False
+
+    return True
+
 def depends_on(expr, symbols_set):
     return any(sym in expr.free_symbols for sym in symbols_set)
 
-def partition_terms(E, F, C, dC_dy, dC_dydot, time_dependent_symbols):
+def partition_terms(E, F, C, dC_dy, dC_dydot, variables, time_dependent_symbols):
     parts = {"constant": [], "time": [], "solution": []}
-    for i in range(E.shape[0]):
-        parts["solution"].append(("C", i, C[i]))
-        for j in range(E.shape[1]):
-            for label, mat in [("E", E), ("F", F), ("dC_dy", dC_dy), ("dC_dydot", dC_dydot)]:
-                if label.startswith('d'):
-                    target = "solution"
-                elif depends_on(mat[i, j], time_dependent_symbols):
-                    target = "time"
+    for label, mat in [("E", E), ("F", F), ("C", C), ("dC_dy", dC_dy), ("dC_dydot", dC_dydot)]:
+        for i in range(mat.rows):
+            for j in range(mat.cols):
+                if mat.cols == 1:
+                    expr = mat[i]
                 else:
-                    target = "constant"
-                parts[target].append((label, i, j, mat[i, j]))
+                    expr = mat[i, j]
+                if expr != 0:
+                    if not is_linear_in(expr, variables):
+                        target = "solution"
+                    elif depends_on(expr, time_dependent_symbols):
+                        target = "time"
+                    else:
+                        target = "constant"
+                    parts[target].append((label, i, j, expr))
     return parts
 
 def get_expressions(parts, type):
@@ -125,7 +144,7 @@ def main(yaml_path):
     C, dC_dy, dC_dydot = extract_nonlinear(residuals, E, F, y, dy)
 
     # split into constant, time dependent and solution parts
-    parts = partition_terms(E, F, C, dC_dy, dC_dydot, time_dependent)
+    parts = partition_terms(E, F, C, dC_dy, dC_dydot, Matrix(list(y) + list(dy)), time_dependent)
 
     # print C++ code
     for section in ['constant', 'time', 'solution']:

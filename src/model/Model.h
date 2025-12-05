@@ -30,6 +30,7 @@
 #include "Junction.h"
 #include "Node.h"
 #include "OpenLoopCoronaryBC.h"
+#include "OpenLoopCoronaryVarResBC.h"
 #include "Parameter.h"
 #include "PressureReferenceBC.h"
 #include "ResistanceBC.h"

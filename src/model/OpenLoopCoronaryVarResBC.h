@@ -13,10 +13,11 @@
 
 /**
  * @brief Open loop coronary boundary condition with time-varying microvascular
- * resistance.
+ * resistance based on \cite yong25.
  *
- * This model extends the standard open loop coronary BC by allowing the
- * microvascular resistance \f$R_{am}\f$ to vary with time according to:
+ * This model extends the standard open loop coronary BC (\cite kim_coronary)
+ * by allowing the microvascular resistance \f$R_{am}\f$ to vary with time
+ * according to:
  *
  * \f[
  * R_{am}(t) = \left[ \left( \sqrt{R_{am,max}} - \sqrt{R_{am,min}} \right)

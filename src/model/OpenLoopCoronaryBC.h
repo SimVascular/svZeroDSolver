@@ -73,12 +73,12 @@
  * Parameter sequence for constructing this block
  *
  * * `0` Ra: Small artery resistance
- * * `1` Ram: Microvascualar resistance
- * * `2` Rv: Venous resistance
- * * `3` Ca: Small artery capacitance
- * * `4` Cim: Intramyocardial capacitance
- * * `5` Pim: Intramyocardial pressure
- * * `6` Pv: Venous pressure
+ * * `1` Rv: Venous resistance
+ * * `2` Ca: Small artery capacitance
+ * * `3` Cim: Intramyocardial capacitance
+ * * `4` Pim: Intramyocardial pressure
+ * * `5` Pv: Venous pressure
+ * * `6` Ram: Microvascular resistance
  *
  * ### Usage in json configuration file
  *
@@ -124,13 +124,13 @@ class OpenLoopCoronaryBC : public Block {
       : Block(id, model, BlockType::open_loop_coronary_bc,
               BlockClass::boundary_condition,
               {{"Ra1", InputParameter()},
-               {"Ra2", InputParameter()},
                {"Rv1", InputParameter()},
                {"Ca", InputParameter()},
                {"Cc", InputParameter()},
                {"t", InputParameter(false, true)},
                {"Pim", InputParameter(false, true)},
                {"P_v", InputParameter()},
+               {"Ra2", InputParameter()},
                {"closed_loop_outlet", InputParameter(true, false, false)}}) {}
 
   /**
@@ -179,9 +179,42 @@ class OpenLoopCoronaryBC : public Block {
    */
   TripletsContributions num_triplets{5, 4, 0};
 
+  /**
+   * @brief Virtual destructor for proper cleanup in derived classes
+   */
+  virtual ~OpenLoopCoronaryBC() = default;
+
  protected:
+  /**
+   * @brief Protected constructor for derived classes
+   *
+   * Allows derived classes to specify their own block type and parameters
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   * @param block_type Type of the block
+   * @param input_params Input parameters for the block
+   */
+  OpenLoopCoronaryBC(
+      int id, Model* model, BlockType block_type,
+      const std::vector<std::pair<std::string, InputParameter>>& input_params)
+      : Block(id, model, block_type, BlockClass::boundary_condition,
+              input_params) {}
+
   double P_Cim_0 = 0;  ///< Pressure proximal to Cim/Vim at initial state
   double Pim_0 = 0;    ///< Pim at initial state
+
+  /**
+   * @brief Get microvascular resistance value
+   *
+   * For the base class, returns constant Ram. Derived classes may
+   * override to provide time-varying resistance.
+   *
+   * @param parameters Parameters of the model
+   * @param time Current simulation time (unused in base class)
+   * @return Microvascular resistance Ram
+   */
+  virtual double get_Ram(std::vector<double>& parameters, double time) const;
 };
 
 #endif  // SVZERODSOLVER_MODEL_OPENLOOPCORONARYBC_HPP_

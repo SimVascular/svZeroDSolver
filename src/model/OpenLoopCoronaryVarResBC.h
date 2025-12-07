@@ -8,8 +8,8 @@
 #define SVZERODSOLVER_MODEL_OPENLOOPCORONARYVARRESBC_HPP_
 
 #include "Block.h"
+#include "OpenLoopCoronaryBC.h"
 #include "Parameter.h"
-#include "SparseSystem.h"
 
 /**
  * @brief Open loop coronary boundary condition with time-varying microvascular
@@ -65,13 +65,13 @@
  * Parameter sequence for constructing this block
  *
  * * `0` Ra: Small artery resistance
- * * `1` Ram_min: Minimum microvascular resistance
- * * `2` Ram_max: Maximum microvascular resistance
- * * `3` Rv: Venous resistance
- * * `4` Ca: Small artery capacitance
- * * `5` Cim: Intramyocardial capacitance
- * * `6` Pim: Intramyocardial pressure (time-dependent)
- * * `7` Pv: Venous pressure
+ * * `1` Rv: Venous resistance
+ * * `2` Ca: Small artery capacitance
+ * * `3` Cim: Intramyocardial capacitance
+ * * `4` Pim: Intramyocardial pressure (time-dependent)
+ * * `5` Pv: Venous pressure
+ * * `6` Ram_min: Minimum microvascular resistance
+ * * `7` Ram_max: Maximum microvascular resistance
  * * `8` T_vc: Contraction time
  * * `9` T_vr: Relaxation time
  *
@@ -110,7 +110,7 @@
  * * `volume_im`: Intramyocardial volume
  *
  */
-class OpenLoopCoronaryVarResBC : public Block {
+class OpenLoopCoronaryVarResBC : public OpenLoopCoronaryBC {
  public:
   /**
    * @brief Construct a new OpenLoopCoronaryVarResBC object
@@ -119,83 +119,34 @@ class OpenLoopCoronaryVarResBC : public Block {
    * @param model The model to which the block belongs
    */
   OpenLoopCoronaryVarResBC(int id, Model* model)
-      : Block(id, model, BlockType::open_loop_coronary_var_res_bc,
-              BlockClass::boundary_condition,
-              {{"Ra1", InputParameter()},
-               {"Ra2_min", InputParameter()},
-               {"Ra2_max", InputParameter()},
-               {"Rv1", InputParameter()},
-               {"Ca", InputParameter()},
-               {"Cc", InputParameter()},
-               {"t", InputParameter(false, true)},
-               {"Pim", InputParameter(false, true)},
-               {"P_v", InputParameter()},
-               {"T_vc", InputParameter()},
-               {"T_vr", InputParameter()},
-               {"closed_loop_outlet", InputParameter(true, false, false)}}) {}
-
-  /**
-   * @brief Set up the degrees of freedom (DOF) of the block
-   *
-   * Set \ref global_var_ids and \ref global_eqn_ids of the element based on
-   * the number of equations and the number of internal variables of the
-   * element.
-   *
-   * @param dofhandler Degree-of-freedom handler to register variables and
-   * equations at
-   */
-  void setup_dofs(DOFHandler& dofhandler);
-
-  /**
-   * @brief Setup parameters that depend on the initial state
-   *
-   * @param initial_state The initial state of the system
-   * @param parameters The parameter values vector (at time 0)
-   */
-  void setup_initial_state_dependent_params(State initial_state,
-                                            std::vector<double>& parameters);
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  void update_constant(SparseSystem& system, std::vector<double>& parameters);
-
-  /**
-   * @brief Update the time-dependent contributions of the element in a sparse
-   * system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
-  void update_time(SparseSystem& system, std::vector<double>& parameters);
-
-  /**
-   * @brief Number of triplets of element
-   *
-   * Number of triplets that the element contributes to the global system
-   * (relevant for sparse memory reservation)
-   */
-  TripletsContributions num_triplets{5, 4, 0};
+      : OpenLoopCoronaryBC(id, model,
+                           BlockType::open_loop_coronary_var_res_bc,
+                           {{"Ra1", InputParameter()},
+                            {"Rv1", InputParameter()},
+                            {"Ca", InputParameter()},
+                            {"Cc", InputParameter()},
+                            {"t", InputParameter(false, true)},
+                            {"Pim", InputParameter(false, true)},
+                            {"P_v", InputParameter()},
+                            {"Ra2_min", InputParameter()},
+                            {"Ra2_max", InputParameter()},
+                            {"T_vc", InputParameter()},
+                            {"T_vr", InputParameter()},
+                            {"closed_loop_outlet",
+                             InputParameter(true, false, false)}}) {}
 
  protected:
-  double P_Cim_0 = 0;  ///< Pressure proximal to Cim/Vim at initial state
-  double Pim_0 = 0;    ///< Pim at initial state
-
   /**
-   * @brief Compute time-varying microvascular resistance
+   * @brief Get time-varying microvascular resistance
    *
-   * @param t_cycle Current time within cardiac cycle
-   * @param Ram_min Minimum microvascular resistance
-   * @param Ram_max Maximum microvascular resistance
-   * @param T_vc Contraction time
-   * @param T_vr Relaxation time
+   * Overrides base class to provide time-varying resistance based on
+   * cardiac cycle phase.
+   *
+   * @param parameters Parameters of the model
+   * @param time Current simulation time
    * @return Time-varying resistance Ram(t)
    */
-  double compute_Ram(double t_cycle, double Ram_min, double Ram_max,
-                     double T_vc, double T_vr) const;
+  double get_Ram(std::vector<double>& parameters, double time) const override;
 };
 
 #endif  // SVZERODSOLVER_MODEL_OPENLOOPCORONARYVARRESBC_HPP_

@@ -14,14 +14,17 @@ double OpenLoopCoronaryVarResBC::get_Ram(std::vector<double>& parameters,
   auto T_vc = parameters[global_param_ids[8]];
   auto T_vr = parameters[global_param_ids[9]];
 
+  // Get time within current cardiac cycle
+  double t_cycle = fmod(time, model->cardiac_cycle_period);
+
   // Compute e(t) based on phase in cardiac cycle
   double e_t;
-  if (time <= T_vc) {
+  if (t_cycle <= T_vc) {
     // Contraction phase
-    e_t = 0.5 * (1.0 - cos(M_PI * time / T_vc));
-  } else if (time <= T_vc + T_vr) {
+    e_t = 0.5 * (1.0 - cos(M_PI * t_cycle / T_vc));
+  } else if (t_cycle <= T_vc + T_vr) {
     // Relaxation phase
-    e_t = 0.5 * (1.0 + cos(M_PI * (time - T_vc) / T_vr));
+    e_t = 0.5 * (1.0 + cos(M_PI * (t_cycle - T_vc) / T_vr));
   } else {
     // Rest phase
     e_t = 0.0;

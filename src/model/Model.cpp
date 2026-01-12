@@ -14,7 +14,8 @@ Model::Model() {
   block_factory_map = {
       {"BloodVessel", block_factory<BloodVessel>()},
       {"ChamberSphere", block_factory<ChamberSphere>()},
-      {"ChamberSphere_StrainDepActStress", block_factory<ChamberSphere_StrainDepActStress>()},
+      {"ChamberSphere_StrainDepActStress",
+       block_factory<ChamberSphere_StrainDepActStress>()},
       {"BloodVesselJunction", block_factory<BloodVesselJunction>()},
       {"ClosedLoopCoronaryLeft", block_factory<ClosedLoopCoronaryLeftBC>()},
       {"ClosedLoopCoronaryRight", block_factory<ClosedLoopCoronaryRightBC>()},

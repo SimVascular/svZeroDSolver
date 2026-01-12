@@ -18,7 +18,7 @@
  * Models the mechanical behavior of a spherical heart chamber with active
  * contraction. For reference, see \cite caruel13 Equations (13a-b) for
  * continuum mechanics and Equations (13c-f) and (3) for the active
- * contraction model. 
+ * contraction model.
  *
  * ### Helper Functions
  *
@@ -63,25 +63,28 @@
  * \f[
  * P_\text{in} - P_\text{out} = 0
  * \f]
- * 
+ *
  * 7. Active stress:
  * \f[
- * \dot{\tau}=E_s \frac{e_{1D}-e_c}{(1+2e_c)^2} 
+ * \dot{\tau}=E_s \frac{e_{1D}-e_c}{(1+2e_c)^2}
  * \f]
  * with $e_{1D}$ being the strain in fiber direction
- * 
+ *
  * and with evolution equations
  * \f[
  * \dot{\omega} = \frac{1}{\alpha_r}(m_0-\omega)
  * \f]
  * \f[
- * \dot{e_c} = \frac{1}{\mu}\left(E_s\frac{(e_{1D}-e_c)(1+2e_{1D})}{(1+2e_c)^3}-\tau_c\right)
+ * \dot{e_c} =
+ \frac{1}{\mu}\left(E_s\frac{(e_{1D}-e_c)(1+2e_{1D})}{(1+2e_c)^3}-\tau_c\right)
  * \f]
  * \f[
- * \dot{k}_c = -(|\bar(u)|_{+}+\omega|\bar(u)|_{-}+\alpha|\dot{e}_c|)k_c+n_0 k_0 |\bar(u)|_{+}
+ * \dot{k}_c = -(|\bar(u)|_{+}+\omega|\bar(u)|_{-}+\alpha|\dot{e}_c|)k_c+n_0 k_0
+ |\bar(u)|_{+}
  * \f]
  * \f[
- * \dot{\tau}_c = -(|\bar(u)|_{+}+|\bar(u)|_{-}+\alpha|\dot{e}_c|)\tau_c + n_0 \sigma_0 |\bar(u)|_{+} + k_c \dot{e}_c
+ * \dot{\tau}_c = -(|\bar(u)|_{+}+|\bar(u)|_{-}+\alpha|\dot{e}_c|)\tau_c + n_0
+ \sigma_0 |\bar(u)|_{+} + k_c \dot{e}_c
  * \f]
  *
  * ### Parameters
@@ -97,7 +100,7 @@
  * * `E_s` - Spring stiffness (in series to contractile unit) \f$E_s\f$
  * * `mu` - Damping coefficient (in parallel to contractile unit) \f$\mu\f$
  * * `alpha_r` - Relaxation time constant \f$\alpha_r\f$
- * * `alpha` - Activation time constant \f$\alpha\f$ 
+ * * `alpha` - Activation time constant \f$\alpha\f$
  * * `k_0` - Linear spring stiffness in contractile unit \f$k_0\f$
  * * `sigma_0` - Maximum active stress \f$\sigma_0
  * * 'm_0' - Relaxation strain-dependence \f$m_0\f$
@@ -145,7 +148,7 @@ class ChamberSphere_StrainDepActStress : public Block {
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  ChamberSphere_StrainDepActStress(int id, Model *model)
+  ChamberSphere_StrainDepActStress(int id, Model* model)
       : Block(id, model, BlockType::chamber_sphere, BlockClass::vessel,
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
@@ -160,8 +163,7 @@ class ChamberSphere_StrainDepActStress : public Block {
                {"alpha_r", InputParameter()},
                {"alpha", InputParameter()},
                {"k_0", InputParameter()},
-               {"sigma_0", InputParameter()}
-}) {}
+               {"sigma_0", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -173,7 +175,7 @@ class ChamberSphere_StrainDepActStress : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler &dofhandler);
+  void setup_dofs(DOFHandler& dofhandler);
 
   /**
    * @brief Update the constant contributions of the element in a sparse
@@ -182,10 +184,11 @@ class ChamberSphere_StrainDepActStress : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem &system, std::vector<double> &parameters);
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
   // /**
-  //  * @brief Update the time-dependent contributions of the element in a sparse
+  //  * @brief Update the time-dependent contributions of the element in a
+  //  sparse
   //  * system
   //  *
   //  * @param system System to update contributions at
@@ -202,9 +205,9 @@ class ChamberSphere_StrainDepActStress : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem &system, std::vector<double> &parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1> &dy);
+  void update_solution(SparseSystem& system, std::vector<double>& parameters,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
 
   /**
    * @brief Update the active stress functions which depend on time and strain
@@ -212,15 +215,14 @@ class ChamberSphere_StrainDepActStress : public Block {
    * @param parameters Parameters of the model
    * @param e_c Current strain
    */
-   void get_active_stress_values(std::vector<double> &parameters,
-                                 const double e_c);
+  void get_active_stress_values(std::vector<double>& parameters,
+                                const double e_c);
 
  private:
-  double n_0 = 0.0; //activation stain-dependence
-  double m_0 = 0.0; //relaxation strain-dependence 
-  double u_plus = 0.0; //positive part of activation function
-  double u_minus = 0.0; // negative part of activation function
-
+  double n_0 = 0.0;      // activation stain-dependence
+  double m_0 = 0.0;      // relaxation strain-dependence
+  double u_plus = 0.0;   // positive part of activation function
+  double u_minus = 0.0;  // negative part of activation function
 
   /**
    * @brief Number of triplets of element

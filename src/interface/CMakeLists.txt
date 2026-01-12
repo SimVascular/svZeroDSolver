@@ -23,3 +23,20 @@ target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
 target_link_libraries( ${lib} svzero_algebra_library)
 target_link_libraries( ${lib} svzero_model_library)
 target_link_libraries( ${lib} svzero_solve_library)
+
+# Put the built library in:
+set(_iface_outdir "${CMAKE_BINARY_DIR}/src/interface")
+set_target_properties(${lib} PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY  "${_iface_outdir}"  # .dll on Windows
+  LIBRARY_OUTPUT_DIRECTORY  "${_iface_outdir}"  # .so/.dylib on Linux/macOS
+  ARCHIVE_OUTPUT_DIRECTORY  "${_iface_outdir}"  # import/static .lib/.a
+  OUTPUT_NAME               "svzero_interface"  # basename stays consistent
+)
+
+# Add the 'lib' prefix
+if (WIN32)
+  set_target_properties(${lib} PROPERTIES
+    PREFIX "lib"
+    WINDOWS_EXPORT_ALL_SYMBOLS ON
+  )
+endif()

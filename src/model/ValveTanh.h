@@ -40,38 +40,43 @@
  * Q_{in}-Q_{out}=0
  * \f]
  *
+ * \f[
+ * \text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
+ * \f]
+ *
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
- * P_{out} & Q_{out}\end{array}\right]^{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out} & \text{valve\_status} \end{array}\right]^{T} \f]
  *
  * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{cccc}
- * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0
- * \end{array}\right]
+ * \mathbf{E}^{e}=\mathbf{0}
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0 \\
- * 0 &      1                 &  0 & -1
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0  & 0\\
+ * 0 &      1                 &  0 & -1 & 0\\
+ * 0 &      0                 &  0 & 0  & 1
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
  * -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
- * 0
+ * 0 \\
+ * -\frac{1}{2}\left[1+tanh\{k(P_{out}-P_{in})\}\right]
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
- * \left[\begin{array}{cccc}
- * A & B & C & 0 \\
- * 0 & 0 & 0 & 0 \end{array}\right] \f]
+ * \left[\begin{array}{ccccc}
+ * A & B &  C & 0 & 0\\
+ * 0 & 0 &  0 & 0 & 0\\
+ * D & 0 & -D & 0 & 0
+ * \end{array}\right] \f]
  * where,
  * \f[
  * A = \frac{1}{2} k Q_{in}
@@ -82,14 +87,15 @@
  * \f]
  * \f[
  * C = -\frac{1}{2} k Q_{in}
- * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \f]
+ * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right]
+ * \f]
+ * \f[
+ * D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
+ * \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
- * \left[\begin{array}{cccc}
- * 0 & 0 & 0 & 0 \\
- * 0 & 0 & 0 & 0
- * \end{array}\right]
+ *  \mathbf{E}^{e}=\mathbf{0}
  * \f]
  *
  * ### Parameters

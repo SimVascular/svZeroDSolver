@@ -1,0 +1,241 @@
+{
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 30,
+    "number_of_time_pts_per_cardiac_cycle": 689,
+    "output_variable_based": true,
+    "output_all_cycles": false,
+    "cardiac_period": 0.68900516753
+  },
+  "vessels": [
+    {
+      "vessel_id": 1,
+      "vessel_length": 10.0,
+      "vessel_name": "pul_artery",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 0.0,
+        "L": 0.0,
+        "R_poiseuille": 0.0
+      }
+    },
+    {
+      "vessel_id": 2,
+      "vessel_length": 10.0,
+      "vessel_name": "Rpul_artery",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 0.003751688672167292,
+        "L": 1.333,
+        "R_poiseuille": 85.312
+      }
+    },
+    {
+      "vessel_id": 3,
+      "vessel_length": 10.0,
+      "vessel_name": "Lpul_artery",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 0.003751688672167292,
+        "L": 1.333,
+        "R_poiseuille": 85.312
+      }
+    },
+    {
+      "vessel_id": 6,
+      "vessel_length": 10.0,
+      "vessel_name": "pul_vein1",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 0.006002701425356339,
+        "L": 1.333,
+        "R_poiseuille": 93.31
+      }
+    },
+    {
+      "vessel_id": 8,
+      "vessel_length": 10.0,
+      "vessel_name": "pul_vein2",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 0.006002701425356339,
+        "L": 1.333,
+        "R_poiseuille": 93.31
+      }
+    },
+    {
+      "vessel_id": 5,
+      "vessel_length": 10.0,
+      "vessel_name": "sys_artery",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 0.001138164597527442,
+        "R_poiseuille": 596.82,
+        "L": 6.665
+      }
+    },
+    {
+      "vessel_id": 7,
+      "vessel_length": 10.0,
+      "vessel_name": "sys_vein",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "C": 0.045011252813952737,
+        "R_poiseuille": 249.42,
+        "L": 0.6665
+      }
+    }
+  ],
+  "junctions": [
+    {
+      "inlet_vessels": [1],
+      "junction_name": "J0",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_vessels": [2, 3]
+    },
+    {
+      "inlet_vessels": [2],
+      "junction_name": "J0a",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_vessels": [6]
+    },
+    {
+      "inlet_vessels": [3],
+      "junction_name": "J0b",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_vessels": [8]
+    },
+    {
+      "inlet_blocks": ["sys_vein"],
+      "junction_name": "J1",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_blocks": ["right_atrium"]
+    },
+    {
+      "inlet_vessels": [5],
+      "junction_name": "J2",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_vessels": [7]
+    },
+    {
+      "inlet_blocks": ["pul_vein1", "pul_vein2"],
+      "junction_name": "J3",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_blocks": ["left_atrium"]
+    }
+  ],
+  "boundary_conditions": [],
+  "chambers": [
+    {
+      "type": "PiecewiseCosineChamber",
+      "name": "right_atrium",
+      "values": {
+        "Emax": 199.95,
+        "Epass": 89.80375933024839,
+        "Vrest": 41.680015938842274,
+        "contract_start": 0.025,
+        "relax_start": 0.08625,
+        "contract_duration": 0.06125,
+        "relax_duration": 0.18375
+      }
+    },
+    {
+      "type": "PiecewiseCosineChamber",
+      "name": "right_ventricle",
+      "values": {
+        "Emax": 1662.0158240056528,
+        "Epass": 40.85565535747109,
+        "Vrest": 72.05452710344869,
+        "contract_start": 0.207,
+        "relax_start": 0.29625,
+        "contract_duration": 0.08925,
+        "relax_duration": 0.26975
+      }
+    },
+    {
+      "type": "PiecewiseCosineChamber",
+      "name": "left_atrium",
+      "values": {
+        "Emax": 199.95,
+        "Epass": 260.59064494602634,
+        "Vrest": 26.23534455334443,
+        "contract_start": 0.025,
+        "relax_start": 0.08625,
+        "contract_duration": 0.06125,
+        "relax_duration": 0.18375
+      }
+    },
+    {
+      "type": "PiecewiseCosineChamber",
+      "name": "left_ventricle",
+      "values": {
+        "Emax": 17837.499965252825,
+        "Epass": 122.82901158252674,
+        "Vrest": 32.41857776349184,
+        "contract_start": 0.207,
+        "relax_start": 0.29625,
+        "contract_duration": 0.08925,
+        "relax_duration": 0.26975
+      }
+    }
+  ],
+  "valves": [
+    {
+      "type": "PiecewiseValve",
+      "name": "tricuspid",
+      "params": {
+        "Rmax": 6665,
+        "Rmin": 6.665,
+        "upstream_block": "right_atrium",
+        "downstream_block": "right_ventricle"
+      }
+    },
+    {
+      "type": "PiecewiseValve",
+      "name": "pulmonary",
+      "params": {
+        "Rmax": 6665,
+        "Rmin": 6.665,
+        "upstream_block": "right_ventricle",
+        "downstream_block": "pul_artery"
+      }
+    },
+    {
+      "type": "PiecewiseValve",
+      "name": "mitral",
+      "params": {
+        "Rmax": 6665,
+        "Rmin": 6.665,
+        "upstream_block": "left_atrium",
+        "downstream_block": "left_ventricle"
+      }
+    },
+    {
+      "type": "PiecewiseValve",
+      "name": "aortic",
+      "params": {
+        "Rmax": 6665,
+        "Rmin": 6.665,
+        "upstream_block": "left_ventricle",
+        "downstream_block": "sys_artery"
+      }
+    }
+  ],
+  "initial_condition": {
+    "Vc:right_ventricle": 128.58981029386334,
+    "Vc:left_ventricle": 93.67748364753461,
+    "Vc:right_atrium": 76.8340776729488,
+    "Vc:left_atrium": 58.761096293979925,
+    "pressure:aortic:sys_artery": 84604.18388331511,
+    "pressure:J2:sys_vein": 31311.64989129829,
+    "pressure:pulmonary:pul_artery": 20525.08438550143,
+    "pressure:J0:Rpul_artery": 20525.08438550143,
+    "pressure:J0:Lpul_artery": 20525.08438550143,
+    "pressure:J0b:pul_vein2": 17316.18888678234,
+    "pressure:J0a:pul_vein1": 17316.18888678234,
+    "flow:sys_artery:J2": 91.00177508885831,
+    "flow:sys_vein:J1": 112.86832799795421,
+    "flow:Rpul_artery:J0b": 75.19549067009953,
+    "flow:Lpul_artery:J0b": 75.19549067009953,
+    "flow:pul_vein:J3": 196.2167628991455
+  }
+}

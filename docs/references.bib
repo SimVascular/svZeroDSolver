@@ -125,3 +125,18 @@ url = {https://doi.org/10.1007/s10439-010-0083-6}
  volume = {13},
  year = {2013}
 }
+
+@article{Regazzoni2022,
+title = {A cardiac electromechanical model coupled with a lumped-parameter model for closed-loop blood circulation},
+journal = {Journal of Computational Physics},
+volume = {457},
+pages = {111083},
+year = {2022},
+issn = {0021-9991},
+doi = {https://doi.org/10.1016/j.jcp.2022.111083},
+url = {https://www.sciencedirect.com/science/article/pii/S0021999122001450},
+author = {F. Regazzoni and M. Salvador and P.C. Africa and M. Fedele and L. Dedè and A. Quarteroni},
+keywords = {Mathematical modeling, Multiphysics models, Multiscale models, Cardiac modeling, Cardiac electromechanics},
+abstract = {We propose a novel mathematical and numerical model for cardiac electromechanics, wherein biophysically detailed core models describe the different physical processes concurring to the cardiac function. The core models, once suitably approximated, are coupled by a computationally efficient strategy. Our model is based on: (1) the combination of implicit-explicit (IMEX) schemes to solve the different core cardiac models, (2) an Artificial Neural Network based model, that surrogates a biophysically detailed but computationally demanding microscale model of active force generation and (3) appropriate partitioned schemes to couple the different models in this multiphysics setting. We employ a flexible and scalable intergrid transfer operator, which allows to interpolate Finite Element functions between nested meshes and, possibly, among arbitrary Finite Element spaces for the different core models. Our core 3D electromechanical model of the left ventricle is coupled with a closed-loop 0D model of the vascular network (and the other cardiac chambers) by an approach that is energy preserving. More precisely, we derive a balance law for the mechanical energy of the whole circulatory network. This provides a quantitative insight into the energy utilization, dissipation and transfer among the different compartments of the cardiovascular network and during different stages of the heartbeat. On this ground, a new tool is proposed to validate some energy indicators adopted in the daily clinical practice. A further contribution of this paper is the proposition of a robust algorithm for the reconstruction of the stress-free reference configuration. This feature is fundamental to correctly initialize our electromechanical simulations. As a matter of fact, the geometry acquired from medical imaging typically refers to a configuration affected by residual internal stresses, whereas the elastodynamics equations that govern the mechanics core model are related to a stress-free configuration. To prove the biophysical accuracy of our computational model, we address different scenarios of clinical interest, namely by varying preload, afterload and contractility.}
+}
+

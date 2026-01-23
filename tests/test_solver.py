@@ -42,7 +42,11 @@ from .utils import run_with_reference, RTOL_PRES, RTOL_FLOW
                                       'valve_tanh.json', 
                                       'pulsatileFlow_bifurcationR_RCR_cycle_error.json', 
                                       'pulsatileFlow_R_RCR_mean_derivative_variable.json',
-                                      'chamber_sphere.json'
+                                      'closedLoopHeart_singleVessel_mistmatchPeriod.json',
+                                      'pulsatileFlow_R_RCR_mismatchPeriod.json',
+                                      'pulsatileFlow_CStenosis_steadyPressure_definedPeriod.json',
+                                      'chamber_sphere.json',
+                                      'piecewise_Chamber_and_Valve.json'
                                       ])
 def test_solver(testfile):
     '''

@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the University of California, and others.
-// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
+// University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 /**
  * @file svzerodcalibrator.cpp
  * @brief Main routine for svZeroDCalibrator
@@ -26,7 +26,8 @@ int main(int argc, char* argv[]) {
   std::ifstream input_file(input_file_name);
 
   if (!input_file.is_open()) {
-    std::cerr << "[svzerodcalibrator] Error: The input file '" << input_file_name << "' cannot be opened." << std::endl;
+    std::cerr << "[svzerodcalibrator] Error: The input file '"
+              << input_file_name << "' cannot be opened." << std::endl;
     return 1;
   }
 
@@ -36,8 +37,10 @@ int main(int argc, char* argv[]) {
   try {
     output_config = calibrate(config);
   } catch (const nlohmann::json::parse_error& e) {
-    std::cerr << "[svzerodcalibrator] Error: The input file '" << input_file_name
-    << "' does not have the parameters needed by the calibrate program." << std::endl;
+    std::cerr
+        << "[svzerodcalibrator] Error: The input file '" << input_file_name
+        << "' does not have the parameters needed by the calibrate program."
+        << std::endl;
     return 1;
   }
 
@@ -45,7 +48,8 @@ int main(int argc, char* argv[]) {
   std::ofstream out_file(output_file_name);
 
   if (!out_file.is_open()) {
-    std::cerr << "[svzerodcalibrator] Error: The output file '" << output_file_name << "' cannot be opened." << std::endl;
+    std::cerr << "[svzerodcalibrator] Error: The output file '"
+              << output_file_name << "' cannot be opened." << std::endl;
     return 1;
   }
 

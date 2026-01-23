@@ -1,5 +1,5 @@
-// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the University of California, and others.
-// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
+// University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 /**
  * @file pysvzerod.cpp
  * @brief Python interface for svZeroDSolver
@@ -65,9 +65,8 @@ PYBIND11_MODULE(pysvzerod, m) {
     py::module_ sys = py::module_::import("sys");
     auto argv = sys.attr("argv").cast<std::vector<std::string>>();
     if (argv.size() != 3) {
-      std::cout
-          << "Usage: svzerodsolver path/to/config.json path/to/output.csv"
-          << std::endl;
+      std::cout << "Usage: svzerodsolver path/to/config.json path/to/output.csv"
+                << std::endl;
       exit(1);
     }
     std::ifstream ifs(argv[1]);

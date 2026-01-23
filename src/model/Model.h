@@ -31,6 +31,8 @@
 #include "Node.h"
 #include "OpenLoopCoronaryBC.h"
 #include "Parameter.h"
+#include "PiecewiseCosineChamber.h"
+#include "PiecewiseValve.h"
 #include "PressureReferenceBC.h"
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"

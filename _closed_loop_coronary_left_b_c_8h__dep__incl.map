@@ -1,26 +1,29 @@
 <map id="model/ClosedLoopCoronaryLeftBC.h" name="model/ClosedLoopCoronaryLeftBC.h">
-<area shape="rect" id="Node000001" title="Left side of ClosedLoopCoronaryBC." alt="" coords="355,5,535,46"/>
-<area shape="rect" id="Node000002" href="$_model_8h.html" title="model::Model source file" alt="" coords="392,94,498,120"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="448,62,448,93,442,93,442,62"/>
-<area shape="rect" id="Node000003" href="$_integrator_8h.html" title="Integrator source file." alt="" coords="175,175,307,201"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="401,128,273,177,271,172,399,123"/>
-<area shape="rect" id="Node000004" href="$interface_8h.html" title="svZeroDSolver callable interface." alt="" coords="20,256,155,282"/>
-<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="377,110,280,112,171,120,120,128,75,138,39,152,15,169,9,178,8,187,15,207,37,234,64,254,61,258,33,238,11,210,3,187,4,177,11,166,36,147,73,133,119,123,171,115,280,107,377,105"/>
-<area shape="rect" id="Node000005" href="$_solver_8h.html" title="Solver source file." alt="" coords="917,256,1021,282"/>
-<area shape="poly" id="edge12_Node000002_Node000005" title=" " alt="" coords="513,104,623,106,751,114,812,122,868,132,913,147,945,166,961,187,969,212,973,256,967,256,964,213,956,189,942,170,911,152,866,138,812,127,750,119,623,111,513,110"/>
-<area shape="rect" id="Node000006" href="$_chamber_elastance_inductor_8h.html" title="model::ChamberElastanceInductor source file" alt="" coords="332,175,558,201"/>
-<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="439,135,441,175,436,175,434,135"/>
-<area shape="rect" id="Node000007" href="$_levenberg_marquardt_optimizer_8h.html" title="opt::LevenbergMarquardtOptimizer source file" alt="" coords="582,168,774,208"/>
-<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="496,123,621,165,619,170,494,128"/>
-<area shape="rect" id="Node000008" href="$calibrate_8h.html" title="opt::calibrate source file" alt="" coords="799,175,931,201"/>
-<area shape="poly" id="edge9_Node000002_Node000008" title=" " alt="" coords="513,116,787,165,817,172,816,177,786,170,512,121"/>
-<area shape="rect" id="Node000009" href="$_simulation_parameters_8h.html" title="Source file to read simulation configuration." alt="" coords="1006,175,1201,201"/>
-<area shape="poly" id="edge10_Node000002_Node000009" title=" " alt="" coords="514,112,726,133,988,165,1034,172,1033,177,987,170,725,139,513,117"/>
-<area shape="rect" id="Node000010" href="$csv__writer_8h.html" title="csv_writer source file" alt="" coords="24,175,151,201"/>
-<area shape="poly" id="edge13_Node000002_Node000010" title=" " alt="" coords="378,124,163,170,135,177,134,172,162,165,376,119"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="205,211,112,258,110,253,203,206"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="301,202,320,206,491,229,660,246,917,263,917,268,659,251,490,235,319,211,300,207"/>
-<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="451,160,449,120,454,120,456,160"/>
-<area shape="poly" id="edge11_Node000009_Node000005" title=" " alt="" coords="1072,211,991,258,988,253,1069,207"/>
-<area shape="poly" id="edge14_Node000010_Node000004" title=" " alt="" coords="90,217,90,256,85,256,85,217"/>
+<area shape="rect" id="Node000001" title="Left side of ClosedLoopCoronaryBC." alt="" coords="634,5,815,46"/>
+<area shape="rect" id="Node000002" href="$_model_8h.html" title="model::Model source file" alt="" coords="672,94,777,120"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="727,62,727,93,722,93,722,62"/>
+<area shape="rect" id="Node000003" href="$_integrator_8h.html" title="Integrator source file." alt="" coords="206,175,339,201"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="657,120,516,141,352,170,321,177,320,172,351,165,515,136,657,115"/>
+<area shape="rect" id="Node000004" href="$interface_8h.html" title="svZeroDSolver callable interface." alt="" coords="101,256,236,282"/>
+<area shape="poly" id="edge5_Node000002_Node000004" title=" " alt="" coords="656,114,387,134,262,150,219,160,195,170,181,189,173,213,170,256,165,256,168,212,176,187,192,166,217,154,261,145,387,128,656,109"/>
+<area shape="rect" id="Node000005" href="$_solver_8h.html" title="Solver source file." alt="" coords="1280,256,1383,282"/>
+<area shape="poly" id="edge14_Node000002_Node000005" title=" " alt="" coords="792,106,960,109,1164,119,1262,126,1345,136,1408,149,1429,157,1442,166,1449,176,1451,187,1443,210,1430,226,1413,240,1377,258,1375,253,1410,235,1426,223,1438,207,1446,187,1444,178,1439,170,1427,162,1406,154,1344,141,1261,131,1164,124,959,115,792,111"/>
+<area shape="rect" id="Node000006" href="$_chamber_elastance_inductor_8h.html" title="model::ChamberElastanceInductor source file" alt="" coords="363,175,590,201"/>
+<area shape="poly" id="edge6_Node000002_Node000006" title=" " alt="" coords="666,127,509,177,507,172,664,122"/>
+<area shape="rect" id="Node000007" href="$_piecewise_cosine_chamber_8h.html" title="model::PiecewiseCosineChamber source file" alt="" coords="613,175,836,201"/>
+<area shape="poly" id="edge8_Node000002_Node000007" title=" " alt="" coords="719,135,720,175,715,175,713,135"/>
+<area shape="rect" id="Node000008" href="$_levenberg_marquardt_optimizer_8h.html" title="opt::LevenbergMarquardtOptimizer source file" alt="" coords="860,168,1053,208"/>
+<area shape="poly" id="edge10_Node000002_Node000008" title=" " alt="" coords="775,123,899,165,898,170,774,128"/>
+<area shape="rect" id="Node000009" href="$calibrate_8h.html" title="opt::calibrate source file" alt="" coords="1077,175,1209,201"/>
+<area shape="poly" id="edge11_Node000002_Node000009" title=" " alt="" coords="793,116,1065,165,1096,172,1094,177,1064,170,792,121"/>
+<area shape="rect" id="Node000010" href="$_simulation_parameters_8h.html" title="Source file to read simulation configuration." alt="" coords="1234,175,1428,201"/>
+<area shape="poly" id="edge12_Node000002_Node000010" title=" " alt="" coords="793,113,986,134,1222,165,1265,172,1264,177,1221,170,986,139,793,118"/>
+<area shape="rect" id="Node000011" href="$csv__writer_8h.html" title="csv_writer source file" alt="" coords="5,175,132,201"/>
+<area shape="poly" id="edge15_Node000002_Node000011" title=" " alt="" coords="657,115,431,134,291,150,150,170,117,177,116,172,149,165,290,145,431,129,656,110"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="246,213,186,258,183,254,243,208"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="332,202,352,206,486,223,624,237,892,255,1122,263,1279,265,1279,271,1122,268,892,260,624,242,486,229,351,211,331,207"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="535,168,692,118,694,123,537,173"/>
+<area shape="poly" id="edge9_Node000007_Node000002" title=" " alt="" coords="730,160,729,120,734,120,736,160"/>
+<area shape="poly" id="edge13_Node000010_Node000005" title=" " alt="" coords="1334,217,1334,256,1328,256,1328,217"/>
+<area shape="poly" id="edge16_Node000011_Node000004" title=" " alt="" coords="97,208,155,254,152,258,94,213"/>
 </map>

@@ -211,7 +211,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p><a class="el" href="class_resistive_junction.html" title="ResistiveJunction.">ResistiveJunction</a>. </p>
 <p>Models a junction with arbitrary resistive inlets and outlets. Across all inlets and outlets of the junction, mass is conserved.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_113_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \begin{circuitikz}
+<picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \begin{circuitikz}
   \draw [-latex] (0.25,1.4) node[left] {$Q_{in,1}$} -- (0.85,1.1);
   \draw [-latex] (0.25,-1.4) node[left] {$Q_{in,1}$} -- (0.85,-1.1);
   \draw (1,1.0) node[anchor=south]{$P_{in,1}$} to [R, , l=$R_{in,1}$, *-*]
@@ -224,43 +224,43 @@ Public Attributes</h2></td></tr>
   {$P_{out,2}$}; \draw [-latex] (5.15,1.1) -- (5.75,1.4) node[right]
   {$Q_{out,1}$}; \draw [-latex] (5.15,-1.1) -- (5.75,-1.4) node[right]
   {$Q_{out,2}$}; \end{circuitikz}
-\]" src="form_113.png" width="396" height="171"/></picture>
+\]" src="form_126.png" width="396" height="171"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_114_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
-\]" src="form_114.png" width="218" height="56"/></picture>
+<picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
+\]" src="form_127.png" width="218" height="56"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_115_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}
-\]" src="form_115.png" width="311" height="21"/></picture>
+<picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}
+\]" src="form_128.png" width="311" height="21"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_116_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}
-\]" src="form_116.png" width="347" height="21"/></picture>
+<picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}
+\]" src="form_129.png" width="347" height="21"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e}
+<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} &amp; Q_{in, 1}^{e}
   &amp; \dots &amp; P_{in, i}^{e} &amp; Q_{in, i}^{e} &amp; P_{out, 1}^{e} &amp; Q_{out, 1}^{e} &amp;
-  \dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e} &amp; P_{C}\end{array}\right] \]" src="form_117.png" width="684" height="24"/></picture>
+  \dots &amp; P_{out, i}^{e} &amp; Q_{out, i}^{e} &amp; P_{C}\end{array}\right] \]" src="form_130.png" width="684" height="24"/></picture>
 </p>
 <p>Mass conservation</p>
 <p class="formulaDsp">
-<picture><source srcset="form_118_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0
-  &amp; -1 &amp; 0 &amp; -1 &amp; \dots &amp; 0\end{array}\right] \]" src="form_118.png" width="428" height="24"/></picture>
+<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 &amp; 1 &amp; 0 &amp; 1 &amp; \dots &amp; 0
+  &amp; -1 &amp; 0 &amp; -1 &amp; \dots &amp; 0\end{array}\right] \]" src="form_131.png" width="428" height="24"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_119_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
+<picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
   \underbrace{1}_{P_{in,i}} &amp; \underbrace{-R_{in,i}}_{Q_{in,i}} &amp; \dots &amp;
   \underbrace{-1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
-  i\in n_{inlets}  \]" src="form_119.png" width="531" height="58"/></picture>
+  i\in n_{inlets}  \]" src="form_132.png" width="531" height="58"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_120_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
+<picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &amp;
   \underbrace{-1}_{P_{out,j}} &amp; \underbrace{-R_{out,j}}_{Q_{out,j}} &amp; \dots &amp;
   \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
-  j\in n_{oulets}  \]" src="form_120.png" width="551" height="58"/></picture>
+  j\in n_{oulets}  \]" src="form_133.png" width="551" height="58"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

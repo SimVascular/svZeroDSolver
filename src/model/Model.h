@@ -18,6 +18,7 @@
 #include "Block.h"
 #include "BlockFactory.h"
 #include "BloodVessel.h"
+#include "BloodVesselCRL.h"
 #include "BloodVesselJunction.h"
 #include "ChamberElastanceInductor.h"
 #include "ChamberSphere.h"

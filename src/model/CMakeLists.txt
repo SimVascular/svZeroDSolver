@@ -8,6 +8,7 @@ set(lib svzero_model_library)
 set(CXXSRCS 
   Block.cpp
   BloodVessel.cpp
+  BloodVesselCRL.cpp
   BloodVesselJunction.cpp
   ChamberSphere.cpp
   ChamberElastanceInductor.cpp
@@ -36,6 +37,7 @@ set(HDRS
   Block.h
   BlockType.h
   BloodVessel.h
+  BloodVesselCRL.h
   BloodVesselJunction.h
   ChamberSphere.h
   ChamberElastanceInductor.h

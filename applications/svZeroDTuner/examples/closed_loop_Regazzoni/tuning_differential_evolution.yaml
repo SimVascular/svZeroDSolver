@@ -1,0 +1,68 @@
+# Tuning configuration for Regazzoni closed-loop model
+#
+# INSTRUCTIONS:
+# 1. Run: python main.py baseline
+# 2. Inspect baseline_results.csv and baseline_summary.csv
+# 3. Update the 'targets' section below with your desired targets
+# 4. Run: python main.py optimize
+
+model:
+  config_file: "model.json"
+
+# Parameters to optimize
+# Add or remove parameters as needed
+parameters:
+  - name: "LV.Emax"
+    bounds: [1e7, 5e8] 
+  - name: "AR_SYS.R_poiseuille"
+    bounds: [5e7, 5e8]
+  - name: "AR_SYS.C"
+    bounds: [1e-9, 1e-8]
+
+# Target outputs
+# Specify which outputs you want to match and their target values
+# Use output names from baseline_summary.csv
+targets:
+  # Example scalar targets:
+  - name: "pressure:AV:AR_SYS"
+    type: "max"
+    target_value: 13065  # Pa
+    weight: 1.0
+  
+  - name: "pressure:AV:AR_SYS"
+    type: "min"
+    target_value: 7066  # Pa
+    weight: 1.0
+  # Example time series target (uncomment and modify as needed):
+  # - name: "pressure:LV:AV"
+  #   type: "time_series"
+  #   target_file: "targets/pressure_lv.csv"  # CSV with 'time' and 'value' columns
+  #   weight: 1.0
+
+# Objective function
+objective:
+  type: "weighted_l2"
+  normalize: true  # Normalize errors by target values for better scaling
+
+# Optimization
+optimization:
+  algorithm: "differential_evolution"
+  max_iterations: 30     # Increased for better convergence
+  parallel: true
+  n_workers: -1
+  tolerance: 1e-9
+  
+  # Differential evolution specific options (tuned for better exploration)
+  popsize: 15             # Larger population for better exploration (75 individuals with 3 parameters)
+  init: 'sobol'           # Sobol sequence for excellent initial coverage
+  strategy: 'best2bin'    # More explorative strategy (uses 2 random difference vectors)
+  mutation: [0.5, 1]    # Wider mutation range for more exploration
+  recombination: 0.7      # Higher recombination for more parameter mixing
+  polish: false            # Polish best result with L-BFGS-B at the end
+
+# Output
+output:
+  directory: "optimization_results_differential_evolution"
+  save_history: true
+  save_plots: true
+  save_final_config: true

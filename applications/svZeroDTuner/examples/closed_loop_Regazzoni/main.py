@@ -290,8 +290,8 @@ def main():
     # ============================================================================
     
     #run_baseline("model.json")         # MODE 1: Run baseline and save results
-    #run_optimization("tuning.yaml")     # MODE 2: Run optimization with tuning.yaml
-    run_sensitivity("sensitivity.yaml") # MODE 3: Run sensitivity analysis
+    run_optimization("tuning_differential_evolution.yaml")     # MODE 2: Run optimization with tuning.yaml
+    #run_sensitivity("sensitivity.yaml") # MODE 3: Run sensitivity analysis
     
     # ============================================================================
 

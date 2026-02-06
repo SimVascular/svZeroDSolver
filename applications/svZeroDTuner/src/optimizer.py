@@ -308,17 +308,22 @@ class OptimizerWrapper:
                 x0 = np.array([(b[0] + b[1]) / 2 for b in bounds])
             # Ensure tolerance is a float
             tol = float(self.tolerance)
+            # Nelder-Mead method options (initial_simplex, adaptive) must go in options dict, not as top-level kwargs
+            nm_options = {
+                'maxiter': int(self.max_iterations),
+                'xatol': tol,
+                'fatol': tol
+            }
+            valid_nm_opts = self.SUPPORTED_ALGORITHMS['Nelder-Mead']['valid_options']
+            for k, v in self.algorithm_kwargs.items():
+                if k in valid_nm_opts:
+                    nm_options[k] = v
             # Note: Nelder-Mead doesn't natively support bounds, so we enforce them via penalty in objective wrapper
             result = minimize(
                 wrapped_obj,
                 x0=x0,
                 method='Nelder-Mead',
-                options={
-                    'maxiter': int(self.max_iterations),
-                    'xatol': tol,
-                    'fatol': tol
-                },
-                **self.algorithm_kwargs
+                options=nm_options
             )
         
         elif self.algorithm == "L-BFGS-B":

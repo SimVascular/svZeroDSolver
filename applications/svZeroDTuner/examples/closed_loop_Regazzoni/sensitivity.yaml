@@ -1,0 +1,48 @@
+# Sensitivity Analysis Configuration for Regazzoni closed-loop model
+#
+# This file specifies parameters to vary and quantities of interest to analyze
+# using global sensitivity analysis with Sobol indices.
+
+model:
+  config_file: "model.json"
+
+# Parameters to vary during sensitivity analysis
+# Specify the bounds over which to vary each parameter
+parameters:
+  - name: "LV.Emax"
+    bounds: [1e8, 5e8]  # Left ventricle maximum elastance
+  
+  - name: "AR_SYS.R_poiseuille"
+    bounds: [5e7, 5e8]  # Systemic arterial resistance
+  
+  - name: "AR_SYS.C"
+    bounds: [1e-9, 1e-8]  # Systemic arterial compliance
+
+# Quantities of Interest (QoI) to analyze
+# These are the outputs you want to understand the sensitivity of
+quantities_of_interest:
+  # Systemic arterial pressure statistics
+  - name: "pressure:AV:AR_SYS"
+    type: "max"  # Maximum (systolic) pressure
+  
+  - name: "pressure:AV:AR_SYS"
+    type: "min"  # Minimum (diastolic) pressure
+  
+  
+  # Additional examples (uncomment as needed):
+  # - name: "pressure:RV:PV"
+  #   type: "max"
+  # 
+  # - name: "flow:AR_SYS:J0"
+  #   type: "mean"
+
+# Sensitivity analysis settings
+sensitivity:
+  n_samples: 256  # Number of samples for Sobol analysis
+                  # Recommended: 256-512 for quick screening, 1024-2048 for higher accuracy
+                  # Higher = more accurate but slower
+
+# Output settings
+output:
+  directory: "sensitivity_results"
+  save_plots: true  # Save visualization plots

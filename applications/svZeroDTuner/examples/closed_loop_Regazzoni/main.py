@@ -1,9 +1,10 @@
 """
 sv0D Tuning Framework - Regazzoni closed-loop model example.
 
-This script provides two modes:
+This script provides three modes:
 1. BASELINE MODE: Run the initial model and save all results for inspection
-2. OPTIMIZE MODE: Run optimization using targets specified in tuning_config.yaml
+2. OPTIMIZE MODE: Run optimization using targets specified in tuning.yaml
+3. SENSITIVITY MODE: Run global sensitivity analysis using Sobol indices
 
 Usage:
     Edit the main() function and uncomment the mode you want to run, then:
@@ -21,6 +22,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
 from src.sv0d_tuner import SV0DTuner
 from src.visualization import plot_simulation_results
+from src.sensitivity import SensitivityAnalyzer
 
 
 def run_baseline(config_file):
@@ -189,6 +191,85 @@ def run_optimization(config_file):
     print()
 
 
+def run_sensitivity(config_file):
+    """
+    Run global sensitivity analysis using Sobol indices.
+    
+    This function:
+    - Performs global sensitivity analysis on specified parameters
+    - Computes first-order and total-order Sobol indices
+    - Identifies which parameters most influence each quantity of interest
+    - Saves results, plots, and summary statistics
+    """
+    print("="*70)
+    print("SENSITIVITY ANALYSIS")
+    print("="*70)
+    print()
+    
+    if not os.path.exists(config_file):
+        print(f"ERROR: Config file not found: {config_file}")
+        print(f"Please create {config_file} with your sensitivity analysis settings.")
+        print(f"See sensitivity.yaml.example for template.")
+        return
+    
+    print(f"Using configuration: {config_file}")
+    print()
+    
+    # Initialize sensitivity analyzer
+    try:
+        analyzer = SensitivityAnalyzer(config_file)
+    except Exception as e:
+        print(f"ERROR loading configuration: {e}")
+        import traceback
+        traceback.print_exc()
+        return
+    
+    # Run sensitivity analysis
+    try:
+        results = analyzer.run()
+    except Exception as e:
+        print(f"ERROR during sensitivity analysis: {e}")
+        import traceback
+        traceback.print_exc()
+        return
+    
+    # Save results
+    try:
+        analyzer.save_results()
+    except Exception as e:
+        print(f"ERROR saving results: {e}")
+        import traceback
+        traceback.print_exc()
+        return
+    
+    # Print summary
+    print()
+    print("="*70)
+    print("SENSITIVITY ANALYSIS COMPLETE")
+    print("="*70)
+    print()
+    print("Summary of Results:")
+    print("-"*70)
+    
+    for qoi_key, qoi_results in results.items():
+        print(f"\n{qoi_key}:")
+        print(f"  Range: [{qoi_results['min']:.4e}, {qoi_results['max']:.4e}]")
+        print(f"  Mean ± Std: {qoi_results['mean']:.4e} ± {qoi_results['std']:.4e}")
+        print(f"\n  Most influential parameters (first-order indices):")
+        
+        # Sort by influence
+        first_order = qoi_results['first_order']
+        sorted_params = sorted(first_order.items(), key=lambda x: abs(x[1]), reverse=True)
+        
+        for param, value in sorted_params:
+            print(f"    {param:<30} {value:>8.4f}")
+    
+    print()
+    print(f"Results saved to: {analyzer.output_config.get('directory', 'sensitivity_results')}")
+    print("="*70)
+    print()
+
+
 def main():
     """
     Main function.
@@ -197,8 +278,9 @@ def main():
     ============
     Uncomment ONE of the following modes to run:
     
-    MODE 1: BASELINE - Run initial simulation and save results for inspection
-    MODE 2: OPTIMIZE - Run optimization with targets from config_file
+    MODE 1: BASELINE    - Run initial simulation and save results for inspection
+    MODE 2: OPTIMIZE    - Run optimization with targets from tuning.yaml
+    MODE 3: SENSITIVITY - Run global sensitivity analysis with sensitivity.yaml
     """
     # Change to script directory
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -207,8 +289,9 @@ def main():
     # SELECT MODE: Uncomment ONE of the following
     # ============================================================================
     
-    #run_baseline("model.json")      # MODE 1: Run baseline and save results
-    run_optimization("tuning.yaml")  # MODE 2: Run optimization with tuning.yaml
+    #run_baseline("model.json")         # MODE 1: Run baseline and save results
+    #run_optimization("tuning.yaml")     # MODE 2: Run optimization with tuning.yaml
+    run_sensitivity("sensitivity.yaml") # MODE 3: Run sensitivity analysis
     
     # ============================================================================
 

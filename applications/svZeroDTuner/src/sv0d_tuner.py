@@ -121,12 +121,6 @@ class SV0DTuner:
         # Get updated config
         config_dict = self.param_handler.get_config()
         
-        # Convert BloodVesselCRL to BloodVessel if needed (workaround for pysvzerod compatibility)
-        if 'vessels' in config_dict:
-            for vessel in config_dict['vessels']:
-                if vessel.get('zero_d_element_type') == 'BloodVesselCRL':
-                    vessel['zero_d_element_type'] = 'BloodVessel'
-        
         # Create and run solver directly with config dict
         # All numpy types have been converted by param_handler.get_config()
         self.solver = pysvzerod.Solver(config_dict)

@@ -1,0 +1,52 @@
+# Tuning configuration for Regazzoni closed-loop model
+#
+# INSTRUCTIONS:
+# 1. Run: python main.py baseline
+# 2. Inspect baseline_results.csv and baseline_summary.csv
+# 3. Update the 'targets' section below with your desired targets
+# 4. Run: python main.py optimize
+
+model:
+  config_file: "model.json"
+
+# Parameters to optimize
+# Add or remove parameters as needed
+parameters:
+  - name: "LV.Emax"
+    bounds: [1e7, 5e8]  # End-systolic elastance
+
+# Target outputs
+# Specify which outputs you want to match and their target values
+# Use output names from baseline_summary.csv
+targets:
+  # Example scalar targets:
+  - name: "pressure:LV:AV"
+    type: "max"
+    target_value: 1.2e4  # Pa
+    weight: 2.0
+  
+  # Example time series target (uncomment and modify as needed):
+  # - name: "pressure:LV:AV"
+  #   type: "time_series"
+  #   target_file: "targets/pressure_lv.csv"  # CSV with 'time' and 'value' columns
+  #   weight: 1.0
+
+# Objective function
+objective:
+  type: "weighted_l2"
+  normalize: true  # Normalize errors by target values for better scaling
+
+# Optimization
+optimization:
+  algorithm: "Nelder-Mead"  # Using Nelder-Mead instead of differential_evolution to avoid scipy issues
+  max_iterations: 30  # Reduced for testing
+  tolerance: 1e-6
+  parallel: false
+  n_workers: 1
+
+# Output
+output:
+  directory: "optimization_results"
+  save_history: true
+  save_plots: true
+  save_final_config: true

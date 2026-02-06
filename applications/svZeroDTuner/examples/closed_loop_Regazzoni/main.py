@@ -171,7 +171,10 @@ def run_optimization(config_file):
     # Print results summary
     print()
     print("="*70)
-    print("OPTIMIZATION COMPLETE")
+    if results.get('interrupted', False):
+        print("OPTIMIZATION INTERRUPTED - BEST RESULTS SO FAR")
+    else:
+        print("OPTIMIZATION COMPLETE")
     print("="*70)
     print(f"Success: {results['success']}")
     print(f"Best objective value: {results['best_value']:.6e}")

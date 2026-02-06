@@ -13,17 +13,17 @@ model:
 # Add or remove parameters as needed
 parameters:
   - name: "LV.Emax"
-    bounds: [1e7, 5e8]  # End-systolic elastance
+    bounds: [1e7, 5e8]  
 
 # Target outputs
 # Specify which outputs you want to match and their target values
 # Use output names from baseline_summary.csv
 targets:
   # Example scalar targets:
-  - name: "pressure:LV:AV"
+  - name: "pressure:AV:AR_SYS"
     type: "max"
-    target_value: 1.2e4  # Pa
-    weight: 2.0
+    target_value: 13065  # Pa
+    weight: 1.0
   
   # Example time series target (uncomment and modify as needed):
   # - name: "pressure:LV:AV"
@@ -38,11 +38,18 @@ objective:
 
 # Optimization
 optimization:
-  algorithm: "Nelder-Mead"  # Using Nelder-Mead instead of differential_evolution to avoid scipy issues
-  max_iterations: 30  # Reduced for testing
-  tolerance: 1e-6
-  parallel: false
-  n_workers: 1
+  algorithm: "differential_evolution"
+  max_iterations: 30     # Increased for better convergence
+  parallel: true
+  n_workers: -1
+  
+  # Differential evolution specific options (tuned for better exploration)
+  popsize: 25             # Larger population for better exploration (75 individuals with 3 parameters)
+  init: 'sobol'           # Sobol sequence for excellent initial coverage
+  strategy: 'best2bin'    # More explorative strategy (uses 2 random difference vectors)
+  mutation: [0.5, 1.5]    # Wider mutation range for more exploration
+  recombination: 0.8      # Higher recombination for more parameter mixing
+  polish: false            # Polish best result with L-BFGS-B at the end
 
 # Output
 output:

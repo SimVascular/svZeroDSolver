@@ -46,7 +46,9 @@ class ResultHandler:
             history: Optimization history list
             filename: Output filename
         """
-        if not self.save_history:
+        if not self.save_history or not history:
+            if not history:
+                print("Note: No optimization history to save (parallel mode may not track history)")
             return
         
         # Save history in optimization_history subfolder
@@ -172,26 +174,30 @@ class ResultHandler:
         history_dir = os.path.join(self.output_dir, 'optimization_history')
         os.makedirs(history_dir, exist_ok=True)
         
-        # Plot objective history
-        plot_objective_history(
-            history,
-            output_file=os.path.join(history_dir, 'objective_history.png')
-        )
-        
-        # Plot parameter evolution
-        if param_names:
-            plot_parameter_evolution(
+        # Only plot history if available (may be empty with parallel differential_evolution)
+        if history:
+            # Plot objective history
+            plot_objective_history(
                 history,
-                param_names,
-                output_file=os.path.join(history_dir, 'parameter_evolution.png')
+                output_file=os.path.join(history_dir, 'objective_history.png')
             )
+            
+            # Plot parameter evolution
+            if param_names:
+                plot_parameter_evolution(
+                    history,
+                    param_names,
+                    output_file=os.path.join(history_dir, 'parameter_evolution.png')
+                )
+        else:
+            print("Note: Skipping history plots (not available with parallel differential_evolution)")
         
         # Plot target comparison if available
         if targets and simulated_values:
             plot_target_comparison(
                 targets,
                 simulated_values,
-                output_file=os.path.join(history_dir, 'target_comparison.png')
+                output_file=os.path.join(self.output_dir, 'target_comparison.png')
             )
         
         # Plot all simulation results if DataFrames are provided
@@ -248,7 +254,9 @@ class ResultHandler:
         
         # Save timing information if provided
         if timing_info:
-            timing_file = os.path.join(self.output_dir, 'optimization_history', 'timing_info.json')
+            history_dir = os.path.join(self.output_dir, 'optimization_history')
+            os.makedirs(history_dir, exist_ok=True)
+            timing_file = os.path.join(history_dir, 'timing_info.json')
             with open(timing_file, 'w') as f:
                 json.dump(timing_info, f, indent=2)
             print(f"Saved timing information to {timing_file}")

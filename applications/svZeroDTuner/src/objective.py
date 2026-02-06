@@ -203,7 +203,6 @@ class WeightedL2Objective(ObjectiveFunction):
     """Weighted L2 objective function (uses weights from target specifications)."""
     
     def __init__(self, targets: List[Dict], **kwargs):
-        kwargs['normalize'] = False  # Override normalize for weighted L2
         super().__init__(targets, **kwargs)
 
 

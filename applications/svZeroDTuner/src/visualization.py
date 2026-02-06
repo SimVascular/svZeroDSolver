@@ -168,13 +168,20 @@ def plot_target_comparison(
         name = target['name']
         target_type = target.get('type', 'time_series')
         
-        if name not in simulated_values:
+        # Construct the key used to store the simulated value
+        # For scalar targets, the key includes the type (e.g., "pressure:LV:AV_max")
+        if target_type in ['min', 'max', 'mean']:
+            sim_key = f"{name}_{target_type}"
+        else:
+            sim_key = name
+        
+        if sim_key not in simulated_values:
             ax.text(0.5, 0.5, f'No data for {name}', 
                    ha='center', va='center', transform=ax.transAxes)
             ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
             continue
         
-        sim_value = simulated_values[name]
+        sim_value = simulated_values[sim_key]
         
         if target_type == 'time_series':
             # Plot time series comparison

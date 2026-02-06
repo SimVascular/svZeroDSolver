@@ -294,14 +294,24 @@ class SV0DTuner:
         # Start timing
         start_time = time.time()
         
-        # Run optimization with progress callback
-        result = self.optimizer.optimize(
-            objective_func=self._objective_function,
-            param_names=param_names,
-            bounds=bounds,
-            x0=x0,
-            iteration_callback=self._iteration_callback
-        )
+        # Run optimization with progress callback, allow graceful interruption
+        interrupted = False
+        result = None
+        try:
+            result = self.optimizer.optimize(
+                objective_func=self._objective_function,
+                param_names=param_names,
+                bounds=bounds,
+                x0=x0,
+                iteration_callback=self._iteration_callback
+            )
+        except KeyboardInterrupt:
+            interrupted = True
+            print("\n\n" + "="*70)
+            print("OPTIMIZATION INTERRUPTED BY USER (Ctrl+C)")
+            print("="*70)
+            print("Processing best results found so far...")
+            print()
         
         # End timing
         end_time = time.time()
@@ -311,8 +321,26 @@ class SV0DTuner:
         self.history = self.optimizer.get_history()
         self.best_value, self.best_params = self.optimizer.get_best()
         
+        # For parallel differential_evolution, history tracking doesn't work properly
+        # Use the result object to get actual number of function evaluations
+        if result is not None:
+            n_evaluations = len(self.history) if self.history else getattr(result, 'nfev', 0)
+            
+            # If history is empty but we have result params, use them
+            if not self.history and hasattr(result, 'x') and hasattr(result, 'fun'):
+                self.best_params = result.x
+                self.best_value = result.fun
+                if not interrupted:
+                    print(f"\nNote: Detailed history not available with parallel differential_evolution")
+                    print(f"Final objective value: {self.best_value:.6e}")
+        else:
+            # Interrupted - use best from history
+            n_evaluations = len(self.history)
+            if interrupted and self.best_value is not None:
+                print(f"Best objective value found: {self.best_value:.6e}")
+                print(f"Total evaluations completed: {n_evaluations}")
+        
         # Calculate timing statistics
-        n_evaluations = len(self.history)
         avg_time_per_eval = total_time / n_evaluations if n_evaluations > 0 else 0
         
         timing_info = {
@@ -331,6 +359,18 @@ class SV0DTuner:
         print(f"Total function evaluations: {n_evaluations}")
         print(f"Average time per evaluation: {timing_info['avg_time_per_evaluation_formatted']}")
         print(f"{'='*70}")
+        
+        # Check if optimization succeeded
+        if self.best_params is None:
+            if interrupted:
+                error_msg = (
+                    "Cannot process results: optimization was interrupted too early.\n"
+                    "When using parallel differential_evolution, history tracking is not available.\n"
+                    "Try interrupting later, or set 'parallel: false' in tuning.yaml for full history tracking."
+                )
+            else:
+                error_msg = "Optimization failed: no best parameters found"
+            raise RuntimeError(error_msg)
         
         # Run final simulation with best parameters and get full results
         print("\nRunning final simulation with best parameters...")
@@ -371,12 +411,13 @@ class SV0DTuner:
         )
         
         return {
-            'success': result.success,
-            'message': result.message,
+            'success': result.success if result else False,
+            'message': result.message if result else ('Interrupted by user' if interrupted else 'Unknown error'),
             'best_value': self.best_value,
             'best_params': dict(zip(param_names, self.best_params)),
             'history': self.history,
-            'result': result
+            'result': result,
+            'interrupted': interrupted
         }
     
     def evaluate(self, param_values: Optional[Dict[str, float]] = None) -> Dict:

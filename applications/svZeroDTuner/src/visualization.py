@@ -255,8 +255,8 @@ def plot_simulation_results(
         fig, ax = plt.subplots(figsize=(14, 8))
         for output in pressure_outputs:
             ax.plot(results_df['time'], results_df[output], label=output, linewidth=1.5)
-        ax.set_xlabel('Time (s)', fontsize=12)
-        ax.set_ylabel('Pressure (Pa)', fontsize=12)
+        ax.set_xlabel('Time', fontsize=12)
+        ax.set_ylabel('Pressure', fontsize=12)
         title = f'{title_prefix} Pressures ({len(pressure_outputs)} outputs)' if title_prefix else f'All Pressures ({len(pressure_outputs)} outputs)'
         ax.set_title(title, fontsize=14, fontweight='bold')
         ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=7)
@@ -270,8 +270,8 @@ def plot_simulation_results(
         fig, ax = plt.subplots(figsize=(14, 8))
         for output in flow_outputs:
             ax.plot(results_df['time'], results_df[output], label=output, linewidth=1.5)
-        ax.set_xlabel('Time (s)', fontsize=12)
-        ax.set_ylabel('Flow (m³/s)', fontsize=12)
+        ax.set_xlabel('Time', fontsize=12)
+        ax.set_ylabel('Flow', fontsize=12)
         title = f'{title_prefix} Flows ({len(flow_outputs)} outputs)' if title_prefix else f'All Flows ({len(flow_outputs)} outputs)'
         ax.set_title(title, fontsize=14, fontweight='bold')
         ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=7)
@@ -285,8 +285,8 @@ def plot_simulation_results(
         fig, ax = plt.subplots(figsize=(14, 8))
         for output in volume_outputs:
             ax.plot(results_df['time'], results_df[output], label=output, linewidth=1.5)
-        ax.set_xlabel('Time (s)', fontsize=12)
-        ax.set_ylabel('Volume (m³)', fontsize=12)
+        ax.set_xlabel('Time', fontsize=12)
+        ax.set_ylabel('Volume', fontsize=12)
         title = f'{title_prefix} Volumes ({len(volume_outputs)} outputs)' if title_prefix else f'All Volumes ({len(volume_outputs)} outputs)'
         ax.set_title(title, fontsize=14, fontweight='bold')
         ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=7)

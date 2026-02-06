@@ -2,10 +2,10 @@
   "_comment": "This is an sv0D input file for a closed loop circulation model by Regazzoni et al (2022). The units are as follows: Compliance (C) is in m^3/Pa, Resistance (R) is in Pa/(m^3/s), Inductance is in Pa/(m^3/s^2), Pressure (Pd) is in Pa.",
   "_diagram_a": "LA -> MV -> LV -> AV -> AR_SYS -> J0 -> VEN_SYS -> J1 -> RA -> TV -> RV -> PV -> AR_PUL -> J2 -> VEN_PUL -> J3 -> LA",
   "simulation_parameters": {
-    "number_of_cardiac_cycles": 3,
+    "number_of_cardiac_cycles": 30,
     "number_of_time_pts_per_cardiac_cycle": 689,
     "output_variable_based": true,
-    "output_all_cycles": true,
+    "output_all_cycles": false,
     "steady_initial": false,
     "cardiac_period": 0.689
   },

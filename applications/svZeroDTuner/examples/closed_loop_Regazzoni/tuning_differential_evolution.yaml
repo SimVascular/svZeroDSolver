@@ -47,18 +47,18 @@ objective:
 # Optimization
 optimization:
   algorithm: "differential_evolution"
-  max_iterations: 30     # Increased for better convergence
+  max_iterations: 30    
   parallel: true
   n_workers: -1
   tolerance: 1e-9
   
-  # Differential evolution specific options (tuned for better exploration)
-  popsize: 15             # Larger population for better exploration (75 individuals with 3 parameters)
-  init: 'sobol'           # Sobol sequence for excellent initial coverage
-  strategy: 'best2bin'    # More explorative strategy (uses 2 random difference vectors)
-  mutation: [0.5, 1]    # Wider mutation range for more exploration
-  recombination: 0.7      # Higher recombination for more parameter mixing
-  polish: false            # Polish best result with L-BFGS-B at the end
+  # Differential evolution specific options
+  popsize: 5             
+  init: 'sobol'           
+  strategy: 'best2bin'    
+  mutation: [0.5, 1]    
+  recombination: 0.7      
+  polish: false            
 
 # Output
 output:

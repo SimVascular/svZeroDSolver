@@ -47,10 +47,10 @@ objective:
 # Optimization
 optimization:
   algorithm: "Nelder-Mead"
-  max_iterations: 30     # Increased for better convergence
+  max_iterations: 30     
   tolerance: 1e-6
   
-  # Nelder-Mead specific options (tuned for better exploration)
+  # Nelder-Mead specific options
   adaptive: true            # Adaptive simplex
 
 # Output

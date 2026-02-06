@@ -21,7 +21,7 @@ import yaml
 
 from .parameter_handler import ParameterHandler
 from .output_extractor import OutputExtractor
-import pysvzerod
+from .simulation import run_simulation
 
 
 class SensitivityAnalyzer:
@@ -99,78 +99,60 @@ class SensitivityAnalyzer:
             if 'name' not in qoi:
                 raise ValueError(f"Quantity of interest {i} missing 'name'")
         
-    def _run_simulation(self, param_values: np.ndarray, suppress_warnings: bool = False) -> Dict[str, float]:
+    def _get_simulated_quantities_of_interest(
+        self, param_values: np.ndarray, suppress_warnings: bool = False
+    ) -> Dict[str, float]:
         """
-        Run sv0D simulation with given parameter values.
-        
+        Run sv0D simulation and return quantity-of-interest values.
+
         Args:
             param_values: Array of parameter values
             suppress_warnings: If True, suppress warning messages
-            
+
         Returns:
             Dictionary of quantity of interest values (NaN for failures)
         """
-        # Initialize return dictionary with NaN values
         qoi_values = {}
         for qoi in self.quantities_of_interest:
             qoi_key = f"{qoi['name']}_{qoi.get('type', 'mean')}"
             qoi_values[qoi_key] = np.nan
-        
+
         try:
-            # Update parameters
-            param_names = [p['name'] for p in self.parameters]
-            for name, value in zip(param_names, param_values):
-                # Explicitly convert to Python float
-                if isinstance(value, np.ndarray):
-                    value = float(value.item())
-                elif not isinstance(value, (int, float)):
-                    value = float(value)
-                self.param_handler.set_parameter(name, value)
-        
-            # Get updated config
-            config_dict = self.param_handler.get_config()
-            
-            # Create and run solver
-            solver = pysvzerod.Solver(config_dict)
-            solver.run()
-            
-            # Create extractor
-            extractor = OutputExtractor(solver)
-            times = extractor.get_times()
-            
-            # Extract quantities of interest
+            _, extractor = run_simulation(
+                self.param_handler, self.parameters, param_values
+            )
+
             for qoi in self.quantities_of_interest:
-                name = qoi['name']
-                extraction_type = qoi.get('type', 'mean')
+                name = qoi["name"]
+                extraction_type = qoi.get("type", "mean")
                 qoi_key = f"{name}_{extraction_type}"
-                
+
                 try:
-                    # Extract time series
-                    time_series = extractor.extract(name, 'time_series')
-                    
-                    # Compute requested statistic
-                    if extraction_type == 'min':
+                    time_series = extractor.extract(name, "time_series")
+
+                    if extraction_type == "min":
                         qoi_values[qoi_key] = float(np.min(time_series))
-                    elif extraction_type == 'max':
+                    elif extraction_type == "max":
                         qoi_values[qoi_key] = float(np.max(time_series))
-                    elif extraction_type == 'mean':
+                    elif extraction_type == "mean":
                         qoi_values[qoi_key] = float(np.mean(time_series))
-                    elif extraction_type == 'std':
+                    elif extraction_type == "std":
                         qoi_values[qoi_key] = float(np.std(time_series))
-                    elif extraction_type == 'range':
-                        qoi_values[qoi_key] = float(np.max(time_series) - np.min(time_series))
+                    elif extraction_type == "range":
+                        qoi_values[qoi_key] = float(
+                            np.max(time_series) - np.min(time_series)
+                        )
                     else:
                         raise ValueError(f"Unknown extraction type: {extraction_type}")
                 except Exception as e:
                     if not suppress_warnings:
                         print(f"Warning: Could not extract {name}: {e}")
                     qoi_values[qoi_key] = np.nan
-        
+
         except Exception as e:
             if not suppress_warnings:
                 print(f"Warning: Simulation failed: {e}")
-            # qoi_values already initialized with NaN
-        
+
         return qoi_values
     
     def _create_qoi_function(self, qoi_key: str) -> Callable:
@@ -189,13 +171,13 @@ class SensitivityAnalyzer:
                 # Handle both single parameter set and multiple parameter sets
                 if params.ndim == 1:
                     # Single parameter set
-                    qoi_values = self._run_simulation(params)
+                    qoi_values = self._get_simulated_quantities_of_interest(params)
                     return qoi_values[qoi_key]
                 else:
                     # Multiple parameter sets
                     results = []
                     for i in range(params.shape[0]):
-                        qoi_values = self._run_simulation(params[i, :])
+                        qoi_values = self._get_simulated_quantities_of_interest(params[i, :])
                         results.append(qoi_values[qoi_key])
                     return np.array(results)
             except Exception as e:
@@ -270,7 +252,7 @@ class SensitivityAnalyzer:
             if (i + 1) % max(1, self.n_samples // 20) == 0:
                 print(f"  Progress: {i+1}/{self.n_samples} ({100*(i+1)/self.n_samples:.0f}%)")
             
-            qoi_values = self._run_simulation(param_values)
+            qoi_values = self._get_simulated_quantities_of_interest(param_values)
             
             # Store sample data
             sample_entry = {

@@ -9,11 +9,11 @@ import json
 import time
 import numpy as np
 import pandas as pd
-import pysvzerod
 from typing import Dict, List, Optional, Callable
 
 from .parameter_handler import ParameterHandler
 from .output_extractor import OutputExtractor
+from .simulation import run_simulation
 from .objective import create_objective, ObjectiveFunction
 from .optimizer import OptimizerWrapper
 from .config_handler import ConfigHandler
@@ -96,39 +96,24 @@ class SV0DTuner:
             minutes = int((seconds % 3600) // 60)
             return f"{hours} hr {minutes} min"
     
-    def _run_simulation(self, param_values: np.ndarray, return_full_results: bool = False):
+    def _get_simulated_values(
+        self, param_values: np.ndarray, return_full_results: bool = False
+    ):
         """
-        Run sv0D simulation with given parameter values.
-        
+        Run sv0D simulation and return simulated target values.
+
         Args:
             param_values: Array of parameter values
             return_full_results: If True, return tuple of (simulated_values, results_df, summary_df)
-            
+
         Returns:
             If return_full_results=False: Dictionary of simulated output values
             If return_full_results=True: Tuple of (simulated_values dict, results_df, summary_df)
         """
-        # Update parameters - ensure values are Python scalars
-        param_names = [p['name'] for p in self.parameters]
-        for name, value in zip(param_names, param_values):
-            # Explicitly convert to Python float
-            if isinstance(value, np.ndarray):
-                value = float(value.item())
-            elif not isinstance(value, (int, float)):
-                value = float(value)
-            self.param_handler.set_parameter(name, value)
-        
-        # Get updated config
-        config_dict = self.param_handler.get_config()
-        
-        # Create and run solver directly with config dict
-        # All numpy types have been converted by param_handler.get_config()
-        self.solver = pysvzerod.Solver(config_dict)
-        self.solver.run()
-        
-        # Create extractor
-        self.extractor = OutputExtractor(self.solver)
-        
+        self.solver, self.extractor = run_simulation(
+            self.param_handler, self.parameters, param_values
+        )
+
         # Extract all target outputs
         simulated_values = {}
         times = self.extractor.get_times()
@@ -252,7 +237,7 @@ class SV0DTuner:
         """
         try:
             # Run simulation
-            simulated_values = self._run_simulation(param_values)
+            simulated_values = self._get_simulated_values(param_values)
             
             # Compute objective
             obj_value = self.objective_func.compute_error(simulated_values)
@@ -372,9 +357,9 @@ class SV0DTuner:
         
         if should_extract_full:
             final_simulated_values, optimized_results_df, optimized_summary_df = \
-                self._run_simulation(self.best_params, return_full_results=True)
+                self._get_simulated_values(self.best_params, return_full_results=True)
         else:
-            final_simulated_values = self._run_simulation(self.best_params)
+            final_simulated_values = self._get_simulated_values(self.best_params)
             optimized_results_df = None
             optimized_summary_df = None
         
@@ -436,7 +421,7 @@ class SV0DTuner:
         ])
         
         # Run simulation
-        simulated_values = self._run_simulation(current_values)
+        simulated_values = self._get_simulated_values(current_values)
         
         # Compute objective
         obj_value = self.objective_func.compute_error(simulated_values)

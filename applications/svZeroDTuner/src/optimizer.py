@@ -149,7 +149,8 @@ class OptimizerWrapper:
     def _validate_optimization_inputs(
         self,
         bounds: List[Tuple[float, float]],
-        x0: Optional[np.ndarray]
+        x0: Optional[np.ndarray],
+        param_names: Optional[List[str]] = None
     ):
         """
         Validate optimization problem inputs.
@@ -157,6 +158,7 @@ class OptimizerWrapper:
         Args:
             bounds: Parameter bounds
             x0: Initial guess
+            param_names: Parameter names (optional, for clearer error messages)
             
         Raises:
             ValueError: If inputs are invalid
@@ -185,13 +187,17 @@ class OptimizerWrapper:
                     f"but {len(bounds)} parameters specified"
                 )
             
-            # Check if x0 is within bounds
+            # Check if x0 is within bounds - raise error if any initial value is outside
             for i, (x_val, (lower, upper)) in enumerate(zip(x0, bounds)):
                 if x_val < lower or x_val > upper:
-                    print(
-                        f"Warning: Initial guess for parameter {i} ({x_val}) "
-                        f"is outside bounds [{lower}, {upper}]. "
-                        f"This may cause issues with some optimizers."
+                    name = param_names[i] if param_names and i < len(param_names) else f"parameter {i}"
+                    bound_type = "min" if x_val < lower else "max"
+                    bound_val = lower if x_val < lower else upper
+                    raise ValueError(
+                        f"Initial value for {name} ({x_val}) is outside its bounds: "
+                        f"violates {bound_type} bound ({bound_val}). "
+                        f"Bounds are [{lower}, {upper}]. "
+                        f"Please update the model configuration or tuning bounds."
                     )
     
     def _objective_wrapper(
@@ -279,7 +285,7 @@ class OptimizerWrapper:
         self.bounds = bounds
         
         # Validate optimization inputs
-        self._validate_optimization_inputs(bounds, x0)
+        self._validate_optimization_inputs(bounds, x0, param_names)
         
         # Create wrapped objective
         wrapped_obj = partial(

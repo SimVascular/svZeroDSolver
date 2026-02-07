@@ -19,7 +19,7 @@ from .visualization import (
 
 
 # Tolerance for "close to bound" warning: within this fraction of the range from a bound
-_BOUND_TOLERANCE = 0.05
+_BOUND_TOLERANCE = 0.01
 
 
 def _check_params_near_bounds(

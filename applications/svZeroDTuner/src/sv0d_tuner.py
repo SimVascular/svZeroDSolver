@@ -17,7 +17,7 @@ from .simulation import run_simulation
 from .objective import create_objective, ObjectiveFunction
 from .optimizer import OptimizerWrapper
 from .config_handler import ConfigHandler
-from .result_handler import ResultHandler
+from .result_handler import ResultHandler, _check_params_near_bounds
 
 
 class SV0DTuner:
@@ -224,6 +224,11 @@ class SV0DTuner:
             print(f" | {param_str}")
         else:
             print()
+        
+        # Warn if any parameter is close to its bounds
+        near_bounds = _check_params_near_bounds(params, self.parameters)
+        for name, value, bound_type, bound_value in near_bounds:
+            print(f"  WARNING: {name}={value:.3e} is near {bound_type} bound ({bound_value:.3e})")
     
     def _objective_function(self, param_values: np.ndarray) -> float:
         """
@@ -404,6 +409,7 @@ class SV0DTuner:
             param_names=param_names,
             best_value=self.best_value,
             best_params=self.best_params,
+            parameters=self.parameters,
             targets=self.targets,
             simulated_values=final_simulated_values,
             optimized_results_df=optimized_results_df,

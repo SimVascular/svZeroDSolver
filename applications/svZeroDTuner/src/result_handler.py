@@ -18,6 +18,40 @@ from .visualization import (
 )
 
 
+# Tolerance for "close to bound" warning: within this fraction of the range from a bound
+_BOUND_TOLERANCE = 0.05
+
+
+def _check_params_near_bounds(
+    params: Dict[str, float], parameters: List[Dict]
+) -> List[tuple]:
+    """
+    Check which parameters are close to their bounds.
+    
+    Returns:
+        List of (param_name, value, bound_type, bound_value) for params near bounds
+    """
+    near_bounds = []
+    for p in parameters:
+        name = p['name']
+        if name not in params:
+            continue
+        bounds = p.get('bounds')
+        if not bounds or len(bounds) != 2:
+            continue
+        lower, upper = float(bounds[0]), float(bounds[1])
+        value = float(params[name])
+        range_val = upper - lower
+        if range_val <= 0:
+            continue
+        tol = _BOUND_TOLERANCE * range_val
+        if value <= lower + tol:
+            near_bounds.append((name, value, 'min', lower))
+        elif value >= upper - tol:
+            near_bounds.append((name, value, 'max', upper))
+    return near_bounds
+
+
 class ResultHandler:
     """
     Handles storage and reporting of optimization results.
@@ -225,6 +259,7 @@ class ResultHandler:
         param_names: List[str],
         best_value: float,
         best_params: np.ndarray,
+        parameters: Optional[List[Dict]] = None,
         targets: Optional[List[Dict]] = None,
         simulated_values: Optional[Dict] = None,
         optimized_results_df: Optional[pd.DataFrame] = None,
@@ -239,6 +274,7 @@ class ResultHandler:
             param_names: Parameter names
             best_value: Best objective value
             best_params: Best parameter values
+            parameters: Parameter definitions with bounds (optional, for bound warnings)
             targets: Target specifications (optional)
             simulated_values: Simulated values dictionary (optional)
             optimized_results_df: DataFrame with optimized simulation time series (optional)
@@ -280,4 +316,13 @@ class ResultHandler:
         print(f"\nBest parameters:")
         for name, value in zip(param_names, best_params):
             print(f"  {name:<50} {value:.6e}")
+        # Warn if any best parameter is close to its bounds
+        if parameters:
+            near_bounds = _check_params_near_bounds(
+                dict(zip(param_names, best_params)), parameters
+            )
+            if near_bounds:
+                print("\nWARNING: The following best parameters are near their bounds:")
+                for name, value, bound_type, bound_value in near_bounds:
+                    print(f"  {name}={value:.6e} is near {bound_type} bound ({bound_value:.6e})")
         print("="*60)

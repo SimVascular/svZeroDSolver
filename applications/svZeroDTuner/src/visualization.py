@@ -17,7 +17,7 @@ def plot_objective_history(
     show: bool = False
 ):
     """
-    Plot objective value vs iteration.
+    Plot objective value vs function evaluation.
     
     Args:
         history: Optimization history list
@@ -27,12 +27,12 @@ def plot_objective_history(
     if not history:
         return
     
-    iterations = [h['iteration'] for h in history]
+    evaluations = [h['evaluation'] for h in history]
     objectives = [h['objective'] for h in history]
     
     plt.figure(figsize=(10, 6))
-    plt.plot(iterations, objectives, 'ko-', linewidth=2, markersize=6, label='Objective Value')
-    plt.xlabel('Iteration', fontsize=12)
+    plt.plot(evaluations, objectives, 'ko-', linewidth=2, markersize=6, label='Objective Value')
+    plt.xlabel('Function evaluation', fontsize=12)
     plt.ylabel('Objective Value', fontsize=12)
     plt.title('Optimization Convergence', fontsize=14, fontweight='bold')
     plt.grid(True, alpha=0.3)
@@ -40,12 +40,12 @@ def plot_objective_history(
     
     # Add best value annotation
     best_idx = np.argmin(objectives)
-    best_iter = iterations[best_idx]
+    best_eval = evaluations[best_idx]
     best_obj = objectives[best_idx]
-    plt.plot(best_iter, best_obj, 'ro', markersize=10, label=f'Best: {best_obj:.6e}')
+    plt.plot(best_eval, best_obj, 'ro', markersize=10, label=f'Best: {best_obj:.6e}')
     plt.annotate(
         f'Best: {best_obj:.6e}',
-        xy=(best_iter, best_obj),
+        xy=(best_eval, best_obj),
         xytext=(10, 10),
         textcoords='offset points',
         bbox=dict(boxstyle='round,pad=0.5', facecolor='yellow', alpha=0.7),
@@ -77,7 +77,7 @@ def plot_parameter_evolution(
     show: bool = False
 ):
     """
-    Plot parameter evolution over iterations.
+    Plot parameter evolution over function evaluations.
     
     Args:
         history: Optimization history list
@@ -100,14 +100,14 @@ def plot_parameter_evolution(
     else:
         axes = axes.flatten()
     
-    iterations = [h['iteration'] for h in history]
+    evaluations = [h['evaluation'] for h in history]
     
     for idx, param_name in enumerate(param_names):
         ax = axes[idx]
         param_values = [h['parameters'][param_name] for h in history]
         
-        ax.plot(iterations, param_values, 'ko-', linewidth=2, markersize=6)
-        ax.set_xlabel('Iteration', fontsize=10)
+        ax.plot(evaluations, param_values, 'ko-', linewidth=2, markersize=6)
+        ax.set_xlabel('Function evaluation', fontsize=10)
         ax.set_ylabel(param_name, fontsize=10)
         ax.set_title(f'Parameter: {param_name}', fontsize=11, fontweight='bold')
         ax.grid(True, alpha=0.3)

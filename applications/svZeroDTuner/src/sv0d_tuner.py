@@ -204,19 +204,19 @@ class SV0DTuner:
         
         return simulated_values
     
-    def _iteration_callback(self, history_entry: Dict) -> None:
+    def _evaluation_callback(self, history_entry: Dict) -> None:
         """
-        Callback function called after each iteration.
+        Callback function called after each function evaluation.
         
         Args:
-            history_entry: Dictionary with iteration, objective, and parameters
+            history_entry: Dictionary with evaluation, objective, and parameters
         """
-        iteration = history_entry['iteration']
+        evaluation = history_entry['evaluation']
         obj_value = history_entry['objective']
         params = history_entry['parameters']
         
-        # Print iteration progress
-        print(f"Iteration {iteration:3d}: Objective = {obj_value:.6e}", end="")
+        # Print evaluation progress
+        print(f"Evaluation {evaluation:3d}: Objective = {obj_value:.6e}", end="")
         
         # Show parameter values if not too many
         if len(params) <= 3:
@@ -282,7 +282,7 @@ class SV0DTuner:
                 param_names=param_names,
                 bounds=bounds,
                 x0=x0,
-                iteration_callback=self._iteration_callback
+                evaluation_callback=self._evaluation_callback
             )
         except KeyboardInterrupt:
             interrupted = True
@@ -291,6 +291,28 @@ class SV0DTuner:
             print("="*70)
             print("Processing best results found so far...")
             print()
+        
+        # Print termination reason when optimization completed normally
+        if result is not None and not interrupted:
+            print("\n" + "="*70)
+            print("OPTIMIZATION TERMINATION")
+            print("="*70)
+            success = getattr(result, 'success', None)
+            message = getattr(result, 'message', None)
+            status = getattr(result, 'status', None)
+            if message:
+                print(f"Reason: {message}")
+            if success is not None:
+                print(f"Success: {success}")
+            if status is not None:
+                print(f"Status code: {status}")
+            nfev = getattr(result, 'nfev', None)
+            if nfev is not None:
+                print(f"Function evaluations: {nfev}")
+            nit = getattr(result, 'nit', None)
+            if nit is not None:
+                print(f"Algorithm iterations: {nit}")
+            print("="*70)
         
         # End timing
         end_time = time.time()

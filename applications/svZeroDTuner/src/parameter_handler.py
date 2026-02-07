@@ -96,6 +96,11 @@ class ParameterHandler:
             if block_name == 'simulation' and param_key in self.config['simulation_parameters']:
                 return self.config['simulation_parameters'][param_key], ['simulation_parameters', param_key]
         
+        # Try initial conditions
+        if 'initial_condition' in self.config:
+            if block_name == 'initial_condition' and param_key in self.config['initial_condition']:
+                return self.config['initial_condition'][param_key], ['initial_condition', param_key]
+        
         raise ValueError(f"Parameter '{param_name}' not found in configuration")
     
     def set_parameter(self, param_name: str, value: Any) -> None:
@@ -158,6 +163,12 @@ class ParameterHandler:
         if 'simulation_parameters' in self.config:
             if block_name == 'simulation':
                 self.config['simulation_parameters'][param_key] = value
+                return
+        
+        # Try initial conditions
+        if 'initial_condition' in self.config:
+            if block_name == 'initial_condition' and param_key in self.config['initial_condition']:
+                self.config['initial_condition'][param_key] = value
                 return
         
         raise ValueError(f"Parameter '{param_name}' not found in configuration")

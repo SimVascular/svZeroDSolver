@@ -1,0 +1,157 @@
+# Tuning configuration for Regazzoni closed-loop model
+#
+# INSTRUCTIONS:
+# 1. Run: python main.py baseline
+# 2. Inspect baseline_results.csv and baseline_summary.csv
+# 3. Update the 'targets' section below with your desired targets
+# 4. Run: python main.py optimize
+
+model:
+  config_file: "model.json"
+
+# Parameters to optimize
+# Add or remove parameters as needed
+parameters:
+  - name: "LV.Epass"
+    bounds: [5e6, 5e7]
+
+  - name: "LV.Emax"
+    bounds: [5e7, 5e8] 
+
+  - name: "RV.Epass"
+    bounds: [1e6, 1e7]
+
+  - name: "RV.Emax"
+    bounds: [1e7, 1e8]
+
+  - name: "LA.Epass"
+    bounds: [5e6, 5e7]
+
+  - name: "RA.Epass"
+    bounds: [1e6, 1e7]
+
+  - name: "LV.Vrest"
+    bounds: [5e-7, 5e-6]
+
+  - name: "RV.Vrest"
+    bounds: [1e-5, 1e-4]
+
+  - name: "AR_SYS.R_poiseuille"
+    bounds: [5e7, 5e8]
+
+  - name: "AR_SYS.C"
+    bounds: [1e-9, 1e-8]
+
+  - name: "VEN_SYS.R_poiseuille"
+    bounds: [5e6, 5e7]
+
+  - name: "initial_condition.pressure:J0:VEN_SYS"
+    bounds: [5e2, 5e3]
+
+
+# Target outputs
+# Specify which outputs you want to match and their target values
+# Use output names from baseline_summary.csv
+targets:
+  - name: "Vc:LV"
+    type: "max"
+    target_value: 116.0e-6  # m^3
+    weight: 1.0
+  - name: "Vc:LV"
+    type: "min"
+    target_value: 38.6e-6  # m^3
+    weight: 1.0
+    
+  - name: "Vc:RV"
+    type: "max"
+    target_value: 171.0e-6  # m^3
+    weight: 1.0
+  - name: "Vc:RV"
+    type: "min"
+    target_value: 82.0e-6  # m^3
+    weight: 1.0
+
+  - name: "Vc:LA"
+    type: "max"
+    target_value: 72.7e-6  # m^3
+    weight: 1.0
+  - name: "Vc:LA"
+    type: "min"
+    target_value: 38.2e-6  # m^3
+    weight: 1.0
+
+  - name: "Vc:RA"
+    type: "max"
+    target_value: 107.9e-6  # m^3
+    weight: 1.0
+  - name: "Vc:RA"
+    type: "min"
+    target_value: 56.0e-6  # m^3
+    weight: 1.0
+
+  - name: "pressure:AV:AR_SYS"
+    type: "max"
+    target_value: 13065  # Pa (98.0 mmHg)
+    weight: 1.0
+  - name: "pressure:AV:AR_SYS"
+    type: "min"
+    target_value: 7066  # Pa (53.0 mmHg)
+    weight: 1.0
+
+  - name: "pressure:PV:AR_PUL"
+    type: "max"
+    target_value: 2666  # Pa (20.0 mmHg)
+    weight: 1.0
+  - name: "pressure:PV:AR_PUL"
+    type: "min"
+    target_value: 1533  # Pa (11.5 mmHg)
+    weight: 1.0
+
+  - name: "pressure:J0:VEN_SYS"
+    type: "mean"
+    target_value: 800  # Pa (6.0 mmHg)
+    weight: 1.0
+
+  - name: "pressure:J1:RA"
+    type: "mean"
+    target_value: 533  # Pa (4.0 mmHg)
+    weight: 1.0
+  
+  - name: "pressure:J3:LA"
+    type: "mean"
+    target_value: 933  # Pa (7.0 mmHg)
+    weight: 1.0
+
+# Objective function
+objective:
+  type: "weighted_l2"
+  normalize: true  # Normalize errors by target values for better scaling
+
+# Optimization
+optimization:
+  # # Differential evolution specific options
+  # algorithm: "differential_evolution"
+  # max_iterations: 5   
+  # parallel: true
+  # n_workers: -1
+  # tolerance: 1e-9
+  # popsize: 5             
+  # init: 'sobol'           
+  # strategy: 'best2bin'    
+  # mutation: [0.5, 1]    
+  # recombination: 0.7      
+  # polish: false           
+
+  # Nelder-Mead specific options
+  algorithm: "Nelder-Mead"
+  max_iterations: 30    
+  tolerance: 1e-6
+  parallel: false
+  adaptive: true            # Adaptive simplex
+
+# Output
+output:
+  directory: "optimization_results_complex"
+  save_history: true
+  save_plots: true
+  save_final_config: true

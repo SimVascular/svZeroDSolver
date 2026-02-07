@@ -170,27 +170,6 @@ def run_optimization(config_file):
     except Exception as e:
         print(f"ERROR during optimization: {e}")
         return
-    
-    # Print results summary
-    print()
-    print("="*70)
-    if results.get('interrupted', False):
-        print("OPTIMIZATION INTERRUPTED - BEST RESULTS SO FAR")
-    else:
-        print("OPTIMIZATION COMPLETE")
-    print("="*70)
-    print(f"Success: {results['success']}")
-    print(f"Best objective value: {results['best_value']:.6e}")
-    print()
-    print("Optimized parameters:")
-    print("-"*70)
-    for name, value in results['best_params'].items():
-        print(f"  {name:<30} {value:.6e}")
-    print()
-    print(f"Results saved to: {tuner.result_handler.output_dir}")
-    print("="*70)
-    print()
-
 
 def run_sensitivity(config_file):
     """
@@ -291,8 +270,8 @@ def main():
     # ============================================================================
     
     #run_baseline("model.json")         # MODE 1: Run baseline and save results
-    #run_optimization("tuning_nelder_mead.yaml")     # MODE 2: Run optimization with tuning.yaml
-    run_sensitivity("sensitivity.yaml") # MODE 3: Run sensitivity analysis
+    run_optimization("tuning_complex.yaml")     # MODE 2: Run optimization with tuning.yaml
+    #run_sensitivity("sensitivity.yaml") # MODE 3: Run sensitivity analysis
     
     # ============================================================================
 

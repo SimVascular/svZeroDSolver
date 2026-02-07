@@ -92,7 +92,7 @@ class ResultHandler:
         rows = []
         for entry in history:
             row = {
-                'iteration': entry['iteration'],
+                'evaluation': entry['evaluation'],
                 'objective': entry['objective']
             }
             row.update(entry['parameters'])
@@ -275,9 +275,9 @@ class ResultHandler:
         print("\n" + "="*60)
         print("OPTIMIZATION SUMMARY")
         print("="*60)
-        print(f"Total iterations: {len(history)}")
+        print(f"Total function evaluations: {len(history)}")
         print(f"Best objective value: {best_value:.6e}")
         print(f"\nBest parameters:")
         for name, value in zip(param_names, best_params):
-            print(f"  {name}: {value:.6e}")
+            print(f"  {name:<50} {value:.6e}")
         print("="*60)

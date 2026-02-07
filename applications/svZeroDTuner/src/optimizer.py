@@ -199,7 +199,7 @@ class OptimizerWrapper:
         params: np.ndarray,
         objective_func: Callable,
         param_names: List[str],
-        iteration_callback: Optional[Callable] = None
+        evaluation_callback: Optional[Callable] = None
     ) -> float:
         """
         Wrapper for objective function that tracks history and enforces bounds.
@@ -208,7 +208,7 @@ class OptimizerWrapper:
             params: Parameter values
             objective_func: Objective function to call
             param_names: Names of parameters
-            iteration_callback: Optional callback function for each iteration
+            evaluation_callback: Optional callback function for each function evaluation
             
         Returns:
             Objective function value (always a float)
@@ -232,7 +232,7 @@ class OptimizerWrapper:
         
         # Track history
         history_entry = {
-            'iteration': len(self.history),
+            'evaluation': len(self.history),
             'objective': obj_value,
             'parameters': dict(zip(param_names, params.tolist()))  # Convert to list for JSON serialization
         }
@@ -243,9 +243,9 @@ class OptimizerWrapper:
             self.best_value = obj_value
             self.best_params = params.copy()
         
-        # Call iteration callback if provided
-        if iteration_callback:
-            iteration_callback(history_entry)
+        # Call evaluation callback if provided
+        if evaluation_callback:
+            evaluation_callback(history_entry)
         
         return obj_value
     
@@ -255,7 +255,7 @@ class OptimizerWrapper:
         param_names: List[str],
         bounds: List[Tuple[float, float]],
         x0: Optional[np.ndarray] = None,
-        iteration_callback: Optional[Callable] = None
+        evaluation_callback: Optional[Callable] = None
     ) -> OptimizeResult:
         """
         Run optimization.
@@ -265,7 +265,7 @@ class OptimizerWrapper:
             param_names: List of parameter names
             bounds: List of (min, max) tuples for each parameter
             x0: Initial guess (optional, required for some algorithms)
-            iteration_callback: Optional callback function for each iteration
+            evaluation_callback: Optional callback function for each function evaluation
             
         Returns:
             Optimization result from scipy.optimize
@@ -286,7 +286,7 @@ class OptimizerWrapper:
             self._objective_wrapper,
             objective_func=objective_func,
             param_names=param_names,
-            iteration_callback=iteration_callback
+            evaluation_callback=evaluation_callback
         )
         
         # Convert bounds to scipy format

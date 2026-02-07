@@ -206,17 +206,18 @@ class SV0DTuner:
     
     def _evaluation_callback(self, history_entry: Dict) -> None:
         """
-        Callback function called after each function evaluation.
+        Callback function called after each function evaluation or generation.
         
         Args:
-            history_entry: Dictionary with evaluation, objective, and parameters
+            history_entry: Dictionary with 'evaluation' or 'generation', objective, and parameters
         """
-        evaluation = history_entry['evaluation']
+        step = history_entry.get('generation', history_entry.get('evaluation', 0))
+        label = 'Generation' if 'generation' in history_entry else 'Evaluation'
         obj_value = history_entry['objective']
         params = history_entry['parameters']
         
-        # Print evaluation progress
-        print(f"Evaluation {evaluation:3d}: Objective = {obj_value:.6e}", end="")
+        # Print progress
+        print(f"{label} {step:3d}: Objective = {obj_value:.6e}", end="")
         
         # Show parameter values if not too many
         if len(params) <= 3:
@@ -327,28 +328,32 @@ class SV0DTuner:
         self.history = self.optimizer.get_history()
         self.best_value, self.best_params = self.optimizer.get_best()
         
-        # For parallel differential_evolution, history tracking doesn't work properly
-        # Use the result object to get actual number of function evaluations
+        is_de = self.optimization_config['algorithm'] == 'differential_evolution'
+
         if result is not None:
-            n_evaluations = len(self.history) if self.history else getattr(result, 'nfev', 0)
-            
+            n_evaluations = getattr(result, 'nfev', len(self.history) if self.history else 0)
+            n_generations = getattr(result, 'nit', len(self.history) if self.history else 0)
+
             # If history is empty but we have result params, use them
             if not self.history and hasattr(result, 'x') and hasattr(result, 'fun'):
                 self.best_params = result.x
                 self.best_value = result.fun
                 if not interrupted:
-                    print(f"\nNote: Detailed history not available with parallel differential_evolution")
+                    print(f"\nNote: No optimization history available")
                     print(f"Final objective value: {self.best_value:.6e}")
         else:
             # Interrupted - use best from history
-            n_evaluations = len(self.history)
+            n_evaluations = len(self.history) if not is_de else 0
+            n_generations = len(self.history)
             if interrupted and self.best_value is not None:
                 print(f"Best objective value found: {self.best_value:.6e}")
-                print(f"Total evaluations completed: {n_evaluations}")
-        
+                if is_de:
+                    print(f"Total generations completed: {n_generations}")
+                else:
+                    print(f"Total evaluations completed: {n_evaluations}")
+
         # Calculate timing statistics
         avg_time_per_eval = total_time / n_evaluations if n_evaluations > 0 else 0
-        
         timing_info = {
             'total_time_seconds': total_time,
             'total_time_formatted': self._format_time(total_time),
@@ -356,13 +361,24 @@ class SV0DTuner:
             'avg_time_per_evaluation_seconds': avg_time_per_eval,
             'avg_time_per_evaluation_formatted': self._format_time(avg_time_per_eval)
         }
-        
+        if is_de:
+            avg_time_per_gen = total_time / n_generations if n_generations > 0 else 0
+            timing_info.update({
+                'n_generations': n_generations,
+                'avg_time_per_generation_seconds': avg_time_per_gen,
+                'avg_time_per_generation_formatted': self._format_time(avg_time_per_gen)
+            })
+
         # Print timing summary
         print(f"\n{'='*70}")
         print(f"TIMING SUMMARY")
         print(f"{'='*70}")
         print(f"Total optimization time: {timing_info['total_time_formatted']}")
+        if is_de:
+            print(f"Total generations: {n_generations}")
         print(f"Total function evaluations: {n_evaluations}")
+        if is_de:
+            print(f"Average time per generation: {timing_info['avg_time_per_generation_formatted']}")
         print(f"Average time per evaluation: {timing_info['avg_time_per_evaluation_formatted']}")
         print(f"{'='*70}")
         
@@ -370,9 +386,8 @@ class SV0DTuner:
         if self.best_params is None:
             if interrupted:
                 error_msg = (
-                    "Cannot process results: optimization was interrupted too early.\n"
-                    "When using parallel differential_evolution, history tracking is not available.\n"
-                    "Try interrupting later, or set 'parallel: false' in tuning.yaml for full history tracking."
+                    "Cannot process results: optimization was interrupted before any results were obtained.\n"
+                    "Try interrupting later to allow more progress."
                 )
             else:
                 error_msg = "Optimization failed: no best parameters found"

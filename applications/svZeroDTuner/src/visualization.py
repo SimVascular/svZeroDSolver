@@ -27,12 +27,15 @@ def plot_objective_history(
     if not history:
         return
     
-    evaluations = [h['evaluation'] for h in history]
+    # Support both 'evaluation' (Nelder-Mead, etc.) and 'generation' (parallel DE)
+    step_key = 'generation' if 'generation' in history[0] else 'evaluation'
+    steps = [h.get(step_key, i) for i, h in enumerate(history)]
     objectives = [h['objective'] for h in history]
+    xlabel = 'Generation' if step_key == 'generation' else 'Function evaluation'
     
     plt.figure(figsize=(10, 6))
-    plt.plot(evaluations, objectives, 'ko-', linewidth=2, markersize=6, label='Objective Value')
-    plt.xlabel('Function evaluation', fontsize=12)
+    plt.plot(steps, objectives, 'ko-', linewidth=2, markersize=6, label='Objective Value')
+    plt.xlabel(xlabel, fontsize=12)
     plt.ylabel('Objective Value', fontsize=12)
     plt.title('Optimization Convergence', fontsize=14, fontweight='bold')
     plt.grid(True, alpha=0.3)
@@ -40,12 +43,12 @@ def plot_objective_history(
     
     # Add best value annotation
     best_idx = np.argmin(objectives)
-    best_eval = evaluations[best_idx]
+    best_step = steps[best_idx]
     best_obj = objectives[best_idx]
-    plt.plot(best_eval, best_obj, 'ro', markersize=10, label=f'Best: {best_obj:.6e}')
+    plt.plot(best_step, best_obj, 'ro', markersize=10, label=f'Best: {best_obj:.6e}')
     plt.annotate(
         f'Best: {best_obj:.6e}',
-        xy=(best_eval, best_obj),
+        xy=(best_step, best_obj),
         xytext=(10, 10),
         textcoords='offset points',
         bbox=dict(boxstyle='round,pad=0.5', facecolor='yellow', alpha=0.7),
@@ -100,14 +103,17 @@ def plot_parameter_evolution(
     else:
         axes = axes.flatten()
     
-    evaluations = [h['evaluation'] for h in history]
+    # Support both 'evaluation' and 'generation' keys
+    step_key = 'generation' if 'generation' in history[0] else 'evaluation'
+    steps = [h.get(step_key, i) for i, h in enumerate(history)]
+    xlabel = 'Generation' if step_key == 'generation' else 'Function evaluation'
     
     for idx, param_name in enumerate(param_names):
         ax = axes[idx]
         param_values = [h['parameters'][param_name] for h in history]
         
-        ax.plot(evaluations, param_values, 'ko-', linewidth=2, markersize=6)
-        ax.set_xlabel('Function evaluation', fontsize=10)
+        ax.plot(steps, param_values, 'ko-', linewidth=2, markersize=6)
+        ax.set_xlabel(xlabel, fontsize=10)
         ax.set_ylabel(param_name, fontsize=10)
         ax.set_title(f'Parameter: {param_name}', fontsize=11, fontweight='bold')
         ax.grid(True, alpha=0.3)

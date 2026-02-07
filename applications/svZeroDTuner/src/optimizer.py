@@ -255,6 +255,36 @@ class OptimizerWrapper:
         
         return obj_value
     
+    def _callback_differential_evolution(
+        self,
+        intermediate_result: OptimizeResult,
+        param_names: List[str],
+        evaluation_callback: Optional[Callable]
+    ) -> None:
+        """
+        Callback for differential_evolution when running in parallel.
+        Runs in main process after each generation. Updates history with 'generation'
+        key and calls evaluation_callback to print progress.
+        
+        Args:
+            intermediate_result: OptimizeResult with .x (best params) and .fun (best objective)
+            param_names: Parameter names for history entry
+            evaluation_callback: Callback to invoke with history_entry (e.g. for printing)
+        """
+        x = np.asarray(intermediate_result.x)
+        fun = float(intermediate_result.fun)
+        history_entry = {
+            'generation': len(self.history),
+            'objective': fun,
+            'parameters': dict(zip(param_names, x.tolist()))
+        }
+        self.history.append(history_entry)
+        if self.best_value is None or fun < self.best_value:
+            self.best_value = fun
+            self.best_params = x.copy()
+        if evaluation_callback:
+            evaluation_callback(history_entry)
+    
     def optimize(
         self,
         objective_func: Callable,
@@ -287,25 +317,36 @@ class OptimizerWrapper:
         # Validate optimization inputs
         self._validate_optimization_inputs(bounds, x0, param_names)
         
+        # For DE parallel, wrapper runs in workers - skip evaluation_callback there;
+        # _callback_differential_evolution will call it in main process instead.
+        use_de_callback = self.algorithm == "differential_evolution" and self.parallel
+        wrapper_eval_cb = None if use_de_callback else evaluation_callback
+        
         # Create wrapped objective
         wrapped_obj = partial(
             self._objective_wrapper,
             objective_func=objective_func,
             param_names=param_names,
-            evaluation_callback=evaluation_callback
+            evaluation_callback=wrapper_eval_cb
         )
         
         # Convert bounds to scipy format
         scipy_bounds = bounds
         
         if self.algorithm == "differential_evolution":
+            de_kwargs = dict(self.algorithm_kwargs)
+            if self.parallel:
+                de_callback = lambda intermediate_result: self._callback_differential_evolution(
+                    intermediate_result, param_names, evaluation_callback
+                )
+                de_kwargs['callback'] = de_callback
             result = differential_evolution(
                 wrapped_obj,
                 bounds=scipy_bounds,
                 maxiter=self.max_iterations,
                 tol=self.tolerance,
                 workers=self.n_workers if self.parallel else 1,
-                **self.algorithm_kwargs
+                **de_kwargs
             )
         
         elif self.algorithm == "Nelder-Mead":

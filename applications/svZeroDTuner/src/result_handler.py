@@ -82,7 +82,7 @@ class ResultHandler:
         """
         if not self.save_history or not history:
             if not history:
-                print("Note: No optimization history to save (parallel mode may not track history)")
+                print("Note: No optimization history to save")
             return
         
         # Save history in optimization_history subfolder
@@ -122,11 +122,17 @@ class ResultHandler:
         os.makedirs(history_dir, exist_ok=True)
         filepath = os.path.join(history_dir, filename)
         
-        # Flatten history for CSV
+        # Parallel DE uses 'generation'; other algorithms use 'evaluation'
+        if 'generation' in history[0]:
+            step_key = 'generation'
+        else:
+            step_key = 'evaluation'
+
         rows = []
         for entry in history:
+            step = entry[step_key]
             row = {
-                'evaluation': entry['evaluation'],
+                step_key: step, 
                 'objective': entry['objective']
             }
             row.update(entry['parameters'])
@@ -208,7 +214,6 @@ class ResultHandler:
         history_dir = os.path.join(self.output_dir, 'optimization_history')
         os.makedirs(history_dir, exist_ok=True)
         
-        # Only plot history if available (may be empty with parallel differential_evolution)
         if history:
             # Plot objective history
             plot_objective_history(
@@ -224,7 +229,7 @@ class ResultHandler:
                     output_file=os.path.join(history_dir, 'parameter_evolution.png')
                 )
         else:
-            print("Note: Skipping history plots (not available with parallel differential_evolution)")
+            print("Note: Skipping history plots (no history available)")
         
         # Plot target comparison if available
         if targets and simulated_values:
@@ -311,7 +316,11 @@ class ResultHandler:
         print("\n" + "="*60)
         print("OPTIMIZATION SUMMARY")
         print("="*60)
-        print(f"Total function evaluations: {len(history)}")
+        if timing_info and 'n_generations' in timing_info:
+            print(f"Total generations: {timing_info['n_generations']}")
+            print(f"Total function evaluations: {timing_info['n_evaluations']}")
+        else:
+            print(f"Total function evaluations: {len(history)}")
         print(f"Best objective value: {best_value:.6e}")
         print(f"\nBest parameters:")
         for name, value in zip(param_names, best_params):

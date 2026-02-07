@@ -22,7 +22,7 @@ parameters:
     bounds: [1e6, 1e7]
 
   - name: "RV.Emax"
-    bounds: [1e7, 1e8]
+    bounds: [5e7, 5e8]
 
   - name: "LA.Epass"
     bounds: [5e6, 5e7]
@@ -40,13 +40,13 @@ parameters:
     bounds: [5e7, 5e8]
 
   - name: "AR_SYS.C"
-    bounds: [1e-9, 1e-8]
+    bounds: [5e-9, 5e-8]
 
   - name: "VEN_SYS.R_poiseuille"
-    bounds: [5e6, 5e7]
+    bounds: [1e6, 1e7]
 
   - name: "initial_condition.pressure:J0:VEN_SYS"
-    bounds: [5e2, 5e3]
+    bounds: [2e2, 2e3]
 
 
 # Target outputs
@@ -129,25 +129,28 @@ objective:
 
 # Optimization
 optimization:
-  # # Differential evolution specific options
-  # algorithm: "differential_evolution"
-  # max_iterations: 5   
-  # parallel: true
-  # n_workers: -1
-  # tolerance: 1e-9
-  # popsize: 5             
-  # init: 'sobol'           
-  # strategy: 'best2bin'    
-  # mutation: [0.5, 1]    
-  # recombination: 0.7      
-  # polish: false           
+  # Differential evolution specific options
+  # "To improve your chances of finding a global minimum use higher popsize values, 
+  # with higher mutation and (dithering), but lower recombination values. This 
+  # has the effect of widening the search radius, but slowing convergence.""
+  algorithm: "differential_evolution"
+  max_iterations: 250
+  parallel: true
+  n_workers: -1
+  tolerance: 1e-2
+  popsize: 20            
+  init: 'sobol'           
+  strategy: 'best1bin'    
+  mutation: [0.5, 1.5]    
+  recombination: 0.5      
+  polish: false           
 
-  # Nelder-Mead specific options
-  algorithm: "Nelder-Mead"
-  max_iterations: 30    
-  tolerance: 1e-6
-  parallel: false
-  adaptive: true            # Adaptive simplex
+  # # Nelder-Mead specific options
+  # algorithm: "Nelder-Mead"
+  # max_iters: 10000
+  # tolerance: 1e-6
+  # parallel: false
+  # adaptive: true            # Adaptive simplex
 
 # Output
 output:

@@ -267,6 +267,9 @@ class SV0DTuner:
         print(f"Targets: {[t['name'] for t in self.targets]}")
         print(f"Algorithm: {self.optimization_config['algorithm']}")
         print(f"Max iterations: {self.optimization_config['max_iterations']}")
+        if (self.optimization_config['algorithm'] == 'differential_evolution'
+                and self.optimization_config.get('parallel', False)):
+            print(f"Workers: {self.optimizer.n_workers}")
         print()
         
         # Prepare optimization inputs

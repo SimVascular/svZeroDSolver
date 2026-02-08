@@ -88,13 +88,56 @@ class ConfigHandler:
                 raise ValueError("Each target must have 'name'")
             if 'type' not in target:
                 raise ValueError(f"Target '{target['name']}' must have 'type'")
+            if 'uncertainty' in target:
+                unc = target['uncertainty']
+                if isinstance(unc, str) and unc.strip().endswith('%'):
+                    try:
+                        pct = float(unc.strip()[:-1])
+                        if pct < 0:
+                            raise ValueError(
+                                f"Target '{target['name']}' uncertainty percent must be non-negative"
+                            )
+                    except ValueError:
+                        raise ValueError(
+                            f"Target '{target['name']}' uncertainty '{unc}' must be a valid percent (e.g. '5%')"
+                        )
+                elif isinstance(unc, (int, float)):
+                    if unc < 0:
+                        raise ValueError(
+                            f"Target '{target['name']}' uncertainty percent must be non-negative"
+                        )
+                elif isinstance(unc, (list, tuple)):
+                    if len(unc) != 2:
+                        raise ValueError(
+                            f"Target '{target['name']}' uncertainty [min, max] must have 2 elements"
+                        )
+                    if unc[0] >= unc[1]:
+                        raise ValueError(
+                            f"Target '{target['name']}' uncertainty [min, max] must have min < max"
+                        )
+                else:
+                    raise ValueError(
+                        f"Target '{target['name']}' uncertainty must be percent (e.g. '5%') or [min, max]"
+                    )
             target_type = target['type']
             if target_type == 'time_series':
                 if 'target_file' not in target:
                     raise ValueError(f"Time series target '{target['name']}' must have 'target_file'")
             elif target_type in ['min', 'max', 'mean']:
-                if 'target_value' not in target:
-                    raise ValueError(f"Scalar target '{target['name']}' must have 'target_value'")
+                if 'target_value' not in target and 'target_range' not in target:
+                    raise ValueError(
+                        f"Scalar target '{target['name']}' must have 'target_value' or 'target_range'"
+                    )
+                if 'target_range' in target:
+                    r = target['target_range']
+                    if not isinstance(r, (list, tuple)) or len(r) != 2:
+                        raise ValueError(
+                            f"Target '{target['name']}' target_range must be [min, max]"
+                        )
+                    if r[0] >= r[1]:
+                        raise ValueError(
+                            f"Target '{target['name']}' target_range must have min < max"
+                        )
             else:
                 raise ValueError(f"Unknown target type: {target_type}")
         # Validate optimization section

@@ -3,8 +3,71 @@ Objective function for sv0D Tuning Framework.
 """
 
 import numpy as np
-from typing import Dict, List, Callable, Optional, Union
+from typing import Dict, List, Callable, Optional, Union, Tuple
 from scipy.interpolate import interp1d
+
+
+def _parse_percent(x) -> Optional[float]:
+    """Parse percent: 5, '5%' -> 0.05. Returns None if not a percent form."""
+    if x is None:
+        return None
+    if isinstance(x, (int, float)):
+        return float(x) / 100.0
+    if isinstance(x, str) and x.strip().endswith('%'):
+        try:
+            return float(x.strip()[:-1]) / 100.0
+        except ValueError:
+            return None
+    return None
+
+
+def _compute_range(target: Dict) -> Tuple[np.ndarray, np.ndarray]:
+    """
+    Convert user spec to (lo, hi) range. Internally we only keep range.
+    User can provide: single value, value+uncertainty (percent), or target_range [min,max].
+    """
+    if 'target_file' in target:
+        # Time series
+        t = np.asarray(target['target_values'])
+
+        # A target_range is provided
+        if 'target_range' in target:
+            lo_val, hi_val = float(target['target_range'][0]), float(target['target_range'][1])
+            return (np.full(len(t), lo_val), np.full(len(t), hi_val))
+
+        # An uncertainty percentage is provided
+        if 'uncertainty' in target:
+            unc = target['uncertainty']
+            pct = _parse_percent(unc)
+            if pct is not None:
+                return (t * (1.0 - pct), t * (1.0 + pct))
+            if isinstance(unc, (list, tuple)) and len(unc) == 2:
+                lo_val, hi_val = float(unc[0]), float(unc[1])
+                return (np.full(len(t), lo_val), np.full(len(t), hi_val))
+        
+        # No target_range or uncertainty, so point target
+        return (t.copy(), t.copy())  # point target
+    else:
+        # Scalar
+
+        # A target_range is provided
+        if 'target_range' in target:
+            lo_val, hi_val = float(target['target_range'][0]), float(target['target_range'][1])
+            return (np.array([lo_val]), np.array([hi_val]))
+        
+        v = float(target['target_value'])
+        
+        # An uncertainty percentage is provided
+        if 'uncertainty' in target:
+            unc = target['uncertainty']
+            pct = _parse_percent(unc)
+            if pct is not None:
+                return (np.array([v * (1.0 - pct)]), np.array([v * (1.0 + pct)]))
+            if isinstance(unc, (list, tuple)) and len(unc) == 2:
+                return (np.array([float(unc[0])]), np.array([float(unc[1])]))
+        
+        # No target_range or uncertainty, so point target
+        return (np.array([v]), np.array([v]))  
 
 
 def _interpolate_to_target_times(
@@ -26,30 +89,50 @@ def _interpolate_to_target_times(
     return interp_func(target_times)
 
 
-def _l2_error(
-    target_values: np.ndarray,
+def _l2_error_with_range(
     sim_values: np.ndarray,
+    lo: np.ndarray,
+    hi: np.ndarray,
     normalize: bool
 ) -> float:
     """
-    L2 error between target and simulated values. Works for both time series
-    (length N) and scalars (length 1).
+    L2 error between simulated values and target range [lo, hi]
+    - if in range, error is zero
+    - if below lo, error is L2(lo - sim_value)
+    - if above hi, error is L2(sim_value - hi)
+    For targets with no range (i.e. lo=hi) this reduces to L2 error between 
+    simulated values and target values. 
+
+    If normalize is True, the error is normalized by the midpoint of the range.
+    
+    Works for both time series (length N) and scalar targets (length 1).
     """
-    target_values = np.asarray(target_values)
     sim_values = np.asarray(sim_values)
-    error = float(np.linalg.norm(sim_values - target_values))
+    lo = np.asarray(lo)
+    hi = np.asarray(hi)
+    below = sim_values < lo
+    above = sim_values > hi
+    residual = np.zeros_like(sim_values)
+    residual[below] = lo[below] - sim_values[below]
+    residual[above] = sim_values[above] - hi[above]
+    error = float(np.linalg.norm(residual))
     if normalize:
-        norm = np.linalg.norm(target_values)
-        if norm > 1e-14:
-            return error / norm
+        norm = np.linalg.norm((lo + hi) / 2.0)
+        return error / norm if norm > 0 else error
+    else:
         return error
-    return error
 
 
 class ObjectiveFunction:
     """
     Objective function for optimization. Computes weighted error between
     simulated values and targets. Supports scalars and time series.
+
+    Internally each target is stored as a range [lo, hi]. User can specify:
+    - Single value (target_value or target_file): range = [v, v]
+    - Value + uncertainty percent: range = value * (1 ± pct)
+    - target_range [min, max] directly
+    Error is zero within the range; outside, penalty by distance from nearest bound.
     """
 
     def __init__(
@@ -72,7 +155,7 @@ class ObjectiveFunction:
         self._process_targets()
 
     def _process_targets(self):
-        """Process and validate target specifications."""
+        """Process targets: load data and compute range [lo, hi] for each."""
         for target in self.targets:
             if 'weight' not in target:
                 target['weight'] = 1.0
@@ -85,8 +168,11 @@ class ObjectiveFunction:
                 target['target_values'] = df['value'].values
             elif 'target_value' in target:
                 target['target_value'] = float(target['target_value'])
-            else:
-                raise ValueError(f"Target must have either 'target_file' or 'target_value': {target}")
+            elif 'target_range' not in target:
+                raise ValueError(f"Target must have 'target_file', 'target_value', or 'target_range': {target}")
+            lo, hi = _compute_range(target)
+            target['range_lo'] = lo
+            target['range_hi'] = hi
 
     def _get_simulated_value(
         self,
@@ -135,14 +221,15 @@ class ObjectiveFunction:
         if not np.all(np.isfinite(sim_interp)):
             return 1e10
 
-        return _l2_error(target_values, sim_interp, self.normalize)
+        return _l2_error_with_range(
+            sim_interp, target['range_lo'], target['range_hi'], self.normalize
+        )
 
     def _error_for_scalar(self, target: Dict, sim_value: np.ndarray) -> float:
         """Compute error for a scalar target (min, max, mean)."""
-        target_value = float(target['target_value'])
         sim_scalar = float(sim_value.item() if sim_value.size == 1 else sim_value.flat[0])
-        return _l2_error(
-            np.array([target_value]), np.array([sim_scalar]), self.normalize
+        return _l2_error_with_range(
+            np.array([sim_scalar]), target['range_lo'], target['range_hi'], self.normalize
         )
 
     def compute(self, simulated_values: Dict[str, Union[np.ndarray, float]]) -> float:
@@ -177,6 +264,7 @@ class ObjectiveFunction:
 def create_objective(targets: List[Dict], **kwargs) -> ObjectiveFunction:
     """
     Create objective function. Use normalize=True for relative error, False for L2.
+    Targets with 'uncertainty' (percent or [min,max]) or target_range use range-based penalty.
     """
     normalize = kwargs.pop('normalize', False)
     custom_function = kwargs.pop('custom_function', None)

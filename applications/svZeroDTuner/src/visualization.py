@@ -147,6 +147,14 @@ def _compute_percent_error(target_value: float, sim_value: float) -> Optional[fl
     return 100.0 * (sim_value - target_value) / target_value
 
 
+def _get_range_for_target(target: Dict):
+    """Get (lo, hi) for target. Returns None if not available."""
+    if 'range_lo' in target and 'range_hi' in target:
+        lo, hi = np.asarray(target['range_lo']), np.asarray(target['range_hi'])
+        return (lo, hi)
+    return None
+
+
 def plot_target_comparison(
     targets: List[Dict],
     simulated_values: Dict,
@@ -194,68 +202,82 @@ def plot_target_comparison(
             ax.text(0.5, 0.5, f'No data for {name}', 
                    ha='center', va='center', transform=ax.transAxes)
             ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
-            csv_rows.append({'name': name, 'type': target_type, 'target_value': '', 'simulated_value': '', 'percent_error': 'N/A'})
+            csv_rows.append({'name': name, 'type': target_type, 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
             continue
         
         sim_value = simulated_values[sim_key]
         
         if target_type == 'time_series':
-            # Plot time series comparison
-            if 'target_times' in target and 'target_values' in target:
-                target_times = np.array(target['target_times'])
-                target_values = np.array(target['target_values'])
-                sim_times = simulated_values.get(f'{name}_times', None)
-                sim_val_arr = np.asarray(sim_value)
-                
-                ax.plot(target_times, target_values, 'b-', linewidth=2, label='Target', alpha=0.7)
-                if sim_times is not None:
-                    ax.plot(sim_times, sim_value, 'r--', linewidth=2, label='Simulated', alpha=0.7)
-                else:
-                    ax.plot(range(len(sim_val_arr)), sim_val_arr, 'r--', linewidth=2, label='Simulated', alpha=0.7)
-                ax.set_xlabel('Time', fontsize=10)
-                ax.set_ylabel(name, fontsize=10)
-                
-                # Compute mean absolute percent error for time series
-                if len(target_times) > 0 and len(sim_val_arr) > 1:
-                    try:
-                        st = np.asarray(sim_times) if sim_times is not None else np.linspace(0, 1, len(sim_val_arr))
-                        interp_func = interp1d(
-                            st, sim_val_arr,
-                            kind='linear', bounds_error=False, fill_value='extrapolate'
-                        )
-                        sim_interp = interp_func(target_times)
-                        valid = np.isfinite(target_values) & (np.abs(target_values) > 1e-14)
-                        if np.any(valid):
-                            pct_errors = 100.0 * np.abs(sim_interp[valid] - target_values[valid]) / np.abs(target_values[valid])
-                            mape = np.mean(pct_errors)
-                            err_str = f'MAPE: {mape:.2f}%'
-                            target_mean = np.mean(target_values)
-                            sim_mean = np.mean(sim_interp)
-                            csv_rows.append({'name': name, 'type': 'time_series', 'target_value': target_mean, 'simulated_value': sim_mean, 'percent_error': mape})
-                        else:
-                            err_str = None
-                    except Exception:
+            # Plot time series: use only range info; target_values = pointwise (lo+hi)/2
+            rng = _get_range_for_target(target)
+            if rng is None or 'target_times' not in target:
+                ax.text(0.5, 0.5, f'No range data for {name}', ha='center', va='center', transform=ax.transAxes)
+                ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
+                csv_rows.append({'name': name, 'type': 'time_series', 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
+                continue
+            lo, hi = rng
+            target_times = np.array(target['target_times'])
+            target_values = (lo + hi) / 2.0  # pointwise midpoint
+            sim_times = simulated_values.get(f'{name}_times', None)
+            sim_val_arr = np.asarray(sim_value)
+            ax.fill_between(target_times, lo, hi, alpha=0.2, color='blue', label='Target range')
+            ax.plot(target_times, target_values, 'b-', linewidth=2, label='Target', alpha=0.7)
+            if sim_times is not None:
+                ax.plot(sim_times, sim_value, 'r--', linewidth=2, label='Simulated', alpha=0.7)
+            else:
+                ax.plot(range(len(sim_val_arr)), sim_val_arr, 'r--', linewidth=2, label='Simulated', alpha=0.7)
+            ax.set_xlabel('Time', fontsize=10)
+            ax.set_ylabel(name, fontsize=10)
+            # Compute MAPE and CSV row
+            if len(target_times) > 0 and len(sim_val_arr) > 1:
+                try:
+                    st = np.asarray(sim_times) if sim_times is not None else np.linspace(0, 1, len(sim_val_arr))
+                    interp_func = interp1d(
+                        st, sim_val_arr,
+                        kind='linear', bounds_error=False, fill_value='extrapolate'
+                    )
+                    sim_interp = interp_func(target_times)
+                    valid = np.isfinite(target_values) & (np.abs(target_values) > 1e-14)
+                    if np.any(valid):
+                        pct_errors = 100.0 * np.abs(sim_interp[valid] - target_values[valid]) / np.abs(target_values[valid])
+                        mape = np.mean(pct_errors)
+                        err_str = f'MAPE: {mape:.2f}%'
+                        sim_mean = np.mean(sim_interp)
+                        target_mean = float(np.mean(target_values))
+                        range_str = f"[{np.min(lo):.6e}, {np.max(hi):.6e}]"
+                        csv_rows.append({'name': name, 'type': 'time_series', 'target_value': target_mean, 'simulated_value': sim_mean, 'target_range': range_str, 'percent_error': mape})
+                    else:
                         err_str = None
-                else:
+                except Exception:
                     err_str = None
-                if err_str is None and len(target_times) > 0 and len(sim_val_arr) > 0:
-                    csv_rows.append({'name': name, 'type': 'time_series', 'target_value': np.mean(target_values), 'simulated_value': np.mean(sim_val_arr), 'percent_error': 'N/A'})
             else:
                 err_str = None
+            if err_str is None and len(target_times) > 0 and len(sim_val_arr) > 0:
+                target_mean = float(np.mean(target_values))
+                range_str = f"[{np.min(lo):.6e}, {np.max(hi):.6e}]"
+                csv_rows.append({'name': name, 'type': 'time_series', 'target_value': target_mean, 'simulated_value': np.mean(sim_val_arr), 'target_range': range_str, 'percent_error': 'N/A'})
         else:
-            # Plot scalar comparison
-            target_value = float(target.get('target_value', 0.0))
+            # Plot scalar: use only range info; target_value = (lo+hi)/2, error bar shows range
+            rng = _get_range_for_target(target)
+            if rng is None:
+                ax.text(0.5, 0.5, f'No range data for {name}', ha='center', va='center', transform=ax.transAxes)
+                ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
+                csv_rows.append({'name': name, 'type': target_type, 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
+                continue
+            lo, hi = float(rng[0].flat[0]), float(rng[1].flat[0])
+            target_value = (lo + hi) / 2.0
+            range_str = f"[{lo:.6e}, {hi:.6e}]"
             if isinstance(sim_value, np.ndarray):
                 sim_scalar = float(sim_value.item() if sim_value.size == 1 else sim_value[0])
             else:
                 sim_scalar = float(sim_value)
-            ax.bar(['Target', 'Simulated'], [target_value, sim_scalar], 
-                  color=['blue', 'red'], alpha=0.7)
+            ax.bar(['Target', 'Simulated'], [target_value, sim_scalar], color=['blue', 'red'], alpha=0.7,
+                   yerr=[[target_value - lo, 0], [hi - target_value, 0]], capsize=5)
             ax.set_ylabel('Value', fontsize=10)
             ax.grid(True, alpha=0.3)
             pct_err = _compute_percent_error(target_value, sim_scalar)
             err_str = f'Error: {pct_err:.2f}%' if pct_err is not None else None
-            csv_rows.append({'name': name, 'type': target_type, 'target_value': target_value, 'simulated_value': sim_scalar, 'percent_error': pct_err if pct_err is not None else 'N/A'})
+            csv_rows.append({'name': name, 'type': target_type, 'target_value': target_value, 'simulated_value': sim_scalar, 'target_range': range_str, 'percent_error': pct_err if pct_err is not None else 'N/A'})
             ax.set_title(f'{name} ({target_type})', fontsize=11, fontweight='bold')
             if err_str:
                 ax.text(0.98, 0.95, err_str, transform=ax.transAxes, fontsize=10,

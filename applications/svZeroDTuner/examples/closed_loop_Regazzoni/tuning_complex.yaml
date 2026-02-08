@@ -56,70 +56,85 @@ targets:
   - name: "Vc:LV"
     type: "max"
     target_value: 116.0e-6  # m^3
+    uncertainty: 10%
     weight: 1.0
   - name: "Vc:LV"
     type: "min"
     target_value: 38.6e-6  # m^3
+    uncertainty: 10%
     weight: 1.0
     
   - name: "Vc:RV"
     type: "max"
     target_value: 171.0e-6  # m^3
+    uncertainty: 10%
     weight: 1.0
   - name: "Vc:RV"
     type: "min"
     target_value: 82.0e-6  # m^3
+    uncertainty: 10%
     weight: 1.0
 
   - name: "Vc:LA"
     type: "max"
     target_value: 72.7e-6  # m^3
+    uncertainty: 10%
     weight: 1.0
   - name: "Vc:LA"
     type: "min"
     target_value: 38.2e-6  # m^3
+    uncertainty: 10%
     weight: 1.0
 
   - name: "Vc:RA"
     type: "max"
     target_value: 107.9e-6  # m^3
+    uncertainty: 10%
     weight: 1.0
   - name: "Vc:RA"
     type: "min"
     target_value: 56.0e-6  # m^3
+    uncertainty: 10%
     weight: 1.0
 
   - name: "pressure:AV:AR_SYS"
     type: "max"
     target_value: 13065  # Pa (98.0 mmHg)
+    uncertainty: 10%
     weight: 1.0
   - name: "pressure:AV:AR_SYS"
     type: "min"
     target_value: 7066  # Pa (53.0 mmHg)
+    uncertainty: 10%
     weight: 1.0
 
   - name: "pressure:PV:AR_PUL"
     type: "max"
     target_value: 2666  # Pa (20.0 mmHg)
+    uncertainty: 20%
     weight: 1.0
   - name: "pressure:PV:AR_PUL"
     type: "min"
     target_value: 1533  # Pa (11.5 mmHg)
+    uncertainty: 20%
     weight: 1.0
 
   - name: "pressure:J0:VEN_SYS"
     type: "mean"
     target_value: 800  # Pa (6.0 mmHg)
+    uncertainty: 20%
     weight: 1.0
 
   - name: "pressure:J1:RA"
     type: "mean"
     target_value: 533  # Pa (4.0 mmHg)
+    uncertainty: 20%
     weight: 1.0
   
   - name: "pressure:J3:LA"
     type: "mean"
     target_value: 933  # Pa (7.0 mmHg)
+    uncertainty: 20%
     weight: 1.0
 
 # Objective function
@@ -132,24 +147,24 @@ optimization:
   # "To improve your chances of finding a global minimum use higher popsize values, 
   # with higher mutation and (dithering), but lower recombination values. This 
   # has the effect of widening the search radius, but slowing convergence.""
-  algorithm: "differential_evolution"
-  max_iterations: 250
-  parallel: true
-  n_workers: -1
-  tolerance: 1e-2
-  popsize: 20            
-  init: 'sobol'           
-  strategy: 'best1bin'    
-  mutation: [0.5, 1.5]    
-  recombination: 0.5      
-  polish: true           
+  # algorithm: "differential_evolution"
+  # max_iterations: 250
+  # parallel: true
+  # n_workers: -1
+  # tolerance: 1e-2
+  # popsize: 20            
+  # init: 'sobol'           
+  # strategy: 'best1bin'    
+  # mutation: [0.5, 1.5]    
+  # recombination: 0.5      
+  # polish: true           
 
-  # # Nelder-Mead specific options
-  # algorithm: "Nelder-Mead"
-  # max_iters: 10000
-  # tolerance: 1e-6
-  # parallel: false
-  # adaptive: true            # Adaptive simplex
+  # Nelder-Mead specific options
+  algorithm: "Nelder-Mead"
+  max_iterations: 10000
+  tolerance: 1e-6
+  parallel: false
+  adaptive: true            # Adaptive simplex
 
 # Output
 output:

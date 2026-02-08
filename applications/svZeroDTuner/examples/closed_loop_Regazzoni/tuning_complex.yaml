@@ -124,7 +124,6 @@ targets:
 
 # Objective function
 objective:
-  type: "weighted_l2"
   normalize: true  # Normalize errors by target values for better scaling
 
 # Optimization

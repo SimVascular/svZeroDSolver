@@ -88,7 +88,6 @@ class ConfigHandler:
                 raise ValueError("Each target must have 'name'")
             if 'type' not in target:
                 raise ValueError(f"Target '{target['name']}' must have 'type'")
-            
             target_type = target['type']
             if target_type == 'time_series':
                 if 'target_file' not in target:
@@ -98,7 +97,6 @@ class ConfigHandler:
                     raise ValueError(f"Scalar target '{target['name']}' must have 'target_value'")
             else:
                 raise ValueError(f"Unknown target type: {target_type}")
-        
         # Validate optimization section
         if 'algorithm' not in self.config['optimization']:
             raise ValueError("optimization.algorithm is required")
@@ -117,7 +115,7 @@ class ConfigHandler:
     
     def get_objective_config(self) -> Dict:
         """Get objective function configuration."""
-        return self.config.get('objective', {'type': 'weighted_l2', 'normalize': False})
+        return self.config.get('objective', {'normalize': False})
     
     def get_optimization_config(self) -> Dict:
         """Get optimization configuration."""

@@ -60,7 +60,6 @@ class SV0DTuner:
         
         # Create objective function
         self.objective_func = create_objective(
-            objective_type=self.objective_config.get('type', 'weighted_l2'),
             targets=self.targets,
             normalize=self.objective_config.get('normalize', False),
             custom_function=self.objective_config.get('custom_function')
@@ -246,7 +245,7 @@ class SV0DTuner:
             simulated_values = self._get_simulated_values(param_values)
             
             # Compute objective
-            obj_value = self.objective_func.compute_error(simulated_values)
+            obj_value = self.objective_func.compute(simulated_values)
             
             return obj_value
         
@@ -470,7 +469,7 @@ class SV0DTuner:
         simulated_values = self._get_simulated_values(current_values)
         
         # Compute objective
-        obj_value = self.objective_func.compute_error(simulated_values)
+        obj_value = self.objective_func.compute(simulated_values)
         
         return {
             'objective_value': obj_value,

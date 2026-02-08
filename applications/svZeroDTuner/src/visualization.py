@@ -28,15 +28,12 @@ def plot_objective_history(
     if not history:
         return
     
-    # Support both 'evaluation' (Nelder-Mead, etc.) and 'generation' (parallel DE)
-    step_key = 'generation' if 'generation' in history[0] else 'evaluation'
-    steps = [h.get(step_key, i) for i, h in enumerate(history)]
+    steps = [h.get('iteration', i) for i, h in enumerate(history)]
     objectives = [h['objective'] for h in history]
-    xlabel = 'Generation' if step_key == 'generation' else 'Function evaluation'
     
     plt.figure(figsize=(10, 6))
     plt.plot(steps, objectives, 'ko-', linewidth=2, markersize=6, label='Objective Value')
-    plt.xlabel(xlabel, fontsize=12)
+    plt.xlabel('Iteration', fontsize=12)
     plt.ylabel('Objective Value', fontsize=12)
     plt.title('Optimization Convergence', fontsize=14, fontweight='bold')
     plt.grid(True, alpha=0.3)
@@ -104,17 +101,14 @@ def plot_parameter_evolution(
     else:
         axes = axes.flatten()
     
-    # Support both 'evaluation' and 'generation' keys
-    step_key = 'generation' if 'generation' in history[0] else 'evaluation'
-    steps = [h.get(step_key, i) for i, h in enumerate(history)]
-    xlabel = 'Generation' if step_key == 'generation' else 'Function evaluation'
+    steps = [h.get('iteration', i) for i, h in enumerate(history)]
     
     for idx, param_name in enumerate(param_names):
         ax = axes[idx]
         param_values = [h['parameters'][param_name] for h in history]
         
         ax.plot(steps, param_values, 'ko-', linewidth=2, markersize=6)
-        ax.set_xlabel(xlabel, fontsize=10)
+        ax.set_xlabel('Iteration', fontsize=10)
         ax.set_ylabel(param_name, fontsize=10)
         ax.set_title(f'Parameter: {param_name}', fontsize=11, fontweight='bold')
         ax.grid(True, alpha=0.3)

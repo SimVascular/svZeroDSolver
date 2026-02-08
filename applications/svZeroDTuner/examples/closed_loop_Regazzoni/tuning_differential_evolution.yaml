@@ -45,6 +45,7 @@ objective:
 
 # Optimization - use scipy differential_evolution options (maxiter, tol, workers, popsize, etc.)
 optimization:
+  terminate_at_zero: true # Stop when objective hits zero (default: true). Set false to run full maxiter.
   algorithm: "differential_evolution"
   maxiter: 30
   tol: 1e-9

@@ -122,17 +122,11 @@ class ResultHandler:
         os.makedirs(history_dir, exist_ok=True)
         filepath = os.path.join(history_dir, filename)
         
-        # Parallel DE uses 'generation'; other algorithms use 'evaluation'
-        if 'generation' in history[0]:
-            step_key = 'generation'
-        else:
-            step_key = 'evaluation'
-
         rows = []
         for entry in history:
-            step = entry[step_key]
+            step = entry.get('iteration', len(rows))
             row = {
-                step_key: step, 
+                'iteration': step, 
                 'objective': entry['objective']
             }
             row.update(entry['parameters'])
@@ -316,9 +310,10 @@ class ResultHandler:
         print("\n" + "="*60)
         print("OPTIMIZATION SUMMARY")
         print("="*60)
-        if timing_info and 'n_generations' in timing_info:
-            print(f"Total generations: {timing_info['n_generations']}")
-            print(f"Total function evaluations: {timing_info['n_evaluations']}")
+        if timing_info and 'n_iterations' in timing_info:
+            print(f"Total iterations: {timing_info['n_iterations']}")
+            n_ev = timing_info.get('n_evaluations')
+            print(f"Total function evaluations: {n_ev if n_ev is not None else 'not available (interrupted)'}")
         else:
             print(f"Total function evaluations: {len(history)}")
         print(f"Best objective value: {best_value:.6e}")

@@ -18,7 +18,7 @@ from .simulation import run_simulation
 from .objective import create_objective, ObjectiveFunction
 from .optimizer import OptimizerWrapper
 from .config_handler import ConfigHandler
-from .result_handler import ResultHandler, _check_params_near_bounds
+from .result_handler import ResultHandler
 
 
 class SV0DTuner:
@@ -204,33 +204,6 @@ class SV0DTuner:
         
         return simulated_values
     
-    def _evaluation_callback(self, history_entry: Dict) -> None:
-        """
-        Callback function called after each function evaluation or generation.
-        
-        Args:
-            history_entry: Dictionary with 'evaluation' or 'generation', objective, and parameters
-        """
-        step = history_entry.get('generation', history_entry.get('evaluation', 0))
-        label = 'Generation' if 'generation' in history_entry else 'Evaluation'
-        obj_value = history_entry['objective']
-        params = history_entry['parameters']
-        
-        # Print progress
-        print(f"{label} {step:3d}: Objective = {obj_value:.6e}", end="")
-        
-        # Show parameter values if not too many
-        if len(params) <= 3:
-            param_str = ", ".join([f"{name}={val:.3e}" for name, val in params.items()])
-            print(f" | {param_str}")
-        else:
-            print()
-        
-        # Warn if any parameter is close to its bounds
-        near_bounds = _check_params_near_bounds(params, self.parameters)
-        for name, value, bound_type, bound_value in near_bounds:
-            print(f"  WARNING: {name}={value:.3e} is near {bound_type} bound ({bound_value:.3e})")
-    
     def _objective_function(self, param_values: np.ndarray) -> float:
         """
         Objective function wrapper for optimization.
@@ -283,7 +256,7 @@ class SV0DTuner:
         # Start timing
         start_time = time.time()
         
-        # Run optimization with progress callback, allow graceful interruption
+        # Run optimization, allow graceful interruption
         interrupted = False
         result = None
         try:
@@ -292,7 +265,7 @@ class SV0DTuner:
                 param_names=param_names,
                 bounds=bounds,
                 x0=x0,
-                evaluation_callback=self._evaluation_callback
+                parameters=self.parameters
             )
         except KeyboardInterrupt:
             interrupted = True
@@ -336,7 +309,7 @@ class SV0DTuner:
 
         if result is not None:
             n_evaluations = getattr(result, 'nfev', len(self.history) if self.history else 0)
-            n_generations = getattr(result, 'nit', len(self.history) if self.history else 0)
+            n_iterations = getattr(result, 'nit', len(self.history) if self.history else 0)
 
             # If history is empty but we have result params, use them
             if not self.history and hasattr(result, 'x') and hasattr(result, 'fun'):
@@ -346,18 +319,15 @@ class SV0DTuner:
                     print(f"\nNote: No optimization history available")
                     print(f"Final objective value: {self.best_value:.6e}")
         else:
-            # Interrupted - use best from history
-            n_evaluations = len(self.history) if not is_de else 0
-            n_generations = len(self.history)
+            # Interrupted - use best from history; nfev unknown
+            n_evaluations = None  # not available when interrupted
+            n_iterations = len(self.history)
             if interrupted and self.best_value is not None:
                 print(f"Best objective value found: {self.best_value:.6e}")
-                if is_de:
-                    print(f"Total generations completed: {n_generations}")
-                else:
-                    print(f"Total evaluations completed: {n_evaluations}")
+                print(f"Total iterations completed: {n_iterations}")
 
         # Calculate timing statistics
-        avg_time_per_eval = total_time / n_evaluations if n_evaluations > 0 else 0
+        avg_time_per_eval = total_time / n_evaluations if n_evaluations and n_evaluations > 0 else 0
         timing_info = {
             'total_time_seconds': total_time,
             'total_time_formatted': self._format_time(total_time),
@@ -365,25 +335,25 @@ class SV0DTuner:
             'avg_time_per_evaluation_seconds': avg_time_per_eval,
             'avg_time_per_evaluation_formatted': self._format_time(avg_time_per_eval)
         }
-        if is_de:
-            avg_time_per_gen = total_time / n_generations if n_generations > 0 else 0
-            timing_info.update({
-                'n_generations': n_generations,
-                'avg_time_per_generation_seconds': avg_time_per_gen,
-                'avg_time_per_generation_formatted': self._format_time(avg_time_per_gen)
-            })
+        avg_time_per_iter = total_time / n_iterations if n_iterations > 0 else 0
+        timing_info.update({
+            'n_iterations': n_iterations,
+            'avg_time_per_iteration_seconds': avg_time_per_iter,
+            'avg_time_per_iteration_formatted': self._format_time(avg_time_per_iter)
+        })
 
         # Print timing summary
         print(f"\n{'='*70}")
         print(f"TIMING SUMMARY")
         print(f"{'='*70}")
         print(f"Total optimization time: {timing_info['total_time_formatted']}")
-        if is_de:
-            print(f"Total generations: {n_generations}")
-        print(f"Total function evaluations: {n_evaluations}")
-        if is_de:
-            print(f"Average time per generation: {timing_info['avg_time_per_generation_formatted']}")
-        print(f"Average time per evaluation: {timing_info['avg_time_per_evaluation_formatted']}")
+        print(f"Total iterations: {n_iterations}")
+        print(f"Total function evaluations: {n_evaluations if n_evaluations is not None else 'not available (interrupted)'}")
+        print(f"Average time per iteration: {timing_info['avg_time_per_iteration_formatted']}")
+        if n_evaluations is not None:
+            print(f"Average time per evaluation: {timing_info['avg_time_per_evaluation_formatted']}")
+        else:
+            print(f"Average time per evaluation: not available (interrupted)")
         print(f"{'='*70}")
         
         # Check if optimization succeeded

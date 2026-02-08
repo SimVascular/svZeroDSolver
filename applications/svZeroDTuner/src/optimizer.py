@@ -7,7 +7,43 @@ Supports scipy optimizers and parallelization.
 import numpy as np
 from typing import Callable, List, Tuple, Dict, Optional, Any
 from scipy.optimize import minimize, differential_evolution, OptimizeResult
-from functools import partial
+
+
+# Small tolerance for "objective hits zero" (floating-point safety)
+_OBJECTIVE_ZERO_TOL = 1e-12
+
+# Tolerance for "close to bound" warning: within this fraction of the range from a bound
+_BOUND_TOLERANCE = 0.01
+
+
+def _check_params_near_bounds(
+    params: Dict[str, float], parameters: List[Dict]
+) -> List[tuple]:
+    """Return (name, value, bound_type, bound_value) for params near bounds."""
+    near_bounds = []
+    for p in parameters:
+        name = p['name']
+        if name not in params:
+            continue
+        bounds = p.get('bounds')
+        if not bounds or len(bounds) != 2:
+            continue
+        lower, upper = float(bounds[0]), float(bounds[1])
+        value = float(params[name])
+        range_val = upper - lower
+        if range_val <= 0:
+            continue
+        tol = _BOUND_TOLERANCE * range_val
+        if value <= lower + tol:
+            near_bounds.append((name, value, 'min', lower))
+        elif value >= upper - tol:
+            near_bounds.append((name, value, 'max', upper))
+    return near_bounds
+
+
+class ObjectiveReachedZero(Exception):
+    """Raised when optimization terminates because objective reached zero (Nelder-Mead)."""
+    pass
 
 
 def _coerce_numeric_options(options: Dict) -> Dict:
@@ -43,12 +79,12 @@ class OptimizerWrapper:
                        Use scipy's exact parameter names. Invalid options will raise from scipy.
         """
         self.algorithm = str(algorithm)
-        self.options = options
+        self.options = dict(options)
+        self.terminate_at_zero = self.options.pop('terminate_at_zero', True)
         self._validate_config()
         self.history = []
         self.best_value = None
         self.best_params = None
-        self.bounds = None
     
     def _validate_config(self):
         if self.algorithm not in self.SUPPORTED_ALGORITHMS:
@@ -56,8 +92,6 @@ class OptimizerWrapper:
                 f"Algorithm '{self.algorithm}' is not supported. "
                 f"Supported: {', '.join(sorted(self.SUPPORTED_ALGORITHMS))}"
             )
-        if self.algorithm == 'Nelder-Mead':
-            print("Note: Nelder-Mead does not natively support bounds; enforcing via penalty.")
     
     def _validate_optimization_inputs(
         self,
@@ -109,109 +143,72 @@ class OptimizerWrapper:
                         f"Please update the model configuration or tuning bounds."
                     )
     
-    def _objective_wrapper(
-        self,
-        params: np.ndarray,
-        objective_func: Callable,
-        param_names: List[str],
-        evaluation_callback: Optional[Callable] = None
-    ) -> float:
-        """
-        Wrapper for objective function that tracks history and enforces bounds.
-        
-        Args:
-            params: Parameter values
-            objective_func: Objective function to call
-            param_names: Names of parameters
-            evaluation_callback: Optional callback function for each function evaluation
-            
-        Returns:
-            Objective function value (always a float)
-        """
-        # Check bounds for algorithms that don't natively support them
-        if self.bounds is not None:
-            out_of_bounds = False
-            for i, (param, (lower, upper)) in enumerate(zip(params, self.bounds)):
-                if param < lower or param > upper:
-                    out_of_bounds = True
-                    break
-            
-            if out_of_bounds:
-                # Return large penalty value for out-of-bounds parameters
-                return 1e10
-        
-        obj_value = objective_func(params)
-        
-        # Ensure obj_value is a float (not numpy scalar or array)
-        obj_value = float(obj_value)
-        
-        # Track history
-        history_entry = {
-            'evaluation': len(self.history),
-            'objective': obj_value,
-            'parameters': dict(zip(param_names, params.tolist()))  # Convert to list for JSON serialization
-        }
-        self.history.append(history_entry)
-        
-        # Update best
-        if self.best_value is None or obj_value < self.best_value:
-            self.best_value = obj_value
-            self.best_params = params.copy()
-        
-        # Call evaluation callback if provided
-        if evaluation_callback:
-            evaluation_callback(history_entry)
-        
-        return obj_value
-    
-    def _callback_differential_evolution(
+    def master_callback(
         self,
         intermediate_result: OptimizeResult,
         param_names: List[str],
-        evaluation_callback: Optional[Callable]
-    ) -> None:
+        parameters: Optional[List[Dict]] = None,
+    ) -> Optional[bool]:
         """
-        Callback for differential_evolution when running in parallel.
-        Runs in main process after each generation. Updates history with 'generation'
-        key and calls evaluation_callback to print progress.
-        
-        Args:
-            intermediate_result: OptimizeResult with .x (best params) and .fun (best objective)
-            param_names: Parameter names for history entry
-            evaluation_callback: Callback to invoke with history_entry (e.g. for printing)
+        Callback function for optimization algorithms. Update history, best, print progress, warn near bounds.
+        Checks if objective reached zero and stops optimization if necessary (returns True for DE, or raises ObjectiveReachedZero for NM, otherwise None).
         """
+        # Extract parameters and objective value from OptimizeResult
         x = np.asarray(intermediate_result.x)
         fun = float(intermediate_result.fun)
+        params_dict = dict(zip(param_names, x.tolist()))
+        
+        # Update history and best parameters
         history_entry = {
-            'generation': len(self.history),
+            'iteration': len(self.history),
             'objective': fun,
-            'parameters': dict(zip(param_names, x.tolist()))
+            'parameters': params_dict,
         }
         self.history.append(history_entry)
         if self.best_value is None or fun < self.best_value:
             self.best_value = fun
             self.best_params = x.copy()
-        if evaluation_callback:
-            evaluation_callback(history_entry)
-    
+
+        # Print progress
+        step = len(self.history) - 1
+        print(f"Iteration {step:3d}: Objective = {fun:.6e}", end="")
+        if len(params_dict) <= 3:
+            param_str = ", ".join([f"{name}={val:.3e}" for name, val in params_dict.items()])
+            print(f" | {param_str}")
+        else:
+            print()
+
+        # Warn if any parameter is close to its bounds
+        if parameters:
+            for name, value, bound_type, bound_value in _check_params_near_bounds(params_dict, parameters):
+                print(f"  WARNING: {name}={value:.3e} is near {bound_type} bound ({bound_value:.3e})")
+
+        # If terminating optimization at zero objective, return True for DE, raise ObjectiveReachedZero for NM, otherwise None.
+        if self.terminate_at_zero and fun <= _OBJECTIVE_ZERO_TOL:
+            if self.algorithm == "differential_evolution":
+                return True
+            raise ObjectiveReachedZero("Objective reached zero; stopping optimization")
+        return None
+
     def optimize(
         self,
         objective_func: Callable,
         param_names: List[str],
         bounds: List[Tuple[float, float]],
         x0: Optional[np.ndarray] = None,
-        evaluation_callback: Optional[Callable] = None
+        parameters: Optional[List[Dict]] = None,
     ) -> OptimizeResult:
         """
         Run optimization.
-        
+
         Args:
             objective_func: Objective function that takes parameter array and returns scalar
             param_names: List of parameter names
             bounds: List of (min, max) tuples for each parameter
             x0: Initial guess (optional, required for some algorithms)
-            evaluation_callback: Optional callback function for each function evaluation
-            
+            parameters: Optional list of param dicts with 'name' and 'bounds'
+                (used for near-bounds warnings)
+
         Returns:
             Optimization result from scipy.optimize
         """
@@ -219,55 +216,37 @@ class OptimizerWrapper:
         self.history = []
         self.best_value = None
         self.best_params = None
-        
-        # Store bounds for enforcement in objective wrapper
-        self.bounds = bounds
-        
-        # Validate optimization inputs
         self._validate_optimization_inputs(bounds, x0, param_names)
-        
-        # For DE with workers>1, our callback runs in main process; skip per-eval callback in wrapper
-        opts = dict(self.options)
-        use_de_callback = self.algorithm == "differential_evolution" and opts.get('workers', 1) not in (0, 1)
-        wrapper_eval_cb = None if use_de_callback else evaluation_callback
-        
-        # Create wrapped objective
-        wrapped_obj = partial(
-            self._objective_wrapper,
-            objective_func=objective_func,
-            param_names=param_names,
-            evaluation_callback=wrapper_eval_cb
-        )
-        
-        # Convert bounds to scipy format
-        scipy_bounds = bounds
-        
+
+        # Ensure numeric optimization options are numeric types.
+        opts = _coerce_numeric_options(self.options)
+
+        # Callback function for optimization algorithms. Must have signature callback(intermediate_result: OptimizeResult).
+        def callback(intermediate_result: OptimizeResult):
+            return self.master_callback(intermediate_result, param_names, parameters)
+
+        # Optimization algorithm options
         if self.algorithm == "differential_evolution":
-            de_opts = _coerce_numeric_options(self.options)
-            if use_de_callback:
-                user_cb = de_opts.pop('callback', None)
-                def combined_cb(intermediate_result):
-                    self._callback_differential_evolution(intermediate_result, param_names, evaluation_callback)
-                    if user_cb:
-                        user_cb(intermediate_result)
-                de_opts['callback'] = combined_cb
-            result = differential_evolution(
-                wrapped_obj,
-                bounds=scipy_bounds,
-                **de_opts
-            )
-        
+            opts['callback'] = callback
+            result = differential_evolution(objective_func, bounds=bounds, **opts)
+
         elif self.algorithm == "Nelder-Mead":
+            # If no initial guess is provided, use center of bounds as initial guess.
             if x0 is None:
-                # Use center of bounds as initial guess
                 x0 = np.array([(b[0] + b[1]) / 2 for b in bounds])
-            nm_opts = _coerce_numeric_options(self.options)
-            result = minimize(
-                wrapped_obj,
-                x0=x0,
-                method='Nelder-Mead',
-                options=nm_opts
-            )
+            try:
+                result = minimize(
+                    objective_func, x0=x0, method='Nelder-Mead',
+                    bounds=bounds, options=opts, callback=callback
+                )
+            except ObjectiveReachedZero:
+                result = OptimizeResult(
+                    x=self.best_params,
+                    success=True,
+                    fun=self.best_value,
+                    message="Optimization terminated: objective reached zero",
+                    nfev=len(self.history),
+                )
         
         return result
     

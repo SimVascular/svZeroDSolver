@@ -143,6 +143,7 @@ objective:
 
 # Optimization - use scipy's exact parameter names
 optimization:
+  terminate_at_zero: true  # Stop when objective hits zero (default: true). Set false to run full maxiter.
   # Differential evolution specific options
   # "To improve your chances of finding a global minimum use higher popsize values, 
   # with higher mutation and (dithering), but lower recombination values. This 

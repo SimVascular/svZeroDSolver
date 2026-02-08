@@ -45,6 +45,7 @@ objective:
 
 # Optimization - use scipy Nelder-Mead options (maxiter, xatol, fatol, adaptive, etc.)
 optimization:
+  terminate_at_zero: true # Stop when objective hits zero (default: true). Set false to run full maxiter.
   algorithm: "Nelder-Mead"
   maxiter: 30
   xatol: 1e-6

@@ -161,17 +161,8 @@ class ConfigHandler:
         return self.config.get('objective', {'normalize': False})
     
     def get_optimization_config(self) -> Dict:
-        """Get optimization configuration."""
-        opt_config = self.config['optimization']
-        return {
-            'algorithm': opt_config.get('algorithm', 'differential_evolution'),
-            'max_iterations': opt_config.get('max_iterations', 100),
-            'tolerance': opt_config.get('tolerance', 1e-6),
-            'parallel': opt_config.get('parallel', False),
-            'n_workers': opt_config.get('n_workers', -1),
-            **{k: v for k, v in opt_config.items() 
-               if k not in ['algorithm', 'max_iterations', 'tolerance', 'parallel', 'n_workers']}
-        }
+        """Get optimization config. Passed directly to optimizer"""
+        return dict(self.config['optimization'])
     
     def get_output_config(self) -> Dict:
         """Get output configuration."""

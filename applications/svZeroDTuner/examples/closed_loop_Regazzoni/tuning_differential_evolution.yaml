@@ -43,20 +43,18 @@ targets:
 objective:
   normalize: true  # Normalize errors by target values for better scaling
 
-# Optimization
+# Optimization - use scipy differential_evolution options (maxiter, tol, workers, popsize, etc.)
 optimization:
   algorithm: "differential_evolution"
-  max_iterations: 30    
-  parallel: true
-  n_workers: -1
-  tolerance: 1e-9
-  
-  # Differential evolution specific options
-  popsize: 5             
-  init: 'sobol'           
-  strategy: 'best2bin'    
-  mutation: [0.5, 1]    
-  recombination: 0.7      
+  maxiter: 30
+  tol: 1e-9
+  workers: -1
+  updating: 'deferred'
+  popsize: 5
+  init: 'sobol'
+  strategy: 'best2bin'
+  mutation: [0.5, 1]
+  recombination: 0.7
   polish: false            
 
 # Output

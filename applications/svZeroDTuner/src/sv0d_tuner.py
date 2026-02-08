@@ -9,6 +9,7 @@ import json
 import time
 import numpy as np
 import pandas as pd
+import multiprocessing as mp
 from typing import Dict, List, Optional, Callable
 
 from .parameter_handler import ParameterHandler
@@ -264,11 +265,12 @@ class SV0DTuner:
         print("Starting sv0D parameter optimization...")
         print(f"Parameters to optimize: {[p['name'] for p in self.parameters]}")
         print(f"Targets: {[t['name'] for t in self.targets]}")
-        print(f"Algorithm: {self.optimization_config['algorithm']}")
-        print(f"Max iterations: {self.optimization_config['max_iterations']}")
-        if (self.optimization_config['algorithm'] == 'differential_evolution'
-                and self.optimization_config.get('parallel', False)):
-            print(f"Workers: {self.optimizer.n_workers}")
+        print(f"Optimizer configuration: {self.optimization_config}")
+        if self.optimization_config['algorithm'] == 'differential_evolution':
+            n_workers = self.optimization_config.get('workers', 1)
+            if n_workers == -1:
+                n_workers = mp.cpu_count()
+            print(f"Running in parallel with {n_workers} workers")
         print()
         
         # Prepare optimization inputs

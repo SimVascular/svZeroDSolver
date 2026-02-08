@@ -43,14 +43,13 @@ targets:
 objective:
   normalize: true  # Normalize errors by target values for better scaling
 
-# Optimization
+# Optimization - use scipy Nelder-Mead options (maxiter, xatol, fatol, adaptive, etc.)
 optimization:
   algorithm: "Nelder-Mead"
-  max_iterations: 30     
-  tolerance: 1e-6
-  
-  # Nelder-Mead specific options
-  adaptive: true            # Adaptive simplex
+  maxiter: 30
+  xatol: 1e-6
+  fatol: 1e-6
+  adaptive: true
 
 # Output
 output:

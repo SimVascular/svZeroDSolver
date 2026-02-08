@@ -13,40 +13,40 @@ model:
 # Add or remove parameters as needed
 parameters:
   - name: "LV.Epass"
-    bounds: [5e6, 5e7]
+    bounds: [1e6, 1e8]
 
   - name: "LV.Emax"
-    bounds: [5e7, 5e8] 
+    bounds: [1e7, 1e9] 
 
   - name: "RV.Epass"
-    bounds: [1e6, 1e7]
+    bounds: [1e6, 1e8]
 
   - name: "RV.Emax"
-    bounds: [5e7, 5e8]
+    bounds: [1e7, 1e9]
 
   - name: "LA.Epass"
-    bounds: [5e6, 5e7]
+    bounds: [1e6, 1e8]
 
   - name: "RA.Epass"
-    bounds: [1e6, 1e7]
+    bounds: [1e6, 1e8]
 
   - name: "LV.Vrest"
-    bounds: [5e-7, 5e-6]
+    bounds: [1e-6, 1e-4]
 
   - name: "RV.Vrest"
-    bounds: [1e-5, 1e-4]
+    bounds: [1e-6, 1e-4]
 
   - name: "AR_SYS.R_poiseuille"
-    bounds: [5e7, 5e8]
+    bounds: [1e7, 1e9]
 
   - name: "AR_SYS.C"
-    bounds: [5e-9, 5e-8]
+    bounds: [1e-9, 1e-7]
 
   - name: "VEN_SYS.R_poiseuille"
-    bounds: [1e6, 1e7]
+    bounds: [1e5, 1e7]
 
   - name: "initial_condition.pressure:J0:VEN_SYS"
-    bounds: [2e2, 2e3]
+    bounds: [1e2, 1e4]
 
 
 # Target outputs
@@ -143,7 +143,7 @@ optimization:
   strategy: 'best1bin'    
   mutation: [0.5, 1.5]    
   recombination: 0.5      
-  polish: false           
+  polish: true           
 
   # # Nelder-Mead specific options
   # algorithm: "Nelder-Mead"

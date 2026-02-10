@@ -30,10 +30,12 @@ set(CXXSRCS
   ValveTanh.cpp
   WindkesselBC.cpp
   PiecewiseCosineChamber.cpp
+  LinearElastanceChamber.cpp
   PiecewiseValve.cpp
 )
 
 set(HDRS 
+  ActivationFunction.h
   Block.h
   BlockType.h
   BloodVessel.h
@@ -59,6 +61,7 @@ set(HDRS
   ValveTanh.h
   WindkesselBC.h
   PiecewiseCosineChamber.h
+  LinearElastanceChamber.h
   PiecewiseValve.h
 )
 

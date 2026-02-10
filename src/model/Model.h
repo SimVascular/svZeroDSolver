@@ -29,6 +29,7 @@
 #include "DOFHandler.h"
 #include "FlowReferenceBC.h"
 #include "Junction.h"
+#include "LinearElastanceChamber.h"
 #include "Node.h"
 #include "OpenLoopCoronaryBC.h"
 #include "Parameter.h"

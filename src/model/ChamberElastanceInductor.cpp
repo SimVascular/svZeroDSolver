@@ -9,6 +9,11 @@ void ChamberElastanceInductor::setup_dofs(DOFHandler& dofhandler) {
 
 void ChamberElastanceInductor::update_constant(
     SparseSystem& system, std::vector<double>& parameters) {
+  // Initialize activation function on first call
+  if (!activation_func_) {
+    initialize_activation_function(parameters);
+  }
+
   double L = parameters[global_param_ids[ParamId::IMPEDANCE]];
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
@@ -40,22 +45,59 @@ void ChamberElastanceInductor::get_elastance_values(
   double Emin = parameters[global_param_ids[ParamId::EMIN]];
   double Vrd = parameters[global_param_ids[ParamId::VRD]];
   double Vrs = parameters[global_param_ids[ParamId::VRS]];
-  double t_active = parameters[global_param_ids[ParamId::TACTIVE]];
-  double t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
 
   auto T_cardiac = model->cardiac_cycle_period;
-  auto t_in_cycle = fmod(model->time, T_cardiac);
-
-  double t_contract = 0;
-  if (t_in_cycle >= t_active) {
-    t_contract = t_in_cycle - t_active;
-  }
-
-  double act = 0;
-  if (t_contract <= t_twitch) {
-    act = -0.5 * cos(2 * M_PI * t_contract / t_twitch) + 0.5;
-  }
+  
+  // Compute activation using the activation function
+  double act = activation_func_->compute(model->time, T_cardiac);
 
   Vrest = (1.0 - act) * (Vrd - Vrs) + Vrs;
   Elas = (Emax - Emin) * act + Emin;
+}
+
+void ChamberElastanceInductor::initialize_activation_function(
+    std::vector<double>& parameters) {
+  // Check if activation_type parameter is provided (optional parameter)
+  int activation_type_int = 0;  // Default to HALF_COSINE
+  if (global_param_ids.count(ParamId::ACTIVATION_TYPE) > 0) {
+    activation_type_int = static_cast<int>(
+        parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
+  }
+
+  auto T_cardiac = model->cardiac_cycle_period;
+
+  switch (activation_type_int) {
+    case 0:  // HALF_COSINE (default)
+    {
+      double t_active = parameters[global_param_ids[ParamId::TACTIVE]];
+      double t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
+      activation_func_ = std::make_unique<HalfCosineActivation>(t_active, t_twitch);
+      break;
+    }
+    case 1:  // PIECEWISE_COSINE
+    {
+      double contract_start = parameters[global_param_ids[ParamId::CSTART]];
+      double relax_start = parameters[global_param_ids[ParamId::RSTART]];
+      double contract_duration = parameters[global_param_ids[ParamId::CDUR]];
+      double relax_duration = parameters[global_param_ids[ParamId::RDUR]];
+      activation_func_ = std::make_unique<PiecewiseCosineActivation>(
+          contract_start, relax_start, contract_duration, relax_duration);
+      break;
+    }
+    case 2:  // TWO_HILL
+    {
+      double t_shift = parameters[global_param_ids[ParamId::TSHIFT]];
+      double tau_1 = parameters[global_param_ids[ParamId::TAU_1]];
+      double tau_2 = parameters[global_param_ids[ParamId::TAU_2]];
+      double m1 = parameters[global_param_ids[ParamId::M1]];
+      double m2 = parameters[global_param_ids[ParamId::M2]];
+      activation_func_ = std::make_unique<TwoHillActivation>(
+          t_shift, tau_1, tau_2, m1, m2, T_cardiac);
+      break;
+    }
+    default:
+      throw std::runtime_error(
+          "ChamberElastanceInductor: Invalid activation_type " +
+          std::to_string(activation_type_int));
+  }
 }

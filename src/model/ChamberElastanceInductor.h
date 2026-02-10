@@ -8,7 +8,9 @@
 #define SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_
 
 #include <math.h>
+#include <memory>
 
+#include "ActivationFunction.h"
 #include "Block.h"
 #include "Model.h"
 #include "SparseSystem.h"
@@ -152,9 +154,19 @@ class ChamberElastanceInductor : public Block {
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
                {"Vrs", InputParameter()},
-               {"t_active", InputParameter()},
-               {"t_twitch", InputParameter()},
-               {"Impedance", InputParameter()}}) {}
+               {"t_active", InputParameter(false)},
+               {"t_twitch", InputParameter(false)},
+               {"Impedance", InputParameter()},
+               {"activation_type", InputParameter(false)},
+               {"contract_start", InputParameter(false)},
+               {"relax_start", InputParameter(false)},
+               {"contract_duration", InputParameter(false)},
+               {"relax_duration", InputParameter(false)},
+               {"t_shift", InputParameter(false)},
+               {"tau_1", InputParameter(false)},
+               {"tau_2", InputParameter(false)},
+               {"m1", InputParameter(false)},
+               {"m2", InputParameter(false)}}) {}
 
   /**
    * @brief Local IDs of the parameters
@@ -167,7 +179,17 @@ class ChamberElastanceInductor : public Block {
     VRS = 3,
     TACTIVE = 4,
     TTWITCH = 5,
-    IMPEDANCE = 6
+    IMPEDANCE = 6,
+    ACTIVATION_TYPE = 7,
+    CSTART = 8,
+    RSTART = 9,
+    CDUR = 10,
+    RDUR = 11,
+    TSHIFT = 12,
+    TAU_1 = 13,
+    TAU_2 = 14,
+    M1 = 15,
+    M2 = 16
   };
 
   /**
@@ -211,6 +233,14 @@ class ChamberElastanceInductor : public Block {
  private:
   double Elas;   // Chamber Elastance
   double Vrest;  // Rest Volume
+  std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
+
+  /**
+   * @brief Initialize the activation function based on parameters
+   * 
+   * @param parameters Parameters of the model
+   */
+  void initialize_activation_function(std::vector<double>& parameters);
 
   /**
    * @brief Update the elastance functions which depend on time

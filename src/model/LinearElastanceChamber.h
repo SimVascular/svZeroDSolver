@@ -10,7 +10,9 @@
 #define SVZERODSOLVER_MODEL_LINEARELASTANCECHAMBER_HPP_
 
 #include <math.h>
+#include <memory>
 
+#include "ActivationFunction.h"
 #include "Block.h"
 #include "Model.h"
 #include "SparseSystem.h"
@@ -129,10 +131,18 @@ class LinearElastanceChamber : public Block {
               {{"Emax", InputParameter()},
                {"Epass", InputParameter()},
                {"Vrest", InputParameter()},
-               {"contract_start", InputParameter()},
-               {"relax_start", InputParameter()},
-               {"contract_duration", InputParameter()},
-               {"relax_duration", InputParameter()}}) {}
+               {"contract_start", InputParameter(false)},
+               {"relax_start", InputParameter(false)},
+               {"contract_duration", InputParameter(false)},
+               {"relax_duration", InputParameter(false)},
+               {"activation_type", InputParameter(false)},
+               {"t_active", InputParameter(false)},
+               {"t_twitch", InputParameter(false)},
+               {"t_shift", InputParameter(false)},
+               {"tau_1", InputParameter(false)},
+               {"tau_2", InputParameter(false)},
+               {"m1", InputParameter(false)},
+               {"m2", InputParameter(false)}}) {}
 
   /**
    * @brief Local IDs of the parameters
@@ -145,7 +155,15 @@ class LinearElastanceChamber : public Block {
     CSTART = 3,
     RSTART = 4,
     CDUR = 5,
-    RDUR = 6
+    RDUR = 6,
+    ACTIVATION_TYPE = 7,
+    TACTIVE = 8,
+    TTWITCH = 9,
+    TSHIFT = 10,
+    TAU_1 = 11,
+    TAU_2 = 12,
+    M1 = 13,
+    M2 = 14
   };
 
   /**
@@ -188,6 +206,14 @@ class LinearElastanceChamber : public Block {
 
  private:
   double Elas;  // Chamber Elastance
+  std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
+
+  /**
+   * @brief Initialize the activation function based on parameters
+   * 
+   * @param parameters Parameters of the model
+   */
+  void initialize_activation_function(std::vector<double>& parameters);
 
   /**
    * @brief Update the elastance functions which depend on time

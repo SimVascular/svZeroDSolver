@@ -10,6 +10,11 @@ void LinearElastanceChamber::setup_dofs(DOFHandler& dofhandler) {
 
 void LinearElastanceChamber::update_constant(SparseSystem& system,
                                              std::vector<double>& parameters) {
+  // Initialize activation function on first call
+  if (!activation_func_) {
+    initialize_activation_function(parameters);
+  }
+
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
 
@@ -37,26 +42,59 @@ void LinearElastanceChamber::get_elastance_values(
     std::vector<double>& parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Epass = parameters[global_param_ids[ParamId::EPASS]];
-  double Vrest = parameters[global_param_ids[ParamId::VREST]];
-  double contract_start = parameters[global_param_ids[ParamId::CSTART]];
-  double relax_start = parameters[global_param_ids[ParamId::RSTART]];
-  double contract_duration = parameters[global_param_ids[ParamId::CDUR]];
-  double relax_duration = parameters[global_param_ids[ParamId::RDUR]];
 
-  auto T_HB = model->cardiac_cycle_period;
-
-  double phi = 0;
-
-  auto piecewise_condition = fmod(model->time - contract_start, T_HB);
-
-  if (0 <= piecewise_condition && piecewise_condition < contract_duration) {
-    phi = 0.5 * (1 - cos((M_PI * piecewise_condition) / contract_duration));
-  } else {
-    piecewise_condition = fmod(model->time - relax_start, T_HB);
-    if (0 <= piecewise_condition && piecewise_condition < relax_duration) {
-      phi = 0.5 * (1 + cos((M_PI * piecewise_condition) / relax_duration));
-    }
-  }
+  auto T_cardiac = model->cardiac_cycle_period;
+  
+  // Compute activation using the activation function
+  double phi = activation_func_->compute(model->time, T_cardiac);
 
   Elas = Epass + Emax * phi;
+}
+
+void LinearElastanceChamber::initialize_activation_function(
+    std::vector<double>& parameters) {
+  // Check if activation_type parameter is provided (optional parameter)
+  // Default to PIECEWISE_COSINE (1) for backward compatibility
+  int activation_type_int = 1;
+  if (global_param_ids.count(ParamId::ACTIVATION_TYPE) > 0) {
+    activation_type_int = static_cast<int>(
+        parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
+  }
+
+  auto T_cardiac = model->cardiac_cycle_period;
+
+  switch (activation_type_int) {
+    case 0:  // HALF_COSINE
+    {
+      double t_active = parameters[global_param_ids[ParamId::TACTIVE]];
+      double t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
+      activation_func_ = std::make_unique<HalfCosineActivation>(t_active, t_twitch);
+      break;
+    }
+    case 1:  // PIECEWISE_COSINE (default for backward compatibility)
+    {
+      double contract_start = parameters[global_param_ids[ParamId::CSTART]];
+      double relax_start = parameters[global_param_ids[ParamId::RSTART]];
+      double contract_duration = parameters[global_param_ids[ParamId::CDUR]];
+      double relax_duration = parameters[global_param_ids[ParamId::RDUR]];
+      activation_func_ = std::make_unique<PiecewiseCosineActivation>(
+          contract_start, relax_start, contract_duration, relax_duration);
+      break;
+    }
+    case 2:  // TWO_HILL
+    {
+      double t_shift = parameters[global_param_ids[ParamId::TSHIFT]];
+      double tau_1 = parameters[global_param_ids[ParamId::TAU_1]];
+      double tau_2 = parameters[global_param_ids[ParamId::TAU_2]];
+      double m1 = parameters[global_param_ids[ParamId::M1]];
+      double m2 = parameters[global_param_ids[ParamId::M2]];
+      activation_func_ = std::make_unique<TwoHillActivation>(
+          t_shift, tau_1, tau_2, m1, m2, T_cardiac);
+      break;
+    }
+    default:
+      throw std::runtime_error(
+          "LinearElastanceChamber: Invalid activation_type " +
+          std::to_string(activation_type_int));
+  }
 }

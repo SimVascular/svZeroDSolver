@@ -56,56 +56,76 @@ targets:
   - name: "Vc:LV"
     type: "max"
     target_value: 116.0e-6  # m^3
-    uncertainty: 10%
+    uncertainty: 5%
     weight: 1.0
   - name: "Vc:LV"
     type: "min"
     target_value: 38.6e-6  # m^3
-    uncertainty: 10%
+    uncertainty: 5%
+    weight: 1.0
+  - name: "Vc:LV"
+    type: "time_series"
+    target_file: "targets/P003_chamber_volumes/target_V_LV.csv"
+    uncertainty: 5%
     weight: 1.0
     
   - name: "Vc:RV"
     type: "max"
     target_value: 171.0e-6  # m^3
-    uncertainty: 10%
+    uncertainty: 5%
     weight: 1.0
   - name: "Vc:RV"
     type: "min"
     target_value: 82.0e-6  # m^3
-    uncertainty: 10%
+    uncertainty: 5%
+    weight: 1.0
+  - name: "Vc:RV"
+    type: "time_series"
+    target_file: "targets/P003_chamber_volumes/target_V_RV.csv"
+    uncertainty: 5%
     weight: 1.0
 
   - name: "Vc:LA"
     type: "max"
     target_value: 72.7e-6  # m^3
-    uncertainty: 10%
+    uncertainty: 5%
     weight: 1.0
   - name: "Vc:LA"
     type: "min"
     target_value: 38.2e-6  # m^3
-    uncertainty: 10%
+    uncertainty: 5%
+    weight: 1.0
+  - name: "Vc:LA"
+    type: "time_series"
+    target_file: "targets/P003_chamber_volumes/target_V_LA.csv"
+    uncertainty: 5%
     weight: 1.0
 
   - name: "Vc:RA"
     type: "max"
     target_value: 107.9e-6  # m^3
-    uncertainty: 10%
+    uncertainty: 5%
     weight: 1.0
   - name: "Vc:RA"
     type: "min"
     target_value: 56.0e-6  # m^3
-    uncertainty: 10%
+    uncertainty: 5%
+    weight: 1.0
+  - name: "Vc:RA"
+    type: "time_series"
+    target_file: "targets/P003_chamber_volumes/target_V_RA.csv"
+    uncertainty: 5%
     weight: 1.0
 
   - name: "pressure:AV:AR_SYS"
     type: "max"
     target_value: 13065  # Pa (98.0 mmHg)
-    uncertainty: 10%
+    uncertainty: 5%
     weight: 1.0
   - name: "pressure:AV:AR_SYS"
     type: "min"
     target_value: 7066  # Pa (53.0 mmHg)
-    uncertainty: 10%
+    uncertainty: 5%
     weight: 1.0
 
   - name: "pressure:PV:AR_PUL"

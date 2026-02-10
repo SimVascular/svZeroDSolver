@@ -126,55 +126,67 @@
   "boundary_conditions": [],
   "chambers": [
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "right_atrium",
       "values": {
         "Emax": 199.95,
         "Epass": 89.80375933024839,
         "Vrest": 41.680015938842274,
-        "contract_start": 0.025,
-        "relax_start": 0.08625,
-        "contract_duration": 0.06125,
-        "relax_duration": 0.18375
+        "activation_function_type": "piecewise_cosine",
+        "activation_function_values": {
+          "contract_start": 0.025,
+          "relax_start": 0.08625,
+          "contract_duration": 0.06125,
+          "relax_duration": 0.18375
+        }
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "right_ventricle",
       "values": {
         "Emax": 1662.0158240056528,
         "Epass": 40.85565535747109,
         "Vrest": 72.05452710344869,
-        "contract_start": 0.207,
-        "relax_start": 0.29625,
-        "contract_duration": 0.08925,
-        "relax_duration": 0.26975
+        "activation_function_type": "piecewise_cosine",
+        "activation_function_values": {
+          "contract_start": 0.207,
+          "relax_start": 0.29625,
+          "contract_duration": 0.08925,
+          "relax_duration": 0.26975
+        }
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "left_atrium",
       "values": {
         "Emax": 199.95,
         "Epass": 260.59064494602634,
         "Vrest": 26.23534455334443,
-        "contract_start": 0.025,
-        "relax_start": 0.08625,
-        "contract_duration": 0.06125,
-        "relax_duration": 0.18375
+        "activation_function_type": "piecewise_cosine",
+        "activation_function_values": {
+          "contract_start": 0.025,
+          "relax_start": 0.08625,
+          "contract_duration": 0.06125,
+          "relax_duration": 0.18375
+        }
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "left_ventricle",
       "values": {
         "Emax": 17837.499965252825,
         "Epass": 122.82901158252674,
         "Vrest": 32.41857776349184,
-        "contract_start": 0.207,
-        "relax_start": 0.29625,
-        "contract_duration": 0.08925,
-        "relax_duration": 0.26975
+        "activation_function_type": "piecewise_cosine",
+        "activation_function_values": {
+          "contract_start": 0.207,
+          "relax_start": 0.29625,
+          "contract_duration": 0.08925,
+          "relax_duration": 0.26975
+        }
       }
     }
   ],

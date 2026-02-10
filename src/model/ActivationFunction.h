@@ -160,7 +160,7 @@ class HalfCosineActivation : public ActivationFunction {
 /**
  * @brief Piecewise cosine activation function
  * 
- * This implements the activation function from the PiecewiseCosineChamber
+ * This implements the activation function from the LinearElastanceChamber
  * (Regazzoni chamber model). The activation consists of separate contraction
  * and relaxation phases, each following a cosine curve.
  * 

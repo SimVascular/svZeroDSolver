@@ -29,7 +29,6 @@ set(CXXSRCS
   ResistiveJunction.cpp
   ValveTanh.cpp
   WindkesselBC.cpp
-  PiecewiseCosineChamber.cpp
   LinearElastanceChamber.cpp
   PiecewiseValve.cpp
 )
@@ -60,7 +59,6 @@ set(HDRS
   ResistiveJunction.h
   ValveTanh.h
   WindkesselBC.h
-  PiecewiseCosineChamber.h
   LinearElastanceChamber.h
   PiecewiseValve.h
 )

@@ -60,7 +60,7 @@ Or with explicit activation function specification:
 
 ### 2. Piecewise Cosine Activation (Type 1)
 
-The default activation function for `LinearElastanceChamber` (formerly `PiecewiseCosineChamber`). It models separate contraction and relaxation phases:
+The default activation function for `LinearElastanceChamber`. It models separate contraction and relaxation phases:
 
 ```
 φ(t) = 0.5 * [1 - cos(π * (t - t_C) / T_C)]  during contraction

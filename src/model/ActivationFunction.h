@@ -25,6 +25,31 @@ enum class ActivationType {
 };
 
 /**
+ * @brief Parameters for creating activation functions
+ */
+struct ActivationFunctionParams {
+  ActivationType type;
+  double cardiac_period;
+  
+  // Half cosine parameters
+  double t_active = 0.0;
+  double t_twitch = 0.0;
+  
+  // Piecewise cosine parameters
+  double contract_start = 0.0;
+  double relax_start = 0.0;
+  double contract_duration = 0.0;
+  double relax_duration = 0.0;
+  
+  // Two hill parameters
+  double t_shift = 0.0;
+  double tau_1 = 0.0;
+  double tau_2 = 0.0;
+  double m1 = 0.0;
+  double m2 = 0.0;
+};
+
+/**
  * @brief Base class for activation functions
  * 
  * Activation functions compute the activation value (between 0 and 1) at a
@@ -53,6 +78,15 @@ class ActivationFunction {
    * @return Type of activation function
    */
   virtual ActivationType get_type() const = 0;
+  
+  /**
+   * @brief Factory method to create activation function from parameters
+   * 
+   * @param params Parameters for creating the activation function
+   * @return Unique pointer to the created activation function
+   */
+  static std::unique_ptr<ActivationFunction> create(
+      const ActivationFunctionParams& params);
 };
 
 /**
@@ -311,5 +345,32 @@ class TwoHillActivation : public ActivationFunction {
   double normalization_factor_;       ///< Normalization constant
   bool normalization_initialized_;    ///< Flag for normalization
 };
+
+/**
+ * @brief Factory method implementation for creating activation functions
+ */
+inline std::unique_ptr<ActivationFunction> ActivationFunction::create(
+    const ActivationFunctionParams& params) {
+  switch (params.type) {
+    case ActivationType::HALF_COSINE:
+      return std::make_unique<HalfCosineActivation>(
+          params.t_active, params.t_twitch);
+    
+    case ActivationType::PIECEWISE_COSINE:
+      return std::make_unique<PiecewiseCosineActivation>(
+          params.contract_start, params.relax_start,
+          params.contract_duration, params.relax_duration);
+    
+    case ActivationType::TWO_HILL:
+      return std::make_unique<TwoHillActivation>(
+          params.t_shift, params.tau_1, params.tau_2,
+          params.m1, params.m2, params.cardiac_period);
+    
+    default:
+      throw std::runtime_error(
+          "ActivationFunction::create: Invalid activation type " +
+          std::to_string(static_cast<int>(params.type)));
+  }
+}
 
 #endif  // SVZERODSOLVER_MODEL_ACTIVATIONFUNCTION_HPP_

@@ -61,40 +61,39 @@ void LinearElastanceChamber::initialize_activation_function(
         parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
   }
 
-  auto T_cardiac = model->cardiac_cycle_period;
-
-  switch (activation_type_int) {
-    case 0:  // HALF_COSINE
-    {
-      double t_active = parameters[global_param_ids[ParamId::TACTIVE]];
-      double t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
-      activation_func_ = std::make_unique<HalfCosineActivation>(t_active, t_twitch);
+  // Prepare parameters for factory method
+  ActivationFunctionParams params;
+  params.type = static_cast<ActivationType>(activation_type_int);
+  params.cardiac_period = model->cardiac_cycle_period;
+  
+  // Set parameters based on type
+  switch (params.type) {
+    case ActivationType::HALF_COSINE:
+      params.t_active = parameters[global_param_ids[ParamId::TACTIVE]];
+      params.t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
       break;
-    }
-    case 1:  // PIECEWISE_COSINE (default for backward compatibility)
-    {
-      double contract_start = parameters[global_param_ids[ParamId::CSTART]];
-      double relax_start = parameters[global_param_ids[ParamId::RSTART]];
-      double contract_duration = parameters[global_param_ids[ParamId::CDUR]];
-      double relax_duration = parameters[global_param_ids[ParamId::RDUR]];
-      activation_func_ = std::make_unique<PiecewiseCosineActivation>(
-          contract_start, relax_start, contract_duration, relax_duration);
+    
+    case ActivationType::PIECEWISE_COSINE:
+      params.contract_start = parameters[global_param_ids[ParamId::CSTART]];
+      params.relax_start = parameters[global_param_ids[ParamId::RSTART]];
+      params.contract_duration = parameters[global_param_ids[ParamId::CDUR]];
+      params.relax_duration = parameters[global_param_ids[ParamId::RDUR]];
       break;
-    }
-    case 2:  // TWO_HILL
-    {
-      double t_shift = parameters[global_param_ids[ParamId::TSHIFT]];
-      double tau_1 = parameters[global_param_ids[ParamId::TAU_1]];
-      double tau_2 = parameters[global_param_ids[ParamId::TAU_2]];
-      double m1 = parameters[global_param_ids[ParamId::M1]];
-      double m2 = parameters[global_param_ids[ParamId::M2]];
-      activation_func_ = std::make_unique<TwoHillActivation>(
-          t_shift, tau_1, tau_2, m1, m2, T_cardiac);
+    
+    case ActivationType::TWO_HILL:
+      params.t_shift = parameters[global_param_ids[ParamId::TSHIFT]];
+      params.tau_1 = parameters[global_param_ids[ParamId::TAU_1]];
+      params.tau_2 = parameters[global_param_ids[ParamId::TAU_2]];
+      params.m1 = parameters[global_param_ids[ParamId::M1]];
+      params.m2 = parameters[global_param_ids[ParamId::M2]];
       break;
-    }
+    
     default:
       throw std::runtime_error(
           "LinearElastanceChamber: Invalid activation_type " +
           std::to_string(activation_type_int));
   }
+  
+  // Use factory method to create activation function
+  activation_func_ = ActivationFunction::create(params);
 }

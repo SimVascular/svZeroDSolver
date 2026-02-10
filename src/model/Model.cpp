@@ -31,7 +31,6 @@ Model::Model() {
       {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
       {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
       {"PiecewiseValve", block_factory<PiecewiseValve>()},
-      {"PiecewiseCosineChamber", block_factory<PiecewiseCosineChamber>()},
       {"LinearElastanceChamber", block_factory<LinearElastanceChamber>()}};
 }
 

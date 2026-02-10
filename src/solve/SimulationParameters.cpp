@@ -615,7 +615,7 @@ void create_chambers(
       if (chamber) {
         chamber->set_activation_params(act_params);
       }
-    } else if (chamber_type == "LinearElastanceChamber" || chamber_type == "PiecewiseCosineChamber") {
+    } else if (chamber_type == "LinearElastanceChamber") {
       auto chamber = dynamic_cast<LinearElastanceChamber*>(chamber_block);
       if (chamber) {
         chamber->set_activation_params(act_params);

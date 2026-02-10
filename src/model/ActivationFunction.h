@@ -67,10 +67,9 @@ class ActivationFunction {
    * @brief Compute activation value at given time
    * 
    * @param time Current time
-   * @param cardiac_period Period of cardiac cycle
    * @return Activation value between 0 and 1
    */
-  virtual double compute(double time, double cardiac_period) = 0;
+  virtual double compute(double time) = 0;
 
   /**
    * @brief Get the type of activation function
@@ -87,6 +86,9 @@ class ActivationFunction {
    */
   static std::unique_ptr<ActivationFunction> create(
       const ActivationFunctionParams& params);
+
+ protected:
+  double cardiac_period_;  ///< Cardiac cycle period
 };
 
 /**
@@ -112,19 +114,21 @@ class HalfCosineActivation : public ActivationFunction {
    * 
    * @param t_active Time when activation begins within cardiac cycle
    * @param t_twitch Duration of the contraction twitch
+   * @param cardiac_period Cardiac cycle period
    */
-  HalfCosineActivation(double t_active, double t_twitch)
-      : t_active_(t_active), t_twitch_(t_twitch) {}
+  HalfCosineActivation(double t_active, double t_twitch, double cardiac_period)
+      : t_active_(t_active), t_twitch_(t_twitch) {
+    cardiac_period_ = cardiac_period;
+  }
 
   /**
    * @brief Compute activation value
    * 
    * @param time Current time
-   * @param cardiac_period Period of cardiac cycle
    * @return Activation value between 0 and 1
    */
-  double compute(double time, double cardiac_period) override {
-    double t_in_cycle = std::fmod(time, cardiac_period);
+  double compute(double time) override {
+    double t_in_cycle = std::fmod(time, cardiac_period_);
     
     double t_contract = 0.0;
     if (t_in_cycle >= t_active_) {
@@ -179,30 +183,33 @@ class PiecewiseCosineActivation : public ActivationFunction {
    * @param relax_start Time when relaxation starts
    * @param contract_duration Duration of contraction phase
    * @param relax_duration Duration of relaxation phase
+   * @param cardiac_period Cardiac cycle period
    */
   PiecewiseCosineActivation(double contract_start, double relax_start,
-                            double contract_duration, double relax_duration)
+                            double contract_duration, double relax_duration,
+                            double cardiac_period)
       : contract_start_(contract_start),
         relax_start_(relax_start),
         contract_duration_(contract_duration),
-        relax_duration_(relax_duration) {}
+        relax_duration_(relax_duration) {
+    cardiac_period_ = cardiac_period;
+  }
 
   /**
    * @brief Compute activation value
    * 
    * @param time Current time
-   * @param cardiac_period Period of cardiac cycle
    * @return Activation value between 0 and 1
    */
-  double compute(double time, double cardiac_period) override {
+  double compute(double time) override {
     double phi = 0.0;
 
-    double piecewise_condition = std::fmod(time - contract_start_, cardiac_period);
+    double piecewise_condition = std::fmod(time - contract_start_, cardiac_period_);
 
     if (0.0 <= piecewise_condition && piecewise_condition < contract_duration_) {
       phi = 0.5 * (1.0 - std::cos((M_PI * piecewise_condition) / contract_duration_));
     } else {
-      piecewise_condition = std::fmod(time - relax_start_, cardiac_period);
+      piecewise_condition = std::fmod(time - relax_start_, cardiac_period_);
       if (0.0 <= piecewise_condition && piecewise_condition < relax_duration_) {
         phi = 0.5 * (1.0 + std::cos((M_PI * piecewise_condition) / relax_duration_));
       }
@@ -269,6 +276,7 @@ class TwoHillActivation : public ActivationFunction {
         m2_(m2),
         normalization_factor_(1.0),
         normalization_initialized_(false) {
+    cardiac_period_ = cardiac_period;
     initialize_normalization(cardiac_period);
   }
 
@@ -276,19 +284,18 @@ class TwoHillActivation : public ActivationFunction {
    * @brief Compute activation value
    * 
    * @param time Current time
-   * @param cardiac_period Period of cardiac cycle
    * @return Activation value between 0 and 1
    */
-  double compute(double time, double cardiac_period) override {
+  double compute(double time) override {
     if (!normalization_initialized_) {
       throw std::runtime_error("TwoHillActivation: Normalization not initialized");
     }
 
-    double t_in_cycle = std::fmod(time, cardiac_period);
+    double t_in_cycle = std::fmod(time, cardiac_period_);
     
     // Compute shifted time (handle negative modulo)
-    double t_shifted = std::fmod(t_in_cycle - t_shift_, cardiac_period);
-    t_shifted = (t_shifted >= 0.0) ? t_shifted : t_shifted + cardiac_period;
+    double t_shifted = std::fmod(t_in_cycle - t_shift_, cardiac_period_);
+    t_shifted = (t_shifted >= 0.0) ? t_shifted : t_shifted + cardiac_period_;
 
     // Compute hill functions
     double g1 = std::pow(t_shifted / tau_1_, m1_);
@@ -354,12 +361,12 @@ inline std::unique_ptr<ActivationFunction> ActivationFunction::create(
   switch (params.type) {
     case ActivationType::HALF_COSINE:
       return std::make_unique<HalfCosineActivation>(
-          params.t_active, params.t_twitch);
+          params.t_active, params.t_twitch, params.cardiac_period);
     
     case ActivationType::PIECEWISE_COSINE:
       return std::make_unique<PiecewiseCosineActivation>(
           params.contract_start, params.relax_start,
-          params.contract_duration, params.relax_duration);
+          params.contract_duration, params.relax_duration, params.cardiac_period);
     
     case ActivationType::TWO_HILL:
       return std::make_unique<TwoHillActivation>(

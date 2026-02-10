@@ -45,11 +45,9 @@ void ChamberElastanceInductor::get_elastance_values(
   double Emin = parameters[global_param_ids[ParamId::EMIN]];
   double Vrd = parameters[global_param_ids[ParamId::VRD]];
   double Vrs = parameters[global_param_ids[ParamId::VRS]];
-
-  auto T_cardiac = model->cardiac_cycle_period;
   
   // Compute activation using the activation function
-  double act = activation_func_->compute(model->time, T_cardiac);
+  double act = activation_func_->compute(model->time);
 
   Vrest = (1.0 - act) * (Vrd - Vrs) + Vrs;
   Elas = (Emax - Emin) * act + Emin;

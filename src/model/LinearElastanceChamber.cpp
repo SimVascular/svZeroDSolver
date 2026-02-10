@@ -42,11 +42,9 @@ void LinearElastanceChamber::get_elastance_values(
     std::vector<double>& parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Epass = parameters[global_param_ids[ParamId::EPASS]];
-
-  auto T_cardiac = model->cardiac_cycle_period;
   
   // Compute activation using the activation function
-  double phi = activation_func_->compute(model->time, T_cardiac);
+  double phi = activation_func_->compute(model->time);
 
   Elas = Epass + Emax * phi;
 }

@@ -12,6 +12,9 @@
 #include <stdexcept>
 #include <string>
 
+#include "ActivationFunction.h"
+#include "ChamberElastanceInductor.h"
+#include "LinearElastanceChamber.h"
 #include "Model.h"
 #include "State.h"
 #include "debug.h"

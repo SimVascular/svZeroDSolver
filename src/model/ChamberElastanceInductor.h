@@ -157,16 +157,7 @@ class ChamberElastanceInductor : public Block {
                {"t_active", InputParameter(false)},
                {"t_twitch", InputParameter(false)},
                {"Impedance", InputParameter()},
-               {"activation_type", InputParameter(false)},
-               {"contract_start", InputParameter(false)},
-               {"relax_start", InputParameter(false)},
-               {"contract_duration", InputParameter(false)},
-               {"relax_duration", InputParameter(false)},
-               {"t_shift", InputParameter(false)},
-               {"tau_1", InputParameter(false)},
-               {"tau_2", InputParameter(false)},
-               {"m1", InputParameter(false)},
-               {"m2", InputParameter(false)}}) {}
+               {"activation_type", InputParameter(false)}}) {}
 
   /**
    * @brief Local IDs of the parameters
@@ -180,16 +171,7 @@ class ChamberElastanceInductor : public Block {
     TACTIVE = 4,
     TTWITCH = 5,
     IMPEDANCE = 6,
-    ACTIVATION_TYPE = 7,
-    CSTART = 8,
-    RSTART = 9,
-    CDUR = 10,
-    RDUR = 11,
-    TSHIFT = 12,
-    TAU_1 = 13,
-    TAU_2 = 14,
-    M1 = 15,
-    M2 = 16
+    ACTIVATION_TYPE = 7
   };
 
   /**
@@ -234,7 +216,19 @@ class ChamberElastanceInductor : public Block {
   double Elas;   // Chamber Elastance
   double Vrest;  // Rest Volume
   std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
+  ActivationFunctionParams activation_params_;  // Activation function parameters
 
+ public:
+  /**
+   * @brief Set activation function parameters from JSON configuration
+   * 
+   * @param params Activation function parameters
+   */
+  void set_activation_params(const ActivationFunctionParams& params) {
+    activation_params_ = params;
+  }
+
+ private:
   /**
    * @brief Initialize the activation function based on parameters
    * 

@@ -548,27 +548,35 @@ void create_chambers(
     // Create a mutable copy of the values to handle activation function parameters
     nlohmann::json chamber_values = chamber_config["values"];
     
+    // Prepare activation function parameters
+    ActivationFunctionParams act_params;
+    act_params.type = ActivationType::HALF_COSINE;  // Default
+    act_params.cardiac_period = 0.0;  // Will be set later from model
+    
     // Check if activation function type is specified as a string
     if (chamber_values.contains("activation_function_type") && 
         chamber_values["activation_function_type"].is_string()) {
       std::string act_type_str = chamber_values["activation_function_type"];
       
-      // Map string to numeric value
-      int act_type_num = 0;  // Default to half_cosine
+      // Map string to activation type
       if (act_type_str == "half_cosine") {
-        act_type_num = 0;
+        act_params.type = ActivationType::HALF_COSINE;
       } else if (act_type_str == "piecewise_cosine") {
-        act_type_num = 1;
+        act_params.type = ActivationType::PIECEWISE_COSINE;
       } else if (act_type_str == "two_hill") {
-        act_type_num = 2;
+        act_params.type = ActivationType::TWO_HILL;
       } else {
         throw std::runtime_error("Unknown activation_function_type: " + act_type_str +
                                  " in chamber " + chamber_name);
       }
       
-      // Replace string with numeric value
-      chamber_values["activation_type"] = act_type_num;
+      // Replace string with numeric value for backward compatibility
+      chamber_values["activation_type"] = static_cast<int>(act_params.type);
       chamber_values.erase("activation_function_type");
+    } else if (chamber_values.contains("activation_type")) {
+      // Handle numeric activation_type for backward compatibility
+      int act_type_num = chamber_values["activation_type"];
+      act_params.type = static_cast<ActivationType>(act_type_num);
     }
     
     // Check if activation function values are specified in nested dict
@@ -576,16 +584,61 @@ void create_chambers(
         chamber_values["activation_function_values"].is_object()) {
       const auto& act_values = chamber_values["activation_function_values"];
       
-      // Flatten the nested dictionary - move all parameters to top level
-      for (auto& [key, value] : act_values.items()) {
-        chamber_values[key] = value;
+      // Extract activation function parameters based on type
+      if (act_params.type == ActivationType::HALF_COSINE) {
+        if (act_values.contains("t_active")) act_params.t_active = act_values["t_active"];
+        if (act_values.contains("t_twitch")) act_params.t_twitch = act_values["t_twitch"];
+      } else if (act_params.type == ActivationType::PIECEWISE_COSINE) {
+        if (act_values.contains("contract_start")) act_params.contract_start = act_values["contract_start"];
+        if (act_values.contains("relax_start")) act_params.relax_start = act_values["relax_start"];
+        if (act_values.contains("contract_duration")) act_params.contract_duration = act_values["contract_duration"];
+        if (act_values.contains("relax_duration")) act_params.relax_duration = act_values["relax_duration"];
+      } else if (act_params.type == ActivationType::TWO_HILL) {
+        if (act_values.contains("t_shift")) act_params.t_shift = act_values["t_shift"];
+        if (act_values.contains("tau_1")) act_params.tau_1 = act_values["tau_1"];
+        if (act_values.contains("tau_2")) act_params.tau_2 = act_values["tau_2"];
+        if (act_values.contains("m1")) act_params.m1 = act_values["m1"];
+        if (act_values.contains("m2")) act_params.m2 = act_values["m2"];
       }
       
-      // Remove the nested dict
+      // Remove the nested dict (don't flatten to avoid parameter conflicts)
       chamber_values.erase("activation_function_values");
+    } else {
+      // Handle flat parameter structure for backward compatibility
+      if (act_params.type == ActivationType::HALF_COSINE) {
+        if (chamber_values.contains("t_active")) act_params.t_active = chamber_values["t_active"];
+        if (chamber_values.contains("t_twitch")) act_params.t_twitch = chamber_values["t_twitch"];
+      } else if (act_params.type == ActivationType::PIECEWISE_COSINE) {
+        if (chamber_values.contains("contract_start")) act_params.contract_start = chamber_values["contract_start"];
+        if (chamber_values.contains("relax_start")) act_params.relax_start = chamber_values["relax_start"];
+        if (chamber_values.contains("contract_duration")) act_params.contract_duration = chamber_values["contract_duration"];
+        if (chamber_values.contains("relax_duration")) act_params.relax_duration = chamber_values["relax_duration"];
+      } else if (act_params.type == ActivationType::TWO_HILL) {
+        if (chamber_values.contains("t_shift")) act_params.t_shift = chamber_values["t_shift"];
+        if (chamber_values.contains("tau_1")) act_params.tau_1 = chamber_values["tau_1"];
+        if (chamber_values.contains("tau_2")) act_params.tau_2 = chamber_values["tau_2"];
+        if (chamber_values.contains("m1")) act_params.m1 = chamber_values["m1"];
+        if (chamber_values.contains("m2")) act_params.m2 = chamber_values["m2"];
+      }
     }
     
-    generate_block(model, chamber_values, chamber_type, chamber_name);
+    // Create the chamber block
+    int block_id = generate_block(model, chamber_values, chamber_type, chamber_name);
+    
+    // Set activation parameters on the chamber
+    auto chamber_block = model.get_block(chamber_name);
+    if (chamber_type == "ChamberElastanceInductor") {
+      auto chamber = dynamic_cast<ChamberElastanceInductor*>(chamber_block);
+      if (chamber) {
+        chamber->set_activation_params(act_params);
+      }
+    } else if (chamber_type == "LinearElastanceChamber" || chamber_type == "PiecewiseCosineChamber") {
+      auto chamber = dynamic_cast<LinearElastanceChamber*>(chamber_block);
+      if (chamber) {
+        chamber->set_activation_params(act_params);
+      }
+    }
+    
     DEBUG_MSG("Created chamber " << chamber_name);
   }
 }

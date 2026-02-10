@@ -62,41 +62,23 @@ void ChamberElastanceInductor::initialize_activation_function(
   if (global_param_ids.count(ParamId::ACTIVATION_TYPE) > 0) {
     activation_type_int = static_cast<int>(
         parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
+    activation_params_.type = static_cast<ActivationType>(activation_type_int);
   }
 
-  // Prepare parameters for factory method
-  ActivationFunctionParams params;
-  params.type = static_cast<ActivationType>(activation_type_int);
-  params.cardiac_period = model->cardiac_cycle_period;
+  // Set cardiac period
+  activation_params_.cardiac_period = model->cardiac_cycle_period;
   
-  // Set parameters based on type
-  switch (params.type) {
-    case ActivationType::HALF_COSINE:
-      params.t_active = parameters[global_param_ids[ParamId::TACTIVE]];
-      params.t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
-      break;
-    
-    case ActivationType::PIECEWISE_COSINE:
-      params.contract_start = parameters[global_param_ids[ParamId::CSTART]];
-      params.relax_start = parameters[global_param_ids[ParamId::RSTART]];
-      params.contract_duration = parameters[global_param_ids[ParamId::CDUR]];
-      params.relax_duration = parameters[global_param_ids[ParamId::RDUR]];
-      break;
-    
-    case ActivationType::TWO_HILL:
-      params.t_shift = parameters[global_param_ids[ParamId::TSHIFT]];
-      params.tau_1 = parameters[global_param_ids[ParamId::TAU_1]];
-      params.tau_2 = parameters[global_param_ids[ParamId::TAU_2]];
-      params.m1 = parameters[global_param_ids[ParamId::M1]];
-      params.m2 = parameters[global_param_ids[ParamId::M2]];
-      break;
-    
-    default:
-      throw std::runtime_error(
-          "ChamberElastanceInductor: Invalid activation_type " +
-          std::to_string(activation_type_int));
+  // For backward compatibility, if activation parameters weren't set from JSON,
+  // try to get them from the parameter vector (for old flat format)
+  if (activation_params_.type == ActivationType::HALF_COSINE) {
+    if (global_param_ids.count(ParamId::TACTIVE) > 0) {
+      activation_params_.t_active = parameters[global_param_ids[ParamId::TACTIVE]];
+    }
+    if (global_param_ids.count(ParamId::TTWITCH) > 0) {
+      activation_params_.t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
+    }
   }
   
   // Use factory method to create activation function
-  activation_func_ = ActivationFunction::create(params);
+  activation_func_ = ActivationFunction::create(activation_params_);
 }

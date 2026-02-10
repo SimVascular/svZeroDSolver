@@ -329,11 +329,20 @@ def plot_simulation_results(
                       (col.lower().startswith('vc:') or col.lower().startswith('volume:') or 'volume' in col.lower()) 
                       and 'pressure' not in col.lower() and 'flow' not in col.lower() and col != 'time']
     
+    # Use default axes color cycle; cycle linestyle when colors repeat
+    default_colors = plt.rcParams['axes.prop_cycle'].by_key().get('color', list(plt.cm.tab10.colors))
+    linestyles = ['-', '--', ':']
+
+    def _plot_outputs(ax, outputs):
+        for i, output in enumerate(outputs):
+            color = default_colors[i % len(default_colors)]
+            ls = linestyles[(i // len(default_colors)) % len(linestyles)]
+            ax.plot(results_df['time'], results_df[output], label=output, linewidth=1.5, color=color, linestyle=ls)
+
     # Plot 1: All Pressures
     if pressure_outputs:
         fig, ax = plt.subplots(figsize=(14, 8))
-        for output in pressure_outputs:
-            ax.plot(results_df['time'], results_df[output], label=output, linewidth=1.5)
+        _plot_outputs(ax, pressure_outputs)
         ax.set_xlabel('Time', fontsize=12)
         ax.set_ylabel('Pressure', fontsize=12)
         title = f'{title_prefix} Pressures ({len(pressure_outputs)} outputs)' if title_prefix else f'All Pressures ({len(pressure_outputs)} outputs)'
@@ -347,8 +356,7 @@ def plot_simulation_results(
     # Plot 2: All Flows
     if flow_outputs:
         fig, ax = plt.subplots(figsize=(14, 8))
-        for output in flow_outputs:
-            ax.plot(results_df['time'], results_df[output], label=output, linewidth=1.5)
+        _plot_outputs(ax, flow_outputs)
         ax.set_xlabel('Time', fontsize=12)
         ax.set_ylabel('Flow', fontsize=12)
         title = f'{title_prefix} Flows ({len(flow_outputs)} outputs)' if title_prefix else f'All Flows ({len(flow_outputs)} outputs)'
@@ -362,8 +370,7 @@ def plot_simulation_results(
     # Plot 3: All Volumes
     if volume_outputs:
         fig, ax = plt.subplots(figsize=(14, 8))
-        for output in volume_outputs:
-            ax.plot(results_df['time'], results_df[output], label=output, linewidth=1.5)
+        _plot_outputs(ax, volume_outputs)
         ax.set_xlabel('Time', fontsize=12)
         ax.set_ylabel('Volume', fontsize=12)
         title = f'{title_prefix} Volumes ({len(volume_outputs)} outputs)' if title_prefix else f'All Volumes ({len(volume_outputs)} outputs)'

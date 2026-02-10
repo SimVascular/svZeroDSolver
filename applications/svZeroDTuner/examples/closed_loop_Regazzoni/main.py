@@ -3,8 +3,8 @@ sv0D Tuning Framework - Regazzoni closed-loop model example.
 
 This script provides three modes:
 1. BASELINE MODE: Run the initial model and save all results for inspection
-2. OPTIMIZE MODE: Run optimization using targets specified in tuning.yaml
-3. SENSITIVITY MODE: Run global sensitivity analysis using Sobol indices
+2. SENSITIVITY MODE: Run global sensitivity analysis using Sobol indices
+3. OPTIMIZE MODE: Run optimization using targets specified in tuning.yaml
 
 Usage:
     Edit the main() function and uncomment the mode you want to run, then:
@@ -269,9 +269,10 @@ def main():
     # SELECT MODE: Uncomment ONE of the following
     # ============================================================================
     
-    #run_baseline("model.json")         # MODE 1: Run baseline and save results
-    run_optimization("tuning_complex.yaml")     # MODE 2: Run optimization with tuning.yaml
-    #run_sensitivity("sensitivity.yaml") # MODE 3: Run sensitivity analysis
+    #run_baseline("model.json")                     # MODE 1: Run baseline and save results
+    #run_sensitivity("sensitivity.yaml")            # MODE 2: Run sensitivity analysis
+    run_optimization("tuning_complex.yaml")     # MODE 3: Run optimization with tuning.yaml
+    
     
     # ============================================================================
 

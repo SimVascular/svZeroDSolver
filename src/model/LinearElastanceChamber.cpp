@@ -33,7 +33,7 @@ void LinearElastanceChamber::update_time(SparseSystem& system,
   get_elastance_values(parameters);
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -1 * Elas;
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -Elas;
   system.C.coeffRef(global_eqn_ids[0]) =
       Elas * parameters[global_param_ids[ParamId::VREST]];
 }

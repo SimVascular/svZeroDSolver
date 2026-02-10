@@ -285,10 +285,13 @@ class TwoHillActivation : public ActivationFunction {
    * @param cardiac_period Period of cardiac cycle
    */
   void initialize_normalization(double cardiac_period) {
+    // Time step for numerical integration when finding maximum activation
+    // Value chosen to balance accuracy and computational cost
+    constexpr double NORMALIZATION_DT = 1e-5;
+    
     double max_value = 0.0;
-    double dt = 1e-5;
 
-    for (double t_temp = 0.0; t_temp < cardiac_period; t_temp += dt) {
+    for (double t_temp = 0.0; t_temp < cardiac_period; t_temp += NORMALIZATION_DT) {
       double g1 = std::pow(t_temp / tau_1_, m1_);
       double g2 = std::pow(t_temp / tau_2_, m2_);
       double two_hill_val = (g1 / (1.0 + g1)) * (1.0 / (1.0 + g2));

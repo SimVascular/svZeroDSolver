@@ -8,6 +8,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from matplotlib.transforms import blended_transform_factory
 from scipy.interpolate import interp1d
 from typing import List, Dict, Optional
 
@@ -196,7 +197,7 @@ def plot_target_comparison(
             ax.text(0.5, 0.5, f'No data for {name}', 
                    ha='center', va='center', transform=ax.transAxes)
             ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
-            csv_rows.append({'name': name, 'type': target_type, 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
+            csv_rows.append({'name': name, 'type': target_type, 'time': 'N/A', 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
             continue
         
         sim_value = simulated_values[sim_key]
@@ -207,7 +208,7 @@ def plot_target_comparison(
             if rng is None or 'target_times' not in target:
                 ax.text(0.5, 0.5, f'No range data for {name}', ha='center', va='center', transform=ax.transAxes)
                 ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
-                csv_rows.append({'name': name, 'type': 'time_series', 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
+                csv_rows.append({'name': name, 'type': 'time_series', 'time': 'N/A', 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
                 continue
             lo, hi = rng
             target_times = np.array(target['target_times'])
@@ -215,14 +216,14 @@ def plot_target_comparison(
             sim_times = simulated_values.get(f'{name}_times', None)
             sim_val_arr = np.asarray(sim_value)
             ax.fill_between(target_times, lo, hi, alpha=0.2, color='blue', label='Target range')
-            ax.plot(target_times, target_values, 'b-', linewidth=2, label='Target', alpha=0.7)
+            ax.plot(target_times, target_values, 'b-o', linewidth=2, markersize=4, label='Target', alpha=0.7)
             if sim_times is not None:
                 ax.plot(sim_times, sim_value, 'r--', linewidth=2, label='Simulated', alpha=0.7)
             else:
                 ax.plot(range(len(sim_val_arr)), sim_val_arr, 'r--', linewidth=2, label='Simulated', alpha=0.7)
             ax.set_xlabel('Time', fontsize=10)
             ax.set_ylabel(name, fontsize=10)
-            # Compute MAPE and CSV row
+            # Compute MAPE and CSV rows (time series: one row per time point)
             if len(target_times) > 0 and len(sim_val_arr) > 1:
                 try:
                     st = np.asarray(sim_times) if sim_times is not None else np.linspace(0, 1, len(sim_val_arr))
@@ -233,13 +234,18 @@ def plot_target_comparison(
                     sim_interp = interp_func(target_times)
                     valid = np.isfinite(target_values) & (np.abs(target_values) > 1e-14)
                     if np.any(valid):
-                        pct_errors = 100.0 * np.abs(sim_interp[valid] - target_values[valid]) / np.abs(target_values[valid])
-                        mape = np.mean(pct_errors)
-                        err_str = f'MAPE: {mape:.2f}%'
-                        sim_mean = np.mean(sim_interp)
-                        target_mean = float(np.mean(target_values))
-                        range_str = f"[{np.min(lo):.6e}, {np.max(hi):.6e}]"
-                        csv_rows.append({'name': name, 'type': 'time_series', 'target_value': target_mean, 'simulated_value': sim_mean, 'target_range': range_str, 'percent_error': mape})
+                        pct_errors = np.array([_compute_percent_error(float(target_values[i]), float(sim_interp[i])) for i in range(len(target_times))])
+                        mape_vals = [abs(p) for p in pct_errors if p is not None]
+                        mape = np.mean(mape_vals) if mape_vals else None
+                        err_str = f'MAPE: {mape:.2f}%' if mape is not None else None
+                        for i in range(len(target_times)):
+                            range_str = f"[{float(lo[i]):.6e}, {float(hi[i]):.6e}]"
+                            pct = pct_errors[i] if pct_errors[i] is not None else 'N/A'
+                            csv_rows.append({
+                                'name': name, 'type': 'time_series',
+                                'time': target_times[i], 'target_value': target_values[i],
+                                'simulated_value': sim_interp[i], 'target_range': range_str, 'percent_error': pct
+                            })
                     else:
                         err_str = None
                 except Exception:
@@ -247,16 +253,35 @@ def plot_target_comparison(
             else:
                 err_str = None
             if err_str is None and len(target_times) > 0 and len(sim_val_arr) > 0:
-                target_mean = float(np.mean(target_values))
-                range_str = f"[{np.min(lo):.6e}, {np.max(hi):.6e}]"
-                csv_rows.append({'name': name, 'type': 'time_series', 'target_value': target_mean, 'simulated_value': np.mean(sim_val_arr), 'target_range': range_str, 'percent_error': 'N/A'})
+                st = np.asarray(sim_times) if sim_times is not None else np.linspace(0, 1, len(sim_val_arr))
+                try:
+                    interp_func = interp1d(st, sim_val_arr, kind='linear', bounds_error=False, fill_value='extrapolate')
+                    sim_interp = interp_func(target_times)
+                except Exception:
+                    sim_interp = np.full_like(target_values, np.nan)
+                pct_errors = [_compute_percent_error(float(target_values[i]), float(sim_interp[i])) for i in range(len(target_times))]
+                for i in range(len(target_times)):
+                    range_str = f"[{float(lo[i]):.6e}, {float(hi[i]):.6e}]"
+                    pct = pct_errors[i] if pct_errors[i] is not None else 'N/A'
+                    csv_rows.append({
+                        'name': name, 'type': 'time_series',
+                        'time': target_times[i], 'target_value': target_values[i],
+                        'simulated_value': sim_interp[i], 'target_range': range_str, 'percent_error': pct
+                    })
+            ax.legend(fontsize=9)
+            ax.grid(True, alpha=0.3)
+            ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
+            if err_str:
+                ax.text(0.98, 0.05, f'Mean Absolute Percent Error: {mape:.2f}%', transform=ax.transAxes, fontsize=10,
+                        ha='right', va='bottom', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
+            continue
         else:
             # Plot scalar: use only range info; target_value = (lo+hi)/2, error bar shows range
             rng = _get_range_for_target(target)
             if rng is None:
                 ax.text(0.5, 0.5, f'No range data for {name}', ha='center', va='center', transform=ax.transAxes)
                 ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
-                csv_rows.append({'name': name, 'type': target_type, 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
+                csv_rows.append({'name': name, 'type': target_type, 'time': 'N/A', 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
                 continue
             lo, hi = float(rng[0].flat[0]), float(rng[1].flat[0])
             target_value = (lo + hi) / 2.0
@@ -271,19 +296,13 @@ def plot_target_comparison(
             ax.grid(True, alpha=0.3)
             pct_err = _compute_percent_error(target_value, sim_scalar)
             err_str = f'Error: {pct_err:.2f}%' if pct_err is not None else None
-            csv_rows.append({'name': name, 'type': target_type, 'target_value': target_value, 'simulated_value': sim_scalar, 'target_range': range_str, 'percent_error': pct_err if pct_err is not None else 'N/A'})
+            csv_rows.append({'name': name, 'type': target_type, 'time': 'N/A', 'target_value': target_value, 'simulated_value': sim_scalar, 'target_range': range_str, 'percent_error': pct_err if pct_err is not None else 'N/A'})
             ax.set_title(f'{name} ({target_type})', fontsize=11, fontweight='bold')
             if err_str:
-                ax.text(0.98, 0.95, err_str, transform=ax.transAxes, fontsize=10,
-                       ha='right', va='top', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
-            continue  # Skip the duplicate title/legend below
-        
-        ax.legend(fontsize=9)
-        ax.grid(True, alpha=0.3)
-        title = f'Target: {name}'
-        if err_str:
-            title += f'  [{err_str}]'
-        ax.set_title(title, fontsize=11, fontweight='bold')
+                trans = blended_transform_factory(ax.transData, ax.transAxes)
+                ax.text(1, 0.05, err_str, transform=trans, fontsize=10,
+                       ha='center', va='bottom', bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8))
+            continue
     
     # Hide unused subplots
     for idx in range(n_targets, len(axes)):
@@ -296,7 +315,8 @@ def plot_target_comparison(
         print(f"Saved target comparison plot to {output_file}")
         if csv_rows:
             csv_path = os.path.splitext(output_file)[0] + '.csv'
-            pd.DataFrame(csv_rows).to_csv(csv_path, index=False)
+            col_order = ['name', 'type', 'time', 'target_value', 'simulated_value', 'target_range', 'percent_error']
+            pd.DataFrame(csv_rows).to_csv(csv_path, index=False, columns=col_order)
             print(f"Saved target comparison data to {csv_path}")
     
     if show:

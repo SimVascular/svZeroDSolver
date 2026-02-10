@@ -38,6 +38,26 @@ where `t_contract = max(0, t - t_active)`
 }
 ```
 
+Or with explicit activation function specification:
+```json
+{
+  "type": "ChamberElastanceInductor",
+  "name": "ventricle",
+  "values": {
+    "Emax": 1.057,
+    "Emin": 0.091,
+    "Vrd": 26.1,
+    "Vrs": 18.0,
+    "Impedance": 0.000351787,
+    "activation_function_type": "half_cosine",
+    "activation_function_values": {
+      "t_active": 0.2,
+      "t_twitch": 0.3
+    }
+  }
+}
+```
+
 ### 2. Piecewise Cosine Activation (Type 1)
 
 The default activation function for `LinearElastanceChamber` (formerly `PiecewiseCosineChamber`). It models separate contraction and relaxation phases:
@@ -63,10 +83,13 @@ The default activation function for `LinearElastanceChamber` (formerly `Piecewis
     "Emax": 199.95,
     "Epass": 260.59,
     "Vrest": 26.24,
-    "contract_start": 0.025,
-    "relax_start": 0.08625,
-    "contract_duration": 0.06125,
-    "relax_duration": 0.18375
+    "activation_function_type": "piecewise_cosine",
+    "activation_function_values": {
+      "contract_start": 0.025,
+      "relax_start": 0.08625,
+      "contract_duration": 0.06125,
+      "relax_duration": 0.18375
+    }
   }
 }
 ```
@@ -107,23 +130,49 @@ C is a normalization constant ensuring maximum activation is 1.
     "Vrd": 26.1,
     "Vrs": 18.0,
     "Impedance": 0.000351787,
-    "activation_type": 2,
-    "t_shift": 0.15,
-    "tau_1": 0.25,
-    "tau_2": 0.35,
-    "m1": 1.5,
-    "m2": 10.0
+    "activation_function_type": "two_hill",
+    "activation_function_values": {
+      "t_shift": 0.15,
+      "tau_1": 0.25,
+      "tau_2": 0.35,
+      "m1": 1.5,
+      "m2": 10.0
+    }
   }
 }
 ```
 
 ## Switching Between Activation Functions
 
-To use a specific activation function, add the `activation_type` parameter to your chamber configuration:
+To use a specific activation function, add the `activation_function_type` parameter to your chamber configuration:
 
-- `activation_type: 0` - Half Cosine (default for ChamberElastanceInductor)
-- `activation_type: 1` - Piecewise Cosine (default for LinearElastanceChamber)
-- `activation_type: 2` - Two Hill
+- `activation_function_type: "half_cosine"` - Half Cosine (default for ChamberElastanceInductor)
+- `activation_function_type: "piecewise_cosine"` - Piecewise Cosine (default for LinearElastanceChamber)  
+- `activation_function_type: "two_hill"` - Two Hill
+
+Group the activation function-specific parameters under `activation_function_values` as a nested dictionary.
+
+## Backward Compatibility
+
+For backward compatibility, the old flat format is also supported:
+
+```json
+{
+  "type": "ChamberElastanceInductor",
+  "name": "ventricle",
+  "values": {
+    "Emax": 1.057,
+    "Emin": 0.091,
+    "Vrd": 26.1,
+    "Vrs": 18.0,
+    "t_active": 0.2,
+    "t_twitch": 0.3,
+    "Impedance": 0.000351787
+  }
+}
+```
+
+This format will continue to work, with the activation function determined by which parameters are provided.
 
 ## Elastance Calculation
 
@@ -148,6 +197,7 @@ The two-hill activation function is described in:
 ## Backward Compatibility
 
 Existing configuration files will continue to work without modification:
-- `ChamberElastanceInductor` defaults to half cosine activation (type 0)
-- `LinearElastanceChamber` defaults to piecewise cosine activation (type 1)
-- `PiecewiseCosineChamber` is maintained as an alias to `LinearElastanceChamber` for backward compatibility
+- `ChamberElastanceInductor` defaults to half cosine activation when `t_active` and `t_twitch` are provided
+- `LinearElastanceChamber` defaults to piecewise cosine activation when contraction/relaxation parameters are provided  
+- The old numeric `activation_type` parameter (0, 1, 2) is still supported but deprecated in favor of the string format
+- Parameters can be specified at the top level without using `activation_function_values` for backward compatibility

@@ -102,12 +102,14 @@
         "Vrd": 26.1,
         "Vrs": 18.0,
         "Impedance": 0.000351787,
-        "activation_type": 2,
-        "t_shift": 0.15,
-        "tau_1": 0.25,
-        "tau_2": 0.35,
-        "m1": 1.5,
-        "m2": 10.0
+        "activation_function_type": "two_hill",
+        "activation_function_values": {
+          "t_shift": 0.15,
+          "tau_1": 0.25,
+          "tau_2": 0.35,
+          "m1": 1.5,
+          "m2": 10.0
+        }
       }
     }
   ],

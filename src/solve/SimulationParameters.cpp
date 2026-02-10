@@ -544,7 +544,48 @@ void create_chambers(
     const auto& chamber_config = JsonWrapper(config, component, "name", i);
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
-    generate_block(model, chamber_config["values"], chamber_type, chamber_name);
+    
+    // Create a mutable copy of the values to handle activation function parameters
+    nlohmann::json chamber_values = chamber_config["values"];
+    
+    // Check if activation function type is specified as a string
+    if (chamber_values.contains("activation_function_type") && 
+        chamber_values["activation_function_type"].is_string()) {
+      std::string act_type_str = chamber_values["activation_function_type"];
+      
+      // Map string to numeric value
+      int act_type_num = 0;  // Default to half_cosine
+      if (act_type_str == "half_cosine") {
+        act_type_num = 0;
+      } else if (act_type_str == "piecewise_cosine") {
+        act_type_num = 1;
+      } else if (act_type_str == "two_hill") {
+        act_type_num = 2;
+      } else {
+        throw std::runtime_error("Unknown activation_function_type: " + act_type_str +
+                                 " in chamber " + chamber_name);
+      }
+      
+      // Replace string with numeric value
+      chamber_values["activation_type"] = act_type_num;
+      chamber_values.erase("activation_function_type");
+    }
+    
+    // Check if activation function values are specified in nested dict
+    if (chamber_values.contains("activation_function_values") &&
+        chamber_values["activation_function_values"].is_object()) {
+      const auto& act_values = chamber_values["activation_function_values"];
+      
+      // Flatten the nested dictionary - move all parameters to top level
+      for (auto& [key, value] : act_values.items()) {
+        chamber_values[key] = value;
+      }
+      
+      // Remove the nested dict
+      chamber_values.erase("activation_function_values");
+    }
+    
+    generate_block(model, chamber_values, chamber_type, chamber_name);
     DEBUG_MSG("Created chamber " << chamber_name);
   }
 }

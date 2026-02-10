@@ -70,12 +70,14 @@
         "Emax": 199.95,
         "Epass": 89.80375933024839,
         "Vrest": 41.680015938842274,
-        "activation_type": 2,
-        "t_shift": 0.025,
-        "tau_1": 0.06,
-        "tau_2": 0.15,
-        "m1": 2.0,
-        "m2": 8.0
+        "activation_function_type": "two_hill",
+        "activation_function_values": {
+          "t_shift": 0.025,
+          "tau_1": 0.06,
+          "tau_2": 0.15,
+          "m1": 2.0,
+          "m2": 8.0
+        }
       }
     },
     {
@@ -85,12 +87,14 @@
         "Emax": 1662.0158240056528,
         "Epass": 40.85565535747109,
         "Vrest": 72.05452710344869,
-        "activation_type": 2,
-        "t_shift": 0.207,
-        "tau_1": 0.08,
-        "tau_2": 0.22,
-        "m1": 2.5,
-        "m2": 12.0
+        "activation_function_type": "two_hill",
+        "activation_function_values": {
+          "t_shift": 0.207,
+          "tau_1": 0.08,
+          "tau_2": 0.22,
+          "m1": 2.5,
+          "m2": 12.0
+        }
       }
     }
   ],

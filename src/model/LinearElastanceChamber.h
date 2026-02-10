@@ -131,10 +131,6 @@ class LinearElastanceChamber : public Block {
               {{"Emax", InputParameter()},
                {"Epass", InputParameter()},
                {"Vrest", InputParameter()},
-               {"contract_start", InputParameter(false)},
-               {"relax_start", InputParameter(false)},
-               {"contract_duration", InputParameter(false)},
-               {"relax_duration", InputParameter(false)},
                {"activation_type", InputParameter(false)}}) {}
 
   /**
@@ -145,11 +141,7 @@ class LinearElastanceChamber : public Block {
     EMAX = 0,
     EPASS = 1,
     VREST = 2,
-    CSTART = 3,
-    RSTART = 4,
-    CDUR = 5,
-    RDUR = 6,
-    ACTIVATION_TYPE = 7
+    ACTIVATION_TYPE = 3
   };
 
   /**

@@ -603,23 +603,6 @@ void create_chambers(
       
       // Remove the nested dict (don't flatten to avoid parameter conflicts)
       chamber_values.erase("activation_function_values");
-    } else {
-      // Handle flat parameter structure for backward compatibility
-      if (act_params.type == ActivationType::HALF_COSINE) {
-        if (chamber_values.contains("t_active")) act_params.t_active = chamber_values["t_active"];
-        if (chamber_values.contains("t_twitch")) act_params.t_twitch = chamber_values["t_twitch"];
-      } else if (act_params.type == ActivationType::PIECEWISE_COSINE) {
-        if (chamber_values.contains("contract_start")) act_params.contract_start = chamber_values["contract_start"];
-        if (chamber_values.contains("relax_start")) act_params.relax_start = chamber_values["relax_start"];
-        if (chamber_values.contains("contract_duration")) act_params.contract_duration = chamber_values["contract_duration"];
-        if (chamber_values.contains("relax_duration")) act_params.relax_duration = chamber_values["relax_duration"];
-      } else if (act_params.type == ActivationType::TWO_HILL) {
-        if (chamber_values.contains("t_shift")) act_params.t_shift = chamber_values["t_shift"];
-        if (chamber_values.contains("tau_1")) act_params.tau_1 = chamber_values["tau_1"];
-        if (chamber_values.contains("tau_2")) act_params.tau_2 = chamber_values["tau_2"];
-        if (chamber_values.contains("m1")) act_params.m1 = chamber_values["m1"];
-        if (chamber_values.contains("m2")) act_params.m2 = chamber_values["m2"];
-      }
     }
     
     // Create the chamber block

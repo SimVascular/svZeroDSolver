@@ -154,8 +154,6 @@ class ChamberElastanceInductor : public Block {
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
                {"Vrs", InputParameter()},
-               {"t_active", InputParameter(false)},
-               {"t_twitch", InputParameter(false)},
                {"Impedance", InputParameter()},
                {"activation_type", InputParameter(false)}}) {}
 
@@ -168,10 +166,8 @@ class ChamberElastanceInductor : public Block {
     EMIN = 1,
     VRD = 2,
     VRS = 3,
-    TACTIVE = 4,
-    TTWITCH = 5,
-    IMPEDANCE = 6,
-    ACTIVATION_TYPE = 7
+    IMPEDANCE = 4,
+    ACTIVATION_TYPE = 5
   };
 
   /**

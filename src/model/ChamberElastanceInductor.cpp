@@ -66,17 +66,6 @@ void ChamberElastanceInductor::initialize_activation_function(
   // Set cardiac period
   activation_params_.cardiac_period = model->cardiac_cycle_period;
   
-  // For backward compatibility, if activation parameters weren't set from JSON,
-  // try to get them from the parameter vector (for old flat format)
-  if (activation_params_.type == ActivationType::HALF_COSINE) {
-    if (global_param_ids.count(ParamId::TACTIVE) > 0) {
-      activation_params_.t_active = parameters[global_param_ids[ParamId::TACTIVE]];
-    }
-    if (global_param_ids.count(ParamId::TTWITCH) > 0) {
-      activation_params_.t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
-    }
-  }
-  
   // Use factory method to create activation function
   activation_func_ = ActivationFunction::create(activation_params_);
 }

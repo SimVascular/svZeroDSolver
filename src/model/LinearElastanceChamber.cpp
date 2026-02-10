@@ -51,34 +51,18 @@ void LinearElastanceChamber::get_elastance_values(
 
 void LinearElastanceChamber::initialize_activation_function(
     std::vector<double>& parameters) {
-  // Check if activation_type parameter is provided (optional parameter)
-  // Default to PIECEWISE_COSINE (1) for backward compatibility
-  int activation_type_int = 1;
-  if (global_param_ids.count(ParamId::ACTIVATION_TYPE) > 0) {
-    activation_type_int = static_cast<int>(
-        parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
-    activation_params_.type = static_cast<ActivationType>(activation_type_int);
+  // Check if activation_type parameter is provided (required parameter)
+  if (global_param_ids.count(ParamId::ACTIVATION_TYPE) == 0) {
+    throw std::runtime_error(
+        "LinearElastanceChamber: activation_type parameter is required");
   }
+  
+  int activation_type_int = static_cast<int>(
+      parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
+  activation_params_.type = static_cast<ActivationType>(activation_type_int);
 
   // Set cardiac period
   activation_params_.cardiac_period = model->cardiac_cycle_period;
-  
-  // For backward compatibility, if activation parameters weren't set from JSON,
-  // try to get them from the parameter vector (for old flat format)
-  if (activation_params_.type == ActivationType::PIECEWISE_COSINE) {
-    if (global_param_ids.count(ParamId::CSTART) > 0) {
-      activation_params_.contract_start = parameters[global_param_ids[ParamId::CSTART]];
-    }
-    if (global_param_ids.count(ParamId::RSTART) > 0) {
-      activation_params_.relax_start = parameters[global_param_ids[ParamId::RSTART]];
-    }
-    if (global_param_ids.count(ParamId::CDUR) > 0) {
-      activation_params_.contract_duration = parameters[global_param_ids[ParamId::CDUR]];
-    }
-    if (global_param_ids.count(ParamId::RDUR) > 0) {
-      activation_params_.relax_duration = parameters[global_param_ids[ParamId::RDUR]];
-    }
-  }
   
   // Use factory method to create activation function
   activation_func_ = ActivationFunction::create(activation_params_);

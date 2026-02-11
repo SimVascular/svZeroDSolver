@@ -79,6 +79,67 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       }
     }
   } else {
+    // First pass: collect all missing parameters
+    std::vector<std::string> missing_params;
+    
+    for (const auto& block_param : block->input_params) {
+      // Time parameter is read at the same time as time-dependent value
+      if (block_param.first.compare("t") == 0) {
+        continue;
+      }
+
+      // Skip reading parameters that are not a number
+      if (!block_param.second.is_number) {
+        continue;
+      }
+
+      // Check vector parameter
+      if (block_param.second.is_array) {
+        // Check parameter vector
+        std::vector<double> val;
+        err = get_param_vector(block_params_json, block_param.first,
+                               block_param.second, val);
+        if (err) {
+          missing_params.push_back(block_param.first + " (array)");
+        }
+
+        // Check time vector
+        InputParameter t_param{false, true};
+        std::vector<double> time;
+        err = get_param_vector(block_params_json, "t", t_param, time);
+        if (err) {
+          // Only add "t" if not already in the list
+          if (std::find(missing_params.begin(), missing_params.end(), "t (array)") == missing_params.end()) {
+            missing_params.push_back("t (array)");
+          }
+        }
+      }
+
+      // Check scalar parameter
+      else {
+        double val;
+        err = get_param_scalar(block_params_json, block_param.first,
+                               block_param.second, val);
+        if (err) {
+          missing_params.push_back(block_param.first);
+        }
+      }
+    }
+
+    // If any parameters are missing, throw error with complete list
+    if (!missing_params.empty()) {
+      std::string error_msg = "Missing required parameter(s) in " + block_type +
+                              " block " + static_cast<std::string>(name) + ": ";
+      for (size_t i = 0; i < missing_params.size(); ++i) {
+        error_msg += missing_params[i];
+        if (i < missing_params.size() - 1) {
+          error_msg += ", ";
+        }
+      }
+      throw std::runtime_error(error_msg);
+    }
+
+    // Second pass: actually read and store the parameters
     for (const auto& block_param : block->input_params) {
       // Time parameter is read at the same time as time-dependent value
       if (block_param.first.compare("t") == 0) {
@@ -94,23 +155,13 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       if (block_param.second.is_array) {
         // Get parameter vector
         std::vector<double> val;
-        err = get_param_vector(block_params_json, block_param.first,
-                               block_param.second, val);
-        if (err) {
-          throw std::runtime_error("Array parameter " + block_param.first +
-                                   " is mandatory in " + block_type +
-                                   " block " + static_cast<std::string>(name));
-        }
+        get_param_vector(block_params_json, block_param.first,
+                        block_param.second, val);
 
         // Get time vector
         InputParameter t_param{false, true};
         std::vector<double> time;
-        err = get_param_vector(block_params_json, "t", t_param, time);
-        if (err) {
-          throw std::runtime_error("Array parameter t is mandatory in " +
-                                   block_type + " block " +
-                                   static_cast<std::string>(name));
-        }
+        get_param_vector(block_params_json, "t", t_param, time);
 
         // Add parameters to model
         new_id = model.add_parameter(time, val, periodic);
@@ -119,13 +170,8 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       // Get scalar parameter
       else {
         double val;
-        err = get_param_scalar(block_params_json, block_param.first,
-                               block_param.second, val);
-        if (err) {
-          throw std::runtime_error("Scalar parameter " + block_param.first +
-                                   " is mandatory in " + block_type +
-                                   " block " + static_cast<std::string>(name));
-        }
+        get_param_scalar(block_params_json, block_param.first,
+                        block_param.second, val);
 
         // Add parameter to model
         new_id = model.add_parameter(val);

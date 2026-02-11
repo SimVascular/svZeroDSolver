@@ -343,8 +343,12 @@ def plot_simulation_results(
     os.makedirs(output_dir, exist_ok=True)
     
     # Group outputs by category for better visualization
-    pressure_outputs = [col for col in results_df.columns if 'pressure' in col.lower() and col != 'time']
-    flow_outputs = [col for col in results_df.columns if 'flow' in col.lower() and col != 'time']
+    pressure_outputs = [col for col in results_df.columns
+                        if (col.lower().startswith('pressure') or col.lower().startswith('pressure_c'))
+                        and col != 'time']
+    flow_outputs = [col for col in results_df.columns
+                    if col.lower().startswith('flow:')
+                    and col != 'time']
     volume_outputs = [col for col in results_df.columns if 
                       (col.lower().startswith('vc:') or col.lower().startswith('volume:') or 'volume' in col.lower()) 
                       and 'pressure' not in col.lower() and 'flow' not in col.lower() and col != 'time']

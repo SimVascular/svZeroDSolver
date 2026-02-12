@@ -52,7 +52,7 @@ void LinearElastanceChamber::get_elastance_values(
 void LinearElastanceChamber::initialize_activation_function(
     std::vector<double>& parameters) {
   // Check if activation_type parameter is provided (required parameter)
-  if (global_param_ids.count(ParamId::ACTIVATION_TYPE) == 0) {
+  if (global_param_ids.size() <= ParamId::ACTIVATION_TYPE) {
     throw std::runtime_error(
         "LinearElastanceChamber: activation_type parameter is required");
   }

@@ -56,9 +56,9 @@ void ChamberElastanceInductor::get_elastance_values(
 void ChamberElastanceInductor::initialize_activation_function(
     std::vector<double>& parameters) {
   // Check if activation_type parameter is provided (optional parameter)
-  int activation_type_int = 0;  // Default to HALF_COSINE
-  if (global_param_ids.count(ParamId::ACTIVATION_TYPE) > 0) {
-    activation_type_int = static_cast<int>(
+  // Defaults to HALF_COSINE if not provided
+  if (global_param_ids.size() > ParamId::ACTIVATION_TYPE) {
+    int activation_type_int = static_cast<int>(
         parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
     activation_params_.type = static_cast<ActivationType>(activation_type_int);
   }

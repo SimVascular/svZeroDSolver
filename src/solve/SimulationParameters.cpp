@@ -596,53 +596,117 @@ void create_chambers(
     
     // Prepare activation function parameters
     ActivationFunctionParams act_params;
-    act_params.type = ActivationType::HALF_COSINE;  // Default
     act_params.cardiac_period = 0.0;  // Will be set later from model
     
-    // Check if activation function type is specified as a string
-    if (chamber_values.contains("activation_function_type") && 
-        chamber_values["activation_function_type"].is_string()) {
-      std::string act_type_str = chamber_values["activation_function_type"];
-      
-      // Map string to activation type
-      if (act_type_str == "half_cosine") {
-        act_params.type = ActivationType::HALF_COSINE;
-      } else if (act_type_str == "piecewise_cosine") {
-        act_params.type = ActivationType::PIECEWISE_COSINE;
-      } else if (act_type_str == "two_hill") {
-        act_params.type = ActivationType::TWO_HILL;
-      } else {
-        throw std::runtime_error("Unknown activation_function_type: " + act_type_str +
-                                 " in chamber " + chamber_name);
-      }
-      
+    // Check if activation function type is specified - it's required
+    if (!chamber_values.contains("activation_function_type")) {
+      throw std::runtime_error("Missing required parameter 'activation_function_type' in chamber " + 
+                               chamber_name + ". Must be one of: 'half_cosine', 'piecewise_cosine', 'two_hill'");
+    }
+    
+    if (!chamber_values["activation_function_type"].is_string()) {
+      throw std::runtime_error("Parameter 'activation_function_type' must be a string in chamber " + 
+                               chamber_name + ". Must be one of: 'half_cosine', 'piecewise_cosine', 'two_hill'");
+    }
+    
+    std::string act_type_str = chamber_values["activation_function_type"];
+    
+    // Map string to activation type
+    if (act_type_str == "half_cosine") {
+      act_params.type = ActivationType::HALF_COSINE;
+    } else if (act_type_str == "piecewise_cosine") {
+      act_params.type = ActivationType::PIECEWISE_COSINE;
+    } else if (act_type_str == "two_hill") {
+      act_params.type = ActivationType::TWO_HILL;
+    } else {
+      throw std::runtime_error("Unknown activation_function_type: '" + act_type_str +
+                               "' in chamber " + chamber_name + 
+                               ". Must be one of: 'half_cosine', 'piecewise_cosine', 'two_hill'");
     }
     
     // Check if activation function values are specified in nested dict
-    if (chamber_values.contains("activation_function_values") &&
-        chamber_values["activation_function_values"].is_object()) {
-      const auto& act_values = chamber_values["activation_function_values"];
+    if (!chamber_values.contains("activation_function_values")) {
+      throw std::runtime_error("Missing required parameter 'activation_function_values' in chamber " + 
+                               chamber_name + ". This nested dictionary must contain parameters for the " +
+                               act_type_str + " activation function.");
+    }
+    
+    if (!chamber_values["activation_function_values"].is_object()) {
+      throw std::runtime_error("Parameter 'activation_function_values' must be an object/dictionary in chamber " + 
+                               chamber_name);
+    }
+    
+    const auto& act_values = chamber_values["activation_function_values"];
+    std::vector<std::string> missing_params;
+    
+    // Extract and validate activation function parameters based on type
+    if (act_params.type == ActivationType::HALF_COSINE) {
+      // Required parameters for half_cosine
+      if (!act_values.contains("t_active")) missing_params.push_back("t_active");
+      if (!act_values.contains("t_twitch")) missing_params.push_back("t_twitch");
       
-      // Extract activation function parameters based on type
-      if (act_params.type == ActivationType::HALF_COSINE) {
-        if (act_values.contains("t_active")) act_params.t_active = act_values["t_active"];
-        if (act_values.contains("t_twitch")) act_params.t_twitch = act_values["t_twitch"];
-      } else if (act_params.type == ActivationType::PIECEWISE_COSINE) {
-        if (act_values.contains("contract_start")) act_params.contract_start = act_values["contract_start"];
-        if (act_values.contains("relax_start")) act_params.relax_start = act_values["relax_start"];
-        if (act_values.contains("contract_duration")) act_params.contract_duration = act_values["contract_duration"];
-        if (act_values.contains("relax_duration")) act_params.relax_duration = act_values["relax_duration"];
-      } else if (act_params.type == ActivationType::TWO_HILL) {
-        if (act_values.contains("t_shift")) act_params.t_shift = act_values["t_shift"];
-        if (act_values.contains("tau_1")) act_params.tau_1 = act_values["tau_1"];
-        if (act_values.contains("tau_2")) act_params.tau_2 = act_values["tau_2"];
-        if (act_values.contains("m1")) act_params.m1 = act_values["m1"];
-        if (act_values.contains("m2")) act_params.m2 = act_values["m2"];
+      if (!missing_params.empty()) {
+        std::string error_msg = "Missing required activation_function_values for 'half_cosine' in chamber " + 
+                                chamber_name + ": ";
+        for (size_t i = 0; i < missing_params.size(); i++) {
+          error_msg += missing_params[i];
+          if (i < missing_params.size() - 1) error_msg += ", ";
+        }
+        throw std::runtime_error(error_msg);
       }
       
-      // Remove the nested dict (don't flatten to avoid parameter conflicts)
-      chamber_values.erase("activation_function_values");
+      act_params.t_active = act_values["t_active"];
+      act_params.t_twitch = act_values["t_twitch"];
+      
+    } else if (act_params.type == ActivationType::PIECEWISE_COSINE) {
+      // Required parameters for piecewise_cosine
+      if (!act_values.contains("contract_start")) missing_params.push_back("contract_start");
+      if (!act_values.contains("relax_start")) missing_params.push_back("relax_start");
+      if (!act_values.contains("contract_duration")) missing_params.push_back("contract_duration");
+      if (!act_values.contains("relax_duration")) missing_params.push_back("relax_duration");
+      
+      if (!missing_params.empty()) {
+        std::string error_msg = "Missing required activation_function_values for 'piecewise_cosine' in chamber " + 
+                                chamber_name + ": ";
+        for (size_t i = 0; i < missing_params.size(); i++) {
+          error_msg += missing_params[i];
+          if (i < missing_params.size() - 1) error_msg += ", ";
+        }
+        throw std::runtime_error(error_msg);
+      }
+      
+      act_params.contract_start = act_values["contract_start"];
+      act_params.relax_start = act_values["relax_start"];
+      act_params.contract_duration = act_values["contract_duration"];
+      act_params.relax_duration = act_values["relax_duration"];
+      
+    } else if (act_params.type == ActivationType::TWO_HILL) {
+      // Required parameters for two_hill
+      if (!act_values.contains("t_shift")) missing_params.push_back("t_shift");
+      if (!act_values.contains("tau_1")) missing_params.push_back("tau_1");
+      if (!act_values.contains("tau_2")) missing_params.push_back("tau_2");
+      if (!act_values.contains("m1")) missing_params.push_back("m1");
+      if (!act_values.contains("m2")) missing_params.push_back("m2");
+      
+      if (!missing_params.empty()) {
+        std::string error_msg = "Missing required activation_function_values for 'two_hill' in chamber " + 
+                                chamber_name + ": ";
+        for (size_t i = 0; i < missing_params.size(); i++) {
+          error_msg += missing_params[i];
+          if (i < missing_params.size() - 1) error_msg += ", ";
+        }
+        throw std::runtime_error(error_msg);
+      }
+      
+      act_params.t_shift = act_values["t_shift"];
+      act_params.tau_1 = act_values["tau_1"];
+      act_params.tau_2 = act_values["tau_2"];
+      act_params.m1 = act_values["m1"];
+      act_params.m2 = act_values["m2"];
     }
+    
+    // Remove the nested dict (don't flatten to avoid parameter conflicts)
+    chamber_values.erase("activation_function_values");
     
     // Create the chamber block
     int block_id = generate_block(model, chamber_values, chamber_type, chamber_name);

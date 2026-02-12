@@ -21,9 +21,9 @@ import pysvzerod
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
 
 import json
-from src.sv0d_tuner import SV0DTuner
-from src.visualization import plot_simulation_results
-from src.sensitivity import SensitivityAnalyzer
+from svzerodtuner.sv0d_tuner import SV0DTuner
+from svzerodtuner.visualization import plot_simulation_results
+from svzerodtuner.sensitivity import SensitivityAnalyzer
 
 
 def run_baseline(config_file):

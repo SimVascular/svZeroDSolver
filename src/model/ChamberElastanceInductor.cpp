@@ -55,13 +55,10 @@ void ChamberElastanceInductor::get_elastance_values(
 
 void ChamberElastanceInductor::initialize_activation_function(
     std::vector<double>& parameters) {
-  // Check if activation_type parameter is provided (optional parameter)
-  // Defaults to HALF_COSINE if not provided
-  if (global_param_ids.size() > ParamId::ACTIVATION_TYPE) {
-    int activation_type_int = static_cast<int>(
-        parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
-    activation_params_.type = static_cast<ActivationType>(activation_type_int);
-  }
+  // Get required activation_type parameter
+  int activation_type_int = static_cast<int>(
+      parameters[global_param_ids[ParamId::ACTIVATION_TYPE]]);
+  activation_params_.type = static_cast<ActivationType>(activation_type_int);
 
   // Set cardiac period
   activation_params_.cardiac_period = model->cardiac_cycle_period;

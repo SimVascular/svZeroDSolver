@@ -155,7 +155,7 @@ class ChamberElastanceInductor : public Block {
                {"Vrd", InputParameter()},
                {"Vrs", InputParameter()},
                {"Impedance", InputParameter()},
-               {"activation_type", InputParameter(true, false, true, 0.0)}}) {}
+               {"activation_type", InputParameter()}}) {}
 
   /**
    * @brief Local IDs of the parameters

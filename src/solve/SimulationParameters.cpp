@@ -616,13 +616,6 @@ void create_chambers(
                                  " in chamber " + chamber_name);
       }
       
-      // Replace string with numeric value for backward compatibility
-      chamber_values["activation_type"] = static_cast<int>(act_params.type);
-      chamber_values.erase("activation_function_type");
-    } else if (chamber_values.contains("activation_type")) {
-      // Handle numeric activation_type for backward compatibility
-      int act_type_num = chamber_values["activation_type"];
-      act_params.type = static_cast<ActivationType>(act_type_num);
     }
     
     // Check if activation function values are specified in nested dict

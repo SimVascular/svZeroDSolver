@@ -73,12 +73,12 @@
  * Parameter sequence for constructing this block
  *
  * * `0` Ra: Small artery resistance
- * * `1` Rv: Venous resistance
- * * `2` Ca: Small artery capacitance
- * * `3` Cim: Intramyocardial capacitance
- * * `4` Pim: Intramyocardial pressure
- * * `5` Pv: Venous pressure
- * * `6` Ram: Microvascular resistance
+ * * `1` Ram: Microvascular resistance
+ * * `2` Rv: Venous resistance
+ * * `3` Ca: Small artery capacitance
+ * * `4` Cim: Intramyocardial capacitance
+ * * `5` Pim: Intramyocardial pressure
+ * * `6` Pv: Venous pressure
  *
  * ### Usage in json configuration file
  *

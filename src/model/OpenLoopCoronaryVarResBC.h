@@ -119,21 +119,20 @@ class OpenLoopCoronaryVarResBC : public OpenLoopCoronaryBC {
    * @param model The model to which the block belongs
    */
   OpenLoopCoronaryVarResBC(int id, Model* model)
-      : OpenLoopCoronaryBC(id, model,
-                           BlockType::open_loop_coronary_var_res_bc,
-                           {{"Ra1", InputParameter()},
-                            {"Rv1", InputParameter()},
-                            {"Ca", InputParameter()},
-                            {"Cc", InputParameter()},
-                            {"t", InputParameter(false, true)},
-                            {"Pim", InputParameter(false, true)},
-                            {"P_v", InputParameter()},
-                            {"Ra2_min", InputParameter()},
-                            {"Ra2_max", InputParameter()},
-                            {"T_vc", InputParameter()},
-                            {"T_vr", InputParameter()},
-                            {"closed_loop_outlet",
-                             InputParameter(true, false, false)}}) {}
+      : OpenLoopCoronaryBC(
+            id, model, BlockType::open_loop_coronary_var_res_bc,
+            {{"Ra1", InputParameter()},
+             {"Rv1", InputParameter()},
+             {"Ca", InputParameter()},
+             {"Cc", InputParameter()},
+             {"t", InputParameter(false, true)},
+             {"Pim", InputParameter(false, true)},
+             {"P_v", InputParameter()},
+             {"Ra2_min", InputParameter()},
+             {"Ra2_max", InputParameter()},
+             {"T_vc", InputParameter()},
+             {"T_vr", InputParameter()},
+             {"closed_loop_outlet", InputParameter(true, false, false)}}) {}
 
  protected:
   /**

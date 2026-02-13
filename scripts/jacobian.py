@@ -1,4 +1,4 @@
-from sympy import symbols, Matrix, diff, simplify, pi, Abs
+from sympy import symbols, Matrix, simplify, pi, Abs
 from sympy.printing import ccode
 import re
 import pdb
@@ -29,8 +29,7 @@ def load_model(filepath):
     return variables, derivatives, constants, residuals, time_dependent
 
 def extract_linear(residuals, y, dy):
-    def is_constant_coeff(coeff):
-        return (coeff and coeff.free_symbols.isdisjoint(y.free_symbols | dy.free_symbols))
+    zero_subs = [(v, 0) for v in list(y) + list(dy)]
     nr = residuals.shape[0]
     ny = y.shape[0]
     E = Matrix.zeros(nr, ny)
@@ -39,8 +38,9 @@ def extract_linear(residuals, y, dy):
         for j in range(ny):
             for mat, dd in zip([E, F], [dy, y]):
                 coeff = residuals[i].coeff(dd[j])
-                if is_constant_coeff(coeff):
-                    mat[i, j] = coeff
+                const_coeff = simplify(coeff.subs(zero_subs))
+                if const_coeff:
+                    mat[i, j] = const_coeff
     return E, F
 
 def extract_nonlinear(residuals, E, F, y, dy):
@@ -49,27 +49,12 @@ def extract_nonlinear(residuals, E, F, y, dy):
     dC_dydot = simplify(C.jacobian(dy))
     return C, dC_dy, dC_dydot
 
-def is_linear_in(expr, variables):
-    expr = simplify(expr)
-
-    # 1. No quadratic terms: second derivative wrt each variable is zero
-    for v in variables:
-        if simplify(diff(expr, v, 2)) != 0:
-            return False
-
-    # 2. No cross terms: mixed second derivatives must all be zero
-    for i, vi in enumerate(variables):
-        for vj in variables[i+1:]:
-            if simplify(diff(expr, vi, vj)) != 0:
-                return False
-
-    return True
-
 def depends_on(expr, symbols_set):
     return any(sym in expr.free_symbols for sym in symbols_set)
 
 def partition_terms(E, F, C, dC_dy, dC_dydot, variables, time_dependent_symbols):
     parts = {"constant": [], "time": [], "solution": []}
+    variable_symbols = variables.free_symbols
     for label, mat in [("E", E), ("F", F), ("C", C), ("dC_dy", dC_dy), ("dC_dydot", dC_dydot)]:
         for i in range(mat.rows):
             for j in range(mat.cols):
@@ -78,13 +63,16 @@ def partition_terms(E, F, C, dC_dy, dC_dydot, variables, time_dependent_symbols)
                 else:
                     expr = mat[i, j]
                 if expr != 0:
-                    if not is_linear_in(expr, variables):
+                    if depends_on(expr, variable_symbols):
                         target = "solution"
                     elif depends_on(expr, time_dependent_symbols):
                         target = "time"
                     else:
                         target = "constant"
-                    parts[target].append((label, i, j, expr))
+                    if mat.cols == 1:
+                        parts[target].append((label, i, expr))
+                    else:
+                        parts[target].append((label, i, j, expr))
     return parts
 
 def get_expressions(parts, type):

@@ -1,0 +1,149 @@
+// SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
+// University of California, and others. SPDX-License-Identifier: BSD-3-Clause
+
+#include "ActivationFunction.h"
+
+#include <cmath>
+#include <stdexcept>
+
+ActivationFunction::ActivationFunction(
+    double cardiac_period,
+    std::vector<std::pair<std::string, InputParameter>> params)
+    : cardiac_period_(cardiac_period) {
+  for (auto& p : params) {
+    if (p.second.is_number) {
+      double default_val =
+          p.second.is_optional ? p.second.default_val : 0.0;
+      params_[p.first] = {std::move(p.second), default_val};
+    }
+  }
+}
+
+void ActivationFunction::set_param(const std::string& name, double value) {
+  auto it = params_.find(name);
+  if (it == params_.end()) {
+    throw std::runtime_error(
+        "ActivationFunction::set_param: unknown parameter '" + name + "'");
+  }
+  if (!it->second.first.is_number) {
+    throw std::runtime_error(
+        "ActivationFunction::set_param: parameter '" + name +
+        "' is not a scalar number");
+  }
+  it->second.second = value;
+}
+
+std::vector<std::pair<std::string, InputParameter>>
+ActivationFunction::get_input_params() const {
+  std::vector<std::pair<std::string, InputParameter>> out;
+  for (const auto& p : params_) {
+    out.push_back({p.first, p.second.first});
+  }
+  return out;
+}
+
+std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
+    const std::string& type_str, double cardiac_period) {
+  if (type_str == "half_cosine") {
+    return std::make_unique<HalfCosineActivation>(cardiac_period);
+  }
+  if (type_str == "piecewise_cosine") {
+    return std::make_unique<PiecewiseCosineActivation>(cardiac_period);
+  }
+  if (type_str == "two_hill") {
+    return std::make_unique<TwoHillActivation>(cardiac_period);
+  }
+  throw std::runtime_error(
+      "Unknown activation_function type '" + type_str +
+      "'. Must be one of: half_cosine, piecewise_cosine, two_hill");
+}
+
+double HalfCosineActivation::compute(double time) {
+  double t_in_cycle = std::fmod(time, cardiac_period_);
+  const double t_active = params_.at("t_active").second;
+  const double t_twitch = params_.at("t_twitch").second;
+
+  double t_contract = 0.0;
+  if (t_in_cycle >= t_active) {
+    t_contract = t_in_cycle - t_active;
+  }
+
+  double act = 0.0;
+  if (t_contract <= t_twitch) {
+    act = -0.5 * std::cos(2.0 * M_PI * t_contract / t_twitch) + 0.5;
+  }
+
+  return act;
+}
+
+double PiecewiseCosineActivation::compute(double time) {
+  const double contract_start = params_.at("contract_start").second;
+  const double relax_start = params_.at("relax_start").second;
+  const double contract_duration = params_.at("contract_duration").second;
+  const double relax_duration = params_.at("relax_duration").second;
+
+  double phi = 0.0;
+  double piecewise_condition =
+      std::fmod(time - contract_start, cardiac_period_);
+
+  if (0.0 <= piecewise_condition &&
+      piecewise_condition < contract_duration) {
+    phi = 0.5 * (1.0 - std::cos((M_PI * piecewise_condition) /
+                                contract_duration));
+  } else {
+    piecewise_condition = std::fmod(time - relax_start, cardiac_period_);
+    if (0.0 <= piecewise_condition &&
+        piecewise_condition < relax_duration) {
+      phi = 0.5 * (1.0 + std::cos((M_PI * piecewise_condition) /
+                                  relax_duration));
+    }
+  }
+
+  return phi;
+}
+
+void TwoHillActivation::calculate_normalization_factor() {
+  const double tau_1 = params_.at("tau_1").second;
+  const double tau_2 = params_.at("tau_2").second;
+  const double m1 = params_.at("m1").second;
+  const double m2 = params_.at("m2").second;
+
+  constexpr double NORMALIZATION_DT = 1e-5;
+  double max_value = 0.0;
+
+  for (double t_temp = 0.0; t_temp < cardiac_period_; t_temp += NORMALIZATION_DT) {
+    double g1 = std::pow(t_temp / tau_1, m1);
+    double g2 = std::pow(t_temp / tau_2, m2);
+    double two_hill_val = (g1 / (1.0 + g1)) * (1.0 / (1.0 + g2));
+    max_value = std::max(max_value, two_hill_val);
+  }
+
+  normalization_factor_ = 1.0 / max_value;
+  normalization_initialized_ = true;
+}
+
+void TwoHillActivation::finalize() {
+  calculate_normalization_factor();
+}
+
+double TwoHillActivation::compute(double time) {
+  if (!normalization_initialized_) {
+    throw std::runtime_error(
+        "TwoHillActivation: call finalize() after setting parameters");
+  }
+
+  const double t_shift = params_.at("t_shift").second;
+  const double tau_1 = params_.at("tau_1").second;
+  const double tau_2 = params_.at("tau_2").second;
+  const double m1 = params_.at("m1").second;
+  const double m2 = params_.at("m2").second;
+
+  double t_in_cycle = std::fmod(time, cardiac_period_);
+  double t_shifted = std::fmod(t_in_cycle - t_shift, cardiac_period_);
+  t_shifted = (t_shifted >= 0.0) ? t_shifted : t_shifted + cardiac_period_;
+
+  double g1 = std::pow(t_shifted / tau_1, m1);
+  double g2 = std::pow(t_shifted / tau_2, m2);
+
+  return normalization_factor_ * (g1 / (1.0 + g1)) * (1.0 / (1.0 + g2));
+}

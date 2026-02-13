@@ -8,7 +8,9 @@
 #define SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_
 
 #include <math.h>
+#include <memory>
 
+#include "ActivationFunction.h"
 #include "Block.h"
 #include "Model.h"
 #include "SparseSystem.h"
@@ -120,9 +122,12 @@
  *                 "Emin": 0.091,
  *                 "Vrd": 26.1,
  *                 "Vrs": 18.0,
- *                 "t_active": 0.2,
- *                 "t_twitch": 0.3,
  *                 "Impedance": 0.000351787
+ *             },
+ *             "activation_function": {
+ *                 "type": "half_cosine",
+ *                 "t_active": 0.2,
+ *                 "t_twitch": 0.3
  *             }
  *         }
  *     ],
@@ -152,8 +157,6 @@ class ChamberElastanceInductor : public Block {
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
                {"Vrs", InputParameter()},
-               {"t_active", InputParameter()},
-               {"t_twitch", InputParameter()},
                {"Impedance", InputParameter()}}) {}
 
   /**
@@ -165,9 +168,7 @@ class ChamberElastanceInductor : public Block {
     EMIN = 1,
     VRD = 2,
     VRS = 3,
-    TACTIVE = 4,
-    TTWITCH = 5,
-    IMPEDANCE = 6
+    IMPEDANCE = 4
   };
 
   /**
@@ -211,6 +212,20 @@ class ChamberElastanceInductor : public Block {
  private:
   double Elas;   // Chamber Elastance
   double Vrest;  // Rest Volume
+  std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
+
+ public:
+  /**
+   * @brief Set the activation function (takes ownership)
+   *
+   * @param af Unique pointer to the activation function
+   */
+  void set_activation_function(
+      std::unique_ptr<ActivationFunction> af) override;
+
+ private:
+
+ private:
 
   /**
    * @brief Update the elastance functions which depend on time

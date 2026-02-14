@@ -74,7 +74,8 @@ class ActivationFunction {
    * @brief Parameter definitions for validation/loading (analogous to
    * Block::input_params).
    *
-   * Returns (name, InputParameter) for each parameter. Built from params_.
+   * @return std::vector<std::pair<std::string, InputParameter>> (name,
+   * InputParameter) for each parameter. Built from params_.
    */
   std::vector<std::pair<std::string, InputParameter>> get_input_params() const;
 
@@ -88,15 +89,15 @@ class ActivationFunction {
  protected:
   /**
    * @brief Time duration of one cardiac cycle
-   * 
+   *
    */
   double cardiac_period_;
 
   /**
    * @brief Map of parameter names to their values and default values
    *
-   * The key is the parameter name, and the value is a pair of the InputParameter
-   * and the value.
+   * The key is the parameter name, and the value is a pair of the
+   * InputParameter and the value.
    */
   std::map<std::string, std::pair<InputParameter, double>> params_;
 };

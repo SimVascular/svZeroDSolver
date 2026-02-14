@@ -294,8 +294,8 @@ class Block {
    * @param af Unique pointer to the activation function (caller transfers
    * ownership)
    */
-  virtual void set_activation_function(
-      std::unique_ptr<ActivationFunction> /*af*/) {}
+  virtual void set_activation_function(std::unique_ptr<ActivationFunction> af) {
+  }
 };
 
 #endif

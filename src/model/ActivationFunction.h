@@ -197,18 +197,15 @@ class TwoHillActivation : public ActivationFunction {
    * @brief Construct with default parameter values (loader fills via
    * set_param).
    *
-   * Defaults for tau_1, tau_2, m1, m2 are 1.0 to avoid division by zero.
-   * Call finalize() after all set_param to recompute normalization.
-   *
    * @param cardiac_period Cardiac cycle period
    */
   explicit TwoHillActivation(double cardiac_period)
       : ActivationFunction(cardiac_period,
                            {{"t_shift", InputParameter()},
-                            {"tau_1", InputParameter(false, false, true, 1.0)},
-                            {"tau_2", InputParameter(false, false, true, 1.0)},
-                            {"m1", InputParameter(false, false, true, 1.0)},
-                            {"m2", InputParameter(false, false, true, 1.0)}}),
+                            {"tau_1", InputParameter()},
+                            {"tau_2", InputParameter()},
+                            {"m1", InputParameter()},
+                            {"m2", InputParameter()}}),
         normalization_factor_(1.0),
         normalization_initialized_(false) {}
 

@@ -295,6 +295,7 @@ class Block {
    * ownership)
    */
   virtual void set_activation_function(std::unique_ptr<ActivationFunction> af) {
+    (void)af; // Included to avoid unused parameter warning
   }
 };
 

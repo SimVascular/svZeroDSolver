@@ -5,6 +5,11 @@
 
 #include <cmath>
 #include <stdexcept>
+#include <string>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 ActivationFunction::ActivationFunction(
     double cardiac_period,
@@ -99,6 +104,13 @@ double PiecewiseCosineActivation::compute(double time) {
 }
 
 void TwoHillActivation::calculate_normalization_factor() {
+  if (cardiac_period_ <= 0.0) {
+    throw std::runtime_error(
+        "TwoHillActivation::calculate_normalization_factor: cardiac_period "
+        "must be positive (got " +
+        std::to_string(cardiac_period_) + ")");
+  }
+
   const double tau_1 = params_.at("tau_1").second;
   const double tau_2 = params_.at("tau_2").second;
   const double m1 = params_.at("m1").second;
@@ -113,6 +125,14 @@ void TwoHillActivation::calculate_normalization_factor() {
     double g2 = std::pow(t_temp / tau_2, m2);
     double two_hill_val = (g1 / (1.0 + g1)) * (1.0 / (1.0 + g2));
     max_value = std::max(max_value, two_hill_val);
+  }
+
+  if (!(max_value > 0.0) || !std::isfinite(max_value)) {
+    throw std::runtime_error(
+        "TwoHillActivation::calculate_normalization_factor: max activation "
+        "value must be positive and finite (got " +
+        std::to_string(max_value) +
+        "). Check tau_1, tau_2, m1, m2 are valid (e.g., tau_1 > 0, tau_2 > 0).");
   }
 
   normalization_factor_ = 1.0 / max_value;

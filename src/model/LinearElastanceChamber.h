@@ -190,7 +190,6 @@ class LinearElastanceChamber : public Block {
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
  private:
- private:
   /**
    * @brief Update the elastance functions which depend on time
    *

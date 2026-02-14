@@ -40,7 +40,7 @@ void ChamberElastanceInductor::get_elastance_values(
   double Emin = parameters[global_param_ids[ParamId::EMIN]];
   double Vrd = parameters[global_param_ids[ParamId::VRD]];
   double Vrs = parameters[global_param_ids[ParamId::VRS]];
-  
+
   // Compute activation using the activation function
   double act = activation_func_->compute(model->time);
 
@@ -52,4 +52,3 @@ void ChamberElastanceInductor::set_activation_function(
     std::unique_ptr<ActivationFunction> af) {
   activation_func_ = std::move(af);
 }
-

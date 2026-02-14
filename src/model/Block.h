@@ -291,7 +291,8 @@ class Block {
    * Default no-op. Overridden by ChamberElastanceInductor and
    * LinearElastanceChamber to take ownership of the activation function.
    *
-   * @param af Unique pointer to the activation function (caller transfers ownership)
+   * @param af Unique pointer to the activation function (caller transfers
+   * ownership)
    */
   virtual void set_activation_function(
       std::unique_ptr<ActivationFunction> /*af*/) {}

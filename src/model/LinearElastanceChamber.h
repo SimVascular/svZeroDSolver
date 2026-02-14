@@ -10,6 +10,7 @@
 #define SVZERODSOLVER_MODEL_LINEARELASTANCECHAMBER_HPP_
 
 #include <math.h>
+
 #include <memory>
 
 #include "ActivationFunction.h"
@@ -136,11 +137,7 @@ class LinearElastanceChamber : public Block {
    * @brief Local IDs of the parameters
    *
    */
-  enum ParamId {
-    EMAX = 0,
-    EPASS = 1,
-    VREST = 2
-  };
+  enum ParamId { EMAX = 0, EPASS = 1, VREST = 2 };
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -181,7 +178,7 @@ class LinearElastanceChamber : public Block {
   TripletsContributions num_triplets{6, 2, 0};
 
  private:
-  double Elas;  // Chamber Elastance
+  double Elas;                                           // Chamber Elastance
   std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
 
  public:
@@ -190,13 +187,10 @@ class LinearElastanceChamber : public Block {
    *
    * @param af Unique pointer to the activation function
    */
-  void set_activation_function(
-      std::unique_ptr<ActivationFunction> af) override;
+  void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
  private:
-
  private:
-
   /**
    * @brief Update the elastance functions which depend on time
    *

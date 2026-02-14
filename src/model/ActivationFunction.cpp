@@ -12,8 +12,7 @@ ActivationFunction::ActivationFunction(
     : cardiac_period_(cardiac_period) {
   for (auto& p : params) {
     if (p.second.is_number) {
-      double default_val =
-          p.second.is_optional ? p.second.default_val : 0.0;
+      double default_val = p.second.is_optional ? p.second.default_val : 0.0;
       params_[p.first] = {std::move(p.second), default_val};
     }
   }
@@ -26,9 +25,8 @@ void ActivationFunction::set_param(const std::string& name, double value) {
         "ActivationFunction::set_param: unknown parameter '" + name + "'");
   }
   if (!it->second.first.is_number) {
-    throw std::runtime_error(
-        "ActivationFunction::set_param: parameter '" + name +
-        "' is not a scalar number");
+    throw std::runtime_error("ActivationFunction::set_param: parameter '" +
+                             name + "' is not a scalar number");
   }
   it->second.second = value;
 }
@@ -86,16 +84,14 @@ double PiecewiseCosineActivation::compute(double time) {
   double piecewise_condition =
       std::fmod(time - contract_start, cardiac_period_);
 
-  if (0.0 <= piecewise_condition &&
-      piecewise_condition < contract_duration) {
-    phi = 0.5 * (1.0 - std::cos((M_PI * piecewise_condition) /
-                                contract_duration));
+  if (0.0 <= piecewise_condition && piecewise_condition < contract_duration) {
+    phi = 0.5 *
+          (1.0 - std::cos((M_PI * piecewise_condition) / contract_duration));
   } else {
     piecewise_condition = std::fmod(time - relax_start, cardiac_period_);
-    if (0.0 <= piecewise_condition &&
-        piecewise_condition < relax_duration) {
-      phi = 0.5 * (1.0 + std::cos((M_PI * piecewise_condition) /
-                                  relax_duration));
+    if (0.0 <= piecewise_condition && piecewise_condition < relax_duration) {
+      phi =
+          0.5 * (1.0 + std::cos((M_PI * piecewise_condition) / relax_duration));
     }
   }
 
@@ -111,7 +107,8 @@ void TwoHillActivation::calculate_normalization_factor() {
   constexpr double NORMALIZATION_DT = 1e-5;
   double max_value = 0.0;
 
-  for (double t_temp = 0.0; t_temp < cardiac_period_; t_temp += NORMALIZATION_DT) {
+  for (double t_temp = 0.0; t_temp < cardiac_period_;
+       t_temp += NORMALIZATION_DT) {
     double g1 = std::pow(t_temp / tau_1, m1);
     double g2 = std::pow(t_temp / tau_2, m2);
     double two_hill_val = (g1 / (1.0 + g1)) * (1.0 / (1.0 + g2));
@@ -122,9 +119,7 @@ void TwoHillActivation::calculate_normalization_factor() {
   normalization_initialized_ = true;
 }
 
-void TwoHillActivation::finalize() {
-  calculate_normalization_factor();
-}
+void TwoHillActivation::finalize() { calculate_normalization_factor(); }
 
 double TwoHillActivation::compute(double time) {
   if (!normalization_initialized_) {

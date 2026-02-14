@@ -37,7 +37,7 @@ void LinearElastanceChamber::get_elastance_values(
     std::vector<double>& parameters) {
   double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Epass = parameters[global_param_ids[ParamId::EPASS]];
-  
+
   // Compute activation using the activation function
   double phi = activation_func_->compute(model->time);
 
@@ -48,4 +48,3 @@ void LinearElastanceChamber::set_activation_function(
     std::unique_ptr<ActivationFunction> af) {
   activation_func_ = std::move(af);
 }
-

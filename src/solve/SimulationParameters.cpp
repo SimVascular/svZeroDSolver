@@ -140,8 +140,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
 }
 
 std::unique_ptr<ActivationFunction> generate_activation_function(
-    Model& model, const nlohmann::json& j,
-    const std::string& chamber_name) {
+    Model& model, const nlohmann::json& j, const std::string& chamber_name) {
   if (j.is_null() || !j.is_object()) {
     throw std::runtime_error(
         "Missing 'activation_function' for chamber " + chamber_name +
@@ -174,9 +173,9 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
       continue;
     }
     if (!has_parameter(input_params, el.key())) {
-      throw std::runtime_error(
-          "Unknown parameter " + el.key() +
-          " defined in activation_function for chamber " + chamber_name);
+      throw std::runtime_error("Unknown parameter " + el.key() +
+                               " defined in activation_function for chamber " +
+                               chamber_name);
     }
   }
 
@@ -621,7 +620,8 @@ void create_chambers(
         chamber_type == "LinearElastanceChamber") {
       auto act_func = generate_activation_function(
           model, chamber_config["activation_function"], chamber_name);
-      model.get_block(chamber_name)->set_activation_function(std::move(act_func));
+      model.get_block(chamber_name)
+          ->set_activation_function(std::move(act_func));
     }
 
     DEBUG_MSG("Created chamber " << chamber_name);

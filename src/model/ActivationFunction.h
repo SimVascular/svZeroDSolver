@@ -29,7 +29,8 @@ class ActivationFunction {
    * @brief Construct activation function
    *
    * @param cardiac_period Cardiac cycle period
-   * @param params Parameter definitions (name, InputParameter) for this activation function
+   * @param params Parameter definitions (name, InputParameter) for this
+   * activation function
    */
   ActivationFunction(
       double cardiac_period,
@@ -70,7 +71,8 @@ class ActivationFunction {
   void set_param(const std::string& name, double value);
 
   /**
-   * @brief Parameter definitions for validation/loading (analogous to Block::input_params).
+   * @brief Parameter definitions for validation/loading (analogous to
+   * Block::input_params).
    *
    * Returns (name, InputParameter) for each parameter. Built from params_.
    */
@@ -90,47 +92,49 @@ class ActivationFunction {
 
 /**
  * @brief Half cosine activation function
- * 
+ *
  * This implements the activation function used in the original
  * ChamberElastanceInductor. The activation follows a half cosine wave
  * during the contraction period.
- * 
+ *
  * \f[
  * A(t) = \begin{cases}
- * -\frac{1}{2}\cos(2\pi t_{contract}/t_{twitch}) + \frac{1}{2}, & \text{if } t_{contract} \le t_{twitch} \\
- * 0, & \text{otherwise}
+ * -\frac{1}{2}\cos(2\pi t_{contract}/t_{twitch}) + \frac{1}{2}, & \text{if }
+ * t_{contract} \le t_{twitch} \\ 0, & \text{otherwise}
  * \end{cases}
  * \f]
- * 
+ *
  * where \f$t_{contract} = \max(0, t_{in\_cycle} - t_{active})\f$
  */
 class HalfCosineActivation : public ActivationFunction {
  public:
   /**
-   * @brief Construct with default parameter values (loader fills via set_param).
+   * @brief Construct with default parameter values (loader fills via
+   * set_param).
    *
    * @param cardiac_period Cardiac cycle period
    */
   explicit HalfCosineActivation(double cardiac_period)
       : ActivationFunction(cardiac_period, {{"t_active", InputParameter()},
-                                           {"t_twitch", InputParameter()}}) {}
+                                            {"t_twitch", InputParameter()}}) {}
 
   double compute(double time) override;
 };
 
-
 /**
  * @brief Piecewise cosine activation function
- * 
+ *
  * This implements the activation function from the LinearElastanceChamber
  * (Regazzoni chamber model). The activation consists of separate contraction
  * and relaxation phases, each following a cosine curve.
- * 
+ *
  * \f[
  * \phi(t, t_C, t_R, T_C, T_R) = \begin{cases}
- * \frac{1}{2}\left[1 - \cos\left(\frac{\pi}{T_C} \bmod(t - t_C, T_{HB})\right)\right], 
+ * \frac{1}{2}\left[1 - \cos\left(\frac{\pi}{T_C} \bmod(t - t_C,
+ * T_{HB})\right)\right],
  *   & \text{if } 0 \le \bmod(t - t_C, T_{HB}) < T_C \\
- * \frac{1}{2}\left[1 + \cos\left(\frac{\pi}{T_R} \bmod(t - t_R, T_{HB})\right)\right], 
+ * \frac{1}{2}\left[1 + \cos\left(\frac{\pi}{T_R} \bmod(t - t_R,
+ * T_{HB})\right)\right],
  *   & \text{if } 0 \le \bmod(t - t_R, T_{HB}) < T_R \\
  * 0, & \text{otherwise}
  * \end{cases}
@@ -139,45 +143,47 @@ class HalfCosineActivation : public ActivationFunction {
 class PiecewiseCosineActivation : public ActivationFunction {
  public:
   /**
-   * @brief Construct with default parameter values (loader fills via set_param).
+   * @brief Construct with default parameter values (loader fills via
+   * set_param).
    *
    * @param cardiac_period Cardiac cycle period
    */
   explicit PiecewiseCosineActivation(double cardiac_period)
       : ActivationFunction(cardiac_period,
-                          {{"contract_start", InputParameter()},
-                           {"relax_start", InputParameter()},
-                           {"contract_duration", InputParameter()},
-                           {"relax_duration", InputParameter()}}) {}
+                           {{"contract_start", InputParameter()},
+                            {"relax_start", InputParameter()},
+                            {"contract_duration", InputParameter()},
+                            {"relax_duration", InputParameter()}}) {}
 
   double compute(double time) override;
 };
 
 /**
  * @brief Two hill activation function
- * 
+ *
  * This implements the two-hill activation function which provides more
  * flexible and physiologically realistic waveforms. See
  * https://link.springer.com/article/10.1007/s10439-022-03047-3
- * 
+ *
  * The activation is computed as:
  * \f[
  * A(t) = C \cdot \frac{g_1(t)}{1 + g_1(t)} \cdot \frac{1}{1 + g_2(t)}
  * \f]
- * 
+ *
  * where:
  * \f[
  * g_1(t) = \left(\frac{t_{shifted}}{\tau_1}\right)^{m_1}, \quad
  * g_2(t) = \left(\frac{t_{shifted}}{\tau_2}\right)^{m_2}
  * \f]
- * 
+ *
  * and \f$t_{shifted} = (t - t_{shift}) \bmod T_{cardiac}\f$, and \f$C\f$ is a
  * normalization constant to ensure max activation is 1.
  */
 class TwoHillActivation : public ActivationFunction {
  public:
   /**
-   * @brief Construct with default parameter values (loader fills via set_param).
+   * @brief Construct with default parameter values (loader fills via
+   * set_param).
    *
    * Defaults for tau_1, tau_2, m1, m2 are 1.0 to avoid division by zero.
    * Call finalize() after all set_param to recompute normalization.
@@ -186,11 +192,11 @@ class TwoHillActivation : public ActivationFunction {
    */
   explicit TwoHillActivation(double cardiac_period)
       : ActivationFunction(cardiac_period,
-                          {{"t_shift", InputParameter()},
-                           {"tau_1", InputParameter(false, false, true, 1.0)},
-                           {"tau_2", InputParameter(false, false, true, 1.0)},
-                           {"m1", InputParameter(false, false, true, 1.0)},
-                           {"m2", InputParameter(false, false, true, 1.0)}}),
+                           {{"t_shift", InputParameter()},
+                            {"tau_1", InputParameter(false, false, true, 1.0)},
+                            {"tau_2", InputParameter(false, false, true, 1.0)},
+                            {"m1", InputParameter(false, false, true, 1.0)},
+                            {"m2", InputParameter(false, false, true, 1.0)}}),
         normalization_factor_(1.0),
         normalization_initialized_(false) {}
 

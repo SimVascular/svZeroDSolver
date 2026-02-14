@@ -8,6 +8,7 @@
 #define SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_
 
 #include <math.h>
+
 #include <memory>
 
 #include "ActivationFunction.h"
@@ -163,13 +164,7 @@ class ChamberElastanceInductor : public Block {
    * @brief Local IDs of the parameters
    *
    */
-  enum ParamId {
-    EMAX = 0,
-    EMIN = 1,
-    VRD = 2,
-    VRS = 3,
-    IMPEDANCE = 4
-  };
+  enum ParamId { EMAX = 0, EMIN = 1, VRD = 2, VRS = 3, IMPEDANCE = 4 };
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -210,8 +205,8 @@ class ChamberElastanceInductor : public Block {
   TripletsContributions num_triplets{6, 2, 0};
 
  private:
-  double Elas;   // Chamber Elastance
-  double Vrest;  // Rest Volume
+  double Elas;                                           // Chamber Elastance
+  double Vrest;                                          // Rest Volume
   std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
 
  public:
@@ -220,13 +215,10 @@ class ChamberElastanceInductor : public Block {
    *
    * @param af Unique pointer to the activation function
    */
-  void set_activation_function(
-      std::unique_ptr<ActivationFunction> af) override;
+  void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
  private:
-
  private:
-
   /**
    * @brief Update the elastance functions which depend on time
    *

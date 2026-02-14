@@ -153,8 +153,7 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
  * @return Unique pointer to the created activation function
  */
 std::unique_ptr<ActivationFunction> generate_activation_function(
-    Model& model, const nlohmann::json& j,
-    const std::string& chamber_name);
+    Model& model, const nlohmann::json& j, const std::string& chamber_name);
 
 /**
  * @brief Load initial conditions from a JSON configuration

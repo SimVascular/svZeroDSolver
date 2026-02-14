@@ -132,7 +132,8 @@ void TwoHillActivation::calculate_normalization_factor() {
         "TwoHillActivation::calculate_normalization_factor: max activation "
         "value must be positive and finite (got " +
         std::to_string(max_value) +
-        "). Check tau_1, tau_2, m1, m2 are valid (e.g., tau_1 > 0, tau_2 > 0).");
+        "). Check tau_1, tau_2, m1, m2 are valid (e.g., tau_1 > 0, tau_2 > "
+        "0).");
   }
 
   normalization_factor_ = 1.0 / max_value;

@@ -200,12 +200,11 @@ class TwoHillActivation : public ActivationFunction {
    * @param cardiac_period Cardiac cycle period
    */
   explicit TwoHillActivation(double cardiac_period)
-      : ActivationFunction(cardiac_period,
-                           {{"t_shift", InputParameter()},
-                            {"tau_1", InputParameter()},
-                            {"tau_2", InputParameter()},
-                            {"m1", InputParameter()},
-                            {"m2", InputParameter()}}),
+      : ActivationFunction(cardiac_period, {{"t_shift", InputParameter()},
+                                            {"tau_1", InputParameter()},
+                                            {"tau_2", InputParameter()},
+                                            {"m1", InputParameter()},
+                                            {"m2", InputParameter()}}),
         normalization_factor_(1.0),
         normalization_initialized_(false) {}
 

@@ -86,7 +86,18 @@ class ActivationFunction {
   virtual void finalize() {}
 
  protected:
+  /**
+   * @brief Time duration of one cardiac cycle
+   * 
+   */
   double cardiac_period_;
+
+  /**
+   * @brief Map of parameter names to their values and default values
+   *
+   * The key is the parameter name, and the value is a pair of the InputParameter
+   * and the value.
+   */
   std::map<std::string, std::pair<InputParameter, double>> params_;
 };
 

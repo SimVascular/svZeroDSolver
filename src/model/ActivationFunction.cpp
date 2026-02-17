@@ -13,36 +13,32 @@
 
 ActivationFunction::ActivationFunction(
     double cardiac_period,
-    std::vector<std::pair<std::string, InputParameter>> params)
-    : cardiac_period_(cardiac_period) {
-  for (auto& p : params) {
+    const std::vector<std::pair<std::string, InputParameter>>&
+        input_param_properties)
+    : cardiac_period_(cardiac_period),
+      input_param_properties(input_param_properties) {
+  // Initialize parameters with default values
+  for (const auto& p : this->input_param_properties) {
     if (p.second.is_number) {
       double default_val = p.second.is_optional ? p.second.default_val : 0.0;
-      params_[p.first] = {std::move(p.second), default_val};
+      params_[p.first] = default_val;
     }
   }
 }
 
 void ActivationFunction::set_param(const std::string& name, double value) {
-  auto it = params_.find(name);
-  if (it == params_.end()) {
-    throw std::runtime_error(
-        "ActivationFunction::set_param: unknown parameter '" + name + "'");
+  for (const auto& p : input_param_properties) {
+    if (p.first == name) {
+      if (!p.second.is_number) {
+        throw std::runtime_error("ActivationFunction::set_param: parameter '" +
+                                 name + "' is not a scalar number");
+      }
+      params_[name] = value;
+      return;
+    }
   }
-  if (!it->second.first.is_number) {
-    throw std::runtime_error("ActivationFunction::set_param: parameter '" +
-                             name + "' is not a scalar number");
-  }
-  it->second.second = value;
-}
-
-std::vector<std::pair<std::string, InputParameter>>
-ActivationFunction::get_input_params() const {
-  std::vector<std::pair<std::string, InputParameter>> out;
-  for (const auto& p : params_) {
-    out.push_back({p.first, p.second.first});
-  }
-  return out;
+  throw std::runtime_error(
+      "ActivationFunction::set_param: unknown parameter '" + name + "'");
 }
 
 std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
@@ -63,8 +59,8 @@ std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
 
 double HalfCosineActivation::compute(double time) {
   double t_in_cycle = std::fmod(time, cardiac_period_);
-  const double t_active = params_.at("t_active").second;
-  const double t_twitch = params_.at("t_twitch").second;
+  const double t_active = params_.at("t_active");
+  const double t_twitch = params_.at("t_twitch");
 
   double t_contract = 0.0;
   if (t_in_cycle >= t_active) {
@@ -80,10 +76,10 @@ double HalfCosineActivation::compute(double time) {
 }
 
 double PiecewiseCosineActivation::compute(double time) {
-  const double contract_start = params_.at("contract_start").second;
-  const double relax_start = params_.at("relax_start").second;
-  const double contract_duration = params_.at("contract_duration").second;
-  const double relax_duration = params_.at("relax_duration").second;
+  const double contract_start = params_.at("contract_start");
+  const double relax_start = params_.at("relax_start");
+  const double contract_duration = params_.at("contract_duration");
+  const double relax_duration = params_.at("relax_duration");
 
   double phi = 0.0;
   double piecewise_condition =
@@ -111,10 +107,10 @@ void TwoHillActivation::calculate_normalization_factor() {
         std::to_string(cardiac_period_) + ")");
   }
 
-  const double tau_1 = params_.at("tau_1").second;
-  const double tau_2 = params_.at("tau_2").second;
-  const double m1 = params_.at("m1").second;
-  const double m2 = params_.at("m2").second;
+  const double tau_1 = params_.at("tau_1");
+  const double tau_2 = params_.at("tau_2");
+  const double m1 = params_.at("m1");
+  const double m2 = params_.at("m2");
 
   constexpr double NORMALIZATION_DT = 1e-5;
   double max_value = 0.0;
@@ -148,11 +144,11 @@ double TwoHillActivation::compute(double time) {
         "TwoHillActivation: call finalize() after setting parameters");
   }
 
-  const double t_shift = params_.at("t_shift").second;
-  const double tau_1 = params_.at("tau_1").second;
-  const double tau_2 = params_.at("tau_2").second;
-  const double m1 = params_.at("m1").second;
-  const double m2 = params_.at("m2").second;
+  const double t_shift = params_.at("t_shift");
+  const double tau_1 = params_.at("tau_1");
+  const double tau_2 = params_.at("tau_2");
+  const double m1 = params_.at("m1");
+  const double m2 = params_.at("m2");
 
   double t_in_cycle = std::fmod(time, cardiac_period_);
   double t_shifted = std::fmod(t_in_cycle - t_shift, cardiac_period_);

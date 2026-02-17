@@ -163,7 +163,7 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
   // this type, then use its parameter schema for validation and reading.
   auto act_func =
       ActivationFunction::create_default(type_str, model.cardiac_cycle_period);
-  const auto input_params = act_func->get_input_params();
+  const auto& input_param_properties = act_func->input_param_properties;
 
   for (auto& el : j.items()) {
     if (el.key()[0] == '_') {
@@ -172,7 +172,7 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
     if (el.key() == "type") {
       continue;
     }
-    if (!has_parameter(input_params, el.key())) {
+    if (!has_parameter(input_param_properties, el.key())) {
       throw std::runtime_error("Unknown parameter " + el.key() +
                                " defined in activation_function for chamber " +
                                chamber_name);
@@ -180,7 +180,7 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
   }
 
   // Read parameters
-  for (const auto& param : input_params) {
+  for (const auto& param : input_param_properties) {
     if (!param.second.is_number) {
       continue;
     }

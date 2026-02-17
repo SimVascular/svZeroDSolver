@@ -26,15 +26,22 @@
 class ActivationFunction {
  public:
   /**
+   * @brief Properties of the input parameters for this activation function
+   * [(name, InputParameter), ...]
+   */
+  const std::vector<std::pair<std::string, InputParameter>>
+      input_param_properties;
+
+  /**
    * @brief Construct activation function
    *
    * @param cardiac_period Cardiac cycle period
-   * @param params Parameter definitions (name, InputParameter) for this
-   * activation function
+   * @param input_param_properties Properties of the input parameters
+   * [(name, InputParameter), ...] for this activation function
    */
-  ActivationFunction(
-      double cardiac_period,
-      std::vector<std::pair<std::string, InputParameter>> params);
+  ActivationFunction(double cardiac_period,
+                     const std::vector<std::pair<std::string, InputParameter>>&
+                         input_param_properties);
 
   /**
    * @brief Virtual destructor
@@ -62,22 +69,13 @@ class ActivationFunction {
   /**
    * @brief Set a scalar parameter value by name.
    *
-   * Validates that name is in params_ and has a number schema, then stores
-   * the value. No per-class logic needed.
+   * Validates that name is in input_param_properties and has a number schema,
+   * then stores the value. No per-class logic needed.
    *
-   * @param name Parameter name (must be a key in params_)
+   * @param name Parameter name (must be in input_param_properties)
    * @param value Parameter value
    */
   void set_param(const std::string& name, double value);
-
-  /**
-   * @brief Parameter definitions for validation/loading (analogous to
-   * Block::input_params).
-   *
-   * @return std::vector<std::pair<std::string, InputParameter>> (name,
-   * InputParameter) for each parameter. Built from params_.
-   */
-  std::vector<std::pair<std::string, InputParameter>> get_input_params() const;
 
   /**
    * @brief Called after all parameters are set (e.g. by loader).
@@ -89,17 +87,13 @@ class ActivationFunction {
  protected:
   /**
    * @brief Time duration of one cardiac cycle
-   *
    */
   double cardiac_period_;
 
   /**
-   * @brief Map of parameter names to their values and default values
-   *
-   * The key is the parameter name, and the value is a pair of the
-   * InputParameter and the value.
+   * @brief Map of parameter names to their values
    */
-  std::map<std::string, std::pair<InputParameter, double>> params_;
+  std::map<std::string, double> params_;
 };
 
 /**

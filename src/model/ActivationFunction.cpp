@@ -27,18 +27,7 @@ ActivationFunction::ActivationFunction(
 }
 
 void ActivationFunction::set_param(const std::string& name, double value) {
-  for (const auto& p : input_param_properties) {
-    if (p.first == name) {
-      if (!p.second.is_number) {
-        throw std::runtime_error("ActivationFunction::set_param: parameter '" +
-                                 name + "' is not a scalar number");
-      }
-      params_[name] = value;
-      return;
-    }
-  }
-  throw std::runtime_error(
-      "ActivationFunction::set_param: unknown parameter '" + name + "'");
+  params_[name] = value;
 }
 
 std::unique_ptr<ActivationFunction> ActivationFunction::create_default(

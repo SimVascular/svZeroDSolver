@@ -69,10 +69,9 @@ class ActivationFunction {
   /**
    * @brief Set a scalar parameter value by name.
    *
-   * Validates that name is in input_param_properties and has a number schema,
-   * then stores the value. No per-class logic needed.
+   * Calling function must validate the parameter name and value
    *
-   * @param name Parameter name (must be in input_param_properties)
+   * @param name Parameter name
    * @param value Parameter value
    */
   void set_param(const std::string& name, double value);

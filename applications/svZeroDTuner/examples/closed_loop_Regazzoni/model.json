@@ -7,7 +7,7 @@
     "output_variable_based": true,
     "output_all_cycles": false,
     "steady_initial": false,
-    "cardiac_period": 0.689
+    "cardiac_period": 0.689655
   },
   "vessels": [
     {
@@ -84,55 +84,71 @@
   "boundary_conditions": [],
   "chambers": [
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "LA",
       "values": {
         "Emax": 2.666e7,
         "Epass": 2.0449931e7,
-        "Vrest": 4.0e-6,
-        "contract_start": 0.025,
-        "relax_start": 0.08625,
-        "contract_duration": 0.06125,
-        "relax_duration": 0.18375
+        "Vrest": 4.0e-6
+      },
+      "activation_function": { 
+        "type": "two_hill",
+        "t_shift": 0.025,
+        "tau_1": 0.07586206896551724,
+        "tau_2": 0.12413793103448276,
+        "m1": 1.32,
+        "m2": 13.1
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "LV",
       "values": {
         "Emax": 3.33878537e8,
         "Epass": 1.2605372e7,
-        "Vrest": 1.9763060505362944e-6,
-        "contract_start": 0.207,
-        "relax_start": 0.29625,
-        "contract_duration": 0.08925,
-        "relax_duration": 0.26975
+        "Vrest": 1.9763060505362944e-6
+      },
+      "activation_function": {
+        "type": "two_hill",
+        "t_shift": 0.207,
+        "tau_1": 0.18551724137931036,
+        "tau_2": 0.31172413793103454,
+        "m1": 1.32,
+        "m2": 27.4
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "RA",
       "values": {
         "Emax": 7.999343e6,
         "Epass": 4.932281e6,
-        "Vrest": 4.0e-6,
-        "contract_start": 0.025,
-        "relax_start": 0.08625,
-        "contract_duration": 0.06125,
-        "relax_duration": 0.18375
+        "Vrest": 4.0e-6
+      },
+      "activation_function": {
+        "type": "two_hill",
+        "t_shift": 0.025,
+        "tau_1": 0.07586206896551724,
+        "tau_2": 0.12413793103448276,
+        "m1": 1.32,
+        "m2": 13.1
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "RV",
       "values": {
         "Emax": 6.5719659e7,
         "Epass": 5.406837e6,
-        "Vrest": 54.31634509432495e-6,
-        "contract_start": 0.207,
-        "relax_start": 0.29625,
-        "contract_duration": 0.08925,
-        "relax_duration": 0.26975
+        "Vrest": 54.31634509432495e-6
+      },
+      "activation_function": {
+        "type": "two_hill",
+        "t_shift": 0.207,
+        "tau_1": 0.18551724137931036,
+        "tau_2": 0.31172413793103454,
+        "m1": 1.32,
+        "m2": 27.4
       }
     }
   ],

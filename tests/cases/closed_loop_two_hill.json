@@ -1,0 +1,235 @@
+{
+  "_comment": "This is an sv0D input file for a closed loop circulation model by Regazzoni et al (2022). The units are as follows: Compliance (C) is in m^3/Pa, Resistance (R) is in Pa/(m^3/s), Inductance is in Pa/(m^3/s^2), Pressure (Pd) is in Pa.",
+  "_diagram_a": "LA -> MV -> LV -> AV -> AR_SYS -> J0 -> VEN_SYS -> J1 -> RA -> TV -> RV -> PV -> AR_PUL -> J2 -> VEN_PUL -> J3 -> LA",
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 3,
+    "number_of_time_pts_per_cardiac_cycle": 689,
+    "output_variable_based": true,
+    "output_all_cycles": false,
+    "steady_initial": false,
+    "cardiac_period": 0.689655
+  },
+  "vessels": [
+    {
+      "vessel_name": "AR_SYS",
+      "vessel_id": 1,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVesselCRL",
+      "zero_d_element_values": {
+        "C": 6.93626e-9,
+        "R_poiseuille": 9.0219259e7,
+        "L": 6.66611e5
+      }
+    },
+    {
+      "vessel_name": "VEN_SYS",
+      "vessel_id": 2,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVesselCRL",
+      "zero_d_element_values": {
+        "C": 4.5004e-7,
+        "R_poiseuille": 8.506913e6,
+        "L": 6.66611e4
+      }
+    },
+    {
+      "vessel_name": "AR_PUL",
+      "vessel_id": 3,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVesselCRL",
+      "zero_d_element_values": {
+        "C": 7.5006e-8,
+        "R_poiseuille": 4.266316e6,
+        "L": 6.66611e4
+      }
+    },
+    {
+      "vessel_name": "VEN_PUL",
+      "vessel_id": 4,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVesselCRL",
+      "zero_d_element_values": {
+        "C": 1.2001e-7,
+        "R_poiseuille": 4.666283e6,
+        "L": 6.66611e4
+      }
+    }
+  ],
+  "junctions": [
+    {
+      "inlet_blocks": ["AR_SYS"],
+      "junction_name": "J0",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_blocks": ["VEN_SYS"]
+    },
+    {
+      "inlet_blocks": ["VEN_SYS"],
+      "junction_name": "J1",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_blocks": ["RA"]
+    },
+    {
+      "inlet_blocks": ["AR_PUL"],
+      "junction_name": "J2",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_blocks": ["VEN_PUL"]
+    },
+    {
+      "inlet_blocks": ["VEN_PUL"],
+      "junction_name": "J3",
+      "junction_type": "NORMAL_JUNCTION",
+      "outlet_blocks": ["LA"]
+    }
+  ],
+  "boundary_conditions": [],
+  "chambers": [
+    {
+      "type": "LinearElastanceChamber",
+      "name": "LA",
+      "values": {
+        "Emax": 2.666e7,
+        "Epass": 2.0449931e7,
+        "Vrest": 4.0e-6
+      },
+      "activation_function": {
+        "type": "two_hill",
+        "t_shift": 0.025,
+        "tau_1": 0.07586206896551724,
+        "tau_2": 0.12413793103448276,
+        "m1": 1.32,
+        "m2": 13.1
+      }
+    },
+    {
+      "type": "LinearElastanceChamber",
+      "name": "LV",
+      "values": {
+        "Emax": 3.33878537e8,
+        "Epass": 1.2605372e7,
+        "Vrest": 1.9763060505362944e-6
+      },
+      "activation_function": {
+        "type": "two_hill",
+        "t_shift": 0.207,
+        "tau_1": 0.18551724137931036,
+        "tau_2": 0.31172413793103454,
+        "m1": 1.32,
+        "m2": 27.4
+      }
+    },
+    {
+      "type": "LinearElastanceChamber",
+      "name": "RA",
+      "values": {
+        "Emax": 7.999343e6,
+        "Epass": 4.932281e6,
+        "Vrest": 4.0e-6
+      },
+      "activation_function": {
+        "type": "two_hill",
+        "t_shift": 0.025,
+        "tau_1": 0.07586206896551724,
+        "tau_2": 0.12413793103448276,
+        "m1": 1.32,
+        "m2": 13.1
+      }
+    },
+    {
+      "type": "LinearElastanceChamber",
+      "name": "RV",
+      "values": {
+        "Emax": 6.5719659e7,
+        "Epass": 5.406837e6,
+        "Vrest": 54.31634509432495e-6
+      },
+      "activation_function": {
+        "type": "two_hill",
+        "t_shift": 0.207,
+        "tau_1": 0.18551724137931036,
+        "tau_2": 0.31172413793103454,
+        "m1": 1.32,
+        "m2": 27.4
+      }
+    }
+  ],
+  "valves": [
+    {
+      "type": "PiecewiseValve",
+      "name": "MV",
+      "params": {
+        "Rmin": 6.666e5,
+        "Rmax": 6.666e9,
+        "upstream_block": "LA",
+        "downstream_block": "LV"
+      }
+    },
+    {
+      "type": "PiecewiseValve",
+      "name": "AV",
+      "params": {
+        "Rmin": 6.666e5,
+        "Rmax": 6.666e9,
+        "upstream_block": "LV",
+        "downstream_block": "AR_SYS"
+      }
+    },
+    {
+      "type": "PiecewiseValve",
+      "name": "TV",
+      "params": {
+        "Rmin": 6.666e5,
+        "Rmax": 6.666e9,
+        "upstream_block": "RA",
+        "downstream_block": "RV"
+      }
+    },
+    {
+      "type": "PiecewiseValve",
+      "name": "PV",
+      "params": {
+        "Rmin": 6.666e5,
+        "Rmax": 6.666e9,
+        "upstream_block": "RV",
+        "downstream_block": "AR_PUL"
+      }
+    }
+  ],
+  "initial_condition": {
+    "Vc:LA": 5.624441188959639e-5,
+    "pressure:LA:MV": 1068.3946660321123545,
+    "flow:LA:MV": 2.22314e-5,
+    "pressure:MV:LV": 1001.7260268934801388,
+    "flow:MV:LV": 2.22314e-5,
+    "Vc:LV": 8.142759737438905e-5,
+    "pressure:LV:AV": 1001.7260268934801388,
+    "flow:LV:AV": -3.627882e-7,
+    "pressure:AV:AR_SYS": 9926.0311597251620697,
+    "flow:AV:AR_SYS": -3.627882e-7,
+    "pressure:AR_SYS:J0": 1358.6946929956583,
+    "flow:AR_SYS:J0": 96.12211741415929e-6,
+    "pressure:J0:VEN_SYS": 1358.6946929956583,
+    "flow:J0:VEN_SYS": 96.12211741415929e-6,
+    "pressure:VEN_SYS:J1": 419.90306906826876,
+    "flow:VEN_SYS:J1": 110.34140583655498e-6,
+    "pressure:J1:RA": 419.90306906826876,
+    "flow:J1:RA": 110.34140583655498e-6,
+    "Vc:RA": 8.913584459023032e-5,
+    "pressure:RA:TV": 419.90306906826876,
+    "flow:RA:TV": 1.090932e-5,
+    "pressure:TV:RV": 348.08995100320674965,
+    "flow:TV:RV": 1.090932e-5,
+    "Vc:RV": 1.1868964658139649e-4,
+    "pressure:RV:PV": 348.08995100320674965,
+    "flow:RV:PV": -7.181835e-8,
+    "pressure:PV:AR_PUL": 2075.0626413038780811,
+    "flow:PV:AR_PUL": -7.181835e-8,
+    "pressure:AR_PUL:J2": 1744.2583185734633844,
+    "flow:AR_PUL:J2": 79.3375172471186e-6,
+    "pressure:J2:VEN_PUL": 1744.2583185734633844,
+    "flow:J2:VEN_PUL": 79.3375172471186e-6,
+    "pressure:VEN_PUL:J3": 1068.3946660321123545,
+    "flow:VEN_PUL:J3": 46.21258343525287e-6,
+    "pressure:J3:LA": 1068.3946660321123545,
+    "flow:J3:LA": 46.21258343525287e-6
+  }
+}

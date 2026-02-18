@@ -2,25 +2,28 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 
 /**
- * @file PiecewiseCosineChamber.h
- * @brief model::PiecewiseCosineChamber source file
+ * @file LinearElastanceChamber.h
+ * @brief model::LinearElastanceChamber source file
  */
 
-#ifndef SVZERODSOLVER_MODEL_PIECEWISECOSINECHAMBER_HPP_
-#define SVZERODSOLVER_MODEL_PIECEWISECOSINECHAMBER_HPP_
+#ifndef SVZERODSOLVER_MODEL_LINEARELASTANCECHAMBER_HPP_
+#define SVZERODSOLVER_MODEL_LINEARELASTANCECHAMBER_HPP_
 
 #include <math.h>
 
+#include <memory>
+
+#include "ActivationFunction.h"
 #include "Block.h"
 #include "Model.h"
 #include "SparseSystem.h"
 #include "debug.h"
 
 /**
- * @brief Cardiac chamber with piecewise elastance and inductor.
+ * @brief Cardiac chamber with linear elastance (no inductor).
  *
  * Models a cardiac chamber as a time-varying capacitor (elastance with
- * specified resting volumes) and an inductor. See \cite Regazzoni2022
+ * specified resting volumes) without inductance. See \cite Regazzoni2022
  *
  * This chamber block can be connected to other blocks using junctions.
  *
@@ -115,38 +118,26 @@
  * * `Vc`: Chamber volume
  *
  */
-class PiecewiseCosineChamber : public Block {
+class LinearElastanceChamber : public Block {
  public:
   /**
-   * @brief Construct a new BloodVessel object
+   * @brief Construct a new LinearElastanceChamber object
    *
    * @param id Global ID of the block
    * @param model The model to which the block belongs
    */
-  PiecewiseCosineChamber(int id, Model* model)
-      : Block(id, model, BlockType::piecewise_cosine_chamber,
+  LinearElastanceChamber(int id, Model* model)
+      : Block(id, model, BlockType::linear_elastance_chamber,
               BlockClass::chamber,
               {{"Emax", InputParameter()},
                {"Epass", InputParameter()},
-               {"Vrest", InputParameter()},
-               {"contract_start", InputParameter()},
-               {"relax_start", InputParameter()},
-               {"contract_duration", InputParameter()},
-               {"relax_duration", InputParameter()}}) {}
+               {"Vrest", InputParameter()}}) {}
 
   /**
    * @brief Local IDs of the parameters
    *
    */
-  enum ParamId {
-    EMAX = 0,
-    EPASS = 1,
-    VREST = 2,
-    CSTART = 3,
-    RSTART = 4,
-    CDUR = 5,
-    RDUR = 6
-  };
+  enum ParamId { EMAX = 0, EPASS = 1, VREST = 2 };
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -187,8 +178,18 @@ class PiecewiseCosineChamber : public Block {
   TripletsContributions num_triplets{6, 2, 0};
 
  private:
-  double Elas;  // Chamber Elastance
+  double Elas;                                           // Chamber Elastance
+  std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
 
+ public:
+  /**
+   * @brief Set the activation function (takes ownership)
+   *
+   * @param af Unique pointer to the activation function
+   */
+  void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
+
+ private:
   /**
    * @brief Update the elastance functions which depend on time
    *
@@ -197,4 +198,4 @@ class PiecewiseCosineChamber : public Block {
   void get_elastance_values(std::vector<double>& parameters);
 };
 
-#endif  // SVZERODSOLVER_MODEL_PIECEWISECOSINECHAMBER_HPP_
+#endif  // SVZERODSOLVER_MODEL_LINEARELASTANCECHAMBER_HPP_

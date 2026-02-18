@@ -40,22 +40,15 @@ void ChamberElastanceInductor::get_elastance_values(
   double Emin = parameters[global_param_ids[ParamId::EMIN]];
   double Vrd = parameters[global_param_ids[ParamId::VRD]];
   double Vrs = parameters[global_param_ids[ParamId::VRS]];
-  double t_active = parameters[global_param_ids[ParamId::TACTIVE]];
-  double t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
 
-  auto T_cardiac = model->cardiac_cycle_period;
-  auto t_in_cycle = fmod(model->time, T_cardiac);
-
-  double t_contract = 0;
-  if (t_in_cycle >= t_active) {
-    t_contract = t_in_cycle - t_active;
-  }
-
-  double act = 0;
-  if (t_contract <= t_twitch) {
-    act = -0.5 * cos(2 * M_PI * t_contract / t_twitch) + 0.5;
-  }
+  // Compute activation using the activation function
+  double act = activation_func_->compute(model->time);
 
   Vrest = (1.0 - act) * (Vrd - Vrs) + Vrs;
   Elas = (Emax - Emin) * act + Emin;
+}
+
+void ChamberElastanceInductor::set_activation_function(
+    std::unique_ptr<ActivationFunction> af) {
+  activation_func_ = std::move(af);
 }

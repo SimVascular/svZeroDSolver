@@ -126,12 +126,15 @@
   "boundary_conditions": [],
   "chambers": [
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "right_atrium",
       "values": {
         "Emax": 199.95,
         "Epass": 89.80375933024839,
-        "Vrest": 41.680015938842274,
+        "Vrest": 41.680015938842274
+      },
+      "activation_function": {
+        "type": "piecewise_cosine",
         "contract_start": 0.025,
         "relax_start": 0.08625,
         "contract_duration": 0.06125,
@@ -139,12 +142,15 @@
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "right_ventricle",
       "values": {
         "Emax": 1662.0158240056528,
         "Epass": 40.85565535747109,
-        "Vrest": 72.05452710344869,
+        "Vrest": 72.05452710344869
+      },
+      "activation_function": {
+        "type": "piecewise_cosine",
         "contract_start": 0.207,
         "relax_start": 0.29625,
         "contract_duration": 0.08925,
@@ -152,12 +158,15 @@
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "left_atrium",
       "values": {
         "Emax": 199.95,
         "Epass": 260.59064494602634,
-        "Vrest": 26.23534455334443,
+        "Vrest": 26.23534455334443
+      },
+      "activation_function": {
+        "type": "piecewise_cosine",
         "contract_start": 0.025,
         "relax_start": 0.08625,
         "contract_duration": 0.06125,
@@ -165,12 +174,15 @@
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "left_ventricle",
       "values": {
         "Emax": 17837.499965252825,
         "Epass": 122.82901158252674,
-        "Vrest": 32.41857776349184,
+        "Vrest": 32.41857776349184
+      },
+      "activation_function": {
+        "type": "piecewise_cosine",
         "contract_start": 0.207,
         "relax_start": 0.29625,
         "contract_duration": 0.08925,

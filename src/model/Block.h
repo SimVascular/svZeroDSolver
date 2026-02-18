@@ -13,6 +13,7 @@
 #include <map>
 #include <vector>
 
+#include "ActivationFunction.h"
 #include "BlockType.h"
 #include "DOFHandler.h"
 #include "Parameter.h"
@@ -283,6 +284,19 @@ class Block {
    * @return TripletsContributions Number of triplets of element
    */
   virtual TripletsContributions get_num_triplets();
+
+  /**
+   * @brief Set activation function (for chamber blocks that use one).
+   *
+   * Default no-op. Overridden by ChamberElastanceInductor and
+   * LinearElastanceChamber to take ownership of the activation function.
+   *
+   * @param af Unique pointer to the activation function (caller transfers
+   * ownership)
+   */
+  virtual void set_activation_function(std::unique_ptr<ActivationFunction> af) {
+    (void)af;  // Included to avoid unused parameter warning
+  }
 };
 
 #endif

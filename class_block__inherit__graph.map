@@ -20,9 +20,9 @@
 <area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="75,429,135,420,136,425,76,434"/>
 <area shape="rect" id="Node000013" href="$class_junction.html" title="Junction." alt="" coords="164,449,234,475"/>
 <area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="76,442,164,455,163,460,75,447"/>
-<area shape="rect" id="Node000014" href="$class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary." alt="" coords="124,499,274,524"/>
+<area shape="rect" id="Node000014" href="$class_linear_elastance_chamber.html" title="Cardiac chamber with linear elastance (no inductor)." alt="" coords="116,499,282,524"/>
 <area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="64,458,109,485,137,496,135,501,107,490,61,463"/>
-<area shape="rect" id="Node000015" href="$class_piecewise_cosine_chamber.html" title="Cardiac chamber with piecewise elastance and inductor." alt="" coords="113,548,286,574"/>
+<area shape="rect" id="Node000015" href="$class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary." alt="" coords="124,548,274,574"/>
 <area shape="poly" id="edge14_Node000001_Node000015" title=" " alt="" coords="49,463,74,501,90,519,109,535,130,545,127,550,106,539,87,523,70,504,45,466"/>
 <area shape="rect" id="Node000016" href="$class_piecewise_valve.html" title="Valve (tanh) block." alt="" coords="142,597,256,623"/>
 <area shape="poly" id="edge15_Node000001_Node000016" title=" " alt="" coords="43,465,66,526,84,557,109,584,125,594,143,601,141,606,123,599,106,588,80,561,61,528,38,467"/>

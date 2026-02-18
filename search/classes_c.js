@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['simulationparameters_0',['SimulationParameters',['../struct_simulation_parameters.html',1,'']]],
-  ['solver_1',['Solver',['../class_solver.html',1,'']]],
-  ['solverinterface_2',['SolverInterface',['../class_solver_interface.html',1,'']]],
-  ['sparsesystem_3',['SparseSystem',['../class_sparse_system.html',1,'']]],
-  ['state_4',['State',['../class_state.html',1,'']]]
+  ['parameter_0',['Parameter',['../class_parameter.html',1,'']]],
+  ['piecewisecosineactivation_1',['PiecewiseCosineActivation',['../class_piecewise_cosine_activation.html',1,'']]],
+  ['piecewisevalve_2',['PiecewiseValve',['../class_piecewise_valve.html',1,'']]],
+  ['pressurereferencebc_3',['PressureReferenceBC',['../class_pressure_reference_b_c.html',1,'']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['resistancebc_0',['ResistanceBC',['../class_resistance_b_c.html',1,'']]],
-  ['resistivejunction_1',['ResistiveJunction',['../class_resistive_junction.html',1,'']]]
+  ['openloopcoronarybc_0',['OpenLoopCoronaryBC',['../class_open_loop_coronary_b_c.html',1,'']]]
 ];

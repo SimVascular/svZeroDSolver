@@ -176,6 +176,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="separator:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block" id="r_ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad0e2d0882fb2a9e2b4bb8e5148f7ea9e">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af)</td></tr>
+<tr class="memdesc:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set activation function (for chamber blocks that use one).  <br /></td></tr>
+<tr class="separator:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -238,7 +241,7 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Closed loop coronary boundary condition which is connected to other blocks on both sides and the intramyocardial pressure is specified by the pressure in a heart block (not as a parameter). </p>
 <p class="formulaDsp">
-<picture><source srcset="form_77_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
+<picture><source srcset="form_83_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_a$, *-] (3,0)
@@ -251,49 +254,49 @@ node[left]{$P_{im}$}
 node[left]{$P_a$};
 \draw [-latex] (7.2,0) -- (8.0,0) node[right] {$Q_{out}$};
 \end{circuitikz}
-\]" src="form_77.png" width="504" height="122"/></picture>
+\]" src="form_83.png" width="504" height="122"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_78_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a
+<picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[P_{out} - P_{in} + (R_{am}+R_a)Q_{in} + R_v Q_{out} + R_{am} C_a
 \frac{dP_a}{dt} - R_{am} C_a \frac{dP_{in}}{dt} + R_{am} R_a C_a
-\frac{dQ_{in}}{dt} = 0 \]" src="form_78.png" width="684" height="41"/></picture>
+\frac{dQ_{in}}{dt} = 0 \]" src="form_84.png" width="684" height="41"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_79_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
-\frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \]" src="form_79.png" width="473" height="41"/></picture>
+<picture><source srcset="form_85_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[Q_{in} - Q_{out} + C_a \frac{dP_a}{dt} - C_a \frac{dP_{in}}{dt} + C_a R_a
+\frac{dQ_{in}}{dt} - \frac{dV_{im}}{dt} = 0 \]" src="form_85.png" width="473" height="41"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_80_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
-\]" src="form_80.png" width="358" height="19"/></picture>
+<picture><source srcset="form_86_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[C_{im} P_{out} + C_{im} R_v Q_{out} - C_{im} P_{im} - V_{im} = 0
+\]" src="form_86.png" width="358" height="19"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_81_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp; P_{out} &amp;
-Q_{out} &amp; V_{im}\end{array}\right]^{T}, \]" src="form_81.png" width="334" height="28"/></picture>
+<picture><source srcset="form_87_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp; P_{out} &amp;
+Q_{out} &amp; V_{im}\end{array}\right]^{T}, \]" src="form_87.png" width="334" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_82_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_88_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
 -R_{am} C_{a} &amp; R_{am} R_{a} C_{a} &amp; 0 &amp; 0 &amp; 0 \\
 -C_{a} &amp; R_{a} C_{a} &amp; 0 &amp; 0 &amp; -1 \\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\
-\end{array}\right] \]" src="form_82.png" width="360" height="69"/></picture>
+\end{array}\right] \]" src="form_88.png" width="360" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_83_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_89_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 -1 &amp; R_{am} + R_{a} &amp; 1 &amp; R_v &amp; 0 \\
 0 &amp; 1 &amp; 0 &amp; -1 &amp; 0 \\
 0 &amp; 0 &amp; C_{im} &amp; C_{im} R_v &amp; -1 \\
-\end{array}\right] \]" src="form_83.png" width="379" height="69"/></picture>
+\end{array}\right] \]" src="form_89.png" width="379" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_90_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{c}^{e}=\left[\begin{array}{c}
 C_{a} R_{am} \frac{d P_{a}}{d t} \\
 C_{a}\frac{d P_{a}}{d t} \\
 -C_{im} P_{im}
-\end{array}\right] \]" src="form_84.png" width="169" height="71"/></picture>
+\end{array}\right] \]" src="form_90.png" width="169" height="71"/></picture>
 </p>
-<p>Assume <picture><source srcset="form_85_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_85.png" width="54" height="19"/></picture>.</p>
+<p>Assume <picture><source srcset="form_91_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_91.png" width="54" height="19"/></picture>.</p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
 <ul>

@@ -9,12 +9,14 @@ var searchData=
   ['closedloopcoronaryrightbc_6',['ClosedLoopCoronaryRightBC',['../class_closed_loop_coronary_right_b_c.html#a0914913747281b82aa963553c7bde55e',1,'ClosedLoopCoronaryRightBC']]],
   ['closedloopheartpulmonary_7',['ClosedLoopHeartPulmonary',['../class_closed_loop_heart_pulmonary.html#a096fdc246fef9ddac34920cb722c8f75',1,'ClosedLoopHeartPulmonary']]],
   ['closedlooprcrbc_8',['ClosedLoopRCRBC',['../class_closed_loop_r_c_r_b_c.html#a00638f69e2b7224889f5793c5b372267',1,'ClosedLoopRCRBC']]],
-  ['create_5fblock_9',['create_block',['../class_model.html#ac84901f4ab500658ec842b199c5ad7fd',1,'Model']]],
-  ['create_5fboundary_5fconditions_10',['create_boundary_conditions',['../_simulation_parameters_8h.html#a48762868893c37068ff5c57c29484ba9',1,'SimulationParameters.cpp']]],
-  ['create_5fchambers_11',['create_chambers',['../_simulation_parameters_8h.html#a1dc4040ce20c099ffafd229bfd66d9bf',1,'SimulationParameters.cpp']]],
-  ['create_5fclosed_5floop_12',['create_closed_loop',['../_simulation_parameters_8h.html#aa0f5d9a69550f398dc9f7176c4cdc812',1,'SimulationParameters.cpp']]],
-  ['create_5fexternal_5fcoupling_13',['create_external_coupling',['../_simulation_parameters_8h.html#ad36cd0e293d3cc8a490003db53888cd4',1,'SimulationParameters.cpp']]],
-  ['create_5fjunctions_14',['create_junctions',['../_simulation_parameters_8h.html#a1e4a9c0e210b2c64b811d990af86d4ad',1,'SimulationParameters.cpp']]],
-  ['create_5fvalves_15',['create_valves',['../_simulation_parameters_8h.html#a5ff24c97813996bd089d3142c5d31375',1,'SimulationParameters.cpp']]],
-  ['create_5fvessels_16',['create_vessels',['../_simulation_parameters_8h.html#a8dea569efa823bdb66eb3abfb1c29d43',1,'SimulationParameters.cpp']]]
+  ['compute_9',['compute',['../class_activation_function.html#a64b93ee5b587116190673d11acbf4ce4',1,'ActivationFunction::compute()'],['../class_half_cosine_activation.html#a6bde836b16e9a3ae925d49c58e0abcf4',1,'HalfCosineActivation::compute()'],['../class_piecewise_cosine_activation.html#a1d22e96e635c3f7fb91203d2f7d7205a',1,'PiecewiseCosineActivation::compute()'],['../class_two_hill_activation.html#a7704a5c99dbf277fd91195763a7ad3da',1,'TwoHillActivation::compute()']]],
+  ['create_5fblock_10',['create_block',['../class_model.html#ac84901f4ab500658ec842b199c5ad7fd',1,'Model']]],
+  ['create_5fboundary_5fconditions_11',['create_boundary_conditions',['../_simulation_parameters_8h.html#a48762868893c37068ff5c57c29484ba9',1,'SimulationParameters.cpp']]],
+  ['create_5fchambers_12',['create_chambers',['../_simulation_parameters_8h.html#a1dc4040ce20c099ffafd229bfd66d9bf',1,'SimulationParameters.cpp']]],
+  ['create_5fclosed_5floop_13',['create_closed_loop',['../_simulation_parameters_8h.html#aa0f5d9a69550f398dc9f7176c4cdc812',1,'SimulationParameters.cpp']]],
+  ['create_5fdefault_14',['create_default',['../class_activation_function.html#a4406e9a5c431ead68793174b3ed1ea73',1,'ActivationFunction']]],
+  ['create_5fexternal_5fcoupling_15',['create_external_coupling',['../_simulation_parameters_8h.html#ad36cd0e293d3cc8a490003db53888cd4',1,'SimulationParameters.cpp']]],
+  ['create_5fjunctions_16',['create_junctions',['../_simulation_parameters_8h.html#a1e4a9c0e210b2c64b811d990af86d4ad',1,'SimulationParameters.cpp']]],
+  ['create_5fvalves_17',['create_valves',['../_simulation_parameters_8h.html#a5ff24c97813996bd089d3142c5d31375',1,'SimulationParameters.cpp']]],
+  ['create_5fvessels_18',['create_vessels',['../_simulation_parameters_8h.html#a8dea569efa823bdb66eb3abfb1c29d43',1,'SimulationParameters.cpp']]]
 ];

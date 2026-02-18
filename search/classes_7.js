@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['model_0',['Model',['../class_model.html',1,'']]]
+  ['jsonwrapper_0',['JsonWrapper',['../class_json_wrapper.html',1,'']]],
+  ['junction_1',['Junction',['../class_junction.html',1,'']]]
 ];

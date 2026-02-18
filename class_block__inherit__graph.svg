@@ -200,9 +200,9 @@
 <!-- Node14 -->
 <g id="Node000014" class="node">
 <title>Node14</title>
-<g id="a_Node000014"><a xlink:href="class_open_loop_coronary_b_c.html" target="_top" xlink:title="Open loop coronary boundary condition based on kim_coronary.">
-<polygon fill="white" stroke="#666666" points="201.88,-278.25 89.12,-278.25 89.12,-259 201.88,-259 201.88,-278.25"/>
-<text text-anchor="middle" x="145.5" y="-264.75" font-family="Helvetica,sans-Serif" font-size="10.00">OpenLoopCoronaryBC</text>
+<g id="a_Node000014"><a xlink:href="class_linear_elastance_chamber.html" target="_top" xlink:title="Cardiac chamber with linear elastance (no inductor).">
+<polygon fill="white" stroke="#666666" points="207.88,-278.25 83.12,-278.25 83.12,-259 207.88,-259 207.88,-278.25"/>
+<text text-anchor="middle" x="145.5" y="-264.75" font-family="Helvetica,sans-Serif" font-size="10.00">LinearElastanceChamber</text>
 </a>
 </g>
 </g>
@@ -218,9 +218,9 @@
 <!-- Node15 -->
 <g id="Node000015" class="node">
 <title>Node15</title>
-<g id="a_Node000015"><a xlink:href="class_piecewise_cosine_chamber.html" target="_top" xlink:title="Cardiac chamber with piecewise elastance and inductor.">
-<polygon fill="white" stroke="#666666" points="210.5,-241.25 80.5,-241.25 80.5,-222 210.5,-222 210.5,-241.25"/>
-<text text-anchor="middle" x="145.5" y="-227.75" font-family="Helvetica,sans-Serif" font-size="10.00">PiecewiseCosineChamber</text>
+<g id="a_Node000015"><a xlink:href="class_open_loop_coronary_b_c.html" target="_top" xlink:title="Open loop coronary boundary condition based on kim_coronary.">
+<polygon fill="white" stroke="#666666" points="201.88,-241.25 89.12,-241.25 89.12,-222 201.88,-222 201.88,-241.25"/>
+<text text-anchor="middle" x="145.5" y="-227.75" font-family="Helvetica,sans-Serif" font-size="10.00">OpenLoopCoronaryBC</text>
 </a>
 </g>
 </g>

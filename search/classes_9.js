@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['openloopcoronarybc_0',['OpenLoopCoronaryBC',['../class_open_loop_coronary_b_c.html',1,'']]]
+  ['model_0',['Model',['../class_model.html',1,'']]]
 ];

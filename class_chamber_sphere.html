@@ -191,6 +191,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="separator:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block" id="r_ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad0e2d0882fb2a9e2b4bb8e5148f7ea9e">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af)</td></tr>
+<tr class="memdesc:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set activation function (for chamber blocks that use one).  <br /></td></tr>
+<tr class="separator:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
@@ -243,74 +246,74 @@ Additional Inherited Members</h2></td></tr>
 <p>Models the mechanical behavior of a spherical heart chamber with active contraction. For reference, see <a class="el" href="citelist.html#CITEREF_caruel13">[1]</a> Equations (13a-b) for continuum mechanics (without length-dependent contraction valves, vessels) and <a class="el" href="citelist.html#CITEREF_pfaller2019importance">[6]</a> Equations (12-16) for the simplified active contraction model.</p>
 <h3>Helper Functions</h3>
 <p>Cauchy-Green deformation tensor and time derivative:   </p><p class="formulaDsp">
-<picture><source srcset="form_50_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  C = \left(1 + \frac{r}{r_0} \right)^2
-\]" src="form_50.png" width="129" height="51"/></picture>
+<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  C = \left(1 + \frac{r}{r_0} \right)^2
+\]" src="form_56.png" width="129" height="51"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_51_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \dot{C} = 2 \left(1 + \frac{r}{r_0} \right) \frac{\dot{r}}{r_0}
-\]" src="form_51.png" width="156" height="47"/></picture>
+<picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \dot{C} = 2 \left(1 + \frac{r}{r_0} \right) \frac{\dot{r}}{r_0}
+\]" src="form_57.png" width="156" height="47"/></picture>
 </p>
 <h3>Governing equations</h3>
 <ol type="1">
 <li>Balance of linear momentum:    <p class="formulaDsp">
-<picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \rho d_0 \dot{v} + \frac{d_0}{r_0} \left(1 + \frac{r}{r_0} \right) S -
+<picture><source srcset="form_58_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \rho d_0 \dot{v} + \frac{d_0}{r_0} \left(1 + \frac{r}{r_0} \right) S -
 P_\text{out} C = 0
-\]" src="form_52.png" width="291" height="47"/></picture>
+\]" src="form_58.png" width="291" height="47"/></picture>
 </p>
 </li>
 <li>Spherical stress:    <p class="formulaDsp">
-<picture><source srcset="form_53_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  -S + \tau + 4 (1 - C^{-3}) (W_1 + C W_2) + 2 \eta \dot{C}
+<picture><source srcset="form_59_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  -S + \tau + 4 (1 - C^{-3}) (W_1 + C W_2) + 2 \eta \dot{C}
   (1 - 2 C^{-6}) = 0
-\]" src="form_53.png" width="459" height="24"/></picture>
+\]" src="form_59.png" width="459" height="24"/></picture>
 </p>
 </li>
 <li>Volume change:   <p class="formulaDsp">
-<picture><source srcset="form_54_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  4 \pi r_0^2 Cv - \dot{V} = 0
-\]" src="form_54.png" width="137" height="24"/></picture>
+<picture><source srcset="form_60_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  4 \pi r_0^2 Cv - \dot{V} = 0
+\]" src="form_60.png" width="137" height="24"/></picture>
 </p>
 </li>
 <li>Active stress:    <p class="formulaDsp">
-<picture><source srcset="form_55_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \dot{\tau} + a \tau - \sigma_\text{max} a_+ = 0, \quad a_+ = \max(a, 0),
+<picture><source srcset="form_61_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \dot{\tau} + a \tau - \sigma_\text{max} a_+ = 0, \quad a_+ = \max(a, 0),
 \quad a = f\alpha_\text{max} + (1 - f)\alpha_\text{min}
-\]" src="form_55.png" width="553" height="21"/></picture>
+\]" src="form_61.png" width="553" height="21"/></picture>
 </p>
  with indicator function    <p class="formulaDsp">
-<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  f = S_+ \cdot S_-, \quad S_\pm = \frac{1}{2} \left(1.0 \pm \text{tanh}\left(
+<picture><source srcset="form_62_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  f = S_+ \cdot S_-, \quad S_\pm = \frac{1}{2} \left(1.0 \pm \text{tanh}\left(
 \frac{t - t_\text{sys/dias}} {\gamma} \right) \right)
-\]" src="form_56.png" width="424" height="47"/></picture>
+\]" src="form_62.png" width="424" height="47"/></picture>
 </p>
 </li>
 <li>Acceleration:   <p class="formulaDsp">
-<picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \dot{r} - v = 0
-\]" src="form_57.png" width="77" height="13"/></picture>
+<picture><source srcset="form_63_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \dot{r} - v = 0
+\]" src="form_63.png" width="77" height="13"/></picture>
 </p>
 </li>
 <li>Conservation of mass:   <p class="formulaDsp">
-<picture><source srcset="form_58_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  Q_\text{in} - Q_\text{out} - \dot{V} = 0
-\]" src="form_58.png" width="161" height="23"/></picture>
+<picture><source srcset="form_64_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  Q_\text{in} - Q_\text{out} - \dot{V} = 0
+\]" src="form_64.png" width="161" height="23"/></picture>
 </p>
 </li>
 <li>Pressure equality:   <p class="formulaDsp">
-<picture><source srcset="form_59_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  P_\text{in} - P_\text{out} = 0
-\]" src="form_59.png" width="118" height="19"/></picture>
+<picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  P_\text{in} - P_\text{out} = 0
+\]" src="form_65.png" width="118" height="19"/></picture>
 </p>
 </li>
 </ol>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block:</p>
 <ul>
-<li><code>rho</code> - Density <picture><source srcset="form_60_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\rho$" src="form_60.png" width="11" height="13"/></picture></li>
-<li><code>thick0</code> - Wall thickness <picture><source srcset="form_61_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$d_0$" src="form_61.png" width="17" height="19"/></picture></li>
-<li><code>radius0</code> - Reference radius <picture><source srcset="form_62_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r_0$" src="form_62.png" width="17" height="13"/></picture></li>
-<li><code>W1</code> - Material constant <picture><source srcset="form_63_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$W_1$" src="form_63.png" width="24" height="19"/></picture></li>
-<li><code>W2</code> - Material constant <picture><source srcset="form_64_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$W_2$" src="form_64.png" width="24" height="19"/></picture></li>
-<li><code>eta</code> - Viscosity parameter <picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\eta$" src="form_65.png" width="11" height="13"/></picture></li>
-<li><code>sigma_max</code> - Maximum active stress <picture><source srcset="form_66_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\sigma_\text{max}$" src="form_66.png" width="38" height="13"/></picture></li>
-<li><code>alpha_max</code> - Maximum activation parameter <picture><source srcset="form_67_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha_\text{max}$" src="form_67.png" width="39" height="13"/></picture></li>
-<li><code>alpha_min</code> - Minimum activation parameter <picture><source srcset="form_68_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha_\text{min}$" src="form_68.png" width="38" height="13"/></picture></li>
-<li><code>tsys</code> - Systole timing parameter <picture><source srcset="form_69_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$t_\text{sys}$" src="form_69.png" width="28" height="19"/></picture></li>
-<li><code>tdias</code> - Diastole timing parameter <picture><source srcset="form_70_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$t_\text{dias}$" src="form_70.png" width="34" height="17"/></picture></li>
-<li><code>steepness</code> - Activation steepness parameter <picture><source srcset="form_71_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\gamma$" src="form_71.png" width="13" height="13"/></picture></li>
+<li><code>rho</code> - Density <picture><source srcset="form_66_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\rho$" src="form_66.png" width="11" height="13"/></picture></li>
+<li><code>thick0</code> - Wall thickness <picture><source srcset="form_67_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$d_0$" src="form_67.png" width="17" height="19"/></picture></li>
+<li><code>radius0</code> - Reference radius <picture><source srcset="form_68_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r_0$" src="form_68.png" width="17" height="13"/></picture></li>
+<li><code>W1</code> - Material constant <picture><source srcset="form_69_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$W_1$" src="form_69.png" width="24" height="19"/></picture></li>
+<li><code>W2</code> - Material constant <picture><source srcset="form_70_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$W_2$" src="form_70.png" width="24" height="19"/></picture></li>
+<li><code>eta</code> - Viscosity parameter <picture><source srcset="form_71_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\eta$" src="form_71.png" width="11" height="13"/></picture></li>
+<li><code>sigma_max</code> - Maximum active stress <picture><source srcset="form_72_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\sigma_\text{max}$" src="form_72.png" width="38" height="13"/></picture></li>
+<li><code>alpha_max</code> - Maximum activation parameter <picture><source srcset="form_73_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha_\text{max}$" src="form_73.png" width="39" height="13"/></picture></li>
+<li><code>alpha_min</code> - Minimum activation parameter <picture><source srcset="form_74_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha_\text{min}$" src="form_74.png" width="38" height="13"/></picture></li>
+<li><code>tsys</code> - Systole timing parameter <picture><source srcset="form_75_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$t_\text{sys}$" src="form_75.png" width="28" height="19"/></picture></li>
+<li><code>tdias</code> - Diastole timing parameter <picture><source srcset="form_76_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$t_\text{dias}$" src="form_76.png" width="34" height="17"/></picture></li>
+<li><code>steepness</code> - Activation steepness parameter <picture><source srcset="form_77_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\gamma$" src="form_77.png" width="13" height="13"/></picture></li>
 </ul>
 <h3>Usage in json configuration file</h3>
 <pre class="fragment">"vessels": [
@@ -339,11 +342,11 @@ P_\text{out} C = 0
 </pre><h3>Internal variables</h3>
 <p>Names of internal variables in this block's output:</p>
 <ul>
-<li><code>radius</code> - Chamber radius <picture><source srcset="form_72_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r$" src="form_72.png" width="11" height="9"/></picture></li>
-<li><code>velo</code> - Chamber velocity <picture><source srcset="form_73_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\dot{r}$" src="form_73.png" width="11" height="13"/></picture></li>
-<li><code>stress</code> - Spherical stress <picture><source srcset="form_74_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S$" src="form_74.png" width="13" height="15"/></picture></li>
-<li><code>tau</code> - Active stress <picture><source srcset="form_75_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_75.png" width="11" height="9"/></picture></li>
-<li><code>volume</code> - Chamber volume <picture><source srcset="form_76_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$V$" src="form_76.png" width="15" height="15"/></picture> </li>
+<li><code>radius</code> - Chamber radius <picture><source srcset="form_78_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r$" src="form_78.png" width="11" height="9"/></picture></li>
+<li><code>velo</code> - Chamber velocity <picture><source srcset="form_79_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\dot{r}$" src="form_79.png" width="11" height="13"/></picture></li>
+<li><code>stress</code> - Spherical stress <picture><source srcset="form_80_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S$" src="form_80.png" width="13" height="15"/></picture></li>
+<li><code>tau</code> - Active stress <picture><source srcset="form_81_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_81.png" width="11" height="9"/></picture></li>
+<li><code>volume</code> - Chamber volume <picture><source srcset="form_82_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$V$" src="form_82.png" width="15" height="15"/></picture> </li>
 </ul>
 </div><h2 class="groupheader">Member Enumeration Documentation</h2>
 <a id="a6b48ac81ff298ba3b2b805084e2287df" name="a6b48ac81ff298ba3b2b805084e2287df"></a>

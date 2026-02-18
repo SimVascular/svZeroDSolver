@@ -102,13 +102,14 @@ $(function(){ initResizable(false); });
 <code>#include &lt;nlohmann/json.hpp&gt;</code><br />
 <code>#include &lt;stdexcept&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &quot;<a class="el" href="_activation_function_8h_source.html">ActivationFunction.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_model_8h_source.html">Model.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="_state_8h_source.html">State.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="debug_8h_source.html">debug.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for SimulationParameters.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="_simulation_parameters_8h__incl.svg" width="3948" height="626"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="_simulation_parameters_8h__incl.svg" width="4018" height="700"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -132,6 +133,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ac9accdc75a6e4cf8e2c9366bfe0a6610" id="r_ac9accdc75a6e4cf8e2c9366bfe0a6610"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac9accdc75a6e4cf8e2c9366bfe0a6610">generate_block</a> (<a class="el" href="class_model.html">Model</a> &amp;model, const nlohmann::json &amp;block_params_json, const std::string &amp;block_type, const std::string_view &amp;name, bool internal=false, bool periodic=true)</td></tr>
 <tr class="memdesc:ac9accdc75a6e4cf8e2c9366bfe0a6610"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a new block and add its parameters to the model.  <br /></td></tr>
 <tr class="separator:ac9accdc75a6e4cf8e2c9366bfe0a6610"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab90f237bb7b9e725d6313f8ac28187f1" id="r_ab90f237bb7b9e725d6313f8ac28187f1"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab90f237bb7b9e725d6313f8ac28187f1">generate_activation_function</a> (<a class="el" href="class_model.html">Model</a> &amp;model, const nlohmann::json &amp;j, const std::string &amp;chamber_name)</td></tr>
+<tr class="memdesc:ab90f237bb7b9e725d6313f8ac28187f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an activation function from JSON (analogous to generate_block)  <br /></td></tr>
+<tr class="separator:ab90f237bb7b9e725d6313f8ac28187f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ead86f55cad44c6099fcea25d851153" id="r_a6ead86f55cad44c6099fcea25d851153"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_state.html">State</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ead86f55cad44c6099fcea25d851153">load_initial_condition</a> (const nlohmann::json &amp;config, <a class="el" href="class_model.html">Model</a> &amp;model)</td></tr>
 <tr class="memdesc:a6ead86f55cad44c6099fcea25d851153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load initial conditions from a JSON configuration.  <br /></td></tr>
 <tr class="separator:a6ead86f55cad44c6099fcea25d851153"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -497,6 +501,44 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="ab90f237bb7b9e725d6313f8ac28187f1" name="ab90f237bb7b9e725d6313f8ac28187f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab90f237bb7b9e725d6313f8ac28187f1">&#9670;&#160;</a></span>generate_activation_function()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; generate_activation_function </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_model.html">Model</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>model</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const nlohmann::json &amp;</td>          <td class="paramname"><span class="paramname"><em>j</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>chamber_name</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create an activation function from JSON (analogous to generate_block) </p>
+<p>Validates keys against the activation type's params, reads scalar parameters, and returns a created <a class="el" href="class_activation_function.html" title="Base class for activation functions.">ActivationFunction</a>. Caller associates it with a chamber block via set_activation_function().</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">model</td><td><a class="el" href="class_model.html" title="Model of 0D elements.">Model</a> (for cardiac_cycle_period) </td></tr>
+    <tr><td class="paramname">j</td><td>JSON object (e.g. chamber_config["activation_function"]) </td></tr>
+    <tr><td class="paramname">chamber_name</td><td>Chamber name for error messages </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Unique pointer to the created activation function </dd></dl>
 
 </div>
 </div>

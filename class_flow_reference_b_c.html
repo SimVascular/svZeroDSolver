@@ -157,6 +157,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="separator:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block" id="r_ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad0e2d0882fb2a9e2b4bb8e5148f7ea9e">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af)</td></tr>
+<tr class="memdesc:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set activation function (for chamber blocks that use one).  <br /></td></tr>
+<tr class="separator:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -211,30 +214,30 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Flow reference boundary condition. </p>
 <p>Applies a prescribed flow to a boundary.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_94_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
+<picture><source srcset="form_100_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\begin{circuitikz} \draw
 node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
 \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
 \end{circuitikz}
-\]" src="form_94.png" width="159" height="32"/></picture>
+\]" src="form_100.png" width="159" height="32"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_95_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[Q=\hat{Q}
-\]" src="form_95.png" width="54" height="23"/></picture>
+<picture><source srcset="form_101_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[Q=\hat{Q}
+\]" src="form_101.png" width="54" height="23"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_96_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} &amp; Q^{e}\end{array}\right]^{T}
-\]" src="form_96.png" width="156" height="28"/></picture>
+<picture><source srcset="form_102_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} &amp; Q^{e}\end{array}\right]^{T}
+\]" src="form_102.png" width="156" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_97_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{ll}0 &amp; 1\end{array}\right]
-\]" src="form_97.png" width="116" height="24"/></picture>
+<picture><source srcset="form_103_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{F}^{e}=\left[\begin{array}{ll}0 &amp; 1\end{array}\right]
+\]" src="form_103.png" width="116" height="24"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_98_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{C}^{e}=\left[\hat{Q}\right]
-\]" src="form_98.png" width="77" height="36"/></picture>
+<picture><source srcset="form_104_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[\mathbf{C}^{e}=\left[\hat{Q}\right]
+\]" src="form_104.png" width="77" height="36"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

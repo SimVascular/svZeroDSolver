@@ -157,6 +157,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="separator:a7cbc135528fbe45b0efc3e374ee6954d inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block" id="r_ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_block.html#ad0e2d0882fb2a9e2b4bb8e5148f7ea9e">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af)</td></tr>
+<tr class="memdesc:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set activation function (for chamber blocks that use one).  <br /></td></tr>
+<tr class="separator:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e inherit pub_methods_class_block"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -211,7 +214,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p><a class="el" href="class_junction.html" title="Junction.">Junction</a> between blood vessels. </p>
 <p>Models a junction with one inlet and arbitrary outlets using modified blood vessel elements between each inlet and outlet pair.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_30_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \begin{circuitikz}
+<picture><source srcset="form_36_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \begin{circuitikz}
   \draw node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
   \draw (1,0.1) node[anchor=south]{$P_\text{in}$};
   \draw (1,0) to [short, *-] (2.5,0.75);
@@ -225,11 +228,11 @@ to
   {$P_{out,2}$}; \draw [-latex] (4.7,0.75) -- (5.5,0.75) node[right]
   {$Q_{out,1}$}; \draw [-latex] (4.7,-0.75) -- (5.5,-0.75) node[right]
   {$Q_{out,2}$}; \end{circuitikz}
-\]" src="form_30.png" width="383" height="129"/></picture>
+\]" src="form_36.png" width="383" height="129"/></picture>
 </p>
 <p>Each blood vessel is modelled as:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_31_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \begin{circuitikz} \draw
+<picture><source srcset="form_37_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \begin{circuitikz} \draw
   node[left] {$Q_\text{in}$} [-latex] (0,0) -- (0.8,0);
   \draw (1,0) node[anchor=south]{$P_\text{in}$}
   to [R, l=$R$, *-] (3,0)
@@ -238,60 +241,60 @@ to
   node[anchor=south]{$P_\text{out}$};
   \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_\text{out}$};
   \end{circuitikz}
-\]" src="form_31.png" width="504" height="45"/></picture>
+\]" src="form_37.png" width="504" height="45"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_32_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  Q_\text{in}-\sum_{i}^{n_{outlets}} Q_{out, i} = 0
-\]" src="form_32.png" width="189" height="54"/></picture>
+<picture><source srcset="form_38_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  Q_\text{in}-\sum_{i}^{n_{outlets}} Q_{out, i} = 0
+\]" src="form_38.png" width="189" height="54"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_33_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  P_\text{in}-P_{\text{out},i} - (R+S|Q_{\text{out},i}|) \cdot Q_{\text{out},i}
-  - L \dot{Q}_{\text{out},i} = 0 \quad \forall i \in n_{outlets} \]" src="form_33.png" width="531" height="24"/></picture>
+<picture><source srcset="form_39_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  P_\text{in}-P_{\text{out},i} - (R+S|Q_{\text{out},i}|) \cdot Q_{\text{out},i}
+  - L \dot{Q}_{\text{out},i} = 0 \quad \forall i \in n_{outlets} \]" src="form_39.png" width="531" height="24"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_34_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_\text{in} &amp; Q_\text{in}
+<picture><source srcset="form_40_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{y}^{e}=\left[\begin{array}{lllllll}P_\text{in} &amp; Q_\text{in}
   &amp; P_{out, 1} &amp; Q_{out, 1} &amp;
-  \dots &amp; P_{out, i} &amp; Q_{out, i}\end{array}\right] \]" src="form_34.png" width="456" height="24"/></picture>
+  \dots &amp; P_{out, i} &amp; Q_{out, i}\end{array}\right] \]" src="form_40.png" width="456" height="24"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_35_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{F}^{e} = \left[\begin{array}{ccccccc}
+<picture><source srcset="form_41_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{F}^{e} = \left[\begin{array}{ccccccc}
   0 &amp; 1 &amp; 0 &amp; -1 &amp; 0 &amp; -1 &amp; \dots \\
   1 &amp; 0 &amp; -1 &amp; -R_1 &amp; 0 &amp; 0 &amp; \\
   1 &amp; 0 &amp; 0 &amp; 0 &amp; -1 &amp; -R_2 &amp; \\
   \vdots &amp; &amp; &amp; &amp; &amp; &amp; \ddots
   \end{array}\right]
-\]" src="form_35.png" width="360" height="101"/></picture>
+\]" src="form_41.png" width="360" height="101"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_36_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{E}^{e} = \left[\begin{array}{ccccccc}
+<picture><source srcset="form_42_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{E}^{e} = \left[\begin{array}{ccccccc}
   0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; \dots \\
   0 &amp; 0 &amp; 0 &amp; -L_1 &amp; 0 &amp; 0 &amp; \\
   0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; -L_2 &amp; \\
   \vdots &amp; &amp; &amp; &amp; &amp; &amp; \ddots
   \end{array}\right]
-\]" src="form_36.png" width="328" height="101"/></picture>
+\]" src="form_42.png" width="328" height="101"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_37_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{c}^{e} = \left[\begin{array}{c}
+<picture><source srcset="form_43_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{c}^{e} = \left[\begin{array}{c}
   0 \\
   - S_1 |Q_{\text{in},1}| Q_{\text{in},1} \\
   - S_2 |Q_{\text{in},2}| Q_{\text{in},2} \\
   \vdots
-  \end{array}\right] \]" src="form_37.png" width="206" height="101"/></picture>
+  \end{array}\right] \]" src="form_43.png" width="206" height="101"/></picture>
 </p>
 <h3>Gradient</h3>
 <p>Gradient of the equations with respect to the parameters:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_38_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{J}^{e} = \left[\begin{array}{lllllllll}
+<picture><source srcset="form_44_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\[  \mathbf{J}^{e} = \left[\begin{array}{lllllllll}
   0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp; \dots &amp; 0 &amp; 0 &amp;
   \dots \\
   - y_4 &amp; 0 &amp; \dots &amp; - \dot y_4 &amp; 0 &amp; \dots &amp; |y_4| y_4 &amp; 0 &amp; \dots \\
   0 &amp; - y_6 &amp; \dots &amp; 0 &amp; - \dot y_6 &amp; \dots &amp; 0 &amp; |y_6| y_6 &amp; \dots \\
   0 &amp; 0 &amp; \ddots &amp; 0 &amp; 0 &amp; \ddots &amp; 0 &amp; 0 &amp; \ddots \\
   \end{array}\right]
-\]" src="form_38.png" width="523" height="103"/></picture>
+\]" src="form_44.png" width="523" height="103"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

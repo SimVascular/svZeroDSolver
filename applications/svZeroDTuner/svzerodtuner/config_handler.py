@@ -121,9 +121,19 @@ class ConfigHandler:
                     )
             target_type = target['type']
             if target_type == 'time_series':
+                if 'expression' not in target:
+                    raise ValueError(
+                        f"Time series target '{target['name']}' must have 'expression'"
+                    )
                 if 'target_file' not in target:
-                    raise ValueError(f"Time series target '{target['name']}' must have 'target_file'")
-            elif target_type in ['min', 'max', 'mean']:
+                    raise ValueError(
+                        f"Time series target '{target['name']}' must have 'target_file'"
+                    )
+            elif target_type == 'scalar':
+                if 'expression' not in target:
+                    raise ValueError(
+                        f"Scalar target '{target['name']}' must have 'expression'"
+                    )
                 if 'target_value' not in target and 'target_range' not in target:
                     raise ValueError(
                         f"Scalar target '{target['name']}' must have 'target_value' or 'target_range'"

@@ -18,20 +18,23 @@ parameters:
   - name: "AR_SYS.C"
     bounds: [1e-9, 1e-7]
 
-# Time series target: match pressure:AV:AR_SYS waveform from target file
-# Target CSV must have 'time' and 'value' columns
+# Target outputs
+# Specify which outputs you want to match and their target values
+# Provide expressions with output names from baseline_summary.csv
 targets:
-  - name: "pressure:AV:AR_SYS"
-    type: "time_series"
+  - name: Systemic arterial pressure
+    type: time_series
+    expression: pressure:AV:AR_SYS
     # Run create_target_from_baseline.py to create the target file from the baseline results.
     target_file: "targets/target_pressure_ar_sys.csv"
-    uncertainty: "10%"
+    uncertainty: "5%"
     weight: 1.0
   
-  - name: "Vc:LV"
-    type: "max"
-    target_value: 191.0e-6  # m^3
-    uncertainty: 10%
+  - name: LV max volume
+    type: scalar
+    expression: np.max(Vc:LV)
+    target_value: 167.6e-6  # m^3
+    uncertainty: 5%
     weight: 1.0
 
 # Objective function

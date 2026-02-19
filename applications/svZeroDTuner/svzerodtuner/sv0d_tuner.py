@@ -21,6 +21,9 @@ from .config_handler import ConfigHandler
 from .result_handler import ResultHandler
 
 
+from .expression_handler import Expression
+
+
 class SV0DTuner:
     """
     Main framework class for tuning sv0D models.
@@ -65,7 +68,15 @@ class SV0DTuner:
             normalize=self.objective_config.get('normalize', False),
             custom_function=self.objective_config.get('custom_function')
         )
-        
+
+        # Replace expression string with Expression object for each target
+        for target in self.targets:
+            expr_str = target.get("expression")
+            if expr_str:
+                target["expression"] = Expression(
+                    expr_str, target.get("type", "time_series")
+                )
+
         # State
         self.solver = None
         self.extractor = None
@@ -114,57 +125,44 @@ class SV0DTuner:
             self.param_handler, self.parameters, param_values
         )
 
-        # Extract all target outputs
+        # Extract all target outputs; store only simulated_values[name] per target
         simulated_values = {}
         times = self.extractor.get_times()
-        
-        # First, extract all unique outputs as time_series (needed for scalar extractions)
+        available_outputs = self.extractor.get_all_output_names()
+
+        # Collect output names we need from each target's expression
         unique_outputs = {}
         for target in self.targets:
-            name = target['name']
-            if name not in unique_outputs:
-                # Always extract as time_series first (we can compute scalars from it)
-                try:
-                    time_series = self.extractor.extract(name, 'time_series')
-                    unique_outputs[name] = {
-                        'time_series': time_series,
-                        'times': times
-                    }
-                except:
-                    # If time_series extraction fails, try the requested type
-                    unique_outputs[name] = {
-                        'value': self.extractor.extract(name, target.get('type', 'time_series'))
-                    }
-        
-        # Now process each target and compute the requested extraction type
+            expr = target.get("expression")
+            if not expr or not isinstance(expr, Expression):
+                raise ValueError(f"Target '{target['name']}' must have an Expression object")
+            for out_name in expr.output_names(available_outputs):
+                if out_name not in unique_outputs:
+                    try:
+                        ts = self.extractor.extract(out_name, "time_series")
+                        unique_outputs[out_name] = {
+                            "time_series": ts,
+                            "times": times,
+                        }
+                    except Exception:
+                        raise ValueError(f"Failed to extract output '{out_name}' for target '{target['name']}'")
+
+        # Compute simulated value per target; store under target name
         for target in self.targets:
-            name = target['name']
-            extraction_type = target.get('type', 'time_series')
-            
-            # Create unique key for targets with same name but different types
-            target_key = f"{name}_{extraction_type}" if extraction_type != 'time_series' else name
-            
-            if name in unique_outputs and 'time_series' in unique_outputs[name]:
-                # We have time series data, compute requested type
-                ts_data = unique_outputs[name]['time_series']
-                if extraction_type == 'time_series':
-                    simulated_values[target_key] = ts_data
-                    simulated_values[f'{target_key}_times'] = unique_outputs[name]['times']
-                    # Also store under base name for backward compatibility
-                    simulated_values[name] = ts_data
-                    simulated_values[f'{name}_times'] = unique_outputs[name]['times']
-                elif extraction_type == 'min':
-                    simulated_values[target_key] = float(np.min(ts_data))
-                    simulated_values[name] = simulated_values[target_key]  # Also store under base name
-                elif extraction_type == 'max':
-                    simulated_values[target_key] = float(np.max(ts_data))
-                    simulated_values[name] = simulated_values[target_key]  # Also store under base name
-                elif extraction_type == 'mean':
-                    simulated_values[target_key] = float(np.mean(ts_data))
-                    simulated_values[name] = simulated_values[target_key]  # Also store under base name
-            else:
-                # Use pre-extracted value
-                simulated_values[target_key] = unique_outputs[name]['value']
+            name = target["name"]
+            expr = target.get("expression")
+            try:
+                result = expr.evaluate(unique_outputs, available_outputs)
+                if expr.kind == "time_series":
+                    arr, t = result
+                    simulated_values[name] = arr
+                    simulated_values[f"{name}_times"] = t
+                else:
+                    simulated_values[name] = float(result)
+            except Exception as e:
+                raise RuntimeError(
+                    f"Failed to evaluate target '{name}': {e}"
+                ) from e
         
         # If full results requested, extract all outputs
         if return_full_results:

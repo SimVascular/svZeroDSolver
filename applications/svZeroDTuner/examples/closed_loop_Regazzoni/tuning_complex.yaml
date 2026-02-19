@@ -51,108 +51,127 @@ parameters:
 
 # Target outputs
 # Specify which outputs you want to match and their target values
-# Use output names from baseline_summary.csv
+# Provide expressions with output names from baseline_summary.csv
 targets:
-  - name: "Vc:LV"
-    type: "max"
+  - name: LV max volume
+    type: scalar
+    expression: np.max(Vc:LV)
     target_value: 116.0e-6  # m^3
     uncertainty: 5%
     weight: 1.0
-  - name: "Vc:LV"
-    type: "min"
+  - name: LV min volume
+    type: scalar
+    expression: np.min(Vc:LV)
     target_value: 38.6e-6  # m^3
     uncertainty: 5%
     weight: 1.0
-  - name: "Vc:LV"
-    type: "time_series"
+  - name: LV volume
+    type: time_series
+    expression: Vc:LV
     target_file: "targets/P003_chamber_volumes/target_V_LV.csv"
     uncertainty: 5%
     weight: 1.0
-    
-  - name: "Vc:RV"
-    type: "max"
+
+  - name: RV max volume
+    type: scalar
+    expression: np.max(Vc:RV)
     target_value: 171.0e-6  # m^3
     uncertainty: 5%
     weight: 1.0
-  - name: "Vc:RV"
-    type: "min"
+  - name: RV min volume
+    type: scalar
+    expression: np.min(Vc:RV)
     target_value: 82.0e-6  # m^3
     uncertainty: 5%
     weight: 1.0
-  - name: "Vc:RV"
-    type: "time_series"
+  - name: RV volume
+    type: time_series
+    expression: Vc:RV
     target_file: "targets/P003_chamber_volumes/target_V_RV.csv"
     uncertainty: 5%
     weight: 1.0
 
-  - name: "Vc:LA"
-    type: "max"
+  - name: LA max volume
+    type: scalar
+    expression: np.max(Vc:LA)
     target_value: 72.7e-6  # m^3
     uncertainty: 5%
     weight: 1.0
-  - name: "Vc:LA"
-    type: "min"
+  - name: LA min volume
+    type: scalar
+    expression: np.min(Vc:LA)
     target_value: 38.2e-6  # m^3
     uncertainty: 5%
     weight: 1.0
-  - name: "Vc:LA"
-    type: "time_series"
+  - name: LA volume
+    type: time_series
+    expression: Vc:LA
     target_file: "targets/P003_chamber_volumes/target_V_LA.csv"
     uncertainty: 5%
     weight: 1.0
 
-  - name: "Vc:RA"
-    type: "max"
+  - name: RA max volume
+    type: scalar
+    expression: np.max(Vc:RA)
     target_value: 107.9e-6  # m^3
     uncertainty: 5%
     weight: 1.0
-  - name: "Vc:RA"
-    type: "min"
+  - name: RA min volume
+    type: scalar
+    expression: np.min(Vc:RA)
     target_value: 56.0e-6  # m^3
     uncertainty: 5%
     weight: 1.0
-  - name: "Vc:RA"
-    type: "time_series"
+  - name: RA volume
+    type: time_series
+    expression: Vc:RA
     target_file: "targets/P003_chamber_volumes/target_V_RA.csv"
     uncertainty: 5%
     weight: 1.0
 
-  - name: "pressure:AV:AR_SYS"
-    type: "max"
+  - name: Systemic arterial max pressure
+    type: scalar
+    expression: np.max(pressure:AV:AR_SYS)
     target_value: 13065  # Pa (98.0 mmHg)
     uncertainty: 5%
     weight: 1.0
-  - name: "pressure:AV:AR_SYS"
-    type: "min"
+  - name: Systemic arterial min pressure
+    type: scalar
+    expression: np.min(pressure:AV:AR_SYS)
     target_value: 7066  # Pa (53.0 mmHg)
     uncertainty: 5%
     weight: 1.0
 
-  - name: "pressure:PV:AR_PUL"
-    type: "max"
+  - name: Pulmonary arterial max pressure
+    type: scalar
+    expression: np.max(pressure:PV:AR_PUL)
     target_value: 2666  # Pa (20.0 mmHg)
     uncertainty: 20%
     weight: 1.0
-  - name: "pressure:PV:AR_PUL"
-    type: "min"
+  - name: Pulmonary arterial min pressure
+    type: scalar
+    expression: np.min(pressure:PV:AR_PUL)
     target_value: 1533  # Pa (11.5 mmHg)
     uncertainty: 20%
     weight: 1.0
 
-  - name: "pressure:J0:VEN_SYS"
-    type: "mean"
+  - name: Systemic venous mean pressure
+    type: scalar
+    expression: np.mean(pressure:J0:VEN_SYS)
     target_value: 800  # Pa (6.0 mmHg)
     uncertainty: 20%
     weight: 1.0
 
-  - name: "pressure:J1:RA"
-    type: "mean"
+  - name: Right atrial mean pressure
+    type: scalar
+    expression: np.mean(pressure:J1:RA)
     target_value: 533  # Pa (4.0 mmHg)
     uncertainty: 20%
     weight: 1.0
-  
-  - name: "pressure:J3:LA"
-    type: "mean"
+
+  - name: Left atrial mean pressure
+    type: scalar
+    expression: np.mean(pressure:J3:LA)
     target_value: 933  # Pa (7.0 mmHg)
     uncertainty: 20%
     weight: 1.0

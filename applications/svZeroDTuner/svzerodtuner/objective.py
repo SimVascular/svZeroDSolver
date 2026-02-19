@@ -181,14 +181,9 @@ class ObjectiveFunction:
     ) -> np.ndarray:
         """Look up and return simulated value for a target as numpy array."""
         name = target['name']
-        extraction_type = target.get('type', 'time_series')
-        target_key = f"{name}_{extraction_type}" if extraction_type != 'time_series' else name
-        if target_key in simulated_values:
-            sim_value = simulated_values[target_key]
-        elif name in simulated_values:
-            sim_value = simulated_values[name]
-        else:
-            raise ValueError(f"Simulated value for '{name}' (type: {extraction_type}) not found")
+        if name not in simulated_values:
+            raise ValueError(f"Simulated value for '{name}' not found")
+        sim_value = simulated_values[name]
         if not isinstance(sim_value, np.ndarray):
             sim_value = np.array([sim_value]) if np.isscalar(sim_value) else np.array(sim_value)
         return np.asarray(sim_value)
@@ -202,7 +197,6 @@ class ObjectiveFunction:
         """Compute error for a time series target."""
         name = target['name']
         target_times = np.array(target['target_times'])
-        target_values = np.array(target['target_values'])
         sim_times = simulated_values.get(f'{name}_times')
         if sim_times is None:
             sim_times = np.linspace(0, 1, len(sim_value))
@@ -249,9 +243,9 @@ class ObjectiveFunction:
         for target in self.targets:
             sim_value = self._get_simulated_value(target, simulated_values)
             weight = float(target.get('weight', 1.0))
-            extraction_type = target.get('type', 'time_series')
+            target_type = target.get('type', 'time_series')
 
-            if extraction_type == 'time_series':
+            if target_type == 'time_series':
                 error = self._error_for_time_series(target, sim_value, simulated_values)
             else:
                 error = self._error_for_scalar(target, sim_value)

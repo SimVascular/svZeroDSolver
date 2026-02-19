@@ -22,6 +22,7 @@ import yaml
 from .parameter_handler import ParameterHandler
 from .output_extractor import OutputExtractor
 from .simulation import run_simulation
+from .expression_handler import Expression
 
 
 class SensitivityAnalyzer:
@@ -58,7 +59,12 @@ class SensitivityAnalyzer:
         
         # Sensitivity analysis settings
         self.n_samples = self.sensitivity_config.get('n_samples', 512)
-        
+
+        # Replace expression string with Expression object for each QoI (all scalars)
+        for qoi in self.quantities_of_interest:
+            expr_str = qoi["expression"]
+            qoi["expression"] = Expression(expr_str, "scalar")
+
         # Results storage
         self.results = {}
         self.sample_data = []
@@ -98,56 +104,54 @@ class SensitivityAnalyzer:
         for i, qoi in enumerate(self.config['quantities_of_interest']):
             if 'name' not in qoi:
                 raise ValueError(f"Quantity of interest {i} missing 'name'")
+            if 'expression' not in qoi:
+                raise ValueError(
+                    f"Quantity of interest '{qoi.get('name', i)}' missing 'expression'"
+                )
         
     def _get_simulated_quantities_of_interest(
         self, param_values: np.ndarray, suppress_warnings: bool = False
     ) -> Dict[str, float]:
         """
         Run sv0D simulation and return quantity-of-interest values.
-
-        Args:
-            param_values: Array of parameter values
-            suppress_warnings: If True, suppress warning messages
-
-        Returns:
-            Dictionary of quantity of interest values (NaN for failures)
+        Each QoI has name (free label) and expression (e.g. np.max(pressure:AV:AR_SYS)).
         """
-        qoi_values = {}
-        for qoi in self.quantities_of_interest:
-            qoi_key = f"{qoi['name']}_{qoi.get('type', 'mean')}"
-            qoi_values[qoi_key] = np.nan
+        qoi_values = {qoi["name"]: np.nan for qoi in self.quantities_of_interest}
 
         try:
             _, extractor = run_simulation(
                 self.param_handler, self.parameters, param_values
             )
+            times = extractor.get_times()
+            available_outputs = extractor.get_all_output_names()
+
+            # Collect outputs needed by any QoI expression
+            unique_outputs = {}
+            for qoi in self.quantities_of_interest:
+                expr = qoi["expression"]
+                for out_name in expr.output_names(available_outputs):
+                    if out_name not in unique_outputs:
+                        try:
+                            ts = extractor.extract(out_name, "time_series")
+                            unique_outputs[out_name] = {
+                                "time_series": ts,
+                                "times": times,
+                            }
+                        except Exception:
+                            pass
 
             for qoi in self.quantities_of_interest:
                 name = qoi["name"]
-                extraction_type = qoi.get("type", "mean")
-                qoi_key = f"{name}_{extraction_type}"
-
                 try:
-                    time_series = extractor.extract(name, "time_series")
-
-                    if extraction_type == "min":
-                        qoi_values[qoi_key] = float(np.min(time_series))
-                    elif extraction_type == "max":
-                        qoi_values[qoi_key] = float(np.max(time_series))
-                    elif extraction_type == "mean":
-                        qoi_values[qoi_key] = float(np.mean(time_series))
-                    elif extraction_type == "std":
-                        qoi_values[qoi_key] = float(np.std(time_series))
-                    elif extraction_type == "range":
-                        qoi_values[qoi_key] = float(
-                            np.max(time_series) - np.min(time_series)
+                    qoi_values[name] = float(
+                        qoi["expression"].evaluate(
+                            unique_outputs, available_outputs
                         )
-                    else:
-                        raise ValueError(f"Unknown extraction type: {extraction_type}")
+                    )
                 except Exception as e:
                     if not suppress_warnings:
-                        print(f"Warning: Could not extract {name}: {e}")
-                    qoi_values[qoi_key] = np.nan
+                        print(f"Warning: Could not evaluate QoI '{name}': {e}")
+                    qoi_values[name] = np.nan
 
         except Exception as e:
             if not suppress_warnings:
@@ -200,7 +204,7 @@ class SensitivityAnalyzer:
         print("SENSITIVITY ANALYSIS")
         print("="*70)
         print(f"Parameters: {[p['name'] for p in self.parameters]}")
-        qoi_names = [f"{q['name']}_{q.get('type', 'mean')}" for q in self.quantities_of_interest]
+        qoi_names = [q["name"] for q in self.quantities_of_interest]
         print(f"Quantities of Interest: {qoi_names}")
         print(f"Number of samples: {self.n_samples}")
         print()
@@ -245,8 +249,7 @@ class SensitivityAnalyzer:
         print("Evaluating simulations...")
         print("-"*70)
         
-        all_qoi_values = {f"{qoi['name']}_{qoi.get('type', 'mean')}": [] 
-                          for qoi in self.quantities_of_interest}
+        all_qoi_values = {qoi["name"]: [] for qoi in self.quantities_of_interest}
         
         for i, param_values in enumerate(samples):
             if (i + 1) % max(1, self.n_samples // 20) == 0:

@@ -21,20 +21,10 @@ parameters:
 # Quantities of Interest (QoI) to analyze
 # These are the outputs you want to understand the sensitivity of
 quantities_of_interest:
-  # Systemic arterial pressure statistics
-  - name: "pressure:AV:AR_SYS"
-    type: "max"  # Maximum (systolic) pressure
-  
-  - name: "pressure:AV:AR_SYS"
-    type: "min"  # Minimum (diastolic) pressure
-  
-  
-  # Additional examples (uncomment as needed):
-  # - name: "pressure:RV:PV"
-  #   type: "max"
-  # 
-  # - name: "flow:AR_SYS:J0"
-  #   type: "mean"
+  - name: Systemic arterial max pressure
+    expression: np.max(pressure:AV:AR_SYS)
+  - name: Systemic arterial min pressure
+    expression: np.min(pressure:AV:AR_SYS)
 
 # Sensitivity analysis settings
 sensitivity:

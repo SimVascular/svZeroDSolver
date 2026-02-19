@@ -50,42 +50,45 @@ parameters:
   - name: "RCR_LPA.C"
     bounds: [1.0e-4, 1.0e-2]
 
-# Targets
-# Note: output names follow the pattern "pressure:<block1>:<block2>" and
-#       "flow:<block1>:<block2>" where <block1> -> <block2> is the connection.
+# Target outputs
+# Specify which outputs you want to match and their target values
+# Provide expressions with output names from baseline_summary.csv
 # Cardiac output is taken as mean flow through the PV->MPA connection.
 # RPA/LPA split is enforced by targeting the mean flows in each branch.
-
 targets:
-  - name: "flow:PV:MPA"
-    type: "mean"
+  - name: Pulmonary arterial mean flow
+    type: scalar
+    expression: np.mean(flow:PV:MPA)
     target_value: 83.33  # cm^3/s (5.0 L/min)
     uncertainty: 10%
     weight: 1.0
-
-  - name: "pressure:PV:MPA"
-    type: "max"
+  - name: Pulmonary arterial max pressure
+    type: scalar
+    expression: np.max(pressure:PV:MPA)
     target_value: 33330.0  # dyn/cm^2 (25 mmHg)
     uncertainty: 10%
     weight: 1.0
-  - name: "pressure:PV:MPA"
-    type: "min"
+  - name: Pulmonary arterial min pressure
+    type: scalar
+    expression: np.min(pressure:PV:MPA)
     target_value: 10670.0  # dyn/cm^2 (8 mmHg)
     uncertainty: 10%
     weight: 1.0
-  - name: "pressure:PV:MPA"
-    type: "mean"
+  - name: Pulmonary arterial mean pressure
+    type: scalar
+    expression: np.mean(pressure:PV:MPA)
     target_value: 20000.0  # dyn/cm^2 (15 mmHg)
     uncertainty: 10%
     weight: 1.0
-
-  - name: "flow:RPA:RCR_RPA"
-    type: "mean"
+  - name: Right pulmonary artery mean flow
+    type: scalar
+    expression: np.mean(flow:RPA:RCR_RPA)
     target_value: 45.83  # 55% of CO
     uncertainty: 10%
     weight: 1.0
-  - name: "flow:LPA:RCR_LPA"
-    type: "mean"
+  - name: Left pulmonary artery mean flow
+    type: scalar
+    expression: np.mean(flow:LPA:RCR_LPA)
     target_value: 37.5  # 45% of CO
     uncertainty: 10%
     weight: 1.0

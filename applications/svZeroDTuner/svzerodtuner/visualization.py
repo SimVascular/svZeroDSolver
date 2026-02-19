@@ -186,21 +186,14 @@ def plot_target_comparison(
         name = target['name']
         target_type = target.get('type', 'time_series')
         
-        # Construct the key used to store the simulated value
-        # For scalar targets, the key includes the type (e.g., "pressure:LV:AV_max")
-        if target_type in ['min', 'max', 'mean']:
-            sim_key = f"{name}_{target_type}"
-        else:
-            sim_key = name
-        
-        if sim_key not in simulated_values:
+        if name not in simulated_values:
             ax.text(0.5, 0.5, f'No data for {name}', 
                    ha='center', va='center', transform=ax.transAxes)
             ax.set_title(f'Target: {name}', fontsize=11, fontweight='bold')
             csv_rows.append({'name': name, 'type': target_type, 'time': 'N/A', 'target_value': '', 'simulated_value': '', 'target_range': '', 'percent_error': 'N/A'})
             continue
         
-        sim_value = simulated_values[sim_key]
+        sim_value = simulated_values[name]
         
         if target_type == 'time_series':
             # Plot time series: use only range info; target_values = pointwise (lo+hi)/2
@@ -297,7 +290,7 @@ def plot_target_comparison(
             pct_err = _compute_percent_error(target_value, sim_scalar)
             err_str = f'Error: {pct_err:.2f}%' if pct_err is not None else None
             csv_rows.append({'name': name, 'type': target_type, 'time': 'N/A', 'target_value': target_value, 'simulated_value': sim_scalar, 'target_range': range_str, 'percent_error': pct_err if pct_err is not None else 'N/A'})
-            ax.set_title(f'{name} ({target_type})', fontsize=11, fontweight='bold')
+            ax.set_title(name, fontsize=11, fontweight='bold')
             if err_str:
                 trans = blended_transform_factory(ax.transData, ax.transAxes)
                 ax.text(1, 0.05, err_str, transform=trans, fontsize=10,

@@ -302,20 +302,10 @@ class SV0DTuner:
         # Get results
         self.history = self.optimizer.get_history()
         self.best_value, self.best_params = self.optimizer.get_best()
-        
-        is_de = self.optimization_config['algorithm'] == 'differential_evolution'
 
         if result is not None:
             n_evaluations = getattr(result, 'nfev', len(self.history) if self.history else 0)
             n_iterations = getattr(result, 'nit', len(self.history) if self.history else 0)
-
-            # If history is empty but we have result params, use them
-            if not self.history and hasattr(result, 'x') and hasattr(result, 'fun'):
-                self.best_params = result.x
-                self.best_value = result.fun
-                if not interrupted:
-                    print(f"\nNote: No optimization history available")
-                    print(f"Final objective value: {self.best_value:.6e}")
         else:
             # Interrupted - use best from history; nfev unknown
             n_evaluations = None  # not available when interrupted

@@ -247,7 +247,12 @@ class OptimizerWrapper:
                     message="Optimization terminated: objective reached zero",
                     nfev=len(self.history),
                 )
-        
+
+        # Use the optimizer's returned result for best value/params (not best seen during optimization)
+        if hasattr(result, 'x') and hasattr(result, 'fun'):
+            self.best_params = result.x
+            self.best_value = result.fun
+
         return result
     
     def get_history(self) -> List[Dict]:

@@ -41,6 +41,7 @@
 #include "ValveTanh.h"
 #include "WindkesselBC.h"
 #include "debug.h"
+#include "ChamberSphere_growth.h"
 
 /**
  * @brief Model of 0D elements

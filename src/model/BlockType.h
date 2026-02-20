@@ -31,7 +31,8 @@ enum class BlockType {
   chamber_sphere = 15,
   blood_vessel_CRL = 16,
   piecewise_cosine_chamber = 17,
-  piecewise_valve = 18
+  piecewise_valve = 18,
+  chamber_sphere_growth = 19
 };
 
 /**

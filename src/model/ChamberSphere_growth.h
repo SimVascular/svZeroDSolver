@@ -168,7 +168,7 @@ class ChamberSphere_growth : public Block {
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
                {"radius0", InputParameter()},
-               {"CO", InputParameter()},
+               {"C0", InputParameter()},
                {"C1", InputParameter()},
                {"C2", InputParameter()},
                {"C3", InputParameter()},

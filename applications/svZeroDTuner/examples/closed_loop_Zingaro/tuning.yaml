@@ -139,7 +139,7 @@ optimization:
   # "To improve your chances of finding a global minimum use higher popsize values, 
   # with higher mutation and (dithering), but lower recombination values. This 
   # has the effect of widening the search radius, but slowing convergence.""
-  # algorithm: "differential_evolution"
+  algorithm: "differential_evolution"
   maxiter: 250
   workers: -1
   updating: 'deferred'

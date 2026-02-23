@@ -13,19 +13,19 @@
 #SBATCH --error=tuning_job.e%j
 
 # The walltime you require for your simulation
-#SBATCH --time=01:00:00
+#SBATCH --time=00:30:00
 
 # Job priority. Leave as normal for now.
 #SBATCH --qos=normal
 
-# Number of nodes you are requesting for your job. You can have 32 processors per node, so plan accordingly
+# Number of nodes you are requesting for your job. You can have 24 processors per node, so plan accordingly
 #SBATCH --nodes=1
 
 # Amount of memory you require per node. The default is 4000 MB (or 4 GB) per node
-#SBATCH --mem=20000
+#SBATCH --mem=4000
 
 # Number of processors per node (for parallel differential_evolution)
-#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks-per-node=24
 
 # Send an email to this address when your job starts and finishes
 #SBATCH --mail-user=abrown97@stanford.edu

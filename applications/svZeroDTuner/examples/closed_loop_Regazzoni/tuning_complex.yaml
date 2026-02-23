@@ -176,10 +176,6 @@ targets:
     uncertainty: 20%
     weight: 1.0
 
-# Objective function
-objective:
-  normalize: true  # Normalize errors by target values for better scaling
-
 # Optimization - use scipy's exact parameter names
 optimization:
   terminate_at_zero: true  # Stop when objective hits zero (default: true). Set false to run full maxiter.

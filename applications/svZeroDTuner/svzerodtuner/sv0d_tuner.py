@@ -48,7 +48,6 @@ class SV0DTuner:
         # Get configuration sections
         self.parameters = self.config_handler.get_parameters()
         self.targets = self.config_handler.get_targets()
-        self.objective_config = self.config_handler.get_objective_config()
         self.optimization_config = self.config_handler.get_optimization_config()
         self.output_config = self.config_handler.get_output_config()
         
@@ -63,11 +62,7 @@ class SV0DTuner:
         )
         
         # Create objective function
-        self.objective_func = create_objective(
-            targets=self.targets,
-            normalize=self.objective_config.get('normalize', False),
-            custom_function=self.objective_config.get('custom_function')
-        )
+        self.objective_func = create_objective(targets=self.targets)
 
         # Replace expression string with Expression object for each target
         for target in self.targets:

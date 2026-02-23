@@ -3,7 +3,7 @@ Objective function for sv0D Tuning Framework.
 """
 
 import numpy as np
-from typing import Dict, List, Callable, Optional, Union, Tuple
+from typing import Dict, List, Optional, Union, Tuple
 from scipy.interpolate import interp1d
 
 
@@ -89,38 +89,36 @@ def _interpolate_to_target_times(
     return interp_func(target_times)
 
 
-def _l2_error_with_range(
+def _sum_rel_errors_outside_range(
     sim_values: np.ndarray,
     lo: np.ndarray,
     hi: np.ndarray,
-    normalize: bool
 ) -> float:
     """
-    L2 error between simulated values and target range [lo, hi]
-    - if in range, error is zero
-    - if below lo, error is L2(lo - sim_value)
-    - if above hi, error is L2(sim_value - hi)
-    For targets with no range (i.e. lo=hi) this reduces to L2 error between 
-    simulated values and target values. 
+    Sum of relative errors for values outside the target range [lo, hi].
+    In-range values contribute zero; outside the range we use residual (distance to nearest bound).
+    Works for both time series (length N) and scalar targets (length 1). For
+    time series, each time point is treated as an individual scalar target.
+    - if in range: residual = 0
+    - if below lo: residual = lo - sim_value
+    - if above hi: residual = sim_value - hi
 
-    If normalize is True, the error is normalized by the midpoint of the range.
-    
-    Works for both time series (length N) and scalar targets (length 1).
+    Residuals are then normalized by the midpoint, per time point.
+
+    Returns: Σ |residual_n| / |midpoint_n|, where midpoint_n = (lo_n + hi_n) / 2. 
     """
     sim_values = np.asarray(sim_values)
     lo = np.asarray(lo)
     hi = np.asarray(hi)
     below = sim_values < lo
     above = sim_values > hi
-    residual = np.zeros_like(sim_values)
+    residual = np.zeros_like(sim_values, dtype=float)
     residual[below] = lo[below] - sim_values[below]
     residual[above] = sim_values[above] - hi[above]
-    error = float(np.linalg.norm(residual))
-    if normalize:
-        norm = np.linalg.norm((lo + hi) / 2.0)
-        return error / norm if norm > 0 else error
-    else:
-        return error
+    abs_residual = np.abs(residual)
+    midpoint = (lo + hi) / 2.0
+    abs_midpoint = np.maximum(np.abs(midpoint), 1e-14)
+    return float(np.sum(abs_residual / abs_midpoint))
 
 
 class ObjectiveFunction:
@@ -135,23 +133,14 @@ class ObjectiveFunction:
     Error is zero within the range; outside, penalty by distance from nearest bound.
     """
 
-    def __init__(
-        self,
-        targets: List[Dict],
-        normalize: bool = False,
-        custom_function: Optional[Callable] = None
-    ):
+    def __init__(self, targets: List[Dict]):
         """
         Initialize objective function.
 
         Args:
             targets: List of target specifications
-            normalize: If True, use relative error (normalized by target)
-            custom_function: Optional custom function (overrides default)
         """
         self.targets = targets
-        self.normalize = normalize
-        self.custom_function = custom_function
         self._process_targets()
 
     def _process_targets(self):
@@ -215,20 +204,22 @@ class ObjectiveFunction:
         if not np.all(np.isfinite(sim_interp)):
             return 1e10
 
-        return _l2_error_with_range(
-            sim_interp, target['range_lo'], target['range_hi'], self.normalize
+        return _sum_rel_errors_outside_range(
+            sim_interp, target['range_lo'], target['range_hi']
         )
 
     def _error_for_scalar(self, target: Dict, sim_value: np.ndarray) -> float:
-        """Compute error for a scalar target (min, max, mean)."""
+        """Compute error for a scalar target."""
         sim_scalar = float(sim_value.item() if sim_value.size == 1 else sim_value.flat[0])
-        return _l2_error_with_range(
-            np.array([sim_scalar]), target['range_lo'], target['range_hi'], self.normalize
+        return _sum_rel_errors_outside_range(
+            np.array([sim_scalar]), target['range_lo'], target['range_hi']
         )
 
     def compute(self, simulated_values: Dict[str, Union[np.ndarray, float]]) -> float:
         """
-        Compute objective function value. Returns weighted sum of L2 error for all targets (both time series and scalars).
+        Compute objective function value. Returns weighted sum of relative errors 
+        for all targets. For time series, each time point is treated as an 
+        individual scalar target.
 
         Args:
             simulated_values: Dictionary mapping output names to simulated values
@@ -236,9 +227,6 @@ class ObjectiveFunction:
         Returns:
             Total weighted error
         """
-        if self.custom_function:
-            return self.custom_function(simulated_values, self.targets)
-
         total_error = 0.0
         for target in self.targets:
             sim_value = self._get_simulated_value(target, simulated_values)
@@ -257,15 +245,7 @@ class ObjectiveFunction:
 
 def create_objective(targets: List[Dict], **kwargs) -> ObjectiveFunction:
     """
-    Create objective function. Use normalize=True for relative error, False for L2.
+    Create objective function object.
     Targets with 'uncertainty' (percent or [min,max]) or target_range use range-based penalty.
     """
-    normalize = kwargs.pop('normalize', False)
-    custom_function = kwargs.pop('custom_function', None)
-
-    return ObjectiveFunction(
-        targets=targets,
-        normalize=normalize,
-        custom_function=custom_function,
-        **kwargs
-    )
+    return ObjectiveFunction(targets=targets, **kwargs)

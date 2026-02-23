@@ -37,10 +37,6 @@ targets:
     uncertainty: 5%
     weight: 1.0
 
-# Objective function
-objective:
-  normalize: true
-
 # Optimization
 optimization:
   terminate_at_zero: true

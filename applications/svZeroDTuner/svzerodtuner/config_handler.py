@@ -166,10 +166,6 @@ class ConfigHandler:
         """Get list of targets."""
         return self.config['targets']
     
-    def get_objective_config(self) -> Dict:
-        """Get objective function configuration."""
-        return self.config.get('objective', {'normalize': False})
-    
     def get_optimization_config(self) -> Dict:
         """Get optimization config. Passed directly to optimizer"""
         return dict(self.config['optimization'])

@@ -38,7 +38,7 @@
       "vessel_length": 10.0,
       "zero_d_element_type": "BloodVesselCRL",
       "zero_d_element_values": {
-        "C": 1.125095633128816e-08,
+        "C": 1.125095633128816e-8,
         "R_poiseuille": 63994560.0,
         "L": 666610
       }
@@ -75,7 +75,7 @@
         "R_poiseuille": 428176.9352,
         "L": 0
       }
-    },  
+    },
     {
       "vessel_name": "AR_PUL",
       "vessel_id": 7,
@@ -159,7 +159,7 @@
         "Epass": 2.0449931e7,
         "Vrest": 4.0e-6
       },
-      "activation_function": { 
+      "activation_function": {
         "type": "two_hill",
         "t_shift": 0.025,
         "tau_1": 0.07586206896551724,
@@ -263,16 +263,16 @@
     }
   ],
   "initial_condition": {
-  "pressure:R_UPSTREAM_SYS:J1": 11185.7158,
-  "pressure:J1:AR_SYS": 11185.7158,
+    "pressure:R_UPSTREAM_SYS:J1": 11185.7158,
+    "pressure:J1:AR_SYS": 11185.7158,
 
-  "pressure:AR_SYS:J2": 4732.9316,
-  "pressure:J2:VEN_SYS": 4732.9316,
+    "pressure:AR_SYS:J2": 4732.9316,
+    "pressure:J2:VEN_SYS": 4732.9316,
 
-  "pressure:R_UPSTREAM_PUL:J5": 1986.4978,
-  "pressure:J5:AR_PUL": 1986.4978,
+    "pressure:R_UPSTREAM_PUL:J5": 1986.4978,
+    "pressure:J5:AR_PUL": 1986.4978,
 
-  "pressure:AR_PUL:J6": 1810.51276,
-  "pressure:J6:VEN_PUL": 1810.51276
+    "pressure:AR_PUL:J6": 1810.51276,
+    "pressure:J6:VEN_PUL": 1810.51276
   }
 }

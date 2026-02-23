@@ -42,7 +42,7 @@ module load viz
 module load py-matplotlib/3.10.8_py314
 module load cmake
 
-# Paths relative to closed_loop_Regazzoni (submit from this directory)
+# Relative paths (submit from this directory)
 VENV_DIR="../../venv"
 REQUIREMENTS="../../requirements.txt"
 SVZEROD_ROOT="../../../.."   # svZeroDSolver repo root (for pip install -e pysvzerod)

@@ -249,6 +249,9 @@ class SV0DTuner:
         bounds = [tuple(float(b) for b in p['bounds']) for p in self.parameters]
         
         # Get initial parameter values
+        print(f"Using initial parameter values from JSON file:")
+        for name in param_names:
+            print(f"\t{name}: {self.param_handler.get_parameter(name)}")
         x0 = np.array([self.param_handler.get_parameter(name) for name in param_names])
         
         # Start timing

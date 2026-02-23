@@ -218,7 +218,7 @@ class ObjectiveFunction:
     def compute(self, simulated_values: Dict[str, Union[np.ndarray, float]]) -> float:
         """
         Compute objective function value. Returns weighted sum of relative errors 
-        for all targets. For time series, each time point is treated as an 
+        for all targets (weighted L1 error). For time series, each time point is treated as an 
         individual scalar target.
 
         Args:

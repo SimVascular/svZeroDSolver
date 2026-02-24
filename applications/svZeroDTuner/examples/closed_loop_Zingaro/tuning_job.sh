@@ -13,7 +13,7 @@
 #SBATCH --error=tuning_job.e%j
 
 # The walltime you require for your simulation
-#SBATCH --time=02:00:00
+#SBATCH --time=03:00:00
 
 # Job priority. Leave as normal for now.
 #SBATCH --qos=normal

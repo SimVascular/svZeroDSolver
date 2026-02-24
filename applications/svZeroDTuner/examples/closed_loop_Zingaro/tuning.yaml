@@ -43,7 +43,7 @@ parameters:
     bounds: [1e-9, 1e-7]
 
   - name: "VEN_SYS.R_poiseuille"
-    bounds: [1e6, 1e8]
+    bounds: [1e5, 1e8]
 
   - name: "initial_condition.pressure:J2:VEN_SYS"
     bounds: [1e2, 1e4]
@@ -153,24 +153,24 @@ optimization:
   # "To improve your chances of finding a global minimum use higher popsize values, 
   # with higher mutation and (dithering), but lower recombination values. This 
   # has the effect of widening the search radius, but slowing convergence.""
-  # algorithm: "differential_evolution"
-  # maxiter: 500
-  # workers: -1
-  # updating: 'deferred'
-  # tol: 1e-2
-  # popsize: 20            
-  # init: 'sobol'           
-  # strategy: 'best1bin'    
-  # mutation: [0.5, 1.5]    
-  # recombination: 0.5      
-  # polish: true  
+  algorithm: "differential_evolution"
+  maxiter: 500
+  workers: -1
+  updating: 'deferred'
+  tol: 1e-2
+  popsize: 30            
+  init: 'sobol'           
+  strategy: 'best1bin'    
+  mutation: [0.5, 1.5]    
+  recombination: 0.5      
+  polish: true  
 
   # Nelder-Mead specific options
-  algorithm: "Nelder-Mead"
-  maxiter: 10000
-  xatol: 1e-6
-  fatol: 1e-6
-  adaptive: true
+  # algorithm: "Nelder-Mead"
+  # maxiter: 10000
+  # xatol: 1e-6
+  # fatol: 1e-6
+  # adaptive: true
 
 # Output
 output:

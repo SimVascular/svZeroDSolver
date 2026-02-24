@@ -7,7 +7,7 @@
         "bc_name": "IN",
         "bc_type": "PRESSURE",
         "bc_values": {
-          "P": [5000, 5000],
+          "P": [2000, 2000],
           "t": [0, 1]
         }
       },
@@ -15,7 +15,7 @@
         "bc_name": "OUT",
         "bc_type": "PRESSURE",
         "bc_values": {
-          "P": [10000, 10000],
+          "P": [1000, 1000],
           "t": [0, 1]
         }
       }
@@ -59,11 +59,11 @@
           "eta": 10.0,
           "Theta_r": 1.0,
           "Theta_c": 1.0,
-          "sigma_max": 130e3,
-          "alpha_max": 30.0,
-          "alpha_min": -30.0,
-          "tsys": 0.0,
-          "tdias": 0.314,
+          "sigma_max": 0.0,
+          "alpha_max": 0.0,
+          "alpha_min": 0.0,
+          "tsys": 0.17,
+          "tdias": 0.484,
           "steepness": 0.005
         }
       },

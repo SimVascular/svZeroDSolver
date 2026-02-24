@@ -101,9 +101,12 @@
         "Emin": 0.091,
         "Vrd": 26.1,
         "Vrs": 18.0,
-        "t_active": 0.2,
-        "t_twitch": 0.3,
         "Impedance": 0.000351787
+      },
+      "activation_function": {
+        "type": "half_cosine",
+        "t_active": 0.2,
+        "t_twitch": 0.3
       }
     }
   ],

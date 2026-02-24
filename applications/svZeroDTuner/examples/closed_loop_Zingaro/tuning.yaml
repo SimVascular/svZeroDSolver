@@ -43,7 +43,7 @@ parameters:
     bounds: [1e-9, 1e-7]
 
   - name: "VEN_SYS.R_poiseuille"
-    bounds: [1e6, 1e8]
+    bounds: [1e5, 1e7]
 
   - name: "initial_condition.pressure:J2:VEN_SYS"
     bounds: [1e2, 1e4]
@@ -81,28 +81,28 @@ targets:
     uncertainty: 5%
     weight: 1.0
 
-  - name: Systemic arterial max pressure
+  - name: Aortic max pressure
     type: scalar
-    expression: np.max(pressure:J1:AR_SYS)
+    expression: np.max(pressure:J0:R_UPSTREAM_SYS)
     target_value: 13065  # Pa (98.0 mmHg)
     uncertainty: 5%
     weight: 1.0
-  - name: Systemic arterial min pressure
+  - name: Aortic min pressure
     type: scalar
-    expression: np.min(pressure:J1:AR_SYS)
+    expression: np.min(pressure:J0:R_UPSTREAM_SYS)
     target_value: 7066  # Pa (53.0 mmHg)
     uncertainty: 5%
     weight: 1.0
 
-  - name: Pulmonary arterial max pressure
+  - name: Pulmonary artery max pressure
     type: scalar
-    expression: np.max(pressure:J5:AR_PUL)
+    expression: np.max(pressure:J4:R_UPSTREAM_PUL)
     target_value: 2666  # Pa (20.0 mmHg)
     uncertainty: 20%
     weight: 1.0
-  - name: Pulmonary arterial min pressure
+  - name: Pulmonary artery min pressure
     type: scalar
-    expression: np.min(pressure:J5:AR_PUL)
+    expression: np.min(pressure:J4:R_UPSTREAM_PUL)
     target_value: 1533  # Pa (11.5 mmHg)
     uncertainty: 20%
     weight: 1.0

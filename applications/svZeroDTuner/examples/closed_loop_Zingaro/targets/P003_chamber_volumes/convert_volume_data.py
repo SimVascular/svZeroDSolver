@@ -57,11 +57,17 @@ VOLUME_COLUMNS_MANUAL: Dict[str, str] = {
 def rr_percent_to_time(rr_percent_series, cardiac_period_sec: float, vent_start_time_sec: float, electromechanical_delay_sec: float):
     """
     Convert RR% (0–100 over one cardiac cycle) to time in seconds.
-    RR%=0 is aligned to ventricular contraction start, minus the electromechanical delay.
-    time = (rr/100) * cardiac_period + vent_start - electromechanical_delay, wrapped into [0, cardiac_period).
+    RR%=0 corresponds to the R-wave. Assuming the start of the P-wave corresponds
+    to t=0, then RR%=0 corresponds to the PR interval + the QRS interval/2.
+    time = (rr/100) * cardiac_period + PR interval + QRS interval/2, wrapped into [0, cardiac_period).
     """
+    
+    # Values from ECG for a particular patient
+    pr_interval_sec = 0.182
+    qrs_interval_sec = 0.088
+
     rr = rr_percent_series.astype(float) / 100.0
-    time = rr * cardiac_period_sec + vent_start_time_sec - electromechanical_delay_sec
+    time = rr * cardiac_period_sec + pr_interval_sec + qrs_interval_sec / 2
     return time % cardiac_period_sec
 
 

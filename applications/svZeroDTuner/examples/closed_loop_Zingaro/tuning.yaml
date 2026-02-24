@@ -130,7 +130,7 @@ targets:
 
 objective:
   # L1 or L2 norm (of relative errors)
-  norm: L1
+  norm: L2
 
 # Optimization - use scipy's exact parameter names
 optimization:

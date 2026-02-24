@@ -234,18 +234,19 @@ class ObjectiveFunction:
         Returns:
             Total error: L1 or L2 norm of the weighted relative-error vector
         """
-        all_errors: np.ndarray = np.array([])
+        error_chunks: List[np.ndarray] = []
         for target in self.targets:
             sim_value = self._get_simulated_value(target, simulated_values)
-            weight = float(target.get('weight', 1.0))
-            target_type = target.get('type', 'time_series')
+            weight = float(target['weight'])
+            target_type = target['type']
 
             if target_type == 'time_series':
                 errors = self._error_for_time_series(target, sim_value, simulated_values)
             else:
                 errors = self._errors_for_scalar(target, sim_value)
 
-            all_errors = np.concatenate((all_errors, weight * errors))
+            error_chunks.append(weight * errors)
+        all_errors = np.concatenate(error_chunks) if error_chunks else np.array([])
 
         if self.norm == "L1":
             ord = 1

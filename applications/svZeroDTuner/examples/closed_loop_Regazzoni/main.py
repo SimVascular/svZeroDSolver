@@ -268,7 +268,7 @@ def main():
     
     #run_baseline("model.json")                     # MODE 1: Run baseline and save results
     #run_sensitivity("sensitivity.yaml")            # MODE 2: Run sensitivity analysis
-    run_optimization("tuning_complex.yaml")     # MODE 3: Run optimization with tuning.yaml
+    run_optimization("tuning_nelder_mead.yaml")     # MODE 3: Run optimization with tuning.yaml
     
     
     # ============================================================================

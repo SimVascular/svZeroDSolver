@@ -41,6 +41,11 @@ targets:
     target_value: 0.5  # 50% (fraction 0-1)
     uncertainty: 5%
     weight: 1.0
+
+objective:
+  # L1 or L2 norm (of relative errors)
+  norm: L1
+
 # Optimization - use scipy Nelder-Mead options (maxiter, xatol, fatol, adaptive, etc.)
 optimization:
   terminate_at_zero: true # Stop when objective hits zero (default: true). Set false to run full maxiter.

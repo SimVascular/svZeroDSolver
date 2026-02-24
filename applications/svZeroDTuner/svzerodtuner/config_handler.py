@@ -58,7 +58,7 @@ class ConfigHandler:
     
     def _validate_config(self):
         """Validate configuration structure."""
-        required_sections = ['model', 'parameters', 'targets', 'optimization']
+        required_sections = ['model', 'parameters', 'targets', 'objective', 'optimization']
         for section in required_sections:
             if section not in self.config:
                 raise ValueError(f"Missing required section '{section}' in configuration")
@@ -153,6 +153,18 @@ class ConfigHandler:
         # Validate optimization section
         if 'algorithm' not in self.config['optimization']:
             raise ValueError("optimization.algorithm is required")
+        
+        # Validate objective section (norm is required)
+        if not isinstance(self.config.get('objective'), dict):
+            raise ValueError(
+                "objective section is required and must be a mapping. "
+                "Example:\n  objective:\n    norm: L1\n"
+                "Options for norm: L1 = sum of absolute relative errors; L2 = Euclidean norm of the error vector."
+            )
+        if 'norm' not in self.config['objective']:
+            raise ValueError(
+                "objective.norm is required"
+            )
     
     def get_model_config_file(self) -> str:
         """Get path to sv0D.json model configuration file."""
@@ -165,6 +177,10 @@ class ConfigHandler:
     def get_targets(self) -> List[Dict]:
         """Get list of targets."""
         return self.config['targets']
+    
+    def get_objective_config(self) -> Dict:
+        """Get objective function configuration (e.g. norm: 'L1' or 'L2')."""
+        return self.config['objective']
     
     def get_optimization_config(self) -> Dict:
         """Get optimization config. Passed directly to optimizer"""

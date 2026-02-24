@@ -93,6 +93,10 @@ targets:
     uncertainty: 10%
     weight: 1.0
 
+objective:
+  # L1 or L2 norm (of relative errors)
+  norm: L1
+
 optimization:
   terminate_at_zero: true
   algorithm: "differential_evolution"

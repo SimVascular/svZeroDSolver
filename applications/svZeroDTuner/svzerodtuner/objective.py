@@ -89,13 +89,13 @@ def _interpolate_to_target_times(
     return interp_func(target_times)
 
 
-def _sum_rel_errors_outside_range(
+def _rel_errors_outside_range(
     sim_values: np.ndarray,
     lo: np.ndarray,
     hi: np.ndarray,
-) -> float:
+) -> np.ndarray:
     """
-    Sum of relative errors for values outside the target range [lo, hi].
+    Relative errors for values outside the target range [lo, hi].
     In-range values contribute zero; outside the range we use residual (distance to nearest bound).
     Works for both time series (length N) and scalar targets (length 1). For
     time series, each time point is treated as an individual scalar target.
@@ -103,9 +103,8 @@ def _sum_rel_errors_outside_range(
     - if below lo: residual = lo - sim_value
     - if above hi: residual = sim_value - hi
 
-    Residuals are then normalized by the midpoint, per time point.
-
-    Returns: Σ |residual_n| / |midpoint_n|, where midpoint_n = (lo_n + hi_n) / 2. 
+    Residuals are then normalized by the midpoint.
+    Returns: array of |residual_n| / |midpoint_n| per point, where midpoint_n = (lo_n + hi_n) / 2.
     """
     sim_values = np.asarray(sim_values)
     lo = np.asarray(lo)
@@ -118,7 +117,7 @@ def _sum_rel_errors_outside_range(
     abs_residual = np.abs(residual)
     midpoint = (lo + hi) / 2.0
     abs_midpoint = np.maximum(np.abs(midpoint), 1e-14)
-    return float(np.sum(abs_residual / abs_midpoint))
+    return abs_residual / abs_midpoint
 
 
 class ObjectiveFunction:
@@ -133,14 +132,22 @@ class ObjectiveFunction:
     Error is zero within the range; outside, penalty by distance from nearest bound.
     """
 
-    def __init__(self, targets: List[Dict]):
+    def __init__(self, targets: List[Dict], norm: str):
         """
         Initialize objective function.
 
         Args:
             targets: List of target specifications
+            norm: 'L1' for sum of absolute errors, 'L2' for Euclidean norm of error vector
         """
+        if norm not in ("L1", "L2"):
+            raise ValueError(
+                f"norm is required and must be 'L1' or 'L2', got {norm!r}. "
+                "Options: L1 = sum of absolute relative errors; L2 = Euclidean norm of the error vector. "
+                "Specify in your tuning YAML under objective: { norm: L1 } or { norm: L2 }."
+            )
         self.targets = targets
+        self.norm = norm
         self._process_targets()
 
     def _process_targets(self):
@@ -182,8 +189,8 @@ class ObjectiveFunction:
         target: Dict,
         sim_value: np.ndarray,
         simulated_values: Dict
-    ) -> float:
-        """Compute error for a time series target."""
+    ) -> np.ndarray:
+        """Return array of relative errors, one per time point."""
         name = target['name']
         target_times = np.array(target['target_times'])
         sim_times = simulated_values.get(f'{name}_times')
@@ -198,49 +205,55 @@ class ObjectiveFunction:
             )
 
         if len(sim_times) < 2 or len(target_times) == 0:
-            return 1e10
+            return np.array([1e10])
 
         sim_interp = _interpolate_to_target_times(sim_times, sim_value, target_times)
         if not np.all(np.isfinite(sim_interp)):
-            return 1e10
+            return np.array([1e10])
 
-        return _sum_rel_errors_outside_range(
+        return _rel_errors_outside_range(
             sim_interp, target['range_lo'], target['range_hi']
         )
 
-    def _error_for_scalar(self, target: Dict, sim_value: np.ndarray) -> float:
-        """Compute error for a scalar target."""
+    def _errors_for_scalar(self, target: Dict, sim_value: np.ndarray) -> np.ndarray:
+        """Return array of one relative error for a scalar target."""
         sim_scalar = float(sim_value.item() if sim_value.size == 1 else sim_value.flat[0])
-        return _sum_rel_errors_outside_range(
+        return _rel_errors_outside_range(
             np.array([sim_scalar]), target['range_lo'], target['range_hi']
         )
 
     def compute(self, simulated_values: Dict[str, Union[np.ndarray, float]]) -> float:
         """
-        Compute objective function value. Returns weighted sum of relative errors 
-        for all targets (weighted L1 error). For time series, each time point is treated as an 
-        individual scalar target.
+        Compute objective function value. Collects weighted relative errors from all
+        targets (each time series point or scalar contributes one error value), then returns
+        L1 norm (sum of absolute errors) or L2 norm (Euclidean norm) of that vector.
 
         Args:
             simulated_values: Dictionary mapping output names to simulated values
 
         Returns:
-            Total weighted error
+            Total error: L1 or L2 norm of the weighted relative-error vector
         """
-        total_error = 0.0
+        all_errors: np.ndarray = np.array([])
         for target in self.targets:
             sim_value = self._get_simulated_value(target, simulated_values)
             weight = float(target.get('weight', 1.0))
             target_type = target.get('type', 'time_series')
 
             if target_type == 'time_series':
-                error = self._error_for_time_series(target, sim_value, simulated_values)
+                errors = self._error_for_time_series(target, sim_value, simulated_values)
             else:
-                error = self._error_for_scalar(target, sim_value)
+                errors = self._errors_for_scalar(target, sim_value)
 
-            total_error += weight * error
+            all_errors = np.concatenate((all_errors, weight * errors))
 
-        return float(total_error)
+        if self.norm == "L1":
+            ord = 1
+        elif self.norm == "L2":
+            ord = 2
+        else:
+            raise ValueError(f"norm must be 'L1' or 'L2', got {self.norm!r}")
+        return float(np.linalg.norm(all_errors, ord=ord))
 
 
 def create_objective(targets: List[Dict], **kwargs) -> ObjectiveFunction:
@@ -248,4 +261,5 @@ def create_objective(targets: List[Dict], **kwargs) -> ObjectiveFunction:
     Create objective function object.
     Targets with 'uncertainty' (percent or [min,max]) or target_range use range-based penalty.
     """
-    return ObjectiveFunction(targets=targets, **kwargs)
+    norm = kwargs.pop("norm")
+    return ObjectiveFunction(targets=targets, norm=norm, **kwargs)

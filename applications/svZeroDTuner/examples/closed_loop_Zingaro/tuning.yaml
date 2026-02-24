@@ -94,6 +94,20 @@ targets:
     uncertainty: 5%
     weight: 1.0
 
+  - name: Aortic valve peak flow rate
+    type: scalar
+    expression: np.max(flow:LV:AV)
+    target_value: 0.000427  # m^3/s
+    uncertainty: 20%
+    weight: 1.0
+
+  - name: Pulmonary valve peak flow rate
+    type: scalar
+    expression: np.max(flow:RV:PV)
+    target_value: 0.000427  # m^3/s
+    uncertainty: 20%
+    weight: 1.0
+
   - name: Pulmonary artery max pressure
     type: scalar
     expression: np.max(pressure:J4:R_UPSTREAM_PUL)
@@ -139,24 +153,24 @@ optimization:
   # "To improve your chances of finding a global minimum use higher popsize values, 
   # with higher mutation and (dithering), but lower recombination values. This 
   # has the effect of widening the search radius, but slowing convergence.""
-  algorithm: "differential_evolution"
-  maxiter: 500
-  workers: -1
-  updating: 'deferred'
-  tol: 1e-2
-  popsize: 20            
-  init: 'sobol'           
-  strategy: 'best1bin'    
-  mutation: [0.5, 1.5]    
-  recombination: 0.5      
-  polish: true  
+  # algorithm: "differential_evolution"
+  # maxiter: 500
+  # workers: -1
+  # updating: 'deferred'
+  # tol: 1e-2
+  # popsize: 20            
+  # init: 'sobol'           
+  # strategy: 'best1bin'    
+  # mutation: [0.5, 1.5]    
+  # recombination: 0.5      
+  # polish: true  
 
   # Nelder-Mead specific options
-  # algorithm: "Nelder-Mead"
-  # maxiter: 10000
-  # xatol: 1e-6
-  # fatol: 1e-6
-  # adaptive: true
+  algorithm: "Nelder-Mead"
+  maxiter: 10000
+  xatol: 1e-6
+  fatol: 1e-6
+  adaptive: true
 
 # Output
 output:

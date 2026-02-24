@@ -43,7 +43,7 @@ parameters:
     bounds: [1e-9, 1e-7]
 
   - name: "VEN_SYS.R_poiseuille"
-    bounds: [1e5, 1e7]
+    bounds: [1e6, 1e8]
 
   - name: "initial_condition.pressure:J2:VEN_SYS"
     bounds: [1e2, 1e4]

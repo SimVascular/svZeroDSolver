@@ -19,7 +19,7 @@
 #SBATCH --qos=normal
 
 # Number of nodes you are requesting for your job. You can have 24 processors per node, so plan accordingly
-#SBATCH --nodes=1
+#SBATCH --nodes=2
 
 # Amount of memory you require per node. The default is 4000 MB (or 4 GB) per node
 #SBATCH --mem=4000

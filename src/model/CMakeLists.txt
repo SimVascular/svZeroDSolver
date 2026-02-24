@@ -32,6 +32,7 @@ set(CXXSRCS
   PiecewiseCosineChamber.cpp
   PiecewiseValve.cpp
   ChamberSphere_growth.cpp
+  ChamberSphere_expmat.cpp
 )
 
 set(HDRS 
@@ -62,6 +63,7 @@ set(HDRS
   PiecewiseCosineChamber.h
   PiecewiseValve.h
   ChamberSphere_growth.h
+  ChamberSphere_expmat.h
 )
 
 add_library(${lib} OBJECT ${CXXSRCS} ${HDRS})

@@ -47,21 +47,18 @@ helper_functions: |
       return 2 * (1 + (radius / radius0)) * (1 / radius0) * dradius_dt
   
   def dW1(radius): 
-    return C0 * exp(C1 * (((((Theta_r**2) * (((1 + (radius / radius0)) ** 2)**(-2)) + 2 * (Theta_c**2) * ((1 + (radius / radius0)) ** 2)) * (((Theta_r**2) * (Theta_c**4))**(-1/3))) - 3)**2)) * 2 * C1 * ((((Theta_r**2) * (((1 + (radius / radius0)) ** 2)**(-2)) + 2 * (Theta_c**2) * ((1 + (radius / radius0)) ** 2)) * (((Theta_r**2) * (Theta_c**4))**(-1/3))) - 3)  
+    return C0 * exp(C1 * (((((Theta_r**2) * ((1 + (radius / radius0)) ** (-4)) + 2 * (Theta_c**2) * ((1 + (radius / radius0)) ** 2)) * (((Theta_r**2) * (Theta_c**4))**(-1/3))) - 3)**2)) * 2 * C1 * ((((Theta_r**2) * ((1 + (radius / radius0)) ** (-4)) + 2 * (Theta_c**2) * ((1 + (radius / radius0)) ** 2)) * (((Theta_r**2) * (Theta_c**4))**(-1/3))) - 3)  
 
   def beta_I1(radius):
-      return (1/3) * ((Theta_r**2) * (((1 + (radius / radius0)) ** 2)**(-2)) + 2 * (Theta_c**2) * ((1 + (radius / radius0)) ** 2)) * (((Theta_r**2) * (Theta_c**4))**(-1/3))
+      return (1/3) * ((Theta_r**2) * ((1 + (radius / radius0)) ** (-4)) + 2 * (Theta_c**2) * ((1 + (radius / radius0)) ** 2))
 
   def dW4(radius):
       return C2 * exp(C3 * ((((Theta_c**2) * ((1 + (radius / radius0)) ** 2) * (((Theta_r**2) * (Theta_c**4))**(-1/3)))-1)**2)) * 2 * C3 * (((Theta_c**2) * ((1 + (radius / radius0)) ** 2) * (((Theta_r**2) * (Theta_c**4))**(-1/3))) - 1)
-
-  def beta_I4(radius):
-      return (1/3) * (Theta_c**2) * ((1 + (radius / radius0)) ** 2) * (((Theta_r**2) * (Theta_c**4))**(-1/3))
        
 
 residuals:
   - Theta_r * (Theta_c**2) * rho * thick0 * dvelo_dt + Theta_c * (thick0 / radius0) * (1 + (radius / radius0)) * stress - (Theta_c**2) * Pout * CG(radius)
-  - -stress + 4 * dW1(radius) *((((Theta_r**2) * (Theta_c**4))**(-1/3))* (1 - CG(radius)**(-3) - beta_I1(radius) * (Theta_c**(-2)) * (CG(radius)**(-1)) * (1 - Theta_r**(-2))) + 2 * dW4(radius) * (((Theta_r**2) * (Theta_c**4))**(-1/3) - 2 * beta_I4(radius) * (Theta_c**(-2)) * (CG(radius)**(-1)) * (1 - Theta_r**(-2))) + eta * dCG(radius,dradius_dt) * (Theta_c**2 + 2 * (Theta_r**2) * (Theta_c**(-2)) * (CG(radius)**(-6))) + tau 
+  - -stress + 4 * dW1(radius) * (((Theta_r**2) * (Theta_c**4))**(-1/3)) * (1 - CG(radius)**(-3) + beta_I1(radius) * (CG(radius)**(-1)) * (Theta_r**(-2) - Theta_c**2)) + dW4(radius) * (((Theta_r**2) * (Theta_c**4))**(-1/3)) * (2/3 + 4/3 * (Theta_c**2) * (Theta_r**(-2))) + eta * dCG(radius,dradius_dt) * (Theta_c**2 + 2 * (Theta_r**2) * (CG(radius)**(-6))) + tau 
   - 4 * pi * radius0 ** 2 * CG(radius) * velo - dvolume_dt
   - dtau_dt + act * tau - sigma_max * act_plus
   - dradius_dt - velo

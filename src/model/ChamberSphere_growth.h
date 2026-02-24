@@ -230,7 +230,7 @@ class ChamberSphere_growth : public Block {
    *
    * @param parameters Parameters of the model
    */
-  void compute_active_stress(std::vector<double>& parameters);
+  void compute_active_stress_values(std::vector<double>& parameters);
 
  private:
   double act = 0.0;       // activation function

@@ -28,11 +28,12 @@ from typing import Dict
 # Cardiac period (duration of one RR interval) in seconds
 CARDIAC_PERIOD_SEC = 0.689
 
-# Ventricular contraction start expressed in seconds
-VENTRICULAR_CONTRACTION_START_TIME_SEC = 0.207
+# Values from ECG for a particular patient
+# PR interval in seconds
+PR_INTERVAL_SEC = 0.182
 
-# Electromechanical delay in seconds
-ELECTROMECHANICAL_DELAY_SEC = 0.025
+# QRS duration in seconds
+QRS_DURATION_SEC = 0.088
 
 # Input filenames (relative to this script's directory)
 VOLUME_FILE = "volume.csv"
@@ -54,29 +55,21 @@ VOLUME_COLUMNS_MANUAL: Dict[str, str] = {
 # ============================================================
 
 
-def rr_percent_to_time(rr_percent_series, cardiac_period_sec: float, vent_start_time_sec: float, electromechanical_delay_sec: float):
+def rr_percent_to_time(rr_percent_series, cardiac_period_sec: float):
     """
     Convert RR% (0–100 over one cardiac cycle) to time in seconds.
     RR%=0 corresponds to the R-wave. Assuming the start of the P-wave corresponds
     to t=0, then RR%=0 corresponds to the PR interval + the QRS interval/2.
     time = (rr/100) * cardiac_period + PR interval + QRS interval/2, wrapped into [0, cardiac_period).
     """
-    
-    # Values from ECG for a particular patient
-    pr_interval_sec = 0.182
-    qrs_interval_sec = 0.088
-
     rr = rr_percent_series.astype(float) / 100.0
-    time = rr * cardiac_period_sec + pr_interval_sec + qrs_interval_sec / 2
+    time = rr * cardiac_period_sec + PR_INTERVAL_SEC + QRS_DURATION_SEC / 2
     return time % cardiac_period_sec
 
 
 def convert_volume_file(
     csv_path: str,
     column_to_output: Dict[str, str],
-    cardiac_period_sec: float,
-    vent_start_time_sec: float,
-    electromechanical_delay_sec: float,
 ):
     """
     Convert a volume CSV (RR% and mL) into time–series target CSVs (time [s], value [m^3]).
@@ -90,7 +83,7 @@ def convert_volume_file(
     if "RR%" not in df.columns:
         raise ValueError(f"'RR%' column not found in {csv_path}. Columns: {list(df.columns)}")
 
-    times = rr_percent_to_time(df["RR%"], cardiac_period_sec, vent_start_time_sec, electromechanical_delay_sec)
+    times = rr_percent_to_time(df["RR%"], CARDIAC_PERIOD_SEC)
     directory = os.path.dirname(os.path.abspath(csv_path))
 
     for col, out_name in column_to_output.items():
@@ -114,18 +107,12 @@ def main():
 
     convert_volume_file(
         csv_path=os.path.join(script_dir, VOLUME_FILE),
-        column_to_output=VOLUME_COLUMNS_MODEL,
-        cardiac_period_sec=CARDIAC_PERIOD_SEC,
-        vent_start_time_sec=VENTRICULAR_CONTRACTION_START_TIME_SEC,
-        electromechanical_delay_sec=ELECTROMECHANICAL_DELAY_SEC,
+        column_to_output=VOLUME_COLUMNS_MODEL
     )
 
     convert_volume_file(
         csv_path=os.path.join(script_dir, LA_MANUAL_FILE),
-        column_to_output=VOLUME_COLUMNS_MANUAL,
-        cardiac_period_sec=CARDIAC_PERIOD_SEC,
-        vent_start_time_sec=VENTRICULAR_CONTRACTION_START_TIME_SEC,
-        electromechanical_delay_sec=ELECTROMECHANICAL_DELAY_SEC,
+        column_to_output=VOLUME_COLUMNS_MANUAL
     )
 
 

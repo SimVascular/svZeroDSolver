@@ -162,19 +162,19 @@ class ChamberSphere_expmat : public Block {
   ChamberSphere_expmat(int id, Model* model)
       : Block(id, model, BlockType::chamber_sphere_expmat, BlockClass::vessel,
               {{"rho", InputParameter()},
-              {"thick0", InputParameter()},
-              {"radius0", InputParameter()},
-              {"C0", InputParameter()},
-              {"C1", InputParameter()},
-              {"C2", InputParameter()},
-              {"C3", InputParameter()},
-              {"eta", InputParameter()},
-              {"sigma_max", InputParameter()},
-              {"alpha_max", InputParameter()},
-              {"alpha_min", InputParameter()},
-              {"tsys", InputParameter()},
-              {"tdias", InputParameter()},
-              {"steepness", InputParameter()}}) {}
+               {"thick0", InputParameter()},
+               {"radius0", InputParameter()},
+               {"C0", InputParameter()},
+               {"C1", InputParameter()},
+               {"C2", InputParameter()},
+               {"C3", InputParameter()},
+               {"eta", InputParameter()},
+               {"sigma_max", InputParameter()},
+               {"alpha_max", InputParameter()},
+               {"alpha_min", InputParameter()},
+               {"tsys", InputParameter()},
+               {"tdias", InputParameter()},
+               {"steepness", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

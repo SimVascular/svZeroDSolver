@@ -11,12 +11,12 @@ void ChamberSphere_expmat::setup_dofs(DOFHandler& dofhandler) {
 }
 
 void ChamberSphere_expmat::update_constant(SparseSystem& system,
-                                    std::vector<double>& parameters) {
+                                           std::vector<double>& parameters) {
   const double rho = parameters[global_param_ids[ParamId::rho]];
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
 
   // balance of linear momentum
-  system.E.coeffRef(global_eqn_ids[0], global_var_ids[5]) = rho*thick0;
+  system.E.coeffRef(global_eqn_ids[0], global_var_ids[5]) = rho * thick0;
 
   // spherical stress
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[6]) = -1;
@@ -43,7 +43,7 @@ void ChamberSphere_expmat::update_constant(SparseSystem& system,
 }
 
 void ChamberSphere_expmat::update_time(SparseSystem& system,
-                                std::vector<double>& parameters) {
+                                       std::vector<double>& parameters) {
   // active stress
   get_active_stress_values(parameters);
   system.F.coeffRef(global_eqn_ids[3], global_var_ids[7]) = act;
@@ -69,26 +69,131 @@ void ChamberSphere_expmat::update_solution(
   const double velo = y[global_var_ids[5]];
 
   // balance of momentum
-  system.C.coeffRef(global_eqn_ids[0]) = (radius + radius0)*(-Pout*(radius + radius0) + stress*thick0)/pow(radius0, 2);
-  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -pow(radius + radius0, 2)/pow(radius0, 2);
-  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) = (-2*Pout*(radius + radius0) + stress*thick0)/pow(radius0, 2);
-  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) = thick0*(radius + radius0)/pow(radius0, 2);
+  system.C.coeffRef(global_eqn_ids[0]) =
+      (radius + radius0) * (-Pout * (radius + radius0) + stress * thick0) /
+      pow(radius0, 2);
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) =
+      -pow(radius + radius0, 2) / pow(radius0, 2);
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
+      (-2 * Pout * (radius + radius0) + stress * thick0) / pow(radius0, 2);
+  system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) =
+      thick0 * (radius + radius0) / pow(radius0, 2);
 
   // spherical stress
-  system.C.coeffRef(global_eqn_ids[1]) = 2*(4*C0*C1*(radius + radius0)*(-pow(radius0, 6) + pow(radius + radius0, 6))*(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6))*exp(C1*pow(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6), 2)/(pow(radius0, 4)*pow(radius + radius0, 8))) + 2*C2*C3*pow(radius + radius0, 11)*(-pow(radius0, 2) + pow(radius + radius0, 2))*exp(C3*pow(-pow(radius0, 2) + pow(radius + radius0, 2), 2)/pow(radius0, 4)) + dradius_dt*eta*(2*pow(radius0, 12) + pow(radius + radius0, 12)))/(pow(radius0, 2)*pow(radius + radius0, 11));
-  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) = 2*(32*C0*pow(C1, 2)*(pow(radius0, 6) - pow(radius + radius0, 6))*pow(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6), 2)*(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6) + 3*pow(radius + radius0, 4)*(pow(radius0, 2) - pow(radius + radius0, 2)))*exp(C1*pow(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6), 2)/(pow(radius0, 4)*pow(radius + radius0, 8))) + 8*C2*pow(C3, 2)*pow(radius + radius0, 20)*pow(pow(radius0, 2) - pow(radius + radius0, 2), 2)*exp(C3*pow(pow(radius0, 2) - pow(radius + radius0, 2), 2)/pow(radius0, 4)) + 2*pow(radius0, 4)*pow(radius + radius0, 8)*(12*C0*C1*pow(radius + radius0, 6)*(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6))*exp(C1*pow(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6), 2)/(pow(radius0, 4)*pow(radius + radius0, 8))) + 24*C0*C1*pow(radius + radius0, 4)*(pow(radius0, 2) - pow(radius + radius0, 2))*(pow(radius0, 6) - pow(radius + radius0, 6))*exp(C1*pow(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6), 2)/(pow(radius0, 4)*pow(radius + radius0, 8))) - 2*C0*C1*(pow(radius0, 6) - pow(radius + radius0, 6))*(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6))*exp(C1*pow(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6), 2)/(pow(radius0, 4)*pow(radius + radius0, 8))) + 2*C2*C3*pow(radius + radius0, 12)*exp(C3*pow(pow(radius0, 2) - pow(radius + radius0, 2), 2)/pow(radius0, 4)) - 11*C2*C3*pow(radius + radius0, 10)*(pow(radius0, 2) - pow(radius + radius0, 2))*exp(C3*pow(pow(radius0, 2) - pow(radius + radius0, 2), 2)/pow(radius0, 4)) + 6*dradius_dt*eta*pow(radius + radius0, 11)) + 11*pow(radius0, 4)*pow(radius + radius0, 7)*(4*C0*C1*(radius + radius0)*(pow(radius0, 6) - pow(radius + radius0, 6))*(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6))*exp(C1*pow(pow(radius0, 6) - 3*pow(radius0, 2)*pow(radius + radius0, 4) + 2*pow(radius + radius0, 6), 2)/(pow(radius0, 4)*pow(radius + radius0, 8))) + 2*C2*C3*pow(radius + radius0, 11)*(pow(radius0, 2) - pow(radius + radius0, 2))*exp(C3*pow(pow(radius0, 2) - pow(radius + radius0, 2), 2)/pow(radius0, 4)) - dradius_dt*eta*(2*pow(radius0, 12) + pow(radius + radius0, 12))))/(pow(radius0, 6)*pow(radius + radius0, 19));
-  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) = 2*eta*(2*pow(radius0, 12) + pow(radius + radius0, 12))/(pow(radius0, 2)*pow(radius + radius0, 11));
+  system.C.coeffRef(global_eqn_ids[1]) =
+      2 *
+      (4 * C0 * C1 * (radius + radius0) *
+           (-pow(radius0, 6) + pow(radius + radius0, 6)) *
+           (pow(radius0, 6) - 3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+            2 * pow(radius + radius0, 6)) *
+           exp(C1 *
+               pow(pow(radius0, 6) -
+                       3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                       2 * pow(radius + radius0, 6),
+                   2) /
+               (pow(radius0, 4) * pow(radius + radius0, 8))) +
+       2 * C2 * C3 * pow(radius + radius0, 11) *
+           (-pow(radius0, 2) + pow(radius + radius0, 2)) *
+           exp(C3 * pow(-pow(radius0, 2) + pow(radius + radius0, 2), 2) /
+               pow(radius0, 4)) +
+       dradius_dt * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12))) /
+      (pow(radius0, 2) * pow(radius + radius0, 11));
+  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+      2 *
+      (32 * C0 * pow(C1, 2) * (pow(radius0, 6) - pow(radius + radius0, 6)) *
+           pow(pow(radius0, 6) -
+                   3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                   2 * pow(radius + radius0, 6),
+               2) *
+           (pow(radius0, 6) - 3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+            2 * pow(radius + radius0, 6) +
+            3 * pow(radius + radius0, 4) *
+                (pow(radius0, 2) - pow(radius + radius0, 2))) *
+           exp(C1 *
+               pow(pow(radius0, 6) -
+                       3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                       2 * pow(radius + radius0, 6),
+                   2) /
+               (pow(radius0, 4) * pow(radius + radius0, 8))) +
+       8 * C2 * pow(C3, 2) * pow(radius + radius0, 20) *
+           pow(pow(radius0, 2) - pow(radius + radius0, 2), 2) *
+           exp(C3 * pow(pow(radius0, 2) - pow(radius + radius0, 2), 2) /
+               pow(radius0, 4)) +
+       2 * pow(radius0, 4) * pow(radius + radius0, 8) *
+           (12 * C0 * C1 * pow(radius + radius0, 6) *
+                (pow(radius0, 6) -
+                 3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                 2 * pow(radius + radius0, 6)) *
+                exp(C1 *
+                    pow(pow(radius0, 6) -
+                            3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                            2 * pow(radius + radius0, 6),
+                        2) /
+                    (pow(radius0, 4) * pow(radius + radius0, 8))) +
+            24 * C0 * C1 * pow(radius + radius0, 4) *
+                (pow(radius0, 2) - pow(radius + radius0, 2)) *
+                (pow(radius0, 6) - pow(radius + radius0, 6)) *
+                exp(C1 *
+                    pow(pow(radius0, 6) -
+                            3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                            2 * pow(radius + radius0, 6),
+                        2) /
+                    (pow(radius0, 4) * pow(radius + radius0, 8))) -
+            2 * C0 * C1 * (pow(radius0, 6) - pow(radius + radius0, 6)) *
+                (pow(radius0, 6) -
+                 3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                 2 * pow(radius + radius0, 6)) *
+                exp(C1 *
+                    pow(pow(radius0, 6) -
+                            3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                            2 * pow(radius + radius0, 6),
+                        2) /
+                    (pow(radius0, 4) * pow(radius + radius0, 8))) +
+            2 * C2 * C3 * pow(radius + radius0, 12) *
+                exp(C3 * pow(pow(radius0, 2) - pow(radius + radius0, 2), 2) /
+                    pow(radius0, 4)) -
+            11 * C2 * C3 * pow(radius + radius0, 10) *
+                (pow(radius0, 2) - pow(radius + radius0, 2)) *
+                exp(C3 * pow(pow(radius0, 2) - pow(radius + radius0, 2), 2) /
+                    pow(radius0, 4)) +
+            6 * dradius_dt * eta * pow(radius + radius0, 11)) +
+       11 * pow(radius0, 4) * pow(radius + radius0, 7) *
+           (4 * C0 * C1 * (radius + radius0) *
+                (pow(radius0, 6) - pow(radius + radius0, 6)) *
+                (pow(radius0, 6) -
+                 3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                 2 * pow(radius + radius0, 6)) *
+                exp(C1 *
+                    pow(pow(radius0, 6) -
+                            3 * pow(radius0, 2) * pow(radius + radius0, 4) +
+                            2 * pow(radius + radius0, 6),
+                        2) /
+                    (pow(radius0, 4) * pow(radius + radius0, 8))) +
+            2 * C2 * C3 * pow(radius + radius0, 11) *
+                (pow(radius0, 2) - pow(radius + radius0, 2)) *
+                exp(C3 * pow(pow(radius0, 2) - pow(radius + radius0, 2), 2) /
+                    pow(radius0, 4)) -
+            dradius_dt * eta *
+                (2 * pow(radius0, 12) + pow(radius + radius0, 12)))) /
+      (pow(radius0, 6) * pow(radius + radius0, 19));
+  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+      2 * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
+      (pow(radius0, 2) * pow(radius + radius0, 11));
 
   // volume change
-  system.C.coeffRef(global_eqn_ids[2]) = 4*M_PI*velo*pow(radius + radius0, 2);
-  system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[4]) = 8*M_PI*velo*(radius + radius0);
-  system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[5]) = 4*M_PI*pow(radius + radius0, 2);
+  system.C.coeffRef(global_eqn_ids[2]) =
+      4 * M_PI * velo * pow(radius + radius0, 2);
+  system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[4]) =
+      8 * M_PI * velo * (radius + radius0);
+  system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[5]) =
+      4 * M_PI * pow(radius + radius0, 2);
 
   // active stress
-  system.C.coeffRef(global_eqn_ids[3]) = -act_plus*sigma_max;
+  system.C.coeffRef(global_eqn_ids[3]) = -act_plus * sigma_max;
 }
 
-void ChamberSphere_expmat::get_active_stress_values(std::vector<double>& parameters) {
+void ChamberSphere_expmat::get_active_stress_values(
+    std::vector<double>& parameters) {
   const double alpha_max = parameters[global_param_ids[ParamId::alpha_max]];
   const double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
   const double tsys = parameters[global_param_ids[ParamId::tsys]];

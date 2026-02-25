@@ -22,6 +22,8 @@
 #include "BloodVesselJunction.h"
 #include "ChamberElastanceInductor.h"
 #include "ChamberSphere.h"
+#include "ChamberSphere_expmat.h"
+#include "ChamberSphere_growth.h"
 #include "ClosedLoopCoronaryLeftBC.h"
 #include "ClosedLoopCoronaryRightBC.h"
 #include "ClosedLoopHeartPulmonary.h"
@@ -41,8 +43,6 @@
 #include "ValveTanh.h"
 #include "WindkesselBC.h"
 #include "debug.h"
-#include "ChamberSphere_growth.h"
-#include "ChamberSphere_expmat.h"
 
 /**
  * @brief Model of 0D elements

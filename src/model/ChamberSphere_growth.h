@@ -12,7 +12,6 @@
 #include "Block.h"
 #include "SparseSystem.h"
 
-
 // TO DO: need to change the documentation!!!!!!!
 /**
  * @brief Spherical heart chamber model
@@ -172,9 +171,9 @@ class ChamberSphere_growth : public Block {
                {"C1", InputParameter()},
                {"C2", InputParameter()},
                {"C3", InputParameter()},
-               {"eta", InputParameter()},
                {"Theta_r", InputParameter()},
                {"Theta_c", InputParameter()},
+               {"eta", InputParameter()},
                {"sigma_max", InputParameter()},
                {"alpha_max", InputParameter()},
                {"alpha_min", InputParameter()},

@@ -1,6 +1,6 @@
 # right_heart_pa example
 
-This example couples a prescribed venous inflow waveform to a right atrium and right ventricle model using `PiecewiseCosineChamber` and `PiecewiseValve` blocks. The right ventricle ejects into a reduced-order pulmonary artery model with:
+This example couples a prescribed venous inflow waveform to a right atrium and right ventricle model using `LinearElastanceChamber` blocks with `piecewise_cosine` activation and `PiecewiseValve` blocks. The right ventricle ejects into a reduced-order pulmonary artery model with:
 
 - MPA: constant resistance
 - RPA/LPA: resistance + stenosis coefficient + inductance

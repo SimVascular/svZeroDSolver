@@ -537,12 +537,15 @@
   ],
   "chambers": [
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "RA",
       "values": {
         "Emax": 80.0,
         "Epass": 50.0,
-        "Vrest": 4.0,
+        "Vrest": 4.0
+      },
+      "activation_function": {
+        "type": "piecewise_cosine",
         "contract_start": 0.025,
         "relax_start": 0.08625,
         "contract_duration": 0.06125,
@@ -550,12 +553,15 @@
       }
     },
     {
-      "type": "PiecewiseCosineChamber",
+      "type": "LinearElastanceChamber",
       "name": "RV",
       "values": {
         "Emax": 650.0,
         "Epass": 54.0,
-        "Vrest": 54.0,
+        "Vrest": 54.0
+      },
+      "activation_function": {
+        "type": "piecewise_cosine",
         "contract_start": 0.207,
         "relax_start": 0.29625,
         "contract_duration": 0.08925,

@@ -16,6 +16,21 @@ _OBJECTIVE_ZERO_TOL = 1e-12
 _BOUND_TOLERANCE = 0.01
 
 
+class _ScaledObjective:
+    """Pickle-safe objective wrapper for scaled optimizer-space parameters."""
+
+    def __init__(
+        self,
+        objective_func: Callable[[np.ndarray], float],
+        to_phys: Callable[[np.ndarray], np.ndarray],
+    ):
+        self.objective_func = objective_func
+        self.to_phys = to_phys
+
+    def __call__(self, x_opt: np.ndarray) -> float:
+        return self.objective_func(self.to_phys(np.asarray(x_opt)))
+
+
 def _check_params_near_bounds(
     params: Dict[str, float], parameters: List[Dict]
 ) -> List[tuple]:
@@ -234,9 +249,35 @@ class OptimizerWrapper:
         # Ensure numeric optimization options are numeric types.
         opts = _coerce_numeric_options(self.options)
 
-        # Callback function for optimization algorithms. Must have signature callback(intermediate_result: OptimizeResult).
-        def callback(intermediate_result: OptimizeResult):
-            return self.master_callback(intermediate_result, param_names, parameters)
+        # Callback function supporting both SciPy styles:
+        # - callback(intermediate_result=OptimizeResult)
+        # - callback(x, convergence=...)
+        def callback(*args, **kwargs):
+            if "intermediate_result" in kwargs:
+                return self.master_callback(
+                    kwargs["intermediate_result"], param_names, parameters
+                )
+
+            if len(args) == 1 and isinstance(args[0], OptimizeResult):
+                return self.master_callback(args[0], param_names, parameters)
+
+            x = None
+            if len(args) >= 1:
+                x = np.asarray(args[0])
+            elif "xk" in kwargs:
+                x = np.asarray(kwargs["xk"])
+            elif "x" in kwargs:
+                x = np.asarray(kwargs["x"])
+
+            if x is None:
+                return None
+
+            # Legacy DE callback doesn't provide objective value; evaluate it here.
+            x_phys = self._scale_to_phys(x) if self._use_scaling else x
+            fun = float(objective_func(x_phys))
+            return self.master_callback(
+                OptimizeResult(x=x, fun=fun), param_names, parameters
+            )
 
         # Use center of bounds as initial guess if no initial guess is provided
         if x0 is None:
@@ -261,9 +302,8 @@ class OptimizerWrapper:
             # Scale initial guess
             x0 = self._scale_to_opt(np.asarray(x0))
 
-            # Objective function in optimizer space
-            def obj_fun(x_opt: np.ndarray) -> float:
-                return objective_func(self._scale_to_phys(np.asarray(x_opt)))
+            # Objective function in optimizer space (module-level callable for multiprocessing compatibility)
+            obj_fun = _ScaledObjective(objective_func, self._scale_to_phys)
         else:
             obj_fun = objective_func
 

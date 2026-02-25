@@ -10,6 +10,7 @@ import time
 import numpy as np
 import pandas as pd
 import multiprocessing as mp
+from functools import partial
 from typing import Dict, List, Optional, Callable
 
 from .parameter_handler import ParameterHandler
@@ -85,6 +86,16 @@ class SV0DTuner:
         self.history = []
         self.best_value = None
         self.best_params = None
+
+    def __getstate__(self):
+        """
+        Make tuner pickle-safe for multiprocessing objective dispatch.
+        `pysvzerod.Solver`/extractor instances are runtime-only and not pickleable.
+        """
+        state = self.__dict__.copy()
+        state["solver"] = None
+        state["extractor"] = None
+        return state
     
     def _format_time(self, seconds: float) -> str:
         """
@@ -257,8 +268,8 @@ class SV0DTuner:
         x0 = np.array([self.param_handler.get_parameter(name) for name in param_names])
 
         # Create scaling functions for optimizer space <-> physical space
-        to_opt = lambda x: to_opt_array(np.asarray(x), self._scalings)
-        to_phys = lambda x: to_physical_array(np.asarray(x), self._scalings)
+        to_opt = partial(to_opt_array, scalings=self._scalings)
+        to_phys = partial(to_physical_array, scalings=self._scalings)
         # Start timing
         start_time = time.time()
         

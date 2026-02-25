@@ -193,7 +193,7 @@ def main():
     # Uncomment the mode you want to run:
 
     # run_baseline("model.json")
-    # run_optimization("tuning_differential_evolution.yaml")
+    run_optimization("tuning_differential_evolution.yaml")
     # run_optimization("tuning_nelder_mead.yaml")
     # run_sensitivity("sensitivity.yaml")
     pass

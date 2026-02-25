@@ -29,6 +29,20 @@ class Expression:
         # Cache: frozenset(available_outputs) -> (output_names, eval_func)
         self._compile_cache: Dict[frozenset, Tuple[List[str], Callable]] = {}
 
+    def __getstate__(self):
+        """
+        Make Expression pickle-safe for multiprocessing by dropping compiled callables.
+        They are recreated lazily on first evaluate() in each worker process.
+        """
+        state = self.__dict__.copy()
+        state["_compile_cache"] = {}
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        if "_compile_cache" not in self.__dict__:
+            self._compile_cache = {}
+
     def output_names(self, available_outputs: List[str]) -> List[str]:
         """Return output names referenced in this expression (for extracting data)."""
         return [

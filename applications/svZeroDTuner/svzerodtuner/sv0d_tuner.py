@@ -19,7 +19,7 @@ from .objective import create_objective, ObjectiveFunction
 from .optimizer import OptimizerWrapper
 from .config_handler import ConfigHandler
 from .result_handler import ResultHandler
-
+from .scaling import get_scaling, to_physical_array, to_opt_array
 
 from .expression_handler import Expression
 
@@ -72,6 +72,12 @@ class SV0DTuner:
                 target["expression"] = Expression(
                     expr_str, target.get("type", "time_series")
                 )
+
+        # Initialize scaling objects for each parameter (optimizer space <-> physical space)
+        self._scalings = [
+            get_scaling(p.get("scaling", "identity"), tuple(p["bounds"]) if "bounds" in p else None)
+            for p in self.parameters
+        ]
 
         # State
         self.solver = None
@@ -249,7 +255,10 @@ class SV0DTuner:
         for name in param_names:
             print(f"\t{name}: {self.param_handler.get_parameter(name)}")
         x0 = np.array([self.param_handler.get_parameter(name) for name in param_names])
-        
+
+        # Create scaling functions for optimizer space <-> physical space
+        to_opt = lambda x: to_opt_array(np.asarray(x), self._scalings)
+        to_phys = lambda x: to_physical_array(np.asarray(x), self._scalings)
         # Start timing
         start_time = time.time()
         
@@ -262,7 +271,9 @@ class SV0DTuner:
                 param_names=param_names,
                 bounds=bounds,
                 x0=x0,
-                parameters=self.parameters
+                parameters=self.parameters,
+                param_scaling_to_opt_space=to_opt,
+                param_scaling_to_phys_space=to_phys,
             )
         except KeyboardInterrupt:
             interrupted = True

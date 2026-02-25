@@ -11,42 +11,91 @@ model:
 
 # Parameters to optimize
 # Add or remove parameters as needed
+# Optional scaling: "log" makes the optimizer work in log(parameter) (recommended for positive, wide-ranging params)
 parameters:
   - name: "LV.Epass"
     bounds: [1e6, 1e8]
+    scaling: log
 
   - name: "LV.Emax"
-    bounds: [1e7, 1e9] 
+    bounds: [1e7, 1e9]
+    scaling: log
 
   - name: "RV.Epass"
     bounds: [1e6, 1e8]
+    scaling: log
 
   - name: "RV.Emax"
     bounds: [1e7, 1e9]
+    scaling: log
+
+  - name: "LA.Emax"
+    bounds: [1e6, 1e9]
+    scaling: log
 
   - name: "LA.Epass"
     bounds: [1e6, 1e8]
+    scaling: log
 
   - name: "RA.Epass"
     bounds: [1e6, 1e8]
+    scaling: log
+
+  - name: "RA.Emax"
+    bounds: [1e6, 1e9]
+    scaling: log
 
   - name: "LV.Vrest"
-    bounds: [1e-6, 1e-4]
+    bounds: [-1e-4, 1e-4]
+    scaling: max
 
   - name: "RV.Vrest"
-    bounds: [1e-6, 1e-4]
+    bounds: [-1e-4, 1e-4]
+    scaling: max
+
+  - name: "LA.Vrest"
+    bounds: [-1e-4, 1e-4]
+    scaling: max
+
+  - name: "RA.Vrest"
+    bounds: [-1e-4, 1e-4]
+    scaling: max
+
+  - name: "R_UPSTREAM_SYS.R_poiseuille"
+    bounds: [1e5, 1e7]
+    scaling: log
 
   - name: "AR_SYS.R_poiseuille"
     bounds: [1e7, 1e9]
+    scaling: log
 
   - name: "AR_SYS.C"
     bounds: [1e-9, 1e-7]
+    scaling: log
 
   - name: "VEN_SYS.R_poiseuille"
     bounds: [1e5, 1e8]
+    scaling: log
+
+  - name: "R_UPSTREAM_PUL.R_poiseuille"
+    bounds: [1e5, 1e7]
+    scaling: log
+
+  - name: "AR_PUL.R_poiseuille"
+    bounds: [1e5, 1e7]
+    scaling: log
+
+  - name: "AR_PUL.C"
+    bounds: [1e-9, 1e-7]
+    scaling: log
+
+  - name: "VEN_PUL.R_poiseuille"
+    bounds: [1e5, 1e8]
+    scaling: log
 
   - name: "initial_condition.pressure:J2:VEN_SYS"
     bounds: [1e2, 1e4]
+    scaling: log
 
 
 # Target outputs
@@ -153,24 +202,24 @@ optimization:
   # "To improve your chances of finding a global minimum use higher popsize values, 
   # with higher mutation and (dithering), but lower recombination values. This 
   # has the effect of widening the search radius, but slowing convergence.""
-  algorithm: "differential_evolution"
-  maxiter: 500
-  workers: -1
-  updating: 'deferred'
-  tol: 1e-2
-  popsize: 30            
-  init: 'sobol'           
-  strategy: 'best1bin'    
-  mutation: [0.5, 1.5]    
-  recombination: 0.5      
-  polish: true  
+  # algorithm: "differential_evolution"
+  # maxiter: 500
+  # workers: -1
+  # updating: 'deferred'
+  # tol: 1e-2
+  # popsize: 30            
+  # init: 'sobol'           
+  # strategy: 'best1bin'    
+  # mutation: [0.5, 1.5]    
+  # recombination: 0.5      
+  # polish: true  
 
   # Nelder-Mead specific options
-  # algorithm: "Nelder-Mead"
-  # maxiter: 10000
-  # xatol: 1e-6
-  # fatol: 1e-6
-  # adaptive: true
+  algorithm: "Nelder-Mead"
+  maxiter: 10000
+  xatol: 1e-6
+  fatol: 1e-6
+  adaptive: true
 
 # Output
 output:

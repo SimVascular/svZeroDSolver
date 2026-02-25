@@ -79,6 +79,27 @@ class ConfigHandler:
                 raise ValueError(f"Parameter '{param['name']}' must have 'bounds'")
             if not isinstance(param['bounds'], list) or len(param['bounds']) != 2:
                 raise ValueError(f"Parameter '{param['name']}' bounds must be [min, max]")
+            # Optional scaling: "identity", "log", or "max"
+            scaling = param.get('scaling')
+            if scaling is not None:
+                if scaling == 'identity':
+                    pass  # no extra validation
+                elif scaling == 'log':
+                    lo, hi = float(param['bounds'][0]), float(param['bounds'][1])
+                    if lo <= 0 or hi <= 0:
+                        raise ValueError(
+                            f"Parameter '{param['name']}' has scaling 'log'; bounds must be positive, got [{lo}, {hi}]"
+                        )
+                elif scaling == 'max':
+                    lo, hi = float(param['bounds'][0]), float(param['bounds'][1])
+                    if max(lo, hi) == 0:
+                        raise ValueError(
+                            f"Parameter '{param['name']}' has scaling 'max'; bounds must be non-zero"
+                        )
+                else:
+                    raise ValueError(
+                        f"Parameter '{param['name']}' scaling must be 'identity', 'log', or 'max' (got {scaling!r})"
+                    )
         
         # Validate targets
         if not isinstance(self.config['targets'], list):

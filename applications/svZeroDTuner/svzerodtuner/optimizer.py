@@ -156,6 +156,11 @@ class OptimizerWrapper:
         # Extract parameters and objective value from OptimizeResult
         x = np.asarray(intermediate_result.x)
         fun = float(intermediate_result.fun)
+
+        # Convert x to physical space if scaling is used
+        if self._use_scaling:
+            x = self._scale_to_phys(x)
+           
         params_dict = dict(zip(param_names, x.tolist()))
         
         # Update history and best parameters
@@ -197,22 +202,30 @@ class OptimizerWrapper:
         bounds: List[Tuple[float, float]],
         x0: Optional[np.ndarray] = None,
         parameters: Optional[List[Dict]] = None,
+        param_scaling_to_opt_space: Optional[Callable[[np.ndarray], np.ndarray]] = None,
+        param_scaling_to_phys_space: Optional[Callable[[np.ndarray], np.ndarray]] = None,
     ) -> OptimizeResult:
         """
         Run optimization.
 
+        Bounds and x0 are in physical space. If scaling callables are
+        provided, the optimizer works in scaled/optimizer space and returns result.x and
+        get_best() in physical space.
+
         Args:
-            objective_func: Objective function that takes parameter array and returns scalar
-            param_names: List of parameter names
-            bounds: List of (min, max) tuples for each parameter
-            x0: Initial guess (optional, required for some algorithms)
+            objective_func: Objective function that takes physical-space parameter
+                array and returns scalar.
+            param_names: List of parameter names.
+            bounds: List of (min, max) tuples in physical space.
+            x0: Initial guess in physical space (optional).
             parameters: Optional list of param dicts with 'name' and 'bounds'
-                (used for near-bounds warnings)
+                (used for near-bounds warnings).
+            param_scaling_to_opt_space: Optional; convert physical -> scaled/optimizer space.
+            param_scaling_to_phys_space: Optional; convert scaled/optimizer -> physical space.
 
         Returns:
-            Optimization result from scipy.optimize
+            OptimizeResult with result.x in physical space.
         """
-        # Reset history
         self.history = []
         self.best_value = None
         self.best_params = None
@@ -225,23 +238,50 @@ class OptimizerWrapper:
         def callback(intermediate_result: OptimizeResult):
             return self.master_callback(intermediate_result, param_names, parameters)
 
-        # Optimization algorithm options
+        # Use center of bounds as initial guess if no initial guess is provided
+        if x0 is None:
+            x0 = np.array([(b[0] + b[1]) / 2 for b in bounds])
+        
+        # Handle scaling of parameter values
+        self._use_scaling = (
+            param_scaling_to_opt_space is not None
+            and param_scaling_to_phys_space is not None
+        )
+        if self._use_scaling:
+            self._scale_to_opt = param_scaling_to_opt_space
+            self._scale_to_phys = param_scaling_to_phys_space
+
+            # Scale bounds
+            bounds_arr = np.array(bounds)
+            bounds = list(zip(
+                self._scale_to_opt(bounds_arr[:, 0]),
+                self._scale_to_opt(bounds_arr[:, 1]),
+            ))
+
+            # Scale initial guess
+            x0 = self._scale_to_opt(np.asarray(x0))
+
+            # Objective function in optimizer space
+            def obj_fun(x_opt: np.ndarray) -> float:
+                return objective_func(self._scale_to_phys(np.asarray(x_opt)))
+        else:
+            obj_fun = objective_func
+
         if self.algorithm == "differential_evolution":
             opts['callback'] = callback
-            result = differential_evolution(objective_func, bounds=bounds, **opts)
-
+            result = differential_evolution(obj_fun, bounds=bounds, **opts)
         elif self.algorithm == "Nelder-Mead":
-            # If no initial guess is provided, use center of bounds as initial guess.
-            if x0 is None:
-                x0 = np.array([(b[0] + b[1]) / 2 for b in bounds])
             try:
                 result = minimize(
-                    objective_func, x0=x0, method='Nelder-Mead',
+                    obj_fun, x0=x0, method='Nelder-Mead',
                     bounds=bounds, options=opts, callback=callback
                 )
             except ObjectiveReachedZero:
+                # Terminated early because objective reached zero
                 result = OptimizeResult(
-                    x=self.best_params,
+                    # best_params is in physical space from callback, so convert to optimizer space
+                    # to be consistent with the optimizer's returned result
+                    x=self._scale_to_opt(self.best_params) if self._use_scaling else self.best_params,
                     success=True,
                     fun=self.best_value,
                     message="Optimization terminated: objective reached zero",
@@ -250,6 +290,8 @@ class OptimizerWrapper:
 
         # Use the optimizer's returned result for best value/params (not best seen during optimization)
         if hasattr(result, 'x') and hasattr(result, 'fun'):
+            if self._use_scaling:
+                result.x = self._scale_to_phys(np.asarray(result.x))
             self.best_params = result.x
             self.best_value = result.fun
 

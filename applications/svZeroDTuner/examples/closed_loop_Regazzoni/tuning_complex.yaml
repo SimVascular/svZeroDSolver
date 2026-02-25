@@ -14,39 +14,51 @@ model:
 parameters:
   - name: "LV.Epass"
     bounds: [1e6, 1e8]
+    scaling: log
 
   - name: "LV.Emax"
     bounds: [1e7, 1e9] 
+    scaling: log
 
   - name: "RV.Epass"
     bounds: [1e6, 1e8]
+    scaling: log
 
   - name: "RV.Emax"
     bounds: [1e7, 1e9]
+    scaling: log
 
   - name: "LA.Epass"
     bounds: [1e6, 1e8]
+    scaling: log
 
   - name: "RA.Epass"
     bounds: [1e6, 1e8]
+    scaling: log
 
   - name: "LV.Vrest"
     bounds: [1e-6, 1e-4]
+    scaling: max
 
   - name: "RV.Vrest"
     bounds: [1e-6, 1e-4]
+    scaling: max
 
   - name: "AR_SYS.R_poiseuille"
     bounds: [1e7, 1e9]
+    scaling: log
 
   - name: "AR_SYS.C"
     bounds: [1e-9, 1e-7]
+    scaling: log
 
   - name: "VEN_SYS.R_poiseuille"
     bounds: [1e5, 1e7]
+    scaling: log
 
   - name: "initial_condition.pressure:J0:VEN_SYS"
     bounds: [1e2, 1e4]
+    scaling: log
 
 
 # Target outputs

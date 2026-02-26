@@ -21,6 +21,7 @@ Model::Model() {
        block_factory<ClosedLoopHeartPulmonary>()},
       {"ClosedLoopRCR", block_factory<ClosedLoopRCRBC>()},
       {"CORONARY", block_factory<OpenLoopCoronaryBC>()},
+      {"CORONARY_VAR_RES", block_factory<OpenLoopCoronaryVarResBC>()},
       {"FLOW", block_factory<FlowReferenceBC>()},
       {"NORMAL_JUNCTION", block_factory<Junction>()},
       {"PRESSURE", block_factory<PressureReferenceBC>()},

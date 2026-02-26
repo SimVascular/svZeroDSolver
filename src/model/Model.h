@@ -32,6 +32,7 @@
 #include "LinearElastanceChamber.h"
 #include "Node.h"
 #include "OpenLoopCoronaryBC.h"
+#include "OpenLoopCoronaryVarResBC.h"
 #include "Parameter.h"
 #include "PiecewiseValve.h"
 #include "PressureReferenceBC.h"

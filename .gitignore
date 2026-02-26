@@ -38,3 +38,7 @@ build*/
 
 # Node modules (for directed graph visualization)
 node_modules/
+
+# Virtual environments
+venv/
+.venv/

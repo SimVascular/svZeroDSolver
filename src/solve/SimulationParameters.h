@@ -12,6 +12,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "ActivationFunction.h"
 #include "Model.h"
 #include "State.h"
 #include "debug.h"
@@ -138,6 +139,21 @@ class JsonWrapper : public nlohmann::json {
 int generate_block(Model& model, const nlohmann::json& block_params_json,
                    const std::string& block_type, const std::string_view& name,
                    bool internal = false, bool periodic = true);
+
+/**
+ * @brief Create an activation function from JSON (analogous to generate_block)
+ *
+ * Validates keys against the activation type's params, reads scalar
+ * parameters, and returns a created ActivationFunction. Caller associates
+ * it with a chamber block via set_activation_function().
+ *
+ * @param model Model (for cardiac_cycle_period)
+ * @param j JSON object (e.g. chamber_config["activation_function"])
+ * @param chamber_name Chamber name for error messages
+ * @return Unique pointer to the created activation function
+ */
+std::unique_ptr<ActivationFunction> generate_activation_function(
+    Model& model, const nlohmann::json& j, const std::string& chamber_name);
 
 /**
  * @brief Load initial conditions from a JSON configuration

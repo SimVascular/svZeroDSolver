@@ -9,6 +9,9 @@
 
 #include <math.h>
 
+#include <memory>
+
+#include "ActivationFunction.h"
 #include "Block.h"
 #include "Model.h"
 #include "SparseSystem.h"
@@ -120,9 +123,12 @@
  *                 "Emin": 0.091,
  *                 "Vrd": 26.1,
  *                 "Vrs": 18.0,
- *                 "t_active": 0.2,
- *                 "t_twitch": 0.3,
  *                 "Impedance": 0.000351787
+ *             },
+ *             "activation_function": {
+ *                 "type": "half_cosine",
+ *                 "t_active": 0.2,
+ *                 "t_twitch": 0.3
  *             }
  *         }
  *     ],
@@ -152,23 +158,13 @@ class ChamberElastanceInductor : public Block {
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
                {"Vrs", InputParameter()},
-               {"t_active", InputParameter()},
-               {"t_twitch", InputParameter()},
                {"Impedance", InputParameter()}}) {}
 
   /**
    * @brief Local IDs of the parameters
    *
    */
-  enum ParamId {
-    EMAX = 0,
-    EMIN = 1,
-    VRD = 2,
-    VRS = 3,
-    TACTIVE = 4,
-    TTWITCH = 5,
-    IMPEDANCE = 6
-  };
+  enum ParamId { EMAX = 0, EMIN = 1, VRD = 2, VRS = 3, IMPEDANCE = 4 };
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -209,9 +205,19 @@ class ChamberElastanceInductor : public Block {
   TripletsContributions num_triplets{6, 2, 0};
 
  private:
-  double Elas;   // Chamber Elastance
-  double Vrest;  // Rest Volume
+  double Elas;                                           // Chamber Elastance
+  double Vrest;                                          // Rest Volume
+  std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
 
+ public:
+  /**
+   * @brief Set the activation function (takes ownership)
+   *
+   * @param af Unique pointer to the activation function
+   */
+  void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
+
+ private:
   /**
    * @brief Update the elastance functions which depend on time
    *

@@ -6,6 +6,7 @@
 set(lib svzero_model_library)
 
 set(CXXSRCS 
+  ActivationFunction.cpp
   Block.cpp
   BloodVessel.cpp
   BloodVesselCRL.cpp
@@ -23,17 +24,19 @@ set(CXXSRCS
   Model.cpp
   Node.cpp
   OpenLoopCoronaryBC.cpp
+  OpenLoopCoronaryVarResBC.cpp
   Parameter.cpp
   PressureReferenceBC.cpp
   ResistanceBC.cpp
   ResistiveJunction.cpp
   ValveTanh.cpp
   WindkesselBC.cpp
-  PiecewiseCosineChamber.cpp
+  LinearElastanceChamber.cpp
   PiecewiseValve.cpp
 )
 
 set(HDRS 
+  ActivationFunction.h
   Block.h
   BlockType.h
   BloodVessel.h
@@ -52,13 +55,14 @@ set(HDRS
   Model.h
   Node.h
   OpenLoopCoronaryBC.h
+  OpenLoopCoronaryVarResBC.h
   Parameter.h
   PressureReferenceBC.h
   ResistanceBC.h
   ResistiveJunction.h
   ValveTanh.h
   WindkesselBC.h
-  PiecewiseCosineChamber.h
+  LinearElastanceChamber.h
   PiecewiseValve.h
 )
 

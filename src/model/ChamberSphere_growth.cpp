@@ -59,16 +59,15 @@ void ChamberSphere_growth::update_solution(
   const double Pout = y[global_var_ids[2]];
   const double radius = y[global_var_ids[4]];
   system.C.coeffRef(global_eqn_ids[0]) =
-      Theta_c * (radius + radius0) *
-      (-Pout * Theta_c * (radius + radius0) + stress * thick0) /
-      pow(radius0, 2);
+      pow(Theta_c, 2) * (radius + radius0) *
+      (-Pout * (radius + radius0) + stress * thick0) / pow(radius0, 2);
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) =
       -pow(Theta_c, 2) * pow(radius + radius0, 2) / pow(radius0, 2);
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
-      Theta_c * (-2 * Pout * Theta_c * (radius + radius0) + stress * thick0) /
+      pow(Theta_c, 2) * (-2 * Pout * (radius + radius0) + stress * thick0) /
       pow(radius0, 2);
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) =
-      Theta_c * thick0 * (radius + radius0) / pow(radius0, 2);
+      pow(Theta_c, 2) * thick0 * (radius + radius0) / pow(radius0, 2);
   system.C.coeffRef(global_eqn_ids[1]) =
       2 *
       (4 * C0 * C1 * (radius + radius0) *

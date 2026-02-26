@@ -7,7 +7,7 @@
       "bc_name": "IN",
       "bc_type": "PRESSURE",
       "bc_values": {
-        "P": [5000, 5000],
+        "P": [2000, 2000],
         "t": [0, 1]
       }
     },
@@ -15,7 +15,7 @@
       "bc_name": "OUT",
       "bc_type": "PRESSURE",
       "bc_values": {
-        "P": [10000, 10000],
+        "P": [1000, 1000],
         "t": [0, 1]
       }
     }
@@ -50,15 +50,15 @@
       "zero_d_element_type": "ChamberSphere_growth",
       "zero_d_element_values": {
         "rho": 1e3,
-        "thick0": 0.01,
-        "radius0": 0.055,
+        "thick0": 0.0142,
+        "radius0": 0.04,
         "C0": 1.9e3,
         "C1": 0.11,
         "C2": 1.9e3,
         "C3": 0.11,
         "eta": 10.0,
         "Theta_r": 1.0,
-        "Theta_c": 1.0,
+        "Theta_c": 1.1,
         "sigma_max": 130e3,
         "alpha_max": 30.0,
         "alpha_min": -30.0,
@@ -87,7 +87,7 @@
       "vessel_name": "downstream_distal_vessel",
       "zero_d_element_type": "BloodVessel",
       "zero_d_element_values": {
-        "R_poiseuille": 1.0e8,
+        "R_poiseuille": 7.0e8,
         "C": 1.0e-8
       }
     }

@@ -2,6 +2,8 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "OpenLoopCoronaryBC.h"
 
+#include "Model.h"
+
 void OpenLoopCoronaryBC::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {"volume_im"});
 }
@@ -9,10 +11,10 @@ void OpenLoopCoronaryBC::setup_dofs(DOFHandler& dofhandler) {
 void OpenLoopCoronaryBC::update_constant(SparseSystem& system,
                                          std::vector<double>& parameters) {
   auto Ra = parameters[global_param_ids[0]];
-  auto Ram = parameters[global_param_ids[1]];
-  auto Rv = parameters[global_param_ids[2]];
-  auto Ca = parameters[global_param_ids[3]];
-  auto Cim = parameters[global_param_ids[4]];
+  auto Ram = get_Ram(parameters, 0.0);
+  auto Rv = parameters[global_param_ids[1]];
+  auto Ca = parameters[global_param_ids[2]];
+  auto Cim = parameters[global_param_ids[3]];
 
   if (steady) {
     // Different equations for steady initial condition
@@ -27,23 +29,27 @@ void OpenLoopCoronaryBC::update_constant(SparseSystem& system,
     system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -1.0;
     system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = Cim * Rv;
     system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = -Cim * Rv * Ra;
-    system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -(Rv + Ram);
 
     system.E.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -Ca * Cim * Rv;
     system.E.coeffRef(global_eqn_ids[0], global_var_ids[1]) =
         Ra * Ca * Cim * Rv;
     system.E.coeffRef(global_eqn_ids[0], global_var_ids[2]) = -Cim * Rv;
-    system.E.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -Cim * Rv * Ram;
   }
+}
+
+double OpenLoopCoronaryBC::get_Ram(std::vector<double>& parameters,
+                                   double time) const {
+  // Base class returns constant resistance (time parameter unused)
+  return parameters[global_param_ids[6]];
 }
 
 void OpenLoopCoronaryBC::update_time(SparseSystem& system,
                                      std::vector<double>& parameters) {
-  auto Ram = parameters[global_param_ids[1]];
-  auto Rv = parameters[global_param_ids[2]];
-  auto Cim = parameters[global_param_ids[4]];
-  auto Pim = parameters[global_param_ids[5]];
-  auto Pv = parameters[global_param_ids[6]];
+  auto Ram = get_Ram(parameters, model->time);
+  auto Rv = parameters[global_param_ids[1]];
+  auto Cim = parameters[global_param_ids[3]];
+  auto Pim = parameters[global_param_ids[4]];
+  auto Pv = parameters[global_param_ids[5]];
 
   if (steady) {
     system.C(global_eqn_ids[1]) = Pv;
@@ -53,6 +59,8 @@ void OpenLoopCoronaryBC::update_time(SparseSystem& system,
     system.C(global_eqn_ids[1]) =
         (Ram * Cim * Pv) -
         Cim * (Rv + Ram) * (Pim + this->P_Cim_0 - this->Pim_0);
+    system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -(Rv + Ram);
+    system.E.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -Cim * Rv * Ram;
   }
 }
 
@@ -63,8 +71,8 @@ void OpenLoopCoronaryBC::setup_initial_state_dependent_params(
   auto P_in_dot = initial_state.ydot[global_var_ids[0]];
   auto Q_in_dot = initial_state.ydot[global_var_ids[1]];
   auto Ra = parameters[global_param_ids[0]];
-  auto Ram = parameters[global_param_ids[1]];
-  auto Ca = parameters[global_param_ids[3]];
+  auto Ram = get_Ram(parameters, 0.0);
+  auto Ca = parameters[global_param_ids[2]];
   // Pressure proximal to Ca and distal to Ra
   auto P_Ca = P_in - Ra * Q_in;
   auto P_Ca_dot = P_in_dot - Ra * Q_in_dot;
@@ -73,5 +81,5 @@ void OpenLoopCoronaryBC::setup_initial_state_dependent_params(
   // Pressure proximal to Cim/Vim and distal to Ram
   this->P_Cim_0 = P_Ca - Ram * Q_am;
   // Initial intramyocardial pressure
-  this->Pim_0 = parameters[global_param_ids[5]];
+  this->Pim_0 = parameters[global_param_ids[4]];
 }

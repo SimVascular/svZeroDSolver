@@ -1,0 +1,7 @@
+<map id="OpenLoopCoronaryVarResBC" name="OpenLoopCoronaryVarResBC">
+<area shape="rect" id="Node000001" title="Open loop coronary boundary condition with time&#45;varying microvascular resistance based on yong25." alt="" coords="5,153,199,178"/>
+<area shape="rect" id="Node000002" href="$class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary." alt="" coords="27,79,177,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,120,105,152,99,152,99,120"/>
+<area shape="rect" id="Node000003" href="$class_block.html" title="Base class for 0D model components." alt="" coords="75,5,129,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,46,105,79,99,79,99,46"/>
+</map>

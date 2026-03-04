@@ -25,7 +25,7 @@
 #SBATCH --mem=8000
 
 # Number of processors per node (for parallel differential_evolution)
-#SBATCH --ntasks-per-node=24
+#SBATCH --ntasks-per-node=32
 
 # Send an email to this address when your job starts and finishes
 #SBATCH --mail-user=abrown97@stanford.edu

@@ -109,36 +109,43 @@ class ConfigHandler:
                 raise ValueError("Each target must have 'name'")
             if 'type' not in target:
                 raise ValueError(f"Target '{target['name']}' must have 'type'")
-            if 'uncertainty' in target:
-                unc = target['uncertainty']
+            has_relative = 'relative_bounds' in target
+            has_uncertainty = 'uncertainty' in target
+            if has_relative and has_uncertainty:
+                raise ValueError(
+                    f"Target '{target['name']}' cannot define both 'relative_bounds' and legacy 'uncertainty'; use only one"
+                )
+            if has_relative or has_uncertainty:
+                unc = target['relative_bounds'] if has_relative else target['uncertainty']
                 if isinstance(unc, str) and unc.strip().endswith('%'):
                     try:
                         pct = float(unc.strip()[:-1])
                         if pct < 0:
                             raise ValueError(
-                                f"Target '{target['name']}' uncertainty percent must be non-negative"
+                                f"Target '{target['name']}' relative_bounds percent must be non-negative"
                             )
                     except ValueError:
                         raise ValueError(
-                            f"Target '{target['name']}' uncertainty '{unc}' must be a valid percent (e.g. '5%')"
+                            f"Target '{target['name']}' relative_bounds '{unc}' must be a valid percent (e.g. '5%')"
                         )
                 elif isinstance(unc, (int, float)):
                     if unc < 0:
                         raise ValueError(
-                            f"Target '{target['name']}' uncertainty percent must be non-negative"
+                            f"Target '{target['name']}' relative_bounds percent must be non-negative"
                         )
                 elif isinstance(unc, (list, tuple)):
+                    key_name = 'relative_bounds' if has_relative else 'uncertainty'
                     if len(unc) != 2:
                         raise ValueError(
-                            f"Target '{target['name']}' uncertainty [min, max] must have 2 elements"
+                            f"Target '{target['name']}' {key_name} [min, max] must have 2 elements"
                         )
                     if unc[0] >= unc[1]:
                         raise ValueError(
-                            f"Target '{target['name']}' uncertainty [min, max] must have min < max"
+                            f"Target '{target['name']}' {key_name} [min, max] must have min < max"
                         )
                 else:
                     raise ValueError(
-                        f"Target '{target['name']}' uncertainty must be percent (e.g. '5%') or [min, max]"
+                        f"Target '{target['name']}' relative_bounds must be percent (e.g. '5%') or [min, max]"
                     )
             target_type = target['type']
             if target_type == 'time_series':

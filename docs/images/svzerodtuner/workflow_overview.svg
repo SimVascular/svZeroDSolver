@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="260" viewBox="0 0 960 260">
+  <rect width="960" height="260" fill="#ffffff"/>
+  <style>
+    .box { fill:#f5f7fa; stroke:#1f2937; stroke-width:2; rx:10; ry:10; }
+    .txt { font-family:Arial, sans-serif; font-size:16px; fill:#111827; }
+    .sub { font-family:Arial, sans-serif; font-size:13px; fill:#374151; }
+    .arr { stroke:#1f2937; stroke-width:2.5; marker-end:url(#a); fill:none; }
+  </style>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1f2937"/>
+    </marker>
+  </defs>
+
+  <rect class="box" x="20" y="70" width="160" height="120"/>
+  <text class="txt" x="100" y="110" text-anchor="middle">Baseline</text>
+  <text class="sub" x="100" y="138" text-anchor="middle">Run model + inspect outputs</text>
+
+  <rect class="box" x="210" y="70" width="170" height="120"/>
+  <text class="txt" x="295" y="110" text-anchor="middle">Targets</text>
+  <text class="sub" x="295" y="138" text-anchor="middle">Define scalar/time-series</text>
+
+  <rect class="box" x="410" y="70" width="170" height="120"/>
+  <text class="txt" x="495" y="110" text-anchor="middle">Optimize</text>
+  <text class="sub" x="495" y="138" text-anchor="middle">DE or Nelder-Mead</text>
+
+  <rect class="box" x="610" y="70" width="160" height="120"/>
+  <text class="txt" x="690" y="110" text-anchor="middle">Validate</text>
+  <text class="sub" x="690" y="138" text-anchor="middle">Compare target vs simulated</text>
+
+  <rect class="box" x="800" y="70" width="140" height="120"/>
+  <text class="txt" x="870" y="110" text-anchor="middle">Visualize</text>
+  <text class="sub" x="870" y="138" text-anchor="middle">Inspect with svZeroDVisualization</text>
+
+  <path class="arr" d="M180 130 L210 130"/>
+  <path class="arr" d="M380 130 L410 130"/>
+  <path class="arr" d="M580 130 L610 130"/>
+  <path class="arr" d="M770 130 L800 130"/>
+</svg>

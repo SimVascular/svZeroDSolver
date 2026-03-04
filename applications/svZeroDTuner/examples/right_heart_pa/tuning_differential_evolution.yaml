@@ -60,37 +60,37 @@ targets:
     type: scalar
     expression: np.mean(flow:PV:MPA)
     target_value: 83.33  # cm^3/s (5.0 L/min)
-    uncertainty: 10%
+    relative_bounds: 10%
     weight: 1.0
   - name: Pulmonary arterial max pressure
     type: scalar
     expression: np.max(pressure:PV:MPA)
     target_value: 33330.0  # dyn/cm^2 (25 mmHg)
-    uncertainty: 10%
+    relative_bounds: 10%
     weight: 1.0
   - name: Pulmonary arterial min pressure
     type: scalar
     expression: np.min(pressure:PV:MPA)
     target_value: 10670.0  # dyn/cm^2 (8 mmHg)
-    uncertainty: 10%
+    relative_bounds: 10%
     weight: 1.0
   - name: Pulmonary arterial mean pressure
     type: scalar
     expression: np.mean(pressure:PV:MPA)
     target_value: 20000.0  # dyn/cm^2 (15 mmHg)
-    uncertainty: 10%
+    relative_bounds: 10%
     weight: 1.0
   - name: Right pulmonary artery mean flow
     type: scalar
     expression: np.mean(flow:RPA:RCR_RPA)
     target_value: 45.83  # 55% of CO
-    uncertainty: 10%
+    relative_bounds: 10%
     weight: 1.0
   - name: Left pulmonary artery mean flow
     type: scalar
     expression: np.mean(flow:LPA:RCR_LPA)
     target_value: 37.5  # 45% of CO
-    uncertainty: 10%
+    relative_bounds: 10%
     weight: 1.0
 
 objective:

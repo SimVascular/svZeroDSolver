@@ -106,89 +106,89 @@ targets:
     type: time_series
     expression: Vc:LV
     target_file: "targets/P003_chamber_volumes/target_V_LV.csv"
-    uncertainty: 5%
+    relative_bounds: 5%
     weight: 1.0
 
   - name: RV volume
     type: time_series
     expression: Vc:RV
     target_file: "targets/P003_chamber_volumes/target_V_RV.csv"
-    uncertainty: 5%
+    relative_bounds: 5%
     weight: 1.0
 
   - name: LA volume
     type: time_series
     expression: Vc:LA
     target_file: "targets/P003_chamber_volumes/target_V_LA.csv"
-    uncertainty: 5%
+    relative_bounds: 5%
     weight: 1.0
 
   - name: RA volume
     type: time_series
     expression: Vc:RA
     target_file: "targets/P003_chamber_volumes/target_V_RA.csv"
-    uncertainty: 5%
+    relative_bounds: 5%
     weight: 1.0
 
   - name: Aortic max pressure
     type: scalar
     expression: np.max(pressure:J0:R_UPSTREAM_SYS)
     target_value: 13065  # Pa (98.0 mmHg)
-    uncertainty: 5%
+    relative_bounds: 5%
     weight: 1.0
   - name: Aortic min pressure
     type: scalar
     expression: np.min(pressure:J0:R_UPSTREAM_SYS)
     target_value: 7066  # Pa (53.0 mmHg)
-    uncertainty: 5%
+    relative_bounds: 5%
     weight: 1.0
 
   - name: Aortic valve peak flow rate
     type: scalar
     expression: np.max(flow:LV:AV)
     target_value: 0.000427  # m^3/s
-    uncertainty: 20%
+    relative_bounds: 20%
     weight: 1.0
 
   - name: Pulmonary valve peak flow rate
     type: scalar
     expression: np.max(flow:RV:PV)
     target_value: 0.000427  # m^3/s
-    uncertainty: 20%
+    relative_bounds: 20%
     weight: 1.0
 
   - name: Pulmonary artery max pressure
     type: scalar
     expression: np.max(pressure:J4:R_UPSTREAM_PUL)
     target_value: 2666  # Pa (20.0 mmHg)
-    uncertainty: 20%
+    relative_bounds: 20%
     weight: 1.0
   - name: Pulmonary artery min pressure
     type: scalar
     expression: np.min(pressure:J4:R_UPSTREAM_PUL)
     target_value: 1533  # Pa (11.5 mmHg)
-    uncertainty: 20%
+    relative_bounds: 20%
     weight: 1.0
 
   - name: Systemic venous mean pressure
     type: scalar
     expression: np.mean(pressure:J2:VEN_SYS)
     target_value: 800  # Pa (6.0 mmHg)
-    uncertainty: 20%
+    relative_bounds: 20%
     weight: 1.0
 
   - name: Right atrial mean pressure
     type: scalar
     expression: np.mean(pressure:J3:RA)
     target_value: 533  # Pa (4.0 mmHg)
-    uncertainty: 20%
+    relative_bounds: 20%
     weight: 1.0
 
   - name: Left atrial mean pressure
     type: scalar
     expression: np.mean(pressure:J7:LA)
     target_value: 933  # Pa (7.0 mmHg)
-    uncertainty: 20%
+    relative_bounds: 20%
     weight: 1.0
 
 objective:

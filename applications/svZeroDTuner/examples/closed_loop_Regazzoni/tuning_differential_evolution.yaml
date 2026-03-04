@@ -39,7 +39,7 @@ targets:
     type: scalar
     expression: (np.max(Vc:LV) - np.min(Vc:LV))/np.max(Vc:LV)
     target_value: 0.5  # 50% (fraction 0-1)
-    uncertainty: 5%
+    relative_bounds: 5%
     weight: 1.0
 
 objective:

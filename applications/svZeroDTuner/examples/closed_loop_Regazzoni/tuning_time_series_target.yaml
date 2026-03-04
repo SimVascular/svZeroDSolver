@@ -27,14 +27,14 @@ targets:
     expression: pressure:AV:AR_SYS
     # Run create_target_from_baseline.py to create the target file from the baseline results.
     target_file: "targets/target_pressure_ar_sys.csv"
-    uncertainty: "5%"
+    relative_bounds: "5%"
     weight: 1.0
   
   - name: LV max volume
     type: scalar
     expression: np.max(Vc:LV)
     target_value: 167.6e-6  # m^3
-    uncertainty: 5%
+    relative_bounds: 5%
     weight: 1.0
 
 objective:

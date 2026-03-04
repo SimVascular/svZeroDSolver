@@ -24,8 +24,13 @@ def _parse_percent(x) -> Optional[float]:
 def _compute_range(target: Dict) -> Tuple[np.ndarray, np.ndarray]:
     """
     Convert user spec to (lo, hi) range. Internally we only keep range.
-    User can provide: single value, value+uncertainty (percent), or target_range [min,max].
+    User can provide:
+    - single value
+    - value + relative_bounds (percent)
+    - target_range [min, max]
+    Legacy alias: uncertainty
     """
+    relative_bounds = target.get('relative_bounds', target.get('uncertainty'))
     if 'target_file' in target:
         # Time series
         t = np.asarray(target['target_values'])
@@ -35,17 +40,16 @@ def _compute_range(target: Dict) -> Tuple[np.ndarray, np.ndarray]:
             lo_val, hi_val = float(target['target_range'][0]), float(target['target_range'][1])
             return (np.full(len(t), lo_val), np.full(len(t), hi_val))
 
-        # An uncertainty percentage is provided
-        if 'uncertainty' in target:
-            unc = target['uncertainty']
-            pct = _parse_percent(unc)
+        # Relative bounds are provided as percent or [min, max]
+        if relative_bounds is not None:
+            pct = _parse_percent(relative_bounds)
             if pct is not None:
                 return (t * (1.0 - pct), t * (1.0 + pct))
-            if isinstance(unc, (list, tuple)) and len(unc) == 2:
-                lo_val, hi_val = float(unc[0]), float(unc[1])
+            if isinstance(relative_bounds, (list, tuple)) and len(relative_bounds) == 2:
+                lo_val, hi_val = float(relative_bounds[0]), float(relative_bounds[1])
                 return (np.full(len(t), lo_val), np.full(len(t), hi_val))
         
-        # No target_range or uncertainty, so point target
+        # No target_range or relative_bounds, so point target
         return (t.copy(), t.copy())  # point target
     else:
         # Scalar
@@ -57,16 +61,15 @@ def _compute_range(target: Dict) -> Tuple[np.ndarray, np.ndarray]:
         
         v = float(target['target_value'])
         
-        # An uncertainty percentage is provided
-        if 'uncertainty' in target:
-            unc = target['uncertainty']
-            pct = _parse_percent(unc)
+        # Relative bounds are provided as percent or [min, max]
+        if relative_bounds is not None:
+            pct = _parse_percent(relative_bounds)
             if pct is not None:
                 return (np.array([v * (1.0 - pct)]), np.array([v * (1.0 + pct)]))
-            if isinstance(unc, (list, tuple)) and len(unc) == 2:
-                return (np.array([float(unc[0])]), np.array([float(unc[1])]))
+            if isinstance(relative_bounds, (list, tuple)) and len(relative_bounds) == 2:
+                return (np.array([float(relative_bounds[0])]), np.array([float(relative_bounds[1])]))
         
-        # No target_range or uncertainty, so point target
+        # No target_range or relative_bounds, so point target
         return (np.array([v]), np.array([v]))  
 
 
@@ -127,7 +130,7 @@ class ObjectiveFunction:
 
     Internally each target is stored as a range [lo, hi]. User can specify:
     - Single value (target_value or target_file): range = [v, v]
-    - Value + uncertainty percent: range = value * (1 ± pct)
+    - Value + relative_bounds percent: range = value * (1 ± pct)
     - target_range [min, max] directly
     Error is zero within the range; outside, penalty by distance from nearest bound.
     """
@@ -260,7 +263,8 @@ class ObjectiveFunction:
 def create_objective(targets: List[Dict], **kwargs) -> ObjectiveFunction:
     """
     Create objective function object.
-    Targets with 'uncertainty' (percent or [min,max]) or target_range use range-based penalty.
+    Targets with 'relative_bounds' (or legacy 'uncertainty') or target_range use
+    range-based penalty.
     """
     norm = kwargs.pop("norm")
     return ObjectiveFunction(targets=targets, norm=norm, **kwargs)

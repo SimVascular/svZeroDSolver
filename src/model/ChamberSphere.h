@@ -41,8 +41,8 @@
  *
  * 2. Spherical stress:
  * \f[
- * -S + \tau + 4 (1 - C^{-3}) (W_1 + C W_2) + 2 \eta \dot{C}
- * (1 - 2 C^{-6}) = 0
+ * -S + \tau + 4 (1 - C^{-3}) (W_1 + C W_2) + \eta \dot{C}
+ * (1 + 2 C^{-6}) = 0
  * \f]
  *
  * 3. Volume change:

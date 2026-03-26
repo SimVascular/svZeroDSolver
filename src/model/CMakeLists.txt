@@ -5,8 +5,11 @@
 
 set(lib svzero_model_library)
 
-set(CXXSRCS 
+set(CXXSRCS
   ActivationFunction.cpp
+  CLHPulmonary.cpp
+  IdealValve.cpp
+  SmoothValveL.cpp
   Block.cpp
   BloodVessel.cpp
   BloodVesselCRL.cpp
@@ -17,6 +20,7 @@ set(CXXSRCS
   ClosedLoopCoronaryLeftBC.cpp
   ClosedLoopCoronaryRightBC.cpp
   ClosedLoopHeartPulmonary.cpp
+  ClosedLoopHeartPulmonarySmooth.cpp
   ClosedLoopRCRBC.cpp
   DOFHandler.cpp
   FlowReferenceBC.cpp
@@ -24,6 +28,7 @@ set(CXXSRCS
   Model.cpp
   Node.cpp
   OpenLoopCoronaryBC.cpp
+  OpenLoopCoronaryDetailedBC.cpp
   OpenLoopCoronaryVarResBC.cpp
   Parameter.cpp
   PressureReferenceBC.cpp
@@ -35,8 +40,11 @@ set(CXXSRCS
   PiecewiseValve.cpp
 )
 
-set(HDRS 
+set(HDRS
   ActivationFunction.h
+  CLHPulmonary.h
+  IdealValve.h
+  SmoothValveL.h
   Block.h
   BlockType.h
   BloodVessel.h
@@ -48,6 +56,7 @@ set(HDRS
   ClosedLoopCoronaryLeftBC.h
   ClosedLoopCoronaryRightBC.h
   ClosedLoopHeartPulmonary.h
+  ClosedLoopHeartPulmonarySmooth.h
   ClosedLoopRCRBC.h
   DOFHandler.h
   FlowReferenceBC.h
@@ -55,6 +64,7 @@ set(HDRS
   Model.h
   Node.h
   OpenLoopCoronaryBC.h
+  OpenLoopCoronaryDetailedBC.h
   OpenLoopCoronaryVarResBC.h
   Parameter.h
   PressureReferenceBC.h

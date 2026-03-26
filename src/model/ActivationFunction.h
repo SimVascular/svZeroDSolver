@@ -212,4 +212,57 @@ class TwoHillActivation : public ActivationFunction {
   bool normalization_initialized_;
 };
 
+/**
+ * @brief Wrapping cosine activation function
+ *
+ * Reproduces the atrial activation AA(t) from ClosedLoopHeartPulmonary.
+ * The cosine wraps across the cardiac cycle boundary, which half_cosine
+ * and piecewise_cosine cannot do.
+ *
+ * Parameters:
+ * * `Tsa` — Atrial systole time fraction (multiplied by cardiac period)
+ * * `tpwave` — P-wave divisor (cardiac period is divided by this)
+ */
+class WrappingCosineActivation : public ActivationFunction {
+ public:
+  explicit WrappingCosineActivation(double cardiac_period)
+      : ActivationFunction(cardiac_period,
+                           {{"Tsa", InputParameter()},
+                            {"tpwave", InputParameter()}}) {}
+
+  double compute(double time) override;
+};
+
+/**
+ * @brief Fourier series activation function
+ *
+ * Uses the same 25-mode Fourier series as ClosedLoopHeartPulmonary to compute
+ * ventricular elastance activation. The series is normalized so the output
+ * ranges from 0 (diastole) to 1 (peak systole). No user parameters are needed;
+ * the Fourier coefficients are hardcoded from the Tran tuning framework.
+ *
+ * Combined with ChamberElastanceInductor using
+ *   Emax = Fourier_peak * E_scale,  Emin = Fourier_trough * E_scale
+ * this reproduces E(t) = Fourier(t) * E_scale exactly.
+ */
+class FourierActivation : public ActivationFunction {
+ public:
+  explicit FourierActivation(double cardiac_period)
+      : ActivationFunction(cardiac_period, {}),
+        norm_min_(0.0),
+        norm_range_(1.0),
+        normalization_initialized_(false) {}
+
+  double compute(double time) override;
+  void finalize() override;
+
+ private:
+  void calculate_normalization();
+  double compute_raw(double t_in_cycle) const;
+
+  double norm_min_;
+  double norm_range_;
+  bool normalization_initialized_;
+};
+
 #endif  // SVZERODSOLVER_MODEL_ACTIVATIONFUNCTION_HPP_

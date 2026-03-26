@@ -19,9 +19,12 @@ Model::Model() {
       {"ClosedLoopCoronaryRight", block_factory<ClosedLoopCoronaryRightBC>()},
       {"ClosedLoopHeartAndPulmonary",
        block_factory<ClosedLoopHeartPulmonary>()},
+      {"ClosedLoopHeartAndPulmonarySmooth",
+       block_factory<ClosedLoopHeartPulmonarySmooth>()},
       {"ClosedLoopRCR", block_factory<ClosedLoopRCRBC>()},
       {"CORONARY", block_factory<OpenLoopCoronaryBC>()},
       {"CORONARY_VAR_RES", block_factory<OpenLoopCoronaryVarResBC>()},
+      {"CORONARY_DETAILED", block_factory<OpenLoopCoronaryDetailedBC>()},
       {"FLOW", block_factory<FlowReferenceBC>()},
       {"NORMAL_JUNCTION", block_factory<Junction>()},
       {"PRESSURE", block_factory<PressureReferenceBC>()},
@@ -32,7 +35,10 @@ Model::Model() {
       {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
       {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
       {"PiecewiseValve", block_factory<PiecewiseValve>()},
-      {"LinearElastanceChamber", block_factory<LinearElastanceChamber>()}};
+      {"LinearElastanceChamber", block_factory<LinearElastanceChamber>()},
+      {"CLHPulmonary", block_factory<CLHPulmonary>()},
+      {"IdealValve", block_factory<IdealValve>()},
+      {"SmoothValveL", block_factory<SmoothValveL>()}};
 }
 
 Model::~Model() {}

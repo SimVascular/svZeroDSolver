@@ -158,13 +158,25 @@ class ChamberElastanceInductor : public Block {
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
                {"Vrs", InputParameter()},
-               {"Impedance", InputParameter()}}) {}
+               {"Impedance", InputParameter()},
+               {"Kxp", InputParameter(true)},
+               {"Kxv", InputParameter(true)},
+               {"Vaso", InputParameter(true)}}) {}
 
   /**
    * @brief Local IDs of the parameters
    *
    */
-  enum ParamId { EMAX = 0, EMIN = 1, VRD = 2, VRS = 3, IMPEDANCE = 4 };
+  enum ParamId {
+    EMAX = 0,
+    EMIN = 1,
+    VRD = 2,
+    VRS = 3,
+    IMPEDANCE = 4,
+    KXP = 5,   ///< Passive pressure scaling (optional, 0 = linear mode)
+    KXV = 6,   ///< Passive volume scaling (optional)
+    VASO = 7   ///< Passive resting volume (optional)
+  };
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -197,16 +209,25 @@ class ChamberElastanceInductor : public Block {
   void update_time(SparseSystem& system, std::vector<double>& parameters);
 
   /**
+   * @brief Update the solution-dependent contributions of the element in a
+   * sparse system. Only active when Kxp > 0 (exponential passive atrial mode).
+   */
+  void update_solution(SparseSystem& system, std::vector<double>& parameters,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
+
+  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system
    * (relevant for sparse memory reservation)
    */
-  TripletsContributions num_triplets{6, 2, 0};
+  TripletsContributions num_triplets{6, 2, 1};
 
  private:
   double Elas;                                           // Chamber Elastance
   double Vrest;                                          // Rest Volume
+  double act_ = 0.0;                                    // Last computed activation
   std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
 
  public:

@@ -37,8 +37,8 @@ def test_decomposed_closedLoopHeart():
     """Four-chamber heart from individual blocks vs monolithic."""
 
     # ---- run both models at same resolution with variable-based output ----
-    shared = {"number_of_time_pts_per_cardiac_cycle": 500,
-              "number_of_cardiac_cycles": 10,
+    shared = {"number_of_time_pts_per_cardiac_cycle": 1000,
+              "number_of_cardiac_cycles": 4,
               "output_all_cycles": False}
 
     mono_config = load_config("closedLoopHeart_singleVessel.json")

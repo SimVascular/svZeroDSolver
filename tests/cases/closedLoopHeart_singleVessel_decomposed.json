@@ -54,10 +54,10 @@
      "activation_function": {"type": "fourier"}}
   ],
   "valves": [
-    {"type": "ValveTanh", "name": "TV", "params": {"Rmin": 0.007887459, "Rmax": 75000.0, "Steepness": 500.0, "upstream_block": "RA", "downstream_block": "RV"}},
-    {"type": "ValveTanh", "name": "PV", "params": {"Rmin": 0.035061704, "Rmax": 75000.0, "Steepness": 500.0, "upstream_block": "RV", "downstream_block": "pul_vessel"}},
-    {"type": "ValveTanh", "name": "MV", "params": {"Rmin": 0.005310825, "Rmax": 75000.0, "Steepness": 500.0, "upstream_block": "LA", "downstream_block": "LV"}},
-    {"type": "ValveTanh", "name": "AV", "params": {"Rmin": 0.034320234, "Rmax": 75000.0, "Steepness": 500.0, "upstream_block": "LV", "downstream_block": "aortic_cap"}}
+    {"type": "ValveTanh", "name": "TV", "params": {"Rmin": 0.007887459, "Rmax": 1.0e3, "Steepness": 1.0e4, "upstream_block": "RA", "downstream_block": "RV"}},
+    {"type": "ValveTanh", "name": "PV", "params": {"Rmin": 0.035061704, "Rmax": 1.0e3, "Steepness": 1.0e4, "upstream_block": "RV", "downstream_block": "pul_vessel"}},
+    {"type": "ValveTanh", "name": "MV", "params": {"Rmin": 0.005310825, "Rmax": 1.0e3, "Steepness": 1.0e4, "upstream_block": "LA", "downstream_block": "LV"}},
+    {"type": "ValveTanh", "name": "AV", "params": {"Rmin": 0.034320234, "Rmax": 1.0e3, "Steepness": 1.0e4, "upstream_block": "LV", "downstream_block": "aortic_cap"}}
   ],
   "initial_condition": {"Vc:RA": 38.43, "Vc:RV": 96.07, "Vc:LA": 38.43, "Vc:LV": 96.07}
 }

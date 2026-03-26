@@ -7,7 +7,7 @@ set(lib svzero_model_library)
 
 set(CXXSRCS
   ActivationFunction.cpp
-  CLHPulmonary.cpp
+  BloodVesselRC.cpp
   ValveTanh.cpp
   Block.cpp
   BloodVessel.cpp
@@ -38,7 +38,7 @@ set(CXXSRCS
 
 set(HDRS
   ActivationFunction.h
-  CLHPulmonary.h
+  BloodVesselRC.h
   ValveTanh.h
   Block.h
   BlockType.h

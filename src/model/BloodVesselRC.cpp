@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
-#include "CLHPulmonary.h"
+#include "BloodVesselRC.h"
 
-void CLHPulmonary::setup_dofs(DOFHandler& dofhandler) {
+void BloodVesselRC::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 2, {});
 }
 
-void CLHPulmonary::update_constant(SparseSystem& system,
+void BloodVesselRC::update_constant(SparseSystem& system,
                                    std::vector<double>& parameters) {
   double Rpd = parameters[global_param_ids[ParamId::RPD]];
   double Cp = parameters[global_param_ids[ParamId::CP]];

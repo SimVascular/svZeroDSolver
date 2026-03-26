@@ -13,7 +13,7 @@
   "boundary_conditions": [],
   "vessels": [
     {"vessel_name": "pul_vessel", "vessel_id": 1, "vessel_length": 10.0,
-     "zero_d_element_type": "CLHPulmonary",
+     "zero_d_element_type": "BloodVesselRC",
      "zero_d_element_values": {"Rpd": 0.098865401, "Cp": 1.090989}},
     {"vessel_name": "aortic_cap", "vessel_id": 2, "vessel_length": 10.0,
      "zero_d_element_type": "BloodVessel",

@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
-#ifndef SVZERODSOLVER_MODEL_CLHPULMONARY_HPP_
-#define SVZERODSOLVER_MODEL_CLHPULMONARY_HPP_
+#ifndef SVZERODSOLVER_MODEL_BLOODVESSELRC_HPP_
+#define SVZERODSOLVER_MODEL_BLOODVESSELRC_HPP_
 
 #include "Block.h"
 #include "SparseSystem.h"
@@ -29,10 +29,10 @@
  * * `Rpd` — Pulmonary resistance
  * * `Cp` — Pulmonary capacitance
  */
-class CLHPulmonary : public Block {
+class BloodVesselRC : public Block {
  public:
-  CLHPulmonary(int id, Model* model)
-      : Block(id, model, BlockType::clh_pulmonary, BlockClass::vessel,
+  BloodVesselRC(int id, Model* model)
+      : Block(id, model, BlockType::blood_vessel_rc, BlockClass::vessel,
               {{"Rpd", InputParameter()}, {"Cp", InputParameter()}}) {}
 
   enum ParamId { RPD = 0, CP = 1 };
@@ -43,4 +43,4 @@ class CLHPulmonary : public Block {
   TripletsContributions num_triplets{5, 1, 0};
 };
 
-#endif  // SVZERODSOLVER_MODEL_CLHPULMONARY_HPP_
+#endif  // SVZERODSOLVER_MODEL_BLOODVESSELRC_HPP_

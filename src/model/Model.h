@@ -21,8 +21,6 @@
 #include "BloodVesselCRL.h"
 #include "BloodVesselJunction.h"
 #include "CLHPulmonary.h"
-#include "IdealValve.h"
-#include "SmoothValveL.h"
 #include "ChamberElastanceInductor.h"
 #include "ChamberSphere.h"
 #include "ClosedLoopCoronaryLeftBC.h"

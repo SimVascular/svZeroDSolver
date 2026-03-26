@@ -36,9 +36,7 @@ Model::Model() {
       {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
       {"PiecewiseValve", block_factory<PiecewiseValve>()},
       {"LinearElastanceChamber", block_factory<LinearElastanceChamber>()},
-      {"CLHPulmonary", block_factory<CLHPulmonary>()},
-      {"IdealValve", block_factory<IdealValve>()},
-      {"SmoothValveL", block_factory<SmoothValveL>()}};
+      {"CLHPulmonary", block_factory<CLHPulmonary>()}};
 }
 
 Model::~Model() {}

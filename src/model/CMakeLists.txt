@@ -8,8 +8,7 @@ set(lib svzero_model_library)
 set(CXXSRCS
   ActivationFunction.cpp
   CLHPulmonary.cpp
-  IdealValve.cpp
-  SmoothValveL.cpp
+  ValveTanh.cpp
   Block.cpp
   BloodVessel.cpp
   BloodVesselCRL.cpp
@@ -34,7 +33,6 @@ set(CXXSRCS
   PressureReferenceBC.cpp
   ResistanceBC.cpp
   ResistiveJunction.cpp
-  ValveTanh.cpp
   WindkesselBC.cpp
   LinearElastanceChamber.cpp
   PiecewiseValve.cpp
@@ -43,8 +41,7 @@ set(CXXSRCS
 set(HDRS
   ActivationFunction.h
   CLHPulmonary.h
-  IdealValve.h
-  SmoothValveL.h
+  ValveTanh.h
   Block.h
   BlockType.h
   BloodVessel.h
@@ -70,7 +67,6 @@ set(HDRS
   PressureReferenceBC.h
   ResistanceBC.h
   ResistiveJunction.h
-  ValveTanh.h
   WindkesselBC.h
   LinearElastanceChamber.h
   PiecewiseValve.h

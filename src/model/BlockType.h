@@ -35,9 +35,7 @@ enum class BlockType {
   open_loop_coronary_var_res_bc = 19,
   open_loop_coronary_detailed_bc = 20,
   clh_pulmonary = 21,
-  ideal_valve = 22,
-  closed_loop_heart_pulmonary_smooth = 23,
-  smooth_valve_l = 24
+  closed_loop_heart_pulmonary_smooth = 22
 };
 
 /**

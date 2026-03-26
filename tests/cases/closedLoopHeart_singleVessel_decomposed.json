@@ -3,11 +3,11 @@
     "description of test case": "Four-chamber closed-loop heart with exact monolithic parameters. Impedance L and resistance R are on the IdealValve (not the chamber), so the valve equation L*dQ + R*Q = P_up - P_down matches the monolithic outflow equation. Rmin=0 because the monolithic has no standalone valve resistance (R is gated by valve state). Circuit: RA -> TV -> RV -> PV -> pul_vessel -> LA -> MV -> LV -> AV -> aortic_cap -> branch0_seg0 -> sys_Rp -> sys_Rd -> RA"
   },
   "simulation_parameters": {
-    "number_of_cardiac_cycles": 10,
+    "number_of_cardiac_cycles": 1,
     "number_of_time_pts_per_cardiac_cycle": 1000,
     "absolute_tolerance": 1e-8,
     "steady_initial": false,
-    "output_all_cycles": false,
+    "output_all_cycles": true,
     "cardiac_period": 1.0169
   },
   "boundary_conditions": [],
@@ -38,19 +38,19 @@
   "chambers": [
     {"type": "ChamberElastanceInductor", "name": "RA",
      "values": {"Emax": 0.208858, "Emin": 0.0, "Vrd": 4.848742, "Vrs": 4.848742,
-                "Impedance": 0.0, "Kxp": 9.22244, "Kxv": 0.004837, "Vaso": 4.848742},
+                "Impedance": 0.000217032, "Kxp": 9.22244, "Kxv": 0.004837, "Vaso": 4.848742},
      "activation_function": {"type": "wrapping_cosine", "Tsa": 0.40742, "tpwave": 8.976868}},
     {"type": "ChamberElastanceInductor", "name": "RV",
      "values": {"Emax": 2.098463, "Emin": 0.108573, "Vrd": 9.424629, "Vrs": 9.424629,
-                "Impedance": 0.0},
+                "Impedance": 0.000186865},
      "activation_function": {"type": "fourier"}},
     {"type": "ChamberElastanceInductor", "name": "LA",
      "values": {"Emax": 0.303119, "Emin": 0.0, "Vrd": 9.355754, "Vrs": 9.355754,
-                "Impedance": 0.0, "Kxp": 9.194992, "Kxv": 0.008067, "Vaso": 9.355754},
+                "Impedance": 0.000351787, "Kxp": 9.194992, "Kxv": 0.008067, "Vaso": 9.355754},
      "activation_function": {"type": "wrapping_cosine", "Tsa": 0.40742, "tpwave": 8.976868}},
     {"type": "ChamberElastanceInductor", "name": "LV",
      "values": {"Emax": 3.085769, "Emin": 0.159656, "Vrd": 5.606007, "Vrs": 5.606007,
-                "Impedance": 0.0},
+                "Impedance": 0.000110776},
      "activation_function": {"type": "fourier"}}
   ],
   "valves": [

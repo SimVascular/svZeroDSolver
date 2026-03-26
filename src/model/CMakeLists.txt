@@ -19,7 +19,6 @@ set(CXXSRCS
   ClosedLoopCoronaryLeftBC.cpp
   ClosedLoopCoronaryRightBC.cpp
   ClosedLoopHeartPulmonary.cpp
-  ClosedLoopHeartPulmonarySmooth.cpp
   ClosedLoopRCRBC.cpp
   DOFHandler.cpp
   FlowReferenceBC.cpp
@@ -27,7 +26,6 @@ set(CXXSRCS
   Model.cpp
   Node.cpp
   OpenLoopCoronaryBC.cpp
-  OpenLoopCoronaryDetailedBC.cpp
   OpenLoopCoronaryVarResBC.cpp
   Parameter.cpp
   PressureReferenceBC.cpp
@@ -53,7 +51,6 @@ set(HDRS
   ClosedLoopCoronaryLeftBC.h
   ClosedLoopCoronaryRightBC.h
   ClosedLoopHeartPulmonary.h
-  ClosedLoopHeartPulmonarySmooth.h
   ClosedLoopRCRBC.h
   DOFHandler.h
   FlowReferenceBC.h
@@ -61,7 +58,6 @@ set(HDRS
   Model.h
   Node.h
   OpenLoopCoronaryBC.h
-  OpenLoopCoronaryDetailedBC.h
   OpenLoopCoronaryVarResBC.h
   Parameter.h
   PressureReferenceBC.h

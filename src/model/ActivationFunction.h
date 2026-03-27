@@ -226,9 +226,8 @@ class TwoHillActivation : public ActivationFunction {
 class WrappingCosineActivation : public ActivationFunction {
  public:
   explicit WrappingCosineActivation(double cardiac_period)
-      : ActivationFunction(cardiac_period,
-                           {{"Tsa", InputParameter()},
-                            {"tpwave", InputParameter()}}) {}
+      : ActivationFunction(cardiac_period, {{"Tsa", InputParameter()},
+                                            {"tpwave", InputParameter()}}) {}
 
   double compute(double time) override;
 };

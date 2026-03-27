@@ -173,9 +173,9 @@ class ChamberElastanceInductor : public Block {
     VRD = 2,
     VRS = 3,
     IMPEDANCE = 4,
-    KXP = 5,   ///< Passive pressure scaling (optional, 0 = linear mode)
-    KXV = 6,   ///< Passive volume scaling (optional)
-    VASO = 7   ///< Passive resting volume (optional)
+    KXP = 5,  ///< Passive pressure scaling (optional, 0 = linear mode)
+    KXV = 6,  ///< Passive volume scaling (optional)
+    VASO = 7  ///< Passive resting volume (optional)
   };
 
   /**
@@ -225,9 +225,9 @@ class ChamberElastanceInductor : public Block {
   TripletsContributions num_triplets{6, 2, 1};
 
  private:
-  double Elas;                                           // Chamber Elastance
-  double Vrest;                                          // Rest Volume
-  double act_ = 0.0;                                    // Last computed activation
+  double Elas;        // Chamber Elastance
+  double Vrest;       // Rest Volume
+  double act_ = 0.0;  // Last computed activation
   std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
 
  public:

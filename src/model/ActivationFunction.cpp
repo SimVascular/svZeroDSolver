@@ -169,11 +169,10 @@ double WrappingCosineActivation::compute(double time) {
 
   double AA = 0.0;
   if (t_in_cycle <= tpwave) {
-    AA = 0.5 * (1.0 - std::cos(2.0 * M_PI *
-                                (t_in_cycle - tpwave + Tsa) / Tsa));
+    AA = 0.5 * (1.0 - std::cos(2.0 * M_PI * (t_in_cycle - tpwave + Tsa) / Tsa));
   } else if ((t_in_cycle >= (T - Tsa) + tpwave) && (t_in_cycle < T)) {
-    AA = 0.5 * (1.0 - std::cos(2.0 * M_PI *
-                                (t_in_cycle - tpwave - (T - Tsa)) / Tsa));
+    AA = 0.5 *
+         (1.0 - std::cos(2.0 * M_PI * (t_in_cycle - tpwave - (T - Tsa)) / Tsa));
   }
   return AA;
 }
@@ -202,10 +201,10 @@ static const double FT_ELAST[25][2] = {
 double FourierActivation::compute_raw(double t_in_cycle) const {
   double val = 0.0;
   for (int i = 0; i < 25; i++) {
-    val += FT_ELAST[i][0] * std::cos(2.0 * M_PI * i * t_in_cycle /
-                                     cardiac_period_) -
-           FT_ELAST[i][1] * std::sin(2.0 * M_PI * i * t_in_cycle /
-                                     cardiac_period_);
+    val += FT_ELAST[i][0] *
+               std::cos(2.0 * M_PI * i * t_in_cycle / cardiac_period_) -
+           FT_ELAST[i][1] *
+               std::sin(2.0 * M_PI * i * t_in_cycle / cardiac_period_);
   }
   return val;
 }

@@ -7,7 +7,7 @@ void BloodVesselRC::setup_dofs(DOFHandler& dofhandler) {
 }
 
 void BloodVesselRC::update_constant(SparseSystem& system,
-                                   std::vector<double>& parameters) {
+                                    std::vector<double>& parameters) {
   double Rpd = parameters[global_param_ids[ParamId::RPD]];
   double Cp = parameters[global_param_ids[ParamId::CP]];
 

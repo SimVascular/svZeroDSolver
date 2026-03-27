@@ -215,9 +215,9 @@ class TwoHillActivation : public ActivationFunction {
 /**
  * @brief Wrapping cosine activation function
  *
- * Reproduces the atrial activation AA(t) from ClosedLoopHeartPulmonary.
- * The cosine wraps across the cardiac cycle boundary, which half_cosine
- * and piecewise_cosine cannot do.
+ * Reproduces the atrial activation AA(t) from \cite sankaran2012patient
+ * and \cite menon2023predictors. The cosine wraps across the cardiac
+ * cycle boundary, which half_cosine and piecewise_cosine cannot do.
  *
  * Parameters:
  * * `Tsa` — Atrial systole time fraction (multiplied by cardiac period)
@@ -236,10 +236,10 @@ class WrappingCosineActivation : public ActivationFunction {
 /**
  * @brief Fourier series activation function
  *
- * Uses the same 25-mode Fourier series as ClosedLoopHeartPulmonary to compute
- * ventricular elastance activation. The series is normalized so the output
- * ranges from 0 (diastole) to 1 (peak systole). No user parameters are needed;
- * the Fourier coefficients are hardcoded from the Tran tuning framework.
+ * 25-mode Fourier series for ventricular elastance activation, based on
+ * J. Tran's tuning framework (\cite menon2023predictors). The series is
+ * normalized so the output ranges from 0 (diastole) to 1 (peak systole).
+ * No user parameters are needed; the Fourier coefficients are hardcoded.
  *
  * Combined with ChamberElastanceInductor using
  *   Emax = Fourier_peak * E_scale,  Emin = Fourier_trough * E_scale

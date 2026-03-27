@@ -157,8 +157,8 @@ double TwoHillActivation::compute(double time) {
 }
 
 // ============================================================
-// WrappingCosineActivation — atrial activation from
-// ClosedLoopHeartPulmonary (wraps across cycle boundary)
+// WrappingCosineActivation — atrial activation that wraps
+// across the cycle boundary (Sankaran 2012, Menon 2023)
 // ============================================================
 
 double WrappingCosineActivation::compute(double time) {
@@ -179,11 +179,11 @@ double WrappingCosineActivation::compute(double time) {
 }
 
 // ============================================================
-// FourierActivation — 25-mode Fourier series from
-// ClosedLoopHeartPulmonary (J. Tran's tuning framework)
+// FourierActivation — 25-mode Fourier series for ventricular
+// elastance (J. Tran's tuning framework, Menon 2023)
 // ============================================================
 
-// Shared Fourier coefficient table (same as ClosedLoopHeartPulmonary.cpp)
+// Fourier coefficient table from Tran's tuning framework
 static const double FT_ELAST[25][2] = {
     {0.283748803, 0.000000000},   {0.031830626, -0.374299825},
     {-0.209472400, -0.018127770}, {0.020520047, 0.073971113},

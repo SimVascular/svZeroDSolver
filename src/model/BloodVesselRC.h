@@ -7,13 +7,12 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Flow-through pulmonary windkessel matching the pulmonary equation
- * from ClosedLoopHeartPulmonary.
+ * @brief Flow-through RC windkessel for pulmonary circulation.
  *
  * Models a resistance-capacitance windkessel where the inlet and outlet
  * flows are equal (Q_in = Q_out). The capacitor stores pressure but does
- * not store blood volume. This matches the monolithic block where Q_RV
- * flows through the pulmonary directly to the LA volume equation.
+ * not store blood volume. This matches the pulmonary model in
+ * \cite sankaran2012patient (equation X6' = X4 - X7).
  *
  * ### Governing equations
  *

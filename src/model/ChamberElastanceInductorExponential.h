@@ -29,12 +29,13 @@
  *
  * ### Parameters
  *
- * Inherits Emax, Emin, Vrd, Vrs, Impedance from ChamberElastanceInductor.
- * Additional parameters:
+ * ### Parameters
  *
- * * `5` Kxp: Passive pressure scaling
- * * `6` Kxv: Passive volume scaling
- * * `7` Vaso: Passive resting volume
+ * * `0` Emax: Maximum (active) elastance
+ * * `1` Impedance: Outflow inductance
+ * * `2` Kxp: Passive pressure scaling
+ * * `3` Kxv: Passive volume scaling
+ * * `4` Vaso: Passive resting volume
  *
  */
 class ChamberElastanceInductorExponential : public ChamberElastanceInductor {
@@ -44,20 +45,20 @@ class ChamberElastanceInductorExponential : public ChamberElastanceInductor {
             id, model,
             BlockType::chamber_elastance_inductor_exponential,
             {{"Emax", InputParameter()},
-             {"Emin", InputParameter()},
-             {"Vrd", InputParameter()},
-             {"Vrs", InputParameter()},
              {"Impedance", InputParameter()},
              {"Kxp", InputParameter()},
              {"Kxv", InputParameter()},
              {"Vaso", InputParameter()}}) {}
 
   enum ExponentialParamId {
-    KXP = 5,
-    KXV = 6,
-    VASO = 7,
+    EXP_EMAX = 0,
+    EXP_IMPEDANCE = 1,
+    KXP = 2,
+    KXV = 3,
+    VASO = 4,
   };
 
+  void update_constant(SparseSystem& system, std::vector<double>& parameters);
   void update_time(SparseSystem& system, std::vector<double>& parameters);
   void update_solution(SparseSystem& system, std::vector<double>& parameters,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,

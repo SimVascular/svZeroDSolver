@@ -44,21 +44,22 @@ class ChamberElastanceInductorExponential : public ChamberElastanceInductor {
       : ChamberElastanceInductor(
             id, model,
             BlockType::chamber_elastance_inductor_exponential,
-            {{"Emax", InputParameter()},
-             {"Impedance", InputParameter()},
+            {{"Impedance", InputParameter()},
+             {"Emax", InputParameter()},
              {"Kxp", InputParameter()},
              {"Kxv", InputParameter()},
              {"Vaso", InputParameter()}}) {}
 
+  /**
+   * @brief Local IDs of the parameters (Impedance=0 and Emax=1 shared with
+   * base class)
+   */
   enum ExponentialParamId {
-    EXP_EMAX = 0,
-    EXP_IMPEDANCE = 1,
     KXP = 2,
     KXV = 3,
     VASO = 4,
   };
 
-  void update_constant(SparseSystem& system, std::vector<double>& parameters);
   void update_time(SparseSystem& system, std::vector<double>& parameters);
   void update_solution(SparseSystem& system, std::vector<double>& parameters,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,

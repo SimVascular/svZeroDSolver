@@ -6,28 +6,10 @@
 
 void ChamberElastanceInductorExponential::get_elastance_values(
     std::vector<double>& parameters) {
-  double Emax = parameters[global_param_ids[ExponentialParamId::EXP_EMAX]];
+  double Emax = parameters[global_param_ids[ParamId::EMAX]];
 
   act_ = activation_func_->compute(model->time);
   Elas = act_ * Emax;
-}
-
-void ChamberElastanceInductorExponential::update_constant(
-    SparseSystem& system, std::vector<double>& parameters) {
-  double L = parameters[global_param_ids[ExponentialParamId::EXP_IMPEDANCE]];
-
-  // Eq 0: P_in - E(t)(Vc - Vrest) = 0
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
-
-  // Eq 1: P_in - P_out - L*dQ_out = 0
-  system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[1], global_var_ids[2]) = -1.0;
-  system.E.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -L;
-
-  // Eq 2: Q_in - Q_out - dVc = 0
-  system.F.coeffRef(global_eqn_ids[2], global_var_ids[1]) = 1.0;
-  system.F.coeffRef(global_eqn_ids[2], global_var_ids[3]) = -1.0;
-  system.E.coeffRef(global_eqn_ids[2], global_var_ids[4]) = -1.0;
 }
 
 void ChamberElastanceInductorExponential::update_time(
@@ -45,7 +27,7 @@ void ChamberElastanceInductorExponential::update_solution(
   double Kxp = parameters[global_param_ids[ExponentialParamId::KXP]];
   double Kxv = parameters[global_param_ids[ExponentialParamId::KXV]];
   double Vaso = parameters[global_param_ids[ExponentialParamId::VASO]];
-  double Emax = parameters[global_param_ids[ExponentialParamId::EXP_EMAX]];
+  double Emax = parameters[global_param_ids[ParamId::EMAX]];
   double Vc = y[global_var_ids[4]];
 
   double exp_term = std::exp(Kxv * (Vc - Vaso));

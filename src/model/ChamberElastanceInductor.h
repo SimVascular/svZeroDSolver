@@ -88,21 +88,21 @@ class ChamberElastanceInductor : public Block {
   ChamberElastanceInductor(int id, Model* model)
       : Block(id, model, BlockType::chamber_elastance_inductor,
               BlockClass::chamber,
-              {{"Emax", InputParameter()},
+              {{"Impedance", InputParameter()},
+               {"Emax", InputParameter()},
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
-               {"Vrs", InputParameter()},
-               {"Impedance", InputParameter()}}) {}
+               {"Vrs", InputParameter()}}) {}
 
   /**
-   * @brief Local IDs of the parameters
+   * @brief Local IDs of the parameters (shared indices first)
    */
   enum ParamId {
-    EMAX = 0,
-    EMIN = 1,
-    VRD = 2,
-    VRS = 3,
-    IMPEDANCE = 4,
+    IMPEDANCE = 0,
+    EMAX = 1,
+    EMIN = 2,
+    VRD = 3,
+    VRS = 4,
   };
 
   void setup_dofs(DOFHandler& dofhandler);

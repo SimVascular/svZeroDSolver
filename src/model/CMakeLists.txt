@@ -14,6 +14,7 @@ set(CXXSRCS
   BloodVesselJunction.cpp
   ChamberSphere.cpp
   ChamberElastanceInductor.cpp
+  ChamberElastanceInductorExponential.cpp
   ClosedLoopCoronaryBC.cpp
   ClosedLoopCoronaryLeftBC.cpp
   ClosedLoopCoronaryRightBC.cpp
@@ -46,6 +47,7 @@ set(HDRS
   BloodVesselJunction.h
   ChamberSphere.h
   ChamberElastanceInductor.h
+  ChamberElastanceInductorExponential.h
   ClosedLoopCoronaryBC.h
   ClosedLoopCoronaryLeftBC.h
   ClosedLoopCoronaryRightBC.h

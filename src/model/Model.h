@@ -22,6 +22,7 @@
 #include "BloodVesselJunction.h"
 #include "BloodVesselRC.h"
 #include "ChamberElastanceInductor.h"
+#include "ChamberElastanceInductorExponential.h"
 #include "ChamberSphere.h"
 #include "ClosedLoopCoronaryLeftBC.h"
 #include "ClosedLoopCoronaryRightBC.h"

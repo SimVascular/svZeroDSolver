@@ -13,12 +13,11 @@
 
 #include "ActivationFunction.h"
 #include "Block.h"
-#include "Model.h"
 #include "SparseSystem.h"
 #include "debug.h"
 
 /**
- * @brief Cardiac chamber with elastance and inductor.
+ * @brief Cardiac chamber with linear elastance and inductor.
  *
  * Models a cardiac chamber as a time-varying capacitor (elastance with
  * specified resting volumes) and an inductor. See \cite kerckhoffs2007coupling
@@ -55,90 +54,25 @@
  * Q_{in}-Q_{out}-\dot{V}_c=0
  * \f]
  *
- * ### Local contributions
- *
- * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
- * P_{out} & Q_{out} & V_c\end{array}\right]^{T} \f]
- *
- * \f[
- * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
- * 0 & 0 & 0 & 0 & 0\\
- * 0 & 0 & 0 & -L & 0\\
- * 0 & 0 & 0 & 0 & -1
- * \end{array}\right]
- * \f]
- *
- * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
- * 1 & 0 &  0 & 0  & E(t) \\
- * 1 & 0 & -1 & 0  & 0 \\
- * 0 & 1 &  0 & -1 & 0
- * \end{array}\right]
- * \f]
- *
- * \f[
- * \mathbf{c}^{e}=\left[\begin{array}{c}
- * E(t)V_{rest} \\
- * 0 \\
- * 0
- * \end{array}\right]
- * \f]
- *
- * In the above equations,
+ * where
  *
  * \f[
  * V_{rest}(t)= \{1-A(t)\}(V_{rd}-V_{rs})+V_{rs}
  * \f]
  *
  * \f[
- * A(t)=-\frac{1}{2}cos(2 \pi T_{contract}/T_{twitch})
- * \f]
- *
- * \f[
  * E(t)=(E_{max}-E_{min})A(t) + E_{min}
  * \f]
  *
- *
  * ### Parameters
- *
- * Parameter sequence for constructing this block
  *
  * * `0` Emax: Maximum elastance
  * * `1` Emin: Minimum elastance
  * * `2` Vrd: Rest diastolic volume
  * * `3` Vrs: Rest systolic volume
- * * `4` t_active: Activation time
- * * `5` t_twitch: Twitch time
- * * `6` Impedance: Impedance of the outflow
- *
- * ### Usage in json configuration file
- *
- *     "chambers": [
- *         {
- *             "type": "ChamberElastanceInductor",
- *             "name": "ventricle",
- *             "values": {
- *                 "Emax": 1.057,
- *                 "Emin": 0.091,
- *                 "Vrd": 26.1,
- *                 "Vrs": 18.0,
- *                 "Impedance": 0.000351787
- *             },
- *             "activation_function": {
- *                 "type": "half_cosine",
- *                 "t_active": 0.2,
- *                 "t_twitch": 0.3
- *             }
- *         }
- *     ],
- *     "initial_condition": {
- *         "Vc:ventricle": 96.07
- *     }
+ * * `4` Impedance: Impedance of the outflow
  *
  * ### Internal variables
- *
- * Names of internal variables in this block's output:
  *
  * * `Vc`: Chamber volume
  *
@@ -158,14 +92,10 @@ class ChamberElastanceInductor : public Block {
                {"Emin", InputParameter()},
                {"Vrd", InputParameter()},
                {"Vrs", InputParameter()},
-               {"Impedance", InputParameter()},
-               {"Kxp", InputParameter(true)},
-               {"Kxv", InputParameter(true)},
-               {"Vaso", InputParameter(true)}}) {}
+               {"Impedance", InputParameter()}}) {}
 
   /**
    * @brief Local IDs of the parameters
-   *
    */
   enum ParamId {
     EMAX = 0,
@@ -173,78 +103,35 @@ class ChamberElastanceInductor : public Block {
     VRD = 2,
     VRS = 3,
     IMPEDANCE = 4,
-    KXP = 5,  ///< Passive pressure scaling (optional, 0 = linear mode)
-    KXV = 6,  ///< Passive volume scaling (optional)
-    VASO = 7  ///< Passive resting volume (optional)
   };
 
-  /**
-   * @brief Set up the degrees of freedom (DOF) of the block
-   *
-   * Set global_var_ids and global_eqn_ids of the element based on the
-   * number of equations and the number of internal variables of the
-   * element.
-   *
-   * @param dofhandler Degree-of-freedom handler to register variables and
-   * equations at
-   */
   void setup_dofs(DOFHandler& dofhandler);
-
-  /**
-   * @brief Update the constant contributions of the element in a sparse
-   system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
   void update_constant(SparseSystem& system, std::vector<double>& parameters);
-
-  /**
-   * @brief Update the time-dependent contributions of the element in a sparse
-   * system
-   *
-   * @param system System to update contributions at
-   * @param parameters Parameters of the model
-   */
   void update_time(SparseSystem& system, std::vector<double>& parameters);
 
-  /**
-   * @brief Update the solution-dependent contributions of the element in a
-   * sparse system. Only active when Kxp > 0 (exponential passive atrial mode).
-   */
-  void update_solution(SparseSystem& system, std::vector<double>& parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
+  TripletsContributions num_triplets{6, 2, 0};
 
-  /**
-   * @brief Number of triplets of element
-   *
-   * Number of triplets that the element contributes to the global system
-   * (relevant for sparse memory reservation)
-   */
-  TripletsContributions num_triplets{6, 2, 1};
-
- private:
-  double Elas;        // Chamber Elastance
-  double Vrest;       // Rest Volume
-  double act_ = 0.0;  // Last computed activation
-  std::unique_ptr<ActivationFunction> activation_func_;  // Activation function
-
- public:
-  /**
-   * @brief Set the activation function (takes ownership)
-   *
-   * @param af Unique pointer to the activation function
-   */
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
- private:
+ protected:
   /**
-   * @brief Update the elastance functions which depend on time
-   *
-   * @param parameters Parameters of the model
+   * @brief Construct a ChamberElastanceInductor with custom block type and
+   * parameters. Used by derived classes.
    */
-  void get_elastance_values(std::vector<double>& parameters);
+  ChamberElastanceInductor(
+      int id, Model* model, BlockType block_type,
+      std::vector<std::pair<std::string, InputParameter>> params)
+      : Block(id, model, block_type, BlockClass::chamber, params) {}
+
+  double Elas = 0.0;   ///< Current chamber elastance
+  double Vrest = 0.0;   ///< Current rest volume
+  double act_ = 0.0;   ///< Last computed activation
+  std::unique_ptr<ActivationFunction> activation_func_;
+
+  /**
+   * @brief Compute elastance and rest volume from activation and parameters.
+   */
+  virtual void get_elastance_values(std::vector<double>& parameters);
 };
 
 #endif  // SVZERODSOLVER_MODEL_CHAMBERELASTANCEINDUCTOR_HPP_

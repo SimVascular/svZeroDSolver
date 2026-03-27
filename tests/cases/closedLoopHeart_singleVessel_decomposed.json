@@ -1,8 +1,7 @@
 {
   "description": {
     "description of test case": "Decomposed four-chamber closed-loop heart model. Uses ChamberElastanceInductor, ValveTanh, BloodVessel, and BloodVesselRC. Parameters from Sankaran et al. 2012 and Menon et al. 2023.",
-    "circuit": "RA -> TV -> RV -> PV -> pul_vessel -> LA -> MV -> LV -> AV -> aortic_cap -> branch0_seg0 -> sys_Rp -> sys_Rd -> RA",
-    }
+    "circuit": "RA -> TV -> RV -> PV -> pul_vessel -> LA -> MV -> LV -> AV -> aortic_cap -> branch0_seg0 -> sys_Rp -> sys_Rd -> RA"
   },
   "simulation_parameters": {
     "number_of_cardiac_cycles": 1,
@@ -90,7 +89,7 @@
   "chambers": [
     {
       "_comment_": "Right atrium. Emax=Emax_ra, Impedance=Lra_v. Exponential passive P-V (Kxp_ra/Kxv_ra/Vaso_ra). Wrapping cosine activation matches atrial AA(t) from Sankaran 2012.",
-      "type": "ChamberElastanceInductor",
+      "type": "ChamberElastanceInductorExponential",
       "name": "RA",
       "values": {
         "Emax": 0.208858,
@@ -123,7 +122,7 @@
     },
     {
       "_comment_": "Left atrium. Emax=Emax_la, Impedance=Lla_v. Exponential passive P-V (Kxp_la/Kxv_la/Vaso_la). Wrapping cosine activation matches atrial AA(t) from Sankaran 2012.",
-      "type": "ChamberElastanceInductor",
+      "type": "ChamberElastanceInductorExponential",
       "name": "LA",
       "values": {
         "Emax": 0.303119,

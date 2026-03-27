@@ -124,7 +124,7 @@ class ChamberElastanceInductor : public Block {
       : Block(id, model, block_type, BlockClass::chamber, params) {}
 
   double Elas = 0.0;   ///< Current chamber elastance
-  double Vrest = 0.0;   ///< Current rest volume
+  double Vrest = 0.0;  ///< Current rest volume
   double act_ = 0.0;   ///< Last computed activation
   std::unique_ptr<ActivationFunction> activation_func_;
 

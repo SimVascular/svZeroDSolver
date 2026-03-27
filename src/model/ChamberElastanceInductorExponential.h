@@ -42,8 +42,7 @@ class ChamberElastanceInductorExponential : public ChamberElastanceInductor {
  public:
   ChamberElastanceInductorExponential(int id, Model* model)
       : ChamberElastanceInductor(
-            id, model,
-            BlockType::chamber_elastance_inductor_exponential,
+            id, model, BlockType::chamber_elastance_inductor_exponential,
             {{"Impedance", InputParameter()},
              {"Emax", InputParameter()},
              {"Kxp", InputParameter()},

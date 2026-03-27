@@ -30,15 +30,23 @@
  */
 class BloodVesselRC : public Block {
  public:
+  /**
+   * @brief Construct a new BloodVesselRC object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   BloodVesselRC(int id, Model* model)
       : Block(id, model, BlockType::blood_vessel_rc, BlockClass::vessel,
               {{"Rpd", InputParameter()}, {"Cp", InputParameter()}}) {}
 
+  /// @brief Local IDs of the parameters
   enum ParamId { RPD = 0, CP = 1 };
 
   void setup_dofs(DOFHandler& dofhandler);
   void update_constant(SparseSystem& system, std::vector<double>& parameters);
 
+  /// @brief Number of triplets of element
   TripletsContributions num_triplets{5, 1, 0};
 };
 

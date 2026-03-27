@@ -225,6 +225,11 @@ class TwoHillActivation : public ActivationFunction {
  */
 class WrappingCosineActivation : public ActivationFunction {
  public:
+  /**
+   * @brief Construct a new WrappingCosineActivation object
+   *
+   * @param cardiac_period Cardiac cycle period
+   */
   explicit WrappingCosineActivation(double cardiac_period)
       : ActivationFunction(cardiac_period, {{"Tsa", InputParameter()},
                                             {"tpwave", InputParameter()}}) {}
@@ -246,6 +251,11 @@ class WrappingCosineActivation : public ActivationFunction {
  */
 class FourierActivation : public ActivationFunction {
  public:
+  /**
+   * @brief Construct a new FourierActivation object
+   *
+   * @param cardiac_period Cardiac cycle period
+   */
   explicit FourierActivation(double cardiac_period)
       : ActivationFunction(cardiac_period, {}),
         norm_min_(0.0),

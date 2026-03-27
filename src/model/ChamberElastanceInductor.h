@@ -109,6 +109,7 @@ class ChamberElastanceInductor : public Block {
   void update_constant(SparseSystem& system, std::vector<double>& parameters);
   void update_time(SparseSystem& system, std::vector<double>& parameters);
 
+  /// @brief Number of triplets of element
   TripletsContributions num_triplets{6, 2, 0};
 
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
@@ -117,6 +118,11 @@ class ChamberElastanceInductor : public Block {
   /**
    * @brief Construct a ChamberElastanceInductor with custom block type and
    * parameters. Used by derived classes.
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   * @param block_type The specific block type for the derived class
+   * @param params Parameter list for the derived class
    */
   ChamberElastanceInductor(
       int id, Model* model, BlockType block_type,
@@ -126,10 +132,13 @@ class ChamberElastanceInductor : public Block {
   double Elas = 0.0;   ///< Current chamber elastance
   double Vrest = 0.0;  ///< Current rest volume
   double act_ = 0.0;   ///< Last computed activation
+  /// @brief Activation function
   std::unique_ptr<ActivationFunction> activation_func_;
 
   /**
    * @brief Compute elastance and rest volume from activation and parameters.
+   *
+   * @param parameters Parameters of the model
    */
   virtual void get_elastance_values(std::vector<double>& parameters);
 };

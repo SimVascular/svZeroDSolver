@@ -40,6 +40,12 @@
  */
 class ChamberElastanceInductorExponential : public ChamberElastanceInductor {
  public:
+  /**
+   * @brief Construct a new ChamberElastanceInductorExponential object
+   *
+   * @param id Global ID of the block
+   * @param model The model to which the block belongs
+   */
   ChamberElastanceInductorExponential(int id, Model* model)
       : ChamberElastanceInductor(
             id, model, BlockType::chamber_elastance_inductor_exponential,
@@ -64,6 +70,7 @@ class ChamberElastanceInductorExponential : public ChamberElastanceInductor {
                        const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
 
+  /// @brief Number of triplets of element
   TripletsContributions num_triplets{6, 2, 1};
 
  protected:

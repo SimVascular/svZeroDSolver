@@ -1,13 +1,7 @@
 {
   "description": {
-    "description of test case": "Decomposed four-chamber closed-loop heart model equivalent to closedLoopHeart_singleVessel.json. Uses individual ChamberElastanceInductor, ValveTanh, BloodVessel, and BloodVesselRC blocks instead of the monolithic ClosedLoopHeartAndPulmonary block. Parameters from Sankaran et al. 2012 and Menon et al. 2023.",
+    "description of test case": "Decomposed four-chamber closed-loop heart model. Uses ChamberElastanceInductor, ValveTanh, BloodVessel, and BloodVesselRC. Parameters from Sankaran et al. 2012 and Menon et al. 2023.",
     "circuit": "RA -> TV -> RV -> PV -> pul_vessel -> LA -> MV -> LV -> AV -> aortic_cap -> branch0_seg0 -> sys_Rp -> sys_Rd -> RA",
-    "parameter mapping": {
-      "_comment_": "Mapping from monolithic ClosedLoopHeartAndPulmonary parameters to individual block parameters. See closedLoopHeart_singleVessel.json for original values. Conversion: pConv = 1333.34 (mmHg to dyn/cm^2).",
-      "chambers": "Emax from Erv_s/Elv_s/Emax_ra/Emax_la. Impedance (L) from Lrv_a/Llv_a/Lra_v/Lla_v. Atria use exponential passive P-V (Kxp/Kxv/Vaso).",
-      "valves": "Rmin from Rrv_a/Rlv_ao/Rra_v/Rla_v. ValveTanh replaces the monolithic hard on/off valve.",
-      "pulmonary": "BloodVesselRC (flow-through RC windkessel, Q_in=Q_out) from Rpd/Cp. Matches Sankaran 2012 eq. X6'=X4-X7.",
-      "systemic": "ClosedLoopRCR (Rp/Rd/C) decomposed into BloodVessel(R=Rp,C) + BloodVessel(R=Rd). Aortic capacitance Cpa as BloodVessel(R=0,C=Cpa)."
     }
   },
   "simulation_parameters": {
@@ -21,7 +15,7 @@
   "boundary_conditions": [],
   "vessels": [
     {
-      "_comment_": "Pulmonary vasculature: flow-through RC windkessel (Sankaran 2012, eq. X6'=X4-X7). Rpd = 1.120725*Rpd_base/pConv, Cp from monolithic.",
+      "_comment_": "Pulmonary vasculature: flow-through RC windkessel (Sankaran 2012, eq. X6'=X4-X7). Rpd = 1.120725*Rpd_base/pConv,.",
       "vessel_name": "pul_vessel",
       "vessel_id": 1,
       "vessel_length": 10.0,
@@ -37,7 +31,7 @@
       "zero_d_element_values": { "R_poiseuille": 0.0, "C": 0.556854 }
     },
     {
-      "_comment_": "Aorta. R = 4.464119/pConv, L = 5.25/pConv. Same as closedLoopHeart_singleVessel.json.",
+      "_comment_": "Aorta. R = 4.464119/pConv, L = 5.25/pConv.",
       "vessel_name": "branch0_seg0",
       "vessel_id": 3,
       "vessel_length": 10.0,
@@ -45,7 +39,7 @@
       "zero_d_element_values": { "R_poiseuille": 0.003348073, "L": 0.004 }
     },
     {
-      "_comment_": "Systemic proximal R+C. Replaces ClosedLoopRCR Rp. C = 0.228215*1.044637, Rp = 0.09*R_total.",
+      "_comment_": "Systemic proximal R+C. C = 0.228215*1.044637, Rp = 0.09*R_total.",
       "vessel_name": "sys_Rp",
       "vessel_id": 4,
       "vessel_length": 10.0,
@@ -53,7 +47,7 @@
       "zero_d_element_values": { "R_poiseuille": 0.134156617, "C": 0.238401833 }
     },
     {
-      "_comment_": "Systemic distal R. Replaces ClosedLoopRCR Rd. Rd = 0.91*R_total.",
+      "_comment_": "Systemic distal R. Rd = 0.91*R_total.",
       "vessel_name": "sys_Rd",
       "vessel_id": 5,
       "vessel_length": 10.0,

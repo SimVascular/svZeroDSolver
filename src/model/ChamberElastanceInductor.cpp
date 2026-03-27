@@ -29,7 +29,7 @@ void ChamberElastanceInductor::update_time(SparseSystem& system,
                                            std::vector<double>& parameters) {
   get_elastance_values(parameters);
 
-  // Eq 0: F[0][4] = -Elas (coefficient on Vc)
+  // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -1 * Elas;
 
   // In exponential passive mode (Kxp > 0), C[0] is set in update_solution.

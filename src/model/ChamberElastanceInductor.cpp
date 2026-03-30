@@ -5,6 +5,7 @@
 #include "Model.h"
 
 void ChamberElastanceInductor::setup_dofs(DOFHandler& dofhandler) {
+  // Internal variable is chamber volume
   Block::setup_dofs_(dofhandler, 3, {"Vc"});
 }
 

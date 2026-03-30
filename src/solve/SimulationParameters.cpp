@@ -533,8 +533,7 @@ void create_closed_loop(
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& closed_loop_config = JsonWrapper(config, component, "name", i);
     std::string closed_loop_type = closed_loop_config["closed_loop_type"];
-    if (closed_loop_type == "ClosedLoopHeartAndPulmonary" ||
-        closed_loop_type == "ClosedLoopHeartAndPulmonarySmooth") {
+    if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
       if (heartpulmonary_block_present == false) {
         heartpulmonary_block_present = true;
         std::string heartpulmonary_name = "CLH";

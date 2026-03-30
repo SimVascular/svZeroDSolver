@@ -54,6 +54,36 @@
  * Q_{in}-Q_{out}-\dot{V}_c=0
  * \f]
  *
+ * ### Local contributions
+ *
+ * \f[
+ * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out} & V_c\end{array}\right]^{T} \f]
+ *
+ * \f[
+ * \mathbf{E}^{e}=\left[\begin{array}{ccccc}
+ * 0 & 0 & 0 & 0 & 0\\
+ * 0 & 0 & 0 & -L & 0\\
+ * 0 & 0 & 0 & 0 & -1
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
+ * 1 & 0 &  0 & 0  & -E(t) \\
+ * 1 & 0 & -1 & 0  & 0 \\
+ * 0 & 1 &  0 & -1 & 0
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{c}^{e}=\left[\begin{array}{c}
+ * E(t) V_{rest} \\
+ * 0 \\
+ * 0
+ * \end{array}\right]
+ * \f]
+ *
  * where
  *
  * \f[
@@ -64,13 +94,16 @@
  * E(t)=(E_{max}-E_{min})A(t) + E_{min}
  * \f]
  *
+ * The activation function \f$A(t)\f$ is provided as a separate object
+ * (e.g. half_cosine, fourier, wrapping_cosine).
+ *
  * ### Parameters
  *
- * * `0` Emax: Maximum elastance
- * * `1` Emin: Minimum elastance
- * * `2` Vrd: Rest diastolic volume
- * * `3` Vrs: Rest systolic volume
- * * `4` Impedance: Impedance of the outflow
+ * * `0` Impedance: Outflow inductance \f$L\f$
+ * * `1` Emax: Maximum elastance
+ * * `2` Emin: Minimum elastance
+ * * `3` Vrd: Rest diastolic volume
+ * * `4` Vrs: Rest systolic volume
  *
  * ### Internal variables
  *

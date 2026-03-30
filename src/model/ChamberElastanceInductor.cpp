@@ -13,7 +13,9 @@ void ChamberElastanceInductor::update_constant(
   double L = parameters[global_param_ids[ParamId::IMPEDANCE]];
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
+  // F[0][0] = 1.0 (P_in coefficient)
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
+  // F[0][4] = -E(t) and C[0] = E(t)*Vrest are set in update_time
 
   // Eq 1: P_in - P_out - L*dQ_out = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
@@ -30,9 +32,11 @@ void ChamberElastanceInductor::update_time(SparseSystem& system,
                                            std::vector<double>& parameters) {
   get_elastance_values(parameters);
 
-  // Eq 0: F[0][4] = -E(t), C[0] = E(t)*Vrest
+  // Eq 0: P_in - E(t)(Vc - Vrest) = 0
+  // F[0][4] = -E(t), C[0] = E(t)*Vrest
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -Elas;
   system.C.coeffRef(global_eqn_ids[0]) = Elas * Vrest;
+  // F[0][0] = 1.0 (P_in coefficient) is set in update_constant
 }
 
 void ChamberElastanceInductor::get_elastance_values(

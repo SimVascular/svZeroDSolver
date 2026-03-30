@@ -16,7 +16,8 @@ void ChamberElastanceInductorExponential::update_time(
     SparseSystem& system, std::vector<double>& parameters) {
   get_elastance_values(parameters);
 
-  // Eq 0: F[0][4] = -E(t). C[0] is set in update_solution (nonlinear).
+  // Eq 0: P_in - A(t)*Emax*(Vc - Vaso) - (1-A(t))*psi(Vc) = 0
+  // F[0][4] = -E(t). C[0] and dC_dy[0][4] are set in update_solution.
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -Elas;
 }
 
@@ -34,7 +35,9 @@ void ChamberElastanceInductorExponential::update_solution(
   double psi = Kxp * (exp_term - 1.0);
   double psi_d = Kxp * Kxv * exp_term;
 
+  // C[0] = A(t)*Emax*Vaso + (A(t)-1)*psi(Vc)
   system.C(global_eqn_ids[0]) = act_ * Emax * Vaso + psi * (act_ - 1.0);
+  // dC_dy[0][4] = (A(t)-1)*psi'(Vc)
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[4]) =
       psi_d * (act_ - 1.0);
 }

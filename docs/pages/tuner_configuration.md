@@ -129,7 +129,7 @@ Sensitivity default output directory:
 
 ## `sensitivity`
 
-- `n_samples` (`int`, optional, default `512`): Sobol sample count.
+- `n_samples` (`int`, optional, default `512`): quasi-random sample count for screening.
 
 # Validation Rules and Common Config Errors
 

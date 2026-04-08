@@ -30,6 +30,11 @@ def _compute_range(target: Dict) -> Tuple[np.ndarray, np.ndarray]:
     - target_range [min, max]
     Legacy alias: uncertainty
     """
+    def _ordered_bounds(lo: np.ndarray, hi: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        lo_arr = np.asarray(lo, dtype=float)
+        hi_arr = np.asarray(hi, dtype=float)
+        return np.minimum(lo_arr, hi_arr), np.maximum(lo_arr, hi_arr)
+
     relative_bounds = target.get('relative_bounds', target.get('uncertainty'))
     if 'target_file' in target:
         # Time series
@@ -44,7 +49,7 @@ def _compute_range(target: Dict) -> Tuple[np.ndarray, np.ndarray]:
         if relative_bounds is not None:
             pct = _parse_percent(relative_bounds)
             if pct is not None:
-                return (t * (1.0 - pct), t * (1.0 + pct))
+                return _ordered_bounds(t * (1.0 - pct), t * (1.0 + pct))
             if isinstance(relative_bounds, (list, tuple)) and len(relative_bounds) == 2:
                 lo_val, hi_val = float(relative_bounds[0]), float(relative_bounds[1])
                 return (np.full(len(t), lo_val), np.full(len(t), hi_val))
@@ -65,7 +70,10 @@ def _compute_range(target: Dict) -> Tuple[np.ndarray, np.ndarray]:
         if relative_bounds is not None:
             pct = _parse_percent(relative_bounds)
             if pct is not None:
-                return (np.array([v * (1.0 - pct)]), np.array([v * (1.0 + pct)]))
+                return _ordered_bounds(
+                    np.array([v * (1.0 - pct)]),
+                    np.array([v * (1.0 + pct)]),
+                )
             if isinstance(relative_bounds, (list, tuple)) and len(relative_bounds) == 2:
                 return (np.array([float(relative_bounds[0])]), np.array([float(relative_bounds[1])]))
         

@@ -3,7 +3,7 @@ sv0D Tuning Framework - right_heart_pa example.
 
 This script provides three modes:
 1. BASELINE MODE: Run the initial model and save all results for inspection
-2. SENSITIVITY MODE: Run global sensitivity analysis using Sobol indices
+2. SENSITIVITY MODE: Run correlation-based sensitivity screening
 3. OPTIMIZE MODE: Run optimization using targets specified in tuning yaml
 
 Usage:
@@ -152,7 +152,7 @@ def run_optimization(config_file):
 
 def run_sensitivity(config_file):
     """
-    Run global sensitivity analysis using Sobol indices.
+    Run correlation-based sensitivity screening.
     """
     print("="*70)
     print("SENSITIVITY ANALYSIS")

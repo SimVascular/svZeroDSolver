@@ -34,7 +34,7 @@ class ParameterHandler:
         with open(self.config_file, 'r') as f:
             return json.load(f)
     
-    def find_parameter(self, param_name: str) -> Tuple[Any, List[str]]:
+    def find_parameter(self, param_name: str) -> Tuple[Any, List[Any]]:
         """
         Find a parameter by name using name-based lookup.
         
@@ -47,7 +47,7 @@ class ParameterHandler:
             param_name: Parameter name in format "BlockName.ParameterName"
             
         Returns:
-            Tuple of (value, path) where path is list of keys to reach the parameter
+            Tuple of (value, path) where path is list of keys/indexes to reach the parameter
             
         Raises:
             ValueError: If parameter is not found
@@ -116,62 +116,12 @@ class ParameterHandler:
             value = float(value.item())
         elif isinstance(value, (np.integer, np.floating)):
             value = float(value)
-        
-        parts = param_name.split('.')
-        if len(parts) != 2:
-            raise ValueError(f"Parameter name must be in format 'BlockName.ParameterName', got '{param_name}'")
-        
-        block_name, param_key = parts
-        
-        # Try chambers first
-        if 'chambers' in self.config:
-            for chamber in self.config['chambers']:
-                if chamber.get('name') == block_name:
-                    if 'values' in chamber:
-                        chamber['values'][param_key] = value
-                        return
-        
-        # Try vessels
-        if 'vessels' in self.config:
-            for vessel in self.config['vessels']:
-                if vessel.get('vessel_name') == block_name:
-                    if 'zero_d_element_values' in vessel:
-                        if param_key in vessel['zero_d_element_values']:
-                            vessel['zero_d_element_values'][param_key] = value
-                            return
-                    # Set as top-level vessel property if not in zero_d_element_values
-                    vessel[param_key] = value
-                    return
-        
-        # Try valves
-        if 'valves' in self.config:
-            for valve in self.config['valves']:
-                if valve.get('name') == block_name:
-                    if 'params' in valve:
-                        valve['params'][param_key] = value
-                        return
-        
-        # Try boundary conditions
-        if 'boundary_conditions' in self.config:
-            for bc in self.config['boundary_conditions']:
-                if bc.get('bc_name') == block_name:
-                    if 'bc_values' in bc:
-                        bc['bc_values'][param_key] = value
-                        return
-        
-        # Try simulation parameters
-        if 'simulation_parameters' in self.config:
-            if block_name == 'simulation':
-                self.config['simulation_parameters'][param_key] = value
-                return
-        
-        # Try initial conditions
-        if 'initial_condition' in self.config:
-            if block_name == 'initial_condition' and param_key in self.config['initial_condition']:
-                self.config['initial_condition'][param_key] = value
-                return
-        
-        raise ValueError(f"Parameter '{param_name}' not found in configuration")
+
+        _, path = self.find_parameter(param_name)
+        target = self.config
+        for key in path[:-1]:
+            target = target[key]
+        target[path[-1]] = value
     
     def get_parameter(self, param_name: str) -> Any:
         """

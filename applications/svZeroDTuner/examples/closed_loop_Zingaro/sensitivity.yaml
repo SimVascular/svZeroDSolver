@@ -1,7 +1,7 @@
 # Sensitivity Analysis Configuration for Regazzoni closed-loop model
 #
 # This file specifies parameters to vary and quantities of interest to analyze
-# using global sensitivity analysis with Sobol indices.
+# using correlation-based sensitivity screening.
 
 model:
   config_file: "model.json"
@@ -34,7 +34,7 @@ quantities_of_interest:
 
 # Sensitivity analysis settings
 sensitivity:
-  n_samples: 256  # Number of samples for Sobol analysis
+  n_samples: 256  # Number of quasi-random samples for screening
                   # Recommended: 256-512 for quick screening, 1024-2048 for higher accuracy
                   # Higher = more accurate but slower
 

@@ -1,13 +1,13 @@
 """
 Sensitivity Analysis for sv0D Tuning Framework
 
-Performs global sensitivity analysis using variance-based methods to understand
-how parameter variations affect quantities of interest.
+Performs correlation-based sensitivity screening to understand how parameter
+variations affect quantities of interest.
 
-This implementation uses Sobol sampling for efficient parameter space exploration
-and correlation-based approximations for first-order and total-order sensitivity indices.
-The method provides screening-level sensitivity information suitable for identifying
-the most influential parameters.
+This implementation uses Sobol low-discrepancy sampling for parameter space
+exploration and reports screening metrics rather than true Sobol indices.
+The method provides screening-level sensitivity information suitable for
+identifying the most influential parameters.
 """
 
 import numpy as np
@@ -27,8 +27,18 @@ from .expression_handler import Expression
 
 class SensitivityAnalyzer:
     """
-    Performs global sensitivity analysis using Sobol indices.
+    Performs correlation-based sensitivity screening.
     """
+
+    ANALYSIS_LABEL = "correlation-based sensitivity screening"
+    FIRST_ORDER_LABEL = "First-order screening score (squared correlation)"
+    TOTAL_ORDER_LABEL = (
+        "Total-order screening score (binned conditional-variance heuristic)"
+    )
+    INDICES_FILENAME = "screening_indices.json"
+    PER_QOI_FIGURE_PREFIX = "screening"
+    HEATMAP_FIRST_FILENAME = "screening_heatmap_first_order.png"
+    HEATMAP_TOTAL_FILENAME = "screening_heatmap_total_order.png"
     
     def __init__(self, config_file: str):
         """
@@ -56,6 +66,14 @@ class SensitivityAnalyzer:
         self.quantities_of_interest = self.config.get('quantities_of_interest', [])
         self.sensitivity_config = self.config.get('sensitivity', {})
         self.output_config = self.config.get('output', {})
+
+        for param in self.parameters:
+            try:
+                self.param_handler.get_parameter(param["name"])
+            except ValueError as exc:
+                raise ValueError(
+                    f"Sensitivity parameter '{param['name']}' not found in model configuration"
+                ) from exc
         
         # Sensitivity analysis settings
         self.n_samples = self.sensitivity_config.get('n_samples', 512)
@@ -195,7 +213,7 @@ class SensitivityAnalyzer:
     
     def run(self) -> Dict:
         """
-        Run sensitivity analysis using correlation-based Sobol indices.
+        Run correlation-based sensitivity screening.
         
         Returns:
             Dictionary with sensitivity analysis results
@@ -214,8 +232,8 @@ class SensitivityAnalyzer:
         bounds = [p['bounds'] for p in self.parameters]
         n_params = len(param_names)
         
-        # Generate Sobol samples
-        print("Generating Sobol samples...")
+        # Generate Sobol low-discrepancy samples for screening.
+        print("Generating quasi-random screening samples...")
         
         # Extract and validate bounds
         lower_bounds = []
@@ -272,8 +290,8 @@ class SensitivityAnalyzer:
         print(f"  Completed {self.n_samples} simulations")
         print()
         
-        # Compute Sobol indices for each QoI
-        print("Computing Sobol indices...")
+        # Compute screening metrics for each QoI
+        print("Computing screening metrics...")
         print("-"*70)
         
         self.results = {}
@@ -294,8 +312,7 @@ class SensitivityAnalyzer:
             else:
                 samples_valid = samples
             
-            # Compute Sobol indices from samples
-            # Use simple variance-based method since we already have the samples
+            # Compute screening metrics from the sampled outputs.
             try:
                 total_variance = np.var(qoi_values_array)
                 
@@ -308,16 +325,15 @@ class SensitivityAnalyzer:
                     first_order = {}
                     total_order = {}
                     
-                    # Estimate first-order and total-order indices
-                    # Using correlation-based approximation (fast, reasonable for screening)
+                    # Estimate first-order and total-order screening scores.
                     for i, param_name in enumerate(param_names):
                         param_values = samples_valid[:, i]
                         
-                        # First-order: squared correlation coefficient
+                        # First-order score: squared correlation coefficient
                         correlation = np.corrcoef(param_values, qoi_values_array)[0, 1]
                         first_order[param_name] = max(0.0, min(1.0, correlation**2))
                         
-                        # Total-order: Use conditional variance estimation
+                        # Total-order score: use conditional variance estimation
                         # Group samples by parameter value bins
                         n_bins = min(10, len(param_values) // 10)
                         if n_bins >= 3:
@@ -332,13 +348,17 @@ class SensitivityAnalyzer:
                                     var_within += np.var(qoi_values_array[mask]) * np.sum(mask)
                             var_within /= len(qoi_values_array)
                             
-                            # Total order index: 1 - (conditional variance / total variance)
+                            # Total-order screening score: 1 - conditional variance fraction
                             total_order[param_name] = max(0.0, min(1.0, 1.0 - var_within / total_variance))
                         else:
                             # Not enough samples for binning, use first-order as approximation
                             total_order[param_name] = first_order[param_name]
                 
                 self.results[qoi_key] = {
+                    'analysis_type': 'correlation_screening',
+                    'sampler': 'sobol_sequence',
+                    'first_order_metric': 'squared_pearson_correlation',
+                    'total_order_metric': 'binned_conditional_variance_screening',
                     'first_order': first_order,
                     'total_order': total_order,
                     'mean': float(np.mean(qoi_values_array)),
@@ -353,6 +373,10 @@ class SensitivityAnalyzer:
                 traceback.print_exc()
                 # Fallback to zeros
                 self.results[qoi_key] = {
+                    'analysis_type': 'correlation_screening',
+                    'sampler': 'sobol_sequence',
+                    'first_order_metric': 'squared_pearson_correlation',
+                    'total_order_metric': 'binned_conditional_variance_screening',
                     'first_order': {param_names[i]: 0.0 for i in range(n_params)},
                     'total_order': {param_names[i]: 0.0 for i in range(n_params)},
                     'mean': float(np.mean(qoi_values_array)),
@@ -383,11 +407,11 @@ class SensitivityAnalyzer:
         print(f"Saving results to {output_dir}/")
         print("-"*70)
         
-        # Save Sobol indices as JSON
-        indices_file = output_path / 'sobol_indices.json'
+        # Save screening metrics as JSON
+        indices_file = output_path / self.INDICES_FILENAME
         with open(indices_file, 'w') as f:
             json.dump(self.results, f, indent=2)
-        print(f"  ✓ Saved Sobol indices: {indices_file.name}")
+        print(f"  ✓ Saved screening metrics: {indices_file.name}")
         
         # Save sample data as CSV
         if self.sample_data:
@@ -417,6 +441,8 @@ class SensitivityAnalyzer:
             f.write("="*70 + "\n")
             f.write("SENSITIVITY ANALYSIS SUMMARY\n")
             f.write("="*70 + "\n\n")
+            f.write(f"Method: {self.ANALYSIS_LABEL}\n")
+            f.write("Sampling: Sobol low-discrepancy sequence\n\n")
             
             f.write(f"Parameters analyzed: {[p['name'] for p in self.parameters]}\n")
             f.write(f"Number of samples: {self.n_samples}\n\n")
@@ -430,12 +456,12 @@ class SensitivityAnalyzer:
                 f.write(f"Min:  {results['min']:.6e}\n")
                 f.write(f"Max:  {results['max']:.6e}\n\n")
                 
-                f.write("First-order Sobol indices (main effects):\n")
+                f.write(f"{self.FIRST_ORDER_LABEL}:\n")
                 for param, value in results['first_order'].items():
                     f.write(f"  {param:<30} {value:>10.4f}\n")
                 f.write("\n")
                 
-                f.write("Total-order Sobol indices (main + interaction effects):\n")
+                f.write(f"{self.TOTAL_ORDER_LABEL}:\n")
                 for param, value in results['total_order'].items():
                     f.write(f"  {param:<30} {value:>10.4f}\n")
                 f.write("\n\n")
@@ -452,39 +478,39 @@ class SensitivityAnalyzer:
         
         param_names = [p['name'] for p in self.parameters]
         
-        # Create heatmap of all Sobol indices
+        # Create heatmap of all screening scores
         self._create_heatmap(output_path, param_names)
         
         for qoi_key, results in self.results.items():
-            # Create bar plot of Sobol indices
+            # Create bar plot of screening scores
             fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
             
-            # First-order indices
+            # First-order scores
             first_order_values = [results['first_order'][p] for p in param_names]
             ax1.bar(range(len(param_names)), first_order_values)
             ax1.set_xticks(range(len(param_names)))
             ax1.set_xticklabels(param_names, rotation=45, ha='right')
-            ax1.set_ylabel('First-order Sobol Index')
+            ax1.set_ylabel('First-order screening score')
             ax1.set_title('Main Effects')
             ax1.grid(axis='y', alpha=0.3)
             ax1.set_ylim([0, 1])
             
-            # Total-order indices
+            # Total-order scores
             total_order_values = [results['total_order'][p] for p in param_names]
             ax2.bar(range(len(param_names)), total_order_values)
             ax2.set_xticks(range(len(param_names)))
             ax2.set_xticklabels(param_names, rotation=45, ha='right')
-            ax2.set_ylabel('Total-order Sobol Index')
+            ax2.set_ylabel('Total-order screening score')
             ax2.set_title('Total Effects (Main + Interactions)')
             ax2.grid(axis='y', alpha=0.3)
             ax2.set_ylim([0, 1])
             
-            plt.suptitle(f'Sensitivity Analysis: {qoi_key}')
+            plt.suptitle(f'Sensitivity Screening: {qoi_key}')
             plt.tight_layout()
             
             # Save figure
             safe_filename = qoi_key.replace(':', '_').replace('/', '_')
-            fig_file = output_path / f'sobol_{safe_filename}.png'
+            fig_file = output_path / f'{self.PER_QOI_FIGURE_PREFIX}_{safe_filename}.png'
             plt.savefig(fig_file, dpi=150, bbox_inches='tight')
             plt.close()
         
@@ -517,7 +543,7 @@ class SensitivityAnalyzer:
                 plt.close()
     
     def _create_heatmap(self, output_path: Path, param_names: List[str]):
-        """Create heatmap visualization of all Sobol indices.
+        """Create heatmap visualization of all screening scores.
         
         Rows = parameters, Columns = quantities of interest.
         """
@@ -548,7 +574,7 @@ class SensitivityAnalyzer:
         ax1.set_yticks(range(len(param_names)))
         ax1.set_xticklabels(qoi_keys, rotation=45, ha='right')
         ax1.set_yticklabels(param_names, fontsize=9)
-        ax1.set_title('First-Order Sobol Indices (Main Effects)', fontweight='bold')
+        ax1.set_title(self.FIRST_ORDER_LABEL, fontweight='bold')
         ax1.set_xlabel('Quantities of Interest')
         ax1.set_ylabel('Parameters')
         for j in range(len(param_names)):
@@ -560,7 +586,7 @@ class SensitivityAnalyzer:
         cbar1 = plt.colorbar(im1, ax=ax1, fraction=0.046, pad=0.04)
         cbar1.set_label('Sensitivity Index', rotation=270, labelpad=15)
         plt.tight_layout()
-        fig1.savefig(output_path / 'sobol_heatmap_first_order.png', dpi=200, bbox_inches='tight')
+        fig1.savefig(output_path / self.HEATMAP_FIRST_FILENAME, dpi=200, bbox_inches='tight')
         plt.close(fig1)
         
         # Figure 2: Total-order heatmap
@@ -570,7 +596,7 @@ class SensitivityAnalyzer:
         ax2.set_yticks(range(len(param_names)))
         ax2.set_xticklabels(qoi_keys, rotation=45, ha='right')
         ax2.set_yticklabels(param_names, fontsize=9)
-        ax2.set_title('Total-Order Sobol Indices (Main + Interactions)', fontweight='bold')
+        ax2.set_title(self.TOTAL_ORDER_LABEL, fontweight='bold')
         ax2.set_xlabel('Quantities of Interest')
         ax2.set_ylabel('Parameters')
         for j in range(len(param_names)):
@@ -582,10 +608,12 @@ class SensitivityAnalyzer:
         cbar2 = plt.colorbar(im2, ax=ax2, fraction=0.046, pad=0.04)
         cbar2.set_label('Sensitivity Index', rotation=270, labelpad=15)
         plt.tight_layout()
-        fig2.savefig(output_path / 'sobol_heatmap_total_order.png', dpi=200, bbox_inches='tight')
+        fig2.savefig(output_path / self.HEATMAP_TOTAL_FILENAME, dpi=200, bbox_inches='tight')
         plt.close(fig2)
         
-        print(f"  ✓ Created heatmaps: sobol_heatmap_first_order.png, sobol_heatmap_total_order.png")
+        print(
+            f"  ✓ Created heatmaps: {self.HEATMAP_FIRST_FILENAME}, {self.HEATMAP_TOTAL_FILENAME}"
+        )
 
 
 def run_sensitivity_analysis(config_file: str) -> Dict:

@@ -1,10 +1,12 @@
 # Tuning configuration for Regazzoni closed-loop model
 #
 # INSTRUCTIONS:
-# 1. Run: python main.py baseline
+# 1. Run baseline:
+#    python -c 'from main import run_baseline; run_baseline("model.json")'
 # 2. Inspect baseline_results.csv and baseline_summary.csv
 # 3. Update the 'targets' section below with your desired targets
-# 4. Run: python main.py optimize
+# 4. Run optimization:
+#    svzerodtuner optimize tuning_nelder_mead.yaml
 
 model:
   config_file: "model.json"

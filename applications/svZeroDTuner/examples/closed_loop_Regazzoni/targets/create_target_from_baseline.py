@@ -25,7 +25,8 @@ def main():
     if not os.path.exists(baseline_path):
         raise FileNotFoundError(
             f"Baseline results not found: {baseline_path}\n"
-            "Run baseline mode first: python main.py (with run_baseline)"
+            "Generate baseline results first with:\n"
+            "python -c 'from main import run_baseline; run_baseline(\"model.json\")'"
         )
 
     df = pd.read_csv(baseline_path)

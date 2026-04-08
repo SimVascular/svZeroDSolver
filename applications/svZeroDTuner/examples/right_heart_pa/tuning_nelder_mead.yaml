@@ -1,4 +1,7 @@
 # Tuning configuration for right_heart_pa example (Nelder-Mead, cgs units)
+#
+# Run with:
+#   svzerodtuner optimize tuning_nelder_mead.yaml
 
 model:
   config_file: "model.json"

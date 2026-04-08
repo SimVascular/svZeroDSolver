@@ -2,11 +2,12 @@
 # Tests time series target matching: tune parameters to match a target waveform.
 #
 # INSTRUCTIONS:
-# 1. Run baseline first to inspect outputs: python main.py (with run_baseline)
+# 1. Run baseline first to inspect outputs:
+#    python -c 'from main import run_baseline; run_baseline("model.json")'
 # 2. Optionally create target from baseline: copy a column from baseline_results.csv
 #    to targets/ as CSV with 'time' and 'value' columns
-# 3. Edit main.py to use: run_optimization("tuning_time_series_target.yaml")
-# 4. Run: python main.py
+# 3. Run optimization:
+#    svzerodtuner optimize tuning_time_series_target.yaml
 
 model:
   config_file: "model.json"

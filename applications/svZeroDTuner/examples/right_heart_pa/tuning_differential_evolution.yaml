@@ -1,10 +1,12 @@
 # Tuning configuration for right_heart_pa example (cgs units)
 #
 # INSTRUCTIONS:
-# 1. Run baseline in main.py to generate baseline_results/
+# 1. Run baseline to generate baseline_results/:
+#    python -c 'from main import run_baseline; run_baseline("model.json")'
 # 2. Inspect baseline_summary.csv for available output names
 # 3. Update targets below as needed
-# 4. Run optimization in main.py
+# 4. Run optimization:
+#    svzerodtuner optimize tuning_differential_evolution.yaml
 
 model:
   config_file: "model.json"

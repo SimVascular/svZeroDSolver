@@ -6,9 +6,10 @@ This script provides three modes:
 2. SENSITIVITY MODE: Run correlation-based sensitivity screening
 3. OPTIMIZE MODE: Run optimization using targets specified in tuning.yaml
 
-Usage:
-    Edit the main() function and uncomment the mode you want to run, then:
-    python main.py
+Recommended command-line workflow:
+    Baseline: python -c 'from main import run_baseline; run_baseline("model.json")'
+    Optimize: svzerodtuner optimize tuning_nelder_mead.yaml
+    Sensitivity: svzerodtuner sensitivity sensitivity.yaml
 """
 
 import os
@@ -128,7 +129,7 @@ def run_baseline(config_file):
     print(f"2. View plots in {output_dir}/ to visualize the outputs")
     print("3. Choose which outputs you want to target")
     print("4. Update tuning.yaml with your desired targets")
-    print("5. Edit main.py to switch to optimization mode")
+    print("5. Run svzerodtuner optimize <tuning_config.yaml>")
     print("="*70)
     print()
 

@@ -14,7 +14,7 @@ Recommended starting point:
 
 ```bash
 cd applications/svZeroDTuner/examples/closed_loop_Regazzoni
-python main.py
+python -c 'from main import run_baseline; run_baseline("model.json")'
 ```
 
 2. Configure scalar targets in one of:
@@ -22,7 +22,7 @@ python main.py
 - `tuning_differential_evolution.yaml`
 - `tuning_nelder_mead.yaml`
 
-3. Run optimization using `main.py` or CLI
+3. Run optimization with the CLI
 
 ```bash
 svzerodtuner optimize applications/svZeroDTuner/examples/closed_loop_Regazzoni/tuning_differential_evolution.yaml
@@ -43,7 +43,13 @@ Pulmonary tree example:
 
 ## Workflow
 
-1. Run baseline with `model.json` and inspect generated baseline outputs.
+1. Run baseline and inspect generated baseline outputs:
+
+```bash
+cd applications/svZeroDTuner/examples/right_heart_pa
+python -c 'from main import run_baseline; run_baseline("model.json")'
+```
+
 2. Tune pulmonary pressures and RPA/LPA flow split using:
 - `tuning_differential_evolution.yaml`, or
 - `tuning_nelder_mead.yaml`

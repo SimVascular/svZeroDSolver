@@ -10,11 +10,12 @@ This example couples a prescribed venous inflow waveform to a right atrium and r
 - Upstream venous return: `VEN_SYS` vessel (CRL) driven by `VEN_IN_FLOW`
 
 All inputs and targets in this example are in cgs units:
+
 - Pressure: dyn/cm^2
 - Flow: cm^3/s
-- Resistance: dyn*s/cm^5
+- Resistance: dyn\*s/cm^5
 - Compliance: cm^5/dyn
-- Inductance: dyn*s^2/cm^5
+- Inductance: dyn\*s^2/cm^5
 
 ## Current Model Notes
 
@@ -25,6 +26,7 @@ All inputs and targets in this example are in cgs units:
 - Solver settings are more conservative (higher nonlinear iterations, smaller time step).
 
 Two tuning configs are provided:
+
 - `tuning_differential_evolution.yaml`
 - `tuning_nelder_mead.yaml`
 
@@ -32,18 +34,42 @@ In practice, Nelder-Mead has produced more stable convergence for this model tha
 
 ## Quick start
 
-1. Baseline:
-   - Edit `main.py` and uncomment `run_baseline("model.json")`.
-   - Run: `python main.py`
+Install the package once from the repository root so the `svzerodtuner` command is available:
+
+```bash
+pip install -e .
+```
+
+Then run the example from this directory:
+
+1. Baseline inspection:
+
+   ```bash
+   python -c 'from main import run_baseline; run_baseline("model.json")'
+   ```
+
+   This creates `baseline_results/` with the full time series, summary CSV, and plots for target selection.
 
 2. Tuning:
-   - Update targets in the tuning yaml if needed.
-   - Uncomment one of the `run_optimization(...)` lines in `main.py`.
-   - Run: `python main.py`
+   - Update targets in the tuning YAML if needed.
+   - Run one of the tuning configurations with the CLI:
+
+   ```bash
+   svzerodtuner optimize tuning_nelder_mead.yaml
+   ```
+
+   or
+
+   ```bash
+   svzerodtuner optimize tuning_differential_evolution.yaml
+   ```
+
+   `svzerodtuner run <config.yaml>` is also supported as an alias for `optimize`.
 
 ## Notes
 
 Target names follow the solver output naming scheme:
+
 - `pressure:<block1>:<block2>`
 - `flow:<block1>:<block2>`
 

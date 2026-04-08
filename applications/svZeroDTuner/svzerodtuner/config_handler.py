@@ -157,6 +157,16 @@ class ConfigHandler:
                     raise ValueError(
                         f"Time series target '{target['name']}' must have 'target_file'"
                     )
+                if 'target_range' in target:
+                    r = target['target_range']
+                    if not isinstance(r, (list, tuple)) or len(r) != 2:
+                        raise ValueError(
+                            f"Target '{target['name']}' target_range must be [min, max]"
+                        )
+                    if r[0] >= r[1]:
+                        raise ValueError(
+                            f"Target '{target['name']}' target_range must have min < max"
+                        )
             elif target_type == 'scalar':
                 if 'expression' not in target:
                     raise ValueError(

@@ -226,6 +226,10 @@ class SensitivityAnalyzer:
         print(f"Quantities of Interest: {qoi_names}")
         print(f"Number of samples: {self.n_samples}")
         print()
+
+        # Reset per-run state so reusing the analyzer does not mix old and new samples.
+        self.results = {}
+        self.sample_data = []
         
         # Get parameter bounds
         param_names = [p['name'] for p in self.parameters]
@@ -293,8 +297,6 @@ class SensitivityAnalyzer:
         # Compute screening metrics for each QoI
         print("Computing screening metrics...")
         print("-"*70)
-        
-        self.results = {}
         
         for qoi_key in all_qoi_values.keys():
             print(f"  Analyzing {qoi_key}...")

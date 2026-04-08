@@ -6,6 +6,7 @@ import types
 from pathlib import Path
 
 import pytest
+import yaml
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -110,6 +111,40 @@ def test_negative_relative_bounds_are_ordered_for_scalar_targets():
     assert objective.compute({"venous_pressure": -100.0}) == pytest.approx(0.0)
 
 
+def test_config_handler_rejects_reversed_time_series_target_range(tmp_path):
+    model_path = tmp_path / "model.json"
+    model_path.write_text(json.dumps({"chambers": [{"name": "LV", "values": {"Emax": 2.0}}]}))
+
+    target_path = tmp_path / "target.csv"
+    target_path.write_text("time,value\n0.0,1.0\n1.0,2.0\n")
+
+    config_path = tmp_path / "tuning.yaml"
+    config_path.write_text(
+        yaml.safe_dump(
+            {
+                "model": {"config_file": str(model_path)},
+                "parameters": [{"name": "LV.Emax", "bounds": [1.0, 3.0]}],
+                "targets": [
+                    {
+                        "name": "lv_volume",
+                        "type": "time_series",
+                        "expression": "Vc:LV",
+                        "target_file": str(target_path),
+                        "target_range": [5.0, -5.0],
+                    }
+                ],
+                "objective": {"norm": "L1"},
+                "optimization": {"algorithm": "Nelder-Mead"},
+            }
+        )
+    )
+
+    from applications.svZeroDTuner.svzerodtuner.config_handler import ConfigHandler
+
+    with pytest.raises(ValueError, match="target_range must have min < max"):
+        ConfigHandler(str(config_path))
+
+
 def test_sensitivity_results_use_screening_labels_and_filenames(tmp_path, monkeypatch):
     sys.modules.setdefault("pysvzerod", types.SimpleNamespace(Solver=object))
     sensitivity_module = importlib.import_module(
@@ -145,3 +180,42 @@ def test_sensitivity_results_use_screening_labels_and_filenames(tmp_path, monkey
     assert "correlation-based sensitivity screening" in summary
     assert "Sobol indices" not in summary
     assert "First-order screening score" in summary
+
+
+def test_sensitivity_run_resets_sample_data_each_time(monkeypatch):
+    sys.modules.setdefault("pysvzerod", types.SimpleNamespace(Solver=object))
+    sensitivity_module = importlib.import_module(
+        "applications.svZeroDTuner.svzerodtuner.sensitivity"
+    )
+
+    analyzer = object.__new__(sensitivity_module.SensitivityAnalyzer)
+    analyzer.parameters = [{"name": "LV.Emax", "bounds": [1.0, 2.0]}]
+    analyzer.quantities_of_interest = [{"name": "qoi"}]
+    analyzer.sensitivity_config = {"n_samples": 1}
+    analyzer.output_config = {}
+    analyzer.n_samples = 1
+    analyzer.results = {"stale": {}}
+    analyzer.sample_data = [{"sample_id": 999, "LV.Emax": -1.0, "qoi": -1.0}]
+
+    samples = [
+        {"qoi": 1.0},
+        {"qoi": 2.0},
+    ]
+
+    def fake_get_qoi(_param_values):
+        return samples.pop(0)
+
+    monkeypatch.setattr(analyzer, "_get_simulated_quantities_of_interest", fake_get_qoi)
+
+    first_run = analyzer.run()
+    assert len(analyzer.sample_data) == 1
+    assert analyzer.sample_data[0]["sample_id"] == 0
+    assert analyzer.sample_data[0]["qoi"] == pytest.approx(1.0)
+    assert "stale" not in first_run
+
+    samples.append({"qoi": 2.0})
+    second_run = analyzer.run()
+    assert len(analyzer.sample_data) == 1
+    assert analyzer.sample_data[0]["sample_id"] == 0
+    assert analyzer.sample_data[0]["qoi"] == pytest.approx(2.0)
+    assert "stale" not in second_run

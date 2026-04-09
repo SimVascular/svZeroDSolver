@@ -4,8 +4,6 @@
 
 # Optimization Config Schema
 
-![](images/svzerodtuner/config_map.svg)
-
 ```yaml
 model:
   config_file: "model.json"

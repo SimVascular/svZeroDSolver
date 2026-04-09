@@ -69,8 +69,6 @@ A typical svZeroDTuner workflow is:
 6. Validate the optimized model against targets and physiology.
 7. Visualize model outputs and network behavior.
 
-![](images/svzerodtuner/workflow_overview.svg)
-
 See [Worked Examples](@ref tuner_examples) for end-to-end templates.
 
 # Related Tools

@@ -30,6 +30,20 @@ bool get_param_vector(const nlohmann::json& data, const std::string& name,
   return false;
 }
 
+bool get_param_string(const nlohmann::json& data, const std::string& name,
+                      const InputParameter& param, std::string& val) {
+  if (data.contains(name)) {
+    val = data[name].get<std::string>();
+  } else {
+    if (param.is_optional) {
+      val = "";
+    } else {
+      return true;
+    }
+  }
+  return false;
+}
+
 bool has_parameter(
     const std::vector<std::pair<std::string, InputParameter>>& params,
     const std::string& name) {
@@ -85,21 +99,32 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
         continue;
       }
 
-      // Skip reading parameters that are not a number
-      if (!block_param.second.is_number) {
+      // Skip reading parameters that are not a number and not a function
+      if (!block_param.second.is_number && !block_param.second.is_function) {
         continue;
       }
 
-      // Get vector parameter
-      if (block_param.second.is_array) {
+      if (block_param.second.is_function) {
+        std::string expression_string;
+        err = get_param_string(block_params_json, block_param.first,
+                               block_param.second, expression_string);
+        if (expression_string.length() <= 1) {
+          continue;
+        }
+        new_id = model.add_parameter(expression_string);
+      } else if (block_param.second.is_array) {
         // Get parameter vector
         std::vector<double> val;
         err = get_param_vector(block_params_json, block_param.first,
                                block_param.second, val);
         if (err) {
-          throw std::runtime_error("Array parameter " + block_param.first +
-                                   " is mandatory in " + block_type +
-                                   " block " + static_cast<std::string>(name));
+          if (!block_param.second.is_optional) {
+            throw std::runtime_error(
+                "Array parameter " + block_param.first + " is mandatory in " +
+                block_type + " block " + static_cast<std::string>(name));
+          } else {
+            continue;
+          }
         }
 
         // Get time vector
@@ -107,9 +132,13 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
         std::vector<double> time;
         err = get_param_vector(block_params_json, "t", t_param, time);
         if (err) {
-          throw std::runtime_error("Array parameter t is mandatory in " +
-                                   block_type + " block " +
-                                   static_cast<std::string>(name));
+          if (!block_param.second.is_optional) {
+            throw std::runtime_error("Array parameter t is mandatory in " +
+                                     block_type + " block " +
+                                     static_cast<std::string>(name));
+          } else {
+            continue;
+          }
         }
 
         // Add parameters to model

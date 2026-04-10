@@ -19,6 +19,7 @@
 #include "BlockFactory.h"
 #include "BloodVessel.h"
 #include "BloodVesselCRL.h"
+#include "BloodVesselFC.h"
 #include "BloodVesselJunction.h"
 #include "ChamberElastanceInductor.h"
 #include "ChamberSphere.h"
@@ -71,6 +72,9 @@ class Model {
 
   double cardiac_cycle_period = -1.0;  ///< Cardiac cycle period
   double time = 0.0;                   ///< Current time
+
+  /// Fixed capacitance values for BloodVesselFC blocks (vessel_name -> C)
+  std::map<std::string, double> fixed_capacitance;
 
   /**
    * @brief Create a new block

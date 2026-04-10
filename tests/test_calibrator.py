@@ -9,6 +9,36 @@ from .utils import execute_pysvzerod, RTOL_PRES
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
 
+def test_calibration_blood_vessel_fc_fixed_capacitance():
+    """BloodVesselFC: C fixed from JSON; R, L, stenosis fit to pulsatile-derived data."""
+    testfile = os.path.join(
+        this_file_dir, "cases", "calibration_BloodVesselFC_fixedC1e-6.json"
+    )
+
+    result, _ = execute_pysvzerod(testfile, "calibrator")
+
+    calibrated_parameters = result["vessels"][0]["zero_d_element_values"]
+
+    # Pulsatile + numeric gradients: looser than RTOL_PRES; C must match fixed input.
+    assert np.isclose(
+        np.mean(calibrated_parameters["R_poiseuille"]),
+        100.0,
+        rtol=1e-4,
+        atol=0.05,
+    )
+    assert np.isclose(
+        np.mean(calibrated_parameters["L"]), 1.0, rtol=2e-2, atol=0.02
+    )
+    assert np.isclose(
+        np.mean(calibrated_parameters["C"]), 1e-6, rtol=0.0, atol=1e-12
+    )
+    assert np.isclose(
+        np.mean(calibrated_parameters["stenosis_coefficient"]),
+        0.0,
+        atol=5e-3,
+    )
+
+
 def test_steady_flow_calibration():
     testfile = os.path.join(this_file_dir, "cases", "steadyFlow_calibration.json")
 

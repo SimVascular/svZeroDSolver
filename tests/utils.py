@@ -1,7 +1,35 @@
 import json
 import os
 import subprocess
+import sys
 from tempfile import TemporaryDirectory
+
+# Prefer the freshly built extension in build/python over any pysvzerod*.so
+# dropped in the repository root (wrong arch / stale builds break imports).
+this_file_dir = os.path.abspath(os.path.dirname(__file__))
+_repo_root = os.path.abspath(os.path.join(this_file_dir, ".."))
+
+
+def _has_pysvzerod_extension(directory):
+    try:
+        for name in os.listdir(directory):
+            if name.startswith("pysvzerod") and (
+                name.endswith(".so") or name.endswith(".pyd")
+            ):
+                return True
+    except OSError:
+        pass
+    return False
+
+
+for _subdir in (
+    os.path.join(_repo_root, "build", "python"),
+    os.path.join(_repo_root, "Release", "python"),
+    os.path.join(_repo_root, "Debug", "python"),
+):
+    if os.path.isdir(_subdir) and _has_pysvzerod_extension(_subdir):
+        sys.path.insert(0, _subdir)
+        break
 
 import numpy as np
 import pandas as pd
@@ -11,8 +39,6 @@ import pandas as pd
 from pytest import coverage
 
 import pysvzerod
-
-this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-7

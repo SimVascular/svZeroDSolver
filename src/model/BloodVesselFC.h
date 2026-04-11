@@ -106,4 +106,3 @@ class BloodVesselFC : public Block {
 };
 
 #endif  // SVZERODSOLVER_MODEL_BLOODVESSELFC_HPP_
-

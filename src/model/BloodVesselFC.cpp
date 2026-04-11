@@ -1,9 +1,10 @@
 // SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 
+#include "BloodVesselFC.h"
+
 #include <cmath>
 
-#include "BloodVesselFC.h"
 #include "Model.h"
 
 void BloodVesselFC::setup_dofs(DOFHandler& dofhandler) {
@@ -15,7 +16,7 @@ void BloodVesselFC::update_constant(SparseSystem& system,
   // Get parameters
   double inductance = parameters[global_param_ids[ParamId::INDUCTANCE]];
   double resistance = parameters[global_param_ids[ParamId::RESISTANCE]];
-  
+
   // Get fixed capacitance from model by looking up this block's name
   double capacitance = 0.0;
   std::string block_name = "";
@@ -57,9 +58,10 @@ void BloodVesselFC::update_solution(
   if (!block_name.empty() && model->fixed_capacitance.count(block_name)) {
     capacitance = model->fixed_capacitance.at(block_name);
   }
-  
+
   double stenosis_coeff = 0.0;
-  if (global_param_ids.size() > static_cast<size_t>(ParamId::STENOSIS_COEFFICIENT)) {
+  if (global_param_ids.size() >
+      static_cast<size_t>(ParamId::STENOSIS_COEFFICIENT)) {
     stenosis_coeff =
         parameters[global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
   }
@@ -95,7 +97,7 @@ void BloodVesselFC::update_gradient(
   auto dy0 = dy[global_var_ids[0]];
   auto dy1 = dy[global_var_ids[1]];
   auto dy3 = dy[global_var_ids[3]];
-  
+
   // Skip residual computation if any required observation is missing (NaN)
   if (std::isnan(y0) || std::isnan(y1) || std::isnan(y2) || std::isnan(y3) ||
       std::isnan(dy0) || std::isnan(dy1) || std::isnan(dy3)) {
@@ -109,7 +111,7 @@ void BloodVesselFC::update_gradient(
   if (global_param_ids.size() > 2) {
     stenosis_coeff = alpha[global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
   }
-  
+
   // Get fixed capacitance from model
   std::string block_name = "";
   for (size_t i = 0; i < model->get_num_blocks(); i++) {
@@ -122,16 +124,16 @@ void BloodVesselFC::update_gradient(
   if (!block_name.empty() && model->fixed_capacitance.count(block_name)) {
     capacitance = model->fixed_capacitance.at(block_name);
   }
-  
+
   auto stenosis_resistance = stenosis_coeff * fabs(y1);
 
   // Jacobian entries for R (param 0) - same as BloodVessel
   jacobian.coeffRef(global_eqn_ids[0], global_param_ids[0]) = -y1;
   jacobian.coeffRef(global_eqn_ids[1], global_param_ids[0]) = capacitance * dy1;
-  
+
   // Jacobian entries for L (param 1) - same as BloodVessel param 2
   jacobian.coeffRef(global_eqn_ids[0], global_param_ids[1]) = -dy3;
-  
+
   // Note: No Jacobian entries for C since it's fixed!
 
   if (global_param_ids.size() > 2) {
@@ -146,6 +148,5 @@ void BloodVesselFC::update_gradient(
       y0 - (resistance + stenosis_resistance) * y1 - y2 - inductance * dy3;
   residual(global_eqn_ids[1]) =
       (y1 - y3 - capacitance * dy0 +
-      capacitance * (resistance + 2.0 * stenosis_resistance) * dy1);
+       capacitance * (resistance + 2.0 * stenosis_resistance) * dy1);
 }
-

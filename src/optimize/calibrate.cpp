@@ -170,8 +170,7 @@ nlohmann::json calibrate(const nlohmann::json& config) {
     std::string vessel_name = vessel_config["vessel_name"];
     DEBUG_MSG("Reading initial alpha for " << vessel_name);
     auto block = model.get_block(vessel_name);
-    std::string vtype =
-        vessel_config["zero_d_element_type"].get<std::string>();
+    std::string vtype = vessel_config["zero_d_element_type"].get<std::string>();
     if (vtype == "BloodVesselFC") {
       alpha[block->global_param_ids[0]] =
           vessel_config["zero_d_element_values"].value("R_poiseuille", 0.0);
@@ -179,8 +178,8 @@ nlohmann::json calibrate(const nlohmann::json& config) {
           vessel_config["zero_d_element_values"].value("L", 0.0);
       if (calibrate_stenosis) {
         alpha[block->global_param_ids[2]] =
-            vessel_config["zero_d_element_values"].value(
-                "stenosis_coefficient", 0.0);
+            vessel_config["zero_d_element_values"].value("stenosis_coefficient",
+                                                         0.0);
       }
     } else {
       alpha[block->global_param_ids[0]] =
@@ -191,8 +190,8 @@ nlohmann::json calibrate(const nlohmann::json& config) {
           vessel_config["zero_d_element_values"].value("L", 0.0);
       if (num_params > 3) {
         alpha[block->global_param_ids[3]] =
-            vessel_config["zero_d_element_values"].value(
-                "stenosis_coefficient", 0.0);
+            vessel_config["zero_d_element_values"].value("stenosis_coefficient",
+                                                         0.0);
       }
     }
   }
@@ -244,8 +243,7 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   for (auto& vessel_config : output_config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
     auto block = model.get_block(vessel_name);
-    std::string vtype =
-        vessel_config["zero_d_element_type"].get<std::string>();
+    std::string vtype = vessel_config["zero_d_element_type"].get<std::string>();
     if (vtype == "BloodVesselFC") {
       double c_value = 0.0;
       if (!zero_capacitance) {

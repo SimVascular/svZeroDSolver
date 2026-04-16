@@ -9,13 +9,12 @@
 
 #include <algorithm>
 #include <cmath>
-#include <cstdio>
 #include <iostream>
+#include <memory>
 #include <numeric>
 #include <string>
 #include <vector>
 
-#include "../ThirdParty/exprtk.hpp"
 #include "DOFHandler.h"
 
 /**
@@ -54,6 +53,21 @@ class Parameter {
    */
   Parameter(int id, const std::string expression_string);
 
+  /**
+   * @brief Destructor
+   */
+  ~Parameter();
+
+  /**
+   * @brief Move constructor
+   */
+  Parameter(Parameter&&) noexcept;
+
+  /**
+   * @brief Move assignment operator
+   */
+  Parameter& operator=(Parameter&&) noexcept;
+
   int id;                      ///< Global ID of the parameter
   std::vector<double> times;   ///< Time steps if parameter is time-dependent
   std::vector<double> values;  ///< Values if parameter is time-dependent
@@ -67,10 +81,6 @@ class Parameter {
   bool is_function = false;  ///< Bool value indicating if the parameter is a
                              ///< function
   std::string expression_string;  ///< String with value function
-  double* time_value = nullptr;   ///< Time value passed into expression
-  exprtk::symbol_table<double> symbol_table;  ///< Symbol table to store time t
-  exprtk::expression<double>
-      expression;  ///< exprtk object from input expression string
 
   /**
    * @brief Update the parameter
@@ -117,6 +127,8 @@ class Parameter {
 
  private:
   bool steady_converted = false;
+  struct ExprtkImpl;                         ///< Forward declared PIMPL struct
+  std::unique_ptr<ExprtkImpl> exprtk_impl_;  ///< PIMPL for exprtk types
 };
 
 /**

@@ -5,6 +5,32 @@
 #include <cstdio>
 #include <string>
 
+// Suppress -Wshadow warnings from the exprtk third-party header
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshadow"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+#include "../ThirdParty/exprtk.hpp"
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+/// PIMPL implementation holding the exprtk expression state
+struct Parameter::ExprtkImpl {
+  exprtk::symbol_table<double> symbol_table;
+  exprtk::expression<double> expression;
+  double* time_value = nullptr;
+};
+
+Parameter::~Parameter() = default;
+Parameter::Parameter(Parameter&&) noexcept = default;
+Parameter& Parameter::operator=(Parameter&&) noexcept = default;
+
 Parameter::Parameter(int id, double value) {
   this->id = id;
   update(value);
@@ -48,25 +74,25 @@ void Parameter::update(const std::string update_string) {
   is_function = true;
   is_constant = false;
   expression_string = update_string;
-  time_value = nullptr;
 
-  expression.release();
-  symbol_table.clear();
+  exprtk_impl_ = std::make_unique<ExprtkImpl>();
 
-  if (!symbol_table.create_variable("t")) {
+  if (!exprtk_impl_->symbol_table.create_variable("t")) {
     throw std::runtime_error(
         "Error failed to create time_value in symbol_table.");
   }
 
-  symbol_table.add_constants();
+  exprtk_impl_->symbol_table.add_constants();
 
-  time_value = &symbol_table.get_variable("t")->ref();
-  expression.register_symbol_table(symbol_table);
+  exprtk_impl_->time_value =
+      &exprtk_impl_->symbol_table.get_variable("t")->ref();
+  exprtk_impl_->expression.register_symbol_table(exprtk_impl_->symbol_table);
 
   exprtk::parser<double> parser;
 
-  if (!parser.compile(expression_string, expression)) {
+  if (!parser.compile(expression_string, exprtk_impl_->expression)) {
     is_function = false;
+    exprtk_impl_.reset();
 
     printf("Error: %s\tExpression: %s\n", parser.error().c_str(),
            expression_string.c_str());
@@ -103,9 +129,10 @@ double Parameter::get(double time) {
   }
 
   if (is_function) {
-    assert(time_value != nullptr);
-    *time_value = time;
-    return expression.value();
+    assert(exprtk_impl_ != nullptr);
+    assert(exprtk_impl_->time_value != nullptr);
+    *exprtk_impl_->time_value = time;
+    return exprtk_impl_->expression.value();
   }
 
   // Determine the lower and upper element for interpolation

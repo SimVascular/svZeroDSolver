@@ -5,30 +5,12 @@
 #include "LevenbergMarquardtOptimizer.h"
 #include "SimulationParameters.h"
 
-#include <cstdlib>
-#include <iostream>
-#include <string>
-
 nlohmann::json calibrate(const nlohmann::json& config) {
   auto output_config = nlohmann::json(config);
 
   // Read calibration parameters
   DEBUG_MSG("Parse calibration parameters");
-  if (!config.contains("calibration_parameters")) {
-    std::cerr << "ERROR: config is missing \"calibration_parameters\" (must be "
-                 "a JSON object)."
-              << std::endl;
-    std::exit(1);
-  }
   auto const& calibration_parameters = config["calibration_parameters"];
-  if (!calibration_parameters.is_object()) {
-    std::cerr << "ERROR: \"calibration_parameters\" must be a JSON object with "
-                 "keys such as \"maximum_iterations\" and "
-                 "\"tolerance_gradient\". It cannot be a number, string, or "
-                 "array."
-              << std::endl;
-    std::exit(1);
-  }
   double gradient_tol =
       calibration_parameters.value("tolerance_gradient", 1e-5);
   double increment_tol =
@@ -39,26 +21,6 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   bool zero_capacitance =
       calibration_parameters.value("set_capacitance_to_zero", false);
   double lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
-  bool export_calibration_jacobian =
-      calibration_parameters.value("export_calibration_jacobian", false);
-  std::string jacobian_export_file;
-  if (export_calibration_jacobian) {
-    if (!calibration_parameters.contains("export_calibration_jacobian_file")) {
-      std::cerr << "ERROR: export_calibration_jacobian is true but "
-                   "export_calibration_jacobian_file is missing"
-                << std::endl;
-      std::exit(1);
-    }
-    jacobian_export_file =
-        calibration_parameters["export_calibration_jacobian_file"]
-            .get<std::string>();
-    if (jacobian_export_file.empty()) {
-      std::cerr << "ERROR: export_calibration_jacobian_file must be non-empty "
-                   "when export_calibration_jacobian is true"
-                << std::endl;
-      std::exit(1);
-    }
-  }
 
   int num_params = 3;
   if (calibrate_stenosis) {
@@ -271,9 +233,9 @@ nlohmann::json calibrate(const nlohmann::json& config) {
 
   // Run optimization
   DEBUG_MSG("Start optimization");
-  auto lm_alg = LevenbergMarquardtOptimizer(
-      &model, num_obs, param_counter, lambda0, gradient_tol, increment_tol,
-      max_iter, jacobian_export_file);
+  auto lm_alg =
+      LevenbergMarquardtOptimizer(&model, num_obs, param_counter, lambda0,
+                                  gradient_tol, increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 

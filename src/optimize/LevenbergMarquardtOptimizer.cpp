@@ -2,15 +2,11 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "LevenbergMarquardtOptimizer.h"
 
-#include <unsupported/Eigen/SparseExtra>
-
-#include <cstdlib>
 #include <iomanip>
-#include <iostream>
 
 LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
     Model* model, int num_obs, int num_params, double lambda0, double tol_grad,
-    double tol_inc, int max_iter, const std::string& jacobian_export_file_in) {
+    double tol_inc, int max_iter) {
   this->model = model;
   this->num_obs = num_obs;
   this->num_params = num_params;
@@ -21,7 +17,6 @@ LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
   this->tol_grad = tol_grad;
   this->tol_inc = tol_inc;
   this->max_iter = max_iter;
-  this->jacobian_export_file = jacobian_export_file_in;
 
   jacobian = Eigen::SparseMatrix<double>(num_dpoints, num_params);
   residual = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(num_dpoints);
@@ -36,16 +31,6 @@ Eigen::Matrix<double, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer::run(
     std::vector<std::vector<double>>& dy_obs) {
   for (size_t i = 0; i < max_iter; i++) {
     update_gradient(alpha, y_obs, dy_obs);
-
-    if (i == 0 && !jacobian_export_file.empty()) {
-      jacobian.makeCompressed();
-      if (!Eigen::saveMarket(jacobian, jacobian_export_file)) {
-        std::cerr << "ERROR: Failed to write calibration Jacobian Matrix Market "
-                     "file: "
-                  << jacobian_export_file << std::endl;
-        std::exit(1);
-      }
-    }
 
     if (i == 0) {
       update_delta(true);

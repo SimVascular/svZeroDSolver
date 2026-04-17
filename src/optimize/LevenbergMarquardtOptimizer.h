@@ -9,6 +9,7 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <string>
 
 #include "Model.h"
 
@@ -71,6 +72,8 @@
  * \dot{\mathbf{y}}+\frac{\partial \mathbf{F}}{\partial \boldsymbol{\alpha}}
  * \cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \f]
  *
+ * Optionally, after the first Jacobian assembly, \f$\mathbf{J}\f$ may be written
+ * to a Matrix Market file (see \c jacobian_export_file in the constructor).
  *
  */
 class LevenbergMarquardtOptimizer {
@@ -85,10 +88,13 @@ class LevenbergMarquardtOptimizer {
    * @param tol_grad Gradient tolerance
    * @param tol_inc Parameter increment tolerance
    * @param max_iter Maximum iterations
+   * @param jacobian_export_file If non-empty, write \f$\mathbf{J}\f$ to this path
+   *        (Matrix Market) after the first \c update_gradient in \c run().
    */
   LevenbergMarquardtOptimizer(Model* model, int num_obs, int num_params,
                               double lambda0, double tol_grad, double tol_inc,
-                              int max_iter);
+                              int max_iter,
+                              const std::string& jacobian_export_file = "");
 
   /**
    * @brief Run the optimization algorithm
@@ -122,6 +128,7 @@ class LevenbergMarquardtOptimizer {
   double tol_grad;
   double tol_inc;
   int max_iter;
+  std::string jacobian_export_file;
 
   void update_gradient(Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
                        std::vector<std::vector<double>>& y_obs,

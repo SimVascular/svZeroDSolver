@@ -107,12 +107,12 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a83ef3a3c45a500edd969f401d51d571c" id="r_a83ef3a3c45a500edd969f401d51d571c"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a83ef3a3c45a500edd969f401d51d571c">LinearElastanceChamber</a> (int <a class="el" href="class_block.html#a5d18d0d232066b097a4d2f181ad5efe2">id</a>, <a class="el" href="class_model.html">Model</a> *<a class="el" href="class_block.html#a608c3330612de2419da47e0f4532a8d9">model</a>)</td></tr>
 <tr class="memdesc:a83ef3a3c45a500edd969f401d51d571c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_linear_elastance_chamber.html" title="Cardiac chamber with linear elastance (no inductor).">LinearElastanceChamber</a> object.  <br /></td></tr>
-<tr class="memitem:a68f4d6d188e9856f6549b776497045e8" id="r_a68f4d6d188e9856f6549b776497045e8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a68f4d6d188e9856f6549b776497045e8">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
-<tr class="memdesc:a68f4d6d188e9856f6549b776497045e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
-<tr class="memitem:ab6bfc592eab12a1d3f3ef014c4b748e9" id="r_ab6bfc592eab12a1d3f3ef014c4b748e9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab6bfc592eab12a1d3f3ef014c4b748e9">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
-<tr class="memdesc:ab6bfc592eab12a1d3f3ef014c4b748e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <br /></td></tr>
-<tr class="memitem:a33b00f64348fad00f33645cf5d838d4d" id="r_a33b00f64348fad00f33645cf5d838d4d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a33b00f64348fad00f33645cf5d838d4d">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
-<tr class="memdesc:a33b00f64348fad00f33645cf5d838d4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="memitem:a5bda6ad3a857874ffff778ee99d30908" id="r_a5bda6ad3a857874ffff778ee99d30908"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a5bda6ad3a857874ffff778ee99d30908">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler) override</td></tr>
+<tr class="memdesc:a5bda6ad3a857874ffff778ee99d30908"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
+<tr class="memitem:ae3db89944e1f06240cb378a8d46432f3" id="r_ae3db89944e1f06240cb378a8d46432f3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae3db89944e1f06240cb378a8d46432f3">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters) override</td></tr>
+<tr class="memdesc:ae3db89944e1f06240cb378a8d46432f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="memitem:a8027a1642b1da5afb08292bceb72f15a" id="r_a8027a1642b1da5afb08292bceb72f15a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8027a1642b1da5afb08292bceb72f15a">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters) override</td></tr>
+<tr class="memdesc:a8027a1642b1da5afb08292bceb72f15a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:a830398aa4baced668590c63fe9d54f64" id="r_a830398aa4baced668590c63fe9d54f64"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a830398aa4baced668590c63fe9d54f64">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af) override</td></tr>
 <tr class="memdesc:a830398aa4baced668590c63fe9d54f64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the activation function (takes ownership).  <br /></td></tr>
 <tr class="inherit_header pub_methods_class_block"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_block')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="class_block.html">Block</a></td></tr>
@@ -358,8 +358,8 @@ t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{c
 
 </div>
 </div>
-<a id="a68f4d6d188e9856f6549b776497045e8" name="a68f4d6d188e9856f6549b776497045e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68f4d6d188e9856f6549b776497045e8">&#9670;&#160;</a></span>setup_dofs()</h2>
+<a id="a5bda6ad3a857874ffff778ee99d30908" name="a5bda6ad3a857874ffff778ee99d30908"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5bda6ad3a857874ffff778ee99d30908">&#9670;&#160;</a></span>setup_dofs()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -376,7 +376,7 @@ t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{c
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -394,8 +394,8 @@ t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{c
 
 </div>
 </div>
-<a id="ab6bfc592eab12a1d3f3ef014c4b748e9" name="ab6bfc592eab12a1d3f3ef014c4b748e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab6bfc592eab12a1d3f3ef014c4b748e9">&#9670;&#160;</a></span>update_constant()</h2>
+<a id="ae3db89944e1f06240cb378a8d46432f3" name="ae3db89944e1f06240cb378a8d46432f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae3db89944e1f06240cb378a8d46432f3">&#9670;&#160;</a></span>update_constant()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -416,7 +416,7 @@ t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{c
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -434,8 +434,8 @@ t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{c
 
 </div>
 </div>
-<a id="a33b00f64348fad00f33645cf5d838d4d" name="a33b00f64348fad00f33645cf5d838d4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33b00f64348fad00f33645cf5d838d4d">&#9670;&#160;</a></span>update_time()</h2>
+<a id="a8027a1642b1da5afb08292bceb72f15a" name="a8027a1642b1da5afb08292bceb72f15a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8027a1642b1da5afb08292bceb72f15a">&#9670;&#160;</a></span>update_time()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -456,7 +456,7 @@ t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{c
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

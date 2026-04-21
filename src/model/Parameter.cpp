@@ -22,8 +22,9 @@
 
 /// PIMPL implementation holding the exprtk expression state
 struct Parameter::ExprtkImpl {
-  exprtk::symbol_table<double> symbol_table;  ///< Symbol table mapping 't' to current time
-  exprtk::expression<double> expression;      ///< Compiled expression object
+  exprtk::symbol_table<double>
+      symbol_table;  ///< Symbol table mapping 't' to current time
+  exprtk::expression<double> expression;  ///< Compiled expression object
   double* time_value = nullptr;  ///< Pointer into the symbol table for 't'
 };
 

@@ -65,6 +65,7 @@ class Parameter {
 
   /**
    * @brief Move assignment operator
+   * @return Reference to this object
    */
   Parameter& operator=(Parameter&&) noexcept;
 

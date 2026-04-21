@@ -68,6 +68,11 @@ set(HDRS
 
 add_library(${lib} OBJECT ${CXXSRCS} ${HDRS})
 
+# exprtk.hpp generates too many COFF sections for the default MSVC object format
+if(MSVC)
+  set_source_files_properties(Parameter.cpp PROPERTIES COMPILE_FLAGS "/bigobj")
+endif()
+
 target_include_directories( ${lib} PUBLIC
   ${CMAKE_SOURCE_DIR}/src/algebra
   ${CMAKE_SOURCE_DIR}/src/model

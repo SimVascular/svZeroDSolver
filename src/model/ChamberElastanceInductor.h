@@ -138,9 +138,37 @@ class ChamberElastanceInductor : public Block {
     VRS = 4,
   };
 
-  void setup_dofs(DOFHandler& dofhandler);
-  void update_constant(SparseSystem& system, std::vector<double>& parameters);
-  void update_time(SparseSystem& system, std::vector<double>& parameters);
+  /**
+   * @brief Set up the degrees of freedom (DOF) of the block
+   *
+   * Set global_var_ids and global_eqn_ids of the element based on the
+   * number of equations and the number of internal variables of the
+   * element.
+   *
+   * @param dofhandler Degree-of-freedom handler to register variables and
+   * equations at
+   */
+  void setup_dofs(DOFHandler& dofhandler) override;
+
+  /**
+   * @brief Update the constant contributions of the element in a sparse
+   system
+   *
+   * @param system System to update contributions at
+   * @param parameters Parameters of the model
+   */
+  void update_constant(SparseSystem& system,
+                       std::vector<double>& parameters) override;
+
+  /**
+   * @brief Update the time-dependent contributions of the element in a sparse
+   * system
+   *
+   * @param system System to update contributions at
+   * @param parameters Parameters of the model
+   */
+  void update_time(SparseSystem& system,
+                   std::vector<double>& parameters) override;
 
   /// @brief Number of triplets of element
   TripletsContributions num_triplets{6, 2, 0};

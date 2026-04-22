@@ -3,7 +3,8 @@ import pytest
 
 import pysvzerod
 
-from .utils import run_test_case_by_name, RTOL_FLOW, RTOL_PRES
+from .utils import run_test_case_by_name, RTOL_FLOW, RTOL_PRES, get_test_case_by_name
+
 
 # use coarse absolute tolerances for gradient calculation
 # we're comparing gradients from gen-alpha in svZeroDSolver with central differences in np.gradient
@@ -155,129 +156,38 @@ def test_time_dependent_block():
         assert np.isclose(pressure[i], calc_val, rtol=0.003)
 
 
-def _minimal_vessel_config():
-    """Return a minimal single-vessel config dict used by error-path tests."""
-    return {
-        "boundary_conditions": [
-            {
-                "bc_name": "INLET",
-                "bc_type": "FLOW",
-                "bc_values": {},
-            },
-            {
-                "bc_name": "OUTLET",
-                "bc_type": "RESISTANCE",
-                "bc_values": {"Pd": 0.0, "R": 100.0},
-            },
-        ],
-        "junctions": [],
-        "simulation_parameters": {
-            "number_of_cardiac_cycles": 1,
-            "number_of_time_pts_per_cardiac_cycle": 10,
-        },
-        "vessels": [
-            {
-                "boundary_conditions": {"inlet": "INLET", "outlet": "OUTLET"},
-                "vessel_id": 0,
-                "vessel_length": 10.0,
-                "vessel_name": "branch0_seg0",
-                "zero_d_element_type": "BloodVessel",
-                "zero_d_element_values": {"R_poiseuille": 100.0},
-            }
-        ],
-    }
-
 
 def test_invalid_fn_expression():
     """Invalid exprtk expression string triggers compile-error path in Parameter."""
-    config = _minimal_vessel_config()
+
+    config = get_test_case_by_name("TimeDep_Flow")
+
+    # input invalid expression
     config["boundary_conditions"][0]["bc_values"] = {"fn": "sin(t"}
+
     with pytest.raises(RuntimeError):
         pysvzerod.simulate(config)
 
 
 def test_missing_mandatory_array_param():
     """Missing mandatory array parameter raises RuntimeError from SimulationParameters."""
-    config = {
-        "boundary_conditions": [
-            {
-                "bc_name": "INLET",
-                "bc_type": "FLOW",
-                "bc_values": {"Q": [1.0, 1.0], "t": [0.0, 1.0]},
-            },
-            {
-                "bc_name": "OUTLET",
-                "bc_type": "CORONARY",
-                "bc_values": {
-                    # Pim (mandatory array) is intentionally omitted
-                    "Ca": 0.0001,
-                    "Cc": 0.0001,
-                    "P_v": 0.0,
-                    "Ra1": 100.0,
-                    "Ra2": 100.0,
-                    "Rv1": 100.0,
-                },
-            },
-        ],
-        "junctions": [],
-        "simulation_parameters": {
-            "number_of_cardiac_cycles": 1,
-            "number_of_time_pts_per_cardiac_cycle": 10,
-        },
-        "vessels": [
-            {
-                "boundary_conditions": {"inlet": "INLET", "outlet": "OUTLET"},
-                "vessel_id": 0,
-                "vessel_length": 10.0,
-                "vessel_name": "branch0_seg0",
-                "zero_d_element_type": "BloodVessel",
-                "zero_d_element_values": {"R_poiseuille": 100.0},
-            }
-        ],
-    }
+
+    config = get_test_case_by_name("pulsatileFlow_R_coronary")
+
+    # remove required t vector for array parameter Pim
+    del config["boundary_conditions"][1]["bc_values"]["Pim"]
+
     with pytest.raises(RuntimeError):
         pysvzerod.simulate(config)
 
 
 def test_missing_t_vector_for_array_param():
     """Mandatory array param present but missing t vector raises RuntimeError."""
-    config = {
-        "boundary_conditions": [
-            {
-                "bc_name": "INLET",
-                "bc_type": "FLOW",
-                "bc_values": {"Q": [1.0, 1.0], "t": [0.0, 1.0]},
-            },
-            {
-                "bc_name": "OUTLET",
-                "bc_type": "CORONARY",
-                "bc_values": {
-                    # Pim provided but t is intentionally omitted
-                    "Ca": 0.0001,
-                    "Cc": 0.0001,
-                    "Pim": [10.0, 10.0],
-                    "P_v": 0.0,
-                    "Ra1": 100.0,
-                    "Ra2": 100.0,
-                    "Rv1": 100.0,
-                },
-            },
-        ],
-        "junctions": [],
-        "simulation_parameters": {
-            "number_of_cardiac_cycles": 1,
-            "number_of_time_pts_per_cardiac_cycle": 10,
-        },
-        "vessels": [
-            {
-                "boundary_conditions": {"inlet": "INLET", "outlet": "OUTLET"},
-                "vessel_id": 0,
-                "vessel_length": 10.0,
-                "vessel_name": "branch0_seg0",
-                "zero_d_element_type": "BloodVessel",
-                "zero_d_element_values": {"R_poiseuille": 100.0},
-            }
-        ],
-    }
+
+    config = get_test_case_by_name("pulsatileFlow_R_coronary")
+
+    # remove required t vector for array parameter Pim
+    del config["boundary_conditions"][1]["bc_values"]["t"]
+
     with pytest.raises(RuntimeError):
         pysvzerod.simulate(config)

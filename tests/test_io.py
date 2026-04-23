@@ -160,7 +160,7 @@ def test_time_dependent_block():
 def test_invalid_fn_expression():
     """Invalid exprtk expression string triggers compile-error path in Parameter."""
 
-    config = get_test_case_by_name("TimeDep_Flow")
+    config = get_test_case_by_name("timeDep_Flow")
 
     # input invalid expression
     config["boundary_conditions"][0]["bc_values"] = {"fn": "sin(t"}

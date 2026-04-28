@@ -19,5 +19,6 @@ var searchData=
   ['bloodvesselcrl_2eh_16',['BloodVesselCRL.h',['../_blood_vessel_c_r_l_8h.html',1,'']]],
   ['bloodvesseljunction_17',['BloodVesselJunction',['../class_blood_vessel_junction.html',1,'BloodVesselJunction'],['../class_blood_vessel_junction.html#a80fb63523d2c0658ed089c941fc94035',1,'BloodVesselJunction::BloodVesselJunction()']]],
   ['bloodvesseljunction_2eh_18',['BloodVesselJunction.h',['../_blood_vessel_junction_8h.html',1,'']]],
-  ['build_20in_20debug_20mode_19',['Build in debug mode',['../developer_guide.html#autotoc_md1',1,'']]]
+  ['bloodvesselrc_19',['BloodVesselRC',['../class_blood_vessel_r_c.html',1,'BloodVesselRC'],['../class_blood_vessel_r_c.html#adb0e16e5aca0c4288518fa02a4edc8f8',1,'BloodVesselRC::BloodVesselRC()']]],
+  ['build_20in_20debug_20mode_20',['Build in debug mode',['../developer_guide.html#autotoc_md1',1,'']]]
 ];

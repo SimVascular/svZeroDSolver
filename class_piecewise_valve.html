@@ -181,56 +181,56 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Valve (tanh) block. </p>
 <p>Models the pressure drop across a diode-like valve, which is implemented as a non-linear piecewise resistor. See <a class="el" href="citelist.html#CITEREF_regazzoni2022">[8]</a> (equations 16 and 22).</p>
 <p class="formulaDsp">
-<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_135_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [D, l=$R_v$, *-*] (3,0)
 node[anchor=south]{$P_{out}$};
 \end{circuitikz}
-\&zwj;]" src="form_130.png" width="212" height="62"/></picture>
+\&zwj;]" src="form_135.png" width="212" height="62"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}-Q_{in}\left[R(P_{out},P_{in})\right]=0
-\&zwj;]" src="form_131.png" width="287" height="21"/></picture>
+<picture><source srcset="form_136_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}-Q_{in}\left[R(P_{out},P_{in})\right]=0
+\&zwj;]" src="form_136.png" width="287" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}=0
-\&zwj;]" src="form_132.png" width="126" height="19"/></picture>
+<picture><source srcset="form_137_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}=0
+\&zwj;]" src="form_137.png" width="126" height="19"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[R_i(p_1, p_2) =
+<picture><source srcset="form_138_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[R_i(p_1, p_2) =
 \begin{cases}
 R_{\min}, &amp; p_1 &lt; p_2, \\&zwj;[0.5em]
 R_{\max}, &amp; p_1 \ge p_2.
 \end{cases}
-\&zwj;]" src="form_133.png" width="251" height="69"/></picture>
+\&zwj;]" src="form_138.png" width="251" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_134_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out}\end{array}\right]^{T} \&zwj;]" src="form_134.png" width="278" height="28"/></picture>
+<picture><source srcset="form_139_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} &amp; Q_{in} &amp;
+P_{out} &amp; Q_{out}\end{array}\right]^{T} \&zwj;]" src="form_139.png" width="278" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_135_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{cccc}
+<picture><source srcset="form_140_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{cccc}
 0 &amp; 0 &amp; 0 &amp; 0 \\
 0 &amp; 0 &amp; 0 &amp; 0
 \end{array}\right]
-\&zwj;]" src="form_135.png" width="174" height="47"/></picture>
+\&zwj;]" src="form_140.png" width="174" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_136_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{cccc}
+<picture><source srcset="form_141_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{cccc}
 1 &amp; -(R(P_{in},P_{out})) &amp; -1 &amp; 0 \\
 0 &amp;      1                 &amp;  0 &amp; -1
 \end{array}\right]
-\&zwj;]" src="form_136.png" width="324" height="47"/></picture>
+\&zwj;]" src="form_141.png" width="324" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_137_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_142_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 0 \\
 0
 \end{array}\right]
-\&zwj;]" src="form_137.png" width="88" height="47"/></picture>
+\&zwj;]" src="form_142.png" width="88" height="47"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

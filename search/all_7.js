@@ -7,7 +7,7 @@ var searchData=
   ['get_5fblock_4',['get_block',['../class_model.html#a9b8ebfbff548d6e22190ee99c7b01ebc',1,'Model::get_block(const std::string_view &amp;name) const'],['../class_model.html#a0ce2029fde25b064d69da46f8f37eb8b',1,'Model::get_block(int block_id) const']]],
   ['get_5fblock_5fname_5',['get_block_name',['../class_model.html#af184f9eb650809b50d0141e3ede4f53b',1,'Model']]],
   ['get_5fblock_5ftype_6',['get_block_type',['../class_model.html#a3f83e95429fee19daecf9ca5d5252c1a',1,'Model']]],
-  ['get_5felastance_5fvalues_7',['get_elastance_values',['../class_chamber_sphere.html#aa64fec52d8de05dcb172c965e0434a9c',1,'ChamberSphere']]],
+  ['get_5felastance_5fvalues_7',['get_elastance_values',['../class_chamber_elastance_inductor.html#ad2936b239a4809542b7b482cf4ccb2b7',1,'ChamberElastanceInductor::get_elastance_values()'],['../class_chamber_elastance_inductor_exponential.html#a164514d7fa9e35cb51568917afec89df',1,'ChamberElastanceInductorExponential::get_elastance_values()'],['../class_chamber_sphere.html#aa64fec52d8de05dcb172c965e0434a9c',1,'ChamberSphere::get_elastance_values()']]],
   ['get_5ffull_5fresult_8',['get_full_result',['../class_solver.html#aebf2a9aa50d3e557fd8023863e690a8e',1,'Solver']]],
   ['get_5fhas_5fwindkessel_5fbc_9',['get_has_windkessel_bc',['../class_model.html#afa3ed78e825c7e620bce0987b3d1aac0',1,'Model']]],
   ['get_5findex_10',['get_index',['../class_d_o_f_handler.html#a16601c2c153c6f7b7c23cd1d4b6f37aa',1,'DOFHandler']]],

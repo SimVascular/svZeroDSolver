@@ -15,5 +15,6 @@ var searchData=
   ['visualization_20guide_12',['Visualization Guide',['../visualization.html',1,'']]],
   ['visualize_20a_20new_20block_13',['How to Visualize a New Block',['../visualization.html#autotoc_md16',1,'']]],
   ['vlv_5fu_14',['VLV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a9540110a7d23ead2b4b881d925d8d066',1,'ClosedLoopHeartPulmonary']]],
-  ['vrv_5fu_15',['VRV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a1c090907252c029c48166bf1a910c551',1,'ClosedLoopHeartPulmonary']]]
+  ['vrest_15',['Vrest',['../class_chamber_elastance_inductor.html#ae9221bd9c9ddb818df329358bd9d5111',1,'ChamberElastanceInductor']]],
+  ['vrv_5fu_16',['VRV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a1c090907252c029c48166bf1a910c551',1,'ClosedLoopHeartPulmonary']]]
 ];

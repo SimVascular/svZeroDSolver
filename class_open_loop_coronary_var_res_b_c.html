@@ -185,15 +185,15 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Open loop coronary boundary condition with time-varying microvascular resistance based on <a class="el" href="citelist.html#CITEREF_yong25">[11]</a>. </p>
-<p>This model extends the standard open loop coronary BC (<a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>) by allowing the microvascular resistance <picture><source srcset="form_123_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}$" src="form_123.png" width="36" height="19"/></picture> to vary with time according to:</p>
+<p>This model extends the standard open loop coronary BC (<a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>) by allowing the microvascular resistance <picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}$" src="form_128.png" width="36" height="19"/></picture> to vary with time according to:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_124_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[R_{am}(t) = \left[ \left( \sqrt{R_{am,max}} - \sqrt{R_{am,min}} \right)
+<picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[R_{am}(t) = \left[ \left( \sqrt{R_{am,max}} - \sqrt{R_{am,min}} \right)
 e(t) + \sqrt{R_{am,min}} \right]^2
-\&zwj;]" src="form_124.png" width="474" height="39"/></picture>
+\&zwj;]" src="form_129.png" width="474" height="39"/></picture>
 </p>
-<p>where <picture><source srcset="form_125_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$e(t)$" src="form_125.png" width="28" height="21"/></picture> is a time-dependent function:</p>
+<p>where <picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$e(t)$" src="form_130.png" width="28" height="21"/></picture> is a time-dependent function:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[e(t) =
+<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[e(t) =
 \begin{cases}
 \dfrac{1}{2}\left[ 1 - \cos\left( \pi \dfrac{t_{cycle}}{T_{vc}} \right)
 \right], &amp; 0 \le t_{cycle} \le T_{vc}, \\
@@ -201,11 +201,11 @@ e(t) + \sqrt{R_{am,min}} \right]^2
 \right) \right], &amp; T_{vc} &lt; t_{cycle} \le T_{vc} + T_{vr}, \\
 0, &amp; t_{cycle} &gt; T_{vc} + T_{vr}
 \end{cases}
-\&zwj;]" src="form_126.png" width="529" height="116"/></picture>
+\&zwj;]" src="form_131.png" width="529" height="116"/></picture>
 </p>
-<p>where <picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$t_{cycle}$" src="form_127.png" width="41" height="19"/></picture> is the time within the current cardiac cycle.</p>
+<p>where <picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$t_{cycle}$" src="form_132.png" width="41" height="19"/></picture> is the time within the current cardiac cycle.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_a$, *-*] (3,0)
@@ -218,10 +218,10 @@ node[left]{$P_{im}$}
 (3,0) to [C, l=$C_a$, -*] (3,-1.5)
 node[left]{$P_a$};
 \end{circuitikz}
-\&zwj;]" src="form_128.png" width="418" height="122"/></picture>
+\&zwj;]" src="form_133.png" width="418" height="122"/></picture>
 </p>
 <h3>Governing equations</h3>
-<p>Same as <a class="el" href="class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary.">OpenLoopCoronaryBC</a>, but with <picture><source srcset="form_123_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}$" src="form_123.png" width="36" height="19"/></picture> replaced by <picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}(t)$" src="form_129.png" width="56" height="21"/></picture>.</p>
+<p>Same as <a class="el" href="class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary.">OpenLoopCoronaryBC</a>, but with <picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}$" src="form_128.png" width="36" height="19"/></picture> replaced by <picture><source srcset="form_134_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}(t)$" src="form_134.png" width="56" height="21"/></picture>.</p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
 <ul>

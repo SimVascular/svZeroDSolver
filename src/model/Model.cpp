@@ -30,9 +30,12 @@ Model::Model() {
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
       {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
+      {"ChamberElastanceInductorExponential",
+       block_factory<ChamberElastanceInductorExponential>()},
       {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
       {"PiecewiseValve", block_factory<PiecewiseValve>()},
-      {"LinearElastanceChamber", block_factory<LinearElastanceChamber>()}};
+      {"LinearElastanceChamber", block_factory<LinearElastanceChamber>()},
+      {"BloodVesselRC", block_factory<BloodVesselRC>()}};
 }
 
 Model::~Model() {}

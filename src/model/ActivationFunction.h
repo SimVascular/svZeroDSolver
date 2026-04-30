@@ -212,4 +212,66 @@ class TwoHillActivation : public ActivationFunction {
   bool normalization_initialized_;
 };
 
+/**
+ * @brief Wrapping cosine activation function
+ *
+ * Reproduces the atrial activation AA(t) from \cite sankaran2012patient
+ * and \cite menon2023predictors. The cosine wraps across the cardiac
+ * cycle boundary, which half_cosine and piecewise_cosine cannot do.
+ *
+ * Parameters:
+ * * `Tsa` — Atrial systole time fraction (multiplied by cardiac period)
+ * * `tpwave` — P-wave divisor (cardiac period is divided by this)
+ */
+class WrappingCosineActivation : public ActivationFunction {
+ public:
+  /**
+   * @brief Construct a new WrappingCosineActivation object
+   *
+   * @param cardiac_period Cardiac cycle period
+   */
+  explicit WrappingCosineActivation(double cardiac_period)
+      : ActivationFunction(cardiac_period, {{"Tsa", InputParameter()},
+                                            {"tpwave", InputParameter()}}) {}
+
+  double compute(double time) override;
+};
+
+/**
+ * @brief Fourier series activation function
+ *
+ * 25-mode Fourier series for ventricular elastance activation, based on
+ * J. Tran's tuning framework (\cite menon2023predictors). The series is
+ * normalized so the output ranges from 0 (diastole) to 1 (peak systole).
+ * No user parameters are needed; the Fourier coefficients are hardcoded.
+ *
+ * Combined with ChamberElastanceInductor using
+ *   Emax = Fourier_peak * E_scale,  Emin = Fourier_trough * E_scale
+ * this reproduces E(t) = Fourier(t) * E_scale exactly.
+ */
+class FourierActivation : public ActivationFunction {
+ public:
+  /**
+   * @brief Construct a new FourierActivation object
+   *
+   * @param cardiac_period Cardiac cycle period
+   */
+  explicit FourierActivation(double cardiac_period)
+      : ActivationFunction(cardiac_period, {}),
+        norm_min_(0.0),
+        norm_range_(1.0),
+        normalization_initialized_(false) {}
+
+  double compute(double time) override;
+  void finalize() override;
+
+ private:
+  void calculate_normalization();
+  double compute_raw(double t_in_cycle) const;
+
+  double norm_min_;
+  double norm_range_;
+  bool normalization_initialized_;
+};
+
 #endif  // SVZERODSOLVER_MODEL_ACTIVATIONFUNCTION_HPP_

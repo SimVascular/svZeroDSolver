@@ -1,0 +1,207 @@
+{
+  "description": {
+    "description of test case": "Decomposed four-chamber closed-loop heart model. Uses ChamberElastanceInductor, ValveTanh, BloodVessel, and BloodVesselRC. Parameters from Sankaran et al. 2012 and Menon et al. 2023.",
+    "circuit": "RA -> TV -> RV -> PV -> pul_vessel -> LA -> MV -> LV -> AV -> aortic_cap -> branch0_seg0 -> sys_Rp -> sys_Rd -> RA"
+  },
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 1,
+    "number_of_time_pts_per_cardiac_cycle": 1000,
+    "absolute_tolerance": 1e-8,
+    "steady_initial": false,
+    "output_all_cycles": true,
+    "cardiac_period": 1.0169
+  },
+  "boundary_conditions": [],
+  "vessels": [
+    {
+      "_comment_": "Pulmonary vasculature: flow-through RC windkessel (Sankaran 2012, eq. X6'=X4-X7). Rpd = 1.120725*Rpd_base/pConv,.",
+      "vessel_name": "pul_vessel",
+      "vessel_id": 1,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVesselRC",
+      "zero_d_element_values": { "Rpd": 0.098865401, "Cp": 1.090989 }
+    },
+    {
+      "_comment_": "Aortic capacitance (Cpa=0.556854 from monolithic). R=0 so this is a pure capacitor.",
+      "vessel_name": "aortic_cap",
+      "vessel_id": 2,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": { "R_poiseuille": 0.0, "C": 0.556854 }
+    },
+    {
+      "_comment_": "Aorta. R = 4.464119/pConv, L = 5.25/pConv.",
+      "vessel_name": "branch0_seg0",
+      "vessel_id": 3,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": { "R_poiseuille": 0.003348073, "L": 0.004 }
+    },
+    {
+      "_comment_": "Systemic proximal R+C. C = 0.228215*1.044637, Rp = 0.09*R_total.",
+      "vessel_name": "sys_Rp",
+      "vessel_id": 4,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": { "R_poiseuille": 0.134156617, "C": 0.238401833 }
+    },
+    {
+      "_comment_": "Systemic distal R. Rd = 0.91*R_total.",
+      "vessel_name": "sys_Rd",
+      "vessel_id": 5,
+      "vessel_length": 10.0,
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": { "R_poiseuille": 1.356472458 }
+    }
+  ],
+  "junctions": [
+    {
+      "junction_name": "J_pul",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["pul_vessel"],
+      "outlet_blocks": ["LA"]
+    },
+    {
+      "junction_name": "J_cap",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["aortic_cap"],
+      "outlet_blocks": ["branch0_seg0"]
+    },
+    {
+      "junction_name": "J_sys1",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["branch0_seg0"],
+      "outlet_blocks": ["sys_Rp"]
+    },
+    {
+      "junction_name": "J_sys2",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["sys_Rp"],
+      "outlet_blocks": ["sys_Rd"]
+    },
+    {
+      "junction_name": "J_return",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["sys_Rd"],
+      "outlet_blocks": ["RA"]
+    }
+  ],
+  "chambers": [
+    {
+      "_comment_": "Right atrium. Emax=Emax_ra, Impedance=Lra_v. Exponential passive P-V (Kxp_ra/Kxv_ra/Vaso_ra). Wrapping cosine activation matches atrial AA(t) from Sankaran 2012.",
+      "type": "ChamberElastanceInductorExponential",
+      "name": "RA",
+      "values": {
+        "Emax": 0.208858,
+        "Impedance": 0.000217032,
+        "Kxp": 9.22244,
+        "Kxv": 0.004837,
+        "Vaso": 4.848742
+      },
+      "activation_function": {
+        "type": "wrapping_cosine",
+        "Tsa": 0.40742,
+        "tpwave": 8.976868
+      }
+    },
+    {
+      "_comment_": "Right ventricle. Emax~Erv_s (see note), Impedance=Lrv_a, Vrd=Vrs=Vrv_u. Fourier activation from Tran's tuning framework (Menon 2023).",
+      "type": "ChamberElastanceInductor",
+      "name": "RV",
+      "values": {
+        "Emax": 2.098463,
+        "Emin": 0.108573,
+        "Vrd": 9.424629,
+        "Vrs": 9.424629,
+        "Impedance": 0.000186865
+      },
+      "activation_function": { "type": "fourier" }
+    },
+    {
+      "_comment_": "Left atrium. Emax=Emax_la, Impedance=Lla_v. Exponential passive P-V (Kxp_la/Kxv_la/Vaso_la). Wrapping cosine activation matches atrial AA(t) from Sankaran 2012.",
+      "type": "ChamberElastanceInductorExponential",
+      "name": "LA",
+      "values": {
+        "Emax": 0.303119,
+        "Impedance": 0.000351787,
+        "Kxp": 9.194992,
+        "Kxv": 0.008067,
+        "Vaso": 9.355754
+      },
+      "activation_function": {
+        "type": "wrapping_cosine",
+        "Tsa": 0.40742,
+        "tpwave": 8.976868
+      }
+    },
+    {
+      "_comment_": "Left ventricle. Emax~Elv_s (see note), Impedance=Llv_a, Vrd=Vrs=Vlv_u. Fourier activation from Tran's tuning framework (Menon 2023).",
+      "type": "ChamberElastanceInductor",
+      "name": "LV",
+      "values": {
+        "Emax": 3.085769,
+        "Emin": 0.159656,
+        "Vrd": 5.606007,
+        "Vrs": 5.606007,
+        "Impedance": 0.000110776
+      },
+      "activation_function": { "type": "fourier" }
+    }
+  ],
+  "valves": [
+    {
+      "_comment_": "Tricuspid valve. Rmin=Rra_v. Smooth tanh approximation of monolithic hard on/off valve.",
+      "type": "ValveTanh",
+      "name": "TV",
+      "params": {
+        "Rmin": 0.007887459,
+        "Rmax": 1.0e3,
+        "Steepness": 1.0e4,
+        "upstream_block": "RA",
+        "downstream_block": "RV"
+      }
+    },
+    {
+      "_comment_": "Pulmonary valve. Rmin=Rrv_a.",
+      "type": "ValveTanh",
+      "name": "PV",
+      "params": {
+        "Rmin": 0.035061704,
+        "Rmax": 1.0e3,
+        "Steepness": 1.0e4,
+        "upstream_block": "RV",
+        "downstream_block": "pul_vessel"
+      }
+    },
+    {
+      "_comment_": "Mitral valve. Rmin=Rla_v.",
+      "type": "ValveTanh",
+      "name": "MV",
+      "params": {
+        "Rmin": 0.005310825,
+        "Rmax": 1.0e3,
+        "Steepness": 1.0e4,
+        "upstream_block": "LA",
+        "downstream_block": "LV"
+      }
+    },
+    {
+      "_comment_": "Aortic valve. Rmin=Rlv_ao.",
+      "type": "ValveTanh",
+      "name": "AV",
+      "params": {
+        "Rmin": 0.034320234,
+        "Rmax": 1.0e3,
+        "Steepness": 1.0e4,
+        "upstream_block": "LV",
+        "downstream_block": "aortic_cap"
+      }
+    }
+  ],
+  "initial_condition": {
+    "Vc:RA": 38.43,
+    "Vc:RV": 96.07,
+    "Vc:LA": 38.43,
+    "Vc:LV": 96.07
+  }
+}

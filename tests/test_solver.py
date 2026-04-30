@@ -54,7 +54,8 @@ EXPECTED_FAILURES = {
                                       'piecewise_Chamber_and_Valve.json',
                                       'closed_loop_two_hill.json',
                                       'pulsatileFlow_CRL.json',
-                                      'pulsatileFlow_R_coronary_varres.json'
+                                      'pulsatileFlow_R_coronary_varres.json',
+                                      'closedLoopHeart_singleVessel_decomposed.json'
                                       ])
 def test_solver(testfile):
     '''

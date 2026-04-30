@@ -134,6 +134,25 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(pybind11_json)
 
 # -----------------------------------------------------------------------------
+# Fetch ExprTk
+# -----------------------------------------------------------------------------
+# ExprTk is a header-only mathematical expression parser used by Parameter.
+#
+FetchContent_Declare(
+    exprtk
+    GIT_REPOSITORY https://github.com/ArashPartow/exprtk.git
+    GIT_TAG        master
+    GIT_SHALLOW    TRUE
+    GIT_PROGRESS   TRUE
+)
+
+FetchContent_MakeAvailable(exprtk)
+
+add_library(exprtk INTERFACE)
+add_library(exprtk::exprtk ALIAS exprtk)
+target_include_directories(exprtk INTERFACE ${exprtk_SOURCE_DIR})
+
+# -----------------------------------------------------------------------------
 # Set executables for each application.
 # -----------------------------------------------------------------------------
 # There are two executables

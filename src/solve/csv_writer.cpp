@@ -44,6 +44,7 @@ std::string to_vessel_csv(const std::vector<double>& times,
     // Extract global solution indices of the block
 
     if (dynamic_cast<const BloodVessel*>(block) == nullptr &&
+        dynamic_cast<const BloodVesselFC*>(block) == nullptr &&
         dynamic_cast<const ChamberSphere*>(block) == nullptr &&
         dynamic_cast<const LinearElastanceChamber*>(block) == nullptr &&
         dynamic_cast<const PiecewiseValve*>(block) == nullptr &&

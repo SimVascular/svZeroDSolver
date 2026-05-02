@@ -337,8 +337,17 @@ void create_vessels(
     const std::string vessel_name = vessel_config["vessel_name"];
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
-    generate_block(model, vessel_values, vessel_config["zero_d_element_type"],
-                   vessel_name);
+    std::string element_type =
+        vessel_config["zero_d_element_type"].get<std::string>();
+    nlohmann::json block_params = vessel_values;
+    if (element_type == "BloodVesselFC") {
+      if (block_params.contains("C")) {
+        model.fixed_capacitance[vessel_name] = block_params["C"].get<double>();
+        block_params.erase("C");
+      }
+    }
+
+    generate_block(model, block_params, element_type, vessel_name);
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {

@@ -37,6 +37,7 @@ def compute_all_ref_sol(tolerance=None):
     """
     testfiles = [f for f in os.listdir(os.path.join(this_file_dir, 'cases')) if f.endswith('.json')]
     testfiles.remove("steadyFlow_calibration.json")
+    testfiles.remove("calibration_BloodVesselFC_fixedC1e-6.json")
     for testfile in testfiles:
         if tolerance is not None:
             set_absolute_tolerance(testfile, tolerance)

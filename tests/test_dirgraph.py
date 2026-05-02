@@ -1,7 +1,8 @@
-import pytest
-import filecmp
 import os
+import shutil
 import sys
+
+import pytest
 
 # Append the 'applications/dirgraph' directory to the system path for imports
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../applications/svZeroDVisualization')))
@@ -12,6 +13,11 @@ from dirgraph_utils import set_up_0d_network
 
 cases_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cases'))
 results_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), 'cases/dirgraph-results'))
+
+pytestmark = pytest.mark.skipif(
+    shutil.which("dot") is None,
+    reason="Graphviz executable 'dot' not found in PATH (required for directed graph layout)",
+)
 
 
 # List of files to exclude

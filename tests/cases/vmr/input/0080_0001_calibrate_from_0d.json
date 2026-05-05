@@ -842,7 +842,9 @@
       "inlet_vessels": [3],
       "junction_name": "J1",
       "junction_type": "NORMAL_JUNCTION",
-      "outlet_vessels": [4, 37, 49, 59, 70, 73, 91, 94, 100, 137, 156, 168, 186, 198],
+      "outlet_vessels": [
+        4, 37, 49, 59, 70, 73, 91, 94, 100, 137, 156, 168, 186, 198
+      ],
       "calibrate": ["R_poiseuille", "L", "stenosis_coefficient"]
     },
     {

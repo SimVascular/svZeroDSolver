@@ -31,8 +31,7 @@ blocks:
   number of samples is the same for every variable. `dy` holds the matching
   time derivatives.
 * `calibration_parameters` collects the calibrator-specific options
-  (tolerances, iteration cap, damping factor, legacy
-  `calibrate_stenosis_coefficient` switch).
+  (tolerances, iteration cap, damping factor, capacitance clamp).
 
 The output file has the same shape as a solver input but with calibrated
 values written into `zero_d_element_values` (vessels) and `junction_values`
@@ -41,11 +40,10 @@ removed from the output.
 
 ## Selecting which parameters to calibrate
 
-By default every parameter exposed by every supported block is calibrated.
-To restrict the optimization, add an optional `calibrate` field to a vessel
-or junction listing the parameter names that should be optimized for that
-block. Any parameter not in the list is held constant at the value found in
-the input file.
+Every vessel and multi-outlet junction must declare which of its parameters
+should be calibrated through a `calibrate` field listing the parameter names.
+Parameters that are not listed are held constant at the value found in the
+input file.
 
 The names must match the parameter names a block exposes through its
 `input_params` list (e.g. `R_poiseuille`, `C`, `L`, `stenosis_coefficient`
@@ -85,11 +83,15 @@ for `BloodVessel`).
 
 * If a block has a `calibrate` field, only the listed parameters are
   optimized for that block.
-* If a block has no `calibrate` field, every parameter the block exposes is
-  optimized (legacy behavior).
-* An explicit empty list (`"calibrate": []`) means "calibrate nothing for
-  this block". The calibrator errors out if no parameter ends up selected
-  in any block.
+* If a block has no `calibrate` field (or an empty list), every parameter of
+  that block is held at its input value.
+* The calibrator errors out if no parameter ends up selected anywhere in the
+  model.
+
+To calibrate every parameter of a block (the previous default), list every
+name explicitly, e.g. `"calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]`
+for a `BloodVessel` or `"calibrate": ["R_poiseuille", "L", "stenosis_coefficient"]`
+for a `BloodVesselJunction`.
 
 ### Worked example
 
@@ -109,9 +111,3 @@ exposes its parameter names through the standard `Block::input_params`
 field. The calibrator reads this metadata at runtime via
 `Block::input_params` and `Block::input_params_list`, so adding a new
 calibratable block does not require any changes to `calibrate.cpp`.
-
-The legacy flag `calibration_parameters.calibrate_stenosis_coefficient`
-(default `true`) layers on top of the selection logic: when set to `false`,
-`stenosis_coefficient` is held constant regardless of any `calibrate` field.
-The flag predates the `calibrate` field and is preserved for backward
-compatibility; new input files should prefer per-block `calibrate`.

@@ -2,7 +2,6 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "calibrate.h"
 
-#include <optional>
 #include <set>
 
 #include "LevenbergMarquardtOptimizer.h"
@@ -40,47 +39,37 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   double increment_tol =
       calibration_parameters.value("tolerance_increment", 1e-10);
   int max_iter = calibration_parameters.value("maximum_iterations", 100);
-  bool calibrate_stenosis =
-      calibration_parameters.value("calibrate_stenosis_coefficient", true);
   bool zero_capacitance =
       calibration_parameters.value("set_capacitance_to_zero", false);
   double lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
 
   // Resolve the set of parameter names to calibrate for a given block from
-  // its own ``calibrate`` field. If the field is absent the block falls back
-  // to ``std::nullopt`` meaning "calibrate every parameter of this block"
-  // (legacy behavior); an explicit empty list means "calibrate nothing for
-  // this block".
-  auto resolve_calibrate_set = [](const nlohmann::json& block_config)
-      -> std::optional<std::set<std::string>> {
-    if (!block_config.contains("calibrate")) return std::nullopt;
-    auto names = block_config["calibrate"].get<std::vector<std::string>>();
-    return std::set<std::string>(names.begin(), names.end());
-  };
-  // Whether ``name`` should be calibrated for this block. The ``set`` argument
-  // is the resolved per-block calibrate filter (nullopt = calibrate all). The
-  // legacy ``calibrate_stenosis_coefficient`` flag layers on top: if disabled,
-  // ``stenosis_coefficient`` is held constant regardless.
-  auto is_active = [&](const std::optional<std::set<std::string>>& set,
-                       const std::string& name) {
-    if (!calibrate_stenosis && name == "stenosis_coefficient") return false;
-    return !set.has_value() || set->count(name) > 0;
+  // its own ``calibrate`` field. The field is mandatory: a block without a
+  // ``calibrate`` field has no parameters optimized (every parameter of that
+  // block is held at its input value). An explicit empty list is equivalent
+  // to omitting the field.
+  auto resolve_calibrate_set = [](const nlohmann::json& block_config) {
+    std::set<std::string> names;
+    if (!block_config.contains("calibrate")) return names;
+    auto list = block_config["calibrate"].get<std::vector<std::string>>();
+    names.insert(list.begin(), list.end());
+    return names;
   };
 
   // Append the active alpha indices contributed by a single block to
-  // ``active_param_ids``. Walks the block's ``input_params`` and consults the
-  // resolved calibrate filter to decide whether each parameter (or each
-  // per-outlet copy of it, for list blocks) is optimized.
+  // ``active_param_ids``. Walks the block's ``input_params`` and includes
+  // each parameter (or, for list blocks, each per-outlet copy of it) whose
+  // name appears in the resolved calibrate filter.
   std::vector<int> active_param_ids;
   auto register_active = [&](const Block& block,
                              const std::vector<int>& param_ids,
-                             const std::optional<std::set<std::string>>& set) {
+                             const std::set<std::string>& set) {
     int stride = static_cast<int>(param_ids.size()) /
                  static_cast<int>(block.input_params.size());
     if (!block.input_params_list) stride = 1;
     for (size_t i = 0; i < block.input_params.size(); i++) {
       const std::string& name = block.input_params[i].first;
-      if (!is_active(set, name)) continue;
+      if (set.count(name) == 0) continue;
       for (int s = 0; s < stride; s++) {
         active_param_ids.push_back(param_ids[i * stride + s]);
       }
@@ -261,9 +250,9 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   DEBUG_MSG("Number of active parameters " << active_param_ids.size());
   if (active_param_ids.empty()) {
     throw std::runtime_error(
-        "[svzerodcalibrator] No parameters selected for calibration. Either "
-        "omit the 'calibrate' field from every block, or list at least one "
-        "parameter name in some block.");
+        "[svzerodcalibrator] No parameters selected for calibration. Add a "
+        "'calibrate' field listing parameter names to at least one vessel or "
+        "junction.");
   }
   auto lm_alg = LevenbergMarquardtOptimizer(
       &model, num_obs, param_counter, active_param_ids, lambda0, gradient_tol,

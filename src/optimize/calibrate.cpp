@@ -2,6 +2,8 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "calibrate.h"
 
+#include <set>
+
 #include "LevenbergMarquardtOptimizer.h"
 #include "SimulationParameters.h"
 
@@ -22,10 +24,32 @@ nlohmann::json calibrate(const nlohmann::json& config) {
       calibration_parameters.value("set_capacitance_to_zero", false);
   double lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
 
+  // Optional list of parameter names to calibrate. Any parameter not listed is
+  // held constant at its initial value from the input file. If the field is
+  // absent or empty, all parameters are calibrated (legacy behavior).
+  std::set<std::string> calibrate_names;
+  bool calibrate_all = true;
+  if (calibration_parameters.contains("calibrate")) {
+    auto names =
+        calibration_parameters["calibrate"].get<std::vector<std::string>>();
+    if (!names.empty()) {
+      calibrate_names.insert(names.begin(), names.end());
+      calibrate_all = false;
+    }
+  }
+  auto is_active = [&](const std::string& name) {
+    return calibrate_all || calibrate_names.count(name) > 0;
+  };
+
   int num_params = 3;
   if (calibrate_stenosis) {
     num_params = 4;
   }
+  // Parameter names ordered to match BloodVessel::ParamId.
+  const std::vector<std::string> bv_param_names = {
+      "R_poiseuille", "C", "L", "stenosis_coefficient"};
+  // Active parameter ids in alpha (ids of params actually optimized).
+  std::vector<int> active_param_ids;
 
   // Setup model
   auto model = Model();
@@ -49,6 +73,13 @@ nlohmann::json calibrate(const nlohmann::json& config) {
     model.add_block(block_type, param_ids, vessel_name);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);
+
+    // Mark which of this block's parameters are active.
+    for (size_t k = 0; k < num_params; k++) {
+      if (is_active(bv_param_names[k])) {
+        active_param_ids.push_back(param_ids[k]);
+      }
+    }
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
@@ -76,6 +107,23 @@ nlohmann::json calibrate(const nlohmann::json& config) {
       for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++)
         param_ids.push_back(param_counter++);
       model.add_block("BloodVesselJunction", param_ids, junction_name);
+
+      // Mark which of this junction's per-outlet parameters are active.
+      // Layout: [R0..Rn-1, L0..Ln-1, (S0..Sn-1)?]
+      for (size_t i = 0; i < num_outlets; i++) {
+        if (is_active("R_poiseuille"))
+          active_param_ids.push_back(param_ids[i]);
+      }
+      for (size_t i = 0; i < num_outlets; i++) {
+        if (is_active("L"))
+          active_param_ids.push_back(param_ids[num_outlets + i]);
+      }
+      if (num_params > 3) {
+        for (size_t i = 0; i < num_outlets; i++) {
+          if (is_active("stenosis_coefficient"))
+            active_param_ids.push_back(param_ids[2 * num_outlets + i]);
+        }
+      }
     }
 
     // Check for connections to inlet and outlet vessels and append to
@@ -203,9 +251,16 @@ nlohmann::json calibrate(const nlohmann::json& config) {
 
   // Run optimization
   DEBUG_MSG("Start optimization");
-  auto lm_alg =
-      LevenbergMarquardtOptimizer(&model, num_obs, param_counter, lambda0,
-                                  gradient_tol, increment_tol, max_iter);
+  DEBUG_MSG("Number of active parameters " << active_param_ids.size());
+  if (active_param_ids.empty()) {
+    throw std::runtime_error(
+        "[svzerodcalibrator] No parameters selected for calibration. Either "
+        "omit 'calibrate' from calibration_parameters or list at least one "
+        "parameter name.");
+  }
+  auto lm_alg = LevenbergMarquardtOptimizer(
+      &model, num_obs, param_counter, active_param_ids, lambda0, gradient_tol,
+      increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 

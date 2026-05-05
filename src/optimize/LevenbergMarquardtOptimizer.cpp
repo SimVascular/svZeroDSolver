@@ -5,11 +5,14 @@
 #include <iomanip>
 
 LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
-    Model* model, int num_obs, int num_params, double lambda0, double tol_grad,
+    Model* model, int num_obs, int num_params,
+    const std::vector<int>& active_param_ids, double lambda0, double tol_grad,
     double tol_inc, int max_iter) {
   this->model = model;
   this->num_obs = num_obs;
   this->num_params = num_params;
+  this->active_param_ids = active_param_ids;
+  this->num_active = static_cast<int>(active_param_ids.size());
   this->num_eqns = model->dofhandler.get_num_equations();
   this->num_vars = model->dofhandler.get_num_variables();
   this->num_dpoints = this->num_obs * this->num_eqns;
@@ -20,9 +23,9 @@ LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
 
   jacobian = Eigen::SparseMatrix<double>(num_dpoints, num_params);
   residual = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(num_dpoints);
-  mat = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(num_params,
-                                                              num_params);
-  vec = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(num_params);
+  mat = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(num_active,
+                                                              num_active);
+  vec = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(num_active);
 }
 
 Eigen::Matrix<double, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer::run(
@@ -38,7 +41,9 @@ Eigen::Matrix<double, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer::run(
       update_delta(false);
     }
 
-    alpha -= delta;
+    for (int k = 0; k < num_active; k++) {
+      alpha[active_param_ids[k]] -= delta[k];
+    }
     double norm_grad = vec.norm();
     double norm_inc = delta.norm();
     std::cout << std::setprecision(1) << std::scientific << "Iteration "
@@ -79,9 +84,23 @@ void LevenbergMarquardtOptimizer::update_gradient(
 }
 
 void LevenbergMarquardtOptimizer::update_delta(bool first_step) {
+  // Build a reduced Jacobian containing only columns of active parameters.
+  // Inactive parameters are held constant, so they do not appear in the
+  // reduced normal equations.
+  Eigen::SparseMatrix<double> jac_active(num_dpoints, num_active);
+  std::vector<Eigen::Triplet<double>> triplets;
+  for (int k = 0; k < num_active; k++) {
+    int col = active_param_ids[k];
+    for (Eigen::SparseMatrix<double>::InnerIterator it(jacobian, col); it;
+         ++it) {
+      triplets.emplace_back(it.row(), k, it.value());
+    }
+  }
+  jac_active.setFromTriplets(triplets.begin(), triplets.end());
+
   // Cache old gradient vector and calulcate new one
   Eigen::Matrix<double, Eigen::Dynamic, 1> vec_old = vec;
-  vec = jacobian.transpose() * residual;
+  vec = jac_active.transpose() * residual;
 
   // Determine new lambda parameter from new and old gradient vector
   if (!first_step) {
@@ -90,7 +109,7 @@ void LevenbergMarquardtOptimizer::update_delta(bool first_step) {
 
   // Determine gradient matrix
   Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> jacobian_sq =
-      jacobian.transpose() * jacobian;
+      jac_active.transpose() * jac_active;
   Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> jacobian_sq_diag =
       jacobian_sq.diagonal().asDiagonal();
   mat = jacobian_sq + lambda * jacobian_sq_diag;

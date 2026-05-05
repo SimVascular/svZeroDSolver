@@ -4704,8 +4704,7 @@
   "calibration_parameters": {
     "tolerance_gradient": 1e-5,
     "tolerance_increment": 1e-9,
-    "maximum_iterations": 20,
-    "set_capacitance_to_zero": false
+    "maximum_iterations": 20
   },
   "y": {
     "flow:branch0_seg0:J0": [

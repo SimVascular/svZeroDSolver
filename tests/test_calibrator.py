@@ -26,25 +26,37 @@ def test_steady_flow_calibration():
     )
 
 
-@pytest.mark.parametrize("model_id", ["0080_0001", "0104_0001", "0140_2001"])
-def test_calibration_vmr(model_id):
-    """Test actual models from the vascular model repository."""
-    with open(
-        os.path.join(
-            this_file_dir, "cases", "vmr", "input", f"{model_id}_calibrate_from_0d.json"
-        )
-    ) as ff:
-        reference = json.load(ff)
-
+@pytest.mark.parametrize(
+    "test_case",
+    [
+        "0080_0001_calibrate_from_0d",
+        "0104_0001_calibrate_from_0d",
+        "0140_2001_calibrate_from_0d",
+        # Calibrates only R_poiseuille via per-block ``calibrate`` fields,
+        # starting from the reference values for C, L and
+        # stenosis_coefficient and zeroed R_poiseuille. The calibrator should
+        # recover R_poiseuille while leaving the other parameters untouched.
+        "0104_0001_calibrate_R_only",
+    ],
+)
+def test_calibration_vmr(test_case):
+    """Calibrate a model from the vascular model repository and check that
+    every parameter matches the corresponding reference."""
     test = os.path.join(
-        this_file_dir, "cases", "vmr", "input", f"{model_id}_calibrate_from_0d.json"
+        this_file_dir, "cases", "vmr", "input", f"{test_case}.json"
     )
+    model_id = test_case[:9]
+    reference_file = os.path.join(
+        this_file_dir, "cases", "vmr", "reference", f"{model_id}_optimal_from_0d.json"
+    )
+    with open(reference_file) as ff:
+        reference = json.load(ff)
 
     result, _ = execute_pysvzerod(test, "calibrator")
 
     for i, vessel in enumerate(reference["vessels"]):
         for key, value in vessel["zero_d_element_values"].items():
-            np.isclose(
+            assert np.isclose(
                 result["vessels"][i]["zero_d_element_values"][key],
                 value,
                 rtol=RTOL_PRES,
@@ -53,57 +65,8 @@ def test_calibration_vmr(model_id):
     for i, junction in enumerate(reference["junctions"]):
         if "junction_values" in junction:
             for key, value in junction["junction_values"].items():
-                np.allclose(
+                assert np.allclose(
                     result["junctions"][i]["junction_values"][key],
                     value,
                     rtol=RTOL_PRES,
                 )
-
-
-def test_calibration_R_only():
-    """Calibrate only ``R_poiseuille`` on a VMR model while holding C, L and
-    stenosis_coefficient at their ground-truth values via per-block
-    ``calibrate`` fields. The fixture starts from the calibrated reference (so
-    non-R parameters are at the optimum) with every R_poiseuille zeroed; the
-    calibrator should recover R_poiseuille and leave the rest untouched. The
-    reference values to compare against live in
-    ``tests/cases/vmr/reference/0104_0001_optimal_from_0d.json``.
-    """
-    testfile = os.path.join(
-        this_file_dir,
-        "cases",
-        "vmr",
-        "input",
-        "0104_0001_calibrate_R_only.json",
-    )
-    reference_file = os.path.join(
-        this_file_dir,
-        "cases",
-        "vmr",
-        "reference",
-        "0104_0001_optimal_from_0d.json",
-    )
-    with open(reference_file) as ff:
-        reference = json.load(ff)
-
-    result, _ = execute_pysvzerod(testfile, "calibrator")
-
-    for ref_vessel, res_vessel in zip(reference["vessels"], result["vessels"]):
-        for key, ref_value in ref_vessel["zero_d_element_values"].items():
-            res_value = res_vessel["zero_d_element_values"][key]
-            assert np.isclose(res_value, ref_value, atol=1e-9, rtol=RTOL_PRES), (
-                f"Vessel {ref_vessel['vessel_name']} parameter {key}: "
-                f"expected {ref_value}, got {res_value}"
-            )
-
-    for ref_junction, res_junction in zip(
-        reference["junctions"], result["junctions"]
-    ):
-        if "junction_values" not in ref_junction:
-            continue
-        for key, ref_values in ref_junction["junction_values"].items():
-            res_values = res_junction["junction_values"][key]
-            assert np.allclose(res_values, ref_values, atol=1e-9, rtol=RTOL_PRES), (
-                f"Junction {ref_junction['junction_name']} parameter {key}: "
-                f"expected {ref_values}, got {res_values}"
-            )

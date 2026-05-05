@@ -39,8 +39,6 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   double increment_tol =
       calibration_parameters.value("tolerance_increment", 1e-10);
   int max_iter = calibration_parameters.value("maximum_iterations", 100);
-  bool zero_capacitance =
-      calibration_parameters.value("set_capacitance_to_zero", false);
   double lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
 
   // Resolve the set of parameter names to calibrate for a given block from
@@ -262,11 +260,6 @@ nlohmann::json calibrate(const nlohmann::json& config) {
 
   // Build a JSON values object for a block by reading optimized alpha values
   // out using the block's own ``input_params``.
-  auto post_process = [&](const std::string& name, double v) {
-    if (name == "C" && zero_capacitance) v = 0.0;
-    if (name == "C" || name == "L") v = std::max(v, 0.0);
-    return v;
-  };
   auto write_alpha_for_block = [&](const Block& block) -> nlohmann::json {
     nlohmann::json values = nlohmann::json::object();
     int total = static_cast<int>(block.global_param_ids.size());
@@ -277,12 +270,11 @@ nlohmann::json calibrate(const nlohmann::json& config) {
       if (block.input_params_list) {
         std::vector<double> arr;
         for (int s = 0; s < stride; s++) {
-          arr.push_back(post_process(
-              name, alpha[block.global_param_ids[i * stride + s]]));
+          arr.push_back(alpha[block.global_param_ids[i * stride + s]]);
         }
         values[name] = arr;
       } else {
-        values[name] = post_process(name, alpha[block.global_param_ids[i]]);
+        values[name] = alpha[block.global_param_ids[i]];
       }
     }
     return values;

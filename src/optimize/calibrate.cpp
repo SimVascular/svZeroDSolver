@@ -46,8 +46,8 @@ nlohmann::json calibrate(const nlohmann::json& config) {
     num_params = 4;
   }
   // Parameter names ordered to match BloodVessel::ParamId.
-  const std::vector<std::string> bv_param_names = {
-      "R_poiseuille", "C", "L", "stenosis_coefficient"};
+  const std::vector<std::string> bv_param_names = {"R_poiseuille", "C", "L",
+                                                   "stenosis_coefficient"};
   // Active parameter ids in alpha (ids of params actually optimized).
   std::vector<int> active_param_ids;
 
@@ -111,8 +111,7 @@ nlohmann::json calibrate(const nlohmann::json& config) {
       // Mark which of this junction's per-outlet parameters are active.
       // Layout: [R0..Rn-1, L0..Ln-1, (S0..Sn-1)?]
       for (size_t i = 0; i < num_outlets; i++) {
-        if (is_active("R_poiseuille"))
-          active_param_ids.push_back(param_ids[i]);
+        if (is_active("R_poiseuille")) active_param_ids.push_back(param_ids[i]);
       }
       for (size_t i = 0; i < num_outlets; i++) {
         if (is_active("L"))

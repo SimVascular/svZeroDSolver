@@ -30,8 +30,9 @@ blocks:
   `flow:branch0_seg0:OUT`). Each value is a list of observed samples; the
   number of samples is the same for every variable. `dy` holds the matching
   time derivatives.
-* `calibration_parameters` collects the calibrator-specific options described
-  below.
+* `calibration_parameters` collects the calibrator-specific options
+  (tolerances, iteration cap, damping factor, legacy
+  `calibrate_stenosis_coefficient` switch).
 
 The output file has the same shape as a solver input but with calibrated
 values written into `zero_d_element_values` (vessels) and `junction_values`
@@ -41,36 +42,14 @@ removed from the output.
 ## Selecting which parameters to calibrate
 
 By default every parameter exposed by every supported block is calibrated.
-Two optional fields restrict the set of parameters that are optimized; any
-parameter that is not selected is held constant at the value found in the
-input file.
+To restrict the optimization, add an optional `calibrate` field to a vessel
+or junction listing the parameter names that should be optimized for that
+block. Any parameter not in the list is held constant at the value found in
+the input file.
 
-### Global default: `calibration_parameters.calibrate`
-
-The list of parameter names under `calibration_parameters.calibrate` applies
-to every block that does not override it. The names must match the parameter
-names a block exposes through its `input_params` list (e.g. `R_poiseuille`,
-`C`, `L`, `stenosis_coefficient` for `BloodVessel`).
-
-```json
-"calibration_parameters": {
-  "tolerance_gradient": 1e-5,
-  "tolerance_increment": 1e-10,
-  "maximum_iterations": 100,
-  "initial_damping_factor": 1.0,
-  "calibrate": ["R_poiseuille"]
-}
-```
-
-In the example above only the Poiseuille resistance is calibrated for every
-block; capacitance, inductance, and stenosis coefficient stay at the values
-provided by the input file.
-
-### Per-block override: `calibrate` field on a vessel or junction
-
-A vessel or junction can carry its own `calibrate` field at the top level of
-its block entry. When present, this list takes precedence over the global
-default for that one block:
+The names must match the parameter names a block exposes through its
+`input_params` list (e.g. `R_poiseuille`, `C`, `L`, `stenosis_coefficient`
+for `BloodVessel`).
 
 ```json
 {
@@ -102,36 +81,25 @@ default for that one block:
 }
 ```
 
-### Resolution order
+### Resolution rules
 
-For each block, the calibrator picks the active set of parameter names with
-the following precedence:
+* If a block has a `calibrate` field, only the listed parameters are
+  optimized for that block.
+* If a block has no `calibrate` field, every parameter the block exposes is
+  optimized (legacy behavior).
+* An explicit empty list (`"calibrate": []`) means "calibrate nothing for
+  this block". The calibrator errors out if no parameter ends up selected
+  in any block.
 
-1. The block's own `calibrate` field, if present.
-2. Otherwise, `calibration_parameters.calibrate`.
-3. Otherwise, every parameter the block exposes (legacy behavior).
+### Worked example
 
-An explicit empty list (`"calibrate": []`) at any level means "calibrate
-nothing for that scope". The calibrator errors out if no parameter is
-selected in any block.
-
-### Worked examples
-
-The repository ships three small fixtures derived from the
-`0104_0001` Vascular Model Repository case that exercise each path:
-
-* `tests/cases/vmr/input/0104_0001_calibrate_R_only_global.json` -
-  uses `calibration_parameters.calibrate`.
-* `tests/cases/vmr/input/0104_0001_calibrate_R_only_per_block.json` -
-  uses per-block `calibrate` fields with no global default.
-* `tests/cases/vmr/input/0104_0001_calibrate_R_only_block_overrides.json` -
-  sets a misleading global default and overrides every block; the override
-  must win.
-
-In each case every `R_poiseuille` value is zeroed in the input file while
-`C`, `L`, and `stenosis_coefficient` are kept at their ground-truth values.
-The calibrator recovers the reference R values to machine precision and
-leaves the other parameters untouched. The matching test is
+The repository ships a small fixture derived from the `0104_0001` Vascular
+Model Repository case at
+`tests/cases/vmr/input/0104_0001_calibrate_R_only.json`. Every vessel and
+multi-outlet junction in that file carries `"calibrate": ["R_poiseuille"]`,
+the non-R parameters are fixed at the calibrated reference, and every R
+value is zeroed. The calibrator recovers the reference R values to machine
+precision and leaves the other parameters untouched. The matching test is
 `tests/test_calibrator.py::test_calibration_R_only`.
 
 ## Block requirements
@@ -146,4 +114,4 @@ The legacy flag `calibration_parameters.calibrate_stenosis_coefficient`
 (default `true`) layers on top of the selection logic: when set to `false`,
 `stenosis_coefficient` is held constant regardless of any `calibrate` field.
 The flag predates the `calibrate` field and is preserved for backward
-compatibility; new input files should prefer `calibrate`.
+compatibility; new input files should prefer per-block `calibrate`.

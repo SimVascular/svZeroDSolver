@@ -46,26 +46,16 @@ nlohmann::json calibrate(const nlohmann::json& config) {
       calibration_parameters.value("set_capacitance_to_zero", false);
   double lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
 
-  // Resolve the set of parameter names to calibrate for a given block. The
-  // block's own ``calibrate`` field takes precedence, followed by the global
-  // ``calibration_parameters.calibrate`` default. If neither is present,
-  // returns ``std::nullopt`` meaning "calibrate every parameter of this
-  // block" (legacy behavior). An explicit empty list means "calibrate
-  // nothing for this block".
-  auto parse_set = [](const nlohmann::json& list) {
-    auto names = list.get<std::vector<std::string>>();
-    return std::set<std::string>(names.begin(), names.end());
-  };
-  std::optional<std::set<std::string>> global_calibrate_set;
-  if (calibration_parameters.contains("calibrate")) {
-    global_calibrate_set = parse_set(calibration_parameters["calibrate"]);
-  }
-  auto resolve_calibrate_set = [&](const nlohmann::json& block_config)
+  // Resolve the set of parameter names to calibrate for a given block from
+  // its own ``calibrate`` field. If the field is absent the block falls back
+  // to ``std::nullopt`` meaning "calibrate every parameter of this block"
+  // (legacy behavior); an explicit empty list means "calibrate nothing for
+  // this block".
+  auto resolve_calibrate_set = [](const nlohmann::json& block_config)
       -> std::optional<std::set<std::string>> {
-    if (block_config.contains("calibrate")) {
-      return parse_set(block_config["calibrate"]);
-    }
-    return global_calibrate_set;
+    if (!block_config.contains("calibrate")) return std::nullopt;
+    auto names = block_config["calibrate"].get<std::vector<std::string>>();
+    return std::set<std::string>(names.begin(), names.end());
   };
   // Whether ``name`` should be calibrated for this block. The ``set`` argument
   // is the resolved per-block calibrate filter (nullopt = calibrate all). The
@@ -272,8 +262,8 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   if (active_param_ids.empty()) {
     throw std::runtime_error(
         "[svzerodcalibrator] No parameters selected for calibration. Either "
-        "omit 'calibrate' from calibration_parameters or list at least one "
-        "parameter name.");
+        "omit the 'calibrate' field from every block, or list at least one "
+        "parameter name in some block.");
   }
   auto lm_alg = LevenbergMarquardtOptimizer(
       &model, num_obs, param_counter, active_param_ids, lambda0, gradient_tol,

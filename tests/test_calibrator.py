@@ -60,28 +60,28 @@ def test_calibration_vmr(model_id):
                 )
 
 
-@pytest.mark.parametrize(
-    "case",
-    [
-        # Selects parameters via the global ``calibration_parameters.calibrate``.
-        "0104_0001_calibrate_R_only_global",
-        # Selects parameters via per-block ``calibrate`` fields, no global default.
-        "0104_0001_calibrate_R_only_per_block",
-        # Per-block ``calibrate`` overrides a misleading global default.
-        "0104_0001_calibrate_R_only_block_overrides",
-    ],
-)
-def test_calibration_R_only(case):
+def test_calibration_R_only():
     """Calibrate only ``R_poiseuille`` on a VMR model while holding C, L and
-    stenosis_coefficient at their ground-truth values. The test fixtures start
-    from the calibrated reference (so non-R parameters are at the optimum) with
-    every R_poiseuille zeroed; the calibrator should recover R_poiseuille and
-    leave the rest untouched. The reference values to compare against live in
+    stenosis_coefficient at their ground-truth values via per-block
+    ``calibrate`` fields. The fixture starts from the calibrated reference (so
+    non-R parameters are at the optimum) with every R_poiseuille zeroed; the
+    calibrator should recover R_poiseuille and leave the rest untouched. The
+    reference values to compare against live in
     ``tests/cases/vmr/reference/0104_0001_optimal_from_0d.json``.
     """
-    testfile = os.path.join(this_file_dir, "cases", "vmr", "input", f"{case}.json")
+    testfile = os.path.join(
+        this_file_dir,
+        "cases",
+        "vmr",
+        "input",
+        "0104_0001_calibrate_R_only.json",
+    )
     reference_file = os.path.join(
-        this_file_dir, "cases", "vmr", "reference", "0104_0001_optimal_from_0d.json"
+        this_file_dir,
+        "cases",
+        "vmr",
+        "reference",
+        "0104_0001_optimal_from_0d.json",
     )
     with open(reference_file) as ff:
         reference = json.load(ff)

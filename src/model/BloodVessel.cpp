@@ -58,23 +58,16 @@ void BloodVessel::update_solution(
 
 void BloodVessel::update_gradient(
     Eigen::SparseMatrix<double>& jacobian,
-    Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
     Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
     std::vector<double>& dy) {
-  auto y0 = y[global_var_ids[0]];
   auto y1 = y[global_var_ids[1]];
-  auto y2 = y[global_var_ids[2]];
-  auto y3 = y[global_var_ids[3]];
-
   auto dy0 = dy[global_var_ids[0]];
   auto dy1 = dy[global_var_ids[1]];
   auto dy3 = dy[global_var_ids[3]];
 
   auto resistance = alpha[global_param_ids[ParamId::RESISTANCE]];
   auto capacitance = alpha[global_param_ids[ParamId::CAPACITANCE]];
-  auto inductance = alpha[global_param_ids[ParamId::INDUCTANCE]];
   double stenosis_coeff = 0.0;
-
   if (global_param_ids.size() > 3) {
     stenosis_coeff = alpha[global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
   }
@@ -82,7 +75,6 @@ void BloodVessel::update_gradient(
 
   jacobian.coeffRef(global_eqn_ids[0], global_param_ids[0]) = -y1;
   jacobian.coeffRef(global_eqn_ids[0], global_param_ids[2]) = -dy3;
-
   if (global_param_ids.size() > 3) {
     jacobian.coeffRef(global_eqn_ids[0], global_param_ids[3]) = -fabs(y1) * y1;
   }
@@ -90,15 +82,8 @@ void BloodVessel::update_gradient(
   jacobian.coeffRef(global_eqn_ids[1], global_param_ids[0]) = capacitance * dy1;
   jacobian.coeffRef(global_eqn_ids[1], global_param_ids[1]) =
       -dy0 + (resistance + 2 * stenosis_resistance) * dy1;
-
   if (global_param_ids.size() > 3) {
     jacobian.coeffRef(global_eqn_ids[1], global_param_ids[3]) =
         2.0 * capacitance * fabs(y1) * dy1;
   }
-
-  residual(global_eqn_ids[0]) =
-      y0 - (resistance + stenosis_resistance) * y1 - y2 - inductance * dy3;
-  residual(global_eqn_ids[1]) =
-      y1 - y3 - capacitance * dy0 +
-      capacitance * (resistance + 2.0 * stenosis_resistance) * dy1;
 }

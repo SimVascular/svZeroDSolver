@@ -252,20 +252,22 @@ class Block {
   virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
-   * @brief Set the gradient of the block contributions with respect to the
-   * parameters
+   * @brief Write this block's contributions to the parameter Jacobian
+   * \f$\partial r / \partial \alpha\f$.
+   *
+   * The residual is recomputed at the top level of the calibrator from the
+   * solver assembly (E, F, c via update_constant / update_time /
+   * update_solution); each block only needs to populate the columns of the
+   * sparse Jacobian that correspond to its own parameters.
    *
    * @param jacobian Jacobian with respect to the parameters
    * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
-   * @param y Current solution
-   * @param dy Time-derivative of the current solution
+   * @param y Observed solution at the current data point
+   * @param dy Observed time derivative at the current data point
    */
-  virtual void update_gradient(
-      Eigen::SparseMatrix<double>& jacobian,
-      Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
-      Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
-      std::vector<double>& dy);
+  virtual void update_gradient(Eigen::SparseMatrix<double>& jacobian,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
+                               std::vector<double>& y, std::vector<double>& dy);
 
   /**
    * @brief Number of triplets of element

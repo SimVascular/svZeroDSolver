@@ -62,11 +62,10 @@ void Block::update_solution(
 void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
 
 void Block::update_gradient(Eigen::SparseMatrix<double>& jacobian,
-                            Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
                             Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
                             std::vector<double>& y, std::vector<double>& dy) {
-  throw std::runtime_error("Gradient calculation not implemented for block " +
-                           get_name());
+  // Default: block has no calibratable parameters, so it contributes no
+  // columns to the parameter Jacobian. Blocks with parameters override this.
 }
 
 TripletsContributions Block::get_num_triplets() { return num_triplets; }

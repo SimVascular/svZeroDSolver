@@ -11,6 +11,7 @@
 #include <Eigen/Sparse>
 
 #include "Model.h"
+#include "SparseSystem.h"
 
 /**
  * @brief Levenberg-Marquardt optimization class
@@ -114,6 +115,8 @@ class LevenbergMarquardtOptimizer {
   Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> mat;
   Eigen::Matrix<double, Eigen::Dynamic, 1> vec;
   std::vector<int> active_param_ids;
+  SparseSystem system;  ///< Forward-solver assembly used to compute the
+                        ///< residual at each observation
   Model* model;
   double lambda;
 

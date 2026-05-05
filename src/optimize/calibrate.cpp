@@ -89,11 +89,16 @@ nlohmann::json calibrate(const nlohmann::json& config) {
     std::string block_type =
         vessel_config["zero_d_element_type"].get<std::string>();
 
-    // Instantiate the block so we can introspect its parameter names.
+    // Instantiate the block so we can introspect its parameter names. Each
+    // parameter slot is registered with the model so that ``parameter_values``
+    // is sized for the assembly path used by the Levenberg-Marquardt loop.
     auto* block = model.create_block(block_type);
     int num_slots = num_param_slots(*block, /*stride=*/1);
     std::vector<int> param_ids;
-    for (int k = 0; k < num_slots; k++) param_ids.push_back(param_counter++);
+    for (int k = 0; k < num_slots; k++) {
+      param_ids.push_back(model.add_parameter(0.0));
+      param_counter++;
+    }
     model.add_block(block, vessel_name, param_ids);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);
@@ -124,7 +129,10 @@ nlohmann::json calibrate(const nlohmann::json& config) {
       auto* block = model.create_block("BloodVesselJunction");
       int num_slots = num_param_slots(*block, num_outlets);
       std::vector<int> param_ids;
-      for (int k = 0; k < num_slots; k++) param_ids.push_back(param_counter++);
+      for (int k = 0; k < num_slots; k++) {
+        param_ids.push_back(model.add_parameter(0.0));
+        param_counter++;
+      }
       model.add_block(block, junction_name, param_ids);
 
       register_active(*block, param_ids,

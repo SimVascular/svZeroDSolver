@@ -174,17 +174,14 @@ class BloodVesselCRL : public Block {
                        const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
 
   /**
-   * @brief Set the gradient of the block contributions with respect to the
-   * parameters
+   * @brief Write this block's columns of the parameter Jacobian.
    *
    * @param jacobian Jacobian with respect to the parameters
    * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
-   * @param y Current solution
-   * @param dy Time-derivative of the current solution
+   * @param y Observed solution
+   * @param dy Observed time derivative of the solution
    */
   void update_gradient(Eigen::SparseMatrix<double>& jacobian,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
                        Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
                        std::vector<double>& y, std::vector<double>& dy);
 

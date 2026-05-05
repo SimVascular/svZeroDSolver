@@ -50,38 +50,16 @@ void BloodVesselCRL::update_solution(
 
 void BloodVesselCRL::update_gradient(
     Eigen::SparseMatrix<double>& jacobian,
-    Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
     Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
     std::vector<double>& dy) {
-  auto y0 = y[global_var_ids[0]];
-  auto y1 = y[global_var_ids[1]];
-  auto y2 = y[global_var_ids[2]];
   auto y3 = y[global_var_ids[3]];
-
   auto dy0 = dy[global_var_ids[0]];
-  auto dy1 = dy[global_var_ids[1]];
   auto dy3 = dy[global_var_ids[3]];
-
-  auto resistance = alpha[global_param_ids[ParamId::RESISTANCE]];
-  auto capacitance = alpha[global_param_ids[ParamId::CAPACITANCE]];
-  auto inductance = alpha[global_param_ids[ParamId::INDUCTANCE]];
-  double stenosis_coeff = 0.0;
-
-  if (global_param_ids.size() > 3) {
-    stenosis_coeff = alpha[global_param_ids[ParamId::STENOSIS_COEFFICIENT]];
-  }
-  auto stenosis_resistance = stenosis_coeff * fabs(y3);
 
   jacobian.coeffRef(global_eqn_ids[0], global_param_ids[0]) = -y3;
   jacobian.coeffRef(global_eqn_ids[0], global_param_ids[2]) = -dy3;
-
   if (global_param_ids.size() > 3) {
     jacobian.coeffRef(global_eqn_ids[0], global_param_ids[3]) = -fabs(y3) * y3;
   }
-
   jacobian.coeffRef(global_eqn_ids[1], global_param_ids[1]) = -dy0;
-
-  residual(global_eqn_ids[0]) =
-      y0 - (resistance + stenosis_resistance) * y3 - y2 - inductance * dy3;
-  residual(global_eqn_ids[1]) = y1 - y3 - capacitance * dy0;
 }

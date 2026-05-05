@@ -9,6 +9,7 @@ Below are links to important sections of the documentation:
 * [Installing svZeroDSolver](https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-install)
 * [User guide for svZeroDSolver](https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-user-guide)
 * [User guide for svZeroDCalibrator](https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-calibrator)
+* [Selecting parameters to calibrate](@ref calibrator)
 * [User guide for svZeroDVisualization](https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-visualization)
 * [User guide for svZeroDGUI](https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-gui)
 

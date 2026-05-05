@@ -170,6 +170,8 @@ class ChamberElastanceInductor : public Block {
   void update_time(SparseSystem& system,
                    std::vector<double>& parameters) override;
 
+  bool has_time_dependent_assembly() const override { return true; }
+
   /// @brief Number of triplets of element
   TripletsContributions num_triplets{6, 2, 0};
 

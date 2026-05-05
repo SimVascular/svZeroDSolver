@@ -116,6 +116,8 @@ class FlowReferenceBC : public Block {
    */
   void update_time(SparseSystem& system, std::vector<double>& parameters);
 
+  bool has_time_dependent_assembly() const override { return true; }
+
   /**
    * @brief Number of triplets of element
    *

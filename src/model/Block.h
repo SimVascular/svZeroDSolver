@@ -231,6 +231,19 @@ class Block {
                            std::vector<double>& parameters);
 
   /**
+   * @brief Whether this block contributes time-dependent terms to the
+   * assembly.
+   *
+   * The calibrator does not support models containing time-dependent blocks
+   * because the observations passed to it carry no time stamp. Blocks that
+   * implement non-trivial ``update_time`` logic must override this to return
+   * true; the calibrator throws on setup if any such block is present.
+   *
+   * @return true if ``update_time`` writes time-dependent contributions
+   */
+  virtual bool has_time_dependent_assembly() const { return false; }
+
+  /**
    * @brief Update the solution-dependent contributions of the element in a
    * sparse system
    *

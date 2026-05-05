@@ -170,6 +170,21 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   // Finalize model
   model.finalize();
 
+  // The calibrator computes residuals from per-observation (y, dy) snapshots
+  // without an associated time stamp, so any block contributing
+  // time-dependent terms to the assembly cannot be calibrated correctly.
+  // Reject such models up front, before reading observations or constructing
+  // the optimizer.
+  for (int j = 0; j < model.get_num_blocks(true); j++) {
+    auto* block = model.get_block(j);
+    if (block->has_time_dependent_assembly()) {
+      throw std::runtime_error(
+          "[svzerodcalibrator] Block " + block->get_name() +
+          " contributes time-dependent terms to the assembly; the calibrator "
+          "does not support time-dependent blocks.");
+    }
+  }
+
   DEBUG_MSG("Number of parameters " << param_counter);
 
   // Read observations

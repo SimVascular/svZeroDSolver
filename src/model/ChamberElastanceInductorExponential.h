@@ -66,6 +66,7 @@ class ChamberElastanceInductorExponential : public ChamberElastanceInductor {
   };
 
   void update_time(SparseSystem& system, std::vector<double>& parameters);
+  bool has_time_dependent_assembly() const override { return true; }
   void update_solution(SparseSystem& system, std::vector<double>& parameters,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
                        const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);

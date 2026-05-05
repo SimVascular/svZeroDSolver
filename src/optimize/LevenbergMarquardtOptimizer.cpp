@@ -118,8 +118,12 @@ void LevenbergMarquardtOptimizer::update_gradient(
     residual.segment(i * num_eqns, num_eqns) = r.head(num_eqns);
 
     // Each block contributes its own columns of the parameter Jacobian.
+    // Blocks without parameters (e.g. NORMAL_JUNCTION) are skipped so that
+    // the base-class default - which throws to flag missing implementations
+    // - is reached only when a parameterized block forgets to override.
     for (size_t j = 0; j < model->get_num_blocks(true); j++) {
       auto block = model->get_block(j);
+      if (block->global_param_ids.empty()) continue;
       for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
         block->global_eqn_ids[l] += num_eqns * i;
       }

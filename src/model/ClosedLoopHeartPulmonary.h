@@ -215,6 +215,8 @@ class ClosedLoopHeartPulmonary : public Block {
    */
   void update_time(SparseSystem& system, std::vector<double>& parameters);
 
+  bool has_time_dependent_assembly() const override { return true; }
+
   /**
    * @brief Update the solution-dependent contributions of the element in a
    * sparse system

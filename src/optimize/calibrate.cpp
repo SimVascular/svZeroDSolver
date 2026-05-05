@@ -2,8 +2,31 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "calibrate.h"
 
+#include <set>
+
 #include "LevenbergMarquardtOptimizer.h"
 #include "SimulationParameters.h"
+
+namespace {
+
+// Number of alpha slots a block exposes to the calibrator. Scalar blocks
+// (``input_params_list == false``) contribute one slot per named input
+// parameter. List blocks contribute ``input_params.size() * stride`` slots,
+// where ``stride`` is determined by the block's connectivity (e.g. number of
+// outlets for BloodVesselJunction).
+int num_param_slots(const Block& block, int stride) {
+  int n = static_cast<int>(block.input_params.size());
+  return block.input_params_list ? n * stride : n;
+}
+
+// Stride for a list-style block. The only list block currently in the model
+// (``BloodVesselJunction``) groups its parameters per outlet, so the stride
+// equals the number of outlets. For scalar blocks the stride is 1.
+int param_stride(const Block& block, int num_outlets) {
+  return block.input_params_list ? num_outlets : 1;
+}
+
+}  // namespace
 
 nlohmann::json calibrate(const nlohmann::json& config) {
   auto output_config = nlohmann::json(config);
@@ -16,16 +39,40 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   double increment_tol =
       calibration_parameters.value("tolerance_increment", 1e-10);
   int max_iter = calibration_parameters.value("maximum_iterations", 100);
-  bool calibrate_stenosis =
-      calibration_parameters.value("calibrate_stenosis_coefficient", true);
-  bool zero_capacitance =
-      calibration_parameters.value("set_capacitance_to_zero", false);
   double lambda0 = calibration_parameters.value("initial_damping_factor", 1.0);
 
-  int num_params = 3;
-  if (calibrate_stenosis) {
-    num_params = 4;
-  }
+  // Resolve the set of parameter names to calibrate for a given block from
+  // its own ``calibrate`` field. The field is mandatory: a block without a
+  // ``calibrate`` field has no parameters optimized (every parameter of that
+  // block is held at its input value). An explicit empty list is equivalent
+  // to omitting the field.
+  auto resolve_calibrate_set = [](const nlohmann::json& block_config) {
+    std::set<std::string> names;
+    if (!block_config.contains("calibrate")) return names;
+    auto list = block_config["calibrate"].get<std::vector<std::string>>();
+    names.insert(list.begin(), list.end());
+    return names;
+  };
+
+  // Append the active alpha indices contributed by a single block to
+  // ``active_param_ids``. Walks the block's ``input_params`` and includes
+  // each parameter (or, for list blocks, each per-outlet copy of it) whose
+  // name appears in the resolved calibrate filter.
+  std::vector<int> active_param_ids;
+  auto register_active = [&](const Block& block,
+                             const std::vector<int>& param_ids,
+                             const std::set<std::string>& set) {
+    int stride = static_cast<int>(param_ids.size()) /
+                 static_cast<int>(block.input_params.size());
+    if (!block.input_params_list) stride = 1;
+    for (size_t i = 0; i < block.input_params.size(); i++) {
+      const std::string& name = block.input_params[i].first;
+      if (set.count(name) == 0) continue;
+      for (int s = 0; s < stride; s++) {
+        active_param_ids.push_back(param_ids[i * stride + s]);
+      }
+    }
+  };
 
   // Setup model
   auto model = Model();
@@ -39,16 +86,19 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   int param_counter = 0;
   for (auto const& vessel_config : config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
-
-    // Create parameter IDs
-    std::vector<int> param_ids;
-    for (size_t k = 0; k < num_params; k++)
-      param_ids.push_back(param_counter++);
     std::string block_type =
         vessel_config["zero_d_element_type"].get<std::string>();
-    model.add_block(block_type, param_ids, vessel_name);
+
+    // Instantiate the block so we can introspect its parameter names.
+    auto* block = model.create_block(block_type);
+    int num_slots = num_param_slots(*block, /*stride=*/1);
+    std::vector<int> param_ids;
+    for (int k = 0; k < num_slots; k++) param_ids.push_back(param_counter++);
+    model.add_block(block, vessel_name, param_ids);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);
+
+    register_active(*block, param_ids, resolve_calibrate_set(vessel_config));
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
@@ -70,12 +120,15 @@ nlohmann::json calibrate(const nlohmann::json& config) {
 
     if (num_outlets == 1) {
       model.add_block("NORMAL_JUNCTION", {}, junction_name);
-
     } else {
+      auto* block = model.create_block("BloodVesselJunction");
+      int num_slots = num_param_slots(*block, num_outlets);
       std::vector<int> param_ids;
-      for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++)
-        param_ids.push_back(param_counter++);
-      model.add_block("BloodVesselJunction", param_ids, junction_name);
+      for (int k = 0; k < num_slots; k++) param_ids.push_back(param_counter++);
+      model.add_block(block, junction_name, param_ids);
+
+      register_active(*block, param_ids,
+                      resolve_calibrate_set(junction_config));
     }
 
     // Check for connections to inlet and outlet vessels and append to
@@ -148,121 +201,97 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   // Setup start parameter vector
   Eigen::Matrix<double, Eigen::Dynamic, 1> alpha =
       Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(param_counter);
+
+  // Initialize alpha from a JSON values object using the block's own
+  // ``input_params`` to map names to slot indices. Missing names default to
+  // 0 (already set by the zero-init above).
+  auto init_alpha_for_block = [&](const Block& block,
+                                  const nlohmann::json& values) {
+    int total = static_cast<int>(block.global_param_ids.size());
+    int stride = param_stride(
+        block, total / static_cast<int>(block.input_params.size()));
+    for (size_t i = 0; i < block.input_params.size(); i++) {
+      const std::string& name = block.input_params[i].first;
+      if (!values.contains(name)) continue;
+      if (block.input_params_list) {
+        auto arr = values[name].get<std::vector<double>>();
+        for (int s = 0; s < stride && s < static_cast<int>(arr.size()); s++) {
+          alpha[block.global_param_ids[i * stride + s]] = arr[s];
+        }
+      } else {
+        alpha[block.global_param_ids[i]] = values[name].get<double>();
+      }
+    }
+  };
+
   DEBUG_MSG("Reading initial alpha");
   for (auto& vessel_config : output_config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
     DEBUG_MSG("Reading initial alpha for " << vessel_name);
     auto block = model.get_block(vessel_name);
-    alpha[block->global_param_ids[0]] =
-        vessel_config["zero_d_element_values"].value("R_poiseuille", 0.0);
-    alpha[block->global_param_ids[1]] =
-        vessel_config["zero_d_element_values"].value("C", 0.0);
-    alpha[block->global_param_ids[2]] =
-        vessel_config["zero_d_element_values"].value("L", 0.0);
-    if (num_params > 3) {
-      alpha[block->global_param_ids[3]] =
-          vessel_config["zero_d_element_values"].value("stenosis_coefficient",
-                                                       0.0);
+    if (vessel_config.contains("zero_d_element_values")) {
+      init_alpha_for_block(*block, vessel_config["zero_d_element_values"]);
     }
   }
   for (auto& junction_config : output_config["junctions"]) {
     std::string junction_name = junction_config["junction_name"];
     DEBUG_MSG("Reading initial alpha for " << junction_name);
     auto block = model.get_block(junction_name);
-    int num_outlets = block->outlet_nodes.size();
-
-    if (num_outlets < 2) {
-      continue;
-    }
-
-    for (size_t i = 0; i < num_outlets; i++) {
-      alpha[block->global_param_ids[i]] = 0.0;
-      alpha[block->global_param_ids[i + num_outlets]] = 0.0;
-      if (num_params > 3) {
-        alpha[block->global_param_ids[i + 2 * num_outlets]] = 0.0;
-      }
-    }
-    if (junction_config["junction_type"] == "BloodVesselJunction") {
-      auto resistance = junction_config["junction_values"]["R_poiseuille"]
-                            .get<std::vector<double>>();
-      auto inductance =
-          junction_config["junction_values"]["L"].get<std::vector<double>>();
-      auto stenosis_coeff =
-          junction_config["junction_values"]["stenosis_coefficient"]
-              .get<std::vector<double>>();
-      for (size_t i = 0; i < num_outlets; i++) {
-        alpha[block->global_param_ids[i]] = resistance[i];
-        alpha[block->global_param_ids[i + num_outlets]] = inductance[i];
-        if (num_params > 3) {
-          alpha[block->global_param_ids[i + 2 * num_outlets]] =
-              stenosis_coeff[i];
-        }
-      }
+    if (block->global_param_ids.empty()) continue;
+    if (junction_config.contains("junction_values")) {
+      init_alpha_for_block(*block, junction_config["junction_values"]);
     }
   }
 
   // Run optimization
   DEBUG_MSG("Start optimization");
-  auto lm_alg =
-      LevenbergMarquardtOptimizer(&model, num_obs, param_counter, lambda0,
-                                  gradient_tol, increment_tol, max_iter);
+  DEBUG_MSG("Number of active parameters " << active_param_ids.size());
+  if (active_param_ids.empty()) {
+    throw std::runtime_error(
+        "[svzerodcalibrator] No parameters selected for calibration. Add a "
+        "'calibrate' field listing parameter names to at least one vessel or "
+        "junction.");
+  }
+  auto lm_alg = LevenbergMarquardtOptimizer(
+      &model, num_obs, param_counter, active_param_ids, lambda0, gradient_tol,
+      increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
+
+  // Build a JSON values object for a block by reading optimized alpha values
+  // out using the block's own ``input_params``.
+  auto write_alpha_for_block = [&](const Block& block) -> nlohmann::json {
+    nlohmann::json values = nlohmann::json::object();
+    int total = static_cast<int>(block.global_param_ids.size());
+    int stride = param_stride(
+        block, total / static_cast<int>(block.input_params.size()));
+    for (size_t i = 0; i < block.input_params.size(); i++) {
+      const std::string& name = block.input_params[i].first;
+      if (block.input_params_list) {
+        std::vector<double> arr;
+        for (int s = 0; s < stride; s++) {
+          arr.push_back(alpha[block.global_param_ids[i * stride + s]]);
+        }
+        values[name] = arr;
+      } else {
+        values[name] = alpha[block.global_param_ids[i]];
+      }
+    }
+    return values;
+  };
 
   // Write optimized simulation config file
   for (auto& vessel_config : output_config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
     auto block = model.get_block(vessel_name);
-    double stenosis_coeff = 0.0;
-    if (num_params > 3) {
-      stenosis_coeff = alpha[block->global_param_ids[3]];
-    }
-    double c_value = 0.0;
-    if (!zero_capacitance) {
-      c_value = alpha[block->global_param_ids[1]];
-    }
-    vessel_config["zero_d_element_values"] = {
-        {"R_poiseuille", alpha[block->global_param_ids[0]]},
-        {"C", std::max(c_value, 0.0)},
-        {"L", std::max(alpha[block->global_param_ids[2]], 0.0)},
-        {"stenosis_coefficient", stenosis_coeff}};
+    vessel_config["zero_d_element_values"] = write_alpha_for_block(*block);
   }
   for (auto& junction_config : output_config["junctions"]) {
     std::string junction_name = junction_config["junction_name"];
     auto block = model.get_block(junction_name);
-    int num_outlets = block->outlet_nodes.size();
-
-    if (num_outlets < 2) {
-      continue;
-    }
-
-    std::vector<double> r_values;
-    for (size_t i = 0; i < num_outlets; i++) {
-      r_values.push_back(alpha[block->global_param_ids[i]]);
-    }
-    std::vector<double> l_values;
-    for (size_t i = 0; i < num_outlets; i++) {
-      l_values.push_back(
-          std::max(alpha[block->global_param_ids[i + num_outlets]], 0.0));
-    }
-
-    std::vector<double> ste_values;
-
-    if (num_params > 3) {
-      for (size_t i = 0; i < num_outlets; i++) {
-        ste_values.push_back(
-            alpha[block->global_param_ids[i + 2 * num_outlets]]);
-      }
-    } else {
-      for (size_t i = 0; i < num_outlets; i++) {
-        ste_values.push_back(0.0);
-      }
-    }
-
+    if (block->global_param_ids.empty()) continue;
     junction_config["junction_type"] = "BloodVesselJunction";
-    junction_config["junction_values"] = {{"R_poiseuille", r_values},
-                                          {"L", l_values},
-                                          {"stenosis_coefficient", ste_values}};
+    junction_config["junction_values"] = write_alpha_for_block(*block);
   }
 
   output_config.erase("y");

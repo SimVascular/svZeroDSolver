@@ -84,6 +84,9 @@ class LevenbergMarquardtOptimizer {
    * @param num_params Total number of parameters in alpha
    * @param active_param_ids Indices into alpha of parameters that should be
    * optimized. Parameters not listed are held constant at their initial value.
+   * @param time_obs Per-observation time stamps. If empty, observations are
+   * treated as time-independent and the model must not contain any
+   * time-dependent blocks.
    * @param lambda0 Initial damping factor
    * @param tol_grad Gradient tolerance
    * @param tol_inc Parameter increment tolerance
@@ -91,6 +94,7 @@ class LevenbergMarquardtOptimizer {
    */
   LevenbergMarquardtOptimizer(Model* model, int num_obs, int num_params,
                               const std::vector<int>& active_param_ids,
+                              const std::vector<double>& time_obs,
                               double lambda0, double tol_grad, double tol_inc,
                               int max_iter);
 
@@ -115,6 +119,7 @@ class LevenbergMarquardtOptimizer {
   Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> mat;
   Eigen::Matrix<double, Eigen::Dynamic, 1> vec;
   std::vector<int> active_param_ids;
+  std::vector<double> time_obs;
   SparseSystem system;  ///< Forward-solver assembly used to compute the
                         ///< residual at each observation
   Model* model;

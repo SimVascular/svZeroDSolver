@@ -6,7 +6,8 @@
 
 LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
     Model* model, int num_obs, int num_params,
-    const std::vector<int>& active_param_ids, double lambda0, double tol_grad,
+    const std::vector<int>& active_param_ids,
+    const std::vector<double>& time_obs, double lambda0, double tol_grad,
     double tol_inc, int max_iter)
     // Size the assembly system with max(num_eqns, num_vars). The calibrator
     // has no boundary-condition blocks so it can have num_vars > num_eqns;
@@ -18,6 +19,7 @@ LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
   this->num_obs = num_obs;
   this->num_params = num_params;
   this->active_param_ids = active_param_ids;
+  this->time_obs = time_obs;
   this->num_active = static_cast<int>(active_param_ids.size());
   this->num_eqns = model->dofhandler.get_num_equations();
   this->num_vars = model->dofhandler.get_num_variables();
@@ -78,18 +80,27 @@ void LevenbergMarquardtOptimizer::update_gradient(
   jacobian.setZero();
   residual.setZero();
 
-  // Sync the LM parameter vector into the model's parameter storage so the
-  // solver assembly (update_constant / update_solution below) sees the same
-  // values that the per-block Jacobians do.
-  for (int p = 0; p < num_params; p++) {
-    model->update_parameter_value(p, alpha[p]);
-  }
+  // Helper to sync the LM parameter vector into the model's parameter storage
+  // so the solver assembly (update_constant / update_solution below) sees the
+  // same values that the per-block Jacobians do.
+  auto sync_alpha = [&]() {
+    for (int p = 0; p < num_params; p++) {
+      model->update_parameter_value(p, alpha[p]);
+    }
+  };
 
-  // E and F are constant in the parameters within one LM iteration; refresh
-  // them once before walking the observations. ``update_time`` is skipped
-  // because it would overwrite ``parameter_values`` from the model's
-  // ``Parameter`` objects, undoing the alpha sync above.
-  model->update_constant(system);
+  sync_alpha();
+
+  // For models without time-dependent blocks, ``E`` and ``F`` are constant
+  // within one LM iteration; refresh them once before walking the
+  // observations. When time stamps are provided, ``update_time`` is called
+  // per observation below, which clobbers parameter_values for time-dependent
+  // parameters; ``sync_alpha`` + ``update_constant`` are repeated each
+  // observation in that case.
+  bool time_dependent = !time_obs.empty();
+  if (!time_dependent) {
+    model->update_constant(system);
+  }
 
   // The system is sized to max(num_eqns, num_vars); pad y and dy so that
   // matrix-vector products E*dy and F*y are well-formed.
@@ -99,6 +110,16 @@ void LevenbergMarquardtOptimizer::update_gradient(
   Eigen::Matrix<double, Eigen::Dynamic, 1> dy =
       Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(n);
   for (size_t i = 0; i < num_obs; i++) {
+    if (time_dependent) {
+      // Refresh time-dependent assembly entries and time-dependent
+      // parameter_values from their Parameter objects, then re-sync alpha so
+      // the calibratable parameters keep their LM values, and re-run
+      // update_constant so the assembly reflects alpha for the current
+      // observation.
+      model->update_time(system, time_obs[i]);
+      sync_alpha();
+      model->update_constant(system);
+    }
     // Copy the observation into Eigen vectors so the forward-solver assembly
     // (update_solution) can reuse its existing API.
     for (int k = 0; k < num_vars; k++) {

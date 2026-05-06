@@ -26,6 +26,43 @@ def test_steady_flow_calibration():
     )
 
 
+def test_pulsatile_R_only_recovers_from_y_and_t():
+    """Calibrate only ``R_poiseuille`` from a pulsatile forward simulation
+    using only ``y`` and ``t``; ``dy`` is reconstructed internally from ``y``
+    via the generalized-alpha relation. The fixture was produced by
+    ``pysvzerod.simulate`` with R=100, C=1e-4, L=1; the calibrator should
+    recover R close to 100 (the reconstruction is first-order accurate so the
+    error is small but non-zero)."""
+    testfile = os.path.join(
+        this_file_dir,
+        "cases",
+        "vmr",
+        "input",
+        "pulsatileFlow_R_calibrate_R_only.json",
+    )
+    result, _ = execute_pysvzerod(testfile, "calibrator")
+    R = result["vessels"][0]["zero_d_element_values"]["R_poiseuille"]
+    assert np.isclose(R, 100.0, rtol=1e-2), f"R = {R}, expected ~100"
+
+
+def test_calibration_rejects_time_dependent_block_without_t(tmp_path):
+    """The calibrator must refuse a model containing a time-dependent block
+    when the input lacks an observation time vector ``t``."""
+    with open(
+        os.path.join(this_file_dir, "cases", "steadyFlow_calibration.json")
+    ) as ff:
+        cfg = json.load(ff)
+    cfg["vessels"][0]["zero_d_element_type"] = "ChamberSphere"
+    cfg["vessels"][0]["calibrate"] = ["W1"]
+
+    testfile = tmp_path / "rejects_time_dependent.json"
+    with open(testfile, "w") as ff:
+        json.dump(cfg, ff)
+
+    with pytest.raises(RuntimeError, match="time-dependent"):
+        execute_pysvzerod(str(testfile), "calibrator")
+
+
 @pytest.mark.parametrize(
     "test_case",
     [

@@ -170,46 +170,117 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   // Finalize model
   model.finalize();
 
-  // The calibrator computes residuals from per-observation (y, dy) snapshots
-  // without an associated time stamp, so any block contributing
-  // time-dependent terms to the assembly cannot be calibrated correctly.
-  // Reject such models up front, before reading observations or constructing
-  // the optimizer.
-  for (int j = 0; j < model.get_num_blocks(true); j++) {
-    auto* block = model.get_block(j);
-    if (block->has_time_dependent_assembly()) {
-      throw std::runtime_error(
-          "[svzerodcalibrator] Block " + block->get_name() +
-          " contributes time-dependent terms to the assembly; the calibrator "
-          "does not support time-dependent blocks.");
-    }
-  }
-
   DEBUG_MSG("Number of parameters " << param_counter);
 
-  // Read observations
+  // Read observations.
+  //
+  // ``y`` and ``t`` are required. ``dy`` is optional: when omitted, the time
+  // derivative is computed internally from ``y`` and ``t`` using the
+  // generalized-alpha relation that the forward solver uses, so the residual
+  // the calibrator sees matches the residual the solver would see at the
+  // same observation. When ``t`` is absent the calibrator runs in legacy
+  // mode (residual evaluated at t = 0); time-dependent blocks are rejected
+  // in that case.
   DEBUG_MSG("Reading observations");
   int num_obs = 0;
   std::vector<std::vector<double>> y_all;
   std::vector<std::vector<double>> dy_all;
   auto y_values = config["y"];
-  auto dy_values = config["dy"];
+  bool has_dy = config.contains("dy");
+  auto dy_values = has_dy ? config["dy"] : nlohmann::json::object();
+  std::vector<double> time_obs;
+  if (config.contains("t")) {
+    time_obs = config["t"].get<std::vector<double>>();
+  }
+  bool has_time = !time_obs.empty();
+
+  // The calibrator computes residuals from per-observation (y, dy) snapshots.
+  // Time-dependent blocks need an associated time stamp (``t``) to evaluate
+  // their assembly correctly; reject such models up front when no ``t`` was
+  // provided.
+  if (!has_time) {
+    for (int j = 0; j < model.get_num_blocks(true); j++) {
+      auto* block = model.get_block(j);
+      if (block->has_time_dependent_assembly()) {
+        throw std::runtime_error(
+            "[svzerodcalibrator] Block " + block->get_name() +
+            " contributes time-dependent terms to the assembly; provide a "
+            "'t' array of observation time stamps to calibrate it.");
+      }
+    }
+  }
+
+  if (!has_dy && !has_time) {
+    throw std::runtime_error(
+        "[svzerodcalibrator] Observations need either explicit 'dy' values "
+        "or a 't' array from which 'dy' can be computed.");
+  }
+
+  // Generalized-alpha parameters used to derive ``dy`` from ``y`` (so the
+  // calibrator's residual matches the residual the forward solver would see
+  // at the same observations). Default rho_infty matches the solver default.
+  double rho_infty = 0.5;
+  if (config.contains("simulation_parameters") &&
+      config["simulation_parameters"].contains("rho_infty")) {
+    rho_infty = config["simulation_parameters"]["rho_infty"].get<double>();
+  }
+  double alpha_m = 0.5 * (3.0 - rho_infty) / (1.0 + rho_infty);
+  double alpha_f = 1.0 / (1.0 + rho_infty);
+  double gamma = 0.5 + alpha_m - alpha_f;
+
   for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
     std::string var_name = model.dofhandler.variables[i];
     DEBUG_MSG("Reading observations for variable " << var_name);
     if (!y_values.contains(var_name)) {
-      std::cout << "ERROR: Missing y observation for '" << var_name << "'"
-                << std::endl;
-      exit(1);
-    }
-    if (!dy_values.contains(var_name)) {
-      std::cout << "ERROR: Missing dy observation for '" << var_name << "'"
-                << std::endl;
-      exit(1);
+      throw std::runtime_error(
+          "[svzerodcalibrator] Missing y observation for '" + var_name + "'");
     }
     auto y_array = y_values[var_name].get<std::vector<double>>();
-    auto dy_array = dy_values[var_name].get<std::vector<double>>();
     num_obs = y_array.size();
+    if (has_time && static_cast<int>(time_obs.size()) != num_obs) {
+      throw std::runtime_error(
+          "[svzerodcalibrator] Length of 't' (" +
+          std::to_string(time_obs.size()) +
+          ") does not match the number of observations of '" + var_name +
+          "' (" + std::to_string(num_obs) + ")");
+    }
+
+    // Get explicit dy if available; otherwise integrate gen-alpha forward
+    // from a periodic dy_0. Two passes through the cycle to converge the
+    // initial value when t spans (approximately) one cardiac cycle.
+    std::vector<double> dy_array(num_obs, 0.0);
+    if (has_dy) {
+      if (!dy_values.contains(var_name)) {
+        throw std::runtime_error(
+            "[svzerodcalibrator] Missing dy observation for '" + var_name +
+            "'");
+      }
+      dy_array = dy_values[var_name].get<std::vector<double>>();
+    } else {
+      // gen-alpha: dy_{n+1} = (y_{n+1} - y_n) / (gamma * dt)
+      //                       + (1 - 1/gamma) * dy_n
+      //
+      // Iterate with a periodic seed (dy_0 := dy_{N-1}) until dy_0 converges,
+      // so the first cycle of the reconstructed derivative matches what the
+      // forward solver sees at the same grid points after enough cycles to
+      // reach periodic steady state.
+      const int max_periodic_iter = 200;
+      const double periodic_tol = 1e-12;
+      for (int pass = 0; pass < max_periodic_iter; pass++) {
+        double dy0_prev = dy_array[0];
+        for (int n = 0; n + 1 < num_obs; n++) {
+          double dt = time_obs[n + 1] - time_obs[n];
+          dy_array[n + 1] = (y_array[n + 1] - y_array[n]) / (gamma * dt) +
+                            (1.0 - 1.0 / gamma) * dy_array[n];
+        }
+        dy_array[0] = dy_array[num_obs - 1];
+        if (std::abs(dy_array[0] - dy0_prev) <
+            periodic_tol * (1.0 + std::abs(dy_array[0]))) {
+          break;
+        }
+      }
+    }
+
     if (i == 0) {
       y_all.resize(num_obs);
       dy_all.resize(num_obs);
@@ -276,8 +347,8 @@ nlohmann::json calibrate(const nlohmann::json& config) {
         "junction.");
   }
   auto lm_alg = LevenbergMarquardtOptimizer(
-      &model, num_obs, param_counter, active_param_ids, lambda0, gradient_tol,
-      increment_tol, max_iter);
+      &model, num_obs, param_counter, active_param_ids, time_obs, lambda0,
+      gradient_tol, increment_tol, max_iter);
 
   alpha = lm_alg.run(alpha, y_all, dy_all);
 

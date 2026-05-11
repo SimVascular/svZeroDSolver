@@ -12,6 +12,10 @@ class Expression:
     """
     Represents an expression that references simulation outputs (e.g. np.max(Vc:LV)).
     Each target or QoI has an Expression object with an evaluate method.
+
+    Security note: expressions are compiled and executed via exec() with full Python
+    builtins available. Config files should be treated as trusted code — do not run
+    configs from untrusted sources.
     """
 
     def __init__(

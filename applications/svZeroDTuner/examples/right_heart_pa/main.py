@@ -178,9 +178,15 @@ def run_sensitivity(config_file):
     print()
 
     try:
-        analyzer.run_analysis()
+        results = analyzer.run()
     except Exception as e:
         print(f"ERROR during sensitivity analysis: {e}")
+        return
+
+    try:
+        analyzer.save_results()
+    except Exception as e:
+        print(f"ERROR saving results: {e}")
         return
 
 

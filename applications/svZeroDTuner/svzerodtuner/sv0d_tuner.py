@@ -80,6 +80,13 @@ class SV0DTuner:
             for p in self.parameters
         ]
 
+        # Validate all parameter names exist in the model at init time
+        for p in self.parameters:
+            try:
+                self.param_handler.get_parameter(p["name"])
+            except ValueError as e:
+                raise ValueError(f"Invalid parameter in tuning config: {e}") from e
+
         # State
         self.solver = None
         self.extractor = None
@@ -235,7 +242,9 @@ class SV0DTuner:
             return obj_value
         
         except Exception as e:
-            # Return large value if simulation fails
+            # Re-raise config errors; only penalize numerical solver failures
+            if isinstance(e, (ValueError, KeyError, AttributeError)):
+                raise
             print(f"Warning: Simulation failed: {e}")
             return float(1e10)
     

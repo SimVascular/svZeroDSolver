@@ -118,15 +118,16 @@ class ConfigHandler:
             if has_relative or has_uncertainty:
                 unc = target['relative_bounds'] if has_relative else target['uncertainty']
                 if isinstance(unc, str) and unc.strip().endswith('%'):
+                    raw = unc.strip()[:-1]
                     try:
-                        pct = float(unc.strip()[:-1])
-                        if pct < 0:
-                            raise ValueError(
-                                f"Target '{target['name']}' relative_bounds percent must be non-negative"
-                            )
+                        pct = float(raw)
                     except ValueError:
                         raise ValueError(
                             f"Target '{target['name']}' relative_bounds '{unc}' must be a valid percent (e.g. '5%')"
+                        )
+                    if pct < 0:
+                        raise ValueError(
+                            f"Target '{target['name']}' relative_bounds percent must be non-negative"
                         )
                 elif isinstance(unc, (int, float)):
                     if unc < 0:

@@ -471,9 +471,9 @@ class SensitivityAnalyzer:
     def _create_visualizations(self, output_path: Path):
         """Create visualization plots."""
         try:
-            import matplotlib.pyplot as plt
             import matplotlib
             matplotlib.use('Agg')
+            import matplotlib.pyplot as plt
         except ImportError:
             print("Warning: matplotlib not available, skipping visualizations")
             return
@@ -550,9 +550,9 @@ class SensitivityAnalyzer:
         Rows = parameters, Columns = quantities of interest.
         """
         try:
-            import matplotlib.pyplot as plt
             import matplotlib
             matplotlib.use('Agg')
+            import matplotlib.pyplot as plt
         except ImportError:
             return
         

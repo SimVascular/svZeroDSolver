@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# NOTE: This script was written for the Stanford Sherlock HPC cluster.
+# You may need to modify the following for your own cluster:
+#   - --partition (currently: amarsden)
+#   - --mail-user
+#   - module load commands and version numbers
+
 # Name of your job
 #SBATCH --job-name=tuning_job
 
@@ -28,7 +34,7 @@
 #SBATCH --ntasks-per-node=32
 
 # Send an email to this address when your job starts and finishes
-#SBATCH --mail-user=abrown97@stanford.edu
+#SBATCH --mail-user=your_email@your_institution.edu
 #SBATCH --mail-type=begin
 #SBATCH --mail-type=fail
 #SBATCH --mail-type=end

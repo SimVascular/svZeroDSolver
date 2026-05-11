@@ -53,11 +53,11 @@ class LogScaling(ParameterScaling):
 
 
 class MaxScaling(ParameterScaling):
-    """Scale by the max of the bounds: optimizer space = physical / max(bounds)."""
+    """Scale by the max absolute bound magnitude: optimizer space = physical / max(|lo|, |hi|)."""
 
     def __init__(self, bounds: tuple):
         lo, hi = float(bounds[0]), float(bounds[1])
-        self._max_bound = max(lo, hi)
+        self._max_bound = max(abs(lo), abs(hi))
         if self._max_bound == 0:
             raise ValueError("Max scaling requires non-zero bounds")
 

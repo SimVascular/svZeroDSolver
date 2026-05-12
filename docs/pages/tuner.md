@@ -78,6 +78,18 @@ A typical svZeroDTuner workflow is:
 
 See [Worked Examples](@ref tuner_examples) for end-to-end templates.
 
+# Examples
+
+Three worked examples are provided in `applications/svZeroDTuner/examples/`. Each has its own README with a model description, quickstart, and a table of expected output files.
+
+| Example | Focus | README |
+|---|---|---|
+| `right_heart_pa` | Scalar pressure and RPA/LPA flow-split targets; right heart + reduced-order pulmonary tree | [README](../../applications/svZeroDTuner/examples/right_heart_pa/README.md) |
+| `closed_loop_Regazzoni` | Scalar systemic pressure and LV ejection fraction targets; four-chamber closed-loop | [README](../../applications/svZeroDTuner/examples/closed_loop_Regazzoni/README.md) |
+| `closed_loop_Zingaro` | Time-series chamber volume targets alongside scalar pressure and flow targets; 21-parameter closed-loop | [README](../../applications/svZeroDTuner/examples/closed_loop_Zingaro/README.md) |
+
+See [svZeroDTuner Worked Examples](@ref tuner_examples) for step-by-step CLI walkthroughs.
+
 # Related Tools
 
 - [svZeroDVisualization Guide](@ref visualization) for plotting and network inspection.

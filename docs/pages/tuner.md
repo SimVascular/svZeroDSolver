@@ -12,6 +12,13 @@ svZeroDTuner is a Python module and command-line tool for calibrating svZeroDSol
 
 The implementation is available in the `applications/svZeroDTuner` folder.
 
+# Additional Resources
+
+- [svZeroDTuner Concepts](@ref tuner_concepts)
+- [svZeroDTuner Configuration Reference](@ref tuner_configuration)
+- [svZeroDTuner API Reference](@ref tuner_api)
+- [svZeroDTuner Troubleshooting](@ref tuner_troubleshooting)
+
 # When to Use / When Not to Use
 
 Use svZeroDTuner when you need to:
@@ -75,7 +82,3 @@ See [Worked Examples](@ref tuner_examples) for end-to-end templates.
 
 - [svZeroDVisualization Guide](@ref visualization) for plotting and network inspection.
 - [svZeroDGUI Guide](@ref GUI) for graphical model construction.
-- [svZeroDTuner Concepts](@ref tuner_concepts)
-- [svZeroDTuner Configuration Reference](@ref tuner_configuration)
-- [svZeroDTuner API Reference](@ref tuner_api)
-- [svZeroDTuner Troubleshooting](@ref tuner_troubleshooting)

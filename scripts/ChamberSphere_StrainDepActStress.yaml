@@ -63,18 +63,21 @@ helper_functions: |
   def dCG(radius, dradius_dt):
       return 2 * (1 + (radius / radius0)) * (1 / radius0) * dradius_dt
 
-  def invariant1(radius):    
-      return 1 / ((1 + (radius / radius0)) **4) + 2 * (1 + (radius / radius0)) **2
+  def dW1(radius): 
+      return C0 * exp(C1 * (((1 + (radius / radius0))**(-4) + 2*(1 + (radius / radius0))**2) - 3)**2) * 2 * C1 * (((1 + (radius / radius0))**(-4) + 2*(1 + (radius / radius0))**2) - 3)
+  
+  def dW4(radius):
+      return C2 * exp(C3 * ((((1 + (radius / radius0)) ** 2)-1)**2)) * 2 * C3 * (((1 + (radius / radius0)) ** 2) - 1)
 
 residuals:
   - rho * thick0 * dvelo_dt + (thick0 / radius0) * (1 + (radius / radius0)) * stress - Pout * CG(radius)
-  - -stress + tau + 4 * (1 - CG(radius) ** -3) * (C0 * exp(C1 * (invariant1(radius) - 3) ** 2) * 2 * (invariant1(radius) - 3)) *  2 * C2 * exp(C3 * (CG(radius)-1) **2) * 2 * (CG(radius) - 1) + 2 * eta * dCG(radius, dradius_dt) * (1 + 2 * CG(radius) ** -6)
+  - -stress + 4 * dW1(radius) *(1 - CG(radius)**(-3)) + 2 * dW4(radius)  + eta * dCG(radius,dradius_dt) * (1 + 2  * (CG(radius)**(-6))) + tau 
   - 4 * pi * radius0 ** 2 * CG(radius) * velo - dvolume_dt
   - dradius_dt - velo
   - Qin - Qout - dvolume_dt
   - Pin - Pout
   - -tau + E_s * ((radius - radius0)/radius0 +0.5 * ((radius - radius0) / radius0) ** 2 - e_c) / ((1 + 2 * e_c) ** 2) 
   - -alpha_r * domega_dt + m_0 - omega
-  - -tau_c - mu * de_c_dt + E_s * (((radius - radius0)/radius0 +0.5 * ((radius - radius0) / radius0) ** 2 - e_c) * (1 + 2 * (radius - radius0)/radius0 +0.5 * ((radius - radius0) / radius0) ** 2)) / ((1 + 2 * e_c) ** 3)
+  - -tau_c - mu * de_c_dt + E_s * (((radius - radius0)/radius0 +0.5 * ((radius - radius0) / radius0) ** 2 - e_c) * (1 + 2 * (radius - radius0)/radius0 + ((radius - radius0) / radius0) ** 2)) / ((1 + 2 * e_c) ** 3)
   - -dk_c_dt - (u_plus + omega * u_minus + alpha * de_c_dt) * k_c + n_0 * k_0 * u_plus
   - -dtau_c_dt - (u_plus + omega * u_minus + alpha * de_c_dt) * tau_c + n_0 * sigma_0 * u_plus + k_c * de_c_dt

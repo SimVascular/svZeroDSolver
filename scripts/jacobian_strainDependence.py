@@ -56,7 +56,7 @@ def depends_on(expr, symbols_set):
     return any(sym in expr.free_symbols for sym in symbols_set)
 
 def partition_terms(E, F, C, dC_dy, dC_dydot, time_dependent_symbols, strain_dependent_symbols):
-    parts = {"constant": [], "time": [], "solution": []}
+    parts = {"constant": [], "time": [], "solution": [], "strain": []}
     for i in range(E.shape[0]):
         parts["solution"].append(("C", i, C[i]))
         for j in range(E.shape[1]):
@@ -106,12 +106,12 @@ def print_system(parts):
                 print_index(part[1], part[2])
             print(f" = {format_cpp_expr(part[-1])};")
 
-def print_constants(parts, constants, time_dependent, strain_dependent): #strain dependence needs to be added here!
+def print_constants(parts, constants, time_dependent, strain_dependent):
     for out in get_expressions(parts, constants):
         if out in time_dependent:
             print(f"  // compute time dependent constant {out}")
         elif out in strain_dependent:
-            print(f"  // compute strain dependent constant {out}") #is this correct??   
+            print(f"  // compute strain dependent constant {out}")
         else:
             print(f"  const double {out} = parameters[global_param_ids[ParamId::{out}]];")
 
@@ -134,7 +134,7 @@ def main(yaml_path):
     parts = partition_terms(E, F, C, dC_dy, dC_dydot, time_dependent, strain_dependent) 
 
     # print C++ code
-    for section in ['constant', 'time', 'solution']:
+    for section in ['constant', 'time', 'strain', 'solution']:
         print(f'update_{section}')
         print_constants(parts[section], constants, time_dependent, strain_dependent)
         print_variables(parts[section], y, dy)

@@ -76,8 +76,8 @@ residuals:
   - dradius_dt - velo
   - Qin - Qout - dvolume_dt
   - Pin - Pout
-  - -tau + E_s * ((radius - radius0)/radius0 +0.5 * ((radius - radius0) / radius0) ** 2 - e_c) / ((1 + 2 * e_c) ** 2) 
+  - -tau + E_s * (radius/radius0 +0.5 * (radius / radius0) ** 2 - e_c) / ((1 + 2 * e_c) ** 2) 
   - -alpha_r * domega_dt + m_0 - omega
-  - -tau_c - mu * de_c_dt + E_s * (((radius - radius0)/radius0 +0.5 * ((radius - radius0) / radius0) ** 2 - e_c) * (1 + 2 * (radius - radius0)/radius0 + ((radius - radius0) / radius0) ** 2)) / ((1 + 2 * e_c) ** 3)
-  - -dk_c_dt - (u_plus + omega * u_minus + alpha * de_c_dt) * k_c + n_0 * k_0 * u_plus
-  - -dtau_c_dt - (u_plus + omega * u_minus + alpha * de_c_dt) * tau_c + n_0 * sigma_0 * u_plus + k_c * de_c_dt
+  - -tau_c - mu * de_c_dt + E_s * ((radius/radius0 +0.5 * (radius / radius0) ** 2 - e_c) * (1 + 2 * radius/radius0 + (radius/ radius0) ** 2)) / ((1 + 2 * e_c) ** 3)
+  - -dk_c_dt - (u_plus + omega * abs(u_minus) + alpha * de_c_dt) * k_c + n_0 * k_0 * u_plus
+  - -dtau_c_dt - (u_plus + omega * abs(u_minus) + alpha * de_c_dt) * tau_c + n_0 * sigma_0 * u_plus + k_c * de_c_dt

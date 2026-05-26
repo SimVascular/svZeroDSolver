@@ -121,5 +121,8 @@
       "junction_type": "NORMAL_JUNCTION",
       "outlet_vessels": [3]
     }
-  ]
+  ],
+  "initial_condition": {
+    "e_c:ventricle": 1.0
+  }
 }

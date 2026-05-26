@@ -7,8 +7,8 @@
 
 void ChamberSphere_StrainDepActStress::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, 11,
-                     {"radius", "velo", "stress", "tau", "volume",
-                      "e_c", "tau_c", "k_c", "omega"});
+                     {"radius", "velo", "stress", "tau", "volume", "e_c",
+                      "tau_c", "k_c", "omega"});
 }
 
 void ChamberSphere_StrainDepActStress::update_constant(
@@ -210,61 +210,58 @@ void ChamberSphere_StrainDepActStress::update_solution(
 
   // active stress
   system.C.coeffRef(global_eqn_ids[6]) =
-      E_s *
-      (-e_c * pow(radius0, 2) + radius0 * (radius - radius0) +
-       0.5 * pow(radius - radius0, 2)) /
+      E_s * (-e_c * pow(radius0, 2) + 0.5 * pow(radius, 2) + radius * radius0) /
       (pow(radius0, 2) * pow(2 * e_c + 1, 2));
   system.dC_dy.coeffRef(global_eqn_ids[6], global_var_ids[4]) =
-      1.0 * E_s * radius / (pow(radius0, 2) * pow(2 * e_c + 1, 2));
+      E_s * (1.0 * radius + radius0) / (pow(radius0, 2) * pow(2 * e_c + 1, 2));
   system.dC_dy.coeffRef(global_eqn_ids[6], global_var_ids[9]) =
       E_s *
-      (2.0 * e_c * pow(radius0, 2) - 2.0 * pow(radius, 2) +
-       1.0 * pow(radius0, 2)) /
-      (pow(radius0, 2) *
-       (8.0 * pow(e_c, 3) + 12.0 * pow(e_c, 2) + 6.0 * e_c + 1.0));
+      (4 * e_c * pow(radius0, 2) - 2.0 * pow(radius, 2) - 4 * radius * radius0 -
+       pow(radius0, 2) * (2 * e_c + 1)) /
+      (pow(radius0, 2) * pow(2 * e_c + 1, 3));
 
   // relaxation dynamics (d_omega_dt)
   system.C.coeffRef(global_eqn_ids[7]) = m_0;
 
   // sarcomere element strain (d_e_c_dt)
   system.C.coeffRef(global_eqn_ids[8]) =
-      E_s * pow(radius, 2) *
-      (-1.0 * e_c * pow(radius0, 2) + 0.5 * pow(radius, 2) -
-       0.5 * pow(radius0, 2)) /
-      (pow(radius0, 4) *
-       (8.0 * pow(e_c, 3) + 12.0 * pow(e_c, 2) + 6.0 * e_c + 1.0));
+      E_s * (pow(radius, 2) + 2 * radius * radius0 + pow(radius0, 2)) *
+      (-e_c * pow(radius0, 2) + 0.5 * pow(radius, 2) + radius * radius0) /
+      (pow(radius0, 4) * pow(2 * e_c + 1, 3));
   system.dC_dy.coeffRef(global_eqn_ids[8], global_var_ids[4]) =
-      E_s * radius *
-      (-2.0 * e_c * pow(radius0, 2) + 2.0 * pow(radius, 2) -
-       1.0 * pow(radius0, 2)) /
-      (pow(radius0, 4) *
-       (8.0 * pow(e_c, 3) + 12.0 * pow(e_c, 2) + 6.0 * e_c + 1.0));
+      E_s *
+      (2 * (radius + radius0) *
+           (-e_c * pow(radius0, 2) + 0.5 * pow(radius, 2) + radius * radius0) +
+       (1.0 * radius + radius0) *
+           (pow(radius, 2) + 2 * radius * radius0 + pow(radius0, 2))) /
+      (pow(radius0, 4) * pow(2 * e_c + 1, 3));
   system.dC_dy.coeffRef(global_eqn_ids[8], global_var_ids[9]) =
-      E_s * pow(radius, 2) *
-      (16.0 * e_c * pow(radius0, 2) - 12.0 * pow(radius, 2) +
-       8.0 * pow(radius0, 2)) /
-      (pow(radius0, 4) * (64.0 * pow(e_c, 4) + 128.0 * pow(e_c, 3) +
-                          96.0 * pow(e_c, 2) + 32.0 * e_c + 4.0));
+      E_s * (pow(radius, 2) + 2 * radius * radius0 + pow(radius0, 2)) *
+      (6 * e_c * pow(radius0, 2) - 3.0 * pow(radius, 2) - 6 * radius * radius0 -
+       pow(radius0, 2) * (2 * e_c + 1)) /
+      (pow(radius0, 4) * pow(2 * e_c + 1, 4));
 
   // sarcomere stiffness (d_k_c_dt)
   system.C.coeffRef(global_eqn_ids[9]) =
-      k_0 * n_0 * u_plus - k_c * (alpha * de_c_dt + omega * u_minus + u_plus);
+      k_0 * n_0 * u_plus -
+      k_c * (alpha * de_c_dt + omega * fabs(u_minus) + u_plus);
   system.dC_dydot.coeffRef(global_eqn_ids[9], global_var_ids[9]) = -alpha * k_c;
   system.dC_dy.coeffRef(global_eqn_ids[9], global_var_ids[11]) =
-      -alpha * de_c_dt - omega * u_minus - u_plus;
-  system.dC_dy.coeffRef(global_eqn_ids[9], global_var_ids[12]) = -k_c * u_minus;
+      -alpha * de_c_dt - omega * fabs(u_minus) - u_plus;
+  system.dC_dy.coeffRef(global_eqn_ids[9], global_var_ids[12]) =
+      -k_c * fabs(u_minus);
 
   // sarcomere active stress (d_tau_c_dt)
   system.C.coeffRef(global_eqn_ids[10]) =
       de_c_dt * k_c + n_0 * sigma_0 * u_plus -
-      tau_c * (alpha * de_c_dt + omega * u_minus + u_plus);
+      tau_c * (alpha * de_c_dt + omega * fabs(u_minus) + u_plus);
   system.dC_dydot.coeffRef(global_eqn_ids[10], global_var_ids[9]) =
       -alpha * tau_c + k_c;
   system.dC_dy.coeffRef(global_eqn_ids[10], global_var_ids[10]) =
-      -alpha * de_c_dt - omega * u_minus - u_plus;
+      -alpha * de_c_dt - omega * fabs(u_minus) - u_plus;
   system.dC_dy.coeffRef(global_eqn_ids[10], global_var_ids[11]) = de_c_dt;
   system.dC_dy.coeffRef(global_eqn_ids[10], global_var_ids[12]) =
-      -tau_c * u_minus;
+      -tau_c * fabs(u_minus);
 }
 
 void ChamberSphere_StrainDepActStress::get_active_stress_values(
@@ -296,8 +293,10 @@ void ChamberSphere_StrainDepActStress::get_active_stress_values(
     n_0 = 1;
   } else if (e_c > 1.3 && e_c <= 2.4) {
     n_0 = 2.182 - 0.9091 * e_c;
+  } else if (e_c <= 0.0) {
+    n_0 = 0.0;
   } else {
-    n_0 = 0;
+    n_0 = 0.0;
   }
 
   // relaxation strain-dependence

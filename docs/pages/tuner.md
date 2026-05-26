@@ -64,6 +64,37 @@ result = SV0DTuner("applications/svZeroDTuner/examples/right_heart_pa/tuning_nel
 print(result["success"], result["best_value"])
 ```
 
+# When to Run Sensitivity Analysis
+
+Sensitivity analysis in svZeroDTuner is a screening step, not a replacement for optimization.
+It is most useful after you have a stable baseline model and a first draft of your candidate
+parameters and quantities of interest, but before you launch a large optimization.
+
+Run sensitivity analysis when:
+
+- You have many plausible tunable parameters and need to decide which ones to include.
+- You expect non-identifiability, meaning several parameters may produce similar changes in the targets.
+- Optimization is expensive and you want to reduce the search space first.
+- You are adding new targets or changing parameter bounds and want to re-rank parameter influence.
+
+In practice, the recommended order is:
+
+1. Run a baseline simulation and confirm the model solves cleanly.
+2. Define the quantities of interest you care about matching.
+3. Select a broad candidate parameter set with physically reasonable bounds.
+4. Run sensitivity analysis to rank which parameters most affect those quantities.
+5. Keep the high-impact parameters free, and fix or defer the low-impact ones.
+6. Run optimization on the reduced parameter set.
+
+Sensitivity analysis is especially valuable for larger closed-loop problems, where tuning too many
+parameters at once can make optimization slow or poorly identifiable. It is usually optional for
+small problems with only a few clearly relevant parameters.
+
+Do not run sensitivity analysis as the very first step on an unvalidated model. If the baseline
+simulation is unstable, has unit issues, or the quantities of interest are not yet defined, the
+sensitivity ranking will not be reliable. You should also rerun it after major changes to the
+parameter list, target definitions, or parameter bounds.
+
 # Workflow
 
 A typical svZeroDTuner workflow is:
@@ -71,10 +102,11 @@ A typical svZeroDTuner workflow is:
 1. Run a baseline simulation and inspect available outputs.
 2. Define tunable parameters and bounds.
 3. Define target quantities (scalar and/or time-series).
-4. Choose objective norm and optimization algorithm.
-5. Run optimization and inspect history/termination diagnostics.
-6. Validate the optimized model against targets and physiology.
-7. Visualize model outputs and network behavior.
+4. Optionally run sensitivity analysis to rank parameter influence and reduce the search space.
+5. Choose objective norm and optimization algorithm.
+6. Run optimization and inspect history/termination diagnostics.
+7. Validate the optimized model against targets and physiology.
+8. Visualize model outputs and network behavior.
 
 See [Worked Examples](@ref tuner_examples) for end-to-end templates.
 

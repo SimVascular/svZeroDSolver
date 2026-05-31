@@ -244,21 +244,23 @@ void ChamberSphere_StrainDepActStress::update_solution(
   // sarcomere stiffness (d_k_c_dt)
   system.C.coeffRef(global_eqn_ids[9]) =
       k_0 * n_0 * u_plus -
-      k_c * (alpha * de_c_dt + omega * fabs(u_minus) + u_plus);
-  system.dC_dydot.coeffRef(global_eqn_ids[9], global_var_ids[9]) = -alpha * k_c;
+      k_c * (alpha * fabs(de_c_dt) + omega * fabs(u_minus) + u_plus);
+  system.dC_dydot.coeffRef(global_eqn_ids[9], global_var_ids[9]) =
+      ((de_c_dt == 0) ? (0) : (-alpha * de_c_dt * k_c / fabs(de_c_dt)));
   system.dC_dy.coeffRef(global_eqn_ids[9], global_var_ids[11]) =
-      -alpha * de_c_dt - omega * fabs(u_minus) - u_plus;
+      -alpha * fabs(de_c_dt) - omega * fabs(u_minus) - u_plus;
   system.dC_dy.coeffRef(global_eqn_ids[9], global_var_ids[12]) =
       -k_c * fabs(u_minus);
 
   // sarcomere active stress (d_tau_c_dt)
   system.C.coeffRef(global_eqn_ids[10]) =
       de_c_dt * k_c + n_0 * sigma_0 * u_plus -
-      tau_c * (alpha * de_c_dt + omega * fabs(u_minus) + u_plus);
+      tau_c * (alpha * fabs(de_c_dt) + omega * fabs(u_minus) + u_plus);
   system.dC_dydot.coeffRef(global_eqn_ids[10], global_var_ids[9]) =
-      -alpha * tau_c + k_c;
+      ((de_c_dt == 0) ? (k_c)
+                      : (-alpha * de_c_dt * tau_c / fabs(de_c_dt) + k_c));
   system.dC_dy.coeffRef(global_eqn_ids[10], global_var_ids[10]) =
-      -alpha * de_c_dt - omega * fabs(u_minus) - u_plus;
+      -alpha * fabs(de_c_dt) - omega * fabs(u_minus) - u_plus;
   system.dC_dy.coeffRef(global_eqn_ids[10], global_var_ids[11]) = de_c_dt;
   system.dC_dy.coeffRef(global_eqn_ids[10], global_var_ids[12]) =
       -tau_c * fabs(u_minus);

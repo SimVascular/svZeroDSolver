@@ -12,7 +12,7 @@ var searchData=
   ['input_5fparams_9',['input_params',['../class_block.html#a3005e28a4e947ca92fa4499c5a7f5c8c',1,'Block::input_params'],['../class_junction.html#a7244ba82080ff7f5a1af9ffdd82a263b',1,'Junction::input_params']]],
   ['input_5fparams_5flist_10',['input_params_list',['../class_block.html#a05f1232b81a42e7b0c4d6781deb5bb53',1,'Block']]],
   ['inputparameter_11',['InputParameter',['../struct_input_parameter.html',1,'InputParameter'],['../struct_input_parameter.html#a8192e830399ab16439dd2e4c7e4a5d3d',1,'InputParameter::InputParameter()']]],
-  ['install_20with_20pip_12',['Install with pip',['../developer_guide.html#autotoc_md2',1,'']]],
+  ['install_20with_20uv_12',['Install with uv',['../developer_guide.html#autotoc_md2',1,'']]],
   ['installing_20dependencies_13',['Installing Dependencies',['../visualization.html#autotoc_md14',1,'']]],
   ['integrator_14',['Integrator',['../class_integrator.html',1,'Integrator'],['../class_integrator.html#ad6e4f6a6409bec36c05ddc6a3fead000',1,'Integrator::Integrator(Model *model, double time_step_size, double rho, double atol, int max_iter)'],['../class_integrator.html#a91fdfba81971dfa13ba22521d11b7c46',1,'Integrator::Integrator()']]],
   ['integrator_2eh_15',['Integrator.h',['../_integrator_8h.html',1,'']]],

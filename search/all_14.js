@@ -15,5 +15,6 @@ var searchData=
   ['update_5fvessel_5ftype_12',['update_vessel_type',['../class_block.html#aa63c92836a51ba1b8b13e88011fba193',1,'Block']]],
   ['use_13',['How to Use',['../visualization.html#autotoc_md15',1,'']]],
   ['use_5fcycle_5fto_5fcycle_5ferror_14',['use_cycle_to_cycle_error',['../struct_simulation_parameters.html#ad50f5c7e99dbbe1ab339543ef01abe02',1,'SimulationParameters']]],
-  ['user_20guide_15',['User guide',['../_g_u_i.html#autotoc_md10',1,'']]]
+  ['user_20guide_15',['User guide',['../_g_u_i.html#autotoc_md10',1,'']]],
+  ['uv_16',['Install with uv',['../developer_guide.html#autotoc_md2',1,'']]]
 ];

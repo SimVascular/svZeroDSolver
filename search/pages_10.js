@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['with_20pip_0',['Install with pip',['../developer_guide.html#autotoc_md2',1,'']]]
+  ['with_20uv_0',['Install with uv',['../developer_guide.html#autotoc_md2',1,'']]]
 ];

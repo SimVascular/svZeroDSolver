@@ -30,11 +30,15 @@ class CustomCMakeBuild(CMakeBuildExt):
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + output_dir,
             "-DCMAKE_BUILD_TYPE=" + build_type,
         ]
-        # The default generator on Windows is Visual Studio, which the project
-        # is not set up for; use Ninja (declared as a build dependency) there.
-        # An explicit CMAKE_GENERATOR environment variable always wins.
-        if sys.platform == "win32" and not os.environ.get("CMAKE_GENERATOR"):
-            configure += ["-G", "Ninja"]
+        # On Windows, build with Ninja (a declared build dependency) to match
+        # the known-good build recipe; an explicit CMAKE_GENERATOR wins. Also
+        # disable Fortran: Eigen runs `enable_language(Fortran OPTIONAL)`, and
+        # under Ninja that picks up an incompatible gfortran from the runner's
+        # PATH (MinGW/Strawberry) and fails to link. We have no Fortran sources.
+        if sys.platform == "win32":
+            if not os.environ.get("CMAKE_GENERATOR"):
+                configure += ["-G", "Ninja"]
+            configure += ["-DCMAKE_Fortran_COMPILER:FILEPATH="]
         configure += [
             x for x in os.environ.get("CMAKE_COMMON_VARIABLES", "").split(" ") if x
         ]

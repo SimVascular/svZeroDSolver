@@ -4,11 +4,7 @@
 
 # Architecture
 
-svZeroDSolver is written in a highly modular manner to enable reuse of code
-for many different applications. It is divided into a header based library
-in the `src` directory and a collection of different applications in the
-`applications` folder. Each application is written for a different use-case
-of svZeroDSolver, namely:
+svZeroDSolver is written in a highly modular manner to enable reuse of code for many different applications. It is divided into a header based library in the `src` directory and a collection of different applications in the `applications` folder. Each application is written for a different use-case of svZeroDSolver, namely:
 
 * svZerodSolver in `svzerodsolver.cpp`
 * Python API in `pysvzerod.cpp`
@@ -34,29 +30,20 @@ cmake --build .
 
 # Install with uv
 
-We use [uv](https://docs.astral.sh/uv/) to manage the Python environment and to
-build the `pysvzerod` Python extension. After [installing uv](https://docs.astral.sh/uv/getting-started/installation/),
-execute this command in the root folder to create a virtual environment in
-`.venv`, install all dependencies (including the development tooling), and build
-the current source:
+We use [uv](https://docs.astral.sh/uv/) to manage the Python environment and to build the `pysvzerod` Python extension. After [installing uv](https://docs.astral.sh/uv/getting-started/installation/), execute this command in the root folder to create a virtual environment in `.venv`, install all dependencies (including the development tooling), and build the current source:
 ```bash
 uv sync
 ```
-This is useful when continuously running the integration tests during
-development. The build is self-contained: uv supplies a compatible Python
-interpreter (pinned in `.python-version`) and the CMake/Ninja build tools, so no
-system-wide installation of those is required.
+This is useful when continuously running the integration tests during development. The build is self-contained: uv supplies a compatible Python interpreter (pinned in `.python-version`) and the CMake/Ninja build tools, so no system-wide installation of those is required.
 
-To install only the Python dependencies without building the C++ extension (for
-example when working on the visualization or GUI tooling), use:
+To install only the Python dependencies without building the C++ extension (for example when working on the visualization or GUI tooling), use:
 ```bash
 uv sync --no-install-project
 ```
 
 The application-specific dependencies live in optional dependency groups: use
 `uv sync --group gui` for the [svZeroDGUI](@ref GUI) application and
-`uv sync --group viz` for the [svZeroDVisualization](@ref visualization)
-application.
+`uv sync --group viz` for the [svZeroDVisualization](@ref visualization) application.
 
 Run any command inside the managed environment with `uv run`, e.g.
 `uv run python` or `uv run svzerodsolver`. uv keeps the environment in sync with

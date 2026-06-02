@@ -89,8 +89,8 @@ Each row reports the target, simulated value, acceptable range, and percent erro
 | Pulmonary arterial mean flow | 83.3 cm³/s | 84.3 cm³/s | [75.0, 91.7] | 1.2 |
 | Pulmonary arterial max pressure | 33 330 dyn/cm² | 36 660 dyn/cm² | [29 997, 36 663] | 10.0 |
 | Pulmonary arterial min pressure | 10 670 dyn/cm² | 11 728 dyn/cm² | [9 603, 11 737] | 9.9 |
-| Pulmonary arterial mean pressure | 20 000 dyn/cm² | 18 000 dyn/cm² | [18 000, 22 000] | −10.0 |
-| RPA mean flow | 45.8 cm³/s | 42.3 cm³/s | [41.2, 50.4] | −7.8 |
+| Pulmonary arterial mean pressure | 20 000 dyn/cm² | 18 000 dyn/cm² | [18 000, 22 000] | -10.0 |
+| RPA mean flow | 45.8 cm³/s | 42.3 cm³/s | [41.2, 50.4] | -7.8 |
 | LPA mean flow | 37.5 cm³/s | 38.3 cm³/s | [33.8, 41.3] | 2.0 |
 
 All targets land within their acceptable ranges.

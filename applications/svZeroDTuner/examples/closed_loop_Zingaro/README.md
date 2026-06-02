@@ -11,19 +11,19 @@ magnitude or include variables that can be zero.
 All inputs and targets are in SI units:
 
 - Pressure: Pa
-- Flow: m³/s
-- Volume: m³
-- Resistance: Pa·s/m³
-- Compliance: m³/Pa
+- Flow: m^3/s
+- Volume: m^3
+- Resistance: Pa*s/m^3
+- Compliance: m^3/Pa
 
 ## Model
 
 - Four `LinearElastanceChamber` blocks (LV, RV, LA, RA) with `piecewise_cosine` activation
-- Systemic circuit: `R_UPSTREAM_SYS` → `AR_SYS` → `VEN_SYS`
-- Pulmonary circuit: `R_UPSTREAM_PUL` → `AR_PUL` → `VEN_PUL`
+- Systemic circuit: `R_UPSTREAM_SYS` -> `AR_SYS` -> `VEN_SYS`
+- Pulmonary circuit: `R_UPSTREAM_PUL` -> `AR_PUL` -> `VEN_PUL`
 
 Twenty-one parameters are tunable, covering cardiac elastances (`Emax`, `Epass`, `Vrest`),
-vascular resistances and compliances, and an initial-condition pressure — all with `log` or
+vascular resistances and compliances, and an initial-condition pressure - all with `log` or
 `max` scaling in `tuning.yaml`.
 
 ## Tuning configuration
@@ -77,23 +77,23 @@ all time points:
 
 | Name | Type | Target | % Error |
 |---|---|---|---|
-| LV volume | time_series | patient waveform | ≤5% at convergence |
-| RV volume | time_series | patient waveform | ≤5% at convergence |
-| LA volume | time_series | patient waveform | ≤5% at convergence |
-| RA volume | time_series | patient waveform | ≤5% at convergence |
-| Aortic max pressure | scalar | 13 065 Pa | ≤5% |
-| Aortic min pressure | scalar | 7 066 Pa | ≤5% |
-| Aortic valve peak flow | scalar | 4.27 × 10⁻⁴ m³/s | ≤20% |
-| Pulmonary valve peak flow | scalar | 4.27 × 10⁻⁴ m³/s | ≤20% |
-| PA max pressure | scalar | 2 666 Pa | ≤20% |
-| PA min pressure | scalar | 1 533 Pa | ≤20% |
-| Systemic venous mean pressure | scalar | 800 Pa | ≤20% |
+| LV volume | time_series | patient waveform | <=5% at convergence |
+| RV volume | time_series | patient waveform | <=5% at convergence |
+| LA volume | time_series | patient waveform | <=5% at convergence |
+| RA volume | time_series | patient waveform | <=5% at convergence |
+| Aortic max pressure | scalar | 13 065 Pa | <=5% |
+| Aortic min pressure | scalar | 7 066 Pa | <=5% |
+| Aortic valve peak flow | scalar | 4.27 x 10^-4 m^3/s | <=20% |
+| Pulmonary valve peak flow | scalar | 4.27 x 10^-4 m^3/s | <=20% |
+| PA max pressure | scalar | 2 666 Pa | <=20% |
+| PA min pressure | scalar | 1 533 Pa | <=20% |
+| Systemic venous mean pressure | scalar | 800 Pa | <=20% |
 
 ### optimization_history/
 
 | File | Contents |
 |---|---|
-| `objective_history.png` | Objective vs. iteration — for a 21-parameter run expect slow early progress |
+| `objective_history.png` | Objective vs. iteration - for a 21-parameter run expect slow early progress |
 | `parameter_evolution.png` | Per-parameter trajectories across all evaluations |
 | `history.csv` | Full numerical record; useful for diagnosing stagnation or parameter bounds issues |
 
@@ -101,8 +101,8 @@ all time points:
 
 | File | Contents |
 |---|---|
-| `sensitivity_scores.csv` | First-order correlation scores for each of the 21 parameters × each QoI |
-| `sensitivity_bar_<qoi>.png` | Ranked bar chart — use to identify which 5–8 parameters to tune first |
+| `sensitivity_scores.csv` | First-order correlation scores for each of the 21 parameters x each QoI |
+| `sensitivity_bar_<qoi>.png` | Ranked bar chart - use to identify which 5-8 parameters to tune first |
 
 Running sensitivity analysis before full optimization is especially valuable with 21 parameters:
 it can reduce a multi-hour run to a few minutes by fixing low-influence parameters.

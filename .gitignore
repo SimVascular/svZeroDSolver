@@ -42,3 +42,6 @@ node_modules/
 # Virtual environments
 venv/
 .venv/
+
+# uv lockfile (resolved fresh by `uv sync`; not committed for this package)
+uv.lock

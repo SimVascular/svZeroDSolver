@@ -22,13 +22,13 @@ jobs:
         if: startsWith(matrix.os, 'ubuntu')
         run: sudo apt update && sudo apt install build-essential cmake lcov graphviz
 
-      - name: Install POSIX-like
-        if: ${{!startsWith(matrix.os, 'windows')}}
-        run: uv sync
+      - name: Setup MSVC dev cmd
+        if: startsWith(matrix.os, 'windows')
+        uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Test the build
-        if: ${{!startsWith(matrix.os, 'windows')}}
+      - name: Build and test
         run: |
+          uv sync
           cd tests
           uv run pytest -v --durations=0 --ignore=test_dirgraph.py
 
@@ -84,42 +84,17 @@ jobs:
           cpack
           cp distribution/svZeroDSolver_* ..
 
-      - name: Setup MSVC dev cmd
-        if: startsWith(matrix.os, 'windows')
-        uses: ilammy/msvc-dev-cmd@v1
-
-      - name: Install and test Windows
+      - name: Build installer Windows
         if: startsWith(matrix.os, 'windows')
         continue-on-error: true
         shell: pwsh
         run: |
-          # Install the Python test dependencies (but not the project itself: on
-          # Windows the extension is built directly with CMake below and made
-          # importable via PYTHONPATH). cmake/ninja come from PyPI wheels so the
-          # build is self-contained.
-          uv sync --no-install-project
           uv pip install cmake ninja
-
-          # keep MinGW/Strawberry off PATH (so Eigen won't try Fortran)
-          $pattern = '^(C:\\mingw64\\bin|C:\\tools\\mingw64\\bin|C:\\Strawberry\\c\\bin|C:\\Strawberry\\perl\\site\\bin|C:\\Strawberry\\perl\\bin)$'
-
-          # one build dir for everything: executables + Python module
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
           uv run --no-sync cmake -S . -B $build -G Ninja `
             -DCMAKE_BUILD_TYPE=Release `
-            -DEIGEN_BUILD_BLAS=OFF `
-            -DEIGEN_BUILD_DOC=OFF -DEIGEN_TEST_FORTRAN=OFF -DEIGEN_TEST_CXX11=OFF -DEIGEN_TEST_NOQT=ON `
-            -DCMAKE_Fortran_COMPILER:FILEPATH="" `
             -DENABLE_DISTRIBUTION=ON
           uv run --no-sync cmake --build $build --parallel 2
-
-          # make the Python extension importable
-          $pydDir = Join-Path $build 'python'
-          $env:PYTHONPATH = "$pydDir;$env:PYTHONPATH"
-
-          # run integration tests
-          cd (Join-Path $env:GITHUB_WORKSPACE 'tests')
-          uv run --no-sync pytest -v --durations=0 --ignore=test_dirgraph.py
 
           # build installer
           choco install nsis -y

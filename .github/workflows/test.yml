@@ -86,13 +86,15 @@ jobs:
 
       - name: Build installer Windows
         if: startsWith(matrix.os, 'windows')
-        continue-on-error: true
         shell: pwsh
         run: |
           uv pip install cmake ninja
           $build = Join-Path $env:GITHUB_WORKSPACE 'Release'
+          # Disable Fortran: Eigen's optional Fortran probe otherwise picks up
+          # an incompatible gfortran from the runner PATH and fails to link.
           uv run --no-sync cmake -S . -B $build -G Ninja `
             -DCMAKE_BUILD_TYPE=Release `
+            -DCMAKE_Fortran_COMPILER:FILEPATH="" `
             -DENABLE_DISTRIBUTION=ON
           uv run --no-sync cmake --build $build --parallel 2
 

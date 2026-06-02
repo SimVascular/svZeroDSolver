@@ -1,9 +1,52 @@
 import os
 import shutil
+import subprocess
+import sys
 from setuptools import setup
 from cmake_setuptools import CMakeExtension, CMakeBuildExt
 
 class CustomCMakeBuild(CMakeBuildExt):
+    def build_extension(self, ext):
+        # cmake_setuptools' default build_extension hard-codes `make`, which
+        # does not exist on Windows. Reimplement the configure + build steps
+        # with a generator-agnostic `cmake --build` so the same code path
+        # works on Linux, macOS, and Windows.
+        if not isinstance(ext, CMakeExtension):
+            return super().build_extension(ext)
+
+        cmake = os.environ.get("CMAKE_EXE", shutil.which("cmake"))
+        if not cmake:
+            raise RuntimeError(
+                "cmake executable not found. Set CMAKE_EXE or update your PATH"
+            )
+
+        output_dir = os.path.abspath(
+            os.path.dirname(self.get_ext_fullpath(ext.name)))
+        build_type = "Debug" if self.debug else "Release"
+
+        configure = [
+            cmake,
+            ext.sourcedir,
+            "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + output_dir,
+            "-DCMAKE_BUILD_TYPE=" + build_type,
+        ]
+        # The default generator on Windows is Visual Studio, which the project
+        # is not set up for; use Ninja (declared as a build dependency) there.
+        # An explicit CMAKE_GENERATOR environment variable always wins.
+        if sys.platform == "win32" and not os.environ.get("CMAKE_GENERATOR"):
+            configure += ["-G", "Ninja"]
+        configure += [
+            x for x in os.environ.get("CMAKE_COMMON_VARIABLES", "").split(" ") if x
+        ]
+
+        os.makedirs(self.build_temp, exist_ok=True)
+        subprocess.check_call(configure, cwd=self.build_temp)
+        subprocess.check_call(
+            [cmake, "--build", ".", "--target", ext.name,
+             "--config", build_type, "--parallel"],
+            cwd=self.build_temp,
+        )
+
     def run(self):
         # -------------------------------------------------
         # 1. Build the C++ extension *without* the default

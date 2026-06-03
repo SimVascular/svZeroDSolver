@@ -121,10 +121,10 @@ Inheritance diagram for ResistiveJunction:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a93315135b8f0c0bf7c868d46a5c038ac" id="r_a93315135b8f0c0bf7c868d46a5c038ac"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a93315135b8f0c0bf7c868d46a5c038ac">ResistiveJunction</a> (int id, <a class="el" href="class_model.html">Model</a> *model)</td></tr>
 <tr class="memdesc:a93315135b8f0c0bf7c868d46a5c038ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_resistive_junction.html" title="ResistiveJunction.">ResistiveJunction</a> object.  <br /></td></tr>
-<tr class="memitem:a0f566683ef2a747f3157f6f07d4c49ec" id="r_a0f566683ef2a747f3157f6f07d4c49ec"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a0f566683ef2a747f3157f6f07d4c49ec">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
-<tr class="memdesc:a0f566683ef2a747f3157f6f07d4c49ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
-<tr class="memitem:aca5165c8316adc06219b3d92b32138ba" id="r_aca5165c8316adc06219b3d92b32138ba"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aca5165c8316adc06219b3d92b32138ba">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters)</td></tr>
-<tr class="memdesc:aca5165c8316adc06219b3d92b32138ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <br /></td></tr>
+<tr class="memitem:a1dd1c67206a777ed18bd71c200f425f9" id="r_a1dd1c67206a777ed18bd71c200f425f9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1dd1c67206a777ed18bd71c200f425f9">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler) override</td></tr>
+<tr class="memdesc:a1dd1c67206a777ed18bd71c200f425f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
+<tr class="memitem:aa1111a51461da2c2750fab2e39b8f466" id="r_aa1111a51461da2c2750fab2e39b8f466"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa1111a51461da2c2750fab2e39b8f466">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, std::vector&lt; double &gt; &amp;parameters) override</td></tr>
+<tr class="memdesc:aa1111a51461da2c2750fab2e39b8f466"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the constant contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="inherit_header pub_methods_class_block"><td colspan="2">Public Member Functions inherited from <a class="el" href="class_block.html">Block</a></td></tr>
 <tr class="memitem:a2fe80c4d04a82a550f41d8b89ac3bcb9 pub_methods_class_block" id="r_a2fe80c4d04a82a550f41d8b89ac3bcb9"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9">Block</a> (int id, <a class="el" href="class_model.html">Model</a> *model, <a class="el" href="_block_type_8h.html#a54420623f26ab6bb61042b41cccf37a3">BlockType</a> block_type, <a class="el" href="_block_type_8h.html#aef4629c3f968cbb691cddca5b9d3e950">BlockClass</a> block_class, std::vector&lt; std::pair&lt; std::string, <a class="el" href="struct_input_parameter.html">InputParameter</a> &gt; &gt; input_params)</td></tr>
 <tr class="memdesc:a2fe80c4d04a82a550f41d8b89ac3bcb9 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
@@ -296,8 +296,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a0f566683ef2a747f3157f6f07d4c49ec" name="a0f566683ef2a747f3157f6f07d4c49ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0f566683ef2a747f3157f6f07d4c49ec">&#9670;&#160;</a></span>setup_dofs()</h2>
+<a id="a1dd1c67206a777ed18bd71c200f425f9" name="a1dd1c67206a777ed18bd71c200f425f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dd1c67206a777ed18bd71c200f425f9">&#9670;&#160;</a></span>setup_dofs()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -314,7 +314,7 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -332,8 +332,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aca5165c8316adc06219b3d92b32138ba" name="aca5165c8316adc06219b3d92b32138ba"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca5165c8316adc06219b3d92b32138ba">&#9670;&#160;</a></span>update_constant()</h2>
+<a id="aa1111a51461da2c2750fab2e39b8f466" name="aa1111a51461da2c2750fab2e39b8f466"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1111a51461da2c2750fab2e39b8f466">&#9670;&#160;</a></span>update_constant()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -354,7 +354,7 @@ Public Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

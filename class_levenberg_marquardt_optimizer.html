@@ -113,8 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa980a5ddaabb60eff200a12bf90c4430" id="r_aa980a5ddaabb60eff200a12bf90c4430"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#aa980a5ddaabb60eff200a12bf90c4430">LevenbergMarquardtOptimizer</a> (<a class="el" href="class_model.html">Model</a> *model, int num_obs, int num_params, double lambda0, double tol_grad, double tol_inc, int max_iter)</td></tr>
-<tr class="memdesc:aa980a5ddaabb60eff200a12bf90c4430"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_levenberg_marquardt_optimizer.html" title="Levenberg-Marquardt optimization class.">LevenbergMarquardtOptimizer</a> object.  <br /></td></tr>
+<tr class="memitem:abec97c5833ad0f307fce66872826419f" id="r_abec97c5833ad0f307fce66872826419f"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#abec97c5833ad0f307fce66872826419f">LevenbergMarquardtOptimizer</a> (<a class="el" href="class_model.html">Model</a> *model, int num_obs, int num_params, const std::vector&lt; int &gt; &amp;active_param_ids, double lambda0, double tol_grad, double tol_inc, int max_iter)</td></tr>
+<tr class="memdesc:abec97c5833ad0f307fce66872826419f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_levenberg_marquardt_optimizer.html" title="Levenberg-Marquardt optimization class.">LevenbergMarquardtOptimizer</a> object.  <br /></td></tr>
 <tr class="memitem:af61872e32f3638b60631ad3fc834ab3f" id="r_af61872e32f3638b60631ad3fc834ab3f"><td class="memItemLeft">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight"><a class="el" href="#af61872e32f3638b60631ad3fc834ab3f">run</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; alpha, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;y_obs, std::vector&lt; std::vector&lt; double &gt; &gt; &amp;dy_obs)</td></tr>
 <tr class="memdesc:af61872e32f3638b60631ad3fc834ab3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the optimization algorithm.  <br /></td></tr>
 </table>
@@ -166,8 +166,8 @@ r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \&zwj;]" src="form_184.png
 \cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \&zwj;]" src="form_192.png" width="276" height="41"/></picture>
 </p>
  </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aa980a5ddaabb60eff200a12bf90c4430" name="aa980a5ddaabb60eff200a12bf90c4430"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa980a5ddaabb60eff200a12bf90c4430">&#9670;&#160;</a></span>LevenbergMarquardtOptimizer()</h2>
+<a id="abec97c5833ad0f307fce66872826419f" name="abec97c5833ad0f307fce66872826419f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abec97c5833ad0f307fce66872826419f">&#9670;&#160;</a></span>LevenbergMarquardtOptimizer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -186,6 +186,11 @@ r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \&zwj;]" src="form_184.png
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>num_params</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>active_param_ids</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -215,7 +220,8 @@ r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \&zwj;]" src="form_184.png
   <table class="params">
     <tr><td class="paramname">model</td><td>The 0D model </td></tr>
     <tr><td class="paramname">num_obs</td><td>Number of observations in optimization </td></tr>
-    <tr><td class="paramname">num_params</td><td>Number of parameters in optimization </td></tr>
+    <tr><td class="paramname">num_params</td><td>Total number of parameters in alpha </td></tr>
+    <tr><td class="paramname">active_param_ids</td><td>Indices into alpha of parameters that should be optimized. Parameters not listed are held constant at their initial value. </td></tr>
     <tr><td class="paramname">lambda0</td><td>Initial damping factor </td></tr>
     <tr><td class="paramname">tol_grad</td><td>Gradient tolerance </td></tr>
     <tr><td class="paramname">tol_inc</td><td><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> increment tolerance </td></tr>

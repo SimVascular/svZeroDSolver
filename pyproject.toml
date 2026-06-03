@@ -24,6 +24,7 @@ svzerodcalibrator = "pysvzerod:run_calibration_cli"
 dev = [
     "pytest",
     "PyYAML",
+    "scipy",
     "pydot",
     "graphviz",
     "networkx",

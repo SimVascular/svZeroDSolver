@@ -1,8 +1,8 @@
-import configparser
 import importlib
 import json
 import sys
 import types
+import tomllib
 from pathlib import Path
 
 import pytest
@@ -12,17 +12,20 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_setup_cfg_declares_svzerodtuner_runtime_dependencies():
-    parser = configparser.ConfigParser()
-    parser.read(REPO_ROOT / "setup.cfg")
+def test_pyproject_declares_svzerodtuner_test_dependencies():
+    with open(REPO_ROOT / "pyproject.toml", "rb") as f:
+        pyproject = tomllib.load(f)
 
-    install_requires = {
-        line.strip()
-        for line in parser["options"]["install_requires"].splitlines()
-        if line.strip()
+    installed_deps = {
+        dep.split(";")[0].split("[")[0].strip().lower()
+        for dep in pyproject["project"]["dependencies"]
     }
+    installed_deps.update(
+        dep.split(";")[0].split("[")[0].strip().lower()
+        for dep in pyproject["dependency-groups"]["dev"]
+    )
 
-    assert {"numpy", "pandas", "scipy", "pyyaml", "matplotlib"} <= install_requires
+    assert {"numpy", "pandas", "scipy", "pyyaml", "matplotlib"} <= installed_deps
 
 
 def test_parameter_handler_rejects_unknown_parameter_names(tmp_path):

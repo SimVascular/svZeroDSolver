@@ -33,7 +33,7 @@
         "L": 1.0,
         "R_poiseuille": 100.0
       },
-      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
+      "calibrate": ["R_poiseuille"]
     }
   ],
   "y": {

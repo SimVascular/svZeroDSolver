@@ -4,11 +4,7 @@
 
 # Architecture
 
-svZeroDSolver is written in a highly modular manner to enable reuse of code
-for many different applications. It is divided into a header based library
-in the `src` directory and a collection of different applications in the
-`applications` folder. Each application is written for a different use-case
-of svZeroDSolver, namely:
+svZeroDSolver is written in a highly modular manner to enable reuse of code for many different applications. It is divided into a header based library in the `src` directory and a collection of different applications in the `applications` folder. Each application is written for a different use-case of svZeroDSolver, namely:
 
 * svZerodSolver in `svzerodsolver.cpp`
 * Python API in `pysvzerod.cpp`
@@ -32,13 +28,30 @@ cmake -DCMAKE_BUILD_TYPE=Debug ..
 cmake --build .
 ```
 
-# Install with pip
+# Install with uv
 
-Execute this command in the root folder to install the current source:
+We use [uv](https://docs.astral.sh/uv/) to manage the Python environment and to build the `pysvzerod` Python extension. After [installing uv](https://docs.astral.sh/uv/getting-started/installation/), execute this command in the root folder to create a virtual environment in `.venv`, install all dependencies (including the development tooling), and build the current source:
 ```bash
-pip install -e ".[dev]"
+uv sync
 ```
-This is useful when continuously running the integration tests during development.
+This is useful when continuously running the integration tests during development. The build is self-contained: uv supplies a compatible Python interpreter (pinned in `.python-version`) and the CMake/Ninja build tools, so no system-wide installation of those is required.
+
+To install only the Python dependencies without building the C++ extension (for example when working on the visualization or GUI tooling), use:
+```bash
+uv sync --no-install-project
+```
+
+The application-specific dependencies live in optional dependency groups: use
+`uv sync --group gui` for the [svZeroDGUI](@ref GUI) application and
+`uv sync --group viz` for the [svZeroDVisualization](@ref visualization) application.
+
+Run any command inside the managed environment with `uv run`, e.g.
+`uv run python` or `uv run svzerodsolver`. uv keeps the environment in sync with
+`uv.lock` automatically.
+
+> Prefer plain `pip`? The project still builds with `pip install -e .`. The
+> development dependencies live in a [dependency group](https://packaging.python.org/en/latest/specifications/dependency-groups/),
+> so install them with `pip install -e . --group dev` (pip >= 25.1).
 
 # Contributing to svZeroDSolver
 
@@ -50,13 +63,12 @@ This is useful when continuously running the integration tests during developmen
 # Testing code changes
 * Tests are automatically run as Github workflows when pushing changes to the developer's remote branch on Github. These tests are defined in the `.github/workflows` directory.
 * It may be helpful and more efficient to run the build tests locally with each incremental change the developer makes. This can be done by following these steps:
-  1. If you do not have `pytest` installed in your virtual environment, install it with `pip install pytest`
-  2. We first need to build the svZeroDSolver project. This can be done by running `pip install -e .` from the svZeroDSolver directory
-  3. From the main svZeroDSolver directory, `cd tests`.
-  4. Now that you are in the `tests` directory, run `pytest`. The terminal output will show which tests are passing.
-    * To run a specific subset of tests matching a certain pattern, e.g., only the calibrator, you can use `pytest -k calibrator`. 
-    * To see all simulation output, run `pytest -sv`.
-    * If you want to run the tests using the binaries in the `Release` directory instead of the python module, you can call `pytest --coverage`
+  1. Build the svZeroDSolver project and install the test dependencies by running `uv sync` from the svZeroDSolver directory. This also makes `pytest` available.
+  2. From the main svZeroDSolver directory, `cd tests`.
+  3. Now that you are in the `tests` directory, run `uv run pytest`. The terminal output will show which tests are passing.
+    * To run a specific subset of tests matching a certain pattern, e.g., only the calibrator, you can use `uv run pytest -k calibrator`. 
+    * To see all simulation output, run `uv run pytest -sv`.
+    * If you want to run the tests using the binaries in the `Release` directory instead of the python module, you can call `uv run pytest --coverage`
 * The tests for the C++ interface require the `CMake` install and can be run by building the tests in `svZeroDSolver/tests/test_interface`.
 * Code formatting can be performed following the instructions in the [Formatting](#formatting) section. 
 * The documentation can be built following the instructions in the [Documentation](#documentation) section. 

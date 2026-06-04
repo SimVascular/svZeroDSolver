@@ -1,6 +1,10 @@
 import numpy as np
+import pytest
 
-from .utils import run_test_case_by_name, RTOL_FLOW, RTOL_PRES
+import pysvzerod
+
+from .utils import run_test_case_by_name, RTOL_FLOW, RTOL_PRES, get_test_case_by_name
+
 
 # use coarse absolute tolerances for gradient calculation
 # we're comparing gradients from gen-alpha in svZeroDSolver with central differences in np.gradient
@@ -121,3 +125,69 @@ def test_pulsatile_flow_r_rcr_mean_derivative_variable():
             rt = np.mean(np.gradient(res_time[f + "_" + k], dt))
             rm = res_mean["ydot"][res_mean["name"] == f + ":" + v]
             assert np.isclose(rt, rm, atol=ATOL_MEAN[f[0]])
+
+
+def test_time_dependent_block():
+    # time-dependent results
+    res_flow = run_test_case_by_name("timeDep_Flow", output_variable_based=True)
+    res_press = run_test_case_by_name(
+        "timeDep_Pressure", output_variable_based=True
+    )
+
+    time = res_flow["time"][
+        res_flow["name"] == "flow:INLET:branch0_seg0"
+    ].to_numpy()
+    flow = res_flow["y"][
+        res_flow["name"] == "flow:INLET:branch0_seg0"
+    ].to_numpy()
+    pressure = res_press["y"][
+        res_press["name"] == "pressure:INLET:branch0_seg0"
+    ].to_numpy()
+
+    # compare time-dependent results to the calculated values
+    for i, t in enumerate(time):
+        # may be unsteady at the beginning
+        if i < 15:
+            continue
+        calc_val = 2.0 * (4 * np.arctan(1.0)) * np.cos(
+            2.0 * (4 * np.arctan(1.0)) * t
+        )
+        assert np.isclose(flow[i], calc_val, rtol=0.003)
+        assert np.isclose(pressure[i], calc_val, rtol=0.003)
+
+
+
+def test_invalid_fn_expression():
+    """Invalid exprtk expression string triggers compile-error path in Parameter."""
+
+    config = get_test_case_by_name("timeDep_Flow")
+
+    # input invalid expression
+    config["boundary_conditions"][0]["bc_values"] = {"fn": "sin(t"}
+
+    with pytest.raises(RuntimeError):
+        pysvzerod.simulate(config)
+
+
+def test_missing_mandatory_array_param():
+    """Missing mandatory array parameter raises RuntimeError from SimulationParameters."""
+
+    config = get_test_case_by_name("pulsatileFlow_R_coronary")
+
+    # remove required t vector for array parameter Pim
+    del config["boundary_conditions"][1]["bc_values"]["Pim"]
+
+    with pytest.raises(RuntimeError):
+        pysvzerod.simulate(config)
+
+
+def test_missing_t_vector_for_array_param():
+    """Mandatory array param present but missing t vector raises RuntimeError."""
+
+    config = get_test_case_by_name("pulsatileFlow_R_coronary")
+
+    # remove required t vector for array parameter Pim
+    del config["boundary_conditions"][1]["bc_values"]["t"]
+
+    with pytest.raises(RuntimeError):
+        pysvzerod.simulate(config)

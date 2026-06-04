@@ -189,3 +189,11 @@ def get_result(result_array, field, branch, time_step):
     """ "Get results at specific field, branch, branch_node and time step."""
     # extract result
     return result_array[field][branch][time_step]
+
+
+def get_test_case_by_name(test_case_name):
+    """Get test case configuration by name."""
+    testfile = os.path.join(this_file_dir, "cases", test_case_name + ".json")
+    with open(testfile) as ff:
+        config = json.load(ff)
+    return config

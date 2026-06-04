@@ -40,10 +40,13 @@ nlohmann::json calibrate(const nlohmann::json& config) {
   for (auto const& vessel_config : config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
 
-    // Create parameter IDs
+    // Create parameter IDs. The parameters are also registered in the model so
+    // that the solver's residual assembly can read their current values.
     std::vector<int> param_ids;
-    for (size_t k = 0; k < num_params; k++)
+    for (size_t k = 0; k < num_params; k++) {
       param_ids.push_back(param_counter++);
+      model.add_parameter(0.0);
+    }
     std::string block_type =
         vessel_config["zero_d_element_type"].get<std::string>();
     model.add_block(block_type, param_ids, vessel_name);
@@ -73,8 +76,10 @@ nlohmann::json calibrate(const nlohmann::json& config) {
 
     } else {
       std::vector<int> param_ids;
-      for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++)
+      for (size_t i = 0; i < (num_outlets * (num_params - 1)); i++) {
         param_ids.push_back(param_counter++);
+        model.add_parameter(0.0);
+      }
       model.add_block("BloodVesselJunction", param_ids, junction_name);
     }
 

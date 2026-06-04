@@ -43,8 +43,9 @@ class BloodVesselRC : public Block {
   /// @brief Local IDs of the parameters
   enum ParamId { RPD = 0, CP = 1 };
 
-  void setup_dofs(DOFHandler& dofhandler);
-  void update_constant(SparseSystem& system, std::vector<double>& parameters);
+  void setup_dofs(DOFHandler& dofhandler) override;
+  void update_constant(SparseSystem& system,
+                       std::vector<double>& parameters) override;
 
   /// @brief Number of triplets of element
   TripletsContributions num_triplets{5, 1, 0};

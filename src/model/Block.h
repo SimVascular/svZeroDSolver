@@ -265,10 +265,9 @@ class Block {
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  virtual void update_gradient(
-      Eigen::SparseMatrix<double>& jacobian,
-      Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
-      std::vector<double>& dy);
+  virtual void update_gradient(Eigen::SparseMatrix<double>& jacobian,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
+                               std::vector<double>& y, std::vector<double>& dy);
 
   /**
    * @brief Number of triplets of element

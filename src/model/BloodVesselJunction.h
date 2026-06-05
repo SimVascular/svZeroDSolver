@@ -179,7 +179,7 @@ class BloodVesselJunction : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler& dofhandler);
+  void setup_dofs(DOFHandler& dofhandler) override;
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -187,7 +187,8 @@ class BloodVesselJunction : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem& system, std::vector<double>& parameters);
+  void update_constant(SparseSystem& system,
+                       std::vector<double>& parameters) override;
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -201,7 +202,7 @@ class BloodVesselJunction : public Block {
   virtual void update_solution(
       SparseSystem& system, std::vector<double>& parameters,
       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
@@ -216,7 +217,8 @@ class BloodVesselJunction : public Block {
   void update_gradient(Eigen::SparseMatrix<double>& jacobian,
                        Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
                        Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
-                       std::vector<double>& y, std::vector<double>& dy);
+                       std::vector<double>& y,
+                       std::vector<double>& dy) override;
 
   /**
    * @brief Number of triplets of element

@@ -715,3 +715,25 @@ r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \]
 \_form#198=36x19:$Q_{out}$
 \_form#199=17x19:$I_{1}$
 \_form#200=188x21:$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$
+\_form#201=56x21:$\partial y / \partial p_i$
+\_form#202=309x24:\[\mathbf{p} = (p_1, \dots, p_d), \qquad p_i \in [p_i^{\min}, p_i^{\max}],
+\]
+\_form#203=77x21:\[y = g(\mathbf{p}),
+\]
+\_form#204=11x13:$g$
+\_form#205=17x15:$N$
+\_form#206=111x23:$\mathbf{p}^{(1)}, \dots, \mathbf{p}^{(N)}$
+\_form#207=276x36:\[y^{(k)} = g\!\left(\mathbf{p}^{(k)}\right), \qquad k = 1, \dots, N.
+\]
+\_form#208=17x13:$p_i$
+\_form#209=11x13:$y$
+\_form#210=184x24:\[S_i^{\mathrm{screen},1} = \mathrm{corr}(p_i, y)^2.
+\]
+\_form#211=99x24:$S_i^{\mathrm{screen},1} \approx 0$
+\_form#212=98x24:$S_i^{\mathrm{screen},1} \approx 1$
+\_form#213=154x21:\[\mathrm{Var}(y \mid p_i \in \text{bin } b).
+\]
+\_form#214=336x47:\[S_i^{\mathrm{screen},T}
+\approx
+1 - \frac{\sum_b n_b \, \mathrm{Var}(y \mid p_i \in \text{bin } b)}{N \, \mathrm{Var}(y)}.
+\]

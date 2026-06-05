@@ -1,17 +1,15 @@
 var searchData=
 [
-  ['openloopcoronarybc_0',['OpenLoopCoronaryBC',['../class_open_loop_coronary_b_c.html',1,'OpenLoopCoronaryBC'],['../class_open_loop_coronary_b_c.html#a7034ac11f20b4322fc47904243506564',1,'OpenLoopCoronaryBC::OpenLoopCoronaryBC(int id, Model *model)'],['../class_open_loop_coronary_b_c.html#a511bcac9c23dffbbc12d2f2e43ab06d7',1,'OpenLoopCoronaryBC::OpenLoopCoronaryBC(int id, Model *model, BlockType block_type, const std::vector&lt; std::pair&lt; std::string, InputParameter &gt; &gt; &amp;input_params)']]],
-  ['openloopcoronarybc_2eh_1',['OpenLoopCoronaryBC.h',['../_open_loop_coronary_b_c_8h.html',1,'']]],
-  ['openloopcoronaryvarresbc_2',['OpenLoopCoronaryVarResBC',['../class_open_loop_coronary_var_res_b_c.html',1,'OpenLoopCoronaryVarResBC'],['../class_open_loop_coronary_var_res_b_c.html#a8cc03b8d7b52bef9492f6e107c8ecbd4',1,'OpenLoopCoronaryVarResBC::OpenLoopCoronaryVarResBC()']]],
-  ['openloopcoronaryvarresbc_2eh_3',['OpenLoopCoronaryVarResBC.h',['../_open_loop_coronary_var_res_b_c_8h.html',1,'']]],
-  ['operator_2b_3d_4',['operator+=',['../struct_triplets_contributions.html#ac3e912c1e238de000b8b1f12dc0852cf',1,'TripletsContributions']]],
-  ['operator_5b_5d_5',['operator[]',['../class_json_wrapper.html#a359ebc2cb4a90ef24b035acb049ab58e',1,'JsonWrapper']]],
-  ['outlet_5feles_6',['outlet_eles',['../class_node.html#ad82f34139c3bdbfcaf53d1f0eecdde96',1,'Node']]],
-  ['outlet_5fnodes_7',['outlet_nodes',['../class_block.html#a7bb57d39f94b221674c7c58057c4abea',1,'Block']]],
-  ['output_5fall_5fcycles_8',['output_all_cycles',['../struct_simulation_parameters.html#a3781dcd107cdc76e5c04cd5d7589a4ff',1,'SimulationParameters']]],
-  ['output_5fderivative_9',['output_derivative',['../struct_simulation_parameters.html#acf01880c7d28c91d7f05dbd5615e124c',1,'SimulationParameters']]],
-  ['output_5finterval_10',['output_interval',['../struct_simulation_parameters.html#a91fb3af39c933a78f3517925a28e72a7',1,'SimulationParameters']]],
-  ['output_5flast_5fcycle_5fonly_5f_11',['output_last_cycle_only_',['../class_solver_interface.html#a3e5a39bc1c8fe7ffa6cce8f487a919bf',1,'SolverInterface']]],
-  ['output_5fmean_5fonly_12',['output_mean_only',['../struct_simulation_parameters.html#a76a3f769988224f5d1469f96b639516f',1,'SimulationParameters']]],
-  ['output_5fvariable_5fbased_13',['output_variable_based',['../struct_simulation_parameters.html#ab25065e02877aff1d32846df3858cf83',1,'SimulationParameters']]]
+  ['matching_0',['Optional: Time-Series Target Matching',['../tuner_examples.html#autotoc_md37',1,'']]],
+  ['max_5fnliter_5f_1',['max_nliter_',['../class_solver_interface.html#a69f2db727e775f5ab5e838dd60425a87',1,'SolverInterface']]],
+  ['metrics_2',['Targets and Metrics',['../tuner_concepts.html#autotoc_md25',1,'']]],
+  ['minimal_20scalar_20target_20tuning_3',['Example 1: Minimal Scalar-Target Tuning',['../tuner_examples.html#autotoc_md35',1,'']]],
+  ['mismatch_4',['Coupling / Units Mismatch',['../tuner_troubleshooting.html#autotoc_md43',1,'']]],
+  ['mode_5',['Build in debug mode',['../developer_guide.html#autotoc_md1',1,'']]],
+  ['model_6',['Model',['../class_model.html',1,'Model'],['../class_model.html#ae3b375de5f6df4faf74a95d64748e048',1,'Model::Model()']]],
+  ['model_7',['model',['../class_block.html#a608c3330612de2419da47e0f4532a8d9',1,'Block::model'],['../class_node.html#a0954ba120d8518cededd07748c5e6a29',1,'Node::model']]],
+  ['model_2eh_8',['Model.h',['../_model_8h.html',1,'']]],
+  ['model_5f_9',['model_',['../class_solver_interface.html#a68920349d4720efd11f9bfd210d421e6',1,'SolverInterface']]],
+  ['modes_10',['Failure Modes',['../tuner_concepts.html#autotoc_md30',1,'']]],
+  ['multi_20outlet_20pulmonary_20tree_20tuning_11',['Example 2: Multi-Outlet Pulmonary Tree Tuning',['../tuner_examples.html#autotoc_md36',1,'']]]
 ];

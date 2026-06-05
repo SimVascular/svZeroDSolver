@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_5fuse_5fmath_5fdefines_0',['_USE_MATH_DEFINES',['../_closed_loop_heart_pulmonary_8h.html#a525335710b53cb064ca56b936120431e',1,'ClosedLoopHeartPulmonary.h']]]
+  ['1_3a_20minimal_20scalar_20target_20tuning_0',['Example 1: Minimal Scalar-Target Tuning',['../tuner_examples.html#autotoc_md35',1,'']]]
 ];

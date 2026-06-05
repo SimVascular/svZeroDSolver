@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['jacobian_0',['jacobian',['../class_sparse_system.html#ae68dcf82fa22bc7479dba6cbc9b87f2d',1,'SparseSystem']]],
-  ['jacobian_20generator_20for_20svzerodsolver_1',['Jacobian Generator for svZeroDSolver',['../jacobian.html',1,'']]],
-  ['jsonwrapper_2',['JsonWrapper',['../class_json_wrapper.html',1,'JsonWrapper'],['../class_json_wrapper.html#a7e052f1e62d62e3b476ad41f5b1ba9f4',1,'JsonWrapper::JsonWrapper()']]],
-  ['junction_3',['Junction',['../class_junction.html',1,'Junction'],['../class_junction.html#abe3444b8a5e9a2f6d07059e4837b8fc0',1,'Junction::Junction()']]],
-  ['junction_2eh_4',['Junction.h',['../_junction_8h.html',1,'']]]
+  ['halfcosineactivation_0',['HalfCosineActivation',['../class_half_cosine_activation.html',1,'HalfCosineActivation'],['../class_half_cosine_activation.html#a0b1afb42cd592e1ad6dbc884e505c398',1,'HalfCosineActivation::HalfCosineActivation()']]],
+  ['has_5fblock_1',['has_block',['../class_model.html#abc36e7c0be46ee4c31f954e9312251d3',1,'Model']]],
+  ['how_20to_20use_2',['How to Use',['../visualization.html#autotoc_md50',1,'']]],
+  ['how_20to_20visualize_20a_20new_20block_3',['How to Visualize a New Block',['../visualization.html#autotoc_md51',1,'']]]
 ];

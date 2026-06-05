@@ -1,24 +1,4 @@
 var searchData=
 [
-  ['bibliography_0',['Bibliography',['../citelist.html',1,'']]],
-  ['block_1',['Block',['../class_block.html',1,'Block'],['../class_block.html#a2fe80c4d04a82a550f41d8b89ac3bcb9',1,'Block::Block(int id, Model *model, BlockType block_type, BlockClass block_class, std::vector&lt; std::pair&lt; std::string, InputParameter &gt; &gt; input_params)'],['../class_block.html#a0b82be82678747aaf1dc304df9edc1be',1,'Block::Block(const Block &amp;)=delete'],['../visualization.html#autotoc_md16',1,'How to Visualize a New Block']]],
-  ['block_2eh_2',['Block.h',['../_block_8h.html',1,'']]],
-  ['block_5fclass_3',['block_class',['../class_block.html#a4a7e01f2e19e5d0e4c947ccdc433467f',1,'Block::block_class'],['../class_junction.html#a5566b94a58feddead02d2508989a3de0',1,'Junction::block_class']]],
-  ['block_5ffactory_5fmap_4',['block_factory_map',['../class_model.html#aefd9dbcdaffe50910d91af391621daa4',1,'Model']]],
-  ['block_5ftype_5',['block_type',['../class_block.html#ae306263ee87b44a0fc397bf6276c3a15',1,'Block::block_type'],['../class_junction.html#ab684ec7fcbfc56e1bbc671eaf1c696b6',1,'Junction::block_type']]],
-  ['blockclass_6',['BlockClass',['../_block_type_8h.html#aef4629c3f968cbb691cddca5b9d3e950',1,'BlockType.h']]],
-  ['blockfactory_2eh_7',['BlockFactory.h',['../_block_factory_8h.html',1,'']]],
-  ['blockfactoryfunc_8',['BlockFactoryFunc',['../_block_factory_8h.html#a03d532c0cd4aae86cbe677fa968a562a',1,'BlockFactory.h']]],
-  ['blocks_9',['Adding New Blocks',['../add_block.html',1,'']]],
-  ['blocks_10',['Adding new blocks',['../developer_guide.html#autotoc_md5',1,'']]],
-  ['blocktype_11',['BlockType',['../_block_type_8h.html#a54420623f26ab6bb61042b41cccf37a3',1,'BlockType.h']]],
-  ['blocktype_2eh_12',['BlockType.h',['../_block_type_8h.html',1,'']]],
-  ['bloodvessel_13',['BloodVessel',['../class_blood_vessel.html',1,'BloodVessel'],['../class_blood_vessel.html#abafeb419a584ad09fcd25827324c9afc',1,'BloodVessel::BloodVessel()']]],
-  ['bloodvessel_2eh_14',['BloodVessel.h',['../_blood_vessel_8h.html',1,'']]],
-  ['bloodvesselcrl_15',['BloodVesselCRL',['../class_blood_vessel_c_r_l.html',1,'BloodVesselCRL'],['../class_blood_vessel_c_r_l.html#a843234a0fb45fe773da1716dfb969071',1,'BloodVesselCRL::BloodVesselCRL()']]],
-  ['bloodvesselcrl_2eh_16',['BloodVesselCRL.h',['../_blood_vessel_c_r_l_8h.html',1,'']]],
-  ['bloodvesseljunction_17',['BloodVesselJunction',['../class_blood_vessel_junction.html',1,'BloodVesselJunction'],['../class_blood_vessel_junction.html#a80fb63523d2c0658ed089c941fc94035',1,'BloodVesselJunction::BloodVesselJunction()']]],
-  ['bloodvesseljunction_2eh_18',['BloodVesselJunction.h',['../_blood_vessel_junction_8h.html',1,'']]],
-  ['bloodvesselrc_19',['BloodVesselRC',['../class_blood_vessel_r_c.html',1,'BloodVesselRC'],['../class_blood_vessel_r_c.html#adb0e16e5aca0c4288518fa02a4edc8f8',1,'BloodVesselRC::BloodVesselRC()']]],
-  ['build_20in_20debug_20mode_20',['Build in debug mode',['../developer_guide.html#autotoc_md1',1,'']]]
+  ['_5fuse_5fmath_5fdefines_0',['_USE_MATH_DEFINES',['../_closed_loop_heart_pulmonary_8h.html#a525335710b53cb064ca56b936120431e',1,'ClosedLoopHeartPulmonary.h']]]
 ];

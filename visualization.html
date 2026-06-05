@@ -105,39 +105,39 @@ document.addEventListener('DOMContentLoaded', () => {
 <div class="toc"><h3>Table of Contents</h3>
 <ul>
   <li class="level1">
-    <a href="#autotoc_md12">About </a>
+    <a href="#autotoc_md47">About </a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md13">Architecture </a>
+    <a href="#autotoc_md48">Architecture </a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md14">Installing Dependencies </a>
+    <a href="#autotoc_md49">Installing Dependencies </a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md15">How to Use </a>
+    <a href="#autotoc_md50">How to Use </a>
   </li>
   <li class="level1">
-    <a href="#autotoc_md16">How to Visualize a New <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> </a>
+    <a href="#autotoc_md51">How to Visualize a New <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> </a>
   </li>
 </ul>
 </div>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md47"></a>
 About</h1>
 <p>svZeroDVisualization is a web application designed for visualizing 0D simulation results and the 0D network. It allows users to interactively explore and analyze their simulation data through an intuitive interface. This application is available in the <span class="tt">applications</span> folder.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md48"></a>
 Architecture</h1>
 <p>svZeroDVisualization is built using a robust architecture that includes:</p><ul>
 <li>Frontend: Utilizes HTML, CSS, Dash, and Plotly for creating a dynamic and interactive user interface. This setup allows for effective visualization and interaction with the 0D network and simulation results.</li>
 <li>Backend: Powered by a Flask application that handles the server-side logic. It leverages NetworkX for managing and visualizing the network graph and a Python code to determine network connections.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md49"></a>
 Installing Dependencies</h1>
 <p>We use <a href="https://docs.astral.sh/uv/">uv</a> to manage the Python environment (see the <a class="el" href="developer_guide.html" title="Developer Guide">Developer Guide</a> for an overview). From the repository root, the following command creates a virtual environment in <span class="tt">.venv</span>, builds the <span class="tt">pysvzerod</span> extension, and installs the visualization dependencies (<span class="tt">dash</span>, <span class="tt">plotly</span>) together with the shared dependencies (<span class="tt">pandas</span>, <span class="tt">numpy</span>, <span class="tt">matplotlib</span>, <span class="tt">networkx</span>): </p><div class="fragment"><div class="line">uv sync --group viz</div>
 </div><!-- fragment --><p>Then launch the application inside the managed environment with <span class="tt">uv run</span>, e.g.: </p><div class="fragment"><div class="line">uv run python applications/svZeroDVisualization/visualize_simulation.py --help</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md50"></a>
 How to Use</h1>
 <p>A user guide is available on the <a href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-visualization">SimVascular website</a>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md51"></a>
 How to Visualize a New Block</h1>
 <ol type="1">
 <li><b>Update JSON Parsing</b>:<ul>

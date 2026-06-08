@@ -1,6 +1,60 @@
 [build-system]
-requires = ["setuptools >= 40.9.0", "wheel", "cmake_setuptools"]
+requires = ["setuptools >= 40.9.0", "wheel", "cmake_setuptools", "cmake >= 3.18", "ninja"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "pysvzerod"
+version = "2.0"
+description = "A fast C++ application for working with 0D models."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "pandas",
+    "numpy",
+]
+
+[project.scripts]
+svzerodsolver = "pysvzerod:run_simulation_cli"
+svzerodcalibrator = "pysvzerod:run_calibration_cli"
+
+# Development tooling. Installed by default with `uv sync`; install with pip via
+# `pip install -e . --group dev` (pip >= 25.1). Consolidates the dependencies
+# previously spread across tests/requirements.txt and scripts/requirements.txt.
+[dependency-groups]
+dev = [
+    "pytest",
+    "PyYAML",
+    "scipy",
+    "pydot",
+    "graphviz",
+    "networkx",
+    "tqdm",
+    "matplotlib",
+    "profilehooks",
+    "sympy>=1.12",
+]
+# Dependencies for the svZeroDGUI Flask application.
+gui = [
+    "flask",
+]
+# Dependencies for the svZeroDVisualization web application (in addition to the
+# pandas/numpy/matplotlib/networkx already provided by the project and dev group).
+viz = [
+    "dash",
+    "plotly",
+]
+
+# The importable artifact is the compiled `pysvzerod` extension module, built by
+# CMake via setup.py (ext_modules). There are no pure-Python packages to ship,
+# so disable setuptools auto-discovery (which would otherwise error on the
+# multiple top-level directories or wrongly pick up `tests`).
+[tool.setuptools]
+py-modules = []
+
+[tool.uv]
+# Keep `uv sync` aligned with the main developer/test workflow by default.
+# Auxiliary groups remain opt-in via `--group`.
+default-groups = ["dev"]
 
 [tool.pytest.ini_options]
 addopts = """

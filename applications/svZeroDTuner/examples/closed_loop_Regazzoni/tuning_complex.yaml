@@ -1,0 +1,228 @@
+# Tuning configuration for Regazzoni closed-loop model
+#
+# INSTRUCTIONS:
+# 1. Run baseline:
+#    python -c 'from main import run_baseline; run_baseline("model.json")'
+# 2. Inspect baseline_results.csv and baseline_summary.csv
+# 3. Update the 'targets' section below with your desired targets
+# 4. Run optimization:
+#    svzerodtuner optimize tuning_complex.yaml
+
+model:
+  config_file: "model.json"
+
+# Parameters to optimize
+# Add or remove parameters as needed
+parameters:
+  - name: "LV.Epass"
+    bounds: [1e6, 1e8]
+    scaling: log
+
+  - name: "LV.Emax"
+    bounds: [1e7, 1e9] 
+    scaling: log
+
+  - name: "RV.Epass"
+    bounds: [1e6, 1e8]
+    scaling: log
+
+  - name: "RV.Emax"
+    bounds: [1e7, 1e9]
+    scaling: log
+
+  - name: "LA.Epass"
+    bounds: [1e6, 1e8]
+    scaling: log
+
+  - name: "RA.Epass"
+    bounds: [1e6, 1e8]
+    scaling: log
+
+  - name: "LV.Vrest"
+    bounds: [1e-6, 1e-4]
+    scaling: max
+
+  - name: "RV.Vrest"
+    bounds: [1e-6, 1e-4]
+    scaling: max
+
+  - name: "AR_SYS.R_poiseuille"
+    bounds: [1e7, 1e9]
+    scaling: log
+
+  - name: "AR_SYS.C"
+    bounds: [1e-9, 1e-7]
+    scaling: log
+
+  - name: "VEN_SYS.R_poiseuille"
+    bounds: [1e5, 1e7]
+    scaling: log
+
+  - name: "initial_condition.pressure:J0:VEN_SYS"
+    bounds: [1e2, 1e4]
+    scaling: log
+
+
+# Target outputs
+# Specify which outputs you want to match and their target values
+# Provide expressions with output names from baseline_summary.csv
+targets:
+  - name: LV max volume
+    type: scalar
+    expression: np.max(Vc:LV)
+    target_value: 116.0e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+  - name: LV min volume
+    type: scalar
+    expression: np.min(Vc:LV)
+    target_value: 38.6e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+  - name: LV volume
+    type: time_series
+    expression: Vc:LV
+    target_file: "targets/P003_chamber_volumes/target_V_LV.csv"
+    relative_bounds: 5%
+    weight: 1.0
+
+  - name: RV max volume
+    type: scalar
+    expression: np.max(Vc:RV)
+    target_value: 171.0e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+  - name: RV min volume
+    type: scalar
+    expression: np.min(Vc:RV)
+    target_value: 82.0e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+  - name: RV volume
+    type: time_series
+    expression: Vc:RV
+    target_file: "targets/P003_chamber_volumes/target_V_RV.csv"
+    relative_bounds: 5%
+    weight: 1.0
+
+  - name: LA max volume
+    type: scalar
+    expression: np.max(Vc:LA)
+    target_value: 72.7e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+  - name: LA min volume
+    type: scalar
+    expression: np.min(Vc:LA)
+    target_value: 38.2e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+  - name: LA volume
+    type: time_series
+    expression: Vc:LA
+    target_file: "targets/P003_chamber_volumes/target_V_LA.csv"
+    relative_bounds: 5%
+    weight: 1.0
+
+  - name: RA max volume
+    type: scalar
+    expression: np.max(Vc:RA)
+    target_value: 107.9e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+  - name: RA min volume
+    type: scalar
+    expression: np.min(Vc:RA)
+    target_value: 56.0e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+  - name: RA volume
+    type: time_series
+    expression: Vc:RA
+    target_file: "targets/P003_chamber_volumes/target_V_RA.csv"
+    relative_bounds: 5%
+    weight: 1.0
+
+  - name: Systemic arterial max pressure
+    type: scalar
+    expression: np.max(pressure:AV:AR_SYS)
+    target_value: 13065  # Pa (98.0 mmHg)
+    relative_bounds: 5%
+    weight: 1.0
+  - name: Systemic arterial min pressure
+    type: scalar
+    expression: np.min(pressure:AV:AR_SYS)
+    target_value: 7066  # Pa (53.0 mmHg)
+    relative_bounds: 5%
+    weight: 1.0
+
+  - name: Pulmonary arterial max pressure
+    type: scalar
+    expression: np.max(pressure:PV:AR_PUL)
+    target_value: 2666  # Pa (20.0 mmHg)
+    relative_bounds: 20%
+    weight: 1.0
+  - name: Pulmonary arterial min pressure
+    type: scalar
+    expression: np.min(pressure:PV:AR_PUL)
+    target_value: 1533  # Pa (11.5 mmHg)
+    relative_bounds: 20%
+    weight: 1.0
+
+  - name: Systemic venous mean pressure
+    type: scalar
+    expression: np.mean(pressure:J0:VEN_SYS)
+    target_value: 800  # Pa (6.0 mmHg)
+    relative_bounds: 20%
+    weight: 1.0
+
+  - name: Right atrial mean pressure
+    type: scalar
+    expression: np.mean(pressure:J1:RA)
+    target_value: 533  # Pa (4.0 mmHg)
+    relative_bounds: 20%
+    weight: 1.0
+
+  - name: Left atrial mean pressure
+    type: scalar
+    expression: np.mean(pressure:J3:LA)
+    target_value: 933  # Pa (7.0 mmHg)
+    relative_bounds: 20%
+    weight: 1.0
+
+objective:
+  # L1 or L2 norm (of relative errors)
+  norm: L1
+
+# Optimization - use scipy's exact parameter names
+optimization:
+  terminate_at_zero: true  # Stop when objective hits zero (default: true). Set false to run full maxiter.
+  # Differential evolution specific options
+  # "To improve your chances of finding a global minimum use higher popsize values, 
+  # with higher mutation and (dithering), but lower recombination values. This 
+  # has the effect of widening the search radius, but slowing convergence.""
+  algorithm: "differential_evolution"
+  maxiter: 500
+  workers: -1
+  updating: 'deferred'
+  tol: 1e-2
+  popsize: 30            
+  init: 'sobol'           
+  strategy: 'best1bin'    
+  mutation: [0.5, 1.5]    
+  recombination: 0.5      
+  polish: false
+
+  # Nelder-Mead specific options
+  # algorithm: "Nelder-Mead"
+  # maxiter: 10000
+  # xatol: 1e-6
+  # fatol: 1e-6
+  # adaptive: true
+
+# Output
+output:
+  directory: "optimization_results_complex"
+  save_history: true
+  save_plots: true
+  save_final_config: true

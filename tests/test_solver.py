@@ -52,7 +52,8 @@ EXPECTED_FAILURES = {
                                       'pulsatileFlow_CStenosis_steadyPressure_definedPeriod.json',
                                       'chamber_sphere.json',
                                       'piecewise_Chamber_and_Valve.json',
-                                      'pulsatileFlow_CRL.json'
+                                      'pulsatileFlow_CRL.json',
+                                      'chamber_sphere_closed_loop.json'
                                       ])
 def test_solver(testfile):
     '''

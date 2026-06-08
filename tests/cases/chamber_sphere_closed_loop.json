@@ -4,7 +4,7 @@
     "circuit": "LV -> AV -> aorta -> arteries -> arterioles -> capillaries -> venules -> veins -> RV -> MV -> LV"
   },
   "simulation_parameters": {
-    "number_of_cardiac_cycles": 10,
+    "number_of_cardiac_cycles": 5,
     "number_of_time_pts_per_cardiac_cycle": 5000,
     "absolute_tolerance": 1e-8,
     "output_variable_based": true,

@@ -23,6 +23,8 @@ svzerodcalibrator = "pysvzerod:run_calibration_cli"
 [dependency-groups]
 dev = [
     "pytest",
+    "PyYAML",
+    "scipy",
     "pydot",
     "graphviz",
     "networkx",
@@ -48,6 +50,11 @@ viz = [
 # multiple top-level directories or wrongly pick up `tests`).
 [tool.setuptools]
 py-modules = []
+
+[tool.uv]
+# Keep `uv sync` aligned with the main developer/test workflow by default.
+# Auxiliary groups remain opt-in via `--group`.
+default-groups = ["dev"]
 
 [tool.pytest.ini_options]
 addopts = """

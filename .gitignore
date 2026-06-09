@@ -39,6 +39,9 @@ build*/
 # Node modules (for directed graph visualization)
 node_modules/
 
+# Allow csv for target files in svZeroDTuner examples
+!applications/svZeroDTuner/examples/**/targets/**/*.csv
+
 # Virtual environments
 venv/
 .venv/

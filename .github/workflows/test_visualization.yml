@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         # The dirgraph test only needs the Python dev tooling, not the compiled
         # pysvzerod extension, so skip building the project.
-        run: uv sync --no-install-project
+        run: uv sync --no-install-project --no-default-groups --group dev
 
       - name: Install Graphviz
         if: runner.os == 'Linux'

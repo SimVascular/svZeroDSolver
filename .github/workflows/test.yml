@@ -28,7 +28,7 @@ jobs:
 
       - name: Build and test
         run: |
-          uv sync
+          uv sync --no-default-groups --group dev
           cd tests
           uv run pytest -v --durations=0 --ignore=test_dirgraph.py
 
@@ -98,11 +98,10 @@ jobs:
             -DENABLE_DISTRIBUTION=ON
           uv run --no-sync cmake --build $build --parallel 2
 
-          # build installer
-          choco install nsis -y
-          echo "C:\Program Files (x86)\NSIS\Bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          # Build a portable package on CI. This avoids the flaky Chocolatey
+          # NSIS install path while still producing a Windows artifact.
           cd $build
-          cpack -C Release
+          cpack -G ZIP -C Release
           Copy-Item distribution\svZeroDSolver_* -Destination ..\
 
       - name: Upload installer

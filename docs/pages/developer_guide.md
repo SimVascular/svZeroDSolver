@@ -11,10 +11,13 @@ svZeroDSolver is written in a highly modular manner to enable reuse of code for 
 * svZeroDCalibrator in `svzerodcalibrator.cpp`
 * svZeroDVisualization for visualizing 0D models and results
 * svZeroDGUI for creating new 0D models grahically.
+* svZeroDTuner for parameter tuning and sensitivity analysis of 0D models.
 
 [Architecture for svZeroDVisualization](@ref visualization).
 
 [Architecture for svZeroDGUI](@ref GUI).
+
+[Guide for svZeroDTuner](@ref tuner).
 
 
 # Build in debug mode

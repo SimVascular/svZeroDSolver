@@ -127,8 +127,8 @@ void ChamberSphere::get_elastance_values(std::vector<double>& parameters) {
   const double phase_tsys = warp_signed(t_in_cycle - tsys);
   const double phase_tdias = warp_signed(t_in_cycle - tdias);
 
-  const double S_plus = 0.5 * (1.0 + tanh((phase_tsys) / steepness));
-  const double S_minus = 0.5 * (1.0 - tanh((phase_tdias - tdias) / steepness));
+  const double S_plus = 0.5 * (1.0 + tanh(phase_tsys / steepness));
+  const double S_minus = 0.5 * (1.0 - tanh(phase_tdias / steepness));
 
   // indicator function
   const double f = S_plus * S_minus;

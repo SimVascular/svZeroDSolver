@@ -119,8 +119,7 @@ void ChamberSphere::get_elastance_values(std::vector<double>& parameters) {
   const auto T_cardiac = model->cardiac_cycle_period;
   const auto t_in_cycle = fmod(model->time, T_cardiac);
 
-  
-  auto warp_signed = [T_cardiac](double dt){
+  auto warp_signed = [T_cardiac](double dt) {
     return fmod(dt + 1.5 * T_cardiac, T_cardiac) - 0.5 * T_cardiac;
   };
 

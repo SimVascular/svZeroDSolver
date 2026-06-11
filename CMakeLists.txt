@@ -252,7 +252,7 @@ add_subdirectory("distribution")
 # Enforce and check code format
 # -----------------------------------------------------------------------------
 # set paths of files to format
-set(SDIR ${PROJECT_SOURCE_DIR}/src/**/)
+set(SDIR ${PROJECT_SOURCE_DIR}/src)
 
 # format the code
 add_custom_target(codeformat

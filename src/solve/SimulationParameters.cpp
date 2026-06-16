@@ -676,8 +676,9 @@ void create_chambers(
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
 
     // Create and set activation_function for chamber types that use it
-    if (chamber_type == "LinearElastanceChamber" ||
-        chamber_config.contains("activation_function")) {
+    if (chamber_type == "ChamberElastanceInductor" ||
+        chamber_type == "ChamberElastanceInductorExponential" ||
+        chamber_type == "LinearElastanceChamber") {
       auto act_func = generate_activation_function(
           model, chamber_config["activation_function"], chamber_name);
       model.get_block(chamber_name)

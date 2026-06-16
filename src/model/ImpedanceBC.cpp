@@ -26,7 +26,7 @@ void ImpedanceBC::update_time(SparseSystem& system,
   double conv_sum = 0.0;
   // Match Olufsen startup semantics: do not evaluate lagged terms until one
   // full cycle of accepted data has elapsed.
-  if (num_accepted_steps > num_period_steps) {
+  if (num_accepted_steps >= num_period_steps) {
     for (int m = 1; m < num_kernel_terms; m++) {
       conv_sum += kernel[m] * lagged_flow(m);
     }

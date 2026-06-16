@@ -29,7 +29,13 @@ enum class BlockType {
   valve_tanh = 13,
   chamber_elastance_inductor = 14,
   chamber_sphere = 15,
-  chamber_sphere_strain_dependent_active_stress = 16,
+  blood_vessel_CRL = 16,
+  piecewise_valve = 17,
+  linear_elastance_chamber = 18,
+  open_loop_coronary_var_res_bc = 19,
+  blood_vessel_rc = 20,
+  chamber_elastance_inductor_exponential = 21,
+  chamber_sphere_strain_dependent_active_stress = 22
 };
 
 /**

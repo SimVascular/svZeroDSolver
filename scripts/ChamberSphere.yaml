@@ -44,7 +44,7 @@ helper_functions: |
 
 residuals:
   - rho * thick0 * dvelo_dt + (thick0 / radius0) * (1 + (radius / radius0)) * stress - Pout * CG(radius)
-  - -stress + tau + 4 * (1 - CG(radius) ** -3) * (W1 + CG(radius) * W2) + 2 * eta * dCG(radius, dradius_dt) * (1 - 2 * CG(radius) ** -6)
+  - -stress + tau + 4 * (1 - CG(radius) ** (-3)) * (W1 + CG(radius) * W2) + eta * dCG(radius, dradius_dt) * (1 + 2 * CG(radius) ** (-6))
   - 4 * pi * radius0 ** 2 * CG(radius) * velo - dvolume_dt
   - dtau_dt + act * tau - sigma_max * act_plus
   - dradius_dt - velo

@@ -12,8 +12,8 @@ void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
 
 void ChamberSphere::update_constant(SparseSystem& system,
                                     std::vector<double>& parameters) {
-  const double thick0 = parameters[global_param_ids[ParamId::thick0]];
   const double rho = parameters[global_param_ids[ParamId::rho]];
+  const double thick0 = parameters[global_param_ids[ParamId::thick0]];
 
   // balance of linear momentum
   system.E.coeffRef(global_eqn_ids[0], global_var_ids[5]) = rho * thick0;
@@ -61,10 +61,10 @@ void ChamberSphere::update_solution(
 
   const double radius0 = parameters[global_param_ids[ParamId::radius0]];
   const double velo = y[global_var_ids[5]];
-  const double dradius_dt = dy[global_var_ids[4]];
   const double Pout = y[global_var_ids[2]];
-  const double radius = y[global_var_ids[4]];
   const double stress = y[global_var_ids[6]];
+  const double dradius_dt = dy[global_var_ids[4]];
+  const double radius = y[global_var_ids[4]];
 
   // balance of momentum
   system.C.coeffRef(global_eqn_ids[0]) =
@@ -79,20 +79,20 @@ void ChamberSphere::update_solution(
 
   // spherical stress
   system.C.coeffRef(global_eqn_ids[1]) =
-      4 *
-      (dradius_dt * eta * (-2 * pow(radius0, 12) + pow(radius + radius0, 12)) +
-       pow(radius + radius0, 5) *
+      2 *
+      (dradius_dt * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) +
+       2 * pow(radius + radius0, 5) *
            (-pow(radius0, 6) + pow(radius + radius0, 6)) *
            (W1 * pow(radius0, 2) + W2 * pow(radius + radius0, 2))) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
   system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
       24 * W1 * pow(radius0, 6) / pow(radius + radius0, 7) +
       8 * W2 * radius / pow(radius0, 2) +
-      16 * W2 * pow(radius0, 4) / pow(radius + radius0, 5) + 8 * W2 / radius0 +
-      88 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12) +
-      4 * dradius_dt * eta / pow(radius0, 2);
+      16 * W2 * pow(radius0, 4) / pow(radius + radius0, 5) + 8 * W2 / radius0 -
+      44 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12) +
+      2 * dradius_dt * eta / pow(radius0, 2);
   system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
-      -4 * eta * (2 * pow(radius0, 12) - pow(radius + radius0, 12)) /
+      2 * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
 
   // volume change

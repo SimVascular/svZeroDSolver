@@ -50,7 +50,12 @@ EXPECTED_FAILURES = {
                                       'closedLoopHeart_singleVessel_mistmatchPeriod.json',
                                       'pulsatileFlow_R_RCR_mismatchPeriod.json',
                                       'pulsatileFlow_CStenosis_steadyPressure_definedPeriod.json',
-                                      'chamber_sphere.json'
+                                      'chamber_sphere.json',
+                                      'piecewise_Chamber_and_Valve.json',
+                                      'closed_loop_two_hill.json',
+                                      'pulsatileFlow_CRL.json',
+                                      'pulsatileFlow_R_coronary_varres.json',
+                                      'closedLoopHeart_singleVessel_decomposed.json'
                                       ])
 def test_solver(testfile):
     '''

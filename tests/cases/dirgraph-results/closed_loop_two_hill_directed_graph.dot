@@ -1,0 +1,34 @@
+strict digraph {
+J0;
+V2;
+J1;
+RA;
+J2;
+V4;
+J3;
+LA;
+MV;
+LV;
+AV;
+V1;
+TV;
+RV;
+PV;
+V3;
+J0 -> V2;
+V2 -> J1;
+J1 -> RA;
+RA -> TV;
+J2 -> V4;
+V4 -> J3;
+J3 -> LA;
+LA -> MV;
+MV -> LV;
+LV -> AV;
+AV -> V1;
+V1 -> J0;
+TV -> RV;
+RV -> PV;
+PV -> V3;
+V3 -> J2;
+}

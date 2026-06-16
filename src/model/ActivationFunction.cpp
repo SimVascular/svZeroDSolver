@@ -41,9 +41,16 @@ std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
   if (type_str == "two_hill") {
     return std::make_unique<TwoHillActivation>(cardiac_period);
   }
+  if (type_str == "fourier") {
+    return std::make_unique<FourierActivation>(cardiac_period);
+  }
+  if (type_str == "wrapping_cosine") {
+    return std::make_unique<WrappingCosineActivation>(cardiac_period);
+  }
   throw std::runtime_error(
       "Unknown activation_function type '" + type_str +
-      "'. Must be one of: half_cosine, piecewise_cosine, two_hill");
+      "'. Must be one of: half_cosine, piecewise_cosine, two_hill, fourier, "
+      "wrapping_cosine");
 }
 
 double HalfCosineActivation::compute(double time) {
@@ -147,4 +154,83 @@ double TwoHillActivation::compute(double time) {
   double g2 = std::pow(t_shifted / tau_2, m2);
 
   return normalization_factor_ * (g1 / (1.0 + g1)) * (1.0 / (1.0 + g2));
+}
+
+// ============================================================
+// WrappingCosineActivation — atrial activation that wraps
+// across the cycle boundary (Sankaran 2012, Menon 2023)
+// ============================================================
+
+double WrappingCosineActivation::compute(double time) {
+  double T = cardiac_period_;
+  double Tsa = T * params_.at("Tsa");
+  double tpwave = T / params_.at("tpwave");
+  double t_in_cycle = std::fmod(time, T);
+
+  double AA = 0.0;
+  if (t_in_cycle <= tpwave) {
+    AA = 0.5 * (1.0 - std::cos(2.0 * M_PI * (t_in_cycle - tpwave + Tsa) / Tsa));
+  } else if ((t_in_cycle >= (T - Tsa) + tpwave) && (t_in_cycle < T)) {
+    AA = 0.5 *
+         (1.0 - std::cos(2.0 * M_PI * (t_in_cycle - tpwave - (T - Tsa)) / Tsa));
+  }
+  return AA;
+}
+
+// ============================================================
+// FourierActivation — 25-mode Fourier series for ventricular
+// elastance (J. Tran's tuning framework, Menon 2023)
+// ============================================================
+
+// Fourier coefficient table from Tran's tuning framework
+static const double FT_ELAST[25][2] = {
+    {0.283748803, 0.000000000},   {0.031830626, -0.374299825},
+    {-0.209472400, -0.018127770}, {0.020520047, 0.073971113},
+    {0.008316883, -0.047249597},  {-0.041677660, 0.003212163},
+    {0.000867323, 0.019441411},   {-0.001675379, -0.005565534},
+    {-0.011252277, 0.003401432},  {-0.000414677, 0.008376795},
+    {0.000253749, -0.000071880},  {-0.002584966, 0.001566861},
+    {0.000584752, 0.003143555},   {0.000028502, -0.000024787},
+    {0.000022961, -0.000007476},  {0.000018735, -0.000001281},
+    {0.000015573, 0.000001781},   {0.000013133, 0.000003494},
+    {0.000011199, 0.000004507},   {0.000009634, 0.000005117},
+    {0.000008343, 0.000005481},   {0.000007265, 0.000005687},
+    {0.000006354, 0.000005789},   {0.000005575, 0.000005821},
+    {0.000004903, 0.000005805}};
+
+double FourierActivation::compute_raw(double t_in_cycle) const {
+  double val = 0.0;
+  for (int i = 0; i < 25; i++) {
+    val += FT_ELAST[i][0] *
+               std::cos(2.0 * M_PI * i * t_in_cycle / cardiac_period_) -
+           FT_ELAST[i][1] *
+               std::sin(2.0 * M_PI * i * t_in_cycle / cardiac_period_);
+  }
+  return val;
+}
+
+void FourierActivation::calculate_normalization() {
+  constexpr int N = 10000;
+  double dt = cardiac_period_ / N;
+  double mn = 1e30, mx = -1e30;
+  for (int k = 0; k < N; k++) {
+    double v = compute_raw(k * dt);
+    if (v < mn) mn = v;
+    if (v > mx) mx = v;
+  }
+  norm_min_ = mn;
+  norm_range_ = mx - mn;
+  if (norm_range_ <= 0.0) norm_range_ = 1.0;
+  normalization_initialized_ = true;
+}
+
+void FourierActivation::finalize() { calculate_normalization(); }
+
+double FourierActivation::compute(double time) {
+  if (!normalization_initialized_) {
+    throw std::runtime_error(
+        "FourierActivation: call finalize() after construction");
+  }
+  double t_in_cycle = std::fmod(time, cardiac_period_);
+  return (compute_raw(t_in_cycle) - norm_min_) / norm_range_;
 }

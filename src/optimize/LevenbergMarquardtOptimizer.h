@@ -80,13 +80,16 @@ class LevenbergMarquardtOptimizer {
    *
    * @param model The 0D model
    * @param num_obs Number of observations in optimization
-   * @param num_params Number of parameters in optimization
+   * @param num_params Total number of parameters in alpha
+   * @param active_param_ids Indices into alpha of parameters that should be
+   * optimized. Parameters not listed are held constant at their initial value.
    * @param lambda0 Initial damping factor
    * @param tol_grad Gradient tolerance
    * @param tol_inc Parameter increment tolerance
    * @param max_iter Maximum iterations
    */
   LevenbergMarquardtOptimizer(Model* model, int num_obs, int num_params,
+                              const std::vector<int>& active_param_ids,
                               double lambda0, double tol_grad, double tol_inc,
                               int max_iter);
 
@@ -110,11 +113,13 @@ class LevenbergMarquardtOptimizer {
   Eigen::Matrix<double, Eigen::Dynamic, 1> delta;
   Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic> mat;
   Eigen::Matrix<double, Eigen::Dynamic, 1> vec;
+  std::vector<int> active_param_ids;
   Model* model;
   double lambda;
 
   int num_obs;
   int num_params;
+  int num_active;
   int num_eqns;
   int num_vars;
   int num_dpoints;

@@ -27,12 +27,15 @@ enum class BlockType {
   closed_loop_rcr_bc = 11,
   closed_loop_heart_pulmonary = 12,
   valve_tanh = 13,
-  chamber_sphere = 14,
-  blood_vessel_CRL = 15,
-  piecewise_valve = 16,
-  linear_elastance_chamber = 17,
-  open_loop_coronary_var_res_bc = 18,
-  impedance_bc = 19
+  chamber_elastance_inductor = 14,
+  chamber_sphere = 15,
+  blood_vessel_CRL = 16,
+  piecewise_valve = 17,
+  linear_elastance_chamber = 18,
+  open_loop_coronary_var_res_bc = 19,
+  blood_vessel_rc = 20,
+  chamber_elastance_inductor_exponential = 21,
+  impedance_bc = 22
 };
 
 /**

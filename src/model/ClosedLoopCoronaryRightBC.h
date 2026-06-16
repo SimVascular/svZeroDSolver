@@ -45,7 +45,7 @@ class ClosedLoopCoronaryRightBC : public ClosedLoopCoronaryBC {
    * @brief Setup parameters that depend on the model
    *
    */
-  void setup_model_dependent_params();
+  void setup_model_dependent_params() override;
 };
 
 #endif  // SVZERODSOLVER_MODEL_CLOSEDLOOPCORONARYRIGHTBC_HPP_

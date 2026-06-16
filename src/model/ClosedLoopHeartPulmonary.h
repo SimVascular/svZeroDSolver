@@ -195,7 +195,7 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler& dofhandler);
+  void setup_dofs(DOFHandler& dofhandler) override;
 
   /**
    * @brief Update the constant contributions of the element in a sparse
@@ -204,7 +204,8 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem& system, std::vector<double>& parameters);
+  void update_constant(SparseSystem& system,
+                       std::vector<double>& parameters) override;
 
   /**
    * @brief Update the time-dependent contributions of the element in a sparse
@@ -213,7 +214,8 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_time(SparseSystem& system, std::vector<double>& parameters);
+  void update_time(SparseSystem& system,
+                   std::vector<double>& parameters) override;
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -224,16 +226,17 @@ class ClosedLoopHeartPulmonary : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem& system, std::vector<double>& parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
+  void update_solution(
+      SparseSystem& system, std::vector<double>& parameters,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
 
   /**
    * @brief Modify the solution after solving it
    *
    * @param y Current solution
    */
-  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+  void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
 
   /**
    * @brief Number of triplets of element

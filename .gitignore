@@ -29,7 +29,6 @@ Debug*/
 externals/
 *.so
 build*/
-_codex_build*/
 
 # IDE
 .cproject
@@ -40,6 +39,12 @@ _codex_build*/
 # Node modules (for directed graph visualization)
 node_modules/
 
+# Allow csv for target files in svZeroDTuner examples
+!applications/svZeroDTuner/examples/**/targets/**/*.csv
+
 # Virtual environments
 venv/
 .venv/
+
+# uv lockfile (resolved fresh by `uv sync`; not committed for this package)
+uv.lock

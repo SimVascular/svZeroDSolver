@@ -45,25 +45,9 @@ bool has_parameter(
   return false;
 }
 
-void throw_if_deprecated_block_type(const std::string& block_type,
-                                    const std::string_view& name) {
-  if (block_type != "ChamberElastanceInductor") {
-    return;
-  }
-
-  throw std::runtime_error(
-      "Block type ChamberElastanceInductor has been removed from svZeroDSolver"
-      " and is no longer supported for block " +
-      static_cast<std::string>(name) +
-      ". Use LinearElastanceChamber instead, and model any outlet inductance "
-      "explicitly in the surrounding network.");
-}
-
 int generate_block(Model& model, const nlohmann::json& block_params_json,
                    const std::string& block_type, const std::string_view& name,
                    bool internal, bool periodic) {
-  throw_if_deprecated_block_type(block_type, name);
-
   // Generate block from factory
   auto block = model.create_block(block_type);
 
@@ -164,10 +148,8 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
   if (j.is_null() || !j.is_object()) {
     throw std::runtime_error(
         "Missing 'activation_function' for chamber " + chamber_name +
-        ". Required with structure: {\"type\": \"piecewise_cosine\", "
-        "\"contract_start\": 0.2, \"relax_start\": 0.3, "
-        "\"contract_duration\": 0.1, \"relax_duration\": 0.2} "
-        "(or type half_cosine / two_hill with "
+        ". Required with structure: {\"type\": \"half_cosine\", \"t_active\": "
+        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill with "
         "their parameters).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {

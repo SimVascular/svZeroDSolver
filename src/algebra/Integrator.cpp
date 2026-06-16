@@ -105,7 +105,6 @@ State Integrator::step(const State& old_state, double time) {
     // Count total number of nonlinear iterations
     n_nonlin_iter++;
   }
-
   model->accept_timestep(new_state.y);
   return new_state;
 }

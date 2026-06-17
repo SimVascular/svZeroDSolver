@@ -108,19 +108,11 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
         "ClosedLoopHeartAndPulmonary block.");
   }
 
-  // Mirror Solver::Solver so coupled runs honor simulation_parameters.
-  if (simparams.sim_cardiac_period < 0.0 && model->cardiac_cycle_period < 0.0) {
+  // Set default cardiac cycle period if not set by model
+  if (model->cardiac_cycle_period < 0.0) {
     model->cardiac_cycle_period =
         1.0;  // If it has not been read from config or Parameter
               // yet, set as default value of 1.0
-  } else if (model->cardiac_cycle_period >= 0.0) {
-    if (simparams.sim_cardiac_period >= 0.0 &&
-        (model->cardiac_cycle_period != simparams.sim_cardiac_period)) {
-      throw std::runtime_error(
-          "Inconsistent cardiac cycle period defined in parameters");
-    }
-  } else {
-    model->cardiac_cycle_period = simparams.sim_cardiac_period;
   }
 
   // Calculate time step size

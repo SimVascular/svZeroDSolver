@@ -14,7 +14,8 @@ EXPECTED_FAILURES = {
     'pulsatileFlow_R_RCR_mismatchPeriod.json'
 }
 
-@pytest.mark.parametrize("testfile", ['steadyFlow_R_R.json', 
+@pytest.mark.parametrize("testfile", ['chamber_elastance_inductor.json', 
+                                      'steadyFlow_R_R.json', 
                                       'pulsatileFlow_R_coronary_cycle_error.json', 
                                       'pulsatileFlow_R_coronary.json', 
                                       'coupledBlock_closedLoopHeart_withCoronaries.json', 

@@ -96,9 +96,11 @@ class ActivationFunction {
 };
 
 /**
- * @brief Legacy half cosine activation function
+ * @brief Half cosine activation function
  *
- * This activation follows a half cosine wave during the contraction period.
+ * This implements the activation function used in the original
+ * ChamberElastanceInductor. The activation follows a half cosine wave
+ * during the contraction period.
  *
  * \f[
  * A(t) = \begin{cases}

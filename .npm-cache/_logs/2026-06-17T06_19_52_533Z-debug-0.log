@@ -1,0 +1,39 @@
+0 verbose cli /opt/homebrew/Cellar/node/25.8.0/bin/node /opt/homebrew/bin/npm
+1 info using npm@11.11.0
+2 info using node@v25.8.0
+3 silly config load:file:/opt/homebrew/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/ndorn/Documents/Stanford/PhD/Marsden_Lab/SimVascular/ppas-dev/svZeroDSolver/.npmrc
+5 silly config load:file:/Users/ndorn/.npmrc
+6 silly config load:file:/opt/homebrew/etc/npmrc
+7 verbose title npm install
+8 verbose argv "install" "--cache" ".npm-cache"
+9 verbose logfile logs-max:10 dir:/Users/ndorn/Documents/Stanford/PhD/Marsden_Lab/SimVascular/ppas-dev/svZeroDSolver/.npm-cache/_logs/2026-06-17T06_19_52_533Z-
+10 verbose logfile /Users/ndorn/Documents/Stanford/PhD/Marsden_Lab/SimVascular/ppas-dev/svZeroDSolver/.npm-cache/_logs/2026-06-17T06_19_52_533Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+13 silly idealTree buildDeps
+14 silly fetch manifest prettier@^3.8.4
+15 silly packumentCache full:https://registry.npmjs.org/prettier cache-miss
+16 http fetch GET 200 https://registry.npmjs.org/prettier 71ms (cache miss)
+17 silly packumentCache full:https://registry.npmjs.org/prettier set size:undefined disposed:false
+18 silly placeDep ROOT prettier@3.8.4 OK for:  want: ^3.8.4
+19 silly reify moves {}
+20 silly audit bulk request { prettier: [ '3.8.4' ] }
+21 http cache prettier@https://registry.npmjs.org/prettier/-/prettier-3.8.4.tgz 0ms (cache hit)
+22 silly tarball no local data for prettier@https://registry.npmjs.org/prettier/-/prettier-3.8.4.tgz. Extracting by manifest.
+23 http fetch GET 200 https://registry.npmjs.org/npm 112ms
+24 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 52ms
+25 silly audit report {}
+26 http fetch GET 200 https://registry.npmjs.org/prettier/-/prettier-3.8.4.tgz 163ms (cache miss)
+27 silly ADD node_modules/prettier
+28 verbose cwd /Users/ndorn/Documents/Stanford/PhD/Marsden_Lab/SimVascular/ppas-dev/svZeroDSolver
+29 verbose os Darwin 24.6.0
+30 verbose node v25.8.0
+31 verbose npm  v11.11.0
+32 notice
+32 notice New minor version of npm available! 11.11.0 -> 11.17.0
+32 notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+32 notice To update run: npm install -g npm@11.17.0
+32 notice  { force: true, Symbol(proc-log.meta): true }
+33 verbose exit 0
+34 info ok

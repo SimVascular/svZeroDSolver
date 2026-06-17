@@ -62,15 +62,51 @@ class ImpedanceBC : public Block {
                {"convolution_mode", InputParameter(true, false, false)},
                {"num_kernel_terms", InputParameter(true, false, false)}}) {}
 
+  /**
+   * @brief Set up the algebraic degree of freedom for the impedance BC.
+   *
+   * @param dofhandler Global degree-of-freedom handler
+   */
   void setup_dofs(DOFHandler& dofhandler) override;
+
+  /**
+   * @brief Assemble constant Jacobian contributions.
+   *
+   * @param system Global sparse system
+   * @param parameters Current parameter values
+   */
   void update_constant(SparseSystem& system,
                        std::vector<double>& parameters) override;
+
+  /**
+   * @brief Assemble time-dependent residual contributions.
+   *
+   * @param system Global sparse system
+   * @param parameters Current parameter values
+   */
   void update_time(SparseSystem& system,
                    std::vector<double>& parameters) override;
 
+  /**
+   * @brief Commit the accepted outlet flow for the next convolution update.
+   *
+   * @param y Accepted global state vector
+   */
   void accept_timestep(
       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
+
+  /**
+   * @brief Serialize the convolution history needed for restart/coupling.
+   *
+   * @return Persistent block state
+   */
   std::vector<double> get_persistent_state() const override;
+
+  /**
+   * @brief Restore a previously serialized convolution history state.
+   *
+   * @param state Persistent block state
+   */
   void set_persistent_state(const std::vector<double>& state) override;
 
   /**
@@ -84,6 +120,9 @@ class ImpedanceBC : public Block {
   void configure(const std::vector<double>& z, double pd,
                  const std::string& convolution_mode, int num_kernel_terms);
 
+  /**
+   * @brief Nonzero triplet counts contributed by this block.
+   */
   TripletsContributions num_triplets{2, 0, 0};
 
  private:

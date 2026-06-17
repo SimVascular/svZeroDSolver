@@ -17,6 +17,21 @@ this_file_dir = os.path.abspath(os.path.dirname(__file__))
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-7
 
+
+def restrict_to_last_cycle(result, cardiac_period):
+    """Restrict a result DataFrame to the final cardiac cycle."""
+    if "time" not in result.columns:
+        return result
+
+    max_time = result["time"].max()
+    start_time = max_time - cardiac_period
+    time_tol = max(1.0, abs(max_time), abs(start_time)) * 1.0e-12
+
+    restricted = result.loc[result["time"] >= start_time - time_tol].copy()
+    restricted["time"] = restricted["time"] - start_time
+
+    return restricted.reset_index(drop=True)
+
 def execute_pysvzerod(testfile, mode):
     """Execute pysvzerod (via Python interface or executable).
 
@@ -133,6 +148,12 @@ def run_with_reference(
     res, config = execute_pysvzerod(test_config, "solver")
 
     output_variable_based = config["simulation_parameters"].get("output_variable_based", False)
+
+    cardiac_period = config["simulation_parameters"].get("cardiac_period")
+    if (not config["simulation_parameters"].get("output_all_cycles", False) and
+            cardiac_period is not None):
+        res = restrict_to_last_cycle(res, cardiac_period)
+        ref = restrict_to_last_cycle(ref, cardiac_period)
 
     difference = compare_result_with_reference(res, ref, rtol_pres, rtol_flow, output_variable_based)
 

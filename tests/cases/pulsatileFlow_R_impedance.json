@@ -130,7 +130,7 @@
     "cardiac_period": 1.0,
     "number_of_cardiac_cycles": 6,
     "number_of_time_pts_per_cardiac_cycle": 129,
-    "output_all_cycles": true,
+    "output_all_cycles": false,
     "steady_initial": false,
     "absolute_tolerance": 1e-9
   },

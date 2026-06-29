@@ -287,7 +287,7 @@ void ChamberSphere_StrainDepActStress::get_active_stress_values(
   u_minus = 0.0;
 
   // activation strain-dependence
-  if (e_c <= 0.3) {
+  if (e_c > -0.4 && e_c <= 0.3) {
     n_0 = 0.22 + 0.53 * e_c;
   } else if (e_c > 0.3 && e_c <= 1.0) {
     n_0 = 0.112857125 + 0.8871428571 * e_c;
@@ -295,8 +295,6 @@ void ChamberSphere_StrainDepActStress::get_active_stress_values(
     n_0 = 1;
   } else if (e_c > 1.3 && e_c <= 2.4) {
     n_0 = 2.182 - 0.9091 * e_c;
-  } else if (e_c <= 0.0) {
-    n_0 = 0.0;
   } else {
     n_0 = 0.0;
   }
@@ -311,18 +309,20 @@ void ChamberSphere_StrainDepActStress::get_active_stress_values(
   }
 
   // activation reaction rate function
-  if (t_in_cycle <= 0.17) {
-    u = -3.2 + 38.2 / 0.17 * t_in_cycle;
-  } else if (t_in_cycle > 0.17 && t_in_cycle <= 0.22) {
+  if (t_in_cycle <= 0.1) {
+    u = -3.2;
+  } else if (t_in_cycle <= 0.27 && t_in_cycle > 0.1) {
+    u = -3.2 + 38.2 / 0.17 * (t_in_cycle-0.1);
+  } else if (t_in_cycle > 0.27 && t_in_cycle <= 0.32) {
     u = 35;
-  } else if (t_in_cycle > 0.22 && t_in_cycle <= 0.24) {
-    u = 420 - 35 / 0.02 * t_in_cycle;
-  } else if (t_in_cycle > 0.24 && t_in_cycle <= 0.36) {
-    u = 24 - 12 / 0.12 * t_in_cycle;
-  } else if (t_in_cycle > 0.36 && t_in_cycle <= 0.49) {
+  } else if (t_in_cycle > 0.32 && t_in_cycle <= 0.34) {
+    u = 35 - (35 / 0.02) * (t_in_cycle - 0.32);
+  } else if (t_in_cycle > 0.34 && t_in_cycle <= 0.46) {
+    u = 24 - 12 / 0.12 * (t_in_cycle-0.1);
+  } else if (t_in_cycle > 0.46 && t_in_cycle <= 0.59) {
     u = -12;
-  } else if (t_in_cycle > 0.49 && t_in_cycle <= 0.5) {
-    u = -443.2 + 8.8 / 0.01 * t_in_cycle;
+  } else if (t_in_cycle > 0.59 && t_in_cycle <= 0.6) {
+    u = -443.2 + 8.8 / 0.01 * (t_in_cycle-0.1);
   } else {
     u = -3.2;
   }

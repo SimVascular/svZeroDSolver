@@ -221,8 +221,8 @@ class TwoHillActivation : public ActivationFunction {
  * systole and one falling at diastole.
  *
  * \f[
- * f(t) = S_+ \cdot S_-, \quad S_\pm = \frac{1}{2} \left(1.0 \pm
- * \text{tanh}\left( \frac{t_{in\_cycle} - t_\text{sys/dias}} {\gamma}
+ * f(t) = S_+ (t_{in\_cycle} - t_sys) \cdot S_- (t_{in\_cycle} - t_dias), \quad S_\pm (\Delta t) = \frac{1}{2} \left(1.0 \pm
+ * \text{tanh}\left( \frac{\Delta t} {\gamma}
  * \right) \right)
  * \f]
  */

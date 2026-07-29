@@ -15,6 +15,7 @@
 
 #include "ActivationFunction.h"
 #include "BlockType.h"
+#include "SphereMaterial.h"
 #include "DOFHandler.h"
 #include "Parameter.h"
 #include "SparseSystem.h"
@@ -296,6 +297,18 @@ class Block {
    */
   virtual void set_activation_function(std::unique_ptr<ActivationFunction> af) {
     (void)af;  // Included to avoid unused parameter warning
+  }
+
+  /**
+   * @brief Set wall material (for ChamberSphere blocks).
+   *
+   * Default no-op. Overridden by ChamberSphere to take ownership of the
+   * material.
+   *
+   * @param m Unique pointer to the material (caller transfers ownership)
+   */
+  virtual void set_material(std::unique_ptr<SphereMaterial> m) {
+    (void)m;  // Included to avoid unused parameter warning
   }
 };
 

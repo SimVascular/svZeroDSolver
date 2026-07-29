@@ -19,22 +19,25 @@
       "vessel_id": 0,
       "vessel_length": 1.0,
       "vessel_name": "LV",
-      "zero_d_element_type": "ChamberSphere_expmat",
+      "zero_d_element_type": "ChamberSphere",
       "zero_d_element_values": {
         "rho": 1e3,
         "thick0": 0.022317634723395277,
         "radius0": 0.03457500522201688,
-        "C0": 1.9e3,
-        "C1": 0.11,
-        "C2": 1.9e3,
-        "C3": 0.11,
-        "eta": 250.0,
         "sigma_max": 237593.9219611258,
         "alpha_max": 19.0,
         "alpha_min": -30.0,
         "tsys": 0.17,
         "tdias": 0.484,
         "steepness": 0.005
+      },
+      "material": {
+        "type": "exponential",
+        "C0": 1.9e3,
+        "C1": 0.11,
+        "C2": 1.9e3,
+        "C3": 0.11,
+        "eta": 250.0
       }
     },
     {

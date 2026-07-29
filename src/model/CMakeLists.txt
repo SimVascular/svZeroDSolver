@@ -5,8 +5,9 @@
 
 set(lib svzero_model_library)
 
-set(CXXSRCS 
+set(CXXSRCS
   ActivationFunction.cpp
+  SphereMaterial.cpp
   BloodVesselRC.cpp
   Block.cpp
   BloodVessel.cpp
@@ -35,11 +36,11 @@ set(CXXSRCS
   WindkesselBC.cpp
   LinearElastanceChamber.cpp
   PiecewiseValve.cpp
-  ChamberSphere_expmat.cpp
 )
 
-set(HDRS 
+set(HDRS
   ActivationFunction.h
+  SphereMaterial.h
   BloodVesselRC.h
   Block.h
   BlockType.h
@@ -69,7 +70,6 @@ set(HDRS
   WindkesselBC.h
   LinearElastanceChamber.h
   PiecewiseValve.h
-  ChamberSphere_expmat.h
 )
 
 add_library(${lib} OBJECT ${CXXSRCS} ${HDRS})

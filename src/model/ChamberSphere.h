@@ -9,7 +9,10 @@
 
 #include <math.h>
 
+#include <memory>
+
 #include "Block.h"
+#include "SphereMaterial.h"
 #include "SparseSystem.h"
 
 /**
@@ -140,15 +143,12 @@ class ChamberSphere : public Block {
     rho = 0,
     thick0 = 1,
     radius0 = 2,
-    W1 = 3,
-    W2 = 4,
-    eta = 5,
-    sigma_max = 6,
-    alpha_max = 7,
-    alpha_min = 8,
-    tsys = 9,
-    tdias = 10,
-    steepness = 11
+    sigma_max = 3,
+    alpha_max = 4,
+    alpha_min = 5,
+    tsys = 6,
+    tdias = 7,
+    steepness = 8
   };
 
   /**
@@ -162,9 +162,6 @@ class ChamberSphere : public Block {
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
                {"radius0", InputParameter()},
-               {"W1", InputParameter()},
-               {"W2", InputParameter()},
-               {"eta", InputParameter()},
                {"sigma_max", InputParameter()},
                {"alpha_max", InputParameter()},
                {"alpha_min", InputParameter()},
@@ -225,9 +222,13 @@ class ChamberSphere : public Block {
    */
   void get_elastance_values(std::vector<double>& parameters);
 
+  void set_material(std::unique_ptr<SphereMaterial> m) override;
+
  private:
   double act = 0.0;       // activation function
   double act_plus = 0.0;  // act_plus = max(act, 0)
+
+  std::unique_ptr<SphereMaterial> material_;
 
   /**
    * @brief Number of triplets of element

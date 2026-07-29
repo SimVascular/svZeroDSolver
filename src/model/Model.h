@@ -24,7 +24,6 @@
 #include "ChamberElastanceInductor.h"
 #include "ChamberElastanceInductorExponential.h"
 #include "ChamberSphere.h"
-#include "ChamberSphere_expmat.h"
 #include "ClosedLoopCoronaryLeftBC.h"
 #include "ClosedLoopCoronaryRightBC.h"
 #include "ClosedLoopHeartPulmonary.h"

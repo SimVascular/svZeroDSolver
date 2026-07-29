@@ -32,7 +32,6 @@ Model::Model() {
       {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
       {"PiecewiseValve", block_factory<PiecewiseValve>()},
       {"PiecewiseCosineChamber", block_factory<PiecewiseCosineChamber>()},
-      {"ChamberSphere_growth", block_factory<ChamberSphere_growth>()},
       {"ChamberSphere_expmat", block_factory<ChamberSphere_expmat>()}};
 }
 

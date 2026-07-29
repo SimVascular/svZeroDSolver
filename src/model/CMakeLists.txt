@@ -31,7 +31,6 @@ set(CXXSRCS
   WindkesselBC.cpp
   PiecewiseCosineChamber.cpp
   PiecewiseValve.cpp
-  ChamberSphere_growth.cpp
   ChamberSphere_expmat.cpp
 )
 
@@ -62,7 +61,6 @@ set(HDRS
   WindkesselBC.h
   PiecewiseCosineChamber.h
   PiecewiseValve.h
-  ChamberSphere_growth.h
   ChamberSphere_expmat.h
 )
 

@@ -23,7 +23,6 @@
 #include "ChamberElastanceInductor.h"
 #include "ChamberSphere.h"
 #include "ChamberSphere_expmat.h"
-#include "ChamberSphere_growth.h"
 #include "ClosedLoopCoronaryLeftBC.h"
 #include "ClosedLoopCoronaryRightBC.h"
 #include "ClosedLoopHeartPulmonary.h"

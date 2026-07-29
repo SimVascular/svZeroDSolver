@@ -30,9 +30,12 @@ enum class BlockType {
   chamber_elastance_inductor = 14,
   chamber_sphere = 15,
   blood_vessel_CRL = 16,
-  piecewise_cosine_chamber = 17,
-  piecewise_valve = 18,
-  chamber_sphere_expmat = 19,
+  piecewise_valve = 17,
+  linear_elastance_chamber = 18,
+  open_loop_coronary_var_res_bc = 19,
+  blood_vessel_rc = 20,
+  chamber_elastance_inductor_exponential = 21,
+  chamber_sphere_expmat = 22
 };
 
 /**

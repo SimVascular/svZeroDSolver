@@ -21,6 +21,7 @@ Model::Model() {
        block_factory<ClosedLoopHeartPulmonary>()},
       {"ClosedLoopRCR", block_factory<ClosedLoopRCRBC>()},
       {"CORONARY", block_factory<OpenLoopCoronaryBC>()},
+      {"CORONARY_VAR_RES", block_factory<OpenLoopCoronaryVarResBC>()},
       {"FLOW", block_factory<FlowReferenceBC>()},
       {"NORMAL_JUNCTION", block_factory<Junction>()},
       {"PRESSURE", block_factory<PressureReferenceBC>()},
@@ -29,9 +30,12 @@ Model::Model() {
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
       {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
+      {"ChamberElastanceInductorExponential",
+       block_factory<ChamberElastanceInductorExponential>()},
       {"BloodVesselCRL", block_factory<BloodVesselCRL>()},
       {"PiecewiseValve", block_factory<PiecewiseValve>()},
-      {"PiecewiseCosineChamber", block_factory<PiecewiseCosineChamber>()},
+      {"LinearElastanceChamber", block_factory<LinearElastanceChamber>()},
+      {"BloodVesselRC", block_factory<BloodVesselRC>()},
       {"ChamberSphere_expmat", block_factory<ChamberSphere_expmat>()}};
 }
 

@@ -1,0 +1,8 @@
+scipy>=1.9.0
+numpy>=1.21.0
+pandas>=1.3.0
+pyyaml>=6.0
+matplotlib>=3.5.0
+
+# pysvzerod is a requirement, but it is not available on PyPI, so we need to 
+#install it from source using "pip install -e ." from the svZeroDSolver repo root

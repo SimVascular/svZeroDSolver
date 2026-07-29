@@ -2,6 +2,8 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "ChamberElastanceInductor.h"
 
+#include "Model.h"
+
 void ChamberElastanceInductor::setup_dofs(DOFHandler& dofhandler) {
   // Internal variable is chamber volume
   Block::setup_dofs_(dofhandler, 3, {"Vc"});
@@ -12,7 +14,9 @@ void ChamberElastanceInductor::update_constant(
   double L = parameters[global_param_ids[ParamId::IMPEDANCE]];
 
   // Eq 0: P_in - E(t)(Vc - Vrest) = 0
+  // F[0][0] = 1.0 (P_in coefficient)
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = 1.0;
+  // F[0][4] = -E(t) and C[0] = E(t)*Vrest are set in update_time
 
   // Eq 1: P_in - P_out - L*dQ_out = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[0]) = 1.0;
@@ -29,9 +33,11 @@ void ChamberElastanceInductor::update_time(SparseSystem& system,
                                            std::vector<double>& parameters) {
   get_elastance_values(parameters);
 
-  // Eq 0: P_in - E(t)(Vc - Vrest) = P_in - E(t)*Vc + E(t)*Vrest = 0
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -1 * Elas;
+  // Eq 0: P_in - E(t)(Vc - Vrest) = 0
+  // F[0][4] = -E(t), C[0] = E(t)*Vrest
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[4]) = -Elas;
   system.C.coeffRef(global_eqn_ids[0]) = Elas * Vrest;
+  // F[0][0] = 1.0 (P_in coefficient) is set in update_constant
 }
 
 void ChamberElastanceInductor::get_elastance_values(
@@ -40,22 +46,13 @@ void ChamberElastanceInductor::get_elastance_values(
   double Emin = parameters[global_param_ids[ParamId::EMIN]];
   double Vrd = parameters[global_param_ids[ParamId::VRD]];
   double Vrs = parameters[global_param_ids[ParamId::VRS]];
-  double t_active = parameters[global_param_ids[ParamId::TACTIVE]];
-  double t_twitch = parameters[global_param_ids[ParamId::TTWITCH]];
 
-  auto T_cardiac = model->cardiac_cycle_period;
-  auto t_in_cycle = fmod(model->time, T_cardiac);
+  act_ = activation_func_->compute(model->time);
+  Vrest = (1.0 - act_) * (Vrd - Vrs) + Vrs;
+  Elas = (Emax - Emin) * act_ + Emin;
+}
 
-  double t_contract = 0;
-  if (t_in_cycle >= t_active) {
-    t_contract = t_in_cycle - t_active;
-  }
-
-  double act = 0;
-  if (t_contract <= t_twitch) {
-    act = -0.5 * cos(2 * M_PI * t_contract / t_twitch) + 0.5;
-  }
-
-  Vrest = (1.0 - act) * (Vrd - Vrs) + Vrs;
-  Elas = (Emax - Emin) * act + Emin;
+void ChamberElastanceInductor::set_activation_function(
+    std::unique_ptr<ActivationFunction> af) {
+  activation_func_ = std::move(af);
 }

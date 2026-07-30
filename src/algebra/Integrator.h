@@ -34,6 +34,7 @@ class Integrator {
   double y_coeff_jacobian{0.0};
   double atol{0.0};
   int max_iter{0};
+  bool max_iter_warning{false};
   int size{0};
   int n_iter{0};
   int n_nonlin_iter{0};
@@ -53,7 +54,7 @@ class Integrator {
    * @param max_iter Maximum number of non-linear iterations
    */
   Integrator(Model* model, double time_step_size, double rho, double atol,
-             int max_iter);
+             int max_iter, bool max_iter_warning = false);
 
   /**
    * @brief Construct a new Integrator object

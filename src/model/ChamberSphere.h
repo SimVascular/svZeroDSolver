@@ -86,9 +86,6 @@
  * * `rho` - Density \f$\rho\f$
  * * `thick0` - Wall thickness \f$d_0\f$
  * * `radius0` - Reference radius \f$r_0\f$
- * * `W1` - Material constant \f$W_1\f$
- * * `W2` - Material constant \f$W_2\f$
- * * `eta` - Viscosity parameter \f$\eta\f$
  * * `sigma_max` - Maximum active stress \f$\sigma_\text{max}\f$
  * * `alpha_max` - Maximum activation parameter \f$\alpha_\text{max}\f$
  * * `alpha_min` - Minimum activation parameter \f$\alpha_\text{min}\f$
@@ -96,7 +93,7 @@
  * * `tdias` - Diastole timing parameter \f$t_\text{dias}\f$
  * * `steepness` - Activation steepness parameter \f$\gamma\f$
  *
- * ### Usage in json configuration file
+ * ### Usage in json configuration file (with example material)
  *
  *     "vessels": [
  *        {
@@ -109,15 +106,18 @@
  *                "rho" : 1e3,
  *                "thick0" : 0.01,
  *                "radius0" : 0.05,
- *                "W1" : 10e3,
- *                "W2" : 40,
- *                "eta" : 10.0,
  *                "sigma_max" : 185e3,
  *                "alpha_max": 30.0,
  *                "alpha_min": -30.0,
  *                "tsys": 0.170,
  *                "tdias": 0.484,
  *                "steepness": 0.005
+ *            }
+ *            "material": {
+ *                "type": "mooney_rivlin",
+ *                "W1": 10e3,
+ *                "W2": 40,
+ *                "eta": 10.0
  *            }
  *        }
  *     ]

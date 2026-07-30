@@ -86,6 +86,9 @@ class SphereMaterial {
   void set_param(const std::string& name, double value);
 
  protected:
+  /**
+   * @brief Map of parameter names to their values
+   */
   std::map<std::string, double> params_;
 };
 

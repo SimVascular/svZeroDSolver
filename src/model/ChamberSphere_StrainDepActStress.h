@@ -102,7 +102,7 @@
  * * `alpha_r` - Relaxation time constant \f$\alpha_r\f$
  * * `alpha` - Activation time constant \f$\alpha\f$
  * * `k_0` - Linear spring stiffness in contractile unit \f$k_0\f$
- * * `sigma_0` - Maximum active stress \f$\sigma_0
+ * * `sigma_0` - Maximum active stress \f$\sigma_0\f$
  * * 'm_0' - Relaxation strain-dependence \f$m_0\f$
  * * `n_0` - Activation strain-dependence \f$n_0\f$
  * * `u_plus` - Positive part of activation function \f$u_+\f$

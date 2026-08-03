@@ -8,7 +8,7 @@
       "bc_type": "PRESSURE",
       "bc_values": {
         "P": [800, 800],
-        "t": [0.0,0.8]
+        "t": [0.0, 0.8]
       }
     },
     {
@@ -68,29 +68,29 @@
       }
     },
     {
-        "vessel_id": 2, 
-        "vessel_name": "proximal_compliance",
-        "zero_d_element_type": "BloodVessel",
-        "zero_d_element_values": {
-          "R_poiseuille": 0.0, 
-          "C": 2.5e-9
-        }
+      "vessel_id": 2,
+      "vessel_name": "proximal_compliance",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 0.0,
+        "C": 2.5e-9
+      }
     },
     {
-      "vessel_id": 3, 
+      "vessel_id": 3,
       "vessel_name": "proximal_resistance",
       "zero_d_element_type": "BloodVessel",
       "zero_d_element_values": {
         "R_poiseuille": 8.0e6,
-         "C": 0.0
+        "C": 0.0
       }
     },
     {
-      "vessel_id": 4, 
+      "vessel_id": 4,
       "vessel_name": "distal_compliance",
       "zero_d_element_type": "BloodVessel",
       "zero_d_element_values": {
-        "R_poiseuille": 0.0, 
+        "R_poiseuille": 0.0,
         "C": 1.0e-8
       }
     },
@@ -98,14 +98,14 @@
       "boundary_conditions": {
         "outlet": "OUT"
       },
-      "vessel_id": 5, 
+      "vessel_id": 5,
       "vessel_name": "distal_resistance",
       "zero_d_element_type": "BloodVessel",
       "zero_d_element_values": {
         "R_poiseuille": 1.0e8,
         "C": 0.0
       }
-  }
+    }
   ],
   "valves": [
     {
@@ -134,20 +134,20 @@
   "junctions": [
     {
       "junction_name": "J0",
-      "junction_type": "NORMAL_JUNCTION", 
-      "inlet_vessels": [2], 
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_vessels": [2],
       "outlet_vessels": [3]
     },
     {
-      "junction_name": "J1", 
+      "junction_name": "J1",
       "junction_type": "NORMAL_JUNCTION",
-      "inlet_vessels": [3], 
+      "inlet_vessels": [3],
       "outlet_vessels": [4]
     },
     {
-      "junction_name": "J2", 
+      "junction_name": "J2",
       "junction_type": "NORMAL_JUNCTION",
-      "inlet_vessels": [4], 
+      "inlet_vessels": [4],
       "outlet_vessels": [5]
     }
   ],

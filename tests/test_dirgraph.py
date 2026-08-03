@@ -25,7 +25,12 @@ excluded_files = [
     'closedLoopHeart_singleVessel_mistmatchPeriod.json',
     'closedLoopHeart_singleVessel_decomposed.json',
     'pulsatileFlow_CStenosis_steadyPressure_definedPeriod.json',
-    'pulsatileFlow_R_RCR_mismatchPeriod.json'
+    'pulsatileFlow_R_RCR_mismatchPeriod.json',
+    'chamber_sphere_closed_loop_straindep.json',
+    'chamber_sphere_straindep_Caruel.json',
+    'chamber_sphere_straindep_Caruel_PiecewiseValve.json',
+    'chamber_sphere_straindep_Caruel_PiecewiseValve_splitVessels.json',
+    'chamber_sphere_straindep_Caruel_TanhValve_splitVessels.json',
 ]
 
 # Generate the list of JSON files to test

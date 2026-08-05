@@ -1,7 +1,7 @@
 {
   "description": {
     "description of test case": "Closed loop circulation with left ventricle modeled as sphere and lumped parameter model of vasculature inspired by Sharifi et al. 2024.",
-    "circuit": "LV -> AV -> aorta -> arteries -> arterioles -> capillaries -> venules -> veins -> RV -> MV -> LV"
+    "circuit": "LV -> AV -> aorta -> arteries -> arterioles -> capillaries -> venules -> veins -> MV -> LV"
   },
   "simulation_parameters": {
     "number_of_cardiac_cycles": 10,

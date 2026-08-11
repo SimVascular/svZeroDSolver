@@ -4,7 +4,7 @@
 #include "Integrator.h"
 
 Integrator::Integrator(Model* model, double time_step_size, double rho,
-                       double atol, int max_iter, bool max_iter_warning) {
+                       double atol, int max_iter, bool max_iter_error_to_warning) {
   this->model = model;
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
@@ -19,7 +19,7 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   this->time_step_size = time_step_size;
   this->atol = atol;
   this->max_iter = max_iter;
-  this->max_iter_warning = max_iter_warning;
+  this->max_iter_error_to_warning = max_iter_error_to_warning;
 
   y_af = Eigen::Matrix<double, Eigen::Dynamic, 1>(size);
   ydot_am = Eigen::Matrix<double, Eigen::Dynamic, 1>(size);
@@ -83,7 +83,7 @@ State Integrator::step(const State& old_state, double time) {
 
     // Abort if maximum number of non-linear iterations is reached
     else if (i == max_iter - 1) {
-      if (max_iter_warning) {
+      if (max_iter_error_to_warning) {
         std::cout << "Warning: Maximum number of non-linear iterations reached at time " << time << std::endl;
       } else {
         throw std::runtime_error(

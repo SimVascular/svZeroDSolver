@@ -67,7 +67,7 @@ struct SimulationParameters {
       false};  ///< Running 0D simulation coupled with external solver
   double sim_external_step_size{0.0};  ///< Step size of external solver if
                                        ///< running coupled
-  bool sim_max_iter_warning{
+  bool sim_max_iter_error_to_warning{
       false};  ///< If true, warn instead of throwing when max nonlinear
                ///< iterations is reached
 };

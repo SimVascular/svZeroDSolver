@@ -34,6 +34,7 @@ class Integrator {
   double y_coeff_jacobian{0.0};
   double atol{0.0};
   int max_iter{0};
+  bool max_iter_error_to_warning{false};
   int size{0};
   int n_iter{0};
   int n_nonlin_iter{0};
@@ -51,9 +52,11 @@ class Integrator {
    * @param rho Spectral radius for generalized-alpha step
    * @param atol Absolut tolerance for non-linear iteration termination
    * @param max_iter Maximum number of non-linear iterations
+   * @param max_iter_error_to_warning If true, print a warning instead of throwing error
+   * when maximum iterations is reached
    */
   Integrator(Model* model, double time_step_size, double rho, double atol,
-             int max_iter);
+             int max_iter, bool max_iter_error_to_warning = false);
 
   /**
    * @brief Construct a new Integrator object

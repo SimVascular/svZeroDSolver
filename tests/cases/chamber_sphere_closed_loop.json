@@ -10,7 +10,8 @@
     "output_variable_based": true,
     "steady_initial": false,
     "output_all_cycles": false,
-    "use_cycle_to_cycle_error": true
+    "use_cycle_to_cycle_error": true,
+    "max_iter_error_to_warning": true
   },
   "boundary_conditions": [],
   "vessels": [

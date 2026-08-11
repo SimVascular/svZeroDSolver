@@ -18,7 +18,7 @@ var searchData=
   ['instability_15',['Numerical Instability',['../tuner_troubleshooting.html#autotoc_md39',1,'']]],
   ['install_20with_20uv_16',['Install with uv',['../developer_guide.html#autotoc_md2',1,'']]],
   ['installing_20dependencies_17',['Installing Dependencies',['../visualization.html#autotoc_md49',1,'']]],
-  ['integrator_18',['Integrator',['../class_integrator.html',1,'Integrator'],['../class_integrator.html#ad6e4f6a6409bec36c05ddc6a3fead000',1,'Integrator::Integrator(Model *model, double time_step_size, double rho, double atol, int max_iter)'],['../class_integrator.html#a91fdfba81971dfa13ba22521d11b7c46',1,'Integrator::Integrator()']]],
+  ['integrator_18',['Integrator',['../class_integrator.html',1,'Integrator'],['../class_integrator.html#af707a8b5774910b7e9be222f6950e589',1,'Integrator::Integrator(Model *model, double time_step_size, double rho, double atol, int max_iter, bool max_iter_error_to_warning=false)'],['../class_integrator.html#a91fdfba81971dfa13ba22521d11b7c46',1,'Integrator::Integrator()']]],
   ['integrator_2eh_19',['Integrator.h',['../_integrator_8h.html',1,'']]],
   ['integrator_5f_20',['integrator_',['../class_solver_interface.html#a63c583c3ebf70a708dd322fbb556d35e',1,'SolverInterface']]],
   ['interface_2eh_21',['interface.h',['../interface_8h.html',1,'']]],

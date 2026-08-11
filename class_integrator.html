@@ -113,8 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad6e4f6a6409bec36c05ddc6a3fead000" id="r_ad6e4f6a6409bec36c05ddc6a3fead000"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ad6e4f6a6409bec36c05ddc6a3fead000">Integrator</a> (<a class="el" href="class_model.html">Model</a> *model, double time_step_size, double rho, double atol, int max_iter)</td></tr>
-<tr class="memdesc:ad6e4f6a6409bec36c05ddc6a3fead000"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a> object.  <br /></td></tr>
+<tr class="memitem:af707a8b5774910b7e9be222f6950e589" id="r_af707a8b5774910b7e9be222f6950e589"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#af707a8b5774910b7e9be222f6950e589">Integrator</a> (<a class="el" href="class_model.html">Model</a> *model, double time_step_size, double rho, double atol, int max_iter, bool max_iter_error_to_warning=false)</td></tr>
+<tr class="memdesc:af707a8b5774910b7e9be222f6950e589"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a> object.  <br /></td></tr>
 <tr class="memitem:a91fdfba81971dfa13ba22521d11b7c46" id="r_a91fdfba81971dfa13ba22521d11b7c46"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a91fdfba81971dfa13ba22521d11b7c46">Integrator</a> ()</td></tr>
 <tr class="memdesc:a91fdfba81971dfa13ba22521d11b7c46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="class_integrator.html" title="Generalized-alpha integrator.">Integrator</a> object.  <br /></td></tr>
 <tr class="memitem:a951d50d45bd02af21f590741f83c0d73" id="r_a951d50d45bd02af21f590741f83c0d73"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a951d50d45bd02af21f590741f83c0d73">~Integrator</a> ()</td></tr>
@@ -133,8 +133,8 @@ Public Member Functions</h2></td></tr>
 <p>This class handles the time integration scheme for solving 0D blood flow system using the generalized- <picture><source srcset="form_0_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha$" src="form_0.png" width="11" height="9"/></picture> method <a class="el" href="citelist.html#CITEREF_jansen2000305">[2]</a>.</p>
 <p>Mathematical details are available on the <a href="https://simvascular.github.io/documentation/rom_simulation.html#0d-solver-theory">SimVascular documentation</a>. </p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad6e4f6a6409bec36c05ddc6a3fead000" name="ad6e4f6a6409bec36c05ddc6a3fead000"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad6e4f6a6409bec36c05ddc6a3fead000">&#9670;&#160;</a></span>Integrator() <span class="overload">[1/2]</span></h2>
+<a id="af707a8b5774910b7e9be222f6950e589" name="af707a8b5774910b7e9be222f6950e589"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af707a8b5774910b7e9be222f6950e589">&#9670;&#160;</a></span>Integrator() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,7 +162,12 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>max_iter</em></span>&#160;)</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>max_iter</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>max_iter_error_to_warning</em></span><span class="paramdefsep"> = </span><span class="paramdefval">false</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -175,6 +180,7 @@ Public Member Functions</h2></td></tr>
     <tr><td class="paramname">rho</td><td>Spectral radius for generalized-alpha step </td></tr>
     <tr><td class="paramname">atol</td><td>Absolut tolerance for non-linear iteration termination </td></tr>
     <tr><td class="paramname">max_iter</td><td>Maximum number of non-linear iterations </td></tr>
+    <tr><td class="paramname">max_iter_error_to_warning</td><td>If true, print a warning instead of throwing error when maximum iterations is reached </td></tr>
   </table>
   </dd>
 </dl>

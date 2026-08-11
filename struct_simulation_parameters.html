@@ -146,6 +146,7 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a1ac60927ea4da69f5730fc866de532ce" id="r_a1ac60927ea4da69f5730fc866de532ce"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a1ac60927ea4da69f5730fc866de532ce">sim_coupled</a></td></tr>
 <tr class="memdesc:a1ac60927ea4da69f5730fc866de532ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Running 0D simulation coupled with external solver.  <br /></td></tr>
 <tr class="memitem:a4b302943694226bd3649278e46f8aee0" id="r_a4b302943694226bd3649278e46f8aee0"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a4b302943694226bd3649278e46f8aee0">sim_external_step_size</a> {0.0}</td></tr>
+<tr class="memitem:a7d5fdd7796a56e55934014fe81715158" id="r_a7d5fdd7796a56e55934014fe81715158"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a7d5fdd7796a56e55934014fe81715158">sim_max_iter_error_to_warning</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Simulation parameters. </p>
@@ -317,6 +318,23 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Step size of external solver if running coupled </p>
+
+</div>
+</div>
+<a id="a7d5fdd7796a56e55934014fe81715158" name="a7d5fdd7796a56e55934014fe81715158"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d5fdd7796a56e55934014fe81715158">&#9670;&#160;</a></span>sim_max_iter_error_to_warning</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool SimulationParameters::sim_max_iter_error_to_warning</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">{</div>
+<div class="line">      <span class="keyword">false</span>}</div>
+</div><!-- fragment --><p>If true, warn instead of throwing when max nonlinear iterations is reached </p>
 
 </div>
 </div>

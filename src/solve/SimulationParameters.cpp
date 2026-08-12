@@ -145,14 +145,14 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
     throw std::runtime_error(
         "Missing 'activation_function' for chamber " + chamber_name +
         ". Required with structure: {\"type\": \"half_cosine\", \"t_active\": "
-        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill with "
+        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill / double_tanh with "
         "their parameters).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in activation_function for chamber " +
         chamber_name +
-        ". Must be one of: half_cosine, piecewise_cosine, two_hill");
+        ". Must be one of: half_cosine, piecewise_cosine, two_hill, double_tanh");
   }
 
   // Extract activation function type

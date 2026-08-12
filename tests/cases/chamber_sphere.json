@@ -27,7 +27,7 @@
     "output_variable_based": true,
     "absolute_tolerance": 1e-9,
     "output_all_cycles": true,
-    "cardiac_period": 1.0
+    "cardiac_period": 1.0,
     "max_iter_error_to_warning": false
   },
   "vessels": [

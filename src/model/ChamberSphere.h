@@ -96,7 +96,7 @@
  * * `tdias` - Diastole timing parameter \f$t_\text{dias}\f$
  * * `steepness` - Activation steepness parameter \f$\gamma\f$
  *
- * ### Usage in json configuration file (material definition can be found in \ref SphereMaterial)
+ * ### Usage in json configuration file
  *
  *     "vessels": [
  *        {
@@ -120,6 +120,8 @@
  *            "material": {}
  *        }
  *     ]
+ * 
+ * Material definition can be found in \ref SphereMaterial.
  *
  * ### Internal variables
  *

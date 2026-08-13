@@ -44,10 +44,10 @@
  *
  * 2. Spherical stress:
  * \f[
- * -S + \tau + f_\text{material}(r, r_0) + \eta \dot{C}
+ * -S + \tau + S_\text{el}(r, r_0) + \eta \dot{C}
  * (1 + 2 C^{-6}) = 0
  * \f]
- * where \f$f_\text{material}\f$ is the elastic stress term supplied by the
+ * where \f$S_\text{el}\f$ is the elastic stress term supplied by the
  * chamber's \ref SphereMaterial.
  *
  * 3. Volume change:
@@ -96,7 +96,7 @@
  * * `tdias` - Diastole timing parameter \f$t_\text{dias}\f$
  * * `steepness` - Activation steepness parameter \f$\gamma\f$
  *
- * ### Usage in json configuration file (with example material)
+ * ### Usage in json configuration file (material definition can be found in \ref SphereMaterial)
  *
  *     "vessels": [
  *        {

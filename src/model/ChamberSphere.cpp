@@ -56,6 +56,7 @@ void ChamberSphere::update_solution(
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
   const double sigma_max = parameters[global_param_ids[ParamId::sigma_max]];
   const double radius0 = parameters[global_param_ids[ParamId::radius0]];
+  const double eta = parameters[global_param_ids[ParamId::eta]];
 
   const double velo = y[global_var_ids[5]];
   const double Pout = y[global_var_ids[2]];
@@ -74,13 +75,24 @@ void ChamberSphere::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) =
       thick0 * (radius + radius0) / pow(radius0, 2);
 
-  // spherical stress (material-dependent)
-  const auto mat = material_->compute(radius, radius0, dradius_dt);
-  system.C.coeffRef(global_eqn_ids[1]) = mat.C_val;
+  // spherical stress: material-dependent elastic term plus viscous damping
+  const auto mat = material_->compute(radius, radius0);
+
+  const double C_val_visc =
+      2 * dradius_dt * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
+      (pow(radius0, 2) * pow(radius + radius0, 11));
+  const double dC_dy_visc =
+      2 * dradius_dt * eta / pow(radius0, 2) -
+      44 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12);
+  const double dC_dydot_visc =
+      2 * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
+      (pow(radius0, 2) * pow(radius + radius0, 11));
+
+  system.C.coeffRef(global_eqn_ids[1]) = mat.C_val + C_val_visc;
   system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
-      mat.dC_dy_radius;
+      mat.dC_dy_radius + dC_dy_visc;
   system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
-      mat.dC_dydot_radius;
+      dC_dydot_visc;
 
   // volume change
   system.C.coeffRef(global_eqn_ids[2]) =

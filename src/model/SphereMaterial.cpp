@@ -34,18 +34,14 @@ std::unique_ptr<SphereMaterial> SphereMaterial::create(
 }
 
 SphericalStressResult MooneyRivlinMaterial::compute(double radius,
-                                                     double radius0,
-                                                     double dradius_dt) const {
+                                                     double radius0) const {
   const double W1 = params_.at("W1");
   const double W2 = params_.at("W2");
-  const double eta = params_.at("eta");
 
   SphericalStressResult res;
   res.C_val =
       2 *
-      (dradius_dt * eta *
-           (2 * pow(radius0, 12) + pow(radius + radius0, 12)) +
-       2 * pow(radius + radius0, 5) *
+      (2 * pow(radius + radius0, 5) *
            (-pow(radius0, 6) + pow(radius + radius0, 6)) *
            (W1 * pow(radius0, 2) + W2 * pow(radius + radius0, 2))) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
@@ -54,25 +50,17 @@ SphericalStressResult MooneyRivlinMaterial::compute(double radius,
       24 * W1 * pow(radius0, 6) / pow(radius + radius0, 7) +
       8 * W2 * radius / pow(radius0, 2) +
       16 * W2 * pow(radius0, 4) / pow(radius + radius0, 5) +
-      8 * W2 / radius0 -
-      44 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12) +
-      2 * dradius_dt * eta / pow(radius0, 2);
-
-  res.dC_dydot_radius =
-      2 * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
-      (pow(radius0, 2) * pow(radius + radius0, 11));
+      8 * W2 / radius0;
 
   return res;
 }
 
 SphericalStressResult ExponentialMaterial::compute(double radius,
-                                                    double radius0,
-                                                    double dradius_dt) const {
+                                                    double radius0) const {
   const double C0 = params_.at("C0");
   const double C1 = params_.at("C1");
   const double C2 = params_.at("C2");
   const double C3 = params_.at("C3");
-  const double eta = params_.at("eta");
 
   SphericalStressResult res;
   res.C_val =
@@ -90,9 +78,7 @@ SphericalStressResult ExponentialMaterial::compute(double radius,
        2 * C2 * C3 * pow(radius + radius0, 11) *
            (-pow(radius0, 2) + pow(radius + radius0, 2)) *
            exp(C3 * pow(-pow(radius0, 2) + pow(radius + radius0, 2), 2) /
-               pow(radius0, 4)) +
-       dradius_dt * eta *
-           (2 * pow(radius0, 12) + pow(radius + radius0, 12))) /
+               pow(radius0, 4))) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
 
   res.dC_dy_radius =
@@ -154,8 +140,7 @@ SphericalStressResult ExponentialMaterial::compute(double radius,
             11 * C2 * C3 * pow(radius + radius0, 10) *
                 (pow(radius0, 2) - pow(radius + radius0, 2)) *
                 exp(C3 * pow(pow(radius0, 2) - pow(radius + radius0, 2), 2) /
-                    pow(radius0, 4)) +
-            6 * dradius_dt * eta * pow(radius + radius0, 11)) +
+                    pow(radius0, 4))) +
        11 * pow(radius0, 4) * pow(radius + radius0, 7) *
            (4 * C0 * C1 * (radius + radius0) *
                 (pow(radius0, 6) - pow(radius + radius0, 6)) *
@@ -171,14 +156,8 @@ SphericalStressResult ExponentialMaterial::compute(double radius,
             2 * C2 * C3 * pow(radius + radius0, 11) *
                 (pow(radius0, 2) - pow(radius + radius0, 2)) *
                 exp(C3 * pow(pow(radius0, 2) - pow(radius + radius0, 2), 2) /
-                    pow(radius0, 4)) -
-            dradius_dt * eta *
-                (2 * pow(radius0, 12) + pow(radius + radius0, 12)))) /
+                    pow(radius0, 4)))) /
       (pow(radius0, 6) * pow(radius + radius0, 19));
-
-  res.dC_dydot_radius =
-      2 * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
-      (pow(radius0, 2) * pow(radius + radius0, 11));
 
   return res;
 }

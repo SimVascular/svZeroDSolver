@@ -44,9 +44,11 @@
  *
  * 2. Spherical stress:
  * \f[
- * -S + \tau + 4 (1 - C^{-3}) (W_1 + C W_2) + \eta \dot{C}
+ * -S + \tau + f_\text{material}(r, r_0) + \eta \dot{C}
  * (1 + 2 C^{-6}) = 0
  * \f]
+ * where \f$f_\text{material}\f$ is the elastic stress term supplied by the
+ * chamber's \ref SphereMaterial.
  *
  * 3. Volume change:
  * \f[
@@ -86,6 +88,7 @@
  * * `rho` - Density \f$\rho\f$
  * * `thick0` - Wall thickness \f$d_0\f$
  * * `radius0` - Reference radius \f$r_0\f$
+ * * `eta` - Viscosity parameter \f$\eta\f$
  * * `sigma_max` - Maximum active stress \f$\sigma_\text{max}\f$
  * * `alpha_max` - Maximum activation parameter \f$\alpha_\text{max}\f$
  * * `alpha_min` - Minimum activation parameter \f$\alpha_\text{min}\f$
@@ -106,6 +109,7 @@
  *                "rho" : 1e3,
  *                "thick0" : 0.01,
  *                "radius0" : 0.05,
+ *                "eta" : 10.0,
  *                "sigma_max" : 185e3,
  *                "alpha_max": 30.0,
  *                "alpha_min": -30.0,
@@ -113,12 +117,7 @@
  *                "tdias": 0.484,
  *                "steepness": 0.005
  *            }
- *            "material": {
- *                "type": "mooney_rivlin",
- *                "W1": 10e3,
- *                "W2": 40,
- *                "eta": 10.0
- *            }
+ *            "material": {}
  *        }
  *     ]
  *
@@ -143,12 +142,13 @@ class ChamberSphere : public Block {
     rho = 0,
     thick0 = 1,
     radius0 = 2,
-    sigma_max = 3,
-    alpha_max = 4,
-    alpha_min = 5,
-    tsys = 6,
-    tdias = 7,
-    steepness = 8
+    eta = 3,
+    sigma_max = 4,
+    alpha_max = 5,
+    alpha_min = 6,
+    tsys = 7,
+    tdias = 8,
+    steepness = 9
   };
 
   /**
@@ -162,6 +162,7 @@ class ChamberSphere : public Block {
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
                {"radius0", InputParameter()},
+               {"eta", InputParameter()},
                {"sigma_max", InputParameter()},
                {"alpha_max", InputParameter()},
                {"alpha_min", InputParameter()},

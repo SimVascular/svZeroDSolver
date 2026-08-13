@@ -23,22 +23,18 @@
  * appear in the spherical-stress equation of ChamberSphere.
  */
 struct SphericalStressResult {
-  double C_val;            ///< Residual contribution to C vector
-  double dC_dy_radius;     ///< Derivative w.r.t. radius
-  double dC_dydot_radius;  ///< Derivative w.r.t. d(radius)/dt
+  double C_val;         ///< Residual contribution to C vector
+  double dC_dy_radius;  ///< Derivative w.r.t. radius
 };
 
 /**
  * @brief Base class for spherical chamber wall materials
  *
- * Subclasses implement the material-specific elastic stress term (including
- * viscous damping) in the spherical stress equation:
+ * Subclasses implement the material-specific elastic stress term in the
+ * spherical stress equation:
  * \f[
- * -S + \tau + f_\text{material}(r, r_0, \dot{r}) = 0
+ * -S + \tau + f_\text{material}(r, r_0) = 0
  * \f]
- *
- * Each subclass owns all its material parameters, including the viscosity
- * \f$\eta\f$.
  */
 class SphereMaterial {
  public:
@@ -63,11 +59,10 @@ class SphereMaterial {
    *
    * @param radius     Radius perturbation \f$r\f$
    * @param radius0    Reference radius \f$r_0\f$
-   * @param dradius_dt Time derivative \f$\dot{r}\f$
    * @return SphericalStressResult
    */
-  virtual SphericalStressResult compute(double radius, double radius0,
-                                        double dradius_dt) const = 0;
+  virtual SphericalStressResult compute(double radius,
+                                        double radius0) const = 0;
 
   /**
    * @brief Factory: create a material from a type string
@@ -93,24 +88,23 @@ class SphereMaterial {
 };
 
 /**
- * @brief Mooney–Rivlin (neo-Hookean) material
+ * @brief Mooney–Rivlin material
  *
  * Implements:
  * \f[
- * f = 4(1 - C^{-3})(W_1 + C W_2) + \eta \dot{C}(1 + 2 C^{-6})
+ * f = 4(1 - C^{-3})(W_1 + C W_2)
  * \f]
  *
- * Parameters: `W1`, `W2`, `eta`
+ * Parameters: `W1`, `W2`
  */
 class MooneyRivlinMaterial : public SphereMaterial {
  public:
   MooneyRivlinMaterial()
       : SphereMaterial({{"W1", InputParameter()},
-                        {"W2", InputParameter()},
-                        {"eta", InputParameter()}}) {}
+                        {"W2", InputParameter()}}) {}
 
-  SphericalStressResult compute(double radius, double radius0,
-                                double dradius_dt) const override;
+  SphericalStressResult compute(double radius,
+                                double radius0) const override;
 };
 
 /**
@@ -122,7 +116,7 @@ class MooneyRivlinMaterial : public SphereMaterial {
  * W_4(r) = C_2 \exp(C_3 [I_{4,\text{iso}}]^2)
  * \f]
  *
- * Parameters: `C0`, `C1`, `C2`, `C3`, `eta`
+ * Parameters: `C0`, `C1`, `C2`, `C3`
  */
 class ExponentialMaterial : public SphereMaterial {
  public:
@@ -130,11 +124,10 @@ class ExponentialMaterial : public SphereMaterial {
       : SphereMaterial({{"C0", InputParameter()},
                         {"C1", InputParameter()},
                         {"C2", InputParameter()},
-                        {"C3", InputParameter()},
-                        {"eta", InputParameter()}}) {}
+                        {"C3", InputParameter()}}) {}
 
-  SphericalStressResult compute(double radius, double radius0,
-                                double dradius_dt) const override;
+  SphericalStressResult compute(double radius,
+                                double radius0) const override;
 };
 
 #endif  // SVZERODSOLVER_MODEL_SPHEREMATERIAL_HPP_

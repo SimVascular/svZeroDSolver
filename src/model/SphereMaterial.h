@@ -33,7 +33,7 @@ struct SphericalStressResult {
  * Subclasses implement the material-specific elastic stress term in the
  * spherical stress equation:
  * \f[
- * -S + \tau + f_\text{material}(r, r_0) = 0
+ * -S + \tau + S_\text{sl}(r, r_0) = 0
  * \f]
  */
 class SphereMaterial {
@@ -88,7 +88,7 @@ class SphereMaterial {
 };
 
 /**
- * @brief Mooney–Rivlin material
+ * @brief Mooney–Rivlin material (reduces to neo-Hookean for W2=0)
  *
  * Implements:
  * \f[

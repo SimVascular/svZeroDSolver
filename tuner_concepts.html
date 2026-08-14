@@ -171,33 +171,33 @@ Constraints / Bounds / Scaling</h1>
 <h1 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
 Sensitivity Analysis</h1>
 <p>svZeroDTuner sensitivity analysis is a <b>global screening method</b>. It is intended to rank which parameters matter most for selected quantities of interest (QoIs) before optimization.</p>
-<p>It is <b>not</b> computing local derivatives such as <picture><source srcset="form_201_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\partial y / \partial p_i$" src="form_201.png" width="56" height="21"/></picture> at a single operating point, and it is also <b>not</b> currently computing exact Sobol sensitivity indices. Instead, it samples the full parameter box and reports screening scores derived from the sampled input-output relationships.</p>
+<p>It is <b>not</b> computing local derivatives such as <picture><source srcset="form_203_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\partial y / \partial p_i$" src="form_203.png" width="56" height="21"/></picture> at a single operating point, and it is also <b>not</b> currently computing exact Sobol sensitivity indices. Instead, it samples the full parameter box and reports screening scores derived from the sampled input-output relationships.</p>
 <h2>Sampling and Quantities of Interest</h2>
 <p>Suppose the tunable parameter vector is   </p><p class="formulaDsp">
-<picture><source srcset="form_202_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{p} = (p_1, \dots, p_d), \qquad p_i \in [p_i^{\min}, p_i^{\max}],
-\&zwj;]" src="form_202.png" width="309" height="24"/></picture>
+<picture><source srcset="form_204_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{p} = (p_1, \dots, p_d), \qquad p_i \in [p_i^{\min}, p_i^{\max}],
+\&zwj;]" src="form_204.png" width="309" height="24"/></picture>
 </p>
 <p> and a scalar quantity of interest is   </p><p class="formulaDsp">
-<picture><source srcset="form_203_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[y = g(\mathbf{p}),
-\&zwj;]" src="form_203.png" width="77" height="21"/></picture>
+<picture><source srcset="form_205_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[y = g(\mathbf{p}),
+\&zwj;]" src="form_205.png" width="77" height="21"/></picture>
 </p>
-<p> where <picture><source srcset="form_204_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$g$" src="form_204.png" width="11" height="13"/></picture> means "run the 0D simulation and evaluate the requested expression."</p>
-<p>svZeroDTuner generates <picture><source srcset="form_205_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$N$" src="form_205.png" width="17" height="15"/></picture> quasi-random samples <picture><source srcset="form_206_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\mathbf{p}^{(1)}, \dots, \mathbf{p}^{(N)}$" src="form_206.png" width="111" height="23"/></picture> using a Sobol low-discrepancy sequence over the parameter bounds, then evaluates   </p><p class="formulaDsp">
-<picture><source srcset="form_207_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[y^{(k)} = g\!\left(\mathbf{p}^{(k)}\right), \qquad k = 1, \dots, N.
-\&zwj;]" src="form_207.png" width="276" height="36"/></picture>
+<p> where <picture><source srcset="form_206_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$g$" src="form_206.png" width="11" height="13"/></picture> means "run the 0D simulation and evaluate the requested expression."</p>
+<p>svZeroDTuner generates <picture><source srcset="form_207_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$N$" src="form_207.png" width="17" height="15"/></picture> quasi-random samples <picture><source srcset="form_208_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\mathbf{p}^{(1)}, \dots, \mathbf{p}^{(N)}$" src="form_208.png" width="111" height="23"/></picture> using a Sobol low-discrepancy sequence over the parameter bounds, then evaluates   </p><p class="formulaDsp">
+<picture><source srcset="form_209_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[y^{(k)} = g\!\left(\mathbf{p}^{(k)}\right), \qquad k = 1, \dots, N.
+\&zwj;]" src="form_209.png" width="276" height="36"/></picture>
 </p>
 <p>This produces one cloud of sampled parameter values and one sampled QoI value for each simulation.</p>
 <h2>What Is Being Computed</h2>
-<p>For each parameter <picture><source srcset="form_208_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$p_i$" src="form_208.png" width="17" height="13"/></picture> and QoI <picture><source srcset="form_209_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$y$" src="form_209.png" width="11" height="13"/></picture>, svZeroDTuner reports two screening scores.</p>
+<p>For each parameter <picture><source srcset="form_210_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$p_i$" src="form_210.png" width="17" height="13"/></picture> and QoI <picture><source srcset="form_211_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$y$" src="form_211.png" width="11" height="13"/></picture>, svZeroDTuner reports two screening scores.</p>
 <h3>First-order screening score</h3>
-<p>The first-order score is the squared Pearson correlation between <picture><source srcset="form_208_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$p_i$" src="form_208.png" width="17" height="13"/></picture> and <picture><source srcset="form_209_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$y$" src="form_209.png" width="11" height="13"/></picture>:   </p><p class="formulaDsp">
-<picture><source srcset="form_210_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[S_i^{\mathrm{screen},1} = \mathrm{corr}(p_i, y)^2.
-\&zwj;]" src="form_210.png" width="184" height="24"/></picture>
+<p>The first-order score is the squared Pearson correlation between <picture><source srcset="form_210_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$p_i$" src="form_210.png" width="17" height="13"/></picture> and <picture><source srcset="form_211_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$y$" src="form_211.png" width="11" height="13"/></picture>:   </p><p class="formulaDsp">
+<picture><source srcset="form_212_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[S_i^{\mathrm{screen},1} = \mathrm{corr}(p_i, y)^2.
+\&zwj;]" src="form_212.png" width="184" height="24"/></picture>
 </p>
 <p>Interpretation:</p>
 <ul>
-<li><picture><source srcset="form_211_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_i^{\mathrm{screen},1} \approx 0$" src="form_211.png" width="99" height="24"/></picture>: little detectable linear or monotone main-effect relationship over the sampled range.</li>
-<li><picture><source srcset="form_212_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_i^{\mathrm{screen},1} \approx 1$" src="form_212.png" width="98" height="24"/></picture>: the QoI is strongly explained by that parameter alone through a nearly one-dimensional trend.</li>
+<li><picture><source srcset="form_213_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_i^{\mathrm{screen},1} \approx 0$" src="form_213.png" width="99" height="24"/></picture>: little detectable linear or monotone main-effect relationship over the sampled range.</li>
+<li><picture><source srcset="form_214_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_i^{\mathrm{screen},1} \approx 1$" src="form_214.png" width="98" height="24"/></picture>: the QoI is strongly explained by that parameter alone through a nearly one-dimensional trend.</li>
 </ul>
 <p>Because the score is squared, it measures <b>strength</b> but not <b>direction</b>:</p>
 <ul>
@@ -205,15 +205,15 @@ Sensitivity Analysis</h1>
 <li>use the scatter plots or raw outputs if you need to know whether increasing a parameter raises or lowers the QoI.</li>
 </ul>
 <h3>Total-order screening score</h3>
-<p>The total-order score is a heuristic based on conditional variance reduction. The sampled values of <picture><source srcset="form_208_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$p_i$" src="form_208.png" width="17" height="13"/></picture> are grouped into bins, and the within-bin QoI variance is estimated:   </p><p class="formulaDsp">
-<picture><source srcset="form_213_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathrm{Var}(y \mid p_i \in \text{bin } b).
-\&zwj;]" src="form_213.png" width="154" height="21"/></picture>
+<p>The total-order score is a heuristic based on conditional variance reduction. The sampled values of <picture><source srcset="form_210_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$p_i$" src="form_210.png" width="17" height="13"/></picture> are grouped into bins, and the within-bin QoI variance is estimated:   </p><p class="formulaDsp">
+<picture><source srcset="form_215_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathrm{Var}(y \mid p_i \in \text{bin } b).
+\&zwj;]" src="form_215.png" width="154" height="21"/></picture>
 </p>
 <p>The code then forms the weighted average within-bin variance and normalizes by the total variance:     </p><p class="formulaDsp">
-<picture><source srcset="form_214_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[S_i^{\mathrm{screen},T}
+<picture><source srcset="form_216_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[S_i^{\mathrm{screen},T}
 \approx
 1 - \frac{\sum_b n_b \, \mathrm{Var}(y \mid p_i \in \text{bin } b)}{N \, \mathrm{Var}(y)}.
-\&zwj;]" src="form_214.png" width="336" height="47"/></picture>
+\&zwj;]" src="form_216.png" width="336" height="47"/></picture>
 </p>
 <p>Interpretation:</p>
 <ul>

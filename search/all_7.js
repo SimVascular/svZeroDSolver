@@ -13,7 +13,8 @@ var searchData=
   ['example_201_3a_20minimal_20scalar_20target_20tuning_10',['Example 1: Minimal Scalar-Target Tuning',['../tuner_examples.html#autotoc_md35',1,'']]],
   ['example_202_3a_20multi_20outlet_20pulmonary_20tree_20tuning_11',['Example 2: Multi-Outlet Pulmonary Tree Tuning',['../tuner_examples.html#autotoc_md36',1,'']]],
   ['examples_12',['Examples',['../tuner.html#autotoc_md18',1,'Examples'],['../tuner_examples.html',1,'svZeroDTuner Worked Examples']]],
-  ['exponentialparamid_13',['ExponentialParamId',['../class_chamber_elastance_inductor_exponential.html#a3dc5bc8d39af9dc88268249f3739479c',1,'ChamberElastanceInductorExponential']]],
-  ['expression_20errors_14',['Expression Errors',['../tuner_troubleshooting.html#autotoc_md44',1,'']]],
-  ['external_5fstep_5fsize_5f_15',['external_step_size_',['../class_solver_interface.html#a20dc4a36f4a612e5fb29240f3cf8ffc2',1,'SolverInterface']]]
+  ['exponentialmaterial_13',['ExponentialMaterial',['../class_exponential_material.html',1,'']]],
+  ['exponentialparamid_14',['ExponentialParamId',['../class_chamber_elastance_inductor_exponential.html#a3dc5bc8d39af9dc88268249f3739479c',1,'ChamberElastanceInductorExponential']]],
+  ['expression_20errors_15',['Expression Errors',['../tuner_troubleshooting.html#autotoc_md44',1,'']]],
+  ['external_5fstep_5fsize_5f_16',['external_step_size_',['../class_solver_interface.html#a20dc4a36f4a612e5fb29240f3cf8ffc2',1,'SolverInterface']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['inputparameter_0',['InputParameter',['../struct_input_parameter.html',1,'']]],
-  ['integrator_1',['Integrator',['../class_integrator.html',1,'']]]
+  ['halfcosineactivation_0',['HalfCosineActivation',['../class_half_cosine_activation.html',1,'']]]
 ];

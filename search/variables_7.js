@@ -5,7 +5,7 @@ var searchData=
   ['inlet_5feles_2',['inlet_eles',['../class_node.html#a1898f677629f884ed654e0842f1c26ed',1,'Node']]],
   ['inlet_5fnodes_3',['inlet_nodes',['../class_block.html#a90f1c5461c3f3e599b1635fe2cc9ac68',1,'Block']]],
   ['input_5ffile_5fname_5f_4',['input_file_name_',['../class_solver_interface.html#abc71e294a8b44c78e01481726c2fabf5',1,'SolverInterface']]],
-  ['input_5fparam_5fproperties_5',['input_param_properties',['../class_activation_function.html#ae4eface593c4d992c079d45fab3263d5',1,'ActivationFunction']]],
+  ['input_5fparam_5fproperties_5',['input_param_properties',['../class_activation_function.html#ae4eface593c4d992c079d45fab3263d5',1,'ActivationFunction::input_param_properties'],['../class_sphere_material.html#a56170b4a908c3698b9d2b58b80d47b4a',1,'SphereMaterial::input_param_properties']]],
   ['input_5fparams_6',['input_params',['../class_block.html#a3005e28a4e947ca92fa4499c5a7f5c8c',1,'Block::input_params'],['../class_junction.html#a7244ba82080ff7f5a1af9ffdd82a263b',1,'Junction::input_params']]],
   ['input_5fparams_5flist_7',['input_params_list',['../class_block.html#a05f1232b81a42e7b0c4d6781deb5bb53',1,'Block']]],
   ['integrator_5f_8',['integrator_',['../class_solver_interface.html#a63c583c3ebf70a708dd322fbb556d35e',1,'SolverInterface']]],

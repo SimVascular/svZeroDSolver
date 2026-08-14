@@ -153,6 +153,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="memitem:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e" id="r_ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ad0e2d0882fb2a9e2b4bb8e5148f7ea9e">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af)</td></tr>
 <tr class="memdesc:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set activation function (for chamber blocks that use one).  <br /></td></tr>
+<tr class="memitem:a82b147185f9df6044638922278a98085" id="r_a82b147185f9df6044638922278a98085"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a82b147185f9df6044638922278a98085">set_material</a> (std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt; m)</td></tr>
+<tr class="memdesc:a82b147185f9df6044638922278a98085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set wall material (for <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> blocks).  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -409,6 +411,42 @@ Public Attributes</h2></td></tr>
 </dl>
 
 <p>Reimplemented in <a class="el" href="class_chamber_elastance_inductor.html#ae9f9d815cca8019220a56fe9dcc83379">ChamberElastanceInductor</a>, and <a class="el" href="class_linear_elastance_chamber.html#a830398aa4baced668590c63fe9d54f64">LinearElastanceChamber</a>.</p>
+
+</div>
+</div>
+<a id="a82b147185f9df6044638922278a98085" name="a82b147185f9df6044638922278a98085"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82b147185f9df6044638922278a98085">&#9670;&#160;</a></span>set_material()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Block::set_material </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt;</td>          <td class="paramname"><span class="paramname"><em>m</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Set wall material (for <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> blocks). </p>
+<p>Default no-op. Overridden by <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> to take ownership of the material.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">m</td><td>Unique pointer to the material (caller transfers ownership) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_chamber_sphere.html#adf63d19996cf07f4d4c5c2bc7200727d">ChamberSphere</a>.</p>
 
 </div>
 </div>

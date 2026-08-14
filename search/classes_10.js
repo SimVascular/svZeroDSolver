@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['valvetanh_0',['ValveTanh',['../class_valve_tanh.html',1,'']]]
+  ['tripletscontributions_0',['TripletsContributions',['../struct_triplets_contributions.html',1,'']]],
+  ['twohillactivation_1',['TwoHillActivation',['../class_two_hill_activation.html',1,'']]]
 ];

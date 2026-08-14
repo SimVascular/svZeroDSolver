@@ -169,6 +169,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a96663232888eeb564e5f37db98fc655f pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block contributions with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
+<tr class="memitem:a82b147185f9df6044638922278a98085 pub_methods_class_block" id="r_a82b147185f9df6044638922278a98085"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a82b147185f9df6044638922278a98085">set_material</a> (std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt; m)</td></tr>
+<tr class="memdesc:a82b147185f9df6044638922278a98085 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set wall material (for <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> blocks).  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -209,7 +211,7 @@ Public Attributes</h2></td></tr>
 <p>Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) without inductance. See <a class="el" href="citelist.html#CITEREF_regazzoni2022">[8]</a></p>
 <p>This chamber block can be connected to other blocks using junctions.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_114_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz}
+<picture><source srcset="form_113_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz}
 \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}
@@ -217,7 +219,7 @@ to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} [-latex];
 \end{circuitikz}
-\&zwj;]" src="form_114.png" width="294" height="133"/></picture>
+\&zwj;]" src="form_113.png" width="294" height="133"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
@@ -225,8 +227,8 @@ node[ground]{};
 \&zwj;]" src="form_48.png" width="216" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_115_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}=0
-\&zwj;]" src="form_115.png" width="118" height="19"/></picture>
+<picture><source srcset="form_114_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}=0
+\&zwj;]" src="form_114.png" width="118" height="19"/></picture>
 </p>
 <p class="formulaDsp">
 <picture><source srcset="form_50_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}-\dot{V}_c=0
@@ -238,44 +240,44 @@ node[ground]{};
 P_{out} &amp; Q_{out} &amp; V_c\end{array}\right]^{T} \&zwj;]" src="form_51.png" width="313" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_116_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_115_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; -1
 \end{array}\right]
-\&zwj;]" src="form_116.png" width="221" height="69"/></picture>
+\&zwj;]" src="form_115.png" width="221" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_116_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 &amp; 0 &amp;  0 &amp; 0  &amp; E(t) \\
 1 &amp; 0 &amp; -1 &amp; 0  &amp; 0 \\
 0 &amp; 1 &amp;  0 &amp; -1 &amp; 0
 \end{array}\right]
-\&zwj;]" src="form_117.png" width="263" height="69"/></picture>
+\&zwj;]" src="form_116.png" width="263" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_118_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 E(t)V_{rest} \\
 0 \\
 0
 \end{array}\right]
-\&zwj;]" src="form_118.png" width="158" height="69"/></picture>
+\&zwj;]" src="form_117.png" width="158" height="69"/></picture>
 </p>
 <p>In the above equations,</p>
 <p class="formulaDsp">
-<picture><source srcset="form_119_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
+<picture><source srcset="form_118_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
 \phi\!\left(t, t_C^i, t_R^i, T_C^i, T_R^i\right),
-\&zwj;]" src="form_119.png" width="366" height="26"/></picture>
+\&zwj;]" src="form_118.png" width="366" height="26"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_120_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\phi(t, t_C, t_R, T_C, T_R) =
+<picture><source srcset="form_119_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\phi(t, t_C, t_R, T_C, T_R) =
 \begin{cases}
 \frac{1}{2}\left[1 - \cos\!\left(\frac{\pi}{T_C} \operatorname{mod}(t - t_C,
 T_{\mathrm{HB}})\right)\right], &amp; \text{if } 0 \le \operatorname{mod}(t -
 t_C, T_{\mathrm{HB}}) &lt; T_C, \\&zwj;[1.2em] \frac{1}{2}\left[1 +
 \cos\!\left(\frac{\pi}{T_R} \operatorname{mod}(t - t_R,
 T_{\mathrm{HB}})\right)\right], &amp; \text{if } 0 \le \operatorname{mod}(t -
-t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{cases} \&zwj;]" src="form_120.png" width="744" height="129"/></picture>
+t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{cases} \&zwj;]" src="form_119.png" width="744" height="129"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

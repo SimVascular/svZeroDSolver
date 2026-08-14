@@ -169,6 +169,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="memitem:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e pub_methods_class_block" id="r_ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad0e2d0882fb2a9e2b4bb8e5148f7ea9e">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af)</td></tr>
 <tr class="memdesc:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set activation function (for chamber blocks that use one).  <br /></td></tr>
+<tr class="memitem:a82b147185f9df6044638922278a98085 pub_methods_class_block" id="r_a82b147185f9df6044638922278a98085"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a82b147185f9df6044638922278a98085">set_material</a> (std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt; m)</td></tr>
+<tr class="memdesc:a82b147185f9df6044638922278a98085 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set wall material (for <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> blocks).  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -208,83 +210,83 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Valve (tanh) block. </p>
 <p>Models the pressure drop across a diode-like valve, which is implemented as a non-linear hyperbolic-tangent resistor. See <a class="el" href="citelist.html#CITEREF_pfaller2019importance">[6]</a> (equations 16 and 22).</p>
 <p class="formulaDsp">
-<picture><source srcset="form_135_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_134_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [D, l=$R_v$, *-*] (3,0)
 node[anchor=south]{$P_{out}$};
 \end{circuitikz}
-\&zwj;]" src="form_135.png" width="212" height="62"/></picture>
+\&zwj;]" src="form_134.png" width="212" height="62"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_161_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}-Q_{in}\left[R_{min} +
+<picture><source srcset="form_163_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}-Q_{in}\left[R_{min} +
 (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
-\&zwj;]" src="form_161.png" width="617" height="47"/></picture>
+\&zwj;]" src="form_163.png" width="617" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_137_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}=0
-\&zwj;]" src="form_137.png" width="126" height="19"/></picture>
+<picture><source srcset="form_136_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}=0
+\&zwj;]" src="form_136.png" width="126" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_162_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
-\&zwj;]" src="form_162.png" width="356" height="39"/></picture>
+<picture><source srcset="form_164_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
+\&zwj;]" src="form_164.png" width="356" height="39"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_163_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out} &amp; \text{valve\_status} \end{array}\right]^{T} \&zwj;]" src="form_163.png" width="392" height="28"/></picture>
+<picture><source srcset="form_165_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
+P_{out} &amp; Q_{out} &amp; \text{valve\_status} \end{array}\right]^{T} \&zwj;]" src="form_165.png" width="392" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_164_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\mathbf{0}
-\&zwj;]" src="form_164.png" width="58" height="15"/></picture>
+<picture><source srcset="form_166_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\mathbf{0}
+\&zwj;]" src="form_166.png" width="58" height="15"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_165_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_167_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 &amp; -(R_{max}+R_{min})/2.0 &amp; -1 &amp; 0  &amp; 0\\
 0 &amp;      1                 &amp;  0 &amp; -1 &amp; 0\\
 0 &amp;      0                 &amp;  0 &amp; 0  &amp; 1
 \end{array}\right]
-\&zwj;]" src="form_165.png" width="399" height="69"/></picture>
+\&zwj;]" src="form_167.png" width="399" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_166_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_168_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
 0 \\
 -\frac{1}{2}\left[1+tanh\{k(P_{out}-P_{in})\}\right]
 \end{array}\right]
-\&zwj;]" src="form_166.png" width="431" height="69"/></picture>
+\&zwj;]" src="form_168.png" width="431" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_167_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+<picture><source srcset="form_169_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
 \left[\begin{array}{ccccc}
 A &amp; B &amp;  C &amp; 0 &amp; 0\\
 0 &amp; 0 &amp;  0 &amp; 0 &amp; 0\\
 D &amp; 0 &amp; -D &amp; 0 &amp; 0
-\end{array}\right] \&zwj;]" src="form_167.png" width="278" height="69"/></picture>
+\end{array}\right] \&zwj;]" src="form_169.png" width="278" height="69"/></picture>
 </p>
 <p> where,    </p><p class="formulaDsp">
-<picture><source srcset="form_168_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[A = \frac{1}{2} k Q_{in}
+<picture><source srcset="form_170_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[A = \frac{1}{2} k Q_{in}
 (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
-\&zwj;]" src="form_168.png" width="443" height="39"/></picture>
+\&zwj;]" src="form_170.png" width="443" height="39"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_169_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
-\&zwj;]" src="form_169.png" width="362" height="39"/></picture>
+<picture><source srcset="form_171_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+\&zwj;]" src="form_171.png" width="362" height="39"/></picture>
 </p>
     <p class="formulaDsp">
-<picture><source srcset="form_170_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[C = -\frac{1}{2} k Q_{in}
+<picture><source srcset="form_172_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[C = -\frac{1}{2} k Q_{in}
 (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right]
-\&zwj;]" src="form_170.png" width="458" height="39"/></picture>
+\&zwj;]" src="form_172.png" width="458" height="39"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_171_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
-\&zwj;]" src="form_171.png" width="233" height="45"/></picture>
+<picture><source srcset="form_173_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
+\&zwj;]" src="form_173.png" width="233" height="45"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_172_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+<picture><source srcset="form_174_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
  \mathbf{E}^{e}=\mathbf{0}
-\&zwj;]" src="form_172.png" width="143" height="49"/></picture>
+\&zwj;]" src="form_174.png" width="143" height="49"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

@@ -10,7 +10,6 @@
     "output_variable_based": true,
     "steady_initial": false,
     "output_all_cycles": false,
-    "use_cycle_to_cycle_error": true,
     "max_iter_error_to_warning": true
   },
   "boundary_conditions": [],
@@ -37,8 +36,8 @@
         "type": "exponential",
         "C0": 1.9e3,
         "C1": 0.11,
-        "C2": 1.9e3,
-        "C3": 0.11
+        "C2": 2.1e3,
+        "C3": 0.15
       }
     },
     {
@@ -148,7 +147,7 @@
       "params": {
         "Rmin": 0.0,
         "Rmax": 1.0e10,
-        "Steepness": 0.1,
+        "Steepness": 1.0,
         "upstream_block": "veins",
         "downstream_block": "LV"
       }
@@ -159,7 +158,7 @@
       "params": {
         "Rmin": 0.0,
         "Rmax": 1.0e11,
-        "Steepness": 1.0,
+        "Steepness": 10.0,
         "upstream_block": "LV",
         "downstream_block": "aorta"
       }

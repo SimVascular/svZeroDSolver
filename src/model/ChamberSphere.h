@@ -9,7 +9,10 @@
 
 #include <math.h>
 
+#include <memory>
+
 #include "Block.h"
+#include "SphereMaterial.h"
 #include "SparseSystem.h"
 
 /**
@@ -41,9 +44,11 @@
  *
  * 2. Spherical stress:
  * \f[
- * -S + \tau + 4 (1 - C^{-3}) (W_1 + C W_2) + \eta \dot{C}
+ * -S + \tau + S_\text{el}(r, r_0) + \eta \dot{C}
  * (1 + 2 C^{-6}) = 0
  * \f]
+ * where \f$S_\text{el}\f$ is the elastic stress term supplied by the
+ * chamber's \ref SphereMaterial.
  *
  * 3. Volume change:
  * \f[
@@ -83,8 +88,6 @@
  * * `rho` - Density \f$\rho\f$
  * * `thick0` - Wall thickness \f$d_0\f$
  * * `radius0` - Reference radius \f$r_0\f$
- * * `W1` - Material constant \f$W_1\f$
- * * `W2` - Material constant \f$W_2\f$
  * * `eta` - Viscosity parameter \f$\eta\f$
  * * `sigma_max` - Maximum active stress \f$\sigma_\text{max}\f$
  * * `alpha_max` - Maximum activation parameter \f$\alpha_\text{max}\f$
@@ -106,8 +109,6 @@
  *                "rho" : 1e3,
  *                "thick0" : 0.01,
  *                "radius0" : 0.05,
- *                "W1" : 10e3,
- *                "W2" : 40,
  *                "eta" : 10.0,
  *                "sigma_max" : 185e3,
  *                "alpha_max": 30.0,
@@ -116,8 +117,11 @@
  *                "tdias": 0.484,
  *                "steepness": 0.005
  *            }
+ *            "material": {}
  *        }
  *     ]
+ * 
+ * Material definition can be found in \ref SphereMaterial.
  *
  * ### Internal variables
  *
@@ -140,15 +144,13 @@ class ChamberSphere : public Block {
     rho = 0,
     thick0 = 1,
     radius0 = 2,
-    W1 = 3,
-    W2 = 4,
-    eta = 5,
-    sigma_max = 6,
-    alpha_max = 7,
-    alpha_min = 8,
-    tsys = 9,
-    tdias = 10,
-    steepness = 11
+    eta = 3,
+    sigma_max = 4,
+    alpha_max = 5,
+    alpha_min = 6,
+    tsys = 7,
+    tdias = 8,
+    steepness = 9
   };
 
   /**
@@ -162,8 +164,6 @@ class ChamberSphere : public Block {
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
                {"radius0", InputParameter()},
-               {"W1", InputParameter()},
-               {"W2", InputParameter()},
                {"eta", InputParameter()},
                {"sigma_max", InputParameter()},
                {"alpha_max", InputParameter()},
@@ -225,9 +225,13 @@ class ChamberSphere : public Block {
    */
   void get_elastance_values(std::vector<double>& parameters);
 
+  void set_material(std::unique_ptr<SphereMaterial> m) override;
+
  private:
   double act = 0.0;       // activation function
   double act_plus = 0.0;  // act_plus = max(act, 0)
+
+  std::unique_ptr<SphereMaterial> material_;
 
   /**
    * @brief Number of triplets of element

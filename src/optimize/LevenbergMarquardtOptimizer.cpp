@@ -99,7 +99,12 @@ void LevenbergMarquardtOptimizer::update_gradient(
     // here.
     model->update_solution(system, y_dpoint, dy_dpoint);
     system.update_residual(y_dpoint, dy_dpoint);
-    residual.segment(num_eqns * i, num_eqns) = system.residual;
+    // The solver system is square in the number of variables, whereas the
+    // calibration model has no boundary condition blocks and thus fewer
+    // equations than variables. Only the first ``num_eqns`` entries of the
+    // system residual are owned by a block; the remaining ones are
+    // structurally zero and are dropped here.
+    residual.segment(num_eqns * i, num_eqns) = system.residual.head(num_eqns);
 
     // Assemble the Jacobian of the residual with respect to the parameters.
     for (size_t j = 0; j < model->get_num_blocks(true); j++) {

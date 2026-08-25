@@ -29,8 +29,14 @@
                            std::to_string(line));
 }
 
-// An expression, not a statement, because Eigen also uses eigen_assert inside
-// larger expressions.
+/**
+ * @brief Eigen assertion that throws instead of aborting
+ *
+ * An expression, not a statement, because Eigen also uses eigen_assert inside
+ * larger expressions.
+ *
+ * @param condition Condition that must hold
+ */
 #define eigen_assert(condition) \
   ((condition)                  \
        ? static_cast<void>(0)   \

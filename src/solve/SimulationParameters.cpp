@@ -145,14 +145,15 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
     throw std::runtime_error(
         "Missing 'activation_function' for chamber " + chamber_name +
         ". Required with structure: {\"type\": \"half_cosine\", \"t_active\": "
-        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill with "
-        "their parameters).");
+        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill / "
+        "double_tanh / wrapping_cosine / fourier with their parameters).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in activation_function for chamber " +
         chamber_name +
-        ". Must be one of: half_cosine, piecewise_cosine, two_hill");
+        ". Must be one of: half_cosine, piecewise_cosine, two_hill, "
+        "double_tanh, wrapping_cosine, fourier");
   }
 
   // Extract activation function type
@@ -199,17 +200,17 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
 }
 
 std::unique_ptr<SphereMaterial> generate_material(
-    const nlohmann::json& j, const std::string& vessel_name) {
+    const nlohmann::json& j, const std::string& chamber_name) {
   if (j.is_null() || !j.is_object()) {
     throw std::runtime_error(
-        "Missing 'material' for vessel " + vessel_name +
+        "Missing 'material' for chamber " + chamber_name +
         ". Required with structure: {\"type\": \"mooney_rivlin\", \"W1\": "
         "10e3, \"W2\": 40, \"eta\": 10.0} (or type exponential with C0, C1, "
         "C2, C3, eta).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
-        "Missing or invalid 'type' in material for vessel " + vessel_name +
+        "Missing or invalid 'type' in material for chamber " + chamber_name +
         ". Must be one of: mooney_rivlin, exponential");
   }
 
@@ -222,8 +223,8 @@ std::unique_ptr<SphereMaterial> generate_material(
     if (el.key() == "type") continue;
     if (!has_parameter(input_param_properties, el.key())) {
       throw std::runtime_error("Unknown parameter " + el.key() +
-                               " defined in material for vessel " +
-                               vessel_name);
+                               " defined in material for chamber " +
+                               chamber_name);
     }
   }
 
@@ -235,7 +236,7 @@ std::unique_ptr<SphereMaterial> generate_material(
     if (err) {
       throw std::runtime_error(
           "Scalar parameter " + param.first +
-          " is mandatory in material for vessel " + vessel_name);
+          " is mandatory in material for chamber " + chamber_name);
     }
     material->set_param(param.first, val);
   }
@@ -299,6 +300,7 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
 
 void load_simulation_model(const nlohmann::json& config, Model& model) {
   DEBUG_MSG("Loading model");
+
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
@@ -382,17 +384,10 @@ void create_vessels(
         JsonWrapper(config, component, "vessel_name", i);
     const auto& vessel_values = vessel_config["zero_d_element_values"];
     const std::string vessel_name = vessel_config["vessel_name"];
+    const std::string vessel_type = vessel_config["zero_d_element_type"];
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
-    std::string vessel_type = vessel_config["zero_d_element_type"];
     generate_block(model, vessel_values, vessel_type, vessel_name);
-
-    // Create and set material for ChamberSphere blocks
-    if (vessel_type == "ChamberSphere") {
-      auto mat =
-          generate_material(vessel_config["material"], vessel_name);
-      model.get_block(vessel_name)->set_material(std::move(mat));
-    }
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
@@ -653,8 +648,8 @@ void create_chambers(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, const std::string& component) {
-  // Set cardiac period from simulation_parameters so activation functions have
-  // it. May already be set by closed_loop_blocks.
+  // Set cardiac period from simulation_parameters so activation functions
+  // have it. May already be set by closed_loop_blocks.
   if (model.cardiac_cycle_period < 0.0 &&
       config.contains("simulation_parameters") &&
       config["simulation_parameters"].contains("cardiac_period")) {
@@ -663,20 +658,22 @@ void create_chambers(
       model.cardiac_cycle_period = period;
     }
   }
+
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& chamber_config = JsonWrapper(config, component, "name", i);
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
 
-    // Create and set activation_function for chamber types that use it
-    if (chamber_type == "ChamberElastanceInductor" ||
-        chamber_type == "ChamberElastanceInductorExponential" ||
-        chamber_type == "LinearElastanceChamber") {
-      auto act_func = generate_activation_function(
-          model, chamber_config["activation_function"], chamber_name);
-      model.get_block(chamber_name)
-          ->set_activation_function(std::move(act_func));
+    auto act_func = generate_activation_function(
+        model, chamber_config["activation_function"], chamber_name);
+    model.get_block(chamber_name)->set_activation_function(std::move(act_func));
+
+    // Create and set material for chamber types that use one
+    if (chamber_type == "ChamberSphere") {
+      auto mat =
+          generate_material(chamber_config["material"], chamber_name);
+      model.get_block(chamber_name)->set_material(std::move(mat));
     }
 
     DEBUG_MSG("Created chamber " << chamber_name);

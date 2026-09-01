@@ -167,12 +167,12 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
  * and returns a created SphereMaterial. Caller associates it with a
  * ChamberSphere block via set_material().
  *
- * @param j           JSON object (e.g. vessel_config["material"])
- * @param vessel_name Vessel name for error messages
+ * @param j            JSON object (e.g. chamber_config["material"])
+ * @param chamber_name Chamber name for error messages
  * @return Unique pointer to the created material
  */
 std::unique_ptr<SphereMaterial> generate_material(
-    const nlohmann::json& j, const std::string& vessel_name);
+    const nlohmann::json& j, const std::string& chamber_name);
 
 /**
  * @brief Load initial conditions from a JSON configuration

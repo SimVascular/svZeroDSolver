@@ -145,14 +145,15 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
     throw std::runtime_error(
         "Missing 'activation_function' for chamber " + chamber_name +
         ". Required with structure: {\"type\": \"half_cosine\", \"t_active\": "
-        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill / double_tanh with "
-        "their parameters).");
+        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill / "
+        "double_tanh / wrapping_cosine / fourier with their parameters).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in activation_function for chamber " +
         chamber_name +
-        ". Must be one of: half_cosine, piecewise_cosine, two_hill, double_tanh");
+        ". Must be one of: half_cosine, piecewise_cosine, two_hill, "
+        "double_tanh, wrapping_cosine, fourier");
   }
 
   // Extract activation function type
@@ -354,14 +355,6 @@ void create_vessels(
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
     generate_block(model, vessel_values, vessel_type, vessel_name);
-
-    // Create and set activation_function for vessel types that use one
-    if (vessel_type == "ChamberSphere") {
-      auto act_func = generate_activation_function(
-          model, vessel_config["activation_function"], vessel_name);
-      model.get_block(vessel_name)
-          ->set_activation_function(std::move(act_func));
-    }
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
@@ -631,7 +624,8 @@ void create_chambers(
     // Create and set activation_function for chamber types that use it
     if (chamber_type == "ChamberElastanceInductor" ||
         chamber_type == "ChamberElastanceInductorExponential" ||
-        chamber_type == "LinearElastanceChamber") {
+        chamber_type == "LinearElastanceChamber" ||
+        chamber_type == "ChamberSphere") {
       auto act_func = generate_activation_function(
           model, chamber_config["activation_function"], chamber_name);
       model.get_block(chamber_name)

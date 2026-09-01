@@ -45,12 +45,24 @@
       }
     },
     {
-      "boundary_conditions": {},
-      "vessel_id": 1,
+      "boundary_conditions": {
+        "outlet": "OUT"
+      },
+      "vessel_id": 2,
       "vessel_length": 1.0,
-      "vessel_name": "ventricle",
-      "zero_d_element_type": "ChamberSphere",
+      "vessel_name": "downstream_vessel",
+      "zero_d_element_type": "BloodVessel",
       "zero_d_element_values": {
+        "R_poiseuille": 1.0e7,
+        "C": 1.0e-9
+      }
+    }
+  ],
+  "chambers": [
+    {
+      "type": "ChamberSphere",
+      "name": "ventricle",
+      "values": {
         "rho": 1e3,
         "thick0": 0.01,
         "radius0": 0.05,
@@ -66,19 +78,6 @@
         "tsys": 0.17,
         "tdias": 0.484,
         "steepness": 0.005
-      }
-    },
-    {
-      "boundary_conditions": {
-        "outlet": "OUT"
-      },
-      "vessel_id": 2,
-      "vessel_length": 1.0,
-      "vessel_name": "downstream_vessel",
-      "zero_d_element_type": "BloodVessel",
-      "zero_d_element_values": {
-        "R_poiseuille": 1.0e7,
-        "C": 1.0e-9
       }
     }
   ],

@@ -99,14 +99,11 @@
  *
  * ### Usage in json configuration file
  *
- *     "vessels": [
+ *     "chambers": [
  *        {
- *            "boundary_conditions": {},
- *            "vessel_id": 1,
- *            "vessel_length": 1.0,
- *            "vessel_name": "ventricle",
- *            "zero_d_element_type": "ChamberSphere",
- *            "zero_d_element_values": {
+ *            "type": "ChamberSphere",
+ *            "name": "ventricle",
+ *            "values": {
  *                "rho" : 1e3,
  *                "thick0" : 0.01,
  *                "radius0" : 0.05,
@@ -127,6 +124,10 @@
  *            }
  *        }
  *     ]
+ *
+ * A chamber is connected to the rest of the circuit via valve blocks (see
+ * \ref ValveTanh, \ref PiecewiseValve) referencing its `name` as their
+ * `upstream_block`/`downstream_block`.
  *
  * ### Internal variables
  *

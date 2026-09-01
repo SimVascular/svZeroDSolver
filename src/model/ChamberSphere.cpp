@@ -53,13 +53,11 @@ void ChamberSphere::update_solution(
     SparseSystem& system, std::vector<double>& parameters,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
-  const double W1 = parameters[global_param_ids[ParamId::W1]];
-  const double W2 = parameters[global_param_ids[ParamId::W2]];
-  const double eta = parameters[global_param_ids[ParamId::eta]];
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
   const double sigma_max = parameters[global_param_ids[ParamId::sigma_max]];
-
   const double radius0 = parameters[global_param_ids[ParamId::radius0]];
+  const double eta = parameters[global_param_ids[ParamId::eta]];
+
   const double velo = y[global_var_ids[5]];
   const double Pout = y[global_var_ids[2]];
   const double stress = y[global_var_ids[6]];
@@ -77,23 +75,24 @@ void ChamberSphere::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) =
       thick0 * (radius + radius0) / pow(radius0, 2);
 
-  // spherical stress
-  system.C.coeffRef(global_eqn_ids[1]) =
-      2 *
-      (dradius_dt * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) +
-       2 * pow(radius + radius0, 5) *
-           (-pow(radius0, 6) + pow(radius + radius0, 6)) *
-           (W1 * pow(radius0, 2) + W2 * pow(radius + radius0, 2))) /
+  // spherical stress: material-dependent elastic term plus viscous damping
+  const auto mat = material_->compute(radius, radius0);
+
+  const double C_val_visc =
+      2 * dradius_dt * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
-  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
-      24 * W1 * pow(radius0, 6) / pow(radius + radius0, 7) +
-      8 * W2 * radius / pow(radius0, 2) +
-      16 * W2 * pow(radius0, 4) / pow(radius + radius0, 5) + 8 * W2 / radius0 -
-      44 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12) +
-      2 * dradius_dt * eta / pow(radius0, 2);
-  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+  const double dC_dy_visc =
+      2 * dradius_dt * eta / pow(radius0, 2) -
+      44 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12);
+  const double dC_dydot_visc =
       2 * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
+
+  system.C.coeffRef(global_eqn_ids[1]) = mat.C_val + C_val_visc;
+  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+      mat.dC_dy_radius + dC_dy_visc;
+  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+      dC_dydot_visc;
 
   // volume change
   system.C.coeffRef(global_eqn_ids[2]) =
@@ -105,6 +104,10 @@ void ChamberSphere::update_solution(
 
   // active stress
   system.C.coeffRef(global_eqn_ids[3]) = -act_plus * sigma_max;
+}
+
+void ChamberSphere::set_material(std::unique_ptr<SphereMaterial> m) {
+  material_ = std::move(m);
 }
 
 void ChamberSphere::get_elastance_values(std::vector<double>& parameters) {

@@ -66,8 +66,6 @@
         "rho": 1e3,
         "thick0": 0.01,
         "radius0": 0.05,
-        "W1": 10e3,
-        "W2": 40,
         "eta": 10.0,
         "sigma_max": 185e3,
         "alpha_max": 30.0,
@@ -78,6 +76,11 @@
         "tsys": 0.17,
         "tdias": 0.484,
         "steepness": 0.005
+      },
+      "material": {
+        "type": "mooney_rivlin",
+        "W1": 10e3,
+        "W2": 40
       }
     }
   ],

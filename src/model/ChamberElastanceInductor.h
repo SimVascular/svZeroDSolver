@@ -173,6 +173,8 @@ class ChamberElastanceInductor : public Block {
   /// @brief Number of triplets of element
   TripletsContributions num_triplets{6, 2, 0};
 
+  bool has_activation_function() const override { return true; }
+
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
  protected:

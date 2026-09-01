@@ -664,16 +664,18 @@ void create_chambers(
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
+    auto* block = model.get_block(chamber_name);
 
-    auto act_func = generate_activation_function(
-        model, chamber_config["activation_function"], chamber_name);
-    model.get_block(chamber_name)->set_activation_function(std::move(act_func));
+    if (block->has_activation_function()) {
+      auto act_func = generate_activation_function(
+          model, chamber_config["activation_function"], chamber_name);
+      block->set_activation_function(std::move(act_func));
+    }
 
     // Create and set material for chamber types that use one
     if (chamber_type == "ChamberSphere") {
-      auto mat =
-          generate_material(chamber_config["material"], chamber_name);
-      model.get_block(chamber_name)->set_material(std::move(mat));
+      auto mat = generate_material(chamber_config["material"], chamber_name);
+      block->set_material(std::move(mat));
     }
 
     DEBUG_MSG("Created chamber " << chamber_name);

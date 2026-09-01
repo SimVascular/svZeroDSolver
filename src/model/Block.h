@@ -287,6 +287,14 @@ class Block {
   virtual TripletsContributions get_num_triplets();
 
   /**
+   * @brief Whether this block requires an activation function.
+   *
+   * Default false. Overridden by chamber blocks that use one, so callers can
+   * decide whether to build and set one without checking the block type.
+   */
+  virtual bool has_activation_function() const { return false; }
+
+  /**
    * @brief Set activation function (for chamber blocks that use one).
    *
    * Default no-op. Overridden by ChamberElastanceInductor and

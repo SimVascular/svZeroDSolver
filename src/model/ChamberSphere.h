@@ -165,7 +165,7 @@ class ChamberSphere : public Block {
    * @param model The model to which the block belongs
    */
   ChamberSphere(int id, Model* model)
-      : Block(id, model, BlockType::chamber_sphere, BlockClass::vessel,
+      : Block(id, model, BlockType::chamber_sphere, BlockClass::chamber,
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
                {"radius0", InputParameter()},

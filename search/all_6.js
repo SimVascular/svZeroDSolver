@@ -16,5 +16,6 @@ var searchData=
   ['dofhandler_13',['DOFHandler',['../class_d_o_f_handler.html',1,'']]],
   ['dofhandler_14',['dofhandler',['../class_model.html#afe47a4ac7609b53d9b9b476609162fcb',1,'Model']]],
   ['dofhandler_2eh_15',['DOFHandler.h',['../_d_o_f_handler_8h.html',1,'']]],
-  ['dydot_16',['dydot',['../class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6',1,'SparseSystem']]]
+  ['doubletanhactivation_16',['DoubleTanhActivation',['../class_double_tanh_activation.html',1,'DoubleTanhActivation'],['../class_double_tanh_activation.html#ab1480266e0cc4edb950f782bbebaca5d',1,'DoubleTanhActivation::DoubleTanhActivation()']]],
+  ['dydot_17',['dydot',['../class_sparse_system.html#ac8eb89978b168443906d319aba4e1bb6',1,'SparseSystem']]]
 ];

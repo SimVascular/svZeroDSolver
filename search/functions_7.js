@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['jsonwrapper_0',['JsonWrapper',['../class_json_wrapper.html#a7e052f1e62d62e3b476ad41f5b1ba9f4',1,'JsonWrapper']]],
-  ['junction_1',['Junction',['../class_junction.html#abe3444b8a5e9a2f6d07059e4837b8fc0',1,'Junction']]]
+  ['inputparameter_0',['InputParameter',['../struct_input_parameter.html#a8192e830399ab16439dd2e4c7e4a5d3d',1,'InputParameter']]],
+  ['integrator_1',['Integrator',['../class_integrator.html#af707a8b5774910b7e9be222f6950e589',1,'Integrator::Integrator(Model *model, double time_step_size, double rho, double atol, int max_iter, bool max_iter_error_to_warning=false)'],['../class_integrator.html#a91fdfba81971dfa13ba22521d11b7c46',1,'Integrator::Integrator()']]]
 ];

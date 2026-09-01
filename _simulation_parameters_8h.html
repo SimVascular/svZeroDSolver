@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for SimulationParameters.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_simulation_parameters_8h__incl.svg" width="4176" height="715"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_simulation_parameters_8h__incl.svg" width="4290" height="715"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -147,8 +147,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:ac9accdc75a6e4cf8e2c9366bfe0a6610"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate a new block and add its parameters to the model.  <br /></td></tr>
 <tr class="memitem:ab90f237bb7b9e725d6313f8ac28187f1" id="r_ab90f237bb7b9e725d6313f8ac28187f1"><td class="memItemLeft">std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ab90f237bb7b9e725d6313f8ac28187f1">generate_activation_function</a> (<a class="el" href="class_model.html">Model</a> &amp;model, const nlohmann::json &amp;j, const std::string &amp;chamber_name)</td></tr>
 <tr class="memdesc:ab90f237bb7b9e725d6313f8ac28187f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an activation function from JSON (analogous to generate_block).  <br /></td></tr>
-<tr class="memitem:a8d28367a7ad4e353867285d18101447a" id="r_a8d28367a7ad4e353867285d18101447a"><td class="memItemLeft">std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a8d28367a7ad4e353867285d18101447a">generate_material</a> (const nlohmann::json &amp;j, const std::string &amp;vessel_name)</td></tr>
-<tr class="memdesc:a8d28367a7ad4e353867285d18101447a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="class_sphere_material.html" title="Base class for spherical chamber wall materials.">SphereMaterial</a> from JSON (analogous to generate_activation_function).  <br /></td></tr>
+<tr class="memitem:aafab920d4ea61d6e8d693e66e77b2416" id="r_aafab920d4ea61d6e8d693e66e77b2416"><td class="memItemLeft">std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#aafab920d4ea61d6e8d693e66e77b2416">generate_material</a> (const nlohmann::json &amp;j, const std::string &amp;chamber_name)</td></tr>
+<tr class="memdesc:aafab920d4ea61d6e8d693e66e77b2416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="class_sphere_material.html" title="Base class for spherical chamber wall materials.">SphereMaterial</a> from JSON (analogous to generate_activation_function).  <br /></td></tr>
 <tr class="memitem:a6ead86f55cad44c6099fcea25d851153" id="r_a6ead86f55cad44c6099fcea25d851153"><td class="memItemLeft"><a class="el" href="class_state.html">State</a>&#160;</td><td class="memItemRight"><a class="el" href="#a6ead86f55cad44c6099fcea25d851153">load_initial_condition</a> (const nlohmann::json &amp;config, <a class="el" href="class_model.html">Model</a> &amp;model)</td></tr>
 <tr class="memdesc:a6ead86f55cad44c6099fcea25d851153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load initial conditions from a JSON configuration.  <br /></td></tr>
 <tr class="memitem:ac1f143691c289b2bf759e862e4ca9f26" id="r_ac1f143691c289b2bf759e862e4ca9f26"><td class="memItemLeft"><a class="el" href="struct_simulation_parameters.html">SimulationParameters</a>&#160;</td><td class="memItemRight"><a class="el" href="#ac1f143691c289b2bf759e862e4ca9f26">load_simulation_params</a> (const nlohmann::json &amp;config)</td></tr>
@@ -599,8 +599,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8d28367a7ad4e353867285d18101447a" name="a8d28367a7ad4e353867285d18101447a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d28367a7ad4e353867285d18101447a">&#9670;&#160;</a></span>generate_material()</h2>
+<a id="aafab920d4ea61d6e8d693e66e77b2416" name="aafab920d4ea61d6e8d693e66e77b2416"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafab920d4ea61d6e8d693e66e77b2416">&#9670;&#160;</a></span>generate_material()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -613,7 +613,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>vessel_name</em></span>&#160;)</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>chamber_name</em></span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -622,8 +622,8 @@ Functions</h2></td></tr>
 <p>Validates keys against the material type's params, reads scalar parameters, and returns a created <a class="el" href="class_sphere_material.html" title="Base class for spherical chamber wall materials.">SphereMaterial</a>. Caller associates it with a <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> block via set_material().</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">j</td><td>JSON object (e.g. vessel_config["material"]) </td></tr>
-    <tr><td class="paramname">vessel_name</td><td>Vessel name for error messages </td></tr>
+    <tr><td class="paramname">j</td><td>JSON object (e.g. chamber_config["material"]) </td></tr>
+    <tr><td class="paramname">chamber_name</td><td>Chamber name for error messages </td></tr>
   </table>
   </dd>
 </dl>

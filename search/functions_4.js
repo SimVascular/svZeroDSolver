@@ -1,28 +1,6 @@
 var searchData=
 [
-  ['generate_5factivation_5ffunction_0',['generate_activation_function',['../_simulation_parameters_8h.html#ab90f237bb7b9e725d6313f8ac28187f1',1,'SimulationParameters.cpp']]],
-  ['generate_5fblock_1',['generate_block',['../_simulation_parameters_8h.html#ac9accdc75a6e4cf8e2c9366bfe0a6610',1,'SimulationParameters.cpp']]],
-  ['generate_5fmaterial_2',['generate_material',['../_simulation_parameters_8h.html#a8d28367a7ad4e353867285d18101447a',1,'SimulationParameters.cpp']]],
-  ['get_3',['get',['../class_parameter.html#aba48fe3c2b11ed3f55718deab4daa26e',1,'Parameter']]],
-  ['get_5fblock_4',['get_block',['../class_model.html#a9b8ebfbff548d6e22190ee99c7b01ebc',1,'Model::get_block(const std::string_view &amp;name) const'],['../class_model.html#a0ce2029fde25b064d69da46f8f37eb8b',1,'Model::get_block(int block_id) const']]],
-  ['get_5fblock_5fname_5',['get_block_name',['../class_model.html#af184f9eb650809b50d0141e3ede4f53b',1,'Model']]],
-  ['get_5fblock_5ftype_6',['get_block_type',['../class_model.html#a3f83e95429fee19daecf9ca5d5252c1a',1,'Model']]],
-  ['get_5felastance_5fvalues_7',['get_elastance_values',['../class_chamber_elastance_inductor.html#ad2936b239a4809542b7b482cf4ccb2b7',1,'ChamberElastanceInductor::get_elastance_values()'],['../class_chamber_elastance_inductor_exponential.html#a164514d7fa9e35cb51568917afec89df',1,'ChamberElastanceInductorExponential::get_elastance_values()'],['../class_chamber_sphere.html#aa64fec52d8de05dcb172c965e0434a9c',1,'ChamberSphere::get_elastance_values()']]],
-  ['get_5ffull_5fresult_8',['get_full_result',['../class_solver.html#aebf2a9aa50d3e557fd8023863e690a8e',1,'Solver']]],
-  ['get_5fhas_5fwindkessel_5fbc_9',['get_has_windkessel_bc',['../class_model.html#afa3ed78e825c7e620bce0987b3d1aac0',1,'Model']]],
-  ['get_5findex_10',['get_index',['../class_d_o_f_handler.html#a16601c2c153c6f7b7c23cd1d4b6f37aa',1,'DOFHandler']]],
-  ['get_5flargest_5fwindkessel_5ftime_5fconstant_11',['get_largest_windkessel_time_constant',['../class_model.html#a4ac4ccacb29373074c0fccb6da37e588',1,'Model']]],
-  ['get_5fname_12',['get_name',['../class_block.html#a31dd6de05c5e40eec70ba7994d6f0528',1,'Block::get_name()'],['../class_node.html#a0cc0386322fca056e49e49d869ade853',1,'Node::get_name()']]],
-  ['get_5fnode_5fname_13',['get_node_name',['../class_model.html#a2f5ea0c77f2f17fb174f6c5543a0e72a',1,'Model']]],
-  ['get_5fnum_5fblocks_14',['get_num_blocks',['../class_model.html#af33fd555a40f38bbe50c9aa2fc4b3e21',1,'Model']]],
-  ['get_5fnum_5fequations_15',['get_num_equations',['../class_d_o_f_handler.html#a1c033c7b25c7e536f9c256c3213f16ae',1,'DOFHandler']]],
-  ['get_5fnum_5ftriplets_16',['get_num_triplets',['../class_block.html#a7cbc135528fbe45b0efc3e374ee6954d',1,'Block::get_num_triplets()'],['../class_model.html#ab5034dbf60991e67d52cdecf29abc47d',1,'Model::get_num_triplets()']]],
-  ['get_5fnum_5fvariables_17',['get_num_variables',['../class_d_o_f_handler.html#a51ec694174b2c808b1607baba752f7bd',1,'DOFHandler']]],
-  ['get_5fparameter_18',['get_parameter',['../class_model.html#af73b0937d32dfbf085d7f74fe02e55b9',1,'Model']]],
-  ['get_5fparameter_5fvalue_19',['get_parameter_value',['../class_model.html#a1fb6ae5e83aa6c8434b6339b13418193',1,'Model']]],
-  ['get_5fram_20',['get_Ram',['../class_open_loop_coronary_b_c.html#a0ea09553e9bbceb70f8f06d0583524ae',1,'OpenLoopCoronaryBC::get_Ram()'],['../class_open_loop_coronary_var_res_b_c.html#a4ef6e307960d7a7877fb47684cfcea31',1,'OpenLoopCoronaryVarResBC::get_Ram()']]],
-  ['get_5fsingle_5fresult_21',['get_single_result',['../class_solver.html#ac45b6a9a598c4c9ed7c1995b4903c929',1,'Solver']]],
-  ['get_5fsingle_5fresult_5favg_22',['get_single_result_avg',['../class_solver.html#abbdd386a547676b658b5b1070040fbe4',1,'Solver']]],
-  ['get_5ftimes_23',['get_times',['../class_solver.html#ac12a4bb26d17f412029796323eaf8070',1,'Solver']]],
-  ['get_5fvariable_5findex_24',['get_variable_index',['../class_d_o_f_handler.html#ab996789b9211f7253ecc1e5600e2f730',1,'DOFHandler']]]
+  ['finalize_0',['finalize',['../class_activation_function.html#af8f0b0eeb1da7a03b2a267f8ae111ef3',1,'ActivationFunction::finalize()'],['../class_two_hill_activation.html#ab94c6863c5e349d245554146e2d86397',1,'TwoHillActivation::finalize()'],['../class_fourier_activation.html#aead6b7fd16e27d5ba91a1fae869cf414',1,'FourierActivation::finalize()'],['../class_model.html#a15a519aed6d0924b98b00ed6899c62b5',1,'Model::finalize()']]],
+  ['flowreferencebc_1',['FlowReferenceBC',['../class_flow_reference_b_c.html#a3f1d7f051057bee7fb64ef95b739c3a2',1,'FlowReferenceBC']]],
+  ['fourieractivation_2',['FourierActivation',['../class_fourier_activation.html#a4507c4e4c78725813858544cf20b9d5a',1,'FourierActivation']]]
 ];

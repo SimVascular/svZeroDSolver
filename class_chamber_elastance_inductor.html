@@ -234,7 +234,7 @@ Protected Attributes</h2></td></tr>
 <p>Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) and an inductor. See <a class="el" href="citelist.html#CITEREF_kerckhoffs2007coupling">[3]</a> (equations 1 and 2). The addition of the inductor is similar to the models in <a class="el" href="citelist.html#CITEREF_sankaran2012patient">[9]</a> and <a class="el" href="citelist.html#CITEREF_menon2023predictors">[5]</a>.</p>
 <p>This chamber block can be connected to other blocks using junctions.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_47_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_48_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to (1,0)
@@ -245,63 +245,63 @@ node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw [-latex] (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} ;
 \end{circuitikz}
-\&zwj;]" src="form_47.png" width="294" height="144"/></picture>
+\&zwj;]" src="form_48.png" width="294" height="144"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_48_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-E(t)(V_c-V_{rest})=0
-\&zwj;]" src="form_48.png" width="216" height="21"/></picture>
+<picture><source srcset="form_49_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-E(t)(V_c-V_{rest})=0
+\&zwj;]" src="form_49.png" width="216" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_49_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}-L\dot{Q}_{out}=0
-\&zwj;]" src="form_49.png" width="193" height="23"/></picture>
+<picture><source srcset="form_50_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}-L\dot{Q}_{out}=0
+\&zwj;]" src="form_50.png" width="193" height="23"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_50_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}-\dot{V}_c=0
-\&zwj;]" src="form_50.png" width="167" height="23"/></picture>
+<picture><source srcset="form_51_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}-\dot{V}_c=0
+\&zwj;]" src="form_51.png" width="167" height="23"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_51_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out} &amp; V_c\end{array}\right]^{T} \&zwj;]" src="form_51.png" width="313" height="28"/></picture>
+<picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
+P_{out} &amp; Q_{out} &amp; V_c\end{array}\right]^{T} \&zwj;]" src="form_52.png" width="313" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_53_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; -L &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; -1
 \end{array}\right]
-\&zwj;]" src="form_52.png" width="240" height="69"/></picture>
+\&zwj;]" src="form_53.png" width="240" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_53_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_54_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 &amp; 0 &amp;  0 &amp; 0  &amp; -E(t) \\
 1 &amp; 0 &amp; -1 &amp; 0  &amp; 0 \\
 0 &amp; 1 &amp;  0 &amp; -1 &amp; 0
 \end{array}\right]
-\&zwj;]" src="form_53.png" width="278" height="69"/></picture>
+\&zwj;]" src="form_54.png" width="278" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_54_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_55_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 E(t) V_{rest} \\
 0 \\
 0
 \end{array}\right]
-\&zwj;]" src="form_54.png" width="158" height="69"/></picture>
+\&zwj;]" src="form_55.png" width="158" height="69"/></picture>
 </p>
 <p>where</p>
 <p class="formulaDsp">
-<picture><source srcset="form_55_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[V_{rest}(t)= \{1-A(t)\}(V_{rd}-V_{rs})+V_{rs}
-\&zwj;]" src="form_55.png" width="309" height="21"/></picture>
+<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[V_{rest}(t)= \{1-A(t)\}(V_{rd}-V_{rs})+V_{rs}
+\&zwj;]" src="form_56.png" width="309" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_56_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[E(t)=(E_{max}-E_{min})A(t) + E_{min}
-\&zwj;]" src="form_56.png" width="287" height="21"/></picture>
+<picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[E(t)=(E_{max}-E_{min})A(t) + E_{min}
+\&zwj;]" src="form_57.png" width="287" height="21"/></picture>
 </p>
-<p>The activation function <picture><source srcset="form_57_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$A(t)$" src="form_57.png" width="36" height="21"/></picture> is provided as a separate object (e.g. half_cosine, fourier, wrapping_cosine).</p>
+<p>The activation function <picture><source srcset="form_58_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$A(t)$" src="form_58.png" width="36" height="21"/></picture> is provided as a separate object (e.g. half_cosine, fourier, wrapping_cosine).</p>
 <h3>Parameters</h3>
 <ul>
-<li><span class="tt">0</span> Impedance: Outflow inductance <picture><source srcset="form_25_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_25.png" width="13" height="15"/></picture></li>
+<li><span class="tt">0</span> Impedance: Outflow inductance <picture><source srcset="form_26_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_26.png" width="13" height="15"/></picture></li>
 <li><span class="tt">1</span> Emax: Maximum elastance</li>
 <li><span class="tt">2</span> Emin: Minimum elastance</li>
 <li><span class="tt">3</span> Vrd: Rest diastolic volume</li>

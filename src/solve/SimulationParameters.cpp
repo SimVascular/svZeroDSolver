@@ -301,18 +301,6 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
 void load_simulation_model(const nlohmann::json& config, Model& model) {
   DEBUG_MSG("Loading model");
 
-  // Set cardiac period from simulation_parameters so activation functions
-  // have it available while blocks are created below. May already be set by
-  // closed_loop_blocks.
-  if (model.cardiac_cycle_period < 0.0 &&
-      config.contains("simulation_parameters") &&
-      config["simulation_parameters"].contains("cardiac_period")) {
-    double period = config["simulation_parameters"]["cardiac_period"];
-    if (period > 0.0) {
-      model.cardiac_cycle_period = period;
-    }
-  }
-
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
@@ -660,22 +648,26 @@ void create_chambers(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, const std::string& component) {
+  // Set cardiac period from simulation_parameters so activation functions
+  // have it. May already be set by closed_loop_blocks.
+  if (model.cardiac_cycle_period < 0.0 &&
+      config.contains("simulation_parameters") &&
+      config["simulation_parameters"].contains("cardiac_period")) {
+    double period = config["simulation_parameters"]["cardiac_period"];
+    if (period > 0.0) {
+      model.cardiac_cycle_period = period;
+    }
+  }
+
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& chamber_config = JsonWrapper(config, component, "name", i);
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
 
-    // Create and set activation_function for chamber types that use it
-    if (chamber_type == "ChamberElastanceInductor" ||
-        chamber_type == "ChamberElastanceInductorExponential" ||
-        chamber_type == "LinearElastanceChamber" ||
-        chamber_type == "ChamberSphere") {
-      auto act_func = generate_activation_function(
-          model, chamber_config["activation_function"], chamber_name);
-      model.get_block(chamber_name)
-          ->set_activation_function(std::move(act_func));
-    }
+    auto act_func = generate_activation_function(
+        model, chamber_config["activation_function"], chamber_name);
+    model.get_block(chamber_name)->set_activation_function(std::move(act_func));
 
     // Create and set material for chamber types that use one
     if (chamber_type == "ChamberSphere") {

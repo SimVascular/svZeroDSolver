@@ -189,8 +189,6 @@ class LinearElastanceChamber : public Block {
    *
    * @param af Unique pointer to the activation function
    */
-  bool has_activation_function() const override { return true; }
-
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
  private:

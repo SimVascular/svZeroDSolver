@@ -222,8 +222,6 @@ class ChamberSphere : public Block {
    */
   void get_elastance_values(std::vector<double>& parameters);
 
-  bool has_activation_function() const override { return true; }
-
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
   void set_material(std::unique_ptr<SphereMaterial> m) override;

@@ -28,7 +28,7 @@
     "steady_initial": false,
     "output_variable_based": true,
     "absolute_tolerance": 1e-9,
-    "output_all_cycles": true,
+    "output_all_cycles": false,
     "max_iter_error_to_warning": true
   },
   "vessels": [
@@ -43,29 +43,6 @@
       "zero_d_element_values": {
         "R_poiseuille": 0.0,
         "C": 1.0e-9
-      }
-    },
-    {
-      "boundary_conditions": {},
-      "vessel_id": 1,
-      "vessel_length": 1.0,
-      "vessel_name": "ventricle",
-      "zero_d_element_type": "ChamberSphere_StrainDepActStress",
-      "zero_d_element_values": {
-        "rho": 1e3,
-        "thick0": 0.0142,
-        "radius0": 0.0236,
-        "C0": 1.9e3,
-        "C1": 0.11,
-        "C2": 1.9e3,
-        "C3": 0.11,
-        "eta": 70.0,
-        "E_s": 3.0e7,
-        "mu": 70.0,
-        "alpha_r": 0.12,
-        "alpha": 1.5,
-        "k_0": 1e5,
-        "sigma_0": 1.24e5
       }
     },
     {
@@ -105,6 +82,37 @@
       "zero_d_element_values": {
         "R_poiseuille": 1.0e8,
         "C": 0.0
+      }
+    }
+  ],
+  "chambers": [
+    {
+      "type": "ChamberSphere",
+      "name": "ventricle",
+      "values": {
+        "rho": 1e3,
+        "thick0": 0.0142,
+        "radius0": 0.0236,
+        "eta": 70.0
+      },
+      "activation_function": {
+        "type": "piecewise_rate"
+      },
+      "material": {
+        "type": "exponential",
+        "C0": 1.9e3,
+        "C1": 0.11,
+        "C2": 1.9e3,
+        "C3": 0.11
+      },
+      "active_stress": {
+        "type": "strain_dependent",
+        "E_s": 3.0e7,
+        "mu": 70.0,
+        "alpha_r": 0.12,
+        "alpha": 1.5,
+        "k_0": 1e5,
+        "sigma_0": 1.24e5
       }
     }
   ],

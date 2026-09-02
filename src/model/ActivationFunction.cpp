@@ -41,6 +41,9 @@ std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
   if (type_str == "two_hill") {
     return std::make_unique<TwoHillActivation>(cardiac_period);
   }
+  if (type_str == "double_tanh") {
+    return std::make_unique<DoubleTanhActivation>(cardiac_period);
+  }
   if (type_str == "fourier") {
     return std::make_unique<FourierActivation>(cardiac_period);
   }
@@ -49,8 +52,8 @@ std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
   }
   throw std::runtime_error(
       "Unknown activation_function type '" + type_str +
-      "'. Must be one of: half_cosine, piecewise_cosine, two_hill, fourier, "
-      "wrapping_cosine");
+      "'. Must be one of: half_cosine, piecewise_cosine, two_hill, "
+      "double_tanh, fourier, wrapping_cosine");
 }
 
 double HalfCosineActivation::compute(double time) {
@@ -154,6 +157,20 @@ double TwoHillActivation::compute(double time) {
   double g2 = std::pow(t_shifted / tau_2, m2);
 
   return normalization_factor_ * (g1 / (1.0 + g1)) * (1.0 / (1.0 + g2));
+}
+
+double DoubleTanhActivation::compute(double time) {
+  const double tsys = params_.at("tsys");
+  const double tdias = params_.at("tdias");
+  const double steepness = params_.at("steepness");
+
+  const double t_in_cycle = std::fmod(time, cardiac_period_);
+
+  const double S_plus = 0.5 * (1.0 + std::tanh((t_in_cycle - tsys) / steepness));
+  const double S_minus =
+      0.5 * (1.0 - std::tanh((t_in_cycle - tdias) / steepness));
+
+  return S_plus * S_minus;
 }
 
 // ============================================================

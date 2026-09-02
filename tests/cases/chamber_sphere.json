@@ -27,6 +27,7 @@
     "output_variable_based": true,
     "absolute_tolerance": 1e-9,
     "output_all_cycles": true,
+    "cardiac_period": 1.0,
     "max_iter_error_to_warning": false
   },
   "vessels": [
@@ -44,27 +45,6 @@
       }
     },
     {
-      "boundary_conditions": {},
-      "vessel_id": 1,
-      "vessel_length": 1.0,
-      "vessel_name": "ventricle",
-      "zero_d_element_type": "ChamberSphere",
-      "zero_d_element_values": {
-        "rho": 1e3,
-        "thick0": 0.01,
-        "radius0": 0.05,
-        "W1": 10e3,
-        "W2": 40,
-        "eta": 10.0,
-        "sigma_max": 185e3,
-        "alpha_max": 30.0,
-        "alpha_min": -30.0,
-        "tsys": 0.17,
-        "tdias": 0.484,
-        "steepness": 0.005
-      }
-    },
-    {
       "boundary_conditions": {
         "outlet": "OUT"
       },
@@ -75,6 +55,32 @@
       "zero_d_element_values": {
         "R_poiseuille": 1.0e7,
         "C": 1.0e-9
+      }
+    }
+  ],
+  "chambers": [
+    {
+      "type": "ChamberSphere",
+      "name": "ventricle",
+      "values": {
+        "rho": 1e3,
+        "thick0": 0.01,
+        "radius0": 0.05,
+        "eta": 10.0,
+        "sigma_max": 185e3,
+        "alpha_max": 30.0,
+        "alpha_min": -30.0
+      },
+      "activation_function": {
+        "type": "double_tanh",
+        "tsys": 0.17,
+        "tdias": 0.484,
+        "steepness": 0.005
+      },
+      "material": {
+        "type": "mooney_rivlin",
+        "W1": 10e3,
+        "W2": 40
       }
     }
   ],

@@ -7,6 +7,7 @@ set(lib svzero_model_library)
 
 set(CXXSRCS
   ActivationFunction.cpp
+  ActiveStress.cpp
   SphereMaterial.cpp
   BloodVesselRC.cpp
   Block.cpp
@@ -41,6 +42,7 @@ set(CXXSRCS
 
 set(HDRS
   ActivationFunction.h
+  ActiveStress.h
   SphereMaterial.h
   BloodVesselRC.h
   Block.h

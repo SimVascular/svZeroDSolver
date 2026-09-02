@@ -669,11 +669,17 @@ void create_chambers(
         model, chamber_config["activation_function"], chamber_name);
     model.get_block(chamber_name)->set_activation_function(std::move(act_func));
 
-    // Create and set material for chamber types that use one
+    // Create and set material and active stress model for chamber types
+    // that use one
     if (chamber_type == "ChamberSphere") {
       auto mat =
           generate_material(chamber_config["material"], chamber_name);
       model.get_block(chamber_name)->set_material(std::move(mat));
+
+      // Active stress type selection is not yet exposed in the input file;
+      // ChamberSphere currently only supports the elastance-type model.
+      model.get_block(chamber_name)
+          ->set_active_stress(std::make_unique<ElastanceActiveStress>());
     }
 
     DEBUG_MSG("Created chamber " << chamber_name);

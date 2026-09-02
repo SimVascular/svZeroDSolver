@@ -115,13 +115,17 @@ void ChamberSphere::get_elastance_values(std::vector<double>& parameters) {
   const double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
 
   const double f = activation_function_->compute(model->time);
-  const double act_t = alpha_max * f + alpha_min * (1 - f);
+  const auto result = active_stress_->compute(f, alpha_max, alpha_min);
 
-  act = std::abs(act_t);
-  act_plus = std::max(act_t, 0.0);
+  act = result.act;
+  act_plus = result.act_plus;
 }
 
 void ChamberSphere::set_activation_function(
     std::unique_ptr<ActivationFunction> af) {
   activation_function_ = std::move(af);
+}
+
+void ChamberSphere::set_active_stress(std::unique_ptr<ActiveStress> as) {
+  active_stress_ = std::move(as);
 }

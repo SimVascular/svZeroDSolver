@@ -13,6 +13,7 @@
 #include <string> 
 
 #include "ActivationFunction.h"
+#include "ActiveStress.h"
 #include "Block.h"
 #include "SphereMaterial.h"
 #include "SparseSystem.h"
@@ -224,12 +225,16 @@ class ChamberSphere : public Block {
 
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
+  void set_active_stress(std::unique_ptr<ActiveStress> as) override;
+
   void set_material(std::unique_ptr<SphereMaterial> m) override;
 
  private:
   double act = 0.0;       // activation function
   double act_plus = 0.0;  // act_plus = max(act, 0)
   std::unique_ptr<ActivationFunction> activation_function_;
+
+  std::unique_ptr<ActiveStress> active_stress_;
 
   std::unique_ptr<SphereMaterial> material_;
 

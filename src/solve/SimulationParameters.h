@@ -13,6 +13,7 @@
 #include <string>
 
 #include "ActivationFunction.h"
+#include "ActiveStress.h"
 #include "Model.h"
 #include "SphereMaterial.h"
 #include "State.h"

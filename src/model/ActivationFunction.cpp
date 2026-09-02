@@ -50,10 +50,13 @@ std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
   if (type_str == "wrapping_cosine") {
     return std::make_unique<WrappingCosineActivation>(cardiac_period);
   }
+  if (type_str == "piecewise_rate") {
+    return std::make_unique<PiecewiseRateActivation>(cardiac_period);
+  }
   throw std::runtime_error(
       "Unknown activation_function type '" + type_str +
       "'. Must be one of: half_cosine, piecewise_cosine, two_hill, "
-      "double_tanh, fourier, wrapping_cosine");
+      "double_tanh, fourier, wrapping_cosine, piecewise_rate");
 }
 
 double HalfCosineActivation::compute(double time) {
@@ -250,4 +253,32 @@ double FourierActivation::compute(double time) {
   }
   double t_in_cycle = std::fmod(time, cardiac_period_);
   return (compute_raw(t_in_cycle) - norm_min_) / norm_range_;
+}
+
+// ============================================================
+// PiecewiseRateActivation — reaction-rate signal u(t) for the
+// strain-dependent active-stress model (Caruel 2013)
+// ============================================================
+
+double PiecewiseRateActivation::compute(double time) {
+  const double t_in_cycle = std::fmod(time, cardiac_period_);
+  double u;
+  if (t_in_cycle <= 0.1) {
+    u = -3.2;
+  } else if (t_in_cycle > 0.1 && t_in_cycle <= 0.27) {
+    u = -3.2 + 38.2 / 0.17 * (t_in_cycle - 0.1);
+  } else if (t_in_cycle > 0.27 && t_in_cycle <= 0.32) {
+    u = 35;
+  } else if (t_in_cycle > 0.32 && t_in_cycle <= 0.34) {
+    u = 35 - (35 / 0.02) * (t_in_cycle - 0.32);
+  } else if (t_in_cycle > 0.34 && t_in_cycle <= 0.46) {
+    u = 24 - 12 / 0.12 * (t_in_cycle - 0.1);
+  } else if (t_in_cycle > 0.46 && t_in_cycle <= 0.59) {
+    u = -12;
+  } else if (t_in_cycle > 0.59 && t_in_cycle <= 0.6) {
+    u = -443.2 + 8.8 / 0.01 * (t_in_cycle - 0.1);
+  } else {
+    u = -3.2;
+  }
+  return u;
 }

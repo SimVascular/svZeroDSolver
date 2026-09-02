@@ -60,7 +60,7 @@ class ActivationFunction {
    * @brief Create a default activation function from activation function type
    *
    * @param type_str One of: "half_cosine", "piecewise_cosine", "two_hill",
-   * "double_tanh", "wrapping_cosine", "fourier"
+   * "double_tanh", "wrapping_cosine", "fourier", "piecewise_rate"
    * @param cardiac_period Cardiac cycle period
    * @return Unique pointer to the created activation function
    */
@@ -302,6 +302,30 @@ class FourierActivation : public ActivationFunction {
   double norm_min_;
   double norm_range_;
   bool normalization_initialized_;
+};
+
+/**
+ * @brief Piecewise-linear reaction-rate activation signal
+ *
+ * Reproduces the reaction-rate signal \f$u(t)\f$ driving the
+ * \ref StrainDependentActiveStress model (Caruel et al. 2013). Unlike the
+ * other activation functions, this is not a normalized fraction in
+ * \f$[0, 1]\f$ — it is a piecewise-linear function of time within the
+ * cardiac cycle whose sign is meaningful (split into positive/negative parts
+ * by the consuming active stress model). No user parameters; breakpoints and
+ * slopes are hardcoded.
+ */
+class PiecewiseRateActivation : public ActivationFunction {
+ public:
+  /**
+   * @brief Construct a new PiecewiseRateActivation object
+   *
+   * @param cardiac_period Cardiac cycle period
+   */
+  explicit PiecewiseRateActivation(double cardiac_period)
+      : ActivationFunction(cardiac_period, {}) {}
+
+  double compute(double time) override;
 };
 
 #endif  // SVZERODSOLVER_MODEL_ACTIVATIONFUNCTION_HPP_

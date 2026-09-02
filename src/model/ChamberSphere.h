@@ -60,12 +60,14 @@
  *
  * 4. Active stress:
  * \f[
- * \dot{\tau} + a \tau - \sigma_\text{max} a_+ = 0, \quad a_+ = \max(a, 0),
- \quad a = f\alpha_\text{max} + (1 - f)\alpha_\text{min}
+ * \tau = \tau(t, r, r_0, \dots)
  * \f]
- * where \f$f \in [0, 1]\f$ is the activation function, evaluated by a
- * separate \ref ActivationFunction object (e.g. two_hill, half_cosine,
- * piecewise_cosine) selected in the JSON configuration.
+ * the specific form of which (and any accompanying internal state and
+ * equations) is supplied by a separate \ref ActiveStress object (e.g.
+ * `strain_independent`, `strain_dependent`) selected in the JSON
+ * configuration. The active stress model is driven by the chamber's
+ * \ref ActivationFunction (e.g. `two_hill`, `half_cosine`, `piecewise_cosine`,
+ * `piecewise_rate`), also selected in the JSON configuration.
  *
  * 5. Acceleration:
  * \f[
@@ -90,18 +92,20 @@
  * * `thick0` - Wall thickness \f$d_0\f$
  * * `radius0` - Reference radius \f$r_0\f$
  * * `eta` - Viscosity parameter \f$\eta\f$
- * * `sigma_max` - Maximum active stress \f$\sigma_\text{max}\f$
- * * `alpha_max` - Maximum activation parameter \f$\alpha_\text{max}\f$
- * * `alpha_min` - Minimum activation parameter \f$\alpha_\text{min}\f$
  *
  * An `activation_function` object is also required alongside
  * `zero_d_element_values` to select and parameterize the activation function
  * \f$f(t)\f$ (see \ref ActivationFunction, e.g. `two_hill`, `half_cosine`,
- * `piecewise_cosine`, `wrapping_cosine`, `fourier`, `double_tanh`).
- * 
- * Furthermore, a `material` object is required to select and parameterize 
- * the material model for the elastic stress term \f$S_\text{el}(r, r_0)\f$ 
+ * `piecewise_cosine`, `wrapping_cosine`, `fourier`, `double_tanh`,
+ * `piecewise_rate`).
+ *
+ * Furthermore, a `material` object is required to select and parameterize
+ * the material model for the elastic stress term \f$S_\text{el}(r, r_0)\f$
  * (see \ref SphereMaterial, e.g. `exponential`, `mooney_rivlin`).
+ *
+ * Finally, an `active_stress` object is required to select and parameterize
+ * the active stress model (see \ref ActiveStress, e.g. `strain_independent`,
+ * `strain_dependent`).
  *
  * ### Usage in json configuration file
  *
@@ -113,13 +117,11 @@
  *                "rho" : 1e3,
  *                "thick0" : 0.01,
  *                "radius0" : 0.05,
- *                "eta" : 10.0,
- *                "sigma_max" : 185e3,
- *                "alpha_max": 30.0,
- *                "alpha_min": -30.0
+ *                "eta" : 10.0
  *            },
  *            "activation_function": {},
- *            "material": {}
+ *            "material": {},
+ *            "active_stress": {}
  *        }
  *     ]
  *
@@ -137,6 +139,10 @@
  * * `tau` - Active stress \f$\tau\f$
  * * `volume` - Chamber volume \f$V\f$
  *
+ * Active stress models may introduce additional internal variables (e.g.
+ * `e_c`, `tau_c`, `k_c`, `omega` for the `strain_dependent` model, see
+ * \ref ActiveStress).
+ *
  */
 class ChamberSphere : public Block {
  public:
@@ -149,9 +155,6 @@ class ChamberSphere : public Block {
     thick0 = 1,
     radius0 = 2,
     eta = 3,
-    sigma_max = 4,
-    alpha_max = 5,
-    alpha_min = 6,
   };
 
   /**
@@ -165,10 +168,7 @@ class ChamberSphere : public Block {
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
                {"radius0", InputParameter()},
-               {"eta", InputParameter()},
-               {"sigma_max", InputParameter()},
-               {"alpha_max", InputParameter()},
-               {"alpha_min", InputParameter()}}) {}
+               {"eta", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -216,13 +216,6 @@ class ChamberSphere : public Block {
       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
 
-  /**
-   * @brief Update the elastance functions which depend on time
-   *
-   * @param parameters Parameters of the model
-   */
-  void get_elastance_values(std::vector<double>& parameters);
-
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 
   void set_active_stress(std::unique_ptr<ActiveStress> as) override;
@@ -230,8 +223,8 @@ class ChamberSphere : public Block {
   void set_material(std::unique_ptr<SphereMaterial> m) override;
 
  private:
-  double act = 0.0;       // activation function
-  double act_plus = 0.0;  // act_plus = max(act, 0)
+  double activation_signal_ = 0.0;  // activation_function_->compute(time),
+                                     // cached for use in update_solution
   std::unique_ptr<ActivationFunction> activation_function_;
 
   std::unique_ptr<ActiveStress> active_stress_;

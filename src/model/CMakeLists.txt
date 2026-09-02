@@ -15,7 +15,6 @@ set(CXXSRCS
   BloodVesselCRL.cpp
   BloodVesselJunction.cpp
   ChamberSphere.cpp
-  ChamberSphere_StrainDepActStress.cpp
   ChamberElastanceInductor.cpp
   ChamberElastanceInductorExponential.cpp
   ClosedLoopCoronaryBC.cpp
@@ -51,7 +50,6 @@ set(HDRS
   BloodVesselCRL.h
   BloodVesselJunction.h
   ChamberSphere.h
-  ChamberSphere_StrainDepActStress.h
   ChamberElastanceInductor.h
   ChamberElastanceInductorExponential.h
   ClosedLoopCoronaryBC.h

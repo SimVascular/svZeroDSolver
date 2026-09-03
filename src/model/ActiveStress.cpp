@@ -89,20 +89,20 @@ void StrainDependentActiveStress::update_constant(
   // active stress
   system.F.coeffRef(global_eqn_ids[TAU_EQN], global_var_ids[TAU_VAR]) = -1;
 
-  // relaxation dynamics (d_omega_dt)
+  // relaxation dynamics 
   system.E.coeffRef(global_eqn_ids[OMEGA_EQN], global_var_ids[OMEGA_VAR]) =
       -alpha_r;
   system.F.coeffRef(global_eqn_ids[OMEGA_EQN], global_var_ids[OMEGA_VAR]) =
       -1;
 
-  // sarcomere strain (d_e_c_dt)
+  // sarcomere strain 
   system.E.coeffRef(global_eqn_ids[E_C_EQN], global_var_ids[E_C_VAR]) = -mu;
   system.F.coeffRef(global_eqn_ids[E_C_EQN], global_var_ids[TAU_C_VAR]) = -1;
 
-  // sarcomere stiffness (d_k_c_dt)
+  // sarcomere stiffness 
   system.E.coeffRef(global_eqn_ids[K_C_EQN], global_var_ids[K_C_VAR]) = -1;
 
-  // sarcomere active stress (d_tau_c_dt)
+  // sarcomere active stress 
   system.E.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[TAU_C_VAR]) =
       -1;
 }
@@ -173,10 +173,10 @@ void StrainDependentActiveStress::update_solution(
        4 * radius * radius0 - pow(radius0, 2) * (2 * e_c + 1)) /
       (pow(radius0, 2) * pow(2 * e_c + 1, 3));
 
-  // relaxation dynamics (d_omega_dt)
+  // relaxation dynamics
   system.C.coeffRef(global_eqn_ids[OMEGA_EQN]) = m_0_;
 
-  // sarcomere element strain (d_e_c_dt)
+  // sarcomere element strain
   system.C.coeffRef(global_eqn_ids[E_C_EQN]) =
       E_s * (pow(radius, 2) + 2 * radius * radius0 + pow(radius0, 2)) *
       (-e_c * pow(radius0, 2) + 0.5 * pow(radius, 2) + radius * radius0) /
@@ -195,7 +195,7 @@ void StrainDependentActiveStress::update_solution(
        6 * radius * radius0 - pow(radius0, 2) * (2 * e_c + 1)) /
       (pow(radius0, 4) * pow(2 * e_c + 1, 4));
 
-  // sarcomere stiffness (d_k_c_dt)
+  // sarcomere stiffness 
   system.C.coeffRef(global_eqn_ids[K_C_EQN]) =
       k_0 * n_0_ * u_plus_ -
       k_c * (alpha * fabs(de_c_dt) + omega * fabs(u_minus_) + u_plus_);
@@ -206,7 +206,7 @@ void StrainDependentActiveStress::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[K_C_EQN], global_var_ids[OMEGA_VAR]) =
       -k_c * fabs(u_minus_);
 
-  // sarcomere active stress (d_tau_c_dt)
+  // sarcomere active stress
   system.C.coeffRef(global_eqn_ids[TAU_C_EQN]) =
       de_c_dt * k_c + n_0_ * sigma_0 * u_plus_ -
       tau_c * (alpha * fabs(de_c_dt) + omega * fabs(u_minus_) + u_plus_);

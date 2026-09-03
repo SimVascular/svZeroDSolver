@@ -305,15 +305,12 @@ class FourierActivation : public ActivationFunction {
 };
 
 /**
- * @brief Piecewise-linear reaction-rate activation signal
+ * @brief Piecewise-linear activation rate activation signal
  *
- * Reproduces the reaction-rate signal \f$u(t)\f$ driving the
- * \ref StrainDependentActiveStress model (Caruel et al. 2013). Unlike the
- * other activation functions, this is not a normalized fraction in
- * \f$[0, 1]\f$ — it is a piecewise-linear function of time within the
+ * Reproduces the activation rate signal \f$u(t)\f$ driving the
+ * \ref StrainDependentActiveStress model (Caruel et al. 2013). It is a piecewise-linear function of time within the
  * cardiac cycle whose sign is meaningful (split into positive/negative parts
- * by the consuming active stress model). No user parameters; breakpoints and
- * slopes are hardcoded.
+ * by the strain-dependent active stress model).
  */
 class PiecewiseRateActivation : public ActivationFunction {
  public:

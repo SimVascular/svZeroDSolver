@@ -256,7 +256,7 @@ double FourierActivation::compute(double time) {
 }
 
 // ============================================================
-// PiecewiseRateActivation — reaction-rate signal u(t) for the
+// PiecewiseRateActivation — activation rate signal u(t) for the
 // strain-dependent active-stress model (Caruel 2013)
 // ============================================================
 

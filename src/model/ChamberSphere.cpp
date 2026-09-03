@@ -9,6 +9,11 @@
 #include "Model.h"
 
 void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
+  if(!activation_function_) {
+    throw std::runtime_error(
+        "ChamberSphere '" + get_name() +
+        "': activation_function not set. Provide an \"activation_function\" JSON block.");
+  }
   if (!active_stress_) {
     throw std::runtime_error(
         "ChamberSphere '" + get_name() +

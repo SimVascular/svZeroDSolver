@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "ActivationFunction.h"
+#include "ActiveStress.h"
 #include "BlockType.h"
 #include "SphereMaterial.h"
 #include "DOFHandler.h"
@@ -297,6 +298,19 @@ class Block {
    */
   virtual void set_activation_function(std::unique_ptr<ActivationFunction> af) {
     (void)af;  // Included to avoid unused parameter warning
+  }
+
+  /**
+   * @brief Set active stress model (for chamber blocks that use one).
+   *
+   * Default no-op. Overridden by ChamberSphere to take ownership of the
+   * active stress model.
+   *
+   * @param as Unique pointer to the active stress model (caller transfers
+   * ownership)
+   */
+  virtual void set_active_stress(std::unique_ptr<ActiveStress> as) {
+    (void)as;  // Included to avoid unused parameter warning
   }
 
   /**

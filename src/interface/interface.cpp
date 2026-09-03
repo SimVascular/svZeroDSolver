@@ -11,6 +11,12 @@
 int SolverInterface::problem_id_count_ = 0;
 std::map<int, SolverInterface*> SolverInterface::interface_list_;
 
+namespace {
+void commit_persistent_state_snapshot(SolverInterface* interface) {
+  interface->committed_block_states_ = interface->model_->get_persistent_states();
+}
+}  // namespace
+
 //-----------------
 // SolverInterface
 //-----------------
@@ -89,6 +95,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   auto simparams = load_simulation_params(config);
 
   auto model = std::shared_ptr<Model>(new Model());
+  model->impedance_points_per_cycle = simparams.sim_impedance_pts_per_cycle;
 
   load_simulation_model(config, *model.get());
   auto state = load_initial_condition(config, *model.get());
@@ -175,6 +182,8 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
       state = integrator_steady.step(state, time_step_size_steady * double(i));
     }
     model_steady->to_unsteady();
+    // Reset dt-dependent persistent memory after steady initialization.
+    model_steady->clear_persistent_states();
   }
 
   interface->state_ = state;
@@ -187,6 +196,7 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   interface->integrator_ =
       Integrator(model.get(), interface->time_step_size_, interface->rho_infty_,
                  interface->absolute_tolerance_, interface->max_nliter_);
+  commit_persistent_state_snapshot(interface);
 
   DEBUG_MSG("[initialize] Done");
 }
@@ -321,6 +331,9 @@ void get_block_node_IDs(int problem_id, std::string block_name,
 /**
  * @brief Return the y state vector.
  *
+ * This also marks the current internal block persistent state as accepted for
+ * subsequent coupling rollback via update_state().
+ *
  * @param problem_id The ID used to identify the 0D problem.
  * @param y The state vector containing all state.y degrees-of-freedom.
  */
@@ -337,10 +350,14 @@ void return_y(int problem_id, std::vector<double>& y) {
   for (int i = 0; i < system_size; i++) {
     y[i] = state.y[i];
   }
+  commit_persistent_state_snapshot(interface);
 }
 
 /**
  * @brief Return the ydot state vector.
+ *
+ * This also marks the current internal block persistent state as accepted for
+ * subsequent coupling rollback via update_state().
  *
  * @param problem_id The ID used to identify the 0D problem.
  * @param ydot The state vector containing all state.ydot degrees-of-freedom.
@@ -358,10 +375,14 @@ void return_ydot(int problem_id, std::vector<double>& ydot) {
   for (int i = 0; i < system_size; i++) {
     ydot[i] = state.ydot[i];
   }
+  commit_persistent_state_snapshot(interface);
 }
 
 /**
  * @brief Update the state vector.
+ *
+ * For coupling safety, this restores the last accepted persistent block state
+ * snapshot before applying the new y/ydot vectors.
  *
  * @param problem_id The ID used to identify the 0D problem.
  * @param new_state_y The new state vector containing all state.y
@@ -378,6 +399,12 @@ void update_state(int problem_id, std::vector<double> new_state_y,
       (new_state_ydot.size() != system_size)) {
     throw std::runtime_error(
         "ERROR: State vector size is wrong in update_state().");
+  }
+
+  if (interface->committed_block_states_.empty()) {
+    commit_persistent_state_snapshot(interface);
+  } else {
+    interface->model_->set_persistent_states(interface->committed_block_states_);
   }
 
   auto state = interface->state_;

@@ -117,6 +117,10 @@ class SolverInterface {
    */
   State state_;
   /**
+   * @brief Last accepted persistent block states for coupling rollback safety.
+   */
+  std::vector<std::vector<double>> committed_block_states_;
+  /**
    * @brief Vector to store solution times
    */
   std::vector<double> times_;

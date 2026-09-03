@@ -155,7 +155,7 @@ class Block {
    *
    * @return std::string Name of the block
    */
-  std::string get_name();
+  std::string get_name() const;
 
   /**
    * @brief Update vessel type of the block
@@ -251,6 +251,34 @@ class Block {
    * @param y Current solution
    */
   virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+
+  /**
+   * @brief Accept a converged time-step.
+   *
+   * This hook is called once per accepted integrator step and can be used by
+   * blocks that maintain persistent memory (for example convolution history).
+   *
+   * @param y Accepted state vector
+   */
+  virtual void accept_timestep(
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+
+  /**
+   * @brief Get persistent internal state of the block.
+   *
+   * The returned vector must be deterministic and sufficient to restore the
+   * block memory using @ref set_persistent_state.
+   *
+   * @return Persistent state payload
+   */
+  virtual std::vector<double> get_persistent_state() const;
+
+  /**
+   * @brief Restore persistent internal state of the block.
+   *
+   * @param state Persistent state payload from @ref get_persistent_state
+   */
+  virtual void set_persistent_state(const std::vector<double>& state);
 
   /**
    * @brief Set the gradient of the block contributions with respect to the

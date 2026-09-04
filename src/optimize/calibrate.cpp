@@ -93,7 +93,12 @@ nlohmann::json calibrate(const nlohmann::json& config) {
     auto* block = model.create_block(block_type);
     int num_slots = num_param_slots(*block, /*stride=*/1);
     std::vector<int> param_ids;
-    for (int k = 0; k < num_slots; k++) param_ids.push_back(param_counter++);
+    // Register a model parameter for each slot so the solver's residual
+    // assembly can read the current parameter values during calibration.
+    for (int k = 0; k < num_slots; k++) {
+      param_ids.push_back(param_counter++);
+      model.add_parameter(0.0);
+    }
     model.add_block(block, vessel_name, param_ids);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);
@@ -124,7 +129,12 @@ nlohmann::json calibrate(const nlohmann::json& config) {
       auto* block = model.create_block("BloodVesselJunction");
       int num_slots = num_param_slots(*block, num_outlets);
       std::vector<int> param_ids;
-      for (int k = 0; k < num_slots; k++) param_ids.push_back(param_counter++);
+      // Register a model parameter for each slot so the solver's residual
+      // assembly can read the current parameter values during calibration.
+      for (int k = 0; k < num_slots; k++) {
+        param_ids.push_back(param_counter++);
+        model.add_parameter(0.0);
+      }
       model.add_block(block, junction_name, param_ids);
 
       register_active(*block, param_ids,

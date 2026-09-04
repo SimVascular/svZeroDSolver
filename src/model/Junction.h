@@ -121,22 +121,6 @@ class Junction : public Block {
                        std::vector<double>& parameters) override;
 
   /**
-   * @brief Set the gradient of the block contributions with respect to the
-   * parameters
-   *
-   * @param jacobian Jacobian with respect to the parameters
-   * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
-   * @param y Current solution
-   * @param dy Time-derivative of the current solution
-   */
-  void update_gradient(Eigen::SparseMatrix<double>& jacobian,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
-                       std::vector<double>& y,
-                       std::vector<double>& dy) override;
-
-  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system

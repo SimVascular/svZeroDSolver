@@ -253,20 +253,22 @@ class Block {
   virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
-   * @brief Set the gradient of the block contributions with respect to the
+   * @brief Set the gradient of the block residual with respect to the
    * parameters
+   *
+   * Only the Jacobian of the residual with respect to the parameters is
+   * assembled here. The residual itself is identical to the one assembled by
+   * the solver (see SparseSystem::update_residual) and is therefore reused
+   * during calibration instead of being redefined.
    *
    * @param jacobian Jacobian with respect to the parameters
    * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  virtual void update_gradient(
-      Eigen::SparseMatrix<double>& jacobian,
-      Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
-      Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
-      std::vector<double>& dy);
+  virtual void update_gradient(Eigen::SparseMatrix<double>& jacobian,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
+                               std::vector<double>& y, std::vector<double>& dy);
 
   /**
    * @brief Number of triplets of element

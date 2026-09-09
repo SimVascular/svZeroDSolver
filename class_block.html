@@ -147,8 +147,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
-<tr class="memitem:a96663232888eeb564e5f37db98fc655f" id="r_a96663232888eeb564e5f37db98fc655f"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a96663232888eeb564e5f37db98fc655f">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;residual, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
-<tr class="memdesc:a96663232888eeb564e5f37db98fc655f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block contributions with respect to the parameters.  <br /></td></tr>
+<tr class="memitem:af652eecb2709bd2786e5ee1d0e0e5033" id="r_af652eecb2709bd2786e5ee1d0e0e5033"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#af652eecb2709bd2786e5ee1d0e0e5033">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
+<tr class="memdesc:af652eecb2709bd2786e5ee1d0e0e5033"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block residual with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="memitem:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e" id="r_ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ad0e2d0882fb2a9e2b4bb8e5148f7ea9e">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af)</td></tr>
@@ -657,8 +657,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a96663232888eeb564e5f37db98fc655f" name="a96663232888eeb564e5f37db98fc655f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96663232888eeb564e5f37db98fc655f">&#9670;&#160;</a></span>update_gradient()</h2>
+<a id="af652eecb2709bd2786e5ee1d0e0e5033" name="af652eecb2709bd2786e5ee1d0e0e5033"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af652eecb2709bd2786e5ee1d0e0e5033">&#9670;&#160;</a></span>update_gradient()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -670,11 +670,6 @@ Public Attributes</h2></td></tr>
           <td class="memname">void Block::update_gradient </td>
           <td>(</td>
           <td class="paramtype">Eigen::SparseMatrix&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>jacobian</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>residual</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -699,19 +694,19 @@ Public Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Set the gradient of the block contributions with respect to the parameters. </p>
+<p>Set the gradient of the block residual with respect to the parameters. </p>
+<p>Only the Jacobian of the residual with respect to the parameters is assembled here. The residual itself is identical to the one assembled by the solver (see <a class="el" href="class_sparse_system.html#a9922d0e459f45c7dda13f80797fb04b9" title="Update the residual of the system.">SparseSystem::update_residual</a>) and is therefore reused during calibration instead of being redefined.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">jacobian</td><td>Jacobian with respect to the parameters </td></tr>
     <tr><td class="paramname">alpha</td><td>Current parameter vector </td></tr>
-    <tr><td class="paramname">residual</td><td>Residual with respect to the parameters </td></tr>
     <tr><td class="paramname">y</td><td>Current solution </td></tr>
     <tr><td class="paramname">dy</td><td>Time-derivative of the current solution </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_blood_vessel.html#a06b0ee78a42aab5e7a84b9b5fa89801d">BloodVessel</a>, <a class="el" href="class_blood_vessel_c_r_l.html#ae63e4f0e7b1378939a00b83ba9f84b3a">BloodVesselCRL</a>, <a class="el" href="class_blood_vessel_junction.html#a96e4fe086026dd59b11afeaf8c90ff63">BloodVesselJunction</a>, and <a class="el" href="class_junction.html#af8aca11d40b2db83fa77c55806f08cca">Junction</a>.</p>
+<p>Reimplemented in <a class="el" href="class_blood_vessel.html#a6f575209396b7e6daee2944f65f6801c">BloodVessel</a>, <a class="el" href="class_blood_vessel_c_r_l.html#af846f2a602dda64f68a14cd3e6a8c657">BloodVesselCRL</a>, and <a class="el" href="class_blood_vessel_junction.html#a7ac821601ea3acc61af121c2af3466e9">BloodVesselJunction</a>.</p>
 
 </div>
 </div>

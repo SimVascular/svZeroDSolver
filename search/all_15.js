@@ -51,12 +51,13 @@ var searchData=
   ['steady_48',['steady',['../class_block.html#adbe1e8cae1e8881588a16590e95ae0bf',1,'Block']]],
   ['step_49',['step',['../class_integrator.html#a14f39fb28ea119b053932b265cc6b035',1,'Integrator']]],
   ['style_50',['Code Style',['../developer_guide.html#autotoc_md6',1,'']]],
-  ['svzerodsolver_51',['svZeroDSolver',['../developer_guide.html#autotoc_md3',1,'Contributing to svZeroDSolver'],['../jacobian.html',1,'Jacobian Generator for svZeroDSolver'],['../index.html',1,'svZeroDSolver']]],
-  ['svzerodtuner_20api_20reference_52',['svZeroDTuner API Reference',['../tuner_api.html',1,'']]],
-  ['svzerodtuner_20concepts_53',['svZeroDTuner Concepts',['../tuner_concepts.html',1,'']]],
-  ['svzerodtuner_20configuration_20reference_54',['svZeroDTuner Configuration Reference',['../tuner_configuration.html',1,'']]],
-  ['svzerodtuner_20guide_55',['svZeroDTuner Guide',['../tuner.html',1,'']]],
-  ['svzerodtuner_20troubleshooting_56',['svZeroDTuner Troubleshooting',['../tuner_troubleshooting.html',1,'']]],
-  ['svzerodtuner_20worked_20examples_57',['svZeroDTuner Worked Examples',['../tuner_examples.html',1,'']]],
-  ['system_5fsize_5f_58',['system_size_',['../class_solver_interface.html#aba3d6f042ab2f983101a3f4471fd1a62',1,'SolverInterface']]]
+  ['svzerod_5feigen_5fassertion_5ffailed_51',['svzerod_eigen_assertion_failed',['../_assertions_8h.html#a7300c2060c408de597260b8100a765c5',1,'Assertions.h']]],
+  ['svzerodsolver_52',['svZeroDSolver',['../developer_guide.html#autotoc_md3',1,'Contributing to svZeroDSolver'],['../jacobian.html',1,'Jacobian Generator for svZeroDSolver'],['../index.html',1,'svZeroDSolver']]],
+  ['svzerodtuner_20api_20reference_53',['svZeroDTuner API Reference',['../tuner_api.html',1,'']]],
+  ['svzerodtuner_20concepts_54',['svZeroDTuner Concepts',['../tuner_concepts.html',1,'']]],
+  ['svzerodtuner_20configuration_20reference_55',['svZeroDTuner Configuration Reference',['../tuner_configuration.html',1,'']]],
+  ['svzerodtuner_20guide_56',['svZeroDTuner Guide',['../tuner.html',1,'']]],
+  ['svzerodtuner_20troubleshooting_57',['svZeroDTuner Troubleshooting',['../tuner_troubleshooting.html',1,'']]],
+  ['svzerodtuner_20worked_20examples_58',['svZeroDTuner Worked Examples',['../tuner_examples.html',1,'']]],
+  ['system_5fsize_5f_59',['system_size_',['../class_solver_interface.html#aba3d6f042ab2f983101a3f4471fd1a62',1,'SolverInterface']]]
 ];

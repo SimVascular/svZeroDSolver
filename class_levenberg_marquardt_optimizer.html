@@ -131,6 +131,7 @@ Public Member Functions</h2></td></tr>
 \mathbb{R}^{P}$" src="form_183.png" width="62" height="19"/></picture>, system matrices  <picture><source srcset="form_184_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{E},\boldsymbol{F} \in
 \mathbb{R}^{NxN}$" src="form_184.png" width="111" height="21"/></picture>, and system vector  <picture><source srcset="form_185_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\boldsymbol{c} \in
 \mathbb{R}^{N}$" src="form_185.png" width="58" height="19"/></picture>.</p>
+<p>This residual is identical (up to an overall sign) to the one the solver assembles in <a class="el" href="class_sparse_system.html#a9922d0e459f45c7dda13f80797fb04b9" title="Update the residual of the system.">SparseSystem::update_residual</a>. It is therefore reused here instead of being redefined, and only its Jacobian with respect to the parameters is assembled by the blocks (see <a class="el" href="class_block.html#af652eecb2709bd2786e5ee1d0e0e5033" title="Set the gradient of the block residual with respect to the parameters.">Block::update_gradient</a>). The overall sign cancels in the normal equations below, so it does not affect the parameter increment.</p>
 <p>The least squares problem can be formulated as</p>
 <p class="formulaDsp">
 <picture><source srcset="form_186_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\min _\alpha S, \quad \mathrm { with } \quad S=\sum_i^D

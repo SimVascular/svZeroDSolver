@@ -8,9 +8,11 @@
 #define SVZERODSOLVER_MODEL_ChamberSphere_HPP_
 
 #include <math.h>
+#include <map>              
+#include <memory>           
+#include <string> 
 
-#include <memory>
-
+#include "ActivationFunction.h"
 #include "Block.h"
 #include "SphereMaterial.h"
 #include "SparseSystem.h"
@@ -60,11 +62,9 @@
  * \dot{\tau} + a \tau - \sigma_\text{max} a_+ = 0, \quad a_+ = \max(a, 0),
  \quad a = f\alpha_\text{max} + (1 - f)\alpha_\text{min}
  * \f]
- * with indicator function
- * \f[
- * f = S_+ \cdot S_-, \quad S_\pm = \frac{1}{2} \left(1.0 \pm \text{tanh}\left(
- \frac{t - t_\text{sys/dias}} {\gamma} \right) \right)
- * \f]
+ * where \f$f \in [0, 1]\f$ is the activation function, evaluated by a
+ * separate \ref ActivationFunction object (e.g. two_hill, half_cosine,
+ * piecewise_cosine) selected in the JSON configuration.
  *
  * 5. Acceleration:
  * \f[
@@ -92,36 +92,39 @@
  * * `sigma_max` - Maximum active stress \f$\sigma_\text{max}\f$
  * * `alpha_max` - Maximum activation parameter \f$\alpha_\text{max}\f$
  * * `alpha_min` - Minimum activation parameter \f$\alpha_\text{min}\f$
- * * `tsys` - Systole timing parameter \f$t_\text{sys}\f$
- * * `tdias` - Diastole timing parameter \f$t_\text{dias}\f$
- * * `steepness` - Activation steepness parameter \f$\gamma\f$
+ *
+ * An `activation_function` object is also required alongside
+ * `zero_d_element_values` to select and parameterize the activation function
+ * \f$f(t)\f$ (see \ref ActivationFunction, e.g. `two_hill`, `half_cosine`,
+ * `piecewise_cosine`, `wrapping_cosine`, `fourier`, `double_tanh`).
+ * 
+ * Furthermore, a `material` object is required to select and parameterize 
+ * the material model for the elastic stress term \f$S_\text{el}(r, r_0)\f$ 
+ * (see \ref SphereMaterial, e.g. `exponential`, `mooney_rivlin`).
  *
  * ### Usage in json configuration file
  *
- *     "vessels": [
+ *     "chambers": [
  *        {
- *            "boundary_conditions": {},
- *            "vessel_id": 1,
- *            "vessel_length": 1.0,
- *            "vessel_name": "ventricle",
- *            "zero_d_element_type": "ChamberSphere",
- *            "zero_d_element_values": {
+ *            "type": "ChamberSphere",
+ *            "name": "ventricle",
+ *            "values": {
  *                "rho" : 1e3,
  *                "thick0" : 0.01,
  *                "radius0" : 0.05,
  *                "eta" : 10.0,
  *                "sigma_max" : 185e3,
  *                "alpha_max": 30.0,
- *                "alpha_min": -30.0,
- *                "tsys": 0.170,
- *                "tdias": 0.484,
- *                "steepness": 0.005
- *            }
+ *                "alpha_min": -30.0
+ *            },
+ *            "activation_function": {},
  *            "material": {}
  *        }
  *     ]
- * 
- * Material definition can be found in \ref SphereMaterial.
+ *
+ * A chamber is connected to the rest of the circuit via valve blocks (see
+ * \ref ValveTanh, \ref PiecewiseValve) referencing its `name` as their
+ * `upstream_block`/`downstream_block`.
  *
  * ### Internal variables
  *
@@ -148,9 +151,6 @@ class ChamberSphere : public Block {
     sigma_max = 4,
     alpha_max = 5,
     alpha_min = 6,
-    tsys = 7,
-    tdias = 8,
-    steepness = 9
   };
 
   /**
@@ -160,17 +160,14 @@ class ChamberSphere : public Block {
    * @param model The model to which the block belongs
    */
   ChamberSphere(int id, Model* model)
-      : Block(id, model, BlockType::chamber_sphere, BlockClass::vessel,
+      : Block(id, model, BlockType::chamber_sphere, BlockClass::chamber,
               {{"rho", InputParameter()},
                {"thick0", InputParameter()},
                {"radius0", InputParameter()},
                {"eta", InputParameter()},
                {"sigma_max", InputParameter()},
                {"alpha_max", InputParameter()},
-               {"alpha_min", InputParameter()},
-               {"tsys", InputParameter()},
-               {"tdias", InputParameter()},
-               {"steepness", InputParameter()}}) {}
+               {"alpha_min", InputParameter()}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -225,11 +222,14 @@ class ChamberSphere : public Block {
    */
   void get_elastance_values(std::vector<double>& parameters);
 
+  void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
+
   void set_material(std::unique_ptr<SphereMaterial> m) override;
 
  private:
   double act = 0.0;       // activation function
   double act_plus = 0.0;  // act_plus = max(act, 0)
+  std::unique_ptr<ActivationFunction> activation_function_;
 
   std::unique_ptr<SphereMaterial> material_;
 

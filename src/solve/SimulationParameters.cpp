@@ -244,6 +244,53 @@ std::unique_ptr<SphereMaterial> generate_material(
   return material;
 }
 
+std::unique_ptr<ActiveStress> generate_active_stress(
+    const nlohmann::json& j, const std::string& chamber_name) {
+  if (j.is_null() || !j.is_object()) {
+    throw std::runtime_error(
+        "Missing 'active_stress' for chamber " + chamber_name +
+        ". Required with structure: {\"type\": \"strain_independent\", "
+        "\"alpha_max\": 30.0, \"alpha_min\": -30.0, \"sigma_max\": 185e3} "
+        "(or type strain_dependent with E_s, mu, alpha_r, alpha, k_0, "
+        "sigma_0).");
+  }
+  if (!j.contains("type") || !j["type"].is_string()) {
+    throw std::runtime_error(
+        "Missing or invalid 'type' in active_stress for chamber " +
+        chamber_name +
+        ". Must be one of: strain_independent, strain_dependent");
+  }
+
+  std::string type_str = j["type"];
+  auto active_stress = ActiveStress::create(type_str);
+  const auto& input_param_properties = active_stress->input_param_properties;
+
+  for (auto& el : j.items()) {
+    if (el.key()[0] == '_') continue;
+    if (el.key() == "type") continue;
+    if (!has_parameter(input_param_properties, el.key())) {
+      throw std::runtime_error("Unknown parameter " + el.key() +
+                               " defined in active_stress for chamber " +
+                               chamber_name);
+    }
+  }
+
+  int err;
+  for (const auto& param : input_param_properties) {
+    if (!param.second.is_number) continue;
+    double val;
+    err = get_param_scalar(j, param.first, param.second, val);
+    if (err) {
+      throw std::runtime_error(
+          "Scalar parameter " + param.first +
+          " is mandatory in active_stress for chamber " + chamber_name);
+    }
+    active_stress->set_param(param.first, val);
+  }
+
+  return active_stress;
+}
+
 void validate_input(const nlohmann::json& config) {
   if (!config.contains("simulation_parameters")) {
     throw std::runtime_error("Define simulation_parameters");
@@ -669,11 +716,16 @@ void create_chambers(
         model, chamber_config["activation_function"], chamber_name);
     model.get_block(chamber_name)->set_activation_function(std::move(act_func));
 
-    // Create and set material for chamber types that use one
+    // Create and set material and active stress model for chamber types
+    // that use one
     if (chamber_type == "ChamberSphere") {
       auto mat =
           generate_material(chamber_config["material"], chamber_name);
       model.get_block(chamber_name)->set_material(std::move(mat));
+
+      auto act_stress = generate_active_stress(
+          chamber_config["active_stress"], chamber_name);
+      model.get_block(chamber_name)->set_active_stress(std::move(act_stress));
     }
 
     DEBUG_MSG("Created chamber " << chamber_name);

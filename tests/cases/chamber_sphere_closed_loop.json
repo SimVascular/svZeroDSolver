@@ -89,10 +89,7 @@
         "rho": 1e3,
         "thick0": 0.022317634723395277,
         "radius0": 0.03457500522201688,
-        "eta": 250.0,
-        "sigma_max": 237593.9219611258,
-        "alpha_max": 19.0,
-        "alpha_min": -30.0
+        "eta": 250.0
       },
       "activation_function": {
         "type": "double_tanh",
@@ -106,6 +103,12 @@
         "C1": 0.11,
         "C2": 2.1e3,
         "C3": 0.15
+      },
+      "active_stress": {
+        "type": "strain_independent",
+        "alpha_max": 19.0,
+        "alpha_min": -30.0,
+        "sigma_max": 237593.9219611258
       }
     }
   ],

@@ -3,11 +3,38 @@
 
 #include "ChamberSphere.h"
 
+#include <list>
+#include <stdexcept>
+
 #include "Model.h"
 
 void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
-  Block::setup_dofs_(dofhandler, 7,
-                     {"radius", "velo", "stress", "tau", "volume"});
+  if(!activation_function_) {
+    throw std::runtime_error(
+        "ChamberSphere '" + get_name() +
+        "': activation_function not set. Provide an \"activation_function\" JSON block.");
+  }
+  if (!active_stress_) {
+    throw std::runtime_error(
+        "ChamberSphere '" + get_name() +
+        "': active_stress not set. Provide an \"active_stress\" JSON block.");
+  }
+  if (!material_) {
+    throw std::runtime_error(
+        "ChamberSphere '" + get_name() +
+        "': material not set. Provide a \"material\" JSON block.");
+  }
+
+  std::list<std::string> internal_var_names = {"radius", "velo", "stress",
+                                               "tau", "volume"};
+  for (const auto& name : active_stress_->extra_var_names()) {
+    internal_var_names.push_back(name);
+  }
+
+  const int num_equations =
+      ActiveStress::NUM_CORE_EQNS + active_stress_->num_extra_equations();
+
+  Block::setup_dofs_(dofhandler, num_equations, internal_var_names);
 }
 
 void ChamberSphere::update_constant(SparseSystem& system,
@@ -25,28 +52,28 @@ void ChamberSphere::update_constant(SparseSystem& system,
   // volume change
   system.E.coeffRef(global_eqn_ids[2], global_var_ids[8]) = -1;
 
-  // active stress
-  system.E.coeffRef(global_eqn_ids[3], global_var_ids[7]) = 1;
-
   // acceleration
-  system.E.coeffRef(global_eqn_ids[4], global_var_ids[4]) = 1;
-  system.F.coeffRef(global_eqn_ids[4], global_var_ids[5]) = -1;
+  system.E.coeffRef(global_eqn_ids[3], global_var_ids[4]) = 1;
+  system.F.coeffRef(global_eqn_ids[3], global_var_ids[5]) = -1;
 
   // conservation of mass
-  system.F.coeffRef(global_eqn_ids[5], global_var_ids[1]) = 1;
-  system.F.coeffRef(global_eqn_ids[5], global_var_ids[3]) = -1;
-  system.E.coeffRef(global_eqn_ids[5], global_var_ids[8]) = -1;
+  system.F.coeffRef(global_eqn_ids[4], global_var_ids[1]) = 1;
+  system.F.coeffRef(global_eqn_ids[4], global_var_ids[3]) = -1;
+  system.E.coeffRef(global_eqn_ids[4], global_var_ids[8]) = -1;
 
   // pressure equality
-  system.F.coeffRef(global_eqn_ids[6], global_var_ids[0]) = 1;
-  system.F.coeffRef(global_eqn_ids[6], global_var_ids[2]) = -1;
+  system.F.coeffRef(global_eqn_ids[5], global_var_ids[0]) = 1;
+  system.F.coeffRef(global_eqn_ids[5], global_var_ids[2]) = -1;
+
+  // active stress
+  active_stress_->update_constant(system, global_eqn_ids, global_var_ids);
 }
 
 void ChamberSphere::update_time(SparseSystem& system,
                                 std::vector<double>& parameters) {
-  // active stress
-  get_elastance_values(parameters);
-  system.F.coeffRef(global_eqn_ids[3], global_var_ids[7]) = act;
+  activation_signal_ = activation_function_->compute(model->time);
+  active_stress_->update_time(system, global_eqn_ids, global_var_ids,
+                              activation_signal_);
 }
 
 void ChamberSphere::update_solution(
@@ -54,7 +81,6 @@ void ChamberSphere::update_solution(
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
-  const double sigma_max = parameters[global_param_ids[ParamId::sigma_max]];
   const double radius0 = parameters[global_param_ids[ParamId::radius0]];
   const double eta = parameters[global_param_ids[ParamId::eta]];
 
@@ -103,25 +129,19 @@ void ChamberSphere::update_solution(
       4 * M_PI * pow(radius + radius0, 2);
 
   // active stress
-  system.C.coeffRef(global_eqn_ids[3]) = -act_plus * sigma_max;
+  active_stress_->update_solution(system, global_eqn_ids, global_var_ids, y,
+                                  dy, radius0, activation_signal_);
 }
 
 void ChamberSphere::set_material(std::unique_ptr<SphereMaterial> m) {
   material_ = std::move(m);
 }
 
-void ChamberSphere::get_elastance_values(std::vector<double>& parameters) {
-  const double alpha_max = parameters[global_param_ids[ParamId::alpha_max]];
-  const double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
-
-  const double f = activation_function_->compute(model->time);
-  const double act_t = alpha_max * f + alpha_min * (1 - f);
-
-  act = std::abs(act_t);
-  act_plus = std::max(act_t, 0.0);
-}
-
 void ChamberSphere::set_activation_function(
     std::unique_ptr<ActivationFunction> af) {
   activation_function_ = std::move(af);
+}
+
+void ChamberSphere::set_active_stress(std::unique_ptr<ActiveStress> as) {
+  active_stress_ = std::move(as);
 }

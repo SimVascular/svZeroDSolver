@@ -26,6 +26,11 @@ LevenbergMarquardtOptimizer::LevenbergMarquardtOptimizer(
   mat = Eigen::Matrix<double, Eigen::Dynamic, Eigen::Dynamic>(num_active,
                                                               num_active);
   vec = Eigen::Matrix<double, Eigen::Dynamic, 1>::Zero(num_active);
+
+  // Set up the solver system so that its residual assembly can be reused for a
+  // single observation at a time.
+  system = SparseSystem(num_vars);
+  system.reserve(model);
 }
 
 Eigen::Matrix<double, Eigen::Dynamic, 1> LevenbergMarquardtOptimizer::run(
@@ -68,14 +73,51 @@ void LevenbergMarquardtOptimizer::update_gradient(
   jacobian.setZero();
   residual.setZero();
 
+  // Push the current parameter vector into the model so that the solver's
+  // residual assembly uses it.
+  for (size_t k = 0; k < num_params; k++) {
+    model->update_parameter_value(k, alpha[k]);
+  }
+
+  // Assemble the parameter-dependent constant system contributions (E and F)
+  // once for the current parameters.
+  model->update_constant(system);
+
+  Eigen::Matrix<double, Eigen::Dynamic, 1> y_dpoint(num_vars);
+  Eigen::Matrix<double, Eigen::Dynamic, 1> dy_dpoint(num_vars);
+
   // Assemble gradient and residual
   for (size_t i = 0; i < num_obs; i++) {
+    // Copy the observation for this datapoint into Eigen vectors.
+    for (size_t k = 0; k < num_vars; k++) {
+      y_dpoint[k] = y_obs[i][k];
+      dy_dpoint[k] = dy_obs[i][k];
+    }
+
+    // Reuse the residual of the solver: r = -C - E*ydot - F*y. This is the
+    // same residual the solver assembles, so it does not need to be redefined
+    // here.
+    model->update_solution(system, y_dpoint, dy_dpoint);
+    system.update_residual(y_dpoint, dy_dpoint);
+    // The solver system is square in the number of variables, whereas the
+    // calibration model has no boundary condition blocks and thus fewer
+    // equations than variables. Only the first ``num_eqns`` entries of the
+    // system residual are owned by a block; the remaining ones are
+    // structurally zero and are dropped here.
+    residual.segment(num_eqns * i, num_eqns) = system.residual.head(num_eqns);
+
+    // Assemble the Jacobian of the residual with respect to the parameters.
     for (size_t j = 0; j < model->get_num_blocks(true); j++) {
       auto block = model->get_block(j);
+      // Blocks without calibration parameters do not contribute to the
+      // Jacobian (e.g. a normal junction).
+      if (block->global_param_ids.empty()) {
+        continue;
+      }
       for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
         block->global_eqn_ids[l] += num_eqns * i;
       }
-      block->update_gradient(jacobian, residual, alpha, y_obs[i], dy_obs[i]);
+      block->update_gradient(jacobian, alpha, y_obs[i], dy_obs[i]);
       for (size_t l = 0; l < block->global_eqn_ids.size(); l++) {
         block->global_eqn_ids[l] -= num_eqns * i;
       }

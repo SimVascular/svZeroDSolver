@@ -35,7 +35,9 @@ def execute_pysvzerod(testfile, mode):
         with TemporaryDirectory() as tempdir:
             out_name = os.path.join(tempdir, "out")
             exe = os.path.join(this_file_dir, "..", "Release", "svzerod")
-            subprocess.run([exe + mode, testfile, out_name])
+            # check=True so a crashing executable reports its exit code
+            # instead of a confusing missing-output-file error.
+            subprocess.run([exe + mode, testfile, out_name], check=True)
             if mode == "solver":
                 result = pd.read_csv(out_name)
             elif mode == "calibrator":

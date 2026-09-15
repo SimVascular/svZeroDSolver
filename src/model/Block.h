@@ -15,6 +15,7 @@
 
 #include "ActivationFunction.h"
 #include "BlockType.h"
+#include "SphereMaterial.h"
 #include "DOFHandler.h"
 #include "Parameter.h"
 #include "SparseSystem.h"
@@ -281,19 +282,22 @@ class Block {
 
   /**
    * @brief Set the gradient of the block contributions with respect to the
+   * @brief Set the gradient of the block residual with respect to the
    * parameters
+   *
+   * Only the Jacobian of the residual with respect to the parameters is
+   * assembled here. The residual itself is identical to the one assembled by
+   * the solver (see SparseSystem::update_residual) and is therefore reused
+   * during calibration instead of being redefined.
    *
    * @param jacobian Jacobian with respect to the parameters
    * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
-  virtual void update_gradient(
-      Eigen::SparseMatrix<double>& jacobian,
-      Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
-      Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
-      std::vector<double>& dy);
+  virtual void update_gradient(Eigen::SparseMatrix<double>& jacobian,
+                               Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
+                               std::vector<double>& y, std::vector<double>& dy);
 
   /**
    * @brief Number of triplets of element
@@ -324,6 +328,18 @@ class Block {
    */
   virtual void set_activation_function(std::unique_ptr<ActivationFunction> af) {
     (void)af;  // Included to avoid unused parameter warning
+  }
+
+  /**
+   * @brief Set wall material (for ChamberSphere blocks).
+   *
+   * Default no-op. Overridden by ChamberSphere to take ownership of the
+   * material.
+   *
+   * @param m Unique pointer to the material (caller transfers ownership)
+   */
+  virtual void set_material(std::unique_ptr<SphereMaterial> m) {
+    (void)m;  // Included to avoid unused parameter warning
   }
 };
 

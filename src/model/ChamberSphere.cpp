@@ -53,13 +53,11 @@ void ChamberSphere::update_solution(
     SparseSystem& system, std::vector<double>& parameters,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
-  const double W1 = parameters[global_param_ids[ParamId::W1]];
-  const double W2 = parameters[global_param_ids[ParamId::W2]];
-  const double eta = parameters[global_param_ids[ParamId::eta]];
   const double thick0 = parameters[global_param_ids[ParamId::thick0]];
   const double sigma_max = parameters[global_param_ids[ParamId::sigma_max]];
-
   const double radius0 = parameters[global_param_ids[ParamId::radius0]];
+  const double eta = parameters[global_param_ids[ParamId::eta]];
+
   const double velo = y[global_var_ids[5]];
   const double Pout = y[global_var_ids[2]];
   const double stress = y[global_var_ids[6]];
@@ -77,23 +75,24 @@ void ChamberSphere::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) =
       thick0 * (radius + radius0) / pow(radius0, 2);
 
-  // spherical stress
-  system.C.coeffRef(global_eqn_ids[1]) =
-      2 *
-      (dradius_dt * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) +
-       2 * pow(radius + radius0, 5) *
-           (-pow(radius0, 6) + pow(radius + radius0, 6)) *
-           (W1 * pow(radius0, 2) + W2 * pow(radius + radius0, 2))) /
+  // spherical stress: material-dependent elastic term plus viscous damping
+  const auto mat = material_->compute(radius, radius0);
+
+  const double C_val_visc =
+      2 * dradius_dt * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
-  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
-      24 * W1 * pow(radius0, 6) / pow(radius + radius0, 7) +
-      8 * W2 * radius / pow(radius0, 2) +
-      16 * W2 * pow(radius0, 4) / pow(radius + radius0, 5) + 8 * W2 / radius0 -
-      44 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12) +
-      2 * dradius_dt * eta / pow(radius0, 2);
-  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+  const double dC_dy_visc =
+      2 * dradius_dt * eta / pow(radius0, 2) -
+      44 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12);
+  const double dC_dydot_visc =
       2 * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
+
+  system.C.coeffRef(global_eqn_ids[1]) = mat.C_val + C_val_visc;
+  system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+      mat.dC_dy_radius + dC_dy_visc;
+  system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
+      dC_dydot_visc;
 
   // volume change
   system.C.coeffRef(global_eqn_ids[2]) =
@@ -107,34 +106,22 @@ void ChamberSphere::update_solution(
   system.C.coeffRef(global_eqn_ids[3]) = -act_plus * sigma_max;
 }
 
+void ChamberSphere::set_material(std::unique_ptr<SphereMaterial> m) {
+  material_ = std::move(m);
+}
+
 void ChamberSphere::get_elastance_values(std::vector<double>& parameters) {
   const double alpha_max = parameters[global_param_ids[ParamId::alpha_max]];
   const double alpha_min = parameters[global_param_ids[ParamId::alpha_min]];
-  const double tsys = parameters[global_param_ids[ParamId::tsys]];
-  const double tdias = parameters[global_param_ids[ParamId::tdias]];
-  const double steepness = parameters[global_param_ids[ParamId::steepness]];
 
-  const double t = model->time;
-
-  const auto T_cardiac = model->cardiac_cycle_period;
-  const auto t_in_cycle = fmod(model->time, T_cardiac);
-
-  auto warp_signed = [T_cardiac](double dt) {
-    return fmod(dt + 1.5 * T_cardiac, T_cardiac) - 0.5 * T_cardiac;
-  };
-
-  const double phase_tsys = warp_signed(t_in_cycle - tsys);
-  const double phase_tdias = warp_signed(t_in_cycle - tdias);
-
-  const double S_plus = 0.5 * (1.0 + tanh(phase_tsys / steepness));
-  const double S_minus = 0.5 * (1.0 - tanh(phase_tdias / steepness));
-
-  // indicator function
-  const double f = S_plus * S_minus;
-
-  // activation rates
+  const double f = activation_function_->compute(model->time);
   const double act_t = alpha_max * f + alpha_min * (1 - f);
 
   act = std::abs(act_t);
   act_plus = std::max(act_t, 0.0);
+}
+
+void ChamberSphere::set_activation_function(
+    std::unique_ptr<ActivationFunction> af) {
+  activation_function_ = std::move(af);
 }

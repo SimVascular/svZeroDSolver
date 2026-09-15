@@ -71,7 +71,6 @@ std::vector<double> Block::get_persistent_state() const { return {}; }
 void Block::set_persistent_state(const std::vector<double>& state) {}
 
 void Block::update_gradient(Eigen::SparseMatrix<double>& jacobian,
-                            Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
                             Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
                             std::vector<double>& y, std::vector<double>& dy) {
   throw std::runtime_error("Gradient calculation not implemented for block " +

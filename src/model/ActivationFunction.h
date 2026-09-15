@@ -59,7 +59,8 @@ class ActivationFunction {
   /**
    * @brief Create a default activation function from activation function type
    *
-   * @param type_str One of: "half_cosine", "piecewise_cosine", "two_hill"
+   * @param type_str One of: "half_cosine", "piecewise_cosine", "two_hill",
+   * "double_tanh", "wrapping_cosine", "fourier"
    * @param cardiac_period Cardiac cycle period
    * @return Unique pointer to the created activation function
    */
@@ -210,6 +211,35 @@ class TwoHillActivation : public ActivationFunction {
 
   double normalization_factor_;
   bool normalization_initialized_;
+};
+
+/**
+ * @brief Double tanh (systole/diastole sigmoid product) activation function
+ *
+ * This implements the original ChamberSphere activation: a smooth indicator
+ * function built from the product of two tanh sigmoids, one rising at
+ * systole and one falling at diastole.
+ *
+ * \f[
+ * f(t) = S_+ (t_{in\_cycle} - t_sys) \cdot S_- (t_{in\_cycle} - t_dias), \quad S_\pm (\Delta t) = \frac{1}{2} \left(1.0 \pm
+ * \text{tanh}\left( \frac{\Delta t} {\gamma}
+ * \right) \right)
+ * \f]
+ */
+class DoubleTanhActivation : public ActivationFunction {
+ public:
+  /**
+   * @brief Construct with default parameter values (loader fills via
+   * set_param).
+   *
+   * @param cardiac_period Cardiac cycle period
+   */
+  explicit DoubleTanhActivation(double cardiac_period)
+      : ActivationFunction(cardiac_period, {{"tsys", InputParameter()},
+                                            {"tdias", InputParameter()},
+                                            {"steepness", InputParameter()}}) {}
+
+  double compute(double time) override;
 };
 
 /**

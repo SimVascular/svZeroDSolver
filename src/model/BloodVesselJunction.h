@@ -210,12 +210,10 @@ class BloodVesselJunction : public Block {
    *
    * @param jacobian Jacobian with respect to the parameters
    * @param alpha Current parameter vector
-   * @param residual Residual with respect to the parameters
    * @param y Current solution
    * @param dy Time-derivative of the current solution
    */
   void update_gradient(Eigen::SparseMatrix<double>& jacobian,
-                       Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
                        Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
                        std::vector<double>& y,
                        std::vector<double>& dy) override;

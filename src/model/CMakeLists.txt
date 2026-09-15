@@ -7,14 +7,12 @@ set(lib svzero_model_library)
 
 set(CXXSRCS 
   ActivationFunction.cpp
-  BloodVesselRC.cpp
   Block.cpp
   BloodVessel.cpp
   BloodVesselCRL.cpp
   BloodVesselJunction.cpp
   ChamberSphere.cpp
   ChamberElastanceInductor.cpp
-  ChamberElastanceInductorExponential.cpp
   ClosedLoopCoronaryBC.cpp
   ClosedLoopCoronaryLeftBC.cpp
   ClosedLoopCoronaryRightBC.cpp
@@ -39,7 +37,6 @@ set(CXXSRCS
 
 set(HDRS 
   ActivationFunction.h
-  BloodVesselRC.h
   Block.h
   BlockType.h
   BloodVessel.h
@@ -47,7 +44,6 @@ set(HDRS
   BloodVesselJunction.h
   ChamberSphere.h
   ChamberElastanceInductor.h
-  ChamberElastanceInductorExponential.h
   ClosedLoopCoronaryBC.h
   ClosedLoopCoronaryLeftBC.h
   ClosedLoopCoronaryRightBC.h
@@ -85,4 +81,4 @@ target_include_directories( ${lib} PUBLIC
 
 target_link_libraries( ${lib} Eigen3::Eigen )
 target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
-target_link_libraries( ${lib} exprtk::exprtk )
+

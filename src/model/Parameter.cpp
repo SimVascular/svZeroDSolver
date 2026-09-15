@@ -13,7 +13,7 @@
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
 #endif
-#include <exprtk.hpp>
+#include "../ThirdParty/exprtk.hpp"
 #if defined(__clang__)
 #pragma clang diagnostic pop
 #elif defined(__GNUC__)

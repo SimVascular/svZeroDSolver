@@ -15,6 +15,7 @@ set(CXXSRCS
   BloodVesselJunction.cpp
   ChamberSphere.cpp
   ChamberElastanceInductor.cpp
+  ChamberElastanceInductorExponential.cpp
   ClosedLoopCoronaryBC.cpp
   ClosedLoopCoronaryLeftBC.cpp
   ClosedLoopCoronaryRightBC.cpp
@@ -48,6 +49,7 @@ set(HDRS
   BloodVesselJunction.h
   ChamberSphere.h
   ChamberElastanceInductor.h
+  ChamberElastanceInductorExponential.h
   ClosedLoopCoronaryBC.h
   ClosedLoopCoronaryLeftBC.h
   ClosedLoopCoronaryRightBC.h
@@ -72,11 +74,6 @@ set(HDRS
 
 add_library(${lib} OBJECT ${CXXSRCS} ${HDRS})
 
-# exprtk.hpp generates too many COFF sections for the default MSVC object format
-if(MSVC)
-  set_source_files_properties(Parameter.cpp PROPERTIES COMPILE_FLAGS "/bigobj")
-endif()
-
 target_include_directories( ${lib} PUBLIC
   ${CMAKE_SOURCE_DIR}/src/algebra
   ${CMAKE_SOURCE_DIR}/src/model
@@ -85,3 +82,4 @@ target_include_directories( ${lib} PUBLIC
 
 target_link_libraries( ${lib} Eigen3::Eigen )
 target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
+target_link_libraries( ${lib} exprtk::exprtk )

@@ -11,6 +11,7 @@
 #include <Eigen/Sparse>
 
 #include "Model.h"
+#include "SparseSystem.h"
 
 /**
  * @brief Levenberg-Marquardt optimization class
@@ -28,6 +29,13 @@
  * \mathbb{R}^{P}\f$, system matrices \f$\boldsymbol{E},\boldsymbol{F} \in
  * \mathbb{R}^{NxN}\f$, and system vector \f$\boldsymbol{c} \in
  * \mathbb{R}^{N}\f$.
+ *
+ * This residual is identical (up to an overall sign) to the one the solver
+ * assembles in SparseSystem::update_residual. It is therefore reused here
+ * instead of being redefined, and only its Jacobian with respect to the
+ * parameters is assembled by the blocks (see Block::update_gradient). The
+ * overall sign cancels in the normal equations below, so it does not affect
+ * the parameter increment.
  *
  * The least squares problem can be formulated as
  *
@@ -115,6 +123,7 @@ class LevenbergMarquardtOptimizer {
   Eigen::Matrix<double, Eigen::Dynamic, 1> vec;
   std::vector<int> active_param_ids;
   Model* model;
+  SparseSystem system;  ///< Solver system used to reuse the residual assembly
   double lambda;
 
   int num_obs;

@@ -23,6 +23,29 @@ set(PYBIND11_FINDPYTHON NEW CACHE STRING "" FORCE)
 find_package(Python COMPONENTS Interpreter Development REQUIRED)
 message(STATUS "Using Python: ${Python_EXECUTABLE} (${Python_VERSION})")
 
+# Enable assertions
+# -----------------------------------------------------------------------------
+# Optimized configurations define NDEBUG, which disables assert() and Eigen's
+# eigen_assert(). Stripping it keeps the optimization settings but re-enables
+# the assertions, much cheaper in CI than a separate Debug build.
+set(ENABLE_ASSERTIONS OFF CACHE BOOL "Enable assert() and eigen_assert() in optimized builds")
+if(ENABLE_ASSERTIONS)
+  foreach(config RELEASE RELWITHDEBINFO MINSIZEREL)
+    string(REPLACE "-DNDEBUG" "" CMAKE_CXX_FLAGS_${config} "${CMAKE_CXX_FLAGS_${config}}")
+    string(REPLACE "/DNDEBUG" "" CMAKE_CXX_FLAGS_${config} "${CMAKE_CXX_FLAGS_${config}}")
+  endforeach()
+
+  # Force-included ahead of Eigen so that eigen_assert throws instead of
+  # aborting. Restricted to C++ to leave the C sources of dependencies alone.
+  set(ASSERTIONS_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/src/Assertions.h)
+  if(MSVC)
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:/FI${ASSERTIONS_HEADER}>)
+  else()
+    add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-include>
+                        $<$<COMPILE_LANGUAGE:CXX>:${ASSERTIONS_HEADER}>)
+  endif()
+endif()
+
 # Enable code coverage
 # -----------------------------------------------------------------------------
 set(ENABLE_COVERAGE OFF CACHE BOOL "Enable code coverage")

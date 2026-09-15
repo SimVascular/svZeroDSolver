@@ -26,7 +26,11 @@ jobs:
         if: startsWith(matrix.os, 'windows')
         uses: ilammy/msvc-dev-cmd@v1
 
+      # setup.py forwards CMAKE_COMMON_VARIABLES to CMake. Assertions are
+      # enabled here because this step runs on every tested OS.
       - name: Build and test
+        env:
+          CMAKE_COMMON_VARIABLES: -DENABLE_ASSERTIONS=ON
         run: |
           uv sync --no-default-groups --group dev
           cd tests
@@ -53,11 +57,20 @@ jobs:
           cd ../test_02
           ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
 
+      - name: Build installer POSIX-like Systems
+        if: ${{!startsWith(matrix.os, 'windows')}}
+        run: |
+          cd Release
+          cpack
+          cp distribution/svZeroDSolver_* ..
+
+      # Reconfigures the Release directory, so it has to run after the
+      # installer was packaged. Covers the assertions in the executables.
       - name: Generate code coverage
         if: startsWith(matrix.os, 'ubuntu-latest')
         run: |
           cd Release
-          cmake -DENABLE_COVERAGE=ON ..
+          cmake -DENABLE_COVERAGE=ON -DENABLE_ASSERTIONS=ON ..
           make -j2
           cd ../tests
           uv run pytest -v --durations=0 --coverage --ignore=test_dirgraph.py
@@ -76,13 +89,6 @@ jobs:
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Build installer POSIX-like Systems
-        if: ${{!startsWith(matrix.os, 'windows')}}
-        run: |
-          cd Release
-          cpack
-          cp distribution/svZeroDSolver_* ..
 
       - name: Build installer Windows
         if: startsWith(matrix.os, 'windows')

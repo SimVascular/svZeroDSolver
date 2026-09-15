@@ -163,7 +163,7 @@ def test_invalid_fn_expression():
     config = get_test_case_by_name("timeDep_Flow")
 
     # input invalid expression
-    config["boundary_conditions"][0]["bc_values"] = {"fn": "sin(t"}
+    config["boundary_conditions"][0]["bc_values"]["fn"] = "sin(t"
 
     with pytest.raises(RuntimeError):
         pysvzerod.simulate(config)

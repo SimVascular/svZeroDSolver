@@ -65,10 +65,12 @@ class ChamberElastanceInductorExponential : public ChamberElastanceInductor {
     VASO = 4,
   };
 
-  void update_time(SparseSystem& system, std::vector<double>& parameters);
-  void update_solution(SparseSystem& system, std::vector<double>& parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
+  void update_time(SparseSystem& system,
+                   std::vector<double>& parameters) override;
+  void update_solution(
+      SparseSystem& system, std::vector<double>& parameters,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
 
   /// @brief Number of triplets of element
   TripletsContributions num_triplets{6, 2, 1};

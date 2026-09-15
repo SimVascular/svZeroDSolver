@@ -13,31 +13,22 @@ svZeroDVisualization is built using a robust architecture that includes:
 - Frontend: Utilizes HTML, CSS, Dash, and Plotly for creating a dynamic and interactive user interface. This setup allows for effective visualization and interaction with the 0D network and simulation results.
 - Backend: Powered by a Flask application that handles the server-side logic. It leverages NetworkX for managing and visualizing the network graph and a Python code to determine network connections.
 
-# Installing Dependencies 
-1. We recommend using a virtual environment to help manage project-specific 
-dependencies and avoid conflicts with other projects.
-    - Using venv:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
-    - Using Conda:
-    ```bash
-    conda create --name myenv python=3.12  # Replace with your desired Python version
-    conda activate myenv
-    ```
+# Installing Dependencies
 
-2. Install the necessary packages:
-    ```bash
-    pysvzerod
-    pandas
-    matplotlib
-    networkx
-    dash
-    plotly
-    numpy
-    argparse
-    ```
+We use [uv](https://docs.astral.sh/uv/) to manage the Python environment (see the
+[Developer Guide](@ref developer_guide) for an overview). From the repository
+root, the following command creates a virtual environment in `.venv`, builds the
+`pysvzerod` extension, and installs the visualization dependencies (`dash`,
+`plotly`) together with the shared dependencies (`pandas`, `numpy`, `matplotlib`,
+`networkx`):
+```bash
+uv sync --group viz
+```
+
+Then launch the application inside the managed environment with `uv run`, e.g.:
+```bash
+uv run python applications/svZeroDVisualization/visualize_simulation.py --help
+```
 
 
 # How to Use

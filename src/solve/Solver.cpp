@@ -11,6 +11,7 @@ Solver::Solver(const nlohmann::json& config) {
   simparams = load_simulation_params(config);
   DEBUG_MSG("Load model");
   this->model = std::shared_ptr<Model>(new Model());
+  this->model->impedance_points_per_cycle = simparams.sim_impedance_pts_per_cycle;
   load_simulation_model(config, *this->model.get());
 
   // If period isn't specified anywhere, set to 1
@@ -74,6 +75,7 @@ void Solver::setup_initial() {
     }
 
     this->model->to_unsteady();
+    this->model->clear_persistent_states();
   }
 
   // Use the initial condition (steady or user-provided) to set up parameters

@@ -23,6 +23,7 @@ set(CXXSRCS
   ClosedLoopRCRBC.cpp
   DOFHandler.cpp
   FlowReferenceBC.cpp
+  ImpedanceBC.cpp
   Junction.cpp
   Model.cpp
   Node.cpp
@@ -57,6 +58,7 @@ set(HDRS
   ClosedLoopRCRBC.h
   DOFHandler.h
   FlowReferenceBC.h
+  ImpedanceBC.h
   Junction.h
   Model.h
   Node.h
@@ -82,4 +84,3 @@ target_include_directories( ${lib} PUBLIC
 
 target_link_libraries( ${lib} Eigen3::Eigen )
 target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
-

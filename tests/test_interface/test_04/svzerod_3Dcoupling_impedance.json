@@ -1,0 +1,36 @@
+{
+  "simulation_parameters": {
+    "cardiac_period": 0.004,
+    "coupled_simulation": true,
+    "number_of_time_pts": 2,
+    "external_step_size": 0.001,
+    "output_all_cycles": true,
+    "steady_initial": false,
+    "absolute_tolerance": 1e-10
+  },
+  "boundary_conditions": [
+    {
+      "bc_name": "IMP",
+      "bc_type": "IMPEDANCE",
+      "bc_values": {
+        "Pd": 5.0,
+        "z": [400.0, 120.0, 40.0, 10.0]
+      }
+    }
+  ],
+  "external_solver_coupling_blocks": [
+    {
+      "name": "FLOW_COUPLING",
+      "type": "FLOW",
+      "location": "inlet",
+      "connected_block": "IMP",
+      "periodic": false,
+      "values": {
+        "t": [0.0, 0.004],
+        "Q": [1.0, 1.0]
+      }
+    }
+  ],
+  "junctions": [],
+  "vessels": []
+}

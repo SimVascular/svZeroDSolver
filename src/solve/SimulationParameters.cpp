@@ -2,6 +2,10 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "SimulationParameters.h"
 
+#include <cmath>
+
+#include "ImpedanceBC.h"
+
 bool get_param_scalar(const nlohmann::json& data, const std::string& name,
                       const InputParameter& param, double& val) {
   if (data.contains(name)) {
@@ -253,16 +257,31 @@ void validate_input(const nlohmann::json& config) {
   }
 }
 
+bool config_has_impedance_bc(const nlohmann::json& config) {
+  if (!config.contains("boundary_conditions") ||
+      !config["boundary_conditions"].is_array()) {
+    return false;
+  }
+  for (const auto& bc_config : config["boundary_conditions"]) {
+    if (bc_config.value("bc_type", "") == "IMPEDANCE") {
+      return true;
+    }
+  }
+  return false;
+}
+
 SimulationParameters load_simulation_params(const nlohmann::json& config) {
   DEBUG_MSG("Loading simulation parameters");
   SimulationParameters sim_params;
   const auto& sim_config = config["simulation_parameters"];
   sim_params.sim_coupled = sim_config.value("coupled_simulation", false);
+  const bool has_impedance = config_has_impedance_bc(config);
 
   if (!sim_params.sim_coupled) {
     sim_params.sim_num_cycles = sim_config["number_of_cardiac_cycles"];
     sim_params.sim_pts_per_cycle =
         sim_config["number_of_time_pts_per_cardiac_cycle"];
+    sim_params.sim_impedance_pts_per_cycle = sim_params.sim_pts_per_cycle;
     sim_params.sim_num_time_steps =
         (sim_params.sim_pts_per_cycle - 1) * sim_params.sim_num_cycles + 1;
     sim_params.use_cycle_to_cycle_error =
@@ -278,8 +297,23 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
     sim_params.sim_num_cycles = 1;
     sim_params.sim_num_time_steps = sim_config["number_of_time_pts"];
     sim_params.sim_pts_per_cycle = sim_params.sim_num_time_steps;
+    sim_params.sim_impedance_pts_per_cycle =
+        sim_config.value("number_of_time_pts_per_cardiac_cycle", 0);
     sim_params.sim_external_step_size =
         sim_config.value("external_step_size", 0.1);
+    if (has_impedance) {
+      if (sim_params.sim_num_time_steps != 2) {
+        throw std::runtime_error(
+            "Coupled configs with IMPEDANCE boundary conditions require "
+            "`simulation_parameters.number_of_time_pts = 2`.");
+      }
+      if (sim_config.contains("number_of_time_pts_per_cardiac_cycle") &&
+          sim_params.sim_impedance_pts_per_cycle <= 1) {
+        throw std::runtime_error(
+            "Coupled configs with IMPEDANCE boundary conditions require "
+            "`simulation_parameters.number_of_time_pts_per_cardiac_cycle > 1`.");
+      }
+    }
   }
   sim_params.sim_abs_tol = sim_config.value("absolute_tolerance", 1e-8);
   sim_params.sim_nliter = sim_config.value("maximum_nonlinear_iterations", 30);
@@ -432,6 +466,31 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
           model.get_largest_windkessel_time_constant(), time_constant));
     }
 
+    if (block->block_type == BlockType::impedance_bc) {
+      auto* impedance_block = dynamic_cast<ImpedanceBC*>(block);
+      if (impedance_block == nullptr) {
+        throw std::runtime_error(
+            "Internal error: IMPEDANCE block creation failed for " + bc_name +
+            ".");
+      }
+
+      if (!bc_values.contains("z")) {
+        throw std::runtime_error("IMPEDANCE block " + bc_name +
+                                 " is missing required `z` kernel.");
+      }
+      if (!bc_values["z"].is_array()) {
+        throw std::runtime_error("IMPEDANCE block " + bc_name +
+                                 " requires `z` to be an array.");
+      }
+      std::vector<double> z = bc_values["z"].get<std::vector<double>>();
+
+      double pd = bc_values.value("Pd", 0.0);
+      std::string convolution_mode = bc_values.value("convolution_mode", "exact");
+      int num_kernel_terms = bc_values.value("num_kernel_terms", -1);
+
+      impedance_block->configure(z, pd, convolution_mode, num_kernel_terms);
+    }
+
     if (block->block_type == BlockType::closed_loop_rcr_bc) {
       if (bc_values["closed_loop_outlet"] == true) {
         closed_loop_bcs.push_back(bc_name);
@@ -495,6 +554,7 @@ void create_external_coupling(
     if (coupling_loc == "inlet") {
       std::vector<std::string> possible_types = {"RESISTANCE",
                                                  "RCR",
+                                                 "IMPEDANCE",
                                                  "ClosedLoopRCR",
                                                  "SimplifiedRCR",
                                                  "CORONARY",

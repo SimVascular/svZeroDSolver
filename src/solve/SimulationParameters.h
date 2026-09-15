@@ -44,6 +44,8 @@ struct SimulationParameters {
   double sim_cardiac_period{-1.0};  ///< Cardiac period
   int sim_num_cycles{0};            ///< Number of cardiac cycles to simulate
   int sim_pts_per_cycle{0};         ///< Number of time steps per cardiac cycle
+  int sim_impedance_pts_per_cycle{
+      0};  ///< Number of sample points spanning one impedance cycle
   bool use_cycle_to_cycle_error{
       false};  ///< If model does not have RCR boundary conditions, simulate
                ///< model to convergence (based on cycle-to-cycle error of last

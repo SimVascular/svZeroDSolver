@@ -20,7 +20,7 @@ set(EIGEN_BUILD_BLAS OFF CACHE BOOL "" FORCE)
 
 include(FetchContent)
 set(PYBIND11_FINDPYTHON NEW CACHE STRING "" FORCE)
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
+find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 message(STATUS "Using Python: ${Python_EXECUTABLE} (${Python_VERSION})")
 
 # Enable code coverage
@@ -96,8 +96,8 @@ FetchContent_MakeAvailable(Eigen)
 #
 FetchContent_Declare(
     pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11
-    GIT_TAG        v3.1.0
+    URL      https://github.com/pybind/pybind11/archive/refs/tags/v3.1.0.tar.gz
+    URL_HASH SHA256=ef712655692a2e9bf7bb7874c022564a45f91d847ddee987e720cd9e28849665
 )
 
 FetchContent_GetProperties(pybind11)
@@ -125,10 +125,11 @@ FetchContent_MakeAvailable(json)
 # pybind11_json is an nlohmann::json to pybind11 bridge that converts 
 # between nlohmann::json and py::object objects. 
 #
+# Pinned to master at d0bf434 (0.2.15 plus 4 commits).
 FetchContent_Declare(
     pybind11_json
-    GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
-    GIT_TAG        d0bf434be9d287d73a963ff28745542daf02c08f
+    URL      https://github.com/pybind/pybind11_json/archive/d0bf434be9d287d73a963ff28745542daf02c08f.tar.gz
+    URL_HASH SHA256=6c1b5973e9afd788ea3d9f59e142cdf022e8331a482c192bc4d23a406bfdbb77
 )
 
 FetchContent_MakeAvailable(pybind11_json)

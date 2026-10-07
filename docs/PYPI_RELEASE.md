@@ -35,18 +35,21 @@ Pending publishers do not reserve the project name until the first upload.
 ## Local TestPyPI upload before merging
 
 For a quick test from this branch, create a TestPyPI account and an API token
-there. Build and inspect the distributions from a clean checkout:
+there. Build and inspect the source distribution from a clean checkout:
 
 ```sh
-uv build
+uv build --sdist
 uvx twine check dist/*
 uvx twine upload --repository testpypi dist/*
 ```
 
 Twine prompts for a username and password. Enter `__token__` as the username
-and the TestPyPI API token as the password. A local build produces a wheel for
-only the current Python version and platform; the GitHub workflow builds the
-full wheel matrix.
+and the TestPyPI API token as the password. Upload only the source
+distribution: a local wheel is tagged for this machine and is not repaired, and
+TestPyPI rejects Linux `linux_x86_64` wheels. The GitHub workflow builds the
+full wheel matrix. Each filename can be uploaded only once, even after
+deletion, so set a dev version such as `2.0.2.dev1` in `pyproject.toml` for
+repeated local tests.
 
 ## Each release
 

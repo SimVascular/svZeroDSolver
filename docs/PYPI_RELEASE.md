@@ -2,19 +2,51 @@
 
 The `.github/workflows/pypi.yml` workflow builds a source distribution and
 CPython wheels for Linux x86_64, Windows x86_64, and macOS Intel and Apple
-Silicon. A manual workflow run builds and checks the artifacts without
-publishing. A `v<version>` tag publishes them after all build jobs pass.
+Silicon. A manual workflow run builds and checks the artifacts. Select the
+`publish_testpypi` input to upload them to TestPyPI; its default is off.
+A `v<version>` tag publishes to production PyPI after all build jobs pass.
 
 ## First-time setup
 
-1. In the GitHub repository that will own releases, create an environment named
-   `pypi`. Configure required reviewers if releases need manual approval.
-2. In PyPI account settings, create a pending trusted publisher for the
-   `pysvzerod` project. Enter the exact GitHub owner and repository that will
-   run the workflow, the workflow filename `pypi.yml`, and environment `pypi`.
-   A pending publisher does not reserve the name; publish promptly after setup.
-3. Merge the packaging changes into that repository's default branch and run
-   the workflow manually once. Inspect all wheel and source build results.
+1. In the GitHub repository that will own releases, create an environment
+   named `testpypi`. Configure required reviewers if uploads need manual
+   approval.
+2. [Create a TestPyPI account](https://test.pypi.org/account/register/). It is
+   separate from a production PyPI account. In its account Publishing settings,
+   create a pending trusted publisher for `pysvzerod` with the exact GitHub
+   owner and repository that will run this workflow, filename `pypi.yml`, and
+   environment `testpypi`.
+3. Merge the packaging changes into that repository's default branch. Run
+   the workflow manually with `publish_testpypi` selected. The workflow builds
+   and tests the packages before uploading them to TestPyPI. Inspect the
+   [TestPyPI project page](https://test.pypi.org/project/pysvzerod/) and install
+   the exact version in a fresh environment:
+
+   ```sh
+   python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pysvzerod==2.0
+   python -c "import importlib.metadata; print(importlib.metadata.version('pysvzerod'))"
+   ```
+
+Before publishing to production PyPI, create a separate `pypi` GitHub
+environment and a pending publisher in the production PyPI account with the
+same owner, repository, and workflow filename, but environment `pypi`.
+Pending publishers do not reserve the project name until the first upload.
+
+## Local TestPyPI upload before merging
+
+For a quick test from this branch, create a TestPyPI account and an API token
+there. Build and inspect the distributions from a clean checkout:
+
+```sh
+uv build
+uvx twine check dist/*
+uvx twine upload --repository testpypi dist/*
+```
+
+Twine prompts for a username and password. Enter `__token__` as the username
+and the TestPyPI API token as the password. A local build produces a wheel for
+only the current Python version and platform; the GitHub workflow builds the
+full wheel matrix.
 
 ## Each release
 

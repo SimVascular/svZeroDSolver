@@ -13,6 +13,12 @@ dependencies = [
     "numpy",
 ]
 
+[project.urls]
+Homepage = "https://simvascular.github.io/svZeroDSolver"
+Documentation = "https://simvascular.github.io/svZeroDSolver"
+Source = "https://github.com/SimVascular/svZeroDSolver"
+Issues = "https://github.com/SimVascular/svZeroDSolver/issues"
+
 [project.scripts]
 svzerodsolver = "pysvzerod:run_simulation_cli"
 svzerodcalibrator = "pysvzerod:run_calibration_cli"

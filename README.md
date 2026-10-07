@@ -11,6 +11,18 @@
 
 svZeroDSolver is a fast simulation tool for modeling the hemodynamics of
 vascular networks using zero-dimensional (0D) lumped parameter models.
+
+## Python package
+
+After a release is published to PyPI, install the Python bindings with:
+
+```sh
+python -m pip install pysvzerod
+```
+
+Use `pysvzerod.simulate("model.json")` to run a model from Python. The package
+also installs the `svzerodsolver` and `svzerodcalibrator` commands.
+
 You can find more information under the following links:
 
 * [**Documentation**](https://simvascular.github.io/svZeroDSolver)

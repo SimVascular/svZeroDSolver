@@ -97,7 +97,7 @@ FetchContent_MakeAvailable(Eigen)
 FetchContent_Declare(
     pybind11
     GIT_REPOSITORY https://github.com/pybind/pybind11
-    GIT_TAG        master
+    GIT_TAG        v3.1.0
 )
 
 FetchContent_GetProperties(pybind11)
@@ -128,7 +128,7 @@ FetchContent_MakeAvailable(json)
 FetchContent_Declare(
     pybind11_json
     GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
-    GIT_TAG        master
+    GIT_TAG        d0bf434be9d287d73a963ff28745542daf02c08f
 )
 
 FetchContent_MakeAvailable(pybind11_json)

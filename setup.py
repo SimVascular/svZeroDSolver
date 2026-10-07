@@ -27,6 +27,8 @@ class CustomCMakeBuild(CMakeBuildExt):
         configure = [
             cmake,
             ext.sourcedir,
+            # Match CMake's Python headers and extension suffix to pip's interpreter.
+            "-DPython_EXECUTABLE=" + sys.executable,
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + output_dir,
             "-DCMAKE_BUILD_TYPE=" + build_type,
         ]

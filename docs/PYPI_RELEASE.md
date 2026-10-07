@@ -23,7 +23,7 @@ A `v<version>` tag publishes to production PyPI after all build jobs pass.
    the exact version in a fresh environment:
 
    ```sh
-   python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pysvzerod==2.0
+   python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pysvzerod==2.0.1
    python -c "import importlib.metadata; print(importlib.metadata.version('pysvzerod'))"
    ```
 
@@ -53,13 +53,13 @@ full wheel matrix.
 1. Set the version in `pyproject.toml`. Run the project tests and the
    PyPI workflow manually from the release commit.
 2. After the changes are merged, create and push a tag matching that version,
-   for example `v2.0`. The tag build verifies the version, builds the source
+   for example `v2.0.1`. The tag build verifies the version, builds the source
    distribution and wheels, checks metadata, and uploads to PyPI through the
    trusted publisher.
 3. Install the released package in a fresh environment and check its version:
 
    ```sh
-   python -m pip install pysvzerod==2.0
+   python -m pip install pysvzerod==2.0.1
    python -c "import importlib.metadata; print(importlib.metadata.version('pysvzerod'))"
    ```
 

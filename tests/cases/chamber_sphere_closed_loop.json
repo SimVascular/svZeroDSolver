@@ -1,0 +1,169 @@
+{
+  "description": {
+    "description of test case": "Closed loop circulation with left ventricle modeled as sphere and lumped parameter model of vasculature inspired by Sharifi et al. 2024.",
+    "circuit": "LV -> AV -> aorta -> arteries -> arterioles -> capillaries -> venules -> veins -> MV -> LV"
+  },
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 10,
+    "number_of_time_pts_per_cardiac_cycle": 5000,
+    "absolute_tolerance": 1e-8,
+    "output_variable_based": true,
+    "steady_initial": false,
+    "output_all_cycles": false,
+    "max_iter_error_to_warning": true
+  },
+  "boundary_conditions": [],
+  "vessels": [
+    {
+      "boundary_conditions": {},
+      "vessel_name": "aorta",
+      "vessel_id": 1,
+      "vessel_length": 1.0,
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 2.666e6,
+        "C": 3.0e-9
+      }
+    },
+    {
+      "boundary_conditions": {},
+      "vessel_id": 2,
+      "vessel_length": 1.0,
+      "vessel_name": "arteries",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 2.666e6,
+        "C": 6e-9
+      }
+    },
+    {
+      "boundary_conditions": {},
+      "vessel_id": 3,
+      "vessel_length": 1.0,
+      "vessel_name": "arterioles",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 1.067e8,
+        "C": 7.5e-9
+      }
+    },
+    {
+      "boundary_conditions": {},
+      "vessel_id": 4,
+      "vessel_length": 1.0,
+      "vessel_name": "capillaries",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 4.666e7,
+        "C": 7.5e-8
+      }
+    },
+    {
+      "boundary_conditions": {},
+      "vessel_id": 5,
+      "vessel_length": 1.0,
+      "vessel_name": "venules",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 6.666e6,
+        "C": 2.25e-7
+      }
+    },
+    {
+      "boundary_conditions": {},
+      "vessel_name": "veins",
+      "vessel_id": 6,
+      "vessel_length": 1.0,
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 6.666e6,
+        "C": 7.5e-7
+      }
+    }
+  ],
+  "chambers": [
+    {
+      "type": "ChamberSphere",
+      "name": "LV",
+      "values": {
+        "rho": 1e3,
+        "thick0": 0.022317634723395277,
+        "radius0": 0.03457500522201688,
+        "eta": 250.0,
+        "sigma_max": 237593.9219611258,
+        "alpha_max": 19.0,
+        "alpha_min": -30.0
+      },
+      "activation_function": {
+        "type": "double_tanh",
+        "tsys": 0.17,
+        "tdias": 0.484,
+        "steepness": 0.005
+      },
+      "material": {
+        "type": "exponential",
+        "C0": 1.9e3,
+        "C1": 0.11,
+        "C2": 2.1e3,
+        "C3": 0.15
+      }
+    }
+  ],
+  "junctions": [
+    {
+      "junction_name": "J_aorta_arteries",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["aorta"],
+      "outlet_blocks": ["arteries"]
+    },
+    {
+      "junction_name": "J_arteries_arterioles",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["arteries"],
+      "outlet_blocks": ["arterioles"]
+    },
+    {
+      "junction_name": "J_arterioles_capillaries",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["arterioles"],
+      "outlet_blocks": ["capillaries"]
+    },
+    {
+      "junction_name": "J_capillaries_venules",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["capillaries"],
+      "outlet_blocks": ["venules"]
+    },
+    {
+      "junction_name": "J_venules_veins",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["venules"],
+      "outlet_blocks": ["veins"]
+    }
+  ],
+
+  "valves": [
+    {
+      "type": "ValveTanh",
+      "name": "MV",
+      "params": {
+        "Rmin": 0.0,
+        "Rmax": 1.0e10,
+        "Steepness": 1.0,
+        "upstream_block": "veins",
+        "downstream_block": "LV"
+      }
+    },
+    {
+      "type": "ValveTanh",
+      "name": "AV",
+      "params": {
+        "Rmin": 0.0,
+        "Rmax": 1.0e11,
+        "Steepness": 10.0,
+        "upstream_block": "LV",
+        "downstream_block": "aorta"
+      }
+    }
+  ]
+}

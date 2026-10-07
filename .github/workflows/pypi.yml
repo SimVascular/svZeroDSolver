@@ -10,6 +10,15 @@ on:
   push:
     tags:
       - "v*"
+  # Build and test the wheels, without publishing, when packaging changes.
+  pull_request:
+    paths:
+      - .github/workflows/pypi.yml
+      - setup.py
+      - pyproject.toml
+      - MANIFEST.in
+      - CMakeLists.txt
+      - applications/pysvzerod.cpp
 
 permissions:
   contents: read

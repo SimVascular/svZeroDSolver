@@ -2,9 +2,11 @@
 
 The `.github/workflows/pypi.yml` workflow builds a source distribution and
 CPython wheels for Linux x86_64, Windows x86_64, and macOS Intel and Apple
-Silicon. A manual workflow run builds and checks the artifacts. Select the
-`publish_testpypi` input to upload them to TestPyPI; its default is off.
-A `v<version>` tag publishes to production PyPI after all build jobs pass.
+Silicon. Pull requests that change packaging files and manual workflow runs
+build and test the artifacts without publishing them. Select the
+`publish_testpypi` input on a manual run to upload them to TestPyPI; its
+default is off. A `v<version>` tag publishes to production PyPI after all build
+jobs pass.
 
 ## First-time setup
 
@@ -23,14 +25,19 @@ A `v<version>` tag publishes to production PyPI after all build jobs pass.
    the exact version in a fresh environment:
 
    ```sh
-   python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pysvzerod==2.0.1
+   python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pysvzerod==3.1
    python -c "import importlib.metadata; print(importlib.metadata.version('pysvzerod'))"
    ```
 
 Before publishing to production PyPI, create a separate `pypi` GitHub
-environment and a pending publisher in the production PyPI account with the
-same owner, repository, and workflow filename, but environment `pypi`.
-Pending publishers do not reserve the project name until the first upload.
+environment. Limit its deployments to `v*` tags and add a required reviewer,
+because an upload cannot be undone. On PyPI, create `pysvzerod` in the
+SimVascular organization (Your organizations, Manage, Projects) and add a
+GitHub trusted publisher to it with the same owner, repository, and workflow
+filename, but environment `pypi`. A pending publisher in a personal account
+also works, but its first upload creates the project under that account, and
+an organization owner must then transfer it. Pending publishers do not reserve
+the project name until the first upload.
 
 ## Local TestPyPI upload before merging
 
@@ -48,21 +55,25 @@ and the TestPyPI API token as the password. Upload only the source
 distribution: a local wheel is tagged for this machine and is not repaired, and
 TestPyPI rejects Linux `linux_x86_64` wheels. The GitHub workflow builds the
 full wheel matrix. Each filename can be uploaded only once, even after
-deletion, so set a dev version such as `2.0.2.dev1` in `pyproject.toml` for
+deletion, so set a dev version such as `3.1.dev1` in `pyproject.toml` for
 repeated local tests.
 
 ## Each release
 
+Repository releases and the package share one version number. Every new `v*`
+tag starts the workflow and must equal `v` plus the `pyproject.toml` version,
+including a tag created for a GitHub release.
+
 1. Set the version in `pyproject.toml`. Run the project tests and the
    PyPI workflow manually from the release commit.
 2. After the changes are merged, create and push a tag matching that version,
-   for example `v2.0.1`. The tag build verifies the version, builds the source
+   for example `v3.1`. The tag build verifies the version, builds the source
    distribution and wheels, checks metadata, and uploads to PyPI through the
    trusted publisher.
 3. Install the released package in a fresh environment and check its version:
 
    ```sh
-   python -m pip install pysvzerod==2.0.1
+   python -m pip install pysvzerod==3.1
    python -c "import importlib.metadata; print(importlib.metadata.version('pysvzerod'))"
    ```
 

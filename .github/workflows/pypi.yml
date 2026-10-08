@@ -51,7 +51,7 @@ jobs:
         run: |
           uv build --sdist
           uv build --wheel dist/pysvzerod-*.tar.gz --out-dir /tmp/sdist-wheel
-          uvx twine check dist/*.tar.gz
+          uvx twine check --strict dist/*.tar.gz
       - uses: actions/upload-artifact@v4
         with:
           name: sdist
@@ -90,9 +90,37 @@ jobs:
           path: wheelhouse/*.whl
           if-no-files-found: error
 
+  validate:
+    needs: [source, wheels]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source distribution
+        uses: actions/download-artifact@v4
+        with:
+          name: sdist
+          path: dist
+      - name: Download wheels
+        uses: actions/download-artifact@v4
+        with:
+          pattern: wheels-*
+          path: dist
+          merge-multiple: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - uses: astral-sh/setup-uv@v5
+      - name: Validate all distribution metadata
+        run: uvx twine check --strict dist/*
+      - name: Store validated distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-distributions
+          path: dist/*
+          if-no-files-found: error
+
   publish:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    needs: [source, wheels]
+    needs: validate
     runs-on: ubuntu-latest
     environment: pypi
     permissions:
@@ -100,6 +128,6 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
+          name: python-distributions
           path: dist
-          merge-multiple: true
       - uses: pypa/gh-action-pypi-publish@release/v1

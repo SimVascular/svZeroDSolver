@@ -116,8 +116,9 @@ class RecordReleaseTests(unittest.TestCase):
         )
         self.assertEqual(
             self.git(self.remote, "show", "-s", "--format=%an <%ae>|%cn <%ce>|%s", commit),
-            "Zachary Sexton <zsexton@stanford.edu>|"
-            "Zachary Sexton <zsexton@stanford.edu>|Release pysvzerod 3.2",
+            "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>|"
+            "github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>|"
+            "Release pysvzerod 3.2",
         )
         self.assertIn('version = "3.2"', self.git(self.remote, "show", f"{commit}:pyproject.toml"))
 

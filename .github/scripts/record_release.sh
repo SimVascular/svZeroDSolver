@@ -40,8 +40,8 @@ else
   [[ $branch_sha == "$SOURCE_SHA" ]] \
     || abort "$DEFAULT_BRANCH advanced after this release started; reconcile the uploaded version before retrying."
 
-  GIT_AUTHOR_NAME="Zachary Sexton" GIT_AUTHOR_EMAIL="zsexton@stanford.edu" \
-    GIT_COMMITTER_NAME="Zachary Sexton" GIT_COMMITTER_EMAIL="zsexton@stanford.edu" \
+  GIT_AUTHOR_NAME="github-actions[bot]" GIT_AUTHOR_EMAIL="41898282+github-actions[bot]@users.noreply.github.com" \
+    GIT_COMMITTER_NAME="github-actions[bot]" GIT_COMMITTER_EMAIL="41898282+github-actions[bot]@users.noreply.github.com" \
     git -c commit.gpgSign=false commit -m "Release pysvzerod $RELEASE_VERSION"
   commit_sha=$(git rev-parse HEAD)
   git tag "$tag" "$commit_sha"

@@ -271,3 +271,90 @@ jobs:
         run: >-
           python .github/scripts/release_version.py verify-index
           --index "$DESTINATION" --dist dist --version "$RELEASE_VERSION"
+
+  github_release:
+    if: github.event_name == 'workflow_dispatch' && inputs.destination == 'pypi'
+    needs: [prepare_release, publish]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      SOURCE_SHA: ${{ needs.prepare_release.outputs.source_sha }}
+      CURRENT_VERSION: ${{ needs.prepare_release.outputs.current_version }}
+      RELEASE_VERSION: ${{ needs.prepare_release.outputs.release_version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare_release.outputs.source_sha }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-distributions
+          path: dist
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Confirm the production artifacts
+        run: >-
+          python .github/scripts/release_version.py verify-index
+          --index pypi --dist dist --version "$RELEASE_VERSION"
+      - name: Record version and tag
+        id: record
+        run: bash .github/scripts/record_release.sh
+      - name: Check existing GitHub release
+        id: release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const crypto = require('crypto');
+            const tag = `v${process.env.RELEASE_VERSION}`;
+            let release;
+            try {
+              release = (await github.rest.repos.getReleaseByTag({...context.repo, tag})).data;
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              // Tag lookup omits drafts left by interrupted asset uploads.
+              const matches = (await github.paginate(github.rest.repos.listReleases, {
+                ...context.repo, per_page: 100
+              })).filter(item => item.tag_name === tag);
+              if (matches.length > 1) throw new Error(`Multiple releases found for ${tag}`);
+              release = matches[0];
+              if (!release) {
+                core.setOutput('exists', 'false');
+                core.setOutput('complete', 'false');
+                return;
+              }
+            }
+            if (release.prerelease) throw new Error(`Unexpected prerelease for ${tag}`);
+            const assets = await github.paginate(github.rest.repos.listReleaseAssets, {
+              ...context.repo, release_id: release.id, per_page: 100
+            });
+            const expected = new Map(fs.readdirSync('dist').map(name => [
+              name, 'sha256:' + crypto.createHash('sha256').update(fs.readFileSync(`dist/${name}`)).digest('hex')
+            ]));
+            const seen = new Set();
+            for (const asset of assets) {
+              if (!expected.has(asset.name) || seen.has(asset.name) ||
+                  asset.state !== 'uploaded' || asset.digest !== expected.get(asset.name)) {
+                throw new Error(`Existing release asset does not match: ${asset.name}`);
+              }
+              seen.add(asset.name);
+            }
+            core.setOutput('exists', 'true');
+            core.setOutput('complete', String(!release.draft && seen.size === expected.size));
+      - name: Create GitHub release
+        if: steps.release.outputs.complete != 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.prepare_release.outputs.release_version }}
+          name: pysvzerod ${{ needs.prepare_release.outputs.release_version }}
+          target_commitish: ${{ steps.record.outputs.commit_sha }}
+          generate_release_notes: ${{ steps.release.outputs.exists != 'true' }}
+          overwrite_files: false
+          prerelease: false
+          fail_on_unmatched_files: true
+          files: |
+            dist/*.whl
+            dist/*.tar.gz

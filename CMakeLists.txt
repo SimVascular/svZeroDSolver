@@ -183,6 +183,8 @@ add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
 # shared library.
 
 pybind11_add_module(pysvzerod applications/pysvzerod.cpp)
+set(PYSVZEROD_VERSION "dev" CACHE STRING "Python package version")
+target_compile_definitions(pysvzerod PRIVATE PYSVZEROD_VERSION="${PYSVZEROD_VERSION}")
 if(WIN32 AND "${CMAKE_GENERATOR}" STREQUAL "MinGW Makefiles")
     message(STATUS ">> Applying static‑link flags to pysvzerod")
 

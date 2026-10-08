@@ -16,6 +16,7 @@
 namespace py = pybind11;
 
 PYBIND11_MODULE(pysvzerod, m) {
+  m.attr("__version__") = PYSVZEROD_VERSION;
   using Solver = Solver;
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {

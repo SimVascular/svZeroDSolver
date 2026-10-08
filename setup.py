@@ -29,6 +29,7 @@ class CustomCMakeBuild(CMakeBuildExt):
             ext.sourcedir,
             # Match CMake's Python headers and extension suffix to pip's interpreter.
             "-DPython_EXECUTABLE=" + sys.executable,
+            "-DPYSVZEROD_VERSION=" + self.distribution.get_version(),
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + output_dir,
             "-DCMAKE_BUILD_TYPE=" + build_type,
         ]

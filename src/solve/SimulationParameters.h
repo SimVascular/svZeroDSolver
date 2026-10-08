@@ -44,6 +44,8 @@ struct SimulationParameters {
   double sim_cardiac_period{-1.0};  ///< Cardiac period
   int sim_num_cycles{0};            ///< Number of cardiac cycles to simulate
   int sim_pts_per_cycle{0};         ///< Number of time steps per cardiac cycle
+  int sim_impedance_pts_per_cycle{
+      0};  ///< Number of sample points spanning one impedance cycle
   bool use_cycle_to_cycle_error{
       false};  ///< If model does not have RCR boundary conditions, simulate
                ///< model to convergence (based on cycle-to-cycle error of last
@@ -190,6 +192,22 @@ State load_initial_condition(const nlohmann::json& config, Model& model);
  * @return SimulationParameters Simulation parameters read from configuration
  */
 SimulationParameters load_simulation_params(const nlohmann::json& config);
+
+/**
+ * @brief Reconcile the cardiac cycle period between the model and parameters
+ *
+ * The period may be defined by a model block (e.g. a closed-loop block or a
+ * chamber) or by `simulation_parameters.cardiac_period`. This resolves
+ * `model.cardiac_cycle_period` from both sources, throws if the two disagree,
+ * and falls back to a default of 1.0 if neither defines it. Must be called by
+ * every entry point (solver and coupled interface) before blocks that depend
+ * on the period are used.
+ *
+ * @param model The 0D model
+ * @param params Simulation parameters read from the configuration
+ */
+void resolve_cardiac_cycle_period(Model& model,
+                                  const SimulationParameters& params);
 
 /**
  * @brief Load the 0D block in the model from a configuration

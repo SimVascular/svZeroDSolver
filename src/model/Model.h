@@ -30,6 +30,7 @@
 #include "ClosedLoopRCRBC.h"
 #include "DOFHandler.h"
 #include "FlowReferenceBC.h"
+#include "ImpedanceBC.h"
 #include "Junction.h"
 #include "LinearElastanceChamber.h"
 #include "Node.h"
@@ -73,6 +74,7 @@ class Model {
 
   double cardiac_cycle_period = -1.0;  ///< Cardiac cycle period
   double time = 0.0;                   ///< Current time
+  int impedance_points_per_cycle = 0;  ///< One-cycle sample count for IMPEDANCE BCs
 
   /**
    * @brief Create a new block
@@ -255,6 +257,46 @@ class Model {
   void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
+   * @brief Accept one converged time-step for all blocks.
+   *
+   * @param y Accepted state vector
+   */
+  void accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+
+  /**
+   * @brief Get persistent state payloads for all blocks (including internal).
+   *
+   * @return Per-block persistent states
+   */
+  std::vector<std::vector<double>> get_persistent_states() const;
+
+  /**
+   * @brief Restore persistent states for all blocks.
+   *
+   * @param states Per-block persistent states
+   */
+  void set_persistent_states(const std::vector<std::vector<double>>& states);
+
+  /**
+   * @brief Clear persistent state for all blocks.
+   */
+  void clear_persistent_states();
+
+  /**
+   * @brief Set model time step size used by blocks with dt-dependent logic.
+   *
+   * @param time_step_size Model time step size
+   */
+  void set_time_step_size(double time_step_size);
+
+  /**
+   * @brief Get model time step size used by blocks with dt-dependent logic.
+   *
+   * @return double Model time step size
+   */
+  double get_time_step_size() const;
+
+  /**
    * @brief Convert the blocks to a steady behavior
    *
    */
@@ -353,6 +395,7 @@ class Model {
 
   bool has_windkessel_bc = false;
   double largest_windkessel_time_constant = 0.0;
+  double time_step_size = -1.0;
 };
 
 #endif  // SVZERODSOLVER_MODEL_MODEL_HPP_

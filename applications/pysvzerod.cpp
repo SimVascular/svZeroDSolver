@@ -15,7 +15,40 @@
 
 namespace py = pybind11;
 
+namespace {
+
+// Keep these values in the extension itself so callers can prove which solver
+// they imported before dispatching a calibration. The source revision is
+// updated with the solver checkout used for a release.
+constexpr const char* kSolverVersion = "2.0";
+constexpr const char* kSolverSourceCommit =
+    "991fa17cfe4d436395f649a2c6be0bbda987c23e";
+
+py::dict build_identity() {
+  py::dict identity;
+  identity["name"] = "svZeroDSolver";
+  identity["version"] = kSolverVersion;
+  identity["source_commit"] = kSolverSourceCommit;
+  identity["build_id"] = std::string("svZeroDSolver-") + kSolverVersion +
+                          "-" + kSolverSourceCommit;
+  return identity;
+}
+
+py::dict capabilities() {
+  py::dict result;
+  result["per_block_parameter_selection"] = true;
+  result["calibration_diagnostics"] = true;
+  return result;
+}
+
+}  // namespace
+
 PYBIND11_MODULE(pysvzerod, m) {
+  m.attr("__version__") = kSolverVersion;
+  m.attr("__build_identity__") = build_identity();
+  m.def("build_identity", &build_identity);
+  m.def("capabilities", &capabilities);
+
   using Solver = Solver;
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {

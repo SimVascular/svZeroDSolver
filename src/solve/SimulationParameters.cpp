@@ -320,6 +320,14 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   sim_params.sim_max_iter_error_to_warning =
       sim_config.value("max_iter_error_to_warning", false);
   sim_params.sim_steady_initial = sim_config.value("steady_initial", true);
+  if (has_impedance && sim_params.sim_steady_initial) {
+    throw std::runtime_error(
+        "IMPEDANCE boundary conditions are incompatible with steady "
+        "initialization: the convolution kernel is discretized at the "
+        "simulation time-step size, but the steady initial condition is "
+        "solved with `cardiac_period / 10`. Set "
+        "`simulation_parameters.steady_initial = false`.");
+  }
   sim_params.sim_rho_infty = sim_config.value("rho_infty", 0.5);
   sim_params.output_variable_based =
       sim_config.value("output_variable_based", false);
@@ -330,6 +338,25 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   sim_params.sim_cardiac_period = sim_config.value("cardiac_period", -1.0);
   DEBUG_MSG("Finished loading simulation parameters");
   return sim_params;
+}
+
+void resolve_cardiac_cycle_period(Model& model,
+                                  const SimulationParameters& params) {
+  if (params.sim_cardiac_period < 0.0 && model.cardiac_cycle_period < 0.0) {
+    // Defined nowhere; fall back to the default period.
+    model.cardiac_cycle_period = 1.0;
+  } else if (model.cardiac_cycle_period >= 0.0) {
+    // Defined by a model block. Check for an inconsistent definition in
+    // simulation_parameters.
+    if (params.sim_cardiac_period >= 0.0 &&
+        (model.cardiac_cycle_period != params.sim_cardiac_period)) {
+      throw std::runtime_error(
+          "Inconsistent cardiac cycle period defined in parameters");
+    }
+  } else {
+    // Defined only in simulation_parameters.
+    model.cardiac_cycle_period = params.sim_cardiac_period;
+  }
 }
 
 void load_simulation_model(const nlohmann::json& config, Model& model) {

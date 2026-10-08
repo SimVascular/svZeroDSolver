@@ -108,12 +108,9 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
         "ClosedLoopHeartAndPulmonary block.");
   }
 
-  // Set default cardiac cycle period if not set by model
-  if (model->cardiac_cycle_period < 0.0) {
-    model->cardiac_cycle_period =
-        1.0;  // If it has not been read from config or Parameter
-              // yet, set as default value of 1.0
-  }
+  // Resolve the cardiac cycle period from the model and
+  // simulation_parameters (defaults to 1.0 if defined by neither).
+  resolve_cardiac_cycle_period(*model.get(), simparams);
 
   // Calculate time step size
   if (!simparams.sim_coupled) {

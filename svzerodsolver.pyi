@@ -7,7 +7,26 @@ import numpy
 import typing
 import pandas
 
-__all__ = ["Solver", "calibrate", "simulate"]
+__all__ = [
+    "Solver",
+    "__version__",
+    "build_identity",
+    "capabilities",
+    "calibrate",
+    "simulate",
+]
+
+__version__: str
+
+
+def build_identity() -> dict[str, str]:
+    """Return the solver version, source revision, and stable build ID."""
+    ...
+
+
+def capabilities() -> dict[str, bool]:
+    """Return machine-readable solver capabilities."""
+    ...
 
 class Solver:
     """Lumped-parameter solver."""

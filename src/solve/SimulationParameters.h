@@ -194,6 +194,22 @@ State load_initial_condition(const nlohmann::json& config, Model& model);
 SimulationParameters load_simulation_params(const nlohmann::json& config);
 
 /**
+ * @brief Reconcile the cardiac cycle period between the model and parameters
+ *
+ * The period may be defined by a model block (e.g. a closed-loop block or a
+ * chamber) or by `simulation_parameters.cardiac_period`. This resolves
+ * `model.cardiac_cycle_period` from both sources, throws if the two disagree,
+ * and falls back to a default of 1.0 if neither defines it. Must be called by
+ * every entry point (solver and coupled interface) before blocks that depend
+ * on the period are used.
+ *
+ * @param model The 0D model
+ * @param params Simulation parameters read from the configuration
+ */
+void resolve_cardiac_cycle_period(Model& model,
+                                  const SimulationParameters& params);
+
+/**
  * @brief Load the 0D block in the model from a configuration
  *
  * @param config The json configuration

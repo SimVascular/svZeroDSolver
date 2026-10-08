@@ -51,5 +51,11 @@ Simulation timing requirements:
   `simulation_parameters.cardiac_period / dt`.
 * In all cases, `simulation_parameters.cardiac_period / dt` must match
   `z.size()`.
+* All configs must set `simulation_parameters.steady_initial = false`. The
+  kernel is discretized at the simulation time-step size, so the steady initial
+  condition (which is solved with `cardiac_period / 10`) has no meaningful
+  interpretation for this boundary condition. Because `steady_initial` defaults
+  to `true`, it must be set explicitly; otherwise the solver reports an error
+  and exits.
 
 For `truncated`, runtime cost is `O(num_kernel_terms)` per accepted 0D step.

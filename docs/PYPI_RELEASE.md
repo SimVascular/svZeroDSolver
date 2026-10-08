@@ -7,11 +7,20 @@
 2. Configure a trusted publisher for `pysvzerod` on each package index:
    owner `SimVascular`, repository `svZeroDSolver`, workflow `pypi.yml`, and
    the matching environment (`pypi` or `testpypi`).
-3. Verify that the release process can update the default branch and create tags
-   and GitHub releases. It pushes the version commit directly using `GITHUB_TOKEN`;
-   `contents: write` does not bypass required pull requests or status checks.
-   Resolve any branch protection or ruleset conflict before publishing: the PyPI
-   upload happens before the version commit and tag are recorded.
+3. Install a dedicated release GitHub App on this repository with **Contents:
+   Read and write**. Create a `release` environment restricted to `master`,
+   without required reviewers. Store the App's client ID as environment variable
+   `RELEASE_APP_CLIENT_ID` and its private key as environment secret
+   `RELEASE_APP_PRIVATE_KEY`.
+4. Allow that App to bypass the `master` ruleset with **Always allow**, and add
+   it to **Allow specified actors to bypass required pull requests** in the
+   classic branch protection. Keep reviews and checks required for other actors,
+   and keep force pushes and branch deletion disabled in classic protection.
+
+The workflow checks App credentials before production uploads and uses a fresh
+App token to push the version commit and tag. Confirm both bypass entries before
+publishing; the credential check does not test branch protection. PyPI and
+TestPyPI authentication still use trusted publishing.
 
 ## Run a release
 

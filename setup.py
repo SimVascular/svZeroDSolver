@@ -49,7 +49,7 @@ class CustomCMakeBuild(CMakeBuildExt):
         subprocess.check_call(configure, cwd=self.build_temp)
         subprocess.check_call(
             [cmake, "--build", ".", "--target", ext.name,
-             "--config", build_type, "--parallel"],
+             "--config", build_type],
             cwd=self.build_temp,
         )
 

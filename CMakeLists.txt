@@ -148,7 +148,6 @@ FetchContent_MakeAvailable(json)
 # pybind11_json is an nlohmann::json to pybind11 bridge that converts 
 # between nlohmann::json and py::object objects. 
 #
-# Pinned to master at d0bf434 (0.2.15 plus 4 commits).
 FetchContent_Declare(
     pybind11_json
     URL      https://github.com/pybind/pybind11_json/archive/d0bf434be9d287d73a963ff28745542daf02c08f.tar.gz

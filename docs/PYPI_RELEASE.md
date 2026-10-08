@@ -7,8 +7,11 @@
 2. Configure a trusted publisher for `pysvzerod` on each package index:
    owner `SimVascular`, repository `svZeroDSolver`, workflow `pypi.yml`, and
    the matching environment (`pypi` or `testpypi`).
-3. Allow the workflow to commit version updates to the default branch, create
-   tags, and create GitHub releases. Branch protection must permit these updates.
+3. Verify that the release process can update the default branch and create tags
+   and GitHub releases. It pushes the version commit directly using `GITHUB_TOKEN`;
+   `contents: write` does not bypass required pull requests or status checks.
+   Resolve any branch protection or ruleset conflict before publishing: the PyPI
+   upload happens before the version commit and tag are recorded.
 
 ## Run a release
 

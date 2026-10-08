@@ -4,12 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       destination:
-        description: "Upload destination (build-only does not publish)"
+        description: "Upload destination"
         required: true
-        default: build-only
+        default: testpypi
         type: choice
         options:
-          - build-only
           - testpypi
           - pypi
       version_bump:
@@ -42,7 +41,7 @@ permissions:
 
 concurrency:
   # Serialize version selection through release recording for each index.
-  group: package-release-${{ github.event_name == 'workflow_dispatch' && inputs.destination != 'build-only' && inputs.destination || github.run_id }}
+  group: package-release-${{ github.event_name == 'workflow_dispatch' && inputs.destination || github.run_id }}
   cancel-in-progress: false
 
 defaults:
@@ -76,24 +75,25 @@ jobs:
       - name: Determine build version
         id: version
         env:
-          DESTINATION: ${{ inputs.destination || 'build-only' }}
+          DESTINATION: ${{ inputs.destination }}
           VERSION_BUMP: ${{ inputs.version_bump }}
         run: |
           current_version=$(python .github/scripts/release_version.py current)
           release_version="$current_version"
-          case "$DESTINATION" in
-            pypi|testpypi)
-              release_version=$(python .github/scripts/release_version.py next --bump "$VERSION_BUMP")
-              ;;
-            build-only) ;;
-            *) echo "::error::Unknown upload destination."; exit 1 ;;
-          esac
+          if [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]]; then
+            case "$DESTINATION" in
+              pypi|testpypi)
+                release_version=$(python .github/scripts/release_version.py next --bump "$VERSION_BUMP")
+                ;;
+              *) echo "::error::Unknown upload destination."; exit 1 ;;
+            esac
+          fi
           source_sha=$(git rev-parse HEAD)
           echo "current_version=$current_version" >> "$GITHUB_OUTPUT"
           echo "release_version=$release_version" >> "$GITHUB_OUTPUT"
           echo "source_sha=$source_sha" >> "$GITHUB_OUTPUT"
           {
-            echo "Destination: $DESTINATION"
+            echo "Destination: ${DESTINATION:-none (pull request)}"
             echo "Version: $current_version -> $release_version"
             echo "Source: $source_sha"
           } >> "$GITHUB_STEP_SUMMARY"

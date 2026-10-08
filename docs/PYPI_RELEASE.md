@@ -19,13 +19,11 @@
 
    | Destination | Result |
    | --- | --- |
-   | `build-only` (default) | Build and test the current version without publishing. |
-   | `testpypi` | Upload the next version to TestPyPI for testing. |
+   | `testpypi` (default) | Upload the next version to TestPyPI for testing. |
    | `pypi` | Upload the next version to PyPI and create a GitHub release. |
 
 4. Choose `version_bump`: **minor** (`3.1 → 3.2`) or **major** (`3.1 → 4.0`).
-   This choice is ignored for `build-only`. Click **Run workflow** and approve
-   the deployment if reviewers are configured.
+   Click **Run workflow** and approve the deployment if reviewers are configured.
 
 The workflow builds, tests, and validates the packages before uploading. A
 successful PyPI release updates `pyproject.toml`, creates a `vX.Y` tag, and

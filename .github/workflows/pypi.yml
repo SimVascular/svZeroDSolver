@@ -170,7 +170,6 @@ jobs:
           CIBW_ENVIRONMENT: "CMAKE_BUILD_PARALLEL_LEVEL=2"
           CIBW_ENVIRONMENT_MACOS: "CMAKE_BUILD_PARALLEL_LEVEL=2 MACOSX_DEPLOYMENT_TARGET=11.0"
           CIBW_TEST_REQUIRES: pytest
-          # Check the installed solver, a small calibration case, and the console script.
           CIBW_TEST_COMMAND: >-
             python -m pytest {project}/tests/test_solver.py
             {project}/tests/test_calibrator.py::test_steady_flow_calibration -q &&

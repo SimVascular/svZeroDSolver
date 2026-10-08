@@ -2,61 +2,39 @@
 
 The `.github/workflows/pypi.yml` workflow builds a source distribution and
 CPython wheels for Linux x86_64, Windows x86_64, and macOS Intel and Apple
-Silicon. Pull requests that change packaging files and manual workflow runs
-build and test the artifacts without publishing them. Select the
-`publish_testpypi` input on a manual run to upload them to TestPyPI; its
-default is off. A `v<version>` tag publishes to production PyPI after all build
-jobs pass.
+Silicon, and tests each wheel. Pull requests that change packaging files and
+manual workflow runs build and test the artifacts without publishing them. A
+`v<version>` tag publishes to PyPI after all build jobs pass.
 
 ## First-time setup
 
-1. In the GitHub repository that will own releases, create an environment
-   named `testpypi`. Configure required reviewers if uploads need manual
-   approval.
-2. [Create a TestPyPI account](https://test.pypi.org/account/register/). It is
-   separate from a production PyPI account. In its account Publishing settings,
-   create a pending trusted publisher for `pysvzerod` with the exact GitHub
-   owner and repository that will run this workflow, filename `pypi.yml`, and
-   environment `testpypi`.
-3. Merge the packaging changes into that repository's default branch. Run
-   the workflow manually with `publish_testpypi` selected. The workflow builds
-   and tests the packages before uploading them to TestPyPI. Inspect the
-   [TestPyPI project page](https://test.pypi.org/project/pysvzerod/) and install
-   the exact version in a fresh environment:
+1. In the `SimVascular/svZeroDSolver` repository, create a GitHub environment
+   named `pypi`. Limit its deployments to `v*` tags and add a required
+   reviewer, because an upload cannot be undone.
+2. On PyPI, create `pysvzerod` in the SimVascular organization (Your
+   organizations, Manage, Projects). In the project's Publishing settings, add
+   a GitHub trusted publisher with owner `SimVascular`, repository
+   `svZeroDSolver`, workflow `pypi.yml`, and environment `pypi`.
 
-   ```sh
-   python -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ pysvzerod==3.1
-   python -c "import importlib.metadata; print(importlib.metadata.version('pysvzerod'))"
-   ```
+A pending publisher in a personal account also works, but its first upload
+creates the project under that account, and an organization owner must then
+transfer it. Pending publishers do not reserve the project name until the first
+upload.
 
-Before publishing to production PyPI, create a separate `pypi` GitHub
-environment. Limit its deployments to `v*` tags and add a required reviewer,
-because an upload cannot be undone. On PyPI, create `pysvzerod` in the
-SimVascular organization (Your organizations, Manage, Projects) and add a
-GitHub trusted publisher to it with the same owner, repository, and workflow
-filename, but environment `pypi`. A pending publisher in a personal account
-also works, but its first upload creates the project under that account, and
-an organization owner must then transfer it. Pending publishers do not reserve
-the project name until the first upload.
+## Testing wheels before a release
 
-## Local TestPyPI upload before merging
-
-For a quick test from this branch, create a TestPyPI account and an API token
-there. Build and inspect the source distribution from a clean checkout:
+Each workflow run keeps its wheels as artifacts named after the runner, such as
+`wheels-macos-15` or `wheels-ubuntu-latest`. To try them on another machine,
+download one and install it in a fresh environment outside the repository:
 
 ```sh
-uv build --sdist
-uvx twine check dist/*
-uvx twine upload --repository testpypi dist/*
+gh run download -R SimVascular/svZeroDSolver --name wheels-macos-15 --dir pysvz-wheels
+python -m pip install --find-links pysvz-wheels --only-binary pysvzerod pysvzerod
 ```
 
-Twine prompts for a username and password. Enter `__token__` as the username
-and the TestPyPI API token as the password. Upload only the source
-distribution: a local wheel is tagged for this machine and is not repaired, and
-TestPyPI rejects Linux `linux_x86_64` wheels. The GitHub workflow builds the
-full wheel matrix. Each filename can be uploaded only once, even after
-deletion, so set a dev version such as `3.1.dev1` in `pyproject.toml` for
-repeated local tests.
+Without a run ID, `gh run download` takes the latest artifact with that name;
+pass a run ID to pick a specific run. Then run a model and the `svzerodsolver`
+command.
 
 ## Each release
 
@@ -64,18 +42,24 @@ Repository releases and the package share one version number. Every new `v*`
 tag starts the workflow and must equal `v` plus the `pyproject.toml` version,
 including a tag created for a GitHub release.
 
-1. Set the version in `pyproject.toml`. Run the project tests and the
-   PyPI workflow manually from the release commit.
-2. After the changes are merged, create and push a tag matching that version,
-   for example `v3.1`. The tag build verifies the version, builds the source
-   distribution and wheels, checks metadata, and uploads to PyPI through the
-   trusted publisher.
+1. Set the version in `pyproject.toml` in a pull request and merge it. Run the
+   workflow manually on that commit and test its wheels as described above.
+2. Create a GitHub release on that commit with a tag matching the version, for
+   example `v3.1`. The tag build verifies the version, builds and tests the
+   source distribution and wheels, and uploads them to PyPI through the
+   trusted publisher once the `pypi` deployment is approved.
 3. Install the released package in a fresh environment and check its version:
 
    ```sh
    python -m pip install pysvzerod==3.1
    python -c "import importlib.metadata; print(importlib.metadata.version('pysvzerod'))"
    ```
+
+A version number can be uploaded only once. If a release turns out broken, yank
+it on PyPI, which makes pip skip it, and publish a fixed version such as
+`3.1.1`. For releases with large packaging changes, publish a pre-release
+first, for example version `3.2rc1` with tag `v3.2rc1`. Once a final release
+exists, pip skips pre-releases unless asked for them.
 
 The wheels use pinned CMake dependencies. Update those pins intentionally when
 changing the supported Python versions. The source distribution includes the

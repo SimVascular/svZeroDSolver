@@ -216,9 +216,27 @@ jobs:
           path: dist/*
           if-no-files-found: error
 
+  release_access:
+    if: github.event_name == 'workflow_dispatch' && inputs.destination == 'pypi'
+    needs: prepare_release
+    runs-on: ubuntu-latest
+    environment: release
+    permissions: {}
+    steps:
+      - name: Verify release App credentials
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
+
   publish:
-    if: github.event_name == 'workflow_dispatch' && (inputs.destination == 'pypi' || inputs.destination == 'testpypi')
-    needs: [prepare_release, validate]
+    if: >-
+      !cancelled() && github.event_name == 'workflow_dispatch' &&
+      needs.validate.result == 'success' &&
+      (inputs.destination == 'testpypi' ||
+      (inputs.destination == 'pypi' && needs.release_access.result == 'success'))
+    needs: [prepare_release, validate, release_access]
     runs-on: ubuntu-latest
     environment: ${{ inputs.destination }}
     permissions:
@@ -273,6 +291,7 @@ jobs:
     if: github.event_name == 'workflow_dispatch' && inputs.destination == 'pypi'
     needs: [prepare_release, publish]
     runs-on: ubuntu-latest
+    environment: release
     permissions:
       contents: write
     env:
@@ -281,10 +300,18 @@ jobs:
       CURRENT_VERSION: ${{ needs.prepare_release.outputs.current_version }}
       RELEASE_VERSION: ${{ needs.prepare_release.outputs.release_version }}
     steps:
+      - name: Create release App token
+        id: release-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
+          private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
+          permission-contents: write
       - uses: actions/checkout@v4
         with:
           ref: ${{ needs.prepare_release.outputs.source_sha }}
           fetch-depth: 0
+          token: ${{ steps.release-token.outputs.token }}
       - uses: actions/download-artifact@v4
         with:
           name: python-distributions

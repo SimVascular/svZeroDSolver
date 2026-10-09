@@ -23,19 +23,11 @@ on:
   pull_request:
     paths:
       - .github/workflows/pypi.yml
-      - .github/scripts/release_version.py
       - setup.py
       - pyproject.toml
       - MANIFEST.in
       - CMakeLists.txt
       - applications/pysvzerod.cpp
-      - tests/test_solver.py
-      - tests/test_calibrator.py
-      - tests/__init__.py
-      - tests/conftest.py
-      - tests/utils.py
-      - tests/cases/*.json
-      - tests/cases/results/*.json
 
 permissions:
   contents: read

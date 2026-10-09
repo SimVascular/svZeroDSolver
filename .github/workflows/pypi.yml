@@ -352,15 +352,23 @@ jobs:
               name, 'sha256:' + crypto.createHash('sha256').update(fs.readFileSync(`dist/${name}`)).digest('hex')
             ]));
             const seen = new Set();
+            const emptyUploads = [];
             for (const asset of assets) {
-              if (!expected.has(asset.name) || seen.has(asset.name) ||
-                  asset.state !== 'uploaded' || asset.digest !== expected.get(asset.name)) {
+              if (!expected.has(asset.name) || seen.has(asset.name)) {
                 throw new Error(`Existing release asset does not match: ${asset.name}`);
               }
               seen.add(asset.name);
+              if (asset.state === 'starter' && asset.size === 0) {
+                emptyUploads.push(asset.id);
+              } else if (asset.state !== 'uploaded' || asset.digest !== expected.get(asset.name)) {
+                throw new Error(`Existing release asset does not match: ${asset.name}`);
+              }
+            }
+            for (const asset_id of emptyUploads) {
+              await github.rest.repos.deleteReleaseAsset({...context.repo, asset_id});
             }
             core.setOutput('exists', 'true');
-            core.setOutput('complete', String(!release.draft && seen.size === expected.size));
+            core.setOutput('complete', String(!release.draft && seen.size === expected.size && emptyUploads.length === 0));
       - name: Create GitHub release
         if: steps.release.outputs.complete != 'true'
         uses: softprops/action-gh-release@v2

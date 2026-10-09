@@ -1,17 +1,25 @@
 [build-system]
-requires = ["setuptools >= 40.9.0", "wheel", "cmake_setuptools", "cmake >= 3.18", "ninja"]
+requires = ["setuptools >= 77", "wheel", "cmake_setuptools", "cmake >= 3.18", "ninja"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pysvzerod"
-version = "2.0"
+version = "3.1"
 description = "A fast C++ application for working with 0D models."
 readme = "README.md"
+license = "BSD-3-Clause"
+license-files = ["LICENSE.txt"]
 requires-python = ">=3.9"
 dependencies = [
     "pandas",
     "numpy",
 ]
+
+[project.urls]
+Homepage = "https://simvascular.github.io/svZeroDSolver"
+Documentation = "https://simvascular.github.io/svZeroDSolver"
+Source = "https://github.com/SimVascular/svZeroDSolver"
+Issues = "https://github.com/SimVascular/svZeroDSolver/issues"
 
 [project.scripts]
 svzerodsolver = "pysvzerod:run_simulation_cli"

@@ -1,32 +1,9 @@
 # Publishing pysvzerod
 
-## One-time setup
-
-1. Create GitHub environments named `pypi` and `testpypi`. Restrict `pypi` to
-   the default branch (`master`); allow testing branches in `testpypi`.
-2. Configure a trusted publisher for `pysvzerod` on each package index:
-   owner `SimVascular`, repository `svZeroDSolver`, workflow `pypi.yml`, and
-   the matching environment (`pypi` or `testpypi`).
-3. Install a dedicated release GitHub App on this repository with **Contents:
-   Read and write**. Create a `release` environment restricted to `master`,
-   without required reviewers. Store the App's client ID as environment variable
-   `RELEASE_APP_CLIENT_ID` and its private key as environment secret
-   `RELEASE_APP_PRIVATE_KEY`.
-4. Allow that App to bypass the `master` ruleset with **Always allow**, and add
-   it to **Allow specified actors to bypass required pull requests** in the
-   classic branch protection. Keep reviews and checks required for other actors,
-   and keep force pushes and branch deletion disabled in classic protection.
-
-The workflow checks App credentials before production uploads and uses a fresh
-App token to push the version commit and tag. Confirm both bypass entries before
-publishing; the credential check does not test branch protection. PyPI and
-TestPyPI authentication still use trusted publishing.
-
 ## Run a release
 
 1. Open **Actions → Build and publish PyPI package → Run workflow**.
-2. Select the source branch. For production, merge your changes into `master`
-   first and select that branch.
+2. Select `master` as the source branch, with your changes already merged.
 3. Choose a `destination`:
 
    | Destination | Result |
@@ -35,12 +12,17 @@ TestPyPI authentication still use trusted publishing.
    | `pypi` | Upload the next version to PyPI and create a GitHub release. |
 
 4. Choose `version_bump`: **minor** (`3.1 → 3.2`) or **major** (`3.1 → 4.0`).
-   Click **Run workflow** and approve the deployment if reviewers are configured.
+5. Click **Run workflow**. For PyPI, have a configured reviewer approve the
+   waiting deployment.
+
+Use `testpypi` to check a release before selecting `pypi` for production.
 
 The workflow builds, tests, and validates the packages before uploading. A
 successful PyPI release updates `pyproject.toml`, creates a `vX.Y` tag, and
 creates a GitHub release with notes and the packages attached. Do not update
 versions or create release tags manually.
+
+The uploaded package reports its version through `pysvzerod.__version__`.
 
 TestPyPI uploads leave the repository version unchanged and do not create a
 GitHub release. Pull requests and tags never publish packages automatically.

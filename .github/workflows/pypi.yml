@@ -23,7 +23,7 @@ on:
   pull_request:
     paths:
       - .github/workflows/pypi.yml
-      - .github/scripts/**
+      - .github/scripts/release_version.py
       - setup.py
       - pyproject.toml
       - MANIFEST.in
@@ -34,7 +34,8 @@ on:
       - tests/__init__.py
       - tests/conftest.py
       - tests/utils.py
-      - tests/cases/**
+      - tests/cases/*.json
+      - tests/cases/results/*.json
 
 permissions:
   contents: read

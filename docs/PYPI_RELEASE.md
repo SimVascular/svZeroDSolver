@@ -1,4 +1,4 @@
-# Publishing pysvzerod
+# Publishing svzerod
 
 ## Run a release
 
@@ -22,7 +22,7 @@ successful PyPI release updates `pyproject.toml`, creates a `vX.Y` tag, and
 creates a GitHub release with notes and the packages attached. Do not update
 versions or create release tags manually.
 
-The uploaded package reports its version through `pysvzerod.__version__`.
+The uploaded package reports its version through `svzerod.__version__`.
 
 TestPyPI uploads leave the repository version unchanged and do not create a
 GitHub release. Pull requests and tags never publish packages automatically.

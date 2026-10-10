@@ -42,7 +42,7 @@ else
 
   GIT_AUTHOR_NAME="github-actions[bot]" GIT_AUTHOR_EMAIL="41898282+github-actions[bot]@users.noreply.github.com" \
     GIT_COMMITTER_NAME="github-actions[bot]" GIT_COMMITTER_EMAIL="41898282+github-actions[bot]@users.noreply.github.com" \
-    git -c commit.gpgSign=false commit -m "Release pysvzerod $RELEASE_VERSION"
+    git -c commit.gpgSign=false commit -m "Release svzerod $RELEASE_VERSION"
   commit_sha=$(git rev-parse HEAD)
   git tag "$tag" "$commit_sha"
   if ! git push --atomic origin "HEAD:refs/heads/$DEFAULT_BRANCH" "refs/tags/$tag"; then

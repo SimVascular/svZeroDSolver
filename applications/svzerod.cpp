@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 /**
- * @file pysvzerod.cpp
+ * @file svzerod.cpp
  * @brief Python interface for svZeroDSolver
  */
 #include <pybind11/eigen.h>
@@ -15,8 +15,8 @@
 
 namespace py = pybind11;
 
-PYBIND11_MODULE(pysvzerod, m) {
-  m.attr("__version__") = PYSVZEROD_VERSION;
+PYBIND11_MODULE(svzerod, m) {
+  m.attr("__version__") = SVZEROD_VERSION;
   using Solver = Solver;
   py::class_<Solver>(m, "Solver")
       .def(py::init([](py::dict& config) {

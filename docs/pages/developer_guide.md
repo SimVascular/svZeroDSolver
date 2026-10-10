@@ -7,7 +7,7 @@
 svZeroDSolver is written in a highly modular manner to enable reuse of code for many different applications. It is divided into a header based library in the `src` directory and a collection of different applications in the `applications` folder. Each application is written for a different use-case of svZeroDSolver, namely:
 
 * svZerodSolver in `svzerodsolver.cpp`
-* Python API in `pysvzerod.cpp`
+* Python API in `svzerod.cpp`
 * svZeroDCalibrator in `svzerodcalibrator.cpp`
 * svZeroDVisualization for visualizing 0D models and results
 * svZeroDGUI for creating new 0D models grahically.
@@ -33,7 +33,7 @@ cmake --build .
 
 # Install with uv
 
-We use [uv](https://docs.astral.sh/uv/) to manage the Python environment and to build the `pysvzerod` Python extension. After [installing uv](https://docs.astral.sh/uv/getting-started/installation/), execute this command in the root folder to create a virtual environment in `.venv`, install all dependencies (including the development tooling), and build the current source:
+We use [uv](https://docs.astral.sh/uv/) to manage the Python environment and to build the `svzerod` Python extension. After [installing uv](https://docs.astral.sh/uv/getting-started/installation/), execute this command in the root folder to create a virtual environment in `.venv`, install all dependencies (including the development tooling), and build the current source:
 ```bash
 uv sync
 ```

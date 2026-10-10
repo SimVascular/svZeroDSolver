@@ -18,8 +18,8 @@ from pathlib import Path
 
 VERSION = re.compile(r"(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)")
 INDEX_URLS = {
-    "pypi": "https://pypi.org/pypi/pysvzerod/{version}/json",
-    "testpypi": "https://test.pypi.org/pypi/pysvzerod/{version}/json",
+    "pypi": "https://pypi.org/pypi/svzerod/{version}/json",
+    "testpypi": "https://test.pypi.org/pypi/svzerod/{version}/json",
 }
 
 
@@ -84,7 +84,7 @@ def set_version(path, version, expected_current):
 
 def check_metadata(content, version, filename):
     metadata = BytesParser().parsebytes(content)
-    for field, expected in (("Name", "pysvzerod"), ("Version", version)):
+    for field, expected in (("Name", "svzerod"), ("Version", version)):
         if metadata.get_all(field, []) != [expected]:
             raise ValueError(f"{filename}: expected exactly one {field}: {expected}")
 
@@ -93,7 +93,7 @@ def inspect_distributions(dist, version):
     parse_version(version)
     paths = sorted(Path(dist).iterdir())
     kinds = set()
-    prefix = f"pysvzerod-{version}"
+    prefix = f"svzerod-{version}"
     wheel_pattern = re.compile(
         re.escape(prefix) + r"-(?:[0-9][A-Za-z0-9_.]*-)?[A-Za-z0-9_.]+-[A-Za-z0-9_.]+-[A-Za-z0-9_.]+\.whl"
     )
@@ -223,13 +223,13 @@ def main():
             print(args.version)
         elif args.command == "verify-dist":
             paths = inspect_distributions(args.dist, args.version)
-            print(f"Verified {len(paths)} distributions for pysvzerod {args.version}")
+            print(f"Verified {len(paths)} distributions for svzerod {args.version}")
         elif args.command == "check-index":
             check_index(args.index, args.dist, args.version)
             print(f"Existing {args.index} files match the candidate distributions")
         else:
             verify_index(args.index, args.dist, args.version, args.attempts, args.delay)
-            print(f"Verified all distributions on {args.index} for pysvzerod {args.version}")
+            print(f"Verified all distributions on {args.index} for svzerod {args.version}")
     except (OSError, ValueError, tarfile.TarError, zipfile.BadZipFile) as error:
         parser.exit(1, f"Error: {error}\n")
 

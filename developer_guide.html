@@ -132,7 +132,7 @@ Architecture</h1>
 <p>svZeroDSolver is written in a highly modular manner to enable reuse of code for many different applications. It is divided into a header based library in the <span class="tt">src</span> directory and a collection of different applications in the <span class="tt">applications</span> folder. Each application is written for a different use-case of svZeroDSolver, namely:</p>
 <ul>
 <li>svZerodSolver in <span class="tt">svzerodsolver.cpp</span></li>
-<li>Python API in <span class="tt">pysvzerod.cpp</span></li>
+<li>Python API in <span class="tt">svzerod.cpp</span></li>
 <li>svZeroDCalibrator in <span class="tt">svzerodcalibrator.cpp</span></li>
 <li>svZeroDVisualization for visualizing 0D models and results</li>
 <li>svZeroDGUI for creating new 0D models grahically.</li>
@@ -150,7 +150,7 @@ Build in debug mode</h1>
 <div class="line">cmake --build .</div>
 </div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md2"></a>
 Install with uv</h1>
-<p>We use <a href="https://docs.astral.sh/uv/">uv</a> to manage the Python environment and to build the <span class="tt">pysvzerod</span> Python extension. After <a href="https://docs.astral.sh/uv/getting-started/installation/">installing uv</a>, execute this command in the root folder to create a virtual environment in <span class="tt">.venv</span>, install all dependencies (including the development tooling), and build the current source: </p><div class="fragment"><div class="line">uv sync</div>
+<p>We use <a href="https://docs.astral.sh/uv/">uv</a> to manage the Python environment and to build the <span class="tt">svzerod</span> Python extension. After <a href="https://docs.astral.sh/uv/getting-started/installation/">installing uv</a>, execute this command in the root folder to create a virtual environment in <span class="tt">.venv</span>, install all dependencies (including the development tooling), and build the current source: </p><div class="fragment"><div class="line">uv sync</div>
 </div><!-- fragment --><p> This is useful when continuously running the integration tests during development. The build is self-contained: uv supplies a compatible Python interpreter (pinned in <span class="tt">.python-version</span>) and the CMake/Ninja build tools, so no system-wide installation of those is required.</p>
 <p>To install only the Python dependencies without building the C++ extension (for example when working on the visualization or GUI tooling), use: </p><div class="fragment"><div class="line">uv sync --no-install-project</div>
 </div><!-- fragment --><p>The application-specific dependencies live in optional dependency groups: use <span class="tt">uv sync --group gui</span> for the <a class="el" href="_g_u_i.html" title="GUI Guide">svZeroDGUI</a> application and <span class="tt">uv sync --group viz</span> for the <a class="el" href="visualization.html" title="Visualization Guide">svZeroDVisualization</a> application.</p>

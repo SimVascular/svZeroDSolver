@@ -189,7 +189,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Report a violated Eigen assertion. </p>
-<p>Eigen asserts via assert(), which aborts the process. Inside the pysvzerod extension module that would tear down the Python interpreter, so throw instead: pybind11 surfaces the exception and only the current call fails.</p>
+<p>Eigen asserts via assert(), which aborts the process. Inside the svzerod extension module that would tear down the Python interpreter, so throw instead: pybind11 surfaces the exception and only the current call fails.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">condition</td><td>Stringified condition that was violated </td></tr>

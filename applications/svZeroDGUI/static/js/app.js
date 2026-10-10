@@ -22,6 +22,9 @@ function updateBoundaryConditionTypeVisibility() {
     } else {
         boundaryConditionTypeContainer.style.display = 'none';
     }
+    // The controls move the canvas without resizing it. Refresh Cytoscape's
+    // cached bounds so mouse events still hit the displayed nodes.
+    window.cy.resize();
 }
 
 /*

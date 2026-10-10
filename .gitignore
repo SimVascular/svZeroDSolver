@@ -19,6 +19,9 @@ __pycache__
 *.prof
 *.vscode
 public
+/tests/cypress/cypress/downloads/
+/tests/cypress/cypress/screenshots/
+/tests/cypress/cypress/videos/
 
 # Documentation
 docs/build

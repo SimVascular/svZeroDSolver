@@ -1,0 +1,176 @@
+{
+  "description": {
+    "description of test case": "runs a 0D model of a cardiac chamber with inlet and outlet valves, connected to a vessel tree as in Caruel et al. (2013), with strain-dependent active stress and an exponential material model"
+  },
+  "boundary_conditions": [
+    {
+      "bc_name": "IN",
+      "bc_type": "PRESSURE",
+      "bc_values": {
+        "P": [800, 800],
+        "t": [0.0, 0.8]
+      }
+    },
+    {
+      "bc_name": "OUT",
+      "bc_type": "PRESSURE",
+      "bc_values": {
+        "P": [1000, 1000],
+        "t": [0, 0.8]
+      }
+    }
+  ],
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 25,
+    "use_cycle_to_cycle_error": true,
+    "cardiac_period": 0.8,
+    "number_of_time_pts_per_cardiac_cycle": 5000,
+    "steady_initial": false,
+    "output_variable_based": true,
+    "absolute_tolerance": 1e-9,
+    "output_all_cycles": false,
+    "max_iter_error_to_warning": true
+  },
+  "vessels": [
+    {
+      "boundary_conditions": {
+        "inlet": "IN"
+      },
+      "vessel_id": 0,
+      "vessel_length": 2.0,
+      "vessel_name": "upstream_vessel",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 0.0,
+        "C": 1.0e-9
+      }
+    },
+    {
+      "vessel_id": 1,
+      "vessel_name": "proximal_compliance",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 0.0,
+        "C": 2.5e-9
+      }
+    },
+    {
+      "vessel_id": 2,
+      "vessel_name": "proximal_resistance",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 8.0e6,
+        "C": 0.0
+      }
+    },
+    {
+      "vessel_id": 3,
+      "vessel_name": "distal_compliance",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 0.0,
+        "C": 1.0e-8
+      }
+    },
+    {
+      "boundary_conditions": {
+        "outlet": "OUT"
+      },
+      "vessel_id": 4,
+      "vessel_name": "distal_resistance",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 1.0e8,
+        "C": 0.0
+      }
+    }
+  ],
+  "chambers": [
+    {
+      "type": "ChamberSphere",
+      "name": "ventricle",
+      "values": {
+        "rho": 1e3,
+        "thick0": 0.0142,
+        "radius0": 0.0236,
+        "eta": 70.0
+      },
+      "activation_function": {
+        "type": "piecewise_rate",
+        "_comment": "u_t/u_values are the piecewise-linear reaction-rate signal u(t) from Caruel et al. 2013, for an 0.8 s cardiac cycle",
+        "u_t": [0.1, 0.27, 0.32, 0.34, 0.46, 0.59, 0.6],
+        "u_values": [-3.2, 35, 35, 0, -12, -12, -3.2]
+      },
+      "material": {
+        "type": "exponential",
+        "C0": 1.9e3,
+        "C1": 0.11,
+        "C2": 1.9e3,
+        "C3": 0.11
+      },
+      "active_stress": {
+        "type": "strain_dependent",
+        "E_s": 3.0e7,
+        "mu": 70.0,
+        "alpha_r": 0.12,
+        "alpha": 1.5,
+        "k_0": 1e5,
+        "sigma_0": 1.24e5,
+        "_comment": "n0_e_c/n0_values and m0_e_c/m0_values are the piecewise-linear activation and relaxation strain-dependence tables from Caruel et al. 2013. n0_e_c has a repeated first entry so n0 clamps to 0 at/below e_c = -0.4 rather than the table's value of 0.008 there",
+        "n0_e_c": [-0.4, -0.4, 0.3, 1.0, 1.3, 2.4],
+        "n0_values": [0.0, 0.008, 0.379, 1.0, 1.0, 0.0],
+        "m0_e_c": [0.95, 1.0],
+        "m0_values": [1.87, 1.0]
+      }
+    }
+  ],
+  "valves": [
+    {
+      "type": "ValveTanh",
+      "name": "inlet_valve",
+      "params": {
+        "Rmax": 2e9,
+        "Rmin": 1.1e5,
+        "Steepness": 10.0,
+        "upstream_block": "upstream_vessel",
+        "downstream_block": "ventricle"
+      }
+    },
+    {
+      "type": "ValveTanh",
+      "name": "outlet_valve",
+      "params": {
+        "Rmax": 2e9,
+        "Rmin": 7.7e4,
+        "Steepness": 10.0,
+        "upstream_block": "ventricle",
+        "downstream_block": "proximal_compliance"
+      }
+    }
+  ],
+  "junctions": [
+    {
+      "junction_name": "J0",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_vessels": [1],
+      "outlet_vessels": [2]
+    },
+    {
+      "junction_name": "J1",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_vessels": [2],
+      "outlet_vessels": [3]
+    },
+    {
+      "junction_name": "J2",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_vessels": [3],
+      "outlet_vessels": [4]
+    }
+  ],
+  "initial_condition": {
+    "pressure:upstream_vessel:inlet_valve": 2000.0,
+    "pressure:inlet_valve:ventricle": 800.0,
+    "pressure:ventricle:outlet_valve": 800.0
+  }
+}

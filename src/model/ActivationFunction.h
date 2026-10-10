@@ -60,7 +60,7 @@ class ActivationFunction {
    * @brief Create a default activation function from activation function type
    *
    * @param type_str One of: "half_cosine", "piecewise_cosine", "two_hill",
-   * "double_tanh", "wrapping_cosine", "fourier"
+   * "double_tanh", "wrapping_cosine", "fourier", "piecewise_rate"
    * @param cardiac_period Cardiac cycle period
    * @return Unique pointer to the created activation function
    */
@@ -78,6 +78,17 @@ class ActivationFunction {
   void set_param(const std::string& name, double value);
 
   /**
+   * @brief Set a vector-valued parameter value by name.
+   *
+   * Calling function must validate the parameter name and value
+   *
+   * @param name Parameter name
+   * @param value Parameter value
+   */
+  void set_param_vector(const std::string& name,
+                        const std::vector<double>& value);
+
+  /**
    * @brief Called after all parameters are set (e.g. by loader).
    *
    * Default no-op. TwoHillActivation overrides to recompute normalization.
@@ -91,9 +102,14 @@ class ActivationFunction {
   double cardiac_period_;
 
   /**
-   * @brief Map of parameter names to their values
+   * @brief Map of scalar parameter names to their values
    */
   std::map<std::string, double> params_;
+
+  /**
+   * @brief Map of vector-valued parameter names to their values
+   */
+  std::map<std::string, std::vector<double>> params_vec_;
 };
 
 /**
@@ -302,6 +318,32 @@ class FourierActivation : public ActivationFunction {
   double norm_min_;
   double norm_range_;
   bool normalization_initialized_;
+};
+
+/**
+ * @brief Piecewise-linear activation rate activation signal
+ *
+ * Reproduces an activation rate signal \f$u(t)\f$ which is a
+ * piecewise-linear function of time within the cardiac cycle, given as a
+ * break point table (`u_t`/`u_values`) and evaluated with \ref
+ * linear_interpolate. The sign is meaningful for the strain-dependent active 
+ * stress model (which splits the signal into positive/negative parts).
+ *
+ * Parameters: `u_t`, `u_values`
+ */
+class PiecewiseRateActivation : public ActivationFunction {
+ public:
+  /**
+   * @brief Construct a new PiecewiseRateActivation object
+   *
+   * @param cardiac_period Cardiac cycle period
+   */
+  explicit PiecewiseRateActivation(double cardiac_period)
+      : ActivationFunction(cardiac_period,
+                           {{"u_t", InputParameter(false, true)},
+                            {"u_values", InputParameter(false, true)}}) {}
+
+  double compute(double time) override;
 };
 
 #endif  // SVZERODSOLVER_MODEL_ACTIVATIONFUNCTION_HPP_

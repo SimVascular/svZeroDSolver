@@ -30,6 +30,11 @@ void ActivationFunction::set_param(const std::string& name, double value) {
   params_[name] = value;
 }
 
+void ActivationFunction::set_param_vector(const std::string& name,
+                                          const std::vector<double>& value) {
+  params_vec_[name] = value;
+}
+
 std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
     const std::string& type_str, double cardiac_period) {
   if (type_str == "half_cosine") {
@@ -50,10 +55,13 @@ std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
   if (type_str == "wrapping_cosine") {
     return std::make_unique<WrappingCosineActivation>(cardiac_period);
   }
+  if (type_str == "piecewise_rate") {
+    return std::make_unique<PiecewiseRateActivation>(cardiac_period);
+  }
   throw std::runtime_error(
       "Unknown activation_function type '" + type_str +
       "'. Must be one of: half_cosine, piecewise_cosine, two_hill, "
-      "double_tanh, fourier, wrapping_cosine");
+      "double_tanh, fourier, wrapping_cosine, piecewise_rate");
 }
 
 double HalfCosineActivation::compute(double time) {
@@ -250,4 +258,15 @@ double FourierActivation::compute(double time) {
   }
   double t_in_cycle = std::fmod(time, cardiac_period_);
   return (compute_raw(t_in_cycle) - norm_min_) / norm_range_;
+}
+
+// ============================================================
+// PiecewiseRateActivation — activation rate signal u(t) for the
+// strain-dependent active-stress model (Caruel 2013)
+// ============================================================
+
+double PiecewiseRateActivation::compute(double time) {
+  const double t_in_cycle = std::fmod(time, cardiac_period_);
+  return linear_interpolate(t_in_cycle, params_vec_.at("u_t"),
+                            params_vec_.at("u_values"));
 }

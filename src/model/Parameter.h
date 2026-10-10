@@ -119,4 +119,18 @@ struct InputParameter {
         default_val(default_val) {}
 };
 
+/**
+ * @brief Linearly interpolate y(x) from a table of break points.
+ *
+ * Outside [xs.front(), xs.back()], the value is clamped to the nearest
+ * endpoint of ys (flat extrapolation).
+ *
+ * @param x Value to evaluate the table at
+ * @param xs Break points, sorted in ascending order (at least 2 entries)
+ * @param ys Values at each break point (same size as xs)
+ * @return Interpolated (or boundary-clamped) value
+ */
+double linear_interpolate(double x, const std::vector<double>& xs,
+                          const std::vector<double>& ys);
+
 #endif  // SVZERODSOLVER_MODEL_PARAMETER_HPP_

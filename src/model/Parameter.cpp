@@ -84,3 +84,22 @@ void Parameter::to_unsteady() {
     steady_converted = false;
   }
 }
+
+double linear_interpolate(double x, const std::vector<double>& xs,
+                          const std::vector<double>& ys) {
+  if (x <= xs.front()) {
+    return ys.front();
+  }
+  if (x >= xs.back()) {
+    return ys.back();
+  }
+
+  auto i = lower_bound(xs.begin(), xs.end(), x);
+  int k = i - xs.begin();
+  if (*i == x) {
+    return ys[k];
+  }
+  int m = k - 1;
+
+  return ys[m] + ((ys[k] - ys[m]) / (xs[k] - xs[m])) * (x - xs[m]);
+}

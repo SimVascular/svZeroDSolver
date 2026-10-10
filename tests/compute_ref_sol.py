@@ -1,6 +1,6 @@
 import os
 import json
-import pysvzerod
+import svzerod
 import argparse
 import sys
 
@@ -19,7 +19,7 @@ def compute_reference_solution(testname):
     # testfiles.remove("steadyFlow_calibration.json")
 
     # compute result
-    result = pysvzerod.simulate(json.load(open(os.path.join(this_file_dir, 'cases', testname))))
+    result = svzerod.simulate(json.load(open(os.path.join(this_file_dir, 'cases', testname))))
 
     # save result
     result_filename = os.path.join(this_file_dir, 'cases', 'results', 'result_' + testname)

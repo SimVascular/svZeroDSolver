@@ -27,7 +27,7 @@ on:
       - pyproject.toml
       - MANIFEST.in
       - CMakeLists.txt
-      - applications/pysvzerod.cpp
+      - applications/svzerod.cpp
 
 permissions:
   contents: read
@@ -115,7 +115,7 @@ jobs:
       - name: Build and verify source distribution
         run: |
           uv build --sdist
-          uv build --wheel dist/pysvzerod-*.tar.gz --out-dir /tmp/sdist-wheel
+          uv build --wheel dist/svzerod-*.tar.gz --out-dir /tmp/sdist-wheel
           uvx twine check --strict dist/*.tar.gz
       - uses: actions/upload-artifact@v4
         with:
@@ -374,7 +374,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ needs.prepare_release.outputs.release_version }}
-          name: pysvzerod ${{ needs.prepare_release.outputs.release_version }}
+          name: svzerod ${{ needs.prepare_release.outputs.release_version }}
           target_commitish: ${{ steps.record.outputs.commit_sha }}
           generate_release_notes: ${{ steps.release.outputs.exists != 'true' }}
           overwrite_files: false

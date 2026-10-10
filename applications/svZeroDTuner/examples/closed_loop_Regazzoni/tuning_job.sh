@@ -51,7 +51,7 @@ module load cmake
 # Relative paths (submit from this directory)
 VENV_DIR="../../venv"
 REQUIREMENTS="../../requirements.txt"
-SVZEROD_ROOT="../../../.."   # svZeroDSolver repo root (for pip install -e pysvzerod)
+SVZEROD_ROOT="../../../.."   # svZeroDSolver repo root (for pip install -e svzerod)
 
 # Check if virtual environment exists and has Python; if not, create and install
 if [[ ! -f "$VENV_DIR/bin/python" ]]; then

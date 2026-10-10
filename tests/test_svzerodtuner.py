@@ -63,7 +63,7 @@ def test_parameter_handler_rejects_unknown_parameter_names(tmp_path):
 
 
 def test_sensitivity_analyzer_validates_parameter_names_up_front(tmp_path):
-    sys.modules.setdefault("pysvzerod", types.SimpleNamespace(Solver=object))
+    sys.modules.setdefault("svzerod", types.SimpleNamespace(Solver=object))
     sensitivity_module = importlib.import_module(
         "applications.svZeroDTuner.svzerodtuner.sensitivity"
     )
@@ -149,7 +149,7 @@ def test_config_handler_rejects_reversed_time_series_target_range(tmp_path):
 
 
 def test_sensitivity_results_use_screening_labels_and_filenames(tmp_path, monkeypatch):
-    sys.modules.setdefault("pysvzerod", types.SimpleNamespace(Solver=object))
+    sys.modules.setdefault("svzerod", types.SimpleNamespace(Solver=object))
     sensitivity_module = importlib.import_module(
         "applications.svZeroDTuner.svzerodtuner.sensitivity"
     )
@@ -186,7 +186,7 @@ def test_sensitivity_results_use_screening_labels_and_filenames(tmp_path, monkey
 
 
 def test_sensitivity_run_resets_sample_data_each_time(monkeypatch):
-    sys.modules.setdefault("pysvzerod", types.SimpleNamespace(Solver=object))
+    sys.modules.setdefault("svzerod", types.SimpleNamespace(Solver=object))
     sensitivity_module = importlib.import_module(
         "applications.svZeroDTuner.svzerodtuner.sensitivity"
     )

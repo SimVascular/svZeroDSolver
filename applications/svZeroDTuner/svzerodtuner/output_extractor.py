@@ -8,7 +8,7 @@ Supports time_series, min, max, and mean extraction types.
 import numpy as np
 import pandas as pd
 from typing import Union, Literal, Optional
-import pysvzerod
+import svzerod
 
 
 class OutputExtractor:
@@ -19,12 +19,12 @@ class OutputExtractor:
     Supports extraction of time series or scalar metrics (min, max, mean).
     """
     
-    def __init__(self, solver: pysvzerod.Solver):
+    def __init__(self, solver: svzerod.Solver):
         """
         Initialize output extractor with a solver instance.
         
         Args:
-            solver: pysvzerod.Solver instance (must have run() called)
+            solver: svzerod.Solver instance (must have run() called)
         """
         self.solver = solver
         self._result_df = None

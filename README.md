@@ -25,8 +25,8 @@ You can find more information under the following links:
 Install the Python bindings from PyPI with:
 
 ```sh
-python -m pip install pysvzerod
+python -m pip install svzerod
 ```
 
-Use `pysvzerod.simulate("model.json")` to run a model from Python. The package
+Use `svzerod.simulate("model.json")` to run a model from Python. The package
 also installs the `svzerodsolver` and `svzerodcalibrator` commands.

@@ -3,7 +3,7 @@
 
 import sys
 import argparse
-import pysvzerod
+import svzerod
 import pandas as pd
 import matplotlib.pyplot as plt
 import networkx as nx
@@ -27,7 +27,7 @@ If you want to save the raw svZeroDSolver simulation results, add "export-csv" a
 '''
 
 def dirgraph(filepath, output_dir, export_csv):
-    solver = pysvzerod.Solver(filepath)
+    solver = svzerod.Solver(filepath)
     solver.run()
     results = pd.DataFrame(solver.get_full_result())
 

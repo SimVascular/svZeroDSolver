@@ -3,7 +3,7 @@ requires = ["setuptools >= 77", "wheel", "cmake_setuptools", "cmake >= 3.18", "n
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pysvzerod"
+name = "svzerod"
 version = "3.1"
 description = "A fast C++ application for working with 0D models."
 readme = "README.md"
@@ -22,8 +22,8 @@ Source = "https://github.com/SimVascular/svZeroDSolver"
 Issues = "https://github.com/SimVascular/svZeroDSolver/issues"
 
 [project.scripts]
-svzerodsolver = "pysvzerod:run_simulation_cli"
-svzerodcalibrator = "pysvzerod:run_calibration_cli"
+svzerodsolver = "svzerod:run_simulation_cli"
+svzerodcalibrator = "svzerod:run_calibration_cli"
 
 # Development tooling. Installed by default with `uv sync`; install with pip via
 # `pip install -e . --group dev` (pip >= 25.1). Consolidates the dependencies
@@ -52,7 +52,7 @@ viz = [
     "plotly",
 ]
 
-# The importable artifact is the compiled `pysvzerod` extension module, built by
+# The importable artifact is the compiled `svzerod` extension module, built by
 # CMake via setup.py (ext_modules). There are no pure-Python packages to ship,
 # so disable setuptools auto-discovery (which would otherwise error on the
 # multiple top-level directories or wrongly pick up `tests`).

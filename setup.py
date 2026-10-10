@@ -29,7 +29,7 @@ class CustomCMakeBuild(CMakeBuildExt):
             ext.sourcedir,
             # Match CMake's Python headers and extension suffix to pip's interpreter.
             "-DPython_EXECUTABLE=" + sys.executable,
-            "-DPYSVZEROD_VERSION=" + self.distribution.get_version(),
+            "-DSVZEROD_VERSION=" + self.distribution.get_version(),
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + output_dir,
             "-DCMAKE_BUILD_TYPE=" + build_type,
         ]
@@ -69,20 +69,20 @@ class CustomCMakeBuild(CMakeBuildExt):
         # -------------------------------------------------
         build_temp = os.path.abspath(self.build_temp)
         search_root = os.path.join(build_temp, "python")
-        dest_dir = os.path.dirname(self.get_ext_fullpath("pysvzerod"))
+        dest_dir = os.path.dirname(self.get_ext_fullpath("svzerod"))
 
         for root, _, files in os.walk(search_root):
             for f in files:
-                if f.startswith("pysvzerod") and f.endswith((".so", ".pyd", ".dll", ".dylib")):
+                if f.startswith("svzerod") and f.endswith((".so", ".pyd", ".dll", ".dylib")):
                     src = os.path.join(root, f)
                     os.makedirs(dest_dir, exist_ok=True)
                     shutil.copy2(src, os.path.join(dest_dir, f))
                     print(f"[INFO] copied {src} -> {dest_dir}")
                     return
 
-        raise RuntimeError("pysvzerod binary not found in build tree")
+        raise RuntimeError("svzerod binary not found in build tree")
 
 setup(
-    ext_modules=[CMakeExtension("pysvzerod")],
+    ext_modules=[CMakeExtension("svzerod")],
     cmdclass={"build_ext": CustomCMakeBuild},
 )

@@ -31,7 +31,7 @@ jobs:
           enable-cache: true
 
       - name: Install Flask dependencies
-        # The GUI only needs Flask, not the compiled pysvzerod extension.
+        # The GUI only needs Flask, not the compiled svzerod extension.
         run: uv sync --no-install-project --no-default-groups --group gui
 
       - name: Start Flask Application

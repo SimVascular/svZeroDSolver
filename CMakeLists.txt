@@ -20,7 +20,7 @@ set(EIGEN_BUILD_BLAS OFF CACHE BOOL "" FORCE)
 
 include(FetchContent)
 set(PYBIND11_FINDPYTHON NEW CACHE STRING "" FORCE)
-find_package(Python COMPONENTS Interpreter Development REQUIRED)
+find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 message(STATUS "Using Python: ${Python_EXECUTABLE} (${Python_VERSION})")
 
 # Enable assertions
@@ -119,8 +119,8 @@ FetchContent_MakeAvailable(Eigen)
 #
 FetchContent_Declare(
     pybind11
-    GIT_REPOSITORY https://github.com/pybind/pybind11
-    GIT_TAG        master
+    URL      https://github.com/pybind/pybind11/archive/refs/tags/v3.1.0.tar.gz
+    URL_HASH SHA256=ef712655692a2e9bf7bb7874c022564a45f91d847ddee987e720cd9e28849665
 )
 
 FetchContent_GetProperties(pybind11)
@@ -150,8 +150,8 @@ FetchContent_MakeAvailable(json)
 #
 FetchContent_Declare(
     pybind11_json
-    GIT_REPOSITORY https://github.com/pybind/pybind11_json.git
-    GIT_TAG        master
+    URL      https://github.com/pybind/pybind11_json/archive/d0bf434be9d287d73a963ff28745542daf02c08f.tar.gz
+    URL_HASH SHA256=6c1b5973e9afd788ea3d9f59e142cdf022e8331a482c192bc4d23a406bfdbb77
 )
 
 FetchContent_MakeAvailable(pybind11_json)
@@ -176,14 +176,16 @@ add_executable(svzerodcalibrator applications/svzerodcalibrator.cpp
 )
 
 # -----------------------------------------------------------------------------
-# Setup building of the pysvzerod Python extension module.
+# Setup building of the svzerod Python extension module.
 # -----------------------------------------------------------------------------
 # Replace EXCLUDE_FROM_ALL with SHARED to test building the Python 
 # shared library.
 
-pybind11_add_module(pysvzerod applications/pysvzerod.cpp)
+pybind11_add_module(svzerod applications/svzerod.cpp)
+set(SVZEROD_VERSION "dev" CACHE STRING "Python package version")
+target_compile_definitions(svzerod PRIVATE SVZEROD_VERSION="${SVZEROD_VERSION}")
 if(WIN32 AND "${CMAKE_GENERATOR}" STREQUAL "MinGW Makefiles")
-    message(STATUS ">> Applying static‑link flags to pysvzerod")
+    message(STATUS ">> Applying static‑link flags to svzerod")
 
     include(CheckCXXCompilerFlag)
     set(_static_flags
@@ -197,20 +199,20 @@ if(WIN32 AND "${CMAKE_GENERATOR}" STREQUAL "MinGW Makefiles")
         list(APPEND _static_flags -static-libwinpthread)
     else()
         find_package(Threads REQUIRED)
-        target_link_libraries(pysvzerod PRIVATE Threads::Threads)
+        target_link_libraries(svzerod PRIVATE Threads::Threads)
     endif()
     # apply to compile *and* link
     foreach(_f IN LISTS _static_flags)
-        target_compile_options(pysvzerod PRIVATE ${_f})
+        target_compile_options(svzerod PRIVATE ${_f})
         # CMake ≥3.13:
-        target_link_options   (pysvzerod PRIVATE ${_f})
+        target_link_options   (svzerod PRIVATE ${_f})
     endforeach()
 
     # verify in the configure log for static compilation:
-    get_target_property(_ccopts pysvzerod COMPILE_OPTIONS)
-    message(STATUS ">>> pysvzerod COMPILE_OPTIONS = ${_ccopts}")
-    get_target_property(_lnkopts pysvzerod LINK_OPTIONS)
-    message(STATUS ">>> pysvzerod LINK_OPTIONS   = ${_lnkopts}")
+    get_target_property(_ccopts svzerod COMPILE_OPTIONS)
+    message(STATUS ">>> svzerod COMPILE_OPTIONS = ${_ccopts}")
+    get_target_property(_lnkopts svzerod LINK_OPTIONS)
+    message(STATUS ">>> svzerod LINK_OPTIONS   = ${_lnkopts}")
 endif()
 
 # -----------------------------------------------------------------------------
@@ -239,7 +241,7 @@ target_include_directories(svzerodcalibrator PUBLIC
   ${CMAKE_SOURCE_DIR}/src/solve 
 )
 
-target_include_directories(pysvzerod PUBLIC 
+target_include_directories(svzerod PUBLIC 
   ${CMAKE_SOURCE_DIR}/src/algebra
   ${CMAKE_SOURCE_DIR}/src/model 
   ${CMAKE_SOURCE_DIR}/src/optimize
@@ -257,13 +259,13 @@ target_link_libraries(svzerodsolver PRIVATE nlohmann_json::nlohmann_json)
 target_link_libraries(svzerodcalibrator PRIVATE Eigen3::Eigen)
 target_link_libraries(svzerodcalibrator PRIVATE nlohmann_json::nlohmann_json)
 
-target_link_libraries(pysvzerod PRIVATE Eigen3::Eigen)
-target_link_libraries(pysvzerod PRIVATE nlohmann_json::nlohmann_json)
-target_link_libraries(pysvzerod PRIVATE pybind11_json)
-target_link_libraries(pysvzerod PRIVATE svzero_algebra_library)
-target_link_libraries(pysvzerod PRIVATE svzero_model_library)
-target_link_libraries(pysvzerod PRIVATE svzero_optimize_library)
-target_link_libraries(pysvzerod PRIVATE svzero_solve_library)
+target_link_libraries(svzerod PRIVATE Eigen3::Eigen)
+target_link_libraries(svzerod PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(svzerod PRIVATE pybind11_json)
+target_link_libraries(svzerod PRIVATE svzero_algebra_library)
+target_link_libraries(svzerod PRIVATE svzero_model_library)
+target_link_libraries(svzerod PRIVATE svzero_optimize_library)
+target_link_libraries(svzerod PRIVATE svzero_solve_library)
 
 
 # Create distribution
@@ -287,12 +289,12 @@ add_custom_target(codecheck
   COMMAND npm run check
   COMMAND find ${SDIR}/*.h ${SDIR}/*.cpp | xargs clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format --dry-run --Werror)
 
-set_target_properties(pysvzerod PROPERTIES
+set_target_properties(svzerod PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/python
 )
 
 # standard install target locations
-install(TARGETS pysvzerod
+install(TARGETS svzerod
         LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
         ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
         RUNTIME DESTINATION "${CMAKE_INSTALL_LIBDIR}"
@@ -300,7 +302,7 @@ install(TARGETS pysvzerod
 
 # append correct suffix for windows python runtime files
 if (WIN32)
-    set_target_properties(pysvzerod PROPERTIES
+    set_target_properties(svzerod PROPERTIES
             PREFIX ""
             SUFFIX ".pyd"
     )

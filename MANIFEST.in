@@ -1,0 +1,5 @@
+include CMakeLists.txt
+include applications/*.cpp
+recursive-include src *.cpp *.h CMakeLists.txt
+include distribution/CMakeLists.txt distribution/readme.txt
+prune tests

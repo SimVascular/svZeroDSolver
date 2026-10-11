@@ -2,6 +2,36 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "Parameter.h"
 
+#include <cstdio>
+#include <string>
+
+// Suppress -Wshadow warnings from the exprtk third-party header
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wshadow"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+#include <exprtk.hpp>
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+/// PIMPL implementation holding the exprtk expression state
+struct Parameter::ExprtkImpl {
+  exprtk::symbol_table<double>
+      symbol_table;  ///< Symbol table mapping 't' to current time
+  exprtk::expression<double> expression;  ///< Compiled expression object
+  double* time_value = nullptr;  ///< Pointer into the symbol table for 't'
+};
+
+Parameter::~Parameter() = default;
+Parameter::Parameter(Parameter&&) noexcept = default;
+Parameter& Parameter::operator=(Parameter&&) noexcept = default;
+
 Parameter::Parameter(int id, double value) {
   this->id = id;
   update(value);
@@ -12,6 +42,12 @@ Parameter::Parameter(int id, const std::vector<double>& times,
   this->id = id;
   this->is_periodic = periodic;
   update(times, values);
+}
+
+Parameter::Parameter(int id, const std::string expression_string) {
+  this->id = id;
+  this->expression_string = expression_string;
+  update(expression_string);
 }
 
 void Parameter::update(double update_value) {
@@ -35,6 +71,48 @@ void Parameter::update(const std::vector<double>& update_times,
   }
 }
 
+void Parameter::update(const std::string update_string) {
+  is_function = true;
+  is_constant = false;
+  expression_string = update_string;
+
+  exprtk_impl_ = std::make_unique<ExprtkImpl>();
+
+  if (!exprtk_impl_->symbol_table.create_variable("t")) {
+    throw std::runtime_error(
+        "Error failed to create time_value in symbol_table.");
+  }
+
+  exprtk_impl_->symbol_table.add_constants();
+
+  exprtk_impl_->time_value =
+      &exprtk_impl_->symbol_table.get_variable("t")->ref();
+  exprtk_impl_->expression.register_symbol_table(exprtk_impl_->symbol_table);
+
+  exprtk::parser<double> parser;
+
+  if (!parser.compile(expression_string, exprtk_impl_->expression)) {
+    is_function = false;
+    exprtk_impl_.reset();
+
+    printf("Error: %s\tExpression: %s\n", parser.error().c_str(),
+           expression_string.c_str());
+
+    for (std::size_t i = 0; i < parser.error_count(); ++i) {
+      const auto error = parser.get_error(i);
+
+      printf(
+          "Error: %02d  Position: %02d Type: [%14s] Msg: %s\tExpression: %s\n",
+          static_cast<unsigned int>(i),
+          static_cast<unsigned int>(error.token.position),
+          exprtk::parser_error::to_str(error.mode).c_str(),
+          error.diagnostic.c_str(), expression_string.c_str());
+    }
+    throw std::runtime_error(
+        "Error when compiling the function provided in 'fn'.");
+  }
+}
+
 double Parameter::get(double time) {
   // Return the constant value if parameter is constant
   if (is_constant) {
@@ -49,6 +127,13 @@ double Parameter::get(double time) {
   } else {
     // this->times is not periodic when running with external solver
     rtime = time;
+  }
+
+  if (is_function) {
+    assert(exprtk_impl_ != nullptr);
+    assert(exprtk_impl_->time_value != nullptr);
+    *exprtk_impl_->time_value = time;
+    return exprtk_impl_->expression.value();
   }
 
   // Determine the lower and upper element for interpolation

@@ -119,4 +119,34 @@ struct InputParameter {
         default_val(default_val) {}
 };
 
+/**
+ * @brief Linearly interpolate y(x) from a table of break points.
+ *
+ * Outside [xs.front(), xs.back()], the value is clamped to the nearest
+ * endpoint of ys (flat extrapolation).
+ *
+ * @param x Value to evaluate the table at
+ * @param xs Break points, sorted in ascending order (at least 2 entries)
+ * @param ys Values at each break point (same size as xs)
+ * @return Interpolated (or boundary-clamped) value
+ */
+double linear_interpolate(double x, const std::vector<double>& xs,
+                          const std::vector<double>& ys);
+
+/**
+ * @brief Local slope dy/dx of the piecewise-linear table used by \ref
+ * linear_interpolate.
+ *
+ * Outside [xs.front(), xs.back()], the table is flat (see \ref
+ * linear_interpolate), so the slope is 0 there. At an interior break point,
+ * the slope of the segment to its right is used.
+ *
+ * @param x Value to evaluate the slope at
+ * @param xs Break points, sorted in ascending order (at least 2 entries)
+ * @param ys Values at each break point (same size as xs)
+ * @return Local slope of the interpolated table at x
+ */
+double linear_interpolate_slope(double x, const std::vector<double>& xs,
+                                const std::vector<double>& ys);
+
 #endif  // SVZERODSOLVER_MODEL_PARAMETER_HPP_

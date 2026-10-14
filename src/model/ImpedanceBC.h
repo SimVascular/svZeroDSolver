@@ -128,6 +128,11 @@ class ImpedanceBC : public Block {
  private:
   enum class ConvolutionMode { exact = 0, truncated = 1 };
 
+  /// @brief Scalar fields preceding the flow history in the persistent state.
+  /// Layout: [dt, num_period_steps, num_kernel_terms, head,
+  ///          num_accepted_steps, flow_history...]
+  static constexpr size_t kNumStateHeaderFields = 5;
+
   void ensure_initialized();
   double lagged_flow(int lag) const;
 
@@ -143,7 +148,8 @@ class ImpedanceBC : public Block {
   int num_period_steps = -1;
   int num_kernel_terms = -1;
   int head = -1;
-  int committed_samples = 0;
+  /// @brief Number of timesteps accepted since (re)initialization. Also tells
+  /// how much of the ring buffer holds real data: min(this, num_period_steps).
   long long num_accepted_steps = 0;
   std::vector<double> flow_history;
 };

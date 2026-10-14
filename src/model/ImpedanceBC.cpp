@@ -45,7 +45,6 @@ void ImpedanceBC::accept_timestep(
   const double flow_accepted = y[global_var_ids[1]];
   head = (head + 1) % num_period_steps;
   flow_history[head] = flow_accepted;
-  committed_samples = std::min(committed_samples + 1, num_period_steps);
   num_accepted_steps += 1;
 }
 
@@ -54,13 +53,14 @@ std::vector<double> ImpedanceBC::get_persistent_state() const {
     return {};
   }
 
+  // Layout: [dt, num_period_steps, num_kernel_terms, head,
+  //          num_accepted_steps, flow_history...]
   std::vector<double> state;
-  state.reserve(6 + flow_history.size());
+  state.reserve(kNumStateHeaderFields + flow_history.size());
   state.push_back(dt);
   state.push_back(static_cast<double>(num_period_steps));
   state.push_back(static_cast<double>(num_kernel_terms));
   state.push_back(static_cast<double>(head));
-  state.push_back(static_cast<double>(committed_samples));
   state.push_back(static_cast<double>(num_accepted_steps));
   state.insert(state.end(), flow_history.begin(), flow_history.end());
   return state;
@@ -73,13 +73,12 @@ void ImpedanceBC::set_persistent_state(const std::vector<double>& state) {
     num_period_steps = -1;
     num_kernel_terms = -1;
     head = -1;
-    committed_samples = 0;
     num_accepted_steps = 0;
     flow_history.clear();
     return;
   }
 
-  if (state.size() < 5) {
+  if (state.size() <= kNumStateHeaderFields) {
     throw std::runtime_error("Invalid persistent state for IMPEDANCE block " +
                              get_name() + ".");
   }
@@ -88,28 +87,19 @@ void ImpedanceBC::set_persistent_state(const std::vector<double>& state) {
   const int new_num_period_steps = static_cast<int>(std::llround(state[1]));
   const int new_num_kernel_terms = static_cast<int>(std::llround(state[2]));
   const int new_head = static_cast<int>(std::llround(state[3]));
-  const int new_committed_samples = static_cast<int>(std::llround(state[4]));
-  const bool has_num_accepted_steps =
-      (state.size() == static_cast<size_t>(6 + new_num_period_steps));
   const long long new_num_accepted_steps =
-      has_num_accepted_steps
-          ? static_cast<long long>(std::llround(state[5]))
-          : static_cast<long long>(new_committed_samples);
+      static_cast<long long>(std::llround(state[4]));
 
   if ((new_dt <= 0.0) || (new_num_period_steps <= 0) ||
       (new_num_kernel_terms <= 0) ||
       (new_num_kernel_terms > new_num_period_steps) || (new_head < 0) ||
-      (new_head >= new_num_period_steps) || (new_committed_samples < 0) ||
-      (new_committed_samples > new_num_period_steps) ||
-      (new_num_accepted_steps < 0)) {
+      (new_head >= new_num_period_steps) || (new_num_accepted_steps < 0)) {
     throw std::runtime_error("Corrupted persistent state for IMPEDANCE block " +
                              get_name() + ".");
   }
 
-  const size_t expected_size = has_num_accepted_steps
-                                   ? static_cast<size_t>(6 + new_num_period_steps)
-                                   : static_cast<size_t>(5 + new_num_period_steps);
-  if (state.size() != expected_size) {
+  if (state.size() !=
+      static_cast<size_t>(kNumStateHeaderFields + new_num_period_steps)) {
     throw std::runtime_error("Persistent state size mismatch for IMPEDANCE "
                              "block " +
                              get_name() + ".");
@@ -126,10 +116,8 @@ void ImpedanceBC::set_persistent_state(const std::vector<double>& state) {
   num_period_steps = new_num_period_steps;
   num_kernel_terms = new_num_kernel_terms;
   head = new_head;
-  committed_samples = new_committed_samples;
   num_accepted_steps = new_num_accepted_steps;
-  flow_history.assign(state.begin() + (has_num_accepted_steps ? 6 : 5),
-                      state.end());
+  flow_history.assign(state.begin() + kNumStateHeaderFields, state.end());
   initialized = true;
 }
 
@@ -183,7 +171,6 @@ void ImpedanceBC::configure(const std::vector<double>& z, double pd,
   num_period_steps = -1;
   this->num_kernel_terms = -1;
   head = -1;
-  committed_samples = 0;
   num_accepted_steps = 0;
   flow_history.clear();
 }
@@ -269,7 +256,6 @@ void ImpedanceBC::ensure_initialized() {
 
     flow_history.assign(num_period_steps, 0.0);
     head = num_period_steps - 1;
-    committed_samples = 0;
     num_accepted_steps = 0;
     initialized = true;
     return;
@@ -292,10 +278,6 @@ double ImpedanceBC::lagged_flow(int lag) const {
                              "IMPEDANCE block " +
                              get_name() + ".");
   }
-  if (lag > committed_samples) {
-    return 0.0;
-  }
-
   int idx = (head - (lag - 1)) % num_period_steps;
   if (idx < 0) {
     idx += num_period_steps;

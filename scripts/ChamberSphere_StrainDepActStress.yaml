@@ -52,9 +52,9 @@ time_dependent:
   - u_plus 
   - u_minus
 
-strain_dependent:
-  - m_0
-  - n_0
+strain_dependent_functions:
+  m_0: e_c
+  n_0: e_c
 
 helper_functions: |
   def CG(radius):

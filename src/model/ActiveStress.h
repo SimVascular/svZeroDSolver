@@ -293,6 +293,11 @@ class StrainDependentActiveStress : public ActiveStress {
                        const std::vector<int>& global_eqn_ids,
                        const std::vector<int>& global_var_ids) override;
 
+  void update_time(SparseSystem& system,
+                   const std::vector<int>& global_eqn_ids,
+                   const std::vector<int>& global_var_ids,
+                   double activation_signal) override;
+
   void update_solution(SparseSystem& system,
                        const std::vector<int>& global_eqn_ids,
                        const std::vector<int>& global_var_ids,
@@ -320,18 +325,19 @@ class StrainDependentActiveStress : public ActiveStress {
   ///@}
 
   /**
-   * @brief Update the strain- and activation-dependent coefficients used
-   * across this model's equations
+   * @brief Update the strain-dependent coefficients used across this
+   * model's equations
    *
    * @param e_c Current sarcomere element strain
-   * @param u Reaction-rate signal at the current time
    */
-  void update_active_stress_values(double e_c, double u);
+  void update_active_stress_values(double e_c);
 
-  double n_0_ = 0.0;      // activation strain-dependence
-  double m_0_ = 0.0;      // relaxation strain-dependence
-  double u_plus_ = 0.0;   // positive part of the reaction-rate signal
-  double u_minus_ = 0.0;  // negative part of the reaction-rate signal
+  double n_0_ = 0.0;         // activation strain-dependence
+  double m_0_ = 0.0;         // relaxation strain-dependence
+  double dn_0_de_c_ = 0.0;   // d(n_0)/d(e_c), local slope of n0_e_c/n0_values
+  double dm_0_de_c_ = 0.0;   // d(m_0)/d(e_c), local slope of m0_e_c/m0_values
+  double u_plus_ = 0.0;      // positive part of the reaction-rate signal
+  double u_minus_ = 0.0;     // negative part of the reaction-rate signal
 };
 
 #endif  // SVZERODSOLVER_MODEL_ACTIVESTRESS_HPP_

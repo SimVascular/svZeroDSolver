@@ -112,15 +112,10 @@ void StrainDependentActiveStress::update_constant(
       -1;
 }
 
-void StrainDependentActiveStress::update_active_stress_values(double e_c,
-                                                               double u) {
-  // activation and relaxation strain-dependence, each a piecewise-linear
-  // function of e_c given by an (e_c, value) break point table
-  n_0_ = linear_interpolate(e_c, params_vec_.at("n0_e_c"),
-                            params_vec_.at("n0_values"));
-  m_0_ = linear_interpolate(e_c, params_vec_.at("m0_e_c"),
-                            params_vec_.at("m0_values"));
-
+void StrainDependentActiveStress::update_time(
+    SparseSystem& system, const std::vector<int>& global_eqn_ids,
+    const std::vector<int>& global_var_ids, double activation_signal) {
+  const double u = activation_signal;
   if (u >= 0.0) {
     u_plus_ = u;
     u_minus_ = 0.0;
@@ -128,6 +123,24 @@ void StrainDependentActiveStress::update_active_stress_values(double e_c,
     u_plus_ = 0.0;
     u_minus_ = u;
   }
+
+  system.F.coeffRef(global_eqn_ids[K_C_EQN], global_var_ids[K_C_VAR]) =
+      -u_plus_;
+  system.F.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[TAU_C_VAR]) =
+      -u_plus_;
+}
+
+void StrainDependentActiveStress::update_active_stress_values(double e_c) {
+  // activation and relaxation strain-dependence, each a piecewise-linear
+  // function of e_c given by an (e_c, value) break point table
+  n_0_ = linear_interpolate(e_c, params_vec_.at("n0_e_c"),
+                            params_vec_.at("n0_values"));
+  m_0_ = linear_interpolate(e_c, params_vec_.at("m0_e_c"),
+                            params_vec_.at("m0_values"));
+  dn_0_de_c_ = linear_interpolate_slope(e_c, params_vec_.at("n0_e_c"),
+                                        params_vec_.at("n0_values"));
+  dm_0_de_c_ = linear_interpolate_slope(e_c, params_vec_.at("m0_e_c"),
+                                        params_vec_.at("m0_values"));
 }
 
 void StrainDependentActiveStress::update_solution(
@@ -136,6 +149,8 @@ void StrainDependentActiveStress::update_solution(
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy, double radius0,
     double activation_signal) {
+  (void)activation_signal;  // u_plus_/u_minus_ are computed in update_time()
+
   const double radius = y[global_var_ids[RADIUS_VAR]];
   const double e_c = y[global_var_ids[E_C_VAR]];
   const double tau_c = y[global_var_ids[TAU_C_VAR]];
@@ -143,7 +158,7 @@ void StrainDependentActiveStress::update_solution(
   const double omega = y[global_var_ids[OMEGA_VAR]];
   const double de_c_dt = dy[global_var_ids[E_C_VAR]];
 
-  update_active_stress_values(e_c, activation_signal);
+  update_active_stress_values(e_c);
 
   const double E_s = params_.at("E_s");
   const double alpha = params_.at("alpha");
@@ -165,6 +180,8 @@ void StrainDependentActiveStress::update_solution(
 
   // relaxation dynamics
   system.C.coeffRef(global_eqn_ids[OMEGA_EQN]) = m_0_;
+  system.dC_dy.coeffRef(global_eqn_ids[OMEGA_EQN], global_var_ids[E_C_VAR]) =
+      dm_0_de_c_;
 
   // sarcomere element strain
   system.C.coeffRef(global_eqn_ids[E_C_EQN]) =
@@ -185,27 +202,31 @@ void StrainDependentActiveStress::update_solution(
        6 * radius * radius0 - pow(radius0, 2) * (2 * e_c + 1)) /
       (pow(radius0, 4) * pow(2 * e_c + 1, 4));
 
-  // sarcomere stiffness 
+  // sarcomere stiffness
   system.C.coeffRef(global_eqn_ids[K_C_EQN]) =
       k_0 * n_0_ * u_plus_ -
-      k_c * (alpha * fabs(de_c_dt) + omega * fabs(u_minus_) + u_plus_);
+      k_c * (alpha * fabs(de_c_dt) + omega * fabs(u_minus_));
   system.dC_dydot.coeffRef(global_eqn_ids[K_C_EQN], global_var_ids[E_C_VAR]) =
       ((de_c_dt == 0) ? (0) : (-alpha * de_c_dt * k_c / fabs(de_c_dt)));
+  system.dC_dy.coeffRef(global_eqn_ids[K_C_EQN], global_var_ids[E_C_VAR]) =
+      k_0 * dn_0_de_c_ * u_plus_;
   system.dC_dy.coeffRef(global_eqn_ids[K_C_EQN], global_var_ids[K_C_VAR]) =
-      -alpha * fabs(de_c_dt) - omega * fabs(u_minus_) - u_plus_;
+      -alpha * fabs(de_c_dt) - omega * fabs(u_minus_);
   system.dC_dy.coeffRef(global_eqn_ids[K_C_EQN], global_var_ids[OMEGA_VAR]) =
       -k_c * fabs(u_minus_);
 
   // sarcomere active stress
   system.C.coeffRef(global_eqn_ids[TAU_C_EQN]) =
       de_c_dt * k_c + n_0_ * sigma_0 * u_plus_ -
-      tau_c * (alpha * fabs(de_c_dt) + omega * fabs(u_minus_) + u_plus_);
+      tau_c * (alpha * fabs(de_c_dt) + omega * fabs(u_minus_));
   system.dC_dydot.coeffRef(global_eqn_ids[TAU_C_EQN],
                            global_var_ids[E_C_VAR]) =
       ((de_c_dt == 0) ? (k_c)
                       : (-alpha * de_c_dt * tau_c / fabs(de_c_dt) + k_c));
+  system.dC_dy.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[E_C_VAR]) =
+      sigma_0 * dn_0_de_c_ * u_plus_;
   system.dC_dy.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[TAU_C_VAR]) =
-      -alpha * fabs(de_c_dt) - omega * fabs(u_minus_) - u_plus_;
+      -alpha * fabs(de_c_dt) - omega * fabs(u_minus_);
   system.dC_dy.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[K_C_VAR]) =
       de_c_dt;
   system.dC_dy.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[OMEGA_VAR]) =

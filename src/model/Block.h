@@ -281,7 +281,6 @@ class Block {
   virtual void set_persistent_state(const std::vector<double>& state);
 
   /**
-   * @brief Set the gradient of the block contributions with respect to the
    * @brief Set the gradient of the block residual with respect to the
    * parameters
    *

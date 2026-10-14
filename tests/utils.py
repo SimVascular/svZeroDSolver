@@ -10,15 +10,15 @@ import pandas as pd
 # (run executables instead of Python interface, much slower)
 from pytest import coverage
 
-import pysvzerod
+import svzerod
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
 RTOL_PRES = 1.0e-7
 RTOL_FLOW = 1.0e-7
 
-def execute_pysvzerod(testfile, mode):
-    """Execute pysvzerod (via Python interface or executable).
+def execute_svzerod(testfile, mode):
+    """Execute svzerod (via Python interface or executable).
 
     Args:
         testfile: Path to the input file.
@@ -46,9 +46,9 @@ def execute_pysvzerod(testfile, mode):
     else:
         # run via Python binding (fast)
         if mode == "solver":
-            result = pysvzerod.simulate(config)
+            result = svzerod.simulate(config)
         elif mode == "calibrator":
-            result = pysvzerod.calibrate(config)
+            result = svzerod.calibrate(config)
 
     return result, config
 
@@ -132,7 +132,7 @@ def run_with_reference(
         ):
 
 
-    res, config = execute_pysvzerod(test_config, "solver")
+    res, config = execute_svzerod(test_config, "solver")
 
     output_variable_based = config["simulation_parameters"].get("output_variable_based", False)
 
@@ -160,7 +160,7 @@ def run_test_case_by_name(name, output_variable_based=False, folder="."):
     testfile = os.path.join(this_file_dir, "cases", name + ".json")
 
     # run test
-    result, config = execute_pysvzerod(testfile, "solver")
+    result, config = execute_svzerod(testfile, "solver")
 
     if not output_variable_based:
         output = {

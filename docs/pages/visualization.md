@@ -18,7 +18,7 @@ svZeroDVisualization is built using a robust architecture that includes:
 We use [uv](https://docs.astral.sh/uv/) to manage the Python environment (see the
 [Developer Guide](@ref developer_guide) for an overview). From the repository
 root, the following command creates a virtual environment in `.venv`, builds the
-`pysvzerod` extension, and installs the visualization dependencies (`dash`,
+`svzerod` extension, and installs the visualization dependencies (`dash`,
 `plotly`) together with the shared dependencies (`pandas`, `numpy`, `matplotlib`,
 `networkx`):
 ```bash

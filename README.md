@@ -20,6 +20,17 @@ You can find more information under the following links:
 * [**Forum**](https://github.com/simvascular/svZeroDSolver/discussions)
 * [**About SimVascular**](https://simvascular.github.io)
 
+## Python package
+
+Install the Python bindings from PyPI with:
+
+```sh
+python -m pip install svzerod
+```
+
+Use `svzerod.simulate("model.json")` to run a model from Python. The package
+also installs the `svzerodsolver` and `svzerodcalibrator` commands.
+
 ## Impedance BC (Olufsen periodic memory)
 
 `IMPEDANCE` is a boundary condition that enforces

@@ -281,7 +281,6 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
     sim_params.sim_num_cycles = sim_config["number_of_cardiac_cycles"];
     sim_params.sim_pts_per_cycle =
         sim_config["number_of_time_pts_per_cardiac_cycle"];
-    sim_params.sim_impedance_pts_per_cycle = sim_params.sim_pts_per_cycle;
     sim_params.sim_num_time_steps =
         (sim_params.sim_pts_per_cycle - 1) * sim_params.sim_num_cycles + 1;
     sim_params.use_cycle_to_cycle_error =
@@ -297,8 +296,6 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
     sim_params.sim_num_cycles = 1;
     sim_params.sim_num_time_steps = sim_config["number_of_time_pts"];
     sim_params.sim_pts_per_cycle = sim_params.sim_num_time_steps;
-    sim_params.sim_impedance_pts_per_cycle =
-        sim_config.value("number_of_time_pts_per_cardiac_cycle", 0);
     sim_params.sim_external_step_size =
         sim_config.value("external_step_size", 0.1);
     if (has_impedance) {
@@ -308,7 +305,7 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
             "`simulation_parameters.number_of_time_pts = 2`.");
       }
       if (sim_config.contains("number_of_time_pts_per_cardiac_cycle") &&
-          sim_params.sim_impedance_pts_per_cycle <= 1) {
+          sim_config.value("number_of_time_pts_per_cardiac_cycle", 0) <= 1) {
         throw std::runtime_error(
             "Coupled configs with IMPEDANCE boundary conditions require "
             "`simulation_parameters.number_of_time_pts_per_cardiac_cycle > 1`.");
@@ -515,7 +512,14 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
       std::string convolution_mode = bc_values.value("convolution_mode", "exact");
       int num_kernel_terms = bc_values.value("num_kernel_terms", -1);
 
-      impedance_block->configure(z, pd, convolution_mode, num_kernel_terms);
+      // One-cycle sample count, if the configuration states it. Mandatory for
+      // non-coupled runs and optional for coupled ones, where 0 means the
+      // block infers the cycle discretization from cardiac_period / dt.
+      int points_per_cycle = config["simulation_parameters"].value(
+          "number_of_time_pts_per_cardiac_cycle", 0);
+
+      impedance_block->configure(z, pd, convolution_mode, num_kernel_terms,
+                                 points_per_cycle);
     }
 
     if (block->block_type == BlockType::closed_loop_rcr_bc) {

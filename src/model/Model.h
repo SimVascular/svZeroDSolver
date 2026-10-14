@@ -74,7 +74,6 @@ class Model {
 
   double cardiac_cycle_period = -1.0;  ///< Cardiac cycle period
   double time = 0.0;                   ///< Current time
-  int impedance_points_per_cycle = 0;  ///< One-cycle sample count for IMPEDANCE BCs
 
   /**
    * @brief Create a new block

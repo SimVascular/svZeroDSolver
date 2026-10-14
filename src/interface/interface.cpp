@@ -95,7 +95,6 @@ void initialize(std::string input_file_arg, int& problem_id, int& pts_per_cycle,
   auto simparams = load_simulation_params(config);
 
   auto model = std::shared_ptr<Model>(new Model());
-  model->impedance_points_per_cycle = simparams.sim_impedance_pts_per_cycle;
 
   load_simulation_model(config, *model.get());
   auto state = load_initial_condition(config, *model.get());

@@ -123,7 +123,7 @@ void ImpedanceBC::set_persistent_state(const std::vector<double>& state) {
 
 void ImpedanceBC::configure(const std::vector<double>& z, double pd,
                             const std::string& convolution_mode,
-                            int num_kernel_terms) {
+                            int num_kernel_terms, int points_per_cycle) {
   if (z.empty()) {
     throw std::runtime_error("IMPEDANCE block " + get_name() +
                              " requires non-empty kernel `z`.");
@@ -163,6 +163,7 @@ void ImpedanceBC::configure(const std::vector<double>& z, double pd,
   kernel = z;
   this->pd = pd;
   num_kernel_terms_input = num_kernel_terms;
+  points_per_cycle_input = points_per_cycle;
   configured = true;
 
   // Reset runtime state; it will be re-initialized using current dt.
@@ -213,8 +214,8 @@ void ImpedanceBC::ensure_initialized() {
     }
 
     const int dt_period_steps = static_cast<int>(rounded);
-    if (model->impedance_points_per_cycle > 0) {
-      const int configured_period_steps = model->impedance_points_per_cycle - 1;
+    if (points_per_cycle_input > 0) {
+      const int configured_period_steps = points_per_cycle_input - 1;
       if (configured_period_steps <= 0) {
         throw std::runtime_error(
             "IMPEDANCE block " + get_name() +
@@ -226,7 +227,7 @@ void ImpedanceBC::ensure_initialized() {
             " requires `simulation_parameters.number_of_time_pts_per_cardiac_cycle - 1` "
             "to match cardiac_period / dt. Expected " +
             std::to_string(dt_period_steps + 1) + ", got " +
-            std::to_string(model->impedance_points_per_cycle) + ".");
+            std::to_string(points_per_cycle_input) + ".");
       }
       num_period_steps = configured_period_steps;
     } else {

@@ -116,9 +116,13 @@ class ImpedanceBC : public Block {
    * @param pd Distal/reference pressure
    * @param convolution_mode Convolution mode (`exact` or `truncated`)
    * @param num_kernel_terms Number of kernel terms for truncated mode
+   * @param points_per_cycle Sample points spanning one cardiac cycle
+   * (`simulation_parameters.number_of_time_pts_per_cardiac_cycle`). Pass 0 to
+   * infer the cycle discretization from `cardiac_period / dt` instead.
    */
   void configure(const std::vector<double>& z, double pd,
-                 const std::string& convolution_mode, int num_kernel_terms);
+                 const std::string& convolution_mode, int num_kernel_terms,
+                 int points_per_cycle);
 
   /**
    * @brief Nonzero triplet counts contributed by this block.
@@ -140,6 +144,9 @@ class ImpedanceBC : public Block {
   double pd = 0.0;
   ConvolutionMode mode = ConvolutionMode::exact;
   int num_kernel_terms_input = -1;
+  /// @brief One-cycle sample count from the configuration; 0 means infer the
+  /// cycle discretization from `cardiac_period / dt`.
+  int points_per_cycle_input = 0;
   bool configured = false;
 
   // Runtime-discretized state.

@@ -16,17 +16,56 @@
 /**
  * @brief Structured-tree impedance boundary condition with periodic memory.
  *
- * This boundary condition applies an Olufsen-style discrete convolution using
- * one-cycle flow history:
+ * Imposes the outlet pressure as a discrete convolution of the impedance
+ * kernel with one cardiac cycle of flow history, following the structured-tree
+ * outflow condition of \cite olufsen2000.
+ *
+ * ### Governing equations
  *
  * \f[
  * P_{n+1}=P_d+z_0Q_{n+1}+\sum_{m=1}^{N_k-1}z_mQ_{n+1-m}
  * \f]
  *
- * The `z` entries are discrete-time convolution weights. The `m=0` term is
- * treated implicitly through the linear system matrix.
- * History terms (`m>=1`) are evaluated from committed (accepted) timesteps only
- * via a fixed-size ring buffer of one cardiac period.
+ * The \f$z\f$ entries are discrete-time convolution weights. The \f$m=0\f$
+ * term depends on the current flow, so it enters the system matrix directly;
+ * the history terms (\f$m\geq 1\f$) are evaluated from accepted timesteps only,
+ * held in a fixed-size ring buffer spanning one cardiac cycle.
+ *
+ * The ring buffer is zero-initialized, so the history terms are omitted
+ * entirely until one full cycle has been accepted, after which they switch on
+ * at full magnitude. This reproduces the reference implementation, which gates
+ * the same sum on `t > Period`, and makes the pressure discontinuous at the
+ * start of the second cycle. The first cycle is therefore not a meaningful
+ * solution and should be discarded.
+ *
+ * ### Local contributions
+ *
+ * \f[
+ * \mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} & Q^{e}\end{array}\right]^{T}
+ * \f]
+ *
+ * \f[
+ * \mathbf{F}^{e}=\left[\begin{array}{cc}
+ * 1 & -z_{0}
+ * \end{array}\right]
+ * \f]
+ *
+ * \f[
+ * \mathbf{c}^{e}=\left[\begin{array}{c}
+ * -\left(P_{d}+\sum_{m=1}^{N_k-1}z_mQ_{n+1-m}\right)
+ * \end{array}\right]
+ * \f]
+ *
+ * ### Parameters
+ *
+ * * `z`: Time-domain impedance kernel. Its length must equal one cardiac cycle
+ *   in time steps (see the timing requirements below).
+ * * `Pd`: Distal/reference pressure. Optional, defaults to `0.0`.
+ * * `convolution_mode`: `exact` (default) or `truncated`. In `truncated` mode
+ *   only the first `num_kernel_terms` kernel entries are used, which costs
+ *   \f$O(N_k)\f$ per accepted timestep instead of one full cycle.
+ * * `num_kernel_terms`: Number of kernel terms. Required when
+ *   `convolution_mode` is `truncated`, ignored otherwise.
  *
  * ### Usage in json configuration file
  *
@@ -43,9 +82,22 @@
  *         }
  *     ]
  *
- * `convolution_mode` may be `exact` (default) or `truncated`.
- * In `truncated` mode, only the first `num_kernel_terms` kernel entries are
- * used.
+ * ### Simulation timing requirements
+ *
+ * The kernel is discretized at the solver time step, which constrains
+ * `simulation_parameters`:
+ *
+ * * `cardiac_period / dt` must equal `z.size()` in all cases.
+ * * Non-coupled configurations must set
+ *   `number_of_time_pts_per_cardiac_cycle = z.size() + 1`.
+ * * 3D-coupled configurations must keep `number_of_time_pts = 2` for the
+ *   external interface step. If `number_of_time_pts_per_cardiac_cycle` is
+ *   omitted, the cycle discretization is inferred from `cardiac_period / dt`.
+ * * `steady_initial` must be set to `false`. The steady initial condition is
+ *   solved with a time step of `cardiac_period / 10`, which does not match the
+ *   kernel discretization and has no meaningful interpretation for this
+ *   boundary condition. Since `steady_initial` defaults to `true`, it must be
+ *   set explicitly; otherwise the solver reports an error and exits.
  */
 class ImpedanceBC : public Block {
  public:

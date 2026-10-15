@@ -95,9 +95,19 @@ The following files are automatically formatted:
 - Source code (`.cpp, .h`): [clang-format](https://clang.llvm.org/docs/ClangFormat.html) as specified in `.clang-format` (defaults to [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html))
 - Test cases and results (`.json`): [Prettier](https://prettier.io/) as specified in `.prettierrc`
 
-Before formatting the code with clang-format, ensure that you have latest clang-format version by running `clang-format --version`. To upgrade `clang-format` use the following commands
-  * on MacOS: `brew upgrade clang-format`
-  * on Ubuntu: `sudo apt upgrade clang-format`
+The CI pins clang-format to version **23.1.0** (`CLANG_FORMAT_VERSION` in
+`.github/workflows/codechecks.yml`). Different clang-format versions can format
+the same code differently, so use exactly this version locally. The simplest
+way on any platform (macOS, Linux, Sherlock) is to install it from PyPI, e.g.
+into your virtual environment:
+
+```bash
+pip install clang-format==23.1.0
+```
+
+Then check that this is the `clang-format` on your `PATH` by running
+`clang-format --version`. Other installations (e.g. Homebrew's `llvm`, a system
+package, or an `llvm` module) may come earlier on your `PATH` and shadow it.
 
 Before committing any changes, run the following
 command **from your build folder** to format all your files:

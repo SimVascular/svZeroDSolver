@@ -276,18 +276,22 @@ add_subdirectory("distribution")
 # -----------------------------------------------------------------------------
 # Enforce and check code format
 # -----------------------------------------------------------------------------
-# set paths of files to format
-set(SDIR ${PROJECT_SOURCE_DIR}/src)
+# collect all C++ sources under src/ (recursively) to format
+file(GLOB_RECURSE FORMAT_SOURCES CONFIGURE_DEPENDS
+  ${PROJECT_SOURCE_DIR}/src/*.h
+  ${PROJECT_SOURCE_DIR}/src/*.cpp)
 
 # format the code
 add_custom_target(codeformat
   COMMAND npm run format
-  COMMAND find ${SDIR}/*.h ${SDIR}/*.cpp | xargs clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format -i)
+  COMMAND clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format -i ${FORMAT_SOURCES}
+  VERBATIM)
 
 # check code format
 add_custom_target(codecheck
   COMMAND npm run check
-  COMMAND find ${SDIR}/*.h ${SDIR}/*.cpp | xargs clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format --dry-run --Werror)
+  COMMAND clang-format -style=file:${PROJECT_SOURCE_DIR}/.clang-format --dry-run --Werror ${FORMAT_SOURCES}
+  VERBATIM)
 
 set_target_properties(svzerod PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/python

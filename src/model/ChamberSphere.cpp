@@ -78,9 +78,9 @@ void ChamberSphere::update_solution(
   // spherical stress: material-dependent elastic term plus viscous damping
   const auto mat = material_->compute(radius, radius0);
 
-  const double C_val_visc =
-      2 * dradius_dt * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
-      (pow(radius0, 2) * pow(radius + radius0, 11));
+  const double C_val_visc = 2 * dradius_dt * eta *
+                            (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
+                            (pow(radius0, 2) * pow(radius + radius0, 11));
   const double dC_dy_visc =
       2 * dradius_dt * eta / pow(radius0, 2) -
       44 * dradius_dt * eta * pow(radius0, 10) / pow(radius + radius0, 12);

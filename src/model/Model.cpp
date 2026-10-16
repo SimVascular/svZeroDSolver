@@ -23,6 +23,7 @@ Model::Model() {
       {"CORONARY", block_factory<OpenLoopCoronaryBC>()},
       {"CORONARY_VAR_RES", block_factory<OpenLoopCoronaryVarResBC>()},
       {"FLOW", block_factory<FlowReferenceBC>()},
+      {"IMPEDANCE", block_factory<ImpedanceBC>()},
       {"NORMAL_JUNCTION", block_factory<Junction>()},
       {"PRESSURE", block_factory<PressureReferenceBC>()},
       {"RCR", block_factory<WindkesselBC>()},
@@ -224,6 +225,47 @@ void Model::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
     block->post_solve(y);
   }
 }
+
+void Model::accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+  for (size_t i = 0; i < get_num_blocks(true); i++) {
+    get_block(i)->accept_timestep(y);
+  }
+}
+
+std::vector<std::vector<double>> Model::get_persistent_states() const {
+  std::vector<std::vector<double>> states;
+  states.reserve(get_num_blocks(true));
+
+  for (size_t i = 0; i < get_num_blocks(true); i++) {
+    states.push_back(get_block(i)->get_persistent_state());
+  }
+
+  return states;
+}
+
+void Model::set_persistent_states(
+    const std::vector<std::vector<double>>& states) {
+  if (states.size() != static_cast<size_t>(get_num_blocks(true))) {
+    throw std::runtime_error(
+        "Persistent-state block count mismatch in Model::set_persistent_states");
+  }
+
+  for (size_t i = 0; i < states.size(); i++) {
+    get_block(i)->set_persistent_state(states[i]);
+  }
+}
+
+void Model::clear_persistent_states() {
+  for (size_t i = 0; i < get_num_blocks(true); i++) {
+    get_block(i)->set_persistent_state({});
+  }
+}
+
+void Model::set_time_step_size(double time_step_size) {
+  this->time_step_size = time_step_size;
+}
+
+double Model::get_time_step_size() const { return time_step_size; }
 
 void Model::to_steady() {
   for (auto& param : parameters) {

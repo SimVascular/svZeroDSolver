@@ -234,9 +234,9 @@ std::unique_ptr<SphereMaterial> generate_material(
     double val;
     err = get_param_scalar(j, param.first, param.second, val);
     if (err) {
-      throw std::runtime_error(
-          "Scalar parameter " + param.first +
-          " is mandatory in material for chamber " + chamber_name);
+      throw std::runtime_error("Scalar parameter " + param.first +
+                               " is mandatory in material for chamber " +
+                               chamber_name);
     }
     material->set_param(param.first, val);
   }
@@ -671,8 +671,7 @@ void create_chambers(
 
     // Create and set material for chamber types that use one
     if (chamber_type == "ChamberSphere") {
-      auto mat =
-          generate_material(chamber_config["material"], chamber_name);
+      auto mat = generate_material(chamber_config["material"], chamber_name);
       model.get_block(chamber_name)->set_material(std::move(mat));
     }
 

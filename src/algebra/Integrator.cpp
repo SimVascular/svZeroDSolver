@@ -4,7 +4,8 @@
 #include "Integrator.h"
 
 Integrator::Integrator(Model* model, double time_step_size, double rho,
-                       double atol, int max_iter, bool max_iter_error_to_warning) {
+                       double atol, int max_iter,
+                       bool max_iter_error_to_warning) {
   this->model = model;
   alpha_m = 0.5 * (3.0 - rho) / (1.0 + rho);
   alpha_f = 1.0 / (1.0 + rho);
@@ -84,11 +85,13 @@ State Integrator::step(const State& old_state, double time) {
     // Abort if maximum number of non-linear iterations is reached
     else if (i == max_iter - 1) {
       if (max_iter_error_to_warning) {
-        std::cout << "Warning: Maximum number of non-linear iterations reached at time " << time << std::endl;
+        std::cout << "Warning: Maximum number of non-linear iterations reached "
+                     "at time "
+                  << time << std::endl;
       } else {
         throw std::runtime_error(
-          "Maximum number of non-linear iterations reached at time " +
-          std::to_string(time));
+            "Maximum number of non-linear iterations reached at time " +
+            std::to_string(time));
       }
     }
 

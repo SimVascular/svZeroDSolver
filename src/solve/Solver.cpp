@@ -13,21 +13,7 @@ Solver::Solver(const nlohmann::json& config) {
   this->model = std::shared_ptr<Model>(new Model());
   load_simulation_model(config, *this->model.get());
 
-  // If period isn't specified anywhere, set to 1
-  if (simparams.sim_cardiac_period < 0 &&
-      this->model->cardiac_cycle_period < 0) {
-    this->model->cardiac_cycle_period = 1;
-  } else if (this->model->cardiac_cycle_period >= 0) {
-    // Check for inconsistent period definition
-    if (simparams.sim_cardiac_period >= 0 &&
-        (this->model->cardiac_cycle_period != simparams.sim_cardiac_period)) {
-      throw std::runtime_error(
-          "Inconsistent cardiac cycle period defined in parameters");
-    }
-    // If period is only defined in parameters, set value in model
-  } else {
-    this->model->cardiac_cycle_period = simparams.sim_cardiac_period;
-  }
+  resolve_cardiac_cycle_period(*this->model.get(), simparams);
   DEBUG_MSG("Load initial condition");
   initial_state = load_initial_condition(config, *this->model.get());
 
@@ -74,6 +60,7 @@ void Solver::setup_initial() {
     }
 
     this->model->to_unsteady();
+    this->model->clear_persistent_states();
   }
 
   // Use the initial condition (steady or user-provided) to set up parameters

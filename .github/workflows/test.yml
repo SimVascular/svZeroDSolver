@@ -56,6 +56,8 @@ jobs:
           ./svZeroD_interface_test01 ../../../../Release ../../test_01/svzerod_3Dcoupling.json
           cd ../test_02
           ./svZeroD_interface_test02 ../../../../Release ../../test_02/svzerod_tuned.json
+          cd ../test_04
+          ./svZeroD_interface_test04 ../../../../Release ../../test_04/svzerod_3Dcoupling_impedance.json
 
       - name: Build installer POSIX-like Systems
         if: ${{!startsWith(matrix.os, 'windows')}}

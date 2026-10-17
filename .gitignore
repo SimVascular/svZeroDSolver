@@ -32,6 +32,7 @@ Debug*/
 externals/
 *.so
 build*/
+.npm-cache/
 
 # IDE
 .cproject

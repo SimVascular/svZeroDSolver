@@ -13,6 +13,7 @@
 #include <string>
 
 #include "ActivationFunction.h"
+#include "ActiveStress.h"
 #include "Model.h"
 #include "SphereMaterial.h"
 #include "State.h"
@@ -172,6 +173,21 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
  * @return Unique pointer to the created material
  */
 std::unique_ptr<SphereMaterial> generate_material(
+    const nlohmann::json& j, const std::string& chamber_name);
+
+/**
+ * @brief Create an ActiveStress model from JSON (analogous to
+ * generate_material)
+ *
+ * Validates keys against the active stress type's params, reads scalar
+ * parameters, and returns a created ActiveStress. Caller associates it with
+ * a ChamberSphere block via set_active_stress().
+ *
+ * @param j            JSON object (e.g. chamber_config["active_stress"])
+ * @param chamber_name Chamber name for error messages
+ * @return Unique pointer to the created active stress model
+ */
+std::unique_ptr<ActiveStress> generate_active_stress(
     const nlohmann::json& j, const std::string& chamber_name);
 
 /**

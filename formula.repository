@@ -379,7 +379,21 @@ node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
 \]
 \_form#106=77x36:\[\mathbf{C}^{e}=\left[\hat{Q}\right]
 \]
-\_form#107=371x180:\[\begin{circuitikz}
+\_form#107=328x56:\[P_{n+1}=P_d+z_0Q_{n+1}+\sum_{m=1}^{N_k-1}z_mQ_{n+1-m}
+\]
+\_form#108=9x9:$z$
+\_form#109=53x13:$m=0$
+\_form#110=51x17:$m\geq 1$
+\_form#111=139x24:\[\mathbf{F}^{e}=\left[\begin{array}{cc}
+1 & -z_{0}
+\end{array}\right]
+\]
+\_form#112=313x36:\[\mathbf{c}^{e}=\left[\begin{array}{c}
+-\left(P_{d}+\sum_{m=1}^{N_k-1}z_mQ_{n+1-m}\right)
+\end{array}\right]
+\]
+\_form#113=53x21:$O(N_k)$
+\_form#114=371x180:\[\begin{circuitikz}
 \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$} to [short, *-*] (3.0,0);
 \draw (3,0) node[anchor=south]{} to [short, -*] (4.5,1.0);
@@ -390,19 +404,19 @@ node[left] {$\hat{Q}$} [-latex] (0,0) -- (0.8,0);
 \draw [-latex] (4.65,-1.1) -- (5.25,-1.5) node[right] {$Q_{out,2}$};
 \end{circuitikz}
 \]
-\_form#108=218x56:\[\sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
+\_form#115=218x56:\[\sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
 \]
-\_form#109=178x21:\[P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
+\_form#116=178x21:\[P_{i}=P_{j} \quad \mathrm{with} \quad i \neq j
 \]
-\_form#110=641x24:\[\mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e} &
+\_form#117=641x24:\[\mathbf{y}^{e}=\left[\begin{array}{llllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e} &
 \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} &
 \dots & P_{out, i}^{e} & Q_{out, i}^{e}\end{array}\right] \]
-\_form#111=398x24:\[\mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 & 1 & 0 & 1 & \dots & 0 &
+\_form#118=398x24:\[\mathbf{F}^{e}_1 = \left[\begin{array}{llllllllll}0 & 1 & 0 & 1 & \dots & 0 &
 -1 & 0 & -1 & \dots\end{array}\right] \]
-\_form#112=448x47:\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
+\_form#119=448x47:\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
 \underbrace{1}_{P_i} & \dots & \underbrace{1}_{P_j} & \dots\end{array}\right]
 \quad \mathrm{with} \quad i \neq j \]
-\_form#113=294x133:\[\begin{circuitikz}
+\_form#120=294x133:\[\begin{circuitikz}
 \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}
@@ -411,30 +425,30 @@ node[ground]{};
 \draw (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} [-latex];
 \end{circuitikz}
 \]
-\_form#114=118x19:\[P_{in}-P_{out}=0
+\_form#121=118x19:\[P_{in}-P_{out}=0
 \]
-\_form#115=221x69:\[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
+\_form#122=221x69:\[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 0 & 0 & 0\\
 0 & 0 & 0 & 0 & -1
 \end{array}\right]
 \]
-\_form#116=263x69:\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+\_form#123=263x69:\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 & 0 &  0 & 0  & E(t) \\
 1 & 0 & -1 & 0  & 0 \\
 0 & 1 &  0 & -1 & 0
 \end{array}\right]
 \]
-\_form#117=158x69:\[\mathbf{c}^{e}=\left[\begin{array}{c}
+\_form#124=158x69:\[\mathbf{c}^{e}=\left[\begin{array}{c}
 E(t)V_{rest} \\
 0 \\
 0
 \end{array}\right]
 \]
-\_form#118=366x26:\[E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
+\_form#125=366x26:\[E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
 \phi\!\left(t, t_C^i, t_R^i, T_C^i, T_R^i\right),
 \]
-\_form#119=744x129:\[\phi(t, t_C, t_R, T_C, T_R) =
+\_form#126=744x129:\[\phi(t, t_C, t_R, T_C, T_R) =
 \begin{cases}
 \frac{1}{2}\left[1 - \cos\!\left(\frac{\pi}{T_C} \operatorname{mod}(t - t_C,
 T_{\mathrm{HB}})\right)\right], & \text{if } 0 \le \operatorname{mod}(t -
@@ -442,7 +456,7 @@ t_C, T_{\mathrm{HB}}) < T_C, \\[1.2em] \frac{1}{2}\left[1 +
 \cos\!\left(\frac{\pi}{T_R} \operatorname{mod}(t - t_R,
 T_{\mathrm{HB}})\right)\right], & \text{if } 0 \le \operatorname{mod}(t -
 t_R, T_{\mathrm{HB}}) < T_R, \\[1.2em] 0, & \text{otherwise.} \end{cases} \]
-\_form#120=418x122:\[\begin{circuitikz} \draw
+\_form#127=418x122:\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_a$, *-*] (3,0)
@@ -456,32 +470,32 @@ node[left]{$P_{im}$}
 node[left]{$P_a$};
 \end{circuitikz}
 \]
-\_form#121=878x56:\begin{eqnarray*}&C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
+\_form#128=878x56:\begin{eqnarray*}&C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
 m}+P_{v}\right)-C_{i m} R_{v} \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v}
 \frac{d P_{in}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q_{in}}{d t}\\ &+C_{a}
 C_{i m} R_{v} \frac{d P_{a}}{d t}=0
 \end{eqnarray*}
-\_form#122=812x51:\begin{eqnarray*}&C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
+\_form#129=812x51:\begin{eqnarray*}&C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
 m}\left(R_{v}+R_{a m}\right) \left(P_{c i m}(0)-P_{i m}(0)+P_{i
 m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} \\ &-R_{a m} V_{i
 m}+R_{a m} C_{i m} P_{v}=0 \end{eqnarray*}
-\_form#123=225x28:\[\mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} & Q_{in} & V_{i
+\_form#130=225x28:\[\mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} & Q_{in} & V_{i
 m}\end{array}\right]^{T}, \]
-\_form#124=422x47:\[\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} & R_{a} C_{a}
+\_form#131=422x47:\[\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} & R_{a} C_{a}
 C_{i m} R_{v} & -C_{i m} R_{v} \\ 0 & 0 & -C_{i m} R_{v} R_{a
 m}\end{array}\right] \]
-\_form#125=384x47:\[\mathbf{F}^{e}=\left[\begin{array}{ccc}0 & C_{i m} R_{v} & -1 \\C_{i m} R_{v}
+\_form#132=384x47:\[\mathbf{F}^{e}=\left[\begin{array}{ccc}0 & C_{i m} R_{v} & -1 \\C_{i m} R_{v}
 & -C_{i m} R_{v} R_{a} & -\left(R_{v}+R_{a m}\right)\end{array}\right] \]
-\_form#126=549x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
+\_form#133=549x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
 m}(0)+P_{v}\right)+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i
 m}\left(R_{v} + R_{a m}\right)\left(P_{cim}(0)-P_{i m}(0)+P_{i m}\right)+R_{a
 m} C_{i m} P_{v}\end{array}\right] \]
-\_form#127=36x19:$R_{am}$
-\_form#128=474x39:\[R_{am}(t) = \left[ \left( \sqrt{R_{am,max}} - \sqrt{R_{am,min}} \right)
+\_form#134=36x19:$R_{am}$
+\_form#135=474x39:\[R_{am}(t) = \left[ \left( \sqrt{R_{am,max}} - \sqrt{R_{am,min}} \right)
 e(t) + \sqrt{R_{am,min}} \right]^2
 \]
-\_form#129=28x21:$e(t)$
-\_form#130=529x116:\[e(t) =
+\_form#136=28x21:$e(t)$
+\_form#137=529x116:\[e(t) =
 \begin{cases}
 \dfrac{1}{2}\left[ 1 - \cos\left( \pi \dfrac{t_{cycle}}{T_{vc}} \right)
 \right], & 0 \le t_{cycle} \le T_{vc}, \\
@@ -490,8 +504,8 @@ e(t) + \sqrt{R_{am,min}} \right]^2
 0, & t_{cycle} > T_{vc} + T_{vr}
 \end{cases}
 \]
-\_form#131=41x19:$t_{cycle}$
-\_form#132=418x122:\[\begin{circuitikz} \draw
+\_form#138=41x19:$t_{cycle}$
+\_form#139=418x122:\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_a$, *-*] (3,0)
@@ -505,72 +519,72 @@ node[left]{$P_{im}$}
 node[left]{$P_a$};
 \end{circuitikz}
 \]
-\_form#133=56x21:$R_{am}(t)$
-\_form#134=212x62:\[\begin{circuitikz} \draw
+\_form#140=56x21:$R_{am}(t)$
+\_form#141=212x62:\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [D, l=$R_v$, *-*] (3,0)
 node[anchor=south]{$P_{out}$};
 \end{circuitikz}
 \]
-\_form#135=287x21:\[P_{in}-P_{out}-Q_{in}\left[R(P_{out},P_{in})\right]=0
+\_form#142=287x21:\[P_{in}-P_{out}-Q_{in}\left[R(P_{out},P_{in})\right]=0
 \]
-\_form#136=126x19:\[Q_{in}-Q_{out}=0
+\_form#143=126x19:\[Q_{in}-Q_{out}=0
 \]
-\_form#137=251x69:\[R_i(p_1, p_2) =
+\_form#144=251x69:\[R_i(p_1, p_2) =
 \begin{cases}
 R_{\min}, & p_1 < p_2, \\[0.5em]
 R_{\max}, & p_1 \ge p_2.
 \end{cases}
 \]
-\_form#138=278x28:\[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
+\_form#145=278x28:\[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
 P_{out} & Q_{out}\end{array}\right]^{T} \]
-\_form#139=174x47:\[\mathbf{E}^{e}=\left[\begin{array}{cccc}
+\_form#146=174x47:\[\mathbf{E}^{e}=\left[\begin{array}{cccc}
 0 & 0 & 0 & 0 \\
 0 & 0 & 0 & 0
 \end{array}\right]
 \]
-\_form#140=324x47:\[\mathbf{F}^{e}=\left[\begin{array}{cccc}
+\_form#147=324x47:\[\mathbf{F}^{e}=\left[\begin{array}{cccc}
 1 & -(R(P_{in},P_{out})) & -1 & 0 \\
 0 &      1                 &  0 & -1
 \end{array}\right]
 \]
-\_form#141=88x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}
+\_form#148=88x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}
 0 \\
 0
 \end{array}\right]
 \]
-\_form#142=98x105:\[\begin{circuitikz}
+\_form#149=98x105:\[\begin{circuitikz}
 \draw (1,0) node[anchor=south]{$P$} to [short, *-] (1.2,0) ;
 \draw [-latex] (1.4,0) -- (2.2,0) node[right] {$Q$};
 \draw (1,0) to [short, l=, *-] (1,-1)
 node[ground]{$\hat{P}$};
 \end{circuitikz}
 \]
-\_form#143=54x19:\[P=\hat{P}
+\_form#150=54x19:\[P=\hat{P}
 \]
-\_form#144=139x28:\[\mathbf{y}^{e}=\left[\begin{array}{ll}P & Q\end{array}\right]^{T}
+\_form#151=139x28:\[\mathbf{y}^{e}=\left[\begin{array}{ll}P & Q\end{array}\right]^{T}
 \]
-\_form#145=116x24:\[\mathbf{F}^{e}=\left[\begin{array}{ll}1 & 0\end{array}\right]
+\_form#152=116x24:\[\mathbf{F}^{e}=\left[\begin{array}{ll}1 & 0\end{array}\right]
 \]
-\_form#146=77x36:\[\mathbf{C}^{e}=\left[\hat{P}\right]
+\_form#153=77x36:\[\mathbf{C}^{e}=\left[\hat{P}\right]
 \]
-\_form#147=208x45:\[\begin{circuitikz} \draw
+\_form#154=208x45:\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1.0,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R$, *-*] (3,0)
 node[anchor=south]{$P_{d}$};
 \end{circuitikz}
 \]
-\_form#148=154x19:\[P_{in}-P_d=R \cdot Q_{in}
+\_form#155=154x19:\[P_{in}-P_d=R \cdot Q_{in}
 \]
-\_form#149=167x28:\[\mathbf{y}^{e}=\left[\begin{array}{ll}P_{in} & Q_{in}\end{array}\right]^{T}
+\_form#156=167x28:\[\mathbf{y}^{e}=\left[\begin{array}{ll}P_{in} & Q_{in}\end{array}\right]^{T}
 \]
-\_form#150=135x24:\[\mathbf{F}^{e}=\left[\begin{array}{ll}1 & -R\end{array}\right]
+\_form#157=135x24:\[\mathbf{F}^{e}=\left[\begin{array}{ll}1 & -R\end{array}\right]
 \]
-\_form#151=92x21:\[\mathbf{C}^{e}=\left[-P_d\right]
+\_form#158=92x21:\[\mathbf{C}^{e}=\left[-P_d\right]
 \]
-\_form#152=396x171:\[  \begin{circuitikz}
+\_form#159=396x171:\[  \begin{circuitikz}
   \draw [-latex] (0.25,1.4) node[left] {$Q_{in,1}$} -- (0.85,1.1);
   \draw [-latex] (0.25,-1.4) node[left] {$Q_{in,1}$} -- (0.85,-1.1);
   \draw (1,1.0) node[anchor=south]{$P_{in,1}$} to [R, , l=$R_{in,1}$, *-*]
@@ -584,73 +598,73 @@ node[anchor=south]{$P_{d}$};
   {$Q_{out,1}$}; \draw [-latex] (5.15,-1.1) -- (5.75,-1.4) node[right]
   {$Q_{out,2}$}; \end{circuitikz}
 \]
-\_form#153=218x56:\[  \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
+\_form#160=218x56:\[  \sum_{i}^{n_{inlets}} Q_{in, i}=\sum_{j}^{n_{outlets}} Q_{out, j}
 \]
-\_form#154=311x21:\[  P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}
+\_form#161=311x21:\[  P_{in,i}-P_{C}=R_{in,i} \cdot Q_{in,i}\quad \forall i\in n_{inlets}
 \]
-\_form#155=347x21:\[  P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}
+\_form#162=347x21:\[  P_{C}-P_{out,j}=R_{out,j} \cdot Q_{out,j}\quad \forall j\in n_{outlets}
 \]
-\_form#156=684x24:\[  \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
+\_form#163=684x24:\[  \mathbf{y}^{e}=\left[\begin{array}{lllllllllll}P_{in, 1}^{e} & Q_{in, 1}^{e}
   & \dots & P_{in, i}^{e} & Q_{in, i}^{e} & P_{out, 1}^{e} & Q_{out, 1}^{e} &
   \dots & P_{out, i}^{e} & Q_{out, i}^{e} & P_{C}\end{array}\right] \]
-\_form#157=428x24:\[  \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 & 1 & 0 & 1 & \dots & 0
+\_form#164=428x24:\[  \mathbf{F}^{e}_1 = \left[\begin{array}{lllllllllll}0 & 1 & 0 & 1 & \dots & 0
   & -1 & 0 & -1 & \dots & 0\end{array}\right] \]
-\_form#158=531x58:\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
+\_form#165=531x58:\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
   \underbrace{1}_{P_{in,i}} & \underbrace{-R_{in,i}}_{Q_{in,i}} & \dots &
   \underbrace{-1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
   i\in n_{inlets}  \]
-\_form#159=551x58:\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
+\_form#166=551x58:\[ \mathbf{F}^{e}_{2,...,n} = \left[\begin{array}{lllll}\dots &
   \underbrace{-1}_{P_{out,j}} & \underbrace{-R_{out,j}}_{Q_{out,j}} & \dots &
   \underbrace{1}_{P_{C}}\end{array}\right] \quad \mathrm{with} \quad \forall
   j\in n_{oulets}  \]
-\_form#160=188x21:\[-S + \tau + S_\text{sl}(r, r_0) = 0
+\_form#167=188x21:\[-S + \tau + S_\text{sl}(r, r_0) = 0
 \]
-\_form#161=231x24:\[f = 4(1 - C^{-3})(W_1 + C W_2)
+\_form#168=231x24:\[f = 4(1 - C^{-3})(W_1 + C W_2)
 \]
-\_form#162=469x24:\[W_1(r) = C_0 \exp(C_1 [I_{1,\text{iso}}]^2),\quad
+\_form#169=469x24:\[W_1(r) = C_0 \exp(C_1 [I_{1,\text{iso}}]^2),\quad
 W_4(r) = C_2 \exp(C_3 [I_{4,\text{iso}}]^2)
 \]
-\_form#163=617x47:\[P_{in}-P_{out}-Q_{in}\left[R_{min} +
+\_form#170=617x47:\[P_{in}-P_{out}-Q_{in}\left[R_{min} +
 (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
 \]
-\_form#164=356x39:\[\text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
+\_form#171=356x39:\[\text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
 \]
-\_form#165=392x28:\[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
+\_form#172=392x28:\[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
 P_{out} & Q_{out} & \text{valve\_status} \end{array}\right]^{T} \]
-\_form#166=58x15:\[\mathbf{E}^{e}=\mathbf{0}
+\_form#173=58x15:\[\mathbf{E}^{e}=\mathbf{0}
 \]
-\_form#167=399x69:\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+\_form#174=399x69:\[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 & -(R_{max}+R_{min})/2.0 & -1 & 0  & 0\\
 0 &      1                 &  0 & -1 & 0\\
 0 &      0                 &  0 & 0  & 1
 \end{array}\right]
 \]
-\_form#168=431x69:\[\mathbf{c}^{e}=\left[\begin{array}{c}
+\_form#175=431x69:\[\mathbf{c}^{e}=\left[\begin{array}{c}
 -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
 0 \\
 -\frac{1}{2}\left[1+tanh\{k(P_{out}-P_{in})\}\right]
 \end{array}\right]
 \]
-\_form#169=278x69:\[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+\_form#176=278x69:\[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
 \left[\begin{array}{ccccc}
 A & B &  C & 0 & 0\\
 0 & 0 &  0 & 0 & 0\\
 D & 0 & -D & 0 & 0
 \end{array}\right] \]
-\_form#170=443x39:\[A = \frac{1}{2} k Q_{in}
+\_form#177=443x39:\[A = \frac{1}{2} k Q_{in}
 (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
 \]
-\_form#171=362x39:\[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+\_form#178=362x39:\[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
 \]
-\_form#172=458x39:\[C = -\frac{1}{2} k Q_{in}
+\_form#179=458x39:\[C = -\frac{1}{2} k Q_{in}
 (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right]
 \]
-\_form#173=233x45:\[D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
+\_form#180=233x45:\[D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
 \]
-\_form#174=143x49:\[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+\_form#181=143x49:\[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
  \mathbf{E}^{e}=\mathbf{0}
 \]
-\_form#175=321x144:\[\begin{circuitikz} \draw
+\_form#182=321x144:\[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_p$, *-] (3,0)
@@ -661,86 +675,86 @@ node[anchor=south]{$P_{ref}$}
 node[ground]{};
 \end{circuitikz}
 \]
-\_form#176=283x41:\[R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
+\_form#183=283x41:\[R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
 \]
-\_form#177=197x28:\[\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} &
+\_form#184=197x28:\[\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} & Q^{e} &
 P_{c}^{e}\end{array}\right]^{T} \]
-\_form#178=189x47:\[\mathbf{E}^{e}=\left[\begin{array}{ccc}
+\_form#185=189x47:\[\mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 & 0 & -R_{d} C \\
 0 & 0 & 0
 \end{array}\right]
 \]
-\_form#179=189x47:\[\mathbf{F}^{e}=\left[\begin{array}{ccc}
+\_form#186=189x47:\[\mathbf{F}^{e}=\left[\begin{array}{ccc}
 0 & R_{d} & -1 \\
 1 & -R_{p} & -1
 \end{array}\right]
 \]
-\_form#180=114x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}
+\_form#187=114x47:\[\mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
 \]
-\_form#181=388x21:\[\boldsymbol{r}(\boldsymbol{\alpha}, \boldsymbol{y}, \boldsymbol{\dot{y}}) =
+\_form#188=388x21:\[\boldsymbol{r}(\boldsymbol{\alpha}, \boldsymbol{y}, \boldsymbol{\dot{y}}) =
 \boldsymbol{E}(\boldsymbol{\alpha}, \boldsymbol{y}) \cdot
 \dot{\boldsymbol{y}}+\boldsymbol{F}(\boldsymbol{\alpha}, \boldsymbol{y})
 \cdot \boldsymbol{y}+\boldsymbol{c}(\boldsymbol{\alpha}, \boldsymbol{y}) \]
-\_form#182=64x21:$\boldsymbol{y} \in \mathbb{R}^{N}$
-\_form#183=62x19:$\boldsymbol{\alpha} \in
+\_form#189=64x21:$\boldsymbol{y} \in \mathbb{R}^{N}$
+\_form#190=62x19:$\boldsymbol{\alpha} \in
 \mathbb{R}^{P}$
-\_form#184=111x21:$\boldsymbol{E},\boldsymbol{F} \in
+\_form#191=111x21:$\boldsymbol{E},\boldsymbol{F} \in
 \mathbb{R}^{NxN}$
-\_form#185=58x19:$\boldsymbol{c} \in
+\_form#192=58x19:$\boldsymbol{c} \in
 \mathbb{R}^{N}$
-\_form#186=291x56:\[\min _\alpha S, \quad \mathrm { with } \quad S=\sum_i^D
+\_form#193=291x56:\[\min _\alpha S, \quad \mathrm { with } \quad S=\sum_i^D
 r_i^2\left(\boldsymbol{\alpha}, y_i, \dot{y}_i\right) \]
-\_form#187=13x13:$\boldsymbol{y}$
-\_form#188=13x19:$\boldsymbol{\dot{y}}$
-\_form#189=15x15:$D$
-\_form#190=161x21:\[\boldsymbol{\alpha}^{i+1}=\boldsymbol{\alpha}^{i}+\Delta
+\_form#194=13x13:$\boldsymbol{y}$
+\_form#195=13x19:$\boldsymbol{\dot{y}}$
+\_form#196=15x15:$D$
+\_form#197=161x21:\[\boldsymbol{\alpha}^{i+1}=\boldsymbol{\alpha}^{i}+\Delta
 \boldsymbol{\alpha}^{i+1} \]
-\_form#191=53x17:$\Delta \boldsymbol{\alpha}^{i+1} $
-\_form#192=656x38:\[\left[\mathbf{J}^{\mathrm{T}} \mathbf{J}+\lambda
+\_form#198=53x17:$\Delta \boldsymbol{\alpha}^{i+1} $
+\_form#199=656x38:\[\left[\mathbf{J}^{\mathrm{T}} \mathbf{J}+\lambda
 \operatorname{diag}\left(\mathbf{J}^{\mathrm{T}} \mathbf{J}\right)\right]^{i}
 \cdot \Delta \boldsymbol{\alpha}^{i+1}=-\left[\mathbf{J}^{\mathrm{T}}
 \mathbf{r}\right]^{i}, \quad \lambda^{i}=\lambda^{i-1}
 \cdot\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i}\right\|_2
 /\left\|\left[\mathbf{J}^{\mathrm{T}} \mathbf{r}\right]^{i-1}\right\|_2. \]
-\_form#193=371x36:\[\left\|\left[\mathbf{J}^{\mathrm{T}}
+\_form#200=371x36:\[\left\|\left[\mathbf{J}^{\mathrm{T}}
 \mathbf{r}\right]^{\mathrm{i}}\right\|_2<\operatorname{tol}_{\text {grad
 }}^\alpha \text { and }\left\|\Delta
 \boldsymbol{\alpha}^{\mathrm{i}+1}\right\|_2<\mathrm{tol}_{\text {inc
 }}^\alpha, \]
-\_form#194=276x41:\[J = \frac{\partial \boldsymbol{r}}{\partial \boldsymbol{\alpha}} =
+\_form#201=276x41:\[J = \frac{\partial \boldsymbol{r}}{\partial \boldsymbol{\alpha}} =
 \frac{\partial \mathbf{E}}{\partial \boldsymbol{\alpha}} \cdot
 \dot{\mathbf{y}}+\frac{\partial \mathbf{F}}{\partial \boldsymbol{\alpha}}
 \cdot \mathbf{y}+\frac{\partial \mathbf{c}}{\partial \boldsymbol{\alpha}} \]
-\_form#195=270x26:$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $
-\_form#196=311x26:$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $
-\_form#197=26x19:$P_{in}$
-\_form#198=28x19:$Q_{in}$
-\_form#199=34x19:$P_{out}$
-\_form#200=36x19:$Q_{out}$
-\_form#201=17x19:$I_{1}$
-\_form#202=188x21:$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$
-\_form#203=56x21:$\partial y / \partial p_i$
-\_form#204=309x24:\[\mathbf{p} = (p_1, \dots, p_d), \qquad p_i \in [p_i^{\min}, p_i^{\max}],
+\_form#202=270x26:$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $
+\_form#203=311x26:$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $
+\_form#204=26x19:$P_{in}$
+\_form#205=28x19:$Q_{in}$
+\_form#206=34x19:$P_{out}$
+\_form#207=36x19:$Q_{out}$
+\_form#208=17x19:$I_{1}$
+\_form#209=188x21:$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$
+\_form#210=56x21:$\partial y / \partial p_i$
+\_form#211=309x24:\[\mathbf{p} = (p_1, \dots, p_d), \qquad p_i \in [p_i^{\min}, p_i^{\max}],
 \]
-\_form#205=77x21:\[y = g(\mathbf{p}),
+\_form#212=77x21:\[y = g(\mathbf{p}),
 \]
-\_form#206=11x13:$g$
-\_form#207=17x15:$N$
-\_form#208=111x23:$\mathbf{p}^{(1)}, \dots, \mathbf{p}^{(N)}$
-\_form#209=276x36:\[y^{(k)} = g\!\left(\mathbf{p}^{(k)}\right), \qquad k = 1, \dots, N.
+\_form#213=11x13:$g$
+\_form#214=17x15:$N$
+\_form#215=111x23:$\mathbf{p}^{(1)}, \dots, \mathbf{p}^{(N)}$
+\_form#216=276x36:\[y^{(k)} = g\!\left(\mathbf{p}^{(k)}\right), \qquad k = 1, \dots, N.
 \]
-\_form#210=17x13:$p_i$
-\_form#211=11x13:$y$
-\_form#212=184x24:\[S_i^{\mathrm{screen},1} = \mathrm{corr}(p_i, y)^2.
+\_form#217=17x13:$p_i$
+\_form#218=11x13:$y$
+\_form#219=184x24:\[S_i^{\mathrm{screen},1} = \mathrm{corr}(p_i, y)^2.
 \]
-\_form#213=99x24:$S_i^{\mathrm{screen},1} \approx 0$
-\_form#214=98x24:$S_i^{\mathrm{screen},1} \approx 1$
-\_form#215=154x21:\[\mathrm{Var}(y \mid p_i \in \text{bin } b).
+\_form#220=99x24:$S_i^{\mathrm{screen},1} \approx 0$
+\_form#221=98x24:$S_i^{\mathrm{screen},1} \approx 1$
+\_form#222=154x21:\[\mathrm{Var}(y \mid p_i \in \text{bin } b).
 \]
-\_form#216=336x47:\[S_i^{\mathrm{screen},T}
+\_form#223=336x47:\[S_i^{\mathrm{screen},T}
 \approx
 1 - \frac{\sum_b n_b \, \mathrm{Var}(y \mid p_i \in \text{bin } b)}{N \, \mathrm{Var}(y)}.
 \]

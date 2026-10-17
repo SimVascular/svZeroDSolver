@@ -143,8 +143,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a19d1bd0e1cef6a865ed2745a2e648405 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
 <tr class="memitem:a0b82be82678747aaf1dc304df9edc1be pub_methods_class_block" id="r_a0b82be82678747aaf1dc304df9edc1be"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a0b82be82678747aaf1dc304df9edc1be">Block</a> (const <a class="el" href="class_block.html">Block</a> &amp;)=delete</td></tr>
 <tr class="memdesc:a0b82be82678747aaf1dc304df9edc1be pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
-<tr class="memitem:a31dd6de05c5e40eec70ba7994d6f0528 pub_methods_class_block" id="r_a31dd6de05c5e40eec70ba7994d6f0528"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a31dd6de05c5e40eec70ba7994d6f0528">get_name</a> ()</td></tr>
-<tr class="memdesc:a31dd6de05c5e40eec70ba7994d6f0528 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
+<tr class="memitem:af2a0ed13f0c1926577ce21d712cafc9f pub_methods_class_block" id="r_af2a0ed13f0c1926577ce21d712cafc9f"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#af2a0ed13f0c1926577ce21d712cafc9f">get_name</a> () const</td></tr>
+<tr class="memdesc:af2a0ed13f0c1926577ce21d712cafc9f pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
 <tr class="memitem:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block" id="r_aa63c92836a51ba1b8b13e88011fba193"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#aa63c92836a51ba1b8b13e88011fba193">update_vessel_type</a> (<a class="el" href="_block_type_8h.html#afa39c7ec7cc0926b332fcd2d77425edb">VesselType</a> type)</td></tr>
 <tr class="memdesc:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update vessel type of the block.  <br /></td></tr>
 <tr class="memitem:a08fb7d659427c235fc3f64ab0d042ea9 pub_methods_class_block" id="r_a08fb7d659427c235fc3f64ab0d042ea9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a08fb7d659427c235fc3f64ab0d042ea9">setup_params_</a> (const std::vector&lt; int &gt; &amp;param_ids)</td></tr>
@@ -159,6 +159,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="memitem:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block" id="r_a215561fcebf3173d59fc47a3aa404c21"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a215561fcebf3173d59fc47a3aa404c21">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept a converged time-step.  <br /></td></tr>
+<tr class="memitem:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block" id="r_a03f617f1a657a58b345a68818523c5e6"><td class="memItemLeft">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a03f617f1a657a58b345a68818523c5e6">get_persistent_state</a> () const</td></tr>
+<tr class="memdesc:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get persistent internal state of the block.  <br /></td></tr>
+<tr class="memitem:ad26b22d5e73e7827424c556384729fea pub_methods_class_block" id="r_ad26b22d5e73e7827424c556384729fea"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad26b22d5e73e7827424c556384729fea">set_persistent_state</a> (const std::vector&lt; double &gt; &amp;state)</td></tr>
+<tr class="memdesc:ad26b22d5e73e7827424c556384729fea pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore persistent internal state of the block.  <br /></td></tr>
 <tr class="memitem:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block" id="r_af652eecb2709bd2786e5ee1d0e0e5033"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#af652eecb2709bd2786e5ee1d0e0e5033">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block residual with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
@@ -202,10 +208,10 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Cardiac chamber with linear elastance (no inductor). </p>
-<p>Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) without inductance. See <a class="el" href="citelist.html#CITEREF_regazzoni2022">[8]</a></p>
+<p>Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) without inductance. See <a class="el" href="citelist.html#CITEREF_regazzoni2022">[9]</a></p>
 <p>This chamber block can be connected to other blocks using junctions.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_113_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz}
+<picture><source srcset="form_120_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz}
 \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}
@@ -213,7 +219,7 @@ to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} [-latex];
 \end{circuitikz}
-\&zwj;]" src="form_113.png" width="294" height="133"/></picture>
+\&zwj;]" src="form_120.png" width="294" height="133"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
@@ -221,8 +227,8 @@ node[ground]{};
 \&zwj;]" src="form_49.png" width="216" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_114_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}=0
-\&zwj;]" src="form_114.png" width="118" height="19"/></picture>
+<picture><source srcset="form_121_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}=0
+\&zwj;]" src="form_121.png" width="118" height="19"/></picture>
 </p>
 <p class="formulaDsp">
 <picture><source srcset="form_51_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}-\dot{V}_c=0
@@ -234,44 +240,44 @@ node[ground]{};
 P_{out} &amp; Q_{out} &amp; V_c\end{array}\right]^{T} \&zwj;]" src="form_52.png" width="313" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_115_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_122_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; -1
 \end{array}\right]
-\&zwj;]" src="form_115.png" width="221" height="69"/></picture>
+\&zwj;]" src="form_122.png" width="221" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_116_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_123_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 &amp; 0 &amp;  0 &amp; 0  &amp; E(t) \\
 1 &amp; 0 &amp; -1 &amp; 0  &amp; 0 \\
 0 &amp; 1 &amp;  0 &amp; -1 &amp; 0
 \end{array}\right]
-\&zwj;]" src="form_116.png" width="263" height="69"/></picture>
+\&zwj;]" src="form_123.png" width="263" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_124_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 E(t)V_{rest} \\
 0 \\
 0
 \end{array}\right]
-\&zwj;]" src="form_117.png" width="158" height="69"/></picture>
+\&zwj;]" src="form_124.png" width="158" height="69"/></picture>
 </p>
 <p>In the above equations,</p>
 <p class="formulaDsp">
-<picture><source srcset="form_118_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
+<picture><source srcset="form_125_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
 \phi\!\left(t, t_C^i, t_R^i, T_C^i, T_R^i\right),
-\&zwj;]" src="form_118.png" width="366" height="26"/></picture>
+\&zwj;]" src="form_125.png" width="366" height="26"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_119_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\phi(t, t_C, t_R, T_C, T_R) =
+<picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\phi(t, t_C, t_R, T_C, T_R) =
 \begin{cases}
 \frac{1}{2}\left[1 - \cos\!\left(\frac{\pi}{T_C} \operatorname{mod}(t - t_C,
 T_{\mathrm{HB}})\right)\right], &amp; \text{if } 0 \le \operatorname{mod}(t -
 t_C, T_{\mathrm{HB}}) &lt; T_C, \\&zwj;[1.2em] \frac{1}{2}\left[1 +
 \cos\!\left(\frac{\pi}{T_R} \operatorname{mod}(t - t_R,
 T_{\mathrm{HB}})\right)\right], &amp; \text{if } 0 \le \operatorname{mod}(t -
-t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{cases} \&zwj;]" src="form_119.png" width="744" height="129"/></picture>
+t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{cases} \&zwj;]" src="form_126.png" width="744" height="129"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

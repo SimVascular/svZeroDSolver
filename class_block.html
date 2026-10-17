@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div class="dynheader">
 Inheritance diagram for Block:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_block__inherit__graph.svg" width="538" height="924"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_block__inherit__graph.svg" width="538" height="974"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -119,8 +119,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a19d1bd0e1cef6a865ed2745a2e648405"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
 <tr class="memitem:a0b82be82678747aaf1dc304df9edc1be" id="r_a0b82be82678747aaf1dc304df9edc1be"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a0b82be82678747aaf1dc304df9edc1be">Block</a> (const <a class="el" href="class_block.html">Block</a> &amp;)=delete</td></tr>
 <tr class="memdesc:a0b82be82678747aaf1dc304df9edc1be"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
-<tr class="memitem:a31dd6de05c5e40eec70ba7994d6f0528" id="r_a31dd6de05c5e40eec70ba7994d6f0528"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#a31dd6de05c5e40eec70ba7994d6f0528">get_name</a> ()</td></tr>
-<tr class="memdesc:a31dd6de05c5e40eec70ba7994d6f0528"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
+<tr class="memitem:af2a0ed13f0c1926577ce21d712cafc9f" id="r_af2a0ed13f0c1926577ce21d712cafc9f"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="#af2a0ed13f0c1926577ce21d712cafc9f">get_name</a> () const</td></tr>
+<tr class="memdesc:af2a0ed13f0c1926577ce21d712cafc9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
 <tr class="memitem:aa63c92836a51ba1b8b13e88011fba193" id="r_aa63c92836a51ba1b8b13e88011fba193"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa63c92836a51ba1b8b13e88011fba193">update_vessel_type</a> (<a class="el" href="_block_type_8h.html#afa39c7ec7cc0926b332fcd2d77425edb">VesselType</a> type)</td></tr>
 <tr class="memdesc:aa63c92836a51ba1b8b13e88011fba193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update vessel type of the block.  <br /></td></tr>
 <tr class="memitem:a08fb7d659427c235fc3f64ab0d042ea9" id="r_a08fb7d659427c235fc3f64ab0d042ea9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a08fb7d659427c235fc3f64ab0d042ea9">setup_params_</a> (const std::vector&lt; int &gt; &amp;param_ids)</td></tr>
@@ -141,6 +141,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="memitem:a215561fcebf3173d59fc47a3aa404c21" id="r_a215561fcebf3173d59fc47a3aa404c21"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a215561fcebf3173d59fc47a3aa404c21">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:a215561fcebf3173d59fc47a3aa404c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept a converged time-step.  <br /></td></tr>
+<tr class="memitem:a03f617f1a657a58b345a68818523c5e6" id="r_a03f617f1a657a58b345a68818523c5e6"><td class="memItemLeft">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a03f617f1a657a58b345a68818523c5e6">get_persistent_state</a> () const</td></tr>
+<tr class="memdesc:a03f617f1a657a58b345a68818523c5e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get persistent internal state of the block.  <br /></td></tr>
+<tr class="memitem:ad26b22d5e73e7827424c556384729fea" id="r_ad26b22d5e73e7827424c556384729fea"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ad26b22d5e73e7827424c556384729fea">set_persistent_state</a> (const std::vector&lt; double &gt; &amp;state)</td></tr>
+<tr class="memdesc:ad26b22d5e73e7827424c556384729fea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore persistent internal state of the block.  <br /></td></tr>
 <tr class="memitem:af652eecb2709bd2786e5ee1d0e0e5033" id="r_af652eecb2709bd2786e5ee1d0e0e5033"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#af652eecb2709bd2786e5ee1d0e0e5033">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:af652eecb2709bd2786e5ee1d0e0e5033"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block residual with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
@@ -288,8 +294,44 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a31dd6de05c5e40eec70ba7994d6f0528" name="a31dd6de05c5e40eec70ba7994d6f0528"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a31dd6de05c5e40eec70ba7994d6f0528">&#9670;&#160;</a></span>get_name()</h2>
+<a id="a215561fcebf3173d59fc47a3aa404c21" name="a215561fcebf3173d59fc47a3aa404c21"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a215561fcebf3173d59fc47a3aa404c21">&#9670;&#160;</a></span>accept_timestep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Block::accept_timestep </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>y</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Accept a converged time-step. </p>
+<p>This hook is called once per accepted integrator step and can be used by blocks that maintain persistent memory (for example convolution history).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>Accepted state vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_impedance_b_c.html#a066522df3a1dfbd9d9229bfc978f75bc">ImpedanceBC</a>.</p>
+
+</div>
+</div>
+<a id="af2a0ed13f0c1926577ce21d712cafc9f" name="af2a0ed13f0c1926577ce21d712cafc9f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2a0ed13f0c1926577ce21d712cafc9f">&#9670;&#160;</a></span>get_name()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -298,7 +340,7 @@ Public Attributes</h2></td></tr>
           <td class="memname">std::string Block::get_name </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -334,6 +376,37 @@ Public Attributes</h2></td></tr>
 <p>Get number of triplets of element. </p>
 <p>Number of triplets that the element contributes to the global system (relevant for sparse memory reservation)</p>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_triplets_contributions.html" title="The number of triplets that the element contributes to the global system.">TripletsContributions</a> Number of triplets of element </dd></dl>
+
+</div>
+</div>
+<a id="a03f617f1a657a58b345a68818523c5e6" name="a03f617f1a657a58b345a68818523c5e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a03f617f1a657a58b345a68818523c5e6">&#9670;&#160;</a></span>get_persistent_state()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Block::get_persistent_state </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get persistent internal state of the block. </p>
+<p>The returned vector must be deterministic and sufficient to restore the block memory using <a class="el" href="#ad26b22d5e73e7827424c556384729fea" title="set_persistent_state">set_persistent_state</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>Persistent state payload </dd></dl>
+
+<p>Reimplemented in <a class="el" href="class_impedance_b_c.html#a61ebc32e30f1bb21c68f00a332f53e5b">ImpedanceBC</a>.</p>
 
 </div>
 </div>
@@ -444,6 +517,41 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ad26b22d5e73e7827424c556384729fea" name="ad26b22d5e73e7827424c556384729fea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad26b22d5e73e7827424c556384729fea">&#9670;&#160;</a></span>set_persistent_state()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Block::set_persistent_state </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>state</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Restore persistent internal state of the block. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">state</td><td>Persistent state payload from <a class="el" href="#a03f617f1a657a58b345a68818523c5e6" title="get_persistent_state">get_persistent_state</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_impedance_b_c.html#ae0372c579145c9ad76f8f8d6578b5062">ImpedanceBC</a>.</p>
+
+</div>
+</div>
 <a id="a51da88989c9ae7d558cbbf73a574a930" name="a51da88989c9ae7d558cbbf73a574a930"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a51da88989c9ae7d558cbbf73a574a930">&#9670;&#160;</a></span>setup_dofs()</h2>
 
@@ -476,7 +584,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_blood_vessel.html#ac2aa7f4f33dcbf1f1ba8c9b7ec1a5b59">BloodVessel</a>, <a class="el" href="class_blood_vessel_c_r_l.html#aac80c92c235dda983e235bd530f9ca0b">BloodVesselCRL</a>, <a class="el" href="class_blood_vessel_junction.html#af1afc744c838bfe21b5bc97fb295e14b">BloodVesselJunction</a>, <a class="el" href="class_blood_vessel_r_c.html#adb55d07bc55282e71255d5faf520fcc8">BloodVesselRC</a>, <a class="el" href="class_chamber_elastance_inductor.html#a93fe4a1fde0b8b95c863e8307a7dfb1b">ChamberElastanceInductor</a>, <a class="el" href="class_chamber_sphere.html#ac2998556c4173e403d9433146376dac2">ChamberSphere</a>, <a class="el" href="class_closed_loop_coronary_b_c.html#af33934f426634160263632c3e60a9604">ClosedLoopCoronaryBC</a>, <a class="el" href="class_closed_loop_heart_pulmonary.html#a96dfc67b56565f23b3b88d38a878de23">ClosedLoopHeartPulmonary</a>, <a class="el" href="class_closed_loop_r_c_r_b_c.html#a120030195e03d223ffee17b9cc3b8f54">ClosedLoopRCRBC</a>, <a class="el" href="class_flow_reference_b_c.html#a716ed369caa318f63e653ded0d43eb09">FlowReferenceBC</a>, <a class="el" href="class_junction.html#ab011d53ed4bccad7fa37f8d7dbe0faea">Junction</a>, <a class="el" href="class_linear_elastance_chamber.html#a5bda6ad3a857874ffff778ee99d30908">LinearElastanceChamber</a>, <a class="el" href="class_open_loop_coronary_b_c.html#a9e1c974c445d891d3be2557e53e5e5c0">OpenLoopCoronaryBC</a>, <a class="el" href="class_piecewise_valve.html#a7f417273c00bca42b906788fed6867ff">PiecewiseValve</a>, <a class="el" href="class_pressure_reference_b_c.html#abf96583b30d5a2cffd79cad40b54147e">PressureReferenceBC</a>, <a class="el" href="class_resistance_b_c.html#a8a0ad1d0ceb8b5138b8e668fbef7182c">ResistanceBC</a>, <a class="el" href="class_resistive_junction.html#a1dd1c67206a777ed18bd71c200f425f9">ResistiveJunction</a>, <a class="el" href="class_valve_tanh.html#a51833289e7ae0a3aa7c6a27e5a18b950">ValveTanh</a>, and <a class="el" href="class_windkessel_b_c.html#a93e58053eb0133f3fac48d5f4efc1e91">WindkesselBC</a>.</p>
+<p>Reimplemented in <a class="el" href="class_blood_vessel.html#ac2aa7f4f33dcbf1f1ba8c9b7ec1a5b59">BloodVessel</a>, <a class="el" href="class_blood_vessel_c_r_l.html#aac80c92c235dda983e235bd530f9ca0b">BloodVesselCRL</a>, <a class="el" href="class_blood_vessel_junction.html#af1afc744c838bfe21b5bc97fb295e14b">BloodVesselJunction</a>, <a class="el" href="class_blood_vessel_r_c.html#adb55d07bc55282e71255d5faf520fcc8">BloodVesselRC</a>, <a class="el" href="class_chamber_elastance_inductor.html#a93fe4a1fde0b8b95c863e8307a7dfb1b">ChamberElastanceInductor</a>, <a class="el" href="class_chamber_sphere.html#ac2998556c4173e403d9433146376dac2">ChamberSphere</a>, <a class="el" href="class_closed_loop_coronary_b_c.html#af33934f426634160263632c3e60a9604">ClosedLoopCoronaryBC</a>, <a class="el" href="class_closed_loop_heart_pulmonary.html#a96dfc67b56565f23b3b88d38a878de23">ClosedLoopHeartPulmonary</a>, <a class="el" href="class_closed_loop_r_c_r_b_c.html#a120030195e03d223ffee17b9cc3b8f54">ClosedLoopRCRBC</a>, <a class="el" href="class_flow_reference_b_c.html#a716ed369caa318f63e653ded0d43eb09">FlowReferenceBC</a>, <a class="el" href="class_impedance_b_c.html#a51b4f1127e07adfd00163b0be745c3e0">ImpedanceBC</a>, <a class="el" href="class_junction.html#ab011d53ed4bccad7fa37f8d7dbe0faea">Junction</a>, <a class="el" href="class_linear_elastance_chamber.html#a5bda6ad3a857874ffff778ee99d30908">LinearElastanceChamber</a>, <a class="el" href="class_open_loop_coronary_b_c.html#a9e1c974c445d891d3be2557e53e5e5c0">OpenLoopCoronaryBC</a>, <a class="el" href="class_piecewise_valve.html#a7f417273c00bca42b906788fed6867ff">PiecewiseValve</a>, <a class="el" href="class_pressure_reference_b_c.html#abf96583b30d5a2cffd79cad40b54147e">PressureReferenceBC</a>, <a class="el" href="class_resistance_b_c.html#a8a0ad1d0ceb8b5138b8e668fbef7182c">ResistanceBC</a>, <a class="el" href="class_resistive_junction.html#a1dd1c67206a777ed18bd71c200f425f9">ResistiveJunction</a>, <a class="el" href="class_valve_tanh.html#a51833289e7ae0a3aa7c6a27e5a18b950">ValveTanh</a>, and <a class="el" href="class_windkessel_b_c.html#a93e58053eb0133f3fac48d5f4efc1e91">WindkesselBC</a>.</p>
 
 </div>
 </div>
@@ -647,7 +755,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_blood_vessel.html#aac8eaafaad9d44ba21bd1014bf6eea34">BloodVessel</a>, <a class="el" href="class_blood_vessel_c_r_l.html#abc13157f01a0d3ac54975b23f7646d0b">BloodVesselCRL</a>, <a class="el" href="class_blood_vessel_junction.html#a5c520b1fa00452b2c083989a599ebb41">BloodVesselJunction</a>, <a class="el" href="class_blood_vessel_r_c.html#adfe630c39973335fc113c38c079032eb">BloodVesselRC</a>, <a class="el" href="class_chamber_elastance_inductor.html#a4730423eddb2655baaf69fb1a78b844c">ChamberElastanceInductor</a>, <a class="el" href="class_chamber_sphere.html#a68b121bb19129d04dd7605cc2511590e">ChamberSphere</a>, <a class="el" href="class_closed_loop_coronary_b_c.html#acded25e3366f216b669cd6a0478d5d4e">ClosedLoopCoronaryBC</a>, <a class="el" href="class_closed_loop_heart_pulmonary.html#a0ebd82f10f9448b26ddecaa81d715ffb">ClosedLoopHeartPulmonary</a>, <a class="el" href="class_closed_loop_r_c_r_b_c.html#afb9ebadde918f13c67ef6b87c5ca198d">ClosedLoopRCRBC</a>, <a class="el" href="class_flow_reference_b_c.html#a7202d4c9a50948834dab14220416a69f">FlowReferenceBC</a>, <a class="el" href="class_junction.html#a2bd9bfac6eadde97e20b2656888ff30d">Junction</a>, <a class="el" href="class_linear_elastance_chamber.html#ae3db89944e1f06240cb378a8d46432f3">LinearElastanceChamber</a>, <a class="el" href="class_open_loop_coronary_b_c.html#a47c8951e32a40b5f50d04803d906ca67">OpenLoopCoronaryBC</a>, <a class="el" href="class_piecewise_valve.html#a3afd1362e76f4cf8690a05aa73da8def">PiecewiseValve</a>, <a class="el" href="class_pressure_reference_b_c.html#a3310de430cc68bc11f988acdec28150b">PressureReferenceBC</a>, <a class="el" href="class_resistance_b_c.html#ab3d20ad70b1310396f069216da7cf7fd">ResistanceBC</a>, <a class="el" href="class_resistive_junction.html#aa1111a51461da2c2750fab2e39b8f466">ResistiveJunction</a>, <a class="el" href="class_valve_tanh.html#a1da977475562f89178fe5954bdf9373e">ValveTanh</a>, and <a class="el" href="class_windkessel_b_c.html#a2230822aa367281c3c66136ce2f6fda7">WindkesselBC</a>.</p>
+<p>Reimplemented in <a class="el" href="class_blood_vessel.html#aac8eaafaad9d44ba21bd1014bf6eea34">BloodVessel</a>, <a class="el" href="class_blood_vessel_c_r_l.html#abc13157f01a0d3ac54975b23f7646d0b">BloodVesselCRL</a>, <a class="el" href="class_blood_vessel_junction.html#a5c520b1fa00452b2c083989a599ebb41">BloodVesselJunction</a>, <a class="el" href="class_blood_vessel_r_c.html#adfe630c39973335fc113c38c079032eb">BloodVesselRC</a>, <a class="el" href="class_chamber_elastance_inductor.html#a4730423eddb2655baaf69fb1a78b844c">ChamberElastanceInductor</a>, <a class="el" href="class_chamber_sphere.html#a68b121bb19129d04dd7605cc2511590e">ChamberSphere</a>, <a class="el" href="class_closed_loop_coronary_b_c.html#acded25e3366f216b669cd6a0478d5d4e">ClosedLoopCoronaryBC</a>, <a class="el" href="class_closed_loop_heart_pulmonary.html#a0ebd82f10f9448b26ddecaa81d715ffb">ClosedLoopHeartPulmonary</a>, <a class="el" href="class_closed_loop_r_c_r_b_c.html#afb9ebadde918f13c67ef6b87c5ca198d">ClosedLoopRCRBC</a>, <a class="el" href="class_flow_reference_b_c.html#a7202d4c9a50948834dab14220416a69f">FlowReferenceBC</a>, <a class="el" href="class_impedance_b_c.html#a65cafe80e7d83ff667301607243d6bae">ImpedanceBC</a>, <a class="el" href="class_junction.html#a2bd9bfac6eadde97e20b2656888ff30d">Junction</a>, <a class="el" href="class_linear_elastance_chamber.html#ae3db89944e1f06240cb378a8d46432f3">LinearElastanceChamber</a>, <a class="el" href="class_open_loop_coronary_b_c.html#a47c8951e32a40b5f50d04803d906ca67">OpenLoopCoronaryBC</a>, <a class="el" href="class_piecewise_valve.html#a3afd1362e76f4cf8690a05aa73da8def">PiecewiseValve</a>, <a class="el" href="class_pressure_reference_b_c.html#a3310de430cc68bc11f988acdec28150b">PressureReferenceBC</a>, <a class="el" href="class_resistance_b_c.html#ab3d20ad70b1310396f069216da7cf7fd">ResistanceBC</a>, <a class="el" href="class_resistive_junction.html#aa1111a51461da2c2750fab2e39b8f466">ResistiveJunction</a>, <a class="el" href="class_valve_tanh.html#a1da977475562f89178fe5954bdf9373e">ValveTanh</a>, and <a class="el" href="class_windkessel_b_c.html#a2230822aa367281c3c66136ce2f6fda7">WindkesselBC</a>.</p>
 
 </div>
 </div>
@@ -792,7 +900,7 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p>Reimplemented in <a class="el" href="class_chamber_elastance_inductor.html#a784115ae7d8ad1465a698df0b252695c">ChamberElastanceInductor</a>, <a class="el" href="class_chamber_elastance_inductor_exponential.html#a6aaee715ada83dcdcaa93f7765f40829">ChamberElastanceInductorExponential</a>, <a class="el" href="class_chamber_sphere.html#ac0a467fd6481629f477e16e2af7372bc">ChamberSphere</a>, <a class="el" href="class_closed_loop_heart_pulmonary.html#a256d933c5f18af368683f9f13a8bfcb6">ClosedLoopHeartPulmonary</a>, <a class="el" href="class_flow_reference_b_c.html#a37f0defa6e23b3bdffa8d13a22b65267">FlowReferenceBC</a>, <a class="el" href="class_linear_elastance_chamber.html#a8027a1642b1da5afb08292bceb72f15a">LinearElastanceChamber</a>, <a class="el" href="class_open_loop_coronary_b_c.html#a571071e4fd0258f31a20ddc0a604988e">OpenLoopCoronaryBC</a>, <a class="el" href="class_pressure_reference_b_c.html#a8fae3d6139c2488a5c8eccdc35dfa973">PressureReferenceBC</a>, <a class="el" href="class_resistance_b_c.html#acfedab77803e301eff926ffe6e4b0848">ResistanceBC</a>, and <a class="el" href="class_windkessel_b_c.html#aca9e0638311503435e12d06dbc45bf2e">WindkesselBC</a>.</p>
+<p>Reimplemented in <a class="el" href="class_chamber_elastance_inductor.html#a784115ae7d8ad1465a698df0b252695c">ChamberElastanceInductor</a>, <a class="el" href="class_chamber_elastance_inductor_exponential.html#a6aaee715ada83dcdcaa93f7765f40829">ChamberElastanceInductorExponential</a>, <a class="el" href="class_chamber_sphere.html#ac0a467fd6481629f477e16e2af7372bc">ChamberSphere</a>, <a class="el" href="class_closed_loop_heart_pulmonary.html#a256d933c5f18af368683f9f13a8bfcb6">ClosedLoopHeartPulmonary</a>, <a class="el" href="class_flow_reference_b_c.html#a37f0defa6e23b3bdffa8d13a22b65267">FlowReferenceBC</a>, <a class="el" href="class_impedance_b_c.html#a5496befacbeddc8927e830bb2c609d50">ImpedanceBC</a>, <a class="el" href="class_linear_elastance_chamber.html#a8027a1642b1da5afb08292bceb72f15a">LinearElastanceChamber</a>, <a class="el" href="class_open_loop_coronary_b_c.html#a571071e4fd0258f31a20ddc0a604988e">OpenLoopCoronaryBC</a>, <a class="el" href="class_pressure_reference_b_c.html#a8fae3d6139c2488a5c8eccdc35dfa973">PressureReferenceBC</a>, <a class="el" href="class_resistance_b_c.html#acfedab77803e301eff926ffe6e4b0848">ResistanceBC</a>, and <a class="el" href="class_windkessel_b_c.html#aca9e0638311503435e12d06dbc45bf2e">WindkesselBC</a>.</p>
 
 </div>
 </div>

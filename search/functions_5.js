@@ -12,7 +12,7 @@ var searchData=
   ['get_5fhas_5fwindkessel_5fbc_9',['get_has_windkessel_bc',['../class_model.html#afa3ed78e825c7e620bce0987b3d1aac0',1,'Model']]],
   ['get_5findex_10',['get_index',['../class_d_o_f_handler.html#a16601c2c153c6f7b7c23cd1d4b6f37aa',1,'DOFHandler']]],
   ['get_5flargest_5fwindkessel_5ftime_5fconstant_11',['get_largest_windkessel_time_constant',['../class_model.html#a4ac4ccacb29373074c0fccb6da37e588',1,'Model']]],
-  ['get_5fname_12',['get_name',['../class_block.html#a31dd6de05c5e40eec70ba7994d6f0528',1,'Block::get_name()'],['../class_node.html#a0cc0386322fca056e49e49d869ade853',1,'Node::get_name()']]],
+  ['get_5fname_12',['get_name',['../class_block.html#af2a0ed13f0c1926577ce21d712cafc9f',1,'Block::get_name()'],['../class_node.html#a0cc0386322fca056e49e49d869ade853',1,'Node::get_name()']]],
   ['get_5fnode_5fname_13',['get_node_name',['../class_model.html#a2f5ea0c77f2f17fb174f6c5543a0e72a',1,'Model']]],
   ['get_5fnum_5fblocks_14',['get_num_blocks',['../class_model.html#af33fd555a40f38bbe50c9aa2fc4b3e21',1,'Model']]],
   ['get_5fnum_5fequations_15',['get_num_equations',['../class_d_o_f_handler.html#a1c033c7b25c7e536f9c256c3213f16ae',1,'DOFHandler']]],
@@ -20,9 +20,12 @@ var searchData=
   ['get_5fnum_5fvariables_17',['get_num_variables',['../class_d_o_f_handler.html#a51ec694174b2c808b1607baba752f7bd',1,'DOFHandler']]],
   ['get_5fparameter_18',['get_parameter',['../class_model.html#af73b0937d32dfbf085d7f74fe02e55b9',1,'Model']]],
   ['get_5fparameter_5fvalue_19',['get_parameter_value',['../class_model.html#a1fb6ae5e83aa6c8434b6339b13418193',1,'Model']]],
-  ['get_5fram_20',['get_Ram',['../class_open_loop_coronary_b_c.html#a0ea09553e9bbceb70f8f06d0583524ae',1,'OpenLoopCoronaryBC::get_Ram()'],['../class_open_loop_coronary_var_res_b_c.html#a4ef6e307960d7a7877fb47684cfcea31',1,'OpenLoopCoronaryVarResBC::get_Ram()']]],
-  ['get_5fsingle_5fresult_21',['get_single_result',['../class_solver.html#ac45b6a9a598c4c9ed7c1995b4903c929',1,'Solver']]],
-  ['get_5fsingle_5fresult_5favg_22',['get_single_result_avg',['../class_solver.html#abbdd386a547676b658b5b1070040fbe4',1,'Solver']]],
-  ['get_5ftimes_23',['get_times',['../class_solver.html#ac12a4bb26d17f412029796323eaf8070',1,'Solver']]],
-  ['get_5fvariable_5findex_24',['get_variable_index',['../class_d_o_f_handler.html#ab996789b9211f7253ecc1e5600e2f730',1,'DOFHandler']]]
+  ['get_5fpersistent_5fstate_20',['get_persistent_state',['../class_block.html#a03f617f1a657a58b345a68818523c5e6',1,'Block::get_persistent_state()'],['../class_impedance_b_c.html#a61ebc32e30f1bb21c68f00a332f53e5b',1,'ImpedanceBC::get_persistent_state()']]],
+  ['get_5fpersistent_5fstates_21',['get_persistent_states',['../class_model.html#a0e3da0d4e4350fa86f542bebccc16965',1,'Model']]],
+  ['get_5fram_22',['get_Ram',['../class_open_loop_coronary_b_c.html#a0ea09553e9bbceb70f8f06d0583524ae',1,'OpenLoopCoronaryBC::get_Ram()'],['../class_open_loop_coronary_var_res_b_c.html#a4ef6e307960d7a7877fb47684cfcea31',1,'OpenLoopCoronaryVarResBC::get_Ram()']]],
+  ['get_5fsingle_5fresult_23',['get_single_result',['../class_solver.html#ac45b6a9a598c4c9ed7c1995b4903c929',1,'Solver']]],
+  ['get_5fsingle_5fresult_5favg_24',['get_single_result_avg',['../class_solver.html#abbdd386a547676b658b5b1070040fbe4',1,'Solver']]],
+  ['get_5ftime_5fstep_5fsize_25',['get_time_step_size',['../class_model.html#a4d1e614908f0d715d3d7944eb37d1ed5',1,'Model']]],
+  ['get_5ftimes_26',['get_times',['../class_solver.html#ac12a4bb26d17f412029796323eaf8070',1,'Solver']]],
+  ['get_5fvariable_5findex_27',['get_variable_index',['../class_d_o_f_handler.html#ab996789b9211f7253ecc1e5600e2f730',1,'DOFHandler']]]
 ];

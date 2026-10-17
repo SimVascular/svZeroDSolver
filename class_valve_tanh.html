@@ -141,8 +141,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a19d1bd0e1cef6a865ed2745a2e648405 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
 <tr class="memitem:a0b82be82678747aaf1dc304df9edc1be pub_methods_class_block" id="r_a0b82be82678747aaf1dc304df9edc1be"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a0b82be82678747aaf1dc304df9edc1be">Block</a> (const <a class="el" href="class_block.html">Block</a> &amp;)=delete</td></tr>
 <tr class="memdesc:a0b82be82678747aaf1dc304df9edc1be pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
-<tr class="memitem:a31dd6de05c5e40eec70ba7994d6f0528 pub_methods_class_block" id="r_a31dd6de05c5e40eec70ba7994d6f0528"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a31dd6de05c5e40eec70ba7994d6f0528">get_name</a> ()</td></tr>
-<tr class="memdesc:a31dd6de05c5e40eec70ba7994d6f0528 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
+<tr class="memitem:af2a0ed13f0c1926577ce21d712cafc9f pub_methods_class_block" id="r_af2a0ed13f0c1926577ce21d712cafc9f"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#af2a0ed13f0c1926577ce21d712cafc9f">get_name</a> () const</td></tr>
+<tr class="memdesc:af2a0ed13f0c1926577ce21d712cafc9f pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
 <tr class="memitem:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block" id="r_aa63c92836a51ba1b8b13e88011fba193"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#aa63c92836a51ba1b8b13e88011fba193">update_vessel_type</a> (<a class="el" href="_block_type_8h.html#afa39c7ec7cc0926b332fcd2d77425edb">VesselType</a> type)</td></tr>
 <tr class="memdesc:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update vessel type of the block.  <br /></td></tr>
 <tr class="memitem:a08fb7d659427c235fc3f64ab0d042ea9 pub_methods_class_block" id="r_a08fb7d659427c235fc3f64ab0d042ea9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a08fb7d659427c235fc3f64ab0d042ea9">setup_params_</a> (const std::vector&lt; int &gt; &amp;param_ids)</td></tr>
@@ -157,6 +157,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a75efe51f152ba4c3f8bab02012ec0dff pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the time-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="memitem:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block" id="r_a215561fcebf3173d59fc47a3aa404c21"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a215561fcebf3173d59fc47a3aa404c21">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept a converged time-step.  <br /></td></tr>
+<tr class="memitem:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block" id="r_a03f617f1a657a58b345a68818523c5e6"><td class="memItemLeft">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a03f617f1a657a58b345a68818523c5e6">get_persistent_state</a> () const</td></tr>
+<tr class="memdesc:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get persistent internal state of the block.  <br /></td></tr>
+<tr class="memitem:ad26b22d5e73e7827424c556384729fea pub_methods_class_block" id="r_ad26b22d5e73e7827424c556384729fea"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad26b22d5e73e7827424c556384729fea">set_persistent_state</a> (const std::vector&lt; double &gt; &amp;state)</td></tr>
+<tr class="memdesc:ad26b22d5e73e7827424c556384729fea pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore persistent internal state of the block.  <br /></td></tr>
 <tr class="memitem:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block" id="r_af652eecb2709bd2786e5ee1d0e0e5033"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#af652eecb2709bd2786e5ee1d0e0e5033">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block residual with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
@@ -202,85 +208,85 @@ Public Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Valve (tanh) block. </p>
-<p>Models the pressure drop across a diode-like valve, which is implemented as a non-linear hyperbolic-tangent resistor. See <a class="el" href="citelist.html#CITEREF_pfaller2019importance">[6]</a> (equations 16 and 22).</p>
+<p>Models the pressure drop across a diode-like valve, which is implemented as a non-linear hyperbolic-tangent resistor. See <a class="el" href="citelist.html#CITEREF_pfaller2019importance">[7]</a> (equations 16 and 22).</p>
 <p class="formulaDsp">
-<picture><source srcset="form_134_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_141_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [D, l=$R_v$, *-*] (3,0)
 node[anchor=south]{$P_{out}$};
 \end{circuitikz}
-\&zwj;]" src="form_134.png" width="212" height="62"/></picture>
+\&zwj;]" src="form_141.png" width="212" height="62"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_163_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}-Q_{in}\left[R_{min} +
+<picture><source srcset="form_170_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}-Q_{in}\left[R_{min} +
 (R_{max}-R_{min})\frac{1}{2}\left[1+tanh\{k(P_{out}-P{in})\}\right]\right]=0
-\&zwj;]" src="form_163.png" width="617" height="47"/></picture>
+\&zwj;]" src="form_170.png" width="617" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_136_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}=0
-\&zwj;]" src="form_136.png" width="126" height="19"/></picture>
+<picture><source srcset="form_143_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}=0
+\&zwj;]" src="form_143.png" width="126" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_164_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
-\&zwj;]" src="form_164.png" width="356" height="39"/></picture>
+<picture><source srcset="form_171_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\text{valve\_status} = \frac{1}{2}\left(1+tanh\{k(P_{out}-P{in})\}\right)
+\&zwj;]" src="form_171.png" width="356" height="39"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_165_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out} &amp; \text{valve\_status} \end{array}\right]^{T} \&zwj;]" src="form_165.png" width="392" height="28"/></picture>
+<picture><source srcset="form_172_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
+P_{out} &amp; Q_{out} &amp; \text{valve\_status} \end{array}\right]^{T} \&zwj;]" src="form_172.png" width="392" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_166_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\mathbf{0}
-\&zwj;]" src="form_166.png" width="58" height="15"/></picture>
+<picture><source srcset="form_173_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\mathbf{0}
+\&zwj;]" src="form_173.png" width="58" height="15"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_167_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_174_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 &amp; -(R_{max}+R_{min})/2.0 &amp; -1 &amp; 0  &amp; 0\\
 0 &amp;      1                 &amp;  0 &amp; -1 &amp; 0\\
 0 &amp;      0                 &amp;  0 &amp; 0  &amp; 1
 \end{array}\right]
-\&zwj;]" src="form_167.png" width="399" height="69"/></picture>
+\&zwj;]" src="form_174.png" width="399" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_168_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_175_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
 0 \\
 -\frac{1}{2}\left[1+tanh\{k(P_{out}-P_{in})\}\right]
 \end{array}\right]
-\&zwj;]" src="form_168.png" width="431" height="69"/></picture>
+\&zwj;]" src="form_175.png" width="431" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_169_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+<picture><source srcset="form_176_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
 \left[\begin{array}{ccccc}
 A &amp; B &amp;  C &amp; 0 &amp; 0\\
 0 &amp; 0 &amp;  0 &amp; 0 &amp; 0\\
 D &amp; 0 &amp; -D &amp; 0 &amp; 0
-\end{array}\right] \&zwj;]" src="form_169.png" width="278" height="69"/></picture>
+\end{array}\right] \&zwj;]" src="form_176.png" width="278" height="69"/></picture>
 </p>
 <p> where,    </p><p class="formulaDsp">
-<picture><source srcset="form_170_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[A = \frac{1}{2} k Q_{in}
+<picture><source srcset="form_177_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[A = \frac{1}{2} k Q_{in}
 (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right] \\
-\&zwj;]" src="form_170.png" width="443" height="39"/></picture>
+\&zwj;]" src="form_177.png" width="443" height="39"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_171_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
-\&zwj;]" src="form_171.png" width="362" height="39"/></picture>
+<picture><source srcset="form_178_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[B = -\frac{1}{2}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
+\&zwj;]" src="form_178.png" width="362" height="39"/></picture>
 </p>
     <p class="formulaDsp">
-<picture><source srcset="form_172_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[C = -\frac{1}{2} k Q_{in}
+<picture><source srcset="form_179_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[C = -\frac{1}{2} k Q_{in}
 (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right]
-\&zwj;]" src="form_172.png" width="458" height="39"/></picture>
+\&zwj;]" src="form_179.png" width="458" height="39"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_173_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
-\&zwj;]" src="form_173.png" width="233" height="45"/></picture>
+<picture><source srcset="form_180_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
+\&zwj;]" src="form_180.png" width="233" height="45"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_174_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+<picture><source srcset="form_181_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
  \mathbf{E}^{e}=\mathbf{0}
-\&zwj;]" src="form_174.png" width="143" height="49"/></picture>
+\&zwj;]" src="form_181.png" width="143" height="49"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

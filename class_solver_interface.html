@@ -148,6 +148,8 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a63c583c3ebf70a708dd322fbb556d35e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current 0D integrator object.  <br /></td></tr>
 <tr class="memitem:a690f46e1bf4ca757c22b7879e61d0a24" id="r_a690f46e1bf4ca757c22b7879e61d0a24"><td class="memItemLeft"><a class="el" href="class_state.html">State</a>&#160;</td><td class="memItemRight"><a class="el" href="#a690f46e1bf4ca757c22b7879e61d0a24">state_</a></td></tr>
 <tr class="memdesc:a690f46e1bf4ca757c22b7879e61d0a24"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current 0D state vector.  <br /></td></tr>
+<tr class="memitem:ad278b072584e9fdefd995f615545c3c4" id="r_ad278b072584e9fdefd995f615545c3c4"><td class="memItemLeft">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ad278b072584e9fdefd995f615545c3c4">committed_block_states_</a></td></tr>
+<tr class="memdesc:ad278b072584e9fdefd995f615545c3c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Last accepted persistent block states for coupling rollback safety.  <br /></td></tr>
 <tr class="memitem:ad15e5e49705a5f3e98cef346afb7094a" id="r_ad15e5e49705a5f3e98cef346afb7094a"><td class="memItemLeft">std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ad15e5e49705a5f3e98cef346afb7094a">times_</a></td></tr>
 <tr class="memdesc:ad15e5e49705a5f3e98cef346afb7094a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Vector to store solution times.  <br /></td></tr>
 <tr class="memitem:acc21fd28b4f2b6c9bbe7aa4f1a70b6d0" id="r_acc21fd28b4f2b6c9bbe7aa4f1a70b6d0"><td class="memItemLeft">std::vector&lt; <a class="el" href="class_state.html">State</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#acc21fd28b4f2b6c9bbe7aa4f1a70b6d0">states_</a></td></tr>
@@ -221,6 +223,22 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Convergence tolerance for the 0D model. </p>
+
+</div>
+</div>
+<a id="ad278b072584e9fdefd995f615545c3c4" name="ad278b072584e9fdefd995f615545c3c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad278b072584e9fdefd995f615545c3c4">&#9670;&#160;</a></span>committed_block_states_</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::vector&lt;double&gt; &gt; SolverInterface::committed_block_states_</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Last accepted persistent block states for coupling rollback safety. </p>
 
 </div>
 </div>

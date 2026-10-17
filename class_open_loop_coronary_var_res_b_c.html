@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 </div><!--header-->
 <div class="contents">
 
-<p>Open loop coronary boundary condition with time-varying microvascular resistance based on <a class="el" href="citelist.html#CITEREF_yong25">[11]</a>.  
+<p>Open loop coronary boundary condition with time-varying microvascular resistance based on <a class="el" href="citelist.html#CITEREF_yong25">[12]</a>.  
  <a href="#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_open_loop_coronary_var_res_b_c_8h_source.html">OpenLoopCoronaryVarResBC.h</a>&gt;</code></p>
@@ -135,8 +135,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a19d1bd0e1cef6a865ed2745a2e648405 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
 <tr class="memitem:a0b82be82678747aaf1dc304df9edc1be pub_methods_class_block" id="r_a0b82be82678747aaf1dc304df9edc1be"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a0b82be82678747aaf1dc304df9edc1be">Block</a> (const <a class="el" href="class_block.html">Block</a> &amp;)=delete</td></tr>
 <tr class="memdesc:a0b82be82678747aaf1dc304df9edc1be pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
-<tr class="memitem:a31dd6de05c5e40eec70ba7994d6f0528 pub_methods_class_block" id="r_a31dd6de05c5e40eec70ba7994d6f0528"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a31dd6de05c5e40eec70ba7994d6f0528">get_name</a> ()</td></tr>
-<tr class="memdesc:a31dd6de05c5e40eec70ba7994d6f0528 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
+<tr class="memitem:af2a0ed13f0c1926577ce21d712cafc9f pub_methods_class_block" id="r_af2a0ed13f0c1926577ce21d712cafc9f"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#af2a0ed13f0c1926577ce21d712cafc9f">get_name</a> () const</td></tr>
+<tr class="memdesc:af2a0ed13f0c1926577ce21d712cafc9f pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
 <tr class="memitem:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block" id="r_aa63c92836a51ba1b8b13e88011fba193"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#aa63c92836a51ba1b8b13e88011fba193">update_vessel_type</a> (<a class="el" href="_block_type_8h.html#afa39c7ec7cc0926b332fcd2d77425edb">VesselType</a> type)</td></tr>
 <tr class="memdesc:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update vessel type of the block.  <br /></td></tr>
 <tr class="memitem:a08fb7d659427c235fc3f64ab0d042ea9 pub_methods_class_block" id="r_a08fb7d659427c235fc3f64ab0d042ea9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a08fb7d659427c235fc3f64ab0d042ea9">setup_params_</a> (const std::vector&lt; int &gt; &amp;param_ids)</td></tr>
@@ -149,6 +149,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="memitem:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block" id="r_a215561fcebf3173d59fc47a3aa404c21"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a215561fcebf3173d59fc47a3aa404c21">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept a converged time-step.  <br /></td></tr>
+<tr class="memitem:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block" id="r_a03f617f1a657a58b345a68818523c5e6"><td class="memItemLeft">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a03f617f1a657a58b345a68818523c5e6">get_persistent_state</a> () const</td></tr>
+<tr class="memdesc:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get persistent internal state of the block.  <br /></td></tr>
+<tr class="memitem:ad26b22d5e73e7827424c556384729fea pub_methods_class_block" id="r_ad26b22d5e73e7827424c556384729fea"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad26b22d5e73e7827424c556384729fea">set_persistent_state</a> (const std::vector&lt; double &gt; &amp;state)</td></tr>
+<tr class="memdesc:ad26b22d5e73e7827424c556384729fea pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore persistent internal state of the block.  <br /></td></tr>
 <tr class="memitem:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block" id="r_af652eecb2709bd2786e5ee1d0e0e5033"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#af652eecb2709bd2786e5ee1d0e0e5033">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block residual with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
@@ -207,16 +213,16 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memdesc:aa2f7d9ae55d3eaaff85a46d864a13487 pro_attribs_class_open_loop_coronary_b_c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pim at initial state.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Open loop coronary boundary condition with time-varying microvascular resistance based on <a class="el" href="citelist.html#CITEREF_yong25">[11]</a>. </p>
-<p>This model extends the standard open loop coronary BC (<a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>) by allowing the microvascular resistance <picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}$" src="form_127.png" width="36" height="19"/></picture> to vary with time according to:</p>
+<div class="textblock"><p>Open loop coronary boundary condition with time-varying microvascular resistance based on <a class="el" href="citelist.html#CITEREF_yong25">[12]</a>. </p>
+<p>This model extends the standard open loop coronary BC (<a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>) by allowing the microvascular resistance <picture><source srcset="form_134_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}$" src="form_134.png" width="36" height="19"/></picture> to vary with time according to:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[R_{am}(t) = \left[ \left( \sqrt{R_{am,max}} - \sqrt{R_{am,min}} \right)
+<picture><source srcset="form_135_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[R_{am}(t) = \left[ \left( \sqrt{R_{am,max}} - \sqrt{R_{am,min}} \right)
 e(t) + \sqrt{R_{am,min}} \right]^2
-\&zwj;]" src="form_128.png" width="474" height="39"/></picture>
+\&zwj;]" src="form_135.png" width="474" height="39"/></picture>
 </p>
-<p>where <picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$e(t)$" src="form_129.png" width="28" height="21"/></picture> is a time-dependent function:</p>
+<p>where <picture><source srcset="form_136_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$e(t)$" src="form_136.png" width="28" height="21"/></picture> is a time-dependent function:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[e(t) =
+<picture><source srcset="form_137_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[e(t) =
 \begin{cases}
 \dfrac{1}{2}\left[ 1 - \cos\left( \pi \dfrac{t_{cycle}}{T_{vc}} \right)
 \right], &amp; 0 \le t_{cycle} \le T_{vc}, \\
@@ -224,11 +230,11 @@ e(t) + \sqrt{R_{am,min}} \right]^2
 \right) \right], &amp; T_{vc} &lt; t_{cycle} \le T_{vc} + T_{vr}, \\
 0, &amp; t_{cycle} &gt; T_{vc} + T_{vr}
 \end{cases}
-\&zwj;]" src="form_130.png" width="529" height="116"/></picture>
+\&zwj;]" src="form_137.png" width="529" height="116"/></picture>
 </p>
-<p>where <picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$t_{cycle}$" src="form_131.png" width="41" height="19"/></picture> is the time within the current cardiac cycle.</p>
+<p>where <picture><source srcset="form_138_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$t_{cycle}$" src="form_138.png" width="41" height="19"/></picture> is the time within the current cardiac cycle.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_139_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_a$, *-*] (3,0)
@@ -241,10 +247,10 @@ node[left]{$P_{im}$}
 (3,0) to [C, l=$C_a$, -*] (3,-1.5)
 node[left]{$P_a$};
 \end{circuitikz}
-\&zwj;]" src="form_132.png" width="418" height="122"/></picture>
+\&zwj;]" src="form_139.png" width="418" height="122"/></picture>
 </p>
 <h3>Governing equations</h3>
-<p>Same as <a class="el" href="class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary.">OpenLoopCoronaryBC</a>, but with <picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}$" src="form_127.png" width="36" height="19"/></picture> replaced by <picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}(t)$" src="form_133.png" width="56" height="21"/></picture>.</p>
+<p>Same as <a class="el" href="class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary.">OpenLoopCoronaryBC</a>, but with <picture><source srcset="form_134_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}$" src="form_134.png" width="36" height="19"/></picture> replaced by <picture><source srcset="form_140_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R_{am}(t)$" src="form_140.png" width="56" height="21"/></picture>.</p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>
 <ul>

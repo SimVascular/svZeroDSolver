@@ -152,6 +152,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aed4cc9690760cc207241b5dd33497b8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of all elements in a sparse system.  <br /></td></tr>
 <tr class="memitem:a9f6ce7f8b525fb3d84e3fb578653c05f" id="r_a9f6ce7f8b525fb3d84e3fb578653c05f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9f6ce7f8b525fb3d84e3fb578653c05f">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:a9f6ce7f8b525fb3d84e3fb578653c05f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="memitem:ae51bf5a1b0f416fb20292581c9428e6a" id="r_ae51bf5a1b0f416fb20292581c9428e6a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae51bf5a1b0f416fb20292581c9428e6a">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:ae51bf5a1b0f416fb20292581c9428e6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept one converged time-step for all blocks.  <br /></td></tr>
+<tr class="memitem:a0e3da0d4e4350fa86f542bebccc16965" id="r_a0e3da0d4e4350fa86f542bebccc16965"><td class="memItemLeft">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a0e3da0d4e4350fa86f542bebccc16965">get_persistent_states</a> () const</td></tr>
+<tr class="memdesc:a0e3da0d4e4350fa86f542bebccc16965"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get persistent state payloads for all blocks (including internal).  <br /></td></tr>
+<tr class="memitem:a4ad4b7db1f8f2d9cabb0367836936075" id="r_a4ad4b7db1f8f2d9cabb0367836936075"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4ad4b7db1f8f2d9cabb0367836936075">set_persistent_states</a> (const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;states)</td></tr>
+<tr class="memdesc:a4ad4b7db1f8f2d9cabb0367836936075"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore persistent states for all blocks.  <br /></td></tr>
+<tr class="memitem:a85ddc7e07327939b6495656396bcb284" id="r_a85ddc7e07327939b6495656396bcb284"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a85ddc7e07327939b6495656396bcb284">clear_persistent_states</a> ()</td></tr>
+<tr class="memdesc:a85ddc7e07327939b6495656396bcb284"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear persistent state for all blocks.  <br /></td></tr>
+<tr class="memitem:a70c664b42465f1483c2ecfb8727196a9" id="r_a70c664b42465f1483c2ecfb8727196a9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a70c664b42465f1483c2ecfb8727196a9">set_time_step_size</a> (double time_step_size)</td></tr>
+<tr class="memdesc:a70c664b42465f1483c2ecfb8727196a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set model time step size used by blocks with dt-dependent logic.  <br /></td></tr>
+<tr class="memitem:a4d1e614908f0d715d3d7944eb37d1ed5" id="r_a4d1e614908f0d715d3d7944eb37d1ed5"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a4d1e614908f0d715d3d7944eb37d1ed5">get_time_step_size</a> () const</td></tr>
+<tr class="memdesc:a4d1e614908f0d715d3d7944eb37d1ed5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get model time step size used by blocks with dt-dependent logic.  <br /></td></tr>
 <tr class="memitem:ac7fb5f5b690063e23e3a54b0f5d7b6d7" id="r_ac7fb5f5b690063e23e3a54b0f5d7b6d7"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac7fb5f5b690063e23e3a54b0f5d7b6d7">to_steady</a> ()</td></tr>
 <tr class="memdesc:ac7fb5f5b690063e23e3a54b0f5d7b6d7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the blocks to a steady behavior.  <br /></td></tr>
 <tr class="memitem:a78157bd7409586bf16117e4cb66ad13a" id="r_a78157bd7409586bf16117e4cb66ad13a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a78157bd7409586bf16117e4cb66ad13a">to_unsteady</a> ()</td></tr>
@@ -225,6 +237,31 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="ae51bf5a1b0f416fb20292581c9428e6a" name="ae51bf5a1b0f416fb20292581c9428e6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51bf5a1b0f416fb20292581c9428e6a">&#9670;&#160;</a></span>accept_timestep()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::accept_timestep </td>
+          <td>(</td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>y</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Accept one converged time-step for all blocks. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>Accepted state vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a758b22387d02d03218900d2fff7cf49b" name="a758b22387d02d03218900d2fff7cf49b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a758b22387d02d03218900d2fff7cf49b">&#9670;&#160;</a></span>add_block() <span class="overload">[1/2]</span></h2>
 
@@ -408,6 +445,25 @@ Public Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>int Global ID of the parameter </dd></dl>
+
+</div>
+</div>
+<a id="a85ddc7e07327939b6495656396bcb284" name="a85ddc7e07327939b6495656396bcb284"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a85ddc7e07327939b6495656396bcb284">&#9670;&#160;</a></span>clear_persistent_states()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::clear_persistent_states </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clear persistent state for all blocks. </p>
 
 </div>
 </div>
@@ -725,6 +781,46 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a0e3da0d4e4350fa86f542bebccc16965" name="a0e3da0d4e4350fa86f542bebccc16965"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e3da0d4e4350fa86f542bebccc16965">&#9670;&#160;</a></span>get_persistent_states()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::vector&lt; double &gt; &gt; Model::get_persistent_states </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get persistent state payloads for all blocks (including internal). </p>
+<dl class="section return"><dt>Returns</dt><dd>Per-block persistent states </dd></dl>
+
+</div>
+</div>
+<a id="a4d1e614908f0d715d3d7944eb37d1ed5" name="a4d1e614908f0d715d3d7944eb37d1ed5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d1e614908f0d715d3d7944eb37d1ed5">&#9670;&#160;</a></span>get_time_step_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double Model::get_time_step_size </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get model time step size used by blocks with dt-dependent logic. </p>
+<dl class="section return"><dt>Returns</dt><dd>double <a class="el" href="class_model.html" title="Model of 0D elements.">Model</a> time step size </dd></dl>
+
+</div>
+</div>
 <a id="abc36e7c0be46ee4c31f954e9312251d3" name="abc36e7c0be46ee4c31f954e9312251d3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abc36e7c0be46ee4c31f954e9312251d3">&#9670;&#160;</a></span>has_block()</h2>
 
@@ -770,6 +866,56 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">y</td><td>Current solution </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4ad4b7db1f8f2d9cabb0367836936075" name="a4ad4b7db1f8f2d9cabb0367836936075"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ad4b7db1f8f2d9cabb0367836936075">&#9670;&#160;</a></span>set_persistent_states()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::set_persistent_states </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>states</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Restore persistent states for all blocks. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">states</td><td>Per-block persistent states </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a70c664b42465f1483c2ecfb8727196a9" name="a70c664b42465f1483c2ecfb8727196a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70c664b42465f1483c2ecfb8727196a9">&#9670;&#160;</a></span>set_time_step_size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::set_time_step_size </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>time_step_size</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Set model time step size used by blocks with dt-dependent logic. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">time_step_size</td><td><a class="el" href="class_model.html" title="Model of 0D elements.">Model</a> time step size </td></tr>
   </table>
   </dd>
 </dl>

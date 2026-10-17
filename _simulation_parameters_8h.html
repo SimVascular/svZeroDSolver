@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for SimulationParameters.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_simulation_parameters_8h__incl.svg" width="4290" height="715"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_simulation_parameters_8h__incl.svg" width="4326" height="642"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
@@ -147,6 +147,8 @@ Functions</h2></td></tr>
 <tr class="memdesc:a6ead86f55cad44c6099fcea25d851153"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load initial conditions from a JSON configuration.  <br /></td></tr>
 <tr class="memitem:ac1f143691c289b2bf759e862e4ca9f26" id="r_ac1f143691c289b2bf759e862e4ca9f26"><td class="memItemLeft"><a class="el" href="struct_simulation_parameters.html">SimulationParameters</a>&#160;</td><td class="memItemRight"><a class="el" href="#ac1f143691c289b2bf759e862e4ca9f26">load_simulation_params</a> (const nlohmann::json &amp;config)</td></tr>
 <tr class="memdesc:ac1f143691c289b2bf759e862e4ca9f26"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the simulation parameters from a JSON configuration.  <br /></td></tr>
+<tr class="memitem:a9cd3247bf4846b55fd798c976faeee8e" id="r_a9cd3247bf4846b55fd798c976faeee8e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9cd3247bf4846b55fd798c976faeee8e">resolve_cardiac_cycle_period</a> (<a class="el" href="class_model.html">Model</a> &amp;model, const <a class="el" href="struct_simulation_parameters.html">SimulationParameters</a> &amp;params)</td></tr>
+<tr class="memdesc:a9cd3247bf4846b55fd798c976faeee8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reconcile the cardiac cycle period between the model and parameters.  <br /></td></tr>
 <tr class="memitem:aa324b347d0a0ce53962668c036d3aed5" id="r_aa324b347d0a0ce53962668c036d3aed5"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa324b347d0a0ce53962668c036d3aed5">load_simulation_model</a> (const nlohmann::json &amp;config, <a class="el" href="class_model.html">Model</a> &amp;model)</td></tr>
 <tr class="memdesc:aa324b347d0a0ce53962668c036d3aed5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Load the 0D block in the model from a configuration.  <br /></td></tr>
 <tr class="memitem:af79ad080bd74ff4d6ad832e1e77a9cd8" id="r_af79ad080bd74ff4d6ad832e1e77a9cd8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af79ad080bd74ff4d6ad832e1e77a9cd8">validate_input</a> (const nlohmann::json &amp;config)</td></tr>
@@ -709,6 +711,37 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="struct_simulation_parameters.html" title="Simulation parameters.">SimulationParameters</a> Simulation parameters read from configuration </dd></dl>
+
+</div>
+</div>
+<a id="a9cd3247bf4846b55fd798c976faeee8e" name="a9cd3247bf4846b55fd798c976faeee8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9cd3247bf4846b55fd798c976faeee8e">&#9670;&#160;</a></span>resolve_cardiac_cycle_period()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void resolve_cardiac_cycle_period </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_model.html">Model</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>model</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="struct_simulation_parameters.html">SimulationParameters</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>params</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reconcile the cardiac cycle period between the model and parameters. </p>
+<p>The period may be defined by a model block (e.g. a closed-loop block or a chamber) or by <span class="tt">simulation_parameters.cardiac_period</span>. This resolves <span class="tt">model.cardiac_cycle_period</span> from both sources, throws if the two disagree, and falls back to a default of 1.0 if neither defines it. Must be called by every entry point (solver and coupled interface) before blocks that depend on the period are used.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">model</td><td>The 0D model </td></tr>
+    <tr><td class="paramname">params</td><td>Simulation parameters read from the configuration </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

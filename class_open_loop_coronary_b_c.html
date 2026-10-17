@@ -134,8 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a19d1bd0e1cef6a865ed2745a2e648405 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
 <tr class="memitem:a0b82be82678747aaf1dc304df9edc1be pub_methods_class_block" id="r_a0b82be82678747aaf1dc304df9edc1be"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a0b82be82678747aaf1dc304df9edc1be">Block</a> (const <a class="el" href="class_block.html">Block</a> &amp;)=delete</td></tr>
 <tr class="memdesc:a0b82be82678747aaf1dc304df9edc1be pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy the <a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a> object.  <br /></td></tr>
-<tr class="memitem:a31dd6de05c5e40eec70ba7994d6f0528 pub_methods_class_block" id="r_a31dd6de05c5e40eec70ba7994d6f0528"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a31dd6de05c5e40eec70ba7994d6f0528">get_name</a> ()</td></tr>
-<tr class="memdesc:a31dd6de05c5e40eec70ba7994d6f0528 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
+<tr class="memitem:af2a0ed13f0c1926577ce21d712cafc9f pub_methods_class_block" id="r_af2a0ed13f0c1926577ce21d712cafc9f"><td class="memItemLeft">std::string&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#af2a0ed13f0c1926577ce21d712cafc9f">get_name</a> () const</td></tr>
+<tr class="memdesc:af2a0ed13f0c1926577ce21d712cafc9f pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the block.  <br /></td></tr>
 <tr class="memitem:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block" id="r_aa63c92836a51ba1b8b13e88011fba193"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#aa63c92836a51ba1b8b13e88011fba193">update_vessel_type</a> (<a class="el" href="_block_type_8h.html#afa39c7ec7cc0926b332fcd2d77425edb">VesselType</a> type)</td></tr>
 <tr class="memdesc:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update vessel type of the block.  <br /></td></tr>
 <tr class="memitem:a08fb7d659427c235fc3f64ab0d042ea9 pub_methods_class_block" id="r_a08fb7d659427c235fc3f64ab0d042ea9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a08fb7d659427c235fc3f64ab0d042ea9">setup_params_</a> (const std::vector&lt; int &gt; &amp;param_ids)</td></tr>
@@ -148,6 +148,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="memitem:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block" id="r_a215561fcebf3173d59fc47a3aa404c21"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a215561fcebf3173d59fc47a3aa404c21">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
+<tr class="memdesc:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept a converged time-step.  <br /></td></tr>
+<tr class="memitem:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block" id="r_a03f617f1a657a58b345a68818523c5e6"><td class="memItemLeft">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a03f617f1a657a58b345a68818523c5e6">get_persistent_state</a> () const</td></tr>
+<tr class="memdesc:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get persistent internal state of the block.  <br /></td></tr>
+<tr class="memitem:ad26b22d5e73e7827424c556384729fea pub_methods_class_block" id="r_ad26b22d5e73e7827424c556384729fea"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad26b22d5e73e7827424c556384729fea">set_persistent_state</a> (const std::vector&lt; double &gt; &amp;state)</td></tr>
+<tr class="memdesc:ad26b22d5e73e7827424c556384729fea pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Restore persistent internal state of the block.  <br /></td></tr>
 <tr class="memitem:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block" id="r_af652eecb2709bd2786e5ee1d0e0e5033"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#af652eecb2709bd2786e5ee1d0e0e5033">update_gradient</a> (Eigen::SparseMatrix&lt; double &gt; &amp;jacobian, Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;alpha, std::vector&lt; double &gt; &amp;y, std::vector&lt; double &gt; &amp;dy)</td></tr>
 <tr class="memdesc:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block residual with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
@@ -208,7 +214,7 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Open loop coronary boundary condition based on <a class="el" href="citelist.html#CITEREF_kim_coronary">[4]</a>. </p>
 <p class="formulaDsp">
-<picture><source srcset="form_120_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_127_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_a$, *-*] (3,0)
@@ -221,41 +227,41 @@ node[left]{$P_{im}$}
 (3,0) to [C, l=$C_a$, -*] (3,-1.5)
 node[left]{$P_a$};
 \end{circuitikz}
-\&zwj;]" src="form_120.png" width="418" height="122"/></picture>
+\&zwj;]" src="form_127.png" width="418" height="122"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_121_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}&amp;C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
+<picture><source srcset="form_128_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}&amp;C_{i m} R_{v} Q_{in}-V_{i m}+C_{i m} \left(-P_{c i m}(0)+P_{i m}(0)-P_{i
 m}+P_{v}\right)-C_{i m} R_{v} \frac{d V_{i m}}{d t}-C_{a} C_{i m} R_{v}
 \frac{d P_{in}}{d t}+R_{a} C_{a} C_{i m} R_{v} \frac{d Q_{in}}{d t}\\ &amp;+C_{a}
 C_{i m} R_{v} \frac{d P_{a}}{d t}=0
-\end{eqnarray*}" src="form_121.png" width="878" height="56"/></picture>
+\end{eqnarray*}" src="form_128.png" width="878" height="56"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_122_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}&amp;C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
+<picture><source srcset="form_129_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\begin{eqnarray*}&amp;C_{i m} R_v P_{in}-C_{i m} R_{v} R_{a} Q_{in}-R_{v} V_{i m}-C_{i
 m}\left(R_{v}+R_{a m}\right) \left(P_{c i m}(0)-P_{i m}(0)+P_{i
 m}\right)-C_{i m} R_{v} R_{a m} \frac{d V_{i m}}{d t} \\ &amp;-R_{a m} V_{i
-m}+R_{a m} C_{i m} P_{v}=0 \end{eqnarray*}" src="form_122.png" width="812" height="51"/></picture>
+m}+R_{a m} C_{i m} P_{v}=0 \end{eqnarray*}" src="form_129.png" width="812" height="51"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_123_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} &amp; Q_{in} &amp; V_{i
-m}\end{array}\right]^{T}, \&zwj;]" src="form_123.png" width="225" height="28"/></picture>
+<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lll}P_{in} &amp; Q_{in} &amp; V_{i
+m}\end{array}\right]^{T}, \&zwj;]" src="form_130.png" width="225" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_124_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} &amp; R_{a} C_{a}
+<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccc}-C_{a} C_{i m} R_{v} &amp; R_{a} C_{a}
 C_{i m} R_{v} &amp; -C_{i m} R_{v} \\ 0 &amp; 0 &amp; -C_{i m} R_{v} R_{a
-m}\end{array}\right] \&zwj;]" src="form_124.png" width="422" height="47"/></picture>
+m}\end{array}\right] \&zwj;]" src="form_131.png" width="422" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_125_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccc}0 &amp; C_{i m} R_{v} &amp; -1 \\C_{i m} R_{v}
-&amp; -C_{i m} R_{v} R_{a} &amp; -\left(R_{v}+R_{a m}\right)\end{array}\right] \&zwj;]" src="form_125.png" width="384" height="47"/></picture>
+<picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccc}0 &amp; C_{i m} R_{v} &amp; -1 \\C_{i m} R_{v}
+&amp; -C_{i m} R_{v} R_{a} &amp; -\left(R_{v}+R_{a m}\right)\end{array}\right] \&zwj;]" src="form_132.png" width="384" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
+<picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}C_{i m}\left(-P_{i m}+P_{i m}(0)-P_{c i
 m}(0)+P_{v}\right)+C_{a} C_{i m} R_{v} \frac{d P_{a}}{d t} \\-C_{i
 m}\left(R_{v} + R_{a m}\right)\left(P_{cim}(0)-P_{i m}(0)+P_{i m}\right)+R_{a
-m} C_{i m} P_{v}\end{array}\right] \&zwj;]" src="form_126.png" width="549" height="47"/></picture>
+m} C_{i m} P_{v}\end{array}\right] \&zwj;]" src="form_133.png" width="549" height="47"/></picture>
 </p>
 <p>Assume <picture><source srcset="form_93_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_a=0$" src="form_93.png" width="54" height="19"/></picture>.</p>
 <h3>Parameters</h3>

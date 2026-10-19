@@ -166,7 +166,8 @@ double DoubleTanhActivation::compute(double time) {
 
   const double t_in_cycle = std::fmod(time, cardiac_period_);
 
-  const double S_plus = 0.5 * (1.0 + std::tanh((t_in_cycle - tsys) / steepness));
+  const double S_plus =
+      0.5 * (1.0 + std::tanh((t_in_cycle - tsys) / steepness));
   const double S_minus =
       0.5 * (1.0 - std::tanh((t_in_cycle - tdias) / steepness));
 

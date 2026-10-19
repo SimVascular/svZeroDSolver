@@ -13,7 +13,8 @@ std::map<int, SolverInterface*> SolverInterface::interface_list_;
 
 namespace {
 void commit_persistent_state_snapshot(SolverInterface* interface) {
-  interface->committed_block_states_ = interface->model_->get_persistent_states();
+  interface->committed_block_states_ =
+      interface->model_->get_persistent_states();
 }
 }  // namespace
 
@@ -400,7 +401,8 @@ void update_state(int problem_id, std::vector<double> new_state_y,
   if (interface->committed_block_states_.empty()) {
     commit_persistent_state_snapshot(interface);
   } else {
-    interface->model_->set_persistent_states(interface->committed_block_states_);
+    interface->model_->set_persistent_states(
+        interface->committed_block_states_);
   }
 
   auto state = interface->state_;

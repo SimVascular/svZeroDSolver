@@ -108,7 +108,8 @@ class ImpedanceBC : public Block {
    * @param model The model to which the block belongs
    */
   ImpedanceBC(int id, Model* model)
-      : Block(id, model, BlockType::impedance_bc, BlockClass::boundary_condition,
+      : Block(id, model, BlockType::impedance_bc,
+              BlockClass::boundary_condition,
               {{"z", InputParameter(false, false, false)},
                {"Pd", InputParameter(true, false, false)},
                {"convolution_mode", InputParameter(true, false, false)},

@@ -247,7 +247,8 @@ void Model::set_persistent_states(
     const std::vector<std::vector<double>>& states) {
   if (states.size() != static_cast<size_t>(get_num_blocks(true))) {
     throw std::runtime_error(
-        "Persistent-state block count mismatch in Model::set_persistent_states");
+        "Persistent-state block count mismatch in "
+        "Model::set_persistent_states");
   }
 
   for (size_t i = 0; i < states.size(); i++) {

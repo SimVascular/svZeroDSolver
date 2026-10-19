@@ -199,10 +199,9 @@ Formatting</h2>
 <li>Source code (<span class="tt">.cpp, .h</span>): <a href="https://clang.llvm.org/docs/ClangFormat.html">clang-format</a> as specified in <span class="tt">.clang-format</span> (defaults to <a href="https://google.github.io/styleguide/cppguide.html">Google C++ Style Guide</a>)</li>
 <li>Test cases and results (<span class="tt">.json</span>): <a href="https://prettier.io/">Prettier</a> as specified in <span class="tt">.prettierrc</span></li>
 </ul>
-<p>Before formatting the code with clang-format, ensure that you have latest clang-format version by running <span class="tt">clang-format --version</span>. To upgrade <span class="tt">clang-format</span> use the following commands</p><ul>
-<li>on MacOS: <span class="tt">brew upgrade clang-format</span></li>
-<li>on Ubuntu: <span class="tt">sudo apt upgrade clang-format</span></li>
-</ul>
+<p>The CI pins clang-format to version <b>23.1.0</b> (<span class="tt">CLANG_FORMAT_VERSION</span> in <span class="tt">.github/workflows/codechecks.yml</span>). Different clang-format versions can format the same code differently, so use exactly this version locally. The simplest way on any platform (macOS, Linux, Sherlock) is to install it from PyPI, e.g. into your virtual environment:</p>
+<div class="fragment"><div class="line">pip install clang-format==23.1.0</div>
+</div><!-- fragment --><p>Then check that this is the <span class="tt">clang-format</span> on your <span class="tt">PATH</span> by running <span class="tt">clang-format --version</span>. Other installations (e.g. Homebrew's <span class="tt">llvm</span>, a system package, or an <span class="tt">llvm</span> module) may come earlier on your <span class="tt">PATH</span> and shadow it.</p>
 <p>Before committing any changes, run the following command <b>from your build folder</b> to format all your files:</p>
 <div class="fragment"><div class="line">make codeformat</div>
 </div><!-- fragment --><p>You can also just check <b>if</b> a file would be formatted without actually formatting it with:</p>

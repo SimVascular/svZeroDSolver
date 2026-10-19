@@ -22,7 +22,8 @@ g_2(t) = \left(\frac{t_{shifted}}{\tau_2}\right)^{m_2}
 \]
 \_form#6=279x21:$t_{shifted} = (t - t_{shift}) \bmod T_{cardiac}$
 \_form#7=15x15:$C$
-\_form#8=660x47:\[f(t) = S_+ (t_{in\_cycle} - t_sys) \cdot S_- (t_{in\_cycle} - t_dias), \quad S_\pm (\Delta t) = \frac{1}{2} \left(1.0 \pm
+\_form#8=660x47:\[f(t) = S_+ (t_{in\_cycle} - t_sys) \cdot S_- (t_{in\_cycle} - t_dias), \quad
+S_\pm (\Delta t) = \frac{1}{2} \left(1.0 \pm
 \text{tanh}\left( \frac{\Delta t} {\gamma}
 \right) \right)
 \]

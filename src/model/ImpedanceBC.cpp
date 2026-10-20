@@ -100,12 +100,14 @@ void ImpedanceBC::set_persistent_state(const std::vector<double>& state) {
 
   if (state.size() !=
       static_cast<size_t>(kNumStateHeaderFields + new_num_period_steps)) {
-    throw std::runtime_error("Persistent state size mismatch for IMPEDANCE "
-                             "block " +
-                             get_name() + ".");
+    throw std::runtime_error(
+        "Persistent state size mismatch for IMPEDANCE "
+        "block " +
+        get_name() + ".");
   }
 
-  if (configured && (kernel.size() != static_cast<size_t>(new_num_period_steps))) {
+  if (configured &&
+      (kernel.size() != static_cast<size_t>(new_num_period_steps))) {
     throw std::runtime_error(
         "Persistent IMPEDANCE state is incompatible with configured kernel "
         "size in block " +
@@ -150,8 +152,9 @@ void ImpedanceBC::configure(const std::vector<double>& z, double pd,
   } else {
     throw std::runtime_error("IMPEDANCE block " + get_name() +
                              " has invalid `convolution_mode` value `" +
-                             convolution_mode + "`. Supported values are "
-                                                "`exact` and `truncated`.");
+                             convolution_mode +
+                             "`. Supported values are "
+                             "`exact` and `truncated`.");
   }
 
   if ((mode == ConvolutionMode::truncated) && (num_kernel_terms <= 0)) {
@@ -217,14 +220,16 @@ void ImpedanceBC::ensure_initialized() {
     if (points_per_cycle_input > 0) {
       const int configured_period_steps = points_per_cycle_input - 1;
       if (configured_period_steps <= 0) {
-        throw std::runtime_error(
-            "IMPEDANCE block " + get_name() +
-            " requires `simulation_parameters.number_of_time_pts_per_cardiac_cycle > 1`.");
+        throw std::runtime_error("IMPEDANCE block " + get_name() +
+                                 " requires "
+                                 "`simulation_parameters.number_of_time_pts_"
+                                 "per_cardiac_cycle > 1`.");
       }
       if (configured_period_steps != dt_period_steps) {
         throw std::runtime_error(
             "IMPEDANCE block " + get_name() +
-            " requires `simulation_parameters.number_of_time_pts_per_cardiac_cycle - 1` "
+            " requires "
+            "`simulation_parameters.number_of_time_pts_per_cardiac_cycle - 1` "
             "to match cardiac_period / dt. Expected " +
             std::to_string(dt_period_steps + 1) + ", got " +
             std::to_string(points_per_cycle_input) + ".");
@@ -262,8 +267,7 @@ void ImpedanceBC::ensure_initialized() {
     return;
   }
 
-  const double denom =
-      std::max({1.0, std::abs(model_dt), std::abs(dt)});
+  const double denom = std::max({1.0, std::abs(model_dt), std::abs(dt)});
   const double rel_change = std::abs(model_dt - dt) / denom;
   if (rel_change > 1.0e-12) {
     throw std::runtime_error(
@@ -275,9 +279,10 @@ void ImpedanceBC::ensure_initialized() {
 
 double ImpedanceBC::lagged_flow(int lag) const {
   if (lag <= 0) {
-    throw std::runtime_error("Internal error: lag must be positive in "
-                             "IMPEDANCE block " +
-                             get_name() + ".");
+    throw std::runtime_error(
+        "Internal error: lag must be positive in "
+        "IMPEDANCE block " +
+        get_name() + ".");
   }
   int idx = (head - (lag - 1)) % num_period_steps;
   if (idx < 0) {

@@ -6,11 +6,21 @@ on: [push, pull_request]
 jobs:
   code-format:
     runs-on: macos-latest
+    env:
+      # Pinned so formatting results don't change when a new clang-format is
+      # released. To bump: update this, run `make codeformat` with the new
+      # version, and commit the result together with the bump.
+      CLANG_FORMAT_VERSION: "23.1.0"
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: Install dependencies
         run: |
-          brew install clang-format
+          pip install "clang-format==${CLANG_FORMAT_VERSION}"
+          clang-format --version
+          clang-format --version | grep -qF "version ${CLANG_FORMAT_VERSION}"
           brew install npm
           npm init -y
           npm install prettier

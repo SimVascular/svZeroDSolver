@@ -238,9 +238,9 @@ std::unique_ptr<SphereMaterial> generate_material(
     double val;
     err = get_param_scalar(j, param.first, param.second, val);
     if (err) {
-      throw std::runtime_error(
-          "Scalar parameter " + param.first +
-          " is mandatory in material for chamber " + chamber_name);
+      throw std::runtime_error("Scalar parameter " + param.first +
+                               " is mandatory in material for chamber " +
+                               chamber_name);
     }
     material->set_param(param.first, val);
   }
@@ -308,7 +308,8 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
           sim_config.value("number_of_time_pts_per_cardiac_cycle", 0) <= 1) {
         throw std::runtime_error(
             "Coupled configs with IMPEDANCE boundary conditions require "
-            "`simulation_parameters.number_of_time_pts_per_cardiac_cycle > 1`.");
+            "`simulation_parameters.number_of_time_pts_per_cardiac_cycle > "
+            "1`.");
       }
     }
   }
@@ -509,7 +510,8 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
       std::vector<double> z = bc_values["z"].get<std::vector<double>>();
 
       double pd = bc_values.value("Pd", 0.0);
-      std::string convolution_mode = bc_values.value("convolution_mode", "exact");
+      std::string convolution_mode =
+          bc_values.value("convolution_mode", "exact");
       int num_kernel_terms = bc_values.value("num_kernel_terms", -1);
 
       // One-cycle sample count, if the configuration states it. Mandatory for
@@ -762,8 +764,7 @@ void create_chambers(
 
     // Create and set material for chamber types that use one
     if (chamber_type == "ChamberSphere") {
-      auto mat =
-          generate_material(chamber_config["material"], chamber_name);
+      auto mat = generate_material(chamber_config["material"], chamber_name);
       model.get_block(chamber_name)->set_material(std::move(mat));
     }
 

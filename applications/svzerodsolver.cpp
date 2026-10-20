@@ -52,7 +52,9 @@ int main(int argc, char* argv[]) {
       // If <path to .json> is still not found, use current directory
       if (end_of_path == std::string::npos) {
         output_file_path = ".";
-      }
+      } else {
+      output_file_path = input_file_name.substr(0, end_of_path);
+    }
     } else {
       output_file_path = input_file_name.substr(0, end_of_path);
     }

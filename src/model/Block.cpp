@@ -5,7 +5,9 @@
 
 #include "Model.h"
 
-std::string Block::get_name() { return this->model->get_block_name(this->id); }
+std::string Block::get_name() const {
+  return this->model->get_block_name(this->id);
+}
 
 void Block::update_vessel_type(VesselType type) { vessel_type = type; }
 
@@ -61,8 +63,14 @@ void Block::update_solution(
 
 void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
 
+void Block::accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+}
+
+std::vector<double> Block::get_persistent_state() const { return {}; }
+
+void Block::set_persistent_state(const std::vector<double>& state) {}
+
 void Block::update_gradient(Eigen::SparseMatrix<double>& jacobian,
-                            Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
                             Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha,
                             std::vector<double>& y, std::vector<double>& dy) {
   throw std::runtime_error("Gradient calculation not implemented for block " +

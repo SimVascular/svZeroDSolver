@@ -15,6 +15,18 @@ You can find more information under the following links:
 
 * [**Documentation**](https://simvascular.github.io/svZeroDSolver)
 * [**Developer Guide**](https://simvascular.github.io/svZeroDSolver/developer_guide.html)
+* [**svZeroDTuner Guide**](https://simvascular.github.io/svZeroDSolver/tuner.html)
 * [**Bug Reports**](https://github.com/simvascular/svZeroDSolver/issues)
 * [**Forum**](https://github.com/simvascular/svZeroDSolver/discussions)
 * [**About SimVascular**](https://simvascular.github.io)
+
+## Python package
+
+Install the Python bindings from PyPI with:
+
+```sh
+python -m pip install svzerod
+```
+
+Use `svzerod.simulate("model.json")` to run a model from Python. The package
+also installs the `svzerodsolver` and `svzerodcalibrator` commands.

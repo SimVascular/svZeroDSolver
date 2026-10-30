@@ -127,13 +127,13 @@ class ClosedLoopCoronaryBC : public Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    */
-  void setup_dofs(DOFHandler& dofhandler);
+  void setup_dofs(DOFHandler& dofhandler) override;
 
   /**
    * @brief Setup parameters that depend on the model
    *
    */
-  virtual void setup_model_dependent_params() = 0;
+  virtual void setup_model_dependent_params() override = 0;
 
   /**
    * @brief Update the constant contributions of the element in a sparse system
@@ -141,7 +141,8 @@ class ClosedLoopCoronaryBC : public Block {
    * @param system System to update contributions at
    * @param parameters Parameters of the model
    */
-  void update_constant(SparseSystem& system, std::vector<double>& parameters);
+  void update_constant(SparseSystem& system,
+                       std::vector<double>& parameters) override;
 
   /**
    * @brief Update the solution-dependent contributions of the element in a
@@ -152,9 +153,10 @@ class ClosedLoopCoronaryBC : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
-  void update_solution(SparseSystem& system, std::vector<double>& parameters,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy);
+  void update_solution(
+      SparseSystem& system, std::vector<double>& parameters,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
 
   /**
    * @brief Number of triplets of element

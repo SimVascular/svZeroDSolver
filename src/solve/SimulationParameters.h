@@ -14,6 +14,7 @@
 
 #include "ActivationFunction.h"
 #include "Model.h"
+#include "SphereMaterial.h"
 #include "State.h"
 #include "debug.h"
 
@@ -67,6 +68,9 @@ struct SimulationParameters {
       false};  ///< Running 0D simulation coupled with external solver
   double sim_external_step_size{0.0};  ///< Step size of external solver if
                                        ///< running coupled
+  bool sim_max_iter_error_to_warning{
+      false};  ///< If true, warn instead of throwing when max nonlinear
+               ///< iterations is reached
 };
 
 /// @brief Wrapper class for nlohmann:json with error checking
@@ -156,6 +160,21 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
     Model& model, const nlohmann::json& j, const std::string& chamber_name);
 
 /**
+ * @brief Create a SphereMaterial from JSON (analogous to
+ * generate_activation_function)
+ *
+ * Validates keys against the material type's params, reads scalar parameters,
+ * and returns a created SphereMaterial. Caller associates it with a
+ * ChamberSphere block via set_material().
+ *
+ * @param j            JSON object (e.g. chamber_config["material"])
+ * @param chamber_name Chamber name for error messages
+ * @return Unique pointer to the created material
+ */
+std::unique_ptr<SphereMaterial> generate_material(
+    const nlohmann::json& j, const std::string& chamber_name);
+
+/**
  * @brief Load initial conditions from a JSON configuration
  *
  * @param config The JSON configuration
@@ -171,6 +190,22 @@ State load_initial_condition(const nlohmann::json& config, Model& model);
  * @return SimulationParameters Simulation parameters read from configuration
  */
 SimulationParameters load_simulation_params(const nlohmann::json& config);
+
+/**
+ * @brief Reconcile the cardiac cycle period between the model and parameters
+ *
+ * The period may be defined by a model block (e.g. a closed-loop block or a
+ * chamber) or by `simulation_parameters.cardiac_period`. This resolves
+ * `model.cardiac_cycle_period` from both sources, throws if the two disagree,
+ * and falls back to a default of 1.0 if neither defines it. Must be called by
+ * every entry point (solver and coupled interface) before blocks that depend
+ * on the period are used.
+ *
+ * @param model The 0D model
+ * @param params Simulation parameters read from the configuration
+ */
+void resolve_cardiac_cycle_period(Model& model,
+                                  const SimulationParameters& params);
 
 /**
  * @brief Load the 0D block in the model from a configuration

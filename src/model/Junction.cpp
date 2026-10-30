@@ -31,14 +31,3 @@ void Junction::update_constant(SparseSystem& system,
                       global_var_ids[i]) = -1.0;
   }
 }
-
-void Junction::update_gradient(
-    Eigen::SparseMatrix<double>& jacobian,
-    Eigen::Matrix<double, Eigen::Dynamic, 1>& residual,
-    Eigen::Matrix<double, Eigen::Dynamic, 1>& alpha, std::vector<double>& y,
-    std::vector<double>& dy) {
-  // Pressure conservation
-  residual(global_eqn_ids[0]) = y[global_var_ids[0]] - y[global_var_ids[2]];
-
-  residual(global_eqn_ids[1]) = y[global_var_ids[1]] - y[global_var_ids[3]];
-}

@@ -2,6 +2,10 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "SimulationParameters.h"
 
+#include <cmath>
+
+#include "ImpedanceBC.h"
+
 bool get_param_scalar(const nlohmann::json& data, const std::string& name,
                       const InputParameter& param, double& val) {
   if (data.contains(name)) {
@@ -145,14 +149,15 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
     throw std::runtime_error(
         "Missing 'activation_function' for chamber " + chamber_name +
         ". Required with structure: {\"type\": \"half_cosine\", \"t_active\": "
-        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill with "
-        "their parameters).");
+        "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill / "
+        "double_tanh / wrapping_cosine / fourier with their parameters).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in activation_function for chamber " +
         chamber_name +
-        ". Must be one of: half_cosine, piecewise_cosine, two_hill");
+        ". Must be one of: half_cosine, piecewise_cosine, two_hill, "
+        "double_tanh, wrapping_cosine, fourier");
   }
 
   // Extract activation function type
@@ -198,6 +203,51 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
   return act_func;
 }
 
+std::unique_ptr<SphereMaterial> generate_material(
+    const nlohmann::json& j, const std::string& chamber_name) {
+  if (j.is_null() || !j.is_object()) {
+    throw std::runtime_error(
+        "Missing 'material' for chamber " + chamber_name +
+        ". Required with structure: {\"type\": \"mooney_rivlin\", \"W1\": "
+        "10e3, \"W2\": 40, \"eta\": 10.0} (or type exponential with C0, C1, "
+        "C2, C3, eta).");
+  }
+  if (!j.contains("type") || !j["type"].is_string()) {
+    throw std::runtime_error(
+        "Missing or invalid 'type' in material for chamber " + chamber_name +
+        ". Must be one of: mooney_rivlin, exponential");
+  }
+
+  std::string type_str = j["type"];
+  auto material = SphereMaterial::create(type_str);
+  const auto& input_param_properties = material->input_param_properties;
+
+  for (auto& el : j.items()) {
+    if (el.key()[0] == '_') continue;
+    if (el.key() == "type") continue;
+    if (!has_parameter(input_param_properties, el.key())) {
+      throw std::runtime_error("Unknown parameter " + el.key() +
+                               " defined in material for chamber " +
+                               chamber_name);
+    }
+  }
+
+  int err;
+  for (const auto& param : input_param_properties) {
+    if (!param.second.is_number) continue;
+    double val;
+    err = get_param_scalar(j, param.first, param.second, val);
+    if (err) {
+      throw std::runtime_error("Scalar parameter " + param.first +
+                               " is mandatory in material for chamber " +
+                               chamber_name);
+    }
+    material->set_param(param.first, val);
+  }
+
+  return material;
+}
+
 void validate_input(const nlohmann::json& config) {
   if (!config.contains("simulation_parameters")) {
     throw std::runtime_error("Define simulation_parameters");
@@ -207,11 +257,25 @@ void validate_input(const nlohmann::json& config) {
   }
 }
 
+bool config_has_impedance_bc(const nlohmann::json& config) {
+  if (!config.contains("boundary_conditions") ||
+      !config["boundary_conditions"].is_array()) {
+    return false;
+  }
+  for (const auto& bc_config : config["boundary_conditions"]) {
+    if (bc_config.value("bc_type", "") == "IMPEDANCE") {
+      return true;
+    }
+  }
+  return false;
+}
+
 SimulationParameters load_simulation_params(const nlohmann::json& config) {
   DEBUG_MSG("Loading simulation parameters");
   SimulationParameters sim_params;
   const auto& sim_config = config["simulation_parameters"];
   sim_params.sim_coupled = sim_config.value("coupled_simulation", false);
+  const bool has_impedance = config_has_impedance_bc(config);
 
   if (!sim_params.sim_coupled) {
     sim_params.sim_num_cycles = sim_config["number_of_cardiac_cycles"];
@@ -234,10 +298,34 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
     sim_params.sim_pts_per_cycle = sim_params.sim_num_time_steps;
     sim_params.sim_external_step_size =
         sim_config.value("external_step_size", 0.1);
+    if (has_impedance) {
+      if (sim_params.sim_num_time_steps != 2) {
+        throw std::runtime_error(
+            "Coupled configs with IMPEDANCE boundary conditions require "
+            "`simulation_parameters.number_of_time_pts = 2`.");
+      }
+      if (sim_config.contains("number_of_time_pts_per_cardiac_cycle") &&
+          sim_config.value("number_of_time_pts_per_cardiac_cycle", 0) <= 1) {
+        throw std::runtime_error(
+            "Coupled configs with IMPEDANCE boundary conditions require "
+            "`simulation_parameters.number_of_time_pts_per_cardiac_cycle > "
+            "1`.");
+      }
+    }
   }
   sim_params.sim_abs_tol = sim_config.value("absolute_tolerance", 1e-8);
   sim_params.sim_nliter = sim_config.value("maximum_nonlinear_iterations", 30);
+  sim_params.sim_max_iter_error_to_warning =
+      sim_config.value("max_iter_error_to_warning", false);
   sim_params.sim_steady_initial = sim_config.value("steady_initial", true);
+  if (has_impedance && sim_params.sim_steady_initial) {
+    throw std::runtime_error(
+        "IMPEDANCE boundary conditions are incompatible with steady "
+        "initialization: the convolution kernel is discretized at the "
+        "simulation time-step size, but the steady initial condition is "
+        "solved with `cardiac_period / 10`. Set "
+        "`simulation_parameters.steady_initial = false`.");
+  }
   sim_params.sim_rho_infty = sim_config.value("rho_infty", 0.5);
   sim_params.output_variable_based =
       sim_config.value("output_variable_based", false);
@@ -250,8 +338,28 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   return sim_params;
 }
 
+void resolve_cardiac_cycle_period(Model& model,
+                                  const SimulationParameters& params) {
+  if (params.sim_cardiac_period < 0.0 && model.cardiac_cycle_period < 0.0) {
+    // Defined nowhere; fall back to the default period.
+    model.cardiac_cycle_period = 1.0;
+  } else if (model.cardiac_cycle_period >= 0.0) {
+    // Defined by a model block. Check for an inconsistent definition in
+    // simulation_parameters.
+    if (params.sim_cardiac_period >= 0.0 &&
+        (model.cardiac_cycle_period != params.sim_cardiac_period)) {
+      throw std::runtime_error(
+          "Inconsistent cardiac cycle period defined in parameters");
+    }
+  } else {
+    // Defined only in simulation_parameters.
+    model.cardiac_cycle_period = params.sim_cardiac_period;
+  }
+}
+
 void load_simulation_model(const nlohmann::json& config, Model& model) {
   DEBUG_MSG("Loading model");
+
   // Create list to store block connections while generating blocks
   std::vector<std::tuple<std::string, std::string>> connections;
 
@@ -335,10 +443,10 @@ void create_vessels(
         JsonWrapper(config, component, "vessel_name", i);
     const auto& vessel_values = vessel_config["zero_d_element_values"];
     const std::string vessel_name = vessel_config["vessel_name"];
+    const std::string vessel_type = vessel_config["zero_d_element_type"];
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
-    generate_block(model, vessel_values, vessel_config["zero_d_element_type"],
-                   vessel_name);
+    generate_block(model, vessel_values, vessel_type, vessel_name);
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
@@ -381,6 +489,39 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
       double time_constant = Rd * C;
       model.update_largest_windkessel_time_constant(std::max(
           model.get_largest_windkessel_time_constant(), time_constant));
+    }
+
+    if (block->block_type == BlockType::impedance_bc) {
+      auto* impedance_block = dynamic_cast<ImpedanceBC*>(block);
+      if (impedance_block == nullptr) {
+        throw std::runtime_error(
+            "Internal error: IMPEDANCE block creation failed for " + bc_name +
+            ".");
+      }
+
+      if (!bc_values.contains("z")) {
+        throw std::runtime_error("IMPEDANCE block " + bc_name +
+                                 " is missing required `z` kernel.");
+      }
+      if (!bc_values["z"].is_array()) {
+        throw std::runtime_error("IMPEDANCE block " + bc_name +
+                                 " requires `z` to be an array.");
+      }
+      std::vector<double> z = bc_values["z"].get<std::vector<double>>();
+
+      double pd = bc_values.value("Pd", 0.0);
+      std::string convolution_mode =
+          bc_values.value("convolution_mode", "exact");
+      int num_kernel_terms = bc_values.value("num_kernel_terms", -1);
+
+      // One-cycle sample count, if the configuration states it. Mandatory for
+      // non-coupled runs and optional for coupled ones, where 0 means the
+      // block infers the cycle discretization from cardiac_period / dt.
+      int points_per_cycle = config["simulation_parameters"].value(
+          "number_of_time_pts_per_cardiac_cycle", 0);
+
+      impedance_block->configure(z, pd, convolution_mode, num_kernel_terms,
+                                 points_per_cycle);
     }
 
     if (block->block_type == BlockType::closed_loop_rcr_bc) {
@@ -446,6 +587,7 @@ void create_external_coupling(
     if (coupling_loc == "inlet") {
       std::vector<std::string> possible_types = {"RESISTANCE",
                                                  "RCR",
+                                                 "IMPEDANCE",
                                                  "ClosedLoopRCR",
                                                  "SimplifiedRCR",
                                                  "CORONARY",
@@ -599,8 +741,8 @@ void create_chambers(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, const std::string& component) {
-  // Set cardiac period from simulation_parameters so activation functions have
-  // it. May already be set by closed_loop_blocks.
+  // Set cardiac period from simulation_parameters so activation functions
+  // have it. May already be set by closed_loop_blocks.
   if (model.cardiac_cycle_period < 0.0 &&
       config.contains("simulation_parameters") &&
       config["simulation_parameters"].contains("cardiac_period")) {
@@ -609,19 +751,21 @@ void create_chambers(
       model.cardiac_cycle_period = period;
     }
   }
+
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& chamber_config = JsonWrapper(config, component, "name", i);
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
 
-    // Create and set activation_function for chamber types that use it
-    if (chamber_type == "ChamberElastanceInductor" ||
-        chamber_type == "LinearElastanceChamber") {
-      auto act_func = generate_activation_function(
-          model, chamber_config["activation_function"], chamber_name);
-      model.get_block(chamber_name)
-          ->set_activation_function(std::move(act_func));
+    auto act_func = generate_activation_function(
+        model, chamber_config["activation_function"], chamber_name);
+    model.get_block(chamber_name)->set_activation_function(std::move(act_func));
+
+    // Create and set material for chamber types that use one
+    if (chamber_type == "ChamberSphere") {
+      auto mat = generate_material(chamber_config["material"], chamber_name);
+      model.get_block(chamber_name)->set_material(std::move(mat));
     }
 
     DEBUG_MSG("Created chamber " << chamber_name);

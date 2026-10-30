@@ -1,0 +1,59 @@
+# Tuning configuration for Regazzoni closed-loop model
+# Tests time series target matching: tune parameters to match a target waveform.
+#
+# INSTRUCTIONS:
+# 1. Run baseline first to inspect outputs:
+#    python -c 'from main import run_baseline; run_baseline("model.json")'
+# 2. Optionally create target from baseline: copy a column from baseline_results.csv
+#    to targets/ as CSV with 'time' and 'value' columns
+# 3. Run optimization:
+#    svzerodtuner optimize tuning_time_series_target.yaml
+
+model:
+  config_file: "model.json"
+
+# Parameters to optimize
+parameters:
+  - name: "LV.Emax"
+    bounds: [1e7, 1e9]
+  - name: "AR_SYS.C"
+    bounds: [1e-9, 1e-7]
+
+# Target outputs
+# Specify which outputs you want to match and their target values
+# Provide expressions with output names from baseline_summary.csv
+targets:
+  - name: Systemic arterial pressure
+    type: time_series
+    expression: pressure:AV:AR_SYS
+    # Run create_target_from_baseline.py to create the target file from the baseline results.
+    target_file: "targets/target_pressure_ar_sys.csv"
+    relative_bounds: "5%"
+    weight: 1.0
+  
+  - name: LV max volume
+    type: scalar
+    expression: np.max(Vc:LV)
+    target_value: 167.6e-6  # m^3
+    relative_bounds: 5%
+    weight: 1.0
+
+objective:
+  # L1 or L2 norm (of relative errors)
+  norm: L1
+
+# Optimization
+optimization:
+  terminate_at_zero: true
+  algorithm: "Nelder-Mead"
+  maxiter: 100
+  xatol: 1e-6
+  fatol: 1e-6
+  adaptive: true
+
+# Output
+output:
+  directory: "optimization_results_time_series"
+  save_history: true
+  save_plots: true
+  save_final_config: true

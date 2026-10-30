@@ -1,0 +1,65 @@
+# Tuning configuration for Regazzoni closed-loop model
+#
+# INSTRUCTIONS:
+# 1. Run baseline:
+#    python -c 'from main import run_baseline; run_baseline("model.json")'
+# 2. Inspect baseline_results.csv and baseline_summary.csv
+# 3. Update the 'targets' section below with your desired targets
+# 4. Run optimization:
+#    svzerodtuner optimize tuning_nelder_mead.yaml
+
+model:
+  config_file: "model.json"
+
+# Parameters to optimize
+# Add or remove parameters as needed
+parameters:
+  - name: "LV.Emax"
+    bounds: [1e7, 5e8] 
+  - name: "AR_SYS.R_poiseuille"
+    bounds: [5e7, 5e8]
+  - name: "AR_SYS.C"
+    bounds: [1e-9, 1e-8]
+
+# Target outputs
+# Specify which outputs you want to match and their target values
+# Provide expressions with output names from baseline_summary.csv
+targets:
+  - name: Systemic arterial max pressure
+    type: scalar
+    expression: np.max(pressure:AV:AR_SYS)
+    target_value: 13065  # Pa
+    weight: 1.0
+  
+  - name: Systemic arterial min pressure
+    type: scalar
+    expression: np.min(pressure:AV:AR_SYS)
+    target_value: 7066  # Pa
+    weight: 1.0
+  
+  - name: LV ejection fraction
+    type: scalar
+    expression: (np.max(Vc:LV) - np.min(Vc:LV))/np.max(Vc:LV)
+    target_value: 0.5  # 50% (fraction 0-1)
+    relative_bounds: 5%
+    weight: 1.0
+
+objective:
+  # L1 or L2 norm (of relative errors)
+  norm: L1
+
+# Optimization - use scipy Nelder-Mead options (maxiter, xatol, fatol, adaptive, etc.)
+optimization:
+  terminate_at_zero: true # Stop when objective hits zero (default: true). Set false to run full maxiter.
+  algorithm: "Nelder-Mead"
+  maxiter: 30
+  xatol: 1e-6
+  fatol: 1e-6
+  adaptive: true
+
+# Output
+output:
+  directory: "optimization_results_nelder_mead"
+  save_history: true
+  save_plots: true
+  save_final_config: true

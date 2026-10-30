@@ -8,8 +8,12 @@ The script `script/jacobian.py` reads block definitions from YAML files and gene
 
 ## Usage
 
+The script depends on SymPy, which is part of the project's `dev` dependency
+group. After running `uv sync` (see the [Developer Guide](@ref developer_guide)),
+run it inside the managed environment:
+
 ```bash
-python jacobian.py <yaml_file>
+uv run python scripts/jacobian.py <yaml_file>
 ```
 
 ## YAML File Format

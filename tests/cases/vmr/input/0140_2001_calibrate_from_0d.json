@@ -183,37 +183,43 @@
       "inlet_vessels": [0],
       "junction_name": "J0",
       "junction_type": "NORMAL_JUNCTION",
-      "outlet_vessels": [1, 9, 21, 34, 37]
+      "outlet_vessels": [1, 9, 21, 34, 37],
+      "calibrate": ["R_poiseuille", "L", "stenosis_coefficient"]
     },
     {
       "inlet_vessels": [1],
       "junction_name": "J1",
       "junction_type": "NORMAL_JUNCTION",
-      "outlet_vessels": [2, 27]
+      "outlet_vessels": [2, 27],
+      "calibrate": ["R_poiseuille", "L", "stenosis_coefficient"]
     },
     {
       "inlet_vessels": [2],
       "junction_name": "J2",
       "junction_type": "NORMAL_JUNCTION",
-      "outlet_vessels": [3, 15]
+      "outlet_vessels": [3, 15],
+      "calibrate": ["R_poiseuille", "L", "stenosis_coefficient"]
     },
     {
       "inlet_vessels": [5],
       "junction_name": "J3",
       "junction_type": "NORMAL_JUNCTION",
-      "outlet_vessels": [6, 24]
+      "outlet_vessels": [6, 24],
+      "calibrate": ["R_poiseuille", "L", "stenosis_coefficient"]
     },
     {
       "inlet_vessels": [11],
       "junction_name": "J4",
       "junction_type": "NORMAL_JUNCTION",
-      "outlet_vessels": [12, 31]
+      "outlet_vessels": [12, 31],
+      "calibrate": ["R_poiseuille", "L", "stenosis_coefficient"]
     },
     {
       "inlet_vessels": [17],
       "junction_name": "J5",
       "junction_type": "NORMAL_JUNCTION",
-      "outlet_vessels": [18, 28]
+      "outlet_vessels": [18, 28],
+      "calibrate": ["R_poiseuille", "L", "stenosis_coefficient"]
     },
     {
       "inlet_vessels": [3],
@@ -382,7 +388,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 1,
@@ -394,7 +401,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 2,
@@ -406,7 +414,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 3,
@@ -418,7 +427,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 4,
@@ -430,7 +440,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 5,
@@ -442,7 +453,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 6,
@@ -454,7 +466,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 7,
@@ -466,7 +479,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -481,7 +495,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 9,
@@ -493,7 +508,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 10,
@@ -505,7 +521,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 11,
@@ -517,7 +534,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 12,
@@ -529,7 +547,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 13,
@@ -541,7 +560,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -556,7 +576,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 15,
@@ -568,7 +589,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 16,
@@ -580,7 +602,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 17,
@@ -592,7 +615,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 18,
@@ -604,7 +628,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 19,
@@ -616,7 +641,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -631,7 +657,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 21,
@@ -643,7 +670,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 22,
@@ -655,7 +683,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -670,7 +699,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 24,
@@ -682,7 +712,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 25,
@@ -694,7 +725,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -709,7 +741,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -724,7 +757,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 28,
@@ -736,7 +770,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 29,
@@ -748,7 +783,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -763,7 +799,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 31,
@@ -775,7 +812,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 32,
@@ -787,7 +825,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -802,7 +841,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 34,
@@ -814,7 +854,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 35,
@@ -826,7 +867,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -841,7 +883,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 37,
@@ -853,7 +896,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "vessel_id": 38,
@@ -865,7 +909,8 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     },
     {
       "boundary_conditions": {
@@ -880,15 +925,14 @@
         "L": 0.0,
         "R_poiseuille": 0.0,
         "stenosis_coefficient": 0.0
-      }
+      },
+      "calibrate": ["R_poiseuille", "C", "L", "stenosis_coefficient"]
     }
   ],
   "calibration_parameters": {
     "tolerance_gradient": 1e-5,
     "tolerance_increment": 1e-9,
-    "maximum_iterations": 20,
-    "calibrate_stenosis_coefficient": true,
-    "set_capacitance_to_zero": false
+    "maximum_iterations": 20
   },
   "y": {
     "flow:branch0_seg0:J0": [

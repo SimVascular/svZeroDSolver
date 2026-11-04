@@ -3,8 +3,48 @@
 #include "SimulationParameters.h"
 
 #include <cmath>
+#include <memory>
+#include <sstream>
 
 #include "ImpedanceBC.h"
+
+namespace {
+
+/// Join `items` as "A, B, C" for listing valid options in error messages.
+std::string join_names(const std::vector<std::string>& items) {
+  std::ostringstream joined;
+  for (size_t i = 0; i < items.size(); i++) {
+    joined << (i > 0 ? ", " : "") << items[i];
+  }
+  return joined.str();
+}
+
+/**
+ * @brief List the block types that can be used as a `bc_type`.
+ *
+ * Derived from the block factory, so the list can't drift from the blocks
+ * that are actually registered: a type qualifies if its block class is
+ * boundary_condition or closed_loop. ClosedLoopHeartAndPulmonary is excluded
+ * because it is configured under `closed_loop_blocks`, not
+ * `boundary_conditions`.
+ *
+ * To read the class, one throwaway block is constructed per registered type;
+ * block constructors only initialize members, so this doesn't touch `model`.
+ */
+std::vector<std::string> get_bc_type_names(Model& model) {
+  std::vector<std::string> bc_types;
+  for (const auto& [type_name, factory] : model.block_factory_map) {
+    std::unique_ptr<Block> block(factory(0, &model));
+    const bool is_bc = block->block_class == BlockClass::boundary_condition ||
+                       block->block_class == BlockClass::closed_loop;
+    if (is_bc && block->block_type != BlockType::closed_loop_heart_pulmonary) {
+      bc_types.push_back(std::string(type_name));
+    }
+  }
+  return bc_types;
+}
+
+}  // namespace
 
 bool get_param_scalar(const nlohmann::json& data, const std::string& name,
                       const InputParameter& param, double& val) {
@@ -374,13 +414,24 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     create_vessels(model, connections, config, component, vessel_id_map);
   }
 
-  // Create map for boundary conditions to boundary condition type
+  // Create map for boundary conditions to boundary condition type. Validate
+  // each bc_type here, before anything consumes the map: external coupling
+  // blocks are created before the boundary conditions, so an unchecked typo
+  // would otherwise surface as an unrelated coupling error.
   component = "boundary_conditions";
   std::map<std::string, std::string> bc_type_map;
+  const std::vector<std::string> valid_bc_types = get_bc_type_names(model);
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& bc_config = JsonWrapper(config, component, "bc_name", i);
     std::string bc_name = bc_config["bc_name"];
     std::string bc_type = bc_config["bc_type"];
+    if (std::find(valid_bc_types.begin(), valid_bc_types.end(), bc_type) ==
+        valid_bc_types.end()) {
+      throw std::runtime_error(
+          "Boundary condition '" + bc_name + "' has invalid bc_type '" +
+          bc_type +
+          "'. Valid bc_type values are: " + join_names(valid_bc_types) + ".");
+    }
     bc_type_map.insert({bc_name, bc_type});
   }
 
@@ -547,6 +598,11 @@ void create_external_coupling(
     std::string coupling_type = coupling_config["type"];
     std::string coupling_name = coupling_config["name"];
     std::string coupling_loc = coupling_config["location"];
+    if (coupling_loc != "inlet" && coupling_loc != "outlet") {
+      throw std::runtime_error("External coupling block '" + coupling_name +
+                               "' has invalid location '" + coupling_loc +
+                               "'. Valid location values are: inlet, outlet.");
+    }
     bool periodic = coupling_config.value("periodic", true);
     const auto& coupling_values = coupling_config["values"];
     const bool internal = false;
@@ -554,69 +610,68 @@ void create_external_coupling(
     generate_block(model, coupling_values, coupling_type, coupling_name,
                    internal, periodic);
 
-    // Determine the type of connected block
+    // Determine the type of connected block: the closed-loop heart, a
+    // boundary condition (by bc_name), or a vessel (by vessel_name).
     std::string connected_block = coupling_config["connected_block"];
     std::string connected_type;
-    int found_block = 0;
     if (connected_block == "ClosedLoopHeartAndPulmonary") {
       connected_type = "ClosedLoopHeartAndPulmonary";
-      found_block = 1;
+    } else if (auto bc = bc_type_map.find(connected_block);
+               bc != bc_type_map.end()) {
+      connected_type = bc->second;
     } else {
-      try {
-        connected_type = bc_type_map.at(connected_block);
-        found_block = 1;
-      } catch (...) {
-      }
-      if (found_block == 0) {
-        // Search for connected_block in the list of vessel names
-        for (auto const vessel : vessel_id_map) {
-          if (connected_block == vessel.second) {
-            connected_type = "BloodVessel";
-            found_block = 1;
-            break;
-          }
+      for (const auto& vessel : vessel_id_map) {
+        if (connected_block == vessel.second) {
+          connected_type = "BloodVessel";
+          break;
         }
       }
-      if (found_block == 0) {
-        std::cout << "Error! Could not connected type for block: "
-                  << connected_block << std::endl;
-        throw std::runtime_error("Terminating.");
-      }
-    }  // connected_block != "ClosedLoopHeartAndPulmonary"
+    }
+    if (connected_type.empty()) {
+      throw std::runtime_error(
+          "External coupling block '" + coupling_name +
+          "' has connected_block '" + connected_block +
+          "', which is not the bc_name of a boundary condition, the "
+          "vessel_name of a vessel, or ClosedLoopHeartAndPulmonary.");
+    }
+
+    // Each location supports only some connected block types. A block's type
+    // is its bc_type for a boundary condition, or BloodVessel for a vessel.
+    const std::vector<std::string> supported_types =
+        (coupling_loc == "inlet")
+            ? std::vector<std::string>{"RESISTANCE",
+                                       "RCR",
+                                       "IMPEDANCE",
+                                       "ClosedLoopRCR",
+                                       "CORONARY",
+                                       "ClosedLoopCoronaryLeft",
+                                       "ClosedLoopCoronaryRight",
+                                       "BloodVessel"}
+            : std::vector<std::string>{"ClosedLoopRCR",
+                                       "ClosedLoopHeartAndPulmonary",
+                                       "BloodVessel"};
+    if (std::find(supported_types.begin(), supported_types.end(),
+                  connected_type) == supported_types.end()) {
+      throw std::runtime_error(
+          "External coupling block '" + coupling_name + "' (location '" +
+          coupling_loc + "') has connected_block '" + connected_block +
+          "' of type '" + connected_type +
+          "', which is not supported at this location. Supported types for "
+          "location '" +
+          coupling_loc + "' are: " + join_names(supported_types) + ".");
+    }
+
     // Create connections
     if (coupling_loc == "inlet") {
-      std::vector<std::string> possible_types = {"RESISTANCE",
-                                                 "RCR",
-                                                 "IMPEDANCE",
-                                                 "ClosedLoopRCR",
-                                                 "SimplifiedRCR",
-                                                 "CORONARY",
-                                                 "ClosedLoopCoronaryLeft",
-                                                 "ClosedLoopCoronaryRight",
-                                                 "BloodVessel"};
-      if (std::find(std::begin(possible_types), std::end(possible_types),
-                    connected_type) == std::end(possible_types)) {
-        throw std::runtime_error(
-            "Error: The specified connection type for inlet"
-            "external_coupling_block is invalid.");
-      }
       connections.push_back({coupling_name, connected_block});
-    } else if (coupling_loc == "outlet") {
-      std::vector<std::string> possible_types = {
-          "ClosedLoopRCR", "ClosedLoopHeartAndPulmonary", "BloodVessel"};
-      if (std::find(std::begin(possible_types), std::end(possible_types),
-                    connected_type) == std::end(possible_types)) {
-        throw std::runtime_error(
-            "Error: The specified connection type for outlet "
-            "external_coupling_block is invalid.");
-      }
-      // Add connection only for closedLoopRCR and BloodVessel. Connection to
+    } else {
+      // Add connection only for ClosedLoopRCR and BloodVessel. Connection to
       // ClosedLoopHeartAndPulmonary will be handled in
       // ClosedLoopHeartAndPulmonary creation.
       if ((connected_type == "ClosedLoopRCR") ||
           (connected_type == "BloodVessel")) {
         connections.push_back({connected_block, coupling_name});
-      }  // connected_type == "ClosedLoopRCR"
+      }
     }  // coupling_loc
   }  // for (size_t i = 0; i < coupling_configs.length(); i++)
 }

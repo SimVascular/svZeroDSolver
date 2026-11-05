@@ -74,6 +74,7 @@ void StrainDependentActiveStress::update_constant(
     const std::vector<int>& global_var_ids) {
   const double alpha_r = params_.at("alpha_r");
   const double mu = params_.at("mu");
+  const double E_s = params_.at("E_s");
 
   // active stress
   system.F.coeffRef(global_eqn_ids[TAU_EQN], global_var_ids[TAU_VAR]) = -1;
@@ -92,6 +93,21 @@ void StrainDependentActiveStress::update_constant(
 
   // sarcomere active stress
   system.E.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[TAU_C_VAR]) = -1;
+
+  // sarcomere stress
+  system.E.coeffRef(global_eqn_ids[SIGMA_C_EQN], global_var_ids[E_C_VAR]) = mu;
+  system.F.coeffRef(global_eqn_ids[SIGMA_C_EQN], global_var_ids[TAU_C_VAR]) = 1;
+  system.F.coeffRef(global_eqn_ids[SIGMA_C_EQN], global_var_ids[SIGMA_C_VAR]) =
+      -1;
+
+  // series element stress
+  system.F.coeffRef(global_eqn_ids[SIGMA_S_EQN], global_var_ids[SIGMA_S_VAR]) =
+      -1;
+
+  // series element strain
+  system.F.coeffRef(global_eqn_ids[E_S_EQN], global_var_ids[SIGMA_S_VAR]) =
+      1 / E_s;
+  system.F.coeffRef(global_eqn_ids[E_S_EQN], global_var_ids[E_S_VAR]) = -1;
 }
 
 void StrainDependentActiveStress::update_time(
@@ -138,6 +154,7 @@ void StrainDependentActiveStress::update_solution(
   const double tau_c = y[global_var_ids[TAU_C_VAR]];
   const double k_c = y[global_var_ids[K_C_VAR]];
   const double omega = y[global_var_ids[OMEGA_VAR]];
+  const double tau = y[global_var_ids[TAU_VAR]];
   const double de_c_dt = dy[global_var_ids[E_C_VAR]];
 
   update_active_stress_values(e_c);
@@ -210,4 +227,11 @@ void StrainDependentActiveStress::update_solution(
       de_c_dt;
   system.dC_dy.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[OMEGA_VAR]) =
       -tau_c * fabs(u_minus_);
+
+  // series element stress
+  system.C.coeffRef(global_eqn_ids[SIGMA_S_EQN]) = tau * (1 + 2 * e_c);
+  system.dC_dy.coeffRef(global_eqn_ids[SIGMA_S_EQN], global_var_ids[TAU_VAR]) =
+      1 + 2 * e_c;
+  system.dC_dy.coeffRef(global_eqn_ids[SIGMA_S_EQN], global_var_ids[E_C_VAR]) =
+      2 * tau;
 }

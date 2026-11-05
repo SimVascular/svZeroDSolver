@@ -150,7 +150,8 @@
  * \f$S_\text{pas} = S - \tau\f$
  *
  * Active stress models may introduce additional internal variables (e.g.
- * `e_c`, `tau_c`, `k_c`, `omega` for the `strain_dependent` model, see
+ * `e_c`, `tau_c`, `k_c`, `omega`, `sigma_c`, `sigma_s`, `e_s` for the
+ * `strain_dependent` model, see
  * \ref ActiveStress).
  *
  */

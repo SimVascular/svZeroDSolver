@@ -7,15 +7,17 @@
  * The spec pattern is set to locate test files in the 'tests/cypress/e2e' directory.
  *
  * To run Cypress with this configuration, use the following command:
- * npx cypress open --config-file tests/cypress/cypress.config.js
+ * cd tests/cypress
+ * npm run cypress:open
  * or
- * npx cypress run --config-file tests/cypress/cypress.config.js
+ * npm test
  */
 
 
 const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
+  video: true,
   e2e: {
     setupNodeEvents(on, config) {},
     baseUrl: 'http://localhost:8902',

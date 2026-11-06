@@ -15,7 +15,7 @@ import os
 import sys
 import numpy as np
 import pandas as pd
-import pysvzerod
+import svzerod
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../..'))
@@ -42,7 +42,7 @@ def run_baseline(config_file):
     print()
 
     try:
-        solver = pysvzerod.Solver(config_file)
+        solver = svzerod.Solver(config_file)
         solver.run()
         print("\u2713 Simulation completed successfully\n")
     except Exception as e:

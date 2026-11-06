@@ -97,7 +97,7 @@ class SV0DTuner:
     def __getstate__(self):
         """
         Make tuner pickle-safe for multiprocessing objective dispatch.
-        `pysvzerod.Solver`/extractor instances are runtime-only and not pickleable.
+        `svzerod.Solver`/extractor instances are runtime-only and not pickleable.
         """
         state = self.__dict__.copy()
         state["solver"] = None

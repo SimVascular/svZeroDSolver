@@ -6,7 +6,7 @@ Used by both SV0DTuner and SensitivityAnalyzer to avoid duplicating simulation l
 """
 
 import numpy as np
-import pysvzerod
+import svzerod
 from typing import List, Dict, Any, Tuple
 
 from .parameter_handler import ParameterHandler
@@ -17,7 +17,7 @@ def run_simulation(
     param_handler: ParameterHandler,
     parameters: List[Dict[str, Any]],
     param_values: np.ndarray,
-) -> Tuple[pysvzerod.Solver, OutputExtractor]:
+) -> Tuple[svzerod.Solver, OutputExtractor]:
     """
     Run sv0D simulation with given parameter values.
 
@@ -42,7 +42,7 @@ def run_simulation(
         param_handler.set_parameter(name, value)
 
     config_dict = param_handler.get_config()
-    solver = pysvzerod.Solver(config_dict)
+    solver = svzerod.Solver(config_dict)
     solver.run()
     extractor = OutputExtractor(solver)
     return solver, extractor

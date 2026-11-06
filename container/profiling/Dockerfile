@@ -20,13 +20,13 @@ RUN apt-get -q update && \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . /opt/pysvzerod
+COPY . /opt/svzerod
 
-RUN mkdir -p /opt/pysvzerod-build/relwithdebinfo && \
-    cd /opt/pysvzerod-build/relwithdebinfo && \
-    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo /opt/pysvzerod && \
+RUN mkdir -p /opt/svzerod-build/relwithdebinfo && \
+    cd /opt/svzerod-build/relwithdebinfo && \
+    cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo /opt/svzerod && \
     cmake --build . --target svzerodsolver
 
 WORKDIR /opt/data
-RUN chmod +x /opt/pysvzerod/container/profiling/entrypoint.sh
-ENTRYPOINT ["/opt/pysvzerod/container/profiling/entrypoint.sh"]
+RUN chmod +x /opt/svzerod/container/profiling/entrypoint.sh
+ENTRYPOINT ["/opt/svzerod/container/profiling/entrypoint.sh"]

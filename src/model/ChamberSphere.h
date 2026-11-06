@@ -8,14 +8,15 @@
 #define SVZERODSOLVER_MODEL_ChamberSphere_HPP_
 
 #include <math.h>
-#include <map>              
-#include <memory>           
-#include <string> 
+
+#include <map>
+#include <memory>
+#include <string>
 
 #include "ActivationFunction.h"
 #include "Block.h"
-#include "SphereMaterial.h"
 #include "SparseSystem.h"
+#include "SphereMaterial.h"
 
 /**
  * @brief Spherical heart chamber model
@@ -97,9 +98,9 @@
  * `zero_d_element_values` to select and parameterize the activation function
  * \f$f(t)\f$ (see \ref ActivationFunction, e.g. `two_hill`, `half_cosine`,
  * `piecewise_cosine`, `wrapping_cosine`, `fourier`, `double_tanh`).
- * 
- * Furthermore, a `material` object is required to select and parameterize 
- * the material model for the elastic stress term \f$S_\text{el}(r, r_0)\f$ 
+ *
+ * Furthermore, a `material` object is required to select and parameterize
+ * the material model for the elastic stress term \f$S_\text{el}(r, r_0)\f$
  * (see \ref SphereMaterial, e.g. `exponential`, `mooney_rivlin`).
  *
  * ### Usage in json configuration file

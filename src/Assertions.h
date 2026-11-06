@@ -13,7 +13,7 @@
 /**
  * @brief Report a violated Eigen assertion
  *
- * Eigen asserts via assert(), which aborts the process. Inside the pysvzerod
+ * Eigen asserts via assert(), which aborts the process. Inside the svzerod
  * extension module that would tear down the Python interpreter, so throw
  * instead: pybind11 surfaces the exception and only the current call fails.
  *

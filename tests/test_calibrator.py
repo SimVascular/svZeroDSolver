@@ -4,7 +4,7 @@ import os
 import numpy as np
 import pytest
 
-from .utils import execute_pysvzerod, RTOL_PRES
+from .utils import execute_svzerod, RTOL_PRES
 
 this_file_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -12,7 +12,7 @@ this_file_dir = os.path.abspath(os.path.dirname(__file__))
 def test_steady_flow_calibration():
     testfile = os.path.join(this_file_dir, "cases", "steadyFlow_calibration.json")
 
-    result, _ = execute_pysvzerod(testfile, "calibrator")
+    result, _ = execute_svzerod(testfile, "calibrator")
 
     calibrated_parameters = result["vessels"][0]["zero_d_element_values"]
 
@@ -52,7 +52,7 @@ def test_calibration_vmr(test_case):
     with open(reference_file) as ff:
         reference = json.load(ff)
 
-    result, _ = execute_pysvzerod(test, "calibrator")
+    result, _ = execute_svzerod(test, "calibrator")
 
     for i, vessel in enumerate(reference["vessels"]):
         for key, value in vessel["zero_d_element_values"].items():

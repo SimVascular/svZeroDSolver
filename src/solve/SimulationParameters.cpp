@@ -83,6 +83,8 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       }
     }
   } else {
+    // Whether any parameter was read as an array that uses "t"
+    bool uses_time_array = false;
     for (const auto& block_param : block->input_params) {
       // Time parameter is read at the same time as time-dependent value
       if (block_param.first.compare("t") == 0) {
@@ -96,6 +98,31 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
 
       // Get vector parameter
       if (block_param.second.is_array) {
+        // A time-dependent parameter is either an array of values at the
+        // times in "t", or a string with an expression of the time t.
+        if (block_params_json.contains(block_param.first) &&
+            block_params_json[block_param.first].is_string()) {
+          const std::string block_desc =
+              block_type + " block " + static_cast<std::string>(name);
+          const std::string expression =
+              block_params_json[block_param.first].get<std::string>();
+          if (expression.empty()) {
+            throw std::runtime_error(
+                "Parameter " + block_param.first + " in " + block_desc +
+                " is an empty string; give an array (with t) or an "
+                "expression of the time t, e.g. \"2*pi*cos(2*pi*t)\".");
+          }
+          try {
+            block_param_ids.push_back(model.add_parameter(expression));
+          } catch (const std::runtime_error& e) {
+            throw std::runtime_error("Invalid expression in parameter " +
+                                     block_param.first + " of " + block_desc +
+                                     ": " + e.what());
+          }
+          continue;
+        }
+        uses_time_array = true;
+
         // Get parameter vector
         std::vector<double> val;
         err = get_param_vector(block_params_json, block_param.first,
@@ -136,6 +163,14 @@ int generate_block(Model& model, const nlohmann::json& block_params_json,
       }
       // Store parameter IDs
       block_param_ids.push_back(new_id);
+    }
+
+    if (!uses_time_array && block_params_json.contains("t")) {
+      throw std::runtime_error(
+          "Parameter t in " + block_type + " block " +
+          static_cast<std::string>(name) +
+          " is unused because all time-dependent parameters are given as "
+          "expressions; remove it.");
     }
   }
 

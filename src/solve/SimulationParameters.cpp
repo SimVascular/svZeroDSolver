@@ -10,6 +10,16 @@
 
 namespace {
 
+/**
+ * @brief Block types configured under `closed_loop_blocks` (selected by
+ * `closed_loop_type`) instead of `boundary_conditions`.
+ *
+ * Both create_closed_loop() and get_bc_type_names() use this list, so the
+ * loader states in one place which section each of these blocks belongs to.
+ */
+const std::vector<std::string> kClosedLoopBlockTypes = {
+    "ClosedLoopHeartAndPulmonary"};
+
 /// Join `items` as "A, B, C" for listing valid options in error messages.
 std::string join_names(const std::vector<std::string>& items) {
   std::ostringstream joined;
@@ -20,28 +30,72 @@ std::string join_names(const std::vector<std::string>& items) {
 }
 
 /**
- * @brief List the block types that can be used as a `bc_type`.
+ * @brief List the registered block types whose block class is in `classes`.
  *
- * Derived from the block factory, so the list can't drift from the blocks
- * that are actually registered: a type qualifies if its block class is
- * boundary_condition or closed_loop. ClosedLoopHeartAndPulmonary is excluded
- * because it is configured under `closed_loop_blocks`, not
- * `boundary_conditions`.
+ * Derived from the block factory, so valid-type lists in error messages
+ * can't drift from the blocks that are actually registered. To read a type's
+ * class, one throwaway block is constructed per registered type; block
+ * constructors only initialize members, so this doesn't touch `model`.
  *
- * To read the class, one throwaway block is constructed per registered type;
- * block constructors only initialize members, so this doesn't touch `model`.
+ * @param model Model whose block factory is queried
+ * @param classes Block classes to include
+ * @param excluded Type names to leave out even if their class matches
+ * @return Matching type names, in the factory's (alphabetical) order
  */
-std::vector<std::string> get_bc_type_names(Model& model) {
-  std::vector<std::string> bc_types;
+std::vector<std::string> get_block_type_names(
+    Model& model, const std::vector<BlockClass>& classes,
+    const std::vector<std::string>& excluded = {}) {
+  std::vector<std::string> type_names;
   for (const auto& [type_name, factory] : model.block_factory_map) {
     std::unique_ptr<Block> block(factory(0, &model));
-    const bool is_bc = block->block_class == BlockClass::boundary_condition ||
-                       block->block_class == BlockClass::closed_loop;
-    if (is_bc && block->block_type != BlockType::closed_loop_heart_pulmonary) {
-      bc_types.push_back(std::string(type_name));
+    const bool class_matches = std::find(classes.begin(), classes.end(),
+                                         block->block_class) != classes.end();
+    const bool is_excluded = std::find(excluded.begin(), excluded.end(),
+                                       type_name) != excluded.end();
+    if (class_matches && !is_excluded) {
+      type_names.push_back(std::string(type_name));
     }
   }
-  return bc_types;
+  return type_names;
+}
+
+/**
+ * @brief List the block types that can be used as a `bc_type` (and as the
+ * `type` of an external coupling block).
+ *
+ * These are the boundary_condition and closed_loop block classes, minus
+ * kClosedLoopBlockTypes, which belong under `closed_loop_blocks`.
+ */
+std::vector<std::string> get_bc_type_names(Model& model) {
+  return get_block_type_names(
+      model, {BlockClass::boundary_condition, BlockClass::closed_loop},
+      kClosedLoopBlockTypes);
+}
+
+/**
+ * @brief Throw a load-time error if a block's configured type isn't valid.
+ *
+ * Checking before generate_block() lets the error name the block, the config
+ * section and key to fix, and the valid values. Model::create_block() only
+ * knows the type string.
+ *
+ * @param type Type read from the configuration
+ * @param valid_types Types accepted for this config section and key
+ * @param component Config section the block is in, e.g. "vessels"
+ * @param key Config key the type was read from, e.g. "zero_d_element_type"
+ * @param name Name of the block, as given in the configuration
+ */
+void check_block_type(const std::string& type,
+                      const std::vector<std::string>& valid_types,
+                      const std::string& component, const std::string& key,
+                      const std::string& name) {
+  if (std::find(valid_types.begin(), valid_types.end(), type) ==
+      valid_types.end()) {
+    throw std::runtime_error("Block '" + name + "' in " + component +
+                             " has invalid " + key + " '" + type + "'. Valid " +
+                             key + " values are: " + join_names(valid_types) +
+                             ".");
+  }
 }
 
 }  // namespace
@@ -425,13 +479,7 @@ void load_simulation_model(const nlohmann::json& config, Model& model) {
     const auto& bc_config = JsonWrapper(config, component, "bc_name", i);
     std::string bc_name = bc_config["bc_name"];
     std::string bc_type = bc_config["bc_type"];
-    if (std::find(valid_bc_types.begin(), valid_bc_types.end(), bc_type) ==
-        valid_bc_types.end()) {
-      throw std::runtime_error(
-          "Boundary condition '" + bc_name + "' has invalid bc_type '" +
-          bc_type +
-          "'. Valid bc_type values are: " + join_names(valid_bc_types) + ".");
-    }
+    check_block_type(bc_type, valid_bc_types, component, "bc_type", bc_name);
     bc_type_map.insert({bc_name, bc_type});
   }
 
@@ -488,6 +536,8 @@ void create_vessels(
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, const std::string& component,
     std::map<int, std::string>& vessel_id_map) {
+  const std::vector<std::string> valid_vessel_types =
+      get_block_type_names(model, {BlockClass::vessel});
   // Loop all vessels
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& vessel_config =
@@ -495,6 +545,8 @@ void create_vessels(
     const auto& vessel_values = vessel_config["zero_d_element_values"];
     const std::string vessel_name = vessel_config["vessel_name"];
     const std::string vessel_type = vessel_config["zero_d_element_type"];
+    check_block_type(vessel_type, valid_vessel_types, component,
+                     "zero_d_element_type", vessel_name);
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
     generate_block(model, vessel_values, vessel_type, vessel_name);
@@ -592,12 +644,16 @@ void create_external_coupling(
     const nlohmann::json& config, const std::string& component,
     std::map<int, std::string>& vessel_id_map,
     std::map<std::string, std::string>& bc_type_map) {
+  const std::vector<std::string> valid_coupling_types =
+      get_bc_type_names(model);
   // Loop all external coupling blocks
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& coupling_config = JsonWrapper(config, component, "name", i);
     std::string coupling_type = coupling_config["type"];
     std::string coupling_name = coupling_config["name"];
     std::string coupling_loc = coupling_config["location"];
+    check_block_type(coupling_type, valid_coupling_types, component, "type",
+                     coupling_name);
     if (coupling_loc != "inlet" && coupling_loc != "outlet") {
       throw std::runtime_error("External coupling block '" + coupling_name +
                                "' has invalid location '" + coupling_loc +
@@ -681,12 +737,16 @@ void create_junctions(
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, const std::string& component,
     std::map<int, std::string>& vessel_id_map) {
+  const std::vector<std::string> valid_junction_types =
+      get_block_type_names(model, {BlockClass::junction});
   // Loop all junctions
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& junction_config =
         JsonWrapper(config, component, "junction_name", i);
     std::string j_type = junction_config["junction_type"];
     std::string junction_name = junction_config["junction_name"];
+    check_block_type(j_type, valid_junction_types, component, "junction_type",
+                     junction_name);
 
     if (!junction_config.contains("junction_values")) {
       generate_block(model, {}, j_type, junction_name);
@@ -730,6 +790,9 @@ void create_closed_loop(
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& closed_loop_config = JsonWrapper(config, component, "name", i);
     std::string closed_loop_type = closed_loop_config["closed_loop_type"];
+    check_block_type(closed_loop_type, kClosedLoopBlockTypes, component,
+                     "closed_loop_type",
+                     "entry " + std::to_string(i));  // entries have no name
     if (closed_loop_type == "ClosedLoopHeartAndPulmonary") {
       if (heartpulmonary_block_present == false) {
         heartpulmonary_block_present = true;
@@ -778,11 +841,15 @@ void create_valves(
     Model& model,
     std::vector<std::tuple<std::string, std::string>>& connections,
     const nlohmann::json& config, const std::string& component) {
+  const std::vector<std::string> valid_valve_types =
+      get_block_type_names(model, {BlockClass::valve});
   // Loop all valves
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& valve_config = JsonWrapper(config, component, "name", i);
     std::string valve_type = valve_config["type"];
     std::string valve_name = valve_config["name"];
+    check_block_type(valve_type, valid_valve_types, component, "type",
+                     valve_name);
     generate_block(model, valve_config["params"], valve_type, valve_name);
     connections.push_back(
         {valve_config["params"]["upstream_block"], valve_name});
@@ -807,10 +874,14 @@ void create_chambers(
     }
   }
 
+  const std::vector<std::string> valid_chamber_types =
+      get_block_type_names(model, {BlockClass::chamber});
   for (size_t i = 0; i < config[component].size(); i++) {
     const auto& chamber_config = JsonWrapper(config, component, "name", i);
     std::string chamber_type = chamber_config["type"];
     std::string chamber_name = chamber_config["name"];
+    check_block_type(chamber_type, valid_chamber_types, component, "type",
+                     chamber_name);
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
 
     auto act_func = generate_activation_function(

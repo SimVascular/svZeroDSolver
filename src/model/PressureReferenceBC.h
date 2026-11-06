@@ -51,17 +51,20 @@
  *
  * * `0` Pressure
  *
- * The pressure is given either as a time series, with `"P"` and `"t"` arrays
- * that are linearly interpolated and repeated every cardiac cycle, or as an
- * expression `"fn"` of the simulation time `t`. Exactly one of the two must
- * be given. Expressions are parsed with ExprTk
- * (https://www.partow.net/programming/exprtk/), which supports
- * the usual operators, functions (`sin`, `cos`, `exp`, `log`, ...) and the
- * constant `pi`. They are evaluated at the absolute simulation time, so a
- * pulsatile expression should be periodic with the cardiac cycle (set
- * `"cardiac_period"` in `"simulation_parameters"`, default 1.0) for the
- * simulation to reach a periodic state. For the steady initial condition, an
- * expression is replaced by its average over one cardiac cycle.
+ * `"P"` is given either as an array of values at the times in the array
+ * `"t"`, linearly interpolated and repeated every cardiac cycle, or as a
+ * string with an expression of the simulation time `t` (then `"t"` must be
+ * omitted). Expressions are parsed with ExprTk
+ * (https://www.partow.net/programming/exprtk/), which supports the usual
+ * operators, functions (`sin`, `cos`, `exp`, `log`, ...), the constant `pi`
+ * and conditionals (`t < 0.3 ? 1 : 0`); loops and assignments are disabled.
+ * They are evaluated at the absolute simulation time, so a pulsatile
+ * expression should be periodic with the model's cardiac cycle for the
+ * simulation to reach a periodic state. That period is set by the model's
+ * tabular parameters (e.g. other boundary conditions given as arrays), or
+ * else by `"cardiac_period"` in `"simulation_parameters"`, or else defaults
+ * to 1.0. For the steady initial condition, an expression is replaced by its
+ * average over one cardiac cycle.
  *
  * ### Usage in json configuration file
  *
@@ -89,7 +92,7 @@
  *             "bc_name": "OUT",
  *             "bc_type": "PRESSURE",
  *             "bc_values": {
- *                 "fn": "1000.0 + 100.0 * cos(2 * pi * t)"
+ *                 "P": "1000.0 + 100.0 * cos(2 * pi * t)"
  *             }
  *         }
  *     ]
@@ -109,9 +112,8 @@ class PressureReferenceBC : public Block {
    */
   PressureReferenceBC(int id, Model* model)
       : Block(id, model, BlockType::pressure_bc, BlockClass::boundary_condition,
-              {{"t", InputParameter(true, true)},
-               {"P", InputParameter(true, true)},
-               {"fn", InputParameter(true, false, false, true)}}) {}
+              {{"t", InputParameter(false, true)},
+               {"P", InputParameter(false, true)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block

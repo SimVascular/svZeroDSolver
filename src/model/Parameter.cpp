@@ -2,6 +2,14 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "Parameter.h"
 
+// Only scalar expressions of t are needed; disabling the rest of ExprTk
+// roughly halves the compile time and size of this file's object.
+#define exprtk_disable_string_capabilities
+#define exprtk_disable_rtl_io
+#define exprtk_disable_rtl_io_file
+#define exprtk_disable_rtl_vecops
+#define exprtk_disable_enhanced_features
+#define exprtk_disable_superscalar_unroll
 #include <exprtk.hpp>
 #include <sstream>
 #include <stdexcept>
@@ -72,21 +80,36 @@ void Parameter::update(const std::string& update_string) {
   impl->time_value = &impl->symbol_table.get_variable("t")->ref();
   impl->expression.register_symbol_table(impl->symbol_table);
 
-  exprtk::parser<double> parser;
+  // Reject loops, return statements, assignments and variable definitions:
+  // a boundary condition only needs a value of t, and a loop could hang the
+  // solver while assignments could silently modify t.
+  using settings_t = exprtk::parser<double>::settings_t;
+  settings_t settings;
+  settings.disable_control_structure(settings_t::e_ctrl_for_loop)
+      .disable_control_structure(settings_t::e_ctrl_while_loop)
+      .disable_control_structure(settings_t::e_ctrl_repeat_loop)
+      .disable_control_structure(settings_t::e_ctrl_return)
+      .disable_all_assignment_ops()
+      .disable_local_vardef();
+
+  exprtk::parser<double> parser(settings);
   if (!parser.compile(update_string, impl->expression)) {
     std::ostringstream msg;
     msg << "could not compile expression \"" << update_string << "\"";
     for (std::size_t i = 0; i < parser.error_count(); ++i) {
       const auto error = parser.get_error(i);
-      msg << "; at position " << error.token.position << ": "
-          << error.diagnostic;
+      msg << "; ";
+      // Errors that are not tied to a token report position npos
+      if (error.token.position != std::string::npos) {
+        msg << "at position " << error.token.position << ": ";
+      }
+      msg << error.diagnostic;
     }
     throw std::runtime_error(msg.str());
   }
 
   // Only modify this parameter once the expression is known to be valid.
   exprtk_impl_ = std::move(impl);
-  expression_string = update_string;
   is_function = true;
   is_constant = false;
   is_periodic = false;

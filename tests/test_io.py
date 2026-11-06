@@ -127,7 +127,7 @@ def test_pulsatile_flow_r_rcr_mean_derivative_variable():
 
 
 def test_time_dependent_block():
-    """FLOW and PRESSURE BCs given as an expression "fn" follow it exactly."""
+    """FLOW and PRESSURE BCs given as an expression string follow it exactly."""
     res_flow = run_test_case_by_name("timeDep_Flow", output_variable_based=True)
     res_press = run_test_case_by_name("timeDep_Pressure", output_variable_based=True)
 
@@ -143,53 +143,68 @@ def test_time_dependent_block():
     assert np.allclose(pressure[15:], expected[15:], rtol=0.003)
 
 
-def run_flow_fn_case(bc_values, **sim_params):
-    """Run timeDep_Flow with the given inlet bc_values and sim parameters."""
-    config = get_test_case_by_name("timeDep_Flow")
+def run_expression_case(bc_values, case="timeDep_Flow", **sim_params):
+    """Run an expression test case with the given inlet bc_values."""
+    config = get_test_case_by_name(case)
     config["boundary_conditions"][0]["bc_values"] = bc_values
     config["simulation_parameters"].update(sim_params)
     return svzerod.simulate(config)
 
 
-def test_fn_steady_initial_uses_cycle_mean():
+def test_expression_steady_initial_uses_cycle_mean():
     """The steady initial condition uses the expression's cycle average."""
-    res = run_flow_fn_case(
-        {"fn": "5.0 + sin(2 * pi * t)"}, steady_initial=True, output_all_cycles=True
-    )
+    res = run_expression_case({"Q": "5.0 + sin(2 * pi * t)"}, steady_initial=True)
     pressure = res["y"][res["name"] == "pressure:INLET:branch0_seg0"].to_numpy()
 
     # steady state for the mean flow Q = 5 through R_poiseuille + R = 1100
     assert np.isclose(pressure[0], 5.0 * 1100.0, rtol=1e-6)
 
 
-def test_fn_with_cardiac_period_from_simulation_parameters():
-    """A model whose only time dependence is "fn" can set cardiac_period."""
-    res = run_flow_fn_case(
-        {"fn": "sin(4 * pi * t)"},
+def test_expression_with_cardiac_period_from_simulation_parameters():
+    """A model whose only time dependence is an expression can set cardiac_period."""
+    res = run_expression_case(
+        {"Q": "sin(4 * pi * t)"},
         cardiac_period=0.5,
         number_of_cardiac_cycles=2,
         number_of_time_pts_per_cardiac_cycle=51,
     )
-    time = res["time"][res["name"] == "flow:INLET:branch0_seg0"].to_numpy()
+    name = "flow:INLET:branch0_seg0"
+    time = res["time"][res["name"] == name].to_numpy()
+    flow = res["y"][res["name"] == name].to_numpy()
     assert np.isclose(time[-1], 1.0)
+
+    # skip the initial transient
+    assert np.allclose(flow[15:], np.sin(4 * np.pi * time[15:]), atol=5e-3)
 
 
 @pytest.mark.parametrize(
+    "case, bc_type, key",
+    [("timeDep_Flow", "FLOW", "Q"), ("timeDep_Pressure", "PRESSURE", "P")],
+)
+@pytest.mark.parametrize(
     "bc_values, message",
     [
-        ({"fn": "sin(t"}, "Invalid parameter fn in FLOW block INLET"),
-        ({"fn": "x * t"}, "Invalid parameter fn in FLOW block INLET"),
-        ({"fn": ""}, "must be a non-empty string"),
-        ({"fn": 5.0}, "must be a non-empty string"),
-        ({}, "needs exactly one of"),
-        ({"fn": "t", "Q": [1.0, 1.0], "t": [0.0, 1.0]}, "needs exactly one of"),
-        ({"Q": [1.0, 1.0]}, "Array parameter t is mandatory in FLOW block INLET"),
+        ({"{key}": "sin(t"}, "Invalid expression in parameter {key} of {bc_type}"),
+        ({"{key}": "x * t"}, "Invalid expression in parameter {key} of {bc_type}"),
+        (
+            {"{key}": "var x := 0; for (var i := 0; i < 10; i += 1) {{ x += t; }}; x"},
+            "Invalid expression in parameter {key}",
+        ),
+        ({"{key}": "t := t * 2; t"}, "Invalid expression in parameter {key}"),
+        ({"{key}": ""}, "Parameter {key} in {bc_type} block INLET is an empty string"),
+        ({"{key}": "t", "t": [0.0, 1.0]}, "Parameter t in {bc_type} block INLET is unused"),
+        ({}, "Array parameter {key} is mandatory in {bc_type} block INLET"),
+        ({"{key}": [1.0, 1.0]}, "Array parameter t is mandatory in {bc_type} block INLET"),
     ],
 )
-def test_invalid_flow_bc_values(bc_values, message):
-    """Invalid or ambiguous FLOW bc_values are rejected at load time."""
-    with pytest.raises(RuntimeError, match=message):
-        run_flow_fn_case(bc_values)
+def test_invalid_reference_bc_values(case, bc_type, key, bc_values, message):
+    """Invalid FLOW and PRESSURE bc_values are rejected at load time."""
+    bc_values = {
+        k.format(key=key): v.format(key=key) if isinstance(v, str) else v
+        for k, v in bc_values.items()
+    }
+    with pytest.raises(RuntimeError, match=message.format(key=key, bc_type=bc_type)):
+        run_expression_case(bc_values, case=case)
 
 
 def test_missing_mandatory_array_param():

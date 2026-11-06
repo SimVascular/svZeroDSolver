@@ -85,12 +85,11 @@ class Parameter {
   double cycle_period = 0.0;   ///< Cardiac cycle period corresponding to the
                                ///< time sequence
   int size = 0;  ///< Size of the time series if parameter is time-dependent
-  bool is_constant = true;        ///< Bool value indicating if the parameter is
-                                  ///< constant
-  bool is_periodic = true;        ///< Bool value indicating if the parameter is
-                                  ///< periodic with the cardiac cycle
-  bool is_function = false;       ///< Is the parameter an expression of time?
-  std::string expression_string;  ///< Expression if is_function is true
+  bool is_constant = true;   ///< Bool value indicating if the parameter is
+                             ///< constant
+  bool is_periodic = true;   ///< Bool value indicating if the parameter is
+                             ///< periodic with the cardiac cycle
+  bool is_function = false;  ///< Is the parameter an expression of time?
 
   /**
    * @brief Update the parameter
@@ -156,7 +155,6 @@ struct InputParameter {
   bool is_optional;    ///< Is this parameter optional?
   bool is_array;       ///< Is this parameter an array?
   bool is_number;      ///< Is this parameter a number?
-  bool is_function;    ///< Is this parameter a time-dependent function?
   double default_val;  ///< Default value (if parameter is optional)
 
   /**
@@ -165,16 +163,13 @@ struct InputParameter {
    * @param is_optional Is this parameter optional?
    * @param is_array Is this parameter an array?
    * @param is_number Is this parameter a number?
-   * @param is_function Is this parameter a time-dependent function?
    * @param default_val Default value (if parameter is optional)
    */
   InputParameter(bool is_optional = false, bool is_array = false,
-                 bool is_number = true, bool is_function = false,
-                 double default_val = 0.0)
+                 bool is_number = true, double default_val = 0.0)
       : is_optional(is_optional),
         is_array(is_array),
         is_number(is_number),
-        is_function(is_function),
         default_val(default_val) {}
 };
 

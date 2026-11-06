@@ -159,7 +159,7 @@ int Model::add_parameter(const std::vector<double>& times,
   return parameter_count++;
 }
 
-int Model::add_parameter(const std::string expression_string) {
+int Model::add_parameter(const std::string& expression_string) {
   auto param = Parameter(parameter_count, expression_string);
   parameter_values.push_back(param.get(0.0));
   parameters.push_back(std::move(param));
@@ -188,10 +188,6 @@ void Model::finalize() {
   DEBUG_MSG("Setup model-dependent parameters");
   for (auto& block : blocks) {
     block->setup_model_dependent_params();
-  }
-
-  if (cardiac_cycle_period < 0.0) {
-    cardiac_cycle_period = 1.0;
   }
 }
 
@@ -281,7 +277,7 @@ double Model::get_time_step_size() const { return time_step_size; }
 
 void Model::to_steady() {
   for (auto& param : parameters) {
-    param.to_steady();
+    param.to_steady(cardiac_cycle_period);
   }
 
   // Special handling for time-varying capacitance

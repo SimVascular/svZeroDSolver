@@ -188,12 +188,12 @@ class Model {
                     const std::vector<double>& values, bool periodic = true);
 
   /**
-   * @brief Add a function-based model parameter
+   * @brief Add a model parameter given as an expression of the time `t`
    *
-   * @param expression_string String with time-dependent function expression
+   * @param expression_string Expression of the simulation time `t`
    * @return int Global ID of the parameter
    */
-  int add_parameter(const std::string expression_string);
+  int add_parameter(const std::string& expression_string);
 
   /**
    * @brief Get a parameter by its global ID

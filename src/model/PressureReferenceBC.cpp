@@ -3,6 +3,13 @@
 #include "PressureReferenceBC.h"
 
 void PressureReferenceBC::setup_dofs(DOFHandler& dofhandler) {
+  // "P" (with "t") and "fn" are both optional, so check that exactly one
+  // was given: the value is always read from global_param_ids[0].
+  if (global_param_ids.size() != 1) {
+    throw std::runtime_error("PRESSURE block " + get_name() +
+                             " needs exactly one of \"P\" (with \"t\") "
+                             "or \"fn\" in bc_values.");
+  }
   Block::setup_dofs_(dofhandler, 1, {});
 }
 

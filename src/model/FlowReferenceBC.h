@@ -50,6 +50,18 @@
  *
  * * `0` Flow
  *
+ * The flow is given either as a time series, with `"Q"` and `"t"` arrays
+ * that are linearly interpolated and repeated every cardiac cycle, or as an
+ * expression `"fn"` of the simulation time `t`. Exactly one of the two must
+ * be given. Expressions are parsed with ExprTk
+ * (https://www.partow.net/programming/exprtk/), which supports
+ * the usual operators, functions (`sin`, `cos`, `exp`, `log`, ...) and the
+ * constant `pi`. They are evaluated at the absolute simulation time, so a
+ * pulsatile expression should be periodic with the cardiac cycle (set
+ * `"cardiac_period"` in `"simulation_parameters"`, default 1.0) for the
+ * simulation to reach a periodic state. For the steady initial condition, an
+ * expression is replaced by its average over one cardiac cycle.
+ *
  * ### Usage in json configuration file
  *
  *     "boundary_conditions": [
@@ -65,6 +77,18 @@
  *                     0.0,
  *                     1.0
  *                 ]
+ *             }
+ *         }
+ *     ]
+ *
+ * or, with an expression of time:
+ *
+ *     "boundary_conditions": [
+ *         {
+ *             "bc_name": "INFLOW",
+ *             "bc_type": "FLOW",
+ *             "bc_values": {
+ *                 "fn": "5.0 + 2.0 * sin(2 * pi * t)"
  *             }
  *         }
  *     ]

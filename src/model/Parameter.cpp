@@ -2,23 +2,14 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "Parameter.h"
 
-#include <cstdio>
+#include <exprtk.hpp>
+#include <sstream>
+#include <stdexcept>
 #include <string>
 
-// Suppress -Wshadow warnings from the exprtk third-party header
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wshadow"
-#elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#endif
-#include <exprtk.hpp>
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#elif defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
+/// Number of midpoint samples used to average an expression over one cardiac
+/// cycle when converting it to a steady value.
+constexpr int kNumSteadyMeanSamples = 1000;
 
 /// PIMPL implementation holding the exprtk expression state
 struct Parameter::ExprtkImpl {
@@ -44,13 +35,14 @@ Parameter::Parameter(int id, const std::vector<double>& times,
   update(times, values);
 }
 
-Parameter::Parameter(int id, const std::string expression_string) {
+Parameter::Parameter(int id, const std::string& expression_string) {
   this->id = id;
-  this->expression_string = expression_string;
   update(expression_string);
 }
 
 void Parameter::update(double update_value) {
+  is_function = false;
+  exprtk_impl_.reset();
   is_constant = true;
   is_periodic = true;
   value = update_value;
@@ -58,6 +50,8 @@ void Parameter::update(double update_value) {
 
 void Parameter::update(const std::vector<double>& update_times,
                        const std::vector<double>& update_values) {
+  is_function = false;
+  exprtk_impl_.reset();
   this->size = update_values.size();
 
   if (size == 1) {
@@ -71,52 +65,42 @@ void Parameter::update(const std::vector<double>& update_times,
   }
 }
 
-void Parameter::update(const std::string update_string) {
-  is_function = true;
-  is_constant = false;
-  expression_string = update_string;
-
-  exprtk_impl_ = std::make_unique<ExprtkImpl>();
-
-  if (!exprtk_impl_->symbol_table.create_variable("t")) {
-    throw std::runtime_error(
-        "Error failed to create time_value in symbol_table.");
-  }
-
-  exprtk_impl_->symbol_table.add_constants();
-
-  exprtk_impl_->time_value =
-      &exprtk_impl_->symbol_table.get_variable("t")->ref();
-  exprtk_impl_->expression.register_symbol_table(exprtk_impl_->symbol_table);
+void Parameter::update(const std::string& update_string) {
+  auto impl = std::make_unique<ExprtkImpl>();
+  impl->symbol_table.create_variable("t");
+  impl->symbol_table.add_constants();  // pi, epsilon, inf
+  impl->time_value = &impl->symbol_table.get_variable("t")->ref();
+  impl->expression.register_symbol_table(impl->symbol_table);
 
   exprtk::parser<double> parser;
-
-  if (!parser.compile(expression_string, exprtk_impl_->expression)) {
-    is_function = false;
-    exprtk_impl_.reset();
-
-    printf("Error: %s\tExpression: %s\n", parser.error().c_str(),
-           expression_string.c_str());
-
+  if (!parser.compile(update_string, impl->expression)) {
+    std::ostringstream msg;
+    msg << "could not compile expression \"" << update_string << "\"";
     for (std::size_t i = 0; i < parser.error_count(); ++i) {
       const auto error = parser.get_error(i);
-
-      printf(
-          "Error: %02d  Position: %02d Type: [%14s] Msg: %s\tExpression: %s\n",
-          static_cast<unsigned int>(i),
-          static_cast<unsigned int>(error.token.position),
-          exprtk::parser_error::to_str(error.mode).c_str(),
-          error.diagnostic.c_str(), expression_string.c_str());
+      msg << "; at position " << error.token.position << ": "
+          << error.diagnostic;
     }
-    throw std::runtime_error(
-        "Error when compiling the function provided in 'fn'.");
+    throw std::runtime_error(msg.str());
   }
+
+  // Only modify this parameter once the expression is known to be valid.
+  exprtk_impl_ = std::move(impl);
+  expression_string = update_string;
+  is_function = true;
+  is_constant = false;
+  is_periodic = false;
 }
 
 double Parameter::get(double time) {
   // Return the constant value if parameter is constant
   if (is_constant) {
     return value;
+  }
+
+  if (is_function) {
+    *exprtk_impl_->time_value = time;
+    return exprtk_impl_->expression.value();
   }
 
   // Determine the time within this->times (necessary to extrapolate)
@@ -127,13 +111,6 @@ double Parameter::get(double time) {
   } else {
     // this->times is not periodic when running with external solver
     rtime = time;
-  }
-
-  if (is_function) {
-    assert(exprtk_impl_ != nullptr);
-    assert(exprtk_impl_->time_value != nullptr);
-    *exprtk_impl_->time_value = time;
-    return exprtk_impl_->expression.value();
   }
 
   // Determine the lower and upper element for interpolation
@@ -153,12 +130,21 @@ double Parameter::get(double time) {
          ((values[k] - values[m]) / (times[k] - times[m])) * (rtime - times[m]);
 }
 
-void Parameter::to_steady() {
+void Parameter::to_steady(double cardiac_cycle_period) {
   if (is_constant) {
     return;
   }
 
-  value = std::accumulate(values.begin(), values.end(), 0.0) / double(size);
+  if (is_function) {
+    // Midpoint-rule time average over one cardiac cycle
+    double sum = 0.0;
+    for (int i = 0; i < kNumSteadyMeanSamples; i++) {
+      sum += get((i + 0.5) * cardiac_cycle_period / kNumSteadyMeanSamples);
+    }
+    value = sum / kNumSteadyMeanSamples;
+  } else {
+    value = std::accumulate(values.begin(), values.end(), 0.0) / double(size);
+  }
   is_constant = true;
   steady_converted = true;
 }

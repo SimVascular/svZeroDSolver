@@ -3,6 +3,13 @@
 #include "FlowReferenceBC.h"
 
 void FlowReferenceBC::setup_dofs(DOFHandler& dofhandler) {
+  // "Q" (with "t") and "fn" are both optional, so check that exactly one
+  // was given: the value is always read from global_param_ids[0].
+  if (global_param_ids.size() != 1) {
+    throw std::runtime_error("FLOW block " + get_name() +
+                             " needs exactly one of \"Q\" (with \"t\") "
+                             "or \"fn\" in bc_values.");
+  }
   Block::setup_dofs_(dofhandler, 1, {});
 }
 

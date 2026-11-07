@@ -9,12 +9,26 @@
 #ifndef SVZERODSOLVER_MODEL_ACTIVATIONFUNCTION_HPP_
 #define SVZERODSOLVER_MODEL_ACTIVATIONFUNCTION_HPP_
 
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "Parameter.h"
+#include "ParameterHolder.h"
+
+/**
+ * @brief Type of signal an ActivationFunction produces
+ *
+ * Used to catch mismatched activation_function/active_stress pairings:
+ * an ActiveStress model declares the signal type it needs via
+ * \ref ActiveStress::required_signal_type, and ChamberSphere::setup_dofs
+ * checks it against the chamber's ActivationFunction::signal_type.
+ */
+enum class ActivationSignalType {
+  normalized,  ///< f(t) in [0, 1], used by most activation functions
+  rate         ///< Signed reaction-rate signal u(t), used by \ref
+               ///< PiecewiseRateActivation
+};
 
 /**
  * @brief Base class for activation functions
@@ -23,15 +37,8 @@
  * given time point within a cardiac cycle. These are used to modulate
  * chamber elastance over time.
  */
-class ActivationFunction {
+class ActivationFunction : public ParameterHolder {
  public:
-  /**
-   * @brief Properties of the input parameters for this activation function
-   * [(name, InputParameter), ...]
-   */
-  const std::vector<std::pair<std::string, InputParameter>>
-      input_param_properties;
-
   /**
    * @brief Construct activation function
    *
@@ -44,11 +51,6 @@ class ActivationFunction {
                          input_param_properties);
 
   /**
-   * @brief Virtual destructor
-   */
-  virtual ~ActivationFunction() = default;
-
-  /**
    * @brief Compute activation value at given time
    *
    * @param time Current time
@@ -57,43 +59,33 @@ class ActivationFunction {
   virtual double compute(double time) = 0;
 
   /**
+   * @brief Type of signal this activation function's compute() produces
+   *
+   * @return \ref ActivationSignalType::normalized for all activation
+   * functions with function values between [0;1] and \ref
+   * ActivationSignalType::rate for \ref PiecewiseRateActivation, which returns
+   * a signed reaction-rate signal.
+   */
+  virtual ActivationSignalType signal_type() const {
+    return ActivationSignalType::normalized;
+  }
+
+  /**
    * @brief Create a default activation function from activation function type
    *
    * @param type_str One of: "half_cosine", "piecewise_cosine", "two_hill",
-   * "double_tanh", "wrapping_cosine", "fourier"
+   * "double_tanh", "wrapping_cosine", "fourier", "piecewise_rate"
    * @param cardiac_period Cardiac cycle period
    * @return Unique pointer to the created activation function
    */
   static std::unique_ptr<ActivationFunction> create_default(
       const std::string& type_str, double cardiac_period);
 
-  /**
-   * @brief Set a scalar parameter value by name.
-   *
-   * Calling function must validate the parameter name and value
-   *
-   * @param name Parameter name
-   * @param value Parameter value
-   */
-  void set_param(const std::string& name, double value);
-
-  /**
-   * @brief Called after all parameters are set (e.g. by loader).
-   *
-   * Default no-op. TwoHillActivation overrides to recompute normalization.
-   */
-  virtual void finalize() {}
-
  protected:
   /**
    * @brief Time duration of one cardiac cycle
    */
   double cardiac_period_;
-
-  /**
-   * @brief Map of parameter names to their values
-   */
-  std::map<std::string, double> params_;
 };
 
 /**
@@ -303,6 +295,43 @@ class FourierActivation : public ActivationFunction {
   double norm_min_;
   double norm_range_;
   bool normalization_initialized_;
+};
+
+/**
+ * @brief Piecewise-linear activation rate activation signal
+ *
+ * Reproduces an activation rate signal \f$u(t)\f$ which is a
+ * piecewise-linear function of time within the cardiac cycle, given as a
+ * break point table (`u_t`/`u_values`) and evaluated with \ref
+ * linear_interpolate. The sign is meaningful for the strain-dependent active
+ * stress model (which splits the signal into positive/negative parts).
+ *
+ * `u_t` must be normalized to the cardiac cycle length, i.e.
+ * \f$u_t \in [0, 1]\f$, where 0 is the start of the cycle and 1 is the end.
+ * This way, the break point table does not need to be recomputed if the
+ * cardiac cycle length changes.
+ *
+ * Parameters: `u_t`, `u_values`
+ */
+class PiecewiseRateActivation : public ActivationFunction {
+ public:
+  /**
+   * @brief Construct a new PiecewiseRateActivation object
+   *
+   * @param cardiac_period Cardiac cycle period
+   */
+  explicit PiecewiseRateActivation(double cardiac_period)
+      : ActivationFunction(cardiac_period,
+                           {{"u_t", InputParameter(false, true)},
+                            {"u_values", InputParameter(false, true)}}) {}
+
+  double compute(double time) override;
+
+  void finalize() override;
+
+  ActivationSignalType signal_type() const override {
+    return ActivationSignalType::rate;
+  }
 };
 
 #endif  // SVZERODSOLVER_MODEL_ACTIVATIONFUNCTION_HPP_

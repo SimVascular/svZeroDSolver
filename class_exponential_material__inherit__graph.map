@@ -1,5 +1,7 @@
 <map id="ExponentialMaterial" name="ExponentialMaterial">
-<area shape="rect" id="Node000001" title="Exponential material." alt="" coords="5,79,139,105"/>
-<area shape="rect" id="Node000002" href="$class_sphere_material.html" title="Base class for spherical chamber wall materials." alt="" coords="18,5,126,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,46,75,79,69,79,69,46"/>
+<area shape="rect" id="Node000001" title="Exponential material." alt="" coords="5,153,139,178"/>
+<area shape="rect" id="Node000002" href="$class_sphere_material.html" title="Base class for spherical chamber wall materials." alt="" coords="18,79,126,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="75,120,75,152,69,152,69,120"/>
+<area shape="rect" id="Node000003" href="$class_parameter_holder.html" title="Base class for chamber sub&#45;components (activation functions, materials, active stress models) that ar..." alt="" coords="12,5,132,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="75,46,75,79,69,79,69,46"/>
 </map>

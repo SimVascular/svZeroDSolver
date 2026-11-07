@@ -17,5 +17,6 @@ var searchData=
   ['exponentialmaterial_14',['ExponentialMaterial',['../class_exponential_material.html',1,'']]],
   ['exponentialparamid_15',['ExponentialParamId',['../class_chamber_elastance_inductor_exponential.html#a3dc5bc8d39af9dc88268249f3739479c',1,'ChamberElastanceInductorExponential']]],
   ['expression_20errors_16',['Expression Errors',['../tuner_troubleshooting.html#autotoc_md44',1,'']]],
-  ['external_5fstep_5fsize_5f_17',['external_step_size_',['../class_solver_interface.html#a20dc4a36f4a612e5fb29240f3cf8ffc2',1,'SolverInterface']]]
+  ['external_5fstep_5fsize_5f_17',['external_step_size_',['../class_solver_interface.html#a20dc4a36f4a612e5fb29240f3cf8ffc2',1,'SolverInterface']]],
+  ['extra_5fvar_5fnames_18',['extra_var_names',['../class_active_stress.html#ae2b54f692ce7d4027e762ad78bd99671',1,'ActiveStress::extra_var_names()'],['../class_strain_dependent_active_stress.html#a3b767324161d2f55dd169bde927aee83',1,'StrainDependentActiveStress::extra_var_names()']]]
 ];

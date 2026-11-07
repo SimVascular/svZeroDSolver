@@ -1,7 +1,9 @@
 <map id="SphereMaterial" name="SphereMaterial">
-<area shape="rect" id="Node000001" title="Base class for spherical chamber wall materials." alt="" coords="99,5,208,31"/>
-<area shape="rect" id="Node000002" href="$class_exponential_material.html" title="Exponential material." alt="" coords="5,79,139,105"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,43,87,81,84,77,126,39"/>
-<area shape="rect" id="Node000003" href="$class_mooney_rivlin_material.html" title="Mooney–Rivlin material (reduces to neo&#45;Hookean for W2=0)." alt="" coords="162,79,307,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="180,39,223,77,219,81,177,43"/>
+<area shape="rect" id="Node000001" title="Base class for spherical chamber wall materials." alt="" coords="99,79,208,105"/>
+<area shape="rect" id="Node000003" href="$class_exponential_material.html" title="Exponential material." alt="" coords="5,153,139,178"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="130,117,87,154,84,150,126,113"/>
+<area shape="rect" id="Node000004" href="$class_mooney_rivlin_material.html" title="Mooney–Rivlin material (reduces to neo&#45;Hookean for W2=0)." alt="" coords="162,153,307,178"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="180,113,223,150,219,154,177,117"/>
+<area shape="rect" id="Node000002" href="$class_parameter_holder.html" title="Base class for chamber sub&#45;components (activation functions, materials, active stress models) that ar..." alt="" coords="94,5,213,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="156,46,156,79,151,79,151,46"/>
 </map>

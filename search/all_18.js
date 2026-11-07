@@ -11,12 +11,14 @@ var searchData=
   ['variables_8',['variables',['../class_d_o_f_handler.html#a228c455dfe97bd9cff7d18f894c6972d',1,'DOFHandler']]],
   ['vaso_5fla_9',['VASO_LA',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a5eb6e17251a206da36c3d9d64f158984',1,'ClosedLoopHeartPulmonary']]],
   ['vaso_5fra_10',['VASO_RA',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834ae66782ca4ba8e2e50f72adf459415ad7',1,'ClosedLoopHeartPulmonary']]],
-  ['ventricle_5fvar_5fid_11',['ventricle_var_id',['../class_closed_loop_coronary_b_c.html#ade219e8b005a30ab653b5b11eac29d83',1,'ClosedLoopCoronaryBC']]],
-  ['vessel_5ftype_12',['vessel_type',['../class_block.html#a9e2b54d7b72d518cd1d7aecf2047bc41',1,'Block']]],
-  ['vesseltype_13',['VesselType',['../_block_type_8h.html#afa39c7ec7cc0926b332fcd2d77425edb',1,'BlockType.h']]],
-  ['visualization_20guide_14',['Visualization Guide',['../visualization.html',1,'']]],
-  ['visualize_20a_20new_20block_15',['How to Visualize a New Block',['../visualization.html#autotoc_md51',1,'']]],
-  ['vlv_5fu_16',['VLV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a9540110a7d23ead2b4b881d925d8d066',1,'ClosedLoopHeartPulmonary']]],
-  ['vrest_17',['Vrest',['../class_chamber_elastance_inductor.html#ae9221bd9c9ddb818df329358bd9d5111',1,'ChamberElastanceInductor']]],
-  ['vrv_5fu_18',['VRV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a1c090907252c029c48166bf1a910c551',1,'ClosedLoopHeartPulmonary']]]
+  ['velo_5fvar_11',['VELO_VAR',['../class_active_stress.html#a6510d48f5ff32ca839c6db04ef1fdd1f',1,'ActiveStress']]],
+  ['ventricle_5fvar_5fid_12',['ventricle_var_id',['../class_closed_loop_coronary_b_c.html#ade219e8b005a30ab653b5b11eac29d83',1,'ClosedLoopCoronaryBC']]],
+  ['vessel_5ftype_13',['vessel_type',['../class_block.html#a9e2b54d7b72d518cd1d7aecf2047bc41',1,'Block']]],
+  ['vesseltype_14',['VesselType',['../_block_type_8h.html#afa39c7ec7cc0926b332fcd2d77425edb',1,'BlockType.h']]],
+  ['visualization_20guide_15',['Visualization Guide',['../visualization.html',1,'']]],
+  ['visualize_20a_20new_20block_16',['How to Visualize a New Block',['../visualization.html#autotoc_md51',1,'']]],
+  ['vlv_5fu_17',['VLV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a9540110a7d23ead2b4b881d925d8d066',1,'ClosedLoopHeartPulmonary']]],
+  ['volume_5fvar_18',['VOLUME_VAR',['../class_active_stress.html#ae9b0636f35649431427d537c8da90a73',1,'ActiveStress']]],
+  ['vrest_19',['Vrest',['../class_chamber_elastance_inductor.html#ae9221bd9c9ddb818df329358bd9d5111',1,'ChamberElastanceInductor']]],
+  ['vrv_5fu_20',['VRV_U',['../class_closed_loop_heart_pulmonary.html#a9b07dd66cda94886387707319b2d1834a1c090907252c029c48166bf1a910c551',1,'ClosedLoopHeartPulmonary']]]
 ];

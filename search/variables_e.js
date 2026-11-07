@@ -18,5 +18,6 @@ var searchData=
   ['state_5f_15',['state_',['../class_solver_interface.html#a690f46e1bf4ca757c22b7879e61d0a24',1,'SolverInterface']]],
   ['states_5f_16',['states_',['../class_solver_interface.html#acc21fd28b4f2b6c9bbe7aa4f1a70b6d0',1,'SolverInterface']]],
   ['steady_17',['steady',['../class_block.html#adbe1e8cae1e8881588a16590e95ae0bf',1,'Block']]],
-  ['system_5fsize_5f_18',['system_size_',['../class_solver_interface.html#aba3d6f042ab2f983101a3f4471fd1a62',1,'SolverInterface']]]
+  ['stress_5fvar_18',['STRESS_VAR',['../class_active_stress.html#ad6b32264f8cf6ed15984597867bbe28a',1,'ActiveStress']]],
+  ['system_5fsize_5f_19',['system_size_',['../class_solver_interface.html#aba3d6f042ab2f983101a3f4471fd1a62',1,'SolverInterface']]]
 ];

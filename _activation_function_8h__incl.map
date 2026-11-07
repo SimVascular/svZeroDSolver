@@ -1,27 +1,34 @@
 <map id="model/ActivationFunction.h" name="model/ActivationFunction.h">
-<area shape="rect" id="Node000001" title="Activation function classes for cardiac chamber models." alt="" coords="290,5,468,31"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,226,52,252"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="290,27,208,45,167,60,129,81,97,110,72,145,53,181,40,213,35,211,48,179,67,143,93,107,126,77,164,55,206,40,289,22"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="694,79,761,105"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="442,29,676,76,679,77,678,82,675,82,441,34"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="91,226,144,252"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="300,34,244,49,186,73,132,108,109,129,90,154,85,168,86,183,101,213,96,215,81,184,79,167,85,151,105,126,129,103,184,68,243,44,299,29"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="388,226,445,252"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="437,29,488,45,542,70,593,105,615,126,634,151,641,175,634,194,615,209,589,220,524,234,461,239,461,234,524,229,587,215,613,205,629,191,635,175,629,154,611,130,590,109,540,74,486,50,436,34"/>
-<area shape="rect" id="Node000006" href="$_parameter_8h.html" title="model::Parameter source file" alt="" coords="334,79,425,105"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="382,31,382,63,376,63,376,31"/>
-<area shape="poly" id="edge10_Node000006_Node000005" title=" " alt="" coords="385,104,412,211,407,212,380,106"/>
-<area shape="rect" id="Node000007" title=" " alt="" coords="545,153,619,178"/>
-<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="414,103,534,144,532,150,413,108"/>
-<area shape="rect" id="Node000008" title=" " alt="" coords="226,153,284,178"/>
-<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="359,108,290,147,288,142,357,103"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="308,153,379,178"/>
-<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="376,106,358,140,354,138,371,104"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="454,153,521,178"/>
-<area shape="poly" id="edge9_Node000006_Node000010" title=" " alt="" coords="399,103,457,141,454,146,396,107"/>
-<area shape="rect" id="Node000011" href="$_d_o_f_handler_8h.html" title="model::DOFHandler source file" alt="" coords="100,153,203,178"/>
-<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="341,108,205,150,204,145,340,103"/>
-<area shape="poly" id="edge12_Node000011_Node000002" title=" " alt="" coords="132,181,63,221,61,216,129,177"/>
-<area shape="poly" id="edge13_Node000011_Node000004" title=" " alt="" coords="148,180,132,213,128,211,143,177"/>
-<area shape="poly" id="edge14_Node000011_Node000005" title=" " alt="" coords="197,176,373,224,372,229,195,181"/>
+<area shape="rect" id="Node000001" title="Activation function classes for cardiac chamber models." alt="" coords="242,5,420,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,73,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="282,34,88,81,87,76,281,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="134,300,187,326"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="312,34,284,54,257,81,223,133,198,190,180,243,168,286,163,284,174,242,193,188,218,131,253,77,281,50,309,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="752,300,809,326"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="383,29,449,47,530,73,617,108,702,150,753,180,772,197,788,225,794,256,791,285,786,285,789,256,783,227,768,201,750,184,699,155,615,113,528,78,447,52,381,34"/>
+<area shape="rect" id="Node000005" href="$_parameter_8h.html" title="model::Parameter source file" alt="" coords="417,153,509,178"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="352,29,381,50,410,77,434,108,452,138,448,140,429,111,406,81,377,54,349,34"/>
+<area shape="rect" id="Node000012" href="$_parameter_holder_8h.html" title="Common base for chamber sub&#45;components configured from input parameters." alt="" coords="266,79,396,105"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="334,31,334,63,328,63,328,31"/>
+<area shape="poly" id="edge9_Node000005_Node000004" title=" " alt="" coords="509,164,558,167,616,176,676,195,705,208,731,224,757,253,774,284,769,287,753,256,728,228,702,212,674,200,615,182,558,172,509,169"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="643,226,718,252"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="501,176,630,218,628,224,499,181"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="376,226,433,252"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="455,180,426,216,422,213,451,177"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="457,226,528,252"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="470,178,484,211,479,213,465,180"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="552,226,619,252"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="485,177,553,216,551,221,482,181"/>
+<area shape="rect" id="Node000010" href="$_d_o_f_handler_8h.html" title="model::DOFHandler source file" alt="" coords="249,226,352,252"/>
+<area shape="poly" id="edge10_Node000005_Node000010" title=" " alt="" coords="436,181,343,222,341,217,434,176"/>
+<area shape="poly" id="edge12_Node000010_Node000003" title=" " alt="" coords="278,255,199,295,196,290,275,250"/>
+<area shape="poly" id="edge13_Node000010_Node000004" title=" " alt="" coords="353,247,365,249,736,303,736,308,364,255,352,253"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="244,300,290,326"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="297,253,282,287,277,285,292,251"/>
+<area shape="poly" id="edge16_Node000012_Node000003" title=" " alt="" coords="313,107,284,128,256,154,230,188,207,224,174,287,169,285,202,221,225,185,252,151,281,124,310,103"/>
+<area shape="poly" id="edge18_Node000012_Node000004" title=" " alt="" coords="397,92,480,100,578,121,629,138,678,161,723,189,762,225,778,253,783,284,778,285,773,255,758,228,719,193,675,165,627,143,577,126,479,105,396,97"/>
+<area shape="poly" id="edge19_Node000012_Node000005" title=" " alt="" coords="355,103,429,143,426,147,352,108"/>
+<area shape="poly" id="edge15_Node000012_Node000011" title=" " alt="" coords="320,107,277,156,255,190,239,227,237,242,239,257,252,286,247,288,234,259,231,242,234,226,251,188,273,153,316,104"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="305,153,357,178"/>
+<area shape="poly" id="edge17_Node000012_Node000013" title=" " alt="" coords="334,105,334,137,328,137,328,105"/>
 </map>

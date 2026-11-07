@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['openloopcoronarybc_0',['OpenLoopCoronaryBC',['../class_open_loop_coronary_b_c.html#a7034ac11f20b4322fc47904243506564',1,'OpenLoopCoronaryBC::OpenLoopCoronaryBC(int id, Model *model)'],['../class_open_loop_coronary_b_c.html#a511bcac9c23dffbbc12d2f2e43ab06d7',1,'OpenLoopCoronaryBC::OpenLoopCoronaryBC(int id, Model *model, BlockType block_type, const std::vector&lt; std::pair&lt; std::string, InputParameter &gt; &gt; &amp;input_params)']]],
-  ['openloopcoronaryvarresbc_1',['OpenLoopCoronaryVarResBC',['../class_open_loop_coronary_var_res_b_c.html#a8cc03b8d7b52bef9492f6e107c8ecbd4',1,'OpenLoopCoronaryVarResBC']]],
-  ['operator_2b_3d_2',['operator+=',['../struct_triplets_contributions.html#ac3e912c1e238de000b8b1f12dc0852cf',1,'TripletsContributions']]],
-  ['operator_5b_5d_3',['operator[]',['../class_json_wrapper.html#a359ebc2cb4a90ef24b035acb049ab58e',1,'JsonWrapper']]]
+  ['node_0',['Node',['../class_node.html#a08ee879d148fda7087955418dfd04464',1,'Node']]],
+  ['num_5fextra_5fequations_1',['num_extra_equations',['../class_active_stress.html#a25e89a6e80c61c941efa6d355a8495b5',1,'ActiveStress::num_extra_equations()'],['../class_strain_independent_active_stress.html#a45a62709a96dc273d8373b7b35f6b4d0',1,'StrainIndependentActiveStress::num_extra_equations()'],['../class_strain_dependent_active_stress.html#ae2c0b7def13dec1effbe76846c3b6569',1,'StrainDependentActiveStress::num_extra_equations()']]],
+  ['num_5fextra_5fvars_2',['num_extra_vars',['../class_active_stress.html#aadbc9f008d8f6e09b4104e250bfd29ca',1,'ActiveStress::num_extra_vars()'],['../class_strain_dependent_active_stress.html#a4f52f68fc020a30280c12833ee49be42',1,'StrainDependentActiveStress::num_extra_vars()']]]
 ];

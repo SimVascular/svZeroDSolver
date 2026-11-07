@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['exponentialparamid_0',['ExponentialParamId',['../class_chamber_elastance_inductor_exponential.html#a3dc5bc8d39af9dc88268249f3739479c',1,'ChamberElastanceInductorExponential']]]
+  ['blockclass_0',['BlockClass',['../_block_type_8h.html#aef4629c3f968cbb691cddca5b9d3e950',1,'BlockType.h']]],
+  ['blocktype_1',['BlockType',['../_block_type_8h.html#a54420623f26ab6bb61042b41cccf37a3',1,'BlockType.h']]]
 ];

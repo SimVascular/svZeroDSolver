@@ -98,27 +98,28 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle"><div class="title">ActivationFunction.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>Activation function classes for cardiac chamber models.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &lt;map&gt;</code><br />
-<code>#include &lt;memory&gt;</code><br />
+<div class="textblock"><code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;<a class="el" href="_parameter_8h_source.html">Parameter.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="_parameter_holder_8h_source.html">ParameterHolder.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ActivationFunction.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_activation_function_8h__incl.svg" width="767" height="258"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_activation_function_8h__incl.svg" width="815" height="331"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_activation_function_8h__dep__incl.svg" width="2950" height="598"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_activation_function_8h__dep__incl.svg" width="2944" height="671"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="_activation_function_8h_source.html">Go to the source code of this file.</a></p>
@@ -139,10 +140,54 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wrapping cosine activation function.  <a href="class_wrapping_cosine_activation.html#details">More...</a><br /></td></tr>
 <tr class="memitem:FourierActivation" id="r_FourierActivation"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_fourier_activation.html">FourierActivation</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fourier series activation function.  <a href="class_fourier_activation.html#details">More...</a><br /></td></tr>
+<tr class="memitem:PiecewiseRateActivation" id="r_PiecewiseRateActivation"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_piecewise_rate_activation.html">PiecewiseRateActivation</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Piecewise-linear activation rate activation signal.  <a href="class_piecewise_rate_activation.html#details">More...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a6ba4b0d17e7445515ad06704f154c910" id="r_a6ba4b0d17e7445515ad06704f154c910"><td class="memItemLeft">enum class &#160;</td><td class="memItemRight"><a class="el" href="#a6ba4b0d17e7445515ad06704f154c910">ActivationSignalType</a> { <br />
+&#160;&#160;<a class="el" href="#a6ba4b0d17e7445515ad06704f154c910a14f42e76ae2e9c7f0eba61593087e78e">normalized</a>
+, <br />
+&#160;&#160;<a class="el" href="#a6ba4b0d17e7445515ad06704f154c910a67942503875c1ae74e4b5b80a0dade01">rate</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:a6ba4b0d17e7445515ad06704f154c910"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of signal an <a class="el" href="class_activation_function.html" title="Base class for activation functions.">ActivationFunction</a> produces.  <a href="#a6ba4b0d17e7445515ad06704f154c910">More...</a><br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Activation function classes for cardiac chamber models. </p>
-</div></div><!-- contents -->
+</div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
+<a id="a6ba4b0d17e7445515ad06704f154c910" name="a6ba4b0d17e7445515ad06704f154c910"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ba4b0d17e7445515ad06704f154c910">&#9670;&#160;</a></span>ActivationSignalType</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum class <a class="el" href="#a6ba4b0d17e7445515ad06704f154c910">ActivationSignalType</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel strong">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Type of signal an <a class="el" href="class_activation_function.html" title="Base class for activation functions.">ActivationFunction</a> produces. </p>
+<p>Used to catch mismatched activation_function/active_stress pairings: an <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> model declares the signal type it needs via <a class="el" href="class_active_stress.html#a836f7983897ae41bb9a862db9fbcb063" title="ActiveStress::required_signal_type">ActiveStress::required_signal_type</a>, and <a class="el" href="class_chamber_sphere.html#ac2998556c4173e403d9433146376dac2" title="Set up the degrees of freedom (DOF) of the block.">ChamberSphere::setup_dofs</a> checks it against the chamber's <a class="el" href="class_activation_function.html#aa03f54963105611bcb3cd58bc4a664e0" title="Type of signal this activation function&#39;s compute() produces.">ActivationFunction::signal_type</a>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a6ba4b0d17e7445515ad06704f154c910a14f42e76ae2e9c7f0eba61593087e78e" name="a6ba4b0d17e7445515ad06704f154c910a14f42e76ae2e9c7f0eba61593087e78e"></a>normalized&#160;</td><td class="fielddoc"><p>f(t) in [0, 1], used by most activation functions </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a6ba4b0d17e7445515ad06704f154c910a67942503875c1ae74e4b5b80a0dade01" name="a6ba4b0d17e7445515ad06704f154c910a67942503875c1ae74e4b5b80a0dade01"></a>rate&#160;</td><td class="fielddoc"><p>Signed reaction-rate signal u(t), used by <a class="el" href="class_piecewise_rate_activation.html" title="PiecewiseRateActivation">PiecewiseRateActivation</a> </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0

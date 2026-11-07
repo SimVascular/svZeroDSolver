@@ -1,0 +1,31 @@
+<map id="ParameterHolder" name="ParameterHolder">
+<area shape="rect" id="Node000001" title="Base class for chamber sub&#45;components (activation functions, materials, active stress models) that ar..." alt="" coords="5,376,125,402"/>
+<area shape="rect" id="Node000002" href="$class_activation_function.html" title="Base class for activation functions." alt="" coords="173,179,302,204"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,363,223,203,227,206,89,366"/>
+<area shape="rect" id="Node000010" href="$class_active_stress.html" title="Base class for chamber active stress models." alt="" coords="189,376,286,402"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="140,386,189,386,189,392,140,392"/>
+<area shape="rect" id="Node000013" href="$class_sphere_material.html" title="Base class for spherical chamber wall materials." alt="" coords="183,449,292,475"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="112,406,206,446,204,451,110,411"/>
+<area shape="rect" id="Node000003" href="$class_double_tanh_activation.html" title="Double tanh (systole/diastole sigmoid product) activation function." alt="" coords="376,5,525,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="249,163,287,101,315,68,349,40,375,27,377,32,351,44,319,71,292,104,254,166"/>
+<area shape="rect" id="Node000004" href="$class_fourier_activation.html" title="Fourier series activation function." alt="" coords="391,55,510,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="258,165,297,126,322,106,349,89,390,74,392,79,351,94,325,110,301,130,261,169"/>
+<area shape="rect" id="Node000005" href="$class_half_cosine_activation.html" title="Half cosine activation function." alt="" coords="379,104,522,130"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="277,169,349,138,385,128,387,133,351,143,279,174"/>
+<area shape="rect" id="Node000006" href="$class_piecewise_cosine_activation.html" title="Piecewise cosine activation function." alt="" coords="361,153,540,179"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="317,179,360,174,361,179,318,185"/>
+<area shape="rect" id="Node000007" href="$class_piecewise_rate_activation.html" title="Piecewise&#45;linear activation rate activation signal." alt="" coords="368,203,534,228"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="318,198,367,203,367,209,317,203"/>
+<area shape="rect" id="Node000008" href="$class_two_hill_activation.html" title="Two hill activation function." alt="" coords="389,252,512,278"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="280,209,351,238,389,249,388,255,349,243,278,214"/>
+<area shape="rect" id="Node000009" href="$class_wrapping_cosine_activation.html" title="Wrapping cosine activation function." alt="" coords="364,301,537,327"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="262,214,301,253,351,288,377,298,375,303,349,293,298,257,258,218"/>
+<area shape="rect" id="Node000011" href="$class_strain_dependent_active_stress.html" title="Strain&#45;dependent active stress model from caruel13." alt="" coords="354,351,547,376"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="300,379,354,372,354,378,301,384"/>
+<area shape="rect" id="Node000012" href="$class_strain_independent_active_stress.html" title="Strain&#45;independent active stress model." alt="" coords="350,400,551,426"/>
+<area shape="poly" id="edge11_Node000010_Node000012" title=" " alt="" coords="301,393,350,399,349,404,300,399"/>
+<area shape="rect" id="Node000014" href="$class_exponential_material.html" title="Exponential material." alt="" coords="384,449,517,475"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="307,460,383,460,383,465,307,465"/>
+<area shape="rect" id="Node000015" href="$class_mooney_rivlin_material.html" title="Mooney–Rivlin material (reduces to neo&#45;Hookean for W2=0)." alt="" coords="378,499,523,524"/>
+<area shape="poly" id="edge14_Node000013_Node000015" title=" " alt="" coords="307,475,392,495,391,501,306,481"/>
+</map>

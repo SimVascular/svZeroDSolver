@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <h3>Optional Sections</h3>
 <ul>
 <li><span class="tt">time_dependent</span>: List of parameters that depend on time (e.g., activation functions)</li>
+<li><span class="tt">strain_dependent_functions</span>: Map of <span class="tt">constant: variable</span> for constants that are themselves functions of a solution variable (e.g. a piecewise-linear break-point table evaluated at a strain). Declaring the dependency here lets SymPy apply the chain rule automatically: for each <span class="tt">constant: variable</span> entry, a new symbol <span class="tt">d&lt;constant&gt;_d&lt;variable&gt;</span> is introduced for the local derivative and appears in the generated Jacobian wherever needed. The numeric value of both the constant and its derivative is supplied by the C++ blocks from an input in the input file (e.g. the value and local slope of the same break-point table).</li>
 <li><span class="tt">helper_functions</span>: Python code defining helper functions used in the residuals</li>
 </ul>
 <h3>Example</h3>

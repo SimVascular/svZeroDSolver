@@ -171,6 +171,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
 <tr class="memitem:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e pub_methods_class_block" id="r_ad0e2d0882fb2a9e2b4bb8e5148f7ea9e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad0e2d0882fb2a9e2b4bb8e5148f7ea9e">set_activation_function</a> (std::unique_ptr&lt; <a class="el" href="class_activation_function.html">ActivationFunction</a> &gt; af)</td></tr>
 <tr class="memdesc:ad0e2d0882fb2a9e2b4bb8e5148f7ea9e pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set activation function (for chamber blocks that use one).  <br /></td></tr>
+<tr class="memitem:aefac778d47259ff76d641541dbdb2e4c pub_methods_class_block" id="r_aefac778d47259ff76d641541dbdb2e4c"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#aefac778d47259ff76d641541dbdb2e4c">set_active_stress</a> (std::unique_ptr&lt; <a class="el" href="class_active_stress.html">ActiveStress</a> &gt; as)</td></tr>
+<tr class="memdesc:aefac778d47259ff76d641541dbdb2e4c pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set active stress model (for chamber blocks that use one).  <br /></td></tr>
 <tr class="memitem:a82b147185f9df6044638922278a98085 pub_methods_class_block" id="r_a82b147185f9df6044638922278a98085"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a82b147185f9df6044638922278a98085">set_material</a> (std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt; m)</td></tr>
 <tr class="memdesc:a82b147185f9df6044638922278a98085 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set wall material (for <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> blocks).  <br /></td></tr>
 </table><table class="memberdecls">
@@ -212,7 +214,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Resistor-capacitor-inductor blood vessel with optional stenosis. </p>
 <p>Models the mechanical behavior of a bloodvessel with optional stenosis.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_15_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_31_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R$, *-] (3,0)
@@ -223,72 +225,72 @@ node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw [-latex] (7.2,0) -- (8,0) node[right] {$Q_{out}$};
 \end{circuitikz}
-\&zwj;]" src="form_15.png" width="504" height="144"/></picture>
+\&zwj;]" src="form_31.png" width="504" height="144"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_16_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_\text{in}-P_\text{out} - (R + S|Q_\text{in}|) Q_\text{in}-L
-\dot{Q}_\text{out}=0 \&zwj;]" src="form_16.png" width="343" height="24"/></picture>
+<picture><source srcset="form_32_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_\text{in}-P_\text{out} - (R + S|Q_\text{in}|) Q_\text{in}-L
+\dot{Q}_\text{out}=0 \&zwj;]" src="form_32.png" width="343" height="24"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_17_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}+C(R +
-2S|Q_\text{in}|) \dot{Q}_{in}=0 \&zwj;]" src="form_17.png" width="366" height="24"/></picture>
+<picture><source srcset="form_33_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_\text{in}-Q_\text{out} - C \dot{P}_\text{in}+C(R +
+2S|Q_\text{in}|) \dot{Q}_{in}=0 \&zwj;]" src="form_33.png" width="366" height="24"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_18_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out}\end{array}\right]^\text{T} \&zwj;]" src="form_18.png" width="276" height="28"/></picture>
+<picture><source srcset="form_34_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{llll}P_{i n} &amp; Q_{in} &amp;
+P_{out} &amp; Q_{out}\end{array}\right]^\text{T} \&zwj;]" src="form_34.png" width="276" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_19_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{cccc}
+<picture><source srcset="form_35_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{cccc}
 1 &amp; -R &amp; -1 &amp;  0 \\
 0 &amp;  1 &amp;  0 &amp; -1
 \end{array}\right]
-\&zwj;]" src="form_19.png" width="223" height="47"/></picture>
+\&zwj;]" src="form_35.png" width="223" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_20_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{cccc}
+<picture><source srcset="form_36_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{cccc}
  0 &amp;  0 &amp; 0 &amp; -L \\
 -C &amp; CR &amp; 0 &amp;  0
 \end{array}\right]
-\&zwj;]" src="form_20.png" width="234" height="47"/></picture>
+\&zwj;]" src="form_36.png" width="234" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_21_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e} = S|Q_\text{in}|
+<picture><source srcset="form_37_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e} = S|Q_\text{in}|
 \left[\begin{array}{c}
 -Q_\text{in} \\
 2C\dot{Q}_\text{in}
 \end{array}\right]
-\&zwj;]" src="form_21.png" width="184" height="47"/></picture>
+\&zwj;]" src="form_37.png" width="184" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_22_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
+<picture><source srcset="form_38_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  S \text{sgn} (Q_\text{in})
 \left[\begin{array}{cccc}
 0 &amp; -2Q_\text{in}        &amp; 0 &amp; 0 \\
 0 &amp; 2C\dot{Q}_\text{in} &amp; 0 &amp; 0
 \end{array}\right]
-\&zwj;]" src="form_22.png" width="341" height="49"/></picture>
+\&zwj;]" src="form_38.png" width="341" height="49"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_23_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
+<picture><source srcset="form_39_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
  S|Q_\text{in}|
 \left[\begin{array}{cccc}
 0 &amp;  0 &amp; 0 &amp; 0 \\
 0 &amp; 2C &amp; 0 &amp; 0
 \end{array}\right]
-\&zwj;]" src="form_23.png" width="281" height="49"/></picture>
+\&zwj;]" src="form_39.png" width="281" height="49"/></picture>
 </p>
-<p>with the stenosis resistance  <picture><source srcset="form_24_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ S=K_{t} \frac{\rho}{2
-A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} $" src="form_24.png" width="178" height="39"/></picture>. <picture><source srcset="form_25_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_25.png" width="15" height="15"/></picture>, <picture><source srcset="form_7_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_7.png" width="15" height="15"/></picture>, and <picture><source srcset="form_26_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_26.png" width="13" height="15"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
+<p>with the stenosis resistance  <picture><source srcset="form_40_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ S=K_{t} \frac{\rho}{2
+A_{o}^{2}}\left(\frac{A_{o}}{A_{s}}-1\right)^{2} $" src="form_40.png" width="178" height="39"/></picture>. <picture><source srcset="form_41_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$R$" src="form_41.png" width="15" height="15"/></picture>, <picture><source srcset="form_7_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$C$" src="form_7.png" width="15" height="15"/></picture>, and <picture><source srcset="form_42_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$L$" src="form_42.png" width="13" height="15"/></picture> refer to Poisieuille resistance, capacitance and inductance, respectively.</p>
 <h3>Gradient</h3>
 <p>Gradient of the equations with respect to the parameters:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_27_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{J}^{e} = \left[\begin{array}{cccc}
+<picture><source srcset="form_43_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{J}^{e} = \left[\begin{array}{cccc}
 -y_2 &amp; 0 &amp; -\dot{y}_4 &amp; -|y_2|y_2 \\
 C\dot{y}_2 &amp; (-\dot{y}_1+(R+2S|Q_\text{in}|)\dot{y}_2) &amp; 0 &amp; 2C|y_2|\dot{y}_2
 \end{array}\right]
-\&zwj;]" src="form_27.png" width="467" height="47"/></picture>
+\&zwj;]" src="form_43.png" width="467" height="47"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

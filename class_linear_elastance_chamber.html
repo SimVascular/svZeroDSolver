@@ -169,6 +169,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block residual with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
+<tr class="memitem:aefac778d47259ff76d641541dbdb2e4c pub_methods_class_block" id="r_aefac778d47259ff76d641541dbdb2e4c"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#aefac778d47259ff76d641541dbdb2e4c">set_active_stress</a> (std::unique_ptr&lt; <a class="el" href="class_active_stress.html">ActiveStress</a> &gt; as)</td></tr>
+<tr class="memdesc:aefac778d47259ff76d641541dbdb2e4c pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set active stress model (for chamber blocks that use one).  <br /></td></tr>
 <tr class="memitem:a82b147185f9df6044638922278a98085 pub_methods_class_block" id="r_a82b147185f9df6044638922278a98085"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a82b147185f9df6044638922278a98085">set_material</a> (std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt; m)</td></tr>
 <tr class="memdesc:a82b147185f9df6044638922278a98085 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set wall material (for <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> blocks).  <br /></td></tr>
 </table><table class="memberdecls">
@@ -211,7 +213,7 @@ Public Attributes</h2></td></tr>
 <p>Models a cardiac chamber as a time-varying capacitor (elastance with specified resting volumes) without inductance. See <a class="el" href="citelist.html#CITEREF_regazzoni2022">[9]</a></p>
 <p>This chamber block can be connected to other blocks using junctions.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_120_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz}
+<picture><source srcset="form_130_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz}
 \draw node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}
@@ -219,65 +221,65 @@ to[short, *-*] (3,0) node[anchor=south]{$P_{out}$}
 node[ground]{};
 \draw (3.2,0) -- (4.0,0) node[right] {$Q_{out}$} [-latex];
 \end{circuitikz}
-\&zwj;]" src="form_120.png" width="294" height="133"/></picture>
+\&zwj;]" src="form_130.png" width="294" height="133"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_49_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-E(t)(V_c-V_{rest})=0
-\&zwj;]" src="form_49.png" width="216" height="21"/></picture>
+<picture><source srcset="form_65_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-E(t)(V_c-V_{rest})=0
+\&zwj;]" src="form_65.png" width="216" height="21"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_121_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}=0
-\&zwj;]" src="form_121.png" width="118" height="19"/></picture>
+<picture><source srcset="form_131_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{out}=0
+\&zwj;]" src="form_131.png" width="118" height="19"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_51_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}-\dot{V}_c=0
-\&zwj;]" src="form_51.png" width="167" height="23"/></picture>
+<picture><source srcset="form_67_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[Q_{in}-Q_{out}-\dot{V}_c=0
+\&zwj;]" src="form_67.png" width="167" height="23"/></picture>
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_52_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
-P_{out} &amp; Q_{out} &amp; V_c\end{array}\right]^{T} \&zwj;]" src="form_52.png" width="313" height="28"/></picture>
+<picture><source srcset="form_68_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} &amp; Q_{in} &amp;
+P_{out} &amp; Q_{out} &amp; V_c\end{array}\right]^{T} \&zwj;]" src="form_68.png" width="313" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_122_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_132_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccccc}
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0\\
 0 &amp; 0 &amp; 0 &amp; 0 &amp; -1
 \end{array}\right]
-\&zwj;]" src="form_122.png" width="221" height="69"/></picture>
+\&zwj;]" src="form_132.png" width="221" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_123_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
+<picture><source srcset="form_133_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccccc}
 1 &amp; 0 &amp;  0 &amp; 0  &amp; E(t) \\
 1 &amp; 0 &amp; -1 &amp; 0  &amp; 0 \\
 0 &amp; 1 &amp;  0 &amp; -1 &amp; 0
 \end{array}\right]
-\&zwj;]" src="form_123.png" width="263" height="69"/></picture>
+\&zwj;]" src="form_133.png" width="263" height="69"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_124_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_134_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 E(t)V_{rest} \\
 0 \\
 0
 \end{array}\right]
-\&zwj;]" src="form_124.png" width="158" height="69"/></picture>
+\&zwj;]" src="form_134.png" width="158" height="69"/></picture>
 </p>
 <p>In the above equations,</p>
 <p class="formulaDsp">
-<picture><source srcset="form_125_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
+<picture><source srcset="form_135_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[E_i(t) = E_i^{\text{pass}} + E_i^{\text{act,max}} \,
 \phi\!\left(t, t_C^i, t_R^i, T_C^i, T_R^i\right),
-\&zwj;]" src="form_125.png" width="366" height="26"/></picture>
+\&zwj;]" src="form_135.png" width="366" height="26"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\phi(t, t_C, t_R, T_C, T_R) =
+<picture><source srcset="form_136_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\phi(t, t_C, t_R, T_C, T_R) =
 \begin{cases}
 \frac{1}{2}\left[1 - \cos\!\left(\frac{\pi}{T_C} \operatorname{mod}(t - t_C,
 T_{\mathrm{HB}})\right)\right], &amp; \text{if } 0 \le \operatorname{mod}(t -
 t_C, T_{\mathrm{HB}}) &lt; T_C, \\&zwj;[1.2em] \frac{1}{2}\left[1 +
 \cos\!\left(\frac{\pi}{T_R} \operatorname{mod}(t - t_R,
 T_{\mathrm{HB}})\right)\right], &amp; \text{if } 0 \le \operatorname{mod}(t -
-t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{cases} \&zwj;]" src="form_126.png" width="744" height="129"/></picture>
+t_R, T_{\mathrm{HB}}) &lt; T_R, \\&zwj;[1.2em] 0, &amp; \text{otherwise.} \end{cases} \&zwj;]" src="form_136.png" width="744" height="129"/></picture>
 </p>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block</p>

@@ -98,7 +98,8 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <div id="doc-content">
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
+<a href="#nested-classes">Classes</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">Parameter.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -119,7 +120,7 @@ Include dependency graph for Parameter.h:</div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_parameter_8h__dep__incl.svg" width="3039" height="671"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="_parameter_8h__dep__incl.svg" width="2916" height="819"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="_parameter_8h_source.html">Go to the source code of this file.</a></p>
@@ -130,10 +131,106 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_model.html" title="Model of 0D elements.">Model</a> <a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a>.  <a href="class_parameter.html#details">More...</a><br /></td></tr>
 <tr class="memitem:InputParameter" id="r_InputParameter"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_input_parameter.html">InputParameter</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Handles the properties of input parameters.  <a href="struct_input_parameter.html#details">More...</a><br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-func-members" class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a8163f4e701c20e2b1f08793b6ed4b66f" id="r_a8163f4e701c20e2b1f08793b6ed4b66f"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a8163f4e701c20e2b1f08793b6ed4b66f">linear_interpolate</a> (double x, const std::vector&lt; double &gt; &amp;xs, const std::vector&lt; double &gt; &amp;ys)</td></tr>
+<tr class="memdesc:a8163f4e701c20e2b1f08793b6ed4b66f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Linearly interpolate y(x) from a table of break points.  <br /></td></tr>
+<tr class="memitem:a3894ac29b56cecd1ba6b34a46ea3def6" id="r_a3894ac29b56cecd1ba6b34a46ea3def6"><td class="memItemLeft">double&#160;</td><td class="memItemRight"><a class="el" href="#a3894ac29b56cecd1ba6b34a46ea3def6">linear_interpolate_slope</a> (double x, const std::vector&lt; double &gt; &amp;xs, const std::vector&lt; double &gt; &amp;ys)</td></tr>
+<tr class="memdesc:a3894ac29b56cecd1ba6b34a46ea3def6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Local slope dy/dx of the piecewise-linear table used by <a class="el" href="#a8163f4e701c20e2b1f08793b6ed4b66f" title="linear_interpolate">linear_interpolate</a>.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>model::Parameter source file </p>
-</div></div><!-- contents -->
+</div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Function Documentation</h2>
+<a id="a8163f4e701c20e2b1f08793b6ed4b66f" name="a8163f4e701c20e2b1f08793b6ed4b66f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8163f4e701c20e2b1f08793b6ed4b66f">&#9670;&#160;</a></span>linear_interpolate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double linear_interpolate </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>xs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ys</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Linearly interpolate y(x) from a table of break points. </p>
+<p>Outside [xs.front(), xs.back()], the value is clamped to the nearest endpoint of ys (flat extrapolation).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Value to evaluate the table at </td></tr>
+    <tr><td class="paramname">xs</td><td>Break points (at least 2 entries, strictly increasing; use a pair of break points an epsilon apart to approximate a step change instead of a literal duplicate) </td></tr>
+    <tr><td class="paramname">ys</td><td>Values at each break point (same size as xs) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Interpolated (or boundary-clamped) value </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if xs has fewer than 2 entries, xs and ys differ in length, or xs is not strictly increasing </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3894ac29b56cecd1ba6b34a46ea3def6" name="a3894ac29b56cecd1ba6b34a46ea3def6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3894ac29b56cecd1ba6b34a46ea3def6">&#9670;&#160;</a></span>linear_interpolate_slope()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double linear_interpolate_slope </td>
+          <td>(</td>
+          <td class="paramtype">double</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>xs</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ys</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Local slope dy/dx of the piecewise-linear table used by <a class="el" href="#a8163f4e701c20e2b1f08793b6ed4b66f" title="linear_interpolate">linear_interpolate</a>. </p>
+<p>Outside [xs.front(), xs.back()], the table is flat (see <a class="el" href="#a8163f4e701c20e2b1f08793b6ed4b66f" title="linear_interpolate">linear_interpolate</a>), so the slope is 0 there. At an interior break point, the slope of the segment to its right is used.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>Value to evaluate the slope at </td></tr>
+    <tr><td class="paramname">xs</td><td>Break points (at least 2 entries, strictly increasing; use a pair of break points an epsilon apart to approximate a step change instead of a literal duplicate) </td></tr>
+    <tr><td class="paramname">ys</td><td>Values at each break point (same size as xs) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Local slope of the interpolated table at x </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::runtime_error</td><td>if xs has fewer than 2 entries, xs and ys differ in length, or xs is not strictly increasing </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.18.0

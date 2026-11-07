@@ -187,6 +187,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af652eecb2709bd2786e5ee1d0e0e5033 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the block residual with respect to the parameters.  <br /></td></tr>
 <tr class="memitem:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block" id="r_a7cbc135528fbe45b0efc3e374ee6954d"><td class="memItemLeft">virtual <a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7cbc135528fbe45b0efc3e374ee6954d">get_num_triplets</a> ()</td></tr>
 <tr class="memdesc:a7cbc135528fbe45b0efc3e374ee6954d pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of triplets of element.  <br /></td></tr>
+<tr class="memitem:aefac778d47259ff76d641541dbdb2e4c pub_methods_class_block" id="r_aefac778d47259ff76d641541dbdb2e4c"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#aefac778d47259ff76d641541dbdb2e4c">set_active_stress</a> (std::unique_ptr&lt; <a class="el" href="class_active_stress.html">ActiveStress</a> &gt; as)</td></tr>
+<tr class="memdesc:aefac778d47259ff76d641541dbdb2e4c pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set active stress model (for chamber blocks that use one).  <br /></td></tr>
 <tr class="memitem:a82b147185f9df6044638922278a98085 pub_methods_class_block" id="r_a82b147185f9df6044638922278a98085"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a82b147185f9df6044638922278a98085">set_material</a> (std::unique_ptr&lt; <a class="el" href="class_sphere_material.html">SphereMaterial</a> &gt; m)</td></tr>
 <tr class="memdesc:a82b147185f9df6044638922278a98085 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set wall material (for <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> blocks).  <br /></td></tr>
 </table><table class="memberdecls">
@@ -252,9 +254,9 @@ Additional Inherited Members</h2></td></tr>
 <h3>Governing equations</h3>
 <p>The pressure-volume relation replaces the linear form with:</p>
 <p class="formulaDsp">
-<picture><source srcset="form_59_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in} = A(t) \, E_{max} (V_c - V_{aso})
+<picture><source srcset="form_75_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in} = A(t) \, E_{max} (V_c - V_{aso})
        + (1 - A(t)) \, K_{xp} \left( e^{K_{xv}(V_c - V_{aso})} - 1 \right)
-\&zwj;]" src="form_59.png" width="529" height="36"/></picture>
+\&zwj;]" src="form_75.png" width="529" height="36"/></picture>
 </p>
 <p>The inductor and volume conservation equations are inherited unchanged.</p>
 <h3>Parameters</h3>

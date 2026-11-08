@@ -9,12 +9,12 @@
 #ifndef SVZERODSOLVER_MODEL_SPHEREMATERIAL_HPP_
 #define SVZERODSOLVER_MODEL_SPHEREMATERIAL_HPP_
 
-#include <map>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "Parameter.h"
+#include "ParameterHolder.h"
 
 /**
  * @brief Return type for SphereMaterial::compute
@@ -36,15 +36,8 @@ struct SphericalStressResult {
  * -S + \tau + S_\text{sl}(r, r_0) = 0
  * \f]
  */
-class SphereMaterial {
+class SphereMaterial : public ParameterHolder {
  public:
-  /**
-   * @brief Properties of the input parameters for this material
-   * [(name, InputParameter), ...]
-   */
-  const std::vector<std::pair<std::string, InputParameter>>
-      input_param_properties;
-
   /**
    * @brief Construct a SphereMaterial
    *
@@ -52,8 +45,6 @@ class SphereMaterial {
    */
   SphereMaterial(
       const std::vector<std::pair<std::string, InputParameter>>& props);
-
-  virtual ~SphereMaterial() = default;
 
   /**
    * @brief Compute material stress contributions at the current state
@@ -72,20 +63,6 @@ class SphereMaterial {
    * @return Unique pointer to the created material
    */
   static std::unique_ptr<SphereMaterial> create(const std::string& type_str);
-
-  /**
-   * @brief Set a scalar parameter value by name
-   *
-   * @param name  Parameter name
-   * @param value Parameter value
-   */
-  void set_param(const std::string& name, double value);
-
- protected:
-  /**
-   * @brief Map of parameter names to their values
-   */
-  std::map<std::string, double> params_;
 };
 
 /**

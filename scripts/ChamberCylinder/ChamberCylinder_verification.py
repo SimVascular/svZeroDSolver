@@ -41,9 +41,9 @@ import sys
 
 import numpy as np
 import svzerod
-from scipy.integrate import solve_ivp
+from scipy.integrate import quad, solve_ivp
 from scipy.interpolate import PchipInterpolator
-from scipy.optimize import curve_fit, root
+from scipy.optimize import brentq, curve_fit, root
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import ChamberCylinder_genet_exact as G  # noqa: E402  (baseline parameters only)
@@ -273,6 +273,66 @@ def static_reference(P, mat, geom, nq=64, nstep=50):
         x = sol.x
     q = x * sc
     return dict(q=q, V=cyl.V(q), ok=ok, res=float(np.abs(f(x)).max()))
+
+
+def fixed_length_exact(P, Ri, Re, mu):
+    """Inner radius of a pressurized fixed-length incompressible neo-Hookean tube.
+
+    Plane strain (lambda_z = 1), W = mu/2 (I1 - 3): with lambda = r/R and
+    r^2 - R^2 = r_i^2 - R_i^2, equilibrium integrates to
+    P = mu [ln(l_i/l_e) - 1/(2 l_i^2) + 1/(2 l_e^2)],
+    l_e^2 = 1 + (l_i^2 - 1) R_i^2/R_e^2. Mooney-Rivlin gives the same with
+    mu = 2 (C1 + C2), since I1 = I2 in plane strain. Returns r_i.
+    """
+    def residual(li):
+        le = math.sqrt(1.0 + (li * li - 1.0) * Ri * Ri / (Re * Re))
+        return mu * (math.log(li / le) - 0.5 / li ** 2 + 0.5 / le ** 2) - P
+    if P == 0.0:
+        return Ri
+    hi = 1.0 + P / mu
+    while residual(hi) < 0.0:
+        hi *= 2.0
+    return Ri * brentq(residual, 1.0, hi, xtol=1e-15, rtol=1e-15)
+
+
+def ho_family(E, a, b, k):
+    """dW/dI of a Holzapfel-Ogden fiber or sheet term (as in ChamberCylinder.cpp)."""
+    if a == 0.0:
+        return 0.0
+    o = 1.0 / (math.exp(k * E) + 1.0)
+    rexp = math.exp(b * E * E)
+    return a * ((1.0 - o) * E * rexp + 0.5 * k * (o - o * o) / b * (rexp - 1.0))
+
+
+def fixed_length_exact_ho(P, Ri, Re, v):
+    """Inner radius of a pressurized fixed-length incompressible tube with the
+    Holzapfel-Ogden law (ho_* values of v), circumferential fibers and radial
+    sheets (alpha = 0).
+
+    Plane strain with lambda = r/R, r^2 - R^2 = r_i^2 - R_i^2:
+    P = int_Ri^Re (sigma_tt - sigma_rr) R/r^2 dR with
+    sigma_tt - sigma_rr = 2 W_1 (l^2 - l^-2) + 2 W_4f l^2 - 2 W_4s l^-2, the
+    fiber-sheet term vanishing (I8 = 0). Returns r_i.
+    """
+    h = {k: float(v.get("ho_" + k, 0.0)) for k in ("a", "b", "af", "bf", "as", "bs", "k")}
+
+    def dsigma(R, ri):
+        l2 = (R * R + ri * ri - Ri * Ri) / (R * R)
+        I1 = l2 + 1.0 / l2 + 1.0
+        w1 = 0.5 * h["a"] * math.exp(h["b"] * (I1 - 3.0))
+        wf = ho_family(l2 - 1.0, h["af"], h["bf"], h["k"])
+        ws = ho_family(1.0 / l2 - 1.0, h["as"], h["bs"], h["k"])
+        return (2.0 * w1 * (l2 - 1.0 / l2) + 2.0 * wf * l2 - 2.0 * ws / l2) / l2 / R
+
+    def residual(li):
+        ri = li * Ri
+        return quad(dsigma, Ri, Re, args=(ri,), epsabs=1e-10, epsrel=1e-12, limit=200)[0] - P
+    if P == 0.0:
+        return Ri
+    hi = 1.01
+    while residual(hi) < 0.0:
+        hi = 1.0 + 2.0 * (hi - 1.0)
+    return Ri * brentq(residual, 1.0, hi, xtol=1e-15, rtol=1e-15)
 
 
 def static_block(P, mat, geom, ne, Tramp=5.0, Thold=25.0, dt=5e-3):

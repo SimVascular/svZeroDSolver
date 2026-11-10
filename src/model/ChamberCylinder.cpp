@@ -37,9 +37,22 @@ inline T clamp_max(T x, double m) {
   return re(x) < m ? x : T(m);
 }
 
+/// Holzapfel-Ogden constants (svMultiPhysics `HolzapfelOgden`).
+struct HolzapfelOgden {
+  double a = 0.0, b = 0.0;      ///< isotropic term
+  double af = 0.0, bf = 0.0;    ///< fiber term
+  double as = 0.0, bs = 0.0;    ///< sheet term
+  double afs = 0.0, bfs = 0.0;  ///< fiber-sheet term
+  double k = 0.0;               ///< smoothed-Heaviside slope
+  bool active() const {
+    return a != 0.0 || af != 0.0 || as != 0.0 || afs != 0.0;
+  }
+};
+
 /// Material parameters passed to the continuum kernel.
 struct MatParams {
   double C1, C2, C3, C4, C5, C6, gamma;
+  HolzapfelOgden ho;
   double p_mix = 0.0;  ///< mixed u/p element hydrostatic pressure
 };
 
@@ -143,6 +156,27 @@ inline Mat3<T> fiber_tensor(double alpha) {
   return ef * ef.transpose();
 }
 
+/// Symmetric fiber-sheet tensor (e_F (x) e_S + e_S (x) e_F) / 2 with the
+/// sheet e_S = e_R.
+template <typename T>
+inline Mat3<T> fiber_sheet_tensor(double alpha) {
+  Mat3<T> H = Mat3<T>::Zero();
+  H(0, 1) = H(1, 0) = T(0.5 * std::cos(alpha));
+  H(0, 2) = H(2, 0) = T(0.5 * std::sin(alpha));
+  return H;
+}
+
+/// dW/dI of a Holzapfel-Ogden fiber or sheet energy
+/// W = a/(2b) chi (exp(b E^2) - 1) with E = I - 1 and the smoothed Heaviside
+/// chi = 1/(1 + exp(-k E)).
+template <typename T>
+inline T ho_family(T E, double a, double b, double k) {
+  if (a == 0.0) return T(0.0);
+  const T o = 1.0 / (std::exp(clamp_max(k * E, 300.0)) + 1.0);  // 1 - chi
+  const T rexp = std::exp(clamp_max(b * E * E, 300.0));
+  return a * ((1.0 - o) * E * rexp + 0.5 * k * (o - o * o) / b * (rexp - 1.0));
+}
+
 /**
  * @brief Second Piola-Kirchhoff stress at an integration point.
  *
@@ -187,6 +221,26 @@ Mat3<T> compute_stress(const Kinematics<T>& k, const T xidot[6],
   const Mat3<T> dI4b = Jm23 * (M - (I4 / 3.0) * Cinv);
 
   Mat3<T> Sd = 2.0 * (w1 * dI1b + w2 * dI2b + w4 * dI4b);  // deviatoric
+
+  // Holzapfel-Ogden terms with the sheet e_S = e_R, using the isochoric
+  // invariants I6b = J^-2/3 C_RR and I8b = J^-2/3 e_F . C . e_S.
+  if (p.ho.active()) {
+    const HolzapfelOgden& h = p.ho;
+    Mat3<T> Hs = Mat3<T>::Zero();
+    Hs(0, 0) = T(1.0);
+    const Mat3<T> Hfs = fiber_sheet_tensor<T>(alpha);
+    const T I6 = C(0, 0);
+    const T I8 = contract<T>(C, Hfs);
+    const T I6b = Jm23 * I6;
+    const T I8b = Jm23 * I8;
+    const Mat3<T> dI6b = Jm23 * (Hs - (I6 / 3.0) * Cinv);
+    const Mat3<T> dI8b = Jm23 * (Hfs - (I8 / 3.0) * Cinv);
+    const T wa = 0.5 * h.a * std::exp(clamp_max(h.b * (I1b - 3.0), 300.0));
+    const T wf = ho_family<T>(I4b - 1.0, h.af, h.bf, h.k);
+    const T ws = ho_family<T>(I6b - 1.0, h.as, h.bs, h.k);
+    const T wfs = h.afs * I8b * std::exp(clamp_max(h.bfs * I8b * I8b, 300.0));
+    Sd += 2.0 * (wa * dI1b + wf * dI4b + ws * dI6b + wfs * dI8b);
+  }
   // Hydrostatic stress p J C^-1 with the element pressure p (mixed u/p).
   const T bulk = T(p.p_mix);
   Mat3<T> Sb = bulk * J * Cinv;  // bulk
@@ -273,6 +327,8 @@ void ChamberCylinder::setup_dofs(DOFHandler& dofhandler) {
   n_node = n_ele + 1;
   pin_rigid_ =
       model->get_parameter_value(global_param_ids[ParamId::density]) == 0.0;
+  fixed_length_ =
+      model->get_parameter_value(global_param_ids[ParamId::fixed_length]) > 0.5;
 
   // Uniform nodes from endocardium (index 0, R_i) to epicardium (R_e).
   node_R.resize(n_node);
@@ -369,6 +425,11 @@ void ChamberCylinder::update_constant(SparseSystem& system,
     system.F.coeffRef(global_eqn_ids[e_eta(0)], global_var_ids[i_eta(0)]) = 1.0;
   }
 
+  // Fixed length: eps = 0 replaces the eps equation.
+  if (fixed_length_) {
+    system.F.coeffRef(global_eqn_ids[e_eps()], global_var_ids[i_eps()]) = 1.0;
+  }
+
   // --- Inertia (genet23 Eqs. 8, 18, A5-A6) ---
   // Companion DOFs w = zeta_dot make the system first order. The consistent
   // mass M = int rho0 Du^T Du dOmega, integrated over Theta and Z, couples
@@ -384,7 +445,9 @@ void ChamberCylinder::update_constant(SparseSystem& system,
     const double cL3 = rho0 * 2.0 * M_PI * Lp * Lp * Lp / 3.0;
     // Accumulate, then assign: update_constant can run more than once.
     std::map<std::pair<int, int>, double> M;
-    auto Madd = [&](int r, int c, double v) { M[{r, c}] += v; };
+    auto Madd = [&](int r, int c, double v) {
+      if (!(fixed_length_ && r == e_eps())) M[{r, c}] += v;
+    };
     for (int q = 0; q < n_quad; q++) {
       const QuadPoint& pt = quad[q];
       const int A[2] = {pt.elem, pt.elem + 1};
@@ -456,9 +519,19 @@ void ChamberCylinder::update_solution(
   p.C5 = parameters[global_param_ids[ParamId::C5]];
   p.C6 = parameters[global_param_ids[ParamId::C6]];
   p.gamma = parameters[global_param_ids[ParamId::gamma]];
+  p.ho.a = parameters[global_param_ids[ParamId::ho_a]];
+  p.ho.b = parameters[global_param_ids[ParamId::ho_b]];
+  p.ho.af = parameters[global_param_ids[ParamId::ho_af]];
+  p.ho.bf = parameters[global_param_ids[ParamId::ho_bf]];
+  p.ho.as = parameters[global_param_ids[ParamId::ho_as]];
+  p.ho.bs = parameters[global_param_ids[ParamId::ho_bs]];
+  p.ho.afs = parameters[global_param_ids[ParamId::ho_afs]];
+  p.ho.bfs = parameters[global_param_ids[ParamId::ho_bfs]];
+  p.ho.k = parameters[global_param_ids[ParamId::ho_k]];
   const double sigma_max = parameters[global_param_ids[ParamId::sigma_max]];
   const double Rip = parameters[global_param_ids[ParamId::Ri]];
   const double Lp = parameters[global_param_ids[ParamId::length]];
+  const double kappa = parameters[global_param_ids[ParamId::bulk_modulus]];
 
   BcsParams bp;
   bp.k_s = parameters[global_param_ids[ParamId::k_s]];
@@ -726,11 +799,20 @@ void ChamberCylinder::update_solution(
       }
     }
 
-    // --- Mixed u/p: int_e (J - 1) dOmega = 0 per element (Eq. 27) ---
+    // --- Mixed u/p: element pressure equation (Eq. 27) ---
+    // Incompressible: int_e (J - 1) dOmega = 0. With a bulk modulus kappa
+    // (ST91, p = kappa/2 (J - 1/J)): int_e ((J - 1/J)/2 - p/kappa) dOmega = 0.
     // J depends on rho, rho' and eps only.
     {
       const int erow = e_pmix(pt.elem);
-      Cloc[erow] += pref * (kin.J - 1.0);
+      double dJfac = 1.0;  // d(constraint)/dJ
+      if (kappa > 0.0) {
+        Cloc[erow] += pref * (0.5 * (kin.J - 1.0 / kin.J) - p.p_mix / kappa);
+        dJfac = 0.5 * (1.0 + 1.0 / (kin.J * kin.J));
+        Kat(erow, i_pmix(pt.elem)) += -pref / kappa;
+      } else {
+        Cloc[erow] += pref * (kin.J - 1.0);
+      }
       const double Rq = pt.R;
       double dJ[6] = {0, 0, 0, 0, 0, 0};
       dJ[0] = (1.0 + xi[1]) * (1.0 / Rq) * (1.0 + xi[4]);  // dJ/drho
@@ -739,7 +821,7 @@ void ChamberCylinder::update_solution(
       for (int m = 0; m < 6; m++) {
         if (dJ[m] == 0.0) continue;
         for (int ci = 0; ci < cn[m]; ci++)
-          Kat(erow, cvr[m][ci]) += pref * dJ[m] * cw[m][ci];
+          Kat(erow, cvr[m][ci]) += pref * dJfac * dJ[m] * cw[m][ci];
       }
     }
 
@@ -832,6 +914,13 @@ void ChamberCylinder::update_solution(
     // d/dydot
     Kdat(re, i_rho(0)) -= piL * 2.0 * Rinner * (1.0 + eps);
     Kdat(re, i_eps()) -= piL * Rinner * Rinner;
+  }
+
+  // Fixed length: the eps row holds only the constraint eps = 0 (in F).
+  if (fixed_length_) {
+    const int re = e_eps();
+    Cloc[re] = 0.0;
+    for (int j = 0; j < n_var; j++) Kat(re, j) = Kdat(re, j) = 0.0;
   }
 
   // --- Assign the local contributions to the sparse system ---

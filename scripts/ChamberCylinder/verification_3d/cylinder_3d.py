@@ -1,0 +1,903 @@
+# SPDX-FileCopyrightText: Copyright (c) Stanford University, The Regents of the
+# University of California, and others. SPDX-License-Identifier: BSD-3-Clause
+"""3D svMultiPhysics counterpart of a ChamberCylinder 0D model.
+
+Reads an svZeroDSolver input file that contains one ChamberCylinder block and
+writes a matching svMultiPhysics case: a structured tetrahedral mesh of the
+same thick-walled cylinder, its boundary faces, the solver input file and the
+cavity-pressure load. Also runs the case (Docker image simvascular/solver or a
+local executable) and computes the lumen volume from the results.
+
+Model correspondence (0D -> 3D):
+  geometry      Ri, Re, length                -> mesh
+  passive law   C1 (neo-Hookean), C2 (Mooney-Rivlin), C3 = 0 required;
+                C5, C6 fiber term             -> HGO with a4 = 2 C5 C6, b4 = C6,
+                                                 one fiber family (a6 = 0)
+                ho_a ... ho_k (C1-C6 = 0)     -> HolzapfelOgden a ... k
+  fibers        alpha_endo, alpha_epi         -> FIB_DIR files (cylinder_fibers.py),
+                sheet e_R                        fiber and sheet
+  ends          fixed_length = 1              -> u_z = 0 on both end faces,
+                                                 free in-plane sliding
+  load          inlet PRESSURE ramp           -> follower pressure on "endo"
+  volumetric    bulk_modulus kappa (ST91)     -> ST91 penalty kappa (struct)
+                bulk_modulus = 0               -> ustruct with nu = 0.5
+
+Mesh: n_r elements through the wall (the refinement parameter); the
+circumferential and axial divisions follow from the element size
+h = (Re - Ri) / n_r. A 90-degree sector uses symmetry planes (u_y = 0 on
+theta = 0, u_x = 0 on theta = 90 deg); helical fibers break this symmetry and
+need the full cylinder, whose rigid-body modes (x, y translation, rotation
+about z) a weak spring on the epicardium removes (Robin, stiffness
+`robin_factor` * mu / Re).
+Quadratic tetrahedra (order 2) have mid-edge nodes on the exact cylindrical
+surfaces.
+
+Usage:
+  python cylinder_3d.py generate MODEL_0D.json CASE_DIR --nr 4 [options]
+  python cylinder_3d.py run CASE_DIR [--np 4] [--exe PATH]
+  python cylinder_3d.py post CASE_DIR
+"""
+import argparse
+import glob
+import itertools
+import json
+import math
+import os
+import queue
+import re
+import shutil
+import subprocess
+import threading
+import time
+
+import numpy as np
+
+MMHG = 133.322387415  # Pa; solver inputs are SI, reports use mmHg
+
+# --------------------------------------------------------------------------- #
+#  0D input
+# --------------------------------------------------------------------------- #
+
+
+def read_0d(path):
+    """ChamberCylinder values and the inlet pressure history of a 0D input."""
+    with open(path) as f:
+        cfg = json.load(f)
+    blocks = [v for v in cfg["vessels"] if v["zero_d_element_type"] == "ChamberCylinder"]
+    if len(blocks) != 1:
+        raise ValueError(f"{path}: expected one ChamberCylinder vessel, found {len(blocks)}")
+    blk = blocks[0]
+    inlet = blk["boundary_conditions"].get("inlet")
+    bc = next((b for b in cfg["boundary_conditions"] if b["bc_name"] == inlet), None)
+    if bc is None or bc["bc_type"] != "PRESSURE":
+        raise ValueError(f"{path}: the ChamberCylinder inlet must be a PRESSURE boundary condition")
+    return dict(name=blk["vessel_name"], values=blk["zero_d_element_values"],
+                t=list(bc["bc_values"]["t"]), P=list(bc["bc_values"]["P"]), config=cfg)
+
+
+def pressure_ramp(t, P):
+    """(T_ramp, P_max) of a load P = 0 at t = 0, linear to P_max, then held."""
+    i = int(np.argmax(P))
+    t, P = np.asarray(t, float), np.asarray(P, float)
+    if t[0] != 0.0 or P[0] != 0.0 or i == 0 or np.any(P[i:] != P[i]):
+        raise ValueError("pressure must start at 0 at t = 0, ramp to its maximum and stay there")
+    T, Pmax = t[i], P[i]
+    if not np.allclose(P[: i + 1], Pmax * t[: i + 1] / T, rtol=1e-12, atol=0.0):
+        raise ValueError("pressure must increase linearly up to its maximum")
+    return float(T), float(Pmax)
+
+
+HO_KEYS = ("a", "b", "af", "bf", "as", "bs", "afs", "bfs", "k")  # 0D ho_<key>
+HO_SVMP = ("a", "b", "a4f", "b4f", "a4s", "b4s", "afs", "bfs", "k")  # svMultiPhysics
+
+
+def material(values):
+    """svMultiPhysics constitutive model equivalent to the 0D passive law."""
+    v = {k: float(values.get(k, 0.0))
+         for k in ("C1", "C2", "C3", "C5", "C6", "gamma", "bulk_modulus")}
+    ho = {k: float(values.get("ho_" + k, 0.0)) for k in HO_KEYS}
+    if v["C3"] != 0.0:
+        raise ValueError("C3 exp(C4 (I1 - 3)^2) has no svMultiPhysics counterpart; set C3 = 0")
+    if v["gamma"] != 0.0:
+        raise ValueError("viscosity gamma has no counterpart in this 3D setup; set gamma = 0")
+    kappa = v["bulk_modulus"]  # ST91 bulk modulus; 0 = incompressible
+    fibers = dict(alpha_endo=float(values["alpha_endo"]), alpha_epi=float(values["alpha_epi"]))
+    if any(ho[k] != 0.0 for k in ("a", "af", "as", "afs")):
+        if any(v[k] != 0.0 for k in ("C1", "C2", "C3", "C5")):
+            raise ValueError("HolzapfelOgden replaces the C1-C6 law: set C1 = C2 = C3 = C5 = 0")
+        if ho["a"] <= 0.0:
+            raise ValueError("HolzapfelOgden needs ho_a > 0 (small-strain shear modulus)")
+        # mu = a is the small-strain shear modulus of the isotropic term.
+        return dict(model="HolzapfelOgden", mu=ho["a"], kappa=kappa, **ho, **fibers)
+    if v["C5"] != 0.0:
+        # C5 exp(C6 (I4b - 1)^2) has the stress of the HGO fiber term
+        # a4/(2 b4) (exp(b4 (I4b - 1)^2) - 1) with a4 = 2 C5 C6, b4 = C6.
+        if v["C2"] != 0.0:
+            raise ValueError("HGO has a neo-Hookean ground matrix; set C2 = 0 with fibers")
+        return dict(model="HGO", mu=2.0 * v["C1"], a4=2.0 * v["C5"] * v["C6"], b4=v["C6"],
+                    kappa=kappa, **fibers)
+    if v["C2"] == 0.0:  # W = C1 (I1b - 3): svMultiPhysics neo-Hookean, C10 = mu / 2
+        return dict(model="neoHookean", mu=2.0 * v["C1"], kappa=kappa)
+    return dict(model="MR", mu=2.0 * (v["C1"] + v["C2"]), c1=v["C1"], c2=v["C2"], kappa=kappa)
+
+
+# --------------------------------------------------------------------------- #
+#  Mesh
+# --------------------------------------------------------------------------- #
+
+# Six tetrahedra per hexahedron along its main diagonal (conforming on a
+# structured grid). Corners are (di, dj, dk) offsets.
+_KUHN = [[(0, 0, 0), tuple(int(a == p[0]) for a in range(3)),
+          tuple(int(a in (p[0], p[1])) for a in range(3)), (1, 1, 1)]
+         for p in itertools.permutations(range(3))]
+_TET_EDGES = [(0, 1), (1, 2), (0, 2), (0, 3), (1, 3), (2, 3)]  # VTK quadratic tetra
+_TRI_EDGES = [(0, 1), (1, 2), (2, 0)]                          # VTK quadratic triangle
+_TET_FACES = [(0, 1, 2), (0, 1, 3), (1, 2, 3), (0, 2, 3)]
+
+
+def mesh_cylinder(Ri, Re, L, nr, sector=90.0, order=2, ntheta=None, nz=None):
+    """Structured tetrahedral mesh of the wall Ri <= R <= Re, 0 <= Z <= L.
+
+    Returns points (N, 3), cells (M, 4 or 10), the coarse divisions and the
+    boundary faces {name: (connectivity (K, 3 or 6), parent cell (K,))}, with
+    face nodes ordered so the normal points out of the solid.
+    """
+    if sector not in (90.0, 360.0):
+        raise ValueError("sector must be 90 (symmetry planes) or 360 degrees")
+    h = (Re - Ri) / nr
+    th = math.radians(sector)
+    nt = ntheta or max(1 if sector < 360 else 3, math.ceil(th * 0.5 * (Ri + Re) / h))
+    nz = nz or max(1, math.ceil(L / h))
+    s = 2 if order == 2 else 1
+    periodic = sector == 360.0
+
+    index, points = {}, []
+
+    def node(I, J, K):  # fine-grid indices; s * coarse index at the corners
+        if periodic:
+            J %= s * nt
+        key = (I, J, K)
+        if key not in index:
+            R = Ri + (Re - Ri) * I / (s * nr)
+            t = th * J / (s * nt)
+            index[key] = len(points)
+            points.append((R * math.cos(t), R * math.sin(t), L * K / (s * nz)))
+        return index[key]
+
+    cells, corners = [], []
+    for i, j, k in itertools.product(range(nr), range(nt), range(nz)):
+        for tet in _KUHN:
+            c = [(i + a, j + b, k + d) for a, b, d in tet]
+            x = [np.array(points[node(s * ci, s * cj, s * ck)]) for ci, cj, ck in c]
+            if np.dot(np.cross(x[1] - x[0], x[2] - x[0]), x[3] - x[0]) < 0.0:
+                c[1], c[2] = c[2], c[1]
+            conn = [node(s * ci, s * cj, s * ck) for ci, cj, ck in c]
+            if order == 2:
+                conn += [node(*(c[a][m] + c[b][m] for m in range(3))) for a, b in _TET_EDGES]
+            cells.append(conn)
+            corners.append(c)
+
+    pts = np.array(points)
+    count = {}
+    for e, c in enumerate(corners):
+        for f in _TET_FACES:
+            key = tuple(sorted((c[a][0], c[a][1] % nt if periodic else c[a][1], c[a][2])
+                               for a in f))
+            count.setdefault(key, []).append((e, f))
+
+    faces = {}
+    planes = [("endo", 0, 0), ("epi", 0, nr), ("base", 2, 0), ("top", 2, nz)]
+    if not periodic:
+        planes += [("y0", 1, 0), ("x0", 1, nt)]
+    for key, owners in count.items():
+        if len(owners) != 1:
+            continue
+        e, f = owners[0]
+        name = next((n for n, ax, val in planes if all(v[ax] == val for v in key)), None)
+        if name is None:
+            raise RuntimeError(f"unclassified boundary face {key}")
+        c = corners[e]
+        loc = list(f)
+        opp = ({0, 1, 2, 3} - set(f)).pop()
+        x = [pts[cells[e][a]] for a in loc]
+        if np.dot(np.cross(x[1] - x[0], x[2] - x[0]), pts[cells[e][opp]] - x[0]) > 0.0:
+            loc[1], loc[2] = loc[2], loc[1]
+        conn = [cells[e][a] for a in loc]
+        if order == 2:
+            conn += [cells[e][4 + _TET_EDGES.index(tuple(sorted((loc[a], loc[b]))))]
+                     for a, b in _TRI_EDGES]
+        faces.setdefault(name, ([], []))
+        faces[name][0].append(conn)
+        faces[name][1].append(e)
+    faces = {n: (np.array(c), np.array(p)) for n, (c, p) in faces.items()}
+    return dict(points=pts, cells=np.array(cells), faces=faces, order=order,
+                nr=nr, ntheta=nt, nz=nz, sector=sector)
+
+
+# --------------------------------------------------------------------------- #
+#  VTK XML (ASCII) writers
+# --------------------------------------------------------------------------- #
+
+
+def _array(name, data, vtype, ncomp=1):
+    fmt = "%.17g" if vtype.startswith("Float") else "%d"
+    rows = np.atleast_2d(np.asarray(data).reshape(len(data), -1))
+    body = "\n".join(" ".join(fmt % v for v in r) for r in rows)
+    nc = f' NumberOfComponents="{ncomp}"' if ncomp > 1 else ""
+    return (f'<DataArray type="{vtype}" Name="{name}"{nc} format="ascii">\n'
+            f"{body}\n</DataArray>\n")
+
+
+def write_vtu(path, points, cells, vtk_type, point_data, cell_data):
+    n = cells.shape[1]
+    with open(path, "w") as f:
+        f.write('<?xml version="1.0"?>\n<VTKFile type="UnstructuredGrid" version="1.0" '
+                'byte_order="LittleEndian" header_type="UInt64">\n<UnstructuredGrid>\n'
+                f'<Piece NumberOfPoints="{len(points)}" NumberOfCells="{len(cells)}">\n')
+        f.write("<PointData>\n" + "".join(_array(k, *v) for k, v in point_data.items())
+                + "</PointData>\n")
+        f.write("<CellData>\n" + "".join(_array(k, *v) for k, v in cell_data.items())
+                + "</CellData>\n")
+        f.write("<Points>\n" + _array("Points", points, "Float64", 3) + "</Points>\n")
+        f.write("<Cells>\n" + _array("connectivity", cells.ravel(), "Int64")
+                + _array("offsets", n * np.arange(1, len(cells) + 1), "Int64")
+                + _array("types", np.full(len(cells), vtk_type), "UInt8") + "</Cells>\n")
+        f.write("</Piece>\n</UnstructuredGrid>\n</VTKFile>\n")
+
+
+def write_vtp(path, points, polys, point_data, cell_data):
+    n = polys.shape[1]
+    with open(path, "w") as f:
+        f.write('<?xml version="1.0"?>\n<VTKFile type="PolyData" version="1.0" '
+                'byte_order="LittleEndian" header_type="UInt64">\n<PolyData>\n'
+                f'<Piece NumberOfPoints="{len(points)}" NumberOfVerts="0" NumberOfLines="0" '
+                f'NumberOfStrips="0" NumberOfPolys="{len(polys)}">\n')
+        f.write("<PointData>\n" + "".join(_array(k, *v) for k, v in point_data.items())
+                + "</PointData>\n")
+        f.write("<CellData>\n" + "".join(_array(k, *v) for k, v in cell_data.items())
+                + "</CellData>\n")
+        f.write("<Points>\n" + _array("Points", points, "Float64", 3) + "</Points>\n")
+        f.write("<Polys>\n" + _array("connectivity", polys.ravel(), "Int64")
+                + _array("offsets", n * np.arange(1, len(polys) + 1), "Int64") + "</Polys>\n")
+        f.write("</Piece>\n</PolyData>\n</VTKFile>\n")
+
+
+def face_extension(order):
+    """Face file format: VTK PolyData has no quadratic triangle, so 6-node faces
+    are written as unstructured grids (svMultiPhysics reads both)."""
+    return "vtu" if order == 2 else "vtp"
+
+
+def write_mesh(mesh, folder):
+    """Volume mesh and faces in the SimVascular layout (1-based global IDs)."""
+    os.makedirs(os.path.join(folder, "mesh-surfaces"), exist_ok=True)
+    pts, cells = mesh["points"], mesh["cells"]
+    quad = mesh["order"] == 2
+    gid = np.arange(1, len(pts) + 1)
+    write_vtu(os.path.join(folder, "mesh-complete.mesh.vtu"), pts, cells, 24 if quad else 10,
+              {"GlobalNodeID": (gid, "Int32")},
+              {"GlobalElementID": (np.arange(1, len(cells) + 1), "Int32"),
+               "ModelRegionID": (np.ones(len(cells), int), "Int32")})
+    ext = face_extension(mesh["order"])
+    for fid, (name, (conn, parent)) in enumerate(sorted(mesh["faces"].items()), start=1):
+        used = np.unique(conn)
+        local = np.searchsorted(used, conn)
+        path = os.path.join(folder, "mesh-surfaces", f"{name}.{ext}")
+        pdata = {"GlobalNodeID": (used + 1, "Int32")}
+        cdata = {"GlobalElementID": (parent + 1, "Int32"),
+                 "ModelFaceID": (np.full(len(conn), fid), "Int32")}
+        if quad:
+            write_vtu(path, pts[used], local, 22, pdata, cdata)
+        else:
+            write_vtp(path, pts[used], local, pdata, cdata)
+
+
+# --------------------------------------------------------------------------- #
+#  svMultiPhysics input
+# --------------------------------------------------------------------------- #
+
+FORMULATIONS = {
+    # quadratic displacement, linear pressure, exactly incompressible
+    "ustruct-th": dict(equation="ustruct", order=2),
+    # linear velocity-pressure with VMS stabilization, exactly incompressible
+    "ustruct-p1": dict(equation="ustruct", order=1),
+    # quadratic displacement with an ST91 bulk penalty (nearly incompressible)
+    "struct-p2": dict(equation="struct", order=2),
+    # linear displacement with an ST91 bulk penalty (locks as kappa grows)
+    "struct-p1": dict(equation="struct", order=1),
+}
+
+
+def solver_xml(case):
+    m, f = case["material"], case["formulation"]
+    eq = FORMULATIONS[f]["equation"]
+    mu, kappa = m["mu"], m["kappa"]
+    if kappa > 0.0:  # ST91 penalty as in the 0D block; nu, E only set C10 = mu / 2
+        nu = (3.0 * kappa - 2.0 * mu) / (2.0 * (3.0 * kappa + mu))
+        vol = (f"   <Dilational_penalty_model> ST91 </Dilational_penalty_model>\n"
+               f"   <Penalty_parameter> {kappa:.17g} </Penalty_parameter>\n")
+    elif eq == "struct":
+        raise ValueError("struct needs a bulk modulus: set bulk_modulus > 0 in the 0D input")
+    else:
+        nu, vol = 0.5, ""
+    E = 2.0 * mu * (1.0 + nu)
+    if m["model"] == "MR":
+        model = (f'   <Constitutive_model type="MR">\n      <c1> {m["c1"]:.17g} </c1>\n'
+                 f'      <c2> {m["c2"]:.17g} </c2>\n   </Constitutive_model>\n')
+    elif m["model"] == "HGO":  # second family (sheet file) switched off
+        model = (f'   <Constitutive_model type="HGO">\n      <a4> {m["a4"]:.17g} </a4>\n'
+                 f'      <b4> {m["b4"]:.17g} </b4>\n      <a6> 0.0 </a6>\n      <b6> 1.0 </b6>\n'
+                 f'      <kappa> 0.0 </kappa>\n   </Constitutive_model>\n')
+    elif m["model"] == "HolzapfelOgden":
+        model = ('   <Constitutive_model type="HolzapfelOgden">\n'
+                 + "".join(f"      <{t}> {m[k]:.17g} </{t}>\n" for k, t in zip(HO_KEYS, HO_SVMP))
+                 + "   </Constitutive_model>\n")
+    else:
+        model = '   <Constitutive_model type="neoHookean"> </Constitutive_model>\n'
+    extra = ""
+    if f == "ustruct-th":
+        extra = "   <Use_taylor_hood_type_basis> true </Use_taylor_hood_type_basis>\n"
+    if f == "ustruct-p1":
+        extra = ("   <Momentum_stabilization_coefficient> 1e-3 </Momentum_stabilization_coefficient>\n"
+                 "   <Continuity_stabilization_coefficient> 1e-3 </Continuity_stabilization_coefficient>\n")
+    ls = case["linear_solver"]
+    assembly = (f"         <Assembly> {ls['assembly']} </Assembly>\n"
+                if ls.get("assembly") else "")
+    ext = face_extension(case["order"])
+    faces = "".join(f'  <Add_face name="{n}">\n      <Face_file_path> mesh/mesh-surfaces/{n}.{ext} '
+                    f"</Face_file_path>\n  </Add_face>\n" for n in case["faces"])
+    tag = f"Fiber_direction_from_file_{case.get('fiber_location', 'cells')}"
+    faces += "".join(f"  <{tag}> {fp} </{tag}>\n" for fp in case.get("fiber_files", []))
+    # Only the nodal fields: svMultiPhysics' stress-type outputs (Stress,
+    # Cauchy_stress, VonMises_stress, Strain, Def_grad, Jacobian,
+    # Fiber_alignment, Volume) abort in get_nnx ("Error in computing shape
+    # functions") for quadratic elements with mid-edge nodes on the curved
+    # surfaces; post() computes them from the displacement instead.
+    out = "     <Velocity> true </Velocity>\n     <Acceleration> true </Acceleration>\n"
+    if case.get("fiber_files"):
+        out += "     <Fiber_direction> true </Fiber_direction>\n"
+    if eq == "ustruct":
+        out += "     <Pressure> true </Pressure>\n"
+
+    def dirichlet(name, direction):
+        state = ("      <Impose_on_state_variable_integral> true "
+                 "</Impose_on_state_variable_integral>\n" if eq == "ustruct" else "")
+        return (f'   <Add_BC name="{name}" >\n      <Type> Dir </Type>\n      <Value> 0.0 </Value>\n'
+                f"      <Effective_direction> {direction} </Effective_direction>\n{state}"
+                f"   </Add_BC>\n")
+
+    bcs = dirichlet("base", "(0, 0, 1)") + dirichlet("top", "(0, 0, 1)")
+    if "y0" in case["faces"]:
+        bcs += dirichlet("y0", "(0, 1, 0)") + dirichlet("x0", "(1, 0, 0)")
+    else:  # full cylinder: weak spring against the rigid-body modes
+        bcs += (f'   <Add_BC name="epi" >\n      <Type> Robin </Type>\n'
+                f"      <Stiffness> {case['robin_stiffness']:.6g} </Stiffness>\n"
+                f"      <Damping> 0.0 </Damping>\n   </Add_BC>\n")
+    return f"""<?xml version="1.0" encoding="UTF-8" ?>
+<svMultiPhysicsFile version="0.1">
+<!-- Generated by cylinder_3d.py from {case['source_0d']} (SI units) -->
+
+<GeneralSimulationParameters>
+  <Continue_previous_simulation> 0 </Continue_previous_simulation>
+  <Number_of_spatial_dimensions> 3 </Number_of_spatial_dimensions>
+  <Number_of_time_steps> {case['n_steps']} </Number_of_time_steps>
+  <Time_step_size> {case['dt']:.17g} </Time_step_size>
+  <Spectral_radius_of_infinite_time_step> 0.0 </Spectral_radius_of_infinite_time_step>
+  <Searched_file_name_to_trigger_stop> STOP_SIM </Searched_file_name_to_trigger_stop>
+  <Save_results_to_VTK_format> 1 </Save_results_to_VTK_format>
+  <Name_prefix_of_saved_VTK_files> result </Name_prefix_of_saved_VTK_files>
+  <Save_results_in_folder> results </Save_results_in_folder>
+  <Increment_in_saving_VTK_files> 1 </Increment_in_saving_VTK_files>
+  <Start_saving_after_time_step> 1 </Start_saving_after_time_step>
+  <Increment_in_saving_restart_files> {case['n_steps']} </Increment_in_saving_restart_files>
+  <Convert_BIN_to_VTK_format> 0 </Convert_BIN_to_VTK_format>
+  <Verbose> 1 </Verbose>
+  <Warning> 1 </Warning>
+  <Debug> 0 </Debug>
+</GeneralSimulationParameters>
+
+<Add_mesh name="msh" >
+  <Mesh_file_path> mesh/mesh-complete.mesh.vtu </Mesh_file_path>
+{faces}  <Mesh_scale_factor> 1.0 </Mesh_scale_factor>
+</Add_mesh>
+
+<Add_equation type="{eq}" >
+   <Coupled> true </Coupled>
+   <Min_iterations> 3 </Min_iterations>
+   <Max_iterations> 20 </Max_iterations>
+   <Tolerance> {case['newton_tol']:.3g} </Tolerance>
+{extra}
+   <Density> {case['density']:.17g} </Density>
+   <Elasticity_modulus> {E:.17g} </Elasticity_modulus>
+   <Poisson_ratio> {nu} </Poisson_ratio>
+{model}{vol}
+   <Output type="Spatial" >
+     <Displacement> true </Displacement>
+{out}   </Output>
+
+   <LS type="{ls['type']}" >
+      <Linear_algebra type="{ls['algebra']}" >
+         <Preconditioner> {ls['preconditioner']} </Preconditioner>
+{assembly}      </Linear_algebra>
+      <Tolerance> {ls['tol']:.3g} </Tolerance>
+      <Absolute_tolerance> {ls['abs_tol']:.3g} </Absolute_tolerance>
+      <Max_iterations> {ls['max_iter']} </Max_iterations>
+      <Krylov_space_dimension> {ls['krylov']} </Krylov_space_dimension>
+   </LS>
+
+   <Add_BC name="endo" >
+      <Type> Neu </Type>
+      <Time_dependence> Unsteady </Time_dependence>
+      <Temporal_values_file_path> endo_pressure.dat </Temporal_values_file_path>
+      <Ramp_function> true </Ramp_function>
+      <Follower_pressure_load> true </Follower_pressure_load>
+   </Add_BC>
+{bcs}
+</Add_equation>
+</svMultiPhysicsFile>
+"""
+
+
+def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, ntheta=None,
+             nz=None, n_steps=20, density=1.0, newton_tol=1e-10, linear_solver=None,
+             robin_factor=1e-6, half_length=False, fiber_location="points"):
+    """Write the svMultiPhysics case of a ChamberCylinder 0D input.
+
+    half_length meshes 0 <= Z <= L/2 with u_z = 0 on Z = L/2, the mid-length
+    symmetry plane of the Z-homogeneous solution. fiber_location "points"
+    writes nodal fiber directions, "cells" one direction per element.
+    """
+    m0 = read_0d(model_0d)
+    v = m0["values"]
+    if float(v.get("fixed_length", 0.0)) != 1.0:
+        raise ValueError("the 3D model has fixed-length ends: set fixed_length = 1 in the 0D input")
+    T, Pmax = pressure_ramp(m0["t"], m0["P"])
+    mat = material(v)
+    fibers = mat["model"] in ("HGO", "HolzapfelOgden")
+    # Mirror symmetry about theta = const planes holds for circumferential or
+    # axial fibers only; helical fibers need the full cylinder.
+    symmetric = not fibers or (mat["alpha_endo"] == mat["alpha_epi"]
+                               and mat["alpha_endo"] % 90.0 == 0.0)
+    if sector is None:
+        sector = 90.0 if symmetric else 360.0
+    if not symmetric and sector != 360.0:
+        raise ValueError("helical fibers break the mirror symmetry: use sector = 360")
+    fm = FORMULATIONS[formulation]
+    Lm = 0.5 * v["length"] if half_length else v["length"]
+    mesh = mesh_cylinder(v["Ri"], v["Re"], Lm, nr, sector, fm["order"], ntheta, nz)
+    write_mesh(mesh, os.path.join(case_dir, "mesh"))
+    fiber_files = []
+    if fibers:
+        from cylinder_fibers import cylinder_fibers, write_fibers
+        fib = cylinder_fibers(mesh["points"], mesh["cells"], v["Ri"], v["Re"],
+                              mat["alpha_endo"], mat["alpha_epi"], fiber_location)
+        paths = write_fibers(os.path.join(case_dir, "mesh"), mesh["points"], mesh["cells"],
+                             24 if fm["order"] == 2 else 10, fib, fiber_location)
+        fiber_files = [os.path.relpath(p, case_dir) for p in paths[:2]]  # fiber, sheet
+    with open(os.path.join(case_dir, "endo_pressure.dat"), "w") as f:
+        f.write(f"2 1\n0.0 0.0\n{T:.17g} {Pmax:.17g}\n")
+    # BiCGStab with the iteration cap of the svMultiPhysics struct tests: the
+    # solves stop early (inexact Newton) but Newton still converges in 4-5
+    # iterations, 6x faster than GMRES to 1e-12. SI residuals are small
+    # (~1e-5 N): the default absolute tolerance (1e-10) would stop the linear
+    # solver before Newton converges.
+    ls = dict(type="BICG", algebra="fsils", preconditioner="fsils", tol=1e-12,
+              abs_tol=1e-20, max_iter=600, krylov=100)
+    ls.update(linear_solver or {})
+    case = dict(source_0d=os.path.basename(model_0d), block=m0["name"],
+                Ri=v["Ri"], Re=v["Re"], length=v["length"], mesh_length=Lm, material=mat,
+                fiber_files=fiber_files, fiber_location=fiber_location,
+                robin_stiffness=robin_factor * mat["mu"] / v["Re"] if sector == 360.0 else 0.0,
+                formulation=formulation, order=fm["order"], sector=sector, nr=nr,
+                ntheta=mesh["ntheta"], nz=mesh["nz"], n_nodes=len(mesh["points"]),
+                n_cells=len(mesh["cells"]), faces=sorted(mesh["faces"]),
+                T_ramp=T, P_max=Pmax, n_steps=n_steps, dt=T / n_steps, density=density,
+                newton_tol=newton_tol, linear_solver=ls)
+    with open(os.path.join(case_dir, "solver.xml"), "w") as f:
+        f.write(solver_xml(case))
+    with open(os.path.join(case_dir, "case.json"), "w") as f:
+        json.dump(case, f, indent=2)
+    return case
+
+
+# --------------------------------------------------------------------------- #
+#  Run
+# --------------------------------------------------------------------------- #
+
+IMAGE = "simvascular/solver:latest"
+EXE_IN_IMAGE = "/build-trilinos/svMultiPhysics-build/bin/svmultiphysics"
+
+
+def docker_cli():
+    """The docker executable (Docker Desktop on macOS installs it in ~/.docker/bin)."""
+    for path in (shutil.which("docker"), os.path.expanduser("~/.docker/bin/docker"),
+                 "/Applications/Docker.app/Contents/Resources/bin/docker"):
+        if path and os.path.exists(path):
+            return path
+    raise FileNotFoundError("docker not found; install Docker or pass --exe")
+
+
+class SolverFailure(RuntimeError):
+    """svMultiPhysics crashed, diverged or exceeded its time limit."""
+
+
+_NEWTON_ROW = re.compile(r"^\s*ST\s+(\d+)-(\d+)(s?)\s")
+
+
+def run(case_dir, np_=1, exe=None, image=IMAGE, platform="linux/amd64", max_time=None,
+        max_residual=1e6, echo=True):
+    """Run svMultiPhysics on a case: locally if exe is given, else in Docker.
+
+    The solver output is streamed to CASE_DIR/svmultiphysics.log and checked
+    line by line: the run is stopped and SolverFailure raised as soon as a
+    Newton iteration reports NaN or a relative residual above max_residual, a
+    time step ends unconverged (above 100x the Newton tolerance), the solver
+    exits with an error, or max_time seconds pass. With echo, one line per
+    time step reports the Newton iterations and the final residual.
+    """
+    case_dir = os.path.abspath(case_dir)
+    with open(os.path.join(case_dir, "case.json")) as f:
+        case = json.load(f)
+    mpi = ["mpirun", "-n", str(np_)] if np_ > 1 else []
+    env, name = None, None
+    if exe:
+        cmd = mpi + [exe, "solver.xml"]
+    else:
+        docker = docker_cli()
+        env = dict(os.environ, PATH=os.path.dirname(docker) + os.pathsep + os.environ["PATH"])
+        name = f"svmp-{os.getpid()}-{int(time.time() * 1e3)}"
+        cmd = ([docker, "run", "--rm", "--name", name, "--platform", platform,
+                "-e", "OMPI_ALLOW_RUN_AS_ROOT=1", "-e", "OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1",
+                "-v", f"{case_dir}:/case", "-w", "/case", image]
+               + (mpi[:1] + ["--allow-run-as-root"] + mpi[1:] if mpi else []) + [EXE_IN_IMAGE, "solver.xml"])
+    tic = time.time()
+    proc = subprocess.Popen(cmd, cwd=case_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                            text=True, env=env, bufsize=1)
+    lines = queue.Queue()
+    threading.Thread(target=lambda: [lines.put(ln) for ln in proc.stdout] + [lines.put(None)],
+                     daemon=True).start()
+    reason, tail, its = None, [], 0
+    with open(os.path.join(case_dir, "svmultiphysics.log"), "w") as log:
+        while reason is None:
+            try:
+                line = lines.get(timeout=1.0)
+            except queue.Empty:
+                line = ""
+            if line is None:
+                break
+            log.write(line)
+            log.flush()
+            tail = (tail + [line.rstrip()])[-8:]
+            m = _NEWTON_ROW.match(line)
+            if m:
+                its += 1
+                nums = re.findall(r"\d\.\d+e[+-]\d+|nan", line)
+                res = float(nums[1]) if len(nums) > 1 else float("nan")
+                step = int(m.group(1))
+                if not math.isfinite(res) or res > max_residual:
+                    reason = f"time step {step}, Newton iteration {m.group(2)}: residual {res:.1e}"
+                elif m.group(3):  # last iteration of the time step
+                    if res > 100.0 * case["newton_tol"]:
+                        reason = f"time step {step}: Newton stopped at residual {res:.1e}"
+                    elif echo:
+                        print(f"    step {step:4d}/{case['n_steps']}: {its:2d} Newton its, "
+                              f"residual {res:.1e}, {time.time() - tic:7.1f} s", flush=True)
+                    its = 0
+            if max_time and time.time() - tic > max_time:
+                reason = f"time limit of {max_time:.0f} s reached"
+    if reason is not None:  # stop the solver
+        if name:
+            subprocess.run([docker, "stop", "-t", "2", name], env=env, capture_output=True)
+        proc.terminate()
+    rc = proc.wait()
+    if reason is None and rc != 0:
+        reason = f"svMultiPhysics exited with code {rc}"
+    if reason is not None:
+        raise SolverFailure(f"{case_dir}: {reason}\n" + "\n".join(tail))
+    return time.time() - tic
+
+
+# --------------------------------------------------------------------------- #
+#  Post-processing
+# --------------------------------------------------------------------------- #
+
+def _tri_rule():
+    """Degree-5 seven-point rule on the reference triangle: (xi, eta, weight)."""
+    a1, w1 = 0.470142064105115, 0.132394152788506
+    a2, w2 = 0.101286507323456, 0.125939180544827
+    pts = [(1 / 3, 1 / 3, 0.225)]
+    for a, w in ((a1, w1), (a2, w2)):
+        pts += [(a, a, w), (1 - 2 * a, a, w), (a, 1 - 2 * a, w)]
+    return [(x, y, 0.5 * w) for x, y, w in pts]  # weights sum to the area 1/2
+
+
+def _tri6_shape(x, y):
+    l = (1 - x - y, x, y)
+    N = [l[0] * (2 * l[0] - 1), l[1] * (2 * l[1] - 1), l[2] * (2 * l[2] - 1),
+         4 * l[0] * l[1], 4 * l[1] * l[2], 4 * l[2] * l[0]]
+    dl = ((-1, -1), (1, 0), (0, 1))
+    dN = [[(4 * l[i] - 1) * dl[i][d] for d in range(2)] for i in range(3)]
+    for (i, j) in _TRI_EDGES:
+        dN.append([4 * (dl[i][d] * l[j] + l[i] * dl[j][d]) for d in range(2)])
+    return np.array(N), np.array(dN)
+
+
+def lumen_volume(x, conn, sector):
+    """Lumen volume enclosed by the deformed endo face between the end planes.
+
+    V = int (x n_x + y n_y) / 2 dA over the endo face with n pointing into the
+    wall (the end planes and the symmetry planes contribute nothing), scaled
+    from the sector to the full cylinder.
+    """
+    V = 0.0
+    if conn.shape[1] == 3:
+        a, b, c = x[conn[:, 0]], x[conn[:, 1]], x[conn[:, 2]]
+        n = 0.5 * np.cross(b - a, c - a)
+        g = (a + b + c) / 3.0
+        V = -0.5 * np.sum(g[:, 0] * n[:, 0] + g[:, 1] * n[:, 1])
+    else:
+        for xi, eta, w in _tri_rule():
+            N, dN = _tri6_shape(xi, eta)
+            xe = x[conn]                      # (K, 6, 3)
+            p = np.einsum("a,kai->ki", N, xe)
+            t1 = np.einsum("a,kai->ki", dN[:, 0], xe)
+            t2 = np.einsum("a,kai->ki", dN[:, 1], xe)
+            n = np.cross(t1, t2)
+            V -= 0.5 * w * np.sum(p[:, 0] * n[:, 0] + p[:, 1] * n[:, 1])
+    return V * 360.0 / sector
+
+
+def _read_vtu(path):
+    """Points and the Displacement field of an svMultiPhysics result file."""
+    try:
+        from vtkmodules.util.numpy_support import vtk_to_numpy
+        from vtkmodules.vtkIOXML import vtkXMLUnstructuredGridReader
+    except ImportError as e:  # pragma: no cover
+        raise ImportError("post-processing needs VTK (pip install vtk)") from e
+    r = vtkXMLUnstructuredGridReader()
+    r.SetFileName(path)
+    r.Update()
+    g = r.GetOutput()
+    pts = vtk_to_numpy(g.GetPoints().GetData())
+    return pts, {"Displacement": vtk_to_numpy(g.GetPointData().GetArray("Displacement"))}
+
+
+def kinematics(X, x, levels):
+    """0D kinematic quantities of a deformed 3D cylinder.
+
+    Fits the rotation of every node about the axis as beta Z + phi(R) and
+    averages over each radial node level R_k (index `levels`) the radial
+    displacement rho = r - R, the transmural rotation phi and the axial
+    displacement u_z, the latter two relative to the endocardium: the 0D
+    fields rho(R), phi(R) - phi(Ri) and eta(R) - eta(Ri). Also returns the
+    largest deviation of rho from its level mean (non-homogeneity).
+    """
+    dth = np.arctan2(x[:, 1], x[:, 0]) - np.arctan2(X[:, 1], X[:, 0])
+    dth = (dth + np.pi) % (2.0 * np.pi) - np.pi
+    rho = np.hypot(x[:, 0], x[:, 1]) - np.hypot(X[:, 0], X[:, 1])
+    uz = x[:, 2] - X[:, 2]
+    nlev = levels.max() + 1
+    # rotation = beta Z + phi_k: least squares with one offset per level
+    A = np.zeros((len(X), nlev + 1))
+    A[:, 0] = X[:, 2]
+    A[np.arange(len(X)), 1 + levels] = 1.0
+    coef, *_ = np.linalg.lstsq(A, dth, rcond=None)
+    mean = lambda f: np.bincount(levels, f) / np.bincount(levels)  # noqa: E731
+    rho_k = mean(rho)
+    return dict(beta=float(coef[0]), rho=rho_k, phi=coef[1:] - coef[1],
+                eta=mean(uz) - mean(uz)[0],
+                rho_spread=float(np.max(np.abs(rho - rho_k[levels]))))
+
+
+def cylinder_fibers_at_nodes(X, Ri, Re, alpha_endo, alpha_epi):
+    """Reference fiber and sheet (e_R) directions at the nodes (0D convention)."""
+    from cylinder_fibers import cylinder_fibers
+    return cylinder_fibers(X, None, Ri, Re, alpha_endo, alpha_epi, "points")
+
+
+def _tet_shape_derivatives(order):
+    """dN_b/dxi (natural coordinates) of the VTK tetrahedron at its own nodes a,
+    as an array (n, n, 3) indexed [a, b, k]."""
+    I4 = np.eye(4)
+    L_nodes = [I4[i] for i in range(4)]
+    if order == 2:
+        L_nodes += [0.5 * (I4[i] + I4[j]) for i, j in _TET_EDGES]
+    dL = np.array([[-1.0, -1.0, -1.0], [1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])
+    dN = np.zeros((len(L_nodes), len(L_nodes), 3))
+    for a, L in enumerate(L_nodes):
+        if order == 1:
+            dN[a] = dL
+            continue
+        for i in range(4):
+            dN[a, i] = (4.0 * L[i] - 1.0) * dL[i]
+        for m, (i, j) in enumerate(_TET_EDGES):
+            dN[a, 4 + m] = 4.0 * (L[i] * dL[j] + L[j] * dL[i])
+    return dN
+
+
+def nodal_deformation_gradient(X, cells, u, order):
+    """F = I + du/dX at the nodes with the (curved) element geometry, averaged
+    over the elements that share a node."""
+    dN = _tet_shape_derivatives(order)
+    Jx = np.einsum("abk,ebi->eaik", dN, X[cells])          # dX_i/dxi_k
+    dNdX = np.einsum("abk,eaki->eabi", dN, np.linalg.inv(Jx))
+    G = np.einsum("ebi,eabj->eaij", u[cells], dNdX)         # du_i/dX_j
+    F = np.zeros((len(X), 3, 3))
+    count = np.zeros(len(X))
+    np.add.at(F, cells, G)
+    np.add.at(count, cells, 1.0)
+    return np.eye(3) + F / count[:, None, None]
+
+
+_SYM = [(0, 0), (1, 1), (2, 2), (0, 1), (1, 2), (2, 0)]  # svMultiPhysics order
+
+
+def _sym6(T):
+    return np.stack([T[:, i, j] for i, j in _SYM], axis=1)
+
+
+def struct_fields(X, cells, u, order, material, fiber, sheet):
+    """The svMultiPhysics struct output fields at the nodes, from the
+    displacement: deformation gradient, Jacobian, Green-Lagrange strain, 2nd
+    Piola-Kirchhoff and Cauchy stress (svMultiPhysics material model of
+    solver.xml, see check_materials.stress_3d), von Mises stress, fiber
+    stretch and deformed fiber direction, plus the cylindrical components
+    (rr, tt, zz, rt, tz, zr) of the strain (reference basis) and of the Cauchy
+    stress (deformed basis)."""
+    from check_materials import stress_3d
+    F = nodal_deformation_gradient(X, cells, u, order)
+    J = np.linalg.det(F)
+    E = 0.5 * (np.einsum("nki,nkj->nij", F, F) - np.eye(3))
+    S = np.array([stress_3d(F[n], fiber[n], sheet[n], material) for n in range(len(X))])
+    sig = np.einsum("nik,nkl,njl->nij", F, S, F) / J[:, None, None]
+    dev = sig - np.trace(sig, axis1=1, axis2=2)[:, None, None] * np.eye(3) / 3.0
+    Ff = np.einsum("nij,nj->ni", F, fiber)
+    lam = np.linalg.norm(Ff, axis=1)
+
+    def cyl(T, pts):  # components in the local (e_r, e_theta, e_z) basis
+        r = np.hypot(pts[:, 0], pts[:, 1])
+        Q = np.zeros((len(pts), 3, 3))
+        Q[:, 0, :2] = pts[:, :2] / r[:, None]
+        Q[:, 1, 0], Q[:, 1, 1] = -pts[:, 1] / r, pts[:, 0] / r
+        Q[:, 2, 2] = 1.0
+        return _sym6(np.einsum("nik,nkl,njl->nij", Q, T, Q))
+    return dict(Def_grad=F.reshape(-1, 9), Jacobian=J, Strain=_sym6(E), Stress=_sym6(S),
+                Cauchy_stress=_sym6(sig),
+                VonMises_stress=np.sqrt(1.5 * np.einsum("nij,nij->n", dev, dev)),
+                Fiber_stretch=lam, Fiber_direction_deformed=Ff / lam[:, None],
+                Strain_cylindrical=cyl(E, X), Cauchy_stress_cylindrical=cyl(sig, X + u))
+
+
+# through-wall profiles of the struct fields: name -> (field, component)
+FIELD_PROFILES = {"J": ("Jacobian", None), "E_RR": ("Strain_cylindrical", 0),
+                  "E_TT": ("Strain_cylindrical", 1), "E_ZZ": ("Strain_cylindrical", 2),
+                  "sigma_rr": ("Cauchy_stress_cylindrical", 0),
+                  "sigma_tt": ("Cauchy_stress_cylindrical", 1),
+                  "sigma_zz": ("Cauchy_stress_cylindrical", 2),
+                  "sigma_vm": ("VonMises_stress", None), "lambda_f": ("Fiber_stretch", None)}
+
+
+def post(case_dir, fields=True):
+    """Cavity volume and kinematics of a finished case, per load step.
+
+    V is the volume enclosed by the deformed (discrete) endo face. The
+    through-wall profiles rho, phi and eta are given at the radial node levels
+    R (see `kinematics`), beta is the twist per unit length (zero in a
+    symmetric sector). Written to CASE_DIR/kinematics.json. With fields, the
+    struct output fields (`struct_fields`) are written per step to
+    CASE_DIR/post/fields_<step>.vtu and their through-wall profiles
+    (FIELD_PROFILES) added to kinematics.json.
+    """
+    with open(os.path.join(case_dir, "case.json")) as f:
+        case = json.load(f)
+    Lm = case.get("mesh_length", case["length"])
+    mesh = mesh_cylinder(case["Ri"], case["Re"], Lm, case["nr"], case["sector"],
+                         case["order"], case["ntheta"], case["nz"])
+    X = mesh["points"]
+    vol = lambda x: lumen_volume(x, conn, case["sector"]) * case["length"] / Lm  # noqa: E731
+    conn = mesh["faces"]["endo"][0]
+    dR = (case["Re"] - case["Ri"]) / (case["nr"] * case["order"])
+    levels = np.rint((np.hypot(X[:, 0], X[:, 1]) - case["Ri"]) / dR).astype(int)
+    files = sorted(glob.glob(os.path.join(case_dir, "results", "result_*.vtu")))
+    if not files:
+        raise FileNotFoundError(f"no results in {case_dir}/results")
+    out = dict(R=(case["Ri"] + dR * np.arange(levels.max() + 1)).tolist(), t=[0.0], P=[0.0],
+               V=[vol(X)], beta=[0.0], rho_spread=[0.0])
+    zero = [0.0] * (levels.max() + 1)
+    out.update(rho=[zero], phi=[zero], eta=[zero])
+    if fields:
+        from check_materials import svmp_material
+        material = svmp_material(os.path.join(case_dir, "solver.xml"))
+        m = case["material"]
+        fib = cylinder_fibers_at_nodes(X, case["Ri"], case["Re"], m.get("alpha_endo", 0.0),
+                                       m.get("alpha_epi", 0.0))
+        mean = lambda f: np.bincount(levels, f) / np.bincount(levels)  # noqa: E731
+        post_dir = os.path.join(case_dir, "post")
+        os.makedirs(post_dir, exist_ok=True)
+        u0 = struct_fields(X, mesh["cells"], np.zeros_like(X), case["order"], material,
+                           fib["fiber"], fib["sheet"])
+        out["fields"] = {k: [mean(u0[f] if c is None else u0[f][:, c]).tolist()]
+                         for k, (f, c) in FIELD_PROFILES.items()}
+    for fn in files:
+        n = int(os.path.basename(fn)[7:-4])
+        pts, pdata = _read_vtu(fn)
+        # results are written in single precision
+        if not np.allclose(pts[:, :3], X, rtol=0, atol=1e-6 * case["Re"]):
+            raise RuntimeError(f"{fn}: node order differs from the generated mesh")
+        x = X + pdata["Displacement"][:, :3]
+        t = n * case["dt"]
+        k = kinematics(X, x, levels)
+        out["t"].append(t)
+        out["P"].append(case["P_max"] * min(t / case["T_ramp"], 1.0))
+        out["V"].append(vol(x))
+        for key in ("beta", "rho_spread"):
+            out[key].append(k[key])
+        for key in ("rho", "phi", "eta"):
+            out[key].append(k[key].tolist())
+        if fields:
+            u = x - X
+            sf = struct_fields(X, mesh["cells"], u, case["order"], material, fib["fiber"],
+                               fib["sheet"])
+            for key, (f, c) in FIELD_PROFILES.items():
+                out["fields"][key].append(mean(sf[f] if c is None else sf[f][:, c]).tolist())
+            pdata = {"Displacement": (u, "Float64", 3)}
+            pdata.update({k: (v, "Float64", 1 if v.ndim == 1 else v.shape[1])
+                          for k, v in sf.items()})
+            write_vtu(os.path.join(post_dir, f"fields_{n:03d}.vtu"), X, mesh["cells"],
+                      24 if case["order"] == 2 else 10, pdata, {})
+    with open(os.path.join(case_dir, "kinematics.json"), "w") as f:
+        json.dump(out, f, indent=1)
+    return out
+
+
+# --------------------------------------------------------------------------- #
+#  CLI
+# --------------------------------------------------------------------------- #
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
+    sub = ap.add_subparsers(dest="cmd", required=True)
+    g = sub.add_parser("generate", help="write the 3D case of a 0D input")
+    g.add_argument("model_0d")
+    g.add_argument("case_dir")
+    g.add_argument("--nr", type=int, required=True, help="elements through the wall")
+    g.add_argument("--formulation", default="struct-p2", choices=sorted(FORMULATIONS))
+    g.add_argument("--sector", type=float, choices=[90.0, 360.0],
+                   help="default: 90 (symmetry planes), 360 with helical fibers")
+    g.add_argument("--half-length", action="store_true",
+                   help="mesh half the length (mid-length symmetry plane)")
+    g.add_argument("--ntheta", type=int, help="circumferential divisions (default from h)")
+    g.add_argument("--nz", type=int, help="axial divisions (default from h)")
+    g.add_argument("--steps", type=int, default=20, help="load steps over the ramp")
+    g.add_argument("--density", type=float, default=1.0)
+    g.add_argument("--ls-type", default="BICG", help="linear solver (BICG, GMRES, ...)")
+    g.add_argument("--algebra", default="fsils", help="fsils, trilinos or petsc")
+    g.add_argument("--preconditioner", default="fsils", help="e.g. fsils, trilinos-ilut")
+    r = sub.add_parser("run", help="run svMultiPhysics on a case")
+    r.add_argument("case_dir")
+    r.add_argument("--np", type=int, default=1)
+    r.add_argument("--exe", help="local svmultiphysics executable instead of Docker")
+    r.add_argument("--image", default=IMAGE)
+    p = sub.add_parser("post", help="cavity volume and kinematics of a finished case")
+    p.add_argument("case_dir")
+    a = ap.parse_args()
+    if a.cmd == "generate":
+        os.makedirs(a.case_dir, exist_ok=True)
+        ls = dict(type=a.ls_type, algebra=a.algebra, preconditioner=a.preconditioner)
+        c = generate(a.model_0d, a.case_dir, a.nr, a.formulation, a.sector, a.ntheta, a.nz,
+                     a.steps, a.density, linear_solver=ls, half_length=a.half_length)
+        print(f"{a.case_dir}: {c['n_cells']} tets (order {c['order']}), {c['n_nodes']} nodes, "
+              f"nr x ntheta x nz = {c['nr']} x {c['ntheta']} x {c['nz']}")
+    elif a.cmd == "run":
+        run(a.case_dir, a.np, a.exe, a.image)
+    else:
+        out = post(a.case_dir)
+        for t, P, V, b, rho in zip(out["t"], out["P"], out["V"], out["beta"], out["rho"]):
+            print(f"t={t:9.4g}  P={P / MMHG:7.2f} mmHg  V={V * 1e6:10.5f} mL  "
+                  f"rho_endo={rho[0] * 1e3:8.5f} mm  rho_epi={rho[-1] * 1e3:8.5f} mm  "
+                  f"beta={b:9.5f} rad/m")
+
+
+if __name__ == "__main__":
+    main()

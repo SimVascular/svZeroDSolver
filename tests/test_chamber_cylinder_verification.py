@@ -42,6 +42,53 @@ def test_static_inflation_extension_torsion(C5):
     assert abs(blk["beta"] - ref["q"][2]) * GEOM["length"] * DEG < 0.02
 
 
+def test_fixed_length_inflation_matches_closed_form():
+    """fixed_length = 1: quasi-static inflation of an incompressible neo-Hookean
+    tube vs. its closed-form plane-strain solution, at every load step."""
+    Ri, Re, L = GEOM["Ri"], GEOM["Re"], GEOM["length"]
+    mu = 1e4
+    vv = dict(GEOM, C1=mu / 2, C2=0.0, C3=0.0, C4=0.0, C5=0.0, C6=0.0, gamma=0.0,
+              num_elements=16, density=0.0, fixed_length=1, **CV.NOACT)
+    T = 2000.0  # slow: no rate effect of the BCS fibre dashpot
+    cfg = CV.isolated_config(vv, [0.0, T / 2, T], [0.0, 2e3, 2e3], T, 21,
+                             {"pressure_all": 0.0, "volume:cyl": math.pi * Ri**2 * L})
+    out = CV.svzerod.simulate(cfg)
+    t, V = CV.series(out, "volume:cyl")
+    _, P = CV.series(out, "pressure:IN:cyl")
+    _, eps = CV.series(out, "eps:cyl")
+    ramp = t <= T / 2
+    V_exact = [math.pi * CV.fixed_length_exact(p, Ri, Re, mu) ** 2 * L for p in P[ramp]]
+    assert np.abs(V[ramp] / V_exact - 1).max() < 1e-4
+    assert np.abs(eps).max() < 1e-15
+
+
+@pytest.mark.parametrize("k", [0.0, 100.0])
+def test_holzapfel_ogden_fixed_length_inflation_matches_closed_form(k):
+    """Holzapfel-Ogden law (svMultiPhysics struct/LV_HolzapfelOgden_passive
+    parameters in SI) with circumferential fibers and radial sheets: inflation
+    of the incompressible fixed-length tube to 120 mmHg vs. its plane-strain
+    closed form, converging at second order in the 0D element size."""
+    Ri, Re, L = GEOM["Ri"], GEOM["Re"], GEOM["length"]
+    ho = dict(ho_a=59.0, ho_b=8.023, ho_af=18472.0, ho_bf=16.026, ho_as=2481.0, ho_bs=11.12,
+              ho_afs=216.0, ho_bfs=11.436, ho_k=k)
+    T = 2400.0
+    err = []
+    for ne in (8, 16):
+        vv = dict(GEOM, alpha_endo=0.0, alpha_epi=0.0, C1=0.0, C2=0.0, C3=0.0, C4=0.0, C5=0.0,
+                  C6=0.0, gamma=0.0, num_elements=ne, density=0.0, fixed_length=1, **ho,
+                  **CV.NOACT)
+        cfg = CV.isolated_config(vv, [0.0, T / 2, T], [0.0, 16e3, 16e3], T, 25,
+                                 {"pressure_all": 0.0, "volume:cyl": math.pi * Ri**2 * L})
+        out = CV.svzerod.simulate(cfg)
+        t, V = CV.series(out, "volume:cyl")
+        _, P = CV.series(out, "pressure:IN:cyl")
+        ramp = t <= T / 2
+        V_exact = [math.pi * CV.fixed_length_exact_ho(p, Ri, Re, vv) ** 2 * L for p in P[ramp]]
+        err.append(np.abs(V[ramp] / V_exact - 1).max())
+    assert err[1] < 5e-4
+    assert 3.6 < err[0] / err[1] < 4.4
+
+
 def test_torsional_free_vibration():
     """Small-amplitude torsion of the free tube vs. the closed-form frequency and
     decay (twist inertia with momentum-free rigid rotation, shear stiffness,

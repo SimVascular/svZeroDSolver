@@ -56,3 +56,7 @@ venv/
 
 # uv lockfile (resolved fresh by `uv sync`; not committed for this package)
 uv.lock
+
+# ChamberCylinder 3D verification: generated cases and results
+scripts/ChamberCylinder/verification_3d/*/runs/
+scripts/ChamberCylinder/verification_3d/*/output/

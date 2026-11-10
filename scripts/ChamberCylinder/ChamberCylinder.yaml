@@ -4,15 +4,11 @@
 # "Reduced left ventricular dynamics modeling based on a cylindrical
 # assumption", Int. J. Numer. Meth. Biomed. Engng., e3711.
 #
-# Unlike ChamberSphere.yaml (a symbolic residual list for a lumped 0D block),
-# this model is a 1D finite-element problem across the wall thickness, assembled
-# numerically in ChamberCylinder.cpp rather than generated symbolically. This
-# file documents the continuous governing equations that the C++ code
-# discretizes; it is NOT a code-generation input. The block implements the
-# single faithful genet23 configuration: Bestel-Clement-Sorine (BCS) active law,
-# ECG-derived activation nu(t), mixed u/p incompressibility, and full dynamics
-# (inertia). With the BCS force-velocity term (bcs_alpha > 0) it needs the
-# L-stable "stiff" time integrator.
+# The model is a 1D finite-element problem across the wall thickness, assembled
+# numerically in ChamberCylinder.cpp. This file documents the continuous
+# equations the block discretizes; unlike ChamberSphere.yaml it is not a
+# Jacobian-generator input. Model parts: Bestel-Clement-Sorine (BCS) active law,
+# ECG-derived activation nu(t), mixed u/p incompressibility and inertia.
 
 # --- Kinematic unknowns (Eq. 1) ---
 # Radial fields (linear finite elements over R in [Ri, Re]):
@@ -25,8 +21,8 @@
 #   eps     : longitudinal strain            z     = (1+eps)*Z + eta
 # Per quadrature point: BCS active internal variables e_c, tau_c, k_c.
 # Per block: cavity volume V and shared cavity pressure Pv = Pin = Pout.
-# Dynamics adds velocity-companion DOFs (the material rates of rho, phi, eta,
-# beta, eps) so the inertial term can be assembled as a first-order system.
+# Velocity-companion DOFs (the rates of rho, phi, eta, beta, eps) make the
+# inertia term first order.
 
 # --- Deformation (Eqs. 13-16), a=1+rho', b=1+rho/R, e=1+eps ---
 deformation_gradient: |
@@ -76,7 +72,7 @@ equations:
   equilibrium: "2*pi*L * int (rho0*a.Du + Sigma:dE) R dR - P_external = 0"
   # 2. Incompressibility weak form (mixed u/p, Eq. 27)
   incompressibility: "int (J - 1) * p_hat R dR = 0"
-  # 3. Velocity-companion definitions (dynamics): rate_field - d(field)/dt = 0
+  # 3. Velocity companions: rate_field - d(field)/dt = 0
   velocity: "zeta_dot - d(zeta)/dt = 0"
   # 4. Cavity volume (Eq. 4)
   volume: "V - pi*(Ri+rho(Ri))^2*(1+eps)*L = 0"
@@ -92,10 +88,7 @@ equations:
   #    fixes the rigid modes.
   pins: "phi(Ri) = 0 ; eta(Ri) = 0   (density = 0 only)"
 
-# Numerical note: genet23 uses a bespoke energy-consistent midpoint scheme with a
-# mixed finite-element formulation. This block instead reuses the svZeroDSolver
-# DAE framework with the L-stable "stiff" integrator (generalized-alpha at
-# maximal dissipation + damped-Newton line search + adaptive sub-stepping), which
-# is required to carry the stiff BCS law (k_s = 1e8). The one documented residual
-# is that the ventricular torsion untwists ~100 ms too early under the full
-# damping model; see ChamberCylinder_provenance.tex for the analysis.
+# Time integration: genet23 uses an energy-consistent midpoint scheme; the block
+# uses the svZeroDSolver DAE integrators. The BCS force-velocity term
+# (bcs_alpha > 0) needs the "stiff" integrator (generalized-alpha at maximal
+# dissipation with damped Newton and adaptive sub-stepping).

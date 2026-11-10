@@ -91,13 +91,11 @@
  * (Chapelle Eq. 9) driven by the ECG-derived activation \f$\nu(t)\f$ (the
  * authors' piecewise-linear `nagumo` waveform, supplied as an
  * `activation_function` object; see \ref NagumoActivation),
- * \f$\sigma_0=\f$ `sigma_max`, and Frank-Starling reduction factor
- * \f$n_0(e_c)\f$ (the PhysioBlocks piecewise-linear force-length curve,
- * frank_starling(); overridable via a `frank_starling` config object).
- * Writing the stress through \f$\tau_c+\mu\dot e_c\f$ rather
- * than the equivalent \f$k_s(e_\text{fib}-e_c)\f$ keeps the paper's very stiff
- * \f$k_s=10^8\f$ out of the mechanical residual (confining it to the \f$e_c\f$
- * ODE), so the model integrates with the standard generalized-alpha solver.
+ * \f$\sigma_0=\f$ `sigma_max`, and the piecewise-linear Frank-Starling factor
+ * \f$n_0(e_c)\f$ (overridable via a `frank_starling` config object).
+ * Writing the stress through \f$\tau_c+\mu\dot e_c\f$ rather than the
+ * equivalent \f$k_s(e_\text{fib}-e_c)\f$ keeps the stiff \f$k_s=10^8\f$ out of
+ * the mechanical residual.
  *
  * ### Governing equations
  *
@@ -114,9 +112,8 @@
  * realized by velocity companion DOFs \f$w=\dot\zeta\f$ and the consistent
  * mass matrix
  * \f$M=\int\varrho_0(\mathrm{D}u)^\top\mathrm{D}u\,\mathrm d\Omega\f$
- * (analytically integrated over \f$\Theta,Z\f$; \cite genet23 Eqs. A5-A6). For
- * cardiac parameters inertia is \f$\sim\!10^{-4}\f$ of the internal/pressure
- * forces. It is complemented by the cavity volume
+ * (analytically integrated over \f$\Theta,Z\f$; \cite genet23 Eqs. A5-A6).
+ * It is complemented by the cavity volume
  * \f$V=\pi(R_i+\rho(R_i))^2(1+\varepsilon)L\f$, mass conservation
  * \f$Q_\text{in}-Q_\text{out}-\dot V = 0\f$ and pressure equality
  * \f$P_\text{in}=P_\text{out}=P_v\f$. Without inertia (`density` = 0) the rigid
@@ -137,8 +134,7 @@
  * * `gamma` - Material viscosity \f$\gamma\f$
  * * `sigma_max` - Maximum active fiber stress \f$\sigma_0\f$ of the BCS model
  * * `num_elements` - Number of (linear) finite elements through the wall
- *   (optional, default 10). The response converges under refinement; ~10-15
- *   elements are adequate for the baseline geometry.
+ *   (optional, default 10)
  * * `k_s` - BCS series-spring stiffness \f$k_s\f$ (optional, default 1e8)
  * * `k_0` - BCS maximum active stiffness \f$k_0\f$ (optional, default 260e3)
  * * `mu` - BCS active dissipation \f$\mu\f$ (optional, default 70). Distinct
@@ -303,9 +299,8 @@ class ChamberCylinder : public Block {
   /**
    * @brief Override the Frank-Starling force-length curve n_0(e_c).
    *
-   * Replaces the default (genet/PhysioBlocks) piecewise-linear breakpoints with
-   * a user-supplied curve. `ec` (abscissas) and `val` (ordinates) must have
-   * equal length >= 2.
+   * Replaces the default piecewise-linear breakpoints. `ec` (abscissas) and
+   * `val` (ordinates) must have equal length >= 2.
    *
    * @param ec Contractile-element strain breakpoints e_c
    * @param val Recruitment factor values n_0 at those breakpoints
@@ -334,7 +329,7 @@ class ChamberCylinder : public Block {
   struct QuadPoint {
     int elem;      ///< Element index (spans nodes elem and elem+1)
     double R;      ///< Reference radius of the quadrature point
-    double w;      ///< Integration weight (Gauss weight times |dR|)
+    double w;      ///< Integration weight (Gauss weight * dR/dxi * R)
     double alpha;  ///< Myofiber helix angle at this radius [rad]
     double N[2];   ///< Shape function values at the two element nodes
     double dN[2];  ///< Shape function radial derivatives
@@ -348,16 +343,15 @@ class ChamberCylinder : public Block {
   //          pmix_0..]
   //   eqns: [rho.., phi.., eta.., beta, eps, (e_c,tau_c,k_c)_q.., volume, mass,
   //          pressure, vrho.., vphi.., veta.., vbeta, veps, pmix_0..]
-  // The Genet BCS active block holds 3*n_quad vars/eqns (e_c, tau_c, k_c per
+  // The BCS block holds 3 * n_quad variables/equations (e_c, tau_c, k_c per
   // quadrature point).
   int i_rho(int a) const { return 4 + a; }
   int i_phi(int a) const { return 4 + n_node + a; }
   int i_eta(int a) const { return 4 + 2 * n_node + a; }
   int i_beta() const { return 4 + 3 * n_node; }
   int i_eps() const { return 4 + 3 * n_node + 1; }
-  int i_active0() const {
-    return 4 + 3 * n_node + 2;
-  }  ///< start of active vars
+  /// Start of the BCS variables
+  int i_active0() const { return 4 + 3 * n_node + 2; }
   int i_ec(int q) const { return i_active0() + 3 * q; }
   int i_tauc(int q) const { return i_active0() + 3 * q + 1; }
   int i_kc(int q) const { return i_active0() + 3 * q + 2; }
@@ -380,7 +374,8 @@ class ChamberCylinder : public Block {
   int e_eta(int a) const { return 2 * n_node + a; }
   int e_beta() const { return 3 * n_node; }
   int e_eps() const { return 3 * n_node + 1; }
-  int e_active0() const { return 3 * n_node + 2; }  ///< start of active eqns
+  /// Start of the BCS equations
+  int e_active0() const { return 3 * n_node + 2; }
   int e_ec(int q) const { return e_active0() + 3 * q; }
   int e_tauc(int q) const { return e_active0() + 3 * q + 1; }
   int e_kc(int q) const { return e_active0() + 3 * q + 2; }
@@ -394,19 +389,19 @@ class ChamberCylinder : public Block {
   int e_veta(int a) const { return e_vel0() + 2 * n_node + a; }
   int e_vbeta() const { return e_vel0() + 3 * n_node; }
   int e_veps() const { return e_vel0() + 3 * n_node + 1; }
-  // Mixed u/p element incompressibility-constraint equations, appended last.
+  // Mixed u/p element incompressibility equations, appended last.
   int e_pmix0() const { return e_vel0() + 3 * n_node + 2; }
   int e_pmix(int e) const { return e_pmix0() + e; }
 
-  double act = 0.0;       ///< Activation rate a(t) (= |nu| for the BCS input)
-  double act_plus = 0.0;  ///< max(a(t), 0) (= |nu|_+ for the BCS input)
+  double act = 0.0;       ///< |nu(t)|
+  double act_plus = 0.0;  ///< |nu(t)|_+ = max(nu(t), 0)
 
   /// Activation function nu(t) driving the BCS active law (type `nagumo`).
   std::unique_ptr<ActivationFunction> activation_function_;
 
-  /// Frank-Starling force-length curve n_0(e_c) breakpoints. Default: the
-  /// genet/PhysioBlocks 9-point piecewise-linear curve (Caruel 2013, Ref. 13
-  /// of \cite genet23); overridable via set_frank_starling_curve().
+  /// Frank-Starling breakpoints of n_0(e_c). Default: the curve of the genet23
+  /// authors' input code (\cite genet23 Table 1); overridable via
+  /// set_frank_starling_curve().
   std::vector<double> n0_ec_ = {-0.1668, -0.0073, 0.0534, 0.0969, 0.1326,
                                 0.2016,  0.4663,  0.9187, 1.1762};
   std::vector<double> n0_val_ = {0.0, 0.5614, 0.7748, 0.8933, 0.9618,

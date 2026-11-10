@@ -450,14 +450,11 @@ void create_vessels(
 
     generate_block(model, vessel_values, vessel_type, vessel_name);
 
-    // ChamberCylinder is loaded as a vessel but, like the chamber blocks, may
-    // carry an ECG-derived activation function nu(t) and, optionally, a
-    // Frank-Starling force-length curve (mirroring create_chambers).
+    // Optional activation function of a vessel block (ChamberCylinder)
     if (vessel_config.contains("activation_function")) {
-      // create_vessels runs before the cardiac period is otherwise set (by the
-      // boundary-condition parameters or the Solver), and the activation
-      // function captures the period at construction. Mirror create_chambers
-      // and take it from simulation_parameters when specified.
+      // The activation function stores the cardiac period at construction,
+      // which is not set yet at this point: take it from simulation_parameters
+      // if given (as create_chambers does).
       if (model.cardiac_cycle_period < 0.0 &&
           config.contains("simulation_parameters") &&
           config["simulation_parameters"].contains("cardiac_period")) {

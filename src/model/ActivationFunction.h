@@ -308,19 +308,14 @@ class FourierActivation : public ActivationFunction {
 /**
  * @brief Nagumo piecewise-linear activation-rate function
  *
- * ECG-derived activation waveform \f$\nu(t)\f$ of the Genet 2023 cylindrical
- * ventricle (\cite genet23; the authors' `nagumo_piecewise_linear` from
- * cardiac_input_functions.py), used to drive the Bestel-Clement-Sorine active
- * law in \ref ChamberCylinder. It is piecewise linear between `alpha_min` and
- * `alpha_max` with knee times set by ECG intervals: `tsys` is the \f$\nu=0\f$
- * upstroke and `tdias` the \f$\nu=0\f$ downstroke, `qrs` the QRS rise/fall ramp
- * width and `ramp` the final repolarization ramp.
+ * ECG-derived activation rate \f$\nu(t)\f$ of \cite genet23, which drives the
+ * Bestel-Clement-Sorine active law of \ref ChamberCylinder. It is piecewise
+ * linear between `alpha_min` and `alpha_max`: `tsys` is the \f$\nu=0\f$
+ * upstroke, `tdias` the \f$\nu=0\f$ downstroke, `qrs` the QRS rise/fall width
+ * and `ramp` the final repolarization ramp.
  *
- * NOTE: unlike the other activation functions, compute() returns the SIGNED
- * contraction RATE \f$\nu(t)\f$ and is deliberately NOT clamped to [0, 1]. The
- * base class's [0, 1] range is a convention (an elastance activation level),
- * not a constraint; here the output is a rate spanning [`alpha_min`,
- * `alpha_max`].
+ * Unlike the other activation functions, compute() returns a signed rate in
+ * [`alpha_min`, `alpha_max`], not an activation level in [0, 1].
  */
 class NagumoActivation : public ActivationFunction {
  public:

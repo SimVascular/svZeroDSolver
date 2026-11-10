@@ -66,7 +66,7 @@ GeneralizedAlpha::GeneralizedAlpha(Model* model, double time_step_size,
 }
 
 State GeneralizedAlpha::step(const State& old_state, double time) {
-  // Step-size-dependent coefficients (mapping the ydot increment to y).
+  // Step-size-dependent coefficients (map the ydot increment to y)
   const double y_coeff = gamma * time_step_size;
   const double y_coeff_jacobian = alpha_f * y_coeff;
 
@@ -133,12 +133,8 @@ State GeneralizedAlpha::step(const State& old_state, double time) {
 ConsistentStiffIntegrator::ConsistentStiffIntegrator(
     Model* model, double time_step_size, double rho, double atol, int max_iter,
     bool max_iter_error_to_warning) {
-  // Maximally dissipative spectral radius (rho_infty = 0, L-stable),
-  // independent of the requested rho: the stiff Bestel-Clement-Sorine active
-  // law of
-  // \cite genet23 needs the high-frequency damping. genet23 itself uses a
-  // bespoke energy-consistent midpoint scheme; this is its svZeroDSolver DAE
-  // counterpart.
+  // Spectral radius 0 (L-stable) regardless of rho: the stiff active law of
+  // \cite genet23 needs the high-frequency damping.
   (void)rho;
   init(model, time_step_size, 0.0, atol, max_iter, max_iter_error_to_warning);
 }
@@ -146,8 +142,7 @@ ConsistentStiffIntegrator::ConsistentStiffIntegrator(
 bool ConsistentStiffIntegrator::damped_step(const State& old_state,
                                             State& new_state, double dt,
                                             double time) {
-  // Step-size-dependent coefficients for this (possibly sub-) step, held
-  // locally so sub-stepping needs no save/restore of shared state.
+  // Step-size-dependent coefficients of this (sub-)step
   const double y_coeff = gamma * dt;
   const double y_coeff_jacobian = alpha_f * y_coeff;
 

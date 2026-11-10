@@ -46,12 +46,11 @@ CMAP = {'red': (213/255, 62/255, 80/255), 'orange': (248/255, 157/255, 91/255),
         'blue': (46/255, 136/255, 189/255)}
 
 
-# ne = 6 is within 0.2 mL of ne = 12 (torsion within 0.05 deg); 12 cycles reach
-# the periodic state to 0.01 mL from the all-pressures-at-P_at start.
+# ne = 6 is within 0.2 mL and 0.05 deg of ne = 12; 12 cycles are periodic to
+# 0.01 mL.
 def run(overrides=None, ne=6, ncycle=12, gamma=GAMMA_TABLE1):
-    """Run ChamberCylinder with the exact Table-1 build, optionally overriding a
-    few vessel parameters (geometry or fiber angle) for a sensitivity case, and
-    the wall viscosity gamma."""
+    """Run the genet23 baseline with optional vessel-parameter overrides
+    (geometry or fiber angle) and wall viscosity gamma; return the last cycle."""
     cfg = G.build(ne=ne, ncycle=ncycle, P_vs=G.P_VS)
     vv = cfg["vessels"][1]["zero_d_element_values"]
     vv["gamma"] = gamma
@@ -63,7 +62,7 @@ def run(overrides=None, ne=6, ncycle=12, gamma=GAMMA_TABLE1):
     cfg["simulation_parameters"]["absolute_tolerance"] = 1e-6
     try:
         out = svzerod.simulate(cfg)
-    except Exception as e:  # pragma: no cover - diagnostic only
+    except Exception as e:  # report and skip a case that fails
         print("  FAIL", str(e)[:70]); return None
 
     def s(n):

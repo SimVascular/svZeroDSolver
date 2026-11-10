@@ -257,8 +257,8 @@ double FourierActivation::compute(double time) {
 }
 
 // ============================================================
-// NagumoActivation — Genet 2023 ECG-derived piecewise-linear
-// activation rate nu(t) (nagumo_piecewise_linear)
+// NagumoActivation: ECG-derived piecewise-linear activation
+// rate nu(t) of genet23
 // ============================================================
 
 double NagumoActivation::compute(double time) {

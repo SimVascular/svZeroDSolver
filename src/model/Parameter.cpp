@@ -2,8 +2,34 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "Parameter.h"
 
+// Only scalar expressions of t are needed; disabling the rest of ExprTk
+// roughly halves the compile time and size of this file's object.
+#define exprtk_disable_string_capabilities
+#define exprtk_disable_rtl_io
+#define exprtk_disable_rtl_io_file
+#define exprtk_disable_rtl_vecops
+#define exprtk_disable_enhanced_features
+#define exprtk_disable_superscalar_unroll
+#include <exprtk.hpp>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+
+/// Number of midpoint samples used to average an expression over one cardiac
+/// cycle when converting it to a steady value.
+constexpr int kNumSteadyMeanSamples = 1000;
+
+/// PIMPL implementation holding the exprtk expression state
+struct Parameter::ExprtkImpl {
+  exprtk::symbol_table<double>
+      symbol_table;  ///< Symbol table mapping 't' to current time
+  exprtk::expression<double> expression;  ///< Compiled expression object
+  double* time_value = nullptr;  ///< Pointer into the symbol table for 't'
+};
+
+Parameter::~Parameter() = default;
+Parameter::Parameter(Parameter&&) noexcept = default;
+Parameter& Parameter::operator=(Parameter&&) noexcept = default;
 
 namespace {
 // Checks that (xs, ys) form a valid piecewise-linear break point table for

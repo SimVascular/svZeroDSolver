@@ -45,6 +45,62 @@ bool has_parameter(
   return false;
 }
 
+namespace {
+
+/**
+ * @brief Read a chamber sub-component's parameters from its JSON block into
+ * it.
+ *
+ * @param j JSON block for the component (e.g. "activation_function")
+ * @param comp Component to read parameters into, already created via its
+ * factory with its type-specific input_param_properties
+ * @param component_label Name of the component block, used in error messages
+ * (e.g. "activation_function", "material", "active_stress")
+ * @param chamber_name Name of the chamber the component belongs to, used in
+ * error messages
+ */
+void read_component_params(const nlohmann::json& j, ParameterHolder& comp,
+                           const std::string& component_label,
+                           const std::string& chamber_name) {
+  const auto& props = comp.input_param_properties;
+
+  // Check that all keys defined in the JSON block are valid parameters
+  for (auto& el : j.items()) {
+    if (el.key()[0] == '_' || el.key() == "type") continue;
+    if (!has_parameter(props, el.key())) {
+      throw std::runtime_error("Unknown parameter " + el.key() +
+                               " defined in " + component_label +
+                               " for chamber " + chamber_name);
+    }
+  }
+
+  // Read all parameters declared by the component
+  for (const auto& param : props) {
+    if (!param.second.is_number) continue;
+    if (param.second.is_array) {
+      std::vector<double> val;
+      if (get_param_vector(j, param.first, param.second, val)) {
+        throw std::runtime_error("Array parameter " + param.first +
+                                 " is mandatory in " + component_label +
+                                 " for chamber " + chamber_name);
+      }
+      comp.set_param_vector(param.first, val);
+    } else {
+      double val;
+      if (get_param_scalar(j, param.first, param.second, val)) {
+        throw std::runtime_error("Scalar parameter " + param.first +
+                                 " is mandatory in " + component_label +
+                                 " for chamber " + chamber_name);
+      }
+      comp.set_param(param.first, val);
+    }
+  }
+
+  comp.finalize();
+}
+
+}  // namespace
+
 int generate_block(Model& model, const nlohmann::json& block_params_json,
                    const std::string& block_type, const std::string_view& name,
                    bool internal, bool periodic) {
@@ -185,56 +241,25 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
         "Missing 'activation_function' for chamber " + chamber_name +
         ". Required with structure: {\"type\": \"half_cosine\", \"t_active\": "
         "0.2, \"t_twitch\": 0.3} (or type piecewise_cosine / two_hill / "
-        "double_tanh / wrapping_cosine / fourier with their parameters).");
+        "double_tanh / wrapping_cosine / fourier / piecewise_rate with their "
+        "parameters).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in activation_function for chamber " +
         chamber_name +
         ". Must be one of: half_cosine, piecewise_cosine, two_hill, "
-        "double_tanh, wrapping_cosine, fourier");
+        "double_tanh, wrapping_cosine, fourier, piecewise_rate");
   }
 
   // Extract activation function type
   std::string type_str = j["type"];
-  int err;
 
   // Create an activation function instance with default parameter values for
   // this type, then use its parameter schema for validation and reading.
   auto act_func =
       ActivationFunction::create_default(type_str, model.cardiac_cycle_period);
-  const auto& input_param_properties = act_func->input_param_properties;
-
-  for (auto& el : j.items()) {
-    if (el.key()[0] == '_') {
-      continue;
-    }
-    if (el.key() == "type") {
-      continue;
-    }
-    if (!has_parameter(input_param_properties, el.key())) {
-      throw std::runtime_error("Unknown parameter " + el.key() +
-                               " defined in activation_function for chamber " +
-                               chamber_name);
-    }
-  }
-
-  // Read parameters
-  for (const auto& param : input_param_properties) {
-    if (!param.second.is_number) {
-      continue;
-    }
-    double val;
-    err = get_param_scalar(j, param.first, param.second, val);
-    if (err) {
-      throw std::runtime_error(
-          "Scalar parameter " + param.first +
-          " is mandatory in activation_function for chamber " + chamber_name);
-    }
-    act_func->set_param(param.first, val);
-  }
-
-  act_func->finalize();
+  read_component_params(j, *act_func, "activation_function", chamber_name);
   return act_func;
 }
 
@@ -255,32 +280,31 @@ std::unique_ptr<SphereMaterial> generate_material(
 
   std::string type_str = j["type"];
   auto material = SphereMaterial::create(type_str);
-  const auto& input_param_properties = material->input_param_properties;
-
-  for (auto& el : j.items()) {
-    if (el.key()[0] == '_') continue;
-    if (el.key() == "type") continue;
-    if (!has_parameter(input_param_properties, el.key())) {
-      throw std::runtime_error("Unknown parameter " + el.key() +
-                               " defined in material for chamber " +
-                               chamber_name);
-    }
-  }
-
-  int err;
-  for (const auto& param : input_param_properties) {
-    if (!param.second.is_number) continue;
-    double val;
-    err = get_param_scalar(j, param.first, param.second, val);
-    if (err) {
-      throw std::runtime_error("Scalar parameter " + param.first +
-                               " is mandatory in material for chamber " +
-                               chamber_name);
-    }
-    material->set_param(param.first, val);
-  }
-
+  read_component_params(j, *material, "material", chamber_name);
   return material;
+}
+
+std::unique_ptr<ActiveStress> generate_active_stress(
+    const nlohmann::json& j, const std::string& chamber_name) {
+  if (j.is_null() || !j.is_object()) {
+    throw std::runtime_error(
+        "Missing 'active_stress' for chamber " + chamber_name +
+        ". Required with structure: {\"type\": \"strain_independent\", "
+        "\"alpha_max\": 30.0, \"alpha_min\": -30.0, \"sigma_max\": 185e3} "
+        "(or type strain_dependent with E_s, mu, alpha_r, alpha, k_0, "
+        "sigma_0, n0_e_c, n0_values, m0_e_c, m0_values).");
+  }
+  if (!j.contains("type") || !j["type"].is_string()) {
+    throw std::runtime_error(
+        "Missing or invalid 'type' in active_stress for chamber " +
+        chamber_name +
+        ". Must be one of: strain_independent, strain_dependent");
+  }
+
+  std::string type_str = j["type"];
+  auto active_stress = ActiveStress::create(type_str);
+  read_component_params(j, *active_stress, "active_stress", chamber_name);
+  return active_stress;
 }
 
 void validate_input(const nlohmann::json& config) {
@@ -797,10 +821,15 @@ void create_chambers(
         model, chamber_config["activation_function"], chamber_name);
     model.get_block(chamber_name)->set_activation_function(std::move(act_func));
 
-    // Create and set material for chamber types that use one
+    // Create and set material and active stress model for chamber types
+    // that use one
     if (chamber_type == "ChamberSphere") {
       auto mat = generate_material(chamber_config["material"], chamber_name);
       model.get_block(chamber_name)->set_material(std::move(mat));
+
+      auto act_stress =
+          generate_active_stress(chamber_config["active_stress"], chamber_name);
+      model.get_block(chamber_name)->set_active_stress(std::move(act_stress));
     }
 
     DEBUG_MSG("Created chamber " << chamber_name);

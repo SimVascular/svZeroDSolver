@@ -101,10 +101,12 @@ set(FETCHCONTENT_UPDATES_DISCONNECTED TRUE)
 
 FetchContent_Declare(
   Eigen
-  GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
-  GIT_TAG 3.4.0
-  GIT_SHALLOW TRUE
-  GIT_PROGRESS TRUE)
+  URL
+    https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
+    https://github.com/SimVascular/svZeroDSolver/releases/download/third-party/eigen-3.4.0.tar.gz
+  URL_HASH SHA256=8586084f71f9bde545ee7fa6d00288b264a2b7ac3607b974e54d13e7162c1c72
+  TLS_VERIFY TRUE
+  TIMEOUT 60)
 
 set(EIGEN_BUILD_DOC OFF)
 set(BUILD_TESTING OFF)

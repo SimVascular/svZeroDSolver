@@ -80,6 +80,12 @@
  * * `5` Pv: Venous pressure
  * * `6` Ram: Microvascular resistance
  *
+ * `"Pim"` is either an array of values at the times in `"t"`, or a string
+ * with an expression of the simulation time `t`, e.g.
+ * `"Pim": "1000 + 500 * sin(2 * pi * t)"` (then `"t"` must be omitted). See
+ * FlowReferenceBC for the expression syntax and how expressions are
+ * evaluated.
+ *
  * ### Usage in json configuration file
  *
  *     "boundary_conditions": [

@@ -151,13 +151,60 @@ def run_expression_case(bc_values, case="timeDep_Flow", **sim_params):
     return svzerod.simulate(config)
 
 
-def test_expression_steady_initial_uses_cycle_mean():
+@pytest.mark.parametrize(
+    "q, sim_params, q_mean",
+    [
+        # Q(0) = 6 differs from the mean 5, so using the value at t = 0 fails
+        ("5.0 + cos(2 * pi * t)", {}, 5.0),
+        # the mean is 0.5 over the cardiac period 0.5 but 0.25 over 1.0, so
+        # averaging over the default period instead of the model's fails
+        ("t < 0.25 ? 1 : 0", {"cardiac_period": 0.5}, 0.5),
+    ],
+)
+def test_expression_steady_initial_uses_cycle_mean(q, sim_params, q_mean):
     """The steady initial condition uses the expression's cycle average."""
-    res = run_expression_case({"Q": "5.0 + sin(2 * pi * t)"}, steady_initial=True)
+    res = run_expression_case({"Q": q}, steady_initial=True, **sim_params)
     pressure = res["y"][res["name"] == "pressure:INLET:branch0_seg0"].to_numpy()
 
-    # steady state for the mean flow Q = 5 through R_poiseuille + R = 1100
-    assert np.isclose(pressure[0], 5.0 * 1100.0, rtol=1e-6)
+    # steady state for the mean flow through R_poiseuille + R = 1100
+    assert np.isclose(pressure[0], q_mean * 1100.0, rtol=1e-3)
+
+
+def test_expression_uses_absolute_time():
+    """Expressions see the absolute time, not the time within the cycle."""
+    res = run_expression_case({"Q": "t"})
+    name = "flow:INLET:branch0_seg0"
+    time = res["time"][res["name"] == name].to_numpy()
+    flow = res["y"][res["name"] == name].to_numpy()
+
+    # three cardiac cycles of period 1.0; wrapping t would keep Q below 1
+    assert np.isclose(time[-1], 3.0)
+    assert np.allclose(flow[15:], time[15:], atol=1e-3)
+
+
+def test_expression_non_finite_during_simulation():
+    """An expression that becomes NaN mid-simulation is reported by value."""
+    with pytest.raises(RuntimeError, match=r"evaluates to .*nan at t = 1\.5"):
+        run_expression_case({"Q": "t > 1.5 ? sqrt(-1) : 1"})
+
+
+def test_coronary_pim_expression_matches_table():
+    """A coronary Pim expression matches the same waveform given as a table."""
+    config = get_test_case_by_name("pulsatileFlow_R_coronary")
+    config["simulation_parameters"]["number_of_cardiac_cycles"] = 3
+    bc_values = config["boundary_conditions"][1]["bc_values"]
+
+    t = np.linspace(0.0, 1.0, 1001)
+    bc_values["t"] = t.tolist()
+    bc_values["Pim"] = (1000.0 + 500.0 * np.sin(2.0 * np.pi * t)).tolist()
+    res_table = svzerod.simulate(config)
+
+    del bc_values["t"]
+    bc_values["Pim"] = "1000 + 500 * sin(2 * pi * t)"
+    res_expr = svzerod.simulate(config)
+
+    assert np.allclose(res_expr["pressure_in"], res_table["pressure_in"], rtol=1e-4)
+    assert np.allclose(res_expr["flow_in"], res_table["flow_in"], rtol=1e-4, atol=1e-6)
 
 
 def test_expression_with_cardiac_period_from_simulation_parameters():
@@ -195,6 +242,7 @@ def test_expression_with_cardiac_period_from_simulation_parameters():
         ({"{key}": "t", "t": [0.0, 1.0]}, "Parameter t in {bc_type} block INLET is unused"),
         ({}, "Array parameter {key} is mandatory in {bc_type} block INLET"),
         ({"{key}": [1.0, 1.0]}, "Array parameter t is mandatory in {bc_type} block INLET"),
+        ({"{key}": "sqrt(t - 1)"}, "Invalid expression in parameter {key}.*evaluates to"),
     ],
 )
 def test_invalid_reference_bc_values(case, bc_type, key, bc_values, message):

@@ -140,9 +140,9 @@ void Parameter::update(const std::string& update_string) {
 
   // Only modify this parameter once the expression is known to be valid.
   exprtk_impl_ = std::move(impl);
+  expression_string = update_string;
   is_function = true;
   is_constant = false;
-  is_periodic = false;
 }
 
 double Parameter::get(double time) {
@@ -153,7 +153,16 @@ double Parameter::get(double time) {
 
   if (is_function) {
     *exprtk_impl_->time_value = time;
-    return exprtk_impl_->expression.value();
+    const double result = exprtk_impl_->expression.value();
+    // JSON arrays cannot hold NaN or inf, but an expression can (e.g.
+    // sqrt(t - 1)); without this check the solver later fails with an
+    // unhelpful "System is singular".
+    if (!std::isfinite(result)) {
+      throw std::runtime_error("expression \"" + expression_string +
+                               "\" evaluates to " + std::to_string(result) +
+                               " at t = " + std::to_string(time));
+    }
+    return result;
   }
 
   // Determine the time within this->times (necessary to extrapolate)

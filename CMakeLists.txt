@@ -162,9 +162,10 @@ FetchContent_MakeAvailable(pybind11_json)
 # Fetch ExprTk
 # -----------------------------------------------------------------------------
 # ExprTk is a header-only mathematical expression parser used by Parameter to
-# evaluate time-dependent boundary condition expressions ("fn"). The repository
-# has no CMake support, so we only download it and expose the header through an
-# INTERFACE target. Pinned to the 2025-01-01 release commit (it has no tag).
+# evaluate time-dependent parameters given as expression strings (e.g. a FLOW
+# boundary condition's "Q": "sin(2*pi*t)"). The repository has no CMake
+# support, so we only download it and expose the header through an INTERFACE
+# target. Pinned to the 2025-01-01 release commit (it has no tag).
 #
 FetchContent_Declare(
     exprtk

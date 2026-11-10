@@ -85,11 +85,13 @@ class Parameter {
   double cycle_period = 0.0;   ///< Cardiac cycle period corresponding to the
                                ///< time sequence
   int size = 0;  ///< Size of the time series if parameter is time-dependent
-  bool is_constant = true;   ///< Bool value indicating if the parameter is
-                             ///< constant
-  bool is_periodic = true;   ///< Bool value indicating if the parameter is
-                             ///< periodic with the cardiac cycle
-  bool is_function = false;  ///< Is the parameter an expression of time?
+  bool is_constant = true;        ///< Bool value indicating if the parameter is
+                                  ///< constant
+  bool is_periodic = true;        ///< Bool value indicating if the parameter is
+                                  ///< periodic with the cardiac cycle
+  bool is_function = false;       ///< Is the parameter an expression of time?
+  std::string expression_string;  ///< Expression if is_function is true, for
+                                  ///< error messages
 
   /**
    * @brief Update the parameter

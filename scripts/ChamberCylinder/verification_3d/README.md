@@ -9,6 +9,7 @@ and load.
 | --- | --- | --- |
 | 1 | `passive_isotropic/`: quasi-static inflation, neo-Hookean wall | implemented |
 | 2 | `passive_anisotropic/`: the same wall with one circumferential fiber family (Holzapfel-Ogden) | implemented |
+| 2b | `passive_anisotropic_full/`: all Holzapfel-Ogden terms (exponential isotropic, fiber, sheet, fiber-sheet) with the tension-compression switch | implemented |
 | 3 | PV loop: 0D and 3D cylinders coupled to the same circulation | planned |
 
 ## Problem definition
@@ -69,6 +70,21 @@ svMultiPhysics default parameters (struct/LV_HolzapfelOgden_passive):
   penalty of 100 a leaves the wall highly compressible (wall volume ×1.9 at
   120 mmHg), while a penalty of 100 a_f makes the linear systems too stiff for
   the fsils solvers.
+
+`passive_anisotropic_full/` uses every term of the law: a = 50 kPa, b = 5,
+a_f = 25 kPa, b_f = 20, a_s = 25 kPa, b_s = 5, a_fs = 10 kPa, b_fs = 5, the
+svMultiPhysics default k = 100 and κ = 100 a = 5 MPa. Inflation stretches the
+circumferential fibers and compresses the radial sheets, so the switch turns
+the sheet term off; the fiber exponential halves the compliance over the ramp
+(+26% lumen volume at 120 mmHg). With these ratios the non-convex dip of the
+switched terms (−4 kPa at −1.6% strain) stays far below the isotropic
+stiffness. The fiber-sheet term carries no stress in the exact solution
+(I8 = 0) but enters the tangent. Run it with `--nr 2 4` or finer: with one
+element through the wall (nr = 1) the discrete solution leaves the uniform
+branch above 70 mmHg (non-homogeneity 4% at 70 mmHg, 10% at 75 mmHg, 990%
+at 120 mmHg), an
+instability of the coarse mesh triggered by the switch (with k = 0 the same
+mesh stays uniform), while nr = 2 and 4 stay uniform to within 1%.
 
 The 0D Holzapfel-Ogden implementation is also checked against the closed
 form of the incompressible tube (`fixed_length_exact_ho`,

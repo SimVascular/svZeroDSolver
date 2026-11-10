@@ -81,13 +81,15 @@ def test_generate_from_0d(tmp_path):
     assert load == [2.0, 1.0, 0.0, 0.0, case["T_ramp"], case["P_max"]]
 
 
-def test_generate_holzapfel_ogden(tmp_path):
+@pytest.mark.parametrize("case_name", ["passive_anisotropic", "passive_anisotropic_full"])
+def test_generate_holzapfel_ogden(tmp_path, case_name):
     """Anisotropic case: HolzapfelOgden with fiber and sheet files, eighth model
     (90-degree sector, half length), and the same stress and directions as the
     0D block."""
     import check_materials
-    case = C3.generate(MODEL_HO, str(tmp_path), nr=1, half_length=True)
-    with open(MODEL_HO) as f:
+    model = os.path.join(CASES, case_name, "chamber_cylinder_0d.json")
+    case = C3.generate(model, str(tmp_path), nr=1, half_length=True)
+    with open(model) as f:
         vals = json.load(f)["vessels"][0]["zero_d_element_values"]
     assert case["material"]["model"] == "HolzapfelOgden"
     assert case["sector"] == 90.0 and case["mesh_length"] == 0.5 * vals["length"]
@@ -96,7 +98,7 @@ def test_generate_holzapfel_ogden(tmp_path):
     for key, tag in zip(C3.HO_KEYS, C3.HO_SVMP):
         assert f"<{tag}> {vals['ho_' + key]:.17g} </{tag}>" in xml
     assert xml.count("<Fiber_direction_from_file_points>") == 2  # nodal directions
-    err, fib = check_materials.check(MODEL_HO, str(tmp_path), n=300)
+    err, fib = check_materials.check(model, str(tmp_path), n=300)
     assert err < 1e-12 and fib < 1e-12
 
 

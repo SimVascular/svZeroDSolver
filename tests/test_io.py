@@ -184,7 +184,7 @@ def test_expression_uses_absolute_time():
 
 def test_expression_non_finite_during_simulation():
     """An expression that becomes NaN mid-simulation is reported by value."""
-    with pytest.raises(RuntimeError, match=r"evaluates to .*nan at t = 1\.5"):
+    with pytest.raises(RuntimeError, match=r"evaluates to NaN at t = 1\.5"):
         run_expression_case({"Q": "t > 1.5 ? sqrt(-1) : 1"})
 
 

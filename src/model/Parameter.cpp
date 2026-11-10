@@ -158,8 +158,12 @@ double Parameter::get(double time) {
     // sqrt(t - 1)); without this check the solver later fails with an
     // unhelpful "System is singular".
     if (!std::isfinite(result)) {
+      // Spelled out because std::to_string(NaN) is platform-dependent
+      // ("nan" or "-nan(ind)")
+      const std::string value =
+          std::isnan(result) ? "NaN" : (result > 0 ? "inf" : "-inf");
       throw std::runtime_error("expression \"" + expression_string +
-                               "\" evaluates to " + std::to_string(result) +
+                               "\" evaluates to " + value +
                                " at t = " + std::to_string(time));
     }
     return result;

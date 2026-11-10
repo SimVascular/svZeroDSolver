@@ -84,17 +84,19 @@ std::vector<std::string> get_bc_type_names(Model& model) {
  * @param component Config section the block is in, e.g. "vessels"
  * @param key Config key the type was read from, e.g. "zero_d_element_type"
  * @param name Name of the block, as given in the configuration
+ * @param hint Optional sentence appended to the error, e.g. to say which of
+ * the valid values are normally used
  */
 void check_block_type(const std::string& type,
                       const std::vector<std::string>& valid_types,
                       const std::string& component, const std::string& key,
-                      const std::string& name) {
+                      const std::string& name, const std::string& hint = "") {
   if (std::find(valid_types.begin(), valid_types.end(), type) ==
       valid_types.end()) {
     throw std::runtime_error("Block '" + name + "' in " + component +
                              " has invalid " + key + " '" + type + "'. Valid " +
                              key + " values are: " + join_names(valid_types) +
-                             ".");
+                             "." + (hint.empty() ? "" : " " + hint));
   }
 }
 
@@ -652,8 +654,13 @@ void create_external_coupling(
     std::string coupling_type = coupling_config["type"];
     std::string coupling_name = coupling_config["name"];
     std::string coupling_loc = coupling_config["location"];
+    // Any boundary condition type loads, but the coupling interface
+    // (update_block_params) only exchanges time series with FLOW and PRESSURE
+    // blocks, so point users at those.
     check_block_type(coupling_type, valid_coupling_types, component, "type",
-                     coupling_name);
+                     coupling_name,
+                     "External solvers normally couple through FLOW or "
+                     "PRESSURE.");
     if (coupling_loc != "inlet" && coupling_loc != "outlet") {
       throw std::runtime_error("External coupling block '" + coupling_name +
                                "' has invalid location '" + coupling_loc +
@@ -693,6 +700,8 @@ void create_external_coupling(
 
     // Each location supports only some connected block types. A block's type
     // is its bc_type for a boundary condition, or BloodVessel for a vessel.
+    // These lists are also documented on create_external_coupling() in
+    // SimulationParameters.h; update both together.
     const std::vector<std::string> supported_types =
         (coupling_loc == "inlet")
             ? std::vector<std::string>{"RESISTANCE",

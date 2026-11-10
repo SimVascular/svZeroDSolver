@@ -72,7 +72,9 @@ def test_misspelled_bc_type_connected_to_coupling_block():
         "'ClosedLoopRCRR'. Valid bc_type values are: " in message
     )
     # The list of valid types comes from the block factory; spot-check it.
-    valid = message.split("Valid bc_type values are: ")[1]
+    # Compare whole names: "RCR" is a substring of "ClosedLoopRCR".
+    listed = message.split("Valid bc_type values are: ")[1]
+    valid = set(listed.split(".")[0].split(", "))
     for bc_type in ["ClosedLoopRCR", "FLOW", "IMPEDANCE", "RCR", "RESISTANCE"]:
         assert bc_type in valid
     for not_a_bc_type in ["BloodVessel", "ClosedLoopHeartAndPulmonary"]:
@@ -126,6 +128,12 @@ def test_misspelled_block_type(case, component, index, key, valid):
     )
     if valid is not None:
         assert f"Valid {key} values are: {valid}." in message
+    if component == "external_solver_coupling_blocks":
+        # Every bc_type loads as a coupling type, but only FLOW and PRESSURE
+        # exchange data with the external solver, so the error says so.
+        assert message.rstrip().endswith(
+            ". External solvers normally couple through FLOW or PRESSURE."
+        )
 
 
 def test_coupling_block_unknown_connected_block():

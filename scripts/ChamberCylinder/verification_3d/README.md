@@ -10,7 +10,8 @@ and load.
 | 1 | `passive_isotropic/`: quasi-static inflation, neo-Hookean wall | implemented |
 | 2 | `passive_anisotropic/`: the same wall with one circumferential fiber family (Holzapfel-Ogden) | implemented |
 | 2b | `passive_anisotropic_full/`: all Holzapfel-Ogden terms (exponential isotropic, fiber, sheet, fiber-sheet) with the tension-compression switch | implemented |
-| 3 | PV loop: 0D and 3D cylinders coupled to the same circulation | planned |
+| 3a | `active_prescribed/`: PV loop with a prescribed active tension, 3D cylinder coupled to the circulation of `tests/cases/chamber_cylinder.json` | implemented (nr 1, 2) |
+| 3b | PV loop with an active-stress ODE model (e.g. Land-Niederer in both) | planned |
 
 ## Problem definition
 
@@ -89,6 +90,53 @@ mesh stays uniform), while nr = 2 and 4 stay uniform to within 1%.
 The 0D Holzapfel-Ogden implementation is also checked against the closed
 form of the incompressible tube (`fixed_length_exact_ho`,
 `tests/test_chamber_cylinder_verification.py`).
+
+### Active contraction in a circulation
+
+`active_prescribed/` is the 0D test case `tests/cases/chamber_cylinder.json`
+(pressure source, tanh valves, RC vessels, 1 s period) with the cylinder
+adapted to what svMultiPhysics can represent: fixed length, circumferential
+fibers, the Holzapfel-Ogden wall of `passive_anisotropic/`, no viscosity, no
+wall inertia, and the BCS active law replaced by a prescribed tension
+T(t) = 80 kPa sin²(π (t − 0.1 s)/0.4 s) on 0.1–0.5 s. The 0D block's
+`active_tension` reproduces svMultiPhysics' `UniformUnsteady` active stress
+exactly: S_a = T(t) e_F ⊗ e_F, with T(t) built from the same samples by the
+same Fourier construction (`FourierTension`, ported from
+FourierInterpolation.cpp; checked against an independent Python port in
+`test_prescribed_active_tension_matches_closed_form`).
+
+`coupled_3d.py` writes the 3D case in which the eighth-model cylinder replaces
+the block, coupled to svZeroDSolver (`svZeroDSolver_interface`, `Coupled` Neu
+BC on the endo face):
+
+- The block is replaced by a cavity junction (zero-resistance stubs to the
+  valves) whose extra inlet is the external FLOW block of the endo face.
+  svMultiPhysics passes Q = ∫ v·n dA with the normal out of the wall, i.e.
+  Q = −dV/dt: flow out of the cavity.
+- The eighth model carries 1/8 of the flow, so the coupled circulation has
+  all resistances and inductances ×8 and compliances ÷8, which reproduces the
+  full-model pressures exactly.
+- Coupling `implicit` with the linear solver GMRES: fsils' BiCGStab leaves out
+  the coupled-BC resistance term of the tangent, which turns Newton into a
+  fixed-point iteration that diverges once the circulation is stiffer than the
+  wall (closed valves); `semi-implicit` converged only linearly. The
+  finite-difference step of dP/dQ is set to SI flow scales (absolute 1e-14).
+- The cavity pressure and the valve flows come from `results/svZeroD_data`,
+  the 0D state that svMultiPhysics writes every step.
+- The Linux interface library is built from this repository inside the Docker
+  image into `build-docker/` (command in `coupled_3d.py`) and mounted at
+  `/svzerod`.
+
+`run_active_study.py` compares the last cycle (volume, pressure, through-wall
+displacement, stroke volume) with the Richardson-extrapolated 0D block in
+the same circulation. The 0D model is periodic from the second cycle, so two
+cycles are run. With 400 steps per cycle, the errors of volume, wall
+displacement and stroke volume fall with the mesh (nr = 1 → 2: 1.4e-2 → 1.8e-3,
+5.1e-2 → 8.7e-3, 3.7e-2 → 4.3e-3; 4 and 16 minutes with 4 processes), while
+the pressure error (4.5e-2 → 3.7e-2 of the 158 mmHg range) is a one-step lag
+in isovolumic relaxation (−2300 mmHg/s): halving the time step halves it
+(4.5e-2 → 2.5e-2 at nr = 1). It is the O(dt) difference between the coupled
+and the stand-alone time integration.
 
 ## Compared quantities
 

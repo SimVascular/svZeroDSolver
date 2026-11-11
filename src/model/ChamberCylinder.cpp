@@ -56,12 +56,13 @@ struct MatParams {
   double p_mix = 0.0;  ///< mixed u/p element hydrostatic pressure
 };
 
-/// Active-stress input at an integration point, giving the fiber stress
-/// sigma_1D = (tauc + mu * ecdot) / sqrt(I4).
+/// Active-stress input at an integration point, giving the 2nd Piola-Kirchhoff
+/// fiber stress ((tauc + mu * ecdot) / sqrt(I4) + tension) e_F (x) e_F.
 struct ActiveInput {
-  double tauc = 0.0;   ///< BCS active bond stress tau_c
-  double ecdot = 0.0;  ///< BCS contractile-element strain rate
-  double mu = 0.0;     ///< BCS active dissipation
+  double tauc = 0.0;     ///< BCS active bond stress tau_c
+  double ecdot = 0.0;    ///< BCS contractile-element strain rate
+  double mu = 0.0;       ///< BCS active dissipation
+  double tension = 0.0;  ///< prescribed active tension T(t)
 };
 
 /// Double contraction A:B (without complex conjugation, for complex-step).
@@ -252,7 +253,10 @@ Mat3<T> compute_stress(const Kinematics<T>& k, const T xidot[6],
   // Active fiber stress sigma_1D = (tau_c + mu e_c_dot) / (1 + e_fib) with
   // 1 + e_fib = sqrt(I4) (Eqs. 30, 32). Using tau_c + mu e_c_dot instead of
   // k_s (e_fib - e_c) keeps the stiff k_s out of the mechanical residual.
-  const T sigma_act = (act.tauc + act.mu * act.ecdot) / std::sqrt(I4);
+  // A prescribed tension T enters the 2nd Piola-Kirchhoff stress directly,
+  // S_a = T e_F (x) e_F (svMultiPhysics active stress).
+  const T sigma_act =
+      (act.tauc + act.mu * act.ecdot) / std::sqrt(I4) + act.tension;
   Mat3<T> Sa = sigma_act * M;
 
   return Sd + Sb + Sv + Sa;
@@ -495,6 +499,13 @@ void ChamberCylinder::update_constant(SparseSystem& system,
 void ChamberCylinder::update_time(SparseSystem& system,
                                   std::vector<double>& parameters) {
   (void)parameters;
+  if (active_tension_.defined()) {
+    tension = active_tension_.value(model->time);
+    if (activation_function_ == nullptr) {  // BCS at rest
+      act = act_plus = 0.0;
+      return;
+    }
+  }
   // BCS inputs |nu| and |nu|_+ from the signed activation rate nu(t)
   if (activation_function_ == nullptr) {
     throw std::runtime_error(
@@ -574,11 +585,16 @@ void ChamberCylinder::update_solution(
     const double deta_d = dN0 * Yd(i_eta(A0)) + dN1 * Yd(i_eta(A1));
     const double xidot[6] = {rho_d, drho_d, dphi_d, beta_d, eps_d, deta_d};
 
-    // Active-stress input of this quadrature point
+    // Active-stress input of this quadrature point: BCS, or a prescribed
+    // tension that replaces it (the BCS states then stay decoupled)
     ActiveInput ai;
-    ai.tauc = Y(i_tauc(q));
-    ai.ecdot = Yd(i_ec(q));
-    ai.mu = bp.mu;
+    if (active_tension_.defined()) {
+      ai.tension = tension;
+    } else {
+      ai.tauc = Y(i_tauc(q));
+      ai.ecdot = Yd(i_ec(q));
+      ai.mu = bp.mu;
+    }
 
     // Hydrostatic pressure of this element (mixed u/p)
     p.p_mix = Y(i_pmix(pt.elem));
@@ -614,10 +630,10 @@ void ChamberCylinder::update_solution(
       }
     }
 
-    // d sigma_1D / d tau_c = 1 / (1 + e_fib)
+    // d sigma_1D / d tau_c = 1 / (1 + e_fib) (0 with a prescribed tension)
     const int active_col = i_tauc(q);
     const double i4denom = std::sqrt(I4q);  // 1 + e_fib = sqrt(I4)
-    const double active_coef = 1.0 / i4denom;
+    const double active_coef = active_tension_.defined() ? 0.0 : 1.0 / i4denom;
 
     // Equation rows and variable columns of each xi component with their
     // shape-function weights: 0 = rho (N), 1 = rho' (dN), 2 = phi' (dN),
@@ -701,7 +717,7 @@ void ChamberCylinder::update_solution(
         // coupling to the element pressure p
         Kat(re, i_pmix(pt.elem)) += rwt * dgdp[k];
         // sigma_1D depends on e_c_dot through mu e_c_dot
-        Kdat(re, i_ec(q)) += rwt * (bp.mu / i4denom) * dgdtau[k];
+        Kdat(re, i_ec(q)) += rwt * (ai.mu / i4denom) * dgdtau[k];
         for (int m = 0; m < 6; m++) {
           for (int ci = 0; ci < cn[m]; ci++) {
             const int cv = cvr[m][ci];
@@ -945,4 +961,69 @@ void ChamberCylinder::set_frank_starling_curve(std::vector<double> ec,
   }
   n0_ec_ = std::move(ec);
   n0_val_ = std::move(val);
+}
+
+void FourierTension::set(const std::vector<double>& t,
+                         const std::vector<double>& v, int n_modes,
+                         bool use_ramp) {
+  const size_t n = t.size();
+  if (n < 2 || v.size() != n || n_modes < 1) {
+    throw std::runtime_error(
+        "FourierTension: needs >= 2 samples t, T of equal length and "
+        "fourier_modes >= 1.");
+  }
+  for (size_t i = 1; i < n; i++) {
+    if (t[i] <= t[i - 1]) {
+      throw std::runtime_error(
+          "FourierTension: sample times must increase strictly.");
+    }
+  }
+  ramp = use_ramp;
+  t0 = t[0];
+  period = t[n - 1] - t[0];
+  v0 = v[0];
+  slope = (v[n - 1] - v[0]) / period;
+  // Samples minus the linear trend
+  std::vector<double> ts(n), vs(n);
+  for (size_t i = 0; i < n; i++) {
+    ts[i] = t[i] - t0;
+    vs[i] = v[i] - (v0 + slope * ts[i]);
+  }
+  // Exact Fourier coefficients of the piecewise-linear interpolant
+  const int n_coef = ramp ? 1 : n_modes;
+  re.assign(n_coef, 0.0);
+  im.assign(n_coef, 0.0);
+  for (int k = 0; k < n_coef; k++) {
+    for (size_t i = 0; i + 1 < n; i++) {
+      if (k == 0) {
+        re[k] += 0.5 * (ts[i + 1] - ts[i]) * (vs[i + 1] + vs[i]);
+      } else {
+        const double ko = 2.0 * M_PI * k * ts[i] / period;
+        const double kn = 2.0 * M_PI * k * ts[i + 1] / period;
+        const double s = (vs[i + 1] - vs[i]) / (ts[i + 1] - ts[i]);
+        re[k] += s * (std::cos(kn) - std::cos(ko));
+        im[k] -= s * (std::sin(kn) - std::sin(ko));
+      }
+    }
+    if (k == 0) {
+      re[k] /= period;
+    } else {
+      const double scale = 0.5 * period / (M_PI * M_PI * k * k);
+      re[k] *= scale;
+      im[k] *= scale;
+    }
+  }
+}
+
+double FourierTension::value(double time) const {
+  const double t = ramp ? std::max(std::min(time - t0, period), 0.0)
+                        : std::fmod(time - t0, period);
+  double val = v0 + t * slope;
+  if (!ramp) {
+    for (size_t k = 0; k < re.size(); k++) {
+      const double K = 2.0 * M_PI * k * t / period;
+      val += re[k] * std::cos(K) - im[k] * std::sin(K);
+    }
+  }
+  return val;
 }

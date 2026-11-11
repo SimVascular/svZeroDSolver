@@ -366,6 +366,45 @@ def solver_xml(case):
                 f"      <Effective_direction> {direction} </Effective_direction>\n{state}"
                 f"   </Add_BC>\n")
 
+    active = ""
+    if case.get("active_tension_file"):  # svMultiPhysics UniformUnsteady
+        active = ("   <Active_stress>\n      <Model> UniformUnsteady </Model>\n"
+                  "      <Directional_distribution>\n"
+                  "         <Fiber_direction> 1.0 </Fiber_direction>\n"
+                  "         <Sheet_direction> 0.0 </Sheet_direction>\n"
+                  "         <Sheet_normal_direction> 0.0 </Sheet_normal_direction>\n"
+                  "      </Directional_distribution>\n      <UniformUnsteady>\n"
+                  "         <Ramp> false </Ramp>\n"
+                  f"         <Temporal_values_file_path> {case['active_tension_file']} "
+                  "</Temporal_values_file_path>\n      </UniformUnsteady>\n   </Active_stress>\n")
+    cp = case.get("coupling")
+    if cp:  # cavity pressure from svZeroDSolver, flow of the endo face to it
+        endo = ("   <Add_BC name=\"endo\" >\n      <Type> Neu </Type>\n"
+                "      <Time_dependence> Coupled </Time_dependence>\n"
+                "      <Follower_pressure_load> true </Follower_pressure_load>\n"
+                "      <Coupling_interface>\n"
+                f"         <svZeroDSolver_block> {cp['block']} </svZeroDSolver_block>\n"
+                "      </Coupling_interface>\n   </Add_BC>\n")
+        interface = ("   <svZeroDSolver_interface>\n"
+                     "      <Coupling_type> implicit </Coupling_type>\n"
+                     f"      <Configuration_file> {cp['config']} </Configuration_file>\n"
+                     f"      <Shared_library> {cp['library']} </Shared_library>\n"
+                     "      <Initial_flows> 0.0 </Initial_flows>\n"
+                     f"      <Initial_pressures> {cp['initial_pressure']:.17g} </Initial_pressures>\n"
+                     # finite-difference step of dP/dQ: max(rms(Q) * rel, abs);
+                     # the defaults (1e-5, 1e-7) are ~10% of SI cavity flows
+                     "      <Finite_difference_absolute_perturbation> 1e-14 "
+                     "</Finite_difference_absolute_perturbation>\n"
+                     "      <Finite_difference_relative_perturbation> 1e-8 "
+                     "</Finite_difference_relative_perturbation>\n"
+                     "   </svZeroDSolver_interface>\n")
+    else:
+        endo = ("   <Add_BC name=\"endo\" >\n      <Type> Neu </Type>\n"
+                "      <Time_dependence> Unsteady </Time_dependence>\n"
+                "      <Temporal_values_file_path> endo_pressure.dat </Temporal_values_file_path>\n"
+                "      <Ramp_function> true </Ramp_function>\n"
+                "      <Follower_pressure_load> true </Follower_pressure_load>\n   </Add_BC>\n")
+        interface = ""
     bcs = dirichlet("base", "(0, 0, 1)") + dirichlet("top", "(0, 0, 1)")
     if "y0" in case["faces"]:
         bcs += dirichlet("y0", "(0, 1, 0)") + dirichlet("x0", "(1, 0, 0)")
@@ -410,7 +449,7 @@ def solver_xml(case):
    <Density> {case['density']:.17g} </Density>
    <Elasticity_modulus> {E:.17g} </Elasticity_modulus>
    <Poisson_ratio> {nu} </Poisson_ratio>
-{model}{vol}
+{model}{vol}{active}
    <Output type="Spatial" >
      <Displacement> true </Displacement>
 {out}   </Output>
@@ -425,14 +464,7 @@ def solver_xml(case):
       <Krylov_space_dimension> {ls['krylov']} </Krylov_space_dimension>
    </LS>
 
-   <Add_BC name="endo" >
-      <Type> Neu </Type>
-      <Time_dependence> Unsteady </Time_dependence>
-      <Temporal_values_file_path> endo_pressure.dat </Temporal_values_file_path>
-      <Ramp_function> true </Ramp_function>
-      <Follower_pressure_load> true </Follower_pressure_load>
-   </Add_BC>
-{bcs}
+{interface}{endo}{bcs}
 </Add_equation>
 </svMultiPhysicsFile>
 """
@@ -525,7 +557,7 @@ _NEWTON_ROW = re.compile(r"^\s*ST\s+(\d+)-(\d+)(s?)\s")
 
 
 def run(case_dir, np_=1, exe=None, image=IMAGE, platform="linux/amd64", max_time=None,
-        max_residual=1e6, echo=True):
+        max_residual=1e6, echo=True, mounts=None, echo_every=1):
     """Run svMultiPhysics on a case: locally if exe is given, else in Docker.
 
     The solver output is streamed to CASE_DIR/svmultiphysics.log and checked
@@ -533,7 +565,8 @@ def run(case_dir, np_=1, exe=None, image=IMAGE, platform="linux/amd64", max_time
     Newton iteration reports NaN or a relative residual above max_residual, a
     time step ends unconverged (above 100x the Newton tolerance), the solver
     exits with an error, or max_time seconds pass. With echo, one line per
-    time step reports the Newton iterations and the final residual.
+    echo_every time steps reports the Newton iterations and the final
+    residual. mounts {host_dir: container_dir} adds Docker volumes.
     """
     case_dir = os.path.abspath(case_dir)
     with open(os.path.join(case_dir, "case.json")) as f:
@@ -548,7 +581,8 @@ def run(case_dir, np_=1, exe=None, image=IMAGE, platform="linux/amd64", max_time
         name = f"svmp-{os.getpid()}-{int(time.time() * 1e3)}"
         cmd = ([docker, "run", "--rm", "--name", name, "--platform", platform,
                 "-e", "OMPI_ALLOW_RUN_AS_ROOT=1", "-e", "OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1",
-                "-v", f"{case_dir}:/case", "-w", "/case", image]
+                "-v", f"{case_dir}:/case", "-w", "/case"]
+               + [a for h, c in (mounts or {}).items() for a in ("-v", f"{h}:{c}")] + [image]
                + (mpi[:1] + ["--allow-run-as-root"] + mpi[1:] if mpi else []) + [EXE_IN_IMAGE, "solver.xml"])
     tic = time.time()
     proc = subprocess.Popen(cmd, cwd=case_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -572,14 +606,15 @@ def run(case_dir, np_=1, exe=None, image=IMAGE, platform="linux/amd64", max_time
             if m:
                 its += 1
                 nums = re.findall(r"\d\.\d+e[+-]\d+|nan", line)
-                res = float(nums[1]) if len(nums) > 1 else float("nan")
+                res = float(nums[1]) if len(nums) > 1 else float("nan")  # Ri/R1 (step)
+                res0 = float(nums[2]) if len(nums) > 2 else res  # Ri/R0 (first step)
                 step = int(m.group(1))
                 if not math.isfinite(res) or res > max_residual:
                     reason = f"time step {step}, Newton iteration {m.group(2)}: residual {res:.1e}"
                 elif m.group(3):  # last iteration of the time step
-                    if res > 100.0 * case["newton_tol"]:
+                    if min(res, res0) > 100.0 * case["newton_tol"]:
                         reason = f"time step {step}: Newton stopped at residual {res:.1e}"
-                    elif echo:
+                    elif echo and (step % echo_every == 0 or step == case["n_steps"]):
                         print(f"    step {step:4d}/{case['n_steps']}: {its:2d} Newton its, "
                               f"residual {res:.1e}, {time.time() - tic:7.1f} s", flush=True)
                     its = 0
@@ -798,7 +833,8 @@ def post(case_dir, fields=True):
     conn = mesh["faces"]["endo"][0]
     dR = (case["Re"] - case["Ri"]) / (case["nr"] * case["order"])
     levels = np.rint((np.hypot(X[:, 0], X[:, 1]) - case["Ri"]) / dR).astype(int)
-    files = sorted(glob.glob(os.path.join(case_dir, "results", "result_*.vtu")))
+    files = sorted(glob.glob(os.path.join(case_dir, "results", "result_*.vtu")),
+                   key=lambda fn: int(os.path.basename(fn)[7:-4]))  # step number
     if not files:
         raise FileNotFoundError(f"no results in {case_dir}/results")
     out = dict(R=(case["Ri"] + dR * np.arange(levels.max() + 1)).tolist(), t=[0.0], P=[0.0],

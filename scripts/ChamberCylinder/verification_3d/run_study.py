@@ -30,10 +30,12 @@ Pressures are reported in mmHg; the solver inputs are SI.
 """
 import argparse
 import copy
+import glob
 import hashlib
 import json
 import math
 import os
+import shutil
 import sys
 import time
 
@@ -162,7 +164,9 @@ def main():
     ap.add_argument("--sector", type=float, help="default: 90, or 360 with helical fibers")
     ap.add_argument("--full-length", action="store_true",
                     help="mesh the full length (default: half, mid-length symmetry plane)")
-    ap.add_argument("--run", action="store_true", help="run svMultiPhysics (else reuse results)")
+    ap.add_argument("--run", action="store_true",
+                    help="run svMultiPhysics where complete results of the same case are missing")
+    ap.add_argument("--rerun", action="store_true", help="with --run: also rerun complete cases")
     ap.add_argument("--np", type=int, default=1)
     ap.add_argument("--exe", help="local svmultiphysics executable instead of Docker")
     ap.add_argument("--max-time", type=float, default=1800.0,
@@ -197,12 +201,20 @@ def main():
     for nr in a.nr:
         case_dir = os.path.join(case_root, "runs", f"{a.formulation}_nr{nr}")
         os.makedirs(case_dir, exist_ok=True)
+        old = None
+        if os.path.exists(os.path.join(case_dir, "case.json")):
+            with open(os.path.join(case_dir, "case.json")) as f:
+                old = json.load(f)
         case = C3.generate(model_0d, case_dir, nr, a.formulation, a.sector,
                            n_steps=a.substeps * (len(t0) - 1), linear_solver=ls,
                            half_length=not a.full_length)
         cases[nr] = (case_dir, case)
-        if a.run:
+        done = len(glob.glob(os.path.join(case_dir, "results", "result_*.vtu"))) == case["n_steps"]
+        if a.run and not a.rerun and done and old == json.loads(json.dumps(case)):
+            print(f"3D nr = {nr}: complete results of the same case exist, not rerun")
+        elif a.run:
             print(f"3D nr = {nr}: running ({case['n_cells']} tets, {case['n_steps']} steps)")
+            shutil.rmtree(os.path.join(case_dir, "results"), ignore_errors=True)  # no stale steps
             try:
                 wall = C3.run(case_dir, a.np, a.exe, max_time=a.max_time)
             except C3.SolverFailure as err:

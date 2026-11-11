@@ -482,6 +482,20 @@ void create_vessels(
       }
     }
 
+    // Optional prescribed active tension for ChamberCylinder (svMultiPhysics
+    // UniformUnsteady): arrays "t" and "T", "fourier_modes", "ramp".
+    if (vessel_type == "ChamberCylinder" &&
+        vessel_config.contains("active_tension")) {
+      const auto& at = vessel_config["active_tension"];
+      auto* cc = dynamic_cast<ChamberCylinder*>(model.get_block(vessel_name));
+      if (cc != nullptr) {
+        cc->set_active_tension(at.at("t").get<std::vector<double>>(),
+                               at.at("T").get<std::vector<double>>(),
+                               at.value("fourier_modes", 1),
+                               at.value("ramp", false));
+      }
+    }
+
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
       const auto& vessel_bc_config = vessel_config["boundary_conditions"];

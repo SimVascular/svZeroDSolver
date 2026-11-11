@@ -89,6 +89,39 @@ def test_holzapfel_ogden_fixed_length_inflation_matches_closed_form(k):
     assert 3.6 < err[0] / err[1] < 4.4
 
 
+def test_prescribed_active_tension_matches_closed_form():
+    """Prescribed active tension (svMultiPhysics UniformUnsteady): a sin^2 pulse
+    as Fourier series of samples contracts the incompressible fixed-length tube
+    with circumferential fibers at constant cavity pressure; the volume follows
+    the closed form evaluated with an independent port of svMultiPhysics'
+    Fourier interpolation, converging at second order in the element size."""
+    Ri, Re, L = GEOM["Ri"], GEOM["Re"], GEOM["length"]
+    ts = np.linspace(0.0, 1.0, 201)
+    Ts = np.where((ts >= 0.1) & (ts <= 0.5), 2e4 * np.sin(np.pi * (ts - 0.1) / 0.4) ** 2, 0.0)
+    T = CV.fourier_interpolation(ts, Ts, 50)
+    ho = dict(ho_a=1e5, ho_b=0.0, ho_af=1e5, ho_bf=1.0, ho_as=0.0, ho_bs=1.0, ho_afs=0.0,
+              ho_bfs=1.0, ho_k=0.0)
+    P = 1e3
+    err = []
+    for ne in (4, 8):
+        vv = dict(GEOM, alpha_endo=0.0, alpha_epi=0.0, C1=0.0, C2=0.0, C3=0.0, C4=0.0, C5=0.0,
+                  C6=0.0, gamma=0.0, num_elements=ne, density=0.0, fixed_length=1, **ho,
+                  **CV.NOACT)
+        cfg = CV.isolated_config(vv, [0.0, 1.0], [P, P], 1.0, 41,
+                                 {"pressure_all": P, "volume:cyl": math.pi * Ri**2 * L})
+        cfg["vessels"][0]["active_tension"] = {"t": ts.tolist(), "T": Ts.tolist(),
+                                               "fourier_modes": 50, "ramp": False}
+        cfg["vessels"][0].pop("activation_function", None)
+        out = CV.svzerod.simulate(cfg)
+        t, V = CV.series(out, "volume:cyl")
+        m = t > 0.0
+        V_exact = [math.pi * CV.fixed_length_exact_ho(P, Ri, Re, vv, float(T(x))) ** 2 * L
+                   for x in t[m]]
+        err.append(np.abs(V[m] / V_exact - 1).max())
+    assert err[1] < 2e-4
+    assert 3.5 < err[0] / err[1] < 4.5
+
+
 def test_torsional_free_vibration():
     """Small-amplitude torsion of the free tube vs. the closed-form frequency and
     decay (twist inertia with momentum-free rigid rotation, shear stiffness,

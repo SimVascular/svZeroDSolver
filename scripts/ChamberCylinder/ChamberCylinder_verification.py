@@ -304,15 +304,45 @@ def ho_family(E, a, b, k):
     return a * ((1.0 - o) * E * rexp + 0.5 * k * (o - o * o) / b * (rexp - 1.0))
 
 
-def fixed_length_exact_ho(P, Ri, Re, v):
+def fourier_interpolation(t, v, n_modes, ramp=False):
+    """svMultiPhysics FourierInterpolation of samples (t_i, v_i) as a function
+    of time: linear trend plus the Fourier series of the piecewise-linear
+    interpolant minus the trend, periodic in t_last - t_0 (independent Python
+    port of FourierInterpolation.cpp)."""
+    t, v = np.asarray(t, float), np.asarray(v, float)
+    T = t[-1] - t[0]
+    slope = (v[-1] - v[0]) / T
+    ts = t - t[0]
+    vs = v - (v[0] + slope * ts)
+    n = np.arange(1 if ramp else n_modes)
+    re, im = np.zeros(len(n)), np.zeros(len(n))
+    re[0] = np.sum(0.5 * np.diff(ts) * (vs[1:] + vs[:-1])) / T
+    s = np.diff(vs) / np.diff(ts)
+    for k in n[1:]:
+        ko, kn = 2 * np.pi * k * ts[:-1] / T, 2 * np.pi * k * ts[1:] / T
+        re[k] = 0.5 * T / (np.pi * k) ** 2 * np.sum(s * (np.cos(kn) - np.cos(ko)))
+        im[k] = -0.5 * T / (np.pi * k) ** 2 * np.sum(s * (np.sin(kn) - np.sin(ko)))
+
+    def f(time):
+        x = np.clip(time - t[0], 0.0, T) if ramp else np.fmod(time - t[0], T)
+        val = v[0] + x * slope
+        if not ramp:
+            K = 2 * np.pi * np.multiply.outer(x, n) / T
+            val = val + np.sum(re * np.cos(K) - im * np.sin(K), axis=-1)
+        return val
+    return f
+
+
+def fixed_length_exact_ho(P, Ri, Re, v, tension=0.0):
     """Inner radius of a pressurized fixed-length incompressible tube with the
     Holzapfel-Ogden law (ho_* values of v), circumferential fibers and radial
-    sheets (alpha = 0).
+    sheets (alpha = 0), and a prescribed active fiber tension T (2nd
+    Piola-Kirchhoff stress T e_F (x) e_F).
 
     Plane strain with lambda = r/R, r^2 - R^2 = r_i^2 - R_i^2:
     P = int_Ri^Re (sigma_tt - sigma_rr) R/r^2 dR with
-    sigma_tt - sigma_rr = 2 W_1 (l^2 - l^-2) + 2 W_4f l^2 - 2 W_4s l^-2, the
-    fiber-sheet term vanishing (I8 = 0). Returns r_i.
+    sigma_tt - sigma_rr = 2 W_1 (l^2 - l^-2) + 2 W_4f l^2 - 2 W_4s l^-2
+    + T l^2, the fiber-sheet term vanishing (I8 = 0). Returns r_i.
     """
     h = {k: float(v.get("ho_" + k, 0.0)) for k in ("a", "b", "af", "bf", "as", "bs", "k")}
 
@@ -322,17 +352,20 @@ def fixed_length_exact_ho(P, Ri, Re, v):
         w1 = 0.5 * h["a"] * math.exp(h["b"] * (I1 - 3.0))
         wf = ho_family(l2 - 1.0, h["af"], h["bf"], h["k"])
         ws = ho_family(1.0 / l2 - 1.0, h["as"], h["bs"], h["k"])
-        return (2.0 * w1 * (l2 - 1.0 / l2) + 2.0 * wf * l2 - 2.0 * ws / l2) / l2 / R
+        return (2.0 * w1 * (l2 - 1.0 / l2) + 2.0 * wf * l2 - 2.0 * ws / l2
+                + tension * l2) / l2 / R
 
     def residual(li):
         ri = li * Ri
         return quad(dsigma, Ri, Re, args=(ri,), epsabs=1e-10, epsrel=1e-12, limit=200)[0] - P
-    if P == 0.0:
+    if P == 0.0 and tension == 0.0:
         return Ri
-    hi = 1.01
+    lo, hi = 0.99, 1.01  # residual increases with r_i
     while residual(hi) < 0.0:
         hi = 1.0 + 2.0 * (hi - 1.0)
-    return Ri * brentq(residual, 1.0, hi, xtol=1e-15, rtol=1e-15)
+    while residual(lo) > 0.0:
+        lo = 1.0 - 2.0 * (1.0 - lo)
+    return Ri * brentq(residual, lo, hi, xtol=1e-15, rtol=1e-15)
 
 
 def static_block(P, mat, geom, ne, Tramp=5.0, Thold=25.0, dt=5e-3):

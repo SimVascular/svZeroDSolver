@@ -162,3 +162,45 @@ def test_unsupported_0d_inputs():
         C3.material({"ho_af": 1.0, "ho_bf": 1.0, "alpha_endo": 0, "alpha_epi": 0})
     with pytest.raises(ValueError):
         C3.pressure_ramp([0.0, 1.0, 2.0], [0.0, 1.0, 0.5])
+
+
+MODEL_ACTIVE = os.path.join(CASES, "active_prescribed", "chamber_cylinder_0d.json")
+
+
+def test_coupled_circulation():
+    """The ChamberCylinder becomes a cavity junction whose extra inlet is the 3D
+    flow (Q = -dV/dt); impedances of the eighth model are scaled by 8."""
+    import coupled_3d as CP
+    with open(MODEL_ACTIVE) as f:
+        cfg = json.load(f)
+    c = CP.coupling_config(cfg, 8.0)
+    names = {v["vessel_name"]: v for v in c["vessels"]}
+    assert "cylinder" not in names and {"cavity_in", "cavity_out", "cavity_3d"} <= set(names)
+    orig = {v["vessel_name"]: v for v in cfg["vessels"]}
+    for n in ("upstream_vessel", "downstream_vessel"):
+        vals, ov = names[n]["zero_d_element_values"], orig[n]["zero_d_element_values"]
+        assert vals["R_poiseuille"] == 8.0 * ov["R_poiseuille"]
+        assert vals["C"] == ov["C"] / 8.0
+    valves = {v["name"]: v["params"] for v in c["valves"]}
+    assert valves["inlet_valve"]["downstream_block"] == "cavity_in"
+    assert valves["outlet_valve"]["upstream_block"] == "cavity_out"
+    assert c["junctions"][-1]["inlet_blocks"] == ["cavity_in", "cavity_3d"]
+    blk = c["external_solver_coupling_blocks"][0]
+    assert (blk["type"], blk["location"], blk["connected_block"]) == ("FLOW", "inlet", "cavity_3d")
+    assert c["simulation_parameters"]["coupled_simulation"] is True
+    assert "volume:cylinder" not in c["initial_condition"]
+
+
+def test_generate_coupled(tmp_path):
+    import coupled_3d as CP
+    case = CP.generate(MODEL_ACTIVE, str(tmp_path), nr=1, cycles=1)
+    xml = (tmp_path / "solver.xml").read_text()
+    assert "<Model> UniformUnsteady </Model>" in xml
+    assert "<svZeroDSolver_block> LV </svZeroDSolver_block>" in xml
+    assert "<Coupling_type> implicit </Coupling_type>" in xml
+    assert '<LS type="GMRES" >' in xml  # BiCGStab drops the coupled-BC tangent
+    assert case["scale"] == 8.0 and case["n_steps"] == 400
+    lines = (tmp_path / "active_tension.dat").read_text().split("\n")
+    with open(MODEL_ACTIVE) as f:
+        at = CP.find_cylinder(json.load(f))["active_tension"]
+    assert lines[0].split() == [str(len(at["t"])), str(at["fourier_modes"])]

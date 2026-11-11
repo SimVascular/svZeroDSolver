@@ -181,6 +181,15 @@
  * optional `frank_starling` object with arrays `e_c` and `n0` overrides the
  * default force-length curve \f$n_0(e_c)\f$.
  *
+ * An optional `active_tension` object with arrays `t`, `T`, the number of
+ * Fourier modes `fourier_modes` and the flag `ramp` (default false) replaces
+ * the BCS active stress with a prescribed tension, the 2nd Piola-Kirchhoff
+ * stress \f$\Sigma^a = T(t)\,\mathbf{e}_F\otimes\mathbf{e}_F\f$ of the
+ * svMultiPhysics `UniformUnsteady` active stress model, with \f$T(t)\f$
+ * built from the samples as in svMultiPhysics (see \ref FourierTension). The
+ * BCS states are then decoupled from the wall mechanics and the
+ * `activation_function` is optional.
+ *
  * ### Internal variables
  *
  * * `rho_<A>` - Radial displacement field nodal values \f$\rho_A\f$
@@ -198,6 +207,47 @@
  * (node index `A` runs from 0 at the endocardium \f$R_i\f$ to `num_elements`
  * at the epicardium \f$R_e\f$.)
  */
+/**
+ * @brief Time function of svMultiPhysics' FourierInterpolation.
+ *
+ * Built from samples \f$(t_i, T_i)\f$: the linear trend through the first and
+ * last sample plus the first `n_modes` Fourier modes of the piecewise-linear
+ * interpolant of the samples minus the trend, periodic with period
+ * \f$t_\text{last}-t_0\f$. With `ramp`, only the trend, held constant outside
+ * \f$[t_0, t_\text{last}]\f$.
+ */
+struct FourierTension {
+  bool ramp = false;       ///< linear ramp instead of the Fourier series
+  double t0 = 0.0;         ///< first sample time
+  double period = 0.0;     ///< last minus first sample time (0: undefined)
+  double v0 = 0.0;         ///< trend value at t0
+  double slope = 0.0;      ///< trend slope
+  std::vector<double> re;  ///< cosine coefficients
+  std::vector<double> im;  ///< sine coefficients (with a minus sign)
+
+  /// True once set() was called.
+  bool defined() const { return period > 0.0; }
+
+  /**
+   * @brief Fourier coefficients of the samples.
+   *
+   * @param t Strictly increasing sample times (at least 2)
+   * @param v Sample values
+   * @param n_modes Number of Fourier modes (at least 1)
+   * @param use_ramp Linear ramp instead of the Fourier series
+   */
+  void set(const std::vector<double>& t, const std::vector<double>& v,
+           int n_modes, bool use_ramp);
+
+  /**
+   * @brief Value at a time.
+   *
+   * @param time Time
+   * @return Function value
+   */
+  double value(double time) const;
+};
+
 class ChamberCylinder : public Block {
  public:
   /**
@@ -355,6 +405,21 @@ class ChamberCylinder : public Block {
   void set_frank_starling_curve(std::vector<double> ec,
                                 std::vector<double> val);
 
+  /**
+   * @brief Prescribe the active tension T(t), replacing the BCS active stress.
+   *
+   * @param t Strictly increasing sample times (at least 2)
+   * @param T Tension samples
+   * @param n_modes Number of Fourier modes (svMultiPhysics
+   * FourierInterpolation)
+   * @param ramp Linear ramp through the first and last sample instead
+   */
+  void set_active_tension(const std::vector<double>& t,
+                          const std::vector<double>& T, int n_modes,
+                          bool ramp) {
+    active_tension_.set(t, T, n_modes, ramp);
+  }
+
  private:
   // --- Finite element discretization of the wall thickness ---
   int n_ele = 0;   ///< Number of finite elements through the wall
@@ -445,6 +510,10 @@ class ChamberCylinder : public Block {
 
   double act = 0.0;       ///< |nu(t)|
   double act_plus = 0.0;  ///< |nu(t)|_+ = max(nu(t), 0)
+  double tension = 0.0;   ///< prescribed active tension T(t)
+
+  /// Prescribed active tension (undefined: BCS active stress).
+  FourierTension active_tension_;
 
   /// Activation function nu(t) driving the BCS active law (type `nagumo`).
   std::unique_ptr<ActivationFunction> activation_function_;

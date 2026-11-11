@@ -127,16 +127,65 @@ BC on the endo face):
   image into `build-docker/` (command in `coupled_3d.py`) and mounted at
   `/svzerod`.
 
-`run_active_study.py` compares the last cycle (volume, pressure, through-wall
+`run_active_study.py` compares a cycle (volume, pressure, through-wall
 displacement, stroke volume) with the Richardson-extrapolated 0D block in
-the same circulation. The 0D model is periodic from the second cycle, so two
-cycles are run. With 400 steps per cycle, the errors of volume, wall
-displacement and stroke volume fall with the mesh (nr = 1 → 2: 1.4e-2 → 1.8e-3,
-5.1e-2 → 8.7e-3, 3.7e-2 → 4.3e-3; 4 and 16 minutes with 4 processes), while
-the pressure error (4.5e-2 → 3.7e-2 of the 158 mmHg range) is a one-step lag
-in isovolumic relaxation (−2300 mmHg/s): halving the time step halves it
-(4.5e-2 → 2.5e-2 at nr = 1). It is the O(dt) difference between the coupled
-and the stand-alone time integration.
+the same circulation. The 0D model is periodic from the second cycle; the
+first cycle, which starts from the same state in both models, is an equally
+valid comparison without its first 0.02 s, in which the initial state
+(reference volume at the initial pressure) is equilibrated
+(`--cycles 1 --compare-cycle 1` halves the cost). Linear solver: fsils
+GMRES up to nr = 2; Trilinos GMRES with algebraic multigrid
+(`--ls trilinos-ml`, ~180 iterations per solve) from nr = 4, where fsils'
+diagonal preconditioner stalls. Four processes are fastest on a 10-core
+laptop; eight are slower (weaker multigrid, oversubscription).
+
+## Results
+
+Maximum relative errors vs. the 0D reference; "order" is log2 of the error
+ratio between successive meshes. Run times with 4 processes.
+
+Passive inflation, 0–120 mmHg in 24 steps:
+
+| Case | nr | V | ρ(R) | wall-thickness change | η | non-homogeneity | run time |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `passive_isotropic` | 1 | 5.1e-3 | 2.1e-2 | 3.0e-2 | 3.2e-3 | 4.8e-2 | 3 s |
+| | 2 | 4.1e-4 (3.6) | 2.8e-3 (2.9) | 6.6e-3 | 1.2e-3 | 1.1e-2 | 9 s |
+| | 4 | 3.7e-5 (3.5) | 4.6e-4 (2.6) | 1.3e-3 | 2.5e-4 | 2.1e-3 | 101 s |
+| `passive_anisotropic` | 1 | 2.6e-3 | 1.9e-2 | 3.0e-2 | 3.9e-3 | 4.7e-2 | 4 s |
+| | 2 | 2.3e-4 (3.5) | 2.9e-3 (2.7) | 6.9e-3 | 1.4e-3 | 1.3e-2 | 12 s |
+| | 4 | 2.1e-5 (3.5) | 4.9e-4 (2.6) | 1.4e-3 | 2.9e-4 | 2.5e-3 | 69 s |
+| `passive_anisotropic_full` | 2 | 1.7e-4 | 1.6e-3 | 4.7e-3 | 1.2e-3 | 8.2e-3 | 36 s |
+| | 4 | 1.5e-5 (3.5) | 2.8e-4 (2.6) | 9.0e-4 | 2.3e-4 | 1.6e-3 | 105 s |
+| | 8 | 1.1e-6 (3.9) | 4.1e-5 (2.8) | 1.4e-4 | 3.3e-5 | 2.5e-4 | 40 min |
+
+nr = 16 (149k elements) is beyond the fsils solvers on a laptop.
+
+Active contraction (`active_prescribed`), first cycle, 400 steps per cycle
+(P relative to the 158 mmHg range):
+
+| nr | V | P | ρ(R) | stroke volume | run time |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 1.3e-2 | 4.5e-2 | 4.9e-2 | 3.6e-2 | 2 min |
+| 2 | 1.8e-3 (2.9) | 3.7e-2 | 8.7e-3 (2.5) | 4.3e-3 (3.1) | 8 min |
+| 4 | 3.9e-4 (2.2) | 3.6e-2 | 2.0e-3 (2.1) | 4.4e-4 (3.3) | 24 min |
+
+With half the time step (800 steps per cycle):
+
+| nr | V | P | ρ(R) | stroke volume | run time |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 1.3e-2 | 2.7e-2 | 4.9e-2 | 3.4e-2 | 4 min |
+| 2 | 1.6e-3 (3.0) | 1.9e-2 | 8.2e-3 (2.6) | 4.3e-3 (3.0) | 13 min |
+| 4 | 2.2e-4 (2.9) | 1.8e-2 | 1.5e-3 (2.5) | 4.3e-4 (3.3) | 44 min |
+
+The pressure error is a lag of about one time step in isovolumic relaxation
+(−2300 mmHg/s), the O(dt) difference between the coupled and the stand-alone
+time integration: it does not fall with the mesh but halves with the time
+step (nr = 4: 3.6e-2 → 1.8e-2; nr = 1 at dt, dt/2, dt/4: 4.5e-2, 2.5e-2,
+1.8e-2, the last limited by the coarse mesh). The time-step lag also enters
+the volume error around end-systole and early filling; with half the time
+step, volume, wall displacement and stroke volume converge at third, 2.5th
+and third order. In the quasi-static late diastole the volume error falls at
+fourth order (nr = 2 → 4: 5.5e-5 → 3.4e-6), as in the passive cases.
 
 ## Compared quantities
 

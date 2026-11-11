@@ -71,17 +71,34 @@ def reference(model_0d, cache_dir):
     return ref, f"0D Richardson ne = {2 * ne}/{4 * ne}"
 
 
-def last_cycle(t, period, cycles):
-    return t >= (cycles - 1) * period - 1e-9
+STARTUP = 0.02  # s, excluded from the comparison of the first cycle
 
 
-def errors(sol, ref, period, cycles):
-    """Errors over the last cycle (3D and 0D on the same time points)."""
+def cycle_mask(t, period, k):
+    """Time points of cycle k (1-based), both ends included."""
+    return (t >= (k - 1) * period - 1e-9) & (t <= k * period + 1e-9)
+
+
+# Linear solvers of the coupled cases (--ls). fsils' BiCGStab drops the
+# coupled-BC tangent, so both use GMRES; fsils' diagonal preconditioner does
+# not scale beyond nr = 2, Trilinos' algebraic multigrid does (nr = 4: ~180
+# iterations per solve).
+LINEAR_SOLVERS = {
+    "fsils": None,  # coupled_3d default: GMRES(300) x 4, tol 1e-6
+    "trilinos-ml": dict(type="GMRES", algebra="trilinos", preconditioner="trilinos-ml",
+                        assembly="fsils", tol=1e-6, max_iter=1000, krylov=200),
+}
+
+
+def errors(sol, ref, period, k):
+    """Errors over cycle k (3D and 0D on the same time points)."""
     t3 = np.asarray(sol["t"])
     idx = [int(np.argmin(np.abs(ref["t"] - t))) for t in t3]
     if not np.allclose(ref["t"][idx], t3, rtol=0, atol=1e-9):
         raise ValueError("0D and 3D time points differ")
-    m = last_cycle(t3, period, cycles)
+    m = cycle_mask(t3, period, k)
+    if k == 1:  # skip the start-up: the initial state (reference volume at the
+        m &= t3 >= STARTUP  # initial pressure) is equilibrated in the first steps
     V, Vr = np.asarray(sol["V"])[m], ref["V"][idx][m]
     P = np.interp(t3, sol["t_0d"], sol["P"])[m]
     Pr = ref["P"][idx][m]
@@ -101,6 +118,9 @@ def main():
     ap.add_argument("--rerun", action="store_true")
     ap.add_argument("--np", type=int, default=2)
     ap.add_argument("--max-time", type=float, default=7200.0)
+    ap.add_argument("--cycles", type=int, help="3D cycles to run (default: the 0D input's)")
+    ap.add_argument("--compare-cycle", type=int, help="cycle compared (default: the 0D input's last)")
+    ap.add_argument("--ls", choices=sorted(LINEAR_SOLVERS), default="fsils")
     a = ap.parse_args()
     sys.stdout.reconfigure(line_buffering=True)
     root = os.path.abspath(a.case)
@@ -108,6 +128,7 @@ def main():
     with open(model) as f:
         sp = json.load(f)["simulation_parameters"]
     period, cycles = float(sp["cardiac_period"]), int(sp["number_of_cardiac_cycles"])
+    k = a.compare_cycle or cycles
     out_dir = os.path.join(root, "output")
     sols = {}
     for nr in a.nr:
@@ -116,7 +137,14 @@ def main():
         if os.path.exists(os.path.join(d, "case.json")):
             with open(os.path.join(d, "case.json")) as f:
                 old = json.load(f)
-        case = CP.generate(model, d, nr)
+        if not a.run:  # post-process the existing case as it was run
+            if old is None:
+                print(f"3D nr = {nr}: no case")
+                continue
+            case = old
+        else:
+            case = CP.generate(model, d, nr, cycles=a.cycles,
+                               linear_solver=LINEAR_SOLVERS[a.ls])
         done = len(glob.glob(os.path.join(d, "results", "result_*.vtu"))) == case["n_steps"]
         if a.run and (a.rerun or not done or old != json.loads(json.dumps(case))):
             print(f"3D nr = {nr}: running ({case['n_cells']} tets, {case['n_steps']} steps)")
@@ -132,41 +160,44 @@ def main():
         if len(glob.glob(os.path.join(d, "results", "result_*.vtu"))) != case["n_steps"]:
             print(f"3D nr = {nr}: no complete results")
             continue
+        if case["cycles"] < k:
+            print(f"3D nr = {nr}: ran {case['cycles']} cycle(s), cycle {k} is compared")
+            continue
         sols[nr] = CP.post(d)
     ref, ref_name = reference(model, out_dir)
-    m = last_cycle(ref["t"], period, cycles)
-    print(f"{ref_name}, last cycle: V {ref['V'][m].min() * 1e6:.2f}-{ref['V'][m].max() * 1e6:.2f} mL,"
+    m = cycle_mask(ref["t"], period, k)
+    print(f"{ref_name}, cycle {k}: V {ref['V'][m].min() * 1e6:.2f}-{ref['V'][m].max() * 1e6:.2f} mL,"
           f" P {ref['P'][m].min() / MMHG:.1f}-{ref['P'][m].max() / MMHG:.1f} mmHg")
-    summary = dict(reference=ref_name, three_d={})
+    summary = dict(reference=ref_name, cycle=k, three_d={})
     print(f"{'':10s}{'V':>11s}{'P':>11s}{'rho':>11s}{'SV':>11s}")
     for nr, sol in sols.items():
-        e = errors(sol, ref, period, cycles)
+        e = errors(sol, ref, period, k)
         summary["three_d"][f"nr{nr}"] = dict(errors=e)
         print(f"3D nr = {nr:<3d}" + "".join(f"{e[k]:11.2e}" for k in ("V", "P", "rho", "SV")))
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "summary.json"), "w") as f:
         json.dump(summary, f, indent=1)
-    plot(sols, ref, ref_name, period, cycles, out_dir)
+    plot(sols, ref, ref_name, period, k, out_dir)
 
 
-def plot(sols, ref, ref_name, period, cycles, out_dir):
+def plot(sols, ref, ref_name, period, k, out_dir):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(1, 3, figsize=(15.6, 4.4))
-    m = last_cycle(ref["t"], period, cycles)
-    t0 = (cycles - 1) * period
+    m = cycle_mask(ref["t"], period, k)
+    t0 = (k - 1) * period
     ax[0].plot(ref["V"][m] * 1e6, ref["P"][m] / MMHG, "k-", lw=2.5, label=ref_name)
     ax[1].plot(ref["t"][m] - t0, ref["V"][m] * 1e6, "k-", lw=2.5, label=ref_name)
     ax[2].plot(ref["t"][m] - t0, ref["P"][m] / MMHG, "k-", lw=2.5, label=ref_name)
     for i, (nr, s) in enumerate(sols.items()):
         t = np.asarray(s["t"])
-        k = last_cycle(t, period, cycles)
+        c = cycle_mask(t, period, k)
         P = np.interp(t, s["t_0d"], s["P"])
         lab = f"3D nr{nr}"
-        ax[0].plot(np.asarray(s["V"])[k] * 1e6, P[k] / MMHG, "--", c=f"C{i}", label=lab)
-        ax[1].plot(t[k] - t0, np.asarray(s["V"])[k] * 1e6, "--", c=f"C{i}", label=lab)
-        ax[2].plot(t[k] - t0, P[k] / MMHG, "--", c=f"C{i}", label=lab)
+        ax[0].plot(np.asarray(s["V"])[c] * 1e6, P[c] / MMHG, "--", c=f"C{i}", label=lab)
+        ax[1].plot(t[c] - t0, np.asarray(s["V"])[c] * 1e6, "--", c=f"C{i}", label=lab)
+        ax[2].plot(t[c] - t0, P[c] / MMHG, "--", c=f"C{i}", label=lab)
     ax[0].set(xlabel="cavity volume [mL]", ylabel="cavity pressure [mmHg]", title="PV loop")
     ax[1].set(xlabel="time in cycle [s]", ylabel="cavity volume [mL]", title="volume")
     ax[2].set(xlabel="time in cycle [s]", ylabel="cavity pressure [mmHg]", title="pressure")
@@ -174,7 +205,7 @@ def plot(sols, ref, ref_name, period, cycles, out_dir):
         x.legend(fontsize=8)
         x.grid(alpha=0.3)
     fig.tight_layout()
-    fig.savefig(os.path.join(out_dir, "pv_loop.png"), dpi=130)
+    fig.savefig(os.path.join(out_dir, f"pv_loop_cycle{k}.png"), dpi=130)
 
 
 if __name__ == "__main__":

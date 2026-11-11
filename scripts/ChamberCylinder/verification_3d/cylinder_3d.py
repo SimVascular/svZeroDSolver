@@ -26,9 +26,10 @@ Mesh: n_r elements through the wall (the refinement parameter); the
 circumferential and axial divisions follow from the element size
 h = (Re - Ri) / n_r. A 90-degree sector uses symmetry planes (u_y = 0 on
 theta = 0, u_x = 0 on theta = 90 deg); helical fibers break this symmetry and
-need the full cylinder, whose rigid-body modes (x, y translation, rotation
-about z) a weak spring on the epicardium removes (Robin, stiffness
-`robin_factor` * mu / Re).
+need the full cylinder (and the full length). Its rigid-body modes (x, y
+translation, rotation about z) are held by in-plane dashpots on both ends
+(Robin, no stiffness): within a load step they act as a spring of stiffness
+damping / dt, at rest they carry no force.
 Quadratic tetrahedra (order 2) have mid-edge nodes on the exact cylindrical
 surfaces.
 
@@ -125,6 +126,13 @@ def material(values):
 #  Mesh
 # --------------------------------------------------------------------------- #
 
+def helical(mat):
+    """True for helical fibers: no mirror symmetry about theta = const or
+    Z = const planes (circumferential or axial fibers have it)."""
+    fibers = mat["model"] in ("HGO", "HolzapfelOgden")
+    return fibers and not (mat["alpha_endo"] == mat["alpha_epi"] and mat["alpha_endo"] % 90.0 == 0.0)
+
+
 # Six tetrahedra per hexahedron along its main diagonal (conforming on a
 # structured grid). Corners are (di, dj, dk) offsets.
 _KUHN = [[(0, 0, 0), tuple(int(a == p[0]) for a in range(3)),
@@ -146,10 +154,12 @@ def mesh_cylinder(Ri, Re, L, nr, sector=90.0, order=2, ntheta=None, nz=None):
         raise ValueError("sector must be 90 (symmetry planes) or 360 degrees")
     h = (Re - Ri) / nr
     th = math.radians(sector)
-    nt = ntheta or max(1 if sector < 360 else 3, math.ceil(th * 0.5 * (Ri + Re) / h))
+    periodic = sector == 360.0
+    nt = ntheta or max(1, math.ceil(th * 0.5 * (Ri + Re) / h))
+    if periodic and not ntheta:  # node planes at theta = 0, 90, 180, 270 deg
+        nt = 4 * math.ceil(nt / 4)
     nz = nz or max(1, math.ceil(L / h))
     s = 2 if order == 2 else 1
-    periodic = sector == 360.0
 
     index, points = {}, []
 
@@ -406,9 +416,14 @@ def solver_xml(case):
                 "      <Follower_pressure_load> true </Follower_pressure_load>\n   </Add_BC>\n")
         interface = ""
     bcs = dirichlet("base", "(0, 0, 1)") + dirichlet("top", "(0, 0, 1)")
-    if "y0" in case["faces"]:
+    if "y0" in case["faces"]:  # symmetry planes of the sector
         bcs += dirichlet("y0", "(0, 1, 0)") + dirichlet("x0", "(1, 0, 0)")
-    else:  # full cylinder: weak spring against the rigid-body modes
+    if case.get("end_damping", 0.0) > 0.0:  # full cylinder: in-plane dashpots on both ends
+        bcs += "".join(f'   <Add_BC name="{n}" >\n      <Type> Robin </Type>\n'
+                       "      <Stiffness> 0.0 </Stiffness>\n"
+                       f"      <Damping> {case['end_damping']:.6g} </Damping>\n   </Add_BC>\n"
+                       for n in ("base", "top"))
+    if case.get("robin_stiffness", 0.0) > 0.0:
         bcs += (f'   <Add_BC name="epi" >\n      <Type> Robin </Type>\n'
                 f"      <Stiffness> {case['robin_stiffness']:.6g} </Stiffness>\n"
                 f"      <Damping> 0.0 </Damping>\n   </Add_BC>\n")
@@ -472,12 +487,17 @@ def solver_xml(case):
 
 def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, ntheta=None,
              nz=None, n_steps=20, density=1.0, newton_tol=1e-10, linear_solver=None,
-             robin_factor=1e-6, half_length=False, fiber_location="points"):
+             robin_factor=0.0, half_length=False, fiber_location="points", end_damping=1e-3):
     """Write the svMultiPhysics case of a ChamberCylinder 0D input.
 
     half_length meshes 0 <= Z <= L/2 with u_z = 0 on Z = L/2, the mid-length
-    symmetry plane of the Z-homogeneous solution. fiber_location "points"
-    writes nodal fiber directions, "cells" one direction per element.
+    symmetry plane of the Z-homogeneous solution (not with helical fibers:
+    the plane would be a slip end). fiber_location "points" writes nodal
+    fiber directions, "cells" one direction per element. The full cylinder
+    gets in-plane dashpots on both ends against its rigid-body modes, with
+    damping end_damping * mu / Re * dt: a spring of end_damping * mu / Re
+    within a load step, no force at rest. robin_factor > 0 adds an epicardial
+    spring of stiffness robin_factor * mu / Re.
     """
     m0 = read_0d(model_0d)
     v = m0["values"]
@@ -486,14 +506,13 @@ def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, nthet
     T, Pmax = pressure_ramp(m0["t"], m0["P"])
     mat = material(v)
     fibers = mat["model"] in ("HGO", "HolzapfelOgden")
-    # Mirror symmetry about theta = const planes holds for circumferential or
-    # axial fibers only; helical fibers need the full cylinder.
-    symmetric = not fibers or (mat["alpha_endo"] == mat["alpha_epi"]
-                               and mat["alpha_endo"] % 90.0 == 0.0)
+    symmetric = not helical(mat)
     if sector is None:
         sector = 90.0 if symmetric else 360.0
     if not symmetric and sector != 360.0:
         raise ValueError("helical fibers break the mirror symmetry: use sector = 360")
+    if not symmetric and half_length:
+        raise ValueError("helical fibers: the mid-length plane would be a slip end, mesh the full length")
     fm = FORMULATIONS[formulation]
     Lm = 0.5 * v["length"] if half_length else v["length"]
     mesh = mesh_cylinder(v["Ri"], v["Re"], Lm, nr, sector, fm["order"], ntheta, nz)
@@ -520,6 +539,8 @@ def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, nthet
                 Ri=v["Ri"], Re=v["Re"], length=v["length"], mesh_length=Lm, material=mat,
                 fiber_files=fiber_files, fiber_location=fiber_location,
                 robin_stiffness=robin_factor * mat["mu"] / v["Re"] if sector == 360.0 else 0.0,
+                **({"end_damping": end_damping * mat["mu"] / v["Re"] * T / n_steps}
+                   if sector == 360.0 else {}),
                 formulation=formulation, order=fm["order"], sector=sector, nr=nr,
                 ntheta=mesh["ntheta"], nz=mesh["nz"], n_nodes=len(mesh["points"]),
                 n_cells=len(mesh["cells"]), faces=sorted(mesh["faces"]),
@@ -697,7 +718,7 @@ def _read_vtu(path):
     return pts, {"Displacement": vtk_to_numpy(g.GetPointData().GetArray("Displacement"))}
 
 
-def kinematics(X, x, levels):
+def kinematics(X, x, levels, z0=None, dz=None):
     """0D kinematic quantities of a deformed 3D cylinder.
 
     Fits the rotation of every node about the axis as beta Z + phi(R) and
@@ -705,23 +726,37 @@ def kinematics(X, x, levels):
     displacement rho = r - R, the transmural rotation phi and the axial
     displacement u_z, the latter two relative to the endocardium: the 0D
     fields rho(R), phi(R) - phi(Ri) and eta(R) - eta(Ri). Also returns the
-    largest deviation of rho from its level mean (non-homogeneity).
+    largest deviation of rho from its level mean (non-homogeneity). With z0,
+    only the nodes with |Z - z0| <= dz enter, and the rotation is fitted as
+    phi(R) + beta (Z - z0) + gamma (Z - z0)^2: beta is the local twist rate
+    at z0.
     """
     dth = np.arctan2(x[:, 1], x[:, 0]) - np.arctan2(X[:, 1], X[:, 0])
     dth = (dth + np.pi) % (2.0 * np.pi) - np.pi
     rho = np.hypot(x[:, 0], x[:, 1]) - np.hypot(X[:, 0], X[:, 1])
     uz = x[:, 2] - X[:, 2]
     nlev = levels.max() + 1
-    # rotation = beta Z + phi_k: least squares with one offset per level
-    A = np.zeros((len(X), nlev + 1))
-    A[:, 0] = X[:, 2]
-    A[np.arange(len(X)), 1 + levels] = 1.0
-    coef, *_ = np.linalg.lstsq(A, dth, rcond=None)
-    mean = lambda f: np.bincount(levels, f) / np.bincount(levels)  # noqa: E731
+    Z = X[:, 2]
+    if z0 is None:
+        use, cols = np.ones(len(X), bool), [Z]
+    else:
+        use = np.abs(Z - z0) <= dz * (1.0 + 1e-9)
+        cols = [Z - z0, (Z - z0) ** 2]
+    lev = levels[use]
+    if np.any(np.bincount(lev, minlength=nlev) == 0):
+        raise ValueError("a radial node level has no nodes in the compared section")
+    # rotation = beta Z (+ gamma Z^2) + phi_k: least squares, one offset per level
+    nc = len(cols)
+    A = np.zeros((use.sum(), nc + nlev))
+    for j, c in enumerate(cols):
+        A[:, j] = c[use]
+    A[np.arange(use.sum()), nc + lev] = 1.0
+    coef, *_ = np.linalg.lstsq(A, dth[use], rcond=None)
+    mean = lambda f: np.bincount(lev, f[use]) / np.bincount(lev)  # noqa: E731
     rho_k = mean(rho)
-    return dict(beta=float(coef[0]), rho=rho_k, phi=coef[1:] - coef[1],
+    return dict(beta=float(coef[0]), rho=rho_k, phi=coef[nc:] - coef[nc],
                 eta=mean(uz) - mean(uz)[0],
-                rho_spread=float(np.max(np.abs(rho - rho_k[levels]))))
+                rho_spread=float(np.max(np.abs(rho[use] - rho_k[lev]))))
 
 
 def cylinder_fibers_at_nodes(X, Ri, Re, alpha_endo, alpha_epi):
@@ -780,27 +815,41 @@ def struct_fields(X, cells, u, order, material, fiber, sheet):
     (rr, tt, zz, rt, tz, zr) of the strain (reference basis) and of the Cauchy
     stress (deformed basis)."""
     from check_materials import stress_3d
-    F = nodal_deformation_gradient(X, cells, u, order)
-    J = np.linalg.det(F)
-    E = 0.5 * (np.einsum("nki,nkj->nij", F, F) - np.eye(3))
+    out = kinematic_fields(X, cells, u, order, fiber)
+    F = out["Def_grad"].reshape(-1, 3, 3)
+    J = out["Jacobian"]
     S = np.array([stress_3d(F[n], fiber[n], sheet[n], material) for n in range(len(X))])
     sig = np.einsum("nik,nkl,njl->nij", F, S, F) / J[:, None, None]
     dev = sig - np.trace(sig, axis1=1, axis2=2)[:, None, None] * np.eye(3) / 3.0
+    out.update(Stress=_sym6(S), Cauchy_stress=_sym6(sig),
+               VonMises_stress=np.sqrt(1.5 * np.einsum("nij,nij->n", dev, dev)),
+               Cauchy_stress_cylindrical=_cylindrical(sig, X + u))
+    return out
+
+
+def _cylindrical(T, pts):
+    """Components (rr, tt, zz, rt, tz, zr) of tensors T in the local
+    (e_r, e_theta, e_z) basis at the points pts."""
+    r = np.hypot(pts[:, 0], pts[:, 1])
+    Q = np.zeros((len(pts), 3, 3))
+    Q[:, 0, :2] = pts[:, :2] / r[:, None]
+    Q[:, 1, 0], Q[:, 1, 1] = -pts[:, 1] / r, pts[:, 0] / r
+    Q[:, 2, 2] = 1.0
+    return _sym6(np.einsum("nik,nkl,njl->nij", Q, T, Q))
+
+
+def kinematic_fields(X, cells, u, order, fiber):
+    """The strain-type struct fields at the nodes (no material model):
+    deformation gradient, Jacobian, Green-Lagrange strain (Cartesian and
+    cylindrical in the reference basis), fiber stretch and deformed fiber
+    direction."""
+    F = nodal_deformation_gradient(X, cells, u, order)
+    E = 0.5 * (np.einsum("nki,nkj->nij", F, F) - np.eye(3))
     Ff = np.einsum("nij,nj->ni", F, fiber)
     lam = np.linalg.norm(Ff, axis=1)
-
-    def cyl(T, pts):  # components in the local (e_r, e_theta, e_z) basis
-        r = np.hypot(pts[:, 0], pts[:, 1])
-        Q = np.zeros((len(pts), 3, 3))
-        Q[:, 0, :2] = pts[:, :2] / r[:, None]
-        Q[:, 1, 0], Q[:, 1, 1] = -pts[:, 1] / r, pts[:, 0] / r
-        Q[:, 2, 2] = 1.0
-        return _sym6(np.einsum("nik,nkl,njl->nij", Q, T, Q))
-    return dict(Def_grad=F.reshape(-1, 9), Jacobian=J, Strain=_sym6(E), Stress=_sym6(S),
-                Cauchy_stress=_sym6(sig),
-                VonMises_stress=np.sqrt(1.5 * np.einsum("nij,nij->n", dev, dev)),
+    return dict(Def_grad=F.reshape(-1, 9), Jacobian=np.linalg.det(F), Strain=_sym6(E),
                 Fiber_stretch=lam, Fiber_direction_deformed=Ff / lam[:, None],
-                Strain_cylindrical=cyl(E, X), Cauchy_stress_cylindrical=cyl(sig, X + u))
+                Strain_cylindrical=_cylindrical(E, X))
 
 
 # through-wall profiles of the struct fields: name -> (field, component)
@@ -810,9 +859,24 @@ FIELD_PROFILES = {"J": ("Jacobian", None), "E_RR": ("Strain_cylindrical", 0),
                   "sigma_tt": ("Cauchy_stress_cylindrical", 1),
                   "sigma_zz": ("Cauchy_stress_cylindrical", 2),
                   "sigma_vm": ("VonMises_stress", None), "lambda_f": ("Fiber_stretch", None)}
+# the kinematic subset (kinematic_fields)
+KINEMATIC_PROFILES = ("J", "E_RR", "E_TT", "E_ZZ", "lambda_f")
 
 
-def post(case_dir, fields=True):
+def level_means(levels, nodal, keys, use=None):
+    """Mean over the nodes of each radial level (only the nodes `use`, a
+    boolean mask, if given) of the profile fields keys."""
+    use = np.ones(len(levels), bool) if use is None else use
+    count = np.bincount(levels[use])
+    out = {}
+    for key in keys:
+        f, c = FIELD_PROFILES[key]
+        val = nodal[f] if c is None else nodal[f][:, c]
+        out[key] = np.bincount(levels[use], val[use]) / count
+    return out
+
+
+def post(case_dir, fields=True, mid_section=False):
     """Cavity volume and kinematics of a finished case, per load step.
 
     V is the volume enclosed by the deformed (discrete) endo face. The
@@ -822,6 +886,12 @@ def post(case_dir, fields=True):
     struct output fields (`struct_fields`) are written per step to
     CASE_DIR/post/fields_<step>.vtu and their through-wall profiles
     (FIELD_PROFILES) added to kinematics.json.
+
+    mid_section compares only the middle element layer (|Z - L/2| <= half an
+    element length; the solution of the free-ended tube is symmetric about
+    L/2, so its layer means are the mid-length values to O(h^2)): profiles,
+    fields and the non-homogeneity from its nodes, beta the local twist rate
+    at L/2, and V the mid-section volume pi (Ri + rho(Ri))^2 L of the 0D.
     """
     with open(os.path.join(case_dir, "case.json")) as f:
         case = json.load(f)
@@ -837,8 +907,14 @@ def post(case_dir, fields=True):
                    key=lambda fn: int(os.path.basename(fn)[7:-4]))  # step number
     if not files:
         raise FileNotFoundError(f"no results in {case_dir}/results")
+    section, use = {}, None
+    if mid_section:
+        section = dict(z0=0.5 * Lm, dz=0.5 * Lm / case["nz"])
+        use = np.abs(X[:, 2] - section["z0"]) <= section["dz"] * (1.0 + 1e-9)
+        vol = lambda x, rho_endo: math.pi * (case["Ri"] + rho_endo) ** 2 * case["length"]  # noqa: E731
     out = dict(R=(case["Ri"] + dR * np.arange(levels.max() + 1)).tolist(), t=[0.0], P=[0.0],
-               V=[vol(X)], beta=[0.0], rho_spread=[0.0])
+               V=[vol(X, 0.0) if mid_section else vol(X)], beta=[0.0], rho_spread=[0.0],
+               section="mid-length" if mid_section else "all")
     zero = [0.0] * (levels.max() + 1)
     out.update(rho=[zero], phi=[zero], eta=[zero])
     if fields:
@@ -847,13 +923,12 @@ def post(case_dir, fields=True):
         m = case["material"]
         fib = cylinder_fibers_at_nodes(X, case["Ri"], case["Re"], m.get("alpha_endo", 0.0),
                                        m.get("alpha_epi", 0.0))
-        mean = lambda f: np.bincount(levels, f) / np.bincount(levels)  # noqa: E731
         post_dir = os.path.join(case_dir, "post")
         os.makedirs(post_dir, exist_ok=True)
         u0 = struct_fields(X, mesh["cells"], np.zeros_like(X), case["order"], material,
                            fib["fiber"], fib["sheet"])
-        out["fields"] = {k: [mean(u0[f] if c is None else u0[f][:, c]).tolist()]
-                         for k, (f, c) in FIELD_PROFILES.items()}
+        out["fields"] = {k: [v.tolist()]
+                         for k, v in level_means(levels, u0, FIELD_PROFILES, use).items()}
     for fn in files:
         n = int(os.path.basename(fn)[7:-4])
         pts, pdata = _read_vtu(fn)
@@ -862,10 +937,10 @@ def post(case_dir, fields=True):
             raise RuntimeError(f"{fn}: node order differs from the generated mesh")
         x = X + pdata["Displacement"][:, :3]
         t = n * case["dt"]
-        k = kinematics(X, x, levels)
+        k = kinematics(X, x, levels, **section)
         out["t"].append(t)
         out["P"].append(case["P_max"] * min(t / case["T_ramp"], 1.0))
-        out["V"].append(vol(x))
+        out["V"].append(vol(x, k["rho"][0]) if mid_section else vol(x))
         for key in ("beta", "rho_spread"):
             out[key].append(k[key])
         for key in ("rho", "phi", "eta"):
@@ -874,8 +949,8 @@ def post(case_dir, fields=True):
             u = x - X
             sf = struct_fields(X, mesh["cells"], u, case["order"], material, fib["fiber"],
                                fib["sheet"])
-            for key, (f, c) in FIELD_PROFILES.items():
-                out["fields"][key].append(mean(sf[f] if c is None else sf[f][:, c]).tolist())
+            for key, v in level_means(levels, sf, FIELD_PROFILES, use).items():
+                out["fields"][key].append(v.tolist())
             pdata = {"Displacement": (u, "Float64", 3)}
             pdata.update({k: (v, "Float64", 1 if v.ndim == 1 else v.shape[1])
                           for k, v in sf.items()})

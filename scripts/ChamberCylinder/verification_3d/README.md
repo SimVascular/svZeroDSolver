@@ -10,7 +10,9 @@ and load.
 | 1 | `passive_isotropic/`: quasi-static inflation, neo-Hookean wall | implemented |
 | 2 | `passive_anisotropic/`: the same wall with one circumferential fiber family (Holzapfel-Ogden) | implemented |
 | 2b | `passive_anisotropic_full/`: all Holzapfel-Ogden terms (exponential isotropic, fiber, sheet, fiber-sheet) with the tension-compression switch | implemented |
+| 2c | `passive_helical/`: the wall of step 2 with helical fibers (+60° to −60°), full cylinder with free ends | implemented (nr 1, 2, 4) |
 | 3a | `active_prescribed/`: PV loop with a prescribed active tension, 3D cylinder coupled to the circulation of `tests/cases/chamber_cylinder.json` | implemented (nr 1, 2) |
+| 3a' | `active_helical/`: the same with helical fibers (+60° to −60°), full 3D cylinder with free ends | implemented (nr 1) |
 | 3b | PV loop with an active-stress ODE model (e.g. Land-Niederer in both) | planned |
 
 ## Problem definition
@@ -27,11 +29,9 @@ and load.
 - **Fiber architecture.** The symmetry planes and the free-sliding ends need
   σ_θZ = 0, which holds for circumferential or axial fibers. Helical fibers
   make the cylinder twist and load every cross-section with a through-wall
-  shear σ_θZ(R) of zero resultant; the uniform 0D solution then needs ends that
-  rotate rigidly while expanding radially (genet23's lids). svMultiPhysics has
-  no such boundary condition (`Undeforming_neu_face` forces one displacement
-  for the whole face), so a full 3D cylinder with helical fibers develops end
-  layers and does not converge to the 0D model. `cylinder_fibers.py` writes
+  shear σ_θZ(R) of zero resultant; the 3D model then covers the full cylinder
+  with free ends and differs from the 0D near the ends (see "Helical fibers"
+  below). `cylinder_fibers.py` writes
   the 0D fiber and sheet (e_R) directions per node; svMultiPhysics
   interpolates them to the quadrature points, so they follow the curved basis
   vectors to the order of the elements. Per-element directions
@@ -91,6 +91,45 @@ The 0D Holzapfel-Ogden implementation is also checked against the closed
 form of the incompressible tube (`fixed_length_exact_ho`,
 `tests/test_chamber_cylinder_verification.py`).
 
+### Helical fibers
+
+`passive_helical/` is the wall of `passive_anisotropic/` with the helix of
+`tests/cases/chamber_cylinder.json`, +60° at the endocardium to −60° at the
+epicardium. Mirroring θ or Z flips the helix angle, so the eighth model's
+symmetry planes do not apply: the 3D model is the full cylinder over the full
+length. It is as free as the 0D: both ends keep u_z = 0 (fixed length) and are
+otherwise free to twist and expand. In-plane dashpots on both end faces
+(Robin BCs with zero stiffness, damping 1e-3 μ/Re·dt) hold the three
+rigid-body modes (x, y translation, rotation about z): within a load step they
+act as springs of 1e-3 μ/Re, at rest they carry no force (during the ramp
+< 2e-5 of the cavity pressure). No 0D data enters the 3D model. Alternatives
+that did worse: a weak epicardial spring (1e-6 μ/Re) gives the same result but
+175–950 linear iterations per solve; no support at all with GMRES stalls
+(Newton stops at 4e-9, the discrete system is not exactly consistent); two
+pinned radial lines at the base give the same averages but disturb the wall
+near the pins (non-homogeneity 8.5% vs 3.4% at nr = 1).
+
+The uniform 0D state does not solve this 3D problem exactly. Every 0D
+cross-section carries the through-wall shear σ_θZ(R) (positive near the
+endocardium, negative near the epicardium, zero net torque, up to 18% of
+σ_θθ at 120 mmHg); the free 3D ends carry none. Near the ends the 3D wall
+twists faster and expands up to 1.6% more. The tube is about four wall
+thicknesses long (L = 57 mm, H = 14 mm), so for the small twist of the ±60°
+helix (βL = −0.085° at 120 mmHg) the end layers reach the middle. This model
+difference does not shrink with the mesh, only with a longer tube.
+`run_study.py` therefore compares helical cases at the mid-length section
+only (the middle element layer). `helical_sketch.py` draws both models and `helical_figure.py` the profiles
+along the axis, with the 0D section shear and twist against the helix angle
+(`output/helical_bcs_sketch.pdf`, `output/helical_discrepancy.pdf`).
+
+The full cylinder is expensive: it has about 8× the elements of the eighth
+model at the same nr, and it is held only weakly against rigid motion. The
+fsils BiCGStab solver stalls from nr = 2 on, with any support; Trilinos GMRES
+with ML (`--ls trilinos-ml`) converges with 500–1000 iterations per solve.
+At nr = 2 (2592 elements, as many as the eighth model at nr = 4) the ramp takes
+12 min, against 69 s for the eighth model; nr = 4 (19584 elements) takes
+82 min with 4 MPI ranks.
+
 ### Active contraction in a circulation
 
 `active_prescribed/` is the 0D test case `tests/cases/chamber_cylinder.json`
@@ -139,6 +178,15 @@ GMRES up to nr = 2; Trilinos GMRES with algebraic multigrid
 diagonal preconditioner stalls. Four processes are fastest on a 10-core
 laptop; eight are slower (weaker multigrid, oversubscription).
 
+`active_helical/` is `active_prescribed/` with the helix of
+`tests/cases/chamber_cylinder.json` (+60° to −60°). As in `passive_helical/`
+the 3D model is the full cylinder over the full length with free ends (u_z = 0,
+end dashpots), without circulation scaling, and it needs `--ls trilinos-ml`
+at every level. Volume, pressure and flows are those of the whole tube (they
+drive the circulation); the wall kinematics, strains and the twist rate β are
+those of the mid-length section. The contraction twists the 0D tube by up to
+7.9° over its length, 100× the passive twist.
+
 ## Results
 
 Maximum relative errors vs. the 0D reference; "order" is log2 of the error
@@ -160,32 +208,120 @@ Passive inflation, 0–120 mmHg in 24 steps:
 
 nr = 16 (149k elements) is beyond the fsils solvers on a laptop.
 
+Strains and stresses through the wall over the same ramp (see Compared
+quantities; J and σ_rr as element means, σ_rr relative to P_max):
+
+| Case | nr | E_RR | E_TT | J | λ_f | σ_vm | σ_tt − σ_rr | σ_rr | σ_rr(Ri) + P |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `passive_isotropic` | 1 | 4.9e-2 | 3.6e-2 | 5.1e-1 | 3.4e-2 | 5.6e-2 | 5.7e-2 | 3.6e-1 | 3.8 |
+| | 2 | 1.5e-2 (1.7) | 7.7e-3 (2.2) | 2.0e-1 (1.4) | 7.3e-3 (2.2) | 1.6e-2 (1.8) | 1.7e-2 | 1.3e-1 (1.4) | 1.4 |
+| | 4 | 5.1e-3 (1.6) | 2.6e-3 (1.6) | 6.2e-2 (1.7) | 2.4e-3 (1.6) | 5.4e-3 (1.6) | 5.6e-3 | 4.3e-2 (1.7) | 4.6e-1 |
+| `passive_anisotropic` | 1 | 6.1e-2 | 3.1e-2 | 4.6e-1 | 3.0e-2 | 5.7e-2 | 5.9e-2 | 2.4e-1 | 2.6 |
+| | 2 | 2.0e-2 (1.6) | 7.2e-3 (2.1) | 1.6e-1 (1.5) | 7.0e-3 (2.1) | 1.7e-2 (1.7) | 1.8e-2 | 8.2e-2 (1.6) | 9.9e-1 |
+| | 4 | 6.8e-3 (1.6) | 2.4e-3 (1.6) | 4.8e-2 (1.7) | 2.3e-3 (1.6) | 5.6e-3 (1.6) | 5.9e-3 | 2.4e-2 (1.7) | 3.2e-1 |
+| `passive_anisotropic_full` | 2 | 1.4e-2 | 5.2e-3 | 3.0e-2 | 5.0e-3 | 3.3e-2 | 3.2e-2 | 3.4e-2 | 5.6e-1 |
+| | 4 | 4.5e-3 (1.6) | 1.6e-3 (1.7) | 7.7e-3 (2.0) | 1.5e-3 (1.7) | 1.0e-2 (1.7) | 9.9e-3 | 8.8e-3 (1.9) | 1.7e-1 |
+| | 8 | 1.3e-3 (1.8) | 4.7e-4 (1.8) | 1.8e-3 (2.1) | 4.4e-4 (1.8) | 2.7e-3 (1.9) | 2.7e-3 | 1.9e-3 (2.2) | 4.8e-2 |
+
+All converge, at order 1.6–2.2: they are gradients of the displacement,
+recovered at the nodes by averaging the element gradients, and the largest
+error sits at the endocardium. E_ZZ stays below 2e-3 of the in-plane
+strains (the ends keep u_z = 0). The nodal hydrostatic stress oscillates
+between the vertex and mid-edge levels of an element (κ (J − 1) of the nodal
+J); its element means converge, but the nodal traction check σ_rr(Ri) = −P
+is off by 0.3–0.5 P_max at nr = 4 with κ = 100 μ, and by 0.05 P_max at
+nr = 8 in the stiffer full Holzapfel-Ogden wall. The 0D block, evaluated the
+same way (nodal profiles, spline derivatives), converges at second order or
+faster to the same reference (ne = 32: strains and deviatoric stresses
+2e-5 to 3e-4, σ_rr(Ri) + P ≤ 3e-3).
+
+Helical fibers (`passive_helical`, full cylinder with free ends), compared at
+the mid-length section only (the middle element layer; β is the local twist
+rate there, V = π (Ri + ρ(Ri))² L as in the 0D), max relative differences
+over the ramp:
+
+| nr | V | ρ(R) | wall thickness | β | φ | E_RR | E_TT | E_ZZ | σ_vm | non-homogeneity | run time |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1.4e-2 | 7.5e-2 | 8.9e-2 | 0.17 | 1.9 | 1.1e-1 | 9.7e-2 | 3.8e-3 | 1.2e-1 | 1.8e-2 | 2 min (fsils) |
+| 2 | 4.9e-4 | 2.5e-3 | 1.2e-2 | 0.23 | 0.31 | 2.3e-2 | 1.1e-2 | 4.7e-3 | 2.4e-2 | 6.3e-3 | 12 min (Trilinos ML) |
+| 4 | 4.8e-4 | 3.2e-3 | 1.7e-3 | 0.16 | 3.2e-2 | 5.5e-3 | 3.0e-3 | 4.1e-3 | 5.2e-3 | 1.4e-3 | 82 min (Trilinos ML) |
+
+At mid-length the wall thickness, the transmural rotation, the strains and
+stresses and the axisymmetry converge toward the 0D. The volume (5e-4), the
+radial displacement (3e-3), the twist rate (16%) and the axial strain stall
+from nr = 2 on: the tube is only about four wall thicknesses long, and the
+end effect still reaches its middle. Along the whole tube
+(`helical_discrepancy.pdf`, where the nr = 2 and 4 profiles hardly differ)
+the endocardium expands 0.3% more than the 0D at mid-length and 1.6% more at
+the ends, and the tube twists 1.9× as much over its length (−0.16° vs
+−0.085° at 120 mmHg). With circumferential fibers the discretization error at
+nr = 4 is about 1e-4, so these differences are the model difference between
+the free-ended tube and the uniform 0D state, not mesh error.
+
 Active contraction (`active_prescribed`), first cycle, 400 steps per cycle
 (P relative to the 158 mmHg range):
 
 | nr | V | P | ρ(R) | stroke volume | run time |
 | --- | --- | --- | --- | --- | --- |
-| 1 | 1.3e-2 | 4.5e-2 | 4.9e-2 | 3.6e-2 | 2 min |
-| 2 | 1.8e-3 (2.9) | 3.7e-2 | 8.7e-3 (2.5) | 4.3e-3 (3.1) | 8 min |
-| 4 | 3.9e-4 (2.2) | 3.6e-2 | 2.0e-3 (2.1) | 4.4e-4 (3.3) | 24 min |
+| 1 | 1.3e-2 | 9.3e-3 | 4.9e-2 | 3.6e-2 | 2 min |
+| 2 | 1.8e-3 (2.9) | 2.2e-3 (2.1) | 8.7e-3 (2.5) | 4.3e-3 (3.1) | 8 min |
+| 4 | 3.9e-4 (2.2) | 2.3e-3 | 2.0e-3 (2.1) | 4.4e-4 (3.3) | 24 min |
 
-With half the time step (800 steps per cycle):
+With half the time step (800 steps per cycle; P not listed, see below):
 
-| nr | V | P | ρ(R) | stroke volume | run time |
-| --- | --- | --- | --- | --- | --- |
-| 1 | 1.3e-2 | 2.7e-2 | 4.9e-2 | 3.4e-2 | 4 min |
-| 2 | 1.6e-3 (3.0) | 1.9e-2 | 8.2e-3 (2.6) | 4.3e-3 (3.0) | 13 min |
-| 4 | 2.2e-4 (2.9) | 1.8e-2 | 1.5e-3 (2.5) | 4.3e-4 (3.3) | 44 min |
+| nr | V | ρ(R) | stroke volume | run time |
+| --- | --- | --- | --- | --- |
+| 1 | 1.3e-2 | 4.9e-2 | 3.4e-2 | 4 min |
+| 2 | 1.6e-3 (3.0) | 8.2e-3 (2.6) | 4.3e-3 (3.0) | 13 min |
+| 4 | 2.2e-4 (2.9) | 1.5e-3 (2.5) | 4.3e-4 (3.3) | 44 min |
 
-The pressure error is a lag of about one time step in isovolumic relaxation
-(−2300 mmHg/s), the O(dt) difference between the coupled and the stand-alone
-time integration: it does not fall with the mesh but halves with the time
-step (nr = 4: 3.6e-2 → 1.8e-2; nr = 1 at dt, dt/2, dt/4: 4.5e-2, 2.5e-2,
-1.8e-2, the last limited by the coarse mesh). The time-step lag also enters
-the volume error around end-systole and early filling; with half the time
-step, volume, wall displacement and stroke volume converge at third, 2.5th
-and third order. In the quasi-static late diastole the volume error falls at
-fourth order (nr = 2 → 4: 5.5e-5 → 3.4e-6), as in the passive cases.
+svMultiPhysics writes each row of `results/svZeroD_data` with the start time
+of its time step but the 0D state at its end (`write_svZeroD_solution` is
+called with `svZeroDTime` before that is advanced by dt, in
+`svZeroD_subroutines.cpp`); `coupled_3d.read_svzerod_data` adds dt. Without
+that correction the pressure error looked like a one-step lag in isovolumic
+relaxation (−2300 mmHg/s): 3.6e-2 at nr = 4, halving with the time step (the
+P column of the half-step runs above had the same offset, and those runs
+were not kept). With it, the pressure error falls to 2.2e-3 at nr = 2 and
+then stalls with the valve flows and dP/dt, presumably at the O(dt)
+difference between the coupled 3D (generalized-α) and the stand-alone 0D
+time integration (not yet confirmed by a half-step run). The volume error
+also falls with the time step around end-systole and early filling: with
+half the step, volume, wall displacement and stroke volume converge at
+third, 2.5th and third order. In the quasi-static late diastole the volume
+error falls at fourth order (nr = 2 → 4: 5.5e-5 → 3.4e-6), as in the passive
+cases.
+
+Further quantities of the first cycle, 400 steps per cycle (flows relative to
+their peak, valve times as the largest offset of the four openings and
+closings):
+
+| nr | Q_in | Q_out | stroke work | EF | max dP/dt | min dP/dt | valve times |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 5.2e-2 | 4.0e-2 | 4.4e-2 | 3.5e-2 | 2.9e-3 | 8.8e-3 | 2.4 ms |
+| 2 | 1.4e-2 | 6.2e-3 | 5.7e-3 (2.9) | 4.2e-3 (3.1) | 1.0e-3 | 2.4e-3 | 1.5 ms |
+| 4 | 1.4e-2 | 5.8e-3 | 1.1e-3 (2.4) | 4.3e-4 (3.3) | 8.6e-4 | 1.5e-3 | 1.6 ms |
+
+| nr | E_RR | E_TT | J | λ_f |
+| --- | --- | --- | --- | --- |
+| 1 | 1.6e-1 | 4.7e-2 | 1.7e-1 | 6.4e-2 |
+| 2 | 5.0e-2 (1.6) | 9.4e-3 (2.3) | 6.1e-2 (1.5) | 1.3e-2 (2.3) |
+| 4 | 1.7e-2 (1.5) | 3.1e-3 (1.6) | 1.8e-2 (1.8) | 4.2e-3 (1.6) |
+
+Stroke work, ejection fraction and the wall strains converge with the mesh.
+The valve flows, dP/dt and the valve times stall from nr = 2 on, like the
+pressure; the valve times differ by less than one step (2.5 ms).
+
+Helical fibers (`active_helical`), first cycle, 400 steps per cycle (ρ, strains
+and β at mid-length; β relative to its peak):
+
+| nr | V | P | ρ(R) | stroke volume | stroke work | EF | β | Q_in | Q_out | valve times | run time |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | 1.4e-2 | 4.7e-2 | 8.8e-2 | 1.6e-2 | 2.4e-2 | 1.8e-2 | 5.3e-2 | 3.2e-1 | 2.4e-1 | 8.0 ms | 8 min |
+
+At nr = 1 the PV loop, pressure and dP/dt nearly coincide with the 0D, and the
+mid-length twist follows the 0D's (peak 7.4° vs 7.9° over the length); the
+flow errors are the steep valve-flow fronts shifted by up to 8 ms.
 
 ## Compared quantities
 
@@ -208,6 +344,40 @@ twice that (the 0D model converges at second order). The study also reports
 the 0D convergence against the same reference and the non-homogeneity of the
 3D solution (largest deviation of ρ from its level mean).
 
+Strains and stresses are compared as through-wall profiles: level means of the
+3D nodal fields (below) vs the same quantities of the 0D solution
+(`zero_d_fields`), interpolated to the 3D levels by cubic splines. The 0D
+deformation gradient follows from the nodal ρ, φ, η and β, with the radial
+derivatives from cubic splines of the nodal values (the 0D derivatives are
+element-wise constant), and ε = 0; its stresses come from the 0D material law
+with the ST91 pressure of the local J.
+
+| Key | Quantity | Error measure |
+| --- | --- | --- |
+| `E_RR`, `E_TT`, `E_ZZ` | Green-Lagrange strain, reference cylindrical basis | relative to max(\|E_RR\|, \|E_TT\|) |
+| `J` | Jacobian, element means | relative to max \|J − 1\| |
+| `lambda_f` | fiber stretch | relative to max \|λ_f − 1\| |
+| `sigma_vm` | von Mises stress | relative to its maximum |
+| `sigma_dev` | σ_tt − σ_rr (Cauchy, deformed basis) | relative to its maximum |
+| `sigma_rr` | radial Cauchy stress, element means | relative to P_max |
+| `sigma_rr_endo` | σ_rr(Ri) + P, the endo traction condition | relative to P_max |
+
+Element means use Simpson's rule over the three node levels of a P2 element;
+the 0D counterpart is the mean of its spline over the element.
+
+`run_active_study.py` compares over the cycle the volume, pressure, ρ(R) and
+stroke volume, the inlet and outlet valve flows (relative to their peak), the
+valve opening and closing times (crossings of 2% of the peak flow, in ms),
+the stroke work (PV-loop area), ejection fraction and the extrema of dP/dt,
+and the strain, Jacobian and fiber-stretch profiles as above.
+
+Each study writes `CASE/output/summary.json` and one multi-panel PDF:
+`comparison_<formulation>.pdf` (passive: PV, ρ(R), strain, J, λ_f, stress
+profiles at 120 mmHg and the convergence of all errors) or
+`comparison_cycle<k>.pdf` (active: PV loop, volume, pressure, valve flows,
+dP/dt, endo and epi fiber stretch, strain profiles at end systole and end
+diastole, convergence).
+
 ### Struct output fields
 
 svMultiPhysics writes Displacement, Velocity, Acceleration and
@@ -225,7 +395,9 @@ profiles (J, E_RR, E_TT, E_ZZ, σ_rr, σ_tt, σ_zz, σ_vm, λ_f) are in
 `kinematics.json`. With κ = 100 μ the nodal hydrostatic stress oscillates
 between node levels (about ±2 kPa at nr = 4): it is κ (J − 1) of a nodal J
 from discontinuous gradients. Strains, fiber stretch and von Mises stress are
-smooth.
+smooth; J and σ_rr are therefore compared as element means. The coupled
+active case adds the kinematic profiles (J, E_RR, E_TT, E_ZZ, λ_f) to
+`coupled.json`.
 
 ## 3D formulations (`--formulation`)
 
@@ -252,11 +424,19 @@ Build the Python module (main README), then from the repository root:
 PYTHONPATH=build/python python scripts/ChamberCylinder/verification_3d/run_study.py scripts/ChamberCylinder/verification_3d/passive_anisotropic --nr 1 2 4 --run --np 4
 ```
 
+Helical fibers need the full length; from nr = 2 on, the Trilinos solver:
+
+```bash
+PYTHONPATH=build/python python scripts/ChamberCylinder/verification_3d/run_study.py scripts/ChamberCylinder/verification_3d/passive_helical --nr 2 4 --run --full-length --ls trilinos-ml --np 4
+PYTHONPATH=build/python python scripts/ChamberCylinder/verification_3d/helical_figure.py scripts/ChamberCylinder/verification_3d/passive_helical
+PYTHONPATH=build/python python scripts/ChamberCylinder/verification_3d/helical_sketch.py scripts/ChamberCylinder/verification_3d/passive_helical
+```
+
 `--nr` sets the elements through the wall (the mesh-size parameter;
 circumferential and axial divisions follow from h = (Re − Ri)/nr). Cases go to
-`CASE/runs/`, results and figures to `CASE/output/`, which also caches the 0D
-runs. Without `--run` the script only generates the 3D cases and
-post-processes existing results.
+`CASE/runs/`, results and the comparison PDF to `CASE/output/`, which also
+caches the 0D runs. Without `--run` the script post-processes existing
+results (as they were run) and generates the missing cases.
 
 The 3D solver runs in the `simvascular/solver:latest` Docker image (or a
 local build with `--exe`). The image is built for x86-64; on Apple Silicon,

@@ -110,8 +110,14 @@ def coupling_config(cfg, scale, n_substeps=2):
 
 
 def generate(model_0d, case_dir, nr, cycles=None, density=1.0, newton_tol=1e-10,
-             linear_solver=None, n_substeps=2):
-    """Write the coupled svMultiPhysics case of a ChamberCylinder circulation."""
+             linear_solver=None, n_substeps=2, end_damping=1e-3):
+    """Write the coupled svMultiPhysics case of a ChamberCylinder circulation.
+
+    Circumferential or axial fibers use the eighth model (the circulation
+    impedances scaled by 8); helical fibers the full cylinder with in-plane
+    dashpots on both ends (damping end_damping * mu / Re * dt, see
+    cylinder_3d.generate).
+    """
     with open(model_0d) as f:
         cfg = json.load(f)
     cyl = find_cylinder(cfg)
@@ -122,13 +128,14 @@ def generate(model_0d, case_dir, nr, cycles=None, density=1.0, newton_tol=1e-10,
     if at is None:
         raise ValueError("the 3D model needs a prescribed active_tension (UniformUnsteady)")
     mat = C3.material(v)
-    if mat.get("alpha_endo", 0.0) != mat.get("alpha_epi", 0.0) or mat.get("alpha_endo", 0.0) % 90:
-        raise ValueError("the eighth model needs circumferential or axial fibers")
     sp = cfg["simulation_parameters"]
     period = float(sp["cardiac_period"])
     n_pts = int(sp["number_of_time_pts_per_cardiac_cycle"])
     cycles = int(cycles or sp.get("number_of_cardiac_cycles", 1))
-    sector, Lm = 90.0, 0.5 * v["length"]
+    # circumferential or axial fibers: the eighth model; helical fibers: the
+    # full cylinder over the full length, with end dashpots (cylinder_3d)
+    helical = C3.helical(mat)
+    sector, Lm = (360.0, v["length"]) if helical else (90.0, 0.5 * v["length"])
     scale = (360.0 / sector) * v["length"] / Lm
     os.makedirs(case_dir, exist_ok=True)
     fm = C3.FORMULATIONS["struct-p2"]
@@ -165,7 +172,9 @@ def generate(model_0d, case_dir, nr, cycles=None, density=1.0, newton_tol=1e-10,
                 coupling=dict(block=BLOCK, config="svzerod_3Dcoupling.json",
                               library=LIB_IN_IMAGE, initial_pressure=p0),
                 # post-processing of the pressure ramp does not apply
-                T_ramp=float("inf"), P_max=0.0)
+                T_ramp=float("inf"), P_max=0.0,
+                **({"end_damping": end_damping * mat["mu"] / v["Re"] * period / (n_pts - 1)}
+                   if helical else {}))
     with open(os.path.join(case_dir, "solver.xml"), "w") as f:
         f.write(C3.solver_xml(case))
     with open(os.path.join(case_dir, "case.json"), "w") as f:
@@ -182,22 +191,29 @@ def run(case_dir, np_=1, max_time=None, echo_every=1):
                   echo_every=echo_every)
 
 
-def read_svzerod_data(path):
-    """Time and named variables of svMultiPhysics' results/svZeroD_data."""
+def read_svzerod_data(path, dt):
+    """Time and named variables of svMultiPhysics' results/svZeroD_data.
+
+    Each row holds the 0D state at the end of a time step but is labeled with
+    the step's start time (svZeroD_subroutines.cpp: write_svZeroD_solution
+    is called with svZeroDTime before it is advanced by dt), so dt is added.
+    """
     with open(path) as f:
         header = f.readline().split()
         names = header[1:]
         rows = [list(map(float, ln.split())) for ln in f if ln.strip()]
     data = np.array(rows)
-    return data[:, 0], {n: data[:, 1 + i] for i, n in enumerate(names)}
+    return data[:, 0] + dt, {n: data[:, 1 + i] for i, n in enumerate(names)}
 
 
 def post(case_dir):
     """Cavity volume, pressure, valve flows and wall kinematics per time step.
 
     Volume and flows are those of the full cylinder (3D volume times the
-    model fraction, 0D flows times the impedance scale). Written to
-    CASE_DIR/coupled.json.
+    model fraction, 0D flows times the impedance scale). With helical fibers
+    (full cylinder, free ends) the wall kinematics and strains are those of
+    the mid-length section (middle element layer, see cylinder_3d.post).
+    Written to CASE_DIR/coupled.json.
     """
     import glob
     with open(os.path.join(case_dir, "case.json")) as f:
@@ -215,15 +231,31 @@ def post(case_dir):
     out = dict(R=(case["Ri"] + dR * np.arange(levels.max() + 1)).tolist(),
                t=[0.0], V=[C3.lumen_volume(X, conn, case["sector"]) * case["length"] / Lm],
                rho=[[0.0] * (levels.max() + 1)], beta=[0.0])
+    m = case["material"]
+    fiber = C3.cylinder_fibers_at_nodes(X, case["Ri"], case["Re"], m.get("alpha_endo", 0.0),
+                                        m.get("alpha_epi", 0.0))["fiber"]
+    section, use = {}, None
+    if case["sector"] == 360.0:  # mid-length section of the free-ended tube
+        section = dict(z0=0.5 * Lm, dz=0.5 * Lm / case["nz"])
+        use = np.abs(X[:, 2] - section["z0"]) <= section["dz"] * (1.0 + 1e-9)
+        out["section"] = "mid-length"
+
+    def fields(u):  # through-wall profiles of strain, Jacobian and fiber stretch
+        kf = C3.kinematic_fields(X, mesh["cells"], u, case["order"], fiber)
+        return {k: v.tolist() for k, v in
+                C3.level_means(levels, kf, C3.KINEMATIC_PROFILES, use).items()}
+    out["fields"] = {k: [v] for k, v in fields(np.zeros_like(X)).items()}
     for n, fn in zip(steps, files):
         pts, pdata = C3._read_vtu(fn)
         x = X + pdata["Displacement"][:, :3]
-        k = C3.kinematics(X, x, levels)
+        k = C3.kinematics(X, x, levels, **section)
         out["t"].append(n * case["dt"])
         out["V"].append(C3.lumen_volume(x, conn, case["sector"]) * case["length"] / Lm)
         out["rho"].append(k["rho"].tolist())
         out["beta"].append(k["beta"])
-    t0d, d = read_svzerod_data(os.path.join(case_dir, "results", "svZeroD_data"))
+        for key, v in fields(x - X).items():
+            out["fields"][key].append(v)
+    t0d, d = read_svzerod_data(os.path.join(case_dir, "results", "svZeroD_data"), case["dt"])
     s = case["scale"]
     out.update(t_0d=t0d.tolist(), P=d[f"pressure:{BLOCK}:cavity_3d"].tolist(),
                Q_in=(s * d["flow:inlet_valve:cavity_in"]).tolist(),
@@ -252,11 +284,12 @@ def run_0d(model_0d, num_elements=None):
     pname = next(n for n in r["name"].unique() if n.startswith("pressure:") and name in n)
     ne = int(cyl["zero_d_element_values"]["num_elements"])
     v = cyl["zero_d_element_values"]
-    rho = np.stack([series(f"rho_{A}:{name}")[1] for A in range(ne + 1)], axis=1)
+    prof = {f: np.stack([series(f"{f}_{A}:{name}")[1] for A in range(ne + 1)], axis=1)
+            for f in ("rho", "phi", "eta")}
     inlet = next(n for n in r["name"].unique() if n.startswith("flow:") and n.endswith(":" + name))
     outlet = next(n for n in r["name"].unique() if n.startswith(f"flow:{name}:"))
     return dict(t=t, V=V, P=series(pname)[1], Q_in=series(inlet)[1], Q_out=series(outlet)[1],
-                R=np.linspace(v["Ri"], v["Re"], ne + 1), rho=rho)
+                beta=series(f"beta:{name}")[1], R=np.linspace(v["Ri"], v["Re"], ne + 1), **prof)
 
 
 def main():

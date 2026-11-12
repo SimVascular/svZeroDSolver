@@ -31,11 +31,12 @@
  * \ref Block::global_eqn_ids arrays (which are passed down unchanged).
  *
  * ChamberSphere::setup_dofs() always registers, in this order:
- * internal variables `radius, velo, stress, tau, volume,
+ * internal variables `radius, velo, stress, active_stress, volume,
+ * passive_stress,
  * <extra_var_names()...>` and equations `momentum, spherical_stress,
  * volume_change, acceleration, mass_conservation, pressure_equality,
- * <this model's equations...>`, so the offsets below are invariant across
- * ActiveStress subclasses.
+ * passive_stress, <this model's equations...>`, so the offsets below are
+ * invariant across ActiveStress subclasses.
  */
 class ActiveStress : public ParameterHolder {
  public:
@@ -62,12 +63,16 @@ class ActiveStress : public ParameterHolder {
           ///<
   static constexpr int VOLUME_VAR =
       8;  ///< Volume position within ChamberSphere's own global_var_ids array
+  static constexpr int PASSIVE_STRESS_VAR =
+      9;  ///< Passive wall stress position within ChamberSphere's own
+          ///< global_var_ids array
+          ///<
   static constexpr int NUM_CORE_VARS =
-      9;  ///< A subclass's own extra
-          ///< variables start at
-          ///< global_var_ids[NUM_CORE_VARS + i]
+      10;  ///< A subclass's own extra
+           ///< variables start at
+           ///< global_var_ids[NUM_CORE_VARS + i]
   static constexpr int NUM_CORE_EQNS =
-      6;  ///< A subclass's own extra
+      7;  ///< A subclass's own extra
           ///< equations start at
           ///< global_eqn_ids[NUM_CORE_EQNS + i]
   ///@}
@@ -82,7 +87,8 @@ class ActiveStress : public ParameterHolder {
 
   /**
    * @brief Number of internal variables this model owns beyond
-   * ChamberSphere's fixed 5 (radius, velo, stress, tau, volume)
+   * ChamberSphere's fixed 6 (radius, velo, stress, active_stress,
+   * volume, passive_stress)
    *
    * @return Number of extra internal variables
    */
@@ -90,7 +96,7 @@ class ActiveStress : public ParameterHolder {
 
   /**
    * @brief Names of this model's extra internal variables, in registration
-   * order (appended immediately after "volume")
+   * order (appended immediately after "passive_stress")
    *
    * @return List of extra internal variable names
    */
@@ -98,7 +104,7 @@ class ActiveStress : public ParameterHolder {
 
   /**
    * @brief Number of equations this model owns beyond ChamberSphere's fixed
-   * 6 core equations. Every ActiveStress supplies at least the equation
+   * 7 core equations. Every ActiveStress supplies at least the equation
    * defining \f$\tau\f$.
    *
    * @return Number of extra equations
@@ -226,8 +232,8 @@ class StrainIndependentActiveStress : public ActiveStress {
 /**
  * @brief Strain-dependent active stress model from \cite caruel13
  *
- * Owns 5 extra equations and 4 extra variables (\f$e_c, \tau_c, k_c,
- * \omega\f$, in that order):
+ * Owns 8 extra equations and 7 extra variables (\f$e_c, \tau_c, k_c,
+ * \omega, \sigma_c, \sigma_s, e_s\f$, in that order):
  * \f[
  * \tau = E_s \frac{e_{1D} - e_c}{(1 + 2 e_c)^2}
  * \f]
@@ -246,6 +252,13 @@ class StrainIndependentActiveStress : public ActiveStress {
  * \f[
  * \dot{\tau}_c = -(|u|_+ + \omega |u|_- + \alpha |\dot{e}_c|) \tau_c + n_0
  * \sigma_0 |u|_+ + k_c \dot{e}_c
+ * \f]
+ * and the additional outputs (sarcomere stress, series element stress and
+ * strain)
+ * \f[
+ * \sigma_c = \tau_c + \mu \dot{e}_c, \quad
+ * \sigma_s = \tau (1 + 2 e_c), \quad
+ * e_s = \frac{\sigma_s}{E_s}
  * \f]
  * where \f$n_0\f$ (activation strain-dependence) and \f$m_0\f$ (relaxation
  * strain-dependence) are piecewise-linear functions of \f$e_c\f$, given as
@@ -271,11 +284,11 @@ class StrainDependentActiveStress : public ActiveStress {
                       {"m0_e_c", InputParameter(false, true)},
                       {"m0_values", InputParameter(false, true)}}) {}
 
-  int num_extra_vars() const override { return 4; }
+  int num_extra_vars() const override { return 7; }
   std::list<std::string> extra_var_names() const override {
-    return {"e_c", "tau_c", "k_c", "omega"};
+    return {"e_c", "tau_c", "k_c", "omega", "sigma_c", "sigma_s", "e_s"};
   }
-  int num_extra_equations() const override { return 5; }
+  int num_extra_equations() const override { return 8; }
 
   ActivationSignalType required_signal_type() const override {
     return ActivationSignalType::rate;
@@ -305,15 +318,21 @@ class StrainDependentActiveStress : public ActiveStress {
    * ChamberSphere used.
    */
   ///@{
-  static constexpr int E_C_VAR = NUM_CORE_VARS + 0;    // 9
-  static constexpr int TAU_C_VAR = NUM_CORE_VARS + 1;  // 10
-  static constexpr int K_C_VAR = NUM_CORE_VARS + 2;    // 11
-  static constexpr int OMEGA_VAR = NUM_CORE_VARS + 3;  // 12
-  static constexpr int TAU_EQN = NUM_CORE_EQNS + 0;    // 6
-  static constexpr int OMEGA_EQN = NUM_CORE_EQNS + 1;  // 7
-  static constexpr int E_C_EQN = NUM_CORE_EQNS + 2;    // 8
-  static constexpr int K_C_EQN = NUM_CORE_EQNS + 3;    // 9
-  static constexpr int TAU_C_EQN = NUM_CORE_EQNS + 4;  // 10
+  static constexpr int E_C_VAR = NUM_CORE_VARS + 0;      // 10
+  static constexpr int TAU_C_VAR = NUM_CORE_VARS + 1;    // 11
+  static constexpr int K_C_VAR = NUM_CORE_VARS + 2;      // 12
+  static constexpr int OMEGA_VAR = NUM_CORE_VARS + 3;    // 13
+  static constexpr int SIGMA_C_VAR = NUM_CORE_VARS + 4;  // 14
+  static constexpr int SIGMA_S_VAR = NUM_CORE_VARS + 5;  // 15
+  static constexpr int E_S_VAR = NUM_CORE_VARS + 6;      // 16
+  static constexpr int TAU_EQN = NUM_CORE_EQNS + 0;      // 7
+  static constexpr int OMEGA_EQN = NUM_CORE_EQNS + 1;    // 8
+  static constexpr int E_C_EQN = NUM_CORE_EQNS + 2;      // 9
+  static constexpr int K_C_EQN = NUM_CORE_EQNS + 3;      // 10
+  static constexpr int TAU_C_EQN = NUM_CORE_EQNS + 4;    // 11
+  static constexpr int SIGMA_C_EQN = NUM_CORE_EQNS + 5;  // 12
+  static constexpr int SIGMA_S_EQN = NUM_CORE_EQNS + 6;  // 13
+  static constexpr int E_S_EQN = NUM_CORE_EQNS + 7;      // 14
   ///@}
 
   /**

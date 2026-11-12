@@ -40,8 +40,8 @@ void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
         " one.");
   }
 
-  std::list<std::string> internal_var_names = {"radius", "velo", "stress",
-                                               "tau", "volume"};
+  std::list<std::string> internal_var_names = {
+      "radius", "velo", "stress", "active_stress", "volume", "passive_stress"};
   for (const auto& name : active_stress_->extra_var_names()) {
     internal_var_names.push_back(name);
   }
@@ -79,6 +79,11 @@ void ChamberSphere::update_constant(SparseSystem& system,
   // pressure equality
   system.F.coeffRef(global_eqn_ids[5], global_var_ids[0]) = 1;
   system.F.coeffRef(global_eqn_ids[5], global_var_ids[2]) = -1;
+
+  // passive stress (total stress minus active stress)
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[9]) = -1;
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[6]) = 1;
+  system.F.coeffRef(global_eqn_ids[6], global_var_ids[7]) = -1;
 
   // active stress
   active_stress_->update_constant(system, global_eqn_ids, global_var_ids);

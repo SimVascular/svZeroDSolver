@@ -15,20 +15,8 @@ ActivationFunction::ActivationFunction(
     double cardiac_period,
     const std::vector<std::pair<std::string, InputParameter>>&
         input_param_properties)
-    : cardiac_period_(cardiac_period),
-      input_param_properties(input_param_properties) {
-  // Initialize parameters with default values
-  for (const auto& p : this->input_param_properties) {
-    if (p.second.is_number) {
-      double default_val = p.second.is_optional ? p.second.default_val : 0.0;
-      params_[p.first] = default_val;
-    }
-  }
-}
-
-void ActivationFunction::set_param(const std::string& name, double value) {
-  params_[name] = value;
-}
+    : ParameterHolder(input_param_properties),
+      cardiac_period_(cardiac_period) {}
 
 std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
     const std::string& type_str, double cardiac_period) {
@@ -50,10 +38,13 @@ std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
   if (type_str == "wrapping_cosine") {
     return std::make_unique<WrappingCosineActivation>(cardiac_period);
   }
+  if (type_str == "piecewise_rate") {
+    return std::make_unique<PiecewiseRateActivation>(cardiac_period);
+  }
   throw std::runtime_error(
       "Unknown activation_function type '" + type_str +
       "'. Must be one of: half_cosine, piecewise_cosine, two_hill, "
-      "double_tanh, fourier, wrapping_cosine");
+      "double_tanh, fourier, wrapping_cosine, piecewise_rate");
 }
 
 double HalfCosineActivation::compute(double time) {
@@ -251,4 +242,45 @@ double FourierActivation::compute(double time) {
   }
   double t_in_cycle = std::fmod(time, cardiac_period_);
   return (compute_raw(t_in_cycle) - norm_min_) / norm_range_;
+}
+
+// ============================================================
+// PiecewiseRateActivation — activation rate signal u(t) for the
+// strain-dependent active-stress model (Caruel 2013)
+// ============================================================
+
+void PiecewiseRateActivation::finalize() {
+  const auto& u_t = params_vec_.at("u_t");
+
+  // u_t must span the whole normalized cycle [0, 1] so that compute()'s
+  // flat-extrapolation outside the table never silently kicks in; linear_
+  // interpolate's general table checks (size, matching lengths, ordering)
+  // are enforced separately, inside linear_interpolate itself.
+  if (u_t.front() != 0.0) {
+    throw std::runtime_error(
+        "PiecewiseRateActivation: u_t must start at 0 (normalized start of "
+        "the cardiac cycle), got u_t.front() = " +
+        std::to_string(u_t.front()));
+  }
+  if (u_t.back() != 1.0) {
+    throw std::runtime_error(
+        "PiecewiseRateActivation: u_t must end at 1 (normalized end of the "
+        "cardiac cycle), got u_t.back() = " +
+        std::to_string(u_t.back()));
+  }
+  for (double t : u_t) {
+    if (t < 0.0 || t > 1.0) {
+      throw std::runtime_error(
+          "PiecewiseRateActivation: u_t entries must lie in [0, 1] "
+          "(normalized to the cardiac cycle), got " +
+          std::to_string(t));
+    }
+  }
+}
+
+double PiecewiseRateActivation::compute(double time) {
+  const double t_in_cycle = std::fmod(time, cardiac_period_);
+  const double t_norm = t_in_cycle / cardiac_period_;
+  return linear_interpolate(t_norm, params_vec_.at("u_t"),
+                            params_vec_.at("u_values"));
 }

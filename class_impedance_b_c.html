@@ -202,33 +202,33 @@ Public Attributes</h2></td></tr>
 <p>Imposes the outlet pressure as a discrete convolution of the impedance kernel with one cardiac cycle of flow history, following the structured-tree outflow condition of <a class="el" href="citelist.html#CITEREF_olufsen2000">[6]</a>.</p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{n+1}=P_d+z_0Q_{n+1}+\sum_{m=1}^{N_k-1}z_mQ_{n+1-m}
-\&zwj;]" src="form_117.png" width="328" height="56"/></picture>
+<picture><source srcset="form_120_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{n+1}=P_d+z_0Q_{n+1}+\sum_{m=1}^{N_k-1}z_mQ_{n+1-m}
+\&zwj;]" src="form_120.png" width="328" height="56"/></picture>
 </p>
-<p>The <picture><source srcset="form_118_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$z$" src="form_118.png" width="9" height="9"/></picture> entries are discrete-time convolution weights. The <picture><source srcset="form_119_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$m=0$" src="form_119.png" width="53" height="13"/></picture> term depends on the current flow, so it enters the system matrix directly; the history terms ( <picture><source srcset="form_120_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$m\geq 1$" src="form_120.png" width="51" height="17"/></picture>) are evaluated from accepted timesteps only, held in a fixed-size ring buffer spanning one cardiac cycle.</p>
+<p>The <picture><source srcset="form_121_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$z$" src="form_121.png" width="9" height="9"/></picture> entries are discrete-time convolution weights. The <picture><source srcset="form_122_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$m=0$" src="form_122.png" width="53" height="13"/></picture> term depends on the current flow, so it enters the system matrix directly; the history terms ( <picture><source srcset="form_123_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$m\geq 1$" src="form_123.png" width="51" height="17"/></picture>) are evaluated from accepted timesteps only, held in a fixed-size ring buffer spanning one cardiac cycle.</p>
 <p>The ring buffer is zero-initialized, so the history terms are omitted entirely until one full cycle has been accepted, after which they switch on at full magnitude. This reproduces the reference implementation, which gates the same sum on <span class="tt">t &gt; Period</span>, and makes the pressure discontinuous at the start of the second cycle. The first cycle is therefore not a meaningful solution and should be discarded.</p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_114_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} &amp; Q^{e}\end{array}\right]^{T}
-\&zwj;]" src="form_114.png" width="156" height="28"/></picture>
+<picture><source srcset="form_117_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{ll}P^{e} &amp; Q^{e}\end{array}\right]^{T}
+\&zwj;]" src="form_117.png" width="156" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_121_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{cc}
+<picture><source srcset="form_124_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{cc}
 1 &amp; -z_{0}
 \end{array}\right]
-\&zwj;]" src="form_121.png" width="139" height="24"/></picture>
+\&zwj;]" src="form_124.png" width="139" height="24"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_122_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_125_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 -\left(P_{d}+\sum_{m=1}^{N_k-1}z_mQ_{n+1-m}\right)
 \end{array}\right]
-\&zwj;]" src="form_122.png" width="313" height="36"/></picture>
+\&zwj;]" src="form_125.png" width="313" height="36"/></picture>
 </p>
 <h3>Parameters</h3>
 <ul>
 <li><span class="tt">z</span>: Time-domain impedance kernel. Its length must equal one cardiac cycle in time steps (see the timing requirements below).</li>
 <li><span class="tt">Pd</span>: Distal/reference pressure. Optional, defaults to <span class="tt">0.0</span>.</li>
-<li><span class="tt">convolution_mode</span>: <span class="tt">exact</span> (default) or <span class="tt">truncated</span>. In <span class="tt">truncated</span> mode only the first <span class="tt">num_kernel_terms</span> kernel entries are used, which costs <picture><source srcset="form_123_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$O(N_k)$" src="form_123.png" width="53" height="21"/></picture> per accepted timestep instead of one full cycle.</li>
+<li><span class="tt">convolution_mode</span>: <span class="tt">exact</span> (default) or <span class="tt">truncated</span>. In <span class="tt">truncated</span> mode only the first <span class="tt">num_kernel_terms</span> kernel entries are used, which costs <picture><source srcset="form_126_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$O(N_k)$" src="form_126.png" width="53" height="21"/></picture> per accepted timestep instead of one full cycle.</li>
 <li><span class="tt">num_kernel_terms</span>: Number of kernel terms. Required when <span class="tt">convolution_mode</span> is <span class="tt">truncated</span>, ignored otherwise.</li>
 </ul>
 <h3>Usage in json configuration file</h3>

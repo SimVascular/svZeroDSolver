@@ -212,63 +212,68 @@ Additional Inherited Members</h2></td></tr>
 <p>Models the mechanical behavior of a spherical heart chamber with active contraction. For reference, see <a class="el" href="citelist.html#CITEREF_caruel13">[1]</a> Equations (13a-b) for continuum mechanics (without length-dependent contraction valves, vessels) and <a class="el" href="citelist.html#CITEREF_pfaller2019importance">[7]</a> Equations (12-16) for the simplified active contraction model.</p>
 <h3>Helper Functions</h3>
 <p>Cauchy-Green deformation tensor and time derivative:   </p><p class="formulaDsp">
-<picture><source srcset="form_76_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  C = \left(1 + \frac{r}{r_0} \right)^2
-\&zwj;]" src="form_76.png" width="129" height="51"/></picture>
+<picture><source srcset="form_77_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  C = \left(1 + \frac{r}{r_0} \right)^2
+\&zwj;]" src="form_77.png" width="129" height="51"/></picture>
 </p>
    <p class="formulaDsp">
-<picture><source srcset="form_77_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  \dot{C} = 2 \left(1 + \frac{r}{r_0} \right) \frac{\dot{r}}{r_0}
-\&zwj;]" src="form_77.png" width="156" height="47"/></picture>
+<picture><source srcset="form_78_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  \dot{C} = 2 \left(1 + \frac{r}{r_0} \right) \frac{\dot{r}}{r_0}
+\&zwj;]" src="form_78.png" width="156" height="47"/></picture>
 </p>
 <h3>Governing equations</h3>
 <ol type="1">
 <li>Balance of linear momentum:    <p class="formulaDsp">
-<picture><source srcset="form_78_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  \rho d_0 \dot{v} + \frac{d_0}{r_0} \left(1 + \frac{r}{r_0} \right) S -
+<picture><source srcset="form_79_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  \rho d_0 \dot{v} + \frac{d_0}{r_0} \left(1 + \frac{r}{r_0} \right) S -
 P_\text{out} C = 0
-\&zwj;]" src="form_78.png" width="291" height="47"/></picture>
+\&zwj;]" src="form_79.png" width="291" height="47"/></picture>
 </p>
 </li>
 <li>Spherical stress:    <p class="formulaDsp">
-<picture><source srcset="form_79_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  -S + \tau + S_\text{el}(r, r_0) + \eta \dot{C}
+<picture><source srcset="form_80_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  -S + \tau + S_\text{el}(r, r_0) + \eta \dot{C}
   (1 + 2 C^{-6}) = 0
-\&zwj;]" src="form_79.png" width="326" height="24"/></picture>
+\&zwj;]" src="form_80.png" width="326" height="24"/></picture>
 </p>
- where <picture><source srcset="form_80_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_\text{el}$" src="form_80.png" width="23" height="19"/></picture> is the elastic stress term supplied by the chamber's <a class="el" href="class_sphere_material.html" title="SphereMaterial">SphereMaterial</a>.</li>
+ where <picture><source srcset="form_81_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_\text{el}$" src="form_81.png" width="23" height="19"/></picture> is the elastic stress term supplied by the chamber's <a class="el" href="class_sphere_material.html" title="SphereMaterial">SphereMaterial</a>.</li>
 <li>Volume change:   <p class="formulaDsp">
-<picture><source srcset="form_81_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  4 \pi r_0^2 Cv - \dot{V} = 0
-\&zwj;]" src="form_81.png" width="137" height="24"/></picture>
+<picture><source srcset="form_82_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  4 \pi r_0^2 Cv - \dot{V} = 0
+\&zwj;]" src="form_82.png" width="137" height="24"/></picture>
 </p>
 </li>
 <li>Active stress:   <p class="formulaDsp">
-<picture><source srcset="form_82_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  \tau = \tau(t, r, r_0, \dots)
-\&zwj;]" src="form_82.png" width="141" height="21"/></picture>
+<picture><source srcset="form_83_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  \tau = \tau(t, r, r_0, \dots)
+\&zwj;]" src="form_83.png" width="141" height="21"/></picture>
 </p>
  the specific form of which (and any accompanying internal state and equations) is supplied by a separate <a class="el" href="class_active_stress.html" title="ActiveStress">ActiveStress</a> object (e.g. <span class="tt">strain_independent</span>, <span class="tt">strain_dependent</span>) selected in the JSON configuration. The active stress model is driven by the chamber's <a class="el" href="class_activation_function.html" title="ActivationFunction">ActivationFunction</a> (e.g. <span class="tt">two_hill</span>, <span class="tt">half_cosine</span>, <span class="tt">piecewise_cosine</span>, <span class="tt">piecewise_rate</span>), also selected in the JSON configuration.</li>
 <li>Acceleration:   <p class="formulaDsp">
-<picture><source srcset="form_83_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  \dot{r} - v = 0
-\&zwj;]" src="form_83.png" width="77" height="13"/></picture>
+<picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  \dot{r} - v = 0
+\&zwj;]" src="form_84.png" width="77" height="13"/></picture>
 </p>
 </li>
 <li>Conservation of mass:   <p class="formulaDsp">
-<picture><source srcset="form_84_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  Q_\text{in} - Q_\text{out} - \dot{V} = 0
-\&zwj;]" src="form_84.png" width="161" height="23"/></picture>
+<picture><source srcset="form_85_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  Q_\text{in} - Q_\text{out} - \dot{V} = 0
+\&zwj;]" src="form_85.png" width="161" height="23"/></picture>
 </p>
 </li>
 <li>Pressure equality:   <p class="formulaDsp">
-<picture><source srcset="form_85_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  P_\text{in} - P_\text{out} = 0
-\&zwj;]" src="form_85.png" width="118" height="19"/></picture>
+<picture><source srcset="form_86_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  P_\text{in} - P_\text{out} = 0
+\&zwj;]" src="form_86.png" width="118" height="19"/></picture>
 </p>
 </li>
+<li>Passive stress:   <p class="formulaDsp">
+<picture><source srcset="form_87_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[  -S_\text{pas} + S - \tau = 0
+\&zwj;]" src="form_87.png" width="150" height="21"/></picture>
+</p>
+ i.e. the elastic plus viscous part of the spherical stress, provided as a direct output.</li>
 </ol>
 <h3>Parameters</h3>
 <p><a class="el" href="class_parameter.html" title="Model Parameter.">Parameter</a> sequence for constructing this block:</p>
 <ul>
-<li><span class="tt">rho</span> - Density <picture><source srcset="form_86_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\rho$" src="form_86.png" width="11" height="13"/></picture></li>
-<li><span class="tt">thick0</span> - Wall thickness <picture><source srcset="form_87_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$d_0$" src="form_87.png" width="17" height="19"/></picture></li>
-<li><span class="tt">radius0</span> - Reference radius <picture><source srcset="form_24_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r_0$" src="form_24.png" width="17" height="13"/></picture></li>
-<li><span class="tt">eta</span> - Viscosity parameter <picture><source srcset="form_88_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\eta$" src="form_88.png" width="11" height="13"/></picture></li>
+<li><span class="tt">rho</span> - Density <picture><source srcset="form_88_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\rho$" src="form_88.png" width="11" height="13"/></picture></li>
+<li><span class="tt">thick0</span> - Wall thickness <picture><source srcset="form_89_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$d_0$" src="form_89.png" width="17" height="19"/></picture></li>
+<li><span class="tt">radius0</span> - Reference radius <picture><source srcset="form_25_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r_0$" src="form_25.png" width="17" height="13"/></picture></li>
+<li><span class="tt">eta</span> - Viscosity parameter <picture><source srcset="form_90_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\eta$" src="form_90.png" width="11" height="13"/></picture></li>
 </ul>
-<p>An <span class="tt">activation_function</span> object is also required alongside <span class="tt">zero_d_element_values</span> to select and parameterize the activation function <picture><source srcset="form_89_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$f(t)$" src="form_89.png" width="32" height="21"/></picture> (see <a class="el" href="class_activation_function.html" title="ActivationFunction">ActivationFunction</a>, e.g. <span class="tt">two_hill</span>, <span class="tt">half_cosine</span>, <span class="tt">piecewise_cosine</span>, <span class="tt">wrapping_cosine</span>, <span class="tt">fourier</span>, <span class="tt">double_tanh</span>, <span class="tt">piecewise_rate</span>).</p>
-<p>Furthermore, a <span class="tt">material</span> object is required to select and parameterize the material model for the elastic stress term <picture><source srcset="form_90_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_\text{el}(r, r_0)$" src="form_90.png" width="69" height="21"/></picture> (see <a class="el" href="class_sphere_material.html" title="SphereMaterial">SphereMaterial</a>, e.g. <span class="tt">exponential</span>, <span class="tt">mooney_rivlin</span>).</p>
+<p>An <span class="tt">activation_function</span> object is also required alongside <span class="tt">zero_d_element_values</span> to select and parameterize the activation function <picture><source srcset="form_91_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$f(t)$" src="form_91.png" width="32" height="21"/></picture> (see <a class="el" href="class_activation_function.html" title="ActivationFunction">ActivationFunction</a>, e.g. <span class="tt">two_hill</span>, <span class="tt">half_cosine</span>, <span class="tt">piecewise_cosine</span>, <span class="tt">wrapping_cosine</span>, <span class="tt">fourier</span>, <span class="tt">double_tanh</span>, <span class="tt">piecewise_rate</span>).</p>
+<p>Furthermore, a <span class="tt">material</span> object is required to select and parameterize the material model for the elastic stress term <picture><source srcset="form_92_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_\text{el}(r, r_0)$" src="form_92.png" width="69" height="21"/></picture> (see <a class="el" href="class_sphere_material.html" title="SphereMaterial">SphereMaterial</a>, e.g. <span class="tt">exponential</span>, <span class="tt">mooney_rivlin</span>).</p>
 <p>Finally, an <span class="tt">active_stress</span> object is required to select and parameterize the active stress model (see <a class="el" href="class_active_stress.html" title="ActiveStress">ActiveStress</a>, e.g. <span class="tt">strain_independent</span>, <span class="tt">strain_dependent</span>).</p>
 <h3>Usage in json configuration file</h3>
 <pre class="fragment">"chambers": [
@@ -290,13 +295,14 @@ P_\text{out} C = 0
 <h3>Internal variables</h3>
 <p>Names of internal variables in this block's output:</p>
 <ul>
-<li><span class="tt">radius</span> - Chamber radius <picture><source srcset="form_91_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r$" src="form_91.png" width="11" height="9"/></picture></li>
-<li><span class="tt">velo</span> - Chamber velocity <picture><source srcset="form_92_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\dot{r}$" src="form_92.png" width="11" height="13"/></picture></li>
-<li><span class="tt">stress</span> - Spherical stress <picture><source srcset="form_93_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S$" src="form_93.png" width="13" height="15"/></picture></li>
-<li><span class="tt">tau</span> - Active stress <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture></li>
-<li><span class="tt">volume</span> - Chamber volume <picture><source srcset="form_94_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$V$" src="form_94.png" width="15" height="15"/></picture></li>
+<li><span class="tt">radius</span> - Chamber radius <picture><source srcset="form_93_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r$" src="form_93.png" width="11" height="9"/></picture></li>
+<li><span class="tt">velo</span> - Chamber velocity <picture><source srcset="form_94_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\dot{r}$" src="form_94.png" width="11" height="13"/></picture></li>
+<li><span class="tt">stress</span> - Spherical stress <picture><source srcset="form_95_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S$" src="form_95.png" width="13" height="15"/></picture></li>
+<li><span class="tt">active_stress</span> - Active stress <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture></li>
+<li><span class="tt">volume</span> - Chamber volume <picture><source srcset="form_96_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$V$" src="form_96.png" width="15" height="15"/></picture></li>
+<li><span class="tt">passive_stress</span> - Passive (elastic + viscous) stress <picture><source srcset="form_97_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$S_\text{pas} = S - \tau$" src="form_97.png" width="105" height="21"/></picture></li>
 </ul>
-<p>Active stress models may introduce additional internal variables (e.g. <span class="tt">e_c</span>, <span class="tt">tau_c</span>, <span class="tt">k_c</span>, <span class="tt">omega</span> for the <span class="tt">strain_dependent</span> model, see <a class="el" href="class_active_stress.html" title="ActiveStress">ActiveStress</a>). </p>
+<p>Active stress models may introduce additional internal variables (e.g. <span class="tt">e_c</span>, <span class="tt">tau_c</span>, <span class="tt">k_c</span>, <span class="tt">omega</span>, <span class="tt">sigma_c</span>, <span class="tt">sigma_s</span>, <span class="tt">e_s</span> for the <span class="tt">strain_dependent</span> model, see <a class="el" href="class_active_stress.html" title="ActiveStress">ActiveStress</a>). </p>
 </div><a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Member Enumeration Documentation</h2>
 <a id="a6b48ac81ff298ba3b2b805084e2287df" name="a6b48ac81ff298ba3b2b805084e2287df"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6b48ac81ff298ba3b2b805084e2287df">&#9670;&#160;</a></span>ParamId</h2>

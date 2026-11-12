@@ -116,11 +116,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac93b4789c92930e22011e6a9a4820ebc" id="r_ac93b4789c92930e22011e6a9a4820ebc"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac93b4789c92930e22011e6a9a4820ebc">ActiveStress</a> (const std::vector&lt; std::pair&lt; std::string, <a class="el" href="struct_input_parameter.html">InputParameter</a> &gt; &gt; &amp;props)</td></tr>
 <tr class="memdesc:ac93b4789c92930e22011e6a9a4820ebc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct an <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> model.  <br /></td></tr>
 <tr class="memitem:aadbc9f008d8f6e09b4104e250bfd29ca" id="r_aadbc9f008d8f6e09b4104e250bfd29ca"><td class="memItemLeft">virtual int&#160;</td><td class="memItemRight"><a class="el" href="#aadbc9f008d8f6e09b4104e250bfd29ca">num_extra_vars</a> () const</td></tr>
-<tr class="memdesc:aadbc9f008d8f6e09b4104e250bfd29ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of internal variables this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 5 (radius, velo, stress, tau, volume).  <br /></td></tr>
+<tr class="memdesc:aadbc9f008d8f6e09b4104e250bfd29ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of internal variables this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 6 (radius, velo, stress, active_stress, volume, passive_stress).  <br /></td></tr>
 <tr class="memitem:ae2b54f692ce7d4027e762ad78bd99671" id="r_ae2b54f692ce7d4027e762ad78bd99671"><td class="memItemLeft">virtual std::list&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ae2b54f692ce7d4027e762ad78bd99671">extra_var_names</a> () const</td></tr>
-<tr class="memdesc:ae2b54f692ce7d4027e762ad78bd99671"><td class="mdescLeft">&#160;</td><td class="mdescRight">Names of this model's extra internal variables, in registration order (appended immediately after "volume").  <br /></td></tr>
+<tr class="memdesc:ae2b54f692ce7d4027e762ad78bd99671"><td class="mdescLeft">&#160;</td><td class="mdescRight">Names of this model's extra internal variables, in registration order (appended immediately after "passive_stress").  <br /></td></tr>
 <tr class="memitem:a25e89a6e80c61c941efa6d355a8495b5" id="r_a25e89a6e80c61c941efa6d355a8495b5"><td class="memItemLeft">virtual int&#160;</td><td class="memItemRight"><a class="el" href="#a25e89a6e80c61c941efa6d355a8495b5">num_extra_equations</a> () const =0</td></tr>
-<tr class="memdesc:a25e89a6e80c61c941efa6d355a8495b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of equations this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 6 core equations. Every <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> supplies at least the equation defining <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>.  <br /></td></tr>
+<tr class="memdesc:a25e89a6e80c61c941efa6d355a8495b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of equations this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 7 core equations. Every <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> supplies at least the equation defining <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>.  <br /></td></tr>
 <tr class="memitem:a909a0ba59c91f43b1a533550274a6ae5" id="r_a909a0ba59c91f43b1a533550274a6ae5"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a909a0ba59c91f43b1a533550274a6ae5">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, const std::vector&lt; int &gt; &amp;global_eqn_ids, const std::vector&lt; int &gt; &amp;global_var_ids)</td></tr>
 <tr class="memdesc:a909a0ba59c91f43b1a533550274a6ae5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constant (time- and solution-independent) contributions.  <br /></td></tr>
 <tr class="memitem:ac03d7452d10ab25aaf2f608698cc3a14" id="r_ac03d7452d10ab25aaf2f608698cc3a14"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ac03d7452d10ab25aaf2f608698cc3a14">update_time</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, const std::vector&lt; int &gt; &amp;global_eqn_ids, const std::vector&lt; int &gt; &amp;global_var_ids, double activation_signal)</td></tr>
@@ -156,6 +156,7 @@ Static Public Attributes</h2></td></tr>
 <tr class="memitem:a0764660773c8af9757312cbd19fc7a04" id="r_a0764660773c8af9757312cbd19fc7a04"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="#a0764660773c8af9757312cbd19fc7a04">TAU_VAR</a></td></tr>
 <tr class="memitem:ae9b0636f35649431427d537c8da90a73" id="r_ae9b0636f35649431427d537c8da90a73"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="#ae9b0636f35649431427d537c8da90a73">VOLUME_VAR</a></td></tr>
 <tr class="memdesc:ae9b0636f35649431427d537c8da90a73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Volume position within <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s own global_var_ids array.  <br /></td></tr>
+<tr class="memitem:a898c8f686e184cbe168a4d66be6bb28a" id="r_a898c8f686e184cbe168a4d66be6bb28a"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="#a898c8f686e184cbe168a4d66be6bb28a">PASSIVE_STRESS_VAR</a></td></tr>
 <tr class="memitem:abaa92a645c97d3e52406c1d175263cf7" id="r_abaa92a645c97d3e52406c1d175263cf7"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="#abaa92a645c97d3e52406c1d175263cf7">NUM_CORE_VARS</a></td></tr>
 <tr class="memitem:afeaf228a75c2db4ea3bbaadf2cb9748e" id="r_afeaf228a75c2db4ea3bbaadf2cb9748e"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="#afeaf228a75c2db4ea3bbaadf2cb9748e">NUM_CORE_EQNS</a></td></tr>
 </table><table class="memberdecls">
@@ -173,10 +174,11 @@ Additional Inherited Members</h2></td></tr>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for chamber active stress models. </p>
 <p>An <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> owns the dynamics of a chamber's active stress <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>. Subclasses may introduce additional internal variables and equations beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed core state, and write directly into the same global <a class="el" href="class_sparse_system.html" title="Sparse system.">SparseSystem</a> that <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a> writes into, using indices that are a fixed offset into <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s own <a class="el" href="class_block.html#ab64718f69f658fd3f66eb959f9349b9e" title="Block::global_var_ids">Block::global_var_ids</a> and <a class="el" href="class_block.html#a7851447ef34b1f916a056b572713e9db" title="Block::global_eqn_ids">Block::global_eqn_ids</a> arrays (which are passed down unchanged).</p>
-<p><a class="el" href="class_chamber_sphere.html#ac2998556c4173e403d9433146376dac2" title="Set up the degrees of freedom (DOF) of the block.">ChamberSphere::setup_dofs()</a> always registers, in this order: internal variables <span class="tt">radius, velo, stress, tau, volume,
-&lt;<a class="el" href="#ae2b54f692ce7d4027e762ad78bd99671" title="Names of this model&#39;s extra internal variables, in registration order (appended immediately after &quot;vo...">extra_var_names()</a>...&gt;</span> and equations <span class="tt">momentum, spherical_stress,
+<p><a class="el" href="class_chamber_sphere.html#ac2998556c4173e403d9433146376dac2" title="Set up the degrees of freedom (DOF) of the block.">ChamberSphere::setup_dofs()</a> always registers, in this order: internal variables <span class="tt">radius, velo, stress, active_stress, volume,
+passive_stress,
+&lt;<a class="el" href="#ae2b54f692ce7d4027e762ad78bd99671" title="Names of this model&#39;s extra internal variables, in registration order (appended immediately after &quot;pa...">extra_var_names()</a>...&gt;</span> and equations <span class="tt">momentum, spherical_stress,
 volume_change, acceleration, mass_conservation, pressure_equality,
-&lt;this model's equations...&gt;</span>, so the offsets below are invariant across <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> subclasses. </p>
+passive_stress, &lt;this model's equations...&gt;</span>, so the offsets below are invariant across <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> subclasses. </p>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac93b4789c92930e22011e6a9a4820ebc" name="ac93b4789c92930e22011e6a9a4820ebc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac93b4789c92930e22011e6a9a4820ebc">&#9670;&#160;</a></span>ActiveStress()</h2>
@@ -269,7 +271,7 @@ volume_change, acceleration, mass_conservation, pressure_equality,
 </table>
 </div><div class="memdoc">
 
-<p>Names of this model's extra internal variables, in registration order (appended immediately after "volume"). </p>
+<p>Names of this model's extra internal variables, in registration order (appended immediately after "passive_stress"). </p>
 <dl class="section return"><dt>Returns</dt><dd>List of extra internal variable names </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_strain_dependent_active_stress.html#a3b767324161d2f55dd169bde927aee83">StrainDependentActiveStress</a>.</p>
@@ -299,7 +301,7 @@ volume_change, acceleration, mass_conservation, pressure_equality,
 </table>
 </div><div class="memdoc">
 
-<p>Number of equations this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 6 core equations. Every <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> supplies at least the equation defining <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>. </p>
+<p>Number of equations this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 7 core equations. Every <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> supplies at least the equation defining <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Number of extra equations </dd></dl>
 
 <p>Implemented in <a class="el" href="class_strain_dependent_active_stress.html#ae2c0b7def13dec1effbe76846c3b6569">StrainDependentActiveStress</a>, and <a class="el" href="class_strain_independent_active_stress.html#a45a62709a96dc273d8373b7b35f6b4d0">StrainIndependentActiveStress</a>.</p>
@@ -329,7 +331,7 @@ volume_change, acceleration, mass_conservation, pressure_equality,
 </table>
 </div><div class="memdoc">
 
-<p>Number of internal variables this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 5 (radius, velo, stress, tau, volume). </p>
+<p>Number of internal variables this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 6 (radius, velo, stress, active_stress, volume, passive_stress). </p>
 <dl class="section return"><dt>Returns</dt><dd>Number of extra internal variables </dd></dl>
 
 <p>Reimplemented in <a class="el" href="class_strain_dependent_active_stress.html#a4f52f68fc020a30280c12833ee49be42">StrainDependentActiveStress</a>.</p>
@@ -473,7 +475,7 @@ volume_change, acceleration, mass_conservation, pressure_equality,
     <tr><td class="paramname">global_var_ids</td><td><a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s global variable indices </td></tr>
     <tr><td class="paramname">y</td><td>Current solution </td></tr>
     <tr><td class="paramname">dy</td><td>Current derivative of the solution </td></tr>
-    <tr><td class="paramname">radius0</td><td>Reference radius <picture><source srcset="form_24_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r_0$" src="form_24.png" width="17" height="13"/></picture> of the chamber </td></tr>
+    <tr><td class="paramname">radius0</td><td>Reference radius <picture><source srcset="form_25_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r_0$" src="form_25.png" width="17" height="13"/></picture> of the chamber </td></tr>
     <tr><td class="paramname">activation_signal</td><td>The chamber's <a class="el" href="class_activation_function.html" title="Base class for activation functions.">ActivationFunction</a> evaluated at the current time </td></tr>
   </table>
   </dd>
@@ -556,7 +558,7 @@ volume_change, acceleration, mass_conservation, pressure_equality,
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">                               =</div>
-<div class="line">6</div>
+<div class="line">7</div>
 </div><!-- fragment --><p>A subclass's own extra equations start at global_eqn_ids[NUM_CORE_EQNS + i] </p>
 
 </div>
@@ -581,8 +583,33 @@ volume_change, acceleration, mass_conservation, pressure_equality,
 </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">                               =</div>
-<div class="line">9</div>
+<div class="line">10</div>
 </div><!-- fragment --><p>A subclass's own extra variables start at global_var_ids[NUM_CORE_VARS + i] </p>
+
+</div>
+</div>
+<a id="a898c8f686e184cbe168a4d66be6bb28a" name="a898c8f686e184cbe168a4d66be6bb28a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a898c8f686e184cbe168a4d66be6bb28a">&#9670;&#160;</a></span>PASSIVE_STRESS_VAR</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ActiveStress::PASSIVE_STRESS_VAR</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<b>Initial value:</b><div class="fragment"><div class="line">                                    =</div>
+<div class="line">9</div>
+</div><!-- fragment --><p>Passive wall stress position within <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s own global_var_ids array </p>
 
 </div>
 </div>

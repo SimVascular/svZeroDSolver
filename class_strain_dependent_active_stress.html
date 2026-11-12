@@ -113,11 +113,11 @@ Inheritance diagram for StrainDependentActiveStress:</div>
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a4f52f68fc020a30280c12833ee49be42" id="r_a4f52f68fc020a30280c12833ee49be42"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a4f52f68fc020a30280c12833ee49be42">num_extra_vars</a> () const override</td></tr>
-<tr class="memdesc:a4f52f68fc020a30280c12833ee49be42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of internal variables this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 5 (radius, velo, stress, tau, volume).  <br /></td></tr>
+<tr class="memdesc:a4f52f68fc020a30280c12833ee49be42"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of internal variables this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 6 (radius, velo, stress, active_stress, volume, passive_stress).  <br /></td></tr>
 <tr class="memitem:a3b767324161d2f55dd169bde927aee83" id="r_a3b767324161d2f55dd169bde927aee83"><td class="memItemLeft">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a3b767324161d2f55dd169bde927aee83">extra_var_names</a> () const override</td></tr>
-<tr class="memdesc:a3b767324161d2f55dd169bde927aee83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Names of this model's extra internal variables, in registration order (appended immediately after "volume").  <br /></td></tr>
+<tr class="memdesc:a3b767324161d2f55dd169bde927aee83"><td class="mdescLeft">&#160;</td><td class="mdescRight">Names of this model's extra internal variables, in registration order (appended immediately after "passive_stress").  <br /></td></tr>
 <tr class="memitem:ae2c0b7def13dec1effbe76846c3b6569" id="r_ae2c0b7def13dec1effbe76846c3b6569"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ae2c0b7def13dec1effbe76846c3b6569">num_extra_equations</a> () const override</td></tr>
-<tr class="memdesc:ae2c0b7def13dec1effbe76846c3b6569"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of equations this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 6 core equations. Every <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> supplies at least the equation defining <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>.  <br /></td></tr>
+<tr class="memdesc:ae2c0b7def13dec1effbe76846c3b6569"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of equations this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 7 core equations. Every <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> supplies at least the equation defining <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>.  <br /></td></tr>
 <tr class="memitem:a276e23bec80dc00e419cef98aed42064" id="r_a276e23bec80dc00e419cef98aed42064"><td class="memItemLeft"><a class="el" href="_activation_function_8h.html#a6ba4b0d17e7445515ad06704f154c910">ActivationSignalType</a>&#160;</td><td class="memItemRight"><a class="el" href="#a276e23bec80dc00e419cef98aed42064">required_signal_type</a> () const override</td></tr>
 <tr class="memdesc:a276e23bec80dc00e419cef98aed42064"><td class="mdescLeft">&#160;</td><td class="mdescRight">Type of activation signal this active stress model needs.  <br /></td></tr>
 <tr class="memitem:a9dc1f26073a6143cda484d473c133d7f" id="r_a9dc1f26073a6143cda484d473c133d7f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9dc1f26073a6143cda484d473c133d7f">update_constant</a> (<a class="el" href="class_sparse_system.html">SparseSystem</a> &amp;system, const std::vector&lt; int &gt; &amp;global_eqn_ids, const std::vector&lt; int &gt; &amp;global_var_ids) override</td></tr>
@@ -155,6 +155,7 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a0764660773c8af9757312cbd19fc7a04 pub_static_attribs_class_active_stress" id="r_a0764660773c8af9757312cbd19fc7a04"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="class_active_stress.html#a0764660773c8af9757312cbd19fc7a04">TAU_VAR</a></td></tr>
 <tr class="memitem:ae9b0636f35649431427d537c8da90a73 pub_static_attribs_class_active_stress" id="r_ae9b0636f35649431427d537c8da90a73"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="class_active_stress.html#ae9b0636f35649431427d537c8da90a73">VOLUME_VAR</a></td></tr>
 <tr class="memdesc:ae9b0636f35649431427d537c8da90a73 pub_static_attribs_class_active_stress"><td class="mdescLeft">&#160;</td><td class="mdescRight">Volume position within <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s own global_var_ids array.  <br /></td></tr>
+<tr class="memitem:a898c8f686e184cbe168a4d66be6bb28a pub_static_attribs_class_active_stress" id="r_a898c8f686e184cbe168a4d66be6bb28a"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="class_active_stress.html#a898c8f686e184cbe168a4d66be6bb28a">PASSIVE_STRESS_VAR</a></td></tr>
 <tr class="memitem:abaa92a645c97d3e52406c1d175263cf7 pub_static_attribs_class_active_stress" id="r_abaa92a645c97d3e52406c1d175263cf7"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="class_active_stress.html#abaa92a645c97d3e52406c1d175263cf7">NUM_CORE_VARS</a></td></tr>
 <tr class="memitem:afeaf228a75c2db4ea3bbaadf2cb9748e pub_static_attribs_class_active_stress" id="r_afeaf228a75c2db4ea3bbaadf2cb9748e"><td class="memItemLeft">static constexpr int&#160;</td><td class="memItemRight"><a class="el" href="class_active_stress.html#afeaf228a75c2db4ea3bbaadf2cb9748e">NUM_CORE_EQNS</a></td></tr>
 <tr class="inherit_header pro_attribs_class_parameter_holder"><td colspan="2">Protected Attributes inherited from <a class="el" href="class_parameter_holder.html">ParameterHolder</a></td></tr>
@@ -165,8 +166,8 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Strain-dependent active stress model from <a class="el" href="citelist.html#CITEREF_caruel13">[1]</a>. </p>
-<p>Owns 5 extra equations and 4 extra variables (  <picture><source srcset="form_14_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$e_c, \tau_c, k_c,
-\omega$" src="form_14.png" width="86" height="19"/></picture>, in that order):   </p><p class="formulaDsp">
+<p>Owns 8 extra equations and 7 extra variables (  <picture><source srcset="form_14_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$e_c, \tau_c, k_c,
+\omega, \sigma_c, \sigma_s, e_s$" src="form_14.png" width="163" height="19"/></picture>, in that order):   </p><p class="formulaDsp">
 <picture><source srcset="form_15_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\tau = E_s \frac{e_{1D} - e_c}{(1 + 2 e_c)^2}
 \&zwj;]" src="form_15.png" width="143" height="39"/></picture>
 </p>
@@ -188,7 +189,13 @@ Additional Inherited Members</h2></td></tr>
 \sigma_0 |u|_+ + k_c \dot{e}_c
 \&zwj;]" src="form_20.png" width="401" height="21"/></picture>
 </p>
-<p> where <picture><source srcset="form_21_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$n_0$" src="form_21.png" width="21" height="13"/></picture> (activation strain-dependence) and <picture><source srcset="form_22_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$m_0$" src="form_22.png" width="26" height="13"/></picture> (relaxation strain-dependence) are piecewise-linear functions of <picture><source srcset="form_23_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$e_c$" src="form_23.png" width="15" height="13"/></picture>, given as break point tables (<span class="tt">n0_e_c</span>/<span class="tt">n0_values</span> and <span class="tt">m0_e_c</span>/<span class="tt">m0_values</span>) and evaluated with <a class="el" href="_parameter_8h.html#a8163f4e701c20e2b1f08793b6ed4b66f" title="linear_interpolate">linear_interpolate</a>, and <picture><source srcset="form_9_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$u(t)$" src="form_9.png" width="32" height="21"/></picture> is a reaction-rate signal supplied by the chamber's <a class="el" href="class_activation_function.html" title="Base class for activation functions.">ActivationFunction</a> (e.g. <a class="el" href="class_piecewise_rate_activation.html" title="PiecewiseRateActivation">PiecewiseRateActivation</a>).</p>
+<p> and the additional outputs (sarcomere stress, series element stress and strain)     </p><p class="formulaDsp">
+<picture><source srcset="form_21_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\sigma_c = \tau_c + \mu \dot{e}_c, \quad
+\sigma_s = \tau (1 + 2 e_c), \quad
+e_s = \frac{\sigma_s}{E_s}
+\&zwj;]" src="form_21.png" width="356" height="39"/></picture>
+</p>
+<p> where <picture><source srcset="form_22_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$n_0$" src="form_22.png" width="21" height="13"/></picture> (activation strain-dependence) and <picture><source srcset="form_23_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$m_0$" src="form_23.png" width="26" height="13"/></picture> (relaxation strain-dependence) are piecewise-linear functions of <picture><source srcset="form_24_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$e_c$" src="form_24.png" width="15" height="13"/></picture>, given as break point tables (<span class="tt">n0_e_c</span>/<span class="tt">n0_values</span> and <span class="tt">m0_e_c</span>/<span class="tt">m0_values</span>) and evaluated with <a class="el" href="_parameter_8h.html#a8163f4e701c20e2b1f08793b6ed4b66f" title="linear_interpolate">linear_interpolate</a>, and <picture><source srcset="form_9_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$u(t)$" src="form_9.png" width="32" height="21"/></picture> is a reaction-rate signal supplied by the chamber's <a class="el" href="class_activation_function.html" title="Base class for activation functions.">ActivationFunction</a> (e.g. <a class="el" href="class_piecewise_rate_activation.html" title="PiecewiseRateActivation">PiecewiseRateActivation</a>).</p>
 <p>Parameters: <span class="tt">E_s</span>, <span class="tt">mu</span>, <span class="tt">alpha_r</span>, <span class="tt">alpha</span>, <span class="tt">k_0</span>, <span class="tt">sigma_0</span>, <span class="tt">n0_e_c</span>, <span class="tt">n0_values</span>, <span class="tt">m0_e_c</span>, <span class="tt">m0_values</span> </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="a3b767324161d2f55dd169bde927aee83" name="a3b767324161d2f55dd169bde927aee83"></a>
@@ -214,7 +221,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Names of this model's extra internal variables, in registration order (appended immediately after "volume"). </p>
+<p>Names of this model's extra internal variables, in registration order (appended immediately after "passive_stress"). </p>
 <dl class="section return"><dt>Returns</dt><dd>List of extra internal variable names </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_active_stress.html#ae2b54f692ce7d4027e762ad78bd99671">ActiveStress</a>.</p>
@@ -244,7 +251,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Number of equations this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 6 core equations. Every <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> supplies at least the equation defining <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>. </p>
+<p>Number of equations this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 7 core equations. Every <a class="el" href="class_active_stress.html" title="Base class for chamber active stress models.">ActiveStress</a> supplies at least the equation defining <picture><source srcset="form_11_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\tau$" src="form_11.png" width="11" height="9"/></picture>. </p>
 <dl class="section return"><dt>Returns</dt><dd>Number of extra equations </dd></dl>
 
 <p>Implements <a class="el" href="class_active_stress.html#a25e89a6e80c61c941efa6d355a8495b5">ActiveStress</a>.</p>
@@ -274,7 +281,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Number of internal variables this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 5 (radius, velo, stress, tau, volume). </p>
+<p>Number of internal variables this model owns beyond <a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s fixed 6 (radius, velo, stress, active_stress, volume, passive_stress). </p>
 <dl class="section return"><dt>Returns</dt><dd>Number of extra internal variables </dd></dl>
 
 <p>Reimplemented from <a class="el" href="class_active_stress.html#aadbc9f008d8f6e09b4104e250bfd29ca">ActiveStress</a>.</p>
@@ -418,7 +425,7 @@ Additional Inherited Members</h2></td></tr>
     <tr><td class="paramname">global_var_ids</td><td><a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>'s global variable indices </td></tr>
     <tr><td class="paramname">y</td><td>Current solution </td></tr>
     <tr><td class="paramname">dy</td><td>Current derivative of the solution </td></tr>
-    <tr><td class="paramname">radius0</td><td>Reference radius <picture><source srcset="form_24_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r_0$" src="form_24.png" width="17" height="13"/></picture> of the chamber </td></tr>
+    <tr><td class="paramname">radius0</td><td>Reference radius <picture><source srcset="form_25_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$r_0$" src="form_25.png" width="17" height="13"/></picture> of the chamber </td></tr>
     <tr><td class="paramname">activation_signal</td><td>The chamber's <a class="el" href="class_activation_function.html" title="Base class for activation functions.">ActivationFunction</a> evaluated at the current time </td></tr>
   </table>
   </dd>

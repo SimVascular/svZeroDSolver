@@ -209,6 +209,32 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handle the creation of boundary condition blocks. </p>
+<p>The block type is read from <span class="tt">bc_type</span>. Valid values are the blocks of class BlockClass::boundary_condition or BlockClass::closed_loop, except <span class="tt">ClosedLoopHeartAndPulmonary</span>, which is configured under <span class="tt">closed_loop_blocks</span> (see <a class="el" href="#aa0f5d9a69550f398dc9f7176c4cdc812" title="Handle the creation of closed-loop blocks and associated connections.">create_closed_loop()</a>). Currently these are:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><span class="tt">bc_type</span>  </th><th class="markdownTableHeadNone"><a class="el" href="class_block.html" title="Base class for 0D model components.">Block</a>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">FLOW</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_flow_reference_b_c.html" title="Flow reference boundary condition.">FlowReferenceBC</a>: prescribed flow rate  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">PRESSURE</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_pressure_reference_b_c.html" title="Pressure reference boundary condition.">PressureReferenceBC</a>: prescribed pressure  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">RESISTANCE</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_resistance_b_c.html" title="Resistance boundary condition.">ResistanceBC</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">RCR</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_windkessel_b_c.html" title="Windkessel RCR boundary condition.">WindkesselBC</a>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">IMPEDANCE</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_impedance_b_c.html" title="Structured-tree impedance boundary condition with periodic memory.">ImpedanceBC</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">CORONARY</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_open_loop_coronary_b_c.html" title="Open loop coronary boundary condition based on kim_coronary.">OpenLoopCoronaryBC</a>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">CORONARY_VAR_RES</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_open_loop_coronary_var_res_b_c.html" title="Open loop coronary boundary condition with time-varying microvascular resistance based on yong25.">OpenLoopCoronaryVarResBC</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ClosedLoopRCR</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_closed_loop_r_c_r_b_c.html" title="Closed-loop RCR boundary condition.">ClosedLoopRCRBC</a>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">ClosedLoopCoronaryLeft</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_closed_loop_coronary_left_b_c.html" title="Left side of closed loop coronary boundary condition ClosedLoopCoronaryBC.">ClosedLoopCoronaryLeftBC</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ClosedLoopCoronaryRight</span>  </td><td class="markdownTableBodyNone"><a class="el" href="class_closed_loop_coronary_right_b_c.html" title="Right side of closed loop coronary boundary condition ClosedLoopCoronaryBC.">ClosedLoopCoronaryRightBC</a>  </td></tr>
+</table>
+<p><span class="tt">bc_type</span> values are validated in <a class="el" href="#aa324b347d0a0ce53962668c036d3aed5" title="Load the 0D block in the model from a configuration.">load_simulation_model()</a>, before this is called.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
@@ -252,6 +278,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handle the creation of chambers. </p>
+<p>The block type is read from <span class="tt">type</span> and must be a block of class BlockClass::chamber. Currently these are <span class="tt"><a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a></span> (<a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a>), <span class="tt"><a class="el" href="class_chamber_elastance_inductor.html" title="Cardiac chamber with linear elastance and inductor.">ChamberElastanceInductor</a></span> (<a class="el" href="class_chamber_elastance_inductor.html" title="Cardiac chamber with linear elastance and inductor.">ChamberElastanceInductor</a>), <span class="tt"><a class="el" href="class_chamber_elastance_inductor_exponential.html" title="Cardiac chamber with exponential passive pressure-volume relation.">ChamberElastanceInductorExponential</a></span> (<a class="el" href="class_chamber_elastance_inductor_exponential.html" title="Cardiac chamber with exponential passive pressure-volume relation.">ChamberElastanceInductorExponential</a>), and <span class="tt"><a class="el" href="class_linear_elastance_chamber.html" title="Cardiac chamber with linear elastance (no inductor).">LinearElastanceChamber</a></span> (<a class="el" href="class_linear_elastance_chamber.html" title="Cardiac chamber with linear elastance (no inductor).">LinearElastanceChamber</a>).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
@@ -299,6 +326,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handle the creation of closed-loop blocks and associated connections. </p>
+<p>The block type is read from <span class="tt">closed_loop_type</span>. The only valid value is <span class="tt">ClosedLoopHeartAndPulmonary</span> (<a class="el" href="class_closed_loop_heart_pulmonary.html" title="Heart and pulmonary circulation model.">ClosedLoopHeartPulmonary</a>), and at most one may be included.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
@@ -353,6 +381,17 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handle the creation of external coupling blocks and connections with other blocks. </p>
+<p>An external coupling block is the boundary through which an external solver (e.g. a 3D solver such as svMultiPhysics) exchanges flow and pressure with the 0D model. Its <span class="tt">type</span> accepts the same values as <span class="tt">bc_type</span> (see <a class="el" href="#a48762868893c37068ff5c57c29484ba9" title="Handle the creation of boundary condition blocks.">create_boundary_conditions()</a>), but use <span class="tt">FLOW</span> or <span class="tt">PRESSURE</span>: those are the blocks whose time series the coupling interface updates (update_block_params() in interface.cpp), and the error for an invalid <span class="tt">type</span> says so. Besides <span class="tt">name</span>, <span class="tt">type</span>, and <span class="tt">values</span>, each block has:</p>
+<ul>
+<li><span class="tt">connected_block</span>: the 0D block on the other side of the coupling block, given as a boundary condition's <span class="tt">bc_name</span>, a vessel's <span class="tt">vessel_name</span>, or <span class="tt">ClosedLoopHeartAndPulmonary</span>.</li>
+<li><span class="tt">location</span>: <span class="tt">inlet</span> or <span class="tt">outlet</span>, the side of <span class="tt">connected_block</span> the coupling block attaches to. With <span class="tt">inlet</span>, flow goes from the coupling block into <span class="tt">connected_block</span>; with <span class="tt">outlet</span>, from <span class="tt">connected_block</span> into the coupling block. The connection to <span class="tt">ClosedLoopHeartAndPulmonary</span> is made by <a class="el" href="#aa0f5d9a69550f398dc9f7176c4cdc812" title="Handle the creation of closed-loop blocks and associated connections.">create_closed_loop()</a> instead.</li>
+</ul>
+<p>Only some connected blocks are supported at each location. A connected block's type is its <span class="tt">bc_type</span> for a boundary condition, or <span class="tt"><a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a></span> for any vessel. These lists are hard-coded in the implementation (<span class="tt">supported_types</span>), so update both together:</p>
+<ul>
+<li><span class="tt">inlet</span>: <span class="tt">RESISTANCE</span>, <span class="tt">RCR</span>, <span class="tt">IMPEDANCE</span>, <span class="tt">ClosedLoopRCR</span>, <span class="tt">CORONARY</span>, <span class="tt">ClosedLoopCoronaryLeft</span>, <span class="tt">ClosedLoopCoronaryRight</span>, <span class="tt"><a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a></span></li>
+<li><span class="tt">outlet</span>: <span class="tt">ClosedLoopRCR</span>, <span class="tt">ClosedLoopHeartAndPulmonary</span>, <span class="tt"><a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a></span></li>
+</ul>
+<p>An invalid <span class="tt">type</span> or <span class="tt">location</span>, an unknown <span class="tt">connected_block</span>, or an unsupported connected block type fails at load time with an error naming the coupling block.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
@@ -402,6 +441,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handle the creation of junctions and their connections. </p>
+<p>The block type is read from <span class="tt">junction_type</span> and must be a block of class BlockClass::junction. Currently these are <span class="tt">NORMAL_JUNCTION</span> (<a class="el" href="class_junction.html" title="Junction.">Junction</a>), <span class="tt">resistive_junction</span> (<a class="el" href="class_resistive_junction.html" title="ResistiveJunction.">ResistiveJunction</a>), and <span class="tt"><a class="el" href="class_blood_vessel_junction.html" title="Junction between blood vessels.">BloodVesselJunction</a></span> (<a class="el" href="class_blood_vessel_junction.html" title="Junction between blood vessels.">BloodVesselJunction</a>).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
@@ -445,6 +485,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handle the creation of valves and their associated connections. </p>
+<p>The block type is read from <span class="tt">type</span> and must be a block of class BlockClass::valve. Currently these are <span class="tt"><a class="el" href="class_valve_tanh.html" title="Valve (tanh) block.">ValveTanh</a></span> (<a class="el" href="class_valve_tanh.html" title="Valve (tanh) block.">ValveTanh</a>) and <span class="tt"><a class="el" href="class_piecewise_valve.html" title="Valve (tanh) block.">PiecewiseValve</a></span> (<a class="el" href="class_piecewise_valve.html" title="Valve (tanh) block.">PiecewiseValve</a>).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
@@ -492,6 +533,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Handle the creation of vessel blocks and connections with boundary conditions. </p>
+<p>The block type is read from <span class="tt">zero_d_element_type</span> and must be a block of class BlockClass::vessel. Currently these are <span class="tt"><a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a></span> (<a class="el" href="class_blood_vessel.html" title="Resistor-capacitor-inductor blood vessel with optional stenosis.">BloodVessel</a>), <span class="tt"><a class="el" href="class_blood_vessel_c_r_l.html" title="Capacitor-resistor-inductor blood vessel with optional stenosis.">BloodVesselCRL</a></span> (<a class="el" href="class_blood_vessel_c_r_l.html" title="Capacitor-resistor-inductor blood vessel with optional stenosis.">BloodVesselCRL</a>), and <span class="tt"><a class="el" href="class_blood_vessel_r_c.html" title="Flow-through RC windkessel for pulmonary circulation.">BloodVesselRC</a></span> (<a class="el" href="class_blood_vessel_r_c.html" title="Flow-through RC windkessel for pulmonary circulation.">BloodVesselRC</a>).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">model</td><td>The model the block is associated with </td></tr>
@@ -713,10 +755,32 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Load the 0D block in the model from a configuration. </p>
+<p>Every block is created from a type string, read from a key that depends on the configuration section the block is in:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Section  </th><th class="markdownTableHeadNone">Type key  </th><th class="markdownTableHeadNone">Valid values documented in  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">vessels</span>  </td><td class="markdownTableBodyNone"><span class="tt">zero_d_element_type</span>  </td><td class="markdownTableBodyNone"><a class="el" href="#a8dea569efa823bdb66eb3abfb1c29d43" title="Handle the creation of vessel blocks and connections with boundary conditions.">create_vessels()</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">junctions</span>  </td><td class="markdownTableBodyNone"><span class="tt">junction_type</span>  </td><td class="markdownTableBodyNone"><a class="el" href="#a1e4a9c0e210b2c64b811d990af86d4ad" title="Handle the creation of junctions and their connections.">create_junctions()</a>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">boundary_conditions</span>  </td><td class="markdownTableBodyNone"><span class="tt">bc_type</span>  </td><td class="markdownTableBodyNone"><a class="el" href="#a48762868893c37068ff5c57c29484ba9" title="Handle the creation of boundary condition blocks.">create_boundary_conditions()</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">external_solver_coupling_blocks</span>  </td><td class="markdownTableBodyNone"><span class="tt">type</span>  </td><td class="markdownTableBodyNone"><a class="el" href="#ad36cd0e293d3cc8a490003db53888cd4" title="Handle the creation of external coupling blocks and connections with other blocks.">create_external_coupling()</a>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">closed_loop_blocks</span>  </td><td class="markdownTableBodyNone"><span class="tt">closed_loop_type</span>  </td><td class="markdownTableBodyNone"><a class="el" href="#aa0f5d9a69550f398dc9f7176c4cdc812" title="Handle the creation of closed-loop blocks and associated connections.">create_closed_loop()</a>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">valves</span>  </td><td class="markdownTableBodyNone"><span class="tt">type</span>  </td><td class="markdownTableBodyNone"><a class="el" href="#a5ff24c97813996bd089d3142c5d31375" title="Handle the creation of valves and their associated connections.">create_valves()</a>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">chambers</span>  </td><td class="markdownTableBodyNone"><span class="tt">type</span>  </td><td class="markdownTableBodyNone"><a class="el" href="#a1dc4040ce20c099ffafd229bfd66d9bf" title="Handle the creation of chambers.">create_chambers()</a>  </td></tr>
+</table>
+<p>Each loader checks its type key before creating the block. An invalid type fails at load time with an error that names the block, section, and key, and lists the valid values. The loaders derive those values from the block factory (<a class="el" href="class_model.html#aefd9dbcdaffe50910d91af391621daa4" title="Factory that holds all implemented blocks.">Model::block_factory_map</a>) filtered by <a class="el" href="_block_type_8h.html#aef4629c3f968cbb691cddca5b9d3e950" title="The classes/categories of blocks supported. Some classes require special handling (e....">BlockClass</a>, so a newly registered block is accepted in the section that matches its class without changes to the loader code. Type strings are case-sensitive.</p>
+<p>The type lists in the comments of the individual loaders are written out by hand as a reference and can fall behind the registered blocks; the list in the error message is authoritative.</p>
+<p>External coupling blocks are created before boundary conditions, so <span class="tt">bc_type</span> values are validated first, while building the map of boundary condition types. Otherwise a misspelled <span class="tt">bc_type</span> on a boundary condition that a coupling block connects to would be reported as an unrelated coupling error.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">config</td><td>The json configuration </td></tr>
-    <tr><td class="paramname">model</td><td>The 0D model @ </td></tr>
+    <tr><td class="paramname">model</td><td>The 0D model </td></tr>
   </table>
   </dd>
 </dl>

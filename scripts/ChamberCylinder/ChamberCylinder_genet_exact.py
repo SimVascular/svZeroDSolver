@@ -60,6 +60,77 @@ SIGMA0 = 65e3  # maximum active stress sigma_0 [Pa]
 # eps = 1e-4 is a Newton aid, reduced here to a numerically inert value.
 FV_REG = 1e-10
 
+
+# --- ChamberCylinder input from flat parameters -------------------------------
+# The block takes its wall material and active stress law as "material" and
+# "active_stress" objects (shared with ChamberSphere). The scripts keep the
+# constants in one flat dict and split it here.
+GENET23_KEYS = ("C1", "C2", "C3", "C4", "C5", "C6")
+HO_KEYS = {"ho_a": "a", "ho_b": "b", "ho_af": "a4f", "ho_bf": "b4f", "ho_as": "a4s",
+           "ho_bs": "b4s", "ho_afs": "afs", "ho_bfs": "bfs", "ho_k": "k"}
+BCS_KEYS = {"sigma_max": "sigma_0", "k_s": "k_s", "k_0": "k_0", "mu": "mu",
+            "bcs_alpha": "alpha", "fv_reg": "fv_reg"}
+
+
+def cylinder_vessel(vv, activation=None, formulation=None, tension=None,
+                    frank_starling=None):
+    """ChamberCylinder vessel entries from flat parameters.
+
+    vv: geometry, gamma, num_elements, density, bulk_modulus and the material
+    (C1-C6 for genet23, or ho_* for holzapfel_ogden) and BCS constants
+    (sigma_max, k_s, k_0, mu, bcs_alpha, fv_reg). activation: the
+    activation_function object; tension: samples {"t", "T", "fourier_modes",
+    "ramp"} of a prescribed tension (active stress uniform_unsteady, no
+    activation); frank_starling: {"e_c", "n0"}. formulation: volumetric and
+    ends. Returns the keys "formulation", "material", "active_stress",
+    "zero_d_element_values" and "activation_function" of the vessel.
+    """
+    vv = dict(vv)
+    if any(float(vv.get(k, 0.0)) != 0.0 for k in HO_KEYS):
+        material = {"type": "holzapfel_ogden"}
+        material.update({HO_KEYS[k]: vv[k] for k in HO_KEYS if k in vv})
+    else:
+        material = {"type": "genet23"}
+        material.update({k: vv[k] for k in GENET23_KEYS if k in vv})
+    for k in list(HO_KEYS) + list(GENET23_KEYS):
+        vv.pop(k, None)
+    if tension is not None:
+        active = {"type": "uniform_unsteady", "t": list(tension["t"]), "T": list(tension["T"]),
+                  "fourier_modes": tension.get("fourier_modes", 1),
+                  "ramp": 1 if tension.get("ramp", False) else 0}
+        for k in BCS_KEYS:
+            vv.pop(k, None)
+    else:
+        active = {"type": "genet23"}
+        active.update({BCS_KEYS[k]: vv.pop(k) for k in list(BCS_KEYS) if k in vv})
+        if frank_starling:
+            active["n0_e_c"], active["n0_values"] = list(frank_starling["e_c"]), list(frank_starling["n0"])
+    out = {}
+    if formulation:
+        out["formulation"] = dict(formulation)
+    out.update(material=material, active_stress=active, zero_d_element_values=vv)
+    if tension is None and activation is not None:
+        out["activation_function"] = activation
+    return out
+
+
+def flat_parameters(vessel):
+    """Inverse of cylinder_vessel: the flat parameters of a ChamberCylinder
+    vessel (zero_d_element_values plus the material and BCS constants)."""
+    vv = dict(vessel["zero_d_element_values"])
+    mat = vessel["material"]
+    if mat["type"] == "holzapfel_ogden":
+        vv.update({k: mat.get(v, 0.0) for k, v in HO_KEYS.items()})
+    elif mat["type"] == "genet23":
+        vv.update({k: mat.get(k, 0.0) for k in GENET23_KEYS})
+    else:
+        raise ValueError(f"material {mat['type']}: no flat genet23 constants")
+    act = vessel["active_stress"]
+    if act["type"] == "genet23":
+        defaults = dict(sigma_0=0.0, k_s=1e8, k_0=260e3, mu=70.0, alpha=0.0, fv_reg=1e-4)
+        vv.update({k: act.get(v, defaults[v]) for k, v in BCS_KEYS.items()})
+    return vv
+
 # --- Input functions (authors' code, genet23 Refs 33/6) ---
 MMHG = 134.0  # the authors' Pa-per-mmHg conversion
 
@@ -163,7 +234,7 @@ def build(P_at=PAT_MAX, P_vs=P_VS, sigma_max=SIGMA0, bcs_alpha=12.0, ne=12,
              "zero_d_element_values": {"R_poiseuille": 0.0, "C": 0.0}},
             {"boundary_conditions": {}, "vessel_id": 1, "vessel_length": 1.0,
              "vessel_name": "ventricle", "zero_d_element_type": "ChamberCylinder",
-             "zero_d_element_values": vv, "activation_function": activation},
+             **cylinder_vessel(vv, activation)},
             # Eq 36b: C_ar at the aortic-valve outlet node P_ar.
             {"boundary_conditions": {}, "vessel_id": 2, "vessel_length": 1.0,
              "vessel_name": "aortic_root", "zero_d_element_type": "BloodVessel",

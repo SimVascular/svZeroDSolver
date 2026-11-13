@@ -18,13 +18,16 @@ and load.
 
 ## Problem definition
 
-- **0D formulation.** The block's `formulation` object
-  (`src/model/ChamberCylinder.h`) swaps each component between genet23 (the
-  default) and its svMultiPhysics equivalent: `passive` (`genet23` C1–C6 or
-  `holzapfel_ogden`), `volumetric` (`incompressible` or `st91`), `active`
-  (`bcs` or `uniform_unsteady`) and `ends` (`lids` or `fixed_length`). Every
-  case input states all four. The passive cases keep the BCS law at rest
-  (`sigma_max` = 0).
+- **0D formulation.** The block takes the wall material and the active
+  stress law of ChamberSphere (`material` and `active_stress` objects,
+  `src/model/Material.h`, `src/model/ActiveStress.h`) and a `formulation`
+  object for its volumetric law and ends (`src/model/ChamberCylinder.h`).
+  Each has the genet23 choice and the svMultiPhysics equivalent: material
+  `genet23` (C1–C6) or `holzapfel_ogden`, active stress `genet23` (the
+  Bestel-Clement-Sorine law) or `uniform_unsteady`, volumetric law
+  `incompressible` or `st91`, ends `lids` or `fixed_length`. Every case input
+  states all four. The passive cases keep the genet23 active stress at rest
+  (`sigma_0` = 0).
 - **Length.** Except in the free-length cases, both end faces keep u_z = 0
   and slide freely in their planes; the 0D block uses the ends
   `fixed_length` (ε = 0, unloaded lids). The free-length cases (`*_closed`)
@@ -48,10 +51,10 @@ and load.
 - **Materials.** The 3D side uses svMultiPhysics' material laws unchanged;
   where the 0D law differs, the 0D side adopts the 3D law. With C3 = 0, the 0D
   passive law is the svMultiPhysics neo-Hookean (C1 = C10 = μ/2), Mooney-Rivlin
-  (C1, C2) or HGO fiber term (a4 = 2 C5 C6, b4 = C6, κ = 0). The passive law
-  `holzapfel_ogden` is svMultiPhysics' `HolzapfelOgden` law with the `ho_*`
-  parameters (isotropic, fiber, sheet and fiber-sheet terms, sheet = e_R,
-  smoothed Heaviside slope k).
+  (C1, C2) or HGO fiber term (a4 = 2 C5 C6, b4 = C6, κ = 0). The material
+  `holzapfel_ogden` is svMultiPhysics' `HolzapfelOgden` law with its
+  parameter names (a, b, a4f, b4f, a4s, b4s, afs, bfs, k: isotropic, fiber,
+  sheet and fiber-sheet terms, sheet = e_R, smoothed Heaviside slope k).
   `check_materials.py` compares the two stress implementations for random
   deformations (agreement to round-off). Viscosity γ = 0.
 - **Volumetric law.** The 0D input selects the volumetric law `st91` with
@@ -184,12 +187,12 @@ end layer against the tube length and the mesh
 adapted to what svMultiPhysics can represent: fixed length, circumferential
 fibers, the Holzapfel-Ogden wall of `passive_anisotropic/`, no viscosity, no
 wall inertia, and the BCS active law replaced by a prescribed tension
-T(t) = 80 kPa sin²(π (t − 0.1 s)/0.4 s) on 0.1–0.5 s. The 0D active law
-`uniform_unsteady` with its `active_tension` object reproduces
-svMultiPhysics' `UniformUnsteady` active stress
-exactly: S_a = T(t) e_F ⊗ e_F, with T(t) built from the same samples by the
-same Fourier construction (`FourierTension`, ported from
-FourierInterpolation.cpp; checked against an independent Python port in
+T(t) = 80 kPa sin²(π (t − 0.1 s)/0.4 s) on 0.1–0.5 s. The 0D active
+stress `uniform_unsteady` (samples `t`, `T`, `fourier_modes`, `ramp`)
+reproduces svMultiPhysics' `UniformUnsteady` active stress exactly:
+S_a = T(t) e_F ⊗ e_F, with T(t) built from the same samples by the same
+Fourier construction (ported from FourierInterpolation.cpp; checked against an
+independent Python port in
 `test_prescribed_active_tension_matches_closed_form`).
 
 `coupled_3d.py` writes the 3D case in which the eighth-model cylinder replaces

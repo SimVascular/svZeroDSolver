@@ -46,10 +46,25 @@
       "vessel_name": "cylinder",
       "zero_d_element_type": "ChamberCylinder",
       "formulation": {
-        "passive": "holzapfel_ogden",
         "volumetric": "st91",
-        "active": "bcs",
         "ends": "fixed_length"
+      },
+      "material": {
+        "type": "holzapfel_ogden",
+        "a": 50000.0,
+        "b": 5.0,
+        "a4f": 25000.0,
+        "b4f": 20.0,
+        "a4s": 25000.0,
+        "b4s": 5.0,
+        "afs": 10000.0,
+        "bfs": 5.0,
+        "k": 100.0
+      },
+      "active_stress": {
+        "type": "genet23",
+        "sigma_0": 0.0,
+        "k_0": 0.0
       },
       "zero_d_element_values": {
         "Ri": 0.019034760191327525,
@@ -57,18 +72,7 @@
         "length": 0.05710428057398258,
         "alpha_endo": 0.0,
         "alpha_epi": 0.0,
-        "ho_a": 50000.0,
-        "ho_b": 5.0,
-        "ho_af": 25000.0,
-        "ho_bf": 20.0,
-        "ho_as": 25000.0,
-        "ho_bs": 5.0,
-        "ho_afs": 10000.0,
-        "ho_bfs": 5.0,
-        "ho_k": 100.0,
         "gamma": 0.0,
-        "sigma_max": 0.0,
-        "k_0": 0.0,
         "density": 0.0,
         "bulk_modulus": 5000000.0,
         "num_elements": 32

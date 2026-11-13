@@ -9,7 +9,7 @@ set(CXXSRCS
   ActivationFunction.cpp
   ActiveStress.cpp
   ParameterHolder.cpp
-  SphereMaterial.cpp
+  Material.cpp
   BloodVesselRC.cpp
   Block.cpp
   BloodVessel.cpp
@@ -46,7 +46,7 @@ set(HDRS
   ActivationFunction.h
   ActiveStress.h
   ParameterHolder.h
-  SphereMaterial.h
+  Material.h
   BloodVesselRC.h
   Block.h
   BlockType.h

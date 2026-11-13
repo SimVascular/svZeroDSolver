@@ -152,8 +152,9 @@ def check(model_0d, case_dir, n=2000, seed=0):
     """Max relative stress difference and max fiber-direction difference."""
     with open(model_0d) as fh:
         cfg = json.load(fh)
+    from cylinder_3d import flat_values
     v = next(b for b in cfg["vessels"] if b["zero_d_element_type"] == "ChamberCylinder")
-    v = {k: float(x) for k, x in v["zero_d_element_values"].items()}
+    v = {k: float(x) for k, x in flat_values(v).items()}
     for k in ("C1", "C2", "C3", "C4", "C5", "C6"):
         v.setdefault(k, 0.0)
     m = svmp_material(os.path.join(case_dir, "solver.xml"))

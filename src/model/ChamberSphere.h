@@ -16,8 +16,8 @@
 #include "ActivationFunction.h"
 #include "ActiveStress.h"
 #include "Block.h"
+#include "Material.h"
 #include "SparseSystem.h"
-#include "SphereMaterial.h"
 
 /**
  * @brief Spherical heart chamber model
@@ -51,8 +51,13 @@
  * -S + \tau + S_\text{el}(r, r_0) + \eta \dot{C}
  * (1 + 2 C^{-6}) = 0
  * \f]
- * where \f$S_\text{el}\f$ is the elastic stress term supplied by the
- * chamber's \ref SphereMaterial.
+ * where \f$S_\text{el} = \frac{1}{\lambda}\,\Sigma^d : \frac{\partial E}
+ * {\partial\lambda}\f$ is the elastic stress of the chamber's \ref Material
+ * for the incompressible equibiaxial stretch \f$\lambda = 1 + r/r_0\f$ of the
+ * wall, \f$C = \mathrm{diag}(\lambda^{-4}, \lambda^2, \lambda^2)\f$ in the
+ * (radial, two tangential) basis, with the fiber in the wall plane and the
+ * sheet radial. For `mooney_rivlin` this is
+ * \f$4(1-\lambda^{-6})(W_1+\lambda^2 W_2)\f$.
  *
  * 3. Volume change:
  * \f[
@@ -64,11 +69,13 @@
  * \tau = \tau(t, r, r_0, \dots)
  * \f]
  * the specific form of which (and any accompanying internal state and
- * equations) is supplied by a separate \ref ActiveStress object (e.g.
- * `strain_independent`, `strain_dependent`) selected in the JSON
- * configuration. The active stress model is driven by the chamber's
+ * equations) is supplied by a separate \ref ActiveStress law (e.g.
+ * `strain_independent`, `strain_dependent`, `genet23`, `uniform_unsteady`)
+ * selected in the JSON configuration, evaluated at the fiber stretch
+ * \f$\lambda\f$. The active stress law is driven by the chamber's
  * \ref ActivationFunction (e.g. `two_hill`, `half_cosine`, `piecewise_cosine`,
- * `piecewise_rate`), also selected in the JSON configuration.
+ * `piecewise_rate`), also selected in the JSON configuration, unless the law
+ * takes no activation (`uniform_unsteady`).
  *
  * 5. Acceleration:
  * \f[
@@ -109,7 +116,8 @@
  *
  * Furthermore, a `material` object is required to select and parameterize
  * the material model for the elastic stress term \f$S_\text{el}(r, r_0)\f$
- * (see \ref SphereMaterial, e.g. `exponential`, `mooney_rivlin`).
+ * (see \ref Material, e.g. `exponential`, `mooney_rivlin`, `genet23`,
+ * `holzapfel_ogden`).
  *
  * Finally, an `active_stress` object is required to select and parameterize
  * the active stress model (see \ref ActiveStress, e.g. `strain_independent`,
@@ -231,7 +239,7 @@ class ChamberSphere : public Block {
 
   void set_active_stress(std::unique_ptr<ActiveStress> as) override;
 
-  void set_material(std::unique_ptr<SphereMaterial> m) override;
+  void set_material(std::unique_ptr<Material> m) override;
 
  private:
   double activation_signal_ = 0.0;  // activation_function_->compute(time),
@@ -240,7 +248,24 @@ class ChamberSphere : public Block {
 
   std::unique_ptr<ActiveStress> active_stress_;
 
-  std::unique_ptr<SphereMaterial> material_;
+  std::unique_ptr<Material> material_;
+
+  /// Positions of the core state in global_var_ids (after the 4 port
+  /// variables); the active stress law's further states follow from
+  /// kNumCoreVars on, its equations from kNumCoreEqns on.
+  static constexpr int kRadiusVar = 4;
+  static constexpr int kVeloVar = 5;
+  static constexpr int kStressVar = 6;
+  static constexpr int kTauVar = 7;
+  static constexpr int kVolumeVar = 8;
+  static constexpr int kPassiveStressVar = 9;
+  static constexpr int kNumCoreVars = 10;
+  static constexpr int kNumCoreEqns = 7;
+
+  /// Global variable index of state i of the active stress law
+  int law_var(int i) const {
+    return global_var_ids[i == 0 ? kTauVar : kNumCoreVars + i - 1];
+  }
 
   /**
    * @brief Number of triplets of element

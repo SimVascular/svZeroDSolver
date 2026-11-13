@@ -8,13 +8,13 @@ same thick-walled cylinder, its boundary faces, the solver input file and the
 cavity-pressure load. Also runs the case (Docker image simvascular/solver or a
 local executable) and computes the lumen volume from the results.
 
-Model correspondence (0D -> 3D; the 0D "formulation" object selects the
-components, see ChamberCylinder.h):
+Model correspondence (0D -> 3D; the 0D "material", "active_stress" and
+"formulation" objects select the components, see ChamberCylinder.h):
   geometry      Ri, Re, length                -> mesh
-  passive       genet23: C1 (neo-Hookean),    -> neoHookean, MR, or HGO with
+  material      genet23: C1 (neo-Hookean),    -> neoHookean, MR, or HGO with
                 C2 (Mooney-Rivlin), C5, C6       a4 = 2 C5 C6, b4 = C6 (one
                 fiber term; C3 = 0 required      fiber family, a6 = 0)
-                holzapfel_ogden: ho_a ... ho_k -> HolzapfelOgden a ... k
+                holzapfel_ogden: a ... k      -> HolzapfelOgden a ... k
   fibers        alpha_endo, alpha_epi         -> FIB_DIR files (cylinder_fibers.py),
                 sheet e_R                        fiber and sheet
   ends          fixed_length                  -> u_z = 0 on both end faces,
@@ -63,15 +63,39 @@ MMHG = 133.322387415  # Pa; solver inputs are SI, reports use mmHg
 # --------------------------------------------------------------------------- #
 
 
-# Formulation of the 0D block when its input omits a component (genet23).
-FORMULATION = dict(passive="genet23", volumetric="incompressible", active="bcs", ends="lids")
+# Formulation of the 0D block when its input omits a component (genet23);
+# passive and active are the types of its material and active_stress objects.
+FORMULATION = dict(passive="genet23", volumetric="incompressible", active="genet23", ends="lids")
+
+# 0D material constants under the flat names used by these scripts
+HO_FLAT = {"a": "ho_a", "b": "ho_b", "a4f": "ho_af", "b4f": "ho_bf", "a4s": "ho_as",
+           "b4s": "ho_bs", "afs": "ho_afs", "bfs": "ho_bfs", "k": "ho_k"}
+GENET23_FLAT = {"genet23": {k: k for k in ("C1", "C2", "C3", "C4", "C5", "C6")},
+                "mooney_rivlin": {"W1": "C1", "W2": "C2"},
+                "exponential": {"C0": "C3", "C1": "C4", "C2": "C5", "C3": "C6"}}
 
 
 def formulation(vessel):
-    """Formulation of a ChamberCylinder vessel of a 0D input."""
+    """Formulation of a ChamberCylinder vessel of a 0D input: volumetric law
+    and ends, and the types of its material (passive) and active stress
+    (active)."""
     form = dict(FORMULATION)
     form.update({k: x for k, x in vessel.get("formulation", {}).items() if not k.startswith("_")})
+    form["passive"] = "holzapfel_ogden" if vessel["material"]["type"] == "holzapfel_ogden" \
+        else "genet23"
+    form["active"] = vessel["active_stress"]["type"]
     return form
+
+
+def flat_values(vessel):
+    """zero_d_element_values of a ChamberCylinder vessel plus its material
+    constants under flat names: C1-C6 (genet23 energy; mooney_rivlin and
+    exponential map onto it) or ho_a ... ho_k (holzapfel_ogden)."""
+    vals = dict(vessel["zero_d_element_values"])
+    mat = vessel["material"]
+    names = HO_FLAT if mat["type"] == "holzapfel_ogden" else GENET23_FLAT[mat["type"]]
+    vals.update({flat: float(mat.get(key, 0.0)) for key, flat in names.items()})
+    return vals
 
 
 def read_0d(path):
@@ -87,7 +111,7 @@ def read_0d(path):
     bc = next((b for b in cfg["boundary_conditions"] if b["bc_name"] == inlet), None)
     if bc is None or bc["bc_type"] != "PRESSURE":
         raise ValueError(f"{path}: the ChamberCylinder inlet must be a PRESSURE boundary condition")
-    return dict(name=blk["vessel_name"], values=blk["zero_d_element_values"],
+    return dict(name=blk["vessel_name"], values=flat_values(blk),
                 formulation=formulation(blk), t=list(bc["bc_values"]["t"]),
                 P=list(bc["bc_values"]["P"]), config=cfg)
 
@@ -130,7 +154,7 @@ def material(values, form=None):
         # mu = a is the small-strain shear modulus of the isotropic term.
         return dict(model="HolzapfelOgden", mu=ho["a"], kappa=kappa, **ho, **fibers)
     if any(x != 0.0 for x in ho.values()):
-        raise ValueError('ho_* need the 0D formulation "passive": "holzapfel_ogden"')
+        raise ValueError('ho_* need the 0D material "holzapfel_ogden"')
     if v["C5"] != 0.0:
         # C5 exp(C6 (I4b - 1)^2) has the stress of the HGO fiber term
         # a4/(2 b4) (exp(b4 (I4b - 1)^2) - 1) with a4 = 2 C5 C6, b4 = C6.

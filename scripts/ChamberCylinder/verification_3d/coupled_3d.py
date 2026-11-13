@@ -121,14 +121,14 @@ def generate(model_0d, case_dir, nr, cycles=None, density=1.0, newton_tol=1e-10,
     with open(model_0d) as f:
         cfg = json.load(f)
     cyl = find_cylinder(cfg)
-    v, form = cyl["zero_d_element_values"], C3.formulation(cyl)
+    v, form = C3.flat_values(cyl), C3.formulation(cyl)
     if form["ends"] != "fixed_length":
         raise ValueError('the 3D model has fixed-length ends: set the 0D formulation '
                          '"ends": "fixed_length"')
-    at = cyl.get("active_tension")
-    if form["active"] != "uniform_unsteady" or at is None:
-        raise ValueError('the 3D model needs the 0D formulation "active": "uniform_unsteady" '
-                         'with an active_tension (UniformUnsteady)')
+    at = cyl["active_stress"]
+    if form["active"] != "uniform_unsteady":
+        raise ValueError('the 3D model needs the 0D active_stress "uniform_unsteady" '
+                         '(a prescribed tension, svMultiPhysics UniformUnsteady)')
     mat = C3.material(v, form)
     sp = cfg["simulation_parameters"]
     period = float(sp["cardiac_period"])

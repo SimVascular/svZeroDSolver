@@ -3,82 +3,48 @@
 
 /**
  * @file ActiveStress.h
- * @brief Active stress models for chamber blocks
+ * @brief Active stress laws shared by the chamber blocks
  */
 
 #ifndef SVZERODSOLVER_MODEL_ACTIVESTRESS_HPP_
 #define SVZERODSOLVER_MODEL_ACTIVESTRESS_HPP_
 
-#include <Eigen/Core>
-#include <list>
+#include <complex>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "ActivationFunction.h"
 #include "Parameter.h"
 #include "ParameterHolder.h"
-#include "SparseSystem.h"
 
 /**
- * @brief Base class for chamber active stress models
+ * @brief Active stress law at a material point of a chamber wall
  *
- * An ActiveStress owns the dynamics of a chamber's active stress \f$\tau\f$.
- * Subclasses may introduce additional internal variables and equations
- * beyond ChamberSphere's fixed core state, and write directly into the same
- * global SparseSystem that ChamberSphere writes into, using indices that are
- * a fixed offset into ChamberSphere's own \ref Block::global_var_ids and
- * \ref Block::global_eqn_ids arrays (which are passed down unchanged).
+ * A law defines the active fiber stress \f$\tau\f$, the 2nd Piola-Kirchhoff
+ * stress \f$\Sigma^a = \tau\,\mathbf{e}_F\otimes\mathbf{e}_F\f$ along the
+ * fiber direction, through a set of states \f$a\f$ (state 0 is \f$\tau\f$
+ * itself) and as many equations
+ * \f[
+ * R(a, \dot a, \lambda) = 0,
+ * \f]
+ * where \f$\lambda = \sqrt{\mathbf{e}_F\cdot C\cdot\mathbf{e}_F}\f$ is the
+ * fiber stretch. Time-dependent inputs (the activation signal of the
+ * chamber's \ref ActivationFunction, prescribed tensions) are set once per
+ * time step with update_time(). The law is the same at every material point,
+ * so a block evaluates it once for a uniform wall (\ref ChamberSphere) or at
+ * each integration point (\ref ChamberCylinder).
  *
- * ChamberSphere::setup_dofs() always registers, in this order:
- * internal variables `radius, velo, stress, active_stress, volume,
- * passive_stress,
- * <extra_var_names()...>` and equations `momentum, spherical_stress,
- * volume_change, acceleration, mass_conservation, pressure_equality,
- * passive_stress, <this model's equations...>`, so the offsets below are
- * invariant across ActiveStress subclasses.
+ * Types (JSON `active_stress` object): `strain_independent`,
+ * `strain_dependent`, `genet23`, `uniform_unsteady`.
  */
 class ActiveStress : public ParameterHolder {
  public:
-  /**
-   * @name Fixed layout of ChamberSphere's always-present ("core") state
-   *
-   * Indices into the full \ref Block::global_var_ids / \ref
-   * Block::global_eqn_ids arrays that ChamberSphere passes down unchanged.
-   */
-  ///@{
-  static constexpr int RADIUS_VAR =
-      4;  ///< Radius position within ChamberSphere's own global_var_ids array
-  static constexpr int VELO_VAR =
-      5;  ///< Radial velocity position within ChamberSphere's own
-          ///< global_var_ids array
-          ///<
-  static constexpr int STRESS_VAR =
-      6;  ///< Total wall stress position within ChamberSphere's own
-          ///< global_var_ids array
-          ///<
-  static constexpr int TAU_VAR =
-      7;  ///< Active stress \f$\tau\f$ position within ChamberSphere's own
-          ///< global_var_ids array
-          ///<
-  static constexpr int VOLUME_VAR =
-      8;  ///< Volume position within ChamberSphere's own global_var_ids array
-  static constexpr int PASSIVE_STRESS_VAR =
-      9;  ///< Passive wall stress position within ChamberSphere's own
-          ///< global_var_ids array
-          ///<
-  static constexpr int NUM_CORE_VARS =
-      10;  ///< A subclass's own extra
-           ///< variables start at
-           ///< global_var_ids[NUM_CORE_VARS + i]
-  static constexpr int NUM_CORE_EQNS =
-      7;  ///< A subclass's own extra
-          ///< equations start at
-          ///< global_eqn_ids[NUM_CORE_EQNS + i]
-  ///@}
+  using cplx = std::complex<double>;  ///< complex-step scalar
 
   /**
-   * @brief Construct an ActiveStress model
+   * @brief Construct an ActiveStress law
    *
    * @param props Parameter name/spec pairs for this active stress type
    */
@@ -86,113 +52,108 @@ class ActiveStress : public ParameterHolder {
       const std::vector<std::pair<std::string, InputParameter>>& props);
 
   /**
-   * @brief Number of internal variables this model owns beyond
-   * ChamberSphere's fixed 6 (radius, velo, stress, active_stress,
-   * volume, passive_stress)
+   * @brief Number of states (and equations) at a material point
    *
-   * @return Number of extra internal variables
+   * @return Number of states, state 0 being the active fiber stress
    */
-  virtual int num_extra_vars() const { return 0; }
+  virtual int num_states() const = 0;
 
   /**
-   * @brief Names of this model's extra internal variables, in registration
-   * order (appended immediately after "passive_stress")
+   * @brief Names of the states, state 0 being `active_stress`
    *
-   * @return List of extra internal variable names
+   * @return State names in order
    */
-  virtual std::list<std::string> extra_var_names() const { return {}; }
+  virtual std::vector<std::string> state_names() const = 0;
 
   /**
-   * @brief Number of equations this model owns beyond ChamberSphere's fixed
-   * 7 core equations. Every ActiveStress supplies at least the equation
-   * defining \f$\tau\f$.
+   * @brief Whether the law is driven by an activation function
    *
-   * @return Number of extra equations
+   * @return False for laws that take no activation signal
    */
-  virtual int num_extra_equations() const = 0;
+  virtual bool uses_activation() const { return true; }
 
   /**
-   * @brief Constant (time- and solution-independent) contributions
+   * @brief Type of activation signal this law needs
    *
-   * @param system System to update contributions at
-   * @param global_eqn_ids ChamberSphere's global equation indices
-   * @param global_var_ids ChamberSphere's global variable indices
-   */
-  virtual void update_constant(SparseSystem& system,
-                               const std::vector<int>& global_eqn_ids,
-                               const std::vector<int>& global_var_ids) {
-    (void)system;
-    (void)global_eqn_ids;
-    (void)global_var_ids;
-  }
-
-  /**
-   * @brief Time-dependent contributions
-   *
-   * @param system System to update contributions at
-   * @param global_eqn_ids ChamberSphere's global equation indices
-   * @param global_var_ids ChamberSphere's global variable indices
-   * @param activation_signal The chamber's ActivationFunction evaluated at
-   * the current time
-   */
-  virtual void update_time(SparseSystem& system,
-                           const std::vector<int>& global_eqn_ids,
-                           const std::vector<int>& global_var_ids,
-                           double activation_signal) {
-    (void)system;
-    (void)global_eqn_ids;
-    (void)global_var_ids;
-    (void)activation_signal;
-  }
-
-  /**
-   * @brief Solution-dependent contributions
-   *
-   * @param system System to update contributions at
-   * @param global_eqn_ids ChamberSphere's global equation indices
-   * @param global_var_ids ChamberSphere's global variable indices
-   * @param y Current solution
-   * @param dy Current derivative of the solution
-   * @param radius0 Reference radius \f$r_0\f$ of the chamber
-   * @param activation_signal The chamber's ActivationFunction evaluated at
-   * the current time
-   */
-  virtual void update_solution(
-      SparseSystem& system, const std::vector<int>& global_eqn_ids,
-      const std::vector<int>& global_var_ids,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy, double radius0,
-      double activation_signal) = 0;
-
-  /**
-   * @brief Type of activation signal this active stress model needs
-   *
-   * Checked against the chamber's ActivationFunction::signal_type in
-   * ChamberSphere::setup_dofs to catch mismatched pairings (e.g.
-   * strain_dependent active stress with a normalized activation function).
+   * Checked by the chamber blocks against ActivationFunction::signal_type.
    *
    * @return The required ActivationSignalType
    */
-  virtual ActivationSignalType required_signal_type() const = 0;
+  virtual ActivationSignalType required_signal_type() const {
+    return ActivationSignalType::normalized;
+  }
 
   /**
-   * @brief Factory: create an active stress model from a type string
+   * @brief Set the time-dependent inputs of the law
    *
-   * @param type_str One of: "strain_independent", "strain_dependent"
-   * @return Unique pointer to the created active stress model
+   * @param time Current time
+   * @param signal Activation signal of the chamber's ActivationFunction at
+   * this time (0 for laws without activation)
+   */
+  virtual void update_time(double time, double signal) = 0;
+
+  /**
+   * @brief Residuals of the state equations at a material point
+   *
+   * @param a States (num_states())
+   * @param adot State rates
+   * @param lambda Fiber stretch
+   * @param R Residuals (num_states())
+   */
+  virtual void residual(const double* a, const double* adot, double lambda,
+                        double* R) const = 0;
+
+  /**
+   * @brief Residuals for complex arguments (complex-step tangents)
+   *
+   * @param a States
+   * @param adot State rates
+   * @param lambda Fiber stretch
+   * @param R Residuals
+   */
+  virtual void residual(const cplx* a, const cplx* adot, cplx lambda,
+                        cplx* R) const = 0;
+
+  /**
+   * @brief Residuals and their derivatives at a material point
+   */
+  struct Linearization {
+    std::vector<double> R;           ///< residuals
+    std::vector<double> dR_da;       ///< dR_i/da_j at [i * n + j]
+    std::vector<double> dR_dadot;    ///< dR_i/dadot_j at [i * n + j]
+    std::vector<double> dR_dlambda;  ///< dR_i/dlambda
+  };
+
+  /**
+   * @brief Residuals and their derivatives by complex step
+   *
+   * @param a States
+   * @param adot State rates
+   * @param lambda Fiber stretch
+   * @param lin Residuals and derivatives
+   */
+  void linearize(const double* a, const double* adot, double lambda,
+                 Linearization& lin) const;
+
+  /**
+   * @brief Factory: create an active stress law from a type string
+   *
+   * @param type_str One of: "strain_independent", "strain_dependent",
+   * "genet23", "uniform_unsteady"
+   * @return Unique pointer to the created active stress law
    */
   static std::unique_ptr<ActiveStress> create(const std::string& type_str);
 };
 
 /**
- * @brief Strain-independent active stress model
+ * @brief Strain-independent active stress (\cite pfaller2019importance)
  *
- * Owns 1 extra equation (the \f$\tau\f$ ODE) and 0 extra variables:
+ * One state, the active stress \f$\tau\f$:
  * \f[
  * \dot{\tau} + |a| \tau - \sigma_\text{max} a_+ = 0, \quad a_+ = \max(a, 0),
  * \quad a = f \alpha_\text{max} + (1 - f) \alpha_\text{min}
  * \f]
- * where \f$f \in [0, 1]\f$ is the activation function.
+ * where \f$f \in [0, 1]\f$ is the (normalized) activation function.
  *
  * Parameters: `alpha_max`, `alpha_min`, `sigma_max`
  */
@@ -203,42 +164,30 @@ class StrainIndependentActiveStress : public ActiveStress {
                       {"alpha_min", InputParameter()},
                       {"sigma_max", InputParameter()}}) {}
 
-  int num_extra_equations() const override { return 1; }
-
-  ActivationSignalType required_signal_type() const override {
-    return ActivationSignalType::normalized;
+  int num_states() const override { return 1; }
+  std::vector<std::string> state_names() const override {
+    return {"active_stress"};
   }
-
-  void update_constant(SparseSystem& system,
-                       const std::vector<int>& global_eqn_ids,
-                       const std::vector<int>& global_var_ids) override;
-
-  void update_time(SparseSystem& system, const std::vector<int>& global_eqn_ids,
-                   const std::vector<int>& global_var_ids,
-                   double activation_signal) override;
-
-  void update_solution(SparseSystem& system,
-                       const std::vector<int>& global_eqn_ids,
-                       const std::vector<int>& global_var_ids,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy,
-                       double radius0, double activation_signal) override;
+  void update_time(double time, double signal) override;
+  void residual(const double* a, const double* adot, double lambda,
+                double* R) const override;
+  void residual(const cplx* a, const cplx* adot, cplx lambda,
+                cplx* R) const override;
 
  private:
-  double act_ = 0.0;       ///< Rate coefficient
-  double act_plus_ = 0.0;  ///< Positive part of act_, act_plus_ = max(act_, 0)
+  double act_ = 0.0;       ///< |a|
+  double act_plus_ = 0.0;  ///< a_+
 };
 
 /**
  * @brief Strain-dependent active stress model from \cite caruel13
  *
- * Owns 8 extra equations and 7 extra variables (\f$e_c, \tau_c, k_c,
- * \omega, \sigma_c, \sigma_s, e_s\f$, in that order):
+ * States \f$\tau, e_c, \tau_c, k_c, \omega, \sigma_c, \sigma_s, e_s\f$:
  * \f[
  * \tau = E_s \frac{e_{1D} - e_c}{(1 + 2 e_c)^2}
  * \f]
- * with \f$e_{1D}\f$ the strain in fiber direction (a function of the
- * chamber's radius), and evolution equations
+ * with the Green-Lagrange fiber strain \f$e_{1D} = (\lambda^2 - 1)/2\f$, and
+ * evolution equations
  * \f[
  * \dot{\omega} = \frac{1}{\alpha_r}(m_0 - \omega)
  * \f]
@@ -284,71 +233,140 @@ class StrainDependentActiveStress : public ActiveStress {
                       {"m0_e_c", InputParameter(false, true)},
                       {"m0_values", InputParameter(false, true)}}) {}
 
-  int num_extra_vars() const override { return 7; }
-  std::list<std::string> extra_var_names() const override {
-    return {"e_c", "tau_c", "k_c", "omega", "sigma_c", "sigma_s", "e_s"};
+  int num_states() const override { return 8; }
+  std::vector<std::string> state_names() const override {
+    return {"active_stress", "e_c",     "tau_c",   "k_c",
+            "omega",         "sigma_c", "sigma_s", "e_s"};
   }
-  int num_extra_equations() const override { return 8; }
-
   ActivationSignalType required_signal_type() const override {
     return ActivationSignalType::rate;
   }
-
-  void update_constant(SparseSystem& system,
-                       const std::vector<int>& global_eqn_ids,
-                       const std::vector<int>& global_var_ids) override;
-
-  void update_time(SparseSystem& system, const std::vector<int>& global_eqn_ids,
-                   const std::vector<int>& global_var_ids,
-                   double activation_signal) override;
-
-  void update_solution(SparseSystem& system,
-                       const std::vector<int>& global_eqn_ids,
-                       const std::vector<int>& global_var_ids,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-                       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy,
-                       double radius0, double activation_signal) override;
+  void update_time(double time, double signal) override;
+  void residual(const double* a, const double* adot, double lambda,
+                double* R) const override;
+  void residual(const cplx* a, const cplx* adot, cplx lambda,
+                cplx* R) const override;
 
  private:
-  /**
-   * @name Extra variable/equation positions within the full ChamberSphere
-   * global_var_ids/global_eqn_ids arrays
-   *
-   * Reproduce the exact global_var_ids/global_eqn_ids indices that the
-   * ChamberSphere used.
-   */
-  ///@{
-  static constexpr int E_C_VAR = NUM_CORE_VARS + 0;      // 10
-  static constexpr int TAU_C_VAR = NUM_CORE_VARS + 1;    // 11
-  static constexpr int K_C_VAR = NUM_CORE_VARS + 2;      // 12
-  static constexpr int OMEGA_VAR = NUM_CORE_VARS + 3;    // 13
-  static constexpr int SIGMA_C_VAR = NUM_CORE_VARS + 4;  // 14
-  static constexpr int SIGMA_S_VAR = NUM_CORE_VARS + 5;  // 15
-  static constexpr int E_S_VAR = NUM_CORE_VARS + 6;      // 16
-  static constexpr int TAU_EQN = NUM_CORE_EQNS + 0;      // 7
-  static constexpr int OMEGA_EQN = NUM_CORE_EQNS + 1;    // 8
-  static constexpr int E_C_EQN = NUM_CORE_EQNS + 2;      // 9
-  static constexpr int K_C_EQN = NUM_CORE_EQNS + 3;      // 10
-  static constexpr int TAU_C_EQN = NUM_CORE_EQNS + 4;    // 11
-  static constexpr int SIGMA_C_EQN = NUM_CORE_EQNS + 5;  // 12
-  static constexpr int SIGMA_S_EQN = NUM_CORE_EQNS + 6;  // 13
-  static constexpr int E_S_EQN = NUM_CORE_EQNS + 7;      // 14
-  ///@}
+  template <typename T>
+  void residual_t(const T* a, const T* adot, T lambda, T* R) const;
+
+  double u_plus_ = 0.0;   ///< positive part of the reaction-rate signal
+  double u_minus_ = 0.0;  ///< negative part of the reaction-rate signal
+};
+
+/**
+ * @brief Bestel-Clement-Sorine active stress of \cite genet23
+ *
+ * The law of \cite genet23 (Eqs. 30-33, after Chapelle et al. 2012) with the
+ * fiber strain \f$e_\text{fib} = \lambda - 1\f$ and a linear series spring.
+ * States \f$\tau, e_c, \tau_c, k_c\f$:
+ * \f[
+ * \tau = \frac{\tau_c + \mu\dot e_c}{\lambda},\quad
+ * \mu\dot e_c = k_s(e_\text{fib}-e_c)-\tau_c,
+ * \f]
+ * \f[
+ * \dot\tau_c = -(|\nu|+\alpha|\dot e_c|)\tau_c + \dot e_c\,k_c +
+ *   n_0(e_c)\sigma_0|\nu|_+,\quad
+ * \dot k_c = -(|\nu|+\alpha|\dot e_c|)k_c + n_0(e_c)k_0|\nu|_+,
+ * \f]
+ * driven by a rate-type activation signal \f$\nu(t)\f$ (e.g. the ECG-derived
+ * `nagumo` waveform). \f$|\dot e_c|\f$ is smoothed to
+ * \f$\sqrt{\dot e_c^2+\epsilon}\f$. Writing \f$\tau\f$ through
+ * \f$\tau_c+\mu\dot e_c\f$ instead of the equivalent
+ * \f$k_s(e_\text{fib}-e_c)\f$ keeps the stiff \f$k_s\f$ out of the wall
+ * stress. The Frank-Starling factor \f$n_0(e_c)\f$ is a piecewise-linear
+ * table (`n0_e_c`/`n0_values`), by default that of the genet23 authors' code.
+ *
+ * Parameters: `sigma_0`, `k_s` (default 1e8), `k_0` (default 260e3), `mu`
+ * (default 70), `alpha` (default 0), `fv_reg` (\f$\epsilon\f$, default 1e-4),
+ * `n0_e_c`, `n0_values` (optional)
+ */
+class Genet23ActiveStress : public ActiveStress {
+ public:
+  Genet23ActiveStress()
+      : ActiveStress({{"sigma_0", InputParameter()},
+                      {"k_s", InputParameter(true, false, true, 1.0e8)},
+                      {"k_0", InputParameter(true, false, true, 260.0e3)},
+                      {"mu", InputParameter(true, false, true, 70.0)},
+                      {"alpha", InputParameter(true, false, true, 0.0)},
+                      {"fv_reg", InputParameter(true, false, true, 1.0e-4)},
+                      {"n0_e_c", InputParameter(true, true, true, 0.0)},
+                      {"n0_values", InputParameter(true, true, true, 0.0)}}) {}
+
+  void finalize() override;
+  int num_states() const override { return 4; }
+  std::vector<std::string> state_names() const override {
+    return {"active_stress", "e_c", "tau_c", "k_c"};
+  }
+  ActivationSignalType required_signal_type() const override {
+    return ActivationSignalType::rate;
+  }
+  void update_time(double time, double signal) override;
+  void residual(const double* a, const double* adot, double lambda,
+                double* R) const override;
+  void residual(const cplx* a, const cplx* adot, cplx lambda,
+                cplx* R) const override;
+
+ private:
+  template <typename T>
+  void residual_t(const T* a, const T* adot, T lambda, T* R) const;
+
+  double nu_abs_ = 0.0;   ///< |nu(t)|
+  double nu_plus_ = 0.0;  ///< |nu(t)|_+
+};
+
+/**
+ * @brief Prescribed active tension of svMultiPhysics (`UniformUnsteady`)
+ *
+ * One state, the active stress \f$\tau = T(t)\f$, with \f$T(t)\f$ built from
+ * samples \f$(t_i, T_i)\f$ as svMultiPhysics' FourierInterpolation does: the
+ * linear trend through the first and last sample plus the first
+ * `fourier_modes` Fourier modes of the piecewise-linear interpolant of the
+ * samples minus the trend, periodic with period \f$t_\text{last}-t_0\f$.
+ * With `ramp` (nonzero), only the trend, held constant outside
+ * \f$[t_0, t_\text{last}]\f$. Takes no activation function.
+ *
+ * Parameters: `t`, `T` (arrays), `fourier_modes` (default 1), `ramp`
+ * (default 0)
+ */
+class UniformUnsteadyActiveStress : public ActiveStress {
+ public:
+  UniformUnsteadyActiveStress()
+      : ActiveStress({{"t", InputParameter(false, true)},
+                      {"T", InputParameter(false, true)},
+                      {"fourier_modes", InputParameter(true, false, true, 1.0)},
+                      {"ramp", InputParameter(true, false, true, 0.0)}}) {}
+
+  void finalize() override;
+  int num_states() const override { return 1; }
+  std::vector<std::string> state_names() const override {
+    return {"active_stress"};
+  }
+  bool uses_activation() const override { return false; }
+  void update_time(double time, double signal) override;
+  void residual(const double* a, const double* adot, double lambda,
+                double* R) const override;
+  void residual(const cplx* a, const cplx* adot, cplx lambda,
+                cplx* R) const override;
 
   /**
-   * @brief Update the strain-dependent coefficients used across this
-   * model's equations
+   * @brief Tension T(t) at a time
    *
-   * @param e_c Current sarcomere element strain
+   * @param time Time
+   * @return Tension
    */
-  void update_active_stress_values(double e_c);
+  double tension(double time) const;
 
-  double n_0_ = 0.0;        // activation strain-dependence
-  double m_0_ = 0.0;        // relaxation strain-dependence
-  double dn_0_de_c_ = 0.0;  // d(n_0)/d(e_c), local slope of n0_e_c/n0_values
-  double dm_0_de_c_ = 0.0;  // d(m_0)/d(e_c), local slope of m0_e_c/m0_values
-  double u_plus_ = 0.0;     // positive part of the reaction-rate signal
-  double u_minus_ = 0.0;    // negative part of the reaction-rate signal
+ private:
+  bool ramp_ = false;       ///< linear ramp instead of the Fourier series
+  double t0_ = 0.0;         ///< first sample time
+  double period_ = 0.0;     ///< last minus first sample time
+  double v0_ = 0.0;         ///< trend value at t0
+  double slope_ = 0.0;      ///< trend slope
+  std::vector<double> re_;  ///< cosine coefficients
+  std::vector<double> im_;  ///< sine coefficients (with a minus sign)
+  double tension_ = 0.0;    ///< T at the current time
 };
 
 #endif  // SVZERODSOLVER_MODEL_ACTIVESTRESS_HPP_

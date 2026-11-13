@@ -48,6 +48,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import coupled_3d as CP  # noqa: E402
+import cylinder_3d as C3  # noqa: E402
 import run_study as RS  # noqa: E402
 
 MMHG = 133.322387415
@@ -240,7 +241,7 @@ def main():
         sols[nr] = dict(CP.post(d), order=case["order"], h=(case["Re"] - case["Ri"]) / nr)
     ref, ref_name = reference(model, out_dir, a.reference_ne)
     with open(model) as f:
-        cyl = CP.find_cylinder(json.load(f))["zero_d_element_values"]
+        cyl = C3.flat_values(CP.find_cylinder(json.load(f)))
     ref_fields = RS.zero_d_fields(ref["R"], ref["rho"], ref["phi"], ref["eta"], ref["beta"], cyl,
                                   (cyl["alpha_endo"], cyl["alpha_epi"]), stresses=False)
     m = cycle_mask(ref["t"], period, k)

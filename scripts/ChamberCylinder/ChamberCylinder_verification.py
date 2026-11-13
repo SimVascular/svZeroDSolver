@@ -195,9 +195,12 @@ def series(out, name):
     return d["time"].to_numpy(), d["y"].to_numpy()
 
 
-def isolated_config(vv, P_t, P_v, T, npts, ic, act=None, integrator="stiff", formulation=None):
+def isolated_config(vv, P_t, P_v, T, npts, ic, act=None, integrator="stiff", formulation=None,
+                    tension=None):
     """Cylinder alone: prescribed cavity pressure at the inlet, closed outlet.
-    formulation: the block's formulation object (default: genet23)."""
+    vv: flat parameters (G.cylinder_vessel); formulation: volumetric and ends
+    (default: genet23); tension: samples of a prescribed active tension
+    (active stress uniform_unsteady) instead of the BCS law."""
     act = act or {"type": "nagumo", "tsys": 0.1, "tdias": 0.4, "qrs": 0.08,
                   "ramp": 0.01, "alpha_max": 0.0, "alpha_min": 0.0}
     cfg = {
@@ -213,11 +216,9 @@ def isolated_config(vv, P_t, P_v, T, npts, ic, act=None, integrator="stiff", for
         "initial_condition": ic,
         "vessels": [{"boundary_conditions": {"inlet": "IN", "outlet": "OUT"}, "vessel_id": 0,
                      "vessel_length": 1.0, "vessel_name": "cyl",
-                     "zero_d_element_type": "ChamberCylinder", "zero_d_element_values": vv,
-                     "activation_function": act}],
+                     "zero_d_element_type": "ChamberCylinder",
+                     **G.cylinder_vessel(vv, act, formulation, tension)}],
         "junctions": [], "valves": []}
-    if formulation:
-        cfg["vessels"][0]["formulation"] = dict(formulation)
     return cfg
 
 
@@ -549,7 +550,7 @@ def block_beat(ne, npts=801, ncycle=12):
     cfg = G.build(ne=ne, ncycle=ncycle, P_vs=G.P_VS)
     cfg["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"] = npts
     cfg["simulation_parameters"]["absolute_tolerance"] = 1e-7
-    vv = cfg["vessels"][1]["zero_d_element_values"]
+    vv = G.flat_parameters(cfg["vessels"][1])
     out = svzerod.simulate(cfg)
     t, V = series(out, "volume:ventricle")
     m = t >= t.max() - 0.8 - 1e-9
@@ -567,8 +568,8 @@ def block_beat(ne, npts=801, ncycle=12):
         for g in (-math.sqrt(0.6), 0.0, math.sqrt(0.6)):
             Rq.append(vv["Ri"] + (e_ + 0.5 + 0.5 * g) * h)
     d["Rq"] = np.array(Rq)
-    for v in ("ec", "tauc", "kc"):
-        d[v] = np.array([series(out, f"{v}_{q}:ventricle")[1][m] for q in range(nqb)])
+    for v, name in (("ec", "e_c"), ("tauc", "tau_c"), ("kc", "k_c")):
+        d[v] = np.array([series(out, f"{name}_{q}:ventricle")[1][m] for q in range(nqb)])
     d["vv"] = vv
     d["act"] = cfg["vessels"][1]["activation_function"]
     return d

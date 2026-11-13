@@ -54,20 +54,26 @@
       "vessel_length": 1.0,
       "vessel_name": "ventricle",
       "zero_d_element_type": "ChamberCylinder",
+      "material": {
+        "type": "genet23",
+        "C1": 7.0,
+        "C2": 0.0,
+        "C3": 700.0,
+        "C4": 2.0,
+        "C5": 50.0,
+        "C6": 4.0
+      },
+      "active_stress": {
+        "type": "genet23",
+        "sigma_0": 55000.0
+      },
       "zero_d_element_values": {
         "Ri": 0.019,
         "Re": 0.033,
         "length": 0.0571,
         "alpha_endo": 60.0,
         "alpha_epi": -60.0,
-        "C1": 7.0,
-        "C2": 0.0,
-        "C3": 700.0,
-        "C4": 2.0,
-        "C5": 50.0,
-        "C6": 4.0,
         "gamma": 70.0,
-        "sigma_max": 55000.0,
         "num_elements": 3
       },
       "activation_function": {

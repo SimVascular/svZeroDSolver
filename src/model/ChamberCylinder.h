@@ -16,31 +16,24 @@
 #include <vector>
 
 #include "ActivationFunction.h"
+#include "ActiveStress.h"
 #include "Block.h"
+#include "Material.h"
 #include "SparseSystem.h"
 
 /**
- * @brief Interchangeable components of the ChamberCylinder model.
+ * @brief Volumetric law and end condition of the ChamberCylinder model.
  *
- * Each component has the formulation of \cite genet23 (the default) and the
- * equivalent of the svMultiPhysics `struct` equation (see the Formulation
- * section of ChamberCylinder).
+ * Each has the formulation of \cite genet23 (the default) and the equivalent
+ * of a 3D svMultiPhysics `struct` model (see the Formulation section of
+ * ChamberCylinder). The passive and active laws are selected with the
+ * `material` and `active_stress` objects instead.
  */
 struct ChamberCylinderFormulation {
-  /// Passive isochoric energy
-  enum class Passive {
-    genet23,         ///< genet23 energy with C1 ... C6
-    holzapfel_ogden  ///< svMultiPhysics HolzapfelOgden with ho_*
-  };
   /// Volumetric law, enforced with the element pressure
   enum class Volumetric {
     incompressible,  ///< genet23: int_e (J - 1) = 0
     st91             ///< svMultiPhysics ST91 penalty with bulk_modulus
-  };
-  /// Active fiber stress
-  enum class Active {
-    bcs,              ///< genet23 Bestel-Clement-Sorine law
-    uniform_unsteady  ///< svMultiPhysics UniformUnsteady prescribed tension
   };
   /// End condition of the tube
   enum class Ends {
@@ -48,63 +41,16 @@ struct ChamberCylinderFormulation {
     fixed_length  ///< eps = 0, ends sliding in fixed planes
   };
 
-  Passive passive = Passive::genet23;                  ///< Passive law
   Volumetric volumetric = Volumetric::incompressible;  ///< Volumetric law
-  Active active = Active::bcs;                         ///< Active law
   Ends ends = Ends::lids;                              ///< End condition
 
   /**
    * @brief Select one component by name.
    *
-   * @param component `passive`, `volumetric`, `active` or `ends`
+   * @param component `volumetric` or `ends`
    * @param choice Name of the formulation of that component
    */
   void set(const std::string& component, const std::string& choice);
-};
-
-/**
- * @brief Time function of svMultiPhysics' FourierInterpolation.
- *
- * Built from samples \f$(t_i, T_i)\f$: the linear trend through the first and
- * last sample plus the first `n_modes` Fourier modes of the piecewise-linear
- * interpolant of the samples minus the trend, periodic with period
- * \f$t_\text{last}-t_0\f$. With `ramp`, only the trend, held constant outside
- * \f$[t_0, t_\text{last}]\f$.
- */
-struct FourierTension {
-  bool ramp = false;       ///< linear ramp instead of the Fourier series
-  double t0 = 0.0;         ///< first sample time
-  double period = 0.0;     ///< last minus first sample time (0: undefined)
-  double v0 = 0.0;         ///< trend value at t0
-  double slope = 0.0;      ///< trend slope
-  std::vector<double> re;  ///< cosine coefficients
-  std::vector<double> im;  ///< sine coefficients (with a minus sign)
-
-  /**
-   * @brief Whether the samples are set.
-   *
-   * @return True once set() was called
-   */
-  bool defined() const { return period > 0.0; }
-
-  /**
-   * @brief Fourier coefficients of the samples.
-   *
-   * @param t Strictly increasing sample times (at least 2)
-   * @param v Sample values
-   * @param n_modes Number of Fourier modes (at least 1)
-   * @param use_ramp Linear ramp instead of the Fourier series
-   */
-  void set(const std::vector<double>& t, const std::vector<double>& v,
-           int n_modes, bool use_ramp);
-
-  /**
-   * @brief Value at a time.
-   *
-   * @param time Time
-   * @return Function value
-   */
-  double value(double time) const;
 };
 
 /**
@@ -144,102 +90,59 @@ struct FourierTension {
  * The second Piola-Kirchhoff stress is split into passive deviatoric, bulk,
  * viscous and active parts, \f$\Sigma = \Sigma^d + \Sigma^b + \Sigma^v +
  * \Sigma^a\f$, with
- * - a deviatoric stress \f$\Sigma^d=\partial W^e/\partial E\f$ from the
- *   passive energy \f$W^e\f$ (component `passive`, see Formulation);
+ * - a deviatoric stress \f$\Sigma^d=2\,\partial W/\partial C\f$ of the wall
+ *   \ref Material (`material` object), with the fiber direction
+ *   \f$\mathbf{e}_F(R) = (0,\cos\alpha(R),\sin\alpha(R))\f$ and the radial
+ *   sheet direction \f$\mathbf{e}_S=\mathbf{e}_R\f$ in the
+ *   \f$(\mathbf{e}_R,\mathbf{e}_\Theta,\mathbf{e}_Z)\f$ basis; the helix
+ *   angle varies linearly through the wall,
+ *   \f$\alpha(R)=\alpha_i\frac{R_e-R}{R_e-R_i}+\alpha_e\frac{R-R_i}{R_e-R_i}\f$;
  * - a bulk term \f$\Sigma^b = p\,J\,C^{-1}\f$ with \f$p\f$ an independent
  *   hydrostatic-pressure field (\cite genet23 mixed u/p formulation),
  *   discretized element-wise constant (P0, LBB-stable with the linear
  *   \f$\rho,\varphi,\eta\f$) and determined per element by the volumetric
- *   law (component `volumetric`);
+ *   law (see Formulation);
  * - a viscous term \f$\Sigma^v=\gamma\,\dot E\f$;
  * - an active fiber stress
- *   \f$\Sigma^a = \tau\,\mathbf{e}_F\otimes\mathbf{e}_F\f$ (component
- *   `active`) along the local myofiber direction
- *   \f$\mathbf{e}_F(R) = (0,\cos\alpha(R),\sin\alpha(R))\f$ with helix angle
- *   varying linearly through the wall,
- *   \f$\alpha(R)=\alpha_i\frac{R_e-R}{R_e-R_i}+\alpha_e\frac{R-R_i}{R_e-R_i}\f$.
+ *   \f$\Sigma^a = \tau\,\mathbf{e}_F\otimes\mathbf{e}_F\f$ of the
+ *   \ref ActiveStress law (`active_stress` object), evaluated at each
+ *   quadrature point at the fiber stretch
+ *   \f$\lambda=\sqrt{\mathbf{e}_F\cdot C\cdot\mathbf{e}_F}\f$ and driven by
+ *   the `activation_function` (unless the law takes none).
  *
- * The invariants are those of the isochoric tensor \f$\bar C = J^{-2/3}C\f$,
- * with \f$\bar I_4 = J^{-2/3}\,\mathbf{e}_F\cdot C\cdot\mathbf{e}_F\f$.
+ * The material and active stress laws are those of \ref ChamberSphere. The
+ * genet23 model is the material `genet23` (Eq. 24, constants `C1` ... `C6`)
+ * with the active stress `genet23` (the Bestel-Clement-Sorine law of Eqs.
+ * 30-33) driven by the ECG-derived `nagumo` activation rate.
  *
  * ### Formulation
  *
- * Four components can be swapped between the formulation of \cite genet23
- * (the default) and the equivalent of the svMultiPhysics `struct` equation, so
- * that the block reproduces either model (e.g., to verify it against 3D finite
- * elements). An optional `formulation` object on the vessel selects them, for
- * example `"formulation": {"passive": "holzapfel_ogden", "volumetric":
- * "st91", "active": "uniform_unsteady", "ends": "fixed_length"}`; omitted
- * components keep the genet23 choice. The parameters of the components that
- * are not selected must be zero (or omitted).
- *
- * Component: genet23 choice (default) / svMultiPhysics equivalent
- * - `passive`: `genet23` (`C1` ... `C6`) / `holzapfel_ogden` (`ho_*`)
- * - `volumetric`: `incompressible` / `st91` (`bulk_modulus`)
- * - `active`: `bcs` (`activation_function`) / `uniform_unsteady`
- *   (`active_tension`)
- * - `ends`: `lids` (pressure-loaded, free length) / `fixed_length`
- *
- * In detail:
- * - `passive`: `genet23` is the transversely isotropic energy
- *   \f$W^e = C_1(\bar I_1-3) + C_2(\bar I_2-3) + C_3 e^{C_4(\bar I_1-3)^2} +
- *   C_5 e^{C_6(\bar I_4-1)^2}\f$. With \f$C_3=0\f$ it already contains the
- *   svMultiPhysics laws `neoHookean` (\f$C_1=\mu/2\f$), `MR` (\f$C_1,C_2\f$)
- *   and the fiber term of `HGO` without dispersion (\f$C_5=a_4/(2b_4)\f$,
- *   \f$C_6=b_4\f$). `holzapfel_ogden` is the svMultiPhysics `HolzapfelOgden`
- *   energy
- *   \f$W^\text{HO}=\frac{a}{2b}e^{b(\bar I_1-3)}
- *   +\sum_{i=f,s}\frac{a_i}{2b_i}\chi_i\left(e^{b_i(\bar I_{4i}-1)^2}-1\right)
- *   +\frac{a_{fs}}{2b_{fs}}\left(e^{b_{fs}\bar I_8^2}-1\right)\f$ with sheet
- *   \f$\mathbf{e}_S=\mathbf{e}_R\f$, \f$\bar I_{4f}=\bar I_4\f$,
- *   \f$\bar I_{4s}=J^{-2/3}\mathbf{e}_S\cdot C\cdot\mathbf{e}_S\f$,
- *   \f$\bar I_8=J^{-2/3}\mathbf{e}_F\cdot C\cdot\mathbf{e}_S\f$ and the
- *   smoothed Heaviside \f$\chi_i=1/(1+e^{-k(\bar I_{4i}-1)})\f$.
- * - `volumetric`: `incompressible` constrains
- *   \f$\int_{\Omega_e}(J-1)\,\mathrm d\Omega=0\f$ per element (locking-free
- *   at coarse meshes). `st91` makes the wall compressible with the
- *   svMultiPhysics energy \f$U=\tfrac\kappa4(J^2-1-2\ln J)\f$, enforced
- *   weakly per element:
- *   \f$\int_{\Omega_e}(\tfrac12(J-1/J)-p/\kappa)\,\mathrm d\Omega=0\f$.
- * - `active`: `bcs` is the Bestel-Clement-Sorine law below.
- *   `uniform_unsteady` prescribes the 2nd Piola-Kirchhoff stress
- *   \f$\Sigma^a = T(t)\,\mathbf{e}_F\otimes\mathbf{e}_F\f$ of the
- *   svMultiPhysics `UniformUnsteady` active stress, with \f$T(t)\f$ built from
- *   the samples of an `active_tension` object (arrays `t`, `T`, number of
- *   Fourier modes `fourier_modes`, flag `ramp`, default false) as in
- *   svMultiPhysics (see \ref FourierTension). The BCS states then stay at
- *   rest, decoupled from the wall.
- * - `ends`: `lids` closes the tube with rigid lids that carry the cavity
- *   pressure (\cite genet23 Eqs. 39-44), so the wall takes the axial force
- *   \f$P_v\pi(R_i+\rho(R_i))^2\f$ and the length is free. `fixed_length` lets
- *   the ends slide in fixed planes, like the end faces of a 3D model with
- *   \f$u_z=0\f$: \f$\varepsilon=0\f$ and the lids carry no load.
+ * The components of the genet23 model can be swapped for the equivalents of
+ * a 3D svMultiPhysics `struct` model, to verify the block against 3D finite
+ * elements:
+ * - material: `genet23` / `holzapfel_ogden` (svMultiPhysics
+ *   `HolzapfelOgden`; with \f$C_3=0\f$, `genet23` already contains
+ *   svMultiPhysics' `neoHookean`, `MR` and the fiber term of `HGO`);
+ * - active stress: `genet23` / `uniform_unsteady` (svMultiPhysics
+ *   `UniformUnsteady`, a prescribed tension);
+ * - volumetric law and end condition, selected with an optional `formulation`
+ *   object on the vessel, e.g. `"formulation": {"volumetric": "st91",
+ *   "ends": "fixed_length"}` (omitted components keep genet23):
+ *   - `volumetric`: `incompressible` (genet23, default) constrains
+ *     \f$\int_{\Omega_e}(J-1)\,\mathrm d\Omega=0\f$ per element (locking-free
+ *     at coarse meshes); `st91` makes the wall compressible with the
+ *     svMultiPhysics energy \f$U=\tfrac\kappa4(J^2-1-2\ln J)\f$ of
+ *     `bulk_modulus` \f$\kappa\f$, enforced weakly per element:
+ *     \f$\int_{\Omega_e}(\tfrac12(J-1/J)-p/\kappa)\,\mathrm d\Omega=0\f$;
+ *   - `ends`: `lids` (genet23, default) closes the tube with rigid lids that
+ *     carry the cavity pressure (\cite genet23 Eqs. 39-44), so the wall takes
+ *     the axial force \f$P_v\pi(R_i+\rho(R_i))^2\f$ and the length is free;
+ *     `fixed_length` lets the ends slide in fixed planes, like the end faces
+ *     of a 3D model with \f$u_z=0\f$: \f$\varepsilon=0\f$ and the lids carry
+ *     no load.
  *
  * The viscous term equals the svMultiPhysics `Potential` viscosity, and the
  * inertia (`density`) is the same in both, so neither needs a switch.
- *
- * ### Active contraction (\cite genet23 / Bestel-Clement-Sorine, Ref. 6)
- *
- * The active fiber stress is \f$\sigma_\text{1D} = (\tau_c+\mu\dot e_c)/
- * (1+e_\text{fib})\f$ (Eqs. 30-32 of the paper / Eq. 10 of Chapelle et al.
- * 2012), where \f$1+e_\text{fib}=\sqrt{\mathbf{e}_F\cdot C\cdot\mathbf{e}_F}=
- * \sqrt{I_4}\f$ from the kinematics, and the contractile-element strain
- * \f$e_c\f$, active stress \f$\tau_c\f$ and active stiffness \f$k_c\f$ evolve
- * per quadrature point via
- * \f[
- * \mu\dot e_c = k_s(e_\text{fib}-e_c)-\tau_c,\quad
- * \dot\tau_c = -(|\nu|+\alpha|\dot e_c|)\tau_c + \dot e_c\,k_c +
- *   n_0(e_c)\sigma_0|\nu|_+,\quad
- * \dot k_c = -(|\nu|+\alpha|\dot e_c|)k_c + n_0(e_c)k_0|\nu|_+,
- * \f]
- * (Chapelle Eq. 9) driven by the ECG-derived activation \f$\nu(t)\f$ (the
- * authors' piecewise-linear `nagumo` waveform, supplied as an
- * `activation_function` object; see \ref NagumoActivation),
- * \f$\sigma_0=\f$ `sigma_max`, and the piecewise-linear Frank-Starling factor
- * \f$n_0(e_c)\f$ (overridable via a `frank_starling` config object).
- * Writing the stress through \f$\tau_c+\mu\dot e_c\f$ rather than the
- * equivalent \f$k_s(e_\text{fib}-e_c)\f$ keeps the stiff \f$k_s=10^8\f$ out of
- * the mechanical residual.
  *
  * ### Governing equations
  *
@@ -275,43 +178,21 @@ struct FourierTension {
  * * `length` - Reference length \f$L\f$
  * * `alpha_endo` - Myofiber helix angle at endocardium \f$\alpha_i\f$ [deg]
  * * `alpha_epi` - Myofiber helix angle at epicardium \f$\alpha_e\f$ [deg]
- * * `C1` ... `C6` - Passive material constants \f$C_1\ldots C_6\f$ (passive
- *   law `genet23`; optional, default 0)
  * * `gamma` - Material viscosity \f$\gamma\f$
- * * `sigma_max` - Maximum active fiber stress \f$\sigma_0\f$ of the BCS model
- *   (active law `bcs`; optional, default 0)
  * * `num_elements` - Number of (linear) finite elements through the wall
  *   (optional, default 10)
- * * `k_s` - BCS series-spring stiffness \f$k_s\f$ (optional, default 1e8)
- * * `k_0` - BCS maximum active stiffness \f$k_0\f$ (optional, default 260e3)
- * * `mu` - BCS active dissipation \f$\mu\f$ (optional, default 70). Distinct
- *   from the passive `gamma`.
- * * `bcs_alpha` - BCS velocity-dependent bond-destruction (force-velocity)
- *   constant \f$\alpha\f$ (optional, default 0; the paper uses 12). The
- *   \f$\alpha|\dot e_c|\f$ term is stiff and destabilizes plain
- *   generalized-alpha; set the simulation parameter `"integrator": "stiff"`
- *   (ConsistentStiffIntegrator) to use \f$\alpha>0\f$. The \f$k_c\dot e_c\f$
- *   source is retained regardless of \f$\alpha\f$.
  * * `density` - Reference mass density \f$\varrho_0\f$ (optional, default 1000
  *   kg/m^3 = the paper's 1 kg/L)
- * * `fv_reg` - BCS force-velocity regularizer \f$\epsilon\f$ smoothing
- *   \f$|\dot e_c|\approx\sqrt{\dot e_c^2+\epsilon}\f$ (optional, default 1e-4)
- * * `ho_a`, `ho_b`, `ho_af`, `ho_bf`, `ho_as`, `ho_bs`, `ho_afs`, `ho_bfs`,
- *   `ho_k` - Holzapfel-Ogden constants \f$a, b, a_f, b_f, a_s, b_s, a_{fs},
- *   b_{fs}, k\f$ (passive law `holzapfel_ogden`; svMultiPhysics `a`, `b`,
- *   `a4f`, `b4f`, `a4s`, `b4s`, `afs`, `bfs`, `k`); a fiber or sheet term is
- *   off when its \f$a\f$ is 0, otherwise its \f$b\f$ must be positive
- *   (optional, default 0)
  * * `bulk_modulus` - Bulk modulus \f$\kappa\f$ of the ST91 energy (volumetric
  *   law `st91`; optional, default 0)
  *
- * With the active law `bcs`, the ECG-derived activation \f$\nu(t)\f$ is
- * supplied as an `activation_function` object (type `nagumo`, see
- * \ref NagumoActivation) with parameters `tsys`, `tdias`, `qrs`, `ramp`,
- * `alpha_max`, `alpha_min`, and an optional `frank_starling` object with
- * arrays `e_c` and `n0` overrides the default force-length curve
- * \f$n_0(e_c)\f$. The active law `uniform_unsteady` takes the
- * `active_tension` object instead.
+ * The vessel configuration also takes a `material` object (see \ref
+ * Material), an `active_stress` object (see \ref ActiveStress) and, for active
+ * stress laws driven by an activation, an `activation_function` object (see
+ * \ref ActivationFunction; `nagumo` for genet23). With the active stress
+ * `genet23` and \f$\alpha>0\f$ (its velocity-dependent bond destruction, 12 in
+ * the paper), the stiff \f$\alpha|\dot e_c|\f$ term needs the simulation
+ * parameter `"integrator": "stiff"` (ConsistentStiffIntegrator).
  *
  * ### Internal variables
  *
@@ -320,8 +201,9 @@ struct FourierTension {
  * * `eta_<A>` - Out-of-plane shear field nodal values \f$\eta_A\f$
  * * `beta` - Twist per unit length \f$\beta\f$
  * * `eps` - Longitudinal strain \f$\varepsilon\f$
- * * `ec_<q>`, `tauc_<q>`, `kc_<q>` - BCS contractile-element strain, active
- *   bond stress and active stiffness at quadrature point `q`
+ * * `active_stress_<q>`, ... - States of the active stress law at quadrature
+ *   point `q` (e.g. `active_stress_<q>`, `e_c_<q>`, `tau_c_<q>`, `k_c_<q>` for
+ *   `genet23`)
  * * `volume` - Cavity volume \f$V\f$
  * * `vrho_<A>`, `vphi_<A>`, `veta_<A>`, `vbeta`, `veps` - velocity companion
  *   DOFs \f$w=\dot\zeta\f$ (full dynamics)
@@ -341,31 +223,10 @@ class ChamberCylinder : public Block {
     length,
     alpha_endo,
     alpha_epi,
-    C1,
-    C2,
-    C3,
-    C4,
-    C5,
-    C6,
     gamma,
-    sigma_max,
     num_elements,
-    k_s,           // BCS series-spring stiffness
-    k_0,           // BCS maximum active stiffness
-    mu,            // BCS active dissipation
-    bcs_alpha,     // BCS activation rate constant (paper's alpha)
-    density,       // reference mass density rho_0 (inertia, genet23 Eq. 18)
-    fv_reg,        // BCS force-velocity regularizer (|e_c dot| smoothing eps)
-    bulk_modulus,  // ST91 bulk modulus kappa (volumetric law st91)
-    ho_a,          // Holzapfel-Ogden isotropic term
-    ho_b,
-    ho_af,  // Holzapfel-Ogden fiber term
-    ho_bf,
-    ho_as,  // Holzapfel-Ogden sheet term
-    ho_bs,
-    ho_afs,  // Holzapfel-Ogden fiber-sheet term
-    ho_bfs,
-    ho_k  // Holzapfel-Ogden smoothed-Heaviside slope
+    density,      // reference mass density rho_0 (inertia, genet23 Eq. 18)
+    bulk_modulus  // ST91 bulk modulus kappa (volumetric law st91)
   };
 
   /**
@@ -381,31 +242,10 @@ class ChamberCylinder : public Block {
                {"length", InputParameter()},
                {"alpha_endo", InputParameter()},
                {"alpha_epi", InputParameter()},
-               {"C1", InputParameter(true, false, true, 0.0)},
-               {"C2", InputParameter(true, false, true, 0.0)},
-               {"C3", InputParameter(true, false, true, 0.0)},
-               {"C4", InputParameter(true, false, true, 0.0)},
-               {"C5", InputParameter(true, false, true, 0.0)},
-               {"C6", InputParameter(true, false, true, 0.0)},
                {"gamma", InputParameter()},
-               {"sigma_max", InputParameter(true, false, true, 0.0)},
                {"num_elements", InputParameter(true, false, true, 10.0)},
-               {"k_s", InputParameter(true, false, true, 1.0e8)},
-               {"k_0", InputParameter(true, false, true, 260.0e3)},
-               {"mu", InputParameter(true, false, true, 70.0)},
-               {"bcs_alpha", InputParameter(true, false, true, 0.0)},
                {"density", InputParameter(true, false, true, 1000.0)},
-               {"fv_reg", InputParameter(true, false, true, 1.0e-4)},
-               {"bulk_modulus", InputParameter(true, false, true, 0.0)},
-               {"ho_a", InputParameter(true, false, true, 0.0)},
-               {"ho_b", InputParameter(true, false, true, 0.0)},
-               {"ho_af", InputParameter(true, false, true, 0.0)},
-               {"ho_bf", InputParameter(true, false, true, 0.0)},
-               {"ho_as", InputParameter(true, false, true, 0.0)},
-               {"ho_bs", InputParameter(true, false, true, 0.0)},
-               {"ho_afs", InputParameter(true, false, true, 0.0)},
-               {"ho_bfs", InputParameter(true, false, true, 0.0)},
-               {"ho_k", InputParameter(true, false, true, 0.0)}}) {}
+               {"bulk_modulus", InputParameter(true, false, true, 0.0)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -461,10 +301,7 @@ class ChamberCylinder : public Block {
   TripletsContributions get_num_triplets() override { return num_triplets; }
 
   /**
-   * @brief Set the activation function driving the BCS active law nu(t).
-   *
-   * Takes ownership of the activation function (type `nagumo`), whose
-   * compute(time) returns the signed activation rate nu(t).
+   * @brief Set the activation function driving the active stress law.
    *
    * @param af Unique pointer to the activation function
    */
@@ -474,39 +311,30 @@ class ChamberCylinder : public Block {
   }
 
   /**
-   * @brief Override the Frank-Starling force-length curve n_0(e_c).
+   * @brief Set the wall material.
    *
-   * Replaces the default piecewise-linear breakpoints. `ec` (abscissas) and
-   * `val` (ordinates) must have equal length >= 2.
-   *
-   * @param ec Contractile-element strain breakpoints e_c
-   * @param val Recruitment factor values n_0 at those breakpoints
+   * @param m Unique pointer to the material
    */
-  void set_frank_starling_curve(std::vector<double> ec,
-                                std::vector<double> val);
+  void set_material(std::unique_ptr<Material> m) override {
+    material_ = std::move(m);
+  }
 
   /**
-   * @brief Select the formulation of the model components.
+   * @brief Set the active stress law.
+   *
+   * @param as Unique pointer to the active stress law
+   */
+  void set_active_stress(std::unique_ptr<ActiveStress> as) override {
+    active_stress_ = std::move(as);
+  }
+
+  /**
+   * @brief Select the volumetric law and end condition.
    *
    * @param formulation genet23 or svMultiPhysics choice of each component
    */
   void set_formulation(const ChamberCylinderFormulation& formulation) {
     formulation_ = formulation;
-  }
-
-  /**
-   * @brief Prescribed active tension T(t) of the active law uniform_unsteady.
-   *
-   * @param t Strictly increasing sample times (at least 2)
-   * @param T Tension samples
-   * @param n_modes Number of Fourier modes (svMultiPhysics
-   * FourierInterpolation)
-   * @param ramp Linear ramp through the first and last sample instead
-   */
-  void set_active_tension(const std::vector<double>& t,
-                          const std::vector<double>& T, int n_modes,
-                          bool ramp) {
-    active_tension_.set(t, T, n_modes, ramp);
   }
 
  private:
@@ -524,13 +352,9 @@ class ChamberCylinder : public Block {
   bool fixed_length() const {
     return formulation_.ends == ChamberCylinderFormulation::Ends::fixed_length;
   }
-  /// Prescribed active tension (active law `uniform_unsteady`)
-  bool prescribed_tension() const {
-    return formulation_.active ==
-           ChamberCylinderFormulation::Active::uniform_unsteady;
-  }
   /// Check the parameters and inputs against the selected formulation.
   void check_formulation() const;
+  int n_law = 0;  ///< Number of active stress states per quadrature point
   int n_var = 0;  ///< Number of block variables (external + internal)
   int n_eqn = 0;  ///< Number of block equations
 
@@ -553,23 +377,22 @@ class ChamberCylinder : public Block {
   // --- Local variable / equation index helpers ---
   // Layout:
   //   vars: [Pin, Qin, Pout, Qout, rho_0.., phi_0.., eta_0.., beta, eps,
-  //          (e_c,tau_c,k_c)_q.., volume, vrho.., vphi.., veta.., vbeta, veps,
+  //          (active stress states)_q.., volume, vrho.., vphi.., veta.., vbeta,
+  //          veps, pmix_0..]
+  //   eqns: [rho.., phi.., eta.., beta, eps, (active stress equations)_q..,
+  //          volume, mass, pressure, vrho.., vphi.., veta.., vbeta, veps,
   //          pmix_0..]
-  //   eqns: [rho.., phi.., eta.., beta, eps, (e_c,tau_c,k_c)_q.., volume, mass,
-  //          pressure, vrho.., vphi.., veta.., vbeta, veps, pmix_0..]
-  // The BCS block holds 3 * n_quad variables/equations (e_c, tau_c, k_c per
-  // quadrature point).
+  // The active stress block holds n_law * n_quad variables/equations.
   int i_rho(int a) const { return 4 + a; }
   int i_phi(int a) const { return 4 + n_node + a; }
   int i_eta(int a) const { return 4 + 2 * n_node + a; }
   int i_beta() const { return 4 + 3 * n_node; }
   int i_eps() const { return 4 + 3 * n_node + 1; }
-  /// Start of the BCS variables
+  /// Start of the active stress variables
   int i_active0() const { return 4 + 3 * n_node + 2; }
-  int i_ec(int q) const { return i_active0() + 3 * q; }
-  int i_tauc(int q) const { return i_active0() + 3 * q + 1; }
-  int i_kc(int q) const { return i_active0() + 3 * q + 2; }
-  int n_active_var() const { return 3 * n_quad; }
+  /// State i of the active stress law at quadrature point q (state 0: tau)
+  int i_law(int q, int i) const { return i_active0() + n_law * q + i; }
+  int n_active_var() const { return n_law * n_quad; }
   int i_vol() const { return i_active0() + n_active_var(); }
   // Velocity companion DOFs (dynamics): w = d(field)/dt, appended after the
   // volume DOF.
@@ -588,11 +411,10 @@ class ChamberCylinder : public Block {
   int e_eta(int a) const { return 2 * n_node + a; }
   int e_beta() const { return 3 * n_node; }
   int e_eps() const { return 3 * n_node + 1; }
-  /// Start of the BCS equations
+  /// Start of the active stress equations
   int e_active0() const { return 3 * n_node + 2; }
-  int e_ec(int q) const { return e_active0() + 3 * q; }
-  int e_tauc(int q) const { return e_active0() + 3 * q + 1; }
-  int e_kc(int q) const { return e_active0() + 3 * q + 2; }
+  /// Equation i of the active stress law at quadrature point q
+  int e_law(int q, int i) const { return e_active0() + n_law * q + i; }
   int e_volume() const { return e_active0() + n_active_var(); }
   int e_mass() const { return e_volume() + 1; }
   int e_pressure() const { return e_volume() + 2; }
@@ -607,23 +429,14 @@ class ChamberCylinder : public Block {
   int e_pmix0() const { return e_vel0() + 3 * n_node + 2; }
   int e_pmix(int e) const { return e_pmix0() + e; }
 
-  double act = 0.0;       ///< |nu(t)|
-  double act_plus = 0.0;  ///< |nu(t)|_+ = max(nu(t), 0)
-  double tension = 0.0;   ///< prescribed active tension T(t)
+  /// Wall material
+  std::unique_ptr<Material> material_;
 
-  /// Prescribed active tension T(t) (active law uniform_unsteady)
-  FourierTension active_tension_;
+  /// Active stress law
+  std::unique_ptr<ActiveStress> active_stress_;
 
-  /// Activation function nu(t) driving the BCS active law (type `nagumo`).
+  /// Activation function driving the active stress law
   std::unique_ptr<ActivationFunction> activation_function_;
-
-  /// Frank-Starling breakpoints of n_0(e_c). Default: the curve of the genet23
-  /// authors' input code (\cite genet23 Table 1); overridable via
-  /// set_frank_starling_curve().
-  std::vector<double> n0_ec_ = {-0.1668, -0.0073, 0.0534, 0.0969, 0.1326,
-                                0.2016,  0.4663,  0.9187, 1.1762};
-  std::vector<double> n0_val_ = {0.0, 0.5614, 0.7748, 0.8933, 0.9618,
-                                 1.0, 1.0,    0.1075, 0.0};
 };
 
 #endif  // SVZERODSOLVER_MODEL_ChamberCylinder_HPP_

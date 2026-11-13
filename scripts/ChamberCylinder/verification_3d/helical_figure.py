@@ -115,12 +115,13 @@ def sweep(config, name, out_dir, angles, T, ne=16):
         shear, twist = [], []
         for a in angles:
             cfg = copy.deepcopy(config)
-            v = next(b for b in cfg["vessels"] if b["vessel_name"] == name)["zero_d_element_values"]
+            blk = next(b for b in cfg["vessels"] if b["vessel_name"] == name)
+            v = blk["zero_d_element_values"]
             a = float(a)
             v["alpha_endo"], v["alpha_epi"] = (a, -a) if fam.startswith("±") else (a, a)
             sol = RS.run_0d(cfg, name, ne, out_dir)
             i = int(np.argmin(np.abs(sol["t"] - T)))
-            _, sig = section_stresses(sol, i, v)
+            _, sig = section_stresses(sol, i, C3.flat_values(blk))
             shear.append(np.max(np.abs(sig["tz"])) / np.max(np.abs(sig["tt"])))
             twist.append(np.degrees(sol["beta"][i] * v["length"]))
         res[fam] = (np.array(shear), np.array(twist))

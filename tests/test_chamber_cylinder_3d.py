@@ -97,7 +97,7 @@ def test_lumen_volume_of_uniform_expansion():
 def test_generate_from_0d(tmp_path):
     case = C3.generate(MODEL, str(tmp_path), nr=1)
     with open(MODEL) as f:
-        vals = json.load(f)["vessels"][0]["zero_d_element_values"]
+        vals = C3.flat_values(json.load(f)["vessels"][0])
     assert case["material"]["model"] == "neoHookean"
     assert case["material"]["mu"] == 2.0 * vals["C1"]
     assert case["T_ramp"] == 1200.0
@@ -124,7 +124,7 @@ def test_generate_closed_end(tmp_path):
         C3.generate(model, str(tmp_path), nr=1)
     case = C3.generate(model, str(tmp_path), nr=1, closed_end=True)
     with open(model) as f:
-        vals = json.load(f)["vessels"][0]["zero_d_element_values"]
+        vals = C3.flat_values(json.load(f)["vessels"][0])
     assert case["mesh_length"] == 0.5 * vals["length"]
     assert case["plate"] == vals["Re"] - vals["Ri"] and "cap" in case["faces"]
     assert case["plate_material"] == dict(mu=vals["ho_a"], kappa=vals["bulk_modulus"])
@@ -146,7 +146,7 @@ def test_generate_holzapfel_ogden(tmp_path, case_name):
     model = os.path.join(CASES, case_name, "chamber_cylinder_0d.json")
     case = C3.generate(model, str(tmp_path), nr=1, half_length=True)
     with open(model) as f:
-        vals = json.load(f)["vessels"][0]["zero_d_element_values"]
+        vals = C3.flat_values(json.load(f)["vessels"][0])
     assert case["material"]["model"] == "HolzapfelOgden"
     assert case["sector"] == 90.0 and case["mesh_length"] == 0.5 * vals["length"]
     xml = (tmp_path / "solver.xml").read_text()
@@ -315,7 +315,7 @@ def test_generate_coupled(tmp_path):
     assert case["scale"] == 8.0 and case["n_steps"] == 400
     lines = (tmp_path / "active_tension.dat").read_text().split("\n")
     with open(MODEL_ACTIVE) as f:
-        at = CP.find_cylinder(json.load(f))["active_tension"]
+        at = CP.find_cylinder(json.load(f))["active_stress"]
     assert lines[0].split() == [str(len(at["t"])), str(at["fourier_modes"])]
 
 
@@ -327,7 +327,7 @@ def test_zero_d_fields_of_homogeneous_state():
     import check_materials
     import run_study as RS
     with open(MODEL_HO) as f:
-        v = json.load(f)["vessels"][0]["zero_d_element_values"]
+        v = C3.flat_values(json.load(f)["vessels"][0])
     R = np.linspace(Ri, Re, 5)
     c, a = 0.05, (30.0, -30.0)
     out = RS.zero_d_fields(R, [c * R], [0 * R], [0 * R], [0.0], v, a)

@@ -56,33 +56,23 @@
       "vessel_name": "cylinder",
       "zero_d_element_type": "ChamberCylinder",
       "formulation": {
-        "passive": "holzapfel_ogden",
         "volumetric": "st91",
-        "active": "uniform_unsteady",
         "ends": "fixed_length"
       },
-      "zero_d_element_values": {
-        "Ri": 0.019,
-        "Re": 0.0475,
-        "length": 0.0571,
-        "alpha_endo": 0.0,
-        "alpha_epi": 0.0,
-        "gamma": 0.0,
-        "num_elements": 8,
-        "ho_a": 100000.0,
-        "ho_b": 0.0,
-        "ho_af": 100000.0,
-        "ho_bf": 1.0,
-        "ho_as": 0.0,
-        "ho_bs": 1.0,
-        "ho_afs": 0.0,
-        "ho_bfs": 1.0,
-        "ho_k": 0.0,
-        "k_0": 0.0,
-        "density": 0.0,
-        "bulk_modulus": 10000000.0
+      "material": {
+        "type": "holzapfel_ogden",
+        "a": 100000.0,
+        "b": 0.0,
+        "a4f": 100000.0,
+        "b4f": 1.0,
+        "a4s": 0.0,
+        "b4s": 1.0,
+        "afs": 0.0,
+        "bfs": 1.0,
+        "k": 0.0
       },
-      "active_tension": {
+      "active_stress": {
+        "type": "uniform_unsteady",
         "t": [
           0.0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009,
           0.01, 0.011, 0.012, 0.013, 0.014, 0.015, 0.016, 0.017, 0.018, 0.019,
@@ -366,7 +356,18 @@
           0.0
         ],
         "fourier_modes": 200,
-        "ramp": false
+        "ramp": 0
+      },
+      "zero_d_element_values": {
+        "Ri": 0.019,
+        "Re": 0.0475,
+        "length": 0.0571,
+        "alpha_endo": 0.0,
+        "alpha_epi": 0.0,
+        "gamma": 0.0,
+        "num_elements": 8,
+        "density": 0.0,
+        "bulk_modulus": 10000000.0
       }
     },
     {

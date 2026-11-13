@@ -80,8 +80,7 @@ def test_holzapfel_ogden_fixed_length_inflation_matches_closed_form(k):
                   density=0.0, **ho, **CV.NOACT)
         cfg = CV.isolated_config(vv, [0.0, T / 2, T], [0.0, 16e3, 16e3], T, 25,
                                  {"pressure_all": 0.0, "volume:cyl": math.pi * Ri**2 * L},
-                                 formulation={"passive": "holzapfel_ogden",
-                                              "ends": "fixed_length"})
+                                 formulation={"ends": "fixed_length"})
         out = CV.svzerod.simulate(cfg)
         t, V = CV.series(out, "volume:cyl")
         _, P = CV.series(out, "pressure:IN:cyl")
@@ -111,12 +110,9 @@ def test_prescribed_active_tension_matches_closed_form():
                   density=0.0, **ho, **CV.NOACT)
         cfg = CV.isolated_config(vv, [0.0, 1.0], [P, P], 1.0, 41,
                                  {"pressure_all": P, "volume:cyl": math.pi * Ri**2 * L},
-                                 formulation={"passive": "holzapfel_ogden",
-                                              "active": "uniform_unsteady",
-                                              "ends": "fixed_length"})
-        cfg["vessels"][0]["active_tension"] = {"t": ts.tolist(), "T": Ts.tolist(),
-                                               "fourier_modes": 50, "ramp": False}
-        cfg["vessels"][0].pop("activation_function", None)
+                                 formulation={"ends": "fixed_length"},
+                                 tension={"t": ts.tolist(), "T": Ts.tolist(),
+                                          "fourier_modes": 50, "ramp": False})
         out = CV.svzerod.simulate(cfg)
         t, V = CV.series(out, "volume:cyl")
         m = t > 0.0
@@ -127,39 +123,73 @@ def test_prescribed_active_tension_matches_closed_form():
     assert 3.5 < err[0] / err[1] < 4.5
 
 
-def _formulation_error(formulation, extra=None, tension=False):
-    """Message of the error that a formulation with inconsistent inputs raises."""
+def _input_error(formulation=None, extra=None, edit=None):
+    """Message of the error that an inconsistent ChamberCylinder input raises.
+    extra: flat parameters (G.cylinder_vessel); edit: function changing the
+    vessel entry."""
     vv = dict(GEOM, C1=5e3, gamma=0.0, num_elements=2, density=0.0, **CV.NOACT)
     vv.update(extra or {})
     cfg = CV.isolated_config(vv, [0.0, 1.0], [0.0, 0.0], 1.0, 3,
                              {"pressure_all": 0.0, "volume:cyl": 1e-5},
                              formulation=formulation)
-    if tension:
-        cfg["vessels"][0]["active_tension"] = {"t": [0.0, 1.0], "T": [0.0, 0.0]}
+    if edit:
+        edit(cfg["vessels"][0])
     with pytest.raises(RuntimeError) as err:
         CV.svzerod.simulate(cfg)
     return str(err.value)
 
 
-def test_formulation_checks_inputs():
-    """The parameters and inputs must match the selected formulation, and the
-    names of components and choices are checked."""
-    assert "unknown passive 'neo'" in _formulation_error({"passive": "neo"})
-    assert "unknown component 'viscous'" in _formulation_error({"viscous": "none"})
-    assert "ho_a needs the passive law holzapfel_ogden" in _formulation_error(
-        {}, {"ho_a": 1e4})
-    assert "C1 needs the passive law genet23" in _formulation_error(
-        {"passive": "holzapfel_ogden"}, {"ho_a": 1e4})
-    assert "bulk_modulus needs the volumetric law st91" in _formulation_error(
-        {}, {"bulk_modulus": 1e6})
-    assert "st91 needs bulk_modulus > 0" in _formulation_error({"volumetric": "st91"})
-    assert "active_tension needs the active law uniform_unsteady" in _formulation_error(
-        {}, tension=True)
-    assert "uniform_unsteady needs an active_tension object" in _formulation_error(
-        {"active": "uniform_unsteady"})
-    # the BCS activation function belongs to the active law bcs
-    assert "activation_function needs the active law bcs" in _formulation_error(
-        {"active": "uniform_unsteady"}, tension=True)
+def test_component_inputs_are_checked():
+    """The formulation, material, active stress and activation inputs must be
+    consistent, and the names of components and types are checked."""
+    assert "unknown volumetric 'neo'" in _input_error({"volumetric": "neo"})
+    assert "unknown component 'viscous'" in _input_error({"viscous": "none"})
+    assert "selected with the material object" in _input_error({"passive": "genet23"})
+    assert "bulk_modulus needs the volumetric law st91" in _input_error(
+        None, {"bulk_modulus": 1e6})
+    assert "st91 needs bulk_modulus > 0" in _input_error({"volumetric": "st91"})
+    assert "Unknown material type 'neo'" in _input_error(
+        edit=lambda v: v["material"].update(type="neo"))
+    assert "Unknown parameter a4f defined in material" in _input_error(
+        edit=lambda v: v["material"].update(a4f=1.0))
+    assert "b4f and b4s must be positive" in _input_error(
+        edit=lambda v: v.update(material={"type": "holzapfel_ogden", "a": 1e4, "a4f": 1e4}))
+    # the BCS activation (nagumo) is a rate; uniform_unsteady takes none
+    assert "takes no activation_function" in _input_error(
+        edit=lambda v: v.update(active_stress={"type": "uniform_unsteady", "t": [0.0, 1.0],
+                                               "T": [0.0, 0.0]}))
+    assert "requires a rate-type" in _input_error(
+        edit=lambda v: v.update(activation_function={"type": "half_cosine", "t_active": 0.2,
+                                                     "t_twitch": 0.3}))
+
+
+def _volume(material, active=None, activation=None):
+    """Cavity volume of a short passive inflation with the given material and
+    active stress law (default: the BCS law at rest)."""
+    vv = dict(GEOM, gamma=0.0, num_elements=3, density=0.0, sigma_max=0.0, k_0=0.0)
+    ic = {"pressure_all": 0.0, "volume:cyl": math.pi * GEOM["Ri"] ** 2 * GEOM["length"]}
+    cfg = CV.isolated_config(vv, [0.0, 0.5, 1.0], [0.0, 2e3, 2e3], 1.0, 11, ic, act=activation)
+    cfg["vessels"][0]["material"] = material
+    if active:
+        cfg["vessels"][0]["active_stress"] = active
+    return CV.series(CV.svzerod.simulate(cfg), "volume:cyl")[1]
+
+
+def test_sphere_laws_in_the_cylinder():
+    """The material and active stress laws are those of ChamberSphere. Its
+    Mooney-Rivlin and exponential materials are the genet23 energy with
+    renamed constants, and its strain-independent active stress contracts the
+    cylinder."""
+    mr = _volume({"type": "mooney_rivlin", "W1": 7e3, "W2": 50.0})
+    assert np.array_equal(mr, _volume({"type": "genet23", "C1": 7e3, "C2": 50.0}))
+    ex = _volume({"type": "exponential", "C0": 700.0, "C1": 2.0, "C2": 50.0, "C3": 4.0})
+    assert np.array_equal(ex, _volume({"type": "genet23", "C3": 700.0, "C4": 2.0, "C5": 50.0,
+                                       "C6": 4.0}))
+    act = _volume({"type": "mooney_rivlin", "W1": 7e3, "W2": 50.0},
+                  {"type": "strain_independent", "alpha_max": 30.0, "alpha_min": -30.0,
+                   "sigma_max": 5e4},
+                  {"type": "half_cosine", "t_active": 0.2, "t_twitch": 0.6})
+    assert act.min() < 0.9 * mr[-1]
 
 
 def test_torsional_free_vibration():

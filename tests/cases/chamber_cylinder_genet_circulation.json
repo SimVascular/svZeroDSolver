@@ -57,27 +57,33 @@
       "vessel_length": 1.0,
       "vessel_name": "ventricle",
       "zero_d_element_type": "ChamberCylinder",
+      "material": {
+        "type": "genet23",
+        "C1": 7.0,
+        "C2": 0.0,
+        "C3": 700.0,
+        "C4": 2.0,
+        "C5": 50.0,
+        "C6": 4.0
+      },
+      "active_stress": {
+        "type": "genet23",
+        "sigma_0": 65000.0,
+        "k_s": 100000000.0,
+        "k_0": 260000.0,
+        "mu": 70.0,
+        "alpha": 12.0,
+        "fv_reg": 1e-10
+      },
       "zero_d_element_values": {
         "Ri": 0.019034760191327525,
         "Re": 0.032969171761268755,
         "length": 0.05710428057398258,
         "alpha_endo": 60.0,
         "alpha_epi": -60.0,
-        "C1": 7.0,
-        "C2": 0.0,
-        "C3": 700.0,
-        "C4": 2.0,
-        "C5": 50.0,
-        "C6": 4.0,
         "gamma": 70.0,
-        "k_s": 100000000.0,
-        "k_0": 260000.0,
-        "mu": 70.0,
-        "sigma_max": 65000.0,
         "num_elements": 3,
-        "bcs_alpha": 12.0,
-        "density": 1000.0,
-        "fv_reg": 1e-10
+        "density": 1000.0
       },
       "activation_function": {
         "type": "nagumo",

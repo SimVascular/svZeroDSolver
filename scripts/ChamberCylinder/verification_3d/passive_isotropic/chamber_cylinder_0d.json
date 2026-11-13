@@ -45,6 +45,12 @@
       "vessel_length": 1.0,
       "vessel_name": "cylinder",
       "zero_d_element_type": "ChamberCylinder",
+      "formulation": {
+        "passive": "genet23",
+        "volumetric": "st91",
+        "active": "bcs",
+        "ends": "fixed_length"
+      },
       "zero_d_element_values": {
         "Ri": 0.019034760191327525,
         "Re": 0.032969171761268755,
@@ -61,7 +67,6 @@
         "sigma_max": 0.0,
         "k_0": 0.0,
         "density": 0.0,
-        "fixed_length": 1,
         "bulk_modulus": 10000000.0,
         "num_elements": 32
       },

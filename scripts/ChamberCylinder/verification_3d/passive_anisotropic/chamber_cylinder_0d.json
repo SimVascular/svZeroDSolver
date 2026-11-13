@@ -45,18 +45,18 @@
       "vessel_length": 1.0,
       "vessel_name": "cylinder",
       "zero_d_element_type": "ChamberCylinder",
+      "formulation": {
+        "passive": "holzapfel_ogden",
+        "volumetric": "st91",
+        "active": "bcs",
+        "ends": "fixed_length"
+      },
       "zero_d_element_values": {
         "Ri": 0.019034760191327525,
         "Re": 0.032969171761268755,
         "length": 0.05710428057398258,
         "alpha_endo": 0.0,
         "alpha_epi": 0.0,
-        "C1": 0.0,
-        "C2": 0.0,
-        "C3": 0.0,
-        "C4": 0.0,
-        "C5": 0.0,
-        "C6": 0.0,
         "ho_a": 100000.0,
         "ho_b": 0.0,
         "ho_af": 100000.0,
@@ -70,7 +70,6 @@
         "sigma_max": 0.0,
         "k_0": 0.0,
         "density": 0.0,
-        "fixed_length": 1,
         "bulk_modulus": 10000000.0,
         "num_elements": 32
       },

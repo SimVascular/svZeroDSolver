@@ -195,11 +195,12 @@ def series(out, name):
     return d["time"].to_numpy(), d["y"].to_numpy()
 
 
-def isolated_config(vv, P_t, P_v, T, npts, ic, act=None, integrator="stiff"):
-    """Cylinder alone: prescribed cavity pressure at the inlet, closed outlet."""
+def isolated_config(vv, P_t, P_v, T, npts, ic, act=None, integrator="stiff", formulation=None):
+    """Cylinder alone: prescribed cavity pressure at the inlet, closed outlet.
+    formulation: the block's formulation object (default: genet23)."""
     act = act or {"type": "nagumo", "tsys": 0.1, "tdias": 0.4, "qrs": 0.08,
                   "ramp": 0.01, "alpha_max": 0.0, "alpha_min": 0.0}
-    return {
+    cfg = {
         "boundary_conditions": [
             {"bc_name": "IN", "bc_type": "PRESSURE", "bc_values": {"P": P_v, "t": P_t}},
             {"bc_name": "OUT", "bc_type": "FLOW", "bc_values": {"Q": [0.0, 0.0], "t": [0.0, T]}}],
@@ -215,6 +216,9 @@ def isolated_config(vv, P_t, P_v, T, npts, ic, act=None, integrator="stiff"):
                      "zero_d_element_type": "ChamberCylinder", "zero_d_element_values": vv,
                      "activation_function": act}],
         "junctions": [], "valves": []}
+    if formulation:
+        cfg["vessels"][0]["formulation"] = dict(formulation)
+    return cfg
 
 
 PASSIVE = dict(C1=7.0, C2=0.0, C3=700.0, C4=2.0, C5=50.0, C6=4.0)

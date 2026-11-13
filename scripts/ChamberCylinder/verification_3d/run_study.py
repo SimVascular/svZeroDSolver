@@ -321,11 +321,11 @@ def main():
     model_0d = os.path.join(case_root, "chamber_cylinder_0d.json")
     m0 = C3.read_0d(model_0d)
     v = m0["values"]
-    mat = C3.material(v)
+    mat = C3.material(v, m0["formulation"])
     fibers = mat["model"] in ("HGO", "HolzapfelOgden")
-    # free length (0D fixed_length = 0, pressure-loaded lids): the 3D tube is
+    # free length (0D ends "lids", pressure-loaded lids): the 3D tube is
     # closed by an end plate (cylinder_3d.generate closed_end)
-    closed = float(v.get("fixed_length", 0.0)) == 0.0
+    closed = m0["formulation"]["ends"] == "lids"
     # helical fibers and closed ends: the 3D ends differ from the uniform 0D
     # state (end layers), so only the mid-length section is compared
     mid = C3.helical(mat) or closed

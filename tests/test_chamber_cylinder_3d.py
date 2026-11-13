@@ -116,11 +116,11 @@ def test_generate_from_0d(tmp_path):
 
 
 def test_generate_closed_end(tmp_path):
-    """Free length (fixed_length = 0): the eighth model closed by an isotropic
+    """Free length (0D ends "lids"): the eighth model closed by an isotropic
     plate, the cavity pressure on endo and cap, u_z = 0 only on the mid-length
     plane, two material domains."""
     model = os.path.join(CASES, "passive_anisotropic_closed", "chamber_cylinder_0d.json")
-    with pytest.raises(ValueError, match="fixed_length = 1"):
+    with pytest.raises(ValueError, match='"ends": "fixed_length"'):
         C3.generate(model, str(tmp_path), nr=1)
     case = C3.generate(model, str(tmp_path), nr=1, closed_end=True)
     with open(model) as f:
@@ -133,7 +133,7 @@ def test_generate_closed_end(tmp_path):
     assert xml.count("<Domain id=") == 2 and xml.count("<Constitutive_model") == 2
     assert 'Add_BC name="cap"' in xml and 'Add_BC name="top"' not in xml
     assert xml.count("<Type> Dir </Type>") == 3  # base, y0, x0
-    with pytest.raises(ValueError, match="fixed_length = 0"):
+    with pytest.raises(ValueError, match='"ends": "lids"'):
         C3.generate(MODEL, str(tmp_path / "fixed"), nr=1, closed_end=True)
 
 
@@ -266,10 +266,13 @@ def test_struct_fields_of_homogeneous_deformation(order):
 def test_unsupported_0d_inputs():
     with pytest.raises(ValueError):
         C3.material({"C1": 1.0, "C3": 1.0})
+    ho = dict(C3.FORMULATION, passive="holzapfel_ogden")
     with pytest.raises(ValueError):  # HolzapfelOgden replaces the C1-C6 law
-        C3.material({"C1": 1.0, "ho_a": 1.0, "ho_b": 1.0, "alpha_endo": 0, "alpha_epi": 0})
+        C3.material({"C1": 1.0, "ho_a": 1.0, "ho_b": 1.0, "alpha_endo": 0, "alpha_epi": 0}, ho)
     with pytest.raises(ValueError):  # HolzapfelOgden needs its isotropic term
-        C3.material({"ho_af": 1.0, "ho_bf": 1.0, "alpha_endo": 0, "alpha_epi": 0})
+        C3.material({"ho_af": 1.0, "ho_bf": 1.0, "alpha_endo": 0, "alpha_epi": 0}, ho)
+    with pytest.raises(ValueError, match="holzapfel_ogden"):  # ho_* need the passive law
+        C3.material({"ho_a": 1.0, "alpha_endo": 0, "alpha_epi": 0})
     with pytest.raises(ValueError):
         C3.pressure_ramp([0.0, 1.0, 2.0], [0.0, 1.0, 0.5])
 

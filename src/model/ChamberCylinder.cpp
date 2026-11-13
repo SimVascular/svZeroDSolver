@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <complex>
+#include <initializer_list>
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -37,28 +38,35 @@ inline T clamp_max(T x, double m) {
   return re(x) < m ? x : T(m);
 }
 
-/// Holzapfel-Ogden constants (svMultiPhysics `HolzapfelOgden`).
+using Formulation = ChamberCylinderFormulation;
+
+/// Constants of the genet23 passive energy (passive law `genet23`).
+struct Genet23Passive {
+  double C1 = 0.0, C2 = 0.0, C3 = 0.0, C4 = 0.0, C5 = 0.0, C6 = 0.0;
+};
+
+/// Holzapfel-Ogden constants (passive law `holzapfel_ogden`, svMultiPhysics
+/// `HolzapfelOgden`).
 struct HolzapfelOgden {
   double a = 0.0, b = 0.0;      ///< isotropic term
   double af = 0.0, bf = 0.0;    ///< fiber term
   double as = 0.0, bs = 0.0;    ///< sheet term
   double afs = 0.0, bfs = 0.0;  ///< fiber-sheet term
   double k = 0.0;               ///< smoothed-Heaviside slope
-  bool active() const {
-    return a != 0.0 || af != 0.0 || as != 0.0 || afs != 0.0;
-  }
 };
 
 /// Material parameters passed to the continuum kernel.
 struct MatParams {
-  double C1, C2, C3, C4, C5, C6, gamma;
-  HolzapfelOgden ho;
-  double p_mix = 0.0;  ///< mixed u/p element hydrostatic pressure
+  Formulation::Passive passive = Formulation::Passive::genet23;
+  Genet23Passive genet23;  ///< passive law genet23
+  HolzapfelOgden ho;       ///< passive law holzapfel_ogden
+  double gamma = 0.0;      ///< viscosity
+  double p_mix = 0.0;      ///< mixed u/p element hydrostatic pressure
 };
 
-/// Active-stress input at an integration point, giving the 2nd Piola-Kirchhoff
-/// fiber stress ((tauc + mu * ecdot) / sqrt(I4) + tension) e_F (x) e_F.
+/// Active-stress input at an integration point.
 struct ActiveInput {
+  Formulation::Active law = Formulation::Active::bcs;
   double tauc = 0.0;     ///< BCS active bond stress tau_c
   double ecdot = 0.0;    ///< BCS contractile-element strain rate
   double mu = 0.0;       ///< BCS active dissipation
@@ -178,12 +186,116 @@ inline T ho_family(T E, double a, double b, double k) {
   return a * ((1.0 - o) * E * rexp + 0.5 * k * (o - o * o) / b * (rexp - 1.0));
 }
 
+/// Isochoric invariants of C and their derivatives d/dC, shared by the
+/// passive laws.
+template <typename T>
+struct Isochoric {
+  Mat3<T> Cinv;  ///< C^-1
+  T Jm23;        ///< J^-2/3
+  T I1, I1b;     ///< trace of C and its isochoric part
+  T I4, I4b;     ///< fiber invariant e_F . C . e_F and its isochoric part
+  Mat3<T> dI1b;  ///< d I1b / dC
+  Mat3<T> dI4b;  ///< d I4b / dC
+};
+
+template <typename T>
+Isochoric<T> isochoric(const Mat3<T>& C, const T& J, const Mat3<T>& M) {
+  Isochoric<T> iso;
+  iso.Cinv = C.inverse();
+  iso.I1 = C.trace();
+  iso.I4 = (C * M).trace();
+  iso.Jm23 = std::pow(J, -2.0 / 3.0);
+  iso.I1b = iso.Jm23 * iso.I1;
+  iso.I4b = iso.Jm23 * iso.I4;
+  const Mat3<T> I = Mat3<T>::Identity();
+  iso.dI1b = iso.Jm23 * (I - (iso.I1 / 3.0) * iso.Cinv);
+  iso.dI4b = iso.Jm23 * (M - (iso.I4 / 3.0) * iso.Cinv);
+  return iso;
+}
+
+/// Passive law `genet23`: deviatoric stress of the energy
+/// W = C1 (I1b - 3) + C2 (I2b - 3) + C3 exp(C4 (I1b - 3)^2)
+///   + C5 exp(C6 (I4b - 1)^2) (\cite genet23 Eq. 24).
+template <typename T>
+Mat3<T> genet23_stress(const Mat3<T>& C, const Isochoric<T>& iso,
+                       const Genet23Passive& c) {
+  const T trC2 = (C.array() * C.array()).sum();
+  const T I2 = 0.5 * (iso.I1 * iso.I1 - trC2);
+  const T Jm43 = iso.Jm23 * iso.Jm23;
+
+  // dW/d(isochoric invariant); the exponents are capped so that non-physical
+  // trial states stay finite.
+  const T a1 = c.C4 * (iso.I1b - 3.0) * (iso.I1b - 3.0);
+  const T a4 = c.C6 * (iso.I4b - 1.0) * (iso.I4b - 1.0);
+  const T w1 = c.C1 + 2.0 * c.C3 * c.C4 * (iso.I1b - 3.0) *
+                          std::exp(clamp_max(a1, 300.0));
+  const T w2 = T(c.C2);
+  const T w4 =
+      2.0 * c.C5 * c.C6 * (iso.I4b - 1.0) * std::exp(clamp_max(a4, 300.0));
+
+  const Mat3<T> dI2b =
+      Jm43 * (iso.I1 * Mat3<T>::Identity() - C - (2.0 / 3.0) * I2 * iso.Cinv);
+  return 2.0 * (w1 * iso.dI1b + w2 * dI2b + w4 * iso.dI4b);
+}
+
+/// Passive law `holzapfel_ogden`: deviatoric stress of the svMultiPhysics
+/// `HolzapfelOgden` energy with the sheet e_S = e_R, using the isochoric
+/// invariants I6b = J^-2/3 C_RR and I8b = J^-2/3 e_F . C . e_S.
+template <typename T>
+Mat3<T> holzapfel_ogden_stress(const Mat3<T>& C, const Isochoric<T>& iso,
+                               double alpha, const HolzapfelOgden& h) {
+  Mat3<T> Hs = Mat3<T>::Zero();
+  Hs(0, 0) = T(1.0);
+  const Mat3<T> Hfs = fiber_sheet_tensor<T>(alpha);
+  const T I6 = C(0, 0);
+  const T I8 = contract<T>(C, Hfs);
+  const T I6b = iso.Jm23 * I6;
+  const T I8b = iso.Jm23 * I8;
+  const Mat3<T> dI6b = iso.Jm23 * (Hs - (I6 / 3.0) * iso.Cinv);
+  const Mat3<T> dI8b = iso.Jm23 * (Hfs - (I8 / 3.0) * iso.Cinv);
+  const T wa = 0.5 * h.a * std::exp(clamp_max(h.b * (iso.I1b - 3.0), 300.0));
+  const T wf = ho_family<T>(iso.I4b - 1.0, h.af, h.bf, h.k);
+  const T ws = ho_family<T>(I6b - 1.0, h.as, h.bs, h.k);
+  const T wfs = h.afs * I8b * std::exp(clamp_max(h.bfs * I8b * I8b, 300.0));
+  return 2.0 * (wa * iso.dI1b + wf * iso.dI4b + ws * dI6b + wfs * dI8b);
+}
+
+/// Deviatoric stress of the selected passive law.
+template <typename T>
+Mat3<T> passive_stress(const Mat3<T>& C, const Isochoric<T>& iso, double alpha,
+                       const MatParams& p) {
+  switch (p.passive) {
+    case Formulation::Passive::holzapfel_ogden:
+      return holzapfel_ogden_stress<T>(C, iso, alpha, p.ho);
+    case Formulation::Passive::genet23:
+    default:
+      return genet23_stress<T>(C, iso, p.genet23);
+  }
+}
+
+/// Active fiber stress tau of Sigma^a = tau e_F (x) e_F for the selected
+/// active law. `bcs`: sigma_1D = (tau_c + mu e_c_dot) / (1 + e_fib) with
+/// 1 + e_fib = sqrt(I4) (\cite genet23 Eqs. 30, 32); using tau_c + mu e_c_dot
+/// instead of k_s (e_fib - e_c) keeps the stiff k_s out of the mechanical
+/// residual. `uniform_unsteady`: the prescribed tension T(t), which enters
+/// the 2nd Piola-Kirchhoff stress directly (svMultiPhysics active stress).
+template <typename T>
+T active_fiber_stress(const ActiveInput& act, const T& I4) {
+  switch (act.law) {
+    case Formulation::Active::uniform_unsteady:
+      return T(act.tension);
+    case Formulation::Active::bcs:
+    default:
+      return (act.tauc + act.mu * act.ecdot) / std::sqrt(I4);
+  }
+}
+
 /**
  * @brief Second Piola-Kirchhoff stress at an integration point.
  *
- * Sigma = Sigma^d (deviatoric, \cite genet23 Eq. 25) + Sigma^b (hydrostatic
- * pressure, Eqs. 26-27) + Sigma^v (viscous, Eq. 28) + Sigma^a (active fiber
- * stress, Eqs. 29-30).
+ * Sigma = Sigma^d (passive law, \cite genet23 Eq. 25) + Sigma^b (hydrostatic
+ * pressure, Eqs. 26-27) + Sigma^v (viscous, Eq. 28) + Sigma^a (active law,
+ * Eqs. 29-30).
  */
 template <typename T>
 Mat3<T> compute_stress(const Kinematics<T>& k, const T xidot[6],
@@ -191,76 +303,53 @@ Mat3<T> compute_stress(const Kinematics<T>& k, const T xidot[6],
                        const MatParams& p) {
   const Mat3<T>& C = k.C;
   const T J = k.J;
-  const Mat3<T> Cinv = C.inverse();
-  const Mat3<T> I = Mat3<T>::Identity();
   const Mat3<T> M = fiber_tensor<T>(alpha);
+  const Isochoric<T> iso = isochoric<T>(C, J, M);
 
-  const T I1 = C.trace();
-  const T trC2 = (C.array() * C.array()).sum();
-  const T I2 = 0.5 * (I1 * I1 - trC2);
-  const T I4 = (C * M).trace();  // e_F . C . e_F
+  const Mat3<T> Sd = passive_stress<T>(C, iso, alpha, p);  // deviatoric
 
-  const T Jm23 = std::pow(J, -2.0 / 3.0);
-  const T Jm43 = Jm23 * Jm23;
-  const T I1b = Jm23 * I1;
-  const T I2b = Jm43 * I2;
-  const T I4b = Jm23 * I4;
-  (void)I2b;  // I2b enters only through its derivative
-
-  // dW/d(isochoric invariant); the exponents are capped so that non-physical
-  // trial states stay finite.
-  const T a1 = p.C4 * (I1b - 3.0) * (I1b - 3.0);
-  const T a4 = p.C6 * (I4b - 1.0) * (I4b - 1.0);
-  const T w1 =
-      p.C1 + 2.0 * p.C3 * p.C4 * (I1b - 3.0) * std::exp(clamp_max(a1, 300.0));
-  const T w2 = T(p.C2);
-  const T w4 = 2.0 * p.C5 * p.C6 * (I4b - 1.0) * std::exp(clamp_max(a4, 300.0));
-
-  // d(isochoric invariant)/dC
-  const Mat3<T> dI1b = Jm23 * (I - (I1 / 3.0) * Cinv);
-  const Mat3<T> dI2b = Jm43 * (I1 * I - C - (2.0 / 3.0) * I2 * Cinv);
-  const Mat3<T> dI4b = Jm23 * (M - (I4 / 3.0) * Cinv);
-
-  Mat3<T> Sd = 2.0 * (w1 * dI1b + w2 * dI2b + w4 * dI4b);  // deviatoric
-
-  // Holzapfel-Ogden terms with the sheet e_S = e_R, using the isochoric
-  // invariants I6b = J^-2/3 C_RR and I8b = J^-2/3 e_F . C . e_S.
-  if (p.ho.active()) {
-    const HolzapfelOgden& h = p.ho;
-    Mat3<T> Hs = Mat3<T>::Zero();
-    Hs(0, 0) = T(1.0);
-    const Mat3<T> Hfs = fiber_sheet_tensor<T>(alpha);
-    const T I6 = C(0, 0);
-    const T I8 = contract<T>(C, Hfs);
-    const T I6b = Jm23 * I6;
-    const T I8b = Jm23 * I8;
-    const Mat3<T> dI6b = Jm23 * (Hs - (I6 / 3.0) * Cinv);
-    const Mat3<T> dI8b = Jm23 * (Hfs - (I8 / 3.0) * Cinv);
-    const T wa = 0.5 * h.a * std::exp(clamp_max(h.b * (I1b - 3.0), 300.0));
-    const T wf = ho_family<T>(I4b - 1.0, h.af, h.bf, h.k);
-    const T ws = ho_family<T>(I6b - 1.0, h.as, h.bs, h.k);
-    const T wfs = h.afs * I8b * std::exp(clamp_max(h.bfs * I8b * I8b, 300.0));
-    Sd += 2.0 * (wa * dI1b + wf * dI4b + ws * dI6b + wfs * dI8b);
-  }
   // Hydrostatic stress p J C^-1 with the element pressure p (mixed u/p).
   const T bulk = T(p.p_mix);
-  Mat3<T> Sb = bulk * J * Cinv;  // bulk
+  Mat3<T> Sb = bulk * J * iso.Cinv;  // bulk
 
   Mat3<T> Edot = Mat3<T>::Zero();  // viscous
   for (int m = 0; m < 6; m++) Edot += k.dE[m] * xidot[m];
   Mat3<T> Sv = p.gamma * Edot;
 
-  // Active fiber stress sigma_1D = (tau_c + mu e_c_dot) / (1 + e_fib) with
-  // 1 + e_fib = sqrt(I4) (Eqs. 30, 32). Using tau_c + mu e_c_dot instead of
-  // k_s (e_fib - e_c) keeps the stiff k_s out of the mechanical residual.
-  // A prescribed tension T enters the 2nd Piola-Kirchhoff stress directly,
-  // S_a = T e_F (x) e_F (svMultiPhysics active stress).
-  const T sigma_act =
-      (act.tauc + act.mu * act.ecdot) / std::sqrt(I4) + act.tension;
-  Mat3<T> Sa = sigma_act * M;
+  Mat3<T> Sa = active_fiber_stress<T>(act, iso.I4) * M;  // active
 
   return Sd + Sb + Sv + Sa;
 }
+
+/**
+ * @brief Volumetric law: the pressure equation int_e g(J, p) dOmega = 0 of an
+ * element.
+ *
+ * `incompressible` (\cite genet23 Eq. 27): g = J - 1. `st91` (svMultiPhysics
+ * ST91, p = kappa/2 (J - 1/J)): g = (J - 1/J)/2 - p/kappa.
+ */
+struct VolumetricLaw {
+  Formulation::Volumetric type = Formulation::Volumetric::incompressible;
+  double kappa = 0.0;  ///< bulk modulus (st91)
+
+  /// g(J, p)
+  double g(double J, double p) const {
+    if (type == Formulation::Volumetric::st91)
+      return 0.5 * (J - 1.0 / J) - p / kappa;
+    return J - 1.0;
+  }
+  /// dg/dJ
+  double dg_dJ(double J) const {
+    if (type == Formulation::Volumetric::st91)
+      return 0.5 * (1.0 + 1.0 / (J * J));
+    return 1.0;
+  }
+  /// Weight w times dg/dp
+  double w_dg_dp(double w) const {
+    if (type == Formulation::Volumetric::st91) return -w / kappa;
+    return 0.0;
+  }
+};
 
 /// Generalized internal forces g_k = Sigma : dE/dxi_k at an integration point.
 template <typename T>
@@ -331,8 +420,7 @@ void ChamberCylinder::setup_dofs(DOFHandler& dofhandler) {
   n_node = n_ele + 1;
   pin_rigid_ =
       model->get_parameter_value(global_param_ids[ParamId::density]) == 0.0;
-  fixed_length_ =
-      model->get_parameter_value(global_param_ids[ParamId::fixed_length]) > 0.5;
+  check_formulation();
 
   // Uniform nodes from endocardium (index 0, R_i) to epicardium (R_e).
   node_R.resize(n_node);
@@ -430,7 +518,7 @@ void ChamberCylinder::update_constant(SparseSystem& system,
   }
 
   // Fixed length: eps = 0 replaces the eps equation.
-  if (fixed_length_) {
+  if (fixed_length()) {
     system.F.coeffRef(global_eqn_ids[e_eps()], global_var_ids[i_eps()]) = 1.0;
   }
 
@@ -450,7 +538,7 @@ void ChamberCylinder::update_constant(SparseSystem& system,
     // Accumulate, then assign: update_constant can run more than once.
     std::map<std::pair<int, int>, double> M;
     auto Madd = [&](int r, int c, double v) {
-      if (!(fixed_length_ && r == e_eps())) M[{r, c}] += v;
+      if (!(fixed_length() && r == e_eps())) M[{r, c}] += v;
     };
     for (int q = 0; q < n_quad; q++) {
       const QuadPoint& pt = quad[q];
@@ -499,12 +587,10 @@ void ChamberCylinder::update_constant(SparseSystem& system,
 void ChamberCylinder::update_time(SparseSystem& system,
                                   std::vector<double>& parameters) {
   (void)parameters;
-  if (active_tension_.defined()) {
+  if (prescribed_tension()) {  // active law uniform_unsteady, BCS at rest
     tension = active_tension_.value(model->time);
-    if (activation_function_ == nullptr) {  // BCS at rest
-      act = act_plus = 0.0;
-      return;
-    }
+    act = act_plus = 0.0;
+    return;
   }
   // BCS inputs |nu| and |nu|_+ from the signed activation rate nu(t)
   if (activation_function_ == nullptr) {
@@ -523,12 +609,13 @@ void ChamberCylinder::update_solution(
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {
   MatParams p;
-  p.C1 = parameters[global_param_ids[ParamId::C1]];
-  p.C2 = parameters[global_param_ids[ParamId::C2]];
-  p.C3 = parameters[global_param_ids[ParamId::C3]];
-  p.C4 = parameters[global_param_ids[ParamId::C4]];
-  p.C5 = parameters[global_param_ids[ParamId::C5]];
-  p.C6 = parameters[global_param_ids[ParamId::C6]];
+  p.passive = formulation_.passive;
+  p.genet23.C1 = parameters[global_param_ids[ParamId::C1]];
+  p.genet23.C2 = parameters[global_param_ids[ParamId::C2]];
+  p.genet23.C3 = parameters[global_param_ids[ParamId::C3]];
+  p.genet23.C4 = parameters[global_param_ids[ParamId::C4]];
+  p.genet23.C5 = parameters[global_param_ids[ParamId::C5]];
+  p.genet23.C6 = parameters[global_param_ids[ParamId::C6]];
   p.gamma = parameters[global_param_ids[ParamId::gamma]];
   p.ho.a = parameters[global_param_ids[ParamId::ho_a]];
   p.ho.b = parameters[global_param_ids[ParamId::ho_b]];
@@ -542,7 +629,9 @@ void ChamberCylinder::update_solution(
   const double sigma_max = parameters[global_param_ids[ParamId::sigma_max]];
   const double Rip = parameters[global_param_ids[ParamId::Ri]];
   const double Lp = parameters[global_param_ids[ParamId::length]];
-  const double kappa = parameters[global_param_ids[ParamId::bulk_modulus]];
+  VolumetricLaw vol;
+  vol.type = formulation_.volumetric;
+  vol.kappa = parameters[global_param_ids[ParamId::bulk_modulus]];
 
   BcsParams bp;
   bp.k_s = parameters[global_param_ids[ParamId::k_s]];
@@ -588,7 +677,8 @@ void ChamberCylinder::update_solution(
     // Active-stress input of this quadrature point: BCS, or a prescribed
     // tension that replaces it (the BCS states then stay decoupled)
     ActiveInput ai;
-    if (active_tension_.defined()) {
+    ai.law = formulation_.active;
+    if (prescribed_tension()) {
       ai.tension = tension;
     } else {
       ai.tauc = Y(i_tauc(q));
@@ -633,7 +723,7 @@ void ChamberCylinder::update_solution(
     // d sigma_1D / d tau_c = 1 / (1 + e_fib) (0 with a prescribed tension)
     const int active_col = i_tauc(q);
     const double i4denom = std::sqrt(I4q);  // 1 + e_fib = sqrt(I4)
-    const double active_coef = active_tension_.defined() ? 0.0 : 1.0 / i4denom;
+    const double active_coef = prescribed_tension() ? 0.0 : 1.0 / i4denom;
 
     // Equation rows and variable columns of each xi component with their
     // shape-function weights: 0 = rho (N), 1 = rho' (dN), 2 = phi' (dN),
@@ -815,20 +905,14 @@ void ChamberCylinder::update_solution(
       }
     }
 
-    // --- Mixed u/p: element pressure equation (Eq. 27) ---
-    // Incompressible: int_e (J - 1) dOmega = 0. With a bulk modulus kappa
-    // (ST91, p = kappa/2 (J - 1/J)): int_e ((J - 1/J)/2 - p/kappa) dOmega = 0.
-    // J depends on rho, rho' and eps only.
+    // --- Mixed u/p: element pressure equation of the volumetric law ---
+    // int_e g(J, p) dOmega = 0; J depends on rho, rho' and eps only.
     {
       const int erow = e_pmix(pt.elem);
-      double dJfac = 1.0;  // d(constraint)/dJ
-      if (kappa > 0.0) {
-        Cloc[erow] += pref * (0.5 * (kin.J - 1.0 / kin.J) - p.p_mix / kappa);
-        dJfac = 0.5 * (1.0 + 1.0 / (kin.J * kin.J));
-        Kat(erow, i_pmix(pt.elem)) += -pref / kappa;
-      } else {
-        Cloc[erow] += pref * (kin.J - 1.0);
-      }
+      Cloc[erow] += pref * vol.g(kin.J, p.p_mix);
+      const double dJfac = vol.dg_dJ(kin.J);
+      if (vol.type == Formulation::Volumetric::st91)
+        Kat(erow, i_pmix(pt.elem)) += vol.w_dg_dp(pref);
       const double Rq = pt.R;
       double dJ[6] = {0, 0, 0, 0, 0, 0};
       dJ[0] = (1.0 + xi[1]) * (1.0 / Rq) * (1.0 + xi[4]);  // dJ/drho
@@ -887,7 +971,7 @@ void ChamberCylinder::update_solution(
     }
   }
 
-  // --- External pressure loading on the inner surface and lids (Eq. 63) ---
+  // --- External pressure loading on the inner surface (Eq. 63) ---
   const double rho_i = Y(i_rho(0));
   const double Rinner = Rip + rho_i;
   const double twoPiL = 2.0 * M_PI * Lp;
@@ -900,8 +984,14 @@ void ChamberCylinder::update_solution(
     Kat(re, i_rho(0)) -= Pin * twoPiL * (1.0 + eps);  // d/drho_i
     Kat(re, i_eps()) -= Pin * twoPiL * Rinner;        // d/deps
   }
-  // eps equation: - P pi L Rinner^2
-  {
+  // --- Ends ---
+  if (fixed_length()) {
+    // eps = 0 (in F) replaces the eps equation
+    const int re = e_eps();
+    Cloc[re] = 0.0;
+    for (int j = 0; j < n_var; j++) Kat(re, j) = Kdat(re, j) = 0.0;
+  } else {
+    // Lids loaded by the cavity pressure; eps equation: - P pi L Rinner^2
     const int re = e_eps();
     Cloc[re] -= Pin * piL * Rinner * Rinner;
     Kat(re, 0) -= piL * Rinner * Rinner;            // d/dPin
@@ -932,13 +1022,6 @@ void ChamberCylinder::update_solution(
     Kdat(re, i_eps()) -= piL * Rinner * Rinner;
   }
 
-  // Fixed length: the eps row holds only the constraint eps = 0 (in F).
-  if (fixed_length_) {
-    const int re = e_eps();
-    Cloc[re] = 0.0;
-    for (int j = 0; j < n_var; j++) Kat(re, j) = Kdat(re, j) = 0.0;
-  }
-
   // --- Assign the local contributions to the sparse system ---
   for (int i = 0; i < n_eqn; i++) {
     system.C(global_eqn_ids[i]) = Cloc[i];
@@ -961,6 +1044,104 @@ void ChamberCylinder::set_frank_starling_curve(std::vector<double> ec,
   }
   n0_ec_ = std::move(ec);
   n0_val_ = std::move(val);
+}
+
+void ChamberCylinderFormulation::set(const std::string& component,
+                                     const std::string& choice) {
+  auto unknown = [&](const std::string& options) {
+    return std::runtime_error("ChamberCylinder formulation: unknown " +
+                              component + " '" + choice +
+                              "' (options: " + options + ").");
+  };
+  if (component == "passive") {
+    if (choice == "genet23")
+      passive = Passive::genet23;
+    else if (choice == "holzapfel_ogden")
+      passive = Passive::holzapfel_ogden;
+    else
+      throw unknown("genet23, holzapfel_ogden");
+  } else if (component == "volumetric") {
+    if (choice == "incompressible")
+      volumetric = Volumetric::incompressible;
+    else if (choice == "st91")
+      volumetric = Volumetric::st91;
+    else
+      throw unknown("incompressible, st91");
+  } else if (component == "active") {
+    if (choice == "bcs")
+      active = Active::bcs;
+    else if (choice == "uniform_unsteady")
+      active = Active::uniform_unsteady;
+    else
+      throw unknown("bcs, uniform_unsteady");
+  } else if (component == "ends") {
+    if (choice == "lids")
+      ends = Ends::lids;
+    else if (choice == "fixed_length")
+      ends = Ends::fixed_length;
+    else
+      throw unknown("lids, fixed_length");
+  } else {
+    throw std::runtime_error(
+        "ChamberCylinder formulation: unknown component '" + component +
+        "' (options: passive, volumetric, active, ends).");
+  }
+}
+
+void ChamberCylinder::check_formulation() const {
+  auto par = [&](ParamId id) {
+    return model->get_parameter_value(global_param_ids[id]);
+  };
+  auto fail = [&](const std::string& msg) {
+    throw std::runtime_error("ChamberCylinder block '" + get_name() +
+                             "': " + msg);
+  };
+  // Parameters of a component that is not selected must be zero.
+  auto unused = [&](std::initializer_list<std::pair<ParamId, const char*>> ps,
+                    const std::string& needs) {
+    for (const auto& pn : ps)
+      if (par(pn.first) != 0.0)
+        fail(std::string("parameter ") + pn.second + " needs " + needs + ".");
+  };
+  using F = ChamberCylinderFormulation;
+  if (formulation_.passive == F::Passive::genet23) {
+    unused({{ho_a, "ho_a"},
+            {ho_b, "ho_b"},
+            {ho_af, "ho_af"},
+            {ho_bf, "ho_bf"},
+            {ho_as, "ho_as"},
+            {ho_bs, "ho_bs"},
+            {ho_afs, "ho_afs"},
+            {ho_bfs, "ho_bfs"},
+            {ho_k, "ho_k"}},
+           "the passive law holzapfel_ogden");
+  } else {
+    unused({{C1, "C1"},
+            {C2, "C2"},
+            {C3, "C3"},
+            {C4, "C4"},
+            {C5, "C5"},
+            {C6, "C6"}},
+           "the passive law genet23");
+    if ((par(ho_af) != 0.0 && par(ho_bf) <= 0.0) ||
+        (par(ho_as) != 0.0 && par(ho_bs) <= 0.0))
+      fail("ho_bf and ho_bs must be positive for nonzero ho_af and ho_as.");
+  }
+  if (formulation_.volumetric == F::Volumetric::incompressible) {
+    unused({{bulk_modulus, "bulk_modulus"}}, "the volumetric law st91");
+  } else if (par(bulk_modulus) <= 0.0) {
+    fail("the volumetric law st91 needs bulk_modulus > 0.");
+  }
+  if (formulation_.active == F::Active::bcs) {
+    if (active_tension_.defined())
+      fail("active_tension needs the active law uniform_unsteady.");
+  } else {
+    unused({{sigma_max, "sigma_max"}}, "the active law bcs");
+    if (!active_tension_.defined())
+      fail("the active law uniform_unsteady needs an active_tension object.");
+    if (activation_function_ != nullptr)
+      fail("activation_function needs the active law bcs.");
+  }
 }
 
 void FourierTension::set(const std::vector<double>& t,

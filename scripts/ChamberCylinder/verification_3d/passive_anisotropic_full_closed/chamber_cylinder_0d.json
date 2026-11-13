@@ -7,30 +7,16 @@
       "bc_name": "CAVITY",
       "bc_type": "PRESSURE",
       "bc_values": {
-        "t": [
-          0.0,
-          1200.0,
-          2400.0
-        ],
-        "P": [
-          0.0,
-          15998.6864898,
-          15998.6864898
-        ]
+        "t": [0.0, 1200.0, 2400.0],
+        "P": [0.0, 15998.6864898, 15998.6864898]
       }
     },
     {
       "bc_name": "CLOSED",
       "bc_type": "FLOW",
       "bc_values": {
-        "t": [
-          0.0,
-          2400.0
-        ],
-        "Q": [
-          0.0,
-          0.0
-        ]
+        "t": [0.0, 2400.0],
+        "Q": [0.0, 0.0]
       }
     }
   ],
@@ -41,7 +27,7 @@
     "steady_initial": false,
     "output_all_cycles": true,
     "output_variable_based": true,
-    "absolute_tolerance": 1e-09,
+    "absolute_tolerance": 1e-9,
     "maximum_nonlinear_iterations": 50,
     "integrator": "stiff"
   },
@@ -59,18 +45,18 @@
       "vessel_length": 1.0,
       "vessel_name": "cylinder",
       "zero_d_element_type": "ChamberCylinder",
+      "formulation": {
+        "passive": "holzapfel_ogden",
+        "volumetric": "st91",
+        "active": "bcs",
+        "ends": "lids"
+      },
       "zero_d_element_values": {
         "Ri": 0.019034760191327525,
         "Re": 0.032969171761268755,
         "length": 0.34262568344389543,
         "alpha_endo": 0.0,
         "alpha_epi": 0.0,
-        "C1": 0.0,
-        "C2": 0.0,
-        "C3": 0.0,
-        "C4": 0.0,
-        "C5": 0.0,
-        "C6": 0.0,
         "ho_a": 50000.0,
         "ho_b": 5.0,
         "ho_af": 25000.0,
@@ -84,7 +70,6 @@
         "sigma_max": 0.0,
         "k_0": 0.0,
         "density": 0.0,
-        "fixed_length": 0,
         "bulk_modulus": 5000000.0,
         "num_elements": 32
       },

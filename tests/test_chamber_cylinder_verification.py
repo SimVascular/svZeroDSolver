@@ -43,15 +43,17 @@ def test_static_inflation_extension_torsion(C5):
 
 
 def test_fixed_length_inflation_matches_closed_form():
-    """fixed_length = 1: quasi-static inflation of an incompressible neo-Hookean
-    tube vs. its closed-form plane-strain solution, at every load step."""
+    """Ends fixed_length: quasi-static inflation of an incompressible
+    neo-Hookean tube vs. its closed-form plane-strain solution, at every load
+    step."""
     Ri, Re, L = GEOM["Ri"], GEOM["Re"], GEOM["length"]
     mu = 1e4
     vv = dict(GEOM, C1=mu / 2, C2=0.0, C3=0.0, C4=0.0, C5=0.0, C6=0.0, gamma=0.0,
-              num_elements=16, density=0.0, fixed_length=1, **CV.NOACT)
+              num_elements=16, density=0.0, **CV.NOACT)
     T = 2000.0  # slow: no rate effect of the BCS fibre dashpot
     cfg = CV.isolated_config(vv, [0.0, T / 2, T], [0.0, 2e3, 2e3], T, 21,
-                             {"pressure_all": 0.0, "volume:cyl": math.pi * Ri**2 * L})
+                             {"pressure_all": 0.0, "volume:cyl": math.pi * Ri**2 * L},
+                             formulation={"ends": "fixed_length"})
     out = CV.svzerod.simulate(cfg)
     t, V = CV.series(out, "volume:cyl")
     _, P = CV.series(out, "pressure:IN:cyl")
@@ -74,11 +76,12 @@ def test_holzapfel_ogden_fixed_length_inflation_matches_closed_form(k):
     T = 2400.0
     err = []
     for ne in (8, 16):
-        vv = dict(GEOM, alpha_endo=0.0, alpha_epi=0.0, C1=0.0, C2=0.0, C3=0.0, C4=0.0, C5=0.0,
-                  C6=0.0, gamma=0.0, num_elements=ne, density=0.0, fixed_length=1, **ho,
-                  **CV.NOACT)
+        vv = dict(GEOM, alpha_endo=0.0, alpha_epi=0.0, gamma=0.0, num_elements=ne,
+                  density=0.0, **ho, **CV.NOACT)
         cfg = CV.isolated_config(vv, [0.0, T / 2, T], [0.0, 16e3, 16e3], T, 25,
-                                 {"pressure_all": 0.0, "volume:cyl": math.pi * Ri**2 * L})
+                                 {"pressure_all": 0.0, "volume:cyl": math.pi * Ri**2 * L},
+                                 formulation={"passive": "holzapfel_ogden",
+                                              "ends": "fixed_length"})
         out = CV.svzerod.simulate(cfg)
         t, V = CV.series(out, "volume:cyl")
         _, P = CV.series(out, "pressure:IN:cyl")
@@ -104,11 +107,13 @@ def test_prescribed_active_tension_matches_closed_form():
     P = 1e3
     err = []
     for ne in (4, 8):
-        vv = dict(GEOM, alpha_endo=0.0, alpha_epi=0.0, C1=0.0, C2=0.0, C3=0.0, C4=0.0, C5=0.0,
-                  C6=0.0, gamma=0.0, num_elements=ne, density=0.0, fixed_length=1, **ho,
-                  **CV.NOACT)
+        vv = dict(GEOM, alpha_endo=0.0, alpha_epi=0.0, gamma=0.0, num_elements=ne,
+                  density=0.0, **ho, **CV.NOACT)
         cfg = CV.isolated_config(vv, [0.0, 1.0], [P, P], 1.0, 41,
-                                 {"pressure_all": P, "volume:cyl": math.pi * Ri**2 * L})
+                                 {"pressure_all": P, "volume:cyl": math.pi * Ri**2 * L},
+                                 formulation={"passive": "holzapfel_ogden",
+                                              "active": "uniform_unsteady",
+                                              "ends": "fixed_length"})
         cfg["vessels"][0]["active_tension"] = {"t": ts.tolist(), "T": Ts.tolist(),
                                                "fourier_modes": 50, "ramp": False}
         cfg["vessels"][0].pop("activation_function", None)
@@ -120,6 +125,41 @@ def test_prescribed_active_tension_matches_closed_form():
         err.append(np.abs(V[m] / V_exact - 1).max())
     assert err[1] < 2e-4
     assert 3.5 < err[0] / err[1] < 4.5
+
+
+def _formulation_error(formulation, extra=None, tension=False):
+    """Message of the error that a formulation with inconsistent inputs raises."""
+    vv = dict(GEOM, C1=5e3, gamma=0.0, num_elements=2, density=0.0, **CV.NOACT)
+    vv.update(extra or {})
+    cfg = CV.isolated_config(vv, [0.0, 1.0], [0.0, 0.0], 1.0, 3,
+                             {"pressure_all": 0.0, "volume:cyl": 1e-5},
+                             formulation=formulation)
+    if tension:
+        cfg["vessels"][0]["active_tension"] = {"t": [0.0, 1.0], "T": [0.0, 0.0]}
+    with pytest.raises(RuntimeError) as err:
+        CV.svzerod.simulate(cfg)
+    return str(err.value)
+
+
+def test_formulation_checks_inputs():
+    """The parameters and inputs must match the selected formulation, and the
+    names of components and choices are checked."""
+    assert "unknown passive 'neo'" in _formulation_error({"passive": "neo"})
+    assert "unknown component 'viscous'" in _formulation_error({"viscous": "none"})
+    assert "ho_a needs the passive law holzapfel_ogden" in _formulation_error(
+        {}, {"ho_a": 1e4})
+    assert "C1 needs the passive law genet23" in _formulation_error(
+        {"passive": "holzapfel_ogden"}, {"ho_a": 1e4})
+    assert "bulk_modulus needs the volumetric law st91" in _formulation_error(
+        {}, {"bulk_modulus": 1e6})
+    assert "st91 needs bulk_modulus > 0" in _formulation_error({"volumetric": "st91"})
+    assert "active_tension needs the active law uniform_unsteady" in _formulation_error(
+        {}, tension=True)
+    assert "uniform_unsteady needs an active_tension object" in _formulation_error(
+        {"active": "uniform_unsteady"})
+    # the BCS activation function belongs to the active law bcs
+    assert "activation_function needs the active law bcs" in _formulation_error(
+        {"active": "uniform_unsteady"}, tension=True)
 
 
 def test_torsional_free_vibration():

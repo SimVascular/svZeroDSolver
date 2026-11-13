@@ -1,6 +1,6 @@
 """Figure: free-length (closed) tube, 0D vs 3D along the axis.
 
-The 0D block with fixed_length = 0 closes the tube with lids that carry the
+The 0D block with the ends "lids" closes the tube with lids that carry the
 cavity pressure (genet23 Eqs. 39-44). The 3D model closes it with a meshed end
 plate (cylinder_3d.py, closed_end): an eighth of the tube with u_z = 0 on the
 mid-length plane and the plate at the other end, pressure on the endocardium

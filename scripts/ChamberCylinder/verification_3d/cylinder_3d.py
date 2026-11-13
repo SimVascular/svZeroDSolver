@@ -8,19 +8,22 @@ same thick-walled cylinder, its boundary faces, the solver input file and the
 cavity-pressure load. Also runs the case (Docker image simvascular/solver or a
 local executable) and computes the lumen volume from the results.
 
-Model correspondence (0D -> 3D):
+Model correspondence (0D -> 3D; the 0D "formulation" object selects the
+components, see ChamberCylinder.h):
   geometry      Ri, Re, length                -> mesh
-  passive law   C1 (neo-Hookean), C2 (Mooney-Rivlin), C3 = 0 required;
-                C5, C6 fiber term             -> HGO with a4 = 2 C5 C6, b4 = C6,
-                                                 one fiber family (a6 = 0)
-                ho_a ... ho_k (C1-C6 = 0)     -> HolzapfelOgden a ... k
+  passive       genet23: C1 (neo-Hookean),    -> neoHookean, MR, or HGO with
+                C2 (Mooney-Rivlin), C5, C6       a4 = 2 C5 C6, b4 = C6 (one
+                fiber term; C3 = 0 required      fiber family, a6 = 0)
+                holzapfel_ogden: ho_a ... ho_k -> HolzapfelOgden a ... k
   fibers        alpha_endo, alpha_epi         -> FIB_DIR files (cylinder_fibers.py),
                 sheet e_R                        fiber and sheet
-  ends          fixed_length = 1              -> u_z = 0 on both end faces,
+  ends          fixed_length                  -> u_z = 0 on both end faces,
                                                  free in-plane sliding
+                lids (pressure-loaded)        -> end plate (closed_end)
   load          inlet PRESSURE ramp           -> follower pressure on "endo"
-  volumetric    bulk_modulus kappa (ST91)     -> ST91 penalty kappa (struct)
-                bulk_modulus = 0               -> ustruct with nu = 0.5
+  volumetric    st91: bulk_modulus kappa      -> ST91 penalty kappa (struct)
+                incompressible                -> ustruct with nu = 0.5
+  active        uniform_unsteady              -> UniformUnsteady (coupled_3d.py)
 
 Mesh: n_r elements through the wall (the refinement parameter); the
 circumferential and axial divisions follow from the element size
@@ -60,8 +63,20 @@ MMHG = 133.322387415  # Pa; solver inputs are SI, reports use mmHg
 # --------------------------------------------------------------------------- #
 
 
+# Formulation of the 0D block when its input omits a component (genet23).
+FORMULATION = dict(passive="genet23", volumetric="incompressible", active="bcs", ends="lids")
+
+
+def formulation(vessel):
+    """Formulation of a ChamberCylinder vessel of a 0D input."""
+    form = dict(FORMULATION)
+    form.update({k: x for k, x in vessel.get("formulation", {}).items() if not k.startswith("_")})
+    return form
+
+
 def read_0d(path):
-    """ChamberCylinder values and the inlet pressure history of a 0D input."""
+    """ChamberCylinder values, formulation and the inlet pressure history of a
+    0D input."""
     with open(path) as f:
         cfg = json.load(f)
     blocks = [v for v in cfg["vessels"] if v["zero_d_element_type"] == "ChamberCylinder"]
@@ -73,7 +88,8 @@ def read_0d(path):
     if bc is None or bc["bc_type"] != "PRESSURE":
         raise ValueError(f"{path}: the ChamberCylinder inlet must be a PRESSURE boundary condition")
     return dict(name=blk["vessel_name"], values=blk["zero_d_element_values"],
-                t=list(bc["bc_values"]["t"]), P=list(bc["bc_values"]["P"]), config=cfg)
+                formulation=formulation(blk), t=list(bc["bc_values"]["t"]),
+                P=list(bc["bc_values"]["P"]), config=cfg)
 
 
 def pressure_ramp(t, P):
@@ -92,24 +108,29 @@ HO_KEYS = ("a", "b", "af", "bf", "as", "bs", "afs", "bfs", "k")  # 0D ho_<key>
 HO_SVMP = ("a", "b", "a4f", "b4f", "a4s", "b4s", "afs", "bfs", "k")  # svMultiPhysics
 
 
-def material(values):
-    """svMultiPhysics constitutive model equivalent to the 0D passive law."""
+def material(values, form=None):
+    """svMultiPhysics constitutive model equivalent to the 0D passive and
+    volumetric laws of the formulation form (default: genet23)."""
+    form = form or FORMULATION
     v = {k: float(values.get(k, 0.0))
          for k in ("C1", "C2", "C3", "C5", "C6", "gamma", "bulk_modulus")}
     ho = {k: float(values.get("ho_" + k, 0.0)) for k in HO_KEYS}
-    if v["C3"] != 0.0:
-        raise ValueError("C3 exp(C4 (I1 - 3)^2) has no svMultiPhysics counterpart; set C3 = 0")
     if v["gamma"] != 0.0:
         raise ValueError("viscosity gamma has no counterpart in this 3D setup; set gamma = 0")
-    kappa = v["bulk_modulus"]  # ST91 bulk modulus; 0 = incompressible
+    if form["passive"] == "genet23" and v["C3"] != 0.0:
+        raise ValueError("C3 exp(C4 (I1 - 3)^2) has no svMultiPhysics counterpart; set C3 = 0")
+    # ST91 bulk modulus; 0 = incompressible
+    kappa = v["bulk_modulus"] if form["volumetric"] == "st91" else 0.0
     fibers = dict(alpha_endo=float(values["alpha_endo"]), alpha_epi=float(values["alpha_epi"]))
-    if any(ho[k] != 0.0 for k in ("a", "af", "as", "afs")):
+    if form["passive"] == "holzapfel_ogden":
         if any(v[k] != 0.0 for k in ("C1", "C2", "C3", "C5")):
-            raise ValueError("HolzapfelOgden replaces the C1-C6 law: set C1 = C2 = C3 = C5 = 0")
+            raise ValueError("the passive law holzapfel_ogden takes no C1-C6")
         if ho["a"] <= 0.0:
             raise ValueError("HolzapfelOgden needs ho_a > 0 (small-strain shear modulus)")
         # mu = a is the small-strain shear modulus of the isotropic term.
         return dict(model="HolzapfelOgden", mu=ho["a"], kappa=kappa, **ho, **fibers)
+    if any(x != 0.0 for x in ho.values()):
+        raise ValueError('ho_* need the 0D formulation "passive": "holzapfel_ogden"')
     if v["C5"] != 0.0:
         # C5 exp(C6 (I4b - 1)^2) has the stress of the HGO fiber term
         # a4/(2 b4) (exp(b4 (I4b - 1)^2) - 1) with a4 = 2 C5 C6, b4 = C6.
@@ -636,7 +657,7 @@ def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, nthet
     them). robin_factor > 0 adds an epicardial spring of stiffness
     robin_factor * mu / Re.
 
-    closed_end (0D fixed_length = 0, the pressure-loaded lids): the eighth
+    closed_end (0D formulation "ends": "lids", the pressure-loaded lids): the eighth
     model of the tube, 0 <= Z <= L/2 with the mid-length plane at Z = 0,
     closed at Z = L/2 by an isotropic plate of thickness plate_factor (Re -
     Ri) (neo-Hookean with the small-strain shear and bulk moduli of the
@@ -645,13 +666,14 @@ def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, nthet
     lids away from the plate, and the mid-length section is compared.
     """
     m0 = read_0d(model_0d)
-    v = m0["values"]
-    if closed_end and float(v.get("fixed_length", 0.0)) != 0.0:
-        raise ValueError("a closed end loads the wall axially: set fixed_length = 0 in the 0D input")
-    if not closed_end and float(v.get("fixed_length", 0.0)) != 1.0:
-        raise ValueError("the 3D model has fixed-length ends: set fixed_length = 1 in the 0D input")
+    v, form = m0["values"], m0["formulation"]
+    if closed_end and form["ends"] != "lids":
+        raise ValueError('a closed end loads the wall axially: set the 0D formulation "ends": "lids"')
+    if not closed_end and form["ends"] != "fixed_length":
+        raise ValueError('the 3D model has fixed-length ends: set the 0D formulation '
+                         '"ends": "fixed_length"')
     T, Pmax = pressure_ramp(m0["t"], m0["P"])
-    mat = material(v)
+    mat = material(v, form)
     fibers = mat["model"] in ("HGO", "HolzapfelOgden")
     symmetric = not helical(mat)
     if sector is None:

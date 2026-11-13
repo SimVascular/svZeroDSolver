@@ -10,7 +10,7 @@ and load.
 | 1 | `passive_isotropic/`: quasi-static inflation, neo-Hookean wall | implemented |
 | 2 | `passive_anisotropic/`: the same wall with one circumferential fiber family (Holzapfel-Ogden) | implemented |
 | 2b | `passive_anisotropic_full/`: all Holzapfel-Ogden terms (exponential isotropic, fiber, sheet, fiber-sheet) with the tension-compression switch | implemented |
-| 2b' | `passive_isotropic_closed/`, `passive_anisotropic_closed/`, `passive_anisotropic_full_closed/`: the walls of steps 1–2b with free length (0D `fixed_length = 0`, lids loaded by the cavity pressure), 3D tube closed by an end plate, 6 L0 long | implemented (nr 1, 2, 4; full HO 2, 4, 8) |
+| 2b' | `passive_isotropic_closed/`, `passive_anisotropic_closed/`, `passive_anisotropic_full_closed/`: the walls of steps 1–2b with free length (0D ends `lids`, loaded by the cavity pressure), 3D tube closed by an end plate, 6 L0 long | implemented (nr 1, 2, 4; full HO 2, 4, 8) |
 | 2c | `passive_helical_L2/`: the wall of step 2 with helical fibers (+60° to −60°), full cylinder with free ends, twice the test-case length; `passive_helical_a30_L2/` (uniform 30°) and `passive_helical_a60to0_L2/` (+60° to 0°) | implemented (nr 1, 2, 4) |
 | 3a | `active_prescribed/`: PV loop with a prescribed active tension, 3D cylinder coupled to the circulation of `tests/cases/chamber_cylinder.json` | implemented (nr 1, 2, 4, 8) |
 | 3a' | `active_helical_L2/`: the same with helical fibers (+60° to −60°), full 3D cylinder with free ends, twice the length | implemented (nr 1, 2) |
@@ -18,11 +18,18 @@ and load.
 
 ## Problem definition
 
+- **0D formulation.** The block's `formulation` object
+  (`src/model/ChamberCylinder.h`) swaps each component between genet23 (the
+  default) and its svMultiPhysics equivalent: `passive` (`genet23` C1–C6 or
+  `holzapfel_ogden`), `volumetric` (`incompressible` or `st91`), `active`
+  (`bcs` or `uniform_unsteady`) and `ends` (`lids` or `fixed_length`). Every
+  case input states all four. The passive cases keep the BCS law at rest
+  (`sigma_max` = 0).
 - **Length.** Except in the free-length cases, both end faces keep u_z = 0
-  and slide freely in their planes; the 0D block uses `fixed_length = 1`
-  (ε = 0, unloaded lids). The free-length cases (`*_closed`) use the 0D
-  default, lids loaded by the cavity pressure, and close the 3D tube with a
-  meshed end plate (see "Free length" below).
+  and slide freely in their planes; the 0D block uses the ends
+  `fixed_length` (ε = 0, unloaded lids). The free-length cases (`*_closed`)
+  use the genet23 ends `lids`, loaded by the cavity pressure, and close the
+  3D tube with a meshed end plate (see "Free length" below).
 - **Eighth model.** The 0D solution is uniform along the axis and in θ, so the
   3D mesh covers a 90° sector with symmetry planes (u_y = 0 on θ = 0, u_x = 0
   on θ = 90°) and half the length (u_z = 0 on the mid-length plane). There are
@@ -41,13 +48,15 @@ and load.
 - **Materials.** The 3D side uses svMultiPhysics' material laws unchanged;
   where the 0D law differs, the 0D side adopts the 3D law. With C3 = 0, the 0D
   passive law is the svMultiPhysics neo-Hookean (C1 = C10 = μ/2), Mooney-Rivlin
-  (C1, C2) or HGO fiber term (a4 = 2 C5 C6, b4 = C6, κ = 0). The `ho_*`
-  parameters add svMultiPhysics' `HolzapfelOgden` law (isotropic, fiber, sheet
-  and fiber-sheet terms, sheet = e_R, smoothed Heaviside slope k).
+  (C1, C2) or HGO fiber term (a4 = 2 C5 C6, b4 = C6, κ = 0). The passive law
+  `holzapfel_ogden` is svMultiPhysics' `HolzapfelOgden` law with the `ho_*`
+  parameters (isotropic, fiber, sheet and fiber-sheet terms, sheet = e_R,
+  smoothed Heaviside slope k).
   `check_materials.py` compares the two stress implementations for random
   deformations (agreement to round-off). Viscosity γ = 0.
-- **Volumetric law.** The 0D input sets `bulk_modulus` (κ of svMultiPhysics'
-  ST91 energy U = κ/4 (J² − 1 − 2 ln J)) and both models use it, with
+- **Volumetric law.** The 0D input selects the volumetric law `st91` with
+  `bulk_modulus` (κ of svMultiPhysics' ST91 energy
+  U = κ/4 (J² − 1 − 2 ln J)) and both models use it, with
   κ = 100× the isotropic shear modulus as in the svMultiPhysics struct tests.
 - **Quasi-static.** The 0D runs without inertia (`density` = 0) and the 3D with
   a negligible density. The pressure ramp is slow because the 0D active branch
@@ -140,7 +149,7 @@ nr = 4 (38016 elements) takes 5 h on the cluster with 2 MPI ranks.
 
 ### Free length (closed ends)
 
-With `fixed_length = 0` (the 0D default) the 0D block closes the tube with
+With the ends `lids` (the genet23 default) the 0D block closes the tube with
 lids that carry the cavity pressure and leaves the axial strain ε free
 (genet23 Eqs. 39–44): the wall carries the axial force P π r_i² and
 V = π r_i² (1 + ε) L. svMultiPhysics' caps (`Chamber_cap_surface`) close the
@@ -152,8 +161,8 @@ isotropic neo-Hookean with the small-strain shear and bulk moduli of the
 wall). The follower cavity pressure acts on the endocardium (`endo`) and the
 inner face of the plate (`cap`); nothing holds the length. By equilibrium the
 wall carries the axial force of the 0D lids, and no 0D data enters the 3D
-model. `run_study.py` picks this setup when the 0D input has
-`fixed_length = 0`.
+model. `run_study.py` picks this setup when the 0D formulation has the ends
+`lids`.
 
 The plate holds the end ring in (endocardial ρ 80% below the 0D value at the
 plate). This end layer decays with an oscillation: in the isotropic wall at
@@ -175,8 +184,9 @@ end layer against the tube length and the mesh
 adapted to what svMultiPhysics can represent: fixed length, circumferential
 fibers, the Holzapfel-Ogden wall of `passive_anisotropic/`, no viscosity, no
 wall inertia, and the BCS active law replaced by a prescribed tension
-T(t) = 80 kPa sin²(π (t − 0.1 s)/0.4 s) on 0.1–0.5 s. The 0D block's
-`active_tension` reproduces svMultiPhysics' `UniformUnsteady` active stress
+T(t) = 80 kPa sin²(π (t − 0.1 s)/0.4 s) on 0.1–0.5 s. The 0D active law
+`uniform_unsteady` with its `active_tension` object reproduces
+svMultiPhysics' `UniformUnsteady` active stress
 exactly: S_a = T(t) e_F ⊗ e_F, with T(t) built from the same samples by the
 same Fourier construction (`FourierTension`, ported from
 FourierInterpolation.cpp; checked against an independent Python port in
@@ -640,7 +650,7 @@ PYTHONPATH=build/python python scripts/ChamberCylinder/verification_3d/helical_f
 PYTHONPATH=build/python python scripts/ChamberCylinder/verification_3d/helical_sketch.py scripts/ChamberCylinder/verification_3d/passive_helical_L2
 ```
 
-Free length (`fixed_length = 0` in the 0D input: closed by an end plate,
+Free length (ends `lids` in the 0D formulation: closed by an end plate,
 the eighth model, no extra option); the figure needs nr = 1, 2, 4 of the 6 L0
 tube and nr = 2 of the 2, 4 and 8 L0 tubes:
 

@@ -7,7 +7,10 @@ free-length ones (Section~\ref{sec:closed}) use fixed length ($z = Z$ at the end
 (the 0D block adopts the 3D law, including the ST91 volumetric penalty, here
 $\kappa = 100\,\mu$), and the active case uses a prescribed fiber tension
 $T(t) = 80~\mathrm{kPa}\,\sin^2(\pi(t-0.1~\mathrm{s})/0.4~\mathrm{s})$, $0.1 \le t \le 0.5$~s,
-built exactly as svMultiPhysics' \texttt{UniformUnsteady} active stress.
+built exactly as svMultiPhysics' \texttt{UniformUnsteady} active stress. The block's
+\texttt{formulation} object selects these svMultiPhysics equivalents component by
+component (passive, volumetric and active law, ends); without it the block uses the
+genet23 formulation.
 
 \paragraph{3D model.} svMultiPhysics \texttt{struct} with quadratic tetrahedra (TET10,
 ``struct-p2''), the same material law, fiber directions given at the nodes, and a

@@ -482,8 +482,32 @@ void create_vessels(
       }
     }
 
-    // Optional prescribed active tension for ChamberCylinder (svMultiPhysics
-    // UniformUnsteady): arrays "t" and "T", "fourier_modes", "ramp".
+    // Optional formulation of the ChamberCylinder components (genet23 or the
+    // svMultiPhysics equivalents): {"passive": ..., "volumetric": ...,
+    // "active": ..., "ends": ...}; omitted components keep genet23.
+    if (vessel_type == "ChamberCylinder" &&
+        vessel_config.contains("formulation")) {
+      const auto& fc = vessel_config["formulation"];
+      if (!fc.is_object()) {
+        throw std::runtime_error("formulation of vessel " + vessel_name +
+                                 " must be an object.");
+      }
+      ChamberCylinderFormulation formulation;
+      for (const auto& el : fc.items()) {
+        if (el.key()[0] == '_') continue;
+        if (!el.value().is_string()) {
+          throw std::runtime_error("formulation component " + el.key() +
+                                   " of vessel " + vessel_name +
+                                   " must be a string.");
+        }
+        formulation.set(el.key(), el.value().get<std::string>());
+      }
+      auto* cc = dynamic_cast<ChamberCylinder*>(model.get_block(vessel_name));
+      if (cc != nullptr) cc->set_formulation(formulation);
+    }
+
+    // Optional prescribed active tension for ChamberCylinder (active law
+    // uniform_unsteady): arrays "t" and "T", "fourier_modes", "ramp".
     if (vessel_type == "ChamberCylinder" &&
         vessel_config.contains("active_tension")) {
       const auto& at = vessel_config["active_tension"];

@@ -26,8 +26,9 @@ int DOFHandler::get_variable_index(const std::string& name) const {
   }
 }
 
-int DOFHandler::register_equation(const std::string& name) {
+int DOFHandler::register_equation(const std::string& name, bool is_output) {
   equations.push_back(name);
+  equation_is_output.push_back(is_output);
   return eqn_counter++;
 }
 

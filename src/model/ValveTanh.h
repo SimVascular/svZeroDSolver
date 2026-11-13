@@ -192,6 +192,19 @@ class ValveTanh : public Block {
       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
 
   /**
+   * @brief Write the valve status at the end of the accepted time step
+   *
+   * The status is an algebraic function of the pressure difference, but the
+   * generalized-alpha scheme enforces it at the mid-point of the step and
+   * then extrapolates to its end, which lets the reported value leave the
+   * interval [0, 1] whenever the valve changes state. Overwriting it here
+   * reports the status actually taken at the end of the step.
+   *
+   * @param y Accepted state vector
+   */
+  void accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
+
+  /**
    * @brief Number of triplets of element
    *
    * Number of triplets that the element contributes to the global system

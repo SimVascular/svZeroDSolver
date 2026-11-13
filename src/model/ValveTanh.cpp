@@ -2,11 +2,13 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "ValveTanh.h"
 
+#include "Model.h"
+
 void ValveTanh::setup_dofs(DOFHandler& dofhandler) {
   // set_up_dofs args: dofhandler (passed in), num equations, list of internal
   // variable names (strings) 3 eqns, one for Pressure, one for Flow, one for
   // the valve status output
-  Block::setup_dofs_(dofhandler, 3, {"valve_status"});
+  Block::setup_dofs_(dofhandler, 3, {"valve_status"}, 1);
 }
 
 // update_constant updates matrices E and F from E(y,t)*y_dot + F(y,t)*y +
@@ -27,6 +29,14 @@ void ValveTanh::update_constant(SparseSystem& system,
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
   system.F.coeffRef(global_eqn_ids[2], global_var_ids[4]) = 1.0;
+}
+
+void ValveTanh::accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+  double p_in = y[global_var_ids[0]];
+  double p_out = y[global_var_ids[2]];
+  double steep =
+      model->get_parameter_value(global_param_ids[ParamId::STEEPNESS]);
+  y[global_var_ids[4]] = 0.5 * (1.0 + tanh(steep * (p_out - p_in)));
 }
 
 // update_solution updates matrices E and F from E(y,t)*y_dot + F(y,t)*y +

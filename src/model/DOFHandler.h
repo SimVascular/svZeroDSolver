@@ -30,6 +30,9 @@ class DOFHandler {
       variable_name_map;  ///< Map between variable name and index
   std::vector<std::string>
       equations;  ///< Equation names corresponding to the equation indices
+  std::vector<bool> equation_is_output;  ///< Marks equations that only define
+                                         ///< a diagnostic output and do not
+                                         ///< feed back into the physics
 
   /**
    * @brief Get the size of the system
@@ -72,9 +75,17 @@ class DOFHandler {
    * @brief Register a new equation at the DOFHandler
    *
    * @param name Name of the equation
+   * @param is_output True if the equation only defines a diagnostic output.
+   * Such equations are assembled and solved like any other, but their
+   * residual does not take part in the convergence check of the non-linear
+   * iteration. This matters for outputs that are discontinuous functions of
+   * the solution, such as the open/closed state of an ideal valve: the
+   * indicator flips by one whenever the pressure difference across the valve
+   * changes sign, which would otherwise keep a converged time step from
+   * terminating.
    * @return Global index of the equation
    */
-  int register_equation(const std::string& name);
+  int register_equation(const std::string& name, bool is_output = false);
 
   /**
    * @brief Get the index of a variable

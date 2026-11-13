@@ -185,7 +185,8 @@ class Block {
    */
 
   void setup_dofs_(DOFHandler& dofhandler, int num_equations,
-                   const std::list<std::string>& internal_var_names);
+                   const std::list<std::string>& internal_var_names,
+                   int num_output_equations = 0);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -257,12 +258,13 @@ class Block {
    * @brief Accept a converged time-step.
    *
    * This hook is called once per accepted integrator step and can be used by
-   * blocks that maintain persistent memory (for example convolution history).
+   * blocks that maintain persistent memory (for example convolution history)
+   * or that write diagnostic outputs which the time integration cannot
+   * represent, such as a discontinuous valve state.
    *
-   * @param y Accepted state vector
+   * @param y Accepted state vector, may be modified
    */
-  virtual void accept_timestep(
-      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+  virtual void accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Get persistent internal state of the block.

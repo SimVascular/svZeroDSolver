@@ -145,8 +145,7 @@ class ImpedanceBC : public Block {
    *
    * @param y Accepted global state vector
    */
-  void accept_timestep(
-      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
+  void accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
 
   /**
    * @brief Serialize the convolution history needed for restart/coupling.

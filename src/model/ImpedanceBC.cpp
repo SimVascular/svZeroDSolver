@@ -38,8 +38,7 @@ void ImpedanceBC::update_time(SparseSystem& system,
   system.C(global_eqn_ids[0]) = -(pd + conv_sum);
 }
 
-void ImpedanceBC::accept_timestep(
-    const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+void ImpedanceBC::accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   ensure_initialized();
 
   const double flow_accepted = y[global_var_ids[1]];

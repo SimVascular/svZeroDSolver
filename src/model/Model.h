@@ -42,6 +42,7 @@
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"
 #include "State.h"
+#include "ValveDiode.h"
 #include "ValveTanh.h"
 #include "WindkesselBC.h"
 #include "debug.h"
@@ -258,9 +259,9 @@ class Model {
   /**
    * @brief Accept one converged time-step for all blocks.
    *
-   * @param y Accepted state vector
+   * @param y Accepted state vector, may be modified by the blocks
    */
-  void accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+  void accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Get persistent state payloads for all blocks (including internal).

@@ -30,6 +30,7 @@ Model::Model() {
       {"RESISTANCE", block_factory<ResistanceBC>()},
       {"resistive_junction", block_factory<ResistiveJunction>()},
       {"ValveTanh", block_factory<ValveTanh>()},
+      {"ValveDiode", block_factory<ValveDiode>()},
       {"ChamberElastanceInductor", block_factory<ChamberElastanceInductor>()},
       {"ChamberElastanceInductorExponential",
        block_factory<ChamberElastanceInductorExponential>()},
@@ -226,7 +227,7 @@ void Model::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   }
 }
 
-void Model::accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+void Model::accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->accept_timestep(y);
   }

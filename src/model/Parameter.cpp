@@ -2,6 +2,39 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "Parameter.h"
 
+#include <stdexcept>
+#include <string>
+
+namespace {
+// Checks that (xs, ys) form a valid piecewise-linear break point table for
+// linear_interpolate/linear_interpolate_slope. xs must be strictly
+// increasing; a near-vertical segment (two xs values an epsilon apart) can
+// be used instead of a literal duplicate to approximate a step change.
+void validate_breakpoint_table(const std::vector<double>& xs,
+                               const std::vector<double>& ys) {
+  if (xs.size() < 2) {
+    throw std::runtime_error(
+        "linear_interpolate: break point table must have at least 2 "
+        "entries (got " +
+        std::to_string(xs.size()) + ")");
+  }
+  if (xs.size() != ys.size()) {
+    throw std::runtime_error(
+        "linear_interpolate: xs and ys must have the same length (got " +
+        std::to_string(xs.size()) + " and " + std::to_string(ys.size()) + ")");
+  }
+  for (size_t i = 0; i + 1 < xs.size(); i++) {
+    if (xs[i] >= xs[i + 1]) {
+      throw std::runtime_error(
+          "linear_interpolate: xs must be strictly increasing (xs[" +
+          std::to_string(i) + "] = " + std::to_string(xs[i]) +
+          " is not less than xs[" + std::to_string(i + 1) +
+          "] = " + std::to_string(xs[i + 1]) + ")");
+    }
+  }
+}
+}  // namespace
+
 Parameter::Parameter(int id, double value) {
   this->id = id;
   update(value);
@@ -83,4 +116,43 @@ void Parameter::to_unsteady() {
     is_constant = false;
     steady_converted = false;
   }
+}
+
+double linear_interpolate(double x, const std::vector<double>& xs,
+                          const std::vector<double>& ys) {
+  validate_breakpoint_table(xs, ys);
+
+  if (x <= xs.front()) {
+    return ys.front();
+  }
+  if (x >= xs.back()) {
+    return ys.back();
+  }
+
+  auto i = lower_bound(xs.begin(), xs.end(), x);
+  int k = i - xs.begin();
+  if (*i == x) {
+    return ys[k];
+  }
+  int m = k - 1;
+
+  return ys[m] + ((ys[k] - ys[m]) / (xs[k] - xs[m])) * (x - xs[m]);
+}
+
+double linear_interpolate_slope(double x, const std::vector<double>& xs,
+                                const std::vector<double>& ys) {
+  validate_breakpoint_table(xs, ys);
+
+  if (x <= xs.front() || x >= xs.back()) {
+    return 0.0;
+  }
+
+  auto i = lower_bound(xs.begin(), xs.end(), x);
+  int k = i - xs.begin();
+  if (*i == x) {
+    ++k;
+  }
+  int m = k - 1;
+
+  return (ys[k] - ys[m]) / (xs[k] - xs[m]);
 }

@@ -8,17 +8,7 @@
 
 SphereMaterial::SphereMaterial(
     const std::vector<std::pair<std::string, InputParameter>>& props)
-    : input_param_properties(props) {
-  for (const auto& p : props) {
-    if (p.second.is_number) {
-      params_[p.first] = p.second.is_optional ? p.second.default_val : 0.0;
-    }
-  }
-}
-
-void SphereMaterial::set_param(const std::string& name, double value) {
-  params_[name] = value;
-}
+    : ParameterHolder(props) {}
 
 std::unique_ptr<SphereMaterial> SphereMaterial::create(
     const std::string& type_str) {

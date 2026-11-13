@@ -30,6 +30,13 @@ The YAML files define the mathematical model of a block with the following struc
 ### Optional Sections
 
 - `time_dependent`: List of parameters that depend on time (e.g., activation functions)
+- `strain_dependent_functions`: Map of `constant: variable` for constants that are themselves
+  functions of a solution variable (e.g. a piecewise-linear break-point table evaluated at a
+  strain). Declaring the dependency here lets SymPy apply the chain rule automatically: for each
+  `constant: variable` entry, a new symbol `d<constant>_d<variable>` is introduced for the local
+  derivative and appears in the generated Jacobian wherever needed. 
+  The numeric value of both the constant and its derivative is supplied by the C++ blocks from an input in the input file (e.g. the value and local slope
+  of the same break-point table).
 - `helper_functions`: Python code defining helper functions used in the residuals
 
 ### Example

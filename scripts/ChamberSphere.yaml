@@ -8,6 +8,7 @@ variables:
   - stress
   - tau
   - volume
+  - passive_stress
 
 derivatives:
   - dPin_dt
@@ -19,6 +20,7 @@ derivatives:
   - dstress_dt
   - dtau_dt
   - dvolume_dt
+  - dpassive_stress_dt
 
 constants:
   - rho
@@ -50,3 +52,4 @@ residuals:
   - dradius_dt - velo
   - Qin - Qout - dvolume_dt
   - Pin - Pout
+  - -passive_stress + stress - tau

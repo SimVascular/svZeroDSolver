@@ -88,8 +88,3 @@ void SparseSystem::solve() {
   dydot.setZero();
   dydot += solver->solve(residual);
 }
-
-Eigen::Matrix<double, Eigen::Dynamic, 1> SparseSystem::apply_inverse_jacobian(
-    const Eigen::Matrix<double, Eigen::Dynamic, 1>& rhs) const {
-  return solver->solve(rhs);
-}

@@ -124,66 +124,11 @@ class Solver {
   std::vector<std::string> get_step_residual_equations() const;
 
   /**
-   * @brief Get the index of the equation holding the largest residual at the
-   * end of each time step
-   *
-   * @return std::vector<int> Equation index per time step
-   */
-  std::vector<int> get_step_residual_indices() const;
-
-  /**
-   * @brief Get the name of every equation of the system, in order
-   *
-   * @return std::vector<std::string> Equation names
-   */
-  std::vector<std::string> get_equation_names() const;
-
-  /**
-   * @brief Get the name of every variable of the state vector, in order
-   *
-   * The post-processing variables are the trailing ones, see
-   * DOFHandler::register_output_variable.
-   *
-   * @return std::vector<std::string> Variable names
-   */
-  std::vector<std::string> get_variable_names() const;
-
-  /**
-   * @brief Get the number of post-processing variables, which are part of
-   * the state vector but not of the solved system
-   *
-   * @return int Number of post-processing variables
-   */
-  int get_num_output_variables() const;
-
-  /**
    * @brief Get the time at the start of each integration step
    *
    * @return std::vector<double> Time per time step
    */
   std::vector<double> get_step_times() const;
-
-  /**
-   * @brief Record the residual after every Newton iteration (debugging)
-   *
-   * @param on True to record the residual of every Newton iteration
-   */
-  void set_record_residual_history(bool on);
-
-  /**
-   * @brief Set the acceptance factor of the Newton line search (debugging)
-   *
-   * @param f Acceptance factor, larger values damp less
-   */
-  void set_line_search_factor(double f);
-
-  /**
-   * @brief Residual after every Newton iteration of every time step
-   *
-   * @return std::vector<std::vector<double>> Residual of each Newton
-   * iteration, grouped by time step
-   */
-  std::vector<std::vector<double>> get_residual_history() const;
 
  private:
   std::shared_ptr<Model> model;
@@ -194,8 +139,6 @@ class Solver {
   std::vector<double> times;
   double time;
   Integrator integrator;
-  bool record_residual_history{false};
-  double line_search_factor{1.0};
 
   void sanity_checks();
 

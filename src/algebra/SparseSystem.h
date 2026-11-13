@@ -66,19 +66,6 @@ class SparseSystem {
                                                                 ///< solver
 
   /**
-   * @brief Apply the inverse of the most recently factorized Jacobian
-   *
-   * Reuses the factorization computed by the last call to \ref solve, so no
-   * new factorization is performed. Used by the line search to measure the
-   * simplified Newton correction at a trial state.
-   *
-   * @param rhs Right-hand side
-   * @return Solution of jacobian * x = rhs
-   */
-  Eigen::Matrix<double, Eigen::Dynamic, 1> apply_inverse_jacobian(
-      const Eigen::Matrix<double, Eigen::Dynamic, 1>& rhs) const;
-
-  /**
    * @brief Reserve memory in system matrices based on number of triplets
    *
    * @param model The model to reserve space for in the system

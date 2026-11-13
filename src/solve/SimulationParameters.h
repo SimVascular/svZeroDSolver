@@ -69,9 +69,6 @@ struct SimulationParameters {
       false};  ///< Running 0D simulation coupled with external solver
   double sim_external_step_size{0.0};  ///< Step size of external solver if
                                        ///< running coupled
-  int sim_line_search_steps{
-      0};  ///< Maximum number of backtracking steps of the Newton line
-           ///< search (0 disables the line search)
   bool sim_max_iter_error_to_warning{
       false};  ///< If true, warn instead of throwing when max nonlinear
                ///< iterations is reached

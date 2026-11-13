@@ -182,6 +182,8 @@ class Block {
    * equations at
    * @param num_equations Number of equations of the block
    * @param internal_var_names Number of internal variables of the block
+   * @param num_output_equations Number of trailing equations that only
+   * define a diagnostic output, see DOFHandler::register_equation
    */
 
   void setup_dofs_(DOFHandler& dofhandler, int num_equations,

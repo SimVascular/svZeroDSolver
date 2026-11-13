@@ -147,16 +147,23 @@ class Solver {
 
   /**
    * @brief Record the residual after every Newton iteration (debugging)
+   *
+   * @param on True to record the residual of every Newton iteration
    */
   void set_record_residual_history(bool on);
 
   /**
    * @brief Set the acceptance factor of the Newton line search (debugging)
+   *
+   * @param f Acceptance factor, larger values damp less
    */
   void set_line_search_factor(double f);
 
   /**
    * @brief Residual after every Newton iteration of every time step
+   *
+   * @return std::vector<std::vector<double>> Residual of each Newton
+   * iteration, grouped by time step
    */
   std::vector<std::vector<double>> get_residual_history() const;
 

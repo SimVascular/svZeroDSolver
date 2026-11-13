@@ -127,17 +127,23 @@ class Integrator {
 
   /**
    * @brief Newton iterations used in each time step so far
+   *
+   * @return Number of Newton iterations of each time step
    */
   const std::vector<int>& get_iter_per_step() const { return iter_per_step; }
 
   /**
    * @brief Maximum residual at the end of each time step so far
+   *
+   * @return Largest absolute residual left at the end of each time step
    */
   const std::vector<double>& get_res_per_step() const { return res_per_step; }
 
   /**
-   * @brief Index of the degree of freedom holding the largest residual at the
-   * end of each time step so far
+   * @brief Index of the equation holding the largest residual at the end of
+   * each time step so far
+   *
+   * @return Equation index of each time step
    */
   const std::vector<int>& get_res_dof_per_step() const {
     return res_dof_per_step;
@@ -145,11 +151,15 @@ class Integrator {
 
   /**
    * @brief Time at the start of each step so far
+   *
+   * @return Time at the start of each time step
    */
   const std::vector<double>& get_time_per_step() const { return time_per_step; }
 
   /**
-   * @brief Discard the per-step convergence history
+   * @brief Record the residual after every single Newton iteration
+   *
+   * @param on True to record the residual of every Newton iteration
    */
   void set_record_history(bool on) { record_history = on; }
 
@@ -162,16 +172,26 @@ class Integrator {
 
   /**
    * @brief Set the acceptance factor of the Newton line search
+   *
+   * A trial step is accepted when the simplified Newton correction at the
+   * trial state is at most this factor times the length of the full step.
+   *
+   * @param f Acceptance factor, larger values damp less
    */
   void set_line_search_factor(double f) { line_search_factor = f; }
 
   /**
-   * @brief Residual norm after every Newton iteration of every time step
+   * @brief Residual after every Newton iteration of every time step
+   *
+   * @return Residual of each Newton iteration, grouped by time step
    */
   const std::vector<std::vector<double>>& get_residual_history() const {
     return residual_history;
   }
 
+  /**
+   * @brief Discard the per-step convergence history
+   */
   void clear_history() {
     residual_history.clear();
     iter_per_step.clear();

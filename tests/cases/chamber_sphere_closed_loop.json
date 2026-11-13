@@ -148,23 +148,19 @@
 
   "valves": [
     {
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "MV",
       "params": {
-        "Rmin": 0.0,
-        "Rmax": 1.0e10,
-        "Steepness": 1.0,
+        "R": 5.5e4,
         "upstream_block": "veins",
         "downstream_block": "LV"
       }
     },
     {
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "AV",
       "params": {
-        "Rmin": 0.0,
-        "Rmax": 1.0e11,
-        "Steepness": 10.0,
+        "R": 8.4e2,
         "upstream_block": "LV",
         "downstream_block": "aorta"
       }

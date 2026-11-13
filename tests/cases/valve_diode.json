@@ -112,7 +112,6 @@
       "name": "valve",
       "params": {
         "R": 100.0,
-        "eps": 0.0,
         "upstream_block": "upstream_vessel",
         "downstream_block": "downstream_vessel"
       }

@@ -154,41 +154,37 @@
   ],
   "valves": [
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "MV",
       "params": {
-        "Rmin": 6.666e5,
-        "Rmax": 6.666e9,
+        "R": 6.666e5,
         "upstream_block": "LA",
         "downstream_block": "LV"
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "AV",
       "params": {
-        "Rmin": 6.666e5,
-        "Rmax": 6.666e9,
+        "R": 6.666e5,
         "upstream_block": "LV",
         "downstream_block": "AR_SYS"
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "TV",
       "params": {
-        "Rmin": 6.666e5,
-        "Rmax": 6.666e9,
+        "R": 6.666e5,
         "upstream_block": "RA",
         "downstream_block": "RV"
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "PV",
       "params": {
-        "Rmin": 6.666e5,
-        "Rmax": 6.666e9,
+        "R": 6.666e5,
         "upstream_block": "RV",
         "downstream_block": "AR_PUL"
       }

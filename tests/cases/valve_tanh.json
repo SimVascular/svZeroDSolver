@@ -1,6 +1,6 @@
 {
   "description": {
-    "description of test case": "pulsatile pressure -> RC vessel -> valve -> RC vessel -> R BC",
+    "description of test case": "pulsatile pressure -> RC vessel -> tanh valve -> RC vessel -> R BC",
     "analytical results": [
       "Boundary conditions:",
       "inlet:",

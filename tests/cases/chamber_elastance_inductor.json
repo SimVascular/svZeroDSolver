@@ -70,23 +70,19 @@
   ],
   "valves": [
     {
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "valve0",
       "params": {
-        "Rmax": 100000.0,
-        "Rmin": 100.0,
-        "Steepness": 100.0,
+        "R": 100.0,
         "upstream_block": "INLET",
         "downstream_block": "ventricle"
       }
     },
     {
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "valve1",
       "params": {
-        "Rmax": 100000.0,
-        "Rmin": 100.0,
-        "Steepness": 100.0,
+        "R": 100.0,
         "upstream_block": "ventricle",
         "downstream_block": "vessel"
       }

@@ -134,7 +134,7 @@
  *     ]
  *
  * A chamber is connected to the rest of the circuit via valve blocks (see
- * \ref ValveTanh, \ref PiecewiseValve) referencing its `name` as their
+ * \ref ValveDiode, \ref ValveTanh, \ref PiecewiseValve) referencing its `name` as their
  * `upstream_block`/`downstream_block`.
  *
  * ### Internal variables

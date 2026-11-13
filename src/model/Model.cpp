@@ -179,6 +179,10 @@ void Model::finalize() {
   for (auto& block : blocks) {
     block->setup_dofs(dofhandler);
   }
+  DEBUG_MSG("Setup post-processing variables");
+  for (auto& block : blocks) {
+    block->setup_output_dofs_(dofhandler);
+  }
   DEBUG_MSG("Setup model-dependent parameters");
   for (auto& block : blocks) {
     block->setup_model_dependent_params();
@@ -224,6 +228,12 @@ void Model::update_solution(SparseSystem& system,
 void Model::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   for (auto block : blocks) {
     block->post_solve(y);
+  }
+}
+
+void Model::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+  for (size_t i = 0; i < get_num_blocks(true); i++) {
+    get_block(i)->update_outputs(y);
   }
 }
 

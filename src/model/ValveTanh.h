@@ -47,35 +47,32 @@
  * ### Local contributions
  *
  * \f[
- * \mathbf{y}^{e}=\left[\begin{array}{lllll}P_{in} & Q_{in} &
- * P_{out} & Q_{out} & \text{valve\_status} \end{array}\right]^{T} \f]
+ * \mathbf{y}^{e}=\left[\begin{array}{llll}P_{in} & Q_{in} &
+ * P_{out} & Q_{out} \end{array}\right]^{T} \f]
  *
  * \f[
  * \mathbf{E}^{e}=\mathbf{0}
  * \f]
  *
  * \f[
- * \mathbf{F}^{e}=\left[\begin{array}{ccccc}
- * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0  & 0\\
- * 0 &      1                 &  0 & -1 & 0\\
- * 0 &      0                 &  0 & 0  & 1
+ * \mathbf{F}^{e}=\left[\begin{array}{cccc}
+ * 1 & -(R_{max}+R_{min})/2.0 & -1 & 0\\
+ * 0 &      1                 &  0 & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
  * -\frac{1}{2}Q_{in}(R_{max}-R_{min})tanh\{k(P_{out}-P_{in})\} \\
- * 0 \\
- * -\frac{1}{2}\left[1+tanh\{k(P_{out}-P_{in})\}\right]
+ * 0
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
- * \left[\begin{array}{ccccc}
- * A & B &  C & 0 & 0\\
- * 0 & 0 &  0 & 0 & 0\\
- * D & 0 & -D & 0 & 0
+ * \left[\begin{array}{cccc}
+ * A & B &  C & 0\\
+ * 0 & 0 &  0 & 0
  * \end{array}\right] \f]
  * where,
  * \f[
@@ -89,9 +86,10 @@
  * C = -\frac{1}{2} k Q_{in}
  * (R_{max}-R_{min})\left[1-tanh^2\{k(P_{out}-P_{in})\}\right]
  * \f]
- * \f[
- * D = \frac{1}{2} \frac{k}{cosh^2\{k(P_{in}-P_{out})\} }
- * \f]
+ *
+ * The valve status is a post-processing variable, see
+ * DOFHandler::register_output_variable: it is reported but has no equation
+ * and is computed from the converged state in \ref update_outputs.
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
@@ -126,7 +124,9 @@
  *
  * ### Internal variables
  *
- * This block has no internal variables.
+ * This block has no internal variables. It reports one post-processing
+ * variable, `valve_status`, which has no equation and is computed from the
+ * converged state once the time step is accepted.
  *
  */
 class ValveTanh : public Block {
@@ -192,17 +192,11 @@ class ValveTanh : public Block {
       const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
 
   /**
-   * @brief Write the valve status at the end of the accepted time step
-   *
-   * The status is an algebraic function of the pressure difference, but the
-   * generalized-alpha scheme enforces it at the mid-point of the step and
-   * then extrapolates to its end, which lets the reported value leave the
-   * interval [0, 1] whenever the valve changes state. Overwriting it here
-   * reports the status actually taken at the end of the step.
+   * @brief Compute the valve status from the converged state
    *
    * @param y Accepted state vector
    */
-  void accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
+  void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
 
   /**
    * @brief Number of triplets of element

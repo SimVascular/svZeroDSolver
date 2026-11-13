@@ -40,6 +40,8 @@ PYBIND11_MODULE(svzerod, m) {
       .def("get_step_times", &Solver::get_step_times)
       .def("get_step_residual_indices", &Solver::get_step_residual_indices)
       .def("get_equation_names", &Solver::get_equation_names)
+      .def("get_variable_names", &Solver::get_variable_names)
+      .def("get_num_output_variables", &Solver::get_num_output_variables)
       .def("set_record_residual_history", &Solver::set_record_residual_history)
       .def("get_residual_history", &Solver::get_residual_history)
       .def("set_line_search_factor", &Solver::set_line_search_factor)

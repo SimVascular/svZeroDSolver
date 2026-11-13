@@ -41,10 +41,31 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 * The class must have a `setup_dofs(DOFHandler &dofhandler)` function.
   * This function typically only includes a call to the following function:
   ```
-  Block::setup_dofs_(DOFHandler &dofhandler, int num_equations, const std::list<std::string> &internal_var_names)
+  Block::setup_dofs_(DOFHandler &dofhandler, int num_equations, const std::list<std::string> &internal_var_names, const std::list<std::string> &output_var_names = {})
   ```
   * In the above function, `num_equations` is the number of governing equations for the new block. 
   * `internal_var_names` is a list of strings that specify names for variables that are internal to the block, i.e. all variables for the block apart from the flow and pressure at the block's inlets and outlets.
+  * `output_var_names` is a list of strings naming **post-processing variables**: quantities the block reports but that appear in no governing equation, of this block or any other.
+
+<p> <br> </p>
+
+### Post-processing variables
+
+A post-processing variable is part of the state vector and is written to the output like any other variable, but it has no equation. It adds no row and no column to the system, is never solved for, and takes no part in the convergence check. The block computes it from the converged solution by overriding
+
+```
+void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1> &y) override;
+```
+
+which is called once per accepted time step. Write each output variable into `y` at its index in `global_var_ids`; the indices of the output variables follow those of the internal variables, in the order they were declared.
+
+Declaring a quantity this way instead of giving it its own equation has three benefits:
+
+* **It is cheaper.** Removing the valve status of the valve blocks from the system, one to four degrees of freedom out of nine to fifty-two, made the test cases 9-14% faster.
+* **It cannot stall the solve.** A variable that is a discontinuous function of the solution, such as the open/closed state of an ideal valve, has a residual that jumps by a finite amount whenever the state flips. As an equation of the system that would keep a time step from ever meeting the tolerance, even once the flow and pressure equations have converged.
+* **It is reported at the end of the step.** An algebraic equation is enforced by generalized-alpha at the mid-point of the step and then extrapolated to its end, which scales the reported value by `1/alpha_f` and makes it ring with a ratio of `-1/2` for about twenty steps after every jump. A post-processing variable is written directly and shows the value actually taken at the end of the step.
+
+Post-processing variables occupy the tail of the state vector, after every solved variable, so that the solved system stays a leading square block. `Model::finalize` therefore registers them in a second pass, after every block has registered its solved variables. `ValveTanh` and `ValveDiode` use this for their `valve_status`.
 
 <p> <br> </p>
 

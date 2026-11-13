@@ -15,8 +15,11 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   y_coeff = gamma * time_step_size;
   y_coeff_jacobian = alpha_f * y_coeff;
 
+  // The state vector holds every variable; the system only holds the ones
+  // that are solved for, which occupy its leading block.
   size = model->dofhandler.size();
-  system = SparseSystem(size);
+  num_equations = model->dofhandler.get_num_equations();
+  system = SparseSystem(num_equations);
   this->time_step_size = time_step_size;
   this->model->set_time_step_size(time_step_size);
   this->atol = atol;
@@ -25,16 +28,6 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
 
   y_af = Eigen::Matrix<double, Eigen::Dynamic, 1>(size);
   ydot_am = Eigen::Matrix<double, Eigen::Dynamic, 1>(size);
-
-  // The convergence check skips equations that only define a diagnostic
-  // output, see DOFHandler::register_equation.
-  const auto& is_output = model->dofhandler.equation_is_output;
-  residual_check_dofs.reserve(size);
-  for (int i = 0; i < size; i++) {
-    if (i >= (int)is_output.size() || !is_output[i]) {
-      residual_check_dofs.push_back(i);
-    }
-  }
 
   // Make some memory reservations
   system.reserve(model);
@@ -74,15 +67,9 @@ double Integrator::evaluate_residual(const State& st, const State& old_state,
   // Evaluate residual
   system.update_residual(y_af, ydot_am);
 
-  double res = 0.0;
-  res_dof = residual_check_dofs.empty() ? 0 : residual_check_dofs.front();
-  for (int i : residual_check_dofs) {
-    double abs_res = std::abs(system.residual[i]);
-    if (abs_res > res) {
-      res = abs_res;
-      res_dof = i;
-    }
-  }
+  Eigen::Index max_res_dof = 0;
+  double res = system.residual.cwiseAbs().maxCoeff(&max_res_dof);
+  res_dof = static_cast<int>(max_res_dof);
   return res;
 }
 
@@ -164,8 +151,10 @@ State Integrator::step(const State& old_state, double time) {
       double lambda = 1.0;
       State trial = new_state;
       for (int k = 0; k <= max_line_search_steps; k++) {
-        trial.ydot = new_state.ydot + full_step * lambda;
-        trial.y = new_state.y + full_step * (y_coeff * lambda);
+        trial.ydot = new_state.ydot;
+        trial.y = new_state.y;
+        trial.ydot.head(num_equations) += full_step * lambda;
+        trial.y.head(num_equations) += full_step * (y_coeff * lambda);
         int trial_dof = 0;
         double trial_res = evaluate_residual(trial, old_state, trial_dof);
         double corr_norm =
@@ -181,9 +170,10 @@ State Integrator::step(const State& old_state, double time) {
         lambda *= 0.5;
       }
     } else {
-      // Update the solution
-      new_state.ydot += system.dydot;
-      new_state.y += system.dydot * y_coeff;
+      // Update the solution. Only the solved variables take part; the
+      // post-processing variables are filled in once the step is accepted.
+      new_state.ydot.head(num_equations) += system.dydot;
+      new_state.y.head(num_equations) += system.dydot * y_coeff;
     }
 
     // Count total number of nonlinear iterations
@@ -199,6 +189,9 @@ State Integrator::step(const State& old_state, double time) {
   if (record_history) {
     residual_history.push_back(std::move(history_this_step));
   }
+
+  // Fill the post-processing variables from the converged state
+  model->update_outputs(new_state.y);
 
   model->accept_timestep(new_state.y);
   return new_state;

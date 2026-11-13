@@ -30,23 +30,33 @@ class DOFHandler {
       variable_name_map;  ///< Map between variable name and index
   std::vector<std::string>
       equations;  ///< Equation names corresponding to the equation indices
-  std::vector<bool> equation_is_output;  ///< Marks equations that only define
-                                         ///< a diagnostic output and do not
-                                         ///< feed back into the physics
+  std::vector<std::string>
+      output_variables;  ///< Names of the post-processing variables, in the
+                         ///< order they occupy at the tail of the state
 
   /**
-   * @brief Get the size of the system
+   * @brief Get the length of the state vector
    *
-   * @return Size of the system
+   * This counts every variable, the post-processing variables included.
+   *
+   * @return Length of the state vector
    */
   int size() const;
 
   /**
-   * @brief Get the number of equations
+   * @brief Get the number of equations, which is the size of the non-linear
+   * system that is actually solved
    *
    * @return int Number of equations
    */
   int get_num_equations() const;
+
+  /**
+   * @brief Get the number of post-processing variables
+   *
+   * @return int Number of post-processing variables
+   */
+  int get_num_output_variables() const;
 
   /**
    * @brief Get the number of variables
@@ -64,6 +74,27 @@ class DOFHandler {
   int register_variable(const std::string& name);
 
   /**
+   * @brief Register a new post-processing variable at the DOFHandler.
+   *
+   * A post-processing variable is part of the state vector and is written to
+   * the output, but it has no equation: it does not appear in any residual,
+   * adds no row or column to the Jacobian and is never solved for. The block
+   * that owns it computes it from the converged solution in
+   * Block::update_outputs. Use this for anything that is reported but does
+   * not feed back into the physics, such as the open/closed state of a
+   * valve.
+   *
+   * Post-processing variables occupy the tail of the state vector, after
+   * every solved variable, which is what lets the solved system stay a
+   * leading square block. Model::finalize therefore registers them in a
+   * second pass, once every block has registered its solved variables.
+   *
+   * @param name Name of the variable
+   * @return Global index of the variable
+   */
+  int register_output_variable(const std::string& name);
+
+  /**
    * @brief Get the index of a variable by its name
    *
    * @param name Name of the variable
@@ -75,17 +106,9 @@ class DOFHandler {
    * @brief Register a new equation at the DOFHandler
    *
    * @param name Name of the equation
-   * @param is_output True if the equation only defines a diagnostic output.
-   * Such equations are assembled and solved like any other, but their
-   * residual does not take part in the convergence check of the non-linear
-   * iteration. This matters for outputs that are discontinuous functions of
-   * the solution, such as the open/closed state of an ideal valve: the
-   * indicator flips by one whenever the pressure difference across the valve
-   * changes sign, which would otherwise keep a converged time step from
-   * terminating.
    * @return Global index of the equation
    */
-  int register_equation(const std::string& name, bool is_output = false);
+  int register_equation(const std::string& name);
 
   /**
    * @brief Get the index of a variable

@@ -150,6 +150,8 @@ class Block {
    * Equation indices correspond to rows in the global system.
    */
   std::vector<int> global_eqn_ids;
+  std::list<std::string>
+      output_var_names;  ///< Post-processing variables declared by the block
 
   /**
    * @brief Get the name of the block
@@ -181,14 +183,29 @@ class Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    * @param num_equations Number of equations of the block
-   * @param internal_var_names Number of internal variables of the block
-   * @param num_output_equations Number of trailing equations that only
-   * define a diagnostic output, see DOFHandler::register_equation
+   * @param internal_var_names Names of the internal variables of the block
+   * @param output_var_names Names of the post-processing variables of the
+   * block, see DOFHandler::register_output_variable. They have no equation
+   * and are filled in \ref update_outputs; their indices are appended to
+   * \ref global_var_ids after the internal variables.
    */
 
   void setup_dofs_(DOFHandler& dofhandler, int num_equations,
                    const std::list<std::string>& internal_var_names,
-                   int num_output_equations = 0);
+                   const std::list<std::string>& output_var_names = {});
+
+  /**
+   * @brief Register the post-processing variables declared in \ref
+   * setup_dofs_
+   *
+   * Called by Model::finalize in a second pass, after every block has
+   * registered its solved variables, so that the post-processing variables
+   * end up at the tail of the state vector. Their indices are appended to
+   * \ref global_var_ids in the order they were declared.
+   *
+   * @param dofhandler Degree-of-freedom handler to register variables at
+   */
+  void setup_output_dofs_(DOFHandler& dofhandler);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -255,6 +272,19 @@ class Block {
    * @param y Current solution
    */
   virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+
+  /**
+   * @brief Compute the post-processing variables of the block
+   *
+   * Called once per accepted time step, after the non-linear solve has
+   * converged, for blocks that declared output variables in \ref
+   * setup_dofs_. Write each of them into \p y at its index in \ref
+   * global_var_ids. Because these variables are not integrated, the value
+   * written here is the one reported at the end of the step.
+   *
+   * @param y Accepted state vector, to write the output variables into
+   */
+  virtual void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Accept a converged time-step.

@@ -264,6 +264,13 @@ class Model {
   void accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
+   * @brief Compute the post-processing variables of all blocks.
+   *
+   * @param y Accepted state vector, to write the output variables into
+   */
+  void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+
+  /**
    * @brief Get persistent state payloads for all blocks (including internal).
    *
    * @return Per-block persistent states

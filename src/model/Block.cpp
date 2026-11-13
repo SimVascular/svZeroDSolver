@@ -19,7 +19,7 @@ void Block::setup_params_(const std::vector<int>& param_ids) {
 
 void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
                         const std::list<std::string>& internal_var_names,
-                        int num_output_equations) {
+                        const std::list<std::string>& output_var_names) {
   // Collect external DOFs from inlet nodes
   for (auto& inlet_node : inlet_nodes) {
     global_var_ids.push_back(inlet_node->pres_dof);
@@ -38,12 +38,13 @@ void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
         dofhandler.register_variable(int_name + ":" + this->get_name()));
   }
 
-  // Register equations of block. The last num_output_equations equations
-  // only define diagnostic outputs and do not gate the non-linear solve.
+  // Remember the post-processing variables; Model::finalize registers them
+  // in a second pass so that they land at the tail of the state vector.
+  this->output_var_names = output_var_names;
+
+  // Register equations of block
   for (int i = 0; i < num_equations; i++) {
-    bool is_output = i >= num_equations - num_output_equations;
-    global_eqn_ids.push_back(
-        dofhandler.register_equation(get_name(), is_output));
+    global_eqn_ids.push_back(dofhandler.register_equation(get_name()));
   }
 }
 
@@ -65,7 +66,16 @@ void Block::update_solution(
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {}
 
+void Block::setup_output_dofs_(DOFHandler& dofhandler) {
+  for (auto& name : output_var_names) {
+    global_var_ids.push_back(
+        dofhandler.register_output_variable(name + ":" + this->get_name()));
+  }
+}
+
 void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
+
+void Block::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
 
 void Block::accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
 

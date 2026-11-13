@@ -469,3 +469,11 @@ std::vector<int> Solver::get_step_residual_indices() const {
 std::vector<std::string> Solver::get_equation_names() const {
   return this->model->dofhandler.equations;
 }
+
+std::vector<std::string> Solver::get_variable_names() const {
+  return this->model->dofhandler.variables;
+}
+
+int Solver::get_num_output_variables() const {
+  return this->model->dofhandler.get_num_output_variables();
+}

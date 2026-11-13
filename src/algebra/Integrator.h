@@ -36,7 +36,8 @@ class Integrator {
   double atol{0.0};
   int max_iter{0};
   bool max_iter_error_to_warning{false};
-  int size{0};
+  int size{0};           ///< Length of the state vector
+  int num_equations{0};  ///< Size of the non-linear system that is solved
   int n_iter{0};
   int n_nonlin_iter{0};
   std::vector<int> iter_per_step;     ///< Newton iterations per time step
@@ -51,8 +52,6 @@ class Integrator {
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
   Model* model{nullptr};
-  std::vector<int> residual_check_dofs;  ///< Equations in the convergence
-                                         ///< check (all but pure outputs)
 
  public:
   /**

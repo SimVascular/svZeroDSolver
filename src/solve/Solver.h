@@ -139,6 +139,24 @@ class Solver {
   std::vector<std::string> get_equation_names() const;
 
   /**
+   * @brief Get the name of every variable of the state vector, in order
+   *
+   * The post-processing variables are the trailing ones, see
+   * DOFHandler::register_output_variable.
+   *
+   * @return std::vector<std::string> Variable names
+   */
+  std::vector<std::string> get_variable_names() const;
+
+  /**
+   * @brief Get the number of post-processing variables, which are part of
+   * the state vector but not of the solved system
+   *
+   * @return int Number of post-processing variables
+   */
+  int get_num_output_variables() const;
+
+  /**
    * @brief Get the time at the start of each integration step
    *
    * @return std::vector<double> Time per time step

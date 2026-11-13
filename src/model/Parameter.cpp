@@ -2,8 +2,34 @@
 // University of California, and others. SPDX-License-Identifier: BSD-3-Clause
 #include "Parameter.h"
 
+// Only scalar expressions of t are needed; disabling the rest of ExprTk
+// roughly halves the compile time and size of this file's object.
+#define exprtk_disable_string_capabilities
+#define exprtk_disable_rtl_io
+#define exprtk_disable_rtl_io_file
+#define exprtk_disable_rtl_vecops
+#define exprtk_disable_enhanced_features
+#define exprtk_disable_superscalar_unroll
+#include <exprtk.hpp>
+#include <sstream>
 #include <stdexcept>
 #include <string>
+
+/// Number of midpoint samples used to average an expression over one cardiac
+/// cycle when converting it to a steady value.
+constexpr int kNumSteadyMeanSamples = 1000;
+
+/// PIMPL implementation holding the exprtk expression state
+struct Parameter::ExprtkImpl {
+  exprtk::symbol_table<double>
+      symbol_table;  ///< Symbol table mapping 't' to current time
+  exprtk::expression<double> expression;  ///< Compiled expression object
+  double* time_value = nullptr;  ///< Pointer into the symbol table for 't'
+};
+
+Parameter::~Parameter() = default;
+Parameter::Parameter(Parameter&&) noexcept = default;
+Parameter& Parameter::operator=(Parameter&&) noexcept = default;
 
 namespace {
 // Checks that (xs, ys) form a valid piecewise-linear break point table for
@@ -47,7 +73,14 @@ Parameter::Parameter(int id, const std::vector<double>& times,
   update(times, values);
 }
 
+Parameter::Parameter(int id, const std::string& expression_string) {
+  this->id = id;
+  update(expression_string);
+}
+
 void Parameter::update(double update_value) {
+  is_function = false;
+  exprtk_impl_.reset();
   is_constant = true;
   is_periodic = true;
   value = update_value;
@@ -55,6 +88,8 @@ void Parameter::update(double update_value) {
 
 void Parameter::update(const std::vector<double>& update_times,
                        const std::vector<double>& update_values) {
+  is_function = false;
+  exprtk_impl_.reset();
   this->size = update_values.size();
 
   if (size == 1) {
@@ -68,10 +103,70 @@ void Parameter::update(const std::vector<double>& update_times,
   }
 }
 
+void Parameter::update(const std::string& update_string) {
+  auto impl = std::make_unique<ExprtkImpl>();
+  impl->symbol_table.create_variable("t");
+  impl->symbol_table.add_constants();  // pi, epsilon, inf
+  impl->time_value = &impl->symbol_table.get_variable("t")->ref();
+  impl->expression.register_symbol_table(impl->symbol_table);
+
+  // Reject loops, return statements, assignments and variable definitions:
+  // a boundary condition only needs a value of t, and a loop could hang the
+  // solver while assignments could silently modify t.
+  using settings_t = exprtk::parser<double>::settings_t;
+  settings_t settings;
+  settings.disable_control_structure(settings_t::e_ctrl_for_loop)
+      .disable_control_structure(settings_t::e_ctrl_while_loop)
+      .disable_control_structure(settings_t::e_ctrl_repeat_loop)
+      .disable_control_structure(settings_t::e_ctrl_return)
+      .disable_all_assignment_ops()
+      .disable_local_vardef();
+
+  exprtk::parser<double> parser(settings);
+  if (!parser.compile(update_string, impl->expression)) {
+    std::ostringstream msg;
+    msg << "could not compile expression \"" << update_string << "\"";
+    for (std::size_t i = 0; i < parser.error_count(); ++i) {
+      const auto error = parser.get_error(i);
+      msg << "; ";
+      // Errors that are not tied to a token report position npos
+      if (error.token.position != std::string::npos) {
+        msg << "at position " << error.token.position << ": ";
+      }
+      msg << error.diagnostic;
+    }
+    throw std::runtime_error(msg.str());
+  }
+
+  // Only modify this parameter once the expression is known to be valid.
+  exprtk_impl_ = std::move(impl);
+  expression_string = update_string;
+  is_function = true;
+  is_constant = false;
+}
+
 double Parameter::get(double time) {
   // Return the constant value if parameter is constant
   if (is_constant) {
     return value;
+  }
+
+  if (is_function) {
+    *exprtk_impl_->time_value = time;
+    const double result = exprtk_impl_->expression.value();
+    // JSON arrays cannot hold NaN or inf, but an expression can (e.g.
+    // sqrt(t - 1)); without this check the solver later fails with an
+    // unhelpful "System is singular".
+    if (!std::isfinite(result)) {
+      // Spelled out because std::to_string(NaN) is platform-dependent
+      // ("nan" or "-nan(ind)")
+      const std::string value =
+          std::isnan(result) ? "NaN" : (result > 0 ? "inf" : "-inf");
+      throw std::runtime_error("expression \"" + expression_string +
+                               "\" evaluates to " + value +
+                               " at t = " + std::to_string(time));
+    }
+    return result;
   }
 
   // Determine the time within this->times (necessary to extrapolate)
@@ -101,12 +196,21 @@ double Parameter::get(double time) {
          ((values[k] - values[m]) / (times[k] - times[m])) * (rtime - times[m]);
 }
 
-void Parameter::to_steady() {
+void Parameter::to_steady(double cardiac_cycle_period) {
   if (is_constant) {
     return;
   }
 
-  value = std::accumulate(values.begin(), values.end(), 0.0) / double(size);
+  if (is_function) {
+    // Midpoint-rule time average over one cardiac cycle
+    double sum = 0.0;
+    for (int i = 0; i < kNumSteadyMeanSamples; i++) {
+      sum += get((i + 0.5) * cardiac_cycle_period / kNumSteadyMeanSamples);
+    }
+    value = sum / kNumSteadyMeanSamples;
+  } else {
+    value = std::accumulate(values.begin(), values.end(), 0.0) / double(size);
+  }
   is_constant = true;
   steady_converted = true;
 }

@@ -80,6 +80,12 @@ set(HDRS
 
 add_library(${lib} OBJECT ${CXXSRCS} ${HDRS})
 
+# exprtk.hpp generates more COFF sections than the default MSVC object format
+# allows (error C1128), so the one file that includes it needs /bigobj.
+if(MSVC)
+  set_source_files_properties(Parameter.cpp PROPERTIES COMPILE_OPTIONS "/bigobj")
+endif()
+
 target_include_directories( ${lib} PUBLIC
   ${CMAKE_SOURCE_DIR}/src/algebra
   ${CMAKE_SOURCE_DIR}/src/model
@@ -88,3 +94,4 @@ target_include_directories( ${lib} PUBLIC
 
 target_link_libraries( ${lib} Eigen3::Eigen )
 target_link_libraries( ${lib} nlohmann_json::nlohmann_json )
+target_link_libraries( ${lib} exprtk::exprtk )

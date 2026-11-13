@@ -1,0 +1,40 @@
+All other passive cases fix the length (0D \texttt{fixed\_length = 1}). The 0D default,
+\texttt{fixed\_length = 0}, closes the tube with lids that carry the cavity pressure and
+leaves the axial strain $\varepsilon$ free (genet23 Eqs.~39--44): the wall carries the
+axial force $P\pi r_i^2$ and $V = \pi r_i^2 (1+\varepsilon) L$. The free-length cases
+repeat the three walls of this section in this setting.
+
+\paragraph{3D model.} svMultiPhysics' cap surfaces (\texttt{Chamber\_cap\_surface}) close
+the cavity for the flux but carry no pressure, so the 3D tube is closed by a meshed end
+plate. The eighth model then reaches from the mid-length plane ($Z = 0$, $u_z = 0$) to
+$Z = L/2$ and continues into a plate of the wall thickness $H = R_e - R_i$ (an isotropic
+neo-Hookean domain with the small-strain shear and bulk moduli of the wall). The follower
+cavity pressure acts on the endocardium and on the inner face of the plate, and nothing
+holds the length: by equilibrium the wall carries the axial force of the 0D lids without
+any 0D data in the 3D model.
+
+\paragraph{End layer and tube length.} The plate holds the end ring in: at the plate the
+endocardial $\rho$ is 80\% below the 0D value. This end layer decays along the tube with
+an oscillation (Figure~\ref{fig:closed-end}). In the isotropic wall at nr = 4 the
+deviation of $\rho$ falls to 7\% at $2H$ from the plate and 0.5\% at $3H$, and reaches the
+discretization level ($1\cdot10^{-3}$) at about $6H$. The axial strain, relative to its
+small value (0.5\% at 120~mmHg), is still 9\% off at $3$--$4H$ and within 1\% from
+$6H$ on. The test-case tube ($L_0 = 4.1H$) would place the mid-length plane inside this
+layer, so the free-length tube is six times as long in both models
+($6L_0 = 343$~mm, $12.3H$ from the plate to the mid-length plane, initial volume
+$6V_0$); the tube-length study (Section~\ref{sec:closed-length}) confirms this. The mid-length plane is compared: the
+first element layer, $\varepsilon$ from a fit of $u_z$, and
+$V = \pi(R_i + \rho(R_i))^2 (1+\varepsilon) L$ as in the 0D model.
+
+\paragraph{Results.} All quantities converge to the 0D block. At nr = 4 the radial
+displacement agrees to $7.5\cdot10^{-4}$ (isotropic) and $9.1\cdot10^{-4}$ (one fiber
+family), the axial strain to $3.9\cdot10^{-3}$ and $1.0\cdot10^{-3}$, at orders 2.4--2.6;
+the full Holzapfel-Ogden wall at nr = 8 to $8.6\cdot10^{-5}$ in $\rho$ and $3.0\cdot10^{-5}$ in $\varepsilon$
+(orders 2.6 and 3.6). The $\rho$ differences are 1.6--2.1 times those of the fixed-length tubes at the
+same nr. The volume comes from $\rho(R_i)$ here, not from the lumen surface, so it
+converges at the order of $\rho$ (2.5--2.8) instead of 3.5. Inside the tube, 8--$10H$ from
+the plate, the differences are smaller than at the mid-length plane (isotropic, nr = 4:
+$\rho$ $1.0\cdot10^{-3}$ against $1.2\cdot10^{-3}$ at the endocardial node, $\varepsilon$
+$2$--$7\cdot10^{-4}$ against $3.9\cdot10^{-3}$): the symmetry plane, where every node keeps
+$u_z = 0$, carries a larger discretization error, so the comparison there is
+conservative. Strains and stresses converge at 1.6--2.3, as with fixed length.

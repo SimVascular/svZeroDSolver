@@ -224,6 +224,118 @@ def mesh_cylinder(Ri, Re, L, nr, sector=90.0, order=2, ntheta=None, nz=None):
                 nr=nr, ntheta=nt, nz=nz, sector=sector)
 
 
+def mesh_closed_cylinder(Ri, Re, Lm, nr, plate, order=2, ntheta=None, nz=None, nz_plate=None,
+                         n_in=None):
+    """Structured tetrahedral mesh of a 90-degree sector of a tube closed at one
+    end: the wall Ri <= R <= Re, 0 <= Z <= Lm (Z = 0 is the mid-length plane)
+    and an end plate 0 <= R <= Re, Lm <= Z <= Lm + plate.
+
+    The grid of mesh_cylinder is continued through the plate and inward to the
+    axis (n_in elements over 0 <= R < Ri); the hexahedra at the axis collapse
+    to wedges, of which the three non-degenerate tetrahedra remain. Cells of
+    the wall have domain 1, cells of the plate domain 2. Boundary faces: endo
+    (R = Ri), cap (the plate's inner face Z = Lm, R < Ri; both carry the
+    cavity pressure), epi (R = Re), base (Z = 0), top (the plate's outer
+    face) and the symmetry planes y0, x0.
+    """
+    h = (Re - Ri) / nr
+    th = 0.5 * math.pi
+    nt = ntheta or max(1, math.ceil(th * 0.5 * (Ri + Re) / h))
+    nz = nz or max(1, math.ceil(Lm / h))
+    nzp = nz_plate or max(1, math.ceil(plate / h))
+    n_in = n_in or max(1, math.ceil(Ri / h))
+    s = 2 if order == 2 else 1
+    I_ax = -s * n_in  # fine radial index of the axis
+
+    def radius(I):
+        return Ri + (Re - Ri) * I / (s * nr) if I >= 0 else Ri * (1.0 + I / (s * n_in))
+
+    def zcoord(K):
+        return Lm * K / (s * nz) if K <= s * nz else Lm + plate * (K - s * nz) / (s * nzp)
+
+    index, points = {}, []
+
+    def node(I, J, K):  # fine-grid indices; all J coincide on the axis
+        key = (I, 0 if I == I_ax else J, K)
+        if key not in index:
+            R, t = radius(I), th * key[1] / (s * nt)
+            index[key] = len(points)
+            points.append((R * math.cos(t), R * math.sin(t), zcoord(K)))
+        return index[key]
+
+    def mid(a, b):  # mid-edge node; an edge to the axis is radial at the other end's theta
+        if a[0] == -n_in and b[0] != -n_in:
+            a, b = b, a
+        J = s * a[1] if b[0] == -n_in else a[1] + b[1]
+        return node(a[0] + b[0], J, a[2] + b[2])
+
+    cells, corner_ids, domains = [], [], []
+    for i, j, k in itertools.product(range(-n_in, nr), range(nt), range(nz + nzp)):
+        if i < 0 and k < nz:  # cavity
+            continue
+        for tet in _KUHN:
+            c = [(i + a, j + b, k + d) for a, b, d in tet]
+            if i == -n_in and any(c[p][0] == c[q][0] == -n_in and c[p][2] == c[q][2]
+                                  for p, q in itertools.combinations(range(4), 2)):
+                continue  # two corners on the same point of the axis
+            ids = [node(s * ci, s * cj, s * ck) for ci, cj, ck in c]
+            x = [np.array(points[n]) for n in ids]
+            vol = np.dot(np.cross(x[1] - x[0], x[2] - x[0]), x[3] - x[0])
+            if vol < 0.0:
+                c[1], c[2], ids[1], ids[2] = c[2], c[1], ids[2], ids[1]
+            if abs(vol) < 1e-12 * h ** 3:
+                raise RuntimeError(f"degenerate tetrahedron in hexahedron {(i, j, k)}")
+            conn = list(ids)
+            if order == 2:
+                conn += [mid(c[a], c[b]) for a, b in _TET_EDGES]
+            cells.append(conn)
+            corner_ids.append(ids)
+            domains.append(1 if k < nz else 2)
+
+    pts = np.array(points)
+    cells = np.array(cells)
+    count = {}
+    for e, ids in enumerate(corner_ids):
+        for f in _TET_FACES:
+            count.setdefault(tuple(sorted(ids[a] for a in f)), []).append((e, f))
+
+    tol = 1e-9 * Re
+    Ztop = Lm + plate
+
+    def classify(x):
+        r = np.hypot(x[:, 0], x[:, 1])
+        for name, ok in (("y0", np.abs(x[:, 1]) < tol), ("x0", np.abs(x[:, 0]) < tol),
+                         ("base", np.abs(x[:, 2]) < tol), ("top", np.abs(x[:, 2] - Ztop) < tol),
+                         ("epi", np.abs(r - Re) < tol),
+                         ("endo", (np.abs(r - Ri) < tol) & (x[:, 2] < Lm + tol)),
+                         ("cap", (np.abs(x[:, 2] - Lm) < tol) & (r < Ri + tol))):
+            if np.all(ok):
+                return name
+        raise RuntimeError(f"unclassified boundary face {x.tolist()}")
+
+    faces = {}
+    for key, owners in count.items():
+        if len(owners) != 1:
+            continue
+        e, f = owners[0]
+        loc = list(f)
+        opp = ({0, 1, 2, 3} - set(f)).pop()
+        x = pts[cells[e][loc]]
+        if np.dot(np.cross(x[1] - x[0], x[2] - x[0]), pts[cells[e][opp]] - x[0]) > 0.0:
+            loc[1], loc[2] = loc[2], loc[1]
+        conn = [cells[e][a] for a in loc]
+        if order == 2:
+            conn += [cells[e][4 + _TET_EDGES.index(tuple(sorted((loc[a], loc[b]))))]
+                     for a, b in _TRI_EDGES]
+        name = classify(pts[conn[:3]])
+        faces.setdefault(name, ([], []))
+        faces[name][0].append(conn)
+        faces[name][1].append(e)
+    faces = {n: (np.array(c), np.array(p)) for n, (c, p) in faces.items()}
+    return dict(points=pts, cells=cells, faces=faces, order=order, nr=nr, ntheta=nt, nz=nz,
+                sector=90.0, domains=np.array(domains), plate=plate, nz_plate=nzp, n_in=n_in)
+
+
 # --------------------------------------------------------------------------- #
 #  VTK XML (ASCII) writers
 # --------------------------------------------------------------------------- #
@@ -284,10 +396,12 @@ def write_mesh(mesh, folder):
     pts, cells = mesh["points"], mesh["cells"]
     quad = mesh["order"] == 2
     gid = np.arange(1, len(pts) + 1)
+    cdata = {"GlobalElementID": (np.arange(1, len(cells) + 1), "Int32"),
+             "ModelRegionID": (np.ones(len(cells), int), "Int32")}
+    if "domains" in mesh:  # svMultiPhysics Domain_file_path reads DOMAIN_ID
+        cdata["DOMAIN_ID"] = (mesh["domains"], "Int32")
     write_vtu(os.path.join(folder, "mesh-complete.mesh.vtu"), pts, cells, 24 if quad else 10,
-              {"GlobalNodeID": (gid, "Int32")},
-              {"GlobalElementID": (np.arange(1, len(cells) + 1), "Int32"),
-               "ModelRegionID": (np.ones(len(cells), int), "Int32")})
+              {"GlobalNodeID": (gid, "Int32")}, cdata)
     ext = face_extension(mesh["order"])
     for fid, (name, (conn, parent)) in enumerate(sorted(mesh["faces"].items()), start=1):
         used = np.unique(conn)
@@ -387,6 +501,27 @@ def solver_xml(case):
                   "         <Ramp> false </Ramp>\n"
                   f"         <Temporal_values_file_path> {case['active_tension_file']} "
                   "</Temporal_values_file_path>\n      </UniformUnsteady>\n   </Active_stress>\n")
+    plate = case.get("plate", 0.0) > 0.0
+    material = (f"   <Density> {case['density']:.17g} </Density>\n"
+                f"   <Elasticity_modulus> {E:.17g} </Elasticity_modulus>\n"
+                f"   <Poisson_ratio> {nu} </Poisson_ratio>\n{model}{vol}{active}")
+    domain_file = ""
+    if plate:  # wall (domain 1) and an isotropic end plate (domain 2)
+        if active or case.get("coupling"):
+            raise ValueError("the closed end is implemented for passive inflation only")
+        pm = case["plate_material"]
+        nu_p = (3.0 * pm["kappa"] - 2.0 * pm["mu"]) / (2.0 * (3.0 * pm["kappa"] + pm["mu"]))
+        indent = lambda s: "".join("   " + ln + "\n" for ln in s.splitlines())  # noqa: E731
+        material = ('   <Domain id="1" >\n' + indent(material) + "   </Domain>\n"
+                    '   <Domain id="2" >\n'
+                    f"      <Density> {case['density']:.17g} </Density>\n"
+                    f"      <Elasticity_modulus> {2.0 * pm['mu'] * (1.0 + nu_p):.17g} </Elasticity_modulus>\n"
+                    f"      <Poisson_ratio> {nu_p} </Poisson_ratio>\n"
+                    '      <Constitutive_model type="neoHookean"> </Constitutive_model>\n'
+                    "      <Dilational_penalty_model> ST91 </Dilational_penalty_model>\n"
+                    f"      <Penalty_parameter> {pm['kappa']:.17g} </Penalty_parameter>\n"
+                    "   </Domain>\n")
+        domain_file = "  <Domain_file_path> mesh/mesh-complete.mesh.vtu </Domain_file_path>\n"
     cp = case.get("coupling")
     if cp:  # cavity pressure from svZeroDSolver, flow of the endo face to it
         endo = ("   <Add_BC name=\"endo\" >\n      <Type> Neu </Type>\n"
@@ -408,21 +543,23 @@ def solver_xml(case):
                      "      <Finite_difference_relative_perturbation> 1e-8 "
                      "</Finite_difference_relative_perturbation>\n"
                      "   </svZeroDSolver_interface>\n")
-    else:
-        endo = ("   <Add_BC name=\"endo\" >\n      <Type> Neu </Type>\n"
-                "      <Time_dependence> Unsteady </Time_dependence>\n"
-                "      <Temporal_values_file_path> endo_pressure.dat </Temporal_values_file_path>\n"
-                "      <Ramp_function> true </Ramp_function>\n"
-                "      <Follower_pressure_load> true </Follower_pressure_load>\n   </Add_BC>\n")
+    else:  # the closed end's plate carries the cavity pressure on its inner face
+        endo = "".join(f"   <Add_BC name=\"{n}\" >\n      <Type> Neu </Type>\n"
+                       "      <Time_dependence> Unsteady </Time_dependence>\n"
+                       "      <Temporal_values_file_path> endo_pressure.dat </Temporal_values_file_path>\n"
+                       "      <Ramp_function> true </Ramp_function>\n"
+                       "      <Follower_pressure_load> true </Follower_pressure_load>\n   </Add_BC>\n"
+                       for n in (("endo", "cap") if plate else ("endo",)))
         interface = ""
-    bcs = dirichlet("base", "(0, 0, 1)") + dirichlet("top", "(0, 0, 1)")
+    # u_z = 0 on the mid-length plane (base) and, with fixed length, on the end
+    bcs = dirichlet("base", "(0, 0, 1)") + ("" if plate else dirichlet("top", "(0, 0, 1)"))
     if "y0" in case["faces"]:  # symmetry planes of the sector
         bcs += dirichlet("y0", "(0, 1, 0)") + dirichlet("x0", "(1, 0, 0)")
     if case.get("end_damping", 0.0) > 0.0:  # full cylinder: in-plane dashpots on both ends
         bcs += "".join(f'   <Add_BC name="{n}" >\n      <Type> Robin </Type>\n'
                        "      <Stiffness> 0.0 </Stiffness>\n"
                        f"      <Damping> {case['end_damping']:.6g} </Damping>\n   </Add_BC>\n"
-                       for n in ("base", "top"))
+                       for n in case.get("dashpot_faces", ("base", "top")))
     if case.get("robin_stiffness", 0.0) > 0.0:
         bcs += (f'   <Add_BC name="epi" >\n      <Type> Robin </Type>\n'
                 f"      <Stiffness> {case['robin_stiffness']:.6g} </Stiffness>\n"
@@ -443,7 +580,8 @@ def solver_xml(case):
   <Save_results_in_folder> results </Save_results_in_folder>
   <Increment_in_saving_VTK_files> 1 </Increment_in_saving_VTK_files>
   <Start_saving_after_time_step> 1 </Start_saving_after_time_step>
-  <Increment_in_saving_restart_files> {case['n_steps']} </Increment_in_saving_restart_files>
+  <Increment_in_saving_restart_files> 1 </Increment_in_saving_restart_files>
+  <Overwrite_restart_file> true </Overwrite_restart_file>
   <Convert_BIN_to_VTK_format> 0 </Convert_BIN_to_VTK_format>
   <Verbose> 1 </Verbose>
   <Warning> 1 </Warning>
@@ -452,7 +590,7 @@ def solver_xml(case):
 
 <Add_mesh name="msh" >
   <Mesh_file_path> mesh/mesh-complete.mesh.vtu </Mesh_file_path>
-{faces}  <Mesh_scale_factor> 1.0 </Mesh_scale_factor>
+{faces}{domain_file}  <Mesh_scale_factor> 1.0 </Mesh_scale_factor>
 </Add_mesh>
 
 <Add_equation type="{eq}" >
@@ -461,10 +599,7 @@ def solver_xml(case):
    <Max_iterations> 20 </Max_iterations>
    <Tolerance> {case['newton_tol']:.3g} </Tolerance>
 {extra}
-   <Density> {case['density']:.17g} </Density>
-   <Elasticity_modulus> {E:.17g} </Elasticity_modulus>
-   <Poisson_ratio> {nu} </Poisson_ratio>
-{model}{vol}{active}
+{material}
    <Output type="Spatial" >
      <Displacement> true </Displacement>
 {out}   </Output>
@@ -487,7 +622,8 @@ def solver_xml(case):
 
 def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, ntheta=None,
              nz=None, n_steps=20, density=1.0, newton_tol=1e-10, linear_solver=None,
-             robin_factor=0.0, half_length=False, fiber_location="points", end_damping=1e-3):
+             robin_factor=0.0, half_length=False, fiber_location="points", end_damping=1e-3,
+             dashpot_faces=("base", "top"), closed_end=False, plate_factor=1.0):
     """Write the svMultiPhysics case of a ChamberCylinder 0D input.
 
     half_length meshes 0 <= Z <= L/2 with u_z = 0 on Z = L/2, the mid-length
@@ -496,12 +632,23 @@ def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, nthet
     fiber directions, "cells" one direction per element. The full cylinder
     gets in-plane dashpots on both ends against its rigid-body modes, with
     damping end_damping * mu / Re * dt: a spring of end_damping * mu / Re
-    within a load step, no force at rest. robin_factor > 0 adds an epicardial
-    spring of stiffness robin_factor * mu / Re.
+    within a load step, no force at rest (dashpot_faces: the faces that carry
+    them). robin_factor > 0 adds an epicardial spring of stiffness
+    robin_factor * mu / Re.
+
+    closed_end (0D fixed_length = 0, the pressure-loaded lids): the eighth
+    model of the tube, 0 <= Z <= L/2 with the mid-length plane at Z = 0,
+    closed at Z = L/2 by an isotropic plate of thickness plate_factor (Re -
+    Ri) (neo-Hookean with the small-strain shear and bulk moduli of the
+    wall) whose inner face carries the cavity pressure. The length is free:
+    by equilibrium the wall then carries the axial force P pi r_i^2 of the 0D
+    lids away from the plate, and the mid-length section is compared.
     """
     m0 = read_0d(model_0d)
     v = m0["values"]
-    if float(v.get("fixed_length", 0.0)) != 1.0:
+    if closed_end and float(v.get("fixed_length", 0.0)) != 0.0:
+        raise ValueError("a closed end loads the wall axially: set fixed_length = 0 in the 0D input")
+    if not closed_end and float(v.get("fixed_length", 0.0)) != 1.0:
         raise ValueError("the 3D model has fixed-length ends: set fixed_length = 1 in the 0D input")
     T, Pmax = pressure_ramp(m0["t"], m0["P"])
     mat = material(v)
@@ -513,15 +660,25 @@ def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, nthet
         raise ValueError("helical fibers break the mirror symmetry: use sector = 360")
     if not symmetric and half_length:
         raise ValueError("helical fibers: the mid-length plane would be a slip end, mesh the full length")
+    if closed_end and not (symmetric and sector == 90.0):
+        raise ValueError("the closed end is implemented for the eighth model (no helical fibers)")
     fm = FORMULATIONS[formulation]
-    Lm = 0.5 * v["length"] if half_length else v["length"]
-    mesh = mesh_cylinder(v["Ri"], v["Re"], Lm, nr, sector, fm["order"], ntheta, nz)
+    Lm = 0.5 * v["length"] if half_length or closed_end else v["length"]
+    if closed_end:
+        plate = plate_factor * (v["Re"] - v["Ri"])
+        mesh = mesh_closed_cylinder(v["Ri"], v["Re"], Lm, nr, plate, fm["order"], ntheta, nz)
+    else:
+        mesh = mesh_cylinder(v["Ri"], v["Re"], Lm, nr, sector, fm["order"], ntheta, nz)
     write_mesh(mesh, os.path.join(case_dir, "mesh"))
     fiber_files = []
     if fibers:
         from cylinder_fibers import cylinder_fibers, write_fibers
-        fib = cylinder_fibers(mesh["points"], mesh["cells"], v["Ri"], v["Re"],
-                              mat["alpha_endo"], mat["alpha_epi"], fiber_location)
+        with np.errstate(invalid="ignore", divide="ignore"):  # the plate's axis nodes
+            fib = cylinder_fibers(mesh["points"], mesh["cells"], v["Ri"], v["Re"],
+                                  mat["alpha_endo"], mat["alpha_epi"], fiber_location)
+        for k, e in (("fiber", 0), ("sheet", 1), ("normal", 2)):  # unused: isotropic plate
+            bad = ~np.all(np.isfinite(fib[k]), axis=1)
+            fib[k][bad] = np.eye(3)[e]
         paths = write_fibers(os.path.join(case_dir, "mesh"), mesh["points"], mesh["cells"],
                              24 if fm["order"] == 2 else 10, fib, fiber_location)
         fiber_files = [os.path.relpath(p, case_dir) for p in paths[:2]]  # fiber, sheet
@@ -541,6 +698,11 @@ def generate(model_0d, case_dir, nr, formulation="struct-p2", sector=None, nthet
                 robin_stiffness=robin_factor * mat["mu"] / v["Re"] if sector == 360.0 else 0.0,
                 **({"end_damping": end_damping * mat["mu"] / v["Re"] * T / n_steps}
                    if sector == 360.0 else {}),
+                **({"dashpot_faces": list(dashpot_faces)}
+                   if sector == 360.0 and tuple(dashpot_faces) != ("base", "top") else {}),
+                **(dict(plate=mesh["plate"], nz_plate=mesh["nz_plate"], n_in=mesh["n_in"],
+                        plate_material=dict(mu=mat["mu"], kappa=mat["kappa"]))
+                   if closed_end else {}),
                 formulation=formulation, order=fm["order"], sector=sector, nr=nr,
                 ntheta=mesh["ntheta"], nz=mesh["nz"], n_nodes=len(mesh["points"]),
                 n_cells=len(mesh["cells"]), faces=sorted(mesh["faces"]),
@@ -604,14 +766,16 @@ def run(case_dir, np_=1, exe=None, image=IMAGE, platform="linux/amd64", max_time
                 "-e", "OMPI_ALLOW_RUN_AS_ROOT=1", "-e", "OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1",
                 "-v", f"{case_dir}:/case", "-w", "/case"]
                + [a for h, c in (mounts or {}).items() for a in ("-v", f"{h}:{c}")] + [image]
-               + (mpi[:1] + ["--allow-run-as-root"] + mpi[1:] if mpi else []) + [EXE_IN_IMAGE, "solver.xml"])
+               + (mpi[:1] + ["--allow-run-as-root"] + mpi[1:] if mpi else [])
+               + [EXE_IN_IMAGE, "solver.xml"])
     tic = time.time()
     proc = subprocess.Popen(cmd, cwd=case_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                             text=True, env=env, bufsize=1)
     lines = queue.Queue()
     threading.Thread(target=lambda: [lines.put(ln) for ln in proc.stdout] + [lines.put(None)],
                      daemon=True).start()
-    reason, tail, its = None, [], 0
+    check = LogChecker(case, max_residual, echo, echo_every)
+    reason = None
     with open(os.path.join(case_dir, "svmultiphysics.log"), "w") as log:
         while reason is None:
             try:
@@ -622,23 +786,7 @@ def run(case_dir, np_=1, exe=None, image=IMAGE, platform="linux/amd64", max_time
                 break
             log.write(line)
             log.flush()
-            tail = (tail + [line.rstrip()])[-8:]
-            m = _NEWTON_ROW.match(line)
-            if m:
-                its += 1
-                nums = re.findall(r"\d\.\d+e[+-]\d+|nan", line)
-                res = float(nums[1]) if len(nums) > 1 else float("nan")  # Ri/R1 (step)
-                res0 = float(nums[2]) if len(nums) > 2 else res  # Ri/R0 (first step)
-                step = int(m.group(1))
-                if not math.isfinite(res) or res > max_residual:
-                    reason = f"time step {step}, Newton iteration {m.group(2)}: residual {res:.1e}"
-                elif m.group(3):  # last iteration of the time step
-                    if min(res, res0) > 100.0 * case["newton_tol"]:
-                        reason = f"time step {step}: Newton stopped at residual {res:.1e}"
-                    elif echo and (step % echo_every == 0 or step == case["n_steps"]):
-                        print(f"    step {step:4d}/{case['n_steps']}: {its:2d} Newton its, "
-                              f"residual {res:.1e}, {time.time() - tic:7.1f} s", flush=True)
-                    its = 0
+            reason = check(line)
             if max_time and time.time() - tic > max_time:
                 reason = f"time limit of {max_time:.0f} s reached"
     if reason is not None:  # stop the solver
@@ -649,8 +797,47 @@ def run(case_dir, np_=1, exe=None, image=IMAGE, platform="linux/amd64", max_time
     if reason is None and rc != 0:
         reason = f"svMultiPhysics exited with code {rc}"
     if reason is not None:
-        raise SolverFailure(f"{case_dir}: {reason}\n" + "\n".join(tail))
+        raise SolverFailure(f"{case_dir}: {reason}\n" + "\n".join(check.tail))
     return time.time() - tic
+
+
+class LogChecker:
+    """Line-by-line check of the svMultiPhysics output (see `run`): returns a
+    failure reason for a Newton iteration with NaN or a relative residual above
+    max_residual, or a time step that ends above 100x the Newton tolerance;
+    with echo, prints one progress line per echo_every time steps. With
+    strict=False a time step that ends above the tolerance is not a failure
+    (svMultiPhysics goes on); it is listed in `unconverged` instead."""
+
+    def __init__(self, case, max_residual=1e6, echo=True, echo_every=1, strict=True):
+        self.case, self.max_residual = case, max_residual
+        self.echo, self.echo_every, self.strict = echo, echo_every, strict
+        self.tail, self.its, self.step, self.tic = [], 0, 0, time.time()
+        self.unconverged = []  # (time step, final residual), strict=False
+
+    def __call__(self, line):
+        self.tail = (self.tail + [line.rstrip()])[-8:]
+        m = _NEWTON_ROW.match(line)
+        if not m:
+            return None
+        self.its += 1
+        nums = re.findall(r"\d\.\d+e[+-]\d+|nan", line)
+        res = float(nums[1]) if len(nums) > 1 else float("nan")  # Ri/R1 (step)
+        res0 = float(nums[2]) if len(nums) > 2 else res  # Ri/R0 (first step)
+        step = self.step = int(m.group(1))
+        if not math.isfinite(res) or res > self.max_residual:
+            return f"time step {step}, Newton iteration {m.group(2)}: residual {res:.1e}"
+        if m.group(3):  # last iteration of the time step
+            if min(res, res0) > 100.0 * self.case["newton_tol"]:
+                if self.strict:
+                    return f"time step {step}: Newton stopped at residual {res:.1e}"
+                self.unconverged.append((step, min(res, res0)))
+            n = self.case["n_steps"]
+            if self.echo and (step % self.echo_every == 0 or step == n):
+                print(f"    step {step:4d}/{n}: {self.its:2d} Newton its, residual {res:.1e}, "
+                      f"{time.time() - self.tic:7.1f} s", flush=True)
+            self.its = 0
+        return None
 
 
 # --------------------------------------------------------------------------- #
@@ -754,15 +941,25 @@ def kinematics(X, x, levels, z0=None, dz=None):
     coef, *_ = np.linalg.lstsq(A, dth[use], rcond=None)
     mean = lambda f: np.bincount(lev, f[use]) / np.bincount(lev)  # noqa: E731
     rho_k = mean(rho)
+    # axial strain: u_z = eps (Z - z0) + offset per level (eps = 0 for fixed length)
+    B = np.zeros((use.sum(), 1 + nlev))
+    B[:, 0] = Z[use] - (z0 or 0.0)
+    B[np.arange(use.sum()), 1 + lev] = 1.0
+    eps = np.linalg.lstsq(B, uz[use], rcond=None)[0][0]
     return dict(beta=float(coef[0]), rho=rho_k, phi=coef[nc:] - coef[nc],
-                eta=mean(uz) - mean(uz)[0],
+                eta=mean(uz) - mean(uz)[0], eps=float(eps),
                 rho_spread=float(np.max(np.abs(rho[use] - rho_k[lev]))))
 
 
 def cylinder_fibers_at_nodes(X, Ri, Re, alpha_endo, alpha_epi):
-    """Reference fiber and sheet (e_R) directions at the nodes (0D convention)."""
+    """Reference fiber and sheet (e_R) directions at the nodes (0D convention);
+    unit Cartesian vectors on the axis (closed end), where they are undefined."""
     from cylinder_fibers import cylinder_fibers
-    return cylinder_fibers(X, None, Ri, Re, alpha_endo, alpha_epi, "points")
+    with np.errstate(invalid="ignore", divide="ignore"):
+        fib = cylinder_fibers(X, None, Ri, Re, alpha_endo, alpha_epi, "points")
+    for k, e in (("fiber", 0), ("sheet", 1), ("normal", 2)):
+        fib[k][~np.all(np.isfinite(fib[k]), axis=1)] = np.eye(3)[e]
+    return fib
 
 
 def _tet_shape_derivatives(order):
@@ -829,8 +1026,11 @@ def struct_fields(X, cells, u, order, material, fiber, sheet):
 
 def _cylindrical(T, pts):
     """Components (rr, tt, zz, rt, tz, zr) of tensors T in the local
-    (e_r, e_theta, e_z) basis at the points pts."""
+    (e_r, e_theta, e_z) basis at the points pts (Cartesian on the axis)."""
     r = np.hypot(pts[:, 0], pts[:, 1])
+    axis = r == 0.0
+    pts = pts.copy()
+    pts[axis, 0], r = 1.0, np.where(axis, 1.0, r)
     Q = np.zeros((len(pts), 3, 3))
     Q[:, 0, :2] = pts[:, :2] / r[:, None]
     Q[:, 1, 0], Q[:, 1, 1] = -pts[:, 1] / r, pts[:, 0] / r
@@ -896,8 +1096,14 @@ def post(case_dir, fields=True, mid_section=False):
     with open(os.path.join(case_dir, "case.json")) as f:
         case = json.load(f)
     Lm = case.get("mesh_length", case["length"])
-    mesh = mesh_cylinder(case["Ri"], case["Re"], Lm, case["nr"], case["sector"],
-                         case["order"], case["ntheta"], case["nz"])
+    closed = case.get("plate", 0.0) > 0.0
+    if closed:
+        mesh = mesh_closed_cylinder(case["Ri"], case["Re"], Lm, case["nr"], case["plate"],
+                                    case["order"], case["ntheta"], case["nz"], case["nz_plate"],
+                                    case["n_in"])
+    else:
+        mesh = mesh_cylinder(case["Ri"], case["Re"], Lm, case["nr"], case["sector"],
+                             case["order"], case["ntheta"], case["nz"])
     X = mesh["points"]
     vol = lambda x: lumen_volume(x, conn, case["sector"]) * case["length"] / Lm  # noqa: E731
     conn = mesh["faces"]["endo"][0]
@@ -908,13 +1114,18 @@ def post(case_dir, fields=True, mid_section=False):
     if not files:
         raise FileNotFoundError(f"no results in {case_dir}/results")
     section, use = {}, None
-    if mid_section:
+    if closed:  # the element layer at the mid-length plane Z = 0
+        mid_section = True
+        section = dict(z0=0.0, dz=Lm / case["nz"])
+    elif mid_section:
         section = dict(z0=0.5 * Lm, dz=0.5 * Lm / case["nz"])
+    if mid_section:  # V of the 0D: pi (Ri + rho(Ri))^2 (1 + eps) L
         use = np.abs(X[:, 2] - section["z0"]) <= section["dz"] * (1.0 + 1e-9)
-        vol = lambda x, rho_endo: math.pi * (case["Ri"] + rho_endo) ** 2 * case["length"]  # noqa: E731
+        vol = lambda x, rho_endo, eps=0.0: (  # noqa: E731
+            math.pi * (case["Ri"] + rho_endo) ** 2 * (1.0 + eps) * case["length"])
     out = dict(R=(case["Ri"] + dR * np.arange(levels.max() + 1)).tolist(), t=[0.0], P=[0.0],
-               V=[vol(X, 0.0) if mid_section else vol(X)], beta=[0.0], rho_spread=[0.0],
-               section="mid-length" if mid_section else "all")
+               V=[vol(X, 0.0) if mid_section else vol(X)], beta=[0.0], eps=[0.0],
+               rho_spread=[0.0], section="mid-length" if mid_section else "all")
     zero = [0.0] * (levels.max() + 1)
     out.update(rho=[zero], phi=[zero], eta=[zero])
     if fields:
@@ -940,8 +1151,9 @@ def post(case_dir, fields=True, mid_section=False):
         k = kinematics(X, x, levels, **section)
         out["t"].append(t)
         out["P"].append(case["P_max"] * min(t / case["T_ramp"], 1.0))
-        out["V"].append(vol(x, k["rho"][0]) if mid_section else vol(x))
-        for key in ("beta", "rho_spread"):
+        out["V"].append(vol(x, k["rho"][0], k["eps"] if closed else 0.0) if mid_section
+                        else vol(x))
+        for key in ("beta", "eps", "rho_spread"):
             out[key].append(k[key])
         for key in ("rho", "phi", "eta"):
             out[key].append(k[key].tolist())

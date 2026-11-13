@@ -14,6 +14,7 @@ pressure ramp the kinematic quantities of the 0D block:
   beta    twist per unit length                relative to max |beta_ref|
   phi     transmural rotation phi(R)-phi(Ri)   relative to the twist max |beta_ref| L
   eta     axial displacement eta(R)-eta(Ri)    relative to max |rho_ref|
+  eps     axial strain (free length)           relative to max |eps_ref|
 
 The profiles are compared at the radial node levels of the 3D mesh, which are
 nodes of the 0D reference. The reference is the Richardson extrapolation of the
@@ -69,7 +70,8 @@ PROFILES = ("rho", "phi", "eta")
 QUANTITIES = [  # key, label, plot marker
     ("V", "volume", "s-"), ("rho", "radial displacement", "o-"),
     ("h", "wall-thickness change", "D-"), ("beta", "twist", "^-"),
-    ("phi", "transmural rotation", "v-"), ("eta", "axial displacement", "x-")]
+    ("phi", "transmural rotation", "v-"), ("eta", "axial displacement", "x-"),
+    ("eps", "axial strain", "<-")]
 FIELD_QUANTITIES = [  # key, label, plot marker
     ("E_RR", "radial strain", "o-"), ("E_TT", "hoop strain", "s-"), ("E_ZZ", "axial strain", "^-"),
     ("J", "Jacobian, element mean", "D-"), ("lambda_f", "fiber stretch", "v-"),
@@ -89,13 +91,15 @@ def zero_d_fields(R, rho, phi, eta, beta, values, alpha=(0.0, 0.0), eps=0.0, str
     Green-Lagrange components in the reference basis, stresses Cauchy
     components in the deformed basis from the 0D material law (check_materials.
     stress_0d, the ST91 pressure of the local J). alpha: helix angles at R[0],
-    R[-1] in degrees (fiber stretch).
+    R[-1] in degrees (fiber stretch). eps: axial strain, a number or one per
+    time (n_t).
     """
     from scipy.interpolate import CubicSpline
     from check_materials import stress_0d
     R = np.asarray(R, float)
     rho, phi, eta = (np.atleast_2d(np.asarray(x, float)) for x in (rho, phi, eta))
     beta = np.atleast_1d(np.asarray(beta, float))
+    eps = np.broadcast_to(np.asarray(eps, float), beta.shape)
     a = np.radians(alpha[0] + (alpha[1] - alpha[0]) * (R - R[0]) / (R[-1] - R[0]))
     vals = {k: float(values.get(k, 0.0)) for k in ("C1", "C2", "C3", "C4", "C5", "C6")}
     vals.update({k: float(x) for k, x in values.items()
@@ -111,7 +115,7 @@ def zero_d_fields(R, rho, phi, eta, beta, values, alpha=(0.0, 0.0), eps=0.0, str
             r = Rj + rho[i, j]
             F = np.array([[1.0 + d["rho"][j], 0.0, 0.0],
                           [r * d["phi"][j], r / Rj, r * beta[i]],
-                          [d["eta"][j], 0.0, 1.0 + eps]])
+                          [d["eta"][j], 0.0, 1.0 + eps[i]]])
             C = F.T @ F
             f = np.array([0.0, np.cos(a[j]), np.sin(a[j])])
             J = np.linalg.det(F)
@@ -198,7 +202,7 @@ def run_0d(config, name, num_elements=None, cache_dir=None):
     t, V = series(f"volume:{name}")
     pname = next(n for n in out["name"].unique() if n.startswith("pressure:") and name in n)
     sol = dict(t=t, P=series(pname)[1], V=V, beta=series(f"beta:{name}")[1],
-               R=np.linspace(vals["Ri"], vals["Re"], ne + 1))
+               eps=series(f"eps:{name}")[1], R=np.linspace(vals["Ri"], vals["Re"], ne + 1))
     for f in PROFILES:
         sol[f] = np.stack([series(f"{f}_{A}:{name}")[1] for A in range(ne + 1)], axis=1)
     if cache:
@@ -214,16 +218,17 @@ def exact_isotropic(t, P, Ri, Re, L, mu, n=257):
     ri = np.array([fixed_length_exact(p, Ri, Re, mu) for p in P])
     rho = np.sqrt(R[None, :] ** 2 + ri[:, None] ** 2 - Ri ** 2) - R[None, :]
     z = np.zeros_like(rho)
-    return dict(t=t, P=P, V=math.pi * ri ** 2 * L, beta=np.zeros_like(P), R=R,
-                rho=rho, phi=z, eta=z)
+    return dict(t=t, P=P, V=math.pi * ri ** 2 * L, beta=np.zeros_like(P), eps=np.zeros_like(P),
+                R=R, rho=rho, phi=z, eta=z)
 
 
 def richardson(coarse, fine):
     """Second-order Richardson extrapolation of two 0D solutions (ne, 2 ne) on
     the coarse nodes."""
     ext = dict(coarse)
-    for k in ("V", "beta"):
-        ext[k] = (4.0 * fine[k] - coarse[k]) / 3.0
+    for k in ("V", "beta", "eps"):
+        if k in coarse and k in fine:  # older cached solutions have no eps
+            ext[k] = (4.0 * fine[k] - coarse[k]) / 3.0
     for k in PROFILES:
         ext[k] = (4.0 * fine[k][:, ::2] - coarse[k]) / 3.0
     return ext
@@ -245,9 +250,11 @@ def tolist(x):
 
 
 def has_twist(ref, L):
-    """True when the reference twists beyond round-off (helical fibers)."""
+    """True when the reference twists beyond round-off (helical fibers). The
+    0D Newton tolerance leaves end-face rotations of up to ~4e-7 rho without
+    fibers (large deformation); the smallest helical twist is ~2e-2 rho."""
     twist = np.max(np.abs(ref["beta"])) * L * np.max(ref["R"])  # end-face rotation
-    return bool(twist > 1e-8 * np.max(np.abs(ref["rho"])))
+    return bool(twist > 1e-5 * np.max(np.abs(ref["rho"])))
 
 
 def errors(sol, ref, L):
@@ -260,6 +267,9 @@ def errors(sol, ref, L):
              rho=np.max(np.abs(rho - rho_ref)) / scale_rho,
              h=np.max(np.abs(dh - dh_ref)) / np.max(np.abs(dh_ref)),
              eta=np.max(np.abs(np.asarray(sol["eta"]) - at("eta"))) / scale_rho)
+    e_ref = np.max(np.abs(ref.get("eps", 0.0)))
+    if e_ref > 0.0:  # free length (closed ends)
+        e["eps"] = np.max(np.abs(np.asarray(sol["eps"]) - ref["eps"])) / e_ref
     b_ref = np.max(np.abs(ref["beta"]))
     if has_twist(ref, L):  # helical fibers
         e["beta"] = np.max(np.abs(np.asarray(sol["beta"]) - ref["beta"])) / b_ref
@@ -300,6 +310,10 @@ def main():
     ap.add_argument("--end-damping", type=float,
                     help="full cylinder: damping of the end dashpots in units of mu / Re * dt "
                          "other than the default 1e-3 (runs/<formulation>_nr<n>_damp<value>)")
+    ap.add_argument("--reference-ne", type=int,
+                    help="compare with the direct 0D solution with this many radial elements "
+                         "instead of the Richardson extrapolation (output/summary_ne<N>.json, "
+                         "no figure)")
     a = ap.parse_args()
     sys.stdout.reconfigure(line_buffering=True)
 
@@ -309,9 +323,12 @@ def main():
     v = m0["values"]
     mat = C3.material(v)
     fibers = mat["model"] in ("HGO", "HolzapfelOgden")
-    # helical fibers: the free 3D ends differ from the uniform 0D state (end
-    # layers), so only the mid-length section is compared
-    mid = C3.helical(mat)
+    # free length (0D fixed_length = 0, pressure-loaded lids): the 3D tube is
+    # closed by an end plate (cylinder_3d.generate closed_end)
+    closed = float(v.get("fixed_length", 0.0)) == 0.0
+    # helical fibers and closed ends: the 3D ends differ from the uniform 0D
+    # state (end layers), so only the mid-length section is compared
+    mid = C3.helical(mat) or closed
     T, Pmax = C3.pressure_ramp(m0["t"], m0["P"])
     Ri, Re, L = v["Ri"], v["Re"], v["length"]
     mmhg = C3.MMHG
@@ -344,7 +361,7 @@ def main():
         else:
             case = C3.generate(model_0d, case_dir, nr, a.formulation, a.sector,
                                n_steps=a.substeps * (len(t0) - 1), linear_solver=ls,
-                               half_length=not a.full_length, **support)
+                               half_length=not a.full_length, closed_end=closed, **support)
         cases[nr] = (case_dir, case)
         done = len(glob.glob(os.path.join(case_dir, "results", "result_*.vtu"))) == case["n_steps"]
         if a.run and not a.rerun and done and old == json.loads(json.dumps(case)):
@@ -362,7 +379,9 @@ def main():
             print(f"3D nr = {nr}: done in {wall:.0f} s")
 
     # 0D reference
-    if mat["kappa"] > 0.0 or fibers:
+    if a.reference_ne:
+        ref, ref_name = zero_d(a.reference_ne), f"0D ne = {a.reference_ne}"
+    elif mat["kappa"] > 0.0 or fibers:
         ne = int(v["num_elements"])
         ref, ref_name = richardson(zero_d(ne), zero_d(2 * ne)), f"0D Richardson ne = {ne}/{2 * ne}"
     else:
@@ -371,7 +390,8 @@ def main():
     # a function of J)
     alpha = (mat.get("alpha_endo", 0.0), mat.get("alpha_epi", 0.0))
     fields_of = lambda s, stresses=True: zero_d_fields(  # noqa: E731
-        s["R"], s["rho"], s["phi"], s["eta"], s["beta"], v, alpha, stresses=stresses)
+        s["R"], s["rho"], s["phi"], s["eta"], s["beta"], v, alpha, eps=s.get("eps", 0.0),
+        stresses=stresses)
     ref_fields = fields_of(ref, ref_name != "exact")
     summary = dict(case=os.path.basename(case_root), material=mat, P_max_mmHg=Pmax / mmhg,
                    reference=dict(name=ref_name, fields=tolist(ref_fields),
@@ -381,7 +401,10 @@ def main():
     print(f"0D reference ({ref_name}) at {Pmax / mmhg:.0f} mmHg: V = {ref['V'][-1] * 1e6:.4f} mL, "
           f"rho endo/epi = {ref['rho'][-1][0] * 1e3:.4f}/{ref['rho'][-1][-1] * 1e3:.4f} mm, "
           f"twist over the length = {twist:.4f} deg")
-    if mid:
+    if closed:
+        print(f"free length: axial strain at {Pmax / mmhg:.0f} mmHg {ref['eps'][-1]:.5f}; 3D closed by "
+              "an end plate, compared at the mid-length plane (V = pi (Ri + rho(Ri))^2 (1 + eps) L)")
+    elif mid:
         print("helical fibers: 3D compared at the mid-length section (middle element layer; "
               "beta = local twist rate, V = pi (Ri + rho(Ri))^2 L)")
 
@@ -425,8 +448,11 @@ def main():
           + table_header(FIELD_QUANTITIES, 14) + "\n" + "\n".join(field_rows))
 
     os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, "summary.json"), "w") as f:
+    name = f"summary_ne{a.reference_ne}.json" if a.reference_ne else "summary.json"
+    with open(os.path.join(out_dir, name), "w") as f:
         json.dump(summary, f, indent=1)
+    if a.reference_ne:
+        return
     twisting = has_twist(ref, L)
     plot(summary, ref, ref_fields, ref_name, mat, L, twisting, a.formulation, out_dir)
 

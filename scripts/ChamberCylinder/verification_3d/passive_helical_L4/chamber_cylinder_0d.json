@@ -1,0 +1,104 @@
+{
+  "description": {
+    "description of test case": "Quasi-static passive inflation of a fixed-length thick-walled cylinder (ChamberCylinder) 4x as long as passive_helical (L = 228.42 mm, 16.4 wall thicknesses) with one helical fiber family (helix angle +60 deg endo to -60 deg epi, as tests/cases/chamber_cylinder.json): cavity pressure ramped from 0 to 120 mmHg (15998.69 Pa) over 1200 s in 24 steps of 50 s (5 mmHg), then held. Holzapfel-Ogden law (svMultiPhysics HolzapfelOgden) reduced to the passive_isotropic wall plus one fiber family: a = 100 kPa, b = 0 (neo-Hookean, mu = a), a_f = 100 kPa, b_f = 1, k = 0 (no tension-compression switch); sheet and fiber-sheet terms off (a_s = a_fs = 0; svMultiPhysics divides by b_s, b_fs, set to 1); ST91 bulk modulus 100 a = 10 MPa. SI units. Source of the matching 3D svMultiPhysics case (cylinder_3d.py): full cylinder and full length (helical fibers have no mirror symmetry), both ends u_z = 0, twist and radial expansion free."
+  },
+  "boundary_conditions": [
+    {
+      "bc_name": "CAVITY",
+      "bc_type": "PRESSURE",
+      "bc_values": {
+        "t": [
+          0.0,
+          1200.0,
+          2400.0
+        ],
+        "P": [
+          0.0,
+          15998.6864898,
+          15998.6864898
+        ]
+      }
+    },
+    {
+      "bc_name": "CLOSED",
+      "bc_type": "FLOW",
+      "bc_values": {
+        "t": [
+          0.0,
+          2400.0
+        ],
+        "Q": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  ],
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 1,
+    "number_of_time_pts_per_cardiac_cycle": 49,
+    "cardiac_period": 2400.0,
+    "steady_initial": false,
+    "output_all_cycles": true,
+    "output_variable_based": true,
+    "absolute_tolerance": 1e-09,
+    "maximum_nonlinear_iterations": 50,
+    "integrator": "stiff"
+  },
+  "initial_condition": {
+    "pressure_all": 0.0,
+    "volume:cylinder": 0.00026000000000000014
+  },
+  "vessels": [
+    {
+      "boundary_conditions": {
+        "inlet": "CAVITY",
+        "outlet": "CLOSED"
+      },
+      "vessel_id": 0,
+      "vessel_length": 1.0,
+      "vessel_name": "cylinder",
+      "zero_d_element_type": "ChamberCylinder",
+      "zero_d_element_values": {
+        "Ri": 0.019034760191327525,
+        "Re": 0.032969171761268755,
+        "length": 0.2284171222959303,
+        "alpha_endo": 60.0,
+        "alpha_epi": -60.0,
+        "C1": 0.0,
+        "C2": 0.0,
+        "C3": 0.0,
+        "C4": 0.0,
+        "C5": 0.0,
+        "C6": 0.0,
+        "ho_a": 100000.0,
+        "ho_b": 0.0,
+        "ho_af": 100000.0,
+        "ho_bf": 1.0,
+        "ho_as": 0.0,
+        "ho_bs": 1.0,
+        "ho_afs": 0.0,
+        "ho_bfs": 1.0,
+        "ho_k": 0.0,
+        "gamma": 0.0,
+        "sigma_max": 0.0,
+        "k_0": 0.0,
+        "density": 0.0,
+        "fixed_length": 1,
+        "bulk_modulus": 10000000.0,
+        "num_elements": 32
+      },
+      "activation_function": {
+        "type": "nagumo",
+        "tsys": 0.1,
+        "tdias": 0.4,
+        "qrs": 0.08,
+        "ramp": 0.01,
+        "alpha_max": 0.0,
+        "alpha_min": 0.0
+      }
+    }
+  ],
+  "junctions": [],
+  "valves": []
+}

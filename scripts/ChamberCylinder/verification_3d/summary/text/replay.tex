@@ -1,0 +1,23 @@
+In the coupled comparison the circulation feeds every difference of the 3D tube back into
+the pressure. To see the wall alone, \texttt{zero\_d\_replay.py} loads the 0D block (the
+same wall and active tension, closed outlet; the Richardson extrapolation from ne = 16
+and 32, as the coupled reference) with the cavity pressure of the
+coupled 3D run, and compares both at the same pressure (Table~\ref{tab:replay}). This is
+post-processing only; the 3D model is unchanged and contains no 0D data.
+
+With circumferential fibers the volume then converges at third order (nr = 1, 2, 4:
+$1.4\cdot10^{-2}$, $1.7\cdot10^{-3}$, $1.9\cdot10^{-4}$), as in the passive cases; the
+coupled comparison adds the time-integration difference ($3.9\cdot10^{-4}$ at nr = 4). At
+nr = 8 the replay difference ($8.4\cdot10^{-5}$) sits at the start of the cycle
+($t = 0.02$~s), where it is time integration: at nr = 4 half the time step reduces it there
+tenfold ($8.2\cdot10^{-5}$ to $8.3\cdot10^{-6}$), and from nr = 4 to 8 it does not change. In the
+ejection (0.2--0.35~s) it keeps falling with the mesh ($1.9\cdot10^{-4}$ to $4.8\cdot10^{-5}$)
+and hardly with the time step ($1.7\cdot10^{-4}$ at nr = 4 with half the step).
+
+With helical fibers ($2L_0$ tube) at nr = 2, the volume of the whole tube differs from the
+0D by $5.6\cdot10^{-3}$, the volume computed from the mid-length radius by $2.0\cdot10^{-3}$, and
+the stroke volumes by $1.5\cdot10^{-2}$ (whole tube) and $9\cdot10^{-4}$ (mid-length): the end
+layers account for most of the stroke-volume difference, and through the circulation for
+the pressure and stroke-volume differences of the coupled comparison. The mid-length twist
+rate agrees to $6.8\cdot10^{-3}$ of its peak, and the mid-length $\rho$ converges from nr = 1
+to 2 at order 3.3 ($1.2\cdot10^{-1}$ to $1.2\cdot10^{-2}$).

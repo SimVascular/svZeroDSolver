@@ -72,13 +72,15 @@ def stress_0d(F, f, s, v):
 
 
 def svmp_material(xml_path):
-    """Material parameters of an svMultiPhysics solver.xml (struct/ustruct)."""
+    """Material parameters of an svMultiPhysics solver.xml (struct/ustruct); with
+    several domains, those of domain 1 (the wall)."""
     eq = ET.parse(xml_path).getroot().find("Add_equation")
     val = lambda e, tag, d=None: float(e.findtext(tag)) if e.findtext(tag) else d  # noqa: E731
-    cm = eq.find("Constitutive_model")
-    m = dict(equation=eq.get("type"), model=cm.get("type"), E=val(eq, "Elasticity_modulus"),
-             nu=val(eq, "Poisson_ratio"), Kpen=val(eq, "Penalty_parameter", 0.0),
-             vol=(eq.findtext("Dilational_penalty_model") or "").strip())
+    dom = next((d for d in eq.findall("Domain") if d.get("id", "").strip() == "1"), eq)
+    cm = dom.find("Constitutive_model")
+    m = dict(equation=eq.get("type"), model=cm.get("type"), E=val(dom, "Elasticity_modulus"),
+             nu=val(dom, "Poisson_ratio"), Kpen=val(dom, "Penalty_parameter", 0.0),
+             vol=(dom.findtext("Dilational_penalty_model") or "").strip())
     for tag in ("c1", "c2", "a4", "b4", "a6", "b6", "kappa",
                 "a", "b", "a4f", "b4f", "a4s", "b4s", "afs", "bfs", "k"):
         m[tag] = val(cm, tag, 0.0)

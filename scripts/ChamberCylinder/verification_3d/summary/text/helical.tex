@@ -1,0 +1,31 @@
+The wall of the anisotropic case with the helix of the genet23 test case
+(\texttt{tests/cases/chamber\_cylinder.json}): $+60^\circ$ at the endocardium to $-60^\circ$
+at the epicardium. Helical fibers load every cross-section of the uniform 0D state with
+the azimuthal shear $\sigma_{\theta z}(R)$: positive near the endocardium, negative near the
+epicardium, zero net torque (which sets $\beta$), up to 18\% of $\sigma_{\theta\theta}$ at
+120~mmHg. The 0D block has no ends, so this costs nothing; a 3D end that only keeps
+$u_z = 0$ carries no $\sigma_{\theta z}$, and the 3D tube twists and expands differently
+in end layers (Figures in the appendix). The 3D model is therefore the full cylinder
+with free ends, and only its mid-length section is compared.
+
+\paragraph{Tube length.} All helical comparisons use a tube twice as long as that of the
+test case ($2L_0 = 114$~mm, 8.2 wall thicknesses; the 0D state does not depend on the
+length). In the original tube the end layers reach the middle: at nr = 4 its mid-length
+radial displacement differs from that of the $2L_0$ tube by $3.4\cdot10^{-3}$ at the
+endocardium and its twist rate by 14\%, and both stop converging to the 0D block. A tube
+four times as long gives the mid-length state of the $2L_0$ tube to $10^{-4}$ in the radial
+displacement at nr = 2 (and to $2\cdot10^{-5}$ for the uniform $30^\circ$ helix), so the
+middle of the $2L_0$ tube is free of the end effect. The dashpots that hold the rigid-body
+modes do not matter either: ten times or a tenth of their damping changes the mid-length
+radial displacement by $1.5\cdot10^{-5}$ and $1.5\cdot10^{-6}$, and dashpots on the
+epicardium instead of the ends give the same state to $10^{-5}$.
+
+\paragraph{Results.} At the mid-length section of the $2L_0$ tube every quantity converges
+to the 0D block (Table~\ref{tab:passive_helical_L2-kin}): the volume at order 3.8 and 2.8 to
+$1.7\cdot10^{-4}$ at nr = 4 (38016 elements, on the cluster), the radial displacement likewise
+to $8.7\cdot10^{-4}$, the wall thickness at 2.1--2.8, the transmural rotation at 2.6--3.3, the
+strains and stresses at 1.6--2.2. The twist rate converges late, 15\%, 8\% and 1.6\% at
+nr = 1, 2, 4 (3D/0D = 1.016 at nr = 4): the $\pm60^\circ$ helix twists the tube by only
+$-0.17^\circ$ over its length, a small difference of the torques of its two fiber layers
+that amplifies the stress error. The two helices below, with large twists, show the
+torsion of the 0D block without this cancellation.

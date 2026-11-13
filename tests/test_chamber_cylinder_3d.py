@@ -46,6 +46,37 @@ def test_mesh_geometry(sector, order):
         assert (sign * (n[:, 0] * g[:, 0] + n[:, 1] * g[:, 1]) > 0).all()
 
 
+@pytest.mark.parametrize("order", [1, 2])
+def test_closed_mesh_geometry(order):
+    """Tube closed by an end plate: positive volumes converging to the solid,
+    conforming at the axis (every face classified), outward normals, two
+    domains, mid-edge nodes of the axis edges on the radial lines."""
+    H = Re - Ri
+    m = C3.mesh_closed_cylinder(Ri, Re, L, 2, H, order)
+    x, c = m["points"], m["cells"]
+    v = tet_volumes(x, c)
+    assert (v > 0).all()
+    solid = math.pi / 4 * ((Re**2 - Ri**2) * L + Re**2 * H)
+    assert abs(v.sum() / solid - 1) < 2e-2
+    assert len(np.unique(c)) == len(x)
+    assert set(m["faces"]) == {"endo", "cap", "epi", "base", "top", "x0", "y0"}
+    assert set(np.unique(m["domains"])) == {1, 2}
+    assert np.all(x[c[m["domains"] == 1]][..., 2] <= L + 1e-12)
+    for name, axis, sign in (("cap", 2, -1.0), ("top", 2, 1.0), ("base", 2, -1.0)):
+        f = m["faces"][name][0]
+        n = np.cross(x[f[:, 1]] - x[f[:, 0]], x[f[:, 2]] - x[f[:, 0]])
+        assert (sign * n[:, axis] > 0).all()
+    area = sum(np.linalg.norm(np.cross(x[f[1]] - x[f[0]], x[f[2]] - x[f[0]])) / 2
+               for f in m["faces"]["cap"][0])
+    assert abs(area / (math.pi / 4 * Ri**2) - 1) < 3e-2  # the cavity's cross-section
+    if order == 2:  # mid-edge nodes: midpoints of straight edges at the axis
+        r = np.hypot(x[:, 0], x[:, 1])
+        for cell in c:
+            for k, (a, b) in enumerate(C3._TET_EDGES):
+                if min(r[cell[a]], r[cell[b]]) == 0.0:
+                    assert np.allclose(x[cell[4 + k]], 0.5 * (x[cell[a]] + x[cell[b]]))
+
+
 def test_lumen_volume_reference_and_convergence():
     V = math.pi * Ri**2 * L
     err = {o: [abs(C3.lumen_volume(m["points"], m["faces"]["endo"][0], 90.0) / V - 1)
@@ -82,6 +113,28 @@ def test_generate_from_0d(tmp_path):
         assert (tmp_path / "mesh" / "mesh-surfaces" / f"{face}.vtu").exists()
     load = [float(x) for x in (tmp_path / "endo_pressure.dat").read_text().split()]
     assert load == [2.0, 1.0, 0.0, 0.0, case["T_ramp"], case["P_max"]]
+
+
+def test_generate_closed_end(tmp_path):
+    """Free length (fixed_length = 0): the eighth model closed by an isotropic
+    plate, the cavity pressure on endo and cap, u_z = 0 only on the mid-length
+    plane, two material domains."""
+    model = os.path.join(CASES, "passive_anisotropic_closed", "chamber_cylinder_0d.json")
+    with pytest.raises(ValueError, match="fixed_length = 1"):
+        C3.generate(model, str(tmp_path), nr=1)
+    case = C3.generate(model, str(tmp_path), nr=1, closed_end=True)
+    with open(model) as f:
+        vals = json.load(f)["vessels"][0]["zero_d_element_values"]
+    assert case["mesh_length"] == 0.5 * vals["length"]
+    assert case["plate"] == vals["Re"] - vals["Ri"] and "cap" in case["faces"]
+    assert case["plate_material"] == dict(mu=vals["ho_a"], kappa=vals["bulk_modulus"])
+    xml = (tmp_path / "solver.xml").read_text()
+    assert "<Domain_file_path> mesh/mesh-complete.mesh.vtu </Domain_file_path>" in xml
+    assert xml.count("<Domain id=") == 2 and xml.count("<Constitutive_model") == 2
+    assert 'Add_BC name="cap"' in xml and 'Add_BC name="top"' not in xml
+    assert xml.count("<Type> Dir </Type>") == 3  # base, y0, x0
+    with pytest.raises(ValueError, match="fixed_length = 0"):
+        C3.generate(MODEL, str(tmp_path / "fixed"), nr=1, closed_end=True)
 
 
 @pytest.mark.parametrize("case_name", ["passive_anisotropic", "passive_anisotropic_full"])
@@ -145,7 +198,28 @@ def test_kinematics_of_twisted_inflation():
     assert abs(k["beta"] / beta - 1) < 1e-12
     assert np.allclose(k["rho"], rho(Ri + (Re - Ri) * np.arange(5) / 4), rtol=0, atol=1e-15)
     assert np.abs(k["phi"]).max() < 1e-12 and np.abs(k["eta"]).max() < 1e-15
-    assert k["rho_spread"] < 1e-15
+    assert k["rho_spread"] < 1e-15 and abs(k["eps"]) < 1e-15
+
+
+def test_kinematics_of_the_closed_tube():
+    """Free length: the axial strain eps of z = (1 + eps) Z + eta(R) is fitted in
+    the element layer at the mid-length plane Z = 0 of the closed-end mesh, the
+    end layer near the plate is ignored, eta stays relative to the endocardium."""
+    m = C3.mesh_closed_cylinder(Ri, Re, L, 2, Re - Ri, 2)
+    X, Z = m["points"], m["points"][:, 2]
+    R = np.hypot(X[:, 0], X[:, 1])
+    wall = R >= Ri - 1e-12
+    rho = 1e-3 * (1.0 + 30.0 * (Re - R)) * (1.0 + 0.5 * (Z > 0.6 * L))
+    eps, eta = 0.018, 1e-5 * (R - Ri) / (Re - Ri)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        x = np.where(wall[:, None], np.stack([X[:, 0] * (1 + rho / R), X[:, 1] * (1 + rho / R),
+                                              (1 + eps) * Z + eta], axis=1), X)
+    levels = np.rint((R - Ri) / ((Re - Ri) / 4)).astype(int)
+    k = C3.kinematics(X, x, levels, z0=0.0, dz=L / m["nz"])
+    assert abs(k["eps"] / eps - 1) < 1e-12
+    Rk = Ri + (Re - Ri) * np.arange(5) / 4
+    assert np.allclose(k["rho"], 1e-3 * (1.0 + 30.0 * (Re - Rk)), rtol=0, atol=1e-15)
+    assert np.allclose(k["eta"], 1e-5 * np.arange(5) / 4, rtol=0, atol=1e-15)
 
 
 def test_kinematics_of_the_mid_section():

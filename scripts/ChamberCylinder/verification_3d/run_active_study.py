@@ -61,25 +61,28 @@ def cache_key(model_0d):
     return hashlib.sha1(json.dumps(cfg, sort_keys=True).encode()).hexdigest()[:16]
 
 
-def reference(model_0d, cache_dir):
-    """Richardson-extrapolated 0D solution (2 and 4 times num_elements), cached."""
+def zero_d(model_0d, cache_dir, n):
+    """0D solution with n radial elements, cached."""
+    path = os.path.join(cache_dir, f"zero_d_ne{n}_{cache_key(model_0d)}.npz")
+    if os.path.exists(path):
+        with np.load(path) as d:
+            s = {k: d[k] for k in d.files}
+        if all(k in s for k in ("beta", "phi", "eta")):  # complete cache
+            return s
+    s = CP.run_0d(model_0d, n)
+    os.makedirs(cache_dir, exist_ok=True)
+    np.savez(path, **s)
+    return s
+
+
+def reference(model_0d, cache_dir, direct_ne=None):
+    """Richardson-extrapolated 0D solution (2 and 4 times num_elements), or
+    the direct solution with direct_ne elements."""
+    if direct_ne:
+        return zero_d(model_0d, cache_dir, direct_ne), f"0D ne = {direct_ne}"
     with open(model_0d) as f:
         ne = int(CP.find_cylinder(json.load(f))["zero_d_element_values"]["num_elements"])
-    key = cache_key(model_0d)
-    sols = []
-    for n in (2 * ne, 4 * ne):
-        path = os.path.join(cache_dir, f"zero_d_ne{n}_{key}.npz")
-        if os.path.exists(path):
-            with np.load(path) as d:
-                s = {k: d[k] for k in d.files}
-            if all(k in s for k in ("beta", "phi", "eta")):  # complete cache
-                sols.append(s)
-                continue
-        s = CP.run_0d(model_0d, n)
-        os.makedirs(cache_dir, exist_ok=True)
-        np.savez(path, **s)
-        sols.append(s)
-    c, f = sols
+    c, f = (zero_d(model_0d, cache_dir, n) for n in (2 * ne, 4 * ne))
     ref = dict(c)
     for k in ("V", "P", "Q_in", "Q_out", "beta"):
         ref[k] = (4.0 * f[k] - c[k]) / 3.0
@@ -188,6 +191,10 @@ def main():
     ap.add_argument("--cycles", type=int, help="3D cycles to run (default: the 0D input's)")
     ap.add_argument("--compare-cycle", type=int, help="cycle compared (default: the 0D input's last)")
     ap.add_argument("--ls", choices=sorted(LINEAR_SOLVERS), default="fsils")
+    ap.add_argument("--reference-ne", type=int,
+                    help="compare with the direct 0D solution with this many radial elements "
+                         "instead of the Richardson extrapolation (output/summary_ne<N>.json, "
+                         "no figure)")
     a = ap.parse_args()
     sys.stdout.reconfigure(line_buffering=True)
     root = os.path.abspath(a.case)
@@ -231,7 +238,7 @@ def main():
             print(f"3D nr = {nr}: ran {case['cycles']} cycle(s), cycle {k} is compared")
             continue
         sols[nr] = dict(CP.post(d), order=case["order"], h=(case["Re"] - case["Ri"]) / nr)
-    ref, ref_name = reference(model, out_dir)
+    ref, ref_name = reference(model, out_dir, a.reference_ne)
     with open(model) as f:
         cyl = CP.find_cylinder(json.load(f))["zero_d_element_values"]
     ref_fields = RS.zero_d_fields(ref["R"], ref["rho"], ref["phi"], ref["eta"], ref["beta"], cyl,
@@ -259,8 +266,11 @@ def main():
     print("strains (relative to max |E_RR|, |E_TT|), J - 1, lambda_f - 1\n"
           + RS.table_header(FIELDS, 10) + "\n" + "\n".join(field_rows))
     os.makedirs(out_dir, exist_ok=True)
-    with open(os.path.join(out_dir, "summary.json"), "w") as f:
+    name = f"summary_ne{a.reference_ne}.json" if a.reference_ne else "summary.json"
+    with open(os.path.join(out_dir, name), "w") as f:
         json.dump(summary, f, indent=1)
+    if a.reference_ne:
+        return
     plot(sols, summary, ref, ref_fields, ref_name, period, k, out_dir, cyl["length"])
 
 

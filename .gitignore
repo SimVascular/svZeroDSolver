@@ -60,3 +60,6 @@ uv.lock
 # ChamberCylinder 3D verification: generated cases and results
 scripts/ChamberCylinder/verification_3d/*/runs/
 scripts/ChamberCylinder/verification_3d/*/output/
+# generated summary report (make_summary.py); the narrative in summary/text/ is tracked
+scripts/ChamberCylinder/verification_3d/summary/*
+!scripts/ChamberCylinder/verification_3d/summary/text/

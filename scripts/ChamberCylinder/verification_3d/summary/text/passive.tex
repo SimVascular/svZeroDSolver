@@ -1,0 +1,17 @@
+Three walls, all with circumferential fibers or none, so the eighth model applies:
+an isotropic neo-Hookean wall ($\mu = 100$~kPa), the same wall with one circumferential
+fiber family (Holzapfel-Ogden, $a = 100$~kPa, $b = 0$, $a_f = 100$~kPa, $b_f = 1$, no
+tension-compression switch), and the full Holzapfel-Ogden law with all four terms and the
+switch ($a = 50$~kPa, $b = 5$, $a_f = 25$~kPa, $b_f = 20$, $a_s = 25$~kPa, $b_s = 5$,
+$a_{fs} = 10$~kPa, $b_{fs} = 5$, $k = 100$).
+
+All kinematic quantities converge to the 0D block: the volume at third to fourth order
+(nodal fibers and quadratic elements on the exact cylindrical surfaces), the
+through-wall displacement and the wall thickness at 2.5--3, the strains, the Jacobian and
+the stresses at about 1.5--2. The full Holzapfel-Ogden wall was refined to nr = 16
+(148896 elements, 10~h on two cluster cores): volume $7.6\cdot10^{-8}$ (order 3.8), $\rho$
+$5.5\cdot10^{-6}$ (2.9), strains and stresses $1\cdot10^{-4}$--$7\cdot10^{-4}$ (1.3--1.9). Against the
+best estimate of the converged 0D solution instead of the reference the volume difference
+is the same to three digits. The largest field errors sit at the endocardium. The nodal
+hydrostatic stress oscillates between vertex and mid-edge node levels (penalty
+$\kappa(J-1)$), so $J$ and $\sigma_{rr}$ are compared as element means.

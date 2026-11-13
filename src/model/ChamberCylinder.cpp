@@ -287,8 +287,20 @@ void ChamberCylinder::setup_dofs(DOFHandler& dofhandler) {
   Block::setup_dofs_(dofhandler, n_eqn, int_names);
   n_var = 4 + 3 * n_node + 2 + n_active_var() + 1 + n_vel + n_pmix;
 
-  // Reservation estimates: dense dC_dy/dC_dydot block, few F/E entries
-  num_triplets.D = n_eqn * n_var;
+  // Local tangents; their sparsity pattern is recorded by the first assembly
+  K_.assign(static_cast<size_t>(n_eqn) * n_var, 0.0);
+  Kd_.assign(K_.size(), 0.0);
+  in_K_.assign(K_.size(), 0);
+  in_Kd_.assign(K_.size(), 0);
+  pattern_K_.clear();
+  pattern_Kd_.clear();
+  pattern_recorded_ = false;
+
+  // Reservation estimates: per element its kinematic, velocity, pressure and
+  // active stress unknowns, plus the global rows and columns (beta, eps,
+  // volume, pressure); few F/E entries
+  const int n_local = 6 + 6 + 4 + 1 + 3 * n_law;
+  num_triplets.D = n_ele * n_local * n_local + 8 * (n_eqn + n_var);
   num_triplets.F = 6 * n_node + 20;
   num_triplets.E = 21 * n_node + 8;  // consistent mass + velocity companions
 }
@@ -408,12 +420,31 @@ void ChamberCylinder::update_solution(
   const double beta_d = Yd(i_beta()), eps_d = Yd(i_eps());
   const double Pin = Y(0);
 
-  // Local dense residual and tangents, scattered into the system at the end
+  // Local residual and tangents, scattered into the system at the end. The
+  // first assembly records the touched tangent entries (the sparsity
+  // pattern); later assemblies must stay within it.
   std::vector<double> Cloc(n_eqn, 0.0);
-  std::vector<double> Kloc(n_eqn * n_var, 0.0);
-  std::vector<double> Kdloc(n_eqn * n_var, 0.0);
-  auto Kat = [&](int r, int c) -> double& { return Kloc[r * n_var + c]; };
-  auto Kdat = [&](int r, int c) -> double& { return Kdloc[r * n_var + c]; };
+  const bool record = !pattern_recorded_;
+  auto touch = [&](int r, int c, std::vector<char>& in,
+                   std::vector<int>& pattern) {
+    const int i = r * n_var + c;
+    if (!in[i]) {
+      if (!record) {
+        throw std::runtime_error(
+            "ChamberCylinder block '" + get_name() +
+            "': tangent entry outside the recorded sparsity pattern.");
+      }
+      in[i] = 1;
+      pattern.push_back(i);
+    }
+    return i;
+  };
+  auto Kat = [&](int r, int c) -> double& {
+    return K_[touch(r, c, in_K_, pattern_K_)];
+  };
+  auto Kdat = [&](int r, int c) -> double& {
+    return Kd_[touch(r, c, in_Kd_, pattern_Kd_)];
+  };
 
   // --- Finite element assembly of the internal virtual work over thickness ---
   for (int q = 0; q < n_quad; q++) {
@@ -666,8 +697,7 @@ void ChamberCylinder::update_solution(
       dJ[0] = (1.0 + xi[1]) * (1.0 / Rq) * (1.0 + xi[4]);  // dJ/drho
       dJ[1] = (1.0 + xi[0] / Rq) * (1.0 + xi[4]);          // dJ/drho'
       dJ[4] = (1.0 + xi[1]) * (1.0 + xi[0] / Rq);          // dJ/deps
-      for (int m = 0; m < 6; m++) {
-        if (dJ[m] == 0.0) continue;
+      for (int m : {0, 1, 4}) {  // dJ/drho, dJ/drho', dJ/deps
         for (int ci = 0; ci < cn[m]; ci++)
           Kat(erow, cvr[m][ci]) += pref * dJfac * dJ[m] * cw[m][ci];
       }
@@ -691,7 +721,6 @@ void ChamberCylinder::update_solution(
         }
         // the law depends on the wall through the fiber stretch:
         // d lambda / d xi_m = (e_F . dE_m . e_F) / lambda = dgdtau[m] / lambda
-        if (lin.dR_dlambda[i] == 0.0) continue;
         for (int m = 0; m < 6; m++) {
           const double coef = lin.dR_dlambda[i] * dgdtau[m] / lam;
           for (int ci = 0; ci < cn[m]; ci++)
@@ -719,7 +748,10 @@ void ChamberCylinder::update_solution(
     // eps = 0 (in F) replaces the eps equation
     const int re = e_eps();
     Cloc[re] = 0.0;
-    for (int j = 0; j < n_var; j++) Kat(re, j) = Kdat(re, j) = 0.0;
+    for (int j = 0; j < n_var; j++) {
+      K_[re * n_var + j] = 0.0;
+      Kd_[re * n_var + j] = 0.0;
+    }
   } else {
     // Lids loaded by the cavity pressure; eps equation: - P pi L Rinner^2
     const int re = e_eps();
@@ -753,13 +785,30 @@ void ChamberCylinder::update_solution(
   }
 
   // --- Assign the local contributions to the sparse system ---
-  for (int i = 0; i < n_eqn; i++) {
-    system.C(global_eqn_ids[i]) = Cloc[i];
-    for (int j = 0; j < n_var; j++) {
-      system.dC_dy.coeffRef(global_eqn_ids[i], global_var_ids[j]) = Kat(i, j);
-      system.dC_dydot.coeffRef(global_eqn_ids[i], global_var_ids[j]) =
-          Kdat(i, j);
-    }
+  for (int i = 0; i < n_eqn; i++) system.C(global_eqn_ids[i]) = Cloc[i];
+  if (record) {
+    // Insert the pattern column by column (cheap insertion into the
+    // column-major sparse matrices)
+    auto by_column = [&](int a, int b) {
+      const int ca = global_var_ids[a % n_var], cb = global_var_ids[b % n_var];
+      if (ca != cb) return ca < cb;
+      return global_eqn_ids[a / n_var] < global_eqn_ids[b / n_var];
+    };
+    std::sort(pattern_K_.begin(), pattern_K_.end(), by_column);
+    std::sort(pattern_Kd_.begin(), pattern_Kd_.end(), by_column);
+    pattern_recorded_ = true;
+  }
+  // Write the pattern entries (zero where a coupling vanishes at this state)
+  // and reset the local arrays
+  for (const int i : pattern_K_) {
+    system.dC_dy.coeffRef(global_eqn_ids[i / n_var],
+                          global_var_ids[i % n_var]) = K_[i];
+    K_[i] = 0.0;
+  }
+  for (const int i : pattern_Kd_) {
+    system.dC_dydot.coeffRef(global_eqn_ids[i / n_var],
+                             global_var_ids[i % n_var]) = Kd_[i];
+    Kd_[i] = 0.0;
   }
 }
 

@@ -165,8 +165,10 @@ def test_component_inputs_are_checked():
 
 def _volume(material, active=None, activation=None):
     """Cavity volume of a short passive inflation with the given material and
-    active stress law (default: the BCS law at rest)."""
-    vv = dict(GEOM, gamma=0.0, num_elements=3, density=0.0, sigma_max=0.0, k_0=0.0)
+    active stress law (default: the BCS law at rest). The viscosity of genet23
+    keeps the system regular at the undeformed state, where the exponential
+    energy has no stiffness."""
+    vv = dict(GEOM, gamma=70.0, num_elements=3, density=0.0, sigma_max=0.0, k_0=0.0)
     ic = {"pressure_all": 0.0, "volume:cyl": math.pi * GEOM["Ri"] ** 2 * GEOM["length"]}
     cfg = CV.isolated_config(vv, [0.0, 0.5, 1.0], [0.0, 2e3, 2e3], 1.0, 11, ic, act=activation)
     cfg["vessels"][0]["material"] = material

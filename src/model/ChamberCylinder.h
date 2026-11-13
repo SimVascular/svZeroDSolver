@@ -429,6 +429,21 @@ class ChamberCylinder : public Block {
   int e_pmix0() const { return e_vel0() + 3 * n_node + 2; }
   int e_pmix(int e) const { return e_pmix0() + e; }
 
+  // --- Local tangents and their sparsity pattern ---
+  // update_solution accumulates dC/dy and dC/dydot in dense local arrays
+  // (n_eqn x n_var, zero between calls) and writes only the entries its
+  // assembly touches to the system. The first assembly (SparseSystem::reserve)
+  // records them; the pattern is fixed afterwards, since the solver analyzes
+  // it once. Which entries are touched depends on the coupling of the
+  // unknowns only, not on their values.
+  std::vector<double> K_;          ///< local dC/dy
+  std::vector<double> Kd_;         ///< local dC/dydot
+  std::vector<char> in_K_;         ///< entry of K_ in the pattern
+  std::vector<char> in_Kd_;        ///< entry of Kd_ in the pattern
+  std::vector<int> pattern_K_;     ///< pattern of K_ (local linear indices)
+  std::vector<int> pattern_Kd_;    ///< pattern of Kd_
+  bool pattern_recorded_ = false;  ///< pattern complete
+
   /// Wall material
   std::unique_ptr<Material> material_;
 

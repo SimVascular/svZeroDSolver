@@ -5,6 +5,9 @@
  * @brief Solver source file
  */
 
+#include <string>
+#include <vector>
+
 #include "Integrator.h"
 #include "Model.h"
 #include "SimulationParameters.h"
@@ -98,6 +101,65 @@ class Solver {
    */
   void write_result_to_csv(const std::string& filename) const;
 
+  /**
+   * @brief Get the number of Newton iterations used in each time step
+   *
+   * @return std::vector<int> Newton iterations per time step
+   */
+  std::vector<int> get_nonlinear_iterations() const;
+
+  /**
+   * @brief Get the largest residual at the end of each time step
+   *
+   * @return std::vector<double> Residual per time step
+   */
+  std::vector<double> get_step_residuals() const;
+
+  /**
+   * @brief Get the name of the equation holding the largest residual at the
+   * end of each time step
+   *
+   * @return std::vector<std::string> Equation name per time step
+   */
+  std::vector<std::string> get_step_residual_equations() const;
+
+  /**
+   * @brief Get the index of the equation holding the largest residual at the
+   * end of each time step
+   *
+   * @return std::vector<int> Equation index per time step
+   */
+  std::vector<int> get_step_residual_indices() const;
+
+  /**
+   * @brief Get the name of every equation of the system, in order
+   *
+   * @return std::vector<std::string> Equation names
+   */
+  std::vector<std::string> get_equation_names() const;
+
+  /**
+   * @brief Get the time at the start of each integration step
+   *
+   * @return std::vector<double> Time per time step
+   */
+  std::vector<double> get_step_times() const;
+
+  /**
+   * @brief Record the residual after every Newton iteration (debugging)
+   */
+  void set_record_residual_history(bool on);
+
+  /**
+   * @brief Set the acceptance factor of the Newton line search (debugging)
+   */
+  void set_line_search_factor(double f);
+
+  /**
+   * @brief Residual after every Newton iteration of every time step
+   */
+  std::vector<std::vector<double>> get_residual_history() const;
+
  private:
   std::shared_ptr<Model> model;
   SimulationParameters simparams;
@@ -107,6 +169,8 @@ class Solver {
   std::vector<double> times;
   double time;
   Integrator integrator;
+  bool record_residual_history{false};
+  double line_search_factor{1.0};
 
   void sanity_checks();
 

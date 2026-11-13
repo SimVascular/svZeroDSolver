@@ -54,6 +54,8 @@ void Solver::setup_initial() {
     Integrator integrator_steady(this->model.get(), time_step_size_steady,
                                  simparams.sim_rho_infty, simparams.sim_abs_tol,
                                  simparams.sim_nliter);
+    integrator_steady.set_max_line_search_steps(
+        simparams.sim_line_search_steps);
 
     for (int i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
@@ -76,6 +78,9 @@ void Solver::setup_integrator() {
       Integrator(this->model.get(), simparams.sim_time_step_size,
                  simparams.sim_rho_infty, simparams.sim_abs_tol,
                  simparams.sim_nliter, simparams.sim_max_iter_error_to_warning);
+  integrator.set_record_history(record_residual_history);
+  integrator.set_max_line_search_steps(simparams.sim_line_search_steps);
+  integrator.set_line_search_factor(line_search_factor);
 
   // Initialize loop
   states = std::vector<State>();
@@ -415,4 +420,52 @@ void Solver::write_result_to_csv(const std::string& filename) const {
   std::ofstream ofs(filename);
   ofs << get_full_result();
   ofs.close();
+}
+
+std::vector<int> Solver::get_nonlinear_iterations() const {
+  return integrator.get_iter_per_step();
+}
+
+std::vector<double> Solver::get_step_residuals() const {
+  return integrator.get_res_per_step();
+}
+
+std::vector<std::string> Solver::get_step_residual_equations() const {
+  const auto& dofs = integrator.get_res_dof_per_step();
+  std::vector<std::string> names;
+  names.reserve(dofs.size());
+  for (int dof : dofs) {
+    if (dof >= 0 && dof < (int)this->model->dofhandler.equations.size()) {
+      names.push_back(this->model->dofhandler.equations[dof]);
+    } else {
+      names.push_back("unknown");
+    }
+  }
+  return names;
+}
+
+std::vector<double> Solver::get_step_times() const {
+  return integrator.get_time_per_step();
+}
+
+void Solver::set_record_residual_history(bool on) {
+  record_residual_history = on;
+  integrator.set_record_history(on);
+}
+
+std::vector<std::vector<double>> Solver::get_residual_history() const {
+  return integrator.get_residual_history();
+}
+
+void Solver::set_line_search_factor(double f) {
+  line_search_factor = f;
+  integrator.set_line_search_factor(f);
+}
+
+std::vector<int> Solver::get_step_residual_indices() const {
+  return integrator.get_res_dof_per_step();
+}
+
+std::vector<std::string> Solver::get_equation_names() const {
+  return this->model->dofhandler.equations;
 }

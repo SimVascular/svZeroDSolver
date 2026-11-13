@@ -435,6 +435,12 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   }
   sim_params.sim_abs_tol = sim_config.value("absolute_tolerance", 1e-8);
   sim_params.sim_nliter = sim_config.value("maximum_nonlinear_iterations", 30);
+  sim_params.sim_line_search_steps = sim_config.value("line_search_steps", 0);
+  if (sim_params.sim_line_search_steps < 0) {
+    throw std::runtime_error(
+        "`simulation_parameters.line_search_steps` must be zero (line search "
+        "off) or a positive number of step halvings.");
+  }
   sim_params.sim_max_iter_error_to_warning =
       sim_config.value("max_iter_error_to_warning", false);
   sim_params.sim_steady_initial = sim_config.value("steady_initial", true);

@@ -8,6 +8,7 @@
 #define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 
 #include <Eigen/Dense>
+#include <vector>
 
 #include "Model.h"
 #include "State.h"
@@ -38,10 +39,20 @@ class Integrator {
   int size{0};
   int n_iter{0};
   int n_nonlin_iter{0};
+  std::vector<int> iter_per_step;     ///< Newton iterations per time step
+  std::vector<double> res_per_step;   ///< Final max residual per time step
+  std::vector<int> res_dof_per_step;  ///< DOF index of largest residual
+  std::vector<double> time_per_step;  ///< Time of each step
+  bool record_history{false};         ///< Record every Newton residual
+  int max_line_search_steps{0};       ///< Backtracking steps (0 = off)
+  double line_search_factor{1.0};     ///< Accepted growth of the correction
+  std::vector<std::vector<double>> residual_history;  ///< Residual per iter
   Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
   Model* model{nullptr};
+  std::vector<int> residual_check_dofs;  ///< Equations in the convergence
+                                         ///< check (all but pure outputs)
 
  public:
   /**
@@ -93,6 +104,19 @@ class Integrator {
    */
   State step(const State& state, double time);
 
+ private:
+  /**
+   * @brief Evaluate the residual of the system at a trial state
+   *
+   * @param st Trial state
+   * @param old_state State at the beginning of the time step
+   * @param res_dof Index of the degree of freedom with the largest residual
+   * @return Maximum absolute residual
+   */
+  double evaluate_residual(const State& st, const State& old_state,
+                           int& res_dof);
+
+ public:
   /**
    * @brief Get average number of nonlinear iterations in all step calls
    *
@@ -100,6 +124,61 @@ class Integrator {
    *
    */
   double avg_nonlin_iter();
+
+  /**
+   * @brief Newton iterations used in each time step so far
+   */
+  const std::vector<int>& get_iter_per_step() const { return iter_per_step; }
+
+  /**
+   * @brief Maximum residual at the end of each time step so far
+   */
+  const std::vector<double>& get_res_per_step() const { return res_per_step; }
+
+  /**
+   * @brief Index of the degree of freedom holding the largest residual at the
+   * end of each time step so far
+   */
+  const std::vector<int>& get_res_dof_per_step() const {
+    return res_dof_per_step;
+  }
+
+  /**
+   * @brief Time at the start of each step so far
+   */
+  const std::vector<double>& get_time_per_step() const { return time_per_step; }
+
+  /**
+   * @brief Discard the per-step convergence history
+   */
+  void set_record_history(bool on) { record_history = on; }
+
+  /**
+   * @brief Set the number of backtracking steps of the Newton line search
+   *
+   * @param n Maximum number of step halvings, 0 disables the line search
+   */
+  void set_max_line_search_steps(int n) { max_line_search_steps = n; }
+
+  /**
+   * @brief Set the acceptance factor of the Newton line search
+   */
+  void set_line_search_factor(double f) { line_search_factor = f; }
+
+  /**
+   * @brief Residual norm after every Newton iteration of every time step
+   */
+  const std::vector<std::vector<double>>& get_residual_history() const {
+    return residual_history;
+  }
+
+  void clear_history() {
+    residual_history.clear();
+    iter_per_step.clear();
+    res_per_step.clear();
+    res_dof_per_step.clear();
+    time_per_step.clear();
+  }
 };
 
 #endif  // SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_

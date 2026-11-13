@@ -69,6 +69,9 @@ struct SimulationParameters {
       false};  ///< Running 0D simulation coupled with external solver
   double sim_external_step_size{0.0};  ///< Step size of external solver if
                                        ///< running coupled
+  int sim_line_search_steps{
+      0};  ///< Maximum number of backtracking steps of the Newton line
+           ///< search (0 disables the line search)
   bool sim_max_iter_error_to_warning{
       false};  ///< If true, warn instead of throwing when max nonlinear
                ///< iterations is reached
@@ -417,8 +420,8 @@ void create_closed_loop(
  * @brief Handle the creation of valves and their associated connections
  *
  * The block type is read from `type` and must be a block of class
- * BlockClass::valve. Currently these are `ValveTanh` (ValveTanh) and
- * `PiecewiseValve` (PiecewiseValve).
+ * BlockClass::valve. Currently these are `ValveDiode` (ValveDiode),
+ * `ValveTanh` (ValveTanh) and `PiecewiseValve` (PiecewiseValve).
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks

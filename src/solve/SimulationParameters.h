@@ -226,9 +226,38 @@ void resolve_cardiac_cycle_period(Model& model,
 /**
  * @brief Load the 0D block in the model from a configuration
  *
+ * Every block is created from a type string, read from a key that depends on
+ * the configuration section the block is in:
+ *
+ * | Section | Type key | Valid values documented in |
+ * |---|---|---|
+ * | `vessels` | `zero_d_element_type` | create_vessels() |
+ * | `junctions` | `junction_type` | create_junctions() |
+ * | `boundary_conditions` | `bc_type` | create_boundary_conditions() |
+ * | `external_solver_coupling_blocks` | `type` | create_external_coupling() |
+ * | `closed_loop_blocks` | `closed_loop_type` | create_closed_loop() |
+ * | `valves` | `type` | create_valves() |
+ * | `chambers` | `type` | create_chambers() |
+ *
+ * Each loader checks its type key before creating the block. An invalid type
+ * fails at load time with an error that names the block, section, and key,
+ * and lists the valid values. The loaders derive those values from the block
+ * factory (Model::block_factory_map) filtered by BlockClass, so a newly
+ * registered block is accepted in the section that matches its class without
+ * changes to the loader code. Type strings are case-sensitive.
+ *
+ * The type lists in the comments of the individual loaders are written out by
+ * hand as a reference and can fall behind the registered blocks; the list in
+ * the error message is authoritative.
+ *
+ * External coupling blocks are created before boundary conditions, so
+ * `bc_type` values are validated first, while building the map of boundary
+ * condition types. Otherwise a misspelled `bc_type` on a boundary condition
+ * that a coupling block connects to would be reported as an unrelated
+ * coupling error.
+ *
  * @param config The json configuration
  * @param model The 0D model
- * @
  */
 void load_simulation_model(const nlohmann::json& config, Model& model);
 
@@ -242,6 +271,10 @@ void validate_input(const nlohmann::json& config);
 /**
  * @brief Handle the creation of vessel blocks and connections with boundary
  * conditions
+ *
+ * The block type is read from `zero_d_element_type` and must be a block of
+ * class BlockClass::vessel. Currently these are `BloodVessel` (BloodVessel),
+ * `BloodVesselCRL` (BloodVesselCRL), and `BloodVesselRC` (BloodVesselRC).
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
@@ -258,6 +291,37 @@ void create_vessels(
 /**
  * @brief Handle the creation of external coupling blocks and connections with
  * other blocks
+ *
+ * An external coupling block is the boundary through which an external solver
+ * (e.g. a 3D solver such as svMultiPhysics) exchanges flow and pressure with
+ * the 0D model. Its `type` accepts the same values as `bc_type` (see
+ * create_boundary_conditions()), but use `FLOW` or `PRESSURE`: those are the
+ * blocks whose time series the coupling interface updates
+ * (update_block_params() in interface.cpp), and the error for an invalid
+ * `type` says so.
+ * Besides `name`, `type`, and `values`, each block has:
+ *
+ * - `connected_block`: the 0D block on the other side of the coupling block,
+ *   given as a boundary condition's `bc_name`, a vessel's `vessel_name`, or
+ *   `ClosedLoopHeartAndPulmonary`.
+ * - `location`: `inlet` or `outlet`, the side of `connected_block` the
+ *   coupling block attaches to. With `inlet`, flow goes from the coupling
+ *   block into `connected_block`; with `outlet`, from `connected_block` into
+ *   the coupling block. The connection to `ClosedLoopHeartAndPulmonary` is
+ *   made by create_closed_loop() instead.
+ *
+ * Only some connected blocks are supported at each location. A connected
+ * block's type is its `bc_type` for a boundary condition, or `BloodVessel`
+ * for any vessel. These lists are hard-coded in the implementation
+ * (`supported_types`), so update both together:
+ *
+ * - `inlet`: `RESISTANCE`, `RCR`, `IMPEDANCE`, `ClosedLoopRCR`, `CORONARY`,
+ *   `ClosedLoopCoronaryLeft`, `ClosedLoopCoronaryRight`, `BloodVessel`
+ * - `outlet`: `ClosedLoopRCR`, `ClosedLoopHeartAndPulmonary`, `BloodVessel`
+ *
+ * An invalid `type` or `location`, an unknown `connected_block`, or an
+ * unsupported connected block type fails at load time with an error naming
+ * the coupling block.
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
@@ -276,6 +340,27 @@ void create_external_coupling(
 /**
  * @brief Handle the creation of boundary condition blocks
  *
+ * The block type is read from `bc_type`. Valid values are the blocks of class
+ * BlockClass::boundary_condition or BlockClass::closed_loop, except
+ * `ClosedLoopHeartAndPulmonary`, which is configured under
+ * `closed_loop_blocks` (see create_closed_loop()). Currently these are:
+ *
+ * | `bc_type` | Block |
+ * |---|---|
+ * | `FLOW` | FlowReferenceBC: prescribed flow rate |
+ * | `PRESSURE` | PressureReferenceBC: prescribed pressure |
+ * | `RESISTANCE` | ResistanceBC |
+ * | `RCR` | WindkesselBC |
+ * | `IMPEDANCE` | ImpedanceBC |
+ * | `CORONARY` | OpenLoopCoronaryBC |
+ * | `CORONARY_VAR_RES` | OpenLoopCoronaryVarResBC |
+ * | `ClosedLoopRCR` | ClosedLoopRCRBC |
+ * | `ClosedLoopCoronaryLeft` | ClosedLoopCoronaryLeftBC |
+ * | `ClosedLoopCoronaryRight` | ClosedLoopCoronaryRightBC |
+ *
+ * `bc_type` values are validated in load_simulation_model(), before this is
+ * called.
+ *
  * @param model The model the block is associated with
  * @param config The JSON configuration
  * @param component Name of the component to retrieve from config
@@ -291,6 +376,11 @@ void create_boundary_conditions(Model& model, const nlohmann::json& config,
 /**
  * @brief Handle the creation of junctions and their connections
  *
+ * The block type is read from `junction_type` and must be a block of class
+ * BlockClass::junction. Currently these are `NORMAL_JUNCTION` (Junction),
+ * `resistive_junction` (ResistiveJunction), and `BloodVesselJunction`
+ * (BloodVesselJunction).
+ *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
  * @param config The JSON configuration
@@ -305,6 +395,10 @@ void create_junctions(
 
 /**
  * @brief Handle the creation of closed-loop blocks and associated connections
+ *
+ * The block type is read from `closed_loop_type`. The only valid value is
+ * `ClosedLoopHeartAndPulmonary` (ClosedLoopHeartPulmonary), and at most one
+ * may be included.
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
@@ -322,6 +416,10 @@ void create_closed_loop(
 /**
  * @brief Handle the creation of valves and their associated connections
  *
+ * The block type is read from `type` and must be a block of class
+ * BlockClass::valve. Currently these are `ValveTanh` (ValveTanh) and
+ * `PiecewiseValve` (PiecewiseValve).
+ *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks
  * @param config The JSON configuration
@@ -334,6 +432,12 @@ void create_valves(
 
 /**
  * @brief Handle the creation of chambers
+ *
+ * The block type is read from `type` and must be a block of class
+ * BlockClass::chamber. Currently these are `ChamberSphere` (ChamberSphere),
+ * `ChamberElastanceInductor` (ChamberElastanceInductor),
+ * `ChamberElastanceInductorExponential` (ChamberElastanceInductorExponential),
+ * and `LinearElastanceChamber` (LinearElastanceChamber).
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks

@@ -86,9 +86,17 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  auto solver = Solver(config);
-  solver.run();
-  solver.write_result_to_csv(output_file_name);
+  // Report errors (e.g. an invalid configuration) as a message and a nonzero
+  // exit code instead of an uncaught exception. Returning normally also lets
+  // coverage instrumentation write its data, which std::terminate skips.
+  try {
+    auto solver = Solver(config);
+    solver.run();
+    solver.write_result_to_csv(output_file_name);
+  } catch (const std::exception& e) {
+    std::cerr << "[svzerodsolver] Error: " << e.what() << std::endl;
+    return 1;
+  }
 
   return 0;
 }

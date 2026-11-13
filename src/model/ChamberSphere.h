@@ -85,6 +85,13 @@
  * P_\text{in} - P_\text{out} = 0
  * \f]
  *
+ * 8. Passive stress:
+ * \f[
+ * -S_\text{pas} + S - \tau = 0
+ * \f]
+ * i.e. the elastic plus viscous part of the spherical stress, provided as a
+ * direct output.
+ *
  * ### Parameters
  *
  * Parameter sequence for constructing this block:
@@ -137,11 +144,14 @@
  * * `radius` - Chamber radius \f$r\f$
  * * `velo` - Chamber velocity \f$\dot{r}\f$
  * * `stress` - Spherical stress \f$S\f$
- * * `tau` - Active stress \f$\tau\f$
+ * * `active_stress` - Active stress \f$\tau\f$
  * * `volume` - Chamber volume \f$V\f$
+ * * `passive_stress` - Passive (elastic + viscous) stress
+ * \f$S_\text{pas} = S - \tau\f$
  *
  * Active stress models may introduce additional internal variables (e.g.
- * `e_c`, `tau_c`, `k_c`, `omega` for the `strain_dependent` model, see
+ * `e_c`, `tau_c`, `k_c`, `omega`, `sigma_c`, `sigma_s`, `e_s` for the
+ * `strain_dependent` model, see
  * \ref ActiveStress).
  *
  */

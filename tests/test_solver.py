@@ -44,7 +44,6 @@ EXPECTED_FAILURES = {
                                       'steadyFlow_blood_vessel_junction.json', 
                                       'valve_tanh.json', 
                                       'valve_diode.json', 
-                                      'valve_piecewise.json', 
                                       'valve_diode_regurgitant.json', 
                                       'pulsatileFlow_bifurcationR_RCR_cycle_error.json', 
                                       'pulsatileFlow_R_RCR_mean_derivative_variable.json',

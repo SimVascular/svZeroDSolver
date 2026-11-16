@@ -37,7 +37,6 @@
 #include "OpenLoopCoronaryBC.h"
 #include "OpenLoopCoronaryVarResBC.h"
 #include "Parameter.h"
-#include "PiecewiseValve.h"
 #include "PressureReferenceBC.h"
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"

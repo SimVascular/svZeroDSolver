@@ -82,7 +82,7 @@ nlohmann::json calibrate(const nlohmann::json& config) {
 
   // Create vessels
   DEBUG_MSG("Load vessels");
-  std::map<std::int64_t, std::string> vessel_id_map;
+  std::map<int, std::string> vessel_id_map;
   int param_counter = 0;
   for (auto const& vessel_config : config["vessels"]) {
     std::string vessel_name = vessel_config["vessel_name"];
@@ -100,7 +100,7 @@ nlohmann::json calibrate(const nlohmann::json& config) {
       model.add_parameter(0.0);
     }
     model.add_block(block, vessel_name, param_ids);
-    vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
+    vessel_id_map.insert({vessel_config["vessel_id"].get<int>(), vessel_name});
     DEBUG_MSG("Created vessel " << vessel_name);
 
     register_active(*block, param_ids, resolve_calibrate_set(vessel_config));
@@ -143,12 +143,16 @@ nlohmann::json calibrate(const nlohmann::json& config) {
 
     // Check for connections to inlet and outlet vessels and append to
     // connections list
-    for (auto vessel_id : junction_config["inlet_vessels"]) {
-      connections.push_back({vessel_id_map[vessel_id], junction_name});
+    for (int vessel_id : junction_config["inlet_vessels"]) {
+      connections.push_back({get_vessel_name(vessel_id_map, vessel_id,
+                                             junction_name, "inlet_vessels"),
+                             junction_name});
     }
 
-    for (auto vessel_id : outlet_vessels) {
-      connections.push_back({junction_name, vessel_id_map[vessel_id]});
+    for (int vessel_id : outlet_vessels) {
+      connections.push_back(
+          {junction_name, get_vessel_name(vessel_id_map, vessel_id,
+                                          junction_name, "outlet_vessels")});
     }
     DEBUG_MSG("Created junction " << junction_name);
   }

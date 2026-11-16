@@ -30,37 +30,6 @@ std::string join_names(const std::vector<std::string>& items) {
 }
 
 /**
- * @brief Name of the vessel with `vessel_id`, for a junction connection.
- *
- * Junctions reference vessels by `vessel_id`. An id that no vessel defines
- * used to resolve to an empty block name, which left the junction and the
- * vessels around it without the connections their equations assume.
- *
- * @param vessel_id_map Vessel IDs to vessel names, filled by create_vessels()
- * @param vessel_id ID referenced by the junction
- * @param junction_name Junction holding the reference, for the error message
- * @param key `inlet_vessels` or `outlet_vessels`, for the error message
- * @return Name of the referenced vessel
- */
-std::string get_vessel_name(const std::map<int, std::string>& vessel_id_map,
-                            int vessel_id, const std::string& junction_name,
-                            const std::string& key) {
-  auto vessel = vessel_id_map.find(vessel_id);
-  if (vessel != vessel_id_map.end()) {
-    return vessel->second;
-  }
-  std::vector<std::string> defined_ids;
-  for (const auto& defined : vessel_id_map) {
-    defined_ids.push_back(std::to_string(defined.first));
-  }
-  throw std::runtime_error(
-      "Junction '" + junction_name + "' lists vessel_id " +
-      std::to_string(vessel_id) + " in " + key +
-      ", but no vessel has that vessel_id. Defined vessel_id values are: " +
-      (defined_ids.empty() ? "none" : join_names(defined_ids)) + ".");
-}
-
-/**
  * @brief List the registered block types whose block class is in `classes`.
  *
  * Derived from the block factory, so valid-type lists in error messages

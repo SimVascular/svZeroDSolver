@@ -42,6 +42,11 @@ int main(int argc, char* argv[]) {
         << "' does not have the parameters needed by the calibrate program."
         << std::endl;
     return 1;
+  } catch (const std::exception& e) {
+    // Report an invalid configuration as a message and a nonzero exit code
+    // instead of an uncaught exception, as svzerodsolver does.
+    std::cerr << "[svzerodcalibrator] Error: " << e.what() << std::endl;
+    return 1;
   }
 
   // Write optimized simulation config

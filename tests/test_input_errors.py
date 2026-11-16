@@ -274,3 +274,54 @@ def test_junction_without_connection_keys():
         "inlet_vessels and outlet_vessels, or both inlet_blocks and "
         "outlet_blocks. Keys found: inlet_vessels." in load_error_message(config)
     )
+
+
+def test_junction_lists_only_the_first_vessel_ids():
+    """Models have hundreds of vessels, so the list of ids is cut short."""
+    config = load_case(BIFURCATION_CASE)
+    for vessel_id in range(3, 15):
+        add_unconnected_vessel(config, vessel_id, f"extra{vessel_id}")
+    config["junctions"][0]["inlet_vessels"] = [99]
+    assert (
+        "Junction 'J0' lists vessel_id 99 in inlet_vessels, but no vessel has "
+        "that vessel_id. Defined vessel_id values are: 0, 1, 2, 3, 4, 5, 6, 7, "
+        "8, 9, and 5 more." in load_error_message(config)
+    )
+
+
+def load_calibrator_error_message(config):
+    """Run `config` through the calibrator, which must fail, and return the
+    error message.
+
+    The calibrator reads the `vessels` and `junctions` sections itself, so it
+    needs its own check that a junction's vessel_id error reaches the user.
+    """
+    if pytest.coverage:
+        with TemporaryDirectory() as tempdir:
+            config_file = os.path.join(tempdir, "config.json")
+            with open(config_file, "w") as ff:
+                json.dump(config, ff)
+            exe = os.path.join(this_file_dir, "..", "Release",
+                               "svzerodcalibrator")
+            run = subprocess.run(
+                [exe, config_file, os.path.join(tempdir, "out.json")],
+                capture_output=True,
+                text=True,
+            )
+        assert run.returncode == 1, run.stdout + run.stderr
+        return run.stderr
+    with pytest.raises(RuntimeError) as err:
+        svzerod.calibrate(config)
+    return str(err.value)
+
+
+def test_calibrator_junction_with_unknown_vessel_id():
+    """A vessel_id no vessel defines used to reach the calibrator as a block
+    lookup for the empty name."""
+    config = load_case("vmr/input/0080_0001_calibrate_from_0d")
+    config["junctions"][0]["outlet_vessels"] = [1, 9999]
+    assert (
+        "Junction 'J0' lists vessel_id 9999 in outlet_vessels, but no vessel "
+        "has that vessel_id. Defined vessel_id values are: "
+        in load_calibrator_error_message(config)
+    )

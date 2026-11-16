@@ -8,6 +8,7 @@
 #define SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_
 
 #include <Eigen/Dense>
+#include <vector>
 
 #include "Model.h"
 #include "State.h"
@@ -38,6 +39,10 @@ class Integrator {
   int size{0};
   int n_iter{0};
   int n_nonlin_iter{0};
+  std::vector<int> iter_per_step;     ///< Newton iterations per time step
+  std::vector<double> res_per_step;   ///< Final max residual per time step
+  std::vector<int> res_dof_per_step;  ///< DOF index of largest residual
+  std::vector<double> time_per_step;  ///< Time of each step
   Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
@@ -100,6 +105,46 @@ class Integrator {
    *
    */
   double avg_nonlin_iter();
+
+  /**
+   * @brief Newton iterations of each time step so far
+   *
+   * @return Number of Newton iterations of each time step
+   */
+  const std::vector<int>& get_iter_per_step() const { return iter_per_step; }
+
+  /**
+   * @brief Largest residual left at the end of each time step so far
+   *
+   * @return Largest absolute residual of each time step
+   */
+  const std::vector<double>& get_res_per_step() const { return res_per_step; }
+
+  /**
+   * @brief Equation holding the largest residual of each time step so far
+   *
+   * @return Equation index of each time step
+   */
+  const std::vector<int>& get_res_dof_per_step() const {
+    return res_dof_per_step;
+  }
+
+  /**
+   * @brief Time at the start of each step so far
+   *
+   * @return Time of each time step
+   */
+  const std::vector<double>& get_time_per_step() const { return time_per_step; }
+
+  /**
+   * @brief Discard the per-step convergence history
+   */
+  void clear_history() {
+    iter_per_step.clear();
+    res_per_step.clear();
+    res_dof_per_step.clear();
+    time_per_step.clear();
+  }
 };
 
 #endif  // SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_

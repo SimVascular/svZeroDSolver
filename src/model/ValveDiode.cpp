@@ -4,6 +4,13 @@
 
 #include "Model.h"
 
+double ValveDiode::get_beta(const std::vector<double>& parameters) const {
+  double rmin = parameters[global_param_ids[ParamId::RMIN]];
+  double rmax = parameters[global_param_ids[ParamId::RMAX]];
+  // A non-positive Rmax means an ideal closed valve: no reverse flow.
+  return rmax > 0.0 ? rmin / rmax : 0.0;
+}
+
 void ValveDiode::setup_dofs(DOFHandler& dofhandler) {
   // Two equations, the diode condition and flow continuity. The valve status
   // is reported but feeds back into nothing, so it is a post-processing
@@ -16,19 +23,32 @@ void ValveDiode::setup_dofs(DOFHandler& dofhandler) {
 
 void ValveDiode::update_constant(SparseSystem& system,
                                  std::vector<double>& parameters) {
-  double r = parameters[global_param_ids[ParamId::R]];
-  if (r <= 0.0) {
+  double rmin = parameters[global_param_ids[ParamId::RMIN]];
+  double rmax = parameters[global_param_ids[ParamId::RMAX]];
+  if (rmin <= 0.0) {
     throw std::runtime_error(
         "ValveDiode '" + get_name() +
-        "': the open resistance R must be positive, got " + std::to_string(r) +
-        ". A valve with zero open resistance does not define a flow rate "
+        "': the forward resistance Rmin must be positive, got " +
+        std::to_string(rmin) +
+        ". A valve with zero forward resistance does not define a flow rate "
         "when it is closed.");
   }
+  if (rmax > 0.0 && rmax <= rmin) {
+    throw std::runtime_error(
+        "ValveDiode '" + get_name() + "': the reverse resistance Rmax (" +
+        std::to_string(rmax) +
+        ") must be larger than the forward resistance Rmin (" +
+        std::to_string(rmin) +
+        "). Leave Rmax out for a valve that does not leak.");
+  }
+  double beta = get_beta(parameters);
 
-  // Equation 0: R * q_in - 0.5 * (p_in - p_out) - 0.5 * sqrt(...) = 0
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -0.5;
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = 0.5;
-  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = r;
+  // Equation 0:
+  //   Rmin * q_in - 0.5 * (1 + beta) * (p_in - p_out)
+  //                - 0.5 * (1 - beta) * sqrt((p_in - p_out)^2 + 4 eps^2) = 0
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -0.5 * (1.0 + beta);
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = 0.5 * (1.0 + beta);
+  system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = rmin;
 
   // Equation 1: q_in - q_out = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
@@ -53,18 +73,18 @@ void ValveDiode::update_solution(
 
   // Get parameters
   double eps = parameters[global_param_ids[ParamId::EPS]];
+  double beta = get_beta(parameters);
 
-  // sqrt(dp^2 + 4 eps^2) and its derivative s = d/d(dp)
   double root = sqrt(dp * dp + 4.0 * eps * eps);
   // Slope of the smoothed maximum, in [0, 1]. For eps = 0 and dp = 0 this
   // picks the closed branch of the subdifferential.
   double s = root > 0.0 ? 0.5 * (1.0 + dp / root) : 0.0;
 
   // Nonlinear term
-  system.C(global_eqn_ids[0]) = -0.5 * root;
+  system.C(global_eqn_ids[0]) = -0.5 * (1.0 - beta) * root;
 
-  // Derivative of the non-linear term. d(0.5*root)/d(dp) = s - 0.5
-  double droot = s - 0.5;
+  // Derivative of the non-linear term, d(0.5*root)/d(dp) = s - 0.5
+  double droot = (1.0 - beta) * (s - 0.5);
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -droot;
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[2]) = droot;
 }

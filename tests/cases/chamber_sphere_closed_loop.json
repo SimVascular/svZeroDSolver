@@ -151,7 +151,7 @@
       "type": "ValveDiode",
       "name": "MV",
       "params": {
-        "R": 5.5e4,
+        "Rmin": 5.5e4,
         "upstream_block": "veins",
         "downstream_block": "LV"
       }
@@ -160,7 +160,7 @@
       "type": "ValveDiode",
       "name": "AV",
       "params": {
-        "R": 8.4e2,
+        "Rmin": 8.4e2,
         "upstream_block": "LV",
         "downstream_block": "aorta"
       }

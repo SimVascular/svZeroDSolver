@@ -153,7 +153,7 @@
       "type": "ValveDiode",
       "name": "TV",
       "params": {
-        "R": 0.007887459,
+        "Rmin": 0.007887459,
         "upstream_block": "RA",
         "downstream_block": "RV"
       }
@@ -162,7 +162,7 @@
       "type": "ValveDiode",
       "name": "PV",
       "params": {
-        "R": 0.035061704,
+        "Rmin": 0.035061704,
         "upstream_block": "RV",
         "downstream_block": "pul_vessel"
       }
@@ -171,7 +171,7 @@
       "type": "ValveDiode",
       "name": "MV",
       "params": {
-        "R": 0.005310825,
+        "Rmin": 0.005310825,
         "upstream_block": "LA",
         "downstream_block": "LV"
       }
@@ -180,7 +180,7 @@
       "type": "ValveDiode",
       "name": "AV",
       "params": {
-        "R": 0.034320234,
+        "Rmin": 0.034320234,
         "upstream_block": "LV",
         "downstream_block": "aortic_cap"
       }

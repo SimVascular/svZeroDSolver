@@ -195,7 +195,7 @@
       "type": "ValveDiode",
       "name": "tricuspid",
       "params": {
-        "R": 6.665,
+        "Rmin": 6.665,
         "upstream_block": "right_atrium",
         "downstream_block": "right_ventricle"
       }
@@ -204,7 +204,7 @@
       "type": "ValveDiode",
       "name": "pulmonary",
       "params": {
-        "R": 6.665,
+        "Rmin": 6.665,
         "upstream_block": "right_ventricle",
         "downstream_block": "pul_artery"
       }
@@ -213,7 +213,7 @@
       "type": "ValveDiode",
       "name": "mitral",
       "params": {
-        "R": 6.665,
+        "Rmin": 6.665,
         "upstream_block": "left_atrium",
         "downstream_block": "left_ventricle"
       }
@@ -222,7 +222,7 @@
       "type": "ValveDiode",
       "name": "aortic",
       "params": {
-        "R": 6.665,
+        "Rmin": 6.665,
         "upstream_block": "left_ventricle",
         "downstream_block": "sys_artery"
       }

@@ -16,17 +16,26 @@
 /**
  * @brief Valve (regularized diode) block.
  *
- * Models an ideal check valve with open resistance \f$R\f$ as the
- * complementarity (diode) condition
+ * Models a check valve as a resistor with two slopes: \f$R_{min}\f$ in the
+ * forward direction and \f$R_{max}\f$ in the reverse one,
  *
  * \f[
- * Q \geq 0, \quad RQ - \Delta p \geq 0, \quad Q\,(RQ - \Delta p) = 0,
- * \qquad \Delta p = P_{in} - P_{out},
+ * Q = \frac{\max(\Delta p, 0)}{R_{min}} + \frac{\min(\Delta p, 0)}
+ * {R_{max}}, \qquad \Delta p = P_{in} - P_{out}.
  * \f]
  *
- * which is equivalent to the single equation \f$ RQ = \max(\Delta p, 0)\f$.
- * The valve is open when \f$\Delta p > 0\f$ (then \f$\Delta p = RQ\f$) and
- * closed otherwise (then \f$Q = 0\f$).
+ * \f$R_{min}\f$ is the resistance of the open valve, which a stenosis
+ * raises. \f$R_{max}\f$ is the resistance of the closed valve, which a
+ * regurgitant valve lowers; leaving it out gives the ideal check valve
+ * \f$R_{min} Q = \max(\Delta p, 0)\f$, the complementarity condition
+ *
+ * \f[
+ * Q \geq 0, \quad R_{min} Q - \Delta p \geq 0, \quad
+ * Q\,(R_{min} Q - \Delta p) = 0,
+ * \f]
+ *
+ * in which the valve is open when \f$\Delta p > 0\f$ (then
+ * \f$\Delta p = R_{min} Q\f$) and closed otherwise (then \f$Q = 0\f$).
  *
  * The non-smooth maximum is replaced by the standard smoothed maximum
  *
@@ -35,28 +44,41 @@
  * \frac{1}{2}\left(x + \sqrt{x^2 + 4\varepsilon^2}\right),
  * \f]
  *
- * so that the governing equation reads
+ * so that, with the reverse-to-forward conductance ratio
  *
  * \f[
- * RQ_{in} - \frac{1}{2}\left(\Delta p +
- * \sqrt{\Delta p^2 + 4\varepsilon^2}\right) = 0.
+ * \beta = \frac{R_{min}}{R_{max}} \in [0, 1),
+ * \f]
+ *
+ * the governing equation reads
+ *
+ * \f[
+ * R_{min}Q_{in} - \frac{1}{2}(1+\beta)\,\Delta p
+ * - \frac{1}{2}(1-\beta)\sqrt{\Delta p^2 + 4\varepsilon^2} = 0.
  * \f]
  *
  * \f$\varepsilon\f$ is a pressure and sets the width of the transition
- * between the open and the closed state. For \f$\varepsilon = 0\f$ the exact
- * diode is recovered and the Newton iteration becomes a semi-smooth
- * (active-set) iteration; for \f$\varepsilon > 0\f$ the equation is smooth
- * and the valve leaks a backward flow of at most
- * \f$\varepsilon / R\f$ at \f$\Delta p = 0\f$, decaying like
- * \f$\varepsilon^2 / (R\,|\Delta p|)\f$ when the valve is firmly closed.
+ * between the open and the closed state. For \f$\varepsilon = 0\f$ the
+ * exact two-slope valve is recovered and the Newton iteration becomes a
+ * semi-smooth (active-set) iteration; for \f$\varepsilon > 0\f$ the
+ * equation is smooth and the valve leaks an additional backward flow of at
+ * most \f$\varepsilon / R_{min}\f$ at \f$\Delta p = 0\f$, decaying like
+ * \f$\varepsilon^2 / (R_{min}|\Delta p|)\f$ when the valve is firmly
+ * closed.
+ *
+ * \f$\beta\f$ enters linearly and the equation stays piecewise linear for
+ * every value of it, so regurgitation costs nothing in robustness: it makes
+ * the problem less non-linear, not more. At \f$\beta = 1\f$ the valve
+ * degenerates into a plain resistor, which the block rejects.
  *
  * Compared with \ref ValveTanh this formulation
  *
- * * has only one open resistance instead of an open/closed resistance pair,
- *   so there is no \f$R_{max}/R_{min}\f$ ratio to condition the system,
- * * has a Jacobian whose entries are bounded by \f$1/2\f$ and \f$R\f$ for
- *   every state, instead of growing with
+ * * has a Jacobian whose derivative with respect to \f$\Delta p\f$ stays
+ *   between \f$-1\f$ and \f$-\beta\f$ for every state, however large
+ *   \f$R_{max}/R_{min}\f$ grows, instead of growing with
  *   \f$k\,Q\,(R_{max}-R_{min})\f$ at the transition,
+ * * needs no steepness, so there is no parameter whose units have to be
+ *   tracked across unit systems,
  * * converges to a well-defined limit (the ideal diode) as
  *   \f$\varepsilon \to 0\f$, so tightening the regularization refines the
  *   solution instead of changing it qualitatively.
@@ -65,7 +87,7 @@
  * \begin{circuitikz} \draw
  * node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
  * \draw (1,0) node[anchor=south]{$P_{in}$}
- * to [D, l=$R$, *-*] (3,0)
+ * to [D, l=$R_{min}$, *-*] (3,0)
  * node[anchor=south]{$P_{out}$};
  * \end{circuitikz}
  * \f]
@@ -73,8 +95,8 @@
  * ### Governing equations
  *
  * \f[
- * RQ_{in} - \frac{1}{2}\left(P_{in}-P_{out} +
- * \sqrt{(P_{in}-P_{out})^2 + 4\varepsilon^2}\right) = 0
+ * R_{min}Q_{in} - \frac{1}{2}(1+\beta)\left(P_{in}-P_{out}\right)
+ * - \frac{1}{2}(1-\beta)\sqrt{(P_{in}-P_{out})^2 + 4\varepsilon^2} = 0
  * \f]
  *
  * \f[
@@ -101,14 +123,14 @@
  *
  * \f[
  * \mathbf{F}^{e}=\left[\begin{array}{cccc}
- * -1/2 & R &  1/2 & 0\\
- * 0    & 1 &  0   & -1
+ * -(1+\beta)/2 & R_{min} &  (1+\beta)/2 & 0\\
+ * 0            & 1       &  0            & -1
  * \end{array}\right]
  * \f]
  *
  * \f[
  * \mathbf{c}^{e}=\left[\begin{array}{c}
- * -\frac{1}{2}\sqrt{\Delta p^2 + 4\varepsilon^2} \\
+ * -\frac{1}{2}(1-\beta)\sqrt{\Delta p^2 + 4\varepsilon^2} \\
  * 0
  * \end{array}\right]
  * \f]
@@ -116,14 +138,20 @@
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\mathbf{y}}\right)^{e} =
  * \left[\begin{array}{cccc}
- * (1/2 - s) & 0 &  (s - 1/2) & 0\\
- * 0         & 0 &  0         & 0
+ * -d & 0 &  d & 0\\
+ * 0  & 0 &  0 & 0
  * \end{array}\right] \f]
  * with
  * \f[
  * s = \frac{1}{2}\left(1 +
- * \frac{\Delta p}{\sqrt{\Delta p^2 + 4\varepsilon^2}}\right).
+ * \frac{\Delta p}{\sqrt{\Delta p^2 + 4\varepsilon^2}}\right)
+ * \in [0, 1], \qquad d = (1-\beta)\left(s - \frac{1}{2}\right).
  * \f]
+ *
+ * The derivative of the first equation with respect to \f$\Delta p\f$ is
+ * \f$-\frac{1}{2}(1+\beta) - (1-\beta)(s - \frac{1}{2})\f$, which lies
+ * between \f$-1\f$ (open) and \f$-\beta\f$ (closed) for every state and
+ * every parameter choice.
  *
  * The valve status is a post-processing variable, see
  * DOFHandler::register_output_variable: it is reported but has no equation
@@ -133,10 +161,14 @@
  *
  * Parameter sequence for constructing this block
  *
- * * `0` R: Resistance of the open valve (must be positive)
- * * `1` eps: Smoothing pressure, optional, defaults to 0 (exact diode)
- * * `2` upstream_block: Name of block connected upstream
- * * `3` downstream_block: Name of block connected downstream
+ * * `0` Rmin: Resistance of the open valve, raised by a stenosis (must be
+ *   positive)
+ * * `1` Rmax: Resistance of the closed valve, lowered by a regurgitant
+ *   valve. Optional; left out (or non-positive) the valve does not leak.
+ *   Must be larger than `Rmin`.
+ * * `2` eps: Smoothing pressure, optional, defaults to 0 (exact valve)
+ * * `3` upstream_block: Name of block connected upstream
+ * * `4` downstream_block: Name of block connected downstream
  *
  * ### Usage in json configuration file
  *
@@ -145,13 +177,21 @@
  *             "type": "ValveDiode",
  *             "name": "valve",
  *             "params": {
- *                 "R": 0.005,
- *                 "eps": 0.0,
+ *                 "Rmin": 0.005,
  *                 "upstream_block": "upstream_vessel",
  *                 "downstream_block": "downstream_vessel"
  *             }
  *         }
  *     ]
+ *
+ * A stenotic valve raises `Rmin`; a regurgitant one adds a finite `Rmax`:
+ *
+ *     "params": {
+ *         "Rmin": 0.05,
+ *         "Rmax": 20.0,
+ *         "upstream_block": "upstream_vessel",
+ *         "downstream_block": "downstream_vessel"
+ *     }
  *
  * ### Internal variables
  *
@@ -167,8 +207,9 @@ class ValveDiode : public Block {
    *
    */
   enum ParamId {
-    R = 0,
-    EPS = 1,
+    RMIN = 0,
+    RMAX = 1,
+    EPS = 2,
   };
 
   /**
@@ -179,7 +220,8 @@ class ValveDiode : public Block {
    */
   ValveDiode(int id, Model* model)
       : Block(id, model, BlockType::valve_diode, BlockClass::valve,
-              {{"R", InputParameter()},
+              {{"Rmin", InputParameter()},
+               {"Rmax", InputParameter(true, false, true, 0.0)},
                {"eps", InputParameter(true, false, true, 0.0)},
                {"upstream_block", InputParameter(false, false, false)},
                {"downstream_block", InputParameter(false, false, false)}}) {}
@@ -223,6 +265,19 @@ class ValveDiode : public Block {
    */
   void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
 
+ private:
+  /**
+   * @brief Reverse-to-forward conductance ratio Rmin / Rmax
+   *
+   * Zero for a valve that does not leak, which is what a non-positive Rmax
+   * means.
+   *
+   * @param parameters Parameters of the model
+   * @return Conductance ratio in [0, 1)
+   */
+  double get_beta(const std::vector<double>& parameters) const;
+
+ public:
   /**
    * @brief Number of triplets of element
    *

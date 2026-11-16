@@ -73,7 +73,7 @@
       "type": "ValveDiode",
       "name": "valve0",
       "params": {
-        "R": 100.0,
+        "Rmin": 100.0,
         "upstream_block": "INLET",
         "downstream_block": "ventricle"
       }
@@ -82,7 +82,7 @@
       "type": "ValveDiode",
       "name": "valve1",
       "params": {
-        "R": 100.0,
+        "Rmin": 100.0,
         "upstream_block": "ventricle",
         "downstream_block": "vessel"
       }

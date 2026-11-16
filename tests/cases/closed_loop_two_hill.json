@@ -157,7 +157,7 @@
       "type": "ValveDiode",
       "name": "MV",
       "params": {
-        "R": 6.666e5,
+        "Rmin": 6.666e5,
         "upstream_block": "LA",
         "downstream_block": "LV"
       }
@@ -166,7 +166,7 @@
       "type": "ValveDiode",
       "name": "AV",
       "params": {
-        "R": 6.666e5,
+        "Rmin": 6.666e5,
         "upstream_block": "LV",
         "downstream_block": "AR_SYS"
       }
@@ -175,7 +175,7 @@
       "type": "ValveDiode",
       "name": "TV",
       "params": {
-        "R": 6.666e5,
+        "Rmin": 6.666e5,
         "upstream_block": "RA",
         "downstream_block": "RV"
       }
@@ -184,7 +184,7 @@
       "type": "ValveDiode",
       "name": "PV",
       "params": {
-        "R": 6.666e5,
+        "Rmin": 6.666e5,
         "upstream_block": "RV",
         "downstream_block": "AR_PUL"
       }

@@ -31,7 +31,19 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  const auto& config = nlohmann::json::parse(input_file);
+  nlohmann::json config;
+
+  try {
+    config = nlohmann::json::parse(input_file);
+  } catch (const nlohmann::json::parse_error& e) {
+    std::cerr << "[svzerodcalibrator] Error: Parsing the input file '"
+              << input_file_name << "' has failed." << std::endl;
+    std::cerr << "[svzerodcalibrator] Details of the parsing error: "
+              << std::endl;
+    std::cerr << e.what() << std::endl;
+    return 1;
+  }
+
   nlohmann::json output_config;
 
   try {

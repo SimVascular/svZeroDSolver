@@ -325,3 +325,35 @@ def test_calibrator_junction_with_unknown_vessel_id():
         "has that vessel_id. Defined vessel_id values are: "
         in load_calibrator_error_message(config)
     )
+
+
+# The non-coverage CI job runs pytest before building Release/, so tests that
+# need an executable only run where one exists.
+CALIBRATOR_EXE = os.path.join(
+    this_file_dir, "..", "Release", "svzerodcalibrator"
+)
+
+
+@pytest.mark.skipif(
+    not os.path.exists(CALIBRATOR_EXE),
+    reason="needs the svzerodcalibrator executable",
+)
+def test_calibrator_malformed_json_file():
+    """A file that isn't valid JSON used to terminate the calibrator.
+
+    Only the executable reads a file; the Python binding takes a dict.
+    """
+    with TemporaryDirectory() as tempdir:
+        config_file = os.path.join(tempdir, "config.json")
+        with open(config_file, "w") as ff:
+            ff.write('{"vessels": [,]}')
+        run = subprocess.run(
+            [CALIBRATOR_EXE, config_file, os.path.join(tempdir, "out.json")],
+            capture_output=True,
+            text=True,
+        )
+    assert run.returncode == 1, run.stdout + run.stderr
+    assert (
+        f"[svzerodcalibrator] Error: Parsing the input file '{config_file}' "
+        "has failed." in run.stderr
+    )

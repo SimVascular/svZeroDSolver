@@ -15,8 +15,7 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   y_coeff = gamma * time_step_size;
   y_coeff_jacobian = alpha_f * y_coeff;
 
-  // The state vector holds every variable; the system only holds the ones
-  // that are solved for, which occupy its leading block.
+  // The system holds only the solved variables, in the leading block of y
   size = model->dofhandler.size();
   num_equations = model->dofhandler.get_num_equations();
   system = SparseSystem(num_equations);
@@ -117,8 +116,7 @@ State Integrator::step(const State& old_state, double time) {
     // Perform post-solve actions on blocks
     model->post_solve(new_state.y);
 
-    // Update the solution. Only the solved variables take part; the
-    // post-processing variables are filled in once the step is accepted.
+    // Update the solution
     new_state.ydot.head(num_equations) += system.dydot;
     new_state.y.head(num_equations) += system.dydot * y_coeff;
 

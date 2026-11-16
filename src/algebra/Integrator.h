@@ -108,22 +108,21 @@ class Integrator {
   double avg_nonlin_iter();
 
   /**
-   * @brief Newton iterations used in each time step so far
+   * @brief Newton iterations of each time step so far
    *
    * @return Number of Newton iterations of each time step
    */
   const std::vector<int>& get_iter_per_step() const { return iter_per_step; }
 
   /**
-   * @brief Maximum residual at the end of each time step so far
+   * @brief Largest residual left at the end of each time step so far
    *
-   * @return Largest absolute residual left at the end of each time step
+   * @return Largest absolute residual of each time step
    */
   const std::vector<double>& get_res_per_step() const { return res_per_step; }
 
   /**
-   * @brief Index of the equation holding the largest residual at the end of
-   * each time step so far
+   * @brief Equation holding the largest residual of each time step so far
    *
    * @return Equation index of each time step
    */
@@ -134,7 +133,7 @@ class Integrator {
   /**
    * @brief Time at the start of each step so far
    *
-   * @return Time at the start of each time step
+   * @return Time of each time step
    */
   const std::vector<double>& get_time_per_step() const { return time_per_step; }
 

@@ -150,8 +150,7 @@ class Block {
    * Equation indices correspond to rows in the global system.
    */
   std::vector<int> global_eqn_ids;
-  std::list<std::string>
-      output_var_names;  ///< Post-processing variables declared by the block
+  std::list<std::string> output_var_names;  ///< Post-processing variables
 
   /**
    * @brief Get the name of the block
@@ -184,10 +183,9 @@ class Block {
    * equations at
    * @param num_equations Number of equations of the block
    * @param internal_var_names Names of the internal variables of the block
-   * @param output_var_names Names of the post-processing variables of the
-   * block, see DOFHandler::register_output_variable. They have no equation
-   * and are filled in \ref update_outputs; their indices are appended to
-   * \ref global_var_ids after the internal variables.
+   * @param output_var_names Post-processing variables of the block, see
+   * DOFHandler::register_output_variable. Their indices follow the internal
+   * ones in \ref global_var_ids.
    */
 
   void setup_dofs_(DOFHandler& dofhandler, int num_equations,
@@ -195,13 +193,7 @@ class Block {
                    const std::list<std::string>& output_var_names = {});
 
   /**
-   * @brief Register the post-processing variables declared in \ref
-   * setup_dofs_
-   *
-   * Called by Model::finalize in a second pass, after every block has
-   * registered its solved variables, so that the post-processing variables
-   * end up at the tail of the state vector. Their indices are appended to
-   * \ref global_var_ids in the order they were declared.
+   * @brief Register the post-processing variables declared in setup_dofs_
    *
    * @param dofhandler Degree-of-freedom handler to register variables at
    */
@@ -276,11 +268,8 @@ class Block {
   /**
    * @brief Compute the post-processing variables of the block
    *
-   * Called once per accepted time step, after the non-linear solve has
-   * converged, for blocks that declared output variables in \ref
-   * setup_dofs_. Write each of them into \p y at its index in \ref
-   * global_var_ids. Because these variables are not integrated, the value
-   * written here is the one reported at the end of the step.
+   * Called once per accepted time step. Write each output variable into
+   * \p y at its index in \ref global_var_ids.
    *
    * @param y Accepted state vector, to write the output variables into
    */
@@ -290,9 +279,8 @@ class Block {
    * @brief Accept a converged time-step.
    *
    * This hook is called once per accepted integrator step and can be used by
-   * blocks that maintain persistent memory (for example convolution history)
-   * or that write diagnostic outputs which the time integration cannot
-   * represent, such as a discontinuous valve state.
+   * blocks that maintain persistent memory (for example convolution
+   * history).
    *
    * @param y Accepted state vector, may be modified
    */

@@ -16,41 +16,25 @@
 /**
  * @brief Valve (regularized diode) block.
  *
- * Models a check valve as a resistor with two slopes: \f$R_{min}\f$ in the
- * forward direction and \f$R_{max}\f$ in the reverse one,
+ * Models a check valve as a resistor with two slopes, \f$R_{min}\f$
+ * forward and \f$R_{max}\f$ in reverse,
  *
  * \f[
  * Q = \frac{\max(\Delta p, 0)}{R_{min}} + \frac{\min(\Delta p, 0)}
  * {R_{max}}, \qquad \Delta p = P_{in} - P_{out}.
  * \f]
  *
- * \f$R_{min}\f$ is the resistance of the open valve, which a stenosis
- * raises. \f$R_{max}\f$ is the resistance of the closed valve, which a
- * regurgitant valve lowers; leaving it out gives the ideal check valve
- * \f$R_{min} Q = \max(\Delta p, 0)\f$, the complementarity condition
+ * A stenosis raises \f$R_{min}\f$ and a regurgitant valve lowers
+ * \f$R_{max}\f$. Leaving \f$R_{max}\f$ out gives the ideal check valve
+ * \f$R_{min} Q = \max(\Delta p, 0)\f$, which is the complementarity
+ * condition \f$Q \geq 0\f$, \f$R_{min} Q - \Delta p \geq 0\f$,
+ * \f$Q\,(R_{min} Q - \Delta p) = 0\f$.
  *
- * \f[
- * Q \geq 0, \quad R_{min} Q - \Delta p \geq 0, \quad
- * Q\,(R_{min} Q - \Delta p) = 0,
- * \f]
- *
- * in which the valve is open when \f$\Delta p > 0\f$ (then
- * \f$\Delta p = R_{min} Q\f$) and closed otherwise (then \f$Q = 0\f$).
- *
- * The non-smooth maximum is replaced by the standard smoothed maximum
- *
- * \f[
- * \max\nolimits_{\varepsilon}(x) =
- * \frac{1}{2}\left(x + \sqrt{x^2 + 4\varepsilon^2}\right),
- * \f]
- *
- * so that, with the reverse-to-forward conductance ratio
- *
- * \f[
- * \beta = \frac{R_{min}}{R_{max}} \in [0, 1),
- * \f]
- *
- * the governing equation reads
+ * Replacing the maximum by the smoothed
+ * \f$\max_{\varepsilon}(x) = \frac{1}{2}(x + \sqrt{x^2 +
+ * 4\varepsilon^2})\f$ and writing \f$\beta = R_{min}/R_{max} \in
+ * [0,1)\f$ for the reverse-to-forward conductance ratio, the governing
+ * equation becomes
  *
  * \f[
  * R_{min}Q_{in} - \frac{1}{2}(1+\beta)\,\Delta p
@@ -58,30 +42,23 @@
  * \f]
  *
  * \f$\varepsilon\f$ is a pressure and sets the width of the transition
- * between the open and the closed state. For \f$\varepsilon = 0\f$ the
- * exact two-slope valve is recovered and the Newton iteration becomes a
- * semi-smooth (active-set) iteration; for \f$\varepsilon > 0\f$ the
- * equation is smooth and the valve leaks an additional backward flow of at
- * most \f$\varepsilon / R_{min}\f$ at \f$\Delta p = 0\f$, decaying like
- * \f$\varepsilon^2 / (R_{min}|\Delta p|)\f$ when the valve is firmly
- * closed.
+ * between open and closed. At \f$\varepsilon = 0\f$ the exact two-slope
+ * valve is recovered and Newton becomes a semi-smooth (active-set)
+ * iteration; for \f$\varepsilon > 0\f$ the equation is smooth and the
+ * valve leaks at most \f$\varepsilon / R_{min}\f$ at \f$\Delta p =
+ * 0\f$, decaying like \f$\varepsilon^2 / (R_{min}|\Delta p|)\f$ once
+ * firmly closed.
  *
- * \f$\beta\f$ enters linearly and the equation stays piecewise linear for
- * every value of it, so regurgitation costs nothing in robustness: it makes
- * the problem less non-linear, not more. At \f$\beta = 1\f$ the valve
- * degenerates into a plain resistor, which the block rejects.
- *
- * Compared with \ref ValveTanh this formulation
- *
- * * has a Jacobian whose derivative with respect to \f$\Delta p\f$ stays
- *   between \f$-1\f$ and \f$-\beta\f$ for every state, however large
- *   \f$R_{max}/R_{min}\f$ grows, instead of growing with
- *   \f$k\,Q\,(R_{max}-R_{min})\f$ at the transition,
- * * needs no steepness, so there is no parameter whose units have to be
- *   tracked across unit systems,
- * * converges to a well-defined limit (the ideal diode) as
- *   \f$\varepsilon \to 0\f$, so tightening the regularization refines the
- *   solution instead of changing it qualitatively.
+ * Compared with \ref ValveTanh, the derivative with respect to
+ * \f$\Delta p\f$ stays between \f$-1\f$ and \f$-\beta\f$ whatever
+ * \f$R_{max}/R_{min}\f$ is, instead of growing with
+ * \f$k\,Q\,(R_{max}-R_{min})\f$ at the transition; there is no steepness
+ * whose units have to be tracked across unit systems; and the solution
+ * converges to the ideal valve as \f$\varepsilon \to 0\f$ instead of
+ * changing qualitatively. Since \f$\beta\f$ enters linearly, the equation
+ * stays piecewise linear for every value of it, so regurgitation makes the
+ * problem less non-linear rather than more. At \f$\beta = 1\f$ the valve
+ * would be a plain resistor, which the block rejects.
  *
  * \f[
  * \begin{circuitikz} \draw
@@ -148,14 +125,9 @@
  * \in [0, 1], \qquad d = (1-\beta)\left(s - \frac{1}{2}\right).
  * \f]
  *
- * The derivative of the first equation with respect to \f$\Delta p\f$ is
- * \f$-\frac{1}{2}(1+\beta) - (1-\beta)(s - \frac{1}{2})\f$, which lies
- * between \f$-1\f$ (open) and \f$-\beta\f$ (closed) for every state and
- * every parameter choice.
- *
  * The valve status is a post-processing variable, see
- * DOFHandler::register_output_variable: it is reported but has no equation
- * and is computed from the converged state in \ref update_outputs.
+ * DOFHandler::register_output_variable: it has no equation and is computed
+ * from the converged state in \ref update_outputs.
  *
  * ### Parameters
  *
@@ -164,8 +136,8 @@
  * * `0` Rmin: Resistance of the open valve, raised by a stenosis (must be
  *   positive)
  * * `1` Rmax: Resistance of the closed valve, lowered by a regurgitant
- *   valve. Optional; left out (or non-positive) the valve does not leak.
- *   Must be larger than `Rmin`.
+ *   valve. Optional and must exceed `Rmin`; left out, the valve does not
+ *   leak.
  * * `2` eps: Smoothing pressure, optional, defaults to 0 (exact valve)
  * * `3` upstream_block: Name of block connected upstream
  * * `4` downstream_block: Name of block connected downstream
@@ -184,20 +156,12 @@
  *         }
  *     ]
  *
- * A stenotic valve raises `Rmin`; a regurgitant one adds a finite `Rmax`:
- *
- *     "params": {
- *         "Rmin": 0.05,
- *         "Rmax": 20.0,
- *         "upstream_block": "upstream_vessel",
- *         "downstream_block": "downstream_vessel"
- *     }
+ * A stenotic valve raises `Rmin`; a regurgitant one adds a finite `Rmax`.
  *
  * ### Internal variables
  *
  * This block has no internal variables. It reports one post-processing
- * variable, `valve_status`, which has no equation and is computed from the
- * converged state once the time step is accepted.
+ * variable, `valve_status`.
  *
  */
 class ValveDiode : public Block {
@@ -235,6 +199,11 @@ class ValveDiode : public Block {
   void setup_dofs(DOFHandler& dofhandler) override;
 
   /**
+   * @brief Check the resistances once, after the parameters are loaded
+   */
+  void setup_model_dependent_params() override;
+
+  /**
    * @brief Update the constant contributions of the element in a sparse
    * system
    *
@@ -269,8 +238,7 @@ class ValveDiode : public Block {
   /**
    * @brief Reverse-to-forward conductance ratio Rmin / Rmax
    *
-   * Zero for a valve that does not leak, which is what a non-positive Rmax
-   * means.
+   * Zero for a valve that does not leak, i.e. a non-positive Rmax.
    *
    * @param parameters Parameters of the model
    * @return Conductance ratio in [0, 1)

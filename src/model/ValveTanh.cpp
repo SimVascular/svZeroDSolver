@@ -5,9 +5,8 @@
 #include "Model.h"
 
 void ValveTanh::setup_dofs(DOFHandler& dofhandler) {
-  // Two equations, one for pressure and one for flow. The valve status is
-  // reported but feeds back into nothing, so it is a post-processing
-  // variable rather than an unknown of the system.
+  // 2 eqns, one for pressure and one for flow. The valve status feeds back
+  // into nothing, so it is a post-processing variable rather than an unknown
   Block::setup_dofs_(dofhandler, 2, {}, {"valve_status"});
 }
 

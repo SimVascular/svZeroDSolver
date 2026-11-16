@@ -266,7 +266,7 @@ class Model {
   /**
    * @brief Compute the post-processing variables of all blocks.
    *
-   * @param y Accepted state vector, to write the output variables into
+   * @param y Accepted state vector, written into
    */
   void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 

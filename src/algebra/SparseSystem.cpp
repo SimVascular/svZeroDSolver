@@ -37,8 +37,7 @@ void SparseSystem::reserve(Model* model) {
   model->update_constant(*this);
   model->update_time(*this, 0.0);
 
-  // The dummy state covers every variable, post-processing ones included,
-  // because blocks index it through their global variable IDs.
+  // Covers every variable: blocks index it through their global variable IDs
   const int state_size = model->dofhandler.size();
 
   Eigen::Matrix<double, Eigen::Dynamic, 1> dummy_y =
@@ -62,8 +61,7 @@ void SparseSystem::reserve(Model* model) {
 void SparseSystem::update_residual(
     Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
-  // The state vector can be longer than the system: post-processing
-  // variables sit at its tail and take part in no equation.
+  // Post-processing variables sit at the tail of y and have no equation
   const Eigen::Index n = F.cols();
   residual.setZero();
   residual -= C;

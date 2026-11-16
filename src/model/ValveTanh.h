@@ -88,8 +88,8 @@
  * \f]
  *
  * The valve status is a post-processing variable, see
- * DOFHandler::register_output_variable: it is reported but has no equation
- * and is computed from the converged state in \ref update_outputs.
+ * DOFHandler::register_output_variable: it has no equation and is computed
+ * from the converged state in \ref update_outputs.
  *
  * \f[
  * \left(\frac{\partial\mathbf{c}}{\partial\dot{\mathbf{y}}}\right)^{e} =
@@ -125,8 +125,7 @@
  * ### Internal variables
  *
  * This block has no internal variables. It reports one post-processing
- * variable, `valve_status`, which has no equation and is computed from the
- * converged state once the time step is accepted.
+ * variable, `valve_status`.
  *
  */
 class ValveTanh : public Block {

@@ -7,50 +7,36 @@
 double ValveDiode::get_beta(const std::vector<double>& parameters) const {
   double rmin = parameters[global_param_ids[ParamId::RMIN]];
   double rmax = parameters[global_param_ids[ParamId::RMAX]];
-  // A non-positive Rmax means an ideal closed valve: no reverse flow.
+  // A non-positive Rmax means an ideal closed valve: no reverse flow
   return rmax > 0.0 ? rmin / rmax : 0.0;
 }
 
+void ValveDiode::setup_model_dependent_params() {
+  double rmin = model->get_parameter_value(global_param_ids[ParamId::RMIN]);
+  double rmax = model->get_parameter_value(global_param_ids[ParamId::RMAX]);
+  if (rmin <= 0.0 || (rmax > 0.0 && rmax <= rmin)) {
+    throw std::runtime_error("ValveDiode '" + get_name() +
+                             "': need Rmin > 0 and, if given, Rmax > Rmin.");
+  }
+}
+
 void ValveDiode::setup_dofs(DOFHandler& dofhandler) {
-  // Two equations, the diode condition and flow continuity. The valve status
-  // is reported but feeds back into nothing, so it is a post-processing
-  // variable: it takes no row or column in the system and is filled in
-  // update_outputs. For eps = 0 it is a step function of the pressure
-  // difference, which would otherwise keep a time step in which the valve
-  // changes state from ever meeting the tolerance.
+  // 2 eqns, one for pressure and one for flow. The valve status feeds back
+  // into nothing, so it is a post-processing variable rather than an unknown
   Block::setup_dofs_(dofhandler, 2, {}, {"valve_status"});
 }
 
 void ValveDiode::update_constant(SparseSystem& system,
                                  std::vector<double>& parameters) {
   double rmin = parameters[global_param_ids[ParamId::RMIN]];
-  double rmax = parameters[global_param_ids[ParamId::RMAX]];
-  if (rmin <= 0.0) {
-    throw std::runtime_error(
-        "ValveDiode '" + get_name() +
-        "': the forward resistance Rmin must be positive, got " +
-        std::to_string(rmin) +
-        ". A valve with zero forward resistance does not define a flow rate "
-        "when it is closed.");
-  }
-  if (rmax > 0.0 && rmax <= rmin) {
-    throw std::runtime_error(
-        "ValveDiode '" + get_name() + "': the reverse resistance Rmax (" +
-        std::to_string(rmax) +
-        ") must be larger than the forward resistance Rmin (" +
-        std::to_string(rmin) +
-        "). Leave Rmax out for a valve that does not leak.");
-  }
   double beta = get_beta(parameters);
 
-  // Equation 0:
-  //   Rmin * q_in - 0.5 * (1 + beta) * (p_in - p_out)
-  //                - 0.5 * (1 - beta) * sqrt((p_in - p_out)^2 + 4 eps^2) = 0
+  // Eqn 0: Rmin*q_in - 0.5*(1+beta)*dp - 0.5*(1-beta)*sqrt(dp^2 + 4 eps^2)
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[0]) = -0.5 * (1.0 + beta);
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[2]) = 0.5 * (1.0 + beta);
   system.F.coeffRef(global_eqn_ids[0], global_var_ids[1]) = rmin;
 
-  // Equation 1: q_in - q_out = 0
+  // Eqn 1: q_in - q_out = 0
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[1]) = 1.0;
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
 }
@@ -76,8 +62,8 @@ void ValveDiode::update_solution(
   double beta = get_beta(parameters);
 
   double root = sqrt(dp * dp + 4.0 * eps * eps);
-  // Slope of the smoothed maximum, in [0, 1]. For eps = 0 and dp = 0 this
-  // picks the closed branch of the subdifferential.
+  // Slope of the smoothed maximum, in [0, 1]. At eps = dp = 0 this picks the
+  // closed branch of the subdifferential
   double s = root > 0.0 ? 0.5 * (1.0 + dp / root) : 0.0;
 
   // Nonlinear term

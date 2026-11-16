@@ -38,8 +38,7 @@ void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
         dofhandler.register_variable(int_name + ":" + this->get_name()));
   }
 
-  // Remember the post-processing variables; Model::finalize registers them
-  // in a second pass so that they land at the tail of the state vector.
+  // Registered by Model::finalize in a second pass, so they land at the tail
   this->output_var_names = output_var_names;
 
   // Register equations of block

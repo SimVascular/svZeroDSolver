@@ -31,21 +31,17 @@ class DOFHandler {
   std::vector<std::string>
       equations;  ///< Equation names corresponding to the equation indices
   std::vector<std::string>
-      output_variables;  ///< Names of the post-processing variables, in the
-                         ///< order they occupy at the tail of the state
+      output_variables;  ///< Post-processing variables, at the state tail
 
   /**
-   * @brief Get the length of the state vector
-   *
-   * This counts every variable, the post-processing variables included.
+   * @brief Get the length of the state vector, post-processing included
    *
    * @return Length of the state vector
    */
   int size() const;
 
   /**
-   * @brief Get the number of equations, which is the size of the non-linear
-   * system that is actually solved
+   * @brief Get the number of equations, the size of the solved system
    *
    * @return int Number of equations
    */
@@ -76,18 +72,11 @@ class DOFHandler {
   /**
    * @brief Register a new post-processing variable at the DOFHandler.
    *
-   * A post-processing variable is part of the state vector and is written to
-   * the output, but it has no equation: it does not appear in any residual,
-   * adds no row or column to the Jacobian and is never solved for. The block
-   * that owns it computes it from the converged solution in
-   * Block::update_outputs. Use this for anything that is reported but does
-   * not feed back into the physics, such as the open/closed state of a
-   * valve.
-   *
-   * Post-processing variables occupy the tail of the state vector, after
-   * every solved variable, which is what lets the solved system stay a
-   * leading square block. Model::finalize therefore registers them in a
-   * second pass, once every block has registered its solved variables.
+   * Such a variable is in the state vector and in the output, but has no
+   * equation: no row, no column, never solved for. The owning block computes
+   * it in Block::update_outputs. They occupy the tail of the state vector so
+   * the solved system stays a leading square block, which Model::finalize
+   * arranges with a second registration pass.
    *
    * @param name Name of the variable
    * @return Global index of the variable

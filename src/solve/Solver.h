@@ -116,8 +116,7 @@ class Solver {
   std::vector<double> get_step_residuals() const;
 
   /**
-   * @brief Get the name of the equation holding the largest residual at the
-   * end of each time step
+   * @brief Get the equation holding the largest residual of each time step
    *
    * @return std::vector<std::string> Equation name per time step
    */

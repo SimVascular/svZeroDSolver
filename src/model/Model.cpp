@@ -169,7 +169,262 @@ void Model::update_parameter_value(int param_id, double param_value) {
   parameter_values[param_id] = param_value;
 }
 
+namespace {
+
+/// Upper connection limit meaning "any number".
+constexpr int kUnlimited = -1;
+
+/// Number of block names listed per network before the message is cut short.
+constexpr size_t kMaxNamesListed = 10;
+
+/**
+ * @brief Inlet and outlet connections a block type needs
+ *
+ * Blocks address the pressure and flow of their nodes by position in
+ * `global_var_ids` (see Block::setup_dofs_), so these are the connection
+ * counts that each block's setup_dofs() and update_constant() assume.
+ */
+struct ConnectivityRule {
+  int min_inlets;   ///< Smallest valid number of inlet connections
+  int max_inlets;   ///< Largest valid number, or kUnlimited
+  int min_outlets;  ///< Smallest valid number of outlet connections
+  int max_outlets;  ///< Largest valid number, or kUnlimited
+  /// Block terminates the model: exactly one connection, on either side
+  bool single_sided{false};
+};
+
+/**
+ * @brief Connections required by a block type
+ *
+ * Written as a switch over all block types without a `default` case, so a
+ * newly added block type shows up as a compiler warning here instead of as a
+ * missing connectivity check.
+ *
+ * @param type Type of the block
+ * @return Connections the block type requires
+ */
+ConnectivityRule get_connectivity_rule(BlockType type) {
+  switch (type) {
+    // Vessels, valves and chambers sit between exactly two nodes.
+    case BlockType::blood_vessel:
+    case BlockType::blood_vessel_CRL:
+    case BlockType::blood_vessel_rc:
+    case BlockType::valve_tanh:
+    case BlockType::piecewise_valve:
+    case BlockType::chamber_elastance_inductor:
+    case BlockType::chamber_elastance_inductor_exponential:
+    case BlockType::chamber_sphere:
+    case BlockType::linear_elastance_chamber:
+    // Closed-loop blocks sit inside the circulation, so they have both an
+    // upstream and a downstream connection.
+    case BlockType::closed_loop_rcr_bc:
+    case BlockType::closed_loop_coronary_left_bc:
+    case BlockType::closed_loop_coronary_right_bc:
+    case BlockType::closed_loop_heart_pulmonary:
+      return {1, 1, 1, 1};
+
+    // Junctions distribute flow between any number of inlets and outlets.
+    case BlockType::junction:
+    case BlockType::resistive_junction:
+      return {1, kUnlimited, 1, kUnlimited};
+
+    // A blood vessel junction models each of its outlets as a vessel of its
+    // own, all fed by a single inlet.
+    case BlockType::blood_vessel_junction:
+      return {1, 1, 1, kUnlimited};
+
+    // Open-loop boundary conditions terminate the model on one side.
+    case BlockType::flow_bc:
+    case BlockType::pressure_bc:
+    case BlockType::resistance_bc:
+    case BlockType::windkessel_bc:
+    case BlockType::impedance_bc:
+    case BlockType::open_loop_coronary_bc:
+    case BlockType::open_loop_coronary_var_res_bc:
+      return {0, 1, 0, 1, true};
+  }
+  throw std::runtime_error(
+      "Internal error: no connectivity rule for block type " +
+      std::to_string(static_cast<int>(type)) + ".");
+}
+
+/**
+ * @brief Name under which a block type is registered in the block factory
+ *
+ * Read from the factory so that error messages name block types the way the
+ * configuration file does. One throwaway block is constructed per registered
+ * type; block constructors only initialize members, so this doesn't touch
+ * `model`.
+ *
+ * @param model Model whose block factory is queried
+ * @param type Type of the block
+ * @return Registered type name, or a placeholder if the type is unregistered
+ */
+std::string get_block_type_name(Model& model, BlockType type) {
+  for (const auto& [type_name, factory] : model.block_factory_map) {
+    std::unique_ptr<Block> block(factory(0, &model));
+    if (block->block_type == type) {
+      return std::string(type_name);
+    }
+  }
+  return "unknown type";
+}
+
+/// Phrase a connection count limit, e.g. "exactly 1" or "at least 1".
+std::string describe_limit(int min_count, int max_count) {
+  if (min_count == max_count) {
+    return "exactly " + std::to_string(min_count);
+  }
+  if (max_count == kUnlimited) {
+    return "at least " + std::to_string(min_count);
+  }
+  return "between " + std::to_string(min_count) + " and " +
+         std::to_string(max_count);
+}
+
+/// Phrase a number of connections, e.g. "1 inlet" or "2 inlets".
+std::string describe_count(size_t count, const std::string& noun) {
+  return std::to_string(count) + " " + noun + (count == 1 ? "" : "s");
+}
+
+/// Join block names as "a, b, c", cut short after kMaxNamesListed entries.
+std::string join_block_names(const std::vector<std::string>& names) {
+  std::string joined;
+  for (size_t i = 0; i < std::min(names.size(), kMaxNamesListed); i++) {
+    joined += (i > 0 ? ", " : "") + names[i];
+  }
+  if (names.size() > kMaxNamesListed) {
+    joined +=
+        ", and " + std::to_string(names.size() - kMaxNamesListed) + " more";
+  }
+  return joined;
+}
+
+}  // namespace
+
+void Model::validate_connectivity() {
+  std::vector<std::string> problems;
+
+  // Check that every block has the connections its equations assume.
+  for (const auto& block : blocks) {
+    const ConnectivityRule rule = get_connectivity_rule(block->block_type);
+    const size_t num_inlets = block->inlet_nodes.size();
+    const size_t num_outlets = block->outlet_nodes.size();
+
+    if (rule.single_sided) {
+      // A boundary condition attaches with a single connection, on the side
+      // of the block it terminates.
+      if (num_inlets + num_outlets != 1) {
+        problems.push_back(
+            "Block '" + block->get_name() + "' (" +
+            get_block_type_name(*this, block->block_type) + ") has " +
+            describe_count(num_inlets + num_outlets, "connection") +
+            ", but a boundary condition needs exactly 1, as the inlet or the "
+            "outlet of one other block.");
+      }
+      continue;
+    }
+
+    const bool inlets_ok = static_cast<int>(num_inlets) >= rule.min_inlets &&
+                           (rule.max_inlets == kUnlimited ||
+                            static_cast<int>(num_inlets) <= rule.max_inlets);
+    const bool outlets_ok = static_cast<int>(num_outlets) >= rule.min_outlets &&
+                            (rule.max_outlets == kUnlimited ||
+                             static_cast<int>(num_outlets) <= rule.max_outlets);
+    if (inlets_ok && outlets_ok) {
+      continue;
+    }
+    problems.push_back(
+        "Block '" + block->get_name() + "' (" +
+        get_block_type_name(*this, block->block_type) + ") has " +
+        describe_count(num_inlets, "inlet connection") + " and " +
+        describe_count(num_outlets, "outlet connection") + ", but needs " +
+        describe_limit(rule.min_inlets, rule.max_inlets) + " inlet and " +
+        describe_limit(rule.min_outlets, rule.max_outlets) + " outlet.");
+  }
+
+  // Check that the blocks form a single network. Blocks that each have the
+  // right number of connections can still make up two circulations that never
+  // exchange flow, which is almost always a connection left out by mistake.
+  std::map<const Block*, size_t> block_ids;
+  for (size_t i = 0; i < blocks.size(); i++) {
+    block_ids.insert({blocks[i].get(), i});
+  }
+  // Blocks meeting at a node are neighbors in this undirected graph.
+  std::vector<std::vector<size_t>> neighbors(blocks.size());
+  for (const auto& node : nodes) {
+    std::vector<size_t> at_node;
+    for (const auto* elements : {&node->inlet_eles, &node->outlet_eles}) {
+      for (const auto& element : *elements) {
+        auto block_id = block_ids.find(element);
+        if (block_id != block_ids.end()) {
+          at_node.push_back(block_id->second);
+        }
+      }
+    }
+    for (size_t first : at_node) {
+      for (size_t second : at_node) {
+        if (first != second) {
+          neighbors[first].push_back(second);
+        }
+      }
+    }
+  }
+  // Collect the blocks of each network by walking the graph from every block
+  // that no earlier walk has reached.
+  std::vector<std::vector<std::string>> networks;
+  std::vector<bool> visited(blocks.size(), false);
+  for (size_t start = 0; start < blocks.size(); start++) {
+    if (visited[start]) {
+      continue;
+    }
+    std::vector<std::string> network;
+    std::vector<size_t> to_visit = {start};
+    visited[start] = true;
+    while (!to_visit.empty()) {
+      const size_t current = to_visit.back();
+      to_visit.pop_back();
+      network.push_back(blocks[current]->get_name());
+      for (size_t neighbor : neighbors[current]) {
+        if (!visited[neighbor]) {
+          visited[neighbor] = true;
+          to_visit.push_back(neighbor);
+        }
+      }
+    }
+    std::sort(network.begin(), network.end());
+    networks.push_back(std::move(network));
+  }
+
+  if (networks.size() > 1) {
+    std::string message = "The model falls apart into " +
+                          std::to_string(networks.size()) +
+                          " separate networks that cannot exchange flow:";
+    for (size_t i = 0; i < networks.size(); i++) {
+      message += " network " + std::to_string(i + 1) + " is " +
+                 join_block_names(networks[i]) +
+                 (i + 1 < networks.size() ? ";" : ".");
+    }
+    problems.push_back(message);
+  }
+
+  if (problems.empty()) {
+    return;
+  }
+  std::string message = "Invalid connectivity in the model:";
+  for (const auto& problem : problems) {
+    message += "\n  - " + problem;
+  }
+  message +=
+      "\nBlocks are connected through the inlet_vessels and outlet_vessels (or "
+      "inlet_blocks and outlet_blocks) of a junction, the boundary_conditions "
+      "of a vessel, and the upstream_block and downstream_block of a valve.";
+  throw std::runtime_error(message);
+}
+
 void Model::finalize() {
+  DEBUG_MSG("Check connectivity of blocks");
+  validate_connectivity();
   DEBUG_MSG("Setup degrees-of-freedom of nodes");
   for (auto& node : nodes) {
     node->setup_dofs(dofhandler);

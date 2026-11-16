@@ -182,3 +182,126 @@ def test_coupling_block_invalid_location():
         "'inelt'. Valid location values are: inlet, outlet."
         in load_error_message(config)
     )
+
+
+# Bifurcation with vessels 0, 1, 2, junction "J0" from vessel 0 to vessels 1
+# and 2, and the boundary conditions INFLOW, OUT1 and OUT2.
+BIFURCATION_CASE = "steadyFlow_bifurcationR_R1"
+
+
+def add_vessel(config, vessel_id, vessel_name, boundary_conditions=None):
+    """Append a copy of vessel "branch1_seg0" under a new id and name."""
+    vessel = copy.deepcopy(config["vessels"][1])
+    vessel["vessel_id"] = vessel_id
+    vessel["vessel_name"] = vessel_name
+    if boundary_conditions is None:
+        vessel.pop("boundary_conditions", None)
+    else:
+        vessel["boundary_conditions"] = boundary_conditions
+    config["vessels"].append(vessel)
+    return vessel
+
+
+def test_vessel_without_any_connection():
+    """A vessel left out of every junction used to segfault the solver.
+
+    Blocks index their nodes' degrees of freedom by position, so a vessel with
+    no connections read past the end of its own variable list.
+    """
+    config = load_case(BIFURCATION_CASE)
+    add_vessel(config, 3, "orphan")
+    message = load_error_message(config)
+    assert "Invalid connectivity in the model:" in message
+    assert (
+        "Block 'orphan' (BloodVessel) has 0 inlet connections and 0 outlet "
+        "connections, but needs exactly 1 inlet and exactly 1 outlet."
+        in message
+    )
+    # The same model is also reported as falling apart.
+    assert (
+        "The model falls apart into 2 separate networks that cannot exchange "
+        "flow: network 1 is INFLOW, J0, OUT1, OUT2, branch0_seg0, "
+        "branch1_seg0, branch2_seg0; network 2 is orphan." in message
+    )
+    # The message says where connections are configured.
+    assert "inlet_vessels and outlet_vessels" in message
+
+
+def test_vessel_with_only_one_connection():
+    """A vessel connected on one side names the side that is missing."""
+    config = load_case(BIFURCATION_CASE)
+    config["junctions"][0]["outlet_vessels"] = [1]
+    assert (
+        "Block 'branch2_seg0' (BloodVessel) has 0 inlet connections and 1 "
+        "outlet connection, but needs exactly 1 inlet and exactly 1 outlet."
+        in load_error_message(config)
+    )
+
+
+def test_junction_without_inlet():
+    """A junction keeps its own requirement of at least one inlet."""
+    config = load_case(BIFURCATION_CASE)
+    config["junctions"][0]["inlet_vessels"] = []
+    config["vessels"][0].pop("boundary_conditions")
+    config["boundary_conditions"] = config["boundary_conditions"][1:]
+    assert (
+        "Block 'J0' (NORMAL_JUNCTION) has 0 inlet connections and 2 outlet "
+        "connections, but needs at least 1 inlet and at least 1 outlet."
+        in load_error_message(config)
+    )
+
+
+def test_boundary_condition_without_connection():
+    """A boundary condition no vessel refers to is reported, not ignored."""
+    config = load_case(BIFURCATION_CASE)
+    config["boundary_conditions"].append(
+        {"bc_name": "UNUSED", "bc_type": "RESISTANCE",
+         "bc_values": {"Pd": 100.0, "R": 100.0}}
+    )
+    assert (
+        "Block 'UNUSED' (RESISTANCE) has 0 connections, but a boundary "
+        "condition needs exactly 1, as the inlet or the outlet of one other "
+        "block." in load_error_message(config)
+    )
+
+
+def test_model_split_into_two_networks():
+    """Blocks can each be connected correctly and still form two circuits."""
+    config = load_case(BIFURCATION_CASE)
+    add_vessel(config, 3, "island", {"inlet": "INFLOW_B", "outlet": "OUT_B"})
+    inflow = copy.deepcopy(config["boundary_conditions"][0])
+    inflow["bc_name"] = "INFLOW_B"
+    outlet = copy.deepcopy(config["boundary_conditions"][1])
+    outlet["bc_name"] = "OUT_B"
+    config["boundary_conditions"] += [inflow, outlet]
+    message = load_error_message(config)
+    # No block is under-connected, so only the split is reported.
+    assert "but needs exactly" not in message
+    assert (
+        "The model falls apart into 2 separate networks that cannot exchange "
+        "flow: network 1 is INFLOW, J0, OUT1, OUT2, branch0_seg0, "
+        "branch1_seg0, branch2_seg0; network 2 is INFLOW_B, OUT_B, island."
+        in message
+    )
+
+
+def test_junction_with_unknown_vessel_id():
+    """A vessel_id no vessel defines used to leave the junction dangling."""
+    config = load_case(BIFURCATION_CASE)
+    config["junctions"][0]["outlet_vessels"] = [1, 5]
+    assert (
+        "Junction 'J0' lists vessel_id 5 in outlet_vessels, but no vessel has "
+        "that vessel_id. Defined vessel_id values are: 0, 1, 2."
+        in load_error_message(config)
+    )
+
+
+def test_junction_without_connection_keys():
+    """Half a connection pair leaves a junction with no connections at all."""
+    config = load_case(BIFURCATION_CASE)
+    config["junctions"][0].pop("outlet_vessels")
+    assert (
+        "Junction 'J0' does not define its connections. Provide either both "
+        "inlet_vessels and outlet_vessels, or both inlet_blocks and "
+        "outlet_blocks. Keys found: inlet_vessels." in load_error_message(config)
+    )

@@ -30,6 +30,37 @@ std::string join_names(const std::vector<std::string>& items) {
 }
 
 /**
+ * @brief Name of the vessel with `vessel_id`, for a junction connection.
+ *
+ * Junctions reference vessels by `vessel_id`. An id that no vessel defines
+ * used to resolve to an empty block name, which left the junction and the
+ * vessels around it without the connections their equations assume.
+ *
+ * @param vessel_id_map Vessel IDs to vessel names, filled by create_vessels()
+ * @param vessel_id ID referenced by the junction
+ * @param junction_name Junction holding the reference, for the error message
+ * @param key `inlet_vessels` or `outlet_vessels`, for the error message
+ * @return Name of the referenced vessel
+ */
+std::string get_vessel_name(const std::map<int, std::string>& vessel_id_map,
+                            int vessel_id, const std::string& junction_name,
+                            const std::string& key) {
+  auto vessel = vessel_id_map.find(vessel_id);
+  if (vessel != vessel_id_map.end()) {
+    return vessel->second;
+  }
+  std::vector<std::string> defined_ids;
+  for (const auto& defined : vessel_id_map) {
+    defined_ids.push_back(std::to_string(defined.first));
+  }
+  throw std::runtime_error(
+      "Junction '" + junction_name + "' lists vessel_id " +
+      std::to_string(vessel_id) + " in " + key +
+      ", but no vessel has that vessel_id. Defined vessel_id values are: " +
+      (defined_ids.empty() ? "none" : join_names(defined_ids)) + ".");
+}
+
+/**
  * @brief List the registered block types whose block class is in `classes`.
  *
  * Derived from the block factory, so valid-type lists in error messages
@@ -793,10 +824,14 @@ void create_junctions(
     if (junction_config.contains("inlet_vessels") &&
         junction_config.contains("outlet_vessels")) {
       for (int vessel_id : junction_config["inlet_vessels"]) {
-        connections.push_back({vessel_id_map[vessel_id], junction_name});
+        connections.push_back({get_vessel_name(vessel_id_map, vessel_id,
+                                               junction_name, "inlet_vessels"),
+                               junction_name});
       }
       for (int vessel_id : junction_config["outlet_vessels"]) {
-        connections.push_back({junction_name, vessel_id_map[vessel_id]});
+        connections.push_back(
+            {junction_name, get_vessel_name(vessel_id_map, vessel_id,
+                                            junction_name, "outlet_vessels")});
       }
     } else if (junction_config.contains("inlet_blocks") &&
                junction_config.contains("outlet_blocks")) {
@@ -806,6 +841,22 @@ void create_junctions(
       for (std::string block_name : junction_config["outlet_blocks"]) {
         connections.push_back({junction_name, block_name});
       }
+    } else {
+      // Without a complete pair the junction gets no connections at all, so
+      // say which keys are missing instead of leaving it dangling.
+      std::vector<std::string> present;
+      for (const char* key : {"inlet_vessels", "outlet_vessels", "inlet_blocks",
+                              "outlet_blocks"}) {
+        if (junction_config.contains(key)) {
+          present.push_back(key);
+        }
+      }
+      throw std::runtime_error(
+          "Junction '" + junction_name +
+          "' does not define its connections. Provide either both "
+          "inlet_vessels and outlet_vessels, or both inlet_blocks and "
+          "outlet_blocks. Keys found: " +
+          (present.empty() ? "none" : join_names(present)) + ".");
     }
     DEBUG_MSG("Created junction " << junction_name);
   }

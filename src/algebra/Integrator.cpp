@@ -67,13 +67,8 @@ State Integrator::step(const State& old_state, double time) {
   // Count total number of step calls
   n_iter++;
 
-  // Convergence history of this step
-  int iter_this_step = 0;
-  double res_this_step = 0.0;
-  int res_dof_this_step = 0;
-
   // Non-linear Newton-Raphson iterations
-  for (int i = 0; i < max_iter; i++) {
+  for (size_t i = 0; i < max_iter; i++) {
     // Initiator: Evaluate the iterates at the intermediate time levels
     ydot_am.setZero();
     y_af.setZero();
@@ -87,10 +82,7 @@ State Integrator::step(const State& old_state, double time) {
     system.update_residual(y_af, ydot_am);
 
     // Check termination criterium
-    Eigen::Index max_res_dof = 0;
-    res_this_step = system.residual.cwiseAbs().maxCoeff(&max_res_dof);
-    res_dof_this_step = static_cast<int>(max_res_dof);
-    if (res_this_step < atol) {
+    if (system.residual.cwiseAbs().maxCoeff() < atol) {
       break;
     }
 
@@ -122,14 +114,7 @@ State Integrator::step(const State& old_state, double time) {
 
     // Count total number of nonlinear iterations
     n_nonlin_iter++;
-    iter_this_step++;
   }
-
-  // Record how hard this step was to solve
-  time_per_step.push_back(time);
-  iter_per_step.push_back(iter_this_step);
-  res_per_step.push_back(res_this_step);
-  res_dof_per_step.push_back(res_dof_this_step);
 
   // Fill the post-processing variables from the converged state
   model->update_outputs(new_state.y);

@@ -34,10 +34,6 @@ PYBIND11_MODULE(svzerod, m) {
       .def("get_single_result_avg", &Solver::get_single_result_avg)
       .def("update_block_params", &Solver::update_block_params)
       .def("read_block_params", &Solver::read_block_params)
-      .def("get_nonlinear_iterations", &Solver::get_nonlinear_iterations)
-      .def("get_step_residuals", &Solver::get_step_residuals)
-      .def("get_step_residual_equations", &Solver::get_step_residual_equations)
-      .def("get_step_times", &Solver::get_step_times)
       .def("get_full_result", [](Solver& solver) {
         py::module_ pd = py::module_::import("pandas");
         py::module_ io = py::module_::import("io");

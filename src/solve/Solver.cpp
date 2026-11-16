@@ -416,29 +416,3 @@ void Solver::write_result_to_csv(const std::string& filename) const {
   ofs << get_full_result();
   ofs.close();
 }
-
-std::vector<int> Solver::get_nonlinear_iterations() const {
-  return integrator.get_iter_per_step();
-}
-
-std::vector<double> Solver::get_step_residuals() const {
-  return integrator.get_res_per_step();
-}
-
-std::vector<std::string> Solver::get_step_residual_equations() const {
-  const auto& dofs = integrator.get_res_dof_per_step();
-  std::vector<std::string> names;
-  names.reserve(dofs.size());
-  for (int dof : dofs) {
-    if (dof >= 0 && dof < (int)this->model->dofhandler.equations.size()) {
-      names.push_back(this->model->dofhandler.equations[dof]);
-    } else {
-      names.push_back("unknown");
-    }
-  }
-  return names;
-}
-
-std::vector<double> Solver::get_step_times() const {
-  return integrator.get_time_per_step();
-}

@@ -5,9 +5,6 @@
  * @brief Solver source file
  */
 
-#include <string>
-#include <vector>
-
 #include "Integrator.h"
 #include "Model.h"
 #include "SimulationParameters.h"
@@ -100,34 +97,6 @@ class Solver {
    * @param filename
    */
   void write_result_to_csv(const std::string& filename) const;
-
-  /**
-   * @brief Get the number of Newton iterations used in each time step
-   *
-   * @return std::vector<int> Newton iterations per time step
-   */
-  std::vector<int> get_nonlinear_iterations() const;
-
-  /**
-   * @brief Get the largest residual at the end of each time step
-   *
-   * @return std::vector<double> Residual per time step
-   */
-  std::vector<double> get_step_residuals() const;
-
-  /**
-   * @brief Get the equation holding the largest residual of each time step
-   *
-   * @return std::vector<std::string> Equation name per time step
-   */
-  std::vector<std::string> get_step_residual_equations() const;
-
-  /**
-   * @brief Get the time at the start of each integration step
-   *
-   * @return std::vector<double> Time per time step
-   */
-  std::vector<double> get_step_times() const;
 
  private:
   std::shared_ptr<Model> model;

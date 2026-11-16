@@ -1,0 +1,33 @@
+{
+  "description": {
+    "mistake": "The vessel 'orphan' is in no junction and has no boundary conditions.",
+    "expected error": "Block 'orphan' needs 2 connections (inlets plus outlets), but the model connects it 0 times."
+  },
+  "boundary_conditions": [
+    {"bc_name": "INFLOW", "bc_type": "FLOW",
+     "bc_values": {"Q": [5.0, 5.0], "t": [0.0, 1.0]}},
+    {"bc_name": "OUT", "bc_type": "RESISTANCE",
+     "bc_values": {"Pd": 100.0, "R": 100.0}}
+  ],
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 2,
+    "number_of_time_pts_per_cardiac_cycle": 5
+  },
+  "vessels": [
+    {
+      "boundary_conditions": {"inlet": "INFLOW", "outlet": "OUT"},
+      "vessel_id": 0,
+      "vessel_length": 10.0,
+      "vessel_name": "branch0_seg0",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {"R_poiseuille": 100.0}
+    },
+    {
+      "vessel_id": 1,
+      "vessel_length": 10.0,
+      "vessel_name": "orphan",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {"R_poiseuille": 100.0}
+    }
+  ]
+}

@@ -218,13 +218,12 @@ class Model {
    * their equations require
    *
    * Reports every block whose number of inlet or outlet connections differs
-   * from what its type needs, and reports a model whose blocks fall apart
-   * into several networks that cannot exchange flow. Called by finalize(),
-   * before the degrees of freedom are set up: blocks index their nodes'
-   * degrees of freedom by position, so a block missing a connection would
-   * otherwise read past the end of its variable list.
+   * from what its type needs. Called by finalize(), before the degrees of
+   * freedom are set up: blocks index their nodes' degrees of freedom by
+   * position, so a block missing a connection would otherwise read past the
+   * end of its variable list.
    *
-   * @throw std::runtime_error Listing every connectivity problem found
+   * @throw std::runtime_error Listing every block that is connected wrongly
    */
   void validate_connectivity();
 

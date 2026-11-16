@@ -174,9 +174,6 @@ namespace {
 /// Upper connection limit meaning "any number".
 constexpr int kUnlimited = -1;
 
-/// Number of block names listed per network before the message is cut short.
-constexpr size_t kMaxNamesListed = 10;
-
 /**
  * @brief Inlet and outlet connections a block type needs
  *
@@ -287,19 +284,6 @@ std::string describe_count(size_t count, const std::string& noun) {
   return std::to_string(count) + " " + noun + (count == 1 ? "" : "s");
 }
 
-/// Join block names as "a, b, c", cut short after kMaxNamesListed entries.
-std::string join_block_names(const std::vector<std::string>& names) {
-  std::string joined;
-  for (size_t i = 0; i < std::min(names.size(), kMaxNamesListed); i++) {
-    joined += (i > 0 ? ", " : "") + names[i];
-  }
-  if (names.size() > kMaxNamesListed) {
-    joined +=
-        ", and " + std::to_string(names.size() - kMaxNamesListed) + " more";
-  }
-  return joined;
-}
-
 }  // namespace
 
 void Model::validate_connectivity() {
@@ -343,71 +327,6 @@ void Model::validate_connectivity() {
         describe_limit(rule.min_outlets, rule.max_outlets) + " outlet.");
   }
 
-  // Check that the blocks form a single network. Blocks that each have the
-  // right number of connections can still make up two circulations that never
-  // exchange flow, which is almost always a connection left out by mistake.
-  std::map<const Block*, size_t> block_ids;
-  for (size_t i = 0; i < blocks.size(); i++) {
-    block_ids.insert({blocks[i].get(), i});
-  }
-  // Blocks meeting at a node are neighbors in this undirected graph.
-  std::vector<std::vector<size_t>> neighbors(blocks.size());
-  for (const auto& node : nodes) {
-    std::vector<size_t> at_node;
-    for (const auto* elements : {&node->inlet_eles, &node->outlet_eles}) {
-      for (const auto& element : *elements) {
-        auto block_id = block_ids.find(element);
-        if (block_id != block_ids.end()) {
-          at_node.push_back(block_id->second);
-        }
-      }
-    }
-    for (size_t first : at_node) {
-      for (size_t second : at_node) {
-        if (first != second) {
-          neighbors[first].push_back(second);
-        }
-      }
-    }
-  }
-  // Collect the blocks of each network by walking the graph from every block
-  // that no earlier walk has reached.
-  std::vector<std::vector<std::string>> networks;
-  std::vector<bool> visited(blocks.size(), false);
-  for (size_t start = 0; start < blocks.size(); start++) {
-    if (visited[start]) {
-      continue;
-    }
-    std::vector<std::string> network;
-    std::vector<size_t> to_visit = {start};
-    visited[start] = true;
-    while (!to_visit.empty()) {
-      const size_t current = to_visit.back();
-      to_visit.pop_back();
-      network.push_back(blocks[current]->get_name());
-      for (size_t neighbor : neighbors[current]) {
-        if (!visited[neighbor]) {
-          visited[neighbor] = true;
-          to_visit.push_back(neighbor);
-        }
-      }
-    }
-    std::sort(network.begin(), network.end());
-    networks.push_back(std::move(network));
-  }
-
-  if (networks.size() > 1) {
-    std::string message = "The model falls apart into " +
-                          std::to_string(networks.size()) +
-                          " separate networks that cannot exchange flow:";
-    for (size_t i = 0; i < networks.size(); i++) {
-      message += " network " + std::to_string(i + 1) + " is " +
-                 join_block_names(networks[i]) +
-                 (i + 1 < networks.size() ? ";" : ".");
-    }
-    problems.push_back(message);
-  }
-
   if (problems.empty()) {
     return;
   }
@@ -415,10 +334,6 @@ void Model::validate_connectivity() {
   for (const auto& problem : problems) {
     message += "\n  - " + problem;
   }
-  message +=
-      "\nBlocks are connected through the inlet_vessels and outlet_vessels (or "
-      "inlet_blocks and outlet_blocks) of a junction, the boundary_conditions "
-      "of a vessel, and the upstream_block and downstream_block of a valve.";
   throw std::runtime_error(message);
 }
 

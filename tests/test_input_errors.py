@@ -189,15 +189,12 @@ def test_coupling_block_invalid_location():
 BIFURCATION_CASE = "steadyFlow_bifurcationR_R1"
 
 
-def add_vessel(config, vessel_id, vessel_name, boundary_conditions=None):
-    """Append a copy of vessel "branch1_seg0" under a new id and name."""
+def add_unconnected_vessel(config, vessel_id, vessel_name):
+    """Append a copy of vessel "branch1_seg0" with no boundary conditions."""
     vessel = copy.deepcopy(config["vessels"][1])
     vessel["vessel_id"] = vessel_id
     vessel["vessel_name"] = vessel_name
-    if boundary_conditions is None:
-        vessel.pop("boundary_conditions", None)
-    else:
-        vessel["boundary_conditions"] = boundary_conditions
+    vessel.pop("boundary_conditions", None)
     config["vessels"].append(vessel)
     return vessel
 
@@ -209,7 +206,7 @@ def test_vessel_without_any_connection():
     no connections read past the end of its own variable list.
     """
     config = load_case(BIFURCATION_CASE)
-    add_vessel(config, 3, "orphan")
+    add_unconnected_vessel(config, 3, "orphan")
     message = load_error_message(config)
     assert "Invalid connectivity in the model:" in message
     assert (
@@ -217,14 +214,6 @@ def test_vessel_without_any_connection():
         "connections, but needs exactly 1 inlet and exactly 1 outlet."
         in message
     )
-    # The same model is also reported as falling apart.
-    assert (
-        "The model falls apart into 2 separate networks that cannot exchange "
-        "flow: network 1 is INFLOW, J0, OUT1, OUT2, branch0_seg0, "
-        "branch1_seg0, branch2_seg0; network 2 is orphan." in message
-    )
-    # The message says where connections are configured.
-    assert "inlet_vessels and outlet_vessels" in message
 
 
 def test_vessel_with_only_one_connection():
@@ -262,26 +251,6 @@ def test_boundary_condition_without_connection():
         "Block 'UNUSED' (RESISTANCE) has 0 connections, but a boundary "
         "condition needs exactly 1, as the inlet or the outlet of one other "
         "block." in load_error_message(config)
-    )
-
-
-def test_model_split_into_two_networks():
-    """Blocks can each be connected correctly and still form two circuits."""
-    config = load_case(BIFURCATION_CASE)
-    add_vessel(config, 3, "island", {"inlet": "INFLOW_B", "outlet": "OUT_B"})
-    inflow = copy.deepcopy(config["boundary_conditions"][0])
-    inflow["bc_name"] = "INFLOW_B"
-    outlet = copy.deepcopy(config["boundary_conditions"][1])
-    outlet["bc_name"] = "OUT_B"
-    config["boundary_conditions"] += [inflow, outlet]
-    message = load_error_message(config)
-    # No block is under-connected, so only the split is reported.
-    assert "but needs exactly" not in message
-    assert (
-        "The model falls apart into 2 separate networks that cannot exchange "
-        "flow: network 1 is INFLOW, J0, OUT1, OUT2, branch0_seg0, "
-        "branch1_seg0, branch2_seg0; network 2 is INFLOW_B, OUT_B, island."
-        in message
     )
 
 

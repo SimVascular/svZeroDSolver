@@ -37,7 +37,7 @@
  * ChamberCylinder).
  *
  * Types (JSON `active_stress` object): `strain_independent`,
- * `strain_dependent`, `genet23`.
+ * `strain_dependent`, `linear_series_spring`.
  */
 class ActiveStress : public ParameterHolder {
  public:
@@ -130,7 +130,7 @@ class ActiveStress : public ParameterHolder {
    * @brief Factory: create an active stress law from a type string
    *
    * @param type_str One of: "strain_independent", "strain_dependent",
-   * "genet23"
+   * "linear_series_spring"
    * @return Unique pointer to the created active stress law
    */
   static std::unique_ptr<ActiveStress> create(const std::string& type_str);
@@ -251,6 +251,9 @@ class StrainDependentActiveStress : public ActiveStress {
  *
  * The law of \cite genet23 (Eqs. 29-33, after Chapelle et al. 2012) with the
  * fiber strain \f$e_\text{fib} = \lambda - 1\f$ and a linear series spring.
+ * Its contractile element is that of `strain_dependent` (\cite caruel13),
+ * whose series element is nonlinear in the Green-Lagrange strain and whose
+ * relaxation depends on the length.
  * States \f$\tau, e_c, \tau_c, k_c\f$:
  * \f[
  * \tau = \frac{\tau_c + \mu\dot e_c}{\lambda},\quad
@@ -272,9 +275,9 @@ class StrainDependentActiveStress : public ActiveStress {
  * Parameters: `sigma_0`, `k_s` (default 1e8), `k_0` (default 260e3), `mu`
  * (default 70), `alpha` (default 0), `n0_e_c`, `n0_values` (optional)
  */
-class Genet23ActiveStress : public ActiveStress {
+class LinearSeriesSpringActiveStress : public ActiveStress {
  public:
-  Genet23ActiveStress()
+  LinearSeriesSpringActiveStress()
       : ActiveStress({{"sigma_0", InputParameter()},
                       {"k_s", InputParameter(true, false, true, 1.0e8)},
                       {"k_0", InputParameter(true, false, true, 260.0e3)},

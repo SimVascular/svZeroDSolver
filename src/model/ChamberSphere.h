@@ -70,7 +70,8 @@
  * \f]
  * the specific form of which (and any accompanying internal state and
  * equations) is supplied by a separate \ref ActiveStress law (e.g.
- * `strain_independent`, `strain_dependent`, `genet23`) selected in the JSON
+ * `strain_independent`, `strain_dependent`,
+ * `linear_series_spring`) selected in the JSON
  * configuration, evaluated at the fiber stretch \f$\lambda\f$. The active
  * stress law is driven by the chamber's \ref ActivationFunction (e.g.
  * `two_hill`, `half_cosine`, `piecewise_cosine`, `piecewise_rate`), also

@@ -139,7 +139,7 @@
         "C3": 4.0
       },
       "active_stress": {
-        "type": "genet23",
+        "type": "linear_series_spring",
         "sigma_0": 65000.0,
         "k_s": 100000000.0,
         "k_0": 260000.0,

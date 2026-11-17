@@ -47,12 +47,13 @@ std::unique_ptr<ActiveStress> ActiveStress::create(
   if (type_str == "strain_dependent") {
     return std::make_unique<StrainDependentActiveStress>();
   }
-  if (type_str == "genet23") {
-    return std::make_unique<Genet23ActiveStress>();
+  if (type_str == "linear_series_spring") {
+    return std::make_unique<LinearSeriesSpringActiveStress>();
   }
   throw std::runtime_error(
       "Unknown active_stress type '" + type_str +
-      "'. Must be one of: strain_independent, strain_dependent, genet23");
+      "'. Must be one of: strain_independent, strain_dependent, "
+      "linear_series_spring");
 }
 
 void ActiveStress::linearize(const double* a, const double* adot, double lambda,
@@ -172,10 +173,10 @@ void StrainDependentActiveStress::residual(const cplx* a, const cplx* adot,
 }
 
 // ============================================================
-// Genet23ActiveStress
+// LinearSeriesSpringActiveStress
 // ============================================================
 
-void Genet23ActiveStress::finalize() {
+void LinearSeriesSpringActiveStress::finalize() {
   // Default Frank-Starling curve n0(e_c): that of the genet23 authors' input
   // functions (genet23 Table 1 cites it from its Ref. 6)
   if (params_vec_.at("n0_e_c").size() < 2 &&
@@ -188,22 +189,24 @@ void Genet23ActiveStress::finalize() {
   if (params_vec_.at("n0_e_c").size() != params_vec_.at("n0_values").size() ||
       params_vec_.at("n0_e_c").size() < 2) {
     throw std::runtime_error(
-        "genet23 active_stress: n0_e_c and n0_values must have equal length "
+        "linear_series_spring active_stress: n0_e_c and n0_values must have "
+        "equal length "
         ">= 2.");
   }
   if (params_.at("mu") <= 0.0) {
-    throw std::runtime_error("genet23 active_stress: mu must be positive.");
+    throw std::runtime_error(
+        "linear_series_spring active_stress: mu must be positive.");
   }
 }
 
-void Genet23ActiveStress::update_time(double signal) {
+void LinearSeriesSpringActiveStress::update_time(double signal) {
   nu_abs_ = std::abs(signal);
   nu_plus_ = std::max(signal, 0.0);
 }
 
 template <typename T>
-void Genet23ActiveStress::residual_t(const T* a, const T* adot, T lambda,
-                                     T* R) const {
+void LinearSeriesSpringActiveStress::residual_t(const T* a, const T* adot,
+                                                T lambda, T* R) const {
   const double k_s = params_.at("k_s");
   const double k_0 = params_.at("k_0");
   const double mu = params_.at("mu");
@@ -225,12 +228,13 @@ void Genet23ActiveStress::residual_t(const T* a, const T* adot, T lambda,
   R[3] = adot[3] - (-decay * k_c + n0 * k_0 * nu_plus_);
 }
 
-void Genet23ActiveStress::residual(const double* a, const double* adot,
-                                   double lambda, double* R) const {
+void LinearSeriesSpringActiveStress::residual(const double* a,
+                                              const double* adot, double lambda,
+                                              double* R) const {
   residual_t<double>(a, adot, lambda, R);
 }
 
-void Genet23ActiveStress::residual(const cplx* a, const cplx* adot, cplx lambda,
-                                   cplx* R) const {
+void LinearSeriesSpringActiveStress::residual(const cplx* a, const cplx* adot,
+                                              cplx lambda, cplx* R) const {
   residual_t<cplx>(a, adot, lambda, R);
 }

@@ -354,14 +354,16 @@ std::unique_ptr<ActiveStress> generate_active_stress(
         ". Required with structure: {\"type\": \"strain_independent\", "
         "\"alpha_max\": 30.0, \"alpha_min\": -30.0, \"sigma_max\": 185e3} "
         "(or type strain_dependent with E_s, mu, alpha_r, alpha, k_0, "
-        "sigma_0, n0_e_c, n0_values, m0_e_c, m0_values; genet23 with sigma_0, "
+        "sigma_0, n0_e_c, n0_values, m0_e_c, m0_values; linear_series_spring "
+        "with sigma_0, "
         "k_s, k_0, mu, alpha, n0_e_c, n0_values).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in active_stress for chamber " +
         chamber_name +
-        ". Must be one of: strain_independent, strain_dependent, genet23");
+        ". Must be one of: strain_independent, strain_dependent, "
+        "linear_series_spring");
   }
 
   std::string type_str = j["type"];

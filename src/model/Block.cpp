@@ -68,7 +68,9 @@ void Block::update_solution(
 
 void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
 
-void Block::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
+void Block::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {}
 
 void Block::accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
 }

@@ -63,11 +63,17 @@ void SparseSystem::reserve(Model* model) {
 void SparseSystem::update_residual(
     Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
-  // Post-processing variables sit behind the solved ones and have no equation
+  // Post-processing variables sit behind the solved ones and have no equation.
+  // Map rather than head() so the products see a plain dense vector
+  Eigen::Map<const Eigen::Matrix<double, Eigen::Dynamic, 1>> y_solved(
+      y.data(), num_equations);
+  Eigen::Map<const Eigen::Matrix<double, Eigen::Dynamic, 1>> ydot_solved(
+      ydot.data(), num_equations);
+
   residual.setZero();
   residual -= C;
-  residual.noalias() -= E * ydot.head(num_equations);
-  residual.noalias() -= F * y.head(num_equations);
+  residual.noalias() -= E * ydot_solved;
+  residual.noalias() -= F * y_solved;
 }
 
 void SparseSystem::update_jacobian(double time_coeff_ydot,

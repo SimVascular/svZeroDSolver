@@ -1,9 +1,9 @@
-# ChamberCylinder: genet23 reproduction and verification
+# ChamberCylinder: genet23 setup
 
-Scripts and data behind the `ChamberCylinder` block, the thick-walled
-cylindrical left ventricle of Genet et al. (2023), "Reduced left ventricular
-dynamics modeling based on a cylindrical assumption", Int. J. Numer. Meth.
-Biomed. Engng., e3711 (genet23).
+Setup of the `ChamberCylinder` block for the thick-walled cylindrical left
+ventricle of Genet et al. (2023), "Reduced left ventricular dynamics modeling
+based on a cylindrical assumption", Int. J. Numer. Meth. Biomed. Engng., e3711
+(genet23).
 
 ## Setup
 
@@ -23,22 +23,22 @@ svZeroDSolver blocks:
   Sec 3.1. That beat is not periodic yet: the periodic end-systolic volume is
   0.6 mL larger.
 
-## Reference solutions
+The regression case `tests/cases/chamber_cylinder_genet_circulation.json` is
+this setup on a coarse mesh (3 elements through the wall, 2 beats).
 
-- **Digitized genet23 Figs 5-9** (`genet23_fig{5..9}_digitized.csv`,
-  `ChamberCylinder_figures.py`):
-  - Pressure, volume and the PV loop are matched in all 15 cases without
-    fitting. The mean end-systolic volume error is 0.6 mL, 0.1 mL for Fig 5.
-  - The torsion panels are not a valid reference (see below).
-- **Independent solutions of the same equations**
-  (`ChamberCylinder_verification.py`, no data from genet23):
-  - symmetry;
-  - static inflation against a semi-analytical solution;
-  - free torsional, axial and breathing vibration against closed forms;
-  - a full beat against an independent closed-loop re-implementation
-    (agreement to 0.06 mL and 0.014° of twist).
+## Reference solution
 
-  Its fast subset runs in `tests/test_chamber_cylinder_verification.py`.
+The reference is genet23 Fig 5 and the current CardiacLab code of the authors.
+With 12 elements through the wall:
+
+| | EDV (mL) | ESV (mL) | Peak pressure (kPa) | Twist at 550 ms |
+| --- | --- | --- | --- | --- |
+| CardiacLab (current) | 135.7 | 74.1 | 12.79 | 5.3° |
+| This block | 135.7 | 74.0 | 12.79 | 5.8° |
+
+Pressure, volume and the PV loop also match the parameter studies of Figs 6-9
+(15 cases, mean end-systolic volume error 0.6 mL) without fitting. The torsion
+panels of Figs 5-9 are not a valid reference (see below).
 
 ## The genet23 inconsistency
 
@@ -51,13 +51,8 @@ were computed with an older CardiacLab inertia term:
 - The code was corrected in March 2022, but the figures were not regenerated.
   Fig 4 (the convergence study) does come from the corrected code.
 
-| Twist at 550 ms | Value |
-| --- | --- |
-| Fig 5 | 13.3° |
-| Corrected CardiacLab | 5.3° |
-| This block | 5.8° |
-
-The authors confirmed this explanation.
+As a result, Fig 5 shows 13.3° of twist at 550 ms where the corrected code gives
+5.3°. The authors confirmed this explanation.
 
 **Remaining 0.5° difference: twist inertia.** Removing inertia gives 5.1° in
 this block. The authors report that inertia changes their twist by less than
@@ -69,35 +64,25 @@ this block. The authors report that inertia changes their twist by less than
 - **Missing inputs:** genet23 does not state the venous pressure, the initial
   arterial pressure or the input functions.
 
-`ChamberCylinder_provenance.tex` documents the source of every parameter and
-the full analysis.
-
 ## Files
 
 | File | Content |
 | --- | --- |
 | `ChamberCylinder_genet_exact.py` | the genet23 baseline configuration |
-| `ChamberCylinder_figures.py` | runs the cases of Figs 5-9 and overlays them on the digitized traces |
-| `genet23_fig{5..9}_digitized.csv` | numeric traces digitized from the published figures |
-| `ChamberCylinder_verification.py` | verification against independent solutions |
-| `ChamberCylinder_provenance.tex` | parameter provenance, formulation audit, torsion analysis |
 | `ChamberCylinder.yaml` | the continuous equations the block discretizes (documentation) |
-
-Only digitized numbers are stored here; the paper's figures, text and the
-authors' code are not.
 
 ## Running
 
 Build the Python module (see the main README), then from the repository root:
 
-```bash
-PYTHONPATH=build/python python scripts/ChamberCylinder/ChamberCylinder_figures.py
-PYTHONPATH=build/python python scripts/ChamberCylinder/ChamberCylinder_verification.py T1 T2 T3 T4 plot
+```python
+import sys
+sys.path.insert(0, "scripts/ChamberCylinder")
+import ChamberCylinder_genet_exact as G
+import svzerod
+
+result = svzerod.simulate(G.build())
 ```
 
-Both write to `scripts/ChamberCylinder/output/` (not tracked). Build the
-document from this folder with `pdflatex ChamberCylinder_provenance.tex`
-(twice). The torsion diagnostics in the document used temporary kernel switches
-that are not part of the block. They are archived in commit `bbd53847`, on the
-branch `claude/chamber-cylinder-diagnostics-archive`. Figures that need them
-appear as placeholders.
+`G.build()` returns the configuration as a dictionary; its arguments set the
+mesh (`ne`), the number of beats (`ncycle`) and the inputs.

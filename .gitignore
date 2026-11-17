@@ -46,10 +46,6 @@ node_modules/
 # Allow csv for target files in svZeroDTuner examples
 !applications/svZeroDTuner/examples/**/targets/**/*.csv
 
-# ChamberCylinder kit: keep the digitized genet23 traces, ignore generated output
-!scripts/ChamberCylinder/*.csv
-scripts/ChamberCylinder/output/
-
 # Virtual environments
 venv/
 .venv/

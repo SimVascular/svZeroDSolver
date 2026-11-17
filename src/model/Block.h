@@ -150,7 +150,14 @@ class Block {
    * Equation indices correspond to rows in the global system.
    */
   std::vector<int> global_eqn_ids;
-  std::list<std::string> output_var_names;  ///< Post-processing variables
+
+  /**
+   * @brief Names of the post-processing variables of the block
+   *
+   * Declared in setup_dofs_ and registered by Model::finalize, which
+   * appends their indices to \ref global_var_ids.
+   */
+  std::list<std::string> output_var_names;
 
   /**
    * @brief Get the name of the block
@@ -183,21 +190,14 @@ class Block {
    * equations at
    * @param num_equations Number of equations of the block
    * @param internal_var_names Names of the internal variables of the block
-   * @param output_var_names Post-processing variables of the block, see
-   * DOFHandler::register_output_variable. Their indices follow the internal
-   * ones in \ref global_var_ids.
+   * @param output_var_names Names of the post-processing variables of the
+   * block, see DOFHandler::register_output_variable. Their indices follow
+   * the internal ones in \ref global_var_ids.
    */
 
   void setup_dofs_(DOFHandler& dofhandler, int num_equations,
                    const std::list<std::string>& internal_var_names,
                    const std::list<std::string>& output_var_names = {});
-
-  /**
-   * @brief Register the post-processing variables declared in setup_dofs_
-   *
-   * @param dofhandler Degree-of-freedom handler to register variables at
-   */
-  void setup_output_dofs_(DOFHandler& dofhandler);
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -279,12 +279,12 @@ class Block {
    * @brief Accept a converged time-step.
    *
    * This hook is called once per accepted integrator step and can be used by
-   * blocks that maintain persistent memory (for example convolution
-   * history).
+   * blocks that maintain persistent memory (for example convolution history).
    *
-   * @param y Accepted state vector, may be modified
+   * @param y Accepted state vector
    */
-  virtual void accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+  virtual void accept_timestep(
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Get persistent internal state of the block.

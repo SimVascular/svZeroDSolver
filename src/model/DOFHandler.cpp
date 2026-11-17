@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <stdexcept>
 
-int DOFHandler::size() const { return var_counter; }
-
 int DOFHandler::get_num_equations() const { return eqn_counter; }
 
 int DOFHandler::get_num_variables() const { return var_counter; }

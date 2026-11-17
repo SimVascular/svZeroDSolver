@@ -38,7 +38,8 @@ void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
         dofhandler.register_variable(int_name + ":" + this->get_name()));
   }
 
-  // Registered by Model::finalize in a second pass, so they land at the tail
+  // Registered by Model::finalize in a second pass, so they land behind
+  // every solved variable
   this->output_var_names = output_var_names;
 
   // Register equations of block
@@ -65,18 +66,12 @@ void Block::update_solution(
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {}
 
-void Block::setup_output_dofs_(DOFHandler& dofhandler) {
-  for (auto& name : output_var_names) {
-    global_var_ids.push_back(
-        dofhandler.register_output_variable(name + ":" + this->get_name()));
-  }
-}
-
 void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
 
 void Block::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
 
-void Block::accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
+void Block::accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+}
 
 std::vector<double> Block::get_persistent_state() const { return {}; }
 

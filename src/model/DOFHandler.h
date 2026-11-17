@@ -34,13 +34,6 @@ class DOFHandler {
       output_variables;  ///< Post-processing variables, at the state tail
 
   /**
-   * @brief Get the length of the state vector, post-processing included
-   *
-   * @return Length of the state vector
-   */
-  int size() const;
-
-  /**
    * @brief Get the number of equations, the size of the solved system
    *
    * @return int Number of equations

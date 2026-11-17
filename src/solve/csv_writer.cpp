@@ -164,7 +164,7 @@ std::string to_variable_csv(const std::vector<double>& times,
   if (derivative) {
     out << "name,time,y,ydot\n";
     if (mean) {
-      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+      for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
         std::string name = model.dofhandler.variables[i];
         double mean_y = 0.0;
         double mean_ydot = 0.0;
@@ -179,7 +179,7 @@ std::string to_variable_csv(const std::vector<double>& times,
         out << name << ",," << mean_y << "," << mean_ydot << "\n";
       }
     } else {
-      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+      for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
         std::string name = model.dofhandler.variables[i];
         for (size_t j = 0; j < num_steps; j++) {
           out << name << "," << times[j] << "," << states[j].y[i] << ","
@@ -190,7 +190,7 @@ std::string to_variable_csv(const std::vector<double>& times,
   } else {
     out << "name,time,y\n";
     if (mean) {
-      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+      for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
         std::string name = model.dofhandler.variables[i];
         double mean_y = 0.0;
         for (size_t j = 0; j < num_steps; j++) {
@@ -201,7 +201,7 @@ std::string to_variable_csv(const std::vector<double>& times,
         out << name << ",," << mean_y << "\n";
       }
     } else {
-      for (size_t i = 0; i < model.dofhandler.size(); i++) {
+      for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
         std::string name = model.dofhandler.variables[i];
         for (size_t j = 0; j < num_steps; j++) {
           out << name << "," << times[j] << "," << states[j].y[i] << "\n";

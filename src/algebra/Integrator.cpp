@@ -16,7 +16,7 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   y_coeff_jacobian = alpha_f * y_coeff;
 
   // The system holds only the solved variables, in the leading block of y
-  size = model->dofhandler.size();
+  size = model->dofhandler.get_num_variables();
   num_equations = model->dofhandler.get_num_equations();
   system = SparseSystem(num_equations);
   this->time_step_size = time_step_size;

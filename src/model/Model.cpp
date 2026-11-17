@@ -179,8 +179,12 @@ void Model::finalize() {
     block->setup_dofs(dofhandler);
   }
   DEBUG_MSG("Setup post-processing variables");
+  // Second pass, so that these land behind every solved variable
   for (auto& block : blocks) {
-    block->setup_output_dofs_(dofhandler);
+    for (const auto& name : block->output_var_names) {
+      block->global_var_ids.push_back(
+          dofhandler.register_output_variable(name + ":" + block->get_name()));
+    }
   }
   DEBUG_MSG("Setup model-dependent parameters");
   for (auto& block : blocks) {
@@ -236,7 +240,7 @@ void Model::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   }
 }
 
-void Model::accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+void Model::accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   for (size_t i = 0; i < get_num_blocks(true); i++) {
     get_block(i)->accept_timestep(y);
   }

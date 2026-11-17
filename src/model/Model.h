@@ -258,12 +258,14 @@ class Model {
   /**
    * @brief Accept one converged time-step for all blocks.
    *
-   * @param y Accepted state vector, may be modified by the blocks
+   * @param y Accepted state vector
    */
-  void accept_timestep(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+  void accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
 
   /**
    * @brief Compute the post-processing variables of all blocks.
+   *
+   * Called once per accepted time step, before accept_timestep.
    *
    * @param y Accepted state vector, written into
    */

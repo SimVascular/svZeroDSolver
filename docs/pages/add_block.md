@@ -51,17 +51,64 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 
 ### Post-processing variables
 
-A post-processing variable is in the state vector and in the output like any other variable, but it has no equation: no row, no column, never solved for, no part in the convergence check. The block computes it from the converged solution by overriding
+Some quantities are worth reporting but drive nothing: a valve's open/closed
+state, a chamber's volume if no other block reads it, a derived pressure
+difference. Giving such a quantity its own governing equation works, but it
+costs a row and a column in every linear solve, and its residual joins the
+convergence check, so a quantity that jumps can hold up a step that is
+otherwise converged. `ValveTanh` used to spend an equation on `valve_status`
+this way.
+
+Declare it as a **post-processing variable** instead. It appears in the state
+vector and in the output like any other variable, but it has no equation: no
+row, no column, never solved for, no part in the convergence check.
+
+**1. Name it** in the fourth argument of `setup_dofs_`:
 
 ```
-void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1> &y) override;
+void MyNewBlock::setup_dofs(DOFHandler &dofhandler) {
+  Block::setup_dofs_(dofhandler, 2, {}, {"my_output"});
+}
 ```
 
-called once per accepted time step. Write each one into `y` at its index in `global_var_ids`, which follow the internal variables in the order declared.
+**2. Compute it** by overriding `update_outputs`, which the integrator calls
+once per accepted time step, after the Newton iteration has converged:
 
-Use this instead of an equation whenever you can. It is cheaper (dropping `valve_status` made the valve test cases 9-14% faster), it cannot stall the solve the way a discontinuous output can, and it reports the value at the end of the step rather than the generalized-alpha mid-point extrapolated to it. See `ValveTanh` and `ValveDiode`.
+```
+void MyNewBlock::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+  y[global_var_ids[4]] = 0.5 * (y[global_var_ids[0]] - y[global_var_ids[2]]);
+}
+```
 
-Post-processing variables sit at the tail of the state vector so the solved system stays a leading square block, which `Model::finalize` arranges with a second registration pass.
+Read the converged state out of `y` and write the result back into it. Indices
+work exactly as in the governing equations: post-processing variables extend
+`global_var_ids` behind the internal ones, in the order declared. There is
+nothing else to do; do not register the variable yourself.
+
+Because the value is computed after the step is accepted, it is the value at
+the end of the step. A variable solved for as part of the system is instead
+enforced at the generalized-\f$\alpha\f$ mid-point and extrapolated from
+there, which makes a quantity that switches overshoot and ring for a few steps
+afterwards.
+
+#### How it works
+
+`Model::finalize` registers variables in two passes: first every block's
+equations and solved variables, then every block's post-processing variables.
+Post-processing variables therefore occupy the tail of the state vector, and
+the solved system stays a dense leading block of it:
+
+```
+y = [ solved variables ........... | post-processing variables ]
+      0 .. get_num_equations()-1     .. get_num_variables()-1
+```
+
+`DOFHandler::get_num_equations()` gives the size of the system that is
+assembled and solved; `DOFHandler::get_num_variables()` gives the length of the
+state vector. They are equal in a model with no post-processing variables.
+The integrator sizes the `SparseSystem` with the former and updates only
+`y.head(num_equations)`, so the extra entries cost nothing per Newton
+iteration.
 
 <p> <br> </p>
 
@@ -91,6 +138,7 @@ Use the [Jacobian Generator](@ref jacobian) to calculate matrix contributions sy
 
 * The local state vector for each block is always arranged as `y = [P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]`.   
   * Here, `InternalVariable*` refers to any variable in the governing equations that are not the inlet and outlet flow and pressure. These are the same as those discussed above in the function `setup_dofs`.
+  * Any post-processing variables of the block follow the internal ones, but they do not appear in the governing equations.
   * The corresponding time-derivative of this state vector is `ydot = dP_in/dt, dQ_in/dt, ...]`.
   * *Note: The length of the state vector is typically four (inlet and outlet pressure and flow) plus the number of internal variables.*
 

@@ -727,25 +727,28 @@ void ChamberCylinder::update_solution(
 }
 
 void ChamberCylinder::check_inputs() const {
-  auto fail = [&](const std::string& msg) {
-    throw std::runtime_error("ChamberCylinder '" + get_name() + "': " + msg);
-  };
+  const std::string where = "ChamberCylinder '" + get_name() + "': ";
   // Without inertia the rigid rotation and axial translation of the tube are
   // undetermined.
   if (model->get_parameter_value(global_param_ids[ParamId::density]) <= 0.0)
-    fail("density must be positive.");
-  if (!material_) fail("material not set. Provide a \"material\" JSON block.");
+    throw std::runtime_error(where + "density must be positive.");
+  if (!material_)
+    throw std::runtime_error(
+        where + "material not set. Provide a \"material\" JSON block.");
   if (!active_stress_)
-    fail("active_stress not set. Provide an \"active_stress\" JSON block.");
+    throw std::runtime_error(
+        where +
+        "active_stress not set. Provide an \"active_stress\" JSON block.");
   if (!activation_function_)
-    fail(
-        "activation_function not set. Provide an \"activation_function\" "
-        "JSON block.");
+    throw std::runtime_error(where +
+                             "activation_function not set. Provide an "
+                             "\"activation_function\" JSON block.");
   if (activation_function_->signal_type() !=
       active_stress_->required_signal_type())
-    fail(std::string("active_stress law requires a ") +
-         (active_stress_->required_signal_type() == ActivationSignalType::rate
-              ? "rate-type (e.g. piecewise_rate)"
-              : "normalized (e.g. half_cosine)") +
-         " activation function.");
+    throw std::runtime_error(
+        where + "active_stress law requires a " +
+        (active_stress_->required_signal_type() == ActivationSignalType::rate
+             ? "rate-type (e.g. piecewise_rate)"
+             : "normalized (e.g. half_cosine)") +
+        " activation function.");
 }

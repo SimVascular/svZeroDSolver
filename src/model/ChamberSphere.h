@@ -249,22 +249,10 @@ class ChamberSphere : public Block {
 
   std::unique_ptr<Material> material_;
 
-  /// Positions of the core state in global_var_ids (after the 4 port
-  /// variables); the active stress law's further states follow from
-  /// kNumCoreVars on, its equations from kNumCoreEqns on.
-  static constexpr int kRadiusVar = 4;
-  static constexpr int kVeloVar = 5;
-  static constexpr int kStressVar = 6;
-  static constexpr int kTauVar = 7;
-  static constexpr int kVolumeVar = 8;
-  static constexpr int kPassiveStressVar = 9;
-  static constexpr int kNumCoreVars = 10;
-  static constexpr int kNumCoreEqns = 7;
-
-  /// Global variable index of state i of the active stress law
-  int law_var(int i) const {
-    return global_var_ids[i == 0 ? kTauVar : kNumCoreVars + i - 1];
-  }
+  /// Global variable index of state i of the active stress law: state 0 is
+  /// active_stress (7), the further states follow the 10 core variables. The
+  /// law's equations follow the 7 core equations.
+  int law_var(int i) const { return global_var_ids[i == 0 ? 7 : 10 + i - 1]; }
 
   /**
    * @brief Number of triplets of element

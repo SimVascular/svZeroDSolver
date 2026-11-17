@@ -39,8 +39,6 @@ svZeroDSolver blocks:
     (agreement to 0.06 mL and 0.014° of twist).
 
   Its fast subset runs in `tests/test_chamber_cylinder_verification.py`.
-- **3D finite elements:** svMultiPhysics models of the same cylinder, in
-  `verification_3d/`.
 
 ## The genet23 inconsistency
 
@@ -84,7 +82,6 @@ the full analysis.
 | `ChamberCylinder_verification.py` | verification against independent solutions |
 | `ChamberCylinder_provenance.tex` | parameter provenance, formulation audit, torsion analysis |
 | `ChamberCylinder.yaml` | the continuous equations the block discretizes (documentation) |
-| `verification_3d/` | comparison with svMultiPhysics |
 
 Only digitized numbers are stored here; the paper's figures, text and the
 authors' code are not.

@@ -109,9 +109,10 @@ class Integrator {
  * The generalized-\f$\alpha\f$ update with spectral radius 0 (L-stable),
  * augmented with a backtracking line search on the residual norm (damped
  * Newton) and adaptive sub-stepping: a step that does not converge is retried
- * as 2, 4, 8, ... equal sub-steps. The force-velocity term of the active
- * stress law of \cite genet23 needs it; plain generalized-\f$\alpha\f$ does
- * not converge. Selected with the simulation parameter `"integrator":
+ * as 2, 4, 8, ... equal sub-steps. It converges where plain
+ * generalized-\f$\alpha\f$ does not, e.g. for the force-velocity term of the
+ * active stress law of \cite genet23 together with piecewise-linear valves.
+ * Selected with the simulation parameter `"integrator":
  * "stiff"`; the parameters `rho_infty` and `max_iter_error_to_warning` do not
  * apply, and a step that fails at the smallest sub-step throws. Blocks with
  * persistent memory (e.g. ImpedanceBC) see one accepted step of the nominal

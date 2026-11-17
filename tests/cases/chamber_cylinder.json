@@ -1,6 +1,6 @@
 {
   "description": {
-    "description of test case": "thick-walled cylindrical ventricle (ChamberCylinder, genet23) between tanh inlet/outlet valves with constant preload and afterload; 3 finite elements through the wall, full dynamics, default generalized-alpha integrator"
+    "description of test case": "thick-walled cylindrical ventricle (ChamberCylinder) with the genet23 passive material and active stress law (without the force-velocity term) between piecewise-linear inlet and outlet valves (PiecewiseValve, open resistances of genet23 Table 1) with constant preload and afterload; 3 finite elements through the wall, full dynamics, default generalized-alpha integrator"
   },
   "boundary_conditions": [
     {
@@ -97,23 +97,21 @@
   ],
   "valves": [
     {
-      "type": "ValveTanh",
+      "type": "PiecewiseValve",
       "name": "inlet_valve",
       "params": {
         "Rmax": 700000000.0,
-        "Rmin": 0,
-        "Steepness": 0.000575,
+        "Rmin": 111110.0,
         "upstream_block": "upstream_vessel",
         "downstream_block": "ventricle"
       }
     },
     {
-      "type": "ValveTanh",
+      "type": "PiecewiseValve",
       "name": "outlet_valve",
       "params": {
         "Rmax": 6665000000.0,
-        "Rmin": 0,
-        "Steepness": 0.000575,
+        "Rmin": 76923.0,
         "upstream_block": "ventricle",
         "downstream_block": "downstream_vessel"
       }

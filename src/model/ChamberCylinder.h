@@ -127,9 +127,11 @@
  * parameters in `values`, a `material` object (see \ref Material), an
  * `active_stress` object (see \ref ActiveStress) and an
  * `activation_function` object (see \ref ActivationFunction). With the
- * active stress `genet23` and \f$\alpha>0\f$ (its velocity-dependent bond
- * destruction, 12 in the paper), the stiff \f$\alpha|\dot e_c|\f$ term needs
- * the simulation parameter `"integrator": "stiff"` (StiffIntegrator).
+ * active stress `genet23`, \f$\alpha>0\f$ (its velocity-dependent bond
+ * destruction, 12 in the paper) and piecewise-linear valves (PiecewiseValve),
+ * plain generalized-\f$\alpha\f$ may not converge: both switch abruptly, at
+ * \f$\dot e_c=0\f$ and at valve opening and closing. The simulation parameter
+ * `"integrator": "stiff"` (StiffIntegrator) then converges.
  *
  * ### Internal variables
  *

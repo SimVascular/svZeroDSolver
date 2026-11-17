@@ -269,11 +269,15 @@ class Block {
    * @brief Compute the post-processing variables of the block
    *
    * Called once per accepted time step. Write each output variable into
-   * \p y at its index in \ref global_var_ids.
+   * \p y at its index in \ref global_var_ids, where they are the last
+   * \ref output_var_names.size() entries.
    *
    * @param y Accepted state vector, to write the output variables into
+   * @param ydot Accepted derivative of the state vector
    */
-  virtual void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+  virtual void update_outputs(
+      Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot);
 
   /**
    * @brief Accept a converged time-step.

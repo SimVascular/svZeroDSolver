@@ -117,7 +117,7 @@ State Integrator::step(const State& old_state, double time) {
   }
 
   // Fill the post-processing variables from the converged state
-  model->update_outputs(new_state.y);
+  model->update_outputs(new_state.y, new_state.ydot);
 
   model->accept_timestep(new_state.y);
   return new_state;

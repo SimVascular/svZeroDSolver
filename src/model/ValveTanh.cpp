@@ -29,7 +29,9 @@ void ValveTanh::update_constant(SparseSystem& system,
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
 }
 
-void ValveTanh::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+void ValveTanh::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
   double p_in = y[global_var_ids[0]];
   double p_out = y[global_var_ids[2]];
   double steep =

@@ -231,8 +231,11 @@ class ValveDiode : public Block {
    * @brief Compute the valve status from the converged state
    *
    * @param y Accepted state vector
+   * @param ydot Accepted derivative of the state vector
    */
-  void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) override;
+  void update_outputs(
+      Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) override;
 
  private:
   /**

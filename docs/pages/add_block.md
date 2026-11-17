@@ -52,12 +52,12 @@ Below are details on the steps required to implement a new block in svZeroDSolve
 ### Post-processing variables
 
 Some quantities are worth reporting but drive nothing: a valve's open/closed
-state, a chamber's volume if no other block reads it, a derived pressure
-difference. Giving such a quantity its own governing equation works, but it
-costs a row and a column in every linear solve, and its residual joins the
-convergence check, so a quantity that jumps can hold up a step that is
-otherwise converged. `ValveTanh` used to spend an equation on `valve_status`
-this way.
+state, the passive part of a wall stress, a derived strain. Giving such a
+quantity its own governing equation works, but it costs a row and a column in
+every linear solve, and its residual joins the convergence check, so a
+quantity that jumps can hold up a step that is otherwise converged.
+`ValveTanh` used to spend an equation on `valve_status` this way, and
+`ChamberSphere` with the `strain_dependent` active stress spent four.
 
 Declare it as a **post-processing variable** instead. It appears in the state
 vector and in the output like any other variable, but it has no equation: no
@@ -75,14 +75,17 @@ void MyNewBlock::setup_dofs(DOFHandler &dofhandler) {
 once per accepted time step, after the Newton iteration has converged:
 
 ```
-void MyNewBlock::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1> &y) {
+void MyNewBlock::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1> &y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1> &ydot) {
   y[global_var_ids[4]] = 0.5 * (y[global_var_ids[0]] - y[global_var_ids[2]]);
 }
 ```
 
-Read the converged state out of `y` and write the result back into it. Indices
-work exactly as in the governing equations: post-processing variables extend
-`global_var_ids` behind the internal ones, in the order declared. There is
+Read the converged state out of `y` and `ydot` and write the result back into
+`y`. Indices work exactly as in the governing equations: post-processing
+variables extend `global_var_ids` behind the internal ones, in the order
+declared, so they are its last `output_var_names.size()` entries. There is
 nothing else to do; do not register the variable yourself.
 
 Because the value is computed after the step is accepted, it is the value at

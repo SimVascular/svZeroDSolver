@@ -41,7 +41,9 @@ void ValveDiode::update_constant(SparseSystem& system,
   system.F.coeffRef(global_eqn_ids[1], global_var_ids[3]) = -1.0;
 }
 
-void ValveDiode::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+void ValveDiode::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
   double dp = y[global_var_ids[0]] - y[global_var_ids[2]];
   double eps = model->get_parameter_value(global_param_ids[ParamId::EPS]);
   double root = sqrt(dp * dp + 4.0 * eps * eps);

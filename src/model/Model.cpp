@@ -234,9 +234,11 @@ void Model::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   }
 }
 
-void Model::update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
+void Model::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
   for (size_t i = 0; i < get_num_blocks(true); i++) {
-    get_block(i)->update_outputs(y);
+    get_block(i)->update_outputs(y, ydot);
   }
 }
 

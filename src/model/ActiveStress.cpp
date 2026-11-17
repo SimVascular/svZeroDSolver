@@ -177,7 +177,7 @@ void StrainDependentActiveStress::residual(const cplx* a, const cplx* adot,
 
 void Genet23ActiveStress::finalize() {
   // Default Frank-Starling curve n0(e_c): that of the genet23 authors' input
-  // code (genet23 Table 1)
+  // functions (genet23 Table 1 cites it from its Ref. 6)
   if (params_vec_.at("n0_e_c").size() < 2 &&
       params_vec_.at("n0_values").size() < 2) {
     params_vec_["n0_e_c"] = {-0.1668, -0.0073, 0.0534, 0.0969, 0.1326,

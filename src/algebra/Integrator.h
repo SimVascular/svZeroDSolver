@@ -42,7 +42,7 @@ class Integrator {
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
   Model* model{nullptr};
-  friend class ConsistentStiffIntegrator;  ///< Uses the scheme's members
+  friend class StiffIntegrator;  ///< Uses the scheme's members
 
  public:
   /**
@@ -109,13 +109,15 @@ class Integrator {
  * The generalized-\f$\alpha\f$ update with spectral radius 0 (L-stable),
  * augmented with a backtracking line search on the residual norm (damped
  * Newton) and adaptive sub-stepping: a step that does not converge is retried
- * with half the step size, recursively. The force-velocity term of the active
+ * as 2, 4, 8, ... equal sub-steps. The force-velocity term of the active
  * stress law of \cite genet23 needs it; plain generalized-\f$\alpha\f$ does
  * not converge. Selected with the simulation parameter `"integrator":
- * "stiff"`. Blocks with persistent memory (e.g. ImpedanceBC) see one accepted
- * step of the nominal size.
+ * "stiff"`; the parameters `rho_infty` and `max_iter_error_to_warning` do not
+ * apply, and a step that fails at the smallest sub-step throws. Blocks with
+ * persistent memory (e.g. ImpedanceBC) see one accepted step of the nominal
+ * size.
  */
-class ConsistentStiffIntegrator : public Integrator {
+class StiffIntegrator : public Integrator {
  public:
   /**
    * @brief Construct a new stiff integrator
@@ -125,8 +127,8 @@ class ConsistentStiffIntegrator : public Integrator {
    * @param atol Absolute tolerance for non-linear iteration termination
    * @param max_iter Maximum number of non-linear iterations per sub-step
    */
-  ConsistentStiffIntegrator(Model* model, double time_step_size, double atol,
-                            int max_iter);
+  StiffIntegrator(Model* model, double time_step_size, double atol,
+                  int max_iter);
 
   /**
    * @brief Perform a time step, sub-stepping if needed
@@ -138,7 +140,7 @@ class ConsistentStiffIntegrator : public Integrator {
   State step(const State& state, double time) override;
 
  private:
-  int max_subdiv{9};      ///< Maximum number of step halvings
+  int max_subdiv{9};      ///< Maximum number of step halvings (2^9 sub-steps)
   int max_backtrack{12};  ///< Maximum line-search iterations
 
   /**

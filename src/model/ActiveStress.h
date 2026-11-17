@@ -31,9 +31,10 @@
  * \f]
  * where \f$\lambda = \sqrt{\mathbf{e}_F\cdot C\cdot\mathbf{e}_F}\f$ is the
  * fiber stretch. The activation signal of the chamber's \ref
- * ActivationFunction is set once per time step with update_time(). The law is the same at every material point,
- * so a block evaluates it once for a uniform wall (\ref ChamberSphere) or at
- * each integration point (\ref ChamberCylinder).
+ * ActivationFunction is set once per time step with update_time(). The law is
+ * the same at every material point, so a block evaluates it once for a uniform
+ * wall (\ref ChamberSphere) or at each integration point (\ref
+ * ChamberCylinder).
  *
  * Types (JSON `active_stress` object): `strain_independent`,
  * `strain_dependent`, `genet23`.
@@ -248,7 +249,7 @@ class StrainDependentActiveStress : public ActiveStress {
 /**
  * @brief Bestel-Clement-Sorine active stress of \cite genet23
  *
- * The law of \cite genet23 (Eqs. 30-33, after Chapelle et al. 2012) with the
+ * The law of \cite genet23 (Eqs. 29-33, after Chapelle et al. 2012) with the
  * fiber strain \f$e_\text{fib} = \lambda - 1\f$ and a linear series spring.
  * States \f$\tau, e_c, \tau_c, k_c\f$:
  * \f[

@@ -121,13 +121,12 @@ double Integrator::avg_nonlin_iter() {
   return (double)n_nonlin_iter / (double)n_iter;
 }
 
-ConsistentStiffIntegrator::ConsistentStiffIntegrator(Model* model,
-                                                     double time_step_size,
-                                                     double atol, int max_iter)
+StiffIntegrator::StiffIntegrator(Model* model, double time_step_size,
+                                 double atol, int max_iter)
     : Integrator(model, time_step_size, 0.0, atol, max_iter) {}
 
-double ConsistentStiffIntegrator::residual_norm(const State& old_state,
-                                                const State& new_state) {
+double StiffIntegrator::residual_norm(const State& old_state,
+                                      const State& new_state) {
   ydot_am.setZero();
   y_af.setZero();
   ydot_am += old_state.ydot + (new_state.ydot - old_state.ydot) * alpha_m;
@@ -137,9 +136,8 @@ double ConsistentStiffIntegrator::residual_norm(const State& old_state,
   return system.residual.cwiseAbs().maxCoeff();
 }
 
-bool ConsistentStiffIntegrator::damped_step(const State& old_state,
-                                            State& new_state, double dt,
-                                            double time) {
+bool StiffIntegrator::damped_step(const State& old_state, State& new_state,
+                                  double dt, double time) {
   // Coefficients of this (sub-)step
   const double y_coeff_dt = gamma * dt;
   const double y_coeff_jacobian_dt = alpha_f * y_coeff_dt;
@@ -185,7 +183,7 @@ bool ConsistentStiffIntegrator::damped_step(const State& old_state,
   return false;
 }
 
-State ConsistentStiffIntegrator::step(const State& old_state, double time) {
+State StiffIntegrator::step(const State& old_state, double time) {
   n_iter++;
   int nsub = 1;
   for (int level = 0; level <= max_subdiv; level++, nsub *= 2) {

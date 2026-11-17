@@ -450,6 +450,13 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
   }
   sim_params.sim_rho_infty = sim_config.value("rho_infty", 0.5);
   sim_params.sim_integrator = sim_config.value("integrator", "genalpha");
+  if (sim_params.sim_integrator != "genalpha" &&
+      sim_params.sim_integrator != "stiff") {
+    throw std::runtime_error(
+        "simulation_parameters.integrator must be \"genalpha\" or \"stiff\", "
+        "got \"" +
+        sim_params.sim_integrator + "\".");
+  }
   sim_params.output_variable_based =
       sim_config.value("output_variable_based", false);
   sim_params.output_interval = sim_config.value("output_interval", 1);

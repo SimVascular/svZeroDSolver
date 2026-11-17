@@ -60,8 +60,7 @@
  * \Sigma^a\f$, with
  * - a deviatoric stress \f$\Sigma^d=2\,\partial W/\partial C\f$ of the wall
  *   \ref Material (`material` object), with the fiber direction
- *   \f$\mathbf{e}_F(R) = (0,\cos\alpha(R),\sin\alpha(R))\f$ and the radial
- *   sheet direction \f$\mathbf{e}_S=\mathbf{e}_R\f$ in the
+ *   \f$\mathbf{e}_F(R) = (0,\cos\alpha(R),\sin\alpha(R))\f$ in the
  *   \f$(\mathbf{e}_R,\mathbf{e}_\Theta,\mathbf{e}_Z)\f$ basis; the helix
  *   angle varies linearly through the wall,
  *   \f$\alpha(R)=\alpha_i\frac{R_e-R}{R_e-R_i}+\alpha_e\frac{R-R_i}{R_e-R_i}\f$;
@@ -77,12 +76,12 @@
  *   \ref ActiveStress law (`active_stress` object), evaluated at each
  *   quadrature point at the fiber stretch
  *   \f$\lambda=\sqrt{\mathbf{e}_F\cdot C\cdot\mathbf{e}_F}\f$ and driven by
- *   the `activation_function` (unless the law takes none).
+ *   the `activation_function`.
  *
  * The material and active stress laws are those of \ref ChamberSphere. The
  * genet23 model is the material `mooney_rivlin_exponential` (\cite genet23
  * Eq. 25) with the active stress `genet23` (the Bestel-Clement-Sorine law of
- * Eqs. 30-33) driven by an activation rate (`piecewise_rate`).
+ * Eqs. 29-33) driven by an activation rate (`piecewise_rate`).
  *
  * ### Governing equations
  *
@@ -105,7 +104,7 @@
  * \f$Q_\text{in}-Q_\text{out}-\dot V = 0\f$ and pressure equality
  * \f$P_\text{in}=P_\text{out}=P_v\f$. The \f$\hat\varepsilon\f$ term is the
  * axial load of the rigid lids that close the tube (\cite genet23 Eqs.
- * 39-44): the wall carries \f$P_v\pi(R_i+\rho(R_i))^2\f$ and the length is
+ * 39-43): the wall carries \f$P_v\pi(R_i+\rho(R_i))^2\f$ and the length is
  * free. The rigid rotation and axial translation of the tube are free and
  * fixed by momentum conservation (\cite genet23 Sec. 2.4).
  *
@@ -130,8 +129,7 @@
  * `activation_function` object (see \ref ActivationFunction). With the
  * active stress `genet23` and \f$\alpha>0\f$ (its velocity-dependent bond
  * destruction, 12 in the paper), the stiff \f$\alpha|\dot e_c|\f$ term needs
- * the simulation parameter `"integrator": "stiff"`
- * (ConsistentStiffIntegrator).
+ * the simulation parameter `"integrator": "stiff"` (StiffIntegrator).
  *
  * ### Internal variables
  *
@@ -145,7 +143,7 @@
  *   `genet23`)
  * * `volume` - Cavity volume \f$V\f$
  * * `vrho_<A>`, `vphi_<A>`, `veta_<A>`, `vbeta`, `veps` - velocity companion
- *   DOFs \f$w=\dot\zeta\f$ (full dynamics)
+ *   DOFs \f$w=\dot\zeta\f$
  * * `pmix_<e>` - Element hydrostatic pressure \f$p_e\f$ (P0 mixed u/p)
  *
  * (node index `A` runs from 0 at the endocardium \f$R_i\f$ to `num_elements`
@@ -270,12 +268,13 @@ class ChamberCylinder : public Block {
   int n_ele = 0;   ///< Number of finite elements through the wall
   int n_node = 0;  ///< Number of nodes (n_ele + 1)
   int n_quad = 0;  ///< Number of quadrature points through the wall
+  int n_law = 0;   ///< Number of active stress states per quadrature point
+  int n_var = 0;   ///< Number of block variables (external + internal)
+  int n_eqn = 0;   ///< Number of block equations
+
   /// Check the density and that the material, active stress law and
   /// activation are set.
   void check_inputs() const;
-  int n_law = 0;  ///< Number of active stress states per quadrature point
-  int n_var = 0;  ///< Number of block variables (external + internal)
-  int n_eqn = 0;  ///< Number of block equations
 
   /// Reference nodal radii (endocardium at index 0, epicardium at n_node-1)
   std::vector<double> node_R;

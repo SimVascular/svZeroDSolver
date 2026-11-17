@@ -46,7 +46,6 @@
     "maximum_nonlinear_iterations": 50,
     "output_all_cycles": false,
     "integrator": "stiff",
-    "rho_infty": 0.5,
     "output_interval": 8
   },
   "initial_condition": {

@@ -73,7 +73,7 @@ void Solver::setup_integrator() {
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
   if (simparams.sim_integrator == "stiff") {
-    integrator = std::make_unique<ConsistentStiffIntegrator>(
+    integrator = std::make_unique<StiffIntegrator>(
         this->model.get(), simparams.sim_time_step_size, simparams.sim_abs_tol,
         simparams.sim_nliter);
   } else {

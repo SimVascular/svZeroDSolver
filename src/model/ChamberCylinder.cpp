@@ -132,7 +132,7 @@ inline Mat3<T> fiber_tensor(double alpha) {
  *
  * Sigma = Sigma^d (material, \cite genet23 Eq. 25) + Sigma^b (hydrostatic
  * pressure, Eqs. 26-27) + Sigma^v (viscous, Eq. 28) + Sigma^a (active stress
- * law, Eqs. 29-30).
+ * law, Eqs. 29-33).
  */
 template <typename T>
 Mat3<T> compute_stress(const Kinematics<T>& k, const T xidot[6], double tau,
@@ -372,7 +372,7 @@ void ChamberCylinder::update_solution(
     if (!in[i]) {
       if (!record) {
         throw std::runtime_error(
-            "ChamberCylinder block '" + get_name() +
+            "ChamberCylinder '" + get_name() +
             "': tangent entry outside the recorded sparsity pattern.");
       }
       in[i] = 1;
@@ -412,7 +412,7 @@ void ChamberCylinder::update_solution(
     // Hydrostatic pressure of this element (mixed u/p)
     p.p_mix = Y(i_pmix(pt.elem));
 
-    // Internal forces g and their derivatives w.r.t. tau_c, p and the rates
+    // Internal forces g and their derivatives w.r.t. tau, p and the rates
     Kinematics<double> kin = compute_kinematics<double>(xi, pt.R);
     Matrix3d M = fiber_tensor<double>(pt.alpha);
     Matrix3d S = compute_stress<double>(kin, xidot, tau, pt.alpha, p);
@@ -443,7 +443,7 @@ void ChamberCylinder::update_solution(
       }
     }
 
-    // The wall depends on the active stress law through tau (coefficient 1)
+    // The wall stress is linear in tau: d g_k / d tau = dgdtau[k]
     const int active_col = i_law(q, 0);
     const double lam = std::sqrt(I4q);  // fiber stretch
 
@@ -651,7 +651,7 @@ void ChamberCylinder::update_solution(
     }
   }
 
-  // --- External pressure loading on the inner surface (Eq. 63) ---
+  // --- Pressure load on the inner surface (genet23 Eqs. 34, 63) ---
   const double rho_i = Y(i_rho(0));
   const double Rinner = Rip + rho_i;
   const double twoPiL = 2.0 * M_PI * Lp;
@@ -664,7 +664,8 @@ void ChamberCylinder::update_solution(
     Kat(re, i_rho(0)) -= Pin * twoPiL * (1.0 + eps);  // d/drho_i
     Kat(re, i_eps()) -= Pin * twoPiL * Rinner;        // d/deps
   }
-  // --- Lids loaded by the cavity pressure; eps equation: - P pi L Rinner^2 ---
+  // --- Lids loaded by the cavity pressure (genet23 Eqs. 39-43); eps equation:
+  // - P pi L Rinner^2 ---
   {
     const int re = e_eps();
     Cloc[re] -= Pin * piL * Rinner * Rinner;

@@ -24,24 +24,25 @@
  */
 
 class Integrator {
- protected:
-  double alpha_m{0.0};                    ///< Coefficient alpha_m
-  double alpha_f{0.0};                    ///< Coefficient alpha_f
-  double gamma{0.0};                      ///< Coefficient gamma
-  double time_step_size{0.0};             ///< Time step size
-  double ydot_init_coeff{0.0};            ///< Predictor coefficient of ydot
-  double y_coeff{0.0};                    ///< gamma * time_step_size
-  double y_coeff_jacobian{0.0};           ///< alpha_f * y_coeff
-  double atol{0.0};                       ///< Absolute residual tolerance
-  int max_iter{0};                        ///< Maximum nonlinear iterations
-  bool max_iter_error_to_warning{false};  ///< Warn instead of throwing
-  int size{0};                            ///< Size of the system
-  int n_iter{0};                          ///< Number of step calls
-  int n_nonlin_iter{0};                   ///< Number of nonlinear iterations
-  Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;     ///< y at alpha_f
-  Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;  ///< ydot at alpha_m
-  SparseSystem system;                               ///< System of equations
-  Model* model{nullptr};                             ///< Model to integrate
+ private:
+  double alpha_m{0.0};
+  double alpha_f{0.0};
+  double gamma{0.0};
+  double time_step_size{0.0};
+  double ydot_init_coeff{0.0};
+  double y_coeff{0.0};
+  double y_coeff_jacobian{0.0};
+  double atol{0.0};
+  int max_iter{0};
+  bool max_iter_error_to_warning{false};
+  int size{0};
+  int n_iter{0};
+  int n_nonlin_iter{0};
+  Eigen::Matrix<double, Eigen::Dynamic, 1> y_af;
+  Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
+  SparseSystem system;
+  Model* model{nullptr};
+  friend class ConsistentStiffIntegrator;  ///< Uses the scheme's members
 
  public:
   /**

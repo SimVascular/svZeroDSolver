@@ -152,6 +152,14 @@ class Block {
   std::vector<int> global_eqn_ids;
 
   /**
+   * @brief Names of the post-processing variables of the block
+   *
+   * Declared in setup_dofs_ and registered by Model::finalize, which
+   * appends their indices to \ref global_var_ids.
+   */
+  std::list<std::string> output_var_names;
+
+  /**
    * @brief Get the name of the block
    *
    * @return std::string Name of the block
@@ -181,11 +189,15 @@ class Block {
    * @param dofhandler Degree-of-freedom handler to register variables and
    * equations at
    * @param num_equations Number of equations of the block
-   * @param internal_var_names Number of internal variables of the block
+   * @param internal_var_names Names of the internal variables of the block
+   * @param output_var_names Names of the post-processing variables of the
+   * block, see DOFHandler::register_output_variable. Their indices follow
+   * the internal ones in \ref global_var_ids.
    */
 
   void setup_dofs_(DOFHandler& dofhandler, int num_equations,
-                   const std::list<std::string>& internal_var_names);
+                   const std::list<std::string>& internal_var_names,
+                   const std::list<std::string>& output_var_names = {});
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -252,6 +264,20 @@ class Block {
    * @param y Current solution
    */
   virtual void post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+
+  /**
+   * @brief Compute the post-processing variables of the block
+   *
+   * Called once per accepted time step. Write each output variable into
+   * \p y at its index in \ref global_var_ids, where they are the last
+   * entries, one per name in \ref output_var_names.
+   *
+   * @param y Accepted state vector, to write the output variables into
+   * @param ydot Accepted derivative of the state vector
+   */
+  virtual void update_outputs(
+      Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot);
 
   /**
    * @brief Accept a converged time-step.

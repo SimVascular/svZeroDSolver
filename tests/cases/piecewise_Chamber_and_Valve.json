@@ -192,40 +192,36 @@
   ],
   "valves": [
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "tricuspid",
       "params": {
-        "Rmax": 6665,
         "Rmin": 6.665,
         "upstream_block": "right_atrium",
         "downstream_block": "right_ventricle"
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "pulmonary",
       "params": {
-        "Rmax": 6665,
         "Rmin": 6.665,
         "upstream_block": "right_ventricle",
         "downstream_block": "pul_artery"
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "mitral",
       "params": {
-        "Rmax": 6665,
         "Rmin": 6.665,
         "upstream_block": "left_atrium",
         "downstream_block": "left_ventricle"
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "aortic",
       "params": {
-        "Rmax": 6665,
         "Rmin": 6.665,
         "upstream_block": "left_ventricle",
         "downstream_block": "sys_artery"

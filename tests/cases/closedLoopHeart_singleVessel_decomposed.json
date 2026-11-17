@@ -150,49 +150,37 @@
   ],
   "valves": [
     {
-      "_comment_": "Tricuspid valve. Rmin=Rra_v. Smooth tanh approximation of monolithic hard on/off valve.",
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "TV",
       "params": {
         "Rmin": 0.007887459,
-        "Rmax": 1.0e3,
-        "Steepness": 1.0e4,
         "upstream_block": "RA",
         "downstream_block": "RV"
       }
     },
     {
-      "_comment_": "Pulmonary valve. Rmin=Rrv_a.",
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "PV",
       "params": {
         "Rmin": 0.035061704,
-        "Rmax": 1.0e3,
-        "Steepness": 1.0e4,
         "upstream_block": "RV",
         "downstream_block": "pul_vessel"
       }
     },
     {
-      "_comment_": "Mitral valve. Rmin=Rla_v.",
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "MV",
       "params": {
         "Rmin": 0.005310825,
-        "Rmax": 1.0e3,
-        "Steepness": 1.0e4,
         "upstream_block": "LA",
         "downstream_block": "LV"
       }
     },
     {
-      "_comment_": "Aortic valve. Rmin=Rlv_ao.",
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "AV",
       "params": {
         "Rmin": 0.034320234,
-        "Rmax": 1.0e3,
-        "Steepness": 1.0e4,
         "upstream_block": "LV",
         "downstream_block": "aortic_cap"
       }

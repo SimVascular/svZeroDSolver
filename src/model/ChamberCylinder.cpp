@@ -180,8 +180,6 @@ void ChamberCylinder::setup_dofs(DOFHandler& dofhandler) {
   n_ele = std::max(1, (int)std::lround(model->get_parameter_value(
                           global_param_ids[ParamId::num_elements])));
   n_node = n_ele + 1;
-  pin_rigid_ =
-      model->get_parameter_value(global_param_ids[ParamId::density]) == 0.0;
   check_inputs();
   n_law = active_stress_->num_states();
 
@@ -285,13 +283,6 @@ void ChamberCylinder::update_constant(SparseSystem& system,
   // Cavity volume V - pi (R_i + rho_i)^2 (1 + eps) L = 0 (linear part)
   system.F.coeffRef(global_eqn_ids[e_volume()], global_var_ids[i_vol()]) = 1.0;
 
-  // Rigid-body pins phi(R_i) = eta(R_i) = 0, only without inertia (genet23
-  // Sec 2.4); with inertia, momentum conservation fixes the rigid modes.
-  if (pin_rigid_) {
-    system.F.coeffRef(global_eqn_ids[e_phi(0)], global_var_ids[i_phi(0)]) = 1.0;
-    system.F.coeffRef(global_eqn_ids[e_eta(0)], global_var_ids[i_eta(0)]) = 1.0;
-  }
-
   // --- Inertia (genet23 Eqs. 8, 18, A5-A6) ---
   // Companion DOFs w = zeta_dot make the system first order. The consistent
   // mass M = int rho0 Du^T Du dOmega, integrated over Theta and Z, couples
@@ -316,21 +307,15 @@ void ChamberCylinder::update_constant(SparseSystem& system,
       Madd(e_beta(), i_vbeta(), cL3 * pt.w * R2);  // beta-beta
       Madd(e_eps(), i_veps(), cL3 * pt.w);         // eps-eps
       for (int i = 0; i < 2; i++) {
-        // When pinned, the pins replace the phi_0/eta_0 momentum rows.
-        const bool free_row = !pin_rigid_ || A[i] != 0;
         Madd(e_beta(), i_vphi(A[i]), cL2 * pt.w * R2 * N[i]);  // beta-phi
         Madd(e_eps(), i_veta(A[i]), cL2 * pt.w * N[i]);        // eps-eta
-        if (free_row) {
-          Madd(e_phi(A[i]), i_vbeta(), cL2 * pt.w * R2 * N[i]);
-          Madd(e_eta(A[i]), i_veps(), cL2 * pt.w * N[i]);
-        }
+        Madd(e_phi(A[i]), i_vbeta(), cL2 * pt.w * R2 * N[i]);  // phi-beta
+        Madd(e_eta(A[i]), i_veps(), cL2 * pt.w * N[i]);        // eta-eps
         for (int j = 0; j < 2; j++) {
           const double mrr = cL1 * pt.w * N[i] * N[j];  // rho-rho / eta-eta
           Madd(e_rho(A[i]), i_vrho(A[j]), mrr);
-          if (free_row) {
-            Madd(e_eta(A[i]), i_veta(A[j]), mrr);
-            Madd(e_phi(A[i]), i_vphi(A[j]), cL1 * pt.w * R2 * N[i] * N[j]);
-          }
+          Madd(e_eta(A[i]), i_veta(A[j]), mrr);
+          Madd(e_phi(A[i]), i_vphi(A[j]), cL1 * pt.w * R2 * N[i] * N[j]);
         }
       }
     }
@@ -487,18 +472,11 @@ void ChamberCylinder::update_solution(
     cvr[1][1] = i_rho(A1);
     cw[1][1] = dN1;
     cn[1] = 2;
-    {  // phi': skip the row of the pinned inner node
-      int c = 0;
-      if (!pin_rigid_ || A0 != 0) {
-        req[2][c] = e_phi(A0);
-        rw[2][c] = dN0;
-        c++;
-      }
-      req[2][c] = e_phi(A1);
-      rw[2][c] = dN1;
-      c++;
-      rn[2] = c;
-    }
+    req[2][0] = e_phi(A0);
+    rw[2][0] = dN0;
+    req[2][1] = e_phi(A1);
+    rw[2][1] = dN1;
+    rn[2] = 2;
     cvr[2][0] = i_phi(A0);
     cw[2][0] = dN0;
     cvr[2][1] = i_phi(A1);
@@ -516,18 +494,11 @@ void ChamberCylinder::update_solution(
     cvr[4][0] = i_eps();
     cw[4][0] = 1.0;
     cn[4] = 1;
-    {  // eta': skip the row of the pinned inner node
-      int c = 0;
-      if (!pin_rigid_ || A0 != 0) {
-        req[5][c] = e_eta(A0);
-        rw[5][c] = dN0;
-        c++;
-      }
-      req[5][c] = e_eta(A1);
-      rw[5][c] = dN1;
-      c++;
-      rn[5] = c;
-    }
+    req[5][0] = e_eta(A0);
+    rw[5][0] = dN0;
+    req[5][1] = e_eta(A1);
+    rw[5][1] = dN1;
+    rn[5] = 2;
     cvr[5][0] = i_eta(A0);
     cw[5][0] = dN0;
     cvr[5][1] = i_eta(A1);
@@ -592,15 +563,13 @@ void ChamberCylinder::update_solution(
               -base * Na * (2.0 * Wb * L2 + 2.0 * Wp * L1) * Nn[j];
           Kat(e_rho(a), i_rho(An[j])) += -c0 * Nn[j] * Iw2 * Na;
         }
-        // phi (skip the inner node when pinned): + 2 rho_dot (int w_om)
-        if (!pin_rigid_ || a != 0) {
-          Cloc[e_phi(a)] += base * 2.0 * Wr * Qp * Na;
-          Kat(e_phi(a), i_vbeta()) += base * 2.0 * Wr * L2 * Na;
-          for (int j = 0; j < 2; j++) {
-            Kat(e_phi(a), i_vrho(An[j])) += base * 2.0 * Nn[j] * Qp * Na;
-            Kat(e_phi(a), i_vphi(An[j])) += base * 2.0 * Wr * L1 * Nn[j] * Na;
-            Kat(e_phi(a), i_rho(An[j])) += c0 * Nn[j] * 2.0 * Wr * Qp * Na;
-          }
+        // phi: + 2 rho_dot (int w_om)
+        Cloc[e_phi(a)] += base * 2.0 * Wr * Qp * Na;
+        Kat(e_phi(a), i_vbeta()) += base * 2.0 * Wr * L2 * Na;
+        for (int j = 0; j < 2; j++) {
+          Kat(e_phi(a), i_vrho(An[j])) += base * 2.0 * Nn[j] * Qp * Na;
+          Kat(e_phi(a), i_vphi(An[j])) += base * 2.0 * Wr * L1 * Nn[j] * Na;
+          Kat(e_phi(a), i_rho(An[j])) += c0 * Nn[j] * 2.0 * Wr * Qp * Na;
         }
       }
     }
@@ -628,11 +597,10 @@ void ChamberCylinder::update_solution(
       Kdat(e_beta(), i_vbeta()) += pt.w * dr2 * cL3;
       for (int j = 0; j < 2; j++)
         Kdat(e_beta(), i_vphi(Am[j])) += pt.w * dr2 * cL2 * Nm[j];
-      // phi momentum rows (skip the pinned inner node)
+      // phi momentum rows
       const double fPhi = cL2 * aBeta + cL1 * aPhi;
       for (int i = 0; i < 2; i++) {
         const int a = Am[i];
-        if (pin_rigid_ && a == 0) continue;
         Cloc[e_phi(a)] += pt.w * dr2 * Nm[i] * fPhi;
         Kdat(e_phi(a), i_vbeta()) += pt.w * dr2 * Nm[i] * cL2;
         for (int j = 0; j < 2; j++)
@@ -760,6 +728,10 @@ void ChamberCylinder::check_inputs() const {
   auto fail = [&](const std::string& msg) {
     throw std::runtime_error("ChamberCylinder '" + get_name() + "': " + msg);
   };
+  // Without inertia the rigid rotation and axial translation of the tube are
+  // undetermined.
+  if (model->get_parameter_value(global_param_ids[ParamId::density]) <= 0.0)
+    fail("density must be positive.");
   if (!material_) fail("material not set. Provide a \"material\" JSON block.");
   if (!active_stress_)
     fail("active_stress not set. Provide an \"active_stress\" JSON block.");

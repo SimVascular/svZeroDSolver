@@ -106,10 +106,8 @@
  * \f$P_\text{in}=P_\text{out}=P_v\f$. The \f$\hat\varepsilon\f$ term is the
  * axial load of the rigid lids that close the tube (\cite genet23 Eqs.
  * 39-44): the wall carries \f$P_v\pi(R_i+\rho(R_i))^2\f$ and the length is
- * free. Without inertia (`density` = 0) the rigid rotation and axial
- * translation are removed by the pins \f$\varphi(R_i)=\eta(R_i)=0\f$; with
- * inertia they are free and fixed by momentum conservation (\cite genet23
- * Sec. 2.4).
+ * free. The rigid rotation and axial translation of the tube are free and
+ * fixed by momentum conservation (\cite genet23 Sec. 2.4).
  *
  * ### Parameters
  *
@@ -123,8 +121,8 @@
  * * `gamma` - Material viscosity \f$\gamma\f$
  * * `num_elements` - Number of (linear) finite elements through the wall
  *   (optional, default 10)
- * * `density` - Reference mass density \f$\varrho_0\f$ (optional, default 1000
- *   kg/m^3 = the paper's 1 kg/L; 0 for the quasi-static model)
+ * * `density` - Reference mass density \f$\varrho_0 > 0\f$ (optional, default
+ *   1000 kg/m^3 = the paper's 1 kg/L)
  *
  * Like \ref ChamberSphere, the block is declared in `chambers` with these
  * parameters in `values`, a `material` object (see \ref Material), an
@@ -272,11 +270,8 @@ class ChamberCylinder : public Block {
   int n_ele = 0;   ///< Number of finite elements through the wall
   int n_node = 0;  ///< Number of nodes (n_ele + 1)
   int n_quad = 0;  ///< Number of quadrature points through the wall
-  /// Rigid-body pins phi(R_i) = eta(R_i) = 0. genet23 (Sec 2.4) needs them only
-  /// in the static setting; with inertia (density > 0) the rigid rotation and
-  /// axial translation are free and governed by momentum conservation.
-  bool pin_rigid_ = true;
-  /// Check that the material, active stress law and activation are set.
+  /// Check the density and that the material, active stress law and
+  /// activation are set.
   void check_inputs() const;
   int n_law = 0;  ///< Number of active stress states per quadrature point
   int n_var = 0;  ///< Number of block variables (external + internal)

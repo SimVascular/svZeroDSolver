@@ -178,6 +178,14 @@ void Model::finalize() {
   for (auto& block : blocks) {
     block->setup_dofs(dofhandler);
   }
+  DEBUG_MSG("Setup post-processing variables");
+  // Second pass, so that these land behind every solved variable
+  for (auto& block : blocks) {
+    for (const auto& name : block->output_var_names) {
+      block->global_var_ids.push_back(
+          dofhandler.register_output_variable(name + ":" + block->get_name()));
+    }
+  }
   DEBUG_MSG("Setup model-dependent parameters");
   for (auto& block : blocks) {
     block->setup_model_dependent_params();
@@ -223,6 +231,14 @@ void Model::update_solution(SparseSystem& system,
 void Model::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
   for (auto block : blocks) {
     block->post_solve(y);
+  }
+}
+
+void Model::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
+  for (size_t i = 0; i < get_num_blocks(true); i++) {
+    get_block(i)->update_outputs(y, ydot);
   }
 }
 

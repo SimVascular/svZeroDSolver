@@ -938,7 +938,7 @@ void create_chambers(
 
 State load_initial_condition(const nlohmann::json& config, Model& model) {
   // Read initial condition
-  auto initial_state = State::Zero(model.dofhandler.size());
+  auto initial_state = State::Zero(model.dofhandler.get_num_variables());
 
   if (config.contains("initial_condition")) {
     const auto& initial_condition = config["initial_condition"];
@@ -955,7 +955,7 @@ State load_initial_condition(const nlohmann::json& config, Model& model) {
     }
 
     // Loop through variables and check for initial conditions.
-    for (size_t i = 0; i < model.dofhandler.size(); i++) {
+    for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
       std::string var_name = model.dofhandler.variables[i];
       double default_val = 0.0;
       // If initial condition is not specified for this variable,
@@ -981,7 +981,7 @@ State load_initial_condition(const nlohmann::json& config, Model& model) {
     DEBUG_MSG("Reading initial condition derivative");
     const auto& initial_condition_d = config["initial_condition_d"];
     // Loop through variables and check for initial conditions.
-    for (size_t i = 0; i < model.dofhandler.size(); i++) {
+    for (size_t i = 0; i < model.dofhandler.get_num_variables(); i++) {
       std::string var_name = model.dofhandler.variables[i];
       if (!initial_condition_d.contains(var_name)) {
         DEBUG_MSG("No initial condition derivative found for " << var_name);

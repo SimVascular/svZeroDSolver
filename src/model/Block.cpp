@@ -19,6 +19,34 @@ void Block::setup_params_(const std::vector<int>& param_ids) {
 
 void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
                         const std::list<std::string>& internal_var_names) {
+  // A block contributes one equation per variable it owns: each connection
+  // contributes one of the two degrees of freedom of its node (the other
+  // belongs to the block on the far side), plus one per internal variable.
+  // A block with too few connections would otherwise index past the end of
+  // global_var_ids while assembling, which used to segfault.
+  const int num_connections =
+      static_cast<int>(inlet_nodes.size() + outlet_nodes.size());
+  const int num_required =
+      num_equations - static_cast<int>(internal_var_names.size());
+
+  if (num_required < 0) {
+    throw std::runtime_error(
+        "Internal error: block '" + get_name() + "' declares " +
+        std::to_string(num_equations) + " equations but " +
+        std::to_string(internal_var_names.size()) + " internal variables.");
+  }
+
+  if (num_connections != num_required) {
+    throw std::runtime_error(
+        "Block '" + get_name() + "' needs " + std::to_string(num_required) +
+        " connection" + (num_required == 1 ? "" : "s") +
+        " (inlets plus outlets), but the model connects it " +
+        std::to_string(num_connections) + " time" +
+        (num_connections == 1 ? "" : "s") +
+        ". Check that it is listed in a junction, or has a boundary "
+        "condition, on every side.");
+  }
+
   // Collect external DOFs from inlet nodes
   for (auto& inlet_node : inlet_nodes) {
     global_var_ids.push_back(inlet_node->pres_dof);

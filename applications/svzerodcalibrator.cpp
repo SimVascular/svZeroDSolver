@@ -31,7 +31,19 @@ int main(int argc, char* argv[]) {
     return 1;
   }
 
-  const auto& config = nlohmann::json::parse(input_file);
+  nlohmann::json config;
+
+  try {
+    config = nlohmann::json::parse(input_file);
+  } catch (const nlohmann::json::parse_error& e) {
+    std::cerr << "[svzerodcalibrator] Error: Parsing the input file '"
+              << input_file_name << "' has failed." << std::endl;
+    std::cerr << "[svzerodcalibrator] Details of the parsing error: "
+              << std::endl;
+    std::cerr << e.what() << std::endl;
+    return 1;
+  }
+
   nlohmann::json output_config;
 
   try {
@@ -41,6 +53,11 @@ int main(int argc, char* argv[]) {
         << "[svzerodcalibrator] Error: The input file '" << input_file_name
         << "' does not have the parameters needed by the calibrate program."
         << std::endl;
+    return 1;
+  } catch (const std::exception& e) {
+    // Report an invalid configuration as a message and a nonzero exit code
+    // instead of an uncaught exception, as svzerodsolver does.
+    std::cerr << "[svzerodcalibrator] Error: " << e.what() << std::endl;
     return 1;
   }
 

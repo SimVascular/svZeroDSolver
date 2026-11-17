@@ -793,10 +793,14 @@ void create_junctions(
     if (junction_config.contains("inlet_vessels") &&
         junction_config.contains("outlet_vessels")) {
       for (int vessel_id : junction_config["inlet_vessels"]) {
-        connections.push_back({vessel_id_map[vessel_id], junction_name});
+        connections.push_back({get_vessel_name(vessel_id_map, vessel_id,
+                                               junction_name, "inlet_vessels"),
+                               junction_name});
       }
       for (int vessel_id : junction_config["outlet_vessels"]) {
-        connections.push_back({junction_name, vessel_id_map[vessel_id]});
+        connections.push_back(
+            {junction_name, get_vessel_name(vessel_id_map, vessel_id,
+                                            junction_name, "outlet_vessels")});
       }
     } else if (junction_config.contains("inlet_blocks") &&
                junction_config.contains("outlet_blocks")) {
@@ -806,6 +810,22 @@ void create_junctions(
       for (std::string block_name : junction_config["outlet_blocks"]) {
         connections.push_back({junction_name, block_name});
       }
+    } else {
+      // Without a complete pair the junction gets no connections at all, so
+      // say which keys are missing instead of leaving it dangling.
+      std::vector<std::string> present;
+      for (const char* key : {"inlet_vessels", "outlet_vessels", "inlet_blocks",
+                              "outlet_blocks"}) {
+        if (junction_config.contains(key)) {
+          present.push_back(key);
+        }
+      }
+      throw std::runtime_error(
+          "Junction '" + junction_name +
+          "' does not define its connections. Provide either both "
+          "inlet_vessels and outlet_vessels, or both inlet_blocks and "
+          "outlet_blocks. Keys found: " +
+          (present.empty() ? "none" : join_names(present)) + ".");
     }
     DEBUG_MSG("Created junction " << junction_name);
   }

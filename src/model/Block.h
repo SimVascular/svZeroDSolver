@@ -270,7 +270,7 @@ class Block {
    *
    * Called once per accepted time step. Write each output variable into
    * \p y at its index in \ref global_var_ids, where they are the last
-   * \ref output_var_names.size() entries.
+   * entries, one per name in \ref output_var_names.
    *
    * @param y Accepted state vector, to write the output variables into
    * @param ydot Accepted derivative of the state vector

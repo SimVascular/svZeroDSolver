@@ -227,6 +227,11 @@ class ChamberSphere : public Block {
    * @param y Current solution
    * @param dy Current derivate of the solution
    */
+  void update_solution(
+      SparseSystem& system, std::vector<double>& parameters,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
+
   /**
    * @brief Compute the post-processing variables from the converged state
    *
@@ -236,11 +241,6 @@ class ChamberSphere : public Block {
   void update_outputs(
       Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
       const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) override;
-
-  void update_solution(
-      SparseSystem& system, std::vector<double>& parameters,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
-      const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) override;
 
   void set_activation_function(std::unique_ptr<ActivationFunction> af) override;
 

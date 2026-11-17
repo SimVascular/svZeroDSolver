@@ -1,6 +1,22 @@
 {
   "description": {
-    "description of test case": "ChamberCylinder with the genet23 Table 1 parameters in its circulation: piecewise-linear valve law (Eq 35, PiecewiseValve) and two-stage C-R-C-R Windkessel (Eq 36, BloodVessel chain), ECG-derived nagumo activation, BCS force-velocity term (bcs_alpha = 12), stiff integrator; 3 elements"
+    "description of test case": "Thick-walled cylindrical left ventricle (ChamberCylinder) in the closed circulation of Genet et al. (2023), Reduced left ventricular dynamics modeling based on a cylindrical assumption, Int. J. Numer. Meth. Biomed. Engng. e3711, doi:10.1002/cnm.3711 (genet23). Atrial pressure -> mitral PiecewiseValve -> ventricle -> aortic PiecewiseValve -> two-stage Windkessel -> venous pressure. All units SI.",
+    "ventricle": {
+      "geometry": "Ri, Re, length derived from the defining volumes of genet23 Table 1: cavity 65 mL, wall 130 mL, aspect ratio L/(2 Ri) = 1.5, i.e. Ri = (65e-6 / (3 pi))^(1/3), L = 3 Ri, Re = sqrt(Ri^2 + 130e-6 / (pi L)). Table 1 prints these rounded (19.0, 33.0, 57.1 mm). Fiber helix angle +60 deg (endocardium) to -60 deg (epicardium), linear across the wall (Eq 22, Table 1).",
+      "material": "genet23 passive energy (Eq 25) with C1-C6 from Table 1; tissue viscosity gamma = 70 Pa s (Eq 28, Table 1); incompressible (mixed u/p, Eqs 26-27); density 1000 kg/m^3 for the inertia terms (Eqs 8, 18).",
+      "active stress": "Bestel-Clement-Sorine law (Eqs 29-33) with sigma_0 = 65 kPa, k_0 = 260 kPa, k_s = 1e8 Pa, mu = 70 Pa s and the force-velocity time constant alpha = 12 (Table 1). fv_reg = 1e-10 makes the smoothing of |de_c/dt| inert, so Eq 33 holds exactly. The Frank-Starling curve n0(e_c) is the block default, the piecewise-linear table of the authors' input functions (genet23 Refs 6/33).",
+      "activation": "nagumo activation nu(t) from the authors' ECG-based input functions: delay 0.10 s, ramp 0.01 s, QRS 0.08 s, QTc 0.33 s with Bazett QT = QTc sqrt(T) at T = 0.8 s, plateaus +-35 1/s. tsys = delay + ramp = 0.11 s, tdias = tsys + QT.",
+      "numerics": "3 elements through the wall and the stiff integrator, which the force-velocity term needs (genet23 uses an energy-consistent midpoint scheme that svZeroDSolver does not have)."
+    },
+    "circulation": {
+      "atrium": "Atrial pressure from the authors' input functions: 7 mmHg peak and 4.5 mmHg floor (134 Pa/mmHg, the authors' conversion), linear drop over 0.05-0.10 s, atrial kick from T - PQ + ramp = 0.67 s to T - AV + ramp = 0.73 s (PQ 0.14 s, AV delay 0.08 s).",
+      "valves": "Piecewise-linear valve law (Eq 35) with R = 1/K from Table 1: mitral Rmin = 1/K_at, Rmax = 1/K_iso (isovolumic leak); aortic Rmin = 1/K_ar, Rmax = 1e12 (Eq 36 has no closed leak on the arterial side). C_valve is not modeled: Table 1 prints 9e-9 m^3/Pa, a typo for the 9e-12 of the authors' code, which stores about 0.1 mL over the beat.",
+      "windkessel": "C-R-C-R chain of Eq 36 from BloodVessel blocks, whose capacitor sits at the outlet node: aortic_root (C_ar), arterial (R_p, C_d), distal (R_d), values from Table 1.",
+      "venous pressure": "P_vs = 500 Pa. Not given in genet23; CardiacLab value communicated by the authors.",
+      "initial condition": "Ventricle at its unloaded volume pi Ri^2 L = 65 mL, all pressures at the atrial 938 Pa, the arterial nodes at 47 mmHg = 6298 Pa (CardiacLab value communicated by the authors). The open mitral valve fills the cavity within about 50 ms, before activation at 110 ms."
+    },
+    "reference solution": "Coarsened for test speed. The full setup (12 elements, 1 ms time step, fifth beat as in genet23 Sec 3.1) gives EDV 135.7 mL, ESV 74.0 mL, peak pressure 12.79 kPa and 5.8 deg of twist at 550 ms; the authors' current CardiacLab code gives 135.7 mL, 74.1 mL, 12.79 kPa and 5.3 deg. Pressure and volume also match genet23 Figs 5-9 (15 cases, mean ESV error 0.6 mL). The torsion curves of Figs 5-9 are not a valid reference: they come from an older CardiacLab inertia term (corrected in March 2022, confirmed by the authors) and show 13.3 deg at 550 ms in Fig 5.",
+    "generated with": "build(ne=3, ncycle=2) from scripts/ChamberCylinder/ChamberCylinder_genet_exact.py on branch claude/chamber-cylinder-3d-verification of github.com/mrp089/svZeroDSolver (commit d72fc1ea), then number_of_time_pts_per_cardiac_cycle = 401 (2 ms) and output_interval = 8. That branch also holds the comparison with the digitized genet23 figures, the parameter provenance document and the verification against independent solutions."
   },
   "boundary_conditions": [
     {

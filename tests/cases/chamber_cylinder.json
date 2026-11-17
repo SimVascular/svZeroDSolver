@@ -49,44 +49,6 @@
       }
     },
     {
-      "boundary_conditions": {},
-      "vessel_id": 1,
-      "vessel_length": 1.0,
-      "vessel_name": "ventricle",
-      "zero_d_element_type": "ChamberCylinder",
-      "material": {
-        "type": "genet23",
-        "C1": 7.0,
-        "C2": 0.0,
-        "C3": 700.0,
-        "C4": 2.0,
-        "C5": 50.0,
-        "C6": 4.0
-      },
-      "active_stress": {
-        "type": "genet23",
-        "sigma_0": 55000.0
-      },
-      "zero_d_element_values": {
-        "Ri": 0.019,
-        "Re": 0.033,
-        "length": 0.0571,
-        "alpha_endo": 60.0,
-        "alpha_epi": -60.0,
-        "gamma": 70.0,
-        "num_elements": 3
-      },
-      "activation_function": {
-        "type": "nagumo",
-        "tsys": 0.17,
-        "tdias": 0.484,
-        "qrs": 0.08,
-        "ramp": 0.01,
-        "alpha_max": 30.0,
-        "alpha_min": -30.0
-      }
-    },
-    {
       "boundary_conditions": {
         "outlet": "OUT"
       },
@@ -97,6 +59,39 @@
       "zero_d_element_values": {
         "R_poiseuille": 10000000.0,
         "C": 1e-9
+      }
+    }
+  ],
+  "chambers": [
+    {
+      "type": "ChamberCylinder",
+      "name": "ventricle",
+      "values": {
+        "Ri": 0.019,
+        "Re": 0.033,
+        "length": 0.0571,
+        "alpha_endo": 60.0,
+        "alpha_epi": -60.0,
+        "gamma": 70.0,
+        "num_elements": 3
+      },
+      "activation_function": {
+        "type": "piecewise_rate",
+        "u_t": [0.0, 0.09, 0.25, 0.404, 0.484, 0.494, 1.0],
+        "u_values": [-30.0, -30.0, 30.0, 30.0, 0.0, -30.0, -30.0]
+      },
+      "material": {
+        "type": "mooney_rivlin_exponential",
+        "W1": 7.0,
+        "W2": 0.0,
+        "C0": 700.0,
+        "C1": 2.0,
+        "C2": 50.0,
+        "C3": 4.0
+      },
+      "active_stress": {
+        "type": "genet23",
+        "sigma_0": 55000.0
       }
     }
   ],

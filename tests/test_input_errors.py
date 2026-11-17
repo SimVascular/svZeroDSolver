@@ -90,7 +90,7 @@ def test_misspelled_bc_type_connected_to_coupling_block():
             "vessels",
             0,
             "zero_d_element_type",
-            "BloodVessel, BloodVesselCRL, BloodVesselRC, ChamberCylinder",
+            "BloodVessel, BloodVesselCRL, BloodVesselRC",
         ),
         (
             "steadyFlow_confluenceR_R",

@@ -3,7 +3,6 @@
 
 #include "ActivationFunction.h"
 
-#include <algorithm>
 #include <cmath>
 #include <stdexcept>
 #include <string>
@@ -42,13 +41,10 @@ std::unique_ptr<ActivationFunction> ActivationFunction::create_default(
   if (type_str == "piecewise_rate") {
     return std::make_unique<PiecewiseRateActivation>(cardiac_period);
   }
-  if (type_str == "nagumo") {
-    return std::make_unique<NagumoActivation>(cardiac_period);
-  }
   throw std::runtime_error(
       "Unknown activation_function type '" + type_str +
       "'. Must be one of: half_cosine, piecewise_cosine, two_hill, "
-      "double_tanh, fourier, wrapping_cosine, piecewise_rate, nagumo");
+      "double_tanh, fourier, wrapping_cosine, piecewise_rate");
 }
 
 double HalfCosineActivation::compute(double time) {
@@ -287,30 +283,4 @@ double PiecewiseRateActivation::compute(double time) {
   const double t_norm = t_in_cycle / cardiac_period_;
   return linear_interpolate(t_norm, params_vec_.at("u_t"),
                             params_vec_.at("u_values"));
-}
-
-// ============================================================
-// NagumoActivation: ECG-derived piecewise-linear activation
-// rate nu(t) of genet23
-// ============================================================
-
-double NagumoActivation::compute(double time) {
-  double T = cardiac_period_, t = std::fmod(time, T);
-  double tsys = params_.at("tsys"), tdias = params_.at("tdias"),
-         qrs = params_.at("qrs"), ramp = params_.at("ramp"),
-         amax = params_.at("alpha_max"), amin = params_.at("alpha_min");
-  double t_max = tsys + qrs;
-  double t_plateau = tsys + qrs + std::max(0.0, tdias - tsys - 2.0 * qrs);
-  double t_finish = tdias + ramp;
-  double nu;
-  if (t < t_max)
-    nu = amax * (t - tsys) / (t_max - tsys);
-  else if (t < t_plateau)
-    nu = amax;
-  else if (t < tdias)
-    nu = amax * (1.0 - (t - t_plateau) / (tdias - t_plateau));
-  else
-    nu = amin * (t - tdias) / (t_finish - tdias);
-  if (nu < amin) nu = amin;
-  return nu;
 }

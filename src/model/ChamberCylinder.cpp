@@ -28,8 +28,6 @@ template <typename T>
 using Vec3 = Eigen::Matrix<T, 3, 1>;
 using cplx = std::complex<double>;
 
-using Formulation = ChamberCylinderFormulation;
-
 /// Material parameters passed to the continuum kernel.
 struct MatParams {
   const Material* material = nullptr;  ///< wall material (deviatoric stress)
@@ -142,11 +140,10 @@ Mat3<T> compute_stress(const Kinematics<T>& k, const T xidot[6], double tau,
   const Mat3<T>& C = k.C;
   const T J = k.J;
   const Mat3<T> M = fiber_tensor<T>(alpha);
-  // fiber (0, cos alpha, sin alpha) and sheet e_R in the (e_R, e_Th, e_Z) basis
+  // fiber (0, cos alpha, sin alpha) in the (e_R, e_Th, e_Z) basis
   const Material::Vec3 f(0.0, std::cos(alpha), std::sin(alpha));
-  const Material::Vec3 s(1.0, 0.0, 0.0);
 
-  const Mat3<T> Sd = p.material->stress(C, J, f, s);  // deviatoric
+  const Mat3<T> Sd = p.material->stress(C, J, f);  // deviatoric
 
   // Hydrostatic stress p J C^-1 with the element pressure p (mixed u/p).
   const T bulk = T(p.p_mix);
@@ -160,36 +157,6 @@ Mat3<T> compute_stress(const Kinematics<T>& k, const T xidot[6], double tau,
 
   return Sd + Sb + Sv + Sa;
 }
-
-/**
- * @brief Volumetric law: the pressure equation int_e g(J, p) dOmega = 0 of an
- * element.
- *
- * `incompressible` (\cite genet23 Eq. 27): g = J - 1. `st91` (svMultiPhysics
- * ST91, p = kappa/2 (J - 1/J)): g = (J - 1/J)/2 - p/kappa.
- */
-struct VolumetricLaw {
-  Formulation::Volumetric type = Formulation::Volumetric::incompressible;
-  double kappa = 0.0;  ///< bulk modulus (st91)
-
-  /// g(J, p)
-  double g(double J, double p) const {
-    if (type == Formulation::Volumetric::st91)
-      return 0.5 * (J - 1.0 / J) - p / kappa;
-    return J - 1.0;
-  }
-  /// dg/dJ
-  double dg_dJ(double J) const {
-    if (type == Formulation::Volumetric::st91)
-      return 0.5 * (1.0 + 1.0 / (J * J));
-    return 1.0;
-  }
-  /// Weight w times dg/dp
-  double w_dg_dp(double w) const {
-    if (type == Formulation::Volumetric::st91) return -w / kappa;
-    return 0.0;
-  }
-};
 
 /// Generalized internal forces g_k = Sigma : dE/dxi_k at an integration point.
 template <typename T>
@@ -215,7 +182,7 @@ void ChamberCylinder::setup_dofs(DOFHandler& dofhandler) {
   n_node = n_ele + 1;
   pin_rigid_ =
       model->get_parameter_value(global_param_ids[ParamId::density]) == 0.0;
-  check_formulation();
+  check_inputs();
   n_law = active_stress_->num_states();
 
   // Uniform nodes from endocardium (index 0, R_i) to epicardium (R_e).
@@ -325,11 +292,6 @@ void ChamberCylinder::update_constant(SparseSystem& system,
     system.F.coeffRef(global_eqn_ids[e_eta(0)], global_var_ids[i_eta(0)]) = 1.0;
   }
 
-  // Fixed length: eps = 0 replaces the eps equation.
-  if (fixed_length()) {
-    system.F.coeffRef(global_eqn_ids[e_eps()], global_var_ids[i_eps()]) = 1.0;
-  }
-
   // --- Inertia (genet23 Eqs. 8, 18, A5-A6) ---
   // Companion DOFs w = zeta_dot make the system first order. The consistent
   // mass M = int rho0 Du^T Du dOmega, integrated over Theta and Z, couples
@@ -345,9 +307,7 @@ void ChamberCylinder::update_constant(SparseSystem& system,
     const double cL3 = rho0 * 2.0 * M_PI * Lp * Lp * Lp / 3.0;
     // Accumulate, then assign: update_constant can run more than once.
     std::map<std::pair<int, int>, double> M;
-    auto Madd = [&](int r, int c, double v) {
-      if (!(fixed_length() && r == e_eps())) M[{r, c}] += v;
-    };
+    auto Madd = [&](int r, int c, double v) { M[{r, c}] += v; };
     for (int q = 0; q < n_quad; q++) {
       const QuadPoint& pt = quad[q];
       const int A[2] = {pt.elem, pt.elem + 1};
@@ -394,10 +354,9 @@ void ChamberCylinder::update_constant(SparseSystem& system,
 
 void ChamberCylinder::update_time(SparseSystem& system,
                                   std::vector<double>& parameters) {
+  (void)system;
   (void)parameters;
-  const double signal =
-      activation_function_ ? activation_function_->compute(model->time) : 0.0;
-  active_stress_->update_time(model->time, signal);
+  active_stress_->update_time(activation_function_->compute(model->time));
 }
 
 void ChamberCylinder::update_solution(
@@ -409,9 +368,6 @@ void ChamberCylinder::update_solution(
   p.gamma = parameters[global_param_ids[ParamId::gamma]];
   const double Rip = parameters[global_param_ids[ParamId::Ri]];
   const double Lp = parameters[global_param_ids[ParamId::length]];
-  VolumetricLaw vol;
-  vol.type = formulation_.volumetric;
-  vol.kappa = parameters[global_param_ids[ParamId::bulk_modulus]];
 
   // Block DOFs and their rates
   auto Y = [&](int lv) { return y[global_var_ids[lv]]; };
@@ -684,14 +640,11 @@ void ChamberCylinder::update_solution(
       }
     }
 
-    // --- Mixed u/p: element pressure equation of the volumetric law ---
-    // int_e g(J, p) dOmega = 0; J depends on rho, rho' and eps only.
+    // --- Mixed u/p: element incompressibility int_e (J - 1) dOmega = 0 ---
+    // (genet23 Eq. 27); J depends on rho, rho' and eps only.
     {
       const int erow = e_pmix(pt.elem);
-      Cloc[erow] += pref * vol.g(kin.J, p.p_mix);
-      const double dJfac = vol.dg_dJ(kin.J);
-      if (vol.type == Formulation::Volumetric::st91)
-        Kat(erow, i_pmix(pt.elem)) += vol.w_dg_dp(pref);
+      Cloc[erow] += pref * (kin.J - 1.0);
       const double Rq = pt.R;
       double dJ[6] = {0, 0, 0, 0, 0, 0};
       dJ[0] = (1.0 + xi[1]) * (1.0 / Rq) * (1.0 + xi[4]);  // dJ/drho
@@ -699,7 +652,7 @@ void ChamberCylinder::update_solution(
       dJ[4] = (1.0 + xi[1]) * (1.0 + xi[0] / Rq);          // dJ/deps
       for (int m : {0, 1, 4}) {  // dJ/drho, dJ/drho', dJ/deps
         for (int ci = 0; ci < cn[m]; ci++)
-          Kat(erow, cvr[m][ci]) += pref * dJfac * dJ[m] * cw[m][ci];
+          Kat(erow, cvr[m][ci]) += pref * dJ[m] * cw[m][ci];
       }
     }
 
@@ -743,17 +696,8 @@ void ChamberCylinder::update_solution(
     Kat(re, i_rho(0)) -= Pin * twoPiL * (1.0 + eps);  // d/drho_i
     Kat(re, i_eps()) -= Pin * twoPiL * Rinner;        // d/deps
   }
-  // --- Ends ---
-  if (fixed_length()) {
-    // eps = 0 (in F) replaces the eps equation
-    const int re = e_eps();
-    Cloc[re] = 0.0;
-    for (int j = 0; j < n_var; j++) {
-      K_[re * n_var + j] = 0.0;
-      Kd_[re * n_var + j] = 0.0;
-    }
-  } else {
-    // Lids loaded by the cavity pressure; eps equation: - P pi L Rinner^2
+  // --- Lids loaded by the cavity pressure; eps equation: - P pi L Rinner^2 ---
+  {
     const int re = e_eps();
     Cloc[re] -= Pin * piL * Rinner * Rinner;
     Kat(re, 0) -= piL * Rinner * Rinner;            // d/dPin
@@ -812,68 +756,22 @@ void ChamberCylinder::update_solution(
   }
 }
 
-void ChamberCylinderFormulation::set(const std::string& component,
-                                     const std::string& choice) {
-  auto unknown = [&](const std::string& options) {
-    return std::runtime_error("ChamberCylinder formulation: unknown " +
-                              component + " '" + choice +
-                              "' (options: " + options + ").");
-  };
-  if (component == "volumetric") {
-    if (choice == "incompressible")
-      volumetric = Volumetric::incompressible;
-    else if (choice == "st91")
-      volumetric = Volumetric::st91;
-    else
-      throw unknown("incompressible, st91");
-  } else if (component == "ends") {
-    if (choice == "lids")
-      ends = Ends::lids;
-    else if (choice == "fixed_length")
-      ends = Ends::fixed_length;
-    else
-      throw unknown("lids, fixed_length");
-  } else if (component == "passive" || component == "active") {
-    throw std::runtime_error(
-        "ChamberCylinder formulation: the " + component +
-        " law is selected with the " +
-        (component == "passive" ? "material" : "active_stress") +
-        " object of the vessel, not in formulation.");
-  } else {
-    throw std::runtime_error(
-        "ChamberCylinder formulation: unknown component '" + component +
-        "' (options: volumetric, ends).");
-  }
-}
-
-void ChamberCylinder::check_formulation() const {
+void ChamberCylinder::check_inputs() const {
   auto fail = [&](const std::string& msg) {
-    throw std::runtime_error("ChamberCylinder block '" + get_name() +
-                             "': " + msg);
+    throw std::runtime_error("ChamberCylinder '" + get_name() + "': " + msg);
   };
   if (!material_) fail("material not set. Provide a \"material\" JSON block.");
   if (!active_stress_)
     fail("active_stress not set. Provide an \"active_stress\" JSON block.");
-  if (active_stress_->uses_activation()) {
-    if (!activation_function_)
-      fail(
-          "activation_function not set. Provide an \"activation_function\" "
-          "JSON block.");
-    if (activation_function_->signal_type() !=
-        active_stress_->required_signal_type())
-      fail(std::string("active_stress law requires a ") +
-           (active_stress_->required_signal_type() == ActivationSignalType::rate
-                ? "rate-type (e.g. nagumo, piecewise_rate)"
-                : "normalized (e.g. half_cosine)") +
-           " activation function.");
-  } else if (activation_function_) {
-    fail("the active_stress law takes no activation_function; remove it.");
-  }
-  const double kappa =
-      model->get_parameter_value(global_param_ids[ParamId::bulk_modulus]);
-  if (formulation_.volumetric == ChamberCylinderFormulation::Volumetric::st91) {
-    if (kappa <= 0.0) fail("the volumetric law st91 needs bulk_modulus > 0.");
-  } else if (kappa != 0.0) {
-    fail("parameter bulk_modulus needs the volumetric law st91.");
-  }
+  if (!activation_function_)
+    fail(
+        "activation_function not set. Provide an \"activation_function\" "
+        "JSON block.");
+  if (activation_function_->signal_type() !=
+      active_stress_->required_signal_type())
+    fail(std::string("active_stress law requires a ") +
+         (active_stress_->required_signal_type() == ActivationSignalType::rate
+              ? "rate-type (e.g. piecewise_rate)"
+              : "normalized (e.g. half_cosine)") +
+         " activation function.");
 }

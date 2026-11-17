@@ -74,7 +74,7 @@ class ActivationFunction : public ParameterHolder {
    * @brief Create a default activation function from activation function type
    *
    * @param type_str One of: "half_cosine", "piecewise_cosine", "two_hill",
-   * "double_tanh", "wrapping_cosine", "fourier", "piecewise_rate", "nagumo"
+   * "double_tanh", "wrapping_cosine", "fourier", "piecewise_rate"
    * @param cardiac_period Cardiac cycle period
    * @return Unique pointer to the created activation function
    */
@@ -328,42 +328,6 @@ class PiecewiseRateActivation : public ActivationFunction {
   double compute(double time) override;
 
   void finalize() override;
-
-  ActivationSignalType signal_type() const override {
-    return ActivationSignalType::rate;
-  }
-};
-
-/**
- * @brief Nagumo piecewise-linear activation-rate function
- *
- * ECG-derived activation rate \f$\nu(t)\f$ of \cite genet23, which drives the
- * Bestel-Clement-Sorine active law of \ref ChamberCylinder. It is piecewise
- * linear between `alpha_min` and `alpha_max`: `tsys` is the \f$\nu=0\f$
- * upstroke, `tdias` the \f$\nu=0\f$ downstroke, `qrs` the QRS rise/fall width
- * and `ramp` the final repolarization ramp.
- *
- * Unlike the normalized activation functions, compute() returns a signed
- * rate in [`alpha_min`, `alpha_max`], not an activation level in [0, 1]
- * (\ref ActivationSignalType::rate).
- */
-class NagumoActivation : public ActivationFunction {
- public:
-  /**
-   * @brief Construct with default parameter values (loader fills via
-   * set_param).
-   *
-   * @param cardiac_period Cardiac cycle period
-   */
-  explicit NagumoActivation(double cardiac_period)
-      : ActivationFunction(cardiac_period, {{"tsys", InputParameter()},
-                                            {"tdias", InputParameter()},
-                                            {"qrs", InputParameter()},
-                                            {"ramp", InputParameter()},
-                                            {"alpha_max", InputParameter()},
-                                            {"alpha_min", InputParameter()}}) {}
-
-  double compute(double time) override;
 
   ActivationSignalType signal_type() const override {
     return ActivationSignalType::rate;

@@ -106,7 +106,7 @@ class Solver {
   State state;
   std::vector<double> times;
   double time;
-  std::unique_ptr<TimeIntegrator> integrator;
+  std::unique_ptr<Integrator> integrator;
 
   void sanity_checks();
 

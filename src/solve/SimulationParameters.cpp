@@ -6,7 +6,6 @@
 #include <memory>
 #include <sstream>
 
-#include "ChamberCylinder.h"
 #include "ImpedanceBC.h"
 
 namespace {
@@ -331,15 +330,14 @@ std::unique_ptr<Material> generate_material(const nlohmann::json& j,
     throw std::runtime_error(
         "Missing 'material' for chamber " + chamber_name +
         ". Required with structure: {\"type\": \"mooney_rivlin\", \"W1\": "
-        "10e3, \"W2\": 40} (or type exponential with C0, C1, C2, C3; genet23 "
-        "with C1 ... C6; holzapfel_ogden with a, b, a4f, b4f, a4s, b4s, afs, "
-        "bfs, k).");
+        "10e3, \"W2\": 40} (or type exponential with C0, C1, C2, C3; "
+        "mooney_rivlin_exponential with W1, W2, C0, C1, C2, C3).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in material for chamber " + chamber_name +
-        ". Must be one of: mooney_rivlin, exponential, genet23, "
-        "holzapfel_ogden");
+        ". Must be one of: mooney_rivlin, exponential, "
+        "mooney_rivlin_exponential");
   }
 
   std::string type_str = j["type"];
@@ -357,15 +355,13 @@ std::unique_ptr<ActiveStress> generate_active_stress(
         "\"alpha_max\": 30.0, \"alpha_min\": -30.0, \"sigma_max\": 185e3} "
         "(or type strain_dependent with E_s, mu, alpha_r, alpha, k_0, "
         "sigma_0, n0_e_c, n0_values, m0_e_c, m0_values; genet23 with sigma_0, "
-        "k_s, k_0, mu, alpha, fv_reg, n0_e_c, n0_values; uniform_unsteady "
-        "with t, T, fourier_modes, ramp).");
+        "k_s, k_0, mu, alpha, n0_e_c, n0_values).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in active_stress for chamber " +
         chamber_name +
-        ". Must be one of: strain_independent, strain_dependent, genet23, "
-        "uniform_unsteady");
+        ". Must be one of: strain_independent, strain_dependent, genet23");
   }
 
   std::string type_str = j["type"];
@@ -583,55 +579,6 @@ void create_vessels(
     vessel_id_map.insert({vessel_config["vessel_id"], vessel_name});
 
     generate_block(model, vessel_values, vessel_type, vessel_name);
-
-    // Optional activation function of a vessel block (ChamberCylinder)
-    if (vessel_config.contains("activation_function")) {
-      // The activation function stores the cardiac period at construction,
-      // which is not set yet at this point: take it from simulation_parameters
-      // if given (as create_chambers does).
-      if (model.cardiac_cycle_period < 0.0 &&
-          config.contains("simulation_parameters") &&
-          config["simulation_parameters"].contains("cardiac_period")) {
-        double period = config["simulation_parameters"]["cardiac_period"];
-        if (period > 0.0) {
-          model.cardiac_cycle_period = period;
-        }
-      }
-      auto act_func = generate_activation_function(
-          model, vessel_config["activation_function"], vessel_name);
-      model.get_block(vessel_name)
-          ->set_activation_function(std::move(act_func));
-    }
-
-    // ChamberCylinder: wall material and active stress law (as for
-    // ChamberSphere), and the optional formulation of its volumetric law and
-    // ends: {"volumetric": ..., "ends": ...}; omitted components keep genet23.
-    if (vessel_type == "ChamberCylinder") {
-      Block* block = model.get_block(vessel_name);
-      block->set_material(
-          generate_material(vessel_config["material"], vessel_name));
-      block->set_active_stress(
-          generate_active_stress(vessel_config["active_stress"], vessel_name));
-      if (vessel_config.contains("formulation")) {
-        const auto& fc = vessel_config["formulation"];
-        if (!fc.is_object()) {
-          throw std::runtime_error("formulation of vessel " + vessel_name +
-                                   " must be an object.");
-        }
-        ChamberCylinderFormulation formulation;
-        for (const auto& el : fc.items()) {
-          if (el.key()[0] == '_') continue;
-          if (!el.value().is_string()) {
-            throw std::runtime_error("formulation component " + el.key() +
-                                     " of vessel " + vessel_name +
-                                     " must be a string.");
-          }
-          formulation.set(el.key(), el.value().get<std::string>());
-        }
-        auto* cc = dynamic_cast<ChamberCylinder*>(block);
-        if (cc != nullptr) cc->set_formulation(formulation);
-      }
-    }
 
     // Read connected boundary conditions
     if (vessel_config.contains("boundary_conditions")) {
@@ -973,19 +920,13 @@ void create_chambers(
                      chamber_name);
     generate_block(model, chamber_config["values"], chamber_type, chamber_name);
 
-    // The activation function drives the active stress law; laws without
-    // activation (uniform_unsteady) take none, which the block checks.
-    if (chamber_type != "ChamberSphere" ||
-        chamber_config.contains("activation_function")) {
-      auto act_func = generate_activation_function(
-          model, chamber_config["activation_function"], chamber_name);
-      model.get_block(chamber_name)
-          ->set_activation_function(std::move(act_func));
-    }
+    auto act_func = generate_activation_function(
+        model, chamber_config["activation_function"], chamber_name);
+    model.get_block(chamber_name)->set_activation_function(std::move(act_func));
 
     // Create and set material and active stress model for chamber types
     // that use one
-    if (chamber_type == "ChamberSphere") {
+    if (chamber_type == "ChamberSphere" || chamber_type == "ChamberCylinder") {
       auto mat = generate_material(chamber_config["material"], chamber_name);
       model.get_block(chamber_name)->set_material(std::move(mat));
 

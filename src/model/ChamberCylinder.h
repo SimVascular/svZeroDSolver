@@ -22,38 +22,6 @@
 #include "SparseSystem.h"
 
 /**
- * @brief Volumetric law and end condition of the ChamberCylinder model.
- *
- * Each has the formulation of \cite genet23 (the default) and the equivalent
- * of a 3D svMultiPhysics `struct` model (see the Formulation section of
- * ChamberCylinder). The passive and active laws are selected with the
- * `material` and `active_stress` objects instead.
- */
-struct ChamberCylinderFormulation {
-  /// Volumetric law, enforced with the element pressure
-  enum class Volumetric {
-    incompressible,  ///< genet23: int_e (J - 1) = 0
-    st91             ///< svMultiPhysics ST91 penalty with bulk_modulus
-  };
-  /// End condition of the tube
-  enum class Ends {
-    lids,         ///< genet23 pressure-loaded lids, free length
-    fixed_length  ///< eps = 0, ends sliding in fixed planes
-  };
-
-  Volumetric volumetric = Volumetric::incompressible;  ///< Volumetric law
-  Ends ends = Ends::lids;                              ///< End condition
-
-  /**
-   * @brief Select one component by name.
-   *
-   * @param component `volumetric` or `ends`
-   * @param choice Name of the formulation of that component
-   */
-  void set(const std::string& component, const std::string& choice);
-};
-
-/**
  * @brief Thick-walled cylindrical heart chamber model
  *
  * Reduced-order left-ventricular model based on the cylindrical geometry and
@@ -85,7 +53,7 @@ struct ChamberCylinderFormulation {
  * Eqs. (13,15,16), with volume ratio
  * \f$J=(1+\rho')(1+\rho/R)(1+\varepsilon)\f$.
  *
- * ### Constitutive law (\cite genet23 Eqs. 22-29)
+ * ### Constitutive law (\cite genet23 Eqs. 22-33)
  *
  * The second Piola-Kirchhoff stress is split into passive deviatoric, bulk,
  * viscous and active parts, \f$\Sigma = \Sigma^d + \Sigma^b + \Sigma^v +
@@ -100,8 +68,9 @@ struct ChamberCylinderFormulation {
  * - a bulk term \f$\Sigma^b = p\,J\,C^{-1}\f$ with \f$p\f$ an independent
  *   hydrostatic-pressure field (\cite genet23 mixed u/p formulation),
  *   discretized element-wise constant (P0, LBB-stable with the linear
- *   \f$\rho,\varphi,\eta\f$) and determined per element by the volumetric
- *   law (see Formulation);
+ *   \f$\rho,\varphi,\eta\f$) and determined by the incompressibility
+ *   constraint \f$\int_{\Omega_e}(J-1)\,\mathrm d\Omega=0\f$ of each
+ *   element (locking-free on coarse meshes);
  * - a viscous term \f$\Sigma^v=\gamma\,\dot E\f$;
  * - an active fiber stress
  *   \f$\Sigma^a = \tau\,\mathbf{e}_F\otimes\mathbf{e}_F\f$ of the
@@ -111,38 +80,9 @@ struct ChamberCylinderFormulation {
  *   the `activation_function` (unless the law takes none).
  *
  * The material and active stress laws are those of \ref ChamberSphere. The
- * genet23 model is the material `genet23` (Eq. 24, constants `C1` ... `C6`)
- * with the active stress `genet23` (the Bestel-Clement-Sorine law of Eqs.
- * 30-33) driven by the ECG-derived `nagumo` activation rate.
- *
- * ### Formulation
- *
- * The components of the genet23 model can be swapped for the equivalents of
- * a 3D svMultiPhysics `struct` model, to verify the block against 3D finite
- * elements:
- * - material: `genet23` / `holzapfel_ogden` (svMultiPhysics
- *   `HolzapfelOgden`; with \f$C_3=0\f$, `genet23` already contains
- *   svMultiPhysics' `neoHookean`, `MR` and the fiber term of `HGO`);
- * - active stress: `genet23` / `uniform_unsteady` (svMultiPhysics
- *   `UniformUnsteady`, a prescribed tension);
- * - volumetric law and end condition, selected with an optional `formulation`
- *   object on the vessel, e.g. `"formulation": {"volumetric": "st91",
- *   "ends": "fixed_length"}` (omitted components keep genet23):
- *   - `volumetric`: `incompressible` (genet23, default) constrains
- *     \f$\int_{\Omega_e}(J-1)\,\mathrm d\Omega=0\f$ per element (locking-free
- *     at coarse meshes); `st91` makes the wall compressible with the
- *     svMultiPhysics energy \f$U=\tfrac\kappa4(J^2-1-2\ln J)\f$ of
- *     `bulk_modulus` \f$\kappa\f$, enforced weakly per element:
- *     \f$\int_{\Omega_e}(\tfrac12(J-1/J)-p/\kappa)\,\mathrm d\Omega=0\f$;
- *   - `ends`: `lids` (genet23, default) closes the tube with rigid lids that
- *     carry the cavity pressure (\cite genet23 Eqs. 39-44), so the wall takes
- *     the axial force \f$P_v\pi(R_i+\rho(R_i))^2\f$ and the length is free;
- *     `fixed_length` lets the ends slide in fixed planes, like the end faces
- *     of a 3D model with \f$u_z=0\f$: \f$\varepsilon=0\f$ and the lids carry
- *     no load.
- *
- * The viscous term equals the svMultiPhysics `Potential` viscosity, and the
- * inertia (`density`) is the same in both, so neither needs a switch.
+ * genet23 model is the material `mooney_rivlin_exponential` (\cite genet23
+ * Eq. 25) with the active stress `genet23` (the Bestel-Clement-Sorine law of
+ * Eqs. 30-33) driven by an activation rate (`piecewise_rate`).
  *
  * ### Governing equations
  *
@@ -163,11 +103,13 @@ struct ChamberCylinderFormulation {
  * It is complemented by the cavity volume
  * \f$V=\pi(R_i+\rho(R_i))^2(1+\varepsilon)L\f$, mass conservation
  * \f$Q_\text{in}-Q_\text{out}-\dot V = 0\f$ and pressure equality
- * \f$P_\text{in}=P_\text{out}=P_v\f$. Without inertia (`density` = 0) the rigid
- * rotation and axial translation are removed by the pins
- * \f$\varphi(R_i)=\eta(R_i)=0\f$; with inertia they are free and fixed by
- * momentum conservation (\cite genet23 Sec. 2.4). The \f$\hat\varepsilon\f$
- * term is the load of the lids (component `ends`).
+ * \f$P_\text{in}=P_\text{out}=P_v\f$. The \f$\hat\varepsilon\f$ term is the
+ * axial load of the rigid lids that close the tube (\cite genet23 Eqs.
+ * 39-44): the wall carries \f$P_v\pi(R_i+\rho(R_i))^2\f$ and the length is
+ * free. Without inertia (`density` = 0) the rigid rotation and axial
+ * translation are removed by the pins \f$\varphi(R_i)=\eta(R_i)=0\f$; with
+ * inertia they are free and fixed by momentum conservation (\cite genet23
+ * Sec. 2.4).
  *
  * ### Parameters
  *
@@ -182,17 +124,16 @@ struct ChamberCylinderFormulation {
  * * `num_elements` - Number of (linear) finite elements through the wall
  *   (optional, default 10)
  * * `density` - Reference mass density \f$\varrho_0\f$ (optional, default 1000
- *   kg/m^3 = the paper's 1 kg/L)
- * * `bulk_modulus` - Bulk modulus \f$\kappa\f$ of the ST91 energy (volumetric
- *   law `st91`; optional, default 0)
+ *   kg/m^3 = the paper's 1 kg/L; 0 for the quasi-static model)
  *
- * The vessel configuration also takes a `material` object (see \ref
- * Material), an `active_stress` object (see \ref ActiveStress) and, for active
- * stress laws driven by an activation, an `activation_function` object (see
- * \ref ActivationFunction; `nagumo` for genet23). With the active stress
- * `genet23` and \f$\alpha>0\f$ (its velocity-dependent bond destruction, 12 in
- * the paper), the stiff \f$\alpha|\dot e_c|\f$ term needs the simulation
- * parameter `"integrator": "stiff"` (ConsistentStiffIntegrator).
+ * Like \ref ChamberSphere, the block is declared in `chambers` with these
+ * parameters in `values`, a `material` object (see \ref Material), an
+ * `active_stress` object (see \ref ActiveStress) and an
+ * `activation_function` object (see \ref ActivationFunction). With the
+ * active stress `genet23` and \f$\alpha>0\f$ (its velocity-dependent bond
+ * destruction, 12 in the paper), the stiff \f$\alpha|\dot e_c|\f$ term needs
+ * the simulation parameter `"integrator": "stiff"`
+ * (ConsistentStiffIntegrator).
  *
  * ### Internal variables
  *
@@ -225,8 +166,7 @@ class ChamberCylinder : public Block {
     alpha_epi,
     gamma,
     num_elements,
-    density,      // reference mass density rho_0 (inertia, genet23 Eq. 18)
-    bulk_modulus  // ST91 bulk modulus kappa (volumetric law st91)
+    density  // reference mass density rho_0 (inertia, genet23 Eq. 18)
   };
 
   /**
@@ -236,7 +176,7 @@ class ChamberCylinder : public Block {
    * @param model The model to which the block belongs
    */
   ChamberCylinder(int id, Model* model)
-      : Block(id, model, BlockType::chamber_cylinder, BlockClass::vessel,
+      : Block(id, model, BlockType::chamber_cylinder, BlockClass::chamber,
               {{"Ri", InputParameter()},
                {"Re", InputParameter()},
                {"length", InputParameter()},
@@ -244,8 +184,7 @@ class ChamberCylinder : public Block {
                {"alpha_epi", InputParameter()},
                {"gamma", InputParameter()},
                {"num_elements", InputParameter(true, false, true, 10.0)},
-               {"density", InputParameter(true, false, true, 1000.0)},
-               {"bulk_modulus", InputParameter(true, false, true, 0.0)}}) {}
+               {"density", InputParameter(true, false, true, 1000.0)}}) {}
 
   /**
    * @brief Set up the degrees of freedom (DOF) of the block
@@ -328,15 +267,6 @@ class ChamberCylinder : public Block {
     active_stress_ = std::move(as);
   }
 
-  /**
-   * @brief Select the volumetric law and end condition.
-   *
-   * @param formulation genet23 or svMultiPhysics choice of each component
-   */
-  void set_formulation(const ChamberCylinderFormulation& formulation) {
-    formulation_ = formulation;
-  }
-
  private:
   // --- Finite element discretization of the wall thickness ---
   int n_ele = 0;   ///< Number of finite elements through the wall
@@ -346,14 +276,8 @@ class ChamberCylinder : public Block {
   /// in the static setting; with inertia (density > 0) the rigid rotation and
   /// axial translation are free and governed by momentum conservation.
   bool pin_rigid_ = true;
-  /// Formulation of the model components (default: genet23)
-  ChamberCylinderFormulation formulation_;
-  /// Fixed length (ends `fixed_length`): eps = 0 replaces the eps equation.
-  bool fixed_length() const {
-    return formulation_.ends == ChamberCylinderFormulation::Ends::fixed_length;
-  }
-  /// Check the parameters and inputs against the selected formulation.
-  void check_formulation() const;
+  /// Check that the material, active stress law and activation are set.
+  void check_inputs() const;
   int n_law = 0;  ///< Number of active stress states per quadrature point
   int n_var = 0;  ///< Number of block variables (external + internal)
   int n_eqn = 0;  ///< Number of block equations

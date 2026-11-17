@@ -14,7 +14,7 @@ namespace {
 /// Elastic stress S_el = (1/lambda) Sigma^d : dE/dlambda of the material for
 /// the incompressible equibiaxial stretch lambda of the wall:
 /// C = diag(lambda^-4, lambda^2, lambda^2) in the (radial, tangential,
-/// tangential) basis, fiber tangential, sheet radial.
+/// tangential) basis, fiber tangential.
 template <typename T>
 T sphere_elastic_stress(const Material& material, const T& lambda) {
   using Mat = Eigen::Matrix<T, 3, 3>;
@@ -23,8 +23,8 @@ T sphere_elastic_stress(const Material& material, const T& lambda) {
   C(0, 0) = 1.0 / (l2 * l2);
   C(1, 1) = l2;
   C(2, 2) = l2;
-  const Material::Vec3 f(0.0, 1.0, 0.0), s(1.0, 0.0, 0.0);
-  const Mat S = material.stress(C, T(1.0), f, s);
+  const Material::Vec3 f(0.0, 1.0, 0.0);
+  const Mat S = material.stress(C, T(1.0), f);
   // dE/dlambda = diag(-2 lambda^-5, lambda, lambda)
   const T dE0 = -2.0 / (l2 * l2 * lambda);
   return (S(0, 0) * dE0 + (S(1, 1) + S(2, 2)) * lambda) / lambda;
@@ -33,6 +33,11 @@ T sphere_elastic_stress(const Material& material, const T& lambda) {
 }  // namespace
 
 void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
+  if (!activation_function_) {
+    throw std::runtime_error("ChamberSphere '" + get_name() +
+                             "': activation_function not set. Provide an "
+                             "\"activation_function\" JSON block.");
+  }
   if (!active_stress_) {
     throw std::runtime_error(
         "ChamberSphere '" + get_name() +
@@ -43,32 +48,20 @@ void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
         "ChamberSphere '" + get_name() +
         "': material not set. Provide a \"material\" JSON block.");
   }
-  if (active_stress_->uses_activation()) {
-    if (!activation_function_) {
-      throw std::runtime_error("ChamberSphere '" + get_name() +
-                               "': activation_function not set. Provide an "
-                               "\"activation_function\" JSON block.");
-    }
-    const ActivationSignalType provided_signal =
-        activation_function_->signal_type();
-    const ActivationSignalType required_signal =
-        active_stress_->required_signal_type();
-    if (provided_signal != required_signal) {
-      throw std::runtime_error("ChamberSphere '" + get_name() +
-                               "': active_stress model requires a " +
-                               (required_signal == ActivationSignalType::rate
-                                    ? "rate-type (e.g. piecewise_rate)"
-                                    : "normalized (e.g. half_cosine)") +
-                               " activation function, but got a " +
-                               (provided_signal == ActivationSignalType::rate
-                                    ? "rate-type"
-                                    : "normalized") +
-                               " one.");
-    }
-  } else if (activation_function_) {
-    throw std::runtime_error("ChamberSphere '" + get_name() +
-                             "': the active_stress law takes no "
-                             "activation_function; remove it.");
+  const ActivationSignalType provided_signal =
+      activation_function_->signal_type();
+  const ActivationSignalType required_signal =
+      active_stress_->required_signal_type();
+  if (provided_signal != required_signal) {
+    throw std::runtime_error(
+        "ChamberSphere '" + get_name() + "': active_stress model requires a " +
+        (required_signal == ActivationSignalType::rate
+             ? "rate-type (e.g. piecewise_rate)"
+             : "normalized (e.g. half_cosine)") +
+        " activation function, but got a " +
+        (provided_signal == ActivationSignalType::rate ? "rate-type"
+                                                       : "normalized") +
+        " one.");
   }
 
   std::list<std::string> internal_var_names = {
@@ -121,9 +114,8 @@ void ChamberSphere::update_time(SparseSystem& system,
                                 std::vector<double>& parameters) {
   (void)system;
   (void)parameters;
-  activation_signal_ =
-      activation_function_ ? activation_function_->compute(model->time) : 0.0;
-  active_stress_->update_time(model->time, activation_signal_);
+  activation_signal_ = activation_function_->compute(model->time);
+  active_stress_->update_time(activation_signal_);
 }
 
 void ChamberSphere::update_solution(

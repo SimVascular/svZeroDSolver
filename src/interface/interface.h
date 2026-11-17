@@ -110,7 +110,7 @@ class SolverInterface {
   /**
    * @brief The current 0D integrator object
    */
-  GeneralizedAlpha integrator_;
+  Integrator integrator_;
 
   /**
    * @brief The current 0D state vector

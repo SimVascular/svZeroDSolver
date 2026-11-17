@@ -30,14 +30,13 @@
  * R(a, \dot a, \lambda) = 0,
  * \f]
  * where \f$\lambda = \sqrt{\mathbf{e}_F\cdot C\cdot\mathbf{e}_F}\f$ is the
- * fiber stretch. Time-dependent inputs (the activation signal of the
- * chamber's \ref ActivationFunction, prescribed tensions) are set once per
- * time step with update_time(). The law is the same at every material point,
+ * fiber stretch. The activation signal of the chamber's \ref
+ * ActivationFunction is set once per time step with update_time(). The law is the same at every material point,
  * so a block evaluates it once for a uniform wall (\ref ChamberSphere) or at
  * each integration point (\ref ChamberCylinder).
  *
  * Types (JSON `active_stress` object): `strain_independent`,
- * `strain_dependent`, `genet23`, `uniform_unsteady`.
+ * `strain_dependent`, `genet23`.
  */
 class ActiveStress : public ParameterHolder {
  public:
@@ -66,13 +65,6 @@ class ActiveStress : public ParameterHolder {
   virtual std::vector<std::string> state_names() const = 0;
 
   /**
-   * @brief Whether the law is driven by an activation function
-   *
-   * @return False for laws that take no activation signal
-   */
-  virtual bool uses_activation() const { return true; }
-
-  /**
    * @brief Type of activation signal this law needs
    *
    * Checked by the chamber blocks against ActivationFunction::signal_type.
@@ -84,13 +76,11 @@ class ActiveStress : public ParameterHolder {
   }
 
   /**
-   * @brief Set the time-dependent inputs of the law
+   * @brief Set the activation signal of the current time
    *
-   * @param time Current time
-   * @param signal Activation signal of the chamber's ActivationFunction at
-   * this time (0 for laws without activation)
+   * @param signal Activation signal of the chamber's ActivationFunction
    */
-  virtual void update_time(double time, double signal) = 0;
+  virtual void update_time(double signal) = 0;
 
   /**
    * @brief Residuals of the state equations at a material point
@@ -139,7 +129,7 @@ class ActiveStress : public ParameterHolder {
    * @brief Factory: create an active stress law from a type string
    *
    * @param type_str One of: "strain_independent", "strain_dependent",
-   * "genet23", "uniform_unsteady"
+   * "genet23"
    * @return Unique pointer to the created active stress law
    */
   static std::unique_ptr<ActiveStress> create(const std::string& type_str);
@@ -168,7 +158,7 @@ class StrainIndependentActiveStress : public ActiveStress {
   std::vector<std::string> state_names() const override {
     return {"active_stress"};
   }
-  void update_time(double time, double signal) override;
+  void update_time(double signal) override;
   void residual(const double* a, const double* adot, double lambda,
                 double* R) const override;
   void residual(const cplx* a, const cplx* adot, cplx lambda,
@@ -241,7 +231,7 @@ class StrainDependentActiveStress : public ActiveStress {
   ActivationSignalType required_signal_type() const override {
     return ActivationSignalType::rate;
   }
-  void update_time(double time, double signal) override;
+  void update_time(double signal) override;
   void residual(const double* a, const double* adot, double lambda,
                 double* R) const override;
   void residual(const cplx* a, const cplx* adot, cplx lambda,
@@ -271,16 +261,15 @@ class StrainDependentActiveStress : public ActiveStress {
  * \dot k_c = -(|\nu|+\alpha|\dot e_c|)k_c + n_0(e_c)k_0|\nu|_+,
  * \f]
  * driven by a rate-type activation signal \f$\nu(t)\f$ (e.g. the ECG-derived
- * `nagumo` waveform). \f$|\dot e_c|\f$ is smoothed to
- * \f$\sqrt{\dot e_c^2+\epsilon}\f$. Writing \f$\tau\f$ through
+ * activation rate of the authors' input functions as a `piecewise_rate`
+ * table). Writing \f$\tau\f$ through
  * \f$\tau_c+\mu\dot e_c\f$ instead of the equivalent
  * \f$k_s(e_\text{fib}-e_c)\f$ keeps the stiff \f$k_s\f$ out of the wall
  * stress. The Frank-Starling factor \f$n_0(e_c)\f$ is a piecewise-linear
  * table (`n0_e_c`/`n0_values`), by default that of the genet23 authors' code.
  *
  * Parameters: `sigma_0`, `k_s` (default 1e8), `k_0` (default 260e3), `mu`
- * (default 70), `alpha` (default 0), `fv_reg` (\f$\epsilon\f$, default 1e-4),
- * `n0_e_c`, `n0_values` (optional)
+ * (default 70), `alpha` (default 0), `n0_e_c`, `n0_values` (optional)
  */
 class Genet23ActiveStress : public ActiveStress {
  public:
@@ -290,7 +279,6 @@ class Genet23ActiveStress : public ActiveStress {
                       {"k_0", InputParameter(true, false, true, 260.0e3)},
                       {"mu", InputParameter(true, false, true, 70.0)},
                       {"alpha", InputParameter(true, false, true, 0.0)},
-                      {"fv_reg", InputParameter(true, false, true, 1.0e-4)},
                       {"n0_e_c", InputParameter(true, true, true, 0.0)},
                       {"n0_values", InputParameter(true, true, true, 0.0)}}) {}
 
@@ -302,7 +290,7 @@ class Genet23ActiveStress : public ActiveStress {
   ActivationSignalType required_signal_type() const override {
     return ActivationSignalType::rate;
   }
-  void update_time(double time, double signal) override;
+  void update_time(double signal) override;
   void residual(const double* a, const double* adot, double lambda,
                 double* R) const override;
   void residual(const cplx* a, const cplx* adot, cplx lambda,
@@ -314,59 +302,6 @@ class Genet23ActiveStress : public ActiveStress {
 
   double nu_abs_ = 0.0;   ///< |nu(t)|
   double nu_plus_ = 0.0;  ///< |nu(t)|_+
-};
-
-/**
- * @brief Prescribed active tension of svMultiPhysics (`UniformUnsteady`)
- *
- * One state, the active stress \f$\tau = T(t)\f$, with \f$T(t)\f$ built from
- * samples \f$(t_i, T_i)\f$ as svMultiPhysics' FourierInterpolation does: the
- * linear trend through the first and last sample plus the first
- * `fourier_modes` Fourier modes of the piecewise-linear interpolant of the
- * samples minus the trend, periodic with period \f$t_\text{last}-t_0\f$.
- * With `ramp` (nonzero), only the trend, held constant outside
- * \f$[t_0, t_\text{last}]\f$. Takes no activation function.
- *
- * Parameters: `t`, `T` (arrays), `fourier_modes` (default 1), `ramp`
- * (default 0)
- */
-class UniformUnsteadyActiveStress : public ActiveStress {
- public:
-  UniformUnsteadyActiveStress()
-      : ActiveStress({{"t", InputParameter(false, true)},
-                      {"T", InputParameter(false, true)},
-                      {"fourier_modes", InputParameter(true, false, true, 1.0)},
-                      {"ramp", InputParameter(true, false, true, 0.0)}}) {}
-
-  void finalize() override;
-  int num_states() const override { return 1; }
-  std::vector<std::string> state_names() const override {
-    return {"active_stress"};
-  }
-  bool uses_activation() const override { return false; }
-  void update_time(double time, double signal) override;
-  void residual(const double* a, const double* adot, double lambda,
-                double* R) const override;
-  void residual(const cplx* a, const cplx* adot, cplx lambda,
-                cplx* R) const override;
-
-  /**
-   * @brief Tension T(t) at a time
-   *
-   * @param time Time
-   * @return Tension
-   */
-  double tension(double time) const;
-
- private:
-  bool ramp_ = false;       ///< linear ramp instead of the Fourier series
-  double t0_ = 0.0;         ///< first sample time
-  double period_ = 0.0;     ///< last minus first sample time
-  double v0_ = 0.0;         ///< trend value at t0
-  double slope_ = 0.0;      ///< trend slope
-  std::vector<double> re_;  ///< cosine coefficients
-  std::vector<double> im_;  ///< sine coefficients (with a minus sign)
-  double tension_ = 0.0;    ///< T at the current time
 };
 
 #endif  // SVZERODSOLVER_MODEL_ACTIVESTRESS_HPP_

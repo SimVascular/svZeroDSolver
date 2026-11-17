@@ -55,8 +55,8 @@
  * {\partial\lambda}\f$ is the elastic stress of the chamber's \ref Material
  * for the incompressible equibiaxial stretch \f$\lambda = 1 + r/r_0\f$ of the
  * wall, \f$C = \mathrm{diag}(\lambda^{-4}, \lambda^2, \lambda^2)\f$ in the
- * (radial, two tangential) basis, with the fiber in the wall plane and the
- * sheet radial. For `mooney_rivlin` this is
+ * (radial, two tangential) basis, with the fiber in the wall plane. For
+ * `mooney_rivlin` this is
  * \f$4(1-\lambda^{-6})(W_1+\lambda^2 W_2)\f$.
  *
  * 3. Volume change:
@@ -70,12 +70,11 @@
  * \f]
  * the specific form of which (and any accompanying internal state and
  * equations) is supplied by a separate \ref ActiveStress law (e.g.
- * `strain_independent`, `strain_dependent`, `genet23`, `uniform_unsteady`)
- * selected in the JSON configuration, evaluated at the fiber stretch
- * \f$\lambda\f$. The active stress law is driven by the chamber's
- * \ref ActivationFunction (e.g. `two_hill`, `half_cosine`, `piecewise_cosine`,
- * `piecewise_rate`), also selected in the JSON configuration, unless the law
- * takes no activation (`uniform_unsteady`).
+ * `strain_independent`, `strain_dependent`, `genet23`) selected in the JSON
+ * configuration, evaluated at the fiber stretch \f$\lambda\f$. The active
+ * stress law is driven by the chamber's \ref ActivationFunction (e.g.
+ * `two_hill`, `half_cosine`, `piecewise_cosine`, `piecewise_rate`), also
+ * selected in the JSON configuration.
  *
  * 5. Acceleration:
  * \f[
@@ -116,8 +115,8 @@
  *
  * Furthermore, a `material` object is required to select and parameterize
  * the material model for the elastic stress term \f$S_\text{el}(r, r_0)\f$
- * (see \ref Material, e.g. `exponential`, `mooney_rivlin`, `genet23`,
- * `holzapfel_ogden`).
+ * (see \ref Material, e.g. `exponential`, `mooney_rivlin`,
+ * `mooney_rivlin_exponential`).
  *
  * Finally, an `active_stress` object is required to select and parameterize
  * the active stress model (see \ref ActiveStress, e.g. `strain_independent`,

@@ -51,9 +51,9 @@ void Solver::setup_initial() {
     double time_step_size_steady = this->model->cardiac_cycle_period / 10.0;
     this->model->to_steady();
 
-    GeneralizedAlpha integrator_steady(
-        this->model.get(), time_step_size_steady, simparams.sim_rho_infty,
-        simparams.sim_abs_tol, simparams.sim_nliter);
+    Integrator integrator_steady(this->model.get(), time_step_size_steady,
+                                 simparams.sim_rho_infty, simparams.sim_abs_tol,
+                                 simparams.sim_nliter);
 
     for (int i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
@@ -72,13 +72,16 @@ void Solver::setup_initial() {
 void Solver::setup_integrator() {
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  IntegratorType itype = (simparams.sim_integrator == "stiff")
-                             ? IntegratorType::consistent_stiff
-                             : IntegratorType::generalized_alpha;
-  integrator = make_integrator(
-      itype, this->model.get(), simparams.sim_time_step_size,
-      simparams.sim_rho_infty, simparams.sim_abs_tol, simparams.sim_nliter,
-      simparams.sim_max_iter_error_to_warning);
+  if (simparams.sim_integrator == "stiff") {
+    integrator = std::make_unique<ConsistentStiffIntegrator>(
+        this->model.get(), simparams.sim_time_step_size, simparams.sim_abs_tol,
+        simparams.sim_nliter);
+  } else {
+    integrator = std::make_unique<Integrator>(
+        this->model.get(), simparams.sim_time_step_size,
+        simparams.sim_rho_infty, simparams.sim_abs_tol, simparams.sim_nliter,
+        simparams.sim_max_iter_error_to_warning);
+  }
 
   // Initialize loop
   states = std::vector<State>();

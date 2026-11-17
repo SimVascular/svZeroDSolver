@@ -7,6 +7,7 @@
 #include <cmath>
 #include <complex>
 #include <initializer_list>
+#include <list>
 #include <map>
 #include <stdexcept>
 #include <string>

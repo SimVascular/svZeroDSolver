@@ -54,6 +54,9 @@ class SparseSystem {
   Eigen::SparseMatrix<double> dC_dydot;        ///< System matrix dC/dydot
   Eigen::Matrix<double, Eigen::Dynamic, 1> C;  ///< System vector C
 
+  int num_equations{0};  ///< Size of the system, i.e. the number of solved
+                         ///< variables at the head of the state vector
+
   Eigen::SparseMatrix<double> jacobian;  ///< Jacobian of the system
   Eigen::Matrix<double, Eigen::Dynamic, 1>
       residual;  ///< Residual of the system

@@ -15,8 +15,10 @@ Integrator::Integrator(Model* model, double time_step_size, double rho,
   y_coeff = gamma * time_step_size;
   y_coeff_jacobian = alpha_f * y_coeff;
 
-  size = model->dofhandler.size();
-  system = SparseSystem(size);
+  // The system holds only the solved variables, in the leading block of y
+  size = model->dofhandler.get_num_variables();
+  num_equations = model->dofhandler.get_num_equations();
+  system = SparseSystem(num_equations);
   this->time_step_size = time_step_size;
   this->model->set_time_step_size(time_step_size);
   this->atol = atol;
@@ -107,12 +109,16 @@ State Integrator::step(const State& old_state, double time) {
     model->post_solve(new_state.y);
 
     // Update the solution
-    new_state.ydot += system.dydot;
-    new_state.y += system.dydot * y_coeff;
+    new_state.ydot.head(num_equations) += system.dydot;
+    new_state.y.head(num_equations) += system.dydot * y_coeff;
 
     // Count total number of nonlinear iterations
     n_nonlin_iter++;
   }
+
+  // Fill the post-processing variables from the converged state
+  model->update_outputs(new_state.y);
+
   model->accept_timestep(new_state.y);
   return new_state;
 }

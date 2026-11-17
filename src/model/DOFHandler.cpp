@@ -5,11 +5,13 @@
 #include <algorithm>
 #include <stdexcept>
 
-int DOFHandler::size() const { return eqn_counter; }
-
 int DOFHandler::get_num_equations() const { return eqn_counter; }
 
 int DOFHandler::get_num_variables() const { return var_counter; }
+
+int DOFHandler::get_num_output_variables() const {
+  return output_variables.size();
+}
 
 int DOFHandler::register_variable(const std::string& name) {
   variables.push_back(name);
@@ -24,6 +26,11 @@ int DOFHandler::get_variable_index(const std::string& name) const {
     std::string error_msg = "ERROR: Variable name '" + name + "' not found.";
     throw std::runtime_error(error_msg);
   }
+}
+
+int DOFHandler::register_output_variable(const std::string& name) {
+  output_variables.push_back(name);
+  return register_variable(name);
 }
 
 int DOFHandler::register_equation(const std::string& name) {

@@ -46,9 +46,9 @@ CMAP = {'red': (213/255, 62/255, 80/255), 'orange': (248/255, 157/255, 91/255),
         'blue': (46/255, 136/255, 189/255)}
 
 
-# ne = 6 is within 0.2 mL and 0.05 deg of ne = 12; 12 cycles are periodic to
-# 0.01 mL.
-def run(overrides=None, ne=6, ncycle=12, gamma=GAMMA_TABLE1):
+# ne = 6 is within 0.2 mL and 0.05 deg of ne = 12. Like genet23, the fifth beat
+# is compared (G.NCYCLE).
+def run(overrides=None, ne=6, ncycle=G.NCYCLE, gamma=GAMMA_TABLE1):
     """Run the genet23 baseline with optional vessel-parameter overrides
     (geometry or fiber angle) and wall viscosity gamma; return the last cycle."""
     cfg = G.build(ne=ne, ncycle=ncycle, P_vs=G.P_VS)

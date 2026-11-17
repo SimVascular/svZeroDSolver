@@ -23,13 +23,14 @@ BloodVesselRC cannot be used here: it is a flow-through element whose capacitor
 stores no volume. The upstream vessel (R = C = 0) only exists because valves
 connect two blocks.
 
-C_valve (Table 1, 9e-9 m^3/Pa) is not modeled. It is 43x C_ar, has no node in
-Caruel's valve/Windkessel topology, and applied at the ventricle it collapses the
-isovolumic phase (see ChamberCylinder_provenance.tex, Discrepancies).
+C_valve is not modeled. Table 1 prints 9e-9 m^3/Pa, a typo for the 9e-12 used
+in the authors' code; at 9e-12 it stores about 0.1 mL over the beat.
 
-Inputs that genet23 does not tabulate (activation nu(t), atrial pressure P_at(t),
-Frank-Starling curve n0(e_c)) follow the authors' input-function code
-(genet23 Refs 33/6); P_vs is fitted to the Fig 5 end-systolic volume.
+Inputs that genet23 does not tabulate follow the authors' code: activation
+nu(t), atrial pressure P_at(t) and Frank-Starling curve n0(e_c) from their input
+functions (genet23 Refs 33/6); venous pressure P_vs and the initial arterial
+pressures from CardiacLab, as communicated by the authors. Like genet23 (Sec 3.1),
+the setup reports the fifth simulated beat, which is not yet periodic.
 """
 import math
 
@@ -37,7 +38,7 @@ import math
 K_at_inv = 1.1111e5   # [Pa s/m^3]
 K_ar_inv = 7.6923e4   # [Pa s/m^3]
 K_iso_inv = 2.0e9     # [Pa s/m^3]
-Cvalve = 9.0e-9       # [m^3/Pa] tabulated but not modeled (see docstring)
+Cvalve = 9.0e-12      # [m^3/Pa] not modeled (Table 1's 9e-9 is a typo)
 Rp = 1.35e7           # [Pa s/m^3]
 Rd = 1.0949e8         # [Pa s/m^3]
 Car = 2.115e-10       # [m^3/Pa]
@@ -161,11 +162,17 @@ PAT_MAX = 7.0 * MMHG            # 938 Pa
 PAT_MIN = PAT_MAX - 2.5 * MMHG  # 603 Pa
 ATR_PQ = 0.14
 ATR_AVNODE = 0.080
-# Systemic venous pressure P_vs: not tabulated in genet23 (it only appears in
-# Eq 36c). Fitted to the Fig 5 end-systolic volume (74 mL); Caruel Table 1 uses
-# 1000 Pa. It sets the afterload floor (~1.8 mL ESV per 500 Pa); EDV, peak
-# pressure and torsion are insensitive to it.
-P_VS = 350.0
+# Not tabulated in genet23; CardiacLab values, as communicated by the authors.
+# Systemic venous pressure P_vs (Eq 36c): it sets the afterload floor (~0.6 mL
+# ESV per 150 Pa); EDV, peak pressure and torsion are insensitive to it.
+P_VS = 500.0
+# Initial pressure of the arterial nodes (P_ar, P_d); the ventricle and atrium
+# start at P_at.
+P_AR0 = 47.0 * MMHG  # 6298 Pa
+# genet23 Sec 3.1 reports the fifth simulated beat. The arterial transient
+# (R_d C_d = 2.2 s) is not over by then: the periodic end-systolic volume is
+# 0.6 mL larger.
+NCYCLE = 5
 
 
 def atrial_pressure(period=0.8):
@@ -182,19 +189,23 @@ def atrial_pressure(period=0.8):
 
 TSYS_08, TDIAS_08 = activation_times(0.8)
 PAT_KICK_T, PAT_KICK_P = atrial_pressure(0.8)
+# Pressure variables of the arterial nodes (aortic root P_ar and distal P_d).
+ARTERIAL_NODES = ("pressure:aortic:aortic_root", "pressure:aortic_root:J0",
+                  "pressure:J0:arterial", "pressure:arterial:J1", "pressure:J1:distal")
 
 
 def build(P_at=PAT_MAX, P_vs=P_VS, sigma_max=SIGMA0, bcs_alpha=12.0, ne=12,
           tsys=TSYS_08, tdias=TDIAS_08, alpha_max=ACT_AMAX, alpha_min=ACT_AMIN,
           act_qrs=ACT_QRSD, act_ramp=ACT_RAMP,
-          integrator="stiff", rho_infty=0.5, ncycle=8,
-          aortic_Rmax=None, atrial_kick=True, density=1000.0):
+          integrator="stiff", rho_infty=0.5, ncycle=NCYCLE,
+          aortic_Rmax=None, atrial_kick=True, density=1000.0, P_ar0=P_AR0):
     """Return the svZeroDSolver configuration (dict) of the genet23 baseline.
 
     ne: finite elements through the wall; ncycle: cardiac cycles (the last is
-    output). Time step 1 ms (genet23 Sec 3.1). The force-velocity term
-    (bcs_alpha > 0) needs the L-stable "stiff" integrator; genet23's own
-    energy-consistent midpoint scheme is not available in svZeroDSolver.
+    output); P_ar0: initial arterial pressure. Time step 1 ms (genet23 Sec 3.1).
+    The force-velocity term (bcs_alpha > 0) needs the L-stable "stiff"
+    integrator; genet23's own energy-consistent midpoint scheme is not
+    available in svZeroDSolver.
     """
     aortic_Rmax = aortic_Rmax if aortic_Rmax is not None else 1.0e12
     vv = dict(GEOM)
@@ -222,11 +233,12 @@ def build(P_at=PAT_MAX, P_vs=P_VS, sigma_max=SIGMA0, bcs_alpha=12.0, ne=12,
             "integrator": integrator, "rho_infty": rho_infty,
         },
         # Unloaded reference geometry at rest (rho = eps = 0), so the consistent
-        # cavity volume is pi Ri^2 L. genet23 preloads statically to P_at and does
-        # not state the arterial initial pressures; starting all pressures at
-        # P_at, the arterial transient (R_d C_d = 2.2 s) is periodic by cycle ~12.
+        # cavity volume is pi Ri^2 L. genet23 preloads statically to P_at; here
+        # the open mitral valve fills the cavity within ~50 ms, before activation
+        # at 110 ms. Arterial nodes start at P_ar0 (CardiacLab).
         "initial_condition": {"pressure_all": P_at,
-                              "volume:ventricle": math.pi * vv["Ri"] ** 2 * vv["length"]},
+                              "volume:ventricle": math.pi * vv["Ri"] ** 2 * vv["length"],
+                              **{n: P_ar0 for n in ARTERIAL_NODES}},
         "vessels": [
             {"boundary_conditions": {"inlet": "ATRIUM"}, "vessel_id": 0,
              "vessel_length": 1.0, "vessel_name": "upstream",

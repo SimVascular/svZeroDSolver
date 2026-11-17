@@ -546,7 +546,7 @@ def t3_vibration(out=None):
 # --------------------------------------------------------------------------- #
 #  T4 independent dynamic re-implementation
 # --------------------------------------------------------------------------- #
-def block_beat(ne, npts=801, ncycle=12):
+def block_beat(ne, npts=801, ncycle=G.NCYCLE):
     cfg = G.build(ne=ne, ncycle=ncycle, P_vs=G.P_VS)
     cfg["simulation_parameters"]["number_of_time_pts_per_cardiac_cycle"] = npts
     cfg["simulation_parameters"]["absolute_tolerance"] = 1e-7

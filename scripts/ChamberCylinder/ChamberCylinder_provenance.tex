@@ -53,6 +53,17 @@ active law and circulation trace back to Caruel~et~al.~(2013, \emph{BMMB}
 \none & appears in genet23 but is \emph{not} faithfully reproduced (see notes) \\
 \end{tabular}
 
+\paragraph{Resolution (November 2026).} The torsion gap analysed in the second half of this
+document (audit B, literature screen, scaling fingerprint) is explained: the twist curves of
+Figs.~5--9 were computed with an older CardiacLab inertia term, the $Z$-independent velocity
+memory B1, which the authors corrected in March 2022 without regenerating the figures (Fig.~4
+uses the corrected code). The authors' re-implementation of the corrected code agrees with the
+block. They also supplied the two unpublished inputs, $P_\text{vs}=\SI{500}{Pa}$ and the
+\SI{47}{mmHg} arterial start, which replace our earlier fit ($P_\text{vs}=\SI{350}{Pa}$ at the
+periodic beat); like the paper, the comparison now uses beat~5. The diagnostic sections below
+predate this and used the earlier set-up (\SI{350}{Pa}, last of 12 beats), which leaves the
+torsion unchanged ($5.80^\circ$ vs.\ $5.78^\circ$). See Discrepancies for the details.
+
 % =========================================================================
 \section*{Geometry (Table~1) --- all \gen}
 \begin{longtable}{l l l P{6.6cm}}
@@ -116,8 +127,9 @@ $K_{at}^{-1},K_{ar}^{-1},K_{iso}^{-1}$ & 1.1111e5, 7.6923e4, 2.0e9 & \gen & Tabl
 $R_p,\,C_\text{ar}$ & 1.35e7, 2.115e-10 & \gen & Table~1 (proximal Windkessel) \\
 $R_d,\,C_d$ & 1.0949e8, 2.0158e-8 & \gen & Table~1 (distal Windkessel) \\
 aortic $R_{\max}$ & $10^{12}$ ($\approx\infty$) & \gen & Eq.~36 arterial line has \emph{no} closed-leak; \emph{corrected} from $K_{iso}^{-1}$ (removed spurious regurgitation) \\
-$C_\text{valve}$ & 9e-9 & \none & Table~1; Eq.~36 adds $C_\text{valve}\dot P_v$ at the ventricular node. Faithfully applied, \SI{9e-9}{m^3/Pa} ($\approx$\SI{1.2}{mL/mmHg}, $43\times C_\text{ar}$) is a huge compliance: it absorbs $\sim$\SI{90}{mL} over the pressure swing, collapsing the isovolumic phase (ESV 39 vs.\ 74, peak $P$ 8.5 vs.\ 12.8) --- inconsistent with the paper's own Fig.~5. Only $\le$9e-11 is negligible, so we run $C_\text{valve}{\approx}0$ (see Discrepancies) \\
-$P_\text{vs}$ (venous) & \SI{350}{Pa} & \textcolor{cnone}{\textbf{FITTED}} & \textbf{not in genet23 Table~1} (only in Eq.~36). \emph{Fitted} to the Fig.~5 ESV: \SI{350}{Pa} ($\approx$\SI{2.6}{mmHg}) gives ESV \SI{74}{mL}; Caruel's \SI{1000}{Pa} overshoots to \SI{76.4}{mL}. Sets only the ESV/afterload floor ($\sim$\SI{1.8}{mL}/\SI{500}{Pa}); EDV/peak-$P$/twist insensitive. The one remaining fitted quantity \\
+$C_\text{valve}$ & 9e-12 (not modeled) & \code & Eq.~36 adds $C_\text{valve}\dot P_v$ at the ventricular node. Table~1 prints 9e-9, a typo for the 9e-12 of the authors' code (confirmed by the authors). Applied, 9e-9 ($43\times C_\text{ar}$) would collapse the isovolumic phase (ESV 39 vs.\ 74, peak $P$ 8.5 vs.\ 12.8); 9e-12 stores $\sim$\SI{0.1}{mL} over the beat and is left out \\
+$P_\text{vs}$ (venous) & \SI{500}{Pa} & \code & \textbf{not in genet23} (only in Eq.~36). CardiacLab value, communicated by the authors. It sets the ESV/afterload floor ($\sim$\SI{0.6}{mL} per \SI{150}{Pa}); EDV/peak-$P$/twist insensitive. (An earlier version fitted \SI{350}{Pa} to the Fig.~5 ESV at the periodic beat, which made up for the paper reporting beat~5; see Numerics) \\
+$P_\text{ar}(0)$, $P_d(0)$ & \SI{47}{mmHg} ($\times$134\,Pa) & \code & \textbf{not in genet23}. Initial arterial pressures of CardiacLab, communicated by the authors \\
 \bottomrule
 \end{longtable}
 
@@ -129,8 +141,8 @@ time step $\Delta t$ & \SI{1}{ms} & \gen & $T/800$, matches genet23 \S3.1 \\
 interpolation / quadrature & $n_e\times$P1/P0, 3-pt Gauss & \svz & genet23: 1 element, P3 displacement / P2 pressure, quadrature order 5. See the convergence section \\
 time integrator & generalized-$\alpha$, $\rho_\infty{=}0$ & \svz & 2nd order, L-stable; genet23 uses the energy-consistent midpoint scheme (Eqs.~51--65). See the convergence section \\
 rigid-body pins & static only & \gen & $\varphi(R_i){=}\eta(R_i){=}0$ only without inertia (\S2.4); free in dynamics (audit A3) \\
-cycles & 12, take last & \svz & periodic to 0.01\,mL (cycle 10: 0.06\,mL); genet23 plots cycle 5 of its own start-up \\
-initial state & reference, all $P{=}P_\text{at}$ & \svz & genet23 preloads statically to $P_\text{at}$, arterial start unstated; our cycle 5 is still 2.3\,mL (ESV) from periodic \\
+cycles & 5, take last & \gen & \S3.1: ``the solution of the fifth simulated cardiac cycle''. With $R_dC_d=\SI{2.2}{s}$ beat~5 is not periodic: the periodic ESV is \SI{0.6}{mL} larger, peak $P$ \SI{0.04}{kPa} higher \\
+initial state & reference, $P_\text{at}$; arteries \SI{47}{mmHg} & \gen/\code & genet23 preloads statically to $P_\text{at}$; here the open mitral valve fills the cavity within $\sim$\SI{50}{ms}, before activation at \SI{110}{ms}. Arterial start from CardiacLab \\
 \bottomrule
 \end{longtable}
 
@@ -141,7 +153,11 @@ initial state & reference, all $P{=}P_\text{at}$ & \svz & genet23 preloads stati
 digitised Genet trace (solid; stored as CSV in \texttt{scripts/ChamberCylinder/}, extracted from the published
 figures --- no copyrighted images in the repo). All runs use the model after the formulation
 audit (identical to the paper's continuous equations, with the \emph{full} Table-1 damping
-$\gamma{=}\mu{=}\SI{70}{Pa\,s}$), $n_e=6$, $\Delta t=\SI{1}{ms}$ and the last of 12 cycles.
+$\gamma{=}\mu{=}\SI{70}{Pa\,s}$), $n_e=6$, $\Delta t=\SI{1}{ms}$ and beat~5, as in the paper.
+Over the 15 cases of Figs.~5--9 the ESV differs from the paper by \SI{0.6}{mL} on average
+(\SI{0.1}{mL} for Fig.~5), the pressure RMS is \SI{0.33}{kPa} and the volume RMS \SI{2.3}{mL}.
+The torsion curves of Figs.~5--9 were computed with an earlier CardiacLab inertia term (see
+Resolution) and are not a valid reference.
 Layout, axes and units follow the paper: cavity pressure
 (with the twin kPa/mmHg axis), cavity volume, PV loop, and ventricular torsion. Pressure, volume
 and the PV loop match across every case; the torsion untwist is discussed at the end.
@@ -374,6 +390,8 @@ reproduces the aspect-ratio dependence of the residual twist at 600\,ms (Fig.~6,
 aspect $1.0\to2.0$: $+10.4$ to $+10.9^\circ$ vs.\ the paper's $+10.6^\circ$; faithful model
 $-0.9^\circ$), but at the paper's $\Delta t=\SI{1}{ms}$ it is about twice too strong, and the
 convergence study below shows it is incompatible with the paper's own Fig.~4.
+\textbf{Update:} B1 is the explanation (see Resolution). Fig.~4 was made with the corrected
+CardiacLab code, Figs.~5--9 with the old one, so the Fig.~4 argument does not apply.
 
 \begin{center}\docfig{0.92\linewidth}{audit_fig5.png}\end{center}
 
@@ -716,37 +734,39 @@ $0.014^\circ$ (max over the beat); tw@550 $5.80^\circ$ vs.\ $5.80^\circ$ \\ \bot
 % =========================================================================
 \section*{Discrepancies}
 The reproduction matches the paper on pressure, volume and the PV loop across every case
-(Figs.~5--9). The following remain, flagged for the authors:
+(Figs.~5--9). The remaining differences, and what the authors said about them:
 \begin{itemize}
-  \item \textbf{Torsion untwist.} With the model now identical to the paper's continuous
-  equations (audit \S A), the twist recovers far too early (Fig.~5 tw@550 $5.8^\circ$ vs.\
-  $13.3^\circ$), and the residual twist at 600\,ms is independent of the aspect ratio, whereas
-  the paper's grows with it (Fig.~6). This is converged in time (to $0.01^\circ$) and in space
-  (to $0.05^\circ$), and it survives the full genet23 damping model (tissue viscosity, Eq.~28;
-  fibre dissipation, Eq.~32; actin--myosin turnover, Eq.~33) and the full inertia (Eqs.~8, 10,
-  18, A8, with free rigid modes). Of the paper's internal inconsistencies, Eq.~59, the missing
-  metric in A7 and the $\alpha$-free internal-variable update of Ref.~6 break pressure and volume; the $Z$-independent velocity memory of A7/A9 has the
-  right signature but is too strong at the paper's \SI{1}{ms} and, even restricted to the twist,
-  contradicts the paper's own Fig.~4. None of the 30 alternative active, passive and viscous laws from the group's and
-  colleagues' papers closes the gap either (literature screen). Probing with rotational dashpots
-  shows that the figures need an extra twist-selective damping of $\approx3.3\times$ the twist
-  damping of Eq.~28, growing with cylinder length as $\approx L^{4.4}$. That scaling excludes every
-  local material law, and the paper rules out boundary damping (Sec.~2.4, Eq.~44), so the
-  damping has no documented source. An independent re-implementation of the written model gives
-  the same torsion as ours (to $0.014^\circ$), so the gap most likely lies between the written
-  model and the CardiacLab code that produced the figures. Questions for the authors: how is $\boldsymbol v$
-  stored across $Z$; are the rigid-body pins released in dynamics; and which $\Delta t$ and
-  start-up produced Fig.~5.
-  \item \textbf{Unspecified inputs.} $P_\text{vs}$ is not given in the paper and is fitted to the
-  Fig.~5 ESV (\SI{350}{Pa}); $\nu(t)$, $n_0(e_c)$ and $P_\text{at}(t)$ are taken from the authors'
-  code (Table~1 refers to Ref.~6).
-  \item \textbf{Valve capacitance $C_\text{valve}$.} The valve law reproduces Eq.~35 exactly, but
-  the tabulated $C_\text{valve}{=}\SI{9e-9}{m^3/Pa}$ (Eq.~36) is a very large ventricular-node
-  compliance ($\approx$\SI{1.2}{mL/mmHg}, $43\times C_\text{ar}$) that stores $\sim$\SI{90}{mL} over
-  the pressure swing: applied faithfully it collapses the isovolumic phase (ESV 39 vs.\ 74, peak
-  $P$ 8.5 vs.\ 12.8), which is inconsistent with the paper's own Fig.~5. Only
-  $C_\text{valve}\le$\,9e-11 is negligible, so we run $C_\text{valve}{\approx}0$; the tabulated
-  value appears to be a paper inconsistency.
+  \item \textbf{Torsion of Figs.~5--9: an old CardiacLab inertia term.} The published twist
+  curves come from a CardiacLab version that stored the velocity integrated over $Z$ (Eq.~A7 as
+  printed, audit B1). That drops the $Z$-dependent twist and axial momentum every step, a
+  dashpot $2\Delta\mathcal M/\Delta t$ that slows the untwist and depends on the time step. The
+  code was corrected in March 2022 but the figures were not regenerated; Fig.~4 comes from the
+  corrected code. The authors' re-implementation of the old scheme reproduces Fig.~5 to
+  $0.01^\circ$ RMS, with a twist at 550\,ms of 12.3, 13.3, 14.9 and 15.9$^\circ$ at
+  $\Delta t=2$, 1, 0.5 and \SI{0.25}{ms}. The corrected code gives $5.3^\circ$, the block
+  $5.8^\circ$ (with the same pressure and volume). Our emulation of B1 has the same signature
+  and Fig.~6 aspect dependence, but needs $\Delta t_p\approx3$--\SI{4}{ms} instead of
+  \SI{1}{ms} to match Fig.~5 (12.7--$13.4^\circ$, RMS 0.4--$0.7^\circ$); the factor $\approx3$ is
+  unexplained. The torsion panels of Figs.~5--9 are therefore not a reference for the block.
+  \item \textbf{Twist inertia: block vs.\ corrected CardiacLab.} The remaining $0.5^\circ$ at
+  550\,ms is the physical twist inertia. Without it the block gives $5.1^\circ$; with
+  $\varrho_0=\SI{1000}{kg/m^3}$, $5.8^\circ$. The authors report that inertia changes their
+  twist by $<0.1^\circ$. The block's inertia matches the closed-form torsional vibration (T3)
+  and the independent re-implementation (T4). CardiacLab also keeps the rigid-body pins in
+  dynamics; with the block's inertia, pinning raises the twist to $7.8^\circ$, since twisting
+  then rotates the whole tube about its base. The block follows \S2.4 and frees them.
+  \item \textbf{Time discretization of CardiacLab.} The corrected code averages the active
+  fibre stress $k_s(e_\text{fib}-e_c)/(1+e_\text{fib})$ between the step ends (neither Eq.~30 nor
+  Eq.~59; $+1.3^\circ$ at 550\,ms with \SI{1}{ms}), evaluates the Frank--Starling factor at the
+  previous $e_c$, and its velocity update has a typo (\texttt{new + old/2}). All vanish as
+  $\Delta t\to0$; the block solves the continuous equations.
+  \item \textbf{Unspecified inputs.} $P_\text{vs}=\SI{500}{Pa}$ and the arterial start at
+  \SI{47}{mmHg} come from CardiacLab (communicated by the authors); $\nu(t)$, $n_0(e_c)$ and
+  $P_\text{at}(t)$ from the authors' input functions (Table~1 refers to Ref.~6). With these and
+  beat~5, Fig.~5 is matched without fitted parameters: EDV 135.73/135.5, ESV 73.98/74.0\,mL,
+  peak $P$ 12.79/12.80\,kPa ($n_e=12$).
+  \item \textbf{Valve capacitance.} Table~1's $C_\text{valve}=\SI{9e-9}{m^3/Pa}$ is a typo for
+  9e-12; it is not modeled ($\sim$\SI{0.1}{mL}).
 \end{itemize}
 
 \end{document}

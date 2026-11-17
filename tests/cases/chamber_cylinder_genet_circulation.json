@@ -15,7 +15,7 @@
       "bc_name": "VENOUS",
       "bc_type": "PRESSURE",
       "bc_values": {
-        "P": [350.0, 350.0],
+        "P": [500.0, 500.0],
         "t": [0.0, 0.8]
       }
     }
@@ -35,7 +35,12 @@
   },
   "initial_condition": {
     "pressure_all": 938.0,
-    "volume:ventricle": 6.500000000000003e-5
+    "volume:ventricle": 6.500000000000003e-5,
+    "pressure:aortic:aortic_root": 6298.0,
+    "pressure:aortic_root:J0": 6298.0,
+    "pressure:J0:arterial": 6298.0,
+    "pressure:arterial:J1": 6298.0,
+    "pressure:J1:distal": 6298.0
   },
   "vessels": [
     {

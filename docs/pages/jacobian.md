@@ -93,3 +93,12 @@ See the provided YAML examples:
 - `ChamberSphere.yaml` - Spherical heart chamber model
 - `BloodVessel.yaml` - Blood vessel model with optional stenosis
 - `ClosedLoopCoronaryBC.yaml` - Coronary boundary condition model
+
+The chamber blocks use exact tangents derived with `scripts/chamber_tangents.py`,
+which builds on this script: the active stress laws are described in
+`ActiveStressStrainIndependent.yaml`, `ActiveStressStrainDependent.yaml` and
+`ActiveStressLinearSeriesSpring.yaml` (with the fiber stretch `lam` as the last
+variable), and `chamber_tangents.py active_stress <yaml>` prints their residuals
+and Jacobians. `chamber_tangents.py kinematics` and `material` print the second
+strain derivatives of ChamberCylinder and the energy derivatives of the
+`mooney_rivlin_exponential` material.

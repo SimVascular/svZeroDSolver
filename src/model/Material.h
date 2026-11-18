@@ -10,7 +10,6 @@
 #define SVZERODSOLVER_MODEL_MATERIAL_HPP_
 
 #include <Eigen/Core>
-#include <complex>
 #include <memory>
 #include <string>
 #include <utility>
@@ -31,8 +30,8 @@
  * incompressible by its kinematics, \ref ChamberCylinder enforces
  * incompressibility with an element pressure.
  *
- * The stress is available for real and complex arguments, so that blocks can
- * compute tangents by complex step. The invariants are
+ * Its directional derivatives give the blocks exact tangents. The invariants
+ * are
  * \f$\bar I_1 = J^{-2/3}\,\mathrm{tr}\,C\f$, \f$\bar I_2 = J^{-4/3}\,
  * \tfrac12(\mathrm{tr}^2 C - \mathrm{tr}\,C^2)\f$ and
  * \f$\bar I_4 = J^{-2/3}\,\mathbf{e}_F\cdot C\cdot\mathbf{e}_F\f$.
@@ -42,9 +41,7 @@
  */
 class Material : public ParameterHolder {
  public:
-  using cplx = std::complex<double>;         ///< complex-step scalar
   using Mat3 = Eigen::Matrix<double, 3, 3>;  ///< real 3x3 matrix
-  using Mat3c = Eigen::Matrix<cplx, 3, 3>;   ///< complex 3x3 matrix
   using Vec3 = Eigen::Matrix<double, 3, 1>;  ///< real 3-vector
 
   /**
@@ -84,17 +81,6 @@ class Material : public ParameterHolder {
                                   Mat3* dS) const = 0;
 
   /**
-   * @brief Deviatoric 2nd Piola-Kirchhoff stress for complex arguments
-   * (complex-step tangents)
-   *
-   * @param C Right Cauchy-Green tensor
-   * @param J Volume ratio
-   * @param f Unit fiber direction
-   * @return Stress \f$2\,\partial W/\partial C\f$
-   */
-  virtual Mat3c stress(const Mat3c& C, cplx J, const Vec3& f) const = 0;
-
-  /**
    * @brief Factory: create a material from a type string
    *
    * @param type_str One of: "mooney_rivlin", "exponential",
@@ -132,7 +118,6 @@ class MooneyRivlinExponentialMaterial : public Material {
   Mat3 stress_derivatives(const Mat3& C, double J, const Vec3& f, int n,
                           const Mat3* dC, const double* dJ,
                           Mat3* dS) const override;
-  Mat3c stress(const Mat3c& C, cplx J, const Vec3& f) const override;
 
  protected:
   /**

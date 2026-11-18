@@ -5,7 +5,6 @@
 
 #include <algorithm>
 #include <cmath>
-#include <complex>
 #include <initializer_list>
 #include <list>
 #include <map>
@@ -15,20 +14,11 @@
 #include <vector>
 
 #include "Model.h"
-#include "TangentCheck.h"
 
 namespace {
 
 using Eigen::Matrix3d;
 using Eigen::Vector3d;
-
-// The continuum kernel is templated on the scalar type: double for the
-// residual, std::complex for complex-step tangents.
-template <typename T>
-using Mat3 = Eigen::Matrix<T, 3, 3>;
-template <typename T>
-using Vec3 = Eigen::Matrix<T, 3, 1>;
-using cplx = std::complex<double>;
 
 /// Material parameters passed to the continuum kernel.
 struct MatParams {
@@ -37,9 +27,8 @@ struct MatParams {
   double p_mix = 0.0;  ///< mixed u/p element hydrostatic pressure
 };
 
-/// Double contraction A:B (without complex conjugation, for complex-step).
-template <typename T>
-inline T contract(const Mat3<T>& A, const Mat3<T>& B) {
+/// Double contraction A:B.
+inline double contract(const Matrix3d& A, const Matrix3d& B) {
   return (A.array() * B.array()).sum();
 }
 
@@ -50,30 +39,28 @@ inline T contract(const Mat3<T>& A, const Mat3<T>& B) {
  * Green-Lagrange strain with respect to the local kinematic quantities
  * xi = [rho, rho', phi', beta, eps, eta'] (\cite genet23 Eqs. 15, 16, 21).
  */
-template <typename T>
 struct Kinematics {
-  Mat3<T> C;      ///< Right Cauchy-Green deformation tensor
-  Mat3<T> dE[6];  ///< dE/dxi_k for xi=[rho,rho',phi',beta,eps,eta']
-  T J;            ///< Volume ratio det(F)
+  Matrix3d C;      ///< Right Cauchy-Green deformation tensor
+  Matrix3d dE[6];  ///< dE/dxi_k for xi=[rho,rho',phi',beta,eps,eta']
+  double J;        ///< Volume ratio det(F)
 };
 
 /// Build C, J and the strain derivatives from local kinematics at radius R.
-template <typename T>
-Kinematics<T> compute_kinematics(const T xi[6], double R) {
-  const T rho = xi[0], drho = xi[1], dphi = xi[2];
-  const T beta = xi[3], eps = xi[4], deta = xi[5];
-  const T a = 1.0 + drho;     // radial stretch F_RR
-  const T b = 1.0 + rho / R;  // circumferential stretch F_ThTh
-  const T e = 1.0 + eps;      // longitudinal stretch F_ZZ
+Kinematics compute_kinematics(const double xi[6], double R) {
+  const double rho = xi[0], drho = xi[1], dphi = xi[2];
+  const double beta = xi[3], eps = xi[4], deta = xi[5];
+  const double a = 1.0 + drho;     // radial stretch F_RR
+  const double b = 1.0 + rho / R;  // circumferential stretch F_ThTh
+  const double e = 1.0 + eps;      // longitudinal stretch F_ZZ
 
-  Kinematics<T> k;
+  Kinematics k;
   // Right Cauchy-Green tensor in the orthonormal (e_R, e_Th, e_Z) basis.
-  const T C00 = a * a + (R * b * dphi) * (R * b * dphi) + deta * deta;
-  const T C11 = b * b;
-  const T C22 = (R * b * beta) * (R * b * beta) + e * e;
-  const T C01 = R * b * b * dphi;
-  const T C02 = R * R * b * b * dphi * beta + deta * e;
-  const T C12 = R * b * b * beta;
+  const double C00 = a * a + (R * b * dphi) * (R * b * dphi) + deta * deta;
+  const double C11 = b * b;
+  const double C22 = (R * b * beta) * (R * b * beta) + e * e;
+  const double C01 = R * b * b * dphi;
+  const double C02 = R * R * b * b * dphi * beta + deta * e;
+  const double C12 = R * b * b * beta;
   k.C << C00, C01, C02, C01, C11, C12, C02, C12, C22;
   k.J = a * b * e;
 
@@ -81,7 +68,7 @@ Kinematics<T> compute_kinematics(const T xi[6], double R) {
 
   // dE/drho (with d b / d rho = 1/R)
   {
-    Mat3<T>& m = k.dE[0];
+    Matrix3d& m = k.dE[0];
     m(0, 0) = R * b * dphi * dphi;
     m(1, 1) = b / R;
     m(2, 2) = R * b * beta * beta;
@@ -93,27 +80,27 @@ Kinematics<T> compute_kinematics(const T xi[6], double R) {
   k.dE[1](0, 0) = a;
   // dE/dphi'
   {
-    Mat3<T>& m = k.dE[2];
+    Matrix3d& m = k.dE[2];
     m(0, 0) = R * R * b * b * dphi;
     m(0, 1) = m(1, 0) = 0.5 * R * b * b;
     m(0, 2) = m(2, 0) = 0.5 * R * R * b * b * beta;
   }
   // dE/dbeta
   {
-    Mat3<T>& m = k.dE[3];
+    Matrix3d& m = k.dE[3];
     m(2, 2) = R * R * b * b * beta;
     m(0, 2) = m(2, 0) = 0.5 * R * R * b * b * dphi;
     m(1, 2) = m(2, 1) = 0.5 * R * b * b;
   }
   // dE/deps
   {
-    Mat3<T>& m = k.dE[4];
+    Matrix3d& m = k.dE[4];
     m(2, 2) = e;
     m(0, 2) = m(2, 0) = 0.5 * deta;
   }
   // dE/deta'
   {
-    Mat3<T>& m = k.dE[5];
+    Matrix3d& m = k.dE[5];
     m(0, 0) = deta;
     m(0, 2) = m(2, 0) = 0.5 * e;
   }
@@ -156,51 +143,10 @@ void strain_second_derivatives(const double xi[6], double R,
 
 /// Fiber structural tensor e_F (x) e_F with e_F = (0, cos alpha, sin alpha) in
 /// the (e_R, e_Th, e_Z) basis (\cite genet23 Eq. 22).
-template <typename T>
-inline Mat3<T> fiber_tensor(double alpha) {
+inline Matrix3d fiber_tensor(double alpha) {
   const double ca = std::cos(alpha), sa = std::sin(alpha);
-  Vec3<T> ef(T(0.0), T(ca), T(sa));
+  Vector3d ef(0.0, ca, sa);
   return ef * ef.transpose();
-}
-
-/**
- * @brief Second Piola-Kirchhoff stress at an integration point.
- *
- * Sigma = Sigma^d (material, \cite genet23 Eq. 25) + Sigma^b (hydrostatic
- * pressure, Eqs. 26-27) + Sigma^v (viscous, Eq. 28) + Sigma^a (active stress
- * law, Eqs. 29-33).
- */
-template <typename T>
-Mat3<T> compute_stress(const Kinematics<T>& k, const T xidot[6], double tau,
-                       double alpha, const MatParams& p) {
-  const Mat3<T>& C = k.C;
-  const T J = k.J;
-  const Mat3<T> M = fiber_tensor<T>(alpha);
-  // fiber (0, cos alpha, sin alpha) in the (e_R, e_Th, e_Z) basis
-  const Material::Vec3 f(0.0, std::cos(alpha), std::sin(alpha));
-
-  const Mat3<T> Sd = p.material->stress(C, J, f);  // deviatoric
-
-  // Hydrostatic stress p J C^-1 with the element pressure p (mixed u/p).
-  const T bulk = T(p.p_mix);
-  Mat3<T> Sb = bulk * J * C.inverse();  // bulk
-
-  Mat3<T> Edot = Mat3<T>::Zero();  // viscous
-  for (int m = 0; m < 6; m++) Edot += k.dE[m] * xidot[m];
-  Mat3<T> Sv = p.gamma * Edot;
-
-  Mat3<T> Sa = tau * M;  // active, tau of the active stress law
-
-  return Sd + Sb + Sv + Sa;
-}
-
-/// Generalized internal forces g_k = Sigma : dE/dxi_k at an integration point.
-template <typename T>
-void compute_g(const T xi[6], const T xidot[6], double tau, double R,
-               double alpha, const MatParams& p, T g[6]) {
-  Kinematics<T> k = compute_kinematics<T>(xi, R);
-  Mat3<T> S = compute_stress<T>(k, xidot, tau, alpha, p);
-  for (int i = 0; i < 6; i++) g[i] = contract<T>(S, k.dE[i]);
 }
 
 }  // namespace
@@ -449,8 +395,8 @@ void ChamberCylinder::update_solution(
     p.p_mix = Y(i_pmix(pt.elem));
 
     // Internal forces g_k = Sigma : dE_k and their exact derivatives
-    Kinematics<double> kin = compute_kinematics<double>(xi, pt.R);
-    const Matrix3d M = fiber_tensor<double>(pt.alpha);
+    Kinematics kin = compute_kinematics(xi, pt.R);
+    const Matrix3d M = fiber_tensor(pt.alpha);
     const Matrix3d Cinv = kin.C.inverse();
     const Material::Vec3 f(0.0, std::cos(pt.alpha), std::sin(pt.alpha));
     // dJ/dxi: J = (1 + rho')(1 + rho/R)(1 + eps)
@@ -472,11 +418,11 @@ void ChamberCylinder::update_solution(
     // d g_k / d p = (J C^-1) : dE_k
     const Matrix3d JCinv = kin.J * Cinv;
     for (int i = 0; i < 6; i++) {
-      g[i] = contract<double>(S, kin.dE[i]);
-      dgdtau[i] = contract<double>(M, kin.dE[i]);
-      dgdp[i] = contract<double>(JCinv, kin.dE[i]);
+      g[i] = contract(S, kin.dE[i]);
+      dgdtau[i] = contract(M, kin.dE[i]);
+      dgdp[i] = contract(JCinv, kin.dE[i]);
       for (int j = 0; j < 6; j++)
-        Kd[i][j] = p.gamma * contract<double>(kin.dE[i], kin.dE[j]);
+        Kd[i][j] = p.gamma * contract(kin.dE[i], kin.dE[j]);
     }
     // K[k][m] = d g_k / d xi_m = dSigma_m : dE_k + Sigma : d2E/dxi_k dxi_m
     for (int m = 0; m < 6; m++) {
@@ -484,27 +430,7 @@ void ChamberCylinder::update_solution(
           dSd[m] + p.p_mix * (dJ[m] * Cinv - kin.J * Cinv * dC[m] * Cinv);
       for (int n = 0; n < 6; n++) dS += p.gamma * xidot[n] * dd[n][m];
       for (int k = 0; k < 6; k++)
-        K[k][m] =
-            contract<double>(dS, kin.dE[k]) + contract<double>(S, dd[k][m]);
-    }
-    if (tangent_check().on) {
-      const double h = 1e-30;
-      cplx xic[6], xidotc[6], gc[6];
-      double Kcs[6][6];
-      for (int i = 0; i < 6; i++) {
-        xic[i] = xi[i];
-        xidotc[i] = xidot[i];
-      }
-      for (int m = 0; m < 6; m++) {
-        xic[m] += cplx(0.0, h);
-        compute_g<cplx>(xic, xidotc, tau, pt.R, pt.alpha, p, gc);
-        for (int k = 0; k < 6; k++) Kcs[k][m] = std::imag(gc[k]) / h;
-        xic[m] = xi[m];
-      }
-      tangent_check().add("cylinder wall K", &K[0][0], &Kcs[0][0], 36);
-      const Matrix3d Sref =
-          compute_stress<double>(kin, xidot, tau, pt.alpha, p);
-      tangent_check().add("cylinder wall stress", S.data(), Sref.data(), 9);
+        K[k][m] = contract(dS, kin.dE[k]) + contract(S, dd[k][m]);
     }
 
     // The wall stress is linear in tau: d g_k / d tau = dgdtau[k]
@@ -697,18 +623,6 @@ void ChamberCylinder::update_solution(
       }
       ActiveStress::Linearization lin;
       active_stress_->linearize(a.data(), ad.data(), lam, lin);
-      if (tangent_check().on) {
-        ActiveStress::Linearization cs;
-        active_stress_->linearize_complex_step(a.data(), ad.data(), lam, cs);
-        const int nl = n_law;
-        tangent_check().add("cylinder law R", lin.R.data(), cs.R.data(), nl);
-        tangent_check().add("cylinder law dR/da", lin.dR_da.data(),
-                            cs.dR_da.data(), nl * nl);
-        tangent_check().add("cylinder law dR/dadot", lin.dR_dadot.data(),
-                            cs.dR_dadot.data(), nl * nl);
-        tangent_check().add("cylinder law dR/dlambda", lin.dR_dlambda.data(),
-                            cs.dR_dlambda.data(), nl);
-      }
       for (int i = 0; i < n_law; i++) {
         const int erow = e_law(q, i);
         Cloc[erow] += lin.R[i];

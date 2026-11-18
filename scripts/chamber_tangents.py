@@ -19,7 +19,7 @@ import argparse
 import os
 import sys
 
-from sympy import Matrix, Rational, cse, diff, exp, eye, simplify, symbols, zeros
+from sympy import Matrix, cse, diff, exp, eye, simplify, symbols, zeros
 from sympy.printing import ccode
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))

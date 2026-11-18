@@ -9,7 +9,6 @@
 #ifndef SVZERODSOLVER_MODEL_ACTIVESTRESS_HPP_
 #define SVZERODSOLVER_MODEL_ACTIVESTRESS_HPP_
 
-#include <complex>
 #include <memory>
 #include <string>
 #include <utility>
@@ -41,8 +40,6 @@
  */
 class ActiveStress : public ParameterHolder {
  public:
-  using cplx = std::complex<double>;  ///< complex-step scalar
-
   /**
    * @brief Construct an ActiveStress law
    *
@@ -84,28 +81,6 @@ class ActiveStress : public ParameterHolder {
   virtual void update_time(double signal) = 0;
 
   /**
-   * @brief Residuals of the state equations at a material point
-   *
-   * @param a States (num_states())
-   * @param adot State rates
-   * @param lambda Fiber stretch
-   * @param R Residuals (num_states())
-   */
-  virtual void residual(const double* a, const double* adot, double lambda,
-                        double* R) const = 0;
-
-  /**
-   * @brief Residuals for complex arguments (complex-step tangents)
-   *
-   * @param a States
-   * @param adot State rates
-   * @param lambda Fiber stretch
-   * @param R Residuals
-   */
-  virtual void residual(const cplx* a, const cplx* adot, cplx lambda,
-                        cplx* R) const = 0;
-
-  /**
    * @brief Residuals and their derivatives at a material point
    */
   struct Linearization {
@@ -137,17 +112,6 @@ class ActiveStress : public ParameterHolder {
    */
   virtual void linearize(const double* a, const double* adot, double lambda,
                          Linearization& lin) const = 0;
-
-  /**
-   * @brief Residuals and their derivatives by complex step
-   *
-   * @param a States
-   * @param adot State rates
-   * @param lambda Fiber stretch
-   * @param lin Residuals and derivatives
-   */
-  void linearize_complex_step(const double* a, const double* adot,
-                              double lambda, Linearization& lin) const;
 
   /**
    * @brief Factory: create an active stress law from a type string
@@ -185,10 +149,6 @@ class StrainIndependentActiveStress : public ActiveStress {
   void update_time(double signal) override;
   void linearize(const double* a, const double* adot, double lambda,
                  Linearization& lin) const override;
-  void residual(const double* a, const double* adot, double lambda,
-                double* R) const override;
-  void residual(const cplx* a, const cplx* adot, cplx lambda,
-                cplx* R) const override;
 
  private:
   double act_ = 0.0;       ///< |a|
@@ -260,15 +220,8 @@ class StrainDependentActiveStress : public ActiveStress {
   void update_time(double signal) override;
   void linearize(const double* a, const double* adot, double lambda,
                  Linearization& lin) const override;
-  void residual(const double* a, const double* adot, double lambda,
-                double* R) const override;
-  void residual(const cplx* a, const cplx* adot, cplx lambda,
-                cplx* R) const override;
 
  private:
-  template <typename T>
-  void residual_t(const T* a, const T* adot, T lambda, T* R) const;
-
   double u_plus_ = 0.0;   ///< positive part of the reaction-rate signal
   double u_minus_ = 0.0;  ///< negative part of the reaction-rate signal
 };
@@ -324,15 +277,8 @@ class LinearSeriesSpringActiveStress : public ActiveStress {
   void update_time(double signal) override;
   void linearize(const double* a, const double* adot, double lambda,
                  Linearization& lin) const override;
-  void residual(const double* a, const double* adot, double lambda,
-                double* R) const override;
-  void residual(const cplx* a, const cplx* adot, cplx lambda,
-                cplx* R) const override;
 
  private:
-  template <typename T>
-  void residual_t(const T* a, const T* adot, T lambda, T* R) const;
-
   double nu_abs_ = 0.0;   ///< |nu(t)|
   double nu_plus_ = 0.0;  ///< |nu(t)|_+
 };

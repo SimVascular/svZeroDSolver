@@ -1,0 +1,22 @@
+# Active stress law strain_independent at a material point: state tau and the
+# fiber stretch lam (no dependence on it).
+# python scripts/chamber_tangents.py active_stress scripts/ActiveStressStrainIndependent.yaml
+variables:
+  - tau
+  - lam
+
+derivatives:
+  - dtau_dt
+  - dlam_dt
+
+constants:
+  - act
+  - act_plus
+  - sigma_max
+
+time_dependent:
+  - act
+  - act_plus
+
+residuals:
+  - dtau_dt + act * tau - act_plus * sigma_max

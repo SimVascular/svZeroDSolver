@@ -225,6 +225,9 @@ void Solver::run_integration() {
 
   DEBUG_MSG("Avg. number of nonlinear iterations per time step: "
             << integrator->avg_nonlin_iter());
+  if (std::getenv("SVZERO_TANGENT_CHECK"))  // temporary
+    std::fprintf(stderr, "avg nonlinear iterations %.4f\n",
+                 integrator->avg_nonlin_iter());
 
   // Make times start from 0
   if (!simparams.output_all_cycles) {

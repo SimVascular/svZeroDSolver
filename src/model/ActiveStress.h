@@ -113,7 +113,30 @@ class ActiveStress : public ParameterHolder {
     std::vector<double> dR_da;       ///< dR_i/da_j at [i * n + j]
     std::vector<double> dR_dadot;    ///< dR_i/dadot_j at [i * n + j]
     std::vector<double> dR_dlambda;  ///< dR_i/dlambda
+
+    /**
+     * @brief Zero all entries for n states
+     *
+     * @param n Number of states
+     */
+    void reset(int n) {
+      R.assign(n, 0.0);
+      dR_da.assign(n * n, 0.0);
+      dR_dadot.assign(n * n, 0.0);
+      dR_dlambda.assign(n, 0.0);
+    }
   };
+
+  /**
+   * @brief Residuals and their exact derivatives at a material point
+   *
+   * @param a States
+   * @param adot State rates
+   * @param lambda Fiber stretch
+   * @param lin Residuals and derivatives
+   */
+  virtual void linearize(const double* a, const double* adot, double lambda,
+                         Linearization& lin) const = 0;
 
   /**
    * @brief Residuals and their derivatives by complex step
@@ -123,8 +146,8 @@ class ActiveStress : public ParameterHolder {
    * @param lambda Fiber stretch
    * @param lin Residuals and derivatives
    */
-  void linearize(const double* a, const double* adot, double lambda,
-                 Linearization& lin) const;
+  void linearize_complex_step(const double* a, const double* adot,
+                              double lambda, Linearization& lin) const;
 
   /**
    * @brief Factory: create an active stress law from a type string
@@ -160,6 +183,8 @@ class StrainIndependentActiveStress : public ActiveStress {
     return {"active_stress"};
   }
   void update_time(double signal) override;
+  void linearize(const double* a, const double* adot, double lambda,
+                 Linearization& lin) const override;
   void residual(const double* a, const double* adot, double lambda,
                 double* R) const override;
   void residual(const cplx* a, const cplx* adot, cplx lambda,
@@ -233,6 +258,8 @@ class StrainDependentActiveStress : public ActiveStress {
     return ActivationSignalType::rate;
   }
   void update_time(double signal) override;
+  void linearize(const double* a, const double* adot, double lambda,
+                 Linearization& lin) const override;
   void residual(const double* a, const double* adot, double lambda,
                 double* R) const override;
   void residual(const cplx* a, const cplx* adot, cplx lambda,
@@ -295,6 +322,8 @@ class LinearSeriesSpringActiveStress : public ActiveStress {
     return ActivationSignalType::rate;
   }
   void update_time(double signal) override;
+  void linearize(const double* a, const double* adot, double lambda,
+                 Linearization& lin) const override;
   void residual(const double* a, const double* adot, double lambda,
                 double* R) const override;
   void residual(const cplx* a, const cplx* adot, cplx lambda,

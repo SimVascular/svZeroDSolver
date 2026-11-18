@@ -1,0 +1,61 @@
+# Active stress law strain_dependent (Caruel et al. 2013) at a material point:
+# states tau, e_c, tau_c, k_c, omega, sigma_c, sigma_s, e_s and the fiber
+# stretch lam.
+# python scripts/chamber_tangents.py active_stress scripts/ActiveStressStrainDependent.yaml
+variables:
+  - tau
+  - e_c
+  - tau_c
+  - k_c
+  - omega
+  - sigma_c
+  - sigma_s
+  - e_s
+  - lam
+
+derivatives:
+  - dtau_dt
+  - de_c_dt
+  - dtau_c_dt
+  - dk_c_dt
+  - domega_dt
+  - dsigma_c_dt
+  - dsigma_s_dt
+  - de_s_dt
+  - dlam_dt
+
+constants:
+  - E_s
+  - mu
+  - alpha_r
+  - alpha
+  - k_0
+  - sigma_0
+  - u_plus
+  - u_minus
+  - n0
+  - m0
+
+time_dependent:
+  - u_plus
+  - u_minus
+
+strain_dependent_functions:
+  n0: e_c
+  m0: e_c
+
+helper_functions: |
+  def e_1D():
+      return (lam**2 - 1) / 2
+  def decay():
+      return alpha * abs(de_c_dt) + omega * abs(u_minus)
+
+residuals:
+  - E_s * (e_1D() - e_c) / (1 + 2 * e_c)**2 - tau
+  - E_s * (e_1D() - e_c) * (1 + 2 * e_1D()) / (1 + 2 * e_c)**3 - tau_c - mu * de_c_dt
+  - de_c_dt * k_c + n0 * sigma_0 * u_plus - tau_c * decay() - u_plus * tau_c - dtau_c_dt
+  - k_0 * n0 * u_plus - k_c * decay() - u_plus * k_c - dk_c_dt
+  - m0 - omega - alpha_r * domega_dt
+  - mu * de_c_dt + tau_c - sigma_c
+  - tau * (1 + 2 * e_c) - sigma_s
+  - sigma_s / E_s - e_s

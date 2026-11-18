@@ -8,6 +8,7 @@
 #include <stdexcept>
 
 #include "Model.h"
+#include "TangentCheck.h"
 
 namespace {
 
@@ -28,6 +29,31 @@ T sphere_elastic_stress(const Material& material, const T& lambda) {
   // dE/dlambda = diag(-2 lambda^-5, lambda, lambda)
   const T dE0 = -2.0 / (l2 * l2 * lambda);
   return (S(0, 0) * dE0 + (S(1, 1) + S(2, 2)) * lambda) / lambda;
+}
+
+/// Elastic stress S_el of the material (as sphere_elastic_stress) and its
+/// exact derivative dS_el/dlambda, from the stress derivative along
+/// dC/dlambda = 2 dE/dlambda (J = 1 stays fixed):
+/// dS_el/dlambda = -S_el/lambda + (dSigma : E' + Sigma : E'')/lambda with
+/// E' = diag(-2 lambda^-5, lambda, lambda), E'' = diag(10 lambda^-6, 1, 1).
+double sphere_elastic_stress(const Material& material, double lambda,
+                             double& dS_dlambda) {
+  using Mat = Material::Mat3;
+  const double l2 = lambda * lambda;
+  const Mat C = Eigen::Vector3d(1.0 / (l2 * l2), l2, l2).asDiagonal();
+  const Mat dE =
+      Eigen::Vector3d(-2.0 / (l2 * l2 * lambda), lambda, lambda).asDiagonal();
+  const Mat ddE = Eigen::Vector3d(10.0 / (l2 * l2 * l2), 1.0, 1.0).asDiagonal();
+  const Material::Vec3 f(0.0, 1.0, 0.0);
+  const Mat dC = 2.0 * dE;
+  const double dJ = 0.0;
+  Mat dS;
+  const Mat S = material.stress_derivatives(C, 1.0, f, 1, &dC, &dJ, &dS);
+  const double S_el = (S.array() * dE.array()).sum() / lambda;
+  dS_dlambda = -S_el / lambda + ((dS.array() * dE.array()).sum() +
+                                 (S.array() * ddE.array()).sum()) /
+                                    lambda;
+  return S_el;
 }
 
 }  // namespace
@@ -143,14 +169,18 @@ void ChamberSphere::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) =
       thick0 * (radius + radius0) / pow(radius0, 2);
 
-  // spherical stress: elastic stress of the material (complex-step tangent)
-  // plus viscous damping
+  // spherical stress: elastic stress of the material plus viscous damping
   const double lambda = 1.0 + radius / radius0;
-  const double h = 1e-30;
-  const double S_el = sphere_elastic_stress<double>(*material_, lambda);
-  const double dS_el_dr = std::imag(sphere_elastic_stress<std::complex<double>>(
-                              *material_, std::complex<double>(lambda, h))) /
-                          h / radius0;
+  double dS_el_dlambda;
+  const double S_el = sphere_elastic_stress(*material_, lambda, dS_el_dlambda);
+  const double dS_el_dr = dS_el_dlambda / radius0;
+  if (tangent_check().on) {
+    const double h = 1e-30;
+    const double cs = std::imag(sphere_elastic_stress<std::complex<double>>(
+                          *material_, std::complex<double>(lambda, h))) /
+                      h / radius0;
+    tangent_check().add("sphere dS_el/dr", &dS_el_dr, &cs, 1);
+  }
 
   const double C_val_visc = 2 * dradius_dt * eta *
                             (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
@@ -185,6 +215,17 @@ void ChamberSphere::update_solution(
   }
   ActiveStress::Linearization lin;
   active_stress_->linearize(a.data(), adot.data(), lambda, lin);
+  if (tangent_check().on) {
+    ActiveStress::Linearization cs;
+    active_stress_->linearize_complex_step(a.data(), adot.data(), lambda, cs);
+    tangent_check().add("sphere law R", lin.R.data(), cs.R.data(), n);
+    tangent_check().add("sphere law dR/da", lin.dR_da.data(), cs.dR_da.data(),
+                        n * n);
+    tangent_check().add("sphere law dR/dadot", lin.dR_dadot.data(),
+                        cs.dR_dadot.data(), n * n);
+    tangent_check().add("sphere law dR/dlambda", lin.dR_dlambda.data(),
+                        cs.dR_dlambda.data(), n);
+  }
   for (int i = 0; i < n; i++) {
     const int eqn = global_eqn_ids[7 + i];
     system.C.coeffRef(eqn) = lin.R[i];

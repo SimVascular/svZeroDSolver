@@ -15,6 +15,7 @@
 #include <vector>
 
 #include "Model.h"
+#include "TangentCheck.h"
 
 namespace {
 
@@ -117,6 +118,40 @@ Kinematics<T> compute_kinematics(const T xi[6], double R) {
     m(0, 2) = m(2, 0) = 0.5 * e;
   }
   return k;
+}
+
+/// Second derivatives dd[k][m] = d2E/dxi_k dxi_m of the Green-Lagrange strain
+/// (symmetric in k, m), from scripts/chamber_tangents.py kinematics.
+void strain_second_derivatives(const double xi[6], double R,
+                               Matrix3d dd[6][6]) {
+  const double dphi = xi[2], beta = xi[3];
+  const double r = R + xi[0];  // current radius
+  const double b = r / R;      // circumferential stretch
+  for (int k = 0; k < 6; k++)
+    for (int m = 0; m < 6; m++) dd[k][m].setZero();
+  auto set = [&](int k, int m, int i, int j, double v) {
+    dd[k][m](i, j) = dd[k][m](j, i) = v;
+    dd[m][k](i, j) = dd[m][k](j, i) = v;
+  };
+  set(0, 0, 0, 0, dphi * dphi);  // rho-rho
+  set(0, 0, 0, 1, dphi / R);
+  set(0, 0, 0, 2, beta * dphi);
+  set(0, 0, 1, 1, 1.0 / (R * R));
+  set(0, 0, 1, 2, beta / R);
+  set(0, 0, 2, 2, beta * beta);
+  set(0, 2, 0, 0, 2.0 * dphi * r);  // rho-phi'
+  set(0, 2, 0, 1, b);
+  set(0, 2, 0, 2, beta * r);
+  set(0, 3, 0, 2, dphi * r);  // rho-beta
+  set(0, 3, 1, 2, b);
+  set(0, 3, 2, 2, 2.0 * beta * r);
+  set(1, 1, 0, 0, 1.0);          // rho'-rho'
+  set(2, 2, 0, 0, r * r);        // phi'-phi'
+  set(2, 3, 0, 2, 0.5 * r * r);  // phi'-beta
+  set(3, 3, 2, 2, r * r);        // beta-beta
+  set(4, 4, 2, 2, 1.0);          // eps-eps
+  set(4, 5, 0, 2, 0.5);          // eps-eta'
+  set(5, 5, 0, 0, 1.0);          // eta'-eta'
 }
 
 /// Fiber structural tensor e_F (x) e_F with e_F = (0, cos alpha, sin alpha) in
@@ -413,14 +448,29 @@ void ChamberCylinder::update_solution(
     // Hydrostatic pressure of this element (mixed u/p)
     p.p_mix = Y(i_pmix(pt.elem));
 
-    // Internal forces g and their derivatives w.r.t. tau, p and the rates
+    // Internal forces g_k = Sigma : dE_k and their exact derivatives
     Kinematics<double> kin = compute_kinematics<double>(xi, pt.R);
-    Matrix3d M = fiber_tensor<double>(pt.alpha);
-    Matrix3d S = compute_stress<double>(kin, xidot, tau, pt.alpha, p);
+    const Matrix3d M = fiber_tensor<double>(pt.alpha);
+    const Matrix3d Cinv = kin.C.inverse();
+    const Material::Vec3 f(0.0, std::cos(pt.alpha), std::sin(pt.alpha));
+    // dJ/dxi: J = (1 + rho')(1 + rho/R)(1 + eps)
+    double dJ[6] = {0, 0, 0, 0, 0, 0};
+    dJ[0] = (1.0 + xi[1]) * (1.0 + xi[4]) / pt.R;
+    dJ[1] = (1.0 + xi[0] / pt.R) * (1.0 + xi[4]);
+    dJ[4] = (1.0 + xi[1]) * (1.0 + xi[0] / pt.R);
+    Matrix3d dC[6], dSd[6], dd[6][6];
+    for (int m = 0; m < 6; m++) dC[m] = 2.0 * kin.dE[m];
+    // Sigma = Sigma^d + p J C^-1 + gamma E_dot + tau e_F (x) e_F
+    const Matrix3d Sd =
+        p.material->stress_derivatives(kin.C, kin.J, f, 6, dC, dJ, dSd);
+    Matrix3d Edot = Matrix3d::Zero();
+    for (int m = 0; m < 6; m++) Edot += kin.dE[m] * xidot[m];
+    const Matrix3d S = Sd + p.p_mix * kin.J * Cinv + p.gamma * Edot + tau * M;
+    strain_second_derivatives(xi, pt.R, dd);
     const double I4q = (kin.C * M).trace();  // e_F . C . e_F
     double g[6], dgdtau[6], dgdp[6], Kd[6][6], K[6][6];
     // d g_k / d p = (J C^-1) : dE_k
-    const Matrix3d JCinv = (kin.J * kin.C.inverse()).eval();
+    const Matrix3d JCinv = kin.J * Cinv;
     for (int i = 0; i < 6; i++) {
       g[i] = contract<double>(S, kin.dE[i]);
       dgdtau[i] = contract<double>(M, kin.dE[i]);
@@ -428,10 +478,19 @@ void ChamberCylinder::update_solution(
       for (int j = 0; j < 6; j++)
         Kd[i][j] = p.gamma * contract<double>(kin.dE[i], kin.dE[j]);
     }
-    // Complex-step tangent K[k][m] = d g_k / d xi_m at fixed rates
-    {
+    // K[k][m] = d g_k / d xi_m = dSigma_m : dE_k + Sigma : d2E/dxi_k dxi_m
+    for (int m = 0; m < 6; m++) {
+      Matrix3d dS =
+          dSd[m] + p.p_mix * (dJ[m] * Cinv - kin.J * Cinv * dC[m] * Cinv);
+      for (int n = 0; n < 6; n++) dS += p.gamma * xidot[n] * dd[n][m];
+      for (int k = 0; k < 6; k++)
+        K[k][m] =
+            contract<double>(dS, kin.dE[k]) + contract<double>(S, dd[k][m]);
+    }
+    if (tangent_check().on) {
       const double h = 1e-30;
       cplx xic[6], xidotc[6], gc[6];
+      double Kcs[6][6];
       for (int i = 0; i < 6; i++) {
         xic[i] = xi[i];
         xidotc[i] = xidot[i];
@@ -439,9 +498,13 @@ void ChamberCylinder::update_solution(
       for (int m = 0; m < 6; m++) {
         xic[m] += cplx(0.0, h);
         compute_g<cplx>(xic, xidotc, tau, pt.R, pt.alpha, p, gc);
-        for (int k = 0; k < 6; k++) K[k][m] = std::imag(gc[k]) / h;
+        for (int k = 0; k < 6; k++) Kcs[k][m] = std::imag(gc[k]) / h;
         xic[m] = xi[m];
       }
+      tangent_check().add("cylinder wall K", &K[0][0], &Kcs[0][0], 36);
+      const Matrix3d Sref =
+          compute_stress<double>(kin, xidot, tau, pt.alpha, p);
+      tangent_check().add("cylinder wall stress", S.data(), Sref.data(), 9);
     }
 
     // The wall stress is linear in tau: d g_k / d tau = dgdtau[k]
@@ -577,9 +640,8 @@ void ChamberCylinder::update_solution(
 
     // --- Current-radius correction of the mass (genet23 Eq. A5) ---
     // The beta and phi moment arms use the current radius: R^2 -> (R + rho)^2.
-    // update_constant assembles the R^2 part; the difference is added to the
-    // residual here. Its derivative w.r.t. rho is left out of the Jacobian
-    // (inexact Newton, more robust); the residual and solution are exact.
+    // update_constant assembles the R^2 part; the difference and its
+    // derivatives are added here.
     {
       const double rho0m = parameters[global_param_ids[ParamId::density]];
       const double cL1 = rho0m * 2.0 * M_PI * Lp;
@@ -596,16 +658,22 @@ void ChamberCylinder::update_solution(
       const double fBeta = cL3 * aBeta + cL2 * aPhi;
       Cloc[e_beta()] += pt.w * dr2 * fBeta;
       Kdat(e_beta(), i_vbeta()) += pt.w * dr2 * cL3;
-      for (int j = 0; j < 2; j++)
+      for (int j = 0; j < 2; j++) {
         Kdat(e_beta(), i_vphi(Am[j])) += pt.w * dr2 * cL2 * Nm[j];
+        // d(dr2)/d(rho_A) = 2 (R + rho) N_A
+        Kat(e_beta(), i_rho(Am[j])) += pt.w * 2.0 * rcur * Nm[j] * fBeta;
+      }
       // phi momentum rows
       const double fPhi = cL2 * aBeta + cL1 * aPhi;
       for (int i = 0; i < 2; i++) {
         const int a = Am[i];
         Cloc[e_phi(a)] += pt.w * dr2 * Nm[i] * fPhi;
         Kdat(e_phi(a), i_vbeta()) += pt.w * dr2 * Nm[i] * cL2;
-        for (int j = 0; j < 2; j++)
+        for (int j = 0; j < 2; j++) {
           Kdat(e_phi(a), i_vphi(Am[j])) += pt.w * dr2 * Nm[i] * cL1 * Nm[j];
+          Kat(e_phi(a), i_rho(Am[j])) +=
+              pt.w * 2.0 * rcur * Nm[j] * Nm[i] * fPhi;
+        }
       }
     }
 
@@ -614,11 +682,6 @@ void ChamberCylinder::update_solution(
     {
       const int erow = e_pmix(pt.elem);
       Cloc[erow] += pref * (kin.J - 1.0);
-      const double Rq = pt.R;
-      double dJ[6] = {0, 0, 0, 0, 0, 0};
-      dJ[0] = (1.0 + xi[1]) * (1.0 / Rq) * (1.0 + xi[4]);  // dJ/drho
-      dJ[1] = (1.0 + xi[0] / Rq) * (1.0 + xi[4]);          // dJ/drho'
-      dJ[4] = (1.0 + xi[1]) * (1.0 + xi[0] / Rq);          // dJ/deps
       for (int m : {0, 1, 4}) {  // dJ/drho, dJ/drho', dJ/deps
         for (int ci = 0; ci < cn[m]; ci++)
           Kat(erow, cvr[m][ci]) += pref * dJ[m] * cw[m][ci];
@@ -634,6 +697,18 @@ void ChamberCylinder::update_solution(
       }
       ActiveStress::Linearization lin;
       active_stress_->linearize(a.data(), ad.data(), lam, lin);
+      if (tangent_check().on) {
+        ActiveStress::Linearization cs;
+        active_stress_->linearize_complex_step(a.data(), ad.data(), lam, cs);
+        const int nl = n_law;
+        tangent_check().add("cylinder law R", lin.R.data(), cs.R.data(), nl);
+        tangent_check().add("cylinder law dR/da", lin.dR_da.data(),
+                            cs.dR_da.data(), nl * nl);
+        tangent_check().add("cylinder law dR/dadot", lin.dR_dadot.data(),
+                            cs.dR_dadot.data(), nl * nl);
+        tangent_check().add("cylinder law dR/dlambda", lin.dR_dlambda.data(),
+                            cs.dR_dlambda.data(), nl);
+      }
       for (int i = 0; i < n_law; i++) {
         const int erow = e_law(q, i);
         Cloc[erow] += lin.R[i];

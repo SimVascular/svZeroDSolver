@@ -1,0 +1,43 @@
+# Active stress law linear_series_spring (genet23 Eqs. 29-33) at a material
+# point: states tau, e_c, tau_c, k_c and the fiber stretch lam.
+# python scripts/chamber_tangents.py active_stress scripts/ActiveStressLinearSeriesSpring.yaml
+variables:
+  - tau
+  - e_c
+  - tau_c
+  - k_c
+  - lam
+
+derivatives:
+  - dtau_dt
+  - de_c_dt
+  - dtau_c_dt
+  - dk_c_dt
+  - dlam_dt
+
+constants:
+  - k_s
+  - k_0
+  - mu
+  - alpha
+  - sigma_0
+  - nu_abs
+  - nu_plus
+  - n0
+
+time_dependent:
+  - nu_abs
+  - nu_plus
+
+strain_dependent_functions:
+  n0: e_c
+
+helper_functions: |
+  def decay():
+      return nu_abs + alpha * abs(de_c_dt)
+
+residuals:
+  - tau - (tau_c + mu * de_c_dt) / lam
+  - de_c_dt - (k_s * (lam - 1 - e_c) - tau_c) / mu
+  - dtau_c_dt - (-decay() * tau_c + de_c_dt * k_c + n0 * sigma_0 * nu_plus)
+  - dk_c_dt - (-decay() * k_c + n0 * k_0 * nu_plus)

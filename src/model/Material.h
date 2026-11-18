@@ -67,6 +67,23 @@ class Material : public ParameterHolder {
   virtual Mat3 stress(const Mat3& C, double J, const Vec3& f) const = 0;
 
   /**
+   * @brief Stress and its directional derivatives
+   *
+   * @param C Right Cauchy-Green tensor
+   * @param J Volume ratio
+   * @param f Unit fiber direction
+   * @param n Number of directions
+   * @param dC Directions of \f$C\f$ (n tensors)
+   * @param dJ Directions of \f$J\f$ (n values)
+   * @param dS Derivatives of the stress along the directions (output, n
+   * tensors)
+   * @return Stress \f$2\,\partial W/\partial C\f$
+   */
+  virtual Mat3 stress_derivatives(const Mat3& C, double J, const Vec3& f, int n,
+                                  const Mat3* dC, const double* dJ,
+                                  Mat3* dS) const = 0;
+
+  /**
    * @brief Deviatoric 2nd Piola-Kirchhoff stress for complex arguments
    * (complex-step tangents)
    *
@@ -112,6 +129,9 @@ class MooneyRivlinExponentialMaterial : public Material {
              {"C3", InputParameter(true, false, true, 0.0)}}) {}
 
   Mat3 stress(const Mat3& C, double J, const Vec3& f) const override;
+  Mat3 stress_derivatives(const Mat3& C, double J, const Vec3& f, int n,
+                          const Mat3* dC, const double* dJ,
+                          Mat3* dS) const override;
   Mat3c stress(const Mat3c& C, cplx J, const Vec3& f) const override;
 
  protected:

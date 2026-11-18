@@ -35,6 +35,21 @@
  * wall (\ref ChamberSphere) or at each integration point (\ref
  * ChamberCylinder).
  *
+ * ### Linearization
+ *
+ * linearize() returns the residuals \f$R\f$ with their exact derivatives
+ * \f$\partial R/\partial a\f$, \f$\partial R/\partial\dot a\f$ and
+ * \f$\partial R/\partial\lambda\f$. The blocks chain the last with the
+ * derivative of the fiber stretch,
+ * \f$\partial\lambda/\partial C =
+ * \mathbf{e}_F\otimes\mathbf{e}_F/(2\lambda)\f$. The derivatives follow from
+ * the residuals in `scripts/ActiveStress*.yaml` with
+ * `scripts/chamber_tangents.py active_stress`. A piecewise-linear table, such
+ * as \f$n_0(e_c)\f$, contributes its local slope \f$n_0'(e_c)\f$, and
+ * \f$|x|\f$ the derivative \f$\operatorname{sign}(x)\f$ (0 at
+ * \f$x = 0\f$). Each law below lists its residuals in the order of its
+ * states and their nonzero derivatives.
+ *
  * Types (JSON `active_stress` object): `strain_independent`,
  * `strain_dependent`, `linear_series_spring`.
  */
@@ -133,6 +148,11 @@ class ActiveStress : public ParameterHolder {
  * \f]
  * where \f$f \in [0, 1]\f$ is the (normalized) activation function.
  *
+ * Linearization of \f$R = \dot\tau + |a|\tau - \sigma_\text{max} a_+\f$:
+ * \f$\partial R/\partial\tau = |a|\f$,
+ * \f$\partial R/\partial\dot\tau = 1\f$; it does not depend on
+ * \f$\lambda\f$.
+ *
  * Parameters: `alpha_max`, `alpha_min`, `sigma_max`
  */
 class StrainIndependentActiveStress : public ActiveStress {
@@ -191,6 +211,42 @@ class StrainIndependentActiveStress : public ActiveStress {
  * evaluated with \ref linear_interpolate, and \f$u(t)\f$ is a reaction-rate
  * signal supplied by the chamber's ActivationFunction (e.g. \ref
  * PiecewiseRateActivation).
+ *
+ * Linearization, with \f$g = 1 + 2e_c\f$ and the decay
+ * \f$d = \alpha|\dot e_c| + \omega|u|_-\f$:
+ * - \f$R_0 = E_s(e_{1D} - e_c)/g^2 - \tau\f$:
+ *   \f$\partial_\tau R_0 = -1\f$,
+ *   \f$\partial_{e_c} R_0 = E_s(g - 2\lambda^2)/g^3\f$,
+ *   \f$\partial_\lambda R_0 = E_s\lambda/g^2\f$;
+ * - \f$R_1 = E_s(e_{1D} - e_c)(1 + 2e_{1D})/g^3 - \tau_c - \mu\dot e_c\f$:
+ *   \f$\partial_{e_c} R_1 = E_s\lambda^2(4e_c - 3\lambda^2 + 2)/g^4\f$,
+ *   \f$\partial_{\tau_c} R_1 = -1\f$, \f$\partial_{\dot e_c} R_1 = -\mu\f$,
+ *   \f$\partial_\lambda R_1 = -E_s\lambda(g - 2\lambda^2)/g^3\f$;
+ * - \f$R_2 = \dot e_c k_c + n_0\sigma_0|u|_+ - (d + |u|_+)\tau_c -
+ * \dot\tau_c\f$:
+ *   \f$\partial_{e_c} R_2 = n_0'\sigma_0|u|_+\f$,
+ *   \f$\partial_{\dot e_c} R_2 = k_c - \alpha\operatorname{sign}(\dot
+ * e_c)\tau_c\f$,
+ *   \f$\partial_{\tau_c} R_2 = -d - |u|_+\f$,
+ *   \f$\partial_{\dot\tau_c} R_2 = -1\f$,
+ *   \f$\partial_{k_c} R_2 = \dot e_c\f$,
+ *   \f$\partial_\omega R_2 = -|u|_-\tau_c\f$;
+ * - \f$R_3 = n_0 k_0|u|_+ - (d + |u|_+)k_c - \dot k_c\f$:
+ *   \f$\partial_{e_c} R_3 = n_0' k_0|u|_+\f$,
+ *   \f$\partial_{\dot e_c} R_3 = -\alpha\operatorname{sign}(\dot e_c)k_c\f$,
+ *   \f$\partial_{k_c} R_3 = -d - |u|_+\f$,
+ *   \f$\partial_{\dot k_c} R_3 = -1\f$,
+ *   \f$\partial_\omega R_3 = -|u|_- k_c\f$;
+ * - \f$R_4 = m_0 - \omega - \alpha_r\dot\omega\f$:
+ *   \f$\partial_{e_c} R_4 = m_0'\f$, \f$\partial_\omega R_4 = -1\f$,
+ *   \f$\partial_{\dot\omega} R_4 = -\alpha_r\f$;
+ * - \f$R_5 = \mu\dot e_c + \tau_c - \sigma_c\f$:
+ *   \f$\partial_{\dot e_c} R_5 = \mu\f$, \f$\partial_{\tau_c} R_5 = 1\f$,
+ *   \f$\partial_{\sigma_c} R_5 = -1\f$;
+ * - \f$R_6 = \tau g - \sigma_s\f$: \f$\partial_\tau R_6 = g\f$,
+ *   \f$\partial_{e_c} R_6 = 2\tau\f$, \f$\partial_{\sigma_s} R_6 = -1\f$;
+ * - \f$R_7 = \sigma_s/E_s - e_s\f$: \f$\partial_{\sigma_s} R_7 = 1/E_s\f$,
+ *   \f$\partial_{e_s} R_7 = -1\f$.
  *
  * Parameters: `E_s`, `mu`, `alpha_r`, `alpha`, `k_0`, `sigma_0`, `n0_e_c`,
  * `n0_values`, `m0_e_c`, `m0_values`
@@ -251,6 +307,26 @@ class StrainDependentActiveStress : public ActiveStress {
  * \f$k_s(e_\text{fib}-e_c)\f$ keeps the stiff \f$k_s\f$ out of the wall
  * stress. The Frank-Starling factor \f$n_0(e_c)\f$ is a piecewise-linear
  * table (`n0_e_c`/`n0_values`), by default that of the genet23 authors' code.
+ *
+ * Linearization, with the decay \f$d = |\nu| + \alpha|\dot e_c|\f$:
+ * - \f$R_0 = \tau - (\tau_c + \mu\dot e_c)/\lambda\f$:
+ *   \f$\partial_\tau R_0 = 1\f$, \f$\partial_{\tau_c} R_0 = -1/\lambda\f$,
+ *   \f$\partial_{\dot e_c} R_0 = -\mu/\lambda\f$,
+ *   \f$\partial_\lambda R_0 = (\tau_c + \mu\dot e_c)/\lambda^2\f$;
+ * - \f$R_1 = \dot e_c - (k_s(\lambda - 1 - e_c) - \tau_c)/\mu\f$:
+ *   \f$\partial_{e_c} R_1 = k_s/\mu\f$, \f$\partial_{\tau_c} R_1 = 1/\mu\f$,
+ *   \f$\partial_{\dot e_c} R_1 = 1\f$,
+ *   \f$\partial_\lambda R_1 = -k_s/\mu\f$;
+ * - \f$R_2 = \dot\tau_c + d\,\tau_c - \dot e_c k_c - n_0\sigma_0|\nu|_+\f$:
+ *   \f$\partial_{e_c} R_2 = -n_0'\sigma_0|\nu|_+\f$,
+ *   \f$\partial_{\dot e_c} R_2 = \alpha\operatorname{sign}(\dot e_c)\tau_c -
+ * k_c\f$,
+ *   \f$\partial_{\tau_c} R_2 = d\f$, \f$\partial_{\dot\tau_c} R_2 = 1\f$,
+ *   \f$\partial_{k_c} R_2 = -\dot e_c\f$;
+ * - \f$R_3 = \dot k_c + d\,k_c - n_0 k_0|\nu|_+\f$:
+ *   \f$\partial_{e_c} R_3 = -n_0' k_0|\nu|_+\f$,
+ *   \f$\partial_{\dot e_c} R_3 = \alpha\operatorname{sign}(\dot e_c)k_c\f$,
+ *   \f$\partial_{k_c} R_3 = d\f$, \f$\partial_{\dot k_c} R_3 = 1\f$.
  *
  * Parameters: `sigma_0`, `k_s` (default 1e8), `k_0` (default 260e3), `mu`
  * (default 70), `alpha` (default 0), `n0_e_c`, `n0_values` (optional)

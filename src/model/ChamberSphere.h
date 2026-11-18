@@ -57,7 +57,18 @@
  * wall, \f$C = \mathrm{diag}(\lambda^{-4}, \lambda^2, \lambda^2)\f$ in the
  * (radial, two tangential) basis, with the fiber in the wall plane. For
  * `mooney_rivlin` this is
- * \f$4(1-\lambda^{-6})(W_1+\lambda^2 W_2)\f$.
+ * \f$4(1-\lambda^{-6})(W_1+\lambda^2 W_2)\f$. Its exact derivative is
+ * \f[
+ * \frac{\partial S_\text{el}}{\partial\lambda} = -\frac{S_\text{el}}{\lambda}
+ * + \frac{1}{\lambda}\left(\mathrm{D}\Sigma^d[2E', 0] : E'
+ * + \Sigma^d : E''\right)
+ * \f]
+ * with \f$E' = \partial E/\partial\lambda =
+ * \mathrm{diag}(-2\lambda^{-5}, \lambda, \lambda)\f$,
+ * \f$E'' = \mathrm{diag}(10\lambda^{-6}, 1, 1)\f$ and the stress derivative
+ * \f$\mathrm{D}\Sigma^d\f$ of the \ref Material (\f$J = 1\f$ stays fixed).
+ * \f$\partial\lambda/\partial r = 1/r_0\f$ chains it, and the derivative
+ * \f$\partial R/\partial\lambda\f$ of the active stress law, to the radius.
  *
  * 3. Volume change:
  * \f[

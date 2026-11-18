@@ -109,6 +109,65 @@
  * free. The rigid rotation and axial translation of the tube are free and
  * fixed by momentum conservation (\cite genet23 Sec. 2.4).
  *
+ * ### Tangent
+ *
+ * The block assembles the exact derivatives of all its residuals. At a
+ * quadrature point, the local kinematic quantities
+ * \f$\xi = (\rho, \rho', \varphi', \beta, \varepsilon, \eta')\f$ give the
+ * internal forces \f$g_k = \Sigma:\partial E/\partial\xi_k\f$, which the shape
+ * functions scatter to the nodal equations. With the derivative of the stress
+ * along \f$\xi_m\f$ (\f$\mathrm{D}\Sigma^d\f$ of the \ref Material),
+ * \f[
+ * \mathrm{D}\Sigma_m = \mathrm{D}\Sigma^d\left[2\frac{\partial
+ * E}{\partial\xi_m},
+ * \frac{\partial J}{\partial\xi_m}\right]
+ * + p\left(\frac{\partial J}{\partial\xi_m}C^{-1}
+ * - 2J\,C^{-1}\frac{\partial E}{\partial\xi_m}C^{-1}\right)
+ * + \gamma\sum_n\dot\xi_n\frac{\partial^2E}{\partial\xi_n\partial\xi_m},
+ * \f]
+ * their derivatives are
+ * - \f$\partial g_k/\partial\xi_m = \mathrm{D}\Sigma_m:\partial E/\partial\xi_k
+ *   + \Sigma:\partial^2E/\partial\xi_k\partial\xi_m\f$;
+ * - \f$\partial g_k/\partial\dot\xi_m =
+ *   \gamma\,\partial E/\partial\xi_k:\partial E/\partial\xi_m\f$;
+ * - \f$\partial g_k/\partial\tau =
+ *   \mathbf{e}_F\cdot\partial E/\partial\xi_k\cdot\mathbf{e}_F\f$;
+ * - \f$\partial g_k/\partial p = J\,C^{-1}:\partial E/\partial\xi_k\f$.
+ *
+ * The volume ratio has the derivatives
+ * \f$\partial J/\partial\rho = (1+\rho')(1+\varepsilon)/R\f$,
+ * \f$\partial J/\partial\rho' = (1+\rho/R)(1+\varepsilon)\f$ and
+ * \f$\partial J/\partial\varepsilon = (1+\rho')(1+\rho/R)\f$, which also
+ * linearize the incompressibility constraint. The \ref ActiveStress law
+ * depends on the wall through the fiber stretch, with
+ * \f$\partial\lambda/\partial\xi_m =
+ * \mathbf{e}_F\cdot\partial E/\partial\xi_m\cdot\mathbf{e}_F/\lambda\f$.
+ *
+ * The second strain derivatives come from
+ * `scripts/chamber_tangents.py kinematics`. With the current radius
+ * \f$r = R + \rho\f$ and \f$b = r/R\f$, their nonzero components in the
+ * \f$(\mathbf{e}_R,\mathbf{e}_\Theta,\mathbf{e}_Z)\f$ basis (symmetric in
+ * both index pairs) are
+ * - \f$\partial^2E/\partial\rho^2\f$: \f$\varphi'^2\f$ (\f$RR\f$),
+ *   \f$\varphi'/R\f$ (\f$R\Theta\f$), \f$\beta\varphi'\f$ (\f$RZ\f$),
+ *   \f$1/R^2\f$ (\f$\Theta\Theta\f$), \f$\beta/R\f$ (\f$\Theta Z\f$),
+ *   \f$\beta^2\f$ (\f$ZZ\f$);
+ * - \f$\partial^2E/\partial\rho\partial\varphi'\f$: \f$2\varphi'r\f$
+ *   (\f$RR\f$), \f$b\f$ (\f$R\Theta\f$), \f$\beta r\f$ (\f$RZ\f$);
+ * - \f$\partial^2E/\partial\rho\partial\beta\f$: \f$\varphi'r\f$ (\f$RZ\f$),
+ *   \f$b\f$ (\f$\Theta Z\f$), \f$2\beta r\f$ (\f$ZZ\f$);
+ * - \f$\partial^2E/\partial\varphi'^2\f$: \f$r^2\f$ (\f$RR\f$);
+ *   \f$\partial^2E/\partial\varphi'\partial\beta\f$: \f$r^2/2\f$ (\f$RZ\f$);
+ *   \f$\partial^2E/\partial\beta^2\f$: \f$r^2\f$ (\f$ZZ\f$);
+ * - \f$\partial^2E/\partial\rho'^2\f$ and \f$\partial^2E/\partial\eta'^2\f$:
+ *   1 (\f$RR\f$); \f$\partial^2E/\partial\varepsilon^2\f$: 1 (\f$ZZ\f$);
+ *   \f$\partial^2E/\partial\varepsilon\partial\eta'\f$: 1/2 (\f$RZ\f$).
+ *
+ * The inertia, pressure load, lid load, cavity volume and mass conservation
+ * are polynomials in the unknowns and are differentiated directly. This
+ * includes the current radius in the mass of \f$\beta\f$ and \f$\varphi\f$,
+ * \f$\partial(R+\rho)^2/\partial\rho = 2(R+\rho)\f$.
+ *
  * ### Parameters
  *
  * Parameter sequence for constructing this block:

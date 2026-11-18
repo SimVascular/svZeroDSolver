@@ -72,10 +72,16 @@ void Solver::setup_initial() {
 void Solver::setup_integrator() {
   // Set-up integrator
   DEBUG_MSG("Setup time integration");
-  integrator =
-      Integrator(this->model.get(), simparams.sim_time_step_size,
-                 simparams.sim_rho_infty, simparams.sim_abs_tol,
-                 simparams.sim_nliter, simparams.sim_max_iter_error_to_warning);
+  if (simparams.sim_integrator == "stiff") {
+    integrator = std::make_unique<StiffIntegrator>(
+        this->model.get(), simparams.sim_time_step_size, simparams.sim_abs_tol,
+        simparams.sim_nliter);
+  } else {
+    integrator = std::make_unique<Integrator>(
+        this->model.get(), simparams.sim_time_step_size,
+        simparams.sim_rho_infty, simparams.sim_abs_tol, simparams.sim_nliter,
+        simparams.sim_max_iter_error_to_warning);
+  }
 
   // Initialize loop
   states = std::vector<State>();
@@ -129,7 +135,7 @@ void Solver::run_integration() {
       }
     }
 
-    state = integrator.step(state, time);
+    state = integrator->step(state, time);
 
     if (simparams.use_cycle_to_cycle_error &&
         last_two_cycles_time_pt_counter > 0) {
@@ -168,7 +174,7 @@ void Solver::run_integration() {
 
         last_two_cycles_time_pt_counter = simparams.sim_pts_per_cycle;
         for (size_t i = 1; i < simparams.sim_pts_per_cycle; i++) {
-          state = integrator.step(state, time);
+          state = integrator->step(state, time);
 
           states_last_two_cycles[last_two_cycles_time_pt_counter] = state;
           last_two_cycles_time_pt_counter += 1;
@@ -218,7 +224,7 @@ void Solver::run_integration() {
   }
 
   DEBUG_MSG("Avg. number of nonlinear iterations per time step: "
-            << integrator.avg_nonlin_iter());
+            << integrator->avg_nonlin_iter());
 
   // Make times start from 0
   if (!simparams.output_all_cycles) {

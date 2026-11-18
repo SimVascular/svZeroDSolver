@@ -8,6 +8,37 @@
 
 #include "Model.h"
 
+namespace {
+
+/// Elastic stress S_el = (1/lambda) Sigma^d : dE/dlambda of the material for
+/// the incompressible equibiaxial stretch lambda of the wall,
+/// C = diag(lambda^-4, lambda^2, lambda^2) in the (radial, tangential,
+/// tangential) basis with the fiber tangential, and its exact derivative from
+/// the stress derivative along dC/dlambda = 2 dE/dlambda (J = 1 stays fixed):
+/// dS_el/dlambda = -S_el/lambda + (dSigma : E' + Sigma : E'')/lambda with
+/// E' = diag(-2 lambda^-5, lambda, lambda), E'' = diag(10 lambda^-6, 1, 1).
+double sphere_elastic_stress(const Material& material, double lambda,
+                             double& dS_dlambda) {
+  using Mat = Material::Mat3;
+  const double l2 = lambda * lambda;
+  const Mat C = Eigen::Vector3d(1.0 / (l2 * l2), l2, l2).asDiagonal();
+  const Mat dE =
+      Eigen::Vector3d(-2.0 / (l2 * l2 * lambda), lambda, lambda).asDiagonal();
+  const Mat ddE = Eigen::Vector3d(10.0 / (l2 * l2 * l2), 1.0, 1.0).asDiagonal();
+  const Material::Vec3 f(0.0, 1.0, 0.0);
+  const Mat dC = 2.0 * dE;
+  const double dJ = 0.0;
+  Mat dS;
+  const Mat S = material.stress_derivatives(C, 1.0, f, 1, &dC, &dJ, &dS);
+  const double S_el = (S.array() * dE.array()).sum() / lambda;
+  dS_dlambda = -S_el / lambda + ((dS.array() * dE.array()).sum() +
+                                 (S.array() * ddE.array()).sum()) /
+                                    lambda;
+  return S_el;
+}
+
+}  // namespace
+
 void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
   if (!activation_function_) {
     throw std::runtime_error("ChamberSphere '" + get_name() +
@@ -42,12 +73,12 @@ void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
 
   std::list<std::string> internal_var_names = {
       "radius", "velo", "stress", "active_stress", "volume", "passive_stress"};
-  for (const auto& name : active_stress_->extra_var_names()) {
-    internal_var_names.push_back(name);
+  const std::vector<std::string> states = active_stress_->state_names();
+  for (size_t i = 1; i < states.size(); i++) {
+    internal_var_names.push_back(states[i]);
   }
 
-  const int num_equations =
-      ActiveStress::NUM_CORE_EQNS + active_stress_->num_extra_equations();
+  const int num_equations = 7 + active_stress_->num_states();
 
   Block::setup_dofs_(dofhandler, num_equations, internal_var_names);
 }
@@ -84,16 +115,14 @@ void ChamberSphere::update_constant(SparseSystem& system,
   system.F.coeffRef(global_eqn_ids[6], global_var_ids[9]) = -1;
   system.F.coeffRef(global_eqn_ids[6], global_var_ids[6]) = 1;
   system.F.coeffRef(global_eqn_ids[6], global_var_ids[7]) = -1;
-
-  // active stress
-  active_stress_->update_constant(system, global_eqn_ids, global_var_ids);
 }
 
 void ChamberSphere::update_time(SparseSystem& system,
                                 std::vector<double>& parameters) {
+  (void)system;
+  (void)parameters;
   activation_signal_ = activation_function_->compute(model->time);
-  active_stress_->update_time(system, global_eqn_ids, global_var_ids,
-                              activation_signal_);
+  active_stress_->update_time(activation_signal_);
 }
 
 void ChamberSphere::update_solution(
@@ -121,8 +150,11 @@ void ChamberSphere::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[0], global_var_ids[6]) =
       thick0 * (radius + radius0) / pow(radius0, 2);
 
-  // spherical stress: material-dependent elastic term plus viscous damping
-  const auto mat = material_->compute(radius, radius0);
+  // spherical stress: elastic stress of the material plus viscous damping
+  const double lambda = 1.0 + radius / radius0;
+  double dS_el_dlambda;
+  const double S_el = sphere_elastic_stress(*material_, lambda, dS_el_dlambda);
+  const double dS_el_dr = dS_el_dlambda / radius0;
 
   const double C_val_visc = 2 * dradius_dt * eta *
                             (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
@@ -134,9 +166,9 @@ void ChamberSphere::update_solution(
       2 * eta * (2 * pow(radius0, 12) + pow(radius + radius0, 12)) /
       (pow(radius0, 2) * pow(radius + radius0, 11));
 
-  system.C.coeffRef(global_eqn_ids[1]) = mat.C_val + C_val_visc;
+  system.C.coeffRef(global_eqn_ids[1]) = S_el + C_val_visc;
   system.dC_dy.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
-      mat.dC_dy_radius + dC_dy_visc;
+      dS_el_dr + dC_dy_visc;
   system.dC_dydot.coeffRef(global_eqn_ids[1], global_var_ids[4]) =
       dC_dydot_visc;
 
@@ -148,12 +180,27 @@ void ChamberSphere::update_solution(
   system.dC_dy.coeffRef(global_eqn_ids[2], global_var_ids[5]) =
       4 * M_PI * pow(radius + radius0, 2);
 
-  // active stress
-  active_stress_->update_solution(system, global_eqn_ids, global_var_ids, y, dy,
-                                  radius0, activation_signal_);
+  // active stress law at the fiber stretch lambda (fibers in the wall plane)
+  const int n = active_stress_->num_states();
+  std::vector<double> a(n), adot(n);
+  for (int i = 0; i < n; i++) {
+    a[i] = y[law_var(i)];
+    adot[i] = dy[law_var(i)];
+  }
+  ActiveStress::Linearization lin;
+  active_stress_->linearize(a.data(), adot.data(), lambda, lin);
+  for (int i = 0; i < n; i++) {
+    const int eqn = global_eqn_ids[7 + i];
+    system.C.coeffRef(eqn) = lin.R[i];
+    for (int j = 0; j < n; j++) {
+      system.dC_dy.coeffRef(eqn, law_var(j)) = lin.dR_da[i * n + j];
+      system.dC_dydot.coeffRef(eqn, law_var(j)) = lin.dR_dadot[i * n + j];
+    }
+    system.dC_dy.coeffRef(eqn, global_var_ids[4]) = lin.dR_dlambda[i] / radius0;
+  }
 }
 
-void ChamberSphere::set_material(std::unique_ptr<SphereMaterial> m) {
+void ChamberSphere::set_material(std::unique_ptr<Material> m) {
   material_ = std::move(m);
 }
 

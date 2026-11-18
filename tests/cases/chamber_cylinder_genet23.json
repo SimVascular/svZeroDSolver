@@ -1,0 +1,187 @@
+{
+  "description": {
+    "description of test case": "Thick-walled cylindrical left ventricle (ChamberCylinder) in the closed circulation of Genet et al. (2023), Reduced left ventricular dynamics modeling based on a cylindrical assumption, Int. J. Numer. Meth. Biomed. Engng. e3711, doi:10.1002/cnm.3711 (genet23). Atrial pressure -> mitral PiecewiseValve -> ventricle (ChamberCylinder chamber) -> aortic PiecewiseValve -> two-stage Windkessel -> venous pressure. All units SI.",
+    "ventricle": {
+      "geometry": "Ri, Re, length derived from the defining volumes of genet23 Table 1: cavity 65 mL, wall 130 mL, aspect ratio L/(2 Ri) = 1.5, i.e. Ri = (65e-6 / (3 pi))^(1/3), L = 3 Ri, Re = sqrt(Ri^2 + 130e-6 / (pi L)). Table 1 prints these rounded (19.0, 33.0, 57.1 mm). Fiber helix angle +60 deg (endocardium) to -60 deg (epicardium), linear across the wall (Eq 22, Table 1).",
+      "material": "mooney_rivlin_exponential energy, which is the genet23 passive energy (Eq 25): Table 1's C1-C6 = 7, 0, 700, 2, 50, 4 are W1, W2, C0, C1, C2, C3 here. Tissue viscosity gamma = 70 Pa s (Eq 28, Table 1); incompressible (mixed u/p, Eqs 26-27); density 1000 kg/m^3 for the inertia terms (Eqs 8, 18).",
+      "active stress": "Bestel-Clement-Sorine law (Eqs 29-33) with sigma_0 = 65 kPa, k_0 = 260 kPa, k_s = 1e8 Pa, mu = 70 Pa s and the force-velocity time constant alpha = 12 (Table 1). The Frank-Starling curve n0(e_c) is the law's default, the piecewise-linear table of the authors' input functions (genet23 Refs 6/33).",
+      "activation": "Activation rate nu(t) of the authors' ECG-based input functions as a piecewise_rate table: delay 0.10 s, ramp 0.01 s, QRS 0.08 s, QTc 0.33 s with Bazett QT = QTc sqrt(T) at T = 0.8 s, plateaus +-35 1/s. With tsys = delay + ramp = 0.11 s and tdias = tsys + QT: -35 1/s until tsys - QRS, linear rise to 35 1/s at tsys + QRS, plateau until tdias - QRS, linear fall to 0 at tdias and to -35 1/s at tdias + ramp; break points divided by T.",
+      "numerics": "3 elements through the wall and the stiff integrator: with the force-velocity term and the piecewise-linear valves, plain generalized-alpha does not converge (genet23 uses an energy-consistent midpoint scheme that svZeroDSolver does not have)."
+    },
+    "circulation": {
+      "atrium": "Atrial pressure from the authors' input functions: 7 mmHg peak and 4.5 mmHg floor (134 Pa/mmHg, the authors' conversion), linear drop over 0.05-0.10 s, atrial kick from T - PQ + ramp = 0.67 s to T - AV + ramp = 0.73 s (PQ 0.14 s, AV delay 0.08 s).",
+      "valves": "Piecewise-linear valve law (Eq 35) with R = 1/K from Table 1: mitral Rmin = 1/K_at, Rmax = 1/K_iso (isovolumic leak); aortic Rmin = 1/K_ar, Rmax = 1e12 (Eq 36 has no closed leak on the arterial side). C_valve is not modeled: Table 1 prints 9e-9 m^3/Pa, a typo for the 9e-12 of the authors' code, which stores about 0.1 mL over the beat.",
+      "windkessel": "C-R-C-R chain of Eq 36 from BloodVessel blocks, whose capacitor sits at the outlet node: aortic_root (C_ar), arterial (R_p, C_d), distal (R_d), values from Table 1.",
+      "venous pressure": "P_vs = 500 Pa. Not given in genet23; CardiacLab value communicated by the authors.",
+      "initial condition": "Ventricle at its unloaded volume pi Ri^2 L = 65 mL, all pressures at the atrial 938 Pa, the arterial nodes at 47 mmHg = 6298 Pa (CardiacLab value communicated by the authors). The open mitral valve fills the cavity within about 50 ms, before activation at 110 ms."
+    },
+    "reference solution": "Coarsened for test speed. The full setup (12 elements, 1 ms time step, fifth beat as in genet23 Sec 3.1) gives EDV 135.7 mL, ESV 74.0 mL, peak pressure 12.79 kPa and 5.8 deg of twist at 550 ms; the authors' current CardiacLab code gives 135.7 mL, 74.1 mL, 12.79 kPa and 5.3 deg. Pressure and volume also match genet23 Figs 5-9 (15 cases, mean ESV error 0.6 mL). The torsion curves of Figs 5-9 are not a valid reference: they come from an older CardiacLab inertia term (corrected in March 2022, confirmed by the authors) and show 13.3 deg at 550 ms in Fig 5.",
+    "generated with": "build(ne=3, ncycle=2) from scripts/ChamberCylinder/ChamberCylinder_genet_exact.py on branch claude/chamber-cylinder-3d-verification of github.com/mrp089/svZeroDSolver, then number_of_time_pts_per_cardiac_cycle = 401 (2 ms) and output_interval = 8. That branch also holds the comparison with the digitized genet23 figures, the parameter provenance document and the verification against independent solutions."
+  },
+  "boundary_conditions": [
+    {
+      "bc_name": "ATRIUM",
+      "bc_type": "PRESSURE",
+      "bc_values": {
+        "P": [938.0, 938.0, 603.0, 603.0, 938.0, 938.0],
+        "t": [0.0, 0.05, 0.1, 0.67, 0.7300000000000001, 0.8]
+      }
+    },
+    {
+      "bc_name": "VENOUS",
+      "bc_type": "PRESSURE",
+      "bc_values": {
+        "P": [500.0, 500.0],
+        "t": [0.0, 0.8]
+      }
+    }
+  ],
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 2,
+    "number_of_time_pts_per_cardiac_cycle": 401,
+    "cardiac_period": 0.8,
+    "steady_initial": false,
+    "output_variable_based": true,
+    "absolute_tolerance": 1e-9,
+    "maximum_nonlinear_iterations": 50,
+    "output_all_cycles": false,
+    "integrator": "stiff",
+    "output_interval": 8
+  },
+  "initial_condition": {
+    "pressure_all": 938.0,
+    "volume:ventricle": 6.500000000000003e-5,
+    "pressure:aortic:aortic_root": 6298.0,
+    "pressure:aortic_root:J0": 6298.0,
+    "pressure:J0:arterial": 6298.0,
+    "pressure:arterial:J1": 6298.0,
+    "pressure:J1:distal": 6298.0
+  },
+  "vessels": [
+    {
+      "boundary_conditions": {
+        "inlet": "ATRIUM"
+      },
+      "vessel_id": 0,
+      "vessel_length": 1.0,
+      "vessel_name": "upstream",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 0.0,
+        "C": 0.0
+      }
+    },
+    {
+      "boundary_conditions": {},
+      "vessel_id": 2,
+      "vessel_length": 1.0,
+      "vessel_name": "aortic_root",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 0.0,
+        "C": 2.115e-10
+      }
+    },
+    {
+      "boundary_conditions": {},
+      "vessel_id": 3,
+      "vessel_length": 1.0,
+      "vessel_name": "arterial",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 13500000.0,
+        "C": 2.0158e-8
+      }
+    },
+    {
+      "boundary_conditions": {
+        "outlet": "VENOUS"
+      },
+      "vessel_id": 4,
+      "vessel_length": 1.0,
+      "vessel_name": "distal",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": {
+        "R_poiseuille": 109490000.0,
+        "C": 0.0
+      }
+    }
+  ],
+  "chambers": [
+    {
+      "type": "ChamberCylinder",
+      "name": "ventricle",
+      "values": {
+        "Ri": 0.019034760191327525,
+        "Re": 0.032969171761268755,
+        "length": 0.05710428057398258,
+        "alpha_endo": 60.0,
+        "alpha_epi": -60.0,
+        "gamma": 70.0,
+        "num_elements": 3,
+        "density": 1000.0
+      },
+      "activation_function": {
+        "type": "piecewise_rate",
+        "u_t": [
+          0.0, 0.0375, 0.2375, 0.406451216287, 0.506451216287, 0.518951216287,
+          1.0
+        ],
+        "u_values": [-35.0, -35.0, 35.0, 35.0, 0.0, -35.0, -35.0]
+      },
+      "material": {
+        "type": "mooney_rivlin_exponential",
+        "W1": 7.0,
+        "W2": 0.0,
+        "C0": 700.0,
+        "C1": 2.0,
+        "C2": 50.0,
+        "C3": 4.0
+      },
+      "active_stress": {
+        "type": "linear_series_spring",
+        "sigma_0": 65000.0,
+        "k_s": 100000000.0,
+        "k_0": 260000.0,
+        "mu": 70.0,
+        "alpha": 12.0
+      }
+    }
+  ],
+  "valves": [
+    {
+      "type": "PiecewiseValve",
+      "name": "mitral",
+      "params": {
+        "Rmax": 2000000000.0,
+        "Rmin": 111110.0,
+        "upstream_block": "upstream",
+        "downstream_block": "ventricle"
+      }
+    },
+    {
+      "type": "PiecewiseValve",
+      "name": "aortic",
+      "params": {
+        "Rmax": 1000000000000.0,
+        "Rmin": 76923.0,
+        "upstream_block": "ventricle",
+        "downstream_block": "aortic_root"
+      }
+    }
+  ],
+  "junctions": [
+    {
+      "junction_name": "J0",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["aortic_root"],
+      "outlet_blocks": ["arterial"]
+    },
+    {
+      "junction_name": "J1",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_blocks": ["arterial"],
+      "outlet_blocks": ["distal"]
+    }
+  ]
+}

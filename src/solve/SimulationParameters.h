@@ -14,8 +14,8 @@
 
 #include "ActivationFunction.h"
 #include "ActiveStress.h"
+#include "Material.h"
 #include "Model.h"
-#include "SphereMaterial.h"
 #include "State.h"
 #include "debug.h"
 
@@ -56,7 +56,9 @@ struct SimulationParameters {
   int sim_nliter{0};  ///< Maximum number of non-linear iterations in time
                       ///< integration
   double sim_rho_infty{0.0};  ///< Spectral radius of generalized-alpha
-  int output_interval{0};     ///< Interval of writing output
+  std::string sim_integrator{
+      "genalpha"};         ///< Time integrator: "genalpha" or "stiff"
+  int output_interval{0};  ///< Interval of writing output
 
   bool sim_steady_initial{0};  ///< Start from steady solution
   bool output_variable_based{
@@ -161,19 +163,19 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
     Model& model, const nlohmann::json& j, const std::string& chamber_name);
 
 /**
- * @brief Create a SphereMaterial from JSON (analogous to
+ * @brief Create a Material from JSON (analogous to
  * generate_activation_function)
  *
  * Validates keys against the material type's params, reads scalar parameters,
- * and returns a created SphereMaterial. Caller associates it with a
- * ChamberSphere block via set_material().
+ * and returns a created Material. Caller associates it with a chamber block
+ * (ChamberSphere, ChamberCylinder) via set_material().
  *
  * @param j            JSON object (e.g. chamber_config["material"])
  * @param chamber_name Chamber name for error messages
  * @return Unique pointer to the created material
  */
-std::unique_ptr<SphereMaterial> generate_material(
-    const nlohmann::json& j, const std::string& chamber_name);
+std::unique_ptr<Material> generate_material(const nlohmann::json& j,
+                                            const std::string& chamber_name);
 
 /**
  * @brief Create an ActiveStress model from JSON (analogous to
@@ -181,7 +183,7 @@ std::unique_ptr<SphereMaterial> generate_material(
  *
  * Validates keys against the active stress type's params, reads scalar
  * parameters, and returns a created ActiveStress. Caller associates it with
- * a ChamberSphere block via set_active_stress().
+ * a chamber block (ChamberSphere, ChamberCylinder) via set_active_stress().
  *
  * @param j            JSON object (e.g. chamber_config["active_stress"])
  * @param chamber_name Chamber name for error messages

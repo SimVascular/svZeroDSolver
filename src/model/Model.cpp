@@ -14,6 +14,7 @@ Model::Model() {
   block_factory_map = {
       {"BloodVessel", block_factory<BloodVessel>()},
       {"ChamberSphere", block_factory<ChamberSphere>()},
+      {"ChamberCylinder", block_factory<ChamberCylinder>()},
       {"BloodVesselJunction", block_factory<BloodVesselJunction>()},
       {"ClosedLoopCoronaryLeft", block_factory<ClosedLoopCoronaryLeftBC>()},
       {"ClosedLoopCoronaryRight", block_factory<ClosedLoopCoronaryRightBC>()},

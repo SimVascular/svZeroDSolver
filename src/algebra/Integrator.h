@@ -42,6 +42,7 @@ class Integrator {
   Eigen::Matrix<double, Eigen::Dynamic, 1> ydot_am;
   SparseSystem system;
   Model* model{nullptr};
+  friend class StiffIntegrator;  ///< Uses the scheme's members
 
  public:
   /**
@@ -68,7 +69,7 @@ class Integrator {
    * @brief Destroy the Integrator object
    *
    */
-  ~Integrator();
+  virtual ~Integrator();
 
   /**
    * @brief Delete dynamically allocated memory (in class member
@@ -91,7 +92,7 @@ class Integrator {
    * @param time Current time
    * @return New state
    */
-  State step(const State& state, double time);
+  virtual State step(const State& state, double time);
 
   /**
    * @brief Get average number of nonlinear iterations in all step calls
@@ -100,6 +101,69 @@ class Integrator {
    *
    */
   double avg_nonlin_iter();
+};
+
+/**
+ * @brief Integrator for stiff active mechanics
+ *
+ * The generalized-\f$\alpha\f$ update with spectral radius 0 (L-stable),
+ * augmented with a backtracking line search on the residual norm (damped
+ * Newton) and adaptive sub-stepping: a step that does not converge is retried
+ * as 2, 4, 8, ... equal sub-steps. It converges where plain
+ * generalized-\f$\alpha\f$ does not, e.g. for the force-velocity term of the
+ * active stress law of \cite genet23 together with piecewise-linear valves.
+ * Selected with the simulation parameter `"integrator":
+ * "stiff"`; the parameters `rho_infty` and `max_iter_error_to_warning` do not
+ * apply, and a step that fails at the smallest sub-step throws. Blocks with
+ * persistent memory (e.g. ImpedanceBC) see one accepted step of the nominal
+ * size.
+ */
+class StiffIntegrator : public Integrator {
+ public:
+  /**
+   * @brief Construct a new stiff integrator
+   *
+   * @param model The model to simulate
+   * @param time_step_size Nominal time step size
+   * @param atol Absolute tolerance for non-linear iteration termination
+   * @param max_iter Maximum number of non-linear iterations per sub-step
+   */
+  StiffIntegrator(Model* model, double time_step_size, double atol,
+                  int max_iter);
+
+  /**
+   * @brief Perform a time step, sub-stepping if needed
+   *
+   * @param state Current state
+   * @param time Current time
+   * @return New state
+   */
+  State step(const State& state, double time) override;
+
+ private:
+  int max_subdiv{9};      ///< Maximum number of step halvings (2^9 sub-steps)
+  int max_backtrack{12};  ///< Maximum line-search iterations
+
+  /**
+   * @brief Residual norm at the generalized mid-point of a candidate state
+   *
+   * @param old_state State at the beginning of the step
+   * @param new_state Candidate state at the end of the step
+   * @return Infinity norm of the residual
+   */
+  double residual_norm(const State& old_state, const State& new_state);
+
+  /**
+   * @brief One damped-Newton step of size `dt` starting at `time`
+   *
+   * @param old_state State at the beginning of the sub-step
+   * @param new_state State at the end of the sub-step (output)
+   * @param dt Sub-step size
+   * @param time Time at the beginning of the sub-step
+   * @return true on convergence
+   */
+  bool damped_step(const State& old_state, State& new_state, double dt,
+                   double time);
 };
 
 #endif  // SVZERODSOLVER_ALGEBRA_INTEGRATOR_HPP_

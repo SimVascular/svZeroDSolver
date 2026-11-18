@@ -9,13 +9,14 @@ set(CXXSRCS
   ActivationFunction.cpp
   ActiveStress.cpp
   ParameterHolder.cpp
-  SphereMaterial.cpp
+  Material.cpp
   BloodVesselRC.cpp
   Block.cpp
   BloodVessel.cpp
   BloodVesselCRL.cpp
   BloodVesselJunction.cpp
   ChamberSphere.cpp
+  ChamberCylinder.cpp
   ChamberElastanceInductor.cpp
   ChamberElastanceInductorExponential.cpp
   ClosedLoopCoronaryBC.cpp
@@ -45,7 +46,7 @@ set(HDRS
   ActivationFunction.h
   ActiveStress.h
   ParameterHolder.h
-  SphereMaterial.h
+  Material.h
   BloodVesselRC.h
   Block.h
   BlockType.h
@@ -53,6 +54,7 @@ set(HDRS
   BloodVesselCRL.h
   BloodVesselJunction.h
   ChamberSphere.h
+  ChamberCylinder.h
   ChamberElastanceInductor.h
   ChamberElastanceInductorExponential.h
   ClosedLoopCoronaryBC.h

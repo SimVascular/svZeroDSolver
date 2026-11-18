@@ -17,9 +17,9 @@
 #include "ActiveStress.h"
 #include "BlockType.h"
 #include "DOFHandler.h"
+#include "Material.h"
 #include "Parameter.h"
 #include "SparseSystem.h"
-#include "SphereMaterial.h"
 #include "State.h"
 
 /**
@@ -333,8 +333,8 @@ class Block {
   /**
    * @brief Set active stress model (for chamber blocks that use one).
    *
-   * Default no-op. Overridden by ChamberSphere to take ownership of the
-   * active stress model.
+   * Default no-op. Overridden by ChamberSphere and ChamberCylinder to take
+   * ownership of the active stress law.
    *
    * @param as Unique pointer to the active stress model (caller transfers
    * ownership)
@@ -344,14 +344,14 @@ class Block {
   }
 
   /**
-   * @brief Set wall material (for ChamberSphere blocks).
+   * @brief Set wall material (for chamber blocks that use one).
    *
-   * Default no-op. Overridden by ChamberSphere to take ownership of the
-   * material.
+   * Default no-op. Overridden by ChamberSphere and ChamberCylinder to take
+   * ownership of the material.
    *
    * @param m Unique pointer to the material (caller transfers ownership)
    */
-  virtual void set_material(std::unique_ptr<SphereMaterial> m) {
+  virtual void set_material(std::unique_ptr<Material> m) {
     (void)m;  // Included to avoid unused parameter warning
   }
 };

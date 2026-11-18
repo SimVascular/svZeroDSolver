@@ -120,3 +120,91 @@ State Integrator::step(const State& old_state, double time) {
 double Integrator::avg_nonlin_iter() {
   return (double)n_nonlin_iter / (double)n_iter;
 }
+
+StiffIntegrator::StiffIntegrator(Model* model, double time_step_size,
+                                 double atol, int max_iter)
+    : Integrator(model, time_step_size, 0.0, atol, max_iter) {}
+
+double StiffIntegrator::residual_norm(const State& old_state,
+                                      const State& new_state) {
+  ydot_am.setZero();
+  y_af.setZero();
+  ydot_am += old_state.ydot + (new_state.ydot - old_state.ydot) * alpha_m;
+  y_af += old_state.y + (new_state.y - old_state.y) * alpha_f;
+  model->update_solution(system, y_af, ydot_am);
+  system.update_residual(y_af, ydot_am);
+  return system.residual.cwiseAbs().maxCoeff();
+}
+
+bool StiffIntegrator::damped_step(const State& old_state, State& new_state,
+                                  double dt, double time) {
+  // Coefficients of this (sub-)step
+  const double y_coeff_dt = gamma * dt;
+  const double y_coeff_jacobian_dt = alpha_f * y_coeff_dt;
+
+  // Predictor: constant y, consistent ydot
+  new_state = State::Zero(size);
+  new_state.ydot += old_state.ydot * ydot_init_coeff;
+  new_state.y += old_state.y;
+
+  model->update_time(system, time + alpha_f * dt);
+
+  for (int i = 0; i < max_iter; i++) {
+    double res_norm = residual_norm(old_state, new_state);
+    if (res_norm < atol) {
+      return true;
+    }
+
+    system.update_jacobian(alpha_m, y_coeff_jacobian_dt);
+    system.solve();
+    model->post_solve(new_state.y);
+    n_nonlin_iter++;
+
+    // Backtracking line search on the residual norm (damped Newton)
+    double lambda = 1.0;
+    bool accepted = false;
+    for (int bt = 0; bt < max_backtrack; bt++) {
+      State trial = new_state;
+      trial.ydot += system.dydot * lambda;
+      trial.y += system.dydot * (y_coeff_dt * lambda);
+      if (residual_norm(old_state, trial) < res_norm) {
+        new_state = trial;
+        accepted = true;
+        break;
+      }
+      lambda *= 0.5;
+    }
+    // If no damping reduces the residual, take the full step
+    if (!accepted) {
+      new_state.ydot += system.dydot;
+      new_state.y += system.dydot * y_coeff_dt;
+    }
+  }
+  return false;
+}
+
+State StiffIntegrator::step(const State& old_state, double time) {
+  n_iter++;
+  int nsub = 1;
+  for (int level = 0; level <= max_subdiv; level++, nsub *= 2) {
+    const double dt = time_step_size / nsub;
+    State st = old_state;
+    bool ok = true;
+    for (int k = 0; k < nsub; k++) {
+      State next;
+      if (!damped_step(st, next, dt, time + k * dt)) {
+        ok = false;
+        break;
+      }
+      st = next;
+    }
+    if (ok) {
+      model->accept_timestep(st.y);
+      return st;
+    }
+  }
+  throw std::runtime_error(
+      "Stiff integrator: no convergence after the maximum number of step "
+      "halvings at time " +
+      std::to_string(time));
+}

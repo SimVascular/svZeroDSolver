@@ -324,23 +324,24 @@ std::unique_ptr<ActivationFunction> generate_activation_function(
   return act_func;
 }
 
-std::unique_ptr<SphereMaterial> generate_material(
-    const nlohmann::json& j, const std::string& chamber_name) {
+std::unique_ptr<Material> generate_material(const nlohmann::json& j,
+                                            const std::string& chamber_name) {
   if (j.is_null() || !j.is_object()) {
     throw std::runtime_error(
         "Missing 'material' for chamber " + chamber_name +
         ". Required with structure: {\"type\": \"mooney_rivlin\", \"W1\": "
-        "10e3, \"W2\": 40, \"eta\": 10.0} (or type exponential with C0, C1, "
-        "C2, C3, eta).");
+        "10e3, \"W2\": 40} (or type exponential with C0, C1, C2, C3; "
+        "mooney_rivlin_exponential with W1, W2, C0, C1, C2, C3).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in material for chamber " + chamber_name +
-        ". Must be one of: mooney_rivlin, exponential");
+        ". Must be one of: mooney_rivlin, exponential, "
+        "mooney_rivlin_exponential");
   }
 
   std::string type_str = j["type"];
-  auto material = SphereMaterial::create(type_str);
+  auto material = Material::create(type_str);
   read_component_params(j, *material, "material", chamber_name);
   return material;
 }
@@ -353,13 +354,16 @@ std::unique_ptr<ActiveStress> generate_active_stress(
         ". Required with structure: {\"type\": \"strain_independent\", "
         "\"alpha_max\": 30.0, \"alpha_min\": -30.0, \"sigma_max\": 185e3} "
         "(or type strain_dependent with E_s, mu, alpha_r, alpha, k_0, "
-        "sigma_0, n0_e_c, n0_values, m0_e_c, m0_values).");
+        "sigma_0, n0_e_c, n0_values, m0_e_c, m0_values; linear_series_spring "
+        "with sigma_0, "
+        "k_s, k_0, mu, alpha, n0_e_c, n0_values).");
   }
   if (!j.contains("type") || !j["type"].is_string()) {
     throw std::runtime_error(
         "Missing or invalid 'type' in active_stress for chamber " +
         chamber_name +
-        ". Must be one of: strain_independent, strain_dependent");
+        ". Must be one of: strain_independent, strain_dependent, "
+        "linear_series_spring");
   }
 
   std::string type_str = j["type"];
@@ -447,6 +451,14 @@ SimulationParameters load_simulation_params(const nlohmann::json& config) {
         "`simulation_parameters.steady_initial = false`.");
   }
   sim_params.sim_rho_infty = sim_config.value("rho_infty", 0.5);
+  sim_params.sim_integrator = sim_config.value("integrator", "genalpha");
+  if (sim_params.sim_integrator != "genalpha" &&
+      sim_params.sim_integrator != "stiff") {
+    throw std::runtime_error(
+        "simulation_parameters.integrator must be \"genalpha\" or \"stiff\", "
+        "got \"" +
+        sim_params.sim_integrator + "\".");
+  }
   sim_params.output_variable_based =
       sim_config.value("output_variable_based", false);
   sim_params.output_interval = sim_config.value("output_interval", 1);
@@ -923,7 +935,7 @@ void create_chambers(
 
     // Create and set material and active stress model for chamber types
     // that use one
-    if (chamber_type == "ChamberSphere") {
+    if (chamber_type == "ChamberSphere" || chamber_type == "ChamberCylinder") {
       auto mat = generate_material(chamber_config["material"], chamber_name);
       model.get_block(chamber_name)->set_material(std::move(mat));
 

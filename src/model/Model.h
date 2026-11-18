@@ -21,6 +21,7 @@
 #include "BloodVesselCRL.h"
 #include "BloodVesselJunction.h"
 #include "BloodVesselRC.h"
+#include "ChamberCylinder.h"
 #include "ChamberElastanceInductor.h"
 #include "ChamberElastanceInductorExponential.h"
 #include "ChamberSphere.h"

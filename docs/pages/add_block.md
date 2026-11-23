@@ -45,23 +45,17 @@ Below are details on the steps required to implement a new block in svZeroDSolve
   ```
   * In the above function, `num_equations` is the number of governing equations for the new block. 
   * `internal_var_names` is a list of strings that specify names for variables that are internal to the block, i.e. all variables for the block apart from the flow and pressure at the block's inlets and outlets.
-  * `output_var_names` names **post-processing variables**: quantities the block reports but that appear in no governing equation, of this block or any other.
+  * `output_var_names` names **post-processing variables**: quantities the block reports but that appear in no governing equation, of this block or any other. See below.
 
 <p> <br> </p>
 
 ### Post-processing variables
 
-Some quantities are worth reporting but drive nothing: a valve's open/closed
-state, the passive part of a wall stress, a derived strain. Giving such a
-quantity its own governing equation works, but it costs a row and a column in
-every linear solve, and its residual joins the convergence check, so a
-quantity that jumps can hold up a step that is otherwise converged.
-`ValveTanh` used to spend an equation on `valve_status` this way, and
-`ChamberSphere` with the `strain_dependent` active stress spent four.
-
-Declare it as a **post-processing variable** instead. It appears in the state
-vector and in the output like any other variable, but it has no equation: no
-row, no column, never solved for, no part in the convergence check.
+A post-processing variable is reported like any other variable but has no
+governing equation: no row, no column, never solved for, no part in the
+convergence check. Use one for a quantity that is only reported and that no
+equation reads back, such as a valve's open/closed state, the passive part of
+a wall stress or a derived strain. It takes two steps.
 
 **1. Name it** in the fourth argument of `setup_dofs_`:
 
@@ -72,7 +66,7 @@ void MyNewBlock::setup_dofs(DOFHandler &dofhandler) {
 ```
 
 **2. Compute it** by overriding `update_outputs`, which the integrator calls
-once per accepted time step, after the Newton iteration has converged:
+once per accepted time step:
 
 ```
 void MyNewBlock::update_outputs(
@@ -83,35 +77,33 @@ void MyNewBlock::update_outputs(
 ```
 
 Read the converged state out of `y` and `ydot` and write the result back into
-`y`. Indices work exactly as in the governing equations: post-processing
-variables extend `global_var_ids` behind the internal ones, in the order
-declared, so they are its last `output_var_names.size()` entries. There is
-nothing else to do; do not register the variable yourself.
+`y`. Indices work as in the governing equations: post-processing variables
+extend `global_var_ids` behind the internal ones, in the order declared, so
+they are its last entries. Do not register them yourself.
 
-Because the value is computed after the step is accepted, it is the value at
-the end of the step. A variable solved for as part of the system is instead
-enforced at the generalized-\f$\alpha\f$ mid-point and extrapolated from
-there, which makes a quantity that switches overshoot and ring for a few steps
-afterwards.
+The reported value is the one at the end of the step. A variable solved for as
+part of the system is instead enforced at the generalized-\f$\alpha\f$
+mid-point and extrapolated from there, so a quantity that switches overshoots
+and rings for a few steps afterwards.
 
-#### How it works
+`ValveTanh` and `ChamberSphere` are worked examples.
 
-`Model::finalize` registers variables in two passes: first every block's
-equations and solved variables, then every block's post-processing variables.
+#### Layout of the state vector
+
+`Model::finalize` registers variables in two passes, every block's equations
+and solved variables first and every block's post-processing variables second.
 Post-processing variables therefore occupy the tail of the state vector, and
-the solved system stays a dense leading block of it:
+the solved system is a dense leading block of it:
 
 ```
 y = [ solved variables ........... | post-processing variables ]
       0 .. get_num_equations()-1     .. get_num_variables()-1
 ```
 
-`DOFHandler::get_num_equations()` gives the size of the system that is
-assembled and solved; `DOFHandler::get_num_variables()` gives the length of the
-state vector. They are equal in a model with no post-processing variables.
-The integrator sizes the `SparseSystem` with the former and updates only
-`y.head(num_equations)`, so the extra entries cost nothing per Newton
-iteration.
+`DOFHandler::get_num_equations()` is the size of the system that is assembled
+and solved, `DOFHandler::get_num_variables()` the length of the state vector;
+they are equal in a model without post-processing variables. Only the leading
+block takes part in a Newton iteration, so the extra entries cost nothing.
 
 <p> <br> </p>
 

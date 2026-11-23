@@ -18,7 +18,8 @@ void Block::setup_params_(const std::vector<int>& param_ids) {
 }
 
 void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
-                        const std::list<std::string>& internal_var_names) {
+                        const std::list<std::string>& internal_var_names,
+                        const std::list<std::string>& output_var_names) {
   // Collect external DOFs from inlet nodes
   for (auto& inlet_node : inlet_nodes) {
     global_var_ids.push_back(inlet_node->pres_dof);
@@ -36,6 +37,10 @@ void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
     global_var_ids.push_back(
         dofhandler.register_variable(int_name + ":" + this->get_name()));
   }
+
+  // Registered by Model::finalize in a second pass, so they land behind
+  // every solved variable
+  this->output_var_names = output_var_names;
 
   // Register equations of block
   for (int i = 0; i < num_equations; i++) {
@@ -62,6 +67,10 @@ void Block::update_solution(
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {}
 
 void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
+
+void Block::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {}
 
 void Block::accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
 }

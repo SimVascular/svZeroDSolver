@@ -18,12 +18,14 @@ void Block::setup_params_(const std::vector<int>& param_ids) {
 }
 
 void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
-                        const std::list<std::string>& internal_var_names) {
+                        const std::list<std::string>& internal_var_names,
+                        const std::list<std::string>& output_var_names) {
   // A block contributes one equation per variable it owns: each connection
   // contributes one of the two degrees of freedom of its node (the other
   // belongs to the block on the far side), plus one per internal variable.
-  // A block with too few connections would otherwise index past the end of
-  // global_var_ids while assembling, which used to segfault.
+  // Output variables are not solved for and have no equation, so they do not
+  // count here. A block with too few connections would otherwise index past
+  // the end of global_var_ids while assembling, which used to segfault.
   const int num_connections =
       static_cast<int>(inlet_nodes.size() + outlet_nodes.size());
   const int num_required =
@@ -65,6 +67,10 @@ void Block::setup_dofs_(DOFHandler& dofhandler, int num_equations,
         dofhandler.register_variable(int_name + ":" + this->get_name()));
   }
 
+  // Registered by Model::finalize in a second pass, so they land behind
+  // every solved variable
+  this->output_var_names = output_var_names;
+
   // Register equations of block
   for (int i = 0; i < num_equations; i++) {
     global_eqn_ids.push_back(dofhandler.register_equation(get_name()));
@@ -90,6 +96,10 @@ void Block::update_solution(
     const Eigen::Matrix<double, Eigen::Dynamic, 1>& dy) {}
 
 void Block::post_solve(Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {}
+
+void Block::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {}
 
 void Block::accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y) {
 }

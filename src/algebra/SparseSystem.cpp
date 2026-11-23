@@ -8,6 +8,8 @@
 SparseSystem::SparseSystem() {}
 
 SparseSystem::SparseSystem(int n) {
+  num_equations = n;
+
   F = Eigen::SparseMatrix<double>(n, n);
   E = Eigen::SparseMatrix<double>(n, n);
   dC_dy = Eigen::SparseMatrix<double>(n, n);
@@ -37,11 +39,14 @@ void SparseSystem::reserve(Model* model) {
   model->update_constant(*this);
   model->update_time(*this, 0.0);
 
+  // Covers every variable: blocks index it through their global variable IDs
+  const int state_size = model->dofhandler.get_num_variables();
+
   Eigen::Matrix<double, Eigen::Dynamic, 1> dummy_y =
-      Eigen::Matrix<double, Eigen::Dynamic, 1>::Ones(residual.size());
+      Eigen::Matrix<double, Eigen::Dynamic, 1>::Ones(state_size);
 
   Eigen::Matrix<double, Eigen::Dynamic, 1> dummy_dy =
-      Eigen::Matrix<double, Eigen::Dynamic, 1>::Ones(residual.size());
+      Eigen::Matrix<double, Eigen::Dynamic, 1>::Ones(state_size);
 
   model->update_solution(*this, dummy_y, dummy_dy);
 
@@ -58,10 +63,18 @@ void SparseSystem::reserve(Model* model) {
 void SparseSystem::update_residual(
     Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
+  // Post-processing variables sit behind the solved ones and have no
+  // equation. The products below need a plain dense vector, so the solved
+  // block is mapped instead of taken as a sub-expression of y
+  Eigen::Map<const Eigen::Matrix<double, Eigen::Dynamic, 1>> y_solved(
+      y.data(), num_equations);
+  Eigen::Map<const Eigen::Matrix<double, Eigen::Dynamic, 1>> ydot_solved(
+      ydot.data(), num_equations);
+
   residual.setZero();
   residual -= C;
-  residual.noalias() -= E * ydot;
-  residual.noalias() -= F * y;
+  residual.noalias() -= E * ydot_solved;
+  residual.noalias() -= F * y_solved;
 }
 
 void SparseSystem::update_jacobian(double time_coeff_ydot,

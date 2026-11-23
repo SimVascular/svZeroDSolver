@@ -63,8 +63,9 @@ void SparseSystem::reserve(Model* model) {
 void SparseSystem::update_residual(
     Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
     Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
-  // Post-processing variables sit behind the solved ones and have no equation.
-  // Map rather than head() so the products see a plain dense vector
+  // Post-processing variables sit behind the solved ones and have no
+  // equation. The products below need a plain dense vector, so the solved
+  // block is mapped instead of taken as a sub-expression of y
   Eigen::Map<const Eigen::Matrix<double, Eigen::Dynamic, 1>> y_solved(
       y.data(), num_equations);
   Eigen::Map<const Eigen::Matrix<double, Eigen::Dynamic, 1>> ydot_solved(

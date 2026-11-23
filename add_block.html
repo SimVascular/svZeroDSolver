@@ -133,13 +133,36 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <h3>Set up the degrees of freedom</h3>
 <ul>
 <li>The class must have a <span class="tt">setup_dofs(<a class="el" href="class_d_o_f_handler.html" title="Degree-of-freedom handler.">DOFHandler</a> &amp;dofhandler)</span> function.<ul>
-<li>This function typically only includes a call to the following function: <div class="fragment"><div class="line">Block::setup_dofs_(DOFHandler &amp;dofhandler, int num_equations, const std::list&lt;std::string&gt; &amp;internal_var_names)</div>
+<li>This function typically only includes a call to the following function: <div class="fragment"><div class="line">Block::setup_dofs_(DOFHandler &amp;dofhandler, int num_equations, const std::list&lt;std::string&gt; &amp;internal_var_names, const std::list&lt;std::string&gt; &amp;output_var_names = {})</div>
 </div><!-- fragment --></li>
 <li>In the above function, <span class="tt">num_equations</span> is the number of governing equations for the new block.</li>
 <li><span class="tt">internal_var_names</span> is a list of strings that specify names for variables that are internal to the block, i.e. all variables for the block apart from the flow and pressure at the block's inlets and outlets.</li>
+<li><span class="tt">output_var_names</span> names <b>post-processing variables</b>: quantities the block reports but that appear in no governing equation, of this block or any other. See below.</li>
 </ul>
 </li>
 </ul>
+<p><br  />
+ </p>
+<h3>Post-processing variables</h3>
+<p>A post-processing variable is reported like any other variable but has no governing equation: no row, no column, never solved for, no part in the convergence check. Use one for a quantity that is only reported and that no equation reads back, such as a valve's open/closed state, the passive part of a wall stress or a derived strain. It takes two steps.</p>
+<p><b>1. Name it</b> in the fourth argument of <span class="tt">setup_dofs_</span>:</p>
+<div class="fragment"><div class="line">void MyNewBlock::setup_dofs(DOFHandler &amp;dofhandler) {</div>
+<div class="line">  Block::setup_dofs_(dofhandler, 2, {}, {&quot;my_output&quot;});</div>
+<div class="line">}</div>
+</div><!-- fragment --><p><b>2. Compute it</b> by overriding <span class="tt">update_outputs</span>, which the integrator calls once per accepted time step:</p>
+<div class="fragment"><div class="line">void MyNewBlock::update_outputs(</div>
+<div class="line">    Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;y,</div>
+<div class="line">    const Eigen::Matrix&lt;double, Eigen::Dynamic, 1&gt; &amp;ydot) {</div>
+<div class="line">  y[global_var_ids[4]] = 0.5 * (y[global_var_ids[0]] - y[global_var_ids[2]]);</div>
+<div class="line">}</div>
+</div><!-- fragment --><p>Read the converged state out of <span class="tt">y</span> and <span class="tt">ydot</span> and write the result back into <span class="tt">y</span>. Indices work as in the governing equations: post-processing variables extend <span class="tt">global_var_ids</span> behind the internal ones, in the order declared, so they are its last entries. Do not register them yourself.</p>
+<p>The reported value is the one at the end of the step. A variable solved for as part of the system is instead enforced at the generalized- <picture><source srcset="form_0_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$\alpha$" src="form_0.png" width="11" height="9"/></picture> mid-point and extrapolated from there, so a quantity that switches overshoots and rings for a few steps afterwards.</p>
+<p><span class="tt"><a class="el" href="class_valve_tanh.html" title="Valve (tanh) block.">ValveTanh</a></span> and <span class="tt"><a class="el" href="class_chamber_sphere.html" title="Spherical heart chamber model.">ChamberSphere</a></span> are worked examples.</p>
+<h4>Layout of the state vector</h4>
+<p><span class="tt"><a class="el" href="class_model.html#a15a519aed6d0924b98b00ed6899c62b5" title="Finalize the model after all blocks, nodes and parameters have been added.">Model::finalize</a></span> registers variables in two passes, every block's equations and solved variables first and every block's post-processing variables second. Post-processing variables therefore occupy the tail of the state vector, and the solved system is a dense leading block of it:</p>
+<div class="fragment"><div class="line">y = [ solved variables ........... | post-processing variables ]</div>
+<div class="line">      0 .. get_num_equations()-1     .. get_num_variables()-1</div>
+</div><!-- fragment --><p><span class="tt"><a class="el" href="class_d_o_f_handler.html#a1c033c7b25c7e536f9c256c3213f16ae" title="Get the number of equations, the size of the solved system.">DOFHandler::get_num_equations()</a></span> is the size of the system that is assembled and solved, <span class="tt"><a class="el" href="class_d_o_f_handler.html#a51ec694174b2c808b1607baba752f7bd" title="Get the number of variables.">DOFHandler::get_num_variables()</a></span> the length of the state vector; they are equal in a model without post-processing variables. Only the leading block takes part in a Newton iteration, so the extra entries cost nothing.</p>
 <p><br  />
  </p>
 <h3>Other class members</h3>
@@ -173,6 +196,7 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <li>The local state vector for each block is always arranged as <span class="tt">y = [P_in, Q_in, P_out, Q_out, InternalVariable_1, ..., InternalVariable_N]</span>. <br  />
 <ul>
 <li>Here, <span class="tt">InternalVariable*</span> refers to any variable in the governing equations that are not the inlet and outlet flow and pressure. These are the same as those discussed above in the function <span class="tt">setup_dofs</span>.</li>
+<li>Any post-processing variables of the block follow the internal ones, but they do not appear in the governing equations.</li>
 <li>The corresponding time-derivative of this state vector is <span class="tt">ydot = dP_in/dt, dQ_in/dt, ...]</span>.</li>
 <li><em>Note: The length of the state vector is typically four (inlet and outlet pressure and flow) plus the number of internal variables.</em></li>
 </ul>
@@ -198,10 +222,10 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <h3>An example</h3>
 <ul>
 <li><p class="startli">Assume a block has the following non-linear governing equations:</p>
-<p class="startli"><picture><source srcset="form_215_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $" src="form_215.png" width="270" height="26"/></picture></p>
-<p class="startli"><picture><source srcset="form_216_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $" src="form_216.png" width="311" height="26"/></picture></p><ul>
-<li>For this block, <picture><source srcset="form_217_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in}$" src="form_217.png" width="26" height="19"/></picture> and <picture><source srcset="form_218_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in}$" src="form_218.png" width="28" height="19"/></picture> are the pressure and flow at the inlet respectively, <picture><source srcset="form_219_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out}$" src="form_219.png" width="34" height="19"/></picture> and <picture><source srcset="form_220_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out}$" src="form_220.png" width="36" height="19"/></picture> are the pressure and flow at the outlet, and <picture><source srcset="form_221_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$I_{1}$" src="form_221.png" width="17" height="19"/></picture> is an internal variable.</li>
-<li>The state vector is <picture><source srcset="form_222_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$" src="form_222.png" width="188" height="21"/></picture>.</li>
+<p class="startli"><picture><source srcset="form_214_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ a \frac{dQ_{in}}{dt} + b P_{in} + c \frac{dP_{in}}{dt} Q_{in} + d = 0 $" src="form_214.png" width="270" height="26"/></picture></p>
+<p class="startli"><picture><source srcset="form_215_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$ e \frac{dP_{out}}{dt} + f Q_{out} Q_{out} + g P_{out} + h I_{1} = 0 $" src="form_215.png" width="311" height="26"/></picture></p><ul>
+<li>For this block, <picture><source srcset="form_216_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{in}$" src="form_216.png" width="26" height="19"/></picture> and <picture><source srcset="form_217_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{in}$" src="form_217.png" width="28" height="19"/></picture> are the pressure and flow at the inlet respectively, <picture><source srcset="form_218_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$P_{out}$" src="form_218.png" width="34" height="19"/></picture> and <picture><source srcset="form_219_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$Q_{out}$" src="form_219.png" width="36" height="19"/></picture> are the pressure and flow at the outlet, and <picture><source srcset="form_220_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$I_{1}$" src="form_220.png" width="17" height="19"/></picture> is an internal variable.</li>
+<li>The state vector is <picture><source srcset="form_221_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaInl" alt="$[P_{in}, Q_{in}, P_{out}, Q_{out}, I_{1}]$" src="form_221.png" width="188" height="21"/></picture>.</li>
 <li>The contributions to the local <span class="tt">F</span> matrix are <span class="tt">F[0,0] = b</span>, <span class="tt">F[1,2] = g</span> and <span class="tt">F[1,4] = h</span>.</li>
 <li>The contributions to the local <span class="tt">E</span> matrix are <span class="tt">E[0,1] = a</span> and <span class="tt">E[1,2] = e</span>.</li>
 <li>The contributions to the local <span class="tt">C</span> vector are <span class="tt">C[0] = c*(dP_in/dt)*Q_in + d</span> and <span class="tt">C[1] = f*Q_out*Q_out</span>.</li>

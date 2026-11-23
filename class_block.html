@@ -125,8 +125,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa63c92836a51ba1b8b13e88011fba193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update vessel type of the block.  <br /></td></tr>
 <tr class="memitem:a08fb7d659427c235fc3f64ab0d042ea9" id="r_a08fb7d659427c235fc3f64ab0d042ea9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a08fb7d659427c235fc3f64ab0d042ea9">setup_params_</a> (const std::vector&lt; int &gt; &amp;param_ids)</td></tr>
 <tr class="memdesc:a08fb7d659427c235fc3f64ab0d042ea9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameter IDs for the block.  <br /></td></tr>
-<tr class="memitem:afc10af316c08e7a78881726e9288b2b0" id="r_afc10af316c08e7a78881726e9288b2b0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#afc10af316c08e7a78881726e9288b2b0">setup_dofs_</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, int num_equations, const std::list&lt; std::string &gt; &amp;internal_var_names)</td></tr>
-<tr class="memdesc:afc10af316c08e7a78881726e9288b2b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
+<tr class="memitem:a88e54826c64c778d06978b55d057ff0e" id="r_a88e54826c64c778d06978b55d057ff0e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a88e54826c64c778d06978b55d057ff0e">setup_dofs_</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, int num_equations, const std::list&lt; std::string &gt; &amp;internal_var_names, const std::list&lt; std::string &gt; &amp;output_var_names={})</td></tr>
+<tr class="memdesc:a88e54826c64c778d06978b55d057ff0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
 <tr class="memitem:a51da88989c9ae7d558cbbf73a574a930" id="r_a51da88989c9ae7d558cbbf73a574a930"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a51da88989c9ae7d558cbbf73a574a930">setup_dofs</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler)</td></tr>
 <tr class="memdesc:a51da88989c9ae7d558cbbf73a574a930"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
 <tr class="memitem:a98bac8f1f93e2876efa7a7d59e302569" id="r_a98bac8f1f93e2876efa7a7d59e302569"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a98bac8f1f93e2876efa7a7d59e302569">setup_model_dependent_params</a> ()</td></tr>
@@ -141,6 +141,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="memitem:aee19992d7c486a747b7cd99bd3dc1039" id="r_aee19992d7c486a747b7cd99bd3dc1039"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#aee19992d7c486a747b7cd99bd3dc1039">update_outputs</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;ydot)</td></tr>
+<tr class="memdesc:aee19992d7c486a747b7cd99bd3dc1039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the post-processing variables of the block.  <br /></td></tr>
 <tr class="memitem:a215561fcebf3173d59fc47a3aa404c21" id="r_a215561fcebf3173d59fc47a3aa404c21"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a215561fcebf3173d59fc47a3aa404c21">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:a215561fcebf3173d59fc47a3aa404c21"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept a converged time-step.  <br /></td></tr>
 <tr class="memitem:a03f617f1a657a58b345a68818523c5e6" id="r_a03f617f1a657a58b345a68818523c5e6"><td class="memItemLeft">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a03f617f1a657a58b345a68818523c5e6">get_persistent_state</a> () const</td></tr>
@@ -186,6 +188,8 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:ab64718f69f658fd3f66eb959f9349b9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global variable indices of the local element contributions.  <br /></td></tr>
 <tr class="memitem:a7851447ef34b1f916a056b572713e9db" id="r_a7851447ef34b1f916a056b572713e9db"><td class="memItemLeft">std::vector&lt; int &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a7851447ef34b1f916a056b572713e9db">global_eqn_ids</a></td></tr>
 <tr class="memdesc:a7851447ef34b1f916a056b572713e9db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global equation indices of the local element contributions.  <br /></td></tr>
+<tr class="memitem:a74ed35e57c67d67aaba35bab2f68825e" id="r_a74ed35e57c67d67aaba35bab2f68825e"><td class="memItemLeft">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a74ed35e57c67d67aaba35bab2f68825e">output_var_names</a></td></tr>
+<tr class="memdesc:a74ed35e57c67d67aaba35bab2f68825e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Names of the post-processing variables of the block.  <br /></td></tr>
 <tr class="memitem:a7388d573014251179f564ccef95ad52e" id="r_a7388d573014251179f564ccef95ad52e"><td class="memItemLeft"><a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7388d573014251179f564ccef95ad52e">num_triplets</a></td></tr>
 <tr class="memdesc:a7388d573014251179f564ccef95ad52e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of triplets of element.  <br /></td></tr>
 </table>
@@ -626,8 +630,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="afc10af316c08e7a78881726e9288b2b0" name="afc10af316c08e7a78881726e9288b2b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc10af316c08e7a78881726e9288b2b0">&#9670;&#160;</a></span>setup_dofs_()</h2>
+<a id="a88e54826c64c778d06978b55d057ff0e" name="a88e54826c64c778d06978b55d057ff0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88e54826c64c778d06978b55d057ff0e">&#9670;&#160;</a></span>setup_dofs_()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -645,7 +649,12 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::list&lt; std::string &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>internal_var_names</em></span>&#160;)</td>
+          <td class="paramtype">const std::list&lt; std::string &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>internal_var_names</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::list&lt; std::string &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>output_var_names</em></span><span class="paramdefsep"> = </span><span class="paramdefval">{}</span>&#160;)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -656,7 +665,8 @@ Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">dofhandler</td><td>Degree-of-freedom handler to register variables and equations at </td></tr>
     <tr><td class="paramname">num_equations</td><td>Number of equations of the block </td></tr>
-    <tr><td class="paramname">internal_var_names</td><td>Number of internal variables of the block </td></tr>
+    <tr><td class="paramname">internal_var_names</td><td>Names of the internal variables of the block </td></tr>
+    <tr><td class="paramname">output_var_names</td><td>Names of the post-processing variables of the block, see <a class="el" href="class_d_o_f_handler.html#ae6c75682c800e3e4acea7b6253ecfa20" title="Register a new post-processing variable at the DOFHandler.">DOFHandler::register_output_variable</a>. Their indices follow the internal ones in <a class="el" href="#ab64718f69f658fd3f66eb959f9349b9e" title="global_var_ids">global_var_ids</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -847,6 +857,47 @@ Public Attributes</h2></td></tr>
 </dl>
 
 <p>Reimplemented in <a class="el" href="class_blood_vessel.html#a6f575209396b7e6daee2944f65f6801c">BloodVessel</a>, <a class="el" href="class_blood_vessel_c_r_l.html#af846f2a602dda64f68a14cd3e6a8c657">BloodVesselCRL</a>, and <a class="el" href="class_blood_vessel_junction.html#a7ac821601ea3acc61af121c2af3466e9">BloodVesselJunction</a>.</p>
+
+</div>
+</div>
+<a id="aee19992d7c486a747b7cd99bd3dc1039" name="aee19992d7c486a747b7cd99bd3dc1039"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee19992d7c486a747b7cd99bd3dc1039">&#9670;&#160;</a></span>update_outputs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Block::update_outputs </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>y</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ydot</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compute the post-processing variables of the block. </p>
+<p>Called once per accepted time step. Write each output variable into <code class="param">y</code> at its index in <a class="el" href="#ab64718f69f658fd3f66eb959f9349b9e" title="global_var_ids">global_var_ids</a>, where they are the last entries, one per name in <a class="el" href="#a74ed35e57c67d67aaba35bab2f68825e" title="output_var_names">output_var_names</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>Accepted state vector, to write the output variables into </td></tr>
+    <tr><td class="paramname">ydot</td><td>Accepted derivative of the state vector </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented in <a class="el" href="class_chamber_sphere.html#ab73dc997c45c1a59cadbac2ee3286dff">ChamberSphere</a>, and <a class="el" href="class_valve_tanh.html#a5225193bbb34d663be09f26b5514dd43">ValveTanh</a>.</p>
 
 </div>
 </div>
@@ -1168,6 +1219,23 @@ $" src="form_31.png" width="15" height="15"/></picture> denoting inlet pressure,
 </div><div class="memdoc">
 
 <p>Outlet nodes. </p>
+
+</div>
+</div>
+<a id="a74ed35e57c67d67aaba35bab2f68825e" name="a74ed35e57c67d67aaba35bab2f68825e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74ed35e57c67d67aaba35bab2f68825e">&#9670;&#160;</a></span>output_var_names</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::list&lt;std::string&gt; Block::output_var_names</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Names of the post-processing variables of the block. </p>
+<p>Declared in setup_dofs_ and registered by <a class="el" href="class_model.html#a15a519aed6d0924b98b00ed6899c62b5" title="Finalize the model after all blocks, nodes and parameters have been added.">Model::finalize</a>, which appends their indices to <a class="el" href="#ab64718f69f658fd3f66eb959f9349b9e" title="global_var_ids">global_var_ids</a>. </p>
 
 </div>
 </div>

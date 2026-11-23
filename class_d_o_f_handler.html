@@ -108,14 +108,16 @@ document.addEventListener('DOMContentLoaded', codefold.init);
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6a4a5151dc3a62a4c24f59039a30e3ab" id="r_a6a4a5151dc3a62a4c24f59039a30e3ab"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a6a4a5151dc3a62a4c24f59039a30e3ab">size</a> () const</td></tr>
-<tr class="memdesc:a6a4a5151dc3a62a4c24f59039a30e3ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the size of the system.  <br /></td></tr>
 <tr class="memitem:a1c033c7b25c7e536f9c256c3213f16ae" id="r_a1c033c7b25c7e536f9c256c3213f16ae"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a1c033c7b25c7e536f9c256c3213f16ae">get_num_equations</a> () const</td></tr>
-<tr class="memdesc:a1c033c7b25c7e536f9c256c3213f16ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of equations.  <br /></td></tr>
+<tr class="memdesc:a1c033c7b25c7e536f9c256c3213f16ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of equations, the size of the solved system.  <br /></td></tr>
+<tr class="memitem:aed2455c66d69580f8a2248660c15e215" id="r_aed2455c66d69580f8a2248660c15e215"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#aed2455c66d69580f8a2248660c15e215">get_num_output_variables</a> () const</td></tr>
+<tr class="memdesc:aed2455c66d69580f8a2248660c15e215"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of post-processing variables.  <br /></td></tr>
 <tr class="memitem:a51ec694174b2c808b1607baba752f7bd" id="r_a51ec694174b2c808b1607baba752f7bd"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a51ec694174b2c808b1607baba752f7bd">get_num_variables</a> () const</td></tr>
 <tr class="memdesc:a51ec694174b2c808b1607baba752f7bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the number of variables.  <br /></td></tr>
 <tr class="memitem:a0bd43f0560bf0f8f9880555eed418ed9" id="r_a0bd43f0560bf0f8f9880555eed418ed9"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a0bd43f0560bf0f8f9880555eed418ed9">register_variable</a> (const std::string &amp;name)</td></tr>
 <tr class="memdesc:a0bd43f0560bf0f8f9880555eed418ed9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a new variable at the <a class="el" href="class_d_o_f_handler.html" title="Degree-of-freedom handler.">DOFHandler</a>.  <br /></td></tr>
+<tr class="memitem:ae6c75682c800e3e4acea7b6253ecfa20" id="r_ae6c75682c800e3e4acea7b6253ecfa20"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ae6c75682c800e3e4acea7b6253ecfa20">register_output_variable</a> (const std::string &amp;name)</td></tr>
+<tr class="memdesc:ae6c75682c800e3e4acea7b6253ecfa20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a new post-processing variable at the <a class="el" href="class_d_o_f_handler.html" title="Degree-of-freedom handler.">DOFHandler</a>.  <br /></td></tr>
 <tr class="memitem:ab996789b9211f7253ecc1e5600e2f730" id="r_ab996789b9211f7253ecc1e5600e2f730"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ab996789b9211f7253ecc1e5600e2f730">get_variable_index</a> (const std::string &amp;name) const</td></tr>
 <tr class="memdesc:ab996789b9211f7253ecc1e5600e2f730"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the index of a variable by its name.  <br /></td></tr>
 <tr class="memitem:ac8a9df3b1ecafd8996eb48f1bacb7b00" id="r_ac8a9df3b1ecafd8996eb48f1bacb7b00"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ac8a9df3b1ecafd8996eb48f1bacb7b00">register_equation</a> (const std::string &amp;name)</td></tr>
@@ -131,6 +133,8 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:ad7465274e716de328b3f45f02296b75e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Map between variable name and index.  <br /></td></tr>
 <tr class="memitem:a6b1bf2155c070700a3701f49583fb5c0" id="r_a6b1bf2155c070700a3701f49583fb5c0"><td class="memItemLeft">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a6b1bf2155c070700a3701f49583fb5c0">equations</a></td></tr>
 <tr class="memdesc:a6b1bf2155c070700a3701f49583fb5c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equation names corresponding to the equation indices.  <br /></td></tr>
+<tr class="memitem:acfcf350ee13e56ceb0836387a1c11571" id="r_acfcf350ee13e56ceb0836387a1c11571"><td class="memItemLeft">std::vector&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#acfcf350ee13e56ceb0836387a1c11571">output_variables</a></td></tr>
+<tr class="memdesc:acfcf350ee13e56ceb0836387a1c11571"><td class="mdescLeft">&#160;</td><td class="mdescRight">Post-processing variables, at the state tail.  <br /></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Degree-of-freedom handler. </p>
@@ -177,8 +181,28 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Get the number of equations. </p>
+<p>Get the number of equations, the size of the solved system. </p>
 <dl class="section return"><dt>Returns</dt><dd>int Number of equations </dd></dl>
+
+</div>
+</div>
+<a id="aed2455c66d69580f8a2248660c15e215" name="aed2455c66d69580f8a2248660c15e215"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed2455c66d69580f8a2248660c15e215">&#9670;&#160;</a></span>get_num_output_variables()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int DOFHandler::get_num_output_variables </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the number of post-processing variables. </p>
+<dl class="section return"><dt>Returns</dt><dd>int Number of post-processing variables </dd></dl>
 
 </div>
 </div>
@@ -254,6 +278,33 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae6c75682c800e3e4acea7b6253ecfa20" name="ae6c75682c800e3e4acea7b6253ecfa20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae6c75682c800e3e4acea7b6253ecfa20">&#9670;&#160;</a></span>register_output_variable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int DOFHandler::register_output_variable </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>name</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Register a new post-processing variable at the <a class="el" href="class_d_o_f_handler.html" title="Degree-of-freedom handler.">DOFHandler</a>. </p>
+<p>Such a variable is in the state vector and in the output, but has no equation: no row, no column, never solved for. The owning block computes it in <a class="el" href="class_block.html#aee19992d7c486a747b7cd99bd3dc1039" title="Compute the post-processing variables of the block.">Block::update_outputs</a>. They occupy the tail of the state vector so the solved system stays a leading square block, which <a class="el" href="class_model.html#a15a519aed6d0924b98b00ed6899c62b5" title="Finalize the model after all blocks, nodes and parameters have been added.">Model::finalize</a> arranges with a second registration pass.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of the variable </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Global index of the variable </dd></dl>
+
+</div>
+</div>
 <a id="a0bd43f0560bf0f8f9880555eed418ed9" name="a0bd43f0560bf0f8f9880555eed418ed9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0bd43f0560bf0f8f9880555eed418ed9">&#9670;&#160;</a></span>register_variable()</h2>
 
@@ -280,26 +331,6 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a6a4a5151dc3a62a4c24f59039a30e3ab" name="a6a4a5151dc3a62a4c24f59039a30e3ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a4a5151dc3a62a4c24f59039a30e3ab">&#9670;&#160;</a></span>size()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int DOFHandler::size </td>
-          <td>(</td>
-          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get the size of the system. </p>
-<dl class="section return"><dt>Returns</dt><dd>Size of the system </dd></dl>
-
-</div>
-</div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
 <a id="a6b1bf2155c070700a3701f49583fb5c0" name="a6b1bf2155c070700a3701f49583fb5c0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6b1bf2155c070700a3701f49583fb5c0">&#9670;&#160;</a></span>equations</h2>
@@ -314,6 +345,22 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Equation names corresponding to the equation indices. </p>
+
+</div>
+</div>
+<a id="acfcf350ee13e56ceb0836387a1c11571" name="acfcf350ee13e56ceb0836387a1c11571"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfcf350ee13e56ceb0836387a1c11571">&#9670;&#160;</a></span>output_variables</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;std::string&gt; DOFHandler::output_variables</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Post-processing variables, at the state tail. </p>
 
 </div>
 </div>

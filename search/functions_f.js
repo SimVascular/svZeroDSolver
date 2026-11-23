@@ -2,12 +2,13 @@ var searchData=
 [
   ['read_5fblock_5fparams_0',['read_block_params',['../class_solver.html#a0c0efb666ac941cf0d49c666b6356483',1,'Solver']]],
   ['register_5fequation_1',['register_equation',['../class_d_o_f_handler.html#ac8a9df3b1ecafd8996eb48f1bacb7b00',1,'DOFHandler']]],
-  ['register_5fvariable_2',['register_variable',['../class_d_o_f_handler.html#a0bd43f0560bf0f8f9880555eed418ed9',1,'DOFHandler']]],
-  ['required_5fsignal_5ftype_3',['required_signal_type',['../class_active_stress.html#a836f7983897ae41bb9a862db9fbcb063',1,'ActiveStress::required_signal_type()'],['../class_strain_independent_active_stress.html#a1a16ad4064fca37b15c4150ebe2d4673',1,'StrainIndependentActiveStress::required_signal_type()'],['../class_strain_dependent_active_stress.html#a276e23bec80dc00e419cef98aed42064',1,'StrainDependentActiveStress::required_signal_type()']]],
-  ['reserve_4',['reserve',['../class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898',1,'SparseSystem']]],
-  ['resistancebc_5',['ResistanceBC',['../class_resistance_b_c.html#a30d3b325f9a07f7751c866febaa177f8',1,'ResistanceBC']]],
-  ['resistivejunction_6',['ResistiveJunction',['../class_resistive_junction.html#a93315135b8f0c0bf7c868d46a5c038ac',1,'ResistiveJunction']]],
-  ['resolve_5fcardiac_5fcycle_5fperiod_7',['resolve_cardiac_cycle_period',['../_simulation_parameters_8h.html#a9cd3247bf4846b55fd798c976faeee8e',1,'SimulationParameters.cpp']]],
-  ['run_8',['run',['../class_levenberg_marquardt_optimizer.html#af61872e32f3638b60631ad3fc834ab3f',1,'LevenbergMarquardtOptimizer::run()'],['../class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96',1,'Solver::run()']]],
-  ['run_5fintegration_9',['run_integration',['../class_solver.html#a60726d2498d4c405660bba52f8c0fa65',1,'Solver']]]
+  ['register_5foutput_5fvariable_2',['register_output_variable',['../class_d_o_f_handler.html#ae6c75682c800e3e4acea7b6253ecfa20',1,'DOFHandler']]],
+  ['register_5fvariable_3',['register_variable',['../class_d_o_f_handler.html#a0bd43f0560bf0f8f9880555eed418ed9',1,'DOFHandler']]],
+  ['required_5fsignal_5ftype_4',['required_signal_type',['../class_active_stress.html#a836f7983897ae41bb9a862db9fbcb063',1,'ActiveStress::required_signal_type()'],['../class_strain_independent_active_stress.html#a1a16ad4064fca37b15c4150ebe2d4673',1,'StrainIndependentActiveStress::required_signal_type()'],['../class_strain_dependent_active_stress.html#a276e23bec80dc00e419cef98aed42064',1,'StrainDependentActiveStress::required_signal_type()']]],
+  ['reserve_5',['reserve',['../class_sparse_system.html#a175040c26141bbe53e98bfd0cf3e4898',1,'SparseSystem']]],
+  ['resistancebc_6',['ResistanceBC',['../class_resistance_b_c.html#a30d3b325f9a07f7751c866febaa177f8',1,'ResistanceBC']]],
+  ['resistivejunction_7',['ResistiveJunction',['../class_resistive_junction.html#a93315135b8f0c0bf7c868d46a5c038ac',1,'ResistiveJunction']]],
+  ['resolve_5fcardiac_5fcycle_5fperiod_8',['resolve_cardiac_cycle_period',['../_simulation_parameters_8h.html#a9cd3247bf4846b55fd798c976faeee8e',1,'SimulationParameters.cpp']]],
+  ['run_9',['run',['../class_levenberg_marquardt_optimizer.html#af61872e32f3638b60631ad3fc834ab3f',1,'LevenbergMarquardtOptimizer::run()'],['../class_solver.html#a1f31e2d38dacd7e828c1bf428eb2ed96',1,'Solver::run()']]],
+  ['run_5fintegration_10',['run_integration',['../class_solver.html#a60726d2498d4c405660bba52f8c0fa65',1,'Solver']]]
 ];

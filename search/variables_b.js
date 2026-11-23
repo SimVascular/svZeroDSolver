@@ -7,5 +7,7 @@ var searchData=
   ['output_5finterval_4',['output_interval',['../struct_simulation_parameters.html#a91fb3af39c933a78f3517925a28e72a7',1,'SimulationParameters']]],
   ['output_5flast_5fcycle_5fonly_5f_5',['output_last_cycle_only_',['../class_solver_interface.html#a3e5a39bc1c8fe7ffa6cce8f487a919bf',1,'SolverInterface']]],
   ['output_5fmean_5fonly_6',['output_mean_only',['../struct_simulation_parameters.html#a76a3f769988224f5d1469f96b639516f',1,'SimulationParameters']]],
-  ['output_5fvariable_5fbased_7',['output_variable_based',['../struct_simulation_parameters.html#ab25065e02877aff1d32846df3858cf83',1,'SimulationParameters']]]
+  ['output_5fvar_5fnames_7',['output_var_names',['../class_block.html#a74ed35e57c67d67aaba35bab2f68825e',1,'Block']]],
+  ['output_5fvariable_5fbased_8',['output_variable_based',['../struct_simulation_parameters.html#ab25065e02877aff1d32846df3858cf83',1,'SimulationParameters']]],
+  ['output_5fvariables_9',['output_variables',['../class_d_o_f_handler.html#acfcf350ee13e56ceb0836387a1c11571',1,'DOFHandler']]]
 ];

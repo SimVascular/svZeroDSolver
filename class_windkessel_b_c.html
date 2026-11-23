@@ -134,8 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aa63c92836a51ba1b8b13e88011fba193 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update vessel type of the block.  <br /></td></tr>
 <tr class="memitem:a08fb7d659427c235fc3f64ab0d042ea9 pub_methods_class_block" id="r_a08fb7d659427c235fc3f64ab0d042ea9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a08fb7d659427c235fc3f64ab0d042ea9">setup_params_</a> (const std::vector&lt; int &gt; &amp;param_ids)</td></tr>
 <tr class="memdesc:a08fb7d659427c235fc3f64ab0d042ea9 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameter IDs for the block.  <br /></td></tr>
-<tr class="memitem:afc10af316c08e7a78881726e9288b2b0 pub_methods_class_block" id="r_afc10af316c08e7a78881726e9288b2b0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#afc10af316c08e7a78881726e9288b2b0">setup_dofs_</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, int num_equations, const std::list&lt; std::string &gt; &amp;internal_var_names)</td></tr>
-<tr class="memdesc:afc10af316c08e7a78881726e9288b2b0 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
+<tr class="memitem:a88e54826c64c778d06978b55d057ff0e pub_methods_class_block" id="r_a88e54826c64c778d06978b55d057ff0e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a88e54826c64c778d06978b55d057ff0e">setup_dofs_</a> (<a class="el" href="class_d_o_f_handler.html">DOFHandler</a> &amp;dofhandler, int num_equations, const std::list&lt; std::string &gt; &amp;internal_var_names, const std::list&lt; std::string &gt; &amp;output_var_names={})</td></tr>
+<tr class="memdesc:a88e54826c64c778d06978b55d057ff0e pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set up the degrees of freedom (DOF) of the block.  <br /></td></tr>
 <tr class="memitem:a98bac8f1f93e2876efa7a7d59e302569 pub_methods_class_block" id="r_a98bac8f1f93e2876efa7a7d59e302569"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a98bac8f1f93e2876efa7a7d59e302569">setup_model_dependent_params</a> ()</td></tr>
 <tr class="memdesc:a98bac8f1f93e2876efa7a7d59e302569 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Setup parameters that depend on the model.  <br /></td></tr>
 <tr class="memitem:a3242f9b5c7d9ecb94e80cccfba3b2a0a pub_methods_class_block" id="r_a3242f9b5c7d9ecb94e80cccfba3b2a0a"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a3242f9b5c7d9ecb94e80cccfba3b2a0a">setup_initial_state_dependent_params</a> (<a class="el" href="class_state.html">State</a> initial_state, std::vector&lt; double &gt; &amp;parameters)</td></tr>
@@ -144,6 +144,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a3d48d0c71bf9f5b416f01a6414b0da78 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update the solution-dependent contributions of the element in a sparse system.  <br /></td></tr>
 <tr class="memitem:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block" id="r_ad4999d98ef4cd47bf8892c4e62142d1e"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#ad4999d98ef4cd47bf8892c4e62142d1e">post_solve</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ad4999d98ef4cd47bf8892c4e62142d1e pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
+<tr class="memitem:aee19992d7c486a747b7cd99bd3dc1039 pub_methods_class_block" id="r_aee19992d7c486a747b7cd99bd3dc1039"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#aee19992d7c486a747b7cd99bd3dc1039">update_outputs</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;ydot)</td></tr>
+<tr class="memdesc:aee19992d7c486a747b7cd99bd3dc1039 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the post-processing variables of the block.  <br /></td></tr>
 <tr class="memitem:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block" id="r_a215561fcebf3173d59fc47a3aa404c21"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a215561fcebf3173d59fc47a3aa404c21">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:a215561fcebf3173d59fc47a3aa404c21 pub_methods_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept a converged time-step.  <br /></td></tr>
 <tr class="memitem:a03f617f1a657a58b345a68818523c5e6 pub_methods_class_block" id="r_a03f617f1a657a58b345a68818523c5e6"><td class="memItemLeft">virtual std::vector&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a03f617f1a657a58b345a68818523c5e6">get_persistent_state</a> () const</td></tr>
@@ -192,6 +194,8 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:ab64718f69f658fd3f66eb959f9349b9e pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global variable indices of the local element contributions.  <br /></td></tr>
 <tr class="memitem:a7851447ef34b1f916a056b572713e9db pub_attribs_class_block" id="r_a7851447ef34b1f916a056b572713e9db"><td class="memItemLeft">std::vector&lt; int &gt;&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7851447ef34b1f916a056b572713e9db">global_eqn_ids</a></td></tr>
 <tr class="memdesc:a7851447ef34b1f916a056b572713e9db pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Global equation indices of the local element contributions.  <br /></td></tr>
+<tr class="memitem:a74ed35e57c67d67aaba35bab2f68825e pub_attribs_class_block" id="r_a74ed35e57c67d67aaba35bab2f68825e"><td class="memItemLeft">std::list&lt; std::string &gt;&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a74ed35e57c67d67aaba35bab2f68825e">output_var_names</a></td></tr>
+<tr class="memdesc:a74ed35e57c67d67aaba35bab2f68825e pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Names of the post-processing variables of the block.  <br /></td></tr>
 <tr class="memitem:a7388d573014251179f564ccef95ad52e pub_attribs_class_block" id="r_a7388d573014251179f564ccef95ad52e"><td class="memItemLeft"><a class="el" href="struct_triplets_contributions.html">TripletsContributions</a>&#160;</td><td class="memItemRight"><a class="el" href="class_block.html#a7388d573014251179f564ccef95ad52e">num_triplets</a></td></tr>
 <tr class="memdesc:a7388d573014251179f564ccef95ad52e pub_attribs_class_block"><td class="mdescLeft">&#160;</td><td class="mdescRight">Number of triplets of element.  <br /></td></tr>
 </table>
@@ -199,7 +203,7 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>Windkessel RCR boundary condition. </p>
 <p>Models the mechanical behavior of a Windkessel boundary condition.</p>
 <p class="formulaDsp">
-<picture><source srcset="form_195_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
+<picture><source srcset="form_194_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\begin{circuitikz} \draw
 node[left] {$Q_{in}$} [-latex] (0,0) -- (0.8,0);
 \draw (1,0) node[anchor=south]{$P_{in}$}
 to [R, l=$R_p$, *-] (3,0)
@@ -209,12 +213,12 @@ node[anchor=south]{$P_{ref}$}
 (3,0) to [C, l=$C$, *-] (3,-1.5)
 node[ground]{};
 \end{circuitikz}
-\&zwj;]" src="form_195.png" width="321" height="144"/></picture>
+\&zwj;]" src="form_194.png" width="321" height="144"/></picture>
 </p>
 <h3>Governing equations</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_196_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
-\&zwj;]" src="form_196.png" width="283" height="41"/></picture>
+<picture><source srcset="form_195_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[R_{d} Q_{in}-P_{c}+P_{r e f}-R_{d} C \frac{d P_{c}}{d t}=0
+\&zwj;]" src="form_195.png" width="283" height="41"/></picture>
 </p>
 <p class="formulaDsp">
 <picture><source srcset="form_109_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[P_{in}-P_{c}-R_{p} Q_{in}=0
@@ -222,29 +226,29 @@ node[ground]{};
 </p>
 <h3>Local contributions</h3>
 <p class="formulaDsp">
-<picture><source srcset="form_197_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} &amp; Q^{e} &amp;
-P_{c}^{e}\end{array}\right]^{T} \&zwj;]" src="form_197.png" width="197" height="28"/></picture>
+<picture><source srcset="form_196_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{y}^{e}=\left[\begin{array}{lll}P^{e} &amp; Q^{e} &amp;
+P_{c}^{e}\end{array}\right]^{T} \&zwj;]" src="form_196.png" width="197" height="28"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_198_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccc}
+<picture><source srcset="form_197_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{E}^{e}=\left[\begin{array}{ccc}
 0 &amp; 0 &amp; -R_{d} C \\
 0 &amp; 0 &amp; 0
+\end{array}\right]
+\&zwj;]" src="form_197.png" width="189" height="47"/></picture>
+</p>
+<p class="formulaDsp">
+<picture><source srcset="form_198_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccc}
+0 &amp; R_{d} &amp; -1 \\
+1 &amp; -R_{p} &amp; -1
 \end{array}\right]
 \&zwj;]" src="form_198.png" width="189" height="47"/></picture>
 </p>
 <p class="formulaDsp">
-<picture><source srcset="form_199_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{F}^{e}=\left[\begin{array}{ccc}
-0 &amp; R_{d} &amp; -1 \\
-1 &amp; -R_{p} &amp; -1
-\end{array}\right]
-\&zwj;]" src="form_199.png" width="189" height="47"/></picture>
-</p>
-<p class="formulaDsp">
-<picture><source srcset="form_200_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
+<picture><source srcset="form_199_dark.png" media="(prefers-color-scheme: dark)"/><img class="formulaDsp" alt="\&zwj;[\mathbf{c}^{e}=\left[\begin{array}{c}
 P_{r e f} \\
 0
 \end{array}\right]
-\&zwj;]" src="form_200.png" width="114" height="47"/></picture>
+\&zwj;]" src="form_199.png" width="114" height="47"/></picture>
 </p>
 <p>See <a class="el" href="citelist.html#CITEREF_vignon04">[11]</a>.</p>
 <h3>Parameters</h3>

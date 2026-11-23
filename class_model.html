@@ -154,6 +154,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:a9f6ce7f8b525fb3d84e3fb578653c05f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modify the solution after solving it.  <br /></td></tr>
 <tr class="memitem:ae51bf5a1b0f416fb20292581c9428e6a" id="r_ae51bf5a1b0f416fb20292581c9428e6a"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae51bf5a1b0f416fb20292581c9428e6a">accept_timestep</a> (const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y)</td></tr>
 <tr class="memdesc:ae51bf5a1b0f416fb20292581c9428e6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Accept one converged time-step for all blocks.  <br /></td></tr>
+<tr class="memitem:ab36f2132307e60a263c10439d6404c75" id="r_ab36f2132307e60a263c10439d6404c75"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab36f2132307e60a263c10439d6404c75">update_outputs</a> (Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;y, const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;ydot)</td></tr>
+<tr class="memdesc:ab36f2132307e60a263c10439d6404c75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the post-processing variables of all blocks.  <br /></td></tr>
 <tr class="memitem:a0e3da0d4e4350fa86f542bebccc16965" id="r_a0e3da0d4e4350fa86f542bebccc16965"><td class="memItemLeft">std::vector&lt; std::vector&lt; double &gt; &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a0e3da0d4e4350fa86f542bebccc16965">get_persistent_states</a> () const</td></tr>
 <tr class="memdesc:a0e3da0d4e4350fa86f542bebccc16965"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get persistent state payloads for all blocks (including internal).  <br /></td></tr>
 <tr class="memitem:a4ad4b7db1f8f2d9cabb0367836936075" id="r_a4ad4b7db1f8f2d9cabb0367836936075"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4ad4b7db1f8f2d9cabb0367836936075">set_persistent_states</a> (const std::vector&lt; std::vector&lt; double &gt; &gt; &amp;states)</td></tr>
@@ -1054,6 +1056,37 @@ Public Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">time_constant</td><td>Largest Windkessel time constant </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab36f2132307e60a263c10439d6404c75" name="ab36f2132307e60a263c10439d6404c75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab36f2132307e60a263c10439d6404c75">&#9670;&#160;</a></span>update_outputs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Model::update_outputs </td>
+          <td>(</td>
+          <td class="paramtype">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>y</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>ydot</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Compute the post-processing variables of all blocks. </p>
+<p>Called once per accepted time step, before accept_timestep.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td>Accepted state vector, written into </td></tr>
+    <tr><td class="paramname">ydot</td><td>Accepted derivative of the state vector </td></tr>
   </table>
   </dd>
 </dl>

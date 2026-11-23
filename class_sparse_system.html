@@ -137,6 +137,7 @@ Public Attributes</h2></td></tr>
 <tr class="memdesc:a3ae84bdf7fbe99730215a3c8642b88a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">System matrix dC/dydot.  <br /></td></tr>
 <tr class="memitem:a460c06c938cca205928ad95517d26ddf" id="r_a460c06c938cca205928ad95517d26ddf"><td class="memItemLeft">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a460c06c938cca205928ad95517d26ddf">C</a></td></tr>
 <tr class="memdesc:a460c06c938cca205928ad95517d26ddf"><td class="mdescLeft">&#160;</td><td class="mdescRight">System vector C.  <br /></td></tr>
+<tr class="memitem:a49d685f1ba56ac691c4bdc1cfce71495" id="r_a49d685f1ba56ac691c4bdc1cfce71495"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a49d685f1ba56ac691c4bdc1cfce71495">num_equations</a> {0}</td></tr>
 <tr class="memitem:ae68dcf82fa22bc7479dba6cbc9b87f2d" id="r_ae68dcf82fa22bc7479dba6cbc9b87f2d"><td class="memItemLeft">Eigen::SparseMatrix&lt; double &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ae68dcf82fa22bc7479dba6cbc9b87f2d">jacobian</a></td></tr>
 <tr class="memdesc:ae68dcf82fa22bc7479dba6cbc9b87f2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Jacobian of the system.  <br /></td></tr>
 <tr class="memitem:a4e30e790f39ac0f6dd65b902acddaa99" id="r_a4e30e790f39ac0f6dd65b902acddaa99"><td class="memItemLeft">Eigen::Matrix&lt; double, Eigen::Dynamic, 1 &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4e30e790f39ac0f6dd65b902acddaa99">residual</a></td></tr>
@@ -447,6 +448,21 @@ Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Jacobian of the system. </p>
+
+</div>
+</div>
+<a id="a49d685f1ba56ac691c4bdc1cfce71495" name="a49d685f1ba56ac691c4bdc1cfce71495"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49d685f1ba56ac691c4bdc1cfce71495">&#9670;&#160;</a></span>num_equations</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SparseSystem::num_equations {0}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Size of the system, i.e. the number of solved variables at the head of the state vector </p>
 
 </div>
 </div>

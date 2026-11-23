@@ -40,16 +40,24 @@ void ChamberSphere::setup_dofs(DOFHandler& dofhandler) {
         " one.");
   }
 
-  std::list<std::string> internal_var_names = {
-      "radius", "velo", "stress", "active_stress", "volume", "passive_stress"};
+  std::list<std::string> internal_var_names = {"radius", "velo", "stress",
+                                               "active_stress", "volume"};
   for (const auto& name : active_stress_->extra_var_names()) {
     internal_var_names.push_back(name);
+  }
+
+  // The passive stress is the total minus the active one, and the active
+  // stress model may add more quantities that no equation reads back
+  std::list<std::string> output_var_names = {"passive_stress"};
+  for (const auto& name : active_stress_->extra_output_names()) {
+    output_var_names.push_back(name);
   }
 
   const int num_equations =
       ActiveStress::NUM_CORE_EQNS + active_stress_->num_extra_equations();
 
-  Block::setup_dofs_(dofhandler, num_equations, internal_var_names);
+  Block::setup_dofs_(dofhandler, num_equations, internal_var_names,
+                     output_var_names);
 }
 
 void ChamberSphere::update_constant(SparseSystem& system,
@@ -79,11 +87,6 @@ void ChamberSphere::update_constant(SparseSystem& system,
   // pressure equality
   system.F.coeffRef(global_eqn_ids[5], global_var_ids[0]) = 1;
   system.F.coeffRef(global_eqn_ids[5], global_var_ids[2]) = -1;
-
-  // passive stress (total stress minus active stress)
-  system.F.coeffRef(global_eqn_ids[6], global_var_ids[9]) = -1;
-  system.F.coeffRef(global_eqn_ids[6], global_var_ids[6]) = 1;
-  system.F.coeffRef(global_eqn_ids[6], global_var_ids[7]) = -1;
 
   // active stress
   active_stress_->update_constant(system, global_eqn_ids, global_var_ids);
@@ -151,6 +154,21 @@ void ChamberSphere::update_solution(
   // active stress
   active_stress_->update_solution(system, global_eqn_ids, global_var_ids, y, dy,
                                   radius0, activation_signal_);
+}
+
+void ChamberSphere::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot) {
+  // The post-processing variables are the last entries of global_var_ids,
+  // this block's own first and the active stress model's after it
+  const int base =
+      static_cast<int>(global_var_ids.size() - output_var_names.size());
+
+  // passive stress (total stress minus active stress)
+  y[global_var_ids[base]] = y[global_var_ids[ActiveStress::STRESS_VAR]] -
+                            y[global_var_ids[ActiveStress::TAU_VAR]];
+
+  active_stress_->update_outputs(y, ydot, global_var_ids, base + 1);
 }
 
 void ChamberSphere::set_material(std::unique_ptr<SphereMaterial> m) {

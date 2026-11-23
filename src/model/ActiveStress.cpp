@@ -74,7 +74,6 @@ void StrainDependentActiveStress::update_constant(
     const std::vector<int>& global_var_ids) {
   const double alpha_r = params_.at("alpha_r");
   const double mu = params_.at("mu");
-  const double E_s = params_.at("E_s");
 
   // active stress
   system.F.coeffRef(global_eqn_ids[TAU_EQN], global_var_ids[TAU_VAR]) = -1;
@@ -93,21 +92,6 @@ void StrainDependentActiveStress::update_constant(
 
   // sarcomere active stress
   system.E.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[TAU_C_VAR]) = -1;
-
-  // sarcomere stress
-  system.E.coeffRef(global_eqn_ids[SIGMA_C_EQN], global_var_ids[E_C_VAR]) = mu;
-  system.F.coeffRef(global_eqn_ids[SIGMA_C_EQN], global_var_ids[TAU_C_VAR]) = 1;
-  system.F.coeffRef(global_eqn_ids[SIGMA_C_EQN], global_var_ids[SIGMA_C_VAR]) =
-      -1;
-
-  // series element stress
-  system.F.coeffRef(global_eqn_ids[SIGMA_S_EQN], global_var_ids[SIGMA_S_VAR]) =
-      -1;
-
-  // series element strain
-  system.F.coeffRef(global_eqn_ids[E_S_EQN], global_var_ids[SIGMA_S_VAR]) =
-      1 / E_s;
-  system.F.coeffRef(global_eqn_ids[E_S_EQN], global_var_ids[E_S_VAR]) = -1;
 }
 
 void StrainDependentActiveStress::update_time(
@@ -227,11 +211,27 @@ void StrainDependentActiveStress::update_solution(
       de_c_dt;
   system.dC_dy.coeffRef(global_eqn_ids[TAU_C_EQN], global_var_ids[OMEGA_VAR]) =
       -tau_c * fabs(u_minus_);
+}
+
+void StrainDependentActiveStress::update_outputs(
+    Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+    const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot,
+    const std::vector<int>& global_var_ids, int output_base) {
+  const double E_s = params_.at("E_s");
+  const double mu = params_.at("mu");
+
+  const double tau = y[global_var_ids[TAU_VAR]];
+  const double e_c = y[global_var_ids[E_C_VAR]];
+  const double tau_c = y[global_var_ids[TAU_C_VAR]];
+  const double de_c_dt = ydot[global_var_ids[E_C_VAR]];
+
+  // sarcomere stress
+  y[global_var_ids[output_base + SIGMA_C_OUT]] = tau_c + mu * de_c_dt;
 
   // series element stress
-  system.C.coeffRef(global_eqn_ids[SIGMA_S_EQN]) = tau * (1 + 2 * e_c);
-  system.dC_dy.coeffRef(global_eqn_ids[SIGMA_S_EQN], global_var_ids[TAU_VAR]) =
-      1 + 2 * e_c;
-  system.dC_dy.coeffRef(global_eqn_ids[SIGMA_S_EQN], global_var_ids[E_C_VAR]) =
-      2 * tau;
+  const double sigma_s = tau * (1 + 2 * e_c);
+  y[global_var_ids[output_base + SIGMA_S_OUT]] = sigma_s;
+
+  // series element strain
+  y[global_var_ids[output_base + E_S_OUT]] = sigma_s / E_s;
 }

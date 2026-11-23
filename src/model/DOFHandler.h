@@ -30,20 +30,22 @@ class DOFHandler {
       variable_name_map;  ///< Map between variable name and index
   std::vector<std::string>
       equations;  ///< Equation names corresponding to the equation indices
+  std::vector<std::string>
+      output_variables;  ///< Post-processing variables, at the state tail
 
   /**
-   * @brief Get the size of the system
-   *
-   * @return Size of the system
-   */
-  int size() const;
-
-  /**
-   * @brief Get the number of equations
+   * @brief Get the number of equations, the size of the solved system
    *
    * @return int Number of equations
    */
   int get_num_equations() const;
+
+  /**
+   * @brief Get the number of post-processing variables
+   *
+   * @return int Number of post-processing variables
+   */
+  int get_num_output_variables() const;
 
   /**
    * @brief Get the number of variables
@@ -59,6 +61,20 @@ class DOFHandler {
    * @return Global index of the variable
    */
   int register_variable(const std::string& name);
+
+  /**
+   * @brief Register a new post-processing variable at the DOFHandler.
+   *
+   * Such a variable is in the state vector and in the output, but has no
+   * equation: no row, no column, never solved for. The owning block computes
+   * it in Block::update_outputs. They occupy the tail of the state vector so
+   * the solved system stays a leading square block, which Model::finalize
+   * arranges with a second registration pass.
+   *
+   * @param name Name of the variable
+   * @return Global index of the variable
+   */
+  int register_output_variable(const std::string& name);
 
   /**
    * @brief Get the index of a variable by its name

@@ -37,11 +37,11 @@
 #include "OpenLoopCoronaryBC.h"
 #include "OpenLoopCoronaryVarResBC.h"
 #include "Parameter.h"
-#include "PiecewiseValve.h"
 #include "PressureReferenceBC.h"
 #include "ResistanceBC.h"
 #include "ResistiveJunction.h"
 #include "State.h"
+#include "ValveDiode.h"
 #include "ValveTanh.h"
 #include "WindkesselBC.h"
 #include "debug.h"
@@ -261,6 +261,17 @@ class Model {
    * @param y Accepted state vector
    */
   void accept_timestep(const Eigen::Matrix<double, Eigen::Dynamic, 1>& y);
+
+  /**
+   * @brief Compute the post-processing variables of all blocks.
+   *
+   * Called once per accepted time step, before accept_timestep.
+   *
+   * @param y Accepted state vector, written into
+   * @param ydot Accepted derivative of the state vector
+   */
+  void update_outputs(Eigen::Matrix<double, Eigen::Dynamic, 1>& y,
+                      const Eigen::Matrix<double, Eigen::Dynamic, 1>& ydot);
 
   /**
    * @brief Get persistent state payloads for all blocks (including internal).

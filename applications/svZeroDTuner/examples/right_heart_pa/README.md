@@ -2,7 +2,7 @@
 
 For full svZeroDTuner usage and configuration guidance, see the svZeroDTuner guide on the docs site: <https://simvascular.github.io/svZeroDSolver/tuner.html>.
 
-This example couples a prescribed venous inflow waveform to a right atrium and right ventricle model using `LinearElastanceChamber` blocks with `piecewise_cosine` activation and `PiecewiseValve` blocks. The right ventricle ejects into a reduced-order pulmonary artery model with:
+This example couples a prescribed venous inflow waveform to a right atrium and right ventricle model using `LinearElastanceChamber` blocks with `piecewise_cosine` activation and `ValveDiode` blocks. The right ventricle ejects into a reduced-order pulmonary artery model with:
 
 - MPA: constant resistance
 - RPA/LPA: resistance + stenosis coefficient + inductance

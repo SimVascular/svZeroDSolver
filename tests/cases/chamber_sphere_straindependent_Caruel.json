@@ -127,23 +127,19 @@
   ],
   "valves": [
     {
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "inlet_valve",
       "params": {
-        "Rmax": 2e9,
         "Rmin": 1.1e5,
-        "Steepness": 10.0,
         "upstream_block": "upstream_vessel",
         "downstream_block": "ventricle"
       }
     },
     {
-      "type": "ValveTanh",
+      "type": "ValveDiode",
       "name": "outlet_valve",
       "params": {
-        "Rmax": 2e9,
         "Rmin": 7.7e4,
-        "Steepness": 10.0,
         "upstream_block": "ventricle",
         "downstream_block": "proximal_compliance"
       }

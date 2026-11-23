@@ -222,7 +222,7 @@
   ],
   "valves": [
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "MV",
       "params": {
         "Rmin": 999915.0,
@@ -232,7 +232,7 @@
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "AV",
       "params": {
         "Rmin": 4732931.0,
@@ -242,7 +242,7 @@
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "TV",
       "params": {
         "Rmin": 999915.0,
@@ -252,7 +252,7 @@
       }
     },
     {
-      "type": "PiecewiseValve",
+      "type": "ValveDiode",
       "name": "PV",
       "params": {
         "Rmin": 2453124.8,

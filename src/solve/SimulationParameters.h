@@ -417,8 +417,8 @@ void create_closed_loop(
  * @brief Handle the creation of valves and their associated connections
  *
  * The block type is read from `type` and must be a block of class
- * BlockClass::valve. Currently these are `ValveTanh` (ValveTanh) and
- * `PiecewiseValve` (PiecewiseValve).
+ * BlockClass::valve. Currently these are `ValveDiode` (ValveDiode) and
+ * `ValveTanh` (ValveTanh).
  *
  * @param model The model the block is associated with
  * @param connections Vector storing the connections between blocks

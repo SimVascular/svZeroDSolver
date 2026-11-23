@@ -106,7 +106,7 @@ def test_misspelled_bc_type_connected_to_coupling_block():
             "closed_loop_type",
             "ClosedLoopHeartAndPulmonary",
         ),
-        ("chamber_sphere", "valves", 0, "type", "PiecewiseValve, ValveTanh"),
+        ("chamber_sphere", "valves", 0, "type", "ValveDiode, ValveTanh"),
         ("chamber_sphere", "chambers", 0, "type", None),
         (COUPLED_CASE, "external_solver_coupling_blocks", 0, "type", None),
     ],

@@ -64,6 +64,9 @@ struct SimulationParameters {
   bool output_mean_only{false};   ///< Output only the mean value
   bool output_derivative{false};  ///< Output derivatives
   bool output_all_cycles{false};  ///< Output all cardiac cycles
+  bool output_convergence_history{
+      false};  ///< Write the Newton convergence history of every time step to
+               ///< a csv file next to the result file
 
   bool sim_coupled{
       false};  ///< Running 0D simulation coupled with external solver

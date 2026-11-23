@@ -3,6 +3,9 @@
 
 #include "Solver.h"
 
+#include <iomanip>
+#include <sstream>
+
 #include "csv_writer.h"
 
 Solver::Solver(const nlohmann::json& config) {
@@ -44,6 +47,7 @@ Solver::Solver(const nlohmann::json& config) {
 
 void Solver::setup_initial() {
   state = initial_state;
+  steady_history.clear();
 
   // Create steady initial condition
   if (simparams.sim_steady_initial) {
@@ -58,6 +62,10 @@ void Solver::setup_initial() {
     for (int i = 0; i < 31; i++) {
       state = integrator_steady.step(state, time_step_size_steady * double(i));
     }
+
+    // Keep the convergence history of the steady initialization, which is
+    // discarded together with its integrator
+    steady_history = integrator_steady.get_history();
 
     this->model->to_unsteady();
     this->model->clear_persistent_states();
@@ -417,28 +425,85 @@ void Solver::write_result_to_csv(const std::string& filename) const {
   ofs.close();
 }
 
+ConvergenceHistory Solver::get_convergence_history() const {
+  ConvergenceHistory history = steady_history;
+  history.append(integrator.get_history());
+  return history;
+}
+
 std::vector<int> Solver::get_nonlinear_iterations() const {
-  return integrator.get_iter_per_step();
+  return get_convergence_history().iterations;
 }
 
 std::vector<double> Solver::get_step_residuals() const {
-  return integrator.get_res_per_step();
+  return get_convergence_history().residual;
 }
 
 std::vector<std::string> Solver::get_step_residual_equations() const {
-  const auto& dofs = integrator.get_res_dof_per_step();
+  const std::vector<int> dofs = get_convergence_history().residual_dof;
+  const auto& equations = this->model->dofhandler.equations;
   std::vector<std::string> names;
   names.reserve(dofs.size());
+
   for (int dof : dofs) {
-    if (dof >= 0 && dof < (int)this->model->dofhandler.equations.size()) {
-      names.push_back(this->model->dofhandler.equations[dof]);
+    if (dof >= 0 && dof < static_cast<int>(equations.size())) {
+      names.push_back(equations[dof]);
     } else {
       names.push_back("unknown");
     }
   }
+
   return names;
 }
 
 std::vector<double> Solver::get_step_times() const {
-  return integrator.get_time_per_step();
+  return get_convergence_history().time;
+}
+
+std::vector<std::string> Solver::get_step_phases() const {
+  std::vector<std::string> phases(steady_history.size(), "steady_initial");
+  phases.resize(steady_history.size() + integrator.get_history().size(),
+                "transient");
+  return phases;
+}
+
+std::string Solver::get_convergence_history_csv() const {
+  const ConvergenceHistory history = get_convergence_history();
+  const std::vector<std::string> phases = get_step_phases();
+  const std::vector<std::string> equations = get_step_residual_equations();
+
+  std::ostringstream out;
+  out << "time,phase,iterations,residual,equation\n";
+  out << std::scientific << std::setprecision(16);
+
+  for (size_t i = 0; i < history.size(); i++) {
+    out << history.time[i] << "," << phases[i] << "," << history.iterations[i]
+        << "," << history.residual[i] << "," << equations[i] << "\n";
+  }
+
+  return out.str();
+}
+
+void Solver::write_convergence_history_to_csv(
+    const std::string& filename) const {
+  std::ofstream ofs(filename);
+  ofs << get_convergence_history_csv();
+  ofs.close();
+}
+
+bool Solver::output_convergence_history() const {
+  return simparams.output_convergence_history;
+}
+
+std::string convergence_history_filename(const std::string& result_filename) {
+  const std::string extension = ".csv";
+  std::string stem = result_filename;
+
+  if (stem.size() >= extension.size() &&
+      stem.compare(stem.size() - extension.size(), extension.size(),
+                   extension) == 0) {
+    stem.erase(stem.size() - extension.size());
+  }
+
+  return stem + "_convergence" + extension;
 }

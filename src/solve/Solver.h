@@ -102,6 +102,17 @@ class Solver {
   void write_result_to_csv(const std::string& filename) const;
 
   /**
+   * @brief Get the convergence history of the whole run
+   *
+   * The history starts with the steps of the steady initial condition (if one
+   * was computed) and continues with the steps of the transient simulation.
+   * Use get_step_phases() to tell the two apart.
+   *
+   * @return ConvergenceHistory Per-step convergence history
+   */
+  ConvergenceHistory get_convergence_history() const;
+
+  /**
    * @brief Get the number of Newton iterations used in each time step
    *
    * @return std::vector<int> Newton iterations per time step
@@ -129,6 +140,39 @@ class Solver {
    */
   std::vector<double> get_step_times() const;
 
+  /**
+   * @brief Get the phase each step belongs to
+   *
+   * Either "steady_initial" for the steps of the steady initial condition or
+   * "transient" for the steps of the simulation itself.
+   *
+   * @return std::vector<std::string> Phase per time step
+   */
+  std::vector<std::string> get_step_phases() const;
+
+  /**
+   * @brief Get the convergence history as a csv encoded string
+   *
+   * @return std::string Convergence history
+   */
+  std::string get_convergence_history_csv() const;
+
+  /**
+   * @brief Write the convergence history to a csv file.
+   *
+   * @param filename
+   */
+  void write_convergence_history_to_csv(const std::string& filename) const;
+
+  /**
+   * @brief Whether the configuration asks for the convergence history to be
+   * written to a file
+   *
+   * @return bool True if `simulation_parameters.output_convergence_history` is
+   * set
+   */
+  bool output_convergence_history() const;
+
  private:
   std::shared_ptr<Model> model;
   SimulationParameters simparams;
@@ -138,6 +182,7 @@ class Solver {
   std::vector<double> times;
   double time;
   Integrator integrator;
+  ConvergenceHistory steady_history;  ///< History of the steady initialization
 
   void sanity_checks();
 
@@ -181,5 +226,16 @@ class Solver {
       const std::vector<State>& states_last_two_cycles,
       const std::pair<int, int>& dof_indices);
 };
+
+/**
+ * @brief Name of the convergence history file belonging to a result file
+ *
+ * Replaces a trailing `.csv` by `_convergence.csv` so that the convergence
+ * history ends up next to the result it belongs to.
+ *
+ * @param result_filename Name of the result file
+ * @return std::string Name of the convergence history file
+ */
+std::string convergence_history_filename(const std::string& result_filename);
 
 #endif

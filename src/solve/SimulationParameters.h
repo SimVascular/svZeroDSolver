@@ -8,9 +8,11 @@
 #define SVZERODSOLVER_SIMULATIONPARAMETERS_HPP_
 
 #include <list>
+#include <map>
 #include <nlohmann/json.hpp>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "ActivationFunction.h"
 #include "ActiveStress.h"
@@ -270,6 +272,52 @@ void load_simulation_model(const nlohmann::json& config, Model& model);
  * @param config The JSON configuration
  */
 void validate_input(const nlohmann::json& config);
+
+/**
+ * @brief Name of the vessel a junction refers to by `vessel_id`
+ *
+ * Junctions reference vessels by `vessel_id` rather than by name. An id that
+ * no vessel defines used to resolve to an empty block name, which left the
+ * junction and the vessels around it without the connections their equations
+ * assume.
+ *
+ * Defined here rather than in SimulationParameters.cpp because the calibrator
+ * reads the same junction format but does not link the solve library.
+ *
+ * @param vessel_id_map Vessel IDs to vessel names, filled by create_vessels()
+ * @param vessel_id ID referenced by the junction
+ * @param junction_name Junction holding the reference, for the error message
+ * @param key `inlet_vessels` or `outlet_vessels`, for the error message
+ * @return Name of the referenced vessel
+ * @throw std::runtime_error If no vessel defines `vessel_id`
+ */
+inline std::string get_vessel_name(
+    const std::map<int, std::string>& vessel_id_map, int vessel_id,
+    const std::string& junction_name, const std::string& key) {
+  auto vessel = vessel_id_map.find(vessel_id);
+  if (vessel != vessel_id_map.end()) {
+    return vessel->second;
+  }
+  // Models can have hundreds of vessels, so list only the first few ids.
+  constexpr size_t max_ids_listed = 10;
+  std::string defined_ids;
+  size_t num_listed = 0;
+  for (const auto& defined : vessel_id_map) {
+    if (num_listed++ == max_ids_listed) {
+      defined_ids += ", and " +
+                     std::to_string(vessel_id_map.size() - max_ids_listed) +
+                     " more";
+      break;
+    }
+    defined_ids +=
+        (defined_ids.empty() ? "" : ", ") + std::to_string(defined.first);
+  }
+  throw std::runtime_error(
+      "Junction '" + junction_name + "' lists vessel_id " +
+      std::to_string(vessel_id) + " in " + key +
+      ", but no vessel has that vessel_id. Defined vessel_id values are: " +
+      (defined_ids.empty() ? "none" : defined_ids) + ".");
+}
 
 /**
  * @brief Handle the creation of vessel blocks and connections with boundary

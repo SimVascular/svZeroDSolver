@@ -1,0 +1,47 @@
+{
+  "description": {
+    "mistake": "The junction 'J0' gives inlet_vessels but no outlet_vessels, so it ends up with no connections at all.",
+    "expected error": "Junction 'J0' does not define its connections. Provide either both inlet_vessels and outlet_vessels, or both inlet_blocks and outlet_blocks. Keys found: inlet_vessels."
+  },
+  "boundary_conditions": [
+    {
+      "bc_name": "INFLOW",
+      "bc_type": "FLOW",
+      "bc_values": { "Q": [5.0, 5.0], "t": [0.0, 1.0] }
+    },
+    {
+      "bc_name": "OUT",
+      "bc_type": "RESISTANCE",
+      "bc_values": { "Pd": 100.0, "R": 100.0 }
+    }
+  ],
+  "junctions": [
+    {
+      "junction_name": "J0",
+      "junction_type": "NORMAL_JUNCTION",
+      "inlet_vessels": [0]
+    }
+  ],
+  "simulation_parameters": {
+    "number_of_cardiac_cycles": 2,
+    "number_of_time_pts_per_cardiac_cycle": 5
+  },
+  "vessels": [
+    {
+      "boundary_conditions": { "inlet": "INFLOW" },
+      "vessel_id": 0,
+      "vessel_length": 10.0,
+      "vessel_name": "branch0_seg0",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": { "R_poiseuille": 100.0 }
+    },
+    {
+      "boundary_conditions": { "outlet": "OUT" },
+      "vessel_id": 1,
+      "vessel_length": 10.0,
+      "vessel_name": "branch1_seg0",
+      "zero_d_element_type": "BloodVessel",
+      "zero_d_element_values": { "R_poiseuille": 100.0 }
+    }
+  ]
+}
